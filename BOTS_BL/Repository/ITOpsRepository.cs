@@ -20,7 +20,7 @@ namespace BOTS_BL.Repository
             string emailId = "";
             using (var context = new CommonDBContext())
             {
-                emailId = context.CustomerLoginDetails.Where(x => x.GroupId == GroupId).Select(y => y.LoginId).FirstOrDefault();
+                emailId = context.CustomerLoginDetails.Where(x => x.GroupId == GroupId).Select(y => y.EmailId).FirstOrDefault();
             }
 
             return emailId;

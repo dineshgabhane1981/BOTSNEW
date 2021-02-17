@@ -43,5 +43,6 @@ namespace BOTS_BL.Models
         public string GroupId { get; set; }
         [NotMapped]
         public string connectionString { get; set; }
+        public string EmailId { get; set; }
     }
 }

@@ -431,28 +431,31 @@ namespace WebApp.Controllers
 
             var email = new MailAddress(senderEmail, "Support Blue Ocktopus");
             var toemail = ITOPS.GetCustomerAdminEmail(GroupId);
-            var receiverEmail = new MailAddress(toemail);            
+            if (!string.IsNullOrEmpty(toemail))
+            {
+                var receiverEmail = new MailAddress(toemail);
 
-            var smtp = new SmtpClient
-            {
-                Host = "smtp.gmail.com",
-                Port = 587,
-                EnableSsl = true,
-                DeliveryMethod = SmtpDeliveryMethod.Network,
-                UseDefaultCredentials = false,
+                var smtp = new SmtpClient
+                {
+                    Host = "smtp.gmail.com",
+                    Port = 587,
+                    EnableSsl = true,
+                    DeliveryMethod = SmtpDeliveryMethod.Network,
+                    UseDefaultCredentials = false,
 
-                Credentials = new NetworkCredential(email.Address, senderEmailPassword)
-            };
-            using (var mess = new MailMessage(email, receiverEmail)
-            {
-                Subject = Subject,
-                Body = EmailBody,
-                IsBodyHtml = true,
-                Priority = MailPriority.High,
-                BodyEncoding = System.Text.Encoding.UTF8
-            })
-            {
-                smtp.Send(mess);
+                    Credentials = new NetworkCredential(email.Address, senderEmailPassword)
+                };
+                using (var mess = new MailMessage(email, receiverEmail)
+                {
+                    Subject = Subject,
+                    Body = EmailBody,
+                    IsBodyHtml = true,
+                    Priority = MailPriority.High,
+                    BodyEncoding = System.Text.Encoding.UTF8
+                })
+                {
+                    smtp.Send(mess);
+                }
             }
         }
 
