@@ -1,0 +1,2011 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link href="~/Content/styleSteps.css" rel="stylesheet" />
+
+<div class="app-main__inner">
+
+    <div class="mb-3 card" style="padding-top:20px;">
+        <div class="content">
+            <!--content inner-->
+            <div class="">
+                <div class="container">
+                </div>
+                <div class="container overflow-hidden">
+                    <!--multisteps-form-->
+                    <div class="multisteps-form">
+                        <!--progress bar-->
+                        <div class="row">
+                            <div class="col-12 col-lg-12 ml-auto mr-auto mb-4" style="padding-left:0px !important;padding-right:0px !important;">
+                                <div class="multisteps-form__progress">
+                                    <button class="multisteps-form__progress-btn js-active" type="button" title="Change Name">Change Name</button>
+                                    <button class="multisteps-form__progress-btn" type="button" title="Change Mobile">Change Mobile</button>
+                                    <button class="multisteps-form__progress-btn" type="button" title="Add/Earn">Add/Earn</button>
+                                    <button class="multisteps-form__progress-btn" type="button" title="Redeem/Deduct">Redeem / Deduct</button>
+                                    <button class="multisteps-form__progress-btn" type="button" title="Add New Member">Add New Member</button>
+                                    <button class="multisteps-form__progress-btn" type="button" title="Load Bonus Points">Load Bonus Points</button>
+                                    <button class="multisteps-form__progress-btn" type="button" title="Cancel Txn">Cancel Txn</button>
+                                    <button class="multisteps-form__progress-btn" type="button" title="Disable SM">Disable SMS</button>
+                                    <button class="multisteps-form__progress-btn" type="button" title="Reset Security Key">Reset Security Key</button>
+                                    <button class="multisteps-form__progress-btn" type="button" title="OTP">OTP</button>
+                                </div>
+                            </div>
+                        </div>
+                        <!--form panels-->
+                        <div class="row">
+                            <input type="hidden" id="hdnGroupId" />
+                            <div class="col-12 col-lg-12 m-auto ">
+                                <div class="multisteps-form__form">
+                                    <!--Change Member Name-->
+                                    <div class="multisteps-form__panel shadow p-4 list-box bg-white js-active" id="sec1" data-animation="scaleIn">
+                                        <h4 class="multisteps-form__title">Change Member Name</h4>
+                                        <br />
+                                        <div class="multisteps-form__content">
+                                            <div>
+                                                <label style="padding-right:5px;padding-top:10px;">Enter Mobile Number </label>
+                                                <input type="number" id="txtMobileNo" class="input50" />
+
+                                                <label style="padding-right:50px;padding-top:10px;padding-left:50px;"><b>(OR)</b> </label>
+
+                                                <label style="padding-right:5px;padding-top:10px;">Enter Card Number </label>
+                                                <input type="number" id="txtCardNo" class="input50" />
+                                                <button type="button" id="btnSearchMember" style="margin-left:15px;margin-top:10px;" class="btn btn-primary">Go</button>
+                                            </div>
+                                            <div>
+                                                <div style="margin-left:30px;margin-bottom:30px;margin-top:30px;">
+                                                    <input type="radio" name="first_item" id="rbtnSMS" /> Send SMS
+                                                    <input type="radio" name="first_item" checked style="margin-left:30px;" id="rbtnNOSMS" /> Don't Send SMS
+                                                </div>
+                                                <div style="display:flex;">
+                                                    <input type="hidden" id="hdnCustomerId" />
+                                                    <table border="2" cellpadding="5" cellspacing="5">
+                                                        <tr>
+                                                            <th colspan="2" style="padding:10px;text-align:center;">Existing Member Details</th>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="padding:10px;">Member Name</td>
+                                                            <td style="padding:10px;width:200px;"><span style="color:red;" id="spnMemberName"></span></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="padding:10px;">Mobile No</td>
+                                                            <td style="padding:10px;"><span id="spnMobileno"></span></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="padding:10px;">Card No</td>
+                                                            <td style="padding:10px;"><span id="spnCardNo"></span></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="padding:10px;">Points Balance</td>
+                                                            <td style="padding:10px;"><span id="spnPtBalance"></span></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="padding:10px;">Enrolled Outlet</td>
+                                                            <td style="padding:10px;"><span id="spnEnrolledOutlet"></span></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="padding:10px;">Enrolled On</td>
+                                                            <td style="padding:10px;">
+                                                                <span id="spnEnrolledOn"></span>
+                                                            </td>
+                                                        </tr>
+
+                                                    </table>
+
+                                                    <table border="2" cellpadding="5" cellspacing="5" id="tblUpdateData" style="margin-left:50px;display:none;">
+                                                        <tr>
+                                                            <th colspan="2" style="padding:10px;text-align:center;">Add New Name</th>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="padding:10px;width:100px;">Enter New Correct Name</td>
+                                                            <td style="padding:10px;width:300px;">
+                                                                <input type="text" id="txtFirstName" placeholder="First Name" class="input50" />
+                                                                <input type="text" id="txtLastName" placeholder="Last Name" class="input50" />
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="padding:10px;">Requested by</td>
+                                                            <td style="padding:10px;">
+                                                                <input type="text" id="txtRequestedByName" placeholder="Requested By" class="input50" />
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="padding:10px;">Requested on Forum</td>
+                                                            <td style="padding:10px;">
+                                                                <select name="ddlRequestedForum" id="ddlRequestedForum" class="input50">
+                                                                    <option value="Whatsapp">Whatsapp</option>
+                                                                    <option value="Email">Email</option>
+                                                                    <option value="Phone">Phone</option>
+                                                                </select>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="padding:10px;">Transaction Date</td>
+                                                            <td style="padding:10px;"><input type="date" id="dtEnrolledOn1" /></td>
+                                                        </tr>
+
+
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="button-row d-flex mt-4">
+                                            <button class="btn btn-primary ml-auto" type="button" title="Next" id="btnSaveMemberName" tabindex="20">Save</button>
+                                        </div>
+                                    </div>
+                                    <!--Change Member Mobile-->
+                                    <div class="multisteps-form__panel shadow p-4 list-box bg-white" id="sec2" data-animation="scaleIn">
+                                        <h4 class="multisteps-form__title">Change Mobile</h4><br />
+                                        <div class="multisteps-form__content">
+                                            <div>
+                                                <label style="padding-right:5px;padding-top:10px;">Enter Mobile Number </label>
+                                                <input type="number" id="txtMobileNo1" class="input50" />
+
+                                                <label style="padding-right:50px;padding-top:10px;padding-left:50px;"><b>(OR)</b> </label>
+
+                                                <label style="padding-right:5px;padding-top:10px;">Enter Card Number </label>
+                                                <input type="number" id="txtCardNo1" class="input50" />
+                                                <button type="button" id="btnSearchMember1" style="margin-left:15px;margin-top:10px;" class="btn btn-primary">Go</button>
+                                            </div>
+                                            <div>
+                                                <div style="margin-left:30px;margin-bottom:30px;margin-top:30px;">
+                                                    <input type="radio" name="first_item1" id="rbtnSMS1" /> Send SMS
+                                                    <input type="radio" name="first_item1" style="margin-left:30px;" checked id="rbtnNOSMS1" /> Don't Send SMS
+                                                </div>
+                                                <div style="display:flex;">
+                                                    <input type="hidden" id="hdnCustomerId1" />
+                                                    <table border="2" cellpadding="5" cellspacing="5">
+                                                        <tr>
+                                                            <th colspan="2" style="padding:10px;text-align:center;">Existing Member Details</th>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="padding:10px;">Member Name</td>
+                                                            <td style="padding:10px;width:200px;"><span style="color:red;" id="spnMemberName1"></span></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="padding:10px;">Mobile No</td>
+                                                            <td style="padding:10px;"><span id="spnMobileno1"></span></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="padding:10px;">Card No</td>
+                                                            <td style="padding:10px;"><span id="spnCardNo1"></span></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="padding:10px;">Points Balance</td>
+                                                            <td style="padding:10px;"><span id="spnPtBalance1"></span></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="padding:10px;">Enrolled Outlet</td>
+                                                            <td style="padding:10px;"><span id="spnEnrolledOutlet1"></span></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="padding:10px;">Enrolled On</td>
+                                                            <td style="padding:10px;">
+                                                                <input id="dtEnrolledOn2" type="date" />
+                                                            </td>
+                                                        </tr>
+
+                                                    </table>
+
+                                                    <table border="2" cellpadding="5" cellspacing="5" id="tblUpdateData1" style="margin-left:50px;display:none;">
+                                                        <tr>
+                                                            <th colspan="2" style="padding:10px;text-align:center;">Modify Mobile Number</th>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="padding:10px;width:100px;">Enter New Mobile Number</td>
+                                                            <td style="padding:10px;width:250px;">
+                                                                <input type="number" id="txtNewMobileNo" placeholder="Mobile No" class="input50" />
+
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="padding:10px;">Requested by</td>
+                                                            <td style="padding:10px;">
+                                                                <input type="text" id="txtRequestedByName1" placeholder="Requested By" class="input50" />
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="padding:10px;">Requested on Forum</td>
+                                                            <td style="padding:10px;">
+                                                                <select name="ddlRequestedForum1" id="ddlRequestedForum1" class="input50">
+                                                                    <option value="Whatsapp">Whatsapp</option>
+                                                                    <option value="Email">Email</option>
+                                                                    <option value="Phone">Phone</option>
+                                                                </select>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="padding:10px;">Transaction Date</td>
+                                                            <td style="padding:10px;"><input type="date" id="dtEnrolledOn1" /></td>
+                                                        </tr>
+                                                        @*<tr>
+                                                                <td style="padding:10px;">Request Date</td>
+                                                                <td style="padding:10px;"><span id="spnRequestDate1"></span></td>
+                                                            </tr>*@
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="button-row d-flex mt-4">
+                                            <button class="btn btn-primary ml-auto" type="button" title="Next" id="btnSaveMemberMobile" tabindex="20">Save</button>
+                                        </div>
+
+                                    </div>
+                                    <!--Add / Earn-->
+                                    <div class="multisteps-form__panel shadow p-4 list-box bg-white" id="sec3" data-animation="scaleIn">
+                                        <h4 class="multisteps-form__title">Add / Earn</h4><br />
+                                        <div class="multisteps-form__content">
+                                            <div>
+                                                <label style="padding-right:5px;padding-top:10px;">Enter Mobile Number </label>
+                                                <input type="number" id="txtMobileNo2" class="input50" />
+
+                                                <label style="padding-right:50px;padding-top:10px;padding-left:50px;"><b>(OR)</b> </label>
+
+                                                <label style="padding-right:5px;padding-top:10px;">Enter Card Number </label>
+                                                <input type="number" id="txtCardNo2" class="input50" />
+                                                <button type="button" id="btnSearchMember2" style="margin-left:15px;margin-top:10px;" class="btn btn-primary">Go</button>
+                                            </div>
+                                            <div>
+                                                <div style="margin-left:30px;margin-bottom:30px;margin-top:30px;">
+                                                    <input type="radio" name="first_item2" id="rbtnSMS2" /> Send SMS
+                                                    <input type="radio" name="first_item2" style="margin-left:30px;" checked id="rbtnNOSMS2" /> Don't Send SMS
+                                                </div>
+                                                <div style="display:flex; height:500px;">
+                                                    <input type="hidden" id="hdnCustomerId2" />
+                                                    <table border="2" cellpadding="5" cellspacing="5">
+                                                        <tr>
+                                                            <th colspan="2" style="padding:10px;text-align:center;">Existing Member Details</th>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="padding:10px;">Member Name</td>
+                                                            <td style="padding:10px;width:200px;"><span style="color:red;" id="spnMemberName2"></span></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="padding:10px;">Mobile No</td>
+                                                            <td style="padding:10px;"><span id="spnMobileno2"></span></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="padding:10px;">Card No</td>
+                                                            <td style="padding:10px;"><span id="spnCardNo2"></span></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="padding:10px;">Points Balance</td>
+                                                            <td style="padding:10px;"><span id="spnPtBalance2"></span></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="padding:10px;">Enrolled Outlet</td>
+                                                            <td style="padding:10px;"><span id="spnEnrolledOutlet2"></span></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="padding:10px;">Enrolled On</td>
+                                                            <td style="padding:10px;"><span id="spnEnrolledOn2"></span></td>
+                                                        </tr>
+
+                                                    </table>
+
+                                                    <table border="2" cellpadding="5" cellspacing="5" id="tblUpdateData2" style="margin-left:50px;display:none;">
+                                                        <tr>
+                                                            <th colspan="2" style="padding:10px;text-align:center;">Points Earning on a Purchase Txn</th>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="padding:10px;width:200px;">Enter Invoice Number</td>
+                                                            <td style="padding:10px;width:200px;">
+                                                                <input type="number" id="txtInvoiceNumber" placeholder="Invoice No" class="input50" />
+
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="padding:10px;width:200px;">Enter Invoice Amount</td>
+                                                            <td style="padding:10px;width:200px;">
+                                                                <input type="number" id="txtInvoiceAmount" placeholder="Invoice Amt" class="input50" />
+
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="padding:10px;width:200px;">Select Outlet</td>
+                                                            <td style="padding:10px;width:200px;">
+                                                                @Html.DropDownList("Outlet", new SelectList(ViewBag.OutletList, "Value", "Text"), "Select Outlet", htmlAttributes: new { @class = "input50", @id = "ddlOutletList" })
+
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="padding:10px;">Requested by</td>
+                                                            <td style="padding:10px;">
+                                                                <input type="text" id="txtRequestedByName2" placeholder="Requested By" class="input50" />
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="padding:10px;">Requested on Forum</td>
+                                                            <td style="padding:10px;">
+                                                                <select name="ddlRequestedForum2" id="ddlRequestedForum2" class="input50">
+                                                                    <option value="Whatsapp">Whatsapp</option>
+                                                                    <option value="Email">Email</option>
+                                                                    <option value="Phone">Phone</option>
+                                                                </select>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="padding:10px;">Transaction Date</td>
+                                                            <td style="padding:10px;"><input type="date" id="dtTransaction" /></td>
+                                                        </tr>
+                                                        @*<tr>
+                                                                <td style="padding:10px;">Request Date</td>
+                                                                <td style="padding:10px;"><span id="spnRequestDate2"></span></td>
+                                                            </tr>*@
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="button-row d-flex mt-5">
+                                            <button class="btn btn-primary ml-auto" type="button" title="Next" id="btnSaveAddEarn" tabindex="20">Save</button>
+                                        </div>
+
+                                    </div>
+                                    <!--Redeem / Deduct-->
+                                    <div class="multisteps-form__panel shadow p-4 list-box bg-white" id="sec4" data-animation="scaleIn">
+                                        <h4 class="multisteps-form__title">Redeem / Deduct</h4><br />
+                                        <div class="multisteps-form__content">
+                                            <div>
+                                                <label style="padding-right:5px;padding-top:10px;">Enter Mobile Number </label>
+                                                <input type="number" id="txtMobileNo3" class="input50" />
+
+                                                <label style="padding-right:50px;padding-top:10px;padding-left:50px;"><b>(OR)</b> </label>
+
+                                                <label style="padding-right:5px;padding-top:10px;">Enter Card Number </label>
+                                                <input type="number" id="txtCardNo3" class="input50" />
+                                                <button type="button" id="btnSearchMember3" style="margin-left:15px;margin-top:10px;" class="btn btn-primary">Go</button>
+                                            </div>
+                                            <div>
+                                                <div style="margin-left:30px;margin-bottom:30px;margin-top:30px;">
+                                                    <input type="radio" name="first_item3" id="rbtnSMS3" /> Send SMS
+                                                    <input type="radio" name="first_item3" style="margin-left:30px;" checked id="rbtnNOSMS3" /> Don't Send SMS
+                                                </div>
+                                                <div style="display:flex; height:500px;">
+                                                    <input type="hidden" id="hdnCustomerId3" />
+                                                    <table border="2" cellpadding="5" cellspacing="5">
+                                                        <tr>
+                                                            <th colspan="2" style="padding:10px;text-align:center;">Existing Member Details</th>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="padding:10px;">Member Name</td>
+                                                            <td style="padding:10px;width:200px;"><span style="color:red;" id="spnMemberName3"></span></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="padding:10px;">Mobile No</td>
+                                                            <td style="padding:10px;"><span id="spnMobileno3"></span></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="padding:10px;">Card No</td>
+                                                            <td style="padding:10px;"><span id="spnCardNo3"></span></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="padding:10px;">Points Balance</td>
+                                                            <td style="padding:10px;"><span id="spnPtBalance3"></span></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="padding:10px;">Enrolled Outlet</td>
+                                                            <td style="padding:10px;"><span id="spnEnrolledOutlet3"></span></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="padding:10px;">Enrolled On</td>
+                                                            <td style="padding:10px;"><span id="spnEnrolledOn3"></span></td>
+                                                        </tr>
+
+                                                    </table>
+
+                                                    <table border="2" cellpadding="5" cellspacing="5" id="tblUpdateData3" style="margin-left:50px;display:none;">
+                                                        <tr>
+                                                            <th colspan="2" style="padding:10px;text-align:center;">Points Earning on a Purchase Txn</th>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="padding:10px;width:200px;">Enter Invoice Number</td>
+                                                            <td style="padding:10px;width:200px;">
+                                                                <input type="number" id="txtInvoiceNumber1" placeholder="Invoice No" class="input50" />
+
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="padding:10px;width:200px;">Enter Invoice Amount</td>
+                                                            <td style="padding:10px;width:200px;">
+                                                                <input type="number" id="txtInvoiceAmount1" placeholder="Invoice Amt" class="input50" />
+
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="padding:10px;width:200px;">Enter Points to Redeem</td>
+                                                            <td style="padding:10px;width:200px;">
+                                                                <input type="number" id="txtPointsToRedeem" placeholder="Points to Redeem" class="input50" />
+
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="padding:10px;width:200px;">Select Outlet</td>
+                                                            <td style="padding:10px;width:200px;">
+                                                                @Html.DropDownList("Outlet", new SelectList(ViewBag.OutletList, "Value", "Text"), "Select Outlet", htmlAttributes: new { @class = "input50", @id = "ddlOutletList1" })
+
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="padding:10px;">Requested by</td>
+                                                            <td style="padding:10px;">
+                                                                <input type="text" id="txtRequestedByName3" placeholder="Requested By" class="input50" />
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="padding:10px;">Requested on Forum</td>
+                                                            <td style="padding:10px;">
+                                                                <select name="ddlRequestedForum3" id="ddlRequestedForum3" class="input50">
+                                                                    <option value="Whatsapp">Whatsapp</option>
+                                                                    <option value="Email">Email</option>
+                                                                    <option value="Phone">Phone</option>
+                                                                </select>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="padding:10px;">Transaction Date</td>
+                                                            <td style="padding:10px;"><input type="date" id="dtTransaction1" /></td>
+                                                        </tr>
+                                                        @*<tr>
+                                                                <td style="padding:10px;">Request Date</td>
+                                                                <td style="padding:10px;"><span id="spnRequestDate3"></span></td>
+                                                            </tr>*@
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="button-row d-flex mt-5">
+                                            <button class="btn btn-primary ml-auto" type="button" title="Next" id="btnSaveRedeem" tabindex="20">Save</button>
+                                        </div>
+
+                                    </div>
+                                    <!--Add New Member-->
+                                    <div class="multisteps-form__panel shadow p-4 list-box bg-white" id="sec5" data-animation="scaleIn">
+                                        <h4 class="multisteps-form__title">Add New Member</h4><br />
+                                        <div class="multisteps-form__content">
+                                            <div>
+                                                <div style="margin-left:30px;margin-bottom:30px;margin-top:30px;">
+                                                    <input type="radio" name="addmember" checked id="rbtnNewMember" /> Add Single Member
+                                                    <input type="radio" name="addmember" style="margin-left:30px;" id="rbtnBulkUpload" /> Bulk Upload
+                                                </div>
+                                                <div style="height:650px;">
+                                                    <div id="dvSingleMember">
+                                                        <table border="2" cellpadding="5" cellspacing="5">
+                                                            <tr>
+                                                                <th colspan="2" style="padding:10px;text-align:center;">New Member Details</th>
+                                                            </tr>
+                                                            <tr>
+                                                                <td style="padding:10px;">Enter Mobile Number</td>
+                                                                <td style="padding:10px;">
+                                                                    <input type="number" id="txtNewMobileNoAdd" placeholder="Mobile No" class="input50" />
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td style="padding:10px;">Enter Card Number</td>
+                                                                <td style="padding:10px;">
+                                                                    <input type="number" id="txtNewCardNoAdd" placeholder="Card No" class="input50" />
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td style="padding:10px;">Enter Member Name</td>
+                                                                <td style="padding:10px;width:350px;">
+                                                                    <input type="text" id="txtNewFirstNameAdd" placeholder="First Name" class="input50" />
+                                                                    <input type="text" id="txtNewLastNameAdd" placeholder="Last Name" class="input50" />
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td style="padding:10px;">Select Gender</td>
+                                                                <td style="padding:10px;">
+                                                                    <input type="radio" name="gender" checked id="rbtnMale" /> Male
+                                                                    <input type="radio" name="gender" style="margin-left:5px;" id="rbtnFemale" /> Female
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td style="padding:10px;">Enter BirthDate</td>
+                                                                <td style="padding:10px;"><input type="date" id="dtBirthday" class="input50" /></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td style="padding:10px;">Select Source</td>
+                                                                <td style="padding:10px;">
+                                                                    <select name="ddlSource" id="ddlSource" class="input50">
+                                                                        <option value="2">Walkin</option>
+                                                                        <option value="3">Referral</option>
+                                                                        <option value="4">Bulk Upload</option>
+                                                                    </select>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td style="padding:10px;">Enrolling Outlet</td>
+                                                                <td style="padding:10px;width:200px;">
+                                                                    @Html.DropDownList("Outlet", new SelectList(ViewBag.OutletList, "Value", "Text"), "Select Outlet", htmlAttributes: new { @class = "input50", @id = "ddlOutletListAddMember" })
+
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td style="padding:10px;">Requested by</td>
+                                                                <td style="padding:10px;">
+                                                                    <input type="text" id="txtRequestedByNameAddMember" placeholder="Requested By" class="input50" />
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td style="padding:10px;">Requested on Forum</td>
+                                                                <td style="padding:10px;">
+                                                                    <select name="ddlRequestedForumAddMember" id="ddlRequestedForumAddMember" class="input50">
+                                                                        <option value="Whatsapp">Whatsapp</option>
+                                                                        <option value="Email">Email</option>
+                                                                        <option value="Phone">Phone</option>
+                                                                    </select>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td style="padding:10px;">Transaction Date</td>
+                                                                <td style="padding:10px;"><input type="date" id="txtRequestedDateAddMember" class="input50" /></td>
+                                                            </tr>
+
+                                                        </table>
+                                                    </div>
+                                                    <div id="dvBulkUpload" style="display:none;">Bulk Upload Section</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="button-row d-flex mt-5">
+                                            <button class="btn btn-primary ml-auto" type="button" title="Next" id="btnSaveMember" tabindex="20">Save</button>
+                                        </div>
+
+                                    </div>
+                                    <!--Load Bonus Points-->
+                                    <div class="multisteps-form__panel shadow p-4 list-box bg-white" id="sec6" data-animation="scaleIn">
+                                        <h4 class="multisteps-form__title">Load Bonus Points</h4><br />
+                                        <div class="multisteps-form__content">
+                                            <div>
+                                                <label style="padding-right:5px;padding-top:10px;">Enter Mobile Number </label>
+                                                <input type="number" id="txtMobileNo4" class="input50" />
+
+                                                <label style="padding-right:50px;padding-top:10px;padding-left:50px;"><b>(OR)</b> </label>
+
+                                                <label style="padding-right:5px;padding-top:10px;">Enter Card Number </label>
+                                                <input type="number" id="txtCardNo4" class="input50" />
+                                                <button type="button" id="btnSearchMember4" style="margin-left:15px;margin-top:10px;" class="btn btn-primary">Go</button>
+                                            </div>
+                                            <div>
+                                                <div style="margin-left:30px;margin-bottom:30px;margin-top:30px;">
+                                                    <input type="radio" name="first_item4" id="rbtnSMS4" /> Send SMS
+                                                    <input type="radio" name="first_item4" style="margin-left:30px;" checked id="rbtnNOSMS4" /> Don't Send SMS
+                                                </div>
+                                                <div style="display:flex; height:450px;">
+                                                    <input type="hidden" id="hdnCustomerId4" />
+                                                    <table border="2" cellpadding="5" cellspacing="5">
+                                                        <tr>
+                                                            <th colspan="2" style="padding:10px;text-align:center;">Existing Member Details</th>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="padding:10px;">Member Name</td>
+                                                            <td style="padding:10px;width:200px;"><span style="color:red;" id="spnMemberName4"></span></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="padding:10px;">Mobile No</td>
+                                                            <td style="padding:10px;"><span id="spnMobileno4"></span></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="padding:10px;">Card No</td>
+                                                            <td style="padding:10px;"><span id="spnCardNo4"></span></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="padding:10px;">Points Balance</td>
+                                                            <td style="padding:10px;"><span id="spnPtBalance4"></span></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="padding:10px;">Enrolled Outlet</td>
+                                                            <td style="padding:10px;"><span id="spnEnrolledOutlet4"></span></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="padding:10px;">Enrolled On</td>
+                                                            <td style="padding:10px;"><span id="spnEnrolledOn4"></span></td>
+                                                        </tr>
+
+                                                    </table>
+
+                                                    <table border="2" cellpadding="5" cellspacing="5" id="tblUpdateData4" style="margin-left:50px;display:none;">
+                                                        <tr>
+                                                            <th colspan="2" style="padding:10px;text-align:center;">Points Earning on a Purchase Txn</th>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="padding:10px;width:200px;">Enter Bonus Points</td>
+                                                            <td style="padding:10px;width:200px;">
+                                                                <input type="number" id="txtBonusPoints" placeholder="Bonus Points" class="input50" />
+
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="padding:10px;width:200px;">Enter Bonus Remark</td>
+                                                            <td style="padding:10px;width:200px;">
+                                                                <input type="text" id="txtBonusRemark" placeholder="Bonus Remark" class="input50" />
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="padding:10px;width:200px;">Expiry Date</td>
+                                                            <td style="padding:10px;width:200px;">
+                                                                <input type="date" id="txtExpiryDate" class="input50" />
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="padding:10px;width:200px;">Select Outlet</td>
+                                                            <td style="padding:10px;width:200px;">
+                                                                @Html.DropDownList("Outlet", new SelectList(ViewBag.OutletList, "Value", "Text"), "Select Outlet", htmlAttributes: new { @class = "input50", @id = "ddlOutletList4" })
+
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="padding:10px;">Requested by</td>
+                                                            <td style="padding:10px;">
+                                                                <input type="text" id="txtRequestedByName4" placeholder="Requested By" class="input50" />
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="padding:10px;">Requested on Forum</td>
+                                                            <td style="padding:10px;">
+                                                                <select name="ddlRequestedForum4" id="ddlRequestedForum4" class="input50">
+                                                                    <option value="Whatsapp">Whatsapp</option>
+                                                                    <option value="Email">Email</option>
+                                                                    <option value="Phone">Phone</option>
+                                                                </select>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="padding:10px;">Transaction Date</td>
+                                                            <td style="padding:10px;"><input type="date" id="txtRequestedDate4" class="input50" /></td>
+                                                        </tr>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="button-row d-flex mt-5">
+                                            <button class="btn btn-primary ml-auto" type="button" title="Next" id="btnLoadBonusPoints" tabindex="20">Save</button>
+                                        </div>
+
+                                    </div>
+                                    <!--Cancel Txn-->
+                                    <div class="multisteps-form__panel shadow p-4 list-box bg-white" id="sec7" data-animation="scaleIn">
+                                        <h4 class="multisteps-form__title">Cancel Txn</h4><br />
+                                        <div class="multisteps-form__content">
+                                            <div>
+                                                <label style="padding-right:5px;padding-top:10px;">Enter Mobile Number </label>
+                                                <input type="number" id="txtMobileNoCancel" class="input50" />
+
+                                                <label style="padding-right:50px;padding-top:10px;padding-left:50px;"><b>(OR)</b> </label>
+
+                                                <label style="padding-right:5px;padding-top:10px;">Enter Invoice Number </label>
+                                                <input type="number" id="txtInvoiceNoCancel" class="input50" />
+                                                <button type="button" id="btnSearchMemberCancel" style="margin-left:15px;margin-top:10px;" class="btn btn-primary">Go</button>
+                                            </div>
+
+                                            <div style="display:flex; height:300px;margin-top:50px;">
+                                                <input type="hidden" id="hdnCustomerId4" />
+                                                <table border="2" cellpadding="5" cellspacing="5">
+                                                    <tr>
+                                                        <th colspan="2" style="padding:10px;text-align:center;">Existing Member Details</th>
+                                                    </tr>
+                                                    <tr>
+                                                        <td style="padding:10px;">Member Name</td>
+                                                        <td style="padding:10px;width:200px;"><span style="color:red;" id="spnMemberNameCancel"></span></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td style="padding:10px;">Mobile No</td>
+                                                        <td style="padding:10px;"><span id="spnMobilenoCancel"></span></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td style="padding:10px;">Card No</td>
+                                                        <td style="padding:10px;"><span id="spnCardNoCancel"></span></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td style="padding:10px;">Points Balance</td>
+                                                        <td style="padding:10px;"><span id="spnPtBalanceCancel"></span></td>
+                                                    </tr>
+
+                                                </table>
+
+                                                <table border="2" cellpadding="5" cellspacing="5" id="tblUpdateDataCancel" style="margin-left:50px;display:none;">
+                                                    <tr>
+                                                        <th colspan="2" style="padding:10px;text-align:center;">Transaction Details</th>
+                                                    </tr>
+                                                    <tr>
+                                                        <td style="padding:10px;width:200px;">Transaction</td>
+                                                        <td style="padding:10px;width:200px;">
+                                                            <span id="spnTransactionCancel"></span>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td style="padding:10px;width:200px;">Invoice Number</td>
+                                                        <td style="padding:10px;width:200px;">
+                                                            <span id="spnInvoiceNoCancel"></span>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td style="padding:10px;width:200px;">Invoice Amount</td>
+                                                        <td style="padding:10px;width:200px;">
+                                                            <span id="spnInvoiceAmtCancel"></span>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td style="padding:10px;width:200px;">Points</td>
+                                                        <td style="padding:10px;width:200px;">
+                                                            <span id="spnPointsCancel"></span>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td style="padding:10px;">Transacting Outlet</td>
+                                                        <td style="padding:10px;">
+                                                            <span id="spnTransactionOutletCancel"></span>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td style="padding:10px;">Date / Time</td>
+                                                        <td style="padding:10px;">
+                                                            <span id="spnTransactionDateTimeCancel"></span>
+                                                        </td>
+                                                    </tr>
+
+                                                </table>
+                                            </div>
+                                            <div class="button-row d-flex mt-5" style="display:none !important;" id="dvDeleteBtn">
+                                                <button class="btn btn-primary ml-auto" type="button" title="Delete" id="btnCancelTxn" tabindex="20">Delete</button>
+                                            </div>
+                                            <div class="row mt-3" id="dvActivityData" style="height:800px;">
+                                                <div class="table-responsive">
+                                                    <table class="table" id="activityTable">
+                                                        <thead style="text-align:center;">
+                                                            <tr>
+                                                                <th scope="col">Date / Time</th>
+                                                                <th scope="col">Invoice No</th>
+                                                                <th scope="col">Invoice Amt</th>
+                                                                <th scope="col">Txn Type</th>
+                                                                <th scope="col">Points</th>
+                                                                <th scope="col">Txn Outlet</th>
+                                                                <th scope="col">Delete Transaction</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody style="text-align:center;">
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <!--Disable SMS-->
+                                    <div class="multisteps-form__panel shadow p-4 list-box bg-white" id="sec8" data-animation="scaleIn">
+                                        <h4 class="multisteps-form__title">Disable SMS</h4><br />
+                                        <div class="multisteps-form__content">
+                                            <div>
+                                                <label style="padding-right:5px;padding-top:10px;">Enter Mobile Number </label>
+                                                <input type="number" id="txtMobileNoSMS" class="input50" />
+
+                                                <label style="padding-right:50px;padding-top:10px;padding-left:50px;"><b>(OR)</b> </label>
+
+                                                <label style="padding-right:5px;padding-top:10px;">Enter Card Number </label>
+                                                <input type="number" id="txtCardNoSMS" class="input50" />
+                                                <button type="button" id="btnSearchMemberSMS" style="margin-left:15px;margin-top:10px;" class="btn btn-primary">Go</button>
+                                            </div>
+                                            <div>
+                                                <div style="margin-left:30px;margin-bottom:30px;margin-top:30px;">
+                                                    <input type="radio" name="first_item5" id="rbtnSMSSMS" /> Send SMS
+                                                    <input type="radio" name="first_item5" style="margin-left:30px;" checked id="rbtnNOSMSSMS" /> Don't Send SMS
+                                                </div>
+                                                <div style="display:flex;">
+                                                    <input type="hidden" id="hdnCustomerIdSMS" />
+                                                    <table border="2" cellpadding="5" cellspacing="5">
+                                                        <tr>
+                                                            <th colspan="2" style="padding:10px;text-align:center;">Existing Member Details</th>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="padding:10px;">Member Name</td>
+                                                            <td style="padding:10px;width:200px;"><span style="color:red;" id="spnMemberNameSMS"></span></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="padding:10px;">Mobile No</td>
+                                                            <td style="padding:10px;"><span id="spnMobilenoSMS"></span></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="padding:10px;">Card No</td>
+                                                            <td style="padding:10px;"><span id="spnCardNoSMS"></span></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="padding:10px;">Points Balance</td>
+                                                            <td style="padding:10px;"><span id="spnPtBalanceSMS"></span></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="padding:10px;">Enrolled Outlet</td>
+                                                            <td style="padding:10px;"><span id="spnEnrolledOutletSMS"></span></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="padding:10px;">Enrolled On</td>
+                                                            <td style="padding:10px;"><span id="spnEnrolledOnSMS"></span></td>
+                                                        </tr>
+
+                                                    </table>
+
+                                                    <table border="2" cellpadding="5" cellspacing="5" id="tblUpdateDataSMS" style="margin-left:50px;display:none;">
+                                                        <tr>
+                                                            <th colspan="2" style="padding:10px;text-align:center;">Disable Promotional SMS </th>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="padding:10px;">Disable</td>
+                                                            <td style="padding:10px;">
+                                                                <select name="ddlDisableSMS" id="ddlDisableSMS" class="input50">
+                                                                    <option value="1">Yes</option>
+                                                                    <option value="0">No</option>
+                                                                </select>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="padding:10px;">Requested by</td>
+                                                            <td style="padding:10px;">
+                                                                <input type="text" id="txtRequestedByNameSMS" placeholder="Requested By" class="input50" />
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="padding:10px;">Requested on Forum</td>
+                                                            <td style="padding:10px;">
+                                                                <select name="ddlRequestedForumSMS" id="ddlRequestedForumSMS" class="input50">
+                                                                    <option value="Whatsapp">Whatsapp</option>
+                                                                    <option value="Email">Email</option>
+                                                                    <option value="Phone">Phone</option>
+                                                                </select>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="padding:10px;">Transaction Date</td>
+                                                            <td style="padding:10px;"><input type="date" id="txtRequestedDateSMS" class="input50" /></td>
+                                                        </tr>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="button-row d-flex mt-4">
+                                            <button class="btn btn-primary ml-auto" type="button" title="Next" id="btnSaveSMS" tabindex="20">Save</button>
+                                        </div>
+                                    </div>
+                                    <!--Reset Security Key-->
+                                    <div class="multisteps-form__panel shadow p-4 list-box bg-white" id="sec9" data-animation="scaleIn">
+                                        <h4 class="multisteps-form__title">Reset Security Key</h4><br />
+                                        <div class="multisteps-form__content" style="display:flex;">
+
+
+                                        </div>
+                                    </div>
+                                    <!--OTP-->
+                                    <div class="multisteps-form__panel shadow p-4 list-box bg-white" id="sec10" data-animation="scaleIn">
+                                        <h4 class="multisteps-form__title">OTP</h4><br />
+                                        <div class="multisteps-form__content">
+                                            <div>
+                                                <label style="padding-right:5px;padding-top:10px;">Enter Mobile Number </label>
+                                                <input type="number" id="txtMobileNoOTP" class="input50" />
+                                                <button type="button" id="btnGetOTP" style="margin-left:15px;margin-top:10px;" class="btn btn-primary">Go</button>
+                                            </div>
+
+                                            <div>
+                                                <br />
+                                                <table border="2" cellpadding="5" cellspacing="5" id="tblOTPDetails">
+                                                    <tr>
+                                                        <th style="padding:10px;text-align:center;">Outlet Name</th>
+                                                        <th style="padding:10px;text-align:center;">Datetime</th>
+                                                        <th style="padding:10px;text-align:center;">OTP</th>
+                                                    </tr>
+                                                    <tr>
+                                                        <td style="padding:10px;"><span id="spnOutletNameOTP"></span></td>
+                                                        <td style="padding:10px;"><span id="spnDateTimeOTP"></span></td>
+                                                        <td style="padding:10px;"><b><span id="spnOTP"></span></b></td>
+                                                    </tr>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="~/Content/scriptSteps.js"></script>
+
+<script>
+    var tableData = [];
+    $(document).ready(function () {
+        var dt = new Date();
+
+        year = dt.getFullYear();
+        month = (dt.getMonth() + 1).toString().padStart(2, "0");
+        day = dt.getDate().toString().padStart(2, "0");
+
+        $("#hdnGroupId").val(@Html.Raw(ViewBag.GroupId));
+        $('#btnSearchMember').on("click", function () {
+            GetChangeNameData();
+        });
+        $('#btnSaveMemberName').on("click", function () {
+            SaveMemberName();
+        });
+        $('#btnSearchMember1').on("click", function () {
+            GetChangeMobileData();
+        });
+        $('#btnSaveMemberMobile').on("click", function () {
+            SaveMemberMobile();
+        });
+        $('#btnSearchMember2').on("click", function () {
+            GetAddEarnData();
+        });
+        $('#btnSaveAddEarn').on("click", function () {
+            SaveAddEarn();
+        });
+        $('#btnSearchMember3').on("click", function () {
+            GetRedeemData();
+        });
+        $('#btnSaveRedeem').on("click", function () {
+            SaveRedeemData();
+        });
+        $('#btnSearchMember4').on("click", function () {
+            GetLoadBonusData();
+        });
+        $('#btnLoadBonusPoints').on("click", function () {
+            SaveLoadBonusData();
+        });
+        $('#rbtnNewMember').on("click", function () {
+            $('#dvSingleMember').show();
+            $('#dvBulkUpload').hide();
+        });
+        $('#rbtnBulkUpload').on("click", function () {
+            $('#dvSingleMember').hide();
+            $('#dvBulkUpload').show();
+        });
+        $('#btnSaveMember').on("click", function () {
+            if ($('#rbtnNewMember').is(':checked')) {
+                AddSingleMemberData();
+            }
+            if ($('#rbtnBulkUpload').is(':checked')) {
+                AddBulkMemberData();
+            }
+        });
+        $('#btnSearchMemberSMS').on("click", function () {
+            GetSMSData();
+        });
+        $('#btnSaveSMS').on("click", function () {
+            SaveSMSData();
+        });
+        $('#btnGetOTP').on("click", function () {
+            GetOTPData();
+        });
+        $('#btnSearchMemberCancel').on("click", function () {
+            GetTransactionCancelData();
+        });
+        $('#btnCancelTxn').on("click", function () {
+            DeleteTxnData();
+        });
+
+    });
+
+    function GetChangeNameData() {
+        if ($('#txtMobileNo').val() == "" && $('#txtCardNo').val() == "") {
+            toastr.error('Please enter Mobile Number OR Card Number');
+            return false
+        }
+        if ($('#txtMobileNo').val() != "" && $('#txtCardNo').val() != "") {
+            toastr.error('Please enter Mobile Number OR Card Number');
+            return false
+        }
+        $("#divLoader").show();
+        $.ajax({
+            type: "POST",
+            url: "/ITOperations/GetChangeNameData",
+            data: '{GroupId: ' + JSON.stringify($('#hdnGroupId').val()) + ', MobileNo: ' + JSON.stringify($('#txtMobileNo').val()) + ',CardNo: ' + JSON.stringify($('#txtCardNo').val()) + '}',
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (result) {
+                if (result.MemberName != null) {
+                    $("#spnMemberName").text(result.MemberName);
+                    $("#spnMobileno").text(result.MobileNo);
+                    $("#spnCardNo").text(result.CardNo);
+                    $("#spnPtBalance").text(result.PointsBalance);
+                    $("#spnEnrolledOutlet").text(result.EnrolledOutletName);
+                    $("#spnEnrolledOn").text(result.EnrolledOn);
+                    $("#hdnCustomerId").val(result.CustomerId);
+
+                    $('#txtFirstName').val("");
+                    $('#txtLastName').val("");
+                    $('#txtRequestedByName').val("");
+                    $('#ddlRequestedForum').prop('selectedIndex', 0);
+                    $("#dtEnrolledOn1").val("")
+                    $("#tblUpdateData").show();
+                }
+                else {
+                    toastr.error('Member not present. Please check entered Mobile Number OR Card Number');
+                    $("#spnMemberName").text("");
+                    $("#spnMobileno").text("");
+                    $("#spnCardNo").text("");
+                    $("#spnPtBalance").text("");
+                    $("#spnEnrolledOutlet").text("");
+                    $("#spnEnrolledOn").text("");
+                    $("#hdnCustomerId").val("");
+
+                    $('#txtFirstName').val("");
+                    $('#txtLastName').val("");
+                    $('#txtRequestedByName').val("");
+                    $('#ddlRequestedForum').prop('selectedIndex', 0);
+                    $("#tblUpdateData").hide();
+                }
+                $("#divLoader").hide();
+            },
+            error: function (result) {
+                console.log(result.responseText)
+                $("#divLoader").hide();
+            }
+        });
+    }
+
+    function SaveMemberName() {
+        if ($('#txtFirstName').val() == "") {
+            toastr.error('Please enter First Name');
+            $('#txtFirstName').focus();
+            return false;
+        }
+        if ($('#txtRequestedByName').val() == "") {
+            toastr.error('Please enter Requested Person name');
+            $('#txtRequestedByName').focus();
+            return false;
+        }
+        if (confirm("Are you sure? You want to change the Name")) {
+            var MemberData = [];
+            item = {}
+            item["GroupID"] = $("#hdnGroupId").val();
+            item["CustomerId"] = $("#hdnCustomerId").val();
+            item["Name"] = $("#txtFirstName").val() + " " + $("#txtLastName").val();
+            item["RequestedBy"] = $("#txtRequestedByName").val();
+            item["RequestedForum"] = $('#ddlRequestedForum :selected').text();
+            item["RequestedOn"] = $("#dtEnrolledOn1").val();
+
+            if ($('#rbtnSMS').is(":checked")) {
+                item["IsSMS"] = 1;
+            }
+            if ($('#rbtnNOSMS').is(":checked")) {
+                item["IsSMS"] = 0;
+            }
+            MemberData.push(item);
+            var data = JSON.stringify(MemberData);
+            console.log(data)
+            $("#divLoader").show();
+            $.ajax({
+                type: "POST",
+                url: "/ITOperations/ChangeMemberName",
+                data: '{jsonData: ' + JSON.stringify(data) + '}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (result) {
+                    console.log(111)
+                },
+                error: function (result) {
+                    console.log(result.responseText)
+                    if (result.responseText == "True") {
+                        toastr.success("Member Name Updated Successfully");
+                        $("#divLoader").hide();
+                    }
+                    else {
+                        toastr.error('error occured while saving data');
+                        $("#divLoader").hide();
+                    }
+                }
+            });
+        }
+    }
+
+    function GetChangeMobileData() {
+        if ($('#txtMobileNo1').val() == "" && $('#txtCardNo1').val() == "") {
+            toastr.error('Please enter Mobile Number OR Card Number');
+            return false
+        }
+        if ($('#txtMobileNo1').val() != "" && $('#txtCardNo1').val() != "") {
+            toastr.error('Please enter Mobile Number OR Card Number');
+            return false
+        }
+        $("#divLoader").show();
+        $.ajax({
+            type: "POST",
+            url: "/ITOperations/GetChangeNameData",
+            data: '{GroupId: ' + JSON.stringify($('#hdnGroupId').val()) + ', MobileNo: ' + JSON.stringify($('#txtMobileNo1').val()) + ',CardNo: ' + JSON.stringify($('#txtCardNo1').val()) + '}',
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (result) {
+                if (result.MemberName != null) {
+                    $("#spnMemberName1").text(result.MemberName);
+                    $("#spnMobileno1").text(result.MobileNo);
+                    $("#spnCardNo1").text(result.CardNo);
+                    $("#spnPtBalance1").text(result.PointsBalance);
+                    $("#spnEnrolledOutlet1").text(result.EnrolledOutletName);
+                    $("#spnEnrolledOn1").text(result.EnrolledOn);
+                    $("#hdnCustomerId1").val(result.CustomerId);
+
+                    $('#txtNewMobileNo').val("");
+                    $('#txtRequestedByName1').val("");
+                    $('#ddlRequestedForum1').prop('selectedIndex', 0);
+                    $("#dtEnrolledOn1").val("");
+                    $("#tblUpdateData1").show();
+                }
+                else {
+                    toastr.error('Member not present. Please check entered Mobile Number OR Card Number');
+                    $("#spnMemberName1").text("");
+                    $("#spnMobileno1").text("");
+                    $("#spnCardNo1").text("");
+                    $("#spnPtBalance1").text("");
+                    $("#spnEnrolledOutlet1").text("");
+                    $("#spnEnrolledOn1").text("");
+                    $("#hdnCustomerId1").val("");
+
+                    $('#txtNewMobileNo').val("");
+                    $('#txtRequestedByName1').val("");
+                    $('#ddlRequestedForum1').prop('selectedIndex', 0);
+                    $("#tblUpdateData1").hide();
+                }
+                $("#divLoader").hide();
+            },
+            error: function (result) {
+                console.log(result.responseText)
+                $("#divLoader").hide();
+            }
+        });
+    }
+
+    function SaveMemberMobile() {
+        if ($('#txtNewMobileNo').val() == "") {
+            toastr.error('Please enter Mobile No');
+            $('#txtNewMobileNo').focus();
+            return false;
+        }
+        if ($('#txtNewMobileNo').val().length != 10) {
+            toastr.error('Mobile No should be 10 digits');
+            $('#txtNewMobileNo').focus();
+            return false;
+        }
+        if ($('#txtRequestedByName1').val() == "") {
+            toastr.error('Please enter Requested Person name');
+            $('#txtRequestedByName1').focus();
+            return false;
+        }
+        if (confirm("Are you sure? You want to change Mobile No")) {
+            var MemberData = [];
+            item = {}
+            item["GroupID"] = $("#hdnGroupId").val();
+            item["CustomerId"] = $("#hdnCustomerId1").val();
+            item["MobileNo"] = $("#txtNewMobileNo").val();
+            item["RequestedBy"] = $("#txtRequestedByName1").val();
+            item["RequestedForum"] = $('#ddlRequestedForum1 :selected').text();
+            item["RequestedOn"] = $("#dtEnrolledOn2").val();
+            if ($('#rbtnSMS1').is(":checked")) {
+                item["IsSMS"] = 1;
+            }
+            if ($('#rbtnNOSMS1').is(":checked")) {
+                item["IsSMS"] = 0;
+            }
+            MemberData.push(item);
+            var data = JSON.stringify(MemberData);
+            console.log(data)
+            $("#divLoader").show();
+            $.ajax({
+                type: "POST",
+                url: "/ITOperations/ChangeMemberMobile",
+                data: '{jsonData: ' + JSON.stringify(data) + '}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (result) {
+                    console.log(111)
+                },
+                error: function (result) {
+                    console.log(result.responseText)
+                    if (result.responseText == "True") {
+                        toastr.success("Mobile No Updated Successfully");
+                        $("#divLoader").hide();
+                    }
+                    else {
+                        toastr.error('error occured while saving data');
+                        $("#divLoader").hide();
+                    }
+                }
+            });
+        }
+    }
+
+    function GetAddEarnData() {
+        if ($('#txtMobileNo2').val() == "" && $('#txtCardNo2').val() == "") {
+            toastr.error('Please enter Mobile Number OR Card Number');
+            return false
+        }
+        if ($('#txtMobileNo2').val() != "" && $('#txtCardNo2').val() != "") {
+            toastr.error('Please enter Mobile Number OR Card Number');
+            return false
+        }
+        $("#divLoader").show();
+        $.ajax({
+            type: "POST",
+            url: "/ITOperations/GetChangeNameData",
+            data: '{GroupId: ' + JSON.stringify($('#hdnGroupId').val()) + ', MobileNo: ' + JSON.stringify($('#txtMobileNo2').val()) + ',CardNo: ' + JSON.stringify($('#txtCardNo2').val()) + '}',
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (result) {
+                if (result.MemberName != null) {
+                    $("#spnMemberName2").text(result.MemberName);
+                    $("#spnMobileno2").text(result.MobileNo);
+                    $("#spnCardNo2").text(result.CardNo);
+                    $("#spnPtBalance2").text(result.PointsBalance);
+                    $("#spnEnrolledOutlet2").text(result.EnrolledOutletName);
+                    $("#spnEnrolledOn2").text(result.EnrolledOn);
+                    $("#hdnCustomerId2").val(result.CustomerId);
+
+                    $('#txtInvoiceNumber').val("");
+                    $('#txtInvoiceAmount').val("");
+                    $('#txtRequestedByName2').val("");
+                    $('#ddlRequestedForum2').prop('selectedIndex', 0);
+                    $("#tblUpdateData2").show();
+                }
+                else {
+                    toastr.error('Member not present. Please check entered Mobile Number OR Card Number');
+                    $("#spnMemberName2").text("");
+                    $("#spnMobileno2").text("");
+                    $("#spnCardNo2").text("");
+                    $("#spnPtBalance2").text("");
+                    $("#spnEnrolledOutlet2").text("");
+                    $("#spnEnrolledOn2").text("");
+                    $("#hdnCustomerId2").val("");
+
+                    $('#txtInvoiceNumber').val("");
+                    $('#txtInvoiceAmount').val("");
+                    $('#txtRequestedByName2').val("");
+                    $('#ddlRequestedForum2').prop('selectedIndex', 0);
+                    $("#tblUpdateData2").hide();
+                }
+                $("#divLoader").hide();
+            },
+            error: function (result) {
+                console.log(result.responseText)
+                $("#divLoader").hide();
+            }
+        });
+    }
+
+    function SaveAddEarn() {
+        if ($('#txtInvoiceNumber').val() == "") {
+            toastr.error('Please enter Invoice Number');
+            $('#txtInvoiceNumber').focus();
+            return false;
+        }
+        if ($('#txtInvoiceAmount').val() == "") {
+            toastr.error('Please enter Invoice Amount');
+            $('#txtInvoiceAmount').focus();
+            return false;
+        }
+        if ($('#ddlOutletList').val() == "") {
+            toastr.error('Please select Outlet');
+            $('#ddlOutletList').focus();
+            return false;
+        }
+        if ($('#txtRequestedByName2').val() == "") {
+            toastr.error('Please enter Requested Person name');
+            $('#txtRequestedByName2').focus();
+            return false;
+        }
+        if ($('#dtTransaction').val() == "") {
+            toastr.error('Please select Transaction date');
+            $('#dtTransaction').focus();
+            return false;
+        }
+
+        if (confirm("Are you sure? You want to change Data")) {
+            var MemberData = [];
+            item = {}
+            item["GroupID"] = $("#hdnGroupId").val();
+            item["MobileNo"] = $("#txtMobileNo2").val();
+            item["OutletId"] = $("#ddlOutletList").val();
+            item["TransactionDate"] = $("#dtTransaction").val();
+            item["InvoiceNumber"] = $("#txtInvoiceNumber").val();
+            item["InvoiceAmount"] = $("#txtInvoiceAmount").val();
+            item["RequestedBy"] = $("#txtRequestedByName2").val();
+            item["RequestedForum"] = $('#ddlRequestedForum2 :selected').text();
+            if ($('#rbtnSMS2').is(":checked")) {
+                item["IsSMS"] = 1;
+            }
+            if ($('#rbtnNOSMS2').is(":checked")) {
+                item["IsSMS"] = 0;
+            }
+            MemberData.push(item);
+            var data = JSON.stringify(MemberData);
+            console.log(data)
+            $("#divLoader").show();
+            $.ajax({
+                type: "POST",
+                url: "/ITOperations/AddEarnData",
+                data: '{jsonData: ' + JSON.stringify(data) + '}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (result) {
+                    console.log(111)
+                },
+                error: function (result) {
+                    console.log(result.responseText)
+                    if (result.responseText == "True") {
+                        toastr.success("Data Updated Successfully");
+                        $("#divLoader").hide();
+                    }
+                    else {
+                        toastr.error('error occured while saving data');
+                        $("#divLoader").hide();
+                    }
+                }
+            });
+        }
+    }
+
+    function GetRedeemData() {
+        if ($('#txtMobileNo3').val() == "" && $('#txtCardNo3').val() == "") {
+            toastr.error('Please enter Mobile Number OR Card Number');
+            return false
+        }
+        if ($('#txtMobileNo3').val() != "" && $('#txtCardNo3').val() != "") {
+            toastr.error('Please enter Mobile Number OR Card Number');
+            return false
+        }
+        $("#divLoader").show();
+        $.ajax({
+            type: "POST",
+            url: "/ITOperations/GetChangeNameData",
+            data: '{GroupId: ' + JSON.stringify($('#hdnGroupId').val()) + ', MobileNo: ' + JSON.stringify($('#txtMobileNo3').val()) + ',CardNo: ' + JSON.stringify($('#txtCardNo3').val()) + '}',
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (result) {
+                if (result.MemberName != null) {
+                    $("#spnMemberName3").text(result.MemberName);
+                    $("#spnMobileno3").text(result.MobileNo);
+                    $("#spnCardNo3").text(result.CardNo);
+                    $("#spnPtBalance3").text(result.PointsBalance);
+                    $("#spnEnrolledOutlet3").text(result.EnrolledOutletName);
+                    $("#spnEnrolledOn3").text(result.EnrolledOn);
+                    $("#hdnCustomerId3").val(result.CustomerId);
+
+                    $('#txtInvoiceNumber1').val("");
+                    $('#txtInvoiceAmount1').val("");
+                    $('#txtPointsToRedeem').val("");
+                    $('#txtRequestedByName3').val("");
+                    $('#ddlRequestedForum3').prop('selectedIndex', 0);
+                    $("#tblUpdateData3").show();
+                }
+                else {
+                    toastr.error('Member not present. Please check entered Mobile Number OR Card Number');
+                    $("#spnMemberName3").text("");
+                    $("#spnMobileno3").text("");
+                    $("#spnCardNo3").text("");
+                    $("#spnPtBalance3").text("");
+                    $("#spnEnrolledOutlet3").text("");
+                    $("#spnEnrolledOn3").text("");
+                    $("#hdnCustomerId3").val("");
+
+                    $('#txtInvoiceNumber1').val("");
+                    $('#txtInvoiceAmount1').val("");
+                    $('#txtPointsToRedeem').val("");
+                    $('#txtRequestedByName3').val("");
+                    $('#ddlRequestedForum3').prop('selectedIndex', 0);
+                    $('#ddlOutletList1').prop('selectedIndex', 0);
+                    $("#tblUpdateData3").hide();
+                }
+                $("#divLoader").hide();
+            },
+            error: function (result) {
+                console.log(result.responseText)
+                $("#divLoader").hide();
+            }
+        });
+    }
+
+    function SaveRedeemData() {
+        if ($('#txtInvoiceNumber1').val() == "") {
+            toastr.error('Please enter Invoice Number');
+            $('#txtInvoiceNumber1').focus();
+            return false;
+        }
+        if ($('#txtInvoiceAmount1').val() == "") {
+            toastr.error('Please enter Invoice Amount');
+            $('#txtInvoiceAmount1').focus();
+            return false;
+        }
+        if ($('#txtPointsToRedeem').val() == "") {
+            toastr.error('Please enter Points to Redeem');
+            $('#txtPointsToRedeem').focus();
+            return false;
+        }
+        if ($('#ddlOutletList1').val() == "") {
+            toastr.error('Please select Outlet');
+            $('#ddlOutletList1').focus();
+            return false;
+        }
+        if ($('#txtRequestedByName3').val() == "") {
+            toastr.error('Please enter Requested Person name');
+            $('#txtRequestedByName3').focus();
+            return false;
+        }
+        if ($('#dtTransaction1').val() == "") {
+            toastr.error('Please select Transaction date');
+            $('#dtTransaction1').focus();
+            return false;
+        }
+
+        if (confirm("Are you sure? You want to Redeem Points")) {
+            var MemberData = [];
+            item = {}
+            item["GroupID"] = $("#hdnGroupId").val();
+            item["MobileNo"] = $("#txtMobileNo3").val();
+            item["OutletId"] = $("#ddlOutletList1").val();
+            item["RedeemPoints"] = $("#txtPointsToRedeem").val();
+            item["TransactionDate"] = $("#dtTransaction1").val();
+            item["InvoiceNumber"] = $("#txtInvoiceNumber1").val();
+            item["InvoiceAmount"] = $("#txtInvoiceAmount1").val();
+            item["RequestedBy"] = $("#txtRequestedByName3").val();
+            item["RequestedForum"] = $('#ddlRequestedForum3 :selected').text();
+            if ($('#rbtnSMS3').is(":checked")) {
+                item["IsSMS"] = 1;
+            }
+            if ($('#rbtnNOSMS3').is(":checked")) {
+                item["IsSMS"] = 0;
+            }
+            MemberData.push(item);
+            var data = JSON.stringify(MemberData);
+            console.log(data)
+            $("#divLoader").show();
+            $.ajax({
+                type: "POST",
+                url: "/ITOperations/RedeemPointsData",
+                data: '{jsonData: ' + JSON.stringify(data) + '}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (result) {
+                    console.log(111)
+                },
+                error: function (result) {
+                    console.log(result.responseText)
+                    if (result.responseText == "True") {
+                        toastr.success("Data Updated Successfully");
+                        $("#divLoader").hide();
+                    }
+                    else {
+                        toastr.error('error occured while saving data');
+                        $("#divLoader").hide();
+                    }
+                }
+            });
+        }
+    }
+
+    function GetLoadBonusData() {
+        if ($('#txtMobileNo4').val() == "" && $('#txtCardNo4').val() == "") {
+            toastr.error('Please enter Mobile Number OR Card Number');
+            return false
+        }
+        if ($('#txtMobileNo4').val() != "" && $('#txtCardNo4').val() != "") {
+            toastr.error('Please enter Mobile Number OR Card Number');
+            return false
+        }
+        $("#divLoader").show();
+        $.ajax({
+            type: "POST",
+            url: "/ITOperations/GetChangeNameData",
+            data: '{GroupId: ' + JSON.stringify($('#hdnGroupId').val()) + ', MobileNo: ' + JSON.stringify($('#txtMobileNo4').val()) + ',CardNo: ' + JSON.stringify($('#txtCardNo4').val()) + '}',
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (result) {
+                if (result.MemberName != null) {
+                    $("#spnMemberName4").text(result.MemberName);
+                    $("#spnMobileno4").text(result.MobileNo);
+                    $("#spnCardNo4").text(result.CardNo);
+                    $("#spnPtBalance4").text(result.PointsBalance);
+                    $("#spnEnrolledOutlet4").text(result.EnrolledOutletName);
+                    $("#spnEnrolledOn4").text(result.EnrolledOn);
+                    $("#hdnCustomerId4").val(result.CustomerId);
+
+                    //$('#txtInvoiceNumber1').val("");
+                    //$('#txtInvoiceAmount1').val("");
+                    //$('#txtPointsToRedeem').val("");
+                    //$('#txtRequestedByName3').val("");
+                    //$('#ddlRequestedForum3').prop('selectedIndex', 0);
+                    $("#tblUpdateData4").show();
+                }
+                else {
+                    toastr.error('Member not present. Please check entered Mobile Number OR Card Number');
+                    $("#spnMemberName3").text("");
+                    $("#spnMobileno3").text("");
+                    $("#spnCardNo3").text("");
+                    $("#spnPtBalance3").text("");
+                    $("#spnEnrolledOutlet3").text("");
+                    $("#spnEnrolledOn3").text("");
+                    $("#hdnCustomerId3").val("");
+
+                    $('#txtInvoiceNumber1').val("");
+                    $('#txtInvoiceAmount1').val("");
+                    $('#txtPointsToRedeem').val("");
+                    $('#txtRequestedByName3').val("");
+                    $('#ddlRequestedForum3').prop('selectedIndex', 0);
+                    $('#ddlOutletList1').prop('selectedIndex', 0);
+                    $("#tblUpdateData3").hide();
+                }
+                $("#divLoader").hide();
+            },
+            error: function (result) {
+                console.log(result.responseText)
+                $("#divLoader").hide();
+            }
+        });
+    }
+
+    function SaveLoadBonusData() {
+        if ($('#txtBonusPoints').val() == "") {
+            toastr.error('Please enter Bonus Points');
+            $('#txtBonusPoints').focus();
+            return false;
+        }
+        if ($('#txtBonusRemark').val() == "") {
+            toastr.error('Please enter Bonus Remark');
+            $('#txtBonusRemark').focus();
+            return false;
+        }
+        if ($('#txtExpiryDate').val() == "") {
+            toastr.error('Please enter Expiry Date');
+            $('#txtExpiryDate').focus();
+            return false;
+        }
+        if ($('#txtRequestedByName4').val() == "") {
+            toastr.error('Please enter Requested Person name');
+            $('#txtRequestedByName4').focus();
+            return false;
+        }
+        if ($('#txtRequestedDate4').val() == "") {
+            toastr.error('Please select Requested date');
+            $('#txtRequestedDate4').focus();
+            return false;
+        }
+
+        if (confirm("Are you sure? You want to Load Points")) {
+            var MemberData = [];
+            item = {}
+            item["GroupID"] = $("#hdnGroupId").val();
+            item["MobileNo"] = $("#txtMobileNo4").val();
+            item["OutletId"] = $("#ddlOutletList4").val();
+            item["BonusPoints"] = $("#txtBonusPoints").val();
+            item["BonusRemark"] = $("#txtBonusRemark").val();
+            item["ExpiryDate"] = $("#txtExpiryDate").val();
+            item["RequestedBy"] = $("#txtRequestedByName4").val();
+            item["RequestedDate"] = $("#txtRequestedDate4").val();
+            item["RequestedForum"] = $('#ddlRequestedForum4 :selected').text();
+            if ($('#rbtnSMS4').is(":checked")) {
+                item["IsSMS"] = 1;
+            }
+            if ($('#rbtnNOSMS4').is(":checked")) {
+                item["IsSMS"] = 0;
+            }
+            MemberData.push(item);
+            var data = JSON.stringify(MemberData);
+            console.log(data)
+            $("#divLoader").show();
+            $.ajax({
+                type: "POST",
+                url: "/ITOperations/LoadBonusData",
+                data: '{jsonData: ' + JSON.stringify(data) + '}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (result) {
+                    console.log(111)
+                },
+                error: function (result) {
+                    console.log(result.responseText)
+                    if (result.responseText == "True") {
+                        toastr.success("Data Updated Successfully");
+                        $("#divLoader").hide();
+                    }
+                    else {
+                        toastr.error('error occured while saving data');
+                        $("#divLoader").hide();
+                    }
+                }
+            });
+        }
+    }
+
+    function AddSingleMemberData() {
+        if ($('#txtNewMobileNoAdd').val() == "") {
+            toastr.error('Please enter Mobile Number');
+            $('#txtNewMobileNoAdd').focus();
+            return false;
+        }
+        if ($('#txtNewFirstNameAdd').val() == "") {
+            toastr.error('Please enter Name');
+            $('#txtNewFirstNameAdd').focus();
+            return false;
+        }
+        if ($('#ddlOutletListAddMember').val() == "") {
+            toastr.error('Please select Outlet');
+            $('#ddlOutletListAddMember').focus();
+            return false;
+        }
+        if ($('#txtRequestedByNameAddMember').val() == "") {
+            toastr.error('Please enter Requested Person name');
+            $('#txtRequestedByNameAddMember').focus();
+            return false;
+        }
+        if ($('#txtRequestedDateAddMember').val() == "") {
+            toastr.error('Please select Requested date');
+            $('#txtRequestedDateAddMember').focus();
+            return false;
+        }
+
+        if (confirm("Are you sure? You want to Add Member")) {
+            var MemberData = [];
+            item = {}
+            item["GroupID"] = $("#hdnGroupId").val();
+            item["MobileNo"] = $("#txtNewMobileNoAdd").val();
+            item["CardNo"] = $("#txtNewCardNoAdd").val();
+            item["FullName"] = $("#txtNewFirstNameAdd").val() + " " + $("#txtNewLastNameAdd").val();
+            if ($('#rbtnMale').is(':checked')) {
+                item["Gender"] = "M";
+            }
+            if ($('#rbtnFemale').is(':checked')) {
+                item["Gender"] = "F";
+            }
+            item["BirthDay"] = $("#dtBirthday").val();
+            item["Source"] = $("#ddlSource").val();
+            item["OutletId"] = $("#ddlOutletListAddMember").val();
+            item["RequestedBy"] = $("#txtRequestedByNameAddMember").val();
+            item["RequestedDate"] = $("#txtRequestedDateAddMember").val();
+            item["RequestedForum"] = $('#ddlRequestedForumAddMember :selected').text();
+
+            MemberData.push(item);
+            var data = JSON.stringify(MemberData);
+            console.log(data)
+            $("#divLoader").show();
+            $.ajax({
+                type: "POST",
+                url: "/ITOperations/AddSingleMember",
+                data: '{jsonData: ' + JSON.stringify(data) + '}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (result) {
+                    console.log(111)
+                },
+                error: function (result) {
+                    console.log(result.responseText)
+                    if (result.responseText == "True") {
+                        toastr.success("Data Updated Successfully");
+                        $("#divLoader").hide();
+                    }
+                    else {
+                        toastr.error('error occured while saving data');
+                        $("#divLoader").hide();
+                    }
+                }
+            });
+        }
+    }
+
+    function GetSMSData() {
+        if ($('#txtMobileNoSMS').val() == "" && $('#txtCardNoSMS').val() == "") {
+            toastr.error('Please enter Mobile Number OR Card Number');
+            return false
+        }
+        if ($('#txtMobileNoSMS').val() != "" && $('#txtCardNoSMS').val() != "") {
+            toastr.error('Please enter Mobile Number OR Card Number');
+            return false
+        }
+        $("#divLoader").show();
+        $.ajax({
+            type: "POST",
+            url: "/ITOperations/GetChangeNameData",
+            data: '{GroupId: ' + JSON.stringify($('#hdnGroupId').val()) + ', MobileNo: ' + JSON.stringify($('#txtMobileNoSMS').val()) + ',CardNo: ' + JSON.stringify($('#txtCardNoSMS').val()) + '}',
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (result) {
+                if (result.MemberName != null) {
+                    $("#spnMemberNameSMS").text(result.MemberName);
+                    $("#spnMobilenoSMS").text(result.MobileNo);
+                    $("#spnCardNoSMS").text(result.CardNo);
+                    $("#spnPtBalanceSMS").text(result.PointsBalance);
+                    $("#spnEnrolledOutletSMS").text(result.EnrolledOutletName);
+                    $("#spnEnrolledOnSMS").text(result.EnrolledOn);
+                    $("#hdnCustomerIdSMS").val(result.CustomerId);
+
+                    $('#txtRequestedByNameSMS').val("");
+                    $('#ddlRequestedForumSMS').prop('selectedIndex', 0);
+                    $("#tblUpdateDataSMS").show();
+                }
+                else {
+                    toastr.error('Member not present. Please check entered Mobile Number OR Card Number');
+                    $("#spnMemberNameSMS").text("");
+                    $("#spnMobilenoSMS").text("");
+                    $("#spnCardNoSMS").text("");
+                    $("#spnPtBalanceSMS").text("");
+                    $("#spnEnrolledOutletSMS").text("");
+                    $("#spnEnrolledOnSMS").text("");
+                    $("#hdnCustomerIdSMS").val("");
+
+
+                    $('#txtRequestedByNameSMS').val("");
+                    $('#ddlRequestedForumSMS').prop('selectedIndex', 0);
+                    $("#tblUpdateDataSMS").hide();
+                }
+                $("#divLoader").hide();
+            },
+            error: function (result) {
+                console.log(result.responseText)
+                $("#divLoader").hide();
+            }
+        });
+    }
+
+    function SaveSMSData() {
+
+        if ($('#txtRequestedByNameSMS').val() == "") {
+            toastr.error('Please enter Requested Person name');
+            $('#txtRequestedByName').focus();
+            return false;
+        }
+        if ($('#txtRequestedDateSMS').val() == "") {
+            toastr.error('Please enter Requested Date');
+            $('#txtRequestedDateSMS').focus();
+            return false;
+        }
+        if (confirm("Are you sure? You want to change SMS Setting")) {
+            var MemberData = [];
+            item = {}
+            item["GroupID"] = $("#hdnGroupId").val();
+            item["CustomerId"] = $("#hdnCustomerIdSMS").val();
+            item["Disable"] = $("#ddlDisableSMS").val();
+            item["RequestedBy"] = $("#txtRequestedByNameSMS").val();
+            item["RequestedForum"] = $('#ddlRequestedForumSMS :selected').text();
+            item["RequestedDate"] = $("#txtRequestedDateSMS").val();
+
+            if ($('#rbtnSMSSMS').is(":checked")) {
+                item["IsSMS"] = 1;
+            }
+            if ($('#rbtnNOSMSSMS').is(":checked")) {
+                item["IsSMS"] = 0;
+            }
+            MemberData.push(item);
+            var data = JSON.stringify(MemberData);
+            console.log(data)
+            $("#divLoader").show();
+            $.ajax({
+                type: "POST",
+                url: "/ITOperations/ChangeSMSDetails",
+                data: '{jsonData: ' + JSON.stringify(data) + '}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (result) {
+                    console.log(111)
+                },
+                error: function (result) {
+                    console.log(result.responseText)
+                    if (result.responseText == "True") {
+                        toastr.success("Member Name Updated Successfully");
+                        $("#divLoader").hide();
+                    }
+                    else {
+                        toastr.error('error occured while saving data');
+                        $("#divLoader").hide();
+                    }
+                }
+            });
+        }
+    }
+
+    function GetOTPData() {
+        if ($('#txtMobileNoOTP').val() == "") {
+            toastr.error('Please enter Mobile Number');
+            $('#txtMobileNoOTP').focus();
+            return false
+        }
+        $("#divLoader").show();
+        $.ajax({
+            type: "POST",
+            url: "/ITOperations/GetOTPData",
+            data: '{GroupId: ' + JSON.stringify($('#hdnGroupId').val()) + ', MobileNo: ' + JSON.stringify($('#txtMobileNoOTP').val()) + '}',
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (result) {
+                if (result.MobileNo != null) {
+                    $("#spnOutletNameOTP").text(result.EnrolledOutletName);
+                    $("#spnDateTimeOTP").text(result.EnrolledOn);
+                    $("#spnOTP").text(result.MobileNo);
+
+                }
+                else {
+                    toastr.error('Member not present. Please check entered Mobile Number OR Card Number');
+                    $("#spnOutletNameOTP").text("");
+                    $("#spnDateTimeOTP").text("");
+                    $("#spnOTP").text("");
+                }
+                $("#divLoader").hide();
+            },
+            error: function (result) {
+                console.log(result.responseText)
+                $("#divLoader").hide();
+            }
+        });
+
+    }
+
+    function GetTransactionCancelData() {
+        if ($('#txtMobileNoCancel').val() == "" && $('#txtInvoiceNoCancel').val() == "") {
+            toastr.error('Please enter Mobile Number OR Invoice Number');
+            return false
+        }
+        if ($('#txtMobileNoCancel').val() != "" && $('#txtInvoiceNoCancel').val() != "") {
+            toastr.error('Please enter Mobile Number OR Invoice Number');
+            return false
+        }
+
+        $("#divLoader").show();
+        $.ajax({
+            type: "POST",
+            url: "/ITOperations/GetCancelTxnData",
+            data: '{GroupId: ' + JSON.stringify($('#hdnGroupId').val()) + ', MobileNo: ' + JSON.stringify($('#txtMobileNoCancel').val()) + ',InvoiceNo: ' + JSON.stringify($('#txtInvoiceNoCancel').val()) + '}',
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (result) {
+                if (result.objCustomerDetail != null) {
+                    $("#spnMemberNameCancel").text(result.objCustomerDetail.CustomerName);
+                    $("#spnMobilenoCancel").text(result.objCustomerDetail.MobileNo);
+                    $("#spnCardNoCancel").text(result.objCustomerDetail.CardNumber);
+                    $("#spnPtBalanceCancel").text(result.objCustomerDetail.Points);
+                    if (result.objCancelTxnModel != null) {
+
+                        $("#spnTransactionCancel").text(result.objCancelTxnModel.TransactionName);
+                        $("#spnInvoiceNoCancel").text(result.objCancelTxnModel.InvoiceNo);
+                        var index = result.objCancelTxnModel.InvoiceAmt.toString().indexOf('.');
+                        if (index > -1) {
+                            $("#spnInvoiceAmtCancel").text(result.objCancelTxnModel.InvoiceAmt);
+                        }
+                        else {
+                            $("#spnInvoiceAmtCancel").text(result.objCancelTxnModel.InvoiceAmt+".00");
+                        }
+                        $("#spnPointsCancel").text(result.objCancelTxnModel.Points);
+                        $("#spnTransactionOutletCancel").text(result.objCancelTxnModel.OutletName);
+                        $("#spnTransactionDateTimeCancel").text(result.objCancelTxnModel.Datetime);
+                        $("#tblUpdateDataCancel").show();
+                        $("#dvDeleteBtn").show();
+                        tableData.length = 0;
+                        DrawTable();
+                        
+                    }
+                    if (result.lstCancelTxnModel != null) {
+                        tableData.length = 0;
+                        $.map(result.lstCancelTxnModel, function (item) {
+                            optionItem = {}
+                            optionItem["Datetime"] = item.Datetime;
+                            optionItem["InvoiceNo"] = item.InvoiceNo;
+                            optionItem["InvoiceAmt"] = item.InvoiceAmt;
+                            optionItem["TransactionName"] = item.TransactionName;
+                            optionItem["Points"] = item.Points;
+                            optionItem["OutletName"] = item.OutletName;
+                            tableData.push(optionItem);
+                        });
+                        DrawTable();
+                        $("#tblUpdateDataCancel").hide();
+                        $("#dvDeleteBtn").attr('style', 'display:none !important');
+                        
+                    }
+                }
+                else {
+                    toastr.error('Member not present. Please check entered Mobile Number OR Card Number');
+                    $("#tblUpdateDataCancel").hide();
+                }
+                $("#divLoader").hide();
+            },
+            error: function (result) {
+                console.log(result.responseText)
+                $("#divLoader").hide();
+            }
+        });
+    }
+
+    function DeleteTxnData(InvoiceNo) {
+        if (confirm("Are you sure? You want to delete Transaction")) {
+            if (InvoiceNo == null) {
+                InvoiceNo = $('#spnInvoiceNoCancel').text();
+            }
+            $("#divLoader").show();
+            $.ajax({
+                type: "POST",
+                url: "/ITOperations/DeleteTransaction",
+                data: '{GroupId: ' + JSON.stringify($('#hdnGroupId').val()) + ', InvoiceNo: ' + JSON.stringify(InvoiceNo) + '}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (result) {
+                    console.log(111)
+                },
+                error: function (result) {
+                    console.log(result.responseText)
+                    if (result.responseText == "True") {
+                        toastr.success("Transaction Deleted Successfully");
+                        $("#tblUpdateDataCancel").hide();
+                        if ($('#spnInvoiceNoCancel').text() == "") {
+                            GetTransactionCancelData();
+                        }
+                        $("#divLoader").hide();
+                    }
+                    else {
+                        toastr.error('error occured while saving data');
+                        $("#divLoader").hide();
+                    }
+                }
+            });
+        }
+    }
+    function DrawTable() {
+        var table1 = $('#activityTable').DataTable();
+        table1.destroy();
+
+        var table = $('#activityTable').DataTable({
+            "data": tableData,
+            "paging": true,
+            "ordering": false,
+            "info": true,
+            "bFilter": true,
+            "pageLength": 10,
+            "pagingType": "simple_numbers",
+            "columns": [
+                { data: "Datetime" },
+                { data: "InvoiceNo" },
+                { data: "InvoiceAmt" },
+                { data: "TransactionName" },
+                { data: "Points" },
+                { data: "OutletName" },
+                {
+                    "mData": "InvoiceNo",
+                    "mRender": function (data, type, row) {
+                        return '<a href="#" onclick="DeleteTxnData('+ data +')" class="login" title="Edit"><img src="/Content/assets/images/delete.png" /></a>';
+                        //return '<button href="#"' + 'id="' + data + '">Edit</button>';
+                    }
+                }
+            ],
+            aoColumnDefs: [
+                {
+                    bSortable: false,
+                    aTargets: []
+                }
+            ]
+        });
+        $('#activityTable_filter').hide();
+        $('#txtSearch').on('keyup', function () {
+
+            $.fn.dataTable.ext.search.push(function (settings, searchData) {
+                var term = $('#txtSearch').val().toLowerCase()
+                for (var i = 0; i < searchData.length; i++) {
+                    if (searchData[i].toLowerCase().indexOf(term) == 0) {
+                        return true;
+                    }
+                }
+                return false;
+            });
+            var table = $('#activityTable').DataTable();
+            table.draw();
+        });
+    }
+    
+</script>
+
+<style>
+    table.dataTable thead .sorting_asc {
+        background: url("https://cdn.datatables.net/1.10.0/images/sort_asc.png") no-repeat center left;
+    }
+
+    table.dataTable thead .sorting_desc {
+        background: url("https://cdn.datatables.net/1.10.0/images/sort_desc.png") no-repeat center left;
+    }
+
+    table.dataTable thead .sorting {
+        background: url("https://cdn.datatables.net/1.10.0/images/sort_both.png") no-repeat center left;
+    }
+</style>

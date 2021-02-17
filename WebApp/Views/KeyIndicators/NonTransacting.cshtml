@@ -1,0 +1,302 @@
+﻿@model BOTS_BL.Models.NonTransactingCls
+@{
+    ViewBag.Title = "NonTransacting";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="app-main__inner">
+    <div class="row">
+        <div class="col-md-12 col-lg-12">
+            <div class="mb-3 card">
+                <div class="card-header-tab card-header-tab-animation card-header">
+                    <div class="card-header-title">
+                        <i class="header-icon lnr-apartment icon-gradient bg-love-kiss"> </i>
+                        NON-TRANSACTING MEMBERS – LETs CALL THEM BACK
+                    </div>
+                    <ul class="nav">
+                        <li class="nav-item"><a href="javascript:void(0);" onclick="ShowAll();" class="active nav-link">All</a></li>
+                        <li class="nav-item">
+                            @Html.DropDownListFor(x => Model._181to365Days, new SelectList(ViewBag.OutletList, "Value", "Text"), "Select Outlet", htmlAttributes: new { @class = "input50", @id = "nonTransOutlet", style = "margin-top:20px;" })
+                        </li>
+                    </ul>
+                </div>
+                <div class="card-body">
+                    <div class="tab-content">
+                        <div class="tab-pane fade show active" id="tabs-eg-77">
+                            <div class="card mb-3 widget-chart widget-chart2 text-left w-100">
+                                <div class="widget-chat-wrapper-outer">
+                                    <div class="widget-chart-wrapper widget-chart-wrapper-lg opacity-10 m-0" id="canvasContainer">
+                                        <canvas id="barcanvas"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="dvOutletWiseData" style="display:none;">
+                        <div class="row mb-3 card">
+                            <div class="container-fluid pt-3 pl-3 pr-3">
+                                <div class="pt-3 pl-3 pr-3 col-md-12 col-lg-12">
+                                    <div class="row">
+                                        <div class="col search-container">
+                                            <i class="fas fa-search"></i>
+                                            <input class="input100" type="text" id="txtSearch" placeholder="Search activity..." />
+                                        </div>
+                                        <div class="col text-right">
+                                            <ul class="list-inline progress-list mt-2">
+                                                <li class="list-inline-item">
+                                                    <div class="dropdown">
+                                                        <button class="btn btn-primary login-btn" onclick='ExportDataExcel();' type="button" id="btnExport">
+                                                            <i class="fas fa-file-export"></i> Export
+                                                        </button>
+                                                    </div>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="row mt-3" id="dvActivityData">
+
+                                        <div class="table-responsive">
+                                            <table class="table" id="activityTable">
+                                                <thead>
+                                                    <tr>
+                                                        <th scope="col">Enrolled Outlet</th>
+                                                        <th scope="col">Mobile Number</th>
+                                                        <th scope="col">Member Name</th>
+                                                        <th scope="col">Type</th>
+                                                        <th scope="col">Total Spend</th>
+                                                        <th scope="col">Avl Bal Points</th>
+                                                        <th scope="col">Txn Update Date</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.2.2/Chart.bundle.min.js"></script>
+<script>
+    var tableData = [];
+    var selectedType = 0;
+    $(document).ready(function () {
+        GetData();
+        $("#nonTransOutlet").on("change", function () {
+            GetData();
+            $("#dvOutletWiseData").hide();
+        });
+    });
+    function ShowAll() {
+        //$("#nonTransOutlet").val("Select Outlet");
+        $("#nonTransOutlet").prop('selectedIndex', 0);
+        GetData();
+        $("#dvOutletWiseData").hide();
+    }
+
+    function GetData() {
+        $("#divLoader").show();
+        var outletId = $("#nonTransOutlet").val();
+        $.ajax({
+            type: "POST",
+            url: "../KeyIndicators/GetNonTransactingResult",
+            data: "{'outletId': '" + outletId + "'}",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+
+                if (response != null) {
+                    $('#barcanvas').remove(); // this is my <canvas> element
+                    $('#canvasContainer').append('<canvas id="barcanvas"><canvas>');
+                    var barChartData =
+                    {
+                        labels: ["Within 30 days", "31 to 60 days", "61 to 90 days", "91 to 180 days", "181 to 365 days", "More than a year"],
+                        datasets: [{
+                            label: '',
+                            backgroundColor: [
+                                "#f990a7",
+                                "#aad2ed",
+                                "#9966FF",
+                                "#99e5e5",
+                                "#f7bd83",
+                                "#996600",
+                            ],
+                            borderWidth: 2,
+                            data: [response._Within30Days, response._31to60Days, response._61to90Days, response._91to180Days, response._181to365Days, response._MoreThanYear]
+                        }]
+                    };
+
+                        var ctx1 = document.getElementById("barcanvas").getContext("2d");
+                    var myChart = new Chart(ctx1,
+                            {
+                                type: 'bar',
+                                data: barChartData,
+                                options:
+                                {
+                                    title:
+                                    {
+                                        display: true,
+                                        text: ""
+                                    },
+                                    legend: {
+                                        display: false
+                                    },
+                                    options: {
+                                        tooltips: { enabled: false },
+                                        hover: { mode: null },                                        
+                                    },
+                                    onClick: function (e) {
+                                        
+                                        var activePointLabel = this.getElementsAtEvent(e)[0]._model.label;
+                                        GetTxnData(activePointLabel);
+                                    },
+                                    responsive: true,
+                                    maintainAspectRatio: true,
+                                    tooltips: { enabled: false },
+                                    hover: { mode: null },
+
+                                    "hover": {
+                                        "animationDuration": 0,
+                                        mode: null
+                                    },
+                                    "animation": {
+                                        "duration": 1,
+                                        "onComplete": function () {
+                                            var chartInstance = this.chart,
+                                                ctx = chartInstance.ctx;
+
+                                            ctx.font = Chart.helpers.fontString(Chart.defaults.global.defaultFontSize, Chart.defaults.global.defaultFontStyle, Chart.defaults.global.defaultFontFamily);
+                                            ctx.textAlign = 'center';
+                                            ctx.textBaseline = 'bottom';
+
+                                            this.data.datasets.forEach(function (dataset, i) {
+                                                var meta = chartInstance.controller.getDatasetMeta(i);
+                                                meta.data.forEach(function (bar, index) {
+                                                    var data = dataset.data[index];
+                                                    ctx.fillStyle = 'rgba(0, 0, 0, 1)';
+                                                    ctx.fillText(data, bar._model.x, bar._model.y - 5);
+                                                });
+                                            });
+                                        }
+                                    }
+                                }
+                            });
+                }
+                $("#divLoader").hide();
+            },
+            failure: function (response) {
+                $("#divLoader").hide();
+            },
+            error: function (response) {
+                //$('#dvOutletWiseData').html(response.responseText);
+                $("#divLoader").hide();
+            }
+        });
+    }
+
+    function GetTxnData(type) {
+        selectedType = type;
+        $("#divLoader").show();
+        var outletId = $("#nonTransOutlet").val();
+        $.ajax({
+            type: "POST",
+            url: "../KeyIndicators/GetNonTransactingTxnResult",
+            data: "{'outletId': '" + outletId + "','type': '" + type + "'}",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                if (response != null) {                   
+                    tableData.length = 0;
+                    $.map(response, function (item) {
+                        optionItem = {}
+                        optionItem["EnrolledOutlet"] = item.EnrolledOutlet;
+                        optionItem["MaskedMobileNo"] = item.MaskedMobileNo;
+                        optionItem["MemberName"] = item.MemberName;
+                        optionItem["Type"] = item.Type;
+                        optionItem["TotalSpend"] = item.TotalSpend;
+                        optionItem["AvlBalPoints"] = item.AvlBalPoints;
+                        optionItem["LastTxnDate"] = item.LastTxnDate;
+                        tableData.push(optionItem);
+                    });
+                    
+                    DrawTable();
+                    $("#dvOutletWiseData").show();
+                }
+                $("#divLoader").hide();
+            },
+            failure: function (response) {
+                $("#divLoader").hide();
+            },
+            error: function (response) {
+                //$('#dvOutletWiseData').html(response.responseText);
+                $("#divLoader").hide();
+            }
+        });
+    }
+
+
+    function DrawTable() {
+        var table1 = $('#activityTable').DataTable();
+        table1.destroy();
+
+        var table = $('#activityTable').DataTable({
+            "data": tableData,
+            "paging": true,
+            "ordering": true,
+            "info": true,
+            "bFilter": true,
+            "pageLength": 25,
+            "pagingType": "simple_numbers",
+            "columns": [
+                { data: "EnrolledOutlet" },
+                { data: "MaskedMobileNo" },
+                { data: "MemberName" },
+                { data: "Type" },
+                { data: "TotalSpend" },
+                { data: "AvlBalPoints" },
+                { data: "LastTxnDate" }
+            ],
+            aoColumnDefs: [
+                {
+                    bSortable: false,
+                    aTargets: [-5, -6, -7]
+                }
+            ]
+        });
+        $('#activityTable_filter').hide();
+
+        $('#txtSearch').on('keyup', function () {
+
+            $.fn.dataTable.ext.search.push(function (settings, searchData) {
+                var term = $('#txtSearch').val().toLowerCase()
+                for (var i = 0; i < searchData.length; i++) {
+                    if (searchData[i].toLowerCase().indexOf(term) == 0) {
+                        return true;
+                    }
+                }
+                return false;
+            });
+            var table = $('#activityTable').DataTable();
+            table.draw();
+        });
+    }
+
+    function ExportDataExcel() {
+        $("#divLoader").show();
+        var outletId = $("#nonTransOutlet").val();
+        var urlLink = "@Url.Action("ExportToExcelNonTransacting", "KeyIndicators")";
+        urlLink = urlLink + "?outletId=" + outletId + "&type=" + selectedType + "&ReportName=NonTransacting";
+        console.log(urlLink);
+        window.location.href = urlLink;
+        $("#divLoader").hide();
+
+    }
+</script>

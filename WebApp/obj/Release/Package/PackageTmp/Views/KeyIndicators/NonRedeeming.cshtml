@@ -1,0 +1,278 @@
+﻿@model BOTS_BL.Models.NonRedemptionCls
+@using System.Globalization
+@{
+    ViewBag.Title = "NonRedeeming";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="app-main__inner">
+    <div class="row">
+        <div class="col-md-6 col-xl-3">
+            <div class="card mb-3 widget-content bg-midnight-bloom">
+                <div class="widget-content-wrapper text-white">
+                    <div class="widget-content-left">
+                        <div class="widget-heading">
+                            Total Members
+                        </div>
+
+                    </div>
+                    <div class="widget-content-right">
+                        <div class="widget-numbers text-white"><span>@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(Model.TotalMember))</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 col-xl-3">
+            <div class="card mb-3 widget-content bg-arielle-smile">
+                <div class="widget-content-wrapper text-white">
+                    <div class="widget-content-left">
+                        <div class="widget-heading">
+                            Unique Redeemed Members
+                        </div>
+
+                    </div>
+                    <div class="widget-content-right">
+                        <div class="widget-numbers text-white"><span>@Model.UniqueRedeemedMember</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 col-xl-3">
+            <div class="card mb-3 widget-content bg-grow-early">
+                <div class="widget-content-wrapper text-white">
+                    <div class="widget-content-left">
+                        <div class="widget-heading">
+                            Never Redeemed
+                        </div>
+
+                    </div>
+                    <div class="widget-content-right">
+                        <div class="widget-numbers text-white"><span>@Model.NeverRedeemed</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 col-xl-3">
+            <div class="card mb-3 widget-content bg-alternate">
+                <div class="widget-content-wrapper text-white">
+                    <div class="widget-content-left">
+                        <div class="widget-heading">
+                            Never Redeemed %
+                        </div>
+
+                    </div>
+                    <div class="widget-content-right">
+                        <div class="widget-numbers text-white"><span>@Model.NeverRedeemedPercentage%</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="row mb-3 pt-3 pl-3 pr-3 card">
+        <div class="col-sm-10">
+            <table class="col-sm-12" border="1">
+                <tr>
+                    <th scope="col" colspan="2" rowspan="2" style="text-align:center;">Never Redeemed</th>
+                    <th scope="col" colspan="3" style="text-align:center;">Enrolled Since</th>
+                </tr>
+                <tr>
+                    <th scope="col" style="text-align:center; width:200px;">Less than 90 days</th>
+                    <th scope="col" style="text-align:center; width:200px;">Between 90 & 180</th>
+                    <th scope="col" style="text-align:center; width:200px;">More than 180 days</th>
+                </tr>
+                <tr>
+                    <th scope="col" style="text-align:center; width:150px;" rowspan="3">Points Balance</th>
+                    <th scope="col" style="text-align:center; width:100px;">High</th>
+                    <td scope="col" style="text-align:center; width:100px; color:blue;cursor:pointer;"><a onclick="GetData(1,1);"><u>@Model.LessThan90DaysHigh</u></a></td>
+                    <td scope="col" style="text-align:center; width:200px; color:blue;cursor:pointer;"><a onclick="GetData(1,2);"><u>@Model.Bt90to180High</u></a></td>
+                    <td scope="col" style="text-align:center; width:200px; color:blue;cursor:pointer;"><a onclick="GetData(1,3);"><u>@Model.MoreThan180DaysHigh</u></a></td>
+                </tr>
+                <tr>
+                    <th style="text-align:center;">Med</th>
+                    <td style="text-align:center; color:blue;cursor:pointer;"><a onclick="GetData(2,1);"><u>@Model.LessThan90DaysMedium</u></a></td>
+                    <td style="text-align:center; color:blue;cursor:pointer;"><a onclick="GetData(2,2);"><u>@Model.Bt90to180Medium</u></a></td>
+                    <td style="text-align:center; color:blue;cursor:pointer;"><a onclick="GetData(2,3);"><u>@Model.MoreThan180DaysMedium</u></a></td>
+                </tr>
+                <tr>
+                    <th style="text-align:center;">Low</th>
+                    <td style="text-align:center; color:blue;cursor:pointer;"><a onclick="GetData(3,1);"><u>@Model.LessThan90DaysLow</u></a></td>
+                    <td style="text-align:center; color:blue;cursor:pointer;"><a onclick="GetData(3,2);"><u>@Model.Bt90to180Low</u></a></td>
+                    <td style="text-align:center; color:blue;cursor:pointer;"><a onclick="GetData(3,3);"><u>@Model.MoreThan180DaysLow</u></a></td>
+                </tr>
+
+            </table>
+
+        </div>
+
+
+        <div id="dvOutletWiseData" style="display:none;">
+            <div class="row mb-3">
+                <div class="container-fluid pt-3 pl-3 pr-3">
+                    <div class="pt-3 pl-3 pr-3 col-md-12 col-lg-12">
+                        <div class="row">
+                            <div class="col search-container">
+                                <i class="fas fa-search"></i>
+                                <input class="input100" type="text" id="txtSearch" placeholder="Search activity..." />
+                            </div>
+                            <div class="col text-right">
+                                <ul class="list-inline progress-list mt-2">
+                                    <li class="list-inline-item">
+                                        <div class="dropdown">
+                                            <button class="btn btn-primary login-btn" onclick='ExportDataExcel();' type="button" id="btnExport">
+                                                <i class="fas fa-file-export"></i> Export
+                                            </button>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="row mt-3" id="dvActivityData">
+
+                            <div class="table-responsive">
+                                <table class="table" id="activityTable">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">Enrolled Outlet</th>
+                                            <th scope="col">Mobile Number</th>
+                                            <th scope="col">Member Name</th>
+                                            <th scope="col">Type</th>
+                                            <th scope="col">Total Spend</th>
+                                            <th scope="col">Avl Bal Points</th>
+                                            <th scope="col">Txn Update Date</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>                                        
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+<script>
+    var clickedType = 0;
+    var clickedDaysType = 0;
+    var tableData = [];
+    $(document).ready(function () {
+        GetData();
+    });
+    function GetData(type,daysType) {
+        clickedType = type;
+        clickedDaysType = daysType;
+        $("#divLoader").show();
+
+        $.ajax({
+            type: "POST",
+            url: "../KeyIndicators/GetNonRedemptionTxnResult",
+            data: "{'type': " + type + ",'daysType': " + daysType + "}",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                if (response != null) {
+                    tableData.length = 0;
+                    $.map(response, function (item) {
+                        optionItem = {}
+                        optionItem["EnrolledOutlet"] = item.EnrolledOutlet;
+                        optionItem["MobileNo"] = item.MobileNo;
+                        optionItem["MemberName"] = item.MemberName;
+                        optionItem["Type"] = item.Type;
+                        optionItem["TotalSpend"] = item.TotalSpend;
+                        optionItem["AvlBalPoints"] = item.AvlBalPoints;
+                        optionItem["LastTxnDate"] = item.LastTxnDate;
+                        tableData.push(optionItem);
+                    });
+
+                    DrawTable();
+                    $("#dvOutletWiseData").show();
+                }
+                $("#divLoader").hide();
+            },
+            failure: function (response) {
+                $("#divLoader").hide();
+            },
+            error: function (response) {
+                //$('#dvOutletWiseData').html(response.responseText);
+                $("#divLoader").hide();
+            }
+        });
+    }
+
+    function DrawTable() {
+        var table1 = $('#activityTable').DataTable();
+        table1.destroy();
+
+        var table = $('#activityTable').DataTable({
+            "data": tableData,
+            "paging": true,
+            "ordering": true,
+            "info": true,
+            "bFilter": true,
+            "pageLength": 25,
+            "pagingType": "simple_numbers",
+            "columns": [
+                { data: "EnrolledOutlet" },
+                { data: "MobileNo" },
+                { data: "MemberName" },
+                { data: "Type" },
+                { data: "TotalSpend" },
+                { data: "AvlBalPoints" },
+                { data: "LastTxnDate" }
+            ],
+            aoColumnDefs: [
+                {
+                    bSortable: false,
+                    aTargets: [-5, -6, -7]
+                }
+            ]
+        });
+        $('#activityTable_filter').hide();
+
+        $('#txtSearch').on('keyup', function () {
+
+            $.fn.dataTable.ext.search.push(function (settings, searchData) {
+                var term = $('#txtSearch').val().toLowerCase()
+                for (var i = 0; i < searchData.length; i++) {
+                    if (searchData[i].toLowerCase().indexOf(term) == 0) {
+                        return true;
+                    }
+                }
+                return false;
+            });
+            var table = $('#activityTable').DataTable();
+            table.draw();
+        });
+    }
+
+        function ExportDataExcel() {
+
+        var urlLink = "@Url.Action("ExportToExcelNonRedemption", "KeyIndicators")";
+            urlLink = urlLink + "?type=" + clickedType + "&daysType=" + clickedDaysType + "&ReportName=NonRedemption";
+        console.log(urlLink);
+        window.location.href = urlLink;
+        $("#divLoader").hide();
+
+    }
+
+</script>
+
+<style>
+    table.dataTable thead .sorting_asc {
+        background: url("https://cdn.datatables.net/1.10.0/images/sort_asc.png") no-repeat center left;
+    }
+
+    table.dataTable thead .sorting_desc {
+        background: url("https://cdn.datatables.net/1.10.0/images/sort_desc.png") no-repeat center left;
+    }
+
+    table.dataTable thead .sorting {
+        background: url("https://cdn.datatables.net/1.10.0/images/sort_both.png") no-repeat center left;
+    }
+</style>

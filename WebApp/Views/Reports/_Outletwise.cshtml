@@ -1,0 +1,157 @@
+﻿@model List<BOTS_BL.Models.OutletWise>
+@using System.Globalization
+
+<div class="row mb-3 card">
+    <div class="container-fluid pt-3 pl-3 pr-3">
+        <div class="pt-3 pl-3 pr-3 col-md-12 col-lg-12">
+            <div class="row">
+                <div class="col search-container">
+                    <i class="fas fa-search"></i>
+                    <input class="input100" type="text" id="txtSearch" placeholder="Search activity..." />
+                </div>
+                <div class="col text-right">
+                    <ul class="list-inline progress-list mt-2">
+                        <li class="list-inline-item">
+                            <div class="dropdown">
+                                <button class="btn btn-primary login-btn" onclick='ExportDataExcel();' type="button" id="btnExport">
+                                    <i class="fas fa-file-export"></i> Export
+                                </button>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="row mt-3" id="dvActivityData">
+
+                <div class="table-responsive">
+                    <table class="table" id="activityTable">
+                        <thead>
+                            <tr style="text-align:center;">
+                                <th scope="col" style="border-top:1px solid black !important;"></th>
+                                <th scope="col" style="border:1px solid black !important;" colspan="7">Keys Indicators</th>
+                                <th scope="col" style="border-right:0px solid black !important;border-top:1px solid black !important;" colspan="4">Points Summary</th>
+                            </tr>
+                            <tr>
+                                <th scope="col">Outlet Name</th>
+                                <th scope="col">Total Members</th>
+                                <th scope="col">Total Txns</th>
+                                <th scope="col">Total Spends</th>
+                                <th scope="col">ATS</th>
+                                <th scope="col">Non Active</th>
+                                <th scope="col">Only Once</th>
+                                <th scope="col">Red'n Rate</th>
+                                <th scope="col">Points Earn</th>
+                                <th scope="col">Points Burn</th>
+                                <th scope="col">Points Cancelled</th>
+                                <th scope="col">Points Expired</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (Model != null)
+                            {
+                                if (Model.Count > 0)
+                                {
+
+                                    foreach (var outlet in Model)
+                                    {
+                                        <tr>
+                                            <td><a href="@Url.Action("Transactionwise", "Reports", new { OutletId = outlet.OutletId })" class="login" title="Launch Course">@outlet.OutletName</a></td>
+                                            <td>@outlet.TotalMember</td>
+                                            <td>@outlet.TotalTxn</td>
+                                            <td>@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(outlet.TotalSpend))</td>
+                                            <td>@outlet.ATS</td>
+                                            <td>@outlet.NonActive</td>
+                                            <td>@outlet.OnlyOnce</td>
+                                            <td>@outlet.RedemptionRate</td>
+                                            <td>@outlet.PointsEarned</td>
+                                            <td>@outlet.PointsBurned</td>
+                                            <td>@outlet.PointsCancelled</td>
+                                            <td>@outlet.PointsExpired</td>
+                                        </tr>
+                                    }
+                                }
+                                else
+                                {
+                                    <tr>
+                                        <td colspan="12" align="center">No Learning Available</td>
+                                    </tr>
+                                }
+                            }
+                            else
+                            {
+                                <tr>
+                                    <td colspan="12">No Learning Available</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+
+
+
+        </div>
+
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $('#activityTable').DataTable({
+            "aaSorting": [],
+            "paging": true,
+            "ordering": true,
+            "info": true,
+            "bFilter": true,
+            "pageLength": 25,
+            "pagingType": "simple_numbers",
+            //language: {
+            //    paginate: {
+            //        next: '&#8594;', // or '→'
+            //        previous: '&#8592;' // or '←'
+            //    }
+            //}
+            aoColumnDefs: [
+                {
+                    bSortable: false,
+                    aTargets: [-10, -11, -12]
+                }
+            ]
+        });
+
+        $('#activityTable_filter').hide();
+
+        $('#txtSearch').on('keyup', function () {
+
+            $.fn.dataTable.ext.search.push(function (settings, searchData) {
+                var term = $('#txtSearch').val().toLowerCase()
+                for (var i = 0; i < searchData.length; i++) {
+                    if (searchData[i].toLowerCase().indexOf(term) == 0) {
+                        return true;
+                    }
+                }
+                return false;
+            });
+            var table = $('#activityTable').DataTable();
+            table.draw();
+        });
+
+        //$(".first.paginate_button, .last.paginate_button").hide();
+    });
+
+</script>
+
+<style>
+    table.dataTable thead .sorting_asc {
+        background: url("https://cdn.datatables.net/1.10.0/images/sort_asc.png") no-repeat center left;
+    }
+
+    table.dataTable thead .sorting_desc {
+        background: url("https://cdn.datatables.net/1.10.0/images/sort_desc.png") no-repeat center left;
+    }
+
+    table.dataTable thead .sorting {
+        background: url("https://cdn.datatables.net/1.10.0/images/sort_both.png") no-repeat center left;
+    }
+</style>

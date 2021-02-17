@@ -1,0 +1,125 @@
+﻿@model List<BOTS_BL.Models.CustomerListing>
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="app-main__inner">
+    <div class="row">
+        <div class="col-md-12 col-lg-12">
+            <div class="mb-3 card">
+                <div style="text-align:right;">
+                    <a href="@Url.Action("SelectProduct", "CustomerManagement")" title="Add New Customer">  <img src="~/Content/assets/images/AddCustomer.png" /></a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="dvOutletWiseData">
+        <div class="row mb-3 card">
+            <div class="container-fluid pt-3 pl-3 pr-3">
+                <div class="pt-3 pl-3 pr-3 col-md-12 col-lg-12">
+                    <div class="row">
+                        <div class="col search-container">
+                            <i class="fas fa-search"></i>
+                            <input class="input100" type="text" id="txtSearch" placeholder="Search activity..." />
+                        </div>
+                    </div>
+                    <div class="row mt-3" id="dvActivityData">
+                        <div class="table-responsive">
+                            <table class="table" id="groupListTable">
+                                <thead>
+                                    <tr>
+                                        <th scope="col" style="text-align:center;">Retail Name</th>
+                                        <th scope="col" style="text-align:center;">Product</th>
+                                        <th scope="col" style="text-align:center;">Started On</th>
+                                        <th scope="col" style="text-align:center;">Category</th>
+                                        <th scope="col" style="text-align:center;">City</th>
+                                        <th scope="col" style="text-align:center;">SMS Bal Count</th>
+                                        <th scope="col" style="text-align:center;">Renewal On</th>
+                                        <th scope="col" style="text-align:center;">Sourced by</th>
+                                        <th scope="col" style="text-align:center;">RM Team</th>
+                                        <th scope="col" style="text-align:center;">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @if (Model != null)
+                                    {
+                                        if (Model.Count > 0)
+                                        {
+                                            foreach (var item in Model)
+                                            {
+
+                                                <tr>
+                                                    <td>@item.RetailName</td>
+                                                    @if (item.Product == 1)
+                                                    {
+                                                        <td>Octa Plus</td>
+                                                    }
+                                                    else
+                                                    {
+                                                        <td>Octa XS</td>
+                                                    }
+                                                    <td>@item.StartedOn</td>
+                                                    <td style="text-align:center;">@item.RetailCategory</td>
+                                                    <td>@item.City</td>
+                                                    <td style="text-align:center;">@item.SMSBalCount</td>
+                                                    <td>@item.RenewalOn</td>
+                                                    <td>@item.SourcedBy</td>
+                                                    <td>@item.RMTeam</td>
+                                                    <td style="text-align:center;"><a href="@Url.Action("AddNewCustomer", "CustomerManagement", new { groupId = item.GroupId })" class="login" title="Edit"><img src="~/Content/assets/images/shape_editUser.png" /></a> </td>
+                                                </tr>
+                                            }
+                                        }
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+</div>
+
+<script>
+
+    $(document).ready(function () {
+        $('#groupListTable').DataTable({
+            "aaSorting": [[0, "asc"]],
+            "paging": true,
+            "ordering": true,
+            "info": true,
+            "bFilter": true,
+            "pageLength": 10,
+            "pagingType": "simple_numbers",
+            aoColumnDefs: [
+                {
+                    bSortable: false,
+                    aTargets: [-1, -2]
+                }
+            ]
+        });
+
+        $('#groupListTable_filter').hide();
+
+        $('#txtSearch').on('keyup', function () {
+
+            $.fn.dataTable.ext.search.push(function (settings, searchData) {
+                var term = $('#txtSearch').val().toLowerCase()
+                for (var i = 0; i < searchData.length; i++) {
+                    if (searchData[i].toLowerCase().indexOf(term) == 0) {
+                        return true;
+                    }
+                }
+                return false;
+            });
+            var table = $('#groupListTable').DataTable();
+            table.draw();
+        });
+
+    });
+</script>

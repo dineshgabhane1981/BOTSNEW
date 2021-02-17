@@ -1,0 +1,10 @@
+E:\Projects\BOTS\BOTSBL\bin\Debug\netstandard2.0\BOTSBL.deps.json
+E:\Projects\BOTS\BOTSBL\bin\Debug\netstandard2.0\BOTSBL.dll
+E:\Projects\BOTS\BOTSBL\bin\Debug\netstandard2.0\BOTSBL.pdb
+E:\Projects\BOTS\BOTSBL\obj\Debug\netstandard2.0\BOTSBL.csprojAssemblyReference.cache
+E:\Projects\BOTS\BOTSBL\obj\Debug\netstandard2.0\BOTSBL.AssemblyInfoInputs.cache
+E:\Projects\BOTS\BOTSBL\obj\Debug\netstandard2.0\BOTSBL.AssemblyInfo.cs
+E:\Projects\BOTS\BOTSBL\obj\Debug\netstandard2.0\BOTSBL.csproj.CoreCompileInputs.cache
+E:\Projects\BOTS\BOTSBL\obj\Debug\netstandard2.0\BOTSBL.dll
+E:\Projects\BOTS\BOTSBL\obj\Debug\netstandard2.0\BOTSBL.pdb
+E:\Projects\BOTS\BOTSBL\bin\Debug\netstandard2.0\BOTSBL.dll.config

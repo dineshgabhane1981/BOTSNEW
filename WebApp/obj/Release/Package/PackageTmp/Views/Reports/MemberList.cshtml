@@ -1,0 +1,155 @@
+﻿@model List<BOTS_BL.Models.MemberList>
+@{
+    ViewBag.Title = "MemberList";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="app-main__inner">
+    <div class="row mb-3 pt-3 pl-3 pr-3 card">
+
+        <div class="col-sm-6">
+            Select Outlet :
+            @Html.DropDownListFor(x => Model.Count, new SelectList(ViewBag.OutletList, "Value", "Text"), "All", htmlAttributes: new { @class = "input100", @id= "OutletList" })
+           
+        </div>
+    </div>
+    <div class="row mb-3 card">
+        <div class="container-fluid pt-3 pl-3 pr-3">
+            <div class="pt-3 pl-3 pr-3 col-md-12 col-lg-12">
+                <div class="row">
+                    <div class="col search-container">
+                        <i class="fas fa-search"></i>
+                        <input class="input100" type="text" id="txtSearch" placeholder="Search activity..." />
+                    </div>
+                </div>
+                <div class="row mt-3" id="dvActivityData">
+                    <div class="table-responsive">
+                        <table class="table" id="activityTable">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Enrolled Outlet</th>
+                                    <th scope="col">Mobile Number</th>
+                                    <th scope="col">Member Name</th>
+                                    <th scope="col">Type</th>
+                                    <th scope="col">Txn Count</th>
+                                    <th scope="col">Total Spends</th>
+                                    <th scope="col">Total Burn Txn</th>
+                                    <th scope="col">Total Burn Points</th>
+                                    <th scope="col">Avl Bal Points</th>
+                                    <th scope="col">Last Txn Date</th>
+                                </tr>
+                            </thead>
+                            <tbody>                               
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    var tableData = [];
+    $(document).ready(function () {        
+        LoadMemberData();
+        $("#OutletList").on("change", function () {            
+            LoadMemberData();
+
+        });
+    });
+
+    function LoadMemberData() {
+        $("#divLoader").show();
+        var SearchText = JSON.stringify($("#OutletList").val());
+        $.ajax({
+            type: "POST",
+            url: "../Reports/GetMemberDataResult",
+            data: '{SearchText: ' + SearchText + '}',
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) { 
+                tableData = [];
+                //$('#dvMemberData').html(response);
+                $.map(response, function (item) {
+                    optionItem = {}
+                    optionItem["EnrolledOutlet"] = item.EnrooledOutlet;
+                    optionItem["MobileNumber"] = item.MaskedMobileNo;
+                    optionItem["MemberName"] = item.MemberName;
+                    optionItem["Type"] = item.Type;
+                    optionItem["TxnCount"] = item.TxnCount;
+                    optionItem["TotalSpends"] = item.TotalSpend;
+                    optionItem["TotalBurnTxn"] = item.TotalBurnTxn;
+                    optionItem["TotalBurnPoints"] = item.TotalBurnPoints;
+                    optionItem["AvlBalPoints"] = item.AvBalPoints;
+                    optionItem["LastTxnDate"] = item.LastTxnDate;
+                    tableData.push(optionItem);
+                });
+                DrawTable();
+                $("#divLoader").hide();
+            },
+            failure: function (response) {
+                $("#divLoader").hide();
+            },
+            error: function (response) {
+                $('#dvMemberData').html(response.responseText);
+                $("#divLoader").hide();
+            }
+        });
+    }
+
+    function DrawTable() {
+        var table1 = $('#activityTable').DataTable();
+        table1.destroy();
+
+        var table = $('#activityTable').DataTable({
+            "data": tableData,
+            "paging": true,
+            "ordering": true,
+            "info": true,
+            "bFilter": true,
+            "pageLength": 25,
+            "pagingType": "simple_numbers",
+            "columns": [
+                { data: "EnrolledOutlet" },
+                { data: "MobileNumber" },
+                { data: "MemberName" },
+                { data: "Type" },
+                { data: "TxnCount" },
+                { data: "TotalSpends" },
+                { data: "TotalBurnTxn" },
+                { data: "TotalBurnPoints" },
+                { data: "AvlBalPoints" },
+                { data: "LastTxnDate" }
+            ],
+            aoColumnDefs: [
+                {
+                    bSortable: false,
+                    aTargets: [-8, -9, -10]
+                }
+            ]
+            //"aoColumnDefs": [{ "sClass": "hide_me", "aTargets": [3] }]
+            //"rowReorder": {
+            //    dataSrc: "index"
+            //}
+        });
+        $('#activityTable_filter').hide();
+
+        $('#txtSearch').on('keyup', function () {
+
+            $.fn.dataTable.ext.search.push(function (settings, searchData) {
+                var term = $('#txtSearch').val().toLowerCase()
+                for (var i = 0; i < searchData.length; i++) {
+                    if (searchData[i].toLowerCase().indexOf(term) == 0) {
+                        return true;
+                    }
+                }
+                return false;
+            });
+            var table = $('#activityTable').DataTable();
+            table.draw();
+        });
+    }
+</script>
+
+

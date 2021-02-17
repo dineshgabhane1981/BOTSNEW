@@ -1,0 +1,395 @@
+﻿@model BOTS_BL.Models.MemberWebPage
+@{
+    ViewBag.Title = "MemberWebPage";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.2.2/Chart.bundle.min.js"></script>
+<script>
+    console.log(@ViewBag.MemberbaseData);
+    window.onload = function () {
+        var options = {
+            rotation: (-0.5 * Math.PI) - (-90 / 180 * Math.PI),
+            legend: {
+                display: false
+            }
+        }
+        var data = {
+            datasets: [{
+                data: [@ViewBag.MemberbaseData],
+                backgroundColor: ["#f990a7", "#aad2ed"]
+            }],
+
+            // These labels appear in the legend and in the tooltips when hovering different arcs
+            labels: [
+                'Member Base',
+                'Referring Base'
+            ],
+
+        };
+
+        var ctx1 = document.getElementById("cvMemberWebpage").getContext("2d");
+        window.myBar = new Chart(ctx1, {
+            type: 'pie',
+            data: data,
+            options: options
+
+        });
+        //-------------------------------------------------------------------------------------------
+        var optionsProfile = {
+            //rotation: (-0.5 * Math.PI) - (-90 / 180 * Math.PI),
+            legend: {
+                display: true,
+                position: 'bottom'
+            }
+        }
+
+        var dataProfile = {
+            datasets: [{
+                data: [@ViewBag.MemberbaseProfileData],
+                backgroundColor: ["#f990a7", "#aad2ed"]
+            }],
+
+            // These labels appear in the legend and in the tooltips when hovering different arcs
+            labels: [
+                'Total Member Base',
+                'No of Profile Update'
+            ],
+
+        };
+
+        var ctx2 = document.getElementById("cvMemberWebpageProfile").getContext("2d");
+        window.myBar = new Chart(ctx2, {
+            type: 'pie',
+            data: dataProfile,
+            options: optionsProfile
+
+        });
+
+        //-----------------------------------------------------------------------------------
+        var optionsGift = {
+            //rotation: (-0.5 * Math.PI) - (-90 / 180 * Math.PI),
+            legend: {
+                display: true,
+                position: 'bottom'
+            }
+        }
+        var dataGift = {
+            datasets: [{
+                data: [@ViewBag.MemberbaseGiftData],
+                backgroundColor: ["#f990a7", "#aad2ed"]
+            }],
+
+            // These labels appear in the legend and in the tooltips when hovering different arcs
+            labels: [
+                'Total Member Base',
+                'Customer Gifting Points'
+            ],
+
+        };
+        var ctx4 = document.getElementById("cvMemberWebpageGiftAPoint").getContext("2d");
+        window.myBar = new Chart(ctx4, {
+            type: 'pie',
+            data: dataGift,
+            options: optionsGift
+
+        });
+        
+        //-------------------------------------------------------------------------------------------
+        var barChartData =
+            {
+                labels: [@Html.Raw(ViewBag.ReferralNames)],
+                datasets: [{
+                    label: '',
+                    backgroundColor: [
+                        "#f990a7",
+                        "#aad2ed",
+                        "#9966FF",
+                        "#99e5e5"
+                    ],
+                    borderWidth: 2,
+                    data: [@ViewBag.ReferralData]
+                }]
+            };
+
+        var ctx3 = document.getElementById("cvMemberWebpageReferral").getContext("2d");
+        window.myBar = new Chart(ctx3,
+            {
+                type: 'bar',
+                data: barChartData,
+                options:
+                {
+                    scales: {
+                        yAxes: [{
+                            ticks: {
+                                beginAtZero: true
+                            }
+                        }]
+                    },
+                    title:
+                    {
+                        display: true,
+                        text: ""
+                    },
+                    legend: {
+                        display: false
+                    },
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    tooltips: { enabled: false },
+                    hover: { mode: null },
+
+                    "hover": {
+                        "animationDuration": 0,
+                        mode: null
+                    },
+                    "animation": {
+                        "duration": 1,
+                        "onComplete": function () {
+                            var chartInstance = this.chart,
+                                ctx = chartInstance.ctx;
+
+                            ctx.font = Chart.helpers.fontString(Chart.defaults.global.defaultFontSize, Chart.defaults.global.defaultFontStyle, Chart.defaults.global.defaultFontFamily);
+                            ctx.textAlign = 'center';
+                            ctx.textBaseline = 'bottom';
+
+                            this.data.datasets.forEach(function (dataset, i) {
+                                var meta = chartInstance.controller.getDatasetMeta(i);
+                                meta.data.forEach(function (bar, index) {
+                                    var data = dataset.data[index];
+                                    ctx.fillStyle = 'rgba(0, 0, 0, 1)';
+                                    ctx.fillText(data, bar._model.x, bar._model.y - 5);
+                                });
+                            });
+                        }
+                    }
+                }
+            });
+        //-------------------------------------------------------------------------------------------
+        var optionsOpt = {
+            rotation: (-0.5 * Math.PI) - (-110 / 180 * Math.PI),
+            legend: {
+                display: true,
+                position: 'bottom'
+            }
+        }
+        var dataOpt = {
+            datasets: [{
+                data: [@ViewBag.MemberbaseOptOutData],
+                backgroundColor: ["#f990a7", "#aad2ed"]
+            }],
+
+            // These labels appear in the legend and in the tooltips when hovering different arcs
+            labels: [
+                'Program Opt-Out',
+                'Promo SMS Opt-Out'
+            ],
+
+        };
+        var ctx6 = document.getElementById("cvMemberWebpageOptOut").getContext("2d");
+        window.myBar = new Chart(ctx6, {
+            type: 'pie',
+            data: dataOpt,
+            options: optionsOpt
+
+        });
+
+        //-------------------------------------------------------------------------------------------
+    }
+
+</script>
+<div class="app-main__inner">
+    <div class="row">
+        <div class="col-md-12 col-lg-6">
+            <div class="mb-3 card">
+                <div class="card-header-tab card-header-tab-animation card-header">
+                    <div class="card-header-title">
+                        <i class="header-icon lnr-apartment icon-gradient bg-love-kiss"> </i>
+                        REFERRALS TO CONVERSION
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="tab-content">
+                        <div class="tab-pane fade show active" id="tabs-eg-77">
+                            <div class="card mb-3 widget-chart widget-chart2 text-left w-100">
+                                <div class="widget-chat-wrapper-outer">
+                                    <div class="widget-chart-wrapper widget-chart-wrapper-lg opacity-10 m-0">
+                                        <canvas id="cvMemberWebpage"></canvas>
+                                        <table border="1" width="100%">
+                                            <tr>
+                                                <th style="text-align:center;">
+                                                    Member Base
+                                                </th>
+                                                <th style="text-align:center;">
+                                                    Referring Base
+                                                </th>
+                                                <th style="text-align:center;">
+                                                    Referrals Generated
+                                                </th>
+                                                <th style="text-align:center;">
+                                                    Referrals Transacted
+                                                </th>
+                                            </tr>
+                                            <tr>
+                                                <td style="text-align:center;">@Model.TotalMember</td>
+                                                <td style="text-align:center;">@Model.ReferringBase</td>
+                                                <td style="text-align:center;">@Model.ReferralGenerated</td>
+                                                <td style="text-align:center;">@Model.ReferralTransacted</td>
+                                            </tr>
+                                            <tr>
+
+                                                <td style="text-align:center;" colspan="2">
+                                                    Referrals Txn Count: @Model.ReferralTxnCount
+                                                </td>
+                                                <td style="text-align:center;" colspan="2">
+                                                    Business Generated: @Model.TotalReferralBusniess
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-12 col-lg-6">
+            <div class="mb-3 card">
+                <div class="card-header-tab card-header-tab-animation card-header">
+                    <div class="card-header-title">
+                        <i class="header-icon lnr-apartment icon-gradient bg-love-kiss"> </i>
+                        PROFILE UPDATE
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="tab-content">
+                        <div class="tab-pane fade show active" id="tabs-eg-77">
+                            <div class="card mb-3 widget-chart widget-chart2 text-left w-100">
+                                <div class="widget-chat-wrapper-outer">
+                                    <div class="widget-chart-wrapper widget-chart-wrapper-lg opacity-10 m-0">
+                                        <canvas id="cvMemberWebpageProfile"></canvas>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="row">
+        <div class="col-md-12 col-lg-6">
+            <div class="mb-3 card">
+                <div class="card-header-tab card-header-tab-animation card-header">
+                    <div class="card-header-title">
+                        <i class="header-icon lnr-apartment icon-gradient bg-love-kiss"> </i>
+                        REFERRAL BONUS UNUSED
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="tab-content">
+                        <div class="tab-pane fade show active" id="tabs-eg-77">
+                            <div class="card mb-3 widget-chart widget-chart2 text-left w-100">
+                                <div class="widget-chat-wrapper-outer">
+                                    <div class="widget-chart-wrapper widget-chart-wrapper-lg opacity-10 m-0">
+                                        <canvas id="cvMemberWebpageReferral"></canvas>
+                                        <table border="1" width="100%">
+                                            <tr>
+                                                <th style="text-align:center;">
+                                                    Referral Points Issued
+                                                </th>
+                                                <th style="text-align:center;">
+                                                    Points Redeemed
+                                                </th>
+                                                <th style="text-align:center;">
+                                                    Expired
+                                                </th>
+                                                <th style="text-align:center;">
+                                                    Unused
+                                                </th>
+                                            </tr>
+                                            <tr>
+                                                <td style="text-align:center;">@Model.ReferralPointsIssued</td>
+                                                <td style="text-align:center;">@Model.ReferralPointsRedeem</td>
+                                                <td style="text-align:center;">@Model.ReferralPointsExpired</td>
+                                                <td style="text-align:center;">@Model.ReferralPointsUnused</td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-12 col-lg-6">
+            <div class="mb-3 card">
+                <div class="card-header-tab card-header-tab-animation card-header">
+                    <div class="card-header-title">
+                        <i class="header-icon lnr-apartment icon-gradient bg-love-kiss"> </i>
+                        GIFT-a-POINT
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="tab-content">
+                        <div class="tab-pane fade show active" id="tabs-eg-77">
+                            <div class="card mb-3 widget-chart widget-chart2 text-left w-100">
+                                <div class="widget-chat-wrapper-outer">
+                                    <div class="widget-chart-wrapper widget-chart-wrapper-lg opacity-10 m-0">
+                                        <canvas id="cvMemberWebpageGiftAPoint"></canvas>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="row">
+        <div class="col-md-12 col-lg-6">
+           
+        </div>
+
+        <div class="col-md-12 col-lg-6">
+            <div class="mb-3 card">
+                <div class="card-header-tab card-header-tab-animation card-header">
+                    <div class="card-header-title">
+                        <i class="header-icon lnr-apartment icon-gradient bg-love-kiss"> </i>
+                        OPT-OUT
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="tab-content">
+                        <div class="tab-pane fade show active" id="tabs-eg-77">
+                            <div class="card mb-3 widget-chart widget-chart2 text-left w-100">
+                                <div class="widget-chat-wrapper-outer">
+                                    <div class="widget-chart-wrapper widget-chart-wrapper-lg opacity-10 m-0">
+                                        <canvas id="cvMemberWebpageOptOut"></canvas>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+
+</div>
+
+
+

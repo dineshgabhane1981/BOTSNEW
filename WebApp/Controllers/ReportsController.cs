@@ -1,0 +1,342 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Web.Mvc;
+using BOTS_BL.Models;
+using BOTS_BL.Repository;
+using ClosedXML.Excel;
+using System.IO;
+using System.Data;
+using System.ComponentModel;
+
+namespace WebApp.Controllers
+{
+    public class ReportsController : Controller
+    {
+        ReportsRepository RR = new ReportsRepository();
+        // GET: Reports
+        public ActionResult Index()
+        {
+            return View();
+        }
+
+        public ActionResult MemberSearch()
+        {
+            return View();
+        }
+
+        public ActionResult MemberList()
+        {
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            var lstOutlet = RR.GetOutletList(userDetails.GroupId, userDetails.connectionString);
+            ViewBag.OutletList = lstOutlet;
+            //ViewBag.OutletId = OutletId;
+            return View();
+        }
+
+        public ActionResult Outletwise()
+        {
+            return View();
+        }
+
+        public ActionResult Transactionwise(string OutletId)
+        {
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            var lstOutlet = RR.GetOutletList(userDetails.GroupId, userDetails.connectionString);
+            ViewBag.OutletList = lstOutlet;
+            ViewBag.OutletId = OutletId;
+            return View();
+        }
+
+        public ActionResult PointsExpiry()
+        {
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            PointExpiry objPointExpiry = new PointExpiry();
+            objPointExpiry = RR.GetPointExpiryData(userDetails.GroupId, DateTime.Now.Month, DateTime.Now.Year, userDetails.connectionString);
+            
+            List<SelectListItem> MonthList = new List<SelectListItem>();            
+            int month = DateTime.Now.Month;
+            string monthtext = DateTime.Now.ToString("MMM");
+            for (int i = month+2; i <= 12; i++)
+            {
+                MonthList.Add(new SelectListItem
+                {
+                    Text = Convert.ToString(DateTime.Now.AddMonths(i-1).ToString("MMM")),
+                    Value = Convert.ToString(i)
+                });
+            }
+
+            ViewBag.MonthList = MonthList;
+            return View(objPointExpiry);
+        }
+
+        public ActionResult Celebrations()
+        {
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            var CelebrationsData = RR.GetCelebrationsData(userDetails.GroupId, userDetails.connectionString);
+            return View(CelebrationsData);
+        }
+
+        [HttpPost]
+        public JsonResult GetCelebrationsTxnResult(int month, int type)
+        {
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            List<CelebrationsMoreDetails> objCelebrationsMoreDetails = new List<CelebrationsMoreDetails>();
+            objCelebrationsMoreDetails = RR.GetCelebrationsTxnData(userDetails.GroupId, month, type, userDetails.connectionString);
+            return new JsonResult() { Data = objCelebrationsMoreDetails, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
+        }
+
+        public ActionResult CreateOwnSegment()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public JsonResult GetPointsExpiryDataResult(int month, int year)
+        {
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            PointExpiry objPointExpiry = new PointExpiry();
+            objPointExpiry = RR.GetPointExpiryData(userDetails.GroupId, month, year, userDetails.connectionString);
+            return new JsonResult() { Data = objPointExpiry, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
+        }
+
+        [HttpPost]
+        public JsonResult GetPointsExpiryTxnResult(int month, int year)
+        {
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];            
+            List<PointExpiryTxn> objPointExpiryTxn = new List<PointExpiryTxn>();
+            objPointExpiryTxn = RR.GetPointExpiryTxnData(userDetails.GroupId, month,year, userDetails.connectionString);
+            return new JsonResult() { Data = objPointExpiryTxn, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
+        }
+
+        [HttpPost]
+        public JsonResult GetMemberDataResult(string SearchText)
+        {
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            if (SearchText.Equals("All"))
+            {
+                SearchText = "";
+            }
+            List<MemberList> lstMember = new List<MemberList>();
+            lstMember = RR.GetMemberList(userDetails.GroupId, SearchText, userDetails.connectionString);
+            return new JsonResult() { Data = lstMember, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
+        }
+
+        public ActionResult GetOutletWiseResult(string DateRangeFlag, string fromDate, string toDate)
+        {
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            List<OutletWise> lstOutlet = new List<OutletWise>();
+            lstOutlet = RR.GetOutletWiseList(userDetails.GroupId, DateRangeFlag, fromDate, toDate, userDetails.connectionString);
+            return PartialView("_Outletwise", lstOutlet);
+        }
+
+        [HttpPost]
+        public JsonResult GetOutletWiseTransactionResult(string DateRangeFlag, string fromDate, string toDate, string outletId, bool EnrolmentDataFlag)
+        {
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            if (outletId.Equals("All"))
+            {
+                outletId = "";
+            }
+            List<OutletwiseTransaction> lstOutletWiseTransaction = new List<OutletwiseTransaction>();
+            lstOutletWiseTransaction = RR.GetOutletWiseTransactionList(userDetails.GroupId, DateRangeFlag, fromDate, toDate, outletId, EnrolmentDataFlag, userDetails.connectionString);
+            return new JsonResult() { Data = lstOutletWiseTransaction, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
+        }
+
+        [HttpPost]
+        public ActionResult GetMemberSearchResult(string searchData)
+        {
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            MemberSearch objMemberSearch = new MemberSearch();
+            objMemberSearch = RR.GetMeamberSearchData(userDetails.GroupId, searchData, userDetails.connectionString);
+            return PartialView("_MemberSearch", objMemberSearch);
+        }
+
+        public ActionResult ExportToExcelTransactionwise(string DateRangeFlag, string fromDate, string toDate, string outletId, bool EnrolmentDataFlag,string ReportName)
+        {
+            System.Data.DataTable table = new System.Data.DataTable();
+            try
+            {
+                var userDetails = (CustomerLoginDetail)Session["UserSession"];
+                if (outletId.Equals("All"))
+                {
+                    outletId = "";
+                }
+                List<OutletwiseTransaction> lstOutletWiseTransaction = new List<OutletwiseTransaction>();
+                lstOutletWiseTransaction = RR.GetOutletWiseTransactionList(userDetails.GroupId, DateRangeFlag, fromDate, toDate, outletId, EnrolmentDataFlag, userDetails.connectionString);
+                
+                PropertyDescriptorCollection properties = TypeDescriptor.GetProperties(typeof(OutletwiseTransaction));
+                foreach (PropertyDescriptor prop in properties)
+                    table.Columns.Add(prop.Name, Nullable.GetUnderlyingType(prop.PropertyType) ?? prop.PropertyType);
+
+                foreach (OutletwiseTransaction item in lstOutletWiseTransaction)
+                {
+                    DataRow row = table.NewRow();
+                    foreach (PropertyDescriptor prop in properties)
+                        row[prop.Name] = prop.GetValue(item) ?? DBNull.Value;
+
+                    table.Rows.Add(row);
+                }
+                table.Columns.Remove("MobileNo");
+                table.Columns["MaskedMobileNo"].ColumnName = "MobileNo";
+                //table.Columns.Remove("MaskedMobileNo");                
+                string fileName = ReportName + ".xlsx";
+                using (XLWorkbook wb = new XLWorkbook())
+                {
+                    
+                    //excelSheet.Name
+                    table.TableName = ReportName;
+                    wb.Worksheets.Add(table);
+                    using (MemoryStream stream = new MemoryStream())
+                    {
+                        wb.SaveAs(stream);
+                        return File(stream.ToArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
+                    }
+                }
+            }
+            catch(Exception ex)
+            {
+                return null;
+            }
+
+            
+        }
+
+        public ActionResult ExportToExcelOutletwise(string DateRangeFlag, string fromDate, string toDate, string ReportName)
+        {
+            System.Data.DataTable table = new System.Data.DataTable();
+            try
+            {
+                var userDetails = (CustomerLoginDetail)Session["UserSession"];
+                List<OutletWise> lstOutlet = new List<OutletWise>();
+                lstOutlet = RR.GetOutletWiseList(userDetails.GroupId, DateRangeFlag, fromDate, toDate, userDetails.connectionString);
+
+                PropertyDescriptorCollection properties = TypeDescriptor.GetProperties(typeof(OutletWise));
+                foreach (PropertyDescriptor prop in properties)
+                    table.Columns.Add(prop.Name, Nullable.GetUnderlyingType(prop.PropertyType) ?? prop.PropertyType);
+
+                foreach (OutletWise item in lstOutlet)
+                {
+                    DataRow row = table.NewRow();
+                    foreach (PropertyDescriptor prop in properties)
+                        row[prop.Name] = prop.GetValue(item) ?? DBNull.Value;
+
+                    table.Rows.Add(row);
+                }
+                table.Columns.Remove("OutletId");
+                
+                string fileName = ReportName + ".xlsx";
+                using (XLWorkbook wb = new XLWorkbook())
+                {
+
+                    //excelSheet.Name
+                    table.TableName = ReportName;
+                    wb.Worksheets.Add(table);
+                    using (MemoryStream stream = new MemoryStream())
+                    {
+                        wb.SaveAs(stream);
+                        return File(stream.ToArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+
+
+        }
+
+        public ActionResult ExportToExcelPointExpiry(int month, int year, string ReportName)
+        {
+            System.Data.DataTable table = new System.Data.DataTable();
+            try
+            {
+                var userDetails = (CustomerLoginDetail)Session["UserSession"];
+                List<PointExpiryTxn> objPointExpiryTxn = new List<PointExpiryTxn>();
+                objPointExpiryTxn = RR.GetPointExpiryTxnData(userDetails.GroupId, month, year, userDetails.connectionString);
+
+                PropertyDescriptorCollection properties = TypeDescriptor.GetProperties(typeof(PointExpiryTxn));
+                foreach (PropertyDescriptor prop in properties)
+                    table.Columns.Add(prop.Name, Nullable.GetUnderlyingType(prop.PropertyType) ?? prop.PropertyType);
+
+                foreach (PointExpiryTxn item in objPointExpiryTxn)
+                {
+                    DataRow row = table.NewRow();
+                    foreach (PropertyDescriptor prop in properties)
+                        row[prop.Name] = prop.GetValue(item) ?? DBNull.Value;
+
+                    table.Rows.Add(row);
+                }
+                table.Columns.Remove("MobileNo");
+                table.Columns["MaskedMobileNo"].ColumnName = "MobileNo";
+                string fileName = ReportName + ".xlsx";
+                using (XLWorkbook wb = new XLWorkbook())
+                {
+
+                    //excelSheet.Name
+                    table.TableName = ReportName;
+                    wb.Worksheets.Add(table);
+                    using (MemoryStream stream = new MemoryStream())
+                    {
+                        wb.SaveAs(stream);
+                        return File(stream.ToArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+
+
+        }
+
+        public ActionResult ExportToExcelCelebrations(int month, int type, string ReportName)
+        {
+            System.Data.DataTable table = new System.Data.DataTable();
+            try
+            {
+                var userDetails = (CustomerLoginDetail)Session["UserSession"];
+                List<CelebrationsMoreDetails> objCelebrationsMoreDetails = new List<CelebrationsMoreDetails>();
+                objCelebrationsMoreDetails = RR.GetCelebrationsTxnData(userDetails.GroupId, month, type, userDetails.connectionString);
+
+                PropertyDescriptorCollection properties = TypeDescriptor.GetProperties(typeof(CelebrationsMoreDetails));
+                foreach (PropertyDescriptor prop in properties)
+                    table.Columns.Add(prop.Name, Nullable.GetUnderlyingType(prop.PropertyType) ?? prop.PropertyType);
+
+                foreach (CelebrationsMoreDetails item in objCelebrationsMoreDetails)
+                {
+                    DataRow row = table.NewRow();
+                    foreach (PropertyDescriptor prop in properties)
+                        row[prop.Name] = prop.GetValue(item) ?? DBNull.Value;
+
+                    table.Rows.Add(row);
+                }
+                table.Columns.Remove("MobileNo");
+                table.Columns["MaskedMobileNo"].ColumnName = "MobileNo";
+
+                string fileName = ReportName + ".xlsx";
+                using (XLWorkbook wb = new XLWorkbook())
+                {
+
+                    //excelSheet.Name
+                    table.TableName = ReportName;
+                    wb.Worksheets.Add(table);
+                    using (MemoryStream stream = new MemoryStream())
+                    {
+                        wb.SaveAs(stream);
+                        return File(stream.ToArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+
+
+        }
+    }
+}

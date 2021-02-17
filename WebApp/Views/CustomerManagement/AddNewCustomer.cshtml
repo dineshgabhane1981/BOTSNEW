@@ -1,0 +1,1013 @@
+﻿﻿@model WebApp.ViewModel.CustomerViewModel
+@{
+    ViewBag.Title = "Add New Customer";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link href="~/Content/styleSteps.css" rel="stylesheet" />
+
+<div class="app-main__inner">
+
+    <div class="mb-3 card" style="padding-top:20px;">
+        <div class="content">
+            <!--content inner-->
+            <div class="">
+                <div class="container">
+                </div>
+                <div class="container overflow-hidden">
+                    <!--multisteps-form-->
+                    <div class="multisteps-form">
+                        <!--progress bar-->
+                        <div class="row">
+                            <div class="col-12 col-lg-12 ml-auto mr-auto mb-4" style="padding-left:0px !important;padding-right:0px !important;">
+                                <div class="multisteps-form__progress">
+                                    <button class="multisteps-form__progress-btn js-active" id="btn1" type="button" title="Group Data">Group Data</button>
+                                    <button class="multisteps-form__progress-btn" id="btn2" type="button" title="Modules/Payments">Modules / Payments</button>
+                                    <button class="multisteps-form__progress-btn" id="btn3" type="button" title="Brand/Outlet">Brand/Outlet</button>
+                                    <button class="multisteps-form__progress-btn" id="btn4" type="button" title="Points Config">Points Config</button>
+                                    <button class="multisteps-form__progress-btn" id="btn5" type="button" title="Txn Alerts">Txn Alerts</button>
+                                    <button class="multisteps-form__progress-btn" id="btn6" type="button" title="Other Modules">Other Modules</button>
+                                    <button class="multisteps-form__progress-btn" id="btn7" type="button" title="Checks/Balances">Checks / Balances</button>
+                                    <button class="multisteps-form__progress-btn" id="btn8" type="button" title="Bulk Upload">Bulk Upload</button>
+                                    <button class="multisteps-form__progress-btn" id="btn9" type="button" title="Moved to Live">Moved to Live</button>
+                                </div>
+                            </div>
+                        </div>
+                        <!--form panels-->
+                        <div class="row">
+                            <div class="col-12 col-lg-12 m-auto ">
+                                <div class="multisteps-form__form">
+                                    <!--Group Data-->
+                                    <div class="multisteps-form__panel shadow p-4 list-box bg-white js-active" id="sec1" data-animation="scaleIn">
+                                        @using (Html.BeginForm("AddGroupDetails", "CustomerManagement", FormMethod.Post, new { enctype = "multipart/form-data", id = "frmaddgroupdetails", @class = "multisteps-form__form" }))
+                                        {
+                                            @Html.HiddenFor(model => model.objGroupData.GroupId, new { @id = "hdnGroupDetailGroupID" })
+                                            @Html.HiddenFor(model => model.objGroupData.ProductType)
+                                            @Html.HiddenFor(model => model.objGroupData.LogoBase64, new { @id = "hdnLogoBase64" })
+                                            @Html.HiddenFor(model => model.objGroupData.Logo, new { @id = "hdnLogo" })
+                                            @Html.HiddenFor(model => model.objGroupData.OtherRetailCategory, new { @id = "hdnOtherRetailCategory" })
+                                            @Html.HiddenFor(model => model.objGroupData.OtherCity, new { @id = "hdnOtherCity" })
+                                            @Html.HiddenFor(model => model.objGroupData.OtherSourcedBy, new { @id = "hdnOtherSourcedBy" })
+                                            @Html.HiddenFor(model => model.objGroupData.OtherRMAssigned, new { @id = "hdnOtherRMAssigned" })
+                                            @Html.HiddenFor(model => model.objGroupData.OtherBillingPartner, new { @id = "hdnOtherBillingPartner" })
+                                            <div class="multisteps-form__content" style="display:flex;">
+                                                <div class="col-sm-5">
+                                                    <label style="padding-left:5px;">Retail Name *</label>
+                                                    @Html.TextBoxFor(model => model.objGroupData.RetailName, new { @class = "input100", @id = "txtRetailName", tabindex = 1 })
+                                                    <label style="padding-left:5px;">Owner Name *</label>
+                                                    @Html.TextBoxFor(model => model.objGroupData.OwnerName, new { @class = "input100", @id = "txtOwnerName", tabindex = 3 })
+                                                    <label style="padding-left:5px;">Owner Email *</label>
+                                                    @Html.TextBoxFor(model => model.objGroupData.OwnerEmail, new { @class = "input100", @id = "txtOwnerEmail", tabindex = 5 })
+
+                                                    <label style="padding-left:5px;"> Address</label>
+                                                    @Html.TextBoxFor(model => model.objGroupData.Address, new { @class = "input100", @id = "txtAddress", tabindex = 9 })
+
+                                                    <label style="padding-left:5px;">Retail Category</label>
+                                                    @Html.DropDownListFor(model => model.objGroupData.RetailCategory, new SelectList(Model.lstRetailCategory, "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input100", @id = "ddlRetailCategory", tabindex = 7 })
+                                                    <label style="padding-left:5px;" id="lblRetailCategory"> Enter Retail Category</label>
+                                                    <input type="text" id="txtRetailCategory" class="input100" disabled />
+
+                                                    <label style="padding-left:5px;">Sourced By</label>
+                                                    @Html.DropDownListFor(model => model.objGroupData.SourcedBy, new SelectList(Model.lstSourcedBy, "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input100", @id = "ddlSourcedBy", tabindex = 11 })
+                                                    <label style="padding-left:5px;" id="lblSourcedBy"> Enter Sourced By</label>
+                                                    <input type="text" id="txtSourcedBy" class="input100" disabled />
+
+                                                    <label style="padding-left:5px;">Billing Partner</label>
+                                                    @Html.DropDownListFor(model => model.objGroupData.BillingPartner, new SelectList(Model.lstBillingPartner, "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input100", @id = "ddlBillingPartner", tabindex = 13 })
+                                                    <label style="padding-left:5px;" id="lblBillingPartner"> Enter Billing Partner</label>
+                                                    <input type="text" id="txtBillingPartner" class="input100" disabled />
+                                                </div>
+                                                <div class="col-sm-5" style="float:left;overflow:hidden;">
+                                                    <label style="padding-left:5px;"> Group Name *</label>
+                                                    @Html.TextBoxFor(model => model.objGroupData.GroupName, new { @class = "input100", @id = "txtGroupName", tabindex = 2 })
+                                                    <label style="padding-left:5px;"> Owner Mobile No *</label>
+                                                    @Html.TextBoxFor(model => model.objGroupData.OwnerMobileNo, new { @class = "input100", @id = "txtOwnerMobileNo", tabindex = 4 })
+                                                    <label style="padding-left:5px;"> GST</label>
+                                                    @Html.TextBoxFor(model => model.objGroupData.GSTNO, new { @class = "input100", @id = "txtGSTNO", tabindex = 6 })
+                                                    <label style="padding-left:5px;"> Outlet Count</label>
+                                                    @Html.TextBoxFor(model => model.objGroupData.OutletCount, new { @class = "input100", @id = "txtOutletCount", tabindex = 8 })
+
+                                                    <label style="padding-left:5px;">City</label>
+                                                    @Html.DropDownListFor(model => model.objGroupData.City, new SelectList(Model.lstCity, "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input100", @id = "ddlCity", tabindex = 10 })
+                                                    <label style="padding-left:5px;" id="lblCity"> Enter City</label>
+                                                    <input type="text" id="txtCity" class="input100" disabled />
+
+                                                    <label style="padding-left:5px;">RM Assigned</label>
+                                                    @Html.DropDownListFor(model => model.objGroupData.RMAssigned, new SelectList(Model.lstRMAssigned, "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input100", @id = "ddlRMAssigned", tabindex = 12 })
+                                                    <label style="padding-left:5px;" id="lblRMAssigned"> Enter RMAssigned</label>
+                                                    <input type="text" id="txtRMAssigned" class="input100" disabled />
+
+                                                    <label style="padding-left:5px;" id="lblRMAssigned"> Upload Logo </label>
+                                                    <input type="file" name="FileUploadLogo" id="FileUploadLogo" style="width:100%;" />
+                                                    @if (!string.IsNullOrEmpty(Model.objGroupData.Logo))
+                                                    {
+                                                        <img style="font-size: 50px" id="logoImage" width="50%" src="@Model.objGroupData.Logo" />
+                                                    }
+                                                    else
+                                                    {
+                                                        <i class="far fa-square mb-4" style="font-size: 50px"></i>
+                                                    }
+                                                </div>
+                                            </div>
+                                            <div class="button-row d-flex mt-4">
+                                                <button class="btn btn-primary ml-auto" type="button" title="Next" id="next1" tabindex="20">Save & Next</button>
+                                            </div>
+                                        }
+                                    </div>
+                                    <!--Modules / Payments-->
+                                    <div class="multisteps-form__panel shadow p-4 list-box bg-white" id="sec2" data-animation="scaleIn">
+                                        @using (Html.BeginForm("AddModulesAndPayments", "CustomerManagement", FormMethod.Post, new { enctype = "multipart/form-data", id = "frmaddmoduleandpayment", @class = "multisteps-form__form" }))
+                                        {
+                                            <div class="multisteps-form__content" style="display:flex;">
+                                                @Html.HiddenFor(model => model.objModulesPayment.GroupId, new { @id = "hdnPaymentGroupID" })
+                                                <div class="col-sm-12" style="float:left;overflow:hidden;">
+                                                    <div>
+                                                        @Html.CheckBoxFor(model => model.objModulesPayment.IsProgramManagement, new { @id = "chkIsProgramManagement", @style = "margin-right:5px; height: 25px; width: 25px;" }) Program Mgmt Fees
+                                                        <label style="padding-left:15px;"> Outlet Count</label>
+                                                        @Html.TextBoxFor(model => model.objModulesPayment.NoOfOutlets, new { @class = "input50", @id = "txtNoOfOutlets", @readonly = "readonly" })
+                                                        <label style="padding-left:15px;"> Annual Fees (Rs.)</label>
+                                                        @Html.TextBoxFor(model => model.objModulesPayment.AnnualFees, new { @class = "input50", @id = "txtAnnualFees", @readonly = "readonly" })
+                                                        <label style="padding-left:180px;"> Payment Terms</label>
+                                                        @Html.DropDownListFor(model => model.objModulesPayment.PaymentTerms, Model.PaymentTerms(), "Select", htmlAttributes: new { @class = "input50", @disabled = "disabled", @id = "ddlAnnualFees" })
+                                                    </div>
+                                                    <hr />
+                                                    <div>
+                                                        @Html.CheckBoxFor(model => model.objModulesPayment.IsSMSPack, new { @id = "chkIsSMSPack", @style = "margin-right:5px; height: 25px; width: 25px;" }) SMS Pack
+                                                        <label style="padding-left:15px;"> Gateway</label>
+                                                        @Html.DropDownListFor(model => model.objModulesPayment.Gateway, Model.Gateway(), "Select", htmlAttributes: new { @class = "input50", @disabled = "disabled", @id = "ddlGateway" })
+                                                        <label style="padding-left:15px;"> Free SMS</label>
+                                                        @Html.TextBoxFor(model => model.objModulesPayment.FreeSMS, new { @class = "input50", @id = "txtFreeSMS", @readonly = "readonly" })
+                                                        <label style="padding-left:180px;"> Prepaid SMS</label>
+                                                        @Html.TextBoxFor(model => model.objModulesPayment.PrepaidSMSCount, new { @class = "input50", @id = "txtPrepaidSMSCount", placeholder = "Count", @readonly = "readonly" })
+                                                        @Html.TextBoxFor(model => model.objModulesPayment.PrepaidSMSAmount, new { @class = "input50", @id = "txtPrepaidSMSAmount", placeholder = "Amount", @readonly = "readonly" })
+                                                    </div>
+                                                    <hr />
+                                                    <div>
+                                                        @Html.CheckBoxFor(model => model.objModulesPayment.IsWhatsApp, new { @id = "chkIsWhatsApp", @style = "margin-right:5px; height: 25px; width: 25px;" }) Whatsapp
+                                                        <label style="padding-left:15px;"> Integration Amount (Rs.)</label>
+                                                        @Html.TextBoxFor(model => model.objModulesPayment.IntegrationAmount, new { @class = "input50", @id = "txtIntegrationAmount", @readonly = "readonly" })
+                                                        <br /><label style="padding-left:180px;"> WA Prepaid Pack</label>
+                                                        @Html.TextBoxFor(model => model.objModulesPayment.WAPrepaidPackCount, new { @class = "input50", @id = "txtWAPrepaidPackCount", placeholder = "Count", @readonly = "readonly" })
+                                                        @Html.TextBoxFor(model => model.objModulesPayment.WAPrepaidPackAmount, new { @class = "input50", @id = "txtWAPrepaidPackAmount", placeholder = "Amount", @readonly = "readonly" })
+                                                    </div>
+                                                    <hr />
+                                                    <div>
+                                                        @Html.CheckBoxFor(model => model.objModulesPayment.IsMemberWebpage, new { @id = "chkIsMemberWebpage", @style = "margin-right:5px; height: 25px; width: 25px;" }) Member WebPage
+                                                        <label style="padding-left:15px;"></label>
+                                                        @Html.DropDownListFor(model => model.objModulesPayment.MemberWebpageCharge, Model.OtherDDL(), "Select", htmlAttributes: new { @class = "input50", @disabled = "disabled", @id = "ddlMemberWebpageCharge" })
+                                                        <label style="padding-left:15px;"> Annual Fees charged</label>
+                                                        @Html.TextBoxFor(model => model.objModulesPayment.MemberWebpageAnnualFee, new { @class = "input50", @id = "txtMemberWebpageAnnualFee", @readonly = "readonly" })
+                                                    </div>
+                                                    <hr />
+                                                    <div>
+                                                        @Html.CheckBoxFor(model => model.objModulesPayment.IsNPC, new { @id = "chkIsNPC", @style = "margin-right:5px; height: 25px; width: 25px;" }) NPC
+                                                        <label style="padding-left:15px;"></label>
+                                                        @Html.DropDownListFor(model => model.objModulesPayment.NPCCharge, Model.OtherDDL(), "Select", htmlAttributes: new { @class = "input50", @disabled = "disabled", @id = "ddlNPCCharge" })
+                                                        <label style="padding-left:15px;"> Annual Fees charged</label>
+                                                        @Html.TextBoxFor(model => model.objModulesPayment.NPCAnnualCharge, new { @class = "input50", @id = "txtNPCAnnualCharge", @readonly = "readonly" })
+                                                    </div>
+                                                    <hr />
+                                                    <div>
+                                                        @Html.CheckBoxFor(model => model.objModulesPayment.IsMobileApp, new { @id = "chkIsMobileApp", @style = "margin-right:5px; height: 25px; width: 25px;" }) Mobile App
+                                                        <label style="padding-left:15px;"></label>
+                                                        @Html.DropDownListFor(model => model.objModulesPayment.MobileAppCharge, Model.OtherDDL(), "Select", htmlAttributes: new { @class = "input50", @disabled = "disabled", @id = "ddlMobileAppCharge" })
+                                                        <label style="padding-left:15px;"> Annual Fees charged</label>
+                                                        @Html.TextBoxFor(model => model.objModulesPayment.MobileAppAnnualCharge, new { @class = "input50", @id = "txtMobileAppAnnualCharge", @readonly = "readonly" })
+                                                    </div>
+                                                    <hr />
+                                                    <div>
+                                                        @Html.CheckBoxFor(model => model.objModulesPayment.IsSProfileUpdate, new { @id = "chkIsSProfileUpdate", @style = "margin-right:5px; height: 25px; width: 25px;" }) Store Profile Update
+                                                        <label style="padding-left:15px;"></label>
+                                                        @Html.DropDownListFor(model => model.objModulesPayment.SProfileUpdateCharge, Model.OtherDDL(), "Select", htmlAttributes: new { @class = "input50", @disabled = "disabled", @id = "ddlSProfileUpdateCharge" })
+                                                        <label style="padding-left:15px;"> Annual Fees charged</label>
+                                                        @Html.TextBoxFor(model => model.objModulesPayment.SProfileUpdateAnnualCharge, new { @class = "input50", @id = "txtSProfileUpdateAnnualCharge", @readonly = "readonly" })
+                                                    </div>
+                                                    <hr />
+                                                    <div>
+                                                        @Html.CheckBoxFor(model => model.objModulesPayment.IsOtherOne, new { @id = "chkIsOtherOne", @style = "margin-right:5px; height: 25px; width: 25px;" }) Other 1
+                                                        <label style="padding-left:15px;"></label>
+                                                        @Html.TextBoxFor(model => model.objModulesPayment.OtherOneDesc, new { @class = "input50", @id = "txtOtherOneDesc", placeholder = "Description", @readonly = "readonly" })
+                                                        <label style="padding-left:15px;"> Annual Fees charged</label>
+                                                        @Html.TextBoxFor(model => model.objModulesPayment.OtherOneFees, new { @class = "input50", @id = "txtOtherOneFees", @readonly = "readonly" })
+                                                    </div>
+                                                    <hr />
+                                                    <div>
+                                                        @Html.CheckBoxFor(model => model.objModulesPayment.IsOtherTwo, new { @id = "chkIsOtherTwo", @style = "margin-right:5px; height: 25px; width: 25px;" }) Other 2
+                                                        <label style="padding-left:15px;"></label>
+                                                        @Html.TextBoxFor(model => model.objModulesPayment.OtherTwoDesc, new { @class = "input50", @id = "txtOtherTwoDesc", placeholder = "Description", @readonly = "readonly" })
+                                                        <label style="padding-left:15px;"> Annual Fees charged</label>
+                                                        @Html.TextBoxFor(model => model.objModulesPayment.OtherTwoFees, new { @class = "input50", @id = "txtOtherTwoFees", @readonly = "readonly" })
+                                                    </div>
+                                                    <hr />
+                                                </div>
+
+                                            </div>
+                                            <div class="button-row d-flex mt-4">
+                                                <button class="btn btn-primary js-btn-prev" type="button" title="Prev" tabindex="36">Prev</button>
+                                                <button class="btn btn-primary ml-auto" type="button" title="Next" id="next2" tabindex="37">Save & Next</button>
+                                            </div>
+                                        }
+                                    </div>
+                                    <!--Brand / Outlet-->
+                                    <div class="multisteps-form__panel shadow p-4 list-box bg-white" id="sec3" data-animation="scaleIn">
+                                        <h5 class="multisteps-form__title"></h5>
+                                        <div class="multisteps-form__content" style="display:flex;">
+                                            <div class="col-sm-12" style="float:left;overflow:hidden;">
+                                                <label>Group Retail Name - <b> @Model.objGroupData.RetailName </b></label>
+                                                <div>
+                                                    <input type="hidden" id="hdnBrand1" />
+                                                    Brand Name <input type="text" id="txtBrandName1" class="input100" />
+                                                    Brand Category <input type="text" id="txtBrandCategory1" class="input100" />
+
+                                                </div>
+                                                <div>
+                                                    <input type="hidden" id="hdnBrand2" />
+                                                    Brand Name <input type="text" id="txtBrandName2" class="input100" />
+                                                    Brand Category <input type="text" id="txtBrandCategory2" class="input100" />
+                                                </div>
+                                                <hr />
+                                                <div>
+                                                    <b>Outlet Details [Brand1]</b><br /><br />
+                                                    <div id="dvBrand1">
+                                                        <div id="dvB11">
+                                                            <input type="hidden" id="hdnBrand1OutletId1"/>
+                                                            Outlet Name <input type="text" id="txtOutletBrand1Name1" class="input50" />
+                                                            City <input type="text" id="txtOutletBrand1City1" class="input50" />
+                                                            Area <input type="text" id="txtOutletBrand1Area1" class="input50" />
+                                                            Pincode <input type="text" id="txtOutletBrand1Pincode1" class="input50" />
+                                                            Geotags <input type="text" id="txtOutletBrand1Geotags1" class="input50" />
+                                                            Cashier Count <input type="text" id="txtOutletBrand1CCount1" class="input50" />
+                                                            <button class="btn btn-primary" id="btnBrand1">+</button>
+                                                        </div>
+                                                    </div>
+                                                    <hr />
+                                                    <b>Outlet Details [Brand2]</b><br /><br />
+                                                    <div id="dvBrand2">
+                                                        <div id="dvB21">
+                                                            <input type="hidden" id="hdnBrand2OutletId1" />
+                                                            Outlet Name <input type="text" id="txtOutletBrand2Name1" class="input50" />
+                                                            City <input type="text" id="txtOutletBrand2City1" class="input50" />
+                                                            Area <input type="text" id="txtOutletBrand2Area1" class="input50" />
+                                                            Pincode <input type="text" id="txtOutletBrand2Pincode1" class="input50" />
+                                                            Geotags <input type="text" id="txtOutletBrand2Geotags1" class="input50" />
+                                                            Cashier Count <input type="text" id="txtOutletBrand2CCount1" class="input50" />
+                                                            <button class="btn btn-primary" id="btnBrand2">+</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="button-row d-flex mt-4">
+                                            <button class="btn btn-primary js-btn-prev" type="button" title="Prev" tabindex="36">Prev</button>
+                                            <button class="btn btn-primary ml-auto" type="button" title="Next" id="next3" tabindex="37">Save & Next</button>
+                                        </div>
+                                    </div>
+                                    <!--Points Config-->
+                                    <div class="multisteps-form__panel shadow p-4 list-box bg-white" id="sec4" data-animation="scaleIn">
+                                        <h5 class="multisteps-form__title">Points Config</h5>
+                                        <div class="multisteps-form__content" style="display:flex;">
+
+
+                                        </div>
+                                        <div class="button-row d-flex mt-4">
+                                            <button class="btn btn-primary js-btn-prev" type="button" title="Prev" tabindex="36">Prev</button>
+                                            <button class="btn btn-primary ml-auto" type="button" title="Next" id="next4" tabindex="37">Next</button>
+                                        </div>
+                                    </div>
+                                    <!--Txn Alerts-->
+                                    <div class="multisteps-form__panel shadow p-4 list-box bg-white" id="sec5" data-animation="scaleIn">
+                                        <h5 class="multisteps-form__title">Txn Alerts</h5>
+                                        <div class="multisteps-form__content" style="display:flex;">
+
+
+                                        </div>
+                                        <div class="button-row d-flex mt-4">
+                                            <button class="btn btn-primary js-btn-prev" type="button" title="Prev" tabindex="36">Prev</button>
+                                            <button class="btn btn-primary ml-auto" type="button" title="Next" id="next5" tabindex="37">Next</button>
+                                        </div>
+                                    </div>
+                                    <!--Other Modules-->
+                                    <div class="multisteps-form__panel shadow p-4 list-box bg-white" id="sec6" data-animation="scaleIn">
+                                        <h5 class="multisteps-form__title">Other Modules</h5>
+                                        <div class="multisteps-form__content" style="display:flex;">
+
+
+                                        </div>
+                                        <div class="button-row d-flex mt-4">
+                                            <button class="btn btn-primary js-btn-prev" type="button" title="Prev" tabindex="36">Prev</button>
+                                            <button class="btn btn-primary ml-auto" type="button" title="Next" id="next6" tabindex="37">Next</button>
+                                        </div>
+                                    </div>
+                                    <!--Checks / Balances-->
+                                    <div class="multisteps-form__panel shadow p-4 list-box bg-white" id="sec7" data-animation="scaleIn">
+                                        <h5 class="multisteps-form__title">Checks / Balances</h5>
+                                        <div class="multisteps-form__content" style="display:flex;">
+
+
+                                        </div>
+                                        <div class="button-row d-flex mt-4">
+                                            <button class="btn btn-primary js-btn-prev" type="button" title="Prev" tabindex="36">Prev</button>
+                                            <button class="btn btn-primary ml-auto" type="button" title="Next" id="next7" tabindex="37">Next</button>
+                                        </div>
+                                    </div>
+                                    <!--Bulk Upload-->
+                                    <div class="multisteps-form__panel shadow p-4 list-box bg-white" id="sec8" data-animation="scaleIn">
+                                        <h5 class="multisteps-form__title">Bulk Upload</h5>
+                                        <div class="multisteps-form__content" style="display:flex;">
+
+
+                                        </div>
+                                        <div class="button-row d-flex mt-4">
+                                            <button class="btn btn-primary js-btn-prev" type="button" title="Prev" tabindex="36">Prev</button>
+                                            <button class="btn btn-primary ml-auto js-btn-next" type="button" title="Next" id="next8" tabindex="37">Next</button>
+                                        </div>
+                                    </div>
+                                    <!--Moved to Live-->
+                                    <div class="multisteps-form__panel shadow p-4 list-box bg-white" id="sec9" data-animation="scaleIn">
+                                        <h5 class="multisteps-form__title">Moved to Live</h5>
+                                        <div class="multisteps-form__content" style="display:flex;">
+
+
+                                        </div>
+                                        <div class="button-row d-flex mt-4">
+                                            <button class="btn btn-primary js-btn-prev" type="button" title="Prev" tabindex="75">Prev</button>
+                                            <button class="btn btn-primary ml-auto " type="button" title="Save" id="next9" tabindex="76"><b>Save</b></button>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="~/Content/scriptSteps.js"></script>
+
+<script>
+    var brand1count = 1;
+    var brand2count = 1;
+    $(document).ready(function () {
+
+        document.getElementById("FileUploadLogo").addEventListener('change', handleFileSelectInvoice, false);
+        $('#ddlRetailCategory').change(function () {
+            if ($('#ddlRetailCategory').val() == "14") {
+                $('#txtRetailCategory').removeAttr("disabled");
+            }
+            else {
+                $('#txtRetailCategory').val("");
+                $('#txtRetailCategory').attr("disabled", "disabled");
+            }
+
+        });
+
+        $('#ddlSourcedBy').change(function () {
+            if ($('#ddlSourcedBy').val() == "6") {
+                $('#txtSourcedBy').removeAttr("disabled");
+            }
+            else {
+                $('#txtSourcedBy').attr("disabled", "disabled");
+            }
+        });
+
+        $('#ddlBillingPartner').change(function () {
+            if ($('#ddlBillingPartner').val() == "10") {
+                $('#txtBillingPartner').removeAttr("disabled");
+            }
+            else {
+                $('#txtBillingPartner').attr("disabled", "disabled");
+            }
+        });
+
+        $('#ddlCity').change(function () {
+            if ($('#ddlCity').val() == "11") {
+                $('#txtCity').removeAttr("disabled");
+            }
+            else {
+                $('#txtCity').attr("disabled", "disabled");
+            }
+        });
+
+        $('#ddlRMAssigned').change(function () {
+            if ($('#ddlRMAssigned').val() == "3") {
+                $('#txtRMAssigned').removeAttr("disabled");
+            }
+            else {
+                $('#txtRMAssigned').attr("disabled", "disabled");
+            }
+        });
+
+        function handleFileSelectInvoice(evt) {
+            var id = evt.currentTarget.id;
+            var qId = id.substring(4, id.length);
+            var f = evt.target.files[0]; // FileList object
+            var reader = new FileReader();
+            // Closure to capture the file information.
+            reader.onload = (function (theFile) {
+                return function (e) {
+                    var binaryData = e.target.result;
+                    var base64String = window.btoa(binaryData);
+                    $("#hdnLogoBase64").val(base64String);
+                    $("#hdnLogo").val($("#FileUploadLogo")[0].files[0].name);
+                };
+            })(f);
+            // Read in the image file as a data URL.
+            reader.readAsBinaryString(f);
+        }
+
+        $('#next1').on("click", function () {
+            if ($("#txtRetailName").val() == "" || $("#txtRetailName").val() == null) {
+                toastr.error('Please enter Retail Name');
+                $("#txtRetailName").focus();
+                return false
+            }
+            if ($("#txtGroupName").val() == "" || $("#txtGroupName").val() == null) {
+                toastr.error('Please enter Group Name');
+                $("#txtGroupName").focus();
+                return false
+            }
+            if ($("#txtOwnerName").val() == "" || $("#txtOwnerName").val() == null) {
+                toastr.error('Please enter Owner Name');
+                $("#txtOwnerName").focus();
+                return false
+            }
+            if ($("#txtOwnerMobileNo").val() == "" || $("#txtOwnerMobileNo").val() == null) {
+                toastr.error('Please enter Owner Mobile No');
+                $("#txtOwnerMobileNo").focus();
+                return false
+            }
+            if ($("#txtOwnerEmail").val() == "" || $("#txtOwnerEmail").val() == null) {
+                toastr.error('Please enter Owner Email');
+                $("#txtOwnerEmail").focus();
+                return false
+            }
+
+            $("#hdnOtherRetailCategory").val($("#txtRetailCategory").val());
+            $("#hdnOtherSourcedBy").val($("#txtSourcedBy").val());
+            $('#hdnOtherBillingPartner').val($("#txtBillingPartner").val());
+            $("#hdnOtherCity").val($("#txtCity").val());
+            $("#hdnOtherRMAssigned").val($("#txtRMAssigned").val());
+
+            $("#divLoader").show();
+            var data = $('#frmaddgroupdetails').serialize();
+
+            $.ajax({
+                url: $('#frmaddgroupdetails').attr('action'),
+                type: 'post',
+                dataType: "html",
+                data: data,
+                success: function (response) {
+                    console.log(response)
+                    if (response != 0) {
+                        toastr.success("Group Detail Saved");
+                        $("#divLoader").hide();
+                        $('#btn2').addClass("js-active");
+                        $('#sec2').addClass("js-active");
+                        $('#sec1').removeClass("js-active");
+                    }
+                    else {
+                        toastr.error("Problem occured in saving Group Details");
+                        $("#divLoader").hide();
+                    }
+                }
+            });
+
+        });
+
+        $('#chkIsProgramManagement').change(function () {
+            if (this.checked) {
+                $("#txtNoOfOutlets").attr("readonly", false);
+                $("#txtAnnualFees").attr("readonly", false);
+                $("#ddlAnnualFees").prop("disabled", false);
+            }
+            else {
+                $("#txtNoOfOutlets").val("");
+                $("#txtNoOfOutlets").attr("readonly", true);
+                $("#txtAnnualFees").val("");
+                $("#txtAnnualFees").attr("readonly", true);
+                $('#ddlAnnualFees').prop('selectedIndex', 0);
+                $("#ddlAnnualFees").prop("disabled", true);
+            }
+        });
+
+        $('#chkIsSMSPack').change(function () {
+            if (this.checked) {
+                $("#txtFreeSMS").attr("readonly", false);
+                $("#txtPrepaidSMSCount").attr("readonly", false);
+                $("#txtPrepaidSMSAmount").attr("readonly", false);
+                $("#ddlGateway").prop("disabled", false);
+            }
+            else {
+                $("#txtFreeSMS").val("");
+                $("#txtFreeSMS").attr("readonly", true);
+                $("#txtPrepaidSMSCount").val("");
+                $("#txtPrepaidSMSCount").attr("readonly", true);
+                $("#txtPrepaidSMSAmount").val("");
+                $("#txtPrepaidSMSAmount").attr("readonly", true);
+                $('#ddlGateway').prop('selectedIndex', 0);
+                $("#ddlGateway").prop("disabled", true);
+            }
+        });
+
+        $('#chkIsWhatsApp').change(function () {
+            if (this.checked) {
+                $("#txtIntegrationAmount").attr("readonly", false);
+                $("#txtWAPrepaidPackCount").attr("readonly", false);
+                $("#txtWAPrepaidPackAmount").attr("readonly", false);
+            }
+            else {
+                $("#txtIntegrationAmount").val("");
+                $("#txtIntegrationAmount").attr("readonly", true);
+                $("#txtWAPrepaidPackCount").val("");
+                $("#txtWAPrepaidPackCount").attr("readonly", true);
+                $("#txtWAPrepaidPackAmount").val("");
+                $("#txtWAPrepaidPackAmount").attr("readonly", true);
+            }
+        });
+
+        $('#chkIsMemberWebpage').change(function () {
+            if (this.checked) {
+                $("#ddlMemberWebpageCharge").prop("disabled", false);
+                $("#txtMemberWebpageAnnualFee").attr("readonly", false);
+            }
+            else {
+                $("#txtMemberWebpageAnnualFee").val("");
+                $("#txtMemberWebpageAnnualFee").attr("readonly", true);
+                $('#ddlMemberWebpageCharge').prop('selectedIndex', 0);
+                $("#ddlMemberWebpageCharge").prop("disabled", true);
+            }
+        });
+
+        $('#chkIsNPC').change(function () {
+            if (this.checked) {
+                $("#ddlNPCCharge").prop("disabled", false);
+                $("#txtNPCAnnualCharge").attr("readonly", false);
+            }
+            else {
+                $("#txtNPCAnnualCharge").val("");
+                $("#txtNPCAnnualCharge").attr("readonly", true);
+                $('#ddlNPCCharge').prop('selectedIndex', 0);
+                $("#ddlNPCCharge").prop("disabled", true);
+            }
+        });
+
+        $('#chkIsMobileApp').change(function () {
+            if (this.checked) {
+                $("#ddlMobileAppCharge").prop("disabled", false);
+                $("#txtMobileAppAnnualCharge").attr("readonly", false);
+            }
+            else {
+                $("#txtMobileAppAnnualCharge").val("");
+                $("#txtMobileAppAnnualCharge").attr("readonly", true);
+                $('#ddlMobileAppCharge').prop('selectedIndex', 0);
+                $("#ddlMobileAppCharge").prop("disabled", true);
+            }
+        });
+
+        $('#chkIsSProfileUpdate').change(function () {
+            if (this.checked) {
+                $("#ddlSProfileUpdateCharge").prop("disabled", false);
+                $("#txtSProfileUpdateAnnualCharge").attr("readonly", false);
+            }
+            else {
+                $("#txtSProfileUpdateAnnualCharge").val("");
+                $("#txtSProfileUpdateAnnualCharge").attr("readonly", true);
+                $('#ddlSProfileUpdateCharge').prop('selectedIndex', 0);
+                $("#ddlSProfileUpdateCharge").prop("disabled", true);
+            }
+        });
+
+        $('#chkIsOtherOne').change(function () {
+            if (this.checked) {
+                $("#txtOtherOneDesc").attr("readonly", false);
+                $("#txtOtherOneFees").attr("readonly", false);
+            }
+            else {
+                $("#txtOtherOneDesc").val("");
+                $("#txtOtherOneDesc").attr("readonly", true);
+                $("#txtOtherOneFees").val("");
+                $("#txtOtherOneFees").attr("readonly", true);
+            }
+        });
+
+        $('#chkIsOtherTwo').change(function () {
+            if (this.checked) {
+                $("#txtOtherTwoDesc").attr("readonly", false);
+                $("#txtOtherTwoFees").attr("readonly", false);
+            }
+            else {
+                $("#txtOtherTwoDesc").val("");
+                $("#txtOtherTwoDesc").attr("readonly", true);
+                $("#txtOtherTwoFees").val("");
+                $("#txtOtherTwoFees").attr("readonly", true);
+            }
+        });
+
+        $('#next2').on("click", function () {
+            if ($("#txtRetailName").val() == "" || $("#txtRetailName").val() == null) {
+                toastr.error('Please enter Retail Name');
+                $("#txtRetailName").focus();
+                return false
+            }
+            if ($("#txtGroupName").val() == "" || $("#txtGroupName").val() == null) {
+                toastr.error('Please enter Group Name');
+                $("#txtGroupName").focus();
+                return false
+            }
+            if ($("#txtOwnerName").val() == "" || $("#txtOwnerName").val() == null) {
+                toastr.error('Please enter Owner Name');
+                $("#txtOwnerName").focus();
+                return false
+            }
+            if ($("#txtOwnerMobileNo").val() == "" || $("#txtOwnerMobileNo").val() == null) {
+                toastr.error('Please enter Owner Mobile No');
+                $("#txtOwnerMobileNo").focus();
+                return false
+            }
+            if ($("#txtOwnerEmail").val() == "" || $("#txtOwnerEmail").val() == null) {
+                toastr.error('Please enter Owner Email');
+                $("#txtOwnerEmail").focus();
+                return false
+            }
+
+            $("#divLoader").show();
+            var data = $('#frmaddmoduleandpayment').serialize();
+
+            $.ajax({
+                url: $('#frmaddmoduleandpayment').attr('action'),
+                type: 'post',
+                dataType: "html",
+                data: data,
+                success: function (response) {
+                    console.log(response)
+                    if (response == "true") {
+                        toastr.success("Modules and Payments Detail Saved");
+                        $("#divLoader").hide();
+                        $('#btn3').addClass("js-active");
+                        $('#sec3').addClass("js-active");
+                        $('#sec2').removeClass("js-active");
+                    }
+                    else {
+                        toastr.error("Problem occured in saving Group Details");
+                        $("#divLoader").hide();
+                    }
+                }
+            });
+
+        });
+
+        
+        if ($("#hdnGroupDetailGroupID").val() != 0) {
+            LoadModuleAndPaymentData();
+            GetBrandAndOutletData();
+        }
+        $('#next3').on("click", function () {
+            SaveBrandAndOutlet();
+        })
+        $('#btnBrand1').on("click", function () {            
+            brand1count++;
+            AddBrand1Outlet();
+        });
+        $('#btnBrand2').on("click", function () {            
+            brand2count++;
+            AddBrand2Outlet();
+            
+        });
+    });
+    
+    function remove1Item(count) {
+        $("#dvB1" + count).remove();
+        //brand1count--;
+    }
+    function remove2Item(count) {
+        $("#dvB2" + count).remove();
+        //brand2count--;
+    }
+    function AddBrand1Outlet() {
+        brand1count++;
+        console.log(brand1count)
+        itemHTML = "<div id=dvB1" + brand1count + ">";
+        itemHTML += "<input type=\"hidden\" id=\"hdnBrand1OutletId" + brand1count + "\" />";
+        itemHTML += "Outlet Name <input type=\"text\" id=\"txtOutletBrand1Name" + brand1count + "\" class=\"input50\" />";
+        itemHTML += "City <input type=\"text\" id=\"txtOutletBrand1City" + brand1count + "\" class=\"input50\" />";
+        itemHTML += "Area <input type=\"text\" id=\"txtOutletBrand1Area" + brand1count + "\" class=\"input50\" />";
+        itemHTML += "Pincode <input type=\"text\" id=\"txtOutletBrand1Pincode" + brand1count + "\" class=\"input50\" />";
+        itemHTML += "Geotags <input type=\"text\" id=\"txtOutletBrand1Geotags" + brand1count + "\" class=\"input50\" />";
+        itemHTML += "Cashier Count <input type=\"text\" id=\"txtOutletBrand1CCount" + brand1count + "\" class=\"input50\" />";
+        itemHTML += "<button onclick=\"remove1Item(" + brand1count + ")\" id=btnBrand1" + brand1count + " type=\"button\" class=\"btn btn-primary\" style=\"margin-left: 5px;\"> - </button>";
+        itemHTML += "</div>";
+        $("#dvBrand1").append(itemHTML);
+    }
+
+    function AddBrand2Outlet() {
+        itemHTML = "<div id=dvB2" + brand2count + ">";
+        itemHTML += "<input type=\"hidden\" id=\"hdnBrand2OutletId" + brand2count + "\" />";
+        itemHTML += "Outlet Name <input type=\"text\" id=\"txtOutletBrand2Name" + brand2count + "\" class=\"input50\" />";
+        itemHTML += "City <input type=\"text\" id=\"txtOutletBrand2City" + brand2count + "\" class=\"input50\" />";
+        itemHTML += "Area <input type=\"text\" id=\"txtOutletBrand2Area" + brand2count + "\" class=\"input50\" />";
+        itemHTML += "Pincode <input type=\"text\" id=\"txtOutletBrand2Pincode" + brand2count + "\" class=\"input50\" />";
+        itemHTML += "Geotags <input type=\"text\" id=\"txtOutletBrand2Geotags" + brand2count + "\" class=\"input50\" />";
+        itemHTML += "Cashier Count <input type=\"text\" id=\"txtOutletBrand2CCount" + brand2count + "\" class=\"input50\" />";
+        itemHTML += "<button onclick=\"remove2Item(" + brand2count + ")\" id=btnBrand2" + brand2count + " type=\"button\" class=\"btn btn-primary\" style=\"margin-left: 5px;\"> - </button>";
+        itemHTML += "</div>";
+        $("#dvBrand2").append(itemHTML);
+    }
+    function LoadModuleAndPaymentData() {
+        if ($("#chkIsProgramManagement").is(':checked')) {
+            $("#txtNoOfOutlets").attr("readonly", false);
+            $("#txtAnnualFees").attr("readonly", false);
+            $("#ddlAnnualFees").prop("disabled", false);
+        }
+        else {
+            $("#txtNoOfOutlets").val("");
+            $("#txtNoOfOutlets").attr("readonly", true);
+            $("#txtAnnualFees").val("");
+            $("#txtAnnualFees").attr("readonly", true);
+            $('#ddlAnnualFees').prop('selectedIndex', 0);
+            $("#ddlAnnualFees").prop("disabled", true);
+        }
+
+        if ($("#chkIsSMSPack").is(':checked')) {
+            $("#txtFreeSMS").attr("readonly", false);
+            $("#txtPrepaidSMSCount").attr("readonly", false);
+            $("#txtPrepaidSMSAmount").attr("readonly", false);
+            $("#ddlGateway").prop("disabled", false);
+        }
+        else {
+            $("#txtFreeSMS").val("");
+            $("#txtFreeSMS").attr("readonly", true);
+            $("#txtPrepaidSMSCount").val("");
+            $("#txtPrepaidSMSCount").attr("readonly", true);
+            $("#txtPrepaidSMSAmount").val("");
+            $("#txtPrepaidSMSAmount").attr("readonly", true);
+            $('#ddlGateway').prop('selectedIndex', 0);
+            $("#ddlGateway").prop("disabled", true);
+        }
+
+        if ($("#chkIsWhatsApp").is(':checked')) {
+            $("#txtIntegrationAmount").attr("readonly", false);
+            $("#txtWAPrepaidPackCount").attr("readonly", false);
+            $("#txtWAPrepaidPackAmount").attr("readonly", false);
+        }
+        else {
+            $("#txtIntegrationAmount").val("");
+            $("#txtIntegrationAmount").attr("readonly", true);
+            $("#txtWAPrepaidPackCount").val("");
+            $("#txtWAPrepaidPackCount").attr("readonly", true);
+            $("#txtWAPrepaidPackAmount").val("");
+            $("#txtWAPrepaidPackAmount").attr("readonly", true);
+        }
+
+        if ($("#chkIsMemberWebpage").is(':checked')) {
+            $("#ddlMemberWebpageCharge").prop("disabled", false);
+            $("#txtMemberWebpageAnnualFee").attr("readonly", false);
+        }
+        else {
+            $("#txtMemberWebpageAnnualFee").val("");
+            $("#txtMemberWebpageAnnualFee").attr("readonly", true);
+            $('#ddlMemberWebpageCharge').prop('selectedIndex', 0);
+            $("#ddlMemberWebpageCharge").prop("disabled", true);
+        }
+
+        if ($("#chkIsNPC").is(':checked')) {
+            $("#ddlNPCCharge").prop("disabled", false);
+            $("#txtNPCAnnualCharge").attr("readonly", false);
+        }
+        else {
+            $("#txtNPCAnnualCharge").val("");
+            $("#txtNPCAnnualCharge").attr("readonly", true);
+            $('#ddlNPCCharge').prop('selectedIndex', 0);
+            $("#ddlNPCCharge").prop("disabled", true);
+        }
+
+        if ($("#chkIsMobileApp").is(':checked')) {
+            $("#ddlMobileAppCharge").prop("disabled", false);
+            $("#txtMobileAppAnnualCharge").attr("readonly", false);
+        }
+        else {
+            $("#txtMobileAppAnnualCharge").val("");
+            $("#txtMobileAppAnnualCharge").attr("readonly", true);
+            $('#ddlMobileAppCharge').prop('selectedIndex', 0);
+            $("#ddlMobileAppCharge").prop("disabled", true);
+        }
+
+        if ($("#chkIsSProfileUpdate").is(':checked')) {
+            $("#ddlSProfileUpdateCharge").prop("disabled", false);
+            $("#txtSProfileUpdateAnnualCharge").attr("readonly", false);
+        }
+        else {
+            $("#txtSProfileUpdateAnnualCharge").val("");
+            $("#txtSProfileUpdateAnnualCharge").attr("readonly", true);
+            $('#ddlSProfileUpdateCharge').prop('selectedIndex', 0);
+            $("#ddlSProfileUpdateCharge").prop("disabled", true);
+        }
+
+        if ($("#chkIsOtherOne").is(':checked')) {
+            $("#txtOtherOneDesc").attr("readonly", false);
+            $("#txtOtherOneFees").attr("readonly", false);
+        }
+        else {
+            $("#txtOtherOneDesc").val("");
+            $("#txtOtherOneDesc").attr("readonly", true);
+            $("#txtOtherOneFees").val("");
+            $("#txtOtherOneFees").attr("readonly", true);
+        }
+
+        if ($("#chkIsOtherTwo").is(':checked')) {
+            $("#txtOtherTwoDesc").attr("readonly", false);
+            $("#txtOtherTwoFees").attr("readonly", false);
+        }
+        else {
+            $("#txtOtherTwoDesc").val("");
+            $("#txtOtherTwoDesc").attr("readonly", true);
+            $("#txtOtherTwoFees").val("");
+            $("#txtOtherTwoFees").attr("readonly", true);
+        }
+
+
+    }
+
+    function SaveBrandAndOutlet() {
+        var BrandData = [];
+        item = {}
+        item["GroupId"] = $("#hdnGroupDetailGroupID").val();
+        item["BrandId1"] = $("#hdnBrand1").val();
+        item["Brand1Name"] = $("#txtBrandName1").val();
+        item["Brand1Category"] = $("#txtBrandCategory1").val();
+        item["BrandId2"] = $("#hdnBrand2").val();
+        item["Brand2Name"] = $("#txtBrandName2").val();
+        item["Brand2Category"] = $("#txtBrandCategory2").val();
+        var ItemObject = [];
+        var IDs = $("#dvBrand1 div[id^='dvB1']");
+        $.each(IDs, function (index, value) {
+            var id = value.id.substring(4, value.id.length);
+            brandItem = {}
+            if ($("#hdnBrand1").val() == "") {
+                brandItem["BrandId"] = 1;
+            }
+            else {
+                brandItem["BrandId"] = $("#hdnBrand1").val();
+            }
+            brandItem["OutletId"] = $("#hdnBrand1OutletId" + id).val();
+            brandItem["OutletName"] = $("#txtOutletBrand1Name" + id).val();
+            brandItem["City"] = $("#txtOutletBrand1City" + id).val();
+            brandItem["Area"] = $("#txtOutletBrand1Area" + id).val();
+            brandItem["Pincode"] = $("#txtOutletBrand1Pincode" + id).val();
+            brandItem["Geotags"] = $("#txtOutletBrand1Geotags" + id).val();
+            brandItem["CashierCount"] = $("#txtOutletBrand1CCount" + id).val();
+            ItemObject.push(brandItem);
+        });
+        var ID2s = $("#dvBrand2 div[id^='dvB2']");
+        $.each(ID2s, function (index, value) {
+            var id = value.id.substring(4, value.id.length);
+            brandItem = {}
+            if ($("#hdnBrand2").val() == "") {
+                brandItem["BrandId"] = 2;
+            }
+            else {
+                brandItem["BrandId"] = $("#hdnBrand2").val();
+            }
+            brandItem["OutletId"] = $("#hdnBrand2OutletId" + id).val();
+            brandItem["OutletName"] = $("#txtOutletBrand2Name" + id).val();
+            brandItem["City"] = $("#txtOutletBrand2City" + id).val();
+            brandItem["Area"] = $("#txtOutletBrand2Area" + id).val();
+            brandItem["Pincode"] = $("#txtOutletBrand2Pincode" + id).val();
+            brandItem["Geotags"] = $("#txtOutletBrand2Geotags" + id).val();
+            brandItem["CashierCount"] = $("#txtOutletBrand2CCount" + id).val();
+            ItemObject.push(brandItem);
+        });
+        item["OutletJson"] = ItemObject;
+        BrandData.push(item);
+        var data = JSON.stringify(BrandData);        
+
+        $.ajax({
+            type: "POST",
+            url: "/CustomerManagement/AddBrandAndOutlet",
+            data: '{jsonData: ' + JSON.stringify(data) + '}',
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (result) {
+                console.log(111)
+            },
+            error: function (result) {
+                console.log(result.responseText)
+                if (result.responseText == "True") {
+                    toastr.success("Brand and Outlets Added");
+                    $('#btn4').addClass("js-active");
+                    $('#sec4').addClass("js-active");
+                    $('#sec3').removeClass("js-active");
+                    $("#divLoader").hide();
+                }
+                else {
+                    toastr.error('error occured while saving data');
+                    $("#divLoader").hide();
+                }
+
+            }
+        });
+    }
+
+    function GetBrandAndOutletData() {
+        var GroupId = $("#hdnGroupDetailGroupID").val();
+
+        $.ajax({
+            type: "POST",
+            url: "/CustomerManagement/GetBrandAndOutletData",
+            data: '{groupId: ' + JSON.stringify(GroupId) + '}',
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (result) {                
+                LoadBrandAndOutlet(result)
+                $("#divLoader").hide();
+            },
+            error: function (result) {                
+                console.log(result.responseText)
+                $("#divLoader").hide();
+            }
+        });
+    }
+    function LoadBrandAndOutlet(data)
+    {        
+        var brands = data.lstBrands;        
+        $("#hdnBrand1").val(brands[0].BrandId);
+        $("#txtBrandName1").val(brands[0].BrandName);
+        $("#txtBrandCategory1").val(brands[0].Category);
+
+        if (data.lstBrands.length > 1) {
+            $("#hdnBrand2").val(brands[1].BrandId);
+            $("#txtBrandName2").val(brands[1].BrandName);
+            $("#txtBrandCategory2").val(brands[1].Category);
+            $("#dvBrand2").html("");
+        }
+
+        var outlets = data.lstOutlets;        
+        var outlet1count = 1;
+        var outlet2count = 1;
+        $("#dvBrand1").html("");
+
+        $.each(outlets, function (index, value) {            
+            if (value.BrandId == $("#hdnBrand1").val()) {
+                itemHTML = "<div id=dvB1" + outlet1count + ">";
+                itemHTML += "<input type=\"hidden\" id=\"hdnBrand1OutletId" + outlet1count + "\" />";
+                itemHTML += "Outlet Name <input type=\"text\" id=\"txtOutletBrand1Name" + outlet1count + "\" class=\"input50\" />";
+                itemHTML += "City <input type=\"text\" id=\"txtOutletBrand1City" + outlet1count + "\" class=\"input50\" />";
+                itemHTML += "Area <input type=\"text\" id=\"txtOutletBrand1Area" + outlet1count + "\" class=\"input50\" />";
+                itemHTML += "Pincode <input type=\"text\" id=\"txtOutletBrand1Pincode" + outlet1count + "\" class=\"input50\" />";
+                itemHTML += "Geotags <input type=\"text\" id=\"txtOutletBrand1Geotags" + outlet1count + "\" class=\"input50\" />";
+                itemHTML += "Cashier Count <input type=\"text\" id=\"txtOutletBrand1CCount" + outlet1count + "\" class=\"input50\" />";
+                if (outlet1count==1) {
+                    itemHTML += "<button class=\"btn btn-primary\" onclick=\"AddBrand1Outlet()\" id=\"btnBrand1\">+</button>";
+                }
+                else {
+                    itemHTML += "<button onclick=\"remove1Item(" + outlet1count + ")\" id=btnBrand1" + outlet1count + " type=\"button\" class=\"btn btn-primary\" style=\"margin-left: 5px;\"> - </button>";
+                }
+                itemHTML += "</div>";
+                $("#dvBrand1").append(itemHTML);
+
+                $("#hdnBrand1OutletId" + outlet1count).val(value.OutletId);
+                $("#txtOutletBrand1Name" + outlet1count).val(value.OutletName);
+                $("#txtOutletBrand1City" + outlet1count).val(value.City);
+                $("#txtOutletBrand1Area" + outlet1count).val(value.Address);
+                $("#txtOutletBrand1Pincode" + outlet1count).val(value.PinCode);
+                $("#txtOutletBrand1Geotags" + outlet1count).val(value.Latitude);
+                //$("#txtOutletBrand1CCount" + outlet1count).val(value.ItemQty);
+                brand1count = outlet1count;
+                outlet1count++;                
+               
+            }
+            if (value.BrandId == $("#hdnBrand2").val()) {
+                
+                itemHTML = "<div id=dvB2" + outlet2count + ">";
+                itemHTML += "<input type=\"hidden\" id=\"hdnBrand2OutletId" + outlet2count + "\" />";
+                itemHTML += "Outlet Name <input type=\"text\" id=\"txtOutletBrand2Name" + outlet2count + "\" class=\"input50\" />";
+                itemHTML += "City <input type=\"text\" id=\"txtOutletBrand2City" + outlet2count + "\" class=\"input50\" />";
+                itemHTML += "Area <input type=\"text\" id=\"txtOutletBrand2Area" + outlet2count + "\" class=\"input50\" />";
+                itemHTML += "Pincode <input type=\"text\" id=\"txtOutletBrand2Pincode" + outlet2count + "\" class=\"input50\" />";
+                itemHTML += "Geotags <input type=\"text\" id=\"txtOutletBrand2Geotags" + outlet2count + "\" class=\"input50\" />";
+                itemHTML += "Cashier Count <input type=\"text\" id=\"txtOutletBrand2CCount" + outlet2count + "\" class=\"input50\" />";
+                if (outlet2count == 1) {
+                    itemHTML += "<button class=\"btn btn-primary\" onclick=\"AddBrand2Outlet()\" id=\"btnBrand2\">+</button>";
+                }
+                else {
+                    itemHTML += "<button onclick=\"remove2Item(" + outlet2count + ")\" id=btnBrand2" + outlet2count + " type=\"button\" class=\"btn btn-primary\" style=\"margin-left: 5px;\"> - </button>";
+                }
+                    itemHTML += "</div>";
+                $("#dvBrand2").append(itemHTML);
+
+                $("#hdnBrand2OutletId" + outlet2count).val(value.OutletId);
+                $("#txtOutletBrand2Name" + outlet2count).val(value.OutletName);
+                $("#txtOutletBrand2City" + outlet2count).val(value.City);
+                $("#txtOutletBrand2Area" + outlet2count).val(value.Address);
+                $("#txtOutletBrand2Pincode" + outlet2count).val(value.PinCode);
+                $("#txtOutletBrand2Geotags" + outlet2count).val(value.Latitude);
+                //$("#txtOutletBrand1CCount" + outlet1count).val(value.ItemQty);
+                
+                outlet2count++;
+                brand2count = outlet2count;
+            }
+        });
+    }
+</script>

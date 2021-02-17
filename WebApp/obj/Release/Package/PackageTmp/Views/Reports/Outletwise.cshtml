@@ -1,0 +1,105 @@
+﻿@model List<BOTS_BL.Models.OutletWise>
+@{
+    ViewBag.Title = "Outletwise";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="app-main__inner">
+    <div class="row mb-3 pt-3 pl-3 pr-3 card">
+
+        <div class="col-sm-10" style="display:flex;padding-bottom: 10px;margin-top:5px;">
+            <label style="margin-right:20px;"> Txn Date Range</label>
+            <input type="radio" id="rdnBTD" checked name="first_item" value="1" style="margin-right:5px;margin-top:5px;" />  <label for="rdnBTD" style="margin-right:20px;">  BTD</label>
+            <input type="radio" id="rdnRange" name="first_item" value="2" style="margin-right:5px;margin-top:5px;" />  <label for="rdnRange" style="margin-right:20px;">  Range</label>
+
+            <label style="margin-right:10px;"> From :</label> <input type="date" id="dtFrom" style="margin-right:20px;" />
+            <label style="margin-right:10px;"> To :</label><input type="date" id="dtTo" style="margin-right:20px;" />
+            <button id="btnFilter" class="btn btn-primary login-btn">Filter</button>
+        </div>
+    </div>
+
+    <div id="dvOutletWiseData"></div>
+
+</div>
+
+<script>
+    $(document).ready(function () {
+        SetFilter();
+        GetData();
+        $("#rdnBTD").change(function () {
+            SetFilter();
+        });
+        $("#rdnRange").change(function () {
+            SetFilter();
+        });
+        $("#btnFilter").click(function () {
+            GetData();
+        });
+    });
+
+    function SetFilter() {
+        if ($("#rdnBTD").is(":checked")) {
+            $('#dtFrom').prop('readonly', true);
+            $('#dtTo').prop('readonly', true);
+            $('#dtFrom').val('');
+            $('#dtTo').val('');
+        }
+        if ($("#rdnRange").is(":checked")) {
+            $('#dtFrom').prop('readonly', false);
+            $('#dtTo').prop('readonly', false);
+        }
+    }
+
+    function GetData() {
+        var DateRangeFlag = 0;
+        var fromDate = '';
+        var toDate = '';
+        $("#divLoader").show();
+        if ($("#rdnRange").is(":checked")) {
+            DateRangeFlag = 1;
+            fromDate = $('#dtFrom').val();
+            toDate = $('#dtTo').val();
+        }
+
+        $.ajax({
+            type: "POST",
+            url: "../Reports/GetOutletWiseResult",
+            data: "{'DateRangeFlag': " + DateRangeFlag + ", 'fromDate': '" + fromDate + "','toDate': '" + toDate + "'}",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                $('#dvOutletWiseData').html(response);
+                $("#divLoader").hide();
+            },
+            failure: function (response) {
+                $("#divLoader").hide();
+            },
+            error: function (response) {
+                $('#dvOutletWiseData').html(response.responseText);
+                $("#divLoader").hide();
+            }
+        });
+    }
+
+     function ExportDataExcel() {
+         var DateRangeFlag = 0;
+         var fromDate = '';
+         var toDate = '';
+         $("#divLoader").show();
+         if ($("#rdnRange").is(":checked")) {
+             DateRangeFlag = 1;
+             fromDate = $('#dtFrom').val();
+             toDate = $('#dtTo').val();
+         }
+
+
+        var urlLink = "@Url.Action("ExportToExcelOutletwise", "Reports")";
+        urlLink = urlLink + "?DateRangeFlag=" + DateRangeFlag + "&fromDate=" + fromDate + "&toDate=" + toDate + "&ReportName=Outletwise";
+        console.log(urlLink);
+        window.location.href = urlLink;
+        $("#divLoader").hide();
+
+    }
+
+
+</script>

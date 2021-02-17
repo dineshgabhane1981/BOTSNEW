@@ -1,0 +1,253 @@
+﻿@model List<BOTS_BL.Models.OutletwiseTransaction>
+@{
+    ViewBag.Title = "Transactionwise";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="app-main__inner">
+    <div class="row mb-3 pt-3 pl-3 pr-3 card">
+
+        <div class="col-sm-12" style="display:flex;">
+            <label style="margin-right:20px;"> Txn Date Range</label>
+            <input type="radio" id="rdnBTD" checked name="first_item" value="1" style="margin-right:5px;margin-top:5px;" />  <label for="rdnBTD" style="margin-right:20px;">  BTD</label>
+            <input type="radio" id="rdnRange" name="first_item" value="2" style="margin-right:5px;margin-top:5px;" />  <label for="rdnRange" style="margin-right:20px;">  Range</label>
+
+            <label style="margin-right:10px;"> From :</label> <input type="date" id="dtFrom" style="margin-right:20px;" />
+            <label style="margin-right:10px;"> To :</label><input type="date" id="dtTo" style="margin-right:20px;" />
+
+        </div>
+        <div class="col-sm-12" style="margin-top:20px;">
+            Select Outlet :  @Html.DropDownListFor(x => Model.Count, new SelectList(ViewBag.OutletList, "Value", "Text"), "All", htmlAttributes: new { @class = "input100", @id = "OutletList" })
+            
+        </div>
+        <div class="col-sm-12" style="margin-bottom:20px;">
+            <input type="checkbox" id="chkEnrollmentData" name="chkEnrollmentData" style="margin-right:5px;height:15px;width:15px;" />  <label for="rdnBTD" style="margin-right:20px;">Only Enrollment data</label>
+            <button id="btnFilter" class="btn btn-primary login-btn" style="margin-left:20px;">Filter</button>
+        </div>
+    </div>
+
+    <div id="dvOutletWiseData">
+        <div class="row mb-3 card">
+            <div class="container-fluid pt-3 pl-3 pr-3">
+                <div class="pt-3 pl-3 pr-3 col-md-12 col-lg-12">
+                    <div class="row">
+                        <div class="col search-container">
+                            <i class="fas fa-search"></i>
+                            <input class="input100" type="text" id="txtSearch" placeholder="Search activity..." />
+                        </div>
+
+                        <div class="col text-right">
+                            <ul class="list-inline progress-list mt-2">
+                                <li class="list-inline-item">
+                                    <div class="dropdown">
+                                        <button class="btn btn-primary login-btn" onclick='ExportDataExcel();' type="button" id="btnExport">
+                                            <i class="fas fa-file-export"></i> Export
+                                        </button>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="row mt-3" id="dvActivityData">
+
+                        <div class="table-responsive">
+                            <table class="table" id="activityTable">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Outlet</th>
+                                        <th scope="col">Mobile Number</th>
+                                        <th scope="col">Member Name</th>
+                                        <th scope="col">Type</th>
+                                        <th scope="col">Invoice No</th>
+                                        <th scope="col">Invoice Amount</th>
+                                        <th scope="col">Txn Type</th>
+                                        <th scope="col">Points Earned</th>
+                                        <th scope="col">Points Burned</th>
+                                        <th scope="col">Txn Datetime</th>
+                                        <th scope="col">Txn Update Date</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+</div>
+<script>
+    var tableData = [];
+    $("#OutletList").val('@ViewBag.OutletId');
+    $(document).ready(function () {
+        SetFilter();
+        GetData();
+        $("#rdnBTD").change(function () {
+            SetFilter();
+        });
+        $("#rdnRange").change(function () {
+            SetFilter();
+        });
+        $("#btnFilter").click(function () {
+            GetData();
+        });
+    });
+    function SetFilter() {
+        if ($("#rdnBTD").is(":checked")) {
+            $('#dtFrom').prop('readonly', true);
+            $('#dtTo').prop('readonly', true);
+            $('#dtFrom').val('');
+            $('#dtTo').val('');
+        }
+        if ($("#rdnRange").is(":checked")) {
+            $('#dtFrom').prop('readonly', false);
+            $('#dtTo').prop('readonly', false);
+        }
+    }
+    function GetData() {
+        var DateRangeFlag = "0";
+        var fromDate = '';
+        var toDate = '';
+        $("#divLoader").show();
+        if ($("#rdnRange").is(":checked")) {
+            DateRangeFlag = "1";
+            fromDate = $('#dtFrom').val();
+            toDate = $('#dtTo').val();
+        }
+        var outletId = "";
+        if ($("#OutletList").val() != "") {
+            outletId = $("#OutletList").val();
+        }
+        var EnrolmentDataFlag = $("#chkEnrollmentData").is(":checked");
+        $.ajax({
+            type: "POST",
+            url: "../Reports/GetOutletWiseTransactionResult",
+            data: "{'DateRangeFlag': " + DateRangeFlag + ", 'fromDate': '" + fromDate + "','toDate': '" + toDate + "','outletId': '" + outletId + "','EnrolmentDataFlag': " + EnrolmentDataFlag + "}",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                tableData.length = 0;
+                //tableData = [];
+                $.map(response, function (item) {
+                    optionItem = {}
+                    optionItem["OutletName"] = item.OutletName;
+                    optionItem["MaskedMobileNo"] = item.MaskedMobileNo;
+                    optionItem["MemberName"] = item.MemberName;
+                    optionItem["Type"] = item.Type;
+                    optionItem["InvoiceNo"] = item.InvoiceNo;
+                    optionItem["InvoiceAmt"] = item.InvoiceAmt;
+                    optionItem["TxnType"] = item.TxnType;
+                    optionItem["PointsEarned"] = item.PointsEarned;
+                    optionItem["PointsBurned"] = item.PointsBurned;
+                    optionItem["TxnDatetime"] = item.TxnDatetime;
+                    optionItem["TxnUpdateDate"] = item.TxnUpdateDate;
+                    tableData.push(optionItem);
+                });
+                DrawTable();
+                $("#divLoader").hide();
+            },
+            failure: function (response) {
+                $("#divLoader").hide();
+            },
+            error: function (response) {
+                //$('#dvOutletWiseData').html(response.responseText);
+                $("#divLoader").hide();
+            }
+        });
+    }
+
+    function DrawTable() {
+        var table1 = $('#activityTable').DataTable();
+        table1.destroy();
+
+        var table = $('#activityTable').DataTable({
+            "data": tableData,
+            "paging": true,
+            "ordering": true,
+            "info": true,
+            "bFilter": true,
+            "pageLength": 25,
+            "pagingType": "simple_numbers",
+            "columns": [
+                { data: "OutletName" },
+                { data: "MaskedMobileNo" },
+                { data: "MemberName" },
+                { data: "Type" },
+                { data: "InvoiceNo" },
+                { data: "InvoiceAmt" },
+                { data: "TxnType" },
+                { data: "PointsEarned" },
+                { data: "PointsBurned" },
+                { data: "TxnDatetime" },
+                { data: "TxnUpdateDate" }
+            ],
+            aoColumnDefs: [
+                {
+                    bSortable: false,
+                    aTargets: [-9, -10, -11]
+                }
+            ]
+            //"aoColumnDefs": [{ "sClass": "hide_me", "aTargets": [1] }]
+            //"rowReorder": {
+            //    dataSrc: "index"
+            //}
+        });
+        $('#activityTable_filter').hide();
+
+        $('#txtSearch').on('keyup', function () {
+
+            $.fn.dataTable.ext.search.push(function (settings, searchData) {
+                var term = $('#txtSearch').val().toLowerCase()
+                for (var i = 0; i < searchData.length; i++) {
+                    if (searchData[i].toLowerCase().indexOf(term) == 0) {
+                        return true;
+                    }
+                }
+                return false;
+            });
+            var table = $('#activityTable').DataTable();
+            table.draw();
+        });
+    }
+
+    function ExportDataExcel() {
+        var DateRangeFlag = "0";
+        var fromDate = '';
+        var toDate = '';
+        $("#divLoader").show();
+        if ($("#rdnRange").is(":checked")) {
+            DateRangeFlag = "1";
+            fromDate = $('#dtFrom').val();
+            toDate = $('#dtTo').val();
+        }
+        var outletId = "";
+        if ($("#OutletList").val() != "") {
+            outletId = $("#OutletList").val();
+        }
+        var EnrolmentDataFlag = $("#chkEnrollmentData").is(":checked");       
+
+        var urlLink = "@Url.Action("ExportToExcelTransactionwise", "Reports")";
+        urlLink = urlLink + "?DateRangeFlag=" + DateRangeFlag + "&fromDate=" + fromDate + "&toDate=" + toDate + "&outletId=" + outletId + "&EnrolmentDataFlag=" + EnrolmentDataFlag + "&ReportName=Transactionwise";
+        console.log(urlLink);
+        window.location.href = urlLink;
+        $("#divLoader").hide();
+
+    }
+
+</script>
+<style>
+    table.dataTable thead .sorting_asc {
+        background: url("https://cdn.datatables.net/1.10.0/images/sort_asc.png") no-repeat center left;
+    }
+
+    table.dataTable thead .sorting_desc {
+        background: url("https://cdn.datatables.net/1.10.0/images/sort_desc.png") no-repeat center left;
+    }
+
+    table.dataTable thead .sorting {
+        background: url("https://cdn.datatables.net/1.10.0/images/sort_both.png") no-repeat center left;
+    }
+</style>

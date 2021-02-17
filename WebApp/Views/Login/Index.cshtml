@@ -1,0 +1,74 @@
+﻿@model BOTS_BL.Models.LoginModel
+@{
+    ViewBag.Title = "Index";
+    Layout = null;
+}
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+      integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+<link rel="stylesheet" href="~/Content/style.css" />
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+<link href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" rel="stylesheet" />
+
+<div class="container-fluid" style="background-image:url('../../Content/assets/BotsLoginBackground.jpeg'); background-position: center;background-repeat: no-repeat;background-size: cover;height: 100%;">
+    <div class="row justify-content-end h-100" style="margin-right:10px;">
+        
+        <div class="col-12 align-self-center text-center login-section" style="border-radius:50px;box-shadow:5px 5px 5px 5px #0A0A0A; margin-bottom:100px;">
+            <div class="text-center">
+                <img src="~/Content/assets/images/Blue Ocktopus-TLC_white.jpg" width="70%">
+            </div>
+            <div class="text-center" style="font-size:20px; color:#1C699F;">SAAS Platform for Retail</div>
+            <div class="text-center" style="font-size:20px; color:#1C699F;"><b>Growth | Retention | Intelligence</b></div>
+            @using (Html.BeginForm("UserAuthentication", "Login", FormMethod.Post, new { enctype = "multipart/form-data", @class = "text-center mt-4" }))
+            {
+
+                if (!string.IsNullOrEmpty(Convert.ToString(TempData["InvalidUserMessage"])))
+                {
+                    <script>
+                        toastr.error('@Convert.ToString(TempData["InvalidUserMessage"])');
+                    </script>
+                }
+
+                @Html.TextBoxFor(model => model.LoginId, new { @class = "input100", placeholder = "Login ID" })
+
+                @Html.PasswordFor(model => model.Password, new { @class = "input100", placeholder = "Password" })
+
+                <div class="mt-3">
+                    <button type="submit" onclick="return CheckRequired();" class="btn btn-primary" style="width:76%;background-color:#1C699F;"><i>Submit</i></button>
+                </div>
+                <div class="mt-3 align-self-center text-center">
+                    <a href="@Url.Action("ResetPassword", "Home")" style="cursor:pointer;color:darkslategrey;"><u>Forgot Password</u></a>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $(".app-header").hide();
+        $(".app-sidebar").hide();
+        $(".app-wrapper-footer").hide();
+    });
+    function CheckRequired() {
+        
+        if ($("#GroupId").val() == "") {
+            $("#GroupId").focus();
+            toastr.error('Please enter Group ID');
+            return false;
+        }
+        if ($("#LoginId").val() == "") {
+            $("#LoginId").focus();
+            toastr.error('Please enter Login ID');
+            return false;
+        }
+        if ($("#Password").val() == "") {
+            $("#Password").focus();
+            toastr.error('Please enter Password');
+            return false;
+        }
+        return true;
+    }
+</script>

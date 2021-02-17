@@ -1,0 +1,289 @@
+﻿@model BOTS_BL.Models.OnlyOnce
+@{
+    ViewBag.Title = "OnlyOnce";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="app-main__inner">
+
+    <div class="row mb-3 pt-3 pl-3 pr-3 card">
+        <div class="col-sm-12">
+            Select Outlet  @Html.DropDownListFor(x => Model.TotalMember, new SelectList(ViewBag.OutletList, "Value", "Text"), "All", htmlAttributes: new { @class = "input100", @id = "OutletList" })
+
+        </div>
+
+        <div class="row">
+            <div class="col-md-6 col-xl-4">
+                <div class="card mb-3 widget-content bg-midnight-bloom">
+                    <div class="widget-content-wrapper text-white">
+                        <div class="widget-content-left">
+                            <div class="widget-heading">
+                                Total Members
+                            </div>
+
+                        </div>
+                        <div class="widget-content-right">
+                            <div class="widget-numbers text-white"><span id="spnTotalMember"></span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-xl-4">
+                <div class="card mb-3 widget-content bg-arielle-smile">
+                    <div class="widget-content-wrapper text-white">
+                        <div class="widget-content-left">
+                            <div class="widget-heading">
+                                Only Once Members
+                            </div>
+
+                        </div>
+                        <div class="widget-content-right">
+                            <div class="widget-numbers text-white"><span><span id="spnOnlyOnceMember"></span></span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-xl-4">
+                <div class="card mb-3 widget-content bg-grow-early">
+                    <div class="widget-content-wrapper text-white">
+                        <div class="widget-content-left">
+                            <div class="widget-heading">
+                                Only Once %
+                            </div>
+
+                        </div>
+                        <div class="widget-content-right">
+                            <div class="widget-numbers text-white"><span id="spnOnlyOncePer"></span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-10" id="dvRecency" style="display:none;margin-bottom:20px;">
+           
+
+            <table class="col-sm-12"  cellpadding="10" cellspacing="10">
+                <tr style="text-align:center;">
+                    <td style="border-bottom:1px solid black;background-color:#DCE6F0;">High Spend, Long time no see member <br /><u><b><span id="spnNotSeenHigh" style="cursor:pointer;" onclick="GetTxnData('3')"></span></b></u> </td>
+                    <td style="border-bottom:1px solid black; border-left:1px solid black;background-color:#DBEDF7;">High Spend, Recent Member <br /><u><b><span id="spnRecentVisitHigh" style="cursor:pointer;" onclick="GetTxnData('1')"></span></b></u></td>
+                </tr>
+                <tr style="text-align:center;">
+                    <td style="background-color: #F1DDDC;">Low Spend, Long time no see member <br /><u><b><span id="spnNotSeenLow" style="cursor:pointer;" onclick="GetTxnData('4')"></span></b></u></td>
+                    <td style="border-left:1px solid black;background-color:#E6E0EA;">Low Spend, Recent Member <br /><u><b><span id="spnRecentVisitLow" style="cursor:pointer;" onclick="GetTxnData('2')"></span></b></u></td>
+                </tr>
+            </table>
+
+        </div>
+
+
+
+        <div id="dvOutletWiseData" style="display:none;">
+            <div class="row mb-3 card">
+                <div class="container-fluid pt-3 pl-3 pr-3">
+                    <div class="pt-3 pl-3 pr-3 col-md-12 col-lg-12">
+                        <div class="row">
+                            <div class="col search-container">
+                                <i class="fas fa-search"></i>
+                                <input class="input100" type="text" id="txtSearch" placeholder="Search activity..." />
+                            </div>
+                            <div class="col text-right">
+                                <ul class="list-inline progress-list mt-2">
+                                    <li class="list-inline-item">
+                                        <div class="dropdown">
+                                            <button class="btn btn-primary login-btn" onclick='ExportDataExcel();' type="button" id="btnExport">
+                                                <i class="fas fa-file-export"></i> Export
+                                            </button>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="row mt-3" id="dvActivityData">
+
+                            <div class="table-responsive">
+                                <table class="table" id="activityTable">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">Enrolled Outlet</th>
+                                            <th scope="col">Mobile Number</th>
+                                            <th scope="col">Member Name</th>
+                                            <th scope="col">Type</th>
+                                            <th scope="col">Total Spend</th>
+                                            <th scope="col">Avl Bal Points</th>
+                                            <th scope="col">Txn Update Date</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    var tableData = [];
+    var clickedType = 0;
+    $(document).ready(function () {
+        GetData();
+
+        $("#OutletList").on("change", function () {
+            GetData();
+        });
+
+
+    });
+    function GetData() {
+
+        $("#divLoader").show();
+        var outletId = $("#OutletList").val();
+        $.ajax({
+            type: "POST",
+            url: "../KeyIndicators/GetOnlyOnceResult",
+            data: "{'outletId': '" + outletId + "'}",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                if (response != null) {
+                    tableData.length = 0;
+                    $("#spnTotalMember").text(response.TotalMemberStr);
+                    $("#spnOnlyOnceMember").text(response.OnlyOnceMemberStr);
+                    $("#spnOnlyOncePer").text(response.OnlyOncePercentage + "%");
+                    $("#dvMemberData").show();
+                    $("#spnRecentVisitHigh").text(response.RecentVisitHighStr);
+                    $("#spnNotSeenHigh").text(response.NotSeenHighStr);
+                    $("#spnRecentVisitLow").text(response.RecentVisitLowStr);
+                    $("#spnNotSeenLow").text(response.NotSeenLowStr);
+
+                    $("#dvRecency").show();
+                }
+                $("#divLoader").hide();
+            },
+            failure: function (response) {
+                $("#divLoader").hide();
+            },
+            error: function (response) {
+                //$('#dvOutletWiseData').html(response.responseText);
+                $("#divLoader").hide();
+            }
+        });
+    }
+
+    function GetTxnData(mtype) {
+        clickedType = mtype;
+        $("#divLoader").show();
+        var outletId = $("#OutletList").val();
+        $.ajax({
+            type: "POST",
+            url: "../KeyIndicators/GetOnlyOnceTxnResult",
+            data: "{'outletId': '" + outletId + "','type': '" + mtype + "'}",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                if (response != null) {
+                    tableData.length = 0;                   
+                    $.map(response, function (item) {
+                        optionItem = {}
+                        optionItem["EnrolledOutlet"] = item.EnrolledOutlet;
+                        optionItem["MaskedMobileNo"] = item.MaskedMobileNo;
+                        optionItem["MemberName"] = item.MemberName;
+                        optionItem["Type"] = item.Type;
+                        optionItem["TotalSpend"] = item.TotalSpend;
+                        optionItem["AvlBalPoints"] = item.AvlBalPoints;
+                        optionItem["LastTxnDate"] = item.LastTxnDate;
+                        tableData.push(optionItem);
+                    });
+                    
+                    DrawTable();
+                    $("#dvOutletWiseData").show();
+                }
+                $("#divLoader").hide();
+            },
+            failure: function (response) {
+                $("#divLoader").hide();
+            },
+            error: function (response) {
+                //$('#dvOutletWiseData').html(response.responseText);
+                $("#divLoader").hide();
+            }
+        });
+    }
+
+
+    function DrawTable() {
+        var table1 = $('#activityTable').DataTable();
+        table1.destroy();
+
+        var table = $('#activityTable').DataTable({
+            "data": tableData,
+            "paging": true,
+            "ordering": true,
+            "info": true,
+            "bFilter": true,
+            "pageLength": 25,
+            "pagingType": "simple_numbers",
+            "columns": [
+                { data: "EnrolledOutlet" },
+                { data: "MaskedMobileNo" },
+                { data: "MemberName" },
+                { data: "Type" },
+                { data: "TotalSpend" },
+                { data: "AvlBalPoints" },
+                { data: "LastTxnDate" }
+            ],
+            aoColumnDefs: [
+                {
+                    bSortable: false,
+                    aTargets: [-5, -6, -7]
+                }
+            ]
+        });
+        $('#activityTable_filter').hide();
+
+        $('#txtSearch').on('keyup', function () {
+
+            $.fn.dataTable.ext.search.push(function (settings, searchData) {
+                var term = $('#txtSearch').val().toLowerCase()
+                for (var i = 0; i < searchData.length; i++) {
+                    if (searchData[i].toLowerCase().indexOf(term) == 0) {
+                        return true;
+                    }
+                }
+                return false;
+            });
+            var table = $('#activityTable').DataTable();
+            table.draw();
+        });
+    }
+
+    function ExportDataExcel() {
+
+        var urlLink = "@Url.Action("ExportToExcelOnlyOnce", "KeyIndicators")";
+        urlLink = urlLink + "?outletId=" + $("#OutletList").val() + "&type=" + clickedType + "&ReportName=OnlyOnce";
+        console.log(urlLink);
+        window.location.href = urlLink;
+        $("#divLoader").hide();
+
+    }
+
+</script>
+
+<style>
+    table.dataTable thead .sorting_asc {
+        background: url("https://cdn.datatables.net/1.10.0/images/sort_asc.png") no-repeat center left;
+    }
+
+    table.dataTable thead .sorting_desc {
+        background: url("https://cdn.datatables.net/1.10.0/images/sort_desc.png") no-repeat center left;
+    }
+
+    table.dataTable thead .sorting {
+        background: url("https://cdn.datatables.net/1.10.0/images/sort_both.png") no-repeat center left;
+    }
+</style>

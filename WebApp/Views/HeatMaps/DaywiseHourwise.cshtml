@@ -1,0 +1,75 @@
+﻿@model List<BOTS_BL.Models.DaywiseHourwise>
+@{
+    ViewBag.Title = "DaywiseHourwise";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="app-main__inner">
+    <div>
+        <div class="row mb-3 pt-3 pl-3 pr-3 card">
+            <div class="col-sm-12">
+                Select Outlet  @Html.DropDownListFor(x => Model.Count, new SelectList(ViewBag.OutletList, "Value", "Text"), "All", htmlAttributes: new { @class = "input100", @id = "OutletList" })
+
+            </div>
+        </div>
+
+
+        <div class="card mb-3 pt-3 pl-3 pr-3" style="padding-bottom:10px;">
+            <div id="dvHeatMap"></div>
+            <div>
+                <table border="1" cellpadding="10" cellspacing="10" style="float:right;">
+                    <tr style="text-align:center;">
+                        <th style="color: white; background-color:#FF0000;">
+                            Low Txns
+                        </th>
+                        <th style="color: white; background-color:#ffa500;">
+                            Medium Txns
+                        </th>
+                        <th style="color: white; background-color:#008000;">
+                            High Txns
+                        </th>
+                    </tr>
+
+                </table>
+            </div>
+        </div>
+        
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        GetData();
+
+        $("#OutletList").on("change", function () {
+            GetData();
+        });
+    });
+
+    function GetData() {
+
+        $("#divLoader").show();
+        var outletId = $("#OutletList").val();
+        $.ajax({
+            type: "POST",
+            url: "../HeatMaps/GetDaywiseHourwiseResult",
+            data: "{'outletId': '" + outletId + "'}",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                if (response != null) {
+                    console.log(response)
+                }
+                $("#divLoader").hide();
+            },
+            failure: function (response) {
+                $("#divLoader").hide();
+            },
+            error: function (response) {
+                $('#dvHeatMap').html(response.responseText);
+                console.log(response.responseText)
+                $("#divLoader").hide();
+            }
+        });
+    }
+</script>
