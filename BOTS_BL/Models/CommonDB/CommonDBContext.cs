@@ -25,7 +25,7 @@ namespace BOTS_BL.Models
         public virtual DbSet<PODetail> PODetails { get; set; }
         public virtual DbSet<POItem> POItems { get; set; }
         public virtual DbSet<ReferralBonusSM> ReferralBonusSMS { get; set; }
-
+        public virtual DbSet<tblErrorLog> tblErrorLogs { get; set; }
         public virtual DbSet<CustomerLoginDetail> CustomerLoginDetails { get; set; }
         public virtual DbSet<OTPDetail> OTPDetails { get; set; }
         public virtual DbSet<tblGroupDetail> tblGroupDetails { get; set; }

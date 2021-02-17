@@ -23,7 +23,7 @@ namespace BOTS_BL.Repository
 
                 dataDashboard = context.Database.SqlQuery<ExecutiveSummary>("sp_Dashboard @pi_GroupId, @pi_Date", new SqlParameter("@pi_GroupId", GroupId), new SqlParameter("@pi_Date", DateTime.Now.ToShortDateString())).FirstOrDefault<ExecutiveSummary>();
 
-                dataDashboard.lstOutletDetails = context.Database.SqlQuery<OutletDetails>("sp_OutletDashboard @pi_GroupId, @pi_Date", new SqlParameter("@pi_GroupId", GroupId), new SqlParameter("@pi_Date", DateTime.Now.ToShortDateString())).ToList<OutletDetails>();
+                dataDashboard.lstOutletDetails = context.Database.SqlQuery<OutletDetails>("sp_OutletDashboard @pi_GroupId, @pi_Date", new SqlParameter("@pi_GroupId", GroupId), new SqlParameter("@pi_Date", DateTime.Now.ToString("yyyy-MM-dd"))).ToList<OutletDetails>();
 
             }
             return dataDashboard;
@@ -36,7 +36,7 @@ namespace BOTS_BL.Repository
             using (var context = new BOTSDBContext(connstr))
             {
 
-                dashboardMemberSegment = context.Database.SqlQuery<DashboardMemberSegment>("sp_BOTS_DashboardMemberSegment @pi_GroupId, @pi_Date, @pi_OutletId", new SqlParameter("@pi_GroupId", GroupId), new SqlParameter("@pi_Date", DateTime.Now.ToShortDateString()), new SqlParameter("@pi_OutletId", OutletId)).FirstOrDefault<DashboardMemberSegment>();
+                dashboardMemberSegment = context.Database.SqlQuery<DashboardMemberSegment>("sp_BOTS_DashboardMemberSegment @pi_GroupId, @pi_Date, @pi_OutletId", new SqlParameter("@pi_GroupId", GroupId), new SqlParameter("@pi_Date", DateTime.Now.ToString("yyyy-MM-dd")), new SqlParameter("@pi_OutletId", OutletId)).FirstOrDefault<DashboardMemberSegment>();
 
             }
             return dashboardMemberSegment;
@@ -49,7 +49,7 @@ namespace BOTS_BL.Repository
             using (var context = new BOTSDBContext(connstr))
             {
 
-                dashboardMemberSegmentTxnDB = context.Database.SqlQuery<DashboardMemberSegmentTxnDB>("sp_BOTS_DashboardMemberSegment1 @pi_GroupId, @pi_Date, @pi_OutletId", new SqlParameter("@pi_GroupId", GroupId), new SqlParameter("@pi_Date", DateTime.Now.ToShortDateString()), new SqlParameter("@pi_OutletId", OutletId)).ToList<DashboardMemberSegmentTxnDB>();
+                dashboardMemberSegmentTxnDB = context.Database.SqlQuery<DashboardMemberSegmentTxnDB>("sp_BOTS_DashboardMemberSegment1 @pi_GroupId, @pi_Date, @pi_OutletId", new SqlParameter("@pi_GroupId", GroupId), new SqlParameter("@pi_Date", DateTime.Now.ToString("yyyy-MM-dd")), new SqlParameter("@pi_OutletId", OutletId)).ToList<DashboardMemberSegmentTxnDB>();
                 int count = 1;
                 foreach (var item in dashboardMemberSegmentTxnDB)
                 {

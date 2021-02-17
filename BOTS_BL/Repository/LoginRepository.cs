@@ -38,7 +38,21 @@ namespace BOTS_BL.Repository
 
         }
 
+        public void AddException(tblErrorLog objerrorlog)
+        {
+            using (var context = new CommonDBContext())
+            {
+                context.tblErrorLogs.Add(objerrorlog);
+                context.SaveChanges();
+
+            }
+
+
+        }
 
     }
+
+    
+
 }
 

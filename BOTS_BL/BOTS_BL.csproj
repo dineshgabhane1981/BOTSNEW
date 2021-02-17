@@ -99,6 +99,7 @@
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Security" />
     <Reference Include="System.Transactions" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.7\lib\net45\System.Web.Helpers.dll</HintPath>
     </Reference>
@@ -126,6 +127,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Class1.cs" />
+    <Compile Include="Exceptions.cs" />
     <Compile Include="Models\BrandDetail.cs" />
     <Compile Include="Models\CommonDB\CommonDBContext.cs" />
     <Compile Include="Models\CommonDB\CommonReferralURL.cs" />
@@ -147,6 +149,7 @@
     <Compile Include="Models\CommonDB\tblBillingPartner.cs" />
     <Compile Include="Models\CommonDB\tblCategory.cs" />
     <Compile Include="Models\CommonDB\tblCity.cs" />
+    <Compile Include="Models\CommonDB\tblErrorLog.cs" />
     <Compile Include="Models\CommonDB\tblGroupDetail.cs" />
     <Compile Include="Models\CommonDB\tblModulesPayment.cs" />
     <Compile Include="Models\CommonDB\tblRMAssigned.cs" />
