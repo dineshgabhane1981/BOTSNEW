@@ -319,7 +319,7 @@ html, body {
 }
 
 .input50 {
-    width: 150px;
+    width: 200px;
     margin-bottom: 20px;
     padding: 12px 10px 12px 25px !important;
     border-radius: 25px !important;
@@ -1106,8 +1106,5 @@ ol.progress[data-steps="9"] li {
 }
 
 .title-color{
-    color:black;
-    
+    color:black;    
 }
-
-

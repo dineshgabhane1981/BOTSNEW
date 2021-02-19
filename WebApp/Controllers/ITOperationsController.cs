@@ -1,4 +1,5 @@
-﻿using BOTS_BL.Models;
+﻿using BOTS_BL;
+using BOTS_BL.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,13 +18,16 @@ namespace WebApp.Controllers
         ITOpsRepository ITOPS = new ITOpsRepository();
         ReportsRepository RR = new ReportsRepository();
         CustomerRepository objCustRepo = new CustomerRepository();
+        Exceptions newexception = new Exceptions();
         // GET: ITOperations
         public ActionResult Index(string groupId)
         {
             string connStr = objCustRepo.GetCustomerConnString(groupId);
             var lstOutlet = RR.GetOutletList(groupId, connStr);
+            var GroupDetails = objCustRepo.GetGroupDetails(Convert.ToInt32(groupId));
             ViewBag.OutletList = lstOutlet;
             ViewBag.GroupId = groupId;
+            ViewBag.GroupName = GroupDetails.RetailName;
             return View();
         }
 
@@ -46,41 +50,50 @@ namespace WebApp.Controllers
         public bool ChangeMemberName(string jsonData)
         {
             bool result = false;
-            JavaScriptSerializer json_serializer = new JavaScriptSerializer();
-            json_serializer.MaxJsonLength = int.MaxValue;
-            object[] objData = (object[])json_serializer.DeserializeObject(jsonData);
-            tblAudit objAudit = new tblAudit();
-            bool IsSMS = false;
-            string GroupId = "";
-            string CustomerId = "";
-            string Name = "";
-            foreach (Dictionary<string, object> item in objData)
+            try
             {
-                GroupId = Convert.ToString(item["GroupID"]);
-                CustomerId = Convert.ToString(item["CustomerId"]);
-                Name = Convert.ToString(item["Name"]);
-                objAudit.RequestedBy = Convert.ToString(item["RequestedBy"]);
-                objAudit.RequestedOnForum = Convert.ToString(item["RequestedForum"]);
-                objAudit.RequestedOn = Convert.ToDateTime(item["RequestedOn"]);
-                IsSMS = Convert.ToBoolean(item["IsSMS"]);
-            }
+                JavaScriptSerializer json_serializer = new JavaScriptSerializer();
+                json_serializer.MaxJsonLength = int.MaxValue;
+                object[] objData = (object[])json_serializer.DeserializeObject(jsonData);
+                tblAudit objAudit = new tblAudit();
+                bool IsSMS = false;
+                string GroupId = "";
+                string CustomerId = "";
+                string Name = "";
+                foreach (Dictionary<string, object> item in objData)
+                {
+                    GroupId = Convert.ToString(item["GroupID"]);
+                    CustomerId = Convert.ToString(item["CustomerId"]);
+                    Name = Convert.ToString(item["Name"]);
+                    objAudit.GroupId = GroupId;
+                    objAudit.RequestedFor = "Name Change";
+                    objAudit.RequestedEntity = "CustomerId - " + CustomerId;
+                    objAudit.RequestedBy = Convert.ToString(item["RequestedBy"]);
+                    objAudit.RequestedOnForum = Convert.ToString(item["RequestedForum"]);
+                    objAudit.RequestedOn = Convert.ToDateTime(item["RequestedOn"]);
+                    IsSMS = Convert.ToBoolean(item["IsSMS"]);
+                }
 
-            result = ITOPS.UpdateNameOfMember(GroupId, CustomerId, Name, objAudit);
-            if (result)
+                result = ITOPS.UpdateNameOfMember(GroupId, CustomerId, Name, objAudit);
+                if (result)
+                {
+                    var subject = "Customer name changed for CustomerId - " + CustomerId;
+                    var body = "Customer name changed for CustomerId - " + CustomerId;
+                    body += "<br/><br/> Regards <br/> Blue Ocktopus Team";
+
+                    SendEmail(GroupId, subject, body);
+                }
+
+                if (IsSMS)
+                {
+                    //Logic to send SMS to Customer whose Name is changed
+                }
+
+            }
+            catch (Exception ex)
             {
-                var subject = "Customer name changed for CustomerId - " + CustomerId;
-                var body = "Customer name changed for CustomerId - " + CustomerId;
-                body += "<br/><br/> Regards <br/> Blue Ocktopus Team";
-
-                SendEmail(GroupId, subject, body);
+                newexception.AddException(ex);
             }
-
-            if (IsSMS)
-            {
-                //Logic to send SMS to Customer whose Name is changed
-            }
-
-
             return result;
         }
 
@@ -88,41 +101,51 @@ namespace WebApp.Controllers
         public bool ChangeMemberMobile(string jsonData)
         {
             bool result = false;
-            JavaScriptSerializer json_serializer = new JavaScriptSerializer();
-            json_serializer.MaxJsonLength = int.MaxValue;
-            object[] objData = (object[])json_serializer.DeserializeObject(jsonData);
-            tblAudit objAudit = new tblAudit();
-            bool IsSMS = false;
-            string GroupId = "";
-            string CustomerId = "";
-            string MobileNo = "";
-            foreach (Dictionary<string, object> item in objData)
+            try
             {
-                GroupId = Convert.ToString(item["GroupID"]);
-                CustomerId = Convert.ToString(item["CustomerId"]);
-                MobileNo = Convert.ToString(item["MobileNo"]);
-                objAudit.RequestedBy = Convert.ToString(item["RequestedBy"]);
-                objAudit.RequestedOnForum = Convert.ToString(item["RequestedForum"]);
-                objAudit.RequestedOn = Convert.ToDateTime(item["RequestedOn"]);
-                IsSMS = Convert.ToBoolean(item["IsSMS"]);
-            }
+                JavaScriptSerializer json_serializer = new JavaScriptSerializer();
+                json_serializer.MaxJsonLength = int.MaxValue;
+                object[] objData = (object[])json_serializer.DeserializeObject(jsonData);
+                tblAudit objAudit = new tblAudit();
+                bool IsSMS = false;
+                string GroupId = "";
+                string CustomerId = "";
+                string MobileNo = "";
+                foreach (Dictionary<string, object> item in objData)
+                {
+                    GroupId = Convert.ToString(item["GroupID"]);
+                    CustomerId = Convert.ToString(item["CustomerId"]);
+                    MobileNo = Convert.ToString(item["MobileNo"]);
 
-            result = ITOPS.UpdateMobileOfMember(GroupId, CustomerId, MobileNo, objAudit);
-            if (result)
+                    objAudit.GroupId = GroupId;
+                    objAudit.RequestedFor = "Mobile Number Change";
+                    objAudit.RequestedEntity = "CustomerId - " + CustomerId;
+                    objAudit.RequestedBy = Convert.ToString(item["RequestedBy"]);
+                    objAudit.RequestedOnForum = Convert.ToString(item["RequestedForum"]);
+                    objAudit.RequestedOn = Convert.ToDateTime(item["RequestedOn"]);
+                    IsSMS = Convert.ToBoolean(item["IsSMS"]);
+                }
+
+                result = ITOPS.UpdateMobileOfMember(GroupId, CustomerId, MobileNo, objAudit);
+                if (result)
+                {
+                    var subject = "Customer Mobile Number changed for CustomerId - " + CustomerId;
+                    var body = "Customer Mobile Number changed for CustomerId - " + CustomerId;
+                    body += "<br/><br/> Regards <br/> Blue Ocktopus Team";
+
+                    SendEmail(GroupId, subject, body);
+                }
+
+                if (IsSMS)
+                {
+                    //Logic to send SMS to Customer whose Name is changed
+                }
+
+            }
+            catch (Exception ex)
             {
-                var subject = "Customer Mobile Number changed for CustomerId - " + CustomerId;
-                var body = "Customer Mobile Number changed for CustomerId - " + CustomerId;
-                body += "<br/><br/> Regards <br/> Blue Ocktopus Team";
-
-                SendEmail(GroupId, subject, body);
+                newexception.AddException(ex);
             }
-
-            if (IsSMS)
-            {
-                //Logic to send SMS to Customer whose Name is changed
-            }
-
-
             return result;
         }
 
@@ -130,49 +153,57 @@ namespace WebApp.Controllers
         public bool AddEarnData(string jsonData)
         {
             bool result = false;
-            JavaScriptSerializer json_serializer = new JavaScriptSerializer();
-            json_serializer.MaxJsonLength = int.MaxValue;
-            object[] objData = (object[])json_serializer.DeserializeObject(jsonData);
-            tblAudit objAudit = new tblAudit();
-            bool IsSMS = false;
-            string GroupId = "";            
-            string MobileNo = "";
-            string TransactionDate = "";
-            string InvoiceNumber = "";
-            string InvoiceAmount = "";
-            string OutletId = "";
-            
-            foreach (Dictionary<string, object> item in objData)
+            try
             {
-                GroupId = Convert.ToString(item["GroupID"]);                
-                MobileNo = Convert.ToString(item["MobileNo"]);
-                OutletId = Convert.ToString(item["OutletId"]);
-                TransactionDate = Convert.ToString(item["TransactionDate"]);
-                InvoiceNumber = Convert.ToString(item["InvoiceNumber"]);
-                InvoiceAmount = Convert.ToString(item["InvoiceAmount"]);  
+                JavaScriptSerializer json_serializer = new JavaScriptSerializer();
+                json_serializer.MaxJsonLength = int.MaxValue;
+                object[] objData = (object[])json_serializer.DeserializeObject(jsonData);
+                tblAudit objAudit = new tblAudit();
+                bool IsSMS = false;
+                string GroupId = "";
+                string MobileNo = "";
+                string TransactionDate = "";
+                string InvoiceNumber = "";
+                string InvoiceAmount = "";
+                string OutletId = "";
 
-                objAudit.RequestedBy = Convert.ToString(item["RequestedBy"]);
-                objAudit.RequestedOnForum = Convert.ToString(item["RequestedForum"]);
-                objAudit.RequestedOn = DateTime.Now;
+                foreach (Dictionary<string, object> item in objData)
+                {
+                    GroupId = Convert.ToString(item["GroupID"]);
+                    MobileNo = Convert.ToString(item["MobileNo"]);
+                    OutletId = Convert.ToString(item["OutletId"]);
+                    TransactionDate = Convert.ToString(item["TransactionDate"]);
+                    InvoiceNumber = Convert.ToString(item["InvoiceNumber"]);
+                    InvoiceAmount = Convert.ToString(item["InvoiceAmount"]);
 
-                IsSMS = Convert.ToBoolean(item["IsSMS"]);
+                    objAudit.GroupId = GroupId;
+                    objAudit.RequestedFor = "Add / Earn";
+                    objAudit.RequestedEntity = "Mobile No - " + MobileNo;
+                    objAudit.RequestedBy = Convert.ToString(item["RequestedBy"]);
+                    objAudit.RequestedOnForum = Convert.ToString(item["RequestedForum"]);
+                    objAudit.RequestedOn = Convert.ToDateTime(item["RequestedOn"]);
+                    IsSMS = Convert.ToBoolean(item["IsSMS"]);
+                }
+
+                result = ITOPS.AddEarnData(GroupId, MobileNo, OutletId, Convert.ToDateTime(TransactionDate), DateTime.Now, InvoiceNumber, InvoiceAmount, Convert.ToString(IsSMS), objAudit);
+                if (result)
+                {
+                    var subject = "Earning updated for mobile no  - " + MobileNo;
+                    var body = "Earning updated for mobile no - " + MobileNo;
+                    body += "<br/><br/> Regards <br/> Blue Ocktopus Team";
+
+                    SendEmail(GroupId, subject, body);
+                }
+
+                if (IsSMS)
+                {
+                    //Logic to send SMS to Customer whose Name is changed
+                }
             }
-
-            result = ITOPS.AddEarnData(GroupId, MobileNo, OutletId, Convert.ToDateTime(TransactionDate),DateTime.Now, InvoiceNumber, InvoiceAmount, Convert.ToString(IsSMS), objAudit);
-            if (result)
+            catch (Exception ex)
             {
-                var subject = "Earning updated for mobile no  - " + MobileNo;
-                var body = "Earning updated for mobile no - " + MobileNo;
-                body += "<br/><br/> Regards <br/> Blue Ocktopus Team";
-
-                SendEmail(GroupId, subject, body);
+                newexception.AddException(ex);
             }
-
-            if (IsSMS)
-            {
-                //Logic to send SMS to Customer whose Name is changed
-            }
-
 
             return result;
         }
@@ -181,52 +212,61 @@ namespace WebApp.Controllers
         public bool RedeemPointsData(string jsonData)
         {
             bool result = false;
-            JavaScriptSerializer json_serializer = new JavaScriptSerializer();
-            json_serializer.MaxJsonLength = int.MaxValue;
-            object[] objData = (object[])json_serializer.DeserializeObject(jsonData);
-            tblAudit objAudit = new tblAudit();
-            bool IsSMS = false;
-            string GroupId = "";
-            string MobileNo = "";
-            string TransactionDate = "";
-            string InvoiceNumber = "";
-            string InvoiceAmount = "";
-            string OutletId = "";
-            string PointsToRedeem = "";
-
-            foreach (Dictionary<string, object> item in objData)
+            try
             {
-                GroupId = Convert.ToString(item["GroupID"]);
-                MobileNo = Convert.ToString(item["MobileNo"]);
-                OutletId = Convert.ToString(item["OutletId"]);
-                TransactionDate = Convert.ToString(item["TransactionDate"]);
-                InvoiceNumber = Convert.ToString(item["InvoiceNumber"]);
-                InvoiceAmount = Convert.ToString(item["InvoiceAmount"]);
-                PointsToRedeem = Convert.ToString(item["RedeemPoints"]);
+                JavaScriptSerializer json_serializer = new JavaScriptSerializer();
+                json_serializer.MaxJsonLength = int.MaxValue;
+                object[] objData = (object[])json_serializer.DeserializeObject(jsonData);
+                tblAudit objAudit = new tblAudit();
+                bool IsSMS = false;
+                string GroupId = "";
+                string MobileNo = "";
+                string TransactionDate = "";
+                string InvoiceNumber = "";
+                string InvoiceAmount = "";
+                string OutletId = "";
+                string PointsToRedeem = "";
 
-                objAudit.RequestedBy = Convert.ToString(item["RequestedBy"]);
-                objAudit.RequestedOnForum = Convert.ToString(item["RequestedForum"]);
-                objAudit.RequestedOn = DateTime.Now;
+                foreach (Dictionary<string, object> item in objData)
+                {
+                    GroupId = Convert.ToString(item["GroupID"]);
+                    MobileNo = Convert.ToString(item["MobileNo"]);
+                    OutletId = Convert.ToString(item["OutletId"]);
+                    TransactionDate = Convert.ToString(item["TransactionDate"]);
+                    InvoiceNumber = Convert.ToString(item["InvoiceNumber"]);
+                    InvoiceAmount = Convert.ToString(item["InvoiceAmount"]);
+                    PointsToRedeem = Convert.ToString(item["RedeemPoints"]);
 
-                IsSMS = Convert.ToBoolean(item["IsSMS"]);
+                    objAudit.GroupId = GroupId;
+                    objAudit.RequestedFor = "Redeem Point";
+                    objAudit.RequestedEntity = "Mobile No - " + MobileNo;
+                    objAudit.RequestedBy = Convert.ToString(item["RequestedBy"]);
+                    objAudit.RequestedOnForum = Convert.ToString(item["RequestedForum"]);
+                    objAudit.RequestedOn = Convert.ToDateTime(item["RequestedOn"]);
+
+                    IsSMS = Convert.ToBoolean(item["IsSMS"]);
+                }
+
+                result = ITOPS.AddRedeemPointsData(GroupId, MobileNo, OutletId, Convert.ToDateTime(TransactionDate), DateTime.Now, InvoiceNumber, InvoiceAmount, Convert.ToDecimal(PointsToRedeem), Convert.ToString(IsSMS), objAudit);
+                if (result)
+                {
+                    var subject = "Points Redeem for mobile no  - " + MobileNo;
+                    var body = "Points Redeem for mobile no - " + MobileNo;
+                    body += "<br/><br/> Regards <br/> Blue Ocktopus Team";
+
+                    SendEmail(GroupId, subject, body);
+                }
+
+                if (IsSMS)
+                {
+                    //Logic to send SMS to Customer whose Name is changed
+                }
+
             }
-
-            result = ITOPS.AddRedeemPointsData(GroupId, MobileNo, OutletId, Convert.ToDateTime(TransactionDate), DateTime.Now, InvoiceNumber, InvoiceAmount, Convert.ToDecimal(PointsToRedeem), Convert.ToString(IsSMS), objAudit);
-            if (result)
+            catch (Exception ex)
             {
-                var subject = "Points Redeem for mobile no  - " + MobileNo;
-                var body = "Points Redeem for mobile no - " + MobileNo;
-                body += "<br/><br/> Regards <br/> Blue Ocktopus Team";
-
-                SendEmail(GroupId, subject, body);
+                newexception.AddException(ex);
             }
-
-            if (IsSMS)
-            {
-                //Logic to send SMS to Customer whose Name is changed
-            }
-
-
             return result;
         }
 
@@ -234,49 +274,59 @@ namespace WebApp.Controllers
         public bool LoadBonusData(string jsonData)
         {
             bool result = false;
-            JavaScriptSerializer json_serializer = new JavaScriptSerializer();
-            json_serializer.MaxJsonLength = int.MaxValue;
-            object[] objData = (object[])json_serializer.DeserializeObject(jsonData);
-            tblAudit objAudit = new tblAudit();
-            bool IsSMS = false;
-            string GroupId = "";
-            string MobileNo = "";            
-            int BonusPoints = 0;
-            string BonusRemark = "";
-            string OutletId = "";            
-            DateTime ExpiryDate = DateTime.Now;
-
-            foreach (Dictionary<string, object> item in objData)
+            try
             {
-                GroupId = Convert.ToString(item["GroupID"]);
-                MobileNo = Convert.ToString(item["MobileNo"]);
-                OutletId = Convert.ToString(item["OutletId"]);
-                BonusPoints = Convert.ToInt32(item["BonusPoints"]);
-                BonusRemark = Convert.ToString(item["BonusRemark"]);                
-                ExpiryDate = Convert.ToDateTime(item["ExpiryDate"]);
-                objAudit.RequestedBy = Convert.ToString(item["RequestedBy"]);
-                objAudit.RequestedOnForum = Convert.ToString(item["RequestedForum"]);
-                objAudit.RequestedOn = Convert.ToDateTime(item["RequestedDate"]);
+                JavaScriptSerializer json_serializer = new JavaScriptSerializer();
+                json_serializer.MaxJsonLength = int.MaxValue;
+                object[] objData = (object[])json_serializer.DeserializeObject(jsonData);
+                tblAudit objAudit = new tblAudit();
+                bool IsSMS = false;
+                string GroupId = "";
+                string MobileNo = "";
+                int BonusPoints = 0;
+                string BonusRemark = "";
+                string OutletId = "";
+                DateTime ExpiryDate = DateTime.Now;
 
-                IsSMS = Convert.ToBoolean(item["IsSMS"]);
+                foreach (Dictionary<string, object> item in objData)
+                {
+                    GroupId = Convert.ToString(item["GroupID"]);
+                    MobileNo = Convert.ToString(item["MobileNo"]);
+                    OutletId = Convert.ToString(item["OutletId"]);
+                    BonusPoints = Convert.ToInt32(item["BonusPoints"]);
+                    BonusRemark = Convert.ToString(item["BonusRemark"]);
+                    ExpiryDate = Convert.ToDateTime(item["ExpiryDate"]);
+
+                    objAudit.GroupId = GroupId;
+                    objAudit.RequestedFor = "Load Bonus";
+                    objAudit.RequestedEntity = "Load Bonus for - " + MobileNo;
+                    objAudit.RequestedBy = Convert.ToString(item["RequestedBy"]);
+                    objAudit.RequestedOnForum = Convert.ToString(item["RequestedForum"]);
+                    objAudit.RequestedOn = Convert.ToDateTime(item["RequestedDate"]);
+
+                    IsSMS = Convert.ToBoolean(item["IsSMS"]);
+                }
+
+                result = ITOPS.AddLoadBonusData(GroupId, MobileNo, OutletId, BonusPoints, BonusRemark, ExpiryDate, Convert.ToString(IsSMS), objAudit);
+                if (result)
+                {
+                    var subject = "Points Loaded for mobile no  - " + MobileNo;
+                    var body = "Points Loaded for mobile no - " + MobileNo;
+                    body += "<br/><br/> Regards <br/> Blue Ocktopus Team";
+
+                    SendEmail(GroupId, subject, body);
+                }
+
+                if (Convert.ToBoolean(IsSMS))
+                {
+                    //Logic to send SMS to Customer whose Name is changed
+                }
+
             }
-
-            result = ITOPS.AddLoadBonusData(GroupId, MobileNo, OutletId, BonusPoints, BonusRemark, ExpiryDate, Convert.ToString(IsSMS), objAudit);
-            if (result)
+            catch (Exception ex)
             {
-                var subject = "Points Loaded for mobile no  - " + MobileNo;
-                var body = "Points Loaded for mobile no - " + MobileNo;
-                body += "<br/><br/> Regards <br/> Blue Ocktopus Team";
-
-                SendEmail(GroupId, subject, body);
+                newexception.AddException(ex);
             }
-
-            if (Convert.ToBoolean(IsSMS))
-            {
-                //Logic to send SMS to Customer whose Name is changed
-            }
-
-
             return result;
         }
 
@@ -284,91 +334,113 @@ namespace WebApp.Controllers
         public bool AddSingleMember(string jsonData)
         {
             bool result = false;
-            JavaScriptSerializer json_serializer = new JavaScriptSerializer();
-            json_serializer.MaxJsonLength = int.MaxValue;
-            object[] objData = (object[])json_serializer.DeserializeObject(jsonData);
-            tblAudit objAudit = new tblAudit();
-            CustomerDetail objCustomer = new CustomerDetail();
-            string GroupId = "";
-
-            foreach (Dictionary<string, object> item in objData)
+            try
             {
-                GroupId = Convert.ToString(item["GroupID"]);
-                objCustomer.MobileNo = Convert.ToString(item["MobileNo"]);
-                objCustomer.CardNumber = Convert.ToString(item["CardNo"]);
-                objCustomer.CustomerName = Convert.ToString(item["FullName"]);
-                objCustomer.Gender = Convert.ToString(item["Gender"]);
-                objCustomer.DOB = Convert.ToDateTime(item["BirthDay"]);
-                objCustomer.CustomerThrough = Convert.ToString(item["Source"]);
-                objCustomer.EnrollingOutlet = Convert.ToString(item["OutletId"]);
-                objCustomer.MemberGroupId = "1000";
-                objCustomer.DOJ = DateTime.Now;
-                objCustomer.Status = "00";
+                JavaScriptSerializer json_serializer = new JavaScriptSerializer();
+                json_serializer.MaxJsonLength = int.MaxValue;
+                object[] objData = (object[])json_serializer.DeserializeObject(jsonData);
+                tblAudit objAudit = new tblAudit();
+                CustomerDetail objCustomer = new CustomerDetail();
+                string GroupId = "";
 
-                objAudit.RequestedBy = Convert.ToString(item["RequestedBy"]);
-                objAudit.RequestedOnForum = Convert.ToString(item["RequestedForum"]);
-                objAudit.RequestedOn = Convert.ToDateTime(item["RequestedDate"]);
+                foreach (Dictionary<string, object> item in objData)
+                {
+                    GroupId = Convert.ToString(item["GroupID"]);
+                    objCustomer.MobileNo = Convert.ToString(item["MobileNo"]);
+                    objCustomer.CardNumber = Convert.ToString(item["CardNo"]);
+                    objCustomer.CustomerName = Convert.ToString(item["FullName"]);
+                    objCustomer.Gender = Convert.ToString(item["Gender"]);
+                    if (!string.IsNullOrEmpty(Convert.ToString(item["BirthDay"])))
+                    {
+                        objCustomer.DOB = Convert.ToDateTime(item["BirthDay"]);
+                    }
+                    objCustomer.CustomerThrough = Convert.ToString(item["Source"]);
+                    objCustomer.EnrollingOutlet = Convert.ToString(item["OutletId"]);
+                    objCustomer.MemberGroupId = "1000";
+                    objCustomer.DOJ = DateTime.Now;
+                    objCustomer.Status = "00";
+
+                    objAudit.GroupId = GroupId;
+                    objAudit.RequestedFor = "User Added";
+                    objAudit.RequestedEntity = "User Added - " + objCustomer.MobileNo;
+                    objAudit.RequestedBy = Convert.ToString(item["RequestedBy"]);
+                    objAudit.RequestedOnForum = Convert.ToString(item["RequestedForum"]);
+                    objAudit.RequestedOn = Convert.ToDateTime(item["RequestedDate"]);
+
+                }
+
+                result = ITOPS.AddSingleCustomerData(GroupId, objCustomer, objAudit);
+                if (result)
+                {
+                    var subject = "New Customer Added with Mobile No  - " + objCustomer.MobileNo;
+                    var body = "New Customer Added with Mobile No - " + objCustomer.MobileNo;
+                    body += "<br/><br/> Regards <br/> Blue Ocktopus Team";
+
+                    SendEmail(GroupId, subject, body);
+                }
+
+                //if (Convert.ToBoolean(IsSMS))
+                //{
+                //    //Logic to send SMS to Customer whose Name is changed
+                //}
 
             }
-
-            result = ITOPS.AddSingleCustomerData(GroupId, objCustomer, objAudit);
-            if (result)
+            catch (Exception ex)
             {
-                var subject = "New Customer Added with Mobile No  - " + objCustomer.MobileNo;
-                var body = "New Customer Added with Mobile No - " + objCustomer.MobileNo;
-                body += "<br/><br/> Regards <br/> Blue Ocktopus Team";
-
-                SendEmail(GroupId, subject, body);
+                newexception.AddException(ex);
             }
-
-            //if (Convert.ToBoolean(IsSMS))
-            //{
-            //    //Logic to send SMS to Customer whose Name is changed
-            //}
-
-
             return result;
         }
 
         public bool ChangeSMSDetails(string jsonData)
         {
             bool result = false;
-            JavaScriptSerializer json_serializer = new JavaScriptSerializer();
-            json_serializer.MaxJsonLength = int.MaxValue;
-            object[] objData = (object[])json_serializer.DeserializeObject(jsonData);
-            tblAudit objAudit = new tblAudit();
-            bool IsSMS = false;
-            string GroupId = "";
-            string CustomerId = "";
-            bool DisableSMS = false;
-            foreach (Dictionary<string, object> item in objData)
+            try
             {
-                GroupId = Convert.ToString(item["GroupID"]);
-                CustomerId = Convert.ToString(item["CustomerId"]);
-                string Disable = Convert.ToString(item["Disable"]);
-                if (Disable == "1")
-                    DisableSMS = true;
+                JavaScriptSerializer json_serializer = new JavaScriptSerializer();
+                json_serializer.MaxJsonLength = int.MaxValue;
+                object[] objData = (object[])json_serializer.DeserializeObject(jsonData);
+                tblAudit objAudit = new tblAudit();
+                bool IsSMS = false;
+                string GroupId = "";
+                string CustomerId = "";
+                bool DisableSMS = false;
+                foreach (Dictionary<string, object> item in objData)
+                {
+                    GroupId = Convert.ToString(item["GroupID"]);
+                    CustomerId = Convert.ToString(item["CustomerId"]);
+                    string Disable = Convert.ToString(item["Disable"]);
+                    if (Disable == "1")
+                        DisableSMS = true;
 
-                objAudit.RequestedBy = Convert.ToString(item["RequestedBy"]);
-                objAudit.RequestedOnForum = Convert.ToString(item["RequestedForum"]);
-                objAudit.RequestedOn = Convert.ToDateTime(item["RequestedDate"]);
+                    objAudit.GroupId = GroupId;
+                    objAudit.RequestedFor = "Change SMS setting";
+                    objAudit.RequestedEntity = "Change SMS setting for - " + CustomerId;
+                    objAudit.RequestedBy = Convert.ToString(item["RequestedBy"]);
+                    objAudit.RequestedOnForum = Convert.ToString(item["RequestedForum"]);
+                    objAudit.RequestedOn = Convert.ToDateTime(item["RequestedDate"]);
 
-                IsSMS = Convert.ToBoolean(item["IsSMS"]);
+                    IsSMS = Convert.ToBoolean(item["IsSMS"]);
 
+                }
+
+                result = ITOPS.ChangeSMSDetails(GroupId, CustomerId, DisableSMS, objAudit);
+                if (result)
+                {
+                    var subject = "New Customer Added with Mobile No  - " + CustomerId;
+                    var body = "New Customer Added with Mobile No - " + CustomerId;
+                    body += "<br/><br/> Regards <br/> Blue Ocktopus Team";
+
+                    SendEmail(GroupId, subject, body);
+                }
+                if (Convert.ToBoolean(IsSMS))
+                {
+                    //Logic to send SMS to Customer whose Name is changed
+                }
             }
-
-            result = ITOPS.ChangeSMSDetails(GroupId, CustomerId, DisableSMS, objAudit);
-            if (result)
+            catch (Exception ex)
             {
-                var subject = "New Customer Added with Mobile No  - " + CustomerId;
-                var body = "New Customer Added with Mobile No - " + CustomerId;
-                body += "<br/><br/> Regards <br/> Blue Ocktopus Team";
-
-                SendEmail(GroupId, subject, body);
-            }
-            if (Convert.ToBoolean(IsSMS))
-            {
-                //Logic to send SMS to Customer whose Name is changed
+                newexception.AddException(ex);
             }
             return result;
         }
@@ -379,7 +451,7 @@ namespace WebApp.Controllers
             if (!string.IsNullOrEmpty(MobileNo))
             {
                 objCustomerDetail = ITOPS.GetOTPData(GroupId, MobileNo);
-            }            
+            }
 
             return Json(objCustomerDetail, JsonRequestBehavior.AllowGet);
         }
@@ -404,22 +476,35 @@ namespace WebApp.Controllers
 
         public bool DeleteTransaction(string GroupId, string InvoiceNo)
         {
-            bool result = false;            
-            tblAudit objAudit = new tblAudit();
-            bool IsSMS = false;            
-
-            result = ITOPS.DeleteTransaction(GroupId, InvoiceNo);
-            if (result)
+            bool result = false;
+            try
             {
-                var subject = "Transaction Deleted for  - " + InvoiceNo;
-                var body = "Transaction Deleted for - " + InvoiceNo;
-                body += "<br/><br/> Regards <br/> Blue Ocktopus Team";
+                tblAudit objAudit = new tblAudit();
+                objAudit.GroupId = GroupId;
+                objAudit.RequestedFor = "Delete Transaction";
+                objAudit.RequestedEntity = "Delete Transaction for Invoice - " + InvoiceNo;
+                objAudit.RequestedBy = "";
+                objAudit.RequestedOnForum = "";
+                objAudit.RequestedOn = DateTime.Now;
+                bool IsSMS = false;
 
-                SendEmail(GroupId, subject, body);
+                result = ITOPS.DeleteTransaction(GroupId, InvoiceNo, objAudit);
+                if (result)
+                {
+                    var subject = "Transaction Deleted for  - " + InvoiceNo;
+                    var body = "Transaction Deleted for - " + InvoiceNo;
+                    body += "<br/><br/> Regards <br/> Blue Ocktopus Team";
+
+                    SendEmail(GroupId, subject, body);
+                }
+                if (Convert.ToBoolean(IsSMS))
+                {
+                    //Logic to send SMS to Customer whose Name is changed
+                }
             }
-            if (Convert.ToBoolean(IsSMS))
+            catch (Exception ex)
             {
-                //Logic to send SMS to Customer whose Name is changed
+                newexception.AddException(ex);
             }
             return result;
         }

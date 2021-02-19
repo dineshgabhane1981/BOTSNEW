@@ -36,6 +36,8 @@ namespace BOTS_BL.Models
         public virtual DbSet<tblSourcedBy> tblSourcedBies { get; set; }
         public virtual DbSet<tblModulesPayment> tblModulesPayments { get; set; }
 
+        public virtual DbSet<tblAudit> tblAudits { get; set; }
+
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             modelBuilder.Entity<CommonReferralURL>()

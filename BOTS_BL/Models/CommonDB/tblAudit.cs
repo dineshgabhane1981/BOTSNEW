@@ -12,11 +12,18 @@ namespace BOTS_BL.Models
         [Key]
         public int RequestId { get; set; }
 
-        [Required]
+        [StringLength(50)]
+        public string RequestedFor { get; set; }
+
+        [StringLength(50)]
+        public string RequestedEntity { get; set; }
+
+        [StringLength(5)]
+        public string GroupId { get; set; }
+
         [StringLength(150)]
         public string RequestedBy { get; set; }
 
-        [Required]
         [StringLength(50)]
         public string RequestedOnForum { get; set; }
 

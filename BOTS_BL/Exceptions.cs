@@ -9,7 +9,7 @@ using context = System.Web.HttpContext;
 
 namespace BOTS_BL
 {
-    class Exceptions
+    public class Exceptions
     {
         private static String exepurl = "";
         public void AddException(Exception ex)
@@ -25,5 +25,21 @@ namespace BOTS_BL
             ObjLR.AddException(objerrorlog);
 
         }
+
+        public void AddDummyException(string str)
+        {
+            tblErrorLog objerrorlog = new tblErrorLog();
+            exepurl = context.Current.Request.Url.AbsolutePath;
+            LoginRepository ObjLR = new LoginRepository();
+            objerrorlog.ExceptionMsg = str;
+            objerrorlog.ExceptionType = str;
+            objerrorlog.ExceptionURL = exepurl;
+            objerrorlog.ExceptionSource = str;
+            objerrorlog.Logdate = DateTime.Now;
+            ObjLR.AddException(objerrorlog);
+
+        }
+
+
     }
 }

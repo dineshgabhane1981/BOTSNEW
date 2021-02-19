@@ -35,7 +35,7 @@ namespace BOTS_BL.Repository
                 using (var context = new BOTSDBContext(connstr))
                 {
 
-                    var lstOutlet = context.Database.SqlQuery<OutletList>("sp_GetOutletListII @pi_GroupId", new SqlParameter("@pi_GroupId", GroupId)).ToList<OutletList>();
+                    var lstOutlet = context.Database.SqlQuery<OutletList>("sp_GetOutletList @pi_GroupId", new SqlParameter("@pi_GroupId", GroupId)).ToList<OutletList>();
                     foreach (var item in lstOutlet)
                     {
                         countriesItem.Add(new SelectListItem

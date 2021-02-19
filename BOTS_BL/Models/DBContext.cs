@@ -20,8 +20,7 @@ namespace BOTS_BL.Models
         public virtual DbSet<LoginDetail> LoginDetails { get; set; }
         public virtual DbSet<BrandDetail> BrandDetails { get; set; }
         public virtual DbSet<OutletDetail> OutletDetails { get; set; }
-        public virtual DbSet<CustomerDetail> CustomerDetails { get; set; }
-        public virtual DbSet<tblAudit> tblAudits { get; set; }
+        public virtual DbSet<CustomerDetail> CustomerDetails { get; set; }        
         public virtual DbSet<OTPMaintenance> OTPMaintenances { get; set; }
         public virtual DbSet<TransactionMaster> TransactionMasters { get; set; }
         public virtual DbSet<TransactionTypeMaster> TransactionTypeMasters { get; set; }

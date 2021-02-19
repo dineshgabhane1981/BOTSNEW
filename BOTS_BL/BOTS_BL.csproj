@@ -146,6 +146,7 @@
     <Compile Include="Models\CommonDB\PODetail.cs" />
     <Compile Include="Models\CommonDB\POItem.cs" />
     <Compile Include="Models\CommonDB\ReferralBonusSM.cs" />
+    <Compile Include="Models\CommonDB\tblAudit.cs" />
     <Compile Include="Models\CommonDB\tblBillingPartner.cs" />
     <Compile Include="Models\CommonDB\tblCategory.cs" />
     <Compile Include="Models\CommonDB\tblCity.cs" />
@@ -163,7 +164,6 @@
     <Compile Include="Models\ITOps\MemberData.cs" />
     <Compile Include="Models\ITOps\OTPMaintenance.cs" />
     <Compile Include="Models\ITOps\SPResponse.cs" />
-    <Compile Include="Models\ITOps\tblAudit.cs" />
     <Compile Include="Models\ITOps\TransactionMaster.cs" />
     <Compile Include="Models\ITOps\TransactionTypeMaster.cs" />
     <Compile Include="Models\KeyIndecators\MemberWebPage.cs" />
