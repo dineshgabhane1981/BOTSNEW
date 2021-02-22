@@ -20,16 +20,16 @@
                     <div class="row">
                         <div class="col-12 col-lg-12 ml-auto mr-auto mb-4" style="padding-left:0px !important;padding-right:0px !important;">
                             <div class="multisteps-form__progress">
-                                <button class="multisteps-form__progress-btn js-active" type="button" title="Change Name">Change Name</button>
-                                <button class="multisteps-form__progress-btn" type="button" title="Change Mobile">Change Mobile</button>
-                                <button class="multisteps-form__progress-btn" type="button" title="Add/Earn">Add/Earn</button>
-                                <button class="multisteps-form__progress-btn" type="button" title="Redeem/Deduct">Redeem / Deduct</button>
-                                <button class="multisteps-form__progress-btn" type="button" title="Add New Member">Add New Member</button>
-                                <button class="multisteps-form__progress-btn" type="button" title="Load Bonus Points">Load Bonus Points</button>
-                                <button class="multisteps-form__progress-btn" type="button" title="Cancel Txn">Cancel Txn</button>
-                                <button class="multisteps-form__progress-btn" type="button" title="Disable SM">Disable SMS</button>
-                                <button class="multisteps-form__progress-btn" type="button" title="Reset Security Key">Reset Security Key</button>
-                                <button class="multisteps-form__progress-btn" type="button" title="OTP">OTP</button>
+                                <button class="multisteps-form__progress-btn js-active" type="button" id="btnchgnm" title="Change Name">Change Name</button>
+                                <button class="multisteps-form__progress-btn" type="button" id="btnchgmob" title="Change Mobile">Change Mobile</button>
+                                <button class="multisteps-form__progress-btn" type="button" id="btnaddearn" title="Add/Earn">Add/Earn</button>
+                                <button class="multisteps-form__progress-btn" type="button" id="btnredeeem" title="Redeem/Deduct">Redeem / Deduct</button>
+                                <button class="multisteps-form__progress-btn" type="button" id="btnnwmem" title="Add New Member">Add New Member</button>
+                                <button class="multisteps-form__progress-btn" type="button" id="btnldbopints" title="Load Bonus Points">Load Bonus Points</button>
+                                <button class="multisteps-form__progress-btn" type="button" id="btncantxn" title="Cancel Txn">Cancel Txn</button>
+                                <button class="multisteps-form__progress-btn" type="button" id="btndissms" title="Disable SM">Disable SMS</button>
+                                <button class="multisteps-form__progress-btn" type="button" id="btnresetseckey" title="Reset Security Key">Reset Security Key</button>
+                                <button class="multisteps-form__progress-btn" type="button" id="btnotp" title="OTP">OTP</button>
                             </div>
                         </div>
                     </div>
@@ -122,7 +122,7 @@
                                                     </tr>
                                                     <tr>
                                                         <td style="padding:10px;">Transaction Date</td>
-                                                        <td style="padding:10px;"><input type="date" id="dtEnrolledOn1" /></td>
+                                                        <td style="padding:10px;"><input type="text" id="dtEnrolledOn1" class="input50" /></td>
                                                     </tr>
                                                 </table>
                                             </div>
@@ -215,8 +215,8 @@
                                                     </tr>
                                                     <tr>
                                                         <td style="padding:10px;">Transaction Date</td>
-                                                        <td style="padding:10px;"><input type="date" id="dtEnrolledOn2" /></td>
-                                                    </tr>                                                    
+                                                        <td style="padding:10px;"><input type="text" id="dtEnrolledOn2" class="input50"/></td>
+                                                    </tr>
                                                 </table>
                                             </div>
                                         </div>
@@ -321,7 +321,7 @@
                                                     </tr>
                                                     <tr>
                                                         <td style="padding:10px;">Transaction Date</td>
-                                                        <td style="padding:10px;"><input type="date" id="dtTransaction" /></td>
+                                                        <td style="padding:10px;"><input type="text" id="dtTransaction" class="input50" /></td>
                                                     </tr>
                                                 </table>
                                             </div>
@@ -433,8 +433,8 @@
                                                     </tr>
                                                     <tr>
                                                         <td style="padding:10px;">Transaction Date</td>
-                                                        <td style="padding:10px;"><input type="date" id="dtTransaction1" /></td>
-                                                    </tr>                                                    
+                                                        <td style="padding:10px;"><input type="text" id="dtTransaction1" class="input50"/></td>
+                                                    </tr>
                                                 </table>
                                             </div>
                                         </div>
@@ -524,7 +524,7 @@
                                                         </tr>
                                                         <tr>
                                                             <td style="padding:10px;">Transaction Date</td>
-                                                            <td style="padding:10px;"><input type="date" id="txtRequestedDateAddMember" class="input50" /></td>
+                                                            <td style="padding:10px;"><input type="text" id="txtRequestedDateAddMember" class="input50" /></td>
                                                         </tr>
                                                     </table>
                                                 </div>
@@ -637,7 +637,7 @@
                                                     </tr>
                                                     <tr>
                                                         <td style="padding:10px;">Transaction Date</td>
-                                                        <td style="padding:10px;"><input type="date" id="txtRequestedDate4" class="input50" /></td>
+                                                        <td style="padding:10px;"><input type="text" id="txtRequestedDate4" class="input50" /></td>
                                                     </tr>
                                                 </table>
                                             </div>
@@ -839,7 +839,7 @@
                                                     </tr>
                                                     <tr>
                                                         <td style="padding:10px;">Transaction Date</td>
-                                                        <td style="padding:10px;"><input type="date" id="txtRequestedDateSMS" class="input50" /></td>
+                                                        <td style="padding:10px;"><input type="text" id="txtRequestedDateSMS" class="input50" /></td>
                                                     </tr>
                                                 </table>
                                             </div>
@@ -897,37 +897,83 @@
 
 <script>
     var tableData = [];
+    
     $(document).ready(function () {
-        var dt = new Date();
-
-        year = dt.getFullYear();
-        month = (dt.getMonth() + 1).toString().padStart(2, "0");
-        day = dt.getDate().toString().padStart(2, "0");
+        var today = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
+       // alert(today);
+        $("#dtEnrolledOn1").datepicker({
         
-        var today = year + "-" + month + "-" + day;
-        var mindate = year + "-" + month + "-" + (day - 4);
-        document.getElementById("dtEnrolledOn1").min = mindate;
-        document.getElementById("dtEnrolledOn1").max = today;
+           dateFormat: "yy-mm-dd",  
+            maxDate: today,
+                minDate: '-4'
+        });
+        $("#dtEnrolledOn2").datepicker({
 
-        document.getElementById("dtEnrolledOn2").min = mindate;
-        document.getElementById("dtEnrolledOn2").max = today;
+            dateFormat: "yy-mm-dd",
+            maxDate: today,
+            minDate: '-4'
+        });
+        $("#dtTransaction").datepicker({
 
-        document.getElementById("dtTransaction").min = mindate;
-        document.getElementById("dtTransaction").max = today;
+            dateFormat: "yy-mm-dd",
+            maxDate: today,
+            minDate: '-4'
+        });
+        $("#dtTransaction1").datepicker({
 
-        document.getElementById("dtTransaction1").min = mindate;
-        document.getElementById("dtTransaction1").max = today;
+            dateFormat: "yy-mm-dd",
+            maxDate: today,
+            minDate: '-4'
+        });
+        $("#txtRequestedDateAddMember").datepicker({
 
-        document.getElementById("txtRequestedDateAddMember").min = mindate;
-        document.getElementById("txtRequestedDateAddMember").max = today;
+            dateFormat: "yy-mm-dd",
+            maxDate: today,
+            minDate: '-4'
+        });
+        $("#txtRequestedDate4").datepicker({
 
-        document.getElementById("txtRequestedDate4").min = mindate;
-        document.getElementById("txtRequestedDate4").max = today;
+            dateFormat: "yy-mm-dd",
+            maxDate: today,
+            minDate: '-4'
+        });
+        $("#txtRequestedDateSMS").datepicker({
 
-        document.getElementById("txtRequestedDateSMS").min = mindate;
-        document.getElementById("txtRequestedDateSMS").max = today;
-
-
+            dateFormat: "yy-mm-dd",
+            maxDate: today,
+            minDate: '-4'
+        });
+        
+        $('#btnchgnm').on("click", function () {
+            GetClearAllTab();
+        });
+        $('#btnchgmob').on("click", function () {
+            GetClearAllTab();
+        });
+        $('#btnaddearn').on("click", function () {
+            GetClearAllTab();
+        });
+        $('#btnredeeem').on("click", function () {
+            GetClearAllTab();
+        });
+        $('#btnnwmem').on("click", function () {
+            GetClearAllTab();
+        });
+        $('#btnldbopints').on("click", function () {
+            GetClearAllTab();
+        });
+        $('#btncantxn').on("click", function () {
+            GetClearAllTab();
+        });
+        $('#btndissms').on("click", function () {
+            GetClearAllTab();
+        });
+        $('#btnresetseckey').on("click", function () {
+            GetClearAllTab();
+        });
+        $('#btnotp').on("click", function () {
+            GetClearAllTab();
+        });
         $("#hdnGroupId").val(@Html.Raw(ViewBag.GroupId));
         $('#btnSearchMember').on("click", function () {
             GetChangeNameData();
@@ -992,6 +1038,31 @@
         });
 
     });
+    function GetClearAllTab() {
+        $('#sec1').find(':input').val('');
+        $('#sec2').find(':input').val('');
+        $('#sec3').find(':input').val('');
+        $('#sec4').find(':input').val('');
+        $('#sec6').find(':input').val('');
+        $('#sec7').find(':input').val('');
+        $('#sec8').find(':input').val('');
+        $('#sec9').find(':input').val('');
+        $('#sec10').find(':input').val('');
+       // $('#dvActivityData').find('tr').val('');
+      //  $('#tblUpdateDataCancel').find("span").text("");
+        $("#sec1").find("span").text("");
+        $("#sec2").find("span").text("");
+        $("#sec3").find("span").text("");
+        $("#sec4").find("span").text("");
+        $("#sec5").find("span").text("");
+        $("#sec6").find("span").text("");
+        $("#sec7").find("span").text("");
+        $("#sec8").find("span").text("");
+        $("#sec9").find("span").text("");
+        $("#sec10").find("span").text("");
+
+
+    }
 
     function GetChangeNameData() {
         if ($('#txtMobileNo').val() == "" && $('#txtCardNo').val() == "") {
@@ -1053,7 +1124,7 @@
     }
 
     function SaveMemberName() {
-       
+
         if ($('#txtFirstName').val() == "") {
             toastr.error('Please enter First Name');
             $('#txtFirstName').focus();
@@ -2047,8 +2118,13 @@
     }
 
 </script>
+<script src="~/Scripts/jquery-ui-1.12.1.js"></script>
+<script src="~/Scripts/jquery-ui-1.12.1.min.js"></script>
+<link href="~/Content/themes/base/jquery-ui.min.css" rel="stylesheet" />
+<link href="~/Content/themes/base/jquery-ui.css" rel="stylesheet" />
 
 <style>
+
     input::-webkit-outer-spin-button,
     input::-webkit-inner-spin-button {
         -webkit-appearance: none;
