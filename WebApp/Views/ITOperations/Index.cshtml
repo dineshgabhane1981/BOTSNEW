@@ -107,7 +107,7 @@
                                                     <tr>
                                                         <td style="padding:10px;">Requested by</td>
                                                         <td style="padding:10px;">
-                                                            <input type="text" id="txtRequestedByName" placeholder="Requested By" class="input50" />
+                                                            <input type="text" id="txtRequestedByName" placeholder="Requested By" onkeypress="return /[a-z]/i.test(event.key)" class="input50" />
                                                         </td>
                                                     </tr>
                                                     <tr>
@@ -200,7 +200,7 @@
                                                     <tr>
                                                         <td style="padding:10px;">Requested by</td>
                                                         <td style="padding:10px;">
-                                                            <input type="text" id="txtRequestedByName1" placeholder="Requested By" class="input50" />
+                                                            <input type="text" id="txtRequestedByName1" placeholder="Requested By" onkeypress="return /[a-z]/i.test(event.key)" class="input50" />
                                                         </td>
                                                     </tr>
                                                     <tr>
@@ -306,7 +306,7 @@
                                                     <tr>
                                                         <td style="padding:10px;">Requested by</td>
                                                         <td style="padding:10px;">
-                                                            <input type="text" id="txtRequestedByName2" placeholder="Requested By" class="input50" />
+                                                            <input type="text" id="txtRequestedByName2" placeholder="Requested By" onkeypress="return /[a-z]/i.test(event.key)" class="input50" />
                                                         </td>
                                                     </tr>
                                                     <tr>
@@ -418,7 +418,7 @@
                                                     <tr>
                                                         <td style="padding:10px;">Requested by</td>
                                                         <td style="padding:10px;">
-                                                            <input type="text" id="txtRequestedByName3" placeholder="Requested By" class="input50" />
+                                                            <input type="text" id="txtRequestedByName3" placeholder="Requested By" onkeypress="return /[a-z]/i.test(event.key)" class="input50" />
                                                         </td>
                                                     </tr>
                                                     <tr>
@@ -509,7 +509,7 @@
                                                         <tr>
                                                             <td style="padding:10px;">Requested by</td>
                                                             <td style="padding:10px;">
-                                                                <input type="text" id="txtRequestedByNameAddMember" placeholder="Requested By" class="input50" />
+                                                                <input type="text" id="txtRequestedByNameAddMember" placeholder="Requested By" onkeypress="return /[a-z]/i.test(event.key)" class="input50" />
                                                             </td>
                                                         </tr>
                                                         <tr>
@@ -622,7 +622,7 @@
                                                     <tr>
                                                         <td style="padding:10px;">Requested by</td>
                                                         <td style="padding:10px;">
-                                                            <input type="text" id="txtRequestedByName4" placeholder="Requested By" class="input50" />
+                                                            <input type="text" id="txtRequestedByName4" placeholder="Requested By" onkeypress="return /[a-z]/i.test(event.key)" class="input50" />
                                                         </td>
                                                     </tr>
                                                     <tr>
@@ -824,7 +824,7 @@
                                                     <tr>
                                                         <td style="padding:10px;">Requested by</td>
                                                         <td style="padding:10px;">
-                                                            <input type="text" id="txtRequestedByNameSMS" placeholder="Requested By" class="input50" />
+                                                            <input type="text" id="txtRequestedByNameSMS" placeholder="Requested By" onkeypress="return /[a-z]/i.test(event.key)" class="input50" />
                                                         </td>
                                                     </tr>
                                                     <tr>
@@ -1053,6 +1053,7 @@
     }
 
     function SaveMemberName() {
+       
         if ($('#txtFirstName').val() == "") {
             toastr.error('Please enter First Name');
             $('#txtFirstName').focus();
@@ -1103,6 +1104,8 @@
                     if (result.responseText == "True") {
                         toastr.success("Member Name Updated Successfully");
                         $("#divLoader").hide();
+                        $('#sec1').find(':input').val('');
+
                     }
                     else {
                         toastr.error('error occured while saving data');
@@ -1226,6 +1229,7 @@
                     if (result.responseText == "True") {
                         toastr.success("Mobile No Updated Successfully");
                         $("#divLoader").hide();
+                        $('#sec2').find(':input').val('');
                     }
                     else {
                         toastr.error('error occured while saving data');
@@ -1359,6 +1363,7 @@
                     if (result.responseText == "True") {
                         toastr.success("Data Updated Successfully");
                         $("#divLoader").hide();
+                        $('#sec3').find(':input').val('');
                     }
                     else {
                         toastr.error('error occured while saving data');
@@ -1512,6 +1517,7 @@
                     if (result.responseText == "True") {
                         toastr.success("Data Updated Successfully");
                         $("#divLoader").hide();
+                        $('#sec4').find(':input').val('');
                     }
                     else {
                         toastr.error('error occured while saving data');
@@ -1650,6 +1656,7 @@
                     if (result.responseText == "True") {
                         toastr.success("Data Updated Successfully");
                         $("#divLoader").hide();
+                        $('#sec5').find(':input').val('');
                     }
                     else {
                         toastr.error('error occured while saving data');
