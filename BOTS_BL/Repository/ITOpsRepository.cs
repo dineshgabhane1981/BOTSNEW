@@ -205,7 +205,7 @@ namespace BOTS_BL.Repository
             return result;
         }
 
-        public SPResponse AddRedeemPointsData(string GroupId, string MobileNo, string OutletId, DateTime TxnDate, DateTime RequestDate, string InvoiceNo, string InvoiceAmt, decimal Points, string IsSMS, tblAudit objAudit)
+        public SPResponse AddRedeemPointsData(string GroupId, string MobileNo, string OutletId, DateTime TxnDate, DateTime RequestDate, string InvoiceNo, string InvoiceAmt, decimal Points, string IsSMS, string TxnType, tblAudit objAudit)
         {
             SPResponse result = new SPResponse();
             try
@@ -213,7 +213,7 @@ namespace BOTS_BL.Repository
                 string connStr = objCustRepo.GetCustomerConnString(GroupId);
                 using (var contextNew = new BOTSDBContext(connStr))
                 {
-                    result = contextNew.Database.SqlQuery<SPResponse>("sp_BurnRW_New_ITOPS @pi_MobileNo, @pi_OutletId, @pi_TxnDate, @pi_RequestDate, @pi_InvoiceNo, @pi_InvoiceAmt,@pi_RedeemPoints, @pi_LoginId, @pi_RequestBy, @pi_RequestedOnForum, @pi_SMSFlag",
+                    result = contextNew.Database.SqlQuery<SPResponse>("sp_BurnRW_New_ITOPS @pi_MobileNo, @pi_OutletId, @pi_TxnDate, @pi_RequestDate, @pi_InvoiceNo, @pi_InvoiceAmt,@pi_RedeemPoints, @pi_LoginId, @pi_RequestBy, @pi_RequestedOnForum, @pi_SMSFlag, @pi_TxnType",
                               new SqlParameter("@pi_MobileNo", MobileNo),
                               new SqlParameter("@pi_OutletId", OutletId),
                               new SqlParameter("@pi_TxnDate", TxnDate.ToString("yyyy-MM-dd")),
@@ -224,7 +224,8 @@ namespace BOTS_BL.Repository
                               new SqlParameter("@pi_LoginId", ""),
                               new SqlParameter("@pi_RequestBy", objAudit.RequestedBy),
                               new SqlParameter("@pi_RequestedOnForum", objAudit.RequestedOnForum),
-                              new SqlParameter("@pi_SMSFlag", IsSMS)).FirstOrDefault<SPResponse>();                   
+                              new SqlParameter("@pi_SMSFlag", IsSMS),
+                              new SqlParameter("@pi_TxnType", TxnType)).FirstOrDefault<SPResponse>();                   
                 }
                 using (var context = new CommonDBContext())
                 {
@@ -416,7 +417,7 @@ namespace BOTS_BL.Repository
                 string connStr = objCustRepo.GetCustomerConnString(GroupId);
                 using (var contextNew = new BOTSDBContext(connStr))
                 {
-                    lstObjTxn = contextNew.TransactionMasters.Where(x => x.MobileNo == MobileNo).ToList();
+                    lstObjTxn = contextNew.TransactionMasters.Where(x => x.MobileNo == MobileNo).OrderByDescending(m => m.Datetime).ToList();
                 }
                 if (lstObjTxn != null)
                 {

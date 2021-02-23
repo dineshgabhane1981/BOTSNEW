@@ -226,6 +226,7 @@ namespace WebApp.Controllers
                 string InvoiceAmount = "";
                 string OutletId = "";
                 string PointsToRedeem = "";
+                string TxnType = "";
 
                 foreach (Dictionary<string, object> item in objData)
                 {
@@ -236,6 +237,7 @@ namespace WebApp.Controllers
                     InvoiceNumber = Convert.ToString(item["InvoiceNumber"]);
                     InvoiceAmount = Convert.ToString(item["InvoiceAmount"]);
                     PointsToRedeem = Convert.ToString(item["RedeemPoints"]);
+                    TxnType = Convert.ToString(item["TxnType"]);
 
                     objAudit.GroupId = GroupId;
                     objAudit.RequestedFor = "Redeem Point";
@@ -247,7 +249,7 @@ namespace WebApp.Controllers
                     IsSMS = Convert.ToBoolean(item["IsSMS"]);
                 }
 
-                result = ITOPS.AddRedeemPointsData(GroupId, MobileNo, OutletId, Convert.ToDateTime(TransactionDate), DateTime.Now, InvoiceNumber, InvoiceAmount, Convert.ToDecimal(PointsToRedeem), Convert.ToString(IsSMS), objAudit);
+                result = ITOPS.AddRedeemPointsData(GroupId, MobileNo, OutletId, Convert.ToDateTime(TransactionDate), DateTime.Now, InvoiceNumber, InvoiceAmount, Convert.ToDecimal(PointsToRedeem), Convert.ToString(IsSMS), TxnType, objAudit);
                 if (result.ResponseCode == "00")
                 {
                     var subject = "Points Redeem for mobile no  - " + MobileNo;
