@@ -467,7 +467,7 @@ namespace WebApp.Controllers
                 objData.objCancelTxnModel = ITOPS.GetTransactionByInvoiceNo(GroupId, InvoiceNo);
                 objData.objCustomerDetail = ITOPS.GetCustomerByMobileNo(GroupId, objData.objCancelTxnModel.MobileNo);
             }
-            if (!string.IsNullOrEmpty(MobileNo))
+            else if (!string.IsNullOrEmpty(MobileNo))
             {
                 objData.objCustomerDetail = ITOPS.GetCustomerByMobileNo(GroupId, MobileNo);
                 objData.lstCancelTxnModel = ITOPS.GetTransactionByMobileNo(GroupId, MobileNo);
@@ -476,7 +476,7 @@ namespace WebApp.Controllers
             return Json(objData, JsonRequestBehavior.AllowGet);
         }
 
-        public bool DeleteTransaction(string GroupId, string InvoiceNo)
+        public bool DeleteTransaction(string GroupId, string InvoiceNo,string RequestedBy, string RequestedForum, string RequestedDate)
         {
             bool result = false;
             try
@@ -485,9 +485,9 @@ namespace WebApp.Controllers
                 objAudit.GroupId = GroupId;
                 objAudit.RequestedFor = "Delete Transaction";
                 objAudit.RequestedEntity = "Delete Transaction for Invoice - " + InvoiceNo;
-                objAudit.RequestedBy = "";
-                objAudit.RequestedOnForum = "";
-                objAudit.RequestedOn = DateTime.Now;
+                objAudit.RequestedBy = RequestedBy;
+                objAudit.RequestedOnForum = RequestedForum;
+                objAudit.RequestedOn = Convert.ToDateTime(RequestedDate);
                 bool IsSMS = false;
 
                 result = ITOPS.DeleteTransaction(GroupId, InvoiceNo, objAudit);

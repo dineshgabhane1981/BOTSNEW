@@ -652,7 +652,7 @@
 
                                 </div>
                                 <!--Cancel Txn-->
-                                <div class="multisteps-form__panel shadow p-4 list-box bg-white" id="sec7" data-animation="scaleIn">
+                                <div class="multisteps-form__panel shadow p-4 list-box bg-white" style="height:auto !important;" id="sec7" data-animation="scaleIn">
                                     <h4 class="multisteps-form__title" style="color:blue;">Cancel Txn</h4><br />
                                     <div class="multisteps-form__content">
                                         <div>
@@ -666,7 +666,7 @@
                                             <button type="button" id="btnSearchMemberCancel" style="margin-left:15px;margin-top:10px;" class="btn btn-primary">Go</button>
                                         </div>
 
-                                        <div style="display:flex; height:300px;margin-top:50px;">
+                                        <div style="display:flex; height:auto !important;margin-top:50px;">
                                             <input type="hidden" id="hdnCustomerId4" />
                                             <table border="2" cellpadding="5" cellspacing="5">
                                                 <tr>
@@ -731,7 +731,26 @@
                                                         <span id="spnTransactionDateTimeCancel"></span>
                                                     </td>
                                                 </tr>
-
+                                                <tr>
+                                                    <td style="padding:10px;">Requested by</td>
+                                                    <td style="padding:10px;">
+                                                        <input type="text" id="txtRequestedByNameCancel1" placeholder="Requested By" onkeypress="return /[a-z]/i.test(event.key)" class="input50" />
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="padding:10px;">Requested on Forum</td>
+                                                    <td style="padding:10px;">
+                                                        <select name="ddlRequestedForumCancel1" id="ddlRequestedForumCancel1" class="input50">
+                                                            <option value="Whatsapp">Whatsapp</option>
+                                                            <option value="Email">Email</option>
+                                                            <option value="Phone">Phone</option>
+                                                        </select>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="padding:10px;">Transaction Date</td>
+                                                    <td style="padding:10px;"><input type="text" id="txtRequestedDateCancel1" class="input50" /></td>
+                                                </tr>
                                             </table>
                                         </div>
                                         <div class="button-row d-flex mt-5" style="display:none !important;" id="dvDeleteBtn">
@@ -946,6 +965,14 @@
             maxDate: today,
             minDate: '-4'
         });
+        $("#txtRequestedDateCancel1").datepicker({
+
+            dateFormat: "yy-mm-dd",
+            maxDate: today,
+            minDate: '-4'
+        });
+
+        
         
         $('#btnchgnm').on("click", function () {
             GetClearAllTab();
@@ -1998,21 +2025,31 @@
 
     }
 
-    function GetTransactionCancelData() {
-        if ($('#txtMobileNoCancel').val() == "" && $('#txtInvoiceNoCancel').val() == "") {
-            toastr.error('Please enter Mobile Number OR Invoice Number');
-            return false
+    function GetTransactionCancelData(InvoiceNo) {
+        var InvNo = "";
+        if (InvoiceNo == null) {           
+            if ($('#txtMobileNoCancel').val() == "" && $('#txtInvoiceNoCancel').val() == "") {
+                toastr.error('Please enter Mobile Number OR Invoice Number');
+                return false
+            }
+            if ($('#txtMobileNoCancel').val() != "" && $('#txtInvoiceNoCancel').val() != "") {
+                toastr.error('Please enter Mobile Number OR Invoice Number');
+                return false
+            }
+            if ($('#txtInvoiceNoCancel').val() != "") {
+                InvNo = $('#txtInvoiceNoCancel').val();
+            }
         }
-        if ($('#txtMobileNoCancel').val() != "" && $('#txtInvoiceNoCancel').val() != "") {
-            toastr.error('Please enter Mobile Number OR Invoice Number');
-            return false
+        else {
+            InvNo = InvoiceNo;
         }
+        
 
         $("#divLoader").show();
         $.ajax({
             type: "POST",
             url: '@Url.Action("GetCancelTxnData", "ITOperations")',//"/ITOperations/GetCancelTxnData",
-            data: '{GroupId: ' + JSON.stringify($('#hdnGroupId').val()) + ', MobileNo: ' + JSON.stringify($('#txtMobileNoCancel').val()) + ',InvoiceNo: ' + JSON.stringify($('#txtInvoiceNoCancel').val()) + '}',
+            data: '{GroupId: ' + JSON.stringify($('#hdnGroupId').val()) + ', MobileNo: ' + JSON.stringify($('#txtMobileNoCancel').val()) + ',InvoiceNo: ' + JSON.stringify(InvNo) + '}',
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             success: function (result) {
@@ -2035,6 +2072,8 @@
                         $("#spnPointsCancel").text(result.objCancelTxnModel.Points);
                         $("#spnTransactionOutletCancel").text(result.objCancelTxnModel.OutletName);
                         $("#spnTransactionDateTimeCancel").text(result.objCancelTxnModel.Datetime);
+
+                        $('#ddlRequestedForumCancel1').prop('selectedIndex', 0);
                         $("#tblUpdateDataCancel").show();
                         $("#dvDeleteBtn").show();
                         tableData.length = 0;
@@ -2060,7 +2099,7 @@
                     }
                 }
                 else {
-                    toastr.error('Member not present. Please check entered Mobile Number OR Card Number');
+                    toastr.error('Transaction not present. Please check entered Mobile Number OR Invoice Number');
                     $("#tblUpdateDataCancel").hide();
                 }
                 $("#divLoader").hide();
@@ -2073,6 +2112,22 @@
     }
 
     function DeleteTxnData(InvoiceNo) {
+        if ($('#txtRequestedByNameCancel1').val() == "") {
+            toastr.error('Please enter Requested Person name');
+            $('#txtRequestedByNameCancel1').focus();
+            return false;
+        }
+        if ($('#ddlRequestedForumCancel1').val() == "") {
+            toastr.error('Please select forum');
+            $('#ddlRequestedForumCancel1').focus();
+            return false;
+        }
+        if ($('#txtRequestedDateCancel1').val() == "") {
+            toastr.error('Please select transaction date');
+            $('#txtRequestedDateCancel1').focus();
+            return false;
+        }
+
         if (confirm("Are you sure? You want to delete Transaction")) {
             if (InvoiceNo == null) {
                 InvoiceNo = $('#spnInvoiceNoCancel').text();
@@ -2081,7 +2136,7 @@
             $.ajax({
                 type: "POST",
                 url: '@Url.Action("DeleteTransaction", "ITOperations")',//"/ITOperations/DeleteTransaction",
-                data: '{GroupId: ' + JSON.stringify($('#hdnGroupId').val()) + ', InvoiceNo: ' + JSON.stringify(InvoiceNo) + '}',
+                data: '{GroupId: ' + JSON.stringify($('#hdnGroupId').val()) + ', InvoiceNo: ' + JSON.stringify(InvoiceNo) + ', RequestedBy: ' + JSON.stringify($('#txtRequestedByNameCancel1').val()) + ', RequestedForum: ' + JSON.stringify($('#ddlRequestedForumCancel1').val()) + ', RequestedDate: ' + JSON.stringify($('#txtRequestedDateCancel1').val()) + '}',
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
                 success: function (result) {
@@ -2127,7 +2182,7 @@
                 {
                     "mData": "InvoiceNo",
                     "mRender": function (data, type, row) {
-                        return '<a href="#" onclick="DeleteTxnData(\''+ data +'\')" class="login" title="Edit"><img src="/Content/assets/images/delete.png" /></a>';
+                        return '<a href="#" onclick="GetTransactionCancelData(\''+ data +'\')" class="login" title="Edit"><img src="/Content/assets/images/delete.png" /></a>';
                         //return '<button href="#"' + 'id="' + data + '">Edit</button>';
                     }
                 }
