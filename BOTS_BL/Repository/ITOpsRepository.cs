@@ -164,15 +164,15 @@ namespace BOTS_BL.Repository
             return status;
         }
 
-        public bool AddEarnData(string GroupId, string MobileNo, string OutletId, DateTime TxnDate, DateTime RequestDate, string InvoiceNo, string InvoiceAmt, string IsSMS, tblAudit objAudit)
+        public SPResponse AddEarnData(string GroupId, string MobileNo, string OutletId, DateTime TxnDate, DateTime RequestDate, string InvoiceNo, string InvoiceAmt, string IsSMS, tblAudit objAudit)
         {
-            bool status = false;
+            SPResponse result = new SPResponse();
             try
             {
                 string connStr = objCustRepo.GetCustomerConnString(GroupId);
                 using (var contextNew = new BOTSDBContext(connStr))
                 {
-                    var result = contextNew.Database.SqlQuery<SPResponse>("sp_EarnRW_New_ITOPS @pi_MobileNo, @pi_OutletId, @pi_TxnDate, @pi_RequestDate, @pi_InvoiceNo, @pi_InvoiceAmt, @pi_LoginId, @pi_RequestBy, @pi_RequestedOnForum, @pi_SMSFlag",
+                    result = contextNew.Database.SqlQuery<SPResponse>("sp_EarnRW_New_ITOPS @pi_MobileNo, @pi_OutletId, @pi_TxnDate, @pi_RequestDate, @pi_InvoiceNo, @pi_InvoiceAmt, @pi_LoginId, @pi_RequestBy, @pi_RequestedOnForum, @pi_SMSFlag",
                               new SqlParameter("@pi_MobileNo", MobileNo),
                               new SqlParameter("@pi_OutletId", OutletId),
                               new SqlParameter("@pi_TxnDate", TxnDate.ToString("yyyy-MM-dd")),
@@ -186,10 +186,10 @@ namespace BOTS_BL.Repository
                     //DateTime.Now.ToString("yyyy-MM-dd")
 
 
-                    if (result.ResponseCode == "00")
-                    {
-                        status = true;
-                    }
+                    //if (result.ResponseCode == "00")
+                    //{
+                    //    status = true;
+                    //}
                 }
                 using (var context = new CommonDBContext())
                 {
@@ -202,18 +202,18 @@ namespace BOTS_BL.Repository
                 newexception.AddException(ex);
             }
 
-            return status;
+            return result;
         }
 
-        public bool AddRedeemPointsData(string GroupId, string MobileNo, string OutletId, DateTime TxnDate, DateTime RequestDate, string InvoiceNo, string InvoiceAmt, decimal Points, string IsSMS, tblAudit objAudit)
+        public SPResponse AddRedeemPointsData(string GroupId, string MobileNo, string OutletId, DateTime TxnDate, DateTime RequestDate, string InvoiceNo, string InvoiceAmt, decimal Points, string IsSMS, tblAudit objAudit)
         {
-            bool status = false;
+            SPResponse result = new SPResponse();
             try
             {
                 string connStr = objCustRepo.GetCustomerConnString(GroupId);
                 using (var contextNew = new BOTSDBContext(connStr))
                 {
-                    var result = contextNew.Database.SqlQuery<SPResponse>("sp_BurnRW_New_ITOPS @pi_MobileNo, @pi_OutletId, @pi_TxnDate, @pi_RequestDate, @pi_InvoiceNo, @pi_InvoiceAmt,@pi_RedeemPoints, @pi_LoginId, @pi_RequestBy, @pi_RequestedOnForum, @pi_SMSFlag",
+                    result = contextNew.Database.SqlQuery<SPResponse>("sp_BurnRW_New_ITOPS @pi_MobileNo, @pi_OutletId, @pi_TxnDate, @pi_RequestDate, @pi_InvoiceNo, @pi_InvoiceAmt,@pi_RedeemPoints, @pi_LoginId, @pi_RequestBy, @pi_RequestedOnForum, @pi_SMSFlag",
                               new SqlParameter("@pi_MobileNo", MobileNo),
                               new SqlParameter("@pi_OutletId", OutletId),
                               new SqlParameter("@pi_TxnDate", TxnDate.ToString("yyyy-MM-dd")),
@@ -224,13 +224,7 @@ namespace BOTS_BL.Repository
                               new SqlParameter("@pi_LoginId", ""),
                               new SqlParameter("@pi_RequestBy", objAudit.RequestedBy),
                               new SqlParameter("@pi_RequestedOnForum", objAudit.RequestedOnForum),
-                              new SqlParameter("@pi_SMSFlag", IsSMS)).FirstOrDefault<SPResponse>();
-
-
-                    if (result.ResponseCode == "00")
-                    {
-                        status = true;
-                    }
+                              new SqlParameter("@pi_SMSFlag", IsSMS)).FirstOrDefault<SPResponse>();                   
                 }
                 using (var context = new CommonDBContext())
                 {
@@ -242,18 +236,18 @@ namespace BOTS_BL.Repository
             {
                 newexception.AddException(ex);
             }
-            return status;
+            return result;
         }
 
-        public bool AddLoadBonusData(string GroupId, string MobileNo, string OutletId, int BonusPoints, string BonusRemark, DateTime ExpiryDate, string IsSMS, tblAudit objAudit)
+        public SPResponse AddLoadBonusData(string GroupId, string MobileNo, string OutletId, int BonusPoints, string BonusRemark, DateTime ExpiryDate, string IsSMS, tblAudit objAudit)
         {
-            bool status = false;
+            SPResponse result = new SPResponse();
             try
             {
                 string connStr = objCustRepo.GetCustomerConnString(GroupId);
                 using (var contextNew = new BOTSDBContext(connStr))
                 {
-                    var result = contextNew.Database.SqlQuery<SPResponse>("sp_BonusPoints_ITOPS @pi_MobileNo, @pi_OutletId, @pi_RequestDate, @pi_ExpiryDate, @pi_BonusRemarks, @pi_BonusPoints,@pi_LoginId, @pi_RequestBy, @pi_RequestedOnForum, @pi_SMSFlag",
+                    result = contextNew.Database.SqlQuery<SPResponse>("sp_BonusPoints_ITOPS @pi_MobileNo, @pi_OutletId, @pi_RequestDate, @pi_ExpiryDate, @pi_BonusRemarks, @pi_BonusPoints,@pi_LoginId, @pi_RequestBy, @pi_RequestedOnForum, @pi_SMSFlag",
                               new SqlParameter("@pi_MobileNo", MobileNo),
                               new SqlParameter("@pi_OutletId", OutletId),
                               new SqlParameter("@pi_RequestDate", objAudit.RequestedOn.ToString("yyyy-MM-dd")),
@@ -264,11 +258,7 @@ namespace BOTS_BL.Repository
                               new SqlParameter("@pi_RequestBy", objAudit.RequestedBy),
                               new SqlParameter("@pi_RequestedOnForum", objAudit.RequestedOnForum),
                               new SqlParameter("@pi_SMSFlag", IsSMS)).FirstOrDefault<SPResponse>();
-
-                    if (result.ResponseCode == "00")
-                    {
-                        status = true;
-                    }
+                    
                 }
                 using (var context = new CommonDBContext())
                 {
@@ -280,25 +270,36 @@ namespace BOTS_BL.Repository
             {
                 newexception.AddException(ex);
             }
-            return status;
+            return result;
         }
 
-        public bool AddSingleCustomerData(string GroupId, CustomerDetail objCustomer, tblAudit objAudit)
+        public SPResponse AddSingleCustomerData(string GroupId, CustomerDetail objCustomer, tblAudit objAudit)
         {
-            bool status = false;
+            SPResponse result = new SPResponse();
             try
             {
                 string connStr = objCustRepo.GetCustomerConnString(GroupId);
                 using (var contextNew = new BOTSDBContext(connStr))
                 {
-                    var CustomerId = contextNew.CustomerDetails.OrderByDescending(x => x.CustomerId).Select(y => y.CustomerId).FirstOrDefault();
+                    var ObjMobileNo = contextNew.CustomerDetails.Where(x => x.MobileNo == objCustomer.MobileNo).FirstOrDefault();
+                    if (ObjMobileNo == null)
+                    {
+                        var CustomerId = contextNew.CustomerDetails.OrderByDescending(x => x.CustomerId).Select(y => y.CustomerId).FirstOrDefault();
 
-                    var NewId = Convert.ToInt64(CustomerId) + 1;
-                    objCustomer.CustomerId = Convert.ToString(NewId);
+                        var NewId = Convert.ToInt64(CustomerId) + 1;
+                        objCustomer.CustomerId = Convert.ToString(NewId);
 
-                    contextNew.CustomerDetails.AddOrUpdate(objCustomer);
-                    contextNew.SaveChanges();
-                    status = true;
+                        contextNew.CustomerDetails.AddOrUpdate(objCustomer);
+                        contextNew.SaveChanges();
+                        result.ResponseCode = "00";
+                        result.ResponseMessage = "Member Added Successfully";
+                    }
+                    else
+                    {
+                        result.ResponseCode = "01";
+                        result.ResponseMessage = "Mobile Number Already Exist";
+                    }
+                    
                 }
                 using (var context = new CommonDBContext())
                 {
@@ -310,7 +311,7 @@ namespace BOTS_BL.Repository
             {
                 newexception.AddException(ex);
             }
-            return status;
+            return result;
         }
 
         public bool ChangeSMSDetails(string GroupId, string CustomerId, bool Disable, tblAudit objAudit)

@@ -89,12 +89,12 @@
     @*@Scripts.Render("~/bundles/jquery")
         @Scripts.Render("~/bundles/bootstrap")
         @RenderSection("scripts", required: false)*@
-<script>
+    <script>
         $(document).ajaxError(function (xhr, props) {
-    if (props.status === 401) {
-    window.location.href = '@Url.Action("Index", "Login")';
-    }
-    });
+            if (props.status === 401) {
+            window.location.href = '@Url.Action("Index", "Login")';
+            }
+          });
         $("#btnMemberSearch").on("click", function () {
             if ($("#txtMember").val() != "") {
                 GetMemberSearchData();
@@ -143,8 +143,8 @@
             });
         }
 
-</script>
+    </script>
 
-    
+
 </body>
 </html>

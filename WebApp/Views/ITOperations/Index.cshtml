@@ -493,7 +493,7 @@
                                                             <td style="padding:10px;">Select Source</td>
                                                             <td style="padding:10px;">
                                                                 <select name="ddlSource" id="ddlSource" class="input50">
-                                                                    <option value="2">Walkin</option>
+                                                                    <option value="2" selected>Walkin</option>
                                                                     <option value="3">Referral</option>
                                                                     <option value="4">Bulk Upload</option>
                                                                 </select>
@@ -1428,6 +1428,15 @@
                 dataType: "json",
                 success: function (result) {
                     console.log(111)
+                    if (result.ResponseCode == "00") {
+                        toastr.success(result.ResponseMessage);
+                        $("#divLoader").hide();
+                        $('#sec3').find(':input').val('');
+                    }
+                    else {
+                        toastr.error(result.ResponseMessage);
+                        $("#divLoader").hide();
+                    }
                 },
                 error: function (result) {
                     console.log(result.responseText)
@@ -1547,9 +1556,6 @@
             return false;
         }
 
-
-
-
         if (confirm("Are you sure? You want to Redeem Points")) {
             var MemberData = [];
             item = {}
@@ -1581,7 +1587,15 @@
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
                 success: function (result) {
-                    console.log(111)
+                    if (result.ResponseCode == "00") {
+                        toastr.success(result.ResponseMessage);
+                        $("#divLoader").hide();
+                        $('#sec4').find(':input').val('');
+                    }
+                    else {
+                        toastr.error(result.ResponseMessage);
+                        $("#divLoader").hide();
+                    }
                 },
                 error: function (result) {
                     console.log(result.responseText)
@@ -1629,7 +1643,7 @@
                     //$('#txtInvoiceAmount1').val("");
                     //$('#txtPointsToRedeem').val("");
                     //$('#txtRequestedByName3').val("");
-                    //$('#ddlRequestedForum3').prop('selectedIndex', 0);
+                    $('#ddlRequestedForum4').prop('selectedIndex', 0);
                     $("#tblUpdateData4").show();
                 }
                 else {
@@ -1646,7 +1660,7 @@
                     $('#txtInvoiceAmount1').val("");
                     $('#txtPointsToRedeem').val("");
                     $('#txtRequestedByName3').val("");
-                    $('#ddlRequestedForum3').prop('selectedIndex', 0);
+                    $('#ddlRequestedForum4').prop('selectedIndex', 0);
                     $('#ddlOutletList1').prop('selectedIndex', 0);
                     $("#tblUpdateData3").hide();
                 }
@@ -1720,7 +1734,15 @@
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
                 success: function (result) {
-                    console.log(111)
+                    if (result.ResponseCode == "00") {
+                        toastr.success("Bonus points loaded Successfully");
+                        $("#divLoader").hide();
+                        $('#sec5').find(':input').val('');
+                    }
+                    else {
+                        toastr.error(result.ResponseMessage);
+                        $("#divLoader").hide();
+                    }
                 },
                 error: function (result) {
                     console.log(result.responseText)
@@ -1796,7 +1818,15 @@
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
                 success: function (result) {
-                    console.log(111)
+                    if (result.ResponseCode == "00") {
+                        toastr.success(result.ResponseMessage);
+                        $("#divLoader").hide();
+                        $('#sec5').find(':input').val('');
+                    }
+                    else {
+                        toastr.error(result.ResponseMessage);
+                        $("#divLoader").hide();
+                    }
                 },
                 error: function (result) {
                     console.log(result.responseText)

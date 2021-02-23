@@ -150,9 +150,9 @@ namespace WebApp.Controllers
         }
 
         [HttpPost]
-        public bool AddEarnData(string jsonData)
+        public ActionResult AddEarnData(string jsonData)
         {
-            bool result = false;
+            SPResponse result = new SPResponse();
             try
             {
                 JavaScriptSerializer json_serializer = new JavaScriptSerializer();
@@ -186,7 +186,7 @@ namespace WebApp.Controllers
                 }
 
                 result = ITOPS.AddEarnData(GroupId, MobileNo, OutletId, Convert.ToDateTime(TransactionDate), DateTime.Now, InvoiceNumber, InvoiceAmount, Convert.ToString(IsSMS), objAudit);
-                if (result)
+                if (result.ResponseCode == "00")
                 {
                     var subject = "Earning updated for mobile no  - " + MobileNo;
                     var body = "Earning updated for mobile no - " + MobileNo;
@@ -205,13 +205,13 @@ namespace WebApp.Controllers
                 newexception.AddException(ex);
             }
 
-            return result;
+            return Json(result, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
-        public bool RedeemPointsData(string jsonData)
+        public ActionResult RedeemPointsData(string jsonData)
         {
-            bool result = false;
+            SPResponse result = new SPResponse();
             try
             {
                 JavaScriptSerializer json_serializer = new JavaScriptSerializer();
@@ -248,7 +248,7 @@ namespace WebApp.Controllers
                 }
 
                 result = ITOPS.AddRedeemPointsData(GroupId, MobileNo, OutletId, Convert.ToDateTime(TransactionDate), DateTime.Now, InvoiceNumber, InvoiceAmount, Convert.ToDecimal(PointsToRedeem), Convert.ToString(IsSMS), objAudit);
-                if (result)
+                if (result.ResponseCode == "00")
                 {
                     var subject = "Points Redeem for mobile no  - " + MobileNo;
                     var body = "Points Redeem for mobile no - " + MobileNo;
@@ -267,13 +267,13 @@ namespace WebApp.Controllers
             {
                 newexception.AddException(ex);
             }
-            return result;
+            return Json(result, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
-        public bool LoadBonusData(string jsonData)
+        public ActionResult LoadBonusData(string jsonData)
         {
-            bool result = false;
+            SPResponse result = new SPResponse();
             try
             {
                 JavaScriptSerializer json_serializer = new JavaScriptSerializer();
@@ -308,7 +308,7 @@ namespace WebApp.Controllers
                 }
 
                 result = ITOPS.AddLoadBonusData(GroupId, MobileNo, OutletId, BonusPoints, BonusRemark, ExpiryDate, Convert.ToString(IsSMS), objAudit);
-                if (result)
+                if (result.ResponseCode == "00")
                 {
                     var subject = "Points Loaded for mobile no  - " + MobileNo;
                     var body = "Points Loaded for mobile no - " + MobileNo;
@@ -327,13 +327,13 @@ namespace WebApp.Controllers
             {
                 newexception.AddException(ex);
             }
-            return result;
+            return Json(result, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
-        public bool AddSingleMember(string jsonData)
+        public ActionResult AddSingleMember(string jsonData)
         {
-            bool result = false;
+            SPResponse result = new SPResponse();
             try
             {
                 JavaScriptSerializer json_serializer = new JavaScriptSerializer();
@@ -370,7 +370,7 @@ namespace WebApp.Controllers
                 }
 
                 result = ITOPS.AddSingleCustomerData(GroupId, objCustomer, objAudit);
-                if (result)
+                if (result.ResponseCode == "00")
                 {
                     var subject = "New Customer Added with Mobile No  - " + objCustomer.MobileNo;
                     var body = "New Customer Added with Mobile No - " + objCustomer.MobileNo;
@@ -389,7 +389,7 @@ namespace WebApp.Controllers
             {
                 newexception.AddException(ex);
             }
-            return result;
+            return Json(result, JsonRequestBehavior.AllowGet);
         }
 
         public bool ChangeSMSDetails(string jsonData)
