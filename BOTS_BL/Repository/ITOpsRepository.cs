@@ -134,21 +134,33 @@ namespace BOTS_BL.Repository
             return status;
         }
 
-        public bool UpdateMobileOfMember(string GroupId, string CustomerId, string MobileNo, tblAudit objAudit)
+        public SPResponse UpdateMobileOfMember(string GroupId, string CustomerId, string MobileNo, tblAudit objAudit)
         {
-            bool status = false;
+            SPResponse result = new SPResponse();
             try
             {
                 CustomerDetail objCustomerDetail = new CustomerDetail();
                 string connStr = objCustRepo.GetCustomerConnString(GroupId);
                 using (var contextNew = new BOTSDBContext(connStr))
                 {
-                    objCustomerDetail = contextNew.CustomerDetails.Where(x => x.CustomerId == CustomerId).FirstOrDefault();
-                    objCustomerDetail.MobileNo = MobileNo;
+                    var objExisting= contextNew.CustomerDetails.Where(x => x.MobileNo == MobileNo).FirstOrDefault();
+                    if (objExisting == null)
+                    {
+                        objCustomerDetail = contextNew.CustomerDetails.Where(x => x.CustomerId == CustomerId).FirstOrDefault();
+                        objCustomerDetail.MobileNo = MobileNo;
 
-                    contextNew.CustomerDetails.AddOrUpdate(objCustomerDetail);
-                    contextNew.SaveChanges();
-                    status = true;
+                        contextNew.CustomerDetails.AddOrUpdate(objCustomerDetail);
+                        contextNew.SaveChanges();
+
+                        result.ResponseCode = "00";
+                        result.ResponseMessage = "Mobile Number Updated Successfully";
+                    }
+                    else
+                    {
+                        result.ResponseCode = "01";
+                        result.ResponseMessage = "Mobile Number Already Exist";
+                    }
+                    
 
                 }
                 using (var context = new CommonDBContext())
@@ -161,7 +173,7 @@ namespace BOTS_BL.Repository
             {
                 newexception.AddException(ex);
             }
-            return status;
+            return result;
         }
 
         public SPResponse AddEarnData(string GroupId, string MobileNo, string OutletId, DateTime TxnDate, DateTime RequestDate, string InvoiceNo, string InvoiceAmt, string IsSMS, tblAudit objAudit)
@@ -289,6 +301,7 @@ namespace BOTS_BL.Repository
 
                         var NewId = Convert.ToInt64(CustomerId) + 1;
                         objCustomer.CustomerId = Convert.ToString(NewId);
+                        objCustomer.Points = 0;
 
                         contextNew.CustomerDetails.AddOrUpdate(objCustomer);
                         contextNew.SaveChanges();
@@ -472,7 +485,13 @@ namespace BOTS_BL.Repository
                 using (var contextNew = new BOTSDBContext(connStr))
                 {
                     var transaction = contextNew.TransactionMasters.Where(x => x.InvoiceNo == InvoiceNo).FirstOrDefault();
+                    var customer = contextNew.CustomerDetails.Where(y => y.CustomerId == transaction.CustomerId).FirstOrDefault();
+                    customer.Points = customer.Points - transaction.PointsEarned;
+
                     contextNew.TransactionMasters.Remove(transaction);
+                    contextNew.SaveChanges();
+
+                    contextNew.CustomerDetails.AddOrUpdate(customer);
                     contextNew.SaveChanges();
                     result = true;
                 }
