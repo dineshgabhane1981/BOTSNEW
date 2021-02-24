@@ -98,9 +98,9 @@ namespace WebApp.Controllers
         }
 
         [HttpPost]
-        public bool ChangeMemberMobile(string jsonData)
+        public ActionResult ChangeMemberMobile(string jsonData)
         {
-            bool result = false;
+            SPResponse result = new SPResponse();
             try
             {
                 JavaScriptSerializer json_serializer = new JavaScriptSerializer();
@@ -127,7 +127,7 @@ namespace WebApp.Controllers
                 }
 
                 result = ITOPS.UpdateMobileOfMember(GroupId, CustomerId, MobileNo, objAudit);
-                if (result)
+                if (result.ResponseCode == "00")
                 {
                     var subject = "Customer Mobile Number changed for CustomerId - " + CustomerId;
                     var body = "Customer Mobile Number changed for CustomerId - " + CustomerId;
@@ -146,7 +146,7 @@ namespace WebApp.Controllers
             {
                 newexception.AddException(ex);
             }
-            return result;
+            return Json(result, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]

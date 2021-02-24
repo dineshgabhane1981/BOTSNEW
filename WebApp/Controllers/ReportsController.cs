@@ -145,11 +145,20 @@ namespace WebApp.Controllers
         }
 
         [HttpPost]
-        public ActionResult GetMemberSearchResult(string searchData)
+        public ActionResult GetMemberSearchResult(string searchData, string GroupId)
         {
-            var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            CustomerRepository objCustRepo = new CustomerRepository();
             MemberSearch objMemberSearch = new MemberSearch();
-            objMemberSearch = RR.GetMeamberSearchData(userDetails.GroupId, searchData, userDetails.connectionString);
+            if (!string.IsNullOrEmpty(GroupId) && GroupId != "undefined")
+            {
+                string connStr = objCustRepo.GetCustomerConnString(GroupId);
+                objMemberSearch = RR.GetMeamberSearchData(GroupId, searchData, connStr);
+            }
+            else
+            {
+                var userDetails = (CustomerLoginDetail)Session["UserSession"];
+                objMemberSearch = RR.GetMeamberSearchData(userDetails.GroupId, searchData, userDetails.connectionString);
+            }
             return PartialView("_MemberSearch", objMemberSearch);
         }
 

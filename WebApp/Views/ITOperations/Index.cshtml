@@ -1323,7 +1323,15 @@
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
                 success: function (result) {
-                    console.log(111)
+                    if (result.ResponseCode == "00") {
+                        toastr.success(result.ResponseMessage);
+                        $("#divLoader").hide();
+                        $('#sec2').find(':input').val('');
+                    }
+                    else {
+                        toastr.error(result.ResponseMessage);
+                        $("#divLoader").hide();
+                    }
                 },
                 error: function (result) {
                     console.log(result.responseText)
@@ -2182,7 +2190,7 @@
                 {
                     "mData": "InvoiceNo",
                     "mRender": function (data, type, row) {
-                        return '<a href="#" onclick="GetTransactionCancelData(\''+ data +'\')" class="login" title="Edit"><img src="/Content/assets/images/delete.png" /></a>';
+                        return '<a href="#" onclick="GetTransactionCancelData(\''+ data +'\')" class="login" title="Edit"><img src="Content/assets/images/delete.png" /></a>';
                         //return '<button href="#"' + 'id="' + data + '">Edit</button>';
                     }
                 }

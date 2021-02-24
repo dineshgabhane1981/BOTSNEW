@@ -120,12 +120,13 @@
         });
         function GetMemberSearchData() {
             var searchData = $("#txtMember").val();
+            var GroupId = $('#hdnGroupId').val();
             var searchURL = "https://blueocktopus.in/bots/Reports/GetMemberSearchResult";
             var searchURL = "../Reports/GetMemberSearchResult";
             $.ajax({
                 type: "POST",
                 url: searchURL,
-                data: "{'searchData': '" + searchData + "'}",
+                data: "{'searchData': '" + searchData + "', 'GroupId': '" + GroupId + "'}",
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
                 success: function (response) {
