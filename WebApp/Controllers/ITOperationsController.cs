@@ -10,6 +10,9 @@ using System.Web.Script.Serialization;
 using System.Net.Mail;
 using System.Net;
 using WebApp.ViewModel;
+using System.Data;
+using System.Text.RegularExpressions;
+using ClosedXML.Excel;
 
 namespace WebApp.Controllers
 {
@@ -393,6 +396,113 @@ namespace WebApp.Controllers
             }
             return Json(result, JsonRequestBehavior.AllowGet);
         }
+
+        public JsonResult AddBulkMemberData(string GroupId, HttpPostedFileBase file)
+        {
+            CustomerDetail objCustomer = new CustomerDetail();
+            SPResponse result = new SPResponse();
+            try
+            {
+
+                using (XLWorkbook workBook = new XLWorkbook(file.InputStream))
+                {
+                   
+
+                        IXLWorksheet workSheet = workBook.Worksheet(1);
+                        DataTable dt = new DataTable();
+                        bool firstRow = true;
+                        foreach (IXLRow row in workSheet.Rows())
+                        {
+
+                            if (firstRow)
+                            {
+                                foreach (IXLCell cell in row.Cells())
+                                {
+                                    if (!string.IsNullOrEmpty(cell.Value.ToString()))
+                                    {
+                                        dt.Columns.Add(cell.Value.ToString());
+                                    }
+                                    else
+                                    {
+                                        break;
+                                    }
+                                }
+                                firstRow = false;
+                            }
+                            else
+                            {
+                                int i = 0;
+                                DataRow toInsert = dt.NewRow();
+                                foreach (IXLCell cell in row.Cells(1, dt.Columns.Count))
+                                {
+                                    try
+                                    {
+                                        toInsert[i] = cell.Value.ToString();
+                                    }
+                                    catch (Exception ex)
+                                    {
+
+                                    }
+                                    i++;
+                                }
+                                dt.Rows.Add(toInsert);
+                            }
+                        }
+                        if (dt.Rows.Count > 0)
+                        {
+                            int TotalRows = 0;
+                            int index = 0;
+                            int invalid = 0;
+
+                            foreach (DataRow dr in dt.Rows)
+                            {
+                                if (!string.IsNullOrEmpty(Convert.ToString(dr["MobileNo"])))
+                                {
+                                    Regex regex = new Regex(@"[0-9]{10}");
+                                    Match match = regex.Match(Convert.ToString(dr["MobileNo"]));
+                                    if (match.Success)
+                                    {
+                                        objCustomer.CustomerName = Convert.ToString(dr["CustomerName"]);
+                                        objCustomer.MobileNo = Convert.ToString(dr["MobileNo"]);
+
+                                        result = ITOPS.AddBulkCustomerData(GroupId, objCustomer);
+                                        if (result.ResponseCode == "00")
+                                        {
+                                            TotalRows++;
+
+                                        }
+
+                                        if (result.ResponseCode == "01")
+                                        {
+                                            index++;
+
+                                        }
+                                    }
+                                    else
+                                    {
+                                        invalid++;
+
+                                    }
+                                }
+                            }
+                            result.ResponseSucessCount = TotalRows.ToString();
+                            result.ResponseFailCount = index.ToString();
+                            result.ResponseInValidFormatCount = invalid.ToString();
+                        }
+                    
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex);
+                result.ResponseCode = "-1";
+            }
+
+
+
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
 
         public bool ChangeSMSDetails(string jsonData)
         {

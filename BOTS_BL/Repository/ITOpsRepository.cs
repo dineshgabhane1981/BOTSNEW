@@ -328,6 +328,43 @@ namespace BOTS_BL.Repository
             return result;
         }
 
+        public SPResponse AddBulkCustomerData(string GroupId, CustomerDetail objCustomer)
+        {
+            SPResponse result = new SPResponse();
+            try
+            {
+                string connStr = objCustRepo.GetCustomerConnString(GroupId);
+                using (var contextNew = new BOTSDBContext(connStr))
+                {
+                    var ObjMobileNo = contextNew.CustomerDetails.Where(x => x.MobileNo == objCustomer.MobileNo).FirstOrDefault();
+                    if (ObjMobileNo == null)
+                    {
+                        var CustomerId = contextNew.CustomerDetails.OrderByDescending(x => x.CustomerId).Select(y => y.CustomerId).FirstOrDefault();
+
+                        var NewId = Convert.ToInt64(CustomerId) + 1;
+                        objCustomer.CustomerId = Convert.ToString(NewId);
+
+                        contextNew.CustomerDetails.AddOrUpdate(objCustomer);
+                        contextNew.SaveChanges();
+                        result.ResponseCode = "00";
+                        result.ResponseMessage = "Member Added Successfully";
+                    }
+                    else
+                    {
+                        result.ResponseCode = "01";
+                        result.ResponseMessage = "Mobile Number Already Exist";
+                    }
+
+                }
+
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex);
+            }
+            return result;
+        }
+
         public bool ChangeSMSDetails(string GroupId, string CustomerId, bool Disable, tblAudit objAudit)
         {
             bool status = false;

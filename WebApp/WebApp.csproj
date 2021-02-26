@@ -257,6 +257,8 @@
     <Content Include="Content\assets\fonts\Pe-icon-7-stroke.eot" />
     <Content Include="Content\assets\fonts\Pe-icon-7-stroke.ttf" />
     <Content Include="Content\assets\fonts\Pe-icon-7-stroke.woff" />
+    <Content Include="Downloads\Bulkupload.xlsx" />
+    <Content Include="Downloads\BulkUpload.xls" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />
