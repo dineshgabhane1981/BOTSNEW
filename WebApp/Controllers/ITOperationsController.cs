@@ -27,8 +27,10 @@ namespace WebApp.Controllers
         {
             string connStr = objCustRepo.GetCustomerConnString(groupId);
             var lstOutlet = RR.GetOutletList(groupId, connStr);
+            var lstBrand = RR.GetBrandList(groupId, connStr);
             var GroupDetails = objCustRepo.GetGroupDetails(Convert.ToInt32(groupId));
             ViewBag.OutletList = lstOutlet;
+            ViewBag.BranchList = lstBrand;
             ViewBag.GroupId = groupId;
             ViewBag.GroupName = GroupDetails.RetailName;
             return View();
@@ -502,7 +504,36 @@ namespace WebApp.Controllers
 
             return Json(result, JsonRequestBehavior.AllowGet);
         }
+        [HttpPost]
+        public ActionResult GetLoginIdByOutlets(string GroupId,int outletId)
+        {
+            SPResponse result = new SPResponse();
+            ResetSecurityKey objreset = new ResetSecurityKey();
+            try
+            {
+                objreset.lstloginid = ITOPS.GetLoginIdByOutlet(GroupId,outletId);
+            }
+            catch (Exception ex)
+            {
 
+                newexception.AddException(ex);
+            }
+
+            return Json(objreset, JsonRequestBehavior.AllowGet);
+        }
+        public bool UpdateSecurityKey(string GroupId,string CounterId)
+        {
+            bool result = false;
+            try
+            {
+                result = ITOPS.UpdateSecurityKey(GroupId, CounterId);
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex);
+            }
+            return result;
+        }
 
         public bool ChangeSMSDetails(string jsonData)
         {

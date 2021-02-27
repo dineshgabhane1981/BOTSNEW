@@ -102,7 +102,31 @@ namespace BOTS_BL.Repository
             }
             return objMemberData;
         }
-
+        public bool UpdateSecurityKey(string GroupId, string counterId)
+        {
+            bool result = false;
+            try
+            {
+                StoreDetail objstore = new StoreDetail();
+                string connStr = objCustRepo.GetCustomerConnString(GroupId);
+                using (var contextNew = new BOTSDBContext(connStr))
+                {
+                    objstore = contextNew.StoreDetails.Where(x => x.CounterId == counterId).FirstOrDefault();
+                    objstore.Status = "01";
+                    
+                    contextNew.StoreDetails.AddOrUpdate(objstore);
+                    contextNew.SaveChanges();
+                   
+                    result = true;
+                }
+                
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex);
+            }
+            return result;
+        }
         public bool UpdateNameOfMember(string GroupId, string CustomerId, string Name, tblAudit objAudit)
         {
             bool status = false;
@@ -513,6 +537,8 @@ namespace BOTS_BL.Repository
             return objCustomerDetail;
         }
 
+        
+
         public bool DeleteTransaction(string GroupId, string InvoiceNo, tblAudit objAudit)
         {
             bool result = false;
@@ -543,6 +569,29 @@ namespace BOTS_BL.Repository
                 newexception.AddException(ex);
             }
             return result;
+
+        }
+
+        public List<LoginIdByOutlet> GetLoginIdByOutlet(string GroupId,int outletId)
+        {
+            List<LoginIdByOutlet> loginidbyoutlet = new List<LoginIdByOutlet>();
+
+            try
+            {
+                string connStr = objCustRepo.GetCustomerConnString(GroupId);
+                using (var context = new BOTSDBContext(connStr))
+                {
+                    loginidbyoutlet = context.Database.SqlQuery<LoginIdByOutlet>("sp_GetLoginIdByOutlet @outletId",
+                        // new SqlParameter("@groupId", GroupId),                       
+                        new SqlParameter("@outletId", outletId)).ToList<LoginIdByOutlet>();
+                }
+                
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return loginidbyoutlet;
 
         }
 

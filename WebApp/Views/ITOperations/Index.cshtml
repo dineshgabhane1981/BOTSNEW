@@ -925,9 +925,47 @@
                                 <div class="multisteps-form__panel shadow p-4 list-box bg-white" id="sec9" data-animation="scaleIn">
                                     <h4 class="multisteps-form__title" style="color:blue;">Reset Security Key</h4><br />
                                     <div class="multisteps-form__content" style="display:flex;">
+                                      <div class="multisteps-form__content">
+                                        <div style="display:flex; height:auto !important;margin-top:50px;">
+                                            <table border="2" cellpadding="5" cellspacing="5">
+                                                <tr>
+                                                </tr>
+                                                <tr>
+                                                    <td style="padding:10px;">Select Branch</td>
+                                                    <td style="padding:10px;width:200px;">
+                                                        @Html.DropDownList("Branch", new SelectList(ViewBag.BranchList, "Value", "Text"), "Select Branch", htmlAttributes: new { @class = "input50", @id = "ddlBranchList" })
+
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="padding:10px;">Select Outlet</td>
+                                                    <td style="padding:10px;width:300px;">
+                                                        @Html.DropDownList("Outlet", new SelectList(ViewBag.OutletList, "Value", "Text"), "Select Outlet", htmlAttributes: new { onchange = "OnChangeResetKey(this.value);", @class = "input50", @id = "ddlOutletList1" })
+
+                                                    </td>
+                                                </tr>
 
 
-                                    </div>
+                                            </table>
+                                            
+                                        </div>
+                                      
+                                       <div class="row mt-3" id="dvActivityData1" style="height:800px;">
+                                                <div class="table-responsive">
+                                                    <table class="table" id="activityTable1">
+                                                        <thead style="text-align:center;">
+                                                            <tr>
+                                                                <th scope="col">Login Id</th>
+                                                                <th scope="col">Security Key</th>
+                                                                <th scope="col">Reset</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody style="text-align:center;">
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>  
+                                       </div>
                                 </div>
                                 <!--OTP-->
                                 <div class="multisteps-form__panel shadow p-4 list-box bg-white" id="sec10" data-animation="scaleIn">
@@ -968,6 +1006,7 @@
 <script src="~/Content/scriptSteps.js"></script>
 
 <script>
+
 
     function DownloadFile() {
         var fileName = "../Downloads/Bulkupload.xlsx";
@@ -1122,6 +1161,8 @@
         $('#btnCancelTxn').on("click", function () {
             DeleteTxnData();
         });
+
+
 
     });
     function GetClearAllTab() {
@@ -1992,6 +2033,46 @@
 
     }
 
+    function OnChangeResetKey(val) {
+        //alert(val);
+        $("#divLoader").show();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("GetLoginIdByOutlets", "ITOperations")',//"/ITOperations/GetChangeNameData",
+            data: '{outletId: ' + JSON.stringify(val) +', GroupId:' + $("#hdnGroupId").val()+ '}',
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (result) {
+                if (result.lstloginid != null) {
+                    tableData.length = 0;
+                    $.map(result.lstloginid, function (item) {
+                       // alert(item.CounterId);
+                        optionItem = {}
+                        optionItem["LoginId"] = item.CounterId;
+                        optionItem["SecurityKey"] = item.securitykey;
+                        optionItem["Reset"] = "<input type='button' id='" + item.CounterId + "' onclick='UpdateSecurityKey(" + item.CounterId + ")' value='Reset'>";
+                        tableData.push(optionItem);
+                    });
+                    DrawTable1();
+
+                  //  $("#dvDeleteBtn").attr('style', 'display:none !important');
+
+                } else {
+                    toastr.error('Login Ids are not present');
+                    $('#ddlBranchList').prop('selectedIndex', 0);
+                    $('#ddlOutletList1').prop('selectedIndex', 0);
+
+                }
+                $("#divLoader").hide();
+            },
+            error: function (result) {
+                console.log(result.responseText)
+                $("#divLoader").hide();
+            }
+        });
+
+    }
+
     function GetSMSData() {
         if ($('#txtMobileNoSMS').val() == "" && $('#txtCardNoSMS').val() == "") {
             toastr.error('Please enter Mobile Number OR Card Number');
@@ -2245,7 +2326,6 @@
             if (InvoiceNo == null) {
                 InvoiceNo = $('#spnInvoiceNoCancel').text();
             }
-            $("#divLoader").show();
             $.ajax({
                 type: "POST",
                 url: '@Url.Action("DeleteTransaction", "ITOperations")',//"/ITOperations/DeleteTransaction",
@@ -2272,6 +2352,32 @@
                 }
             });
         }
+    }
+    function UpdateSecurityKey(id) {
+      //  alert(id);
+        $("#divLoader").show();
+         $.ajax({
+                type: "POST",
+                url: '@Url.Action("UpdateSecurityKey", "ITOperations")',//"/ITOperations/DeleteTransaction",
+             data: '{GroupId: ' + JSON.stringify($('#hdnGroupId').val()) +', CounterId: ' + id + '}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (result) {
+                    console.log(111)
+                },
+                error: function (result) {
+                    console.log(result.responseText)
+                    if (result.responseText == "True") {
+                        toastr.success("Security Key Updated Successfully");                    
+                        $("#dvActivityData1").hide();
+                        $("#divLoader").hide();
+                    }
+                    else {
+                        toastr.error('error occured while updating data');
+                        $("#divLoader").hide();
+                    }
+                }
+            });
     }
     function DrawTable() {
         var table1 = $('#activityTable').DataTable();
@@ -2322,6 +2428,48 @@
             var table = $('#activityTable').DataTable();
             table.draw();
         });
+    }
+    function DrawTable1() {
+        var table1 = $('#activityTable1').DataTable();
+        table1.destroy();
+
+        var table = $('#activityTable1').DataTable({
+            "data": tableData,
+            "paging": true,
+            "ordering": false,
+            "info": true,
+            "bFilter": true,
+            "pageLength": 10,
+            "pagingType": "simple_numbers",
+            "columns": [
+                { data: "LoginId" },
+                { data: "SecurityKey" },
+                { data: "Reset" }
+                
+            ],
+            aoColumnDefs: [
+                {
+                    bSortable: false,
+                    aTargets: []
+                }
+            ]
+        });
+        $('#activityTable_filter').hide();
+        $('#txtSearch').on('keyup', function () {
+
+            $.fn.dataTable.ext.search.push(function (settings, searchData) {
+                var term = $('#txtSearch').val().toLowerCase()
+                for (var i = 0; i < searchData.length; i++) {
+                    if (searchData[i].toLowerCase().indexOf(term) == 0) {
+                        return true;
+                    }
+                }
+                return false;
+            });
+            var table = $('#activityTable1').DataTable();
+            table.draw();
+        });
+       
     }
 
 </script>

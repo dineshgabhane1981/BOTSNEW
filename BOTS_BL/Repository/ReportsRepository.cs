@@ -54,6 +54,34 @@ namespace BOTS_BL.Repository
             return countriesItem;
         }
 
+        public List<SelectListItem> GetBrandList(string GroupId, string connstr)
+        {
+            List<SelectListItem> BrandItem = new List<SelectListItem>();
+            try
+            {
+                using (var context = new BOTSDBContext(connstr))
+                {
+
+                    var lstOutlet = context.Database.SqlQuery<BrandList>("sp_GetBrandList @pi_GroupId", new SqlParameter("@pi_GroupId", GroupId)).ToList<BrandList>();
+                    foreach (var item in lstOutlet)
+                    {
+                        BrandItem.Add(new SelectListItem
+                        {
+                            Text = item.BrandName,
+                            Value = Convert.ToString(item.BrandId)
+                        });
+                    }
+
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex);
+            }
+            return BrandItem;
+
+        }
+
         public List<OutletWise> GetOutletWiseList(string GroupId, string DateRangeFlag, string FromDate, string ToDate, string connstr)
         {
             List<OutletWise> lstOutletWise = new List<OutletWise>();

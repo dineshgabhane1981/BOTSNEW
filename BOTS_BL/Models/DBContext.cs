@@ -24,7 +24,7 @@ namespace BOTS_BL.Models
         public virtual DbSet<OTPMaintenance> OTPMaintenances { get; set; }
         public virtual DbSet<TransactionMaster> TransactionMasters { get; set; }
         public virtual DbSet<TransactionTypeMaster> TransactionTypeMasters { get; set; }
-
+        public virtual DbSet<StoreDetail> StoreDetails { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
