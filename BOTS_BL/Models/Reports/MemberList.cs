@@ -26,4 +26,10 @@ namespace BOTS_BL.Models
         public string OutletId { get; set; }
         public string OutletName { get; set; }
     }
+
+    public class BrandList
+    {
+        public string BrandId { get; set; }
+        public string BrandName { get; set; }
+    }
 }
