@@ -405,11 +405,9 @@ namespace WebApp.Controllers
             SPResponse result = new SPResponse();
             try
             {
-
                 using (XLWorkbook workBook = new XLWorkbook(file.InputStream))
                 {
                    
-
                         IXLWorksheet workSheet = workBook.Worksheet(1);
                         DataTable dt = new DataTable();
                         bool firstRow = true;
@@ -499,10 +497,16 @@ namespace WebApp.Controllers
                 newexception.AddException(ex);
                 result.ResponseCode = "-1";
             }
-
-
-
             return Json(result, JsonRequestBehavior.AllowGet);
+        }
+        [HttpPost]
+        public ActionResult GetOutletByBrandId(string GroupId,string BrandId)
+        {
+            string connStr = objCustRepo.GetCustomerConnString(GroupId);
+            SPResponse result = new SPResponse();
+            var lstoutletlist = RR.GetOutletListByBrandId(BrandId, connStr);
+            ViewBag.OutletListByBrand = lstoutletlist;
+            return Json(lstoutletlist, JsonRequestBehavior.AllowGet);
         }
         [HttpPost]
         public ActionResult GetLoginIdByOutlets(string GroupId,int outletId)

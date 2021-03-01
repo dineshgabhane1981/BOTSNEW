@@ -82,6 +82,8 @@ namespace BOTS_BL.Repository
 
         }
 
+
+
         public List<OutletWise> GetOutletWiseList(string GroupId, string DateRangeFlag, string FromDate, string ToDate, string connstr)
         {
             List<OutletWise> lstOutletWise = new List<OutletWise>();
@@ -242,6 +244,34 @@ namespace BOTS_BL.Repository
                 throw ex;
             }
             return celebrationTxnsData;
+        }
+
+        public List<SelectListItem> GetOutletListByBrandId(string BrandId, string connstr)
+        {
+            List<SelectListItem> outletlist = new List<SelectListItem>();
+            try
+            {
+                using (var context = new BOTSDBContext(connstr))
+                {
+
+                    var lstOutlet = context.Database.SqlQuery<OutletList>("sp_GetOutletListByBrandId @pi_BrandId", new SqlParameter("@pi_BrandId", BrandId)).ToList<OutletList>();
+                    foreach (var item in lstOutlet)
+                    {
+                        outletlist.Add(new SelectListItem
+                        {
+                            Text = item.OutletName,
+                            Value = Convert.ToString(item.OutletId)
+                        });
+                    }
+
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex);
+            }
+            return outletlist;
+
         }
 
     }
