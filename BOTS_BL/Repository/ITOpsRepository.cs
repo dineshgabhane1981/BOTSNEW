@@ -164,14 +164,51 @@ namespace BOTS_BL.Repository
             try
             {
                 CustomerDetail objCustomerDetail = new CustomerDetail();
+                List<TransactionMaster> lstObjTxn = new List<TransactionMaster>();
+                List<PointsExpiry> lstobjpoints = new List<PointsExpiry>();            
+                TransferPointsDetail objtransferPointsDetail = new TransferPointsDetail();
+                
                 string connStr = objCustRepo.GetCustomerConnString(GroupId);
                 using (var contextNew = new BOTSDBContext(connStr))
                 {
+                    
                     var objExisting= contextNew.CustomerDetails.Where(x => x.MobileNo == MobileNo).FirstOrDefault();
                     if (objExisting == null)
                     {
                         objCustomerDetail = contextNew.CustomerDetails.Where(x => x.CustomerId == CustomerId).FirstOrDefault();
+                        string oldno = objCustomerDetail.MobileNo;
                         objCustomerDetail.MobileNo = MobileNo;
+
+                       lstObjTxn = contextNew.TransactionMasters.Where(x => x.CustomerId == CustomerId).Take(10000).ToList(); 
+                        if (lstObjTxn != null)
+                        {
+                            foreach (var trans in lstObjTxn)
+                            {
+                                trans.MobileNo = MobileNo;
+                                contextNew.TransactionMasters.AddOrUpdate(trans);
+                                contextNew.SaveChanges();
+                            }
+                        }
+
+                        lstobjpoints = contextNew.PointsExpiries.Where(x => x.CustomerId == CustomerId).Take(10000).ToList();
+                        if (lstobjpoints != null)
+                        {
+                            foreach (var points in lstobjpoints)
+                            {
+                                points.MobileNo = MobileNo;
+                                contextNew.PointsExpiries.AddOrUpdate(points);
+                                contextNew.SaveChanges();
+                            }
+
+                        }
+                       
+                        objtransferPointsDetail.NewMobileNo = MobileNo;
+                        objtransferPointsDetail.OldMobileNo = oldno;
+                        objtransferPointsDetail.GroupId = GroupId;
+                        objtransferPointsDetail.Datetime = DateTime.Now;
+                        objtransferPointsDetail.Points = objCustomerDetail.Points;
+                        contextNew.TransferPointsDetails.AddOrUpdate(objtransferPointsDetail);
+                        contextNew.SaveChanges();
 
                         contextNew.CustomerDetails.AddOrUpdate(objCustomerDetail);
                         contextNew.SaveChanges();

@@ -1,3 +1,4 @@
+using BOTS_BL.Models;
 using System;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity;
@@ -25,7 +26,8 @@ namespace BOTS_BL.Models
         public virtual DbSet<TransactionMaster> TransactionMasters { get; set; }
         public virtual DbSet<TransactionTypeMaster> TransactionTypeMasters { get; set; }
         public virtual DbSet<StoreDetail> StoreDetails { get; set; }
-
+        public virtual DbSet<TransferPointsDetail> TransferPointsDetails { get; set; }
+        public virtual DbSet<PointsExpiry> PointsExpiries { get; set; }
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             modelBuilder.Entity<LoginDetail>()

@@ -52,7 +52,7 @@ namespace WebApp.Controllers
         public ActionResult PointsExpiry()
         {
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
-            PointExpiry objPointExpiry = new PointExpiry();
+            PointExpiryTmp objPointExpiry = new PointExpiryTmp();
             objPointExpiry = RR.GetPointExpiryData(userDetails.GroupId, DateTime.Now.Month, DateTime.Now.Year, userDetails.connectionString);
             
             List<SelectListItem> MonthList = new List<SelectListItem>();            
@@ -96,7 +96,7 @@ namespace WebApp.Controllers
         public JsonResult GetPointsExpiryDataResult(int month, int year)
         {
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
-            PointExpiry objPointExpiry = new PointExpiry();
+            PointExpiryTmp objPointExpiry = new PointExpiryTmp();
             objPointExpiry = RR.GetPointExpiryData(userDetails.GroupId, month, year, userDetails.connectionString);
             return new JsonResult() { Data = objPointExpiry, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }

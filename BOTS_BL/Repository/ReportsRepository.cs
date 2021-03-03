@@ -82,8 +82,6 @@ namespace BOTS_BL.Repository
 
         }
 
-
-
         public List<OutletWise> GetOutletWiseList(string GroupId, string DateRangeFlag, string FromDate, string ToDate, string connstr)
         {
             List<OutletWise> lstOutletWise = new List<OutletWise>();
@@ -132,19 +130,19 @@ namespace BOTS_BL.Repository
             return lstOutletWiseTransaction;
         }
 
-        public PointExpiry GetPointExpiryData(string GroupId, int month,int year, string connstr)
+        public PointExpiryTmp GetPointExpiryData(string GroupId, int month,int year, string connstr)
         {
-            PointExpiry pointExpiry = new PointExpiry();
+            PointExpiryTmp pointExpiry = new PointExpiryTmp();
             try
             {
                 using (var context = new BOTSDBContext(connstr))
                 {
-                    pointExpiry = context.Database.SqlQuery<PointExpiry>("sp_BOTS_PointsExpiry @pi_GroupId, @pi_Date, @pi_LoginId, @pi_Month, @pi_Year",
+                    pointExpiry = context.Database.SqlQuery<PointExpiryTmp>("sp_BOTS_PointsExpiry @pi_GroupId, @pi_Date, @pi_LoginId, @pi_Month, @pi_Year",
                         new SqlParameter("@pi_GroupId", GroupId),
                         new SqlParameter("@pi_Date", DateTime.Now.ToShortDateString()),
                         new SqlParameter("@pi_LoginId", ""),
                         new SqlParameter("@pi_Month", month),
-                        new SqlParameter("@pi_Year", year)).FirstOrDefault<PointExpiry>();                    
+                        new SqlParameter("@pi_Year", year)).FirstOrDefault<PointExpiryTmp>();                    
                 }
             }
             catch (Exception ex)
@@ -233,8 +231,8 @@ namespace BOTS_BL.Repository
                 {
                     celebrationTxnsData = context.Database.SqlQuery<CelebrationsMoreDetails>("sp_BOTS_Celebrate1 @pi_GroupId, @pi_Date, @pi_LoginId, @pi_Month,@pi_Type",
                         new SqlParameter("@pi_GroupId", GroupId),
-                        new SqlParameter("@pi_Date", DateTime.Now.ToShortDateString()),
-                        new SqlParameter("@pi_LoginId", ""),
+                          new SqlParameter("@pi_Date", DateTime.Now.ToString("yyyy-MM-dd")),
+                          new SqlParameter("@pi_LoginId", ""),
                         new SqlParameter("@pi_Month", month),
                         new SqlParameter("@pi_Type", type)).ToList<CelebrationsMoreDetails>();
                 }

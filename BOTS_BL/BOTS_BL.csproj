@@ -163,6 +163,7 @@
     <Compile Include="Models\ITOps\CustomerDetail.cs" />
     <Compile Include="Models\ITOps\MemberData.cs" />
     <Compile Include="Models\ITOps\OTPMaintenance.cs" />
+    <Compile Include="Models\ITOps\PointsExpiry.cs" />
     <Compile Include="Models\ITOps\ResetSecurityKey.cs" />
     <Compile Include="Models\ITOps\SPResponse.cs" />
     <Compile Include="Models\ITOps\TransactionMaster.cs" />
@@ -179,8 +180,9 @@
     <Compile Include="Models\Reports\MemberSearch.cs" />
     <Compile Include="Models\Reports\OutletWise.cs" />
     <Compile Include="Models\Reports\OutletwiseTransaction.cs" />
-    <Compile Include="Models\Reports\PointExpiry.cs" />
+    <Compile Include="Models\Reports\PointExpiryTmp.cs" />
     <Compile Include="Models\StoreDetail.cs" />
+    <Compile Include="Models\TransferPointsDetail.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repository\CustomerRepository.cs" />
     <Compile Include="Repository\DashboardRepository.cs" />
