@@ -5,12 +5,14 @@ using System.Web;
 using System.Web.Mvc;
 using BOTS_BL.Models;
 using BOTS_BL.Repository;
+using BOTS_BL;
 
 namespace WebApp.Controllers
 {
     public class LoginController : Controller
     {
         LoginRepository LR = new LoginRepository();
+        Exceptions newexception = new Exceptions();
         // GET: Login
         public ActionResult Index()
         {
@@ -39,6 +41,7 @@ namespace WebApp.Controllers
             }
             catch (Exception ex)
             {
+                newexception.AddException(ex);
                 TempData["InvalidUserMessage"] = ex.Message;
                 return RedirectToAction("Index");
             }

@@ -54,7 +54,7 @@ namespace BOTS_BL.Models
         [StringLength(500)]
         public string Logo { get; set; }
 
-        public int CreatedBy { get; set; }
+        public long? CreatedBy { get; set; }
 
         public DateTime CreatedDate { get; set; }
 

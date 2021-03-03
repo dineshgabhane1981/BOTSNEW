@@ -215,7 +215,7 @@
                                                     </tr>
                                                     <tr>
                                                         <td style="padding:10px;">Transaction Date</td>
-                                                        <td style="padding:10px;"><input type="text" id="dtEnrolledOn2" class="input50"/></td>
+                                                        <td style="padding:10px;"><input type="text" id="dtEnrolledOn2" class="input50" /></td>
                                                     </tr>
                                                 </table>
                                             </div>
@@ -351,7 +351,7 @@
                                                 <input type="radio" name="first_item3" style="margin-left:30px;" checked id="rbtnNOSMS3" /> Don't Send SMS
 
                                                 <input type="radio" name="first_item9" style="margin-left:30px;" checked id="rbtnRedeem" /> Redeem
-                                                <input type="radio" name="first_item9" style="margin-left:30px;"  id="rbtnDeduct" /> Deduct
+                                                <input type="radio" name="first_item9" style="margin-left:30px;" id="rbtnDeduct" /> Deduct
                                             </div>
                                             <div style="display:flex; height:500px;">
                                                 <input type="hidden" id="hdnCustomerId3" />
@@ -436,7 +436,7 @@
                                                     </tr>
                                                     <tr>
                                                         <td style="padding:10px;">Transaction Date</td>
-                                                        <td style="padding:10px;"><input type="text" id="dtTransaction1" class="input50"/></td>
+                                                        <td style="padding:10px;"><input type="text" id="dtTransaction1" class="input50" /></td>
                                                     </tr>
                                                 </table>
                                             </div>
@@ -537,15 +537,11 @@
                                                             <th colspan="2" style="padding:10px;text-align:center;">Bulk Upload</th>
                                                         </tr>
                                                         <tr>
-                                                            <td style="padding:10px;">
-                                                                Customer Bulk Upload data
-
-                                                            </td>
+                                                            <td style="padding:10px;">Customer Bulk Upload data</td>
 
                                                             <td style="padding:10px;">
                                                                 <input type="file" id="file" class="input50" style="width:80%" />
                                                             </td>
-
                                                         </tr>
                                                         <tr>
                                                             <td style="padding:10px;">Upload Source Type</td>
@@ -558,30 +554,15 @@
                                                             </td>
 
                                                         </tr>
-                                                        @*<tr>
-                    <td style="padding:10px;">
-                        Upload Completed
-
-                    </td>
-
-                    <td style="padding:10px;">
-                    </td>
-
-                </tr>*@
                                                         <tr>
                                                             <td style="padding:10px">
-                                                                <a href="#" target="_blank" onclick="DownloadFile();" style="text-decoration-color: blue">DownLoad Sample File</a>
-
+                                                                <a href="#" target="_blank" onclick="DownloadFile();" style="color: blue">DownLoad Sample File</a>
                                                             </td>
                                                             <td>
                                                             </td>
                                                         </tr>
-
-
                                                     </table>
-
                                                 </div>
-
                                             </div>
                                         </div>
                                     </div>
@@ -925,34 +906,28 @@
                                 <div class="multisteps-form__panel shadow p-4 list-box bg-white" id="sec9" data-animation="scaleIn">
                                     <h4 class="multisteps-form__title" style="color:blue;">Reset Security Key</h4><br />
                                     <div class="multisteps-form__content" style="display:flex;">
-                                      <div class="multisteps-form__content">
-                                        <div style="display:flex; height:auto !important;margin-top:50px;">
-                                            <table border="2" cellpadding="5" cellspacing="5">
-                                                <tr>
-                                                </tr>
-                                                <tr>
-                                                    <td style="padding:10px;">Select Brand</td>
-                                                    <td style="padding:10px;width:200px;">
-                                                        @Html.DropDownList("Branch", new SelectList(ViewBag.BranchList, "Value", "Text"), "Select Brand", htmlAttributes: new {onchange = "GetOutletList(this.value);", @class = "input50", @id = "ddlBranchList" })
+                                        <div class="multisteps-form__content">
+                                            <div style="display:flex; height:auto !important;margin-top:50px;">
+                                                <table border="2" cellpadding="5" cellspacing="5">
+                                                    <tr>
+                                                    </tr>
+                                                    <tr>
+                                                        <td style="padding:10px;">Select Brand</td>
+                                                        <td style="padding:10px;width:200px;">
+                                                            @Html.DropDownList("Branch", new SelectList(ViewBag.BranchList, "Value", "Text"), "Select Brand", htmlAttributes: new { onchange = "GetOutletList(this.value);", @class = "input50", @id = "ddlBranchList" })
 
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td style="padding:10px;">Select Outlet</td>
-                                                    <td style="padding:10px;width:300px;">
-                                                        @*@Html.DropDownList("Outlet", new SelectList(ViewBag.OutletListByBrand, "Value", "Text"), "Select Outlet", htmlAttributes: new { onchange = "OnChangeResetKey(this.value);", @class = "input50", @id = "ddlOutletList1" })*@
-                                                        <select id="ddlOutletListby" class="input50" onchange="OnChangeResetKey(this.value);">
-                                                            
-                                                        </select>
-                                                    </td>
-                                                </tr>
-
-
-                                            </table>
-                                            
-                                        </div>
-                                      
-                                       <div class="row mt-3" id="dvActivityData1" style="height:800px;">
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td style="padding:10px;">Select Outlet</td>
+                                                        <td style="padding:10px;width:300px;">
+                                                            <select id="ddlOutletListby" class="input50" onchange="OnChangeResetKey(this.value);">
+                                                            </select>
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </div>
+                                            <div class="row mt-3" id="dvActivityData1" style="height:800px;">
                                                 <div class="table-responsive">
                                                     <table class="table" id="activityTable1">
                                                         <thead style="text-align:center;">
@@ -966,33 +941,34 @@
                                                         </tbody>
                                                     </table>
                                                 </div>
-                                            </div>  
-                                       </div>
-                                </div>
-                                <!--OTP-->
-                                <div class="multisteps-form__panel shadow p-4 list-box bg-white" id="sec10" data-animation="scaleIn">
-                                    <h4 class="multisteps-form__title" style="color:blue;">OTP</h4><br />
-                                    <div class="multisteps-form__content">
-                                        <div>
-                                            <label style="padding-right:5px;padding-top:10px;">Enter Mobile Number </label>
-                                            <input type="number" id="txtMobileNoOTP" class="input50" />
-                                            <button type="button" id="btnGetOTP" style="margin-left:15px;margin-top:10px;" class="btn btn-primary">Go</button>
+                                            </div>
                                         </div>
+                                    </div>
+                                    <!--OTP-->
+                                    <div class="multisteps-form__panel shadow p-4 list-box bg-white" id="sec10" data-animation="scaleIn">
+                                        <h4 class="multisteps-form__title" style="color:blue;">OTP</h4><br />
+                                        <div class="multisteps-form__content">
+                                            <div>
+                                                <label style="padding-right:5px;padding-top:10px;">Enter Mobile Number </label>
+                                                <input type="number" id="txtMobileNoOTP" class="input50" />
+                                                <button type="button" id="btnGetOTP" style="margin-left:15px;margin-top:10px;" class="btn btn-primary">Go</button>
+                                            </div>
 
-                                        <div>
-                                            <br />
-                                            <table border="2" cellpadding="5" cellspacing="5" id="tblOTPDetails">
-                                                <tr>
-                                                    <th style="padding:10px;text-align:center;">Outlet Name</th>
-                                                    <th style="padding:10px;text-align:center;">Datetime</th>
-                                                    <th style="padding:10px;text-align:center;">OTP</th>
-                                                </tr>
-                                                <tr>
-                                                    <td style="padding:10px;"><span id="spnOutletNameOTP"></span></td>
-                                                    <td style="padding:10px;"><span id="spnDateTimeOTP"></span></td>
-                                                    <td style="padding:10px;"><b><span id="spnOTP"></span></b></td>
-                                                </tr>
-                                            </table>
+                                            <div>
+                                                <br />
+                                                <table border="2" cellpadding="5" cellspacing="5" id="tblOTPDetails">
+                                                    <tr>
+                                                        <th style="padding:10px;text-align:center;">Outlet Name</th>
+                                                        <th style="padding:10px;text-align:center;">Datetime</th>
+                                                        <th style="padding:10px;text-align:center;">OTP</th>
+                                                    </tr>
+                                                    <tr>
+                                                        <td style="padding:10px;"><span id="spnOutletNameOTP"></span></td>
+                                                        <td style="padding:10px;"><span id="spnDateTimeOTP"></span></td>
+                                                        <td style="padding:10px;"><b><span id="spnOTP"></span></b></td>
+                                                    </tr>
+                                                </table>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -1003,11 +979,10 @@
             </div>
         </div>
     </div>
-</div>
 
-<script src="~/Content/scriptSteps.js"></script>
+    <script src="~/Content/scriptSteps.js"></script>
 
-<script>
+    <script>
 
 
     function DownloadFile() {
@@ -2074,7 +2049,9 @@
 
     function GetOutletList(brandId) {
         $("#divLoader").show();
+        $("#ddlOutletListby").empty();
         var ddlCustomers = $("#ddlOutletListby");
+     
         $.ajax({
             type: "POST",
             url: '@Url.Action("GetOutletByBrandId", "ITOperations")',//"/ITOperations/GetChangeNameData",
@@ -2093,7 +2070,7 @@
                             data[i].Value + '">' + data[i].Text + '</option>';
                         console.log(optionhtml);
                         ddlCustomers.append(optionhtml);
-                    });                   
+                    });
                 }
                  else {
                     toastr.error('OutLets are not present');
@@ -2510,33 +2487,33 @@
 
     }
 
-</script>
-<script src="~/Scripts/jquery-ui-1.12.1.js"></script>
-<script src="~/Scripts/jquery-ui-1.12.1.min.js"></script>
-<link href="~/Content/themes/base/jquery-ui.min.css" rel="stylesheet" />
-<link href="~/Content/themes/base/jquery-ui.css" rel="stylesheet" />
+    </script>
+    <script src="~/Scripts/jquery-ui-1.12.1.js"></script>
+    <script src="~/Scripts/jquery-ui-1.12.1.min.js"></script>
+    <link href="~/Content/themes/base/jquery-ui.min.css" rel="stylesheet" />
+    <link href="~/Content/themes/base/jquery-ui.css" rel="stylesheet" />
 
-<style>
+    <style>
 
-    input::-webkit-outer-spin-button,
-    input::-webkit-inner-spin-button {
-        -webkit-appearance: none;
-        margin: 0;
-    }
+        input::-webkit-outer-spin-button,
+        input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
 
-    input[type="number"] {
-        -moz-appearance: textfield;
-    }
+        input[type="number"] {
+            -moz-appearance: textfield;
+        }
 
-    table.dataTable thead .sorting_asc {
-        background: url("https://cdn.datatables.net/1.10.0/images/sort_asc.png") no-repeat center left;
-    }
+        table.dataTable thead .sorting_asc {
+            background: url("https://cdn.datatables.net/1.10.0/images/sort_asc.png") no-repeat center left;
+        }
 
-    table.dataTable thead .sorting_desc {
-        background: url("https://cdn.datatables.net/1.10.0/images/sort_desc.png") no-repeat center left;
-    }
+        table.dataTable thead .sorting_desc {
+            background: url("https://cdn.datatables.net/1.10.0/images/sort_desc.png") no-repeat center left;
+        }
 
-    table.dataTable thead .sorting {
-        background: url("https://cdn.datatables.net/1.10.0/images/sort_both.png") no-repeat center left;
-    }
-</style>
+        table.dataTable thead .sorting {
+            background: url("https://cdn.datatables.net/1.10.0/images/sort_both.png") no-repeat center left;
+        }
+    </style>
