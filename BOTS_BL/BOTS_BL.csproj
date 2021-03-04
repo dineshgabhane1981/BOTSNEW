@@ -137,6 +137,7 @@
     <Compile Include="Models\ChitaleModel\ClusterMaster.cs" />
     <Compile Include="Models\ChitaleModel\CustomerDetail.cs" />
     <Compile Include="Models\ChitaleModel\CustomerMapping.cs" />
+    <Compile Include="Models\ChitaleModel\Dashboardsummary.cs" />
     <Compile Include="Models\ChitaleModel\ErrorServerLog.cs" />
     <Compile Include="Models\ChitaleModel\InvoiceDetail.cs" />
     <Compile Include="Models\ChitaleModel\InvoiceMaster.cs" />
