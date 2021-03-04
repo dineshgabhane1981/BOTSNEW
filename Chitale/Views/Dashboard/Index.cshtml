@@ -3,6 +3,377 @@
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.2.2/Chart.bundle.min.js"></script>
 
-<h2>Index</h2>
+<div class="app-main__inner">
+    <div class="row">
+        <div style="width:75%;  padding:10px; background-color:white;float:left;">
+            <div class="card-header-tab card-header-tab-animation card-header" style="margin-bottom:10px;">
+                <div class="card-header-title">
+                    <i class="header-icon lnr-apartment icon-gradient bg-love-kiss"> </i>
+                    OUTLET ENROLMENTS
+                </div>
+                <ul class="nav">
+                    <li class="nav-item"><a href="javascript:void(0);" onclick="showSummerySelection('1')" id="summeryBTD" class="active nav-link">BTD</a></li>
+                    <li class="nav-item"><a href="javascript:void(0);" onclick="showSummerySelection('0')" id="summeryCurrentDate" class="nav-link second-tab-toggle">Current Month</a></li>
+                </ul>
+            </div>
 
+
+            <div class="row">
+                <div class="col-md-6 col-xl-4">
+                    <div class="card mb-3 widget-content bg-midnight-bloom">
+                        <div class="widget-content-wrapper text-white">
+                            <div class="widget-content-left">
+                                <div class="widget-heading" style="font-size:17px;">
+                                    Order Points (Purchase)
+                                </div>
+                                <div class="widget-numbers text-white"><span id="spnPurchaseOrderPoints"></span></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-xl-4">
+                    <div class="card mb-3 widget-content bg-arielle-smile">
+                        <div class="widget-content-wrapper text-white">
+                            <div class="widget-content-left">
+                                <div class="widget-heading" style="font-size:17px;">
+                                    Order Points (Sales)
+                                </div>
+                                <div class="widget-numbers text-white"><span id="spnSalesOrderPoints"></span></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-xl-4">
+                    <div class="card mb-3 widget-content bg-grow-early">
+                        <div class="widget-content-wrapper text-white">
+                            <div class="widget-content-left">
+                                <div class="widget-heading" style="font-size:17px;">
+                                    Redeemed Points
+                                </div>
+                                <div class="widget-numbers text-white"><span id="spnRedeemedPoints"></span></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 col-xl-4">
+                    <div class="card mb-3 widget-content bg-midnight-bloom">
+                        <div class="widget-content-wrapper text-white">
+                            <div class="widget-content-left">
+                                <div class="widget-heading" style="font-size:17px;">
+                                    Add On Points
+                                </div>
+                                <div class="widget-numbers text-white"><span id="spnAddOnPoints"></span></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-xl-4">
+                    <div class="card mb-3 widget-content bg-arielle-smile">
+                        <div class="widget-content-wrapper text-white">
+                            <div class="widget-content-left">
+                                <div class="widget-heading" style="font-size:17px;">
+                                    Lost Opp Points
+                                </div>
+                                <div class="widget-numbers text-white"><span id="spnLostPoints"></span></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-xl-4">
+                    <div class="card mb-3 widget-content bg-grow-early">
+                        <div class="widget-content-wrapper text-white">
+                            <div class="widget-content-left">
+                                <div class="widget-heading" style="font-size:17px;">
+                                    Total Balance Points
+                                </div>
+                                <div class="widget-numbers text-white"><span id="spnTotalPointsBalance"></span></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div style="float:right; width:23%;">
+            <div style="width:100%; text-align:center; background-color:white; margin-left:10px;  border-radius:100%;box-shadow:3px 3px 3px 3px lightgray;">
+                <img src="~/Content/assets/images/Rank.png" />
+                <br />
+                <span style="font-size:30px; font-weight:bold;">Your Rank </span>
+                <br /><span style="font-size:30px; color:deepskyblue; font-weight:bold;">12</span><br />
+                <span style="font-size:18px; color:red; font-weight:bold;">Last Month Rank</span>
+                <br /><span style="font-size:18px; color:red; font-weight:bold;">9</span>
+            </div>
+            <div style="width:100%; padding:10px; margin-top:10px; margin-left:10px; background-color:white; text-align:center;">
+                <table>
+                    <tr style="border-bottom:1px solid grey;">
+                        <td colspan="2">
+                            If you had no Lost Opportunity Points, your status would be
+                        </td>
+                    </tr>
+                    <tr style="border-bottom:1px solid grey;">
+                        <td>Point Balance</td>
+                        <td>10000</td>
+                    </tr>
+                    <tr style="border-bottom:1px solid grey;">
+                        <td>Your Rank</td>
+                        <td>10</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="row mt-3">
+        <div class="col-md-12 col-lg-6">
+            <div class="mb-3 card">
+                <div class="card-header-tab card-header-tab-animation card-header">
+                    <div class="card-header-title">
+                        <i class="header-icon lnr-apartment icon-gradient bg-love-kiss"> </i>
+                        LOST OPPORTUNITY POINTS
+                    </div>
+                    <ul class="nav">
+                        <li class="nav-item"><a href="javascript:void(0);" onclick="showLostBTD('1');" id="lostBTD" class="active nav-link">BTD</a></li>
+                        <li class="nav-item"><a href="javascript:void(0);" onclick="showLostBTD('0');" id="lostCurrentMonth" class="nav-link second-tab-toggle">Current Month</a></li>
+                    </ul>
+                </div>
+                <div class="card-body">
+                    <div class="tab-content">
+                        <div class="tab-pane fade show active" id="tabs-eg-77">
+                            <div class="card mb-3 widget-chart widget-chart2 text-left w-100">
+                                <div class="widget-chat-wrapper-outer">
+                                    <div class="widget-chart-wrapper widget-chart-wrapper-lg opacity-10 m-0" id="containerLostOpp">
+                                        <canvas id="cvLostOpp"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-12 col-lg-6">
+            <div class="mb-3 card">
+                <div class="card-header-tab card-header-tab-animation card-header">
+                    <div class="card-header-title">
+                        <i class="header-icon lnr-apartment icon-gradient bg-love-kiss"> </i>
+                        TGT vs ACH
+                    </div>
+                    <ul class="nav">
+                        <li class="nav-item"><a href="javascript:void(0);" onclick="showTGTCurrent('1');" id="tgtCurrent" class="active nav-link">Current Month</a></li>
+                        <li class="nav-item"><a href="javascript:void(0);" onclick="showTGTCurrent('0');" id="tgtLast" class="nav-link second-tab-toggle">Last Month</a></li>
+                    </ul>
+                </div>
+                <div class="card-body">
+                    <div class="tab-content">
+                        <div class="tab-pane fade show active" id="tabs-eg-77">
+                            <div class="card mb-3 widget-chart widget-chart2 text-left w-100">
+                                <div class="widget-chat-wrapper-outer">
+                                    <div class="widget-chart-wrapper widget-chart-wrapper-lg opacity-10 m-0" id="containerTgt">
+                                        <canvas id="cvTgt"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        showSummerySelection('1');
+        showLostBTD('1');
+        showTGTCurrent('1');
+    });
+    
+    function showSummerySelection(flag) {
+
+        $.ajax({
+            type: "POST",
+            url: "Dashboard/GetDashboardSummeryData",
+            data: "{'Flag': '" + flag + "'}",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {                
+                if (response != null) {
+                    $("#spnPurchaseOrderPoints").text(response.PurchaseOrderPointsStr);
+                    $("#spnSalesOrderPoints").text(response.SalesOrderPointsStr);
+                    $("#spnRedeemedPoints").text(response.RedeemedPointsStr);
+                    $("#spnAddOnPoints").text(response.AddOnPointsStr);
+                    $("#spnLostPoints").text(response.LostPointsStr);
+                    $("#spnTotalPointsBalance").text(response.TotalPointsBalanceStr);
+                    
+                    $("#divLoader").hide();
+                }
+            },
+            failure: function (response) {
+                $("#divLoader").hide();
+            },
+            error: function (response) {
+                $("#divLoader").hide();
+            }
+        });
+
+        if (flag == '1') {
+            $("#summeryBTD").addClass("active");
+            $("#summeryCurrentDate").removeClass("active");
+        }
+        else {
+            $("#summeryBTD").removeClass("active");
+            $("#summeryCurrentDate").addClass("active");
+        }
+    }
+
+    function showLostBTD(flag) {
+        $("#divLoader").show();
+        $.ajax({
+            type: "POST",
+            url: "Dashboard/GetDashboardLostOppData",
+            data: "{'profileFlag': '" + flag + "'}",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {                
+                if (response != null) {
+                    $('#cvLostOpp').remove(); // this is my <canvas> element
+                    $('#containerLostOpp').append('<canvas id="cvLostOpp"><canvas>');
+                    var options = {
+                        rotation: (-0.5 * Math.PI) - (-90 / 180 * Math.PI),
+                        legend: {
+                            display: true,
+                            position: 'bottom'
+                        }
+                    }
+                                       
+                    var data1 = response[0];
+                    var data2 = response[1];   
+                    var data3 = response[2];   
+                    var data4 = response[3];   
+                    console.log(data1)
+                    console.log(data2)
+                    console.log(data3)
+                    console.log(data4)
+                    var data = {
+                        datasets: [{
+                            data: [...response],
+                            backgroundColor: ["#f990a7", "#aad2ed", "#FFFF00","#0000FF"]
+                        }],
+
+                        // These labels appear in the legend and in the tooltips when hovering different arcs
+                        labels: [
+                            "Late Order",
+                            "Cancel Order",
+                            "Tgt Vs Ach",
+                            "SCM Order"
+                        ],
+
+                    };
+
+                    var ctx4 = document.getElementById("cvLostOpp").getContext("2d");
+                    window.myBar = new Chart(ctx4, {
+                        type: 'pie',
+                        data: data,
+                        options: options
+
+                    });
+                    $("#divLoader").hide();
+                }
+            },
+            failure: function (response) {
+                $("#divLoader").hide();
+            },
+            error: function (response) {
+                $("#divLoader").hide();
+            }
+        });
+
+        if (flag == '1') {
+            $("#lostBTD").addClass("active");
+            $("#lostCurrentMonth").removeClass("active");
+            
+        }
+        else {
+            $("#lostBTD").removeClass("active");
+            $("#lostCurrentMonth").addClass("active");
+           
+        }
+
+    }
+
+    function showTGTCurrent(flag) {
+        $("#divLoader").show();
+        $.ajax({
+            type: "POST",
+            url: "Dashboard/GetTargetData",
+            data: "{'profileFlag': '" + flag + "'}",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                console.log(response[0]);
+                console.log(response[1]);
+                if (response != null) {
+                    var list1 = response[0];
+                    var list2 = response[1];
+                    $('#cvTgt').remove(); // this is my <canvas> element
+                    $('#containerTgt').append('<canvas id="cvTgt"><canvas>');
+                    var data = {
+                        labels: ["Value-Wise", "Volume-Wise"],
+                        datasets: [
+                            {
+                                label: "Target",
+                                backgroundColor: "blue",
+                                data: [...list1]
+                            },
+                            {
+                                label: "Achievement",
+                                backgroundColor: "orange",
+                                data: [...list2]
+                            }
+                        ]
+                    };
+                    var ctx = document.getElementById("cvTgt").getContext("2d");
+                    var myBarChart = new Chart(ctx, {
+                        type: 'bar',
+                        data: data,
+                        options: {
+                            barValueSpacing: 20,
+                            scales: {
+                                yAxes: [{
+                                    ticks: {
+                                        min: 0,
+                                    }
+                                }]
+                            }
+                        }
+                    });
+                    $("#divLoader").hide();
+                }
+            },
+            failure: function (response) {
+                $("#divLoader").hide();
+            },
+            error: function (response) {
+                $("#divLoader").hide();
+            }
+        });
+
+        if (flag == '1') {
+            $("#tgtCurrent").addClass("active");
+            $("#tgtLast").removeClass("active");
+
+        }
+        else {
+            $("#tgtCurrent").removeClass("active");
+            $("#tgtLast").addClass("active");
+
+        }
+
+    }
+</script>

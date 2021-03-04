@@ -43,30 +43,9 @@
             </button>
         </span>
     </div>    <div class="app-header__content">
-        <div class="app-header-left">
-            <div class="search-wrapper">
-                <div class="input-holder">
-                    <input id="txtMember" type="text" class="search-input" placeholder="Search a Member">
-                    <button id="btnMemberSearch" type="submit" class="search-icon"><span></span></button>
-                </div>
-                <button id="btnCloseMemberSearch" class="close"></button>
-            </div>
-            <ul class="header-menu nav">
-                <li class="dropdown nav-item">
-                    <a href="javascript:void(0);" class="nav-link" style="color:white !important;">
-                        <i class="nav-link-icon fa fa-cog"></i>
-                        Operations
-                    </a>
-                </li>
-                <li class="btn-group nav-item">
-                    <a href="javascript:void(0);" class="nav-link" style="color:white !important;">
-                        <i class="nav-link-icon fa fa-edit"></i>
-                        Refer & Earn
-                    </a>
-                </li>
-
-            </ul>
-        </div>
+                  <div class="app-header-left" style="font-size:16px; font-weight:bold;">
+                      @userDetails.CustomerName | @userDetails.CustomerType | @userDetails.CustomerId | @userDetails.Cluster | @userDetails.SubCluster | @userDetails.City
+                  </div>
         <div class="app-header-right">
             <div class="header-btn-lg pr-0">
                 <div class="widget-content p-0">

@@ -21,115 +21,97 @@ namespace BOTS_BL.Repository
             return objCustomerDetail;
         }
 
-        public List<TransactionMaster> GetTransactionDetails(string CustomerId,string CustomerType,string startdt,string enddt)
+        public Dashboardsummary GetSummeryDetails(string CustomerId, bool IsBTD)
         {
+            Dashboardsummary objDashboardsummary = new Dashboardsummary();
             List<TransactionMaster> objtransactionmaster = new List<TransactionMaster>();
-            using(var context = new ChitaleDBContext())
-            {
-                objtransactionmaster = context.Database.SqlQuery<TransactionMaster>("sp_GetTransactionMasterDetailsByDate @customerId, @customerType, @startDt, @endDt",
-                        new SqlParameter("@customerId", CustomerId),
-                        new SqlParameter("@customerType", CustomerType),
-                        new SqlParameter("@startDt", startdt),
-                        new SqlParameter("@endDt", enddt)).ToList<TransactionMaster>();
-
-                
-            }
-
-            return objtransactionmaster;
-        }
-
-        public decimal GetOrderPointsPurchase(string CustomerId, string CustomerType, string startdt, string enddt)
-        {
-            List<TransactionMaster> objtransactionmaster = new List<TransactionMaster>();
-            // List<Dashboardsummary> objdashboardsummary = new List<Dashboardsummary>();
-            decimal sumorder =0;
             using (var context = new ChitaleDBContext())
             {
-                objtransactionmaster = context.Database.SqlQuery<TransactionMaster>("sp_GetTransactionMasterDetailsByDate @customerId, @customerType, @startDt, @endDt",
-                        new SqlParameter("@customerId", CustomerId),
-                        new SqlParameter("@customerType", CustomerType),
-                        new SqlParameter("@startDt", startdt),
-                        new SqlParameter("@endDt", enddt)).ToList<TransactionMaster>();
-
-                sumorder = (decimal)objtransactionmaster.Where(x => x.TxnType == "Purchase").Sum(x => x.NormalPoints);
+                if (IsBTD)
+                {
+                    objtransactionmaster = context.TransactionMasters.Where(x => x.CustomerId == CustomerId).ToList();
+                }
+                else
+                {
+                    objtransactionmaster = context.TransactionMasters.Where(x => x.CustomerId == CustomerId && x.OrderDatetime.Value.Month == DateTime.Today.Month
+                    && x.OrderDatetime.Value.Year == DateTime.Today.Year).ToList();
+                }
+                if (objtransactionmaster != null)
+                {
+                    objDashboardsummary.PurchaseOrderPoints = (decimal)objtransactionmaster.Where(x => x.TxnType == "Purchase").Sum(x => x.NormalPoints);
+                    objDashboardsummary.SalesOrderPoints = (decimal)objtransactionmaster.Where(x => x.TxnType == "Sale").Sum(x => x.NormalPoints);
+                    objDashboardsummary.AddOnPoints = (decimal)objtransactionmaster.Sum(x => x.AddOnPoints);
+                    objDashboardsummary.RedeemedPoints = 0;
+                    objDashboardsummary.LostPoints = (decimal)objtransactionmaster.Sum(x => x.PenaltyPoints);
+                    var NormalPoints = (decimal)objtransactionmaster.Sum(x => x.NormalPoints);
+                    objDashboardsummary.TotalPointsBalance = (NormalPoints + objDashboardsummary.AddOnPoints) - objDashboardsummary.LostPoints;
+                }
             }
-
-            return sumorder;
+            return objDashboardsummary;
         }
 
-        public decimal GetRedeemPoints(string CustomerId, string CustomerType, string startdt, string enddt)
+        public DashboardLostOpp GetDashboardLostOppData(string CustomerId, bool IsBTD)
         {
+            DashboardLostOpp objDashboardLostOpp = new DashboardLostOpp();
             List<TransactionMaster> objtransactionmaster = new List<TransactionMaster>();
-            // List<Dashboardsummary> objdashboardsummary = new List<Dashboardsummary>();
-            var sumorder = 0;
             using (var context = new ChitaleDBContext())
             {
-                objtransactionmaster = context.Database.SqlQuery<TransactionMaster>("sp_GetTransactionMasterDetailsByDate @customerId, @customerType, @startDt, @endDt",
-                        new SqlParameter("@customerId", CustomerId),
-                        new SqlParameter("@customerType", CustomerType),
-                        new SqlParameter("@startDt", startdt),
-                        new SqlParameter("@endDt", enddt)).ToList<TransactionMaster>();
-
-                sumorder = (int)(decimal)objtransactionmaster.Where(x => x.TxnType == "Sale").Sum(x => x.NormalPoints);
+                if (IsBTD)
+                {
+                    objtransactionmaster = context.TransactionMasters.Where(x => x.CustomerId == CustomerId).ToList();
+                }
+                else
+                {
+                    objtransactionmaster = context.TransactionMasters.Where(x => x.CustomerId == CustomerId && x.OrderDatetime.Value.Month == DateTime.Today.Month
+                    && x.OrderDatetime.Value.Year == DateTime.Today.Year).ToList();
+                }
+                if (objtransactionmaster != null)
+                {
+                    objDashboardLostOpp.LateOrder= (decimal)objtransactionmaster.Where(x => x.TxnType == "Purchase").Sum(x => x.PenaltyPoints);
+                    objDashboardLostOpp.CancelOrder = (decimal)objtransactionmaster.Where(x => x.TxnType == "Cancel Order").Sum(x => x.PenaltyPoints);
+                    objDashboardLostOpp.TgtVsAch = (decimal)objtransactionmaster.Where(x => x.TxnType == "tgt vs ach").Sum(x => x.PenaltyPoints);
+                    objDashboardLostOpp.SCMOrder = (decimal)objtransactionmaster.Where(x => x.TxnType == "SCM").Sum(x => x.PenaltyPoints);
+                }
             }
-
-            return sumorder;
+            return objDashboardLostOpp;
         }
-        public decimal GetAddOnPoints(string CustomerId, string CustomerType, string startdt, string enddt)
+
+        public DashboardTarget GetTargetData(string CustomerId, bool IsCurrentMonth)
         {
-            List<TransactionMaster> objtransactionmaster = new List<TransactionMaster>();
-            // List<Dashboardsummary> objdashboardsummary = new List<Dashboardsummary>();
-            var sumorder = 0;
+            DashboardTarget objDashboardTarget = new DashboardTarget();
+            List<TargetMaster> objTargetMaster = new List<TargetMaster>();
             using (var context = new ChitaleDBContext())
             {
-                objtransactionmaster = context.Database.SqlQuery<TransactionMaster>("sp_GetTransactionMasterDetailsByDate @customerId, @customerType, @startDt, @endDt",
-                        new SqlParameter("@customerId", CustomerId),
-                        new SqlParameter("@customerType", CustomerType),
-                        new SqlParameter("@startDt", startdt),
-                        new SqlParameter("@endDt", enddt)).ToList<TransactionMaster>();
+                if (IsCurrentMonth)
+                {
+                    objTargetMaster = context.TargetMasters.Where(x => x.CustomerId == CustomerId && x.TargetFromDate.Value.Month == DateTime.Today.Month
+                     && x.TargetFromDate.Value.Year == DateTime.Today.Year).ToList();
+                }
+                else
+                {
+                    objTargetMaster = context.TargetMasters.Where(x => x.CustomerId == CustomerId && x.TargetFromDate.Value.Month == DateTime.Today.Month-1
+                     && x.TargetFromDate.Value.Year == DateTime.Today.Year).ToList();
 
-                sumorder = (int)(decimal)objtransactionmaster.Sum(x => x.AddOnPoints);
+                }
+                if (objTargetMaster != null)
+                {
+                    objDashboardTarget.TargetValueWise = (decimal)objTargetMaster.Sum(x => x.TargetProductAmt);
+                    objDashboardTarget.TargetVolumeWise = (decimal)objTargetMaster.Sum(x => x.TargetProductVolume);
+                    if (IsCurrentMonth)
+                    {
+                        objDashboardTarget.AchiveValueWise = 0;
+                        objDashboardTarget.AchiveVolumeWise = 0;
+                    }
+                    else
+                    {
+                        objDashboardTarget.AchiveValueWise = 0;
+                        objDashboardTarget.AchiveVolumeWise = 0;
+                    }
+                       
+                    
+                }
             }
-
-            return sumorder;
+            return objDashboardTarget;
         }
-        public decimal GetLostPoints(string CustomerId, string CustomerType, string startdt, string enddt)
-        {
-            List<TransactionMaster> objtransactionmaster = new List<TransactionMaster>();
-            // List<Dashboardsummary> objdashboardsummary = new List<Dashboardsummary>();
-            var sumorder = 0;
-            using (var context = new ChitaleDBContext())
-            {
-                objtransactionmaster = context.Database.SqlQuery<TransactionMaster>("sp_GetTransactionMasterDetailsByDate @customerId, @customerType, @startDt, @endDt",
-                        new SqlParameter("@customerId", CustomerId),
-                        new SqlParameter("@customerType", CustomerType),
-                        new SqlParameter("@startDt", startdt),
-                        new SqlParameter("@endDt", enddt)).ToList<TransactionMaster>();
-
-                sumorder = (int)(decimal)objtransactionmaster.Sum(x => x.PenaltyPoints);
-            }
-
-            return sumorder;
-        }
-        //public decimal GetTotalPoints(string CustomerId, string CustomerType, string startdt, string enddt)
-        //{
-        //    CustomerDetail objCustomerDetail = new CustomerDetail();
-        //    List<CustomerDetail> objtransactionmaster = new List<CustomerDetail>();
-        //    // List<Dashboardsummary> objdashboardsummary = new List<Dashboardsummary>();
-        //    var sumorder = 0;
-        //    using (var context = new ChitaleDBContext())
-        //    {
-        //        objtransactionmaster = context.Database.SqlQuery<CustomerDetail>("sp_GetTransactionMasterDetailsByDate @customerId, @customerType, @startDt, @endDt",
-        //                new SqlParameter("@customerId", CustomerId),
-        //                new SqlParameter("@customerType", CustomerType),
-        //                new SqlParameter("@startDt", startdt),
-        //                new SqlParameter("@endDt", enddt)).ToList<TransactionMaster>();
-
-        //        sumorder = (int)(decimal)objtransactionmaster.Sum(x => x.PenaltyPoints);
-        //    }
-
-        //    return sumorder;
-        //}
-
     }
 }
