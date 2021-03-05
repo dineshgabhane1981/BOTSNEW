@@ -39,4 +39,12 @@ namespace BOTS_BL.Models.ChitaleModel
         public decimal AchiveVolumeWise { get; set; }
 
     }
+
+    public class DashboardRank
+    {
+        public int CurrentRank { get; set; }
+        public int LastMonthRank { get; set; }
+        public decimal RankPoints { get; set; }
+        public int LostRank { get; set; }
+    }
 }

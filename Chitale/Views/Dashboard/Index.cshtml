@@ -11,7 +11,7 @@
             <div class="card-header-tab card-header-tab-animation card-header" style="margin-bottom:10px;">
                 <div class="card-header-title">
                     <i class="header-icon lnr-apartment icon-gradient bg-love-kiss"> </i>
-                    OUTLET ENROLMENTS
+                    SUMMARY
                 </div>
                 <ul class="nav">
                     <li class="nav-item"><a href="javascript:void(0);" onclick="showSummerySelection('1')" id="summeryBTD" class="active nav-link">BTD</a></li>
@@ -105,9 +105,9 @@
                 <img src="~/Content/assets/images/Rank.png" />
                 <br />
                 <span style="font-size:30px; font-weight:bold;">Your Rank </span>
-                <br /><span style="font-size:30px; color:deepskyblue; font-weight:bold;">12</span><br />
-                <span style="font-size:18px; color:red; font-weight:bold;">Last Month Rank</span>
-                <br /><span style="font-size:18px; color:red; font-weight:bold;">9</span>
+                <br /><span id="spnRank" style="font-size:30px; color:deepskyblue; font-weight:bold;"></span><br />
+                <span style="font-size:16px; color:red; font-weight:bold;">Last Month Rank</span>
+                <br /><span id="spnLastMonthRank" style="font-size:16px; color:red; font-weight:bold;"></span>
             </div>
             <div style="width:100%; padding:10px; margin-top:10px; margin-left:10px; background-color:white; text-align:center;">
                 <table>
@@ -118,11 +118,11 @@
                     </tr>
                     <tr style="border-bottom:1px solid grey;">
                         <td>Point Balance</td>
-                        <td>10000</td>
+                        <td><span id="spnRankPoints"></span></td>
                     </tr>
                     <tr style="border-bottom:1px solid grey;">
                         <td>Your Rank</td>
-                        <td>10</td>
+                        <td><span id="spnLostRank"></span></td>
                     </tr>
                 </table>
             </div>
@@ -189,9 +189,11 @@
 
 <script>
     $(document).ready(function () {
+        GetRankData();
         showSummerySelection('1');
         showLostBTD('1');
         showTGTCurrent('1');
+        
     });
     
     function showSummerySelection(flag) {
@@ -376,4 +378,33 @@
         }
 
     }
+
+    function GetRankData() {
+        $("#divLoader").show();
+        $.ajax({
+            type: "POST",
+            url: "Dashboard/GetRankData",
+            //data: "{'profileFlag': '" + flag + "'}",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                console.log(response);
+                $("#spnRank").text(response.CurrentRank);
+                $("#spnLastMonthRank").text(response.LastMonthRank);
+                $("#spnRankPoints").text(response.RankPoints);
+                $("#spnLostRank").text(response.LostRank);
+                $("#divLoader").hide();
+            },
+            failure: function (response) {
+                $("#divLoader").hide();
+            },
+            error: function (response) {
+                $("#divLoader").hide();
+            }
+        });
+
+        
+    }
+
+
 </script>

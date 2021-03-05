@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Data.Entity.Core.EntityClient;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
@@ -67,7 +69,7 @@ namespace BOTS_BL.Repository
                 }
                 if (objtransactionmaster != null)
                 {
-                    objDashboardLostOpp.LateOrder= (decimal)objtransactionmaster.Where(x => x.TxnType == "Purchase").Sum(x => x.PenaltyPoints);
+                    objDashboardLostOpp.LateOrder = (decimal)objtransactionmaster.Where(x => x.TxnType == "Purchase").Sum(x => x.PenaltyPoints);
                     objDashboardLostOpp.CancelOrder = (decimal)objtransactionmaster.Where(x => x.TxnType == "Cancel Order").Sum(x => x.PenaltyPoints);
                     objDashboardLostOpp.TgtVsAch = (decimal)objtransactionmaster.Where(x => x.TxnType == "tgt vs ach").Sum(x => x.PenaltyPoints);
                     objDashboardLostOpp.SCMOrder = (decimal)objtransactionmaster.Where(x => x.TxnType == "SCM").Sum(x => x.PenaltyPoints);
@@ -89,7 +91,7 @@ namespace BOTS_BL.Repository
                 }
                 else
                 {
-                    objTargetMaster = context.TargetMasters.Where(x => x.CustomerId == CustomerId && x.TargetFromDate.Value.Month == DateTime.Today.Month-1
+                    objTargetMaster = context.TargetMasters.Where(x => x.CustomerId == CustomerId && x.TargetFromDate.Value.Month == DateTime.Today.Month - 1
                      && x.TargetFromDate.Value.Year == DateTime.Today.Year).ToList();
 
                 }
@@ -107,11 +109,40 @@ namespace BOTS_BL.Repository
                         objDashboardTarget.AchiveValueWise = 0;
                         objDashboardTarget.AchiveVolumeWise = 0;
                     }
-                       
-                    
+
+
                 }
             }
             return objDashboardTarget;
+        }
+
+        public DashboardRank GetRankData(string CustomerId)
+        {
+            DashboardRank objRank = new DashboardRank();
+            DataSet retVal = new DataSet();            
+            SqlConnection sqlConn = new SqlConnection("Data Source=DESKTOP-JOLRHRS\\SQLEXPRESS;Initial Catalog=ChitaleLive;Integrated Security=True");
+            SqlCommand cmdReport = new SqlCommand("sp_Dashboard", sqlConn);
+            SqlDataAdapter daReport = new SqlDataAdapter(cmdReport);
+            using (cmdReport)
+            {
+                SqlParameter param1 = new SqlParameter("pi_CustomerId", CustomerId);
+                SqlParameter param2 = new SqlParameter("pi_CustomerType", "Distributors");
+                SqlParameter param3 = new SqlParameter("pi_Datetime", DateTime.Now.ToString("dd-MM-yyyy"));
+                SqlParameter param4 = new SqlParameter("pi_Year", DateTime.Now.Year);
+                cmdReport.CommandType = CommandType.StoredProcedure;
+                cmdReport.Parameters.Add(param1);
+                cmdReport.Parameters.Add(param2);
+                cmdReport.Parameters.Add(param3);
+                cmdReport.Parameters.Add(param4);
+                daReport.Fill(retVal);
+                DataTable dt = retVal.Tables[1];
+                objRank.CurrentRank = Convert.ToInt32(dt.Rows[0]["Rank"]);
+                objRank.LastMonthRank = Convert.ToInt32(dt.Rows[0]["LastMonthRank"]);
+                objRank.RankPoints = Convert.ToDecimal(dt.Rows[0]["RankNoPenaltyPoints"]);
+                objRank.LostRank = Convert.ToInt32(dt.Rows[0]["RankNoPenalty"]);
+            }
+
+            return objRank;
         }
     }
 }

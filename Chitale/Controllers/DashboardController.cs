@@ -99,5 +99,20 @@ namespace Chitale.Controllers
             }
             return new JsonResult() { Data = lstData, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
+
+        public JsonResult GetRankData()
+        {
+            DashboardRank rankData = new DashboardRank();
+            try
+            {
+                var UserSession = (CustomerDetail)Session["ChitaleUser"];                
+                rankData = CDR.GetRankData(UserSession.CustomerId);               
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex);
+            }
+            return new JsonResult() { Data = rankData, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
+        }
     }
 }
