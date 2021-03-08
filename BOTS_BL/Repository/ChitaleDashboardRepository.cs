@@ -112,7 +112,7 @@ namespace BOTS_BL.Repository
         {
             DashboardRank objRank = new DashboardRank();
             DataSet retVal = new DataSet();
-            SqlConnection sqlConn = new SqlConnection("Data Source=DESKTOP-JOLRHRS\\SQLEXPRESS;Initial Catalog=ChitaleLive;Integrated Security=True");
+            SqlConnection sqlConn = new SqlConnection("Data Source=LAPTOP-SIDRDIDV;Initial Catalog=ChitaleLive;Integrated Security=True");
             SqlCommand cmdReport = new SqlCommand("sp_Dashboard", sqlConn);
             SqlDataAdapter daReport = new SqlDataAdapter(cmdReport);
             using (cmdReport)
@@ -144,90 +144,6 @@ namespace BOTS_BL.Repository
             return objRank;
         }
 
-        public ParticipantList GetParticipantList(string CustomerId, string CustomerType)
-        {
-            ParticipantList objparticipantList = new ParticipantList();
-            try
-            {
-                DataSet retVal = new DataSet();
-                SqlConnection sqlConn = new SqlConnection("Data Source=LAPTOP-SIDRDIDV;Initial Catalog=ChitaleLive;Integrated Security=True");
-                SqlCommand cmdReport = new SqlCommand("sp_KYBLoadParticipant_MFC", sqlConn);
-                SqlDataAdapter daReport = new SqlDataAdapter(cmdReport);
-                using (cmdReport)
-                {
-                    SqlParameter param1 = new SqlParameter("@pi_LoginId", "");
-                    SqlParameter param2 = new SqlParameter("@pi_Datetime", DateTime.Now.ToString("dd-MM-yyyy"));
-                    SqlParameter param3 = new SqlParameter("@pi_DataType", "");
-                    SqlParameter param4 = new SqlParameter("@pi_City", "");
-                    SqlParameter param5 = new SqlParameter("@pi_Cluster", "");
-                    SqlParameter param6 = new SqlParameter("@pi_SubCluster", "");
-                    SqlParameter param7 = new SqlParameter("@pi_Id ", CustomerId);
-                    SqlParameter param8 = new SqlParameter("@pi_ParticipantType", CustomerType);
-                    cmdReport.CommandType = CommandType.StoredProcedure;
-                    cmdReport.Parameters.Add(param1);
-                    cmdReport.Parameters.Add(param2);
-                    cmdReport.Parameters.Add(param3);
-                    cmdReport.Parameters.Add(param4);
-                    cmdReport.Parameters.Add(param5);
-                    cmdReport.Parameters.Add(param6);
-                    cmdReport.Parameters.Add(param7);
-                    cmdReport.Parameters.Add(param8);
-                    daReport.Fill(retVal);
-                    DataTable dt = retVal.Tables[1];
-                    DataTable dt1 = new DataTable();
-                    DataRow dr1 = dt1.NewRow();
-                    dt1.Columns.Add("Id");
-                    dt1.Columns.Add("Name");
-                    dt1.Columns.Add("participantType");
-                    dt1.Columns.Add("Rank");
-                    dt1.Columns.Add("subcluster");
-                    dt1.Columns.Add("Totalpoints");
-                    dt1.Columns.Add("city");
-                    dt1.Columns.Add("cluster");
-
-                    foreach (DataRow dr in dt.Rows)
-                    {
-                        CustomerDetail objcustomerDetail = new CustomerDetail();
-                        using (var context = new ChitaleDBContext())
-                        {
-
-                            string customerid = Convert.ToString(dr["Id"]);
-                            objcustomerDetail = context.CustomerDetails.Where(x => x.CustomerId == customerid).FirstOrDefault();
-                            dr1["Id"] = Convert.ToString(dr["Id"]);
-                            dr1["Name"] = objcustomerDetail.CustomerName;
-                            dr1["participantType"] = objcustomerDetail.CustomerType;
-                            dr1["Rank"] = Convert.ToInt32(dr["CurrentRank"]);
-                            dr1["subcluster"] = objcustomerDetail.SubCluster;
-                            dr1["Totalpoints"] = (decimal)objcustomerDetail.Points;
-                            dr1["city"] = objcustomerDetail.City;
-                            dr1["cluster"] = objcustomerDetail.Cluster;
-
-                            //string customerid = Convert.ToString(dt.Rows[0]["Id"]);
-                            //objcustomerDetail = context.CustomerDetails.Where(x => x.CustomerId == customerid).FirstOrDefault();                            
-                            //objparticipantList.Id = Convert.ToString(dt.Rows[0]["Id"]);
-                            //objparticipantList.Name = objcustomerDetail.CustomerName;
-                            //objparticipantList.participantType = objcustomerDetail.CustomerType;
-                            //objparticipantList.Rank = Convert.ToInt32(dt.Rows[0]["CurrentRank"]);
-                            //objparticipantList.subcluster = objcustomerDetail.SubCluster;
-                            //objparticipantList.Totalpoints = (decimal)objcustomerDetail.Points;
-                            //objparticipantList.city = objcustomerDetail.City;
-                            //objparticipantList.cluster = objcustomerDetail.Cluster;
-
-                        }
-                        dt1.Rows.Add(dr1.ItemArray);
-
-
-                    }
-
-                    // objparticipantList = dt1;
-                }
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-
-            return objparticipantList;
-        }
+        
     }
 }

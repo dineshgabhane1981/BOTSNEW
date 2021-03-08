@@ -265,6 +265,7 @@
     <Content Include="Views\Dashboard\Index.cshtml" />
     <Content Include="Views\participant\ParticipantList.cshtml" />
     <Content Include="Views\participant\RedumptionData.cshtml" />
+    <Content Include="Views\participant\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

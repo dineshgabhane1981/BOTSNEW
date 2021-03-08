@@ -12,20 +12,23 @@ namespace Chitale.Controllers
     public class ParticipantController : Controller
     {
         ChitaleDashboardRepository CDR = new ChitaleDashboardRepository();
+        ParticipantRepository pr = new ParticipantRepository();
         Exceptions newexception = new Exceptions();
         // GET: participant
         public ActionResult Index()
         {
+                     
             return View();
-            GetParticipantList();
+
         }
 
-        public ParticipantList GetParticipantList()
+        public JsonResult GetParticipantList()
         {
             var UserSession = (CustomerDetail)Session["ChitaleUser"];
             ParticipantList objlist = new ParticipantList();
-            objlist = CDR.GetParticipantList(UserSession.CustomerId, UserSession.CustomerType);
-            return objlist;
+            List<ParticipantList> lstparticipantLists = new List<ParticipantList>();
+            lstparticipantLists = pr.GetParticipantList(UserSession.CustomerId, UserSession.CustomerType);
+            return new JsonResult() { Data = lstparticipantLists, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
         public ActionResult RedumptionData()
         {

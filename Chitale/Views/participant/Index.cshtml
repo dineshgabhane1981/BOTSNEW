@@ -1,6 +1,6 @@
 ﻿
 @{
-    ViewBag.Title = "ParticipantList";
+    ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -10,10 +10,12 @@
         <div class="card-header-tab card-header-tab-animation card-header" style="margin-bottom:10px;">
             <div class="card-header-title">
                 <i class="header-icon lnr-apartment icon-gradient bg-love-kiss"> </i>
-                SUMMARY
+                PARTICIPANT LIST
+
             </div>
 
-            <div class="row" id="divactivityTable">
+            <div  id="divactivityTable">
+               <div >
                 <div class="table-responsive">
                     <table class="table" id="activityTable">
                         <thead>
@@ -21,22 +23,18 @@
                                 <th scope="col">Participant Type</th>
                                 <th scope="col">ID</th>
                                 <th scope="col">Name</th>
-                                <th scope="col" class="mobile-hide">City</th>
-                                <th scope="col" class="mobile-hide">Cluster</th>
-                                <th scope="col" class="mobile-hide">Sub-Cluster</th>
-                                <th scope="col" class="mobile-hide" style="text-align:center;">Rank</th>
-                                <th scope="col" style="text-align:center;">Total Points</th>
+                                <th scope="col">City</th>
+                                <th scope="col">Cluster</th>
+                                <th scope="col">Sub-Cluster</th>
+                                <th scope="col">Rank</th>
+                                <th scope="col">Total Points</th>
                             </tr>
                         </thead>
-                        <tbody>                       
-                                
-                                                             
-                              
-                                
-                            
-                            </tbody>
+                        <tbody>
+                        </tbody>
                     </table>
                 </div>
+               </div>
             </div>
         </div>
     </div>
@@ -45,20 +43,21 @@
     $(document).ready(function () {
         GetParticipantList();
     });
-
+    var tableData = [];
     function GetParticipantList() {
         $("#divLoader").show();
         $.ajax({
             type: "POST",
             url: '@Url.Action("GetParticipantList", "Participant")',//"/ITOperations/GetChangeNameData",
-           
+
             contentType: "application/json; charset=utf-8",
             dataType: "json",
-            success: function (result) {
-                if (result.ParticipantList != null) {
-                    alert("in");
+            success: function (response) {
+                console.log(response);
+                if (response.lstparticipantLists != null) {
+                    console.log("in");
                     tableData.length = 0;
-                    $.map(result.ParticipantList, function (item) {
+                    $.map(response.lstparticipantLists, function (item) {
                         alert(item.participantType);
                         optionItem = {}
                         optionItem["participantType"] = item.participantType;
@@ -75,13 +74,25 @@
                     DrawTable();
 
                 } else {
-                    toastr.error('Login Ids are not present');
-                    $('#ddlBranchList').prop('selectedIndex', 0);
-                    $('#ddlOutletListby').prop('selectedIndex', 0);
+                    $.map(response, function (item) {
+                       
+                        optionItem = {}
+                        optionItem["participantType"] = item.participantType;
+                        optionItem["Id"] = item.Id;
+                        optionItem["Name"] = item.Name;
+                        optionItem["city"] = item.city;
+                        optionItem["cluster"] = item.cluster;
+                        optionItem["subcluster"] = item.subcluster;
+                        optionItem["Rank"] = item.Rank;
+                        optionItem["Totalpoints"] = item.Totalpoints;
+                        // optionItem["Reset"] = "<input type='button' id='" + item.CounterId + "' onclick='UpdateSecurityKey(" + item.CounterId + ")' value='Reset'>";
+                        tableData.push(optionItem);
+                    });
+                    DrawTable();
                 }
                 $("#divLoader").hide();
             },
-            error: function (result) {
+            error: function (response) {
                 console.log(result.responseText)
                 $("#divLoader").hide();
             }
@@ -89,10 +100,10 @@
 
     }
     function DrawTable() {
-            var table1 = $('#activityTable').DataTable();
+        var table1 = $('#activityTable').DataTable();
             table1.destroy();
 
-            var table = $('#activityTable').DataTable({
+        var table = $('#activityTable').DataTable({
                 "data": tableData,
                 "paging": true,
                 "ordering": false,
@@ -109,13 +120,7 @@
                     { data: "subcluster" },
                     { data: "Rank" },
                     { data: "Totalpoints" },
-                    {
-                        "mData": "InvoiceNo",
-                        "mRender": function (data, type, row) {
-                           // return '<a href="#" onclick="GetTransactionCancelData(\'' + data + '\')" class="login" title="Edit"><img src="Content/assets/images/delete.png" /></a>';
-                            //return '<button href="#"' + 'id="' + data + '">Edit</button>';
-                        }
-                    }
+                   
                 ],
                 aoColumnDefs: [
                     {
@@ -141,5 +146,10 @@
             });
         }
 </script>
-   
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.23/css/jquery.dataTables.css">
+
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.23/js/jquery.dataTables.js"></script>
+
+
+
 
