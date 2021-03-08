@@ -223,6 +223,7 @@
     <Compile Include="Repository\ITOpsRepository.cs" />
     <Compile Include="Repository\KeyIndecatorsRepository.cs" />
     <Compile Include="Repository\LoginRepository.cs" />
+    <Compile Include="Repository\ParticipantRepository.cs" />
     <Compile Include="Repository\ReportsRepository.cs" />
   </ItemGroup>
   <ItemGroup>

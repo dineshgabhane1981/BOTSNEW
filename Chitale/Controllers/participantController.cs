@@ -27,5 +27,9 @@ namespace Chitale.Controllers
             objlist = CDR.GetParticipantList(UserSession.CustomerId, UserSession.CustomerType);
             return objlist;
         }
+        public ActionResult RedumptionData()
+        {
+            return View();
+        }
     }
 }
