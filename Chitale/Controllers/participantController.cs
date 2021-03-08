@@ -9,7 +9,7 @@ using BOTS_BL.Repository;
 
 namespace Chitale.Controllers
 {
-    public class participantController : Controller
+    public class ParticipantController : Controller
     {
         ChitaleDashboardRepository CDR = new ChitaleDashboardRepository();
         Exceptions newexception = new Exceptions();
@@ -17,8 +17,15 @@ namespace Chitale.Controllers
         public ActionResult Index()
         {
             return View();
+            GetParticipantList();
         }
 
-       
+        public ParticipantList GetParticipantList()
+        {
+            var UserSession = (CustomerDetail)Session["ChitaleUser"];
+            ParticipantList objlist = new ParticipantList();
+            objlist = CDR.GetParticipantList(UserSession.CustomerId, UserSession.CustomerType);
+            return objlist;
+        }
     }
 }

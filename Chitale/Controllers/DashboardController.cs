@@ -17,18 +17,12 @@ namespace Chitale.Controllers
         // GET: Dashboard
         public ActionResult Index()
         {
-            GetParticipantList();
+            
 
 
             return View();
         }
-        public ParticipantList GetParticipantList()
-        {
-            var UserSession = (CustomerDetail)Session["ChitaleUser"];
-            ParticipantList objlist = new ParticipantList();
-            objlist = CDR.GetParticipantList(UserSession.CustomerId, UserSession.CustomerType);
-            return objlist;
-        }
+       
         public JsonResult GetDashboardSummeryData(string Flag)
         {
             Dashboardsummary SummeryData = new Dashboardsummary();
