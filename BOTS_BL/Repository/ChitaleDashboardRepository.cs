@@ -78,39 +78,31 @@ namespace BOTS_BL.Repository
             return objDashboardLostOpp;
         }
 
-        public DashboardTarget GetTargetData(string CustomerId, bool IsCurrentMonth)
+        public DashboardTarget GetTargetData(string CustomerId, bool IsValue)
         {
             DashboardTarget objDashboardTarget = new DashboardTarget();
             List<TargetMaster> objTargetMaster = new List<TargetMaster>();
             using (var context = new ChitaleDBContext())
             {
-                if (IsCurrentMonth)
-                {
-                    objTargetMaster = context.TargetMasters.Where(x => x.CustomerId == CustomerId && x.TargetFromDate.Value.Month == DateTime.Today.Month
-                     && x.TargetFromDate.Value.Year == DateTime.Today.Year).ToList();
-                }
-                else
-                {
-                    objTargetMaster = context.TargetMasters.Where(x => x.CustomerId == CustomerId && x.TargetFromDate.Value.Month == DateTime.Today.Month - 1
-                     && x.TargetFromDate.Value.Year == DateTime.Today.Year).ToList();
+                objTargetMaster = context.TargetMasters.Where(x => x.CustomerId == CustomerId && x.TargetFromDate.Value.Month == DateTime.Today.Month
+                 && x.TargetFromDate.Value.Year == DateTime.Today.Year).ToList();
 
-                }
                 if (objTargetMaster != null)
                 {
-                    objDashboardTarget.TargetValueWise = (decimal)objTargetMaster.Sum(x => x.TargetProductAmt);
-                    objDashboardTarget.TargetVolumeWise = (decimal)objTargetMaster.Sum(x => x.TargetProductVolume);
-                    if (IsCurrentMonth)
+                    if (IsValue)
                     {
+                        objDashboardTarget.TargetValueWise = (decimal)objTargetMaster.Sum(x => x.TargetProductAmt);
                         objDashboardTarget.AchiveValueWise = 0;
+                        objDashboardTarget.TargetVolumeWise = 0;
                         objDashboardTarget.AchiveVolumeWise = 0;
                     }
                     else
                     {
-                        objDashboardTarget.AchiveValueWise = 0;
+                        objDashboardTarget.TargetVolumeWise = (decimal)objTargetMaster.Sum(x => x.TargetProductVolume);
                         objDashboardTarget.AchiveVolumeWise = 0;
+                        objDashboardTarget.TargetValueWise = 0;
+                        objDashboardTarget.AchiveValueWise = 0;
                     }
-
-
                 }
             }
             return objDashboardTarget;
@@ -119,8 +111,8 @@ namespace BOTS_BL.Repository
         public DashboardRank GetRankData(string CustomerId)
         {
             DashboardRank objRank = new DashboardRank();
-            DataSet retVal = new DataSet();            
-            SqlConnection sqlConn = new SqlConnection("Data Source=LAPTOP-SIDRDIDV;Initial Catalog=ChitaleLive;Integrated Security=True");
+            DataSet retVal = new DataSet();
+            SqlConnection sqlConn = new SqlConnection("Data Source=DESKTOP-JOLRHRS\\SQLEXPRESS;Initial Catalog=ChitaleLive;Integrated Security=True");
             SqlCommand cmdReport = new SqlCommand("sp_Dashboard", sqlConn);
             SqlDataAdapter daReport = new SqlDataAdapter(cmdReport);
             using (cmdReport)
@@ -138,14 +130,21 @@ namespace BOTS_BL.Repository
                 DataTable dt = retVal.Tables[1];
                 objRank.CurrentRank = Convert.ToInt32(dt.Rows[0]["Rank"]);
                 objRank.LastMonthRank = Convert.ToInt32(dt.Rows[0]["LastMonthRank"]);
-                objRank.RankPoints = Convert.ToDecimal(dt.Rows[0]["RankNoPenaltyPoints"]);
+                if (!string.IsNullOrEmpty(Convert.ToString(dt.Rows[0]["RankNoPenaltyPoints"])))
+                {
+                    objRank.RankPoints = Convert.ToDecimal(dt.Rows[0]["RankNoPenaltyPoints"]);
+                }
+                else
+                {
+                    objRank.RankPoints = 0;
+                }
                 objRank.LostRank = Convert.ToInt32(dt.Rows[0]["RankNoPenalty"]);
             }
 
             return objRank;
         }
 
-        public ParticipantList GetParticipantList(string CustomerId,string CustomerType)
+        public ParticipantList GetParticipantList(string CustomerId, string CustomerType)
         {
             ParticipantList objparticipantList = new ParticipantList();
             try
@@ -185,42 +184,42 @@ namespace BOTS_BL.Repository
                     dt1.Columns.Add("Totalpoints");
                     dt1.Columns.Add("city");
                     dt1.Columns.Add("cluster");
-                                      
-                     foreach (DataRow dr in dt.Rows)                   
+
+                    foreach (DataRow dr in dt.Rows)
                     {
                         CustomerDetail objcustomerDetail = new CustomerDetail();
-                            using (var context = new ChitaleDBContext())
-                            {
-                                
-                                string customerid = Convert.ToString(dr["Id"]);
-                                objcustomerDetail = context.CustomerDetails.Where(x => x.CustomerId == customerid).FirstOrDefault();                            
-                                dr1["Id"] = Convert.ToString(dr["Id"]);
-                                dr1["Name"] = objcustomerDetail.CustomerName;
-                                dr1["participantType"] = objcustomerDetail.CustomerType;
-                                dr1["Rank"] = Convert.ToInt32(dr["CurrentRank"]);
-                                dr1["subcluster"] = objcustomerDetail.SubCluster;
-                                dr1["Totalpoints"] = (decimal)objcustomerDetail.Points;
-                                dr1["city"] = objcustomerDetail.City;
-                                dr1["cluster"] = objcustomerDetail.Cluster;
+                        using (var context = new ChitaleDBContext())
+                        {
 
-                                //string customerid = Convert.ToString(dt.Rows[0]["Id"]);
-                                //objcustomerDetail = context.CustomerDetails.Where(x => x.CustomerId == customerid).FirstOrDefault();                            
-                                //objparticipantList.Id = Convert.ToString(dt.Rows[0]["Id"]);
-                                //objparticipantList.Name = objcustomerDetail.CustomerName;
-                                //objparticipantList.participantType = objcustomerDetail.CustomerType;
-                                //objparticipantList.Rank = Convert.ToInt32(dt.Rows[0]["CurrentRank"]);
-                                //objparticipantList.subcluster = objcustomerDetail.SubCluster;
-                                //objparticipantList.Totalpoints = (decimal)objcustomerDetail.Points;
-                                //objparticipantList.city = objcustomerDetail.City;
-                                //objparticipantList.cluster = objcustomerDetail.Cluster;
-                                
-                            }
-                            dt1.Rows.Add(dr1.ItemArray);
-                      
+                            string customerid = Convert.ToString(dr["Id"]);
+                            objcustomerDetail = context.CustomerDetails.Where(x => x.CustomerId == customerid).FirstOrDefault();
+                            dr1["Id"] = Convert.ToString(dr["Id"]);
+                            dr1["Name"] = objcustomerDetail.CustomerName;
+                            dr1["participantType"] = objcustomerDetail.CustomerType;
+                            dr1["Rank"] = Convert.ToInt32(dr["CurrentRank"]);
+                            dr1["subcluster"] = objcustomerDetail.SubCluster;
+                            dr1["Totalpoints"] = (decimal)objcustomerDetail.Points;
+                            dr1["city"] = objcustomerDetail.City;
+                            dr1["cluster"] = objcustomerDetail.Cluster;
+
+                            //string customerid = Convert.ToString(dt.Rows[0]["Id"]);
+                            //objcustomerDetail = context.CustomerDetails.Where(x => x.CustomerId == customerid).FirstOrDefault();                            
+                            //objparticipantList.Id = Convert.ToString(dt.Rows[0]["Id"]);
+                            //objparticipantList.Name = objcustomerDetail.CustomerName;
+                            //objparticipantList.participantType = objcustomerDetail.CustomerType;
+                            //objparticipantList.Rank = Convert.ToInt32(dt.Rows[0]["CurrentRank"]);
+                            //objparticipantList.subcluster = objcustomerDetail.SubCluster;
+                            //objparticipantList.Totalpoints = (decimal)objcustomerDetail.Points;
+                            //objparticipantList.city = objcustomerDetail.City;
+                            //objparticipantList.cluster = objcustomerDetail.Cluster;
+
+                        }
+                        dt1.Rows.Add(dr1.ItemArray);
+
 
                     }
 
-                   // objparticipantList = dt1;
+                    // objparticipantList = dt1;
                 }
             }
             catch (Exception ex)

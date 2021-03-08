@@ -75,32 +75,30 @@ namespace Chitale.Controllers
             return new JsonResult() { Data = dataList, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
 
-        public JsonResult GetTargetData(string profileFlag)
+        public JsonResult GetTargetData(string valueVolumne)
         {
             List<object> lstData = new List<object>();
-            List<decimal> dataListValue = new List<decimal>();
-            List<decimal> dataListVolume = new List<decimal>();
+            List<decimal> dataList = new List<decimal>();
+
             try
             {
-                bool IsBTD = false;
-                if (profileFlag == "1")
-                    IsBTD = true;
+                bool IsValue = false;
+                if (valueVolumne == "1")
+                    IsValue = true;
                 var UserSession = (CustomerDetail)Session["ChitaleUser"];
                 DashboardTarget objDashboardTarget = new DashboardTarget();
-                objDashboardTarget = CDR.GetTargetData(UserSession.CustomerId, IsBTD);
+                objDashboardTarget = CDR.GetTargetData(UserSession.CustomerId, IsValue);
 
-                dataListValue.Add(objDashboardTarget.TargetValueWise);
-                dataListValue.Add(objDashboardTarget.TargetVolumeWise); 
-                dataListVolume.Add(objDashboardTarget.AchiveValueWise);
-                dataListVolume.Add(objDashboardTarget.AchiveVolumeWise);
-                lstData.Add(dataListValue);
-                lstData.Add(dataListVolume);
+                dataList.Add(objDashboardTarget.TargetValueWise);
+                dataList.Add(objDashboardTarget.AchiveValueWise);
+                dataList.Add(objDashboardTarget.TargetVolumeWise);
+                dataList.Add(objDashboardTarget.AchiveVolumeWise);
             }
             catch (Exception ex)
             {
                 newexception.AddException(ex);
             }
-            return new JsonResult() { Data = lstData, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
+            return new JsonResult() { Data = dataList, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
 
         public JsonResult GetRankData()

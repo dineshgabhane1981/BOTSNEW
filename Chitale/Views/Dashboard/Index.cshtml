@@ -62,7 +62,7 @@
 
             <div class="row">
                 <div class="col-md-6 col-xl-4">
-                    <div class="card mb-3 widget-content " style="background-color:chartreuse;">
+                    <div class="card mb-3 widget-content " style="background-color: #92D050;">
                         <div class="widget-content-wrapper text-white">
                             <div class="widget-content-left">
                                 <div class="widget-heading" style="font-size:17px;">
@@ -165,8 +165,8 @@
                         TGT vs ACH
                     </div>
                     <ul class="nav">
-                        <li class="nav-item"><a href="javascript:void(0);" onclick="showTGTCurrent('1');" id="tgtCurrent" class="active nav-link">Current Month</a></li>
-                        <li class="nav-item"><a href="javascript:void(0);" onclick="showTGTCurrent('0');" id="tgtLast" class="nav-link second-tab-toggle">Last Month</a></li>
+                        <li class="nav-item"><a href="javascript:void(0);" onclick="showTGTCurrent('1');" id="tgtCurrent" class="active nav-link">Value Wise</a></li>
+                        <li class="nav-item"><a href="javascript:void(0);" onclick="showTGTCurrent('0');" id="tgtLast" class="nav-link second-tab-toggle">Volume Wise</a></li>
                     </ul>
                 </div>
                 <div class="card-body">
@@ -253,15 +253,10 @@
                             position: 'bottom'
                         }
                     }
-
                     var data1 = response[0];
                     var data2 = response[1];
                     var data3 = response[2];
-                    var data4 = response[3];
-                    console.log(data1)
-                    console.log(data2)
-                    console.log(data3)
-                    console.log(data4)
+                    var data4 = response[3];                    
                     var data = {
                         datasets: [{
                             data: [...response],
@@ -314,47 +309,123 @@
         $.ajax({
             type: "POST",
             url: "Dashboard/GetTargetData",
-            data: "{'profileFlag': '" + flag + "'}",
+            data: "{'valueVolumne': '" + flag + "'}",
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             success: function (response) {
-                console.log(response[0]);
-                console.log(response[1]);
-                if (response != null) {
-                    var list1 = response[0];
-                    var list2 = response[1];
+                console.log(response);               
+                var value1 = response[0];
+                var value2 = response[1];
+                if (flag == "0") {
+                    value1 = response[2];
+                    value2 = response[3];
+                }
+                
+                if (response != null) {                    
                     $('#cvTgt').remove(); // this is my <canvas> element
                     $('#containerTgt').append('<canvas id="cvTgt"><canvas>');
-                    var data = {
-                        labels: ["Value-Wise", "Volume-Wise"],
-                        datasets: [
-                            {
-                                label: "Target",
-                                backgroundColor: "blue",
-                                data: [...list1]
-                            },
-                            {
-                                label: "Achievement",
-                                backgroundColor: "orange",
-                                data: [...list2]
-                            }
-                        ]
+
+                    var barChartData =
+                    {
+                        labels: ["Target", "Achievement"],
+                        datasets: [{
+                            label: '',
+                            backgroundColor: [
+                                "#f990a7",
+                                "#aad2ed"
+                            ],
+                            borderWidth: 2,
+                            data: [value1, value2]
+                        }]
                     };
-                    var ctx = document.getElementById("cvTgt").getContext("2d");
-                    var myBarChart = new Chart(ctx, {
-                        type: 'bar',
-                        data: data,
-                        options: {
-                            barValueSpacing: 20,
-                            scales: {
-                                yAxes: [{
-                                    ticks: {
-                                        min: 0,
+
+
+                    var ctx10 = document.getElementById("cvTgt").getContext("2d");
+                    var myChart = new Chart(ctx10,
+                        {
+                            type: 'bar',
+                            data: barChartData,
+                            options:
+                            {
+                                scales: {
+                                    yAxes: [{
+                                        ticks: {
+                                            beginAtZero: true
+                                        }
+                                    }]
+                                },
+                                title:
+                                {
+                                    display: true,
+                                    text: ""
+                                },
+                                legend: {
+                                    display: false
+                                },
+                                responsive: true,
+                                maintainAspectRatio: true,
+                                tooltips: { enabled: false },
+                                hover: { mode: null },
+
+                                "hover": {
+                                    "animationDuration": 0,
+                                    mode: null
+                                },
+                                "animation": {
+                                    "duration": 1,
+                                    "onComplete": function () {
+                                        var chartInstance = this.chart,
+                                            ctx = chartInstance.ctx;
+
+                                        ctx.font = Chart.helpers.fontString(Chart.defaults.global.defaultFontSize, Chart.defaults.global.defaultFontStyle, Chart.defaults.global.defaultFontFamily);
+                                        ctx.textAlign = 'center';
+                                        ctx.textBaseline = 'bottom';
+
+                                        this.data.datasets.forEach(function (dataset, i) {
+                                            var meta = chartInstance.controller.getDatasetMeta(i);
+                                            meta.data.forEach(function (bar, index) {
+                                                var data = dataset.data[index];
+                                                ctx.fillStyle = 'rgba(0, 0, 0, 1)';
+                                                ctx.fillText(data, bar._model.x, bar._model.y - 5);
+                                            });
+                                        });
                                     }
-                                }]
+                                }
                             }
-                        }
-                    });
+                        });
+
+
+
+                    //var data = {
+                    //    labels: ["Value-Wise", "Volume-Wise"],
+                    //    datasets: [
+                    //        {
+                    //            label: "Target",
+                    //            backgroundColor: "blue",
+                    //            data: [...list1]
+                    //        },
+                    //        {
+                    //            label: "Achievement",
+                    //            backgroundColor: "orange",
+                    //            data: [...list2]
+                    //        }
+                    //    ]
+                    //};
+                    //var ctx = document.getElementById("cvTgt").getContext("2d");
+                    //var myBarChart = new Chart(ctx, {
+                    //    type: 'bar',
+                    //    data: data,
+                    //    options: {
+                    //        barValueSpacing: 20,
+                    //        scales: {
+                    //            yAxes: [{
+                    //                ticks: {
+                    //                    min: 0,
+                    //                }
+                    //            }]
+                    //        }
+                    //    }
+                    //});
                     $("#divLoader").hide();
                 }
             },
@@ -388,7 +459,7 @@
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             success: function (response) {
-                console.log(response);
+                
                 $("#spnrank").text(response.CurrentRank);
                 $("#spnRank").text(response.CurrentRank);
                 $("#spnLastMonthRank").text(response.LastMonthRank);
