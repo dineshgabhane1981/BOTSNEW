@@ -33,16 +33,16 @@
                             {
                                 //if (Model.Count > 0)
                                 //{
-                                   var cId = 0;
+                                var cId = 0;
 
                                 foreach (var List in Model)
                                 {
                                     cId++;
                                     var isCurriculum = false;
                                         <tr>
-                                            <td>@activity.ActivityName</td>
-                                            <td>@activity.ActivityType</td>
-                                            <td style="max-width:150px;">@activity.ActivityDescription</td>
+                                            <td>@List.Name</td>
+                                            <td>@List.ActivityType</td>
+                                            <td style="max-width:150px;">@List.ActivityDescription</td>
                                             @if (activity.ActivityDuration == "0" || activity.ActivityDuration == "")
                                             {
                                                 <td class="mobile-hide add-column-padding">-</td>
