@@ -1,8 +1,248 @@
-﻿
+﻿@model BOTS_BL.Models.ChitaleModel.RedemptionModel
 @{
-    ViewBag.Title = "RedumptionData";
+    ViewBag.Title = "Redumption Data";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>RedumptionData</h2>
+<div class="app-main__inner">
+    @Html.HiddenFor(model => model.DepositData, new { @id = "hdnDepositData" })
+    @Html.HiddenFor(model => model.CreditData, new { @id = "hdnCreditData" })
+    @Html.HiddenFor(model => model.InfraData, new { @id = "hdnInfraData" })
+    @Html.HiddenFor(model => model.PromoData, new { @id = "hdnPromoData" })
+    <div class="row">
 
+        <div style="width:100%;  padding:10px; background-color:white;float:left;">
+            <div style="color:blue;font-size:18px;">
+                <b>POINTS REDEMPTION CATALOGUE</b>
+            </div>
+            <div style="margin-top:20px;margin-bottom:20px;text-align:center;font-size:18px;">
+                YOUR POINTS BENEFITS – <b>DO POSITIVE | GET MORE</b>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 col-xl-3">
+                    <div class="card mb-3 widget-content" style="background-color:#00B050;text-align:center !important;display:block !important;">
+                        <div class="text-white">
+                            <div class="widget-content-left">
+                                <div class="widget-heading" style="font-size:24px; ">
+                                    DEPOSIT <br /> @Model.DepositDataStr
+                                </div>
+                                <div class="widget-numbers text-white"><span id="spnPurchaseOrderPoints"></span></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-xl-3">
+                    <div class="card mb-3 widget-content" style="background-color:deepskyblue;text-align:center !important;display:block !important;">
+                        <div class="text-white">
+                            <div class="widget-content-left">
+                                <div class="widget-heading" style="font-size:24px;">
+                                    CREDIT <br /> @Model.CreditDataStr
+                                </div>
+                                <div class="widget-numbers text-white"><span id="spnSalesOrderPoints"></span></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-xl-3">
+                    <div class="card mb-3 widget-content" style="background-color:palevioletred;text-align:center !important;display:block !important;">
+                        <div class="text-white">
+                            <div class="widget-content-left">
+                                <div class="widget-heading" style="font-size:24px; ">
+                                    INFRA <br /> @Model.InfraDataStr
+                                </div>
+                                <div class="widget-numbers text-white"><span id="spnPurchaseOrderPoints"></span></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-xl-3">
+                    <div class="card mb-3 widget-content" style="background-color:#FFC000; text-align:center !important;display:block !important;">
+                        <div class="text-white">
+                            <div class="widget-content-left">
+                                <div class="widget-heading" style="font-size:24px;">
+                                    PROMO <br /> @Model.PromoDataStr
+                                </div>
+                                <div class="widget-numbers text-white"><span id="spnSalesOrderPoints"></span></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div style="width:100%;  padding:10px; background-color:white;float:left;">
+            <div style="width:100%;  padding:10px; background-color:white;align-content:center;">
+                <table cellpadding="10" cellspacing="10">
+                    <tr>
+                        <th colspan="2" style="background-color:green; color:white; padding:10px 150px;"><b>REQUEST TO REDEEM</b></th>
+
+                    </tr>
+                    <tr>
+                        <td><b>Select Type </b></td>
+                        <td>
+                            <select name="ddlType" id="ddlType" class="input50">
+                                <option value="Deposit">Deposit</option>
+                                <option value="Credit">Credit</option>
+                                <option value="Infra">Infra</option>
+                                <option value="Promo">Promo</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><b>Enter Points to Redeem </b></td>
+                        <td><input type="text" id="txtPoints" onkeypress='return event.charCode >= 48 && event.charCode <= 57'  class="input50" /></td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid grey;">
+                        <td colspan="2" align="center"><button type="button" class="btn btn-primary ml-auto" id="btnGenerateOTP">GENERATE OTP</button></td>
+                    </tr>
+                    <tr>
+                        <td><b>Enter OTP </b></td>
+                        <td><input type="text" id="txtOTP" onkeypress='return event.charCode >= 48 && event.charCode <= 57'  class="input50" /></td>
+                    </tr>
+                    <tr style="border-bottom:1px solid grey;">
+                        <td colspan="2" align="center"><button type="button" class="btn btn-primary ml-auto" id="btnSubmit">SUBMIT</button></td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $('#btnGenerateOTP').on("click", function () {
+            GenerateOTP();
+        });
+        $('#btnSubmit').on("click", function () {
+            SubmitRequest();
+        });
+    });
+
+    function GenerateOTP() {
+        if ($('#txtPoints').val() == "") {
+            toastr.error('Please enter points to redeem');
+            $('#txtPoints').focus();
+            return false;
+        }
+        if ($('#ddlType').val() == "Deposit") {
+            if (parseInt($('#txtPoints').val()) > parseInt($('#hdnDepositData').val())) {
+                toastr.error('Entered points are greater than available');
+                $('#txtPoints').focus();
+                return false;
+            }
+        }
+        if ($('#ddlType').val() == "Credit") {
+            if (parseInt($('#txtPoints').val()) > parseInt($('#hdnCreditData').val())) {
+                toastr.error('Entered points are greater than available');
+                $('#txtPoints').focus();
+                return false;
+            }
+        }
+        if ($('#ddlType').val() == "Infra") {
+            if (parseInt($('#txtPoints').val()) > parseInt($('#hdnInfraData').val())) {
+                toastr.error('Entered points are greater than available');
+                $('#txtPoints').focus();
+                return false;
+            }
+        }
+        if ($('#ddlType').val() == "Promo") {
+            if (parseInt($('#txtPoints').val()) > parseInt($('#hdnPromoData').val())) {
+                toastr.error('Entered points are greater than available');
+                $('#txtPoints').focus();
+                return false;
+            }
+        }
+        $("#divLoader").show();
+        $.ajax({
+            type: "POST",
+            url: "../Participant/GenerateOTP",
+            data: "{'OutletId': '" + 111 + "'}",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                toastr.success('OTP sent successfully!');
+                $("#divLoader").hide();
+            },
+            failure: function (response) {
+                toastr.error('problem occur while sending OTP');
+                $("#divLoader").hide();
+            },
+            error: function (response) {
+                
+                $("#divLoader").hide();
+            }
+
+        });
+    }
+
+    function SubmitRequest() {
+        if ($('#txtPoints').val() == "") {
+            toastr.error('Please enter points to redeem');
+            $('#txtPoints').focus();
+            return false;
+        }
+        if ($('#ddlType').val() == "Deposit") {
+            if (parseInt($('#txtPoints').val()) > parseInt($('#hdnDepositData').val())) {
+                toastr.error('Entered points are greater than available');
+                $('#txtPoints').focus();
+                return false;
+            }
+        }
+        if ($('#ddlType').val() == "Credit") {
+            if (parseInt($('#txtPoints').val()) > parseInt($('#hdnCreditData').val())) {
+                toastr.error('Entered points are greater than available');
+                $('#txtPoints').focus();
+                return false;
+            }
+        }
+        if ($('#ddlType').val() == "Infra") {
+            if (parseInt($('#txtPoints').val()) > parseInt($('#hdnInfraData').val())) {
+                toastr.error('Entered points are greater than available');
+                $('#txtPoints').focus();
+                return false;
+            }
+        }
+        if ($('#ddlType').val() == "Promo") {
+            if (parseInt($('#txtPoints').val()) > parseInt($('#hdnPromoData').val())) {
+                toastr.error('Entered points are greater than available');
+                $('#txtPoints').focus();
+                return false;
+            }
+        }
+        $("#divLoader").show();
+        $.ajax({
+            type: "POST",
+            url: "../Participant/RedemptionRequest",
+            data: "{'Type': '" + $('#ddlType').val() + "', 'Points': '" + $('#txtPoints').val() + "', 'OTP': '" + $('#txtOTP').val() + "'}",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                console.log(response)
+                if (response == true) {
+                    toastr.success('Redemption Request submitted successfully!');
+                    $('#txtPoints').val("");
+                    $('#txtOTP').val("");
+                    $('#ddlType').prop('selectedIndex', 0);
+                }
+                else {
+                    toastr.error('OTP does not match');
+                }
+                $("#divLoader").hide();
+            },
+            failure: function (response) {
+                toastr.error('problem occur while submitting request');
+                $("#divLoader").hide();
+            },
+            error: function (response) {
+                
+                $("#divLoader").hide();
+            }
+
+        });
+    }
+
+
+</script>

@@ -5,6 +5,9 @@
 }
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.2.2/Chart.bundle.min.js"></script>
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.23/css/jquery.dataTables.css">
+
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.23/js/jquery.dataTables.js"></script>
 <div class="app-main__inner">
     <div class="row">
         <div class="card-header-tab card-header-tab-animation card-header" style="margin-bottom:10px;">
@@ -13,30 +16,78 @@
                 PARTICIPANT LIST
 
             </div>
-
-            <div  id="divactivityTable">
-               <div >
-                <div class="table-responsive">
-                    <table class="table" id="activityTable">
-                        <thead>
-                            <tr>
-                                <th scope="col">Participant Type</th>
-                                <th scope="col">ID</th>
-                                <th scope="col">Name</th>
-                                <th scope="col">City</th>
-                                <th scope="col">Cluster</th>
-                                <th scope="col">Sub-Cluster</th>
-                                <th scope="col">Rank</th>
-                                <th scope="col">Total Points</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                        </tbody>
-                    </table>
-                </div>
-               </div>
-            </div>
         </div>
+        <div class="row mb-3 pt-3 pl-3 pr-3 card">
+            <div id="dvOutletWiseData">
+                <div class="row mb-3">
+                    <div class="container-fluid pt-3 pl-3 pr-3">
+                        <div class="pt-3 pl-3 pr-3 col-md-12 col-lg-12">
+                            <div class="row">
+                                <div class="col search-container">
+                                    <i class="fas fa-search"></i>
+                                    <input class="input100" type="text" id="txtSearch" placeholder="Search activity..." />
+                                </div>
+                                <div class="col text-right">
+                                    <ul class="list-inline progress-list mt-2">
+                                        <li class="list-inline-item">
+                                            <div class="dropdown">
+                                                <button class="btn btn-primary login-btn" onclick='ExportDataExcel();' type="button" id="btnExport">
+                                                    <i class="fas fa-file-export"></i> Export
+                                                </button>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="row mt-3" id="dvActivityData">
+
+                                <div class="table-responsive">
+                                    <table class="table" id="activityTable">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col">Participant Type</th>
+                                                <th scope="col">ID</th>
+                                                <th scope="col">Name</th>
+                                                <th scope="col">City</th>
+                                                <th scope="col">Cluster</th>
+                                                <th scope="col">Sub-Cluster</th>
+                                                <th scope="col">Rank</th>
+                                                <th scope="col">Total Points</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>  @*<div id="divactivityTable">
+
+            <div class="table-responsive">
+                <table class="table" id="activityTable">
+                    <thead>
+                        <tr>
+                            <th scope="col">Participant Type</th>
+                            <th scope="col">ID</th>
+                            <th scope="col">Name</th>
+                            <th scope="col">City</th>
+                            <th scope="col">Cluster</th>
+                            <th scope="col">Sub-Cluster</th>
+                            <th scope="col">Rank</th>
+                            <th scope="col">Total Points</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+
+        </div>*@
+    </div>
     </div>
 </div>
 <script>
@@ -74,8 +125,9 @@
                     DrawTable();
 
                 } else {
+                    tableData.length = 0;
                     $.map(response, function (item) {
-                       
+
                         optionItem = {}
                         optionItem["participantType"] = item.participantType;
                         optionItem["Id"] = item.Id;
@@ -88,6 +140,7 @@
                         // optionItem["Reset"] = "<input type='button' id='" + item.CounterId + "' onclick='UpdateSecurityKey(" + item.CounterId + ")' value='Reset'>";
                         tableData.push(optionItem);
                     });
+                    console.log(tableData);
                     DrawTable();
                 }
                 $("#divLoader").hide();
@@ -120,7 +173,7 @@
                     { data: "subcluster" },
                     { data: "Rank" },
                     { data: "Totalpoints" },
-                   
+
                 ],
                 aoColumnDefs: [
                     {
@@ -146,10 +199,17 @@
             });
         }
 </script>
-<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.23/css/jquery.dataTables.css">
 
-<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.23/js/jquery.dataTables.js"></script>
+<style>
+    table.dataTable thead .sorting_asc {
+        background: url("https://cdn.datatables.net/1.10.0/images/sort_asc.png") no-repeat center left;
+    }
 
+    table.dataTable thead .sorting_desc {
+        background: url("https://cdn.datatables.net/1.10.0/images/sort_desc.png") no-repeat center left;
+    }
 
-
-
+    table.dataTable thead .sorting {
+        background: url("https://cdn.datatables.net/1.10.0/images/sort_both.png") no-repeat center left;
+    }
+</style>

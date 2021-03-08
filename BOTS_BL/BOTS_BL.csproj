@@ -154,9 +154,11 @@
     <Compile Include="Models\ChitaleModel\PointsExpiry.cs" />
     <Compile Include="Models\ChitaleModel\ProductReturnDetail.cs" />
     <Compile Include="Models\ChitaleModel\ProductReturnMaster.cs" />
+    <Compile Include="Models\ChitaleModel\RedemptionModel.cs" />
     <Compile Include="Models\ChitaleModel\SalesmanMapping.cs" />
     <Compile Include="Models\ChitaleModel\SubClusterMaster.cs" />
     <Compile Include="Models\ChitaleModel\TargetMaster.cs" />
+    <Compile Include="Models\ChitaleModel\tblRedemptionRequest.cs" />
     <Compile Include="Models\ChitaleModel\TempBalance.cs" />
     <Compile Include="Models\ChitaleModel\TempPoint.cs" />
     <Compile Include="Models\ChitaleModel\TempReceiptNo.cs" />
