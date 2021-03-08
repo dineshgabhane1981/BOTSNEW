@@ -16,10 +16,19 @@ namespace Chitale.Controllers
         Exceptions newexception = new Exceptions();
         // GET: Dashboard
         public ActionResult Index()
-        {            
+        {
+            GetParticipantList();
+
+
             return View();
         }
-
+        public ParticipantList GetParticipantList()
+        {
+            var UserSession = (CustomerDetail)Session["ChitaleUser"];
+            ParticipantList objlist = new ParticipantList();
+            objlist = CDR.GetParticipantList(UserSession.CustomerId, UserSession.CustomerType);
+            return objlist;
+        }
         public JsonResult GetDashboardSummeryData(string Flag)
         {
             Dashboardsummary SummeryData = new Dashboardsummary();
@@ -106,7 +115,8 @@ namespace Chitale.Controllers
             try
             {
                 var UserSession = (CustomerDetail)Session["ChitaleUser"];                
-                rankData = CDR.GetRankData(UserSession.CustomerId);               
+                rankData = CDR.GetRankData(UserSession.CustomerId);
+                ViewBag.schoolName = rankData.CurrentRank;
             }
             catch (Exception ex)
             {

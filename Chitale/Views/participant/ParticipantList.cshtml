@@ -1,0 +1,181 @@
+﻿@model List<BOTS_BL.Models.ChitaleModel.ParticipantList>
+@{
+    ViewBag.Title = "ParticipantList";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.2.2/Chart.bundle.min.js"></script>
+<div class="app-main__inner">
+    <div class="row">
+        <div class="card-header-tab card-header-tab-animation card-header" style="margin-bottom:10px;">
+            <div class="card-header-title">
+                <i class="header-icon lnr-apartment icon-gradient bg-love-kiss"> </i>
+                SUMMARY
+            </div>
+
+            <div class="row" id="divactivityTable">
+                <div class="table-responsive">
+                    <table class="table" id="activityTable">
+                        <thead>
+                            <tr>
+                                <th scope="col">Participant Type</th>
+                                <th scope="col">ID</th>
+                                <th scope="col">Name</th>
+                                <th scope="col" class="mobile-hide">City</th>
+                                <th scope="col" class="mobile-hide">Cluster</th>
+                                <th scope="col" class="mobile-hide">Sub-Cluster</th>
+                                <th scope="col" class="mobile-hide" style="text-align:center;">Rank</th>
+                                <th scope="col" style="text-align:center;">Total Points</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (Model != null)
+                            {
+                                //if (Model.Count > 0)
+                                //{
+                                   var cId = 0;
+
+                                foreach (var List in Model)
+                                {
+                                    cId++;
+                                    var isCurriculum = false;
+                                        <tr>
+                                            <td>@activity.ActivityName</td>
+                                            <td>@activity.ActivityType</td>
+                                            <td style="max-width:150px;">@activity.ActivityDescription</td>
+                                            @if (activity.ActivityDuration == "0" || activity.ActivityDuration == "")
+                                            {
+                                                <td class="mobile-hide add-column-padding">-</td>
+                                            }
+                                            else
+                                            {
+                                                var durationInSeconds = 0;
+                                                var duration = "0";
+                                                if (Convert.ToInt32(activity.ActivityDuration) >= 60)
+                                                {
+                                                    duration = activity.ActivityDuration + ":00";
+                                                }
+                                                else
+                                                {
+                                                    durationInSeconds = Convert.ToInt32(activity.ActivityDuration) * 60;
+                                                    TimeSpan t = TimeSpan.FromSeconds(durationInSeconds);
+                                                    duration = string.Format("{0:D2}:{1:D2}", (int)t.Minutes, t.Seconds);
+                                                }
+                                                <td class="mobile-hide add-column-padding">@duration</td>
+                                            }
+                                            <td class="mobile-hide">@activity.ActivityStartDate</td>
+                                            @if (activity.ActivityCompletionDate == "")
+                                            {
+                                                <td class="mobile-hide add-column-padding ">-</td>
+                                            }
+                                            else
+                                            {
+                                                <td class="mobile-hide">@activity.ActivityCompletionDate</td>
+                                            }
+                                            @if (activity.ActivityStatus == "Completed")
+                                            {
+                                                <td class="mobile-hide" style="text-align:center;"><i class="far fa-check-circle green-color"></i></td>
+                                            }
+                                            @if (activity.ActivityStatus == "InProgress")
+                                            {
+                                                <td class="mobile-hide" style="text-align:center;"><i class="far fa-hourglass orange-color"></i></td>
+                                            }
+                                            @if (activity.ActivityStatus == "Not Started")
+                                            {
+                                                <td class="mobile-hide" style="text-align:center;"><i class="far fa-clock"></i></td>
+                                            }
+                                            @if (activity.ActivityType == "Quiz")
+                                            {
+                                                <td style="text-align:center;">
+                                                    <a href="@Url.Action("LaunchQuiz", "Assignment", new { QuizId = activity.ActivityId })" class="login" title="Launch Quiz"><img src="~/assets/images/launch.png" /></a>&nbsp;&nbsp;
+                                                    @if (activity.ActivityRating == "0" && activity.ActivityStatus == "Completed")
+                                                    {
+                                                        <a href="@Url.Action("RatingAndFeedback", "Assignment", new { ActivityId = activity.ActivityId, LearningType = "Quiz" })" class="login" title="Give Rating"><i class="fas fa-star"></i></a>
+
+                                                    }
+                                                    else
+                                                    {
+                                                        <a><i class="fas fa-star"></i></a>
+                                                    }
+                                                </td>
+                                            }
+                                            @if (activity.ActivityType == "Course")
+                                            {
+                                                <td style="text-align:center;">
+
+                                                    @if (activity.ActivitySubType == "Scorm1.2")
+                                                    {
+                                                        //<a href="@baseURL?AID=@activity.ActivityId&LID=@objUser.UserId" class="login" title="Launch Course" target="_blank"><img src="~/assets/images/launch.png" /></a>
+                                                        <a href="@Url.Action("LaunchCourse", "Assignment", new { CourseId = activity.ActivityId })" class="login" title="Launch Course"><img src="~/assets/images/launch.png" /></a>
+                                                    }
+                                                    @if (activity.ActivitySubType == "Other")
+                                                    {
+                                                        <a href="@CourseOtherBaseURL\ContentModules\@activity.ActivityId@activity.ActivityURL" class="login" title="Launch Course" target="_blank"><img src="~/assets/images/launch.png" /></a>
+                                                    }
+
+                                                    &nbsp;
+                                                    @if (activity.ActivityRating == "0" && activity.ActivityStatus == "Completed")
+                                                    {
+                                                        <a href="@Url.Action("RatingAndFeedback", "Assignment", new { ActivityId = activity.ActivityId, LearningType = "Course" })" class="login" title="Give Rating"><i class="fas fa-star"></i></a>
+                                                    }
+                                                    else
+                                                    {
+                                                        <a><i class="fas fa-star"></i></a>
+                                                    }
+                                                </td>
+                                            }
+                                            @if (activity.ActivityType == "Curriculum")
+                                            {
+
+                                                isCurriculum = true;
+                                                var imgId = "imgExpand" + cId;
+                                                <td style="text-align:center;">
+                                                    <img id="@imgId" src="~/assets/images/details_open.png" style="cursor:pointer;" onclick="ShowActivities(@cId,@activity.ActivityId);" />
+
+                                                </td>
+
+                                            }
+                                        </tr>
+                                        if (isCurriculum)
+                                        {
+                                            var dynamicIdTr = "trActivities" + cId;
+                                            var dynamicIdDiv = "dvActivities" + cId;
+                                            <tr id="@dynamicIdTr" style="display:none;">
+                                                <td colspan="7">
+                                                    <div id="@dynamicIdDiv" style="display:none;" class="table-responsive">
+
+                                                    </div>
+                                                </td>
+                                                <td style="display:none;"></td>
+                                                <td style="display:none;"></td>
+                                                <td style="display:none;"></td>
+                                                <td style="display:none;"></td>
+                                                <td style="display:none;"></td>
+                                                <td style="display:none;"></td>
+                                            </tr>
+                                        }
+
+                                    }
+                                //}
+                                else
+                                {
+                                    <tr>
+                                        <td colspan="7" align="center">No Learning Available</td>
+                                    </tr>
+                                }
+                            }
+                            else
+                            {
+                                <tr>
+                                    <td colspan="7">No Learning Available</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+    </div>
+

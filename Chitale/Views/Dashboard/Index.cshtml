@@ -22,10 +22,10 @@
 
             <div class="row">
                 <div class="col-md-6 col-xl-4">
-                    <div class="card mb-3 widget-content bg-midnight-bloom">
+                    <div class="card mb-3 widget-content" style="background-color:palevioletred;">
                         <div class="widget-content-wrapper text-white">
                             <div class="widget-content-left">
-                                <div class="widget-heading" style="font-size:17px;">
+                                <div class="widget-heading" style="font-size:17px; ">
                                     Order Points (Purchase)
                                 </div>
                                 <div class="widget-numbers text-white"><span id="spnPurchaseOrderPoints"></span></div>
@@ -46,7 +46,7 @@
                     </div>
                 </div>
                 <div class="col-md-6 col-xl-4">
-                    <div class="card mb-3 widget-content bg-grow-early">
+                    <div class="card mb-3 widget-content" style="background-color:orchid;">
                         <div class="widget-content-wrapper text-white">
                             <div class="widget-content-left">
                                 <div class="widget-heading" style="font-size:17px;">
@@ -62,7 +62,7 @@
 
             <div class="row">
                 <div class="col-md-6 col-xl-4">
-                    <div class="card mb-3 widget-content bg-midnight-bloom">
+                    <div class="card mb-3 widget-content " style="background-color:chartreuse;">
                         <div class="widget-content-wrapper text-white">
                             <div class="widget-content-left">
                                 <div class="widget-heading" style="font-size:17px;">
@@ -74,7 +74,7 @@
                     </div>
                 </div>
                 <div class="col-md-6 col-xl-4">
-                    <div class="card mb-3 widget-content bg-arielle-smile">
+                    <div class="card mb-3 widget-content" style="background-color:coral;">
                         <div class="widget-content-wrapper text-white">
                             <div class="widget-content-left">
                                 <div class="widget-heading" style="font-size:17px;">
@@ -86,7 +86,7 @@
                     </div>
                 </div>
                 <div class="col-md-6 col-xl-4">
-                    <div class="card mb-3 widget-content bg-grow-early">
+                    <div class="card mb-3 widget-content " style="background-color:darkkhaki;">
                         <div class="widget-content-wrapper text-white">
                             <div class="widget-content-left">
                                 <div class="widget-heading" style="font-size:17px;">
@@ -193,9 +193,9 @@
         showSummerySelection('1');
         showLostBTD('1');
         showTGTCurrent('1');
-        
+
     });
-    
+
     function showSummerySelection(flag) {
 
         $.ajax({
@@ -204,7 +204,7 @@
             data: "{'Flag': '" + flag + "'}",
             contentType: "application/json; charset=utf-8",
             dataType: "json",
-            success: function (response) {                
+            success: function (response) {
                 if (response != null) {
                     $("#spnPurchaseOrderPoints").text(response.PurchaseOrderPointsStr);
                     $("#spnSalesOrderPoints").text(response.SalesOrderPointsStr);
@@ -212,7 +212,7 @@
                     $("#spnAddOnPoints").text(response.AddOnPointsStr);
                     $("#spnLostPoints").text(response.LostPointsStr);
                     $("#spnTotalPointsBalance").text(response.TotalPointsBalanceStr);
-                    
+
                     $("#divLoader").hide();
                 }
             },
@@ -242,7 +242,7 @@
             data: "{'profileFlag': '" + flag + "'}",
             contentType: "application/json; charset=utf-8",
             dataType: "json",
-            success: function (response) {                
+            success: function (response) {
                 if (response != null) {
                     $('#cvLostOpp').remove(); // this is my <canvas> element
                     $('#containerLostOpp').append('<canvas id="cvLostOpp"><canvas>');
@@ -253,11 +253,11 @@
                             position: 'bottom'
                         }
                     }
-                                       
+
                     var data1 = response[0];
-                    var data2 = response[1];   
-                    var data3 = response[2];   
-                    var data4 = response[3];   
+                    var data2 = response[1];
+                    var data3 = response[2];
+                    var data4 = response[3];
                     console.log(data1)
                     console.log(data2)
                     console.log(data3)
@@ -265,7 +265,7 @@
                     var data = {
                         datasets: [{
                             data: [...response],
-                            backgroundColor: ["#f990a7", "#aad2ed", "#FFFF00","#0000FF"]
+                            backgroundColor: ["#f990a7", "#aad2ed", "#FFFF00", "#0000FF"]
                         }],
 
                         // These labels appear in the legend and in the tooltips when hovering different arcs
@@ -299,12 +299,12 @@
         if (flag == '1') {
             $("#lostBTD").addClass("active");
             $("#lostCurrentMonth").removeClass("active");
-            
+
         }
         else {
             $("#lostBTD").removeClass("active");
             $("#lostCurrentMonth").addClass("active");
-           
+
         }
 
     }
@@ -389,6 +389,7 @@
             dataType: "json",
             success: function (response) {
                 console.log(response);
+                $("#spnrank").text(response.CurrentRank);
                 $("#spnRank").text(response.CurrentRank);
                 $("#spnLastMonthRank").text(response.LastMonthRank);
                 $("#spnRankPoints").text(response.RankPoints);
@@ -403,7 +404,7 @@
             }
         });
 
-        
+
     }
 
 
