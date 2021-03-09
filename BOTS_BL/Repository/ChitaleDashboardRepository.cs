@@ -112,7 +112,7 @@ namespace BOTS_BL.Repository
         {
             DashboardRank objRank = new DashboardRank();
             DataSet retVal = new DataSet();
-            SqlConnection sqlConn = new SqlConnection("Data Source=DESKTOP-JOLRHRS\\SQLEXPRESS;Initial Catalog=ChitaleLive;Integrated Security=True");
+            SqlConnection sqlConn = new SqlConnection("Data Source=LAPTOP-SIDRDIDV;Initial Catalog=ChitaleLive;Integrated Security=True");
             SqlCommand cmdReport = new SqlCommand("sp_Dashboard", sqlConn);
             SqlDataAdapter daReport = new SqlDataAdapter(cmdReport);
             using (cmdReport)

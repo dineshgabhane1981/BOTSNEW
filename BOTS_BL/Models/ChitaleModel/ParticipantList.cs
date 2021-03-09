@@ -18,7 +18,7 @@ namespace BOTS_BL.Models.ChitaleModel
         public int Rank { get; set; }
         public decimal Totalpoints { get; set; }
 
-        List<ParticipantList> lstparticipantlist { get; set; }
+       public List<ParticipantList> lstparticipantlist { get; set; }
 
         
     }

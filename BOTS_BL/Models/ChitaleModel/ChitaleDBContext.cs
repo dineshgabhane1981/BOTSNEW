@@ -710,5 +710,7 @@ namespace BOTS_BL.Models.ChitaleModel
                 .Property(e => e.RefOrderNo)
                 .IsUnicode(false);
         }
+
+        public System.Data.Entity.DbSet<BOTS_BL.Models.ChitaleModel.ParticipantList> ParticipantLists { get; set; }
     }
 }

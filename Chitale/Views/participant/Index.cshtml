@@ -2,6 +2,7 @@
 @{
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
+
 }
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.2.2/Chart.bundle.min.js"></script>
@@ -10,7 +11,7 @@
 <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.23/js/jquery.dataTables.js"></script>
 <div class="app-main__inner">
     <div class="row" style="margin-left:20px;">
-         
+
         <div class="row mb-3 pt-3 pl-3 pr-3 card">
             <div id="dvOutletWiseData">
                 <b>PARTICIPANT LIST</b>
@@ -41,6 +42,7 @@
                                     <table class="table" id="activityTable">
                                         <thead>
                                             <tr>
+                                                <th id="img" scope="col"></th>
                                                 <th scope="col">Participant Type</th>
                                                 <th scope="col">ID</th>
                                                 <th scope="col">Name</th>
@@ -52,7 +54,8 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                        </tbody>
+                                            
+                                            </tbody>
                                     </table>
                                 </div>
                             </div>
@@ -61,34 +64,13 @@
                     </div>
                 </div>
             </div>
-        </div>  @*<div id="divactivityTable">
-
-            <div class="table-responsive">
-                <table class="table" id="activityTable">
-                    <thead>
-                        <tr>
-                            <th scope="col">Participant Type</th>
-                            <th scope="col">ID</th>
-                            <th scope="col">Name</th>
-                            <th scope="col">City</th>
-                            <th scope="col">Cluster</th>
-                            <th scope="col">Sub-Cluster</th>
-                            <th scope="col">Rank</th>
-                            <th scope="col">Total Points</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                    </tbody>
-                </table>
-            </div>
-
-        </div>*@
-    </div>
+        </div>
     </div>
 </div>
+
 <script>
     $(document).ready(function () {
-        GetParticipantList();
+       GetParticipantList();
     });
     var tableData = [];
     function GetParticipantList() {
@@ -100,9 +82,68 @@
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             success: function (response) {
-                console.log(response);
+               // console.log(response);
                 if (response.lstparticipantLists != null) {
                     console.log("in");
+                    tableData.length = 0;
+                    $.map(response.lstparticipantLists, function (item) {
+                        alert(item.participantType);
+                        optionItem = {}
+                        optionItem["participantType"] = item.participantType;
+                        optionItem["Id"] = item.Id;
+                        optionItem["Name"] = item.Name;
+                        optionItem["city"] = item.city;
+                        optionItem["cluster"] = item.cluster;
+                        optionItem["subcluster"] = item.subcluster;
+                        optionItem["Rank"] = item.Rank;
+                        optionItem["Totalpoints"] = item.Totalpoints;
+                       // optionItem["Reset"] = "<input type='button' id='" + item.CounterId + "' onclick='UpdateSecurityKey(" + item.CounterId + ")' value='Reset'>";
+                        tableData.push(optionItem);
+                    });
+                    DrawTable();
+
+                } else {
+                    tableData.length = 0;
+                    $.map(response, function (item) {
+
+                        optionItem = {}
+                        optionItem["participantType"] = item.participantType;
+                        optionItem["Id"] = item.Id;
+                        optionItem["Name"] = item.Name;
+                        optionItem["city"] = item.city;
+                        optionItem["cluster"] = item.cluster;
+                        optionItem["subcluster"] = item.subcluster;
+                        optionItem["Rank"] = item.Rank;
+                        optionItem["Totalpoints"] = item.Totalpoints;
+                        // optionItem["Reset"] = "<input type='button' id='" + item.CounterId + "' onclick='UpdateSecurityKey(" + item.CounterId + ")' value='Reset'>";
+                        tableData.push(optionItem);
+                    });
+                    
+                    DrawTable();
+                }
+                $("#divLoader").hide();
+            },
+            error: function (response) {
+                console.log(result.responseText)
+                $("#divLoader").hide();
+            }
+        });
+
+    }
+    function GetNestedParticipantList(Id, participantType) {
+        console.log(Id);
+        console.log(participantType);
+        $("#divLoader").show();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("GetNestedParticipantList", "Participant")',//"/ITOperations/GetChangeNameData",
+            data: '{customerId:' + JSON.stringify(Id) + ', CustomerType:' + JSON.stringify(participantType) + '}',
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                console.log(response);
+                if (response.lstparticipantLists != null) {
+                   
                     tableData.length = 0;
                     $.map(response.lstparticipantLists, function (item) {
                         alert(item.participantType);
@@ -160,15 +201,22 @@
                 "bFilter": true,
                 "pageLength": 10,
                 "pagingType": "simple_numbers",
-                "columns": [
-                    { data: "participantType" },
+            "columns": [
+                {
+                    data: "Id",
+                    "render": function (data, type, row) {
+                       
+                        return '<a href="#" onclick="GetNestedParticipantList(\'' + row['Id'] + '\'\, \'' + row['participantType'] + '\'\)"><img src="Content/assets/images/details_open.png"/></a>';
+                    }
+                },
+                { data:"participantType" },
                     { data: "Id" },
                     { data: "Name" },
                     { data: "city" },
                     { data: "cluster" },
                     { data: "subcluster" },
                     { data: "Rank" },
-                    { data: "Totalpoints" },
+                { data: "Totalpoints" },
 
                 ],
                 aoColumnDefs: [
@@ -195,6 +243,11 @@
             });
         }
 </script>
+
+<script src="~/Scripts/jquery-ui-1.12.1.js"></script>
+<script src="~/Scripts/jquery-ui-1.12.1.min.js"></script>
+<link href="~/Content/themes/base/jquery-ui.min.css" rel="stylesheet" />
+<link href="~/Content/themes/base/jquery-ui.css" rel="stylesheet" />
 
 <style>
     table.dataTable thead .sorting_asc {

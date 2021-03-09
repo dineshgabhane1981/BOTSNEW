@@ -20,9 +20,10 @@ namespace BOTS_BL.Repository
             try
             {
                 DataSet retVal = new DataSet();
-                SqlConnection sqlConn = new SqlConnection("Data Source=DESKTOP-JOLRHRS\\SQLEXPRESS;Initial Catalog=ChitaleLive;Integrated Security=True");
+                SqlConnection sqlConn = new SqlConnection("Data Source=LAPTOP-SIDRDIDV;Initial Catalog=ChitaleLive;Integrated Security=True");
                 SqlCommand cmdReport = new SqlCommand("sp_KYBLoadParticipant_MFC", sqlConn);
                 SqlDataAdapter daReport = new SqlDataAdapter(cmdReport);
+               // daReport.SelectCommand.CommandTimeout = 180;  
                 using (cmdReport)
                 {
                     SqlParameter param1 = new SqlParameter("@pi_LoginId", "");
