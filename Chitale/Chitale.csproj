@@ -131,6 +131,7 @@
     <Compile Include="Controllers\DashboardController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ParticipantController.cs" />
+    <Compile Include="Controllers\PointsLedgerController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -266,6 +267,8 @@
     <Content Include="Views\participant\ParticipantList.cshtml" />
     <Content Include="Views\participant\RedumptionData.cshtml" />
     <Content Include="Views\participant\Index.cshtml" />
+    <Content Include="Views\PointsLedger\TgtVsAch.cshtml" />
+    <Content Include="Views\PointsLedger\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
