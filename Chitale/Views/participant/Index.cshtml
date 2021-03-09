@@ -141,45 +141,7 @@
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             success: function (response) {
-                console.log(response);
-                if (response.lstparticipantLists != null) {
-                   
-                    tableData.length = 0;
-                    $.map(response.lstparticipantLists, function (item) {
-                        alert(item.participantType);
-                        optionItem = {}
-                        optionItem["participantType"] = item.participantType;
-                        optionItem["Id"] = item.Id;
-                        optionItem["Name"] = item.Name;
-                        optionItem["city"] = item.city;
-                        optionItem["cluster"] = item.cluster;
-                        optionItem["subcluster"] = item.subcluster;
-                        optionItem["Rank"] = item.Rank;
-                        optionItem["Totalpoints"] = item.Totalpoints;
-                       // optionItem["Reset"] = "<input type='button' id='" + item.CounterId + "' onclick='UpdateSecurityKey(" + item.CounterId + ")' value='Reset'>";
-                        tableData.push(optionItem);
-                    });
-                    DrawTable();
-
-                } else {
-                    tableData.length = 0;
-                    $.map(response, function (item) {
-
-                        optionItem = {}
-                        optionItem["participantType"] = item.participantType;
-                        optionItem["Id"] = item.Id;
-                        optionItem["Name"] = item.Name;
-                        optionItem["city"] = item.city;
-                        optionItem["cluster"] = item.cluster;
-                        optionItem["subcluster"] = item.subcluster;
-                        optionItem["Rank"] = item.Rank;
-                        optionItem["Totalpoints"] = item.Totalpoints;
-                        // optionItem["Reset"] = "<input type='button' id='" + item.CounterId + "' onclick='UpdateSecurityKey(" + item.CounterId + ")' value='Reset'>";
-                        tableData.push(optionItem);
-                    });
-                    console.log(tableData);
-                    DrawTable();
-                }
+                BindActivities(Id, response);
                 $("#divLoader").hide();
             },
             error: function (response) {
@@ -187,6 +149,10 @@
                 $("#divLoader").hide();
             }
         });
+
+    }
+
+    function BindNestedList(Id, data) {
 
     }
     function DrawTable() {
