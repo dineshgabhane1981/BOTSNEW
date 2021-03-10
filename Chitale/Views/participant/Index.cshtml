@@ -1,4 +1,4 @@
-﻿
+﻿@model List<BOTS_BL.Models.ChitaleModel.ParticipantList>
 @{
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -28,9 +28,9 @@
                                     <ul class="list-inline progress-list mt-2">
                                         <li class="list-inline-item">
                                             <div class="dropdown">
-                                                <button class="btn btn-primary login-btn" onclick='ExportDataExcel();' type="button" id="btnExport">
+                                                @*<button class="btn btn-primary login-btn" onclick='ExportDataExcel();' type="button" id="btnExport">
                                                     <i class="fas fa-file-export"></i> Export
-                                                </button>
+                                                </button>*@
                                             </div>
                                         </li>
                                     </ul>
@@ -42,7 +42,7 @@
                                     <table class="table" id="activityTable">
                                         <thead>
                                             <tr>
-                                                <th id="img" scope="col"></th>
+                                                <th scope="col"></th>
                                                 <th scope="col">Participant Type</th>
                                                 <th scope="col">ID</th>
                                                 <th scope="col">Name</th>
@@ -54,8 +54,66 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            
-                                            </tbody>
+                                            @if (Model != null)
+                                            {
+                                                if (Model.Count > 0)
+                                                {
+                                                    foreach (var item in Model)
+                                                    {
+                                                        var imgId = "imgExpand" + item.Id;
+                                                        <tr>
+                                                            <td style="text-align:center;">
+                                                                @if (item.participantType == "Distributors")
+                                                                {
+                                                                    <img id="@imgId" src="~/Content/assets/images/details_open.png" style="cursor:pointer;" onclick="ShowActivities(@item.Id);" />
+                                                                }
+                                                            </td>
+                                                            <td>@item.participantType</td>
+                                                            <td>@item.Id</td>
+                                                            <td>@item.Name</td>
+                                                            <td>@item.city</td>
+                                                            <td>@item.cluster</td>
+                                                            <td>@item.subcluster</td>
+                                                            <td>@item.Rank</td>
+                                                            <td>@item.Totalpoints</td>
+                                                        </tr>
+                                                        if (item.participantType == "Distributors")
+                                                        {
+                                                            var dynamicIdTr = "trActivities" + item.Id;
+                                                            var dynamicIdDiv = "dvActivities" + item.Id;
+                                                            <tr id="@dynamicIdTr" style="display:none;">
+                                                                <td colspan="9">
+                                                                    <div id="@dynamicIdDiv" style="display:none;" class="table-responsive">
+
+                                                                    </div>
+                                                                </td>
+                                                                <td style="display:none;"></td>
+                                                                <td style="display:none;"></td>
+                                                                <td style="display:none;"></td>
+                                                                <td style="display:none;"></td>
+                                                                <td style="display:none;"></td>
+                                                                <td style="display:none;"></td>
+                                                                <td style="display:none;"></td>
+                                                                <td style="display:none;"></td>
+                                                            </tr>
+                                                        }
+                                                    }
+
+                                                }
+                                                else
+                                                {
+                                                    <tr>
+                                                        <td colspan="9" align="center">No Data Available</td>
+                                                    </tr>
+                                                }
+                                            }
+                                            else
+                                            {
+                                                <tr>
+                                                    <td colspan="9" align="center">No Data Available</td>
+                                                </tr>
+                                            }
+                                        </tbody>
                                     </table>
                                 </div>
                             </div>
@@ -70,8 +128,128 @@
 
 <script>
     $(document).ready(function () {
-       GetParticipantList();
+        $('#activityTable').DataTable({
+            "aaSorting": [],
+            "paging": true,
+            "ordering": false,
+            "info": true,
+            "bFilter": true,
+            "pageLength": 10,
+            "pagingType": "simple_numbers",
+            //language: {
+            //    paginate: {
+            //        next: '&#8594;', // or '→'
+            //        previous: '&#8592;' // or '←'
+            //    }
+            //}
+            aoColumnDefs: [
+                {
+                    bSortable: false,
+                    aTargets: [-1, -2]
+                }
+            ]
+        });
+
+        $('#activityTable_filter').hide();
+
+        $('#txtSearch').on('keyup', function () {
+
+            $.fn.dataTable.ext.search.push(function (settings, searchData) {
+                var term = $('#txtSearch').val().toLowerCase()
+                for (var i = 0; i < searchData.length; i++) {
+                    if (searchData[i].toLowerCase().indexOf(term) == 0) {
+                        return true;
+                    }
+                }
+                return false;
+            });
+            var table = $('#activityTable').DataTable();
+            table.draw();
+        });
+       //GetParticipantList();
     });
+
+
+    function ShowActivities(id) {
+        var pType = "Distributors";
+        if ($("#dvActivities" + id).is(":visible")) {
+            $("#dvActivities" + id).hide(1000);
+            $("#trActivities" + id).hide(1000);
+
+            $("#imgExpand" + id).attr("src", "/Content/assets/images/details_open.png");
+        }
+        else {
+            $("#divLoader").show();
+            $.ajax({
+                type: "POST",
+                 url: '@Url.Action("GetNestedParticipantList")',
+                data: '{customerId:' + JSON.stringify(id) + ', CustomerType:' + JSON.stringify(pType) + '}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (response) {
+                    console.log(response);
+                    BindActivities(id, response);
+                    $("#divLoader").hide();
+                },
+                failure: function (response) {
+                    swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Something went Wrong!'
+                    })
+                    $("#divLoader").hide();
+                }
+            });
+        }
+    }
+
+    function BindActivities(id, data) {
+        console.log(data);
+        var htmlStr = "<table border=\"2\" style=\"background-color:gray;margin-left: 11px;width: 98%;\" class=\"table\">";
+        htmlStr += "<tr style=\"text-align: center;\">"
+
+        htmlStr += "<th scope=\"col\">Participant Type</th>";
+        htmlStr += "<th scope=\"col\">ID</th>";
+        htmlStr += "<th scope=\"col\" style=\"text-align: left;\">Name</th>";
+        htmlStr += "<th scope=\"col\">City</th>";
+        htmlStr += "<th scope=\"col\">Cluster</th>";
+        htmlStr += "<th scope=\"col\">Sub-Cluster</th>";
+        htmlStr += "<th scope=\"col\">Rank</th>";
+        htmlStr += "<th scope=\"col\">Total Points</th>";
+        htmlStr += "</tr>";
+        $.map(data, function (item) {
+            htmlStr += "<tr style=\"text-align: center;\">"
+
+            //htmlStr += "<td>" + item.TxnType + "</td>";
+            htmlStr += "<td>" + item.participantType + "</td>";
+            htmlStr += "<td>" + item.Id + "</td>";
+            htmlStr += "<td style=\"text-align: left; width: 150px;\">" + item.Name + "</td>";
+            htmlStr += "<td style=\"width: 100px;\">" + item.city + "</td>";
+            htmlStr += "<td style=\"width: 100px;\">" + item.cluster + "</td>";
+            htmlStr += "<td style=\"width: 100px;\">" + item.subcluster + "</td>";
+            htmlStr += "<td style=\"text-align: center;\">" + item.Rank.toFixed(2) + "</td>";
+            htmlStr += "<td style=\"text-align: center;\">" + item.Totalpoints.toFixed(2) + "</td>";            
+            htmlStr += "</tr>"
+        });
+
+        htmlStr += "</table>";
+        $("#dvActivities" + id).html(htmlStr);
+
+        $("#trActivities" + id).show(1000);
+        $("#dvActivities" + id).show(1000);
+        $("#imgExpand" + id).attr("src", "/Content/assets/images/details_close.png");
+
+    }
+
+
+
+
+
+
+
+
+
+
     var tableData = [];
     function GetParticipantList() {
         $("#divLoader").show();
@@ -118,7 +296,7 @@
                         // optionItem["Reset"] = "<input type='button' id='" + item.CounterId + "' onclick='UpdateSecurityKey(" + item.CounterId + ")' value='Reset'>";
                         tableData.push(optionItem);
                     });
-                    
+
                     DrawTable();
                 }
                 $("#divLoader").hide();
@@ -155,65 +333,8 @@
     function BindNestedList(Id, data) {
 
     }
-    function DrawTable() {
-        var table1 = $('#activityTable').DataTable();
-            table1.destroy();
 
-        var table = $('#activityTable').DataTable({
-                "data": tableData,
-                "paging": true,
-                "ordering": false,
-                "info": true,
-                "bFilter": true,
-                "pageLength": 10,
-                "pagingType": "simple_numbers",
-            "columns": [
-                {
-                    data: "Id",
-                    "render": function (data, type, row) {
-                       
-                        return '<a href="#" onclick="GetNestedParticipantList(\'' + row['Id'] + '\'\, \'' + row['participantType'] + '\'\)"><img src="Content/assets/images/details_open.png"/></a>';
-                    }
-                },
-                { data:"participantType" },
-                    { data: "Id" },
-                    { data: "Name" },
-                    { data: "city" },
-                    { data: "cluster" },
-                    { data: "subcluster" },
-                    { data: "Rank" },
-                { data: "Totalpoints" },
-
-                ],
-                aoColumnDefs: [
-                    {
-                        bSortable: false,
-                        aTargets: []
-                    }
-                ]
-            });
-            $('#activityTable_filter').hide();
-            $('#txtSearch').on('keyup', function () {
-
-                $.fn.dataTable.ext.search.push(function (settings, searchData) {
-                    var term = $('#txtSearch').val().toLowerCase()
-                    for (var i = 0; i < searchData.length; i++) {
-                        if (searchData[i].toLowerCase().indexOf(term) == 0) {
-                            return true;
-                        }
-                    }
-                    return false;
-                });
-                var table = $('#activityTable').DataTable();
-                table.draw();
-            });
-        }
 </script>
-
-<script src="~/Scripts/jquery-ui-1.12.1.js"></script>
-<script src="~/Scripts/jquery-ui-1.12.1.min.js"></script>
-<link href="~/Content/themes/base/jquery-ui.min.css" rel="stylesheet" />
-<link href="~/Content/themes/base/jquery-ui.css" rel="stylesheet" />
 
 <style>
     table.dataTable thead .sorting_asc {

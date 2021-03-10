@@ -151,6 +151,7 @@
     <Compile Include="Models\ChitaleModel\ParticipantList.cs" />
     <Compile Include="Models\ChitaleModel\PaymentMaster.cs" />
     <Compile Include="Models\ChitaleModel\PaymentPointsConfig.cs" />
+    <Compile Include="Models\ChitaleModel\PointLedgerModel.cs" />
     <Compile Include="Models\ChitaleModel\PointsExpiry.cs" />
     <Compile Include="Models\ChitaleModel\ProductReturnDetail.cs" />
     <Compile Include="Models\ChitaleModel\ProductReturnMaster.cs" />
@@ -162,6 +163,7 @@
     <Compile Include="Models\ChitaleModel\TempBalance.cs" />
     <Compile Include="Models\ChitaleModel\TempPoint.cs" />
     <Compile Include="Models\ChitaleModel\TempReceiptNo.cs" />
+    <Compile Include="Models\ChitaleModel\TgtvsAchMaster.cs" />
     <Compile Include="Models\ChitaleModel\TransactionMaster.cs" />
     <Compile Include="Models\CommonDB\CommonDBContext.cs" />
     <Compile Include="Models\CommonDB\CommonReferralURL.cs" />

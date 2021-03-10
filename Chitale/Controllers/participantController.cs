@@ -15,11 +15,12 @@ namespace Chitale.Controllers
         // GET: participant
         public ActionResult Index()
         {
-            //var UserSession = (CustomerDetail)Session["ChitaleUser"];
-            //ParticipantList objlist = new ParticipantList();
-            //objlist.lstparticipantlist = pr.GetParticipantList(UserSession.CustomerId, UserSession.CustomerType);
-            
-            return View();
+            var UserSession = (CustomerDetail)Session["ChitaleUser"];
+            ParticipantList objlist = new ParticipantList();
+            List<ParticipantList> lstparticipantLists = new List<ParticipantList>();
+            lstparticipantLists = pr.GetParticipantList(UserSession.CustomerId, UserSession.CustomerType);
+
+            return View(lstparticipantLists);
 
         }
        
@@ -107,6 +108,7 @@ namespace Chitale.Controllers
             {
                 tblRedemptionRequest objRedeem = new tblRedemptionRequest();
                 objRedeem.CustomerId = UserSession.CustomerId;
+                objRedeem.CustomerType = UserSession.CustomerType;
                 objRedeem.RedemptionType = Type;
                 objRedeem.Points = Points;
                 objRedeem.CreatedDate = DateTime.Now;

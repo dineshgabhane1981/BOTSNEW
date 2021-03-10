@@ -70,5 +70,11 @@ namespace BOTS_BL.Models.ChitaleModel
 
         [Column(TypeName = "numeric")]
         public decimal? AchievedAmt { get; set; }
+
+        [StringLength(100)]
+        public string Type { get; set; }
+
+        [StringLength(100)]
+        public string SubType { get; set; }
     }
 }

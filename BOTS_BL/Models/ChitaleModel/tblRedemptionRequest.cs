@@ -15,12 +15,16 @@ namespace BOTS_BL.Models.ChitaleModel
         [StringLength(50)]
         public string CustomerId { get; set; }
 
-        [MaxLength(50)]
+        [StringLength(50)]
         public string RedemptionType { get; set; }
 
-        
+        [Required]
+        [StringLength(50)]
         public string Points { get; set; }
 
         public DateTime? CreatedDate { get; set; }
+
+        [StringLength(25)]
+        public string CustomerType { get; set; }
     }
 }
