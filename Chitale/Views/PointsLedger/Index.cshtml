@@ -13,7 +13,7 @@
                     <div class="container-fluid pt-3 pl-3 pr-3">
                         <div class="pt-3 pl-3 pr-3 col-md-12 col-lg-12">
                             <div class="row">
-                                <div class="col search-container">
+                                <div class="col search-container" style="margin-bottom:10px;">
                                     <i class="fas fa-search"></i>
                                     <input class="input100" type="text" id="txtSearch" placeholder="Search activity..." />
                                 </div>
@@ -185,17 +185,11 @@
                     BindActivities(id, response);
                     $("#divLoader").hide();
                 },
-                failure: function (response) {
-                    swal.fire({
-                    icon: 'error',
-                    title: 'Oops...',
-                    text: 'Something went Wrong!'
-                    })
+                failure: function (response) {                    
                     $("#divLoader").hide();
                 }
             });
         }
-
     }
     function BindActivities(id,data) {
         console.log(data);
@@ -214,9 +208,7 @@
         htmlStr += "<th scope=\"col\">Net Earn Points</th>";
         htmlStr += "</tr>";
         $.map(data, function (item) {
-            htmlStr += "<tr style=\"text-align: center;\">"
-            
-            //htmlStr += "<td>" + item.TxnType + "</td>";
+            htmlStr += "<tr style=\"text-align: center;\">"            
             htmlStr += "<td>" + item.SubType + "</td>";
             htmlStr += "<td>" + item.RefNo + "</td>";
             htmlStr += "<td>" + item.Amount + "</td>";
@@ -236,7 +228,6 @@
         $("#trActivities" + id).show(1000);
         $("#dvActivities" + id).show(1000);
         $("#imgExpand" + id).attr("src", "/Content/assets/images/details_close.png");
-
     }
 
 

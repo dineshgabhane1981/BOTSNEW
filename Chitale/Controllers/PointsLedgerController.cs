@@ -30,8 +30,34 @@ namespace Chitale.Controllers
 
         public ActionResult TgtVsAch()
         {
-            return View();
+            var UserSession = (CustomerDetail)Session["ChitaleUser"];
+            TgtvsAchMaster objData = new TgtvsAchMaster();
+            objData = PLR.GetOverallData(UserSession.CustomerId);
+
+            return View(objData);
         }
+
+        public ActionResult GetCategoryTgtVsAch(string id, string pType)
+        {
+            List<TgtvsAchMaster> objData = new List<TgtvsAchMaster>();
+            objData = PLR.GetCategoryData(id);
+            return Json(objData, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult GetSubCategoryTgtVsAch(string CategoryCode)
+        {
+            var UserSession = (CustomerDetail)Session["ChitaleUser"];
+            List<TgtvsAchMaster> objData = new List<TgtvsAchMaster>();
+            objData = PLR.GetSubCategoryData(UserSession.CustomerId, CategoryCode);
+            return Json(objData, JsonRequestBehavior.AllowGet);
+        }
+        public ActionResult GetProductTgtVsAch(string SubCategoryCode)
+        {
+            var UserSession = (CustomerDetail)Session["ChitaleUser"];
+            List<TgtvsAchMaster> objData = new List<TgtvsAchMaster>();
+            objData = PLR.GetProductData(UserSession.CustomerId, SubCategoryCode);
+            return Json(objData, JsonRequestBehavior.AllowGet);
+        }       
 
     }
 }

@@ -26,7 +26,7 @@ namespace BOTS_BL.Repository
                     {
                         PointLedgerModel objPointLedger = new PointLedgerModel();
                         var objTransaction = context.TransactionMasters.Where(x => x.InvoiceNo == item.InvoiceNo && x.Type == "Purchase").FirstOrDefault();
-                        if(objTransaction !=null)
+                        if (objTransaction != null)
                         {
                             objPointLedger.TxnType = "Purchase";
                             objPointLedger.SubType = "Invoice";
@@ -47,7 +47,6 @@ namespace BOTS_BL.Repository
 
             return bojList;
         }
-
 
         public List<PointLedgerModel> GetInvoiceData(string InvoiceNo)
         {
@@ -85,6 +84,49 @@ namespace BOTS_BL.Repository
 
             return bojList;
         }
+
+        public TgtvsAchMaster GetOverallData(string CustomerId)
+        {
+            TgtvsAchMaster objTgtvsAchMaster = new TgtvsAchMaster();
+            using (var context = new ChitaleDBContext())
+            {
+                objTgtvsAchMaster = context.TgtvsAchMasters.Where(x => x.CustomerId == CustomerId && x.ProductType == "Over All").FirstOrDefault();
+            }
+
+            return objTgtvsAchMaster;
+        }
+        public List<TgtvsAchMaster> GetCategoryData(string CustomerId)
+        {
+            List<TgtvsAchMaster> objTgtvsAchMaster = new List<TgtvsAchMaster>();
+            using (var context = new ChitaleDBContext())
+            {
+                objTgtvsAchMaster = context.TgtvsAchMasters.Where(x => x.CustomerId == CustomerId && x.ProductType == "Category").ToList();
+            }
+
+            return objTgtvsAchMaster;
+        }
+        public List<TgtvsAchMaster> GetSubCategoryData(string CustomerId, string CategoryCode)
+        {
+            List<TgtvsAchMaster> objTgtvsAchMaster = new List<TgtvsAchMaster>();
+            using (var context = new ChitaleDBContext())
+            {
+                objTgtvsAchMaster = context.TgtvsAchMasters.Where(x => x.CustomerId == CustomerId && x.ProductType == "SubCategory" && x.CategoryCode == CategoryCode).ToList();
+            }
+
+            return objTgtvsAchMaster;
+        }
+
+        public List<TgtvsAchMaster> GetProductData(string CustomerId, string SubCategoryCode)
+        {
+            List<TgtvsAchMaster> objTgtvsAchMaster = new List<TgtvsAchMaster>();
+            using (var context = new ChitaleDBContext())
+            {
+                objTgtvsAchMaster = context.TgtvsAchMasters.Where(x => x.CustomerId == CustomerId && x.ProductType == "Product" && x.SubCategoryCode == SubCategoryCode).ToList();
+            }
+
+            return objTgtvsAchMaster;
+        }
+
 
     }
 }
