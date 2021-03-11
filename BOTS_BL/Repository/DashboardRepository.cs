@@ -115,8 +115,8 @@ namespace BOTS_BL.Repository
             using (var context = new BOTSDBContext(connstr))
             {
 
-                dashboardOutletEnrolment = context.Database.SqlQuery<DashboardOutletEnrolment>("sp_BOTS_DashboardOutletEnrolment @pi_GroupId, @pi_Date, @pi_Flag", new SqlParameter("@pi_GroupId", GroupId), new SqlParameter("@pi_Date", DateTime.Now.ToShortDateString()), new SqlParameter("@pi_Flag", monthFlag)).ToList<DashboardOutletEnrolment>();
-
+                dashboardOutletEnrolment = context.Database.SqlQuery<DashboardOutletEnrolment>("sp_BOTS_DashboardOutletEnrolment @pi_GroupId, @pi_Date, @pi_Flag", new SqlParameter("@pi_GroupId", GroupId), new SqlParameter("@pi_Date", DateTime.Now.ToShortDateString()), new SqlParameter("@pi_Flag", monthFlag)).OrderByDescending(s => s.EnrollmentCount).ToList<DashboardOutletEnrolment>();
+               
             }
             return dashboardOutletEnrolment;
         }

@@ -231,8 +231,8 @@ namespace BOTS_BL.Repository
                 {
                     celebrationTxnsData = context.Database.SqlQuery<CelebrationsMoreDetails>("sp_BOTS_Celebrate1 @pi_GroupId, @pi_Date, @pi_LoginId, @pi_Month,@pi_Type",
                         new SqlParameter("@pi_GroupId", GroupId),
-                          new SqlParameter("@pi_Date", DateTime.Now.ToString("yyyy-MM-dd")),
-                          new SqlParameter("@pi_LoginId", ""),
+                          new SqlParameter("@pi_Date", DateTime.Now.ToString("yyyy-MM-dd")),                      
+                          new SqlParameter("@pi_LoginId",""),
                         new SqlParameter("@pi_Month", month),
                         new SqlParameter("@pi_Type", type)).ToList<CelebrationsMoreDetails>();
                 }
