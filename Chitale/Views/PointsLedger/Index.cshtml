@@ -22,8 +22,8 @@
                                         <li class="list-inline-item">
                                             <div class="dropdown">
                                                 @*<button class="btn btn-primary login-btn" onclick='ExportDataExcel();' type="button" id="btnExport">
-                                                    <i class="fas fa-file-export"></i> Export
-                                                </button>*@
+                                                        <i class="fas fa-file-export"></i> Export
+                                                    </button>*@
                                             </div>
                                         </li>
                                     </ul>
@@ -39,13 +39,13 @@
                                                 <th scope="col">Txn Type</th>
                                                 <th scope="col">Sub-Type</th>
                                                 <th scope="col">Ref No.</th>
-                                                <th scope="col">Amt (RS)</th>
+                                                <th scope="col">Amt (Rs)</th>
                                                 <th scope="col">Base Pts</th>
                                                 <th scope="col">Add-on Pts</th>
                                                 <th scope="col">Lost Opp Pts</th>
-                                                <th scope="col">Order Date</th>
-                                                <th scope="col">Ravana Date</th>
-                                                <th scope="col">Days Diff</th>
+                                                @*<th scope="col">Order Date</th>
+                                                    <th scope="col">Ravana Date</th>
+                                                    <th scope="col">Days Diff</th>*@
                                                 <th scope="col">Net Earn Points</th>
                                             </tr>
                                         </thead>
@@ -64,14 +64,14 @@
                                                             <td>@item.TxnType</td>
                                                             <td>@item.SubType</td>
                                                             <td>@item.RefNo</td>
-                                                            <td>@item.Amount</td>
-                                                            <td>@item.BasePoints</td>
-                                                            <td>@item.AddOnPoints</td>
-                                                            <td>@item.LostOppPoints</td>
-                                                            <td>@item.OrderDate</td>
-                                                            <td>@item.RavanaDate</td>
-                                                            <td>@item.DaysDiff</td>
-                                                            <td>@item.NetEarnPoints</td>
+                                                            <td>@item.AmountStr</td>
+                                                            <td>@item.BasePointsStr</td>
+                                                            <td>@item.AddOnPointsStr</td>
+                                                            <td>@item.LostOppPointsStr</td>
+                                                            @*<td>@item.OrderDate</td>
+                                                                <td>@item.RavanaDate</td>
+                                                                <td>@item.DaysDiff</td>*@
+                                                            <td>@item.NetEarnPointsStr</td>
                                                         </tr>
                                                         var dynamicIdTr = "trActivities" + item.RefNo;
                                                         var dynamicIdDiv = "dvActivities" + item.RefNo;
@@ -88,9 +88,9 @@
                                                             <td style="display:none;"></td>
                                                             <td style="display:none;"></td>
                                                             <td style="display:none;"></td>
-                                                            <td style="display:none;"></td>
-                                                            <td style="display:none;"></td>
-                                                            <td style="display:none;"></td>
+                                                            @* <td style="display:none;"></td>
+                                                                <td style="display:none;"></td>
+                                                                <td style="display:none;"></td>*@
                                                             <td style="display:none;"></td>
                                                         </tr>
                                                     }
@@ -99,7 +99,7 @@
                                                 else
                                                 {
                                                     <tr>
-                                                        <td colspan="12" align="center">No Data Available</td>
+                                                        <td colspan="9" align="center">No Data Available</td>
                                                     </tr>
                                                 }
                                             }
@@ -165,7 +165,7 @@
     });
 
     function ShowActivities(id) {
-         
+
         if ($("#dvActivities" + id).is(":visible")) {
             $("#dvActivities" + id).hide(1000);
             $("#trActivities" + id).hide(1000);
@@ -185,7 +185,7 @@
                     BindActivities(id, response);
                     $("#divLoader").hide();
                 },
-                failure: function (response) {                    
+                failure: function (response) {
                     $("#divLoader").hide();
                 }
             });
@@ -193,32 +193,32 @@
     }
     function BindActivities(id,data) {
         console.log(data);
-        var htmlStr = "<table border=\"2\" style=\"background-color:gray;margin-left: 115px;width: 88%;\" class=\"table\">";
+        var htmlStr = "<table border=\"2\" style=\"background-color:gray;margin-left: 135px;width: 85%;\" class=\"table\">";
         htmlStr += "<tr style=\"text-align: center;\">"
-       
+
         htmlStr += "<th scope=\"col\">Sub-Type</th>";
         htmlStr += "<th scope=\"col\">Ref No.</th>";
-        htmlStr += "<th scope=\"col\">Amt (RS)</th>";
+        htmlStr += "<th scope=\"col\">Amt (Rs)</th>";
         htmlStr += "<th scope=\"col\">Base Pts</th>";
         htmlStr += "<th scope=\"col\">Add-on Pts</th>";
         htmlStr += "<th scope=\"col\">Lost Opp Pts</th>";
         htmlStr += "<th scope=\"col\">Order Date</th>";
         htmlStr += "<th scope=\"col\">Ravana Date</th>";
         htmlStr += "<th scope=\"col\">Days Diff</th>";
-        htmlStr += "<th scope=\"col\">Net Earn Points</th>";
+        //htmlStr += "<th scope=\"col\">Net Earn Points</th>";
         htmlStr += "</tr>";
         $.map(data, function (item) {
-            htmlStr += "<tr style=\"text-align: center;\">"            
+            htmlStr += "<tr style=\"text-align: center;\">"
             htmlStr += "<td>" + item.SubType + "</td>";
             htmlStr += "<td>" + item.RefNo + "</td>";
-            htmlStr += "<td>" + item.Amount + "</td>";
-            htmlStr += "<td>" + item.BasePoints + "</td>";
-            htmlStr += "<td>" + item.AddOnPoints.toFixed(2) + "</td>";
-            htmlStr += "<td>" + item.LostOppPoints.toFixed(2) + "</td>";
+            htmlStr += "<td>" + item.AmountStr + "</td>";
+            htmlStr += "<td>" + item.BasePointsStr + "</td>";
+            htmlStr += "<td>" + item.AddOnPointsStr + "</td>";
+            htmlStr += "<td>" + item.LostOppPointsStr + "</td>";
             htmlStr += "<td>" + item.OrderDate + "</td>";
             htmlStr += "<td>" + item.RavanaDate + "</td>";
             htmlStr += "<td>" + item.DaysDiff + "</td>";
-            htmlStr += "<td>" + item.NetEarnPoints + "</td>";
+            //htmlStr += "<td>" + item.NetEarnPoints + "</td>";
             htmlStr +="</tr>"
          });
 

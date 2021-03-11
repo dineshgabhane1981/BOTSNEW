@@ -32,12 +32,51 @@ namespace BOTS_BL.Repository
                             objPointLedger.SubType = "Invoice";
                             objPointLedger.RefNo = objTransaction.InvoiceNo;
                             objPointLedger.Amount = objTransaction.InvoiceAmt;
-                            objPointLedger.BasePoints = objTransaction.NormalPoints;
-                            objPointLedger.AddOnPoints = objTransaction.AddOnPoints;
-                            objPointLedger.LostOppPoints = objTransaction.PenaltyPoints;
+                            objPointLedger.AmountStr = String.Format(new CultureInfo("en-IN", false), "{0:n}", Convert.ToDecimal(objTransaction.InvoiceAmt));
+
+                            if (!string.IsNullOrEmpty(Convert.ToString(objTransaction.NormalPoints)))
+                            {
+                                objPointLedger.BasePoints = objTransaction.NormalPoints;
+                                objPointLedger.BasePointsStr = String.Format(new CultureInfo("en-IN", false), "{0:n}", Convert.ToDecimal(objTransaction.NormalPoints));
+                            }
+                            else
+                            {
+                                objPointLedger.BasePoints = 0;
+                                objPointLedger.BasePointsStr = "0.00";
+                            }
+
+                            if (!string.IsNullOrEmpty(Convert.ToString(objTransaction.AddOnPoints)))
+                            {
+                                objPointLedger.AddOnPoints = objTransaction.AddOnPoints;
+                                objPointLedger.AddOnPointsStr = String.Format(new CultureInfo("en-IN", false), "{0:n}", Convert.ToDecimal(objTransaction.AddOnPoints));
+                            }
+                            else
+                            {
+                                objPointLedger.AddOnPoints = 0;
+                                objPointLedger.AddOnPointsStr = "0.00";
+                            }
+                            if (!string.IsNullOrEmpty(Convert.ToString(objTransaction.PenaltyPoints)))
+                            {
+                                objPointLedger.LostOppPoints = objTransaction.PenaltyPoints;
+                                objPointLedger.LostOppPointsStr = String.Format(new CultureInfo("en-IN", false), "{0:n}", Convert.ToDecimal(objTransaction.PenaltyPoints));
+                            }
+                            else
+                            {
+                                objPointLedger.LostOppPoints = 0;
+                                objPointLedger.LostOppPointsStr = "0.00";
+                            }
                             objPointLedger.OrderDate = objTransaction.OrderDatetime.Value.ToString("dd-MM-yyyy");
                             objPointLedger.RavanaDate = objTransaction.RavanaDate.Value.ToString("dd-MM-yyyy");
-                            objPointLedger.NetEarnPoints = objTransaction.TotalPoints;
+                            if (!string.IsNullOrEmpty(Convert.ToString(objTransaction.TotalPoints)))
+                            {
+                                objPointLedger.NetEarnPoints = objTransaction.TotalPoints;
+                                objPointLedger.NetEarnPointsStr = String.Format(new CultureInfo("en-IN", false), "{0:n}", Convert.ToDecimal(objTransaction.TotalPoints));
+                            }
+                            else
+                            {
+                                objPointLedger.NetEarnPoints = 0;
+                                objPointLedger.NetEarnPointsStr = "0.00";
+                            }
                             objPointLedger.DaysDiff = Convert.ToInt32((objTransaction.RavanaDate - objTransaction.OrderDatetime).Value.TotalDays);
                             bojList.Add(objPointLedger);
                         }
@@ -61,19 +100,60 @@ namespace BOTS_BL.Repository
                     foreach (var item in ObjInvoiceLst)
                     {
                         PointLedgerModel objPointLedger = new PointLedgerModel();
-                        var objTransaction = context.TransactionMasters.Where(x => x.OrderNo == item.OrderNo && x.Type == "Purchase").FirstOrDefault();
+                        var objTransaction = context.TransactionMasters.Where(x => x.OrderNo == item.OrderNo && x.TxnType == "Purchase" && x.SubType== "Order").FirstOrDefault();
                         if (objTransaction != null)
                         {
                             objPointLedger.TxnType = "";
                             objPointLedger.SubType = objTransaction.SubType;
-                            objPointLedger.RefNo = objTransaction.InvoiceNo;
+                            objPointLedger.RefNo = objTransaction.OrderNo;
+
                             objPointLedger.Amount = objTransaction.InvoiceAmt;
-                            objPointLedger.BasePoints = objTransaction.NormalPoints;
-                            objPointLedger.AddOnPoints = objTransaction.AddOnPoints;
-                            objPointLedger.LostOppPoints = objTransaction.PenaltyPoints;
+                            objPointLedger.AmountStr= String.Format(new CultureInfo("en-IN", false), "{0:n}", Convert.ToDecimal(objTransaction.InvoiceAmt));
+
+                            if (!string.IsNullOrEmpty(Convert.ToString(objTransaction.NormalPoints)))
+                            {
+                                objPointLedger.BasePoints = objTransaction.NormalPoints;
+                                objPointLedger.BasePointsStr = String.Format(new CultureInfo("en-IN", false), "{0:n}", Convert.ToDecimal(objTransaction.NormalPoints));
+                            }
+                            else
+                            {
+                                objPointLedger.BasePoints = 0;
+                                objPointLedger.BasePointsStr = "0.00";
+                            }
+
+                            if (!string.IsNullOrEmpty(Convert.ToString(objTransaction.AddOnPoints)))
+                            {
+                                objPointLedger.AddOnPoints = objTransaction.AddOnPoints;
+                                objPointLedger.AddOnPointsStr = String.Format(new CultureInfo("en-IN", false), "{0:n}", Convert.ToDecimal(objTransaction.AddOnPoints));
+                            }
+                            else
+                            {
+                                objPointLedger.AddOnPoints = 0;
+                                objPointLedger.AddOnPointsStr = "0.00";
+                            }
+                            if (!string.IsNullOrEmpty(Convert.ToString(objTransaction.PenaltyPoints)))
+                            {
+                                objPointLedger.LostOppPoints = objTransaction.PenaltyPoints;
+                                objPointLedger.LostOppPointsStr = String.Format(new CultureInfo("en-IN", false), "{0:n}", Convert.ToDecimal(objTransaction.PenaltyPoints));
+                            }
+                            else
+                            {
+                                objPointLedger.LostOppPoints = 0;
+                                objPointLedger.LostOppPointsStr = "0.00";
+                            }
                             objPointLedger.OrderDate = objTransaction.OrderDatetime.Value.ToString("dd-MM-yyyy");
                             objPointLedger.RavanaDate = objTransaction.RavanaDate.Value.ToString("dd-MM-yyyy");
-                            objPointLedger.NetEarnPoints = objTransaction.TotalPoints;
+                            if (!string.IsNullOrEmpty(Convert.ToString(objTransaction.TotalPoints)))
+                            {
+                                objPointLedger.NetEarnPoints = objTransaction.TotalPoints;
+                                objPointLedger.NetEarnPointsStr = String.Format(new CultureInfo("en-IN", false), "{0:n}", Convert.ToDecimal(objTransaction.TotalPoints));
+                            }
+                            else
+                            {
+                                objPointLedger.NetEarnPoints = 0;
+                                objPointLedger.NetEarnPointsStr = "0.00";
+                            }
+                            
                             objPointLedger.DaysDiff = Convert.ToInt32((objTransaction.RavanaDate - objTransaction.OrderDatetime).Value.TotalDays);
 
                             bojList.Add(objPointLedger);
