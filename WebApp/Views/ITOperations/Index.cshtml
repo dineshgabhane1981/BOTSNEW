@@ -760,6 +760,8 @@
                                                     <td style="padding:10px;">Date / Time</td>
                                                     <td style="padding:10px;">
                                                         <span id="spnTransactionDateTimeCancel"></span>
+                                                        <span style="display:none;" id="spnTransactionDateTimeCancelOriginal"></span>
+                                                        
                                                     </td>
                                                 </tr>
                                                 <tr>
@@ -2281,6 +2283,7 @@
                         $("#spnPointsCancel").text(result.objCancelTxnModel.Points);
                         $("#spnTransactionOutletCancel").text(result.objCancelTxnModel.OutletName);
                         $("#spnTransactionDateTimeCancel").text(result.objCancelTxnModel.Datetime);
+                        $("#spnTransactionDateTimeCancelOriginal").text(result.objCancelTxnModel.DatetimeOriginal);
 
                         $('#ddlRequestedForumCancel1').prop('selectedIndex', 0);
                         $("#tblUpdateDataCancel").show();
@@ -2336,7 +2339,9 @@
             $('#txtRequestedDateCancel1').focus();
             return false;
         }
-
+        var MobileNo = $("#spnMobilenoCancel").text();
+        var InvoiceAmt = $("#spnInvoiceAmtCancel").text();
+        var ip_Date = $("#spnTransactionDateTimeCancelOriginal").text();
         if (confirm("Are you sure? You want to delete Transaction")) {
             if (InvoiceNo == null) {
                 InvoiceNo = $('#spnInvoiceNoCancel').text();
@@ -2344,26 +2349,33 @@
             $.ajax({
                 type: "POST",
                 url: '@Url.Action("DeleteTransaction", "ITOperations")',//"/ITOperations/DeleteTransaction",
-                data: '{GroupId: ' + JSON.stringify($('#hdnGroupId').val()) + ', InvoiceNo: ' + JSON.stringify(InvoiceNo) + ', RequestedBy: ' + JSON.stringify($('#txtRequestedByNameCancel1').val()) + ', RequestedForum: ' + JSON.stringify($('#ddlRequestedForumCancel1').val()) + ', RequestedDate: ' + JSON.stringify($('#txtRequestedDateCancel1').val()) + '}',
+                data: '{GroupId: ' + JSON.stringify($('#hdnGroupId').val()) + ', InvoiceNo: ' + JSON.stringify(InvoiceNo) + ', MobileNo: ' + JSON.stringify(MobileNo) + ', InvoiceAmt: ' + JSON.stringify(InvoiceAmt) + ', ip_Date: ' + JSON.stringify(ip_Date) + ', RequestedBy: ' + JSON.stringify($('#txtRequestedByNameCancel1').val()) + ', RequestedForum: ' + JSON.stringify($('#ddlRequestedForumCancel1').val()) + ', RequestedDate: ' + JSON.stringify($('#txtRequestedDateCancel1').val()) + '}',
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
                 success: function (result) {
                     console.log(111)
+                    console.log(result.responseText)
+                    if (result.ResponseCode == "00") {
+                        toastr.success("Transaction Deleted Successfully");
+                        $("#divLoader").hide();
+
+                    }
+                    else {
+                        toastr.error(result.ResponseMessage);
+                        $("#divLoader").hide();
+                    }        
                 },
                 error: function (result) {
                     console.log(result.responseText)
-                    if (result.responseText == "True") {
+                    if (result.ResponseCode == "00") {
                         toastr.success("Transaction Deleted Successfully");
-                        $("#tblUpdateDataCancel").hide();
-                        if ($('#spnInvoiceNoCancel').text() == "") {
-                            GetTransactionCancelData();
-                        }
                         $("#divLoader").hide();
+                        
                     }
                     else {
-                        toastr.error('error occured while saving data');
+                        toastr.error(result.ResponseMessage);
                         $("#divLoader").hide();
-                    }
+                    }                    
                 }
             });
         }

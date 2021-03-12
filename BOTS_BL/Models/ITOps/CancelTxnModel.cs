@@ -15,5 +15,6 @@ namespace BOTS_BL.Models
         public string Points { get; set; }
         public string OutletName { get; set; }
         public string Datetime { get; set; }
+        public string DatetimeOriginal { get; set; }
     }
 }
