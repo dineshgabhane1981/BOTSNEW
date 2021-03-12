@@ -495,7 +495,7 @@ namespace BOTS_BL.Repository
                 string connStr = objCustRepo.GetCustomerConnString(GroupId);
                 using (var contextNew = new BOTSDBContext(connStr))
                 {
-                    objTxn = contextNew.TransactionMasters.Where(x => x.InvoiceNo == InvoiceNo).FirstOrDefault();
+                    objTxn = contextNew.TransactionMasters.Where(x => x.InvoiceNo == InvoiceNo && x.Status=="06").FirstOrDefault();
                 }
                 if (objTxn != null)
                 {
@@ -504,6 +504,7 @@ namespace BOTS_BL.Repository
                     objReturn.MobileNo = objTxn.MobileNo;
                     objReturn.Points = Convert.ToString(objTxn.PointsEarned);
                     objReturn.Datetime = Convert.ToDateTime(objTxn.Datetime).ToString("dd/MM/yyyy HH:mm:ss");
+                    objReturn.DatetimeOriginal = Convert.ToString(objTxn.Datetime);
                     var OutletId = objTxn.CounterId.Substring(0, objTxn.CounterId.Length - 2);
                     using (var contextNew = new BOTSDBContext(connStr))
                     {
@@ -528,7 +529,7 @@ namespace BOTS_BL.Repository
                 string connStr = objCustRepo.GetCustomerConnString(GroupId);
                 using (var contextNew = new BOTSDBContext(connStr))
                 {
-                    lstObjTxn = contextNew.TransactionMasters.Where(x => x.MobileNo == MobileNo).OrderByDescending(m => m.Datetime).ToList();
+                    lstObjTxn = contextNew.TransactionMasters.Where(x => x.MobileNo == MobileNo && x.Status == "06").OrderByDescending(m => m.Datetime).ToList();
                 }
                 if (lstObjTxn != null)
                 {
@@ -576,24 +577,25 @@ namespace BOTS_BL.Repository
 
         
 
-        public bool DeleteTransaction(string GroupId, string InvoiceNo, tblAudit objAudit)
+        public SPResponse DeleteTransaction(string GroupId, string InvoiceNo, string MobileNo, string InvoiceAmt, DateTime ip_Date, tblAudit objAudit)
         {
-            bool result = false;
+            SPResponse result = new SPResponse();
             try
             {
                 string connStr = objCustRepo.GetCustomerConnString(GroupId);
                 using (var contextNew = new BOTSDBContext(connStr))
                 {
-                    var transaction = contextNew.TransactionMasters.Where(x => x.InvoiceNo == InvoiceNo).FirstOrDefault();
-                    var customer = contextNew.CustomerDetails.Where(y => y.CustomerId == transaction.CustomerId).FirstOrDefault();
-                    customer.Points = customer.Points - transaction.PointsEarned;
-
-                    contextNew.TransactionMasters.Remove(transaction);
-                    contextNew.SaveChanges();
-
-                    contextNew.CustomerDetails.AddOrUpdate(customer);
-                    contextNew.SaveChanges();
-                    result = true;
+                    result = contextNew.Database.SqlQuery<SPResponse>("sp_CancelTxn1_ITOPS @pi_MobileNo, @pi_InvoiceNo, @pi_InvoiceAmt, @pi_RequestDate, @pi_Datetime, @pi_LoginId,@pi_RequestBy, @pi_RequestedOnForum, @pi_SMSFlag",
+                              new SqlParameter("@pi_MobileNo", MobileNo),
+                              new SqlParameter("@pi_InvoiceNo", InvoiceNo),
+                              new SqlParameter("@pi_InvoiceAmt", InvoiceAmt),
+                              new SqlParameter("@pi_RequestDate", objAudit.RequestedOn),
+                              new SqlParameter("@pi_Datetime", ip_Date),
+                              new SqlParameter("@pi_LoginId", ""),
+                              new SqlParameter("@pi_RequestBy", objAudit.RequestedBy),
+                              new SqlParameter("@pi_RequestedOnForum", objAudit.RequestedOnForum),
+                              new SqlParameter("@pi_SMSFlag", "0")).FirstOrDefault<SPResponse>();
+                   
                 }
                 using (var context = new CommonDBContext())
                 {

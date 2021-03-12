@@ -621,9 +621,9 @@ namespace WebApp.Controllers
             return Json(objData, JsonRequestBehavior.AllowGet);
         }
 
-        public bool DeleteTransaction(string GroupId, string InvoiceNo,string RequestedBy, string RequestedForum, string RequestedDate)
+        public ActionResult DeleteTransaction(string GroupId, string InvoiceNo, string MobileNo, string InvoiceAmt, string ip_Date, string RequestedBy, string RequestedForum, string RequestedDate)
         {
-            bool result = false;
+            SPResponse result = new SPResponse();
             try
             {
                 tblAudit objAudit = new tblAudit();
@@ -634,9 +634,9 @@ namespace WebApp.Controllers
                 objAudit.RequestedOnForum = RequestedForum;
                 objAudit.RequestedOn = Convert.ToDateTime(RequestedDate);
                 bool IsSMS = false;
-
-                result = ITOPS.DeleteTransaction(GroupId, InvoiceNo, objAudit);
-                if (result)
+                var dateCancel = Convert.ToDateTime(ip_Date);
+                result = ITOPS.DeleteTransaction(GroupId, InvoiceNo, MobileNo, InvoiceAmt, dateCancel, objAudit);
+                if (result.ResponseCode == "00")
                 {
                     var subject = "Transaction Deleted for  - " + InvoiceNo;
                     var body = "Transaction Deleted for - " + InvoiceNo;
@@ -644,6 +644,7 @@ namespace WebApp.Controllers
 
                     SendEmail(GroupId, subject, body);
                 }
+                
                 if (Convert.ToBoolean(IsSMS))
                 {
                     //Logic to send SMS to Customer whose Name is changed
@@ -653,7 +654,7 @@ namespace WebApp.Controllers
             {
                 newexception.AddException(ex);
             }
-            return result;
+            return Json(result, JsonRequestBehavior.AllowGet);
         }
 
         public void SendEmail(string GroupId, string Subject, string EmailBody)
