@@ -18,58 +18,14 @@ namespace BOTS_BL.Repository
             
             List<ParticipantList> lstparticipantLists = new List<ParticipantList>();
             try
-            {
-                DataSet retVal = new DataSet();
-                //SqlConnection sqlConn = new SqlConnection("Data Source=DESKTOP-JOLRHRS\\SQLEXPRESS;Initial Catalog=ChitaleLive;Integrated Security=True");
-                SqlConnection sqlConn = new SqlConnection("Data Source=13.233.128.61;Initial Catalog=ChitaleUAT;user id = sa; password=BO%Admin#LY!4@");
-                SqlCommand cmdReport = new SqlCommand("sp_KYBLoadParticipant_MFC", sqlConn);
-                SqlDataAdapter daReport = new SqlDataAdapter(cmdReport);
-               // daReport.SelectCommand.CommandTimeout = 180;  
-                using (cmdReport)
+            {                
+                using (var context = new ChitaleDBContext())
                 {
-                    SqlParameter param1 = new SqlParameter("@pi_LoginId", "");
-                    SqlParameter param2 = new SqlParameter("@pi_Datetime", DateTime.Now.ToString("dd-MM-yyyy"));
-                    SqlParameter param3 = new SqlParameter("@pi_DataType", "");
-                    SqlParameter param4 = new SqlParameter("@pi_City", "");
-                    SqlParameter param5 = new SqlParameter("@pi_Cluster", "");
-                    SqlParameter param6 = new SqlParameter("@pi_SubCluster", "");
-                    SqlParameter param7 = new SqlParameter("@pi_Id ", CustomerId);
-                    SqlParameter param8 = new SqlParameter("@pi_ParticipantType", CustomerType);
-                    cmdReport.CommandType = CommandType.StoredProcedure;
-                    cmdReport.Parameters.Add(param1);
-                    cmdReport.Parameters.Add(param2);
-                    cmdReport.Parameters.Add(param3);
-                    cmdReport.Parameters.Add(param4);
-                    cmdReport.Parameters.Add(param5);
-                    cmdReport.Parameters.Add(param6);
-                    cmdReport.Parameters.Add(param7);
-                    cmdReport.Parameters.Add(param8);
-                    daReport.Fill(retVal);
-                    DataTable dt = retVal.Tables[1];
-
-                    foreach (DataRow dr in dt.Rows)
-                    {
-                        ParticipantList objparticipantList = new ParticipantList();
-                        CustomerDetail objcustomerDetail = new CustomerDetail();
-                        using (var context = new ChitaleDBContext())
-                        {
-
-                            string customerid = Convert.ToString(dr["Id"]);
-                            objcustomerDetail = context.CustomerDetails.Where(x => x.CustomerId == customerid).FirstOrDefault();
-                            objparticipantList.Id = Convert.ToString(dr["Id"]);
-                            objparticipantList.Name = objcustomerDetail.CustomerName;
-                            objparticipantList.participantType = objcustomerDetail.CustomerType;
-                            objparticipantList.Rank = Convert.ToInt32(dr["CurrentRank"]);
-                            objparticipantList.subcluster = objcustomerDetail.SubCluster;
-                            objparticipantList.Totalpoints = (decimal)objcustomerDetail.Points;
-                            objparticipantList.city = objcustomerDetail.City;
-                            objparticipantList.cluster = objcustomerDetail.Cluster;
-
-                        }
-
-                        lstparticipantLists.Add(objparticipantList);
-                    }
-
+                    lstparticipantLists= context.Database.SqlQuery<ParticipantList>("Chitale_ParticipantList @pi_LoginId, @pi_Datetime, @pi_CustomerId, @pi_CustomerType", 
+                        new SqlParameter("@pi_LoginId", ""), 
+                        new SqlParameter("@pi_Datetime", DateTime.Now.ToString("yyyy-MM-dd")), 
+                        new SqlParameter("@pi_CustomerId", CustomerId),
+                        new SqlParameter("@pi_CustomerType", CustomerType)).ToList<ParticipantList>();
                 }
             }
             catch (Exception ex)

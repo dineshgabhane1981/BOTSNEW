@@ -22,7 +22,7 @@ namespace Chitale.Controllers
             var UserSession = (CustomerDetail)Session["ChitaleUser"];
             ParticipantList objlist = new ParticipantList();
             List<ParticipantList> lstparticipantLists = new List<ParticipantList>();
-            lstparticipantLists = pr.GetParticipantList(UserSession.CustomerId, UserSession.CustomerType);
+            lstparticipantLists = pr.GetParticipantList(UserSession.CustomerId, UserSession.Type);
 
             return View(lstparticipantLists);
 
@@ -33,7 +33,7 @@ namespace Chitale.Controllers
             var UserSession = (CustomerDetail)Session["ChitaleUser"];
             ParticipantList objlist = new ParticipantList();
             List<ParticipantList> lstparticipantLists = new List<ParticipantList>();
-            lstparticipantLists = pr.GetParticipantList(UserSession.CustomerId, UserSession.CustomerType);
+            lstparticipantLists = pr.GetParticipantList(UserSession.CustomerId, UserSession.Type);
            
             return new JsonResult() { Data = lstparticipantLists, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
@@ -112,7 +112,7 @@ namespace Chitale.Controllers
             {
                 tblRedemptionRequest objRedeem = new tblRedemptionRequest();
                 objRedeem.CustomerId = UserSession.CustomerId;
-                objRedeem.CustomerType = UserSession.CustomerType;
+                objRedeem.CustomerType = UserSession.Type;
                 objRedeem.RedemptionType = Type;
                 objRedeem.Points = Points;
                 objRedeem.CreatedDate = DateTime.Now;

@@ -2,7 +2,7 @@
 @using BOTS_BL.Models.ChitaleModel;
 @{
     var userDetails = (CustomerDetail)Session["ChitaleUser"];
-    
+
     var customerType = userDetails.CustomerType;
 }
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
@@ -40,7 +40,7 @@
     <div class="scrollbar-sidebar">
         <div class="app-sidebar__inner">
             <ul class="vertical-nav-menu">
-                @if (userDetails.Type == "Participant")
+                @if (userDetails.CustomerCategory == "Participant")
                 {
                     <li>
                         <a href="@Url.Action("Index", "Dashboard")" class="@Html.IsSelected(controller: "Dashboard", action: "Index")">
@@ -57,26 +57,31 @@
                     </li>
                     <li>
                         <a href="@Url.Action("Index", "Participant")" class="@Html.IsSelected(controller: "Participant", action: "Index")">
-                            
+
                             <i class="metismenu-icon fas fa-th-list"></i>
                             Participant List
                         </a>
                     </li>
                     <li>
                         <a href="@Url.Action("RedumptionData", "Participant")" class="@Html.IsSelected(controller: "Participant", action: "RedumptionData")">
-                            
+
                             <i class="metismenu-icon fas fa-trophy"></i>
                             Redemption
                         </a>
                     </li>
                     <li>
                         <a href="@Url.Action("TgtVsAch", "PointsLedger")" class="@Html.IsSelected(controller: "PointsLedger", action: "TgtVsAch")">
-                           
+
                             <i class="metismenu-icon fas fa-star-half-alt"></i>
                             Focus Vs Ach
                         </a>
                     </li>
 
+
+                }
+
+                @if (userDetails.CustomerCategory == "Management")
+                {
 
                 }
             </ul>

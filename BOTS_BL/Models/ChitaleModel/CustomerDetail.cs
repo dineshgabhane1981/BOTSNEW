@@ -85,6 +85,9 @@ namespace BOTS_BL.Models.ChitaleModel
 
         [NotMapped]
         public string Type { get; set; }
+        
+        [NotMapped]
+        public string CustomerCategory { get; set; }
 
         [NotMapped]
         public string CurrentRank { get; set; }

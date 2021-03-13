@@ -63,21 +63,21 @@
                                                         var imgId = "imgExpand" + item.Id;
                                                         <tr>
                                                             <td style="text-align:center;">
-                                                                @if (item.participantType == "Distributors")
+                                                                @if (item.ParticipantType == "Distributors")
                                                                 {
                                                                     <img id="@imgId" src="~/Content/assets/images/details_open.png" style="cursor:pointer;" onclick="ShowActivities(@item.Id);" />
                                                                 }
                                                             </td>
-                                                            <td>@item.participantType</td>
+                                                            <td>@item.ParticipantType</td>
                                                             <td>@item.Id</td>
                                                             <td>@item.Name</td>
-                                                            <td>@item.city</td>
-                                                            <td>@item.cluster</td>
-                                                            <td>@item.subcluster</td>
+                                                            <td>@item.City</td>
+                                                            <td>@item.Cluster</td>
+                                                            <td>@item.SubCluster</td>
                                                             <td>@item.Rank</td>
-                                                            <td>@item.Totalpoints</td>
+                                                            <td>@item.TotalPoints</td>
                                                         </tr>
-                                                        if (item.participantType == "Distributors")
+                                                        if (item.ParticipantType == "Distributors")
                                                         {
                                                             var dynamicIdTr = "trActivities" + item.Id;
                                                             var dynamicIdDiv = "dvActivities" + item.Id;
@@ -217,14 +217,14 @@
             htmlStr += "<tr style=\"text-align: center;\">"
 
             //htmlStr += "<td>" + item.TxnType + "</td>";
-            htmlStr += "<td>" + item.participantType + "</td>";
+            htmlStr += "<td>" + item.ParticipantType + "</td>";
             htmlStr += "<td>" + item.Id + "</td>";
             htmlStr += "<td style=\"text-align: left; width: 150px;\">" + item.Name + "</td>";
-            htmlStr += "<td style=\"width: 100px;\">" + item.city + "</td>";
-            htmlStr += "<td style=\"width: 100px;\">" + item.cluster + "</td>";
-            htmlStr += "<td style=\"width: 100px;\">" + item.subcluster + "</td>";
-            htmlStr += "<td style=\"text-align: center;\">" + item.Rank.toFixed(2) + "</td>";
-            htmlStr += "<td style=\"text-align: center;\">" + item.Totalpoints.toFixed(2) + "</td>";            
+            htmlStr += "<td style=\"width: 100px;\">" + item.City + "</td>";
+            htmlStr += "<td style=\"width: 100px;\">" + item.Cluster + "</td>";
+            htmlStr += "<td style=\"width: 100px;\">" + item.SubCluster + "</td>";
+            htmlStr += "<td style=\"text-align: center;\">" + item.Rank + "</td>";
+            htmlStr += "<td style=\"text-align: center;\">" + item.TotalPoints.toFixed(2) + "</td>";            
             htmlStr += "</tr>"
         });
 

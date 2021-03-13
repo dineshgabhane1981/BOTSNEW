@@ -10,12 +10,13 @@ namespace Chitale.Controllers
     public class HomeController : Controller
     {
         ChitaleDashboardRepository CDR = new ChitaleDashboardRepository();
-        public ActionResult Index(string CustomerId, string CustomerType)
+        public ActionResult Index(string CustomerId, string CustomerType, string CustomerCategory)
         {
             var objCust = CDR.GetCustomerDetail(CustomerId);
             if (objCust != null)
             {
                 objCust.Type = CustomerType;
+                objCust.CustomerCategory = CustomerCategory;
                 Session["ChitaleUser"] = objCust;
                 return RedirectToAction("Index", "Dashboard");
             }
