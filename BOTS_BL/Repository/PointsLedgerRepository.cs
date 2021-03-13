@@ -28,7 +28,7 @@ namespace BOTS_BL.Repository
                         var objTransaction = context.TransactionMasters.Where(x => x.InvoiceNo == item.InvoiceNo && x.Type == "Purchase").FirstOrDefault();
                         if (objTransaction != null)
                         {
-                            objPointLedger.TxnType = "Purchase";
+                            objPointLedger.TxnType = objTransaction.Type;
                             objPointLedger.SubType = "Invoice";
                             objPointLedger.RefNo = objTransaction.InvoiceNo;
                             objPointLedger.Amount = objTransaction.InvoiceAmt;

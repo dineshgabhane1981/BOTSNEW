@@ -1,6 +1,6 @@
 ﻿@model BOTS_BL.Models.ChitaleModel.TgtvsAchMaster
 @{
-    ViewBag.Title = "TgtVsAch";
+    ViewBag.Title = "Focus Vs Ach";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -46,7 +46,7 @@
 
                                                 </tr>*@
                                             <tr style="text-align:center;">
-                                                <td scope="col" style="border:1px solid black;border-left:0px;" colspan="3"></td>
+                                                <td scope="col" style="border:1px solid black;border-left:0px;" colspan="2"></td>
                                                 <td scope="col" style="border:1px solid black; font-size:18px;" colspan="3"><b>Volume-wise</b> </td>
 
                                                 <td scope="col" style="border:1px solid black;border-right:0px; font-size:18px;" colspan="3"><b>Value-wise</b> </td>
@@ -54,7 +54,7 @@
                                             <tr>
                                                 <th scope="col"></th>
                                                 <th scope="col">Name</th>
-                                                <th scope="col">Type</th>
+                                                @*<th scope="col">Type</th>*@
                                                 <th scope="col">Focus</th>
                                                 <th scope="col">Ach</th>
                                                 <th scope="col">Ach %</th>
@@ -74,7 +74,7 @@
                                                         <img id="@imgId" src="~/Content/assets/images/details_open.png"  onclick="ShowActivities(@Model.CustomerId);" />
                                                     </td>
                                                     <td>Overall</td>
-                                                    <td></td>
+                                                    @*<td></td>*@
                                                     <td>@Model.VolumeTgt</td>
                                                     <td>@Model.VolumeAch</td>
                                                     <td>@Model.VolumeAchPercentage</td>
@@ -87,7 +87,7 @@
                                                 var dynamicIdTr = "trActivities" + Model.CustomerId;
                                                 var dynamicIdDiv = "dvActivities" + Model.CustomerId;
                                         <tr id="@dynamicIdTr" style="display:none;">
-                                            <td colspan="9">
+                                            <td colspan="8">
                                                 <div id="@dynamicIdDiv" style="display:none;" class="table-responsive">
 
                                                 </div>
@@ -99,7 +99,7 @@
                                             <td style="display:none;"></td>
                                             <td style="display:none;"></td>
                                             <td style="display:none;"></td>
-                                            <td style="display:none;"></td>
+                                            @*<td style="display:none;"></td>*@
                                         </tr>
                                             }
                                             else
@@ -191,13 +191,13 @@
             
             htmlStr += "<tr style=\"text-align: center;  border:hidden; border-collapse: collapse; \">"
             htmlStr += "<td style=\"max-width:50px;  \" ><span style=\"text-align: center;color:darkblue;\" onclick=showSubCat(" + item.CategoryCode + ")>" + item.Name + "</span></td>";
-            htmlStr += "<td style=\"max-width:50px; text-align: center;\">Category</td>";
-            htmlStr += "<td style=\"  \">" + item.VolumeTgt + "</td>";
-            htmlStr += "<td style=\"\">" + item.VolumeAch + "</td>";
-            htmlStr += "<td style=\"\">" + item.VolumeAchPercentage + "</td>";
-            htmlStr += "<td style=\"max-width:70px; text-align: right;\">" + item.ValueTgt + "</td>";
-            htmlStr += "<td style=\"max-width:70px;text-align: right; \">" + item.ValueAch + "</td>";
-            htmlStr += "<td style=\"max-width:70px; text-align: right;\">" + item.ValueAchPercentage + "</td>";
+            //htmlStr += "<td style=\"width:30px; text-align: left;\">Category</td>";
+            htmlStr += "<td style=\"text-align: left;\">" + item.VolumeTgt + "</td>";
+            htmlStr += "<td style=\"text-align: left;\">" + item.VolumeAch + "</td>";
+            htmlStr += "<td style=\"text-align: left;\">" + item.VolumeAchPercentage + "</td>";
+            htmlStr += "<td style=\"text-align: left;\">" + item.ValueTgt + "</td>";
+            htmlStr += "<td style=\"text-align: left; \">" + item.ValueAch + "</td>";
+            htmlStr += "<td style=\"text-align: left;\">" + item.ValueAchPercentage + "</td>";
             htmlStr += "</tr>";
             var cIdTr = "trCategory" + item.CategoryCode;
             var cIdDiv = "dvCategory" + item.CategoryCode;
@@ -244,14 +244,14 @@
 
         $.map(data, function (item) {
             htmlStr += "<tr style=\"text-align: center;  border:hidden;border-collapse: collapse; \">"
-            htmlStr += "<td style=\"max-width:50px;\" ><span style=\" color:brown;\" onclick=showProd(" + item.SubCategoryCode + ") >" + item.Name + "</span></td>";
-            htmlStr += "<td style=\"max-width:50px; \" >Sub-Category</td>";
-            htmlStr += "<td style=\" \" >" + item.VolumeTgt + "</td>"; 
-            htmlStr += "<td style=\" \">" + item.VolumeAch + "</td>";
-            htmlStr += "<td style=\" \">" + item.VolumeAchPercentage + "</td>";
-            htmlStr += "<td style=\"max-width:70px; text-align: right;\">" + item.ValueTgt + "</td>";
-            htmlStr += "<td style=\"max-width:70px;text-align: right; \" >" + item.ValueAch + "</td>";
-            htmlStr += "<td style=\"max-width:70px; text-align: right; \">" + item.ValueAchPercentage + "</td>";
+            htmlStr += "<td style=\"max-width:40px;\" ><span style=\" color:brown;\" onclick=showProd(" + item.SubCategoryCode + ") >" + item.Name + "</span></td>";
+            //htmlStr += "<td style=\"max-width:50px; \" >Sub-Category</td>";
+            htmlStr += "<td style=\"text-align: left; max-width:25px;\" >" + item.VolumeTgt + "</td>"; 
+            htmlStr += "<td style=\"text-align: left; max-width:25px;\">" + item.VolumeAch + "</td>";
+            htmlStr += "<td style=\"text-align: left; max-width:25px;\">" + item.VolumeAchPercentage + "</td>";
+            htmlStr += "<td style=\"text-align: left; max-width:25px;\">" + item.ValueTgt + "</td>";
+            htmlStr += "<td style=\"text-align: left; max-width:25px;\" >" + item.ValueAch + "</td>";
+            htmlStr += "<td style=\"text-align: left; max-width:25px;\">" + item.ValueAchPercentage + "</td>";
             htmlStr += "</tr>";
             var cIdtr = "trSubCategory" + item.SubCategoryCode;
             var cIdDiv = "dvSubCategory" + item.SubCategoryCode;
@@ -305,7 +305,7 @@
             htmlStr += "<td style=\"\" >" + item.VolumeAchPercentage + "</td>";
             htmlStr += "<td style=\"max-width:70px; text-align: right;\">" + item.ValueTgt + "</td>";
             htmlStr += "<td style=\"max-width:70px; text-align: right;\" >" + item.ValueAch + "</td>";
-            htmlStr += "<td style=\"max-width:70px;text-align: right; \">" + item.ValueAchPercentage + "</td>";
+            htmlStr += "<td style=\"max-width:70px; text-align: right; \">" + item.ValueAchPercentage + "</td>";
             htmlStr += "</tr>";
         });
 

@@ -5,6 +5,7 @@
     
     var customerType = userDetails.CustomerType;
 }
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
 <div class="app-sidebar sidebar-shadow">
     <div class="app-header__logo">
         <div class="logo-src"></div>
@@ -43,32 +44,36 @@
                 {
                     <li>
                         <a href="@Url.Action("Index", "Dashboard")" class="@Html.IsSelected(controller: "Dashboard", action: "Index")">
-                            <i class="metismenu-icon pe-7s-rocket"></i>
+                            <i class="metismenu-icon fas fa-analytics"></i>
                             Home / Exe Summary
                         </a>
                     </li>
                     <li>
                         <a href="@Url.Action("Index", "PointsLedger")" class="@Html.IsSelected(controller: "PointsLedger", action: "Index")">
-                            <i class="metismenu-icon pe-7s-rocket"></i>
+                            @*<i class="metismenu-icon pe-7s-rocket"></i>*@
+                            <i class="metismenu-icon fas fa-table"></i>
                             Points Ledger
                         </a>
                     </li>
                     <li>
                         <a href="@Url.Action("Index", "Participant")" class="@Html.IsSelected(controller: "Participant", action: "Index")">
-                            <i class="metismenu-icon pe-7s-rocket"></i>
+                            
+                            <i class="metismenu-icon fas fa-th-list"></i>
                             Participant List
                         </a>
                     </li>
                     <li>
                         <a href="@Url.Action("RedumptionData", "Participant")" class="@Html.IsSelected(controller: "Participant", action: "RedumptionData")">
-                            <i class="metismenu-icon pe-7s-rocket"></i>
+                            
+                            <i class="metismenu-icon fas fa-trophy"></i>
                             Redemption
                         </a>
                     </li>
                     <li>
                         <a href="@Url.Action("TgtVsAch", "PointsLedger")" class="@Html.IsSelected(controller: "PointsLedger", action: "TgtVsAch")">
-                            <i class="metismenu-icon pe-7s-rocket"></i>
-                            Tgt Vs Ach
+                           
+                            <i class="metismenu-icon fas fa-star-half-alt"></i>
+                            Focus Vs Ach
                         </a>
                     </li>
 

@@ -65,7 +65,7 @@ namespace Chitale.Controllers
                 dataList.Add(objDashboardLostOpp.LateOrder);
                 dataList.Add(objDashboardLostOpp.CancelOrder);
                 dataList.Add(objDashboardLostOpp.TgtVsAch);
-                dataList.Add(objDashboardLostOpp.SCMOrder);                
+                //dataList.Add(objDashboardLostOpp.SCMOrder);                
                 var lstData = string.Join(" ", dataList);
             }
             catch (Exception ex)
