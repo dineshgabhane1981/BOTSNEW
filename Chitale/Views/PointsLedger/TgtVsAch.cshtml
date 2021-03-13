@@ -8,7 +8,7 @@
     <div class="row" style="margin-left:10px;margin-right:10px;">
         <div class="row mb-3 pt-3 pl-3 pr-3 card" style="width:100%;">
             <div id="dvOutletWiseData">
-                <b>TARGET vs ACHIEVEMENT</b>
+                <b>FOCUS vs ACHIEVEMENT</b>
                 <div class="row mb-3">
                     <div class="container-fluid pt-3 pl-3 pr-3">
                         <div class="pt-3 pl-3 pr-3 col-md-12 col-lg-12">
@@ -46,7 +46,7 @@
 
                                                 </tr>*@
                                             <tr style="text-align:center;">
-                                                <td scope="col" style="border:1px solid black;border-left:0px;" colspan="2"></td>
+                                                <td scope="col" style="border:1px solid black;border-left:0px;" colspan="3"></td>
                                                 <td scope="col" style="border:1px solid black; font-size:18px;" colspan="3"><b>Volume-wise</b> </td>
 
                                                 <td scope="col" style="border:1px solid black;border-right:0px; font-size:18px;" colspan="3"><b>Value-wise</b> </td>
@@ -54,6 +54,7 @@
                                             <tr>
                                                 <th scope="col"></th>
                                                 <th scope="col">Name</th>
+                                                <th scope="col">Type</th>
                                                 <th scope="col">Focus</th>
                                                 <th scope="col">Ach</th>
                                                 <th scope="col">Ach %</th>
@@ -68,11 +69,12 @@
                                             {
 
                                                 var imgId = "imgExpand" + Model.CustomerId;
-                                                <tr style=" border: hidden;">
+                                                <tr style=" border: hidden; ">
                                                     <td>
                                                         <img id="@imgId" src="~/Content/assets/images/details_open.png"  onclick="ShowActivities(@Model.CustomerId);" />
                                                     </td>
                                                     <td>Overall</td>
+                                                    <td></td>
                                                     <td>@Model.VolumeTgt</td>
                                                     <td>@Model.VolumeAch</td>
                                                     <td>@Model.VolumeAchPercentage</td>
@@ -85,11 +87,12 @@
                                                 var dynamicIdTr = "trActivities" + Model.CustomerId;
                                                 var dynamicIdDiv = "dvActivities" + Model.CustomerId;
                                         <tr id="@dynamicIdTr" style="display:none;">
-                                            <td colspan="8">
+                                            <td colspan="9">
                                                 <div id="@dynamicIdDiv" style="display:none;" class="table-responsive">
 
                                                 </div>
                                             </td>
+                                            <td style="display:none; "></td>
                                             <td style="display:none; "></td>
                                             <td style="display:none;"></td>
                                             <td style="display:none;"></td>
@@ -182,17 +185,19 @@
         }
     }
     function BindActivities(id, data) {
-        var htmlStr = "<table cellspacing=\"0\" cellpadding=\"0\" style=\"width:90%;  \" class=\"table\">";
+        var htmlStr = "<table cellspacing=\"0\" cellpadding=\"0\" style=\"width:100%;  \" class=\"table\">";
 
         $.map(data, function (item) {
+            
             htmlStr += "<tr style=\"text-align: center;  border:hidden; border-collapse: collapse; \">"
-            htmlStr += "<td style=\"max-width:50px; column-gap:20px; \" ><span style=\"text-align: center;color:blue;\" onclick=showSubCat(" + item.CategoryCode + ")>" + item.Name + "</span></td>";
-            htmlStr += "<td style=\"max-width:50px; column-gap: 20px;\">" + item.VolumeTgt + "</td>";
-            htmlStr += "<td style=\"max-width:50px; column-gap: 20px;\">" + item.VolumeAch + "</td>";
-            htmlStr += "<td style=\"max-width:50px; column-gap: 20px;\">" + item.VolumeAchPercentage + "</td>";
-            htmlStr += "<td style=\"max-width:50px; column-gap: 20px;\">" + item.ValueTgt + "</td>";
-            htmlStr += "<td style=\"max-width:50px; column-gap: 20px;\">" + item.ValueAch + "</td>";
-            htmlStr += "<td style=\"max-width:50px; column-gap: 20px;\">" + item.ValueAchPercentage + "</td>";
+            htmlStr += "<td style=\"max-width:50px;  \" ><span style=\"text-align: center;color:darkblue;\" onclick=showSubCat(" + item.CategoryCode + ")>" + item.Name + "</span></td>";
+            htmlStr += "<td style=\"max-width:50px; text-align: center;\">Category</td>";
+            htmlStr += "<td style=\"  \">" + item.VolumeTgt + "</td>";
+            htmlStr += "<td style=\"\">" + item.VolumeAch + "</td>";
+            htmlStr += "<td style=\"\">" + item.VolumeAchPercentage + "</td>";
+            htmlStr += "<td style=\"max-width:70px; text-align: right;\">" + item.ValueTgt + "</td>";
+            htmlStr += "<td style=\"max-width:70px;text-align: right; \">" + item.ValueAch + "</td>";
+            htmlStr += "<td style=\"max-width:70px; text-align: right;\">" + item.ValueAchPercentage + "</td>";
             htmlStr += "</tr>";
             var cIdTr = "trCategory" + item.CategoryCode;
             var cIdDiv = "dvCategory" + item.CategoryCode;
@@ -235,17 +240,18 @@
     }
 
     function BindSubActivities(id, data) {
-        var htmlStr = "<table cellspacing=\"0\" cellpadding=\"0\" style=\"width:100%; \" class=\"table\">";
+        var htmlStr = "<table cellspacing=\"0\" cellpadding=\"0\" style=\"width:110%; \" class=\"table\">";
 
         $.map(data, function (item) {
             htmlStr += "<tr style=\"text-align: center;  border:hidden;border-collapse: collapse; \">"
-            htmlStr += "<td style=\"max-width:50px;\" ><span style=\" color:blue;\" onclick=showProd(" + item.SubCategoryCode + ") >" + item.Name + "</span></td>";
-            htmlStr += "<td style=\"max-width:50px; column-gap: 20px;\" >" + item.VolumeTgt + "</td>";
-            htmlStr += "<td style=\"max-width:50px; column-gap: 20px;\">" + item.VolumeAch + "</td>";
-            htmlStr += "<td style=\"max-width:50px; column-gap: 20px;\">" + item.VolumeAchPercentage + "</td>";
-            htmlStr += "<td style=\"max-width:50px; column-gap: 20px;\">" + item.ValueTgt + "</td>";
-            htmlStr += "<td style=\"max-width:50px; column-gap: 20px;\" >" + item.ValueAch + "</td>";
-            htmlStr += "<td style=\"max-width:50px; column-gap: 20px;\">" + item.ValueAchPercentage + "</td>";
+            htmlStr += "<td style=\"max-width:50px;\" ><span style=\" color:brown;\" onclick=showProd(" + item.SubCategoryCode + ") >" + item.Name + "</span></td>";
+            htmlStr += "<td style=\"max-width:50px; \" >Sub-Category</td>";
+            htmlStr += "<td style=\" \" >" + item.VolumeTgt + "</td>"; 
+            htmlStr += "<td style=\" \">" + item.VolumeAch + "</td>";
+            htmlStr += "<td style=\" \">" + item.VolumeAchPercentage + "</td>";
+            htmlStr += "<td style=\"max-width:70px; text-align: right;\">" + item.ValueTgt + "</td>";
+            htmlStr += "<td style=\"max-width:70px;text-align: right; \" >" + item.ValueAch + "</td>";
+            htmlStr += "<td style=\"max-width:70px; text-align: right; \">" + item.ValueAchPercentage + "</td>";
             htmlStr += "</tr>";
             var cIdtr = "trSubCategory" + item.SubCategoryCode;
             var cIdDiv = "dvSubCategory" + item.SubCategoryCode;
@@ -288,17 +294,18 @@
     }
 
     function BindProdActivities(id, data) {
-        var htmlStr = "<table cellspacing=\"0\" cellpadding=\"0\" style=\"width:100%; \"class=\"table\" >";
+        var htmlStr = "<table cellspacing=\"0\" cellpadding=\"0\" style=\"width:110%; \"class=\"table\" >";
 
         $.map(data, function (item) {
             htmlStr += "<tr style=\"text-align: center;  border:hidden; border-collapse: collapse;\">"
-            htmlStr += "<td style=\"max-width:50px; column-gap: 20px;\" >" + item.Name + "</td>";
-            htmlStr += "<td style=\"max-width:50px; column-gap: 20px;\" >" + item.VolumeTgt + "</td>";
-            htmlStr += "<td style=\"max-width:50px; column-gap: 20px;\">" + item.VolumeAch + "</td>";
-            htmlStr += "<td style=\"max-width:50px; column-gap: 20px;\" >" + item.VolumeAchPercentage + "</td>";
-            htmlStr += "<td style=\"max-width:50px; column-gap: 20px;\">" + item.ValueTgt + "</td>";
-            htmlStr += "<td style=\"max-width:50px; column-gap: 20px;\" >" + item.ValueAch + "</td>";
-            htmlStr += "<td style=\"max-width:50px; column-gap: 20px;\">" + item.ValueAchPercentage + "</td>";
+            htmlStr += "<td style=\"max-width:50px;  color:orange;\" >" + item.Name + "</td>";
+            htmlStr += "<td style=\"max-width:50px; \" >Product</td>";
+            htmlStr += "<td style=\" \" >" + item.VolumeTgt + "</td>";
+            htmlStr += "<td style=\" \">" + item.VolumeAch + "</td>";
+            htmlStr += "<td style=\"\" >" + item.VolumeAchPercentage + "</td>";
+            htmlStr += "<td style=\"max-width:70px; text-align: right;\">" + item.ValueTgt + "</td>";
+            htmlStr += "<td style=\"max-width:70px; text-align: right;\" >" + item.ValueAch + "</td>";
+            htmlStr += "<td style=\"max-width:70px;text-align: right; \">" + item.ValueAchPercentage + "</td>";
             htmlStr += "</tr>";
         });
 
