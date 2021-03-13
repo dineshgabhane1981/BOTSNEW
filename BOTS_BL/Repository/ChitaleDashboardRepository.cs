@@ -13,12 +13,12 @@ namespace BOTS_BL.Repository
 {
     public class ChitaleDashboardRepository
     {
-        public CustomerDetail GetCustomerDetail(string CustomerId)
+        public CustomerDetail GetCustomerDetail(string CustomerId, string CustomerType)
         {
             CustomerDetail objCustomerDetail = new CustomerDetail();
             using (var context = new ChitaleDBContext())
             {
-                objCustomerDetail = context.CustomerDetails.Where(x => x.CustomerId == CustomerId).FirstOrDefault();
+                objCustomerDetail = context.CustomerDetails.Where(x => x.CustomerId == CustomerId && x.CustomerType == CustomerType).FirstOrDefault();
             }
             return objCustomerDetail;
         }

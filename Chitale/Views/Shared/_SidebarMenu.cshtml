@@ -82,7 +82,103 @@
 
                 @if (userDetails.CustomerCategory == "Management")
                 {
+                    <li>
+                        <a href="@Url.Action("Index", "ManagementDashboard")" class="@Html.IsSelected(controller: "ManagementDashboard", action: "Index")">
+                            <i class="metismenu-icon fas fa-analytics"></i>
+                            Home / Exe Summary
+                        </a>
+                    </li>
+                    <li>
+                        <a href="@Url.Action("ParticipantList", "ManagementDashboard")" class="@Html.IsSelected(controller: "ManagementDashboard", action: "ParticipantList")">
+                            <i class="metismenu-icon fas fa-th-list"></i>
+                            KYB / Participant List
+                        </a>
+                    </li>
+                    <li>
+                        <a href="@Url.Action("LeaderBoard", "ManagementDashboard")" class="@Html.IsSelected(controller: "ManagementDashboard", action: "LeaderBoard")">
+                            <i class="metismenu-icon fas fa-list-ol"></i>
+                            Leader Board
+                        </a>
+                    </li>
 
+                    <li>
+                        <a href="#">
+                            <i class="metismenu-icon fas fa-trophy"></i>
+                            Redemption
+                            <i class="metismenu-state-icon pe-7s-angle-down caret-left"></i>
+                        </a>
+                        <ul>
+                            <li class="@Html.IsSelected(controller: "Redemption", action: "RedeemedList")">
+                                <a class="@Html.IsSelected(controller: "Redemption", action: "RedeemedList")" href="@Url.Action("RedeemedList", "Redemption")">
+                                    <i class="metismenu-icon"></i>
+                                    Redeemed List
+                                </a>
+                            </li>
+                            <li class="@Html.IsSelected(controller: "Redemption", action: "RedemptionValues")">
+                                <a class="@Html.IsSelected(controller: "Redemption", action: "RedemptionValues")" href="@Url.Action("RedemptionValues", "Redemption")">
+                                    <i class="metismenu-icon">
+                                    </i>Redemption Values
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+
+                    <li>
+                        <a href="#">
+                            <i class="metismenu-icon fas fa-star-half-alt"></i>
+                            Tgt Vs Ach
+                            <i class="metismenu-state-icon pe-7s-angle-down caret-left"></i>
+                        </a>
+                        <ul>
+                            <li class="@Html.IsSelected(controller: "TgtVsAch", action: "Participantwise")">
+                                <a class="@Html.IsSelected(controller: "TgtVsAch", action: "Participantwise")" href="@Url.Action("Participantwise", "TgtVsAch")">
+                                    <i class="metismenu-icon"></i>
+                                    Participant-wise
+                                </a>
+                            </li>
+                            <li class="@Html.IsSelected(controller: "TgtVsAch", action: "Productwise")">
+                                <a class="@Html.IsSelected(controller: "TgtVsAch", action: "Productwise")" href="@Url.Action("Productwise", "TgtVsAch")">
+                                    <i class="metismenu-icon">
+                                    </i>Product-wise
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+
+                    <li>
+                        <a href="@Url.Action("OrdertoRavanaDays", "ManagementDashboard")" class="@Html.IsSelected(controller: "ManagementDashboard", action: "OrdertoRavanaDays")">
+                            <i class="metismenu-icon fas fa-angle-double-right"></i>
+                            Order to Ravana Days
+                        </a>
+                    </li>
+                    <li>
+                        <a href="@Url.Action("InvoicetoOrder", "ManagementDashboard")" class="@Html.IsSelected(controller: "ManagementDashboard", action: "InvoicetoOrder")">
+                            <i class="metismenu-icon fas fa-hand-point-right"></i>
+                            Invoice to Order
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="#">
+                            <i class="metismenu-icon fas fa-not-equal"></i>                            
+                            No Action
+                            <i class="metismenu-state-icon pe-7s-angle-down caret-left"></i>
+                        </a>
+                        <ul>
+                            <li class="@Html.IsSelected(controller: "NoAction", action: "Participants")">
+                                <a class="@Html.IsSelected(controller: "NoAction", action: "Participants")" href="@Url.Action("Participants", "NoAction")">
+                                    <i class="metismenu-icon"></i>
+                                    Participants
+                                </a>
+                            </li>
+                            <li class="@Html.IsSelected(controller: "NoAction", action: "Products")">
+                                <a class="@Html.IsSelected(controller: "NoAction", action: "Products")" href="@Url.Action("Products", "NoAction")">
+                                    <i class="metismenu-icon">
+                                    </i>Products
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
                 }
             </ul>
         </div>

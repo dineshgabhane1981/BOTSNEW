@@ -130,8 +130,12 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\DashboardController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\ManagementDashboardController.cs" />
+    <Compile Include="Controllers\NoActionController.cs" />
     <Compile Include="Controllers\ParticipantController.cs" />
     <Compile Include="Controllers\PointsLedgerController.cs" />
+    <Compile Include="Controllers\RedemptionController.cs" />
+    <Compile Include="Controllers\TgtVsAchController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -269,6 +273,17 @@
     <Content Include="Views\participant\Index.cshtml" />
     <Content Include="Views\PointsLedger\TgtVsAch.cshtml" />
     <Content Include="Views\PointsLedger\Index.cshtml" />
+    <Content Include="Views\ManagementDashboard\Index.cshtml" />
+    <Content Include="Views\ManagementDashboard\ParticipantList.cshtml" />
+    <Content Include="Views\ManagementDashboard\LeaderBoard.cshtml" />
+    <Content Include="Views\ManagementDashboard\OrdertoRavanaDays.cshtml" />
+    <Content Include="Views\ManagementDashboard\InvoicetoOrder.cshtml" />
+    <Content Include="Views\Redemption\RedeemedList.cshtml" />
+    <Content Include="Views\Redemption\RedemptionValues.cshtml" />
+    <Content Include="Views\TgtVsAch\Participantwise.cshtml" />
+    <Content Include="Views\TgtVsAch\Productwise.cshtml" />
+    <Content Include="Views\NoAction\Participants.cshtml" />
+    <Content Include="Views\NoAction\Products.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
