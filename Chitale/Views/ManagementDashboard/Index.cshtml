@@ -1,8 +1,179 @@
-﻿
+﻿@model Chitale.ViewModel.ManagementViewModel
 @{
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Index</h2>
+<div class="app-main__inner">
+    <div class="row">
+        <div style="width:100%;  padding:10px; background-color:white;float:left;">
+            <div class="card-header-tab card-header-tab-animation card-header" style="margin-bottom:10px;">
+                <div class="card-header-title">
+                    <i class="header-icon lnr-apartment icon-gradient bg-love-kiss"> </i>
+                    SUMMARY
+                </div>
+                <ul class="nav">
+                    <li class="nav-item"><a href="javascript:void(0);" onclick="showSummeryBTD('1');" id="SummeryBTD" class="active nav-link">BTD</a></li>
+                    <li class="nav-item"><a href="javascript:void(0);" onclick="showSummeryBTD('0');" id="SummeryCurrentMonth" class="nav-link second-tab-toggle">Current Month</a></li>
+                </ul>
+            </div>
 
+            <div class="card-header-tab" style="margin-bottom:20px;">
+                <div>
+                    @Html.DropDownListFor(model => model.ClusterList, new SelectList(Model.ClusterList, "Value", "Text"), "Please Cluster", htmlAttributes: new { @class = "input50", @id = "ddlClusterList" }) &nbsp;&nbsp;&nbsp;&nbsp;
+                    @Html.DropDownListFor(model => model.SubClusterList, new SelectList(Model.SubClusterList, "Value", "Text"), "Please Sub-Cluster", htmlAttributes: new { @class = "input50", @id = "ddlSubClusterList" })&nbsp;&nbsp;&nbsp;&nbsp;
+                    @Html.DropDownListFor(model => model.CityList, new SelectList(Model.CityList, "Value", "Text"), "Please City", htmlAttributes: new { @class = "input50", @id = "ddlCityList" })
+                </div>
+
+                <div>
+                    <br />
+                    <input type="text" class="input50" placeholder="From Date" readonly id="txtFrmDate" />&nbsp;&nbsp;&nbsp;&nbsp;
+                    <input type="text" class="input50" placeholder="To Date" readonly id="txtToDate" />
+                    <button type="button" id="btnFilter" style="margin-left:17px;margin-top:5px;" class="btn btn-primary"><b>FILTER</b></button>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 col-xl-4">
+                    <div class="card mb-3 widget-content" style="background-color:palevioletred;">
+                        <div class="widget-content-wrapper text-white">
+                            <div class="widget-content-left">
+                                <div class="widget-heading" style="font-size:17px; ">
+                                    Order Points (Purchase)
+                                </div>
+                                <div class="widget-numbers text-white"><span id="spnPurchaseOrderPoints"></span></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-xl-4">
+                    <div class="card mb-3 widget-content bg-arielle-smile">
+                        <div class="widget-content-wrapper text-white">
+                            <div class="widget-content-left">
+                                <div class="widget-heading" style="font-size:17px;">
+                                    Order Points (Sales)
+                                </div>
+                                <div class="widget-numbers text-white"><span id="spnSalesOrderPoints"></span></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-xl-4">
+                    <div class="card mb-3 widget-content" style="background-color:orchid;">
+                        <div class="widget-content-wrapper text-white">
+                            <div class="widget-content-left">
+                                <div class="widget-heading" style="font-size:17px;">
+                                    Redeemed Points
+                                </div>
+                                <div class="widget-numbers text-white"><span id="spnRedeemedPoints"></span></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 col-xl-4">
+                    <div class="card mb-3 widget-content " style="background-color: #92D050;">
+                        <div class="widget-content-wrapper text-white">
+                            <div class="widget-content-left">
+                                <div class="widget-heading" style="font-size:17px;">
+                                    Add On Points
+                                </div>
+                                <div class="widget-numbers text-white"><span id="spnAddOnPoints"></span></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-xl-4">
+                    <div class="card mb-3 widget-content" style="background-color:coral;">
+                        <div class="widget-content-wrapper text-white">
+                            <div class="widget-content-left">
+                                <div class="widget-heading" style="font-size:17px;">
+                                    Lost Opp Points
+                                </div>
+                                <div class="widget-numbers text-white"><span id="spnLostPoints"></span></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-xl-4">
+                    <div class="card mb-3 widget-content " style="background-color:darkkhaki;">
+                        <div class="widget-content-wrapper text-white">
+                            <div class="widget-content-left">
+                                <div class="widget-heading" style="font-size:17px;">
+                                    Total Balance Points
+                                </div>
+                                <div class="widget-numbers text-white"><span id="spnTotalPointsBalance"></span></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        var today = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
+        $("#txtFrmDate").datepicker({
+            dateFormat: "yy-mm-dd",
+            maxDate: today,
+        });
+        $("#txtToDate").datepicker({
+            dateFormat: "yy-mm-dd",
+            maxDate: today,
+        });
+
+        GetSummeryDetails('1');
+    });
+
+    function GetSummeryDetails(flag) {
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("GetDashboardSummeryData")',
+            data: "{'Flag': '" + flag + "'}",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                if (response != null) {
+                    $("#spnPurchaseOrderPoints").text(response.PurchaseOrderPointsStr);
+                    $("#spnSalesOrderPoints").text(response.SalesOrderPointsStr);
+                    $("#spnRedeemedPoints").text(response.RedeemedPointsStr);
+                    $("#spnAddOnPoints").text(response.AddOnPointsStr);
+                    $("#spnLostPoints").text(response.LostPointsStr);
+                    $("#spnTotalPointsBalance").text(response.TotalPointsBalanceStr);
+
+                    $("#divLoader").hide();
+                }
+            },
+            failure: function (response) {
+                $("#divLoader").hide();
+            },
+            error: function (response) {
+                $("#divLoader").hide();
+            }
+        });
+    }
+
+    function showSummeryBTD(flag) {
+        if (flag == '1') {
+            $("#SummeryBTD").addClass("active");
+            $("#SummeryCurrentMonth").removeClass("active");
+
+        }
+        else {
+            $("#SummeryBTD").removeClass("active");
+            $("#SummeryCurrentMonth").addClass("active");
+
+        }
+    }
+</script>
+
+
+<script src="~/Scripts/jquery-ui-1.12.1.js"></script>
+<script src="~/Scripts/jquery-ui-1.12.1.min.js"></script>
+<link href="~/Content/themes/base/jquery-ui.min.css" rel="stylesheet" />
+<link href="~/Content/themes/base/jquery-ui.css" rel="stylesheet" />
