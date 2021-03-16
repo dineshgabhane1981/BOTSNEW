@@ -1,5 +1,4 @@
-﻿using BOTS_BL.Models;
-using BOTS_BL.Models.ChitaleModel;
+﻿using BOTS_BL.Models.ChitaleModel;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
@@ -92,5 +91,75 @@ namespace BOTS_BL.Repository
             }
             return CityItems;
         }
+
+        public Dashboardsummary GetSummeryDetails(bool IsBTD, string Cluster, string SubCluster, string City, string FromDate, string Todate)
+        {
+            Dashboardsummary objDashboardsummary = new Dashboardsummary();
+            List<TransactionMaster> objtransactionmaster = new List<TransactionMaster>();
+            using (var context = new ChitaleDBContext())
+            {
+                if (Cluster == "All" && SubCluster == "All" && City == "All" && FromDate == "" && Todate == "")
+                {
+                    objtransactionmaster = context.TransactionMasters.ToList();
+                }
+                else
+                {
+                    objtransactionmaster = context.TransactionMasters.ToList();
+                    if (Cluster != "All")
+                    {
+                        var lstResult = from s in context.CustomerDetails
+                                        join sa in context.TransactionMasters on s.CustomerId equals sa.CustomerId
+                                        where s.Cluster == Cluster
+                                        select sa;
+                        objtransactionmaster = lstResult.ToList();
+                    }
+                    else if (SubCluster != "All")
+                    {
+                        var lstResult = from s in context.CustomerDetails
+                                        join sa in context.TransactionMasters on s.CustomerId equals sa.CustomerId
+                                        where s.SubCluster == SubCluster
+                                        select sa;
+                        objtransactionmaster = lstResult.ToList();
+                    }
+                    else if (City != "All")
+                    {
+                        var lstResult = from s in context.CustomerDetails
+                                        join sa in context.TransactionMasters on s.CustomerId equals sa.CustomerId
+                                        where s.City == City
+                                        select sa;
+                        objtransactionmaster = lstResult.ToList();
+                    }
+                    if (FromDate != "" && Todate != "")
+                    {
+                        objtransactionmaster = objtransactionmaster.Where(x => x.OrderDatetime >= Convert.ToDateTime(FromDate) && x.OrderDatetime <= Convert.ToDateTime(Todate)).ToList();
+                    }
+                    else
+                    {
+                        if (FromDate != "")
+                        {
+                            objtransactionmaster = objtransactionmaster.Where(x => x.OrderDatetime >= Convert.ToDateTime(FromDate)).ToList();
+                        }
+                        if (Todate != "")
+                        {
+                            objtransactionmaster = objtransactionmaster.Where(x => x.OrderDatetime >= Convert.ToDateTime(Todate)).ToList();
+                        }
+                    }
+                }
+
+                if (objtransactionmaster != null)
+                {
+                    objDashboardsummary.PurchaseOrderPoints = (decimal)objtransactionmaster.Where(x => x.TxnType == "Purchase").Sum(x => x.NormalPoints);
+                    objDashboardsummary.SalesOrderPoints = (decimal)objtransactionmaster.Where(x => x.TxnType == "Sale").Sum(x => x.NormalPoints);
+                    objDashboardsummary.AddOnPoints = (decimal)objtransactionmaster.Sum(x => x.AddOnPoints);
+                    objDashboardsummary.RedeemedPoints = 0;
+                    objDashboardsummary.LostPoints = (decimal)objtransactionmaster.Sum(x => x.PenaltyPoints);
+                    var NormalPoints = (decimal)objtransactionmaster.Sum(x => x.NormalPoints);
+                    objDashboardsummary.TotalPointsBalance = (NormalPoints + objDashboardsummary.AddOnPoints) - objDashboardsummary.LostPoints;
+                }
+            }
+            return objDashboardsummary;
+        }
+
+
     }
 }

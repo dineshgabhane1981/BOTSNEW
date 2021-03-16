@@ -8,6 +8,7 @@ using System.Globalization;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Script.Serialization;
 
 namespace Chitale.Controllers
 {
@@ -21,26 +22,38 @@ namespace Chitale.Controllers
             ManagementViewModel objModel = new ManagementViewModel();
             objModel.ClusterList = MDR.GetClusterList();
             objModel.SubClusterList = MDR.GetSubClusterList();
-            objModel.CityList = MDR.GetCityList();            
+            objModel.CityList = MDR.GetCityList();
             return View(objModel);
         }
-        public JsonResult GetDashboardSummeryData(string Flag)
+        public JsonResult GetDashboardSummeryData(string jsonData)
         {
             Dashboardsummary SummeryData = new Dashboardsummary();
             try
             {
-                var UserSession = (CustomerDetail)Session["ChitaleUser"];
-                bool IsBTD = false;
-                if (Flag == "1")
-                    IsBTD = true;
-                //SummeryData = CDR.GetSummeryDetails(UserSession.CustomerId, IsBTD);
-                SummeryData.PurchaseOrderPointsStr = String.Format(new CultureInfo("en-IN", false), "{0:n}", Convert.ToDecimal(SummeryData.PurchaseOrderPoints));
-                SummeryData.SalesOrderPointsStr = String.Format(new CultureInfo("en-IN", false), "{0:n}", Convert.ToDecimal(SummeryData.SalesOrderPoints));
-                SummeryData.RedeemedPointsStr = String.Format(new CultureInfo("en-IN", false), "{0:n}", Convert.ToDecimal(SummeryData.RedeemedPoints));
-                SummeryData.AddOnPointsStr = String.Format(new CultureInfo("en-IN", false), "{0:n}", Convert.ToDecimal(SummeryData.AddOnPoints));
-                SummeryData.LostPointsStr = String.Format(new CultureInfo("en-IN", false), "{0:n}", Convert.ToDecimal(SummeryData.LostPoints));
-                SummeryData.TotalPointsBalanceStr = String.Format(new CultureInfo("en-IN", false), "{0:n}", Convert.ToDecimal(SummeryData.TotalPointsBalance));
+                JavaScriptSerializer json_serializer = new JavaScriptSerializer();
+                json_serializer.MaxJsonLength = int.MaxValue;
+                object[] objData = (object[])json_serializer.DeserializeObject(jsonData);
+                
+                foreach (Dictionary<string, object> item in objData)
+                {
+                    string Flag = Convert.ToString(item["Flag"]);
+                    string Cluster = Convert.ToString(item["Cluster"]);
+                    string SubCluster = Convert.ToString(item["SubCluster"]);
+                    string City = Convert.ToString(item["City"]);
+                    string FromDate = Convert.ToString(item["FromDate"]);
+                    string Todate = Convert.ToString(item["Todate"]);
 
+                    bool IsBTD = false;
+                    if (Flag == "1")
+                        IsBTD = true;
+                    SummeryData = MDR.GetSummeryDetails(IsBTD, Cluster, SubCluster, City, FromDate, Todate);
+                    SummeryData.PurchaseOrderPointsStr = String.Format(new CultureInfo("en-IN", false), "{0:n}", Convert.ToDecimal(SummeryData.PurchaseOrderPoints));
+                    SummeryData.SalesOrderPointsStr = String.Format(new CultureInfo("en-IN", false), "{0:n}", Convert.ToDecimal(SummeryData.SalesOrderPoints));
+                    SummeryData.RedeemedPointsStr = String.Format(new CultureInfo("en-IN", false), "{0:n}", Convert.ToDecimal(SummeryData.RedeemedPoints));
+                    SummeryData.AddOnPointsStr = String.Format(new CultureInfo("en-IN", false), "{0:n}", Convert.ToDecimal(SummeryData.AddOnPoints));
+                    SummeryData.LostPointsStr = String.Format(new CultureInfo("en-IN", false), "{0:n}", Convert.ToDecimal(SummeryData.LostPoints));
+                    SummeryData.TotalPointsBalanceStr = String.Format(new CultureInfo("en-IN", false), "{0:n}", Convert.ToDecimal(SummeryData.TotalPointsBalance));
+                }
             }
             catch (Exception ex)
             {
@@ -64,7 +77,7 @@ namespace Chitale.Controllers
         {
             return View();
         }
-       
+
 
     }
 }

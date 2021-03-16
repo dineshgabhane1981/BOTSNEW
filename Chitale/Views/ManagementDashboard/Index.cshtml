@@ -12,17 +12,17 @@
                     <i class="header-icon lnr-apartment icon-gradient bg-love-kiss"> </i>
                     SUMMARY
                 </div>
-                <ul class="nav">
-                    <li class="nav-item"><a href="javascript:void(0);" onclick="showSummeryBTD('1');" id="SummeryBTD" class="active nav-link">BTD</a></li>
-                    <li class="nav-item"><a href="javascript:void(0);" onclick="showSummeryBTD('0');" id="SummeryCurrentMonth" class="nav-link second-tab-toggle">Current Month</a></li>
-                </ul>
+                @*<ul class="nav">
+                        <li class="nav-item"><a href="javascript:void(0);" onclick="GetSummeryDetails('1');" id="SummeryBTD" class="active nav-link">BTD</a></li>
+                        <li class="nav-item"><a href="javascript:void(0);" onclick="GetSummeryDetails('0');" id="SummeryCurrentMonth" class="nav-link second-tab-toggle">Current Month</a></li>
+                    </ul>*@
             </div>
 
             <div class="card-header-tab" style="margin-bottom:20px;">
                 <div>
-                    @Html.DropDownListFor(model => model.ClusterList, new SelectList(Model.ClusterList, "Value", "Text"), "Please Cluster", htmlAttributes: new { @class = "input50", @id = "ddlClusterList" }) &nbsp;&nbsp;&nbsp;&nbsp;
-                    @Html.DropDownListFor(model => model.SubClusterList, new SelectList(Model.SubClusterList, "Value", "Text"), "Please Sub-Cluster", htmlAttributes: new { @class = "input50", @id = "ddlSubClusterList" })&nbsp;&nbsp;&nbsp;&nbsp;
-                    @Html.DropDownListFor(model => model.CityList, new SelectList(Model.CityList, "Value", "Text"), "Please City", htmlAttributes: new { @class = "input50", @id = "ddlCityList" })
+                    @Html.DropDownListFor(model => model.ClusterList, new SelectList(Model.ClusterList, "Value", "Text"), "All", htmlAttributes: new { @class = "input50", @id = "ddlClusterList" }) &nbsp;&nbsp;&nbsp;&nbsp;
+                    @Html.DropDownListFor(model => model.SubClusterList, new SelectList(Model.SubClusterList, "Value", "Text"), "All", htmlAttributes: new { @class = "input50", @id = "ddlSubClusterList" })&nbsp;&nbsp;&nbsp;&nbsp;
+                    @Html.DropDownListFor(model => model.CityList, new SelectList(Model.CityList, "Value", "Text"), "All", htmlAttributes: new { @class = "input50", @id = "ddlCityList" })
                 </div>
 
                 <div>
@@ -112,6 +112,37 @@
                 </div>
 
             </div>
+
+            <div class="row">
+                <div class="col-md-12 col-lg-6">
+                    <div class="mb-3 card">
+                        <div class="card-header-tab card-header-tab-animation card-header">
+                            <div class="card-header-title">
+                                <i class="header-icon lnr-apartment icon-gradient bg-love-kiss"> </i>
+                                5 TOP PARTICIPANTS
+                            </div>
+                            <ul class="nav">
+                                <li class="nav-item"><a href="javascript:void(0);" onclick="showOutletEnrolmentChart('')" id="navSS" class="active nav-link">SS</a></li>
+                                <li class="nav-item"><a href="javascript:void(0);" onclick="showOutletEnrolmentChart('1')" id="navDist" class="nav-link second-tab-toggle">Dist</a></li>
+                                <li class="nav-item"><a href="javascript:void(0);" onclick="showOutletEnrolmentChart('1')" id="navRetailer" class="nav-link second-tab-toggle">Retailer</a></li>
+                            </ul>
+                        </div>
+                        <div class="card-body">
+                            <div class="tab-content">
+                                <div class="tab-pane fade show active" id="tabs-eg-77">
+                                    <div class="card mb-3 widget-chart widget-chart2 text-left w-100">
+                                        <div class="widget-chat-wrapper-outer">
+                                            <div class="widget-chart-wrapper widget-chart-wrapper-lg opacity-10 m-0" id="containerOutlet" style="overflow-y:auto;">
+                                                <canvas id="cvTop5Participant"></canvas>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
@@ -128,13 +159,46 @@
         });
 
         GetSummeryDetails('1');
+        Top5Participants('SS');
+        $('#btnFilter').on("click", function () {
+            if ($("#SummeryBTD").hasClass("active")) {
+                GetSummeryDetails('1');
+            }
+            else {
+                GetSummeryDetails('0');
+            }
+        });
+
+        $("#ddlClusterList").on('change', function () {
+            $('#ddlSubClusterList').prop('selectedIndex', 0);
+            $('#ddlCityList').prop('selectedIndex', 0);
+        });
+        $("#ddlSubClusterList").on('change', function () {
+            $('#ddlClusterList').prop('selectedIndex', 0);
+            $('#ddlCityList').prop('selectedIndex', 0);
+        });
+        $("#ddlCityList").on('change', function () {
+            $('#ddlClusterList').prop('selectedIndex', 0);
+            $('#ddlSubClusterList').prop('selectedIndex', 0);
+        });
     });
 
     function GetSummeryDetails(flag) {
+        var SummeryData = [];
+        item = {}
+        item["Flag"] = flag;
+        item["Cluster"] = $('#ddlClusterList :selected').text();
+        item["SubCluster"] = $('#ddlSubClusterList :selected').text();
+        item["City"] = $('#ddlCityList :selected').text();
+        item["FromDate"] = $("#txtFrmDate").val();
+        item["Todate"] = $('#txtToDate').val();
+        SummeryData.push(item);
+        var data = JSON.stringify(SummeryData);
+        $("#divLoader").show();
         $.ajax({
             type: "POST",
             url: '@Url.Action("GetDashboardSummeryData")',
-            data: "{'Flag': '" + flag + "'}",
+            data: '{jsonData: ' + JSON.stringify(data) + '}',
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             success: function (response) {
@@ -156,20 +220,20 @@
                 $("#divLoader").hide();
             }
         });
-    }
-
-    function showSummeryBTD(flag) {
         if (flag == '1') {
             $("#SummeryBTD").addClass("active");
             $("#SummeryCurrentMonth").removeClass("active");
-
         }
         else {
             $("#SummeryBTD").removeClass("active");
             $("#SummeryCurrentMonth").addClass("active");
-
         }
     }
+
+    function Top5Participants(type) {
+
+    }
+
 </script>
 
 
