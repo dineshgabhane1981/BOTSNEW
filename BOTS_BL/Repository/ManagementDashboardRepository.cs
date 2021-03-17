@@ -160,6 +160,38 @@ namespace BOTS_BL.Repository
             return objDashboardsummary;
         }
 
+        public List<CustomerDetail> GetTop5Participant(string type)
+        {
+            List<CustomerDetail> objTop5Participant = new List<CustomerDetail>();
+            using (var context = new ChitaleDBContext())
+            {
+                objTop5Participant = context.CustomerDetails.Where(a=>a.CustomerType== type).OrderByDescending(x => x.Points).Take(5).ToList();
+            }
+
+            return objTop5Participant;
+        }
+
+        public List<CustomerDetail> Bottom5Participants(string type)
+        {
+            List<CustomerDetail> objTop5Participant = new List<CustomerDetail>();
+            using (var context = new ChitaleDBContext())
+            {
+                objTop5Participant = context.CustomerDetails.Where(a => a.CustomerType == type).OrderBy(x => x.Points).Take(5).ToList();
+            }
+
+            return objTop5Participant;
+        }
+
+        public List<Top5LostParticipants> GetTop5LostParticipant(string type)
+        {
+            List<Top5LostParticipants> objTop5Participant = new List<Top5LostParticipants>();
+            using (var context = new ChitaleDBContext())
+            {
+                objTop5Participant = context.Database.SqlQuery<Top5LostParticipants>("sp_GetTop5LostParticipants @pi_CustomerType", new SqlParameter("@pi_CustomerType", type)).ToList<Top5LostParticipants>();
+            }
+
+            return objTop5Participant;
+        }
 
     }
 }

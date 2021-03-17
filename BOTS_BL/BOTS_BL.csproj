@@ -164,6 +164,7 @@
     <Compile Include="Models\ChitaleModel\TempPoint.cs" />
     <Compile Include="Models\ChitaleModel\TempReceiptNo.cs" />
     <Compile Include="Models\ChitaleModel\TgtvsAchMaster.cs" />
+    <Compile Include="Models\ChitaleModel\Top5LostParticipants.cs" />
     <Compile Include="Models\ChitaleModel\TransactionMaster.cs" />
     <Compile Include="Models\CommonDB\CommonDBContext.cs" />
     <Compile Include="Models\CommonDB\CommonReferralURL.cs" />

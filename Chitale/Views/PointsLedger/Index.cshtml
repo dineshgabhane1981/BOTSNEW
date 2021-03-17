@@ -170,7 +170,7 @@
             $("#dvActivities" + id).hide(1000);
             $("#trActivities" + id).hide(1000);
 
-            $("#imgExpand" + id).attr("src", "/chitaleweb/Content/assets/images/details_open.png");
+            $("#imgExpand" + id).attr("src", "~/Content/assets/images/details_open.png");
         }
         else {
             $("#divLoader").show();
@@ -225,9 +225,15 @@
         htmlStr += "</table>";
         $("#dvActivities" + id).html(htmlStr);
 
+        $('tr[id^="trActivities"]').hide(1000);
+        $('div[id^="dvActivities"]').hide(1000);
+        $('[id^="imgExpand"]').attr("src", "~/Content/assets/images/details_open.png");
+        //$("#trActivities").hide(1000);
+        //$("#dvActivities").hide(1000);
+
         $("#trActivities" + id).show(1000);
         $("#dvActivities" + id).show(1000);
-        $("#imgExpand" + id).attr("src", "/chitaleweb/Content/assets/images/details_close.png");
+        $("#imgExpand" + id).attr("src", "~/Content/assets/images/details_close.png");
     }
 
 

@@ -231,6 +231,10 @@
         htmlStr += "</table>";
         $("#dvActivities" + id).html(htmlStr);
 
+        $('tr[id^="trActivities"]').hide(1000);
+        $('div[id^="dvActivities"]').hide(1000);
+        $('[id^="imgExpand"]').attr("src", "~/Content/assets/images/details_open.png");
+
         $("#trActivities" + id).show(1000);
         $("#dvActivities" + id).show(1000);
         $("#imgExpand" + id).attr("src", "/chitaleweb/Content/assets/images/details_close.png");

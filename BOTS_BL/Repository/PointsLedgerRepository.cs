@@ -77,7 +77,7 @@ namespace BOTS_BL.Repository
                                 objPointLedger.NetEarnPoints = 0;
                                 objPointLedger.NetEarnPointsStr = "0.00";
                             }
-                            objPointLedger.DaysDiff = Convert.ToInt32((objTransaction.RavanaDate - objTransaction.OrderDatetime).Value.TotalDays);
+                            objPointLedger.DaysDiff = Convert.ToInt32((objTransaction.RavanaDate.Value.Date - objTransaction.OrderDatetime.Value.Date).Days);
                             bojList.Add(objPointLedger);
                         }
                     }
@@ -154,7 +154,7 @@ namespace BOTS_BL.Repository
                                 objPointLedger.NetEarnPointsStr = "0.00";
                             }
                             
-                            objPointLedger.DaysDiff = Convert.ToInt32((objTransaction.RavanaDate - objTransaction.OrderDatetime).Value.TotalDays);
+                            objPointLedger.DaysDiff = Convert.ToInt32((objTransaction.RavanaDate.Value.Date - objTransaction.OrderDatetime.Value.Date).Days);
 
                             bojList.Add(objPointLedger);
                         }

@@ -122,9 +122,9 @@
                                 5 TOP PARTICIPANTS
                             </div>
                             <ul class="nav">
-                                <li class="nav-item"><a href="javascript:void(0);" onclick="showOutletEnrolmentChart('')" id="navSS" class="active nav-link">SS</a></li>
-                                <li class="nav-item"><a href="javascript:void(0);" onclick="showOutletEnrolmentChart('1')" id="navDist" class="nav-link second-tab-toggle">Dist</a></li>
-                                <li class="nav-item"><a href="javascript:void(0);" onclick="showOutletEnrolmentChart('1')" id="navRetailer" class="nav-link second-tab-toggle">Retailer</a></li>
+                                <li class="nav-item"><a href="javascript:void(0);" onclick="Top5Participants('SuperStockiest')" id="navSS" class="active nav-link">SS</a></li>
+                                <li class="nav-item"><a href="javascript:void(0);" onclick="Top5Participants('Distributors')" id="navDist" class="nav-link second-tab-toggle">Dist</a></li>
+                                <li class="nav-item"><a href="javascript:void(0);" onclick="Top5Participants('Retailers')" id="navRetailer" class="nav-link second-tab-toggle">Retailer</a></li>
                             </ul>
                         </div>
                         <div class="card-body">
@@ -132,8 +132,68 @@
                                 <div class="tab-pane fade show active" id="tabs-eg-77">
                                     <div class="card mb-3 widget-chart widget-chart2 text-left w-100">
                                         <div class="widget-chat-wrapper-outer">
-                                            <div class="widget-chart-wrapper widget-chart-wrapper-lg opacity-10 m-0" id="containerOutlet" style="overflow-y:auto;">
+                                            <div class="widget-chart-wrapper widget-chart-wrapper-lg opacity-10 m-0" id="containerTop5Participant" style="overflow-y:auto;">
                                                 <canvas id="cvTop5Participant"></canvas>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-12 col-lg-6">
+                    <div class="mb-3 card">
+                        <div class="card-header-tab card-header-tab-animation card-header">
+                            <div class="card-header-title">
+                                <i class="header-icon lnr-apartment icon-gradient bg-love-kiss"> </i>
+                                5 BOTTOM PARTICIPANTS
+                            </div>
+                            <ul class="nav">
+                                <li class="nav-item"><a href="javascript:void(0);" onclick="Bottom5Participants('SuperStockiest')" id="navBotSS" class="active nav-link">SS</a></li>
+                                <li class="nav-item"><a href="javascript:void(0);" onclick="Bottom5Participants('Distributors')" id="navBotDist" class="nav-link second-tab-toggle">Dist</a></li>
+                                <li class="nav-item"><a href="javascript:void(0);" onclick="Bottom5Participants('Retailers')" id="navBotRetailer" class="nav-link second-tab-toggle">Retailer</a></li>
+                            </ul>
+                        </div>
+                        <div class="card-body">
+                            <div class="tab-content">
+                                <div class="tab-pane fade show active" id="tabs-eg-77">
+                                    <div class="card mb-3 widget-chart widget-chart2 text-left w-100">
+                                        <div class="widget-chat-wrapper-outer">
+                                            <div class="widget-chart-wrapper widget-chart-wrapper-lg opacity-10 m-0" id="containerBottom5Participant" style="overflow-y:auto;">
+                                                <canvas id="cvBottom5Participant"></canvas>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12 col-lg-6">
+                    <div class="mb-3 card">
+                        <div class="card-header-tab card-header-tab-animation card-header">
+                            <div class="card-header-title">
+                                <i class="header-icon lnr-apartment icon-gradient bg-love-kiss"> </i>
+                                TOP 5 LOST OPP PARTICIPANTS
+                            </div>
+                            <ul class="nav">
+                                <li class="nav-item"><a href="javascript:void(0);" onclick="Top5LostParticipants('SuperStockiest')" id="navLostSS" class="active nav-link">SS</a></li>
+                                <li class="nav-item"><a href="javascript:void(0);" onclick="Top5LostParticipants('Distributors')" id="navLostDist" class="nav-link second-tab-toggle">Dist</a></li>
+                                <li class="nav-item"><a href="javascript:void(0);" onclick="Top5LostParticipants('Retailers')" id="navLostRetailer" class="nav-link second-tab-toggle">Retailer</a></li>
+                            </ul>
+                        </div>
+                        <div class="card-body">
+                            <div class="tab-content">
+                                <div class="tab-pane fade show active" id="tabs-eg-77">
+                                    <div class="card mb-3 widget-chart widget-chart2 text-left w-100">
+                                        <div class="widget-chat-wrapper-outer">
+                                            <div class="widget-chart-wrapper widget-chart-wrapper-lg opacity-10 m-0" id="containerTop5LostParticipant" style="overflow-y:auto;">
+                                                <canvas id="cvTop5LostParticipant"></canvas>
                                             </div>
                                         </div>
                                     </div>
@@ -159,7 +219,9 @@
         });
 
         GetSummeryDetails('1');
-        Top5Participants('SS');
+        Top5Participants('SuperStockiest');
+        Bottom5Participants('SuperStockiest');
+        Top5LostParticipants('SuperStockiest');
         $('#btnFilter').on("click", function () {
             if ($("#SummeryBTD").hasClass("active")) {
                 GetSummeryDetails('1');
@@ -231,9 +293,348 @@
     }
 
     function Top5Participants(type) {
+        $("#divLoader").show();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("Top5Participants")',
+            data: "{'type': '" + type + "'}",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                var names = response[0];
+                var dataList = response[1];
 
+                if (response != null) {
+                    $('#cvTop5Participant').remove(); // this is my <canvas> element
+                    $('#containerTop5Participant').append('<canvas id="cvTop5Participant"><canvas>');
+                    var barChartData =
+                    {
+                        labels: [...names],
+                        datasets: [{
+                            label: '',
+                            backgroundColor: [
+                                "#f990a7",
+                                "#aad2ed",
+                                "#9966FF",
+                                "#99e5e5",
+                                "#f7bd83",
+                            ],
+                            borderWidth: 2,
+                            data: [...dataList]
+                        }]
+                    };
+
+                    var ctx10 = document.getElementById("cvTop5Participant").getContext("2d");
+                    var myChart = new Chart(ctx10,
+                        {
+                            type: 'horizontalBar',
+                            data: barChartData,
+                            options:
+                            {
+                                scales: {
+                                    xAxes: [{
+                                        ticks: {
+                                            beginAtZero: true
+                                        }
+                                    }]
+                                },
+                                title:
+                                {
+                                    display: true,
+                                    text: ""
+                                },
+                                legend: {
+                                    display: false
+                                },
+
+                                responsive: true,
+                                maintainAspectRatio: true,
+                                tooltips: { enabled: false },
+                                hover: { mode: null },
+
+                                "hover": {
+                                    "animationDuration": 0,
+                                    mode: null
+                                },
+                                "animation": {
+                                    "duration": 1,
+                                    "onComplete": function () {
+                                        var chartInstance = this.chart,
+                                            ctx = chartInstance.ctx;
+
+                                        ctx.font = Chart.helpers.fontString(Chart.defaults.global.defaultFontSize, Chart.defaults.global.defaultFontStyle, Chart.defaults.global.defaultFontFamily);
+                                        ctx.textAlign = 'center';
+                                        ctx.textBaseline = 'bottom';
+
+                                        this.data.datasets.forEach(function (dataset, i) {
+                                            var meta = chartInstance.controller.getDatasetMeta(i);
+                                            meta.data.forEach(function (bar, index) {
+                                                var data = dataset.data[index];
+                                                ctx.fillStyle = 'rgba(0, 0, 0, 1)';
+                                                var value = (data).toFixed(2).replace(/(\d)(?=(\d{2})+\d\.)/g, '$1,');
+                                                ctx.fillText(value, bar._model.x, bar._model.y - 5);
+                                            });
+                                        });
+                                    }
+                                }
+                            }
+                        });
+                    $("#divLoader").hide();
+                }
+            },
+            failure: function (response) {
+                $("#divLoader").hide();
+            },
+            error: function (response) {
+                $("#divLoader").hide();
+            }
+        });
+
+        if (type == 'SuperStockiest') {
+            $("#navSS").addClass("active");
+            $("#navDist").removeClass("active");
+            $("#navRetailer").removeClass("active");
+        }
+        if (type == 'Distributors') {
+            $("#navSS").removeClass("active");
+            $("#navDist").addClass("active");
+            $("#navRetailer").removeClass("active");
+        }
+        if (type == 'Retailers') {
+            $("#navSS").removeClass("active");
+            $("#navDist").removeClass("active");
+            $("#navRetailer").addClass("active");
+        }
+    }
+    function Bottom5Participants(type) {
+        $("#divLoader").show();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("Bottom5Participants")',
+            data: "{'type': '" + type + "'}",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                var names = response[0];
+                var dataList = response[1];
+
+                if (response != null) {
+                    $('#cvBottom5Participant').remove(); // this is my <canvas> element
+                    $('#containerBottom5Participant').append('<canvas id="cvBottom5Participant"><canvas>');
+                    var barChartData =
+                    {
+                        labels: [...names],
+                        datasets: [{
+                            label: '',
+                            backgroundColor: [
+                                "#f990a7",
+                                "#aad2ed",
+                                "#9966FF",
+                                "#99e5e5",
+                                "#f7bd83",
+                            ],
+                            borderWidth: 2,
+                            data: [...dataList]
+                        }]
+                    };
+
+                    var ctx10 = document.getElementById("cvBottom5Participant").getContext("2d");
+                    var myChart = new Chart(ctx10,
+                        {
+                            type: 'horizontalBar',
+                            data: barChartData,
+                            options:
+                            {
+                                scales: {
+                                    xAxes: [{
+                                        ticks: {
+                                            beginAtZero: true
+                                        }
+                                    }]
+                                },
+                                title:
+                                {
+                                    display: true,
+                                    text: ""
+                                },
+                                legend: {
+                                    display: false
+                                },
+
+                                responsive: true,
+                                maintainAspectRatio: true,
+                                tooltips: { enabled: false },
+                                hover: { mode: null },
+
+                                "hover": {
+                                    "animationDuration": 0,
+                                    mode: null
+                                },
+                                "animation": {
+                                    "duration": 1,
+                                    "onComplete": function () {
+                                        var chartInstance = this.chart,
+                                            ctx = chartInstance.ctx;
+
+                                        ctx.font = Chart.helpers.fontString(Chart.defaults.global.defaultFontSize, Chart.defaults.global.defaultFontStyle, Chart.defaults.global.defaultFontFamily);
+                                        ctx.textAlign = 'center';
+                                        ctx.textBaseline = 'bottom';
+
+                                        this.data.datasets.forEach(function (dataset, i) {
+                                            var meta = chartInstance.controller.getDatasetMeta(i);
+                                            meta.data.forEach(function (bar, index) {
+                                                var data = dataset.data[index];
+                                                ctx.fillStyle = 'rgba(0, 0, 0, 1)';
+                                                var value = (data).toFixed(2).replace(/(\d)(?=(\d{2})+\d\.)/g, '$1,');
+                                                ctx.fillText(value, bar._model.x, bar._model.y - 5);
+                                            });
+                                        });
+                                    }
+                                }
+                            }
+                        });
+                    $("#divLoader").hide();
+                }
+            },
+            failure: function (response) {
+                $("#divLoader").hide();
+            },
+            error: function (response) {
+                $("#divLoader").hide();
+            }
+        });
+
+        if (type == 'SuperStockiest') {
+            $("#navBotSS").addClass("active");
+            $("#navBotDist").removeClass("active");
+            $("#navBotRetailer").removeClass("active");
+        }
+        if (type == 'Distributors') {
+            $("#navBotSS").removeClass("active");
+            $("#navBotDist").addClass("active");
+            $("#navBotRetailer").removeClass("active");
+        }
+        if (type == 'Retailers') {
+            $("#navBotSS").removeClass("active");
+            $("#navBotDist").removeClass("active");
+            $("#navBotRetailer").addClass("active");
+        }
     }
 
+    function Top5LostParticipants(type) {
+        $("#divLoader").show();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("Top5LostParticipants")',
+            data: "{'type': '" + type + "'}",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                var names = response[0];
+                var dataList = response[1];
+
+                if (response != null) {
+                    $('#cvTop5LostParticipant').remove(); // this is my <canvas> element
+                    $('#containerTop5LostParticipant').append('<canvas id="cvTop5LostParticipant"><canvas>');
+                    var barChartData =
+                    {
+                        labels: [...names],
+                        datasets: [{
+                            label: '',
+                            backgroundColor: [
+                                "#f990a7",
+                                "#aad2ed",
+                                "#9966FF",
+                                "#99e5e5",
+                                "#f7bd83",
+                            ],
+                            borderWidth: 2,
+                            data: [...dataList]
+                        }]
+                    };
+
+                    var ctx10 = document.getElementById("cvTop5LostParticipant").getContext("2d");
+                    var myChart = new Chart(ctx10,
+                        {
+                            type: 'horizontalBar',
+                            data: barChartData,
+                            options:
+                            {
+                                scales: {
+                                    xAxes: [{
+                                        ticks: {
+                                            beginAtZero: true
+                                        }
+                                    }]
+                                },
+                                title:
+                                {
+                                    display: true,
+                                    text: ""
+                                },
+                                legend: {
+                                    display: false
+                                },
+
+                                responsive: true,
+                                maintainAspectRatio: true,
+                                tooltips: { enabled: false },
+                                hover: { mode: null },
+
+                                "hover": {
+                                    "animationDuration": 0,
+                                    mode: null
+                                },
+                                "animation": {
+                                    "duration": 1,
+                                    "onComplete": function () {
+                                        var chartInstance = this.chart,
+                                            ctx = chartInstance.ctx;
+
+                                        ctx.font = Chart.helpers.fontString(Chart.defaults.global.defaultFontSize, Chart.defaults.global.defaultFontStyle, Chart.defaults.global.defaultFontFamily);
+                                        ctx.textAlign = 'center';
+                                        ctx.textBaseline = 'bottom';
+
+                                        this.data.datasets.forEach(function (dataset, i) {
+                                            var meta = chartInstance.controller.getDatasetMeta(i);
+                                            meta.data.forEach(function (bar, index) {
+                                                var data = dataset.data[index];
+                                                ctx.fillStyle = 'rgba(0, 0, 0, 1)';
+                                                var value = (data).toFixed(2).replace(/(\d)(?=(\d{2})+\d\.)/g, '$1,');
+                                                ctx.fillText(value, bar._model.x, bar._model.y - 5);
+                                            });
+                                        });
+                                    }
+                                }
+                            }
+                        });
+                    $("#divLoader").hide();
+                }
+            },
+            failure: function (response) {
+                $("#divLoader").hide();
+            },
+            error: function (response) {
+                $("#divLoader").hide();
+            }
+        });
+
+        if (type == 'SuperStockiest') {
+            $("#navLostSS").addClass("active");
+            $("#navLostDist").removeClass("active");
+            $("#navLostRetailer").removeClass("active");
+        }
+        if (type == 'Distributors') {
+            $("#navLostSS").removeClass("active");
+            $("#navLostDist").addClass("active");
+            $("#navLostRetailer").removeClass("active");
+        }
+        if (type == 'Retailers') {
+            $("#navLostSS").removeClass("active");
+            $("#navLostDist").removeClass("active");
+            $("#navLostRetailer").addClass("active");
+        }
+    }
 </script>
 
 
