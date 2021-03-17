@@ -142,7 +142,32 @@ namespace Chitale.Controllers
 
         public ActionResult ParticipantList()
         {
+            var lstCluster = MDR.GetClusterList();
+            var lstCity = MDR.GetCityList();
+            var lstSubcluster = MDR.GetSubClusterList();
+
+
+            ViewBag.ClusterList = lstCluster;
+            ViewBag.SubclusterList = lstSubcluster;
+            ViewBag.CityList = lstCity;
             return View();
+        }
+
+        public JsonResult GetParticipantListForMgt()
+        {
+            List<ParticipantListForManagement> listformgt = new List<ParticipantListForManagement>();
+            listformgt = MDR.GetParticipantListForMgt();
+
+            return new JsonResult() { Data = listformgt, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
+            
+        }
+        public JsonResult GetSubParticipantListForMgt(string Id,string ParticipantType)
+        {
+            List<ParticipantListForManagement> listformgt = new List<ParticipantListForManagement>();
+            listformgt = MDR.GetSubParticipantListForMgt(Id, ParticipantType);
+
+            return new JsonResult() { Data = listformgt, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
+           
         }
         public ActionResult LeaderBoard()
         {

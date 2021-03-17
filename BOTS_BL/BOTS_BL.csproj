@@ -149,6 +149,7 @@
     <Compile Include="Models\ChitaleModel\OrderPointsConfig.cs" />
     <Compile Include="Models\ChitaleModel\OTPMaintenance.cs" />
     <Compile Include="Models\ChitaleModel\ParticipantList.cs" />
+    <Compile Include="Models\ChitaleModel\ParticipantListForManagement.cs" />
     <Compile Include="Models\ChitaleModel\PaymentMaster.cs" />
     <Compile Include="Models\ChitaleModel\PaymentPointsConfig.cs" />
     <Compile Include="Models\ChitaleModel\PointLedgerModel.cs" />

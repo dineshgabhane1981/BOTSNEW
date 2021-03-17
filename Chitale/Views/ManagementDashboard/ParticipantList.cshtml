@@ -4,5 +4,481 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>ParticipantList</h2>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.2.2/Chart.bundle.min.js"></script>
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.23/css/jquery.dataTables.css">
+
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.23/js/jquery.dataTables.js"></script>
+<div class="app-main__inner">
+    <div class="row" style="margin-left:20px;">
+
+        <div class="row mb-3 pt-3 pl-3 pr-3 card">
+            <div id="dvOutletWiseData">
+                <b>
+                    KYB / PARTICIPANT LIST
+                </b>
+                <div class="row mb-3">
+                    <div class="container-fluid pt-3 pl-3 pr-3">
+
+                        <div class="pt-3 pl-3 pr-3 col-md-12 col-lg-12">
+                            <div class="row">
+
+                                @*<i class="fas fa-search"></i>*@
+                                @*<input class="input100" type="text" id="txtSearch" placeholder="Search activity..." />*@
+                                @Html.DropDownList("Cluster", new SelectList(ViewBag.ClusterList, "Value", "Text"), "Select Cluster", htmlAttributes: new { onchange = "GetCluster(this.value);", @class = "input50", @id = "ddlClusterList" })
+
+                                @Html.DropDownList("Sub-Cluster", new SelectList(ViewBag.SubclusterList, "Value", "Text"), "Select Sub-cluster", htmlAttributes: new { onchange = "GetSubcluster(this.value);", @class = "input50", @id = "ddlSubClusterList" })
+
+                                @Html.DropDownList("City", new SelectList(ViewBag.CityList, "Value", "Text"), "Select City", htmlAttributes: new { onchange = "GetCity(this.value);", @class = "input50", @id = "ddlCityList" })
+
+
+                                <button class="btn btn-primary login-btn" type="button" id="btnFilter">
+                                    Filter
+                                </button>
+
+
+                                <div class="col text-right">
+                                    <ul class="list-inline progress-list mt-2">
+                                        <li class="list-inline-item">
+                                            <div class="dropdown">
+                                                @*<button class="btn btn-primary login-btn" onclick='ExportDataExcel();' type="button" id="btnExport">
+                                <i class="fas fa-file-export"></i> Export
+                            </button>*@
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="row row-grid">
+                                @*<div class="col-md-3">
+                <input type="radio" name="first_item5" id="rbtnStockiest" /> Super Stockiest
+            </div>
+            <div class="col-md-3">
+                <input type="radio" name="first_item5" id="rbtnDistributer" /> Distributor
+
+            </div>
+            <div class="col-md-3">
+                <input type="radio" name="first_item5" id="rbtnRetailer" /> Retailer
+            </div>*@
+
+                            </div>
+                            <div class="row mt-3" id="dvActivityData">
+
+                                <div class="table-responsive">
+                                    <table class="table" id="activityTable" style="width:100%;">
+                                        <thead>
+                                            <tr>
+                                                @*<th scope="col"></th>*@
+                                                <th scope="col">Type</th>
+                                                <th scope="col">ID</th>
+                                                <th scope="col">Name</th>
+                                                <th scope="col">CurrentRank</th>
+                                                <th scope="col">LastMonthRank</th>
+                                                <th scope="col">PurchasePoints</th>
+                                                <th scope="col">SalePoints</th>
+                                                <th scope="col">AddOnPoints</th>
+                                                <th scope="col">LostOppPoints</th>
+                                                <th scope="col">RedeemedPoints</th>
+                                                <th scope="col">BalancedPoints</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                            <div class="row mt-3" id="dvActivityData1" >
+
+                                <div class="table-responsive">
+                                    <table class="table" id="activityTable1" style="width:100%;">
+                                        <thead>
+                                            <tr>
+                                                @*<th scope="col"></th>*@
+                                                <th scope="col">Type</th>
+                                                <th scope="col">ID</th>
+                                                <th scope="col">Name</th>
+                                                <th scope="col">CurrentRank</th>
+                                                <th scope="col">LastMonthRank</th>
+                                                <th scope="col">PurchasePoints</th>
+                                                <th scope="col">SalePoints</th>
+                                                <th scope="col">AddOnPoints</th>
+                                                <th scope="col">LostOppPoints</th>
+                                                <th scope="col">RedeemedPoints</th>
+                                                <th scope="col">BalancedPoints</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                            <div class="row mt-3" id="dvActivityData2" >
+
+                                <div class="table-responsive">
+                                    <table class="table" id="activityTable2" style="width:100%;">
+                                        <thead>
+                                            <tr>
+                                                @*<th scope="col"></th>*@
+                                                <th scope="col">Type</th>
+                                                <th scope="col">ID</th>
+                                                <th scope="col">Name</th>
+                                                <th scope="col">CurrentRank</th>
+                                                <th scope="col">LastMonthRank</th>
+                                                <th scope="col">PurchasePoints</th>
+                                                <th scope="col">SalePoints</th>
+                                                <th scope="col">AddOnPoints</th>
+                                                <th scope="col">LostOppPoints</th>
+                                                <th scope="col">RedeemedPoints</th>
+                                                <th scope="col">BalancedPoints</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    var tableData = [];
+
+
+    $(document).ready(function () {
+        $('#activityTable').DataTable({
+            "aaSorting": [],
+            "paging": true,
+            "ordering": false,
+            "info": true,
+            "bFilter": true,
+            "pageLength": 10,
+            "pagingType": "simple_numbers",
+            //language: {
+            //    paginate: {
+            //        next: '&#8594;', // or '→'
+            //        previous: '&#8592;' // or '←'
+            //    }
+            //}
+            aoColumnDefs: [
+                {
+                    bSortable: false,
+                    aTargets: []
+                }
+            ]
+        });
+
+        $('#activityTable_filter').hide();
+
+        $('#txtSearch').on('keyup', function () {
+
+            $.fn.dataTable.ext.search.push(function (settings, searchData) {
+                var term = $('#txtSearch').val().toLowerCase()
+                for (var i = 0; i < searchData.length; i++) {
+                    if (searchData[i].toLowerCase().indexOf(term) == 0) {
+                        return true;
+                    }
+                }
+                return false;
+            });
+            var table = $('#activityTable').DataTable();
+            table.draw();
+        });
+
+        GetParticipantList();
+    });
+
+    function GetParticipantList() {
+        $("#divLoader").show();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("GetParticipantListForMgt", "ManagementDashboard")',
+           // data: '{outletId: ' + JSON.stringify(val) +', GroupId:' + $("#hdnGroupId").val()+ '}',
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+
+            success: function (response) {
+
+                if (response.listformgt != null) {
+
+                }
+                else {
+
+                    tableData.length = 0;
+                    $.map(response, function (item) {
+                        console.log(item);
+                        optionItem = {}
+                        optionItem["ParticipantType"] = item.ParticipantType;
+                        optionItem["ID"] = item.Id;
+                        optionItem["ParticipantName"] = item.ParticipantName;
+                        optionItem["CurrentRank"] = item.CurrentRank;
+                        optionItem["LastMonthRank"] = item.LastMonthRank;
+                        optionItem["PurchasePoints"] = item.PurchasePoints;
+                        optionItem["SalePoints"] = item.SalePoints;
+                        optionItem["AddOnPoints"] = item.AddOnPoints;
+                        optionItem["LostOppPoints"] = item.LostOppPoints;
+                        optionItem["RedeemedPoints"] = item.RedeemedPoints;
+                        optionItem["BalancedPoints"] = item.BalancedPoints;
+                        tableData.push(optionItem);
+                       // console.log(optionItem);
+
+                    });
+                    DrawTable();
+
+                }
+                $("#divLoader").hide();
+
+            },
+            error: function (response) {
+                console.log(response.responseText)
+                $("#divLoader").hide();
+            }
+        });
+    }
+    function GetsubParticipantList(id,Type) {
+        $('#dvActivityData').hide();
+        $('#dvActivityData1').show();
+        console.log(id);
+        console.log(Type);
+         $.ajax({
+            type: "POST",
+            url: '@Url.Action("GetSubParticipantListForMgt", "ManagementDashboard")',
+            data: '{Id: ' + JSON.stringify(id) + ',ParticipantType:' + JSON.stringify(Type)+'}',
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                console.log(response);
+                if (response != null) {               
+
+                    tableData.length = 0;
+                    $.map(response, function (item) {
+                        console.log(item);
+                        optionItem = {}
+                        optionItem["ParticipantType"] = item.ParticipantType;
+                        optionItem["ID"] = item.Id;
+                        optionItem["ParticipantName"] = item.ParticipantName;
+                        optionItem["CurrentRank"] = item.CurrentRank;
+                        optionItem["LastMonthRank"] = item.LastMonthRank;
+                        optionItem["PurchasePoints"] = item.PurchasePoints;
+                        optionItem["SalePoints"] = item.SalePoints;
+                        optionItem["AddOnPoints"] = item.AddOnPoints;
+                        optionItem["LostOppPoints"] = item.LostOppPoints;
+                        optionItem["RedeemedPoints"] = item.RedeemedPoints;
+                        optionItem["BalancedPoints"] = item.BalancedPoints;
+                        tableData.push(optionItem);
+                       // console.log(optionItem);
+
+                    });
+                    DrawTable1();
+
+                }
+
+            },
+            error: function (response) {
+                console.log(response.responseText)
+                $("#divLoader").hide();
+            }
+        });
+    }
+    function GetsubRetailerList(id) {
+        $('#dvActivityData').hide();
+        $('#dvActivityData1').hide();
+        $('#dvActivityData2').show();
+    }
+    function DrawTable() {
+        var table1 = $('#activityTable').DataTable();
+        table1.destroy();
+
+        var table = $('#activityTable').DataTable({
+            "data": tableData,
+            "paging": true,
+            "ordering": false,
+            "info": true,
+            "bFilter": true,
+            "pageLength": 10,
+            "pagingType": "simple_numbers",
+            "columns": [
+                {
+
+                    "mData": "ParticipantType",
+                    "mRender": function (data, type, row) {
+                        var id = row.ID;
+                        var Type = row.ParticipantType;// (\'' + row['attribute1'] + '\'\, \'' + row['attribute2'] + '\'\
+                        return '<a href="#" onclick="GetsubParticipantList(\'' + id +'\'\,\''+ Type + '\'\)" class="login" >' + data +'</a>';
+                    }
+                },
+                { data: "ID" },
+                { data: "ParticipantName" },
+                { data: "CurrentRank" },
+                { data: "LastMonthRank" },
+                { data: "PurchasePoints" },
+                { data: "SalePoints" },
+                { data: "AddOnPoints" },
+                { data: "LostOppPoints" },
+                { data: "RedeemedPoints" },
+                { data: "BalancedPoints" }
+
+
+            ],
+            aoColumnDefs: [
+                {
+                    bSortable: false,
+                    aTargets: []
+                }
+            ]
+        });
+        $('#activityTable_filter').hide();
+        $('#txtSearch').on('keyup', function () {
+
+            $.fn.dataTable.ext.search.push(function (settings, searchData) {
+                var term = $('#txtSearch').val().toLowerCase()
+                for (var i = 0; i < searchData.length; i++) {
+                    if (searchData[i].toLowerCase().indexOf(term) == 0) {
+                        return true;
+                    }
+                }
+                return false;
+            });
+            var table = $('#activityTable').DataTable();
+            table.draw();
+        });
+
+    }
+    function DrawTable1() {
+        var table1 = $('#activityTable1').DataTable();
+        table1.destroy();
+
+        var table = $('#activityTable1').DataTable({
+            "data": tableData,
+            "paging": true,
+            "ordering": false,
+            "info": true,
+            "bFilter": true,
+            "pageLength": 10,
+            "pagingType": "simple_numbers",
+            "columns": [
+                {
+
+                    "mData": "ParticipantType",
+                    "mRender": function (data, type, row) {
+                        var id = row.ID
+                        return '<a href="#" onclick="GetsubRetailerList(\'' + row.ID + '\')" class="login" >' + data + '</a>';
+                    }
+                },
+                { data: "ID" },
+                { data: "ParticipantName" },
+                { data: "CurrentRank" },
+                { data: "LastMonthRank" },
+                { data: "PurchasePoints" },
+                { data: "SalePoints" },
+                { data: "AddOnPoints" },
+                { data: "LostOppPoints" },
+                { data: "RedeemedPoints" },
+                { data: "BalancedPoints" }
+
+
+            ],
+            aoColumnDefs: [
+                {
+                    bSortable: false,
+                    aTargets: []
+                }
+            ]
+        });
+        $('#activityTable_filter').hide();
+        $('#txtSearch').on('keyup', function () {
+
+            $.fn.dataTable.ext.search.push(function (settings, searchData) {
+                var term = $('#txtSearch').val().toLowerCase()
+                for (var i = 0; i < searchData.length; i++) {
+                    if (searchData[i].toLowerCase().indexOf(term) == 0) {
+                        return true;
+                    }
+                }
+                return false;
+            });
+            var table = $('#activityTable1').DataTable();
+            table.draw();
+        });
+
+    }
+    function DrawTable2() {
+        var table1 = $('#activityTable2').DataTable();
+        table1.destroy();
+
+        var table = $('#activityTable2').DataTable({
+            "data": tableData,
+            "paging": true,
+            "ordering": false,
+            "info": true,
+            "bFilter": true,
+            "pageLength": 10,
+            "pagingType": "simple_numbers",
+            "columns": [
+                {
+
+                    "mData": "ParticipantType",
+                    "mRender": function (data, type, row) {
+
+                        return '<a href="#" onclick="GetsubRetailerList(\'' + row.Id + '\')" class="login" >' + data + '</a>';
+                    }
+                },
+                { data: "ID" },
+                { data: "ParticipantName" },
+                { data: "CurrentRank" },
+                { data: "LastMonthRank" },
+                { data: "PurchasePoints" },
+                { data: "SalePoints" },
+                { data: "AddOnPoints" },
+                { data: "LostOppPoints" },
+                { data: "RedeemedPoints" },
+                { data: "BalancedPoints" }
+
+
+            ],
+            aoColumnDefs: [
+                {
+                    bSortable: false,
+                    aTargets: []
+                }
+            ]
+        });
+        $('#activityTable_filter').hide();
+        $('#txtSearch').on('keyup', function () {
+
+            $.fn.dataTable.ext.search.push(function (settings, searchData) {
+                var term = $('#txtSearch').val().toLowerCase()
+                for (var i = 0; i < searchData.length; i++) {
+                    if (searchData[i].toLowerCase().indexOf(term) == 0) {
+                        return true;
+                    }
+                }
+                return false;
+            });
+            var table = $('#activityTable2').DataTable();
+            table.draw();
+        });
+
+    }
+</script>
+
+<style>
+    table.dataTable thead .sorting_asc {
+        background: url("https://cdn.datatables.net/1.10.0/images/sort_asc.png") no-repeat center left;
+    }
+
+    table.dataTable thead .sorting_desc {
+        background: url("https://cdn.datatables.net/1.10.0/images/sort_desc.png") no-repeat center left;
+    }
+
+    table.dataTable thead .sorting {
+        background: url("https://cdn.datatables.net/1.10.0/images/sort_both.png") no-repeat center left;
+    }
+</style>
 
