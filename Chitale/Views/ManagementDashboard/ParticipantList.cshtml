@@ -24,11 +24,11 @@
 
                                 @*<i class="fas fa-search"></i>*@
                                 @*<input class="input100" type="text" id="txtSearch" placeholder="Search activity..." />*@
-                                @Html.DropDownList("Cluster", new SelectList(ViewBag.ClusterList, "Value", "Text"), "Select Cluster", htmlAttributes: new { onchange = "GetCluster(this.value);", @class = "input50", @id = "ddlClusterList" })&nbsp;&nbsp;&nbsp;&nbsp;
+                                @Html.DropDownList("Cluster", new SelectList(ViewBag.ClusterList, "Value", "Text"), "All", htmlAttributes: new {  @class = "input50", @id = "ddlClusterList" })&nbsp;&nbsp;&nbsp;&nbsp;
 
-                                @Html.DropDownList("Sub-Cluster", new SelectList(ViewBag.SubclusterList, "Value", "Text"), "Select Sub-cluster", htmlAttributes: new { onchange = "GetSubcluster(this.value);", @class = "input50", @id = "ddlSubClusterList" })&nbsp;&nbsp;&nbsp;&nbsp;
+                                @Html.DropDownList("Sub-Cluster", new SelectList(ViewBag.SubclusterList, "Value", "Text"), "All", htmlAttributes: new { @class = "input50", @id = "ddlSubClusterList" })&nbsp;&nbsp;&nbsp;&nbsp;
 
-                                @Html.DropDownList("City", new SelectList(ViewBag.CityList, "Value", "Text"), "Select City", htmlAttributes: new { onchange = "GetCity(this.value);", @class = "input50", @id = "ddlCityList" })
+                                @Html.DropDownList("City", new SelectList(ViewBag.CityList, "Value", "Text"), "All", htmlAttributes: new {  @class = "input50", @id = "ddlCityList" })
 
 
                                 <button class="btn btn-primary login-btn" type="button" id="btnFilter">
@@ -174,10 +174,12 @@
         
         $('#btnFilter').on("click", function () {
             
-                GetSummeryDetails('1');          
+            GetParticipantList('0');   
+            //dropdownselect();
            
         });
         $("#ddlClusterList").on('change', function () {
+
             $('#ddlSubClusterList').prop('selectedIndex', 0);
             $('#ddlCityList').prop('selectedIndex', 0);
         });
@@ -189,28 +191,53 @@
             $('#ddlClusterList').prop('selectedIndex', 0);
             $('#ddlSubClusterList').prop('selectedIndex', 0);
         });
-        GetParticipantList();
+        GetParticipantList('1');
     });
-
-    function GetParticipantList() {
+ 
+    function GetParticipantList(flag) {
         $("#divLoader").show();
+        var SummeryData = [];
+        item = {}
+        item["Flag"] = flag;
+        item["SubCluster"] = $('#ddlSubClusterList :selected').text();
+        item["Cluster"] = $('#ddlClusterList :selected').text();       
+        item["City"] = $('#ddlCityList :selected').text();
+        SummeryData.push(item);
+        var data = JSON.stringify(SummeryData);
         $.ajax({
             type: "POST",
             url: '@Url.Action("GetParticipantListForMgt", "ManagementDashboard")',
-           // data: '{outletId: ' + JSON.stringify(val) +', GroupId:' + $("#hdnGroupId").val()+ '}',
+            data: '{jsonData: ' + JSON.stringify(data) + '}',
             contentType: "application/json; charset=utf-8",
             dataType: "json",
 
             success: function (response) {
-
-                if (response.listformgt != null) {
-
+                console.log(response);
+                if (response != null) {
+                    tableData.length = 0;
+                    $.map(response, function (item) {
+                       
+                        optionItem = {}
+                        optionItem["ParticipantType"] = item.ParticipantType;
+                        optionItem["ID"] = item.Id;
+                        optionItem["ParticipantName"] = item.ParticipantName;
+                        optionItem["CurrentRank"] = item.CurrentRank;
+                        optionItem["LastMonthRank"] = item.LastMonthRank;
+                        optionItem["PurchasePoints"] = item.PurchasePoints;
+                        optionItem["SalePoints"] = item.SalePoints;
+                        optionItem["AddOnPoints"] = item.AddOnPoints;
+                        optionItem["LostOppPoints"] = item.LostOppPoints;
+                        optionItem["RedeemedPoints"] = item.RedeemedPoints;
+                        optionItem["BalancedPoints"] = item.BalancedPoints;
+                        tableData.push(optionItem);
+                    });
+                    DrawTable();
                 }
                 else {
 
                     tableData.length = 0;
                     $.map(response, function (item) {
-                        //console.log(item);
+                        console.log(item);
                         optionItem = {}
                         optionItem["ParticipantType"] = item.ParticipantType;
                         optionItem["ID"] = item.Id;
@@ -234,6 +261,7 @@
 
             },
             error: function (response) {
+
                 console.log(response.responseText)
                 $("#divLoader").hide();
             }

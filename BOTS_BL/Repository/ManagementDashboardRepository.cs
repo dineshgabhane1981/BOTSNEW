@@ -192,23 +192,89 @@ namespace BOTS_BL.Repository
 
             return objTop5Participant;
         }
-        public List<ParticipantListForManagement> GetParticipantListForMgt()
+        public List<ParticipantListForManagement> GetParticipantListForMgt(string Cluster, string SubCluster, string City)
         {
 
             List<ParticipantListForManagement> lstparticipantListsformgt = new List<ParticipantListForManagement>();
             try
             {
-                using (var context = new ChitaleDBContext())
+                if (Cluster == "All" && SubCluster == "All" && City == "All")
                 {
-                    lstparticipantListsformgt = context.Database.SqlQuery<ParticipantListForManagement>("sp_KYBLoad_MFC @pi_LoginId, @pi_Datetime, @pi_DataType, @pi_City,@pi_Cluster ,@pi_SubCluster",
-                        new SqlParameter("@pi_LoginId", ""),
-                        new SqlParameter("@pi_Datetime", DateTime.Now.ToShortDateString()),
-                          new SqlParameter("@pi_DataType", ""),
-                            new SqlParameter("@pi_City", ""),
-                        new SqlParameter("@pi_Cluster", ""),
-                        new SqlParameter("@pi_SubCluster", "")
+                    using (var context = new ChitaleDBContext())
+                    {
+                        lstparticipantListsformgt = context.Database.SqlQuery<ParticipantListForManagement>("sp_KYBLoad_MFC @pi_LoginId, @pi_Datetime, @pi_DataType, @pi_City,@pi_Cluster ,@pi_SubCluster",
+                            new SqlParameter("@pi_LoginId", ""),
+                            new SqlParameter("@pi_Datetime", DateTime.Now.ToShortDateString()),
+                              new SqlParameter("@pi_DataType", ""),
+                                new SqlParameter("@pi_City", ""),
+                            new SqlParameter("@pi_Cluster", ""),
+                            new SqlParameter("@pi_SubCluster", "")
 
-                        ).ToList<ParticipantListForManagement>();
+                            ).ToList<ParticipantListForManagement>();
+                    }
+
+                }
+                else if(Cluster != "All")
+                {
+                    using (var context = new ChitaleDBContext())
+                    {
+                        lstparticipantListsformgt = context.Database.SqlQuery<ParticipantListForManagement>("sp_KYBLoad_MFC @pi_LoginId, @pi_Datetime, @pi_DataType, @pi_City,@pi_Cluster ,@pi_SubCluster",
+                            new SqlParameter("@pi_LoginId", ""),
+                            new SqlParameter("@pi_Datetime", DateTime.Now.ToShortDateString()),
+                              new SqlParameter("@pi_DataType", ""),
+                                new SqlParameter("@pi_City", ""),
+                            new SqlParameter("@pi_Cluster", Cluster),
+                            new SqlParameter("@pi_SubCluster", "")
+
+                            ).ToList<ParticipantListForManagement>();
+                    }
+                }
+                else if (SubCluster != "All")
+                {
+                    using (var context = new ChitaleDBContext())
+                    {
+                        lstparticipantListsformgt = context.Database.SqlQuery<ParticipantListForManagement>("sp_KYBLoad_MFC @pi_LoginId, @pi_Datetime, @pi_DataType, @pi_City,@pi_Cluster ,@pi_SubCluster",
+                            new SqlParameter("@pi_LoginId", ""),
+                            new SqlParameter("@pi_Datetime", DateTime.Now.ToShortDateString()),
+                              new SqlParameter("@pi_DataType", ""),
+                                new SqlParameter("@pi_City", ""),
+                            new SqlParameter("@pi_Cluster", ""),
+                            new SqlParameter("@pi_SubCluster", SubCluster)
+
+                            ).ToList<ParticipantListForManagement>();
+                    }
+
+                }
+                else if (City != "All")
+                {
+                    using (var context = new ChitaleDBContext())
+                    {
+                        lstparticipantListsformgt = context.Database.SqlQuery<ParticipantListForManagement>("sp_KYBLoad_MFC @pi_LoginId, @pi_Datetime, @pi_DataType, @pi_City,@pi_Cluster ,@pi_SubCluster",
+                            new SqlParameter("@pi_LoginId", ""),
+                            new SqlParameter("@pi_Datetime", DateTime.Now.ToShortDateString()),
+                              new SqlParameter("@pi_DataType", ""),
+                                new SqlParameter("@pi_City", City),
+                            new SqlParameter("@pi_Cluster", ""),
+                            new SqlParameter("@pi_SubCluster", "")
+
+                            ).ToList<ParticipantListForManagement>();
+                    }
+
+                }
+                else
+                {
+                    using (var context = new ChitaleDBContext())
+                    {
+                        lstparticipantListsformgt = context.Database.SqlQuery<ParticipantListForManagement>("sp_KYBLoad_MFC @pi_LoginId, @pi_Datetime, @pi_DataType, @pi_City,@pi_Cluster ,@pi_SubCluster",
+                            new SqlParameter("@pi_LoginId", ""),
+                            new SqlParameter("@pi_Datetime", DateTime.Now.ToShortDateString()),
+                              new SqlParameter("@pi_DataType", ""),
+                                new SqlParameter("@pi_City", ""),
+                            new SqlParameter("@pi_Cluster", ""),
+                            new SqlParameter("@pi_SubCluster", "")
+
+                            ).ToList<ParticipantListForManagement>();
+                    }
                 }
             }
             catch (Exception ex)

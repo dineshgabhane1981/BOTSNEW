@@ -145,19 +145,36 @@ namespace Chitale.Controllers
             var lstCluster = MDR.GetClusterList();
             var lstCity = MDR.GetCityList();
             var lstSubcluster = MDR.GetSubClusterList();
-
-
             ViewBag.ClusterList = lstCluster;
             ViewBag.SubclusterList = lstSubcluster;
             ViewBag.CityList = lstCity;
             return View();
         }
 
-        public JsonResult GetParticipantListForMgt()
+        public JsonResult GetParticipantListForMgt(string jsonData)
         {
             List<ParticipantListForManagement> listformgt = new List<ParticipantListForManagement>();
-            listformgt = MDR.GetParticipantListForMgt();
+            JavaScriptSerializer json_serializer = new JavaScriptSerializer();
+            json_serializer.MaxJsonLength = int.MaxValue;
+            object[] objData = (object[])json_serializer.DeserializeObject(jsonData);
 
+            foreach (Dictionary<string, object> item in objData)
+            {
+                string Flag = Convert.ToString(item["Flag"]);
+                string Cluster = Convert.ToString(item["Cluster"]);
+                string SubCluster = Convert.ToString(item["SubCluster"]);
+                string City = Convert.ToString(item["City"]);
+                listformgt = MDR.GetParticipantListForMgt(Cluster, SubCluster, City);
+                //if (Flag != "1")
+                //{
+                //    listformgt = MDR.GetParticipantListForMgt(Cluster, SubCluster, City);
+                //}
+                //else 
+                //{
+                //    listformgt = MDR.GetParticipantListForMgt("", "", "");
+                //}
+
+            }
             return new JsonResult() { Data = listformgt, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
             
         }
@@ -169,7 +186,6 @@ namespace Chitale.Controllers
             return new JsonResult() { Data = listformgt, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
            
         }
-       
         public ActionResult LeaderBoard()
         {
             return View();
