@@ -24,25 +24,30 @@
 
                                 @*<i class="fas fa-search"></i>*@
                                 @*<input class="input100" type="text" id="txtSearch" placeholder="Search activity..." />*@
-                                @Html.DropDownList("Cluster", new SelectList(ViewBag.ClusterList, "Value", "Text"), "Select Cluster", htmlAttributes: new { onchange = "GetCluster(this.value);", @class = "input50", @id = "ddlClusterList" })
+                                @Html.DropDownList("Cluster", new SelectList(ViewBag.ClusterList, "Value", "Text"), "Select Cluster", htmlAttributes: new { onchange = "GetCluster(this.value);", @class = "input50", @id = "ddlClusterList" })&nbsp;&nbsp;&nbsp;&nbsp;
 
-                                @Html.DropDownList("Sub-Cluster", new SelectList(ViewBag.SubclusterList, "Value", "Text"), "Select Sub-cluster", htmlAttributes: new { onchange = "GetSubcluster(this.value);", @class = "input50", @id = "ddlSubClusterList" })
+                                @Html.DropDownList("Sub-Cluster", new SelectList(ViewBag.SubclusterList, "Value", "Text"), "Select Sub-cluster", htmlAttributes: new { onchange = "GetSubcluster(this.value);", @class = "input50", @id = "ddlSubClusterList" })&nbsp;&nbsp;&nbsp;&nbsp;
 
                                 @Html.DropDownList("City", new SelectList(ViewBag.CityList, "Value", "Text"), "Select City", htmlAttributes: new { onchange = "GetCity(this.value);", @class = "input50", @id = "ddlCityList" })
 
 
                                 <button class="btn btn-primary login-btn" type="button" id="btnFilter">
                                     Filter
+                                </button>&nbsp;&nbsp;&nbsp;&nbsp;
+                                <button class="btn btn-primary login-btn" type="button" id="btnback">
+                                    Back
                                 </button>
-
+                                <button class="btn btn-primary login-btn" type="button" id="btnbackretail" >
+                                    Back
+                                </button>
 
                                 <div class="col text-right">
                                     <ul class="list-inline progress-list mt-2">
                                         <li class="list-inline-item">
                                             <div class="dropdown">
                                                 @*<button class="btn btn-primary login-btn" onclick='ExportDataExcel();' type="button" id="btnExport">
-                                <i class="fas fa-file-export"></i> Export
-                            </button>*@
+                            <i class="fas fa-file-export"></i> Export
+                        </button>*@
                                             </div>
                                         </li>
                                     </ul>
@@ -61,7 +66,7 @@
             </div>*@
 
                             </div>
-                            <div class="row mt-3" id="dvActivityData">
+                            <div class="row mt-3" id="dvActivityData1">
 
                                 <div class="table-responsive">
                                     <table class="table" id="activityTable" style="width:100%;">
@@ -87,7 +92,7 @@
                                 </div>
                             </div>
 
-                            <div class="row mt-3" id="dvActivityData1" >
+                            <div class="row mt-3" id="dvActivityData2" >
 
                                 <div class="table-responsive">
                                     <table class="table" id="activityTable1" style="width:100%;">
@@ -113,7 +118,7 @@
                                 </div>
                             </div>
 
-                            <div class="row mt-3" id="dvActivityData2" >
+                            <div class="row mt-3" id="dvActivityData3"  >
 
                                 <div class="table-responsive">
                                     <table class="table" id="activityTable2" style="width:100%;">
@@ -152,45 +157,38 @@
 
 
     $(document).ready(function () {
-        $('#activityTable').DataTable({
-            "aaSorting": [],
-            "paging": true,
-            "ordering": false,
-            "info": true,
-            "bFilter": true,
-            "pageLength": 10,
-            "pagingType": "simple_numbers",
-            //language: {
-            //    paginate: {
-            //        next: '&#8594;', // or '→'
-            //        previous: '&#8592;' // or '←'
-            //    }
-            //}
-            aoColumnDefs: [
-                {
-                    bSortable: false,
-                    aTargets: []
-                }
-            ]
+        $('#btnbackretail').hide();    
+        $('#dvActivityData2').hide();
+        $('#dvActivityData3').hide();
+        $('#btnback').click(function () {           
+            $('#dvActivityData1').show();
+            $('#dvActivityData2').hide();
         });
-
-        $('#activityTable_filter').hide();
-
-        $('#txtSearch').on('keyup', function () {
-
-            $.fn.dataTable.ext.search.push(function (settings, searchData) {
-                var term = $('#txtSearch').val().toLowerCase()
-                for (var i = 0; i < searchData.length; i++) {
-                    if (searchData[i].toLowerCase().indexOf(term) == 0) {
-                        return true;
-                    }
-                }
-                return false;
-            });
-            var table = $('#activityTable').DataTable();
-            table.draw();
+        $('#btnbackretail').click(function () {
+           
+            $('#dvActivityData2').show();
+            $('#dvActivityData3').hide();
+            $('#btnback').show();
+            $('#btnbackretail').hide();
         });
-
+        
+        $('#btnFilter').on("click", function () {
+            
+                GetSummeryDetails('1');          
+           
+        });
+        $("#ddlClusterList").on('change', function () {
+            $('#ddlSubClusterList').prop('selectedIndex', 0);
+            $('#ddlCityList').prop('selectedIndex', 0);
+        });
+        $("#ddlSubClusterList").on('change', function () {
+            $('#ddlClusterList').prop('selectedIndex', 0);
+            $('#ddlCityList').prop('selectedIndex', 0);
+        });
+        $("#ddlCityList").on('change', function () {
+            $('#ddlClusterList').prop('selectedIndex', 0);
+            $('#ddlSubClusterList').prop('selectedIndex', 0);
+        });
         GetParticipantList();
     });
 
@@ -212,7 +210,7 @@
 
                     tableData.length = 0;
                     $.map(response, function (item) {
-                        console.log(item);
+                        //console.log(item);
                         optionItem = {}
                         optionItem["ParticipantType"] = item.ParticipantType;
                         optionItem["ID"] = item.Id;
@@ -241,9 +239,13 @@
             }
         });
     }
-    function GetsubParticipantList(id,Type) {
-        $('#dvActivityData').hide();
-        $('#dvActivityData1').show();
+    function GetsubParticipantList(id, Type) {
+        $("#divLoader").show();
+        $('#btnbackretail').hide();
+        $('#btnback').show();
+        $('#dvActivityData1').hide();
+        $('#dvActivityData2').show();
+       
         console.log(id);
         console.log(Type);
          $.ajax({
@@ -253,12 +255,12 @@
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             success: function (response) {
-                console.log(response);
-                if (response != null) {               
+               // console.log(response);
+                if (response != null) {
 
                     tableData.length = 0;
                     $.map(response, function (item) {
-                        console.log(item);
+                       // console.log(item);
                         optionItem = {}
                         optionItem["ParticipantType"] = item.ParticipantType;
                         optionItem["ID"] = item.Id;
@@ -278,7 +280,7 @@
                     DrawTable1();
 
                 }
-
+                $("#divLoader").hide();
             },
             error: function (response) {
                 console.log(response.responseText)
@@ -286,10 +288,54 @@
             }
         });
     }
-    function GetsubRetailerList(id) {
-        $('#dvActivityData').hide();
+    function GetRetailerList(id, Type) {
         $('#dvActivityData1').hide();
-        $('#dvActivityData2').show();
+        $('#dvActivityData2').hide();
+        $('#dvActivityData3').show();
+        $('#btnbackretail').show();
+        $('#btnback').hide();
+        $("#divLoader").show();
+        console.log(id);
+        console.log(Type);
+         $.ajax({
+            type: "POST",
+            url: '@Url.Action("GetSubParticipantListForMgt", "ManagementDashboard")',
+            data: '{Id: ' + JSON.stringify(id) + ',ParticipantType:' + JSON.stringify(Type)+'}',
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+              //  console.log(response);
+                if (response != null) {
+
+                    tableData.length = 0;
+                    $.map(response, function (item) {
+                      //  console.log(item);
+                        optionItem = {}
+                        optionItem["ParticipantType"] = item.ParticipantType;
+                        optionItem["ID"] = item.Id;
+                        optionItem["ParticipantName"] = item.ParticipantName;
+                        optionItem["CurrentRank"] = item.CurrentRank;
+                        optionItem["LastMonthRank"] = item.LastMonthRank;
+                        optionItem["PurchasePoints"] = item.PurchasePoints;
+                        optionItem["SalePoints"] = item.SalePoints;
+                        optionItem["AddOnPoints"] = item.AddOnPoints;
+                        optionItem["LostOppPoints"] = item.LostOppPoints;
+                        optionItem["RedeemedPoints"] = item.RedeemedPoints;
+                        optionItem["BalancedPoints"] = item.BalancedPoints;
+                        tableData.push(optionItem);
+                       // console.log(optionItem);
+
+                    });
+                    DrawTable2();
+
+                }
+                $("#divLoader").hide();
+            },
+            error: function (response) {
+                console.log(response.responseText)
+                $("#divLoader").hide();
+            }
+        });
     }
     function DrawTable() {
         var table1 = $('#activityTable').DataTable();
@@ -309,7 +355,7 @@
                     "mData": "ParticipantType",
                     "mRender": function (data, type, row) {
                         var id = row.ID;
-                        var Type = row.ParticipantType;// (\'' + row['attribute1'] + '\'\, \'' + row['attribute2'] + '\'\
+                        var Type = row.ParticipantType;
                         return '<a href="#" onclick="GetsubParticipantList(\'' + id +'\'\,\''+ Type + '\'\)" class="login" >' + data +'</a>';
                     }
                 },
@@ -367,10 +413,11 @@
 
                     "mData": "ParticipantType",
                     "mRender": function (data, type, row) {
-                        var id = row.ID
-                        return '<a href="#" onclick="GetsubRetailerList(\'' + row.ID + '\')" class="login" >' + data + '</a>';
+                        var id = row.ID;
+                        var Type = row.ParticipantType;
+                        return '<a href="#" onclick="GetRetailerList(\'' + id + '\'\,\'' + Type + '\'\)" class="login" >' + data + '</a>';
                     }
-                },
+                    },
                 { data: "ID" },
                 { data: "ParticipantName" },
                 { data: "CurrentRank" },
@@ -422,12 +469,8 @@
             "pagingType": "simple_numbers",
             "columns": [
                 {
-
-                    "mData": "ParticipantType",
-                    "mRender": function (data, type, row) {
-
-                        return '<a href="#" onclick="GetsubRetailerList(\'' + row.Id + '\')" class="login" >' + data + '</a>';
-                    }
+                    data: "ParticipantType",
+                    
                 },
                 { data: "ID" },
                 { data: "ParticipantName" },

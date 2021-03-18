@@ -169,6 +169,7 @@ namespace Chitale.Controllers
             return new JsonResult() { Data = listformgt, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
            
         }
+       
         public ActionResult LeaderBoard()
         {
             return View();
