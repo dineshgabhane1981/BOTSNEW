@@ -140,6 +140,91 @@ namespace Chitale.Controllers
             return new JsonResult() { Data = lstData, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
 
+        [HttpPost]
+        public JsonResult GetManagementDashboardLostOpp(string type)
+        {
+            List<int> dataList = new List<int>();
+            List<double> percentageList = new List<double>();
+            try
+            {
+
+                ManagementDashboardLostOpp objLostOpp = new ManagementDashboardLostOpp();
+                objLostOpp = MDR.GetManagementDashboardLostOpp(type);
+                var total = objLostOpp.LessThanTwo + objLostOpp.TwoToThree + objLostOpp.MoreThanThree;
+                double LessThanTwo = (double)objLostOpp.LessThanTwo * 100 / total;
+                double TwoToThree = (double)objLostOpp.TwoToThree * 100 / total;
+                double MoreThanThree = (double)objLostOpp.MoreThanThree * 100 / total;
+
+                LessThanTwo = Math.Round(LessThanTwo, 2);
+                TwoToThree = Math.Round(TwoToThree, 2);
+                MoreThanThree = Math.Round(MoreThanThree, 2);
+
+                percentageList.Add(LessThanTwo);
+                percentageList.Add(TwoToThree);
+                percentageList.Add(MoreThanThree);
+
+                var lstData = string.Join(" ", dataList);
+
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex);
+            }
+            return new JsonResult() { Data = percentageList, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
+        }
+
+        [HttpPost]
+        public JsonResult GetManagementTGTVsACHPerformance(string type)
+        {
+            List<object> lstData = new List<object>();
+            try
+            {
+
+                List<ManagementTGTVsACHPerformance> objTGTVsACHPerformance = new List<ManagementTGTVsACHPerformance>();
+                objTGTVsACHPerformance = MDR.GetManagementTGTVsACHPerformance(type);
+                List<string> nameList = new List<string>();
+                List<decimal> dataList = new List<decimal>();
+                foreach (var item in objTGTVsACHPerformance)
+                {
+                    nameList.Add(item.CustomerName);
+                    dataList.Add(Convert.ToDecimal(item.VolumeAchPercentage));
+                }
+                lstData.Add(nameList);
+                lstData.Add(dataList);
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex);
+            }
+            return new JsonResult() { Data = lstData, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
+        }
+
+        [HttpPost]
+        public JsonResult GetManagementOrderToRavanaPerformance(string type)
+        {
+            List<object> lstData = new List<object>();
+            try
+            {
+
+                List<ManagementOrderToRavanaPerformance> objdata = new List<ManagementOrderToRavanaPerformance>();
+                objdata = MDR.GetManagementOrderToRavanaPerformance(type);
+                List<string> nameList = new List<string>();
+                List<decimal> dataList = new List<decimal>();
+                foreach (var item in objdata)
+                {
+                    nameList.Add(item.CustomerName);
+                    dataList.Add(Convert.ToDecimal(item.AvgDays));
+                }
+                lstData.Add(nameList);
+                lstData.Add(dataList);
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex);
+            }
+            return new JsonResult() { Data = lstData, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
+        }
+
         public ActionResult ParticipantList()
         {
             var lstCluster = MDR.GetClusterList();

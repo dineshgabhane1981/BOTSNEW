@@ -47,4 +47,24 @@ namespace BOTS_BL.Models.ChitaleModel
         public decimal RankPoints { get; set; }
         public int LostRank { get; set; }
     }
+
+    public class ManagementDashboardLostOpp
+    {
+        public int LessThanTwo { get; set; }
+        public int TwoToThree { get; set; }
+        public int MoreThanThree { get; set; }        
+    }
+
+    public class ManagementTGTVsACHPerformance
+    {
+        public string CustomerName { get; set; }
+        public decimal? VolumeAchPercentage { get; set; }
+    }
+
+    public class ManagementOrderToRavanaPerformance
+    {
+        public string CustomerId { get; set; }
+        public string CustomerName { get; set; }
+        public decimal AvgDays { get; set; }
+    }
 }

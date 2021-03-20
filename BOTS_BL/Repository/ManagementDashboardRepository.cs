@@ -389,5 +389,57 @@ namespace BOTS_BL.Repository
 
         }
 
+        public ManagementDashboardLostOpp GetManagementDashboardLostOpp(string type)
+        {
+            ManagementDashboardLostOpp objLostOpp = new ManagementDashboardLostOpp();
+            using (var context = new ChitaleDBContext())
+            {
+                try
+                {
+                    objLostOpp = context.Database.SqlQuery<ManagementDashboardLostOpp>("sp_GetAvgOrderToRavanaDate @pi_CustomerType", new SqlParameter("@pi_CustomerType", type)).FirstOrDefault<ManagementDashboardLostOpp>();
+                }
+                catch (Exception ex)
+                {
+
+                }
+            }
+            return objLostOpp;
+        }
+
+        public List<ManagementTGTVsACHPerformance> GetManagementTGTVsACHPerformance(string type)
+        {
+            List<ManagementTGTVsACHPerformance> lstData = new List<ManagementTGTVsACHPerformance>();
+            using (var context = new ChitaleDBContext())
+            {
+                var lstResult = from s in context.CustomerDetails
+                                join sa in context.TgtvsAchMasters on s.CustomerId equals sa.CustomerId
+                                where sa.CustomerType == type && sa.ProductType == "Over All"
+                                select new ManagementTGTVsACHPerformance
+                                {
+                                    CustomerName = s.CustomerName,
+                                    VolumeAchPercentage = sa.VolumeAchPercentage
+                                };
+
+                lstData = lstResult.OrderByDescending(x => x.VolumeAchPercentage).Take(5).ToList();
+            }
+            return lstData;
+        }
+
+        public List<ManagementOrderToRavanaPerformance> GetManagementOrderToRavanaPerformance(string type)
+        {
+            List<ManagementOrderToRavanaPerformance> objdata = new List<ManagementOrderToRavanaPerformance>();
+            using (var context = new ChitaleDBContext())
+            {
+                try
+                {
+                    objdata = context.Database.SqlQuery<ManagementOrderToRavanaPerformance>("sp_GetOrderToRavanaPerformance @pi_CustomerType", new SqlParameter("@pi_CustomerType", type)).ToList<ManagementOrderToRavanaPerformance>();
+                }
+                catch (Exception ex)
+                {
+
+                }
+            }
+            return objdata;
+        }
     }
 }

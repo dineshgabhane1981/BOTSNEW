@@ -11,5 +11,7 @@ namespace Chitale.ViewModel
         public List<SelectListItem> ClusterList { get; set; }
         public List<SelectListItem> SubClusterList { get; set; }
         public List<SelectListItem> CityList { get; set; }
+        public List<SelectListItem> MonthsList { get; set; }
+        public List<SelectListItem> YearList { get; set; }
     }
 }

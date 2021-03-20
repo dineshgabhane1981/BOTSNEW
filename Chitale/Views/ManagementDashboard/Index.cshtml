@@ -202,10 +202,104 @@
                         </div>
                     </div>
                 </div>
+
+                <div class="col-md-12 col-lg-6">
+                    <div class="mb-3 card">
+                        <div class="card-header-tab card-header-tab-animation card-header">
+                            <div class="card-header-title">
+                                <i class="header-icon lnr-apartment icon-gradient bg-love-kiss"> </i>
+                                TGT vs ACH VOL PERFORMANCE
+                            </div>
+                            <ul class="nav">
+                                <li class="nav-item"><a href="javascript:void(0);" onclick="TgtVsAchVolPerformance('SuperStockiest')" id="navPerformanceSS" class="active nav-link">SS</a></li>
+                                <li class="nav-item"><a href="javascript:void(0);" onclick="TgtVsAchVolPerformance('Distributors')" id="navPerformanceDist" class="nav-link second-tab-toggle">Dist</a></li>
+                                <li class="nav-item"><a href="javascript:void(0);" onclick="TgtVsAchVolPerformance('Retailers')" id="navPerformanceRetailer" class="nav-link second-tab-toggle">Retailer</a></li>
+                            </ul>
+                        </div>
+                        <div class="card-body">
+                            <div class="tab-content">
+                                <div class="tab-pane fade show active" id="tabs-eg-77">
+                                    <div class="card mb-3 widget-chart widget-chart2 text-left w-100">
+                                        <div class="widget-chat-wrapper-outer">
+                                            <div class="widget-chart-wrapper widget-chart-wrapper-lg opacity-10 m-0" id="containerPerformance" style="overflow-y:auto;">
+                                                <canvas id="cvPerformance"></canvas>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
+
+
+            <div class="row">
+                <div class="col-md-12 col-lg-6">
+                    <div class="mb-3 card">
+                        <div class="card-header-tab card-header-tab-animation card-header">
+                            <div class="card-header-title">
+                                <i class="header-icon lnr-apartment icon-gradient bg-love-kiss"> </i>
+                                AVG ORDER TO RAVANE DATES
+                            </div>
+                            <ul class="nav">
+                                <li class="nav-item"><a href="javascript:void(0);" onclick="GetManagementDashboardLostOpp('SuperStockiest')" id="navLostSS" class="active nav-link">SS</a></li>
+                                <li class="nav-item"><a href="javascript:void(0);" onclick="GetManagementDashboardLostOpp('Distributors')" id="navLostDist" class="nav-link second-tab-toggle">Dist</a></li>
+
+                            </ul>
+                        </div>
+                        <div class="card-body">
+                            <div class="tab-content">
+                                <div class="tab-pane fade show active" id="tabs-eg-77">
+                                    <div class="card mb-3 widget-chart widget-chart2 text-left w-100">
+                                        <div class="widget-chat-wrapper-outer">
+                                            <div class="widget-chart-wrapper widget-chart-wrapper-lg opacity-10 m-0" id="containerAvgOrder" style="overflow-y:auto;">
+                                                <canvas id="cvAvgOrder"></canvas>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            
+                <div class="col-md-12 col-lg-6">
+                    <div class="mb-3 card">
+                        <div class="card-header-tab card-header-tab-animation card-header">
+                            <div class="card-header-title">
+                                <i class="header-icon lnr-apartment icon-gradient bg-love-kiss"> </i>
+                                ORDER TO RAVANA PERFORMANCE
+                            </div>
+                            <ul class="nav">
+                                <li class="nav-item"><a href="javascript:void(0);" onclick="OrderToRavanaPerformance('SuperStockiest')" id="navOrderToRavanaSS" class="active nav-link">SS</a></li>
+                                <li class="nav-item"><a href="javascript:void(0);" onclick="OrderToRavanaPerformance('Distributors')" id="navOrderToRavanaDist" class="nav-link second-tab-toggle">Dist</a></li>
+                                
+                            </ul>
+                        </div>
+                        <div class="card-body">
+                            <div class="tab-content">
+                                <div class="tab-pane fade show active" id="tabs-eg-77">
+                                    <div class="card mb-3 widget-chart widget-chart2 text-left w-100">
+                                        <div class="widget-chat-wrapper-outer">
+                                            <div class="widget-chart-wrapper widget-chart-wrapper-lg opacity-10 m-0" id="containerOrderToRavana" style="overflow-y:auto;">
+                                                <canvas id="cvOrderToRavana"></canvas>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
         </div>
     </div>
 </div>
+
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@0.4.0/dist/chartjs-plugin-datalabels.min.js"></script>
+
 <script>
     $(document).ready(function () {
         var today = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
@@ -222,6 +316,9 @@
         Top5Participants('SuperStockiest');
         Bottom5Participants('SuperStockiest');
         Top5LostParticipants('SuperStockiest');
+        GetManagementDashboardLostOpp('SuperStockiest');
+        TgtVsAchVolPerformance('SuperStockiest');
+        OrderToRavanaPerformance('SuperStockiest');
         $('#btnFilter').on("click", function () {
             if ($("#SummeryBTD").hasClass("active")) {
                 GetSummeryDetails('1');
@@ -291,7 +388,6 @@
             $("#SummeryCurrentMonth").addClass("active");
         }
     }
-
     function Top5Participants(type) {
         $("#divLoader").show();
         $.ajax({
@@ -356,25 +452,18 @@
                                     "animationDuration": 0,
                                     mode: null
                                 },
-                                "animation": {
-                                    "duration": 1,
-                                    "onComplete": function () {
-                                        var chartInstance = this.chart,
-                                            ctx = chartInstance.ctx;
-
-                                        ctx.font = Chart.helpers.fontString(Chart.defaults.global.defaultFontSize, Chart.defaults.global.defaultFontStyle, Chart.defaults.global.defaultFontFamily);
-                                        ctx.textAlign = 'center';
-                                        ctx.textBaseline = 'bottom';
-
-                                        this.data.datasets.forEach(function (dataset, i) {
-                                            var meta = chartInstance.controller.getDatasetMeta(i);
-                                            meta.data.forEach(function (bar, index) {
-                                                var data = dataset.data[index];
-                                                ctx.fillStyle = 'rgba(0, 0, 0, 1)';
-                                                var value = (data).toFixed(2).replace(/(\d)(?=(\d{2})+\d\.)/g, '$1,');
-                                                ctx.fillText(value, bar._model.x, bar._model.y - 5);
-                                            });
-                                        });
+                                plugins: {
+                                    datalabels: {
+                                        formatter: (value, ctx) => {
+                                            let datasets = ctx.chart.data.datasets;
+                                            if (datasets.indexOf(ctx.dataset) === datasets.length - 1) {
+                                                let percentage = (value).toFixed(2).replace(/(\d)(?=(\d{2})+\d\.)/g, '$1,');
+                                                return percentage;
+                                            } else {
+                                                return percentage;
+                                            }
+                                        },
+                                        color: '#000',
                                     }
                                 }
                             }
@@ -470,25 +559,18 @@
                                     "animationDuration": 0,
                                     mode: null
                                 },
-                                "animation": {
-                                    "duration": 1,
-                                    "onComplete": function () {
-                                        var chartInstance = this.chart,
-                                            ctx = chartInstance.ctx;
-
-                                        ctx.font = Chart.helpers.fontString(Chart.defaults.global.defaultFontSize, Chart.defaults.global.defaultFontStyle, Chart.defaults.global.defaultFontFamily);
-                                        ctx.textAlign = 'center';
-                                        ctx.textBaseline = 'bottom';
-
-                                        this.data.datasets.forEach(function (dataset, i) {
-                                            var meta = chartInstance.controller.getDatasetMeta(i);
-                                            meta.data.forEach(function (bar, index) {
-                                                var data = dataset.data[index];
-                                                ctx.fillStyle = 'rgba(0, 0, 0, 1)';
-                                                var value = (data).toFixed(2).replace(/(\d)(?=(\d{2})+\d\.)/g, '$1,');
-                                                ctx.fillText(value, bar._model.x, bar._model.y - 5);
-                                            });
-                                        });
+                                plugins: {
+                                    datalabels: {
+                                        formatter: (value, ctx) => {
+                                            let datasets = ctx.chart.data.datasets;
+                                            if (datasets.indexOf(ctx.dataset) === datasets.length - 1) {
+                                                let percentage = (value).toFixed(2).replace(/(\d)(?=(\d{2})+\d\.)/g, '$1,');
+                                                return percentage;
+                                            } else {
+                                                return percentage;
+                                            }
+                                        },
+                                        color: '#000',
                                     }
                                 }
                             }
@@ -520,7 +602,6 @@
             $("#navBotRetailer").addClass("active");
         }
     }
-
     function Top5LostParticipants(type) {
         $("#divLoader").show();
         $.ajax({
@@ -585,25 +666,18 @@
                                     "animationDuration": 0,
                                     mode: null
                                 },
-                                "animation": {
-                                    "duration": 1,
-                                    "onComplete": function () {
-                                        var chartInstance = this.chart,
-                                            ctx = chartInstance.ctx;
-
-                                        ctx.font = Chart.helpers.fontString(Chart.defaults.global.defaultFontSize, Chart.defaults.global.defaultFontStyle, Chart.defaults.global.defaultFontFamily);
-                                        ctx.textAlign = 'center';
-                                        ctx.textBaseline = 'bottom';
-
-                                        this.data.datasets.forEach(function (dataset, i) {
-                                            var meta = chartInstance.controller.getDatasetMeta(i);
-                                            meta.data.forEach(function (bar, index) {
-                                                var data = dataset.data[index];
-                                                ctx.fillStyle = 'rgba(0, 0, 0, 1)';
-                                                var value = (data).toFixed(2).replace(/(\d)(?=(\d{2})+\d\.)/g, '$1,');
-                                                ctx.fillText(value, bar._model.x, bar._model.y - 5);
-                                            });
-                                        });
+                                plugins: {
+                                    datalabels: {
+                                        formatter: (value, ctx) => {
+                                            let datasets = ctx.chart.data.datasets;
+                                            if (datasets.indexOf(ctx.dataset) === datasets.length - 1) {
+                                                let percentage = (value).toFixed(2).replace(/(\d)(?=(\d{2})+\d\.)/g, '$1,');
+                                                return percentage;
+                                            } else {
+                                                return percentage;
+                                            }
+                                        },
+                                        color: '#000',
                                     }
                                 }
                             }
@@ -634,6 +708,303 @@
             $("#navLostDist").removeClass("active");
             $("#navLostRetailer").addClass("active");
         }
+    }
+
+    function TgtVsAchVolPerformance(type) {
+        $("#divLoader").show();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("GetManagementTGTVsACHPerformance")',
+            data: "{'type': '" + type + "'}",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                var names = response[0];
+                var dataList = response[1];
+
+                if (response != null) {
+                    $('#cvPerformance').remove(); // this is my <canvas> element
+                    $('#containerPerformance').append('<canvas id="cvPerformance"><canvas>');
+                    var barChartData =
+                    {
+                        labels: [...names],
+                        datasets: [{
+                            label: '',
+                            backgroundColor: [
+                                "#f990a7",
+                                "#aad2ed",
+                                "#9966FF",
+                                "#99e5e5",
+                                "#f7bd83",
+                            ],
+                            borderWidth: 2,
+                            data: [...dataList]
+                        }]
+                    };
+
+                    var ctx10 = document.getElementById("cvPerformance").getContext("2d");
+                    var myChart = new Chart(ctx10,
+                        {
+                            type: 'horizontalBar',
+                            data: barChartData,
+                            options:
+                            {
+                                scales: {
+                                    xAxes: [{
+                                        ticks: {
+                                            beginAtZero: true
+                                        }
+                                    }]
+                                },
+                                title:
+                                {
+                                    display: true,
+                                    text: ""
+                                },
+                                legend: {
+                                    display: false
+                                },
+
+                                responsive: true,
+                                maintainAspectRatio: true,
+                                tooltips: { enabled: false },
+                                hover: { mode: null },
+
+                                "hover": {
+                                    "animationDuration": 0,
+                                    mode: null
+                                },
+                                plugins: {
+                                    datalabels: {
+                                        formatter: (value, ctx) => {
+                                            let datasets = ctx.chart.data.datasets;
+                                            if (datasets.indexOf(ctx.dataset) === datasets.length - 1) {
+                                                let percentage = (value).toFixed(2).replace(/(\d)(?=(\d{2})+\d\.)/g, '$1,') + '%';
+
+                                                //let percentage = value + '%';
+                                                return percentage;
+                                            } else {
+                                                return percentage;
+                                            }
+                                        },
+                                        color: '#000',
+                                    }
+                                }
+                            }
+                        });
+                    $("#divLoader").hide();
+                }
+            },
+            failure: function (response) {
+                $("#divLoader").hide();
+            },
+            error: function (response) {
+                $("#divLoader").hide();
+            }
+        });
+
+        if (type == 'SuperStockiest') {
+            $("#navPerformanceSS").addClass("active");
+            $("#navPerformanceDist").removeClass("active");
+            $("#navPerformanceRetailer").removeClass("active");
+        }
+        if (type == 'Distributors') {
+            $("#navPerformanceSS").removeClass("active");
+            $("#navPerformanceDist").addClass("active");
+            $("#navPerformanceRetailer").removeClass("active");
+        }
+        if (type == 'Retailers') {
+            $("#navPerformanceSS").removeClass("active");
+            $("#navPerformanceDist").removeClass("active");
+            $("#navPerformanceRetailer").addClass("active");
+        }
+    }
+
+    function GetManagementDashboardLostOpp(type) {
+        $("#divLoader").show();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("GetManagementDashboardLostOpp")',
+            data: "{'type': '" + type + "'}",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                console.log(response)
+                if (response != null) {
+                    $('#cvAvgOrder').remove(); // this is my <canvas> element
+                    $('#containerAvgOrder').append('<canvas id="cvAvgOrder"><canvas>');
+                    var options = {
+                        //rotation: (-0.5 * Math.PI) - (-90 / 180 * Math.PI),
+                        legend: {
+                            display: true,
+                            position: 'bottom'
+                        },
+                        tooltips: {
+                            enabled: false
+                        },
+                        plugins: {
+                            datalabels: {
+                                formatter: (value, ctx) => {
+                                    let datasets = ctx.chart.data.datasets;
+                                    if (datasets.indexOf(ctx.dataset) === datasets.length - 1) {
+                                        let sum = datasets[0].data.reduce((a, b) => a + b, 0);
+                                        let percentage = value + '%';
+                                        return percentage;
+                                    } else {
+                                        return percentage;
+                                    }
+                                },
+                                color: '#000',
+                            }
+                        }
+                    }
+
+                    var data = {
+                        datasets: [{
+                            data: [...response],
+                            backgroundColor: ["#4F81BD", "#9BBB59", "#C0504D"]
+                        }],
+
+                        // These labels appear in the legend and in the tooltips when hovering different arcs
+                        labels: [
+                            "Less than 2",
+                            "2 to 3",
+                            "More than 3"
+                        ],
+                    };
+
+                    var ctx4 = document.getElementById("cvAvgOrder").getContext("2d");
+                    window.myBar = new Chart(ctx4, {
+                        type: 'pie',
+                        data: data,
+                        options: options
+
+                    });
+                    $("#divLoader").hide();
+                }
+            },
+            failure: function (response) {
+                $("#divLoader").hide();
+            },
+            error: function (response) {
+                $("#divLoader").hide();
+            }
+        });
+
+        if (type == 'SuperStockiest') {
+            $("#navLostSS").addClass("active");
+            $("#navLostDist").removeClass("active");
+        }
+        if (type == 'Distributors') {
+            $("#navLostSS").removeClass("active");
+            $("#navLostDist").addClass("active");
+
+        }
+
+    }
+
+    function OrderToRavanaPerformance(type) {
+        $("#divLoader").show();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("GetManagementOrderToRavanaPerformance")',
+            data: "{'type': '" + type + "'}",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                var names = response[0];
+                var dataList = response[1];
+
+                if (response != null) {
+                    $('#cvOrderToRavana').remove(); // this is my <canvas> element
+                    $('#containerOrderToRavana').append('<canvas id="cvOrderToRavana"><canvas>');
+                    var barChartData =
+                    {
+                        labels: [...names],
+                        datasets: [{
+                            label: '',
+                            backgroundColor: [
+                                "#f990a7",
+                                "#aad2ed",
+                                "#9966FF",
+                                "#99e5e5",
+                                "#f7bd83",
+                            ],
+                            borderWidth: 2,
+                            data: [...dataList]
+                        }]
+                    };
+
+                    var ctx10 = document.getElementById("cvOrderToRavana").getContext("2d");
+                    var myChart = new Chart(ctx10,
+                        {
+                            type: 'horizontalBar',
+                            data: barChartData,
+                            options:
+                            {
+                                scales: {
+                                    xAxes: [{
+                                        ticks: {
+                                            beginAtZero: true
+                                        }
+                                    }]
+                                },
+                                title:
+                                {
+                                    display: true,
+                                    text: ""
+                                },
+                                legend: {
+                                    display: false
+                                },
+
+                                responsive: true,
+                                maintainAspectRatio: true,
+                                tooltips: { enabled: false },
+                                hover: { mode: null },
+
+                                "hover": {
+                                    "animationDuration": 0,
+                                    mode: null
+                                },
+                                plugins: {
+                                    datalabels: {
+                                        formatter: (value, ctx) => {
+                                            let datasets = ctx.chart.data.datasets;
+                                            if (datasets.indexOf(ctx.dataset) === datasets.length - 1) {
+                                                let percentage = (value).toFixed(2).replace(/(\d)(?=(\d{2})+\d\.)/g, '$1,');
+
+                                                //let percentage = value + '%';
+                                                return percentage;
+                                            } else {
+                                                return percentage;
+                                            }
+                                        },
+                                        color: '#000',
+                                    }
+                                }
+                            }
+                        });
+                    $("#divLoader").hide();
+                }
+            },
+            failure: function (response) {
+                $("#divLoader").hide();
+            },
+            error: function (response) {
+                $("#divLoader").hide();
+            }
+        });
+
+        if (type == 'SuperStockiest') {
+            $("#navOrderToRavanaSS").addClass("active");
+            $("#navOrderToRavanaDist").removeClass("active");
+        }
+        if (type == 'Distributors') {
+            $("#navOrderToRavanaSS").removeClass("active");
+            $("#navOrderToRavanaDist").addClass("active");            
+        }
+        
     }
 </script>
 
