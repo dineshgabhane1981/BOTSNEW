@@ -14,10 +14,10 @@ namespace BOTS_BL.Models.ChitaleModel
         public string NormalPoints { get; set; }
         public string CurrentOverallRank { get; set; }
         public string CurrentClusterRank { get; set; }
-        public string StarRating { get; set; }
+        public string CurrentStarRating { get; set; }
         public string LastMonthOverallRank { get; set; }
         public string LastMonthClusterRank { get; set; }
-        public string StarRating { get; set; }
+        public string LastStarRating { get; set; }
         public string RankMovement { get; set; }
     }
 }
