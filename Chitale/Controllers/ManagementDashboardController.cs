@@ -150,7 +150,22 @@ namespace Chitale.Controllers
             ViewBag.CityList = lstCity;
             return View();
         }
-
+        public JsonResult GetLeaderBoard(string jsonData)
+        {
+            List<LeaderBoardForMgt> listLeaderBoard = new List<LeaderBoardForMgt>();
+            JavaScriptSerializer json_serializer = new JavaScriptSerializer();
+            json_serializer.MaxJsonLength = int.MaxValue;
+            object[] objData = (object[])json_serializer.DeserializeObject(jsonData);
+            foreach (Dictionary<string, object> item in objData)
+            {
+                string radio = Convert.ToString(item["Radiobtnchk"]);
+                string Cluster = Convert.ToString(item["Cluster"]);
+                string SubCluster = Convert.ToString(item["SubCluster"]);
+                string City = Convert.ToString(item["City"]);
+                listLeaderBoard = MDR.GetLeaderBoardForMgts(radio,Cluster, SubCluster, City);
+            }
+            return new JsonResult() { Data = listLeaderBoard, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
+        }
         public JsonResult GetParticipantListForMgt(string jsonData)
         {
             List<ParticipantListForManagement> listformgt = new List<ParticipantListForManagement>();
@@ -188,6 +203,12 @@ namespace Chitale.Controllers
         }
         public ActionResult LeaderBoard()
         {
+            var lstCluster = MDR.GetClusterList();
+            var lstCity = MDR.GetCityList();
+            var lstSubcluster = MDR.GetSubClusterList();
+            ViewBag.ClusterList = lstCluster;
+            ViewBag.SubclusterList = lstSubcluster;
+            ViewBag.CityList = lstCity;
             return View();
         }
         public ActionResult OrdertoRavanaDays()

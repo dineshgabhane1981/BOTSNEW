@@ -199,9 +199,9 @@
         var SummeryData = [];
         item = {}
         item["Flag"] = flag;
-        item["SubCluster"] = $('#ddlSubClusterList :selected').text();
-        item["Cluster"] = $('#ddlClusterList :selected').text();       
-        item["City"] = $('#ddlCityList :selected').text();
+        item["SubCluster"] = $('#ddlSubClusterList :selected').val();
+        item["Cluster"] = $('#ddlClusterList :selected').val();       
+        item["City"] = $('#ddlCityList :selected').val();
         SummeryData.push(item);
         var data = JSON.stringify(SummeryData);
         $.ajax({

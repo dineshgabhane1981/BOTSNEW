@@ -4,5 +4,242 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>LeaderBoard</h2>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.2.2/Chart.bundle.min.js"></script>
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.23/css/jquery.dataTables.css">
+
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.23/js/jquery.dataTables.js"></script>
+<div class="app-main__inner">
+    <div class="row" style="margin-left:20px;">
+
+        <div class="row mb-3 pt-3 pl-3 pr-3 card">
+            <div id="dvOutletWiseData">
+                <b>
+                    LEADERBOARD
+                </b>
+                <div class="row mb-3">
+                    <div class="container-fluid pt-3 pl-3 pr-3">
+
+                        <div class="pt-3 pl-3 pr-3 col-md-12 col-lg-12">
+                            <div class="row">
+
+                                @*<i class="fas fa-search"></i>*@
+                                @*<input class="input100" type="text" id="txtSearch" placeholder="Search activity..." />*@
+                                @Html.DropDownList("Cluster", new SelectList(ViewBag.ClusterList, "Value", "Text"), "All", htmlAttributes: new { @class = "input50", @id = "ddlClusterList" })&nbsp;&nbsp;&nbsp;&nbsp;
+
+                                @Html.DropDownList("Sub-Cluster", new SelectList(ViewBag.SubclusterList, "Value", "Text"), "All", htmlAttributes: new { @class = "input50", @id = "ddlSubClusterList" })&nbsp;&nbsp;&nbsp;&nbsp;
+
+                                @Html.DropDownList("City", new SelectList(ViewBag.CityList, "Value", "Text"), "All", htmlAttributes: new { @class = "input50", @id = "ddlCityList" })
+
+
+                                <button class="btn btn-primary login-btn" type="button" id="btnFilter" style="width:40px">
+                                    Filter
+                                </button>&nbsp;&nbsp;&nbsp;&nbsp;
+                                <div class="col text-right">
+                                    <ul class="list-inline progress-list mt-2">
+                                        <li class="list-inline-item">
+                                            <div class="dropdown">
+                                                @*<button class="btn btn-primary login-btn" onclick='ExportDataExcel();' type="button" id="btnExport">
+                                                        <i class="fas fa-file-export"></i> Export
+                                                    </button>*@
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="row row-grid">
+                                <div class="col-md-3">
+                                    <input type="radio" name="first_item5" id="rbtnStockiest" /> Super Stockiest
+                                </div>
+                                <div class="col-md-3">
+                                    <input type="radio" name="first_item5" id="rbtnDistributer" /> Distributor
+
+                                </div>
+                                <div class="col-md-3">
+                                    <input type="radio" name="first_item5" id="rbtnRetailer" /> Retailer
+                                </div>
+
+                            </div>
+                            <div class="row mt-3" id="dvActivityData1">
+
+                                <div class="table-responsive">
+                                    <table class="table" id="activityTable" style="width:100%;">
+                                        <thead>
+                                            <tr>
+                                                <th>current Month</th>
+                                                <th>Last Month</th>
+                                            </tr>
+                                            <tr>
+                                                @*<th scope="col"></th>*@
+                                                <th scope="col">Type</th>
+                                                <th scope="col">ID</th>
+                                                <th scope="col">Name</th>
+                                                <th scope="col">Balance points</th>
+                                                <th scope="col">overall Rank</th>
+                                                <th scope="col">cluster Rank</th>
+                                                <th scope="col">Star Rating</th>
+                                                <th scope="col">overall Rank</th>
+                                                <th scope="col">cluster Rank</th>
+                                                <th scope="col">Star Rating</th>
+                                                <th scope="col">Movement</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    var tableData = [];
+
+
+    $(document).ready(function () {
+        $('#rbtnStockiest').prop('checked', true);
+        var radiobtn;
+        if ($('#rbtnStockiest:checked')) {
+            radiobtn = 'SS';
+        }
+        else if ($('#rbtnDistributer:checked')) {
+            radiobtn = 'Distributer';
+        }
+        else if ($('#rbtnRetailer:checked')) {
+            radiobtn = 'Retailer';
+        }
+        GetParticipantList(radiobtn);
+    });
+
+    function GetParticipantList(radiobtn) {
+        $("#divLoader").show();
+        var SummeryData = [];
+        item = {}
+        item["Radiobtnchk"] = radiobtn;
+        item["SubCluster"] = $('#ddlSubClusterList:selected').val();
+        item["Cluster"] = $('#ddlClusterList :selected').val();
+        item["City"] = $('#ddlCityList :selected').val();
+        SummeryData.push(item);
+        var data = JSON.stringify(SummeryData);
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("GetLeaderBoard", "ManagementDashboard")',
+            data: '{jsonData: ' + JSON.stringify(data) + '}',
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+
+            success: function (response) {
+                console.log(response);
+                if (response != null) {
+                    tableData.length = 0;
+                    $.map(response, function (item) {
+
+                        optionItem = {}
+                        optionItem["ParticipantType"] = item.ParticipantType;
+                        optionItem["ID"] = item.Id;
+                        optionItem["Name"] = item.ParticipantName;
+                        optionItem["Balancepoints"] = item.CurrentRank;
+                        optionItem["CurrentoverallRank"] = item.LastMonthRank;
+                        optionItem["CurrentclusterRank"] = item.PurchasePoints;
+                        optionItem["CurrentStarRating"] = item.SalePoints;
+                        optionItem["LastMonthoverallRank"] = item.AddOnPoints;
+                        optionItem["LastMonthclusterRank"] = item.LostOppPoints;
+                        optionItem["LastMonthStarRating"] = item.RedeemedPoints;
+                        optionItem["RankMovement"] = item.BalancedPoints;
+                        tableData.push(optionItem);
+                    });
+                    DrawTable();
+                }
+                else {                     
+
+                }
+                $("#divLoader").hide();
+
+            },
+            error: function (response) {
+
+                console.log(response.responseText)
+                $("#divLoader").hide();
+            }
+        });
+    }
+    
+    function DrawTable() {
+        var table1 = $('#activityTable').DataTable();
+        table1.destroy();
+
+        var table = $('#activityTable').DataTable({
+            "data": tableData,
+            "paging": true,
+            "ordering": false,
+            "info": true,
+            "bFilter": true,
+            "pageLength": 10,
+            "pagingType": "simple_numbers",
+            "columns": [
+                {
+                      
+                    data:"ParticipantType"
+                   
+                },
+                { data: "ID" },
+                { data: "Name" },
+                { data: "Balancepoints" },
+                { data: "CurrentoverallRank" },
+                { data: "CurrentclusterRank" },
+                { data: "CurrentStarRating" },
+                { data: "LastMonthoverallRank" },
+                { data: "LastMonthclusterRank" },
+                { data: "LastMonthStarRating" },
+                { data: "RankMovement" }
+
+
+            ],
+            aoColumnDefs: [
+                {
+                    bSortable: false,
+                    aTargets: []
+                }
+            ]
+        });
+        $('#activityTable_filter').hide();
+        $('#txtSearch').on('keyup', function () {
+
+            $.fn.dataTable.ext.search.push(function (settings, searchData) {
+                var term = $('#txtSearch').val().toLowerCase()
+                for (var i = 0; i < searchData.length; i++) {
+                    if (searchData[i].toLowerCase().indexOf(term) == 0) {
+                        return true;
+                    }
+                }
+                return false;
+            });
+            var table = $('#activityTable').DataTable();
+            table.draw();
+        });
+
+    }
+    
+   
+</script>
+
+<style>
+    table.dataTable thead .sorting_asc {
+        background: url("https://cdn.datatables.net/1.10.0/images/sort_asc.png") no-repeat center left;
+    }
+
+    table.dataTable thead .sorting_desc {
+        background: url("https://cdn.datatables.net/1.10.0/images/sort_desc.png") no-repeat center left;
+    }
+
+    table.dataTable thead .sorting {
+        background: url("https://cdn.datatables.net/1.10.0/images/sort_both.png") no-repeat center left;
+    }
+</style>
+
 
