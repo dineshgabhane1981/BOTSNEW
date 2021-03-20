@@ -20,7 +20,7 @@
                     <div class="container-fluid pt-3 pl-3 pr-3">
 
                         <div class="pt-3 pl-3 pr-3 col-md-12 col-lg-12">
-                            <div class="row">
+                            <div class="row" style="margin-bottom:10px">
 
                                 @*<i class="fas fa-search"></i>*@
                                 @*<input class="input100" type="text" id="txtSearch" placeholder="Search activity..." />*@
@@ -28,37 +28,34 @@
 
                                 @Html.DropDownList("Sub-Cluster", new SelectList(ViewBag.SubclusterList, "Value", "Text"), "All", htmlAttributes: new { @class = "input50", @id = "ddlSubClusterList" })&nbsp;&nbsp;&nbsp;&nbsp;
 
-                                @Html.DropDownList("City", new SelectList(ViewBag.CityList, "Value", "Text"), "All", htmlAttributes: new { @class = "input50", @id = "ddlCityList" })
+                                @Html.DropDownList("City", new SelectList(ViewBag.CityList, "Value", "Text"), "All", htmlAttributes: new { @class = "input50", @id = "ddlCityList" })&nbsp;&nbsp;&nbsp;&nbsp;
 
 
-                                <button class="btn btn-primary login-btn" type="button" id="btnFilter" style="width:40px">
+                                <button class="btn btn-primary login-btn" type="button" id="btnFilter" >
                                     Filter
                                 </button>&nbsp;&nbsp;&nbsp;&nbsp;
-                                <div class="col text-right">
+                                <!--<div class="col text-right">
                                     <ul class="list-inline progress-list mt-2">
                                         <li class="list-inline-item">
-                                            <div class="dropdown">
+                                            <div class="dropdown">-->
                                                 @*<button class="btn btn-primary login-btn" onclick='ExportDataExcel();' type="button" id="btnExport">
-                                                        <i class="fas fa-file-export"></i> Export
-                                                    </button>*@
-                                            </div>
+                            <i class="fas fa-file-export"></i> Export
+                        </button>*@
+                                            <!--</div>
                                         </li>
                                     </ul>
-                                </div>
+                                </div>-->
                             </div>
-                            <div class="row row-grid">
+                            @*<div class="row row-grid">*@
                                 <div class="col-md-3">
-                                    <input type="radio" name="first_item5" id="rbtnStockiest" /> Super Stockiest
-                                </div>
-                                <div class="col-md-3">
-                                    <input type="radio" name="first_item5" id="rbtnDistributer" /> Distributor
+                                    <input type="radio" name="first_item5" id="rbtnStockiest" value="SS" /> Super Stockiest &nbsp;&nbsp;&nbsp;&nbsp;
 
-                                </div>
-                                <div class="col-md-3">
-                                    <input type="radio" name="first_item5" id="rbtnRetailer" /> Retailer
+                                    <input type="radio" name="first_item5" id="rbtnDistributer"  value="Distributor"/> Distributor &nbsp;&nbsp;&nbsp;&nbsp;
+
+                                    <input type="radio" name="first_item5" id="rbtnRetailer" value="Retailer" /> Retailer
                                 </div>
 
-                            </div>
+                            @*</div>*@
                             <div class="row mt-3" id="dvActivityData1">
 
                                 <div class="table-responsive">
@@ -70,7 +67,7 @@
                                             </tr>
                                             <tr>
                                                 @*<th scope="col"></th>*@
-                                                <th scope="col">Type</th>
+                                                @*<th scope="col">Type</th>*@
                                                 <th scope="col">ID</th>
                                                 <th scope="col">Name</th>
                                                 <th scope="col">Balance points</th>
@@ -104,27 +101,66 @@
     $(document).ready(function () {
         $('#rbtnStockiest').prop('checked', true);
         var radiobtn;
-        if ($('#rbtnStockiest:checked')) {
-            radiobtn = 'SS';
-        }
-        else if ($('#rbtnDistributer:checked')) {
-            radiobtn = 'Distributer';
-        }
-        else if ($('#rbtnRetailer:checked')) {
-            radiobtn = 'Retailer';
-        }
-        GetParticipantList(radiobtn);
+       
+        $('#btnFilter').on("click", function () {
+            GetParticipantList(0);
+           
+        });      
+        
+       
+        $('#rbtnStockiest').on("click", function () {
+            GetParticipantList(this.value,0);
+           
+        });
+        $('#rbtnDistributer').on("click", function () {
+            GetParticipantList(this.value,0);
+          
+        });
+        $('#rbtnRetailer').on("click", function () {
+            GetParticipantList(this.value,0);
+           
+        });
+        $("#ddlClusterList").on('change', function () {
+           
+            $('#ddlSubClusterList :selected').val = 0;
+            $('#ddlCityList :selected').val = 0;
+        });
+        $("#ddlSubClusterList").on('change', function () {
+            
+            $('#ddlClusterList :selected').val = 0;
+            $('#ddlCityList :selected').val = 0;
+        });
+        $("#ddlCityList").on('change', function () {
+            
+            $('#ddlClusterList :selected').val = 0;
+            $('#ddlSubClusterList :selected').val = 0;
+        });
+        GetParticipantList("SS");
     });
 
     function GetParticipantList(radiobtn) {
+        console.log(radiobtn);
         $("#divLoader").show();
         var SummeryData = [];
-        item = {}
-        item["Radiobtnchk"] = radiobtn;
-        item["SubCluster"] = $('#ddlSubClusterList:selected').val();
-        item["Cluster"] = $('#ddlClusterList :selected').val();
-        item["City"] = $('#ddlCityList :selected').val();
-        SummeryData.push(item);
+        if ($("#ddlClusterList").prop('selectedIndex') == 0 && $("#ddlCityList").prop('selectedIndex') == 0 && $("#ddlSubClusterList").prop('selectedIndex') == 0) {
+            console.log("HI");
+            item = {}
+            item["Radiobtnchk"] = radiobtn;
+            item["SubCluster"] = 0;
+            item["Cluster"] = 0;
+            item["City"] = 0;
+            SummeryData.push(item);
+        }
+        else {
+           
+            item = {}
+            item["Radiobtnchk"] = radiobtn;
+            item["SubCluster"] = $('#ddlSubClusterList :selected').val();
+            item["Cluster"] = $('#ddlClusterList :selected').val();
+            item["City"] = $('#ddlCityList :selected').val();
+            SummeryData.push(item);
+
+        }
         var data = JSON.stringify(SummeryData);
         $.ajax({
             type: "POST",
@@ -140,17 +176,17 @@
                     $.map(response, function (item) {
 
                         optionItem = {}
-                        optionItem["ParticipantType"] = item.ParticipantType;
-                        optionItem["ID"] = item.Id;
-                        optionItem["Name"] = item.ParticipantName;
-                        optionItem["Balancepoints"] = item.CurrentRank;
-                        optionItem["CurrentoverallRank"] = item.LastMonthRank;
-                        optionItem["CurrentclusterRank"] = item.PurchasePoints;
-                        optionItem["CurrentStarRating"] = item.SalePoints;
-                        optionItem["LastMonthoverallRank"] = item.AddOnPoints;
-                        optionItem["LastMonthclusterRank"] = item.LostOppPoints;
-                        optionItem["LastMonthStarRating"] = item.RedeemedPoints;
-                        optionItem["RankMovement"] = item.BalancedPoints;
+                        //optionItem["ParticipantType"] = item.ParticipantType;
+                        optionItem["ID"] = item.ID;
+                        optionItem["Name"] = item.Name;
+                        optionItem["Balancepoints"] = item.NormalPoints;
+                        optionItem["CurrentoverallRank"] = item.CurrentOverallRank;
+                        optionItem["CurrentclusterRank"] = item.CurrentClusterRank;
+                        optionItem["CurrentStarRating"] = item.CurrentStarRating;
+                        optionItem["LastMonthoverallRank"] = item.LastMonthOverallRank;
+                        optionItem["LastMonthclusterRank"] = item.LastMonthClusterRank;
+                        optionItem["LastMonthStarRating"] = item.LastStarRating;
+                        optionItem["RankMovement"] = item.RankMovement;
                         tableData.push(optionItem);
                     });
                     DrawTable();
@@ -182,11 +218,7 @@
             "pageLength": 10,
             "pagingType": "simple_numbers",
             "columns": [
-                {
-                      
-                    data:"ParticipantType"
-                   
-                },
+                //{data:"ParticipantType"},
                 { data: "ID" },
                 { data: "Name" },
                 { data: "Balancepoints" },

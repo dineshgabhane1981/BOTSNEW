@@ -315,16 +315,16 @@ namespace BOTS_BL.Repository
             return lstparticipantListsformgt;
         }
 
-        public List<LeaderBoardForMgt> GetLeaderBoardForMgts(string radiobtn, string Cluster, string SubCluster, string City)
+        public List<LeaderBoardForMgt> GetLeaderBoardForMgts(string radiobtn, int Cluster, int SubCluster, int City)
         {
             List<LeaderBoardForMgt> lstLeaderBrd = new List<LeaderBoardForMgt>();
             try
             {
-                if (Cluster == "All" && SubCluster == "All" && City == "All" && radiobtn != "")
+                if (Cluster == 0 && SubCluster == 0 && City == 0 && radiobtn != null)
                 {
                     using (var context = new ChitaleDBContext())
                     {
-                        lstLeaderBrd = context.Database.SqlQuery<LeaderBoardForMgt>("sp_LeaderBoard_MFC @pi_LoginId,@pi_ParticipantType, @pi_Datetime, @pi_City,@pi_Cluster ,@pi_SubCluster,@pi_Id,@pi_ParticipantType",
+                        lstLeaderBrd = context.Database.SqlQuery<LeaderBoardForMgt>("sp_LeaderBoard_MFC @pi_LoginId,@pi_ParticipantType,@pi_Datetime,@pi_City,@pi_Cluster,@pi_SubCluster",
                             new SqlParameter("@pi_LoginId", ""),
                               new SqlParameter("@pi_ParticipantType", radiobtn),
                             new SqlParameter("@pi_Datetime", DateTime.Now.ToShortDateString()),
@@ -334,11 +334,11 @@ namespace BOTS_BL.Repository
                             ).ToList<LeaderBoardForMgt>();
                     }
                 }
-                else if (Cluster != "All")
+                else if (Cluster > 0)
                 {
                     using (var context = new ChitaleDBContext())
                     {
-                        lstLeaderBrd = context.Database.SqlQuery<LeaderBoardForMgt>("sp_LeaderBoard_MFC @pi_LoginId,@pi_ParticipantType, @pi_Datetime, @pi_City,@pi_Cluster ,@pi_SubCluster,@pi_Id,@pi_ParticipantType",
+                        lstLeaderBrd = context.Database.SqlQuery<LeaderBoardForMgt>("sp_LeaderBoard_MFC @pi_LoginId,@pi_ParticipantType, @pi_Datetime, @pi_City,@pi_Cluster,@pi_SubCluster",
                             new SqlParameter("@pi_LoginId", ""),
                               new SqlParameter("@pi_ParticipantType", radiobtn),
                             new SqlParameter("@pi_Datetime", DateTime.Now.ToShortDateString()),
@@ -348,11 +348,11 @@ namespace BOTS_BL.Repository
                             ).ToList<LeaderBoardForMgt>();
                     }
                 }
-                else if (Cluster != "All" && SubCluster != "All")
+                else if (Cluster > 0 && SubCluster >0)
                 {
                     using (var context = new ChitaleDBContext())
                     {
-                        lstLeaderBrd = context.Database.SqlQuery<LeaderBoardForMgt>("sp_LeaderBoard_MFC @pi_LoginId,@pi_ParticipantType, @pi_Datetime, @pi_City,@pi_Cluster ,@pi_SubCluster,@pi_Id,@pi_ParticipantType",
+                        lstLeaderBrd = context.Database.SqlQuery<LeaderBoardForMgt>("sp_LeaderBoard_MFC @pi_LoginId,@pi_ParticipantType, @pi_Datetime, @pi_City,@pi_Cluster ,@pi_SubCluster",
                             new SqlParameter("@pi_LoginId", ""),
                               new SqlParameter("@pi_ParticipantType", radiobtn),
                             new SqlParameter("@pi_Datetime", DateTime.Now.ToShortDateString()),
@@ -362,11 +362,11 @@ namespace BOTS_BL.Repository
                             ).ToList<LeaderBoardForMgt>();
                     }
                 }
-                else if (City != "All")
+                else if (City > 0)
                 {
                     using (var context = new ChitaleDBContext())
                     {
-                        lstLeaderBrd = context.Database.SqlQuery<LeaderBoardForMgt>("sp_LeaderBoard_MFC @pi_LoginId,@pi_ParticipantType, @pi_Datetime, @pi_City,@pi_Cluster ,@pi_SubCluster,@pi_Id,@pi_ParticipantType",
+                        lstLeaderBrd = context.Database.SqlQuery<LeaderBoardForMgt>("sp_LeaderBoard_MFC @pi_LoginId,@pi_ParticipantType, @pi_Datetime, @pi_City,@pi_Cluster ,@pi_SubCluster",
                             new SqlParameter("@pi_LoginId", ""),
                               new SqlParameter("@pi_ParticipantType", radiobtn),
                             new SqlParameter("@pi_Datetime", DateTime.Now.ToShortDateString()),
@@ -377,7 +377,9 @@ namespace BOTS_BL.Repository
                     }
 
                 }
+                
             }
+
             catch (Exception ex)
             {
                 throw ex;

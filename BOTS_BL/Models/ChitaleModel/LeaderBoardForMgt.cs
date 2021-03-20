@@ -18,6 +18,6 @@ namespace BOTS_BL.Models.ChitaleModel
         public string LastMonthOverallRank { get; set; }
         public string LastMonthClusterRank { get; set; }
         public string LastStarRating { get; set; }
-        public string RankMovement { get; set; }
+        public long RankMovement { get; set; }
     }
 }

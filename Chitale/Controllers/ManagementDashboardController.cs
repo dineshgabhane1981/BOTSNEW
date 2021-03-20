@@ -159,9 +159,9 @@ namespace Chitale.Controllers
             foreach (Dictionary<string, object> item in objData)
             {
                 string radio = Convert.ToString(item["Radiobtnchk"]);
-                string Cluster = Convert.ToString(item["Cluster"]);
-                string SubCluster = Convert.ToString(item["SubCluster"]);
-                string City = Convert.ToString(item["City"]);
+                int Cluster = Convert.ToInt32(item["Cluster"]);
+                int SubCluster = Convert.ToInt32(item["SubCluster"]);
+                int City = Convert.ToInt32(item["City"]);
                 listLeaderBoard = MDR.GetLeaderBoardForMgts(radio,Cluster, SubCluster, City);
             }
             return new JsonResult() { Data = listLeaderBoard, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
@@ -203,7 +203,8 @@ namespace Chitale.Controllers
         }
         public ActionResult LeaderBoard()
         {
-            var lstCluster = MDR.GetClusterList();
+            var lstCluster = MDR.GetClusterList();  
+            lstCluster.Add(new SelectListItem { Text = "All", Value = "0", Selected = true });
             var lstCity = MDR.GetCityList();
             var lstSubcluster = MDR.GetSubClusterList();
             ViewBag.ClusterList = lstCluster;
