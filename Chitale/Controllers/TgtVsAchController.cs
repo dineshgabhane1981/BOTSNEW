@@ -88,7 +88,9 @@ namespace Chitale.Controllers
 
         public ActionResult Productwise()
         {
+
             return View();
         }
+        
     }
 }

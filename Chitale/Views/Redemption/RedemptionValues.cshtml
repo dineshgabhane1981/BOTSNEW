@@ -1,8 +1,196 @@
 ﻿
 @{
-    ViewBag.Title = "RedemptionValues";
+    ViewBag.Title = "Redemption Values";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>RedemptionValues</h2>
+<div class="app-main__inner">
+    <div class="row">
+        <div style="width:100%;  padding:10px; background-color:white;float:left;">
+            <div class="card-header-tab card-header-tab-animation card-header" style="margin-bottom:10px;">
+                <div class="card-header-title">
+                    <i class="header-icon lnr-apartment icon-gradient bg-love-kiss"> </i>
+                    REDEMPTION VALUES
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="container-fluid pt-3 pl-3 pr-3">
+                    <div class="pt-3 pl-3 pr-3 col-md-12 col-lg-12">
+                        <div>
+                            <select name="ddlParticipantType" id="ddlParticipantType" class="input100">
+                                <option value="0">Select Participant Type</option>
+                                <option value="1">SuperStockiest</option>
+                                <option value="2">Distributors</option>
+                                <option value="3">Retailers</option>
+                                <option value="4">Employee</option>
+                            </select>
+                        </div>
 
+                        <div>
+                            <br />
+                            <table cellpadding="10">
+                                <tr style="border-bottom:1px solid grey;">
+                                    <th>
+                                        Sub Redemption Type
+                                    </th>
+                                    <th style="text-align:center;">
+                                        Allocation %
+                                    </th>
+                                </tr>
+                                <tr style="border-bottom:1px solid grey;">
+                                    <td>
+                                        Cash Incentive
+                                    </td>
+                                    <td><input id="txtCashIncentive" class="input50" /></td>
+                                </tr>
+                                <tr style="border-bottom:1px solid grey;">
+                                    <td>
+                                        Infrastructure
+                                    </td>
+                                    <td><input id="txtInfrastructure" class="input50" /></td>
+                                </tr>
+                                <tr style="border-bottom:1px solid grey;">
+                                    <td>Deposit</td>
+                                    <td><input id="txtDeposit" class="input50" /></td>
+                                </tr>
+                                <tr style="border-bottom:1px solid grey;">
+                                    <td>Promotion</td>
+                                    <td><input id="txtPromotion" class="input50" /></td>
+                                </tr>
+                                <tr style="text-align:center;">
+                                    <td colspan="2">
+                                        <button id="btnGenerateOTP" class="btn btn-primary ml-auto">
+                                            GENERATE OTP
+                                        </button>
+                                    </td>
+                                </tr>
+                            </table>
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $('#btnGenerateOTP').on("click", function () {
+            GenerateOTP();
+        });
+        $("#ddlParticipantType").on('change', function () {
+            if ($("#ddlParticipantType").val() != "0") {
+                LoadData();
+            }
+            else {
+                $("#txtCashIncentive").val("");
+                $("#txtInfrastructure").val("");
+                $("#txtDeposit").val("");
+                $("#txtPromotion").val("");
+                $("#divLoader").hide();
+            }
+        });
+    });
+
+    function LoadData() {
+         $("#divLoader").show();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("GetRedeemptionData")',
+            data: '{type: ' + JSON.stringify($("#ddlParticipantType").val()) + '}',
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                if (response != null) {
+                    $("#txtCashIncentive").val(response.CaseIncentive);
+                    $("#txtInfrastructure").val(response.InfraStructure);
+                    $("#txtDeposit").val(response.Deposit);
+                    $("#txtPromotion").val(response.Promotion);
+                    $("#divLoader").hide();
+                }
+            },
+            failure: function (response) {
+                console.log(111);
+                $("#divLoader").hide();
+            },
+            error: function (response) {
+                console.log(222);
+                $("#divLoader").hide();
+            }
+        });
+    }
+
+    function GenerateOTP() {
+        if ($('#ddlParticipantType').val() == "0") {
+            toastr.error('Please select Participant Type');
+            $('#ddlParticipantType').focus();
+            return false;
+        }
+        if ($('#txtCashIncentive').val() == "") {
+            toastr.error('Please enter Cash Incentive');
+            $('#txtCashIncentive').focus();
+            return false;
+        }
+        if ($('#txtInfrastructure').val() == "") {
+            toastr.error('Please enter Infrastructure');
+            $('#txtInfrastructure').focus();
+            return false;
+        }
+        if ($('#txtDeposit').val() == "") {
+            toastr.error('Please enter Deposit');
+            $('#txtDeposit').focus();
+            return false;
+        }
+        if ($('#txtPromotion').val() == "") {
+            toastr.error('Please enter Promotion');
+            $('#txtPromotion').focus();
+            return false;
+        }
+
+        var addedValue = (parseInt($('#txtCashIncentive').val()) + parseInt($('#txtInfrastructure').val()) + parseInt($('#txtDeposit').val()) + parseInt($('#txtPromotion').val()));
+        if (addedValue != 100) {
+            toastr.error('Total Redeemption Value should be 100');
+            return false;
+        }
+        var RedeemptionData = [];
+        item = {}
+        item["Type"] = $("#ddlParticipantType").val();
+        item["CashIncentive"] = $("#txtCashIncentive").val();
+        item["Infrastructure"] = $("#txtInfrastructure").val();
+        item["Deposit"] = $("#txtDeposit").val();
+        item["Promotion"] = $("#txtPromotion").val();
+
+        MemberData.push(item);
+        var data = JSON.stringify(MemberData);
+
+        $("#divLoader").show();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("GenerateOTP")',
+            data: '{jsonData: ' + JSON.stringify(data) + '}',
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                console.log(response);
+                if (response != null) {
+
+
+
+                    $("#divLoader").hide();
+                }
+            },
+            failure: function (response) {
+                console.log(111);
+                $("#divLoader").hide();
+            },
+            error: function (response) {
+                console.log(222);
+                $("#divLoader").hide();
+            }
+        });
+
+    }
+</script>

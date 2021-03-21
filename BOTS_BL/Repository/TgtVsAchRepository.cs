@@ -65,12 +65,12 @@ namespace BOTS_BL.Repository
                                }).ToList();
                     if (Cluster != "All")
                     {
-                        objData = objData.Where(x => x.DateVal.Value.Month == DateTime.Today.Month && x.Cluster == Cluster).ToList();                        
+                        objData = objData.Where(x => x.DateVal.Value.Month == DateTime.Today.Month && x.Cluster == Cluster).ToList();
                     }
                     else if (SubCluster != "All")
                     {
                         objData = objData.Where(x => x.DateVal.Value.Month == DateTime.Today.Month && x.SubCluster == SubCluster).ToList();
-                        
+
                     }
                     else if (City != "All")
                     {
@@ -92,7 +92,7 @@ namespace BOTS_BL.Repository
                         }
                     }
                 }
-                if(CustomerType !="0")
+                if (CustomerType != "0")
                 {
                     objData = objData.Where(x => x.Type == CustomerType).ToList();
                 }
@@ -101,5 +101,6 @@ namespace BOTS_BL.Repository
 
             return objData;
         }
+
     }
 }

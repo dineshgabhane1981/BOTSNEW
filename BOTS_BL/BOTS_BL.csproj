@@ -158,6 +158,7 @@
     <Compile Include="Models\ChitaleModel\ProductReturnDetail.cs" />
     <Compile Include="Models\ChitaleModel\ProductReturnMaster.cs" />
     <Compile Include="Models\ChitaleModel\RedemptionModel.cs" />
+    <Compile Include="Models\ChitaleModel\RedemptionValue.cs" />
     <Compile Include="Models\ChitaleModel\SalesmanMapping.cs" />
     <Compile Include="Models\ChitaleModel\SubClusterMaster.cs" />
     <Compile Include="Models\ChitaleModel\TargetMaster.cs" />

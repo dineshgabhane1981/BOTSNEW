@@ -43,6 +43,7 @@ namespace BOTS_BL.Models.ChitaleModel
         public virtual DbSet<TransactionMaster> TransactionMasters { get; set; }
         public virtual DbSet<tblRedemptionRequest> tblRedemptionRequests { get; set; }
         public virtual DbSet<TgtvsAchMaster> TgtvsAchMasters { get; set; }
+        public virtual DbSet<RedemptionValue> RedemptionValues { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
