@@ -23,12 +23,50 @@
 
                 <div>
                     <br />
-                    <input type="radio" id="rdnSS" name="cust_type" /> Super Stockiest
-                    <input type="radio" id="rdnDist" name="cust_type" /> Distributor
-                    <input type="radio" id="rdnRetailer" name="cust_type" /> Retailer <br />
+                    <input type="radio" id="rdnSS" name="cust_type" /> Super Stockiest &nbsp;&nbsp;&nbsp;&nbsp;
+                    <input type="radio" id="rdnDist" name="cust_type" /> Distributors &nbsp;&nbsp;&nbsp;&nbsp;
+                    <input type="radio" id="rdnRetailer" name="cust_type" /> Retailers <br /><br />
                     @Html.DropDownListFor(model => model.MonthsList, new SelectList(Model.MonthsList, "Value", "Text"), "Select Month", htmlAttributes: new { @class = "input50", @id = "ddlMonthList" })&nbsp;&nbsp;&nbsp;&nbsp;
                     @Html.DropDownListFor(model => model.YearList, new SelectList(Model.YearList, "Value", "Text"), "Select Year", htmlAttributes: new { @class = "input50", @id = "ddlYearList" })
                     <button type="button" id="btnFilter" style="margin-left:17px;margin-top:5px;" class="btn btn-primary"><b>FILTER</b></button>
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="container-fluid pt-3 pl-3 pr-3">
+                    <div class="pt-3 pl-3 pr-3 col-md-12 col-lg-12">
+                        <div class="row" id="divactivityTable">
+
+                            <div class="table-responsive">
+
+                                <table class="table" id="activityTable" cellspacing="0" cellpadding="0">
+                                    <thead>
+                                        <tr style="text-align:center;">
+                                            <td scope="col" style="border:1px solid black;border-left:0px;" colspan="6"></td>
+                                            <td scope="col" style="border:1px solid black; font-size:18px;" colspan="3"><b>Volume-wise</b> </td>
+
+                                            <td scope="col" style="border:1px solid black;border-right:0px; font-size:18px;" colspan="3"><b>Value-wise</b> </td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="col">Type</th>
+                                            <th scope="col">ID</th>
+                                            <th scope="col">Name</th>
+                                            <th scope="col">Cluster</th>
+                                            <th scope="col">Sub Cluster</th>
+                                            <th scope="col">City</th>
+                                            <th scope="col">Focus</th>
+                                            <th scope="col">Ach</th>
+                                            <th scope="col">Ach %</th>
+                                            <th scope="col">Focus</th>
+                                            <th scope="col">Ach</th>
+                                            <th scope="col">Ach %</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -36,10 +74,137 @@
 </div>
 
 <script>
+    var tableData = [];
     $(document).ready(function () {
-        
-
+        GetSummeryDetails();
+        $('#btnFilter').on("click", function () {
+            GetSummeryDetails();        
+        });
+        $("#ddlClusterList").on('change', function () {
+            $('#ddlSubClusterList').prop('selectedIndex', 0);
+            $('#ddlCityList').prop('selectedIndex', 0);
+        });
+        $("#ddlSubClusterList").on('change', function () {
+            $('#ddlClusterList').prop('selectedIndex', 0);
+            $('#ddlCityList').prop('selectedIndex', 0);
+        });
+        $("#ddlCityList").on('change', function () {
+            $('#ddlClusterList').prop('selectedIndex', 0);
+            $('#ddlSubClusterList').prop('selectedIndex', 0);
+        });
     });
+    function GetSummeryDetails() {
+        var SummeryData = [];
+        item = {}        
+        item["Cluster"] = $('#ddlClusterList :selected').text();
+        item["SubCluster"] = $('#ddlSubClusterList :selected').text();
+        item["City"] = $('#ddlCityList :selected').text();
+        item["Month"] = $('#ddlMonthList').val();
+        item["Year"] = $('#ddlYearList').val();
+        item["CustomerType"] = "0";
+        if ($('#rdnSS').is(":checked")) {
+            item["CustomerType"] = "SuperStockiest";
+        }
+        if ($('#rdnDist').is(":checked")) {
+            item["CustomerType"] = "Distributors";
+        }
+        if ($('#rdnRetailer').is(":checked")) {
+            item["CustomerType"] = "Retailers";
+        }
 
+
+        SummeryData.push(item);
+        var data = JSON.stringify(SummeryData);
+        $("#divLoader").show();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("GetParticipantData")',
+            data: '{jsonData: ' + JSON.stringify(data) + '}',
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                console.log(response);
+                if (response != null) {
+                    tableData.length = 0;
+                    $.map(response, function (item) {                        
+                        optionItem = {}
+                        optionItem["Type"] = item.Type;
+                        optionItem["ID"] = item.ID;
+                        optionItem["Name"] = item.Name;
+                        optionItem["Cluster"] = item.Cluster;
+                        optionItem["SubCluster"] = item.SubCluster;
+                        optionItem["City"] = item.City;
+                        optionItem["VolTgt"] = item.VolTgt;
+                        optionItem["VolAch"] = item.VolAch;
+                        optionItem["VolAchPer"] = item.VolAchPer;
+                        optionItem["ValTgt"] = item.ValTgt;
+                        optionItem["ValAch"] = item.ValAch;
+                        optionItem["ValAchPer"] = item.ValAchPer;
+                        tableData.push(optionItem);
+                    });
+                    DrawTable();
+                    $("#divLoader").hide();
+                }
+            },
+            failure: function (response) {
+                console.log(111);
+                $("#divLoader").hide();
+            },
+            error: function (response) {
+                console.log(222);
+                $("#divLoader").hide();
+            }
+        });        
+    }
+    function DrawTable() {
+        var table1 = $('#activityTable').DataTable();
+        table1.destroy();
+        console.log(tableData)
+        var table = $('#activityTable').DataTable({
+            "data": tableData,
+            "paging": true,
+            "ordering": false,
+            "info": true,
+            "bFilter": true,
+            "pageLength": 10,
+            "pagingType": "simple_numbers",
+            "columns": [
+                { data: "Type" },
+                { data: "ID" },
+                { data: "Name" },
+                { data: "Cluster" },
+                { data: "SubCluster" },
+                { data: "City" },
+                { data: "VolTgt" },
+                { data: "VolAch" },
+                { data: "VolAchPer" },
+                { data: "ValTgt" },
+                { data: "ValAch" },
+                { data: "ValAchPer" }
+            ],
+            aoColumnDefs: [
+                {
+                    bSortable: false,
+                    aTargets: []
+                }
+            ]
+        });
+        $('#activityTable_filter').hide();
+        $('#txtSearch').on('keyup', function () {
+
+            $.fn.dataTable.ext.search.push(function (settings, searchData) {
+                var term = $('#txtSearch').val().toLowerCase()
+                for (var i = 0; i < searchData.length; i++) {
+                    if (searchData[i].toLowerCase().indexOf(term) == 0) {
+                        return true;
+                    }
+                }
+                return false;
+            });
+            var table = $('#activityTable').DataTable();
+            table.draw();
+        });
+
+    }
 </script>
 
