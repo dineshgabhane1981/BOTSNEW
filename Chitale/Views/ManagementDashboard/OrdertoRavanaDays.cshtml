@@ -1,8 +1,165 @@
-﻿
+﻿@model Chitale.ViewModel.ManagementViewModel
 @{
     ViewBag.Title = "OrdertoRavanaDays";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>OrdertoRavanaDays</h2>
 
+<div class="app-main__inner">
+    <div class="row">
+        <div style="width:100%;  padding:10px; background-color:white;float:left;">
+            <div class="card-header-tab card-header-tab-animation card-header" style="margin-bottom:10px;">
+                <div class="card-header-title">
+                    <i class="header-icon lnr-apartment icon-gradient bg-love-kiss"> </i>
+                    ORDER vs RAVANA DAYS
+                </div>
+            </div>
+
+            <div class="card-header-tab" style="margin-bottom:20px;">
+                <div>
+                    @Html.DropDownListFor(model => model.ClusterList, new SelectList(Model.ClusterList, "Value", "Text"), "All", htmlAttributes: new { @class = "input50", @id = "ddlClusterList" }) &nbsp;&nbsp;&nbsp;&nbsp;
+                    @Html.DropDownListFor(model => model.SubClusterList, new SelectList(Model.SubClusterList, "Value", "Text"), "All", htmlAttributes: new { @class = "input50", @id = "ddlSubClusterList" })&nbsp;&nbsp;&nbsp;&nbsp;
+                    @Html.DropDownListFor(model => model.CityList, new SelectList(Model.CityList, "Value", "Text"), "All", htmlAttributes: new { @class = "input50", @id = "ddlCityList" })
+                </div>
+
+                <div>
+                    <br />
+                    <input type="radio" id="rdnSS" name="cust_type" /> Super Stockiest &nbsp;&nbsp;&nbsp;&nbsp;
+                    <input type="radio" id="rdnDist" name="cust_type" /> Distributors <br /><br />
+                    <input id="txtFromDate" placeholder="From Date" class="input50" />&nbsp;&nbsp;&nbsp;&nbsp;
+                    <input id="txtToDate" placeholder="To Date" class="input50" />
+                    <button type="button" id="btnFilter" style="margin-left:17px;margin-top:5px;" class="btn btn-primary"><b>FILTER</b></button>
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="container-fluid pt-3 pl-3 pr-3">
+                    <div class="pt-3 pl-3 pr-3 col-md-12 col-lg-12">
+                        <div class="row" id="divactivityTable">
+
+                            <div class="table-responsive">
+
+                                <table class="table" id="activityTable" cellspacing="0" cellpadding="0">
+                                    <thead>
+                                        <tr style="text-align:center;">
+                                            <td scope="col" style="border:1px solid black;border-left:0px;" colspan="8"></td>
+                                            <td scope="col" style="border:1px solid black;border-right:0px; font-size:18px;" colspan="4"><b>Value-wise</b> </td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="col">Type</th>
+                                            <th scope="col">ID</th>
+                                            <th scope="col">Name</th>
+                                            <th scope="col">Cluster</th>
+                                            <th scope="col">Sub Cluster</th>
+                                            <th scope="col">City</th>
+                                            <th scope="col">Order Count</th>
+                                            <th scope="col">Avg Diff in Days</th>
+                                            <th scope="col">1</th>
+                                            <th scope="col">2</th>
+                                            <th scope="col">3</th>
+                                            <th scope="col">4</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    var tableData = [];
+    $(document).ready(function () {
+        var today = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
+        $("#txtFromDate").datepicker({
+            dateFormat: "yy-mm-dd",
+            maxDate: today,
+        });
+        $("#txtToDate").datepicker({
+            dateFormat: "yy-mm-dd",
+            maxDate: today,
+        });
+
+        GetOrdertoRavanaDays();
+        $('#btnFilter').on("click", function () {
+            GetOrdertoRavanaDays();
+        });
+        $("#ddlClusterList").on('change', function () {
+            $('#ddlSubClusterList').prop('selectedIndex', 0);
+            $('#ddlCityList').prop('selectedIndex', 0);
+        });
+        $("#ddlSubClusterList").on('change', function () {
+            $('#ddlClusterList').prop('selectedIndex', 0);
+            $('#ddlCityList').prop('selectedIndex', 0);
+        });
+        $("#ddlCityList").on('change', function () {
+            $('#ddlClusterList').prop('selectedIndex', 0);
+            $('#ddlSubClusterList').prop('selectedIndex', 0);
+        });
+    });
+
+    function GetOrdertoRavanaDays() {
+
+
+    }
+    function DrawTable() {
+        var table1 = $('#activityTable').DataTable();
+        table1.destroy();
+        console.log(tableData)
+        var table = $('#activityTable').DataTable({
+            "data": tableData,
+            "paging": true,
+            "ordering": false,
+            "info": true,
+            "bFilter": true,
+            "pageLength": 10,
+            "pagingType": "simple_numbers",
+            "columns": [
+                { data: "Type" },
+                { data: "ID" },
+                { data: "Name" },
+                { data: "Cluster" },
+                { data: "SubCluster" },
+                { data: "City" },
+                { data: "VolTgt" },
+                { data: "VolAch" },
+                { data: "VolAchPer" },
+                { data: "ValTgt" },
+                { data: "ValAch" },
+                { data: "ValAchPer" }
+            ],
+            aoColumnDefs: [
+                {
+                    bSortable: false,
+                    aTargets: []
+                }
+            ]
+        });
+        $('#activityTable_filter').hide();
+        $('#txtSearch').on('keyup', function () {
+
+            $.fn.dataTable.ext.search.push(function (settings, searchData) {
+                var term = $('#txtSearch').val().toLowerCase()
+                for (var i = 0; i < searchData.length; i++) {
+                    if (searchData[i].toLowerCase().indexOf(term) == 0) {
+                        return true;
+                    }
+                }
+                return false;
+            });
+            var table = $('#activityTable').DataTable();
+            table.draw();
+        });
+
+    }
+</script>
+
+
+<script src="~/Scripts/jquery-ui-1.12.1.js"></script>
+<script src="~/Scripts/jquery-ui-1.12.1.min.js"></script>
+<link href="~/Content/themes/base/jquery-ui.min.css" rel="stylesheet" />
+<link href="~/Content/themes/base/jquery-ui.css" rel="stylesheet" />

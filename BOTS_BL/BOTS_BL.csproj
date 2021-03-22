@@ -149,6 +149,7 @@
     <Compile Include="Models\ChitaleModel\OrderDetail.cs" />
     <Compile Include="Models\ChitaleModel\OrderMaster.cs" />
     <Compile Include="Models\ChitaleModel\OrderPointsConfig.cs" />
+    <Compile Include="Models\ChitaleModel\OrderVsRavanaDay.cs" />
     <Compile Include="Models\ChitaleModel\OTPMaintenance.cs" />
     <Compile Include="Models\ChitaleModel\ParticipantList.cs" />
     <Compile Include="Models\ChitaleModel\ParticipantListForManagement.cs" />

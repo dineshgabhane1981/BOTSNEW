@@ -292,8 +292,17 @@ namespace Chitale.Controllers
         }
         public ActionResult OrdertoRavanaDays()
         {
-            return View();
+            ManagementViewModel objModel = new ManagementViewModel();
+            objModel.ClusterList = MDR.GetClusterList();
+            objModel.SubClusterList = MDR.GetSubClusterList();
+            objModel.CityList = MDR.GetCityList();
+            return View(objModel);            
         }
+        public JsonResult GetOrdertoRavanaDaysData(string jsonData)
+        {
+            return new JsonResult() { Data = "", JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
+        }
+
         public ActionResult InvoicetoOrder()
         {
             return View();

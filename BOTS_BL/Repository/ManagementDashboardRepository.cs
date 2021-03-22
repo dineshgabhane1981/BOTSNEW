@@ -165,7 +165,7 @@ namespace BOTS_BL.Repository
             List<CustomerDetail> objTop5Participant = new List<CustomerDetail>();
             using (var context = new ChitaleDBContext())
             {
-                objTop5Participant = context.CustomerDetails.Where(a=>a.CustomerType== type).OrderByDescending(x => x.Points).Take(5).ToList();
+                objTop5Participant = context.CustomerDetails.Where(a => a.CustomerType == type).OrderByDescending(x => x.Points).Take(5).ToList();
             }
 
             return objTop5Participant;
@@ -214,7 +214,7 @@ namespace BOTS_BL.Repository
                     }
 
                 }
-                else if(Cluster >0)
+                else if (Cluster > 0)
                 {
                     using (var context = new ChitaleDBContext())
                     {
@@ -245,7 +245,7 @@ namespace BOTS_BL.Repository
                     }
 
                 }
-                else if (City >0)
+                else if (City > 0)
                 {
                     using (var context = new ChitaleDBContext())
                     {
@@ -285,7 +285,7 @@ namespace BOTS_BL.Repository
             return lstparticipantListsformgt;
         }
 
-        public List<ParticipantListForManagement> GetSubParticipantListForMgt(string Id,string ParticipantType)
+        public List<ParticipantListForManagement> GetSubParticipantListForMgt(string Id, string ParticipantType)
         {
 
             List<ParticipantListForManagement> lstparticipantListsformgt = new List<ParticipantListForManagement>();
@@ -328,8 +328,8 @@ namespace BOTS_BL.Repository
                             new SqlParameter("@pi_LoginId", ""),
                               new SqlParameter("@pi_ParticipantType", radiobtn),
                             new SqlParameter("@pi_Datetime", DateTime.Now.ToShortDateString()),
-                                new SqlParameter("@pi_City","" ),
-                            new SqlParameter("@pi_Cluster","" ),
+                                new SqlParameter("@pi_City", ""),
+                            new SqlParameter("@pi_Cluster", ""),
                             new SqlParameter("@pi_SubCluster", "")
                             ).ToList<LeaderBoardForMgt>();
                     }
@@ -377,7 +377,7 @@ namespace BOTS_BL.Repository
                     }
 
                 }
-                
+
             }
 
             catch (Exception ex)
@@ -441,5 +441,28 @@ namespace BOTS_BL.Repository
             }
             return objdata;
         }
+
+        public List<OrderVsRavanaDay> GetOrderVsRavanaDayData(string Cluster, string SubCluster, string City, string type, string FromDate, string Todate)
+        {
+            List<OrderVsRavanaDay> objData = new List<OrderVsRavanaDay>();
+            using (var context = new ChitaleDBContext())
+            {
+                try
+                {
+                    if (Cluster == "All" && SubCluster == "All" && City == "All" && FromDate == "" && Todate == "" && type == "")
+                    {
+                        objData = context.OrderVsRavanaDays.ToList();
+                    }
+                }
+                catch (Exception ex)
+                {
+
+                }
+            }
+
+            return objData;
+        }
+
+
     }
 }
