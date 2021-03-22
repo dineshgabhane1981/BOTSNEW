@@ -143,6 +143,7 @@
     <Compile Include="Models\ChitaleModel\InvoiceDetail.cs" />
     <Compile Include="Models\ChitaleModel\InvoiceMaster.cs" />
     <Compile Include="Models\ChitaleModel\InvoiceOrderMapping.cs" />
+    <Compile Include="Models\ChitaleModel\InvoiceToOrder.cs" />
     <Compile Include="Models\ChitaleModel\LeaderBoardForMgt.cs" />
     <Compile Include="Models\ChitaleModel\LogDetail.cs" />
     <Compile Include="Models\ChitaleModel\LoseDetail.cs" />

@@ -33,7 +33,7 @@ namespace Chitale.Controllers
                 JavaScriptSerializer json_serializer = new JavaScriptSerializer();
                 json_serializer.MaxJsonLength = int.MaxValue;
                 object[] objData = (object[])json_serializer.DeserializeObject(jsonData);
-                
+
                 foreach (Dictionary<string, object> item in objData)
                 {
                     string Flag = Convert.ToString(item["Flag"]);
@@ -76,7 +76,7 @@ namespace Chitale.Controllers
                 foreach (var item in dataCustomerDetail)
                 {
                     nameList.Add(item.CustomerName);
-                    dataList.Add(Convert.ToDecimal(item.Points)); 
+                    dataList.Add(Convert.ToDecimal(item.Points));
                 }
                 lstData.Add(nameList);
                 lstData.Add(dataList);
@@ -244,11 +244,11 @@ namespace Chitale.Controllers
             foreach (Dictionary<string, object> item in objData)
             {
                 string radio = Convert.ToString(item["Radiobtnchk"]);
-           
+
                 int Cluster = Convert.ToInt32(item["Cluster"]);
                 int SubCluster = Convert.ToInt32(item["SubCluster"]);
                 int City = Convert.ToInt32(item["City"]);
-                listLeaderBoard = MDR.GetLeaderBoardForMgts(radio,Cluster, SubCluster, City);
+                listLeaderBoard = MDR.GetLeaderBoardForMgts(radio, Cluster, SubCluster, City);
             }
             return new JsonResult() { Data = listLeaderBoard, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
@@ -266,22 +266,22 @@ namespace Chitale.Controllers
                 int SubCluster = Convert.ToInt32(item["SubCluster"]);
                 int City = Convert.ToInt32(item["City"]);
                 listformgt = MDR.GetParticipantListForMgt(Cluster, SubCluster, City);
-                
+
             }
             return new JsonResult() { Data = listformgt, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
-            
+
         }
-        public JsonResult GetSubParticipantListForMgt(string Id,string ParticipantType)
+        public JsonResult GetSubParticipantListForMgt(string Id, string ParticipantType)
         {
             List<ParticipantListForManagement> listformgt = new List<ParticipantListForManagement>();
             listformgt = MDR.GetSubParticipantListForMgt(Id, ParticipantType);
 
             return new JsonResult() { Data = listformgt, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
-           
+
         }
         public ActionResult LeaderBoard()
         {
-            var lstCluster = MDR.GetClusterList();  
+            var lstCluster = MDR.GetClusterList();
             lstCluster.Add(new SelectListItem { Text = "All", Value = "0", Selected = true });
             var lstCity = MDR.GetCityList();
             var lstSubcluster = MDR.GetSubClusterList();
@@ -296,16 +296,57 @@ namespace Chitale.Controllers
             objModel.ClusterList = MDR.GetClusterList();
             objModel.SubClusterList = MDR.GetSubClusterList();
             objModel.CityList = MDR.GetCityList();
-            return View(objModel);            
+            return View(objModel);
         }
         public JsonResult GetOrdertoRavanaDaysData(string jsonData)
         {
-            return new JsonResult() { Data = "", JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
+            List<OrderVsRavanaDay> objOrderData = new List<OrderVsRavanaDay>();
+            JavaScriptSerializer json_serializer = new JavaScriptSerializer();
+            json_serializer.MaxJsonLength = int.MaxValue;
+            object[] objData = (object[])json_serializer.DeserializeObject(jsonData);
+
+            foreach (Dictionary<string, object> item in objData)
+            {                
+                string Cluster = Convert.ToString(item["Cluster"]);
+                string SubCluster = Convert.ToString(item["SubCluster"]);
+                string City = Convert.ToString(item["City"]);
+                string FromDate = Convert.ToString(item["FromDate"]);
+                string Todate = Convert.ToString(item["Todate"]);
+                string type = Convert.ToString(item["CustomerType"]);
+                objOrderData = MDR.GetOrderVsRavanaDayData(Cluster, SubCluster, City, type, FromDate, Todate);
+
+            }
+            return new JsonResult() { Data = objOrderData, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
 
         public ActionResult InvoicetoOrder()
         {
-            return View();
+            ManagementViewModel objModel = new ManagementViewModel();
+            objModel.ClusterList = MDR.GetClusterList();
+            objModel.SubClusterList = MDR.GetSubClusterList();
+            objModel.CityList = MDR.GetCityList();
+            return View(objModel);
+        }
+
+        public JsonResult GetInvoiceToOrderData(string jsonData)
+        {
+            List<InvoiceToOrder> objOrderData = new List<InvoiceToOrder>();
+            JavaScriptSerializer json_serializer = new JavaScriptSerializer();
+            json_serializer.MaxJsonLength = int.MaxValue;
+            object[] objData = (object[])json_serializer.DeserializeObject(jsonData);
+
+            foreach (Dictionary<string, object> item in objData)
+            {
+                string Cluster = Convert.ToString(item["Cluster"]);
+                string SubCluster = Convert.ToString(item["SubCluster"]);
+                string City = Convert.ToString(item["City"]);
+                string FromDate = Convert.ToString(item["FromDate"]);
+                string Todate = Convert.ToString(item["Todate"]);
+                string type = Convert.ToString(item["CustomerType"]);
+                objOrderData = MDR.GetInvoiceToOrderData(Cluster, SubCluster, City, type, FromDate, Todate);
+
+            }
+            return new JsonResult() { Data = objOrderData, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
 
 

@@ -103,7 +103,62 @@
     });
 
     function GetOrdertoRavanaDays() {
-
+        var OrderToRavanaData = [];
+        item = {}
+        item["Cluster"] = $('#ddlClusterList :selected').text();
+        item["SubCluster"] = $('#ddlSubClusterList :selected').text();
+        item["City"] = $('#ddlCityList :selected').text();
+        item["FromDate"] = $("#txtFromDate").val();
+        item["Todate"] = $('#txtToDate').val();
+        item["CustomerType"] = "0";
+        if ($('#rdnSS').is(":checked")) {
+            item["CustomerType"] = "SuperStockiest";
+        }
+        if ($('#rdnDist').is(":checked")) {
+            item["CustomerType"] = "Distributors";
+        }
+        OrderToRavanaData.push(item);
+        var data = JSON.stringify(OrderToRavanaData);
+        $("#divLoader").show();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("GetOrdertoRavanaDaysData")',
+            data: '{jsonData: ' + JSON.stringify(data) + '}',
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                console.log(response);
+                if (response != null) {
+                    tableData.length = 0;
+                    $.map(response, function (item) {
+                        optionItem = {}
+                        optionItem["CustomerType"] = item.CustomerType;
+                        optionItem["CustomerId"] = item.CustomerId;
+                        optionItem["CustomerName"] = item.CustomerName;
+                        optionItem["Cluster"] = item.Cluster;
+                        optionItem["SubCluster"] = item.SubCluster;
+                        optionItem["City"] = item.City;
+                        optionItem["OrderCount"] = item.OrderCount;
+                        optionItem["AvgDiffInDays"] = item.AvgDiffInDays;
+                        optionItem["Diff1"] = item.Diff1;
+                        optionItem["Diff2"] = item.Diff2;
+                        optionItem["Diff3"] = item.Diff3;
+                        optionItem["Diff4"] = item.Diff4;
+                        tableData.push(optionItem);
+                    });
+                    DrawTable();
+                    $("#divLoader").hide();
+                }
+            },
+            failure: function (response) {
+                console.log(111);
+                $("#divLoader").hide();
+            },
+            error: function (response) {
+                console.log(222);
+                $("#divLoader").hide();
+            }
+        });
 
     }
     function DrawTable() {
@@ -119,18 +174,39 @@
             "pageLength": 10,
             "pagingType": "simple_numbers",
             "columns": [
-                { data: "Type" },
-                { data: "ID" },
-                { data: "Name" },
+                { data: "CustomerType" },
+                { data: "CustomerId" },
+                { data: "CustomerName" },
                 { data: "Cluster" },
                 { data: "SubCluster" },
                 { data: "City" },
-                { data: "VolTgt" },
-                { data: "VolAch" },
-                { data: "VolAchPer" },
-                { data: "ValTgt" },
-                { data: "ValAch" },
-                { data: "ValAchPer" }
+                { data: "OrderCount" },
+                { data: "AvgDiffInDays" },
+                {
+                    "mData": "Diff1",
+                    "mRender": function (data, type, row) {
+                        return data+"%";                       
+                    }
+                },
+                {
+                    "mData": "Diff2",
+                    "mRender": function (data, type, row) {
+                        return data + "%";
+                    }
+                },
+                {
+                    "mData": "Diff3",
+                    "mRender": function (data, type, row) {
+                        return data + "%";
+                    }
+                },
+                {
+                    "mData": "Diff4",
+                    "mRender": function (data, type, row) {
+                        return data + "%";
+                    }
+                }
+                
             ],
             aoColumnDefs: [
                 {
@@ -157,7 +233,22 @@
 
     }
 </script>
+<style>
 
+   
+
+    table.dataTable thead .sorting_asc {
+        background: url("https://cdn.datatables.net/1.10.0/images/sort_asc.png") no-repeat center left;
+    }
+
+    table.dataTable thead .sorting_desc {
+        background: url("https://cdn.datatables.net/1.10.0/images/sort_desc.png") no-repeat center left;
+    }
+
+    table.dataTable thead .sorting {
+        background: url("https://cdn.datatables.net/1.10.0/images/sort_both.png") no-repeat center left;
+    }
+</style>
 
 <script src="~/Scripts/jquery-ui-1.12.1.js"></script>
 <script src="~/Scripts/jquery-ui-1.12.1.min.js"></script>

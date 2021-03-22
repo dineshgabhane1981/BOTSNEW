@@ -449,9 +449,44 @@ namespace BOTS_BL.Repository
             {
                 try
                 {
-                    if (Cluster == "All" && SubCluster == "All" && City == "All" && FromDate == "" && Todate == "" && type == "")
+                    objData = context.OrderVsRavanaDays.ToList();
+                    if (Cluster == "All" && SubCluster == "All" && City == "All" && FromDate == "" && Todate == "" && type == "0")
                     {
                         objData = context.OrderVsRavanaDays.ToList();
+                    }
+                    else
+                    {
+                        if(Cluster != "All")
+                        {
+                            objData = objData.Where(x => x.Cluster == Cluster).ToList();
+                        }
+                        else if(SubCluster != "All")
+                        {
+                            objData = objData.Where(x => x.SubCluster == SubCluster).ToList();
+                        }
+                        else if(City != "All")
+                        {
+                            objData = objData.Where(x => x.City == City).ToList();
+                        }
+                        if (FromDate != "" && Todate != "")
+                        {
+                            objData = objData.Where(x => x.Date >= Convert.ToDateTime(FromDate) && x.Date <= Convert.ToDateTime(Todate)).ToList();
+                        }
+                        else
+                        {
+                            if (FromDate != "")
+                            {
+                                objData = objData.Where(x => x.Date >= Convert.ToDateTime(FromDate)).ToList();
+                            }
+                            if (Todate != "")
+                            {
+                                objData = objData.Where(x => x.Date >= Convert.ToDateTime(Todate)).ToList();
+                            }
+                        }
+                    }
+                    if (type != "0")
+                    {
+                        objData = objData.Where(x => x.CustomerType == type).ToList();
                     }
                 }
                 catch (Exception ex)
@@ -463,6 +498,67 @@ namespace BOTS_BL.Repository
             return objData;
         }
 
+        public List<InvoiceToOrder> GetInvoiceToOrderData(string Cluster, string SubCluster, string City, string type, string FromDate, string Todate)
+        {
+            List<InvoiceToOrder> objData = new List<InvoiceToOrder>();
+            using (var context = new ChitaleDBContext())
+            {
+                try
+                {
+                    objData = context.InvoiceToOrders.ToList();
+                    if (Cluster == "All" && SubCluster == "All" && City == "All" && FromDate == "" && Todate == "" && type == "0")
+                    {
+                        objData = context.InvoiceToOrders.ToList();
+                    }
+                    else
+                    {
+                        if (Cluster != "All")
+                        {
+                            objData = objData.Where(x => x.Cluster == Cluster).ToList();
+                        }
+                        else if (SubCluster != "All")
+                        {
+                            objData = objData.Where(x => x.SubCluster == SubCluster).ToList();
+                        }
+                        else if (City != "All")
+                        {
+                            objData = objData.Where(x => x.City == City).ToList();
+                        }
+                        if (FromDate != "" && Todate != "")
+                        {
+                            objData = objData.Where(x => x.InvDate >= Convert.ToDateTime(FromDate) && x.InvDate <= Convert.ToDateTime(Todate)).ToList();
+                        }
+                        else
+                        {
+                            if (FromDate != "")
+                            {
+                                objData = objData.Where(x => x.InvDate >= Convert.ToDateTime(FromDate)).ToList();
+                            }
+                            if (Todate != "")
+                            {
+                                objData = objData.Where(x => x.InvDate >= Convert.ToDateTime(Todate)).ToList();
+                            }
+                        }
+                    }
+                    if (type != "0")
+                    {
+                        objData = objData.Where(x => x.CustomerType == type).ToList();
+                    }
+                }
+                catch (Exception ex)
+                {
+
+                }
+            }
+
+
+            foreach(var item in objData)
+            {
+                item.StrDate = item.InvDate.Value.ToString("dd-MM-yyyy");
+            }
+
+            return objData;
+        }
 
     }
 }
