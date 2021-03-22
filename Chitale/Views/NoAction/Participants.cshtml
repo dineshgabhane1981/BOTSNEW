@@ -4,5 +4,76 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Participants</h2>
+<div class="app-main__inner">
+    <div class="row">
+        <div style="width:100%;  padding:10px; background-color:white;">
+            <div class="row" style="margin-left:30px;">
+                <div class="col-md-2 col-xl-2">
+                    <div class="card mb-3 widget-content" style="background-color:palevioletred;">
+                        <div class="widget-content-wrapper text-white" style="text-align:center !important; display:block; ">
+                            <div class="widget-content-left" >
+                                <div class="widget-heading" style="font-size:17px;text-align:center;">
+                                    All <br /> <a href="#" style="color: white !important;"><u>SS: <span id="spnSSAll">15</span></u></a>
+                                    <br /> <a href="#" style="color: white !important;"><u>Dist: <span id="spnDistAll">115</span></u></a>
+
+                                </div>
+                                <div class="widget-numbers text-white"><span id="spnPurchaseOrderPoints"></span></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-2 col-xl-2">
+                    <div class="card mb-3 widget-content bg-arielle-smile">
+                        <div class="widget-content-wrapper text-white" style="text-align:center !important; display:block; ">
+                            <div class="widget-content-left">
+                                <div class="widget-heading" style="font-size:17px;">
+                                    Last 30 days <br /> <a href="#" style="color: white !important;"><u><span id="spnSS30">3</span></u></a>
+                                    <br /> <a href="#" style="color: white !important;"><u><span id="spnDist30">43</span></u></a>
+                                </div>
+                                <div class="widget-numbers text-white"><span id="spnSalesOrderPoints"></span></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-2 col-xl-2">
+                    <div class="card mb-3 widget-content" style="background-color:orchid;">
+                        <div class="widget-content-wrapper text-white" style="text-align:center !important; display:block; ">
+                            <div class="widget-content-left">
+                                <div class="widget-heading" style="font-size:17px;">
+                                    Last 90 days
+                                </div>
+                                <div class="widget-numbers text-white"><span id="spnRedeemedPoints"></span></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-2 col-xl-2">
+                    <div class="card mb-3 widget-content" style="background-color:orchid;">
+                        <div class="widget-content-wrapper text-white" style="text-align:center !important; display:block; ">
+                            <div class="widget-content-left">
+                                <div class="widget-heading" style="font-size:17px;">
+                                    Last 180 days
+                                </div>
+                                <div class="widget-numbers text-white"><span id="spnRedeemedPoints"></span></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-2 col-xl-2">
+                    <div class="card mb-3 widget-content" style="background-color:orchid;">
+                        <div class="widget-content-wrapper text-white" style="text-align:center !important; display:block; ">
+                            <div class="widget-content-left">
+                                <div class="widget-heading" style="font-size:17px;">
+                                    Last 365 days
+                                </div>
+                                <div class="widget-numbers text-white"><span id="spnRedeemedPoints"></span></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
 

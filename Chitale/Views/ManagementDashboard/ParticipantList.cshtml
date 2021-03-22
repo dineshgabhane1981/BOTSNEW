@@ -102,14 +102,14 @@
                                                 <th scope="col">Type</th>
                                                 <th scope="col">ID</th>
                                                 <th scope="col">Name</th>
-                                                <th scope="col">CurrentRank</th>
-                                                <th scope="col">LastMonthRank</th>
-                                                <th scope="col">PurchasePoints</th>
-                                                <th scope="col">SalePoints</th>
-                                                <th scope="col">AddOnPoints</th>
-                                                <th scope="col">LostOppPoints</th>
-                                                <th scope="col">RedeemedPoints</th>
-                                                <th scope="col">BalancedPoints</th>
+                                                <th scope="col">Current Rank</th>
+                                                <th scope="col">Last Month Rank</th>
+                                                <th scope="col">Purchase Points</th>
+                                                <th scope="col">Sale Points</th>
+                                                <th scope="col">Add On Points</th>
+                                                <th scope="col">Lost Opp Points</th>
+                                                <th scope="col">Redeemed Points</th>
+                                                <th scope="col">Balanced Points</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -128,14 +128,14 @@
                                                 <th scope="col">Type</th>
                                                 <th scope="col">ID</th>
                                                 <th scope="col">Name</th>
-                                                <th scope="col">CurrentRank</th>
-                                                <th scope="col">LastMonthRank</th>
-                                                <th scope="col">PurchasePoints</th>
-                                                <th scope="col">SalePoints</th>
-                                                <th scope="col">AddOnPoints</th>
-                                                <th scope="col">LostOppPoints</th>
-                                                <th scope="col">RedeemedPoints</th>
-                                                <th scope="col">BalancedPoints</th>
+                                                <th scope="col">Current Rank</th>
+                                                <th scope="col">Last Month Rank</th>
+                                                <th scope="col">Purchase Points</th>
+                                                <th scope="col">Sale Points</th>
+                                                <th scope="col">Add On Points</th>
+                                                <th scope="col">Lost Opp Points</th>
+                                                <th scope="col">Redeemed Points</th>
+                                                <th scope="col">Balanced Points</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -262,31 +262,7 @@
                         tableData.push(optionItem);
                     });
                     DrawTable();
-                }
-                else {
-
-                    tableData.length = 0;
-                    $.map(response, function (item) {
-                        console.log(item);
-                        optionItem = {}
-                        optionItem["ParticipantType"] = item.ParticipantType;
-                        optionItem["ID"] = item.Id;
-                        optionItem["ParticipantName"] = item.ParticipantName;
-                        optionItem["CurrentRank"] = item.CurrentRank;
-                        optionItem["LastMonthRank"] = item.LastMonthRank;
-                        optionItem["PurchasePoints"] = item.PurchasePoints;
-                        optionItem["SalePoints"] = item.SalePoints;
-                        optionItem["AddOnPoints"] = item.AddOnPoints;
-                        optionItem["LostOppPoints"] = item.LostOppPoints;
-                        optionItem["RedeemedPoints"] = item.RedeemedPoints;
-                        optionItem["BalancedPoints"] = item.BalancedPoints;
-                        tableData.push(optionItem);
-                       // console.log(optionItem);
-
-                    });
-                    DrawTable();
-
-                }
+                }                
                 $("#divLoader").hide();
 
             },

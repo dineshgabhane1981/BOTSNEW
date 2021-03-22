@@ -204,7 +204,7 @@ namespace BOTS_BL.Repository
                     {
                         lstparticipantListsformgt = context.Database.SqlQuery<ParticipantListForManagement>("sp_KYBLoad_MFC @pi_LoginId, @pi_Datetime, @pi_DataType, @pi_City,@pi_Cluster ,@pi_SubCluster",
                             new SqlParameter("@pi_LoginId", ""),
-                            new SqlParameter("@pi_Datetime", DateTime.Now.ToShortDateString()),
+                            new SqlParameter("@pi_Datetime", DateTime.Now.ToString("dd-MM-yyyy")),
                               new SqlParameter("@pi_DataType", ""),
                                 new SqlParameter("@pi_City", ""),
                             new SqlParameter("@pi_Cluster", ""),
@@ -220,7 +220,7 @@ namespace BOTS_BL.Repository
                     {
                         lstparticipantListsformgt = context.Database.SqlQuery<ParticipantListForManagement>("sp_KYBLoad_MFC @pi_LoginId, @pi_Datetime, @pi_DataType, @pi_City,@pi_Cluster ,@pi_SubCluster",
                             new SqlParameter("@pi_LoginId", ""),
-                            new SqlParameter("@pi_Datetime", DateTime.Now.ToShortDateString()),
+                            new SqlParameter("@pi_Datetime", DateTime.Now.ToString("dd-MM-yyyy")),
                               new SqlParameter("@pi_DataType", ""),
                                 new SqlParameter("@pi_City", ""),
                             new SqlParameter("@pi_Cluster", Cluster),
@@ -235,7 +235,7 @@ namespace BOTS_BL.Repository
                     {
                         lstparticipantListsformgt = context.Database.SqlQuery<ParticipantListForManagement>("sp_KYBLoad_MFC @pi_LoginId, @pi_Datetime, @pi_DataType, @pi_City,@pi_Cluster ,@pi_SubCluster",
                             new SqlParameter("@pi_LoginId", ""),
-                            new SqlParameter("@pi_Datetime", DateTime.Now.ToShortDateString()),
+                            new SqlParameter("@pi_Datetime", DateTime.Now.ToString("dd-MM-yyyy")),
                               new SqlParameter("@pi_DataType", ""),
                                 new SqlParameter("@pi_City", ""),
                             new SqlParameter("@pi_Cluster", ""),
@@ -251,7 +251,7 @@ namespace BOTS_BL.Repository
                     {
                         lstparticipantListsformgt = context.Database.SqlQuery<ParticipantListForManagement>("sp_KYBLoad_MFC @pi_LoginId, @pi_Datetime, @pi_DataType, @pi_City,@pi_Cluster ,@pi_SubCluster",
                             new SqlParameter("@pi_LoginId", ""),
-                            new SqlParameter("@pi_Datetime", DateTime.Now.ToShortDateString()),
+                            new SqlParameter("@pi_Datetime", DateTime.Now.ToString("dd-MM-yyyy")),
                               new SqlParameter("@pi_DataType", ""),
                                 new SqlParameter("@pi_City", City),
                             new SqlParameter("@pi_Cluster", ""),
@@ -267,7 +267,7 @@ namespace BOTS_BL.Repository
                     {
                         lstparticipantListsformgt = context.Database.SqlQuery<ParticipantListForManagement>("sp_KYBLoad_MFC @pi_LoginId, @pi_Datetime, @pi_DataType, @pi_City,@pi_Cluster ,@pi_SubCluster",
                             new SqlParameter("@pi_LoginId", ""),
-                            new SqlParameter("@pi_Datetime", DateTime.Now.ToShortDateString()),
+                            new SqlParameter("@pi_Datetime", DateTime.Now.ToString("dd-MM-yyyy")),
                               new SqlParameter("@pi_DataType", ""),
                                 new SqlParameter("@pi_City", ""),
                             new SqlParameter("@pi_Cluster", ""),
@@ -296,7 +296,7 @@ namespace BOTS_BL.Repository
                 {
                     lstparticipantListsformgt = context.Database.SqlQuery<ParticipantListForManagement>("sp_KYBLoadParticipant_MFC @pi_LoginId, @pi_Datetime, @pi_DataType, @pi_City,@pi_Cluster ,@pi_SubCluster,@pi_Id,@pi_ParticipantType",
                         new SqlParameter("@pi_LoginId", ""),
-                        new SqlParameter("@pi_Datetime", DateTime.Now.ToShortDateString()),
+                        new SqlParameter("@pi_Datetime", DateTime.Now.ToString("dd-MM-yyyy")),
                           new SqlParameter("@pi_DataType", ""),
                             new SqlParameter("@pi_City", ""),
                         new SqlParameter("@pi_Cluster", ""),
