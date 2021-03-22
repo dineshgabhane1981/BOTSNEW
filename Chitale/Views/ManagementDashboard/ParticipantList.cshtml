@@ -197,12 +197,42 @@
     function GetParticipantList(flag) {
         $("#divLoader").show();
         var SummeryData = [];
-        item = {}
-        item["Flag"] = flag;
-        item["SubCluster"] = $('#ddlSubClusterList :selected').val();
-        item["Cluster"] = $('#ddlClusterList :selected').val();       
-        item["City"] = $('#ddlCityList :selected').val();
-        SummeryData.push(item);
+        if ($("#ddlClusterList").prop('selectedIndex') == 0 && $("#ddlCityList").prop('selectedIndex') == 0 && $("#ddlSubClusterList").prop('selectedIndex') == 0) {
+
+            item = {}
+            item["Flag"] = flag;
+            item["SubCluster"] = 0;
+            item["Cluster"] = 0;
+            item["City"] = 0;
+            SummeryData.push(item);
+        }
+        else if ($("#ddlClusterList").prop('selectedIndex') !== 0) {
+            console.log("cluster");
+            item = {}
+            item["Flag"] = flag;
+            item["SubCluster"] = 0;
+            item["Cluster"] = $('#ddlClusterList :selected').val();
+            item["City"] = 0;
+            SummeryData.push(item);
+
+        }
+        else if ($("#ddlCityList").prop('selectedIndex') !== 0) {
+            item = {}
+            item["Flag"] = flag;
+            item["SubCluster"] = 0;
+            item["Cluster"] = 0;
+            item["City"] = $('#ddlCityList :selected').val();
+            SummeryData.push(item);
+
+        }
+        else if ($("#ddlSubClusterList").prop('selectedIndex') !== 0) {
+            item = {}
+            item["Flag"] = flag;
+            item["SubCluster"] = $('#ddlSubClusterList :selected').val();
+            item["Cluster"] = 0;
+            item["City"] = 0;
+            SummeryData.push(item);
+        }
         var data = JSON.stringify(SummeryData);
         $.ajax({
             type: "POST",

@@ -244,6 +244,7 @@ namespace Chitale.Controllers
             foreach (Dictionary<string, object> item in objData)
             {
                 string radio = Convert.ToString(item["Radiobtnchk"]);
+           
                 int Cluster = Convert.ToInt32(item["Cluster"]);
                 int SubCluster = Convert.ToInt32(item["SubCluster"]);
                 int City = Convert.ToInt32(item["City"]);
@@ -261,19 +262,11 @@ namespace Chitale.Controllers
             foreach (Dictionary<string, object> item in objData)
             {
                 string Flag = Convert.ToString(item["Flag"]);
-                string Cluster = Convert.ToString(item["Cluster"]);
-                string SubCluster = Convert.ToString(item["SubCluster"]);
-                string City = Convert.ToString(item["City"]);
+                int Cluster = Convert.ToInt32(item["Cluster"]);
+                int SubCluster = Convert.ToInt32(item["SubCluster"]);
+                int City = Convert.ToInt32(item["City"]);
                 listformgt = MDR.GetParticipantListForMgt(Cluster, SubCluster, City);
-                //if (Flag != "1")
-                //{
-                //    listformgt = MDR.GetParticipantListForMgt(Cluster, SubCluster, City);
-                //}
-                //else 
-                //{
-                //    listformgt = MDR.GetParticipantListForMgt("", "", "");
-                //}
-
+                
             }
             return new JsonResult() { Data = listformgt, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
             
