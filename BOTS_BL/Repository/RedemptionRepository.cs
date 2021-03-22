@@ -11,21 +11,22 @@ namespace BOTS_BL.Repository
 {
     public class RedemptionRepository
     {
-        public bool GenerateOTP(string Type, string CashIncentive, string Infrastructure, string Deposit, string Promotion)
+        public List<GenerateOTPList> GenerateOTP(string Type, string CashIncentive, string Infrastructure, string Deposit, string Promotion)
         {
-            bool status = false;
+            List<GenerateOTPList> objData = new List<GenerateOTPList>();
+            
             using (var context = new ChitaleDBContext())
             {
-                var result = context.Database.SqlQuery<GenerateOTPList>("sp_RedemptionOTP @pi_LoginId, @pi_CashIncentive, @pi_InfraStructure, @pi_Deposit, @pi_Promotion, @pi_Datetime,@pi_Type",
+                objData = context.Database.SqlQuery<GenerateOTPList>("sp_RedemptionOTP @pi_LoginId, @pi_CashIncentive, @pi_InfraStructure, @pi_Deposit, @pi_Promotion, @pi_Datetime,@pi_Type",
                               new SqlParameter("@pi_LoginId", ""),
                               new SqlParameter("@pi_CashIncentive", CashIncentive),
                               new SqlParameter("@pi_InfraStructure", Infrastructure),
                               new SqlParameter("@pi_Deposit", Deposit),
                               new SqlParameter("@pi_Promotion", Promotion),
                               new SqlParameter("@pi_Datetime", DateTime.Now.ToString("dd-MM-yyyy")),
-                              new SqlParameter("@pi_Type", Type)).FirstOrDefault<GenerateOTPList>();
+                              new SqlParameter("@pi_Type", Type)).ToList<GenerateOTPList>();
             }
-            return status;
+            return objData;
         }
         public RedemptionValue GetRedeemptionData(string Type)
         {
@@ -33,6 +34,26 @@ namespace BOTS_BL.Repository
             using (var context = new ChitaleDBContext())
             {
                 objData = context.RedemptionValues.Where(x => x.Status == "00" && x.Type == Type).FirstOrDefault();
+            }
+            return objData;
+        }
+
+        public ChitaleSPResponse ValidateOTP(string Type, string CashIncentive, string Infrastructure, string Deposit, string Promotion,string OTP1, string OTP2)
+        {
+            ChitaleSPResponse objData = new ChitaleSPResponse();
+
+            using (var context = new ChitaleDBContext())
+            {
+                objData = context.Database.SqlQuery<ChitaleSPResponse>("sp_RedemptionValues @pi_LoginId, @pi_CashIncentive, @pi_InfraStructure, @pi_Deposit, @pi_Promotion, @pi_Datetime,@pi_Type,@pi_OTPValue1,@pi_OTPValue2",
+                              new SqlParameter("@pi_LoginId", ""),
+                              new SqlParameter("@pi_CashIncentive", CashIncentive),
+                              new SqlParameter("@pi_InfraStructure", Infrastructure),
+                              new SqlParameter("@pi_Deposit", Deposit),
+                              new SqlParameter("@pi_Promotion", Promotion),
+                              new SqlParameter("@pi_Datetime", DateTime.Now.ToString("dd-MM-yyyy")),
+                              new SqlParameter("@pi_Type", Type),
+                              new SqlParameter("@pi_OTPValue1", OTP1),
+                              new SqlParameter("@pi_OTPValue2", OTP2)).FirstOrDefault<ChitaleSPResponse>();
             }
             return objData;
         }

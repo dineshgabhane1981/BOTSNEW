@@ -14,7 +14,7 @@
                 </div>
             </div>
             <div class="row mb-3">
-                <div class="container-fluid pt-3 pl-3 pr-3">
+                <div class="container-fluid pt-3 pl-3 pr-3" >
                     <div class="pt-3 pl-3 pr-3 col-md-12 col-lg-12">
                         <div>
                             <select name="ddlParticipantType" id="ddlParticipantType" class="input100">
@@ -26,49 +26,59 @@
                             </select>
                         </div>
 
-                        <div>
-                            <br />
-                            <table cellpadding="10">
-                                <tr style="border-bottom:1px solid grey;">
-                                    <th>
-                                        Sub Redemption Type
-                                    </th>
-                                    <th style="text-align:center;">
-                                        Allocation %
-                                    </th>
-                                </tr>
-                                <tr style="border-bottom:1px solid grey;">
-                                    <td>
-                                        Cash Incentive
-                                    </td>
-                                    <td><input id="txtCashIncentive" class="input50" /></td>
-                                </tr>
-                                <tr style="border-bottom:1px solid grey;">
-                                    <td>
-                                        Infrastructure
-                                    </td>
-                                    <td><input id="txtInfrastructure" class="input50" /></td>
-                                </tr>
-                                <tr style="border-bottom:1px solid grey;">
-                                    <td>Deposit</td>
-                                    <td><input id="txtDeposit" class="input50" /></td>
-                                </tr>
-                                <tr style="border-bottom:1px solid grey;">
-                                    <td>Promotion</td>
-                                    <td><input id="txtPromotion" class="input50" /></td>
-                                </tr>
-                                <tr style="text-align:center;">
-                                    <td colspan="2">
-                                        <button id="btnGenerateOTP" class="btn btn-primary ml-auto">
-                                            GENERATE OTP
-                                        </button>
-                                    </td>
-                                </tr>
-                            </table>
+                        <div style="display:flex;">
+                            <div>
+                                <br />
+                                <table cellpadding="10">
+                                    <tr style="border-bottom:1px solid grey;">
+                                        <th>
+                                            Sub Redemption Type
+                                        </th>
+                                        <th style="text-align:center;">
+                                            Allocation %
+                                        </th>
+                                    </tr>
+                                    <tr style="border-bottom:1px solid grey;">
+                                        <td>
+                                            Cash Incentive
+                                        </td>
+                                        <td><input id="txtCashIncentive" class="input50" /></td>
+                                    </tr>
+                                    <tr style="border-bottom:1px solid grey;">
+                                        <td>
+                                            Infrastructure
+                                        </td>
+                                        <td><input id="txtInfrastructure" class="input50" /></td>
+                                    </tr>
+                                    <tr style="border-bottom:1px solid grey;">
+                                        <td>Deposit</td>
+                                        <td><input id="txtDeposit" class="input50" /></td>
+                                    </tr>
+                                    <tr style="border-bottom:1px solid grey;">
+                                        <td>Promotion</td>
+                                        <td><input id="txtPromotion" class="input50" /></td>
+                                    </tr>
+                                    <tr style="text-align:center;">
+                                        <td colspan="2">
+                                            <button id="btnGenerateOTP" class="btn btn-primary ml-auto">
+                                                GENERATE OTP
+                                            </button>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                            <div class="pt-3 pl-3 pr-3 col-md-12 col-lg-6" style="margin-left:50px;text-align:center;">
+                                <br />
+                                <input id="txtOTP1" class="input100" placeholder="ENTER OTP No. 1" /><br /><br />
+                                <input id="txtOTP2" class="input100" placeholder="ENTER OTP No. 2" /><br /><br />
+                                <button id="btnValidateOTP" class="btn btn-primary ml-auto">
+                                    VALIDATE OTP
+                                </button>
+                            </div>
 
                         </div>
-
                     </div>
+                    
                 </div>
             </div>
         </div>
@@ -80,6 +90,14 @@
     $(document).ready(function () {
         $('#btnGenerateOTP').on("click", function () {
             GenerateOTP();
+        });
+        $('#btnValidateOTP').on("click", function () {
+            if ($("#txtOTP1").val() != "" && $("#txtOTP2").val() != "") {
+                ValidateOTP();
+            }
+            else {
+                toastr.error('OTP1 and OTP2 are required');
+            }
         });
         $("#ddlParticipantType").on('change', function () {
             if ($("#ddlParticipantType").val() != "0") {
@@ -163,8 +181,8 @@
         item["Deposit"] = $("#txtDeposit").val();
         item["Promotion"] = $("#txtPromotion").val();
 
-        MemberData.push(item);
-        var data = JSON.stringify(MemberData);
+        RedeemptionData.push(item);
+        var data = JSON.stringify(RedeemptionData);
 
         $("#divLoader").show();
         $.ajax({
@@ -175,10 +193,12 @@
             dataType: "json",
             success: function (response) {
                 console.log(response);
-                if (response != null) {
-
-
-
+                if (response == true) {
+                    toastr.success('OTP Sent Successfully');
+                    $("#divLoader").hide();
+                }
+                else {
+                    toastr.error('There is problem in sending OTP. Please contact Administrator');
                     $("#divLoader").hide();
                 }
             },
@@ -193,4 +213,79 @@
         });
 
     }
+
+    function ValidateOTP() {
+        if ($('#ddlParticipantType').val() == "0") {
+            toastr.error('Please select Participant Type');
+            $('#ddlParticipantType').focus();
+            return false;
+        }
+        if ($('#txtCashIncentive').val() == "") {
+            toastr.error('Please enter Cash Incentive');
+            $('#txtCashIncentive').focus();
+            return false;
+        }
+        if ($('#txtInfrastructure').val() == "") {
+            toastr.error('Please enter Infrastructure');
+            $('#txtInfrastructure').focus();
+            return false;
+        }
+        if ($('#txtDeposit').val() == "") {
+            toastr.error('Please enter Deposit');
+            $('#txtDeposit').focus();
+            return false;
+        }
+        if ($('#txtPromotion').val() == "") {
+            toastr.error('Please enter Promotion');
+            $('#txtPromotion').focus();
+            return false;
+        }
+
+        var addedValue = (parseInt($('#txtCashIncentive').val()) + parseInt($('#txtInfrastructure').val()) + parseInt($('#txtDeposit').val()) + parseInt($('#txtPromotion').val()));
+        if (addedValue != 100) {
+            toastr.error('Total Redeemption Value should be 100');
+            return false;
+        }
+        var RedeemptionData = [];
+        item = {}
+        item["Type"] = $("#ddlParticipantType").val();
+        item["CashIncentive"] = $("#txtCashIncentive").val();
+        item["Infrastructure"] = $("#txtInfrastructure").val();
+        item["Deposit"] = $("#txtDeposit").val();
+        item["Promotion"] = $("#txtPromotion").val();
+        item["OTP1"] = $("#txtOTP1").val();
+        item["OTP2"] = $("#txtOTP2").val();
+
+        RedeemptionData.push(item);
+        var data = JSON.stringify(RedeemptionData);
+
+        $("#divLoader").show();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("ValidateOTP")',
+            data: '{jsonData: ' + JSON.stringify(data) + '}',
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                console.log(response);
+                if (response.ResponseCode == "0") {
+                    toastr.success(response.ResponseMessage);
+                    $("#divLoader").hide();
+                }
+                else {
+                    toastr.error(response.ResponseMessage);
+                    $("#divLoader").hide();
+                }
+            },
+            failure: function (response) {
+                console.log(111);
+                $("#divLoader").hide();
+            },
+            error: function (response) {
+                console.log(222);
+                $("#divLoader").hide();
+            }
+        });
+    }
+
 </script>

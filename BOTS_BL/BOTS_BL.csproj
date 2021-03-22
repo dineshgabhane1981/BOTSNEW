@@ -133,6 +133,7 @@
     <Compile Include="Models\ChitaleModel\ChequeBounceConfig.cs" />
     <Compile Include="Models\ChitaleModel\ChequeReturnMaster.cs" />
     <Compile Include="Models\ChitaleModel\ChitaleDBContext.cs" />
+    <Compile Include="Models\ChitaleModel\ChitaleSPResponse.cs" />
     <Compile Include="Models\ChitaleModel\CityMaster.cs" />
     <Compile Include="Models\ChitaleModel\ClusterMaster.cs" />
     <Compile Include="Models\ChitaleModel\CustomerDetail.cs" />
