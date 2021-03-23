@@ -327,7 +327,7 @@ namespace BOTS_BL.Repository
                         lstLeaderBrd = context.Database.SqlQuery<LeaderBoardForMgt>("sp_LeaderBoard_MFC @pi_LoginId,@pi_ParticipantType,@pi_Datetime,@pi_City,@pi_Cluster,@pi_SubCluster",
                             new SqlParameter("@pi_LoginId", ""),
                               new SqlParameter("@pi_ParticipantType", radiobtn),
-                            new SqlParameter("@pi_Datetime", DateTime.Now.ToShortDateString()),
+                            new SqlParameter("@pi_Datetime", DateTime.Now.ToString("dd-MM-yyyy")),
                                 new SqlParameter("@pi_City", ""),
                             new SqlParameter("@pi_Cluster", ""),
                             new SqlParameter("@pi_SubCluster", "")
@@ -341,7 +341,7 @@ namespace BOTS_BL.Repository
                         lstLeaderBrd = context.Database.SqlQuery<LeaderBoardForMgt>("sp_LeaderBoard_MFC @pi_LoginId,@pi_ParticipantType, @pi_Datetime, @pi_City,@pi_Cluster,@pi_SubCluster",
                             new SqlParameter("@pi_LoginId", ""),
                               new SqlParameter("@pi_ParticipantType", radiobtn),
-                            new SqlParameter("@pi_Datetime", DateTime.Now.ToShortDateString()),
+                            new SqlParameter("@pi_Datetime", DateTime.Now.ToString("dd-MM-yyyy")),
                                 new SqlParameter("@pi_City", ""),
                             new SqlParameter("@pi_Cluster", Cluster),
                             new SqlParameter("@pi_SubCluster", "")
@@ -355,7 +355,7 @@ namespace BOTS_BL.Repository
                         lstLeaderBrd = context.Database.SqlQuery<LeaderBoardForMgt>("sp_LeaderBoard_MFC @pi_LoginId,@pi_ParticipantType, @pi_Datetime, @pi_City,@pi_Cluster ,@pi_SubCluster",
                             new SqlParameter("@pi_LoginId", ""),
                               new SqlParameter("@pi_ParticipantType", radiobtn),
-                            new SqlParameter("@pi_Datetime", DateTime.Now.ToShortDateString()),
+                            new SqlParameter("@pi_Datetime", DateTime.Now.ToString("dd-MM-yyyy")),
                                 new SqlParameter("@pi_City", ""),
                             new SqlParameter("@pi_Cluster", ""),
                             new SqlParameter("@pi_SubCluster", SubCluster)
@@ -369,7 +369,7 @@ namespace BOTS_BL.Repository
                         lstLeaderBrd = context.Database.SqlQuery<LeaderBoardForMgt>("sp_LeaderBoard_MFC @pi_LoginId,@pi_ParticipantType, @pi_Datetime, @pi_City,@pi_Cluster ,@pi_SubCluster",
                             new SqlParameter("@pi_LoginId", ""),
                               new SqlParameter("@pi_ParticipantType", radiobtn),
-                            new SqlParameter("@pi_Datetime", DateTime.Now.ToShortDateString()),
+                            new SqlParameter("@pi_Datetime", DateTime.Now.ToString("dd-MM-yyyy")),
                                 new SqlParameter("@pi_City", City),
                             new SqlParameter("@pi_Cluster", ""),
                             new SqlParameter("@pi_SubCluster", "")

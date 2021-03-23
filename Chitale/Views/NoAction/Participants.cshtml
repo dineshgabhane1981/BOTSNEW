@@ -11,13 +11,12 @@
                 <div class="col-md-2 col-xl-2">
                     <div class="card mb-3 widget-content" style="background-color:palevioletred;">
                         <div class="widget-content-wrapper text-white" style="text-align:center !important; display:block; ">
-                            <div class="widget-content-left" >
+                            <div class="widget-content-left">
                                 <div class="widget-heading" style="font-size:17px;text-align:center;">
-                                    All <br /> <a href="#" style="color: white !important;"><u>SS: <span id="spnSSAll">15</span></u></a>
-                                    <br /> <a href="#" style="color: white !important;"><u>Dist: <span id="spnDistAll">115</span></u></a>
+                                    All <br /> <a href="#" onclick="GetPerticularTileData(1);" style="color: white !important;"><u>SS: <span id="spnSSAll">15</span></u></a>
+                                    <br /> <a href="#" onclick="GetPerticularTileData(6);" style="color: white !important;"><u>Dist: <span id="spnDistAll">115</span></u></a>
 
                                 </div>
-                                <div class="widget-numbers text-white"><span id="spnPurchaseOrderPoints"></span></div>
                             </div>
                         </div>
                     </div>
@@ -27,10 +26,9 @@
                         <div class="widget-content-wrapper text-white" style="text-align:center !important; display:block; ">
                             <div class="widget-content-left">
                                 <div class="widget-heading" style="font-size:17px;">
-                                    Last 30 days <br /> <a href="#" style="color: white !important;"><u><span id="spnSS30">3</span></u></a>
-                                    <br /> <a href="#" style="color: white !important;"><u><span id="spnDist30">43</span></u></a>
+                                    Last 30 days <br /> <a href="#" onclick="GetPerticularTileData(2);" style="color: white !important;"><u><span id="spnSS30">3</span></u></a>
+                                    <br /> <a href="#" onclick="GetPerticularTileData(7);" style="color: white !important;"><u><span id="spnDist30">43</span></u></a>
                                 </div>
-                                <div class="widget-numbers text-white"><span id="spnSalesOrderPoints"></span></div>
                             </div>
                         </div>
                     </div>
@@ -40,40 +38,206 @@
                         <div class="widget-content-wrapper text-white" style="text-align:center !important; display:block; ">
                             <div class="widget-content-left">
                                 <div class="widget-heading" style="font-size:17px;">
-                                    Last 90 days
+                                    Last 90 days <br /> <a href="#" onclick="GetPerticularTileData(3);" style="color: white !important;"><u><span id="spnSS90">4</span></u></a>
+                                    <br /> <a href="#" onclick="GetPerticularTileData(8);" style="color: white !important;"><u><span id="spnDist90">32</span></u></a>
                                 </div>
-                                <div class="widget-numbers text-white"><span id="spnRedeemedPoints"></span></div>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="col-md-2 col-xl-2">
-                    <div class="card mb-3 widget-content" style="background-color:orchid;">
+                    <div class="card mb-3 widget-content" style="background-color: #92D050;">
                         <div class="widget-content-wrapper text-white" style="text-align:center !important; display:block; ">
                             <div class="widget-content-left">
                                 <div class="widget-heading" style="font-size:17px;">
-                                    Last 180 days
+                                    Last 180 days<br /> <a href="#" onclick="GetPerticularTileData(4);" style="color: white !important;"><u><span id="spnSS180">4</span></u></a>
+                                    <br /> <a href="#" onclick="GetPerticularTileData(9);" style="color: white !important;"><u><span id="spnDist180">32</span></u></a>
                                 </div>
-                                <div class="widget-numbers text-white"><span id="spnRedeemedPoints"></span></div>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="col-md-2 col-xl-2">
-                    <div class="card mb-3 widget-content" style="background-color:orchid;">
+                    <div class="card mb-3 widget-content" style="background-color: coral;">
                         <div class="widget-content-wrapper text-white" style="text-align:center !important; display:block; ">
                             <div class="widget-content-left">
                                 <div class="widget-heading" style="font-size:17px;">
-                                    Last 365 days
+                                    Last 365 days<br /> <a href="#" onclick="GetPerticularTileData(5);" style="color: white !important;"><u><span id="spnSS365">4</span></u></a>
+                                    <br /> <a href="#" onclick="GetPerticularTileData(10);" style="color: white !important;"><u><span id="spnDist365">32</span></u></a>
                                 </div>
-                                <div class="widget-numbers text-white"><span id="spnRedeemedPoints"></span></div>
                             </div>
                         </div>
                     </div>
                 </div>
-
+            </div>
+            <div class="row mb-3" id="dvParticipantData" style="display:none;">
+                <div class="container-fluid pt-3 pl-3 pr-3">
+                    <div class="pt-3 pl-3 pr-3 col-md-12 col-lg-12">
+                        <div class="row" id="divactivityTable">
+                            <div class="table-responsive">
+                                <table class="table" id="activityTable" cellspacing="0" cellpadding="0">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">Type</th>
+                                            <th scope="col">ID</th>
+                                            <th scope="col">Name</th>
+                                            <th scope="col">Cluster</th>
+                                            <th scope="col">Sub Cluster</th>
+                                            <th scope="col">City</th>
+                                            <th scope="col">Last Invoice Date</th>
+                                            <th scope="col">Balance Points</th>
+                                            <th scope="col">Days Since Last Inv</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 </div>
 
+<script>
+    var tableData = [];
+    $(document).ready(function () {
+        GetSummeryDetails();
+    });
+     function GetSummeryDetails() {
+
+        $("#divLoader").show();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("GetParticipantsTilesData")',
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                if (response != null) {
+                    $("#spnSSAll").text(response.SS_All);
+                    $("#spnSS30").text(response.SS_30);
+                    $("#spnSS90").text(response.SS_90);
+                    $("#spnSS180").text(response.SS_180);
+                    $("#spnSS365").text(response.SS_365);
+                    $("#spnDistAll").text(response.Dist_All);
+                    $("#spnDist30").text(response.Dist_30);
+                    $("#spnDist90").text(response.Dist_90);
+                    $("#spnDist180").text(response.Dist_180);
+                    $("#spnDist365").text(response.Dist_365);
+
+                    $("#divLoader").hide();
+                }
+            },
+            failure: function (response) {
+                $("#divLoader").hide();
+            },
+            error: function (response) {
+                $("#divLoader").hide();
+            }
+        });
+    }
+
+
+    function GetPerticularTileData(type) {
+         $("#divLoader").show();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("GetParticipantsData")',
+            data: '{type: ' + JSON.stringify(type) + '}',
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                if (response != null) {                    
+                    tableData.length = 0;
+                    $.map(response, function (item) {
+                        optionItem = {}
+                        optionItem["Type"] = item.Type;
+                        optionItem["Id"] = item.Id;
+                        optionItem["Name"] = item.Name;
+                        optionItem["Cluster"] = item.Cluster;
+                        optionItem["SubCluster"] = item.SubCluster;
+                        optionItem["City"] = item.City;
+                        optionItem["BalancePoints"] = item.BalancePoints;
+                        optionItem["LastInvoiceDate"] = item.LastInvoiceDateStr;
+                        optionItem["DaysSinceLastInvoice"] = item.DaysSinceLastInvoice;
+                        tableData.push(optionItem);
+                    });
+                    DrawTable();
+                    $("#dvParticipantData").show();
+                    $("#divLoader").hide();
+                }
+            },
+            failure: function (response) {
+                $("#divLoader").hide();
+            },
+            error: function (response) {
+                $("#divLoader").hide();
+            }
+        });
+    }
+
+    function DrawTable() {
+        var table1 = $('#activityTable').DataTable();
+        table1.destroy();
+        console.log(tableData)
+        var table = $('#activityTable').DataTable({
+            "data": tableData,
+            "paging": true,
+            "ordering": false,
+            "info": true,
+            "bFilter": true,
+            "pageLength": 10,
+            "pagingType": "simple_numbers",
+            "columns": [
+                { data: "Type" },
+                { data: "Id" },
+                { data: "Name" },
+                { data: "Cluster" },
+                { data: "SubCluster" },
+                { data: "City" },
+                { data: "BalancePoints" },
+                { data: "LastInvoiceDate" },
+                { data: "DaysSinceLastInvoice" }
+            ],
+            aoColumnDefs: [
+                {
+                    bSortable: false,
+                    aTargets: []
+                }
+            ]
+        });
+        $('#activityTable_filter').hide();
+        $('#txtSearch').on('keyup', function () {
+
+            $.fn.dataTable.ext.search.push(function (settings, searchData) {
+                var term = $('#txtSearch').val().toLowerCase()
+                for (var i = 0; i < searchData.length; i++) {
+                    if (searchData[i].toLowerCase().indexOf(term) == 0) {
+                        return true;
+                    }
+                }
+                return false;
+            });
+            var table = $('#activityTable').DataTable();
+            table.draw();
+        });
+
+    }
+
+</script>
+
+<style>
+    table.dataTable thead .sorting_asc {
+        background: url("https://cdn.datatables.net/1.10.0/images/sort_asc.png") no-repeat center left;
+    }
+
+    table.dataTable thead .sorting_desc {
+        background: url("https://cdn.datatables.net/1.10.0/images/sort_desc.png") no-repeat center left;
+    }
+
+    table.dataTable thead .sorting {
+        background: url("https://cdn.datatables.net/1.10.0/images/sort_both.png") no-repeat center left;
+    }
+</style>

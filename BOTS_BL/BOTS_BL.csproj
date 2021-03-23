@@ -147,6 +147,7 @@
     <Compile Include="Models\ChitaleModel\LeaderBoardForMgt.cs" />
     <Compile Include="Models\ChitaleModel\LogDetail.cs" />
     <Compile Include="Models\ChitaleModel\LoseDetail.cs" />
+    <Compile Include="Models\ChitaleModel\NoActionModel.cs" />
     <Compile Include="Models\ChitaleModel\OrderDetail.cs" />
     <Compile Include="Models\ChitaleModel\OrderMaster.cs" />
     <Compile Include="Models\ChitaleModel\OrderPointsConfig.cs" />
