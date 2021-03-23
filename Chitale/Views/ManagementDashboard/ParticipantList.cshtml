@@ -24,22 +24,22 @@
 
                                 @*<i class="fas fa-search"></i>*@
                                 @*<input class="input100" type="text" id="txtSearch" placeholder="Search activity..." />*@
-                                @Html.DropDownList("Cluster", new SelectList(ViewBag.ClusterList, "Value", "Text"), "All", htmlAttributes: new {  @class = "input50", @id = "ddlClusterList" })&nbsp;&nbsp;&nbsp;&nbsp;
+                                @Html.DropDownList("Cluster", new SelectList(ViewBag.ClusterList, "Value", "Text"), "All", htmlAttributes: new { @class = "input50", @id = "ddlClusterList" })&nbsp;&nbsp;&nbsp;&nbsp;
 
                                 @Html.DropDownList("Sub-Cluster", new SelectList(ViewBag.SubclusterList, "Value", "Text"), "All", htmlAttributes: new { @class = "input50", @id = "ddlSubClusterList" })&nbsp;&nbsp;&nbsp;&nbsp;
 
-                                @Html.DropDownList("City", new SelectList(ViewBag.CityList, "Value", "Text"), "All", htmlAttributes: new {  @class = "input50", @id = "ddlCityList" })
-
-
-                                <button class="btn btn-primary login-btn" type="button" id="btnFilter">
-                                    Filter
-                                </button>&nbsp;&nbsp;&nbsp;&nbsp;
-                                <button class="btn btn-primary login-btn" type="button" id="btnback">
-                                    Back
-                                </button>
-                                <button class="btn btn-primary login-btn" type="button" id="btnbackretail" >
-                                    Back
-                                </button>
+                                @Html.DropDownList("City", new SelectList(ViewBag.CityList, "Value", "Text"), "All", htmlAttributes: new { @class = "input50", @id = "ddlCityList" })&nbsp;&nbsp;&nbsp;&nbsp;
+                                <div  class="card-header-tab" style="margin-bottom:20px;">
+                                    <button style="margin-left:17px;margin-top:5px;" class="btn btn-primary" type="button" id="btnFilter">
+                                        Filter
+                                    </button>&nbsp;&nbsp;&nbsp;&nbsp;
+                                    <button style="margin-left:17px;margin-top:5px;" class="btn btn-primary" type="button" id="btnback">
+                                        Back
+                                    </button>
+                                    <button style="margin-left:17px;margin-top:5px;" class="btn btn-primary" type="button" id="btnbackretail">
+                                        Back
+                                    </button>
+                                </div>
 
                                 <div class="col text-right">
                                     <ul class="list-inline progress-list mt-2">
@@ -53,19 +53,7 @@
                                     </ul>
                                 </div>
                             </div>
-                            <div class="row row-grid">
-                                @*<div class="col-md-3">
-                <input type="radio" name="first_item5" id="rbtnStockiest" /> Super Stockiest
-            </div>
-            <div class="col-md-3">
-                <input type="radio" name="first_item5" id="rbtnDistributer" /> Distributor
-
-            </div>
-            <div class="col-md-3">
-                <input type="radio" name="first_item5" id="rbtnRetailer" /> Retailer
-            </div>*@
-
-                            </div>
+                           
                             <div class="row mt-3" id="dvActivityData1">
 
                                 <div class="table-responsive">
@@ -160,6 +148,8 @@
         $('#btnbackretail').hide();    
         $('#dvActivityData2').hide();
         $('#dvActivityData3').hide();
+        $('#btnback').hide();
+        $('#btnbackretail').hide();
         $('#btnback').click(function () {           
             $('#dvActivityData1').show();
             $('#dvActivityData2').hide();
@@ -196,6 +186,8 @@
  
     function GetParticipantList(flag) {
         $("#divLoader").show();
+        $('#btnbackretail').hide();
+        $('#btnback').hide();
         var SummeryData = [];
         if ($("#ddlClusterList").prop('selectedIndex') == 0 && $("#ddlCityList").prop('selectedIndex') == 0 && $("#ddlSubClusterList").prop('selectedIndex') == 0) {
 
