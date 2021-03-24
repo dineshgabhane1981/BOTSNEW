@@ -232,6 +232,7 @@
     <Compile Include="Repository\ChitaleDashboardRepository.cs" />
     <Compile Include="Repository\CustomerRepository.cs" />
     <Compile Include="Repository\DashboardRepository.cs" />
+    <Compile Include="Repository\EmployeeRepository.cs" />
     <Compile Include="Repository\HeatMapsRepository.cs" />
     <Compile Include="Repository\ITOpsRepository.cs" />
     <Compile Include="Repository\KeyIndecatorsRepository.cs" />

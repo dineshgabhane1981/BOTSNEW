@@ -129,6 +129,7 @@
     <Compile Include="App_Start\MenuHelper.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\DashboardController.cs" />
+    <Compile Include="Controllers\EmployeeController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManagementDashboardController.cs" />
     <Compile Include="Controllers\NoActionController.cs" />
@@ -287,6 +288,9 @@
     <Content Include="Views\TgtVsAch\Productwise.cshtml" />
     <Content Include="Views\NoAction\Participants.cshtml" />
     <Content Include="Views\NoAction\Products.cshtml" />
+    <Content Include="Views\Employee\OrderToInvoice.cshtml" />
+    <Content Include="Views\Employee\LeaderBoard.cshtml" />
+    <Content Include="Views\Employee\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
