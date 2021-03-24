@@ -52,13 +52,15 @@
                                 <div class="table-responsive">
                                     <table class="table" id="activityTable" style="width:100%;">
                                         <thead>
-                                            @*<tr>
-                                                <th>current Month</th>
-                                                <th>Last Month</th>
-                                            </tr>*@
+                                            <tr style="text-align:center;">
+                                                <td scope="col" style="border:1px solid black;border-left:0px;" colspan="4"></td>
+                                                <td scope="col" style="border:1px solid black; font-size:16px;" colspan="3"><b>Current Month</b> </td>
+                                                <td scope="col" style="border:1px solid black;border-right:0px; font-size:16px;" colspan="3"><b>Last Month</b> </td>
+                                                <td style="border:1px solid black;border-right:0px;"></td>
+                                            </tr>
                                             <tr>
                                                 @*<th scope="col"></th>*@
-                                                @*<th scope="col">Type</th>*@
+                                                <th scope="col">Type</th>
                                                 <th scope="col">ID</th>
                                                 <th scope="col">Name</th>
                                                 <th scope="col">Balance Points</th>
@@ -184,7 +186,7 @@
                     $.map(response, function (item) {
 
                         optionItem = {}
-                        //optionItem["ParticipantType"] = item.ParticipantType;
+                        optionItem["ParticipantType"] = item.ParticipantType;
                         optionItem["ID"] = item.ID;
                         optionItem["Name"] = item.Name;
                         optionItem["Balancepoints"] = item.NormalPoints;
@@ -226,7 +228,7 @@
             "pageLength": 10,
             "pagingType": "simple_numbers",
             "columns": [
-                //{data:"ParticipantType"},
+                { data:"ParticipantType"},
                 { data: "ID" },
                 { data: "Name" },
                 { data: "Balancepoints" },
