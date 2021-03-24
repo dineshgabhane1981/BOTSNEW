@@ -21,7 +21,8 @@ namespace BOTS_BL.Repository
             {
                 using (var context = new ChitaleDBContext())
                 {
-                    objlist = context.ClusterMasters.ToList();
+                    objlist = context.ClusterMasters.OrderBy(s => s.Cluster).ToList();
+                   
                     foreach (var item in objlist)
                     {
                         clusterItems.Add(new SelectListItem
@@ -47,7 +48,7 @@ namespace BOTS_BL.Repository
             {
                 using (var context = new ChitaleDBContext())
                 {
-                    objsublist = context.SubClusterMasters.ToList();
+                    objsublist = context.SubClusterMasters.OrderBy(s => s.SubCluster).ToList();
                     foreach (var item in objsublist)
                     {
                         subclusterItems.Add(new SelectListItem
@@ -73,7 +74,7 @@ namespace BOTS_BL.Repository
             {
                 using (var context = new ChitaleDBContext())
                 {
-                    objCitylist = context.CityMasters.ToList();
+                    objCitylist = context.CityMasters.OrderBy(s => s.City).ToList();
                     foreach (var item in objCitylist)
                     {
                         CityItems.Add(new SelectListItem

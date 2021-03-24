@@ -66,6 +66,7 @@
 <script>
     var tableData = [];
     $(document).ready(function () {
+
         var today = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
         $("#txtFromDate").datepicker({
             dateFormat: "yy-mm-dd",
@@ -131,7 +132,7 @@
                         optionItem["SubCluster"] = item.SubCluster;
                         optionItem["City"] = item.City;
                         optionItem["InvDate"] = item.StrDate;
-                        optionItem["InvNumber"] = item.InvNumber;
+                        optionItem["InvNumber"] = item.InvNumber;                       
                         optionItem["InvAmount"] = item.InvAmount;
                         optionItem["OrderAmount"] = item.OrderAmount;
                         optionItem["Variance"] = item.Variance;
@@ -175,7 +176,9 @@
                 { data: "InvNumber" },
                 { data: "InvAmount" },
                 { data: "OrderAmount" },
-                { data: "Variance" }               
+                {
+                    data: "Variance"
+                }               
 
             ],
             aoColumnDefs: [
@@ -183,8 +186,10 @@
                     bSortable: false,
                     aTargets: []
                 }
-            ]
+            ],
+            
         });
+       
         $('#activityTable_filter').hide();
         $('#txtSearch').on('keyup', function () {
 
@@ -200,6 +205,8 @@
             var table = $('#activityTable').DataTable();
             table.draw();
         });
+
+        
 
     }
 </script>
