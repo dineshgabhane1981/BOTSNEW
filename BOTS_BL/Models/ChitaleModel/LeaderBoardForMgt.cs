@@ -8,7 +8,7 @@ namespace BOTS_BL.Models.ChitaleModel
 {
    public class LeaderBoardForMgt
     {
-        public string ParticipantType { get; set; }
+        //public string ParticipantType { get; set; }
         public string ID { get; set; }
         public string Name { get; set; }
         public string NormalPoints { get; set; }

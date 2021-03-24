@@ -59,8 +59,6 @@
                                                 <td style="border:1px solid black;border-right:0px;"></td>
                                             </tr>
                                             <tr>
-                                                @*<th scope="col"></th>*@
-                                                <th scope="col">Type</th>
                                                 <th scope="col">ID</th>
                                                 <th scope="col">Name</th>
                                                 <th scope="col">Balance Points</th>
@@ -186,7 +184,7 @@
                     $.map(response, function (item) {
 
                         optionItem = {}
-                        optionItem["ParticipantType"] = item.ParticipantType;
+                        //optionItem["ParticipantType"] = item.ParticipantType;
                         optionItem["ID"] = item.ID;
                         optionItem["Name"] = item.Name;
                         optionItem["Balancepoints"] = item.NormalPoints;
@@ -228,7 +226,7 @@
             "pageLength": 10,
             "pagingType": "simple_numbers",
             "columns": [
-                { data:"ParticipantType"},
+                //{ data:"ParticipantType"},
                 { data: "ID" },
                 { data: "Name" },
                 { data: "Balancepoints" },
