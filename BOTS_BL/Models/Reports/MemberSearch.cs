@@ -30,11 +30,11 @@ namespace BOTS_BL.Models
     {
         public string TxnOutlet { get; set; }
         public string InvoiceNo { get; set; }
-        public decimal InvoiceAmt { get; set; }
+        public decimal? InvoiceAmt { get; set; }
         public string TxnType { get; set; }
-        public decimal PointsEarned { get; set; }
-        public decimal PointsBurned { get; set; }
-        public decimal PointsBalance { get; set; }
+        public decimal? PointsEarned { get; set; }
+        public decimal? PointsBurned { get; set; }
+        public decimal? PointsBalance { get; set; }
         public string TxnDatetime { get; set; }
         public string TxnUpdateDate { get; set; }
     }

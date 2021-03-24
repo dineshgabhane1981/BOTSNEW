@@ -9,12 +9,14 @@ using ClosedXML.Excel;
 using System.IO;
 using System.Data;
 using System.ComponentModel;
+using BOTS_BL;
 
 namespace WebApp.Controllers
 {
     public class ReportsController : Controller
     {
         ReportsRepository RR = new ReportsRepository();
+        Exceptions newexception = new Exceptions();
         // GET: Reports
         public ActionResult Index()
         {
@@ -149,15 +151,22 @@ namespace WebApp.Controllers
         {
             CustomerRepository objCustRepo = new CustomerRepository();
             MemberSearch objMemberSearch = new MemberSearch();
-            if (!string.IsNullOrEmpty(GroupId) && GroupId != "undefined")
+            try
             {
-                string connStr = objCustRepo.GetCustomerConnString(GroupId);
-                objMemberSearch = RR.GetMeamberSearchData(GroupId, searchData, connStr);
+                if (!string.IsNullOrEmpty(GroupId) && GroupId != "undefined")
+                {
+                    string connStr = objCustRepo.GetCustomerConnString(GroupId);
+                    objMemberSearch = RR.GetMeamberSearchData(GroupId, searchData, connStr);
+                }
+                else
+                {
+                    var userDetails = (CustomerLoginDetail)Session["UserSession"];
+                    objMemberSearch = RR.GetMeamberSearchData(userDetails.GroupId, searchData, userDetails.connectionString);
+                }
             }
-            else
+            catch(Exception ex)
             {
-                var userDetails = (CustomerLoginDetail)Session["UserSession"];
-                objMemberSearch = RR.GetMeamberSearchData(userDetails.GroupId, searchData, userDetails.connectionString);
+                newexception.AddException(ex);
             }
             return PartialView("_MemberSearch", objMemberSearch);
         }

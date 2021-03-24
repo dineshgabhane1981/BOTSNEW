@@ -131,17 +131,46 @@
 
                                     foreach (var item in Model.lstMemberSearchTxn)
                                     {
-                                        <tr>
-                                            <td>@item.TxnOutlet</td>
-                                            <td>@item.InvoiceNo</td>
-                                            <td>@item.InvoiceAmt</td>
-                                            <td>@item.TxnType</td>
-                                            <td>@item.PointsEarned</td>
-                                            <td>@item.PointsBurned</td>
-                                            <td>@item.PointsBalance</td>
-                                            <td>@item.TxnDatetime</td>
-                                            <td>@item.TxnUpdateDate</td>
-                                        </tr>
+                            <tr>
+                                <td>@item.TxnOutlet</td>
+                                <td>@item.InvoiceNo</td>
+                                @if (item.InvoiceAmt.HasValue)
+                                {
+                                    <td>@item.InvoiceAmt</td>
+                                }
+                                else
+                                {
+                                    <td>0.00</td>
+                                }
+
+                                <td>@item.TxnType</td>
+                                @if (item.PointsEarned.HasValue)
+                                {
+                                    <td>@item.PointsEarned</td>
+                                }
+                                else
+                                {
+                                    <td>0.00</td>
+                                }
+                                @if (item.PointsBurned.HasValue)
+                                {
+                                    <td>@item.PointsBurned</td>
+                                }
+                                else
+                                {
+                                    <td>0.00</td>
+                                }
+                                @if (item.PointsBalance.HasValue)
+                                {
+                                    <td>@item.PointsBalance</td>
+                                }
+                                else
+                                {
+                                    <td>0.00</td>
+                                }                                
+                                <td>@item.TxnDatetime</td>
+                                <td>@item.TxnUpdateDate</td>
+                            </tr>
                                     }
                                 }
                                 else

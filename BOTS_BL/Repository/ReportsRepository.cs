@@ -176,7 +176,7 @@ namespace BOTS_BL.Repository
 
 
         public MemberSearch GetMeamberSearchData(string GroupId,string searchData, string connstr)
-        {
+        {            
             MemberSearch memberSearch = new MemberSearch();
             try
             {
@@ -197,7 +197,7 @@ namespace BOTS_BL.Repository
             }
             catch (Exception ex)
             {
-                throw ex;
+                newexception.AddException(ex);
             }
             return memberSearch;
         }
