@@ -46,6 +46,7 @@ namespace BOTS_BL.Models.ChitaleModel
         public virtual DbSet<RedemptionValue> RedemptionValues { get; set; }
         public virtual DbSet<OrderVsRavanaDay> OrderVsRavanaDays { get; set; }
         public virtual DbSet<InvoiceToOrder> InvoiceToOrders { get; set; }
+        public virtual DbSet<tblErrorLog> tblErrorLogs { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
