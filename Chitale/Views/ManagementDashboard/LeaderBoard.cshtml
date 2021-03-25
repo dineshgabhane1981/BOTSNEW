@@ -58,10 +58,10 @@
                                                 <td scope="col" style="border:1px solid black;border-right:0px; font-size:16px;" colspan="3"><b>Last Month</b> </td>
                                                 <td style="border:1px solid black;border-right:0px;"></td>
                                             </tr>
-                                            <tr>
-                                                <th scope="col">ID</th>
+                                            <tr  >
+                                                <th scope="col" >ID</th>
                                                 <th scope="col">Name</th>
-                                                <th scope="col">Balance Points</th>
+                                                <th scope="col" >Balance Points</th>
                                                 <th scope="col">Overall Rank</th>
                                                 <th scope="col">Cluster Rank</th>
                                                 <th scope="col">Star Rating</th>
@@ -242,6 +242,8 @@
             ],
             aoColumnDefs: [
                 {
+                    className: 'dt-body-center',
+                    //className: 'dt[-head]-center',
                     bSortable: false,
                     aTargets: []
                 }
