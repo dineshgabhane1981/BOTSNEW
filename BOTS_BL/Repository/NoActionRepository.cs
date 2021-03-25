@@ -11,6 +11,7 @@ namespace BOTS_BL.Repository
 {
     public class NoActionRepository
     {
+        ChitaleException newexception = new ChitaleException();
         public NoActionModelTile GetNoActionParticipantsTilesData()
         {
             NoActionModelTile objData = new NoActionModelTile();
@@ -25,7 +26,7 @@ namespace BOTS_BL.Repository
                 }
                 catch (Exception ex)
                 {
-
+                    newexception.AddException(ex);
                 }
             }
             return objData;
@@ -52,7 +53,7 @@ namespace BOTS_BL.Repository
                 }
                 catch (Exception ex)
                 {
-
+                    newexception.AddException(ex);
                 }
             }
             return objData;

@@ -16,7 +16,7 @@ namespace Chitale.Controllers
     {
         ManagementDashboardRepository MDR = new ManagementDashboardRepository();
         TgtVsAchRepository TAR = new TgtVsAchRepository();
-        Exceptions newexception = new Exceptions();
+        ChitaleException newexception = new ChitaleException();
         // GET: TgtVsAch
         public ActionResult Index()
         {

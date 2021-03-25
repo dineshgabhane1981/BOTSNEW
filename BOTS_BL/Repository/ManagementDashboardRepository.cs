@@ -11,7 +11,7 @@ namespace BOTS_BL.Repository
 {
     public class ManagementDashboardRepository
     {
-        Exceptions newexception = new Exceptions();
+        ChitaleException newexception = new ChitaleException();
 
         public List<SelectListItem> GetClusterList()
         {

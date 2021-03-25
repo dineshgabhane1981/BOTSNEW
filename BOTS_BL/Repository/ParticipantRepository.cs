@@ -12,7 +12,7 @@ namespace BOTS_BL.Repository
 {
     public class ParticipantRepository
     {
-        Exceptions newexception = new Exceptions();
+        ChitaleException newexception = new ChitaleException();
         public List<ParticipantList> GetParticipantList(string CustomerId, string CustomerType)
         {
             
@@ -30,7 +30,7 @@ namespace BOTS_BL.Repository
             }
             catch (Exception ex)
             {
-                throw ex;
+                newexception.AddException(ex);
             }
 
             return lstparticipantLists;

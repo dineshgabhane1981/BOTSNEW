@@ -13,7 +13,7 @@ namespace Chitale.Controllers
     public class DashboardController : Controller
     {
         ChitaleDashboardRepository CDR = new ChitaleDashboardRepository();
-        Exceptions newexception = new Exceptions();
+        ChitaleException newexception = new ChitaleException();
         // GET: Dashboard
         public ActionResult Index()
         {

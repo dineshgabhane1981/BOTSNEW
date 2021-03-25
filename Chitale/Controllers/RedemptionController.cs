@@ -16,7 +16,7 @@ namespace Chitale.Controllers
     public class RedemptionController : Controller
     {
         RedemptionRepository RR = new RedemptionRepository();
-        Exceptions newexception = new Exceptions();
+        ChitaleException newexception = new ChitaleException();
         // GET: Redemption
         public ActionResult Index()
         {
