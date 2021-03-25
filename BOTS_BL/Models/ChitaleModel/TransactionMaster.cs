@@ -76,5 +76,11 @@ namespace BOTS_BL.Models.ChitaleModel
 
         [StringLength(100)]
         public string SubType { get; set; }
+
+        [Column(TypeName = "numeric")]
+        public decimal? AchPercentage { get; set; }
+
+        [Column(TypeName = "numeric")]
+        public decimal? Variance { get; set; }
     }
 }

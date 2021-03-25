@@ -56,5 +56,11 @@ namespace BOTS_BL.Models.ChitaleModel
 
         [StringLength(50)]
         public string ProductCode { get; set; }
+
+        [Column(TypeName = "numeric")]
+        public decimal? VolumePoints { get; set; }
+
+        [Column(TypeName = "numeric")]
+        public decimal? ValuePoints { get; set; }
     }
 }

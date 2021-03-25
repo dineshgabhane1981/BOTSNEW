@@ -145,6 +145,16 @@ namespace BOTS_BL.Repository
             return objRank;
         }
 
-        
+        public void AddException(tblErrorLog objerrorlog)
+        {
+            using (var context = new ChitaleDBContext())
+            {
+                context.tblErrorLogs.Add(objerrorlog);
+                context.SaveChanges();
+
+            }
+
+
+        }
     }
 }
