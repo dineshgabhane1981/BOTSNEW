@@ -29,12 +29,12 @@ namespace Chitale.Controllers
             return View(bojList);
         }
 
-        public ActionResult GetInvoiceOrders(string id)
+        public ActionResult GetInvoiceOrders(string id,string CustomerId)
         {
             List<PointLedgerModel> bojList = new List<PointLedgerModel>();
             try
             {
-                bojList = PLR.GetInvoiceData(id);
+                bojList = PLR.GetInvoiceData(id, CustomerId);
             }
             catch (Exception ex)
             {

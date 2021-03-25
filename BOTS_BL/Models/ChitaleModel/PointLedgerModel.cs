@@ -8,6 +8,7 @@ namespace BOTS_BL.Models.ChitaleModel
 {
     public class PointLedgerModel
     {
+        public string CustomerId { get; set; }
         public string TxnType { get; set; }
         public string SubType { get; set; }
         public string RefNo { get; set; }
@@ -24,6 +25,10 @@ namespace BOTS_BL.Models.ChitaleModel
         public int? DaysDiff { get; set; }
         public decimal? NetEarnPoints { get; set; }
         public string NetEarnPointsStr { get; set; }
+        public string AchievedAmt { get; set; }
+        public string Variance { get; set; }
+        public string AchPercentage { get; set; }
+
 
 
 

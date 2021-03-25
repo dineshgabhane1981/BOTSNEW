@@ -15,7 +15,7 @@ namespace Chitale.Controllers
     public class ManagementDashboardController : Controller
     {
         ManagementDashboardRepository MDR = new ManagementDashboardRepository();
-        Exceptions newexception = new Exceptions();
+        ChitaleException newexception = new ChitaleException();
         // GET: ManagementDashboard
         public ActionResult Index()
         {

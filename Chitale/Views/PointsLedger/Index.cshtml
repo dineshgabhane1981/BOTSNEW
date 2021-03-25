@@ -59,7 +59,7 @@
                                                         var imgId = "imgExpand" + item.RefNo;
                                                         <tr style="text-align:center;">
                                                             <td style="text-align:center;">
-                                                                <img id="@imgId" src="~/Content/assets/images/details_open.png" style="cursor:pointer;" onclick="ShowActivities('@item.RefNo');" />
+                                                                <img id="@imgId" src="~/Content/assets/images/details_open.png" style="cursor:pointer;" onclick="ShowActivities('@item.RefNo', @item.CustomerId, '@item.TxnType');" />
                                                             </td>
                                                             <td>@item.TxnType</td>
                                                             <td>@item.SubType</td>
@@ -164,7 +164,7 @@
         //$(".first.paginate_button, .last.paginate_button").hide();
     });
 
-    function ShowActivities(id) {
+    function ShowActivities(id, CustomerId, type) {
 
         if ($("#dvActivities" + id).is(":visible")) {
             $("#dvActivities" + id).hide(1000);
@@ -177,12 +177,12 @@
             $.ajax({
                 type: "POST",
                  url: '@Url.Action("GetInvoiceOrders")',
-                data: '{id: ' + JSON.stringify(id) + '}',
+                data: '{id: ' + JSON.stringify(id) + ',CustomerId: ' + JSON.stringify(CustomerId) + '}',
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
                 success: function (response) {
                     console.log(response);
-                    BindActivities(id, response);
+                    BindActivities(id, response, type);
                     $("#divLoader").hide();
                 },
                 failure: function (response) {
@@ -191,38 +191,70 @@
             });
         }
     }
-    function BindActivities(id,data) {
+    function BindActivities(id, data, type) {
         console.log(data);
         var htmlStr = "<table border=\"2\" style=\"background-color:gray;margin-left: 135px;width: 85%;\" class=\"table\">";
-        htmlStr += "<tr style=\"text-align: center;\">"
-
-        htmlStr += "<th scope=\"col\">Sub-Type</th>";
-        htmlStr += "<th scope=\"col\">Ref No.</th>";
-        htmlStr += "<th scope=\"col\">Amt (Rs)</th>";
-        htmlStr += "<th scope=\"col\">Base Pts</th>";
-        htmlStr += "<th scope=\"col\">Add-on Pts</th>";
-        htmlStr += "<th scope=\"col\">Lost Opp Pts</th>";
-        htmlStr += "<th scope=\"col\">Order Date</th>";
-        htmlStr += "<th scope=\"col\">Ravana Date</th>";
-        htmlStr += "<th scope=\"col\">Days Diff</th>";
-        //htmlStr += "<th scope=\"col\">Net Earn Points</th>";
-        htmlStr += "</tr>";
-        $.map(data, function (item) {
+        if (type == "Purchase") {
             htmlStr += "<tr style=\"text-align: center;\">"
-            htmlStr += "<td>" + item.SubType + "</td>";
-            htmlStr += "<td>" + item.RefNo + "</td>";
-            htmlStr += "<td>" + item.AmountStr + "</td>";
-            htmlStr += "<td>" + item.BasePointsStr + "</td>";
-            htmlStr += "<td>" + item.AddOnPointsStr + "</td>";
-            htmlStr += "<td>" + item.LostOppPointsStr + "</td>";
-            htmlStr += "<td>" + item.OrderDate + "</td>";
-            htmlStr += "<td>" + item.RavanaDate + "</td>";
-            htmlStr += "<td>" + item.DaysDiff + "</td>";
-            //htmlStr += "<td>" + item.NetEarnPoints + "</td>";
-            htmlStr +="</tr>"
-         });
 
+            htmlStr += "<th scope=\"col\">Sub-Type</th>";
+            htmlStr += "<th scope=\"col\">Ref No.</th>";
+            htmlStr += "<th scope=\"col\">Amt (Rs)</th>";
+            htmlStr += "<th scope=\"col\">Base Pts</th>";
+            htmlStr += "<th scope=\"col\">Add-on Pts</th>";
+            htmlStr += "<th scope=\"col\">Lost Opp Pts</th>";
+            htmlStr += "<th scope=\"col\">Order Date</th>";
+            htmlStr += "<th scope=\"col\">Ravana Date</th>";
+            htmlStr += "<th scope=\"col\">Days Diff</th>";
+            //htmlStr += "<th scope=\"col\">Net Earn Points</th>";
+            htmlStr += "</tr>";
+            $.map(data, function (item) {
+                htmlStr += "<tr style=\"text-align: center;\">"
+                htmlStr += "<td>" + item.SubType + "</td>";
+                htmlStr += "<td>" + item.RefNo + "</td>";
+                htmlStr += "<td>" + item.AmountStr + "</td>";
+                htmlStr += "<td>" + item.BasePointsStr + "</td>";
+                htmlStr += "<td>" + item.AddOnPointsStr + "</td>";
+                htmlStr += "<td>" + item.LostOppPointsStr + "</td>";
+                htmlStr += "<td>" + item.OrderDate + "</td>";
+                htmlStr += "<td>" + item.RavanaDate + "</td>";
+                htmlStr += "<td>" + item.DaysDiff + "</td>";
+                //htmlStr += "<td>" + item.NetEarnPoints + "</td>";
+                htmlStr += "</tr>"
+            });
+        }
+        if (type == "Tgt Vs Ach") {
+            htmlStr += "<tr style=\"text-align: center;\">"
+
+            htmlStr += "<th scope=\"col\">Sub-Type</th>";
+            htmlStr += "<th scope=\"col\">Ref No.</th>";
+            htmlStr += "<th scope=\"col\">Date</th>";
+            htmlStr += "<th scope=\"col\">Focus</th>";
+            htmlStr += "<th scope=\"col\">Ach</th>";
+            htmlStr += "<th scope=\"col\">Var</th>";
+            htmlStr += "<th scope=\"col\">%Ach</th>";
+            htmlStr += "<th scope=\"col\">Add-On</th>";
+            htmlStr += "<th scope=\"col\">Lost Opp</th>";            
+            htmlStr += "</tr>";
+
+            $.map(data, function (item) {
+                htmlStr += "<tr style=\"text-align: center;\">"
+                htmlStr += "<td>" + item.SubType + "</td>";
+                htmlStr += "<td>" + item.RefNo + "</td>";
+                htmlStr += "<td>" + item.OrderDate + "</td>";
+                htmlStr += "<td>" + item.AmountStr + "</td>";
+                htmlStr += "<td>" + item.AchievedAmt + "</td>";
+                htmlStr += "<td>" + item.Variance + "</td>";
+                htmlStr += "<td>" + item.AchPercentage + "</td>";
+                htmlStr += "<td>" + item.AddOnPointsStr + "</td>";
+                htmlStr += "<td>" + item.LostOppPointsStr + "</td>";                
+                htmlStr += "</tr>"
+            });
+        }
         htmlStr += "</table>";
+
+
+
         $("#dvActivities" + id).html(htmlStr);
 
         $('tr[id^="trActivities"]').hide(1000);
