@@ -127,7 +127,11 @@ namespace Chitale.Controllers
 
         public ActionResult LeaderBoard()
         {
-            return View();
+            ManagementViewModel objModel = new ManagementViewModel();
+            objModel.ClusterList = MDR.GetClusterList();
+            objModel.SubClusterList = MDR.GetSubClusterList();
+            objModel.CityList = MDR.GetCityList();
+            return View(objModel);
         }
         public ActionResult OrderToInvoice()
         {
@@ -137,11 +141,9 @@ namespace Chitale.Controllers
             objModel.CityList = MDR.GetCityList();
             return View(objModel);
         }
-        public JsonResult GetInvoiceToOrderData(string jsonData, string CustomerId, string customerType)
+        public JsonResult GetInvoiceToOrderData(string jsonData, string CustomerType)
         {
-            var UserSession = (CustomerDetail)Session["ChitaleUser"];
-            CustomerId = UserSession.CustomerId;
-            customerType = UserSession.CustomerType;
+            var UserSession = (CustomerDetail)Session["ChitaleUser"];           
             List<InvoiceToOrder> objOrderData = new List<InvoiceToOrder>();
             JavaScriptSerializer json_serializer = new JavaScriptSerializer();
             json_serializer.MaxJsonLength = int.MaxValue;
@@ -155,7 +157,7 @@ namespace Chitale.Controllers
                 string FromDate = Convert.ToString(item["FromDate"]);
                 string Todate = Convert.ToString(item["Todate"]);
                 string type = Convert.ToString(item["CustomerType"]);
-                objOrderData = ER.GetInvoiceToOrderData(Cluster, SubCluster, City, type, FromDate, Todate, CustomerId, customerType);
+                objOrderData = ER.GetInvoiceToOrderData(Cluster, SubCluster, City, type, FromDate, Todate, UserSession.CustomerId, UserSession.CustomerType);
 
             }
             return new JsonResult() { Data = objOrderData, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
