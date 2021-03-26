@@ -151,7 +151,7 @@ namespace BOTS_BL.Repository
 
             return objData;
         }
-        public List<ParticipantListForManagement> GetParticipantListForEmp(int Cluster, int SubCluster, int City, string CustomerId, string CustomerType)
+        public List<ParticipantListForManagement> GetParticipantListForEmp(string Cluster, string SubCluster, string City, string CustomerId, string CustomerType)
         {
 
             List<ParticipantListForManagement> lstparticipantListsformgt = new List<ParticipantListForManagement>();
@@ -162,7 +162,7 @@ namespace BOTS_BL.Repository
                 {
                     CustomerType = "SalesExecutive";
                 }
-                else if(CustomerType == "ASM (Sales Manager)")
+                else if (CustomerType == "ASM (Sales Manager)")
                 {
                     CustomerType = "AreaSalesManager";
                 }
@@ -187,16 +187,43 @@ namespace BOTS_BL.Repository
                     CustomerType = "NationalHead";
                 }
                 using (var context = new ChitaleDBContext())
-                    {
-                        lstparticipantListsformgt = context.Database.SqlQuery<ParticipantListForManagement>("sp_KYBLoad_Emp @pi_CustomerId, @pi_Datetime, @pi_CustomerType",
-                            new SqlParameter("@pi_CustomerId", CustomerId),
-                            new SqlParameter("@pi_Datetime", DateTime.Now.ToString("dd-MM-yyyy")),
-                              new SqlParameter("@pi_CustomerType", CustomerType)
+                {
+                    lstparticipantListsformgt = context.Database.SqlQuery<ParticipantListForManagement>("sp_KYBLoad_Emp @pi_CustomerId, @pi_Datetime, @pi_CustomerType",
+                    new SqlParameter("@pi_CustomerId", CustomerId),
+                    new SqlParameter("@pi_Datetime", DateTime.Now.ToString("dd-MM-yyyy")),
+                      new SqlParameter("@pi_CustomerType", CustomerType)
 
-                            ).ToList<ParticipantListForManagement>();
+                    ).ToList<ParticipantListForManagement>();
+                    if (Cluster != "0")
+                    {
+                        var lstResult = (from s in context.CustomerDetails.Select(x => new { x.CustomerId, x.Cluster }).AsEnumerable()
+                                         join sa in lstparticipantListsformgt on s.CustomerId equals sa.Id
+                                         where s.Cluster == Cluster
+                                         select sa).ToList();
+
+                        lstparticipantListsformgt = lstResult;
                     }
-                            
-                
+                    if (SubCluster != "0")
+                    {
+                        var lstResult = (from s in context.CustomerDetails.Select(x => new { x.CustomerId, x.SubCluster }).AsEnumerable()
+                                         join sa in lstparticipantListsformgt on s.CustomerId equals sa.Id
+                                         where s.SubCluster == SubCluster
+                                         select sa).ToList();
+
+                        lstparticipantListsformgt = lstResult;
+                    }
+                    if (City != "0")
+                    {
+                        var lstResult = (from s in context.CustomerDetails.Select(x => new { x.CustomerId, x.City }).AsEnumerable()
+                                         join sa in lstparticipantListsformgt on s.CustomerId equals sa.Id
+                                         where s.City == City
+                                         select sa).ToList();
+
+                        lstparticipantListsformgt = lstResult;
+                    }
+                }
+
+
             }
             catch (Exception ex)
             {

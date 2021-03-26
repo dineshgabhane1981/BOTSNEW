@@ -301,20 +301,27 @@ namespace Chitale.Controllers
         public JsonResult GetOrdertoRavanaDaysData(string jsonData)
         {
             List<OrderVsRavanaDay> objOrderData = new List<OrderVsRavanaDay>();
-            JavaScriptSerializer json_serializer = new JavaScriptSerializer();
-            json_serializer.MaxJsonLength = int.MaxValue;
-            object[] objData = (object[])json_serializer.DeserializeObject(jsonData);
+            try
+            {
+                JavaScriptSerializer json_serializer = new JavaScriptSerializer();
+                json_serializer.MaxJsonLength = int.MaxValue;
+                object[] objData = (object[])json_serializer.DeserializeObject(jsonData);
 
-            foreach (Dictionary<string, object> item in objData)
-            {                
-                string Cluster = Convert.ToString(item["Cluster"]);
-                string SubCluster = Convert.ToString(item["SubCluster"]);
-                string City = Convert.ToString(item["City"]);
-                string FromDate = Convert.ToString(item["FromDate"]);
-                string Todate = Convert.ToString(item["Todate"]);
-                string type = Convert.ToString(item["CustomerType"]);
-                objOrderData = MDR.GetOrderVsRavanaDayData(Cluster, SubCluster, City, type, FromDate, Todate);
+                foreach (Dictionary<string, object> item in objData)
+                {
+                    string Cluster = Convert.ToString(item["Cluster"]);
+                    string SubCluster = Convert.ToString(item["SubCluster"]);
+                    string City = Convert.ToString(item["City"]);
+                    string FromDate = Convert.ToString(item["FromDate"]);
+                    string Todate = Convert.ToString(item["Todate"]);
+                    string type = Convert.ToString(item["CustomerType"]);
+                    objOrderData = MDR.GetOrderVsRavanaDayData(Cluster, SubCluster, City, type, FromDate, Todate);
 
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex);
             }
             return new JsonResult() { Data = objOrderData, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }

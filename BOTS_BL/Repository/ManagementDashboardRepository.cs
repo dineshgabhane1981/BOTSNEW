@@ -492,7 +492,7 @@ namespace BOTS_BL.Repository
                 }
                 catch (Exception ex)
                 {
-
+                    newexception.AddException(ex);
                 }
             }
 

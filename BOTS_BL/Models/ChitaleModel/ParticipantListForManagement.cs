@@ -19,6 +19,7 @@ namespace BOTS_BL.Models.ChitaleModel
         public string LostOppPoints { get; set; }
         public string RedeemedPoints { get; set; }
         public string BalancedPoints { get; set; }
+        public string BalancePoints { get; set; }
 
     }
 }

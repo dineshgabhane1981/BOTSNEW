@@ -29,7 +29,7 @@ namespace BOTS_BL.Models.ChitaleModel
         [StringLength(100)]
         public string City { get; set; }
 
-        public int? OrderCount { get; set; }
+        public long? OrderCount { get; set; }
 
         [Column(TypeName = "numeric")]
         public decimal? AvgDiffInDays { get; set; }
@@ -48,5 +48,13 @@ namespace BOTS_BL.Models.ChitaleModel
 
         [Column(TypeName = "date")]
         public DateTime? Date { get; set; }
+
+        public long? OrderNo1 { get; set; }
+
+        public long? OrderNo2 { get; set; }
+
+        public long? OrderNo3 { get; set; }
+
+        public long? OrderNo4 { get; set; }
     }
 }

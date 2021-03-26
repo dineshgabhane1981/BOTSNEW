@@ -207,7 +207,7 @@
             item = {}
             item["Flag"] = flag;
             item["SubCluster"] = 0;
-            item["Cluster"] = $('#ddlClusterList :selected').val();
+            item["Cluster"] = $('#ddlClusterList :selected').text();
             item["City"] = 0;
             SummeryData.push(item);
 
@@ -217,14 +217,14 @@
             item["Flag"] = flag;
             item["SubCluster"] = 0;
             item["Cluster"] = 0;
-            item["City"] = $('#ddlCityList :selected').val();
+            item["City"] = $('#ddlCityList :selected').text();
             SummeryData.push(item);
 
         }
         else if ($("#ddlSubClusterList").prop('selectedIndex') !== 0) {
             item = {}
             item["Flag"] = flag;
-            item["SubCluster"] = $('#ddlSubClusterList :selected').val();
+            item["SubCluster"] = $('#ddlSubClusterList :selected').text();
             item["Cluster"] = 0;
             item["City"] = 0;
             SummeryData.push(item);
@@ -254,7 +254,7 @@
                         optionItem["AddOnPoints"] = item.AddOnPoints;
                         optionItem["LostOppPoints"] = item.LostOppPoints;
                         optionItem["RedeemedPoints"] = item.RedeemedPoints;
-                        optionItem["BalancedPoints"] = item.BalancedPoints;
+                        optionItem["BalancedPoints"] = item.BalancePoints;
                         tableData.push(optionItem);
                     });
                     DrawTable();

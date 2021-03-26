@@ -135,9 +135,9 @@ namespace Chitale.Controllers
             foreach (Dictionary<string, object> item in objData)
             {
                 string Flag = Convert.ToString(item["Flag"]);
-                int Cluster = Convert.ToInt32(item["Cluster"]);
-                int SubCluster = Convert.ToInt32(item["SubCluster"]);
-                int City = Convert.ToInt32(item["City"]);
+                string Cluster = Convert.ToString(item["Cluster"]);
+                string SubCluster = Convert.ToString(item["SubCluster"]);
+                string City = Convert.ToString(item["City"]);
                 string CustomerId = UserSession.CustomerId;
                 string CustomerType = UserSession.CustomerType;
                 listformgt = ER.GetParticipantListForEmp(Cluster, SubCluster, City,CustomerId,CustomerType);
