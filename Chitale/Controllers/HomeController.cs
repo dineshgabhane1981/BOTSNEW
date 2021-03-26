@@ -29,8 +29,9 @@ namespace Chitale.Controllers
                     Session["ChitaleUser"] = objCust;
                     return RedirectToAction("Index", "ManagementDashboard");
                 }
-
-                if (CustomerType == "Sales Executive")
+                
+                if (CustomerType == "Sales Executive" || CustomerType == "ASM (Sales Manager)" || CustomerType == "Sales Officer" || CustomerType == "Sales Representative" || CustomerType == "National Head"
+                    || CustomerType == "Zonal Head" || CustomerType == "State Head")
                 {
                     objCust.CustomerCategory = "Employee";
                     Session["ChitaleUser"] = objCust;

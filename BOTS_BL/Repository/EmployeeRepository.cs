@@ -157,10 +157,36 @@ namespace BOTS_BL.Repository
             List<ParticipantListForManagement> lstparticipantListsformgt = new List<ParticipantListForManagement>();
             try
             {
+
                 if (CustomerType == "Sales Executive")
                 {
                     CustomerType = "SalesExecutive";
-                    using (var context = new ChitaleDBContext())
+                }
+                else if(CustomerType == "ASM (Sales Manager)")
+                {
+                    CustomerType = "AreaSalesManager";
+                }
+                else if (CustomerType == "Sales Officer")
+                {
+                    CustomerType = "SalesOfficer";
+                }
+                else if (CustomerType == "Sales Representative")
+                {
+                    CustomerType = "SalesRepresentative";
+                }
+                else if (CustomerType == "State Head")
+                {
+                    CustomerType = "StateHead";
+                }
+                else if (CustomerType == "Zonal Head")
+                {
+                    CustomerType = "ZonalHead";
+                }
+                else if (CustomerType == "National Head")
+                {
+                    CustomerType = "NationalHead";
+                }
+                using (var context = new ChitaleDBContext())
                     {
                         lstparticipantListsformgt = context.Database.SqlQuery<ParticipantListForManagement>("sp_KYBLoad_Emp @pi_CustomerId, @pi_Datetime, @pi_CustomerType",
                             new SqlParameter("@pi_CustomerId", CustomerId),
@@ -169,7 +195,7 @@ namespace BOTS_BL.Repository
 
                             ).ToList<ParticipantListForManagement>();
                     }
-                }             
+                            
                 
             }
             catch (Exception ex)
@@ -186,7 +212,34 @@ namespace BOTS_BL.Repository
             List<ParticipantListForManagement> lstparticipantListsformgt = new List<ParticipantListForManagement>();
             try
             {
-                CustomerType = "SalesExecutive";
+                if (CustomerType == "Sales Executive")
+                {
+                    CustomerType = "SalesExecutive";
+                }
+                else if (CustomerType == "ASM (Sales Manager)")
+                {
+                    CustomerType = "AreaSalesManager";
+                }
+                else if (CustomerType == "Sales Officer")
+                {
+                    CustomerType = "SalesOfficer";
+                }
+                else if (CustomerType == "Sales Representative")
+                {
+                    CustomerType = "SalesRepresentative";
+                }
+                else if (CustomerType == "State Head")
+                {
+                    CustomerType = "StateHead";
+                }
+                else if (CustomerType == "Zonal Head")
+                {
+                    CustomerType = "ZonalHead";
+                }
+                else if (CustomerType == "National Head")
+                {
+                    CustomerType = "NationalHead";
+                }
                 using (var context = new ChitaleDBContext())
                 {
                     lstparticipantListsformgt = context.Database.SqlQuery<ParticipantListForManagement>("sp_KYBParticipant_Emp @pi_LoginId, @pi_Datetime, @pi_CustomerType,@pi_ParticipantId,@pi_ParticipantType",
