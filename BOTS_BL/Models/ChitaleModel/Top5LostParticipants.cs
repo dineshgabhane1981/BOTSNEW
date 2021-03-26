@@ -12,4 +12,11 @@ namespace BOTS_BL.Models.ChitaleModel
         public string CustomerName { get; set; }
         public decimal Points { get; set; }
     }
+
+    public class Top5TgtVsAchPerformanceEmp
+    {
+        public string CustomerId { get; set; }
+        public string CustomerName { get; set; }
+        public decimal VolumeAchPercentage { get; set; }
+    }
 }

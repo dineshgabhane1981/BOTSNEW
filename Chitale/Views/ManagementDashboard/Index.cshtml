@@ -253,8 +253,8 @@
                                 AVG ORDER TO RAVANE DATES
                             </div>
                             <ul class="nav">
-                                <li class="nav-item"><a href="javascript:void(0);" onclick="GetManagementDashboardLostOpp('SuperStockiest')" id="navLostSS" class="active nav-link">SS</a></li>
-                                <li class="nav-item"><a href="javascript:void(0);" onclick="GetManagementDashboardLostOpp('Distributors')" id="navLostDist" class="nav-link second-tab-toggle">Dist</a></li>
+                                <li class="nav-item"><a href="javascript:void(0);" onclick="GetManagementDashboardLostOpp('SuperStockiest')" id="navAvgOrderSS" class="active nav-link">SS</a></li>
+                                <li class="nav-item"><a href="javascript:void(0);" onclick="GetManagementDashboardLostOpp('Distributors')" id="navAvgOrderDist" class="nav-link second-tab-toggle">Dist</a></li>
 
                             </ul>
                         </div>
@@ -902,12 +902,12 @@
         });
 
         if (type == 'SuperStockiest') {
-            $("#navLostSS").addClass("active");
-            $("#navLostDist").removeClass("active");
+            $("#navAvgOrderSS").addClass("active");
+            $("#navAvgOrderDist").removeClass("active");
         }
         if (type == 'Distributors') {
-            $("#navLostSS").removeClass("active");
-            $("#navLostDist").addClass("active");
+            $("#navAvgOrderSS").removeClass("active");
+            $("#navAvgOrderDist").addClass("active");
 
         }
 

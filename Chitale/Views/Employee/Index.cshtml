@@ -66,6 +66,67 @@
                     </div>
                 </div>
             </div>
+
+            <div class="row">
+                <div class="col-md-12 col-lg-6">
+                    <div class="mb-3 card">
+                        <div class="card-header-tab card-header-tab-animation card-header">
+                            <div class="card-header-title">
+                                <i class="header-icon lnr-apartment icon-gradient bg-love-kiss"> </i>
+                                TOP 5 LOST OPP PARTICIPANTS
+                            </div>
+                            <ul class="nav">
+                                <li class="nav-item"><a href="javascript:void(0);" onclick="Top5LostOpps('SuperStockiest')" id="navLostOppsSS" class="active nav-link">SS</a></li>
+                                <li class="nav-item"><a href="javascript:void(0);" onclick="Top5LostOpps('Distributors')" id="navLostOppsDist" class="nav-link second-tab-toggle">Dist</a></li>
+                                <li class="nav-item"><a href="javascript:void(0);" onclick="Top5LostOpps('Retailers')" id="navLostOppsRetailer" class="nav-link second-tab-toggle">Retailer</a></li>
+                            </ul>
+                        </div>
+                        <div class="card-body">
+                            <div class="tab-content">
+                                <div class="tab-pane fade show active" id="tabs-eg-77">
+                                    <div class="card mb-3 widget-chart widget-chart2 text-left w-100">
+                                        <div class="widget-chat-wrapper-outer">
+                                            <div class="widget-chart-wrapper widget-chart-wrapper-lg opacity-10 m-0" id="containerTop5LostOppsParticipant" style="overflow-y:auto;">
+                                                <canvas id="cvTop5LostOppsParticipant"></canvas>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-12 col-lg-6">
+                    <div class="mb-3 card">
+                        <div class="card-header-tab card-header-tab-animation card-header">
+                            <div class="card-header-title">
+                                <i class="header-icon lnr-apartment icon-gradient bg-love-kiss"> </i>
+                                TGT vs ACH VOL PERFORMANCE
+                            </div>
+                            <ul class="nav">
+                                <li class="nav-item"><a href="javascript:void(0);" onclick="TgtVsAchVolPerformance('SuperStockiest')" id="navTgtVsAchSS" class="active nav-link">SS</a></li>
+                                <li class="nav-item"><a href="javascript:void(0);" onclick="TgtVsAchVolPerformance('Distributors')" id="navTgtVsAchDist" class="nav-link second-tab-toggle">Dist</a></li>
+                                <li class="nav-item"><a href="javascript:void(0);" onclick="TgtVsAchVolPerformance('Retailers')" id="navTgtVsAchRetailer" class="nav-link second-tab-toggle">Retailer</a></li>
+                            </ul>
+                        </div>
+                        <div class="card-body">
+                            <div class="tab-content">
+                                <div class="tab-pane fade show active" id="tabs-eg-77">
+                                    <div class="card mb-3 widget-chart widget-chart2 text-left w-100">
+                                        <div class="widget-chat-wrapper-outer">
+                                            <div class="widget-chart-wrapper widget-chart-wrapper-lg opacity-10 m-0" id="containerTgtVsAch" style="overflow-y:auto;">
+                                                <canvas id="cvTgtVsAch"></canvas>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
         </div>
     </div>
 </div>
@@ -76,6 +137,8 @@
 
         Top5Participants('SuperStockiest');
         Bottom5Participants('SuperStockiest');
+        Top5LostOpps('SuperStockiest');
+        TgtVsAchVolPerformance('SuperStockiest')
     });
     function Top5Participants(type) {
         $("#divLoader").show();
@@ -184,7 +247,8 @@
             $("#navRetailer").addClass("active");
         }
     }
-function Bottom5Participants(type) {
+
+    function Bottom5Participants(type) {
         $("#divLoader").show();
         $.ajax({
             type: "POST",
@@ -292,5 +356,219 @@ function Bottom5Participants(type) {
         }
     }
 
+    function Top5LostOpps(type) {
+        $("#divLoader").show();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("GetTop5LostOppsParticipant")',
+            data: "{'type': '" + type + "'}",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                var names = response[0];
+                var dataList = response[1];
 
+                if (response != null) {
+                    $('#cvTop5LostOppsParticipant').remove(); // this is my <canvas> element
+                    $('#containerTop5LostOppsParticipant').append('<canvas id="cvTop5LostOppsParticipant"><canvas>');
+                    var barChartData =
+                    {
+                        labels: [...names],
+                        datasets: [{
+                            label: '',
+                            backgroundColor: [
+                                "#f990a7",
+                                "#aad2ed",
+                                "#9966FF",
+                                "#99e5e5",
+                                "#f7bd83",
+                            ],
+                            borderWidth: 2,
+                            data: [...dataList]
+                        }]
+                    };
+
+                    var ctx10 = document.getElementById("cvTop5LostOppsParticipant").getContext("2d");
+                    var myChart = new Chart(ctx10,
+                        {
+                            type: 'horizontalBar',
+                            data: barChartData,
+                            options:
+                            {
+                                scales: {
+                                    xAxes: [{
+                                        ticks: {
+                                            beginAtZero: true
+                                        }
+                                    }]
+                                },
+                                title:
+                                {
+                                    display: true,
+                                    text: ""
+                                },
+                                legend: {
+                                    display: false
+                                },
+
+                                responsive: true,
+                                maintainAspectRatio: true,
+                                tooltips: { enabled: false },
+                                hover: { mode: null },
+
+                                "hover": {
+                                    "animationDuration": 0,
+                                    mode: null
+                                },
+                                plugins: {
+                                    datalabels: {
+                                        formatter: (value, ctx) => {
+                                            let datasets = ctx.chart.data.datasets;
+                                            if (datasets.indexOf(ctx.dataset) === datasets.length - 1) {
+                                                let percentage = (value).toFixed(2).replace(/(\d)(?=(\d{2})+\d\.)/g, '$1,');
+                                                return percentage;
+                                            } else {
+                                                return percentage;
+                                            }
+                                        },
+                                        color: '#000',
+                                    }
+                                }
+                            }
+                        });
+                    $("#divLoader").hide();
+                }
+            },
+            failure: function (response) {
+                $("#divLoader").hide();
+            },
+            error: function (response) {
+                $("#divLoader").hide();
+            }
+        });
+
+        if (type == 'SuperStockiest') {
+            $("#navLostOppsSS").addClass("active");
+            $("#navLostOppsDist").removeClass("active");
+            $("#navLostOppsRetailer").removeClass("active");
+        }
+        if (type == 'Distributors') {
+            $("#navLostOppsSS").removeClass("active");
+            $("#navLostOppsDist").addClass("active");
+            $("#navLostOppsRetailer").removeClass("active");
+        }
+        if (type == 'Retailers') {
+            $("#navLostOppsSS").removeClass("active");
+            $("#navLostOppsDist").removeClass("active");
+            $("#navLostOppsRetailer").addClass("active");
+        }
+    }
+
+    function TgtVsAchVolPerformance(type) {
+        $("#divLoader").show();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("GetTop5TgtVsAchPerformanceEmp")',
+            data: "{'type': '" + type + "'}",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                var names = response[0];
+                var dataList = response[1];
+
+                if (response != null) {
+                    $('#cvTgtVsAch').remove(); // this is my <canvas> element
+                    $('#containerTgtVsAch').append('<canvas id="cvTgtVsAch"><canvas>');
+                    var barChartData =
+                    {
+                        labels: [...names],
+                        datasets: [{
+                            label: '',
+                            backgroundColor: [
+                                "#f990a7",
+                                "#aad2ed",
+                                "#9966FF",
+                                "#99e5e5",
+                                "#f7bd83",
+                            ],
+                            borderWidth: 2,
+                            data: [...dataList]
+                        }]
+                    };
+
+                    var ctx10 = document.getElementById("cvTgtVsAch").getContext("2d");
+                    var myChart = new Chart(ctx10,
+                        {
+                            type: 'horizontalBar',
+                            data: barChartData,
+                            options:
+                            {
+                                scales: {
+                                    xAxes: [{
+                                        ticks: {
+                                            beginAtZero: true
+                                        }
+                                    }]
+                                },
+                                title:
+                                {
+                                    display: true,
+                                    text: ""
+                                },
+                                legend: {
+                                    display: false
+                                },
+
+                                responsive: true,
+                                maintainAspectRatio: true,
+                                tooltips: { enabled: false },
+                                hover: { mode: null },
+
+                                "hover": {
+                                    "animationDuration": 0,
+                                    mode: null
+                                },
+                                plugins: {
+                                    datalabels: {
+                                        formatter: (value, ctx) => {
+                                            let datasets = ctx.chart.data.datasets;
+                                            if (datasets.indexOf(ctx.dataset) === datasets.length - 1) {
+                                                let percentage = (value).toFixed(2).replace(/(\d)(?=(\d{2})+\d\.)/g, '$1,') + "%";
+                                                return percentage;
+                                            } else {
+                                                return percentage;
+                                            }
+                                        },
+                                        color: '#000',
+                                    }
+                                }
+                            }
+                        });
+                    $("#divLoader").hide();
+                }
+            },
+            failure: function (response) {
+                $("#divLoader").hide();
+            },
+            error: function (response) {
+                $("#divLoader").hide();
+            }
+        });
+
+        if (type == 'SuperStockiest') {
+            $("#navTgtVsAchSS").addClass("active");
+            $("#navTgtVsAchDist").removeClass("active");
+            $("#navTgtVsAchRetailer").removeClass("active");
+        }
+        if (type == 'Distributors') {
+            $("#navTgtVsAchSS").removeClass("active");
+            $("#navTgtVsAchDist").addClass("active");
+            $("#navTgtVsAchRetailer").removeClass("active");
+        }
+        if (type == 'Retailers') {
+            $("#navTgtVsAchSS").removeClass("active");
+            $("#navTgtVsAchDist").removeClass("active");
+            $("#navTgtVsAchRetailer").addClass("active");
+        }
+    }
 </script>
