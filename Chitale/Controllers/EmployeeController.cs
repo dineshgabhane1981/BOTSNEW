@@ -124,9 +124,39 @@ namespace Chitale.Controllers
             }
             return new JsonResult() { Data = lstData, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
+        public JsonResult GetParticipantListForEmp(string jsonData)
+        {
+            var UserSession = (CustomerDetail)Session["ChitaleUser"];
+            List<ParticipantListForManagement> listformgt = new List<ParticipantListForManagement>();
+            JavaScriptSerializer json_serializer = new JavaScriptSerializer();
+            json_serializer.MaxJsonLength = int.MaxValue;
+            object[] objData = (object[])json_serializer.DeserializeObject(jsonData);
 
+            foreach (Dictionary<string, object> item in objData)
+            {
+                string Flag = Convert.ToString(item["Flag"]);
+                int Cluster = Convert.ToInt32(item["Cluster"]);
+                int SubCluster = Convert.ToInt32(item["SubCluster"]);
+                int City = Convert.ToInt32(item["City"]);
+                string CustomerId = UserSession.CustomerId;
+                string CustomerType = UserSession.CustomerType;
+                listformgt = ER.GetParticipantListForEmp(Cluster, SubCluster, City,CustomerId,CustomerType);
+
+            }
+            return new JsonResult() { Data = listformgt, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
+
+        }
+        //public JsonResult GetSubParticipantListForEmp(string Id, string ParticipantType)
+        //{
+        //    List<ParticipantListForManagement> listformgt = new List<ParticipantListForManagement>();
+        //    listformgt = ER.GetSubParticipantListForEmp(Id, ParticipantType);
+
+        //    return new JsonResult() { Data = listformgt, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
+
+        //}
         public ActionResult LeaderBoard()
         {
+
             ManagementViewModel objModel = new ManagementViewModel();
             objModel.ClusterList = MDR.GetClusterList();
             objModel.SubClusterList = MDR.GetSubClusterList();

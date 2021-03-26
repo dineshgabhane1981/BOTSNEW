@@ -151,6 +151,60 @@ namespace BOTS_BL.Repository
 
             return objData;
         }
+        public List<ParticipantListForManagement> GetParticipantListForEmp(int Cluster, int SubCluster, int City, string CustomerId, string CustomerType)
+        {
 
+            List<ParticipantListForManagement> lstparticipantListsformgt = new List<ParticipantListForManagement>();
+            try
+            {
+                if (CustomerType == "Sales Executive")
+                {
+                    CustomerType = "SalesExecutive";
+                    using (var context = new ChitaleDBContext())
+                    {
+                        lstparticipantListsformgt = context.Database.SqlQuery<ParticipantListForManagement>("sp_KYBLoad_Emp @pi_CustomerId, @pi_Datetime, @pi_CustomerType",
+                            new SqlParameter("@pi_CustomerId", CustomerId),
+                            new SqlParameter("@pi_Datetime", DateTime.Now.ToString("dd-MM-yyyy")),
+                              new SqlParameter("@pi_CustomerType", CustomerType)
+
+                            ).ToList<ParticipantListForManagement>();
+                    }
+                }             
+                
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex);
+            }
+
+            return lstparticipantListsformgt;
+        }
+
+        //public List<ParticipantListForManagement> GetSubParticipantListForEmp(string Id, string ParticipantType)
+        //{
+
+        //    List<ParticipantListForManagement> lstparticipantListsformgt = new List<ParticipantListForManagement>();
+        //    try
+        //    {
+
+        //        using (var context = new ChitaleDBContext())
+        //        {
+        //            lstparticipantListsformgt = context.Database.SqlQuery<ParticipantListForManagement>("sp_KYBParticipant_Emp @pi_LoginId, @pi_Datetime, @pi_CustomerType,@pi_ParticipantId,@pi_ParticipantType",
+        //                new SqlParameter("@pi_LoginId", ""),
+        //                new SqlParameter("@pi_Datetime", DateTime.Now.ToString("dd-MM-yyyy")),
+        //                 new SqlParameter("@pi_CustomerType", CustomerType),
+        //               new SqlParameter("@pi_ParticipantId", Id),
+        //               new SqlParameter("@pi_ParticipantType", ParticipantType)
+
+        //                ).ToList<ParticipantListForManagement>();
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw ex;
+        //    }
+
+        //    return lstparticipantListsformgt;
+        //}
     }
 }
