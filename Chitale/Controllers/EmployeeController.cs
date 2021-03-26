@@ -1,16 +1,19 @@
 ﻿using BOTS_BL;
 using BOTS_BL.Models.ChitaleModel;
 using BOTS_BL.Repository;
+using Chitale.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Script.Serialization;
 
 namespace Chitale.Controllers
 {
     public class EmployeeController : Controller
     {
+        ManagementDashboardRepository MDR = new ManagementDashboardRepository();
         ChitaleException newexception = new ChitaleException();
         EmployeeRepository ER = new EmployeeRepository();
         // GET: Employee
@@ -128,7 +131,34 @@ namespace Chitale.Controllers
         }
         public ActionResult OrderToInvoice()
         {
-            return View();
+            ManagementViewModel objModel = new ManagementViewModel();
+            objModel.ClusterList = MDR.GetClusterList();
+            objModel.SubClusterList = MDR.GetSubClusterList();
+            objModel.CityList = MDR.GetCityList();
+            return View(objModel);
+        }
+        public JsonResult GetInvoiceToOrderData(string jsonData, string CustomerId, string customerType)
+        {
+            var UserSession = (CustomerDetail)Session["ChitaleUser"];
+            CustomerId = UserSession.CustomerId;
+            customerType = UserSession.CustomerType;
+            List<InvoiceToOrder> objOrderData = new List<InvoiceToOrder>();
+            JavaScriptSerializer json_serializer = new JavaScriptSerializer();
+            json_serializer.MaxJsonLength = int.MaxValue;
+            object[] objData = (object[])json_serializer.DeserializeObject(jsonData);
+
+            foreach (Dictionary<string, object> item in objData)
+            {
+                string Cluster = Convert.ToString(item["Cluster"]);
+                string SubCluster = Convert.ToString(item["SubCluster"]);
+                string City = Convert.ToString(item["City"]);
+                string FromDate = Convert.ToString(item["FromDate"]);
+                string Todate = Convert.ToString(item["Todate"]);
+                string type = Convert.ToString(item["CustomerType"]);
+                objOrderData = ER.GetInvoiceToOrderData(Cluster, SubCluster, City, type, FromDate, Todate, CustomerId, customerType);
+
+            }
+            return new JsonResult() { Data = objOrderData, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
     }
 }
