@@ -15,12 +15,18 @@
             </div>
 
             <div class="card-header-tab" style="margin-bottom:20px;">
-                <div>
-                    @Html.DropDownListFor(model => model.ClusterList, new SelectList(Model.ClusterList, "Value", "Text"), "All", htmlAttributes: new { @class = "input50", @id = "ddlClusterList" }) &nbsp;&nbsp;&nbsp;&nbsp;
-                    @Html.DropDownListFor(model => model.SubClusterList, new SelectList(Model.SubClusterList, "Value", "Text"), "All", htmlAttributes: new { @class = "input50", @id = "ddlSubClusterList" })&nbsp;&nbsp;&nbsp;&nbsp;
-                    @Html.DropDownListFor(model => model.CityList, new SelectList(Model.CityList, "Value", "Text"), "All", htmlAttributes: new { @class = "input50", @id = "ddlCityList" })
-                </div>
+                <div style="display:flex;">
+                    <div class="col-md-3 col-xl-3">
+                        Cluster <br />@Html.DropDownListFor(model => model.ClusterList, new SelectList(Model.ClusterList, "Value", "Text"), "All", htmlAttributes: new { @class = "input50", @id = "ddlClusterList" }) &nbsp;&nbsp;&nbsp;&nbsp;
+                    </div>
+                    <div class="col-md-3 col-xl-3">
+                        Sub Cluster <br /> @Html.DropDownListFor(model => model.SubClusterList, new SelectList(Model.SubClusterList, "Value", "Text"), "All", htmlAttributes: new { @class = "input50", @id = "ddlSubClusterList" })&nbsp;&nbsp;&nbsp;&nbsp;
 
+                    </div>
+                    <div class="col-md-3 col-xl-3">
+                        City <br />@Html.DropDownListFor(model => model.CityList, new SelectList(Model.CityList, "Value", "Text"), "All", htmlAttributes: new { @class = "input50", @id = "ddlCityList" })
+                    </div>
+                </div>
                 <div>
                     <br />
                     <input type="radio" id="rdnSS" name="cust_type" /> Super Stockiest &nbsp;&nbsp;&nbsp;&nbsp;
@@ -29,7 +35,7 @@
                     <input id="txtToDate" placeholder="To Date" class="input50" />
                     <button type="button" id="btnFilter" style="margin-left:17px;margin-top:5px;" class="btn btn-primary"><b>FILTER</b></button>
                 </div>
-            </div>
+                </div>
             <div class="row mb-3">
                 <div class="container-fluid pt-3 pl-3 pr-3">
                     <div class="pt-3 pl-3 pr-3 col-md-12 col-lg-12">

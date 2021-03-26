@@ -20,25 +20,32 @@
                     <div class="container-fluid pt-3 pl-3 pr-3">
 
                         <div class="pt-3 pl-3 pr-3 col-md-12 col-lg-12">
-                            <div class="row">
+                            <div style="display:flex;">
+                                <div class="col-md-3 col-xl-3">
+                                    Cluster <br />
+                                    @Html.DropDownList("Cluster", new SelectList(ViewBag.ClusterList, "Value", "Text"), "All", htmlAttributes: new { @class = "input50", @id = "ddlClusterList" })
 
-                                @*<i class="fas fa-search"></i>*@
-                                @*<input class="input100" type="text" id="txtSearch" placeholder="Search activity..." />*@
-                                @Html.DropDownList("Cluster", new SelectList(ViewBag.ClusterList, "Value", "Text"), "All", htmlAttributes: new { @class = "input50", @id = "ddlClusterList" })&nbsp;&nbsp;&nbsp;&nbsp;
+                                </div>
+                                <div class="col-md-3 col-xl-3">
+                                    Sub Cluster <br />@Html.DropDownList("Sub-Cluster", new SelectList(ViewBag.SubclusterList, "Value", "Text"), "All", htmlAttributes: new { @class = "input50", @id = "ddlSubClusterList" })
 
-                                @Html.DropDownList("Sub-Cluster", new SelectList(ViewBag.SubclusterList, "Value", "Text"), "All", htmlAttributes: new { @class = "input50", @id = "ddlSubClusterList" })&nbsp;&nbsp;&nbsp;&nbsp;
-
-                                @Html.DropDownList("City", new SelectList(ViewBag.CityList, "Value", "Text"), "All", htmlAttributes: new { @class = "input50", @id = "ddlCityList" })&nbsp;&nbsp;&nbsp;&nbsp;
-                                <div  class="card-header-tab" style="margin-bottom:20px;">
-                                    <button style="margin-left:17px;margin-top:5px;" class="btn btn-primary" type="button" id="btnFilter">
+                                </div>
+                                <div class="col-md-3 col-xl-3">
+                                    City <br />@Html.DropDownList("City", new SelectList(ViewBag.CityList, "Value", "Text"), "All", htmlAttributes: new { @class = "input50", @id = "ddlCityList" })
+                                </div>
+                                <div class="col-md-1 col-xl-1" style="margin: 20px 0px;">
+                                    <button  class="btn btn-primary" type="button" id="btnFilter">
                                         Filter
-                                    </button>&nbsp;&nbsp;&nbsp;&nbsp;
-                                    <button style="margin-left:17px;margin-top:5px;" class="btn btn-primary" type="button" id="btnback">
+                                    </button>
+                                </div>
+                                <div class="col-md-1 col-xl-1" style="margin: 20px 0px;">
+                                    <button margin-top:5px;" class="btn btn-primary" type="button" id="btnback">
                                         Back
                                     </button>
-                                    <button style="margin-left:17px;margin-top:5px;" class="btn btn-primary" type="button" id="btnbackretail">
+                                    <button margin-top:5px;" class="btn btn-primary" type="button" id="btnbackretail">
                                         Back
                                     </button>
+                                    </div>
                                 </div>
 
                                 <div class="col text-right">
@@ -53,92 +60,92 @@
                                     </ul>
                                 </div>
                             </div>
-                           
-                            <div class="row mt-3" id="dvActivityData1">
 
-                                <div class="table-responsive">
-                                    <table class="table" id="activityTable" style="width:100%;">
-                                        <thead>
-                                            <tr>
-                                                @*<th scope="col"></th>*@
-                                                <th scope="col">Type</th>
-                                                <th scope="col">ID</th>
-                                                <th scope="col">Name</th>
-                                                <th scope="col">Current Rank</th>
-                                                <th scope="col">Last Month Rank</th>
-                                                <th scope="col">Purchase Points</th>
-                                                <th scope="col">Sale Points</th>
-                                                <th scope="col">Add On Points</th>
-                                                <th scope="col">Lost Opp Points</th>
-                                                <th scope="col">Redeemed Points</th>
-                                                <th scope="col">Balanced Points</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                        </tbody>
-                                    </table>
+                                <div class="row mt-3" id="dvActivityData1">
+
+                                    <div class="table-responsive">
+                                        <table class="table" id="activityTable" style="width:100%;">
+                                            <thead>
+                                                <tr>
+                                                    @*<th scope="col"></th>*@
+                                                    <th scope="col">Type</th>
+                                                    <th scope="col">ID</th>
+                                                    <th scope="col">Name</th>
+                                                    <th scope="col">Current Rank</th>
+                                                    <th scope="col">Last Month Rank</th>
+                                                    <th scope="col">Purchase Points</th>
+                                                    <th scope="col">Sale Points</th>
+                                                    <th scope="col">Add On Points</th>
+                                                    <th scope="col">Lost Opp Points</th>
+                                                    <th scope="col">Redeemed Points</th>
+                                                    <th scope="col">Balanced Points</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+
+                                <div class="row mt-3" id="dvActivityData2">
+
+                                    <div class="table-responsive">
+                                        <table class="table" id="activityTable1" style="width:100%;">
+                                            <thead>
+                                                <tr>
+                                                    @*<th scope="col"></th>*@
+                                                    <th scope="col">Type</th>
+                                                    <th scope="col">ID</th>
+                                                    <th scope="col">Name</th>
+                                                    <th scope="col">Current Rank</th>
+                                                    <th scope="col">Last Month Rank</th>
+                                                    <th scope="col">Purchase Points</th>
+                                                    <th scope="col">Sale Points</th>
+                                                    <th scope="col">Add On Points</th>
+                                                    <th scope="col">Lost Opp Points</th>
+                                                    <th scope="col">Redeemed Points</th>
+                                                    <th scope="col">Balanced Points</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+
+                                <div class="row mt-3" id="dvActivityData3">
+
+                                    <div class="table-responsive">
+                                        <table class="table" id="activityTable2" style="width:100%;">
+                                            <thead>
+                                                <tr>
+                                                    @*<th scope="col"></th>*@
+                                                    <th scope="col">Type</th>
+                                                    <th scope="col">ID</th>
+                                                    <th scope="col">Name</th>
+                                                    <th scope="col">Current Rank</th>
+                                                    <th scope="col">Last Month Rank</th>
+                                                    <th scope="col">Purchase Points</th>
+                                                    <th scope="col">Sale Points</th>
+                                                    <th scope="col">Add On Points</th>
+                                                    <th scope="col">Lost Opp Points</th>
+                                                    <th scope="col">Redeemed Points</th>
+                                                    <th scope="col">Balanced Points</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                            </tbody>
+                                        </table>
+                                    </div>
                                 </div>
                             </div>
-
-                            <div class="row mt-3" id="dvActivityData2" >
-
-                                <div class="table-responsive">
-                                    <table class="table" id="activityTable1" style="width:100%;">
-                                        <thead>
-                                            <tr>
-                                                @*<th scope="col"></th>*@
-                                                <th scope="col">Type</th>
-                                                <th scope="col">ID</th>
-                                                <th scope="col">Name</th>
-                                                <th scope="col">Current Rank</th>
-                                                <th scope="col">Last Month Rank</th>
-                                                <th scope="col">Purchase Points</th>
-                                                <th scope="col">Sale Points</th>
-                                                <th scope="col">Add On Points</th>
-                                                <th scope="col">Lost Opp Points</th>
-                                                <th scope="col">Redeemed Points</th>
-                                                <th scope="col">Balanced Points</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-
-                            <div class="row mt-3" id="dvActivityData3"  >
-
-                                <div class="table-responsive">
-                                    <table class="table" id="activityTable2" style="width:100%;">
-                                        <thead>
-                                            <tr>
-                                                @*<th scope="col"></th>*@
-                                                <th scope="col">Type</th>
-                                                <th scope="col">ID</th>
-                                                <th scope="col">Name</th>
-                                                <th scope="col">Current Rank</th>
-                                                <th scope="col">Last Month Rank</th>
-                                                <th scope="col">Purchase Points</th>
-                                                <th scope="col">Sale Points</th>
-                                                <th scope="col">Add On Points</th>
-                                                <th scope="col">Lost Opp Points</th>
-                                                <th scope="col">Redeemed Points</th>
-                                                <th scope="col">Balanced Points</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
 
                     </div>
                 </div>
-            </div>
         </div>
     </div>
 </div>
+
 
 <script>
     var tableData = [];

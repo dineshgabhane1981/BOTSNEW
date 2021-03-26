@@ -15,61 +15,68 @@
             </div>
 
             <div class="card-header-tab" style="margin-bottom:20px;">
-                <div>
-                    @Html.DropDownListFor(model => model.ClusterList, new SelectList(Model.ClusterList, "Value", "Text"), "All", htmlAttributes: new { @class = "input50", @id = "ddlClusterList" }) &nbsp;&nbsp;&nbsp;&nbsp;
-                    @Html.DropDownListFor(model => model.SubClusterList, new SelectList(Model.SubClusterList, "Value", "Text"), "All", htmlAttributes: new { @class = "input50", @id = "ddlSubClusterList" })&nbsp;&nbsp;&nbsp;&nbsp;
-                    @Html.DropDownListFor(model => model.CityList, new SelectList(Model.CityList, "Value", "Text"), "All", htmlAttributes: new { @class = "input50", @id = "ddlCityList" })
+                <div style="display:flex;">
+                    <div class="col-md-3 col-xl-3">
+                        Cluster <br />
+                        @Html.DropDownListFor(model => model.ClusterList, new SelectList(Model.ClusterList, "Value", "Text"), "All", htmlAttributes: new { @class = "input50", @id = "ddlClusterList" }) &nbsp;&nbsp;&nbsp;&nbsp;
+                    </div>
+                    <div class="col-md-3 col-xl-3">
+                        Sub Cluster <br /> @Html.DropDownListFor(model => model.SubClusterList, new SelectList(Model.SubClusterList, "Value", "Text"), "All", htmlAttributes: new { @class = "input50", @id = "ddlSubClusterList" })&nbsp;&nbsp;&nbsp;&nbsp;
+                    </div>
+                    <div class="col-md-3 col-xl-3">
+                        City <br /> @Html.DropDownListFor(model => model.CityList, new SelectList(Model.CityList, "Value", "Text"), "All", htmlAttributes: new { @class = "input50", @id = "ddlCityList" })
+                    </div>
                 </div>
-
-                <div>
-                    <br />
-                    <input type="radio" id="rdnSS" name="cust_type" /> Super Stockiest &nbsp;&nbsp;&nbsp;&nbsp;
-                    <input type="radio" id="rdnDist" name="cust_type" /> Distributors &nbsp;&nbsp;&nbsp;&nbsp;
-                    <input type="radio" id="rdnRetailer" name="cust_type" /> Retailers <br /><br />
-                    @Html.DropDownListFor(model => model.MonthsList, new SelectList(Model.MonthsList, "Value", "Text"), "Select Month", htmlAttributes: new { @class = "input50", @id = "ddlMonthList" })&nbsp;&nbsp;&nbsp;&nbsp;
-                    @Html.DropDownListFor(model => model.YearList, new SelectList(Model.YearList, "Value", "Text"), "Select Year", htmlAttributes: new { @class = "input50", @id = "ddlYearList" })
-                    <button type="button" id="btnFilter" style="margin-left:17px;margin-top:5px;" class="btn btn-primary"><b>FILTER</b></button>
+                <div >                    
+                        <br />
+                        <input type="radio" id="rdnSS" name="cust_type" /> Super Stockiest &nbsp;&nbsp;&nbsp;&nbsp;
+                        <input type="radio" id="rdnDist" name="cust_type" /> Distributors &nbsp;&nbsp;&nbsp;&nbsp;
+                        <input type="radio" id="rdnRetailer" name="cust_type" /> Retailers <br /><br />
+                        @Html.DropDownListFor(model => model.MonthsList, new SelectList(Model.MonthsList, "Value", "Text"), "Select Month", htmlAttributes: new { @class = "input50", @id = "ddlMonthList" })&nbsp;&nbsp;&nbsp;&nbsp;
+                        @Html.DropDownListFor(model => model.YearList, new SelectList(Model.YearList, "Value", "Text"), "Select Year", htmlAttributes: new { @class = "input50", @id = "ddlYearList" })
+                        <button type="button" id="btnFilter" style="margin-left:17px;margin-top:5px;" class="btn btn-primary"><b>FILTER</b></button>
+                   
+                 </div>
                 </div>
-            </div>
-            <div class="row mb-3">
-                <div class="container-fluid pt-3 pl-3 pr-3">
-                    <div class="pt-3 pl-3 pr-3 col-md-12 col-lg-12">
-                        <div class="row" id="divactivityTable">
+                <div class="row mb-3">
+                    <div class="container-fluid pt-3 pl-3 pr-3">
+                        <div class="pt-3 pl-3 pr-3 col-md-12 col-lg-12">
+                            <div class="row" id="divactivityTable">
 
-                            <div class="table-responsive">
+                                <div class="table-responsive">
 
-                                <table class="table" id="activityTable" cellspacing="0" cellpadding="0">
-                                    <thead>
-                                        <tr style="text-align:center;">
-                                            <td scope="col" style="border:1px solid black;border-left:0px;" colspan="6"></td>
-                                            <td scope="col" style="border:1px solid black; font-size:18px;" colspan="3"><b>Volume-wise</b> </td>
+                                    <table class="table" id="activityTable" cellspacing="0" cellpadding="0">
+                                        <thead>
+                                            <tr style="text-align:center;">
+                                                <td scope="col" style="border:1px solid black;border-left:0px;" colspan="6"></td>
+                                                <td scope="col" style="border:1px solid black; font-size:18px;" colspan="3"><b>Volume-wise</b> </td>
 
-                                            <td scope="col" style="border:1px solid black;border-right:0px; font-size:18px;" colspan="3"><b>Value-wise</b> </td>
-                                        </tr>
-                                        <tr>
-                                            <th scope="col">Type</th>
-                                            <th scope="col">ID</th>
-                                            <th scope="col">Name</th>
-                                            <th scope="col">Cluster</th>
-                                            <th scope="col">Sub Cluster</th>
-                                            <th scope="col">City</th>
-                                            <th scope="col">Focus</th>
-                                            <th scope="col">Ach</th>
-                                            <th scope="col">Ach %</th>
-                                            <th scope="col">Focus</th>
-                                            <th scope="col">Ach</th>
-                                            <th scope="col">Ach %</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                    </tbody>
-                                </table>
+                                                <td scope="col" style="border:1px solid black;border-right:0px; font-size:18px;" colspan="3"><b>Value-wise</b> </td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="col">Type</th>
+                                                <th scope="col">ID</th>
+                                                <th scope="col">Name</th>
+                                                <th scope="col">Cluster</th>
+                                                <th scope="col">Sub Cluster</th>
+                                                <th scope="col">City</th>
+                                                <th scope="col">Focus</th>
+                                                <th scope="col">Ach</th>
+                                                <th scope="col">Ach %</th>
+                                                <th scope="col">Focus</th>
+                                                <th scope="col">Ach</th>
+                                                <th scope="col">Ach %</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
     </div>
 </div>
 

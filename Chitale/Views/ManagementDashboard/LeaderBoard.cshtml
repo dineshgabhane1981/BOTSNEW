@@ -20,64 +20,68 @@
                     <div class="container-fluid pt-3 pl-3 pr-3">
 
                         <div class="pt-3 pl-3 pr-3 col-md-12 col-lg-12">
-                            <div class="row" style="margin-bottom:20px">
+                            <div style="display:flex;">
+                                <div class="col-md-3 col-xl-3">
+                                    Cluster <br />
+                                    @Html.DropDownList("Cluster", new SelectList(ViewBag.ClusterList, "Value", "Text"), "All", htmlAttributes: new { @class = "input50", @id = "ddlClusterList" })
 
-                                @*<i class="fas fa-search"></i>*@
-                                @*<input class="input100" type="text" id="txtSearch" placeholder="Search activity..." />*@
-                                @Html.DropDownList("Cluster", new SelectList(ViewBag.ClusterList, "Value", "Text"), "All", htmlAttributes: new { @class = "input50", @id = "ddlClusterList" })&nbsp;&nbsp;&nbsp;&nbsp;
-
-                                @Html.DropDownList("Sub-Cluster", new SelectList(ViewBag.SubclusterList, "Value", "Text"), "All", htmlAttributes: new { @class = "input50", @id = "ddlSubClusterList" })&nbsp;&nbsp;&nbsp;&nbsp;
-
-                                @Html.DropDownList("City", new SelectList(ViewBag.CityList, "Value", "Text"), "All", htmlAttributes: new { @class = "input50", @id = "ddlCityList" })&nbsp;&nbsp;&nbsp;&nbsp;
-
-
-                                <button class="btn btn-primary login-btn" type="button" id="btnFilter">
-                                    Filter
-                                </button>&nbsp;&nbsp;&nbsp;&nbsp;
-                                
-                                
-                            </div>
-                            @*<div class="row row-grid">*@
-                        <div class="col-md-6">
-                            <input type="radio" name="first_item5" id="rbtnStockiest" value="SS" /> Super Stockiest &nbsp;&nbsp;&nbsp;&nbsp;
-
-                            <input type="radio" name="first_item5" id="rbtnDistributer" value="Distributor" /> Distributor &nbsp;&nbsp;&nbsp;&nbsp;
-
-                            <input type="radio" name="first_item5" id="rbtnRetailer" value="Retailers" /> Retailer
-                        </div>
-
-                            @*</div>*@
-                            <div class="row mt-3" id="dvActivityData1">
-
-                                <div class="table-responsive">
-                                    <table class="table" id="activityTable" style="width:100%;">
-                                        <thead>
-                                            <tr style="text-align:center;">
-                                                <td scope="col" style="border:1px solid black;border-left:0px;" colspan="3"></td>
-                                                <td scope="col" style="border:1px solid black; font-size:16px;" colspan="3"><b>Current Month</b> </td>
-                                                <td scope="col" style="border:1px solid black;border-right:0px; font-size:16px;" colspan="3"><b>Last Month</b> </td>
-                                                <td style="border:1px solid black;border-right:0px;"></td>
-                                            </tr>
-                                            <tr  >
-                                                <th scope="col" >ID</th>
-                                                <th scope="col">Name</th>
-                                                <th scope="col" >Balance Points</th>
-                                                <th scope="col">Overall Rank</th>
-                                                <th scope="col">Cluster Rank</th>
-                                                <th scope="col">Star Rating</th>
-                                                <th scope="col">Overall Rank</th>
-                                                <th scope="col">Cluster Rank</th>
-                                                <th scope="col">Star Rating</th>
-                                                <th scope="col">Movement</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody style="text-align:center;">
-                                        </tbody>
-                                    </table>
                                 </div>
-                            </div>
+                                <div class="col-md-3 col-xl-3">
+                                    Sub Cluster <br /> @Html.DropDownList("Sub-Cluster", new SelectList(ViewBag.SubclusterList, "Value", "Text"), "All", htmlAttributes: new { @class = "input50", @id = "ddlSubClusterList" })
 
-                        </div>
+                                </div>
+                                <div class="col-md-3 col-xl-3">
+                                    City <br />@Html.DropDownList("City", new SelectList(ViewBag.CityList, "Value", "Text"), "All", htmlAttributes: new { @class = "input50", @id = "ddlCityList" })
+
+                                </div>
+                                <div class="col-md-3 col-xl-3" style="margin: 20px 0px;">
+                                    <button class="btn btn-primary login-btn" type="button" id="btnFilter">
+                                        Filter
+                                    </button>
+                                </div>
+
+                             </div>
+                                @*<div class="row row-grid">*@
+                                <div class="col-md-6" style="margin: 20px 0px;">
+                                    <input type="radio" name="first_item5" id="rbtnStockiest" value="SS" /> Super Stockiest &nbsp;&nbsp;&nbsp;&nbsp;
+
+                                    <input type="radio" name="first_item5" id="rbtnDistributer" value="Distributor" /> Distributor &nbsp;&nbsp;&nbsp;&nbsp;
+
+                                    <input type="radio" name="first_item5" id="rbtnRetailer" value="Retailers" /> Retailer
+                                </div>
+
+                                @*</div>*@
+                                <div class="row mt-3" id="dvActivityData1">
+
+                                    <div class="table-responsive">
+                                        <table class="table" id="activityTable" style="width:100%;">
+                                            <thead>
+                                                <tr style="text-align:center;">
+                                                    <td scope="col" style="border:1px solid black;border-left:0px;" colspan="3"></td>
+                                                    <td scope="col" style="border:1px solid black; font-size:16px;" colspan="3"><b>Current Month</b> </td>
+                                                    <td scope="col" style="border:1px solid black;border-right:0px; font-size:16px;" colspan="3"><b>Last Month</b> </td>
+                                                    <td style="border:1px solid black;border-right:0px;"></td>
+                                                </tr>
+                                                <tr>
+                                                    <th scope="col">ID</th>
+                                                    <th scope="col">Name</th>
+                                                    <th scope="col">Balance Points</th>
+                                                    <th scope="col">Overall Rank</th>
+                                                    <th scope="col">Cluster Rank</th>
+                                                    <th scope="col">Star Rating</th>
+                                                    <th scope="col">Overall Rank</th>
+                                                    <th scope="col">Cluster Rank</th>
+                                                    <th scope="col">Star Rating</th>
+                                                    <th scope="col">Movement</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody style="text-align:center;">
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+
+                            </div>
 
                     </div>
                 </div>
