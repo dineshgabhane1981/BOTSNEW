@@ -180,31 +180,31 @@ namespace BOTS_BL.Repository
             return lstparticipantListsformgt;
         }
 
-        //public List<ParticipantListForManagement> GetSubParticipantListForEmp(string Id, string ParticipantType)
-        //{
+        public List<ParticipantListForManagement> GetSubParticipantListForEmp(string Id, string ParticipantType, string CustomerType)
+        {
 
-        //    List<ParticipantListForManagement> lstparticipantListsformgt = new List<ParticipantListForManagement>();
-        //    try
-        //    {
+            List<ParticipantListForManagement> lstparticipantListsformgt = new List<ParticipantListForManagement>();
+            try
+            {
+                CustomerType = "SalesExecutive";
+                using (var context = new ChitaleDBContext())
+                {
+                    lstparticipantListsformgt = context.Database.SqlQuery<ParticipantListForManagement>("sp_KYBParticipant_Emp @pi_LoginId, @pi_Datetime, @pi_CustomerType,@pi_ParticipantId,@pi_ParticipantType",
+                        new SqlParameter("@pi_LoginId", ""),
+                        new SqlParameter("@pi_Datetime", DateTime.Now.ToString("dd-MM-yyyy")),
+                         new SqlParameter("@pi_CustomerType", CustomerType),
+                       new SqlParameter("@pi_ParticipantId", Id),
+                       new SqlParameter("@pi_ParticipantType", ParticipantType)
 
-        //        using (var context = new ChitaleDBContext())
-        //        {
-        //            lstparticipantListsformgt = context.Database.SqlQuery<ParticipantListForManagement>("sp_KYBParticipant_Emp @pi_LoginId, @pi_Datetime, @pi_CustomerType,@pi_ParticipantId,@pi_ParticipantType",
-        //                new SqlParameter("@pi_LoginId", ""),
-        //                new SqlParameter("@pi_Datetime", DateTime.Now.ToString("dd-MM-yyyy")),
-        //                 new SqlParameter("@pi_CustomerType", CustomerType),
-        //               new SqlParameter("@pi_ParticipantId", Id),
-        //               new SqlParameter("@pi_ParticipantType", ParticipantType)
+                        ).ToList<ParticipantListForManagement>();
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
 
-        //                ).ToList<ParticipantListForManagement>();
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        throw ex;
-        //    }
-
-        //    return lstparticipantListsformgt;
-        //}
+            return lstparticipantListsformgt;
+        }
     }
 }
