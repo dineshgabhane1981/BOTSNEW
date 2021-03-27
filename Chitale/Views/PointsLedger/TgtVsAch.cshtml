@@ -1,4 +1,4 @@
-﻿@model BOTS_BL.Models.ChitaleModel.TgtvsAchMaster
+﻿@model Chitale.ViewModel.TgtVsAchViewModel
 @{
     ViewBag.Title = "Focus Vs Ach";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -33,64 +33,124 @@
 
                                 <div class="table-responsive">
 
-                                    <table class="table" id="activityTable" cellspacing="0"cellpadding="0" >
+                                    <table class="table" id="activityTable" cellspacing="0" cellpadding="0">
                                         <thead>
-                                           <tr style="text-align:center;">
-                                                <td scope="col" style="border:1px solid black;border-left:0px;" colspan="2"></td>
-                                                <td scope="col" style="border:1px solid black; font-size:18px;" colspan="3"><b>Volume-wise</b> </td>
+                                            <tr style="text-align:center;">
+                                                <td scope="col" style="border:1px solid black;border-left:0px;" colspan="3"></td>
+                                                <td scope="col" style="border:1px solid black; font-size:18px;" colspan="4"><b>Volume-wise</b> </td>
 
-                                                <td scope="col" style="border:1px solid black;border-right:0px; font-size:18px;" colspan="3"><b>Value-wise</b> </td>
+                                                <td scope="col" style="border:1px solid black;border-right:0px; font-size:18px;" colspan="4"><b>Value-wise</b> </td>
                                             </tr>
                                             <tr>
                                                 <th scope="col"></th>
                                                 <th scope="col">Name</th>
-                                                @*<th scope="col">Type</th>*@
+                                                <th scope="col">Type</th>
                                                 <th scope="col">Focus</th>
                                                 <th scope="col">Ach</th>
                                                 <th scope="col">Ach %</th>
+                                                <th scope="col">Points</th>
                                                 <th scope="col">Focus</th>
                                                 <th scope="col">Ach</th>
                                                 <th scope="col">Ach %</th>
+                                                <th scope="col">Points</th>
 
                                             </tr>
                                         </thead>
-                                        <tbody >
+                                        <tbody>
                                             @if (Model != null)
                                             {
+                                                if (Model.objOverAll != null)
+                                                {
 
-                                                var imgId = "imgExpand" + Model.CustomerId;
-                                                <tr style=" border: hidden; ">
-                                                    <td>
-                                                        <img id="@imgId" src="~/Content/assets/images/details_open.png"  onclick="ShowActivities(@Model.CustomerId);" />
-                                                    </td>
-                                                    <td>Overall</td>
-                                                    @*<td></td>*@
-                                                    <td>@Model.VolumeTgt</td>
-                                                    <td>@Model.VolumeAch</td>
-                                                    <td>@Model.VolumeAchPercentage</td>
-                                                    <td>@Model.ValueTgt</td>
-                                                    <td>@Model.ValueAch</td>
-                                                    <td>@Model.ValueAchPercentage</td>
+                                                    var imgId = "imgExpand" + Model.objOverAll.CustomerId;
+                                                    <tr style=" border: hidden; ">
+                                                        <td>
+                                                            <img id="@imgId" src="~/Content/assets/images/details_open.png" style="cursor:pointer;" onclick="ShowActivities(@Model.objOverAll.CustomerId);" />
+                                                        </td>
+                                                        <td>Overall</td>
+                                                        <td></td>
+                                                        <td>@Model.objOverAll.VolumeTgt</td>
+                                                        <td>@Model.objOverAll.VolumeAch</td>
+                                                        <td>@Model.objOverAll.VolumeAchPercentage</td>
+                                                        <td>@Model.objOverAll.VolumePoints</td>
+                                                        <td>@Model.objOverAll.ValueTgt</td>
+                                                        <td>@Model.objOverAll.ValueAch</td>
+                                                        <td>@Model.objOverAll.ValueAchPercentage</td>
+                                                        <td>@Model.objOverAll.ValuePoints</td>
 
 
-                                                </tr>
-                                                var dynamicIdTr = "trActivities" + Model.CustomerId;
-                                                var dynamicIdDiv = "dvActivities" + Model.CustomerId;
-                                        <tr id="@dynamicIdTr" style="display:none;">
-                                            <td colspan="8">
-                                                <div id="@dynamicIdDiv" style="display:none;" class="table-responsive">
+                                                    </tr>
+                                                    if (Model.objCategory != null)
+                                                    {
+                                                        var dynamicIdDiv = "dvActivities" + Model.objOverAll.CustomerId;
 
-                                                </div>
-                                            </td>
-                                            <td style="display:none; "></td>
-                                            <td style="display:none; "></td>
-                                            <td style="display:none;"></td>
-                                            <td style="display:none;"></td>
-                                            <td style="display:none;"></td>
-                                            <td style="display:none;"></td>
-                                            <td style="display:none;"></td>
-                                            @*<td style="display:none;"></td>*@
-                                        </tr>
+                                                        foreach (var item in Model.objCategory)
+                                                        {
+                                                            var dynamicIdSub = "dvActivitiesSub" + item.CategoryCode;
+                                                            <tr class="@dynamicIdDiv" style="display:none;">
+                                                                <td></td>
+                                                                <td><a href="#" onclick="ShowSubCategory('@dynamicIdSub');" style="color:red;">@item.Name</a></td>
+                                                                <td>Category</td>
+                                                                <td>@item.VolumeTgt</td>
+                                                                <td>@item.VolumeAch</td>
+                                                                <td>@item.VolumeAchPercentage</td>
+                                                                <td>@item.VolumePoints</td>
+                                                                <td>@item.ValueTgt</td>
+                                                                <td>@item.ValueAch</td>
+                                                                <td>@item.ValueAchPercentage</td>
+                                                                <td>@item.ValuePoints</td>
+                                                            </tr>
+
+                                                            if (Model.objSubCategory != null)
+                                                            {
+                                                                foreach (var itemSub in Model.objSubCategory)
+                                                                {
+                                                                    if (item.CategoryCode == itemSub.CategoryCode)
+                                                                    {
+                                                                        var dynamicIdProd = "dvActivitiesProd" + item.CategoryCode;
+                                                                        <tr class="@dynamicIdSub" id="@dynamicIdSub" style="display:none;">
+                                                                            <td></td>
+                                                                            <td><a href="#" onclick="ShowProducts('@dynamicIdProd');" style="color:green;">@itemSub.Name</a></td>
+                                                                            <td>Sub Category</td>
+                                                                            <td>@itemSub.VolumeTgt</td>
+                                                                            <td>@itemSub.VolumeAch</td>
+                                                                            <td>@itemSub.VolumeAchPercentage</td>
+                                                                            <td>@itemSub.VolumePoints</td>
+                                                                            <td>@itemSub.ValueTgt</td>
+                                                                            <td>@itemSub.ValueAch</td>
+                                                                            <td>@itemSub.ValueAchPercentage</td>
+                                                                            <td>@itemSub.ValuePoints</td>
+                                                                        </tr>
+
+
+                                                                        if (Model.objProducts != null)
+                                                                        {
+                                                                            foreach (var itemProd in Model.objProducts)
+                                                                            {
+                                                                                if (itemProd.SubCategoryCode == itemSub.SubCategoryCode)
+                                                                                {
+                                                                                    <tr class="@dynamicIdProd" id="@dynamicIdProd" style="display:none;">
+                                                                                        <td></td>
+                                                                                        <td style="color:brown;">@itemProd.Name</td>
+                                                                                        <td>Product</td>
+                                                                                        <td>@itemProd.VolumeTgt</td>
+                                                                                        <td>@itemProd.VolumeAch</td>
+                                                                                        <td>@itemProd.VolumeAchPercentage</td>
+                                                                                        <td>@itemProd.VolumePoints</td>
+                                                                                        <td>@itemProd.ValueTgt</td>
+                                                                                        <td>@itemProd.ValueAch</td>
+                                                                                        <td>@itemProd.ValueAchPercentage</td>
+                                                                                        <td>@itemProd.ValuePoints</td>
+                                                                                    </tr>
+                                                                                }
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                }
                                             }
                                             else
                                             {
@@ -146,163 +206,27 @@
             table.draw();
         });
     });
-
-     function ShowActivities(id) {
-         var pType = "Category";
-        if ($("#dvActivities" + id).is(":visible")) {
-            $("#dvActivities" + id).hide(1000);
-            $("#trActivities" + id).hide(1000);
-
+    var flag = 1;
+    function ShowActivities(id) {        
+        if (flag == 1) {
+            flag = 0;
+            $("#imgExpand" + id).attr("src", "/Content/assets/images/details_close.png");
+            $('.dvActivities' + id).show(500);
+        }
+        else {
+            flag = 1;
             $("#imgExpand" + id).attr("src", "/Content/assets/images/details_open.png");
-        }
-        else {
-            $("#divLoader").show();
-            $.ajax({
-                type: "POST",
-                 url: '@Url.Action("GetCategoryTgtVsAch")',
-                data: '{id: ' + JSON.stringify(id) + '}',
-                contentType: "application/json; charset=utf-8",
-                dataType: "json",
-                success: function (response) {
-                    BindActivities(id, response);
-                    $("#divLoader").hide();
-                },
-                failure: function (response) {
-
-                    $("#divLoader").hide();
-                }
-            });
-        }
+            $('[id^=dvActivitiesSub]').hide(500);
+            $('[id^=dvActivitiesProd]').hide(500);
+            $('.dvActivities' + id).hide(500);
+        }        
     }
-    function BindActivities(id, data) {
-        var htmlStr = "<table cellspacing=\"0\" cellpadding=\"0\" style=\"width:100%;  \" class=\"table\">";
-
-        $.map(data, function (item) {
-            
-            htmlStr += "<tr style=\"text-align: center;  border:hidden; border-collapse: collapse; \">"
-            htmlStr += "<td style=\"max-width:50px;  \" ><span style=\"text-align: center;color:darkblue;\" onclick=showSubCat(" + item.CategoryCode + ")>" + item.Name + "</span></td>";
-            //htmlStr += "<td style=\"width:30px; text-align: left;\">Category</td>";
-            htmlStr += "<td style=\"text-align: left;\">" + item.VolumeTgt + "</td>";
-            htmlStr += "<td style=\"text-align: left;\">" + item.VolumeAch + "</td>";
-            htmlStr += "<td style=\"text-align: left;\">" + item.VolumeAchPercentage + "</td>";
-            htmlStr += "<td style=\"text-align: left;\">" + item.ValueTgt + "</td>";
-            htmlStr += "<td style=\"text-align: left; \">" + item.ValueAch + "</td>";
-            htmlStr += "<td style=\"text-align: left;\">" + item.ValueAchPercentage + "</td>";
-            htmlStr += "</tr>";
-            var cIdTr = "trCategory" + item.CategoryCode;
-            var cIdDiv = "dvCategory" + item.CategoryCode;
-            htmlStr += "<tr id=" + cIdTr + "  style =\"display: none;\">";
-            htmlStr += "<td colspan=\"7\"><div id=" + cIdDiv + "></div></td>";
-            htmlStr += "</tr>";
-        });
-
-        htmlStr += "</table>";
-        $("#dvActivities" + id).html(htmlStr);
-
-        $("#trActivities" + id).show(1000);
-        $("#dvActivities" + id).show(1000);
-        $("#imgExpand" + id).attr("src", "/Content/assets/images/details_close.png");
+    
+    function ShowSubCategory(id) {        
+        $('.' + id).toggle(500);
     }
-
-    function showSubCat(id) {
-        if ($("#dvCategory" + id).is(":visible")) {
-            $("#dvCategory" + id).hide(1000);
-            $("#trCategory" + id).hide(1000);
-        }
-        else {
-            $("#divLoader").show();
-            $.ajax({
-                type: "POST",
-                url: '@Url.Action("GetSubCategoryTgtVsAch")',
-                data: '{CategoryCode: ' + JSON.stringify(id) + '}',
-                contentType: "application/json; charset=utf-8",
-                dataType: "json",
-                success: function (response) {
-                    BindSubActivities(id, response);
-                    $("#divLoader").hide();
-                },
-                failure: function (response) {
-
-                    $("#divLoader").hide();
-                }
-            });
-        }
-    }
-
-    function BindSubActivities(id, data) {
-        var htmlStr = "<table cellspacing=\"0\" cellpadding=\"0\" style=\"width:110%; \" class=\"table\">";
-
-        $.map(data, function (item) {
-            htmlStr += "<tr style=\"text-align: center;  border:hidden;border-collapse: collapse; \">"
-            htmlStr += "<td style=\"max-width:40px;\" ><span style=\" color:brown;\" onclick=showProd(" + item.SubCategoryCode + ") >" + item.Name + "</span></td>";
-            //htmlStr += "<td style=\"max-width:50px; \" >Sub-Category</td>";
-            htmlStr += "<td style=\"text-align: left; max-width:25px;\" >" + item.VolumeTgt + "</td>"; 
-            htmlStr += "<td style=\"text-align: left; max-width:25px;\">" + item.VolumeAch + "</td>";
-            htmlStr += "<td style=\"text-align: left; max-width:25px;\">" + item.VolumeAchPercentage + "</td>";
-            htmlStr += "<td style=\"text-align: left; max-width:25px;\">" + item.ValueTgt + "</td>";
-            htmlStr += "<td style=\"text-align: left; max-width:25px;\" >" + item.ValueAch + "</td>";
-            htmlStr += "<td style=\"text-align: left; max-width:25px;\">" + item.ValueAchPercentage + "</td>";
-            htmlStr += "</tr>";
-            var cIdtr = "trSubCategory" + item.SubCategoryCode;
-            var cIdDiv = "dvSubCategory" + item.SubCategoryCode;
-            htmlStr += "<tr id=" + cIdtr + "  style =\"display: none;\">";
-            htmlStr += "<td colspan=\"7\"><div id=" + cIdDiv + "></div></td>";
-            htmlStr += "</tr>";
-        });
-
-        htmlStr += "</table>";
-        $("#dvCategory" + id).html(htmlStr);
-
-        $("#dvCategory" + id).show(1000);
-        $("#trCategory" + id).show(1000);
-
-    }
-
-    function showProd(id) {
-        if ($("#dvSubCategory" + id).is(":visible")) {
-            $("#dvSubCategory" + id).hide(1000);
-            $("#trSubCategory" + id).hide(1000);
-        }
-        else {
-            $("#divLoader").show();
-            $.ajax({
-                type: "POST",
-                url: '@Url.Action("GetProductTgtVsAch")',
-                data: '{SubCategoryCode: ' + JSON.stringify(id) + '}',
-                contentType: "application/json; charset=utf-8",
-                dataType: "json",
-                success: function (response) {
-                    BindProdActivities(id, response);
-                    $("#divLoader").hide();
-                },
-                failure: function (response) {
-
-                    $("#divLoader").hide();
-                }
-            });
-        }
-    }
-
-    function BindProdActivities(id, data) {
-        var htmlStr = "<table cellspacing=\"0\" cellpadding=\"0\" style=\"width:110%; \"class=\"table\" >";
-
-        $.map(data, function (item) {
-            htmlStr += "<tr style=\"text-align: center;  border:hidden; border-collapse: collapse;\">"
-            htmlStr += "<td style=\"max-width:50px;  color:orange;\" >" + item.Name + "</td>";
-            htmlStr += "<td style=\"max-width:50px; \" >Product</td>";
-            htmlStr += "<td style=\" \" >" + item.VolumeTgt + "</td>";
-            htmlStr += "<td style=\" \">" + item.VolumeAch + "</td>";
-            htmlStr += "<td style=\"\" >" + item.VolumeAchPercentage + "</td>";
-            htmlStr += "<td style=\"max-width:70px; text-align: right;\">" + item.ValueTgt + "</td>";
-            htmlStr += "<td style=\"max-width:70px; text-align: right;\" >" + item.ValueAch + "</td>";
-            htmlStr += "<td style=\"max-width:70px; text-align: right; \">" + item.ValueAchPercentage + "</td>";
-            htmlStr += "</tr>";
-        });
-
-        htmlStr += "</table>";
-        $("#dvSubCategory" + id).html(htmlStr);
-        $("#dvSubCategory" + id).show(1000);
-        $("#trSubCategory" + id).show(1000);
+    function ShowProducts(id) {        
+        $('.' + id).toggle(500);
     }
 
 </script>

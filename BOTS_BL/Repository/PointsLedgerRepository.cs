@@ -280,28 +280,28 @@ namespace BOTS_BL.Repository
             List<TgtvsAchMaster> objTgtvsAchMaster = new List<TgtvsAchMaster>();
             using (var context = new ChitaleDBContext())
             {
-                objTgtvsAchMaster = context.TgtvsAchMasters.Where(x => x.CustomerId == CustomerId && x.ProductType == "Category").ToList();
+                objTgtvsAchMaster = context.TgtvsAchMasters.Where(x => x.CustomerId== CustomerId && x.ProductType == "Category").ToList();
             }
 
             return objTgtvsAchMaster;
         }
-        public List<TgtvsAchMaster> GetSubCategoryData(string CustomerId, string CategoryCode)
+        public List<TgtvsAchMaster> GetSubCategoryData(string CustomerId)
         {
             List<TgtvsAchMaster> objTgtvsAchMaster = new List<TgtvsAchMaster>();
             using (var context = new ChitaleDBContext())
             {
-                objTgtvsAchMaster = context.TgtvsAchMasters.Where(x => x.CustomerId == CustomerId && x.ProductType == "SubCategory" && x.CategoryCode == CategoryCode).ToList();
+                objTgtvsAchMaster = context.TgtvsAchMasters.Where(x => x.CustomerId == CustomerId && x.ProductType == "SubCategory").ToList();
             }
 
             return objTgtvsAchMaster;
         }
 
-        public List<TgtvsAchMaster> GetProductData(string CustomerId, string SubCategoryCode)
+        public List<TgtvsAchMaster> GetProductData(string CustomerId)
         {
             List<TgtvsAchMaster> objTgtvsAchMaster = new List<TgtvsAchMaster>();
             using (var context = new ChitaleDBContext())
             {
-                objTgtvsAchMaster = context.TgtvsAchMasters.Where(x => x.CustomerId == CustomerId && x.ProductType == "Product" && x.SubCategoryCode == SubCategoryCode).ToList();
+                objTgtvsAchMaster = context.TgtvsAchMasters.Where(x => x.CustomerId == CustomerId && x.ProductType == "Product").ToList();
             }
 
             return objTgtvsAchMaster;

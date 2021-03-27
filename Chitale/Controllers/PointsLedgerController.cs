@@ -6,6 +6,7 @@ using System.Web.Mvc;
 using BOTS_BL;
 using BOTS_BL.Models.ChitaleModel;
 using BOTS_BL.Repository;
+using Chitale.ViewModel;
 
 namespace Chitale.Controllers
 {
@@ -45,12 +46,15 @@ namespace Chitale.Controllers
 
         public ActionResult TgtVsAch()
         {
-            TgtvsAchMaster objData = new TgtvsAchMaster();
+            TgtVsAchViewModel objData = new TgtVsAchViewModel();
             try
             {
                 var UserSession = (CustomerDetail)Session["ChitaleUser"];
 
-                objData = PLR.GetOverallData(UserSession.CustomerId);
+                objData.objOverAll = PLR.GetOverallData(UserSession.CustomerId);
+                objData.objCategory = PLR.GetCategoryData(UserSession.CustomerId);
+                objData.objSubCategory = PLR.GetSubCategoryData(UserSession.CustomerId);
+                objData.objProducts = PLR.GetProductData(UserSession.CustomerId);
             }
             catch (Exception ex)
             {
@@ -58,49 +62,5 @@ namespace Chitale.Controllers
             }
             return View(objData);
         }
-
-        public ActionResult GetCategoryTgtVsAch(string id, string pType)
-        {
-            List<TgtvsAchMaster> objData = new List<TgtvsAchMaster>();
-            try
-            {
-                objData = PLR.GetCategoryData(id);
-            }
-            catch (Exception ex)
-            {
-                newexception.AddException(ex);
-            }
-            return Json(objData, JsonRequestBehavior.AllowGet);
-        }
-
-        public ActionResult GetSubCategoryTgtVsAch(string CategoryCode)
-        {
-            List<TgtvsAchMaster> objData = new List<TgtvsAchMaster>();
-            try
-            {
-                var UserSession = (CustomerDetail)Session["ChitaleUser"];
-                objData = PLR.GetSubCategoryData(UserSession.CustomerId, CategoryCode);
-            }
-            catch (Exception ex)
-            {
-                newexception.AddException(ex);
-            }
-            return Json(objData, JsonRequestBehavior.AllowGet);
-        }
-        public ActionResult GetProductTgtVsAch(string SubCategoryCode)
-        {
-            List<TgtvsAchMaster> objData = new List<TgtvsAchMaster>();
-            try
-            {
-                var UserSession = (CustomerDetail)Session["ChitaleUser"];
-                objData = PLR.GetProductData(UserSession.CustomerId, SubCategoryCode);
-            }
-            catch (Exception ex)
-            {
-                newexception.AddException(ex);
-            }
-            return Json(objData, JsonRequestBehavior.AllowGet);
-        }
-
     }
 }
