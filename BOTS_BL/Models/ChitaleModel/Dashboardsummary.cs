@@ -21,6 +21,8 @@ namespace BOTS_BL.Models.ChitaleModel
         public string AddOnPointsStr { get; set; }
         public string LostPointsStr { get; set; }
         public string TotalPointsBalanceStr { get; set; }
+        public string FromDate { get; set; }
+        public string ToDate { get; set; }
 
     }
 
@@ -45,6 +47,7 @@ namespace BOTS_BL.Models.ChitaleModel
         public int CurrentRank { get; set; }
         public int LastMonthRank { get; set; }
         public decimal RankPoints { get; set; }
+        public string RankPointsStr { get; set; }
         public int LostRank { get; set; }
     }
 

@@ -32,11 +32,21 @@ namespace BOTS_BL.Repository
                 if (IsBTD)
                 {
                     objtransactionmaster = context.TransactionMasters.Where(x => x.CustomerId == CustomerId).ToList();
+                    var FromDate = context.TransactionMasters.Where(x => x.CustomerId == CustomerId).OrderBy(y => y.OrderDatetime).Select(z => z.OrderDatetime).FirstOrDefault();
+
+                    if (FromDate != null)
+                    {
+                        objDashboardsummary.FromDate = FromDate.Value.ToString("dd-MM-yyyy");
+                        objDashboardsummary.ToDate = DateTime.Now.ToString("dd-MM-yyyy");
+                    }
                 }
                 else
                 {
                     objtransactionmaster = context.TransactionMasters.Where(x => x.CustomerId == CustomerId && x.OrderDatetime.Value.Month == DateTime.Today.Month
                     && x.OrderDatetime.Value.Year == DateTime.Today.Year).ToList();
+                    var startDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
+                    objDashboardsummary.FromDate = startDate.ToString("dd-MM-yyyy");
+                    objDashboardsummary.ToDate = DateTime.Now.ToString("dd-MM-yyyy");
                 }
                 if (objtransactionmaster != null)
                 {
@@ -48,6 +58,7 @@ namespace BOTS_BL.Repository
                     var NormalPoints = (decimal)objtransactionmaster.Sum(x => x.NormalPoints);
                     objDashboardsummary.TotalPointsBalance = (NormalPoints + objDashboardsummary.AddOnPoints) - objDashboardsummary.LostPoints;
                 }
+                
             }
             return objDashboardsummary;
         }
@@ -108,7 +119,7 @@ namespace BOTS_BL.Repository
             return objDashboardTarget;
         }
 
-        public DashboardRank GetRankData(string CustomerId)
+        public DashboardRank GetRankData(string CustomerId, string CustomerType)
         {
             DashboardRank objRank = new DashboardRank();
             DataSet retVal = new DataSet();
@@ -119,7 +130,7 @@ namespace BOTS_BL.Repository
             using (cmdReport)
             {
                 SqlParameter param1 = new SqlParameter("pi_CustomerId", CustomerId);
-                SqlParameter param2 = new SqlParameter("pi_CustomerType", "Distributors");
+                SqlParameter param2 = new SqlParameter("pi_CustomerType", CustomerType);
                 SqlParameter param3 = new SqlParameter("pi_Datetime", DateTime.Now.ToString("dd-MM-yyyy"));
                 SqlParameter param4 = new SqlParameter("pi_Year", DateTime.Now.Year);
                 cmdReport.CommandType = CommandType.StoredProcedure;

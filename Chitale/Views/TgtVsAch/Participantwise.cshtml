@@ -10,7 +10,7 @@
             <div class="card-header-tab card-header-tab-animation card-header" style="margin-bottom:10px;">
                 <div class="card-header-title">
                     <i class="header-icon lnr-apartment icon-gradient bg-love-kiss"> </i>
-                    TARGET vs ACHIEVEMENT – PARTICIPANT-WISE
+                    FOCUS vs ACHIEVEMENT – PARTICIPANT-WISE &nbsp;&nbsp;&nbsp;&nbsp; <span id="spnMonthDetails">(Current Month)</span>
                 </div>
             </div>
 
@@ -29,7 +29,7 @@
                 </div>
                 <div >                    
                         <br />
-                        <input type="radio" id="rdnSS" name="cust_type" /> Super Stockiest &nbsp;&nbsp;&nbsp;&nbsp;
+                        <input type="radio" id="rdnSS" checked name="cust_type" /> Super Stockiest &nbsp;&nbsp;&nbsp;&nbsp;
                         <input type="radio" id="rdnDist" name="cust_type" /> Distributors &nbsp;&nbsp;&nbsp;&nbsp;
                         <input type="radio" id="rdnRetailer" name="cust_type" /> Retailers <br /><br />
                         @Html.DropDownListFor(model => model.MonthsList, new SelectList(Model.MonthsList, "Value", "Text"), "Select Month", htmlAttributes: new { @class = "input50", @id = "ddlMonthList" })&nbsp;&nbsp;&nbsp;&nbsp;
@@ -101,6 +101,7 @@
         });
     });
     function GetSummeryDetails() {
+        console.log($('#ddlMonthList').val())
         var SummeryData = [];
         item = {}        
         item["Cluster"] = $('#ddlClusterList :selected').text();
@@ -150,6 +151,23 @@
                         tableData.push(optionItem);
                     });
                     DrawTable();
+                    if ($('#ddlMonthList').val() == "" && $('#ddlYearList').val() == "") {
+                        $("#spnMonthDetails").text("(Current Month)")
+                    }
+                    else if ($('#ddlMonthList').val() != "" && $('#ddlYearList').val() != "") {
+                        $("#spnMonthDetails").text($("#ddlMonthList option:selected").text() + " - " + $("#ddlYearList option:selected").text());
+                    }
+                    else if ($('#ddlMonthList').val() !="") {
+                        $("#spnMonthDetails").text($("#ddlMonthList option:selected").text());
+                    }
+                    else if ($('#ddlYearList').val() != "") {
+                        $("#spnMonthDetails").text($("#ddlYearList option:selected").text());
+                    }
+                    
+                    
+
+
+                    $('#ddlYearList').val()
                     $("#divLoader").hide();
                 }
             },

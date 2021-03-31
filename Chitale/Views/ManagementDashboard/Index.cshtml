@@ -10,12 +10,8 @@
             <div class="card-header-tab card-header-tab-animation card-header" style="margin-bottom:10px;">
                 <div class="card-header-title">
                     <i class="header-icon lnr-apartment icon-gradient bg-love-kiss"> </i>
-                    SUMMARY
-                </div>
-                @*<ul class="nav">
-                        <li class="nav-item"><a href="javascript:void(0);" onclick="GetSummeryDetails('1');" id="SummeryBTD" class="active nav-link">BTD</a></li>
-                        <li class="nav-item"><a href="javascript:void(0);" onclick="GetSummeryDetails('0');" id="SummeryCurrentMonth" class="nav-link second-tab-toggle">Current Month</a></li>
-                    </ul>*@
+                    SUMMARY &nbsp;&nbsp;&nbsp; Period : &nbsp;&nbsp; <span id="spnFrmDate"></span>&nbsp; to &nbsp; <span id="spnToDate"></span>
+                </div>               
             </div>
 
             <div class="card-header-tab" style="margin-bottom:20px;">
@@ -146,6 +142,7 @@
                                                 <canvas id="cvTop5Participant"></canvas>
                                             </div>
                                         </div>
+                                        <span>&nbsp;* The above is participant ranking, based on points</span>
                                     </div>
                                 </div>
                             </div>
@@ -175,6 +172,7 @@
                                                 <canvas id="cvBottom5Participant"></canvas>
                                             </div>
                                         </div>
+                                        <span>&nbsp;* The above is participant ranking, based on points</span>
                                     </div>
                                 </div>
                             </div>
@@ -206,6 +204,7 @@
                                                 <canvas id="cvTop5LostParticipant"></canvas>
                                             </div>
                                         </div>
+                                        <span>&nbsp;* The above is based on maximum Lost Opportunity points</span>
                                     </div>
                                 </div>
                             </div>
@@ -218,7 +217,7 @@
                         <div class="card-header-tab card-header-tab-animation card-header">
                             <div class="card-header-title">
                                 <i class="header-icon lnr-apartment icon-gradient bg-love-kiss"> </i>
-                                TGT vs ACH VOL PERFORMANCE
+                                FOCUS vs ACH VOL PERFORMANCE <br />(Current Month)
                             </div>
                             <ul class="nav">
                                 <li class="nav-item"><a href="javascript:void(0);" onclick="TgtVsAchVolPerformance('SuperStockiest')" id="navPerformanceSS" class="active nav-link">SS</a></li>
@@ -235,6 +234,7 @@
                                                 <canvas id="cvPerformance"></canvas>
                                             </div>
                                         </div>
+                                        <span>&nbsp;* This Achievement is for the current on-going month</span>
                                     </div>
                                 </div>
                             </div>
@@ -267,6 +267,7 @@
                                                 <canvas id="cvAvgOrder"></canvas>
                                             </div>
                                         </div>
+                                        <span>&nbsp;* The days depict the difference between Order Dates & Ravana Dates</span>
                                     </div>
                                 </div>
                             </div>
@@ -296,6 +297,7 @@
                                                 <canvas id="cvOrderToRavana"></canvas>
                                             </div>
                                         </div>
+                                        <span>&nbsp;* This Achievement is for the current on-going month</span>
                                     </div>
                                 </div>
                             </div>
@@ -378,7 +380,8 @@
                     $("#spnAddOnPoints").text(response.AddOnPointsStr);
                     $("#spnLostPoints").text(response.LostPointsStr);
                     $("#spnTotalPointsBalance").text(response.TotalPointsBalanceStr);
-
+                    $("#spnFrmDate").text(response.FromDate);
+                    $("#spnToDate").text(response.ToDate);
                     $("#divLoader").hide();
                 }
             },
@@ -474,6 +477,8 @@
                                             }
                                         },
                                         color: '#000',
+                                        align: 'end',
+                                        anchor: 'left',
                                     }
                                 }
                             }
@@ -581,6 +586,8 @@
                                             }
                                         },
                                         color: '#000',
+                                        align: 'end',
+                                        anchor: 'left',
                                     }
                                 }
                             }
@@ -688,6 +695,8 @@
                                             }
                                         },
                                         color: '#000',
+                                        align: 'end',
+                                        anchor: 'left',
                                     }
                                 }
                             }
@@ -798,6 +807,8 @@
                                             }
                                         },
                                         color: '#000',
+                                        align: 'end',
+                                        anchor: 'left',
                                     }
                                 }
                             }
@@ -991,6 +1002,8 @@
                                             }
                                         },
                                         color: '#000',
+                                        align: 'end',
+                                        anchor: 'left',
                                     }
                                 }
                             }

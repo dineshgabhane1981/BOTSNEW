@@ -1,4 +1,4 @@
-﻿@model List<BOTS_BL.Models.ChitaleModel.PointLedgerModel>
+﻿@*@model List<BOTS_BL.Models.ChitaleModel.PointLedgerModel>*@
 @{
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -11,6 +11,22 @@
                 <b>DETAILED POINTS LEDGER</b>
                 <div class="row mb-3">
                     <div class="container-fluid pt-3 pl-3 pr-3">
+                        <div style="display:flex; margin:20px 0px;">
+                            <div class="col-md-3 col-xl-3">
+                                <b>Select Date Range</b><br /><br />&nbsp;&nbsp; <input type="radio" checked id="BTD" name="btdornot" /> BTD &nbsp;&nbsp;&nbsp;&nbsp;
+                                <input type="radio" id="Range" name="btdornot" /> Range &nbsp;&nbsp;&nbsp;&nbsp;
+                            </div>
+                            <div class="col-md-3 col-xl-3">
+                                From Date <br /><input type="text" class="input50" placeholder="From Date" readonly id="txtFrmDate" />&nbsp;&nbsp;&nbsp;&nbsp;
+                            </div>
+                            <div class="col-md-3 col-xl-3">
+                                To Date <br /><input type="text" class="input50" placeholder="To Date" readonly id="txtToDate" />
+                            </div>
+                            <div class="col-md-3 col-xl-3">
+                                <button type="button" id="btnFilter" style="margin-left:17px;margin-top:30px;" class="btn btn-primary"><b>FILTER</b></button>
+                            </div>
+                        </div>
+
                         <div class="pt-3 pl-3 pr-3 col-md-12 col-lg-12">
                             <div class="row">
                                 <div class="col search-container" style="margin-bottom:10px;">
@@ -21,97 +37,16 @@
                                     <ul class="list-inline progress-list mt-2">
                                         <li class="list-inline-item">
                                             <div class="dropdown">
-                                                @*<button class="btn btn-primary login-btn" onclick='ExportDataExcel();' type="button" id="btnExport">
-                                                        <i class="fas fa-file-export"></i> Export
-                                                    </button>*@
                                             </div>
                                         </li>
                                     </ul>
                                 </div>
                             </div>
                             <div class="row" id="divactivityTable">
+                                <div id="dvListing">
 
-                                <div class="table-responsive">
-                                    <table class="table" id="activityTable">
-                                        <thead>
-                                            <tr>
-                                                <th scope="col"></th>
-                                                <th scope="col">Txn Type</th>
-                                                <th scope="col">Sub-Type</th>
-                                                <th scope="col">Ref No.</th>
-                                                <th scope="col">Amt (Rs)</th>
-                                                <th scope="col">Base Pts</th>
-                                                <th scope="col">Add-on Pts</th>
-                                                <th scope="col">Lost Opp Pts</th>
-                                                @*<th scope="col">Order Date</th>
-                                                    <th scope="col">Ravana Date</th>
-                                                    <th scope="col">Days Diff</th>*@
-                                                <th scope="col">Net Earn Points</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @if (Model != null)
-                                            {
-                                                if (Model.Count > 0)
-                                                {
-                                                    foreach (var item in Model)
-                                                    {
-                                                        var imgId = "imgExpand" + item.RefNo;
-                                                        <tr style="text-align:center;">
-                                                            <td style="text-align:center;">
-                                                                <img id="@imgId" src="~/Content/assets/images/details_open.png" style="cursor:pointer;" onclick="ShowActivities('@item.RefNo', @item.CustomerId, '@item.TxnType');" />
-                                                            </td>
-                                                            <td>@item.TxnType</td>
-                                                            <td>@item.SubType</td>
-                                                            <td>@item.RefNo</td>
-                                                            <td>@item.AmountStr</td>
-                                                            <td>@item.BasePointsStr</td>
-                                                            <td>@item.AddOnPointsStr</td>
-                                                            <td>@item.LostOppPointsStr</td>
-                                                            @*<td>@item.OrderDate</td>
-                                                                <td>@item.RavanaDate</td>
-                                                                <td>@item.DaysDiff</td>*@
-                                                            <td>@item.NetEarnPointsStr</td>
-                                                        </tr>
-                                                        var dynamicIdTr = "trActivities" + item.RefNo;
-                                                        var dynamicIdDiv = "dvActivities" + item.RefNo;
-                                                        <tr id="@dynamicIdTr" style="display:none;">
-                                                            <td colspan="12">
-                                                                <div id="@dynamicIdDiv" style="display:none;" class="table-responsive">
-
-                                                                </div>
-                                                            </td>
-                                                            <td style="display:none;"></td>
-                                                            <td style="display:none;"></td>
-                                                            <td style="display:none;"></td>
-                                                            <td style="display:none;"></td>
-                                                            <td style="display:none;"></td>
-                                                            <td style="display:none;"></td>
-                                                            <td style="display:none;"></td>
-                                                            @* <td style="display:none;"></td>
-                                                                <td style="display:none;"></td>
-                                                                <td style="display:none;"></td>*@
-                                                            <td style="display:none;"></td>
-                                                        </tr>
-                                                    }
-
-                                                }
-                                                else
-                                                {
-                                                    <tr>
-                                                        <td colspan="9" align="center">No Data Available</td>
-                                                    </tr>
-                                                }
-                                            }
-                                            else
-                                            {
-                                                <tr>
-                                                    <td colspan="12" align="center">No Data Available</td>
-                                                </tr>
-                                            }
-                                        </tbody>
-                                    </table>
                                 </div>
+                               
                             </div>
                         </div>
                     </div>
@@ -122,48 +57,81 @@
 </div>
 <script>
     $(document).ready(function () {
-        $('#activityTable').DataTable({
-            "aaSorting": [],
-            "paging": true,
-            "ordering": false,
-            "info": true,
-            "bFilter": true,
-            "pageLength": 10,
-            "pagingType": "simple_numbers",
-            //language: {
-            //    paginate: {
-            //        next: '&#8594;', // or '→'
-            //        previous: '&#8592;' // or '←'
-            //    }
-            //}
-            aoColumnDefs: [
-                {
-                    bSortable: false,
-                    aTargets: [-1, -2]
-                }
-            ]
+        var today = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
+        $("#txtFrmDate").datepicker({
+            dateFormat: "yy-mm-dd",
+            maxDate: today,
         });
-
-        $('#activityTable_filter').hide();
-
-        $('#txtSearch').on('keyup', function () {
-
-            $.fn.dataTable.ext.search.push(function (settings, searchData) {
-                var term = $('#txtSearch').val().toLowerCase()
-                for (var i = 0; i < searchData.length; i++) {
-                    if (searchData[i].toLowerCase().indexOf(term) == 0) {
-                        return true;
-                    }
-                }
-                return false;
-            });
-            var table = $('#activityTable').DataTable();
-            table.draw();
+        $("#txtToDate").datepicker({
+            dateFormat: "yy-mm-dd",
+            maxDate: today,
         });
+        showfilterrange();
+        $("#BTD").change(function(){
+            showfilterrange();
+        });
+        $("#Range").change(function () {
+            showfilterrange();
+        });
+        BindData();
 
-        //$(".first.paginate_button, .last.paginate_button").hide();
+        $("#btnFilter").click(function () {
+            BindData();
+        });
     });
+    function BindData() {
+        var btd = 0;
+        var FrmDate = "";
+        var ToDate = "";
+        if ($("#BTD").prop("checked")) {
+            btd = 1;
+            FrmDate = "";
+            ToDate = "";
+        }
+        if ($("#Range").prop("checked")) {
+            btd = 0;
+            FrmDate = $("#txtFrmDate").val();
+            ToDate = $("#txtToDate").val();
+        }
 
+         $("#divLoader").show();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("GetPointLedgerData")',
+            data: '{isBTD: ' + JSON.stringify(btd) + ',FrmDate: ' + JSON.stringify(FrmDate) + ',ToDate: ' + JSON.stringify(ToDate) + '}',
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                console.log(response)
+                if (response != null) {
+                    $("#dvListing").html(response);                    
+                    $("#divLoader").hide();
+                }
+            },
+            failure: function (response) {                
+                $("#divLoader").hide();
+            },
+            error: function (response) {                
+                $("#dvListing").html(response.responseText);
+                $("#divLoader").hide();
+            }
+        });
+    
+    }
+    function showfilterrange() {
+        if ($("#BTD").prop("checked")) {
+            $('#txtFrmDate').attr('readonly', true);
+            $('#txtFrmDate').val("");
+            $('#txtToDate').attr('readonly', true);
+            $('#txtToDate').val("");
+
+        }
+        if ($("#Range").prop("checked")) {
+            $('#txtFrmDate').attr('readonly', false);
+            $('#txtToDate').attr('readonly', false);
+
+        }
+    }
     function ShowActivities(id, CustomerId, type) {
 
         if ($("#dvActivities" + id).is(":visible")) {
@@ -234,7 +202,7 @@
             htmlStr += "<th scope=\"col\">Var</th>";
             htmlStr += "<th scope=\"col\">%Ach</th>";
             htmlStr += "<th scope=\"col\">Add-On</th>";
-            htmlStr += "<th scope=\"col\">Lost Opp</th>";            
+            htmlStr += "<th scope=\"col\">Lost Opp</th>";
             htmlStr += "</tr>";
 
             $.map(data, function (item) {
@@ -247,7 +215,7 @@
                 htmlStr += "<td>" + item.Variance + "</td>";
                 htmlStr += "<td>" + item.AchPercentage + "</td>";
                 htmlStr += "<td>" + item.AddOnPointsStr + "</td>";
-                htmlStr += "<td>" + item.LostOppPointsStr + "</td>";                
+                htmlStr += "<td>" + item.LostOppPointsStr + "</td>";
                 htmlStr += "</tr>"
             });
         }
@@ -270,3 +238,7 @@
 
 
 </script>
+<script src="~/Scripts/jquery-ui-1.12.1.js"></script>
+<script src="~/Scripts/jquery-ui-1.12.1.min.js"></script>
+<link href="~/Content/themes/base/jquery-ui.min.css" rel="stylesheet" />
+<link href="~/Content/themes/base/jquery-ui.css" rel="stylesheet" />

@@ -101,7 +101,7 @@ namespace BOTS_BL.Repository
             {
                 if (Cluster == "All" && SubCluster == "All" && City == "All" && FromDate == "" && Todate == "")
                 {
-                    objtransactionmaster = context.TransactionMasters.ToList();
+                    objtransactionmaster = context.TransactionMasters.ToList();                   
                 }
                 else
                 {
@@ -145,10 +145,17 @@ namespace BOTS_BL.Repository
                             objtransactionmaster = objtransactionmaster.Where(x => x.OrderDatetime >= Convert.ToDateTime(Todate)).ToList();
                         }
                     }
+                   
                 }
 
                 if (objtransactionmaster != null)
                 {
+                    var TxnFromDate = context.TransactionMasters.OrderBy(y => y.OrderDatetime).Select(z => z.OrderDatetime).FirstOrDefault();
+                    if (TxnFromDate != null)
+                    {
+                        objDashboardsummary.FromDate = TxnFromDate.Value.ToString("dd-MM-yyyy");
+                        objDashboardsummary.ToDate = DateTime.Now.ToString("dd-MM-yyyy");
+                    }
                     objDashboardsummary.PurchaseOrderPoints = (decimal)objtransactionmaster.Where(x => x.TxnType == "Purchase").Sum(x => x.NormalPoints);
                     objDashboardsummary.SalesOrderPoints = (decimal)objtransactionmaster.Where(x => x.TxnType == "Sale").Sum(x => x.NormalPoints);
                     objDashboardsummary.AddOnPoints = (decimal)objtransactionmaster.Sum(x => x.AddOnPoints);
@@ -277,6 +284,11 @@ namespace BOTS_BL.Repository
                             ).ToList<ParticipantListForManagement>();
                     }
                 }
+
+                if (lstparticipantListsformgt != null)
+                {
+                    lstparticipantListsformgt = lstparticipantListsformgt.OrderBy(x => Convert.ToInt32(x.CurrentRank)).ToList();
+                }
             }
             catch (Exception ex)
             {
@@ -377,6 +389,11 @@ namespace BOTS_BL.Repository
                             ).ToList<LeaderBoardForMgt>();
                     }
 
+                }
+
+                if (lstLeaderBrd != null)
+                {
+                    lstLeaderBrd = lstLeaderBrd.OrderBy(x => Convert.ToInt32(x.CurrentOverallRank)).ToList();
                 }
 
             }

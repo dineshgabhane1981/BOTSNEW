@@ -3,7 +3,8 @@
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.2.2/Chart.bundle.min.js"></script>
+@*<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.2.2/Chart.bundle.min.js"></script>*@
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@0.4.0/dist/chartjs-plugin-datalabels.min.js"></script>
 
 <div class="app-main__inner">
     <div class="row">
@@ -11,7 +12,7 @@
             <div class="card-header-tab card-header-tab-animation card-header" style="margin-bottom:10px;">
                 <div class="card-header-title">
                     <i class="header-icon lnr-apartment icon-gradient bg-love-kiss"> </i>
-                    SUMMARY
+                    SUMMARY &nbsp;&nbsp;&nbsp; Period : &nbsp;&nbsp; <span id="spnFrmDate"></span>&nbsp; to &nbsp; <span id="spnToDate"></span>
                 </div>
                 <ul class="nav">
                     <li class="nav-item"><a href="javascript:void(0);" onclick="showSummerySelection('1')" id="summeryBTD" class="active nav-link">BTD</a></li>
@@ -162,7 +163,7 @@
                 <div class="card-header-tab card-header-tab-animation card-header">
                     <div class="card-header-title">
                         <i class="header-icon lnr-apartment icon-gradient bg-love-kiss"> </i>
-                        FOCUS vs ACH
+                        FOCUS vs ACH (Current Month)
                     </div>
                     <ul class="nav">
                         <li class="nav-item"><a href="javascript:void(0);" onclick="showTGTCurrent('1');" id="tgtCurrent" class="active nav-link">Value Wise</a></li>
@@ -200,7 +201,8 @@
 
         $.ajax({
             type: "POST",
-            url: "Dashboard/GetDashboardSummeryData",
+            //url: "Dashboard/GetDashboardSummeryData",
+            url: '@Url.Action("GetDashboardSummeryData")',
             data: "{'Flag': '" + flag + "'}",
             contentType: "application/json; charset=utf-8",
             dataType: "json",
@@ -212,6 +214,9 @@
                     $("#spnAddOnPoints").text(response.AddOnPointsStr);
                     $("#spnLostPoints").text(response.LostPointsStr);
                     $("#spnTotalPointsBalance").text(response.TotalPointsBalanceStr);
+
+                    $("#spnFrmDate").text(response.FromDate);
+                    $("#spnToDate").text(response.ToDate);
 
                     $("#divLoader").hide();
                 }
@@ -238,7 +243,8 @@
         $("#divLoader").show();
         $.ajax({
             type: "POST",
-            url: "Dashboard/GetDashboardLostOppData",
+            //url: "Dashboard/GetDashboardLostOppData",
+            url: '@Url.Action("GetDashboardLostOppData")',
             data: "{'profileFlag': '" + flag + "'}",
             contentType: "application/json; charset=utf-8",
             dataType: "json",
@@ -251,9 +257,40 @@
                         legend: {
                             display: true,
                             position: 'bottom'
+                        },
+                        tooltips: {
+                            enabled: false
+                        },
+                        plugins: {
+                            datalabels: {
+                                formatter: (value, ctx) => {
+                                    let datasets = ctx.chart.data.datasets;
+                                    if (datasets.indexOf(ctx.dataset) === datasets.length - 1) {
+                                        let sum = datasets[0].data.reduce((a, b) => a + b, 0);
+
+                                        x = value.toString();
+                                        var afterPoint = '';
+                                        if (x.indexOf('.') > 0)
+                                            afterPoint = x.substring(x.indexOf('.'), x.length);
+                                        x = Math.floor(x);
+                                        x = x.toString();
+                                        var lastThree = x.substring(x.length - 3);
+                                        var otherNumbers = x.substring(0, x.length - 3);
+                                        if (otherNumbers != '')
+                                            lastThree = ',' + lastThree;
+                                        value = otherNumbers.replace(/\B(?=(\d{2})+(?!\d))/g, ",") + lastThree + afterPoint;
+
+
+                                        return value;
+                                    } else {
+                                        return value;
+                                    }
+                                },
+                                color: '#000',
+                            }
                         }
                     }
-                                     
+
                     var data = {
                         datasets: [{
                             data: [...response],
@@ -304,20 +341,21 @@
         $("#divLoader").show();
         $.ajax({
             type: "POST",
-            url: "Dashboard/GetTargetData",
+            //url: "Dashboard/GetTargetData",
+            url: '@Url.Action("GetTargetData")',
             data: "{'valueVolumne': '" + flag + "'}",
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             success: function (response) {
-                console.log(response);               
+                console.log(response);
                 var value1 = response[0];
                 var value2 = response[1];
                 if (flag == "0") {
                     value1 = response[2];
                     value2 = response[3];
                 }
-                
-                if (response != null) {                    
+
+                if (response != null) {
                     $('#cvTgt').remove(); // this is my <canvas> element
                     $('#containerTgt').append('<canvas id="cvTgt"><canvas>');
 
@@ -344,7 +382,7 @@
                             options:
                             {
                                 scales: {
-                                    yAxes: [{
+                                    xAxes: [{
                                         ticks: {
                                             beginAtZero: true
                                         }
@@ -358,6 +396,7 @@
                                 legend: {
                                     display: false
                                 },
+
                                 responsive: true,
                                 maintainAspectRatio: true,
                                 tooltips: { enabled: false },
@@ -367,24 +406,19 @@
                                     "animationDuration": 0,
                                     mode: null
                                 },
-                                "animation": {
-                                    "duration": 1,
-                                    "onComplete": function () {
-                                        var chartInstance = this.chart,
-                                            ctx = chartInstance.ctx;
+                                plugins: {
+                                    datalabels: {
+                                        formatter: (value, ctx) => {
+                                            let datasets = ctx.chart.data.datasets;
+                                            if (datasets.indexOf(ctx.dataset) === datasets.length - 1) {
+                                                let percentage = (value).toFixed(2).replace(/(\d)(?=(\d{2})+\d\.)/g, '$1,');
+                                                return percentage;
+                                            } else {
+                                                return percentage;
+                                            }
+                                        },
+                                        color: '#000',
 
-                                        ctx.font = Chart.helpers.fontString(Chart.defaults.global.defaultFontSize, Chart.defaults.global.defaultFontStyle, Chart.defaults.global.defaultFontFamily);
-                                        ctx.textAlign = 'center';
-                                        ctx.textBaseline = 'bottom';
-
-                                        this.data.datasets.forEach(function (dataset, i) {
-                                            var meta = chartInstance.controller.getDatasetMeta(i);
-                                            meta.data.forEach(function (bar, index) {
-                                                var data = dataset.data[index];
-                                                ctx.fillStyle = 'rgba(0, 0, 0, 1)';
-                                                ctx.fillText(data, bar._model.x, bar._model.y - 5);
-                                            });
-                                        });
                                     }
                                 }
                             }
@@ -450,16 +484,17 @@
         $("#divLoader").show();
         $.ajax({
             type: "POST",
-            url: "Dashboard/GetRankData",
+            //url: "Dashboard/GetRankData",
+            url: '@Url.Action("GetRankData")',
             //data: "{'profileFlag': '" + flag + "'}",
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             success: function (response) {
-                
+
                 $("#spnCurrentRank").text(response.CurrentRank);
                 $("#spnRank").text(response.CurrentRank);
                 $("#spnLastMonthRank").text(response.LastMonthRank);
-                $("#spnRankPoints").text(response.RankPoints);
+                $("#spnRankPoints").text(response.RankPointsStr);
                 $("#spnLostRank").text(response.LostRank);
                 $("#divLoader").hide();
             },
@@ -476,3 +511,7 @@
 
 
 </script>
+<script src="~/Scripts/jquery-ui-1.12.1.js"></script>
+<script src="~/Scripts/jquery-ui-1.12.1.min.js"></script>
+<link href="~/Content/themes/base/jquery-ui.min.css" rel="stylesheet" />
+<link href="~/Content/themes/base/jquery-ui.css" rel="stylesheet" />

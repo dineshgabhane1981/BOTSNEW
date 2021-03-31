@@ -20,14 +20,29 @@ namespace Chitale.Controllers
             List<PointLedgerModel> bojList = new List<PointLedgerModel>();
             try
             {
-                var UserSession = (CustomerDetail)Session["ChitaleUser"];                
-                bojList = PLR.GetPointLedgerData(UserSession.CustomerId);
+                //var UserSession = (CustomerDetail)Session["ChitaleUser"];
+                //bojList = PLR.GetPointLedgerData(UserSession.CustomerId);
             }
             catch (Exception ex)
             {
                 newexception.AddException(ex);
             }
-            return View(bojList);
+            return View();
+        }
+
+        public ActionResult GetPointLedgerData(string isBTD, string FrmDate,string ToDate)
+        {
+            List<PointLedgerModel> bojList = new List<PointLedgerModel>();
+            try
+            {
+                var UserSession = (CustomerDetail)Session["ChitaleUser"];
+                bojList = PLR.GetPointLedgerData(UserSession.CustomerId, isBTD, FrmDate, ToDate);
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex);
+            }
+            return PartialView("_Listing",bojList);
         }
 
         public ActionResult GetInvoiceOrders(string id,string CustomerId)

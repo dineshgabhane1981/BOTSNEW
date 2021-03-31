@@ -50,6 +50,11 @@ namespace BOTS_BL.Repository
                     {
                         item.LastInvoiceDateStr = item.LastInvoiceDate.ToString("dd-MM-yyyy");
                     }
+
+                    if (objData != null)
+                    {
+                        objData = objData.OrderBy(x => Convert.ToInt32(x.DaysSinceLastInvoice)).ToList();
+                    }
                 }
                 catch (Exception ex)
                 {

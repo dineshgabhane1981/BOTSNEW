@@ -12,20 +12,29 @@ namespace BOTS_BL.Repository
 {
     public class PointsLedgerRepository
     {
-        public List<PointLedgerModel> GetPointLedgerData(string CustomerId)
+        public List<PointLedgerModel> GetPointLedgerData(string CustomerId, string isBTD, string FrmDate, string ToDate)
         {
             List<PointLedgerModel> bojList = new List<PointLedgerModel>();
 
             using (var context = new ChitaleDBContext())
             {
-                var ObjInvoiceLst = context.InvoiceOrderMappings.Where(x => x.CustomerId == CustomerId).ToList();
-
+                List<string> ObjInvoiceLst = new List<string>();
+                if (isBTD == "1")
+                {
+                    ObjInvoiceLst = context.InvoiceOrderMappings.Where(x => x.CustomerId == CustomerId).Select(y => y.InvoiceNo).Distinct().ToList();
+                }
+                else
+                {
+                    var fromDate = Convert.ToDateTime(FrmDate);
+                    var toDate = Convert.ToDateTime(ToDate);
+                    ObjInvoiceLst = context.InvoiceOrderMappings.Where(x => x.CustomerId == CustomerId && x.InvoiceDate >= fromDate && x.InvoiceDate <= toDate).Select(y => y.InvoiceNo).Distinct().ToList();
+                }
                 if (ObjInvoiceLst != null)
                 {
                     foreach (var item in ObjInvoiceLst)
                     {
                         PointLedgerModel objPointLedger = new PointLedgerModel();
-                        var objTransaction = context.TransactionMasters.Where(x => x.InvoiceNo == item.InvoiceNo && x.Type == "Purchase").FirstOrDefault();
+                        var objTransaction = context.TransactionMasters.Where(x => x.InvoiceNo == item && x.Type == "Purchase").FirstOrDefault();
                         if (objTransaction != null)
                         {
                             objPointLedger.CustomerId = CustomerId;
@@ -83,8 +92,18 @@ namespace BOTS_BL.Repository
                         }
                     }
                 }
+                List<TransactionMaster> tgtTransaction = new List<TransactionMaster>();
+                if (isBTD == "1")
+                {
+                    tgtTransaction = context.TransactionMasters.Where(x => x.CustomerId == CustomerId && x.Type == "Tgt Vs Ach").ToList();
+                }
+                else
+                {
+                    var fromDate = Convert.ToDateTime(FrmDate);
+                    var toDate = Convert.ToDateTime(ToDate);
+                    tgtTransaction = context.TransactionMasters.Where(x => x.CustomerId == CustomerId && x.OrderDatetime>= fromDate && x.OrderDatetime<= toDate && x.Type == "Tgt Vs Ach").ToList();
+                }
 
-                var tgtTransaction = context.TransactionMasters.Where(x => x.CustomerId == CustomerId && x.Type == "Tgt Vs Ach").ToList();
                 foreach (var item in tgtTransaction)
                 {
                     PointLedgerModel objPointLedger = new PointLedgerModel();
@@ -226,8 +245,8 @@ namespace BOTS_BL.Repository
                 }
                 if (checkTrans.Type == "Tgt Vs Ach")
                 {
-                    var objTransaction = context.TransactionMasters.Where(x => x.InvoiceNo == InvoiceNo && x.CustomerId== CustomerId && (x.SubType== "Volume" || x.SubType == "Value")).ToList();
-                    foreach(var item in objTransaction)
+                    var objTransaction = context.TransactionMasters.Where(x => x.InvoiceNo == InvoiceNo && x.CustomerId == CustomerId && (x.SubType == "Volume" || x.SubType == "Value")).ToList();
+                    foreach (var item in objTransaction)
                     {
                         PointLedgerModel objPointLedger = new PointLedgerModel();
                         objPointLedger.TxnType = "";
@@ -237,21 +256,21 @@ namespace BOTS_BL.Repository
                         objPointLedger.AmountStr = String.Format(new CultureInfo("en-IN", false), "{0:n}", Convert.ToDecimal(item.InvoiceAmt));
                         objPointLedger.AchievedAmt = String.Format(new CultureInfo("en-IN", false), "{0:n}", Convert.ToDecimal(item.AchievedAmt));
                         objPointLedger.Variance = String.Format(new CultureInfo("en-IN", false), "{0:n}", Convert.ToDecimal(item.Variance));
-                        objPointLedger.AchPercentage =Convert.ToString(item.AchPercentage);// String.Format(new CultureInfo("en-IN", false), "{0:n}", Convert.ToDecimal(item.Variance));
+                        objPointLedger.AchPercentage = Convert.ToString(item.AchPercentage);// String.Format(new CultureInfo("en-IN", false), "{0:n}", Convert.ToDecimal(item.Variance));
                         if (!string.IsNullOrEmpty(Convert.ToString(item.AddOnPoints)))
-                        {                            
+                        {
                             objPointLedger.AddOnPointsStr = String.Format(new CultureInfo("en-IN", false), "{0:n}", Convert.ToDecimal(item.AddOnPoints));
                         }
                         else
-                        {                           
+                        {
                             objPointLedger.AddOnPointsStr = "0.00";
                         }
                         if (!string.IsNullOrEmpty(Convert.ToString(item.PenaltyPoints)))
-                        {                            
+                        {
                             objPointLedger.LostOppPointsStr = String.Format(new CultureInfo("en-IN", false), "{0:n}", Convert.ToDecimal(item.PenaltyPoints));
                         }
                         else
-                        {                            
+                        {
                             objPointLedger.LostOppPointsStr = "0.00";
                         }
 
@@ -280,7 +299,7 @@ namespace BOTS_BL.Repository
             List<TgtvsAchMaster> objTgtvsAchMaster = new List<TgtvsAchMaster>();
             using (var context = new ChitaleDBContext())
             {
-                objTgtvsAchMaster = context.TgtvsAchMasters.Where(x => x.CustomerId== CustomerId && x.ProductType == "Category").ToList();
+                objTgtvsAchMaster = context.TgtvsAchMasters.Where(x => x.CustomerId == CustomerId && x.ProductType == "Category").ToList();
             }
 
             return objTgtvsAchMaster;

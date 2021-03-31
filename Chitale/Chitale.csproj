@@ -292,6 +292,7 @@
     <Content Include="Views\Employee\OrderToInvoice.cshtml" />
     <Content Include="Views\Employee\LeaderBoard.cshtml" />
     <Content Include="Views\Employee\Index.cshtml" />
+    <Content Include="Views\PointsLedger\_Listing.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

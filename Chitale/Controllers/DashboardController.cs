@@ -107,8 +107,8 @@ namespace Chitale.Controllers
             try
             {
                 var UserSession = (CustomerDetail)Session["ChitaleUser"];                
-                rankData = CDR.GetRankData(UserSession.CustomerId);
-
+                rankData = CDR.GetRankData(UserSession.CustomerId, UserSession.CustomerType);
+                rankData.RankPointsStr = String.Format(new CultureInfo("en-IN", false), "{0:n}", Convert.ToDecimal(rankData.RankPoints));
                 UserSession.CurrentRank = Convert.ToString(rankData.CurrentRank);
                 Session["ChitaleUser"] = UserSession;
                 ViewBag.schoolName = rankData.CurrentRank;

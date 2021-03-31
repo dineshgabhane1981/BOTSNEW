@@ -221,6 +221,11 @@ namespace BOTS_BL.Repository
 
                         lstparticipantListsformgt = lstResult;
                     }
+
+                    if (lstparticipantListsformgt != null)
+                    {
+                        lstparticipantListsformgt = lstparticipantListsformgt.OrderBy(x => Convert.ToInt32(x.CurrentRank)).ToList();
+                    }
                 }
 
 
@@ -277,6 +282,11 @@ namespace BOTS_BL.Repository
                        new SqlParameter("@pi_ParticipantType", ParticipantType)
 
                         ).ToList<ParticipantListForManagement>();
+
+                    if (lstparticipantListsformgt != null)
+                    {
+                        lstparticipantListsformgt = lstparticipantListsformgt.OrderBy(x => Convert.ToInt32(x.CurrentRank)).ToList();
+                    }
                 }
             }
             catch (Exception ex)

@@ -26,7 +26,15 @@ namespace BOTS_BL.Repository
                         new SqlParameter("@pi_Datetime", DateTime.Now.ToString("yyyy-MM-dd")), 
                         new SqlParameter("@pi_CustomerId", CustomerId),
                         new SqlParameter("@pi_CustomerType", CustomerType)).ToList<ParticipantList>();
+
+
+                    if(lstparticipantLists!=null)
+                    {
+                        lstparticipantLists = lstparticipantLists.OrderBy(x => Convert.ToInt32(x.Rank)).ToList();
+                    }
                 }
+
+
             }
             catch (Exception ex)
             {
