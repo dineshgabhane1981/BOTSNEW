@@ -238,7 +238,7 @@ namespace BOTS_BL.Repository
             return lstparticipantListsformgt;
         }
 
-        public List<ParticipantListForManagement> GetSubParticipantListForEmp(string Id, string ParticipantType, string CustomerType)
+        public List<ParticipantListForManagement> GetSubParticipantListForEmp(string Id, string ParticipantType, string CustomerType,string CustomerId)
         {
 
             List<ParticipantListForManagement> lstparticipantListsformgt = new List<ParticipantListForManagement>();
@@ -275,7 +275,7 @@ namespace BOTS_BL.Repository
                 using (var context = new ChitaleDBContext())
                 {
                     lstparticipantListsformgt = context.Database.SqlQuery<ParticipantListForManagement>("sp_KYBParticipant_Emp @pi_LoginId, @pi_Datetime, @pi_CustomerType,@pi_ParticipantId,@pi_ParticipantType",
-                        new SqlParameter("@pi_LoginId", ""),
+                        new SqlParameter("@pi_LoginId", CustomerId),
                         new SqlParameter("@pi_Datetime", DateTime.Now.ToString("dd-MM-yyyy")),
                          new SqlParameter("@pi_CustomerType", CustomerType),
                        new SqlParameter("@pi_ParticipantId", Id),

@@ -150,8 +150,9 @@ namespace Chitale.Controllers
         {
             var UserSession = (CustomerDetail)Session["ChitaleUser"];
             string CustomerType = UserSession.CustomerType;
+            string CustomerId = UserSession.CustomerId;
             List<ParticipantListForManagement> listformgt = new List<ParticipantListForManagement>();
-            listformgt = ER.GetSubParticipantListForEmp(Id, ParticipantType, CustomerType);
+            listformgt = ER.GetSubParticipantListForEmp(Id, ParticipantType, CustomerType, CustomerId);
 
             return new JsonResult() { Data = listformgt, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
 
