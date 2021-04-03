@@ -101,7 +101,7 @@ namespace BOTS_BL.Repository
                 {
                     var fromDate = Convert.ToDateTime(FrmDate);
                     var toDate = Convert.ToDateTime(ToDate);
-                    tgtTransaction = context.TransactionMasters.Where(x => x.CustomerId == CustomerId && x.OrderDatetime>= fromDate && x.OrderDatetime<= toDate && x.Type == "Tgt Vs Ach").ToList();
+                    tgtTransaction = context.TransactionMasters.Where(x => x.CustomerId == CustomerId && x.OrderDatetime >= fromDate && x.OrderDatetime <= toDate && x.Type == "Tgt Vs Ach").ToList();
                 }
 
                 foreach (var item in tgtTransaction)
@@ -324,6 +324,17 @@ namespace BOTS_BL.Repository
             }
 
             return objTgtvsAchMaster;
+        }
+
+        public string GetNameOfParticipant(string CustomerId)
+        {
+            string Name = "";
+            using (var context = new ChitaleDBContext())
+            {
+                Name = context.CustomerDetails.Where(x => x.CustomerId == CustomerId).Select(y => y.CustomerName).FirstOrDefault();
+            }
+
+            return Name;
         }
 
 

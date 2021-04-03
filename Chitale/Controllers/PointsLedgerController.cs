@@ -14,6 +14,7 @@ namespace Chitale.Controllers
     {
         ChitaleException newexception = new ChitaleException();
         PointsLedgerRepository PLR = new PointsLedgerRepository();
+        ChitaleDashboardRepository CDR = new ChitaleDashboardRepository();
         // GET: PointsLedger
         public ActionResult Index()
         {
@@ -30,7 +31,7 @@ namespace Chitale.Controllers
             return View();
         }
 
-        public ActionResult GetPointLedgerData(string isBTD, string FrmDate,string ToDate)
+        public ActionResult GetPointLedgerData(string isBTD, string FrmDate, string ToDate)
         {
             List<PointLedgerModel> bojList = new List<PointLedgerModel>();
             try
@@ -42,10 +43,10 @@ namespace Chitale.Controllers
             {
                 newexception.AddException(ex);
             }
-            return PartialView("_Listing",bojList);
+            return PartialView("_Listing", bojList);
         }
 
-        public ActionResult GetInvoiceOrders(string id,string CustomerId)
+        public ActionResult GetInvoiceOrders(string id, string CustomerId)
         {
             List<PointLedgerModel> bojList = new List<PointLedgerModel>();
             try
@@ -64,12 +65,14 @@ namespace Chitale.Controllers
             TgtVsAchViewModel objData = new TgtVsAchViewModel();
             try
             {
-                var UserSession = (CustomerDetail)Session["ChitaleUser"];
+                CustomerDetail UserSession = new CustomerDetail();                
+                UserSession = (CustomerDetail)Session["ChitaleUser"];                
 
                 objData.objOverAll = PLR.GetOverallData(UserSession.CustomerId);
                 objData.objCategory = PLR.GetCategoryData(UserSession.CustomerId);
                 objData.objSubCategory = PLR.GetSubCategoryData(UserSession.CustomerId);
-                objData.objProducts = PLR.GetProductData(UserSession.CustomerId);
+                objData.objProducts = PLR.GetProductData(UserSession.CustomerId);               
+
             }
             catch (Exception ex)
             {
@@ -77,5 +80,23 @@ namespace Chitale.Controllers
             }
             return View(objData);
         }
+
+        public ActionResult TgtVsAchParticipant(string id, string type)
+        {
+            TgtVsAchViewModel objData = new TgtVsAchViewModel();
+            var objCust = CDR.GetCustomerDetail(id, type);
+            if (objCust != null)
+            {
+                objData.objOverAll = PLR.GetOverallData(objCust.CustomerId);
+                objData.objCategory = PLR.GetCategoryData(objCust.CustomerId);
+                objData.objSubCategory = PLR.GetSubCategoryData(objCust.CustomerId);
+                objData.objProducts = PLR.GetProductData(objCust.CustomerId);
+                objData.ParticipantName = PLR.GetNameOfParticipant(objCust.CustomerId);
+            }
+            return View(objData);
+        }
+
+
+
     }
 }

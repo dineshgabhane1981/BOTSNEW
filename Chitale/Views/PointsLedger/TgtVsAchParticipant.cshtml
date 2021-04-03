@@ -1,6 +1,6 @@
 ﻿@model Chitale.ViewModel.TgtVsAchViewModel
 @{
-    ViewBag.Title = "Focus Vs Ach";
+    ViewBag.Title = "Focus Vs Ach Participant";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -8,7 +8,7 @@
     <div class="row" style="margin-left:10px;margin-right:10px;">
         <div class="row mb-3 pt-3 pl-3 pr-3 card" style="width:100%;">
             <div id="dvOutletWiseData">
-                <b>FOCUS vs ACHIEVEMENT</b>
+                <b>FOCUS vs ACHIEVEMENT - <span style="background-color:yellow;"> @Model.ParticipantName</span></b>
                 <div class="row mb-3">
                     <div class="container-fluid pt-3 pl-3 pr-3">
                         <div class="pt-3 pl-3 pr-3 col-md-12 col-lg-12">
@@ -21,9 +21,7 @@
                                     <ul class="list-inline progress-list mt-2">
                                         <li class="list-inline-item">
                                             <div class="dropdown">
-                                                @*<button class="btn btn-primary login-btn" onclick='ExportDataExcel();' type="button" id="btnExport">
-                                                        <i class="fas fa-file-export"></i> Export
-                                                    </button>*@
+                                                <a href="@Url.Action("Participantwise","TgtVsAch")"> <button id="btnBack" class="btn btn-primary">Back</button></a>                                               
                                             </div>
                                         </li>
                                     </ul>
@@ -207,7 +205,7 @@
         });
     });
     var flag = 1;
-    function ShowActivities(id) {        
+    function ShowActivities(id) {
         if (flag == 1) {
             flag = 0;
             $("#imgExpand" + id).attr("src", "/Content/assets/images/details_close.png");
@@ -219,13 +217,13 @@
             $('[id^=dvActivitiesSub]').hide(500);
             $('[id^=dvActivitiesProd]').hide(500);
             $('.dvActivities' + id).hide(500);
-        }        
+        }
     }
-    
-    function ShowSubCategory(id) {        
+
+    function ShowSubCategory(id) {
         $('.' + id).toggle(500);
     }
-    function ShowProducts(id) {        
+    function ShowProducts(id) {
         $('.' + id).toggle(500);
     }
 

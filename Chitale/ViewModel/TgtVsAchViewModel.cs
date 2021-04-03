@@ -13,5 +13,6 @@ namespace Chitale.ViewModel
         public List<TgtvsAchMaster> objCategory { get; set; }
         public List<TgtvsAchMaster> objSubCategory { get; set; }
         public List<TgtvsAchMaster> objProducts { get; set; }
+        public string ParticipantName { get; set; }
     }
 }
