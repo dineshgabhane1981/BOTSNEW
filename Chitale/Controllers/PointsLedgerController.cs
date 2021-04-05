@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -73,10 +74,35 @@ namespace Chitale.Controllers
                 UserSession = (CustomerDetail)Session["ChitaleUser"];
 
                 objData.objOverAll = PLR.GetOverallData(UserSession.CustomerId);
-                objData.objCategory = PLR.GetCategoryData(UserSession.CustomerId);
+                objData.objCategory = PLR.GetCategoryData(UserSession.CustomerId, "", "");
                 objData.objSubCategory = PLR.GetSubCategoryData(UserSession.CustomerId);
                 objData.objProducts = PLR.GetProductData(UserSession.CustomerId);
 
+                string[] names = DateTimeFormatInfo.CurrentInfo.MonthNames;
+                List<SelectListItem> MonthItems = new List<SelectListItem>();
+                int Month = 1;
+                foreach (var item in names)
+                {
+                    MonthItems.Add(new SelectListItem
+                    {
+                        Text = Convert.ToString(item),
+                        Value = Convert.ToString(Month)
+                    });
+                    Month++;
+                }
+                MonthItems.RemoveAt(12);
+                objData.MonthItems = MonthItems;
+                List<SelectListItem> YearItems = new List<SelectListItem>();
+                for (int i = 0; i <= 10; i++)
+                {
+                    int year = DateTime.Now.Year;
+                    YearItems.Add(new SelectListItem
+                    {
+                        Text = Convert.ToString(year - i),
+                        Value = Convert.ToString(year - i)
+                    });
+                }
+                objData.YearItems = YearItems;
             }
             catch (Exception ex)
             {
@@ -85,22 +111,33 @@ namespace Chitale.Controllers
             return View(objData);
         }
 
-        public ActionResult TgtVsAchParticipant(string id, string type)
+        public ActionResult TgtVsAchFiltered(string CustomerId, string CustomerType, string MonthVal, string YearVal)
         {
             TgtVsAchViewModel objData = new TgtVsAchViewModel();
-            var objCust = CDR.GetCustomerDetail(id, type);
-            if (objCust != null)
+            try
             {
-                objData.objOverAll = PLR.GetOverallData(objCust.CustomerId);
-                objData.objCategory = PLR.GetCategoryData(objCust.CustomerId);
-                objData.objSubCategory = PLR.GetSubCategoryData(objCust.CustomerId);
-                objData.objProducts = PLR.GetProductData(objCust.CustomerId);
-                objData.ParticipantName = PLR.GetNameOfParticipant(objCust.CustomerId);
+                if (CustomerType.Contains("#"))
+                {
+                    CustomerType = CustomerType.Remove(CustomerType.Length - 1, 1);
+                }
+                var objCust = CDR.GetCustomerDetail(CustomerId, CustomerType);
+                objCust.CustomerCategory = "Participant";
+                Session["ChitaleUser"] = objCust;
+
+                CustomerDetail UserSession = new CustomerDetail();
+                UserSession = (CustomerDetail)Session["ChitaleUser"];
+
+                objData.objOverAll = PLR.GetOverallData(UserSession.CustomerId);
+                objData.objCategory = PLR.GetCategoryData(UserSession.CustomerId, MonthVal, YearVal);
+                objData.objSubCategory = PLR.GetSubCategoryData(UserSession.CustomerId);
+                objData.objProducts = PLR.GetProductData(UserSession.CustomerId);
             }
-            return View(objData);
+            catch (Exception ex)
+            {
+                newexception.AddException(ex);
+            }
+            return PartialView("_TgtVsAchList", objData);
         }
-
-
 
     }
 }

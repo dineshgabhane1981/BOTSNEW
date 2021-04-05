@@ -9,162 +9,17 @@
         <div class="row mb-3 pt-3 pl-3 pr-3 card" style="width:100%;">
             <div id="dvOutletWiseData">
                 <b>FOCUS vs ACHIEVEMENT</b>
-                <div class="row mb-3">
-                    <div class="container-fluid pt-3 pl-3 pr-3">
-                        <div class="pt-3 pl-3 pr-3 col-md-12 col-lg-12">
-                            <div class="row">
-                                <div class="col search-container" style="margin-bottom:10px;">
-                                    <i class="fas fa-search"></i>
-                                    <input class="input100" type="text" id="txtSearch" placeholder="Search activity..." />
-                                </div>
-                                <div class="col text-right">
-                                    <ul class="list-inline progress-list mt-2">
-                                        <li class="list-inline-item">
-                                            <div class="dropdown">
-                                                @*<button class="btn btn-primary login-btn" onclick='ExportDataExcel();' type="button" id="btnExport">
-                                                        <i class="fas fa-file-export"></i> Export
-                                                    </button>*@
-                                            </div>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                            <div class="row" id="divactivityTable">
+                <div class="card-header-tab" style="margin-bottom:20px;">
+                    <div>
+                        <br />
+                        @Html.DropDownListFor(model => model.MonthItems, new SelectList(Model.MonthItems, "Value", "Text"), "Select Month", htmlAttributes: new { @class = "input50", @id = "ddlMonthList" })&nbsp;&nbsp;&nbsp;&nbsp;
+                        @Html.DropDownListFor(model => model.YearItems, new SelectList(Model.YearItems, "Value", "Text"), "Select Year", htmlAttributes: new { @class = "input50", @id = "ddlYearList" })
+                        <button type="button" id="btnFilter" style="margin-left:17px;margin-top:5px;" class="btn btn-primary"><b>FILTER</b></button>
 
-                                <div class="table-responsive">
-
-                                    <table class="table" id="activityTable" cellspacing="0" cellpadding="0">
-                                        <thead>
-                                            <tr style="text-align:center;">
-                                                <td scope="col" style="border:1px solid black;border-left:0px;" colspan="3"></td>
-                                                <td scope="col" style="border:1px solid black; font-size:18px;" colspan="4"><b>Volume-wise</b> </td>
-
-                                                <td scope="col" style="border:1px solid black;border-right:0px; font-size:18px;" colspan="4"><b>Value-wise</b> </td>
-                                            </tr>
-                                            <tr>
-                                                <th scope="col"></th>
-                                                <th scope="col">Name</th>
-                                                <th scope="col">Type</th>
-                                                <th scope="col">Focus</th>
-                                                <th scope="col">Ach</th>
-                                                <th scope="col">Ach %</th>
-                                                <th scope="col">Points</th>
-                                                <th scope="col">Focus</th>
-                                                <th scope="col">Ach</th>
-                                                <th scope="col">Ach %</th>
-                                                <th scope="col">Points</th>
-
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @if (Model != null)
-                                            {
-                                                if (Model.objOverAll != null)
-                                                {
-
-                                                    var imgId = "imgExpand" + Model.objOverAll.CustomerId;
-                                                    <tr style=" border: hidden; ">
-                                                        <td>
-                                                            <img id="@imgId" src="~/Content/assets/images/details_open.png" style="cursor:pointer;" onclick="ShowActivities(@Model.objOverAll.CustomerId);" />
-                                                        </td>
-                                                        <td>Overall</td>
-                                                        <td></td>
-                                                        <td>@Model.objOverAll.VolumeTgt</td>
-                                                        <td>@Model.objOverAll.VolumeAch</td>
-                                                        <td>@Model.objOverAll.VolumeAchPercentage</td>
-                                                        <td>@Model.objOverAll.VolumePoints</td>
-                                                        <td>@Model.objOverAll.ValueTgt</td>
-                                                        <td>@Model.objOverAll.ValueAch</td>
-                                                        <td>@Model.objOverAll.ValueAchPercentage</td>
-                                                        <td>@Model.objOverAll.ValuePoints</td>
-
-
-                                                    </tr>
-                                                    if (Model.objCategory != null)
-                                                    {
-                                                        var dynamicIdDiv = "dvActivities" + Model.objOverAll.CustomerId;
-
-                                                        foreach (var item in Model.objCategory)
-                                                        {
-                                                            var dynamicIdSub = "dvActivitiesSub" + item.CategoryCode;
-                                                            <tr class="@dynamicIdDiv" style="display:none;">
-                                                                <td></td>
-                                                                <td><a href="#" onclick="ShowSubCategory('@dynamicIdSub');" style="color:red;">@item.Name</a></td>
-                                                                <td>Category</td>
-                                                                <td>@item.VolumeTgt</td>
-                                                                <td>@item.VolumeAch</td>
-                                                                <td>@item.VolumeAchPercentage</td>
-                                                                <td>@item.VolumePoints</td>
-                                                                <td>@item.ValueTgt</td>
-                                                                <td>@item.ValueAch</td>
-                                                                <td>@item.ValueAchPercentage</td>
-                                                                <td>@item.ValuePoints</td>
-                                                            </tr>
-
-                                                            if (Model.objSubCategory != null)
-                                                            {
-                                                                foreach (var itemSub in Model.objSubCategory)
-                                                                {
-                                                                    if (item.CategoryCode == itemSub.CategoryCode)
-                                                                    {
-                                                                        var dynamicIdProd = "dvActivitiesProd" + itemSub.SubCategoryCode;
-                                                                        <tr class="@dynamicIdSub" id="@dynamicIdSub" style="display:none;">
-                                                                            <td></td>
-                                                                            <td><a href="#" onclick="ShowProducts('@dynamicIdProd');" style="color:green;">@itemSub.Name</a></td>
-                                                                            <td>Sub Category</td>
-                                                                            <td>@itemSub.VolumeTgt</td>
-                                                                            <td>@itemSub.VolumeAch</td>
-                                                                            <td>@itemSub.VolumeAchPercentage</td>
-                                                                            <td>@itemSub.VolumePoints</td>
-                                                                            <td>@itemSub.ValueTgt</td>
-                                                                            <td>@itemSub.ValueAch</td>
-                                                                            <td>@itemSub.ValueAchPercentage</td>
-                                                                            <td>@itemSub.ValuePoints</td>
-                                                                        </tr>
-
-
-                                                                        if (Model.objProducts != null)
-                                                                        {
-                                                                            foreach (var itemProd in Model.objProducts)
-                                                                            {
-                                                                                if (itemProd.SubCategoryCode == itemSub.SubCategoryCode)
-                                                                                {
-                                                                                    <tr class="@dynamicIdProd" id="@dynamicIdProd" style="display:none;">
-                                                                                        <td></td>
-                                                                                        <td style="color:brown;">@itemProd.Name</td>
-                                                                                        <td>Product</td>
-                                                                                        <td>@itemProd.VolumeTgt</td>
-                                                                                        <td>@itemProd.VolumeAch</td>
-                                                                                        <td>@itemProd.VolumeAchPercentage</td>
-                                                                                        <td>@itemProd.VolumePoints</td>
-                                                                                        <td>@itemProd.ValueTgt</td>
-                                                                                        <td>@itemProd.ValueAch</td>
-                                                                                        <td>@itemProd.ValueAchPercentage</td>
-                                                                                        <td>@itemProd.ValuePoints</td>
-                                                                                    </tr>
-                                                                                }
-                                                                            }
-                                                                        }
-                                                                    }
-                                                                }
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                            else
-                                            {
-                                                <tr>
-                                                    <td colspan="7" align="center">No Data Available</td>
-                                                </tr>
-                                            }
-
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
                     </div>
+                </div>
+                <div class="row mb-3" id="dvData">
+                    @Html.Partial("~/Views/PointsLedger/_TgtVsAchList.cshtml", Model)
                 </div>
             </div>
         </div>
@@ -173,60 +28,85 @@
 
 <script>
     $(document).ready(function () {
-        $('#activityTable').DataTable({
-            "aaSorting": [],
-            "paging": true,
-            "ordering": false,
-            "info": false,
-            "bFilter": true,
-            "pageLength": 100,
-            "pagingType": "simple_numbers",
-            aoColumnDefs: [
-                {
-                    bSortable: false,
-                    aTargets: [-1, -2]
-                }
-            ]
+        $("#btnFilter").click(function () {
+            BindData();
         });
 
-        $('#activityTable_filter').hide();
 
-        $('#txtSearch').on('keyup', function () {
 
-            $.fn.dataTable.ext.search.push(function (settings, searchData) {
-                var term = $('#txtSearch').val().toLowerCase()
-                for (var i = 0; i < searchData.length; i++) {
-                    if (searchData[i].toLowerCase().indexOf(term) == 0) {
-                        return true;
-                    }
-                }
-                return false;
-            });
-            var table = $('#activityTable').DataTable();
-            table.draw();
-        });
+        //$('#activityTable').DataTable({
+        //    "aaSorting": [],
+        //    "paging": true,
+        //    "ordering": false,
+        //    "info": false,
+        //    "bFilter": true,
+        //    "pageLength": 100,
+        //    "pagingType": "simple_numbers",
+        //    aoColumnDefs: [
+        //        {
+        //            bSortable: false,
+        //            aTargets: [-1, -2]
+        //        }
+        //    ]
+        //});
+
+        //$('#activityTable_filter').hide();
+
+        //$('#txtSearch').on('keyup', function () {
+
+        //    $.fn.dataTable.ext.search.push(function (settings, searchData) {
+        //        var term = $('#txtSearch').val().toLowerCase()
+        //        for (var i = 0; i < searchData.length; i++) {
+        //            if (searchData[i].toLowerCase().indexOf(term) == 0) {
+        //                return true;
+        //            }
+        //        }
+        //        return false;
+        //    });
+        //    var table = $('#activityTable').DataTable();
+        //    table.draw();
+        //});
     });
-    var flag = 1;
-    function ShowActivities(id) {        
-        if (flag == 1) {
-            flag = 0;
-            $("#imgExpand" + id).attr("src", "/Content/assets/images/details_close.png");
-            $('.dvActivities' + id).show(500);
+    function getUrlVars() {
+        var vars = [], hash;
+        var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+        for (var i = 0; i < hashes.length; i++) {
+            hash = hashes[i].split('=');
+            vars.push(hash[0]);
+            vars[hash[0]] = hash[1];
         }
-        else {
-            flag = 1;
-            $("#imgExpand" + id).attr("src", "/Content/assets/images/details_open.png");
-            $('[id^=dvActivitiesSub]').hide(500);
-            $('[id^=dvActivitiesProd]').hide(500);
-            $('.dvActivities' + id).hide(500);
-        }        
+        return vars;
     }
-    
-    function ShowSubCategory(id) {        
-        $('.' + id).toggle(500);
-    }
-    function ShowProducts(id) {        
-        $('.' + id).toggle(500);
-    }
+
+     function BindData() {
+         var CustomerId = getUrlVars()["CustomerId"];
+         var CustomerType = getUrlVars()["CustomerType"];
+
+         var Month = $("#ddlMonthList").val();
+         var Year = $("#ddlYearList").val();
+
+         $("#divLoader").show();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("TgtVsAchFiltered")',
+            data: '{CustomerId: ' + JSON.stringify(CustomerId) + ',CustomerType: ' + JSON.stringify(CustomerType) + ',MonthVal: ' + JSON.stringify(Month) + ',YearVal: ' + JSON.stringify(Year) + '}',
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                console.log(response)
+                if (response != null) {
+                    $("#dvData").html(response);
+                    $("#divLoader").hide();
+                }
+            },
+            failure: function (response) {
+                $("#divLoader").hide();
+            },
+            error: function (response) {
+                $("#dvData").html(response.responseText);
+                $("#divLoader").hide();
+            }
+        });
+    }    
 
 </script>

@@ -294,12 +294,23 @@ namespace BOTS_BL.Repository
 
             return objTgtvsAchMaster;
         }
-        public List<TgtvsAchMaster> GetCategoryData(string CustomerId)
+        public List<TgtvsAchMaster> GetCategoryData(string CustomerId, string MonthVal, string YearVal)
         {
             List<TgtvsAchMaster> objTgtvsAchMaster = new List<TgtvsAchMaster>();
             using (var context = new ChitaleDBContext())
             {
-                objTgtvsAchMaster = context.TgtvsAchMasters.Where(x => x.CustomerId == CustomerId && x.ProductType == "Category").ToList();
+                if (MonthVal == "" && YearVal == "")
+                {
+                    objTgtvsAchMaster = context.TgtvsAchMasters.Where(x => x.CustomerId == CustomerId && x.ProductType == "Category"
+                    && x.Date.Value.Month == DateTime.Now.Month && x.Date.Value.Year == DateTime.Now.Year).ToList();
+                }
+                else
+                {
+                    var month = Convert.ToInt32(MonthVal);
+                    var year = Convert.ToInt32(YearVal);
+                    objTgtvsAchMaster = context.TgtvsAchMasters.Where(x => x.CustomerId == CustomerId && x.ProductType == "Category"
+                    && x.Date.Value.Month== month && x.Date.Value.Year == year).ToList();
+                }
             }
 
             return objTgtvsAchMaster;
