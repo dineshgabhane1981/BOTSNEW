@@ -198,7 +198,14 @@
                     "mRender": function (data, type, row) {
                         var id = row.ID;
                         var Type = row.Type;
-                        return '<a href="#" onclick="RedirectToParticipant(\'' + id + '\'\,\'' + Type + '\'\)" class="login" >' + data + '</a>';
+                        var URL = '@Url.Action("TgtVsAch", "PointsLedger")';
+                        var actualURL = URL + "?CustomerId=" + id + "&CustomerType=" + Type;
+                        return '<a target=\"_blank\"  class=\"login\" href=' + actualURL + '>' + data + '</a>';
+
+                        //var id = row.ID;
+                        //var Type = row.Type;
+                        //return '<a href="#" onclick="RedirectToParticipant(\'' + id + '\'\,\'' + Type + '\'\)" class="login" >' + data + '</a>';
+
                     }
                 },
                 //{ data: "Name" },

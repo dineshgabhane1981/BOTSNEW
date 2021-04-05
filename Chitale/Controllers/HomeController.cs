@@ -20,22 +20,25 @@ namespace Chitale.Controllers
                 {
                     objCust.CustomerCategory = "Participant";
                     Session["ChitaleUser"] = objCust;
-                    return RedirectToAction("Index", "Dashboard");
+                    Session["CategoryParticipant"] = "Participant";
+                    return RedirectToAction("Index", "Dashboard", new{ CustomerId = CustomerId, CustomerType = CustomerType });
                 }
 
                 if (CustomerType == "Management")
                 {
                     objCust.CustomerCategory = "Management";
-                    Session["ChitaleUser"] = objCust;
-                    return RedirectToAction("Index", "ManagementDashboard");
+                    Session["ChitaleManagement"] = objCust;
+                    Session["CategoryManagement"] = "Management";
+                    return RedirectToAction("Index", "ManagementDashboard", new { CustomerId = CustomerId, CustomerType = CustomerType });
                 }
                 
                 if (CustomerType == "Sales Executive" || CustomerType == "ASM (Sales Manager)" || CustomerType == "Sales Officer" || CustomerType == "Sales Representative" || CustomerType == "National Head"
                     || CustomerType == "Zonal Head" || CustomerType == "State Head")
                 {
                     objCust.CustomerCategory = "Employee";
-                    Session["ChitaleUser"] = objCust;
-                    return RedirectToAction("Index", "Employee");
+                    Session["ChitaleEmployee"] = objCust;
+                    Session["CategoryEmployee"] = "Employee";
+                    return RedirectToAction("Index", "Employee", new { CustomerId = CustomerId, CustomerType = CustomerType });
                 }
             }
             return View();

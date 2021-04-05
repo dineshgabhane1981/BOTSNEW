@@ -17,7 +17,7 @@ namespace Chitale.Controllers
         ManagementDashboardRepository MDR = new ManagementDashboardRepository();
         ChitaleException newexception = new ChitaleException();
         // GET: ManagementDashboard
-        public ActionResult Index()
+        public ActionResult Index(string CustomerId, string CustomerType)
         {
             ManagementViewModel objModel = new ManagementViewModel();
             objModel.ClusterList = MDR.GetClusterList();
@@ -68,7 +68,6 @@ namespace Chitale.Controllers
             List<object> lstData = new List<object>();
             try
             {
-
                 List<CustomerDetail> dataCustomerDetail = new List<CustomerDetail>();
                 dataCustomerDetail = MDR.GetTop5Participant(type);
                 List<string> nameList = new List<string>();
@@ -94,7 +93,6 @@ namespace Chitale.Controllers
             List<object> lstData = new List<object>();
             try
             {
-
                 List<CustomerDetail> dataCustomerDetail = new List<CustomerDetail>();
                 dataCustomerDetail = MDR.Bottom5Participants(type);
                 List<string> nameList = new List<string>();
@@ -120,7 +118,6 @@ namespace Chitale.Controllers
             List<object> lstData = new List<object>();
             try
             {
-
                 List<Top5LostParticipants> objTop5Participant = new List<Top5LostParticipants>();
                 objTop5Participant = MDR.GetTop5LostParticipant(type);
                 List<string> nameList = new List<string>();
@@ -147,7 +144,6 @@ namespace Chitale.Controllers
             List<double> percentageList = new List<double>();
             try
             {
-
                 ManagementDashboardLostOpp objLostOpp = new ManagementDashboardLostOpp();
                 objLostOpp = MDR.GetManagementDashboardLostOpp(type);
                 var total = objLostOpp.LessThanTwo + objLostOpp.TwoToThree + objLostOpp.MoreThanThree;
@@ -164,7 +160,6 @@ namespace Chitale.Controllers
                 percentageList.Add(MoreThanThree);
 
                 var lstData = string.Join(" ", dataList);
-
             }
             catch (Exception ex)
             {
@@ -179,7 +174,6 @@ namespace Chitale.Controllers
             List<object> lstData = new List<object>();
             try
             {
-
                 List<ManagementTGTVsACHPerformance> objTGTVsACHPerformance = new List<ManagementTGTVsACHPerformance>();
                 objTGTVsACHPerformance = MDR.GetManagementTGTVsACHPerformance(type);
                 List<string> nameList = new List<string>();
@@ -205,7 +199,6 @@ namespace Chitale.Controllers
             List<object> lstData = new List<object>();
             try
             {
-
                 List<ManagementOrderToRavanaPerformance> objdata = new List<ManagementOrderToRavanaPerformance>();
                 objdata = MDR.GetManagementOrderToRavanaPerformance(type);
                 List<string> nameList = new List<string>();

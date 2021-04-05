@@ -15,11 +15,8 @@ namespace Chitale.Controllers
         ChitaleDashboardRepository CDR = new ChitaleDashboardRepository();
         ChitaleException newexception = new ChitaleException();
         // GET: Dashboard
-        public ActionResult Index()
+        public ActionResult Index(string CustomerId, string CustomerType)
         {
-            
-
-
             return View();
         }
        
@@ -47,8 +44,6 @@ namespace Chitale.Controllers
             }
             return new JsonResult() { Data = SummeryData, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
-
-
 
         public JsonResult GetDashboardLostOppData(string profileFlag)
         {

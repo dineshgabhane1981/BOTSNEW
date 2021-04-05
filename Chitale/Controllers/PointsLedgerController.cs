@@ -60,18 +60,22 @@ namespace Chitale.Controllers
             return Json(bojList, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult TgtVsAch()
+        public ActionResult TgtVsAch(string CustomerId, string CustomerType)
         {
             TgtVsAchViewModel objData = new TgtVsAchViewModel();
             try
             {
-                CustomerDetail UserSession = new CustomerDetail();                
-                UserSession = (CustomerDetail)Session["ChitaleUser"];                
+                var objCust = CDR.GetCustomerDetail(CustomerId, CustomerType);
+                objCust.CustomerCategory = "Participant";
+                Session["ChitaleUser"] = objCust;
+
+                CustomerDetail UserSession = new CustomerDetail();
+                UserSession = (CustomerDetail)Session["ChitaleUser"];
 
                 objData.objOverAll = PLR.GetOverallData(UserSession.CustomerId);
                 objData.objCategory = PLR.GetCategoryData(UserSession.CustomerId);
                 objData.objSubCategory = PLR.GetSubCategoryData(UserSession.CustomerId);
-                objData.objProducts = PLR.GetProductData(UserSession.CustomerId);               
+                objData.objProducts = PLR.GetProductData(UserSession.CustomerId);
 
             }
             catch (Exception ex)

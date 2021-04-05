@@ -1,18 +1,25 @@
 ﻿
 @using BOTS_BL.Models.ChitaleModel;
 @{
-    var userDetails = (CustomerDetail)Session["ChitaleUser"];
+    CustomerDetail userDetails = new CustomerDetail();
+
+    var CustomerType = Context.Request.QueryString["CustomerType"];
+    if (CustomerType == "Management")
+    {
+        userDetails = (CustomerDetail)Session["ChitaleManagement"];
+    }
+    if (CustomerType == "Distributors" || CustomerType == "SuperStockiest" || CustomerType == "Retailers")
+    {
+        userDetails = (CustomerDetail)Session["ChitaleUser"];
+    }
+    if (CustomerType == "Sales Executive" || CustomerType == "ASM (Sales Manager)" || CustomerType == "Sales Officer" || CustomerType == "Sales Representative" || CustomerType == "National Head"
+                    || CustomerType == "Zonal Head" || CustomerType == "State Head")
+    {
+        userDetails = (CustomerDetail)Session["ChitaleEmployee"];
+    }
 
 }
-@{
 
-    <style>
-        /*::placeholder {
-            color: #0070c0;
-            opacity: 1;*/ /* Firefox */
-        /*}*/
-    </style>
-}
 <div class="app-header header-shadow">
     <div class="app-header__logo">
         <div class="logo-src"></div>
@@ -44,34 +51,34 @@
             </button>
         </span>
     </div>    <div class="app-header__content">
-                  <div class="app-header-left" style="font-size: 16px;">
-                      <span style="font-weight: bold; ">  @userDetails.CustomerName </span> &ensp;|&ensp; <span style="font-size:14px;"> @userDetails.Type </span>&ensp; |&ensp;<span style="font-size:14px;"> @userDetails.CustomerId</span>&ensp; |&ensp;<span style="font-size:14px;"> @userDetails.Cluster</span> &ensp;|&ensp; <span style="font-size:14px;"> @userDetails.SubCluster </span>&ensp; |&ensp; <span style="font-size:14px;"> @userDetails.City</span> &ensp;
-                      |&ensp; <span id="spnCurrentRank" style="font-size:20px; font-weight:bold;"> @userDetails.CurrentRank</span>
-                  </div>
+        <div class="app-header-left" style="font-size: 16px;">
+            <span style="font-weight: bold; ">  @userDetails.CustomerName </span> &ensp;|&ensp; <span style="font-size:14px;"> @userDetails.Type </span>&ensp; |&ensp;<span style="font-size:14px;"> @userDetails.CustomerId</span>&ensp; |&ensp;<span style="font-size:14px;"> @userDetails.Cluster</span> &ensp;|&ensp; <span style="font-size:14px;"> @userDetails.SubCluster </span>&ensp; |&ensp; <span style="font-size:14px;"> @userDetails.City</span> &ensp;
+            |&ensp; <span id="spnCurrentRank" style="font-size:20px; font-weight:bold;"> @userDetails.CurrentRank</span>
+        </div>
         @*<div class="app-header-right">
-            <div class="header-btn-lg pr-0">
-                <div class="widget-content p-0">
-                    <div class="widget-content-wrapper">
+                <div class="header-btn-lg pr-0">
+                    <div class="widget-content p-0">
+                        <div class="widget-content-wrapper">
 
-                        <div class="widget-content-left  ml-3 header-user-info">
-                            <div class="widget-heading">
-                                @userDetails.CustomerName
+                            <div class="widget-content-left  ml-3 header-user-info">
+                                <div class="widget-heading">
+                                    @userDetails.CustomerName
+                                </div>
                             </div>
-                        </div>
-                        <div class="widget-content-left">
-                            <div class="btn-group">
-                                <a data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="p-0 btn">
-                                    <i class="fa fa-angle-down ml-2 opacity-8"></i>
-                                </a>
-                                <div tabindex="-1" role="menu" aria-hidden="true" class="dropdown-menu dropdown-menu-right" style="top:20px !important;left:42px !important;">
-                                    <a href="@Url.Action("ChangePassword", "Home")" class="dropdown-item">Change Password</a>
-                                    <a href="@Url.Action("Logout", "Home")" class="dropdown-item">Logout</a>
+                            <div class="widget-content-left">
+                                <div class="btn-group">
+                                    <a data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="p-0 btn">
+                                        <i class="fa fa-angle-down ml-2 opacity-8"></i>
+                                    </a>
+                                    <div tabindex="-1" role="menu" aria-hidden="true" class="dropdown-menu dropdown-menu-right" style="top:20px !important;left:42px !important;">
+                                        <a href="@Url.Action("ChangePassword", "Home")" class="dropdown-item">Change Password</a>
+                                        <a href="@Url.Action("Logout", "Home")" class="dropdown-item">Logout</a>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>*@
+            </div>*@
     </div>
 </div>

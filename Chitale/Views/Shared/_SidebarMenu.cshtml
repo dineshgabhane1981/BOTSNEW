@@ -1,9 +1,22 @@
-﻿
-@using BOTS_BL.Models.ChitaleModel;
+﻿@using BOTS_BL.Models.ChitaleModel;
 @{
-    var userDetails = (CustomerDetail)Session["ChitaleUser"];
+    var customerCategory = "";
 
-    var customerType = userDetails.CustomerType;
+    var CustomerType = Context.Request.QueryString["CustomerType"];
+    var CustomerId = Context.Request.QueryString["CustomerId"];
+    if (CustomerType == "Distributors" || CustomerType == "SuperStockiest" || CustomerType == "Retailers")
+    {
+        customerCategory = "Participant";
+    }
+    if (CustomerType == "Sales Executive" || CustomerType == "ASM (Sales Manager)" || CustomerType == "Sales Officer" || CustomerType == "Sales Representative" || CustomerType == "National Head"
+                    || CustomerType == "Zonal Head" || CustomerType == "State Head")
+    {
+        customerCategory = "Employee";
+    }
+    if (CustomerType == "Management")
+    {
+        customerCategory = "Management";
+    }
 }
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
 <div class="app-sidebar sidebar-shadow">
@@ -40,37 +53,37 @@
     <div class="scrollbar-sidebar">
         <div class="app-sidebar__inner">
             <ul class="vertical-nav-menu">
-                @if (userDetails.CustomerCategory == "Participant")
+                @if (customerCategory == "Participant")
                 {
                     <li>
-                        <a href="@Url.Action("Index", "Dashboard")" class="@Html.IsSelected(controller: "Dashboard", action: "Index")">
+                        <a href="@Url.Action("Index", "Dashboard", new { CustomerId = CustomerId, CustomerType=CustomerType })" class="@Html.IsSelected(controller: "Dashboard", action: "Index")">
                             <i class="metismenu-icon fas fa-analytics"></i>
                             Home / Exe Summary
                         </a>
                     </li>
                     <li>
-                        <a href="@Url.Action("Index", "PointsLedger")" class="@Html.IsSelected(controller: "PointsLedger", action: "Index")">
+                        <a href="@Url.Action("Index", "PointsLedger", new { CustomerId = CustomerId, CustomerType=CustomerType })" class="@Html.IsSelected(controller: "PointsLedger", action: "Index")">
                             @*<i class="metismenu-icon pe-7s-rocket"></i>*@
                             <i class="metismenu-icon fas fa-table"></i>
                             Points Ledger
                         </a>
                     </li>
                     <li>
-                        <a href="@Url.Action("Index", "Participant")" class="@Html.IsSelected(controller: "Participant", action: "Index")">
+                        <a href="@Url.Action("Index", "Participant", new { CustomerId = CustomerId, CustomerType=CustomerType })" class="@Html.IsSelected(controller: "Participant", action: "Index")">
 
                             <i class="metismenu-icon fas fa-th-list"></i>
                             Participant List
                         </a>
                     </li>
                     <li>
-                        <a href="@Url.Action("RedumptionData", "Participant")" class="@Html.IsSelected(controller: "Participant", action: "RedumptionData")">
+                        <a href="@Url.Action("RedumptionData", "Participant", new { CustomerId = CustomerId, CustomerType=CustomerType })" class="@Html.IsSelected(controller: "Participant", action: "RedumptionData")">
 
                             <i class="metismenu-icon fas fa-trophy"></i>
                             Redemption
                         </a>
                     </li>
                     <li>
-                        <a href="@Url.Action("TgtVsAch", "PointsLedger")" class="@Html.IsSelected(controller: "PointsLedger", action: "TgtVsAch")">
+                        <a href="@Url.Action("TgtVsAch", "PointsLedger", new { CustomerId = CustomerId, CustomerType=CustomerType })" class="@Html.IsSelected(controller: "PointsLedger", action: "TgtVsAch")">
 
                             <i class="metismenu-icon fas fa-star-half-alt"></i>
                             Focus Vs Ach
@@ -80,22 +93,22 @@
 
                 }
 
-                @if (userDetails.CustomerCategory == "Management")
+                @if (customerCategory == "Management")
                 {
                     <li>
-                        <a href="@Url.Action("Index", "ManagementDashboard")" class="@Html.IsSelected(controller: "ManagementDashboard", action: "Index")">
+                        <a href="@Url.Action("Index", "ManagementDashboard", new { CustomerId = CustomerId, CustomerType=CustomerType })" class="@Html.IsSelected(controller: "ManagementDashboard", action: "Index")">
                             <i class="metismenu-icon fas fa-analytics"></i>
                             Home / Exe Summary
                         </a>
                     </li>
                     <li>
-                        <a href="@Url.Action("ParticipantList", "ManagementDashboard")" class="@Html.IsSelected(controller: "ManagementDashboard", action: "ParticipantList")">
+                        <a href="@Url.Action("ParticipantList", "ManagementDashboard", new { CustomerId = CustomerId, CustomerType=CustomerType })" class="@Html.IsSelected(controller: "ManagementDashboard", action: "ParticipantList")">
                             <i class="metismenu-icon fas fa-th-list"></i>
                             KYB / Participant List
                         </a>
                     </li>
                     <li>
-                        <a href="@Url.Action("LeaderBoard", "ManagementDashboard")" class="@Html.IsSelected(controller: "ManagementDashboard", action: "LeaderBoard")">
+                        <a href="@Url.Action("LeaderBoard", "ManagementDashboard", new { CustomerId = CustomerId, CustomerType=CustomerType })" class="@Html.IsSelected(controller: "ManagementDashboard", action: "LeaderBoard")">
                             <i class="metismenu-icon fas fa-list-ol"></i>
                             Leader Board
                         </a>
@@ -109,13 +122,13 @@
                         </a>
                         <ul>
                             <li class="@Html.IsSelected(controller: "Redemption", action: "RedeemedList")">
-                                <a class="@Html.IsSelected(controller: "Redemption", action: "RedeemedList")" href="@Url.Action("RedeemedList", "Redemption")">
+                                <a class="@Html.IsSelected(controller: "Redemption", action: "RedeemedList")" href="@Url.Action("RedeemedList", "Redemption", new { CustomerId = CustomerId, CustomerType=CustomerType })">
                                     <i class="metismenu-icon"></i>
                                     Redeemed List
                                 </a>
                             </li>
                             <li class="@Html.IsSelected(controller: "Redemption", action: "RedemptionValues")">
-                                <a class="@Html.IsSelected(controller: "Redemption", action: "RedemptionValues")" href="@Url.Action("RedemptionValues", "Redemption")">
+                                <a class="@Html.IsSelected(controller: "Redemption", action: "RedemptionValues")" href="@Url.Action("RedemptionValues", "Redemption", new { CustomerId = CustomerId, CustomerType=CustomerType })">
                                     <i class="metismenu-icon">
                                     </i>Redemption Values
                                 </a>
@@ -131,13 +144,13 @@
                         </a>
                         <ul>
                             <li class="@Html.IsSelected(controller: "TgtVsAch,", action: "Participantwise")">
-                                <a class="@Html.IsSelected(controller: "TgtVsAch", action: "Participantwise")" href="@Url.Action("Participantwise", "TgtVsAch")">
+                                <a class="@Html.IsSelected(controller: "TgtVsAch", action: "Participantwise")" href="@Url.Action("Participantwise", "TgtVsAch", new { CustomerId = CustomerId, CustomerType=CustomerType })">
                                     <i class="metismenu-icon"></i>
                                     Participant-wise
                                 </a>
                             </li>
                             <li class="@Html.IsSelected(controller: "TgtVsAch", action: "Productwise")">
-                                <a class="@Html.IsSelected(controller: "TgtVsAch", action: "Productwise")" href="@Url.Action("Productwise", "TgtVsAch")">
+                                <a class="@Html.IsSelected(controller: "TgtVsAch", action: "Productwise")" href="@Url.Action("Productwise", "TgtVsAch", new { CustomerId = CustomerId, CustomerType=CustomerType })">
                                     <i class="metismenu-icon">
                                     </i>Product-wise
                                 </a>
@@ -146,13 +159,13 @@
                     </li>
 
                     <li>
-                        <a href="@Url.Action("OrdertoRavanaDays", "ManagementDashboard")" class="@Html.IsSelected(controller: "ManagementDashboard", action: "OrdertoRavanaDays")">
+                        <a href="@Url.Action("OrdertoRavanaDays", "ManagementDashboard", new { CustomerId = CustomerId, CustomerType=CustomerType })" class="@Html.IsSelected(controller: "ManagementDashboard", action: "OrdertoRavanaDays")">
                             <i class="metismenu-icon fas fa-angle-double-right"></i>
                             Order to Ravana Days
                         </a>
                     </li>
                     <li>
-                        <a href="@Url.Action("InvoicetoOrder", "ManagementDashboard")" class="@Html.IsSelected(controller: "ManagementDashboard", action: "InvoicetoOrder")">
+                        <a href="@Url.Action("InvoicetoOrder", "ManagementDashboard", new { CustomerId = CustomerId, CustomerType=CustomerType })" class="@Html.IsSelected(controller: "ManagementDashboard", action: "InvoicetoOrder")">
                             <i class="metismenu-icon fas fa-hand-point-right"></i>
                             Order to Invoice
                         </a>
@@ -166,13 +179,13 @@
                         </a>
                         <ul>
                             <li class="@Html.IsSelected(controller: "NoAction", action: "Participants")">
-                                <a class="@Html.IsSelected(controller: "NoAction", action: "Participants")" href="@Url.Action("Participants", "NoAction")">
+                                <a class="@Html.IsSelected(controller: "NoAction", action: "Participants")" href="@Url.Action("Participants", "NoAction", new { CustomerId = CustomerId, CustomerType=CustomerType })">
                                     <i class="metismenu-icon"></i>
                                     Participants
                                 </a>
                             </li>
                             <li class="@Html.IsSelected(controller: "NoAction", action: "Products")">
-                                <a class="@Html.IsSelected(controller: "NoAction", action: "Products")" href="@Url.Action("Products", "NoAction")">
+                                <a class="@Html.IsSelected(controller: "NoAction", action: "Products")" href="@Url.Action("Products", "NoAction", new { CustomerId = CustomerId, CustomerType=CustomerType })">
                                     <i class="metismenu-icon">
                                     </i>Products
                                 </a>
@@ -180,23 +193,24 @@
                         </ul>
                     </li>
                 }
-                @if (userDetails.CustomerCategory == "Employee")
+               
+                @if (customerCategory == "Employee")
                 {
                     <li>
-                        <a href="@Url.Action("Index", "Employee")" class="@Html.IsSelected(controller: "Employee", action: "Index")">
+                        <a href="@Url.Action("Index", "Employee", new { CustomerId = CustomerId, CustomerType=CustomerType })" class="@Html.IsSelected(controller: "Employee", action: "Index")">
                             <i class="metismenu-icon fas fa-analytics"></i>
                             Home / Exe Summary
                         </a>
                     </li>
 
                     <li>
-                        <a href="@Url.Action("LeaderBoard", "Employee")" class="@Html.IsSelected(controller: "Employee", action: "LeaderBoard")">
+                        <a href="@Url.Action("LeaderBoard", "Employee", new { CustomerId = CustomerId, CustomerType=CustomerType })" class="@Html.IsSelected(controller: "Employee", action: "LeaderBoard")">
                             <i class="metismenu-icon fas fa-list-ol"></i>
                             Leaderboard / KYB
                         </a>
                     </li>
                     <li>
-                        <a href="@Url.Action("OrderToInvoice", "Employee")" class="@Html.IsSelected(controller: "Employee", action: "OrderToInvoice")">
+                        <a href="@Url.Action("OrderToInvoice", "Employee", new { CustomerId = CustomerId, CustomerType=CustomerType })" class="@Html.IsSelected(controller: "Employee", action: "OrderToInvoice")">
                             <i class="metismenu-icon fas fa-hand-point-right"></i>
                             Order to Invoice
                         </a>

@@ -152,29 +152,29 @@
 
 
     $(document).ready(function () {
-        $('#btnbackretail').hide();    
+        $('#btnbackretail').hide();
         $('#dvActivityData2').hide();
         $('#dvActivityData3').hide();
         $('#btnback').hide();
         $('#btnbackretail').hide();
-        $('#btnback').click(function () {           
+        $('#btnback').click(function () {
             $('#dvActivityData1').show();
             $('#dvActivityData2').hide();
             $('#btnback').hide();
         });
         $('#btnbackretail').click(function () {
-           
+
             $('#dvActivityData2').show();
             $('#dvActivityData3').hide();
             $('#btnback').show();
             $('#btnbackretail').hide();
         });
-        
+
         $('#btnFilter').on("click", function () {
-            
-            GetParticipantList('0');   
+
+            GetParticipantList('0');
             //dropdownselect();
-           
+
         });
         $("#ddlClusterList").on('change', function () {
 
@@ -191,7 +191,7 @@
         });
         GetParticipantList('1');
     });
- 
+
     function GetParticipantList(flag) {
         $("#divLoader").show();
         $('#btnbackretail').hide();
@@ -246,7 +246,7 @@
                 if (response != null) {
                     tableData.length = 0;
                     $.map(response, function (item) {
-                       
+
                         optionItem = {}
                         optionItem["ParticipantType"] = item.ParticipantType;
                         optionItem["ID"] = item.Id;
@@ -262,7 +262,7 @@
                         tableData.push(optionItem);
                     });
                     DrawTable();
-                }                
+                }
                 $("#divLoader").hide();
 
             },
@@ -279,7 +279,7 @@
         $('#btnback').show();
         $('#dvActivityData1').hide();
         $('#dvActivityData2').show();
-       
+
         console.log(id);
         console.log(Type);
          $.ajax({
@@ -394,7 +394,18 @@
                     }
                 },
                 { data: "ID" },
-                { data: "ParticipantName" },
+                //{ data: "ParticipantName" },
+                {
+
+                    "mData": "ParticipantName",
+                    "mRender": function (data, type, row) {
+                        var id = row.ID;
+                        var Type = row.ParticipantType;
+                        var URL = '@Url.Action("Index", "Home")';
+                        var actualURL = URL + "?CustomerId=" + id + "&CustomerType=" + Type;
+                        return '<a target=\"_blank\"  class=\"login\" href=' + actualURL + '>' + data + '</a>';
+                    }
+                },
                 { data: "CurrentRank" },
                 { data: "LastMonthRank" },
                 { data: "PurchasePoints" },
@@ -504,7 +515,7 @@
             "columns": [
                 {
                     data: "ParticipantType",
-                    
+
                 },
                 { data: "ID" },
                 { data: "ParticipantName" },

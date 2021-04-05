@@ -68,28 +68,18 @@
                 </div>
             </div>
         </div>
-
+        
         @Html.Partial("~/Views/Shared/_Header.cshtml")
-
-
-
         <div class="app-main">
-
             @Html.Partial("~/Views/Shared/_SidebarMenu.cshtml")
-
             <div class="app-main__outer">
                 <div id="dvMemberSearch" style="display:none;">
                 </div>
                 @RenderBody()
-
-                @*@Html.Partial("~/Views/Shared/_Footer.cshtml")*@
-
             </div>
         </div>
     </div>
-    @*@Scripts.Render("~/bundles/jquery")
-        @Scripts.Render("~/bundles/bootstrap")
-        @RenderSection("scripts", required: false)*@
+   
     <script>
         $(document).ajaxError(function (xhr, props) {
             if (props.status === 401) {

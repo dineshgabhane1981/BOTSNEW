@@ -17,7 +17,7 @@ namespace Chitale.Controllers
         ChitaleException newexception = new ChitaleException();
         EmployeeRepository ER = new EmployeeRepository();
         // GET: Employee
-        public ActionResult Index()
+        public ActionResult Index(string CustomerId, string CustomerType)
         {
             return View();
         }
@@ -27,7 +27,7 @@ namespace Chitale.Controllers
             List<object> lstData = new List<object>();
             try
             {
-                var UserSession = (CustomerDetail)Session["ChitaleUser"];
+                var UserSession = (CustomerDetail)Session["ChitaleEmployee"];
                 List<CustomerDetail> dataCustomerDetail = new List<CustomerDetail>();
                 dataCustomerDetail = ER.GetTop5Participant(type, UserSession.CustomerId, UserSession.CustomerType);
                 List<string> nameList = new List<string>();
@@ -53,7 +53,7 @@ namespace Chitale.Controllers
             List<object> lstData = new List<object>();
             try
             {
-                var UserSession = (CustomerDetail)Session["ChitaleUser"];
+                var UserSession = (CustomerDetail)Session["ChitaleEmployee"];
                 List<CustomerDetail> dataCustomerDetail = new List<CustomerDetail>();
                 dataCustomerDetail = ER.Bottom5Participants(type, UserSession.CustomerId, UserSession.CustomerType);
                 List<string> nameList = new List<string>();
@@ -79,7 +79,7 @@ namespace Chitale.Controllers
             List<object> lstData = new List<object>();
             try
             {
-                var UserSession = (CustomerDetail)Session["ChitaleUser"];
+                var UserSession = (CustomerDetail)Session["ChitaleEmployee"];
                 List<Top5LostParticipants> dataLostOpps = new List<Top5LostParticipants>();
                 dataLostOpps = ER.GetTop5LostOppsParticipant(type, UserSession.CustomerId, UserSession.CustomerType);
                 List<string> nameList = new List<string>();
@@ -105,7 +105,7 @@ namespace Chitale.Controllers
             List<object> lstData = new List<object>();
             try
             {
-                var UserSession = (CustomerDetail)Session["ChitaleUser"];
+                var UserSession = (CustomerDetail)Session["ChitaleEmployee"];
                 List<Top5TgtVsAchPerformanceEmp> dataTop5TgtVsAch = new List<Top5TgtVsAchPerformanceEmp>();
                 dataTop5TgtVsAch = ER.GetTop5TgtVsAchPerformanceEmp(type, UserSession.CustomerId, UserSession.CustomerType);
                 List<string> nameList = new List<string>();
@@ -126,7 +126,7 @@ namespace Chitale.Controllers
         }
         public JsonResult GetParticipantListForEmp(string jsonData)
         {
-            var UserSession = (CustomerDetail)Session["ChitaleUser"];
+            var UserSession = (CustomerDetail)Session["ChitaleEmployee"];
             List<ParticipantListForManagement> listformgt = new List<ParticipantListForManagement>();
             JavaScriptSerializer json_serializer = new JavaScriptSerializer();
             json_serializer.MaxJsonLength = int.MaxValue;
@@ -148,7 +148,7 @@ namespace Chitale.Controllers
         }
         public JsonResult GetSubParticipantListForEmp(string Id, string ParticipantType)
         {
-            var UserSession = (CustomerDetail)Session["ChitaleUser"];
+            var UserSession = (CustomerDetail)Session["ChitaleEmployee"];
             string CustomerType = UserSession.CustomerType;
             string CustomerId = UserSession.CustomerId;
             List<ParticipantListForManagement> listformgt = new List<ParticipantListForManagement>();
@@ -176,7 +176,7 @@ namespace Chitale.Controllers
         }
         public JsonResult GetInvoiceToOrderData(string jsonData, string CustomerType)
         {
-            var UserSession = (CustomerDetail)Session["ChitaleUser"];           
+            var UserSession = (CustomerDetail)Session["ChitaleEmployee"];           
             List<InvoiceToOrder> objOrderData = new List<InvoiceToOrder>();
             JavaScriptSerializer json_serializer = new JavaScriptSerializer();
             json_serializer.MaxJsonLength = int.MaxValue;
