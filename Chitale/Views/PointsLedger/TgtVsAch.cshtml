@@ -8,7 +8,7 @@
     <div class="row" style="margin-left:10px;margin-right:10px;">
         <div class="row mb-3 pt-3 pl-3 pr-3 card" style="width:100%;">
             <div id="dvOutletWiseData">
-                <b>FOCUS vs ACHIEVEMENT</b>
+                <b>FOCUS vs ACHIEVEMENT - <span id="spnDuration">(Current Month)</span></b>
                 <div class="card-header-tab" style="margin-bottom:20px;">
                     <div>
                         <br />
@@ -29,43 +29,18 @@
 <script>
     $(document).ready(function () {
         $("#btnFilter").click(function () {
-            BindData();
+            if ($("#ddlMonthList").val() == "" && $("#ddlYearList").val() == "") {
+                BindData();
+                $("#spnDuration").text("(Current Month)");
+            }
+            else if ($("#ddlMonthList").val() != "" && $("#ddlYearList").val() != "") {
+                BindData();
+                $("#spnDuration").text("(" + $("#ddlMonthList option:selected").text() + " " + $("#ddlYearList").val() + ")");
+            }
+            else {
+                toastr.error('Please select both Month and Year');
+            }
         });
-
-
-
-        //$('#activityTable').DataTable({
-        //    "aaSorting": [],
-        //    "paging": true,
-        //    "ordering": false,
-        //    "info": false,
-        //    "bFilter": true,
-        //    "pageLength": 100,
-        //    "pagingType": "simple_numbers",
-        //    aoColumnDefs: [
-        //        {
-        //            bSortable: false,
-        //            aTargets: [-1, -2]
-        //        }
-        //    ]
-        //});
-
-        //$('#activityTable_filter').hide();
-
-        //$('#txtSearch').on('keyup', function () {
-
-        //    $.fn.dataTable.ext.search.push(function (settings, searchData) {
-        //        var term = $('#txtSearch').val().toLowerCase()
-        //        for (var i = 0; i < searchData.length; i++) {
-        //            if (searchData[i].toLowerCase().indexOf(term) == 0) {
-        //                return true;
-        //            }
-        //        }
-        //        return false;
-        //    });
-        //    var table = $('#activityTable').DataTable();
-        //    table.draw();
-        //});
     });
     function getUrlVars() {
         var vars = [], hash;
@@ -107,6 +82,6 @@
                 $("#divLoader").hide();
             }
         });
-    }    
+    }
 
 </script>

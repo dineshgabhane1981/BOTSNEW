@@ -284,12 +284,33 @@ namespace BOTS_BL.Repository
             return bojList;
         }
 
-        public TgtvsAchMaster GetOverallData(string CustomerId)
+        public TgtvsAchMaster GetOverallData(string CustomerId, string MonthVal, string YearVal)
         {
             TgtvsAchMaster objTgtvsAchMaster = new TgtvsAchMaster();
             using (var context = new ChitaleDBContext())
             {
-                objTgtvsAchMaster = context.TgtvsAchMasters.Where(x => x.CustomerId == CustomerId && x.ProductType == "Over All").FirstOrDefault();
+                if (MonthVal == "" && YearVal == "")
+                {
+                    objTgtvsAchMaster = context.TgtvsAchMasters.Where(x => x.CustomerId == CustomerId && x.ProductType == "Over All"
+                    && x.Date.Value.Month == DateTime.Now.Month && x.Date.Value.Year == DateTime.Now.Year).FirstOrDefault();
+                    if (objTgtvsAchMaster != null)
+                    {
+                        objTgtvsAchMaster.ValuePoints = null;
+                        objTgtvsAchMaster.VolumePoints = null;
+                    }
+                }
+                else
+                {
+                    var month = Convert.ToInt32(MonthVal);
+                    var year = Convert.ToInt32(YearVal);
+                    objTgtvsAchMaster = context.TgtvsAchMasters.Where(x => x.CustomerId == CustomerId && x.ProductType == "Over All"
+                    && x.Date.Value.Month == month && x.Date.Value.Year == year).FirstOrDefault();
+                    if(DateTime.Now.Month == month && DateTime.Now.Year== year && objTgtvsAchMaster != null)
+                    {
+                        objTgtvsAchMaster.ValuePoints = null;
+                        objTgtvsAchMaster.VolumePoints = null;
+                    }
+                }
             }
 
             return objTgtvsAchMaster;
@@ -303,35 +324,96 @@ namespace BOTS_BL.Repository
                 {
                     objTgtvsAchMaster = context.TgtvsAchMasters.Where(x => x.CustomerId == CustomerId && x.ProductType == "Category"
                     && x.Date.Value.Month == DateTime.Now.Month && x.Date.Value.Year == DateTime.Now.Year).ToList();
+                    foreach (var item in objTgtvsAchMaster)
+                    {
+                        item.ValuePoints = null;
+                        item.VolumePoints = null;
+                    }
                 }
                 else
                 {
                     var month = Convert.ToInt32(MonthVal);
                     var year = Convert.ToInt32(YearVal);
                     objTgtvsAchMaster = context.TgtvsAchMasters.Where(x => x.CustomerId == CustomerId && x.ProductType == "Category"
-                    && x.Date.Value.Month== month && x.Date.Value.Year == year).ToList();
+                    && x.Date.Value.Month == month && x.Date.Value.Year == year).ToList();
+                    if (DateTime.Now.Month == month && DateTime.Now.Year == year)
+                    {
+                        foreach (var item in objTgtvsAchMaster)
+                        {
+                            item.ValuePoints = null;
+                            item.VolumePoints = null;
+                        }
+                    }
                 }
             }
 
             return objTgtvsAchMaster;
         }
-        public List<TgtvsAchMaster> GetSubCategoryData(string CustomerId)
+        public List<TgtvsAchMaster> GetSubCategoryData(string CustomerId, string MonthVal, string YearVal)
         {
             List<TgtvsAchMaster> objTgtvsAchMaster = new List<TgtvsAchMaster>();
             using (var context = new ChitaleDBContext())
             {
-                objTgtvsAchMaster = context.TgtvsAchMasters.Where(x => x.CustomerId == CustomerId && x.ProductType == "SubCategory").ToList();
+                if (MonthVal == "" && YearVal == "")
+                {
+                    objTgtvsAchMaster = context.TgtvsAchMasters.Where(x => x.CustomerId == CustomerId && x.ProductType == "SubCategory"
+                    && x.Date.Value.Month == DateTime.Now.Month && x.Date.Value.Year == DateTime.Now.Year).ToList();
+                    foreach (var item in objTgtvsAchMaster)
+                    {
+                        item.ValuePoints = null;
+                        item.VolumePoints = null;
+                    }
+                }
+                else
+                {
+                    var month = Convert.ToInt32(MonthVal);
+                    var year = Convert.ToInt32(YearVal);
+                    objTgtvsAchMaster = context.TgtvsAchMasters.Where(x => x.CustomerId == CustomerId && x.ProductType == "SubCategory"
+                    && x.Date.Value.Month == month && x.Date.Value.Year == year).ToList();
+                    if (DateTime.Now.Month == month && DateTime.Now.Year == year)
+                    {
+                        foreach (var item in objTgtvsAchMaster)
+                        {
+                            item.ValuePoints = null;
+                            item.VolumePoints = null;
+                        }
+                    }
+                }
             }
 
             return objTgtvsAchMaster;
         }
 
-        public List<TgtvsAchMaster> GetProductData(string CustomerId)
+        public List<TgtvsAchMaster> GetProductData(string CustomerId, string MonthVal, string YearVal)
         {
             List<TgtvsAchMaster> objTgtvsAchMaster = new List<TgtvsAchMaster>();
             using (var context = new ChitaleDBContext())
             {
-                objTgtvsAchMaster = context.TgtvsAchMasters.Where(x => x.CustomerId == CustomerId && x.ProductType == "Product").ToList();
+                if (MonthVal == "" && YearVal == "")
+                {
+                    objTgtvsAchMaster = context.TgtvsAchMasters.Where(x => x.CustomerId == CustomerId && x.ProductType == "Product"
+                    && x.Date.Value.Month == DateTime.Now.Month && x.Date.Value.Year == DateTime.Now.Year).ToList();
+                    foreach (var item in objTgtvsAchMaster)
+                    {
+                        item.ValuePoints = null;
+                        item.VolumePoints = null;
+                    }
+                }
+                else
+                {
+                    var month = Convert.ToInt32(MonthVal);
+                    var year = Convert.ToInt32(YearVal);
+                    objTgtvsAchMaster = context.TgtvsAchMasters.Where(x => x.CustomerId == CustomerId && x.ProductType == "Product"
+                    && x.Date.Value.Month == month && x.Date.Value.Year == year).ToList();
+                    if (DateTime.Now.Month == month && DateTime.Now.Year == year)
+                    {
+                        foreach (var item in objTgtvsAchMaster)
+                        {
+                            item.ValuePoints = null;
+                            item.VolumePoints = null;
+                        }
+                    }
+                }
             }
 
             return objTgtvsAchMaster;

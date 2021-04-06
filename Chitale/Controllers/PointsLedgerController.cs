@@ -73,10 +73,10 @@ namespace Chitale.Controllers
                 CustomerDetail UserSession = new CustomerDetail();
                 UserSession = (CustomerDetail)Session["ChitaleUser"];
 
-                objData.objOverAll = PLR.GetOverallData(UserSession.CustomerId);
+                objData.objOverAll = PLR.GetOverallData(UserSession.CustomerId, "", "");
                 objData.objCategory = PLR.GetCategoryData(UserSession.CustomerId, "", "");
-                objData.objSubCategory = PLR.GetSubCategoryData(UserSession.CustomerId);
-                objData.objProducts = PLR.GetProductData(UserSession.CustomerId);
+                objData.objSubCategory = PLR.GetSubCategoryData(UserSession.CustomerId, "", "");
+                objData.objProducts = PLR.GetProductData(UserSession.CustomerId, "", "");
 
                 string[] names = DateTimeFormatInfo.CurrentInfo.MonthNames;
                 List<SelectListItem> MonthItems = new List<SelectListItem>();
@@ -127,10 +127,10 @@ namespace Chitale.Controllers
                 CustomerDetail UserSession = new CustomerDetail();
                 UserSession = (CustomerDetail)Session["ChitaleUser"];
 
-                objData.objOverAll = PLR.GetOverallData(UserSession.CustomerId);
+                objData.objOverAll = PLR.GetOverallData(UserSession.CustomerId, MonthVal, YearVal);
                 objData.objCategory = PLR.GetCategoryData(UserSession.CustomerId, MonthVal, YearVal);
-                objData.objSubCategory = PLR.GetSubCategoryData(UserSession.CustomerId);
-                objData.objProducts = PLR.GetProductData(UserSession.CustomerId);
+                objData.objSubCategory = PLR.GetSubCategoryData(UserSession.CustomerId, MonthVal, YearVal);
+                objData.objProducts = PLR.GetProductData(UserSession.CustomerId, MonthVal, YearVal);
             }
             catch (Exception ex)
             {

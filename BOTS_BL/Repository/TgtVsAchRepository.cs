@@ -90,6 +90,10 @@ namespace BOTS_BL.Repository
                         {
                             objData = objData.Where(x => x.DateVal.Value.Year == Convert.ToInt32(Year)).ToList();
                         }
+                        if (DateTime.Now.Month == Convert.ToInt32(Month) && DateTime.Now.Year == Convert.ToInt32(Year))
+                        {
+                            
+                        }
                     }
                 }
                 if (CustomerType != "0")
