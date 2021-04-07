@@ -49,9 +49,9 @@
                                     <ul class="list-inline progress-list mt-2">
                                         <li class="list-inline-item">
                                             <div class="dropdown">
-                                                @*<button class="btn btn-primary login-btn" onclick='ExportDataExcel();' type="button" id="btnExport">
+                                                <button class="btn btn-primary login-btn" onclick='ExportDataExcel();' type="button" id="btnExport">
                                                     <i class="fas fa-file-export"></i> Export
-                                                </button>*@
+                                                </button>
                                             </div>
                                         </li>
                                     </ul>
@@ -205,7 +205,6 @@
         }
     }
 
-    // When the user clicks on the button, scroll to the top of the document
     function topFunction() {
         document.body.scrollTop = 0; // For Safari
         document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
@@ -234,7 +233,7 @@
                     $("#divLoader").hide();
                 },
                 failure: function (response) {
-                    
+
                     $("#divLoader").hide();
                 }
             });
@@ -266,7 +265,7 @@
             htmlStr += "<td style=\"width: 100px;\">" + item.Cluster + "</td>";
             htmlStr += "<td style=\"width: 100px;\">" + item.SubCluster + "</td>";
             htmlStr += "<td style=\"text-align: center;\">" + item.Rank + "</td>";
-            htmlStr += "<td style=\"text-align: center;\">" + item.TotalPoints.toFixed(2) + "</td>";            
+            htmlStr += "<td style=\"text-align: center;\">" + item.TotalPoints.toFixed(2) + "</td>";
             htmlStr += "</tr>"
         });
 
@@ -282,8 +281,6 @@
         $("#imgExpand" + id).attr("src", "/Content/assets/images/details_close.png");
 
     }
-
-
 
     var tableData = [];
     function GetParticipantList() {
@@ -369,6 +366,12 @@
 
     }
 
+    function ExportDataExcel() { 
+        $("#divLoader").show();
+        var urlLink = "@Url.Action("ExportParticipantList", "Export")";        
+        window.location.href = urlLink;
+        $("#divLoader").hide();
+    }
 </script>
 
 <style>

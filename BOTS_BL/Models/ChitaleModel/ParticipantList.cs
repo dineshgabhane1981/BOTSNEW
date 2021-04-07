@@ -17,9 +17,6 @@ namespace BOTS_BL.Models.ChitaleModel
         public string SubCluster { get; set; }
         public string Rank { get; set; }
         public decimal TotalPoints { get; set; }
-
-       public List<ParticipantList> lstparticipantlist { get; set; }
-
         
     }
 }
