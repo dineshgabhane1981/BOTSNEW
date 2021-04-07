@@ -361,7 +361,7 @@ namespace BOTS_BL.Repository
 
                     if (lstparticipantListsformgt != null)
                     {
-                        lstparticipantListsformgt = lstparticipantListsformgt.OrderBy(x => Convert.ToInt32(x.CurrentRank)).ToList();
+                        lstparticipantListsformgt = lstparticipantListsformgt.OrderBy(x => x.CurrentRank).ToList();
                     }
                 }
             }

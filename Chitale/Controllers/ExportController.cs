@@ -23,6 +23,7 @@ namespace Chitale.Controllers
         PointsLedgerRepository PLR = new PointsLedgerRepository();
         ManagementDashboardRepository MDR = new ManagementDashboardRepository();
         TgtVsAchRepository TAR = new TgtVsAchRepository();
+        NoActionRepository NAR = new NoActionRepository();
         // GET: Export
         public ActionResult Index()
         {
@@ -208,8 +209,6 @@ namespace Chitale.Controllers
             }
 
         }
-
-
 
 
         //Export Functions of Management Category
@@ -448,6 +447,178 @@ namespace Chitale.Controllers
                         return File(stream.ToArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
                     }
                 }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex);
+                return null;
+            }
+        }
+
+        public ActionResult ExportOrdertoRavanaDaysManagement(string Cluster, string SubCluster, string City, string FromDate, string Todate, string Type)
+        {
+            try
+            {
+                List<OrderVsRavanaDay> objOrderData = new List<OrderVsRavanaDay>();
+                objOrderData = MDR.GetOrderVsRavanaDayData(Cluster, SubCluster, City, Type, FromDate, Todate);
+
+                System.Data.DataTable tableToExport = new System.Data.DataTable();
+                tableToExport.Columns.Add("Type");
+                tableToExport.Columns.Add("ID");
+                tableToExport.Columns.Add("Name");
+                tableToExport.Columns.Add("Cluster");
+                tableToExport.Columns.Add("Sub Cluster");
+                tableToExport.Columns.Add("City");
+                tableToExport.Columns.Add("Order Count");
+                tableToExport.Columns.Add("Avg Diff in Days");
+                tableToExport.Columns.Add("Days Diff 1");
+                tableToExport.Columns.Add("Days Diff 2");
+                tableToExport.Columns.Add("Days Diff 3");
+                tableToExport.Columns.Add("Days Diff 4");
+
+                foreach (var item in objOrderData)
+                {
+                    DataRow dr = tableToExport.NewRow();
+                    dr["Type"] = item.CustomerType;
+                    dr["ID"] = item.CustomerId;
+                    dr["Name"] = item.CustomerName;
+                    dr["Cluster"] = item.Cluster;
+                    dr["Sub Cluster"] = item.SubCluster;
+                    dr["City"] = item.City;
+                    dr["Order Count"] = item.OrderCount;
+                    dr["Avg Diff in Days"] = item.AvgDiffInDays;
+                    dr["Days Diff 1"] = item.Diff1;
+                    dr["Days Diff 2"] = item.Diff2;
+                    dr["Days Diff 3"] = item.Diff3;
+                    dr["Days Diff 4"] = item.Diff4;
+                    tableToExport.Rows.Add(dr);
+                }
+
+                string ReportName = "OrdertoRavanaDaysManagement";
+                string fileName = ReportName + ".xlsx";
+                using (XLWorkbook wb = new XLWorkbook())
+                {
+                    tableToExport.TableName = ReportName;
+                    wb.Worksheets.Add(tableToExport);
+                    using (MemoryStream stream = new MemoryStream())
+                    {
+                        wb.SaveAs(stream);
+                        return File(stream.ToArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex);
+                return null;
+            }            
+        }
+
+        public ActionResult ExportInvoiceToOrderManagement(string Cluster, string SubCluster, string City, string FromDate, string Todate, string Type)
+        {
+            try
+            {
+                List<InvoiceToOrder> objOrderData = new List<InvoiceToOrder>();
+                objOrderData = MDR.GetInvoiceToOrderData(Cluster, SubCluster, City, Type, FromDate, Todate);
+                System.Data.DataTable tableToExport = new System.Data.DataTable();
+                tableToExport.Columns.Add("Type");
+                tableToExport.Columns.Add("ID");
+                tableToExport.Columns.Add("Name");
+                tableToExport.Columns.Add("Cluster");
+                tableToExport.Columns.Add("Sub Cluster");
+                tableToExport.Columns.Add("City");
+                tableToExport.Columns.Add("Inv Date");
+                tableToExport.Columns.Add("Inv Number");
+                tableToExport.Columns.Add("Inv Amount");
+                tableToExport.Columns.Add("Order Amount");
+                tableToExport.Columns.Add("Variance");
+
+                foreach(var item in objOrderData)
+                {
+                    DataRow dr = tableToExport.NewRow();
+                    dr["Type"] = item.CustomerType;
+                    dr["ID"] = item.CustomerId;
+                    dr["Name"] = item.CustomerName;
+                    dr["Cluster"] = item.Cluster;
+                    dr["Sub Cluster"] = item.SubCluster;
+                    dr["City"] = item.City;
+                    dr["Inv Date"] = item.InvDate;
+                    dr["Inv Number"] = item.InvNumber;
+                    dr["Inv Amount"] = item.InvAmount;
+                    dr["Order Amount"] = item.OrderAmount;
+                    dr["Variance"] = item.Variance;
+
+                    tableToExport.Rows.Add(dr);
+                }
+
+                string ReportName = "InvoiceToOrderManagement";
+                string fileName = ReportName + ".xlsx";
+                using (XLWorkbook wb = new XLWorkbook())
+                {
+                    tableToExport.TableName = ReportName;
+                    wb.Worksheets.Add(tableToExport);
+                    using (MemoryStream stream = new MemoryStream())
+                    {
+                        wb.SaveAs(stream);
+                        return File(stream.ToArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex);
+                return null;
+            }
+            
+        }
+        
+        public ActionResult ExportNoActionParticipantManagement(string Type)
+        {
+            try
+            {
+                List<NoActionParticipantData> objData = new List<NoActionParticipantData>();
+                objData = NAR.GetNoActionParticipantsData(Type);
+                System.Data.DataTable tableToExport = new System.Data.DataTable();
+                tableToExport.Columns.Add("Type");
+                tableToExport.Columns.Add("ID");
+                tableToExport.Columns.Add("Name");
+                tableToExport.Columns.Add("Cluster");
+                tableToExport.Columns.Add("Sub Cluster");
+                tableToExport.Columns.Add("City");
+                tableToExport.Columns.Add("Last Invoice Date");
+                tableToExport.Columns.Add("Balance Points");                
+                tableToExport.Columns.Add("Days Since Last Inv");
+
+                foreach(var item in objData)
+                {
+                    DataRow dr = tableToExport.NewRow();
+                    dr["Type"] = item.Type;
+                    dr["ID"] = item.Id;
+                    dr["Name"] = item.Name;
+                    dr["Cluster"] = item.Cluster;
+                    dr["Sub Cluster"] = item.SubCluster;
+                    dr["City"] = item.City;
+                    dr["Last Invoice Date"] = item.LastInvoiceDate;
+                    dr["Balance Points"] = item.BalancePoints;                    
+                    dr["Days Since Last Inv"] = item.DaysSinceLastInvoice;
+
+                    tableToExport.Rows.Add(dr);
+                }
+
+                string ReportName = "NoActionParticipantManagement";
+                string fileName = ReportName + ".xlsx";
+                using (XLWorkbook wb = new XLWorkbook())
+                {
+                    tableToExport.TableName = ReportName;
+                    wb.Worksheets.Add(tableToExport);
+                    using (MemoryStream stream = new MemoryStream())
+                    {
+                        wb.SaveAs(stream);
+                        return File(stream.ToArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
+                    }
+                }
+
+
             }
             catch (Exception ex)
             {

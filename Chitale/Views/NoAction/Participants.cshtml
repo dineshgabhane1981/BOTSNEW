@@ -72,7 +72,7 @@
             </div>
             <div class="row mb-3" id="dvParticipantData" style="display:none;">
                 <div class="container-fluid pt-3 pl-3 pr-3">
-                    <div class="pt-3 pl-3 pr-3 col-md-12 col-lg-12">
+                    <div class="pt-3 col-md-12 col-lg-12">
                         <div class="row" style="margin-bottom:10px;">
                             <div class="col search-container">
                                 <i class="fas fa-search"></i>
@@ -82,7 +82,9 @@
                                 <ul class="list-inline progress-list mt-2">
                                     <li class="list-inline-item">
                                         <div class="dropdown">
-                                            
+                                            <button class="btn btn-primary login-btn" onclick='ExportDataExcel();' type="button" id="btnExport">
+                                                <i class="fas fa-file-export"></i> Export
+                                            </button>
                                         </div>
                                     </li>
                                 </ul>
@@ -118,6 +120,7 @@
 
 <script>
     var tableData = [];
+    var tileType = 0;
     $(document).ready(function () {
         GetSummeryDetails();
     });
@@ -156,6 +159,7 @@
 
 
     function GetPerticularTileData(type) {
+        tileType = type;
          $("#divLoader").show();
         $.ajax({
             type: "POST",
@@ -164,7 +168,7 @@
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             success: function (response) {
-                if (response != null) {                    
+                if (response != null) {
                     tableData.length = 0;
                     $.map(response, function (item) {
                         optionItem = {}
@@ -240,6 +244,16 @@
         });
 
     }
+
+    function ExportDataExcel() {
+        $("#divLoader").show();        
+
+        var urlLink = "@Url.Action("ExportNoActionParticipantManagement", "Export")";
+        urlLink = urlLink + "?Type=" + tileType + "";
+        window.location.href = urlLink;
+        $("#divLoader").hide();
+    }
+
 
 </script>
 

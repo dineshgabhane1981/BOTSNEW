@@ -1,12 +1,12 @@
 ﻿@model Chitale.ViewModel.ManagementViewModel
 @{
-    ViewBag.Title = "InvoicetoOrder";
+    ViewBag.Title = "Invoice to Order";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <div class="app-main__inner">
     <div class="row">
-        <div style="width:100%;  padding:10px; background-color:white;float:left;">
+        <div style="width:100%; background-color:white;float:left;">
             <div class="card-header-tab card-header-tab-animation card-header" style="margin-bottom:10px;">
                 <div class="card-header-title">
                     <i class="header-icon lnr-apartment icon-gradient bg-love-kiss"> </i>
@@ -27,7 +27,7 @@
                         City <br />@Html.DropDownListFor(model => model.CityList, new SelectList(Model.CityList, "Value", "Text"), "All", htmlAttributes: new { @class = "input50", @id = "ddlCityList" })
                     </div>
                 </div>
-                <div>
+                <div style="margin-left:15px;">
                     <br />
                     <input type="radio" id="rdnSS" checked name="cust_type" /> Super Stockiest &nbsp;&nbsp;&nbsp;&nbsp;
                     <input type="radio" id="rdnDist" name="cust_type" /> Distributors <br /><br />
@@ -35,10 +35,21 @@
                     <input id="txtToDate" placeholder="To Date" class="input50" />
                     <button type="button" id="btnFilter" style="margin-left:17px;margin-top:5px;" class="btn btn-primary"><b>FILTER</b></button>
                 </div>
-                </div>
+            </div>
             <div class="row mb-3">
                 <div class="container-fluid pt-3 pl-3 pr-3">
                     <div class="pt-3 pl-3 pr-3 col-md-12 col-lg-12">
+                        <div class="col text-right">
+                            <ul class="list-inline progress-list mt-2">
+                                <li class="list-inline-item">
+                                    <div class="dropdown">
+                                        <button class="btn btn-primary login-btn" onclick='ExportDataExcel();' type="button" id="btnExport">
+                                            <i class="fas fa-file-export"></i> Export
+                                        </button>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
                         <div class="row" id="divactivityTable">
                             <div class="table-responsive">
                                 <table class="table" id="activityTable" cellspacing="0" cellpadding="0">
@@ -77,7 +88,7 @@
                             Indicates Opportunity loss
                         </td>
                     </tr>
-                                        
+
                 </table>
             </div>
         </div>
@@ -153,7 +164,7 @@
                         optionItem["SubCluster"] = item.SubCluster;
                         optionItem["City"] = item.City;
                         optionItem["InvDate"] = item.StrDate;
-                        optionItem["InvNumber"] = item.InvNumber;                       
+                        optionItem["InvNumber"] = item.InvNumber;
                         optionItem["InvAmount"] = item.InvAmount;
                         optionItem["OrderAmount"] = item.OrderAmount;
                         optionItem["Variance"] = item.Variance;
@@ -206,20 +217,20 @@
                     aTargets: []
                 }
             ],
-            "fnRowCallback": function (row, data, dataIndex) {               
-                var invamt = data.InvAmount;
-                var orderamt = data.OrderAmount;
-                    if (invamt - orderamt > 0) {
-                       $('td:eq(10)', row).css('background-color', '#FFA500');
-                    }
-                    else if (invamt - orderamt < 0) {
-                        $('td:eq(10)', row).css('background-color', '#FF0000');
-                    }
-                    
+            "fnRowCallback": function (row, data, dataIndex) {
+                var variance = data.Variance;
+
+                if (variance > 0) {
+                    $('td:eq(10)', row).css('background-color', '#FFA500');
                 }
-           
+                else if (variance < 0) {
+                    $('td:eq(10)', row).css('background-color', '#FF0000');
+                }
+
+                }
+
         });
-       
+
         $('#activityTable_filter').hide();
         $('#txtSearch').on('keyup', function () {
 
@@ -236,9 +247,33 @@
             table.draw();
         });
 
-        
+
 
     }
+
+    function ExportDataExcel() {
+        $("#divLoader").show();
+         var Cluster = $('#ddlClusterList :selected').text();
+         var SubCluster = $('#ddlSubClusterList :selected').text();
+         var City = $('#ddlCityList :selected').text();
+         var FromDate = $("#txtFromDate").val();
+         var Todate = $('#txtToDate').val();
+         var CustomerType = "0";
+         if ($('#rdnSS').is(":checked")) {
+             CustomerType = "SuperStockiest";
+         }
+         if ($('#rdnDist').is(":checked")) {
+             CustomerType = "Distributors";
+         }
+
+        var urlLink = "@Url.Action("ExportInvoiceToOrderManagement", "Export")";
+        urlLink = urlLink + "?Cluster=" + Cluster + "&SubCluster=" + SubCluster + "&City=" + City + "&FromDate=" + FromDate + "&Todate=" + Todate + "&Type=" + CustomerType + "";
+        window.location.href = urlLink;
+        $("#divLoader").hide();
+    }
+
+
+
 </script>
 <style>
     table.dataTable thead .sorting_asc {
