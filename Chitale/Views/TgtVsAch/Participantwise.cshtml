@@ -27,7 +27,7 @@
                         City <br /> @Html.DropDownListFor(model => model.CityList, new SelectList(Model.CityList, "Value", "Text"), "All", htmlAttributes: new { @class = "input50", @id = "ddlCityList" })
                     </div>
                 </div>
-                <div>
+                <div style="margin-left:15px;">
                     <br />
                     <input type="radio" id="rdnSS" checked name="cust_type" /> Super Stockiest &nbsp;&nbsp;&nbsp;&nbsp;
                     <input type="radio" id="rdnDist" name="cust_type" /> Distributors &nbsp;&nbsp;&nbsp;&nbsp;
@@ -41,6 +41,17 @@
             <div class="row mb-3">
                 <div class="container-fluid pt-3 pl-3 pr-3">
                     <div class="pt-3 pl-3 pr-3 col-md-12 col-lg-12">
+                        <div class="col text-right">
+                            <ul class="list-inline progress-list mt-2">
+                                <li class="list-inline-item">
+                                    <div class="dropdown">
+                                        <button class="btn btn-primary login-btn" onclick='ExportDataExcel();' type="button" id="btnExport">
+                                            <i class="fas fa-file-export"></i> Export
+                                        </button>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
                         <div class="row" id="divactivityTable">
 
                             <div class="table-responsive">
@@ -202,10 +213,6 @@
                         var actualURL = URL + "?CustomerId=" + id + "&CustomerType=" + Type;
                         return '<a target=\"_blank\"  class=\"login\" href=' + actualURL + '>' + data + '</a>';
 
-                        //var id = row.ID;
-                        //var Type = row.Type;
-                        //return '<a href="#" onclick="RedirectToParticipant(\'' + id + '\'\,\'' + Type + '\'\)" class="login" >' + data + '</a>';
-
                     }
                 },
                 //{ data: "Name" },
@@ -244,12 +251,29 @@
 
     }
 
-    function RedirectToParticipant(id, type) {
-        var URL = '@Url.Action("TgtVsAchParticipant", "PointsLedger")?id=' + id + '&type=' + type;
-        window.location.href = URL;
+    function ExportDataExcel() {
+        $("#divLoader").show();
+        var Cluster = $('#ddlClusterList :selected').text();
+        var SubCluster = $('#ddlSubClusterList :selected').text();
+        var City = $('#ddlCityList :selected').text();
+        var Month = $('#ddlMonthList').val();
+        var Year = $('#ddlYearList').val();
+        var CustomerType = "0";
+        if ($('#rdnSS').is(":checked")) {
+            CustomerType = "SuperStockiest";
+        }
+        if ($('#rdnDist').is(":checked")) {
+            CustomerType = "Distributors";
+        }
+        if ($('#rdnRetailer').is(":checked")) {
+            CustomerType = "Retailers";
+        }
+
+        var urlLink = "@Url.Action("ExportParticipantWiseManagement", "Export")";
+        urlLink = urlLink + "?Cluster=" + Cluster + "&SubCluster=" + SubCluster + "&City=" + City + "&Month=" + Month + "&Year=" + Year + "&Type=" + CustomerType + "";
+        window.location.href = urlLink;
+        $("#divLoader").hide();
     }
-
-
 
 </script>
 

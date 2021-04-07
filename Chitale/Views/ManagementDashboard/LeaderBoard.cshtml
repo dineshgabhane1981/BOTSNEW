@@ -40,48 +40,58 @@
                                     </button>
                                 </div>
 
-                             </div>
-                                @*<div class="row row-grid">*@
-                                <div class="col-md-6" style="margin: 20px 0px;">
-                                    <input type="radio" name="first_item5" id="rbtnStockiest" value="SS" /> Super Stockiest &nbsp;&nbsp;&nbsp;&nbsp;
-
-                                    <input type="radio" name="first_item5" id="rbtnDistributer" value="Distributor" /> Distributor &nbsp;&nbsp;&nbsp;&nbsp;
-
-                                    <input type="radio" name="first_item5" id="rbtnRetailer" value="Retailers" /> Retailer
-                                </div>
-
-                                @*</div>*@
-                                <div class="row mt-3" id="dvActivityData1">
-
-                                    <div class="table-responsive">
-                                        <table class="table" id="activityTable" style="width:100%;">
-                                            <thead>
-                                                <tr style="text-align:center;">
-                                                    <td scope="col" style="border:1px solid black;border-left:0px;" colspan="3"></td>
-                                                    <td scope="col" style="border:1px solid black; font-size:16px;" colspan="3"><b>Current Month</b> </td>
-                                                    <td scope="col" style="border:1px solid black;border-right:0px; font-size:16px;" colspan="3"><b>Last Month</b> </td>
-                                                    <td style="border:1px solid black;border-right:0px;"></td>
-                                                </tr>
-                                                <tr>
-                                                    <th scope="col">ID</th>
-                                                    <th scope="col">Name</th>
-                                                    <th scope="col">Balance Points</th>
-                                                    <th scope="col">Overall Rank</th>
-                                                    <th scope="col">Cluster Rank</th>
-                                                    <th scope="col">Star Rating</th>
-                                                    <th scope="col">Overall Rank</th>
-                                                    <th scope="col">Cluster Rank</th>
-                                                    <th scope="col">Star Rating</th>
-                                                    <th scope="col">Movement</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody style="text-align:center;">
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-
                             </div>
+
+                            <div class="col-md-6" style="margin: 20px 0px;">
+                                <input type="radio" name="first_item5" id="rbtnStockiest" value="SS" /> Super Stockiest &nbsp;&nbsp;&nbsp;&nbsp;
+
+                                <input type="radio" name="first_item5" id="rbtnDistributer" value="Distributor" /> Distributor &nbsp;&nbsp;&nbsp;&nbsp;
+
+                                <input type="radio" name="first_item5" id="rbtnRetailer" value="Retailers" /> Retailer
+                            </div>
+
+                            <div class="col text-right">
+                                <ul class="list-inline progress-list mt-2">
+                                    <li class="list-inline-item">
+                                        <div class="dropdown">
+                                            <button class="btn btn-primary login-btn" onclick='ExportDataExcel();' type="button" id="btnExport">
+                                                <i class="fas fa-file-export"></i> Export
+                                            </button>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="row mt-3" id="dvActivityData1">
+
+                                <div class="table-responsive">
+                                    <table class="table" id="activityTable" style="width:100%;">
+                                        <thead>
+                                            <tr style="text-align:center;">
+                                                <td scope="col" style="border:1px solid black;border-left:0px;" colspan="3"></td>
+                                                <td scope="col" style="border:1px solid black; font-size:16px;" colspan="3"><b>Current Month</b> </td>
+                                                <td scope="col" style="border:1px solid black;border-right:0px; font-size:16px;" colspan="3"><b>Last Month</b> </td>
+                                                <td style="border:1px solid black;border-right:0px;"></td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="col">ID</th>
+                                                <th scope="col">Name</th>
+                                                <th scope="col">Balance Points</th>
+                                                <th scope="col">Overall Rank</th>
+                                                <th scope="col">Cluster Rank</th>
+                                                <th scope="col">Star Rating</th>
+                                                <th scope="col">Overall Rank</th>
+                                                <th scope="col">Cluster Rank</th>
+                                                <th scope="col">Star Rating</th>
+                                                <th scope="col">Movement</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody style="text-align:center;">
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                        </div>
 
                     </div>
                 </div>
@@ -96,36 +106,31 @@
     $(document).ready(function () {
         $('#rbtnStockiest').prop('checked', true);
         var radiobtn;
-       
         $('#btnFilter').on("click", function () {
-            GetLeaderBoard(0);
-           
-        });      
-               
+            var Type = $("input[name='first_item5']:checked").val()            
+            GetLeaderBoard(Type);
+
+        });
         $('#rbtnStockiest').on("click", function () {
             GetLeaderBoard(this.value,0);
-           
+
         });
         $('#rbtnDistributer').on("click", function () {
             GetLeaderBoard(this.value,0);
-          
+
         });
         $('#rbtnRetailer').on("click", function () {
             GetLeaderBoard(this.value,0);
-           
         });
         $("#ddlClusterList").on('change', function () {
-           
             $('#ddlSubClusterList').val = 0;
             $('#ddlCityList').val = 0;
         });
         $("#ddlSubClusterList").on('change', function () {
-            
             $('#ddlClusterList :selected').val = 0;
             $('#ddlCityList :selected').val = 0;
         });
         $("#ddlCityList").on('change', function () {
-            
             $('#ddlClusterList :selected').val = 0;
             $('#ddlSubClusterList :selected').val = 0;
         });
@@ -203,7 +208,7 @@
                     });
                     DrawTable();
                 }
-                else {                     
+                else {
 
                 }
                 $("#divLoader").hide();
@@ -216,7 +221,7 @@
             }
         });
     }
-    
+
     function DrawTable() {
         var table1 = $('#activityTable').DataTable();
         table1.destroy();
@@ -270,8 +275,20 @@
         });
 
     }
-    
-   
+
+    function ExportDataExcel() {
+        $("#divLoader").show();
+        var Type = $("input[name='first_item5']:checked").val() 
+        var Cluster = $('#ddlClusterList :selected').val();
+        var SubCluster = $('#ddlSubClusterList :selected').val();
+        var City = $('#ddlCityList :selected').val();
+
+        var urlLink = "@Url.Action("ExportLeaderBoardManagement", "Export")";
+        urlLink = urlLink + "?Cluster=" + Cluster + "&SubCluster=" + SubCluster + "&City=" + City + "&Type=" + Type + "";
+        window.location.href = urlLink;
+        $("#divLoader").hide();
+    }
+
 </script>
 
 <style>

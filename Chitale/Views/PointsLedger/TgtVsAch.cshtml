@@ -16,7 +16,7 @@
                         @Html.DropDownListFor(model => model.YearItems, new SelectList(Model.YearItems, "Value", "Text"), "Select Year", htmlAttributes: new { @class = "input50", @id = "ddlYearList" })
                         <button type="button" id="btnFilter" style="margin-left:17px;margin-top:5px;" class="btn btn-primary"><b>FILTER</b></button>
 
-                    </div>
+                    </div>                    
                 </div>
                 <div class="row mb-3" id="dvData">
                     @Html.Partial("~/Views/PointsLedger/_TgtVsAchList.cshtml", Model)
@@ -84,4 +84,14 @@
         });
     }
 
+    function ExportDataExcel() {
+        $("#divLoader").show();
+        var Month = $("#ddlMonthList").val();
+        var Year = $("#ddlYearList").val();
+
+        var urlLink = "@Url.Action("ExportFocusVsAch", "Export")";
+        urlLink = urlLink + "?Month=" + Month + "&Year=" + Year + "";
+        window.location.href = urlLink;
+        $("#divLoader").hide();
+    }
 </script>

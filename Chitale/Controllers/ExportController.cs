@@ -20,20 +20,24 @@ namespace Chitale.Controllers
     {
         ChitaleException newexception = new ChitaleException();
         ParticipantRepository pr = new ParticipantRepository();
+        PointsLedgerRepository PLR = new PointsLedgerRepository();
+        ManagementDashboardRepository MDR = new ManagementDashboardRepository();
+        TgtVsAchRepository TAR = new TgtVsAchRepository();
         // GET: Export
         public ActionResult Index()
         {
             return View();
         }
 
+        //Export Functions of Participant Category
         public ActionResult ExportParticipantList()
         {
             try
             {
-                string ReportName = "Participant List";
+
                 System.Data.DataTable table = new System.Data.DataTable();
                 var UserSession = (CustomerDetail)Session["ChitaleUser"];
-                ParticipantList objlist = new ParticipantList();
+
                 List<ParticipantList> lstparticipantLists = new List<ParticipantList>();
                 lstparticipantLists = pr.GetParticipantList(UserSession.CustomerId, UserSession.Type);
 
@@ -51,7 +55,7 @@ namespace Chitale.Controllers
 
                         List<ParticipantList> lstRetailerLists = new List<ParticipantList>();
                         lstRetailerLists = pr.GetParticipantList(item.Id, item.ParticipantType);
-                        foreach(ParticipantList itemRetailer in lstRetailerLists)
+                        foreach (ParticipantList itemRetailer in lstRetailerLists)
                         {
                             DataRow row1 = table.NewRow();
                             foreach (PropertyDescriptor prop in properties)
@@ -74,9 +78,10 @@ namespace Chitale.Controllers
 
                 var count = table.Rows.Count;
 
+                string ReportName = "Participant List";
                 string fileName = ReportName + ".xlsx";
                 using (XLWorkbook wb = new XLWorkbook())
-                {                    
+                {
                     table.TableName = ReportName;
                     wb.Worksheets.Add(table);
                     using (MemoryStream stream = new MemoryStream())
@@ -91,7 +96,365 @@ namespace Chitale.Controllers
                 newexception.AddException(ex);
                 return null;
             }
-            
+
+        }
+
+        public ActionResult ExportFocusVsAch(string Month, string Year)
+        {
+            try
+            {
+                System.Data.DataTable table = new System.Data.DataTable();
+                System.Data.DataTable tableToExport = new System.Data.DataTable();
+
+                tableToExport.Columns.Add("Name");
+                tableToExport.Columns.Add("Type");
+                tableToExport.Columns.Add("VolumeFocus");
+                tableToExport.Columns.Add("VolumeAch");
+                tableToExport.Columns.Add("VolumeAch%");
+                tableToExport.Columns.Add("VolumePoints");
+                tableToExport.Columns.Add("ValueFocus");
+                tableToExport.Columns.Add("ValueAch");
+                tableToExport.Columns.Add("ValueAch%");
+                tableToExport.Columns.Add("ValuePoints");
+
+                CustomerDetail UserSession = new CustomerDetail();
+                UserSession = (CustomerDetail)Session["ChitaleUser"];
+
+                TgtVsAchViewModel objData = new TgtVsAchViewModel();
+                objData.objOverAll = PLR.GetOverallData(UserSession.CustomerId, Month, Year);
+                objData.objCategory = PLR.GetCategoryData(UserSession.CustomerId, Month, Year);
+                objData.objSubCategory = PLR.GetSubCategoryData(UserSession.CustomerId, Month, Year);
+                objData.objProducts = PLR.GetProductData(UserSession.CustomerId, Month, Year);
+
+
+                PropertyDescriptorCollection properties = TypeDescriptor.GetProperties(typeof(TgtvsAchMaster));
+                foreach (PropertyDescriptor prop in properties)
+                    table.Columns.Add(prop.Name, Nullable.GetUnderlyingType(prop.PropertyType) ?? prop.PropertyType);
+
+                DataRow row = table.NewRow();
+                foreach (PropertyDescriptor prop in properties)
+                    row[prop.Name] = prop.GetValue(objData.objOverAll) ?? DBNull.Value;
+                table.Rows.Add(row);
+
+                foreach (TgtvsAchMaster item1 in objData.objCategory)
+                {
+                    DataRow row1 = table.NewRow();
+                    foreach (PropertyDescriptor prop in properties)
+                        row1[prop.Name] = prop.GetValue(item1) ?? DBNull.Value;
+
+                    table.Rows.Add(row1);
+
+                    foreach (TgtvsAchMaster item2 in objData.objSubCategory)
+                    {
+                        if (item1.CategoryCode == item2.CategoryCode)
+                        {
+                            DataRow row2 = table.NewRow();
+                            foreach (PropertyDescriptor prop in properties)
+                                row2[prop.Name] = prop.GetValue(item2) ?? DBNull.Value;
+
+                            table.Rows.Add(row2);
+
+                            foreach (TgtvsAchMaster item3 in objData.objProducts)
+                            {
+                                if (item2.SubCategoryCode == item3.SubCategoryCode)
+                                {
+                                    DataRow row3 = table.NewRow();
+                                    foreach (PropertyDescriptor prop in properties)
+                                        row3[prop.Name] = prop.GetValue(item3) ?? DBNull.Value;
+
+                                    table.Rows.Add(row3);
+                                }
+                            }
+                        }
+                    }
+
+                }
+
+                foreach (DataRow item in table.Rows)
+                {
+                    DataRow newDr = tableToExport.NewRow();
+                    newDr["Name"] = item["Name"];
+                    newDr["Type"] = item["ProductType"];
+                    newDr["VolumeFocus"] = item["VolumeTgt"];
+                    newDr["VolumeAch"] = item["VolumeAch"];
+                    newDr["VolumeAch%"] = item["VolumeAchPercentage"];
+                    newDr["VolumePoints"] = item["VolumePoints"];
+                    newDr["ValueFocus"] = item["ValueTgt"];
+                    newDr["ValueAch"] = item["ValueAch"];
+                    newDr["ValueAch%"] = item["ValueAchPercentage"];
+                    newDr["ValuePoints"] = item["ValuePoints"];
+
+                    tableToExport.Rows.Add(newDr);
+                }
+
+                string ReportName = "Focus Vs Ach";
+                string fileName = ReportName + ".xlsx";
+                using (XLWorkbook wb = new XLWorkbook())
+                {
+                    tableToExport.TableName = ReportName;
+                    wb.Worksheets.Add(tableToExport);
+                    using (MemoryStream stream = new MemoryStream())
+                    {
+                        wb.SaveAs(stream);
+                        return File(stream.ToArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
+                    }
+                }
+
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex);
+                return null;
+            }
+
+        }
+
+
+
+
+        //Export Functions of Management Category
+        public ActionResult ExportParticipantListManagement(string Cluster, string SubCluster, string City)
+        {
+            try
+            {
+                int clusterId = 0;
+                int subClusterId = 0;
+                int cityId = 0;
+                if (!string.IsNullOrEmpty(Cluster))
+                {
+                    clusterId = Convert.ToInt32(Cluster);
+                }
+                if (!string.IsNullOrEmpty(SubCluster))
+                {
+                    subClusterId = Convert.ToInt32(SubCluster);
+                }
+                if (!string.IsNullOrEmpty(City))
+                {
+                    cityId = Convert.ToInt32(City);
+                }
+
+                System.Data.DataTable table = new System.Data.DataTable();
+
+                List<ParticipantListForManagement> lstSuperStockiest = new List<ParticipantListForManagement>();
+                lstSuperStockiest = MDR.GetParticipantListForMgt(clusterId, subClusterId, cityId);
+
+                PropertyDescriptorCollection properties = TypeDescriptor.GetProperties(typeof(ParticipantListForManagement));
+                foreach (PropertyDescriptor prop in properties)
+                    table.Columns.Add(prop.Name, Nullable.GetUnderlyingType(prop.PropertyType) ?? prop.PropertyType);
+
+                foreach (ParticipantListForManagement item1 in lstSuperStockiest)
+                {
+                    DataRow row1 = table.NewRow();
+                    foreach (PropertyDescriptor prop in properties)
+                        row1[prop.Name] = prop.GetValue(item1) ?? DBNull.Value;
+
+                    table.Rows.Add(row1);
+
+                    List<ParticipantListForManagement> lstDistributor = new List<ParticipantListForManagement>();
+                    lstDistributor = MDR.GetSubParticipantListForMgt(item1.Id, item1.ParticipantType);
+                    foreach (ParticipantListForManagement item2 in lstDistributor)
+                    {
+                        DataRow row2 = table.NewRow();
+                        foreach (PropertyDescriptor prop in properties)
+                            row2[prop.Name] = prop.GetValue(item2) ?? DBNull.Value;
+
+                        table.Rows.Add(row2);
+
+                        List<ParticipantListForManagement> lstRetailer = new List<ParticipantListForManagement>();
+                        lstRetailer = MDR.GetSubParticipantListForMgt(item2.Id, item2.ParticipantType);
+                        foreach (ParticipantListForManagement item3 in lstRetailer)
+                        {
+                            DataRow row3 = table.NewRow();
+                            foreach (PropertyDescriptor prop in properties)
+                                row3[prop.Name] = prop.GetValue(item3) ?? DBNull.Value;
+
+                            table.Rows.Add(row3);
+                        }
+                    }
+                }
+                System.Data.DataTable tableToExport = new System.Data.DataTable();
+                tableToExport.Columns.Add("Type");
+                tableToExport.Columns.Add("ID");
+                tableToExport.Columns.Add("Name");
+                tableToExport.Columns.Add("Current Rank");
+                tableToExport.Columns.Add("Last Month Rank");
+                tableToExport.Columns.Add("Purchase Points");
+                tableToExport.Columns.Add("Sale Points");
+                tableToExport.Columns.Add("Add On Points");
+                tableToExport.Columns.Add("Lost Opp Points");
+                tableToExport.Columns.Add("Redeemed Points");
+                tableToExport.Columns.Add("Balanced Points");
+
+                foreach (DataRow dr in table.Rows)
+                {
+                    DataRow drExport = tableToExport.NewRow();
+                    drExport["Type"] = dr["ParticipantType"];
+                    drExport["ID"] = dr["Id"];
+                    drExport["Name"] = dr["ParticipantName"];
+                    drExport["Current Rank"] = dr["CurrentRank"];
+                    drExport["Last Month Rank"] = dr["LastMonthRank"];
+                    drExport["Purchase Points"] = dr["PurchasePoints"];
+                    drExport["Sale Points"] = dr["SalePoints"];
+                    drExport["Add On Points"] = dr["AddOnPoints"];
+                    drExport["Lost Opp Points"] = dr["LostOppPoints"];
+                    drExport["Redeemed Points"] = dr["RedeemedPoints"];
+                    drExport["Balanced Points"] = dr["BalancedPoints"];
+
+                    tableToExport.Rows.Add(drExport);
+                }
+                string ReportName = "Participant List Management";
+                string fileName = ReportName + ".xlsx";
+                using (XLWorkbook wb = new XLWorkbook())
+                {
+                    tableToExport.TableName = ReportName;
+                    wb.Worksheets.Add(tableToExport);
+                    using (MemoryStream stream = new MemoryStream())
+                    {
+                        wb.SaveAs(stream);
+                        return File(stream.ToArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex);
+                return null;
+            }
+
+        }
+
+        public ActionResult ExportLeaderBoardManagement(string Cluster, string SubCluster, string City, string Type)
+        {
+            try
+            {
+                int clusterId = 0;
+                int subClusterId = 0;
+                int cityId = 0;
+                if (!string.IsNullOrEmpty(Cluster))
+                {
+                    clusterId = Convert.ToInt32(Cluster);
+                }
+                if (!string.IsNullOrEmpty(SubCluster))
+                {
+                    subClusterId = Convert.ToInt32(SubCluster);
+                }
+                if (!string.IsNullOrEmpty(City))
+                {
+                    cityId = Convert.ToInt32(City);
+                }
+
+                List<LeaderBoardForMgt> listLeaderBoard = new List<LeaderBoardForMgt>();
+                listLeaderBoard = MDR.GetLeaderBoardForMgts(Type, clusterId, subClusterId, cityId);
+
+                System.Data.DataTable tableToExport = new System.Data.DataTable();
+                tableToExport.Columns.Add("ID");
+                tableToExport.Columns.Add("Name");
+                tableToExport.Columns.Add("Balance Points");
+                tableToExport.Columns.Add("Current Overall Rank");
+                tableToExport.Columns.Add("Current Cluster Rank");
+                tableToExport.Columns.Add("Current Star Rating");
+                tableToExport.Columns.Add("Last Month Overall Rank");
+                tableToExport.Columns.Add("Last Month Cluster Rank");
+                tableToExport.Columns.Add("Last Star Rating");
+                tableToExport.Columns.Add("Movement");
+
+                foreach (var item in listLeaderBoard)
+                {
+                    DataRow dr = tableToExport.NewRow();
+                    dr["ID"] = item.ID;
+                    dr["Name"] = item.Name;
+                    dr["Balance Points"] = item.NormalPoints;
+                    dr["Current Overall Rank"] = item.CurrentOverallRank;
+                    dr["Current Cluster Rank"] = item.CurrentClusterRank;
+                    dr["Current Star Rating"] = item.CurrentStarRating;
+                    dr["Last Month Overall Rank"] = item.LastMonthOverallRank;
+                    dr["Last Month Cluster Rank"] = item.LastMonthClusterRank;
+                    dr["Last Star Rating"] = item.LastStarRating;
+                    dr["Movement"] = item.RankMovement;
+
+                    tableToExport.Rows.Add(dr);
+
+                }
+
+                string ReportName = "Leader Board Management";
+                string fileName = ReportName + ".xlsx";
+                using (XLWorkbook wb = new XLWorkbook())
+                {
+                    tableToExport.TableName = ReportName;
+                    wb.Worksheets.Add(tableToExport);
+                    using (MemoryStream stream = new MemoryStream())
+                    {
+                        wb.SaveAs(stream);
+                        return File(stream.ToArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex);
+                return null;
+            }
+
+        }
+
+        public ActionResult ExportParticipantWiseManagement(string Cluster, string SubCluster, string City, string Month, string Year, string Type)
+        {
+            try
+            {
+                List<TgtVsAchParticipantWise> objParticipantData = new List<TgtVsAchParticipantWise>();
+                objParticipantData = TAR.GetTgtVsAchParticipantWise(Cluster, SubCluster, City, Month, Year, Type);
+
+                System.Data.DataTable tableToExport = new System.Data.DataTable();
+                tableToExport.Columns.Add("Type");
+                tableToExport.Columns.Add("ID");
+                tableToExport.Columns.Add("Name");
+                tableToExport.Columns.Add("Cluster");
+                tableToExport.Columns.Add("SubCluster");
+                tableToExport.Columns.Add("City");
+                tableToExport.Columns.Add("Volume Focus");
+                tableToExport.Columns.Add("Volume Ach");
+                tableToExport.Columns.Add("Volume Ach Percentage");
+                tableToExport.Columns.Add("Value Focus");
+                tableToExport.Columns.Add("Value Ach");
+                tableToExport.Columns.Add("Value Ach Percentage");
+
+                foreach (var item in objParticipantData)
+                {
+                    DataRow dr = tableToExport.NewRow();
+                    dr["Type"] = item.Type;
+                    dr["ID"] = item.ID;
+                    dr["Name"] = item.Name;
+                    dr["Cluster"] = item.Cluster;
+                    dr["SubCluster"] = item.SubCluster;
+                    dr["City"] = item.City;
+                    dr["Volume Focus"] = item.VolTgt;
+                    dr["Volume Ach"] = item.VolAch;
+                    dr["Volume Ach Percentage"] = item.VolAchPer;
+                    dr["Value Focus"] = item.ValTgt;
+                    dr["Value Ach"] = item.ValAch;
+                    dr["Value Ach Percentage"] = item.ValAchPer;
+
+                    tableToExport.Rows.Add(dr);
+                }
+                string ReportName = "FocusVsAchParticipantWise";
+                string fileName = ReportName + ".xlsx";
+                using (XLWorkbook wb = new XLWorkbook())
+                {
+                    tableToExport.TableName = ReportName;
+                    wb.Worksheets.Add(tableToExport);
+                    using (MemoryStream stream = new MemoryStream())
+                    {
+                        wb.SaveAs(stream);
+                        return File(stream.ToArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex);
+                return null;
+            }
+            return null;
         }
     }
 }
