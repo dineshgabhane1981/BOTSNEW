@@ -89,8 +89,9 @@ namespace Chitale.Controllers
             catch (Exception ex)
             {
                 newexception.AddException(ex);
+                return null;
             }
-            return null;
+            
         }
     }
 }
