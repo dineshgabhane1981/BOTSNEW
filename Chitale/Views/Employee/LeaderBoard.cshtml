@@ -1,6 +1,6 @@
 ﻿@model Chitale.ViewModel.ManagementViewModel
 @{
-    ViewBag.Title = "LeaderBoard";
+    ViewBag.Title = "Leader Board";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.2.2/Chart.bundle.min.js"></script>
@@ -48,9 +48,9 @@
                                 <ul class="list-inline progress-list mt-2">
                                     <li class="list-inline-item">
                                         <div class="dropdown">
-                                            @*<button class="btn btn-primary login-btn" onclick='ExportDataExcel();' type="button" id="btnExport">
-                                                    <i class="fas fa-file-export"></i> Export
-                                                </button>*@
+                                            <button class="btn btn-primary login-btn" onclick='ExportDataExcel();' type="button" id="btnExport">
+                                                <i class="fas fa-file-export"></i> Export
+                                            </button>
                                         </div>
                                     </li>
                                 </ul>
@@ -539,6 +539,21 @@
         });
 
     }
+
+    function ExportDataExcel() {
+        $("#divLoader").show();
+        var Cluster = $('#ddlClusterList :selected').val();
+        var SubCluster = $('#ddlSubClusterList :selected').val();
+        var City = $('#ddlCityList :selected').val();
+
+        var urlLink = "@Url.Action("ExportParticipantListEmployee", "Export")";
+        urlLink = urlLink + "?Cluster=" + Cluster + "&SubCluster=" + SubCluster + "&City=" + City + "";
+        window.location.href = urlLink;
+        $("#divLoader").hide();
+    }
+
+
+
 </script>
 
 <style>

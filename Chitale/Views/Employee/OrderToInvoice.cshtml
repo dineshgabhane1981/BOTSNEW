@@ -1,6 +1,6 @@
 ﻿@model Chitale.ViewModel.ManagementViewModel
 @{
-    ViewBag.Title = "OrderToInvoice";
+    ViewBag.Title = "Order To Invoice";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -38,6 +38,17 @@
                 <div class="row mb-3">
                     <div class="container-fluid pt-3 pl-3 pr-3">
                         <div class="pt-3 pl-3 pr-3 col-md-12 col-lg-12">
+                            <div class="col text-right">
+                                <ul class="list-inline progress-list mt-2">
+                                    <li class="list-inline-item">
+                                        <div class="dropdown">
+                                            <button class="btn btn-primary login-btn" onclick='ExportDataExcel();' type="button" id="btnExport">
+                                                <i class="fas fa-file-export"></i> Export
+                                            </button>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
                             <div class="row" id="divactivityTable">
                                 <div class="table-responsive">
                                     <table class="table" id="activityTable" cellspacing="0" cellpadding="0">
@@ -238,6 +249,29 @@
 
 
     }
+
+    function ExportDataExcel() {
+        $("#divLoader").show();
+        var Cluster = $('#ddlClusterList :selected').text();
+        var SubCluster = $('#ddlSubClusterList :selected').text();
+        var City = $('#ddlCityList :selected').text();
+        var FromDate = $("#txtFromDate").val();
+        var Todate = $('#txtToDate').val();
+        var CustomerType = "0";
+        if ($('#rdnSS').is(":checked")) {
+            CustomerType = "SuperStockiest";
+        }
+        if ($('#rdnDist').is(":checked")) {
+            CustomerType = "Distributors";
+        }
+
+        var urlLink = "@Url.Action("ExportOrderToInvoiceEmployee", "Export")";
+        urlLink = urlLink + "?Cluster=" + Cluster + "&SubCluster=" + SubCluster + "&City=" + City + "&FromDate=" + FromDate + "&Todate=" + Todate + "&CustomerType=" + CustomerType + "";
+        window.location.href = urlLink;
+        $("#divLoader").hide();
+    }
+
+
 </script>
 <style>
     table.dataTable thead .sorting_asc {

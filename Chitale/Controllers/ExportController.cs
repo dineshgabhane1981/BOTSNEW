@@ -24,13 +24,14 @@ namespace Chitale.Controllers
         ManagementDashboardRepository MDR = new ManagementDashboardRepository();
         TgtVsAchRepository TAR = new TgtVsAchRepository();
         NoActionRepository NAR = new NoActionRepository();
+        EmployeeRepository ER = new EmployeeRepository();
         // GET: Export
         public ActionResult Index()
         {
             return View();
         }
 
-        //Export Functions of Participant Category
+        //Export Functions for Participant Category
         public ActionResult ExportParticipantList()
         {
             try
@@ -211,7 +212,7 @@ namespace Chitale.Controllers
         }
 
 
-        //Export Functions of Management Category
+        //Export Functions for Management Category
         public ActionResult ExportParticipantListManagement(string Cluster, string SubCluster, string City)
         {
             try
@@ -627,5 +628,176 @@ namespace Chitale.Controllers
             }
             return null;
         }
+
+
+        //Export Functions for Employee Category
+        public ActionResult ExportParticipantListEmployee(string Cluster, string SubCluster, string City)
+        {
+            try
+            {
+                 
+                if (string.IsNullOrEmpty(Cluster))
+                {
+                    Cluster = "0";
+                }
+                if (string.IsNullOrEmpty(SubCluster))
+                {
+                    SubCluster = "0";
+                }
+                if (string.IsNullOrEmpty(City))
+                {
+                    City = "0";
+                }
+                var UserSession = (CustomerDetail)Session["ChitaleEmployee"];
+                System.Data.DataTable table = new System.Data.DataTable();
+
+                List<ParticipantListForManagement> lstSuperStockiest = new List<ParticipantListForManagement>();
+                lstSuperStockiest = ER.GetParticipantListForEmp(Cluster, SubCluster, City, UserSession.CustomerId, UserSession.CustomerType);
+
+                PropertyDescriptorCollection properties = TypeDescriptor.GetProperties(typeof(ParticipantListForManagement));
+                foreach (PropertyDescriptor prop in properties)
+                    table.Columns.Add(prop.Name, Nullable.GetUnderlyingType(prop.PropertyType) ?? prop.PropertyType);
+
+                foreach (ParticipantListForManagement item1 in lstSuperStockiest)
+                {
+                    DataRow row1 = table.NewRow();
+                    foreach (PropertyDescriptor prop in properties)
+                        row1[prop.Name] = prop.GetValue(item1) ?? DBNull.Value;
+
+                    table.Rows.Add(row1);
+
+                    List<ParticipantListForManagement> lstDistributor = new List<ParticipantListForManagement>();
+                    lstDistributor = ER.GetSubParticipantListForEmp(item1.Id, item1.ParticipantType, UserSession.CustomerType, UserSession.CustomerId);
+                    foreach (ParticipantListForManagement item2 in lstDistributor)
+                    {
+                        DataRow row2 = table.NewRow();
+                        foreach (PropertyDescriptor prop in properties)
+                            row2[prop.Name] = prop.GetValue(item2) ?? DBNull.Value;
+
+                        table.Rows.Add(row2);
+
+                        List<ParticipantListForManagement> lstRetailer = new List<ParticipantListForManagement>();
+                        lstRetailer = ER.GetSubParticipantListForEmp(item2.Id, item2.ParticipantType, UserSession.CustomerType, UserSession.CustomerId);
+                        foreach (ParticipantListForManagement item3 in lstRetailer)
+                        {
+                            DataRow row3 = table.NewRow();
+                            foreach (PropertyDescriptor prop in properties)
+                                row3[prop.Name] = prop.GetValue(item3) ?? DBNull.Value;
+
+                            table.Rows.Add(row3);
+                        }
+                    }
+                }
+                System.Data.DataTable tableToExport = new System.Data.DataTable();
+                tableToExport.Columns.Add("Type");
+                tableToExport.Columns.Add("ID");
+                tableToExport.Columns.Add("Name");
+                tableToExport.Columns.Add("Current Rank");
+                tableToExport.Columns.Add("Last Month Rank");
+                tableToExport.Columns.Add("Purchase Points");
+                tableToExport.Columns.Add("Sale Points");
+                tableToExport.Columns.Add("Add On Points");
+                tableToExport.Columns.Add("Lost Opp Points");
+                tableToExport.Columns.Add("Redeemed Points");
+                tableToExport.Columns.Add("Balanced Points");
+
+                foreach (DataRow dr in table.Rows)
+                {
+                    DataRow drExport = tableToExport.NewRow();
+                    drExport["Type"] = dr["ParticipantType"];
+                    drExport["ID"] = dr["Id"];
+                    drExport["Name"] = dr["ParticipantName"];
+                    drExport["Current Rank"] = dr["CurrentRank"];
+                    drExport["Last Month Rank"] = dr["LastMonthRank"];
+                    drExport["Purchase Points"] = dr["PurchasePoints"];
+                    drExport["Sale Points"] = dr["SalePoints"];
+                    drExport["Add On Points"] = dr["AddOnPoints"];
+                    drExport["Lost Opp Points"] = dr["LostOppPoints"];
+                    drExport["Redeemed Points"] = dr["RedeemedPoints"];
+                    drExport["Balanced Points"] = dr["BalancedPoints"];
+
+                    tableToExport.Rows.Add(drExport);
+                }
+                string ReportName = "Participant List Management";
+                string fileName = ReportName + ".xlsx";
+                using (XLWorkbook wb = new XLWorkbook())
+                {
+                    tableToExport.TableName = ReportName;
+                    wb.Worksheets.Add(tableToExport);
+                    using (MemoryStream stream = new MemoryStream())
+                    {
+                        wb.SaveAs(stream);
+                        return File(stream.ToArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex);
+                return null;
+            }
+
+        }
+
+        public ActionResult ExportOrderToInvoiceEmployee(string Cluster, string SubCluster, string City,string FromDate,string Todate, string CustomerType)
+        {
+            try
+            {                                
+                var UserSession = (CustomerDetail)Session["ChitaleEmployee"];
+                List<InvoiceToOrder> objOrderData = new List<InvoiceToOrder>();
+                System.Data.DataTable table = new System.Data.DataTable();
+                objOrderData = ER.GetInvoiceToOrderData(Cluster, SubCluster, City, CustomerType, FromDate, Todate, UserSession.CustomerId, UserSession.CustomerType);
+
+                System.Data.DataTable tableToExport = new System.Data.DataTable();
+                tableToExport.Columns.Add("Type");
+                tableToExport.Columns.Add("ID");
+                tableToExport.Columns.Add("Name");
+                tableToExport.Columns.Add("Cluster");
+                tableToExport.Columns.Add("Sub Cluster");
+                tableToExport.Columns.Add("City");
+                tableToExport.Columns.Add("Inv Date");
+                tableToExport.Columns.Add("Inv Number");
+                tableToExport.Columns.Add("Inv Amount");
+                tableToExport.Columns.Add("Order Amount");
+                tableToExport.Columns.Add("Variance");
+
+                foreach (var item in objOrderData)
+                {
+                    DataRow dr = tableToExport.NewRow();
+                    dr["Type"] = item.CustomerType;
+                    dr["ID"] = item.CustomerId;
+                    dr["Name"] = item.CustomerName;
+                    dr["Cluster"] = item.Cluster;
+                    dr["Sub Cluster"] = item.SubCluster;
+                    dr["City"] = item.City;
+                    dr["Inv Date"] = item.InvDate;
+                    dr["Inv Number"] = item.InvNumber;
+                    dr["Inv Amount"] = item.InvAmount;
+                    dr["Order Amount"] = item.OrderAmount;
+                    dr["Variance"] = item.Variance;
+
+                    tableToExport.Rows.Add(dr);
+                }
+                string ReportName = "InvoiceToOrderEmployee";
+                string fileName = ReportName + ".xlsx";
+                using (XLWorkbook wb = new XLWorkbook())
+                {
+                    tableToExport.TableName = ReportName;
+                    wb.Worksheets.Add(tableToExport);
+                    using (MemoryStream stream = new MemoryStream())
+                    {
+                        wb.SaveAs(stream);
+                        return File(stream.ToArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex);
+                return null;
+            }
+
+        }
+
     }
 }
