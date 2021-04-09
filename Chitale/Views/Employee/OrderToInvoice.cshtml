@@ -217,16 +217,16 @@
                 }
             ],
             "fnRowCallback": function (row, data, dataIndex) {
-                var invamt = data.InvAmount;
-                var orderamt = data.OrderAmount;
-                    if (invamt - orderamt > 0) {
-                       $('td:eq(10)', row).css('background-color', '#FFA500');
-                    }
-                    else if (invamt - orderamt < 0) {
-                        $('td:eq(10)', row).css('background-color', '#FF0000');
-                    }
+                var variance = data.Variance;
 
+                if (variance > 0) {
+                    $('td:eq(10)', row).css('background-color', '#FFA500');
                 }
+                else if (variance < 0) {
+                    $('td:eq(10)', row).css('background-color', '#FF0000');
+                }
+
+            }
 
         });
 
