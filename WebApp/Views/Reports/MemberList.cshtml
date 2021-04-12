@@ -1,6 +1,6 @@
 ﻿@model List<BOTS_BL.Models.MemberList>
 @{
-    ViewBag.Title = "MemberList";
+    ViewBag.Title = "Member List";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -12,6 +12,7 @@
             @Html.DropDownListFor(x => Model.Count, new SelectList(ViewBag.OutletList, "Value", "Text"), "All", htmlAttributes: new { @class = "input100", @id= "OutletList" })
            
         </div>
+        <br />
     </div>
     <div class="row mb-3 card">
         <div class="container-fluid pt-3 pl-3 pr-3">

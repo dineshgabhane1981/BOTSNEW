@@ -13,7 +13,8 @@ namespace WebApp
         {
             var sessionUser = filterContext.HttpContext.Session["UserSession"];
             var routeValues = filterContext.RequestContext.RouteData.Values["controller"].ToString();
-            if (sessionUser == null && !routeValues.Equals("Login"))
+            string actionName = filterContext.RequestContext.RouteData.Values["action"].ToString();
+            if (sessionUser == null && !routeValues.Equals("Login") && !actionName.Equals("ResetPassword"))
             {
                 if (filterContext.HttpContext.Request.IsAjaxRequest())
                 {

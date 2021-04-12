@@ -43,7 +43,7 @@
         <div class="row">
             <div class="col search-container">
                 <i class="fas fa-search"></i>
-                <input class="input100" type="text" id="txtSearch" placeholder="Search transaction..." />
+                <input class="input100" type="text" id="txtSearch" placeholder="Search transaction..." />                
             </div>
             <div class="col text-right">
                 <ul class="list-inline progress-list mt-2">
@@ -58,7 +58,7 @@
             </div>
         </div>
         <div class="row mt-3" id="dvActivityData">
-            <h5>Transaction Details</h5>
+            <h5>Transaction Details</h5><h5><span id="spnType" style="margin-left:100px;"></span><span id="spnMonth"></span></h5>
             <div class="table-responsive">
                 <table class="table" id="activityTable">
                     <thead>
@@ -69,7 +69,7 @@
                             <th scope="col">Txn Count</th>
                             <th scope="col">Total Spends</th>
                             <th scope="col">Avl Bal Points</th>
-                            <th scope="col">Last Txn Date</th>                            
+                            <th scope="col">Last Txn Date</th>
                             <th scope="col">Celebration Date</th>
                         </tr>
                     </thead>
@@ -118,6 +118,22 @@
                     tableData.push(optionItem);
                 });
                 DrawTable();
+                if (currentMonth == 1) {
+                    $("#spnMonth").text("Current Month");
+                }
+                else {
+                    $("#spnMonth").text("Next Month");
+                }
+                if (type == 1) {
+                    $("#spnType").text("Birthdays | ");
+                }
+                if (type == 2) {
+                    $("#spnType").text("Marriage Anniversaries | ");
+                }
+                if (type == 3) {
+                    $("#spnType").text("Enrolment Anniversaries | ");
+                }
+                
                 $("#dvCelebrationTable").show();
                 $("#dvTxnTable").show();
 

@@ -24,11 +24,11 @@ namespace BOTS_BL.Models
         public string MaskedMobileNo { get; set; }
         public string MobileNo { get; set; }
         public string MemberName { get; set; }
-        public long TxnCount { get; set; }
-        public long TotalSpend { get; set; }
-        public long AvlPoints { get; set; }
+        public long? TxnCount { get; set; }
+        public long? TotalSpend { get; set; }
+        public long? AvlPoints { get; set; }
         public string LastTxnDate { get; set; }
-        public long PointsExpiry { get; set; }
+        public long? PointsExpiry { get; set; }
         public string ExpiryDate { get; set; }
         public string CelebrationDate { get; set; }
     }
