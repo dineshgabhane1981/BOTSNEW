@@ -182,7 +182,7 @@ namespace BOTS_BL.Repository
                         foreach (var item in ObjInvoiceLst)
                         {
                             PointLedgerModel objPointLedger = new PointLedgerModel();
-                            var objTransaction = context.TransactionMasters.Where(x => x.OrderNo == item.OrderNo && x.TxnType == "Purchase" && x.SubType == "Order").FirstOrDefault();
+                            var objTransaction = context.TransactionMasters.Where(x => x.OrderNo == item.OrderNo && ((x.TxnType == "Purchase" && x.SubType == "Order") || (x.TxnType == "Cancel" && x.SubType == "Cancel") || (x.TxnType == "Modified" && x.SubType == "Re-order"))).FirstOrDefault();
                             if (objTransaction != null)
                             {
                                 objPointLedger.TxnType = "";
