@@ -31,8 +31,8 @@
                                 <th scope="col" style="border:1px solid black !important;" colspan="7">Keys Indicators</th>
                                 <th scope="col" style="border-right:0px solid black !important;border-top:1px solid black !important;" colspan="4">Points Summary</th>
                             </tr>
-                            <tr>
-                                <th scope="col">Outlet Name</th>
+                            <tr style="text-align:end;">
+                                <th scope="col" style="text-align:left;">Outlet Name</th>
                                 <th scope="col">Total Members</th>
                                 <th scope="col">Total Txns</th>
                                 <th scope="col">Total Spends</th>
@@ -51,23 +51,45 @@
                             {
                                 if (Model.Count > 0)
                                 {
+                                    var index = 0;
 
                                     foreach (var outlet in Model)
                                     {
-                                        <tr>
-                                            <td><a href="@Url.Action("Transactionwise", "Reports", new { OutletId = outlet.OutletId })" class="login" title="Launch Course">@outlet.OutletName</a></td>
-                                            <td>@outlet.TotalMember</td>
-                                            <td>@outlet.TotalTxn</td>
-                                            <td>@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(outlet.TotalSpend))</td>
-                                            <td>@outlet.ATS</td>
-                                            <td>@outlet.NonActive</td>
-                                            <td>@outlet.OnlyOnce</td>
-                                            <td>@outlet.RedemptionRate</td>
-                                            <td>@outlet.PointsEarned</td>
-                                            <td>@outlet.PointsBurned</td>
-                                            <td>@outlet.PointsCancelled</td>
-                                            <td>@outlet.PointsExpired</td>
-                                        </tr>
+                                        index++;
+                                        if (Model.Count == index)
+                                        {
+                                            <tr style="text-align:end;font-weight:bold;">
+                                                <td style="border-top:1px solid black;text-align:left;">@outlet.OutletName</td>
+                                                <td style="border-top:1px solid black;">@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(outlet.TotalMember))</td>
+                                                <td style="border-top:1px solid black;">@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(outlet.TotalTxn))</td>
+                                                <td style="border-top:1px solid black;">@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(outlet.TotalSpend))</td>
+                                                <td style="border-top:1px solid black;">@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(outlet.ATS))</td>
+                                                <td style="border-top:1px solid black;">@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(outlet.NonActive))</td>
+                                                <td style="border-top:1px solid black;">@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(outlet.OnlyOnce))</td>
+                                                <td style="border-top:1px solid black;">-</td>
+                                                <td style="border-top:1px solid black;">@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(outlet.PointsEarned))</td>
+                                                <td style="border-top:1px solid black;">@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(outlet.PointsBurned))</td>
+                                                <td style="border-top:1px solid black;">@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(outlet.PointsCancelled))</td>
+                                                <td style="border-top:1px solid black;">@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(outlet.PointsExpired))</td>
+                                            </tr>
+                                        }
+                                        else
+                                        {
+                                            <tr style="text-align:end;">
+                                                <td style="text-align:left;"><a href="@Url.Action("Transactionwise", "Reports", new { OutletId = outlet.OutletId })" class="login" title="Launch Course">@outlet.OutletName</a></td>
+                                                <td>@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(outlet.TotalMember))</td>
+                                                <td>@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(outlet.TotalTxn))</td>
+                                                <td>@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(outlet.TotalSpend))</td>
+                                                <td>@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(outlet.ATS))</td>
+                                                <td>@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(outlet.NonActive))</td>
+                                                <td>@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(outlet.OnlyOnce))</td>
+                                                <td>@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(outlet.RedemptionRate))</td>
+                                                <td>@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(outlet.PointsEarned))</td>
+                                                <td>@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(outlet.PointsBurned))</td>
+                                                <td>@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(outlet.PointsCancelled))</td>
+                                                <td>@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(outlet.PointsExpired))</td>
+                                            </tr>                                           
+                                        }
                                     }
                                 }
                                 else

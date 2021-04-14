@@ -23,42 +23,19 @@ namespace BOTS_BL.Repository
             return objCustomerDetail;
         }
 
-        public Dashboardsummary GetSummeryDetails(string CustomerId, bool IsBTD)
+        public DashboardParticipantsummary GetSummeryDetails(string CustomerId, string CustomerType,  string IsBTD)
         {
-            Dashboardsummary objDashboardsummary = new Dashboardsummary();
+            DashboardParticipantsummary objDashboardsummary = new DashboardParticipantsummary();
             List<TransactionMaster> objtransactionmaster = new List<TransactionMaster>();
             using (var context = new ChitaleDBContext())
             {
-                if (IsBTD)
-                {
-                    objtransactionmaster = context.TransactionMasters.Where(x => x.CustomerId == CustomerId).ToList();
-                    var FromDate = context.TransactionMasters.Where(x => x.CustomerId == CustomerId).OrderBy(y => y.OrderDatetime).Select(z => z.OrderDatetime).FirstOrDefault();
 
-                    if (FromDate != null)
-                    {
-                        objDashboardsummary.FromDate = FromDate.Value.ToString("dd-MM-yyyy");
-                        objDashboardsummary.ToDate = DateTime.Now.ToString("dd-MM-yyyy");
-                    }
-                }
-                else
-                {
-                    objtransactionmaster = context.TransactionMasters.Where(x => x.CustomerId == CustomerId && x.OrderDatetime.Value.Month == DateTime.Today.Month
-                    && x.OrderDatetime.Value.Year == DateTime.Today.Year).ToList();
-                    var startDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
-                    objDashboardsummary.FromDate = startDate.ToString("dd-MM-yyyy");
-                    objDashboardsummary.ToDate = DateTime.Now.ToString("dd-MM-yyyy");
-                }
-                if (objtransactionmaster != null)
-                {
-                    objDashboardsummary.PurchaseOrderPoints = (decimal)objtransactionmaster.Where(x => x.TxnType == "Purchase").Sum(x => x.NormalPoints);
-                    objDashboardsummary.SalesOrderPoints = (decimal)objtransactionmaster.Where(x => x.TxnType == "Sale").Sum(x => x.NormalPoints);
-                    objDashboardsummary.AddOnPoints = (decimal)objtransactionmaster.Sum(x => x.AddOnPoints);
-                    objDashboardsummary.RedeemedPoints = 0;
-                    objDashboardsummary.LostPoints = (decimal)objtransactionmaster.Sum(x => x.PenaltyPoints);
-                    var NormalPoints = (decimal)objtransactionmaster.Sum(x => x.NormalPoints);
-                    objDashboardsummary.TotalPointsBalance = (NormalPoints + objDashboardsummary.AddOnPoints) - objDashboardsummary.LostPoints;
-                }
-                
+                objDashboardsummary = context.Database.SqlQuery<DashboardParticipantsummary>("sp_DashboardSeg_Participant @pi_CustomerId,@pi_CustomerType,@pi_Date,@pi_BTDType",
+                            new SqlParameter("@pi_CustomerId", CustomerId),
+                            new SqlParameter("@pi_CustomerType", CustomerType),
+                            new SqlParameter("@pi_Date", DateTime.Now.ToString("yyyy-MM-dd")),
+                              new SqlParameter("@pi_BTDType", IsBTD)
+                            ).FirstOrDefault<DashboardParticipantsummary>();
             }
             return objDashboardsummary;
         }

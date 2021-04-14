@@ -21,8 +21,6 @@ namespace BOTS_BL.Models
         public long? PointsBurned { get; set; }
         public long? PointsCancelled { get; set; }
         public long? PointsExpired { get; set; }
-
-
-
+        
     }
 }

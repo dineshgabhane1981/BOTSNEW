@@ -38,7 +38,24 @@ namespace BOTS_BL.Repository
 
                 dashboardMemberSegment = context.Database.SqlQuery<DashboardMemberSegment>("sp_BOTS_DashboardMemberSegment @pi_GroupId, @pi_Date, @pi_OutletId", new SqlParameter("@pi_GroupId", GroupId), new SqlParameter("@pi_Date", DateTime.Now.ToString("yyyy-MM-dd")), new SqlParameter("@pi_OutletId", OutletId)).FirstOrDefault<DashboardMemberSegment>();
 
+                DateTime? FromDate;
+                if (!string.IsNullOrEmpty(OutletId))
+                {
+                    OutletId = OutletId + "01";
+                     FromDate = context.TransactionMasters.Where(x => x.CounterId == OutletId).OrderBy(y => y.Datetime).Select(z => z.Datetime).FirstOrDefault();
+
+                }
+                else
+                {
+                    FromDate = context.TransactionMasters.OrderBy(y => y.Datetime).Select(z => z.Datetime).FirstOrDefault();
+                }
+                if (FromDate.HasValue)
+                {
+                    dashboardMemberSegment.FromDate = FromDate.Value.ToString("dd-MM-yyyy");
+                    dashboardMemberSegment.ToDate = DateTime.Now.ToString("dd-MM-yyyy");
+                }
             }
+
             return dashboardMemberSegment;
         }
         public List<DashboardMemberSegmentTxn> GetDashboardMemberSegmentTxnData(string GroupId, string OutletId, string connstr)
@@ -56,7 +73,7 @@ namespace BOTS_BL.Repository
                     DashboardMemberSegmentTxn newItem = new DashboardMemberSegmentTxn();
                     if (count == 1)
                     {
-                        newItem.Title = "No of Txns";
+                        newItem.Title = "No of Unique Members";
                         newItem.Unit = "Nos";
                     }
                     if (count == 2)
@@ -116,7 +133,7 @@ namespace BOTS_BL.Repository
             {
 
                 dashboardOutletEnrolment = context.Database.SqlQuery<DashboardOutletEnrolment>("sp_BOTS_DashboardOutletEnrolment @pi_GroupId, @pi_Date, @pi_Flag", new SqlParameter("@pi_GroupId", GroupId), new SqlParameter("@pi_Date", DateTime.Now.ToShortDateString()), new SqlParameter("@pi_Flag", monthFlag)).OrderByDescending(s => s.EnrollmentCount).ToList<DashboardOutletEnrolment>();
-               
+
             }
             return dashboardOutletEnrolment;
         }
@@ -162,7 +179,7 @@ namespace BOTS_BL.Repository
                     status = true;
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
 
             }
@@ -170,7 +187,7 @@ namespace BOTS_BL.Repository
             return status;
         }
 
-        public bool InsertOTP(string emailId,int OTP)
+        public bool InsertOTP(string emailId, int OTP)
         {
             bool status = false;
             try
@@ -203,7 +220,7 @@ namespace BOTS_BL.Repository
                 using (var context = new CommonDBContext())
                 {
                     OTPDetail objOTPDetail = new OTPDetail();
-                    objOTPDetail = context.OTPDetails.Where(x => x.EmailId == emailId && x.OTP == OTP).OrderByDescending(y=>y.SentDate).FirstOrDefault();
+                    objOTPDetail = context.OTPDetails.Where(x => x.EmailId == emailId && x.OTP == OTP).OrderByDescending(y => y.SentDate).FirstOrDefault();
                     if (objOTPDetail != null)
                     {
                         status = true;

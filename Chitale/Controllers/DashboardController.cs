@@ -22,20 +22,20 @@ namespace Chitale.Controllers
        
         public JsonResult GetDashboardSummeryData(string Flag)
         {
-            Dashboardsummary SummeryData = new Dashboardsummary();
+            DashboardParticipantsummary SummeryData = new DashboardParticipantsummary();
             try
             {
                 var UserSession = (CustomerDetail)Session["ChitaleUser"];
-                bool IsBTD = false;
+                string IsBTD = "2";
                 if (Flag == "1")
-                    IsBTD = true;
-                SummeryData = CDR.GetSummeryDetails(UserSession.CustomerId, IsBTD);
-                SummeryData.PurchaseOrderPointsStr = String.Format(new CultureInfo("en-IN", false), "{0:n}", Convert.ToDecimal(SummeryData.PurchaseOrderPoints));
-                SummeryData.SalesOrderPointsStr = String.Format(new CultureInfo("en-IN", false), "{0:n}", Convert.ToDecimal(SummeryData.SalesOrderPoints));
+                    IsBTD = "1";
+                SummeryData = CDR.GetSummeryDetails(UserSession.CustomerId, UserSession.CustomerType, IsBTD);
+                SummeryData.PurchaseOrderPointsStr = String.Format(new CultureInfo("en-IN", false), "{0:n}", Convert.ToDecimal(SummeryData.OrderPointsPurchase));
+                SummeryData.SalesOrderPointsStr = String.Format(new CultureInfo("en-IN", false), "{0:n}", Convert.ToDecimal(SummeryData.OrderPointsSale));
                 SummeryData.RedeemedPointsStr = String.Format(new CultureInfo("en-IN", false), "{0:n}", Convert.ToDecimal(SummeryData.RedeemedPoints));
                 SummeryData.AddOnPointsStr = String.Format(new CultureInfo("en-IN", false), "{0:n}", Convert.ToDecimal(SummeryData.AddOnPoints));
-                SummeryData.LostPointsStr = String.Format(new CultureInfo("en-IN", false), "{0:n}", Convert.ToDecimal(SummeryData.LostPoints));
-                SummeryData.TotalPointsBalanceStr = String.Format(new CultureInfo("en-IN", false), "{0:n}", Convert.ToDecimal(SummeryData.TotalPointsBalance));
+                SummeryData.LostPointsStr = String.Format(new CultureInfo("en-IN", false), "{0:n}", Convert.ToDecimal(SummeryData.LOP));
+                SummeryData.TotalPointsBalanceStr = String.Format(new CultureInfo("en-IN", false), "{0:n}", Convert.ToDecimal(SummeryData.BalancePoints));
 
             }
             catch (Exception ex)

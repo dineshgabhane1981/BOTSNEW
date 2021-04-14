@@ -25,6 +25,25 @@ namespace BOTS_BL.Models.ChitaleModel
         public string ToDate { get; set; }
 
     }
+    public class DashboardParticipantsummary
+    {
+        public decimal OrderPointsPurchase { get; set; }
+        public decimal OrderPointsSale { get; set; }
+        public decimal RedeemedPoints { get; set; }
+        public decimal AddOnPoints { get; set; }
+        public decimal LOP { get; set; }
+        public decimal BalancePoints { get; set; }
+
+        public string PurchaseOrderPointsStr { get; set; }
+        public string SalesOrderPointsStr { get; set; }
+        public string RedeemedPointsStr { get; set; }
+        public string AddOnPointsStr { get; set; }
+        public string LostPointsStr { get; set; }
+        public string TotalPointsBalanceStr { get; set; }
+        public string FromDate { get; set; }
+        public string ToDate { get; set; }
+
+    }
 
     public class DashboardLostOpp
     {

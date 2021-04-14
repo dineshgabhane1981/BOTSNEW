@@ -64,7 +64,7 @@
                 <div class="card-header-tab card-header-tab-animation card-header">
                     <div class="card-header-title">
                         <i class="header-icon lnr-apartment icon-gradient bg-love-kiss"> </i>
-                        MEMBER SEGMENT
+                        MEMBER SEGMENT <span id="spnPeriod" style="margin-left:100px;"></span>
                     </div>
                     <ul class="nav">
                         <li class="nav-item"><a href="javascript:void(0);" onclick="ShowAll();" class="active nav-link">All</a></li>
@@ -279,8 +279,9 @@
             dataType: "json",
             success: function (response) {
                 //console.log(response);
-
-                if (response != null) {
+                var resp = response[0];
+                if (resp != null) {                   
+                     
                     $('#barcanvas').remove(); // this is my <canvas> element
                     $('#canvasContainer').append('<canvas id="barcanvas"><canvas>');
 
@@ -297,7 +298,7 @@
                                 "#f7bd83",
                             ],
                             borderWidth: 2,
-                            data: [response[0], response[1], response[2], response[3], response[4]]
+                            data: [resp[0], resp[1], resp[2], resp[3], resp[4]]
                         }]
                     };
 
@@ -356,6 +357,14 @@
                             }
                         });
 
+                    var resp1 = response[1];
+                    if (resp1[0] != null && resp1[1] != null) {
+                        $("#spnPeriod").text("PERIOD : " + resp1[0] + " TO " + resp1[1]);
+                    }
+                    else {
+                        $("#spnPeriod").text("");
+                    }
+
                     //--------------------------Member segment Transaction-----------------------------------------
 
                     $.ajax({
@@ -371,20 +380,20 @@
                                 tableHTML += "<td>Title</td>";
                                 tableHTML += "<td>Unit</td>";
                                 tableHTML += "<td>Total Base</td>";
-                                tableHTML += "<td>Repeat Base</td>";
-                                tableHTML += "<td>Only Once</td>";
-                                tableHTML += "<td>Never Redeem</td>";
+                                tableHTML += "<td>Repeat Members</td>";                                
+                                tableHTML += "<td>Never Redeemed</td>";
                                 tableHTML += "<td>Recently Enrolled</td>";
+                                tableHTML += "<td>Only Once</td>";
                                 tableHTML += "</tr>";
                                 $.map(response, function (item) {
                                     tableHTML += "<tr style=\"text-align:center;\">";
                                     tableHTML += "<td style=\"background-color:lightgrey;font-weight: bold;\">" + item.Title + "</td>";
                                     tableHTML += "<td style=\"background-color:lightgrey;font-weight: bold;\">" + item.Unit + "</td>";
                                     tableHTML += "<td>" + item.TotalBase + "</td>";
-                                    tableHTML += "<td>" + item.RepeatBase + "</td>";
-                                    tableHTML += "<td>" + item.OnlyOnce + "</td>";
+                                    tableHTML += "<td>" + item.RepeatBase + "</td>";                                   
                                     tableHTML += "<td>" + item.NeverRedeem + "</td>";
                                     tableHTML += "<td>" + item.RecentlyEnrolled + "</td>";
+                                    tableHTML += "<td>" + item.OnlyOnce + "</td>";
                                     tableHTML += "</tr>";
                                 });
                                 tableHTML += "</table>";

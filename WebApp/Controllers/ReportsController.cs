@@ -56,15 +56,15 @@ namespace WebApp.Controllers
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
             PointExpiryTmp objPointExpiry = new PointExpiryTmp();
             objPointExpiry = RR.GetPointExpiryData(userDetails.GroupId, DateTime.Now.Month, DateTime.Now.Year, userDetails.connectionString);
-            
-            List<SelectListItem> MonthList = new List<SelectListItem>();            
+
+            List<SelectListItem> MonthList = new List<SelectListItem>();
             int month = DateTime.Now.Month;
             string monthtext = DateTime.Now.ToString("MMM");
-            for (int i = month+2; i <= 12; i++)
+            for (int i = month + 2; i <= 12; i++)
             {
                 MonthList.Add(new SelectListItem
                 {
-                    Text = Convert.ToString(DateTime.Now.AddMonths(i-1).ToString("MMM")),
+                    Text = Convert.ToString(DateTime.Now.AddMonths(i - 1).ToString("MMM")),
                     Value = Convert.ToString(i)
                 });
             }
@@ -106,9 +106,9 @@ namespace WebApp.Controllers
         [HttpPost]
         public JsonResult GetPointsExpiryTxnResult(int month, int year)
         {
-            var userDetails = (CustomerLoginDetail)Session["UserSession"];            
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
             List<PointExpiryTxn> objPointExpiryTxn = new List<PointExpiryTxn>();
-            objPointExpiryTxn = RR.GetPointExpiryTxnData(userDetails.GroupId, month,year, userDetails.connectionString);
+            objPointExpiryTxn = RR.GetPointExpiryTxnData(userDetails.GroupId, month, year, userDetails.connectionString);
             return new JsonResult() { Data = objPointExpiryTxn, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
 
@@ -130,6 +130,24 @@ namespace WebApp.Controllers
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
             List<OutletWise> lstOutlet = new List<OutletWise>();
             lstOutlet = RR.GetOutletWiseList(userDetails.GroupId, DateRangeFlag, fromDate, toDate, userDetails.connectionString);
+            OutletWise objSum = new OutletWise();            
+            foreach (var item in lstOutlet)
+            {
+
+                objSum.TotalMember = (objSum.TotalMember == null ? 0 : objSum.TotalMember) + (item.TotalMember == null ? 0 : item.TotalMember);
+                objSum.TotalTxn = (objSum.TotalTxn == null ? 0 : objSum.TotalTxn) + (item.TotalTxn == null ? 0 : item.TotalTxn);
+                objSum.TotalSpend = (objSum.TotalSpend == null ? 0 : objSum.TotalSpend) + (item.TotalSpend == null ? 0 : item.TotalSpend);
+                objSum.ATS = (objSum.ATS == null ? 0 : objSum.ATS) + (item.ATS == null ? 0 : item.ATS);
+                objSum.NonActive = (objSum.NonActive == null ? 0 : objSum.NonActive) + (item.NonActive == null ? 0 : item.NonActive);
+                objSum.OnlyOnce = (objSum.OnlyOnce == null ? 0 : objSum.OnlyOnce) + (item.OnlyOnce == null ? 0 : item.OnlyOnce);
+                objSum.PointsEarned = (objSum.PointsEarned == null ? 0 : objSum.PointsEarned) + (item.PointsEarned == null ? 0 : item.PointsEarned);
+                objSum.PointsBurned = (objSum.PointsBurned == null ? 0 : objSum.PointsBurned) + (item.PointsBurned == null ? 0 : item.PointsBurned);
+                objSum.PointsCancelled = (objSum.PointsCancelled == null ? 0 : objSum.PointsCancelled) + (item.PointsCancelled == null ? 0 : item.PointsCancelled);
+                objSum.PointsExpired = (objSum.PointsExpired == null ? 0 : objSum.PointsExpired) + (item.PointsExpired == null ? 0 : item.PointsExpired);
+            }
+            objSum.OutletName = "Sum";
+            lstOutlet.Add(objSum);
+
             return PartialView("_Outletwise", lstOutlet);
         }
 
@@ -164,14 +182,14 @@ namespace WebApp.Controllers
                     objMemberSearch = RR.GetMeamberSearchData(userDetails.GroupId, searchData, userDetails.connectionString);
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 newexception.AddException(ex);
             }
             return PartialView("_MemberSearch", objMemberSearch);
         }
 
-        public ActionResult ExportToExcelTransactionwise(string DateRangeFlag, string fromDate, string toDate, string outletId, bool EnrolmentDataFlag,string ReportName)
+        public ActionResult ExportToExcelTransactionwise(string DateRangeFlag, string fromDate, string toDate, string outletId, bool EnrolmentDataFlag, string ReportName)
         {
             System.Data.DataTable table = new System.Data.DataTable();
             try
@@ -183,7 +201,7 @@ namespace WebApp.Controllers
                 }
                 List<OutletwiseTransaction> lstOutletWiseTransaction = new List<OutletwiseTransaction>();
                 lstOutletWiseTransaction = RR.GetOutletWiseTransactionList(userDetails.GroupId, DateRangeFlag, fromDate, toDate, outletId, EnrolmentDataFlag, userDetails.connectionString);
-                
+
                 PropertyDescriptorCollection properties = TypeDescriptor.GetProperties(typeof(OutletwiseTransaction));
                 foreach (PropertyDescriptor prop in properties)
                     table.Columns.Add(prop.Name, Nullable.GetUnderlyingType(prop.PropertyType) ?? prop.PropertyType);
@@ -202,7 +220,7 @@ namespace WebApp.Controllers
                 string fileName = ReportName + ".xlsx";
                 using (XLWorkbook wb = new XLWorkbook())
                 {
-                    
+
                     //excelSheet.Name
                     table.TableName = ReportName;
                     wb.Worksheets.Add(table);
@@ -213,12 +231,12 @@ namespace WebApp.Controllers
                     }
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return null;
             }
 
-            
+
         }
 
         public ActionResult ExportToExcelOutletwise(string DateRangeFlag, string fromDate, string toDate, string ReportName)
@@ -229,6 +247,23 @@ namespace WebApp.Controllers
                 var userDetails = (CustomerLoginDetail)Session["UserSession"];
                 List<OutletWise> lstOutlet = new List<OutletWise>();
                 lstOutlet = RR.GetOutletWiseList(userDetails.GroupId, DateRangeFlag, fromDate, toDate, userDetails.connectionString);
+
+                OutletWise objSum = new OutletWise();
+                foreach (var item in lstOutlet)
+                {
+                    objSum.TotalMember = (objSum.TotalMember == null ? 0 : objSum.TotalMember) + (item.TotalMember == null ? 0 : item.TotalMember);
+                    objSum.TotalTxn = (objSum.TotalTxn == null ? 0 : objSum.TotalTxn) + (item.TotalTxn == null ? 0 : item.TotalTxn);
+                    objSum.TotalSpend = (objSum.TotalSpend == null ? 0 : objSum.TotalSpend) + (item.TotalSpend == null ? 0 : item.TotalSpend);
+                    objSum.ATS = (objSum.ATS == null ? 0 : objSum.ATS) + (item.ATS == null ? 0 : item.ATS);
+                    objSum.NonActive = (objSum.NonActive == null ? 0 : objSum.NonActive) + (item.NonActive == null ? 0 : item.NonActive);
+                    objSum.OnlyOnce = (objSum.OnlyOnce == null ? 0 : objSum.OnlyOnce) + (item.OnlyOnce == null ? 0 : item.OnlyOnce);
+                    objSum.PointsEarned = (objSum.PointsEarned == null ? 0 : objSum.PointsEarned) + (item.PointsEarned == null ? 0 : item.PointsEarned);
+                    objSum.PointsBurned = (objSum.PointsBurned == null ? 0 : objSum.PointsBurned) + (item.PointsBurned == null ? 0 : item.PointsBurned);
+                    objSum.PointsCancelled = (objSum.PointsCancelled == null ? 0 : objSum.PointsCancelled) + (item.PointsCancelled == null ? 0 : item.PointsCancelled);
+                    objSum.PointsExpired = (objSum.PointsExpired == null ? 0 : objSum.PointsExpired) + (item.PointsExpired == null ? 0 : item.PointsExpired);
+                }
+                objSum.OutletName = "Sum";
+                lstOutlet.Add(objSum);
 
                 PropertyDescriptorCollection properties = TypeDescriptor.GetProperties(typeof(OutletWise));
                 foreach (PropertyDescriptor prop in properties)
@@ -243,7 +278,7 @@ namespace WebApp.Controllers
                     table.Rows.Add(row);
                 }
                 table.Columns.Remove("OutletId");
-                
+
                 string fileName = ReportName + ".xlsx";
                 using (XLWorkbook wb = new XLWorkbook())
                 {

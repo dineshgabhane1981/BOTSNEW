@@ -52,9 +52,11 @@ namespace WebApp.Controllers
         [HttpPost]
         public JsonResult GetMemberSegmentResult(string OutletId)
         {
+            List<object> lstData = new List<object>();
             List<long> dataList = new List<long>();
             try
             {
+                List<string> lstDates = new List<string>();
                 var userDetails = (CustomerLoginDetail)Session["UserSession"];
                 DashboardMemberSegment dataMemberSegment = new DashboardMemberSegment();
                 dataMemberSegment = DR.GetDashboardMemberSegmentData(userDetails.GroupId, OutletId, userDetails.connectionString);
@@ -64,14 +66,19 @@ namespace WebApp.Controllers
                 dataList.Add(dataMemberSegment.NoofMember_NeverRedeem);
                 dataList.Add(dataMemberSegment.NoofMember_RecentlyEnrolled);
                 dataList.Add(dataMemberSegment.NoofMember_OnlyOnce);
-                var lstData = string.Join(" ", dataList);
+                //var lstData = string.Join(" ", dataList);
+                lstDates.Add(dataMemberSegment.FromDate);
+                lstDates.Add(dataMemberSegment.ToDate);
+                lstData.Add(dataList);
+                lstData.Add(lstDates);
+
             }
             catch (Exception ex)
             {
                 newexception.AddException(ex);
             }
             //lstMember = RR.GetMemberList(SearchText);
-            return new JsonResult() { Data = dataList, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
+            return new JsonResult() { Data = lstData, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
 
         [HttpPost]

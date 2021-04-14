@@ -76,6 +76,7 @@
                     optionItem = {}
                     optionItem["EnrolledOutlet"] = item.EnrooledOutlet;
                     optionItem["MobileNumber"] = item.MaskedMobileNo;
+                    optionItem["MobileNo"] = item.MobileNo;
                     optionItem["MemberName"] = item.MemberName;
                     optionItem["Type"] = item.Type;
                     optionItem["TxnCount"] = item.TxnCount;
@@ -112,8 +113,14 @@
             "pageLength": 25,
             "pagingType": "simple_numbers",
             "columns": [
-                { data: "EnrolledOutlet" },
-                { data: "MobileNumber" },
+                { data: "EnrolledOutlet" },                
+                {
+                    "mData": "MobileNumber",
+                    "mRender": function (data, type, row) {
+                        var MobileNo = row.MobileNo;
+                        return '<span class="login" title=' + MobileNo + '>' + data + '</span>';
+                    }
+                },
                 { data: "MemberName" },
                 { data: "Type" },
                 { data: "TxnCount" },
