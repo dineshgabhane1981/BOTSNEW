@@ -120,7 +120,7 @@ namespace BOTS_BL.Repository
                         new SqlParameter("@pi_FromDate", FromDate),
                         new SqlParameter("@pi_ToDate", ToDate),
                         new SqlParameter("@pi_OutletId", OutletId),
-                        new SqlParameter("@pi_EnrolmentDataFlag", EnrolmentDataFlag)).Take(50000).ToList<OutletwiseTransaction>();
+                        new SqlParameter("@pi_EnrolmentDataFlag", EnrolmentDataFlag)).ToList<OutletwiseTransaction>();
                 }
             }
             catch (Exception ex)
