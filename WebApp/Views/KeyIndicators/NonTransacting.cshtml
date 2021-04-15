@@ -1,6 +1,6 @@
 ﻿@model BOTS_BL.Models.NonTransactingCls
 @{
-    ViewBag.Title = "NonTransacting";
+    ViewBag.Title = "Non Transacting";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -161,11 +161,17 @@
                                     responsive: true,
                                     maintainAspectRatio: true,
                                     tooltips: { enabled: false },
-                                    hover: { mode: null },
+                                    hover: {
+                                        onHover: function (e) {
+                                            $("#barcanvas").css("cursor", e[0] ? "pointer" : "default");
+                                        }                                       
+                                    },
 
                                     "hover": {
                                         "animationDuration": 0,
-                                        mode: null
+                                        onHover: function (e) {
+                                            $("#barcanvas").css("cursor", e[0] ? "pointer" : "default");
+                                        }     
                                     },
                                     "animation": {
                                         "duration": 1,
@@ -182,7 +188,7 @@
                                                 meta.data.forEach(function (bar, index) {
                                                     var data = dataset.data[index];
                                                     ctx.fillStyle = 'rgba(0, 0, 0, 1)';
-                                                    ctx.fillText(data, bar._model.x, bar._model.y - 5);
+                                                    ctx.fillText(addComma(data), bar._model.x, bar._model.y - 5);
                                                 });
                                             });
                                         }
@@ -259,11 +265,30 @@
                 { data: "EnrolledOutlet" },
                 { data: "MaskedMobileNo" },
                 { data: "MemberName" },
-                { data: "Type" },
-                { data: "TotalSpend" },
-                { data: "AvlBalPoints" },
+                { data: "Type" },                 
+                {
+                    "mData": "TotalSpend",
+                    "mRender": function (data, type, row) {
+                        return '<span>' + addComma(data) + '</span>';
+                    }
+                },
+                {
+                    "mData": "AvlBalPoints",
+                    "mRender": function (data, type, row) {
+                        return '<span>' + addComma(data) + '</span>';
+                    }
+                },                 
                 { data: "LastTxnDate" }
             ],
+            "columnDefs": [
+                {
+                    "targets": 4,
+                    "className": "text-right"
+                },
+                {
+                    "targets": 5,
+                    "className": "text-right",
+                }],
             aoColumnDefs: [
                 {
                     bSortable: false,

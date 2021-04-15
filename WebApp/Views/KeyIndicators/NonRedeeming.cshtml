@@ -1,7 +1,7 @@
 ﻿@model BOTS_BL.Models.NonRedemptionCls
 @using System.Globalization
 @{
-    ViewBag.Title = "NonRedeeming";
+    ViewBag.Title = "Non Redeeming";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -32,7 +32,7 @@
 
                     </div>
                     <div class="widget-content-right">
-                        <div class="widget-numbers text-white"><span>@Model.UniqueRedeemedMember</span></div>
+                        <div class="widget-numbers text-white"><span>@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(Model.UniqueRedeemedMember))</span></div>
                     </div>
                 </div>
             </div>
@@ -47,7 +47,7 @@
 
                     </div>
                     <div class="widget-content-right">
-                        <div class="widget-numbers text-white"><span>@Model.NeverRedeemed</span></div>
+                        <div class="widget-numbers text-white"><span>@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(Model.NeverRedeemed))</span></div>
                     </div>
                 </div>
             </div>
@@ -222,10 +222,29 @@
                 { data: "MobileNo" },
                 { data: "MemberName" },
                 { data: "Type" },
-                { data: "TotalSpend" },
-                { data: "AvlBalPoints" },
+                {
+                    "mData": "TotalSpend",
+                    "mRender": function (data, type, row) {
+                        return '<span>' + addComma(data) + '</span>';
+                    }
+                },
+                {
+                    "mData": "AvlBalPoints",
+                    "mRender": function (data, type, row) {
+                        return '<span>' + addComma(data) + '</span>';
+                    }
+                },    
                 { data: "LastTxnDate" }
             ],
+            "columnDefs": [
+                {
+                    "targets": 4,
+                    "className": "text-right"                    
+                },
+                {
+                    "targets": 5,
+                    "className": "text-right",
+                }],
             aoColumnDefs: [
                 {
                     bSortable: false,

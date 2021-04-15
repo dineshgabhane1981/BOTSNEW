@@ -1,13 +1,13 @@
 ﻿@model BOTS_BL.Models.OnlyOnce
 @{
-    ViewBag.Title = "OnlyOnce";
+    ViewBag.Title = "Only Once";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <div class="app-main__inner">
 
-    <div class="row mb-3 pt-3 pl-3 pr-3 card">
-        <div class="col-sm-12">
+    <div class="row mb-3 pt-3 pl-3 pr-3 card" >
+        <div class="col-sm-12" style="margin-bottom:20px;">
             Select Outlet  @Html.DropDownListFor(x => Model.TotalMember, new SelectList(ViewBag.OutletList, "Value", "Text"), "All", htmlAttributes: new { @class = "input100", @id = "OutletList" })
 
         </div>
@@ -232,11 +232,32 @@
                 { data: "EnrolledOutlet" },
                 { data: "MaskedMobileNo" },
                 { data: "MemberName" },
-                { data: "Type" },
-                { data: "TotalSpend" },
-                { data: "AvlBalPoints" },
+                { data: "Type" },                
+                {
+                    "mData": "TotalSpend",
+                    "mRender": function (data, type, row) {
+                        
+                        return '<span>' + addComma(data) + '</span>';
+                    }
+                },
+                {
+                    "mData": "AvlBalPoints",
+                    "mRender": function (data, type, row) {
+
+                        return '<span>' + addComma(data) + '</span>';
+                    }
+                },                
                 { data: "LastTxnDate" }
             ],
+            "columnDefs": [
+                {
+                    "targets": 4,
+                    "className": "text-right"
+                },
+                {
+                    "targets": 5,
+                    "className": "text-right",
+                }],
             aoColumnDefs: [
                 {
                     bSortable: false,
