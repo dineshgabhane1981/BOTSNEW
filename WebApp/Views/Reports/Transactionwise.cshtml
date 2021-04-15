@@ -213,7 +213,14 @@
             "pagingType": "simple_numbers",
             "columns": [
                 { data: "OutletName" },
-                { data: "MaskedMobileNo" },
+                //{ data: "MaskedMobileNo" },
+                {
+                    "mData": "MaskedMobileNo",
+                    "mRender": function (data, type, row) {
+                        var MobileNo = row.MobileNo;
+                        return '<span class="login" title=' + MobileNo + '>' + data + '</span>';
+                    }
+                },
                 { data: "MemberName" },
                 { data: "Type" },
                 { data: "InvoiceNo" },
