@@ -164,7 +164,8 @@
         var EnrolmentDataFlag = $("#chkEnrollmentData").is(":checked");
         $.ajax({
             type: "POST",
-            url: "../Reports/GetOutletWiseTransactionResult",
+            url: '@Url.Action("GetOutletWiseTransactionResult", "Reports")',
+            //url: "../Reports/GetOutletWiseTransactionResult",
             data: "{'DateRangeFlag': " + DateRangeFlag + ", 'fromDate': '" + fromDate + "','toDate': '" + toDate + "','outletId': '" + outletId + "','EnrolmentDataFlag': " + EnrolmentDataFlag + "}",
             contentType: "application/json; charset=utf-8",
             dataType: "json",
@@ -175,6 +176,7 @@
                     optionItem = {}
                     optionItem["OutletName"] = item.OutletName;
                     optionItem["MaskedMobileNo"] = item.MaskedMobileNo;
+                    optionItem["MobileNo"] = item.MobileNo;
                     optionItem["MemberName"] = item.MemberName;
                     optionItem["Type"] = item.Type;
                     optionItem["InvoiceNo"] = item.InvoiceNo;
@@ -224,23 +226,47 @@
                 { data: "MemberName" },
                 { data: "Type" },
                 { data: "InvoiceNo" },
-                { data: "InvoiceAmt" },
+                {
+                    "mData": "InvoiceAmt",
+                    "mRender": function (data, type, row) {
+                        return '<span>' + addComma(data) + '</span>';
+                    }
+                },
                 { data: "TxnType" },
-                { data: "PointsEarned" },
-                { data: "PointsBurned" },
+                {
+                    "mData": "PointsEarned",
+                    "mRender": function (data, type, row) {
+                        return '<span>' + addComma(data) + '</span>';
+                    }
+                },
+                {
+                    "mData": "PointsBurned",
+                    "mRender": function (data, type, row) {
+                        return '<span>' + addComma(data) + '</span>';
+                    }
+                },
                 { data: "TxnDatetime" },
                 { data: "TxnUpdateDate" }
             ],
+            "columnDefs": [
+                {
+                    "targets": 5,
+                    "className": "text-right"
+                },
+                {
+                    "targets": 7,
+                    "className": "text-right"
+                },
+                {
+                    "targets": 8,
+                    "className": "text-right",
+                }],
             aoColumnDefs: [
                 {
                     bSortable: false,
                     aTargets: [-9, -10, -11]
                 }
             ]
-            //"aoColumnDefs": [{ "sClass": "hide_me", "aTargets": [1] }]
-            //"rowReorder": {
-            //    dataSrc: "index"
-            //}
         });
         $('#activityTable_filter').hide();
 

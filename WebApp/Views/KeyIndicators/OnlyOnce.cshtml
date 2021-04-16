@@ -145,7 +145,8 @@
         var outletId = $("#OutletList").val();
         $.ajax({
             type: "POST",
-            url: "../KeyIndicators/GetOnlyOnceResult",
+            url: '@Url.Action("GetOnlyOnceResult", "KeyIndicators")',
+            //url: "../KeyIndicators/GetOnlyOnceResult",
             data: "{'outletId': '" + outletId + "'}",
             contentType: "application/json; charset=utf-8",
             dataType: "json",
@@ -181,17 +182,20 @@
         var outletId = $("#OutletList").val();
         $.ajax({
             type: "POST",
-            url: "../KeyIndicators/GetOnlyOnceTxnResult",
+            url: '@Url.Action("GetOnlyOnceTxnResult", "KeyIndicators")',
+            //url: "../KeyIndicators/GetOnlyOnceTxnResult",
             data: "{'outletId': '" + outletId + "','type': '" + mtype + "'}",
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             success: function (response) {
                 if (response != null) {
-                    tableData.length = 0;                   
+                    tableData.length = 0;
                     $.map(response, function (item) {
                         optionItem = {}
                         optionItem["EnrolledOutlet"] = item.EnrolledOutlet;
                         optionItem["MaskedMobileNo"] = item.MaskedMobileNo;
+                        optionItem["MobileNo"] = item.MobileNo;
+                        optionItem["MobileNo"] = item.MobileNo;
                         optionItem["MemberName"] = item.MemberName;
                         optionItem["Type"] = item.Type;
                         optionItem["TotalSpend"] = item.TotalSpend;
@@ -199,7 +203,7 @@
                         optionItem["LastTxnDate"] = item.LastTxnDate;
                         tableData.push(optionItem);
                     });
-                    
+
                     DrawTable();
                     $("#dvOutletWiseData").show();
                 }
@@ -230,13 +234,19 @@
             "pagingType": "simple_numbers",
             "columns": [
                 { data: "EnrolledOutlet" },
-                { data: "MaskedMobileNo" },
+                {
+                    "mData": "MaskedMobileNo",
+                    "mRender": function (data, type, row) {
+                        var MobileNo = row.MobileNo;
+                        return '<span class="login" title=' + MobileNo + '>' + data + '</span>';
+                    }
+                },
                 { data: "MemberName" },
-                { data: "Type" },                
+                { data: "Type" },
                 {
                     "mData": "TotalSpend",
                     "mRender": function (data, type, row) {
-                        
+
                         return '<span>' + addComma(data) + '</span>';
                     }
                 },
@@ -246,7 +256,7 @@
 
                         return '<span>' + addComma(data) + '</span>';
                     }
-                },                
+                },
                 { data: "LastTxnDate" }
             ],
             "columnDefs": [

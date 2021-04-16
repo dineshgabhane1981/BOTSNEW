@@ -304,7 +304,8 @@ namespace WebApp.Controllers
 
                     table.Rows.Add(row);
                 }
-                //table.Columns.Remove("OutletId");
+                table.Columns.Remove("MobileNo");
+                table.Columns["MaskedMobileNo"].ColumnName = "MobileNo";
                 string fileName = ReportName + ".xlsx";
                 using (XLWorkbook wb = new XLWorkbook())
                 {

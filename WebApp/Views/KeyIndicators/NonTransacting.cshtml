@@ -107,7 +107,8 @@
         var outletId = $("#nonTransOutlet").val();
         $.ajax({
             type: "POST",
-            url: "../KeyIndicators/GetNonTransactingResult",
+            url: '@Url.Action("GetNonTransactingResult", "KeyIndicators")',
+            //url: "../KeyIndicators/GetNonTransactingResult",
             data: "{'outletId': '" + outletId + "'}",
             contentType: "application/json; charset=utf-8",
             dataType: "json",
@@ -151,10 +152,10 @@
                                     },
                                     options: {
                                         tooltips: { enabled: false },
-                                        hover: { mode: null },                                        
+                                        hover: { mode: null },
                                     },
                                     onClick: function (e) {
-                                        
+
                                         var activePointLabel = this.getElementsAtEvent(e)[0]._model.label;
                                         GetTxnData(activePointLabel);
                                     },
@@ -164,14 +165,14 @@
                                     hover: {
                                         onHover: function (e) {
                                             $("#barcanvas").css("cursor", e[0] ? "pointer" : "default");
-                                        }                                       
+                                        }
                                     },
 
                                     "hover": {
                                         "animationDuration": 0,
                                         onHover: function (e) {
                                             $("#barcanvas").css("cursor", e[0] ? "pointer" : "default");
-                                        }     
+                                        }
                                     },
                                     "animation": {
                                         "duration": 1,
@@ -214,17 +215,19 @@
         var outletId = $("#nonTransOutlet").val();
         $.ajax({
             type: "POST",
-            url: "../KeyIndicators/GetNonTransactingTxnResult",
+            url: '@Url.Action("GetNonTransactingTxnResult", "KeyIndicators")',
+            //url: "../KeyIndicators/GetNonTransactingTxnResult",
             data: "{'outletId': '" + outletId + "','type': '" + type + "'}",
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             success: function (response) {
-                if (response != null) {                   
+                if (response != null) {
                     tableData.length = 0;
                     $.map(response, function (item) {
                         optionItem = {}
                         optionItem["EnrolledOutlet"] = item.EnrolledOutlet;
                         optionItem["MaskedMobileNo"] = item.MaskedMobileNo;
+                        optionItem["MobileNo"] = item.MobileNo;
                         optionItem["MemberName"] = item.MemberName;
                         optionItem["Type"] = item.Type;
                         optionItem["TotalSpend"] = item.TotalSpend;
@@ -232,7 +235,7 @@
                         optionItem["LastTxnDate"] = item.LastTxnDate;
                         tableData.push(optionItem);
                     });
-                    
+
                     DrawTable();
                     $("#dvOutletWiseData").show();
                 }
@@ -263,9 +266,15 @@
             "pagingType": "simple_numbers",
             "columns": [
                 { data: "EnrolledOutlet" },
-                { data: "MaskedMobileNo" },
+                {
+                    "mData": "MaskedMobileNo",
+                    "mRender": function (data, type, row) {
+                        var MobileNo = row.MobileNo;
+                        return '<span class="login" title=' + MobileNo + '>' + data + '</span>';
+                    }
+                },
                 { data: "MemberName" },
-                { data: "Type" },                 
+                { data: "Type" },
                 {
                     "mData": "TotalSpend",
                     "mRender": function (data, type, row) {
@@ -277,7 +286,7 @@
                     "mRender": function (data, type, row) {
                         return '<span>' + addComma(data) + '</span>';
                     }
-                },                 
+                },
                 { data: "LastTxnDate" }
             ],
             "columnDefs": [

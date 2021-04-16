@@ -1,6 +1,7 @@
 ﻿@model BOTS_BL.Models.PointExpiryTmp
+@using System.Globalization
 @{
-    ViewBag.Title = "PointsExpiry";
+    ViewBag.Title = "Points Expiry";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -19,22 +20,22 @@
                     </tr>
                     <tr>
                         <td>Member Count</td>
-                        <td style="text-align:center;">@Model.MemberCountThisMonth</td>
-                        <td style="text-align:center;">@Model.MemberCountNextMonth</td>
+                        <td style="text-align:center;">@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(Model.MemberCountThisMonth))</td>
+                        <td style="text-align:center;">@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(Model.MemberCountNextMonth))</td>
                     </tr>
                     <tr>
                         <td>Points Expiring</td>
-                        <td style="text-align:center;">@Model.MemberPointsThisMonth</td>
-                        <td style="text-align:center;">@Model.MemberPointsNextMonth</td>
+                        <td style="text-align:center;">@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(Model.MemberPointsThisMonth))</td>
+                        <td style="text-align:center;">@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(Model.MemberPointsNextMonth))</td>
                     </tr>
                 </table>
             </div>
 
             <div class="row col-5" style="margin-left:120px;">
-                <div>
+                <div style="margin-bottom:10px;">
                     @Html.DropDownListFor(x => Model.SelectedCount, new SelectList(ViewBag.MonthList, "Value", "Text"), "Select Month", htmlAttributes: new { @class = "input50", @id = "MonthList" })
                 </div>
-                    <table class="table" id="selectedMonth" style="border:1px solid gray; display:none;">                    
+                <table class="table" id="selectedMonth" style="border:1px solid gray; display:none;">
                     <tr>
                         <th scope="col">Period</th>
                         <th scope="col" style="text-align:center; color:blue;cursor:pointer;"><a onclick="GetFutureData();"><u>Selected Month</u></a></th>
@@ -42,12 +43,12 @@
                     <tr>
                         <td>Member Count</td>
                         <td style="text-align:center;"><span id="spnSelectedCount"></span></td>
-                       
+
                     </tr>
                     <tr>
                         <td>Points Expiring</td>
                         <td style="text-align:center;"><span id="spnSelectedPoints"></span></td>
-                       
+
                     </tr>
                 </table>
             </div>
@@ -90,7 +91,7 @@
                                     <th scope="col">Expiry Date</th>
                                 </tr>
                             </thead>
-                            <tbody>                                
+                            <tbody>
                             </tbody>
                         </table>
                     </div>
@@ -119,12 +120,12 @@
             data: "{'month': " + month + ",'year': " + year + "}",
             contentType: "application/json; charset=utf-8",
             dataType: "json",
-            success: function (response) {                
+            success: function (response) {
                 console.log(response)
-                $("#spnSelectedCount").text(response.SelectedCount);
-                $("#spnSelectedPoints").text(response.SelectedPoints);
+                $("#spnSelectedCount").text(addComma(response.SelectedCount));
+                $("#spnSelectedPoints").text(addComma(response.SelectedPoints));
                 $("#selectedMonth").show();
-             
+
 
                 $("#divLoader").hide();
             },
@@ -159,7 +160,8 @@
         $("#divLoader").show();
         $.ajax({
             type: "POST",
-            url: "../Reports/GetPointsExpiryTxnResult",
+            url: '@Url.Action("GetPointsExpiryTxnResult", "Reports")',
+            //url: "../Reports/GetPointsExpiryTxnResult",
             data: "{'month': " + month + ",'year': " + year + "}",
             contentType: "application/json; charset=utf-8",
             dataType: "json",
@@ -170,6 +172,7 @@
                     optionItem = {}
                     optionItem["EnrolledOutlet"] = item.EnrolledOutlet;
                     optionItem["MaskedMobileNo"] = item.MaskedMobileNo;
+                    optionItem["MobileNo"] = item.MobileNo;
                     optionItem["MemberName"] = item.MemberName;
                     optionItem["TxnCount"] = item.TxnCount;
                     optionItem["TotalSpend"] = item.TotalSpend;
@@ -206,8 +209,7 @@
             "pageLength": 25,
             "pagingType": "simple_numbers",
             "columns": [
-                { data: "EnrolledOutlet" },
-                //{ data: "MaskedMobileNo" },
+                { data: "EnrolledOutlet" },               
                 {
                     "mData": "MaskedMobileNo",
                     "mRender": function (data, type, row) {
@@ -215,15 +217,52 @@
                         return '<span class="login" title=' + MobileNo + '>' + data + '</span>';
                     }
                 },
-                { data: "MemberName" },
-                { data: "TxnCount" },
-                { data: "TotalSpend" },
-                { data: "AvlPoints" },
-                { data: "LastTxnDate" },
-                { data: "PointsExpiry" },
+                { data: "MemberName" },                
+                {
+                    "mData": "TxnCount",
+                    "mRender": function (data, type, row) {
+                        return '<span>' + addComma(data) + '</span>';
+                    }
+                },
+                {
+                    "mData": "TotalSpend",
+                    "mRender": function (data, type, row) {
+                        return '<span>' + addComma(data) + '</span>';
+                    }
+                },
+                {
+                    "mData": "AvlPoints",
+                    "mRender": function (data, type, row) {
+                        return '<span>' + addComma(data) + '</span>';
+                    }
+                },                 
+                { data: "LastTxnDate" },                 
+                {
+                    "mData": "PointsExpiry",
+                    "mRender": function (data, type, row) {
+                        return '<span>' + addComma(data) + '</span>';
+                    }
+                },
                 { data: "ExpiryDate" }
 
             ],
+            "columnDefs": [
+                {
+                    "targets": 3,
+                    "className": "text-right"
+                },
+                {
+                    "targets": 4,
+                    "className": "text-right"
+                },
+                {
+                    "targets": 5,
+                    "className": "text-right",
+                },
+                {
+                    "targets": 7,
+                    "className": "text-right",
+                }],
             aoColumnDefs: [
                 {
                     bSortable: false,
@@ -249,7 +288,7 @@
         });
     }
 
-    function ExportDataExcel() {        
+    function ExportDataExcel() {
 
         var urlLink = "@Url.Action("ExportToExcelPointExpiry", "Reports")";
         urlLink = urlLink + "?month=" + clickedMonth + "&year=" + clickedYear + "&ReportName=PointExpiry";

@@ -28,6 +28,7 @@ namespace BOTS_BL.Models
     {
         public string EnrolledOutlet { get; set; }
         public string MobileNo { get; set; }
+        public string MaskedMobileNo { get; set; }
         public string MemberName { get; set; }
         public string Type { get; set; }
         public long TotalSpend { get; set; }

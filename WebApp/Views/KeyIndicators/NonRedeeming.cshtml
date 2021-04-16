@@ -85,21 +85,21 @@
                 <tr>
                     <th scope="col" style="text-align:center; width:150px;" rowspan="3">Points Balance</th>
                     <th scope="col" style="text-align:center; width:100px;">High</th>
-                    <td scope="col" style="text-align:center; width:100px; color:blue;cursor:pointer;"><a onclick="GetData(1,1);"><u>@Model.LessThan90DaysHigh</u></a></td>
-                    <td scope="col" style="text-align:center; width:200px; color:blue;cursor:pointer;"><a onclick="GetData(1,2);"><u>@Model.Bt90to180High</u></a></td>
-                    <td scope="col" style="text-align:center; width:200px; color:blue;cursor:pointer;"><a onclick="GetData(1,3);"><u>@Model.MoreThan180DaysHigh</u></a></td>
+                    <td scope="col" style="text-align:center; width:100px; color:blue;cursor:pointer;"><a onclick="GetData(1,1);"><u>@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(Model.LessThan90DaysHigh))</u></a></td>
+                    <td scope="col" style="text-align:center; width:200px; color:blue;cursor:pointer;"><a onclick="GetData(1,2);"><u>@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(Model.Bt90to180High))</u></a></td>
+                    <td scope="col" style="text-align:center; width:200px; color:blue;cursor:pointer;"><a onclick="GetData(1,3);"><u>@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(Model.MoreThan180DaysHigh))</u></a></td>
                 </tr>
                 <tr>
                     <th style="text-align:center;">Med</th>
-                    <td style="text-align:center; color:blue;cursor:pointer;"><a onclick="GetData(2,1);"><u>@Model.LessThan90DaysMedium</u></a></td>
-                    <td style="text-align:center; color:blue;cursor:pointer;"><a onclick="GetData(2,2);"><u>@Model.Bt90to180Medium</u></a></td>
-                    <td style="text-align:center; color:blue;cursor:pointer;"><a onclick="GetData(2,3);"><u>@Model.MoreThan180DaysMedium</u></a></td>
+                    <td style="text-align:center; color:blue;cursor:pointer;"><a onclick="GetData(2,1);"><u>@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(Model.LessThan90DaysMedium))</u></a></td>
+                    <td style="text-align:center; color:blue;cursor:pointer;"><a onclick="GetData(2,2);"><u>@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(Model.Bt90to180Medium))</u></a></td>
+                    <td style="text-align:center; color:blue;cursor:pointer;"><a onclick="GetData(2,3);"><u>@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(Model.MoreThan180DaysMedium))</u></a></td>
                 </tr>
                 <tr>
                     <th style="text-align:center;">Low</th>
-                    <td style="text-align:center; color:blue;cursor:pointer;"><a onclick="GetData(3,1);"><u>@Model.LessThan90DaysLow</u></a></td>
-                    <td style="text-align:center; color:blue;cursor:pointer;"><a onclick="GetData(3,2);"><u>@Model.Bt90to180Low</u></a></td>
-                    <td style="text-align:center; color:blue;cursor:pointer;"><a onclick="GetData(3,3);"><u>@Model.MoreThan180DaysLow</u></a></td>
+                    <td style="text-align:center; color:blue;cursor:pointer;"><a onclick="GetData(3,1);"><u>@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(Model.LessThan90DaysLow))</u></a></td>
+                    <td style="text-align:center; color:blue;cursor:pointer;"><a onclick="GetData(3,2);"><u>@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(Model.Bt90to180Low))</u></a></td>
+                    <td style="text-align:center; color:blue;cursor:pointer;"><a onclick="GetData(3,3);"><u>@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(Model.MoreThan180DaysLow))</u></a></td>
                 </tr>
 
             </table>
@@ -171,7 +171,8 @@
 
         $.ajax({
             type: "POST",
-            url: "../KeyIndicators/GetNonRedemptionTxnResult",
+            url: '@Url.Action("GetNonRedemptionTxnResult", "KeyIndicators")',
+            //url: "../KeyIndicators/GetNonRedemptionTxnResult",
             data: "{'type': " + type + ",'daysType': " + daysType + "}",
             contentType: "application/json; charset=utf-8",
             dataType: "json",
@@ -181,6 +182,7 @@
                     $.map(response, function (item) {
                         optionItem = {}
                         optionItem["EnrolledOutlet"] = item.EnrolledOutlet;
+                        optionItem["MaskedMobileNo"] = item.MaskedMobileNo;
                         optionItem["MobileNo"] = item.MobileNo;
                         optionItem["MemberName"] = item.MemberName;
                         optionItem["Type"] = item.Type;
@@ -219,7 +221,13 @@
             "pagingType": "simple_numbers",
             "columns": [
                 { data: "EnrolledOutlet" },
-                { data: "MobileNo" },
+                {
+                    "mData": "MaskedMobileNo",
+                    "mRender": function (data, type, row) {
+                        var MobileNo = row.MobileNo;
+                        return '<span class="login" title=' + MobileNo + '>' + data + '</span>';
+                    }
+                },
                 { data: "MemberName" },
                 { data: "Type" },
                 {
@@ -233,13 +241,13 @@
                     "mRender": function (data, type, row) {
                         return '<span>' + addComma(data) + '</span>';
                     }
-                },    
+                },
                 { data: "LastTxnDate" }
             ],
             "columnDefs": [
                 {
                     "targets": 4,
-                    "className": "text-right"                    
+                    "className": "text-right"
                 },
                 {
                     "targets": 5,
