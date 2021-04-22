@@ -312,6 +312,7 @@
     <Content Include="Views\PointsLedger\_Listing.cshtml" />
     <Content Include="Views\PointsLedger\TgtVsAchParticipant.cshtml" />
     <Content Include="Views\PointsLedger\_TgtVsAchList.cshtml" />
+    <Content Include="Views\participant\OrdertoRavanaDays.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

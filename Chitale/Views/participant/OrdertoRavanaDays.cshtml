@@ -1,0 +1,285 @@
+﻿@model Chitale.ViewModel.ManagementViewModel
+@{
+    ViewBag.Title = "Order to Ravana Days";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="app-main__inner">
+    <div class="row">
+        <div style="width:100%;  padding:10px; background-color:white;float:left;">
+            <div class="card-header-tab card-header-tab-animation card-header" style="margin-bottom:10px;">
+                <div class="card-header-title">
+                    <i class="header-icon lnr-apartment icon-gradient bg-love-kiss"> </i>
+                    ORDER vs RAVANA DAYS
+                </div>
+            </div>
+            <div class="card-header-tab" style="margin-bottom:20px;">
+                <div style="display:flex;">
+                    <div class="col-md-3 col-xl-3">
+                        Cluster <br />
+                        @Html.DropDownListFor(model => model.ClusterList, new SelectList(Model.ClusterList, "Value", "Text"), "All", htmlAttributes: new { @class = "input50", @id = "ddlClusterList" }) &nbsp;&nbsp;&nbsp;&nbsp;
+                    </div>
+                    <div class="col-md-3 col-xl-3">
+                        Sub Cluster <br /> @Html.DropDownListFor(model => model.SubClusterList, new SelectList(Model.SubClusterList, "Value", "Text"), "All", htmlAttributes: new { @class = "input50", @id = "ddlSubClusterList" })&nbsp;&nbsp;&nbsp;&nbsp;
+                    </div>
+                    <div class="col-md-3 col-xl-3">
+                        City <br />@Html.DropDownListFor(model => model.CityList, new SelectList(Model.CityList, "Value", "Text"), "All", htmlAttributes: new { @class = "input50", @id = "ddlCityList" })
+                    </div>
+                </div>
+                <div>
+                    <br />        &nbsp;&nbsp;&nbsp;
+                    <input id="txtFromDate" placeholder="From Date" class="input50" />&nbsp;&nbsp;&nbsp;&nbsp;
+                    <input id="txtToDate" placeholder="To Date" class="input50" />
+                    <button type="button" id="btnFilter" style="margin-left:17px;margin-top:5px;" class="btn btn-primary"><b>FILTER</b></button>
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="container-fluid pt-3 pl-3 pr-3">
+                    <div class="pt-3 pl-3 pr-3 col-md-12 col-lg-12">
+                        <div class="col text-right">
+                            <ul class="list-inline progress-list mt-2">
+                                <li class="list-inline-item">
+                                    <div class="dropdown">
+                                        <button class="btn btn-primary login-btn" onclick='ExportDataExcel();' type="button" id="btnExport">
+                                            <i class="fas fa-file-export"></i> Export
+                                        </button>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="row" id="divactivityTable">
+                            <div class="table-responsive">
+                                <table class="table" id="activityTable" cellspacing="0" cellpadding="0">
+                                    <thead>
+                                        <tr style="text-align:center;">
+                                            <td scope="col" style="border:1px solid black;border-left:0px;" colspan="8"></td>
+                                            <td scope="col" style="border:1px solid black;border-right:0px; font-size:18px;" colspan="4"><b>Order Count with days diff</b> </td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="col">Type</th>
+                                            <th scope="col">ID</th>
+                                            <th scope="col">Name</th>
+                                            <th scope="col">Cluster</th>
+                                            <th scope="col">Sub Cluster</th>
+                                            <th scope="col">City</th>
+                                            <th scope="col">Order Count</th>
+                                            <th scope="col">Avg Diff in Days</th>
+                                            <th scope="col">1</th>
+                                            <th scope="col">2</th>
+                                            <th scope="col">3</th>
+                                            <th scope="col">4</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    var tableData = [];
+    $(document).ready(function () {
+        var today = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
+        $("#txtFromDate").datepicker({
+            dateFormat: "yy-mm-dd",
+            maxDate: today,
+        });
+        $("#txtToDate").datepicker({
+            dateFormat: "yy-mm-dd",
+            maxDate: today,
+        });
+
+        GetOrdertoRavanaDays();
+        $('#btnFilter').on("click", function () {
+            GetOrdertoRavanaDays();
+        });
+        $("#ddlClusterList").on('change', function () {
+            $('#ddlSubClusterList').prop('selectedIndex', 0);
+            $('#ddlCityList').prop('selectedIndex', 0);
+        });
+        $("#ddlSubClusterList").on('change', function () {
+            $('#ddlClusterList').prop('selectedIndex', 0);
+            $('#ddlCityList').prop('selectedIndex', 0);
+        });
+        $("#ddlCityList").on('change', function () {
+            $('#ddlClusterList').prop('selectedIndex', 0);
+            $('#ddlSubClusterList').prop('selectedIndex', 0);
+        });
+    });
+
+    function GetOrdertoRavanaDays() {
+        var OrderToRavanaData = [];
+        item = {}
+        item["Cluster"] = $('#ddlClusterList :selected').text();
+        item["SubCluster"] = $('#ddlSubClusterList :selected').text();
+        item["City"] = $('#ddlCityList :selected').text();
+        item["FromDate"] = $("#txtFromDate").val();
+        item["Todate"] = $('#txtToDate').val();
+        
+        OrderToRavanaData.push(item);
+        var data = JSON.stringify(OrderToRavanaData);
+        $("#divLoader").show();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("GetOrdertoRavanaDaysData","Participant")',
+            data: '{jsonData: ' + JSON.stringify(data) + '}',
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                console.log(response);
+                if (response != null) {
+                    tableData.length = 0;
+                    $.map(response, function (item) {
+                        optionItem = {}
+                        optionItem["CustomerType"] = item.CustomerType;
+                        optionItem["CustomerId"] = item.CustomerId;
+                        optionItem["CustomerName"] = item.CustomerName;
+                        optionItem["Cluster"] = item.Cluster;
+                        optionItem["SubCluster"] = item.SubCluster;
+                        optionItem["City"] = item.City;
+                        optionItem["OrderCount"] = item.OrderCount;
+                        optionItem["AvgDiffInDays"] = item.AvgDiffInDays;
+                        optionItem["Diff1"] = item.Diff1;
+                        optionItem["Diff2"] = item.Diff2;
+                        optionItem["Diff3"] = item.Diff3;
+                        optionItem["Diff4"] = item.Diff4;
+                        tableData.push(optionItem);
+                    });
+                    DrawTable();
+                    $("#divLoader").hide();
+                }
+            },
+            failure: function (response) {
+                console.log(111);
+                $("#divLoader").hide();
+            },
+            error: function (response) {
+                console.log(222);
+                $("#divLoader").hide();
+            }
+        });
+
+    }
+    function DrawTable() {
+        var table1 = $('#activityTable').DataTable();
+        table1.destroy();
+        console.log(tableData)
+        var table = $('#activityTable').DataTable({
+            "data": tableData,
+            "paging": true,
+            "ordering": false,
+            "info": true,
+            "bFilter": true,
+            "pageLength": 10,
+            "pagingType": "simple_numbers",
+            "columns": [
+                { data: "CustomerType" },
+                { data: "CustomerId" },
+                { data: "CustomerName" },
+                { data: "Cluster" },
+                { data: "SubCluster" },
+                { data: "City" },
+                { data: "OrderCount" },
+                { data: "AvgDiffInDays" },
+                {
+                    "mData": "Diff1",
+                    "mRender": function (data, type, row) {
+                        return data+"%";
+                    }
+                },
+                {
+                    "mData": "Diff2",
+                    "mRender": function (data, type, row) {
+                        return data + "%";
+                    }
+                },
+                {
+                    "mData": "Diff3",
+                    "mRender": function (data, type, row) {
+                        return data + "%";
+                    }
+                },
+                {
+                    "mData": "Diff4",
+                    "mRender": function (data, type, row) {
+                        return data + "%";
+                    }
+                }
+
+            ],
+            aoColumnDefs: [
+                {
+                    bSortable: false,
+                    aTargets: []
+                }
+            ]
+        });
+        $('#activityTable_filter').hide();
+        $('#txtSearch').on('keyup', function () {
+
+            $.fn.dataTable.ext.search.push(function (settings, searchData) {
+                var term = $('#txtSearch').val().toLowerCase()
+                for (var i = 0; i < searchData.length; i++) {
+                    if (searchData[i].toLowerCase().indexOf(term) == 0) {
+                        return true;
+                    }
+                }
+                return false;
+            });
+            var table = $('#activityTable').DataTable();
+            table.draw();
+        });
+
+    }
+
+    function ExportDataExcel() {
+        $("#divLoader").show();
+         var Cluster = $('#ddlClusterList :selected').text();
+         var SubCluster = $('#ddlSubClusterList :selected').text();
+         var City = $('#ddlCityList :selected').text();
+         var FromDate = $("#txtFromDate").val();
+         var Todate = $('#txtToDate').val();
+         var CustomerType = "0";
+         if ($('#rdnSS').is(":checked")) {
+             CustomerType = "SuperStockiest";
+         }
+         if ($('#rdnDist').is(":checked")) {
+             CustomerType = "Distributors";
+         }
+
+        var urlLink = "@Url.Action("ExportOrdertoRavanaDaysManagement", "Export")";
+        urlLink = urlLink + "?Cluster=" + Cluster + "&SubCluster=" + SubCluster + "&City=" + City + "&FromDate=" + FromDate + "&Todate=" + Todate + "&Type=" + CustomerType + "";
+        window.location.href = urlLink;
+        $("#divLoader").hide();
+    }
+
+
+</script>
+<style>
+
+
+
+    table.dataTable thead .sorting_asc {
+        background: url("https://cdn.datatables.net/1.10.0/images/sort_asc.png") no-repeat center left;
+    }
+
+    table.dataTable thead .sorting_desc {
+        background: url("https://cdn.datatables.net/1.10.0/images/sort_desc.png") no-repeat center left;
+    }
+
+    table.dataTable thead .sorting {
+        background: url("https://cdn.datatables.net/1.10.0/images/sort_both.png") no-repeat center left;
+    }
+</style>
+
+<script src="~/Scripts/jquery-ui-1.12.1.js"></script>
+<script src="~/Scripts/jquery-ui-1.12.1.min.js"></script>
+<link href="~/Content/themes/base/jquery-ui.min.css" rel="stylesheet" />
+<link href="~/Content/themes/base/jquery-ui.css" rel="stylesheet" />

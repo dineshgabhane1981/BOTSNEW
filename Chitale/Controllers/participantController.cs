@@ -5,9 +5,11 @@ using System.Net;
 using System.Text;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Script.Serialization;
 using BOTS_BL;
 using BOTS_BL.Models.ChitaleModel;
 using BOTS_BL.Repository;
+using Chitale.ViewModel;
 
 namespace Chitale.Controllers
 {
@@ -16,6 +18,7 @@ namespace Chitale.Controllers
         ChitaleDashboardRepository CDR = new ChitaleDashboardRepository();
         ParticipantRepository pr = new ParticipantRepository();
         Exceptions newexception = new Exceptions();
+        ManagementDashboardRepository MDR = new ManagementDashboardRepository();
         // GET: participant
         public ActionResult Index()
         {
@@ -121,5 +124,43 @@ namespace Chitale.Controllers
 
             return new JsonResult() { Data = status, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
+
+        public ActionResult OrdertoRavanaDays()
+        {
+            ManagementViewModel objModel = new ManagementViewModel();
+            objModel.ClusterList = MDR.GetClusterList();
+            objModel.SubClusterList = MDR.GetSubClusterList();
+            objModel.CityList = MDR.GetCityList();
+            return View(objModel);
+        }
+
+        public JsonResult GetOrdertoRavanaDaysData(string jsonData)
+        {
+            List<OrderVsRavanaDay> objOrderData = new List<OrderVsRavanaDay>();
+            try
+            {
+                var UserSession = (CustomerDetail)Session["ChitaleUser"];
+                JavaScriptSerializer json_serializer = new JavaScriptSerializer();
+                json_serializer.MaxJsonLength = int.MaxValue;
+                object[] objData = (object[])json_serializer.DeserializeObject(jsonData);
+
+                foreach (Dictionary<string, object> item in objData)
+                {
+                    string Cluster = Convert.ToString(item["Cluster"]);
+                    string SubCluster = Convert.ToString(item["SubCluster"]);
+                    string City = Convert.ToString(item["City"]);
+                    string FromDate = Convert.ToString(item["FromDate"]);
+                    string Todate = Convert.ToString(item["Todate"]);
+                    objOrderData = pr.GetOrderVsRavanaDayData(Cluster, SubCluster, City, FromDate, Todate, UserSession.CustomerId);
+
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex);
+            }
+            return new JsonResult() { Data = objOrderData, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
+        }
+
     }
 }

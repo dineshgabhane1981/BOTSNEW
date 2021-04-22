@@ -68,13 +68,16 @@
                             Points Ledger
                         </a>
                     </li>
-                    <li>
-                        <a href="@Url.Action("Index", "Participant", new { CustomerId = CustomerId, CustomerType=CustomerType })" class="@Html.IsSelected(controller: "Participant", action: "Index")">
+                    if (CustomerType != "Retailers")
+                    {
+                        <li>
+                            <a href="@Url.Action("Index", "Participant", new { CustomerId = CustomerId, CustomerType = CustomerType })" class="@Html.IsSelected(controller: "Participant", action: "Index")">
 
-                            <i class="metismenu-icon fas fa-th-list"></i>
-                            Participant List
-                        </a>
-                    </li>
+                                <i class="metismenu-icon fas fa-th-list"></i>
+                                Participant List
+                            </a>
+                        </li>
+                    }
                     <li>
                         <a href="@Url.Action("RedumptionData", "Participant", new { CustomerId = CustomerId, CustomerType=CustomerType })" class="@Html.IsSelected(controller: "Participant", action: "RedumptionData")">
 
@@ -89,7 +92,33 @@
                             Focus Vs Ach
                         </a>
                     </li>
-
+                    <li>
+                        <a href="@Url.Action("OrdertoRavanaDays", "Participant", new { CustomerId = CustomerId, CustomerType=CustomerType })" class="@Html.IsSelected(controller: "Participant", action: "OrdertoRavanaDays")">
+                            <i class="metismenu-icon fas fa-angle-double-right"></i>
+                            Order to Ravana Days
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <i class="metismenu-icon fas fa-not-equal"></i>
+                            No Action
+                            <i class="metismenu-state-icon pe-7s-angle-down caret-left"></i>
+                        </a>
+                        <ul>
+                            <li class="@Html.IsSelected(controller: "Participant", action: "NoActionParticipants")">
+                                <a class="@Html.IsSelected(controller: "Participant", action: "NoActionParticipants")" href="@Url.Action("NoActionParticipants", "Participant", new { CustomerId = CustomerId, CustomerType=CustomerType })">
+                                    <i class="metismenu-icon"></i>
+                                    Participants
+                                </a>
+                            </li>
+                            <li class="@Html.IsSelected(controller: "Participant", action: "NoActionProducts")">
+                                <a class="@Html.IsSelected(controller: "Participant", action: "NoActionProducts")" href="@Url.Action("NoActionProducts", "Participant", new { CustomerId = CustomerId, CustomerType=CustomerType })">
+                                    <i class="metismenu-icon">
+                                    </i>Products
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
 
                 }
 
@@ -193,7 +222,7 @@
                         </ul>
                     </li>
                 }
-               
+
                 @if (customerCategory == "Employee")
                 {
                     <li>
