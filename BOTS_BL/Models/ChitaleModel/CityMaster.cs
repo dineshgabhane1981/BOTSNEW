@@ -14,5 +14,7 @@ namespace BOTS_BL.Models.ChitaleModel
 
         [StringLength(100)]
         public string City { get; set; }
+
+        public long? SubClusterId { get; set; }
     }
 }

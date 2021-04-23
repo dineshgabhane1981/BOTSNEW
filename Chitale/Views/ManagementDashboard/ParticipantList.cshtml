@@ -23,15 +23,15 @@
                             <div style="display:flex;">
                                 <div class="col-md-3 col-xl-3">
                                     Cluster <br />
-                                    @Html.DropDownList("Cluster", new SelectList(ViewBag.ClusterList, "Value", "Text"), "All", htmlAttributes: new { @class = "input50", @id = "ddlClusterList" })
+                                    @Html.DropDownList("Cluster", new SelectList(ViewBag.ClusterList, "Value", "Text"), "All", htmlAttributes: new { @class = "input50", @id = "ddlClusterList", @onchange = "FillSubCluster()" })
 
                                 </div>
                                 <div class="col-md-3 col-xl-3">
-                                    Sub Cluster <br />@Html.DropDownList("Sub-Cluster", new SelectList(ViewBag.SubclusterList, "Value", "Text"), "All", htmlAttributes: new { @class = "input50", @id = "ddlSubClusterList" })
+                                    Sub Cluster <br />@Html.DropDownList("Sub-Cluster", new SelectList(Enumerable.Empty<SelectListItem>(), "Value", "Text"), "All", htmlAttributes: new { @class = "input50", @id = "ddlSubClusterList", @onchange = "FillCity()" })
 
                                 </div>
                                 <div class="col-md-3 col-xl-3">
-                                    City <br />@Html.DropDownList("City", new SelectList(ViewBag.CityList, "Value", "Text"), "All", htmlAttributes: new { @class = "input50", @id = "ddlCityList" })
+                                    City <br />@Html.DropDownList("City", new SelectList(Enumerable.Empty<SelectListItem>(), "Value", "Text"), "All", htmlAttributes: new { @class = "input50", @id = "ddlCityList" })
                                 </div>
                                 <div class="col-md-1 col-xl-1" style="margin: 20px 0px;">
                                     <button  class="btn btn-primary" type="button" id="btnFilter">
@@ -176,19 +176,7 @@
             //dropdownselect();
 
         });
-        $("#ddlClusterList").on('change', function () {
-
-            $('#ddlSubClusterList').prop('selectedIndex', 0);
-            $('#ddlCityList').prop('selectedIndex', 0);
-        });
-        $("#ddlSubClusterList").on('change', function () {
-            $('#ddlClusterList').prop('selectedIndex', 0);
-            $('#ddlCityList').prop('selectedIndex', 0);
-        });
-        $("#ddlCityList").on('change', function () {
-            $('#ddlClusterList').prop('selectedIndex', 0);
-            $('#ddlSubClusterList').prop('selectedIndex', 0);
-        });
+        
         GetParticipantList('1');
     });
 
@@ -206,33 +194,17 @@
             item["City"] = 0;
             SummeryData.push(item);
         }
-        else if ($("#ddlClusterList").prop('selectedIndex') !== 0) {
-            console.log("cluster");
+        else {
+            // console.log("cluster");
             item = {}
             item["Flag"] = flag;
-            item["SubCluster"] = 0;
-            item["Cluster"] = $('#ddlClusterList :selected').val();
-            item["City"] = 0;
+            item["SubCluster"] = ($("#ddlSubClusterList").prop('selectedIndex') !== 0) ? $('#ddlSubClusterList :selected').val() : 0;
+            item["Cluster"] = ($("#ddlClusterList").prop('selectedIndex') !== 0) ? $('#ddlClusterList :selected').val() : 0;
+            item["City"] = ($("#ddlCityList").prop('selectedIndex') !== 0) ? $('#ddlCityList :selected').val() : 0;
             SummeryData.push(item);
 
         }
-        else if ($("#ddlCityList").prop('selectedIndex') !== 0) {
-            item = {}
-            item["Flag"] = flag;
-            item["SubCluster"] = 0;
-            item["Cluster"] = 0;
-            item["City"] = $('#ddlCityList :selected').val();
-            SummeryData.push(item);
-
-        }
-        else if ($("#ddlSubClusterList").prop('selectedIndex') !== 0) {
-            item = {}
-            item["Flag"] = flag;
-            item["SubCluster"] = $('#ddlSubClusterList :selected').val();
-            item["Cluster"] = 0;
-            item["City"] = 0;
-            SummeryData.push(item);
-        }
+       
         var data = JSON.stringify(SummeryData);
         $.ajax({
             type: "POST",
@@ -270,6 +242,46 @@
 
                 console.log(response.responseText)
                 $("#divLoader").hide();
+            }
+        });
+    }
+    function FillSubCluster() {
+        var cluster = $('#ddlClusterList :selected').val();
+        console.log(cluster);
+        $.ajax({
+            url: '@Url.Action("GetSubCluster", "ManagementDashboard")',
+            data: "{'Cluster': '" + cluster + "'}",
+            type: "post",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (objModel) {
+                console.log(objModel.SubClusterList);
+                $("#ddlSubClusterList").html("");
+                $.each(objModel.SubClusterList, function (i,item) {
+                    $("#ddlSubClusterList").append(
+                        $('<option></option>').val(item.Value).html(item.Text));
+
+                });
+            }
+        });
+    }
+    function FillCity() {
+        var Subcluster = $('#ddlSubClusterList :selected').val();
+        console.log(Subcluster);
+        $.ajax({
+            url: '@Url.Action("GetCity", "ManagementDashboard")',
+            data: "{'SubCluster': '" + Subcluster + "'}",
+            type: "post",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (objModel) {
+                console.log(objModel.CityList);
+                $("#ddlCityList").html("");
+                $.each(objModel.CityList, function (i,item) {
+                    $("#ddlCityList").append(
+                        $('<option></option>').val(item.Value).html(item.Text));
+
+                });
             }
         });
     }

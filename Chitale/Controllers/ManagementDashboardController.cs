@@ -21,8 +21,8 @@ namespace Chitale.Controllers
         {
             ManagementViewModel objModel = new ManagementViewModel();
             objModel.ClusterList = MDR.GetClusterList();
-            objModel.SubClusterList = MDR.GetSubClusterList();
-            objModel.CityList = MDR.GetCityList();
+            //objModel.SubClusterList = MDR.GetSubClusterList();
+            //objModel.CityList = MDR.GetCityList();
             return View(objModel);
         }
         public JsonResult GetDashboardSummeryData(string jsonData)
@@ -220,12 +220,8 @@ namespace Chitale.Controllers
 
         public ActionResult ParticipantList()
         {
-            var lstCluster = MDR.GetClusterList();
-            var lstCity = MDR.GetCityList();
-            var lstSubcluster = MDR.GetSubClusterList();
-            ViewBag.ClusterList = lstCluster;
-            ViewBag.SubclusterList = lstSubcluster;
-            ViewBag.CityList = lstCity;
+            var lstCluster = MDR.GetClusterList();    
+            ViewBag.ClusterList = lstCluster;          
             return View();
         }
         public JsonResult GetLeaderBoard(string jsonData)
@@ -237,7 +233,6 @@ namespace Chitale.Controllers
             foreach (Dictionary<string, object> item in objData)
             {
                 string radio = Convert.ToString(item["Radiobtnchk"]);
-
                 int Cluster = Convert.ToInt32(item["Cluster"]);
                 int SubCluster = Convert.ToInt32(item["SubCluster"]);
                 int City = Convert.ToInt32(item["City"]);
@@ -274,21 +269,16 @@ namespace Chitale.Controllers
         }
         public ActionResult LeaderBoard()
         {
-            var lstCluster = MDR.GetClusterList();
-            lstCluster.Add(new SelectListItem { Text = "All", Value = "0", Selected = true });
-            var lstCity = MDR.GetCityList();
-            var lstSubcluster = MDR.GetSubClusterList();
-            ViewBag.ClusterList = lstCluster;
-            ViewBag.SubclusterList = lstSubcluster;
-            ViewBag.CityList = lstCity;
+            var lstCluster = MDR.GetClusterList();                 
+            ViewBag.ClusterList = lstCluster;           
             return View();
         }
         public ActionResult OrdertoRavanaDays()
         {
             ManagementViewModel objModel = new ManagementViewModel();
             objModel.ClusterList = MDR.GetClusterList();
-            objModel.SubClusterList = MDR.GetSubClusterList();
-            objModel.CityList = MDR.GetCityList();
+            //objModel.SubClusterList = MDR.GetSubClusterList();
+            //objModel.CityList = MDR.GetCityList();
             return View(objModel);
         }
         public JsonResult GetOrdertoRavanaDaysData(string jsonData)
@@ -323,8 +313,8 @@ namespace Chitale.Controllers
         {
             ManagementViewModel objModel = new ManagementViewModel();
             objModel.ClusterList = MDR.GetClusterList();
-            objModel.SubClusterList = MDR.GetSubClusterList();
-            objModel.CityList = MDR.GetCityList();
+           // objModel.SubClusterList = MDR.GetSubClusterList();
+          //  objModel.CityList = MDR.GetCityList();
             return View(objModel);
         }
 
@@ -349,6 +339,18 @@ namespace Chitale.Controllers
             return new JsonResult() { Data = objOrderData, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
 
+        public JsonResult GetSubCluster(int Cluster)
+        {
+            ManagementViewModel objModel = new ManagementViewModel();            
+            objModel.SubClusterList = MDR.GetSubClusterList(Cluster);           
+            return new JsonResult() { Data = objModel, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
+        }
+        public JsonResult GetCity(int SubCluster)
+        {
+            ManagementViewModel objModel = new ManagementViewModel();
+            objModel.CityList = MDR.GetCityList(SubCluster);
+            return new JsonResult() { Data = objModel, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
+        }
 
     }
 }

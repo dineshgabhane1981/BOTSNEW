@@ -40,7 +40,33 @@ namespace BOTS_BL.Repository
             }
             return clusterItems;
         }
-        public List<SelectListItem> GetSubClusterList()
+        //public List<SelectListItem> GetSubClusterList()
+        //{
+        //    List<SubClusterMaster> objsublist = new List<SubClusterMaster>();
+        //    List<SelectListItem> subclusterItems = new List<SelectListItem>();
+        //    try
+        //    {
+        //        using (var context = new ChitaleDBContext())
+        //        {
+        //            objsublist = context.SubClusterMasters.OrderBy(s => s.SubCluster).ToList();
+        //            foreach (var item in objsublist)
+        //            {
+        //                subclusterItems.Add(new SelectListItem
+        //                {
+        //                    Text = item.SubCluster,
+        //                    Value = Convert.ToString(item.SlNo)
+        //                });
+        //            }
+
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        newexception.AddException(ex);
+        //    }
+        //    return subclusterItems;
+        //}
+        public List<SelectListItem> GetSubClusterList(int cluster)
         {
             List<SubClusterMaster> objsublist = new List<SubClusterMaster>();
             List<SelectListItem> subclusterItems = new List<SelectListItem>();
@@ -48,7 +74,7 @@ namespace BOTS_BL.Repository
             {
                 using (var context = new ChitaleDBContext())
                 {
-                    objsublist = context.SubClusterMasters.OrderBy(s => s.SubCluster).ToList();
+                    objsublist = context.SubClusterMasters.Where(s => s.ClusterId == cluster).ToList();
                     foreach (var item in objsublist)
                     {
                         subclusterItems.Add(new SelectListItem
@@ -66,7 +92,33 @@ namespace BOTS_BL.Repository
             }
             return subclusterItems;
         }
-        public List<SelectListItem> GetCityList()
+        //public List<SelectListItem> GetCityList()
+        //{
+        //    List<CityMaster> objCitylist = new List<CityMaster>();
+        //    List<SelectListItem> CityItems = new List<SelectListItem>();
+        //    try
+        //    {
+        //        using (var context = new ChitaleDBContext())
+        //        {
+        //            objCitylist = context.CityMasters.OrderBy(s => s.City).ToList();
+        //            foreach (var item in objCitylist)
+        //            {
+        //                CityItems.Add(new SelectListItem
+        //                {
+        //                    Text = item.City,
+        //                    Value = Convert.ToString(item.SlNo)
+        //                });
+        //            }
+
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        newexception.AddException(ex);
+        //    }
+        //    return CityItems;
+        //}
+        public List<SelectListItem> GetCityList(int Subcluster)
         {
             List<CityMaster> objCitylist = new List<CityMaster>();
             List<SelectListItem> CityItems = new List<SelectListItem>();
@@ -74,7 +126,7 @@ namespace BOTS_BL.Repository
             {
                 using (var context = new ChitaleDBContext())
                 {
-                    objCitylist = context.CityMasters.OrderBy(s => s.City).ToList();
+                    objCitylist = context.CityMasters.Where(s => s.SubClusterId == Subcluster).ToList();
                     foreach (var item in objCitylist)
                     {
                         CityItems.Add(new SelectListItem
@@ -92,7 +144,6 @@ namespace BOTS_BL.Repository
             }
             return CityItems;
         }
-
         public Dashboardsummary GetSummeryDetails(bool IsBTD, string Cluster, string SubCluster, string City, string FromDate, string Todate)
         {
             Dashboardsummary objDashboardsummary = new Dashboardsummary();
@@ -222,7 +273,7 @@ namespace BOTS_BL.Repository
                     }
 
                 }
-                else if (Cluster > 0)
+                else if (City > 0)
                 {
                     using (var context = new ChitaleDBContext())
                     {
@@ -230,12 +281,13 @@ namespace BOTS_BL.Repository
                             new SqlParameter("@pi_LoginId", ""),
                             new SqlParameter("@pi_Datetime", DateTime.Now.ToString("dd-MM-yyyy")),
                               new SqlParameter("@pi_DataType", ""),
-                                new SqlParameter("@pi_City", ""),
-                            new SqlParameter("@pi_Cluster", Cluster),
+                                new SqlParameter("@pi_City", City),
+                            new SqlParameter("@pi_Cluster", ""),
                             new SqlParameter("@pi_SubCluster", "")
 
                             ).ToList<ParticipantListForManagement>();
                     }
+
                 }
                 else if (SubCluster > 0)
                 {
@@ -253,7 +305,7 @@ namespace BOTS_BL.Repository
                     }
 
                 }
-                else if (City > 0)
+                else if (Cluster > 0)
                 {
                     using (var context = new ChitaleDBContext())
                     {
@@ -261,14 +313,13 @@ namespace BOTS_BL.Repository
                             new SqlParameter("@pi_LoginId", ""),
                             new SqlParameter("@pi_Datetime", DateTime.Now.ToString("dd-MM-yyyy")),
                               new SqlParameter("@pi_DataType", ""),
-                                new SqlParameter("@pi_City", City),
-                            new SqlParameter("@pi_Cluster", ""),
+                                new SqlParameter("@pi_City", ""),
+                            new SqlParameter("@pi_Cluster", Cluster),
                             new SqlParameter("@pi_SubCluster", "")
 
                             ).ToList<ParticipantListForManagement>();
                     }
-
-                }
+                }               
                 else
                 {
                     using (var context = new ChitaleDBContext())
@@ -347,34 +398,6 @@ namespace BOTS_BL.Repository
                             ).ToList<LeaderBoardForMgt>();
                     }
                 }
-                else if (Cluster > 0)
-                {
-                    using (var context = new ChitaleDBContext())
-                    {
-                        lstLeaderBrd = context.Database.SqlQuery<LeaderBoardForMgt>("sp_LeaderBoard_MFC @pi_LoginId,@pi_ParticipantType, @pi_Datetime, @pi_City,@pi_Cluster,@pi_SubCluster",
-                            new SqlParameter("@pi_LoginId", ""),
-                              new SqlParameter("@pi_ParticipantType", radiobtn),
-                            new SqlParameter("@pi_Datetime", DateTime.Now.ToString("dd-MM-yyyy")),
-                                new SqlParameter("@pi_City", ""),
-                            new SqlParameter("@pi_Cluster", Cluster),
-                            new SqlParameter("@pi_SubCluster", "")
-                            ).ToList<LeaderBoardForMgt>();
-                    }
-                }
-                else if (SubCluster > 0)
-                {
-                    using (var context = new ChitaleDBContext())
-                    {
-                        lstLeaderBrd = context.Database.SqlQuery<LeaderBoardForMgt>("sp_LeaderBoard_MFC @pi_LoginId,@pi_ParticipantType, @pi_Datetime, @pi_City,@pi_Cluster ,@pi_SubCluster",
-                            new SqlParameter("@pi_LoginId", ""),
-                              new SqlParameter("@pi_ParticipantType", radiobtn),
-                            new SqlParameter("@pi_Datetime", DateTime.Now.ToString("dd-MM-yyyy")),
-                                new SqlParameter("@pi_City", ""),
-                            new SqlParameter("@pi_Cluster", ""),
-                            new SqlParameter("@pi_SubCluster", SubCluster)
-                            ).ToList<LeaderBoardForMgt>();
-                    }
-                }
                 else if (City > 0)
                 {
                     using (var context = new ChitaleDBContext())
@@ -390,6 +413,35 @@ namespace BOTS_BL.Repository
                     }
 
                 }
+                else if (SubCluster > 0)
+                {
+                    using (var context = new ChitaleDBContext())
+                    {
+                        lstLeaderBrd = context.Database.SqlQuery<LeaderBoardForMgt>("sp_LeaderBoard_MFC @pi_LoginId,@pi_ParticipantType, @pi_Datetime, @pi_City,@pi_Cluster ,@pi_SubCluster",
+                            new SqlParameter("@pi_LoginId", ""),
+                              new SqlParameter("@pi_ParticipantType", radiobtn),
+                            new SqlParameter("@pi_Datetime", DateTime.Now.ToString("dd-MM-yyyy")),
+                                new SqlParameter("@pi_City", ""),
+                            new SqlParameter("@pi_Cluster", ""),
+                            new SqlParameter("@pi_SubCluster", SubCluster)
+                            ).ToList<LeaderBoardForMgt>();
+                    }
+                }
+                else if (Cluster > 0)
+                {
+                    using (var context = new ChitaleDBContext())
+                    {
+                        lstLeaderBrd = context.Database.SqlQuery<LeaderBoardForMgt>("sp_LeaderBoard_MFC @pi_LoginId,@pi_ParticipantType, @pi_Datetime, @pi_City,@pi_Cluster,@pi_SubCluster",
+                            new SqlParameter("@pi_LoginId", ""),
+                              new SqlParameter("@pi_ParticipantType", radiobtn),
+                            new SqlParameter("@pi_Datetime", DateTime.Now.ToString("dd-MM-yyyy")),
+                                new SqlParameter("@pi_City", ""),
+                            new SqlParameter("@pi_Cluster", Cluster),
+                            new SqlParameter("@pi_SubCluster", "")
+                            ).ToList<LeaderBoardForMgt>();
+                    }
+                }
+                
 
                 if (lstLeaderBrd != null)
                 {
@@ -530,17 +582,18 @@ namespace BOTS_BL.Repository
                     }
                     else
                     {
-                        if (Cluster != "All")
+                        
+                        if (City != "All")
                         {
-                            objData = objData.Where(x => x.Cluster == Cluster).ToList();
+                            objData = objData.Where(x => x.City == City).ToList();
                         }
                         else if (SubCluster != "All")
                         {
                             objData = objData.Where(x => x.SubCluster == SubCluster).ToList();
                         }
-                        else if (City != "All")
-                        {
-                            objData = objData.Where(x => x.City == City).ToList();
+                        else if (Cluster != "All")
+                        {                            
+                            objData = objData.Where(x => x.Cluster == Cluster).ToList();
                         }
                         if (FromDate != "" && Todate != "")
                         {
