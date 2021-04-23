@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -562,6 +563,15 @@ namespace BOTS_BL.Repository
                     {
                         objData = objData.Where(x => x.CustomerType == type).ToList();
                     }
+
+                    foreach(var item in objData)
+                    {
+                        item.InvAmountStr= String.Format(new CultureInfo("en-IN", false), "{0:n}", Convert.ToDecimal(item.InvAmount));
+                        item.OrderAmountStr = String.Format(new CultureInfo("en-IN", false), "{0:n}", Convert.ToDecimal(item.OrderAmountStr));
+                    }
+
+
+                    
                 }
                 catch (Exception ex)
                 {

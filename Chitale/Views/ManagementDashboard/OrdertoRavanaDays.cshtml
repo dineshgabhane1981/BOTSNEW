@@ -39,47 +39,53 @@
             <div class="row mb-3">
                 <div class="container-fluid pt-3 pl-3 pr-3">
                     <div class="pt-3 pl-3 pr-3 col-md-12 col-lg-12">
-                        <div class="col text-right">
-                            <ul class="list-inline progress-list mt-2">
-                                <li class="list-inline-item">
-                                    <div class="dropdown">
-                                        <button class="btn btn-primary login-btn" onclick='ExportDataExcel();' type="button" id="btnExport">
-                                            <i class="fas fa-file-export"></i> Export
-                                        </button>
-                                    </div>
-                                </li>
-                            </ul>
+                        <div class="row" style="margin-bottom:10px;">
+                            <div class="col search-container">
+                                <i class="fas fa-search"></i>
+                                <input class="input100" type="text" id="txtSearch" placeholder="Search activity..." />
+                            </div>
+                            <div class="col text-right">
+                                <ul class="list-inline progress-list mt-2">
+                                    <li class="list-inline-item">
+                                        <div class="dropdown">
+                                            <button class="btn btn-primary login-btn" onclick='ExportDataExcel();' type="button" id="btnExport">
+                                                <i class="fas fa-file-export"></i> Export
+                                            </button>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
                         </div>
-                        <div class="row" id="divactivityTable">
-                            <div class="table-responsive">
-                                <table class="table" id="activityTable" cellspacing="0" cellpadding="0">
-                                    <thead>
-                                        <tr style="text-align:center;">
-                                            <td scope="col" style="border:1px solid black;border-left:0px;" colspan="8"></td>
-                                            <td scope="col" style="border:1px solid black;border-right:0px; font-size:18px;" colspan="4"><b>Order Count with days diff</b> </td>
-                                        </tr>
-                                        <tr>
-                                            <th scope="col">Type</th>
-                                            <th scope="col">ID</th>
-                                            <th scope="col">Name</th>
-                                            <th scope="col">Cluster</th>
-                                            <th scope="col">Sub Cluster</th>
-                                            <th scope="col">City</th>
-                                            <th scope="col">Order Count</th>
-                                            <th scope="col">Avg Diff in Days</th>
-                                            <th scope="col">1</th>
-                                            <th scope="col">2</th>
-                                            <th scope="col">3</th>
-                                            <th scope="col">4</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                    </tbody>
-                                </table>
+                            <div class="row" id="divactivityTable">
+                                <div class="table-responsive">
+                                    <table class="table" id="activityTable" cellspacing="0" cellpadding="0">
+                                        <thead>
+                                            <tr style="text-align:center;">
+                                                <td scope="col" style="border:1px solid black;border-left:0px;" colspan="8"></td>
+                                                <td scope="col" style="border:1px solid black;border-right:0px; font-size:18px;" colspan="4"><b>Order Count with days diff</b> </td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="col">Type</th>
+                                                <th scope="col">ID</th>
+                                                <th scope="col">Name</th>
+                                                <th scope="col">Cluster</th>
+                                                <th scope="col">Sub Cluster</th>
+                                                <th scope="col">City</th>
+                                                <th scope="col">Order Count</th>
+                                                <th scope="col">Avg Diff in Days</th>
+                                                <th scope="col">1</th>
+                                                <th scope="col">2</th>
+                                                <th scope="col">3</th>
+                                                <th scope="col">4</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
             </div>
         </div>
     </div>

@@ -39,42 +39,48 @@
             <div class="row mb-3">
                 <div class="container-fluid pt-3 pl-3 pr-3">
                     <div class="pt-3 pl-3 pr-3 col-md-12 col-lg-12">
-                        <div class="col text-right">
-                            <ul class="list-inline progress-list mt-2">
-                                <li class="list-inline-item">
-                                    <div class="dropdown">
-                                        <button class="btn btn-primary login-btn" onclick='ExportDataExcel();' type="button" id="btnExport">
-                                            <i class="fas fa-file-export"></i> Export
-                                        </button>
-                                    </div>
-                                </li>
-                            </ul>
+                        <div class="row" style="margin-bottom:10px;">
+                            <div class="col search-container">
+                                <i class="fas fa-search"></i>
+                                <input class="input100" type="text" id="txtSearch" placeholder="Search activity..." />
+                            </div>
+                            <div class="col text-right">
+                                <ul class="list-inline progress-list mt-2">
+                                    <li class="list-inline-item">
+                                        <div class="dropdown">
+                                            <button class="btn btn-primary login-btn" onclick='ExportDataExcel();' type="button" id="btnExport">
+                                                <i class="fas fa-file-export"></i> Export
+                                            </button>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
                         </div>
-                        <div class="row" id="divactivityTable">
-                            <div class="table-responsive">
-                                <table class="table" id="activityTable" cellspacing="0" cellpadding="0">
-                                    <thead>
-                                        <tr>
-                                            <th scope="col">Type</th>
-                                            <th scope="col">ID</th>
-                                            <th scope="col">Name</th>
-                                            <th scope="col">Cluster</th>
-                                            <th scope="col">Sub Cluster</th>
-                                            <th scope="col">City</th>
-                                            <th scope="col">Inv Date</th>
-                                            <th scope="col">Inv Number</th>
-                                            <th scope="col">Inv Amount</th>
-                                            <th scope="col">Order Amount</th>
-                                            <th scope="col">Variance</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                    </tbody>
-                                </table>
+                            <div class="row" id="divactivityTable">
+                                <div class="table-responsive">
+                                    <table class="table" id="activityTable" cellspacing="0" cellpadding="0">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col">Type</th>
+                                                <th scope="col">ID</th>
+                                                <th scope="col">Name</th>
+                                                <th scope="col">Cluster</th>
+                                                <th scope="col">Sub Cluster</th>
+                                                <th scope="col">City</th>
+                                                <th scope="col">Inv Date</th>
+                                                <th scope="col">Inv Number</th>
+                                                <th scope="col">Inv Amount</th>
+                                                <th scope="col">Order Amount</th>
+                                                <th scope="col">Variance</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
             </div>
             <div>
                 <table>
@@ -165,8 +171,8 @@
                         optionItem["City"] = item.City;
                         optionItem["InvDate"] = item.StrDate;
                         optionItem["InvNumber"] = item.InvNumber;
-                        optionItem["InvAmount"] = item.InvAmount;
-                        optionItem["OrderAmount"] = item.OrderAmount;
+                        optionItem["InvAmount"] = item.InvAmountStr;
+                        optionItem["OrderAmount"] = item.OrderAmountStr;
                         optionItem["Variance"] = item.Variance;
                         tableData.push(optionItem);
                     });
@@ -211,6 +217,15 @@
                 { data: "Variance" }
 
             ],
+            "columnDefs": [
+                {
+                    "targets": 8,
+                    "className": "text-right"
+                },
+                {
+                    "targets": 9,
+                    "className": "text-right"
+                }],
             aoColumnDefs: [
                 {
                     bSortable: false,

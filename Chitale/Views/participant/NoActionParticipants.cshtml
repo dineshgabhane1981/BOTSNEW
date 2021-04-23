@@ -129,11 +129,11 @@
         $("#divLoader").show();
         $.ajax({
             type: "POST",
-            url: '@Url.Action("GetParticipantsTilesData")',
+            url: '@Url.Action("GetParticipantsTilesData", "Participant")',
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             success: function (response) {
-                if (response != null) {
+                    if (response != null) {
                     $("#spnSSAll").text(response.SS_All);
                     $("#spnSS30").text(response.SS_30);
                     $("#spnSS90").text(response.SS_90);
@@ -146,15 +146,15 @@
                     $("#spnDist365").text(response.Dist_365);
 
                     $("#divLoader").hide();
-                }
-            },
+                    }
+                },
             failure: function (response) {
                 $("#divLoader").hide();
-            },
+                },
             error: function (response) {
                 $("#divLoader").hide();
-            }
-        });
+                }
+            });
     }
 
 
@@ -163,38 +163,38 @@
          $("#divLoader").show();
         $.ajax({
             type: "POST",
-            url: '@Url.Action("GetParticipantsData")',
+            url: '@Url.Action("GetParticipantsData", "Participant")',
             data: '{type: ' + JSON.stringify(type) + '}',
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             success: function (response) {
-                if (response != null) {
-                    tableData.length = 0;
+                    if (response != null) {
+                        tableData.length = 0;
                     $.map(response, function (item) {
-                        optionItem = {}
-                        optionItem["Type"] = item.Type;
-                        optionItem["Id"] = item.Id;
-                        optionItem["Name"] = item.Name;
-                        optionItem["Cluster"] = item.Cluster;
-                        optionItem["SubCluster"] = item.SubCluster;
-                        optionItem["City"] = item.City;
-                        optionItem["BalancePoints"] = item.BalancePoints;
-                        optionItem["LastInvoiceDate"] = item.LastInvoiceDateStr;
-                        optionItem["DaysSinceLastInvoice"] = item.DaysSinceLastInvoice;
-                        tableData.push(optionItem);
-                    });
-                    DrawTable();
+                            optionItem = {}
+                            optionItem["Type"] = item.Type;
+                            optionItem["Id"] = item.Id;
+                            optionItem["Name"] = item.Name;
+                            optionItem["Cluster"] = item.Cluster;
+                            optionItem["SubCluster"] = item.SubCluster;
+                            optionItem["City"] = item.City;
+                            optionItem["BalancePoints"] = item.BalancePoints;
+                            optionItem["LastInvoiceDate"] = item.LastInvoiceDateStr;
+                            optionItem["DaysSinceLastInvoice"] = item.DaysSinceLastInvoice;
+                            tableData.push(optionItem);
+                        });
+                        DrawTable();
                     $("#dvParticipantData").show();
                     $("#divLoader").hide();
-                }
-            },
+                    }
+                },
             failure: function (response) {
                 $("#divLoader").hide();
-            },
+                },
             error: function (response) {
                 $("#divLoader").hide();
-            }
-        });
+                }
+            });
     }
 
     function DrawTable() {
@@ -246,7 +246,7 @@
     }
 
     function ExportDataExcel() {
-        $("#divLoader").show();        
+        $("#divLoader").show();
 
         var urlLink = "@Url.Action("ExportNoActionParticipantManagement", "Export")";
         urlLink = urlLink + "?Type=" + tileType + "";

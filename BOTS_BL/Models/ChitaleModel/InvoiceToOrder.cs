@@ -46,5 +46,9 @@ namespace BOTS_BL.Models.ChitaleModel
         public decimal? Variance { get; set; }
         [NotMapped]
         public string StrDate { get; set; }
+        [NotMapped]
+        public string InvAmountStr { get; set; }
+        [NotMapped]
+        public string OrderAmountStr { get; set; }
     }
 }
