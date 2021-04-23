@@ -19,6 +19,7 @@ namespace Chitale.Controllers
         ParticipantRepository pr = new ParticipantRepository();
         Exceptions newexception = new Exceptions();
         ManagementDashboardRepository MDR = new ManagementDashboardRepository();
+        NoActionRepository NAR = new NoActionRepository();
         // GET: participant
         public ActionResult Index()
         {
@@ -160,5 +161,23 @@ namespace Chitale.Controllers
             return new JsonResult() { Data = objOrderData, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
 
+        public ActionResult NoActionParticipants()
+        {
+            return View();
+        }
+        public JsonResult GetParticipantsTilesData()
+        {
+            var UserSession = (CustomerDetail)Session["ChitaleUser"];
+            NoActionModelTile objData = new NoActionModelTile();
+            objData = pr.GetNoActionParticipantsTilesData(UserSession.CustomerId);
+            return new JsonResult() { Data = objData, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
+        }
+        public JsonResult GetParticipantsData(string type)
+        {
+            var UserSession = (CustomerDetail)Session["ChitaleUser"];
+            List<NoActionParticipantData> objData = new List<NoActionParticipantData>();
+            objData = pr.GetNoActionParticipantsData(type, UserSession.CustomerId);
+            return new JsonResult() { Data = objData, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
+        }
     }
 }
