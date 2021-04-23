@@ -159,19 +159,14 @@ namespace Chitale.Controllers
         }
         public ActionResult LeaderBoard()
         {
-
             ManagementViewModel objModel = new ManagementViewModel();
-            objModel.ClusterList = MDR.GetClusterList();
-            objModel.SubClusterList = MDR.GetSubClusterList();
-            objModel.CityList = MDR.GetCityList();
+            objModel.ClusterList = MDR.GetClusterList();           
             return View(objModel);
         }
         public ActionResult OrderToInvoice()
         {
             ManagementViewModel objModel = new ManagementViewModel();
-            objModel.ClusterList = MDR.GetClusterList();
-            objModel.SubClusterList = MDR.GetSubClusterList();
-            objModel.CityList = MDR.GetCityList();
+            objModel.ClusterList = MDR.GetClusterList();           
             return View(objModel);
         }
         public JsonResult GetInvoiceToOrderData(string jsonData, string CustomerType)

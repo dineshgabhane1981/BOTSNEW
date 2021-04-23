@@ -21,13 +21,13 @@
                         <div class="pt-3 pl-3 pr-3 col-md-12 col-lg-12">
                             <div style="display:flex;">
                                 <div class="col-md-3 col-xl-3">
-                                    Cluster <br /> @Html.DropDownListFor(model => model.ClusterList, new SelectList(Model.ClusterList, "Value", "Text"), "All", htmlAttributes: new { @class = "input50", @id = "ddlClusterList" }) &nbsp;&nbsp;&nbsp;&nbsp;
+                                    Cluster <br /> @Html.DropDownListFor(model => model.ClusterList, new SelectList(Model.ClusterList, "Value", "Text"), "All", htmlAttributes: new { @class = "input50", @id = "ddlClusterList", @onchange = "FillSubCluster()" }) &nbsp;&nbsp;&nbsp;&nbsp;
                                 </div>
                                 <div class="col-md-3 col-xl-3">
-                                    Sub Cluster <br /> @Html.DropDownListFor(model => model.SubClusterList, new SelectList(Model.SubClusterList, "Value", "Text"), "All", htmlAttributes: new { @class = "input50", @id = "ddlSubClusterList" })&nbsp;&nbsp;&nbsp;&nbsp;
+                                    Sub Cluster <br /> @Html.DropDownListFor(model => model.SubClusterList, new SelectList(Enumerable.Empty<SelectListItem>(), "Value", "Text"), "All", htmlAttributes: new { @class = "input50", @id = "ddlSubClusterList", @onchange = "FillCity()" })&nbsp;&nbsp;&nbsp;&nbsp;
                                 </div>
                                 <div class="col-md-3 col-xl-3">
-                                    City <br /> @Html.DropDownListFor(model => model.CityList, new SelectList(Model.CityList, "Value", "Text"), "All", htmlAttributes: new { @class = "input50", @id = "ddlCityList" })
+                                    City <br /> @Html.DropDownListFor(model => model.CityList, new SelectList(Enumerable.Empty<SelectListItem>(), "Value", "Text"), "All", htmlAttributes: new { @class = "input50", @id = "ddlCityList" })
                                 </div>
                                 <div class="col-md-1 col-xl-1" style="margin: 20px 0px;">
                                     <button style="margin-left:17px;margin-top:5px;" class="btn btn-primary" type="button" id="btnFilter">
@@ -172,22 +172,49 @@
             //dropdownselect();
 
         });
-        $("#ddlClusterList").on('change', function () {
 
-            $('#ddlSubClusterList').prop('selectedIndex', 0);
-            $('#ddlCityList').prop('selectedIndex', 0);
-        });
-        $("#ddlSubClusterList").on('change', function () {
-            $('#ddlClusterList').prop('selectedIndex', 0);
-            $('#ddlCityList').prop('selectedIndex', 0);
-        });
-        $("#ddlCityList").on('change', function () {
-            $('#ddlClusterList').prop('selectedIndex', 0);
-            $('#ddlSubClusterList').prop('selectedIndex', 0);
-        });
         GetParticipantList('1');
     });
+    function FillSubCluster() {
+        var cluster = $('#ddlClusterList :selected').val();
+        console.log(cluster);
+        $.ajax({
+            url: '@Url.Action("GetSubCluster", "ManagementDashboard")',
+            data: "{'Cluster': '" + cluster + "'}",
+            type: "post",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (objModel) {
+                console.log(objModel.SubClusterList);
+                $("#ddlSubClusterList").html("");
+                $.each(objModel.SubClusterList, function (i,item) {
+                    $("#ddlSubClusterList").append(
+                        $('<option></option>').val(item.Value).html(item.Text));
 
+                });
+            }
+        });
+    }
+    function FillCity() {
+        var Subcluster = $('#ddlSubClusterList :selected').val();
+        console.log(Subcluster);
+        $.ajax({
+            url: '@Url.Action("GetCity", "ManagementDashboard")',
+            data: "{'SubCluster': '" + Subcluster + "'}",
+            type: "post",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (objModel) {
+                console.log(objModel.CityList);
+                $("#ddlCityList").html("");
+                $.each(objModel.CityList, function (i,item) {
+                    $("#ddlCityList").append(
+                        $('<option></option>').val(item.Value).html(item.Text));
+
+                });
+            }
+        });
+    }
     function GetParticipantList(flag) {
         $("#divLoader").show();
         $('#btnbackretail').hide();
@@ -202,33 +229,16 @@
             item["City"] = 0;
             SummeryData.push(item);
         }
-        else if ($("#ddlClusterList").prop('selectedIndex') !== 0) {
-            console.log("cluster");
+        else {
             item = {}
             item["Flag"] = flag;
-            item["SubCluster"] = 0;
-            item["Cluster"] = $('#ddlClusterList :selected').text();
-            item["City"] = 0;
+            item["SubCluster"] = ($("#ddlSubClusterList").prop('selectedIndex') !== 0) ? $('#ddlSubClusterList :selected').text() :0;
+            item["Cluster"] = ($("#ddlClusterList").prop('selectedIndex') !== 0) ? $('#ddlClusterList :selected').text() : 0;
+            item["City"] = ($("#ddlCityList").prop('selectedIndex') !== 0) ? $('#ddlCityList :selected').text() : 0;
             SummeryData.push(item);
 
         }
-        else if ($("#ddlCityList").prop('selectedIndex') !== 0) {
-            item = {}
-            item["Flag"] = flag;
-            item["SubCluster"] = 0;
-            item["Cluster"] = 0;
-            item["City"] = $('#ddlCityList :selected').text();
-            SummeryData.push(item);
-
-        }
-        else if ($("#ddlSubClusterList").prop('selectedIndex') !== 0) {
-            item = {}
-            item["Flag"] = flag;
-            item["SubCluster"] = $('#ddlSubClusterList :selected').text();
-            item["Cluster"] = 0;
-            item["City"] = 0;
-            SummeryData.push(item);
-        }
+       
         var data = JSON.stringify(SummeryData);
         $.ajax({
             type: "POST",

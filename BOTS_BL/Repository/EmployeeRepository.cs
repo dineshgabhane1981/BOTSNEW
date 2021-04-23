@@ -180,17 +180,18 @@ namespace BOTS_BL.Repository
                     }
                     else
                     {
-                        if (Cluster != "All")
+                        if (City != "All")
                         {
-                            objData = objData.Where(x => x.Cluster == Cluster).ToList();
+                            objData = objData.Where(x => x.City == City).ToList();
                         }
+                        
                         else if (SubCluster != "All")
                         {
                             objData = objData.Where(x => x.SubCluster == SubCluster).ToList();
                         }
-                        else if (City != "All")
+                        else if (Cluster != "All")
                         {
-                            objData = objData.Where(x => x.City == City).ToList();
+                            objData = objData.Where(x => x.Cluster == Cluster).ToList();
                         }
                         if (FromDate != "" && Todate != "")
                         {
@@ -270,15 +271,15 @@ namespace BOTS_BL.Repository
                       new SqlParameter("@pi_CustomerType", CustomerType)
 
                     ).ToList<ParticipantListForManagement>();
-                    if (Cluster != "0")
+                    if (City != "0")
                     {
-                        var lstResult = (from s in context.CustomerDetails.Select(x => new { x.CustomerId, x.Cluster }).AsEnumerable()
+                        var lstResult = (from s in context.CustomerDetails.Select(x => new { x.CustomerId, x.City }).AsEnumerable()
                                          join sa in lstparticipantListsformgt on s.CustomerId equals sa.Id
-                                         where s.Cluster == Cluster
+                                         where s.City == City
                                          select sa).ToList();
 
                         lstparticipantListsformgt = lstResult;
-                    }
+                    }                   
                     if (SubCluster != "0")
                     {
                         var lstResult = (from s in context.CustomerDetails.Select(x => new { x.CustomerId, x.SubCluster }).AsEnumerable()
@@ -288,11 +289,11 @@ namespace BOTS_BL.Repository
 
                         lstparticipantListsformgt = lstResult;
                     }
-                    if (City != "0")
+                    if (Cluster != "0")
                     {
-                        var lstResult = (from s in context.CustomerDetails.Select(x => new { x.CustomerId, x.City }).AsEnumerable()
+                        var lstResult = (from s in context.CustomerDetails.Select(x => new { x.CustomerId, x.Cluster }).AsEnumerable()
                                          join sa in lstparticipantListsformgt on s.CustomerId equals sa.Id
-                                         where s.City == City
+                                         where s.Cluster == Cluster
                                          select sa).ToList();
 
                         lstparticipantListsformgt = lstResult;
