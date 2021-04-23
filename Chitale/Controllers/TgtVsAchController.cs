@@ -25,9 +25,7 @@ namespace Chitale.Controllers
         public ActionResult Participantwise()
         {
             ManagementViewModel objModel = new ManagementViewModel();
-            objModel.ClusterList = MDR.GetClusterList();
-            objModel.SubClusterList = MDR.GetSubClusterList();
-            objModel.CityList = MDR.GetCityList();
+            objModel.ClusterList = MDR.GetClusterList();          
             string[] names = DateTimeFormatInfo.CurrentInfo.MonthNames;
             List<SelectListItem> MonthItems = new List<SelectListItem>();
             int Month = 1;

@@ -128,9 +128,7 @@ namespace Chitale.Controllers
         public ActionResult OrdertoRavanaDays()
         {
             ManagementViewModel objModel = new ManagementViewModel();
-            objModel.ClusterList = MDR.GetClusterList();
-            objModel.SubClusterList = MDR.GetSubClusterList();
-            objModel.CityList = MDR.GetCityList();
+            objModel.ClusterList = MDR.GetClusterList();            
             return View(objModel);
         }
 

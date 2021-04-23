@@ -18,13 +18,13 @@
                 <div style="display:flex;">
                     <div class="col-md-3 col-xl-3">
                         Cluster <br />
-                        @Html.DropDownListFor(model => model.ClusterList, new SelectList(Model.ClusterList, "Value", "Text"), "All", htmlAttributes: new { @class = "input50", @id = "ddlClusterList" }) &nbsp;&nbsp;&nbsp;&nbsp;
+                        @Html.DropDownListFor(model => model.ClusterList, new SelectList(Model.ClusterList, "Value", "Text"), "All", htmlAttributes: new { @class = "input50", @id = "ddlClusterList", @onchange = "FillSubCluster()" }) &nbsp;&nbsp;&nbsp;&nbsp;
                     </div>
                     <div class="col-md-3 col-xl-3">
-                        Sub Cluster <br /> @Html.DropDownListFor(model => model.SubClusterList, new SelectList(Model.SubClusterList, "Value", "Text"), "All", htmlAttributes: new { @class = "input50", @id = "ddlSubClusterList" })&nbsp;&nbsp;&nbsp;&nbsp;
+                        Sub Cluster <br /> @Html.DropDownListFor(model => model.SubClusterList, new SelectList(Enumerable.Empty<SelectListItem>(), "Value", "Text"), "All", htmlAttributes: new { @class = "input50", @id = "ddlSubClusterList", @onchange = "FillCity()" })&nbsp;&nbsp;&nbsp;&nbsp;
                     </div>
                     <div class="col-md-3 col-xl-3">
-                        City <br />@Html.DropDownListFor(model => model.CityList, new SelectList(Model.CityList, "Value", "Text"), "All", htmlAttributes: new { @class = "input50", @id = "ddlCityList" })
+                        City <br />@Html.DropDownListFor(model => model.CityList, new SelectList(Enumerable.Empty<SelectListItem>(), "Value", "Text"), "All", htmlAttributes: new { @class = "input50", @id = "ddlCityList" })
                     </div>
                 </div>
                 <div>
@@ -102,20 +102,59 @@
         $('#btnFilter').on("click", function () {
             GetOrdertoRavanaDays();
         });
-        $("#ddlClusterList").on('change', function () {
-            $('#ddlSubClusterList').prop('selectedIndex', 0);
-            $('#ddlCityList').prop('selectedIndex', 0);
-        });
-        $("#ddlSubClusterList").on('change', function () {
-            $('#ddlClusterList').prop('selectedIndex', 0);
-            $('#ddlCityList').prop('selectedIndex', 0);
-        });
-        $("#ddlCityList").on('change', function () {
-            $('#ddlClusterList').prop('selectedIndex', 0);
-            $('#ddlSubClusterList').prop('selectedIndex', 0);
-        });
+        //$("#ddlClusterList").on('change', function () {
+        //    $('#ddlSubClusterList').prop('selectedIndex', 0);
+        //    $('#ddlCityList').prop('selectedIndex', 0);
+        //});
+        //$("#ddlSubClusterList").on('change', function () {
+        //    $('#ddlClusterList').prop('selectedIndex', 0);
+        //    $('#ddlCityList').prop('selectedIndex', 0);
+        //});
+        //$("#ddlCityList").on('change', function () {
+        //    $('#ddlClusterList').prop('selectedIndex', 0);
+        //    $('#ddlSubClusterList').prop('selectedIndex', 0);
+        //});
     });
+    function FillSubCluster() {
+        var cluster = $('#ddlClusterList :selected').val();
+        console.log(cluster);
+        $.ajax({
+            url: '@Url.Action("GetSubCluster", "ManagementDashboard")',
+            data: "{'Cluster': '" + cluster + "'}",
+            type: "post",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (objModel) {
+                console.log(objModel.SubClusterList);
+                $("#ddlSubClusterList").html("");
+                $.each(objModel.SubClusterList, function (i,item) {
+                    $("#ddlSubClusterList").append(
+                        $('<option></option>').val(item.Value).html(item.Text));
 
+                });
+            }
+        });
+    }
+    function FillCity() {
+        var Subcluster = $('#ddlSubClusterList :selected').val();
+        console.log(Subcluster);
+        $.ajax({
+            url: '@Url.Action("GetCity", "ManagementDashboard")',
+            data: "{'SubCluster': '" + Subcluster + "'}",
+            type: "post",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (objModel) {
+                console.log(objModel.CityList);
+                $("#ddlCityList").html("");
+                $.each(objModel.CityList, function (i,item) {
+                    $("#ddlCityList").append(
+                        $('<option></option>').val(item.Value).html(item.Text));
+
+                });
+            }
+        });
+    }
     function GetOrdertoRavanaDays() {
         var OrderToRavanaData = [];
         item = {}
@@ -261,7 +300,7 @@
          if ($('#rdnDist').is(":checked")) {
              CustomerType = "Distributors";
          }
-        
+
         var urlLink = "@Url.Action("ExportOrdertoRavanaDaysManagement", "Export")";
         urlLink = urlLink + "?Cluster=" + Cluster + "&SubCluster=" + SubCluster + "&City=" + City + "&FromDate=" + FromDate + "&Todate=" + Todate + "&Type=" + CustomerType + "";
         window.location.href = urlLink;

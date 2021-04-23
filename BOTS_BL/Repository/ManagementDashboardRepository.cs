@@ -157,14 +157,14 @@ namespace BOTS_BL.Repository
                 else
                 {
                     objtransactionmaster = context.TransactionMasters.ToList();
-                    if (Cluster != "All")
+                    if (City != "All")
                     {
                         var lstResult = from s in context.CustomerDetails
                                         join sa in context.TransactionMasters on s.CustomerId equals sa.CustomerId
-                                        where s.Cluster == Cluster
+                                        where s.City == City
                                         select sa;
                         objtransactionmaster = lstResult.ToList();
-                    }
+                    }                   
                     else if (SubCluster != "All")
                     {
                         var lstResult = from s in context.CustomerDetails
@@ -173,14 +173,15 @@ namespace BOTS_BL.Repository
                                         select sa;
                         objtransactionmaster = lstResult.ToList();
                     }
-                    else if (City != "All")
+                    else if(Cluster != "All")
                     {
                         var lstResult = from s in context.CustomerDetails
                                         join sa in context.TransactionMasters on s.CustomerId equals sa.CustomerId
-                                        where s.City == City
+                                        where s.Cluster == Cluster
                                         select sa;
                         objtransactionmaster = lstResult.ToList();
                     }
+
                     if (FromDate != "" && Todate != "")
                     {
                         objtransactionmaster = objtransactionmaster.Where(x => x.OrderDatetime >= Convert.ToDateTime(FromDate) && x.OrderDatetime <= Convert.ToDateTime(Todate)).ToList();
@@ -526,17 +527,17 @@ namespace BOTS_BL.Repository
                     }
                     else
                     {
-                        if(Cluster != "All")
+                        if (City != "All")
                         {
-                            objData = objData.Where(x => x.Cluster == Cluster).ToList();
-                        }
+                            objData = objData.Where(x => x.City == City).ToList();
+                        }                        
                         else if(SubCluster != "All")
                         {
                             objData = objData.Where(x => x.SubCluster == SubCluster).ToList();
                         }
-                        else if(City != "All")
+                        else if (Cluster != "All")
                         {
-                            objData = objData.Where(x => x.City == City).ToList();
+                            objData = objData.Where(x => x.Cluster == Cluster).ToList();
                         }
                         if (FromDate != "" && Todate != "")
                         {

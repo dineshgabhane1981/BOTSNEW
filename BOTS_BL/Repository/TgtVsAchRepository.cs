@@ -63,18 +63,19 @@ namespace BOTS_BL.Repository
                                    DateVal = sa.Date
 
                                }).ToList();
-                    if (Cluster != "All")
+                    if (City != "All")
                     {
-                        objData = objData.Where(x => x.DateVal.Value.Month == DateTime.Today.Month && x.Cluster == Cluster).ToList();
+                        objData = objData.Where(x => x.DateVal.Value.Month == DateTime.Today.Month && x.City == City).ToList();
                     }
+                    
                     else if (SubCluster != "All")
                     {
                         objData = objData.Where(x => x.DateVal.Value.Month == DateTime.Today.Month && x.SubCluster == SubCluster).ToList();
 
                     }
-                    else if (City != "All")
+                    else if(Cluster != "All")
                     {
-                        objData = objData.Where(x => x.DateVal.Value.Month == DateTime.Today.Month && x.City == City).ToList();
+                        objData = objData.Where(x => x.DateVal.Value.Month == DateTime.Today.Month && x.Cluster == Cluster).ToList();
                     }
                     if (Month != "" && Year != "")
                     {
