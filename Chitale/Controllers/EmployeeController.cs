@@ -365,5 +365,10 @@ namespace Chitale.Controllers
             }
             return null;
         }
+
+        public ActionResult Products()
+        {
+            return View();
+        }
     }
 }

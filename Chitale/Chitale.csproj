@@ -317,6 +317,7 @@
     <Content Include="Views\Employee\OrdertoRavanaDays.cshtml" />
     <Content Include="Views\Employee\NoActionParticipants.cshtml" />
     <Content Include="Views\participant\Products.cshtml" />
+    <Content Include="Views\Employee\Products.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
