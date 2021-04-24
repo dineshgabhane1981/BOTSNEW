@@ -71,6 +71,7 @@
                                                 <th scope="col">Cluster</th>
                                                 <th scope="col">Sub-Cluster</th>
                                                 <th scope="col">Rank</th>
+                                                <th scope="col">Cluster Rank</th>
                                                 <th scope="col">Total Points</th>
                                             </tr>
                                         </thead>
@@ -95,19 +96,21 @@
                                                             <td>@item.City</td>
                                                             <td>@item.Cluster</td>
                                                             <td>@item.SubCluster</td>
-                                                            <td style="text-align:center;" >@item.Rank</td>
-                                                            <td>@item.TotalPoints</td>
+                                                            <td style="text-align:center;">@item.Rank</td>
+                                                            <td style="text-align:center;">@item.ClusterRank</td>
+                                                            <td style="text-align:right;">@item.TotalPoints</td>
                                                         </tr>
                                                         if (item.ParticipantType == "Distributors")
                                                         {
                                                             var dynamicIdTr = "trActivities" + item.Id;
                                                             var dynamicIdDiv = "dvActivities" + item.Id;
                                                             <tr id="@dynamicIdTr" style="display:none;">
-                                                                <td colspan="9">
+                                                                <td colspan="10">
                                                                     <div id="@dynamicIdDiv" style="display:none;" class="table-responsive">
 
                                                                     </div>
                                                                 </td>
+                                                                <td style="display:none;"></td>
                                                                 <td style="display:none;"></td>
                                                                 <td style="display:none;"></td>
                                                                 <td style="display:none;"></td>
@@ -124,14 +127,14 @@
                                                 else
                                                 {
                                                     <tr>
-                                                        <td colspan="9" align="center">No Data Available</td>
+                                                        <td colspan="10" align="center">No Data Available</td>
                                                     </tr>
                                                 }
                                             }
                                             else
                                             {
                                                 <tr>
-                                                    <td colspan="9" align="center">No Data Available</td>
+                                                    <td colspan="10" align="center">No Data Available</td>
                                                 </tr>
                                             }
                                         </tbody>
@@ -142,7 +145,7 @@
 
                     </div>
                 </div>
-            
+
                 <button onclick="topFunction()" id="myBtn" title="Go to top">Top</button>
             </div>
         </div>
@@ -152,31 +155,17 @@
 <script>
     $(document).ready(function () {
         $('#activityTable').DataTable({
-            "aaSorting": [],
             "paging": true,
             "ordering": false,
             "info": false,
             "bFilter": true,
             "pageLength": 25,
-            "pagingType": "simple_numbers",
-            //language: {
-            //    paginate: {
-            //        next: '&#8594;', // or '→'
-            //        previous: '&#8592;' // or '←'
-            //    }
-            //}
-            aoColumnDefs: [
-                {
-                    bSortable: false,
-                    aTargets: [-1, -2]
-                }
-            ]
+            "pagingType": "simple_numbers"
         });
 
         $('#activityTable_filter').hide();
 
         $('#txtSearch').on('keyup', function () {
-
             $.fn.dataTable.ext.search.push(function (settings, searchData) {
                 var term = $('#txtSearch').val().toLowerCase()
                 for (var i = 0; i < searchData.length; i++) {
@@ -189,7 +178,6 @@
             var table = $('#activityTable').DataTable();
             table.draw();
         });
-       //GetParticipantList();
     });
 
     mybutton = document.getElementById("myBtn");
@@ -283,7 +271,7 @@
     }
 
     var tableData = [];
-    function GetParticipantList() {
+    @*function GetParticipantList() {
         $("#divLoader").show();
         $.ajax({
             type: "POST",
@@ -339,7 +327,7 @@
             }
         });
 
-    }
+    }*@
     function GetNestedParticipantList(Id, participantType) {
         console.log(Id);
         console.log(participantType);
@@ -366,9 +354,9 @@
 
     }
 
-    function ExportDataExcel() { 
+    function ExportDataExcel() {
         $("#divLoader").show();
-        var urlLink = "@Url.Action("ExportParticipantList", "Export")";        
+        var urlLink = "@Url.Action("ExportParticipantList", "Export")";
         window.location.href = urlLink;
         $("#divLoader").hide();
     }

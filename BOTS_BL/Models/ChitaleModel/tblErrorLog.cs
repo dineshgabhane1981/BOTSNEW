@@ -12,15 +12,15 @@ namespace BOTS_BL.Models.ChitaleModel
         [Key]
         public long Logid { get; set; }
 
-        [StringLength(100)]
+        
         public string ExceptionMsg { get; set; }
 
-        [StringLength(100)]
+        
         public string ExceptionType { get; set; }
 
         public string ExceptionSource { get; set; }
 
-        [StringLength(100)]
+        
         public string ExceptionURL { get; set; }
 
         public DateTime? Logdate { get; set; }
