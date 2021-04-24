@@ -175,17 +175,45 @@ namespace BOTS_BL.Repository
             return objData;
         }
 
-        public NoActionModelTile GetNoActionParticipantsTilesData(string CustomerId)
+        public NoActionModelTile GetNoActionParticipantsTilesData(string CustomerId, string CustomerType)
         {
             NoActionModelTile objData = new NoActionModelTile();
             using (var context = new ChitaleDBContext())
             {
                 try
                 {
+                    if (CustomerType == "Sales Executive")
+                    {
+                        CustomerType = "SalesExecutive";
+                    }
+                    else if (CustomerType == "ASM (Sales Manager)")
+                    {
+                        CustomerType = "AreaSalesManager";
+                    }
+                    else if (CustomerType == "Sales Officer")
+                    {
+                        CustomerType = "SalesOfficer";
+                    }
+                    else if (CustomerType == "Sales Representative")
+                    {
+                        CustomerType = "SalesRepresentative";
+                    }
+                    else if (CustomerType == "State Head")
+                    {
+                        CustomerType = "StateHead";
+                    }
+                    else if (CustomerType == "Zonal Head")
+                    {
+                        CustomerType = "ZonalHead";
+                    }
+                    else if (CustomerType == "National Head")
+                    {
+                        CustomerType = "NationalHead";
+                    }
                     objData = context.Database.SqlQuery<NoActionModelTile>("Chitale_NoActionByParticipant1 @pi_Date, @pi_CustomerId, @pi_CustomerType",
                                   new SqlParameter("@pi_Date", DateTime.Now.ToString("yyyy-MM-dd")),
-                                  new SqlParameter("@pi_CustomerId", ""),
-                                  new SqlParameter("@pi_CustomerType", "")).FirstOrDefault<NoActionModelTile>();
+                                  new SqlParameter("@pi_CustomerId", CustomerId),
+                                  new SqlParameter("@pi_CustomerType", CustomerType)).FirstOrDefault<NoActionModelTile>();
                 }
                 catch (Exception ex)
                 {
@@ -196,22 +224,51 @@ namespace BOTS_BL.Repository
 
         }
 
-        public List<NoActionParticipantData> GetNoActionParticipantsData(string type, string CustomerId)
+        public List<NoActionParticipantData> GetNoActionParticipantsData(string type, string CustomerId, string CustomerType)
         {
             List<NoActionParticipantData> objData = new List<NoActionParticipantData>();
             using (var context = new ChitaleDBContext())
             {
                 try
                 {
+                    if (CustomerType == "Sales Executive")
+                    {
+                        CustomerType = "SalesExecutive";
+                    }
+                    else if (CustomerType == "ASM (Sales Manager)")
+                    {
+                        CustomerType = "AreaSalesManager";
+                    }
+                    else if (CustomerType == "Sales Officer")
+                    {
+                        CustomerType = "SalesOfficer";
+                    }
+                    else if (CustomerType == "Sales Representative")
+                    {
+                        CustomerType = "SalesRepresentative";
+                    }
+                    else if (CustomerType == "State Head")
+                    {
+                        CustomerType = "StateHead";
+                    }
+                    else if (CustomerType == "Zonal Head")
+                    {
+                        CustomerType = "ZonalHead";
+                    }
+                    else if (CustomerType == "National Head")
+                    {
+                        CustomerType = "NationalHead";
+                    }
                     objData = context.Database.SqlQuery<NoActionParticipantData>("Chitale_NoActionByParticipant2 @pi_Date, @pi_CustomerId, @pi_CustomerType,@pi_SelectedType",
                                   new SqlParameter("@pi_Date", DateTime.Now.ToString("yyyy-MM-dd")),
-                                  new SqlParameter("@pi_CustomerId", ""),
-                                  new SqlParameter("@pi_CustomerType", ""),
+                                  new SqlParameter("@pi_CustomerId", CustomerId),
+                                  new SqlParameter("@pi_CustomerType", CustomerType),
                                   new SqlParameter("@pi_SelectedType", type)).ToList<NoActionParticipantData>();
 
                     foreach (var item in objData)
                     {
                         item.LastInvoiceDateStr = item.LastInvoiceDate.ToString("dd-MM-yyyy");
+                        item.BalancePointsStr = String.Format(new CultureInfo("en-IN", false), "{0:n}", Convert.ToDouble(item.BalancePoints));
                     }
 
                     if (objData != null)

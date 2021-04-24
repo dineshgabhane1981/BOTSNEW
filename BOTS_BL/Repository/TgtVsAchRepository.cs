@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -100,6 +101,10 @@ namespace BOTS_BL.Repository
                 if (CustomerType != "0")
                 {
                     objData = objData.Where(x => x.Type == CustomerType).ToList();
+                }
+                foreach(var item in objData)
+                {
+                    item.MonthYear = CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(item.DateVal.Value.Month)  + "-" + item.DateVal.Value.Year;
                 }
 
             }

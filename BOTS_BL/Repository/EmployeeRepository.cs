@@ -373,5 +373,94 @@ namespace BOTS_BL.Repository
 
             return lstparticipantListsformgt;
         }
+
+        public List<OrderVsRavanaDay> GetOrderVsRavanaDayData(string Cluster, string SubCluster, string City, string FromDate, string Todate, string type, string CustomerId, string CustomerType)
+        {
+            List<OrderVsRavanaDay> objData = new List<OrderVsRavanaDay>();
+            using (var context = new ChitaleDBContext())
+            {
+                try
+                {
+                    List<string> Ids = new List<string>();
+                    if (CustomerType == "Sales Executive")
+                    {
+                        Ids = context.SalesmanMappings.Where(x => x.SalesExecutive == CustomerId).Select(y => y.ParticipantId).ToList();
+                    }
+                    if (CustomerType == "ASM (Sales Manager)")
+                    {
+                        Ids = context.SalesmanMappings.Where(x => x.AreaSalesManager == CustomerId).Select(y => y.ParticipantId).ToList();
+                    }
+                    if (CustomerType == "Sales Officer")
+                    {
+                        Ids = context.SalesmanMappings.Where(x => x.SalesOfficer == CustomerId).Select(y => y.ParticipantId).ToList();
+                    }
+                    if (CustomerType == "Sales Representative")
+                    {
+                        Ids = context.SalesmanMappings.Where(x => x.SalesRepresentative == CustomerId).Select(y => y.ParticipantId).ToList();
+                    }
+                    if (CustomerType == "National Head")
+                    {
+                        Ids = context.SalesmanMappings.Where(x => x.NationalHead == CustomerId).Select(y => y.ParticipantId).ToList();
+                    }
+                    if (CustomerType == "Zonal Head")
+                    {
+                        Ids = context.SalesmanMappings.Where(x => x.ZonalHead == CustomerId).Select(y => y.ParticipantId).ToList();
+                    }
+                    if (CustomerType == "State Head")
+                    {
+                        Ids = context.SalesmanMappings.Where(x => x.StateHead == CustomerId).Select(y => y.ParticipantId).ToList();
+                    }
+                    
+                    objData = context.OrderVsRavanaDays.Where(x => Ids.Contains(x.CustomerId)).ToList();
+
+                    if (Cluster == "All" && SubCluster == "All" && City == "All" && FromDate == "" && Todate == "")
+                    {
+                        objData = context.OrderVsRavanaDays.Where(x => Ids.Contains(x.CustomerId)).ToList();
+                    }
+                    else
+                    {
+                        if (City != "All")
+                        {
+                            objData = objData.Where(x => x.City == City).ToList();
+                        }
+
+                        else if (SubCluster != "All")
+                        {
+                            objData = objData.Where(x => x.SubCluster == SubCluster).ToList();
+                        }
+                        else if (Cluster != "All")
+                        {
+                            objData = objData.Where(x => x.Cluster == Cluster).ToList();
+                        }
+                        if (FromDate != "" && Todate != "")
+                        {
+                            objData = objData.Where(x => x.Date >= Convert.ToDateTime(FromDate) && x.Date <= Convert.ToDateTime(Todate)).ToList();
+                        }
+                        else
+                        {
+                            if (FromDate != "")
+                            {
+                                objData = objData.Where(x => x.Date >= Convert.ToDateTime(FromDate)).ToList();
+                            }
+                            if (Todate != "")
+                            {
+                                objData = objData.Where(x => x.Date >= Convert.ToDateTime(Todate)).ToList();
+                            }
+                        }
+                    }
+                    if (type != "0")
+                    {
+                        objData = objData.Where(x => x.CustomerType == type).ToList();
+                    }
+
+                }
+                catch (Exception ex)
+                {
+                    newexception.AddException(ex);
+                }
+            }
+
+            return objData;
+        }
     }
 }

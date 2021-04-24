@@ -286,7 +286,7 @@
              CustomerType = "Distributors";
          }
 
-        var urlLink = "@Url.Action("ExportOrdertoRavanaDaysManagement", "Export")";
+        var urlLink = "@Url.Action("ExportOrdertoRavanaDaysParticipant", "Participant")";
         urlLink = urlLink + "?Cluster=" + Cluster + "&SubCluster=" + SubCluster + "&City=" + City + "&FromDate=" + FromDate + "&Todate=" + Todate + "&Type=" + CustomerType + "";
         window.location.href = urlLink;
         $("#divLoader").hide();

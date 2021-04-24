@@ -1,8 +1,9 @@
 ﻿@model Chitale.ViewModel.ManagementViewModel
 @{
-    ViewBag.Title = "Participant Wise";
+    ViewBag.Title = "Order to Ravana Days";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+
 
 <div class="app-main__inner">
     <div class="row">
@@ -10,10 +11,9 @@
             <div class="card-header-tab card-header-tab-animation card-header" style="margin-bottom:10px;">
                 <div class="card-header-title">
                     <i class="header-icon lnr-apartment icon-gradient bg-love-kiss"> </i>
-                    FOCUS vs ACHIEVEMENT – PARTICIPANT-WISE &nbsp;&nbsp;&nbsp;&nbsp; <span id="spnMonthDetails">(Current Month)</span>
+                    ORDER vs RAVANA DAYS
                 </div>
             </div>
-
             <div class="card-header-tab" style="margin-bottom:20px;">
                 <div style="display:flex;">
                     <div class="col-md-3 col-xl-3">
@@ -24,18 +24,16 @@
                         Sub Cluster <br /> @Html.DropDownListFor(model => model.SubClusterList, new SelectList(Enumerable.Empty<SelectListItem>(), "Value", "Text"), "All", htmlAttributes: new { @class = "input50", @id = "ddlSubClusterList", @onchange = "FillCity()" })&nbsp;&nbsp;&nbsp;&nbsp;
                     </div>
                     <div class="col-md-3 col-xl-3">
-                        City <br /> @Html.DropDownListFor(model => model.CityList, new SelectList(Enumerable.Empty<SelectListItem>(), "Value", "Text"), "All", htmlAttributes: new { @class = "input50", @id = "ddlCityList" })
+                        City <br />@Html.DropDownListFor(model => model.CityList, new SelectList(Enumerable.Empty<SelectListItem>(), "Value", "Text"), "All", htmlAttributes: new { @class = "input50", @id = "ddlCityList" })
                     </div>
                 </div>
-                <div style="margin-left:15px;">
-                    <br />
+                <div>
+                    <br />        &nbsp;&nbsp;&nbsp;
                     <input type="radio" id="rdnSS" checked name="cust_type" /> Super Stockiest &nbsp;&nbsp;&nbsp;&nbsp;
-                    <input type="radio" id="rdnDist" name="cust_type" /> Distributors &nbsp;&nbsp;&nbsp;&nbsp;
-                    <input type="radio" id="rdnRetailer" name="cust_type" /> Retailers <br /><br />
-                    @Html.DropDownListFor(model => model.MonthsList, new SelectList(Model.MonthsList, "Value", "Text"), "Select Month", htmlAttributes: new { @class = "input50", @id = "ddlMonthList" })&nbsp;&nbsp;&nbsp;&nbsp;
-                    @Html.DropDownListFor(model => model.YearList, new SelectList(Model.YearList, "Value", "Text"), "Select Year", htmlAttributes: new { @class = "input50", @id = "ddlYearList" })
+                    <input type="radio" id="rdnDist" name="cust_type" /> Distributors <br /><br />
+                    <input id="txtFromDate" placeholder="From Date" class="input50" />&nbsp;&nbsp;&nbsp;&nbsp;
+                    <input id="txtToDate" placeholder="To Date" class="input50" />
                     <button type="button" id="btnFilter" style="margin-left:17px;margin-top:5px;" class="btn btn-primary"><b>FILTER</b></button>
-
                 </div>
             </div>
             <div class="row mb-3">
@@ -53,16 +51,12 @@
                             </ul>
                         </div>
                         <div class="row" id="divactivityTable">
-
                             <div class="table-responsive">
-
                                 <table class="table" id="activityTable" cellspacing="0" cellpadding="0">
                                     <thead>
                                         <tr style="text-align:center;">
-                                            <td scope="col" style="border:1px solid black;border-left:0px;" colspan="7"></td>
-                                            <td scope="col" style="border:1px solid black; font-size:18px;" colspan="3"><b>Volume-wise</b> </td>
-
-                                            <td scope="col" style="border:1px solid black;border-right:0px; font-size:18px;" colspan="3"><b>Value-wise</b> </td>
+                                            <td scope="col" style="border:1px solid black;border-left:0px;" colspan="8"></td>
+                                            <td scope="col" style="border:1px solid black;border-right:0px; font-size:18px;" colspan="4"><b>Order Count with days diff</b> </td>
                                         </tr>
                                         <tr>
                                             <th scope="col">Type</th>
@@ -71,13 +65,12 @@
                                             <th scope="col">Cluster</th>
                                             <th scope="col">Sub Cluster</th>
                                             <th scope="col">City</th>
-                                            <th scope="col">Date</th>                                            
-                                            <th scope="col">Focus</th>
-                                            <th scope="col">Ach</th>
-                                            <th scope="col">Ach %</th>
-                                            <th scope="col">Focus</th>
-                                            <th scope="col">Ach</th>
-                                            <th scope="col">Ach %</th>
+                                            <th scope="col">Order Count</th>
+                                            <th scope="col">Avg Diff in Days</th>
+                                            <th scope="col">1</th>
+                                            <th scope="col">2</th>
+                                            <th scope="col">3</th>
+                                            <th scope="col">4</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -95,16 +88,25 @@
 <script>
     var tableData = [];
     $(document).ready(function () {
-        GetSummeryDetails();
-        $('#btnFilter').on("click", function () {
-            GetSummeryDetails();
+        var today = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
+        $("#txtFromDate").datepicker({
+            dateFormat: "yy-mm-dd",
+            maxDate: today,
         });
-        
+        $("#txtToDate").datepicker({
+            dateFormat: "yy-mm-dd",
+            maxDate: today,
+        });
+
+        GetOrdertoRavanaDays();
+        $('#btnFilter').on("click", function () {
+            GetOrdertoRavanaDays();
+        });
+
     });
     function FillSubCluster() {
-        var items1 = '<option>All</option>';
-        $("#ddlCityList").html(items1);
-        $("#ddlSubClusterList").html(items1);
+        $("#ddlSubClusterList").html("");
+        $("#ddlCityList").html("");
         var cluster = $('#ddlClusterList :selected').val();
         console.log(cluster);
         $.ajax({
@@ -116,13 +118,12 @@
             success: function (objModel) {
                 console.log(objModel.SubClusterList);
                 $("#ddlSubClusterList").html("");
-                var items = '<option value="0">All</option>';
+                var items = '<option>All</option>';
                 $.each(objModel.SubClusterList, function (i, item) {
                     items += "<option value='" + item.Value + "'>" + item.Text + "</option>";
                 });
                 $("#ddlSubClusterList").html(items);
                 $("#ddlCityList").val("All");
-
             }
         });
     }
@@ -146,15 +147,14 @@
             }
         });
     }
-    function GetSummeryDetails() {
-        console.log($('#ddlMonthList').val())
-        var SummeryData = [];
+    function GetOrdertoRavanaDays() {
+        var OrderToRavanaData = [];
         item = {}
         item["Cluster"] = $('#ddlClusterList :selected').text();
         item["SubCluster"] = $('#ddlSubClusterList :selected').text();
         item["City"] = $('#ddlCityList :selected').text();
-        item["Month"] = $('#ddlMonthList').val();
-        item["Year"] = $('#ddlYearList').val();
+        item["FromDate"] = $("#txtFromDate").val();
+        item["Todate"] = $('#txtToDate').val();
         item["CustomerType"] = "0";
         if ($('#rdnSS').is(":checked")) {
             item["CustomerType"] = "SuperStockiest";
@@ -162,17 +162,13 @@
         if ($('#rdnDist').is(":checked")) {
             item["CustomerType"] = "Distributors";
         }
-        if ($('#rdnRetailer').is(":checked")) {
-            item["CustomerType"] = "Retailers";
-        }
 
-
-        SummeryData.push(item);
-        var data = JSON.stringify(SummeryData);
+        OrderToRavanaData.push(item);
+        var data = JSON.stringify(OrderToRavanaData);
         $("#divLoader").show();
         $.ajax({
             type: "POST",
-            url: '@Url.Action("GetParticipantData")',
+            url: '@Url.Action("GetOrdertoRavanaDaysData", "Employee")',
             data: '{jsonData: ' + JSON.stringify(data) + '}',
             contentType: "application/json; charset=utf-8",
             dataType: "json",
@@ -182,35 +178,21 @@
                     tableData.length = 0;
                     $.map(response, function (item) {
                         optionItem = {}
-                        optionItem["Type"] = item.Type;
-                        optionItem["ID"] = item.ID;
-                        optionItem["Name"] = item.Name;
+                        optionItem["CustomerType"] = item.CustomerType;
+                        optionItem["CustomerId"] = item.CustomerId;
+                        optionItem["CustomerName"] = item.CustomerName;
                         optionItem["Cluster"] = item.Cluster;
                         optionItem["SubCluster"] = item.SubCluster;
                         optionItem["City"] = item.City;
-                        optionItem["Date"] = item.MonthYear;
-                        optionItem["VolTgt"] = item.VolTgt;
-                        optionItem["VolAch"] = item.VolAch;
-                        optionItem["VolAchPer"] = item.VolAchPer;
-                        optionItem["ValTgt"] = item.ValTgt;
-                        optionItem["ValAch"] = item.ValAch;
-                        optionItem["ValAchPer"] = item.ValAchPer;
+                        optionItem["OrderCount"] = item.OrderCount;
+                        optionItem["AvgDiffInDays"] = item.AvgDiffInDays;
+                        optionItem["Diff1"] = item.Diff1;
+                        optionItem["Diff2"] = item.Diff2;
+                        optionItem["Diff3"] = item.Diff3;
+                        optionItem["Diff4"] = item.Diff4;
                         tableData.push(optionItem);
                     });
                     DrawTable();
-                    if ($('#ddlMonthList').val() == "" && $('#ddlYearList').val() == "") {
-                        $("#spnMonthDetails").text("(Current Month)")
-                    }
-                    else if ($('#ddlMonthList').val() != "" && $('#ddlYearList').val() != "") {
-                        $("#spnMonthDetails").text($("#ddlMonthList option:selected").text() + " - " + $("#ddlYearList option:selected").text());
-                    }
-                    else if ($('#ddlMonthList').val() !="") {
-                        $("#spnMonthDetails").text($("#ddlMonthList option:selected").text());
-                    }
-                    else if ($('#ddlYearList').val() != "") {
-                        $("#spnMonthDetails").text($("#ddlYearList option:selected").text());
-                    }
-                    $('#ddlYearList').val()
                     $("#divLoader").hide();
                 }
             },
@@ -223,6 +205,7 @@
                 $("#divLoader").hide();
             }
         });
+
     }
     function DrawTable() {
         var table1 = $('#activityTable').DataTable();
@@ -237,31 +220,39 @@
             "pageLength": 10,
             "pagingType": "simple_numbers",
             "columns": [
-                { data: "Type" },
-                { data: "ID" },
-                {
-
-                    "mData": "Name",
-                    "mRender": function (data, type, row) {
-                        var id = row.ID;
-                        var Type = row.Type;
-                        var URL = '@Url.Action("TgtVsAch", "PointsLedger")';
-                        var actualURL = URL + "?CustomerId=" + id + "&CustomerType=" + Type;
-                        return '<a target=\"_blank\"  class=\"login\" href=' + actualURL + '>' + data + '</a>';
-
-                    }
-                },
-                //{ data: "Name" },
+                { data: "CustomerType" },
+                { data: "CustomerId" },
+                { data: "CustomerName" },
                 { data: "Cluster" },
                 { data: "SubCluster" },
                 { data: "City" },
-                { data: "Date" },
-                { data: "VolTgt" },
-                { data: "VolAch" },
-                { data: "VolAchPer" },
-                { data: "ValTgt" },
-                { data: "ValAch" },
-                { data: "ValAchPer" }
+                { data: "OrderCount" },
+                { data: "AvgDiffInDays" },
+                {
+                    "mData": "Diff1",
+                    "mRender": function (data, type, row) {
+                        return data+"%";
+                    }
+                },
+                {
+                    "mData": "Diff2",
+                    "mRender": function (data, type, row) {
+                        return data + "%";
+                    }
+                },
+                {
+                    "mData": "Diff3",
+                    "mRender": function (data, type, row) {
+                        return data + "%";
+                    }
+                },
+                {
+                    "mData": "Diff4",
+                    "mRender": function (data, type, row) {
+                        return data + "%";
+                    }
+                }
+
             ],
             aoColumnDefs: [
                 {
@@ -290,27 +281,45 @@
 
     function ExportDataExcel() {
         $("#divLoader").show();
-        var Cluster = $('#ddlClusterList :selected').text();
-        var SubCluster = $('#ddlSubClusterList :selected').text();
-        var City = $('#ddlCityList :selected').text();
-        var Month = $('#ddlMonthList').val();
-        var Year = $('#ddlYearList').val();
-        var CustomerType = "0";
-        if ($('#rdnSS').is(":checked")) {
-            CustomerType = "SuperStockiest";
-        }
-        if ($('#rdnDist').is(":checked")) {
-            CustomerType = "Distributors";
-        }
-        if ($('#rdnRetailer').is(":checked")) {
-            CustomerType = "Retailers";
-        }
+         var Cluster = $('#ddlClusterList :selected').text();
+         var SubCluster = $('#ddlSubClusterList :selected').text();
+         var City = $('#ddlCityList :selected').text();
+         var FromDate = $("#txtFromDate").val();
+         var Todate = $('#txtToDate').val();
+         var CustomerType = "0";
+         if ($('#rdnSS').is(":checked")) {
+             CustomerType = "SuperStockiest";
+         }
+         if ($('#rdnDist').is(":checked")) {
+             CustomerType = "Distributors";
+         }
 
-        var urlLink = "@Url.Action("ExportParticipantWiseManagement", "Export")";
-        urlLink = urlLink + "?Cluster=" + Cluster + "&SubCluster=" + SubCluster + "&City=" + City + "&Month=" + Month + "&Year=" + Year + "&Type=" + CustomerType + "";
+        var urlLink = "@Url.Action("ExportOrdertoRavanaDaysEmployee", "Employee")";
+        urlLink = urlLink + "?Cluster=" + Cluster + "&SubCluster=" + SubCluster + "&City=" + City + "&FromDate=" + FromDate + "&Todate=" + Todate + "&Type=" + CustomerType + "";
         window.location.href = urlLink;
         $("#divLoader").hide();
     }
 
-</script>
 
+</script>
+<style>
+
+
+
+    table.dataTable thead .sorting_asc {
+        background: url("https://cdn.datatables.net/1.10.0/images/sort_asc.png") no-repeat center left;
+    }
+
+    table.dataTable thead .sorting_desc {
+        background: url("https://cdn.datatables.net/1.10.0/images/sort_desc.png") no-repeat center left;
+    }
+
+    table.dataTable thead .sorting {
+        background: url("https://cdn.datatables.net/1.10.0/images/sort_both.png") no-repeat center left;
+    }
+</style>
+
+<script src="~/Scripts/jquery-ui-1.12.1.js"></script>
+<script src="~/Scripts/jquery-ui-1.12.1.min.js"></script>
+<link href="~/Content/themes/base/jquery-ui.min.css" rel="stylesheet" />
+<link href="~/Content/themes/base/jquery-ui.css" rel="stylesheet" />
