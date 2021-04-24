@@ -21,6 +21,7 @@ namespace BOTS_BL.Models.ChitaleModel
         public decimal? ValAch { get; set; }
         public decimal? ValAchPer { get; set; }
         public DateTime? DateVal { get; set; }
+        public string MonthYear { get; set; }
     }
     public class GenerateOTPList
     {

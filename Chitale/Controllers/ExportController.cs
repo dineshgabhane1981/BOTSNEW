@@ -411,6 +411,7 @@ namespace Chitale.Controllers
                 tableToExport.Columns.Add("Cluster");
                 tableToExport.Columns.Add("SubCluster");
                 tableToExport.Columns.Add("City");
+                tableToExport.Columns.Add("Date");
                 tableToExport.Columns.Add("Volume Focus");
                 tableToExport.Columns.Add("Volume Ach");
                 tableToExport.Columns.Add("Volume Ach Percentage");
@@ -427,6 +428,7 @@ namespace Chitale.Controllers
                     dr["Cluster"] = item.Cluster;
                     dr["SubCluster"] = item.SubCluster;
                     dr["City"] = item.City;
+                    dr["Date"] = item.MonthYear;
                     dr["Volume Focus"] = item.VolTgt;
                     dr["Volume Ach"] = item.VolAch;
                     dr["Volume Ach Percentage"] = item.VolAchPer;
@@ -577,8 +579,9 @@ namespace Chitale.Controllers
         {
             try
             {
+                var UserSession = (CustomerDetail)Session["ChitaleManagement"];
                 List<NoActionParticipantData> objData = new List<NoActionParticipantData>();
-                objData = NAR.GetNoActionParticipantsData(Type);
+                objData = NAR.GetNoActionParticipantsData(Type, UserSession.CustomerId, UserSession.CustomerType);
                 System.Data.DataTable tableToExport = new System.Data.DataTable();
                 tableToExport.Columns.Add("Type");
                 tableToExport.Columns.Add("ID");

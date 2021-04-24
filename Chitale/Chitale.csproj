@@ -314,6 +314,9 @@
     <Content Include="Views\PointsLedger\_TgtVsAchList.cshtml" />
     <Content Include="Views\participant\OrdertoRavanaDays.cshtml" />
     <Content Include="Views\participant\NoActionParticipants.cshtml" />
+    <Content Include="Views\Employee\OrdertoRavanaDays.cshtml" />
+    <Content Include="Views\Employee\NoActionParticipants.cshtml" />
+    <Content Include="Views\participant\Products.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

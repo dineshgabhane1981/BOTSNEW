@@ -22,14 +22,16 @@ namespace Chitale.Controllers
         }
         public JsonResult GetParticipantsTilesData()
         {
+            var UserSession = (CustomerDetail)Session["ChitaleManagement"];
             NoActionModelTile objData = new NoActionModelTile();
-            objData = NAR.GetNoActionParticipantsTilesData();
+            objData = NAR.GetNoActionParticipantsTilesData(UserSession.CustomerId, UserSession.CustomerType);
             return new JsonResult() { Data = objData, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
         public JsonResult GetParticipantsData(string type)
         {
+            var UserSession = (CustomerDetail)Session["ChitaleManagement"];
             List<NoActionParticipantData> objData = new List<NoActionParticipantData>();
-            objData = NAR.GetNoActionParticipantsData(type);
+            objData = NAR.GetNoActionParticipantsData(type, UserSession.CustomerId, UserSession.CustomerType);
             return new JsonResult() { Data = objData, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
         public ActionResult Products()

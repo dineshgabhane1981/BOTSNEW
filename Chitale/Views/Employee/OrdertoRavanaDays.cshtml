@@ -29,6 +29,8 @@
                 </div>
                 <div>
                     <br />        &nbsp;&nbsp;&nbsp;
+                    <input type="radio" id="rdnSS" checked name="cust_type" /> Super Stockiest &nbsp;&nbsp;&nbsp;&nbsp;
+                    <input type="radio" id="rdnDist" name="cust_type" /> Distributors <br /><br />
                     <input id="txtFromDate" placeholder="From Date" class="input50" />&nbsp;&nbsp;&nbsp;&nbsp;
                     <input id="txtToDate" placeholder="To Date" class="input50" />
                     <button type="button" id="btnFilter" style="margin-left:17px;margin-top:5px;" class="btn btn-primary"><b>FILTER</b></button>
@@ -153,13 +155,20 @@
         item["City"] = $('#ddlCityList :selected').text();
         item["FromDate"] = $("#txtFromDate").val();
         item["Todate"] = $('#txtToDate').val();
+        item["CustomerType"] = "0";
+        if ($('#rdnSS').is(":checked")) {
+            item["CustomerType"] = "SuperStockiest";
+        }
+        if ($('#rdnDist').is(":checked")) {
+            item["CustomerType"] = "Distributors";
+        }
 
         OrderToRavanaData.push(item);
         var data = JSON.stringify(OrderToRavanaData);
         $("#divLoader").show();
         $.ajax({
             type: "POST",
-            url: '@Url.Action("GetOrdertoRavanaDaysData","Participant")',
+            url: '@Url.Action("GetOrdertoRavanaDaysData", "Employee")',
             data: '{jsonData: ' + JSON.stringify(data) + '}',
             contentType: "application/json; charset=utf-8",
             dataType: "json",
@@ -285,7 +294,7 @@
              CustomerType = "Distributors";
          }
 
-        var urlLink = "@Url.Action("ExportOrdertoRavanaDaysParticipant", "Participant")";
+        var urlLink = "@Url.Action("ExportOrdertoRavanaDaysEmployee", "Employee")";
         urlLink = urlLink + "?Cluster=" + Cluster + "&SubCluster=" + SubCluster + "&City=" + City + "&FromDate=" + FromDate + "&Todate=" + Todate + "&Type=" + CustomerType + "";
         window.location.href = urlLink;
         $("#divLoader").hide();

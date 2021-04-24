@@ -111,8 +111,8 @@
                                     Participants
                                 </a>
                             </li>
-                            <li class="@Html.IsSelected(controller: "Participant", action: "NoActionProducts")">
-                                <a class="@Html.IsSelected(controller: "Participant", action: "NoActionProducts")" href="@Url.Action("NoActionProducts", "Participant", new { CustomerId = CustomerId, CustomerType=CustomerType })">
+                            <li class="@Html.IsSelected(controller: "Participant", action: "Products")">
+                                <a class="@Html.IsSelected(controller: "Participant", action: "Products")" href="@Url.Action("Products", "Participant", new { CustomerId = CustomerId, CustomerType=CustomerType })">
                                     <i class="metismenu-icon">
                                     </i>Products
                                 </a>
@@ -243,6 +243,33 @@
                             <i class="metismenu-icon fas fa-hand-point-right"></i>
                             Order to Invoice
                         </a>
+                    </li>
+                    <li>
+                        <a href="@Url.Action("OrdertoRavanaDays", "Employee", new { CustomerId = CustomerId, CustomerType=CustomerType })" class="@Html.IsSelected(controller: "Employee", action: "OrdertoRavanaDays")">
+                            <i class="metismenu-icon fas fa-angle-double-right"></i>
+                            Order to Ravana Days
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <i class="metismenu-icon fas fa-not-equal"></i>
+                            No Action
+                            <i class="metismenu-state-icon pe-7s-angle-down caret-left"></i>
+                        </a>
+                        <ul>
+                            <li class="@Html.IsSelected(controller: "Employee", action: "NoActionParticipants")">
+                                <a class="@Html.IsSelected(controller: "Employee", action: "NoActionParticipants")" href="@Url.Action("NoActionParticipants", "Employee", new { CustomerId = CustomerId, CustomerType=CustomerType })">
+                                    <i class="metismenu-icon"></i>
+                                    Participants
+                                </a>
+                            </li>
+                            <li class="@Html.IsSelected(controller: "Employee", action: "NoActionProducts")">
+                                <a class="@Html.IsSelected(controller: "Employee", action: "NoActionProducts")" href="@Url.Action("NoActionProducts", "Employee", new { CustomerId = CustomerId, CustomerType=CustomerType })">
+                                    <i class="metismenu-icon">
+                                    </i>Products
+                                </a>
+                            </li>
+                        </ul>
                     </li>
                 }
             </ul>

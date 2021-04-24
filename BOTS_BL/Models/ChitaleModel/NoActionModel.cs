@@ -8,16 +8,21 @@ namespace BOTS_BL.Models.ChitaleModel
 {
     public class NoActionModelTile
     {
-        public Int64 SS_All { get; set; }
-        public Int64 SS_30 { get; set; }
-        public Int64 SS_90 { get; set; }
-        public Int64 SS_180 { get; set; }
-        public Int64 SS_365 { get; set; }
-        public Int64 Dist_All { get; set; }
-        public Int64 Dist_30 { get; set; }
-        public Int64 Dist_90 { get; set; }
-        public Int64 Dist_180 { get; set; }
-        public Int64 Dist_365 { get; set; }
+        public Int64? SS_All { get; set; }
+        public Int64? SS_30 { get; set; }
+        public Int64? SS_90 { get; set; }
+        public Int64? SS_180 { get; set; }
+        public Int64? SS_365 { get; set; }
+        public Int64? Dist_All { get; set; }
+        public Int64? Dist_30 { get; set; }
+        public Int64? Dist_90 { get; set; }
+        public Int64? Dist_180 { get; set; }
+        public Int64? Dist_365 { get; set; }
+        public Int64? Ret_All { get; set; }
+        public Int64? Ret_30 { get; set; }
+        public Int64? Ret_90 { get; set; }
+        public Int64? Ret_180 { get; set; }
+        public Int64? Ret_365 { get; set; }
     }
     public class NoActionParticipantData
     {
@@ -31,6 +36,7 @@ namespace BOTS_BL.Models.ChitaleModel
         public DateTime LastInvoiceDate { get; set; }
         public Int64 DaysSinceLastInvoice { get; set; }
         public string LastInvoiceDateStr { get; set; }
+        public string BalancePointsStr { get; set; }
 
     }
 }

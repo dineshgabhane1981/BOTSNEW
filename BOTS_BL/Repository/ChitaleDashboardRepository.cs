@@ -137,8 +137,15 @@ namespace BOTS_BL.Repository
         {
             using (var context = new ChitaleDBContext())
             {
-                context.tblErrorLogs.Add(objerrorlog);
-                context.SaveChanges();
+                try
+                {
+                    context.tblErrorLogs.Add(objerrorlog);
+                    context.SaveChanges();
+                }
+                catch(Exception ex)
+                {
+
+                }
 
             }
 

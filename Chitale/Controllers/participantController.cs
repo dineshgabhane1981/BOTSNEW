@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.IO;
 using System.Net;
 using System.Text;
@@ -10,6 +11,7 @@ using BOTS_BL;
 using BOTS_BL.Models.ChitaleModel;
 using BOTS_BL.Repository;
 using Chitale.ViewModel;
+using ClosedXML.Excel;
 
 namespace Chitale.Controllers
 {
@@ -169,15 +171,134 @@ namespace Chitale.Controllers
         {
             var UserSession = (CustomerDetail)Session["ChitaleUser"];
             NoActionModelTile objData = new NoActionModelTile();
-            objData = pr.GetNoActionParticipantsTilesData(UserSession.CustomerId);
+            objData = pr.GetNoActionParticipantsTilesData(UserSession.CustomerId, UserSession.CustomerType);
             return new JsonResult() { Data = objData, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
         public JsonResult GetParticipantsData(string type)
         {
             var UserSession = (CustomerDetail)Session["ChitaleUser"];
             List<NoActionParticipantData> objData = new List<NoActionParticipantData>();
-            objData = pr.GetNoActionParticipantsData(type, UserSession.CustomerId);
+            objData = pr.GetNoActionParticipantsData(type, UserSession.CustomerId, UserSession.CustomerType);
             return new JsonResult() { Data = objData, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
+        }
+
+        public ActionResult ExportOrdertoRavanaDaysParticipant(string Cluster, string SubCluster, string City, string FromDate, string Todate, string Type)
+        {
+            try
+            {
+                var UserSession = (CustomerDetail)Session["ChitaleUser"];
+                List<OrderVsRavanaDay> objOrderData = new List<OrderVsRavanaDay>();
+                objOrderData = pr.GetOrderVsRavanaDayData(Cluster, SubCluster, City, FromDate, Todate, UserSession.CustomerId);
+
+                System.Data.DataTable tableToExport = new System.Data.DataTable();
+                tableToExport.Columns.Add("Type");
+                tableToExport.Columns.Add("ID");
+                tableToExport.Columns.Add("Name");
+                tableToExport.Columns.Add("Cluster");
+                tableToExport.Columns.Add("Sub Cluster");
+                tableToExport.Columns.Add("City");
+                tableToExport.Columns.Add("Order Count");
+                tableToExport.Columns.Add("Avg Diff in Days");
+                tableToExport.Columns.Add("Days Diff 1");
+                tableToExport.Columns.Add("Days Diff 2");
+                tableToExport.Columns.Add("Days Diff 3");
+                tableToExport.Columns.Add("Days Diff 4");
+
+                foreach (var item in objOrderData)
+                {
+                    DataRow dr = tableToExport.NewRow();
+                    dr["Type"] = item.CustomerType;
+                    dr["ID"] = item.CustomerId;
+                    dr["Name"] = item.CustomerName;
+                    dr["Cluster"] = item.Cluster;
+                    dr["Sub Cluster"] = item.SubCluster;
+                    dr["City"] = item.City;
+                    dr["Order Count"] = item.OrderCount;
+                    dr["Avg Diff in Days"] = item.AvgDiffInDays;
+                    dr["Days Diff 1"] = item.Diff1;
+                    dr["Days Diff 2"] = item.Diff2;
+                    dr["Days Diff 3"] = item.Diff3;
+                    dr["Days Diff 4"] = item.Diff4;
+                    tableToExport.Rows.Add(dr);
+                }
+
+                string ReportName = "OrdertoRavanaDays";
+                string fileName = ReportName + ".xlsx";
+                using (XLWorkbook wb = new XLWorkbook())
+                {
+                    tableToExport.TableName = ReportName;
+                    wb.Worksheets.Add(tableToExport);
+                    using (MemoryStream stream = new MemoryStream())
+                    {
+                        wb.SaveAs(stream);
+                        return File(stream.ToArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex);
+                return null;
+            }
+        }
+
+        public ActionResult ExportNoActionParticipantParticipant(string Type)
+        {
+            try
+            {
+                var UserSession = (CustomerDetail)Session["ChitaleUser"];
+                List<NoActionParticipantData> objData = new List<NoActionParticipantData>();
+                objData = pr.GetNoActionParticipantsData(Type, UserSession.CustomerId, UserSession.CustomerType);
+                System.Data.DataTable tableToExport = new System.Data.DataTable();
+                tableToExport.Columns.Add("Type");
+                tableToExport.Columns.Add("ID");
+                tableToExport.Columns.Add("Name");
+                tableToExport.Columns.Add("Cluster");
+                tableToExport.Columns.Add("Sub Cluster");
+                tableToExport.Columns.Add("City");
+                tableToExport.Columns.Add("Last Invoice Date");
+                tableToExport.Columns.Add("Balance Points");
+                tableToExport.Columns.Add("Days Since Last Inv");
+
+                foreach (var item in objData)
+                {
+                    DataRow dr = tableToExport.NewRow();
+                    dr["Type"] = item.Type;
+                    dr["ID"] = item.Id;
+                    dr["Name"] = item.Name;
+                    dr["Cluster"] = item.Cluster;
+                    dr["Sub Cluster"] = item.SubCluster;
+                    dr["City"] = item.City;
+                    dr["Last Invoice Date"] = item.LastInvoiceDate;
+                    dr["Balance Points"] = item.BalancePoints;
+                    dr["Days Since Last Inv"] = item.DaysSinceLastInvoice;
+
+                    tableToExport.Rows.Add(dr);
+                }
+
+                string ReportName = "NoActionParticipant";
+                string fileName = ReportName + ".xlsx";
+                using (XLWorkbook wb = new XLWorkbook())
+                {
+                    tableToExport.TableName = ReportName;
+                    wb.Worksheets.Add(tableToExport);
+                    using (MemoryStream stream = new MemoryStream())
+                    {
+                        wb.SaveAs(stream);
+                        return File(stream.ToArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex);
+                return null;
+            }
+            return null;
+        }
+        public ActionResult Products()
+        {
+            return View();
         }
     }
 }
