@@ -175,8 +175,9 @@
         GetParticipantList('1');
     });
     function FillSubCluster() {
-        $("#ddlSubClusterList").html("");
-        $("#ddlCityList").html("");
+        var items1 = '<option>All</option>';
+        $("#ddlCityList").html(items1);
+        $("#ddlSubClusterList").html(items1);
         var cluster = $('#ddlClusterList :selected').val();
         console.log(cluster);
         $.ajax({
@@ -193,7 +194,7 @@
                    items += "<option value='" + item.Value + "'>" + item.Text + "</option>";
                 });
                 $("#ddlSubClusterList").html(items);               
-                $("#ddlCityList").val("All");
+               
             }
         });
     }
