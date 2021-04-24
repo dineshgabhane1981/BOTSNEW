@@ -41,32 +41,7 @@ namespace BOTS_BL.Repository
             }
             return clusterItems;
         }
-        //public List<SelectListItem> GetSubClusterList()
-        //{
-        //    List<SubClusterMaster> objsublist = new List<SubClusterMaster>();
-        //    List<SelectListItem> subclusterItems = new List<SelectListItem>();
-        //    try
-        //    {
-        //        using (var context = new ChitaleDBContext())
-        //        {
-        //            objsublist = context.SubClusterMasters.OrderBy(s => s.SubCluster).ToList();
-        //            foreach (var item in objsublist)
-        //            {
-        //                subclusterItems.Add(new SelectListItem
-        //                {
-        //                    Text = item.SubCluster,
-        //                    Value = Convert.ToString(item.SlNo)
-        //                });
-        //            }
-
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        newexception.AddException(ex);
-        //    }
-        //    return subclusterItems;
-        //}
+        
         public List<SelectListItem> GetSubClusterList(int cluster)
         {
             List<SubClusterMaster> objsublist = new List<SubClusterMaster>();
@@ -93,32 +68,7 @@ namespace BOTS_BL.Repository
             }
             return subclusterItems;
         }
-        //public List<SelectListItem> GetCityList()
-        //{
-        //    List<CityMaster> objCitylist = new List<CityMaster>();
-        //    List<SelectListItem> CityItems = new List<SelectListItem>();
-        //    try
-        //    {
-        //        using (var context = new ChitaleDBContext())
-        //        {
-        //            objCitylist = context.CityMasters.OrderBy(s => s.City).ToList();
-        //            foreach (var item in objCitylist)
-        //            {
-        //                CityItems.Add(new SelectListItem
-        //                {
-        //                    Text = item.City,
-        //                    Value = Convert.ToString(item.SlNo)
-        //                });
-        //            }
-
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        newexception.AddException(ex);
-        //    }
-        //    return CityItems;
-        //}
+        
         public List<SelectListItem> GetCityList(int Subcluster)
         {
             List<CityMaster> objCitylist = new List<CityMaster>();
@@ -322,21 +272,21 @@ namespace BOTS_BL.Repository
                             ).ToList<ParticipantListForManagement>();
                     }
                 }               
-                else
-                {
-                    using (var context = new ChitaleDBContext())
-                    {
-                        lstparticipantListsformgt = context.Database.SqlQuery<ParticipantListForManagement>("sp_KYBLoad_MFC @pi_LoginId, @pi_Datetime, @pi_DataType, @pi_City,@pi_Cluster ,@pi_SubCluster",
-                            new SqlParameter("@pi_LoginId", ""),
-                            new SqlParameter("@pi_Datetime", DateTime.Now.ToString("dd-MM-yyyy")),
-                              new SqlParameter("@pi_DataType", ""),
-                                new SqlParameter("@pi_City", ""),
-                            new SqlParameter("@pi_Cluster", ""),
-                            new SqlParameter("@pi_SubCluster", "")
+                //else
+                //{
+                //    using (var context = new ChitaleDBContext())
+                //    {
+                //        lstparticipantListsformgt = context.Database.SqlQuery<ParticipantListForManagement>("sp_KYBLoad_MFC @pi_LoginId, @pi_Datetime, @pi_DataType, @pi_City,@pi_Cluster ,@pi_SubCluster",
+                //            new SqlParameter("@pi_LoginId", ""),
+                //            new SqlParameter("@pi_Datetime", DateTime.Now.ToString("dd-MM-yyyy")),
+                //              new SqlParameter("@pi_DataType", ""),
+                //                new SqlParameter("@pi_City", ""),
+                //            new SqlParameter("@pi_Cluster", ""),
+                //            new SqlParameter("@pi_SubCluster", "")
 
-                            ).ToList<ParticipantListForManagement>();
-                    }
-                }
+                //            ).ToList<ParticipantListForManagement>();
+                //    }
+                //}
 
                 if (lstparticipantListsformgt != null)
                 {

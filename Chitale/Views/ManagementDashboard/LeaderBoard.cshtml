@@ -127,6 +127,9 @@
     });
 
     function FillSubCluster() {
+        $("#ddlSubClusterList").html(""); 
+        $("#ddlCityList").html("");
+        
         var cluster = $('#ddlClusterList :selected').val();
         console.log(cluster);
         $.ajax({
@@ -138,11 +141,13 @@
             success: function (objModel) {
                 console.log(objModel.SubClusterList);
                 $("#ddlSubClusterList").html(""); 
+                var items = '<option>All</option>';
                 $.each(objModel.SubClusterList, function (i,item) {
-                    $("#ddlSubClusterList").append(
-                        $('<option></option>').val(item.Value).html(item.Text));
-                   
+                    items += "<option value='" + item.Value + "'>" + item.Text + "</option>";                   
                 });
+                $("#ddlSubClusterList").html(items);               
+                $("#ddlCityList").val("All");
+               
             }
         });
     }
@@ -157,12 +162,12 @@
             dataType: "json",
             success: function (objModel) {
                 console.log(objModel.CityList);
-                $("#ddlCityList").html("");                
+                $("#ddlCityList").html("");    
+                var items = '<option>All</option>';
                 $.each(objModel.CityList, function (i,item) {
-                    $("#ddlCityList").append(
-                        $('<option></option>').val(item.Value).html(item.Text));
-                   
+                    items += "<option value='" + item.Value + "'>" + item.Text + "</option>";                   
                 });
+                $("#ddlCityList").html(items);
             }
         });
     }
@@ -219,9 +224,7 @@
                         tableData.push(optionItem);
                     });
                     DrawTable();
-                    $('#ddlClusterList').prop('selectedIndex', 0);
-                    //$('#ddlSubClusterList').html("All");
-                    //$("#ddlCityList").html("All");
+                   
                 }
                 else {
 

@@ -17,7 +17,7 @@
             <div class="card-header-tab" style="margin-bottom:20px;">
                 <div style="display:flex;">
                     <div class="col-md-3 col-xl-3">
-                        Cluster <br /> @Html.DropDownListFor(model => model.ClusterList, new SelectList(Model.ClusterList, "Value", "Text"), "All", htmlAttributes: new { @class = "input50", @id = "ddlClusterList",, @onchange = "FillSubCluster()" }) &nbsp;&nbsp;&nbsp;&nbsp;
+                        Cluster <br /> @Html.DropDownListFor(model => model.ClusterList, new SelectList(Model.ClusterList, "Value", "Text"), "All", htmlAttributes: new { @class = "input50", @id = "ddlClusterList", @onchange = "FillSubCluster()" }) &nbsp;&nbsp;&nbsp;&nbsp;
                     </div>
                     <div class="col-md-3 col-xl-3">
                         Sub Cluster <br /> @Html.DropDownListFor(model => model.SubClusterList, new SelectList(Enumerable.Empty<SelectListItem>(), "Value", "Text"), "All", htmlAttributes: new { @class = "input50", @id = "ddlSubClusterList", @onchange = "FillCity()" })&nbsp;&nbsp;&nbsp;&nbsp;
@@ -115,6 +115,8 @@
        
     });
     function FillSubCluster() {
+        $("#ddlSubClusterList").html("");
+        $("#ddlCityList").html("");
         var cluster = $('#ddlClusterList :selected').val();
         console.log(cluster);
         $.ajax({
@@ -126,11 +128,12 @@
             success: function (objModel) {
                 console.log(objModel.SubClusterList);
                 $("#ddlSubClusterList").html("");
-                $.each(objModel.SubClusterList, function (i,item) {
-                    $("#ddlSubClusterList").append(
-                        $('<option></option>').val(item.Value).html(item.Text));
-
+                var items = '<option>All</option>';
+                $.each(objModel.SubClusterList, function (i, item) {
+                    items += "<option value='" + item.Value + "'>" + item.Text + "</option>";
                 });
+                $("#ddlSubClusterList").html(items);
+                $("#ddlCityList").val("All");
             }
         });
     }
@@ -146,11 +149,11 @@
             success: function (objModel) {
                 console.log(objModel.CityList);
                 $("#ddlCityList").html("");
-                $.each(objModel.CityList, function (i,item) {
-                    $("#ddlCityList").append(
-                        $('<option></option>').val(item.Value).html(item.Text));
-
+                var items = '<option>All</option>';
+                $.each(objModel.CityList, function (i, item) {
+                    items += "<option value='" + item.Value + "'>" + item.Text + "</option>";
                 });
+                $("#ddlCityList").html(items);
             }
         });
     }

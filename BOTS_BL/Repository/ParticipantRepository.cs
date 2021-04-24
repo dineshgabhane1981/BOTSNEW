@@ -135,17 +135,18 @@ namespace BOTS_BL.Repository
                     }
                     else
                     {
-                        if (Cluster != "All")
+                        if (City != "All")
                         {
-                            objData = objData.Where(x => x.Cluster == Cluster).ToList();
+                            objData = objData.Where(x => x.City == City).ToList();
                         }
+                        
                         else if (SubCluster != "All")
                         {
                             objData = objData.Where(x => x.SubCluster == SubCluster).ToList();
                         }
-                        else if (City != "All")
+                        else if(Cluster != "All")
                         {
-                            objData = objData.Where(x => x.City == City).ToList();
+                            objData = objData.Where(x => x.Cluster == Cluster).ToList();
                         }
                         if (FromDate != "" && Todate != "")
                         {

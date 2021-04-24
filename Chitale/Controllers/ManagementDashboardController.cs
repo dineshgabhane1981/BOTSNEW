@@ -276,9 +276,7 @@ namespace Chitale.Controllers
         public ActionResult OrdertoRavanaDays()
         {
             ManagementViewModel objModel = new ManagementViewModel();
-            objModel.ClusterList = MDR.GetClusterList();
-            //objModel.SubClusterList = MDR.GetSubClusterList();
-            //objModel.CityList = MDR.GetCityList();
+            objModel.ClusterList = MDR.GetClusterList();            
             return View(objModel);
         }
         public JsonResult GetOrdertoRavanaDaysData(string jsonData)
@@ -312,9 +310,7 @@ namespace Chitale.Controllers
         public ActionResult InvoicetoOrder()
         {
             ManagementViewModel objModel = new ManagementViewModel();
-            objModel.ClusterList = MDR.GetClusterList();
-           // objModel.SubClusterList = MDR.GetSubClusterList();
-          //  objModel.CityList = MDR.GetCityList();
+            objModel.ClusterList = MDR.GetClusterList();         
             return View(objModel);
         }
 
