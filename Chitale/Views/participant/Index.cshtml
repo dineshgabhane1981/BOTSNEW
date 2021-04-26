@@ -96,8 +96,23 @@
                                                             <td>@item.City</td>
                                                             <td>@item.Cluster</td>
                                                             <td>@item.SubCluster</td>
-                                                            <td style="text-align:center;">@item.Rank</td>
-                                                            <td style="text-align:center;">@item.ClusterRank</td>
+                                                            @if (item.Rank == "0")
+                                                            {
+                                                                <td style="text-align:center;">-</td>
+                                                            }
+                                                            else
+                                                            {
+                                                                <td style="text-align:center;">@item.Rank</td>
+                                                            }
+                                                            @if (item.ClusterRank == "0")
+                                                            {
+                                                                <td style="text-align:center;">-</td>
+                                                            }
+                                                            else
+                                                            {
+                                                                <td style="text-align:center;">@item.ClusterRank</td>
+                                                            }
+
                                                             <td style="text-align:right;">@item.TotalPoints</td>
                                                         </tr>
                                                         if (item.ParticipantType == "Distributors")

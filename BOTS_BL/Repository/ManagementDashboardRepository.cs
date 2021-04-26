@@ -571,7 +571,7 @@ namespace BOTS_BL.Repository
                     foreach(var item in objData)
                     {
                         item.InvAmountStr= String.Format(new CultureInfo("en-IN", false), "{0:n}", Convert.ToDecimal(item.InvAmount));
-                        item.OrderAmountStr = String.Format(new CultureInfo("en-IN", false), "{0:n}", Convert.ToDecimal(item.OrderAmountStr));
+                        item.OrderAmountStr = String.Format(new CultureInfo("en-IN", false), "{0:n}", Convert.ToDecimal(item.OrderAmount));
                     }
 
 
