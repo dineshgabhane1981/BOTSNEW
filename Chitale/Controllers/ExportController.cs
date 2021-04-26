@@ -458,12 +458,12 @@ namespace Chitale.Controllers
             }
         }
 
-        public ActionResult ExportOrdertoRavanaDaysManagement(string Cluster, string SubCluster, string City, string FromDate, string Todate, string Type)
+        public ActionResult ExportOrdertoRavanaDaysManagement(string Cluster, string SubCluster, string City, string Type)
         {
             try
             {
                 List<OrderVsRavanaDay> objOrderData = new List<OrderVsRavanaDay>();
-                objOrderData = MDR.GetOrderVsRavanaDayData(Cluster, SubCluster, City, Type, FromDate, Todate);
+                objOrderData = MDR.GetOrderVsRavanaDayData(Cluster, SubCluster, City, Type);
 
                 System.Data.DataTable tableToExport = new System.Data.DataTable();
                 tableToExport.Columns.Add("Type");

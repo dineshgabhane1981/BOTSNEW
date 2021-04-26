@@ -292,11 +292,9 @@ namespace Chitale.Controllers
                 {
                     string Cluster = Convert.ToString(item["Cluster"]);
                     string SubCluster = Convert.ToString(item["SubCluster"]);
-                    string City = Convert.ToString(item["City"]);
-                    string FromDate = Convert.ToString(item["FromDate"]);
-                    string Todate = Convert.ToString(item["Todate"]);
+                    string City = Convert.ToString(item["City"]);                    
                     string type = Convert.ToString(item["CustomerType"]);
-                    objOrderData = MDR.GetOrderVsRavanaDayData(Cluster, SubCluster, City, type, FromDate, Todate);
+                    objOrderData = MDR.GetOrderVsRavanaDayData(Cluster, SubCluster, City, type);
 
                 }
             }

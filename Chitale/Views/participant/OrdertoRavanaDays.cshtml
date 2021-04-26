@@ -13,30 +13,14 @@
                     <i class="header-icon lnr-apartment icon-gradient bg-love-kiss"> </i>
                     ORDER vs RAVANA DAYS
                 </div>
-            </div>
-            <div class="card-header-tab" style="margin-bottom:20px;">
-                <div style="display:flex;">
-                    <div class="col-md-3 col-xl-3">
-                        Cluster <br />
-                        @Html.DropDownListFor(model => model.ClusterList, new SelectList(Model.ClusterList, "Value", "Text"), "All", htmlAttributes: new { @class = "input50", @id = "ddlClusterList", @onchange = "FillSubCluster()" }) &nbsp;&nbsp;&nbsp;&nbsp;
-                    </div>
-                    <div class="col-md-3 col-xl-3">
-                        Sub Cluster <br /> @Html.DropDownListFor(model => model.SubClusterList, new SelectList(Enumerable.Empty<SelectListItem>(), "Value", "Text"), "All", htmlAttributes: new { @class = "input50", @id = "ddlSubClusterList", @onchange = "FillCity()" })&nbsp;&nbsp;&nbsp;&nbsp;
-                    </div>
-                    <div class="col-md-3 col-xl-3">
-                        City <br />@Html.DropDownListFor(model => model.CityList, new SelectList(Enumerable.Empty<SelectListItem>(), "Value", "Text"), "All", htmlAttributes: new { @class = "input50", @id = "ddlCityList" })
-                    </div>
-                </div>
-                <div>
-                    <br />        &nbsp;&nbsp;&nbsp;
-                    <input id="txtFromDate" placeholder="From Date" class="input50" />&nbsp;&nbsp;&nbsp;&nbsp;
-                    <input id="txtToDate" placeholder="To Date" class="input50" />
-                    <button type="button" id="btnFilter" style="margin-left:17px;margin-top:5px;" class="btn btn-primary"><b>FILTER</b></button>
-                </div>
-            </div>
+            </div>            
             <div class="row mb-3">
                 <div class="container-fluid pt-3 pl-3 pr-3">
                     <div class="pt-3 pl-3 pr-3 col-md-12 col-lg-12">
+                        <div class="col search-container">
+                            <i class="fas fa-search"></i>
+                            <input class="input100" type="text" id="txtSearch" placeholder="Search activity..." />
+                        </div>
                         <div class="col text-right">
                             <ul class="list-inline progress-list mt-2">
                                 <li class="list-inline-item">
@@ -147,21 +131,13 @@
         });
     }
     function GetOrdertoRavanaDays() {
-        var OrderToRavanaData = [];
-        item = {}
-        item["Cluster"] = $('#ddlClusterList :selected').text();
-        item["SubCluster"] = $('#ddlSubClusterList :selected').text();
-        item["City"] = $('#ddlCityList :selected').text();
-        item["FromDate"] = $("#txtFromDate").val();
-        item["Todate"] = $('#txtToDate').val();
-
-        OrderToRavanaData.push(item);
-        var data = JSON.stringify(OrderToRavanaData);
+        
+         
         $("#divLoader").show();
         $.ajax({
             type: "POST",
             url: '@Url.Action("GetOrdertoRavanaDaysData","Participant")',
-            data: '{jsonData: ' + JSON.stringify(data) + '}',
+            data: '',
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             success: function (response) {
@@ -273,11 +249,7 @@
 
     function ExportDataExcel() {
         $("#divLoader").show();
-         var Cluster = $('#ddlClusterList :selected').text();
-         var SubCluster = $('#ddlSubClusterList :selected').text();
-         var City = $('#ddlCityList :selected').text();
-         var FromDate = $("#txtFromDate").val();
-         var Todate = $('#txtToDate').val();
+         
          var CustomerType = "0";
          if ($('#rdnSS').is(":checked")) {
              CustomerType = "SuperStockiest";
@@ -287,7 +259,7 @@
          }
 
         var urlLink = "@Url.Action("ExportOrdertoRavanaDaysParticipant", "Participant")";
-        urlLink = urlLink + "?Cluster=" + Cluster + "&SubCluster=" + SubCluster + "&City=" + City + "&FromDate=" + FromDate + "&Todate=" + Todate + "&Type=" + CustomerType + "";
+        urlLink = urlLink + "?Type=" + CustomerType + "";
         window.location.href = urlLink;
         $("#divLoader").hide();
     }

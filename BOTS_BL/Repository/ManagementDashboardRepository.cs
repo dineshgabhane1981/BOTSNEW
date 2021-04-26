@@ -464,7 +464,7 @@ namespace BOTS_BL.Repository
             return objdata;
         }
 
-        public List<OrderVsRavanaDay> GetOrderVsRavanaDayData(string Cluster, string SubCluster, string City, string type, string FromDate, string Todate)
+        public List<OrderVsRavanaDay> GetOrderVsRavanaDayData(string Cluster, string SubCluster, string City, string type)
         {
             List<OrderVsRavanaDay> objData = new List<OrderVsRavanaDay>();
             using (var context = new ChitaleDBContext())
@@ -472,7 +472,7 @@ namespace BOTS_BL.Repository
                 try
                 {
                     objData = context.OrderVsRavanaDays.ToList();
-                    if (Cluster == "All" && SubCluster == "All" && City == "All" && FromDate == "" && Todate == "" && type == "0")
+                    if (Cluster == "All" && SubCluster == "All" && City == "All" && type == "0")
                     {
                         objData = context.OrderVsRavanaDays.ToList();
                     }
@@ -489,22 +489,7 @@ namespace BOTS_BL.Repository
                         else if (Cluster != "All")
                         {
                             objData = objData.Where(x => x.Cluster == Cluster).ToList();
-                        }
-                        if (FromDate != "" && Todate != "")
-                        {
-                            objData = objData.Where(x => x.Date >= Convert.ToDateTime(FromDate) && x.Date <= Convert.ToDateTime(Todate)).ToList();
-                        }
-                        else
-                        {
-                            if (FromDate != "")
-                            {
-                                objData = objData.Where(x => x.Date >= Convert.ToDateTime(FromDate)).ToList();
-                            }
-                            if (Todate != "")
-                            {
-                                objData = objData.Where(x => x.Date >= Convert.ToDateTime(Todate)).ToList();
-                            }
-                        }
+                        }                        
                     }
                     if (type != "0")
                     {

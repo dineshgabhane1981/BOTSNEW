@@ -135,26 +135,16 @@ namespace Chitale.Controllers
             return View(objModel);
         }
 
-        public JsonResult GetOrdertoRavanaDaysData(string jsonData)
+        public JsonResult GetOrdertoRavanaDaysData()
         {
             List<OrderVsRavanaDay> objOrderData = new List<OrderVsRavanaDay>();
             try
             {
                 var UserSession = (CustomerDetail)Session["ChitaleUser"];
-                JavaScriptSerializer json_serializer = new JavaScriptSerializer();
-                json_serializer.MaxJsonLength = int.MaxValue;
-                object[] objData = (object[])json_serializer.DeserializeObject(jsonData);
+                
+                    objOrderData = pr.GetOrderVsRavanaDayData(UserSession.CustomerId);
 
-                foreach (Dictionary<string, object> item in objData)
-                {
-                    string Cluster = Convert.ToString(item["Cluster"]);
-                    string SubCluster = Convert.ToString(item["SubCluster"]);
-                    string City = Convert.ToString(item["City"]);
-                    string FromDate = Convert.ToString(item["FromDate"]);
-                    string Todate = Convert.ToString(item["Todate"]);
-                    objOrderData = pr.GetOrderVsRavanaDayData(Cluster, SubCluster, City, FromDate, Todate, UserSession.CustomerId);
-
-                }
+               
             }
             catch (Exception ex)
             {
@@ -188,7 +178,7 @@ namespace Chitale.Controllers
             {
                 var UserSession = (CustomerDetail)Session["ChitaleUser"];
                 List<OrderVsRavanaDay> objOrderData = new List<OrderVsRavanaDay>();
-                objOrderData = pr.GetOrderVsRavanaDayData(Cluster, SubCluster, City, FromDate, Todate, UserSession.CustomerId);
+                objOrderData = pr.GetOrderVsRavanaDayData(UserSession.CustomerId);
 
                 System.Data.DataTable tableToExport = new System.Data.DataTable();
                 tableToExport.Columns.Add("Type");

@@ -26,13 +26,12 @@
                     <div class="col-md-3 col-xl-3">
                         City <br />@Html.DropDownListFor(model => model.CityList, new SelectList(Enumerable.Empty<SelectListItem>(), "Value", "Text"), "All", htmlAttributes: new { @class = "input50", @id = "ddlCityList" })
                     </div>
+
                 </div>
                 <div>
                     <br />
                     <input type="radio" id="rdnSS" checked name="cust_type" /> Super Stockiest &nbsp;&nbsp;&nbsp;&nbsp;
-                    <input type="radio" id="rdnDist" name="cust_type" /> Distributors <br /><br />
-                    <input id="txtFromDate" placeholder="From Date" class="input50" />&nbsp;&nbsp;&nbsp;&nbsp;
-                    <input id="txtToDate" placeholder="To Date" class="input50" />
+                    <input type="radio" id="rdnDist" name="cust_type" /> Distributors &nbsp;&nbsp;&nbsp;&nbsp;
                     <button type="button" id="btnFilter" style="margin-left:17px;margin-top:5px;" class="btn btn-primary"><b>FILTER</b></button>
                 </div>
             </div>
@@ -94,16 +93,7 @@
 <script>
     var tableData = [];
     $(document).ready(function () {
-        var today = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
-        $("#txtFromDate").datepicker({
-            dateFormat: "yy-mm-dd",
-            maxDate: today,
-        });
-        $("#txtToDate").datepicker({
-            dateFormat: "yy-mm-dd",
-            maxDate: today,
-        });
-
+        
         GetOrdertoRavanaDays();
         $('#btnFilter').on("click", function () {
             GetOrdertoRavanaDays();
@@ -160,9 +150,7 @@
         item = {}
         item["Cluster"] = $('#ddlClusterList :selected').text();
         item["SubCluster"] = $('#ddlSubClusterList :selected').text();
-        item["City"] = $('#ddlCityList :selected').text();
-        item["FromDate"] = $("#txtFromDate").val();
-        item["Todate"] = $('#txtToDate').val();
+        item["City"] = $('#ddlCityList :selected').text();        
         item["CustomerType"] = "0";
         if ($('#rdnSS').is(":checked")) {
             item["CustomerType"] = "SuperStockiest";
@@ -291,8 +279,7 @@
          var Cluster = $('#ddlClusterList :selected').text();
          var SubCluster = $('#ddlSubClusterList :selected').text();
          var City = $('#ddlCityList :selected').text();
-         var FromDate = $("#txtFromDate").val();
-         var Todate = $('#txtToDate').val();
+         
          var CustomerType = "0";
          if ($('#rdnSS').is(":checked")) {
              CustomerType = "SuperStockiest";
@@ -302,7 +289,7 @@
          }
 
         var urlLink = "@Url.Action("ExportOrdertoRavanaDaysManagement", "Export")";
-        urlLink = urlLink + "?Cluster=" + Cluster + "&SubCluster=" + SubCluster + "&City=" + City + "&FromDate=" + FromDate + "&Todate=" + Todate + "&Type=" + CustomerType + "";
+        urlLink = urlLink + "?Cluster=" + Cluster + "&SubCluster=" + SubCluster + "&City=" + City + "&Type=" + CustomerType + "";
         window.location.href = urlLink;
         $("#divLoader").hide();
     }
