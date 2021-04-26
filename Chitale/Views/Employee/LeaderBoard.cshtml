@@ -43,7 +43,9 @@
                                     </button>
                                 </div>
                             </div>
-
+                            <div class="col-md-8 col-xl-8">
+                                <span id="spnFilter" style="font-size:17px;font-weight:bold;display:none;"></span>
+                            </div>
                             <div class="col text-right">
                                 <ul class="list-inline progress-list mt-2">
                                     <li class="list-inline-item">
@@ -242,7 +244,21 @@
             SummeryData.push(item);
 
         }
-       
+        var text = "";
+        if ($("#ddlClusterList").prop('selectedIndex') != 0) {
+            text = "Filter : " + $("#ddlClusterList option:selected").text();
+        }
+        if ($("#ddlSubClusterList").prop('selectedIndex') != 0 && text != "") {
+            text = text + " | " + $("#ddlSubClusterList option:selected").text();
+        }
+        if ($("#ddlCityList").prop('selectedIndex') != 0 && text != "") {
+            text = text + " | " + $("#ddlCityList option:selected").text();
+        }
+        if (text != "") {
+            $("#spnFilter").text(text);
+            $("#spnFilter").show();
+        }
+
         var data = JSON.stringify(SummeryData);
         $.ajax({
             type: "POST",

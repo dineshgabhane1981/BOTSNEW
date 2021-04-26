@@ -37,6 +37,11 @@
                     <button type="button" id="btnFilter" style="margin-left:17px;margin-top:5px;" class="btn btn-primary"><b>FILTER</b></button>
 
                 </div>
+               
+                 <div class="col-md-8 col-xl-8">
+                        <span id="spnFilter" style="font-size:17px;font-weight:bold;display:none;"></span>
+                 </div>
+                
             </div>
             <div class="row mb-3">
                 <div class="container-fluid pt-3 pl-3 pr-3">
@@ -165,9 +170,28 @@
         if ($('#rdnRetailer').is(":checked")) {
             item["CustomerType"] = "Retailers";
         }
-
-
         SummeryData.push(item);
+
+        var text = "";
+        if ($("#ddlClusterList").prop('selectedIndex') != 0) {
+            text = "Filter : " + $("#ddlClusterList option:selected").text();
+        }
+        if ($("#ddlSubClusterList").prop('selectedIndex') != 0 && text != "") {
+            text = text + " | " + $("#ddlSubClusterList option:selected").text();
+        }
+        if ($("#ddlCityList").prop('selectedIndex') != 0 && text != "") {
+            text = text + " | " + $("#ddlCityList option:selected").text();
+        }
+        if ($("#ddlMonthList").prop('selectedIndex') != 0 && text != "") {
+            text = text + " | " + $("#ddlMonthList option:selected").text();
+        }
+        if ($('#ddlYearList').prop('selectedIndex') != 0 && text != "") {
+            text = text + " | " + $("#ddlYearList option:selected").text();
+        }
+        if (text != "") {
+            $("#spnFilter").text(text);
+            $("#spnFilter").show();
+        }
         var data = JSON.stringify(SummeryData);
         $("#divLoader").show();
         $.ajax({

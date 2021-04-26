@@ -26,15 +26,20 @@
                         City <br /> @Html.DropDownListFor(model => model.CityList, new SelectList(Enumerable.Empty<SelectListItem>(), "Value", "Text"), "All", htmlAttributes: new { @class = "input50", @id = "ddlCityList" })
                     </div>
                 </div>
-                    <div>
-                        <br />
-                        <input type="radio" id="rdnSS" checked name="cust_type" /> Super Stockiest &nbsp;&nbsp;&nbsp;&nbsp;
-                        <input type="radio" id="rdnDist" name="cust_type" /> Distributors <br /><br />
-                        <input id="txtFromDate" placeholder="From Date" class="input50" />&nbsp;&nbsp;&nbsp;&nbsp;
-                        <input id="txtToDate" placeholder="To Date" class="input50" />
-                        <button type="button" id="btnFilter" style="margin-left:17px;margin-top:5px;" class="btn btn-primary"><b>FILTER</b></button>
+                <div>
+                    <br />
+                    <input type="radio" id="rdnSS" checked name="cust_type" /> Super Stockiest &nbsp;&nbsp;&nbsp;&nbsp;
+                    <input type="radio" id="rdnDist" name="cust_type" /> Distributors <br /><br />
+                    <input id="txtFromDate" placeholder="From Date" class="input50" />&nbsp;&nbsp;&nbsp;&nbsp;
+                    <input id="txtToDate" placeholder="To Date" class="input50" />
+                    <button type="button" id="btnFilter" style="margin-left:17px;margin-top:5px;" class="btn btn-primary"><b>FILTER</b></button>
+                </div>
+                <div>
+                    <div class="col-md-8 col-xl-8">
+                        <span id="spnFilter" style="font-size:17px;font-weight:bold;display:none;"></span>
                     </div>
                 </div>
+            </div>
                 <div class="row mb-3">
                     <div class="container-fluid pt-3 pl-3 pr-3">
                         <div class="pt-3 pl-3 pr-3 col-md-12 col-lg-12">
@@ -174,6 +179,29 @@
             item["CustomerType"] = "Distributors";
         }
         OrderToRavanaData.push(item);
+        var dt = $("#txtFromDate").val();
+        console.log(dt);
+        var text = "";
+        if ($("#ddlClusterList").prop('selectedIndex') != 0) {
+            text = "Filter : " + $("#ddlClusterList option:selected").text();
+        }
+        if ($("#ddlSubClusterList").prop('selectedIndex') != 0 && text != "") {
+            text = text + " | " + $("#ddlSubClusterList option:selected").text();
+        }
+        if ($("#ddlCityList").prop('selectedIndex') != 0 && text != "") {
+            text = text + " | " + $("#ddlCityList option:selected").text();
+        }
+        if ($('#txtFromDate').value !== null  && text != "") {            
+            text = text + " | " + $("#txtFromDate").val();
+        }
+        if ($('#txtToDate').value != "" && text != "") {
+            text = text + " | " + $("#txtToDate").val();
+        }
+        if (text != "") {
+            $("#spnFilter").text(text);
+            $("#spnFilter").show();
+        }
+
         var data = JSON.stringify(OrderToRavanaData);
         $("#divLoader").show();
         $.ajax({
