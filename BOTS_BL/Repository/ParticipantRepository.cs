@@ -28,10 +28,26 @@ namespace BOTS_BL.Repository
                         new SqlParameter("@pi_CustomerType", CustomerType)).ToList<ParticipantList>();
 
 
+                    
+
                     if (lstparticipantLists != null)
                     {
                         lstparticipantLists = lstparticipantLists.OrderBy(x => Convert.ToInt32(x.Rank)).ToList();
                     }
+                    List<ParticipantList> lstparticipantListsNew = new List<ParticipantList>();
+                    foreach (var item in lstparticipantLists)
+                    {
+                        if (item.Rank == "0")
+                        {
+                            lstparticipantListsNew.Add(item);                            
+                        }
+                    }
+                    foreach (var item in lstparticipantListsNew)
+                    {
+                        lstparticipantLists.Remove(item);                        
+                    }
+
+                    lstparticipantLists.AddRange(lstparticipantListsNew);
                 }
 
 
