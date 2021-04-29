@@ -200,10 +200,10 @@
                             <div class="card mb-3 widget-chart widget-chart2 text-left w-100">
                                 <div class="widget-chat-wrapper-outer">
                                     <div class="widget-chart-wrapper widget-chart-wrapper-lg opacity-10 m-0" id="containerMemberWebpage">
+                                        <div id="dvMWPMsessage" style="display:none;margin:20px;padding:20px;font-weight:bold;">Member WebPage - Not Opted. Please connect with the team to start your Profile Update & Referral journey</div>
                                         <canvas id="cvMemberWebpage"></canvas>
-
                                     </div>
-                                    <div>
+                                    <div id="dvWebpageData">
                                         <table border="1" width="100%" id="tblReferrals">
                                             <tr>
                                                 <th style="text-align:center;">
@@ -654,59 +654,67 @@
             success: function (response) {
                 console.log(response);
                 if (response != null) {
-                    $('#cvMemberWebpage').remove(); // this is my <canvas> element
-                    $('#containerMemberWebpage').append('<canvas id="cvMemberWebpage"><canvas>');
-                    var options = {
-                        rotation: (-0.5 * Math.PI) - (-90 / 180 * Math.PI),
-                        legend: {
-                            display: true,
-                            position: 'bottom'
+                    if (response[7] == "1") {
+                        $("#dvMWPMsessage").show();
+                        $("#dvWebpageData").hide();
+                        $("#cvMemberWebpage").hide();
+                    }
+                    else {
+                        $("#dvMWPMsessage").hide();
+                        $("#dvWebpageData").show();
+                        $("#cvMemberWebpage").show();
+                        $('#cvMemberWebpage').remove(); // this is my <canvas> element
+                        $('#containerMemberWebpage').append('<canvas id="cvMemberWebpage"><canvas>');
+                        var options = {
+                            rotation: (-0.5 * Math.PI) - (-90 / 180 * Math.PI),
+                            legend: {
+                                display: true,
+                                position: 'bottom'
+                            }
+                        }
+                        var label1 = 'Total Member Base';
+                        var label2 = 'Referring Base';
+                        if (flag == 1) {
+                            label2 = 'No of Profile Update';
+                        }
+                        var data1 = response[0];
+                        var data2 = response[6];
+                        if (flag == 1) {
+                            console.log("Profile");
+                            data2 = response[1];
+                        }
+                        var data = {
+                            datasets: [{
+                                data: [data1, data2],
+                                backgroundColor: ["#f990a7", "#aad2ed"]
+                            }],
+
+                            // These labels appear in the legend and in the tooltips when hovering different arcs
+                            labels: [
+                                label1,
+                                label2
+                            ],
+
+                        };
+
+                        var ctx4 = document.getElementById("cvMemberWebpage").getContext("2d");
+                        window.myBar = new Chart(ctx4, {
+                            type: 'pie',
+                            data: data,
+                            options: options
+
+                        });
+                        if (flag == 1) {
+                            $("#spnMemberBase").text(addComma(response[0]));
+                            $("#spnNoofReferee").text(addComma(response[1]));
+                            $("#spnNoofReferral").text(addComma(response[2]));
+                            $("#spnUniqueReferralTxn").text(addComma(response[3]));
+                            $("#spnTotalReferralTxn").text(addComma(response[4]));
+                            $("#spnTotalReferralBusniess").text(addComma(response[5]));
                         }
                     }
-                    var label1 = 'Total Member Base';
-                    var label2 = 'Referring Base';
-                    if (flag == 1) {
-                        label2 = 'No of Profile Update';
-                    }
-                    var data1 = response[0];
-                    var data2 = response[6];
-                    if (flag == 1) {
-					console.log("Profile");
-                        data2 = response[1];
-                    }
-                    var data = {
-                        datasets: [{
-                            data: [data1, data2],
-                            backgroundColor: ["#f990a7", "#aad2ed"]
-                        }],
-
-                        // These labels appear in the legend and in the tooltips when hovering different arcs
-                        labels: [
-                            label1,
-                            label2
-                        ],
-
-                    };
-
-                    var ctx4 = document.getElementById("cvMemberWebpage").getContext("2d");
-                    window.myBar = new Chart(ctx4, {
-                        type: 'pie',
-                        data: data,
-                        options: options
-
-                    });
-                    if (flag == 1) {
-                        $("#spnMemberBase").text(addComma(response[0]));
-                        $("#spnNoofReferee").text(addComma(response[1]));
-                        $("#spnNoofReferral").text(addComma(response[2]));
-                        $("#spnUniqueReferralTxn").text(addComma(response[3]));
-                        $("#spnTotalReferralTxn").text(addComma(response[4]));
-                        $("#spnTotalReferralBusniess").text(addComma(response[5]));
-                    }
-
-
-                    $("#divLoader").hide();
                 }
+                $("#divLoader").hide();
             },
             failure: function (response) {
                 $("#divLoader").hide();

@@ -24,9 +24,16 @@
                     {
                         var imgId = "imgExpand" + item.RefNo;
                         <tr style="text-align:center;">
-                            <td style="text-align:center;">
-                                <img id="@imgId" src="~/Content/assets/images/details_open.png" style="cursor:pointer;" onclick="ShowActivities('@item.RefNo', @item.CustomerId, '@item.TxnType');" />
-                            </td>
+                            @if (item.TxnType == "Sale")
+                            {
+                                <td style="text-align:center;"></td>
+                            }
+                            else
+                            {
+                                <td style="text-align:center;">
+                                    <img id="@imgId" src="~/Content/assets/images/details_open.png" style="cursor:pointer;" onclick="ShowActivities('@item.RefNo', @item.CustomerId, '@item.TxnType');" />
+                                </td>
+                            }
                             @if (item.TxnType == "Tgt Vs Ach")
                             {
                                 <td>Focus Vs Ach</td>

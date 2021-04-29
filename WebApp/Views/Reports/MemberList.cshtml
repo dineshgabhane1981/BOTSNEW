@@ -38,6 +38,7 @@
                                     <th scope="col">Total Burn Points</th>
                                     <th scope="col">Avl Bal Points</th>
                                     <th scope="col">Last Txn Date</th>
+                                    <th scope="col">Enrolled Date</th>
                                 </tr>
                             </thead>
                             <tbody>                               
@@ -86,6 +87,9 @@
                     optionItem["TotalBurnPoints"] = item.TotalBurnPoints;
                     optionItem["AvlBalPoints"] = item.AvBalPoints;
                     optionItem["LastTxnDate"] = item.LastTxnDate;
+                    optionItem["EnrolledDate"] = item.EnrolledDate;
+
+                    
                     tableData.push(optionItem);
                 });
                 DrawTable();
@@ -154,7 +158,8 @@
                         return '<span>' + addComma(data) + '</span>';
                     }
                 },                
-                { data: "LastTxnDate" }
+                { data: "LastTxnDate" },
+                { data: "EnrolledDate" }
             ],
             "columnDefs": [                
                 {

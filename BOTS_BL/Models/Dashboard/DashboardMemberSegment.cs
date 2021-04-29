@@ -41,6 +41,8 @@ namespace BOTS_BL.Models
         public long ReferralTxnCount { get; set; }
         public long BusinessGenerated { get; set; }
         public long ProfileUpdatedCount { get; set; }
+        public string MWPStatus { get; set; }
+        public long MWPStatusCode { get; set; }
     }
 
     public class DashboardMemberSegmentTxnDB

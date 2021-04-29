@@ -163,7 +163,17 @@ namespace WebApp.Controllers
                 dataList.Add(dataMemberWebPage.ReferralTxnCount);
                 dataList.Add(dataMemberWebPage.BusinessGenerated);
                 dataList.Add(dataMemberWebPage.ProfileUpdatedCount);
-                var lstData = string.Join(" ", dataList);
+
+                if(dataMemberWebPage.MWPStatus=="No")
+                {
+                    dataMemberWebPage.MWPStatusCode = 1;
+                }
+                else
+                {
+                    dataMemberWebPage.MWPStatusCode = 0;
+                }
+                dataList.Add(dataMemberWebPage.MWPStatusCode);
+                 
             }
             catch (Exception ex)
             {
