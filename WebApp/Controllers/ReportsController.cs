@@ -60,13 +60,15 @@ namespace WebApp.Controllers
             List<SelectListItem> MonthList = new List<SelectListItem>();
             int month = DateTime.Now.Month;
             string monthtext = DateTime.Now.ToString("MMM");
-            for (int i = month + 2; i <= 12; i++)
+            int count = 1;
+            for (int i = month; i < 12; i++)
             {
                 MonthList.Add(new SelectListItem
                 {
-                    Text = Convert.ToString(DateTime.Now.AddMonths(i - 1).ToString("MMM")),
-                    Value = Convert.ToString(i)
+                    Text = Convert.ToString(DateTime.Now.AddMonths(count).ToString("MMM")),
+                    Value = Convert.ToString(count)
                 });
+                count++;
             }
 
             ViewBag.MonthList = MonthList;

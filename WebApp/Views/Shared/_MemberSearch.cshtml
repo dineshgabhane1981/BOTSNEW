@@ -35,7 +35,7 @@
                             </tr>
                             <tr>
                                 <td>Card No</td>
-                                <td></td>
+                                <td>N/A</td>
                             </tr>
                             <tr>
                                 <td>Type</td>
@@ -43,6 +43,29 @@
                             </tr>
                             <tr>
                                 <td>Birthday</td>
+                                <td>@Model.Birthdate</td>
+                            </tr>
+                            <tr>
+                                <td>Anniversary</td>
+                                <td>@Model.AnniversaryDate</td>
+                            </tr>
+                            <tr>
+                                <td>Gender</td>
+                                @if (string.IsNullOrEmpty(Model.Gender))
+                                {
+                                    <td></td>
+                                }
+                                @if (Model.Gender == "M")
+                                {
+                                    <td>Male</td>
+                                }
+                                @if (Model.Gender == "F")
+                                {
+                                    <td>Female</td>
+                                }
+                            </tr>
+                            <tr>
+                                <td>Area</td>
                                 <td>@Model.Birthdate</td>
                             </tr>
                             <tr>
@@ -61,15 +84,33 @@
                                 <th colspan="2" style="text-align:center;color:darkcyan;font-size:20px;"><b>@Model.AvlPtsBal</b></th>
                             </tr>
                             <tr>
-                                <th colspan="2" style="text-align:center;">Points Balance</th>
+                                <th colspan="2" style="text-align:center;">Total Points balance</th>
                             </tr>
                             <tr style="text-align:center;">
-                                <td>Expired Points</td>
+                                <td>Points Expiry</td>
                                 <td style="text-align:center;">On</td>
                             </tr>
                             <tr style="text-align:center;">
                                 <td>@Model.PointstobeExpired</td>
                                 <td>@Model.PointsExpiryDate</td>
+                            </tr>
+
+                        </table>
+
+                        <table border="1" cellpadding="5" cellspacing="5" style="margin-top:25px;">
+                            <tr>
+                                <th colspan="2" style="text-align:center;color:darkcyan;font-size:20px;height:30px;"><b>@Model.BonusPoints</b></th>
+                            </tr>
+                            <tr>
+                                <th colspan="2" style="text-align:center;">Bonus Points balance</th>
+                            </tr>
+                            <tr style="text-align:center;">
+                                <td>Points Expiry</td>
+                                <td style="text-align:center;">On</td>
+                            </tr>
+                            <tr style="text-align:center;">
+                                <td style="height:30px;">@Model.BonusPointsExpiry</td>
+                                <td>@Model.BonusPointsExpiryDate</td>
                             </tr>
 
                         </table>
@@ -97,6 +138,22 @@
                             <tr>
                                 <td>Total Burn</td>
                                 <td>@Model.TotalBurn</td>
+                            </tr>
+                            <tr>
+                                <td>Profile Updated</td>
+                                <td>@Model.ProfileUpdate</td>
+                            </tr>
+                            <tr>
+                                <td>Referred</td>
+                                <td>@Model.Referred</td>
+                            </tr>
+                            <tr>
+                                <td>Referral Biz</td>
+                                <td>@Model.ReferralBiz</td>
+                            </tr>
+                            <tr>
+                                <td>If Referred, by</td>
+                                <td>@Model.ReferredBy</td>
                             </tr>
 
                         </table>
@@ -131,46 +188,46 @@
 
                                     foreach (var item in Model.lstMemberSearchTxn)
                                     {
-                            <tr>
-                                <td>@item.TxnOutlet</td>
-                                <td>@item.InvoiceNo</td>
-                                @if (item.InvoiceAmt.HasValue)
-                                {
-                                    <td>@item.InvoiceAmt</td>
-                                }
-                                else
-                                {
-                                    <td>0.00</td>
-                                }
+                                        <tr>
+                                            <td>@item.TxnOutlet</td>
+                                            <td>@item.InvoiceNo</td>
+                                            @if (item.InvoiceAmt.HasValue)
+                                            {
+                                                <td>@item.InvoiceAmt</td>
+                                            }
+                                            else
+                                            {
+                                                <td>0.00</td>
+                                            }
 
-                                <td>@item.TxnType</td>
-                                @if (item.PointsEarned.HasValue)
-                                {
-                                    <td>@item.PointsEarned</td>
-                                }
-                                else
-                                {
-                                    <td>0.00</td>
-                                }
-                                @if (item.PointsBurned.HasValue)
-                                {
-                                    <td>@item.PointsBurned</td>
-                                }
-                                else
-                                {
-                                    <td>0.00</td>
-                                }
-                                @if (item.PointsBalance.HasValue)
-                                {
-                                    <td>@item.PointsBalance</td>
-                                }
-                                else
-                                {
-                                    <td>0.00</td>
-                                }                                
-                                <td>@item.TxnDatetime</td>
-                                <td>@item.TxnUpdateDate</td>
-                            </tr>
+                                            <td>@item.TxnType</td>
+                                            @if (item.PointsEarned.HasValue)
+                                            {
+                                                <td>@item.PointsEarned</td>
+                                            }
+                                            else
+                                            {
+                                                <td>0.00</td>
+                                            }
+                                            @if (item.PointsBurned.HasValue)
+                                            {
+                                                <td>@item.PointsBurned</td>
+                                            }
+                                            else
+                                            {
+                                                <td>0.00</td>
+                                            }
+                                            @if (item.PointsBalance.HasValue)
+                                            {
+                                                <td>@item.PointsBalance</td>
+                                            }
+                                            else
+                                            {
+                                                <td>0.00</td>
+                                            }
+                                            <td>@item.TxnDatetime</td>
+                                            <td>@item.TxnUpdateDate</td>
+                                        </tr>
                                     }
                                 }
                                 else

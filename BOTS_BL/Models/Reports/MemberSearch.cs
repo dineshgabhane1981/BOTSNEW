@@ -22,6 +22,16 @@ namespace BOTS_BL.Models
         public long? TotalVisit { get; set; }
         public long? TotalSpend { get; set; }
         public long? TotalBurn { get; set; }
+        public string AnniversaryDate { get; set; }
+        public string Area { get; set; }
+        public string ReferredBy { get; set; }
+        public string LastTxnDate { get; set; }
+        public string ProfileUpdate { get; set; }
+        public long? Referred { get; set; }
+        public long? ReferralBiz { get; set; }
+        public decimal? BonusPoints { get; set; }
+        public string BonusPointsExpiryDate { get; set; }
+        public decimal? BonusPointsExpiry { get; set; }
 
         public List<MemberSearchTxn> lstMemberSearchTxn { get; set; }
     }
