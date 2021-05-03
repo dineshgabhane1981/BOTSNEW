@@ -92,12 +92,15 @@
                             Focus Vs Ach
                         </a>
                     </li>
-                    <li>
-                        <a href="@Url.Action("OrdertoRavanaDays", "Participant", new { CustomerId = CustomerId, CustomerType=CustomerType })" class="@Html.IsSelected(controller: "Participant", action: "OrdertoRavanaDays")">
-                            <i class="metismenu-icon fas fa-angle-double-right"></i>
-                            Order to Ravana Days
-                        </a>
-                    </li>
+                    if (CustomerType != "Retailers")
+                    {
+                        <li>
+                            <a href="@Url.Action("OrdertoRavanaDays", "Participant", new { CustomerId = CustomerId, CustomerType = CustomerType })" class="@Html.IsSelected(controller: "Participant", action: "OrdertoRavanaDays")">
+                                <i class="metismenu-icon fas fa-angle-double-right"></i>
+                                Order to Ravana Days
+                            </a>
+                        </li>
+
                     <li>
                         <a href="#">
                             <i class="metismenu-icon fas fa-not-equal"></i>
@@ -106,19 +109,20 @@
                         </a>
                         <ul>
                             <li class="@Html.IsSelected(controller: "Participant", action: "NoActionParticipants")">
-                                <a class="@Html.IsSelected(controller: "Participant", action: "NoActionParticipants")" href="@Url.Action("NoActionParticipants", "Participant", new { CustomerId = CustomerId, CustomerType=CustomerType })">
+                                <a class="@Html.IsSelected(controller: "Participant", action: "NoActionParticipants")" href="@Url.Action("NoActionParticipants", "Participant", new { CustomerId = CustomerId, CustomerType = CustomerType })">
                                     <i class="metismenu-icon"></i>
                                     Participants
                                 </a>
                             </li>
                             <li class="@Html.IsSelected(controller: "Participant", action: "Products")">
-                                <a class="@Html.IsSelected(controller: "Participant", action: "Products")" href="@Url.Action("Products", "Participant", new { CustomerId = CustomerId, CustomerType=CustomerType })">
+                                <a class="@Html.IsSelected(controller: "Participant", action: "Products")" href="@Url.Action("Products", "Participant", new { CustomerId = CustomerId, CustomerType = CustomerType })">
                                     <i class="metismenu-icon">
                                     </i>Products
                                 </a>
                             </li>
                         </ul>
                     </li>
+                    }
 
                 }
 
