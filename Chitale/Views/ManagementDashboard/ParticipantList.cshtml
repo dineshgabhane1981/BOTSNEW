@@ -178,7 +178,7 @@
             //dropdownselect();
 
         });
-        
+
         GetParticipantList('1');
     });
 
@@ -212,7 +212,7 @@
         }
         if ($("#ddlSubClusterList").prop('selectedIndex') != 0 && text != "") {
             text = text + " | " + $("#ddlSubClusterList option:selected").text();
-        }        
+        }
         if ($("#ddlCityList").prop('selectedIndex') != 0 && text != "") {
             text = text + " | " + $("#ddlCityList option:selected").text();
         }
@@ -282,7 +282,7 @@
                     items += "<option value='" + item.Value + "'>" + item.Text + "</option>";
                 });
                 $("#ddlSubClusterList").html(items);
-              
+
             }
         });
     }
@@ -497,7 +497,17 @@
                     }
                     },
                 { data: "ID" },
-                { data: "ParticipantName" },
+                {
+
+                    "mData": "ParticipantName",
+                    "mRender": function (data, type, row) {
+                        var id = row.ID;
+                        var Type = row.ParticipantType;
+                        var URL = '@Url.Action("Index", "Home")';
+                        var actualURL = URL + "?CustomerId=" + id + "&CustomerType=" + Type;
+                        return '<a target=\"_blank\"  class=\"login\" href=' + actualURL + '>' + data + '</a>';
+                    }
+                },
                 { data: "CurrentRank" },
                 { data: "LastMonthRank" },
                 { data: "PurchasePoints" },
@@ -551,7 +561,17 @@
 
                 },
                 { data: "ID" },
-                { data: "ParticipantName" },
+                {
+
+                    "mData": "ParticipantName",
+                    "mRender": function (data, type, row) {
+                        var id = row.ID;
+                        var Type = row.ParticipantType;
+                        var URL = '@Url.Action("Index", "Home")';
+                        var actualURL = URL + "?CustomerId=" + id + "&CustomerType=" + Type;
+                        return '<a target=\"_blank\"  class=\"login\" href=' + actualURL + '>' + data + '</a>';
+                    }
+                },
                 { data: "CurrentRank" },
                 { data: "LastMonthRank" },
                 { data: "PurchasePoints" },
