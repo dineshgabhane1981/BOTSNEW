@@ -102,6 +102,10 @@ namespace BOTS_BL.Repository
                 {
                     item.MonthYear = CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(item.DateVal.Value.Month)  + "-" + item.DateVal.Value.Year;
                 }
+                if(objData !=null)
+                {
+                    objData = objData.OrderByDescending(x => x.ValAchPer).ToList();
+                }
 
             }
 

@@ -6,7 +6,7 @@
 
 <div class="app-main__inner">
     <div class="row">
-        <div style="width:100%;  padding:10px; background-color:white;float:left;">
+        <div style="width:100%;  padding:0px; background-color:white;float:left;">
             <div class="card-header-tab card-header-tab-animation card-header" style="margin-bottom:10px;">
                 <div class="card-header-title">
                     <i class="header-icon lnr-apartment icon-gradient bg-love-kiss"> </i>
@@ -251,8 +251,7 @@
     }
     function DrawTable() {
         var table1 = $('#activityTable').DataTable();
-        table1.destroy();
-        console.log(tableData)
+        table1.destroy();        
         var table = $('#activityTable').DataTable({
             "data": tableData,
             "paging": true,
@@ -281,11 +280,31 @@
                 { data: "SubCluster" },
                 { data: "City" },
                 { data: "Date" },
-                { data: "VolTgt" },
-                { data: "VolAch" },
-                { data: "VolAchPer" },
-                { data: "ValTgt" },
-                { data: "ValAch" },
+                {
+                    "mData": "VolTgt",
+                    "mRender": function (data, type, row) {
+                        return '<span>' + addComma(data) + '</span>';
+                    }
+                },                
+                {
+                    "mData": "VolAch",
+                    "mRender": function (data, type, row) {
+                        return '<span>' + addComma(data) + '</span>';
+                    }
+                },
+                { data: "VolAchPer" },                
+                {
+                    "mData": "ValTgt",
+                    "mRender": function (data, type, row) {
+                        return '<span>' + addComma(data) + '</span>';
+                    }
+                },               
+                {
+                    "mData": "ValAch",
+                    "mRender": function (data, type, row) {
+                        return '<span>' + addComma(data) + '</span>';
+                    }
+                },
                 { data: "ValAchPer" }
             ],
             aoColumnDefs: [

@@ -66,11 +66,13 @@
                 <tr style="text-align:center;">
                     <td style="border-bottom:1px solid black;background-color:#DCE6F0;">High Spend, Long time no see member <br /><u><b><span id="spnNotSeenHigh" style="cursor:pointer;" onclick="GetTxnData('3')"></span></b></u> </td>
                     <td style="border-bottom:1px solid black; border-left:1px solid black;background-color:#DBEDF7;">High Spend, Recent Member <br /><u><b><span id="spnRecentVisitHigh" style="cursor:pointer;" onclick="GetTxnData('1')"></span></b></u></td>
+                    <td rowspan="2" width="100px" class="bg-arielle-smile"> <u><b><span id="spnAll" style="cursor:pointer;" onclick="GetTxnData('5')"> All </span></b></u> </td>
                 </tr>
                 <tr style="text-align:center;">
                     <td style="background-color: #F1DDDC;">Low Spend, Long time no see member <br /><u><b><span id="spnNotSeenLow" style="cursor:pointer;" onclick="GetTxnData('4')"></span></b></u></td>
                     <td style="border-left:1px solid black;background-color:#E6E0EA;">Low Spend, Recent Member <br /><u><b><span id="spnRecentVisitLow" style="cursor:pointer;" onclick="GetTxnData('2')"></span></b></u></td>
                 </tr>
+                <tr></tr>
             </table>
 
         </div>
@@ -246,15 +248,24 @@
                 {
                     "mData": "TotalSpend",
                     "mRender": function (data, type, row) {
-
-                        return '<span>' + addComma(data) + '</span>';
+                        if (data != null) {
+                            return '<span>' + addComma(data) + '</span>';
+                        }
+                        else {
+                            return '<span></span>';
+                        }
                     }
                 },
                 {
                     "mData": "AvlBalPoints",
                     "mRender": function (data, type, row) {
 
-                        return '<span>' + addComma(data) + '</span>';
+                        if (data != null) {
+                            return '<span>' + addComma(data) + '</span>';
+                        }
+                        else {
+                            return '<span></span>';
+                        }
                     }
                 },
                 { data: "LastTxnDate" }

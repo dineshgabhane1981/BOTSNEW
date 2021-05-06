@@ -30,8 +30,8 @@ namespace BOTS_BL.Models
         public string MobileNo { get; set; }
         public string MemberName { get; set; }
         public string Type { get; set; }
-        public long TotalSpend { get; set; }
-        public long AvlBalPoints { get; set; }
+        public long? TotalSpend { get; set; }
+        public long? AvlBalPoints { get; set; }
         public string LastTxnDate { get; set; }
     }
 }

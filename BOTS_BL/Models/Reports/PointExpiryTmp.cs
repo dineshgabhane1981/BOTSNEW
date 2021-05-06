@@ -13,8 +13,11 @@ namespace BOTS_BL.Models
         public long MemberCountNextMonth { get; set; }
         public long MemberPointsNextMonth { get; set; }
         public long SelectedCount { get; set; }
-        public long SelectedPoints { get; set; }   
-        
+        public long SelectedPoints { get; set; }
+        public long MemberCount3rdMonth { get; set; }
+        public long MemberPoints3rdMonth { get; set; }
+
+
         public List<PointExpiryTxn> lstPointExpiryTxn { get; set; }
     }
 

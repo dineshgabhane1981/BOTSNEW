@@ -24305,3 +24305,11 @@ a.fc-more {
     border-radius: 10px !important;
     border: solid 1px #e1e1e1;
 }
+
+.smallDDL {
+    width: 80px;
+    padding: 5px !important;
+    border-radius: 10px !important;
+    border: solid 1px #e1e1e1;
+}
+

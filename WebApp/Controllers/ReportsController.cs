@@ -59,19 +59,30 @@ namespace WebApp.Controllers
 
             List<SelectListItem> MonthList = new List<SelectListItem>();
             int month = DateTime.Now.Month;
-            string monthtext = DateTime.Now.ToString("MMM");
+           
             int count = 1;
-            for (int i = month; i < 12; i++)
+            for (int i = 1; i <= 12; i++)
             {
                 MonthList.Add(new SelectListItem
                 {
-                    Text = Convert.ToString(DateTime.Now.AddMonths(count).ToString("MMM")),
-                    Value = Convert.ToString(count)
+                    Text = Convert.ToString(DateTime.Now.AddMonths(i).ToString("MMM")),
+                    Value = Convert.ToString(DateTime.Now.AddMonths(i).Month)
                 });
                 count++;
             }
+            List<SelectListItem> YearList = new List<SelectListItem>();
+            int year = DateTime.Now.Year;
+            for (int i = 0; i <= 9; i++)
+            {
+                YearList.Add(new SelectListItem
+                {
+                    Text = Convert.ToString(DateTime.Now.AddYears(i).Year.ToString()),
+                    Value = Convert.ToString(year + i)
+                });         
+            }
 
             ViewBag.MonthList = MonthList;
+            ViewBag.YearList = YearList;
             return View(objPointExpiry);
         }
 
