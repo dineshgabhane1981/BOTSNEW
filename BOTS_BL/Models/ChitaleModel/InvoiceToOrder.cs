@@ -44,11 +44,12 @@ namespace BOTS_BL.Models.ChitaleModel
 
         [Column(TypeName = "numeric")]
         public decimal? Variance { get; set; }
-        [NotMapped]
+
+        [StringLength(2)]
+        public string Status { get; set; }
         public string StrDate { get; set; }
-        [NotMapped]
         public string InvAmountStr { get; set; }
-        [NotMapped]
         public string OrderAmountStr { get; set; }
+
     }
 }
