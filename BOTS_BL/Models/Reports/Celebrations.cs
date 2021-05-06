@@ -14,6 +14,10 @@ namespace BOTS_BL.Models
         public long AnniversaryCountNextMonth { get; set; }
         public long EnrollmentAnniversaryCountThisMonth { get; set; }
         public long EnrollmentAnniversaryCountNextMonth { get; set; }
+        public long BirthdayCount3rdMonth { get; set; }
+        public long AnniversaryCount3rdMonth { get; set; }
+        public long EnrollmentAnniversary3rdMonth { get; set; }
+
 
         public List<CelebrationsMoreDetails> lstCelebrationsMoreDetails { get; set; }
     }

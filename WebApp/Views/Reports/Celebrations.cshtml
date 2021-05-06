@@ -1,49 +1,160 @@
 ﻿@model BOTS_BL.Models.Celebrations
+@using System.Globalization
 @{
     ViewBag.Title = "Celebrations";
     Layout = "~/Views/Shared/_Layout.cshtml";
+
+    var currentMonth = DateTime.Now.ToString("MMMM");
+    var nextMonth = DateTime.Now.AddMonths(1).ToString("MMMM");
+    var next2Month = DateTime.Now.AddMonths(2).ToString("MMMM");
+    var currentYear = DateTime.Now.Year.ToString();
+    var nextYear = DateTime.Now.AddMonths(1).Year.ToString();
+    var next2Year = DateTime.Now.AddMonths(2).Year.ToString();
 }
 
 <div class="app-main__inner">
-    <div class="row mb-3 card">
-        <div class="container-fluid pt-3 pl-3 pr-3">
-            <div class="row col-6">
-                <table class="table" style="border:1px solid gray;">
-                    <tr>
-                        <th scope="col" colspan="3" style="text-align:center;">Celebrations in</th>
-                    </tr>
-                    <tr>
-                        <th scope="col">Period</th>
-                        <th scope="col" style="text-align:center;">Current Month</th>
-                        <th scope="col" style="text-align:center;">Next Month</th>
-                    </tr>
-                    <tr>
-                        <td>Birthdays</td>
-                        <td style="text-align:center; color:blue;cursor:pointer;"><a onclick="GetData(1,1);"><u>@Model.BirthdayCountThisMonth</u></a></td>
-                        <td style="text-align:center; color:blue;cursor:pointer;"><a onclick="GetData(2,1);"><u>@Model.BirthdayCountNextMonth</u></a></td>
-                    </tr>
-                    <tr>
-                        <td>Marriage Anniversaries</td>
-                        <td style="text-align:center;color:blue;cursor:pointer;"><a onclick="GetData(1,2);"><u>@Model.AnniversaryCountThisMonth</u></a></td>
-                        <td style="text-align:center;color:blue;cursor:pointer;"><a onclick="GetData(2,2);"><u>@Model.AnniversaryCountNextMonth</u></a></td>
-                    </tr>
-                    <tr>
-                        <td>Enrolment Anniversaries</td>
-                        <td style="text-align:center;color:blue;cursor:pointer;"><a onclick="GetData(1,3);"><u>@Model.EnrollmentAnniversaryCountThisMonth</u></a></td>
-                        <td style="text-align:center;color:blue;cursor:pointer;"><a onclick="GetData(2,3);"><u>@Model.EnrollmentAnniversaryCountNextMonth</u></a></td>
-                    </tr>
-                </table>
+    <div class="mb-3 pr-3 pt-3 pl-3 card" style="padding-bottom:20px;">
+        <div class="row">
+            <div class="col-md-6 col-xl-3" style="margin-left:20px; margin-top:20px;">
+                Expiring in (@currentMonth - @currentYear)
+                <hr />
+                <div class="card mb-2 widget-content" style="background-color: #0070C0;">
+                    <div class="widget-content-wrapper text-white" style="display:block !important;">
+                        <div class="widget-content-left">
+                            <div class="widget-heading">
+                                <span style="cursor:pointer;"><a onclick="GetData(1,1);"><u>@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(Model.BirthdayCountThisMonth))</u></a></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card mb-2 widget-content" style="background-color: #FF0000;">
+                    <div class="widget-content-wrapper text-white" style="display:block !important;">
+                        <div class="widget-content-left">
+                            <div class="widget-heading">
+                                <span style="cursor:pointer;"><a onclick="GetData(1,2);"><u>@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(Model.AnniversaryCountThisMonth))</u></a></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card mb-2 widget-content" style="background-color: #FFC000;">
+                    <div class="widget-content-wrapper text-white" style="display:block !important;">
+                        <div class="widget-content-left">
+                            <div class="widget-heading">
+                                <span style="cursor:pointer;"><a onclick="GetData(1,3);"><u>@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(Model.EnrollmentAnniversaryCountThisMonth))</u></a></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-
-
+            <div class="col-md-6 col-xl-3" style="margin-left:20px; margin-top:20px;">
+                Expiring in (@nextMonth - @nextYear)
+                <hr />
+                <div class="card mb-2 widget-content" style="background-color: #0070C0;">
+                    <div class="widget-content-wrapper text-white" style="display:block !important;">
+                        <div class="widget-content-left">
+                            <div class="widget-heading">
+                                <span style="cursor:pointer;"><a onclick="GetData(2,1);"><u>@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(Model.BirthdayCountNextMonth))</u></a></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card mb-2 widget-content" style="background-color: #FF0000;">
+                    <div class="widget-content-wrapper text-white" style="display:block !important;">
+                        <div class="widget-content-left">
+                            <div class="widget-heading">
+                                <span style="cursor:pointer;"><a onclick="GetData(2,2);"><u>@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(Model.AnniversaryCountNextMonth))</u></a></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card mb-2 widget-content" style="background-color: #FFC000;">
+                    <div class="widget-content-wrapper text-white" style="display:block !important;">
+                        <div class="widget-content-left">
+                            <div class="widget-heading">
+                                <span style="cursor:pointer;"><a onclick="GetData(2,3);"><u>@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(Model.EnrollmentAnniversaryCountNextMonth))</u></a></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-xl-3" style="margin-left:20px; margin-top:20px;">
+                Expiring in (@next2Month - @next2Year)
+                <hr />
+                <div class="card mb-2 widget-content" style="background-color: #0070C0;">
+                    <div class="widget-content-wrapper text-white" style="display:block !important;">
+                        <div class="widget-content-left">
+                            <div class="widget-heading">
+                                <span style="cursor:pointer;"><a onclick="GetData(3,1);"><u>@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(Model.BirthdayCount3rdMonth))</u></a></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card mb-2 widget-content" style="background-color: #FF0000;">
+                    <div class="widget-content-wrapper text-white" style="display:block !important;">
+                        <div class="widget-content-left">
+                            <div class="widget-heading">
+                                <span style="cursor:pointer;"><a onclick="GetData(3,2);"><u>@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(Model.AnniversaryCount3rdMonth))</u></a></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card mb-2 widget-content" style="background-color: #FFC000;">
+                    <div class="widget-content-wrapper text-white" style="display:block !important;">
+                        <div class="widget-content-left">
+                            <div class="widget-heading">
+                                <span style="cursor:pointer;"><a onclick="GetData(3,3);"><u>@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(Model.EnrollmentAnniversary3rdMonth))</u></a></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="col-md-6 col-xl-2" style="margin-left:20px; margin-top:20px;">
+                Legend                
+                <div class="card mb-2" style="background-color: #0070C0; padding:5px;">
+                    <div class="widget-content-wrapper text-white" style="display:block !important;">
+                        <div class="widget-content-left">
+                            <div class="widget-heading">
+                                <span>Birthday</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card mb-2" style="background-color: #FF0000; padding:5px;">
+                    <div class="widget-content-wrapper text-white" style="display:block !important;">
+                        <div class="widget-content-left">
+                            <div class="widget-heading">
+                                <span>
+                                    M. Anniversary
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card mb-2" style="background-color: #FFC000; padding:5px;">
+                    <div class="widget-content-wrapper text-white" style="display:block !important;">
+                        <div class="widget-content-left">
+                            <div class="widget-heading">
+                                <span>
+                                    Enr Anniversary
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        
+        
+        
         </div>
+               
     </div>
 
     <div class="row mb-3 pt-3 pl-3 pr-3 card" id="dvCelebrationTable" style="display:none;">
         <div class="row">
             <div class="col search-container">
                 <i class="fas fa-search"></i>
-                <input class="input100" type="text" id="txtSearch" placeholder="Search transaction..." />                
+                <input class="input100" type="text" id="txtSearch" placeholder="Search transaction..." />
             </div>
             <div class="col text-right">
                 <ul class="list-inline progress-list mt-2">
@@ -103,7 +214,7 @@
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             success: function (response) {
-                tableData.length = 0;                
+                tableData.length = 0;
                 $.map(response, function (item) {
                     optionItem = {}
                     optionItem["EnrolledOutlet"] = item.EnrolledOutlet;
@@ -115,7 +226,7 @@
                     optionItem["AvlPoints"] = item.AvlPoints;
                     optionItem["LastTxnDate"] = item.LastTxnDate;
                     optionItem["CelebrationDate"] = item.CelebrationDate;
-                    
+
                     tableData.push(optionItem);
                 });
                 DrawTable();
@@ -134,7 +245,7 @@
                 if (type == 3) {
                     $("#spnType").text("Enrolment Anniversaries | ");
                 }
-                
+
                 $("#dvCelebrationTable").show();
                 $("#dvTxnTable").show();
 
@@ -163,11 +274,11 @@
             "pageLength": 25,
             "pagingType": "simple_numbers",
             "columns": [
-                { data: "EnrolledOutlet" },                
+                { data: "EnrolledOutlet" },
                 {
                     "mData": "MaskedMobileNo",
-                    "mRender": function (data, type, row) {                        
-                        var MobileNo = row.MobileNo;                       
+                    "mRender": function (data, type, row) {
+                        var MobileNo = row.MobileNo;
                         return '<span class="login" title=' + MobileNo + '>' + data + '</span>';
                     }
                 },
