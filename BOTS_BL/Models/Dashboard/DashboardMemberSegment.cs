@@ -51,7 +51,7 @@ namespace BOTS_BL.Models
         public string RepeatBase { get; set; }
         public string OnlyOnce { get; set; }
         public string NeverRedeem { get; set; }
-        public string RecentlyEnrolled { get; set; }        
+        public string RecentlyEnrolled { get; set; }
     }
     public class DashboardMemberSegmentTxn
     {
@@ -62,5 +62,29 @@ namespace BOTS_BL.Models
         public string OnlyOnce { get; set; }
         public string NeverRedeem { get; set; }
         public string RecentlyEnrolled { get; set; }
+    }
+
+    public class DashboardBulkUpload
+    {
+        public long TotalUpload { get; set; }
+        public long UniqueTransacted { get; set; }
+        public long TransactedCount { get; set; }
+        public long BusinessGenerated { get; set; }
+        public long PieChartYellow { get; set; }
+        public decimal PieChartGreen { get; set; }
+    }
+
+    public class DashboardRedemption
+    {
+        public long? RedeemedMembers { get; set; }
+        public long? RedemptionTxnCount { get; set; }
+        public long? RedeemedPoints { get; set; }
+        public long? PointsValueRs { get; set; }
+        public long? BusinessGenerated { get; set; }
+        public decimal? RedeemToInvoice { get; set; }
+        public long? PieChartYellowRedemptionRate { get; set; }
+        public decimal? PieChartGreenRedemptionRate { get; set; }
+        public long? PieChartYellowUniqueRedeemMember { get; set; }        
+        public decimal? PieChartGreenUniqueMember { get; set; }
     }
 }

@@ -42,7 +42,7 @@ namespace BOTS_BL.Repository
                 if (!string.IsNullOrEmpty(OutletId))
                 {
                     OutletId = OutletId + "01";
-                     FromDate = context.TransactionMasters.Where(x => x.CounterId == OutletId).OrderBy(y => y.Datetime).Select(z => z.Datetime).FirstOrDefault();
+                    FromDate = context.TransactionMasters.Where(x => x.CounterId == OutletId).OrderBy(y => y.Datetime).Select(z => z.Datetime).FirstOrDefault();
 
                 }
                 else
@@ -161,6 +161,31 @@ namespace BOTS_BL.Repository
 
             }
             return dashboardMemberWebPage;
+        }
+
+        public DashboardBulkUpload GetDashboardBulkUpload(string GroupId, string connstr)
+        {
+            DashboardBulkUpload objDashboardBulkUpload = new DashboardBulkUpload();
+            using (var context = new BOTSDBContext(connstr))
+            {
+                objDashboardBulkUpload = context.Database.SqlQuery<DashboardBulkUpload>("sp_BOTS_DashboardBulkUpload @pi_GroupId, @pi_Date, @pi_LoginId", new SqlParameter("@pi_GroupId", GroupId), 
+                    new SqlParameter("@pi_Date", DateTime.Now.ToShortDateString()), 
+                    new SqlParameter("@pi_LoginId", "")).FirstOrDefault<DashboardBulkUpload>();
+            }
+            return objDashboardBulkUpload;
+        }
+
+        public DashboardRedemption GetDashboardRedemption(string GroupId, string Type, string connstr)
+        {
+            DashboardRedemption objDashboardRedemption = new DashboardRedemption();
+            using (var context = new BOTSDBContext(connstr))
+            {
+                objDashboardRedemption = context.Database.SqlQuery<DashboardRedemption>("sp_BOTS_DashboardRedemption @pi_GroupId, @pi_Date, @pi_LoginId, @pi_Type", new SqlParameter("@pi_GroupId", GroupId),
+                    new SqlParameter("@pi_Date", DateTime.Now.ToShortDateString()),
+                    new SqlParameter("@pi_LoginId", ""),
+                    new SqlParameter("@pi_Type", Type)).FirstOrDefault<DashboardRedemption>(); 
+            }
+            return objDashboardRedemption;
         }
 
         public bool UpdatePassword(string LoginId, string password)

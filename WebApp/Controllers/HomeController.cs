@@ -26,6 +26,7 @@ namespace WebApp.Controllers
             {
                 var userDetails = (CustomerLoginDetail)Session["UserSession"];
                 var lstOutlet = RR.GetOutletList(userDetails.GroupId, userDetails.connectionString);
+                dataDashboard = DR.GetDashboardData(userDetails.GroupId, userDetails.connectionString);
                 ViewBag.OutletList = lstOutlet;
             }
             catch (Exception ex)
@@ -174,6 +175,56 @@ namespace WebApp.Controllers
                 }
                 dataList.Add(dataMemberWebPage.MWPStatusCode);
                  
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex);
+            }
+            return new JsonResult() { Data = dataList, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
+        }
+
+
+        public JsonResult GetBulkUploadResult()
+        {
+            List<object> dataList = new List<object>();
+            try
+            {
+                var userDetails = (CustomerLoginDetail)Session["UserSession"];
+                DashboardBulkUpload objDashboardBulkUpload = new DashboardBulkUpload();
+                objDashboardBulkUpload = DR.GetDashboardBulkUpload(userDetails.GroupId, userDetails.connectionString);
+
+                dataList.Add(objDashboardBulkUpload.TotalUpload);
+                dataList.Add(objDashboardBulkUpload.UniqueTransacted);
+                dataList.Add(objDashboardBulkUpload.TransactedCount);
+                dataList.Add(objDashboardBulkUpload.BusinessGenerated);
+                dataList.Add(objDashboardBulkUpload.PieChartYellow);
+                dataList.Add(objDashboardBulkUpload.PieChartGreen);                                
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex);
+            }
+            return new JsonResult() { Data = dataList, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
+        }
+        public JsonResult GetRedemptionResult(string type)
+        {
+            List<object> dataList = new List<object>();
+            try
+            {
+                var userDetails = (CustomerLoginDetail)Session["UserSession"];
+                DashboardRedemption objDashboardRedemption = new DashboardRedemption();
+                objDashboardRedemption = DR.GetDashboardRedemption(userDetails.GroupId, type, userDetails.connectionString);
+
+                dataList.Add(objDashboardRedemption.RedeemedMembers);
+                dataList.Add(objDashboardRedemption.RedemptionTxnCount);
+                dataList.Add(objDashboardRedemption.RedeemedPoints);
+                dataList.Add(objDashboardRedemption.PointsValueRs);
+                dataList.Add(objDashboardRedemption.BusinessGenerated);
+                dataList.Add(objDashboardRedemption.RedeemToInvoice);
+                dataList.Add(objDashboardRedemption.PieChartYellowRedemptionRate);
+                dataList.Add(objDashboardRedemption.PieChartGreenRedemptionRate);
+                dataList.Add(objDashboardRedemption.PieChartYellowUniqueRedeemMember);
+                dataList.Add(objDashboardRedemption.PieChartGreenUniqueMember);
             }
             catch (Exception ex)
             {

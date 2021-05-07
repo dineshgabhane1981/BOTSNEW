@@ -2,14 +2,15 @@
 @using System.Globalization
 @{
     ViewBag.Title = "Executive Summary";
-    var labelValues = "";
 }
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.2.2/Chart.bundle.min.js"></script>
+
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@0.4.0/dist/chartjs-plugin-datalabels.min.js"></script>
+@*<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.2.2/Chart.bundle.min.js"></script>*@
 
 <div class="app-main__inner">
     <input type="hidden" id="hdnNames" />
-    <div class="row" >
+    <div class="row">
         <div class="col-md-6 col-xl-4">
             <div class="card mb-3 widget-content bg-midnight-bloom">
                 <div class="widget-content-wrapper text-white">
@@ -85,7 +86,7 @@
                             </div>
                             <h6 class="text-muted text-uppercase font-size-md opacity-5 font-weight-normal" style="color:blue !important; cursor:pointer;" id="btnExpand" onclick="ToggleKeyPointers();"><b>Expand to see key pointers</b></h6>
                             <div class="scroll-area-sm" id="dvKeyPointers" style="display:none;">
-                                
+
                             </div>
                         </div>
                     </div>
@@ -94,7 +95,6 @@
         </div>
 
     </div>
-
 
     <div class="row">
         <div class="col-md-12 col-lg-6">
@@ -110,8 +110,8 @@
                     </ul>
                 </div>
                 <div class="card-body">
-                    <div class="tab-content" >
-                        <div class="tab-pane fade show active" id="tabs-eg-77" >
+                    <div class="tab-content">
+                        <div class="tab-pane fade show active" id="tabs-eg-77">
                             <div class="card mb-3 widget-chart widget-chart2 text-left w-100">
                                 <div class="widget-chat-wrapper-outer">
                                     <div class="widget-chart-wrapper widget-chart-wrapper-lg opacity-10 m-0" id="containerOutlet" style="overflow-y:auto;">
@@ -245,19 +245,143 @@
         </div>
 
     </div>
+
+    <div class="row">
+        <div class="col-md-12 col-lg-6">
+            <div class="mb-3 card">
+                <div class="card-header-tab card-header-tab-animation card-header">
+                    <div class="card-header-title">
+                        <i class="header-icon lnr-apartment icon-gradient bg-love-kiss"> </i>
+                        REDEMPTION
+                    </div>
+                    <ul class="nav">
+                        <li class="nav-item"><a href="javascript:void(0);" onclick="showRedemptionChart('1');" class="active nav-link">Base</a></li>
+                        <li class="nav-item"><a href="javascript:void(0);" onclick="showRedemptionChart('2');" class="nav-link second-tab-toggle">Bonus</a></li>
+                    </ul>
+                </div>
+                <div class="card-body">
+                    <div class="tab-content">
+                        <div class="tab-pane fade show active" id="tabs-eg-77">
+                            <div class="card mb-3 widget-chart widget-chart2 text-left w-100">
+                                <div class="widget-chat-wrapper-outer">
+                                    <div style="display:flex;margin-top:30px;">
+                                        <div class="widget-chart-wrapper widget-chart-wrapper-lg opacity-10 m-0" id="containerRedemption" style="width:200px !important;border-right:1px solid black;">
+                                            <canvas id="cvRedemption"></canvas>
+                                        </div>
+                                        <div class="widget-chart-wrapper widget-chart-wrapper-lg opacity-10 m-0" id="containerRedemptionMember" style="width:200px !important;">
+                                            <canvas id="cvRedemptionMember"></canvas>
+                                        </div>
+                                    </div>
+                                    <div id="dvWebpageData">
+                                        <table border="1" width="100%" id="tblReferrals" style="margin-top:30px;">
+                                            <tr>
+                                                <th style="text-align:center;">
+                                                    Redeemed Members
+                                                </th>
+                                                <th style="text-align:center;">
+                                                    Redemption Txn Count
+                                                </th>
+                                                <th style="text-align:center;">
+                                                    Redeemed Points
+                                                </th>
+                                                <th style="text-align:center;">
+                                                    Points Value (Rs.)
+                                                </th>
+                                            </tr>
+                                            <tr>
+                                                <td style="text-align:center;"><span id="spnRedeemedMembers"></span></td>
+                                                <td style="text-align:center;"><span id="spnRedemptionTxnCount"></span></td>
+                                                <td style="text-align:center;"><span id="spnRedeemedPoints"></span></td>
+                                                <td style="text-align:center;"><span id="spnPointsValue"></span></td>
+                                            </tr>
+                                            <tr>
+                                                <td colspan="4" style="height:20px;"></td>
+                                            </tr>
+                                            <tr>
+                                                <td style="text-align:center;font-weight:bold;">
+                                                    Business Generated
+                                                </td>
+                                                <td style="text-align:center;"><span id="spnBusinessGenerated"></span></td>
+                                                <td style="text-align:center;font-weight:bold;">
+                                                    Redeem to Invoice
+                                                </td>
+                                                <td style="text-align:center;"><span id="spnRedeemToInvoice"></span></td>
+                                            </tr>
+
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-12 col-lg-6">
+            <div class="mb-3 card">
+                <div class="card-header-tab card-header-tab-animation card-header">
+                    <div class="card-header-title">
+                        <i class="header-icon lnr-apartment icon-gradient bg-love-kiss"> </i>
+                        BULK UPLOAD
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="tab-content">
+                        <div class="tab-pane fade show active" id="tabs-eg-77">
+                            <div class="card mb-3 widget-chart widget-chart2 text-left w-100">
+                                <div class="widget-chat-wrapper-outer">
+                                    <div class="widget-chart-wrapper widget-chart-wrapper-lg opacity-10 m-0" id="containerBulkUpload">
+                                        <canvas id="cvBulkUpload"></canvas>
+                                    </div>
+                                    <div>
+                                        <table border="1" width="100%">
+                                            <tr>
+                                                <th style="text-align:center;">
+                                                    Total Upload
+                                                </th>
+                                                <th style="text-align:center;">
+                                                    Unique Transacted
+                                                </th>
+                                                <th style="text-align:center;">
+                                                    Transaction Count
+                                                </th>
+                                                <th style="text-align:center;">
+                                                    Business Generated
+                                                </th>
+                                            </tr>
+                                            <tr>
+                                                <td style="text-align:center;"><span id="spnTotalUpload"></span></td>
+                                                <td style="text-align:center;"><span id="spnUniqueTransacted"></span></td>
+                                                <td style="text-align:center;"><span id="spnTransactionCount"></span></td>
+                                                <td style="text-align:center;"><span id="spnBusinessGenerated"></span></td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
 </div>
 
 <script>
-
     $(document).ready(function () {
+        $("#divLoader").hide();
         ShowMemberSegmentChart();
         showOutletEnrolmentChart('');
         showPointSummeryChart('');
         showMemberWebpageChart('1');
+        showBulkUploadChart();
+        showRedemptionChart('1');
         $("#memberSegmentOutletList").on("change", function () {
             ShowMemberSegmentChart();
         });
-
+        $("#divLoader").hide();
     });
     function ToggleKeyPointers() {
         $("#dvKeyPointers").toggle(1000);
@@ -268,20 +392,20 @@
     }
 
     function ShowMemberSegmentChart() {
-        $("#divLoader").show();
+        ////$("#divLoader").hide();
         var selectedOutlet = $("#memberSegmentOutletList").val();
         var outletData = [];
         $.ajax({
             type: "POST",
-            url: "Home/GetMemberSegmentResult",
+            url: '@Url.Action("GetMemberSegmentResult", "Home")',
             data: "{'OutletId': '" + selectedOutlet + "'}",
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             success: function (response) {
-                //console.log(response);
+
                 var resp = response[0];
-                if (resp != null) {                   
-                     
+                if (resp != null) {
+
                     $('#barcanvas').remove(); // this is my <canvas> element
                     $('#canvasContainer').append('<canvas id="barcanvas"><canvas>');
 
@@ -310,6 +434,11 @@
                             data: barChartData,
                             options:
                             {
+                                plugins: {
+                                    datalabels: {
+                                        display: false
+                                    }
+                                },
                                 scales: {
                                     xAxes: [{
                                         ticks: {
@@ -317,6 +446,7 @@
                                         }
                                     }]
                                 },
+
                                 title:
                                 {
                                     display: true,
@@ -350,7 +480,7 @@
                                                 var data = dataset.data[index];
                                                 ctx.fillStyle = 'rgba(0, 0, 0, 1)';
 
-                                                var res = addComma(data);                                                                                            
+                                                var res = addComma(data);
                                                 ctx.fillText(res, bar._model.x, bar._model.y - 5);
                                             });
                                         });
@@ -358,6 +488,8 @@
                                 }
                             }
                         });
+
+
 
                     var resp1 = response[1];
                     if (resp1[0] != null && resp1[1] != null) {
@@ -382,7 +514,7 @@
                                 tableHTML += "<td>Title</td>";
                                 tableHTML += "<td>Unit</td>";
                                 tableHTML += "<td>Total Base</td>";
-                                tableHTML += "<td>Repeat Members</td>";                                
+                                tableHTML += "<td>Repeat Members</td>";
                                 tableHTML += "<td>Never Redeemed</td>";
                                 tableHTML += "<td>Recently Enrolled</td>";
                                 tableHTML += "<td>Only Once</td>";
@@ -392,7 +524,7 @@
                                     tableHTML += "<td style=\"background-color:lightgrey;font-weight: bold;\">" + item.Title + "</td>";
                                     tableHTML += "<td style=\"background-color:lightgrey;font-weight: bold;\">" + item.Unit + "</td>";
                                     tableHTML += "<td>" + addComma(item.TotalBase) + "</td>";
-                                    tableHTML += "<td>" + addComma(item.RepeatBase) + "</td>";                                   
+                                    tableHTML += "<td>" + addComma(item.RepeatBase) + "</td>";
                                     tableHTML += "<td>" + addComma(item.NeverRedeem) + "</td>";
                                     tableHTML += "<td>" + addComma(item.RecentlyEnrolled) + "</td>";
                                     tableHTML += "<td>" + addComma(item.OnlyOnce) + "</td>";
@@ -404,39 +536,39 @@
                             }
                         },
                         failure: function (response) {
-                            $("#divLoader").hide();
+                            //$("#divLoader").hide();
                         },
                         error: function (response) {
-                            $("#divLoader").hide();
+                            //$("#divLoader").hide();
                         }
 
                     });
                     //--------------------------------------------------------------------------------------------
 
-                    $("#divLoader").hide();
+                    ////$("#divLoader").hide();
                 }
             },
             failure: function (response) {
-                $("#divLoader").hide();
+                //$("#divLoader").hide();
             },
             error: function (response) {
-                $("#divLoader").hide();
+                //$("#divLoader").hide();
             }
         });
     }
 
     function showOutletEnrolmentChart(flag) {
-        $("#divLoader").show();
+        //$("#divLoader").hide();
         $.ajax({
             type: "POST",
-            url: "Home/GetOutletEnrolmentResult",
+            url: '@Url.Action("GetOutletEnrolmentResult", "Home")',
             data: "{'monthFlag': '" + flag + "'}",
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             success: function (response) {
-                
+
                 var names = response[0];
-                var count = names.length;               
+                var count = names.length;
 
                 var dataList = response[1];
                 if (response != null) {
@@ -444,7 +576,7 @@
                     $('#containerOutlet').append('<canvas id="cvOutlet"><canvas>');
                     var barChartData =
                     {
-                        
+
                         labels: [...names],
                         datasets: [{
                             label: '',
@@ -471,6 +603,11 @@
                             data: barChartData,
                             options:
                             {
+                                plugins: {
+                                    datalabels: {
+                                        display: false
+                                    }
+                                },
                                 scales: {
                                     xAxes: [{
                                         ticks: {
@@ -518,14 +655,14 @@
                                 }
                             }
                         });
-                    $("#divLoader").hide();
+                    ////$("#divLoader").hide();
                 }
             },
             failure: function (response) {
-                $("#divLoader").hide();
+                //$("#divLoader").hide();
             },
             error: function (response) {
-                $("#divLoader").hide();
+                //$("#divLoader").hide();
             }
         });
 
@@ -540,10 +677,10 @@
     }
 
     function showPointSummeryChart(flag) {
-        $("#divLoader").show();
+        ////$("#divLoader").hide();
         $.ajax({
             type: "POST",
-            url: "Home/GetPointsSummaryResult",
+            url: '@Url.Action("GetPointsSummaryResult", "Home")',
             data: "{'monthFlag': '" + flag + "'}",
             contentType: "application/json; charset=utf-8",
             dataType: "json",
@@ -575,6 +712,11 @@
                             data: barChartData,
                             options:
                             {
+                                plugins: {
+                                    datalabels: {
+                                        display: false
+                                    }
+                                },
                                 scales: {
                                     xAxes: [{
                                         ticks: {
@@ -621,14 +763,14 @@
                                 }
                             }
                         });
-                    $("#divLoader").hide();
+                    ////$("#divLoader").hide();
                 }
             },
             failure: function (response) {
-                $("#divLoader").hide();
+                //$("#divLoader").hide();
             },
             error: function (response) {
-                $("#divLoader").hide();
+                //$("#divLoader").hide();
             }
         });
 
@@ -642,17 +784,16 @@
         }
     }
 
-
     function showMemberWebpageChart(flag) {
-        $("#divLoader").show();
+        ////$("#divLoader").hide();
         $.ajax({
             type: "POST",
-            url: "Home/GetMemberWebPageResult",
+             url: '@Url.Action("GetMemberWebPageResult", "Home")',
             data: "{'profileFlag': '" + flag + "'}",
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             success: function (response) {
-                console.log(response);
+
                 if (response != null) {
                     if (response[7] == "1") {
                         $("#dvMWPMsessage").show();
@@ -666,6 +807,11 @@
                         $('#cvMemberWebpage').remove(); // this is my <canvas> element
                         $('#containerMemberWebpage').append('<canvas id="cvMemberWebpage"><canvas>');
                         var options = {
+                            plugins: {
+                                datalabels: {
+                                    display: false
+                                }
+                            },
                             rotation: (-0.5 * Math.PI) - (-90 / 180 * Math.PI),
                             legend: {
                                 display: true,
@@ -714,13 +860,13 @@
                         }
                     }
                 }
-                $("#divLoader").hide();
+                ////$("#divLoader").hide();
             },
             failure: function (response) {
-                $("#divLoader").hide();
+                //$("#divLoader").hide();
             },
             error: function (response) {
-                $("#divLoader").hide();
+                //$("#divLoader").hide();
             }
         });
 
@@ -735,5 +881,258 @@
             $("#tblReferrals").hide();
         }
     }
-    
+
+     function showBulkUploadChart() {
+        ////$("#divLoader").hide();
+        $.ajax({
+            type: "POST",
+             url: '@Url.Action("GetBulkUploadResult", "Home")',
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+
+                if (response != null) {
+                    $('#cvBulkUpload').remove(); // this is my <canvas> element
+                    $('#containerBulkUpload').append('<canvas id="cvBulkUpload"><canvas>');
+                    var count = 0;
+                    var options = {
+                        rotation: (-0.5 * Math.PI) - (-90 / 180 * Math.PI),
+                        legend: {
+                            display: false,
+                            position: 'bottom'
+                        },
+                        tooltips: {
+                            enabled: false
+                        },
+                        plugins: {
+                            datalabels: {
+                                formatter: (value, ctx) => {
+                                    let sum = 0;
+                                    let dataArr = ctx.chart.data.datasets[0].data;
+                                    dataArr.map(data => {
+                                        sum += data;
+                                    });
+                                    let percentage = (value * 100 / sum).toFixed(2) + "%";
+
+                                    return percentage;
+                                },
+                                color: '#000',
+                            }
+                        }
+                    }
+                    var label1 = '';
+                    var label2 = '';
+                    var data1 = response[4];
+                    var data2 = response[5];
+
+                    var data = {
+                        datasets: [{
+                            data: [data1, data2],
+                            backgroundColor: ["#f990a7", "#aad2ed"]
+                        }],
+
+                        // These labels appear in the legend and in the tooltips when hovering different arcs
+                        labels: [
+                            label1,
+                            label2
+                        ],
+                    };
+
+                    var ctx4 = document.getElementById("cvBulkUpload").getContext("2d");
+                        window.myBar = new Chart(ctx4, {
+                            type: 'pie',
+                            data: data,
+                            options: options
+                        });
+
+                        $("#spnTotalUpload").text(addComma(response[0]));
+                        $("#spnUniqueTransacted").text(addComma(response[1]));
+                        $("#spnTransactionCount").text(addComma(response[2]));
+                        $("#spnBusinessGenerated").text(addComma(response[3]));
+
+                    }
+
+                ////$("#divLoader").hide();
+            },
+            failure: function (response) {
+                //$("#divLoader").hide();
+            },
+            error: function (response) {
+                //$("#divLoader").hide();
+            }
+        });
+    }
+
+    function showRedemptionChart(type) {
+        ////$("#divLoader").hide();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("GetRedemptionResult", "Home")',
+            data: "{'type': '" + type + "'}",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                console.log(response);
+                if (response != null) {
+                    console.log(response[0]);
+                    $('#cvRedemption').remove(); // this is my <canvas> element
+                    $('#containerRedemption').append('<canvas id="cvRedemption"><canvas>');
+
+                    $('#cvRedemptionMember').remove(); // this is my <canvas> element
+                    $('#containerRedemptionMember').append('<canvas id="cvRedemptionMember"><canvas>');
+
+                    var count = 0;
+                    var options = {
+                        rotation: (-0.5 * Math.PI) - (-90 / 180 * Math.PI),
+                        legend: {
+                            display: false,
+                            position: 'bottom'
+                        },
+                        tooltips: {
+                            enabled: false
+                        },
+                        plugins: {
+                            datalabels: {
+                                formatter: (value, ctx) => {
+                                    let sum = 0;
+                                    let dataArr = ctx.chart.data.datasets[0].data;
+                                    dataArr.map(data => {
+                                        sum += data;
+                                    });
+                                    let percentage = value;
+                                    if (value != null) {
+                                        console.log(111);
+                                        percentage = (value * 100 / sum).toFixed(2) + "%";
+                                    }
+                                    return percentage;
+                                },
+                                color: '#000',
+                            }
+                        }
+                    }
+                    var label1 = '';
+                    var label2 = '';
+                    var data1 = response[6];
+                    var data2 = response[7];
+
+                    var data = {
+                        datasets: [{
+                            data: [data1, data2],
+                            backgroundColor: ["#f990a7", "#aad2ed"]
+                        }],
+
+                        // These labels appear in the legend and in the tooltips when hovering different arcs
+                        labels: [
+                            label1,
+                            label2
+                        ],
+                    };
+                    var ctx4 = document.getElementById("cvRedemption").getContext("2d");
+                    window.myBar = new Chart(ctx4, {
+                        type: 'pie',
+                        data: data,
+                        options: options
+                    });
+
+
+                    var options1 = {
+                        rotation: (-0.5 * Math.PI) - (-90 / 180 * Math.PI),
+                        legend: {
+                            display: false,
+                            position: 'bottom'
+                        },
+                        tooltips: {
+                            enabled: false
+                        },
+                        plugins: {
+                            datalabels: {
+                                formatter: (value, ctx) => {
+                                    let sum = 0;
+                                    let dataArr = ctx.chart.data.datasets[0].data;
+                                    dataArr.map(data => {
+                                        sum += data;
+                                    });
+                                    let percentage = value;
+                                    if (value != null) {
+                                        console.log(222);
+                                        percentage = (value * 100 / sum).toFixed(2) + "%";
+                                    }
+                                    return percentage;
+                                },
+                                color: '#000',
+                            }
+                        }
+                    }
+                    var label3 = '';
+                    var label4 = '';
+                    var data3 = response[8];
+                    var data4 = response[9];
+
+                    var data1 = {
+                        datasets: [{
+                            data: [data3, data4],
+                            backgroundColor: ["#f990a7", "#aad2ed"]
+                        }],
+
+                        // These labels appear in the legend and in the tooltips when hovering different arcs
+                        labels: [
+                            label3,
+                            label4
+                        ],
+                    };
+
+                    var ctx5 = document.getElementById("cvRedemptionMember").getContext("2d");
+                    window.myBar = new Chart(ctx5, {
+                        type: 'pie',
+                        data: data1,
+                        options: options1
+                    });
+                    if (response[0] != null) {
+                        $("#spnRedeemedMembers").text(addComma(response[0]));
+                    }
+                    else {
+                        $("#spnRedeemedMembers").text("-");
+                    }
+                    if (response[1] != null) {
+                        $("#spnRedemptionTxnCount").text(addComma(response[1]));
+                    }
+                    else {
+                        $("#spnRedemptionTxnCount").text("-");
+                    }
+                    if (response[2] != null) {
+                        $("#spnRedeemedPoints").text(addComma(response[2]));
+                    }
+                    else {
+                        $("#spnRedeemedPoints").text("-");
+                    }
+                    if (response[3] != null) {
+                        $("#spnPointsValue").text(addComma(response[3]));
+                    }
+                    else {
+                        $("#spnPointsValue").text("-");
+                    }
+                    if (response[4] != null) {
+                        $("#spnBusinessGenerated").text(addComma(response[4]));
+                    }
+                    else {
+                        $("#spnBusinessGenerated").text("-");
+                    }
+                    if (response[5] != null) {
+                        $("#spnRedeemToInvoice").text(addComma(response[5]));
+                    }
+                    else {
+                        $("#spnRedeemToInvoice").text("-");
+                    }
+                 }
+
+                ////$("#divLoader").hide();
+            },
+            failure: function (response) {
+                //$("#divLoader").hide();
+            },
+            error: function (response) {
+                //$("#divLoader").hide();
+            }
+        });
+    }
 </script>
