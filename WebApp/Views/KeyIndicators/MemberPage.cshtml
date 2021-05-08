@@ -1,0 +1,414 @@
+﻿@model BOTS_BL.Models.MemberPage
+@using System.Globalization
+@{
+    ViewBag.Title = "Member Page";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="app-main__inner">
+    <div class="row mb-3 pt-3 pl-3 pr-3 card">
+        <div class="row">
+            <div class="col-md-6 col-xl-2">
+                <div class="card mb-3 widget-content" style="background-color:#00B0F0;">
+                    <div class="widget-content-wrapper text-white" style="display:block !important;">
+                        <div class="widget-content-left">
+                            <div class="widget-heading">
+                                Referring Base
+                                <hr style="border-top: 2px solid white;margin:0px;" />
+                            </div>
+                        </div>
+                        <div>
+                            <div class="widget-numbers text-white">
+                                <span style="cursor:pointer;font-size:22px !important;"><a onclick="GetReferingBase();"><u>@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(Model.ReferringBase))</u></a></span>
+                                <hr style="border-top: 2px solid white;margin:0px;" />
+                                <span>@String.Format(new CultureInfo("en-IN", false), "{0:n2}", Convert.ToDouble(Model.ReferringBasePercentage))%</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-xl-2">
+                <div class="card mb-3 widget-content" style="background-color:#E46C0A;">
+                    <div class="widget-content-wrapper text-white" style="display:block !important;">
+                        <div class="widget-content-left">
+                            <div class="widget-heading">
+                                Ref Gen | Conv
+                                <hr style="border-top: 2px solid white;margin:0px;" />
+                            </div>
+                        </div>
+                        <div>
+                            <div class="widget-numbers text-white">
+                                <span style="cursor:pointer;font-size:22px !important;"><a onclick="GetRefGenConv(2);"><u>@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(Model.RefGen))</u></a></span> |
+                                <span style="cursor:pointer;font-size:22px !important;"><a onclick="GetRefGenConv(2);"><u>@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(Model.Con))</u></a></span>
+                                <hr style="border-top: 2px solid white;margin:0px;" />
+                                <span>@String.Format(new CultureInfo("en-IN", false), "{0:n2}", Convert.ToDouble(Model.RefGenConPercentage))%</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-xl-2">
+                <div class="card mb-3 widget-content" style="        background-color: #F0F000;">
+                    <div class="widget-content-wrapper text-white" style="display:block !important;">
+                        <div class="widget-content-left">
+                            <div class="widget-heading">
+                                Ref Biz
+                                <hr style="border-top: 2px solid white;margin:0px;" />
+                            </div>
+                        </div>
+                        <div>
+                            <div class="widget-numbers text-white">
+                                <span style="font-size:22px !important;">@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(Model.RefBiz))</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-xl-2">
+                <div class="card mb-3 widget-content" style="background-color: #D99694;">
+                    <div class="widget-content-wrapper text-white" style="display:block !important;">
+                        <div class="widget-content-left">
+                            <div class="widget-heading">
+                                New Registrations
+                                <hr style="border-top: 2px solid white;margin:0px;" />
+                            </div>
+                        </div>
+                        <div>
+                            <div class="widget-numbers text-white">
+                                <span style="cursor:pointer;font-size:22px !important;"><a onclick="GetNewRegistration();"><u>@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(Model.NewRegistration))</u></a></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-xl-3">
+                <table border="1" cellpadding="5" cellspacing="5">
+                    <tr>
+                        <th>Other Elements</th>
+                        <th>Nos</th>
+                        <th>%</th>
+                    </tr>
+                    <tr>
+                        <td>Profile Update</td>
+                        <td>@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(Model.ProfileUpdateCount))</td>
+                        <td>@String.Format(new CultureInfo("en-IN", false), "{0:n2}", Convert.ToDouble(Model.ProfileUpdatePercentage))</td>
+                    </tr>
+                    <tr>
+                        <td>Gift-a-Point</td>
+                        <td>@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(Model.GiftAPointsCount))</td>
+                        <td>@String.Format(new CultureInfo("en-IN", false), "{0:n2}", Convert.ToDouble(Model.GiftAPointsPercentage))</td>
+                    </tr>
+                    <tr>
+                        <td>Opt-outs</td>
+                        <td>@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(Model.OptOutCount))</td>
+                        <td>@String.Format(new CultureInfo("en-IN", false), "{0:n2}", Convert.ToDouble(Model.OptOutPercentage))</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="row mb-3 pt-3 pl-3 pr-3 card" id="dvData" style="display:none;">
+        <div id="dvReferreingBase" style="display:none;">
+            <div class="container-fluid pt-3 pl-3 pr-3">
+                <div class="pt-3 pl-3 pr-3 col-md-12 col-lg-12">
+                    <div class="row mt-3" id="dvReferreingBase">
+                        <div class="table-responsive">
+                            <table class="table" id="referreingBaseTable">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Mobile No</th>
+                                        <th scope="col">Member Name</th>
+                                        <th scope="col">Referrals Generated</th>
+                                        <th scope="col">ReferralsTransacted</th>
+                                        <th scope="col">Business Generated</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row" id="dvRefGenConv" style="display:none;">
+            <div class="container-fluid pt-3 pl-3 pr-3">
+                <div class="pt-3 pl-3 pr-3 col-md-12 col-lg-12">
+                    <div class="row mt-3" id="dvRefGenConv">
+                        <div class="table-responsive">
+                            <table class="table" id="refGenConvTable">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Mobile No</th>
+                                        <th scope="col">Member Name</th>
+                                        <th scope="col">Referral Mobile No</th>
+                                        <th scope="col">Referral Name </th>
+                                        <th scope="col">Transaction Count </th>
+                                        <th scope="col">Business Generated </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row" id="dvNewRegistration" style="display:none;">
+            <div class="container-fluid pt-3 pl-3 pr-3">
+                <div class="pt-3 pl-3 pr-3 col-md-12 col-lg-12">
+                    <div class="row mt-3" id="dvNewRegistration">
+                        <div class="table-responsive">
+                            <table class="table" id="newRegistrationTable">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Source</th>
+                                        <th scope="col">Source Description</th>
+                                        <th scope="col">Reg Count</th>
+                                        <th scope="col">%</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row" id="dvNewRegistrationData" style="display:none;">
+
+        </div>
+    </div>
+</div>
+<script>
+
+    
+    var tableData = [];
+    var tableDataRefGenConv = [];
+    var tableDataNewRegistration = [];
+    function GetReferingBase() {
+        var type = 1;
+        $("#divLoader").show();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("GetReferingBaseData", "KeyIndicators")',
+            data: "{'type': " + type + "}",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                tableData.length = 0;
+                $.map(response, function (item) {
+                    optionItem = {}
+                    optionItem["MobileNo"] = item.MobileNo;
+                    optionItem["MemberName"] = item.MemberName;
+                    optionItem["ReferralGenerated"] = item.ReferralGenerated;
+                    optionItem["ReferralTransacted"] = item.ReferralTransacted;
+                    optionItem["BusinessGenerated"] = item.BusinessGenerated;
+                    tableData.push(optionItem);
+                });
+                DrawReferingBaseTable();
+                $("#dvData").show();
+                $("#dvReferreingBase").show();
+                $("#dvRefGenConv").hide();
+                $("#dvNewRegistration").hide();
+
+                $("#divLoader").hide();
+            },
+            failure: function (response) {
+                $("#divLoader").hide();
+            },
+            error: function (response) {
+                $("#divLoader").hide();
+            }
+        });
+    }
+
+    function DrawReferingBaseTable() {
+        var table1 = $('#referreingBaseTable').DataTable();
+        table1.destroy();
+        var table = $('#referreingBaseTable').DataTable({
+            "data": tableData,
+            "paging": true,
+            "ordering": true,
+            "info": true,
+            "bFilter": true,
+            "pageLength": 25,
+            "pagingType": "simple_numbers",
+            "columns": [
+                { data: "MobileNo" },
+                { data: "MemberName" },
+                { data: "ReferralGenerated" },
+                { data: "ReferralTransacted" },
+                { data: "BusinessGenerated" }
+
+            ]
+        });
+        $('#referreingBaseTable_filter').hide();
+
+        $('#txtSearch').on('keyup', function () {
+            $.fn.dataTable.ext.search.push(function (settings, searchData) {
+                var term = $('#txtSearch').val().toLowerCase()
+                for (var i = 0; i < searchData.length; i++) {
+                    if (searchData[i].toLowerCase().indexOf(term) == 0) {
+                        return true;
+                    }
+                }
+                return false;
+            });
+            var table = $('#referreingBaseTable').DataTable();
+            table.draw();
+        });
+    }
+
+    function GetRefGenConv(type) {
+        $("#divLoader").show();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("GetReferingBaseData", "KeyIndicators")',
+            data: "{'type': " + type + "}",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                tableDataRefGenConv.length = 0;
+                $.map(response, function (item) {
+                    optionItem = {}
+                    optionItem["MobileNo"] = item.MobileNo;
+                    optionItem["MemberName"] = item.MemberName;
+                    optionItem["ReferralMobileNo"] = item.ReferralMobileNo;
+                    optionItem["ReferralName"] = item.ReferralName;
+                    optionItem["TransactionCount"] = item.TransactionCount;
+                    optionItem["BusinessGenerated"] = item.BusinessGenerated;
+                    tableDataRefGenConv.push(optionItem);
+                });
+                DrawRefGenConvTable();
+                $("#dvData").show();               
+                $("#dvRefGenConv").show();
+                $("#dvReferreingBase").hide();
+                $("#dvNewRegistration").hide();
+
+                $("#divLoader").hide();
+            },
+            failure: function (response) {
+                $("#divLoader").hide();
+            },
+            error: function (response) {
+                $("#divLoader").hide();
+            }
+        });
+    }
+
+    function DrawRefGenConvTable() {
+        var table1 = $('#refGenConvTable').DataTable();
+        table1.destroy();
+        var table = $('#refGenConvTable').DataTable({
+            "data": tableDataRefGenConv,
+            "paging": true,
+            "ordering": true,
+            "info": true,
+            "bFilter": true,
+            "pageLength": 25,
+            "pagingType": "simple_numbers",
+            "columns": [
+                { data: "MobileNo" },
+                { data: "MemberName" },
+                { data: "ReferralMobileNo" },
+                { data: "ReferralName" },
+                { data: "TransactionCount" },
+                { data: "BusinessGenerated" }
+
+            ]
+        });
+        $('#refGenConvTable_filter').hide();
+
+        $('#txtSearch').on('keyup', function () {
+            $.fn.dataTable.ext.search.push(function (settings, searchData) {
+                var term = $('#txtSearch').val().toLowerCase()
+                for (var i = 0; i < searchData.length; i++) {
+                    if (searchData[i].toLowerCase().indexOf(term) == 0) {
+                        return true;
+                    }
+                }
+                return false;
+            });
+            var table = $('#refGenConvTable').DataTable();
+            table.draw();
+        });
+    }
+
+    function GetNewRegistration() {
+        var type = 3;
+        $("#divLoader").show();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("GetReferingBaseData", "KeyIndicators")',
+            data: "{'type': " + type + "}",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                tableDataNewRegistration.length = 0;
+                $.map(response, function (item) {
+                    optionItem = {}
+                    optionItem["Source"] = item.MobileNo;
+                    optionItem["SourceDesc"] = item.MemberName;
+                    optionItem["RegCount"] = item.ReferralMobileNo;
+                    optionItem["Percentage"] = item.ReferralName;
+                    tableDataNewRegistration.push(optionItem);
+                });
+                DrawNewRegistrationTable();
+                $("#dvData").show();
+                $("#dvRefGenConv").hide();
+                $("#dvReferreingBase").hide();
+                $("#dvNewRegistration").show();
+                $("#divLoader").hide();
+            },
+            failure: function (response) {
+                $("#divLoader").hide();
+            },
+            error: function (response) {
+                $("#divLoader").hide();
+            }
+        });
+    }
+
+    function DrawNewRegistrationTable() {
+        var table1 = $('#newRegistrationTable').DataTable();
+        table1.destroy();
+        var table = $('#newRegistrationTable').DataTable({
+            "data": tableDataNewRegistration,
+            "paging": true,
+            "ordering": true,
+            "info": true,
+            "bFilter": true,
+            "pageLength": 25,
+            "pagingType": "simple_numbers",
+            "columns": [
+                { data: "Source" },
+                { data: "SourceDesc" },
+                { data: "RegCount" },
+                { data: "Percentage" }
+            ]
+        });
+        $('#newRegistrationTable_filter').hide();
+
+        $('#txtSearch').on('keyup', function () {
+            $.fn.dataTable.ext.search.push(function (settings, searchData) {
+                var term = $('#txtSearch').val().toLowerCase()
+                for (var i = 0; i < searchData.length; i++) {
+                    if (searchData[i].toLowerCase().indexOf(term) == 0) {
+                        return true;
+                    }
+                }
+                return false;
+            });
+            var table = $('#newRegistrationTable').DataTable();
+            table.draw();
+        });
+    }
+</script>

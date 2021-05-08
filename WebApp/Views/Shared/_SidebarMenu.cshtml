@@ -63,24 +63,12 @@
                             <i class="metismenu-state-icon pe-7s-angle-down caret-left"></i>
                         </a>
                         <ul>
-                            @*<li class="@Html.IsSelected(controller: "LoyaltyKPIs", action: "BizObj")">
-                                <a class="@Html.IsSelected(controller: "LoyaltyKPIs", action: "BizObj")" href="@Url.Action("BizObj", "LoyaltyKPIs")">
-                                    <i class="metismenu-icon"></i>
-                                    Biz Obj
-                                </a>
-                            </li>*@
                             <li class="@Html.IsSelected(controller: "LoyaltyKPIs", action: "LoyaltyPerformance")">
                                 <a class="@Html.IsSelected(controller: "LoyaltyKPIs", action: "LoyaltyPerformance")" href="@Url.Action("LoyaltyPerformance", "LoyaltyKPIs")">
                                     <i class="metismenu-icon">
                                     </i>Loyalty Performance
                                 </a>
-                            </li>
-                            @*<li class="@Html.IsSelected(controller: "LoyaltyKPIs", action: "LoyaltySegments")">
-                                <a class="@Html.IsSelected(controller: "LoyaltyKPIs", action: "LoyaltySegments")" href="@Url.Action("LoyaltySegments", "LoyaltyKPIs")">
-                                    <i class="metismenu-icon">
-                                    </i>Loyalty Segments
-                                </a>
-                            </li>*@
+                            </li>                            
                         </ul>
                     </li>
                     <li>
@@ -89,13 +77,7 @@
                             Reports
                             <i class="metismenu-state-icon pe-7s-angle-down caret-left"></i>
                         </a>
-                        <ul>
-                            @*<li class="@Html.IsSelected(controller: "Reports", action: "MemberSearch")">
-                        <a class="@Html.IsSelected(controller: "Reports", action: "MemberSearch")" href="@Url.Action("MemberSearch", "Reports")">
-                            <i class="metismenu-icon"></i>
-                            Member Search
-                        </a>
-                    </li>*@
+                        <ul>                           
                             <li class="@Html.IsSelected(controller: "Reports", action: "MemberList")">
                                 <a class="@Html.IsSelected(controller: "Reports", action: "MemberList")" href="@Url.Action("MemberList", "Reports")">
                                     <i class="metismenu-icon"></i>
@@ -161,8 +143,8 @@
                                     Non-Redeeming
                                 </a>
                             </li>
-                            <li class="@Html.IsSelected(controller: "KeyIndicators", action: "MemberWebPage")">
-                                <a class="@Html.IsSelected(controller: "KeyIndicators", action: "MemberWebPage")" href="@Url.Action("MemberWebPage", "KeyIndicators")">
+                            <li class="@Html.IsSelected(controller: "KeyIndicators", action: "MemberPage")">
+                                <a class="@Html.IsSelected(controller: "KeyIndicators", action: "MemberPage")" href="@Url.Action("MemberPage", "KeyIndicators")">
                                     <i class="metismenu-icon"></i>
                                     Member WebPage
                                 </a>

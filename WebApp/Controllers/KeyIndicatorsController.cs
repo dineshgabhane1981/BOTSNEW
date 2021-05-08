@@ -97,6 +97,23 @@ namespace WebApp.Controllers
             return View(objMemberWebPage);
         }
 
+        public ActionResult MemberPage()
+        {
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            MemberPage objMemberPage = new MemberPage();
+            objMemberPage = KR.GetMemberPageData(userDetails.GroupId, userDetails.connectionString);
+            return View(objMemberPage);
+        }
+        [HttpPost]
+        public JsonResult GetReferingBaseData(string type)
+        {
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
+
+            List<MemberPageRefData> objMemberPageRefData = new List<MemberPageRefData>();
+            objMemberPageRefData = KR.GetMemberPageRefData(userDetails.GroupId, type, userDetails.connectionString);           
+            return new JsonResult() { Data = objMemberPageRefData, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
+        }
+
         [HttpPost]
         public JsonResult GetOnlyOnceResult(string outletId)
         {

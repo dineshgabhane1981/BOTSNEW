@@ -159,5 +159,47 @@ namespace BOTS_BL.Repository
 
             return objMemberWebPage;
         }
+
+        public MemberPage GetMemberPageData(string GroupId, string connstr)
+        {
+            MemberPage objMemberPage = new MemberPage();
+            try
+            {
+                using (var context = new BOTSDBContext(connstr))
+                {
+                    objMemberPage = context.Database.SqlQuery<MemberPage>("sp_BOTS_MemberWebPage1 @pi_GroupId, @pi_Date, @pi_LoginId",
+                        new SqlParameter("@pi_GroupId", GroupId), new SqlParameter("@pi_Date", DateTime.Now.ToShortDateString()), new SqlParameter("@pi_LoginId", "")).FirstOrDefault<MemberPage>();
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+            return objMemberPage;
+        }
+
+        public List<MemberPageRefData> GetMemberPageRefData(string GroupId, string type, string connstr)
+        {
+            List<MemberPageRefData> objMemberPageRefData = new List<MemberPageRefData>();
+            try
+            {
+                using (var context = new BOTSDBContext(connstr))
+                {
+                    objMemberPageRefData = context.Database.SqlQuery<MemberPageRefData>("sp_BOTS_MemberWebPage2 @pi_GroupId, @pi_Date, @pi_LoginId, @pi_Type", 
+                        new SqlParameter("@pi_GroupId", GroupId), 
+                        new SqlParameter("@pi_Date", DateTime.Now.ToShortDateString()), 
+                        new SqlParameter("@pi_LoginId", ""), 
+                        new SqlParameter("@pi_Type", type)).ToList<MemberPageRefData>();                    
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+            return objMemberPageRefData;
+        }
+
     }
 }
