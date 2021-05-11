@@ -24,14 +24,16 @@ namespace WebApp.Controllers
             ExecutiveSummary dataDashboard = new ExecutiveSummary();
             try
             {
+                
                 var userDetails = (CustomerLoginDetail)Session["UserSession"];
-                var lstOutlet = RR.GetOutletList(userDetails.GroupId, userDetails.connectionString);
-                dataDashboard = DR.GetDashboardData(userDetails.GroupId, userDetails.connectionString);
+                var lstOutlet = RR.GetOutletList(userDetails.GroupId, userDetails.connectionString);                
+                dataDashboard = DR.GetDashboardData(userDetails.GroupId, userDetails.connectionString);                
                 ViewBag.OutletList = lstOutlet;
+                
             }
             catch (Exception ex)
-            {
-                newexception.AddException(ex);
+            { 
+                newexception.AddException(ex,"");
             }
             return View(dataDashboard);
         }
@@ -55,10 +57,11 @@ namespace WebApp.Controllers
         {
             List<object> lstData = new List<object>();
             List<long> dataList = new List<long>();
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
             try
             {
                 List<string> lstDates = new List<string>();
-                var userDetails = (CustomerLoginDetail)Session["UserSession"];
+               
                 DashboardMemberSegment dataMemberSegment = new DashboardMemberSegment();
                 dataMemberSegment = DR.GetDashboardMemberSegmentData(userDetails.GroupId, OutletId, userDetails.connectionString);
 
@@ -76,7 +79,7 @@ namespace WebApp.Controllers
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex);
+                newexception.AddException(ex, userDetails.GroupId);
             }
             //lstMember = RR.GetMemberList(SearchText);
             return new JsonResult() { Data = lstData, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
@@ -85,15 +88,16 @@ namespace WebApp.Controllers
         [HttpPost]
         public JsonResult GetMemberSegmentTxnResult(string OutletId)
         {
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
             List<DashboardMemberSegmentTxn> dataMemberSegmentTxn = new List<DashboardMemberSegmentTxn>();
             try
             {
-                var userDetails = (CustomerLoginDetail)Session["UserSession"];
+                
                 dataMemberSegmentTxn = DR.GetDashboardMemberSegmentTxnData(userDetails.GroupId, OutletId, userDetails.connectionString);
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex);
+                newexception.AddException(ex, userDetails.GroupId);
             }
             return new JsonResult() { Data = dataMemberSegmentTxn, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
@@ -101,10 +105,11 @@ namespace WebApp.Controllers
         [HttpPost]
         public JsonResult GetOutletEnrolmentResult(string monthFlag)
         {
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
             List<object> lstData = new List<object>();
             try
             {
-                var userDetails = (CustomerLoginDetail)Session["UserSession"];
+                
                 List<DashboardOutletEnrolment> dataOutletEnrolment = new List<DashboardOutletEnrolment>();
                 dataOutletEnrolment = DR.GetDashboardOutletEnrolmentData(userDetails.GroupId, monthFlag, userDetails.connectionString);
                 List<string> nameList = new List<string>();
@@ -119,7 +124,7 @@ namespace WebApp.Controllers
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex);
+                newexception.AddException(ex, userDetails.GroupId);
             }
             return new JsonResult() { Data = lstData, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
@@ -127,10 +132,11 @@ namespace WebApp.Controllers
         [HttpPost]
         public JsonResult GetPointsSummaryResult(string monthFlag)
         {
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
             List<long> dataList = new List<long>();
             try
             {
-                var userDetails = (CustomerLoginDetail)Session["UserSession"];
+                
                 DashboardPointsSummary dataPointsSummary = new DashboardPointsSummary();
                 dataPointsSummary = DR.GetDashboardPointsSummaryData(userDetails.GroupId, monthFlag, userDetails.connectionString);
 
@@ -143,7 +149,7 @@ namespace WebApp.Controllers
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex);
+                newexception.AddException(ex, userDetails.GroupId);
             }
             return new JsonResult() { Data = dataList, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
@@ -151,9 +157,10 @@ namespace WebApp.Controllers
         public JsonResult GetMemberWebPageResult(string profileFlag)
         {
             List<long> dataList = new List<long>();
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
             try
             {
-                var userDetails = (CustomerLoginDetail)Session["UserSession"];
+                
                 DashboardMemberWebPage dataMemberWebPage = new DashboardMemberWebPage();
                 dataMemberWebPage = DR.GetDashboardMemberWebPageData(userDetails.GroupId, profileFlag, userDetails.connectionString);
 
@@ -178,7 +185,7 @@ namespace WebApp.Controllers
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex);
+                newexception.AddException(ex, userDetails.GroupId);
             }
             return new JsonResult() { Data = dataList, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
@@ -187,9 +194,10 @@ namespace WebApp.Controllers
         public JsonResult GetBulkUploadResult()
         {
             List<object> dataList = new List<object>();
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
             try
             {
-                var userDetails = (CustomerLoginDetail)Session["UserSession"];
+                
                 DashboardBulkUpload objDashboardBulkUpload = new DashboardBulkUpload();
                 objDashboardBulkUpload = DR.GetDashboardBulkUpload(userDetails.GroupId, userDetails.connectionString);
 
@@ -202,16 +210,17 @@ namespace WebApp.Controllers
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex);
+                newexception.AddException(ex, userDetails.GroupId);
             }
             return new JsonResult() { Data = dataList, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
         public JsonResult GetRedemptionResult(string type)
         {
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
             List<object> dataList = new List<object>();
             try
             {
-                var userDetails = (CustomerLoginDetail)Session["UserSession"];
+                
                 DashboardRedemption objDashboardRedemption = new DashboardRedemption();
                 objDashboardRedemption = DR.GetDashboardRedemption(userDetails.GroupId, type, userDetails.connectionString);
 
@@ -228,7 +237,7 @@ namespace WebApp.Controllers
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex);
+                newexception.AddException(ex, userDetails.GroupId);
             }
             return new JsonResult() { Data = dataList, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
@@ -289,7 +298,7 @@ namespace WebApp.Controllers
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex);
+                newexception.AddException(ex,"");
             }
             return new JsonResult() { Data = status, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }

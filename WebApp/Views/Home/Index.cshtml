@@ -266,11 +266,11 @@
                             <div class="card mb-3 widget-chart widget-chart2 text-left w-100">
                                 <div class="widget-chat-wrapper-outer">
                                     <div style="display:flex;margin-top:30px;">
-                                        <div class="widget-chart-wrapper widget-chart-wrapper-lg opacity-10 m-0" id="containerRedemption" style="width:200px !important;border-right:1px solid black;">
-                                            <canvas id="cvRedemption"></canvas>
+                                        <div class="widget-chart-wrapper widget-chart-wrapper-lg opacity-10 m-0" id="containerRedemption" style="width:250px;border-right:1px solid black;">
+                                            <canvas id="cvRedemption" width="350"></canvas>
                                         </div>
-                                        <div class="widget-chart-wrapper widget-chart-wrapper-lg opacity-10 m-0" id="containerRedemptionMember" style="width:200px !important;">
-                                            <canvas id="cvRedemptionMember"></canvas>
+                                        <div class="widget-chart-wrapper widget-chart-wrapper-lg opacity-10 m-0" id="containerRedemptionMember" >
+                                            <canvas id="cvRedemptionMember" width="250"></canvas>
                                         </div>
                                     </div>
                                     <div id="dvWebpageData">
@@ -908,14 +908,16 @@
                         plugins: {
                             datalabels: {
                                 formatter: (value, ctx) => {
-                                    let sum = 0;
-                                    let dataArr = ctx.chart.data.datasets[0].data;
-                                    dataArr.map(data => {
-                                        sum += data;
-                                    });
-                                    let percentage = (value * 100 / sum).toFixed(2) + "%";
+                                    if (value != null) {
+                                        let sum = 0;
+                                        let dataArr = ctx.chart.data.datasets[0].data;
+                                        dataArr.map(data => {
+                                            sum += data;
+                                        });
+                                        let percentage = (value * 100 / sum).toFixed(2) + "%";
 
-                                    return percentage;
+                                        return percentage;
+                                    }
                                 },
                                 color: '#000',
                             }

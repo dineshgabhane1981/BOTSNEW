@@ -25,7 +25,7 @@ namespace WebApp.Controllers
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex);
+                newexception.AddException(ex,"");
             }
             return View(list);
         }
@@ -46,7 +46,7 @@ namespace WebApp.Controllers
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex);
+                newexception.AddException(ex, groupId);
             }
             return RedirectToAction("Index", "Home");
         }
@@ -80,7 +80,7 @@ namespace WebApp.Controllers
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex);
+                newexception.AddException(ex, groupId);
             }
             return View(objCustomerViewModel);
         }
@@ -89,16 +89,17 @@ namespace WebApp.Controllers
         public ActionResult AddGroupDetails(CustomerViewModel objCustomerViewModel)
         {
             int GroupId = 0;
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
             try
             {
-                var userDetails = (CustomerLoginDetail)Session["UserSession"];
+                
                 objCustomerViewModel.objGroupData.CreatedDate = DateTime.Now;
                 objCustomerViewModel.objGroupData.CreatedBy = Convert.ToInt32(userDetails.UserId);
                 GroupId = CR.AddGroupDetails(objCustomerViewModel.objGroupData);
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex);
+                newexception.AddException(ex, userDetails.GroupId);
             }
             return Json(GroupId, JsonRequestBehavior.AllowGet);
         }
@@ -107,16 +108,17 @@ namespace WebApp.Controllers
         public ActionResult AddModulesAndPayments(CustomerViewModel objCustomerViewModel)
         {
             bool status = false;
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
             try
             {
-                var userDetails = (CustomerLoginDetail)Session["UserSession"];
+                
                 objCustomerViewModel.objModulesPayment.CreatedDate = DateTime.Now;
                 objCustomerViewModel.objModulesPayment.CreatedBy = Convert.ToInt32(userDetails.UserId);
                 status = CR.AddModulesAndPayments(objCustomerViewModel.objModulesPayment);
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex);
+                newexception.AddException(ex, userDetails.GroupId);
             }
             return Json(status, JsonRequestBehavior.AllowGet);
         }
@@ -125,12 +127,13 @@ namespace WebApp.Controllers
         public bool AddBrandAndOutlet(string jsonData)
         {
             bool result = false;
+            string GroupId = "";
             try
             {
                 JavaScriptSerializer json_serializer = new JavaScriptSerializer();
                 json_serializer.MaxJsonLength = int.MaxValue;
                 object[] objData = (object[])json_serializer.DeserializeObject(jsonData);
-                string GroupId = string.Empty;
+                
                 List<BrandDetail> lstBrands = new List<BrandDetail>();
                 List<OutletDetail> lstOutlets = new List<OutletDetail>();
                 foreach (Dictionary<string, object> item in objData)
@@ -175,7 +178,7 @@ namespace WebApp.Controllers
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex);
+                newexception.AddException(ex, GroupId);
             }
             return result;
         }
@@ -190,7 +193,7 @@ namespace WebApp.Controllers
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex);
+                newexception.AddException(ex, groupId);
             }
             return Json(objData, JsonRequestBehavior.AllowGet);
         }

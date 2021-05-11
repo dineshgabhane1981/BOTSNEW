@@ -24,5 +24,8 @@ namespace BOTS_BL.Models.CommonDB
         public string ExceptionURL { get; set; }
 
         public DateTime? Logdate { get; set; }
+
+        [StringLength(50)]
+        public string GroupId { get; set; }
     }
 }

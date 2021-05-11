@@ -41,7 +41,7 @@ namespace WebApp.Controllers
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex);
+                newexception.AddException(ex,"");
                 TempData["InvalidUserMessage"] = ex.Message;
                 return RedirectToAction("Index");
             }

@@ -197,7 +197,7 @@ namespace WebApp.Controllers
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex);
+                newexception.AddException(ex, GroupId);
             }
             return PartialView("_MemberSearch", objMemberSearch);
         }

@@ -55,6 +55,7 @@ namespace WebApp.Controllers
         public bool ChangeMemberName(string jsonData)
         {
             bool result = false;
+            string GroupId = "";
             try
             {
                 JavaScriptSerializer json_serializer = new JavaScriptSerializer();
@@ -62,7 +63,7 @@ namespace WebApp.Controllers
                 object[] objData = (object[])json_serializer.DeserializeObject(jsonData);
                 tblAudit objAudit = new tblAudit();
                 bool IsSMS = false;
-                string GroupId = "";
+                
                 string CustomerId = "";
                 string Name = "";
                 foreach (Dictionary<string, object> item in objData)
@@ -97,7 +98,7 @@ namespace WebApp.Controllers
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex);
+                newexception.AddException(ex, GroupId);
             }
             return result;
         }
@@ -106,6 +107,7 @@ namespace WebApp.Controllers
         public ActionResult ChangeMemberMobile(string jsonData)
         {
             SPResponse result = new SPResponse();
+            string GroupId = "";
             try
             {
                 JavaScriptSerializer json_serializer = new JavaScriptSerializer();
@@ -113,7 +115,7 @@ namespace WebApp.Controllers
                 object[] objData = (object[])json_serializer.DeserializeObject(jsonData);
                 tblAudit objAudit = new tblAudit();
                 bool IsSMS = false;
-                string GroupId = "";
+                
                 string CustomerId = "";
                 string MobileNo = "";
                 foreach (Dictionary<string, object> item in objData)
@@ -149,7 +151,7 @@ namespace WebApp.Controllers
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex);
+                newexception.AddException(ex, GroupId);
             }
             return Json(result, JsonRequestBehavior.AllowGet);
         }
@@ -158,6 +160,7 @@ namespace WebApp.Controllers
         public ActionResult AddEarnData(string jsonData)
         {
             SPResponse result = new SPResponse();
+            string GroupId = "";
             try
             {
                 JavaScriptSerializer json_serializer = new JavaScriptSerializer();
@@ -165,7 +168,7 @@ namespace WebApp.Controllers
                 object[] objData = (object[])json_serializer.DeserializeObject(jsonData);
                 tblAudit objAudit = new tblAudit();
                 bool IsSMS = false;
-                string GroupId = "";
+                
                 string MobileNo = "";
                 string TransactionDate = "";
                 string InvoiceNumber = "";
@@ -207,7 +210,7 @@ namespace WebApp.Controllers
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex);
+                newexception.AddException(ex, GroupId);
             }
 
             return Json(result, JsonRequestBehavior.AllowGet);
@@ -217,6 +220,7 @@ namespace WebApp.Controllers
         public ActionResult RedeemPointsData(string jsonData)
         {
             SPResponse result = new SPResponse();
+            string GroupId = "";
             try
             {
                 JavaScriptSerializer json_serializer = new JavaScriptSerializer();
@@ -224,7 +228,7 @@ namespace WebApp.Controllers
                 object[] objData = (object[])json_serializer.DeserializeObject(jsonData);
                 tblAudit objAudit = new tblAudit();
                 bool IsSMS = false;
-                string GroupId = "";
+                
                 string MobileNo = "";
                 string TransactionDate = "";
                 string InvoiceNumber = "";
@@ -272,7 +276,7 @@ namespace WebApp.Controllers
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex);
+                newexception.AddException(ex, GroupId);
             }
             return Json(result, JsonRequestBehavior.AllowGet);
         }
@@ -281,6 +285,7 @@ namespace WebApp.Controllers
         public ActionResult LoadBonusData(string jsonData)
         {
             SPResponse result = new SPResponse();
+            string GroupId = "";
             try
             {
                 JavaScriptSerializer json_serializer = new JavaScriptSerializer();
@@ -288,7 +293,7 @@ namespace WebApp.Controllers
                 object[] objData = (object[])json_serializer.DeserializeObject(jsonData);
                 tblAudit objAudit = new tblAudit();
                 bool IsSMS = false;
-                string GroupId = "";
+                
                 string MobileNo = "";
                 int BonusPoints = 0;
                 string BonusRemark = "";
@@ -332,7 +337,7 @@ namespace WebApp.Controllers
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex);
+                newexception.AddException(ex, GroupId);
             }
             return Json(result, JsonRequestBehavior.AllowGet);
         }
@@ -340,7 +345,8 @@ namespace WebApp.Controllers
         [HttpPost]
         public ActionResult AddSingleMember(string jsonData)
         {
-            SPResponse result = new SPResponse();
+            SPResponse result = new SPResponse(); 
+            string GroupId = "";
             try
             {
                 JavaScriptSerializer json_serializer = new JavaScriptSerializer();
@@ -348,7 +354,7 @@ namespace WebApp.Controllers
                 object[] objData = (object[])json_serializer.DeserializeObject(jsonData);
                 tblAudit objAudit = new tblAudit();
                 CustomerDetail objCustomer = new CustomerDetail();
-                string GroupId = "";
+                
 
                 foreach (Dictionary<string, object> item in objData)
                 {
@@ -394,7 +400,7 @@ namespace WebApp.Controllers
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex);
+                newexception.AddException(ex, GroupId);
             }
             return Json(result, JsonRequestBehavior.AllowGet);
         }
@@ -494,7 +500,7 @@ namespace WebApp.Controllers
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex);
+                newexception.AddException(ex, GroupId);
                 result.ResponseCode = "-1";
             }
             return Json(result, JsonRequestBehavior.AllowGet);
@@ -520,7 +526,7 @@ namespace WebApp.Controllers
             catch (Exception ex)
             {
 
-                newexception.AddException(ex);
+                newexception.AddException(ex, GroupId);
             }
 
             return Json(objreset, JsonRequestBehavior.AllowGet);
@@ -534,7 +540,7 @@ namespace WebApp.Controllers
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex);
+                newexception.AddException(ex, GroupId);
             }
             return result;
         }
@@ -542,6 +548,7 @@ namespace WebApp.Controllers
         public bool ChangeSMSDetails(string jsonData)
         {
             bool result = false;
+            string GroupId = "";
             try
             {
                 JavaScriptSerializer json_serializer = new JavaScriptSerializer();
@@ -549,7 +556,7 @@ namespace WebApp.Controllers
                 object[] objData = (object[])json_serializer.DeserializeObject(jsonData);
                 tblAudit objAudit = new tblAudit();
                 bool IsSMS = false;
-                string GroupId = "";
+               
                 string CustomerId = "";
                 bool DisableSMS = false;
                 foreach (Dictionary<string, object> item in objData)
@@ -587,7 +594,7 @@ namespace WebApp.Controllers
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex);
+                newexception.AddException(ex, GroupId);
             }
             return result;
         }
@@ -652,7 +659,7 @@ namespace WebApp.Controllers
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex);
+                newexception.AddException(ex, GroupId);
             }
             return Json(result, JsonRequestBehavior.AllowGet);
         }

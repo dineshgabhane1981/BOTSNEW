@@ -148,7 +148,7 @@ namespace Chitale.Controllers
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex);
+                newexception.AddException(ex,"");
             }
             return new JsonResult() { Data = objOrderData, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
@@ -174,9 +174,10 @@ namespace Chitale.Controllers
 
         public ActionResult ExportOrdertoRavanaDaysParticipant(string Cluster, string SubCluster, string City, string FromDate, string Todate, string Type)
         {
+            var UserSession = (CustomerDetail)Session["ChitaleUser"];
             try
             {
-                var UserSession = (CustomerDetail)Session["ChitaleUser"];
+                
                 List<OrderVsRavanaDay> objOrderData = new List<OrderVsRavanaDay>();
                 objOrderData = pr.GetOrderVsRavanaDayData(UserSession.CustomerId);
 
@@ -227,16 +228,17 @@ namespace Chitale.Controllers
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex);
+                newexception.AddException(ex, UserSession.CustomerId);
                 return null;
             }
         }
 
         public ActionResult ExportNoActionParticipantParticipant(string Type)
         {
+            var UserSession = (CustomerDetail)Session["ChitaleUser"];
             try
             {
-                var UserSession = (CustomerDetail)Session["ChitaleUser"];
+                
                 List<NoActionParticipantData> objData = new List<NoActionParticipantData>();
                 objData = pr.GetNoActionParticipantsData(Type, UserSession.CustomerId, UserSession.CustomerType);
                 System.Data.DataTable tableToExport = new System.Data.DataTable();
@@ -281,7 +283,7 @@ namespace Chitale.Controllers
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex);
+                newexception.AddException(ex, UserSession.CustomerId);
                 return null;
             }
             return null;

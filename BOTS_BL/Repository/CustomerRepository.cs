@@ -145,7 +145,7 @@ namespace BOTS_BL.Repository
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex);
+                newexception.AddException(ex,"");
             }
             return objGroupList;
         }

@@ -49,7 +49,7 @@ namespace BOTS_BL.Repository
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex);
+                newexception.AddException(ex, GroupId);
             }
             return countriesItem;
         }
@@ -76,7 +76,7 @@ namespace BOTS_BL.Repository
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex);
+                newexception.AddException(ex, GroupId);
             }
             return BrandItem;
 
@@ -197,7 +197,7 @@ namespace BOTS_BL.Repository
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex);
+                newexception.AddException(ex, GroupId);
             }
             return memberSearch;
         }
@@ -266,7 +266,7 @@ namespace BOTS_BL.Repository
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex);
+                newexception.AddException(ex, BrandId);
             }
             return outletlist;
 

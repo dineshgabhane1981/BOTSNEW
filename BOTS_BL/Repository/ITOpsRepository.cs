@@ -28,7 +28,7 @@ namespace BOTS_BL.Repository
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex);
+                newexception.AddException(ex, "");
             }
             return emailId;
         }
@@ -63,7 +63,7 @@ namespace BOTS_BL.Repository
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex);
+                newexception.AddException(ex, "");
             }
             return objMemberData;
         }
@@ -98,7 +98,7 @@ namespace BOTS_BL.Repository
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex);
+                newexception.AddException(ex, "");
             }
             return objMemberData;
         }
@@ -123,7 +123,7 @@ namespace BOTS_BL.Repository
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex);
+                newexception.AddException(ex, "");
             }
             return result;
         }
@@ -153,7 +153,7 @@ namespace BOTS_BL.Repository
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex);
+                newexception.AddException(ex, "");
             }
             return status;
         }
@@ -232,7 +232,7 @@ namespace BOTS_BL.Repository
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex);
+                newexception.AddException(ex, GroupId);
             }
             return result;
         }
@@ -272,7 +272,7 @@ namespace BOTS_BL.Repository
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex);
+                newexception.AddException(ex, "");
             }
 
             return result;
@@ -308,7 +308,7 @@ namespace BOTS_BL.Repository
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex);
+                newexception.AddException(ex, GroupId);
             }
             return result;
         }
@@ -342,7 +342,7 @@ namespace BOTS_BL.Repository
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex);
+                newexception.AddException(ex, GroupId);
             }
             return result;
         }
@@ -384,7 +384,7 @@ namespace BOTS_BL.Repository
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex);
+                newexception.AddException(ex, GroupId);
             }
             return result;
         }
@@ -421,7 +421,7 @@ namespace BOTS_BL.Repository
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex);
+                newexception.AddException(ex, GroupId);
             }
             return result;
         }
@@ -449,7 +449,7 @@ namespace BOTS_BL.Repository
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex);
+                newexception.AddException(ex, GroupId);
             }
             return status;
         }
@@ -480,7 +480,7 @@ namespace BOTS_BL.Repository
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex);
+                newexception.AddException(ex, GroupId);
             }
             return objMemberData;
         }
@@ -515,7 +515,7 @@ namespace BOTS_BL.Repository
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex);
+                newexception.AddException(ex, GroupId);
             }
             return objReturn;
         }
@@ -553,7 +553,7 @@ namespace BOTS_BL.Repository
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex);
+                newexception.AddException(ex, GroupId);
             }
             return lstObjReturn;
         }
@@ -570,7 +570,7 @@ namespace BOTS_BL.Repository
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex);
+                newexception.AddException(ex, GroupId);
             }
             return objCustomerDetail;
         }
@@ -605,7 +605,7 @@ namespace BOTS_BL.Repository
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex);
+                newexception.AddException(ex, GroupId);
             }
             return result;
 

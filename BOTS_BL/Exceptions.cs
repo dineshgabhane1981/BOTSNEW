@@ -12,7 +12,7 @@ namespace BOTS_BL
     public class Exceptions
     {
         private static String exepurl = "";
-        public void AddException(Exception ex)
+        public void AddException(Exception ex, string groupId)
         {
             tblErrorLog objerrorlog = new tblErrorLog();
             exepurl = context.Current.Request.Url.AbsolutePath;
@@ -22,6 +22,7 @@ namespace BOTS_BL
             objerrorlog.ExceptionURL = exepurl;
             objerrorlog.ExceptionSource = ex.ToString();
             objerrorlog.Logdate = DateTime.Now;
+            objerrorlog.GroupId = groupId;
             ObjLR.AddException(objerrorlog);
 
         }

@@ -14,17 +14,25 @@ namespace BOTS_BL.Repository
     public class DashboardRepository
     {
         //string connstr = CustomerConnString.ConnectionStringCustomer;
+        Exceptions newexception = new Exceptions();
         public ExecutiveSummary GetDashboardData(string GroupId, string connstr)
         {
 
             ExecutiveSummary dataDashboard = new ExecutiveSummary();
-            using (var context = new BOTSDBContext(connstr))
+            try
             {
-
-                dataDashboard = context.Database.SqlQuery<ExecutiveSummary>("sp_Dashboard @pi_GroupId, @pi_Date", new SqlParameter("@pi_GroupId", GroupId), new SqlParameter("@pi_Date", DateTime.Now.ToShortDateString())).FirstOrDefault<ExecutiveSummary>();
-
-                dataDashboard.lstOutletDetails = context.Database.SqlQuery<OutletDetails>("sp_OutletDashboard @pi_GroupId, @pi_Date", new SqlParameter("@pi_GroupId", GroupId), new SqlParameter("@pi_Date", DateTime.Now.ToString("yyyy-MM-dd"))).ToList<OutletDetails>();
-
+                using (var context = new BOTSDBContext(connstr))
+                {
+                    
+                    dataDashboard = context.Database.SqlQuery<ExecutiveSummary>("sp_Dashboard @pi_GroupId, @pi_Date", new SqlParameter("@pi_GroupId", GroupId), new SqlParameter("@pi_Date", DateTime.Now.ToShortDateString())).FirstOrDefault<ExecutiveSummary>();
+                    
+                    dataDashboard.lstOutletDetails = context.Database.SqlQuery<OutletDetails>("sp_OutletDashboard @pi_GroupId, @pi_Date", new SqlParameter("@pi_GroupId", GroupId), new SqlParameter("@pi_Date", DateTime.Now.ToString("yyyy-MM-dd"))).ToList<OutletDetails>();
+                    
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, GroupId);
             }
             return dataDashboard;
         }
@@ -168,8 +176,8 @@ namespace BOTS_BL.Repository
             DashboardBulkUpload objDashboardBulkUpload = new DashboardBulkUpload();
             using (var context = new BOTSDBContext(connstr))
             {
-                objDashboardBulkUpload = context.Database.SqlQuery<DashboardBulkUpload>("sp_BOTS_DashboardBulkUpload @pi_GroupId, @pi_Date, @pi_LoginId", new SqlParameter("@pi_GroupId", GroupId), 
-                    new SqlParameter("@pi_Date", DateTime.Now.ToShortDateString()), 
+                objDashboardBulkUpload = context.Database.SqlQuery<DashboardBulkUpload>("sp_BOTS_DashboardBulkUpload @pi_GroupId, @pi_Date, @pi_LoginId", new SqlParameter("@pi_GroupId", GroupId),
+                    new SqlParameter("@pi_Date", DateTime.Now.ToShortDateString()),
                     new SqlParameter("@pi_LoginId", "")).FirstOrDefault<DashboardBulkUpload>();
             }
             return objDashboardBulkUpload;
@@ -183,7 +191,7 @@ namespace BOTS_BL.Repository
                 objDashboardRedemption = context.Database.SqlQuery<DashboardRedemption>("sp_BOTS_DashboardRedemption @pi_GroupId, @pi_Date, @pi_LoginId, @pi_Type", new SqlParameter("@pi_GroupId", GroupId),
                     new SqlParameter("@pi_Date", DateTime.Now.ToShortDateString()),
                     new SqlParameter("@pi_LoginId", ""),
-                    new SqlParameter("@pi_Type", Type)).FirstOrDefault<DashboardRedemption>(); 
+                    new SqlParameter("@pi_Type", Type)).FirstOrDefault<DashboardRedemption>();
             }
             return objDashboardRedemption;
         }
