@@ -42,10 +42,10 @@ namespace BOTS_BL.Repository
         {
             try
             {
-                using (var context = new CommonDBContext())
+                using (var contextCommon = new CommonDBContext())
                 {
-                    context.tblErrorLogs.Add(objerrorlog);
-                    context.SaveChanges();
+                    contextCommon.tblErrorLogs.Add(objerrorlog);
+                    contextCommon.SaveChanges();
 
                 }
             }
