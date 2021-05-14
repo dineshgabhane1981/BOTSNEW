@@ -50,7 +50,7 @@
             </div>
 
             <div class="col-md-6 col-xl-2">
-                <div class="card mb-3 widget-content" style="        background-color: #F0F000;">
+                <div class="card mb-3 widget-content" style="background-color: #F0F000;padding-bottom:60px;">
                     <div class="widget-content-wrapper text-white" style="display:block !important;">
                         <div class="widget-content-left">
                             <div class="widget-heading">
@@ -68,10 +68,10 @@
             </div>
 
             <div class="col-md-6 col-xl-2">
-                <div class="card mb-3 widget-content" style="background-color: #D99694;">
+                <div class="card mb-3 widget-content" style="background-color: #D99694; padding-bottom:60px;">
                     <div class="widget-content-wrapper text-white" style="display:block !important;">
                         <div class="widget-content-left">
-                            <div class="widget-heading">
+                            <div class="widget-heading" style="margin-left:-8px;">
                                 New Registrations
                                 <hr style="border-top: 2px solid white;margin:0px;" />
                             </div>
@@ -84,31 +84,32 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-6 col-xl-3">
-                <table border="1" cellpadding="5" cellspacing="5">
-                    <tr>
-                        <th>Other Elements</th>
-                        <th>Nos</th>
-                        <th>%</th>
-                    </tr>
-                    <tr>
-                        <td>Profile Update</td>
-                        <td>@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(Model.ProfileUpdateCount))</td>
-                        <td>@String.Format(new CultureInfo("en-IN", false), "{0:n2}", Convert.ToDouble(Model.ProfileUpdatePercentage))</td>
-                    </tr>
-                    <tr>
-                        <td>Gift-a-Point</td>
-                        <td>@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(Model.GiftAPointsCount))</td>
-                        <td>@String.Format(new CultureInfo("en-IN", false), "{0:n2}", Convert.ToDouble(Model.GiftAPointsPercentage))</td>
-                    </tr>
-                    <tr>
-                        <td>Opt-outs</td>
-                        <td>@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(Model.OptOutCount))</td>
-                        <td>@String.Format(new CultureInfo("en-IN", false), "{0:n2}", Convert.ToDouble(Model.OptOutPercentage))</td>
-                    </tr>
-                </table>
+            <div class="col-md-6 col-xl-3">                
+                    <table border="1" cellpadding="5" cellspacing="5">
+                        <tr>
+                            <th colspan="3" style="text-align:center;background-color:orangered;color:white;"><span style="cursor:pointer;" onclick="ShowValues();">Other Elements</span></th>
+                            @*<th>Nos</th>
+                    <th>%</th>*@
+                        </tr>
+                        <tr id="tr1" style="display:none;">
+                            <td>Profile Update</td>
+                            <td>@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(Model.ProfileUpdateCount))</td>
+                            <td>@String.Format(new CultureInfo("en-IN", false), "{0:n2}", Convert.ToDouble(Model.ProfileUpdatePercentage))</td>
+                        </tr>
+                        <tr id="tr2" style="display:none;">
+                            <td>Gift-a-Point</td>
+                            <td>@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(Model.GiftAPointsCount))</td>
+                            <td>@String.Format(new CultureInfo("en-IN", false), "{0:n2}", Convert.ToDouble(Model.GiftAPointsPercentage))</td>
+                        </tr>
+                        <tr id="tr3" style="display:none;">
+                            <td>Opt-outs</td>
+                            <td>@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(Model.OptOutCount))</td>
+                            <td>@String.Format(new CultureInfo("en-IN", false), "{0:n2}", Convert.ToDouble(Model.OptOutPercentage))</td>
+                        </tr>
+                    </table>
+                </div>
+           
             </div>
-        </div>
     </div>
 
 
@@ -411,4 +412,13 @@
             table.draw();
         });
     }
+
+    function ShowValues() {
+        $("#tr1").toggle();
+        $("#tr2").toggle();
+        $("#tr3").toggle();
+    }
+
+
+
 </script>

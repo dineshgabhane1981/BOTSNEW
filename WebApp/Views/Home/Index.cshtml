@@ -152,7 +152,128 @@
                 </div>
             </div>
         </div>
+    </div>
 
+    <div class="row">
+        <div class="col-md-12 col-lg-6">
+            <div class="mb-3 card">
+                <div class="card-header-tab card-header-tab-animation card-header">
+                    <div class="card-header-title">
+                        <i class="header-icon lnr-apartment icon-gradient bg-love-kiss"> </i>
+                        REDEMPTION
+                    </div>
+                    <ul class="nav">
+                        <li class="nav-item"><a href="javascript:void(0);" onclick="showRedemptionChart('1');" class="active nav-link">Base</a></li>
+                        <li class="nav-item"><a href="javascript:void(0);" onclick="showRedemptionChart('2');" class="nav-link second-tab-toggle">Bonus</a></li>
+                    </ul>
+                </div>
+                <div class="card-body">
+                    <div class="tab-content">
+                        <div class="tab-pane fade show active" id="tabs-eg-77">
+                            <div class="card mb-3 widget-chart widget-chart2 text-left w-100">
+                                <div class="widget-chat-wrapper-outer">
+                                    <div style="display:flex;margin-top:30px;">
+                                        <div class="widget-chart-wrapper widget-chart-wrapper-lg opacity-10 m-0" id="containerRedemption" style="width:250px;border-right:1px solid black;text-align:center;">
+                                            <span style="font-weight:bold;">Redemption<br /> Rate</span>
+                                            <canvas id="cvRedemption"></canvas>
+                                        </div>
+                                        <div class="widget-chart-wrapper widget-chart-wrapper-lg opacity-10 m-0" id="containerRedemptionMember" style="width:250px;text-align:center;">
+                                            <span style="font-weight:bold;">Unique Redeeming <br /> Members</span>
+                                            <canvas id="cvRedemptionMember"></canvas>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <table border="1" width="100%" id="tblReferrals" style="margin-top:30px;">
+                                            <tr>
+                                                <th style="text-align:center;">
+                                                    Redeemed Members
+                                                </th>
+                                                <th style="text-align:center;">
+                                                    Redemption Txn Count
+                                                </th>
+                                                <th style="text-align:center;">
+                                                    Redeemed Points
+                                                </th>
+                                                <th style="text-align:center;">
+                                                    Points Value (Rs.)
+                                                </th>
+                                            </tr>
+                                            <tr>
+                                                <td style="text-align:center;"><span id="spnRedeemedMembers"></span></td>
+                                                <td style="text-align:center;"><span id="spnRedemptionTxnCount"></span></td>
+                                                <td style="text-align:center;"><span id="spnRedeemedPoints"></span></td>
+                                                <td style="text-align:center;"><span id="spnPointsValue"></span></td>
+                                            </tr>
+                                            <tr>
+                                                <td colspan="4" style="height:20px;"></td>
+                                            </tr>
+                                            <tr>
+                                                <td style="text-align:center;font-weight:bold;">
+                                                    Business Generated
+                                                </td>
+                                                <td style="text-align:center;"><span id="spnBusinessGenerated"></span></td>
+                                                <td style="text-align:center;font-weight:bold;">
+                                                    Redeem to Invoice
+                                                </td>
+                                                <td style="text-align:center;"><span id="spnRedeemToInvoice"></span></td>
+                                            </tr>
+
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-12 col-lg-6">
+            <div class="mb-3 card">
+                <div class="card-header-tab card-header-tab-animation card-header">
+                    <div class="card-header-title">
+                        <i class="header-icon lnr-apartment icon-gradient bg-love-kiss"> </i>
+                        BULK UPLOAD
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="tab-content">
+                        <div class="tab-pane fade show active" id="tabs-eg-77">
+                            <div class="card mb-3 widget-chart widget-chart2 text-left w-100">
+                                <div class="widget-chat-wrapper-outer">
+                                    <div class="widget-chart-wrapper widget-chart-wrapper-lg opacity-10 m-0" id="containerBulkUpload">
+                                        <canvas id="cvBulkUpload"></canvas>
+                                    </div>
+                                    <div>
+                                        <table border="1" width="100%">
+                                            <tr>
+                                                <th style="text-align:center;">
+                                                    Total Upload
+                                                </th>
+                                                <th style="text-align:center;">
+                                                    Unique Transacted
+                                                </th>
+                                                <th style="text-align:center;">
+                                                    Transaction Count
+                                                </th>
+                                                <th style="text-align:center;">
+                                                    Business Generated
+                                                </th>
+                                            </tr>
+                                            <tr>
+                                                <td style="text-align:center;"><span id="spnTotalUpload"></span></td>
+                                                <td style="text-align:center;"><span id="spnUniqueTransacted"></span></td>
+                                                <td style="text-align:center;"><span id="spnTransactionCount"></span></td>
+                                                <td style="text-align:center;"><span id="spnBusinessGenerated"></span></td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
     <div class="row">
@@ -247,132 +368,13 @@
 
     </div>
 
-    <div class="row">
-        <div class="col-md-12 col-lg-6">
-            <div class="mb-3 card">
-                <div class="card-header-tab card-header-tab-animation card-header">
-                    <div class="card-header-title">
-                        <i class="header-icon lnr-apartment icon-gradient bg-love-kiss"> </i>
-                        REDEMPTION
-                    </div>
-                    <ul class="nav">
-                        <li class="nav-item"><a href="javascript:void(0);" onclick="showRedemptionChart('1');" class="active nav-link">Base</a></li>
-                        <li class="nav-item"><a href="javascript:void(0);" onclick="showRedemptionChart('2');" class="nav-link second-tab-toggle">Bonus</a></li>
-                    </ul>
-                </div>
-                <div class="card-body">
-                    <div class="tab-content">
-                        <div class="tab-pane fade show active" id="tabs-eg-77">
-                            <div class="card mb-3 widget-chart widget-chart2 text-left w-100">
-                                <div class="widget-chat-wrapper-outer">
-                                    <div style="display:flex;margin-top:30px;">
-                                        <div class="widget-chart-wrapper widget-chart-wrapper-lg opacity-10 m-0" id="containerRedemption" style="width:250px;border-right:1px solid black;">
-                                            <canvas id="cvRedemption" width="350"></canvas>
-                                        </div>
-                                        <div class="widget-chart-wrapper widget-chart-wrapper-lg opacity-10 m-0" id="containerRedemptionMember" >
-                                            <canvas id="cvRedemptionMember" width="250"></canvas>
-                                        </div>
-                                    </div>
-                                    <div id="dvWebpageData">
-                                        <table border="1" width="100%" id="tblReferrals" style="margin-top:30px;">
-                                            <tr>
-                                                <th style="text-align:center;">
-                                                    Redeemed Members
-                                                </th>
-                                                <th style="text-align:center;">
-                                                    Redemption Txn Count
-                                                </th>
-                                                <th style="text-align:center;">
-                                                    Redeemed Points
-                                                </th>
-                                                <th style="text-align:center;">
-                                                    Points Value (Rs.)
-                                                </th>
-                                            </tr>
-                                            <tr>
-                                                <td style="text-align:center;"><span id="spnRedeemedMembers"></span></td>
-                                                <td style="text-align:center;"><span id="spnRedemptionTxnCount"></span></td>
-                                                <td style="text-align:center;"><span id="spnRedeemedPoints"></span></td>
-                                                <td style="text-align:center;"><span id="spnPointsValue"></span></td>
-                                            </tr>
-                                            <tr>
-                                                <td colspan="4" style="height:20px;"></td>
-                                            </tr>
-                                            <tr>
-                                                <td style="text-align:center;font-weight:bold;">
-                                                    Business Generated
-                                                </td>
-                                                <td style="text-align:center;"><span id="spnBusinessGenerated"></span></td>
-                                                <td style="text-align:center;font-weight:bold;">
-                                                    Redeem to Invoice
-                                                </td>
-                                                <td style="text-align:center;"><span id="spnRedeemToInvoice"></span></td>
-                                            </tr>
 
-                                        </table>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-12 col-lg-6">
-            <div class="mb-3 card">
-                <div class="card-header-tab card-header-tab-animation card-header">
-                    <div class="card-header-title">
-                        <i class="header-icon lnr-apartment icon-gradient bg-love-kiss"> </i>
-                        BULK UPLOAD
-                    </div>
-                </div>
-                <div class="card-body">
-                    <div class="tab-content">
-                        <div class="tab-pane fade show active" id="tabs-eg-77">
-                            <div class="card mb-3 widget-chart widget-chart2 text-left w-100">
-                                <div class="widget-chat-wrapper-outer">
-                                    <div class="widget-chart-wrapper widget-chart-wrapper-lg opacity-10 m-0" id="containerBulkUpload">
-                                        <canvas id="cvBulkUpload"></canvas>
-                                    </div>
-                                    <div>
-                                        <table border="1" width="100%">
-                                            <tr>
-                                                <th style="text-align:center;">
-                                                    Total Upload
-                                                </th>
-                                                <th style="text-align:center;">
-                                                    Unique Transacted
-                                                </th>
-                                                <th style="text-align:center;">
-                                                    Transaction Count
-                                                </th>
-                                                <th style="text-align:center;">
-                                                    Business Generated
-                                                </th>
-                                            </tr>
-                                            <tr>
-                                                <td style="text-align:center;"><span id="spnTotalUpload"></span></td>
-                                                <td style="text-align:center;"><span id="spnUniqueTransacted"></span></td>
-                                                <td style="text-align:center;"><span id="spnTransactionCount"></span></td>
-                                                <td style="text-align:center;"><span id="spnBusinessGenerated"></span></td>
-                                            </tr>
-                                        </table>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
 
 
 </div>
 
 <script>
-    $(document).ready(function () {
-        $("#divLoader").hide();
+    $(document).ready(function () {        
         ShowMemberSegmentChart();
         showOutletEnrolmentChart('');
         showPointSummeryChart('');
@@ -382,7 +384,7 @@
         $("#memberSegmentOutletList").on("change", function () {
             ShowMemberSegmentChart();
         });
-        $("#divLoader").hide();
+        
     });
     function ToggleKeyPointers() {
         $("#dvKeyPointers").toggle(1000);
@@ -393,7 +395,7 @@
     }
 
     function ShowMemberSegmentChart() {
-        ////$("#divLoader").hide();
+        $("#divLoader").show();
         var selectedOutlet = $("#memberSegmentOutletList").val();
         var outletData = [];
         $.ajax({
@@ -546,20 +548,20 @@
                     });
                     //--------------------------------------------------------------------------------------------
 
-                    ////$("#divLoader").hide();
+                    $("#divLoader").hide();
                 }
             },
             failure: function (response) {
-                //$("#divLoader").hide();
+                $("#divLoader").hide();
             },
             error: function (response) {
-                //$("#divLoader").hide();
+                $("#divLoader").hide();
             }
         });
     }
 
     function showOutletEnrolmentChart(flag) {
-        //$("#divLoader").hide();
+        $("#divLoader").show();
         $.ajax({
             type: "POST",
             url: '@Url.Action("GetOutletEnrolmentResult", "Home")',
@@ -656,14 +658,14 @@
                                 }
                             }
                         });
-                    ////$("#divLoader").hide();
+                    $("#divLoader").hide();
                 }
             },
             failure: function (response) {
-                //$("#divLoader").hide();
+                $("#divLoader").hide();
             },
             error: function (response) {
-                //$("#divLoader").hide();
+                $("#divLoader").hide();
             }
         });
 
@@ -678,7 +680,7 @@
     }
 
     function showPointSummeryChart(flag) {
-        ////$("#divLoader").hide();
+        $("#divLoader").show();
         $.ajax({
             type: "POST",
             url: '@Url.Action("GetPointsSummaryResult", "Home")',
@@ -764,14 +766,14 @@
                                 }
                             }
                         });
-                    ////$("#divLoader").hide();
+                    $("#divLoader").hide();
                 }
             },
             failure: function (response) {
-                //$("#divLoader").hide();
+                $("#divLoader").hide();
             },
             error: function (response) {
-                //$("#divLoader").hide();
+               $("#divLoader").hide();
             }
         });
 
@@ -786,7 +788,7 @@
     }
 
     function showMemberWebpageChart(flag) {
-        ////$("#divLoader").hide();
+        $("#divLoader").show();
         $.ajax({
             type: "POST",
              url: '@Url.Action("GetMemberWebPageResult", "Home")',
@@ -861,13 +863,13 @@
                         }
                     }
                 }
-                ////$("#divLoader").hide();
+                $("#divLoader").hide();
             },
             failure: function (response) {
-                //$("#divLoader").hide();
+                $("#divLoader").hide();
             },
             error: function (response) {
-                //$("#divLoader").hide();
+                $("#divLoader").hide();
             }
         });
 
@@ -884,18 +886,18 @@
     }
 
      function showBulkUploadChart() {
-        ////$("#divLoader").hide();
+        $("#divLoader").show();
         $.ajax({
             type: "POST",
              url: '@Url.Action("GetBulkUploadResult", "Home")',
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             success: function (response) {
-
+                var count = 0;
                 if (response != null) {
                     $('#cvBulkUpload').remove(); // this is my <canvas> element
                     $('#containerBulkUpload').append('<canvas id="cvBulkUpload"><canvas>');
-                    var count = 0;
+                   
                     var options = {
                         rotation: (-0.5 * Math.PI) - (-90 / 180 * Math.PI),
                         legend: {
@@ -905,6 +907,7 @@
                         tooltips: {
                             enabled: false
                         },
+                        hover: { mode: null },
                         plugins: {
                             datalabels: {
                                 formatter: (value, ctx) => {
@@ -914,9 +917,15 @@
                                         dataArr.map(data => {
                                             sum += data;
                                         });
+                                        count++;                                       
                                         let percentage = (value * 100 / sum).toFixed(2) + "%";
-
-                                        return percentage;
+                                        if (count == 1) {
+                                            return "";
+                                        }
+                                        if (count == 2) {
+                                            count = 0;
+                                            return percentage;                                            
+                                        }
                                     }
                                 },
                                 color: '#000',
@@ -955,27 +964,26 @@
 
                     }
 
-                ////$("#divLoader").hide();
+                $("#divLoader").hide();
             },
             failure: function (response) {
-                //$("#divLoader").hide();
+                $("#divLoader").hide();
             },
             error: function (response) {
-                //$("#divLoader").hide();
+                $("#divLoader").hide();
             }
         });
     }
 
     function showRedemptionChart(type) {
-        ////$("#divLoader").hide();
+        $("#divLoader").show();
         $.ajax({
             type: "POST",
             url: '@Url.Action("GetRedemptionResult", "Home")',
             data: "{'type': '" + type + "'}",
             contentType: "application/json; charset=utf-8",
             dataType: "json",
-            success: function (response) {
-                console.log(response);
+            success: function (response) {                 
                 if (response != null) {
                     console.log(response[0]);
                     $('#cvRedemption').remove(); // this is my <canvas> element
@@ -994,6 +1002,7 @@
                         tooltips: {
                             enabled: false
                         },
+                        hover: { mode: null },
                         plugins: {
                             datalabels: {
                                 formatter: (value, ctx) => {
@@ -1002,12 +1011,16 @@
                                     dataArr.map(data => {
                                         sum += data;
                                     });
-                                    let percentage = value;
-                                    if (value != null) {
-                                        console.log(111);
-                                        percentage = (value * 100 / sum).toFixed(2) + "%";
+
+                                    count++;
+                                    let percentage = (value * 100 / sum).toFixed(2) + "%";
+                                    if (count == 1) {
+                                        return "";
                                     }
-                                    return percentage;
+                                    if (count == 2) {
+                                        count = 0;
+                                        return percentage;
+                                    }
                                 },
                                 color: '#000',
                             }
@@ -1037,7 +1050,7 @@
                         options: options
                     });
 
-
+                    var count1 = 0;
                     var options1 = {
                         rotation: (-0.5 * Math.PI) - (-90 / 180 * Math.PI),
                         legend: {
@@ -1047,6 +1060,7 @@
                         tooltips: {
                             enabled: false
                         },
+                        hover: { mode: null },
                         plugins: {
                             datalabels: {
                                 formatter: (value, ctx) => {
@@ -1055,12 +1069,15 @@
                                     dataArr.map(data => {
                                         sum += data;
                                     });
-                                    let percentage = value;
-                                    if (value != null) {
-                                        console.log(222);
-                                        percentage = (value * 100 / sum).toFixed(2) + "%";
+                                    count1++;
+                                    let percentage = (value * 100 / sum).toFixed(2) + "%";
+                                    if (count1 == 1) {
+                                        return "";
                                     }
-                                    return percentage;
+                                    if (count1 == 2) {
+                                        count1 = 0;
+                                        return percentage;
+                                    }
                                 },
                                 color: '#000',
                             }
@@ -1121,20 +1138,20 @@
                         $("#spnBusinessGenerated").text("-");
                     }
                     if (response[5] != null) {
-                        $("#spnRedeemToInvoice").text(addComma(response[5]));
+                        $("#spnRedeemToInvoice").text(response[5]);
                     }
                     else {
                         $("#spnRedeemToInvoice").text("-");
                     }
                  }
 
-                ////$("#divLoader").hide();
+                $("#divLoader").hide();
             },
             failure: function (response) {
-                //$("#divLoader").hide();
+                $("#divLoader").hide();
             },
             error: function (response) {
-                //$("#divLoader").hide();
+                $("#divLoader").hide();
             }
         });
     }
