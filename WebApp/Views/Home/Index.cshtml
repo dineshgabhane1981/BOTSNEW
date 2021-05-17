@@ -163,8 +163,8 @@
                         REDEMPTION
                     </div>
                     <ul class="nav">
-                        <li class="nav-item"><a href="javascript:void(0);" onclick="showRedemptionChart('1');" class="active nav-link">Base</a></li>
-                        <li class="nav-item"><a href="javascript:void(0);" onclick="showRedemptionChart('2');" class="nav-link second-tab-toggle">Bonus</a></li>
+                        <li class="nav-item"><a href="javascript:void(0);" onclick="showRedemptionChart('1');" id="pointsBase" class="active nav-link">Base</a></li>
+                        <li class="nav-item"><a href="javascript:void(0);" onclick="showRedemptionChart('2');" id="pointsBonus" class="nav-link second-tab-toggle">Bonus</a></li>
                     </ul>
                 </div>
                 <div class="card-body">
@@ -526,8 +526,15 @@
                                     tableHTML += "<tr style=\"text-align:center;\">";
                                     tableHTML += "<td style=\"background-color:lightgrey;font-weight: bold;\">" + item.Title + "</td>";
                                     tableHTML += "<td style=\"background-color:lightgrey;font-weight: bold;\">" + item.Unit + "</td>";
-                                    tableHTML += "<td>" + addComma(item.TotalBase) + "</td>";
-                                    tableHTML += "<td>" + addComma(item.RepeatBase) + "</td>";
+                                    if (item.Unit == "Times") {
+                                        tableHTML += "<td>" + item.TotalBase + "</td>";
+                                        tableHTML += "<td>" + item.RepeatBase + "</td>";
+                                    }
+                                    else {
+                                        tableHTML += "<td>" + addComma(item.TotalBase) + "</td>";
+                                        tableHTML += "<td>" + addComma(item.RepeatBase) + "</td>";
+                                    }
+                                    
                                     tableHTML += "<td>" + addComma(item.NeverRedeem) + "</td>";
                                     tableHTML += "<td>" + addComma(item.RecentlyEnrolled) + "</td>";
                                     tableHTML += "<td>" + addComma(item.OnlyOnce) + "</td>";
@@ -918,7 +925,7 @@
                                             sum += data;
                                         });
                                         count++;                                       
-                                        let percentage = (value * 100 / sum).toFixed(2) + "%";
+                                        let percentage = value.toFixed(2) + "%";
                                         if (count == 1) {
                                             return "";
                                         }
@@ -1006,20 +1013,16 @@
                         plugins: {
                             datalabels: {
                                 formatter: (value, ctx) => {
-                                    let sum = 0;
-                                    let dataArr = ctx.chart.data.datasets[0].data;
-                                    dataArr.map(data => {
-                                        sum += data;
-                                    });
-
-                                    count++;
-                                    let percentage = (value * 100 / sum).toFixed(2) + "%";
-                                    if (count == 1) {
-                                        return "";
-                                    }
-                                    if (count == 2) {
-                                        count = 0;
-                                        return percentage;
+                                    if (value != null) {
+                                        count++;
+                                        let percentage = value.toFixed(2) + "%";
+                                        if (count == 1) {
+                                            return "";
+                                        }
+                                        if (count == 2) {
+                                            count = 0;
+                                            return percentage;
+                                        }
                                     }
                                 },
                                 color: '#000',
@@ -1064,19 +1067,16 @@
                         plugins: {
                             datalabels: {
                                 formatter: (value, ctx) => {
-                                    let sum = 0;
-                                    let dataArr = ctx.chart.data.datasets[0].data;
-                                    dataArr.map(data => {
-                                        sum += data;
-                                    });
-                                    count1++;
-                                    let percentage = (value * 100 / sum).toFixed(2) + "%";
-                                    if (count1 == 1) {
-                                        return "";
-                                    }
-                                    if (count1 == 2) {
-                                        count1 = 0;
-                                        return percentage;
+                                    if (value != null) {
+                                        count1++;
+                                        let percentage = value.toFixed(2) + "%";
+                                        if (count1 == 1) {
+                                            return "";
+                                        }
+                                        if (count1 == 2) {
+                                            count1 = 0;
+                                            return percentage;
+                                        }
                                     }
                                 },
                                 color: '#000',
@@ -1143,7 +1143,15 @@
                     else {
                         $("#spnRedeemToInvoice").text("-");
                     }
-                 }
+                }
+                if (type == 1) {
+                    $("#pointsBase").addClass("active");
+                    $("#pointsBonus").removeClass("active");
+                }
+                else {
+                    $("#pointsBase").removeClass("active");
+                    $("#pointsBonus").addClass("active");
+                }
 
                 $("#divLoader").hide();
             },

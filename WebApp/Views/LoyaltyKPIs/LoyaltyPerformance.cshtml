@@ -1,13 +1,211 @@
-﻿
+﻿@model BOTS_BL.Models.LoyaltyKPIs
+@using System.Globalization
 @{
-    ViewBag.Title = "LoyaltyPerformance";
+    ViewBag.Title = "Loyalty Performance";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@0.4.0/dist/chartjs-plugin-datalabels.min.js"></script>
 
 <div class="app-main__inner">
+    <div class="row mb-3 pt-3 pl-3 pr-3 card">
+        <div class="row">
+            <div class="col-md-6 col-xl-3">
+                <div class="card mb-3 widget-content" style="        background-color: #D99694;">
+                    <div class="widget-content-wrapper text-white" style="display:block !important;text-align:center;">
+                        <div class="widget-content-left">
+                            <div class="widget-heading" style="font-size:20px !important;">
+                                Total Biz (Rs.)
+                                <hr style="border-top: 2px solid white;margin:0px;" />
+                            </div>
+                        </div>
+                        <div>
+                            <div class="widget-numbers text-white">
+                                <span style="font-size:24px !important;">
+                                    @String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(Model.TotalBiz))
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-xl-3">
+                <div class="card mb-3 widget-content" style="        background-color: #E46C0A;">
+                    <div class="widget-content-wrapper text-white" style="display:block !important;text-align:center;">
+                        <div class="widget-content-left">
+                            <div class="widget-heading" style="font-size:20px !important;">
+                                Loyalty Biz (Rs.)
+                                <hr style="border-top: 2px solid white;margin:0px;" />
+                            </div>
+                        </div>
+                        <div>
+                            <div class="widget-numbers text-white">
+                                <span style="font-size:24px !important;">
+                                    @String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(Model.LoyaltyBiz))
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-xl-3">
+                <div class="card mb-3 widget-content" style="        background-color: #558ED5;">
+                    <div class="widget-content-wrapper text-white" style="display:block !important;text-align:center;">
+                        <div class="widget-content-left">
+                            <div class="widget-heading" style="font-size:20px !important;">
+                                Total Biz (Rs.)
+                                <hr style="border-top: 2px solid white;margin:0px;" />
+                            </div>
+                        </div>
+                        <div>
+                            <div class="widget-numbers text-white">
+                                <span style="font-size:24px !important;">
+                                    @String.Format(new CultureInfo("en-IN", false), "{0:n2}", Convert.ToDecimal(Convert.ToDecimal(Model.LoyaltyBiz * 100) / Convert.ToDecimal(Model.TotalBiz)))%
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-    <div class="row mb-3 pt-3 pl-3 pr-3 card" style="text-align:center;padding-bottom:20px;">
-        <h3><b>Coming Soon in March 2021</b> </h3>
+
+        <div class="row">
+            <div class="col-md-12 col-lg-6">
+                <div class="mb-3 card">
+
+                    <div class="card-body">
+                        <div class="tab-content">
+                            <div class="tab-pane fade show active" id="tabs-eg-77">
+                                <div class="card mb-3 widget-chart widget-chart2 text-left w-100">
+                                    <div class="widget-chat-wrapper-outer" style="margin:30px;">
+                                        <table border="1" cellpadding="10" cellspacing="10">
+                                            <tr>
+                                                <th>
+                                                    Business Through
+                                                </th>
+                                                <th>
+                                                    Amount (Rs.)
+                                                </th>
+                                            </tr>
+                                            <tr>
+                                                <td>Redemption </td>
+                                                <td>@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(Model.Redemption))</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Referrals </td>
+                                                <td>@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(Model.Referrals))</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Campaigns </td>
+                                                <td>@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(Model.Campaigns))</td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    SMS/WA
+                                                </td>
+                                                <td>@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(Model.SMSBlastWA))</td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    New MWP Registrations
+                                                </td>
+                                                <td>@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(Model.NewMWPRegistration))</td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12 col-lg-6">
+                <div class="mb-3 card">
+                    <div class="card-header-tab card-header-tab-animation card-header">
+                        <div class="card-header-title">
+                            <i class="header-icon lnr-apartment icon-gradient bg-love-kiss"> </i>
+
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="tab-content">
+                            <div class="tab-pane fade show active" id="tabs-eg-77">
+                                <div class="card mb-3 widget-chart widget-chart2 text-left w-100">
+                                    <div class="widget-chat-wrapper-outer">
+                                        <div class="widget-chart-wrapper widget-chart-wrapper-lg opacity-10 m-0" id="containerKPI">
+                                            <canvas id="cvKPI"></canvas>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 
+<script>
+    $(document).ready(function () {
+        $('#cvKPI').remove(); // this is my <canvas> element
+        $('#containerKPI').append('<canvas id="cvKPI"><canvas>');
+        var options = {
+            rotation: (-0.5 * Math.PI) - (-90 / 180 * Math.PI),
+            legend: {
+                display: true,
+                position: 'bottom'
+            },
+            tooltips: {
+                enabled: false
+            },
+            hover: { mode: null },
+            plugins: {
+                datalabels: {
+                    formatter: (value, ctx) => {
+                        if (value != null) {
+                            let sum = 0;
+                            let dataArr = ctx.chart.data.datasets[0].data;
+                            dataArr.map(data => {
+                                sum += data;
+                            });
+                            let percentage = value + "%";
+                            return percentage;
+                        }
+                    },
+                    color: '#000',
+                }
+            }
+        }
+
+        var data1 = '@Model.RedemptionPer';
+        var data2 = '@Model.ReferralsPer';
+        var data3 = '@Model.CampaignsPer';
+        var data4 = '@Model.SMSBlastWAPer';
+        var data5 = '@Model.NewMWPRegistrationPer';
+
+
+        var data = {
+            datasets: [{
+                data: [data1, data2, data3, data4, data5],
+                backgroundColor: ["#f990a7", "#A5A5A5", "#4472C4", "#ED7D31", "#92D050"]
+            }],
+
+            // These labels appear in the legend and in the tooltips when hovering different arcs
+            labels: [
+                "Redemption",
+                "Referrals",
+                "Campaigns",
+                "SMS/WA",
+                "New MWP Registrations"
+            ],
+        };
+
+        var ctx4 = document.getElementById("cvKPI").getContext("2d");
+        window.myBar = new Chart(ctx4, {
+            type: 'pie',
+            data: data,
+            options: options
+        });
+    });
+</script>

@@ -230,9 +230,11 @@ namespace WebApp.Controllers
                 dataList.Add(objDashboardRedemption.PointsValueRs);
                 dataList.Add(objDashboardRedemption.BusinessGenerated);
                 dataList.Add(objDashboardRedemption.RedeemToInvoice);
-                dataList.Add(objDashboardRedemption.PieChartYellowRedemptionRate);
+                var remaining = 100 - objDashboardRedemption.PieChartGreenRedemptionRate;
+                dataList.Add(remaining);
                 dataList.Add(objDashboardRedemption.PieChartGreenRedemptionRate);
-                dataList.Add(objDashboardRedemption.PieChartYellowUniqueRedeemMember);
+                var remaining1 = 100 - objDashboardRedemption.PieChartGreenUniqueMember;
+                dataList.Add(remaining1);
                 dataList.Add(objDashboardRedemption.PieChartGreenUniqueMember);
             }
             catch (Exception ex)

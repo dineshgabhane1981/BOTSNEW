@@ -130,6 +130,8 @@
     <Compile Include="Class1.cs" />
     <Compile Include="Exceptions.cs" />
     <Compile Include="Models\BrandDetail.cs" />
+    <Compile Include="Models\Campaign\CampaignTiles.cs" />
+    <Compile Include="Models\Campaign\LoyaltyKPIs.cs" />
     <Compile Include="Models\ChitaleModel\CancelOrderDetail.cs" />
     <Compile Include="Models\ChitaleModel\ChequeBounceConfig.cs" />
     <Compile Include="Models\ChitaleModel\ChequeReturnMaster.cs" />
@@ -232,6 +234,7 @@
     <Compile Include="Models\StoreDetail.cs" />
     <Compile Include="Models\TransferPointsDetail.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Repository\CampaignRepository.cs" />
     <Compile Include="Repository\ChitaleDashboardRepository.cs" />
     <Compile Include="Repository\CustomerRepository.cs" />
     <Compile Include="Repository\DashboardRepository.cs" />
@@ -240,6 +243,7 @@
     <Compile Include="Repository\ITOpsRepository.cs" />
     <Compile Include="Repository\KeyIndecatorsRepository.cs" />
     <Compile Include="Repository\LoginRepository.cs" />
+    <Compile Include="Repository\LoyaltyKPIsRepository.cs" />
     <Compile Include="Repository\ManagementDashboardRepository.cs" />
     <Compile Include="Repository\NoActionRepository.cs" />
     <Compile Include="Repository\ParticipantRepository.cs" />
