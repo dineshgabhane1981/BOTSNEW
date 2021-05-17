@@ -372,6 +372,7 @@
     <Content Include="Views\CustomerManagement\SelectProduct.cshtml" />
     <Content Include="Views\ITOperations\Index.cshtml" />
     <Content Include="Views\KeyIndicators\MemberPage.cshtml" />
+    <Content Include="Views\Reports\ProfitableCustomer.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

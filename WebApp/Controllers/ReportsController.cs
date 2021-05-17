@@ -10,6 +10,7 @@ using System.IO;
 using System.Data;
 using System.ComponentModel;
 using BOTS_BL;
+using System.Globalization;
 
 namespace WebApp.Controllers
 {
@@ -59,7 +60,7 @@ namespace WebApp.Controllers
 
             List<SelectListItem> MonthList = new List<SelectListItem>();
             int month = DateTime.Now.Month;
-           
+
             int count = 1;
             for (int i = 1; i <= 12; i++)
             {
@@ -78,7 +79,7 @@ namespace WebApp.Controllers
                 {
                     Text = Convert.ToString(DateTime.Now.AddYears(i).Year.ToString()),
                     Value = Convert.ToString(year + i)
-                });         
+                });
             }
 
             ViewBag.MonthList = MonthList;
@@ -143,7 +144,7 @@ namespace WebApp.Controllers
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
             List<OutletWise> lstOutlet = new List<OutletWise>();
             lstOutlet = RR.GetOutletWiseList(userDetails.GroupId, DateRangeFlag, fromDate, toDate, userDetails.connectionString);
-            OutletWise objSum = new OutletWise();            
+            OutletWise objSum = new OutletWise();
             foreach (var item in lstOutlet)
             {
 
@@ -404,5 +405,163 @@ namespace WebApp.Controllers
 
 
         }
+
+        public ActionResult ProfitableCustomer()
+        {
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            var lstOutlet = RR.GetOutletList(userDetails.GroupId, userDetails.connectionString);
+            ViewBag.OutletList = lstOutlet;
+            return View();
+        }
+
+        [HttpPost]
+        public JsonResult GetProfitableCustomersResult(string DateRangeFlag, string fromDate, string toDate, string outletId, string ReportBasis)
+        {
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            if (outletId.Equals("All"))
+            {
+                outletId = "";
+            }
+            List<MemberList> lstMember = new List<MemberList>();
+            lstMember = RR.GetMemberList(userDetails.GroupId, outletId, userDetails.connectionString);
+
+            if (DateRangeFlag == "2")
+            {
+                foreach(var item in lstMember)
+                {
+                    if (!string.IsNullOrEmpty(item.LastTxnDate))
+                    {                        
+                        var datenew = DateTime.ParseExact(item.LastTxnDate, "dd/MM/yyyy", CultureInfo.InvariantCulture)
+                        .ToString("MM/dd/yyyy", CultureInfo.InvariantCulture);
+                        item.txnDate = Convert.ToDateTime(datenew);
+                    }
+                    else
+                    {
+                        item.txnDate = null;
+                    }
+                }
+                DateTime fDate = Convert.ToDateTime(fromDate);
+                DateTime tDate = Convert.ToDateTime(toDate);
+                lstMember = lstMember.Where(x => x.txnDate >= fDate && x.txnDate <= tDate).ToList();
+            }
+            if (ReportBasis != "")
+            {
+                if(ReportBasis=="1")
+                {
+                    var count = lstMember.Count;
+                    if (count > 10)
+                    {
+                        count = count / 10;
+                    }
+                    lstMember = lstMember.OrderByDescending(x => x.TotalSpend).Take(count).ToList();
+                }
+                if (ReportBasis == "2")
+                {
+                    var count = lstMember.Count;
+                    if (count > 10)
+                    {
+                        count = count / 10;
+                    }
+                    lstMember = lstMember.OrderByDescending(x => x.TxnCount).Take(count).ToList();
+                }
+            }
+
+            return new JsonResult() { Data = lstMember, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
+        }
+
+        public ActionResult ExportToProfitableCustomers(string DateRangeFlag, string fromDate, string toDate, string outletId, string ReportBasis, string ReportName)
+        {
+            System.Data.DataTable table = new System.Data.DataTable();
+            try
+            {
+                var userDetails = (CustomerLoginDetail)Session["UserSession"];
+                if (outletId.Equals("All"))
+                {
+                    outletId = "";
+                }
+                List<MemberList> lstMember = new List<MemberList>();
+                lstMember = RR.GetMemberList(userDetails.GroupId, outletId, userDetails.connectionString);
+
+                if (DateRangeFlag == "2")
+                {
+                    foreach (var item in lstMember)
+                    {
+                        if (!string.IsNullOrEmpty(item.LastTxnDate))
+                        {
+                            var datenew = DateTime.ParseExact(item.LastTxnDate, "dd/MM/yyyy", CultureInfo.InvariantCulture)
+                            .ToString("MM/dd/yyyy", CultureInfo.InvariantCulture);
+                            item.txnDate = Convert.ToDateTime(datenew);
+                        }
+                        else
+                        {
+                            item.txnDate = null;
+                        }
+                    }
+                    DateTime fDate = Convert.ToDateTime(fromDate);
+                    DateTime tDate = Convert.ToDateTime(toDate);
+                    lstMember = lstMember.Where(x => x.txnDate >= fDate && x.txnDate <= tDate).ToList();
+                }
+                if (ReportBasis != "")
+                {
+                    if (ReportBasis == "1")
+                    {
+                        var count = lstMember.Count;
+                        if (count > 10)
+                        {
+                            count = count / 10;
+                        }
+                        lstMember = lstMember.OrderByDescending(x => x.TotalSpend).Take(count).ToList();
+                    }
+                    if (ReportBasis == "2")
+                    {
+                        var count = lstMember.Count;
+                        if (count > 10)
+                        {
+                            count = count / 10;
+                        }
+                        lstMember = lstMember.OrderByDescending(x => x.TxnCount).Take(count).ToList();
+                    }
+                }
+                
+                PropertyDescriptorCollection properties = TypeDescriptor.GetProperties(typeof(MemberList));
+                foreach (PropertyDescriptor prop in properties)
+                    table.Columns.Add(prop.Name, Nullable.GetUnderlyingType(prop.PropertyType) ?? prop.PropertyType);
+
+                foreach (MemberList item in lstMember)
+                {
+                    DataRow row = table.NewRow();
+                    foreach (PropertyDescriptor prop in properties)
+                        row[prop.Name] = prop.GetValue(item) ?? DBNull.Value;
+
+                    table.Rows.Add(row);
+                }
+                table.Columns.Remove("MobileNo");
+                table.Columns.Remove("txnDate");                
+                table.Columns["MaskedMobileNo"].ColumnName = "MobileNo";
+                //table.Columns.Remove("MaskedMobileNo");                
+                string fileName = ReportName + ".xlsx";
+                using (XLWorkbook wb = new XLWorkbook())
+                {
+
+                    //excelSheet.Name
+                    table.TableName = ReportName;
+                    wb.Worksheets.Add(table);
+                    using (MemoryStream stream = new MemoryStream())
+                    {
+                        wb.SaveAs(stream);
+                        return File(stream.ToArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+
+
+        }
+
+
+
     }
 }

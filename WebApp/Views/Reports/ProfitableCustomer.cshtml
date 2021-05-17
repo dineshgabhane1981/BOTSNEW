@@ -1,0 +1,338 @@
+﻿@model List<BOTS_BL.Models.MemberList>
+@{
+    ViewBag.Title = "Profitable Customer";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="app-main__inner">
+    <div class="row mb-3 pt-3 pl-3 pr-3 card">
+        <div class="col-sm-10" style="margin-left:15px;">
+            <div class="col-md-10 col-xl-10">
+                <b>Select Outlet</b> :  @Html.DropDownListFor(x => Model.Count, new SelectList(ViewBag.OutletList, "Value", "Text"), "All", htmlAttributes: new { @class = "input100", @id = "OutletList" })
+            </div>
+        </div>
+        <div class="col-sm-10" style="display:flex;padding-bottom: 10px;margin-top:5px;margin-left:15px;padding-top:20px;">
+            <div class="col-md-6 col-xl-4" style="padding-top: 15px;">
+                <b>Txn Date Range</b>&nbsp;&nbsp; <input type="radio" checked id="rdnBTD" name="btdornot" /> BTD &nbsp;&nbsp;&nbsp;&nbsp;
+                <input type="radio" id="rdnRange" name="btdornot" /> Range
+            </div>
+            <div class="col-md-3 col-xl-3">
+                <input type="text" class="input50" placeholder="From Date" readonly id="dtFrom" />&nbsp;&nbsp;&nbsp;&nbsp;
+            </div>
+            <div class="col-md-3 col-xl-3">
+                <input type="text" class="input50" placeholder="To Date" readonly id="dtTo" />
+            </div>
+        </div>
+
+        <div class="col-sm-10" style="margin-bottom:20px;margin-top:20px;margin-left:15px;">
+            <div class="col-md-10 col-xl-10">
+                <b>Report Basis</b> :  <input type="radio" id="rdnSpends" name="raportbasis" /> Spends &nbsp;&nbsp;&nbsp;&nbsp;
+                <input type="radio" id="rdnVisit" name="raportbasis" /> Visit
+                <button id="btnFilter" class="btn btn-primary login-btn" style="margin-left:40px;">Filter</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mb-3 card">
+        <div class="container-fluid pt-3 pl-3 pr-3">
+            <div class="pt-3 pl-3 pr-3 col-md-12 col-lg-12">
+                <div class="row">
+                    <div class="col search-container">
+                        <i class="fas fa-search"></i>
+                        <input class="input100" type="text" id="txtSearch" placeholder="Search activity..." />
+                    </div>
+                    <div class="col text-right">
+                        <ul class="list-inline progress-list mt-2">
+                            <li class="list-inline-item">
+                                <div class="dropdown">
+                                    <button class="btn btn-primary login-btn" onclick='ExportDataExcel();' type="button" id="btnExport">
+                                        <i class="fas fa-file-export"></i> Export
+                                    </button>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="row mt-3" id="dvActivityData">
+                    <div class="table-responsive">
+                        <table class="table" id="activityTable">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Enrolled Outlet</th>
+                                    <th scope="col">Mobile Number</th>
+                                    <th scope="col">Member Name</th>
+                                    <th scope="col">Type</th>
+                                    <th scope="col">Txn Count</th>
+                                    <th scope="col">Total Spends</th>
+                                    <th scope="col">Total Burn Txn</th>
+                                    <th scope="col">Total Burn Points</th>
+                                    <th scope="col">Avl Bal Points</th>
+                                    <th scope="col">Last Txn Date</th>
+                                    <th scope="col">Enrolled Date</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+<script src="~/Scripts/jquery-ui-1.12.1.js"></script>
+<script src="~/Scripts/jquery-ui-1.12.1.min.js"></script>
+<link href="~/Content/themes/base/jquery-ui.min.css" rel="stylesheet" />
+<link href="~/Content/themes/base/jquery-ui.css" rel="stylesheet" />
+<script>
+    var today = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
+    $("#dtFrom").datepicker({
+        dateFormat: "yy-mm-dd",
+        maxDate: today,
+    });
+    $("#dtTo").datepicker({
+        dateFormat: "yy-mm-dd",
+        maxDate: today,
+    });
+
+    $(document).ready(function () {
+        SetFilter();
+        GetData();
+        $("#rdnBTD").change(function () {
+            SetFilter();
+        });
+        $("#rdnRange").change(function () {
+            SetFilter();
+        });
+        $("#btnFilter").click(function () {
+            GetData();
+        });
+    });
+
+    function SetFilter() {
+        if ($("#rdnBTD").is(":checked")) {
+            $('#dtFrom').prop('readonly', true);
+            $('#dtTo').prop('readonly', true);
+            $('#dtFrom').val('');
+            $('#dtTo').val('');
+        }
+
+        if ($("#rdnRange").is(":checked")) {
+            $('#dtFrom').prop('readonly', false);
+            $('#dtTo').prop('readonly', false);
+        }
+    }
+
+    function GetData() {
+        $("#divLoader").show();
+        var DateRangeFlag = "0";
+        var fromDate = '';
+        var toDate = '';
+        $("#divLoader").show();
+        if ($("#rdnBTD").is(":checked")) {
+            DateRangeFlag = "1";
+            fromDate = $('#dtFrom').val();
+            toDate = $('#dtTo').val();
+        }
+        if ($("#rdnRange").is(":checked")) {
+            DateRangeFlag = "2";
+            fromDate = $('#dtFrom').val();
+            toDate = $('#dtTo').val();
+        }
+        var outletId = "";
+        if ($("#OutletList").val() != "") {
+            outletId = $("#OutletList").val();
+        }
+        var ReportBasis = 0;
+        if ($("#rdnSpends").is(":checked")) {
+            ReportBasis = 1;
+        }
+        if ($("#rdnVisit").is(":checked")) {
+            ReportBasis = 2;
+        }
+
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("GetProfitableCustomersResult", "Reports")',
+            data: "{'DateRangeFlag': " + DateRangeFlag + ", 'fromDate': '" + fromDate + "','toDate': '" + toDate + "','outletId': '" + outletId + "','ReportBasis': " + ReportBasis + "}",
+
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                tableData = [];
+                //$('#dvMemberData').html(response);
+                $.map(response, function (item) {
+                    optionItem = {}
+                    optionItem["EnrolledOutlet"] = item.EnrooledOutlet;
+                    optionItem["MobileNumber"] = item.MaskedMobileNo;
+                    optionItem["MobileNo"] = item.MobileNo;
+                    optionItem["MemberName"] = item.MemberName;
+                    optionItem["Type"] = item.Type;
+                    optionItem["TxnCount"] = item.TxnCount;
+                    optionItem["TotalSpends"] = item.TotalSpend;
+                    optionItem["TotalBurnTxn"] = item.TotalBurnTxn;
+                    optionItem["TotalBurnPoints"] = item.TotalBurnPoints;
+                    optionItem["AvlBalPoints"] = item.AvBalPoints;
+                    optionItem["LastTxnDate"] = item.LastTxnDate;
+                    optionItem["EnrolledDate"] = item.EnrolledDate;
+
+
+                    tableData.push(optionItem);
+                });
+                DrawTable();
+                $("#divLoader").hide();
+            },
+            failure: function (response) {
+                $("#divLoader").hide();
+            },
+            error: function (response) {
+                $('#dvMemberData').html(response.responseText);
+                $("#divLoader").hide();
+            }
+        });
+    }
+    function DrawTable() {
+        var table1 = $('#activityTable').DataTable();
+        table1.destroy();
+
+        var table = $('#activityTable').DataTable({
+            "data": tableData,
+            "paging": true,
+            "ordering": true,
+            "info": true,
+            "bFilter": true,
+            "pageLength": 25,
+            "pagingType": "simple_numbers",
+            "columns": [
+                { data: "EnrolledOutlet" },
+                {
+                    "mData": "MobileNumber",
+                    "mRender": function (data, type, row) {
+                        var MobileNo = row.MobileNo;
+                        return '<span class="login" title=' + MobileNo + '>' + data + '</span>';
+                    }
+                },
+                { data: "MemberName" },
+                { data: "Type" },
+                {
+                    "mData": "TxnCount",
+                    "mRender": function (data, type, row) {
+                        return '<span>' + addComma(data) + '</span>';
+                    }
+                },
+                {
+                    "mData": "TotalSpends",
+                    "mRender": function (data, type, row) {
+                        return '<span>' + addComma(data) + '</span>';
+                    }
+                },
+                {
+                    "mData": "TotalBurnTxn",
+                    "mRender": function (data, type, row) {
+                        return '<span>' + addComma(data) + '</span>';
+                    }
+                },
+                {
+                    "mData": "TotalBurnPoints",
+                    "mRender": function (data, type, row) {
+                        return '<span>' + addComma(data) + '</span>';
+                    }
+                },
+                {
+                    "mData": "AvlBalPoints",
+                    "mRender": function (data, type, row) {
+                        return '<span>' + addComma(data) + '</span>';
+                    }
+                },
+                { data: "LastTxnDate" },
+                { data: "EnrolledDate" }
+            ],
+            "columnDefs": [
+                {
+                    "targets": 4,
+                    "className": "text-right"
+                },
+                {
+                    "targets": 5,
+                    "className": "text-right",
+                },
+                {
+                    "targets": 6,
+                    "className": "text-right"
+                },
+                {
+                    "targets": 7,
+                    "className": "text-right",
+                },
+                {
+                    "targets": 8,
+                    "className": "text-right"
+                }],
+            aoColumnDefs: [
+                {
+                    bSortable: false,
+                    aTargets: [-8, -9, -10]
+                }
+            ]
+            //"aoColumnDefs": [{ "sClass": "hide_me", "aTargets": [3] }]
+            //"rowReorder": {
+            //    dataSrc: "index"
+            //}
+        });
+        $('#activityTable_filter').hide();
+
+        $('#txtSearch').on('keyup', function () {
+
+            $.fn.dataTable.ext.search.push(function (settings, searchData) {
+                var term = $('#txtSearch').val().toLowerCase()
+                for (var i = 0; i < searchData.length; i++) {
+                    if (searchData[i].toLowerCase().indexOf(term) == 0) {
+                        return true;
+                    }
+                }
+                return false;
+            });
+            var table = $('#activityTable').DataTable();
+            table.draw();
+        });
+    }
+
+    function ExportDataExcel() {
+        $("#divLoader").show();
+        var DateRangeFlag = "0";
+        var fromDate = '';
+        var toDate = '';
+        $("#divLoader").show();
+        if ($("#rdnBTD").is(":checked")) {
+            DateRangeFlag = "1";
+            fromDate = $('#dtFrom').val();
+            toDate = $('#dtTo').val();
+        }
+        if ($("#rdnRange").is(":checked")) {
+            DateRangeFlag = "2";
+            fromDate = $('#dtFrom').val();
+            toDate = $('#dtTo').val();
+        }
+        var outletId = "";
+        if ($("#OutletList").val() != "") {
+            outletId = $("#OutletList").val();
+        }
+        var ReportBasis = 0;
+        if ($("#rdnSpends").is(":checked")) {
+            ReportBasis = 1;
+        }
+        if ($("#rdnVisit").is(":checked")) {
+            ReportBasis = 2;
+        }
+
+        var urlLink = "@Url.Action("ExportToProfitableCustomers", "Reports")";
+        urlLink = urlLink + "?DateRangeFlag=" + DateRangeFlag + "&fromDate=" + fromDate + "&toDate=" + toDate + "&outletId=" + outletId + "&ReportBasis=" + ReportBasis + "&ReportName=ProfitableCustomers";
+        console.log(urlLink);
+        window.location.href = urlLink;
+        $("#divLoader").hide();
+
+    }
+
+
+</script>

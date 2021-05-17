@@ -20,6 +20,7 @@ namespace BOTS_BL.Models
         public string LastTxnDate { get; set; }
         public string EnrooledOutlet { get; set; }
         public string EnrolledDate { get; set; }
+        public DateTime? txnDate { get; set; }
 
     }
     public class OutletList
