@@ -110,6 +110,23 @@ namespace WebApp.Controllers
         }
 
         [HttpPost]
+        public JsonResult GetCampaignSecondData(string month, string year, string CampaignId)
+        {
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            List<CampaignSecond> objCampaignData = new List<CampaignSecond>();
+            objCampaignData = CMPR.GetCampaignSecondData(userDetails.GroupId, userDetails.connectionString, month, year, CampaignId);
+            return new JsonResult() { Data = objCampaignData, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
+        }
+        [HttpPost]
+        public JsonResult GetCampaignThirdData(string month, string year, string CampaignId)
+        {
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            List<CampaignThird> objCampaignData = new List<CampaignThird>();
+            objCampaignData = CMPR.GetCampaignThirdData(userDetails.GroupId, userDetails.connectionString, month, year, CampaignId);
+            return new JsonResult() { Data = objCampaignData, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
+        }
+
+        [HttpPost]
         public JsonResult GetCampaignSMSBlastFirstData(string month, string year)
         {
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
@@ -117,5 +134,24 @@ namespace WebApp.Controllers
             objCampaignSMSBlastFirstData = CMPR.GetCampaignSMSBlastFirstData(userDetails.GroupId, userDetails.connectionString, month, year);
             return new JsonResult() { Data = objCampaignSMSBlastFirstData, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
+        
+        [HttpPost]
+        public JsonResult GetSMSBlastsSecondData(string month, string year, string CampaignId)
+        {
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            List<CampaignSecond> objCampaignData = new List<CampaignSecond>();
+            objCampaignData = CMPR.GetSMSBlastsSecondData(userDetails.GroupId, userDetails.connectionString, month, year, CampaignId);
+            return new JsonResult() { Data = objCampaignData, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
+        }
+
+        [HttpPost]
+        public JsonResult GetSMSBlastsThirdData(string month, string year, string CampaignId)
+        {
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            List<CampaignThird> objCampaignData = new List<CampaignThird>();
+            objCampaignData = CMPR.GetSMSBlastsThirdData(userDetails.GroupId, userDetails.connectionString, month, year, CampaignId);
+            return new JsonResult() { Data = objCampaignData, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
+        }
+
     }
 }

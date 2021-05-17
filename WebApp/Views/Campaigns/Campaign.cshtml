@@ -42,7 +42,7 @@
                     </div>
                 </div>
             </div>
-        
+
             <div class="col-md-6 col-xl-2">
                 <div class="card mb-3 widget-content" style="background-color:red;">
                     <div class="widget-content-wrapper text-white" style="display:block !important;">
@@ -296,13 +296,50 @@
             </div>
         </div>
         <div class="row" id="dvCampaignsSecond" style="display:none;">
-            <span>CAMPAIGN Name : </span><span>Name</span><span>Date Label</span>
+            <span style="margin-left:20px;">CAMPAIGN Name : </span><span id="spnCampaignsName" style="margin-left:20px;">
+                <a onclick="GetCampaignsThirdData();">Click to see detailed campaign list</a>
+            </span>
+            <div class="pt-3 pl-3 pr-3 col-md-12 col-lg-12">
+                <div class="row mt-3" id="dvCampaignsSecondData" style="padding-bottom:20px;">
+                    <div class="table-responsive">
+                        <table class="table" id="activityCampaignsSecond">
+                            <thead>
+                                <tr>
+                                    <th scope="col"></th>
+                                    <th scope="col">Campaign Base</th>
+                                    <th scope="col">Control Base</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
         </div>
         <div class="row" id="dvCampaignsThird" style="display:none;">
-            <span>CAMPAIGN Name : </span><span>Name</span><span>Date Label</span>
+            <div class="pt-3 pl-3 pr-3 col-md-12 col-lg-12">
+                <div class="row mt-3" id="dvCampaignsThirdData" style="padding-bottom:20px;">
+                    <div class="table-responsive">
+                        <table class="table" id="activityCampaignsThird">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Status</th>
+                                    <th scope="col">Mem Name</th>
+                                    <th scope="col">Mob No</th>
+                                    <th scope="col">Txn Count</th>
+                                    <th scope="col">Total Biz</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
         </div>
 
-        <div class="row" id="dvSMSBlastsFirst" style="display:none;">           
+        <div class="row" id="dvSMSBlastsFirst" style="display:none;">
             <div class="mb-3 pt-3 pl-3 pr-3">
                 <span><u>SMS BLASTS</u></span> <br /><br />
                 @Html.DropDownListFor(x => Model.month, new SelectList(Model.lstYear, "Value", "Text"), htmlAttributes: new { @class = "smallDDL", @id = "YearListSMSBlasts" })
@@ -318,7 +355,7 @@
                                     <th scope="col">Cpg Type</th>
                                     <th scope="col">Cpg Name </th>
                                     <th scope="col">Status</th>
-                                    <th scope="col">Sent Date</th>                                    
+                                    <th scope="col">Sent Date</th>
                                     <th scope="col">Cpg Member Count</th>
                                     <th scope="col">Unique Members Transacted </th>
                                     <th scope="col">Transactions</th>
@@ -334,10 +371,47 @@
             </div>
         </div>
         <div class="row" id="dvSMSBlastsSecond" style="display:none;">
-            <span>SMS Blast Name</span><span>Name</span><span>Date Label</span>
+            <span style="margin-left:20px;">SMS Blast Name : </span><span id="spnSMSBlastName" style="margin-left:20px;">
+                <a onclick="GetSMSBlastThirdData();">Click to see detailed campaign list</a>
+            </span>
+            <div class="pt-3 pl-3 pr-3 col-md-12 col-lg-12">
+                <div class="row mt-3" id="dvSMSBlastSecondData" style="padding-bottom:20px;">
+                    <div class="table-responsive">
+                        <table class="table" id="activitySMSBlastSecond">
+                            <thead>
+                                <tr>
+                                    <th scope="col"></th>
+                                    <th scope="col">Campaign Base</th>
+                                    <th scope="col">Control Base</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
         </div>
         <div class="row" id="dvSMSBlastsThird" style="display:none;">
-            <span>SMS Blast Name</span><span>Name</span><span>Date Label</span>
+            <div class="pt-3 pl-3 pr-3 col-md-12 col-lg-12">
+                <div class="row mt-3" id="dvSMSBlastThirdData" style="padding-bottom:20px;">
+                    <div class="table-responsive">
+                        <table class="table" id="activitySMSBlastThird">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Status</th>
+                                    <th scope="col">Mem Name</th>
+                                    <th scope="col">Mob No</th>
+                                    <th scope="col">Txn Count</th>
+                                    <th scope="col">Total Biz</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
         </div>
 
     </div>
@@ -357,7 +431,8 @@
     var tblSMSBlastsFirst = [];
     var tblSMSBlastsSecond = [];
     var tblSMSBlastsThird = [];
-
+    var CampaignIDClicked = 0;
+    var SMSBlastIDClicked = 0;
 
     function showhideDiv(id) {
         $("#dvCelebrationsFirst").hide();
@@ -533,8 +608,8 @@
             $("#spnType").text("BIRTHDAY");
         if (id == 2)
             $("#spnType").text("ANNIVERSARY");
-        
-        $("#spnCelebrationsDateLabel").text($("#MonthList option:selected").text() + " - " + $("#YearList option:selected").text());        
+
+        $("#spnCelebrationsDateLabel").text($("#MonthList option:selected").text() + " - " + $("#YearList option:selected").text());
 
         showhideDiv(2);
     }
@@ -666,7 +741,7 @@
             }
         });
         $("#dvDetailData").show();
-        $("#spnPointsExpiryDateLabel").text($("#MonthListInactive option:selected").text() + " - " + $("#YearListInactive option:selected").text());         
+        $("#spnPointsExpiryDateLabel").text($("#MonthListInactive option:selected").text() + " - " + $("#YearListInactive option:selected").text());
         showhideDiv(4);
     }
     function DrawPointsExpirySecondTable() {
@@ -876,7 +951,7 @@
                     "mData": "CampaignName",
                     "mRender": function (data, type, row) {
                         var id = row.CampaignId;
-                        return '<a href="#" onclick="GetCampaignSecondList(\'' + id +'\'\)" class="login" >' + data + '</a>';
+                        return '<a href="#" onclick="GetCampaignSecondList(\'' + id + '\'\,\'' + data +'\'\)" class="login" >' + data + '</a>';
                     }
                 },
                 { data: "Status" },
@@ -890,6 +965,121 @@
             ]
         });
         $('#activityCampaign_filter').hide();
+    }
+
+    function GetCampaignSecondList(id, name) {
+        CampaignIDClicked = id;
+        var year = $("#YearListCampaigns").val();
+        var month = $("#MonthListCampaigns").val();
+        $("#divLoader").show();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("GetCampaignSecondData", "Campaigns")',
+            data: "{'month': " + month + ",'year': " + year + ",'CampaignId': " + id + "}",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                tblCampaignSecond.length = 0;
+                $.map(response, function (item) {
+                    optionItem = {}
+                    optionItem["CampaignId"] = item.CampaignId;
+                    optionItem["Element"] = item.Element;
+                    optionItem["CampaignBase"] = item.CampaignBase;
+                    optionItem["ControlBase"] = item.ControlBase;
+                    tblCampaignSecond.push(optionItem);
+                });
+                DrawCampaignSecondTable();
+                $("#spnCampaignsName").text(name);
+                $("#divLoader").hide();
+            },
+            failure: function (response) {
+                $("#divLoader").hide();
+            },
+            error: function (response) {
+                $("#divLoader").hide();
+            }
+        });
+
+        $("#dvDetailData").show();
+        showhideDiv(8);
+    }
+    function DrawCampaignSecondTable() {
+        var table1 = $('#activityCampaignsSecond').DataTable();
+        table1.destroy();
+
+        var table = $('#activityCampaignsSecond').DataTable({
+            "data": tblCampaignSecond,
+            "paging": false,
+            "ordering": false,
+            "info": false,
+            "bFilter": false,
+            "pageLength": 25,
+            "pagingType": "simple_numbers",
+            "columns": [
+                { data: "Element" },
+                { data: "CampaignBase" },
+                { data: "ControlBase" }
+            ]
+        });
+        $('#activityCampaignsSecond_filter').hide();
+    }
+
+    function GetCampaignsThirdData() {
+        var year = $("#YearListCampaigns").val();
+        var month = $("#MonthListCampaigns").val();
+        $("#divLoader").show();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("GetCampaignThirdData", "Campaigns")',
+            data: "{'month': " + month + ",'year': " + year + ",'CampaignId': " + CampaignIDClicked + "}",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                tblCampaignThird.length = 0;
+                $.map(response, function (item) {
+                    optionItem = {}
+                    optionItem["MobileNo"] = item.MobileNo;
+                    optionItem["MemberName"] = item.MemberName;
+                    optionItem["TxnCount"] = item.TxnCount;
+                    optionItem["TotalBiz"] = item.TotalBiz;
+                    optionItem["Status"] = item.Status;
+                    tblCampaignThird.push(optionItem);
+                });
+                DrawCampaignThirdTable();
+                $("#divLoader").hide();
+            },
+            failure: function (response) {
+                $("#divLoader").hide();
+            },
+            error: function (response) {
+                $("#divLoader").hide();
+            }
+        });
+
+        $("#dvDetailData").show();
+        showhideDiv(9);
+    }
+    function DrawCampaignThirdTable() {
+        var table1 = $('#activityCampaignsThird').DataTable();
+        table1.destroy();
+
+        var table = $('#activityCampaignsThird').DataTable({
+            "data": tblCampaignThird,
+            "paging": false,
+            "ordering": false,
+            "info": false,
+            "bFilter": false,
+            "pageLength": 25,
+            "pagingType": "simple_numbers",
+            "columns": [
+                { data: "Status" },
+                { data: "MemberName" },
+                { data: "MobileNo" },
+                { data: "TxnCount" },
+                { data: "TotalBiz" }
+            ]
+        });
+        $('#activityCampaignsThird_filter').hide();
     }
 
     function GetSMSBlastsData() {
@@ -908,7 +1098,7 @@
                     optionItem = {}
                     optionItem["CampaignType"] = item.CampaignType;
                     optionItem["CampaignName"] = item.CampaignName;
-                    optionItem["SendDate"] = item.SendDate;                    
+                    optionItem["SendDate"] = item.SendDate;
                     optionItem["CampaignMemberCount"] = item.CampaignMemberCount;
                     optionItem["Status"] = item.Status;
                     optionItem["CampaignId"] = item.CampaignId;
@@ -950,11 +1140,11 @@
                     "mData": "CampaignName",
                     "mRender": function (data, type, row) {
                         var id = row.CampaignId;
-                        return '<a href="#" onclick="GetCampaignSecondList(\'' + id +'\'\)" class="login" >' + data + '</a>';
+                        return '<a href="#" onclick="GetSMSBlastsSecondList((\'' + id + '\'\,\'' + data +'\'\))" class="login" >' + data + '</a>';
                     }
                 },
                 { data: "Status" },
-                { data: "SendDate" },               
+                { data: "SendDate" },
                 { data: "CampaignMemberCount" },
                 { data: "UniqueMemberTransacted" },
                 { data: "Transactions" },
@@ -964,4 +1154,121 @@
         });
         $('#activitySMSBlastsFirst_filter').hide();
     }
+
+    function GetSMSBlastsSecondList(id, name) {
+        SMSBlastIDClicked = id;
+        var year = $("#YearListSMSBlasts").val();
+        var month = $("#MonthListSMSBlasts").val();
+        $("#divLoader").show();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("GetSMSBlastsSecondData", "Campaigns")',
+            data: "{'month': " + month + ",'year': " + year + ",'CampaignId': " + id + "}",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                tblSMSBlastsSecond.length = 0;
+                $.map(response, function (item) {
+                    optionItem = {}
+                    optionItem["CampaignId"] = item.CampaignId;
+                    optionItem["Element"] = item.Element;
+                    optionItem["CampaignBase"] = item.CampaignBase;
+                    optionItem["ControlBase"] = item.ControlBase;
+                    tblSMSBlastsSecond.push(optionItem);
+                });
+                DrawSMSBlastsSecondTable();
+                $("#spnSMSBlastName").text(name);
+                $("#divLoader").hide();
+            },
+            failure: function (response) {
+                $("#divLoader").hide();
+            },
+            error: function (response) {
+                $("#divLoader").hide();
+            }
+        });
+
+        $("#dvDetailData").show();
+        showhideDiv(11);
+    }
+    function DrawSMSBlastsSecondTable() {
+        var table1 = $('#activitySMSBlastSecond').DataTable();
+        table1.destroy();
+
+        var table = $('#activitySMSBlastSecond').DataTable({
+            "data": tblSMSBlastsSecond,
+            "paging": false,
+            "ordering": false,
+            "info": false,
+            "bFilter": false,
+            "pageLength": 25,
+            "pagingType": "simple_numbers",
+            "columns": [
+                { data: "Element" },
+                { data: "CampaignBase" },
+                { data: "ControlBase" }
+            ]
+        });
+        $('#activitySMSBlastSecond_filter').hide();
+    }
+
+    function GetSMSBlastThirdData() {
+        var year = $("#YearListSMSBlasts").val();
+        var month = $("#MonthListSMSBlasts").val();
+        $("#divLoader").show();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("GetSMSBlastsThirdData", "Campaigns")',
+            data: "{'month': " + month + ",'year': " + year + ",'CampaignId': " + SMSBlastIDClicked + "}",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                tblSMSBlastsThird.length = 0;
+                $.map(response, function (item) {
+                    optionItem = {}
+                    optionItem["MobileNo"] = item.MobileNo;
+                    optionItem["MemberName"] = item.MemberName;
+                    optionItem["TxnCount"] = item.TxnCount;
+                    optionItem["TotalBiz"] = item.TotalBiz;
+                    optionItem["Status"] = item.Status;
+                    tblSMSBlastsThird.push(optionItem);
+                });
+                DrawSMSBlastThirdTable();
+                $("#divLoader").hide();
+            },
+            failure: function (response) {
+                $("#divLoader").hide();
+            },
+            error: function (response) {
+                $("#divLoader").hide();
+            }
+        });
+        $("#dvDetailData").show();
+        showhideDiv(12);
+    }
+    function DrawSMSBlastThirdTable() {
+        var table1 = $('#activitySMSBlastThird').DataTable();
+        table1.destroy();
+
+        var table = $('#activitySMSBlastThird').DataTable({
+            "data": tblCampaignThird,
+            "paging": false,
+            "ordering": false,
+            "info": false,
+            "bFilter": false,
+            "pageLength": 25,
+            "pagingType": "simple_numbers",
+            "columns": [
+                { data: "Status" },
+                { data: "MemberName" },
+                { data: "MobileNo" },
+                { data: "TxnCount" },
+                { data: "TotalBiz" }
+            ]
+        });
+        $('#activitySMSBlastThird_filter').hide();
+    }
+
+
+
 </script>

@@ -195,6 +195,53 @@ namespace BOTS_BL.Repository
             return objCampaignData;
         }
 
+        public List<CampaignSecond> GetCampaignSecondData(string GroupId, string connstr, string month, string year, string CampaignId)
+        {
+            List<CampaignSecond> objCampaignData = new List<CampaignSecond>();
+            try
+            {
+                using (var context = new BOTSDBContext(connstr))
+                {
+                    objCampaignData = context.Database.SqlQuery<CampaignSecond>("sp_BOTS_CM_Campaign1 @pi_GroupId, @pi_Date, @pi_LoginId, @pi_Month, @pi_Year",
+                        new SqlParameter("@pi_GroupId", GroupId),
+                        new SqlParameter("@pi_Date", DateTime.Now.ToShortDateString()),
+                        new SqlParameter("@pi_LoginId", ""),
+                        new SqlParameter("@pi_Month", month),
+                        new SqlParameter("@pi_Year", year),
+                        new SqlParameter("@pi_CampaignId", CampaignId)).ToList<CampaignSecond>();
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, GroupId);
+            }
+            return objCampaignData;
+        }
+
+        public List<CampaignThird> GetCampaignThirdData(string GroupId, string connstr, string month, string year, string CampaignId)
+        {
+            List<CampaignThird> objCampaignData = new List<CampaignThird>();
+            try
+            {
+                using (var context = new BOTSDBContext(connstr))
+                {
+                    objCampaignData = context.Database.SqlQuery<CampaignThird>("sp_BOTS_CM_Campaign2 @pi_GroupId, @pi_Date, @pi_LoginId, @pi_Month, @pi_Year",
+                        new SqlParameter("@pi_GroupId", GroupId),
+                        new SqlParameter("@pi_Date", DateTime.Now.ToShortDateString()),
+                        new SqlParameter("@pi_LoginId", ""),
+                        new SqlParameter("@pi_Month", month),
+                        new SqlParameter("@pi_Year", year),
+                        new SqlParameter("@pi_CampaignId", CampaignId)).ToList<CampaignThird>();
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, GroupId);
+            }
+            return objCampaignData;
+        }
+
+
         public List<CampaignSMSBlastFirst> GetCampaignSMSBlastFirstData(string GroupId, string connstr, string month, string year)
         {
             List<CampaignSMSBlastFirst> objCampaignSMSBlastFirstData = new List<CampaignSMSBlastFirst>();
@@ -217,5 +264,50 @@ namespace BOTS_BL.Repository
             return objCampaignSMSBlastFirstData;
         }
 
+        public List<CampaignSecond> GetSMSBlastsSecondData(string GroupId, string connstr, string month, string year, string CampaignId)
+        {
+            List<CampaignSecond> objCampaignData = new List<CampaignSecond>();
+            try
+            {
+                using (var context = new BOTSDBContext(connstr))
+                {
+                    objCampaignData = context.Database.SqlQuery<CampaignSecond>("sp_BOTS_CM_SMSBlast1 @pi_GroupId, @pi_Date, @pi_LoginId, @pi_Month, @pi_Year",
+                        new SqlParameter("@pi_GroupId", GroupId),
+                        new SqlParameter("@pi_Date", DateTime.Now.ToShortDateString()),
+                        new SqlParameter("@pi_LoginId", ""),
+                        new SqlParameter("@pi_Month", month),
+                        new SqlParameter("@pi_Year", year),
+                        new SqlParameter("@pi_CampaignId", CampaignId)).ToList<CampaignSecond>();
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, GroupId);
+            }
+            return objCampaignData;
+        }
+
+        public List<CampaignThird> GetSMSBlastsThirdData(string GroupId, string connstr, string month, string year, string CampaignId)
+        {
+            List<CampaignThird> objCampaignData = new List<CampaignThird>();
+            try
+            {
+                using (var context = new BOTSDBContext(connstr))
+                {
+                    objCampaignData = context.Database.SqlQuery<CampaignThird>("sp_BOTS_CM_SMSBlast2 @pi_GroupId, @pi_Date, @pi_LoginId, @pi_Month, @pi_Year",
+                        new SqlParameter("@pi_GroupId", GroupId),
+                        new SqlParameter("@pi_Date", DateTime.Now.ToShortDateString()),
+                        new SqlParameter("@pi_LoginId", ""),
+                        new SqlParameter("@pi_Month", month),
+                        new SqlParameter("@pi_Year", year),
+                        new SqlParameter("@pi_CampaignId", CampaignId)).ToList<CampaignThird>();
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, GroupId);
+            }
+            return objCampaignData;
+        }
     }
 }
