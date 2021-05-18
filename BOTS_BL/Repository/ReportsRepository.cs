@@ -105,7 +105,7 @@ namespace BOTS_BL.Repository
             return lstOutletWise;
         }
 
-        public List<OutletwiseTransaction> GetOutletWiseTransactionList(string GroupId,string DateRangeFlag, string FromDate, string ToDate, string OutletId, bool EnrolmentDataFlag, string connstr)
+        public List<OutletwiseTransaction> GetOutletWiseTransactionList(string GroupId,string DateRangeFlag, string FromDate, string ToDate, string OutletId, string EnrolmentDataFlag, string connstr)
         {
             List<OutletwiseTransaction> lstOutletWiseTransaction = new List<OutletwiseTransaction>();
             try

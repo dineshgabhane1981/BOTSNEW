@@ -166,7 +166,7 @@ namespace WebApp.Controllers
         }
 
         [HttpPost]
-        public JsonResult GetOutletWiseTransactionResult(string DateRangeFlag, string fromDate, string toDate, string outletId, bool EnrolmentDataFlag)
+        public JsonResult GetOutletWiseTransactionResult(string DateRangeFlag, string fromDate, string toDate, string outletId, string EnrolmentDataFlag)
         {
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
             if (outletId.Equals("All"))
@@ -203,7 +203,7 @@ namespace WebApp.Controllers
             return PartialView("_MemberSearch", objMemberSearch);
         }
 
-        public ActionResult ExportToExcelTransactionwise(string DateRangeFlag, string fromDate, string toDate, string outletId, bool EnrolmentDataFlag, string ReportName)
+        public ActionResult ExportToExcelTransactionwise(string DateRangeFlag, string fromDate, string toDate, string outletId, string EnrolmentDataFlag, string ReportName)
         {
             System.Data.DataTable table = new System.Data.DataTable();
             try

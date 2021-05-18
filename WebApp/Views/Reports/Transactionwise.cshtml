@@ -28,9 +28,10 @@
         </div>
         <div class="col-sm-10" style="margin-bottom:20px;margin-top:20px;margin-left:15px;">
             <div class="col-md-10 col-xl-10">
-                <input type="checkbox" id="chkEnrollmentData" name="chkEnrollmentData" style="margin-right:5px;height:15px;width:15px;" /> Only Enrollment data &nbsp;&nbsp;&nbsp;&nbsp;
-                <input type="checkbox" id="chkEarn" name="chkEarn" style="margin-right:5px;height:15px;width:15px;" /> Earn &nbsp;&nbsp;&nbsp;&nbsp;
-                <input type="checkbox" id="chkRedeem" name="chkRedeem" style="margin-right:5px;height:15px;width:15px;" /> Redeem &nbsp;&nbsp;&nbsp;&nbsp;
+                <input type="radio" id="chkAll" name="EnrollmentParam" style="margin-right:5px;height:15px;width:15px;" /> All &nbsp;&nbsp;&nbsp;&nbsp;
+                <input type="radio" id="chkEnrollmentData" name="EnrollmentParam" style="margin-right:5px;height:15px;width:15px;" /> Only Enrollment data &nbsp;&nbsp;&nbsp;&nbsp;
+                <input type="radio" id="chkEarn" name="EnrollmentParam" style="margin-right:5px;height:15px;width:15px;" /> Earn &nbsp;&nbsp;&nbsp;&nbsp;
+                <input type="radio" id="chkRedeem" name="EnrollmentParam" style="margin-right:5px;height:15px;width:15px;" /> Redeem &nbsp;&nbsp;&nbsp;&nbsp;
                 <button id="btnFilter" class="btn btn-primary login-btn" style="margin-left:40px;">Filter</button>
             </div>
         </div>
@@ -161,7 +162,20 @@
         if ($("#OutletList").val() != "") {
             outletId = $("#OutletList").val();
         }
-        var EnrolmentDataFlag = $("#chkEnrollmentData").is(":checked");
+        var EnrolmentDataFlag = 4;
+        if ($("#chkEnrollmentData").is(":checked")) {
+            EnrolmentDataFlag = 1;
+        }
+        if ($("#chkEarn").is(":checked")) {
+            EnrolmentDataFlag = 2;
+        }
+        if ($("#chkRedeem").is(":checked")) {
+            EnrolmentDataFlag = 3;
+        }
+        if ($("#chkAll").is(":checked")) {
+            EnrolmentDataFlag = 4;
+        }
+        
         $.ajax({
             type: "POST",
             url: '@Url.Action("GetOutletWiseTransactionResult", "Reports")',
@@ -291,8 +305,13 @@
         var fromDate = '';
         var toDate = '';
         $("#divLoader").show();
-        if ($("#rdnRange").is(":checked")) {
+        if ($("#rdn30Days").is(":checked")) {
             DateRangeFlag = "1";
+            fromDate = $('#dtFrom').val();
+            toDate = $('#dtTo').val();
+        }
+        if ($("#rdnRange").is(":checked")) {
+            DateRangeFlag = "2";
             fromDate = $('#dtFrom').val();
             toDate = $('#dtTo').val();
         }
@@ -300,7 +319,16 @@
         if ($("#OutletList").val() != "") {
             outletId = $("#OutletList").val();
         }
-        var EnrolmentDataFlag = $("#chkEnrollmentData").is(":checked");
+        var EnrolmentDataFlag = 4;
+        if ($("#chkEnrollmentData").is(":checked")) {
+            EnrolmentDataFlag = 1;
+        }
+        if ($("#chkEarn").is(":checked")) {
+            EnrolmentDataFlag = 2;
+        }
+        if ($("#chkRedeem").is(":checked")) {
+            EnrolmentDataFlag = 3;
+        }
 
         var urlLink = "@Url.Action("ExportToExcelTransactionwise", "Reports")";
         urlLink = urlLink + "?DateRangeFlag=" + DateRangeFlag + "&fromDate=" + fromDate + "&toDate=" + toDate + "&outletId=" + outletId + "&EnrolmentDataFlag=" + EnrolmentDataFlag + "&ReportName=Transactionwise";
