@@ -4,11 +4,438 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<div class="app-main__inner">
+<div class="app-main__inner" id="dvall">
 
     <div class="row mb-3 pt-3 pl-3 pr-3 card" style="text-align:center;padding-bottom:20px;">
-        <h3><b>Coming Soon in March 2021</b> </h3>
+        <h3><b>SLICE & DICE - Customise Your Own Report</b> </h3>
     </div>
+    <h6><b>Select Member Demographics</b></h6>
+    <div class="row mt-4" id="secmember">
+        <div class="col-md-3 col-xl-3">
+             Gender
+        </div>
+        <div class="col-md-3 col-xl-3">
+            @Html.DropDownList("Gender", new SelectList(ViewBag.lstGenderList, "Value", "Text"), htmlAttributes: new { @class = "input50", @id = "ddlGender" })
+        </div>
+    </div>
+    <div class="row mt-2">
+        <div class="col-md-3 col-xl-3">
+             Age
+        </div>
+        <div class="col-md-3 col-xl-3">
+            @Html.DropDownList("Age", new SelectList(ViewBag.lstSpendList, "Value", "Text"), htmlAttributes: new { @class = "input50", @id = "ddlAge" })
+        </div>
+        <div class="col-md-6 col-xl-4">
+            <input type="text" id="txtAgemin" class="input50" placeholder="Enter" style="display:none" />
+            <input type="text" id="txtAgemax" class="input50" placeholder="Enter" style="display:none" />
+        </div>
+    </div>
+    <div class="row mt-2">
+        <div class="col-md-3 col-xl-3">
+            Source
+        </div>
+        <div class="col-md-3 col-xl-3">
+            @Html.DropDownList("Source", new SelectList(ViewBag.lstSourceList, "Value", "Text"), htmlAttributes: new { @class = "input50", @id = "ddlSource" })
+        </div>
+    </div>
+    <h6><b>Select Transactiona Variables</b></h6>
+
+    <div class="row mt-4" id="secTransaction">
+        <div class="col-md-3 col-xl-3">
+             Enrolled Since (days)
+        </div>
+        <div class="col-md-3 col-xl-3">
+            @Html.DropDownList("Entrolled", new SelectList(ViewBag.lstEnrolledList, "Value", "Text"), htmlAttributes: new { @class = "input50", @id = "ddlEnrolled" })
+        </div>
+        <div class="col-md-6 col-xl-4">
+            <input type="text" id="txtEnrollmin" class="input50" placeholder="Enter" style="display:none" />
+            <input type="text" id="txtEnrollmax" class="input50" placeholder="Enter" style="display:none" />
+
+        </div>
+    </div>
+    <div class="row mt-2">
+        <div class="col-md-3 col-xl-3">
+             Not transacted since (days)
+        </div>
+        <div class="col-md-3 col-xl-3">
+            @Html.DropDownList("NonTransacted", new SelectList(ViewBag.lstnontransactedList, "Value", "Text"), htmlAttributes: new { @class = "input50", @id = "ddlNontrasacted" })
+        </div>
+        <div class="col-md-6 col-xl-4">
+            <input type="text" id="txtnontransactedmin" class="input50" placeholder="Enter" style="display:none" />
+            <input type="text" id="txtnontransactedmax" class="input50" placeholder="Enter" style="display:none" />
+
+        </div>
+    </div>
+    <div class="row mt-2">
+        <div class="col-md-3 col-xl-3">
+            Spends(Rs.)
+        </div>
+        <div class="col-md-3 col-xl-3">
+            @Html.DropDownList("Spends", new SelectList(ViewBag.lstSpendList, "Value", "Text"), htmlAttributes: new { @class = "input50", @id = "ddlSpend" })
+        </div>
+        <div class="col-md-6 col-xl-4">
+            <input type="text" id="txtspendmin" class="input50" placeholder="Enter" style="display:none" />
+            <input type="text" id="txtspendmax" class="input50" placeholder="Enter" style="display:none" />
+
+        </div>
+    </div>
+    <div class="row mt-2">
+        <div class="col-md-3 col-xl-3">
+           Txn Count
+        </div>
+        <div class="col-md-3 col-xl-3">
+            @Html.DropDownList("TxnCount", new SelectList(ViewBag.lstSpendList, "Value", "Text"), htmlAttributes: new { @class = "input50", @id = "ddltxncount" })
+        </div>
+        <div class="col-md-6 col-xl-4">
+            <input type="text" id="txttxncountmin" class="input50" placeholder="Enter" style="display:none" />
+            <input type="text" id="txttxncountmax" class="input50" placeholder="Enter" style="display:none" />
+
+        </div>
+    </div>
+    <div class="row mt-2">
+        <div class="col-md-3 col-xl-3">
+            Redeemed
+        </div>
+        <div class="col-md-3 col-xl-3">
+            @Html.DropDownList("Redeemed", new SelectList(ViewBag.lstRedeemedList, "Value", "Text"), htmlAttributes: new { @class = "input50", @id = "ddlRedeemed" })
+        </div>
+    </div>
+    <div class="row mt-2">
+        <div class="col-md-3 col-xl-3">
+             Points Balance
+        </div>
+        <div class="col-md-3 col-xl-3">
+            @Html.DropDownList("PointsBalance", new SelectList(ViewBag.lstSpendList, "Value", "Text"), htmlAttributes: new { @class = "input50", @id = "ddlPointsBalance" })
+        </div>
+        <div class="col-md-6 col-xl-4">
+            <input type="text" id="txtPointsBalnmin" class="input50" placeholder="Enter" style="display:none" />
+            <input type="text" id="txtPointsBalnmax" class="input50" placeholder="Enter" style="display:none" />
+
+        </div>
+    </div>
+    <div class="row mt-2">
+        <div class="col-md-3 col-xl-3">
+            Avg Ticket Size
+        </div>
+        <div class="col-md-3 col-xl-3">
+            @Html.DropDownList("Avg ticket", new SelectList(ViewBag.lstSpendList, "Value", "Text"), htmlAttributes: new { @class = "input50", @id = "ddlTicketsize" })
+        </div>
+        <div class="col-md-6 col-xl-4">
+            <input type="text" id="txtTicketmin" class="input50" placeholder="Enter" style="display:none" />
+            <input type="text" id="txtTicketmax" class="input50" placeholder="Enter" style="display:none" />
+        </div>
+    </div>
+
+    <h6><b>Brand And Outlet Selection</b></h6>
+    <div class="row mt-4" id="secbrandOutlet">
+        <div class="col-md-3 col-xl-3">
+             Select Brand
+        </div>
+        <div class="col-md-3 col-xl-3">
+            @Html.DropDownList("SelectBrand", new SelectList(ViewBag.lstBrandList, "Value", "Text"), "--Select--", htmlAttributes: new { @class = "input50", @id = "ddlBrand" })
+        </div>
+
+    </div>
+    <div class="row mt-2">
+        <div class="col-md-3 col-xl-3">
+             Select Outlet
+        </div>
+        <div class="col-md-3 col-xl-3">
+            @*<input type="button" id="btnOutlet" value="Submit" />*@
+            @*<select id="ddlOutlet" class="input50">
+            </select>*@
+            @*@Html.ListBoxFor("SelectOutlet", new SelectList(ViewBag.lstOutlet, "Value", "Text"), "--Select--", htmlAttributes: new { @class = "input50", @id = "ddlOutlet" })*@
+            @Html.ListBox("SelectOutlet", new MultiSelectList(ViewBag.lstOutlet, "Value", "Text"), new { @class = "chzn-select", Multiple = "multiple", @id = "ddlOutlet" })
+            
+        </div>
+        
+        @*<div class="col-md-3 col-xl-3">
+                @Html.DropDownList("SelectOutlet", new SelectList(ViewBag.lstOutlet, "Value", "Text"), "--Select--", htmlAttributes: new { @class = "input50", @id = "ddlOutlet" })
+            </div>*@
+    </div>
+
+
+    @*<div class="row">
+            <div class="col-md-3 col-xl-3">
+                <input type="checkbox" id="chkAge" />
+            </div>
+            <div class="col-md-3 col-xl-3">
+                @Html.DropDownList("Age", new SelectList(ViewBag.lstAgeList, "Value", "Text"), htmlAttributes: new { @class = "input50", @id = "ddlAge" })
+            </div>
+            <div class="col-md-6 col-xl-4">
+                <input type="text" id="txtAgemin" class="input50" value="Enter" />
+                <input type="text" id="txtAgemax" class="input50" />
+            </div>
+        </div>*@
+    <div class="row mt-5">
+        <div class="col-md-3 col-xl-3">
+            <button class="btn btn-primary login-btn" type="button" id="btnFilter" onclick="GetFilteredData1();">
+                Filter
+            </button>
+        </div>
+        <div class="col-md-4 col-xl-4">
+            <table style="border:2px solid black;width:80%">
+                <tr style="border:2px solid black;">
+                    <td style="border:2px solid black;">
+                        Total Member Count
+                    </td>
+                    <td style="border:2px solid black;">
+                        <span id="spnMemberCount">@ViewBag.TotalMemberCount</span>
+                    </td>
+                </tr>
+                <tr style="border:2px solid black; ">
+                    <td style="border:2px solid black;text-align:left;">
+                        <span id="spnfilteredCount"></span>Filtered Count
+                    </td>
+                    <td style="border:2px solid black;">
+                        <span id="spnfilteredCountnum"></span>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
 </div>
+
+<script src="http://code.jquery.com/jquery-1.12.4.min.js"></script>
+@*<link href="http://cdn.rawgit.com/davidstutz/bootstrap-multiselect/master/dist/css/bootstrap-multiselect.css" rel="stylesheet" type="text/css" />
+    <script src="http://cdn.rawgit.com/davidstutz/bootstrap-multiselect/master/dist/js/bootstrap-multiselect.js"></script>
+    <link href="http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.0.3/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.0.3/js/bootstrap.min.js"></script>*@
+
+
+    @*<script src="http://cdn.rawgit.com/davidstutz/bootstrap-multiselect/master/dist/js/bootstrap-multiselect.js"></script>
+    <link href="http://cdn.rawgit.com/davidstutz/bootstrap-multiselect/master/dist/css/bootstrap-multiselect.css" rel="stylesheet" type="text/css" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+      <script src="http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.0.3/js/bootstrap.min.js"></script>
+        <link href="http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.0.3/css/bootstrap.min.css" rel="stylesheet" type="text/css" />*@
+
+
+@*<script src="~/Content/scriptSteps.js"></script>*@
+
+<script>
+
+    $(document).ready(function () {
+        //GetOutletList();       
+
+    });
+
+    $('#btnFilter').on("click", function () {
+        GetFilteredData1();
+    });
+    function GetOutletList() {
+      //  $("#divLoader").show();
+        $.ajax({
+            url: '@Url.Action("GetOutletlist", "Reports")',
+            type: "GET",
+            contentType: "application/json; charset=utf-8",
+            datatype: JSON,
+            success: function (lstOutlet) {
+                console.log(lstOutlet);
+                $.each(lstOutlet, function () {
+                    console.log(this.Value);
+                    $('#ddlOutlet').append($("<option />").val(this.Value).text(this.Text));
+                });
+                //$('#ddlOutlet').multiselect({
+                //includeSelectAllOption: true,
+
+                //});                
+            },
+            error: function (data) { }
+            });
+
+            }
+    $("#ddlTicketsize").change(function () {
+        var selected = $("#ddlTicketsize option:selected").text();
+        if (selected == 'Between') {
+            $("#txtTicketmin").show();
+            $("#txtTicketmax").show();
+        }
+        else {
+            $("#txtTicketmin").show();
+            $("#txtTicketmax").hide();
+        }
+    });   
+    $("#ddlPointsBalance").change(function () {
+        var selected = $("#ddlPointsBalance option:selected").text();
+        if (selected == 'Between') {
+            $("#txtPointsBalnmin").show();
+            $("#txtPointsBalnmax").show();
+        }
+        else {
+            $("#txtPointsBalnmin").show();
+            $("#txtPointsBalnmax").hide();
+        }
+    });
+    $("#ddltxncount").change(function () {
+        var selected = $("#ddltxncount option:selected").text();
+        if (selected == 'Between') {
+            $("#txttxncountmin").show();
+            $("#txttxncountmax").show();
+        }
+        else {
+            $("#txttxncountmin").show();
+            $("#txttxncountmax").hide();
+        }
+    });
+    $("#ddlSpend").change(function () {
+        var selected = $("#ddlSpend option:selected").text();
+        if (selected == 'Between') {
+            $("#txtspendmin").show();
+            $("#txtspendmax").show();
+        }
+        else {
+            $("#txtspendmin").show();
+            $("#txtspendmax").hide();
+        }
+    });
+    $("#ddlNontrasacted").change(function () {
+        var selected = $("#ddlNontrasacted option:selected").text();
+        if (selected == 'Custom') {
+            $("#txtnontransactedmin").show();
+            $("#txtnontransactedmax").show();
+        }
+
+    });
+    $("#ddlEnrolled").change(function () {
+        var selected = $("#ddlEnrolled option:selected").text();
+        if (selected == 'Custom') {
+            $("#txtEnrollmin").show();
+            $("#txtEnrollmax").show();
+        }
+
+    });
+    $("#ddlAge").change(function () {
+      var selected = $("#ddlAge option:selected").text();
+        if (selected == 'Between') {
+            $("#txtAgemin").show();
+            $("#txtAgemax").show();
+        }
+        else {
+            $("#txtAgemin").show();
+            $("#txtAgemax").hide();
+        }
+    });
+
+    function GetFilteredData1() {
+        $("#divLoader").show();
+        var FilterData = [];
+        item = {};
+        item["Gender"] = ($("#ddlGender").prop('selectedIndex') !== 0) ? $('#ddlGender :selected').val() : 0;
+
+        item["Age-min"] = ($("#ddlAge").prop('selectedIndex') == 1) ? $('#txtAgemin').val() : 0;
+        item["Age-max"] = ($("#ddlAge").prop('selectedIndex') == 2) ? $('#txtAgemin').val() : 0;
+         if ($("#ddlAge").prop('selectedIndex') == 3) {
+             item["Age-max"] = $('#txtAgemax').val();
+             item["Age-min"] = $('#txtAgemin').val();
+        }
+        item["Source"] = ($("#ddlSource").prop('selectedIndex') !== 0) ? $('#ddlSource :selected').val() : 0;
+        if ($("#ddlEnrolled").prop('selectedIndex') !== 0) {
+            item["Enroll-min"] = ($("#ddlEnrolled").prop('selectedIndex') == 8) ? $("#txtEnrollmin").val() : $('#ddlEnrolled :selected').text();
+            item["Enroll-max"] = ($("#ddlEnrolled").prop('selectedIndex') == 8) ? $('#txtEnrollmax').val() : 0;
+        }
+        else {
+            item["Enroll-min"] = 0;
+            item["Enroll-max"] = 0;
+        }
+        if ($("#ddlNontrasacted").prop('selectedIndex') !== 0) {
+            item["Nontransacted-min"] = ($("#ddlNontrasacted").prop('selectedIndex') == 7) ? $("#txtnontransactedmin").val() : $('#ddlNontrasacted :selected').text();;
+            item["Nontransacted-max"] = ($("#ddlNontrasacted").prop('selectedIndex') == 7) ? $('#txtnontransactedmax').val() : 0;
+        }
+        else {
+            item["Nontransacted-min"] = 0;
+            item["Nontransacted-max"] = 0;
+        }
+
+        item["Spend-min"] = ($("#ddlSpend").prop('selectedIndex') !== 0) ? $('#txtspendmin').val() :0;
+            item["Spend-max"] = ($("#ddlSpend").prop('selectedIndex') == 3) ? $('#txtspendmax').val() : 0;
+
+        item["txncount-min"] = ($("#ddltxncount").prop('selectedIndex') == 1) ? $('#txttxncountmin').val() : 0;
+        item["txncount-max"] = ($("#ddltxncount").prop('selectedIndex') == 2) ? $('#txttxncountmin').val() : 0;
+        if ($("#ddltxncount").prop('selectedIndex') == 3) {
+            item["txncount-max"] = $('#txttxncountmax').val();
+            item["txncount-min"] = $('#txttxncountmin').val();
+        }
+
+        item["pointBaln-min"] = ($("#ddlPointsBalance").prop('selectedIndex') == 1) ? $('#txtPointsBalnmin').val() : 0;
+        item["pointBaln-max"] = ($("#ddlPointsBalance").prop('selectedIndex') == 2) ? $('#txtPointsBalnmin').val() : 0;
+        if ($("#ddlPointsBalance").prop('selectedIndex') == 3) {
+            item["pointBaln-max"] = $('#txtPointsBalnmax').val();
+            item["pointBaln-min"] = $('#txtPointsBalnmin').val();
+        }
+        item["Redeem"] = ($("#ddlRedeemed").prop('selectedIndex') !== 0) ? $('#ddlRedeemed :selected').val() : 0;
+       
+        item["TicketSize-min"] = ($("#ddlTicketsize").prop('selectedIndex') !== 0) ? $('#txtTicketmin').val() :0;
+            item["TicketSize-max"] = ($("#ddlTicketsize").prop('selectedIndex') == 3) ? $('#txtTicketmax').val() : 0;
+        
+        item["Brand"] = ($("#ddlBrand").prop('selectedIndex') !== 0) ? $('#ddlBrand :selected').val() : 0;
+        if ($("#ddlOutlet").prop('selected') !== 0) {
+
+            var Array = [];
+            $('#ddlOutlet :selected').each(function (i, selected) {
+                Array.push($(selected).val());
+             });
+            item["Outlet"] = Array;
+
+        }
+
+        FilterData.push(item);
+        console.log(FilterData);
+        var data = JSON.stringify(FilterData);
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("GetFilteredData", "Reports")',
+            data: '{jsonData: ' + JSON.stringify(data) + '}',
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+
+            success: function (response) {
+                console.log(response);
+                if (response != null) {
+                    $("#spnfilteredCountnum").text(response);
+                    $("#divLoader").hide();                    
+                    $('#dvall').find(':input').val(''); 
+                    $('#txtAgemin').hide();
+                    $('#txtAgemax').hide();
+                    $("#txtEnrollmin").hide();
+                    $('#txtEnrollmax').hide();
+                    $("#txtnontransactedmin").hide();
+                    $("#txtnontransactedmax").hide();
+                    $('#txtspendmin').hide();
+                    $('#txtspendmax').hide();
+                    $('#txttxncountmin').hide();
+                    $('#txttxncountmax').hide();
+                    $('#txtPointsBalnmin').hide();
+                    $('#txtPointsBalnmax').hide();
+                    $('#txtTicketmin').hide();
+                    $('#txtTicketmax').hide();
+                    $('#ddlPointsBalance').prop('selectedIndex', 0);
+                    $('#ddltxncount').prop('selectedIndex', 0);
+                    $('#ddlSpend').prop('selectedIndex', 0);
+                    $('#ddlNontrasacted').prop('selectedIndex', 0);
+                    $('#ddlEnrolled').prop('selectedIndex', 0);
+                    $('#ddlAge').prop('selectedIndex', 0);
+                    $('#ddlGender').prop('selectedIndex', 0);
+                    $('#ddlBrand').prop('selectedIndex', 0);
+                    $('#ddlRedeemed').prop('selectedIndex', 0);
+                    $('#ddlOutlet').prop('selectedIndex', 0);
+                    $('#ddlTicketsize').prop('selectedIndex', 0);
+                    $('#ddlSource').prop('selectedIndex', 0);
+
+                }
+                else {
+
+                }
+
+            },
+            error: function (response) {
+                console.log(response.responseText);
+            }
+        });
+    }
+
+</script>
+
+
 
 

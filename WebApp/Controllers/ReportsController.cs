@@ -11,6 +11,7 @@ using System.Data;
 using System.ComponentModel;
 using BOTS_BL;
 using System.Globalization;
+using System.Web.Script.Serialization;
 
 namespace WebApp.Controllers
 {
@@ -105,8 +106,65 @@ namespace WebApp.Controllers
 
         public ActionResult CreateOwnSegment()
         {
-            return View();
+            
+                var userDetails = (CustomerLoginDetail)Session["UserSession"];
+                var lstEnrolledList = RR.GetEnrolledList(userDetails.GroupId, userDetails.connectionString);
+                ViewBag.lstEnrolledList = lstEnrolledList;
+                var lstnontransactedList = RR.GetNonTransactedList(userDetails.GroupId, userDetails.connectionString);
+                ViewBag.lstnontransactedList = lstnontransactedList;
+                var lstSpendList = RR.GetSpendList(userDetails.GroupId, userDetails.connectionString);
+                ViewBag.lstSpendList = lstSpendList;
+                var lstGenderList = RR.GetGenderList(userDetails.GroupId, userDetails.connectionString);
+                ViewBag.lstGenderList = lstGenderList;
+                var lstSourceList = RR.GetSourseList(userDetails.GroupId, userDetails.connectionString);
+                ViewBag.lstSourceList = lstSourceList;
+                var lstRedeemedList = RR.GetRedeemedList(userDetails.GroupId, userDetails.connectionString);
+                ViewBag.lstRedeemedList = lstRedeemedList;
+                var lstOutlet = RR.GetOutletList(userDetails.GroupId, userDetails.connectionString);
+                ViewBag.lstOutlet = lstOutlet;
+                var TotalCount = RR.GetTotalMemberCount(userDetails.GroupId, userDetails.connectionString);
+                ViewBag.TotalMemberCount = TotalCount;
+                var lstBrandList = RR.GetBrandList(userDetails.GroupId, userDetails.connectionString);
+                ViewBag.lstBrandList = lstBrandList;
+                return View();
+            
+
         }
+        public JsonResult GetFilteredData(string jsonData)
+        {
+            var transcount = 0;
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            List<CustomerDetail> listCustD = new List<CustomerDetail>();
+            JavaScriptSerializer json_serializer = new JavaScriptSerializer();
+            json_serializer.MaxJsonLength = int.MaxValue;
+            object[] objData = (object[])json_serializer.DeserializeObject(jsonData);
+            foreach (Dictionary<string, object> item in objData)
+            {
+                string gender = Convert.ToString(item["Gender"]);
+                string Age_min = Convert.ToString(item["Age-min"]);
+                string Age_max = Convert.ToString(item["Age-max"]);
+                string source = Convert.ToString(item["Source"]);
+                string Enroll_min = Convert.ToString(item["Enroll-min"]);
+                string Enroll_max = Convert.ToString(item["Enroll-max"]);
+                string Nontransacted_min = Convert.ToString(item["Nontransacted-min"]);
+                string Nontransacted_max = Convert.ToString(item["Nontransacted-max"]);
+                int Spend_min = Convert.ToInt32(item["Spend-min"]);
+                int Spend_max = Convert.ToInt32(item["Spend-max"]);
+                int txncount_min = Convert.ToInt32(item["txncount-min"]);
+                int txncount_max = Convert.ToInt32(item["txncount-max"]);
+                int pointBaln_min = Convert.ToInt32(item["pointBaln-min"]);
+                int pointBaln_max = Convert.ToInt32(item["pointBaln-max"]);
+                string Redeem = Convert.ToString(item["Redeem"]);
+                int TicketSize_min = Convert.ToInt32(item["TicketSize-min"]);
+                int TicketSize_max = Convert.ToInt32(item["TicketSize-max"]);
+                string Brand = Convert.ToString(item["Brand"]);
+                object[] outletId = (object[])item["Outlet"];
+
+                transcount = RR.GetSliceAndDiceFilteredData(gender, Age_min, Age_max, source, Enroll_max, Enroll_min, Nontransacted_max, Nontransacted_min, Spend_min, Spend_max, txncount_min, txncount_max, pointBaln_min, pointBaln_max, Redeem, TicketSize_min, TicketSize_max, Brand, outletId, userDetails.GroupId, userDetails.connectionString);
+            }
+            return new JsonResult() { Data = transcount, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
+        }
+
 
         [HttpPost]
         public JsonResult GetPointsExpiryDataResult(int month, int year)
