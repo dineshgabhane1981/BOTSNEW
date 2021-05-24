@@ -89,7 +89,7 @@
     @*@Scripts.Render("~/bundles/jquery")
         @Scripts.Render("~/bundles/bootstrap")
         @RenderSection("scripts", required: false)*@
-    <script>
+<script>
         $(document).ajaxError(function (xhr, props) {
             if (props.status === 401) {
             window.location.href = '@Url.Action("Index", "Login")';
@@ -122,7 +122,7 @@
             var searchData = $("#txtMember").val();
             var GroupId = $('#hdnGroupId').val();
             var searchURL = "https://blueocktopus.in/bots/Reports/GetMemberSearchResult";
-            var searchURL = "../Reports/GetMemberSearchResult";
+            var searchURL = "@Url.Action("GetMemberSearchResult", "Reports")";
             $.ajax({
                 type: "POST",
                 url: searchURL,
@@ -159,7 +159,7 @@
                 return 0;
             }
         }
-    </script>
+</script>
 
 
 </body>
