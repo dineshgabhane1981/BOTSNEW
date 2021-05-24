@@ -167,6 +167,7 @@
     <Compile Include="ViewModel\CancelTxnViewModel.cs" />
     <Compile Include="ViewModel\CustomerViewModel.cs" />
     <Compile Include="ViewModel\DataPoint.cs" />
+    <Compile Include="ViewModel\OtherReportProductwiseViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\assets\BlueocktopusLoadingGIF.gif" />

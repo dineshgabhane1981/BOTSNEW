@@ -228,6 +228,7 @@
     <Compile Include="Models\Reports\Celebrations.cs" />
     <Compile Include="Models\Reports\MemberList.cs" />
     <Compile Include="Models\Reports\MemberSearch.cs" />
+    <Compile Include="Models\Reports\OtherReportProductwise.cs" />
     <Compile Include="Models\Reports\OutletWise.cs" />
     <Compile Include="Models\Reports\OutletwiseTransaction.cs" />
     <Compile Include="Models\Reports\PointExpiryTmp.cs" />
@@ -246,6 +247,7 @@
     <Compile Include="Repository\LoyaltyKPIsRepository.cs" />
     <Compile Include="Repository\ManagementDashboardRepository.cs" />
     <Compile Include="Repository\NoActionRepository.cs" />
+    <Compile Include="Repository\OtherReportsRepository.cs" />
     <Compile Include="Repository\ParticipantRepository.cs" />
     <Compile Include="Repository\PointsLedgerRepository.cs" />
     <Compile Include="Repository\RedemptionRepository.cs" />

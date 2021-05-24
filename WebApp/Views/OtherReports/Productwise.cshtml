@@ -1,13 +1,61 @@
-﻿
+﻿@model WebApp.ViewModel.OtherReportProductwiseViewModel
 @{
     ViewBag.Title = "Productwise";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <div class="app-main__inner">
-
     <div class="row mb-3 pt-3 pl-3 pr-3 card" style="text-align:center;padding-bottom:20px;">
-        <h3><b>Coming Soon in March 2021</b> </h3>
+        <div class="row" style="display:flex;">
+            <div class="col-md-6 col-xl-6">
+                <table border="1" cellpadding="5" cellspacing="5">
+                    <tr>
+                        <th colspan="5">Top 5 Selling Product – Value</th>
+                    </tr>
+                    <tr>
+                        <th>Product Code</th>
+                        <th>Product Name</th>
+                        <th>Unique Members</th>
+                        <th>Unique Txns</th>
+                        <th>Total Amount</th>
+                    </tr>
+                    @foreach (var item in Model.lstTop5Value)
+                    {
+                        <tr>
+                            <td>@item.ProductCode</td>
+                            <td>@item.ProductName</td>
+                            <td>@item.UniqueMember</td>
+                            <td>@item.UniqueTxn</td>
+                            <td>@item.TotalAmt</td>
+                        </tr>
+                    }
+                </table>
+            </div>
+            <div class="col-md-6 col-xl-6">
+                <table border="1" cellpadding="5" cellspacing="5">
+                    <tr>
+                        <th colspan="5">Bottom 5 Selling Products – Value</th>
+                    </tr>
+                    <tr>
+                        <th>Product Code</th>
+                        <th>Product Name</th>
+                        <th>Unique Members</th>
+                        <th>Unique Txns</th>
+                        <th>Total Amount</th>
+                    </tr>
+                    @foreach (var item in Model.lstBottom5Value)
+                    {
+                        <tr>
+                            <td>@item.ProductCode</td>
+                            <td>@item.ProductName</td>
+                            <td>@item.UniqueMember</td>
+                            <td>@item.UniqueTxn</td>
+                            <td>@item.TotalAmt</td>
+                        </tr>
+                    }
+                </table>
+            </div>
+        </div>
     </div>
 </div>
 
