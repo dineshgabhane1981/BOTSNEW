@@ -140,8 +140,9 @@
                                             <th scope="col">Member Name</th>
                                             <th scope="col">Type</th>
                                             <th scope="col">Total Spend</th>
+                                            <th scope="col">Total Visits</th>
                                             <th scope="col">Avl Bal Points</th>
-                                            <th scope="col">Txn Update Date</th>
+                                            <th scope="col">Last Txn Date</th>
                                         </tr>
                                     </thead>
                                     <tbody>                                        
@@ -188,6 +189,7 @@
                         optionItem["MemberName"] = item.MemberName;
                         optionItem["Type"] = item.Type;
                         optionItem["TotalSpend"] = item.TotalSpend;
+                        optionItem["TotalVisit"] = item.TotalVisit;
                         optionItem["AvlBalPoints"] = item.AvlBalPoints;
                         optionItem["LastTxnDate"] = item.LastTxnDate;
                         tableData.push(optionItem);
@@ -237,6 +239,7 @@
                         return '<span>' + addComma(data) + '</span>';
                     }
                 },
+                { data: "TotalVisit" },
                 {
                     "mData": "AvlBalPoints",
                     "mRender": function (data, type, row) {
@@ -253,6 +256,10 @@
                 {
                     "targets": 5,
                     "className": "text-right",
+                },
+                {
+                    "targets": 6,
+                    "className": "text-right"
                 }],
             aoColumnDefs: [
                 {

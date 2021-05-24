@@ -28,14 +28,15 @@
                         <thead>
                             <tr style="text-align:center;">
                                 <th scope="col" style="border-top:1px solid black !important;"></th>
-                                <th scope="col" style="border:1px solid black !important;" colspan="7">Keys Indicators</th>
+                                <th scope="col" style="border:1px solid black !important;" colspan="8">Keys Indicators</th>
                                 <th scope="col" style="border-right:0px solid black !important;border-top:1px solid black !important;" colspan="4">Points Summary</th>
                             </tr>
                             <tr style="text-align:end;">
                                 <th scope="col" style="text-align:left;">Outlet Name</th>
                                 <th scope="col">Total Members</th>
                                 <th scope="col">Total Txns</th>
-                                <th scope="col">Total Spends</th>
+                                <th scope="col">Total Business</th>
+                                <th scope="col">Biz Share</th>
                                 <th scope="col">ATS</th>
                                 <th scope="col">Non Active</th>
                                 <th scope="col">Only Once</th>
@@ -51,8 +52,17 @@
                             {
                                 if (Model.Count > 0)
                                 {
+                                    BOTS_BL.Models.OutletWise outletWiseLast = new BOTS_BL.Models.OutletWise();
+                                    var count = 0;
+                                    foreach (var outlet in Model)
+                                    {
+                                        count++;
+                                        if (Model.Count == count)
+                                        {
+                                            outletWiseLast.TotalSpend = outlet.TotalSpend;
+                                        }
+                                    }
                                     var index = 0;
-
                                     foreach (var outlet in Model)
                                     {
                                         index++;
@@ -63,9 +73,10 @@
                                                 <td style="border-top:1px solid black;">@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(outlet.TotalMember))</td>
                                                 <td style="border-top:1px solid black;">@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(outlet.TotalTxn))</td>
                                                 <td style="border-top:1px solid black;">@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(outlet.TotalSpend))</td>
-                                                <td style="border-top:1px solid black;">@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(outlet.ATS))</td>
-                                                <td style="border-top:1px solid black;">@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(outlet.NonActive))</td>
-                                                <td style="border-top:1px solid black;">@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(outlet.OnlyOnce))</td>
+                                                <td style="border-top:1px solid black;">-</td>
+                                                <td style="border-top:1px solid black;">-</td>
+                                                <td style="border-top:1px solid black;">-</td>
+                                                <td style="border-top:1px solid black;">-</td>
                                                 <td style="border-top:1px solid black;">-</td>
                                                 <td style="border-top:1px solid black;">@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(outlet.PointsEarned))</td>
                                                 <td style="border-top:1px solid black;">@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(outlet.PointsBurned))</td>
@@ -75,20 +86,36 @@
                                         }
                                         else
                                         {
+                                            outlet.BizShare = (Convert.ToDecimal(outlet.TotalSpend) * 100) / Convert.ToDecimal(outletWiseLast.TotalSpend);
+                                            decimal NonActivePer = 0;
+                                            if (outlet.TotalMember > 0)
+                                            {
+                                                NonActivePer = (Convert.ToDecimal(outlet.NonActive) * 100) / Convert.ToDecimal(outlet.TotalMember);
+
+                                            }
+                                            decimal OnlyOncePer = 0;
+                                            if (outlet.TotalMember > 0)
+                                            {
+                                                OnlyOncePer = (Convert.ToDecimal(outlet.OnlyOnce) * 100) / Convert.ToDecimal(outlet.TotalMember);
+
+                                            }
                                             <tr style="text-align:end;">
                                                 <td style="text-align:left;"><a href="@Url.Action("Transactionwise", "Reports", new { OutletId = outlet.OutletId })" class="login" title="Launch Course">@outlet.OutletName</a></td>
                                                 <td>@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(outlet.TotalMember))</td>
                                                 <td>@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(outlet.TotalTxn))</td>
                                                 <td>@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(outlet.TotalSpend))</td>
+                                                <td>@String.Format(new CultureInfo("en-IN", false), "{0:n2}", Convert.ToDecimal(outlet.BizShare))%</td>
+
                                                 <td>@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(outlet.ATS))</td>
-                                                <td>@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(outlet.NonActive))</td>
-                                                <td>@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(outlet.OnlyOnce))</td>
-                                                <td>@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(outlet.RedemptionRate))</td>
+                                                <td>@String.Format(new CultureInfo("en-IN", false), "{0:n2}", Convert.ToDecimal(NonActivePer))%</td>
+                                                <td>@String.Format(new CultureInfo("en-IN", false), "{0:n2}", Convert.ToDecimal(OnlyOncePer))%</td>
+                                                <td>@String.Format(new CultureInfo("en-IN", false), "{0:n2}", Convert.ToDecimal(outlet.RedemptionRate))%</td>
                                                 <td>@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(outlet.PointsEarned))</td>
                                                 <td>@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(outlet.PointsBurned))</td>
                                                 <td>@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(outlet.PointsCancelled))</td>
                                                 <td>@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(outlet.PointsExpired))</td>
-                                            </tr>                                           
+                                            </tr>
+
                                         }
                                     }
                                 }

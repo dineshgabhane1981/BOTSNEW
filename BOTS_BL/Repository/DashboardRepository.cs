@@ -81,7 +81,7 @@ namespace BOTS_BL.Repository
                     DashboardMemberSegmentTxn newItem = new DashboardMemberSegmentTxn();
                     if (count == 1)
                     {
-                        newItem.Title = "No of Unique Members";
+                        newItem.Title = "No of Transactions";
                         newItem.Unit = "Nos";
                     }
                     if (count == 2)

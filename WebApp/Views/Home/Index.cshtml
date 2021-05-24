@@ -36,7 +36,7 @@
 
                     </div>
                     <div class="widget-content-right">
-                        <div class="widget-numbers text-white"><span>@Model.LoyaltyBiz</span></div>
+                        <div class="widget-numbers text-white"><span>@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(Model.LoyaltyBiz))</span></div>
                     </div>
                 </div>
             </div>
@@ -130,7 +130,7 @@
                 <div class="card-header-tab card-header-tab-animation card-header">
                     <div class="card-header-title">
                         <i class="header-icon lnr-apartment icon-gradient bg-love-kiss"> </i>
-                        POINTS SUMMARY
+                        TRANSACTION POINTS SUMMARY
                     </div>
                     <ul class="nav">
                         <li class="nav-item"><a href="javascript:void(0);" onclick="showPointSummeryChart('')" id="pointsTillDate" class="active nav-link">Till Date</a></li>
@@ -211,7 +211,7 @@
                                                 <td style="text-align:center;font-weight:bold;">
                                                     Business Generated
                                                 </td>
-                                                <td style="text-align:center;"><span id="spnBusinessGenerated"></span></td>
+                                                <td style="text-align:center;"><span id="spnRedemBusinessGenerated"></span></td>
                                                 <td style="text-align:center;font-weight:bold;">
                                                     Redeem to Invoice
                                                 </td>
@@ -1132,10 +1132,10 @@
                         $("#spnPointsValue").text("-");
                     }
                     if (response[4] != null) {
-                        $("#spnBusinessGenerated").text(addComma(response[4]));
+                        $("#spnRedemBusinessGenerated").text(addComma(response[4]));
                     }
                     else {
-                        $("#spnBusinessGenerated").text("-");
+                        $("#spnRedemBusinessGenerated").text("-");
                     }
                     if (response[5] != null) {
                         $("#spnRedeemToInvoice").text(response[5]);

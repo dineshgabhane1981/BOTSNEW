@@ -33,5 +33,6 @@ namespace BOTS_BL.Models
         public long TotalSpend { get; set; }
         public long AvlBalPoints { get; set; }
         public string LastTxnDate { get; set; }
+        public long? TotalVisit { get; set; }
     }
 }

@@ -217,7 +217,7 @@ namespace WebApp.Controllers
                 objSum.PointsCancelled = (objSum.PointsCancelled == null ? 0 : objSum.PointsCancelled) + (item.PointsCancelled == null ? 0 : item.PointsCancelled);
                 objSum.PointsExpired = (objSum.PointsExpired == null ? 0 : objSum.PointsExpired) + (item.PointsExpired == null ? 0 : item.PointsExpired);
             }
-            objSum.OutletName = "Sum";
+            objSum.OutletName = "Total";
             lstOutlet.Add(objSum);
 
             return PartialView("_Outletwise", lstOutlet);

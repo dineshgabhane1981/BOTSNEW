@@ -78,7 +78,7 @@
 
         $.ajax({
             type: "POST",
-            url: "../Reports/GetOutletWiseResult",
+            url: '@Url.Action("GetOutletWiseResult", "Reports")',            
             data: "{'DateRangeFlag': " + DateRangeFlag + ", 'fromDate': '" + fromDate + "','toDate': '" + toDate + "'}",
             contentType: "application/json; charset=utf-8",
             dataType: "json",
