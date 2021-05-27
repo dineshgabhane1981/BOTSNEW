@@ -240,6 +240,15 @@ namespace WebApp.Controllers
             return new JsonResult() { Data = objNonRedemptionTxn, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
 
+        [HttpPost]
+        public JsonResult GetMemberMisinformationData()
+        {
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            MembersInformation objMembersInformation = new MembersInformation();
+            objMembersInformation = KR.GetMemberMisinformationData(userDetails.GroupId, userDetails.connectionString);
+            return new JsonResult() { Data = objMembersInformation, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
+        }
+
         public ActionResult ExportToExcelNonTransacting(string outletId, string type, string ReportName)
         {
             var userDetails = (CustomerLoginDetail)Session["UserSession"];

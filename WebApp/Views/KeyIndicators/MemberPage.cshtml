@@ -4,52 +4,56 @@
     ViewBag.Title = "Member Page";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@0.4.0/dist/chartjs-plugin-datalabels.min.js"></script>
 <div class="app-main__inner">
     <div class="row mb-3 pt-3 pl-3 pr-3 card">
         <div class="row">
-            <div class="col-md-6 col-xl-2">
-                <div class="card mb-3 widget-content" style="background-color:#00B0F0;">
-                    <div class="widget-content-wrapper text-white" style="display:block !important;">
-                        <div class="widget-content-left">
-                            <div class="widget-heading">
-                                Referring Base
-                                <hr style="border-top: 2px solid white;margin:0px;" />
+            <div class="col-md-6 col-xl-2" style="padding-right:7px !important; padding-left:7px !important;cursor:pointer;">
+                <a onclick="GetReferingBase();">
+                    <div class="card mb-3 widget-content" style="background-color:#00B0F0;">
+                        <div class="widget-content-wrapper text-white" style="display:block !important;">
+                            <div class="widget-content-left">
+                                <div class="widget-heading">
+                                    Referring Base
+                                    <hr style="border-top: 2px solid white;margin:0px;" />
+                                </div>
                             </div>
-                        </div>
-                        <div>
-                            <div class="widget-numbers text-white">
-                                <span style="cursor:pointer;font-size:22px !important;"><a onclick="GetReferingBase();"><u>@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(Model.ReferringBase))</u></a></span>
-                                <hr style="border-top: 2px solid white;margin:0px;" />
-                                <span>@String.Format(new CultureInfo("en-IN", false), "{0:n2}", Convert.ToDouble(Model.ReferringBasePercentage))%</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-md-6 col-xl-2">
-                <div class="card mb-3 widget-content" style="background-color:#E46C0A;">
-                    <div class="widget-content-wrapper text-white" style="display:block !important;">
-                        <div class="widget-content-left">
-                            <div class="widget-heading">
-                                Ref Gen | Conv
-                                <hr style="border-top: 2px solid white;margin:0px;" />
-                            </div>
-                        </div>
-                        <div>
-                            <div class="widget-numbers text-white">
-                                <span style="cursor:pointer;font-size:22px !important;"><a onclick="GetRefGenConv(2);"><u>@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(Model.RefGen))</u></a></span> |
-                                <span style="cursor:pointer;font-size:22px !important;"><a onclick="GetRefGenConv(2);"><u>@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(Model.Con))</u></a></span>
-                                <hr style="border-top: 2px solid white;margin:0px;" />
-                                <span>@String.Format(new CultureInfo("en-IN", false), "{0:n2}", Convert.ToDouble(Model.RefGenConPercentage))%</span>
+                            <div>
+                                <div class="widget-numbers text-white">
+                                    <span style="font-size:22px !important;">@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(Model.ReferringBase))</span>
+                                    <hr style="border-top: 2px solid white;margin:0px;" />
+                                    <span>@String.Format(new CultureInfo("en-IN", false), "{0:n2}", Convert.ToDouble(Model.ReferringBasePercentage))%</span>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
+                </a>
             </div>
 
-            <div class="col-md-6 col-xl-2">
+            <div class="col-md-6 col-xl-2" style="padding-right:7px !important; padding-left:7px !important;cursor:pointer;">
+                <a onclick="GetRefGenConv(2);">
+                    <div class="card mb-3 widget-content" style="background-color:#E46C0A;">
+                        <div class="widget-content-wrapper text-white" style="display:block !important;">
+                            <div class="widget-content-left">
+                                <div class="widget-heading">
+                                    Ref Gen | Conv
+                                    <hr style="border-top: 2px solid white;margin:0px;" />
+                                </div>
+                            </div>
+                            <div>
+                                <div class="widget-numbers text-white">
+                                    <span style="font-size:22px !important;">@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(Model.RefGen))</span> |
+                                    <span style="font-size:22px !important;">@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(Model.Con))</span>
+                                    <hr style="border-top: 2px solid white;margin:0px;" />
+                                    <span>@String.Format(new CultureInfo("en-IN", false), "{0:n2}", Convert.ToDouble(Model.RefGenConPercentage))%</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+
+            <div class="col-md-6 col-xl-2" style="padding-right:7px !important; padding-left:7px !important;">
                 <div class="card mb-3 widget-content" style="background-color: #F0F000;padding-bottom:60px;">
                     <div class="widget-content-wrapper text-white" style="display:block !important;">
                         <div class="widget-content-left">
@@ -67,49 +71,71 @@
                 </div>
             </div>
 
-            <div class="col-md-6 col-xl-2">
-                <div class="card mb-3 widget-content" style="background-color: #D99694; padding-bottom:60px;">
-                    <div class="widget-content-wrapper text-white" style="display:block !important;">
-                        <div class="widget-content-left">
-                            <div class="widget-heading" style="margin-left:-8px;">
-                                New Registrations
-                                <hr style="border-top: 2px solid white;margin:0px;" />
+            <div class="col-md-6 col-xl-2" style="padding-right:7px !important; padding-left:7px !important;cursor:pointer;">
+                <a onclick="GetNewRegistration();">
+                    <div class="card mb-3 widget-content" style="background-color: #D99694; padding-bottom:60px;">
+                        <div class="widget-content-wrapper text-white" style="display:block !important;">
+                            <div class="widget-content-left">
+                                <div class="widget-heading" style="margin-left:-8px;">
+                                    New Registrations
+                                    <hr style="border-top: 2px solid white;margin:0px;" />
+                                </div>
                             </div>
-                        </div>
-                        <div>
-                            <div class="widget-numbers text-white">
-                                <span style="cursor:pointer;font-size:22px !important;"><a onclick="GetNewRegistration();"><u>@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(Model.NewRegistration))</u></a></span>
+                            <div>
+                                <div class="widget-numbers text-white">
+                                    <span style="font-size:22px !important;">@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(Model.NewRegistration))</span>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
+                </a>
             </div>
-            <div class="col-md-6 col-xl-3">                
-                    <table border="1" cellpadding="5" cellspacing="5">
-                        <tr>
-                            <th colspan="3" style="text-align:center;background-color:orangered;color:white;"><span style="cursor:pointer;" onclick="ShowValues();">Other Elements</span></th>
-                            @*<th>Nos</th>
-                    <th>%</th>*@
-                        </tr>
-                        <tr id="tr1" style="display:none;">
-                            <td>Profile Update</td>
-                            <td>@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(Model.ProfileUpdateCount))</td>
-                            <td>@String.Format(new CultureInfo("en-IN", false), "{0:n2}", Convert.ToDouble(Model.ProfileUpdatePercentage))</td>
-                        </tr>
-                        <tr id="tr2" style="display:none;">
-                            <td>Gift-a-Point</td>
-                            <td>@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(Model.GiftAPointsCount))</td>
-                            <td>@String.Format(new CultureInfo("en-IN", false), "{0:n2}", Convert.ToDouble(Model.GiftAPointsPercentage))</td>
-                        </tr>
-                        <tr id="tr3" style="display:none;">
-                            <td>Opt-outs</td>
-                            <td>@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(Model.OptOutCount))</td>
-                            <td>@String.Format(new CultureInfo("en-IN", false), "{0:n2}", Convert.ToDouble(Model.OptOutPercentage))</td>
-                        </tr>
-                    </table>
-                </div>
-           
+
+            <div class="col-md-6 col-xl-2" style="padding-right:7px !important; padding-left:7px !important;">
+                <table border="1" cellpadding="5" cellspacing="5">
+                    <tr>
+                        <th colspan="3" style="text-align:center;background-color:orangered;color:white;"><span style="cursor:pointer;" onclick="ShowValues();">Other Elements</span></th>
+                    </tr>
+                    <tr id="tr1" style="display:none;">
+                        <td>Profile Update</td>
+                        <td>@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(Model.ProfileUpdateCount))</td>
+                        <td>@String.Format(new CultureInfo("en-IN", false), "{0:n2}", Convert.ToDouble(Model.ProfileUpdatePercentage))</td>
+                    </tr>
+                    <tr id="tr2" style="display:none;">
+                        <td>Gift-a-Point</td>
+                        <td>@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(Model.GiftAPointsCount))</td>
+                        <td>@String.Format(new CultureInfo("en-IN", false), "{0:n2}", Convert.ToDouble(Model.GiftAPointsPercentage))</td>
+                    </tr>
+                    <tr id="tr3" style="display:none;">
+                        <td>Opt-outs</td>
+                        <td>@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(Model.OptOutCount))</td>
+                        <td>@String.Format(new CultureInfo("en-IN", false), "{0:n2}", Convert.ToDouble(Model.OptOutPercentage))</td>
+                    </tr>
+                </table>
             </div>
+
+            <div class="col-md-6 col-xl-2" style="padding-right:7px !important; padding-left:7px !important;cursor:pointer;">
+                <a onclick="GetMembersInformation();">
+                    <div class="card mb-3 widget-content" style="background-color: lightgreen; padding-bottom:80px;">
+                        <div class="widget-content-wrapper text-white" style="display:block !important;">
+                            <div class="widget-content-left">
+                                <div class="widget-heading" style="margin-left:-8px;">
+                                    Members Information
+                                    <hr style="border-top: 2px solid white;margin:0px;" />
+                                </div>
+                            </div>
+                            <div>
+                                <div class="widget-numbers text-white">
+                                    <span style="cursor:pointer;font-size:22px !important;"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+
+
     </div>
 
 
@@ -186,14 +212,171 @@
         <div class="row" id="dvNewRegistrationData" style="display:none;">
 
         </div>
+
+
+        <div class="row card" id="dvMembersInformation" style="display:none;">
+            <div class="row" style="margin-left:35px;margin-bottom:10px;">
+                <table border="1" cellpadding="5" cellspacing="5">
+                    <tr>
+                        <td style="font-weight:bold;">Total Member Base</td>
+                        <td><span id="spnTotalMemberBase" style="font-weight:bold;"></span></td>
+                    </tr>
+                </table>
+            </div>
+            <div class="row" style="margin-left:20px;">
+
+                <div class="col-md-6 col-xl-2">
+                    <div class="card mb-3 widget-content" style="background-color: #C5DAEF;">
+                        <div class="widget-content-wrapper" style="display:block !important;">
+                            <div class="align-content-center" style="text-align:center;">
+                                <div class="widget-heading" style="text-align:center;font-weight:bold;">
+                                    Name
+                                    <hr style="border-top: 2px solid black;margin:0px;" />
+                                </div>
+                            </div>
+                            <div>
+                                <div class="widget-numbers" style="text-align:center;">
+                                    <span style="font-size:16px !important;" id="spnNameCount"></span><br />
+                                    <span style="font-size:16px !important;" id="spnNamePercentage"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6 col-xl-2">
+                    <div class="card mb-3 widget-content" style="background-color: #FDEADC;">
+                        <div class="widget-content-wrapper" style="display:block !important;">
+                            <div class="align-content-center" style="text-align:center;">
+                                <div class="widget-heading" style="text-align:center;font-weight:bold;">
+                                    Gender
+                                    <hr style="border-top: 2px solid black;margin:0px;" />
+                                </div>
+                            </div>
+                            <div>
+                                <div class="widget-numbers" style="text-align:center;">
+                                    <span style="font-size:16px !important;" id="spnGenderCount"></span><br />
+                                    <span style="font-size:16px !important;" id="spnGenderPercentage"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6 col-xl-2">
+                    <div class="card mb-3 widget-content" style="background-color: #F4DCDC;">
+                        <div class="widget-content-wrapper" style="display:block !important;">
+                            <div class="align-content-center" style="text-align:center;">
+                                <div class="widget-heading" style="text-align:center;font-weight:bold;">
+                                    Birth Date
+                                    <hr style="border-top: 2px solid black;margin:0px;" />
+                                </div>
+                            </div>
+                            <div>
+                                <div class="widget-numbers" style="text-align:center;">
+                                    <span style="font-size:16px !important;" id="spnBirthCount"></span><br />
+                                    <span style="font-size:16px !important;" id="spnBirthPercentage"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6 col-xl-2">
+                    <div class="card mb-3 widget-content" style="background-color: #DBEEF4;">
+                        <div class="widget-content-wrapper" style="display:block !important;">
+                            <div class="align-content-center" style="text-align:center;">
+                                <div class="widget-heading" style="text-align:center; font-weight:bold;">
+                                    Marital Status
+                                    <hr style="border-top: 2px solid black;margin:0px;" />
+                                </div>
+                            </div>
+                            <div>
+                                <div class="widget-numbers" style="text-align:center;">
+                                    <span style="font-size:16px !important;" id="spnMaritalCount"></span><br />
+                                    <span style="font-size:16px !important;" id="spnMaritalPercentage"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6 col-xl-2" style="padding-right:10px;">
+                    <div class="card mb-3 widget-content" style="background-color: #EAF1E1;">
+                        <div class="widget-content-wrapper" style="display:block !important;">
+                            <div class="align-content-center" style="text-align:center;">
+                                <div class="widget-heading" style="text-align:center;font-weight:bold;">
+                                    Anniversary Date
+                                    <hr style="border-top: 2px solid black;margin:0px;" />
+                                </div>
+                            </div>
+                            <div>
+                                <div class="widget-numbers" style="text-align:center;">
+                                    <span style="font-size:16px !important;" id="spnAnniversaryCount"></span><br />
+                                    <span style="font-size:16px !important;" id="spnAnniversaryPercentage"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="row" style="margin-left:20px;">
+                <div class="col-md-6 col-xl-6" style="padding-left:0px !important;">
+                    <div class="tab-pane fade show active" id="tabs-eg-77">
+                        <div class="card mb-3 widget-chart widget-chart2 text-left w-100">
+                            <div class="widget-chat-wrapper-outer">
+                                <div class="widget-chart-wrapper widget-chart-wrapper-lg opacity-10 m-0" id="containerGenderSplit" style="text-align:center;">
+                                    <span style="font-weight:bold;">Gender Split</span>
+                                    <canvas id="cvGenderSplit"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-xl-6" style="padding-left:0px !important;">
+                    <div class="tab-pane fade show active" id="tabs-eg-77">
+                        <div class="card mb-3 widget-chart widget-chart2 text-left w-100">
+                            <div class="widget-chat-wrapper-outer">
+                                <div class="widget-chart-wrapper widget-chart-wrapper-lg opacity-10 m-0" id="containerMaritalStatusSplit" style="text-align:center;">
+                                    <span style="font-weight:bold;">Marital Status Split</span>
+                                    <canvas id="cvMaritalStatusSplit"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row" style="margin-left:20px;">
+                <div class="col-md-6 col-xl-2" style="padding-left:0px !important;">
+                </div>
+                <div class="col-md-6 col-xl-8" style="padding-left:0px !important;">
+                    <div class="tab-pane fade show active" id="tabs-eg-77" style="margin-right:10px;">
+                        <div class="card mb-3 widget-chart widget-chart2 text-left w-100">
+                            <div class="widget-chat-wrapper-outer">
+                                <div class="widget-chart-wrapper widget-chart-wrapper-lg opacity-10 m-0" id="containerAgewiseSplit" style="text-align:center;">
+                                    <span style="font-weight:bold;">Age-wise Split</span>
+                                    <canvas id="cvAgewiseSplit"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-xl-2" style="padding-left:0px !important;">
+                </div>
+            </div>
+
+        </div>
     </div>
 </div>
 <script>
 
-    
+
     var tableData = [];
     var tableDataRefGenConv = [];
     var tableDataNewRegistration = [];
+
     function GetReferingBase() {
         var type = 1;
         $("#divLoader").show();
@@ -218,6 +401,7 @@
                 $("#dvData").show();
                 $("#dvReferreingBase").show();
                 $("#dvRefGenConv").hide();
+                $("#dvMembersInformation").hide();
                 $("#dvNewRegistration").hide();
 
                 $("#divLoader").hide();
@@ -236,6 +420,7 @@
         table1.destroy();
         var table = $('#referreingBaseTable').DataTable({
             "data": tableData,
+            "bAutoWidth": false,
             "paging": true,
             "ordering": true,
             "info": true,
@@ -289,9 +474,10 @@
                     tableDataRefGenConv.push(optionItem);
                 });
                 DrawRefGenConvTable();
-                $("#dvData").show();               
+                $("#dvData").show();
                 $("#dvRefGenConv").show();
                 $("#dvReferreingBase").hide();
+                $("#dvMembersInformation").hide();
                 $("#dvNewRegistration").hide();
 
                 $("#divLoader").hide();
@@ -310,6 +496,7 @@
         table1.destroy();
         var table = $('#refGenConvTable').DataTable({
             "data": tableDataRefGenConv,
+            "bAutoWidth": false,
             "paging": true,
             "ordering": true,
             "info": true,
@@ -366,6 +553,7 @@
                 $("#dvData").show();
                 $("#dvRefGenConv").hide();
                 $("#dvReferreingBase").hide();
+                $("#dvMembersInformation").hide();
                 $("#dvNewRegistration").show();
                 $("#divLoader").hide();
             },
@@ -383,6 +571,7 @@
         table1.destroy();
         var table = $('#newRegistrationTable').DataTable({
             "data": tableDataNewRegistration,
+            "bAutoWidth": false,
             "paging": true,
             "ordering": true,
             "info": true,
@@ -419,6 +608,187 @@
         $("#tr3").toggle();
     }
 
+    function GetMembersInformation() {
+        $("#divLoader").show();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("GetMemberMisinformationData", "KeyIndicators")',
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                console.log(response);
+                $("#spnTotalMemberBase").text(addComma(response.TotalMemberCount));
+                $("#spnNameCount").text(addComma(response.NameCount));
+                $("#spnNamePercentage").text(response.NameCount_Percentage + "%");
+                $("#spnGenderCount").text(addComma(response.GenderCount));
+                $("#spnGenderPercentage").text(response.GenderCount_Percentage + "%");
+                $("#spnBirthCount").text(addComma(response.BirthDateCount));
+                $("#spnBirthPercentage").text(response.BirthDateCount_Percentage + "%");
+                $("#spnMaritalCount").text(addComma(response.MaritalStatusCount));
+                $("#spnMaritalPercentage").text(response.MaritalStatusCount_Percentage + "%");
+                $("#spnAnniversaryCount").text(addComma(response.AnniversaryDateCount));
+                $("#spnAnniversaryPercentage").text(response.AnniversaryDateCount_Percentage + "%");
+
+
+                $('#cvGenderSplit').remove();
+                $('#containerGenderSplit').append('<canvas id="cvGenderSplit"><canvas>');
+
+                var options = {
+                    rotation: (-0.5 * Math.PI) - (-90 / 180 * Math.PI),
+                    legend: {
+                        display: true,
+                        position: 'bottom'
+                    },
+                    tooltips: {
+                        enabled: false
+                    },
+                    hover: { mode: null },
+                    plugins: {
+                        datalabels: {
+                            formatter: (value, ctx) => {
+                                if (value != null) {
+                                    return value;
+                                }
+                            },
+                            color: '#000',
+                        }
+                    }
+                }
+
+                var data = {
+                    datasets: [{
+                        data: [response.GenderSplitCount_Male, response.GenderSplitCount_Female, response.GenderSplitCount_Others, response.GenderSplitCount_Null],
+                        backgroundColor: ["#F37A43", "#3F74C0", "#A5A5A5", "#FFBD42"]
+                    }],
+
+                    // These labels appear in the legend and in the tooltips when hovering different arcs
+                    labels: [
+                        "Male",
+                        "Female",
+                        "Others",
+                        "Null"
+                    ],
+                };
+                var ctx = document.getElementById("cvGenderSplit").getContext("2d");
+                window.myBar = new Chart(ctx, {
+                    type: 'pie',
+                    data: data,
+                    options: options
+                });
+
+                $('#cvMaritalStatusSplit').remove();
+                $('#containerMaritalStatusSplit').append('<canvas id="cvMaritalStatusSplit"><canvas>');
+
+                var options1 = {
+                    rotation: (-0.5 * Math.PI) - (-90 / 180 * Math.PI),
+                    legend: {
+                        display: true,
+                        position: 'bottom'
+                    },
+                    tooltips: {
+                        enabled: false
+                    },
+                    hover: { mode: null },
+                    plugins: {
+                        datalabels: {
+                            formatter: (value, ctx) => {
+                                if (value != null) {
+                                    return value;
+                                }
+                            },
+                            color: '#000',
+                        }
+                    }
+                }
+
+                var data1 = {
+                    datasets: [{
+                        data: [response.MaritalStatusCount_M, response.MaritalStatusCount_U, response.MaritalStatusCount_Null],
+                        backgroundColor: ["#F37A43", "#3F74C0", "#FFBD42"]
+                    }],
+
+                    // These labels appear in the legend and in the tooltips when hovering different arcs
+                    labels: [
+                        "Married",
+                        "Unmarried",
+                        "Null"
+                    ],
+                };
+                var ctx1 = document.getElementById("cvMaritalStatusSplit").getContext("2d");
+                window.myBar = new Chart(ctx1, {
+                    type: 'pie',
+                    data: data1,
+                    options: options1
+                });
+
+                $('#cvAgewiseSplit').remove();
+                $('#containerAgewiseSplit').append('<canvas id="cvAgewiseSplit"><canvas>');
+
+                var options2 = {
+                    rotation: (-0.5 * Math.PI) - (-90 / 180 * Math.PI),
+                    legend: {
+                        display: true,
+                        position: 'bottom'
+                    },
+                    tooltips: {
+                        enabled: false
+                    },
+                    hover: { mode: null },
+                    plugins: {
+                        datalabels: {
+                            formatter: (value, ctx) => {
+                                if (value != null) {
+                                    return value;
+                                }
+                            },
+                            color: '#000',
+                        }
+                    }
+                }
+
+                var data2 = {
+                    datasets: [{
+                        data: [response.Age18to25, response.Age26to35, response.Age36to45, response.Age46to55, response.Age55Above],
+                        backgroundColor: ["#F37A43", "#3F74C0", "#A5A5A5", "#FFBD42","#569CD0"]
+                    }],
+
+                    // These labels appear in the legend and in the tooltips when hovering different arcs
+                    labels: [
+                        "18 to 25 yrs",
+                        "25 to 35 yrs",
+                        "35 to 45 yrs",
+                        "45 to 55 yrs",
+                        "55 yrs and above"
+                    ],
+                };
+                var ctx2 = document.getElementById("cvAgewiseSplit").getContext("2d");
+                window.myBar = new Chart(ctx2, {
+                    type: 'pie',
+                    data: data2,
+                    options: options2
+                });
+
+
+                $("#dvData").show();
+                $("#dvRefGenConv").hide();
+                $("#dvReferreingBase").hide();
+                $("#dvNewRegistration").hide();
+                $("#dvMembersInformation").show();
+                $("#divLoader").hide();
+            },
+            failure: function (response) {
+                $("#divLoader").hide();
+            },
+            error: function (response) {
+                $("#divLoader").hide();
+            }
+        });
+
+
+
+
+
+    }
 
 
 </script>

@@ -201,5 +201,25 @@ namespace BOTS_BL.Repository
             return objMemberPageRefData;
         }
 
+        public MembersInformation GetMemberMisinformationData(string GroupId, string connstr)
+        {
+            MembersInformation objMembersInformation = new MembersInformation();
+            try
+            {
+                using (var context = new BOTSDBContext(connstr))
+                {
+                    objMembersInformation = context.Database.SqlQuery<MembersInformation>("sp_BOTS_MemberInformation @pi_GroupId, @pi_Date, @pi_LoginId",
+                        new SqlParameter("@pi_GroupId", GroupId),
+                        new SqlParameter("@pi_Date", DateTime.Now.ToShortDateString()),
+                        new SqlParameter("@pi_LoginId", "")).FirstOrDefault<MembersInformation>();
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return objMembersInformation;
+        }
+
     }
 }
