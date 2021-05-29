@@ -12,8 +12,7 @@ namespace BOTS_BL.Repository
 {
 
     public class DashboardRepository
-    {
-        //string connstr = CustomerConnString.ConnectionStringCustomer;
+    {        
         Exceptions newexception = new Exceptions();
         public ExecutiveSummary GetDashboardData(string GroupId, string connstr)
         {
@@ -194,6 +193,20 @@ namespace BOTS_BL.Repository
                     new SqlParameter("@pi_Type", Type)).FirstOrDefault<DashboardRedemption>();
             }
             return objDashboardRedemption;
+        }
+
+        public List<DashboardBizShared> GetDashboardBizShared(string GroupId, string OutletId, string connstr)
+        {
+            List<DashboardBizShared> lstBizShared = new List<DashboardBizShared>();
+            using (var context = new BOTSDBContext(connstr))
+            {
+                lstBizShared = context.Database.SqlQuery<DashboardBizShared>("sp_BOTS_DashboardBizShared @pi_GroupId, @pi_Date, @pi_LoginId, @pi_OutletId", 
+                    new SqlParameter("@pi_GroupId", GroupId),
+                    new SqlParameter("@pi_Date", DateTime.Now.ToShortDateString()),
+                    new SqlParameter("@pi_LoginId", ""),
+                    new SqlParameter("@pi_OutletId", OutletId)).ToList<DashboardBizShared>();
+            }
+            return lstBizShared;
         }
 
         public bool UpdatePassword(string LoginId, string password)

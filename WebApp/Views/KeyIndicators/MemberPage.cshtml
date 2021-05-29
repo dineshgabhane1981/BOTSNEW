@@ -15,13 +15,13 @@
                             <div class="widget-content-left">
                                 <div class="widget-heading">
                                     Referring Base
-                                    <hr style="border-top: 2px solid white;margin:0px;" />
+                                    <hr style="border-top: 1px solid white;margin:0px;" />
                                 </div>
                             </div>
                             <div>
-                                <div class="widget-numbers text-white">
-                                    <span style="font-size:22px !important;">@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(Model.ReferringBase))</span>
-                                    <hr style="border-top: 2px solid white;margin:0px;" />
+                                <div class="widget-numbers" style="font-size:20px !important;">
+                                    <span >@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(Model.ReferringBase))</span>
+                                    <hr style="border-top: 1px solid white;margin:0px;" />
                                     <span>@String.Format(new CultureInfo("en-IN", false), "{0:n2}", Convert.ToDouble(Model.ReferringBasePercentage))%</span>
                                 </div>
                             </div>
@@ -37,14 +37,14 @@
                             <div class="widget-content-left">
                                 <div class="widget-heading">
                                     Ref Gen | Conv
-                                    <hr style="border-top: 2px solid white;margin:0px;" />
+                                    <hr style="border-top: 1px solid white;margin:0px;" />
                                 </div>
                             </div>
                             <div>
-                                <div class="widget-numbers text-white">
-                                    <span style="font-size:22px !important;">@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(Model.RefGen))</span> |
-                                    <span style="font-size:22px !important;">@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(Model.Con))</span>
-                                    <hr style="border-top: 2px solid white;margin:0px;" />
+                                <div class="widget-numbers text-white" style="font-size:20px !important;">
+                                    <span>@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(Model.RefGen))</span> |
+                                    <span>@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(Model.Con))</span>
+                                    <hr style="border-top: 1px solid white;margin:0px;" />
                                     <span>@String.Format(new CultureInfo("en-IN", false), "{0:n2}", Convert.ToDouble(Model.RefGenConPercentage))%</span>
                                 </div>
                             </div>
@@ -54,17 +54,17 @@
             </div>
 
             <div class="col-md-6 col-xl-2" style="padding-right:7px !important; padding-left:7px !important;">
-                <div class="card mb-3 widget-content" style="background-color: #F0F000;padding-bottom:60px;">
+                <div class="card mb-3 widget-content" style="background-color: #F0F000;padding-bottom:35px;">
                     <div class="widget-content-wrapper text-white" style="display:block !important;">
                         <div class="widget-content-left">
                             <div class="widget-heading">
                                 Ref Biz
-                                <hr style="border-top: 2px solid white;margin:0px;" />
+                                <hr style="border-top: 1px solid white;margin:0px;" />
                             </div>
                         </div>
                         <div>
                             <div class="widget-numbers text-white">
-                                <span style="font-size:22px !important;">@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(Model.RefBiz))</span>
+                                <span style="font-size:20px !important;">@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(Model.RefBiz))</span>
                             </div>
                         </div>
                     </div>
@@ -73,17 +73,17 @@
 
             <div class="col-md-6 col-xl-2" style="padding-right:7px !important; padding-left:7px !important;cursor:pointer;">
                 <a onclick="GetNewRegistration();">
-                    <div class="card mb-3 widget-content" style="background-color: #D99694; padding-bottom:60px;">
+                    <div class="card mb-3 widget-content" style="background-color: #D99694; padding-bottom:35px;">
                         <div class="widget-content-wrapper text-white" style="display:block !important;">
                             <div class="widget-content-left">
                                 <div class="widget-heading" style="margin-left:-8px;">
                                     New Registrations
-                                    <hr style="border-top: 2px solid white;margin:0px;" />
+                                    <hr style="border-top: 1px solid white;margin:0px;" />
                                 </div>
                             </div>
                             <div>
                                 <div class="widget-numbers text-white">
-                                    <span style="font-size:22px !important;">@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(Model.NewRegistration))</span>
+                                    <span style="font-size:20px !important;">@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(Model.NewRegistration))</span>
                                 </div>
                             </div>
                         </div>
@@ -116,7 +116,7 @@
 
             <div class="col-md-6 col-xl-2" style="padding-right:7px !important; padding-left:7px !important;cursor:pointer;">
                 <a onclick="GetMembersInformation();">
-                    <div class="card mb-3 widget-content" style="background-color: lightgreen; padding-bottom:80px;">
+                    <div class="card mb-3 widget-content" style="background-color: lightgreen; padding-bottom:55px;">
                         <div class="widget-content-wrapper text-white" style="display:block !important;">
                             <div class="widget-content-left">
                                 <div class="widget-heading" style="margin-left:-8px;">

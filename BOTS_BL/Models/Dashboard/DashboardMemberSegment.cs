@@ -87,4 +87,12 @@ namespace BOTS_BL.Models
         public long? PieChartYellowUniqueRedeemMember { get; set; }        
         public decimal? PieChartGreenUniqueMember { get; set; }
     }
+
+    public class DashboardBizShared
+    {
+        public string MonthYear { get; set; }
+        public long? FirstMemberTxn { get; set; }
+        public long? RepeatMemberTxn { get; set; }
+        public long? RedeemTxn { get; set; }
+    }
 }

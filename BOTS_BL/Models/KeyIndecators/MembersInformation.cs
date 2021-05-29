@@ -18,7 +18,7 @@ namespace BOTS_BL.Models
         public long? MaritalStatusCount { get; set; }
         public decimal? MaritalStatusCount_Percentage { get; set; }
         public long? AnniversaryDateCount { get; set; }
-        public decimal? AnniversaryDateCount_Percentage { get; set; }       
+        public decimal? AnniversaryDateCount_Percentage { get; set; }
         public long? GenderSplitCount_Male { get; set; }
         public long? GenderSplitCount_Female  { get; set; }
         public long? GenderSplitCount_Others { get; set; }

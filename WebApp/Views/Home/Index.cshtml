@@ -65,6 +65,39 @@
                 <div class="card-header-tab card-header-tab-animation card-header">
                     <div class="card-header-title">
                         <i class="header-icon lnr-apartment icon-gradient bg-love-kiss"> </i>
+                        Share of Business(Rs.) <span style="margin-left:100px;">PERIOD : Last 12 Months</span>
+                    </div>
+                    <ul class="nav">
+                        <li class="nav-item"><a href="javascript:void(0);" onclick="ShowAllSharedBiz();" class="active nav-link">All</a></li>
+                        <li class="nav-item">
+                            @Html.DropDownListFor(x => Model.ActiveBase_Total, new SelectList(ViewBag.OutletList, "Value", "Text"), "Select Outlet", htmlAttributes: new { @class = "input50", @id = "sharedBizOutletList", style = "margin-top:20px;" })
+                        </li>
+                    </ul>
+                </div>
+                <div class="card-body">
+                    <div class="tab-content">
+                        <div class="tab-pane fade show active" id="tabs-eg-77">
+                            <div class="card mb-3 widget-chart widget-chart2 text-left w-100">
+                                <div class="widget-chat-wrapper-outer">
+                                    <div class="widget-chart-wrapper widget-chart-wrapper-lg opacity-10 m-0" id="canvasSharedBizContainer">
+                                        <canvas id="sharedBizcanvas"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="row">
+        <div class="col-md-12 col-lg-12">
+            <div class="mb-3 card">
+                <div class="card-header-tab card-header-tab-animation card-header">
+                    <div class="card-header-title">
+                        <i class="header-icon lnr-apartment icon-gradient bg-love-kiss"> </i>
                         MEMBER SEGMENT <span id="spnPeriod" style="margin-left:100px;"></span>
                     </div>
                     <ul class="nav">
@@ -374,8 +407,9 @@
 </div>
 
 <script>
-    $(document).ready(function () {        
+    $(document).ready(function () {
         ShowMemberSegmentChart();
+        ShowAllSharedBiz();
         showOutletEnrolmentChart('');
         showPointSummeryChart('');
         showMemberWebpageChart('1');
@@ -384,7 +418,10 @@
         $("#memberSegmentOutletList").on("change", function () {
             ShowMemberSegmentChart();
         });
-        
+        $("#sharedBizOutletList").on("change", function () {
+            ShowAllSharedBiz();
+        });
+
     });
     function ToggleKeyPointers() {
         $("#dvKeyPointers").toggle(1000);
@@ -534,7 +571,7 @@
                                         tableHTML += "<td>" + addComma(item.TotalBase) + "</td>";
                                         tableHTML += "<td>" + addComma(item.RepeatBase) + "</td>";
                                     }
-                                    
+
                                     tableHTML += "<td>" + addComma(item.NeverRedeem) + "</td>";
                                     tableHTML += "<td>" + addComma(item.RecentlyEnrolled) + "</td>";
                                     tableHTML += "<td>" + addComma(item.OnlyOnce) + "</td>";
@@ -557,6 +594,77 @@
 
                     $("#divLoader").hide();
                 }
+            },
+            failure: function (response) {
+                $("#divLoader").hide();
+            },
+            error: function (response) {
+                $("#divLoader").hide();
+            }
+        });
+    }
+
+    function ShowAllSharedBiz() {
+        $("#divLoader").show();
+        var selectedOutlet = $("#sharedBizOutletList").val();
+        var outletData = [];
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("GetSharedBizResult", "Home")',
+            data: "{'OutletId': '" + selectedOutlet + "'}",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                console.log(response);
+                $('#sharedBizcanvas').remove(); // this is my <canvas> element
+                $('#canvasSharedBizContainer').append('<canvas id="sharedBizcanvas"><canvas>');
+                var names = response[0];
+                var first = response[1];
+                var repeat = response[2];
+                var redeem = response[3];
+
+                var ctx = document.getElementById("sharedBizcanvas").getContext("2d");
+                var bizChart = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        datasets: [
+                            {
+                            label: 'Redeem Txn',
+                            data: [...redeem],
+                            type: 'line',       
+                            borderColor: '#F37A43',
+                            //backgroundColor: "#F37A43",
+                            fill: false,                            
+                            order: 3,
+                            tension: 0.1
+                        },
+                        
+                        {
+                            label: 'First Time Txn',
+                            data: [...first],
+                            type: 'line',
+                            borderColor: '#FFBD42',
+                            //backgroundColor: "#FFBD42",
+                            fill: false,
+                            order: 1,
+                            tension: 0.1
+                            },
+                            {
+                                label: 'Repeat Txn',
+                                data: [...repeat],
+                                type: 'line',
+                                borderColor: '#3F74C0',
+                                fill: false,
+                                //backgroundColor: "#3F74C0",
+                                order: 2,
+                                tension: 0.1
+                            }],
+                        labels: [...names]
+                    }//,
+                    //options: options
+                });
+
+                $("#divLoader").hide();
             },
             failure: function (response) {
                 $("#divLoader").hide();
@@ -904,7 +1012,7 @@
                 if (response != null) {
                     $('#cvBulkUpload').remove(); // this is my <canvas> element
                     $('#containerBulkUpload').append('<canvas id="cvBulkUpload"><canvas>');
-                   
+
                     var options = {
                         rotation: (-0.5 * Math.PI) - (-90 / 180 * Math.PI),
                         legend: {
@@ -924,14 +1032,14 @@
                                         dataArr.map(data => {
                                             sum += data;
                                         });
-                                        count++;                                       
+                                        count++;
                                         let percentage = value.toFixed(2) + "%";
                                         if (count == 1) {
                                             return "";
                                         }
                                         if (count == 2) {
                                             count = 0;
-                                            return percentage;                                            
+                                            return percentage;
                                         }
                                     }
                                 },
@@ -990,7 +1098,7 @@
             data: "{'type': '" + type + "'}",
             contentType: "application/json; charset=utf-8",
             dataType: "json",
-            success: function (response) {                 
+            success: function (response) {
                 if (response != null) {
                     console.log(response[0]);
                     $('#cvRedemption').remove(); // this is my <canvas> element

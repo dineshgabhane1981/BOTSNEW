@@ -23,8 +23,7 @@ namespace WebApp.Controllers
         {
             ExecutiveSummary dataDashboard = new ExecutiveSummary();
             try
-            {
-                
+            {                
                 var userDetails = (CustomerLoginDetail)Session["UserSession"];
                 var lstOutlet = RR.GetOutletList(userDetails.GroupId, userDetails.connectionString);                
                 dataDashboard = DR.GetDashboardData(userDetails.GroupId, userDetails.connectionString);                
@@ -69,8 +68,7 @@ namespace WebApp.Controllers
                 dataList.Add(dataMemberSegment.NoofMember_Repeat);
                 dataList.Add(dataMemberSegment.NoofMember_NeverRedeem);
                 dataList.Add(dataMemberSegment.NoofMember_RecentlyEnrolled);
-                dataList.Add(dataMemberSegment.NoofMember_OnlyOnce);
-                //var lstData = string.Join(" ", dataList);
+                dataList.Add(dataMemberSegment.NoofMember_OnlyOnce);                
                 lstDates.Add(dataMemberSegment.FromDate);
                 lstDates.Add(dataMemberSegment.ToDate);
                 lstData.Add(dataList);
@@ -82,6 +80,40 @@ namespace WebApp.Controllers
                 newexception.AddException(ex, userDetails.GroupId);
             }
             //lstMember = RR.GetMemberList(SearchText);
+            return new JsonResult() { Data = lstData, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
+        }
+
+        [HttpPost]
+        public JsonResult GetSharedBizResult(string OutletId)
+        {
+            List<object> lstData = new List<object>();
+            List<string> nameList = new List<string>();
+            List<long> firstList = new List<long>();
+            List<long> repeatList = new List<long>();
+            List<long> redeemList = new List<long>();
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            try
+            {
+                List<DashboardBizShared> lstBizShared = new List<DashboardBizShared>();
+                lstBizShared = DR.GetDashboardBizShared(userDetails.GroupId, OutletId, userDetails.connectionString);
+                lstBizShared.Reverse();
+                foreach (var item in lstBizShared)
+                {
+                    nameList.Add(item.MonthYear);
+                    firstList.Add(Convert.ToInt64(item.FirstMemberTxn));
+                    repeatList.Add(Convert.ToInt64(item.RepeatMemberTxn));
+                    redeemList.Add(Convert.ToInt64(item.RedeemTxn));
+                }
+                lstData.Add(nameList);
+                lstData.Add(firstList);
+                lstData.Add(repeatList);
+                lstData.Add(redeemList);
+
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, userDetails.GroupId);
+            }
             return new JsonResult() { Data = lstData, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
 
