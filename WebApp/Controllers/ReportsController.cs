@@ -12,6 +12,7 @@ using System.ComponentModel;
 using BOTS_BL;
 using System.Globalization;
 using System.Web.Script.Serialization;
+using BOTS_BL.Models.Reports;
 
 namespace WebApp.Controllers
 {
@@ -120,7 +121,7 @@ namespace WebApp.Controllers
                 ViewBag.lstSourceList = lstSourceList;
                 var lstRedeemedList = RR.GetRedeemedList(userDetails.GroupId, userDetails.connectionString);
                 ViewBag.lstRedeemedList = lstRedeemedList;
-                var lstOutlet = RR.GetOutletList(userDetails.GroupId, userDetails.connectionString);
+                var lstOutlet = RR.GetOutletListForSliceAndDice(userDetails.GroupId, userDetails.connectionString);
                 ViewBag.lstOutlet = lstOutlet;
                 var TotalCount = RR.GetTotalMemberCount(userDetails.GroupId, userDetails.connectionString);
                 ViewBag.TotalMemberCount = TotalCount;
@@ -163,6 +164,36 @@ namespace WebApp.Controllers
                 transcount = RR.GetSliceAndDiceFilteredData(gender, Age_min, Age_max, source, Enroll_max, Enroll_min, Nontransacted_max, Nontransacted_min, Spend_min, Spend_max, txncount_min, txncount_max, pointBaln_min, pointBaln_max, Redeem, TicketSize_min, TicketSize_max, Brand, outletId, userDetails.GroupId, userDetails.connectionString);
             }
             return new JsonResult() { Data = transcount, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
+        }
+
+
+        public JsonResult GetFilteredCountforDrillDown(string jsonData)
+        {
+
+            List<ReportFilterCount> filtercount = new List<ReportFilterCount>();
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            List<CustomerDetail> listCustD = new List<CustomerDetail>();
+            JavaScriptSerializer json_serializer = new JavaScriptSerializer();
+            json_serializer.MaxJsonLength = int.MaxValue;
+            object[] objData = (object[])json_serializer.DeserializeObject(jsonData);
+            foreach (Dictionary<string, object> item in objData)
+            {
+
+                int Elementtype = Convert.ToInt32(item["Element_Type"]);
+                int Elementfilter = Convert.ToInt32(item["Element_Filter"]);
+                long Element1 = Convert.ToInt64(item["element1"]);
+                long Element2 = Convert.ToInt64(item["element2"]);
+                string BillSizeFilter = Convert.ToString(item["AvgBillFilter"]);
+                long BillSize_min = Convert.ToInt64(item["AvgBill-min"]);
+                long BillSize_max = Convert.ToInt64(item["AvgBill-max"]);
+                int periodsfilter = Convert.ToInt32(item["period_filter"]);
+                string periodFrm = Convert.ToString(item["period_From"]);
+                string periodTo = Convert.ToString(item["period_To"]);
+                string outletIds = Convert.ToString(item["OutletIds"]);
+
+                filtercount = RR.GetFilterCountOfDrillDown(Elementtype, Elementfilter, Element1, Element2, BillSizeFilter, BillSize_min, BillSize_max, periodsfilter, periodFrm, periodTo, outletIds, userDetails.GroupId, userDetails.connectionString);
+            }
+            return new JsonResult() { Data = filtercount, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
 
 

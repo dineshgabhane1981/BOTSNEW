@@ -5,223 +5,372 @@
 }
 
 <div class="app-main__inner" id="dvall">
-
-    <div class="row mb-3 pt-3 pl-3 pr-3 card" style="text-align:center;padding-bottom:20px;">
-        <h3><b>SLICE & DICE - Customise Your Own Report</b> </h3>
-    </div>
-    <h6><b>Select Member Demographics</b></h6>
-    <div class="row mt-4" id="secmember">
-        <div class="col-md-3 col-xl-3">
-             Gender
-        </div>
-        <div class="col-md-3 col-xl-3">
-            @Html.DropDownList("Gender", new SelectList(ViewBag.lstGenderList, "Value", "Text"), htmlAttributes: new { @class = "input50", @id = "ddlGender" })
-        </div>
-    </div>
-    <div class="row mt-2">
-        <div class="col-md-3 col-xl-3">
-             Age
-        </div>
-        <div class="col-md-3 col-xl-3">
-            @Html.DropDownList("Age", new SelectList(ViewBag.lstSpendList, "Value", "Text"), htmlAttributes: new { @class = "input50", @id = "ddlAge" })
-        </div>
-        <div class="col-md-6 col-xl-4">
-            <input type="text" id="txtAgemin" class="input50" placeholder="Enter" style="display:none" />
-            <input type="text" id="txtAgemax" class="input50" placeholder="Enter" style="display:none" />
-        </div>
-    </div>
-    <div class="row mt-2">
-        <div class="col-md-3 col-xl-3">
-            Source
-        </div>
-        <div class="col-md-3 col-xl-3">
-            @Html.DropDownList("Source", new SelectList(ViewBag.lstSourceList, "Value", "Text"), htmlAttributes: new { @class = "input50", @id = "ddlSource" })
-        </div>
-    </div>
-    <h6><b>Select Transactiona Variables</b></h6>
-
-    <div class="row mt-4" id="secTransaction">
-        <div class="col-md-3 col-xl-3">
-             Enrolled Since (days)
-        </div>
-        <div class="col-md-3 col-xl-3">
-            @Html.DropDownList("Entrolled", new SelectList(ViewBag.lstEnrolledList, "Value", "Text"), htmlAttributes: new { @class = "input50", @id = "ddlEnrolled" })
-        </div>
-        <div class="col-md-6 col-xl-4">
-            <input type="text" id="txtEnrollmin" class="input50" placeholder="Enter" style="display:none" />
-            <input type="text" id="txtEnrollmax" class="input50" placeholder="Enter" style="display:none" />
-
-        </div>
-    </div>
-    <div class="row mt-2">
-        <div class="col-md-3 col-xl-3">
-             Not transacted since (days)
-        </div>
-        <div class="col-md-3 col-xl-3">
-            @Html.DropDownList("NonTransacted", new SelectList(ViewBag.lstnontransactedList, "Value", "Text"), htmlAttributes: new { @class = "input50", @id = "ddlNontrasacted" })
-        </div>
-        <div class="col-md-6 col-xl-4">
-            <input type="text" id="txtnontransactedmin" class="input50" placeholder="Enter" style="display:none" />
-            <input type="text" id="txtnontransactedmax" class="input50" placeholder="Enter" style="display:none" />
-
-        </div>
-    </div>
-    <div class="row mt-2">
-        <div class="col-md-3 col-xl-3">
-            Spends(Rs.)
-        </div>
-        <div class="col-md-3 col-xl-3">
-            @Html.DropDownList("Spends", new SelectList(ViewBag.lstSpendList, "Value", "Text"), htmlAttributes: new { @class = "input50", @id = "ddlSpend" })
-        </div>
-        <div class="col-md-6 col-xl-4">
-            <input type="text" id="txtspendmin" class="input50" placeholder="Enter" style="display:none" />
-            <input type="text" id="txtspendmax" class="input50" placeholder="Enter" style="display:none" />
-
-        </div>
-    </div>
-    <div class="row mt-2">
-        <div class="col-md-3 col-xl-3">
-           Txn Count
-        </div>
-        <div class="col-md-3 col-xl-3">
-            @Html.DropDownList("TxnCount", new SelectList(ViewBag.lstSpendList, "Value", "Text"), htmlAttributes: new { @class = "input50", @id = "ddltxncount" })
-        </div>
-        <div class="col-md-6 col-xl-4">
-            <input type="text" id="txttxncountmin" class="input50" placeholder="Enter" style="display:none" />
-            <input type="text" id="txttxncountmax" class="input50" placeholder="Enter" style="display:none" />
-
-        </div>
-    </div>
-    <div class="row mt-2">
-        <div class="col-md-3 col-xl-3">
-            Redeemed
-        </div>
-        <div class="col-md-3 col-xl-3">
-            @Html.DropDownList("Redeemed", new SelectList(ViewBag.lstRedeemedList, "Value", "Text"), htmlAttributes: new { @class = "input50", @id = "ddlRedeemed" })
-        </div>
-    </div>
-    <div class="row mt-2">
-        <div class="col-md-3 col-xl-3">
-             Points Balance
-        </div>
-        <div class="col-md-3 col-xl-3">
-            @Html.DropDownList("PointsBalance", new SelectList(ViewBag.lstSpendList, "Value", "Text"), htmlAttributes: new { @class = "input50", @id = "ddlPointsBalance" })
-        </div>
-        <div class="col-md-6 col-xl-4">
-            <input type="text" id="txtPointsBalnmin" class="input50" placeholder="Enter" style="display:none" />
-            <input type="text" id="txtPointsBalnmax" class="input50" placeholder="Enter" style="display:none" />
-
-        </div>
-    </div>
-    <div class="row mt-2">
-        <div class="col-md-3 col-xl-3">
-            Avg Ticket Size
-        </div>
-        <div class="col-md-3 col-xl-3">
-            @Html.DropDownList("Avg ticket", new SelectList(ViewBag.lstSpendList, "Value", "Text"), htmlAttributes: new { @class = "input50", @id = "ddlTicketsize" })
-        </div>
-        <div class="col-md-6 col-xl-4">
-            <input type="text" id="txtTicketmin" class="input50" placeholder="Enter" style="display:none" />
-            <input type="text" id="txtTicketmax" class="input50" placeholder="Enter" style="display:none" />
-        </div>
-    </div>
-
-    <h6><b>Brand And Outlet Selection</b></h6>
-    <div class="row mt-4" id="secbrandOutlet">
-        <div class="col-md-3 col-xl-3">
-             Select Brand
-        </div>
-        <div class="col-md-3 col-xl-3">
-            @Html.DropDownList("SelectBrand", new SelectList(ViewBag.lstBrandList, "Value", "Text"), "--Select--", htmlAttributes: new { @class = "input50", @id = "ddlBrand" })
-        </div>
-
-    </div>
-    <div class="row mt-2">
-        <div class="col-md-3 col-xl-3">
-             Select Outlet
-        </div>
-        <div class="col-md-3 col-xl-3">
-            @*<input type="button" id="btnOutlet" value="Submit" />*@
-            @*<select id="ddlOutlet" class="input50">
-            </select>*@
-            @*@Html.ListBoxFor("SelectOutlet", new SelectList(ViewBag.lstOutlet, "Value", "Text"), "--Select--", htmlAttributes: new { @class = "input50", @id = "ddlOutlet" })*@
-            @Html.ListBox("SelectOutlet", new MultiSelectList(ViewBag.lstOutlet, "Value", "Text"), new { @class = "chzn-select", Multiple = "multiple", @id = "ddlOutlet" })
-            
-        </div>
-        
-        @*<div class="col-md-3 col-xl-3">
-                @Html.DropDownList("SelectOutlet", new SelectList(ViewBag.lstOutlet, "Value", "Text"), "--Select--", htmlAttributes: new { @class = "input50", @id = "ddlOutlet" })
-            </div>*@
-    </div>
-
-
-    @*<div class="row">
-            <div class="col-md-3 col-xl-3">
-                <input type="checkbox" id="chkAge" />
+    <div class="mb-3 pr-3 pt-3 pl-3 card" style="padding-bottom:20px;">
+        @*<div class="col-sm-8" style="display:flex;padding-bottom: 10px;margin-top:5px;">*@
+        <div class="row mt-4">
+            <div class="col-md-8 col-xl-8">
+                <input type="radio" checked id="rdnSliceandDice" name="btdornot" /><b> Slice And Dice </b> &nbsp;&nbsp;&nbsp;&nbsp;
+                <input type="radio" id="rdnTxncnt" name="btdornot" /><b> Txn Count and Spend DrillDown</b> &nbsp;&nbsp;&nbsp;&nbsp;
             </div>
+        </div>
+
+        @*</div>*@
+    </div>
+    <div class="mb-3 pr-3 pt-3 pl-3 card" style="padding-bottom:20px;" id="divSliceDice">
+        <div class="row mt-4">
+            <div class="col-md-8 col-xl-8">
+                <span id="spnFilter" style="font-size:17px;font-weight:bold;"></span>
+            </div>
+        </div>
+        <br/>
+        <h6><b>Select Member Demographics</b></h6>
+        <div class="row mt-4" id="secmember">
             <div class="col-md-3 col-xl-3">
-                @Html.DropDownList("Age", new SelectList(ViewBag.lstAgeList, "Value", "Text"), htmlAttributes: new { @class = "input50", @id = "ddlAge" })
+                Gender
+            </div>
+            <div class="col-md-2 col-xl-2">
+                @Html.DropDownList("Gender", new SelectList(ViewBag.lstGenderList, "Value", "Text"), htmlAttributes: new { @class = "input50", @id = "ddlGender" })
+            </div>
+        </div>
+        <div class="row mt-2">
+            <div class="col-md-3 col-xl-3">
+                Age
+            </div>
+            <div class="col-md-2 col-xl-2">
+                @Html.DropDownList("Age", new SelectList(ViewBag.lstSpendList, "Value", "Text"), htmlAttributes: new { @class = "input50", @id = "ddlAge" })
             </div>
             <div class="col-md-6 col-xl-4">
-                <input type="text" id="txtAgemin" class="input50" value="Enter" />
-                <input type="text" id="txtAgemax" class="input50" />
+                <input type="text" id="txtAgemin" class="input50" placeholder="From Age" style="display:none" />
+                <input type="text" id="txtAgemax" class="input50" placeholder="To Age" style="display:none" />
             </div>
-        </div>*@
-    <div class="row mt-5">
-        <div class="col-md-3 col-xl-3">
-            <button class="btn btn-primary login-btn" type="button" id="btnFilter" onclick="GetFilteredData1();">
-                Filter
-            </button>
         </div>
-        <div class="col-md-4 col-xl-4">
-            <table style="border:2px solid black;width:80%">
-                <tr style="border:2px solid black;">
-                    <td style="border:2px solid black;">
-                        Total Member Count
-                    </td>
-                    <td style="border:2px solid black;">
-                        <span id="spnMemberCount">@ViewBag.TotalMemberCount</span>
-                    </td>
-                </tr>
-                <tr style="border:2px solid black; ">
-                    <td style="border:2px solid black;text-align:left;">
-                        <span id="spnfilteredCount"></span>Filtered Count
-                    </td>
-                    <td style="border:2px solid black;">
-                        <span id="spnfilteredCountnum"></span>
-                    </td>
-                </tr>
-            </table>
+        <div class="row mt-2">
+            <div class="col-md-3 col-xl-3">
+                Source
+            </div>
+            <div class="col-md-2 col-xl-2">
+                @Html.DropDownList("Source", new SelectList(ViewBag.lstSourceList, "Value", "Text"), htmlAttributes: new { @class = "input50", @id = "ddlSource" })
+            </div>
+        </div>
+        <h6><b>Select Transactional Variables</b></h6>
+
+        <div class="row mt-4" id="secTransaction">
+            <div class="col-md-3 col-xl-3">
+                Enrolled Since (days)
+            </div>
+            <div class="col-md-2 col-xl-2">
+                @Html.DropDownList("Entrolled", new SelectList(ViewBag.lstEnrolledList, "Value", "Text"), htmlAttributes: new { @class = "input50", @id = "ddlEnrolled" })
+            </div>
+            <div class="col-md-6 col-xl-4">
+                <input type="text" id="txtEnrollmin" class="input50" placeholder="From Enrolled" style="display:none" />
+                <input type="text" id="txtEnrollmax" class="input50" placeholder="To Enrolled" style="display:none" />
+
+            </div>
+        </div>
+        <div class="row mt-2">
+            <div class="col-md-3 col-xl-3">
+                Not transacted since (days)
+            </div>
+            <div class="col-md-2 col-xl-2">
+                @Html.DropDownList("NonTransacted", new SelectList(ViewBag.lstnontransactedList, "Value", "Text"), htmlAttributes: new { @class = "input50", @id = "ddlNontrasacted" })
+            </div>
+            <div class="col-md-6 col-xl-4">
+                <input type="text" id="txtnontransactedmin" class="input50" placeholder="From NotTransacted" style="display:none" />
+                <input type="text" id="txtnontransactedmax" class="input50" placeholder="To NotTransacted" style="display:none" />
+
+            </div>
+        </div>
+        <div class="row mt-2">
+            <div class="col-md-3 col-xl-3">
+                Spends(Rs.)
+            </div>
+            <div class="col-md-2 col-xl-2">
+                @Html.DropDownList("Spends", new SelectList(ViewBag.lstSpendList, "Value", "Text"), htmlAttributes: new { @class = "input50", @id = "ddlSpend" })
+            </div>
+            <div class="col-md-6 col-xl-4">
+                <input type="text" id="txtspendmin" class="input50" placeholder="From Spend" style="display:none" />
+                <input type="text" id="txtspendmax" class="input50" placeholder="To Spend" style="display:none" />
+
+            </div>
+        </div>
+        <div class="row mt-2">
+            <div class="col-md-3 col-xl-3">
+                Txn Count
+            </div>
+            <div class="col-md-2 col-xl-2">
+                @Html.DropDownList("TxnCount", new SelectList(ViewBag.lstSpendList, "Value", "Text"), htmlAttributes: new { @class = "input50", @id = "ddltxncount" })
+            </div>
+            <div class="col-md-3 col-xl-4">
+                <input type="text" id="txttxncountmin" class="input50" placeholder="From Txn Count" style="display:none" />
+                <input type="text" id="txttxncountmax" class="input50" placeholder="To Txn Count" style="display:none" />
+
+            </div>
+        </div>
+        <div class="row mt-2">
+            <div class="col-md-3 col-xl-3">
+                Redeemed
+            </div>
+            <div class="col-md-2 col-xl-2">
+                @Html.DropDownList("Redeemed", new SelectList(ViewBag.lstRedeemedList, "Value", "Text"), htmlAttributes: new { @class = "input50", @id = "ddlRedeemed" })
+            </div>
+        </div>
+        <div class="row mt-2">
+            <div class="col-md-3 col-xl-3">
+                Points Balance
+            </div>
+            <div class="col-md-2 col-xl-2">
+                @Html.DropDownList("PointsBalance", new SelectList(ViewBag.lstSpendList, "Value", "Text"), htmlAttributes: new { @class = "input50", @id = "ddlPointsBalance" })
+            </div>
+            <div class="col-md-6 col-xl-4">
+                <input type="text" id="txtPointsBalnmin" class="input50" placeholder="From PointBalance" style="display:none" />
+                <input type="text" id="txtPointsBalnmax" class="input50" placeholder="To PointBalance" style="display:none" />
+
+            </div>
+        </div>
+        <div class="row mt-2">
+            <div class="col-md-3 col-xl-3">
+                Avg Ticket Size
+            </div>
+            <div class="col-md-2 col-xl-2">
+                @Html.DropDownList("Avg ticket", new SelectList(ViewBag.lstSpendList, "Value", "Text"), htmlAttributes: new { @class = "input50", @id = "ddlTicketsize" })
+            </div>
+            <div class="col-md-6 col-xl-4">
+                <input type="text" id="txtTicketmin" class="input50" placeholder="From Ticket Size" style="display:none" />
+                <input type="text" id="txtTicketmax" class="input50" placeholder="To Ticket Size" style="display:none" />
+            </div>
+        </div>
+
+        <h6><b>Brand And Outlet Selection</b></h6>
+        <div class="row mt-4" id="secbrandOutlet">
+            <div class="col-md-3 col-xl-3">
+                Select Brand
+            </div>
+            <div class="col-md-3 col-xl-3">
+                @Html.DropDownList("SelectBrand", new SelectList(ViewBag.lstBrandList, "Value", "Text"), "--Select--", htmlAttributes: new { @class = "input50", @id = "ddlBrand" })
+            </div>
+
+        </div>
+        <div class="row mt-2">
+            <div class="col-md-3 col-xl-3">
+                Select Outlet
+            </div>
+            <div class="col-md-3 col-xl-3">
+                @*<input type="button" id="btnOutlet" value="Submit" />*@
+                @*<select id="ddlOutlet" class="input50">
+                    </select>*@
+                @*@Html.ListBoxFor("SelectOutlet", new SelectList(ViewBag.lstOutlet, "Value", "Text"), "--Select--", htmlAttributes: new { @class = "input50", @id = "ddlOutlet" })*@
+                @Html.ListBox("SelectOutlet", new MultiSelectList(ViewBag.lstOutlet, "Value", "Text"), new { @class = "input50", @style = "width:80%", Multiple = "multiple", @id = "ddlOutlet" })
+
+            </div>
+
+            @*<div class="col-md-3 col-xl-3">
+                    @Html.DropDownList("SelectOutlet", new SelectList(ViewBag.lstOutlet, "Value", "Text"), "--Select--", htmlAttributes: new { @class = "input50", @id = "ddlOutlet" })
+                </div>*@
+        </div>
+
+
+        @*<div class="row">
+                <div class="col-md-3 col-xl-3">
+                    <input type="checkbox" id="chkAge" />
+                </div>
+                <div class="col-md-3 col-xl-3">
+                    @Html.DropDownList("Age", new SelectList(ViewBag.lstAgeList, "Value", "Text"), htmlAttributes: new { @class = "input50", @id = "ddlAge" })
+                </div>
+                <div class="col-md-6 col-xl-4">
+                    <input type="text" id="txtAgemin" class="input50" value="Enter" />
+                    <input type="text" id="txtAgemax" class="input50" />
+                </div>
+            </div>*@
+        <div class="row mt-5">
+            <div class="col-md-3 col-xl-3">
+                <button class="btn btn-primary login-btn" type="button" id="btnFilter">
+                    Filter
+                </button>
+                <button class="btn btn-primary login-btn" type="button" id="btnReset" onclick="ResetAll();">
+                    Reset
+                </button>
+            </div>
+            <div class="col-md-4 col-xl-4">
+                <table style="border:2px solid black;width:80%">
+                    <tr style="border:2px solid black;">
+                        <td style="border:2px solid black;">
+                            Total Member Count
+                        </td>
+                        <td style="border:2px solid black;">
+                            <span id="spnMemberCount">@ViewBag.TotalMemberCount</span>
+                        </td>
+                    </tr>
+                    <tr style="border:2px solid black; ">
+                        <td style="border:2px solid black;text-align:left;">
+                            <span id="spnfilteredCount"></span>Filtered Count
+                        </td>
+                        <td style="border:2px solid black;">
+                            <span id="spnfilteredCountnum"></span>
+                        </td>
+                    </tr>
+                </table>
+            </div>
         </div>
     </div>
+    <div class="mb-3 pr-3 pt-3 pl-3 card" id="divTxncount" style="padding-bottom:20px;display:none; text-align:center;">
+        <div class="row mt-4">
+            <div class="col-md-8 col-xl-8">
+                <span id="spnFilterDrillDown" style="font-size:17px;font-weight:bold;"></span>
+            </div>
+        </div>
+        <div class="row mt-4">
+            <div class="col-md-6 col-xl-4 ">
+                <b>Select Outlet</b>
+                @*</div>
+                <div class="col-md-2 col-xl-2">*@
+                @Html.DropDownList("Outlet", new SelectList(ViewBag.lstOutlet, "Value", "Text"), "--Select--", htmlAttributes: new { @class = "input50", @id = "ddloutletId" })
+            </div>
+        </div>
+        <div class="row mt-8 ">
+            <div class="col-md-4 col-xl-4 border" style="margin-left:20px; margin-top:20px; text-align:center;">
+                <b> Elements </b>
+                <hr />
+                <div class="row mb-3">
+                    <div class="col text-center ">
+                        <input type="radio" id="rdnNooftxn" name="bt2" /> No Of Txn  &nbsp;&nbsp;&nbsp;&nbsp;
+                        <input type="radio" id="rdnSpend" name="bt2" /> Spend &nbsp;&nbsp;&nbsp;&nbsp;<br />
+                    </div>
+                </div>
+                <div class="row mb-3 text-center">
+                    <div class="col text-center">
+                        @Html.DropDownList("Spends", new SelectList(ViewBag.lstSpendList, "Value", "Text"), htmlAttributes: new { @class = "input50", @id = "ddlSpendTxn" })
+                    </div>
+                </div>
+                <div class="row mb-3 ">
+                    <div class="col text-center">
+                        <input type="text" id="txtEnterminval" class="input50" placeholder="From Spend" style="display:none" />
+                        <input type="text" id="txtEntermaxval" class="input50" placeholder="To Spend" style="display:none" />
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 col-xl-4 border" style="margin-left:20px; margin-top:20px; text-align:center;">
+                <b> Avg Bill Size</b>
+                <hr />
+                <div class="row mb-3 text-center">
+                    <div class="col text-center">
+                        @Html.DropDownList("Spends", new SelectList(ViewBag.lstSpendList, "Value", "Text"), htmlAttributes: new { @class = "input50", @id = "ddlAvgBill" })
+                    </div>
+                </div>
+                <div class="row mb-3 text-center">
+                    <div class="col text-center">
+                        <input type="text" id="txtBillSizemin" class="input50" placeholder="From Bill" style="display:none" />
+                        <input type="text" id="txtBillSizemax" class="input50" placeholder="To Bill" style="display:none" />
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 col-xl-3 border" style="margin-left:20px; margin-top:20px;text-align:center;">
+                <b>  Period </b>
+                <hr />
+                <div class="row mb-3">
+                </div>
+                <div class="row mb-3  text-center">
+                    <div class="col text-center">
+                        <input type="radio" checked id="rdnevryMonth" name="bt3" /> Every Month  &nbsp;&nbsp;&nbsp;&nbsp;
+                        <input type="radio" id="rdnDuration" name="bt3" /> Duration &nbsp;&nbsp;&nbsp;&nbsp;<br />
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col text-center">
+                        <input type="text" id="txtperiodFrom" class="date-picker" placeholder="Select Period From" />
+                        <input type="text" id="txtperiodTo" class="date-picker" placeholder="Select Period To" />
+                    </div>
+                </div>
 
+            </div>
+        </div>
+        <div class="row mt-4 ">
+            <div class="col-md-6 col-xl-2 ">
+                <button class="btn btn-primary login-btn" type="button" id="btnFilterdrilldown">
+                    Filter
+                </button>
+                <button class="btn btn-primary login-btn" type="button" id="btnResetForDrillDown" onclick="ResetAllForDrillDown();">
+                    Reset
+                </button>
+            </div>
+            <div class="col-md-6 col-xl-4 ">
+                <table style="border:2px solid black;width:80%">
+                    <tr style="border:2px solid black;">
+                        <td style="border:2px solid black;text-align:left;">
+                            Total Member Count
+                        </td>
+                        <td style="border:2px solid black;">
+                            <span id="spnMemberCount">@ViewBag.TotalMemberCount</span>
+                        </td>
+                    </tr>
+                    <tr style="border:2px solid black; ">
+                        <td style="border:2px solid black;text-align:left;">
+                            <span id="spnfilteredCount"></span>Filtered Count
+                        </td>
+                        <td style="border:2px solid black;">
+                            <span id="spnfilteredCountDrillDown"></span>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
 </div>
 
 <script src="http://code.jquery.com/jquery-1.12.4.min.js"></script>
-@*<link href="http://cdn.rawgit.com/davidstutz/bootstrap-multiselect/master/dist/css/bootstrap-multiselect.css" rel="stylesheet" type="text/css" />
-    <script src="http://cdn.rawgit.com/davidstutz/bootstrap-multiselect/master/dist/js/bootstrap-multiselect.js"></script>
-    <link href="http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.0.3/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
-    <script src="http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.0.3/js/bootstrap.min.js"></script>*@
-
-
-    @*<script src="http://cdn.rawgit.com/davidstutz/bootstrap-multiselect/master/dist/js/bootstrap-multiselect.js"></script>
-    <link href="http://cdn.rawgit.com/davidstutz/bootstrap-multiselect/master/dist/css/bootstrap-multiselect.css" rel="stylesheet" type="text/css" />
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
-      <script src="http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.0.3/js/bootstrap.min.js"></script>
-        <link href="http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.0.3/css/bootstrap.min.css" rel="stylesheet" type="text/css" />*@
-
-
+<link href="~/Content/themes/base/jquery-ui.min.css" rel="stylesheet" />
+<link href="~/Content/themes/base/jquery-ui.css" rel="stylesheet" />
+@*<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.1/jquery.js"></script>
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.2/jquery-ui.min.js"></script>
+    <link rel="stylesheet" type="text/css" media="screen" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.2/themes/base/jquery-ui.css">*@
+<script src="~/Scripts/jquery-ui-1.12.1.js"></script>
+<script src="~/Scripts/jquery-ui-1.12.1.min.js"></script>
 @*<script src="~/Content/scriptSteps.js"></script>*@
-
+<style>
+    .ui-datepicker-calendar {
+        display: none;
+    }
+</style>
 <script>
-
-    $(document).ready(function () {
-        //GetOutletList();       
-
+    
+    $(function () {
+        $('.date-picker').datepicker({
+            changeMonth: true,
+            changeYear: true,
+            showButtonPanel: true,
+            dateFormat: 'MM yy',
+            onClose: function (dateText, inst) {
+                var month = $("#ui-datepicker-div .ui-datepicker-month :selected").val();
+                var year = $("#ui-datepicker-div .ui-datepicker-year :selected").val();
+                $(this).datepicker('setDate', new Date(year, month, 1));
+            },
+            beforeShow: function (input, inst) {
+                var datestr;
+                if ((datestr = $(this).val()).length > 0) {
+                    year = datestr.substring(datestr.length - 4, datestr.length);
+                    month = jQuery.inArray(datestr.substring(0, datestr.length - 5), $(this).datepicker('option', 'monthNamesShort'));
+                    $(this).datepicker('option', 'defaultDate', new Date(year, month, 1));
+                    $(this).datepicker('setDate', new Date(year, month, 1));
+                }
+            }
+        });
     });
-
+    $(document).ready(function () {
+        //GetOutletList();
+        $('#rdnSliceandDice').change(function () {
+            $('#divTxncount').hide();
+            $('#divSliceDice').show();
+        });
+        $('#rdnTxncnt').change(function () {
+            $('#divTxncount').show();
+            $('#divSliceDice').hide();
+        });
+        $("#spnFilter").text('');
+    });
     $('#btnFilter').on("click", function () {
-        GetFilteredData1();
+        GetFilteredDataforSliceAndDice();
+    });
+    $('#btnFilterdrilldown').on("click", function () {
+        GetFilteredDataForDrillDown();
     });
     function GetOutletList() {
       //  $("#divLoader").show();
@@ -233,13 +382,12 @@
             success: function (lstOutlet) {
                 console.log(lstOutlet);
                 $.each(lstOutlet, function () {
-                    console.log(this.Value);
                     $('#ddlOutlet').append($("<option />").val(this.Value).text(this.Text));
                 });
                 //$('#ddlOutlet').multiselect({
                 //includeSelectAllOption: true,
 
-                //});                
+                //});
             },
             error: function (data) { }
             });
@@ -250,20 +398,44 @@
         if (selected == 'Between') {
             $("#txtTicketmin").show();
             $("#txtTicketmax").show();
+            $('#txtTicketmin').attr('placeholder', 'From Ticket Size');
+            $('#txtTicketmax').attr('placeholder', 'To Ticket Size');
         }
-        else {
+        else if (selected == 'Less than') {
             $("#txtTicketmin").show();
             $("#txtTicketmax").hide();
+            $('#txtTicketmin').attr('placeholder', 'Less Than TicketSize');
         }
-    });   
+        else if (selected == 'More than') {
+            $("#txtTicketmax").show();
+            $("#txtTicketmin").hide();
+            $('#txtTicketmax').attr('placeholder', 'More Than TicketSize');
+        }
+        else if (selected == '---Select---') {
+            $("#txtTicketmin").hide();
+            $("#txtTicketmax").hide();
+        }
+    });
     $("#ddlPointsBalance").change(function () {
         var selected = $("#ddlPointsBalance option:selected").text();
         if (selected == 'Between') {
             $("#txtPointsBalnmin").show();
             $("#txtPointsBalnmax").show();
+            $('#txtPointsBalnmin').attr('placeholder', 'From Point Balance');
+            $('#txtPointsBalnmax').attr('placeholder', 'To Point Balance');
         }
-        else {
+        else if (selected == 'Less than') {
             $("#txtPointsBalnmin").show();
+            $("#txtPointsBalnmax").hide();
+            $('#txtPointsBalnmin').attr('placeholder', 'Less Than Point Baln');
+        }
+        else if (selected == 'More than') {
+            $("#txtPointsBalnmax").show();
+            $("#txtPointsBalnmin").hide();
+            $('#txtPointsBalnmax').attr('placeholder', 'More Than Point Baln');
+        }
+        else if (selected == '---Select---') {
+            $("#txtPointsBalnmin").hide();
             $("#txtPointsBalnmax").hide();
         }
     });
@@ -272,9 +444,21 @@
         if (selected == 'Between') {
             $("#txttxncountmin").show();
             $("#txttxncountmax").show();
+            $('#txttxncountmin').attr('placeholder', 'From Txn Count');
+            $('#txttxncountmax').attr('placeholder', 'To Txn Count');
         }
-        else {
+        else if (selected == 'Less than') {
             $("#txttxncountmin").show();
+            $("#txttxncountmax").hide();
+            $('#txttxncountmin').attr('placeholder', 'Less Than Txn Count');
+        }
+        else if (selected == 'More than') {
+            $("#txttxncountmax").show();
+            $("#txttxncountmin").hide();
+            $('#txttxncountmax').attr('placeholder', 'More Than Txn Count');
+        }
+        else if (selected == '---Select---') {
+            $("#txttxncountmin").hide();
             $("#txttxncountmax").hide();
         }
     });
@@ -283,9 +467,21 @@
         if (selected == 'Between') {
             $("#txtspendmin").show();
             $("#txtspendmax").show();
+            $('#txtspendmin').attr('placeholder', 'From Spend Amount');
+            $('#txtspendmax').attr('placeholder', 'To Spend Amount');
         }
-        else {
+        else if (selected == 'Less than') {
             $("#txtspendmin").show();
+            $("#txtspendmax").hide();
+            $('#txtspendmin').attr('placeholder', 'Less Than Spend Amt');
+        }
+        else if (selected == 'More than') {
+            $("#txtspendmax").show();
+            $("#txtspendmin").hide();
+            $('#txtspendmax').attr('placeholder', 'More Than Spend Amt');
+        }
+        else if (selected == '---Select---') {
+            $("#txtspendmin").hide();
             $("#txtspendmax").hide();
         }
     });
@@ -295,6 +491,10 @@
             $("#txtnontransactedmin").show();
             $("#txtnontransactedmax").show();
         }
+        else if (selected == '---Select---') {
+            $("#txtnontransactedmin").hide();
+            $("#txtnontransactedmax").hide();
+        }
 
     });
     $("#ddlEnrolled").change(function () {
@@ -303,21 +503,140 @@
             $("#txtEnrollmin").show();
             $("#txtEnrollmax").show();
         }
-
+        else if (selected == '---Select---') {
+            $("#txtEnrollmin").hide();
+            $("#txtEnrollmax").hide();
+        }
     });
     $("#ddlAge").change(function () {
       var selected = $("#ddlAge option:selected").text();
         if (selected == 'Between') {
             $("#txtAgemin").show();
             $("#txtAgemax").show();
+            $('#txtAgemin').attr('placeholder', 'From Age');
+            $('#txtAgemax').attr('placeholder', 'To Age');
         }
-        else {
+        else if (selected == 'Less than') {
             $("#txtAgemin").show();
+            $("#txtAgemax").hide();
+            $('#txtAgemin').attr('placeholder', 'Less Than Age');
+        }
+        else if (selected == 'More than') {
+            $("#txtAgemax").show();
+            $("#txtAgemin").hide();
+            $('#txtAgemax').attr('placeholder', 'More Than Age');
+        }
+        else if (selected == '---Select---') {
+            $("#txtAgemin").hide();
             $("#txtAgemax").hide();
         }
     });
+    $("#ddlSpendTxn").change(function () {
+     var selected = $("#ddlSpendTxn option:selected").text();
+        if (selected == 'Between') {
+            $("#txtEnterminval").show();
+            $("#txtEntermaxval").show();
+            $('#txtEnterminval').attr('placeholder', 'From Value');
+            $('#txtEntermaxval').attr('placeholder', 'To Value');
+        }
+        else if (selected == 'Less than') {
+            $("#txtEnterminval").show();
+            $("#txtEntermaxval").hide();
+            $('#txtEnterminval').attr('placeholder', 'Less Than Value');
+        }
+     else if(selected == 'More than') {
+            $("#txtEntermaxval").show();
+            $("#txtEnterminval").hide();
+            $('#txtEntermaxval').attr('placeholder', 'More Than Value');
+        }
+        else if (selected == '---Select---') {
+            $("#txtEnterminval").hide();
+            $("#txtEntermaxval").hide();
+        }
+ });
+    $("#ddlAvgBill").change(function () {
+       var selected = $("#ddlAvgBill option:selected").text();
+       if (selected == 'Between') {
+           $("#txtBillSizemin").show();
+           $("#txtBillSizemax").show();
+           $('#txtBillSizemin').attr('placeholder', 'From Bill');
+           $('#txtBillSizemax').attr('placeholder', 'To Bill');
+        }
+       else if (selected == 'Less than') {
+           $("#txtBillSizemin").show();
+           $("#txtBillSizemax").hide();
+           $('#txtBillSizemin').attr('placeholder', 'Less Than Bill');
+       }
+       else if (selected == 'More than') {
+           $("#txtBillSizemax").show();
+           $("#txtBillSizemin").hide();
+           $('#txtBillSizemax').attr('placeholder', 'More Than Bill');
+        }
+       else if (selected == '---Select---') {
+           $("#txtBillSizemin").hide();
+           $("#txtBillSizemax").hide();
+        }
+    });
+    $('#rdnNooftxn').change(function () {
+        $('#txtEnterminval').hide();
+        $('#txtEntermaxval').hide();
+        $('#ddlSpendTxn').prop('selectedIndex', 0);
+    });
+    $('#rdnSpend').change(function () {
+        $('#txtEnterminval').hide();
+        $('#txtEntermaxval').hide();
+        $('#ddlSpendTxn').prop('selectedIndex', 0);
+    });
+    function ResetAll() {
 
-    function GetFilteredData1() {
+        $('#dvall').find(':input').val('');
+        $('#txtAgemin').hide();
+        $('#txtAgemax').hide();
+        $("#txtEnrollmin").hide();
+        $('#txtEnrollmax').hide();
+        $("#txtnontransactedmin").hide();
+        $("#txtnontransactedmax").hide();
+        $('#txtspendmin').hide();
+        $('#txtspendmax').hide();
+        $('#txttxncountmin').hide();
+        $('#txttxncountmax').hide();
+        $('#txtPointsBalnmin').hide();
+        $('#txtPointsBalnmax').hide();
+        $('#txtTicketmin').hide();
+        $('#txtTicketmax').hide();
+        $('#ddlPointsBalance').prop('selectedIndex', 0);
+        $('#ddltxncount').prop('selectedIndex', 0);
+        $('#ddlSpend').prop('selectedIndex', 0);
+        $('#ddlNontrasacted').prop('selectedIndex', 0);
+        $('#ddlEnrolled').prop('selectedIndex', 0);
+        $('#ddlAge').prop('selectedIndex', 0);
+        $('#ddlGender').prop('selectedIndex', 0);
+        $('#ddlBrand').prop('selectedIndex', 0);
+        $('#ddlRedeemed').prop('selectedIndex', 0);
+        $('#ddlOutlet').prop('selectedIndex', 0);
+        $('#ddlTicketsize').prop('selectedIndex', 0);
+        $('#ddlSource').prop('selectedIndex', 0);
+        $('#spnfilteredCountnum').text('');
+        $("#spnFilter").text('');
+
+    }
+    function ResetAllForDrillDown()
+    {
+        $('#ddlSpendTxn').prop('selectedIndex', 0);
+        $('#ddlAvgBill').prop('selectedIndex', 0);
+        $('#txtEnterminval').hide();
+        $('#txtEntermaxval').hide();
+        $("#txtperiod").val('');
+        $('#txtBillSizemin').hide();
+        $("#txtBillSizemax").hide();
+        $('#spnfilteredCountDrillDown').text('');
+        $("#ddlOutlet").prop('selectedIndex', 0);
+        $('#txtperiodFrom').val('');
+        $('#txtperiodTo').val('');
+        $('#txtEnterminval').val('');
+        $('#txtEntermaxval').val('');
+    }
+    function GetFilteredDataforSliceAndDice() {
         $("#divLoader").show();
         var FilterData = [];
         item = {};
@@ -364,10 +683,10 @@
             item["pointBaln-min"] = $('#txtPointsBalnmin').val();
         }
         item["Redeem"] = ($("#ddlRedeemed").prop('selectedIndex') !== 0) ? $('#ddlRedeemed :selected').val() : 0;
-       
+
         item["TicketSize-min"] = ($("#ddlTicketsize").prop('selectedIndex') !== 0) ? $('#txtTicketmin').val() :0;
             item["TicketSize-max"] = ($("#ddlTicketsize").prop('selectedIndex') == 3) ? $('#txtTicketmax').val() : 0;
-        
+
         item["Brand"] = ($("#ddlBrand").prop('selectedIndex') !== 0) ? $('#ddlBrand :selected').val() : 0;
         if ($("#ddlOutlet").prop('selected') !== 0) {
 
@@ -380,7 +699,50 @@
         }
 
         FilterData.push(item);
-        console.log(FilterData);
+
+        var text = "";
+        if ($("#ddlGender").prop('selectedIndex') !== 0 ) {
+            text = "Filter : " + $("#ddlGender :selected").text();
+        }
+        if ($("#ddlAge").prop('selectedIndex') !== 0 ) {
+            text = text + " | " + $("#ddlAge :selected").text();
+        }
+        if ($("#ddlSource").prop('selectedIndex') != 0 ) {
+            text = text + " | " + $("#ddlSource :selected").text();
+        }
+        if ($("#ddlEnrolled").prop('selectedIndex') != 0 ) {
+            text = text + " | " + $("#ddlEnrolled :selected").text();
+        }
+        if ($("#ddlNontrasacted").prop('selectedIndex') != 0 ) {
+            text = text + " | " + $("#ddlNontrasacted :selected").text();
+        }
+        if ($("#ddlSpend").prop('selectedIndex') != 0 ) {
+            text = text + " | " + $("#ddlSpend :selected").text();
+        }
+        if ($("#ddltxncount").prop('selectedIndex') != 0 ) {
+            text = text + " | " + $("#ddltxncount :selected").text();
+        }
+        if ($("#ddlPointsBalance").prop('selectedIndex') != 0 ) {
+            text = text + " | " + $("#ddlPointsBalance :selected").text();
+        }
+        if ($("#ddlRedeemed").prop('selectedIndex') != 0 ) {
+            text = text + " | " + $("#ddlRedeemed :selected").text();
+        }
+        if ($("#ddlTicketsize").prop('selectedIndex') != 0 ) {
+            text = text + " | " + $("#ddlTicketsize :selected").text();
+        }
+        if ($("#ddlBrand").prop('selectedIndex') != 0 ) {
+            text = text + " | " + $("#ddlBrand :selected").text();
+        }
+        if ($("#ddlOutlet").prop('selected') != 0 ) {
+            text = text + " | " + $("#ddlOutlet :selected").text();
+        }
+        if (text != "") {
+
+            $("#spnFilter").text(text);
+            $("#spnFilter").show();
+        }
+        console.log(text);
         var data = JSON.stringify(FilterData);
         $.ajax({
             type: "POST",
@@ -393,47 +755,166 @@
                 console.log(response);
                 if (response != null) {
                     $("#spnfilteredCountnum").text(response);
-                    $("#divLoader").hide();                    
-                    $('#dvall').find(':input').val(''); 
-                    $('#txtAgemin').hide();
-                    $('#txtAgemax').hide();
-                    $("#txtEnrollmin").hide();
-                    $('#txtEnrollmax').hide();
-                    $("#txtnontransactedmin").hide();
-                    $("#txtnontransactedmax").hide();
-                    $('#txtspendmin').hide();
-                    $('#txtspendmax').hide();
-                    $('#txttxncountmin').hide();
-                    $('#txttxncountmax').hide();
-                    $('#txtPointsBalnmin').hide();
-                    $('#txtPointsBalnmax').hide();
-                    $('#txtTicketmin').hide();
-                    $('#txtTicketmax').hide();
-                    $('#ddlPointsBalance').prop('selectedIndex', 0);
-                    $('#ddltxncount').prop('selectedIndex', 0);
-                    $('#ddlSpend').prop('selectedIndex', 0);
-                    $('#ddlNontrasacted').prop('selectedIndex', 0);
-                    $('#ddlEnrolled').prop('selectedIndex', 0);
-                    $('#ddlAge').prop('selectedIndex', 0);
-                    $('#ddlGender').prop('selectedIndex', 0);
-                    $('#ddlBrand').prop('selectedIndex', 0);
-                    $('#ddlRedeemed').prop('selectedIndex', 0);
-                    $('#ddlOutlet').prop('selectedIndex', 0);
-                    $('#ddlTicketsize').prop('selectedIndex', 0);
-                    $('#ddlSource').prop('selectedIndex', 0);
-
+                    $("#divLoader").hide();
                 }
                 else {
 
                 }
-
             },
             error: function (response) {
                 console.log(response.responseText);
             }
         });
     }
+    function GetFilteredDataForDrillDown()
+    {
+        $("#divLoader").show();
+        var FilterData = [];
+        item = {};
+        if ($("#rdnNooftxn").is(":checked")) {
+            item["Element_Type"] = 1;
+            if ($("#ddlSpendTxn").prop('selectedIndex') == 1) {
+                item["Element_Filter"] = 1;
+                item["element1"] = $('#txtEnterminval').val();
+                item["element2"] = 0;
+            }
+            else if ($("#ddlSpendTxn").prop('selectedIndex') == 2) {
+                item["Element_Filter"] = 2;
+                item["element2"] = $('#txtEntermaxval').val();
+                item["element1"] = 0;
+            }
+            else if ($("#ddlSpendTxn").prop('selectedIndex') == 3) {
+                item["element1"] = $('#txtEnterminval').val();
+                item["element2"] = $('#txtEntermaxval').val();
+                item["Element_Filter"] = 3;
+            }
+            else {
+                item["element2"] = 0;
+                item["element1"] = 0;
+            }
 
+        }
+         if ($("#rdnSpend").is(":checked")) {
+            item["Element_Type"] = 2;
+            if ($("#ddlSpendTxn").prop('selectedIndex') == 1) {
+                item["Element_Filter"] = 1;
+                item["element1"] = $('#txtEnterminval').val();
+                item["element2"] = 0;
+            }
+            else if ($("#ddlSpendTxn").prop('selectedIndex') == 2) {
+                item["Element_Filter"] = 2;
+                item["element2"] = $('#txtEntermaxval').val();
+                item["element1"] = 0;
+            }
+            else if ($("#ddlSpendTxn").prop('selectedIndex') == 3) {
+                item["element1"] = $('#txtEnterminval').val();
+                item["element2"] = $('#txtEntermaxval').val();
+                item["Element_Filter"] = 3;
+            }
+        }
+        if ($("#ddlAvgBill").prop('selectedIndex') == 1) {
+            item["AvgBillFilter"] = 1;
+            item["AvgBill-min"] = $('#txtBillSizemin').val();
+            item["AvgBill-max"] = 0;
+        }
+        else if ($("#ddlAvgBill").prop('selectedIndex') == 2) {
+            item["AvgBillFilter"] = 2;
+            item["AvgBill-max"] = $('#txtBillSizemax').val();
+            item["AvgBill-min"] = 0;
+        }
+        else if ($("#ddlAvgBill").prop('selectedIndex') == 3) {
+            item["AvgBillFilter"] = 3;
+            item["AvgBill-max"] = $('#txtBillSizemax').val();
+            item["AvgBill-min"] = $('#txtBillSizemin').val();
+        }
+        else {
+            item["AvgBillFilter"] = '';
+            item["AvgBill-max"] = 0;
+            item["AvgBill-min"] = 0;
+        }
+        if ($("#rdnevryMonth").is(":checked")) {
+
+            item["period_filter"] = 2;
+            item["period_From"] = $('#txtperiodFrom').val();
+            item["period_To"] = $('#txtperiodTo').val();
+        }
+        else if ($("#rdnDuration").is(":checked")) {
+            item["period_filter"] = 1;
+            item["period_From"] = $('#txtperiodFrom').val();
+            item["period_To"] = $('#txtperiodTo').val();
+
+        }
+        if ($("#ddloutletId").prop('selected') !== 0) {
+            var selectval = $("#ddloutletId option:selected").text();
+            if (selectval == "All") {
+                item["OutletIds"] = '';
+            }
+            else {
+                item["OutletIds"] = $("#ddloutletId option:selected").val();
+            }
+
+        }
+        FilterData.push(item);
+        //var text = "";
+        //if ($("#ddloutletId").prop('selectedIndex') !== 0) {
+        //    text = "Filter : " + $("#ddloutletId :selected").text();
+        //}
+        ////if ($("#rdnNooftxn").is(":checked")) {
+        ////    text = text + " | " + $("#rdnNooftxn").parent().text();
+        ////}
+        ////if ($("#rdnSpend").is(":checked")) {
+        ////    text = text + " | " + $("#rdnSpend").parent().text();
+        ////}
+        //if ($("#ddlSpendTxn").prop('selectedIndex') != 0) {
+        //    text = text + " | " + $("#ddlSpendTxn :selected").text();
+        //}
+        //if ($("#ddlAvgBill").prop('selectedIndex') != 0) {
+        //    text = text + " | " + $("#ddlAvgBill :selected").text();
+        //}
+        ////if ($("#rdnevryMonth").is(":checked")) {
+        ////    text = text + " | " + $("#rdnevryMonth").parent().text();
+        ////}
+        ////if ($("#rdnDuration").is(":checked")) {
+        ////    text = text + " | " + $("#rdnDuration").parent().text();
+        ////}
+        ////if ($("#txtperiodFrom").text != "") {
+        ////    text = text + " | " + $("#txtperiodFrom").text();
+        ////}
+        ////if ($("#txtperiodTo").text != "") {
+        ////    text = text + " | " + $("#txtperiodTo").text();
+        ////}
+       
+        //if (text != "") {
+
+        //    $("#spnFilterDrillDown").text(text);
+        //    $("#spnFilterDrillDown").show();
+        //}
+        var data = JSON.stringify(FilterData);
+        console.log(data);
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("GetFilteredCountforDrillDown", "Reports")',
+            data: '{jsonData: ' + JSON.stringify(data) + '}',
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                console.log(response);
+                if (response[0] != null) {
+                    $("#spnfilteredCountDrillDown").text(response[0].FilterCount);
+                    $("#divLoader").hide();
+                }
+                else {
+                    alert("error");
+                    $("#divLoader").hide();
+                
+                }
+            },
+            error: function (response) {
+                console.log(response.responseText);
+            }
+        });
+
+    }
 </script>
 
 
