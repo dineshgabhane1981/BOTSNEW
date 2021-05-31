@@ -62,19 +62,19 @@
     <div class="row">
         <div class="col-md-12 col-lg-12">
             <div class="mb-3 card">
-                <div class="card-header-tab card-header-tab-animation card-header">
-                    <div class="card-header-title">
+                <div class="card-header-tab card-header-tab-animation card-header" >
+                    <div class="card-header-title" style="cursor:pointer;" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
                         <i class="header-icon lnr-apartment icon-gradient bg-love-kiss"> </i>
                         Share of Business(Rs.) <span style="margin-left:100px;">PERIOD : Last 12 Months</span>
                     </div>
                     <ul class="nav">
                         <li class="nav-item"><a href="javascript:void(0);" onclick="ShowAllSharedBiz();" class="active nav-link">All</a></li>
-                        <li class="nav-item">
+                        <li class="nav-item" style="padding-bottom:15px;">
                             @Html.DropDownListFor(x => Model.ActiveBase_Total, new SelectList(ViewBag.OutletList, "Value", "Text"), "Select Outlet", htmlAttributes: new { @class = "input50", @id = "sharedBizOutletList", style = "margin-top:20px;" })
                         </li>
                     </ul>
                 </div>
-                <div class="card-body">
+                <div class="card-body collapse" id="collapseExample">
                     <div class="tab-content">
                         <div class="tab-pane fade show active" id="tabs-eg-77">
                             <div class="card mb-3 widget-chart widget-chart2 text-left w-100">
