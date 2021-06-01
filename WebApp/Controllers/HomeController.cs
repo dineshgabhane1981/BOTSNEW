@@ -26,7 +26,7 @@ namespace WebApp.Controllers
             {                
                 var userDetails = (CustomerLoginDetail)Session["UserSession"];
                 var lstOutlet = RR.GetOutletList(userDetails.GroupId, userDetails.connectionString);                
-                dataDashboard = DR.GetDashboardData(userDetails.GroupId, userDetails.connectionString);                
+                dataDashboard = DR.GetDashboardData(userDetails.GroupId, userDetails.connectionString, userDetails.LoginId);                
                 ViewBag.OutletList = lstOutlet;
                 
             }

@@ -51,7 +51,9 @@
 
                     </div>
                     <div class="widget-content-right">
-                        <div class="widget-numbers text-white"><span>@Model.LoyaltyPercentageBiz%</span></div>
+                        <div class="widget-numbers text-white"><span>
+                            @String.Format(new CultureInfo("en-IN", false), "{0:n2}", Convert.ToDouble(Convert.ToDouble(Model.LoyaltyBiz * 100) / Convert.ToDouble(Model.TotalBiz)))%
+                        </span></div>
                     </div>
                 </div>
             </div>
