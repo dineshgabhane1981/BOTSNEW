@@ -77,8 +77,8 @@ namespace BOTS_BL.Models
     {
         public string CampaignType { get; set; }
         public string CampaignName { get; set; }
-        public DateTime? StartDate { get; set; }
-        public DateTime? EndDate { get; set; }
+        public string StartDate { get; set; }
+        public string EndDate { get; set; }
         public long? CampaignMemberCount { get; set; }
         public string Status { get; set; }
         public string CampaignId { get; set; }
