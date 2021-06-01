@@ -375,18 +375,18 @@
                                                 </th>
                                             </tr>
                                             <tr>
-                                                <td style="text-align:center;"><span id="spnMemberBase">@Model.NoofMember_Total</span></td>
-                                                <td style="text-align:center;"><span id="spnNoofReferee">@Model.NoofReferee</span></td>
-                                                <td style="text-align:center;"><span id="spnNoofReferral">@Model.NoofReferral</span></td>
-                                                <td style="text-align:center;"><span id="spnUniqueReferralTxn">@Model.UniqueReferralTxn</span></td>
+                                                <td style="text-align:center;"><span id="spnMemberBase"></span></td>
+                                                <td style="text-align:center;"><span id="spnNoofReferee"></span></td>
+                                                <td style="text-align:center;"><span id="spnNoofReferral"></span></td>
+                                                <td style="text-align:center;"><span id="spnUniqueReferralTxn"></span></td>
                                             </tr>
                                             <tr>
 
                                                 <td style="text-align:center;" colspan="2">
-                                                    Referrals Txn Count: <span id="spnTotalReferralTxn">@Model.TotalReferralTxn</span>
+                                                    Referrals Txn Count: <span id="spnTotalReferralTxn"></span>
                                                 </td>
                                                 <td style="text-align:center;" colspan="2">
-                                                    Business Generated:<span id="spnTotalReferralBusniess"> @Model.TotalReferralBusniess</span>
+                                                    Business Generated:<span id="spnTotalReferralBusniess"></span>
                                                 </td>
                                             </tr>
                                         </table>
@@ -1049,7 +1049,7 @@
                     }
                     var label1 = '';
                     var label2 = '';
-                    var data1 = response[4];
+                    var data1 = 100 - parseFloat(response[5]);
                     var data2 = response[5];
 
                     var data = {
