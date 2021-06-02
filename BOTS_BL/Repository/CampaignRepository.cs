@@ -202,7 +202,7 @@ namespace BOTS_BL.Repository
             {
                 using (var context = new BOTSDBContext(connstr))
                 {
-                    objCampaignData = context.Database.SqlQuery<CampaignSecond>("sp_BOTS_CM_Campaign1 @pi_GroupId, @pi_Date, @pi_LoginId, @pi_Month, @pi_Year",
+                    objCampaignData = context.Database.SqlQuery<CampaignSecond>("sp_BOTS_CM_Campaign1 @pi_GroupId, @pi_Date, @pi_LoginId, @pi_Month, @pi_Year, @pi_CampaignId",
                         new SqlParameter("@pi_GroupId", GroupId),
                         new SqlParameter("@pi_Date", DateTime.Now.ToShortDateString()),
                         new SqlParameter("@pi_LoginId", ""),
@@ -225,7 +225,7 @@ namespace BOTS_BL.Repository
             {
                 using (var context = new BOTSDBContext(connstr))
                 {
-                    objCampaignData = context.Database.SqlQuery<CampaignThird>("sp_BOTS_CM_Campaign2 @pi_GroupId, @pi_Date, @pi_LoginId, @pi_Month, @pi_Year",
+                    objCampaignData = context.Database.SqlQuery<CampaignThird>("sp_BOTS_CM_Campaign2 @pi_GroupId, @pi_Date, @pi_LoginId, @pi_Month, @pi_Year, @pi_CampaignId",
                         new SqlParameter("@pi_GroupId", GroupId),
                         new SqlParameter("@pi_Date", DateTime.Now.ToShortDateString()),
                         new SqlParameter("@pi_LoginId", ""),

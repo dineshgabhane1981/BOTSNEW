@@ -297,8 +297,9 @@
         </div>
         <div class="row" id="dvCampaignsSecond" style="display:none;">
             <span style="margin-left:20px;">CAMPAIGN Name : </span><span id="spnCampaignsName" style="margin-left:20px;">
-                <a onclick="GetCampaignsThirdData();">Click to see detailed campaign list</a>
+
             </span>
+            <a style="cursor:pointer;color:blue;margin-left:50px;" onclick="GetCampaignsThirdData();"><u>Click to see detailed campaign list</u></a>
             <div class="pt-3 pl-3 pr-3 col-md-12 col-lg-12">
                 <div class="row mt-3" id="dvCampaignsSecondData" style="padding-bottom:20px;">
                     <div class="table-responsive">
@@ -1065,11 +1066,12 @@
 
         var table = $('#activityCampaignsThird').DataTable({
             "data": tblCampaignThird,
-            "paging": false,
+            "paging": true,
             "ordering": false,
             "info": false,
             "bFilter": false,
             "pageLength": 25,
+            "lengthChange": false,
             "pagingType": "simple_numbers",
             "columns": [
                 { data: "Status" },
