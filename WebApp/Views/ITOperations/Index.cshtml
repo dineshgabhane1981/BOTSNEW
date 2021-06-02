@@ -1632,8 +1632,9 @@
         });
     }
 
-    function SaveRedeemData() {
-        if ($("#txtPointsToRedeem").val() > $("#spnPtBalance3").text()) {
+        function SaveRedeemData() {
+           
+        if (parseFloat($("#txtPointsToRedeem").val()) > parseFloat($("#spnPtBalance3").text())) {
             toastr.error('Redeem points can not be greater than available points');
             $('#txtPointsToRedeem').focus();
             return false;
