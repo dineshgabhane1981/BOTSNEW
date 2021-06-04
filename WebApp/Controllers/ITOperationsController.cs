@@ -212,7 +212,7 @@ namespace WebApp.Controllers
             {
                 newexception.AddException(ex, GroupId);
             }
-
+            
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 

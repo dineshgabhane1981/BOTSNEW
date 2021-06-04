@@ -118,7 +118,7 @@
                                 <tr>
                                     <th scope="col">Celebration</th>
                                     <th scope="col">Count </th>
-                                    <th scope="col">Unique Members Transacted</th>
+                                    <th scope="col">Unique Members Qualified</th>
                                     <th scope="col">Bonus Points Issued</th>
                                     <th scope="col">Bonus Points Redeemed</th>
                                     <th scope="col">Redemption Rate</th>
@@ -173,7 +173,7 @@
                                     <th scope="col">Element</th>
                                     <th scope="col">Count </th>
                                     <th scope="col">Points to Be Expired</th>
-                                    <th scope="col">Unique Members Transacted</th>
+                                    <th scope="col">Unique Members Qualified</th>
                                     <th scope="col">Points Redeemed</th>
                                     <th scope="col">Redemption %</th>
                                     <th scope="col">Business Generated</th>
@@ -200,6 +200,7 @@
                                     <th scope="col">Expiry Date</th>
                                     <th scope="col">Txn Date</th>
                                     <th scope="col">No of Txns</th>
+                                    <th scope="col">Points Redeemed</th>
                                     <th scope="col">Total Spends (Rs.)</th>
                                 </tr>
                             </thead>
@@ -226,7 +227,7 @@
                                 <tr>
                                     <th scope="col">Inactive</th>
                                     <th scope="col">Count </th>
-                                    <th scope="col">Unique Members Transacted</th>
+                                    <th scope="col">Unique Members Qualified</th>
                                     <th scope="col">Business Generated</th>
                                     <th scope="col">Conv %</th>
                                 </tr>
@@ -282,7 +283,7 @@
                                     <th scope="col">Start Date</th>
                                     <th scope="col">End Date</th>
                                     <th scope="col">Cpg Member Count</th>
-                                    <th scope="col">Unique Members Transacted </th>
+                                    <th scope="col">Unique Members Qualified </th>
                                     <th scope="col">Transactions</th>
                                     <th scope="col">Biz Gen</th>
                                     <th scope="col">Conv %</th>
@@ -358,7 +359,7 @@
                                     <th scope="col">Status</th>
                                     <th scope="col">Sent Date</th>
                                     <th scope="col">Cpg Member Count</th>
-                                    <th scope="col">Unique Members Transacted </th>
+                                    <th scope="col">Unique Members Qualified </th>
                                     <th scope="col">Transactions</th>
                                     <th scope="col">Biz Gen</th>
                                     <th scope="col">Conv %</th>
@@ -726,9 +727,9 @@
                     optionItem["MemberName"] = item.MemberName;
                     optionItem["ExpiryDate"] = item.ExpiryDate;
                     optionItem["TxnDate"] = item.TxnDate;
-                    optionItem["NoOfTxn"] = item.NoOfTxn;
-                    optionItem["TotalSpend"] = item.TotalSpend;
+                    optionItem["NoOfTxn"] = item.NoOfTxn;                   
                     optionItem["PointsRedeemed"] = item.PointsRedeemed;
+                    optionItem["TotalSpend"] = item.TotalSpend;
                     tblPointsExpirySecond.push(optionItem);
                 });
                 DrawPointsExpirySecondTable();
@@ -763,7 +764,8 @@
                 { data: "ExpiryDate" },
                 { data: "TxnDate" },
                 { data: "NoOfTxn" },
-                { data: "PointsRedeemed" }
+                { data: "PointsRedeemed" },
+                { data: "TotalSpend"}
             ]
         });
         $('#activityPointsExpirySecond_filter').hide();
