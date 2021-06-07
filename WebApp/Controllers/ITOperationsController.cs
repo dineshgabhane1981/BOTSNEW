@@ -13,6 +13,7 @@ using WebApp.ViewModel;
 using System.Data;
 using System.Text.RegularExpressions;
 using ClosedXML.Excel;
+using WebApp.App_Start;
 
 namespace WebApp.Controllers
 {
@@ -25,14 +26,23 @@ namespace WebApp.Controllers
         // GET: ITOperations
         public ActionResult Index(string groupId)
         {
-            string connStr = objCustRepo.GetCustomerConnString(groupId);
-            var lstOutlet = RR.GetOutletList(groupId, connStr);
-            var lstBrand = RR.GetBrandList(groupId, connStr);
-            var GroupDetails = objCustRepo.GetGroupDetails(Convert.ToInt32(groupId));
-            ViewBag.OutletList = lstOutlet;
-            ViewBag.BranchList = lstBrand;
-            ViewBag.GroupId = groupId;
-            ViewBag.GroupName = GroupDetails.RetailName;
+            try
+            {
+                CommonFunctions common = new CommonFunctions();
+                groupId = common.DecryptString(groupId);
+                string connStr = objCustRepo.GetCustomerConnString(groupId);
+                var lstOutlet = RR.GetOutletList(groupId, connStr);
+                var lstBrand = RR.GetBrandList(groupId, connStr);
+                var GroupDetails = objCustRepo.GetGroupDetails(Convert.ToInt32(groupId));
+                ViewBag.OutletList = lstOutlet;
+                ViewBag.BranchList = lstBrand;
+                ViewBag.GroupId = groupId;
+                ViewBag.GroupName = GroupDetails.RetailName;
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, groupId);
+            }
             return View();
         }
 
@@ -63,7 +73,7 @@ namespace WebApp.Controllers
                 object[] objData = (object[])json_serializer.DeserializeObject(jsonData);
                 tblAudit objAudit = new tblAudit();
                 bool IsSMS = false;
-                
+
                 string CustomerId = "";
                 string Name = "";
                 foreach (Dictionary<string, object> item in objData)
@@ -115,7 +125,7 @@ namespace WebApp.Controllers
                 object[] objData = (object[])json_serializer.DeserializeObject(jsonData);
                 tblAudit objAudit = new tblAudit();
                 bool IsSMS = false;
-                
+
                 string CustomerId = "";
                 string MobileNo = "";
                 foreach (Dictionary<string, object> item in objData)
@@ -168,7 +178,7 @@ namespace WebApp.Controllers
                 object[] objData = (object[])json_serializer.DeserializeObject(jsonData);
                 tblAudit objAudit = new tblAudit();
                 bool IsSMS = false;
-                
+
                 string MobileNo = "";
                 string TransactionDate = "";
                 string InvoiceNumber = "";
@@ -212,7 +222,7 @@ namespace WebApp.Controllers
             {
                 newexception.AddException(ex, GroupId);
             }
-            
+
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
@@ -228,7 +238,7 @@ namespace WebApp.Controllers
                 object[] objData = (object[])json_serializer.DeserializeObject(jsonData);
                 tblAudit objAudit = new tblAudit();
                 bool IsSMS = false;
-                
+
                 string MobileNo = "";
                 string TransactionDate = "";
                 string InvoiceNumber = "";
@@ -293,7 +303,7 @@ namespace WebApp.Controllers
                 object[] objData = (object[])json_serializer.DeserializeObject(jsonData);
                 tblAudit objAudit = new tblAudit();
                 bool IsSMS = false;
-                
+
                 string MobileNo = "";
                 int BonusPoints = 0;
                 string BonusRemark = "";
@@ -345,7 +355,7 @@ namespace WebApp.Controllers
         [HttpPost]
         public ActionResult AddSingleMember(string jsonData)
         {
-            SPResponse result = new SPResponse(); 
+            SPResponse result = new SPResponse();
             string GroupId = "";
             try
             {
@@ -354,7 +364,7 @@ namespace WebApp.Controllers
                 object[] objData = (object[])json_serializer.DeserializeObject(jsonData);
                 tblAudit objAudit = new tblAudit();
                 CustomerDetail objCustomer = new CustomerDetail();
-                
+
 
                 foreach (Dictionary<string, object> item in objData)
                 {
@@ -413,89 +423,89 @@ namespace WebApp.Controllers
             {
                 using (XLWorkbook workBook = new XLWorkbook(file.InputStream))
                 {
-                   
-                        IXLWorksheet workSheet = workBook.Worksheet(1);
-                        DataTable dt = new DataTable();
-                        bool firstRow = true;
-                        foreach (IXLRow row in workSheet.Rows())
+
+                    IXLWorksheet workSheet = workBook.Worksheet(1);
+                    DataTable dt = new DataTable();
+                    bool firstRow = true;
+                    foreach (IXLRow row in workSheet.Rows())
+                    {
+
+                        if (firstRow)
                         {
-
-                            if (firstRow)
+                            foreach (IXLCell cell in row.Cells())
                             {
-                                foreach (IXLCell cell in row.Cells())
+                                if (!string.IsNullOrEmpty(cell.Value.ToString()))
                                 {
-                                    if (!string.IsNullOrEmpty(cell.Value.ToString()))
-                                    {
-                                        dt.Columns.Add(cell.Value.ToString());
-                                    }
-                                    else
-                                    {
-                                        break;
-                                    }
+                                    dt.Columns.Add(cell.Value.ToString());
                                 }
-                                firstRow = false;
+                                else
+                                {
+                                    break;
+                                }
                             }
-                            else
+                            firstRow = false;
+                        }
+                        else
+                        {
+                            int i = 0;
+                            DataRow toInsert = dt.NewRow();
+                            foreach (IXLCell cell in row.Cells(1, dt.Columns.Count))
                             {
-                                int i = 0;
-                                DataRow toInsert = dt.NewRow();
-                                foreach (IXLCell cell in row.Cells(1, dt.Columns.Count))
+                                try
                                 {
-                                    try
+                                    toInsert[i] = cell.Value.ToString();
+                                }
+                                catch (Exception ex)
+                                {
+
+                                }
+                                i++;
+                            }
+                            dt.Rows.Add(toInsert);
+                        }
+                    }
+                    if (dt.Rows.Count > 0)
+                    {
+                        int TotalRows = 0;
+                        int index = 0;
+                        int invalid = 0;
+
+                        foreach (DataRow dr in dt.Rows)
+                        {
+                            if (!string.IsNullOrEmpty(Convert.ToString(dr["MobileNo"])))
+                            {
+                                Regex regex = new Regex(@"[0-9]{10}");
+                                Match match = regex.Match(Convert.ToString(dr["MobileNo"]));
+                                if (match.Success)
+                                {
+                                    objCustomer.CustomerName = Convert.ToString(dr["CustomerName"]);
+                                    objCustomer.MobileNo = Convert.ToString(dr["MobileNo"]);
+
+                                    result = ITOPS.AddBulkCustomerData(GroupId, objCustomer);
+                                    if (result.ResponseCode == "00")
                                     {
-                                        toInsert[i] = cell.Value.ToString();
-                                    }
-                                    catch (Exception ex)
-                                    {
+                                        TotalRows++;
 
                                     }
-                                    i++;
+
+                                    if (result.ResponseCode == "01")
+                                    {
+                                        index++;
+
+                                    }
                                 }
-                                dt.Rows.Add(toInsert);
+                                else
+                                {
+                                    invalid++;
+
+                                }
                             }
                         }
-                        if (dt.Rows.Count > 0)
-                        {
-                            int TotalRows = 0;
-                            int index = 0;
-                            int invalid = 0;
+                        result.ResponseSucessCount = TotalRows.ToString();
+                        result.ResponseFailCount = index.ToString();
+                        result.ResponseInValidFormatCount = invalid.ToString();
+                    }
 
-                            foreach (DataRow dr in dt.Rows)
-                            {
-                                if (!string.IsNullOrEmpty(Convert.ToString(dr["MobileNo"])))
-                                {
-                                    Regex regex = new Regex(@"[0-9]{10}");
-                                    Match match = regex.Match(Convert.ToString(dr["MobileNo"]));
-                                    if (match.Success)
-                                    {
-                                        objCustomer.CustomerName = Convert.ToString(dr["CustomerName"]);
-                                        objCustomer.MobileNo = Convert.ToString(dr["MobileNo"]);
-
-                                        result = ITOPS.AddBulkCustomerData(GroupId, objCustomer);
-                                        if (result.ResponseCode == "00")
-                                        {
-                                            TotalRows++;
-
-                                        }
-
-                                        if (result.ResponseCode == "01")
-                                        {
-                                            index++;
-
-                                        }
-                                    }
-                                    else
-                                    {
-                                        invalid++;
-
-                                    }
-                                }
-                            }
-                            result.ResponseSucessCount = TotalRows.ToString();
-                            result.ResponseFailCount = index.ToString();
-                            result.ResponseInValidFormatCount = invalid.ToString();
-                        }
-                    
                 }
             }
             catch (Exception ex)
@@ -506,7 +516,7 @@ namespace WebApp.Controllers
             return Json(result, JsonRequestBehavior.AllowGet);
         }
         [HttpPost]
-        public ActionResult GetOutletByBrandId(string GroupId,string BrandId)
+        public ActionResult GetOutletByBrandId(string GroupId, string BrandId)
         {
             string connStr = objCustRepo.GetCustomerConnString(GroupId);
             SPResponse result = new SPResponse();
@@ -515,13 +525,13 @@ namespace WebApp.Controllers
             return Json(lstoutletlist, JsonRequestBehavior.AllowGet);
         }
         [HttpPost]
-        public ActionResult GetLoginIdByOutlets(string GroupId,int outletId)
+        public ActionResult GetLoginIdByOutlets(string GroupId, int outletId)
         {
             SPResponse result = new SPResponse();
             ResetSecurityKey objreset = new ResetSecurityKey();
             try
             {
-                objreset.lstloginid = ITOPS.GetLoginIdByOutlet(GroupId,outletId);
+                objreset.lstloginid = ITOPS.GetLoginIdByOutlet(GroupId, outletId);
             }
             catch (Exception ex)
             {
@@ -531,7 +541,7 @@ namespace WebApp.Controllers
 
             return Json(objreset, JsonRequestBehavior.AllowGet);
         }
-        public bool UpdateSecurityKey(string GroupId,string CounterId)
+        public bool UpdateSecurityKey(string GroupId, string CounterId)
         {
             bool result = false;
             try
@@ -556,7 +566,7 @@ namespace WebApp.Controllers
                 object[] objData = (object[])json_serializer.DeserializeObject(jsonData);
                 tblAudit objAudit = new tblAudit();
                 bool IsSMS = false;
-               
+
                 string CustomerId = "";
                 bool DisableSMS = false;
                 foreach (Dictionary<string, object> item in objData)
@@ -651,7 +661,7 @@ namespace WebApp.Controllers
 
                     SendEmail(GroupId, subject, body);
                 }
-                
+
                 if (Convert.ToBoolean(IsSMS))
                 {
                     //Logic to send SMS to Customer whose Name is changed
