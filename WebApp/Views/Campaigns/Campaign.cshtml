@@ -374,8 +374,8 @@
         </div>
         <div class="row" id="dvSMSBlastsSecond" style="display:none;">
             <span style="margin-left:20px;">SMS Blast Name : </span><span id="spnSMSBlastName" style="margin-left:20px;">
-                <a onclick="GetSMSBlastThirdData();">Click to see detailed campaign list</a>
             </span>
+            <a style="cursor:pointer;color:blue;margin-left:50px;" onclick="GetSMSBlastThirdData();"><u>Click to see detailed campaign list</u></a>
             <div class="pt-3 pl-3 pr-3 col-md-12 col-lg-12">
                 <div class="row mt-3" id="dvSMSBlastSecondData" style="padding-bottom:20px;">
                     <div class="table-responsive">
@@ -447,7 +447,8 @@
         $("#dvCampaignsSecond").hide();
         $("#dvCampaignsThird").hide();
         $("#dvSMSBlastsFirst").hide();
-
+        $("#dvSMSBlastsSecond").hide();
+        $("#dvSMSBlastsThird").hide();
 
         if (id == 1) {
             $("#dvCelebrationsFirst").show();
@@ -850,9 +851,9 @@
                     optionItem = {}
                     optionItem["MobileNo"] = item.MobileNo;
                     optionItem["MemberName"] = item.MemberName;
-                    optionItem["InActiveDate"] = item.InActiveDate;
+                    optionItem["InActiveDate"] = item.InActiveDateStr;
                     optionItem["Status"] = item.Status;
-                    optionItem["TxnDate"] = item.TxnDate;
+                    optionItem["TxnDate"] = item.TxnDateStr;
                     optionItem["TotalSpend"] = item.TotalSpend;
                     tblInactiveSecond.push(optionItem);
                 });
@@ -1144,7 +1145,7 @@
                     "mData": "CampaignName",
                     "mRender": function (data, type, row) {
                         var id = row.CampaignId;
-                        return '<a href="#" onclick="GetSMSBlastsSecondList((\'' + id + '\'\,\'' + data +'\'\))" class="login" >' + data + '</a>';
+                        return '<a href="#" onclick="GetSMSBlastsSecondList(\'' + id + '\'\,\'' + data +'\'\)" class="login" >' + data + '</a>';
                     }
                 },
                 { data: "Status" },
@@ -1255,7 +1256,7 @@
         table1.destroy();
 
         var table = $('#activitySMSBlastThird').DataTable({
-            "data": tblCampaignThird,
+            "data": tblSMSBlastsThird,
             "paging": false,
             "ordering": false,
             "info": false,

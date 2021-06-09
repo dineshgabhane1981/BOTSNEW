@@ -36,7 +36,7 @@ namespace BOTS_BL.Models
         public string MobileNo { get; set; }
         public string MemberName { get; set; }
         public string CelebrationDate { get; set; }
-        public DateTime? TxnDate { get; set; }
+        public string TxnDate { get; set; }
         public string NoOfTxn { get; set; }
         public long? TotalSpend { get; set; }
         public long? PointsRedeemed { get; set; }
@@ -66,9 +66,11 @@ namespace BOTS_BL.Models
     {
         public string MobileNo { get; set; }
         public string MemberName { get; set; }
-        public string InActiveDate { get; set; }
+        public DateTime? InActiveDate { get; set; }
+        public string InActiveDateStr { get; set; }
         public string Status { get; set; }
         public DateTime? TxnDate { get; set; }
+        public string TxnDateStr { get; set; }
         public long? TotalSpend { get; set; }
         public long? PointsRedeemed { get; set; }
     }
@@ -107,7 +109,7 @@ namespace BOTS_BL.Models
     {
         public string CampaignType { get; set; }
         public string CampaignName { get; set; }
-        public DateTime? SendDate { get; set; }        
+        public string SendDate { get; set; }        
         public long? CampaignMemberCount { get; set; }
         public string Status { get; set; }
         public string CampaignId { get; set; }

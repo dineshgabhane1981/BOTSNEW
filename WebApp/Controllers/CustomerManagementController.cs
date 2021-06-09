@@ -8,6 +8,7 @@ using BOTS_BL.Models;
 using BOTS_BL.Repository;
 using System.Web.Script.Serialization;
 using BOTS_BL;
+using WebApp.App_Start;
 
 namespace WebApp.Controllers
 {
@@ -39,6 +40,8 @@ namespace WebApp.Controllers
         {
             try
             {
+                CommonFunctions common = new CommonFunctions();
+                groupId = common.DecryptString(groupId);
                 var userDetails = (CustomerLoginDetail)Session["UserSession"];
                 userDetails.GroupId = groupId;
                 userDetails.connectionString = CR.GetCustomerConnString(groupId);
@@ -60,6 +63,8 @@ namespace WebApp.Controllers
 
                 if (!string.IsNullOrEmpty(groupId))
                 {
+                    CommonFunctions common = new CommonFunctions();
+                    groupId = common.DecryptString(groupId);
                     objGroupDetail = CR.GetGroupDetails(Convert.ToInt32(groupId));
                     var LogoURL = System.Configuration.ConfigurationManager.AppSettings["LogoURL"];
                     objGroupDetail.Logo = LogoURL + objGroupDetail.Logo;
