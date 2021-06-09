@@ -1,0 +1,319 @@
+﻿@model BOTS_BL.Models.MemberSearch
+
+<div class="app-main__inner">
+    <div class="row mb-3 pt-3 pl-3 pr-3 card" style="background-color:#e4dfec;">
+        <span id="toFocus"></span>
+        <h5>Member Search</h5>
+        @if (!string.IsNullOrEmpty(Model.MobileNo))
+        {
+            <div class="row" style="margin-left:0px !important;margin-right:0px !important;">
+                <div class="row col-md-12 mt-3">
+                    <div class="col-md-12 col-lg-3" style="text-align:center;">
+                        @if (string.IsNullOrEmpty(Model.Gender))
+                        {
+                            <img src="~/Content/assets/images/NoProfile.jpg" width="200px" />
+                        }
+                        @if (Model.Gender == "M")
+                        {
+                            <img src="~/Content/assets/images/Man.jpg" width="200px" />
+                        }
+                        @if (Model.Gender == "F")
+                        {
+                            <img src="~/Content/assets/images/woman.jpg" width="120px" />
+                        }
+
+                    </div>
+                    <div class="col-md-12 col-lg-3">
+
+
+                        <table border="1" cellpadding="5" cellspacing="5">
+                            <tr>
+                                <th colspan="2" style="padding-left:5px; text-align:center; font-size:16px;">@Model.MobileNo</th>
+                            </tr>
+                            <tr>
+                                <th colspan="2" style="padding-left:5px;color:darkcyan;font-size:16px;">@Model.MemberName</th>
+                            </tr>
+                            <tr>
+                                <td>Card No</td>
+                                <td>N/A</td>
+                            </tr>
+                            <tr>
+                                <td>Type</td>
+                                <td>@Model.Type</td>
+                            </tr>
+                            <tr>
+                                <td>Birthday</td>
+                                <td>@Model.Birthdate</td>
+                            </tr>
+                            <tr>
+                                <td>Anniversary</td>
+                                <td>@Model.AnniversaryDate</td>
+                            </tr>
+                            <tr>
+                                <td>Gender</td>
+                                @if (string.IsNullOrEmpty(Model.Gender))
+                                {
+                                    <td></td>
+                                }
+                                @if (Model.Gender == "M")
+                                {
+                                    <td>Male</td>
+                                }
+                                @if (Model.Gender == "F")
+                                {
+                                    <td>Female</td>
+                                }
+                            </tr>
+                            <tr>
+                                <td>Area</td>
+                                <td>@Model.Birthdate</td>
+                            </tr>
+                            <tr>
+                                <td>Source</td>
+                                <td>@Model.Source</td>
+                            </tr>
+
+                        </table>
+                    </div>
+
+                    <div class="col-md-12 col-lg-3">
+
+
+                        <table border="1" cellpadding="5" cellspacing="5">
+                            <tr>
+                                <th colspan="2" style="text-align:center;color:darkcyan;font-size:20px;"><b>@Model.AvlPtsBal</b></th>
+                            </tr>
+                            <tr>
+                                <th colspan="2" style="text-align:center;">Total Points balance</th>
+                            </tr>
+                            <tr style="text-align:center;">
+                                <td>Points Expiry</td>
+                                <td style="text-align:center;">On</td>
+                            </tr>
+                            <tr style="text-align:center;">
+                                <td>@Model.PointstobeExpired</td>
+                                <td>@Model.PointsExpiryDate</td>
+                            </tr>
+
+                        </table>
+
+                        <table border="1" cellpadding="5" cellspacing="5" style="margin-top:25px;">
+                            <tr>
+                                <th colspan="2" style="text-align:center;color:darkcyan;font-size:20px;height:30px;"><b>@Model.BonusPoints</b></th>
+                            </tr>
+                            <tr>
+                                <th colspan="2" style="text-align:center;">Bonus Points balance</th>
+                            </tr>
+                            <tr style="text-align:center;">
+                                <td>Points Expiry</td>
+                                <td style="text-align:center;">On</td>
+                            </tr>
+                            <tr style="text-align:center;">
+                                <td style="height:30px;">@Model.BonusPointsExpiry</td>
+                                <td>@Model.BonusPointsExpiryDate</td>
+                            </tr>
+
+                        </table>
+
+                    </div>
+                    <div class="col-md-12 col-lg-3">
+
+                        <table border="1" cellpadding="5" cellspacing="5">
+                            <tr>
+                                <td>Enrolled Outlet</td>
+                                <td>@Model.EnrolledOutlet</td>
+                            </tr>
+                            <tr>
+                                <td>Enrolled On</td>
+                                <td>@Model.EnrolledSince</td>
+                            </tr>
+                            <tr>
+                                <td>Total Visits</td>
+                                <td>@Model.TotalVisit</td>
+                            </tr>
+                            <tr>
+                                <td>Total Spends</td>
+                                <td>@Model.TotalSpend</td>
+                            </tr>
+                            <tr>
+                                <td>Total Burn</td>
+                                <td>@Model.TotalBurn</td>
+                            </tr>
+                            <tr>
+                                <td>Profile Updated</td>
+                                <td>@Model.ProfileUpdate</td>
+                            </tr>
+                            <tr>
+                                <td>Referred</td>
+                                <td>@Model.Referred</td>
+                            </tr>
+                            <tr>
+                                <td>Referral Biz</td>
+                                <td>@Model.ReferralBiz</td>
+                            </tr>
+                            <tr>
+                                <td>If Referred, by</td>
+                                <td>@Model.ReferredBy</td>
+                            </tr>
+
+                        </table>
+
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="row" style="margin-left:0px !important;margin-right:0px !important; background-color:white;" id="dvActivityData">
+                <h5>Transaction Details</h5>
+                <div class="table-responsive">
+                    <table class="table" id="memberSearchTable">
+                        <thead>
+                            <tr>
+                                <th scope="col">Txn Outlet</th>
+                                <th scope="col">Invoice No</th>
+                                <th scope="col">Invoice Amount</th>
+                                <th scope="col">Txn Type</th>
+                                <th scope="col">Points Earned</th>
+                                <th scope="col">Points Burned</th>
+                                <th scope="col">Points Balance</th>
+                                <th scope="col">Txn Datetime</th>
+                                <th scope="col">Txn Update Date</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (Model != null)
+                            {
+                                if (Model.lstMemberSearchTxn != null)
+                                {
+
+                                    foreach (var item in Model.lstMemberSearchTxn)
+                                    {
+                                        <tr>
+                                            <td>@item.TxnOutlet</td>
+                                            <td>@item.InvoiceNo</td>
+                                            @if (item.InvoiceAmt.HasValue)
+                                            {
+                                                <td>@item.InvoiceAmt</td>
+                                            }
+                                            else
+                                            {
+                                                <td>0.00</td>
+                                            }
+
+                                            <td>@item.TxnType</td>
+                                            @if (item.PointsEarned.HasValue)
+                                            {
+                                                <td>@item.PointsEarned</td>
+                                            }
+                                            else
+                                            {
+                                                <td>0.00</td>
+                                            }
+                                            @if (item.PointsBurned.HasValue)
+                                            {
+                                                <td>@item.PointsBurned</td>
+                                            }
+                                            else
+                                            {
+                                                <td>0.00</td>
+                                            }
+                                            @if (item.PointsBalance.HasValue)
+                                            {
+                                                <td>@item.PointsBalance</td>
+                                            }
+                                            else
+                                            {
+                                                <td>0.00</td>
+                                            }
+                                            <td>@item.TxnDatetime</td>
+                                            <td>@item.TxnUpdateDate</td>
+                                        </tr>
+                                    }
+                                }
+                                else
+                                {
+                                    <tr>
+                                        <td colspan="9">No Data Available</td>
+                                    </tr>
+                                }
+                            }
+                            else
+                            {
+                                <tr>
+                                    <td colspan="9">No Data Available</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        }
+        else
+        {
+            <div class="row" style="margin-left:0px !important;margin-right:0px !important;">
+                <div class="row col-md-12 mt-3" style="color:red;">
+                    This Mobile Number is not part of the Member Database. Please check the number & try again
+
+                </div>
+            </div>
+        }
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        $('#memberSearchTable').DataTable({
+            "aaSorting": [],
+            "paging": true,
+            "ordering": true,
+            "info": true,
+            "bFilter": true,
+            "pageLength": 10,
+            "pagingType": "simple_numbers",
+            //language: {
+            //    paginate: {
+            //        next: '&#8594;', // or '→'
+            //        previous: '&#8592;' // or '←'
+            //    }
+            //}
+            aoColumnDefs: [
+                {
+                    bSortable: false,
+                    aTargets: [-9, -8, -7]
+                }
+            ]
+        });
+
+        $('#memberSearchTable_filter').hide();
+
+        $('#txtMemberSearch').on('keyup', function () {
+
+            $.fn.dataTable.ext.search.push(function (settings, searchData) {
+                var term = $('#txtSearch').val().toLowerCase()
+                for (var i = 0; i < searchData.length; i++) {
+                    if (searchData[i].toLowerCase().indexOf(term) == 0) {
+                        return true;
+                    }
+                }
+                return false;
+            });
+            var table = $('#memberSearchTable').DataTable();
+            table.draw();
+        });
+
+        //$(".first.paginate_button, .last.paginate_button").hide();
+    });
+</script>
+
+<style>
+    table.dataTable thead .sorting_asc {
+        background: url("https://cdn.datatables.net/1.10.0/images/sort_asc.png") no-repeat center left;
+    }
+
+    table.dataTable thead .sorting_desc {
+        background: url("https://cdn.datatables.net/1.10.0/images/sort_desc.png") no-repeat center left;
+    }
+
+    table.dataTable thead .sorting {
+        background: url("https://cdn.datatables.net/1.10.0/images/sort_both.png") no-repeat center left;
+    }
+</style>

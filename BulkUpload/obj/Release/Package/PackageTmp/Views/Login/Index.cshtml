@@ -1,0 +1,135 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = null;
+}
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+      integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+<link rel="stylesheet" href="~/Content/style.css" />
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+<link href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" rel="stylesheet" />
+
+<div class="container-fluid" style="background-image:url('../../Content/assets/BotsLoginBackground.jpeg'); background-position: center;background-repeat: no-repeat;background-size: cover;height: 100%;">
+    <div class="row justify-content-end h-100" style="margin-right:10px;">
+        
+        <div class="col-12 align-self-center text-center login-section" style="border-radius:50px;box-shadow:5px 5px 5px 5px #0A0A0A; margin-bottom:100px;">
+            <div class="text-center">
+                <img src="~/Content/assets/images/Blue-Ocktopus-TLC_white.jpg" width="70%" >
+            </div>
+            <div class="text-center" style="font-size:20px; color:#1C699F;">SAAS Platform for Retail</div>
+            <div class="text-center" style="font-size:20px; color:#1C699F;"><b>Growth | Retention | Intelligence</b></div>
+            <div class="mt-2">
+
+                <input type="number" id="txtMobileNo" placeholder="Enter Your Register Mobile NO" class="input50" />
+            </div>
+            <div class=" mb-2">
+                <button type="submit" onclick="return SendOTP();" id="btnsubmit" class="btn btn-primary" style="width:76%;background-color:#1C699F;"><i>Submit</i></button>
+            </div>
+            <div class="mb-1">
+                <input type="number" id="txtOTP" placeholder="Enter OTP" class="input50" />
+                @*</div>
+                <div >*@
+                    <button type="submit" onclick="return ProceedToUpload();" id="btnproceed" class="btn btn-primary" style="width:76%;background-color:#1C699F;"><i>Proceed</i></button>
+                </div>
+            </div>
+        </div>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $(".app-header").hide();
+        $(".app-sidebar").hide();
+        $(".app-wrapper-footer").hide();
+    });
+
+    function SendOTP() {
+
+        var MobileNo = $('#txtMobileNo').val();
+        console.log(MobileNo);
+        if (/^[6789]\d{9,9}$/.test(MobileNo) || MobileNo =='') {
+           var data = JSON.stringify(MobileNo);
+            console.log(data)
+            $("#divLoader").show();
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("SendOTP", "Login")',
+                data: '{ MobileNo: ' + JSON.stringify($('#txtMobileNo').val()) +  '}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (result) {
+                    console.log(result);
+                    if (result == "true") {
+                        toastr.success("OTP Send Successfully");
+                        $("#divLoader").hide();
+
+                    }
+                    else {
+                        toastr.error('error occured while sending OTP');
+                        $("#divLoader").hide();
+                    }
+                },
+                error: function (result) {
+                    console.log(result.responseText)
+                    
+                }
+            });
+        }
+        else {
+            $("#txtMobileNo").focus();
+            toastr.error('Please Enter Valid Mobile No');
+            return false;
+        }
+
+
+    }
+    function ProceedToUpload() {
+        var otp = $('#txtOTP').val();
+        if ( otp !== '') {          
+        console.log(otp);
+            $("#divLoader").show();
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("HomePage", "Login")',
+                data: '{ OTPNO: ' + JSON.stringify($('#txtOTP').val()) +', MobileNo: ' + JSON.stringify($('#txtMobileNo').val()) +'}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (response) {
+                    console.log(response);
+                    if (response.result == "Redirect") {
+                        //toastr.success("OTP Send Successfully");
+                        $("#divLoader").hide();
+                        window.location = response.url;
+                        console.log(111);
+                    }
+                    else {
+                        toastr.error("Wrong OTP");
+                    }
+                    
+                },
+                error: function (result) {
+                   
+                }
+            });
+        }
+        else {
+            $("#txtOTP").focus();
+            toastr.error('Please enter OTP');
+            return false;
+        }
+
+    }
+</script>
+
+<style>
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+
+    input[type="number"] {
+        -moz-appearance: textfield;
+    }
+</style>
