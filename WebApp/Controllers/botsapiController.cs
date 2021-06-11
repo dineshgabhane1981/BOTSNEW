@@ -16,6 +16,7 @@ namespace WebApp.Controllers
     {
         CustomerRepository CR = new CustomerRepository();
         ReportsRepository RR = new ReportsRepository();
+        DashboardRepository DR = new DashboardRepository();
         Exceptions newexception = new Exceptions();
         LoginRepository LR = new LoginRepository();
         // GET: botsapi
@@ -42,6 +43,45 @@ namespace WebApp.Controllers
             List<MemberList> lstMember = new List<MemberList>();
             lstMember = RR.GetMemberList(GroupId, SearchText, connectionString);
             return new JsonResult() { Data = lstMember, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
+        }
+
+        [HttpGet]
+        public JsonResult GetOutletList(string GroupId)
+        {                        
+            string connectionString = CR.GetCustomerConnString(GroupId);            
+            var lstOutlet = RR.GetOutletList(GroupId, connectionString);
+            return new JsonResult() { Data = lstOutlet, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
+        }
+
+        [HttpGet]
+        public JsonResult GetMemberSegmentResult(string GroupId,string OutletId)
+        {
+            List<object> lstData = new List<object>();
+            List<long> dataList = new List<long>();
+            DashboardMemberSegment dataMemberSegment = new DashboardMemberSegment();
+            try
+            {
+                List<string> lstDates = new List<string>();
+                string connectionString = CR.GetCustomerConnString(GroupId);
+                
+                dataMemberSegment = DR.GetDashboardMemberSegmentData(GroupId, OutletId, connectionString);
+
+                dataList.Add(dataMemberSegment.NoofMember_Total);
+                dataList.Add(dataMemberSegment.NoofMember_Repeat);
+                dataList.Add(dataMemberSegment.NoofMember_NeverRedeem);
+                dataList.Add(dataMemberSegment.NoofMember_RecentlyEnrolled);
+                dataList.Add(dataMemberSegment.NoofMember_OnlyOnce);
+                lstDates.Add(dataMemberSegment.FromDate);
+                lstDates.Add(dataMemberSegment.ToDate);
+                lstData.Add(dataList);
+                lstData.Add(lstDates);
+
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, GroupId);
+            }            
+            return new JsonResult() { Data = dataMemberSegment, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
     }
 }
