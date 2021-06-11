@@ -1,0 +1,133 @@
+﻿
+@{
+    ViewBag.Title = "Home";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+      integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+<link rel="stylesheet" href="~/Content/style.css" />
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+<link href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" rel="stylesheet" />
+<link href="~/Content/styleSteps.css" rel="stylesheet" />
+
+@*<h2>Upload Your Customer Data!</h2>*@
+<div class="app-main__inner" id="dvall">
+    <div class="mb-3 pr-3 pt-3 pl-3 card" style="padding-bottom:20px;">
+        @*<div class="col-sm-8" style="display:flex;padding-bottom: 10px;margin-top:5px;">*@
+        <div class="row mt-2">
+            <div class="col-md-8 col-xl-8" style="font-family:Verdana;font-size:16px;">
+                <b>
+                    Upload Your Customer Data!
+                </b>
+            </div>
+        </div>
+
+        @*</div>*@
+    </div>
+    <div class="mb-3 pr-3 pt-3 pl-3 card" style="padding-bottom:20px;" id="divSliceDice">
+
+        <div class="row mt-4" id="secmember">
+            <div class="col-md-3 col-xl-3">
+                Enter your Retail Name
+            </div>
+            <div class="col-md-2 col-xl-2">
+                <input type="text" id="txtRetailerName" placeholder="Retailer Name" class="input50" />
+            </div>
+        </div>
+        <div class="row mt-2">
+            <div class="col-md-3 col-xl-3">
+                Upload your Customer Data File
+            </div>
+            <div class="col-md-2 col-xl-5">
+                <input type="file" id="txtDataUpload" placeholder="Upload File" style="width:100%;" />
+            </div>
+
+        </div>
+        <div class="row mt-2">
+            <div class="col-md-3 col-xl-3">
+                <a href="#" target="_blank" onclick="DownloadFile();" style="color: blue">DownLoad Sample Customer File</a>
+            </div>
+
+        </div>
+        <div class="row mt-4">
+            <div class="col-md-3 col-xl-3">
+                <button type="submit" id="btnsubmit" class="btn btn-primary" style="width:76%;background-color:#1C699F;">Submit</button>
+
+            </div>
+
+        </div>
+        <div class="row mt-4">
+            <div class="col-md-3 col-xl-5" style="font-size:10px;">
+                Imp Note: The data upload takes 24 to 48 hours depending on the size of data.
+                The system performs various automated tasks and cleans up the data before uploading to your loyalty system
+
+            </div>
+        </div>
+    </div>
+</div>
+<script src="~/Content/scriptSteps.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+    function DownloadFile() {
+        var fileName = "../DownLoad/Bulkupload.xlsx";
+        window.location = fileName;
+    }
+    $('#btnsubmit').on("click", function () {
+        BulkMemberData();
+    });
+    function BulkMemberData() {
+        if ($("#txtRetailerName").val() !== "") {
+            $("#divLoader").show();
+            $.ajax({
+                url: '@Url.Action("SendEmail", "Login")',
+                type: "POST",
+                data: function () {
+                    var data = new FormData();
+                    data.append("RetailerNm", jQuery("#txtRetailerName").val());                    
+                    data.append("file", jQuery("#txtDataUpload").get(0).files[0]);
+                    return data;
+                }(),
+                contentType: false,
+                processData: false,
+                success: function (response) {
+                    console.log(response);
+                    if (response == "True") {
+
+                        toastr.success("Data Uploaded Successfully! The data will get added in the system after necessary clean-up within 24 to 48 hours");
+
+                        $("#divLoader").hide();
+                        $("#txtDataUpload").val('');
+                        $("#txtRetailerName").val('');
+
+                    }
+                    else {
+                        toastr.error("File Format is Not Valid", result.ResponseMessage);
+                        //  toastr.error('error occured while saving data');
+                        $("#divLoader").hide();
+                    }
+
+                },
+                error: function (result) {
+
+                }
+            });
+        }
+        else {
+            $("#txtRetailerName").focus();
+            toastr.error('Please Enter Retailer Name');
+            return false;
+        }
+    }
+</script>
+<style>
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+
+    input[type="number"] {
+        -moz-appearance: textfield;
+    }
+</style>
