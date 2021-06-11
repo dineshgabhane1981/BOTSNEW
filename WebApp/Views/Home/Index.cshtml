@@ -467,7 +467,7 @@
 
                     var barChartData =
                     {
-                        labels: ["Total Base", "Repeat Members", "Never Redeemed", "Recently Enrolled", "Only Once"],
+                        labels: ["Total Base", "Repeat Redeemed", "Repeat Non-Redeemed", "Recently Enrolled", "Only Once"],
                         datasets: [{
                             label: '',
                             backgroundColor: [
@@ -570,11 +570,24 @@
                                 tableHTML += "<td>Title</td>";
                                 tableHTML += "<td>Unit</td>";
                                 tableHTML += "<td>Total Base</td>";
-                                tableHTML += "<td>Repeat Members</td>";
-                                tableHTML += "<td>Never Redeemed</td>";
+                                tableHTML += "<td>Repeat Redeemed</td>";
+                                tableHTML += "<td>Repeat Non-Redeemed</td>";
                                 tableHTML += "<td>Recently Enrolled</td>";
                                 tableHTML += "<td>Only Once</td>";
                                 tableHTML += "</tr>";
+
+                                tableHTML += "<tr style=\"text-align:center;\">";
+                                tableHTML += "<td style=\"background-color:lightgrey;font-weight: bold;\">No of Unique Members</td>";
+                                tableHTML += "<td style=\"background-color:lightgrey;font-weight: bold;\">Nos</td>";
+                                tableHTML += "<td>" + addComma(resp[0]) + "</td>";
+                                tableHTML += "<td>" + addComma(resp[1]) + "</td>";
+                                tableHTML += "<td>" + addComma(resp[2]) + "</td>";
+                                tableHTML += "<td>" + addComma(resp[3]) + "</td>";
+                                tableHTML += "<td>" + addComma(resp[4]) + "</td>";
+                                tableHTML += "</tr>";
+
+                                
+
                                 $.map(response, function (item) {
                                     tableHTML += "<tr style=\"text-align:center;\">";
                                     tableHTML += "<td style=\"background-color:lightgrey;font-weight: bold;\">" + item.Title + "</td>";

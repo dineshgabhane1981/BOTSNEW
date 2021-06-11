@@ -569,7 +569,10 @@ namespace WebApp.Controllers
                     lstMember = lstMember.OrderByDescending(x => x.TxnCount).Take(count).ToList();
                 }
             }
-
+            if(lstMember!=null)
+            {
+                lstMember = lstMember.OrderByDescending(x => x.TotalSpend).ToList();
+            }
             return new JsonResult() { Data = lstMember, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
 

@@ -16,7 +16,7 @@
     <div class="mb-3 pr-3 pt-3 pl-3 card" style="padding-bottom:20px;">
         <div class="row">
             <div class="col-md-6 col-xl-3" style="margin-left:20px; margin-top:20px;">
-                Expiring in (@currentMonth - @currentYear)
+                Celebrations in (@currentMonth - @currentYear)
                 <hr />
                 <div class="card mb-2 widget-content" style="background-color: #0070C0;">
                     <div class="widget-content-wrapper text-white" style="display:block !important;">
@@ -47,7 +47,7 @@
                 </div>
             </div>
             <div class="col-md-6 col-xl-3" style="margin-left:20px; margin-top:20px;">
-                Expiring in (@nextMonth - @nextYear)
+                Celebrations in (@nextMonth - @nextYear)
                 <hr />
                 <div class="card mb-2 widget-content" style="background-color: #0070C0;">
                     <div class="widget-content-wrapper text-white" style="display:block !important;">
@@ -78,7 +78,7 @@
                 </div>
             </div>
             <div class="col-md-6 col-xl-3" style="margin-left:20px; margin-top:20px;">
-                Expiring in (@next2Month - @next2Year)
+                Celebrations in (@next2Month - @next2Year)
                 <hr />
                 <div class="card mb-2 widget-content" style="background-color: #0070C0;">
                     <div class="widget-content-wrapper text-white" style="display:block !important;">
@@ -233,8 +233,11 @@
                 if (currentMonth == 1) {
                     $("#spnMonth").text("Current Month");
                 }
-                else {
+                if (currentMonth == 2) {
                     $("#spnMonth").text("Next Month");
+                }
+                if (currentMonth == 3) {
+                    $("#spnMonth").text("Third Month");
                 }
                 if (type == 1) {
                     $("#spnType").text("Birthdays | ");
