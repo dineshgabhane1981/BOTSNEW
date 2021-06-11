@@ -1,7 +1,10 @@
 ﻿@model BOTS_BL.Models.ExecutiveSummary
 @using System.Globalization
+@using BOTS_BL.Models;
 @{
     ViewBag.Title = "Executive Summary";
+    var userDetails = (CustomerLoginDetail)Session["UserSession"];
+    var level = userDetails.LevelIndicator;
 }
 
 
@@ -10,327 +13,155 @@
 
 <div class="app-main__inner">
     <input type="hidden" id="hdnNames" />
-    <div class="row">
-        <div class="col-md-6 col-xl-4">
-            <div class="card mb-3 widget-content bg-midnight-bloom">
-                <div class="widget-content-wrapper text-white">
-                    <div class="widget-content-left">
-                        <div class="widget-heading">
-                            Total Biz (Rs.)
-                        </div>
+    @if (level == "02")
+    {
+        <div class="row">
+            <div class="col-md-6 col-xl-4">
+                <div class="card mb-3 widget-content bg-midnight-bloom">
+                    <div class="widget-content-wrapper text-white">
+                        <div class="widget-content-left">
+                            <div class="widget-heading">
+                                Total Biz (Rs.)
+                            </div>
 
-                    </div>
-                    <div class="widget-content-right">
-                        <div class="widget-numbers text-white"><span>@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(Model.TotalBiz))</span></div>
+                        </div>
+                        <div class="widget-content-right">
+                            <div class="widget-numbers text-white"><span>@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(Model.TotalBiz))</span></div>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="col-md-6 col-xl-4">
-            <div class="card mb-3 widget-content bg-arielle-smile">
-                <div class="widget-content-wrapper text-white">
-                    <div class="widget-content-left">
-                        <div class="widget-heading">
-                            Loyalty Biz (Rs.)
-                        </div>
+            <div class="col-md-6 col-xl-4">
+                <div class="card mb-3 widget-content bg-arielle-smile">
+                    <div class="widget-content-wrapper text-white">
+                        <div class="widget-content-left">
+                            <div class="widget-heading">
+                                Loyalty Biz (Rs.)
+                            </div>
 
-                    </div>
-                    <div class="widget-content-right">
-                        <div class="widget-numbers text-white"><span>@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(Model.LoyaltyBiz))</span></div>
+                        </div>
+                        <div class="widget-content-right">
+                            <div class="widget-numbers text-white"><span>@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(Model.LoyaltyBiz))</span></div>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="col-md-6 col-xl-4">
-            <div class="card mb-3 widget-content bg-grow-early">
-                <div class="widget-content-wrapper text-white">
-                    <div class="widget-content-left">
-                        <div class="widget-heading">
-                            Loyalty % to Biz
+            <div class="col-md-6 col-xl-4">
+                <div class="card mb-3 widget-content bg-grow-early">
+                    <div class="widget-content-wrapper text-white">
+                        <div class="widget-content-left">
+                            <div class="widget-heading">
+                                Loyalty % to Biz
+                            </div>
+
                         </div>
-
-                    </div>
-                    <div class="widget-content-right">
-                        <div class="widget-numbers text-white"><span>
-                            @String.Format(new CultureInfo("en-IN", false), "{0:n2}", Convert.ToDouble(Convert.ToDouble(Model.LoyaltyBiz * 100) / Convert.ToDouble(Model.TotalBiz)))%
-                        </span></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-    </div>
-
-    <div class="row">
-        <div class="col-md-12 col-lg-12">
-            <div class="mb-3 card">
-                <div class="card-header-tab card-header-tab-animation card-header" >
-                    <div class="card-header-title" style="cursor:pointer;" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
-                        <i class="header-icon lnr-apartment icon-gradient bg-love-kiss"> </i>
-                        Share of Business(Rs.) <span style="margin-left:100px;">PERIOD : Last 12 Months</span>
-                    </div>
-                    <ul class="nav">
-                        <li class="nav-item"><a href="javascript:void(0);" onclick="ShowAllSharedBiz();" class="active nav-link">All</a></li>
-                        <li class="nav-item" style="padding-bottom:15px;">
-                            @Html.DropDownListFor(x => Model.ActiveBase_Total, new SelectList(ViewBag.OutletList, "Value", "Text"), "Select Outlet", htmlAttributes: new { @class = "input50", @id = "sharedBizOutletList", style = "margin-top:20px;" })
-                        </li>
-                    </ul>
-                </div>
-                <div class="card-body collapse" id="collapseExample">
-                    <div class="tab-content">
-                        <div class="tab-pane fade show active" id="tabs-eg-77">
-                            <div class="card mb-3 widget-chart widget-chart2 text-left w-100">
-                                <div class="widget-chat-wrapper-outer">
-                                    <div class="widget-chart-wrapper widget-chart-wrapper-lg opacity-10 m-0" id="canvasSharedBizContainer">
-                                        <canvas id="sharedBizcanvas"></canvas>
-                                    </div>
-                                </div>
+                        <div class="widget-content-right">
+                            <div class="widget-numbers text-white">
+                                <span>
+                                    @String.Format(new CultureInfo("en-IN", false), "{0:n2}", Convert.ToDouble(Convert.ToDouble(Model.LoyaltyBiz * 100) / Convert.ToDouble(Model.TotalBiz)))%
+                                </span>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+
         </div>
 
-    </div>
-
-    <div class="row">
-        <div class="col-md-12 col-lg-12">
-            <div class="mb-3 card">
-                <div class="card-header-tab card-header-tab-animation card-header">
-                    <div class="card-header-title">
-                        <i class="header-icon lnr-apartment icon-gradient bg-love-kiss"> </i>
-                        MEMBER SEGMENT <span id="spnPeriod" style="margin-left:100px;"></span>
-                    </div>
-                    <ul class="nav">
-                        <li class="nav-item"><a href="javascript:void(0);" onclick="ShowAll();" class="active nav-link">All</a></li>
-                        <li class="nav-item">
-                            @Html.DropDownListFor(x => Model.ActiveBase_Total, new SelectList(ViewBag.OutletList, "Value", "Text"), "Select Outlet", htmlAttributes: new { @class = "input50", @id = "memberSegmentOutletList", style = "margin-top:20px;" })
-                        </li>
-                    </ul>
-                </div>
-                <div class="card-body">
-                    <div class="tab-content">
-                        <div class="tab-pane fade show active" id="tabs-eg-77">
-                            <div class="card mb-3 widget-chart widget-chart2 text-left w-100">
-                                <div class="widget-chat-wrapper-outer">
-                                    <div class="widget-chart-wrapper widget-chart-wrapper-lg opacity-10 m-0" id="canvasContainer">
-                                        <canvas id="barcanvas"></canvas>
-                                    </div>
-                                </div>
-                            </div>
-                            <h6 class="text-muted text-uppercase font-size-md opacity-5 font-weight-normal" style="color:blue !important; cursor:pointer;" id="btnExpand" onclick="ToggleKeyPointers();"><b>Expand to see key pointers</b></h6>
-                            <div class="scroll-area-sm" id="dvKeyPointers" style="display:none;">
-
-                            </div>
+        <div class="row">
+            <div class="col-md-12 col-lg-12">
+                <div class="mb-3 card">
+                    <div class="card-header-tab card-header-tab-animation card-header">
+                        <div class="card-header-title" style="cursor:pointer;" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+                            <i class="header-icon lnr-apartment icon-gradient bg-love-kiss"> </i>
+                            Share of Business(Rs.) <span style="margin-left:100px;">PERIOD : Last 12 Months</span>
                         </div>
+                        <ul class="nav">
+                            <li class="nav-item"><a href="javascript:void(0);" onclick="ShowAllSharedBiz();" class="active nav-link">All</a></li>
+                            <li class="nav-item" style="padding-bottom:15px;">
+                                @Html.DropDownListFor(x => Model.ActiveBase_Total, new SelectList(ViewBag.OutletList, "Value", "Text"), "Select Outlet", htmlAttributes: new { @class = "input50", @id = "sharedBizOutletList", style = "margin-top:20px;" })
+                            </li>
+                        </ul>
                     </div>
-                </div>
-            </div>
-        </div>
-
-    </div>
-
-    <div class="row">
-        <div class="col-md-12 col-lg-6">
-            <div class="mb-3 card">
-                <div class="card-header-tab card-header-tab-animation card-header">
-                    <div class="card-header-title">
-                        <i class="header-icon lnr-apartment icon-gradient bg-love-kiss"> </i>
-                        OUTLET ENROLMENTS
-                    </div>
-                    <ul class="nav">
-                        <li class="nav-item"><a href="javascript:void(0);" onclick="showOutletEnrolmentChart('')" id="outletTillDate" class="active nav-link">Till Date</a></li>
-                        <li class="nav-item"><a href="javascript:void(0);" onclick="showOutletEnrolmentChart('1')" id="outletCurrentDate" class="nav-link second-tab-toggle">Current Month</a></li>
-                    </ul>
-                </div>
-                <div class="card-body">
-                    <div class="tab-content">
-                        <div class="tab-pane fade show active" id="tabs-eg-77">
-                            <div class="card mb-3 widget-chart widget-chart2 text-left w-100">
-                                <div class="widget-chat-wrapper-outer">
-                                    <div style="overflow:scroll" id="containerOutlet">
-                                        <canvas id="cvOutlet"></canvas>
-                                        @*// widget-chart-wrapper widget-chart-wrapper-lg opacity-10 m-0*@
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-12 col-lg-6">
-            <div class="mb-3 card">
-                <div class="card-header-tab card-header-tab-animation card-header">
-                    <div class="card-header-title">
-                        <i class="header-icon lnr-apartment icon-gradient bg-love-kiss"> </i>
-                        TRANSACTION POINTS SUMMARY
-                    </div>
-                    <ul class="nav">
-                        <li class="nav-item"><a href="javascript:void(0);" onclick="showPointSummeryChart('')" id="pointsTillDate" class="active nav-link">Till Date</a></li>
-                        <li class="nav-item"><a href="javascript:void(0);" onclick="showPointSummeryChart('1')" id="pointsCurrentMonth" class="nav-link second-tab-toggle">Current Month</a></li>
-                    </ul>
-                </div>
-                <div class="card-body">
-                    <div class="tab-content">
-                        <div class="tab-pane fade show active" id="tabs-eg-77">
-                            <div class="card mb-3 widget-chart widget-chart2 text-left w-100">
-                                <div class="widget-chat-wrapper-outer">
-                                    <div class="widget-chart-wrapper widget-chart-wrapper-lg opacity-10 m-0" id="containerPointSummery">
-                                        <canvas id="cvPointSummery"></canvas>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="row">
-        <div class="col-md-12 col-lg-6">
-            <div class="mb-3 card">
-                <div class="card-header-tab card-header-tab-animation card-header">
-                    <div class="card-header-title">
-                        <i class="header-icon lnr-apartment icon-gradient bg-love-kiss"> </i>
-                        REDEMPTION
-                    </div>
-                    <ul class="nav">
-                        <li class="nav-item"><a href="javascript:void(0);" onclick="showRedemptionChart('1');" id="pointsBase" class="active nav-link">Base</a></li>
-                        <li class="nav-item"><a href="javascript:void(0);" onclick="showRedemptionChart('2');" id="pointsBonus" class="nav-link second-tab-toggle">Bonus</a></li>
-                    </ul>
-                </div>
-                <div class="card-body">
-                    <div class="tab-content">
-                        <div class="tab-pane fade show active" id="tabs-eg-77">
-                            <div class="card mb-3 widget-chart widget-chart2 text-left w-100">
-                                <div class="widget-chat-wrapper-outer">
-                                    <div style="display:flex;margin-top:30px;">
-                                        <div class="widget-chart-wrapper widget-chart-wrapper-lg opacity-10 m-0" id="containerRedemption" style="width:250px;border-right:1px solid black;text-align:center;">
-                                            <span style="font-weight:bold;">Redemption<br /> Rate</span>
-                                            <canvas id="cvRedemption"></canvas>
-                                        </div>
-                                        <div class="widget-chart-wrapper widget-chart-wrapper-lg opacity-10 m-0" id="containerRedemptionMember" style="width:250px;text-align:center;">
-                                            <span style="font-weight:bold;">Unique Redeeming <br /> Members</span>
-                                            <canvas id="cvRedemptionMember"></canvas>
+                    <div class="card-body collapse" id="collapseExample">
+                        <div class="tab-content">
+                            <div class="tab-pane fade show active" id="tabs-eg-77">
+                                <div class="card mb-3 widget-chart widget-chart2 text-left w-100">
+                                    <div class="widget-chat-wrapper-outer">
+                                        <div class="widget-chart-wrapper widget-chart-wrapper-lg opacity-10 m-0" id="canvasSharedBizContainer">
+                                            <canvas id="sharedBizcanvas"></canvas>
                                         </div>
                                     </div>
-                                    <div>
-                                        <table border="1" width="100%" id="tblReferrals" style="margin-top:30px;">
-                                            <tr>
-                                                <th style="text-align:center;">
-                                                    Redeemed Members
-                                                </th>
-                                                <th style="text-align:center;">
-                                                    Redemption Txn Count
-                                                </th>
-                                                <th style="text-align:center;">
-                                                    Redeemed Points
-                                                </th>
-                                                <th style="text-align:center;">
-                                                    Points Value (Rs.)
-                                                </th>
-                                            </tr>
-                                            <tr>
-                                                <td style="text-align:center;"><span id="spnRedeemedMembers"></span></td>
-                                                <td style="text-align:center;"><span id="spnRedemptionTxnCount"></span></td>
-                                                <td style="text-align:center;"><span id="spnRedeemedPoints"></span></td>
-                                                <td style="text-align:center;"><span id="spnPointsValue"></span></td>
-                                            </tr>
-                                            <tr>
-                                                <td colspan="4" style="height:20px;"></td>
-                                            </tr>
-                                            <tr>
-                                                <td style="text-align:center;font-weight:bold;">
-                                                    Business Generated
-                                                </td>
-                                                <td style="text-align:center;"><span id="spnRedemBusinessGenerated"></span></td>
-                                                <td style="text-align:center;font-weight:bold;">
-                                                    Redeem to Invoice
-                                                </td>
-                                                <td style="text-align:center;"><span id="spnRedeemToInvoice"></span></td>
-                                            </tr>
-
-                                        </table>
-                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+
         </div>
-        <div class="col-md-12 col-lg-6">
-            <div class="mb-3 card">
-                <div class="card-header-tab card-header-tab-animation card-header">
-                    <div class="card-header-title">
-                        <i class="header-icon lnr-apartment icon-gradient bg-love-kiss"> </i>
-                        BULK UPLOAD
+
+        <div class="row">
+            <div class="col-md-12 col-lg-12">
+                <div class="mb-3 card">
+                    <div class="card-header-tab card-header-tab-animation card-header">
+                        <div class="card-header-title">
+                            <i class="header-icon lnr-apartment icon-gradient bg-love-kiss"> </i>
+                            MEMBER SEGMENT <span id="spnPeriod" style="margin-left:100px;"></span>
+                        </div>
+                        <ul class="nav">
+                            <li class="nav-item"><a href="javascript:void(0);" onclick="ShowAll();" class="active nav-link">All</a></li>
+                            <li class="nav-item">
+                                @Html.DropDownListFor(x => Model.ActiveBase_Total, new SelectList(ViewBag.OutletList, "Value", "Text"), "Select Outlet", htmlAttributes: new { @class = "input50", @id = "memberSegmentOutletList", style = "margin-top:20px;" })
+                            </li>
+                        </ul>
                     </div>
-                </div>
-                <div class="card-body">
-                    <div class="tab-content">
-                        <div class="tab-pane fade show active" id="tabs-eg-77">
-                            <div class="card mb-3 widget-chart widget-chart2 text-left w-100">
-                                <div class="widget-chat-wrapper-outer">
-                                    <div class="widget-chart-wrapper widget-chart-wrapper-lg opacity-10 m-0" id="containerBulkUpload">
-                                        <canvas id="cvBulkUpload"></canvas>
+                    <div class="card-body">
+                        <div class="tab-content">
+                            <div class="tab-pane fade show active" id="tabs-eg-77">
+                                <div class="card mb-3 widget-chart widget-chart2 text-left w-100">
+                                    <div class="widget-chat-wrapper-outer">
+                                        <div class="widget-chart-wrapper widget-chart-wrapper-lg opacity-10 m-0" id="canvasContainer">
+                                            <canvas id="barcanvas"></canvas>
+                                        </div>
                                     </div>
-                                    <div>
-                                        <table border="1" width="100%">
-                                            <tr>
-                                                <th style="text-align:center;">
-                                                    Total Upload
-                                                </th>
-                                                <th style="text-align:center;">
-                                                    Unique Transacted
-                                                </th>
-                                                <th style="text-align:center;">
-                                                    Transaction Count
-                                                </th>
-                                                <th style="text-align:center;">
-                                                    Business Generated
-                                                </th>
-                                            </tr>
-                                            <tr>
-                                                <td style="text-align:center;"><span id="spnTotalUpload"></span></td>
-                                                <td style="text-align:center;"><span id="spnUniqueTransacted"></span></td>
-                                                <td style="text-align:center;"><span id="spnTransactionCount"></span></td>
-                                                <td style="text-align:center;"><span id="spnBusinessGenerated"></span></td>
-                                            </tr>
-                                        </table>
-                                    </div>
+                                </div>
+                                <h6 class="text-muted text-uppercase font-size-md opacity-5 font-weight-normal" style="color:blue !important; cursor:pointer;" id="btnExpand" onclick="ToggleKeyPointers();"><b>Expand to see key pointers</b></h6>
+                                <div class="scroll-area-sm" id="dvKeyPointers" style="display:none;">
+
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
 
+        </div>
+    }
     <div class="row">
-        <div class="col-md-12 col-lg-6">
-            <div class="mb-3 card">
-                <div class="card-header-tab card-header-tab-animation card-header">
-                    <div class="card-header-title">
-                        <i class="header-icon lnr-apartment icon-gradient bg-love-kiss"> </i>
-                        CAMPAIGN REPORT
+        @if (level == "02")
+        {
+            <div class="col-md-12 col-lg-6">
+                <div class="mb-3 card">
+                    <div class="card-header-tab card-header-tab-animation card-header">
+                        <div class="card-header-title">
+                            <i class="header-icon lnr-apartment icon-gradient bg-love-kiss"> </i>
+                            OUTLET ENROLMENTS
+                        </div>
+                        <ul class="nav">
+                            <li class="nav-item"><a href="javascript:void(0);" onclick="showOutletEnrolmentChart('')" id="outletTillDate" class="active nav-link">Till Date</a></li>
+                            <li class="nav-item"><a href="javascript:void(0);" onclick="showOutletEnrolmentChart('1')" id="outletCurrentDate" class="nav-link second-tab-toggle">Current Month</a></li>
+                        </ul>
                     </div>
-                    <ul class="nav">
-                        <li class="nav-item"><a href="javascript:void(0);" class="active nav-link">Till Date</a></li>
-                        <li class="nav-item"><a href="javascript:void(0);" class="nav-link second-tab-toggle">Current Month</a></li>
-                    </ul>
-                </div>
-                <div class="card-body">
-                    <div class="tab-content">
-                        <div class="tab-pane fade show active" id="tabs-eg-77">
-                            <div class="card mb-3 widget-chart widget-chart2 text-left w-100">
-                                <div class="widget-chat-wrapper-outer">
-                                    <div class="widget-chart-wrapper widget-chart-wrapper-lg opacity-10 m-0">
-                                        @*<canvas id="cvOutlet"></canvas>*@
+                    <div class="card-body">
+                        <div class="tab-content">
+                            <div class="tab-pane fade show active" id="tabs-eg-77">
+                                <div class="card mb-3 widget-chart widget-chart2 text-left w-100">
+                                    <div class="widget-chat-wrapper-outer">
+                                        <div style="overflow:scroll" id="containerOutlet">
+                                            <canvas id="cvOutlet"></canvas>
+                                            @*// widget-chart-wrapper widget-chart-wrapper-lg opacity-10 m-0*@
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -338,60 +169,29 @@
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="col-md-12 col-lg-6">
-            <div class="mb-3 card">
-                <div class="card-header-tab card-header-tab-animation card-header">
-                    <div class="card-header-title">
-                        <i class="header-icon lnr-apartment icon-gradient bg-love-kiss"> </i>
-                        MEMBER WEBPAGE
+        }
+        @if (level == "02" || level == "04")
+        {
+            <div class="col-md-12 col-lg-6">
+                <div class="mb-3 card">
+                    <div class="card-header-tab card-header-tab-animation card-header">
+                        <div class="card-header-title">
+                            <i class="header-icon lnr-apartment icon-gradient bg-love-kiss"> </i>
+                            TRANSACTION POINTS SUMMARY
+                        </div>
+                        <ul class="nav">
+                            <li class="nav-item"><a href="javascript:void(0);" onclick="showPointSummeryChart('')" id="pointsTillDate" class="active nav-link">Till Date</a></li>
+                            <li class="nav-item"><a href="javascript:void(0);" onclick="showPointSummeryChart('1')" id="pointsCurrentMonth" class="nav-link second-tab-toggle">Current Month</a></li>
+                        </ul>
                     </div>
-                    <ul class="nav">
-                        <li class="nav-item"><a href="javascript:void(0);" onclick="showMemberWebpageChart('1');" id="memberWebpageReferrals" class="active nav-link">Referrals</a></li>
-                        <li class="nav-item"><a href="javascript:void(0);" onclick="showMemberWebpageChart('0');" id="memberWebpageProfile" class="nav-link second-tab-toggle">Profile</a></li>
-                    </ul>
-                </div>
-                <div class="card-body">
-                    <div class="tab-content">
-                        <div class="tab-pane fade show active" id="tabs-eg-77">
-                            <div class="card mb-3 widget-chart widget-chart2 text-left w-100">
-                                <div class="widget-chat-wrapper-outer">
-                                    <div class="widget-chart-wrapper widget-chart-wrapper-lg opacity-10 m-0" id="containerMemberWebpage">
-                                        <div id="dvMWPMsessage" style="display:none;margin:20px;padding:20px;font-weight:bold;">Member WebPage - Not Opted. Please connect with the team to start your Profile Update & Referral journey</div>
-                                        <canvas id="cvMemberWebpage"></canvas>
-                                    </div>
-                                    <div id="dvWebpageData">
-                                        <table border="1" width="100%" id="tblReferrals">
-                                            <tr>
-                                                <th style="text-align:center;">
-                                                    Member Base
-                                                </th>
-                                                <th style="text-align:center;">
-                                                    Referring Base
-                                                </th>
-                                                <th style="text-align:center;">
-                                                    Referrals Generated
-                                                </th>
-                                                <th style="text-align:center;">
-                                                    Referrals Transacted
-                                                </th>
-                                            </tr>
-                                            <tr>
-                                                <td style="text-align:center;"><span id="spnMemberBase"></span></td>
-                                                <td style="text-align:center;"><span id="spnNoofReferee"></span></td>
-                                                <td style="text-align:center;"><span id="spnNoofReferral"></span></td>
-                                                <td style="text-align:center;"><span id="spnUniqueReferralTxn"></span></td>
-                                            </tr>
-                                            <tr>
-
-                                                <td style="text-align:center;" colspan="2">
-                                                    Referrals Txn Count: <span id="spnTotalReferralTxn"></span>
-                                                </td>
-                                                <td style="text-align:center;" colspan="2">
-                                                    Business Generated:<span id="spnTotalReferralBusniess"></span>
-                                                </td>
-                                            </tr>
-                                        </table>
+                    <div class="card-body">
+                        <div class="tab-content">
+                            <div class="tab-pane fade show active" id="tabs-eg-77">
+                                <div class="card mb-3 widget-chart widget-chart2 text-left w-100">
+                                    <div class="widget-chat-wrapper-outer">
+                                        <div class="widget-chart-wrapper widget-chart-wrapper-lg opacity-10 m-0" id="containerPointSummery">
+                                            <canvas id="cvPointSummery"></canvas>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -399,10 +199,224 @@
                     </div>
                 </div>
             </div>
-        </div>
-
+        }
     </div>
+    @if (level == "02")
+    {
+        <div class="row">
+            <div class="col-md-12 col-lg-6">
+                <div class="mb-3 card">
+                    <div class="card-header-tab card-header-tab-animation card-header">
+                        <div class="card-header-title">
+                            <i class="header-icon lnr-apartment icon-gradient bg-love-kiss"> </i>
+                            REDEMPTION
+                        </div>
+                        <ul class="nav">
+                            <li class="nav-item"><a href="javascript:void(0);" onclick="showRedemptionChart('1');" id="pointsBase" class="active nav-link">Base</a></li>
+                            <li class="nav-item"><a href="javascript:void(0);" onclick="showRedemptionChart('2');" id="pointsBonus" class="nav-link second-tab-toggle">Bonus</a></li>
+                        </ul>
+                    </div>
+                    <div class="card-body">
+                        <div class="tab-content">
+                            <div class="tab-pane fade show active" id="tabs-eg-77">
+                                <div class="card mb-3 widget-chart widget-chart2 text-left w-100">
+                                    <div class="widget-chat-wrapper-outer">
+                                        <div style="display:flex;margin-top:30px;">
+                                            <div class="widget-chart-wrapper widget-chart-wrapper-lg opacity-10 m-0" id="containerRedemption" style="width:250px;border-right:1px solid black;text-align:center;">
+                                                <span style="font-weight:bold;">Redemption<br /> Rate</span>
+                                                <canvas id="cvRedemption"></canvas>
+                                            </div>
+                                            <div class="widget-chart-wrapper widget-chart-wrapper-lg opacity-10 m-0" id="containerRedemptionMember" style="width:250px;text-align:center;">
+                                                <span style="font-weight:bold;">Unique Redeeming <br /> Members</span>
+                                                <canvas id="cvRedemptionMember"></canvas>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <table border="1" width="100%" id="tblReferrals" style="margin-top:30px;">
+                                                <tr>
+                                                    <th style="text-align:center;">
+                                                        Redeemed Members
+                                                    </th>
+                                                    <th style="text-align:center;">
+                                                        Redemption Txn Count
+                                                    </th>
+                                                    <th style="text-align:center;">
+                                                        Redeemed Points
+                                                    </th>
+                                                    <th style="text-align:center;">
+                                                        Points Value (Rs.)
+                                                    </th>
+                                                </tr>
+                                                <tr>
+                                                    <td style="text-align:center;"><span id="spnRedeemedMembers"></span></td>
+                                                    <td style="text-align:center;"><span id="spnRedemptionTxnCount"></span></td>
+                                                    <td style="text-align:center;"><span id="spnRedeemedPoints"></span></td>
+                                                    <td style="text-align:center;"><span id="spnPointsValue"></span></td>
+                                                </tr>
+                                                <tr>
+                                                    <td colspan="4" style="height:20px;"></td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="text-align:center;font-weight:bold;">
+                                                        Business Generated
+                                                    </td>
+                                                    <td style="text-align:center;"><span id="spnRedemBusinessGenerated"></span></td>
+                                                    <td style="text-align:center;font-weight:bold;">
+                                                        Redeem to Invoice
+                                                    </td>
+                                                    <td style="text-align:center;"><span id="spnRedeemToInvoice"></span></td>
+                                                </tr>
 
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12 col-lg-6">
+                <div class="mb-3 card">
+                    <div class="card-header-tab card-header-tab-animation card-header">
+                        <div class="card-header-title">
+                            <i class="header-icon lnr-apartment icon-gradient bg-love-kiss"> </i>
+                            BULK UPLOAD
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="tab-content">
+                            <div class="tab-pane fade show active" id="tabs-eg-77">
+                                <div class="card mb-3 widget-chart widget-chart2 text-left w-100">
+                                    <div class="widget-chat-wrapper-outer">
+                                        <div class="widget-chart-wrapper widget-chart-wrapper-lg opacity-10 m-0" id="containerBulkUpload">
+                                            <canvas id="cvBulkUpload"></canvas>
+                                        </div>
+                                        <div>
+                                            <table border="1" width="100%">
+                                                <tr>
+                                                    <th style="text-align:center;">
+                                                        Total Upload
+                                                    </th>
+                                                    <th style="text-align:center;">
+                                                        Unique Transacted
+                                                    </th>
+                                                    <th style="text-align:center;">
+                                                        Transaction Count
+                                                    </th>
+                                                    <th style="text-align:center;">
+                                                        Business Generated
+                                                    </th>
+                                                </tr>
+                                                <tr>
+                                                    <td style="text-align:center;"><span id="spnTotalUpload"></span></td>
+                                                    <td style="text-align:center;"><span id="spnUniqueTransacted"></span></td>
+                                                    <td style="text-align:center;"><span id="spnTransactionCount"></span></td>
+                                                    <td style="text-align:center;"><span id="spnBusinessGenerated"></span></td>
+                                                </tr>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12 col-lg-6">
+                <div class="mb-3 card">
+                    <div class="card-header-tab card-header-tab-animation card-header">
+                        <div class="card-header-title">
+                            <i class="header-icon lnr-apartment icon-gradient bg-love-kiss"> </i>
+                            CAMPAIGN REPORT
+                        </div>
+                        <ul class="nav">
+                            <li class="nav-item"><a href="javascript:void(0);" class="active nav-link">Till Date</a></li>
+                            <li class="nav-item"><a href="javascript:void(0);" class="nav-link second-tab-toggle">Current Month</a></li>
+                        </ul>
+                    </div>
+                    <div class="card-body">
+                        <div class="tab-content">
+                            <div class="tab-pane fade show active" id="tabs-eg-77">
+                                <div class="card mb-3 widget-chart widget-chart2 text-left w-100">
+                                    <div class="widget-chat-wrapper-outer">
+                                        <div class="widget-chart-wrapper widget-chart-wrapper-lg opacity-10 m-0">
+                                            @*<canvas id="cvOutlet"></canvas>*@
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12 col-lg-6">
+                <div class="mb-3 card">
+                    <div class="card-header-tab card-header-tab-animation card-header">
+                        <div class="card-header-title">
+                            <i class="header-icon lnr-apartment icon-gradient bg-love-kiss"> </i>
+                            MEMBER WEBPAGE
+                        </div>
+                        <ul class="nav">
+                            <li class="nav-item"><a href="javascript:void(0);" onclick="showMemberWebpageChart('1');" id="memberWebpageReferrals" class="active nav-link">Referrals</a></li>
+                            <li class="nav-item"><a href="javascript:void(0);" onclick="showMemberWebpageChart('0');" id="memberWebpageProfile" class="nav-link second-tab-toggle">Profile</a></li>
+                        </ul>
+                    </div>
+                    <div class="card-body">
+                        <div class="tab-content">
+                            <div class="tab-pane fade show active" id="tabs-eg-77">
+                                <div class="card mb-3 widget-chart widget-chart2 text-left w-100">
+                                    <div class="widget-chat-wrapper-outer">
+                                        <div class="widget-chart-wrapper widget-chart-wrapper-lg opacity-10 m-0" id="containerMemberWebpage">
+                                            <div id="dvMWPMsessage" style="display:none;margin:20px;padding:20px;font-weight:bold;">Member WebPage - Not Opted. Please connect with the team to start your Profile Update & Referral journey</div>
+                                            <canvas id="cvMemberWebpage"></canvas>
+                                        </div>
+                                        <div id="dvWebpageData">
+                                            <table border="1" width="100%" id="tblReferrals">
+                                                <tr>
+                                                    <th style="text-align:center;">
+                                                        Member Base
+                                                    </th>
+                                                    <th style="text-align:center;">
+                                                        Referring Base
+                                                    </th>
+                                                    <th style="text-align:center;">
+                                                        Referrals Generated
+                                                    </th>
+                                                    <th style="text-align:center;">
+                                                        Referrals Transacted
+                                                    </th>
+                                                </tr>
+                                                <tr>
+                                                    <td style="text-align:center;"><span id="spnMemberBase"></span></td>
+                                                    <td style="text-align:center;"><span id="spnNoofReferee"></span></td>
+                                                    <td style="text-align:center;"><span id="spnNoofReferral"></span></td>
+                                                    <td style="text-align:center;"><span id="spnUniqueReferralTxn"></span></td>
+                                                </tr>
+                                                <tr>
+
+                                                    <td style="text-align:center;" colspan="2">
+                                                        Referrals Txn Count: <span id="spnTotalReferralTxn"></span>
+                                                    </td>
+                                                    <td style="text-align:center;" colspan="2">
+                                                        Business Generated:<span id="spnTotalReferralBusniess"></span>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    }
 
 
 
@@ -633,14 +647,14 @@
                             {
                             label: 'Redeem Txn',
                             data: [...redeem],
-                            type: 'line',       
+                            type: 'line',
                             borderColor: '#F37A43',
                             //backgroundColor: "#F37A43",
-                            fill: false,                            
+                            fill: false,
                             order: 3,
                             tension: 0.1
                         },
-                        
+
                         {
                             label: 'First Time Txn',
                             data: [...first],

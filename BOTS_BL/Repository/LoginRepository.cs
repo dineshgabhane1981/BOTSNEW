@@ -38,6 +38,18 @@ namespace BOTS_BL.Repository
 
         }
 
+        public string AuthenticateUserMobile(string LoginId, string Password)
+        {
+            DatabaseDetail DBDetails = new DatabaseDetail();
+            CustomerLoginDetail userDetail = new CustomerLoginDetail();
+            using (var context = new CommonDBContext())
+            {
+                userDetail = context.CustomerLoginDetails.Where(a => a.LoginId == LoginId && a.Password == Password).FirstOrDefault();
+            }
+            return userDetail.GroupId;
+
+        }
+
         public void AddException(tblErrorLog objerrorlog)
         {
             try

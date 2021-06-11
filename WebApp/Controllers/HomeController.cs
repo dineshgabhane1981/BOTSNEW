@@ -168,9 +168,13 @@ namespace WebApp.Controllers
             List<long> dataList = new List<long>();
             try
             {
-                
+                string loginId = string.Empty;
+                if (userDetails.LevelIndicator == "03" || userDetails.LevelIndicator == "04")
+                {
+                    loginId = userDetails.LoginId;
+                }
                 DashboardPointsSummary dataPointsSummary = new DashboardPointsSummary();
-                dataPointsSummary = DR.GetDashboardPointsSummaryData(userDetails.GroupId, monthFlag, userDetails.connectionString);
+                dataPointsSummary = DR.GetDashboardPointsSummaryData(userDetails.GroupId, monthFlag, userDetails.connectionString, loginId);
 
                 dataList.Add(dataPointsSummary.PointsIssued);
                 dataList.Add(dataPointsSummary.PointsRedeemed);

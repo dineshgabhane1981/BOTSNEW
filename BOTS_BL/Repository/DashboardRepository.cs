@@ -146,7 +146,7 @@ namespace BOTS_BL.Repository
             return dashboardOutletEnrolment;
         }
 
-        public DashboardPointsSummary GetDashboardPointsSummaryData(string GroupId, string monthFlag, string connstr)
+        public DashboardPointsSummary GetDashboardPointsSummaryData(string GroupId, string monthFlag, string connstr, string loginId)
         {
 
             DashboardPointsSummary dashboardPointsSummary = new DashboardPointsSummary();

@@ -109,7 +109,7 @@ namespace BOTS_BL.Repository
 
         }
 
-        public List<OutletWise> GetOutletWiseList(string GroupId, string DateRangeFlag, string FromDate, string ToDate, string connstr)
+        public List<OutletWise> GetOutletWiseList(string GroupId, string DateRangeFlag, string FromDate, string ToDate, string connstr, string loginId)
         {
             List<OutletWise> lstOutletWise = new List<OutletWise>();
             try
@@ -119,7 +119,7 @@ namespace BOTS_BL.Repository
                     lstOutletWise = context.Database.SqlQuery<OutletWise>("sp_BOTS_OutletwiseSummary @pi_GroupId, @pi_Date, @pi_LoginId, @pi_DateRangeFlag, @pi_FromDate, @pi_ToDate",
                         new SqlParameter("@pi_GroupId", GroupId),
                         new SqlParameter("@pi_Date", DateTime.Now.ToShortDateString()),
-                        new SqlParameter("@pi_LoginId", ""),
+                        new SqlParameter("@pi_LoginId", loginId),
                         new SqlParameter("@pi_DateRangeFlag", DateRangeFlag),
                         new SqlParameter("@pi_FromDate", FromDate),
                         new SqlParameter("@pi_ToDate", ToDate)).ToList<OutletWise>();
@@ -202,7 +202,7 @@ namespace BOTS_BL.Repository
         }
 
 
-        public MemberSearch GetMeamberSearchData(string GroupId,string searchData, string connstr)
+        public MemberSearch GetMeamberSearchData(string GroupId,string searchData, string connstr, string loginId)
         {            
             MemberSearch memberSearch = new MemberSearch();
             try
@@ -212,13 +212,13 @@ namespace BOTS_BL.Repository
                     memberSearch = context.Database.SqlQuery<MemberSearch>("sp_BOTS_MemberSearch @pi_GroupId, @pi_Date, @pi_LoginId, @pi_SearchData",
                         new SqlParameter("@pi_GroupId", GroupId),
                         new SqlParameter("@pi_Date", DateTime.Now.ToShortDateString()),
-                        new SqlParameter("@pi_LoginId", ""),
+                        new SqlParameter("@pi_LoginId", loginId),
                         new SqlParameter("@pi_SearchData", searchData)).FirstOrDefault<MemberSearch>();
 
                     memberSearch.lstMemberSearchTxn = context.Database.SqlQuery<MemberSearchTxn>("sp_BOTS_MemberSearch1 @pi_GroupId, @pi_Date, @pi_LoginId, @pi_SearchData",
                         new SqlParameter("@pi_GroupId", GroupId),
                         new SqlParameter("@pi_Date", DateTime.Now.ToShortDateString()),
-                        new SqlParameter("@pi_LoginId", ""),
+                        new SqlParameter("@pi_LoginId", loginId),
                         new SqlParameter("@pi_SearchData", searchData)).ToList<MemberSearchTxn>();
                 }
             }

@@ -230,9 +230,14 @@ namespace WebApp.Controllers
 
         public ActionResult GetOutletWiseResult(string DateRangeFlag, string fromDate, string toDate)
         {
+            string loginId = string.Empty;
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            if(userDetails.LevelIndicator =="03" || userDetails.LevelIndicator == "04")
+            {
+                loginId = userDetails.LoginId;
+            }
             List<OutletWise> lstOutlet = new List<OutletWise>();
-            lstOutlet = RR.GetOutletWiseList(userDetails.GroupId, DateRangeFlag, fromDate, toDate, userDetails.connectionString);
+            lstOutlet = RR.GetOutletWiseList(userDetails.GroupId, DateRangeFlag, fromDate, toDate, userDetails.connectionString, loginId);
             OutletWise objSum = new OutletWise();
             foreach (var item in lstOutlet)
             {
@@ -274,15 +279,20 @@ namespace WebApp.Controllers
             MemberSearch objMemberSearch = new MemberSearch();
             try
             {
+                var userDetails = (CustomerLoginDetail)Session["UserSession"];
+                string loginId = string.Empty;
+                if (userDetails.LevelIndicator == "03" || userDetails.LevelIndicator == "04")
+                {
+                    loginId = userDetails.LoginId;
+                }
                 if (!string.IsNullOrEmpty(GroupId) && GroupId != "undefined")
                 {
                     string connStr = objCustRepo.GetCustomerConnString(GroupId);
-                    objMemberSearch = RR.GetMeamberSearchData(GroupId, searchData, connStr);
+                    objMemberSearch = RR.GetMeamberSearchData(GroupId, searchData, connStr, loginId);
                 }
                 else
-                {
-                    var userDetails = (CustomerLoginDetail)Session["UserSession"];
-                    objMemberSearch = RR.GetMeamberSearchData(userDetails.GroupId, searchData, userDetails.connectionString);
+                {                    
+                    objMemberSearch = RR.GetMeamberSearchData(userDetails.GroupId, searchData, userDetails.connectionString, loginId);
                 }
             }
             catch (Exception ex)
@@ -347,9 +357,14 @@ namespace WebApp.Controllers
             System.Data.DataTable table = new System.Data.DataTable();
             try
             {
+                string loginId = string.Empty;
                 var userDetails = (CustomerLoginDetail)Session["UserSession"];
+                if (userDetails.LevelIndicator == "03" || userDetails.LevelIndicator == "04")
+                {
+                    loginId = userDetails.LoginId;
+                }
                 List<OutletWise> lstOutlet = new List<OutletWise>();
-                lstOutlet = RR.GetOutletWiseList(userDetails.GroupId, DateRangeFlag, fromDate, toDate, userDetails.connectionString);
+                lstOutlet = RR.GetOutletWiseList(userDetails.GroupId, DateRangeFlag, fromDate, toDate, userDetails.connectionString, loginId);
 
                 OutletWise objSum = new OutletWise();
                 foreach (var item in lstOutlet)

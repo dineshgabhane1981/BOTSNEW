@@ -3,6 +3,7 @@
     var userDetails = (CustomerLoginDetail)Session["UserSession"];
     var GroupId = userDetails.GroupId;
     var roleId = userDetails.LoginType;
+    var level = userDetails.LevelIndicator;
 }
 <div class="app-sidebar sidebar-shadow">
     <div class="app-header__logo">
@@ -38,7 +39,7 @@
     <div class="scrollbar-sidebar">
         <div class="app-sidebar__inner">
             <ul class="vertical-nav-menu">
-                @if (GroupId == null || roleId=="1")
+                @if (GroupId == null || roleId == "1")
                 {
                     <li>
                         <a href="@Url.Action("Index", "CustomerManagement")" class="@Html.IsSelected(controller: "CustomerManagement", action: "Index,SelectProduct,AddNewCustomer")">
@@ -47,7 +48,8 @@
                         </a>
                     </li>
                 }
-                @if (GroupId != null)
+
+                @if (GroupId != null && level == "02")
                 {
                     <li>
                         <a href="@Url.Action("Index", "Home")" class="@Html.IsSelected(controller: "Home", action: "Index")">
@@ -68,7 +70,7 @@
                                     <i class="metismenu-icon">
                                     </i>Loyalty Performance
                                 </a>
-                            </li>                            
+                            </li>
                         </ul>
                     </li>
                     <li>
@@ -172,11 +174,11 @@
                                 </a>
                             </li>
                             @*<li class="@Html.IsSelected(controller: "HeatMaps", action: "SMSConversion")">
-                                <a class="@Html.IsSelected(controller: "HeatMaps", action: "SMSConversion")" href="@Url.Action("SMSConversion", "HeatMaps")">
-                                    <i class="metismenu-icon"></i>
-                                    SMS Conversion
-                                </a>
-                            </li>*@
+                                    <a class="@Html.IsSelected(controller: "HeatMaps", action: "SMSConversion")" href="@Url.Action("SMSConversion", "HeatMaps")">
+                                        <i class="metismenu-icon"></i>
+                                        SMS Conversion
+                                    </a>
+                                </li>*@
                         </ul>
                     </li>
                     <li>
@@ -217,33 +219,31 @@
                         </ul>
                     </li>
                 }
-                @*<li>
-            <a href="forms-layouts.html">
-                <i class="metismenu-icon pe-7s-eyedropper">
-                </i>Forms Layouts
-            </a>
-        </li>*@
-                @*<li>
-            <a href="forms-validation.html">
-                <i class="metismenu-icon pe-7s-pendrive">
-                </i>Forms Validation
-            </a>
-        </li>*@
-                @*<li class="app-sidebar__heading">Charts</li>
-        <li>
-            <a href="charts-chartjs.html">
-                <i class="metismenu-icon pe-7s-graph2">
-                </i>ChartJS
-            </a>
-        </li>*@
-                @*<li class="app-sidebar__heading">PRO Version</li>
-        <li>
-            <a href="https://dashboardpack.com/theme-details/architectui-dashboard-html-pro/" target="_blank">
-                <i class="metismenu-icon pe-7s-graph2">
-                </i>
-                Upgrade to PRO
-            </a>
-        </li>*@
+
+                @if (GroupId != null && level == "04")
+                {
+                    <li>
+                        <a href="@Url.Action("Index", "Home")" class="@Html.IsSelected(controller: "Home", action: "Index")">
+                            <i class="metismenu-icon pe-7s-rocket"></i>
+                            Executive Summary
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <i class="metismenu-icon pe-7s-car"></i>
+                            Reports
+                            <i class="metismenu-state-icon pe-7s-angle-down caret-left"></i>
+                        </a>
+                        <ul>                            
+                            <li class="@Html.IsSelected(controller: "Reports", action: "Outletwise")">
+                                <a class="@Html.IsSelected(controller: "Reports", action: "Outletwise")" href="@Url.Action("Outletwise", "Reports")">
+                                    <i class="metismenu-icon"></i>
+                                    Outlet-wise
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                }
             </ul>
         </div>
     </div>
