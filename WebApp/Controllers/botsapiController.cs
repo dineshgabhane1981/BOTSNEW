@@ -65,17 +65,6 @@ namespace WebApp.Controllers
                 string connectionString = CR.GetCustomerConnString(GroupId);
                 
                 dataMemberSegment = DR.GetDashboardMemberSegmentData(GroupId, OutletId, connectionString);
-
-                dataList.Add(dataMemberSegment.NoofMember_Total);
-                dataList.Add(dataMemberSegment.NoofMember_Repeat);
-                dataList.Add(dataMemberSegment.NoofMember_NeverRedeem);
-                dataList.Add(dataMemberSegment.NoofMember_RecentlyEnrolled);
-                dataList.Add(dataMemberSegment.NoofMember_OnlyOnce);
-                lstDates.Add(dataMemberSegment.FromDate);
-                lstDates.Add(dataMemberSegment.ToDate);
-                lstData.Add(dataList);
-                lstData.Add(lstDates);
-
             }
             catch (Exception ex)
             {
