@@ -72,5 +72,44 @@ namespace WebApp.Controllers
             }            
             return new JsonResult() { Data = dataMemberSegment, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
+
+        [HttpGet]
+        public JsonResult GetPointsSummaryResult(string GroupId,string monthFlag)
+        {
+           
+            List<long> dataList = new List<long>();
+            DashboardPointsSummary dataPointsSummary = new DashboardPointsSummary();
+            try
+            {
+                string loginId = string.Empty;
+                string connectionString = CR.GetCustomerConnString(GroupId);
+               
+                dataPointsSummary = DR.GetDashboardPointsSummaryData(GroupId, monthFlag, connectionString, loginId);
+
+                
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, GroupId);
+            }
+            return new JsonResult() { Data = dataPointsSummary, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
+        }
+        [HttpGet]
+        public JsonResult GetBulkUploadResult(string GroupId)
+        {
+            List<object> dataList = new List<object>();
+            DashboardBulkUpload objDashboardBulkUpload = new DashboardBulkUpload();
+            string connectionString = CR.GetCustomerConnString(GroupId);
+            try
+            {                
+                objDashboardBulkUpload = DR.GetDashboardBulkUpload(GroupId, connectionString);                
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, GroupId);
+            }
+            return new JsonResult() { Data = objDashboardBulkUpload, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
+        }
+
     }
 }
