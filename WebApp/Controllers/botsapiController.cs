@@ -30,21 +30,7 @@ namespace WebApp.Controllers
             string groupId = LR.AuthenticateUserMobile(loginId, password);
             return Json(groupId, JsonRequestBehavior.AllowGet);
         }        
-
-        [HttpGet]
-        public JsonResult GetMemberDataResult(string GroupId, string SearchText)
-        {
-            var userDetails = (CustomerLoginDetail)Session["UserSession"];
-            if (SearchText.Equals("All"))
-            {
-                SearchText = "";
-            }
-            string connectionString = CR.GetCustomerConnString(GroupId);
-            List<MemberList> lstMember = new List<MemberList>();
-            lstMember = RR.GetMemberList(GroupId, SearchText, connectionString);
-            return new JsonResult() { Data = lstMember, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
-        }
-
+        
         [HttpGet]
         public JsonResult GetOutletList(string GroupId)
         {                        
