@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BOTS_BL", "BOTS_BL\BOTS_BL.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chitale", "Chitale\Chitale.csproj", "{55C99E29-9563-4F6B-AF3A-4C7B78B26FB1}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MobileAPI", "MobileAPI\MobileAPI.csproj", "{43992F03-5BB1-4AF7-ABB1-65BEBFE39972}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{55C99E29-9563-4F6B-AF3A-4C7B78B26FB1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{55C99E29-9563-4F6B-AF3A-4C7B78B26FB1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{55C99E29-9563-4F6B-AF3A-4C7B78B26FB1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{43992F03-5BB1-4AF7-ABB1-65BEBFE39972}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{43992F03-5BB1-4AF7-ABB1-65BEBFE39972}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{43992F03-5BB1-4AF7-ABB1-65BEBFE39972}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{43992F03-5BB1-4AF7-ABB1-65BEBFE39972}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
