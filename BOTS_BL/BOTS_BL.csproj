@@ -194,6 +194,7 @@
     <Compile Include="Models\CommonDB\OTPDetails.cs" />
     <Compile Include="Models\CommonDB\PODetail.cs" />
     <Compile Include="Models\CommonDB\POItem.cs" />
+    <Compile Include="Models\CommonDB\ReferAndEarn.cs" />
     <Compile Include="Models\CommonDB\ReferralBonusSM.cs" />
     <Compile Include="Models\CommonDB\tblAudit.cs" />
     <Compile Include="Models\CommonDB\tblBillingPartner.cs" />

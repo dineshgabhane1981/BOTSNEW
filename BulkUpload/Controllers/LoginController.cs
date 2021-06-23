@@ -13,6 +13,7 @@ using System.Net.Mail;
 
 namespace WebApp.Controllers
 {
+    
     public class LoginController : Controller
     {
         Exceptions newexception = new Exceptions();
@@ -33,44 +34,50 @@ namespace WebApp.Controllers
             var Url = " https://http2.myvfirst.com/smpp/sendsms?";
             Random random = new Random();
             int otpnum = random.Next(1001,9999);
-           // string MobileMessage = "Your OTP for data upload is "+ otpnum + "– Blue Ocktopus";
-            string MobileMessage = "Your OTP for data upload is 1234 – Blue Ocktopus";
-           // SendOTPMessage(MobileNo, sender, MobileMessage, Url);
+            string MobileMessage = "Dear Member,"+ otpnum + " is your OTP. Sample SMS for OTP - Blue Ocktopus";
+            //string MobileMessage = "Your OTP for data upload is 1234 – Blue Your OTP for data upload is "+ otpnum + "– Blue OcktopusOcktopus";
+            SendOTPMessage(MobileNo, sender, MobileMessage, Url);
             var result = "true";
-            TempData["OTP"] = "1234";
+            TempData["OTP"] = otpnum;
             return Json(result, JsonRequestBehavior.AllowGet);
         }
         public void SendOTPMessage(string MobileNo, string Sender, string MobileMessage, string Url)
         {
-
-            var UserName = System.Configuration.ConfigurationManager.AppSettings["SMSUserID"];
-            var Password = System.Configuration.ConfigurationManager.AppSettings["SMSPassword"];
-
-            MobileMessage = HttpUtility.UrlEncode(MobileMessage);
-            string type1 = "TEXT";
-            StringBuilder sbposdata1 = new StringBuilder();
-            sbposdata1.AppendFormat("username={0}", UserName);
-            sbposdata1.AppendFormat("&password={0}", Password);
-            sbposdata1.AppendFormat("&to={0}", MobileNo);
-            sbposdata1.AppendFormat("&from={0}", Sender);
-            sbposdata1.AppendFormat("&text={0}", MobileMessage);
-            ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls | (SecurityProtocolType)3072;
-            ServicePointManager.ServerCertificateValidationCallback += (sender, cert, chain, sslPolicyErrors) => true;
-            HttpWebRequest httpWReq1 = (HttpWebRequest)WebRequest.Create(Url);
-            UTF8Encoding encoding1 = new UTF8Encoding();
-            byte[] data1 = encoding1.GetBytes(sbposdata1.ToString());
-            httpWReq1.Method = "POST";
-            httpWReq1.ContentType = "application/x-www-form-urlencoded";
-            httpWReq1.ContentLength = data1.Length;
-            using (Stream stream1 = httpWReq1.GetRequestStream())
+            try
             {
-                stream1.Write(data1, 0, data1.Length);
+                var UserName = System.Configuration.ConfigurationManager.AppSettings["SMSUserID"];
+                var Password = System.Configuration.ConfigurationManager.AppSettings["SMSPassword"];
+
+                MobileMessage = HttpUtility.UrlEncode(MobileMessage);
+                string type1 = "TEXT";
+                StringBuilder sbposdata1 = new StringBuilder();
+                sbposdata1.AppendFormat("username={0}", UserName);
+                sbposdata1.AppendFormat("&password={0}", Password);
+                sbposdata1.AppendFormat("&to={0}", MobileNo);
+                sbposdata1.AppendFormat("&from={0}", Sender);
+                sbposdata1.AppendFormat("&text={0}", MobileMessage);
+                ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls | (SecurityProtocolType)3072;
+                ServicePointManager.ServerCertificateValidationCallback += (sender, cert, chain, sslPolicyErrors) => true;
+                HttpWebRequest httpWReq1 = (HttpWebRequest)WebRequest.Create(Url);
+                UTF8Encoding encoding1 = new UTF8Encoding();
+                byte[] data1 = encoding1.GetBytes(sbposdata1.ToString());
+                httpWReq1.Method = "POST";
+                httpWReq1.ContentType = "application/x-www-form-urlencoded";
+                httpWReq1.ContentLength = data1.Length;
+                using (Stream stream1 = httpWReq1.GetRequestStream())
+                {
+                    stream1.Write(data1, 0, data1.Length);
+                }
+                HttpWebResponse response1 = (HttpWebResponse)httpWReq1.GetResponse();
+                StreamReader reader1 = new StreamReader(response1.GetResponseStream());
+                string responseString1 = reader1.ReadToEnd();
+                reader1.Close();
+                response1.Close();
             }
-            HttpWebResponse response1 = (HttpWebResponse)httpWReq1.GetResponse();
-            StreamReader reader1 = new StreamReader(response1.GetResponseStream());
-            string responseString1 = reader1.ReadToEnd();
-            reader1.Close();
-            response1.Close();
+            catch(Exception ex)
+            {
+                newexception.AddException(ex, "bulkuploadtest");
+            }
 
         }
         
@@ -121,7 +128,7 @@ namespace WebApp.Controllers
                 smtp.UseDefaultCredentials = true;
                 smtp.Credentials = networkCredential;
                 smtp.Port = 587;
-                //smtp.Send(mail);
+                smtp.Send(mail);
                 // ViewBag.Message = "Sent";
                 // return View("Index", objModelMail);
                 result = "True";

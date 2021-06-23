@@ -13,6 +13,7 @@ using BOTS_BL.Repository;
 using BOTS_BL;
 using System.Web.Http.Results;
 using System.Globalization;
+using BOTS_BL.Models.CommonDB;
 
 namespace BotsMobileAPI.Controllers
 {
@@ -237,33 +238,36 @@ namespace BotsMobileAPI.Controllers
             }
             return "Invalid Token or Expired";
         }
-
+        //point no 9
         [HttpGet]
-        public object GetCelebrationsTxnResult(string GroupId, int month, int type)
+        public object Celebrations(string GroupId)
         {
             if (User.Identity.IsAuthenticated)
             {
                 string connectionString = CR.GetCustomerConnString(GroupId);
-                List<CelebrationsMoreDetails> objCelebrationsMoreDetails = new List<CelebrationsMoreDetails>();
-                objCelebrationsMoreDetails = RR.GetCelebrationsTxnData(GroupId, month, type, connectionString);
-                return new { Data = objCelebrationsMoreDetails, MaxJsonLength = Int32.MaxValue };
+               
+                var CelebrationsData = RR.GetCelebrationsData(GroupId, connectionString);
+               
+                return new { Data = CelebrationsData, MaxJsonLength = Int32.MaxValue };
             }
             return "Invalid Token or Expired";
         }
-        
+        //point no 9
         [HttpGet]
-        public object GetPointsExpiryDataResult(string GroupId, int month, int year)
+        public object PointsExpiry(string GroupId)
         {
             if (User.Identity.IsAuthenticated)
             {
                 string connectionString = CR.GetCustomerConnString(GroupId);
+              
                 PointExpiryTmp objPointExpiry = new PointExpiryTmp();
-                objPointExpiry = RR.GetPointExpiryData(GroupId, month, year, connectionString);
+                objPointExpiry = RR.GetPointExpiryData(GroupId, DateTime.Now.Month, DateTime.Now.Year, connectionString);
                 return new { Data = objPointExpiry, MaxJsonLength = Int32.MaxValue };
             }
             return "Invalid Token or Expired";
         }
         //ponit no 12-no of profile updated,referral generated,memeberbase
+        //profileflag:1(referral),0(profile)
         [HttpGet]
         public object GetMemberWebPageResult(string GroupId, string profileFlag)
         {
@@ -434,8 +438,8 @@ namespace BotsMobileAPI.Controllers
             }
             return "Invalid Token or Expired";
         }
-        //pointno 4-sub point 3
-        [HttpPost]
+        //pointno 4-sub point 3 more than 6 months
+        [HttpGet]
         public object GetNonTransactingResult(string GroupId, string outletId)
         {
             if (User.Identity.IsAuthenticated)
@@ -450,6 +454,31 @@ namespace BotsMobileAPI.Controllers
                 return new { Data = objNonTransactingCls, MaxJsonLength = Int32.MaxValue };
             }
             return "Invalid Token or Expired";
+        }
+        //ReferAndEarnPoints
+        [HttpPost]
+        public HttpResponseMessage ReferAndEarnPoints([FromBody] ReferAndEarn referAndEarn)
+        {
+
+            if (User.Identity.IsAuthenticated)
+            {
+                try
+                {
+                    using (var context = new CommonDBContext())
+                    {
+                        context.ReferAndEarns.Add(referAndEarn);
+                        context.SaveChanges();
+                        var message = Request.CreateResponse(HttpStatusCode.Created, "Created with SRNo-" + referAndEarn.SlNo.ToString());
+
+                        return message;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ex);
+                }
+            }
+            return Request.CreateErrorResponse(HttpStatusCode.Unauthorized, "Invalid Token or Expired");
         }
 
     }

@@ -35,6 +35,7 @@ namespace BOTS_BL.Models
         public virtual DbSet<tblRMAssigned> tblRMAssigneds { get; set; }
         public virtual DbSet<tblSourcedBy> tblSourcedBies { get; set; }
         public virtual DbSet<tblModulesPayment> tblModulesPayments { get; set; }
+        public virtual DbSet<ReferAndEarn> ReferAndEarns { get; set; }
 
         public virtual DbSet<tblAudit> tblAudits { get; set; }
 
