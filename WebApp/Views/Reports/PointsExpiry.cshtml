@@ -40,9 +40,9 @@
                             </div>
                         </div>
                         <div>
-                            <div class="widget-numbers text-white">
-                                <span style="cursor:pointer;"><a onclick="GetData(0);"><u>@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(Model.MemberCountThisMonth))</u></a></span>
-                                <br /><span style="font-size:20px !important;">@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(Model.MemberPointsThisMonth))</span>
+                            <div class="text-white" style="font-weight:bold;">
+                                Members | <span style="cursor:pointer; font-size:22px !important;"><a onclick="GetData(0);"> <u>@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(Model.MemberCountThisMonth))</u></a></span>
+                                <br />Expiring Points | <span style="font-size:20px !important;"> @String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(Model.MemberPointsThisMonth))</span>
                             </div>
                         </div>
                     </div>
@@ -59,9 +59,9 @@
 
                         </div>
                         <div>
-                            <div class="widget-numbers text-white">
-                                <span style="cursor:pointer;"><a onclick="GetData(1);"><u>@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(Model.MemberCountNextMonth))</u></a></span>
-                                <br /><span style="font-size:20px !important;">@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(Model.MemberPointsNextMonth))</span>
+                            <div class="text-white" style="font-weight:bold;">
+                                Members | <span style="cursor:pointer;font-size:22px !important;"><a onclick="GetData(1);"><u>@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(Model.MemberCountNextMonth))</u></a></span>
+                                <br />Expiring Points | <span style="font-size:20px !important;">@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(Model.MemberPointsNextMonth))</span>
                             </div>
                         </div>
                     </div>
@@ -77,9 +77,9 @@
                             </div>
                         </div>
                         <div>
-                            <div class="widget-numbers text-white">
-                                <span style="cursor:pointer;"><a onclick="GetData(2);"><u>@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(Model.MemberCount3rdMonth))</u></a></span>
-                                <br /><span style="font-size:20px !important;">@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(Model.MemberPoints3rdMonth))</span>
+                            <div class="text-white" style="font-weight:bold;">
+                                Members | <span style="cursor:pointer;font-size:22px !important;"><a onclick="GetData(2);"><u>@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(Model.MemberCount3rdMonth))</u></a></span>
+                                <br />Expiring Points | <span style="font-size:20px !important;">@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(Model.MemberPoints3rdMonth))</span>
                             </div>
                         </div>
                     </div>

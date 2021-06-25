@@ -27,24 +27,24 @@
                     <table class="table" id="activityTable">
                         <thead>
                             <tr style="text-align:center;">
-                                <th scope="col" style="border-top:1px solid black !important;"></th>
-                                <th scope="col" style="border:1px solid black !important;" colspan="8">Keys Indicators</th>
-                                <th scope="col" style="border-right:0px solid black !important;border-top:1px solid black !important;" colspan="4">Points Summary</th>
+                                <th scope="col" style="border-top:1px solid black !important;" colspan="4"></th>
+                                <th scope="col" style="border:1px solid black !important; background-color: #FFF3CB;" colspan="5">Keys Indicators</th>
+                                <th scope="col" style="border-right:0px solid black !important;background-color: #DEEBF6;border-top:1px solid black !important;" colspan="4">Points Summary</th>
                             </tr>
                             <tr style="text-align:end;">
                                 <th scope="col" style="text-align:left;">Outlet Name</th>
                                 <th scope="col">Total Members</th>
                                 <th scope="col">Total Txns</th>
                                 <th scope="col">Total Business</th>
-                                <th scope="col">Biz Share</th>
-                                <th scope="col">ATS</th>
-                                <th scope="col">Non Active</th>
-                                <th scope="col">Only Once</th>
-                                <th scope="col">Red'n Rate</th>
-                                <th scope="col">Points Earn</th>
-                                <th scope="col">Points Burn</th>
-                                <th scope="col">Points Cancelled</th>
-                                <th scope="col">Points Expired</th>
+                                <th scope="col" style="background-color: #FFF3CB;">Biz Share</th>
+                                <th scope="col" style="background-color: #FFF3CB;">ATS</th>
+                                <th scope="col" style="background-color: #FFF3CB;">Non Active</th>
+                                <th scope="col" style="background-color: #FFF3CB;">Only Once</th>
+                                <th scope="col" style="background-color: #FFF3CB;">Red'n Rate</th>
+                                <th scope="col" style="background-color: #DEEBF6;">Points Earn</th>
+                                <th scope="col" style="background-color: #DEEBF6;">Points Burn</th>
+                                <th scope="col" style="background-color: #DEEBF6;">Points Cancelled</th>
+                                <th scope="col" style="background-color: #DEEBF6;">Points Expired</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -87,18 +87,7 @@
                                         else
                                         {
                                             outlet.BizShare = (Convert.ToDecimal(outlet.TotalSpend) * 100) / Convert.ToDecimal(outletWiseLast.TotalSpend);
-                                            decimal NonActivePer = 0;
-                                            if (outlet.TotalMember > 0)
-                                            {
-                                                NonActivePer = (Convert.ToDecimal(outlet.NonActive) * 100) / Convert.ToDecimal(outlet.TotalMember);
-
-                                            }
-                                            decimal OnlyOncePer = 0;
-                                            if (outlet.TotalMember > 0)
-                                            {
-                                                OnlyOncePer = (Convert.ToDecimal(outlet.OnlyOnce) * 100) / Convert.ToDecimal(outlet.TotalMember);
-
-                                            }
+                                            
                                             <tr style="text-align:end;">
                                                 <td style="text-align:left;"><a href="@Url.Action("Transactionwise", "Reports", new { OutletId = outlet.OutletId })" class="login" title="Launch Course">@outlet.OutletName</a></td>
                                                 <td>@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(outlet.TotalMember))</td>
@@ -107,41 +96,70 @@
                                                 <td>@String.Format(new CultureInfo("en-IN", false), "{0:n2}", Convert.ToDecimal(outlet.BizShare))%</td>
 
                                                 <td>@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(outlet.ATS))</td>
-                                                <td>@String.Format(new CultureInfo("en-IN", false), "{0:n2}", Convert.ToDecimal(NonActivePer))%</td>
-                                                <td>@String.Format(new CultureInfo("en-IN", false), "{0:n2}", Convert.ToDecimal(OnlyOncePer))%</td>
-                                                <td>@String.Format(new CultureInfo("en-IN", false), "{0:n2}", Convert.ToDecimal(outlet.RedemptionRate))%</td>
+                                                @if (outlet.NonActiveColor == "Red")
+                                                {
+                                                    <td style="background-color:red;">@String.Format(new CultureInfo("en-IN", false), "{0:n2}", Convert.ToDecimal(outlet.NonActivePer))%</td>
+                                                }
+                                                @if (outlet.NonActiveColor == "Orange")
+                                                {
+                                                    <td style="background-color:darkorange;">@String.Format(new CultureInfo("en-IN", false), "{0:n2}", Convert.ToDecimal(outlet.NonActivePer))%</td>
+                                                }
+                                                @if (outlet.NonActiveColor == "Green")
+                                                {
+                                                    <td style="background-color:limegreen;">@String.Format(new CultureInfo("en-IN", false), "{0:n2}", Convert.ToDecimal(outlet.NonActivePer))%</td>
+                                                }
+
+                                                @if (outlet.OnlyOnceColor == "Red")
+                                                {
+                                                    <td style="background-color:red;">@String.Format(new CultureInfo("en-IN", false), "{0:n2}", Convert.ToDecimal(outlet.OnlyOncePer))%</td>
+                                                }
+                                                @if (outlet.OnlyOnceColor == "Orange")
+                                                {
+                                                    <td style="background-color:darkorange;">@String.Format(new CultureInfo("en-IN", false), "{0:n2}", Convert.ToDecimal(outlet.OnlyOncePer))%</td>
+                                                }
+                                                @if (outlet.OnlyOnceColor == "Green")
+                                                {
+                                                    <td style="background-color:limegreen;">@String.Format(new CultureInfo("en-IN", false), "{0:n2}", Convert.ToDecimal(outlet.OnlyOncePer))%</td>
+                                                }
+
+                                                @if (outlet.RedemptionRateColor == "Red")
+                                                {
+                                                    <td style="background-color:red;">@String.Format(new CultureInfo("en-IN", false), "{0:n2}", Convert.ToDecimal(outlet.RedemptionRate))%</td>
+                                                }
+                                                @if (outlet.RedemptionRateColor == "Orange")
+                                                {
+                                                    <td style="background-color:darkorange;">@String.Format(new CultureInfo("en-IN", false), "{0:n2}", Convert.ToDecimal(outlet.RedemptionRate))%</td>
+                                                }
+                                                @if (outlet.RedemptionRateColor == "Green")
+                                                {
+                                                    <td style="background-color:limegreen;">@String.Format(new CultureInfo("en-IN", false), "{0:n2}", Convert.ToDecimal(outlet.RedemptionRate))%</td>
+                                                }
                                                 <td>@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(outlet.PointsEarned))</td>
                                                 <td>@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(outlet.PointsBurned))</td>
                                                 <td>@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(outlet.PointsCancelled))</td>
                                                 <td>@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(outlet.PointsExpired))</td>
                                             </tr>
-
                                         }
                                     }
                                 }
                                 else
                                 {
                                     <tr>
-                                        <td colspan="12" align="center">No Learning Available</td>
+                                        <td colspan="13" align="center">No Learning Available</td>
                                     </tr>
                                 }
                             }
                             else
                             {
                                 <tr>
-                                    <td colspan="12">No Learning Available</td>
+                                    <td colspan="13">No Learning Available</td>
                                 </tr>
                             }
                         </tbody>
                     </table>
                 </div>
             </div>
-
-
-
-
         </div>
-
     </div>
 </div>
 
@@ -155,12 +173,6 @@
             "bFilter": true,
             "pageLength": 25,
             "pagingType": "simple_numbers",
-            //language: {
-            //    paginate: {
-            //        next: '&#8594;', // or '→'
-            //        previous: '&#8592;' // or '←'
-            //    }
-            //}
             aoColumnDefs: [
                 {
                     bSortable: false,

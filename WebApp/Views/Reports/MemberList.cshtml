@@ -29,6 +29,7 @@
                             <thead>
                                 <tr>
                                     <th scope="col">Enrolled Outlet</th>
+                                    <th scope="col">Enrolled Date</th>
                                     <th scope="col">Mobile Number</th>
                                     <th scope="col">Member Name</th>
                                     <th scope="col">Type</th>
@@ -38,7 +39,7 @@
                                     <th scope="col">Total Burn Points</th>
                                     <th scope="col">Avl Bal Points</th>
                                     <th scope="col">Last Txn Date</th>
-                                    <th scope="col">Enrolled Date</th>
+
                                 </tr>
                             </thead>
                             <tbody>                               
@@ -119,6 +120,7 @@
             "pagingType": "simple_numbers",
             "columns": [
                 { data: "EnrolledOutlet" },
+                { data: "EnrolledDate" },
                 {
                     "mData": "MobileNumber",
                     "mRender": function (data, type, row) {
@@ -158,8 +160,8 @@
                         return '<span>' + addComma(data) + '</span>';
                     }
                 },                
-                { data: "LastTxnDate" },
-                { data: "EnrolledDate" }
+                { data: "LastTxnDate" }
+                
             ],
             "columnDefs": [                
                 {

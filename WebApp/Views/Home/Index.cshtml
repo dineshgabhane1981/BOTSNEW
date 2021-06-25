@@ -7,7 +7,6 @@
     var level = userDetails.LevelIndicator;
 }
 
-
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@0.4.0/dist/chartjs-plugin-datalabels.min.js"></script>
 @*<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.2.2/Chart.bundle.min.js"></script>*@
 
@@ -156,9 +155,9 @@
                     <div class="card-body">
                         <div class="tab-content">
                             <div class="tab-pane fade show active" id="tabs-eg-77">
-                                <div class="card mb-3 widget-chart widget-chart2 text-left w-100">
-                                    <div class="widget-chat-wrapper-outer">
-                                        <div style="overflow:scroll" id="containerOutlet">
+                                <div class="card mb-3 widget-chart widget-chart2 text-left w-100" >
+                                    <div class="widget-chat-wrapper-outer" >
+                                        <div  id="containerOutlet">
                                             <canvas id="cvOutlet"></canvas>
                                             @*// widget-chart-wrapper widget-chart-wrapper-lg opacity-10 m-0*@
                                         </div>
@@ -404,6 +403,11 @@
                                                     <td style="text-align:center;" colspan="2">
                                                         Business Generated:<span id="spnTotalReferralBusniess"></span>
                                                     </td>
+                                                </tr>
+                                                <tr id="trNoOfProfileUpdate">
+                                                    <td style="text-align:center;" colspan="4">
+                                                        No of Profile Update: <span id="spnNoOfProfileUpdate"></span>
+                                                    </td>                                                    
                                                 </tr>
                                             </table>
                                         </div>
@@ -940,7 +944,7 @@
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             success: function (response) {
-
+                console.log(response)
                 if (response != null) {
                     if (response[7] == "1") {
                         $("#dvMWPMsessage").show();
@@ -966,9 +970,9 @@
                             }
                         }
                         var label1 = 'Total Member Base';
-                        var label2 = 'Referring Base';
+                        var label2 = 'No of Profile Update';
                         if (flag == 1) {
-                            label2 = 'No of Profile Update';
+                            label2 = 'Referring Base'; 
                         }
                         var data1 = response[0];
                         var data2 = response[6];
@@ -1004,6 +1008,11 @@
                             $("#spnUniqueReferralTxn").text(addComma(response[3]));
                             $("#spnTotalReferralTxn").text(addComma(response[4]));
                             $("#spnTotalReferralBusniess").text(addComma(response[5]));
+                            $("#trNoOfProfileUpdate").hide()
+                        }
+                        else {
+                            $("#trNoOfProfileUpdate").show();                            
+                            $("#spnNoOfProfileUpdate").text(addComma(response[6]));
                         }
                     }
                 }
