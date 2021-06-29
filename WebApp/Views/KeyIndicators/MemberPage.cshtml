@@ -18,72 +18,58 @@
                                     <hr style="border-top: 1px solid white;margin:0px;" />
                                 </div>
                             </div>
-                            <div>
-                                <div class="widget-numbers" style="font-size:20px !important;">
-                                    <span >@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(Model.ReferringBase))</span>
-                                    <hr style="border-top: 1px solid white;margin:0px;" />
-                                    <span>@String.Format(new CultureInfo("en-IN", false), "{0:n2}", Convert.ToDouble(Model.ReferringBasePercentage))%</span>
-                                </div>
+
+                            <div class="widget-numbers" style="font-size:20px !important;">
+                                <span>@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(Model.ReferringBase))</span>
+                                <hr style="border-top: 1px solid white;margin:0px;" />
+                                <span>@String.Format(new CultureInfo("en-IN", false), "{0:n2}", Convert.ToDouble(Model.ReferringBasePercentage))%</span>
+
                             </div>
+                            <span style="font-size:10px;">% denotes members giving referrals from member base</span>
                         </div>
                     </div>
                 </a>
             </div>
 
-            <div class="col-md-6 col-xl-2" style="padding-right:7px !important; padding-left:7px !important;cursor:pointer;">
+            <div class="col-md-6 col-xl-3" style="padding-right:7px !important; padding-left:7px !important;cursor:pointer;">
                 <a onclick="GetRefGenConv(2);">
-                    <div class="card mb-3 widget-content" style="background-color:#E46C0A;">
+                    <div class="card mb-3 widget-content" style="background-color:#E46C0A; ">
                         <div class="widget-content-wrapper text-white" style="display:block !important;">
                             <div class="widget-content-left">
                                 <div class="widget-heading">
-                                    Ref Gen | Conv
+                                    Ref Gen | Conv | Ref Biz
                                     <hr style="border-top: 1px solid white;margin:0px;" />
                                 </div>
                             </div>
                             <div>
-                                <div class="widget-numbers text-white" style="font-size:20px !important;">
+                                <div class="widget-numbers text-white" style="font-size:20px !important;padding-bottom:17px;">
                                     <span>@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(Model.RefGen))</span> |
-                                    <span>@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(Model.Con))</span>
+                                    <span>@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(Model.Con))</span> |
+                                    <span>@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(Model.RefBiz))</span>
                                     <hr style="border-top: 1px solid white;margin:0px;" />
                                     <span>@String.Format(new CultureInfo("en-IN", false), "{0:n2}", Convert.ToDouble(Model.RefGenConPercentage))%</span>
                                 </div>
+                                <span style="vertical-align:bottom;font-size:10px;">% denotes referral conversions </span>
                             </div>
                         </div>
                     </div>
                 </a>
             </div>
-
-            <div class="col-md-6 col-xl-2" style="padding-right:7px !important; padding-left:7px !important;">
-                <div class="card mb-3 widget-content" style="background-color: #F0F000;padding-bottom:35px;">
-                    <div class="widget-content-wrapper text-white" style="display:block !important;">
-                        <div class="widget-content-left">
-                            <div class="widget-heading">
-                                Ref Biz
-                                <hr style="border-top: 1px solid white;margin:0px;" />
-                            </div>
-                        </div>
-                        <div>
-                            <div class="widget-numbers text-white">
-                                <span style="font-size:20px !important;">@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(Model.RefBiz))</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-md-6 col-xl-2" style="padding-right:7px !important; padding-left:7px !important;cursor:pointer;">
+            
+            <div class="col-md-6 col-xl-3" style="padding-right:7px !important; padding-left:7px !important;cursor:pointer;">
                 <a onclick="GetNewRegistration();">
-                    <div class="card mb-3 widget-content" style="background-color: #D99694; padding-bottom:35px;">
+                    <div class="card mb-3 widget-content" style="background-color: #D99694; padding-bottom:70px;">
                         <div class="widget-content-wrapper text-white" style="display:block !important;">
                             <div class="widget-content-left">
                                 <div class="widget-heading" style="margin-left:-8px;">
-                                    New Registrations
+                                    New Reg Count | New Reg Biz
                                     <hr style="border-top: 1px solid white;margin:0px;" />
                                 </div>
                             </div>
                             <div>
                                 <div class="widget-numbers text-white">
-                                    <span style="font-size:20px !important;">@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(Model.NewRegistration))</span>
+                                    <span style="font-size:20px !important;">@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(Model.NewRegistration))</span> |
+                                    <span style="font-size:20px !important;">@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(Model.NewRegistrationBiz))</span>
                                 </div>
                             </div>
                         </div>
@@ -96,17 +82,17 @@
                     <tr>
                         <th colspan="3" style="text-align:center;background-color:orangered;color:white;"><span style="cursor:pointer;" onclick="ShowValues();">Other Elements</span></th>
                     </tr>
-                    <tr id="tr1" style="display:none;">
+                    <tr id="tr1">
                         <td>Profile Update</td>
                         <td>@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(Model.ProfileUpdateCount))</td>
                         <td>@String.Format(new CultureInfo("en-IN", false), "{0:n2}", Convert.ToDouble(Model.ProfileUpdatePercentage))</td>
                     </tr>
-                    <tr id="tr2" style="display:none;">
+                    <tr id="tr2">
                         <td>Gift-a-Point</td>
                         <td>@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(Model.GiftAPointsCount))</td>
                         <td>@String.Format(new CultureInfo("en-IN", false), "{0:n2}", Convert.ToDouble(Model.GiftAPointsPercentage))</td>
                     </tr>
-                    <tr id="tr3" style="display:none;">
+                    <tr id="tr3">
                         <td>Opt-outs</td>
                         <td>@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(Model.OptOutCount))</td>
                         <td>@String.Format(new CultureInfo("en-IN", false), "{0:n2}", Convert.ToDouble(Model.OptOutPercentage))</td>
@@ -116,7 +102,7 @@
 
             <div class="col-md-6 col-xl-2" style="padding-right:7px !important; padding-left:7px !important;cursor:pointer;">
                 <a onclick="GetMembersInformation();">
-                    <div class="card mb-3 widget-content" style="background-color: lightgreen; padding-bottom:55px;">
+                    <div class="card mb-3 widget-content" style="background-color: lightgreen; padding-bottom:90px;">
                         <div class="widget-content-wrapper text-white" style="display:block !important;">
                             <div class="widget-content-left">
                                 <div class="widget-heading" style="margin-left:-8px;">

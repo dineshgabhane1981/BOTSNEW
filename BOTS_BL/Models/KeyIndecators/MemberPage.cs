@@ -15,6 +15,7 @@ namespace BOTS_BL.Models
         public decimal? RefGenConPercentage { get; set; }
         public long? RefBiz { get; set; }
         public long? NewRegistration { get; set; }
+        public long? NewRegistrationBiz { get; set; }
         public long? ProfileUpdateCount { get; set; }
         public decimal? ProfileUpdatePercentage { get; set; }
         public long? GiftAPointsCount { get; set; }
