@@ -260,15 +260,22 @@ namespace WebApp.Controllers
             }
             List<OutletWise> lstOutletFinal = new List<OutletWise>();
             OutletWise objAdmin = new OutletWise();
-            objAdmin = lstOutlet.Where(x => x.OutletName.IndexOf("Admin") >= 0).FirstOrDefault();
-            foreach (var item in lstOutlet)
+            objAdmin = lstOutlet.Where(x => x.OutletName.ToLower().IndexOf("admin") >= 0).FirstOrDefault();
+            if (objAdmin != null)
             {
-                if (item.OutletId != objAdmin.OutletId)
+                foreach (var item in lstOutlet)
                 {
-                    lstOutletFinal.Add(item);
+                    if (item.OutletId != objAdmin.OutletId)
+                    {
+                        lstOutletFinal.Add(item);
+                    }
                 }
+                lstOutletFinal.Add(objAdmin);
             }
-            lstOutletFinal.Add(objAdmin);
+            else
+            {
+                lstOutletFinal = lstOutlet;
+            }
            
             int totalCount = lstOutletFinal.Count;
             int nonActiveRed = totalCount * 30 / 100;
@@ -597,66 +604,47 @@ namespace WebApp.Controllers
         public ActionResult ProfitableCustomer()
         {
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
-            var lstOutlet = RR.GetOutletList(userDetails.GroupId, userDetails.connectionString);
-            ViewBag.OutletList = lstOutlet;
+            List<SelectListItem> ListFilter = new List<SelectListItem>();
+            SelectListItem newItem = new SelectListItem();
+            newItem.Value = "50";
+            newItem.Text = "50";
+            ListFilter.Add(newItem);
+
+            SelectListItem newItem1 = new SelectListItem();            
+            newItem1.Value = "100";
+            newItem1.Text = "100";
+            ListFilter.Add(newItem1);
+
+            SelectListItem newItem2 = new SelectListItem();
+            newItem2.Value = "500";
+            newItem2.Text = "500";
+            ListFilter.Add(newItem2);
+
+            SelectListItem newItem3 = new SelectListItem();
+            newItem3.Value = "1000";
+            newItem3.Text = "1000";
+            ListFilter.Add(newItem3);
+           
+            ViewBag.ListFilter = ListFilter;
             return View();
         }
 
         [HttpPost]
-        public JsonResult GetProfitableCustomersResult(string DateRangeFlag, string fromDate, string toDate, string outletId, string ReportBasis)
+        public JsonResult GetProfitableCustomersResult(string CountOrBusiness, string Count)
         {
-            var userDetails = (CustomerLoginDetail)Session["UserSession"];
-            if (outletId.Equals("All"))
-            {
-                outletId = "";
-            }
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];            
             List<MemberList> lstMember = new List<MemberList>();
-            lstMember = RR.GetMemberList(userDetails.GroupId, outletId, userDetails.connectionString);
+            lstMember = RR.GetMemberList(userDetails.GroupId, "", userDetails.connectionString);
+            int CountNumber = Convert.ToInt32(Count);
+            if (CountOrBusiness== "Count")
+            {
+                lstMember = lstMember.OrderByDescending(x => x.TxnCount).Take(CountNumber).ToList();
+            }
+            if (CountOrBusiness == "Business")
+            {
+                lstMember = lstMember.OrderByDescending(x => x.TotalSpend).Take(CountNumber).ToList();
+            }
 
-            if (DateRangeFlag == "2")
-            {
-                foreach (var item in lstMember)
-                {
-                    if (!string.IsNullOrEmpty(item.LastTxnDate))
-                    {
-                        var datenew = DateTime.ParseExact(item.LastTxnDate, "dd/MM/yyyy", CultureInfo.InvariantCulture)
-                        .ToString("MM/dd/yyyy", CultureInfo.InvariantCulture);
-                        item.txnDate = Convert.ToDateTime(datenew);
-                    }
-                    else
-                    {
-                        item.txnDate = null;
-                    }
-                }
-                DateTime fDate = Convert.ToDateTime(fromDate);
-                DateTime tDate = Convert.ToDateTime(toDate);
-                lstMember = lstMember.Where(x => x.txnDate >= fDate && x.txnDate <= tDate).ToList();
-            }
-            if (ReportBasis != "")
-            {
-                if (ReportBasis == "1")
-                {
-                    var count = lstMember.Count;
-                    if (count > 10)
-                    {
-                        count = count / 10;
-                    }
-                    lstMember = lstMember.OrderByDescending(x => x.TotalSpend).Take(count).ToList();
-                }
-                if (ReportBasis == "2")
-                {
-                    var count = lstMember.Count;
-                    if (count > 10)
-                    {
-                        count = count / 10;
-                    }
-                    lstMember = lstMember.OrderByDescending(x => x.TxnCount).Take(count).ToList();
-                }
-            }
-            if (lstMember != null)
-            {
-                lstMember = lstMember.OrderByDescending(x => x.TotalSpend).ToList();
-            }
             return new JsonResult() { Data = lstMember, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
 

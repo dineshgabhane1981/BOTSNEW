@@ -58,7 +58,7 @@
             
             <div class="col-md-6 col-xl-3" style="padding-right:7px !important; padding-left:7px !important;cursor:pointer;">
                 <a onclick="GetNewRegistration();">
-                    <div class="card mb-3 widget-content" style="background-color: #D99694; padding-bottom:70px;">
+                    <div class="card mb-3 widget-content" style="background-color: #D99694;">
                         <div class="widget-content-wrapper text-white" style="display:block !important;">
                             <div class="widget-content-left">
                                 <div class="widget-heading" style="margin-left:-8px;">
@@ -67,11 +67,12 @@
                                 </div>
                             </div>
                             <div>
-                                <div class="widget-numbers text-white">
+                                <div class="widget-numbers text-white" style="font-size:20px !important;padding-bottom:47px;">
                                     <span style="font-size:20px !important;">@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(Model.NewRegistration))</span> |
                                     <span style="font-size:20px !important;">@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(Model.NewRegistrationBiz))</span>
                                 </div>
                             </div>
+                            <span style="vertical-align:bottom;font-size:10px;">% denotes conversions of registrations </span>
                         </div>
                     </div>
                 </a>
@@ -115,6 +116,7 @@
                                     <span style="cursor:pointer;font-size:22px !important;"></span>
                                 </div>
                             </div>
+                            
                         </div>
                     </div>
                 </a>
@@ -428,7 +430,7 @@
             $.fn.dataTable.ext.search.push(function (settings, searchData) {
                 var term = $('#txtSearch').val().toLowerCase()
                 for (var i = 0; i < searchData.length; i++) {
-                    if (searchData[i].toLowerCase().indexOf(term) == 0) {
+                    if (searchData[i].toLowerCase().indexOf(term) >= 0) {
                         return true;
                     }
                 }
@@ -505,7 +507,7 @@
             $.fn.dataTable.ext.search.push(function (settings, searchData) {
                 var term = $('#txtSearch').val().toLowerCase()
                 for (var i = 0; i < searchData.length; i++) {
-                    if (searchData[i].toLowerCase().indexOf(term) == 0) {
+                    if (searchData[i].toLowerCase().indexOf(term) >= 0) {
                         return true;
                     }
                 }
@@ -577,7 +579,7 @@
             $.fn.dataTable.ext.search.push(function (settings, searchData) {
                 var term = $('#txtSearch').val().toLowerCase()
                 for (var i = 0; i < searchData.length; i++) {
-                    if (searchData[i].toLowerCase().indexOf(term) == 0) {
+                    if (searchData[i].toLowerCase().indexOf(term) >= 0) {
                         return true;
                     }
                 }
