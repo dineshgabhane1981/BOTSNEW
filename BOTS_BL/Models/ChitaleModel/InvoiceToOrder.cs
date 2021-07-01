@@ -47,8 +47,11 @@ namespace BOTS_BL.Models.ChitaleModel
 
         [StringLength(2)]
         public string Status { get; set; }
+        [NotMapped]
         public string StrDate { get; set; }
+        [NotMapped]
         public string InvAmountStr { get; set; }
+        [NotMapped]
         public string OrderAmountStr { get; set; }
 
     }

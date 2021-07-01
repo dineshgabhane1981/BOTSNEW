@@ -5,32 +5,23 @@
 }
 
 <div class="app-main__inner">
-    <div class="row mb-3 pt-3 pl-3 pr-3 card">
-        <div class="col-sm-10" style="margin-left:15px;">
-            <div class="col-md-10 col-xl-10">
-                <b>Select Outlet</b> :  @Html.DropDownListFor(x => Model.Count, new SelectList(ViewBag.OutletList, "Value", "Text"), "All", htmlAttributes: new { @class = "input100", @id = "OutletList" })
+    <div class="row mb-3 pt-3 pl-3 pr-3 card">        
+        <div class="col-sm-10" style="margin-left:15px;padding-bottom:10px; display:flex;">
+            <div class="col-md-10 col-xl-6">
+                Top
+                @Html.DropDownListFor(x => Model.Count, new SelectList(ViewBag.ListFilter, "Value", "Text"), "Select", htmlAttributes: new { @class = "input50", @id = "TopTxnCount" })
+                Members as per Txn Count
             </div>
-        </div>
-        <div class="col-sm-10" style="display:flex;padding-bottom: 10px;margin-top:5px;margin-left:15px;padding-top:20px;">
-            <div class="col-md-6 col-xl-4" style="padding-top: 15px;">
-                <b>Txn Date Range</b>&nbsp;&nbsp; <input type="radio" checked id="rdnBTD" name="btdornot" /> BTD &nbsp;&nbsp;&nbsp;&nbsp;
-                <input type="radio" id="rdnRange" name="btdornot" /> Range
+            <b style="margin-top:15px;">OR</b>
+            <div class="col-md-10 col-xl-6">
+                Top
+                @Html.DropDownListFor(x => Model.Count, new SelectList(ViewBag.ListFilter, "Value", "Text"), "Select", htmlAttributes: new { @class = "input50", @id = "TopBusiness" })
+                Members as per Business
             </div>
-            <div class="col-md-3 col-xl-3">
-                <input type="text" class="input50" placeholder="From Date" readonly id="dtFrom" />&nbsp;&nbsp;&nbsp;&nbsp;
+            <div style="margin-right:100px;margin-top:10px;">
+                <button id="btnFilter" class="btn btn-primary login-btn pull-right">Filter</button>
             </div>
-            <div class="col-md-3 col-xl-3">
-                <input type="text" class="input50" placeholder="To Date" readonly id="dtTo" />
-            </div>
-        </div>
-
-        <div class="col-sm-10" style="margin-bottom:20px;margin-top:20px;margin-left:15px;">
-            <div class="col-md-10 col-xl-10">
-                <b>Report Basis</b> :  <input type="radio" id="rdnSpends" name="raportbasis" /> Spends &nbsp;&nbsp;&nbsp;&nbsp;
-                <input type="radio" id="rdnVisit" name="raportbasis" /> Visit
-                <button id="btnFilter" class="btn btn-primary login-btn" style="margin-left:40px;">Filter</button>
-            </div>
-        </div>
+        </div>       
     </div>
 
     <div class="row mb-3 card">
@@ -97,65 +88,51 @@
     });
 
     $(document).ready(function () {
-        SetFilter();
-        GetData();
-        $("#rdnBTD").change(function () {
-            SetFilter();
+        //SetFilter();
+        //GetData();
+        $("#TopTxnCount").change(function () {
+            SetFilter(1);
         });
-        $("#rdnRange").change(function () {
-            SetFilter();
+        $("#TopBusiness").change(function () {
+            SetFilter(2);
         });
         $("#btnFilter").click(function () {
-            GetData();
+            if ($('#TopTxnCount').val() == "0" && $('#TopBusiness').val() == "0") {
+                alert("Please select Members as per Txn Count OR Members as per Business");
+            }
+            else {
+                GetData();
+            }
         });
     });
 
-    function SetFilter() {
-        if ($("#rdnBTD").is(":checked")) {
-            $('#dtFrom').prop('readonly', true);
-            $('#dtTo').prop('readonly', true);
-            $('#dtFrom').val('');
-            $('#dtTo').val('');
+    function SetFilter(flag) {
+        if (flag==1) {
+            $('#TopBusiness').prop('selectedIndex', 0);
         }
-
-        if ($("#rdnRange").is(":checked")) {
-            $('#dtFrom').prop('readonly', false);
-            $('#dtTo').prop('readonly', false);
+        else  {
+            $('#TopTxnCount').prop('selectedIndex', 0);
         }
     }
 
     function GetData() {
-        $("#divLoader").show();
-        var DateRangeFlag = "0";
-        var fromDate = '';
-        var toDate = '';
-        $("#divLoader").show();
-        if ($("#rdnBTD").is(":checked")) {
-            DateRangeFlag = "1";
-            fromDate = $('#dtFrom').val();
-            toDate = $('#dtTo').val();
+        $("#divLoader").show();   
+        var CountOrBusiness = "";
+        var Count = 0;
+        
+        if ($('#TopTxnCount').val() != "") {
+            CountOrBusiness = "Count";
+            Count = $('#TopTxnCount').val();
+            
         }
-        if ($("#rdnRange").is(":checked")) {
-            DateRangeFlag = "2";
-            fromDate = $('#dtFrom').val();
-            toDate = $('#dtTo').val();
+        if ($('#TopBusiness').val() != "") {
+            CountOrBusiness = "Business";
+            Count = $('#TopBusiness').val();
         }
-        var outletId = "";
-        if ($("#OutletList").val() != "") {
-            outletId = $("#OutletList").val();
-        }
-        var ReportBasis = 0;
-        if ($("#rdnSpends").is(":checked")) {
-            ReportBasis = 1;
-        }
-        if ($("#rdnVisit").is(":checked")) {
-            ReportBasis = 2;
-        }
-
         $.ajax({
             type: "POST",
             url: '@Url.Action("GetProfitableCustomersResult", "Reports")',
-            data: "{'DateRangeFlag': " + DateRangeFlag + ", 'fromDate': '" + fromDate + "','toDate': '" + toDate + "','outletId': '" + outletId + "','ReportBasis': " + ReportBasis + "}",
+            data: "{'CountOrBusiness': '" + CountOrBusiness + "', 'Count': '" + Count + "'}",
 
             contentType: "application/json; charset=utf-8",
             dataType: "json",
@@ -282,12 +259,11 @@
         });
         $('#activityTable_filter').hide();
 
-        $('#txtSearch').on('keyup', function () {
-
-            $.fn.dataTable.ext.search.push(function (settings, searchData) {
+        $('#txtSearch').on('keyup', function () {            
+            $.fn.dataTable.ext.search.push(function (settings, searchData) {                
                 var term = $('#txtSearch').val().toLowerCase()
-                for (var i = 0; i < searchData.length; i++) {
-                    if (searchData[i].toLowerCase().indexOf(term) == 0) {
+                for (var i = 0; i < searchData.length; i++) {                    
+                    if (searchData[i].toLowerCase().indexOf(term) >= 0) {
                         return true;
                     }
                 }

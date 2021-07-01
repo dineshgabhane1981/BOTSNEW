@@ -304,34 +304,34 @@ namespace WebApp.Controllers
             bool status = false;
             try
             {
-                Random r = new Random();
-                int randNum = r.Next(1000000);
-                string sixDigitNumber = randNum.ToString("D6");
+                //Random r = new Random();
+                //int randNum = r.Next(1000000);
+                //string sixDigitNumber = randNum.ToString("D6");
 
-                status = DR.InsertOTP(emailId, Convert.ToInt32(sixDigitNumber));
+                //status = DR.InsertOTP(emailId, Convert.ToInt32(sixDigitNumber));
 
-                var senderEmail = new MailAddress("dgabhane@gmail.com", "Dinesh G");
-                var receiverEmail = new MailAddress(emailId, "Receiver");
-                var password = "Dinesh1981";
-                var subject = "Your OTP is here";
-                var body = "Your OTP is - " + sixDigitNumber;
-                var smtp = new SmtpClient
-                {
-                    Host = "smtp.gmail.com",
-                    Port = 587,
-                    EnableSsl = true,
-                    DeliveryMethod = SmtpDeliveryMethod.Network,
-                    UseDefaultCredentials = false,
-                    Credentials = new NetworkCredential(senderEmail.Address, password)
-                };
-                using (var mess = new MailMessage(senderEmail, receiverEmail)
-                {
-                    Subject = subject,
-                    Body = body
-                })
-                {
-                    smtp.Send(mess);
-                }
+                //var senderEmail = new MailAddress("dgabhane@gmail.com", "Dinesh G");
+                //var receiverEmail = new MailAddress(emailId, "Receiver");
+                //var password = "Dinesh1981";
+                //var subject = "Your OTP is here";
+                //var body = "Your OTP is - " + sixDigitNumber;
+                //var smtp = new SmtpClient
+                //{
+                //    Host = "smtp.gmail.com",
+                //    Port = 587,
+                //    EnableSsl = true,
+                //    DeliveryMethod = SmtpDeliveryMethod.Network,
+                //    UseDefaultCredentials = false,
+                //    Credentials = new NetworkCredential(senderEmail.Address, password)
+                //};
+                //using (var mess = new MailMessage(senderEmail, receiverEmail)
+                //{
+                //    Subject = subject,
+                //    Body = body
+                //})
+                //{
+                //    smtp.Send(mess);
+                //}
                 status = true;
             }
             catch (Exception ex)

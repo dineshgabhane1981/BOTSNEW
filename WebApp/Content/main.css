@@ -9982,7 +9982,7 @@ a, button, .btn {
 
 .app-header__logo {
     padding: 0 1.5rem;
-    height: 60px;
+    height: 70px;
     width: 280px;
     display: flex;
     align-items: center;
@@ -9990,9 +9990,9 @@ a, button, .btn {
 }
 
     .app-header__logo .logo-src {
-        height: 50px;
+        height: 70px;
         width: 100%;
-        background: url(assets/images/Blue-Ocktopus-TLC_white_New.jpg)
+        background: url(assets/Blue_Ocktopus-TLC_blue.png)
         /*background: url(assets/images/logo.jpg)*/
     }
 

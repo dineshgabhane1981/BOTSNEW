@@ -22,6 +22,11 @@ namespace BOTS_BL.Models
         public long? PointsCancelled { get; set; }
         public long? PointsExpired { get; set; }
         public decimal? BizShare { get; set; }
+        public string NonActiveColor { get; set; }
+        public string OnlyOnceColor { get; set; }
+        public string RedemptionRateColor { get; set; }
+        public decimal NonActivePer { get; set; }
+        public decimal OnlyOncePer { get; set; }
 
     }
 }

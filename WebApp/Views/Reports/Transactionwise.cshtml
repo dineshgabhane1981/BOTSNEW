@@ -247,12 +247,7 @@
                     }
                 },
                 { data: "TxnType" },
-                {
-                    "mData": "PointsEarned",
-                    "mRender": function (data, type, row) {
-                        return '<span>' + addComma(data) + '</span>';
-                    }
-                },
+                { data: "PointsEarned" },
                 {
                     "mData": "PointsBurned",
                     "mRender": function (data, type, row) {
@@ -289,7 +284,7 @@
             $.fn.dataTable.ext.search.push(function (settings, searchData) {
                 var term = $('#txtSearch').val().toLowerCase()
                 for (var i = 0; i < searchData.length; i++) {
-                    if (searchData[i].toLowerCase().indexOf(term) == 0) {
+                    if (searchData[i].toLowerCase().indexOf(term) >= 0) {
                         return true;
                     }
                 }

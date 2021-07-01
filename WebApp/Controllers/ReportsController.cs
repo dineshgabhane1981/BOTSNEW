@@ -107,28 +107,28 @@ namespace WebApp.Controllers
 
         public ActionResult CreateOwnSegment()
         {
-            
-                var userDetails = (CustomerLoginDetail)Session["UserSession"];
-                var lstEnrolledList = RR.GetEnrolledList(userDetails.GroupId, userDetails.connectionString);
-                ViewBag.lstEnrolledList = lstEnrolledList;
-                var lstnontransactedList = RR.GetNonTransactedList(userDetails.GroupId, userDetails.connectionString);
-                ViewBag.lstnontransactedList = lstnontransactedList;
-                var lstSpendList = RR.GetSpendList(userDetails.GroupId, userDetails.connectionString);
-                ViewBag.lstSpendList = lstSpendList;
-                var lstGenderList = RR.GetGenderList(userDetails.GroupId, userDetails.connectionString);
-                ViewBag.lstGenderList = lstGenderList;
-                var lstSourceList = RR.GetSourseList(userDetails.GroupId, userDetails.connectionString);
-                ViewBag.lstSourceList = lstSourceList;
-                var lstRedeemedList = RR.GetRedeemedList(userDetails.GroupId, userDetails.connectionString);
-                ViewBag.lstRedeemedList = lstRedeemedList;
-                var lstOutlet = RR.GetOutletListForSliceAndDice(userDetails.GroupId, userDetails.connectionString);
-                ViewBag.lstOutlet = lstOutlet;
-                var TotalCount = RR.GetTotalMemberCount(userDetails.GroupId, userDetails.connectionString);
-                ViewBag.TotalMemberCount = TotalCount;
-                var lstBrandList = RR.GetBrandList(userDetails.GroupId, userDetails.connectionString);
-                ViewBag.lstBrandList = lstBrandList;
-                return View();
-            
+
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            var lstEnrolledList = RR.GetEnrolledList(userDetails.GroupId, userDetails.connectionString);
+            ViewBag.lstEnrolledList = lstEnrolledList;
+            var lstnontransactedList = RR.GetNonTransactedList(userDetails.GroupId, userDetails.connectionString);
+            ViewBag.lstnontransactedList = lstnontransactedList;
+            var lstSpendList = RR.GetSpendList(userDetails.GroupId, userDetails.connectionString);
+            ViewBag.lstSpendList = lstSpendList;
+            var lstGenderList = RR.GetGenderList(userDetails.GroupId, userDetails.connectionString);
+            ViewBag.lstGenderList = lstGenderList;
+            var lstSourceList = RR.GetSourseList(userDetails.GroupId, userDetails.connectionString);
+            ViewBag.lstSourceList = lstSourceList;
+            var lstRedeemedList = RR.GetRedeemedList(userDetails.GroupId, userDetails.connectionString);
+            ViewBag.lstRedeemedList = lstRedeemedList;
+            var lstOutlet = RR.GetOutletListForSliceAndDice(userDetails.GroupId, userDetails.connectionString);
+            ViewBag.lstOutlet = lstOutlet;
+            var TotalCount = RR.GetTotalMemberCount(userDetails.GroupId, userDetails.connectionString);
+            ViewBag.TotalMemberCount = TotalCount;
+            var lstBrandList = RR.GetBrandList(userDetails.GroupId, userDetails.connectionString);
+            ViewBag.lstBrandList = lstBrandList;
+            return View();
+
 
         }
         public JsonResult GetFilteredData(string jsonData)
@@ -232,7 +232,7 @@ namespace WebApp.Controllers
         {
             string loginId = string.Empty;
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
-            if(userDetails.LevelIndicator =="03" || userDetails.LevelIndicator == "04")
+            if (userDetails.LevelIndicator == "03" || userDetails.LevelIndicator == "04")
             {
                 loginId = userDetails.LoginId;
             }
@@ -241,7 +241,6 @@ namespace WebApp.Controllers
             OutletWise objSum = new OutletWise();
             foreach (var item in lstOutlet)
             {
-
                 objSum.TotalMember = (objSum.TotalMember == null ? 0 : objSum.TotalMember) + (item.TotalMember == null ? 0 : item.TotalMember);
                 objSum.TotalTxn = (objSum.TotalTxn == null ? 0 : objSum.TotalTxn) + (item.TotalTxn == null ? 0 : item.TotalTxn);
                 objSum.TotalSpend = (objSum.TotalSpend == null ? 0 : objSum.TotalSpend) + (item.TotalSpend == null ? 0 : item.TotalSpend);
@@ -252,11 +251,103 @@ namespace WebApp.Controllers
                 objSum.PointsBurned = (objSum.PointsBurned == null ? 0 : objSum.PointsBurned) + (item.PointsBurned == null ? 0 : item.PointsBurned);
                 objSum.PointsCancelled = (objSum.PointsCancelled == null ? 0 : objSum.PointsCancelled) + (item.PointsCancelled == null ? 0 : item.PointsCancelled);
                 objSum.PointsExpired = (objSum.PointsExpired == null ? 0 : objSum.PointsExpired) + (item.PointsExpired == null ? 0 : item.PointsExpired);
+
+                if (item.TotalMember > 0)
+                {
+                    item.NonActivePer = (Convert.ToDecimal(item.NonActive) * 100) / Convert.ToDecimal(item.TotalMember);
+                    item.OnlyOncePer = (Convert.ToDecimal(item.OnlyOnce) * 100) / Convert.ToDecimal(item.TotalMember);
+                }
+            }
+            List<OutletWise> lstOutletFinal = new List<OutletWise>();
+            OutletWise objAdmin = new OutletWise();
+            objAdmin = lstOutlet.Where(x => x.OutletName.ToLower().IndexOf("admin") >= 0).FirstOrDefault();
+            if (objAdmin != null)
+            {
+                foreach (var item in lstOutlet)
+                {
+                    if (item.OutletId != objAdmin.OutletId)
+                    {
+                        lstOutletFinal.Add(item);
+                    }
+                }
+                lstOutletFinal.Add(objAdmin);
+            }
+            else
+            {
+                lstOutletFinal = lstOutlet;
+            }
+           
+            int totalCount = lstOutletFinal.Count;
+            int nonActiveRed = totalCount * 30 / 100;
+            int nonActiveOrange = totalCount * 45 / 100;
+            int nonActiveGreen = totalCount - (nonActiveRed + nonActiveOrange);
+
+            var nonActiveRedOutlets = lstOutletFinal.OrderByDescending(x => x.NonActivePer).Take(nonActiveRed).ToList();
+            var nonActiveOrangeOutlets = lstOutletFinal.OrderByDescending(x => x.NonActivePer).Skip(nonActiveRed).Take(nonActiveOrange).ToList();
+            var nonActiveGreenOutlets = lstOutletFinal.OrderByDescending(x => x.NonActivePer).Skip(nonActiveRed + nonActiveOrange).Take(nonActiveGreen).ToList();
+
+            var onlyOnceRedOutlets = lstOutletFinal.OrderByDescending(x => x.OnlyOncePer).Take(nonActiveRed).ToList();
+            var onlyOnceOrangeOutlets = lstOutletFinal.OrderByDescending(x => x.OnlyOncePer).Skip(nonActiveRed).Take(nonActiveOrange).ToList();
+            var onlyOnceGreenOutlets = lstOutletFinal.OrderByDescending(x => x.OnlyOncePer).Skip(nonActiveRed + nonActiveOrange).Take(nonActiveGreen).ToList();
+
+            var RedmRedOutlets = lstOutletFinal.OrderBy(x => x.RedemptionRate).Take(nonActiveRed).ToList();
+            var RedmOrangeOutlets = lstOutletFinal.OrderBy(x => x.RedemptionRate).Skip(nonActiveRed).Take(nonActiveOrange).ToList();
+            var RedmGreenOutlets = lstOutletFinal.OrderBy(x => x.RedemptionRate).Skip(nonActiveRed + nonActiveOrange).Take(nonActiveGreen).ToList();
+
+
+            foreach (var item in lstOutletFinal)
+            {
+                var outletRed = nonActiveRedOutlets.Where(x => x.OutletId == item.OutletId).FirstOrDefault();
+                if (outletRed != null)
+                {
+                    item.NonActiveColor = "Red";
+                }
+                var outletOrange = nonActiveOrangeOutlets.Where(x => x.OutletId == item.OutletId).FirstOrDefault();
+                if (outletOrange != null)
+                {
+                    item.NonActiveColor = "Orange";
+                }
+                var outletGreen = nonActiveGreenOutlets.Where(x => x.OutletId == item.OutletId).FirstOrDefault();
+                if (outletGreen != null)
+                {
+                    item.NonActiveColor = "Green";
+                }
+
+                var outletOORed = onlyOnceRedOutlets.Where(x => x.OutletId == item.OutletId).FirstOrDefault();
+                if (outletOORed != null)
+                {
+                    item.OnlyOnceColor = "Red";
+                }
+                var outletOOOrange = onlyOnceOrangeOutlets.Where(x => x.OutletId == item.OutletId).FirstOrDefault();
+                if (outletOOOrange != null)
+                {
+                    item.OnlyOnceColor = "Orange";
+                }
+                var outletOOGreen = onlyOnceGreenOutlets.Where(x => x.OutletId == item.OutletId).FirstOrDefault();
+                if (outletOOGreen != null)
+                {
+                    item.OnlyOnceColor = "Green";
+                }
+
+                var outletRRRed = RedmRedOutlets.Where(x => x.OutletId == item.OutletId).FirstOrDefault();
+                if (outletRRRed != null)
+                {
+                    item.RedemptionRateColor = "Red";
+                }
+                var outletRROrange = RedmOrangeOutlets.Where(x => x.OutletId == item.OutletId).FirstOrDefault();
+                if (outletRROrange != null)
+                {
+                    item.RedemptionRateColor = "Orange";
+                }
+                var outletRRGreen = RedmGreenOutlets.Where(x => x.OutletId == item.OutletId).FirstOrDefault();
+                if (outletRRGreen != null)
+                {
+                    item.RedemptionRateColor = "Green";
+                }
             }
             objSum.OutletName = "Total";
-            lstOutlet.Add(objSum);
-
-            return PartialView("_Outletwise", lstOutlet);
+            lstOutletFinal.Add(objSum);
+            return PartialView("_Outletwise", lstOutletFinal);
         }
 
         [HttpPost]
@@ -291,7 +382,7 @@ namespace WebApp.Controllers
                     objMemberSearch = RR.GetMeamberSearchData(GroupId, searchData, connStr, loginId);
                 }
                 else
-                {                    
+                {
                     objMemberSearch = RR.GetMeamberSearchData(userDetails.GroupId, searchData, userDetails.connectionString, loginId);
                 }
             }
@@ -513,66 +604,47 @@ namespace WebApp.Controllers
         public ActionResult ProfitableCustomer()
         {
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
-            var lstOutlet = RR.GetOutletList(userDetails.GroupId, userDetails.connectionString);
-            ViewBag.OutletList = lstOutlet;
+            List<SelectListItem> ListFilter = new List<SelectListItem>();
+            SelectListItem newItem = new SelectListItem();
+            newItem.Value = "50";
+            newItem.Text = "50";
+            ListFilter.Add(newItem);
+
+            SelectListItem newItem1 = new SelectListItem();            
+            newItem1.Value = "100";
+            newItem1.Text = "100";
+            ListFilter.Add(newItem1);
+
+            SelectListItem newItem2 = new SelectListItem();
+            newItem2.Value = "500";
+            newItem2.Text = "500";
+            ListFilter.Add(newItem2);
+
+            SelectListItem newItem3 = new SelectListItem();
+            newItem3.Value = "1000";
+            newItem3.Text = "1000";
+            ListFilter.Add(newItem3);
+           
+            ViewBag.ListFilter = ListFilter;
             return View();
         }
 
         [HttpPost]
-        public JsonResult GetProfitableCustomersResult(string DateRangeFlag, string fromDate, string toDate, string outletId, string ReportBasis)
+        public JsonResult GetProfitableCustomersResult(string CountOrBusiness, string Count)
         {
-            var userDetails = (CustomerLoginDetail)Session["UserSession"];
-            if (outletId.Equals("All"))
-            {
-                outletId = "";
-            }
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];            
             List<MemberList> lstMember = new List<MemberList>();
-            lstMember = RR.GetMemberList(userDetails.GroupId, outletId, userDetails.connectionString);
+            lstMember = RR.GetMemberList(userDetails.GroupId, "", userDetails.connectionString);
+            int CountNumber = Convert.ToInt32(Count);
+            if (CountOrBusiness== "Count")
+            {
+                lstMember = lstMember.OrderByDescending(x => x.TxnCount).Take(CountNumber).ToList();
+            }
+            if (CountOrBusiness == "Business")
+            {
+                lstMember = lstMember.OrderByDescending(x => x.TotalSpend).Take(CountNumber).ToList();
+            }
 
-            if (DateRangeFlag == "2")
-            {
-                foreach(var item in lstMember)
-                {
-                    if (!string.IsNullOrEmpty(item.LastTxnDate))
-                    {                        
-                        var datenew = DateTime.ParseExact(item.LastTxnDate, "dd/MM/yyyy", CultureInfo.InvariantCulture)
-                        .ToString("MM/dd/yyyy", CultureInfo.InvariantCulture);
-                        item.txnDate = Convert.ToDateTime(datenew);
-                    }
-                    else
-                    {
-                        item.txnDate = null;
-                    }
-                }
-                DateTime fDate = Convert.ToDateTime(fromDate);
-                DateTime tDate = Convert.ToDateTime(toDate);
-                lstMember = lstMember.Where(x => x.txnDate >= fDate && x.txnDate <= tDate).ToList();
-            }
-            if (ReportBasis != "")
-            {
-                if(ReportBasis=="1")
-                {
-                    var count = lstMember.Count;
-                    if (count > 10)
-                    {
-                        count = count / 10;
-                    }
-                    lstMember = lstMember.OrderByDescending(x => x.TotalSpend).Take(count).ToList();
-                }
-                if (ReportBasis == "2")
-                {
-                    var count = lstMember.Count;
-                    if (count > 10)
-                    {
-                        count = count / 10;
-                    }
-                    lstMember = lstMember.OrderByDescending(x => x.TxnCount).Take(count).ToList();
-                }
-            }
-            if(lstMember!=null)
-            {
-                lstMember = lstMember.OrderByDescending(x => x.TotalSpend).ToList();
-            }
             return new JsonResult() { Data = lstMember, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
 
@@ -629,7 +701,7 @@ namespace WebApp.Controllers
                         lstMember = lstMember.OrderByDescending(x => x.TxnCount).Take(count).ToList();
                     }
                 }
-                
+
                 PropertyDescriptorCollection properties = TypeDescriptor.GetProperties(typeof(MemberList));
                 foreach (PropertyDescriptor prop in properties)
                     table.Columns.Add(prop.Name, Nullable.GetUnderlyingType(prop.PropertyType) ?? prop.PropertyType);
@@ -643,7 +715,7 @@ namespace WebApp.Controllers
                     table.Rows.Add(row);
                 }
                 table.Columns.Remove("MobileNo");
-                table.Columns.Remove("txnDate");                
+                table.Columns.Remove("txnDate");
                 table.Columns["MaskedMobileNo"].ColumnName = "MobileNo";
                 //table.Columns.Remove("MaskedMobileNo");                
                 string fileName = ReportName + ".xlsx";
