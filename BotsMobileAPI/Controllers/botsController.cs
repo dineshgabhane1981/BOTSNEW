@@ -480,6 +480,70 @@ namespace BotsMobileAPI.Controllers
             }
             return Request.CreateErrorResponse(HttpStatusCode.Unauthorized, "Invalid Token or Expired");
         }
+        //membersearch
+        [HttpGet]
+        public object GetMemberSearchResult(string searchData, string GroupId)
+        {
+            if (User.Identity.IsAuthenticated)
+            {
+                string connectionString = CR.GetCustomerConnString(GroupId);
+                CustomerRepository objCustRepo = new CustomerRepository();
+                MemberSearch objMemberSearch = new MemberSearch();
+               
+                  //  var userDetails = (CustomerLoginDetail)Session["UserSession"];
+                    string loginId = string.Empty;
+                   
+                    if (!string.IsNullOrEmpty(GroupId) && GroupId != "undefined")
+                    {
+                       // string connStr = objCustRepo.GetCustomerConnString(GroupId);
+                        objMemberSearch = RR.GetMeamberSearchData(GroupId, searchData, connectionString, loginId);
+                    }
+                    else
+                    {
+                        objMemberSearch = RR.GetMeamberSearchData(GroupId, searchData,connectionString, loginId);
+                    }
+               
+                return new { Data = objMemberSearch, MaxJsonLength = Int32.MaxValue };
+            }
+            return "Invalid Token or Expired";
+        }
+        //need to add API
+        [HttpGet]
+        public object GetSMSCreditBalance(string GroupId)
+        {
+            if (User.Identity.IsAuthenticated)
+            {
+                string connectionString = CR.GetCustomerConnString(GroupId);
+                var whatsApptoken ="";
+                using (var contextNew = new BOTSDBContext(connectionString))
+                {                    
+                     whatsApptoken = contextNew.SMSDetails.Select(x => x.WhatsappTokenId).FirstOrDefault();
+                }
+               
+                return new { Data = whatsApptoken, MaxJsonLength = Int32.MaxValue };
+            }
+            return "Invalid Token or Expired";
+
+        }
+
+        [HttpGet]
+        public object AuthenticateUser(string LoginId, string Password)
+        {
+            if (User.Identity.IsAuthenticated)
+            {
+               // string connectionString = CR.GetCustomerConnString(GroupId);
+                DatabaseDetail DBDetails = new DatabaseDetail();
+                CustomerLoginDetail userDetail = new CustomerLoginDetail();
+
+                var userDetails = LR.AuthenticateUserAPI(LoginId, Password);
+               
+
+                return new { Data = userDetails, MaxJsonLength = Int32.MaxValue };
+            }
+            return "Invalid Token or Expired";
+        }
+
+
 
     }
 }

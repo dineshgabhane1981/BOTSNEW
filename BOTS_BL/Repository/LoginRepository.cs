@@ -50,6 +50,18 @@ namespace BOTS_BL.Repository
 
         }
 
+        public CustomerLoginDetail AuthenticateUserAPI(string LoginId, string Password)
+        {
+            DatabaseDetail DBDetails = new DatabaseDetail();
+            CustomerLoginDetail userDetail = new CustomerLoginDetail();
+            using (var context = new CommonDBContext())
+            {
+                userDetail = context.CustomerLoginDetails.Where(a => a.LoginId == LoginId && a.Password == Password).FirstOrDefault();
+            }
+            return userDetail;
+
+        }
+
         public void AddException(tblErrorLog objerrorlog)
         {
             try
