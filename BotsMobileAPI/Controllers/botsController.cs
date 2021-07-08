@@ -544,8 +544,44 @@ namespace BotsMobileAPI.Controllers
         }
 
 
-
-    }
+        [HttpPost]
+        public HttpResponseMessage SendOTP(string mobileNo)
+        {
+            bool status = false;          
+            if (User.Identity.IsAuthenticated)
+            {
+                var sender = "BLUEOC";
+                var Url = " https://http2.myvfirst.com/smpp/sendsms?";
+                Random random = new Random();
+                int randNum = random.Next(1000000);
+                string sixDigitNumber = randNum.ToString("D6");
+                status = DR.InsertOTP(mobileNo, Convert.ToInt32(sixDigitNumber));
+                string MobileMessage = "Dear Member," + sixDigitNumber + " is your OTP. Sample SMS for OTP - Blue Ocktopus";                
+                bool result = DR.SendOTPMessage(mobileNo, sender, MobileMessage, Url);
+                if (result)
+                {
+                   var message = Request.CreateResponse(HttpStatusCode.OK);
+                    return message;
+                }
+                else
+                {
+                   return Request.CreateErrorResponse(HttpStatusCode.BadRequest,"OTP Not Send");
+                }
+               
+            }
+            return Request.CreateErrorResponse(HttpStatusCode.Unauthorized, "Invalid Token or Expired");
+        }
+        [HttpGet]
+        public object VerifyOTP(string emailId, int OTP)
+        {
+            if (User.Identity.IsAuthenticated)
+            {
+                bool status = DR.VerifyOTP(emailId, OTP);
+                return new { Data = status, MaxJsonLength = Int32.MaxValue };
+            }
+            return "Invalid Token or Expired";
+        }
+     }
 }
 
 

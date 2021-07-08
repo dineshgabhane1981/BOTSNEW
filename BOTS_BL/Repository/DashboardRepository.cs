@@ -7,6 +7,9 @@ using BOTS_BL.Models;
 using System.Data.Entity;
 using System.Data.Entity.Migrations;
 using System.Data.SqlClient;
+using System.Net;
+using System.Web;
+using System.IO;
 
 namespace BOTS_BL.Repository
 {
@@ -300,6 +303,48 @@ namespace BOTS_BL.Repository
             catch (Exception ex)
             {
 
+            }
+            return status;
+        }
+
+        public bool SendOTPMessage(string MobileNo, string Sender, string MobileMessage, string Url)
+        {
+            bool status = false;
+            try
+            {
+                var UserName = System.Configuration.ConfigurationManager.AppSettings["SMSUserID"];
+                var Password = System.Configuration.ConfigurationManager.AppSettings["SMSPassword"];
+
+                MobileMessage = HttpUtility.UrlEncode(MobileMessage);
+                string type1 = "TEXT";
+                StringBuilder sbposdata1 = new StringBuilder();
+                sbposdata1.AppendFormat("username={0}", UserName);
+                sbposdata1.AppendFormat("&password={0}", Password);
+                sbposdata1.AppendFormat("&to={0}", MobileNo);
+                sbposdata1.AppendFormat("&from={0}", Sender);
+                sbposdata1.AppendFormat("&text={0}", MobileMessage);
+                ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls | (SecurityProtocolType)3072;
+                ServicePointManager.ServerCertificateValidationCallback += (sender, cert, chain, sslPolicyErrors) => true;
+                HttpWebRequest httpWReq1 = (HttpWebRequest)WebRequest.Create(Url);
+                UTF8Encoding encoding1 = new UTF8Encoding();
+                byte[] data1 = encoding1.GetBytes(sbposdata1.ToString());
+                httpWReq1.Method = "POST";
+                httpWReq1.ContentType = "application/x-www-form-urlencoded";
+                httpWReq1.ContentLength = data1.Length;
+                using (Stream stream1 = httpWReq1.GetRequestStream())
+                {
+                    stream1.Write(data1, 0, data1.Length);
+                }
+                HttpWebResponse response1 = (HttpWebResponse)httpWReq1.GetResponse();
+                StreamReader reader1 = new StreamReader(response1.GetResponseStream());
+                string responseString1 = reader1.ReadToEnd();
+                reader1.Close();
+                response1.Close();
+                return status = true;
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "OTPSend");
             }
             return status;
         }
