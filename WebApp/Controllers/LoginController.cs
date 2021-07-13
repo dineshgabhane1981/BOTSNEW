@@ -70,22 +70,32 @@ namespace WebApp.Controllers
         public string CheckUserAndSendOTP(string LoginID)
         {
             string returnString = string.Empty;
-            var loginType = LR.CheckUserType(LoginID);
-            if(loginType!="1")
+            try
             {
-                var result = new HomeController().SendOTP(LoginID);
-                if (result)
+                
+                var loginType = LR.CheckUserType(LoginID);
+                if (loginType != "1")
                 {
-                    returnString = "OTP";
+                    var result = new HomeController().SendOTP(LoginID);
+                    if (result)
+                    {
+                        returnString = "OTP";
+                    }
+                    else
+                    {
+                        returnString = "error in sending OTP";
+                    }
                 }
                 else
                 {
-                    returnString = "error in sending OTP";
+                    returnString = "Password";
                 }
             }
-            else
+            catch (Exception ex)
             {
-                returnString = "Password";
+                newexception.AddException(ex, "");
+                TempData["InvalidUserMessage"] = ex.Message;
+                returnString = "There is problem in Validation";
             }
             return returnString;
         }
