@@ -207,11 +207,11 @@ namespace WebApp.Controllers
         }
 
         [HttpPost]
-        public JsonResult GetPointsExpiryTxnResult(int month, int year)
+        public JsonResult GetPointsExpiryTxnResult(string month, string year)
         {
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
             List<PointExpiryTxn> objPointExpiryTxn = new List<PointExpiryTxn>();
-            objPointExpiryTxn = RR.GetPointExpiryTxnData(userDetails.GroupId, month, year, userDetails.connectionString);
+            objPointExpiryTxn = RR.GetPointExpiryTxnData(userDetails.GroupId, Convert.ToInt32(month), Convert.ToInt32(year), userDetails.connectionString);
             return new JsonResult() { Data = objPointExpiryTxn, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
 
@@ -234,7 +234,7 @@ namespace WebApp.Controllers
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
             if (userDetails.LevelIndicator == "03" || userDetails.LevelIndicator == "04")
             {
-                loginId = userDetails.LoginId;
+                loginId = userDetails.OutletOrBrandId;
             }
             List<OutletWise> lstOutlet = new List<OutletWise>();
             lstOutlet = RR.GetOutletWiseList(userDetails.GroupId, DateRangeFlag, fromDate, toDate, userDetails.connectionString, loginId);
@@ -418,9 +418,16 @@ namespace WebApp.Controllers
 
                     table.Rows.Add(row);
                 }
-                table.Columns.Remove("MobileNo");
-                table.Columns["MaskedMobileNo"].ColumnName = "MobileNo";
-                //table.Columns.Remove("MaskedMobileNo");                
+                if (userDetails.LoginType == "1")
+                {                    
+                    table.Columns.Remove("MaskedMobileNo");
+                }
+                else
+                {
+                    table.Columns.Remove("MobileNo");
+                    table.Columns["MaskedMobileNo"].ColumnName = "MobileNo";
+                }
+
                 string fileName = ReportName + ".xlsx";
                 using (XLWorkbook wb = new XLWorkbook())
                 {
@@ -531,8 +538,15 @@ namespace WebApp.Controllers
 
                     table.Rows.Add(row);
                 }
-                table.Columns.Remove("MobileNo");
-                table.Columns["MaskedMobileNo"].ColumnName = "MobileNo";
+                if (userDetails.LoginType == "1")
+                {
+                    table.Columns.Remove("MaskedMobileNo");
+                }
+                else
+                {
+                    table.Columns.Remove("MobileNo");
+                    table.Columns["MaskedMobileNo"].ColumnName = "MobileNo";
+                }
                 string fileName = ReportName + ".xlsx";
                 using (XLWorkbook wb = new XLWorkbook())
                 {
@@ -576,8 +590,15 @@ namespace WebApp.Controllers
 
                     table.Rows.Add(row);
                 }
-                table.Columns.Remove("MaskedMobileNo");
-                //table.Columns["MaskedMobileNo"].ColumnName = "MobileNo";
+                if (userDetails.LoginType == "1")
+                {
+                    table.Columns.Remove("MaskedMobileNo");
+                }
+                else
+                {
+                    table.Columns.Remove("MobileNo");
+                    table.Columns["MaskedMobileNo"].ColumnName = "MobileNo";
+                }
 
                 string fileName = ReportName + ".xlsx";
                 using (XLWorkbook wb = new XLWorkbook())
@@ -713,11 +734,17 @@ namespace WebApp.Controllers
                         row[prop.Name] = prop.GetValue(item) ?? DBNull.Value;
 
                     table.Rows.Add(row);
+                }                
+                table.Columns.Remove("txnDate");                
+                if (userDetails.LoginType == "1")
+                {
+                    table.Columns.Remove("MaskedMobileNo");
                 }
-                table.Columns.Remove("MobileNo");
-                table.Columns.Remove("txnDate");
-                table.Columns["MaskedMobileNo"].ColumnName = "MobileNo";
-                //table.Columns.Remove("MaskedMobileNo");                
+                else
+                {
+                    table.Columns.Remove("MobileNo");
+                    table.Columns["MaskedMobileNo"].ColumnName = "MobileNo";
+                }                       
                 string fileName = ReportName + ".xlsx";
                 using (XLWorkbook wb = new XLWorkbook())
                 {

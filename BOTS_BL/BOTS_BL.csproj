@@ -235,6 +235,7 @@
     <Compile Include="Models\Reports\OutletwiseTransaction.cs" />
     <Compile Include="Models\Reports\PointExpiryTmp.cs" />
     <Compile Include="Models\Reports\ReportFilterCount.cs" />
+    <Compile Include="Models\SMSDetail.cs" />
     <Compile Include="Models\StoreDetail.cs" />
     <Compile Include="Models\TransferPointsDetail.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

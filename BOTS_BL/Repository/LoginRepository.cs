@@ -31,6 +31,7 @@ namespace BOTS_BL.Repository
                         //CustomerConnString.ConnectionStringCustomer = DBDetails.DBName;
 
                         userDetail.connectionString = "Data Source = " + DBDetails.IPAddress + "; Initial Catalog = " + DBDetails.DBName + "; user id = " + DBDetails.DBId + "; password = " + DBDetails.DBPassword + "";
+                        
                     }
                 }
             }
@@ -77,6 +78,39 @@ namespace BOTS_BL.Repository
             {
 
             }
+        }
+
+        public string CheckUserType(string LoginId)
+        {             
+            CustomerLoginDetail userDetail = new CustomerLoginDetail();
+            using (var context = new CommonDBContext())
+            {
+                userDetail = context.CustomerLoginDetails.Where(a => a.LoginId == LoginId).FirstOrDefault();
+            }
+            return userDetail.LoginType;
+
+        }
+        public CustomerLoginDetail GetUserDetailsByLoginID(string LoginId)
+        {
+            CustomerLoginDetail userDetail = new CustomerLoginDetail();
+            DatabaseDetail DBDetails = new DatabaseDetail();
+            using (var context = new CommonDBContext())
+            {
+                userDetail = context.CustomerLoginDetails.Where(a => a.LoginId == LoginId).FirstOrDefault();
+                if (userDetail != null)
+                {
+                    if (userDetail.GroupId != null)
+                    {
+                        DBDetails = context.DatabaseDetails.Where(x => x.GroupId == userDetail.GroupId).FirstOrDefault();
+                        //CustomerConnString.ConnectionStringCustomer = DBDetails.DBName;
+
+                        userDetail.connectionString = "Data Source = " + DBDetails.IPAddress + "; Initial Catalog = " + DBDetails.DBName + "; user id = " + DBDetails.DBId + "; password = " + DBDetails.DBPassword + "";
+
+                    }
+                }
+            }
+            return userDetail;
+
         }
 
     }

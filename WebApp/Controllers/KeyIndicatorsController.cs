@@ -282,10 +282,16 @@ namespace WebApp.Controllers
                         row[prop.Name] = prop.GetValue(item) ?? DBNull.Value;
 
                     table.Rows.Add(row);
+                }               
+                if (userDetails.LoginType == "1")
+                {
+                    table.Columns.Remove("MaskedMobileNo");
                 }
-                //table.Columns.Remove("OutletId");
-                table.Columns.Remove("MobileNo");
-                table.Columns["MaskedMobileNo"].ColumnName = "MobileNo";
+                else
+                {
+                    table.Columns.Remove("MobileNo");
+                    table.Columns["MaskedMobileNo"].ColumnName = "MobileNo";
+                }
                 string fileName = ReportName + ".xlsx";
                 using (XLWorkbook wb = new XLWorkbook())
                 {
@@ -330,8 +336,15 @@ namespace WebApp.Controllers
 
                     table.Rows.Add(row);
                 }
-                table.Columns.Remove("MobileNo");
-                table.Columns["MaskedMobileNo"].ColumnName = "MobileNo";
+                if (userDetails.LoginType == "1")
+                {
+                    table.Columns.Remove("MaskedMobileNo");
+                }
+                else
+                {
+                    table.Columns.Remove("MobileNo");
+                    table.Columns["MaskedMobileNo"].ColumnName = "MobileNo";
+                }
                 string fileName = ReportName + ".xlsx";
                 using (XLWorkbook wb = new XLWorkbook())
                 {

@@ -45,6 +45,8 @@ namespace WebApp.Controllers
                 var userDetails = (CustomerLoginDetail)Session["UserSession"];
                 userDetails.GroupId = groupId;
                 userDetails.connectionString = CR.GetCustomerConnString(groupId);
+                userDetails.CustomerName= CR.GetCustomerName(groupId);
+
                 Session["UserSession"] = userDetails;
             }
             catch (Exception ex)

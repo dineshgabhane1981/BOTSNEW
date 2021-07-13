@@ -162,6 +162,17 @@ namespace BOTS_BL.Repository
             }
             return ConnectionString;
         }
+
+        public string GetCustomerName(string GroupId)
+        {
+            string CustomerName = string.Empty;
+            using (var context = new CommonDBContext())
+            {
+                CustomerName = context.CustomerLoginDetails.Where(x => x.GroupId == GroupId).Select(y => y.UserName).FirstOrDefault();
+            }
+            return CustomerName;
+        }
+
         public tblGroupDetail GetGroupDetails(int GroupId)
         {
             tblGroupDetail objGroupDetail = new tblGroupDetail();

@@ -63,6 +63,12 @@
                         Refer & Earn
                     </a>
                 </li>
+                @if (!string.IsNullOrEmpty(userDetails.CustomerName))
+                {
+                <li class="btn-group nav-item">                    
+                    <span style="margin-top:10px; margin-left:50px; font-weight:bold;">  Welcome - @userDetails.CustomerName           </span>         
+                </li>
+                }
 
             </ul>
         </div>

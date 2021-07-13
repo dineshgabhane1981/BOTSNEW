@@ -7,6 +7,11 @@
     var currentMonth = DateTime.Now.ToString("MMMM");
     var nextMonth = DateTime.Now.AddMonths(1).ToString("MMMM");
     var next2Month = DateTime.Now.AddMonths(2).ToString("MMMM");
+
+    var currentMonthNum = DateTime.Now.Month;
+    var nextMonthNum = DateTime.Now.AddMonths(1).Month;
+    var next2MonthNum = DateTime.Now.AddMonths(2).Month;
+
     var currentYear = DateTime.Now.Year.ToString();
     var nextYear = DateTime.Now.AddMonths(1).Year.ToString();
     var next2Year = DateTime.Now.AddMonths(2).Year.ToString();
@@ -41,7 +46,7 @@
                         </div>
                         <div>
                             <div class="text-white" style="font-weight:bold;">
-                                Members | <span style="cursor:pointer; font-size:22px !important;"><a onclick="GetData(0);"> <u>@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(Model.MemberCountThisMonth))</u></a></span>
+                                Members | <span style="cursor:pointer; font-size:22px !important;"><a onclick="GetData(@currentMonthNum,@currentYear);"> <u>@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(Model.MemberCountThisMonth))</u></a></span>
                                 <br />Expiring Points | <span style="font-size:20px !important;"> @String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(Model.MemberPointsThisMonth))</span>
                             </div>
                         </div>
@@ -60,7 +65,7 @@
                         </div>
                         <div>
                             <div class="text-white" style="font-weight:bold;">
-                                Members | <span style="cursor:pointer;font-size:22px !important;"><a onclick="GetData(1);"><u>@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(Model.MemberCountNextMonth))</u></a></span>
+                                Members | <span style="cursor:pointer;font-size:22px !important;"><a onclick="GetData(@nextMonthNum,@nextYear);"><u>@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(Model.MemberCountNextMonth))</u></a></span>
                                 <br />Expiring Points | <span style="font-size:20px !important;">@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(Model.MemberPointsNextMonth))</span>
                             </div>
                         </div>
@@ -78,7 +83,7 @@
                         </div>
                         <div>
                             <div class="text-white" style="font-weight:bold;">
-                                Members | <span style="cursor:pointer;font-size:22px !important;"><a onclick="GetData(2);"><u>@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(Model.MemberCount3rdMonth))</u></a></span>
+                                Members | <span style="cursor:pointer;font-size:22px !important;"><a onclick="GetData(@next2MonthNum, @next2Year);"><u>@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(Model.MemberCount3rdMonth))</u></a></span>
                                 <br />Expiring Points | <span style="font-size:20px !important;">@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(Model.MemberPoints3rdMonth))</span>
                             </div>
                         </div>
@@ -192,20 +197,11 @@
 
     function GetFutureData() {
         var month = $("#MonthList").val();
-        //var year = $("#YearList").val();
-        GetData(month);
+        var year = $("#YearList").val();
+        GetData(month, year);
     }
 
-    function GetData(currentMonth, type) {
-        var month = $("#MonthList").val();
-        var year = $("#YearList").val();
-
-        //if (currentMonth == 1) {
-        //    month = month + 1;
-        //}
-        //if (currentMonth > 1) {
-        //    month = currentMonth;
-        //}
+    function GetData(month, year) {        
         clickedMonth = month;
         clickedYear = year;
 
@@ -259,6 +255,7 @@
             "info": true,
             "bFilter": true,
             "pageLength": 25,
+            "bAutoWidth": false,
             "pagingType": "simple_numbers",
             "columns": [
                 { data: "EnrolledOutlet" },

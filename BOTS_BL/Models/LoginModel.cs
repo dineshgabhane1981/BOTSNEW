@@ -10,5 +10,6 @@ namespace BOTS_BL.Models
     {        
         public string LoginId { get; set; }
         public string Password { get; set; }
+        public string OTP { get; set; }
     }
 }

@@ -28,6 +28,7 @@ namespace BOTS_BL.Models
         public virtual DbSet<StoreDetail> StoreDetails { get; set; }
         public virtual DbSet<TransferPointsDetail> TransferPointsDetails { get; set; }
         public virtual DbSet<PointsExpiry> PointsExpiries { get; set; }
+        public virtual DbSet<SMSDetail> SMSDetails { get; set; }
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             modelBuilder.Entity<LoginDetail>()

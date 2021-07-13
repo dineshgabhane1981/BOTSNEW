@@ -151,13 +151,11 @@ namespace BOTS_BL.Repository
 
         public DashboardPointsSummary GetDashboardPointsSummaryData(string GroupId, string monthFlag, string connstr, string loginId)
         {
-
             DashboardPointsSummary dashboardPointsSummary = new DashboardPointsSummary();
             using (var context = new BOTSDBContext(connstr))
             {
-
-                dashboardPointsSummary = context.Database.SqlQuery<DashboardPointsSummary>("sp_BOTS_DashboardPointsSummary @pi_GroupId, @pi_Date, @pi_Flag", new SqlParameter("@pi_GroupId", GroupId), new SqlParameter("@pi_Date", DateTime.Now.ToShortDateString()), new SqlParameter("@pi_Flag", monthFlag)).FirstOrDefault<DashboardPointsSummary>();
-
+                dashboardPointsSummary = context.Database.SqlQuery<DashboardPointsSummary>("sp_BOTS_DashboardPointsSummary @pi_GroupId, @pi_Date, @pi_Flag, @pi_LoginId", new SqlParameter("@pi_GroupId", GroupId), new SqlParameter("@pi_Date", DateTime.Now.ToShortDateString()), new SqlParameter("@pi_Flag", monthFlag),
+                    new SqlParameter("@pi_LoginId", loginId)).FirstOrDefault<DashboardPointsSummary>();
             }
             return dashboardPointsSummary;
         }

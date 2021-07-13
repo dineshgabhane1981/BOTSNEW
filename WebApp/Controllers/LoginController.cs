@@ -12,6 +12,7 @@ namespace WebApp.Controllers
     public class LoginController : Controller
     {
         LoginRepository LR = new LoginRepository();
+        DashboardRepository DR = new DashboardRepository();
         Exceptions newexception = new Exceptions();
         // GET: Login
         public ActionResult Index()
@@ -24,7 +25,24 @@ namespace WebApp.Controllers
         {
             try
             {
-                var userDetails = LR.AuthenticateUser(objLogin);
+                CustomerLoginDetail userDetails = new CustomerLoginDetail();
+                //var status = DR.VerifyOTP(emailId, Convert.ToInt32(OTP));
+                if (objLogin.OTP == null)
+                {
+                    userDetails = LR.AuthenticateUser(objLogin);
+                }
+                else
+                {
+                    var status = DR.VerifyOTP(objLogin.LoginId, Convert.ToInt32(objLogin.OTP));
+                    if(status)
+                    {
+                        userDetails = LR.GetUserDetailsByLoginID(objLogin.LoginId);
+                    }
+                    else
+                    {
+                        TempData["InvalidUserMessage"] = "There is problem in verifying OTP. Please check once";
+                    }
+                }
 
                 if (userDetails != null)
                 {
@@ -41,11 +59,38 @@ namespace WebApp.Controllers
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex,"");
+                newexception.AddException(ex, "");
                 TempData["InvalidUserMessage"] = ex.Message;
                 return RedirectToAction("Index");
             }
             return View("Index");
         }
+
+        [HttpPost]
+        public string CheckUserAndSendOTP(string LoginID)
+        {
+            string returnString = string.Empty;
+            var loginType = LR.CheckUserType(LoginID);
+            if(loginType!="1")
+            {
+                var result = new HomeController().SendOTP(LoginID);
+                if (result)
+                {
+                    returnString = "OTP";
+                }
+                else
+                {
+                    returnString = "error in sending OTP";
+                }
+            }
+            else
+            {
+                returnString = "Password";
+            }
+            return returnString;
+        }
+
+
+
     }
 }

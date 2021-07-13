@@ -86,8 +86,14 @@
                                         }
                                         else
                                         {
-                                            outlet.BizShare = (Convert.ToDecimal(outlet.TotalSpend) * 100) / Convert.ToDecimal(outletWiseLast.TotalSpend);
-                                            
+                                            if (outlet.TotalSpend > 0)
+                                            {
+                                                outlet.BizShare = (Convert.ToDecimal(outlet.TotalSpend) * 100) / Convert.ToDecimal(outletWiseLast.TotalSpend);
+                                            }
+                                            else
+                                            {
+                                                outlet.BizShare = 0;
+                                            }
                                             <tr style="text-align:end;">
                                                 <td style="text-align:left;"><a href="@Url.Action("Transactionwise", "Reports", new { OutletId = outlet.OutletId })" class="login" title="Launch Course">@outlet.OutletName</a></td>
                                                 <td>@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(outlet.TotalMember))</td>
