@@ -14,6 +14,7 @@ using BOTS_BL;
 using System.Web.Http.Results;
 using System.Globalization;
 using BOTS_BL.Models.CommonDB;
+using System.Net.Mail;
 
 namespace BotsMobileAPI.Controllers
 {
@@ -543,31 +544,127 @@ namespace BotsMobileAPI.Controllers
             return "Invalid Token or Expired";
         }
 
+        //this API for sending email of contact us form in blueocktopus website
+        [HttpPost]
+        public HttpResponseMessage ContactUsFromWebsite(string firstname,string lastname,string emailid,string subject,string emailmessage )
+        {            
+             try
+             { 
+               
+                   // var result = "";                   
+                   // string To = emailto;
+                    using (MailMessage mail = new MailMessage())
+                {
+
+                    StringBuilder str = new StringBuilder();
+                    str.Append("<table>");
+                    str.Append("<tr>");
+                    str.AppendLine("<td>Dear Sir,</td>");
+                    str.AppendLine("</br>");
+                    str.Append("</tr>");
+                    str.Append("<tr>");
+                    str.AppendLine("<td>Following customer is contacted us through website</td>");
+                    str.Append("<tr>");
+                    str.Append("<td>");
+                    str.Append("Name:" + firstname + lastname);
+                    str.Append("</td>");
+                    str.Append("</tr>");
+                    str.Append("<tr>");
+                    str.Append("<td>");
+                    str.Append("Email Id:</br>" + emailid);
+                    str.Append("</td>");
+                    str.Append("</tr>");
+                    str.Append("<tr>");
+                    str.Append("<td>");
+                    str.Append("Subject:" + subject);
+                    str.Append("</td>");
+                    str.Append("</tr>");
+                    str.Append("<tr>");
+                    str.Append("<td>");
+                    str.Append("Message:" + emailmessage);
+                    str.Append("</td>");
+                    str.Append("</tr>");
+                    str.Append("<tr>");
+                    str.Append("<td>");
+                    str.Append("Regards,");
+                    str.Append("</td>");
+                    str.Append("</tr>");
+                    str.Append("<tr>");
+                    str.Append("<td>");
+                    str.Append("- Blue Ocktopus Team");
+                    str.Append("</td>");
+                    str.Append("</tr>");
+                    str.Append("</table>");
+
+                    MailMessage Msg = new MailMessage();
+                    Msg.From = new MailAddress("info@blueocktopus.in");
+                    Msg.To.Add("ashlesha@blueocktopus.in");
+                    Msg.Subject = "New Enquiry";
+                    Msg.Body = str.ToString();
+                    Msg.IsBodyHtml = true;
+                    SmtpClient smtp = new SmtpClient("smtp.zoho.com");
+                    smtp.EnableSsl = true;
+                    smtp.Port = 587;
+                    smtp.Credentials = new System.Net.NetworkCredential("info@blueocktopus.in", "Info@123");
+                    smtp.Send(Msg);
+                    Msg.Dispose();
+               
+                }         
+
+                     var message = Request.CreateResponse(HttpStatusCode.Created, "Email send Sucessfully");
+
+                     return message;
+                    
+              }
+              catch (Exception ex)
+              {
+                    return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ex);
+              }
+            
+           
+        }
 
         [HttpPost]
         public HttpResponseMessage SendOTP(string mobileNo)
         {
-            bool status = false;          
+            bool status = false;
             if (User.Identity.IsAuthenticated)
             {
-                var sender = "BLUEOC";
-                var Url = " https://http2.myvfirst.com/smpp/sendsms?";
-                Random random = new Random();
-                int randNum = random.Next(1000000);
-                string sixDigitNumber = randNum.ToString("D6");
-                status = DR.InsertOTP(mobileNo, Convert.ToInt32(sixDigitNumber));
-                string MobileMessage = "Dear Member," + sixDigitNumber + " is your OTP. Sample SMS for OTP - Blue Ocktopus";                
-                bool result = DR.SendOTPMessage(mobileNo, sender, MobileMessage, Url);
-                if (result)
+                CustomerLoginDetail objcustlogin = new CustomerLoginDetail();
+                using (var context = new CommonDBContext())
                 {
-                   var message = Request.CreateResponse(HttpStatusCode.OK);
-                    return message;
+
+                    objcustlogin = context.CustomerLoginDetails.Where(x => x.LoginId == mobileNo).FirstOrDefault();
+
+
+                    if (objcustlogin != null)
+                    {
+                        var sender = "BLUEOC";
+                        var Url = " https://http2.myvfirst.com/smpp/sendsms?";
+                        Random random = new Random();
+                        // int randNum = random.Next(1000000);
+                        //  string sixDigitNumber = randNum.ToString("D6");
+                        string sixDigitNumber = "123456";
+                        status = DR.InsertOTP(mobileNo, Convert.ToInt32(sixDigitNumber));
+                        string MobileMessage = "Dear Member," + sixDigitNumber + " is your OTP. Sample SMS for OTP - Blue Ocktopus";
+                        // bool result = DR.SendOTPMessage(mobileNo, sender, MobileMessage, Url);
+                        bool result = true;
+                        if (result)
+                        {
+                            var message = Request.CreateResponse(HttpStatusCode.OK);
+                            return message;
+                        }
+                        else
+                        {
+                            return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "OTP Not Send");
+                        }
+                    }
+                    else
+                    {
+                        return Request.CreateErrorResponse(HttpStatusCode.Unauthorized, "Number is Not Registered");
+
+                    }
                 }
-                else
-                {
-                   return Request.CreateErrorResponse(HttpStatusCode.BadRequest,"OTP Not Send");
-                }
-               
             }
             return Request.CreateErrorResponse(HttpStatusCode.Unauthorized, "Invalid Token or Expired");
         }
