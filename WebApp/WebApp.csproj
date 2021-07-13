@@ -387,6 +387,7 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Content\assets\images\CustomerLogo\" />
+    <Folder Include="Controllers\OnBoarding\" />
     <Folder Include="Models\" />
   </ItemGroup>
   <ItemGroup>
