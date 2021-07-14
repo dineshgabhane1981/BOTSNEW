@@ -157,6 +157,7 @@
     <Compile Include="Controllers\KeyIndicatorsController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Controllers\LoyaltyKPIsController.cs" />
+    <Compile Include="Controllers\OnBoarding\CustomerOnBoardingController.cs" />
     <Compile Include="Controllers\OtherReportsController.cs" />
     <Compile Include="Controllers\ReportsController.cs" />
     <Compile Include="Global.asax.cs">
@@ -383,11 +384,19 @@
     <Content Include="Views\ITOperations\Index.cshtml" />
     <Content Include="Views\KeyIndicators\MemberPage.cshtml" />
     <Content Include="Views\Reports\ProfitableCustomer.cshtml" />
+    <Content Include="Views\Shared\_OnBoardingLayout.cshtml" />
+    <Content Include="Views\Shared\_HeaderOnboarding.cshtml" />
+    <Content Include="Views\Shared\_SidebarMenuOnboarding.cshtml" />
+    <Content Include="Views\CustomerOnBoarding\CustomerDetail.cshtml" />
+    <Content Include="Views\CustomerOnBoarding\ProductAssignmentDetails.cshtml" />
+    <Content Include="Views\CustomerOnBoarding\DealDetails.cshtml" />
+    <Content Include="Views\CustomerOnBoarding\UpdatePaymentDetails.cshtml" />
+    <Content Include="Views\CustomerOnBoarding\Notifications.cshtml" />
+    <Content Include="Views\CustomerOnBoarding\PaymentSchedule.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Content\assets\images\CustomerLogo\" />
-    <Folder Include="Controllers\OnBoarding\" />
     <Folder Include="Models\" />
   </ItemGroup>
   <ItemGroup>

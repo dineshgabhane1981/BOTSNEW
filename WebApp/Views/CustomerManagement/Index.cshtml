@@ -4,16 +4,7 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<div class="app-main__inner">
-    <div class="row">
-        <div class="col-md-12 col-lg-12">
-            <div class="mb-3 card">
-                <div style="text-align:right;">
-                    <a href="@Url.Action("SelectProduct", "CustomerManagement")" title="Add New Customer">  <img src="~/Content/assets/images/AddCustomer.png" /></a>
-                </div>
-            </div>
-        </div>
-    </div>
+<div class="app-main__inner">    
 
     <div id="dvOutletWiseData">
         <div class="row mb-3 card">
@@ -23,6 +14,9 @@
                         <div class="col search-container">
                             <i class="fas fa-search"></i>
                             <input class="input100" type="text" id="txtSearch" placeholder="Search activity..." />
+                        </div>
+                        <div style="text-align:right;">
+                            <a href="@Url.Action("CustomerDetail", "CustomerOnBoarding")" title="Add New Customer">  <img src="~/Content/assets/images/AddCustomer.png" /></a>
                         </div>
                     </div>
                     <div class="row mt-3" id="dvActivityData">
