@@ -47,7 +47,7 @@ namespace WebApp.Controllers
                 if (userDetails != null)
                 {
                     Session["UserSession"] = userDetails;
-                    if (!string.IsNullOrEmpty(userDetails.GroupId))
+                    if (!string.IsNullOrEmpty(userDetails.GroupId) && string.IsNullOrEmpty(userDetails.LoginType))
                         return RedirectToAction("Index", "Home");
                     else
                         return RedirectToAction("Index", "CustomerManagement");
