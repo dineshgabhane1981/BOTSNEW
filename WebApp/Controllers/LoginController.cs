@@ -31,7 +31,7 @@ namespace WebApp.Controllers
                 {
                     userDetails = LR.AuthenticateUser(objLogin);
                 }
-                else
+                else 
                 {
                     var status = DR.VerifyOTP(objLogin.LoginId, Convert.ToInt32(objLogin.OTP));
                     if(status)
@@ -44,13 +44,17 @@ namespace WebApp.Controllers
                     }
                 }
 
-                if (userDetails != null)
+                if (userDetails != null )
                 {
                     Session["UserSession"] = userDetails;
-                    if (!string.IsNullOrEmpty(userDetails.GroupId) && string.IsNullOrEmpty(userDetails.LoginType))
+                    if (!string.IsNullOrEmpty(userDetails.GroupId) )
+                    {
                         return RedirectToAction("Index", "Home");
-                    else
+                    }
+                    else if (string.IsNullOrEmpty(objLogin.OTP))
+                    {
                         return RedirectToAction("Index", "CustomerManagement");
+                    }
                 }
                 else
                 {
