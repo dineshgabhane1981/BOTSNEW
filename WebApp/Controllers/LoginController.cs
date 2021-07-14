@@ -44,21 +44,24 @@ namespace WebApp.Controllers
                     }
                 }
 
-                if (userDetails != null )
+                if (userDetails.LoginId != null)
                 {
                     Session["UserSession"] = userDetails;
                     if (!string.IsNullOrEmpty(userDetails.GroupId) )
                     {
                         return RedirectToAction("Index", "Home");
                     }
-                    else if (string.IsNullOrEmpty(objLogin.OTP))
+                    else// if (string.IsNullOrEmpty(objLogin.OTP))
                     {
                         return RedirectToAction("Index", "CustomerManagement");
                     }
                 }
                 else
                 {
-                    TempData["InvalidUserMessage"] = "User Does not Exist";
+                    if (!string.IsNullOrEmpty(Convert.ToString(TempData["InvalidUserMessage"])))
+                    {
+                        TempData["InvalidUserMessage"] = "User Does not Exist";
+                    }
                 }
             }
             catch (Exception ex)
