@@ -226,6 +226,8 @@
     <Compile Include="Models\KeyIndecators\OnlyOnce.cs" />
     <Compile Include="Models\LoginDetail.cs" />
     <Compile Include="Models\LoginModel.cs" />
+    <Compile Include="Models\OnBoarding\BOTS_TblGroupMaster.cs" />
+    <Compile Include="Models\OnBoarding\BOTS_TblRetailMaster.cs" />
     <Compile Include="Models\OutletDetail.cs" />
     <Compile Include="Models\Reports\Celebrations.cs" />
     <Compile Include="Models\Reports\MemberList.cs" />
@@ -263,7 +265,6 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Models\OnBoarding\" />
     <Folder Include="Repository\OnBoarding\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

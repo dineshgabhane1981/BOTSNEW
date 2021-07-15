@@ -11,8 +11,9 @@ namespace BOTS_BL.Models
         public CommonDBContext()
             : base("name=CommonDBContext")
         {
-        }    
-        
+        }
+        public virtual DbSet<BOTS_TblGroupMaster> BOTS_TblGroupMaster { get; set; }
+        public virtual DbSet<BOTS_TblRetailMaster> BOTS_TblRetailMaster { get; set; }
         public virtual DbSet<CommonReferralURL> CommonReferralURLs { get; set; }
         public virtual DbSet<DailyReport> DailyReports { get; set; }
         public virtual DbSet<DailySM> DailySMS { get; set; }
