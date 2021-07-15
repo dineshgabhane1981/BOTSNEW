@@ -39,7 +39,7 @@
     <div class="scrollbar-sidebar">
         <div class="app-sidebar__inner">
             <ul class="vertical-nav-menu">
-                @if (GroupId == null || roleId == "1")
+                @if ((GroupId == null || roleId == "1") && GroupId !="1051")
                 {
                     <li>
                         <a href="@Url.Action("Index", "CustomerManagement")" class="@Html.IsSelected(controller: "CustomerManagement", action: "Index,SelectProduct,AddNewCustomer")">

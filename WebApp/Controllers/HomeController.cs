@@ -238,13 +238,16 @@ namespace WebApp.Controllers
 
                 DashboardBulkUpload objDashboardBulkUpload = new DashboardBulkUpload();
                 objDashboardBulkUpload = DR.GetDashboardBulkUpload(userDetails.GroupId, userDetails.connectionString);
+                if (objDashboardBulkUpload != null)
+                {
 
-                dataList.Add(objDashboardBulkUpload.TotalUpload);
-                dataList.Add(objDashboardBulkUpload.UniqueTransacted);
-                dataList.Add(objDashboardBulkUpload.TransactedCount);
-                dataList.Add(objDashboardBulkUpload.BusinessGenerated);
-                dataList.Add(objDashboardBulkUpload.PieChartYellow);
-                dataList.Add(objDashboardBulkUpload.PieChartGreen);
+                    dataList.Add(objDashboardBulkUpload.TotalUpload);
+                    dataList.Add(objDashboardBulkUpload.UniqueTransacted);
+                    dataList.Add(objDashboardBulkUpload.TransactedCount);
+                    dataList.Add(objDashboardBulkUpload.BusinessGenerated);
+                    dataList.Add(objDashboardBulkUpload.PieChartYellow);
+                    dataList.Add(objDashboardBulkUpload.PieChartGreen);
+                }
             }
             catch (Exception ex)
             {
