@@ -17,6 +17,8 @@ using BOTS_BL.Models.CommonDB;
 using System.Net.Mail;
 using System.Web.Http.Cors;
 
+//using System.Web.Mvc;
+
 namespace BotsMobileAPI.Controllers
 {
    
@@ -389,7 +391,7 @@ namespace BotsMobileAPI.Controllers
             }
             return "Invalid Token or Expired";
         }
-
+        //slide 13-table and slide 14 all boxes
         [HttpGet]
         public object MemberPage(string GroupId)
         {
@@ -403,6 +405,19 @@ namespace BotsMobileAPI.Controllers
             return "Invalid Token or Expired";
         }
 
+        //pie chart-slide 13
+        [HttpGet]
+        public object GetMemberMisinformationData(string GroupId)
+        {
+            if (User.Identity.IsAuthenticated)
+            {
+                string connectionString = CR.GetCustomerConnString(GroupId);
+                MembersInformation objMembersInformation = new MembersInformation();
+                objMembersInformation = KR.GetMemberMisinformationData(GroupId, connectionString);
+                return new { Data = objMembersInformation, MaxJsonLength = Int32.MaxValue };
+            }
+            return "Invalid Token or Expired";
+        }
         //pointno 4-sub point 1
         [HttpGet]
         public object GetOnlyOnceResult(string GroupId, string outletId)
@@ -428,23 +443,7 @@ namespace BotsMobileAPI.Controllers
             }
             return "Invalid Token or Expired";
         }
-        [HttpGet]
-        public object GetOnlyOnceTxnResult(string GroupId, string outletId, string type)
-        {
-            if (User.Identity.IsAuthenticated)
-            {
-                string connectionString = CR.GetCustomerConnString(GroupId);
-                if (outletId.Equals("All"))
-                {
-                    outletId = "";
-                }
-                List<OnlyOnceTxn> objOnlyOnceTxn = new List<OnlyOnceTxn>();
-                objOnlyOnceTxn = KR.GetOnlyOnceTxnData(GroupId, outletId, type, connectionString);              
-
-                return new { Data = objOnlyOnceTxn, MaxJsonLength = Int32.MaxValue };
-            }
-            return "Invalid Token or Expired";
-        }
+        
         //pointno 4-sub point 2
         [HttpGet]
         public object NonRedeeming(string GroupId)
@@ -502,25 +501,24 @@ namespace BotsMobileAPI.Controllers
         }
         //membersearch
         [HttpGet]
-        public object GetMemberSearchResult(string searchData, string GroupId)
+        public object GetMemberSearchResult(string SearchData, string GroupId)
         {
             if (User.Identity.IsAuthenticated)
             {
                 string connectionString = CR.GetCustomerConnString(GroupId);
                 CustomerRepository objCustRepo = new CustomerRepository();
-                MemberSearch objMemberSearch = new MemberSearch();
-               
-                  //  var userDetails = (CustomerLoginDetail)Session["UserSession"];
+                MemberSearch objMemberSearch = new MemberSearch();            
+                 
                     string loginId = string.Empty;
                    
                     if (!string.IsNullOrEmpty(GroupId) && GroupId != "undefined")
                     {
-                       // string connStr = objCustRepo.GetCustomerConnString(GroupId);
-                        objMemberSearch = RR.GetMeamberSearchData(GroupId, searchData, connectionString, loginId);
+                      
+                        objMemberSearch = RR.GetMeamberSearchData(GroupId, SearchData, connectionString, loginId);
                     }
                     else
                     {
-                        objMemberSearch = RR.GetMeamberSearchData(GroupId, searchData,connectionString, loginId);
+                        objMemberSearch = RR.GetMeamberSearchData(GroupId, SearchData,connectionString, loginId);
                     }
                
                 return new { Data = objMemberSearch, MaxJsonLength = Int32.MaxValue };
@@ -563,7 +561,7 @@ namespace BotsMobileAPI.Controllers
             return "Invalid Token or Expired";
         }
 
-        //this API for sending email of contact us form in blueocktopus website
+        //this API for sending email from contact us form in blueocktopus website
         [HttpPost]
         public HttpResponseMessage ContactUsFromWebsite(string firstname,string lastname,string emailid,string subject,string emailmessage )
         {            
@@ -647,14 +645,13 @@ namespace BotsMobileAPI.Controllers
         public HttpResponseMessage SendOTP(string mobileNo)
         {
             bool status = false;
-            if (User.Identity.IsAuthenticated)
-            {
+            //if (User.Identity.IsAuthenticated)
+            //{
                 CustomerLoginDetail objcustlogin = new CustomerLoginDetail();
                 using (var context = new CommonDBContext())
                 {
 
                     objcustlogin = context.CustomerLoginDetails.Where(x => x.LoginId == mobileNo).FirstOrDefault();
-
 
                     if (objcustlogin != null)
                     {
@@ -684,20 +681,228 @@ namespace BotsMobileAPI.Controllers
 
                     }
                 }
-            }
-            return Request.CreateErrorResponse(HttpStatusCode.Unauthorized, "Invalid Token or Expired");
+            //}
+           // return Request.CreateErrorResponse(HttpStatusCode.Unauthorized, "Invalid Token or Expired");
         }
         [HttpGet]
-        public object VerifyOTP(string emailId, int OTP)
+        public object VerifyOTP(string mobileNo, int OTP)
+        {           
+            
+                bool status = DR.VerifyOTP(mobileNo, OTP);
+                if (status)
+                {
+                    CustomerLoginDetail objcustlogin = new CustomerLoginDetail();
+                    using (var context = new CommonDBContext())
+                    {
+                        objcustlogin = context.CustomerLoginDetails.Where(x => x.LoginId == mobileNo).FirstOrDefault();
+
+                        string key = "my_secret_key_98765"; //Secret key which will be used later during validation    
+                                                            //var issuer = "http://mysite.com";  //normally this will be your site URL
+                                                            //
+                                                            //string value = System.Configuration.ConfigurationManager.AppSettings[key];
+                        var issuer = System.Configuration.ConfigurationManager.AppSettings["BaseURL"];// "https://localhost:44330/";
+
+                        var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key));
+                        var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
+
+                        //Create a List of Claims, Keep claims name short    
+                        var permClaims = new List<Claim>();
+                        permClaims.Add(new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()));
+                        permClaims.Add(new Claim("valid", "1"));
+                        permClaims.Add(new Claim("userid", "1"));
+                        permClaims.Add(new Claim("name", "mobileBots"));
+
+                        //Create Security Token object by giving required parameters    
+                        var token = new JwtSecurityToken(issuer, //Issure    
+                                        issuer,  //Audience    
+                                        permClaims,
+                                        expires: DateTime.Now.AddDays(1),
+                                        signingCredentials: credentials);
+                        var jwt_token = new JwtSecurityTokenHandler().WriteToken(token);
+                        List<string> responseData = new List<string>();
+                        responseData.Add(jwt_token);
+                        responseData.Add(objcustlogin.GroupId);
+                        return new { data = responseData };
+                    }
+                }
+                else
+                {
+                    return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Incorrect OTP");
+                }
+               
+        }
+        //slide no 8
+        [HttpGet]
+        public object GetEnrollBase(string DateRangeFlag, string fromDate, string toDate,string GroupId)
         {
             if (User.Identity.IsAuthenticated)
             {
-                bool status = DR.VerifyOTP(emailId, OTP);
-                return new { Data = status, MaxJsonLength = Int32.MaxValue };
+                string loginId = string.Empty;
+                string connectionString = CR.GetCustomerConnString(GroupId);
+                //if (userDetails.LevelIndicator == "03" || userDetails.LevelIndicator == "04")
+                //{
+                //    loginId = userDetails.OutletOrBrandId;
+                //}
+                List<OutletWise> lstOutlet = new List<OutletWise>();
+                lstOutlet = RR.GetOutletWiseList(GroupId, DateRangeFlag, fromDate, toDate, connectionString, loginId);
+                OutletWise objSum = new OutletWise();
+                foreach (var item in lstOutlet)
+                {
+                    objSum.TotalMember = (objSum.TotalMember == null ? 0 : objSum.TotalMember) + (item.TotalMember == null ? 0 : item.TotalMember);
+                    objSum.TotalTxn = (objSum.TotalTxn == null ? 0 : objSum.TotalTxn) + (item.TotalTxn == null ? 0 : item.TotalTxn);
+                    objSum.TotalSpend = (objSum.TotalSpend == null ? 0 : objSum.TotalSpend) + (item.TotalSpend == null ? 0 : item.TotalSpend);
+                    objSum.ATS = (objSum.ATS == null ? 0 : objSum.ATS) + (item.ATS == null ? 0 : item.ATS);
+                    objSum.NonActive = (objSum.NonActive == null ? 0 : objSum.NonActive) + (item.NonActive == null ? 0 : item.NonActive);
+                    objSum.OnlyOnce = (objSum.OnlyOnce == null ? 0 : objSum.OnlyOnce) + (item.OnlyOnce == null ? 0 : item.OnlyOnce);
+                    objSum.PointsEarned = (objSum.PointsEarned == null ? 0 : objSum.PointsEarned) + (item.PointsEarned == null ? 0 : item.PointsEarned);
+                    objSum.PointsBurned = (objSum.PointsBurned == null ? 0 : objSum.PointsBurned) + (item.PointsBurned == null ? 0 : item.PointsBurned);
+                    objSum.PointsCancelled = (objSum.PointsCancelled == null ? 0 : objSum.PointsCancelled) + (item.PointsCancelled == null ? 0 : item.PointsCancelled);
+                    objSum.PointsExpired = (objSum.PointsExpired == null ? 0 : objSum.PointsExpired) + (item.PointsExpired == null ? 0 : item.PointsExpired);
+
+                    if (item.TotalMember > 0)
+                    {
+                        item.NonActivePer = (Convert.ToDecimal(item.NonActive) * 100) / Convert.ToDecimal(item.TotalMember);
+                        item.OnlyOncePer = (Convert.ToDecimal(item.OnlyOnce) * 100) / Convert.ToDecimal(item.TotalMember);
+                    }
+                }
+                List<OutletWise> lstOutletFinal = new List<OutletWise>();
+                OutletWise objAdmin = new OutletWise();
+                objAdmin = lstOutlet.Where(x => x.OutletName.ToLower().IndexOf("admin") >= 0).FirstOrDefault();
+                if (objAdmin != null)
+                {
+                    foreach (var item in lstOutlet)
+                    {
+                        if (item.OutletId != objAdmin.OutletId)
+                        {
+                            lstOutletFinal.Add(item);
+                        }
+                    }
+                    lstOutletFinal.Add(objAdmin);
+                }
+                else
+                {
+                    lstOutletFinal = lstOutlet;
+                }
+
+                int totalCount = lstOutletFinal.Count;
+                int nonActiveRed = totalCount * 30 / 100;
+                int nonActiveOrange = totalCount * 45 / 100;
+                int nonActiveGreen = totalCount - (nonActiveRed + nonActiveOrange);
+
+                var nonActiveRedOutlets = lstOutletFinal.OrderByDescending(x => x.NonActivePer).Take(nonActiveRed).ToList();
+                var nonActiveOrangeOutlets = lstOutletFinal.OrderByDescending(x => x.NonActivePer).Skip(nonActiveRed).Take(nonActiveOrange).ToList();
+                var nonActiveGreenOutlets = lstOutletFinal.OrderByDescending(x => x.NonActivePer).Skip(nonActiveRed + nonActiveOrange).Take(nonActiveGreen).ToList();
+
+                var onlyOnceRedOutlets = lstOutletFinal.OrderByDescending(x => x.OnlyOncePer).Take(nonActiveRed).ToList();
+                var onlyOnceOrangeOutlets = lstOutletFinal.OrderByDescending(x => x.OnlyOncePer).Skip(nonActiveRed).Take(nonActiveOrange).ToList();
+                var onlyOnceGreenOutlets = lstOutletFinal.OrderByDescending(x => x.OnlyOncePer).Skip(nonActiveRed + nonActiveOrange).Take(nonActiveGreen).ToList();
+
+                var RedmRedOutlets = lstOutletFinal.OrderBy(x => x.RedemptionRate).Take(nonActiveRed).ToList();
+                var RedmOrangeOutlets = lstOutletFinal.OrderBy(x => x.RedemptionRate).Skip(nonActiveRed).Take(nonActiveOrange).ToList();
+                var RedmGreenOutlets = lstOutletFinal.OrderBy(x => x.RedemptionRate).Skip(nonActiveRed + nonActiveOrange).Take(nonActiveGreen).ToList();
+
+
+                foreach (var item in lstOutletFinal)
+                {
+                    var outletRed = nonActiveRedOutlets.Where(x => x.OutletId == item.OutletId).FirstOrDefault();
+                    if (outletRed != null)
+                    {
+                        item.NonActiveColor = "Red";
+                    }
+                    var outletOrange = nonActiveOrangeOutlets.Where(x => x.OutletId == item.OutletId).FirstOrDefault();
+                    if (outletOrange != null)
+                    {
+                        item.NonActiveColor = "Orange";
+                    }
+                    var outletGreen = nonActiveGreenOutlets.Where(x => x.OutletId == item.OutletId).FirstOrDefault();
+                    if (outletGreen != null)
+                    {
+                        item.NonActiveColor = "Green";
+                    }
+
+                    var outletOORed = onlyOnceRedOutlets.Where(x => x.OutletId == item.OutletId).FirstOrDefault();
+                    if (outletOORed != null)
+                    {
+                        item.OnlyOnceColor = "Red";
+                    }
+                    var outletOOOrange = onlyOnceOrangeOutlets.Where(x => x.OutletId == item.OutletId).FirstOrDefault();
+                    if (outletOOOrange != null)
+                    {
+                        item.OnlyOnceColor = "Orange";
+                    }
+                    var outletOOGreen = onlyOnceGreenOutlets.Where(x => x.OutletId == item.OutletId).FirstOrDefault();
+                    if (outletOOGreen != null)
+                    {
+                        item.OnlyOnceColor = "Green";
+                    }
+
+                    var outletRRRed = RedmRedOutlets.Where(x => x.OutletId == item.OutletId).FirstOrDefault();
+                    if (outletRRRed != null)
+                    {
+                        item.RedemptionRateColor = "Red";
+                    }
+                    var outletRROrange = RedmOrangeOutlets.Where(x => x.OutletId == item.OutletId).FirstOrDefault();
+                    if (outletRROrange != null)
+                    {
+                        item.RedemptionRateColor = "Orange";
+                    }
+                    var outletRRGreen = RedmGreenOutlets.Where(x => x.OutletId == item.OutletId).FirstOrDefault();
+                    if (outletRRGreen != null)
+                    {
+                        item.RedemptionRateColor = "Green";
+                    }
+                }
+                objSum.OutletName = "Total";
+                lstOutletFinal.Add(objSum);
+                return new { Data = lstOutletFinal, MaxJsonLength = Int32.MaxValue };
+                //  return PartialView("_Outletwise", lstOutletFinal);
             }
             return "Invalid Token or Expired";
         }
-     }
+        //slide no 16-4 tiles
+        [HttpGet]
+        public object GetCampaignData(string GroupId)
+        {
+            if (User.Identity.IsAuthenticated)
+            {
+                string connectionString = CR.GetCustomerConnString(GroupId);
+                CampaignTiles objCampaignTiles = new CampaignTiles();
+               // var userDetails = (CustomerLoginDetail)Session["UserSession"];
+                objCampaignTiles = CMPR.GetCampaignTilesData(GroupId, connectionString);
+                List<System.Web.Mvc.SelectListItem> MonthList = new List<System.Web.Mvc.SelectListItem>();
+
+                for (int i = 0; i < 12; i++)
+                {
+                    MonthList.Add(new System.Web.Mvc.SelectListItem
+                    {
+                        Text = Convert.ToString(DateTime.Now.AddMonths(i).ToString("MMM")),
+                        Value = Convert.ToString(DateTime.Now.AddMonths(i).Month)
+                    });
+                }
+                List<System.Web.Mvc.SelectListItem> YearList = new List<System.Web.Mvc.SelectListItem>();
+                int year = DateTime.Now.Year;
+                for (int i = 0; i <= 9; i++)
+                {
+                    YearList.Add(new System.Web.Mvc.SelectListItem
+                    {
+                        Text = Convert.ToString(DateTime.Now.AddYears(i).Year.ToString()),
+                        Value = Convert.ToString(year + i)
+                    });
+                }
+
+                objCampaignTiles.lstMonth = MonthList;
+                objCampaignTiles.lstYear = YearList;
+               
+
+                return new { Data = objCampaignTiles, MaxJsonLength = Int32.MaxValue };
+            }
+            return "Invalid Token or Expired";
+
+        }
+
+
+
+    }
 }
 
 

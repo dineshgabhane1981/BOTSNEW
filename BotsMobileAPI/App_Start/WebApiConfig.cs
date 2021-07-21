@@ -14,7 +14,7 @@ namespace BotsMobileAPI
             // Web API configuration and services    
             config.SuppressDefaultHostAuthentication();
             config.Filters.Add(new HostAuthenticationFilter(OAuthDefaults.AuthenticationType));
-            //EnableCorsAttribute cors = new EnableCorsAttribute("https://blueocktopus.in/MobileNewAPI/", "*", "*");
+            //EnableCorsAttribute cors = new EnableCorsAttribute("*", "*", "*");
             //config.EnableCors(cors);
             // Web API routes
             config.MapHttpAttributeRoutes();
