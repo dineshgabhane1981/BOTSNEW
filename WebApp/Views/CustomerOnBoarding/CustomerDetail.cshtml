@@ -1,4 +1,5 @@
-﻿
+﻿@model BOTS_BL.Models.BOTS_TblGroupMaster
+
 @{
     ViewBag.Title = "Customer Detail";
     Layout = "~/Views/Shared/_OnBoardingLayout.cshtml";
@@ -8,13 +9,130 @@
     <div class="row mb-3 card">
         <div class="container-fluid pt-3 pl-3 pr-3 pb-3">
             <div style="margin: 0;">
-                <div class="col-sm-6" style="float:left;">
-                    Legal Name <input class="input100" />
+                @*<div class="col-sm-6" style="float:left;">
+                        Legal Name <input class="input100" />
+                    </div>
+                    <div class="col-sm-6" style="float:left;">
+                        Owner’s Name <input class="input100" />
+                    </div>*@
+                <h5 style="color:blue;"><b>Customer Details</b></h5>
+                <div class="row mt-4" id="secmember">
+                    <div class="col-md-3 col-xl-2">
+                        Group Name
+                    </div>
+                    <div class="col-md-2 col-xl-2">
+                        <input type="text" id="txtGroupname" class="input50" />
+                    </div>
+                    <div class=" col-md-2 col-xl-2">
+                        PAN Document
+                    </div>
+                    <div class="col-md-2 col-xl-2">
+                        <input type="text" id="txtPanDoc" class="input50" />
+                    </div>
                 </div>
-                <div class="col-sm-6" style="float:left;">
-                    Owner’s Name <input class="input100" />
+                <div class="row mt-4" id="secmember">
+                    <div class="col-md-3 col-xl-2">
+                        Owner Name
+                    </div>
+                    <div class="col-md-2 col-xl-2">
+                        <input type="text" id="txtOwnerNm" class="input50" />
+                    </div>
+                    <div class="col-md-3 col-xl-2">
+                        GST Document
+                    </div>
+                    <div class="col-md-2 col-xl-2">
+                        <input type="text" id="txtGstDoc" class="input50" />
+                    </div>
+
+                </div>
+                <div class="row mt-4" id="secmember">
+                    <div class="col-md-3 col-xl-2">
+                        Owner Mobile No
+                    </div>
+                    <div class="col-md-2 col-xl-2">
+                        <input type="number" id="txtOwnerMobNo" class="input50" />
+                    </div>
+                    <div class=" col-md-3 col-xl-2">
+                        City
+                    </div>
+                    <div class="col-md-2 col-xl-2">
+                        @Html.DropDownList("City", new SelectList("Value", "Text"), htmlAttributes: new { @class = "input50", @id = "ddlCity" })
+                    </div>
+                </div>
+                <div class="row mt-4" id="secmember">
+                    <div class="col-md-3 col-xl-2">
+                        Owner Email Id
+                    </div>
+                    <div class="col-md-2 col-xl-2">
+                        <input type="text" id="txtOwnerEmailId" class="input50" />
+                    </div>
+                    <div class="col-md-3 col-xl-2">
+                        No Of Retail Category
+                    </div>
+                    <div class="col-md-2 col-xl-2">
+                        <input type="number" id="txtNoOfRetailCat" class="input50" />
+                    </div>
+                </div>
+                <div class="row mt-4" id="secmember">
+                    <div class="col-md-3 col-xl-3">
+                        <input type="checkbox" id="chkAlternateDetails" onclick="ShowHideDiv(this)" /> Alternate Contact Details
+                    </div>
+                </div>
+                <div class="row mt-4 ml-2" id="divAlternateDetails" style="display:none;">
+                    <div class="row mt-4" >
+                        <div class="col-md-3 col-xl-2">
+                            Alternate Person Name
+                        </div>
+                        <div class="col-md-2 col-xl-2">
+                            <input type="text" id="txtAlternateNm" class="input50" />
+                        </div>
+                    </div>
+                    <div class="row mt-4" >
+                        <div class="col-md-3 col-xl-2">
+                            Alternate Person Mobile No
+                        </div>
+                        <div class="col-md-2 col-xl-2">
+                            <input type="number" id="txtAlternateMobileNo" class="input50" />
+                        </div>
+                    </div>
+                    <div class="row mt-4" >
+                        <div class="col-md-3 col-xl-2">
+                            Alternate Person Email Id
+                        </div>
+                        <div class="col-md-2 col-xl-2">
+                            <input type="text" id="txtAlternateEmailId" class="input50" />
+                        </div>
+                    </div>
+                </div>
+                <div class="row mt-4" >
+
+                    <div class="col-md-2 col-xl-2">
+                        <button class="btn btn-primary login-btn" type="button" id="btnFilter" onclick="saveAll();">
+                            submit
+                        </button>
+                        <button class="btn btn-primary login-btn" type="button" id="btnReset" >
+                            Reset
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
+<script src="http://code.jquery.com/jquery-1.12.4.min.js"></script>
+<link href="~/Content/themes/base/jquery-ui.min.css" rel="stylesheet" />
+<link href="~/Content/themes/base/jquery-ui.css" rel="stylesheet" />
+<script src="~/Scripts/jquery-ui-1.12.1.js"></script>
+<script src="~/Scripts/jquery-ui-1.12.1.min.js"></script>
+<script>
+    $(document).ready(function () {
+        
+    });
+    function saveAll() {
+        console.log("Hi");
+    }
+    function ShowHideDiv(chkAlternateDetails) {
+        var dvAlternateDetails = document.getElementById("divAlternateDetails");
+        dvAlternateDetails.style.display = chkAlternateDetails.checked ? "block" : "none";
+    }
+</script>
