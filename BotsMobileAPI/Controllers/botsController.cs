@@ -15,9 +15,11 @@ using System.Web.Http.Results;
 using System.Globalization;
 using BOTS_BL.Models.CommonDB;
 using System.Net.Mail;
+using System.Web.Http.Cors;
 
 namespace BotsMobileAPI.Controllers
 {
+   
     public class botsController : ApiController
     {
         LoginRepository LR = new LoginRepository();
@@ -426,6 +428,23 @@ namespace BotsMobileAPI.Controllers
             }
             return "Invalid Token or Expired";
         }
+        [HttpGet]
+        public object GetOnlyOnceTxnResult(string GroupId, string outletId, string type)
+        {
+            if (User.Identity.IsAuthenticated)
+            {
+                string connectionString = CR.GetCustomerConnString(GroupId);
+                if (outletId.Equals("All"))
+                {
+                    outletId = "";
+                }
+                List<OnlyOnceTxn> objOnlyOnceTxn = new List<OnlyOnceTxn>();
+                objOnlyOnceTxn = KR.GetOnlyOnceTxnData(GroupId, outletId, type, connectionString);              
+
+                return new { Data = objOnlyOnceTxn, MaxJsonLength = Int32.MaxValue };
+            }
+            return "Invalid Token or Expired";
+        }
         //pointno 4-sub point 2
         [HttpGet]
         public object NonRedeeming(string GroupId)
@@ -642,13 +661,13 @@ namespace BotsMobileAPI.Controllers
                         var sender = "BLUEOC";
                         var Url = " https://http2.myvfirst.com/smpp/sendsms?";
                         Random random = new Random();
-                        // int randNum = random.Next(1000000);
-                        //  string sixDigitNumber = randNum.ToString("D6");
-                        string sixDigitNumber = "123456";
+                         int randNum = random.Next(1000000);
+                          string sixDigitNumber = randNum.ToString("D6");
+                       // string sixDigitNumber = "123456";
                         status = DR.InsertOTP(mobileNo, Convert.ToInt32(sixDigitNumber));
                         string MobileMessage = "Dear Member," + sixDigitNumber + " is your OTP. Sample SMS for OTP - Blue Ocktopus";
-                        // bool result = DR.SendOTPMessage(mobileNo, sender, MobileMessage, Url);
-                        bool result = true;
+                         bool result = DR.SendOTPMessage(mobileNo, sender, MobileMessage, Url);
+                       // bool result = true;
                         if (result)
                         {
                             var message = Request.CreateResponse(HttpStatusCode.OK);

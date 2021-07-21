@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http;
 using Microsoft.Owin.Security.OAuth;
+using System.Web.Http.Cors;
 
 namespace BotsMobileAPI
 {
@@ -13,7 +14,8 @@ namespace BotsMobileAPI
             // Web API configuration and services    
             config.SuppressDefaultHostAuthentication();
             config.Filters.Add(new HostAuthenticationFilter(OAuthDefaults.AuthenticationType));
-
+            //EnableCorsAttribute cors = new EnableCorsAttribute("https://blueocktopus.in/MobileNewAPI/", "*", "*");
+            //config.EnableCors(cors);
             // Web API routes
             config.MapHttpAttributeRoutes();
 
