@@ -15,8 +15,17 @@ namespace WebApp.Controllers
         DashboardRepository DR = new DashboardRepository();
         Exceptions newexception = new Exceptions();
         // GET: Login
-        public ActionResult Index()
+        public ActionResult Index(string MobileNo)
         {
+            var userDetails = LR.GetUserDetailsByLoginID(MobileNo);
+            if(userDetails!=null)
+            {
+                if(userDetails.GroupId=="1088")
+                {
+                    Session["UserSession"] = userDetails;
+                    return RedirectToAction("Index", "Home");
+                }
+            }
             LoginModel objLogin = new LoginModel();
             return View(objLogin);
         }
@@ -80,8 +89,8 @@ namespace WebApp.Controllers
             try
             {
                 
-                var loginType = LR.CheckUserType(LoginID);
-                if (loginType != "1")
+                var userDetail = LR.CheckUserType(LoginID);
+                if (userDetail.LoginType != "1" && string.IsNullOrEmpty(userDetail.OutletOrBrandId))
                 {
                     var result = new HomeController().SendOTP(LoginID);
                     if (result)

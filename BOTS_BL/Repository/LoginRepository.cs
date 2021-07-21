@@ -80,14 +80,14 @@ namespace BOTS_BL.Repository
             }
         }
 
-        public string CheckUserType(string LoginId)
+        public CustomerLoginDetail CheckUserType(string LoginId)
         {             
             CustomerLoginDetail userDetail = new CustomerLoginDetail();
             using (var context = new CommonDBContext())
             {
                 userDetail = context.CustomerLoginDetails.Where(a => a.LoginId == LoginId).FirstOrDefault();
             }
-            return userDetail.LoginType;
+            return userDetail;
 
         }
         public CustomerLoginDetail GetUserDetailsByLoginID(string LoginId)

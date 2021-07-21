@@ -528,15 +528,17 @@
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             success: function (response) {
+                console.log(response)
                 tableDataNewRegistration.length = 0;
                 $.map(response, function (item) {
                     optionItem = {}
-                    optionItem["Source"] = item.MobileNo;
-                    optionItem["SourceDesc"] = item.MemberName;
-                    optionItem["RegCount"] = item.ReferralMobileNo;
-                    optionItem["Percentage"] = item.ReferralName;
+                    optionItem["Source"] = item.Source;
+                    optionItem["SourceDesc"] = item.SourceDesc;
+                    optionItem["RegCount"] = item.RegCount;
+                    optionItem["Percentage"] = item.Percentage;
                     tableDataNewRegistration.push(optionItem);
                 });
+                console.log(tableDataNewRegistration)
                 DrawNewRegistrationTable();
                 $("#dvData").show();
                 $("#dvRefGenConv").hide();

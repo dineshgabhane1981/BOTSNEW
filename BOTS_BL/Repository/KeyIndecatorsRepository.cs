@@ -13,6 +13,7 @@ namespace BOTS_BL.Repository
 {
     public class KeyIndecatorsRepository
     {
+        Exceptions newexception = new Exceptions();
         //string connstr = CustomerConnString.ConnectionStringCustomer;
         public OnlyOnce GetOnlyOnceData(string GroupId, string outletId, string connstr)
         {
@@ -27,7 +28,7 @@ namespace BOTS_BL.Repository
             }
             catch (Exception ex)
             {
-                throw ex;
+                newexception.AddException(ex, GroupId);
             }
 
             return objOnlyOnce;
@@ -50,7 +51,7 @@ namespace BOTS_BL.Repository
             }
             catch (Exception ex)
             {
-                throw ex;
+                newexception.AddException(ex, GroupId);
             }
 
             return objOnlyOnceTxn;
@@ -69,7 +70,7 @@ namespace BOTS_BL.Repository
             }
             catch (Exception ex)
             {
-                throw ex;
+                newexception.AddException(ex, GroupId);
             }
 
             return objNonTransacting;
@@ -93,7 +94,7 @@ namespace BOTS_BL.Repository
             }
             catch (Exception ex)
             {
-                throw ex;
+                newexception.AddException(ex, GroupId);
             }
 
             return objNonTransactingTxn;
@@ -112,7 +113,7 @@ namespace BOTS_BL.Repository
             }
             catch (Exception ex)
             {
-                throw ex;
+                newexception.AddException(ex, GroupId);
             }
 
             return objNonRedemption;
@@ -135,7 +136,7 @@ namespace BOTS_BL.Repository
             }
             catch (Exception ex)
             {
-                throw ex;
+                newexception.AddException(ex, GroupId);
             }
 
             return objNonRedemptionTxn;
@@ -154,7 +155,7 @@ namespace BOTS_BL.Repository
             }
             catch (Exception ex)
             {
-                throw ex;
+                newexception.AddException(ex, GroupId);
             }
 
             return objMemberWebPage;
@@ -173,7 +174,7 @@ namespace BOTS_BL.Repository
             }
             catch (Exception ex)
             {
-                throw ex;
+                newexception.AddException(ex, GroupId);
             }
 
             return objMemberPage;
@@ -195,7 +196,7 @@ namespace BOTS_BL.Repository
             }
             catch (Exception ex)
             {
-                throw ex;
+                newexception.AddException(ex, GroupId);
             }
 
             return objMemberPageRefData;
@@ -216,7 +217,7 @@ namespace BOTS_BL.Repository
             }
             catch (Exception ex)
             {
-                throw ex;
+                newexception.AddException(ex, GroupId);
             }
             return objMembersInformation;
         }

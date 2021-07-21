@@ -32,10 +32,10 @@ namespace BOTS_BL.Models
         public long? BusinessGenerated { get; set; }
         public string ReferralMobileNo { get; set; }
         public string ReferralName { get; set; }
-        public long? TransactionCount { get; set; }
+        public int? TransactionCount { get; set; }
         public string Source { get; set; }
         public string SourceDesc { get; set; }
-        public long? RegCount { get; set; }
+        public int? RegCount { get; set; }
         public decimal? Percentage { get; set; }
 
 

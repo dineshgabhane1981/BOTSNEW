@@ -21,7 +21,7 @@ namespace BOTS_BL.Repository
                 objCustomerDetail = context.CustomerDetails.Where(x => x.CustomerId == CustomerId && x.CustomerType == CustomerType).FirstOrDefault();
             }
             return objCustomerDetail;
-        }
+        }        
 
         public DashboardParticipantsummary GetSummeryDetails(string CustomerId, string CustomerType,  string IsBTD)
         {
