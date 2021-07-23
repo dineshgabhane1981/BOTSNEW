@@ -315,6 +315,7 @@ namespace BotsMobileAPI.Controllers
             return "Invalid Token or Expired";
         }
 
+        //campaign 1st click data
         [HttpGet]
         public object GetCampaignFirstData(string GroupId, string month, string year)
         {
@@ -328,6 +329,87 @@ namespace BotsMobileAPI.Controllers
             return "Invalid Token or Expired";
         }
 
+        //get celebration data on 1st click
+        [HttpGet]
+        public object GetCampaignCelebrationsData(string GroupId, string month, string year)
+        {
+            if (User.Identity.IsAuthenticated)
+            {
+                string connectionString = CR.GetCustomerConnString(GroupId);
+                List<CampaignCelebrations> objCampaignCelebrations = new List<CampaignCelebrations>();
+                objCampaignCelebrations = CMPR.GetCampaignCelebrationsData(GroupId, connectionString, month, year);
+                return new { Data = objCampaignCelebrations, MaxJsonLength = Int32.MaxValue };
+            }
+            return "Invalid Token or Expired";
+        }
+        //celebration 2nd click data
+        //type 1=birthday,2=anniversary
+        [HttpGet]
+        public object GetCampaignCelebrationsSecondData(string GroupId, string month, string year, string type)
+        {
+            if (User.Identity.IsAuthenticated)
+            {
+                string connectionString = CR.GetCustomerConnString(GroupId);
+                List<CampaignCelebrationsData> objCampaignCelebrationsData = new List<CampaignCelebrationsData>();
+                objCampaignCelebrationsData = CMPR.GetCampaignCelebrationsSecondData(GroupId, connectionString, month, year, type);
+                return new { Data = objCampaignCelebrationsData, MaxJsonLength = Int32.MaxValue };
+            }
+            return "Invalid Token or Expired";
+        }
+        //point expiry 1st click data
+        [HttpGet]
+        public object GetCampaignPointsExpiryData(string GroupId, string month, string year)
+        {
+            if (User.Identity.IsAuthenticated)
+            {
+                string connectionString = CR.GetCustomerConnString(GroupId);
+                List<CampaignPointsExpiry> objCampaignPointsExpiry = new List<CampaignPointsExpiry>();
+                objCampaignPointsExpiry = CMPR.GetCampaignPointsExpiryData(GroupId, connectionString, month, year);
+                return new { Data = objCampaignPointsExpiry, MaxJsonLength = Int32.MaxValue };
+            }
+            return "Invalid Token or Expired";
+        }
+        //point expiry 2nd click data
+        [HttpGet]
+        public object GetCampaignPointsExpirySecondData(string GroupId, string month, string year,string type)
+        {
+            if (User.Identity.IsAuthenticated)
+            {
+                string connectionString = CR.GetCustomerConnString(GroupId);
+                List<CampaignCelebrationsData> objCampaignCelebrationsData = new List<CampaignCelebrationsData>();
+                objCampaignCelebrationsData = CMPR.GetCampaignCelebrationsSecondData(GroupId, connectionString, month, year, type);
+                return new { Data = objCampaignCelebrationsData, MaxJsonLength = Int32.MaxValue };
+            }
+            return "Invalid Token or Expired";
+        }
+
+        //Inactive 1st click data
+        [HttpGet]
+        public object GetCampaignInactiveData(string GroupId, string month, string year)
+        {
+            if (User.Identity.IsAuthenticated)
+            {
+                string connectionString = CR.GetCustomerConnString(GroupId);
+                List<CampaignInactive> objCampaignInactive = new List<CampaignInactive>();
+                objCampaignInactive = CMPR.GetCampaignInactiveData(GroupId, connectionString, month, year);
+                return new { Data = objCampaignInactive, MaxJsonLength = Int32.MaxValue };
+            }
+            return "Invalid Token or Expired";
+        }
+        //Inactive 2nd click data
+        [HttpGet]
+        public object GetCampaignInactiveSecondData(string GroupId, string month, string year)
+        {
+            if (User.Identity.IsAuthenticated)
+            {
+                string connectionString = CR.GetCustomerConnString(GroupId);
+                List<CampaignInactiveData> objCampaignInactiveData = new List<CampaignInactiveData>();
+                objCampaignInactiveData = CMPR.GetCampaignInactiveSecondData(GroupId, connectionString, month, year);
+                return new { Data = objCampaignInactiveData, MaxJsonLength = Int32.MaxValue };
+            }
+            return "Invalid Token or Expired";
+        }
+        //campaign 2nd click data
         [HttpGet]
         public object GetCampaignSecondData(string GroupId, string month, string year, string CampaignId)
         {
@@ -340,6 +422,7 @@ namespace BotsMobileAPI.Controllers
             }
             return "Invalid Token or Expired";
         }
+        //not necessary 
         [HttpGet]
         public object GetCampaignThirdData(string GroupId, string month, string year, string CampaignId)
         {
@@ -352,7 +435,7 @@ namespace BotsMobileAPI.Controllers
             }
             return "Invalid Token or Expired";
         }
-
+        //smsblast 1st click data
         [HttpGet]
         public object GetCampaignSMSBlastFirstData(string GroupId, string month, string year)
         {
@@ -365,7 +448,7 @@ namespace BotsMobileAPI.Controllers
             }
             return "Invalid Token or Expired";
         }
-
+        //smsblast 2nd click data
         [HttpGet]
         public object GetSMSBlastsSecondData(string GroupId, string month, string year, string CampaignId)
         {
@@ -378,7 +461,7 @@ namespace BotsMobileAPI.Controllers
             }
             return "Invalid Token or Expired";
         }
-
+        //not necessary
         [HttpGet]
         public object GetSMSBlastsThirdData(string GroupId, string month, string year, string CampaignId)
         {
@@ -899,6 +982,28 @@ namespace BotsMobileAPI.Controllers
             return "Invalid Token or Expired";
 
         }
+
+        //[HttpGet]
+        //public object GetProfile(string GroupId)
+        //{
+        //    if (User.Identity.IsAuthenticated)
+        //    {
+        //        string connectionString = CR.GetCustomerConnString(GroupId);
+        //        tblGroupDetail objgrpdetails = new tblGroupDetail();
+        //        using (var context = new CommonDBContext())
+        //        {
+        //            objgrpdetails = context.tblGroupDetails.Where(x => x.GroupId == Convert.ToInt32(GroupId)).FirstOrDefault();
+
+        //        }
+        //        SMSDetail objsMSDetail = new SMSDetail();
+        //        using (var Context = new BOTSDBContext(connectionString))
+        //        {
+        //           // objsMSDetail = Context.SMSDetails.Where(x => x.BrandId == objgrpdetails.).
+        //        }
+
+        //    }
+        //    return "Invalid Token or Expired";
+        //}
 
 
 

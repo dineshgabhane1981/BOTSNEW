@@ -37,5 +37,23 @@ namespace BOTS_BL.Models
 
         [StringLength(100)]
         public string WhatsappTokenId { get; set; }
+
+        [StringLength(50)]
+        public string SMSGatewayId { get; set; }
+
+        [StringLength(25)]
+        public string VirtualSmsUserName { get; set; }
+
+        [StringLength(25)]
+        public string VirtualSmsPassword { get; set; }
+
+        [StringLength(25)]
+        public string VirtualWhatsAppUserName { get; set; }
+
+        [StringLength(25)]
+        public string VirtualWhatsAppPassword { get; set; }
+
+        [StringLength(25)]
+        public string OutletId { get; set; }
     }
 }

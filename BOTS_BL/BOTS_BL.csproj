@@ -229,6 +229,7 @@
     <Compile Include="Models\OnBoarding\BOTS_TblGroupMaster.cs" />
     <Compile Include="Models\OnBoarding\BOTS_TblRetailMaster.cs" />
     <Compile Include="Models\OutletDetail.cs" />
+    <Compile Include="Models\ProfilePage.cs" />
     <Compile Include="Models\Reports\Celebrations.cs" />
     <Compile Include="Models\Reports\MemberList.cs" />
     <Compile Include="Models\Reports\MemberSearch.cs" />

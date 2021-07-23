@@ -464,5 +464,43 @@ namespace BOTS_BL.Repository
             return lstOutlets;
         }
 
+        public ProfilePage GetprofilePageData(string GroupId)
+        {
+            ProfilePage objprofilePage = new ProfilePage();
+            string connectionString = GetCustomerConnString(GroupId);
+            tblGroupDetail objgrpdetails = new tblGroupDetail();
+            using (var context = new CommonDBContext())
+            {
+                objgrpdetails = context.tblGroupDetails.Where(x => x.GroupId == Convert.ToInt32(GroupId)).FirstOrDefault();
+
+            }
+            SMSDetail objsMSDetail = new SMSDetail();
+            using (var Context = new BOTSDBContext(connectionString))
+            {
+                var objsms = Context.SMSDetails;
+                foreach(var sms in objsms)
+                {
+                   if(sms.SMSGatewayId == "2")
+                   {
+                        if(!string.IsNullOrEmpty(sms.WhatsappTokenId))
+                        {
+
+                        }
+                        if(!string.IsNullOrEmpty(sms.TxnUserName) && !string.IsNullOrEmpty(sms.TxnPassword))
+                        {
+
+                        }
+                   }
+                   else
+                   {
+
+                   }
+                }
+
+            }
+
+            return objprofilePage;
+        }
+
     }
 }
