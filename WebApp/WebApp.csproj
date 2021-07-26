@@ -168,6 +168,7 @@
     <Compile Include="ViewModel\CancelTxnViewModel.cs" />
     <Compile Include="ViewModel\CustomerViewModel.cs" />
     <Compile Include="ViewModel\DataPoint.cs" />
+    <Compile Include="ViewModel\OnBoardingSalesViewModel.cs" />
     <Compile Include="ViewModel\OtherReportProductwiseViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -393,6 +394,7 @@
     <Content Include="Views\CustomerOnBoarding\UpdatePaymentDetails.cshtml" />
     <Content Include="Views\CustomerOnBoarding\Notifications.cshtml" />
     <Content Include="Views\CustomerOnBoarding\PaymentSchedule.cshtml" />
+    <Content Include="Views\CustomerOnBoarding\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

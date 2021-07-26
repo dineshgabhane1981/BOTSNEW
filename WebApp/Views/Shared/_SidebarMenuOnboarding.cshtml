@@ -47,47 +47,7 @@
                             Customer Management
                         </a>
                     </li>
-                }
-
-                @if (roleId == "05" || roleId == "1")
-                {
-                    <li>
-                        <a href="@Url.Action("CustomerDetail", "CustomerOnBoarding")" class="@Html.IsSelected(controller: "CustomerOnBoarding", action: "CustomerDetail")">
-                            <i class="metismenu-icon pe-7s-user"></i>
-                            Customer Detail
-                        </a>
-                    </li>
-                    <li>
-                        <a href="@Url.Action("ProductAssignmentDetails", "CustomerOnBoarding")" class="@Html.IsSelected(controller: "CustomerOnBoarding", action: "ProductAssignmentDetails")">
-                            <i class="metismenu-icon pe-7s-diamond"></i>
-                            Product Details
-                        </a>
-                    </li>
-                    <li>
-                        <a href="@Url.Action("DealDetails", "CustomerOnBoarding")" class="@Html.IsSelected(controller: "CustomerOnBoarding", action: "DealDetails")">
-                            <i class="metismenu-icon pe-7s-like2"></i>
-                            Deal Details
-                        </a>
-                    </li>
-                    <li>
-                        <a href="@Url.Action("PaymentSchedule", "CustomerOnBoarding")" class="@Html.IsSelected(controller: "CustomerOnBoarding", action: "PaymentSchedule")">
-                            <i class="metismenu-icon pe-7s-note2"></i>
-                            Payment Schedule
-                        </a>
-                    </li>
-                    <li>
-                        <a href="@Url.Action("UpdatePaymentDetails", "CustomerOnBoarding")" class="@Html.IsSelected(controller: "CustomerOnBoarding", action: "UpdatePaymentDetails")">
-                            <i class="metismenu-icon pe-7s-credit"></i>
-                            Update Payment Details
-                        </a>
-                    </li>
-                    <li>
-                        <a href="@Url.Action("Notifications", "CustomerOnBoarding")" class="@Html.IsSelected(controller: "CustomerOnBoarding", action: "Notifications")">
-                            <i class="metismenu-icon pe-7s-volume"></i>
-                            Notifications
-                        </a>
-                    </li>
-                }
+                }            
 
             </ul>
         </div>

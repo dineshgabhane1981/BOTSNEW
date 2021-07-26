@@ -1,0 +1,153 @@
+﻿@model WebApp.ViewModel.OnBoardingSalesViewModel
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_OnBoardingLayout.cshtml";
+}
+<style>
+    .row {
+        margin-top: 40px;
+        padding: 0 10px;
+    }
+
+    .clickable {
+        cursor: pointer;
+    }
+
+    .panel-heading span {
+        margin-top: -20px;
+        font-size: 15px;
+    }
+</style>
+<div class="app-main__inner">
+    <div class="row mb-3 card">
+        <div class="container-fluid pt-3 pl-3 pr-3 pb-3">            
+            <div class="btn btn-info col-md-12" data-toggle="collapse" style="cursor:pointer;text-align:left;" data-target="#custdetails">Customer Detail</div>
+            <div id="custdetails" class="collapse show">
+                <div class="row" style="margin: 0; padding-top:10px;">
+                    <div style="float:left;text-align:right;width:100px;">
+                        Legal Name
+                    </div>
+                    <div class="col-sm-4" style="float:left;">
+                        @Html.TextBoxFor(model => model.bots_TblGroupMaster.GroupName, new { @class = "input100", @id = "txtGroupName", tabindex = 1 })
+                    </div>
+                    <div style="float:left;text-align:right;width:115px;">
+                        Owner’s Name
+                    </div>
+                    <div class="col-sm-4" style="float:left;">
+                        @Html.TextBoxFor(model => model.bots_TblGroupMaster.OwnerName, new { @class = "input100", @id = "txtOwnerName", tabindex = 2 })
+                    </div>
+                </div>
+                <div class="row" style="margin: 0;">
+                    <div style="float:left;text-align:right;width:100px;">
+                        Mobile No
+                    </div>
+                    <div class="col-sm-4" style="float:left;margin-top:10px;">
+                        @Html.TextBoxFor(model => model.bots_TblGroupMaster.OwnerMobileNo, new { @class = "input100", @id = "txtOwnerMobileNo", tabindex = 3 })
+                    </div>
+                    <div style="float:left;text-align:right;width:115px;">
+                        Owner’s Email
+                    </div>
+                    <div class="col-sm-4" style="float:left;margin-top:10px;">
+                         @Html.TextBoxFor(model => model.bots_TblGroupMaster.OwnerEmailId, new { @class = "input100", @id = "txtOwnerEmailId", tabindex = 4 })
+                    </div>
+                </div>
+                <div class="row" style="margin: 0;">
+                    <div style="float:left;text-align:right;width:100px;">
+                        Upload GST
+                    </div>
+                    <div class="col-sm-4" style="float:left;margin-top:10px;">
+                        <input type="file" id="uploadGST" name="uploadGST" tabindex="5" />
+                    </div>
+                    <div style="float:left;text-align:right;width:115px;">
+                        Upload PAN
+                    </div>
+                    <div class="col-sm-4" style="float:left;margin-top:10px;">
+                        <input type="file" id="uploadPAN" name="uploadPAN" tabindex="6" />
+                    </div>
+                </div>
+                <div class="row" style="margin: 0;">
+                    <div style="float:left;text-align:right;width:100px;">
+                        City
+                    </div>
+                    <div class="col-sm-4" style="float:left;margin-top:10px;">
+                        @Html.TextBoxFor(model => model.bots_TblGroupMaster.City, new { @class = "input100", @id = "txtCity", tabindex = 7 })
+                    </div>
+                    <div style="float:left;text-align:right;width:115px;">
+                        Other Person Name
+                    </div>
+                    <div class="col-sm-4" style="float:left;margin-top:10px;">
+                        @Html.TextBoxFor(model => model.bots_TblGroupMaster.AnyOtherName, new { @class = "input100", tabindex = 8 })
+                    </div>
+                </div>
+                <div class="row" style="margin: 0;">
+                    <div style="float:left;text-align:right;width:100px;">
+                        Mobile No
+                    </div>
+                    <div class="col-sm-4" style="float:left;margin-top:10px;">
+                        @Html.TextBoxFor(model => model.bots_TblGroupMaster.AlternateMobileNo, new { @class = "input100", tabindex = 9 })
+                    </div>
+                    <div style="float:left;text-align:right;width:115px;">
+                        Email
+                    </div>
+                    <div class="col-sm-4" style="float:left;margin-top:10px;">
+                        @Html.TextBoxFor(model => model.bots_TblGroupMaster.AlternateEmailId, new { @class = "input100", tabindex = 10 })
+                    </div>
+                </div>
+                <div class="row" style="margin: 0;">
+                    <div style="float:left;text-align:right;width:100px;">
+                        No of Retail Categories
+                    </div>
+                    <div class="col-sm-4" style="float:left;margin-top:10px;">
+                        @Html.TextBoxFor(model => model.bots_TblGroupMaster.NoOfRetailCategory, new { @class = "input100", @id = "txtNoOfRetailCategory", tabindex = 11 })
+                    </div>
+                    
+                </div>
+                
+            </div>
+        </div>
+
+        <div class="container-fluid pt-3 pl-3 pr-3 pb-3">
+            <div class="btn btn-info col-md-12" data-toggle="collapse" style="cursor:pointer;text-align:left;" data-target="#productdetails">Product & Assignment Details</div>
+            <div id="productdetails" class="collapse">
+                Lorem ipsum dolor sit amet, consectetur adipisicing elit,
+                sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+                quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+            </div>
+        </div>
+
+        <div class="container-fluid pt-3 pl-3 pr-3 pb-3">
+            <div class="btn btn-info col-md-12" data-toggle="collapse" style="cursor:pointer;text-align:left;" data-target="#dealdetails">Deal Details</div>
+            <div id="dealdetails" class="collapse">
+                Lorem ipsum dolor sit amet, consectetur adipisicing elit,
+                sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+                quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+            </div>
+        </div>
+
+        <div class="container-fluid pt-3 pl-3 pr-3 pb-3">
+            <div class="btn btn-info col-md-12" data-toggle="collapse" style="cursor:pointer;text-align:left;" data-target="#paymentmodule">Payment Schedule</div>
+            <div id="paymentmodule" class="collapse">
+                Lorem ipsum dolor sit amet, consectetur adipisicing elit,
+                sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+                quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+            </div>
+        </div>
+        <div class="container-fluid pt-3 pl-3 pr-3 pb-3">
+            <div class="btn btn-info col-md-12" data-toggle="collapse" style="cursor:pointer;text-align:left;" data-target="#updatepaymentdetails">Update Payment Details</div>
+            <div id="updatepaymentdetails" class="collapse">
+                Lorem ipsum dolor sit amet, consectetur adipisicing elit,
+                sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+                quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+            </div>
+        </div>
+
+        <div class="container-fluid pt-3 pl-3 pr-3 pb-3">
+            <div class="btn btn-info col-md-12" data-toggle="collapse" style="cursor:pointer;text-align:left;" data-target="#notifications">Notifications</div>
+            <div id="notifications" class="collapse">
+                Lorem ipsum dolor sit amet, consectetur adipisicing elit,
+                sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+                quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+            </div>
+        </div>
+    </div>
+</div>

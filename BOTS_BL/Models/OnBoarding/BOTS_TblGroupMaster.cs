@@ -100,5 +100,7 @@ namespace BOTS_BL.Models
 
         [Column(TypeName = "text")]
         public string OtherFeesDescription { get; set; }
+        [Column(TypeName = "text")]
+        public string AnyOtherName { get; set; }
     }
 }
