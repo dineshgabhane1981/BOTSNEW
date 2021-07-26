@@ -7,6 +7,7 @@ using System.Net.Mail;
 using System.Text;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Script.Serialization;
 //using BOTS_BL;
 
 namespace BusinessLoyaltyWebPage.Controllers
@@ -21,7 +22,7 @@ namespace BusinessLoyaltyWebPage.Controllers
         public JsonResult SendMsg(string MobileNo,string CustomerName)
         {
             var sender = "BLUEOC";
-            var Url = " https://http2.myvfirst.com/smpp/sendsms?";            
+            var Url = "https://http2.myvfirst.com/smpp/sendsms?";            
             string MobileMessage = "Dear "+ CustomerName + ", Thanks for sharing your information. One of our representative will call you to take your on your Loyalty Journey – Blue Ocktopus";
 
             SendSucessMessage(MobileNo, sender, MobileMessage, Url);
@@ -67,56 +68,46 @@ namespace BusinessLoyaltyWebPage.Controllers
             }
 
         }
-        public ActionResult SendEmailAndSMS(string mobileNo, string BusinessNm, string CustomerName, string Location)
-        {
+        //string mobileNo, string BusinessNm, string CustomerName, string Location,
+        [HttpPost]
+        public ActionResult SendEmailAndSMS( string jsonData)
+        { 
             var result = "";
+            JavaScriptSerializer json_serializer = new JavaScriptSerializer();
+            json_serializer.MaxJsonLength = int.MaxValue;
+            object[] objData = (object[])json_serializer.DeserializeObject(jsonData);
+            string mobileNo = "";
+            string BusinessNm = "";
+            string CustomerName = "";
+            string Location = "";
+            
+            foreach (Dictionary<string, object> item in objData)
+            {
+                mobileNo = Convert.ToString(item["MobileNo"]);
+                BusinessNm = Convert.ToString(item["Businessname"]);
+                CustomerName = Convert.ToString(item["Name"]);
+                Location = Convert.ToString(item["BusiLocation"]);
+            }
             try
-            {                
+            {
                 string from = "report@blueocktopus.in";
-                // string To = System.Configuration.ConfigurationManager.AppSettings["emailId"];
-                string To = "ashlesha@blueocktopus.in";
+                 string To = System.Configuration.ConfigurationManager.AppSettings["emailId"];
+               // string To = "ashlesha@blueocktopus.in";
                 using (MailMessage mail = new MailMessage(from, To))
                 {
-                    StringBuilder str = new StringBuilder();
-                    str.Append("<table>");
-                    str.Append("<tr>");
-                    str.AppendLine("<td>Please find following Exhibition Data</td>");
-                    str.AppendLine("</br>");
-                    str.Append("</tr>");
-                    str.Append("</table>");
-                    str.Append("<table >");
-                    str.Append("<tr>");
-                    str.Append("</tr>");
-
-                    str.Append("<tr>");
-                    str.Append("<td > Name:</td>");
-
-                    str.Append("<td >" + CustomerName + "</ td >");
-                    str.Append("</tr>");
-                    str.Append("<tr>");
-                    str.Append("<td >Business Name:</td>");
-
-                    str.Append("<td> " + BusinessNm + "</td>");
-                    str.Append("</tr>");
-
-                    str.Append("<tr>");
-                    str.Append("<td > Mobile No:</td>");
-
-                    str.Append("<td >" + mobileNo + "</ td >");
-                    str.Append("</tr>");
-
-                    str.Append("<tr>");
-                    str.Append("<td > Location:</td>");
-
-                    str.Append("<td >" + Location + "</ td >");
-                    str.Append("</tr>");
-                    str.Append("<tr>");
-                    str.Append("<td >Regards,</td>");
-                    str.Append("</tr>");
-                    str.Append("<tr>");
-                    str.Append("<td > - Blue Ocktopus Team</ td >");
-                    str.Append("</tr>");
-                    str.Append("</table>");
+                    StringBuilder str = new StringBuilder();                   
+                    str.AppendLine("Dear Sir,");
+                    str.AppendLine();
+                    str.AppendLine("Please find following Exhibition Data");
+                    str.AppendLine();
+                    str.AppendLine(" Name:" + CustomerName + "" );  
+                    str.AppendLine("Business Name: " + BusinessNm + "");                    
+                    str.AppendLine("Mobile No:" + mobileNo + "");
+                    str.AppendLine("Location:" + Location + "");                   
+                    str.AppendLine();
+                    str.AppendLine("Regards,");                   
+                    str.AppendLine(" - Blue Ocktopus Team");
+                    
 
                     mail.Subject = "Jewellery Exhibition Lead-" + BusinessNm;
                     mail.Body = str.ToString();
@@ -128,14 +119,14 @@ namespace BusinessLoyaltyWebPage.Controllers
                     smtp.UseDefaultCredentials = true;
                     smtp.Credentials = networkCredential;
                     smtp.Port = 587;
-                    smtp.Send(mail);                    
+                    smtp.Send(mail);
                     // var resultsms = SendMsg(mobileNo, CustomerName);
                     result = "True";
                 }
 
 
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
 
             }

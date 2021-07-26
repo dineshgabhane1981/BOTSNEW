@@ -92,7 +92,7 @@
         }
 </style>
 @*background-image:url(../images/Toppicture.jpg);background-size: 100% auto;*@
-<div class="img">
+
     <div id="divLoader" runat="server" style="display:none">
         <div id="loader">
             <div class="loader-inner">
@@ -108,20 +108,24 @@
         <div>
             <table style="text-align:center;">
                 <tr >
-                    <td style="padding-top:20px; font-family:Verdana; font-size:15px;letter-spacing:1px;">
-                        Let us start your journey to make your <b>walk-in customers loyal</b> and achieving objectives of <b>repeat purchases & higher spends!!!</b>
-
+                    <td style="padding-top:20px; font-family:Verdana; font-size:15px;letter-spacing:1px;">                       
+                        Let's work towards making your <b>walk-in customers loyal</b> and <b>increase repeat purchases and higher spends.</b>
                     </td>
                     <td style="padding-top:20px;">
                        
 
                     </td>
                 </tr>
+                <tr>
+                    <td id ="fillform"style="padding-top:10px; font-family:Verdana; font-size:13px; ">
+                        Please fill this form and we will take you through our platform in detail
+                    </td>
+                </tr>
             </table>
         </div>
         @*<h4>Fill below details to start your business loyalty journey</h4>*@
         <div>
-            <table id="divExisting" width="100%" style="font-family: Verdana; font-size: 15px;  ">
+            <table id="tblform" width="100%" style="font-family: Verdana; font-size: 15px;  ">
 
 
                 <tr style="width:10px;">
@@ -134,7 +138,7 @@
                 </tr>
                 <tr>
                     <td style="padding-top:20px;">
-                        Business Name/व्यवसायचा नाव
+                        Business Name/व्यवसायाचे नाव 
                     </td>
                     <td style="padding-top:20px;">
 
@@ -154,7 +158,7 @@
                 </tr>
                 <tr>
                     <td style="padding-top:20px;">
-                        Business location/व्यवसायचा ठिकाण
+                        Business location/व्यवसायाचे ठिकाण
                     </td>
                     <td style="padding-top:20px;">
                         <input type="text" id="txtBusinessLoc" class="input50" />
@@ -168,17 +172,29 @@
                 </tr>
                 <tr>
                     <td colspan="2" align="left" style="color: red;">
-                        <span id="spncustnm" style="font:bold;"></span>
+                        <span id="spncustnm" style="font:bold;"></span>                        
                     </td>
 
                 </tr>
-                
-
-
             </table>
-            <table>
+            <table id="tblsucessmsg" style="display:none; color:red;font:bold;font-family:Verdana; height:200px;padding-top:40px;">
                 <tr>
-                    <td >
+                    <td>
+                        Thank you for showing interest in our Loyalty & Analytics Platform. Our representative will connect with you in a day!!!
+
+                    </td>
+                </tr>
+            </table>
+            <table id ="tbllogo"style="text-align:center; font-family:Verdana; color:deepskyblue;">
+                <thead>
+                    <tr>
+                        <td>
+                            <b> Successfully running our platform at more than 40 Jewellers across 18 cities & towns!!!</b>
+                        </td>
+                    </tr>
+                </thead>
+                <tr >
+                    <td style="padding-top:20px;" >
                         <img src="../Content/assets/images/Screenshot_2021-07-23-15-14-33-659_com.google.android.googlequicksearchbox (1).png" />
                         <img src="../Content/assets/images/Screenshot_2021-07-23-15-28-00-295_com.android.chrome.png" />
                         <img src="../Content/assets/images/Screenshot_2021-07-23-15-18-02-765_com.android.chrome.png" />
@@ -206,6 +222,11 @@
 
                     </td>
                 </tr>
+                <tr>
+                    <td style="text-align:right; font-size:12px;color:black;">
+                        <b>And several more..</b>
+                    </td>
+                </tr>
             </table>
       
     </div>
@@ -224,10 +245,10 @@
             var BusiLocation = $('#txtBusinessLoc').val();
             var Businessname = $('#txtBusinessNm').val();
             var Name = $('#txtName').val();
-            
+
             var errormsg = [];
             if (/^[6789]\d{9,9}$/.test(MobileNo)) {
-                
+
             }
             else {
                 errormsg.push("Invalide MobileNo Or Enter MobileNo");
@@ -248,39 +269,53 @@
             return errormsg;
 
         }
-        
+
         function SendEmail() {
             console.log("hi");
-        var MobileNo = $('#txtMobileNo').val();
-        var BusiLocation = $('#txtBusinessLoc').val();
-        var Businessname = $('#txtBusinessNm').val();
-        var Name = $('#txtName').val();
+        //var MobileNo = $('#txtMobileNo').val();        
+        //var Businessname = $('#txtBusinessNm').val();
+        //    var Name = $('#txtName').val();
+         var BusiLocation = $('#txtBusinessLoc').val();
         if (BusiLocation == null) {
             BusiLocation = "Not Mentioned";
         }
+            var MemberData = [];
+            item = {}
+            item["MobileNo"] = $('#txtMobileNo').val();
+            item["BusiLocation"] = BusiLocation;
+            item["Businessname"] = $('#txtBusinessNm').val();
+            item["Name"] = $('#txtName').val();
+            
+            MemberData.push(item);
+            var data = JSON.stringify(MemberData);
+            console.log(data);
 
         var errorMessage = validate();
             console.log(errorMessage);
-        
+
         if (errorMessage.length <= 0)
-        { 
-            console.log("hiinside");
+        {
+           // console.log(MobileNo);
             $("#divLoader").show();
-             $.ajax({
-                        type: "POST",
-                        url: '@Url.Action("SendEmailAndSMS", "Home")',
-                        data: "{'mobileNo': " + MobileNo + ",'BusinessNm': " + Businessname + ",'CustomerName': " + Name + ",'Location':" + BusiLocation +"}",
-                        contentType: "application/json; charset=utf-8",
+            $.ajax({
+                 type: "POST",
+                 url: '@Url.Action("SendEmailAndSMS", "Home")',
+                       // data: "{'mobileNo:' " + MobileNo + ",'BusinessNm:' " + Businessname + ",'CustomerName:' " + Name + ",'Location:'" + BusiLocation +"}",
+                data: '{jsonData: ' + JSON.stringify(data) + '}',
+                contentType: "application/json; charset=utf-8",
                         dataType: "json",
                         success: function (result) {
                             if (result != null) {
-                                console.log("in");                              
-                                $('#spncustnm').show();
+                                console.log("in");
+                                $("#tblform").hide();
+                                $('#tblsucessmsg').show();
                                 $("#divLoader").hide();
+                                $("#fillform").hide();
+
                             }
                             else {
                                 console.log("fail");
-                               
+
                             }
                         },
                         failure: function (result) {
@@ -288,10 +323,10 @@
                             $("#divLoader").hide();
                         },
                         error: function (result) {
-                           
+
                             $("#divLoader").hide();
                         }
-                    });
+              });
         }
         else
         {
