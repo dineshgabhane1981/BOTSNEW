@@ -95,6 +95,11 @@ namespace BotsMobileAPI.Controllers
                 DashboardMemberSegment dataMemberSegment = new DashboardMemberSegment();
                 try
                 {
+                    OutletId = OutletId.ToUpper();
+                    if (OutletId.Equals("ALL"))
+                    {
+                        OutletId = "";
+                    }
                     List<string> lstDates = new List<string>();
                     string connectionString = CR.GetCustomerConnString(GroupId);
 
@@ -218,6 +223,11 @@ namespace BotsMobileAPI.Controllers
 
                 try
                 {
+                    OutletId= OutletId.ToUpper();
+                    if (OutletId.Equals("ALL"))
+                    {
+                        OutletId = "";
+                    }
                     string connectionString = CR.GetCustomerConnString(GroupId);
                     List<DashboardBizShared> lstBizShared = new List<DashboardBizShared>();
                     lstBizShared = DR.GetDashboardBizShared(GroupId, OutletId, connectionString);
@@ -273,6 +283,7 @@ namespace BotsMobileAPI.Controllers
         }
         //ponit no 12-no of profile updated,referral generated,memeberbase
         //profileflag:1(referral),0(profile)
+        //alternative for enrolled base
         [HttpGet]
         public object GetMemberWebPageResult(string GroupId, string profileFlag)
         {
@@ -508,7 +519,8 @@ namespace BotsMobileAPI.Controllers
             if (User.Identity.IsAuthenticated)
             {
                 string connectionString = CR.GetCustomerConnString(GroupId);
-                if (outletId.Equals("All"))
+                outletId = outletId.ToUpper();
+                if (outletId.Equals("ALL"))
                 {
                     outletId = "";
                 }
@@ -547,7 +559,8 @@ namespace BotsMobileAPI.Controllers
             if (User.Identity.IsAuthenticated)
             {
                 string connectionString = CR.GetCustomerConnString(GroupId);
-                if (outletId.Equals("All"))
+                outletId = outletId.ToUpper();
+                if (outletId.Equals("ALL"))
                 {
                     outletId = "";
                 }
@@ -607,25 +620,8 @@ namespace BotsMobileAPI.Controllers
                 return new { Data = objMemberSearch, MaxJsonLength = Int32.MaxValue };
             }
             return "Invalid Token or Expired";
-        }
-        //need to add API
-        [HttpGet]
-        public object GetSMSCreditBalance(string GroupId)
-        {
-            if (User.Identity.IsAuthenticated)
-            {
-                string connectionString = CR.GetCustomerConnString(GroupId);
-                var whatsApptoken ="";
-                using (var contextNew = new BOTSDBContext(connectionString))
-                {                    
-                     whatsApptoken = contextNew.SMSDetails.Select(x => x.WhatsappTokenId).FirstOrDefault();
-                }
-               
-                return new { Data = whatsApptoken, MaxJsonLength = Int32.MaxValue };
-            }
-            return "Invalid Token or Expired";
-
-        }
+        }     
+        
 
         [HttpGet]
         public object AuthenticateUser(string LoginId, string Password)
@@ -767,6 +763,7 @@ namespace BotsMobileAPI.Controllers
             //}
            // return Request.CreateErrorResponse(HttpStatusCode.Unauthorized, "Invalid Token or Expired");
         }
+
         [HttpGet]
         public object VerifyOTP(string mobileNo, int OTP)
         {           
@@ -983,27 +980,18 @@ namespace BotsMobileAPI.Controllers
 
         }
 
-        //[HttpGet]
-        //public object GetProfile(string GroupId)
-        //{
-        //    if (User.Identity.IsAuthenticated)
-        //    {
-        //        string connectionString = CR.GetCustomerConnString(GroupId);
-        //        tblGroupDetail objgrpdetails = new tblGroupDetail();
-        //        using (var context = new CommonDBContext())
-        //        {
-        //            objgrpdetails = context.tblGroupDetails.Where(x => x.GroupId == Convert.ToInt32(GroupId)).FirstOrDefault();
+        [HttpGet]
+        public object GetProfile(string GroupId)
+        {
+            if (User.Identity.IsAuthenticated)
+            {
+                string connectionString = CR.GetCustomerConnString(GroupId);
+                ProfilePage objprofilepage = CR.GetprofilePageData(GroupId);
 
-        //        }
-        //        SMSDetail objsMSDetail = new SMSDetail();
-        //        using (var Context = new BOTSDBContext(connectionString))
-        //        {
-        //           // objsMSDetail = Context.SMSDetails.Where(x => x.BrandId == objgrpdetails.).
-        //        }
-
-        //    }
-        //    return "Invalid Token or Expired";
-        //}
+                return new { Data = objprofilepage, MaxJsonLength = Int32.MaxValue };
+            }
+            return "Invalid Token or Expired";
+        }
 
 
 
