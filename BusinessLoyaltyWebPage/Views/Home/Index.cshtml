@@ -85,109 +85,125 @@
         </table>
     </div>
     @*<h4>Fill below details to start your business loyalty journey</h4>*@
-    <div class="col-12">
-        <div class="row">
-            <div class="col-6">Name/नाव</div>
-            <div class="col-6"><input type="text" id="txtName" />*</div>
-        </div>
-
-
-
-        <table id="tblform" class="table-responsive col-12"  style="font-family: Verdana; font-size: 15px;">
-
-            <tr >
-                <td style="padding-top:20px;">
-                    Name/नाव
-                </td>
-                <td style="padding-top:20px;">
-                    <input type="text" id="txtName" />*
-                </td>
-            </tr>
-            <tr>
-                <td style="padding-top:20px;">
-                    Business Name/व्यवसायाचे नाव
-                </td>
-                <td style="padding-top:20px;">
-
-                    <input type="text" id="txtBusinessNm" />*
-                </td>
-
-            </tr>
-            <tr>
-                <td style="padding-top:20px;">
-                    Mobile No./मोबाईल नंबर
-                </td>
-                <td style="padding-top:20px;">
-
-                    <input type="number" id="txtMobileNo" class="input50" />*
-                </td>
-
-            </tr>
-            <tr>
-                <td style="padding-top:20px;">
-                    Business location/व्यवसायाचे ठिकाण
-                </td>
-                <td style="padding-top:20px;">
-                    <input type="text" id="txtBusinessLoc" class="input50" />
-                </td>
-
-            </tr>
-            <tr>
-                <td colspan="2" align="center" style="padding-top: 20px;">
-                    <input type="button" id="btnSubmit" class="btn btn-primary" value="SUBMIT" onclick="SendEmail();" />
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2" align="left" style="color: red;">
-                    <span id="spncustnm" style="font:bold;"></span>
-                </td>
-
-            </tr>
-        </table>
-        <table id="tblsucessmsg" style="display:none; color:red;font:bold;font-family:Verdana;padding-top:40px;">
-            <tr>
-                <td>
-                    Thank you for showing interest in our Loyalty & Analytics Platform. Our representative will connect with you in a day!!!
-
-                </td>
-            </tr>
-        </table>
-        <table id="tbllogo" style="text-align:center; font-family:Verdana; color:deepskyblue;">
-            <thead>
-                <tr>
-                    <td>
-                        <b> Successfully running our platform at more than 40 Jewellers across 18 cities & towns!!!</b>
-                    </td>
-                </tr>
-            </thead>
-            <tr>
-                <td style="padding-top:20px;">
-                    <img src="../Content/assets/images/Screenshot_2021-07-23-15-14-33-659_com.google.android.googlequicksearchbox (1).png" />
-                    <img src="../Content/assets/images/Screenshot_2021-07-23-15-28-00-295_com.android.chrome.png" />
-                    <img src="../Content/assets/images/Screenshot_2021-07-23-15-18-02-765_com.android.chrome.png" />
-                    <img src="../Content/assets/images/Screenshot_2021-07-23-15-10-34-021_com.android.chrome.png" />
-                    <img src="../Content/assets/images/Screenshot_2021-07-23-15-23-49-074_com.android.chrome.png" />
-                </td>
-
-            </tr>
-            <tr>
-                <td>
-                    <img src="../Content/assets/images/Screenshot_2021-07-23-15-19-33-051_com.google.android.googlequicksearchbox.png" />
-                    <img src="../Content/assets/images/Screenshot_2021-07-23-15-12-56-339_com.google.android.googlequicksearchbox.png" />
-                    <img src="../Content/assets/images/Screenshot_2021-07-23-15-21-07-626_com.google.android.googlequicksearchbox.png" />
-                    <img src="../Content/assets/images/Screenshot_2021-07-23-15-31-38-102_com.android.chrome.png" />
-                    <img src="../Content/assets/images/Screenshot_2021-07-23-15-48-58-074_com.google.android.googlequicksearchbox.png" />
-                    <img src="../Content/assets/images/Screenshot_2021-07-23-15-06-37-766_com.google.android.googlequicksearchbox.png" />
-                </td>
-            </tr>
-            <tr>
-                <td style="text-align:right; font-size:12px;color:black;">
-                    <b>And several more..</b>
-                </td>
-            </tr>
-        </table>
-
+<div class="col-12">
+    <div class="row" style="margin-top:20px;">
+        <div class="col-1" style="padding-right:0px !important;"></div>
+        <div class="col-10">Name/नाव<input type="text" id="txtName" /></div>
+        <div class="col-1"></div>
     </div>
+    <div class="row" style="margin-top:10px;">
+        <div class="col-1" style="padding-right:0px !important;"></div>
+        <div class="col-10">Business Name/व्यवसायाचे नाव<input type="text" id="txtBusinessNm" /></div>
+        <div class="col-1"></div>
+    </div>
+    <div class="row" style="margin-top:10px;">
+        <div class="col-1" style="padding-right:0px !important;"></div>
+        <div class="col-10">Mobile No./मोबाईल नंबर<input type="text" id="txtMobileNo" /></div>
+        <div class="col-1"></div>
+    </div>
+    <div class="row" style="margin-top:0px;">
+        <div class="col-1" style="padding-right:0px !important;"></div>
+        <div class="col-11">Business location/व्यवसायाचे ठिकाण<input type="text" id="txtBusinessLoc" /></div>
+        @*<div class="col-1"></div>*@
+    </div>
+
+
+
+    @*<table id="tblform" class="table-responsive col-12" style="font-family: Verdana; font-size: 15px;">
+
+        <tr>
+            <td style="padding-top:20px;">
+                Name/नाव
+            </td>
+            <td style="padding-top:20px;">
+                <input type="text" id="txtName" />*
+            </td>
+        </tr>
+        <tr>
+            <td style="padding-top:20px;">
+                Business Name/व्यवसायाचे नाव
+            </td>
+            <td style="padding-top:20px;">
+
+                <input type="text" id="txtBusinessNm" />*
+            </td>
+
+        </tr>
+        <tr>
+            <td style="padding-top:20px;">
+                Mobile No./मोबाईल नंबर
+            </td>
+            <td style="padding-top:20px;">
+
+                <input type="number" id="txtMobileNo" class="input50" />*
+            </td>
+
+        </tr>
+        <tr>
+            <td style="padding-top:20px;">
+                Business location/व्यवसायाचे ठिकाण
+            </td>
+            <td style="padding-top:20px;">
+                <input type="text" id="txtBusinessLoc" class="input50" />
+            </td>
+
+        </tr>
+        <tr>
+            <td colspan="2" align="center" style="padding-top: 20px;">
+                <input type="button" id="btnSubmit" class="btn btn-primary" value="SUBMIT" onclick="SendEmail();" />
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2" align="left" style="color: red;">
+                <span id="spncustnm" style="font:bold;"></span>
+            </td>
+
+        </tr>
+    </table>*@
+    <table id="tblsucessmsg" style="display:none; color:red;font:bold;font-family:Verdana;padding-top:40px;">
+        <tr>
+            <td>
+                Thank you for showing interest in our Loyalty & Analytics Platform. Our representative will connect with you in a day!!!
+
+            </td>
+        </tr>
+    </table>
+    <table id="tbllogo" style="text-align:center; font-family:Verdana; color:deepskyblue;">
+        <thead>
+            <tr>
+                <td>
+                    <b> Successfully running our platform at more than 40 Jewellers across 18 cities & towns!!!</b>
+                </td>
+            </tr>
+        </thead>
+        <tr>
+            <td style="padding-top:20px;">
+                <img src="../Content/assets/images/Screenshot_2021-07-23-15-14-33-659_com.google.android.googlequicksearchbox (1).png" />
+                <img src="../Content/assets/images/Screenshot_2021-07-23-15-28-00-295_com.android.chrome.png" />
+                <img src="../Content/assets/images/Screenshot_2021-07-23-15-18-02-765_com.android.chrome.png" />
+                <img src="../Content/assets/images/Screenshot_2021-07-23-15-10-34-021_com.android.chrome.png" />
+                <img src="../Content/assets/images/Screenshot_2021-07-23-15-23-49-074_com.android.chrome.png" />
+            </td>
+
+        </tr>
+        <tr>
+            <td>
+                <img src="../Content/assets/images/Screenshot_2021-07-23-15-19-33-051_com.google.android.googlequicksearchbox.png" />
+                <img src="../Content/assets/images/Screenshot_2021-07-23-15-12-56-339_com.google.android.googlequicksearchbox.png" />
+                <img src="../Content/assets/images/Screenshot_2021-07-23-15-21-07-626_com.google.android.googlequicksearchbox.png" />
+                <img src="../Content/assets/images/Screenshot_2021-07-23-15-31-38-102_com.android.chrome.png" />
+                <img src="../Content/assets/images/Screenshot_2021-07-23-15-48-58-074_com.google.android.googlequicksearchbox.png" />
+                <img src="../Content/assets/images/Screenshot_2021-07-23-15-06-37-766_com.google.android.googlequicksearchbox.png" />
+            </td>
+        </tr>
+        <tr>
+            <td style="text-align:right; font-size:12px;color:black;">
+                <b>And several more..</b>
+            </td>
+        </tr>
+    </table>
+
+</div>
 
 </div>
 
