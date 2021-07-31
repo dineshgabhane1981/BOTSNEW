@@ -21,7 +21,7 @@ using System.Web.Http.Cors;
 
 namespace BotsMobileAPI.Controllers
 {
-   
+    [EnableCors(origins: "*", headers: "*", methods: "*")]
     public class botsController : ApiController
     {
         LoginRepository LR = new LoginRepository();

@@ -6,6 +6,7 @@ using Microsoft.Owin.Security;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.Owin.Security.Jwt;
+using System.Web.Http.Cors;
 
 [assembly: OwinStartup(typeof(BotsMobileAPI.Startup))]
 
@@ -15,6 +16,7 @@ namespace BotsMobileAPI
     {
         public void Configuration(IAppBuilder app)
         {
+            
             var url = System.Configuration.ConfigurationManager.AppSettings["BaseURL"];
             app.UseJwtBearerAuthentication(
                  new JwtBearerAuthenticationOptions
@@ -31,5 +33,6 @@ namespace BotsMobileAPI
                      }
                  });
         }
+        
     }
 }
