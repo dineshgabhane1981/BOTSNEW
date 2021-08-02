@@ -17,13 +17,16 @@ namespace WebApp.Controllers
         // GET: Login
         public ActionResult Index(string MobileNo)
         {
-            var userDetails = LR.GetUserDetailsByLoginID(MobileNo);
-            if(userDetails!=null)
+            if (!string.IsNullOrEmpty(MobileNo))
             {
-                if(userDetails.GroupId=="1088")
+                var userDetails = LR.GetUserDetailsByLoginID(MobileNo);
+                if (userDetails != null)
                 {
-                    Session["UserSession"] = userDetails;
-                    return RedirectToAction("Index", "Home");
+                    if (userDetails.GroupId == "1088")
+                    {
+                        Session["UserSession"] = userDetails;
+                        return RedirectToAction("Index", "Home");
+                    }
                 }
             }
             LoginModel objLogin = new LoginModel();

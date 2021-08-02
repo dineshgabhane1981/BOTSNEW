@@ -41,13 +41,17 @@ namespace BOTS_BL.Models
 
         [StringLength(10)]
         public string GroupId { get; set; }
-        [NotMapped]
-        public string connectionString { get; set; }
+
+        [StringLength(150)]
         public string EmailId { get; set; }
+
+        [StringLength(10)]
+        public string OutletOrBrandId { get; set; }
 
         [NotMapped]
         public string CustomerName { get; set; }
-        public string OutletOrBrandId { get; set; }
-        
+
+        [NotMapped]
+        public string connectionString { get; set; }
     }
 }

@@ -61,7 +61,7 @@
 </div>
 <div class="container-fluid" style="background-image:url('../../Content/assets/BotsLoginBackground.jpeg'); background-position: center;background-repeat: no-repeat;background-size: cover;height: 100%;">
     <div class="row justify-content-end h-100" style="margin-right:10px;">
-        
+
         <div class="col-12 align-self-center text-center login-section" style="border-radius:50px;box-shadow:5px 5px 5px 5px #0A0A0A; margin-bottom:100px;">
             <div class="text-center">
                 <img src="~/Content/assets/images/Blue-Ocktopus-TLC_white.jpg" width="70%">
@@ -105,6 +105,7 @@
         $(".app-header").hide();
         $(".app-sidebar").hide();
         $(".app-wrapper-footer").hide();
+        //textAPI();
     });
     function SendOTP() {
 
@@ -112,7 +113,7 @@
             $("#LoginId").focus();
             toastr.error('Please enter Login ID');
             return false;
-        }        
+        }
         $("#divLoader").show();
             $.ajax({
                 type: "POST",
@@ -120,27 +121,27 @@
                 data: "{'LoginID': '" + $("#LoginId").val() + "'}",
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
-                success: function (response) {  
+                success: function (response) {
                     $("#divLoader").hide();
                 },
                 failure: function (response) {
                     toastr.error('There is problem while sending OTP, please try after sometime');
                     $("#divLoader").hide();
                 },
-                error: function (response) {                    
+                error: function (response) {
                     if (response.responseText == "Password") {
                         $("#dvLogin").hide();
-                        $("#dvPassword").show();  
-                        $("#btnProceed").hide(); 
-                        $("#btnSubmit").show(); 
+                        $("#dvPassword").show();
+                        $("#btnProceed").hide();
+                        $("#btnSubmit").show();
                         $("#hdnOTPOrPassword").val(1);
-                        
+
                     }
                     if (response.responseText == "OTP") {
                         $("#dvLogin").hide();
                         $("#dvOTP").show();
-                        $("#btnProceed").hide(); 
-                        $("#btnSubmit").show(); 
+                        $("#btnProceed").hide();
+                        $("#btnSubmit").show();
                         $("#hdnOTPOrPassword").val(2);
                         toastr.success('OTP Sent Successfully');
                     }
@@ -151,7 +152,7 @@
                     $("#divLoader").hide();
                 }
             });
-        
+
         return true;
     }
 
@@ -165,5 +166,35 @@
             return false;
         }
         return true;
+    }
+
+    function textAPI()
+    {
+        $.ajax({
+            url: "https://blueocktopus.in/MobileNewAPI/api/bots/GetToken?username=123&password=123",
+            method: "GET",      // The HTTP method to use for the request
+            contentType: "application/json; charset=utf-8",
+            dataType: "json", // The type of data that you're exerciseecting back
+
+            error: function () {
+                
+                // A function to be called if the request fails.
+            },
+
+            success: function (response) {
+               
+                console.log(response);
+                // A function to be called if the request succeeds.
+            },
+            complete: function (response) {
+               
+                // A function to be called when the request finishes
+            },
+            failure: function (response) {
+                
+                // A function to be called when the request finishes
+            },
+
+        });
     }
 </script>

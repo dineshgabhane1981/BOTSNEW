@@ -5,6 +5,7 @@ namespace BOTS_BL.Models
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Data.Entity.Spatial;
+    using System.Web;
 
     public partial class BOTS_TblGroupMaster
     {
@@ -36,9 +37,13 @@ namespace BOTS_BL.Models
 
         [StringLength(500)]
         public string GSTDocument { get; set; }
+        [NotMapped]
+        public HttpPostedFileBase GSTDocumentFile { get; set; }
 
         [StringLength(500)]
         public string PANDocument { get; set; }
+        [NotMapped]
+        public HttpPostedFileBase PANDocumentFile { get; set; }
 
         [StringLength(100)]
         public string City { get; set; }

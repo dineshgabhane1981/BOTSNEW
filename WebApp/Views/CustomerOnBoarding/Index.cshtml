@@ -17,11 +17,24 @@
         margin-top: -20px;
         font-size: 15px;
     }
+
+    .section-heading {
+        cursor: pointer;
+        text-align: left;
+        /*background-color: #022C48;*/
+        color: white;
+        font-weight: bold;
+        padding: 10px;
+        border-radius: 5px;
+        background-color: #000000 !important;
+        background-image: linear-gradient(147deg, #000000 0%, #04619f 74%) !important;
+        font-size: 16px;
+    }
 </style>
 <div class="app-main__inner">
     <div class="row mb-3 card">
-        <div class="container-fluid pt-3 pl-3 pr-3 pb-3">            
-            <div class="btn btn-info col-md-12" data-toggle="collapse" style="cursor:pointer;text-align:left;" data-target="#custdetails">Customer Detail</div>
+        <div class="container-fluid pt-3 pl-3 pr-3 pb-3">
+            <div class="col-md-12 section-heading" data-toggle="collapse" data-target="#custdetails">Customer Detail</div>
             <div id="custdetails" class="collapse show">
                 <div class="row" style="margin: 0; padding-top:10px;">
                     <div style="float:left;text-align:right;width:100px;">
@@ -48,7 +61,7 @@
                         Owner’s Email
                     </div>
                     <div class="col-sm-4" style="float:left;margin-top:10px;">
-                         @Html.TextBoxFor(model => model.bots_TblGroupMaster.OwnerEmailId, new { @class = "input100", @id = "txtOwnerEmailId", tabindex = 4 })
+                        @Html.TextBoxFor(model => model.bots_TblGroupMaster.OwnerEmailId, new { @class = "input100", @id = "txtOwnerEmailId", tabindex = 4 })
                     </div>
                 </div>
                 <div class="row" style="margin: 0;">
@@ -56,13 +69,13 @@
                         Upload GST
                     </div>
                     <div class="col-sm-4" style="float:left;margin-top:10px;">
-                        <input type="file" id="uploadGST" name="uploadGST" tabindex="5" />
+                        @Html.TextBoxFor(model => model.bots_TblGroupMaster.GSTDocumentFile, new { type = "file", tabindex = "5" })
                     </div>
                     <div style="float:left;text-align:right;width:115px;">
                         Upload PAN
                     </div>
                     <div class="col-sm-4" style="float:left;margin-top:10px;">
-                        <input type="file" id="uploadPAN" name="uploadPAN" tabindex="6" />
+                        @Html.TextBoxFor(model => model.bots_TblGroupMaster.PANDocumentFile, new { type = "file", tabindex = "6" })
                     </div>
                 </div>
                 <div class="row" style="margin: 0;">
@@ -70,7 +83,8 @@
                         City
                     </div>
                     <div class="col-sm-4" style="float:left;margin-top:10px;">
-                        @Html.TextBoxFor(model => model.bots_TblGroupMaster.City, new { @class = "input100", @id = "txtCity", tabindex = 7 })
+                        @Html.DropDownListFor(model => model.bots_TblGroupMaster.City, new SelectList(Model.lstCity, "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input100", @id = "ddlCity", tabindex = 10 })
+                        <input type="text" id="txtCity" class="input100" placeholder="Enter City" style="margin-top:10px;display:none;" disabled />
                     </div>
                     <div style="float:left;text-align:right;width:115px;">
                         Other Person Name
@@ -100,14 +114,133 @@
                     <div class="col-sm-4" style="float:left;margin-top:10px;">
                         @Html.TextBoxFor(model => model.bots_TblGroupMaster.NoOfRetailCategory, new { @class = "input100", @id = "txtNoOfRetailCategory", tabindex = 11 })
                     </div>
-                    
+
                 </div>
-                
+
+
+                <div class="row" style="margin: 0;margin-top:20px;display:none;border:1px solid grey;border-radius:5px;" id="dvRetailCategory">
+                    <div class="col-sm-3" style="float:left;">
+                        <br /><br /><span>Retail Category</span><br /><br />
+                        <span>Retail / Brand Name</span><br /><br />
+                        <span>Total Outlets</span><br /><br />
+                        <span>Enrolled Outlets</span><br /><br />
+                        <span>BO Product </span><br /><br />
+                        <span>Billing Partner</span><br /><br />
+                        <span>Billing Product </span><br /><br />
+                    </div>
+                    <div class="col-sm-2" style="float:left;margin-top:10px;" id="dvCategory1">
+                        <span style="padding-left:10px;font-weight:bold;">Category 1</span>
+                        <br />
+                        @Html.DropDownListFor(model => model.bots_TblRetailMaster.CategoryId, new SelectList(Model.lstRetailCategory, "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input40", @id = "ddlCategory1" })
+                        @Html.TextBoxFor(model => model.bots_TblRetailMaster.BrandName, new { @class = "input40", @id = "ddlBrandName1" })
+                        @Html.TextBoxFor(model => model.bots_TblRetailMaster.NoOfOutlets, new { @class = "input40", @id = "ddlNoOfOutlets1" })
+                        @Html.TextBoxFor(model => model.bots_TblRetailMaster.NoOfEnrolled, new { @class = "input40", @id = "ddlNoOfEnrolled1" })
+                        @Html.DropDownListFor(model => model.bots_TblRetailMaster.BOProduct, new SelectList(Model.BOProducts(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input40", @id = "ddlBOProduct1" })
+                        @Html.DropDownListFor(model => model.bots_TblRetailMaster.BillingPartner, new SelectList(Model.lstBillingPartner, "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input40", @id = "ddlBillingPartner1" })
+                        @Html.TextBoxFor(model => model.bots_TblRetailMaster.BOProduct, new { @class = "input40", @id = "ddlBOProduct1" })
+                    </div>
+                    <div class="col-sm-2" style="float:left;margin-top:10px;" id="dvCategory2">
+                        <span style="padding-left: 10px; font-weight: bold;">Category 2</span>
+                        <br />
+                        @Html.DropDownListFor(model => model.bots_TblRetailMaster.CategoryId, new SelectList(Model.lstRetailCategory, "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input40", @id = "ddlCategory2" })
+                        @Html.TextBoxFor(model => model.bots_TblRetailMaster.BrandName, new { @class = "input40", @id = "ddlBrandName2" })
+                        @Html.TextBoxFor(model => model.bots_TblRetailMaster.NoOfOutlets, new { @class = "input40", @id = "ddlNoOfOutlets2" })
+                        @Html.TextBoxFor(model => model.bots_TblRetailMaster.NoOfEnrolled, new { @class = "input40", @id = "ddlNoOfEnrolled2" })
+                        @Html.DropDownListFor(model => model.bots_TblRetailMaster.BOProduct, new SelectList(Model.BOProducts(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input40", @id = "ddlBOProduct2" })
+                        @Html.DropDownListFor(model => model.bots_TblRetailMaster.BillingPartner, new SelectList(Model.lstBillingPartner, "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input40", @id = "ddlBillingPartner2" })
+                        @Html.TextBoxFor(model => model.bots_TblRetailMaster.BOProduct, new { @class = "input40", @id = "ddlBOProduct2" })
+                    </div>
+                    <div class="col-sm-2" style="float:left;margin-top:10px;" id="dvCategory3">
+                        <span style="padding-left: 10px; font-weight: bold;">Category 3</span>
+                        <br />
+                        @Html.DropDownListFor(model => model.bots_TblRetailMaster.CategoryId, new SelectList(Model.lstRetailCategory, "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input40", @id = "ddlCategory3" })
+                        @Html.TextBoxFor(model => model.bots_TblRetailMaster.BrandName, new { @class = "input40", @id = "ddlBrandName3" })
+                        @Html.TextBoxFor(model => model.bots_TblRetailMaster.NoOfOutlets, new { @class = "input40", @id = "ddlNoOfOutlets3" })
+                        @Html.TextBoxFor(model => model.bots_TblRetailMaster.NoOfEnrolled, new { @class = "input40", @id = "ddlNoOfEnrolled3" })
+                        @Html.DropDownListFor(model => model.bots_TblRetailMaster.BOProduct, new SelectList(Model.BOProducts(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input40", @id = "ddlBOProduct3" })
+                        @Html.DropDownListFor(model => model.bots_TblRetailMaster.BillingPartner, new SelectList(Model.lstBillingPartner, "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input40", @id = "ddlBillingPartner3" })
+                        @Html.TextBoxFor(model => model.bots_TblRetailMaster.BOProduct, new { @class = "input40", @id = "ddlBOProduct3" })
+                    </div>
+                    <div class="col-sm-2" style="float:left;margin-top:10px;" id="dvCategory4">
+                        <span style="padding-left: 10px; font-weight: bold;">Category 4</span>
+                        <br />
+                        @Html.DropDownListFor(model => model.bots_TblRetailMaster.CategoryId, new SelectList(Model.lstRetailCategory, "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input40", @id = "ddlCategory4" })
+                        @Html.TextBoxFor(model => model.bots_TblRetailMaster.BrandName, new { @class = "input40", @id = "ddlBrandName4" })
+                        @Html.TextBoxFor(model => model.bots_TblRetailMaster.NoOfOutlets, new { @class = "input40", @id = "ddlNoOfOutlets4" })
+                        @Html.TextBoxFor(model => model.bots_TblRetailMaster.NoOfEnrolled, new { @class = "input40", @id = "ddlNoOfEnrolled4" })
+                        @Html.DropDownListFor(model => model.bots_TblRetailMaster.BOProduct, new SelectList(Model.BOProducts(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input40", @id = "ddlBOProduct4" })
+                        @Html.DropDownListFor(model => model.bots_TblRetailMaster.BillingPartner, new SelectList(Model.lstBillingPartner, "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input40", @id = "ddlBillingPartner4" })
+                        @Html.TextBoxFor(model => model.bots_TblRetailMaster.BOProduct, new { @class = "input40", @id = "ddlBOProduct4" })
+                    </div>
+                </div>
+
+
+
+                <div class="row" style="margin: 0;">
+                    <div style="float:left;text-align:right;width:100px;margin-top:10px;">
+                        MWP
+                    </div>
+                    <div class="col-sm-4" style="float:left;margin-top:10px;">
+                        @Html.RadioButtonFor(model => model.bots_TblGroupMaster.IsMWP, "1") Yes
+                        @Html.RadioButtonFor(model => model.bots_TblGroupMaster.IsMWP, "0") No
+                    </div>
+                </div>
+                <div class="row" style="margin: 0;">
+                    <div style="float:left;text-align:right;width:100px;margin-top:10px;">
+                        Whataspp Int
+                    </div>
+                    <div class="col-sm-4" style="float:left;margin-top:10px;">
+                        @Html.RadioButtonFor(model => model.bots_TblGroupMaster.IsWhatsApp, "1") Yes
+                        @Html.RadioButtonFor(model => model.bots_TblGroupMaster.IsWhatsApp, "0") No
+                    </div>
+                </div>
+                <div class="row" style="margin: 0;">
+                    <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
+                        WA Free Msgs
+                    </div>
+                    <div class="col-sm-4" style="float:left;margin-top:10px;">
+                        @Html.TextBoxFor(model => model.bots_TblGroupMaster.NoOfFreeWhatsAppMsg, new { @class = "input100", @id = "txtNoOfFreeWhatsAppMsg" })
+                    </div>
+                    <div style="float: left; text-align: right; width: 115px; margin-top: 10px;">
+                        WA Paid Msgs
+                    </div>
+                    <div class="col-sm-4" style="float:left;margin-top:10px;">
+                        @Html.TextBoxFor(model => model.bots_TblGroupMaster.NoOfPaidWhatsAppMsg, new { @class = "input100", @id = "txtNoOfPaidWhatsAppMsg" })
+                    </div>
+                </div>
+                <div class="row" style="margin: 0;">
+                    <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
+                        SMS Free Msgs
+                    </div>
+                    <div class="col-sm-4" style="float:left;margin-top:10px;">
+                        @Html.TextBoxFor(model => model.bots_TblGroupMaster.NoOfFreeSMS, new { @class = "input100", @id = "txtNoOfFreeSMS" })
+                    </div>
+                    <div style="float: left; text-align: right; width: 115px; margin-top: 10px;">
+                        SMS Paid Msgs
+                    </div>
+                    <div class="col-sm-4" style="float:left;margin-top:10px;">
+                        @Html.TextBoxFor(model => model.bots_TblGroupMaster.NoOfPaidSMS, new { @class = "input100", @id = "txtNoOfPaidSMS" })
+                    </div>
+                </div>
+                <div class="row" style="margin: 0;">
+                    <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
+                        Mobile App
+                    </div>
+                    <div class="col-sm-4" style="float:left;margin-top:10px;">
+                        @Html.DropDownListFor(model => model.bots_TblGroupMaster.IsMobileApp, new SelectList(Model.YesNo(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input100", @id = "ddlIsMobileApp" })
+                    </div>
+                    <div style="float: left; text-align: right; width: 115px; margin-top: 10px;">
+                        Mobile App Description
+                    </div>
+                    <div class="col-sm-4" style="float:left;margin-top:10px;">
+                        @Html.TextBoxFor(model => model.bots_TblGroupMaster.MobileAppDescription, new { @class = "input100", @id = "txtNoOfPaidSMS" })
+                    </div>
+                </div>
             </div>
         </div>
 
         <div class="container-fluid pt-3 pl-3 pr-3 pb-3">
-            <div class="btn btn-info col-md-12" data-toggle="collapse" style="cursor:pointer;text-align:left;" data-target="#productdetails">Product & Assignment Details</div>
+            <div class="col-md-12 section-heading" data-toggle="collapse" data-target="#productdetails">Product & Assignment Details</div>
             <div id="productdetails" class="collapse">
                 Lorem ipsum dolor sit amet, consectetur adipisicing elit,
                 sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
@@ -116,7 +249,7 @@
         </div>
 
         <div class="container-fluid pt-3 pl-3 pr-3 pb-3">
-            <div class="btn btn-info col-md-12" data-toggle="collapse" style="cursor:pointer;text-align:left;" data-target="#dealdetails">Deal Details</div>
+            <div class="col-md-12 section-heading" data-toggle="collapse" data-target="#dealdetails">Deal Details</div>
             <div id="dealdetails" class="collapse">
                 Lorem ipsum dolor sit amet, consectetur adipisicing elit,
                 sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
@@ -125,7 +258,7 @@
         </div>
 
         <div class="container-fluid pt-3 pl-3 pr-3 pb-3">
-            <div class="btn btn-info col-md-12" data-toggle="collapse" style="cursor:pointer;text-align:left;" data-target="#paymentmodule">Payment Schedule</div>
+            <div class="col-md-12 section-heading" data-toggle="collapse" data-target="#paymentmodule">Payment Schedule</div>
             <div id="paymentmodule" class="collapse">
                 Lorem ipsum dolor sit amet, consectetur adipisicing elit,
                 sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
@@ -133,7 +266,7 @@
             </div>
         </div>
         <div class="container-fluid pt-3 pl-3 pr-3 pb-3">
-            <div class="btn btn-info col-md-12" data-toggle="collapse" style="cursor:pointer;text-align:left;" data-target="#updatepaymentdetails">Update Payment Details</div>
+            <div class="col-md-12 section-heading" data-toggle="collapse" data-target="#updatepaymentdetails">Update Payment Details</div>
             <div id="updatepaymentdetails" class="collapse">
                 Lorem ipsum dolor sit amet, consectetur adipisicing elit,
                 sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
@@ -142,7 +275,7 @@
         </div>
 
         <div class="container-fluid pt-3 pl-3 pr-3 pb-3">
-            <div class="btn btn-info col-md-12" data-toggle="collapse" style="cursor:pointer;text-align:left;" data-target="#notifications">Notifications</div>
+            <div class="col-md-12 section-heading" data-toggle="collapse" data-target="#notifications">Notifications</div>
             <div id="notifications" class="collapse">
                 Lorem ipsum dolor sit amet, consectetur adipisicing elit,
                 sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
@@ -151,3 +284,63 @@
         </div>
     </div>
 </div>
+
+<script>
+    $(document).ready(function () {
+        $('#ddlCity').change(function () {
+            if ($('#ddlCity').val() == "11") {
+                $('#txtCity').removeAttr("disabled");
+                $('#txtCity').show();
+            }
+            else {
+                $('#txtCity').attr("disabled", "disabled");
+                $('#txtCity').hide();
+            }
+        });
+
+        $("#txtNoOfRetailCategory").focusout(function () {
+            if ($("#txtNoOfRetailCategory").val() > 4 || $("#txtNoOfRetailCategory").val() == 0) {
+                if ($("#txtNoOfRetailCategory").val() == "") {
+                    $("#dvRetailCategory").hide();
+                }
+                else {
+                    cuteAlert({
+                        type: "error",
+                        title: "Oops..",
+                        message: "Retail Category can not be 0 or greater than 4",
+                        buttonText: "Okay"
+                    })
+                }
+            }
+            else {
+                $("#dvRetailCategory").show();
+                if ($("#txtNoOfRetailCategory").val() == 1) {
+                    $("#dvCategory1").show();
+                    $("#dvCategory2").hide();
+                    $("#dvCategory3").hide();
+                    $("#dvCategory4").hide();
+                }
+                if ($("#txtNoOfRetailCategory").val() == 2) {
+                    $("#dvCategory1").show();
+                    $("#dvCategory2").show();
+                    $("#dvCategory3").hide();
+                    $("#dvCategory4").hide();
+                }
+                if ($("#txtNoOfRetailCategory").val() == 3) {
+                    $("#dvCategory1").show();
+                    $("#dvCategory2").show();
+                    $("#dvCategory3").show();
+                    $("#dvCategory4").hide();
+                }
+                if ($("#txtNoOfRetailCategory").val() == 4) {
+                    $("#dvCategory1").show();
+                    $("#dvCategory2").show();
+                    $("#dvCategory3").show();
+                    $("#dvCategory4").show();
+                }
+
+            }
+        });
+    });
+
+</script>

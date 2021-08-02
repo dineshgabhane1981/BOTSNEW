@@ -9,6 +9,9 @@ using BOTS_BL.Repository;
 using System.Web.Script.Serialization;
 using BOTS_BL;
 using WebApp.App_Start;
+using System.Threading.Tasks;
+using System.Net.Http;
+using Newtonsoft.Json;
 
 namespace WebApp.Controllers
 {
@@ -21,7 +24,14 @@ namespace WebApp.Controllers
         {
             List<CustomerListing> list = new List<CustomerListing>();
             try
-            {                
+            {
+                //string uri = "https://blueocktopus.in/MobileNewAPI/api/bots/GetToken?username=123&password=123";
+                //using (HttpClient httpClient = new HttpClient())
+                //{
+                //    Task<String> response = httpClient.GetStringAsync(uri);
+                //    var result= response.Result;
+                //    int abc = 0;
+                //}
                 list = CR.GetAllCustomer();
             }
             catch (Exception ex)
