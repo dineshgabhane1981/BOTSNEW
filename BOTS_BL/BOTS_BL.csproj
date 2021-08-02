@@ -100,6 +100,7 @@
     <Reference Include="System.Security" />
     <Reference Include="System.Transactions" />
     <Reference Include="System.Web" />
+    <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.7\lib\net45\System.Web.Helpers.dll</HintPath>
     </Reference>
@@ -189,6 +190,7 @@
     <Compile Include="Models\CommonDB\DashboardReport.cs" />
     <Compile Include="Models\CommonDB\DatabaseDetail.cs" />
     <Compile Include="Models\CommonDB\MobileAppCommSecurityKey.cs" />
+    <Compile Include="Models\CommonDB\MobileAppOnceInMonthData.cs" />
     <Compile Include="Models\CommonDB\MonthlyReport.cs" />
     <Compile Include="Models\CommonDB\NPCSM.cs" />
     <Compile Include="Models\CommonDB\OTPDetails.cs" />
@@ -196,6 +198,7 @@
     <Compile Include="Models\CommonDB\POItem.cs" />
     <Compile Include="Models\CommonDB\ReferAndEarn.cs" />
     <Compile Include="Models\CommonDB\ReferralBonusSM.cs" />
+    <Compile Include="Models\CommonDB\SMSGatewayMaster.cs" />
     <Compile Include="Models\CommonDB\tblAudit.cs" />
     <Compile Include="Models\CommonDB\tblBillingPartner.cs" />
     <Compile Include="Models\CommonDB\tblCategory.cs" />

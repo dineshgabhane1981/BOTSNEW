@@ -812,6 +812,8 @@ namespace BotsMobileAPI.Controllers
                
         }
         //slide no 8
+        //datarangeflage =0,fromdate and todate blanck
+        //datarangeflag =1,fromdate and todate values
         [HttpGet]
         public object GetEnrollBase(string DateRangeFlag, string fromDate, string toDate,string GroupId)
         {

@@ -12,6 +12,8 @@ namespace BOTS_BL.Models
             : base("name=CommonDBContext")
         {
         }
+        public virtual DbSet<SMSGatewayMaster> SMSGatewayMasters { get; set; }
+        public virtual DbSet<MobileAppOnceInMonthData> MobileAppOnceInMonthDatas { get; set; }
         public virtual DbSet<BOTS_TblGroupMaster> BOTS_TblGroupMaster { get; set; }
         public virtual DbSet<BOTS_TblRetailMaster> BOTS_TblRetailMaster { get; set; }
         public virtual DbSet<CommonReferralURL> CommonReferralURLs { get; set; }
