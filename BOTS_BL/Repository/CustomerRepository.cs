@@ -484,7 +484,7 @@ namespace BOTS_BL.Repository
                 lstOutlets = contextNew.OutletDetails.Where(x => x.GroupId == GroupId).ToList();
             }
             return lstOutlets;
-        }
+        }        
 
         public ProfilePage GetprofilePageData(string GroupId)
         {
@@ -493,13 +493,13 @@ namespace BOTS_BL.Repository
             tblGroupDetail objgrpdetails = new tblGroupDetail();
             tblCategory objtblcategory = new tblCategory();
             SMSGatewayMaster objsmsgateway = new SMSGatewayMaster();
-            
+
             using (var context = new CommonDBContext())
             {
                 int gId = Convert.ToInt32(GroupId);
                 objgrpdetails = context.tblGroupDetails.Where(x => x.GroupId == gId).FirstOrDefault();
                 objtblcategory = context.tblCategories.Where(x => x.CategoryId == objgrpdetails.RetailCategory).FirstOrDefault();
-               
+
             }
             SMSDetail objsMSDetail = new SMSDetail();
             GroupDetail objgroupdetails = new GroupDetail();
@@ -508,12 +508,12 @@ namespace BOTS_BL.Repository
                 var objsms = Context.SMSDetails;
                 string whatsAppbaln = null;
                 string Smsbalance = null;
-               // string SmsgatewayId = null;
+                // string SmsgatewayId = null;
                 foreach (var sms in objsms)
                 {
-                   if(sms.SMSGatewayId == "2")
-                   {
-                        if(!string.IsNullOrEmpty(sms.WhatsappTokenId))
+                    if (sms.SMSGatewayId == "2")
+                    {
+                        if (!string.IsNullOrEmpty(sms.WhatsappTokenId))
                         {
                             ServicePointManager.Expect100Continue = true;
                             ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls;
@@ -524,14 +524,14 @@ namespace BOTS_BL.Repository
                             var uri = string.Concat("https://enotify.app/api/checkBal?token=", sms.WhatsappTokenId);
                             var result = client.DownloadString(uri);
                             Dictionary<string, dynamic> whatsappbalance = (new JavaScriptSerializer()).Deserialize<Dictionary<string, dynamic>>(result);
-                            
-                                string whatsappexpirydt = whatsappbalance["data"]["expiryDate"];
-                                string whatsappdate = whatsappexpirydt.Substring(0, 19);
-                               // whatsexpdt = Convert.ToDateTime(whatsappdate).ToString("yyyy-MM-dd");
-                                whatsAppbaln = Convert.ToInt32(whatsappbalance["data"]["quota"]);
-                            
+
+                            string whatsappexpirydt = whatsappbalance["data"]["expiryDate"];
+                            string whatsappdate = whatsappexpirydt.Substring(0, 19);
+                            // whatsexpdt = Convert.ToDateTime(whatsappdate).ToString("yyyy-MM-dd");
+                            whatsAppbaln = Convert.ToInt32(whatsappbalance["data"]["quota"]);
+
                         }
-                        if(!string.IsNullOrEmpty(sms.TxnUserName) && !string.IsNullOrEmpty(sms.TxnPassword))
+                        if (!string.IsNullOrEmpty(sms.TxnUserName) && !string.IsNullOrEmpty(sms.TxnPassword))
                         {
                             ServicePointManager.Expect100Continue = true;
                             ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls;
@@ -547,22 +547,26 @@ namespace BOTS_BL.Repository
                                 Dictionary<string, dynamic> accountdata = smsbalance["response"]["account"];
                                 Smsbalance = Convert.ToInt32(accountdata["smsBalance"]);
                             }
-                            
+
                         }
 
-                   }
-                   else
-                   {
+                    }
+                    else
+                    {
 
-                   }
+                    }
                     objprofilePage.GroupId = objgrpdetails.GroupId;
                     objprofilePage.Logo = objgrpdetails.Logo;
                     objprofilePage.LegalName = objgrpdetails.GroupName;
                     objprofilePage.RetailName = objgrpdetails.GroupName;
                     objprofilePage.OwnerName = objgrpdetails.OwnerName;
                     objprofilePage.OwnerNumber = objgrpdetails.OwnerMobileNo;
-                    objgroupdetails = Context.GroupDetails.Where(x => x.GroupId == objgrpdetails.GroupId.ToString()).FirstOrDefault();
-                    objprofilePage.City = objgroupdetails.City;                    
+                    using (var Context1 = new BOTSDBContext(connectionString))
+                    {
+                        string gid = objgrpdetails.GroupId.ToString();
+                        objgroupdetails = Context1.GroupDetails.Where(x => x.GroupId == gid).FirstOrDefault();
+                    }
+                    objprofilePage.City = objgroupdetails.City;
                     objprofilePage.RetailCategory = objtblcategory.CategoryName.ToString();
                     objprofilePage.OutletEnrolled = objgrpdetails.OutletCount.ToString();
                     using (var context = new CommonDBContext())
@@ -575,7 +579,7 @@ namespace BOTS_BL.Repository
                     objprofilePage.WhatsAppBalance = whatsAppbaln;
                     objprofilePage.NextPaymentDate = DateTime.Now.ToString();
                     objprofilePage.NextPaymentAmount = "";
-                }                
+                }
 
 
             }
@@ -588,7 +592,7 @@ namespace BOTS_BL.Repository
             MobileAppOnceInMonthData objmobileappdata = new MobileAppOnceInMonthData();
             using (var context = new CommonDBContext())
             {
-               // int gId = Convert.ToInt32(GroupId);
+                // int gId = Convert.ToInt32(GroupId);
                 objmobileappdata = context.MobileAppOnceInMonthData.Where(x => x.GroupId == GroupId).FirstOrDefault();
 
             }
