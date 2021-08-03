@@ -42,6 +42,10 @@ namespace BOTS_BL.Models.CommonDB
         [StringLength(50)]
         public string NoOfProfileUpdated { get; set; }
 
-        public long Id { get; set; }
+        [StringLength(50)]
+        public string GroupId { get; set; }
+
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
+        public int Id { get; set; }
     }
 }

@@ -620,8 +620,7 @@ namespace BotsMobileAPI.Controllers
                 return new { Data = objMemberSearch, MaxJsonLength = Int32.MaxValue };
             }
             return "Invalid Token or Expired";
-        }     
-        
+        }             
 
         [HttpGet]
         public object AuthenticateUser(string LoginId, string Password)
@@ -981,7 +980,7 @@ namespace BotsMobileAPI.Controllers
             return "Invalid Token or Expired";
 
         }
-
+        //slide no 17
         [HttpGet]
         public object GetProfile(string GroupId)
         {
@@ -991,6 +990,19 @@ namespace BotsMobileAPI.Controllers
                 ProfilePage objprofilepage = CR.GetprofilePageData(GroupId);
 
                 return new { Data = objprofilepage, MaxJsonLength = Int32.MaxValue };
+            }
+            return "Invalid Token or Expired";
+        }
+        //slide no 18
+        [HttpGet]
+        public object GetMonthlySnapShot(string GroupId)
+        {
+            if (User.Identity.IsAuthenticated)
+            {
+                string connectionString = CR.GetCustomerConnString(GroupId);
+                MobileAppOnceInMonthData objmonthlydata = CR.GetMonthlySnapShotForMobileApp(GroupId);
+
+                return new { Data = objmonthlydata, MaxJsonLength = Int32.MaxValue };
             }
             return "Invalid Token or Expired";
         }

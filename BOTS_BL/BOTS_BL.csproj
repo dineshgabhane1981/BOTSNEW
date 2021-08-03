@@ -211,6 +211,7 @@
     <Compile Include="Models\Dashboard\DashboardMemberSegment.cs" />
     <Compile Include="Models\DBContext.cs" />
     <Compile Include="Models\ExecutiveSummary.cs" />
+    <Compile Include="Models\GroupDetail.cs" />
     <Compile Include="Models\HeatMaps\DaywiseHourwise.cs" />
     <Compile Include="Models\ITOps\CancelTxnModel.cs" />
     <Compile Include="Models\ITOps\CustomerDetail.cs" />

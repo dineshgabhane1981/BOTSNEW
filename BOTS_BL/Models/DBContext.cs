@@ -17,7 +17,7 @@ namespace BOTS_BL.Models
             : base(connectionStringName)
         {
         }
-
+        public virtual DbSet<GroupDetail> GroupDetails { get; set; }
         public virtual DbSet<LoginDetail> LoginDetails { get; set; }
         public virtual DbSet<BrandDetail> BrandDetails { get; set; }
         public virtual DbSet<OutletDetail> OutletDetails { get; set; }

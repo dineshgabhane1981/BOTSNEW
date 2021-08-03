@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using BOTS_BL.Models;
+using BOTS_BL.Models.CommonDB;
 using System.Data.Entity;
 using System.Data.Entity.Migrations;
 using System.Data.SqlClient;
@@ -472,17 +473,17 @@ namespace BOTS_BL.Repository
             string connectionString = GetCustomerConnString(GroupId);
             tblGroupDetail objgrpdetails = new tblGroupDetail();
             tblCategory objtblcategory = new tblCategory();
+            SMSGatewayMaster objsmsgateway = new SMSGatewayMaster();
             
             using (var context = new CommonDBContext())
             {
                 int gId = Convert.ToInt32(GroupId);
                 objgrpdetails = context.tblGroupDetails.Where(x => x.GroupId == gId).FirstOrDefault();
                 objtblcategory = context.tblCategories.Where(x => x.CategoryId == objgrpdetails.RetailCategory).FirstOrDefault();
-
-
-
+               
             }
             SMSDetail objsMSDetail = new SMSDetail();
+            GroupDetail objgroupdetails = new GroupDetail();
             using (var Context = new BOTSDBContext(connectionString))
             {
                 var objsms = Context.SMSDetails;
@@ -536,15 +537,20 @@ namespace BOTS_BL.Repository
 
                    }
                     objprofilePage.GroupId = objgrpdetails.GroupId;
-                    objprofilePage.Logo = null;
+                    objprofilePage.Logo = objgrpdetails.Logo;
                     objprofilePage.LegalName = objgrpdetails.GroupName;
                     objprofilePage.RetailName = objgrpdetails.GroupName;
                     objprofilePage.OwnerName = objgrpdetails.OwnerName;
                     objprofilePage.OwnerNumber = objgrpdetails.OwnerMobileNo;
-                    objprofilePage.City = objgrpdetails.CityName;                    
+                    objgroupdetails = Context.GroupDetails.Where(x => x.GroupId == objgrpdetails.GroupId.ToString()).FirstOrDefault();
+                    objprofilePage.City = objgroupdetails.City;                    
                     objprofilePage.RetailCategory = objtblcategory.CategoryName.ToString();
                     objprofilePage.OutletEnrolled = objgrpdetails.OutletCount.ToString();
-                    objprofilePage.SMSGateway = sms.SMSGatewayId;
+                    using (var context = new CommonDBContext())
+                    {
+                        objsmsgateway = context.SMSGatewayMasters.Where(x => x.SMSGatewayId == sms.SMSGatewayId).FirstOrDefault();
+                    }
+                    objprofilePage.SMSGateway = objsmsgateway.SMSGatewayName;
                     objprofilePage.GSTNo = objgrpdetails.GSTNO;
                     objprofilePage.SMSBalance = Smsbalance;
                     objprofilePage.WhatsAppBalance = whatsAppbaln;
@@ -556,6 +562,18 @@ namespace BOTS_BL.Repository
             }
 
             return objprofilePage;
+        }
+
+        public MobileAppOnceInMonthData GetMonthlySnapShotForMobileApp(string GroupId)
+        {
+            MobileAppOnceInMonthData objmobileappdata = new MobileAppOnceInMonthData();
+            using (var context = new CommonDBContext())
+            {
+               // int gId = Convert.ToInt32(GroupId);
+                objmobileappdata = context.MobileAppOnceInMonthData.Where(x => x.GroupId == GroupId).FirstOrDefault();
+
+            }
+            return objmobileappdata;
         }
 
     }
