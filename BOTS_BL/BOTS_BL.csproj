@@ -230,7 +230,10 @@
     <Compile Include="Models\KeyIndecators\OnlyOnce.cs" />
     <Compile Include="Models\LoginDetail.cs" />
     <Compile Include="Models\LoginModel.cs" />
+    <Compile Include="Models\OnBoarding\BOTS_TblDealDetails.cs" />
     <Compile Include="Models\OnBoarding\BOTS_TblGroupMaster.cs" />
+    <Compile Include="Models\OnBoarding\BOTS_TblInstallmentDetails.cs" />
+    <Compile Include="Models\OnBoarding\BOTS_TblPaymentDetails.cs" />
     <Compile Include="Models\OnBoarding\BOTS_TblRetailMaster.cs" />
     <Compile Include="Models\OutletDetail.cs" />
     <Compile Include="Models\ProfilePage.cs" />

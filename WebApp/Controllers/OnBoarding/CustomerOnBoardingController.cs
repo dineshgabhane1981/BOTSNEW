@@ -22,6 +22,16 @@ namespace WebApp.Controllers.OnBoarding
                 objData.lstCity = CR.GetCity();
                 objData.lstRetailCategory = CR.GetRetailCategory();
                 objData.lstBillingPartner = CR.GetBillingPartner();
+                objData.lstSourcedBy = CR.GetSourcedBy();
+                objData.lstRMAssigned = CR.GetRMAssigned();
+                List<SelectListItem> refferedname = new List<SelectListItem>();
+                SelectListItem item = new SelectListItem();
+                item.Value = "0";
+                item.Text = "Please Select";
+                refferedname.Add(item);
+                objData.lstAllGroups = refferedname;
+
+
             }
             catch(Exception ex)
             {

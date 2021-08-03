@@ -5,7 +5,6 @@ namespace BOTS_BL.Models
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Data.Entity.Spatial;
-    using System.Web;
 
     public partial class BOTS_TblGroupMaster
     {
@@ -37,13 +36,9 @@ namespace BOTS_BL.Models
 
         [StringLength(500)]
         public string GSTDocument { get; set; }
-        [NotMapped]
-        public HttpPostedFileBase GSTDocumentFile { get; set; }
 
         [StringLength(500)]
         public string PANDocument { get; set; }
-        [NotMapped]
-        public HttpPostedFileBase PANDocumentFile { get; set; }
 
         [StringLength(100)]
         public string City { get; set; }
@@ -56,9 +51,6 @@ namespace BOTS_BL.Models
 
         [StringLength(10)]
         public string NoOfRetailCategory { get; set; }
-
-        [StringLength(50)]
-        public string RetailId { get; set; }
 
         public bool? IsMWP { get; set; }
 
@@ -105,7 +97,17 @@ namespace BOTS_BL.Models
 
         [Column(TypeName = "text")]
         public string OtherFeesDescription { get; set; }
-        [Column(TypeName = "text")]
+
+        [StringLength(100)]
         public string AnyOtherName { get; set; }
+
+        [Key]
+        [Column(Order = 4)]
+        public DateTime CreatedDate { get; set; }
+
+        [Key]
+        [Column(Order = 5)]
+        [StringLength(10)]
+        public string CreatedBy { get; set; }
     }
 }

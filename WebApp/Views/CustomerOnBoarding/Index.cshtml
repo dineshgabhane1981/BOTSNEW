@@ -240,20 +240,64 @@
         </div>
 
         <div class="container-fluid pt-3 pl-3 pr-3 pb-3">
-            <div class="col-md-12 section-heading" data-toggle="collapse" data-target="#productdetails">Product & Assignment Details</div>
+            <div class="col-md-12 section-heading" data-toggle="collapse" data-target="#productdetails">Assignment Details</div>
             <div id="productdetails" class="collapse">
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit,
-                sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-                quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                <div class="row" style="margin: 0;">
+                    <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
+                        Sourced By
+                    </div>
+                    <div class="col-sm-4" style="float:left;margin-top:10px;">
+                        @Html.DropDownListFor(model => model.bots_TblGroupMaster.SourcedBy, new SelectList(Model.lstSourcedBy, "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input100", @id = "ddlSourcedBy" })
+                    </div>
+                    <div style="float: left; text-align: right; width: 115px; margin-top: 10px;">
+                        Assigned CS
+                    </div>
+                    <div class="col-sm-4" style="float:left;margin-top:10px;">
+                        @Html.DropDownListFor(model => model.bots_TblGroupMaster.AssignedCS, new SelectList(Model.lstRMAssigned, "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input100", @id = "ddlAssignedCS" })
+                    </div>
+                </div>
+                <div class="row" style="margin: 0;">
+                    <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
+                        Referred by
+                    </div>
+                    <div class="col-sm-4" style="float:left;margin-top:10px;">
+                        @Html.DropDownListFor(model => model.bots_TblGroupMaster.Referredby, new SelectList(Model.RefferedCategory(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input100", @id = "ddlReferredby" })
+                    </div>
+                    <div style="float: left; text-align: right; width: 115px; margin-top: 10px;">
+                        Referred Name
+                    </div>
+                    <div class="col-sm-4" style="float:left;margin-top:10px;">
+                        @Html.DropDownListFor(model => model.bots_TblGroupMaster.ReferredName, new SelectList(Model.lstAllGroups, "Value", "Text"), htmlAttributes: new { @class = "input100", @id = "ddlReferredName" })
+                    </div>
+                </div>
+                <div class="row" style="margin: 0;">
+                    <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
+                        Comments
+                    </div>
+                    <div class="col-sm-8" style="float:left;margin-top:10px;">
+                        @Html.TextAreaFor(model => model.bots_TblGroupMaster.Comments, new { @class = "input100", @id = "txtComments" })
+                    </div>                   
+                </div>
             </div>
         </div>
 
         <div class="container-fluid pt-3 pl-3 pr-3 pb-3">
             <div class="col-md-12 section-heading" data-toggle="collapse" data-target="#dealdetails">Deal Details</div>
             <div id="dealdetails" class="collapse">
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit,
-                sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-                quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                <div class="row" style="margin: 0;">
+                    <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
+                        Loyalty Fees
+                    </div>
+                    <div class="col-sm-4" style="float:left;margin-top:10px;">
+                        @Html.TextBoxFor(model => model.bots_TblGroupMaster.fee, new { @class = "input100", @id = "txtNoOfFreeSMS" })
+                    </div>
+                    <div style="float: left; text-align: right; width: 115px; margin-top: 10px;">
+                        SMS Paid Msgs
+                    </div>
+                    <div class="col-sm-4" style="float:left;margin-top:10px;">
+                        @Html.TextBoxFor(model => model.bots_TblGroupMaster.NoOfPaidSMS, new { @class = "input100", @id = "txtNoOfPaidSMS" })
+                    </div>
+                </div>
             </div>
         </div>
 

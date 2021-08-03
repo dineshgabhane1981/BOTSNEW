@@ -111,6 +111,25 @@ namespace BOTS_BL.Repository
             return lstBillingPartner;
         }
 
+        public List<SelectListItem> GetAllGroups()
+        {
+            List<SelectListItem> lstAllFroup = new List<SelectListItem>();
+            using (var context = new CommonDBContext())
+            {
+                var GroupDetails = context.tblGroupDetails.ToList();
+
+                foreach (var item in GroupDetails)
+                {
+                    lstAllFroup.Add(new SelectListItem
+                    {
+                        Text = item.GroupName,
+                        Value = Convert.ToString(item.GroupId)
+                    });
+                }
+            }
+            return lstAllFroup;
+        }
+
         public List<CustomerListing> GetAllCustomer()
         {
             List<CustomerListing> objGroupList = new List<CustomerListing>();
