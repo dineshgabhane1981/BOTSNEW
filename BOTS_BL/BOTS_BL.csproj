@@ -201,7 +201,6 @@
     <Compile Include="Models\CommonDB\SMSGatewayMaster.cs" />
     <Compile Include="Models\CommonDB\tblAudit.cs" />
     <Compile Include="Models\CommonDB\tblBillingPartner.cs" />
-    <Compile Include="Models\CommonDB\tblCategory.cs" />
     <Compile Include="Models\CommonDB\tblCity.cs" />
     <Compile Include="Models\CommonDB\tblErrorLog.cs" />
     <Compile Include="Models\CommonDB\tblGroupDetail.cs" />
@@ -230,11 +229,13 @@
     <Compile Include="Models\KeyIndecators\OnlyOnce.cs" />
     <Compile Include="Models\LoginDetail.cs" />
     <Compile Include="Models\LoginModel.cs" />
+    <Compile Include="Models\OnBoarding\BOTS_TblBillingPartnerProduct.cs" />
     <Compile Include="Models\OnBoarding\BOTS_TblDealDetails.cs" />
     <Compile Include="Models\OnBoarding\BOTS_TblGroupMaster.cs" />
     <Compile Include="Models\OnBoarding\BOTS_TblInstallmentDetails.cs" />
     <Compile Include="Models\OnBoarding\BOTS_TblPaymentDetails.cs" />
     <Compile Include="Models\OnBoarding\BOTS_TblRetailMaster.cs" />
+    <Compile Include="Models\CommonDB\tblCategory.cs" />
     <Compile Include="Models\OutletDetail.cs" />
     <Compile Include="Models\ProfilePage.cs" />
     <Compile Include="Models\Reports\Celebrations.cs" />
@@ -261,6 +262,7 @@
     <Compile Include="Repository\LoyaltyKPIsRepository.cs" />
     <Compile Include="Repository\ManagementDashboardRepository.cs" />
     <Compile Include="Repository\NoActionRepository.cs" />
+    <Compile Include="Repository\OnBoarding\CustomerOnBoardingRepository.cs" />
     <Compile Include="Repository\OtherReportsRepository.cs" />
     <Compile Include="Repository\ParticipantRepository.cs" />
     <Compile Include="Repository\PointsLedgerRepository.cs" />
@@ -272,9 +274,7 @@
     <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Repository\OnBoarding\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

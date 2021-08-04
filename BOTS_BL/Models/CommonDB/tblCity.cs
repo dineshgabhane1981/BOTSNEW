@@ -1,4 +1,4 @@
-namespace BOTS_BL.Models
+namespace BOTS_BL.Models.CommonDB
 {
     using System;
     using System.Collections.Generic;
@@ -15,5 +15,10 @@ namespace BOTS_BL.Models
         [Required]
         [StringLength(250)]
         public string CityName { get; set; }
+
+        [StringLength(50)]
+        public string CreatedBy { get; set; }
+
+        public DateTime? CreatedDate { get; set; }
     }
 }

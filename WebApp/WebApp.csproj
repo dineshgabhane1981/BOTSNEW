@@ -404,6 +404,7 @@
     <Content Include="Views\CustomerOnBoarding\Notifications.cshtml" />
     <Content Include="Views\CustomerOnBoarding\PaymentSchedule.cshtml" />
     <Content Include="Views\CustomerOnBoarding\Index.cshtml" />
+    <Content Include="Views\CustomerOnBoarding\CustomerMaster.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
