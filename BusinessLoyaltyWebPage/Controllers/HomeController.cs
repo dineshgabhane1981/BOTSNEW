@@ -22,8 +22,9 @@ namespace BusinessLoyaltyWebPage.Controllers
         public JsonResult SendMsg(string MobileNo,string CustomerName)
         {
             var sender = "BLUEOC";
-            var Url = "https://http2.myvfirst.com/smpp/sendsms?";            
-            string MobileMessage = "Dear "+ CustomerName + ", Thanks for sharing your information. One of our representative will call you to take your on your Loyalty Journey – Blue Ocktopus";
+            var Url = "https://http.myvfirst.com/smpp/sendsms?";            
+            string MobileMessage = "Dear" + CustomerName + ",Thanks for sharing your information. One of our representative will call you to take your on your Loyalty Journey - Blue Ocktopus";
+            //Dear {#var#}, Thanks for sharing your information. One of our representative will call you to take your on your Loyalty Journey - Blue Ocktopus
 
             SendSucessMessage(MobileNo, sender, MobileMessage, Url);
             var result = "true";          
@@ -44,6 +45,8 @@ namespace BusinessLoyaltyWebPage.Controllers
                 sbposdata1.AppendFormat("&to={0}", MobileNo);
                 sbposdata1.AppendFormat("&from={0}", Sender);
                 sbposdata1.AppendFormat("&text={0}", MobileMessage);
+                sbposdata1.AppendFormat("&dlr-mask={0}", "19");
+                sbposdata1.AppendFormat("&dlr-url");
                 ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls | (SecurityProtocolType)3072;
                 ServicePointManager.ServerCertificateValidationCallback += (sender, cert, chain, sslPolicyErrors) => true;
                 HttpWebRequest httpWReq1 = (HttpWebRequest)WebRequest.Create(Url);
@@ -120,7 +123,7 @@ namespace BusinessLoyaltyWebPage.Controllers
                     smtp.Credentials = networkCredential;
                     smtp.Port = 587;
                     smtp.Send(mail);
-                    // var resultsms = SendMsg(mobileNo, CustomerName);
+                     var resultsms = SendMsg(mobileNo, CustomerName);
                     result = "True";
                 }
 

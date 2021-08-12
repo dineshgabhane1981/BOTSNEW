@@ -1,0 +1,232 @@
+﻿@model List<BOTS_BL.Models.CommonDB.CategoryDetails>
+@{
+    ViewBag.Title = "CategoryMaster";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="app-main__inner">
+    <div class="row mb-3 card">
+        <div class="container-fluid pt-3 pl-3 pr-3">
+            <div class="pb-3">
+                <h4><b>Category Master</b></h4>
+            </div>
+
+            <div class="pt-3 pl-3 pr-3 col-md-12 col-lg-12">
+                <div class="col-md-8 col-lg-8 mb-5" id="divadd" style="display:none; border:1px solid grey; border-radius:10px;">
+                    <div class="mb-4">
+                        <h6><b>Add Category</b></h6>
+                    </div>
+                    <div class="col-md-12 col-lg-12 mt-2 mb-4">
+                        Category Name  <input class="input100" type="text" id="txtcategoryNm" />
+                        <button class="btn btn-primary login-btn ml-5 mr-2" type="button" id="btnSave">
+                            Save
+                        </button>
+                        <button class="btn btn-primary login-btn ml-5 mr-2" type="button" id="btnUpdate" style="display:none;">
+                            Update
+                        </button>
+                        <button class="btn btn-primary login-btn" type="button" id="btnCancle">
+                            Cancel
+                        </button>
+                     </div>
+                 </div>
+
+                    <div class="row">
+                        <div class="col search-container">
+                            <i class="fas fa-search"></i>
+                            <input class="input100" type="text" id="txtSearch" placeholder="Search activity..." />
+                        </div>
+                        <div style="text-align:right;" class="pr-2">
+                            <button class="btn btn-primary login-btn" type="button" id="btnAdd">
+                                ADD
+                            </button>
+
+                        </div>
+                    </div>
+
+                    <div class="row mt-3" id="dvActivityData">
+                        <div class="table-responsive">
+                            <table class="table" id="groupListTable">
+                                <thead>
+                                    <tr>
+                                        <th scope="col" style="text-align:left;">Category Name</th>
+                                        <th scope="col" style="text-align:left;">Created By</th>
+                                        <th scope="col" style="text-align:left;">Created On</th>
+                                        <th scope="col" style="text-align:left;">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @if (Model != null)
+                                    {
+                                        if (Model.Count > 0)
+                                        {
+                                            foreach (var item in Model)
+                                            {
+
+                                                <tr>
+                                                    <td style="text-align:left;">@item.CategoryName</td>
+                                                    <td style="text-align:left;">@item.UserName</td>
+                                                    <td style="text-align:left;">@item.CreatedDate</td>
+                                                    <td style="text-align:left; width:100px;">
+                                                        <a href="#" class="login" onclick="EditCategory(@item.CategoryId)" title="Edit"><img src="~/Content/assets/images/shape_editUser.png" /></a>
+
+                                                    </td>
+                                                </tr>
+                                            }
+                                        }
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+        </div>
+    </div>
+</div>
+<script>
+
+    $('#btnAdd').on("click", function () {
+        $("#divadd").show(1000);
+        $("#btnSave").show();
+        $("#btnUpdate").hide();
+    });
+    $('#btnCancle').on("click", function () {
+        $("#divadd").hide(1000);
+        $('#divadd').find(':input').val('');
+    });
+    $('#btnUpdate').on("click", function () {
+        if ($('#txtcategoryNm').val() == "") {
+            toastr.error('Please enter Category Name');
+            $('#txtcategoryNm').focus();
+            return false;
+        }
+        if (confirm("Are you sure? You want to Update Category")) {
+            var CategoryData = [];
+            item = {}
+            item["CategoryNm"] = $("#txtcategoryNm").val();
+
+            CategoryData.push(item);
+            var data = JSON.stringify(CategoryData);
+            console.log(data)
+            $("#divLoader").show();
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("AddCategory", "CustomerMaster")',
+                data: '{jsonData: ' + JSON.stringify(data) + '}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (result) {
+                    if (result.ResponseCode == "00") {
+                        toastr.success(result.ResponseMessage);
+                        $("#divLoader").hide();
+                        $("#txtcategoryNm").val("");
+
+                    }
+                    else {
+                        toastr.error(result.ResponseMessage);
+                        $("#divLoader").hide();
+                    }
+                },
+                error: function (result) {
+                    console.log(result.responseText)
+                    if (result.responseText == "True") {
+                        toastr.success("Data Updated Successfully");
+                        $("#divLoader").hide();
+                    }
+                    else {
+                        toastr.error('error occured while saving data');
+                        $("#divLoader").hide();
+                    }
+                }
+            });
+       // }
+    }
+    });
+    function EditCategory(id) {
+        $("#divLoader").show();
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("GetCategory", "CustomerMaster")',
+                data: '{CategoryId: ' + JSON.stringify(id) + '}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (responce) {
+                    console.log(responce);
+                    if (responce.CategoryName != null) {
+                        $("#divLoader").hide();
+                        $("#divadd").show(1000);
+                        $('#txtcategoryNm').val(responce.CategoryName);
+                        $("#btnUpdate").show();
+                        $("#btnSave").hide();
+
+                    }
+                    else {
+                      //  alert("no");
+                    }
+
+                },
+                error: function (result) {
+                    console.log(result.responseText)
+                    if (result.responseText == "True") {
+                        toastr.success("Data Updated Successfully");
+                        $("#divLoader").hide();
+                    }
+                    else {
+                        toastr.error('error occured while saving data');
+                        $("#divLoader").hide();
+                    }
+                }
+            });
+        console.log(id);
+    }
+    $('#btnSave').on("click", function () {
+
+           if ($('#txtcategoryNm').val() == "") {
+            toastr.error('Please enter Category Name');
+               $('#txtcategoryNm').focus();
+            return false;
+        }
+
+
+        if (confirm("Are you sure? You want to Add Category")) {
+            var CategoryData = [];
+            item = {}
+            item["CategoryNm"] = $("#txtcategoryNm").val();
+
+            CategoryData.push(item);
+            var data = JSON.stringify(CategoryData);
+            console.log(data)
+            $("#divLoader").show();
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("AddCategory", "CustomerMaster")',
+                data: '{jsonData: ' + JSON.stringify(data) + '}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (result) {
+                    if (result.ResponseCode == "00") {
+                        toastr.success(result.ResponseMessage);
+                        $("#divLoader").hide();
+                        $("#txtcategoryNm").val("");
+
+                    }
+                    else {
+                        toastr.error(result.ResponseMessage);
+                        $("#divLoader").hide();
+                    }
+                },
+                error: function (result) {
+                    console.log(result.responseText)
+                    if (result.responseText == "True") {
+                        toastr.success("Data Updated Successfully");
+                        $("#divLoader").hide();
+                    }
+                    else {
+                        toastr.error('error occured while saving data');
+                        $("#divLoader").hide();
+                    }
+                }
+            });
+       // }
+    }
+    });
+</script>

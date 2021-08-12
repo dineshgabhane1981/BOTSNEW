@@ -41,18 +41,14 @@
             <ul class="vertical-nav-menu">
                 @if (roleId == "1")
                 {
+
                     <li>
                         <a href="@Url.Action("Index", "CustomerManagement")" class="@Html.IsSelected(controller: "CustomerManagement", action: "Index,SelectProduct,AddNewCustomer")">
                             <i class="metismenu-icon pe-7s-rocket"></i>
                             Customer Management
                         </a>
                     </li>
-                    <li>
-                        <a href="@Url.Action("CustomerMaster", "CustomerOnBoardingController")" class="@Html.IsSelected(controller: "CustomerOnBoardingController", action: "Index,CustomerMaster")">
-                            <i class="metismenu-icon pe-7s-rocket"></i>
-                            Customer Master
-                        </a>
-                    </li>
+                   
                 }
 
             </ul>

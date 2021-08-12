@@ -1,48 +1,11 @@
 ﻿@{
     ViewBag.Title = "Home Page";
 }
+<meta name="viewport" content="initial-scale=1, maximum-scale=1">
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
-
-<style>
-    .img {
-        /* background-image: url(../covidpagetest/Content/images/Background.png);
-        background-image: url(../Content/images/Background.png);*/
-        width: 500px;
-        vertical-align: middle
-    }
-
-    .headertb {
-        background-image: url(../Content/assets/images/logoLogin.jpg);
-        background-repeat: no-repeat;
-        position: fixed;
-        width: 200%;
-        height: 40%;
-    }
-
-    .tble {
-        width: 200%;
-        height: 100%;
-    }
-
-    .fonth {
-        /* font-family: bold verdana;*/
-        font: bold 17px verdana;
-        /*font-size: 18px;*/
-        color: white;
-        letter-spacing: 1px;
-        text-align: center;
-        padding-bottom: 20px;
-        padding-top: 20px;
-    }
-
-    .fontp {
-        font-family: Verdana;
-        letter-spacing: 2px;
-        text-align: center;
-        padding-bottom: 20px;
-        padding-top: 20px;
-        color: white;
-    }
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+<style>   
+       
 
     input::-webkit-outer-spin-button,
     input::-webkit-inner-spin-button {
@@ -93,148 +56,167 @@
 </style>
 @*background-image:url(../images/Toppicture.jpg);background-size: 100% auto;*@
 
-    <div id="divLoader" runat="server" style="display:none">
-        <div id="loader">
-            <div class="loader-inner">
-                <img src="../Content/assets/images/BlueocktopusLoadingGIF.gif" style="width:100px; height:100px;" />
-            </div>
+<div id="divLoader" runat="server" style="display:none">
+    <div id="loader">
+        <div class="loader-inner">
+            <img src="../Content/assets/images/BlueocktopusLoadingGIF.gif" style="width:100px; height:100px;" />
         </div>
+    </div>
+</div>
+<div class="col-12">
+    <div style="padding-top:5px; text-align:center;">
+        @*<img src="../covidpagetest/Content/images/XpressLogo.png" />*@
+        <img src="../Content/assets/images/logo.jpg" />
     </div>
     <div>
-        <div style="padding-top:5px; text-align:center;">
-            @*<img src="../covidpagetest/Content/images/XpressLogo.png" />*@
-            <img src="../Content/assets/images/logo.jpg" />
-        </div>
-        <div>
-            <table style="text-align:center;">
-                <tr >
-                    <td style="padding-top:20px; font-family:Verdana; font-size:15px;letter-spacing:1px;">                       
-                        Let's work towards making your <b>walk-in customers loyal</b> and <b>increase repeat purchases and higher spends.</b>
-                    </td>
-                    <td style="padding-top:20px;">
-                       
-
-                    </td>
-                </tr>
-                <tr>
-                    <td style="padding-top:10px; font-family:Verdana; font-size:13px;">
-                        Please fill this form and we will take you through our platform in detail
-                    </td>
-                </tr>
-            </table>
-        </div>
-        @*<h4>Fill below details to start your business loyalty journey</h4>*@
-        <div>
-            <table id="tblform" width="100%" style="font-family: Verdana; font-size: 15px;  ">
-
-
-                <tr style="width:10px;">
-                    <td style="padding-top:20px;">
-                        Name/नाव
-                    </td>
-                    <td style="padding-top:20px;">
-                        <input type="text" id="txtName" class="input50" />*
-                    </td>
-                </tr>
-                <tr>
-                    <td style="padding-top:20px;">
-                        Business Name/व्यवसायाचे नाव 
-                    </td>
-                    <td style="padding-top:20px;">
-
-                        <input type="text" id="txtBusinessNm" class="input50" />*
-                    </td>
-
-                </tr>
-                <tr>
-                    <td style="padding-top:20px;">
-                        Mobile No./मोबाईल नंबर
-                    </td>
-                    <td style="padding-top:20px;">
-
-                        <input type="number" id="txtMobileNo" class="input50" />*
-                    </td>
-
-                </tr>
-                <tr>
-                    <td style="padding-top:20px;">
-                        Business location/व्यवसायाचे ठिकाण
-                    </td>
-                    <td style="padding-top:20px;">
-                        <input type="text" id="txtBusinessLoc" class="input50" />
-                    </td>
-
-                </tr>
-                <tr>
-                    <td colspan="2" align="center" style="padding-top: 20px;">
-                        <input type="button" id="btnSubmit" class="btn btn-primary" value="SUBMIT" onclick="SendEmail();" />
-                    </td>
-                </tr>
-                <tr>
-                    <td colspan="2" align="left" style="color: red;">
-                        <span id="spncustnm" style="font:bold;"></span>                        
-                    </td>
-
-                </tr>
-            </table>
-            <table id="tblsucessmsg" style="display:none; color:red;font:bold;font-family:Verdana; height:200px;padding-top:40px;">
-                <tr>
-                    <td>
-                        Thank you for showing interest in our Loyalty & Analytics Platform. Our representative will connect with you in a day!!!
-
-                    </td>
-                </tr>
-            </table>
-            <table id ="tbllogo"style="text-align:center; font-family:Verdana; color:deepskyblue;">
-                <thead>
-                    <tr>
-                        <td>
-                            <b> Successfully running our platform at more than 40 Jewellers across 18 cities & towns!!!</b>
-                        </td>
-                    </tr>
-                </thead>
-                <tr >
-                    <td style="padding-top:20px;" >
-                        <img src="../Content/assets/images/Screenshot_2021-07-23-15-14-33-659_com.google.android.googlequicksearchbox (1).png" />
-                        <img src="../Content/assets/images/Screenshot_2021-07-23-15-28-00-295_com.android.chrome.png" />
-                        <img src="../Content/assets/images/Screenshot_2021-07-23-15-18-02-765_com.android.chrome.png" />
-                    @*</td>
-
-                    <td >*@
-                        <img src="../Content/assets/images/Screenshot_2021-07-23-15-10-34-021_com.android.chrome.png" />
-                        
-                        <img src="../Content/assets/images/Screenshot_2021-07-23-15-23-49-074_com.android.chrome.png" /> 
-                    </td>
-
-                </tr>
-                <tr>
-                    <td>
-                        <img src="../Content/assets/images/Screenshot_2021-07-23-15-19-33-051_com.google.android.googlequicksearchbox.png" />
-                        <img src="../Content/assets/images/Screenshot_2021-07-23-15-12-56-339_com.google.android.googlequicksearchbox.png" />
-                        <img src="../Content/assets/images/Screenshot_2021-07-23-15-21-07-626_com.google.android.googlequicksearchbox.png" />
-                        @*</td>
-
-        <td >*@
-
-                        <img src="../Content/assets/images/Screenshot_2021-07-23-15-31-38-102_com.android.chrome.png" />
-                        <img src="../Content/assets/images/Screenshot_2021-07-23-15-48-58-074_com.google.android.googlequicksearchbox.png" />
-                        <img src="../Content/assets/images/Screenshot_2021-07-23-15-06-37-766_com.google.android.googlequicksearchbox.png" />
-
-                    </td>
-                </tr>
-                <tr>
-                    <td style="text-align:right; font-size:12px;color:black;">
-                        <b>And several more..</b>
-                    </td>
-                </tr>
-            </table>
-      
+        <table style="text-align:center;">
+            <tr>
+                <td style="padding-top:20px; font-family:Verdana; font-size:15px;letter-spacing:1px;">
+                    Let's work towards making your <b>walk-in customers loyal</b> and <b>increase repeat purchases and higher spends.</b>
+                </td>
+                <td style="padding-top:20px;">
+                </td>
+            </tr>
+            <tr>
+                <td id="fillform" style="padding-top:10px; font-family:Verdana; font-size:13px; ">
+                    Please fill this form and we will take you through our platform in detail
+                </td>
+            </tr>
+        </table>
     </div>
+    @*<h4>Fill below details to start your business loyalty journey</h4>*@
+<div class="col-12">
+    <div class="row" style="margin-top:20px;">
+        <div class="col-1" style="padding-right:0px !important;"></div>
+        <div class="col-10">Name/नाव<input type="text" id="txtName" />*</div>
+        <div class="col-1"></div>
+    </div>
+    <div class="row" style="margin-top:10px;">
+        <div class="col-1" style="padding-right:0px !important;"></div>
+        <div class="col-10">Business Name/व्यवसायाचे नाव<input type="text" id="txtBusinessNm" />*</div>
+        <div class="col-1"></div>
+    </div>
+    <div class="row" style="margin-top:10px;">
+        <div class="col-1" style="padding-right:0px !important;"></div>
+        <div class="col-10">Mobile No./मोबाईल नंबर<input type="text" id="txtMobileNo" />*</div>
+        <div class="col-1"></div>
+    </div>
+    <div class="row" style="margin-top:0px;">
+        <div class="col-1" style="padding-right:0px !important;"></div>
+        <div class="col-11">Business location/व्यवसायाचे ठिकाण<input type="text" id="txtBusinessLoc" /></div>
+        @*<div class="col-1"></div>*@
+    </div>
+    <div class="row" style="margin-top:0px;">
+        <div class="col-4" ></div>
+        <input type="button" id="btnSubmit" class="btn btn-primary" value="SUBMIT" onclick="SendEmail();" />
+    </div>
+    <div class="row" style="margin-top:0px; color:red;">
+        <div class="col-1" style="padding-right:0px !important;"></div>
+        <span id="spncustnm" style="font:bold;"></span>
+    </div>
+
+
+
+    @*<table id="tblform" class="table-responsive col-12" style="font-family: Verdana; font-size: 15px;">
+
+            <tr>
+                <td style="padding-top:20px;">
+                    Name/नाव
+                </td>
+                <td style="padding-top:20px;">
+                    <input type="text" id="txtName" />*
+                </td>
+            </tr>
+            <tr>
+                <td style="padding-top:20px;">
+                    Business Name/व्यवसायाचे नाव
+                </td>
+                <td style="padding-top:20px;">
+
+                    <input type="text" id="txtBusinessNm" />*
+                </td>
+
+            </tr>
+            <tr>
+                <td style="padding-top:20px;">
+                    Mobile No./मोबाईल नंबर
+                </td>
+                <td style="padding-top:20px;">
+
+                    <input type="number" id="txtMobileNo" class="input50" />*
+                </td>
+
+            </tr>
+            <tr>
+                <td style="padding-top:20px;">
+                    Business location/व्यवसायाचे ठिकाण
+                </td>
+                <td style="padding-top:20px;">
+                    <input type="text" id="txtBusinessLoc" class="input50" />
+                </td>
+
+            </tr>
+            <tr>
+                <td colspan="2" align="center" style="padding-top: 20px;">
+                    <input type="button" id="btnSubmit" class="btn btn-primary" value="SUBMIT" onclick="SendEmail();" />
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2" align="left" style="color: red;">
+                    <span id="spncustnm" style="font:bold;"></span>
+                </td>
+
+            </tr>
+        </table>*@
+    <table id="tblsucessmsg" style="display:none; color:red;font:bold;font-family:Verdana;padding-top:40px;">
+        <tr>
+            <td>
+                Thank you for showing interest in our Loyalty & Analytics Platform. Our representative will connect with you in a day!!!
+
+            </td>
+        </tr>
+    </table>
+    <table id="tbllogo" style="text-align:center; font-family:Verdana; color:deepskyblue;">
+        <thead>
+            <tr>
+                <td>
+                    <b> Successfully running our platform at more than 40 Jewellers across 18 cities & towns!!!</b>
+                </td>
+            </tr>
+        </thead>
+        <tr>
+            <td style="padding-top:20px;">
+                <img src="../Content/assets/images/Screenshot_2021-07-23-15-14-33-659_com.google.android.googlequicksearchbox (1).png" />
+                <img src="../Content/assets/images/Screenshot_2021-07-23-15-28-00-295_com.android.chrome.png" />
+                <img src="../Content/assets/images/Screenshot_2021-07-23-15-18-02-765_com.android.chrome.png" />
+                <img src="../Content/assets/images/Screenshot_2021-07-23-15-10-34-021_com.android.chrome.png" />
+                <img src="../Content/assets/images/Screenshot_2021-07-23-15-23-49-074_com.android.chrome.png" />
+            </td>
+
+        </tr>
+        <tr>
+            <td>
+                <img src="../Content/assets/images/Screenshot_2021-07-23-15-19-33-051_com.google.android.googlequicksearchbox.png" />
+                <img src="../Content/assets/images/Screenshot_2021-07-23-15-12-56-339_com.google.android.googlequicksearchbox.png" />
+                <img src="../Content/assets/images/Screenshot_2021-07-23-15-21-07-626_com.google.android.googlequicksearchbox.png" />
+                <img src="../Content/assets/images/Screenshot_2021-07-23-15-31-38-102_com.android.chrome.png" />
+                <img src="../Content/assets/images/Screenshot_2021-07-23-15-48-58-074_com.google.android.googlequicksearchbox.png" />
+                <img src="../Content/assets/images/Screenshot_2021-07-23-15-06-37-766_com.google.android.googlequicksearchbox.png" />
+            </td>
+        </tr>
+        <tr>
+            <td style="text-align:right; font-size:12px;color:black;">
+                <b>And several more..</b>
+            </td>
+        </tr>
+    </table>
+
+</div>
 
 </div>
 
 
-    <script type="text/javascript">
+<script type="text/javascript">
     $(document).ready(function () {
        // $("#spncustnm").text(result.CustomerName);
 
@@ -272,7 +254,7 @@
 
         function SendEmail() {
             console.log("hi");
-        //var MobileNo = $('#txtMobileNo').val();        
+        //var MobileNo = $('#txtMobileNo').val();
         //var Businessname = $('#txtBusinessNm').val();
         //    var Name = $('#txtName').val();
          var BusiLocation = $('#txtBusinessLoc').val();
@@ -285,7 +267,7 @@
             item["BusiLocation"] = BusiLocation;
             item["Businessname"] = $('#txtBusinessNm').val();
             item["Name"] = $('#txtName').val();
-            
+
             MemberData.push(item);
             var data = JSON.stringify(MemberData);
             console.log(data);
@@ -310,6 +292,7 @@
                                 $("#tblform").hide();
                                 $('#tblsucessmsg').show();
                                 $("#divLoader").hide();
+                                $("#fillform").hide();
 
                             }
                             else {
@@ -341,7 +324,7 @@
    }
 
 
-    </script>
+</script>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <link href="~/Content/themes/base/jquery-ui.min.css" rel="stylesheet" />

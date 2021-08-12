@@ -21,4 +21,18 @@ namespace BOTS_BL.Models.CommonDB
 
         public DateTime? CreatedDate { get; set; }
     }
+
+    public class RMAssignedDetails
+    {
+        
+        public int RMAssignedId { get; set; }
+       
+        public string RMAssignedName { get; set; }
+        
+        public string CreatedBy { get; set; }
+
+        public DateTime? CreatedDate { get; set; }
+
+        public string UserName { get; set; }
+    }
 }

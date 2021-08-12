@@ -88,53 +88,7 @@
 <script>
 
     $(document).ready(function () {
-
-        //$.ajax({
-        //    url: "https://blueocktopus.in/MobileNewAPI/api/bots/GetToken?username=123&password=123",
-        //    method: "GET",      // The HTTP method to use for the request
-        //    contentType: "application/json; charset=utf-8",
-        //    dataType: "json", // The type of data that you're exerciseecting back
-
-        //    error: function () {
-
-        //        // A function to be called if the request fails.
-        //    },
-
-        //    success: function (response) {
-        //        console.log(response.data[0]);
-
-        //        $.ajax({
-        //            url: "https://blueocktopus.in/MobileNewAPI/api/bots/GetOutletList?GroupId=1051",
-        //            method: "GET",      // The HTTP method to use for the request
-        //            contentType: "application/json; charset=utf-8",
-        //            dataType: "json", // The type of data that you're exerciseecting back
-        //            Authorization: 'Bearer ' + response.data[0],
-        //            error: function () {
-        //                alert(111)
-        //                // A function to be called if the request fails.
-        //            },
-
-        //            success: function (response) {
-        //                alert(222)
-        //                console.log(response);
-
-        //                // A function to be called if the request succeeds.
-        //            },
-        //            complete: function (response) {
-        //                alert(333)
-        //                // A function to be called when the request finishes
-        //            }
-        //        });
-
-        //        // A function to be called if the request succeeds.
-        //    },
-        //    complete: function (response) {
-
-        //        // A function to be called when the request finishes
-        //    }
-        //});
-
-
+        
         $('#groupListTable').DataTable({
             "aaSorting": [[0, "asc"]],
             "paging": true,

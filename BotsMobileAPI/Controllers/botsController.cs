@@ -433,7 +433,7 @@ namespace BotsMobileAPI.Controllers
             }
             return "Invalid Token or Expired";
         }
-        //not necessary 
+        //campaign 3nd click data
         [HttpGet]
         public object GetCampaignThirdData(string GroupId, string month, string year, string CampaignId)
         {
@@ -472,7 +472,7 @@ namespace BotsMobileAPI.Controllers
             }
             return "Invalid Token or Expired";
         }
-        //not necessary
+        //smsblast 3rd click data
         [HttpGet]
         public object GetSMSBlastsThirdData(string GroupId, string month, string year, string CampaignId)
         {
@@ -801,6 +801,7 @@ namespace BotsMobileAPI.Controllers
                         List<string> responseData = new List<string>();
                         responseData.Add(jwt_token);
                         responseData.Add(objcustlogin.GroupId);
+                        responseData.Add(objcustlogin.UserName);
                         return new { data = responseData };
                     }
                 }

@@ -88,17 +88,17 @@
 <div class="col-12">
     <div class="row" style="margin-top:20px;">
         <div class="col-1" style="padding-right:0px !important;"></div>
-        <div class="col-10">Name/नाव<input type="text" id="txtName" /></div>
+        <div class="col-10">Name/नाव<input type="text" id="txtName" />*</div>
         <div class="col-1"></div>
     </div>
     <div class="row" style="margin-top:10px;">
         <div class="col-1" style="padding-right:0px !important;"></div>
-        <div class="col-10">Business Name/व्यवसायाचे नाव<input type="text" id="txtBusinessNm" /></div>
+        <div class="col-10">Business Name/व्यवसायाचे नाव<input type="text" id="txtBusinessNm" />*</div>
         <div class="col-1"></div>
     </div>
     <div class="row" style="margin-top:10px;">
         <div class="col-1" style="padding-right:0px !important;"></div>
-        <div class="col-10">Mobile No./मोबाईल नंबर<input type="text" id="txtMobileNo" /></div>
+        <div class="col-10">Mobile No./मोबाईल नंबर<input type="text" id="txtMobileNo" />*</div>
         <div class="col-1"></div>
     </div>
     <div class="row" style="margin-top:0px;">
@@ -106,60 +106,68 @@
         <div class="col-11">Business location/व्यवसायाचे ठिकाण<input type="text" id="txtBusinessLoc" /></div>
         @*<div class="col-1"></div>*@
     </div>
+    <div class="row" style="margin-top:0px;">
+        <div class="col-4" ></div>
+        <input type="button" id="btnSubmit" class="btn btn-primary" value="SUBMIT" onclick="SendEmail();" />
+    </div>
+    <div class="row" style="margin-top:0px; color:red;">
+        <div class="col-1" style="padding-right:0px !important;"></div>
+        <span id="spncustnm" style="font:bold;"></span>
+    </div>
 
 
 
     @*<table id="tblform" class="table-responsive col-12" style="font-family: Verdana; font-size: 15px;">
 
-        <tr>
-            <td style="padding-top:20px;">
-                Name/नाव
-            </td>
-            <td style="padding-top:20px;">
-                <input type="text" id="txtName" />*
-            </td>
-        </tr>
-        <tr>
-            <td style="padding-top:20px;">
-                Business Name/व्यवसायाचे नाव
-            </td>
-            <td style="padding-top:20px;">
+            <tr>
+                <td style="padding-top:20px;">
+                    Name/नाव
+                </td>
+                <td style="padding-top:20px;">
+                    <input type="text" id="txtName" />*
+                </td>
+            </tr>
+            <tr>
+                <td style="padding-top:20px;">
+                    Business Name/व्यवसायाचे नाव
+                </td>
+                <td style="padding-top:20px;">
 
-                <input type="text" id="txtBusinessNm" />*
-            </td>
+                    <input type="text" id="txtBusinessNm" />*
+                </td>
 
-        </tr>
-        <tr>
-            <td style="padding-top:20px;">
-                Mobile No./मोबाईल नंबर
-            </td>
-            <td style="padding-top:20px;">
+            </tr>
+            <tr>
+                <td style="padding-top:20px;">
+                    Mobile No./मोबाईल नंबर
+                </td>
+                <td style="padding-top:20px;">
 
-                <input type="number" id="txtMobileNo" class="input50" />*
-            </td>
+                    <input type="number" id="txtMobileNo" class="input50" />*
+                </td>
 
-        </tr>
-        <tr>
-            <td style="padding-top:20px;">
-                Business location/व्यवसायाचे ठिकाण
-            </td>
-            <td style="padding-top:20px;">
-                <input type="text" id="txtBusinessLoc" class="input50" />
-            </td>
+            </tr>
+            <tr>
+                <td style="padding-top:20px;">
+                    Business location/व्यवसायाचे ठिकाण
+                </td>
+                <td style="padding-top:20px;">
+                    <input type="text" id="txtBusinessLoc" class="input50" />
+                </td>
 
-        </tr>
-        <tr>
-            <td colspan="2" align="center" style="padding-top: 20px;">
-                <input type="button" id="btnSubmit" class="btn btn-primary" value="SUBMIT" onclick="SendEmail();" />
-            </td>
-        </tr>
-        <tr>
-            <td colspan="2" align="left" style="color: red;">
-                <span id="spncustnm" style="font:bold;"></span>
-            </td>
+            </tr>
+            <tr>
+                <td colspan="2" align="center" style="padding-top: 20px;">
+                    <input type="button" id="btnSubmit" class="btn btn-primary" value="SUBMIT" onclick="SendEmail();" />
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2" align="left" style="color: red;">
+                    <span id="spncustnm" style="font:bold;"></span>
+                </td>
 
-        </tr>
-    </table>*@
+            </tr>
+        </table>*@
     <table id="tblsucessmsg" style="display:none; color:red;font:bold;font-family:Verdana;padding-top:40px;">
         <tr>
             <td>
