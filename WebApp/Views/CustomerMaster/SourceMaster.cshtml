@@ -18,10 +18,11 @@
                     </div>
                     <div class="col-md-12 col-lg-12 mt-2 mb-4">
                         Source Name  <input class="input100" type="text" id="txtSourceNm" />
+                        <span id="hdnSourceId" style="display:none;"></span>
                         <button class="btn btn-primary login-btn ml-5 mr-2" type="button" id="btnSave">
                             Save
                         </button>
-                        
+
                         <button class="btn btn-primary login-btn" type="button" id="btnCancle">
                             Cancel
                         </button>
@@ -65,7 +66,7 @@
                                                 <td style="text-align:left;">@item.UserName</td>
                                                 <td style="text-align:left;">@item.CreatedDate</td>
                                                 <td style="text-align:left; width:100px;">
-                                                    <a href="" class="login" title="Edit"><img src="~/Content/assets/images/shape_editUser.png" /></a>
+                                                    <a href="#" class="login" onclick="EditCategory(@item.SourcedbyId)" title="Edit"><img src="~/Content/assets/images/shape_editUser.png" /></a>
 
                                                 </td>
                                             </tr>
@@ -84,10 +85,11 @@
 
     $('#btnAdd').on("click", function () {
         $("#divadd").show(1000);
-      //  $("#divadd").hide();
     });
     $('#btnCancle').on("click", function () {
         $("#divadd").hide(1000);
+        $('#divadd').find(':input').val('');
+        $("#hdnSourceId").text("");
     });
     $('#btnSave').on("click", function () {
 
@@ -97,12 +99,17 @@
             return false;
         }
         if (confirm("Are you sure? You want to Add Category")) {
-            var CategoryData = [];
+            var SourceData = [];
             item = {}
             item["SourceNm"] = $("#txtSourceNm").val();
-
-            CategoryData.push(item);
-            var data = JSON.stringify(CategoryData);
+            if ($('#hdnSourceId').text != 0) {
+                item["SourceId"] = $('#hdnSourceId').text();
+            }
+            else {
+                item["SourceId"] = 0;
+            }
+            SourceData.push(item);
+            var data = JSON.stringify(SourceData);
             console.log(data)
             $("#divLoader").show();
             $.ajax({
@@ -138,5 +145,43 @@
 
     }
     });
+
+    function EditCategory(id) {
+
+        $("#divLoader").show();
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("GetSource", "CustomerMaster")',
+                data: '{SourceId: ' + JSON.stringify(id) + '}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (responce) {
+                    console.log(responce);
+                    if (responce.SourcedbyName != null) {
+                        $("#divLoader").hide();
+                        $("#divadd").show(1000);
+                        $('#txtSourceNm').val(responce.SourcedbyName);
+                        $("#btnSave").show();
+                        $("#hdnSourceId").text(id);
+
+                    }
+                    else {
+
+                    }
+
+                },
+                error: function (result) {
+                    console.log(result.responseText)
+                    if (result.responseText == "True") {
+                        toastr.success("Data Updated Successfully");
+                        $("#divLoader").hide();
+                    }
+                    else {
+                        toastr.error('error occured while saving data');
+                        $("#divLoader").hide();
+                    }
+                }
+            });
+    }
 </script>
 

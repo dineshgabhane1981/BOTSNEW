@@ -157,6 +157,7 @@
     <Compile Include="Controllers\KeyIndicatorsController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Controllers\LoyaltyKPIsController.cs" />
+    <Compile Include="Controllers\OnBoarding\CustomerMasterController.cs" />
     <Compile Include="Controllers\OnBoarding\CustomerOnBoardingController.cs" />
     <Compile Include="Controllers\OtherReportsController.cs" />
     <Compile Include="Controllers\ReportsController.cs" />
@@ -404,7 +405,12 @@
     <Content Include="Views\CustomerOnBoarding\Notifications.cshtml" />
     <Content Include="Views\CustomerOnBoarding\PaymentSchedule.cshtml" />
     <Content Include="Views\CustomerOnBoarding\Index.cshtml" />
-    <Content Include="Views\CustomerOnBoarding\CustomerMaster.cshtml" />
+    <Content Include="Views\CustomerMaster\CategoryMaster.cshtml" />
+    <Content Include="Views\CustomerMaster\SourceMaster.cshtml" />
+    <Content Include="Views\CustomerMaster\CsMaster.cshtml" />
+    <Content Include="Views\CustomerMaster\CityMaster.cshtml" />
+    <Content Include="Views\CustomerMaster\BillingPartnerMaster.cshtml" />
+    <Content Include="Views\CustomerMaster\BillingPartnerProductMaster.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

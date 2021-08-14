@@ -31,6 +31,7 @@ namespace BotsMobileAPI.Controllers
         LoyaltyKPIsRepository LKR = new LoyaltyKPIsRepository();
         CampaignRepository CMPR = new CampaignRepository();
         KeyIndecatorsRepository KR = new KeyIndecatorsRepository();
+        CustomerOnBoardingRepository CBR = new CustomerOnBoardingRepository();
 
         Exceptions newexception = new Exceptions();
         [HttpGet]
@@ -1008,7 +1009,18 @@ namespace BotsMobileAPI.Controllers
             return "Invalid Token or Expired";
         }
 
+        [HttpGet]
+        public object GetCityList()
+        {
+            if (User.Identity.IsAuthenticated)
+            {
+                List<CityDetails> objcity = new List<CityDetails>();
+                objcity = CBR.GetCityList();
 
+                return new { Data = objcity, MaxJsonLength = Int32.MaxValue };
+            }
+            return "Invalid Token or Expired";
+        }
 
     }
 }

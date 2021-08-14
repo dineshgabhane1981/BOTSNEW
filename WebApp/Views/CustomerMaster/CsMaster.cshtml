@@ -18,10 +18,10 @@
                     </div>
                     <div class="col-md-12 col-lg-12 mt-2 mb-4">
                         Customer Success Name  <input class="input100" type="text" id="txtCSNm" />
+                        <span id="hdnCSId" style="display:none;"></span>
                         <button class="btn btn-primary login-btn ml-5 mr-2" type="button" id="btnSave">
                             Save
                         </button>
-                        
                         <button class="btn btn-primary login-btn" type="button" id="btnCancle">
                             Cancel
                         </button>
@@ -64,7 +64,7 @@
                                                     <td style="text-align:left;">@item.UserName</td>
                                                     <td style="text-align:left;">@item.CreatedDate</td>
                                                     <td style="text-align:left; width:100px;">
-                                                        <a href="" class="login" title="Edit"><img src="~/Content/assets/images/shape_editUser.png" /></a>
+                                                        <a href="#" class="login" onclick="EditCategory(@item.RMAssignedId)" title="Edit"><img src="~/Content/assets/images/shape_editUser.png" /></a>
 
                                                     </td>
                                                 </tr>
@@ -83,10 +83,12 @@
 
     $('#btnAdd').on("click", function () {
         $("#divadd").show(1000);
-      //  $("#divadd").hide();
+      
     });
     $('#btnCancle').on("click", function () {
         $("#divadd").hide(1000);
+        $('#divadd').find(':input').val('');
+        $("#hdnCSId").text("");
     });
     $('#btnSave').on("click", function () {
 
@@ -96,14 +98,18 @@
             return false;
         }
 
-
         if (confirm("Are you sure? You want to Add Customer Success name")) {
-            var CategoryData = [];
+            var CSData = [];
             item = {}
             item["CSNm"] = $("#txtCSNm").val();
-
-            CategoryData.push(item);
-            var data = JSON.stringify(CategoryData);
+            if ($('#hdnCSId').text != 0) {
+                item["CSId"] = $('#hdnCSId').text();
+            } 
+            else {
+                item["CSId"] = 0;
+            }
+            CSData.push(item);
+            var data = JSON.stringify(CSData);
             console.log(data)
             $("#divLoader").show();
             $.ajax({
@@ -117,6 +123,7 @@
                         toastr.success(result.ResponseMessage);
                         $("#divLoader").hide();
                         $("#txtCSNm").val("");
+                        $('#hdnCSId').val("");
 
                     }
                     else {
@@ -139,5 +146,43 @@
        // }
     }
     });
+
+     function EditCategory(id) {
+
+        $("#divLoader").show();
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("GetRM", "CustomerMaster")',
+                data: '{RMId: ' + JSON.stringify(id) + '}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (responce) {
+                    console.log(responce);
+                    if (responce.RMAssignedName != null) {
+                        $("#divLoader").hide();
+                        $("#divadd").show(1000);
+                        $('#txtCSNm').val(responce.RMAssignedName);
+                        $("#btnSave").show();
+                        $("#hdnCSId").text(id);
+
+                    }
+                    else {
+
+                    }
+
+                },
+                error: function (result) {
+                    console.log(result.responseText)
+                    if (result.responseText == "True") {
+                        toastr.success("Data Updated Successfully");
+                        $("#divLoader").hide();
+                    }
+                    else {
+                        toastr.error('error occured while saving data');
+                        $("#divLoader").hide();
+                    }
+                }
+            });       
+    }
 </script>
 

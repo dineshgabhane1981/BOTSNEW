@@ -1,6 +1,8 @@
-﻿@model List<BOTS_BL.Models.CommonDB.CityDetails>
+﻿@model List<BOTS_BL.Models.CommonDB.BOTS_TblBillingPartnerProduct>
+@*@model List<BOTS_BL.Models.CommonDB.BillingPartnerDetails>*@
+
 @{
-    ViewBag.Title = "City Master";
+    ViewBag.Title = "BillingPartnerProductMaster";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -8,16 +10,17 @@
     <div class="row mb-3 card">
         <div class="container-fluid pt-3 pl-3 pr-3">
             <div class="pb-3">
-                <h4><b>City Master</b></h4>
+                <h4><b>Billing Partner Product Master</b></h4>
             </div>
+
             <div class="pt-3 pl-3 pr-3 col-md-12 col-lg-12">
                 <div class="col-md-8 col-lg-8 mb-5" id="divadd" style="display:none; border:1px solid grey; border-radius:10px;">
                     <div class="mb-4">
-                        <h6><b>Add City</b></h6>
+                        <h6><b>Add Billing Product Partner</b></h6>
                     </div>
-                    <span id="hdnCityId" style="display:none;"></span>
                     <div class="col-md-12 col-lg-12 mt-2 mb-4">
-                        City Name  <input class="input100" type="text" id="txtcityNm" />
+                        Billing Partner Product Name  <input class="input100" type="text" id="txtBillingPartnerProductNm" />
+                        <span id="hdnBillingPartnerProductId" style="display:none;"></span>
                         <button class="btn btn-primary login-btn ml-5 mr-2" type="button" id="btnSave">
                             Save
                         </button>
@@ -26,10 +29,13 @@
                         </button>
                     </div>
                 </div>
-
-
+                
                 <div class="row">
-                    <div class="col search-container">
+                    <div class="pr-2 ml-2">
+                        <b>Billing Partner Name</b> @Html.DropDownList("BillingPartnerProduct", new SelectList(ViewBag.lstBillingPartner, "Value", "Text"), htmlAttributes: new { @class = "input50", @id = "ddlBillingPartnerProduct" })
+
+                    </div>
+                    <div style="text-align:right;" class="col search-container">
                         <i class="fas fa-search"></i>
                         <input class="input100" type="text" id="txtSearch" placeholder="Search activity..." />
                     </div>
@@ -46,7 +52,7 @@
                         <table class="table" id="groupListTable">
                             <thead>
                                 <tr>
-                                    <th scope="col" style="text-align:left;">City Name</th>
+                                    <th scope="col" style="text-align:left;">Billing Partner Name</th>
                                     <th scope="col" style="text-align:left;">Created By</th>
                                     <th scope="col" style="text-align:left;">Created On</th>
                                     <th scope="col" style="text-align:left;">Action</th>
@@ -61,12 +67,11 @@
                                         {
 
                                             <tr>
-                                                <td style="text-align:left;">@item.CityName</td>
+                                                <td style="text-align:left;">@item.BillingPartnerProductName</td>
                                                 <td style="text-align:left;">@item.UserName</td>
                                                 <td style="text-align:left;">@item.CreatedDate</td>
                                                 <td style="text-align:left; width:100px;">
-                                                    <a href="#" class="login" onclick="EditCategory(@item.CityId)" title="Edit"><img src="~/Content/assets/images/shape_editUser.png" /></a>
-
+                                                    <a href="#" class="login" onclick="EditCategory(@item.BillingPartnerProductId)" title="Edit"><img src="~/Content/assets/images/shape_editUser.png" /></a>
                                                 </td>
                                             </tr>
                                         }
@@ -81,89 +86,20 @@
     </div>
 </div>
 <script>
-
-    $('#btnAdd').on("click", function () {
-        $("#divadd").show(1000);
-        
-    });
-    $('#btnCancle').on("click", function () {
-        $("#divadd").hide(1000);
-        $('#divadd').find(':input').val('');
-        $("#hdnCityId").text("");
-    });
-    $('#btnSave').on("click", function () {
-
-        if ($('#txtcityNm').val() == "") {
-            toastr.error('Please enter City Name');
-            $('#txtcityNm').focus();
-            return false;
-        }
-
-        if (confirm("Are you sure? You want to Add City")) {
-            var CityData = [];
-            item = {}
-            item["cityNm"] = $("#txtcityNm").val();
-            if ($('#hdnCityId').text != 0) {
-                item["CityId"] = $('#hdnCityId').text();
-            }
-            else {
-                item["CityId"] = 0;
-            }
-            CityData.push(item);
-            var data = JSON.stringify(CityData);
-            console.log(data)
-            $("#divLoader").show();
-            $.ajax({
-                type: "POST",
-                url: '@Url.Action("AddCity", "CustomerMaster")',
-                data: '{jsonData: ' + JSON.stringify(data) + '}',
-                contentType: "application/json; charset=utf-8",
-                dataType: "json",
-                success: function (result) {
-                    if (result.ResponseCode == "00") {
-                        toastr.success(result.ResponseMessage);
-                        $("#divLoader").hide();
-                        $("#txtcityNm").val("");
-                        $('#hdnCityId').val("");
-
-                    }
-                    else {
-                        toastr.error(result.ResponseMessage);
-                        $("#divLoader").hide();
-                    }
-                },
-                error: function (result) {
-                    console.log(result.responseText)
-                    if (result.responseText == "True") {
-                        toastr.success("Data Updated Successfully");
-                        $("#divLoader").hide();
-                    }
-                    else {
-                        toastr.error('error occured while saving data');
-                        $("#divLoader").hide();
-                    }
-                }
-            });
-       // }
-    }
-    });
-    function EditCategory(id) {
-
+    $("#ddlBillingPartnerProduct").change(function () {
+        var selected = $("#ddlBillingPartnerProduct option:selected").val();
         $("#divLoader").show();
             $.ajax({
                 type: "POST",
-                url: '@Url.Action("GetCity", "CustomerMaster")',
-                data: '{CityId: ' + JSON.stringify(id) + '}',
+                url: '@Url.Action("GetBillingPartnerProductByPartner", "CustomerMaster")',
+                data: '{BillingpartnerId: ' + JSON.stringify(selected) + '}',
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
                 success: function (responce) {
                     console.log(responce);
-                    if (responce.CityName != null) {
+                    if (responce.BillingPartnerProductName != null) {
                         $("#divLoader").hide();
-                        $("#divadd").show(1000);
-                        $('#txtcityNm').val(responce.CityName);
-                        $("#btnSave").show();
-                        $("#hdnCityId").text(id);
+                       // $("#divadd").show(1000);                      
 
                     }
                     else {
@@ -183,7 +119,19 @@
                     }
                 }
             });
-        console.log(id);
-    }
+        
+    });
 </script>
+<style>
+    table.dataTable thead .sorting_asc {
+        background: url("https://cdn.datatables.net/1.10.0/images/sort_asc.png") no-repeat center left;
+    }
 
+    table.dataTable thead .sorting_desc {
+        background: url("https://cdn.datatables.net/1.10.0/images/sort_desc.png") no-repeat center left;
+    }
+
+    table.dataTable thead .sorting {
+        background: url("https://cdn.datatables.net/1.10.0/images/sort_both.png") no-repeat center left;
+    }
+</style>

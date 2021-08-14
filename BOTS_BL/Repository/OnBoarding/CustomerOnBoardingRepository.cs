@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity.Migrations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web.Mvc;
 using BOTS_BL.Models;
 using BOTS_BL.Models.CommonDB;
 
@@ -48,7 +50,7 @@ namespace BOTS_BL.Repository
             {
                 using (var context = new CommonDBContext())
                 {
-                    context.tblCategories.Add(objtblcategory);
+                    context.tblCategories.AddOrUpdate(objtblcategory);
                     context.SaveChanges();
                     result.ResponseCode = "00";
                     result.ResponseMessage = "Category Added Successfully";
@@ -94,7 +96,7 @@ namespace BOTS_BL.Repository
             {
                 using (var context = new CommonDBContext())
                 {
-                    context.tblSourcedBies.Add(objtblSourceBy);
+                    context.tblSourcedBies.AddOrUpdate(objtblSourceBy);
                     context.SaveChanges();
                     result.ResponseCode = "00";
                     result.ResponseMessage = "Source Added Successfully";
@@ -141,7 +143,7 @@ namespace BOTS_BL.Repository
             {
                 using (var context = new CommonDBContext())
                 {
-                    context.tblCities.Add(objtblcity);
+                    context.tblCities.AddOrUpdate(objtblcity);
                     context.SaveChanges();
                     result.ResponseCode = "00";
                     result.ResponseMessage = "City Added Successfully";
@@ -190,7 +192,7 @@ namespace BOTS_BL.Repository
             {
                 using (var context = new CommonDBContext())
                 {
-                    context.tblRMAssigneds.Add(objtblRMAssigned);
+                    context.tblRMAssigneds.AddOrUpdate(objtblRMAssigned);
                     context.SaveChanges();
                     result.ResponseCode = "00";
                     result.ResponseMessage = "Customer Success Added Successfully";
@@ -211,6 +213,143 @@ namespace BOTS_BL.Repository
                 objcategory = context.tblCategories.Where(x => x.CategoryId == CategoryId).FirstOrDefault();
             }
                 return objcategory;
+        }
+
+        public tblCity GetCityById(int CityId)
+        {
+            tblCity objcity = new tblCity();
+            using (var context = new CommonDBContext())
+            {
+                objcity = context.tblCities.Where(x => x.CityId == CityId).FirstOrDefault();
+            }
+            return objcity;
+        }
+
+        public tblRMAssigned GetRMById(int RMId)
+        {
+            tblRMAssigned objRM = new tblRMAssigned();
+            using (var context = new CommonDBContext())
+            {
+                objRM = context.tblRMAssigneds.Where(x => x.RMAssignedId == RMId).FirstOrDefault();
+            }
+            return objRM;
+        }
+
+        public tblSourcedBy GetSourceById(int SourceId)
+        {
+            tblSourcedBy objsource = new tblSourcedBy();
+            using (var context = new CommonDBContext())
+            {
+                objsource = context.tblSourcedBies.Where(x => x.SourcedbyId == SourceId).FirstOrDefault();
+            }
+            return objsource;
+        }
+
+        public SPResponse AddBillingPartner(tblBillingPartner objtblbillingpartner)
+        {
+            SPResponse result = new SPResponse();
+            try
+            {
+                using (var context = new CommonDBContext())
+                {
+                    context.tblBillingPartners.AddOrUpdate(objtblbillingpartner);
+                    context.SaveChanges();
+                    result.ResponseCode = "00";
+                    result.ResponseMessage = "Billing Partner Added Successfully";
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "onboarding_master");
+            }
+            return result;
+        }
+
+        public tblBillingPartner GetBillingPartnerById(int BillingpartnerId)
+        {
+            tblBillingPartner objbillingpartner = new tblBillingPartner();
+            using (var context = new CommonDBContext())
+            {
+                objbillingpartner = context.tblBillingPartners.Where(x => x.BillingPartnerId == BillingpartnerId).FirstOrDefault();
+            }
+            return objbillingpartner;
+        }
+
+        public List<BillingPartnerDetails> GetBillingPartnerList()
+        {
+            List<BillingPartnerDetails> objbillingpartnerDetails = new List<BillingPartnerDetails>();
+            try
+            {
+                using (var context = new CommonDBContext())
+                {
+                    objbillingpartnerDetails = (from r in context.tblBillingPartners
+                                    join cl in context.CustomerLoginDetails on r.CreatedBy equals cl.LoginId into billingpartner
+                                    from p in billingpartner.DefaultIfEmpty()
+                                    select new BillingPartnerDetails
+                                    {
+                                        BillingPartnerId = r.BillingPartnerId,
+                                        BillingPartnerName = r.BillingPartnerName,
+                                        CreatedBy = r.CreatedBy,
+                                        CreatedDate = r.CreatedDate,
+                                        UserName = p.UserName
+                                    }).ToList();
+
+
+
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "onboarding_master");
+            }
+            return objbillingpartnerDetails;
+        }
+
+        public List<SelectListItem> GetBillingPartner()
+        {
+            List<SelectListItem> BillingPartnerItem = new List<SelectListItem>();
+            try
+            {
+                using (var context = new CommonDBContext())
+                {
+                    var lstbillingpartner = (from r in context.tblBillingPartners
+                                                join cl in context.CustomerLoginDetails on r.CreatedBy equals cl.LoginId into billingpartner
+                                                from p in billingpartner.DefaultIfEmpty()
+                                                select new BillingPartnerDetails
+                                                {
+                                                    BillingPartnerId = r.BillingPartnerId,
+                                                    BillingPartnerName = r.BillingPartnerName,
+                                                    CreatedBy = r.CreatedBy,
+                                                    CreatedDate = r.CreatedDate,
+                                                    UserName = p.UserName
+                                                }).ToList();
+
+                    foreach (var item in lstbillingpartner)
+                    {
+                        BillingPartnerItem.Add(new SelectListItem
+                        {
+                            Text = item.BillingPartnerName,
+                            Value = Convert.ToString(item.BillingPartnerId)
+                        });
+                    }
+
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "onboarding_master");
+            }
+            return BillingPartnerItem;
+        }
+
+        public BOTS_TblBillingPartnerProduct GetBillingPartnerProductById(int BillingpartnerId)
+        {
+            BOTS_TblBillingPartnerProduct objbillingpartnerproduct = new BOTS_TblBillingPartnerProduct();
+            using (var context = new CommonDBContext())
+            {
+                objbillingpartnerproduct = context.BOTS_TblBillingPartnerProduct.Where(x => x.BillingPartnerId == BillingpartnerId).FirstOrDefault();
+            }
+            return objbillingpartnerproduct;
         }
 
     }

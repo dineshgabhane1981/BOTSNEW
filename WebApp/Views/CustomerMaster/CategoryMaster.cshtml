@@ -17,17 +17,18 @@
                         <h6><b>Add Category</b></h6>
                     </div>
                     <div class="col-md-12 col-lg-12 mt-2 mb-4">
-                        Category Name  <input class="input100" type="text" id="txtcategoryNm" />
+                        Category Name  <input class="input100" type="text" id="txtcategoryNm" />                       
+                        <span id="hdnCategoryId" style="display:none;" ></span>
                         <button class="btn btn-primary login-btn ml-5 mr-2" type="button" id="btnSave">
                             Save
                         </button>
-                        <button class="btn btn-primary login-btn ml-5 mr-2" type="button" id="btnUpdate" style="display:none;">
+                        @*<button class="btn btn-primary login-btn ml-5 mr-2" type="button" id="btnUpdate" style="display:none;">
                             Update
-                        </button>
+                        </button>*@
                         <button class="btn btn-primary login-btn" type="button" id="btnCancle">
                             Cancel
                         </button>
-                     </div>
+                    </div>
                  </div>
 
                     <div class="row">
@@ -86,14 +87,14 @@
 
     $('#btnAdd').on("click", function () {
         $("#divadd").show(1000);
-        $("#btnSave").show();
-        $("#btnUpdate").hide();
+       
     });
     $('#btnCancle').on("click", function () {
         $("#divadd").hide(1000);
         $('#divadd').find(':input').val('');
+        $("#hdnCategoryId").text("");
     });
-    $('#btnUpdate').on("click", function () {
+    @*$('#btnUpdate').on("click", function () {
         if ($('#txtcategoryNm').val() == "") {
             toastr.error('Please enter Category Name');
             $('#txtcategoryNm').focus();
@@ -140,8 +141,9 @@
             });
        // }
     }
-    });
-    function EditCategory(id) {
+    });*@
+    function EditCategory(id) {      
+
         $("#divLoader").show();
             $.ajax({
                 type: "POST",
@@ -154,13 +156,13 @@
                     if (responce.CategoryName != null) {
                         $("#divLoader").hide();
                         $("#divadd").show(1000);
-                        $('#txtcategoryNm').val(responce.CategoryName);
-                        $("#btnUpdate").show();
-                        $("#btnSave").hide();
+                        $('#txtcategoryNm').val(responce.CategoryName);                       
+                       // $("#btnSave").show();
+                        $("#hdnCategoryId").text(id);
 
                     }
                     else {
-                      //  alert("no");
+                      
                     }
 
                 },
@@ -179,19 +181,22 @@
         console.log(id);
     }
     $('#btnSave').on("click", function () {
-
+        
            if ($('#txtcategoryNm').val() == "") {
             toastr.error('Please enter Category Name');
                $('#txtcategoryNm').focus();
             return false;
         }
-
-
         if (confirm("Are you sure? You want to Add Category")) {
             var CategoryData = [];
             item = {}
             item["CategoryNm"] = $("#txtcategoryNm").val();
-
+            if ($('#hdnCategoryId').text != 0) {
+                item["CategoryId"] = $('#hdnCategoryId').text();
+            }
+            else {
+                item["CategoryId"] = 0;
+            }
             CategoryData.push(item);
             var data = JSON.stringify(CategoryData);
             console.log(data)
@@ -207,7 +212,7 @@
                         toastr.success(result.ResponseMessage);
                         $("#divLoader").hide();
                         $("#txtcategoryNm").val("");
-
+                        $('#hdnCategoryId').val("");
                     }
                     else {
                         toastr.error(result.ResponseMessage);
