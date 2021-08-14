@@ -1,4 +1,4 @@
-namespace BOTS_BL.Models.OnBoarding
+namespace BOTS_BL.Models
 {
     using System;
     using System.Collections.Generic;
@@ -10,16 +10,11 @@ namespace BOTS_BL.Models.OnBoarding
     {
         [Key]
         [Column(Order = 0)]
-        [DatabaseGenerated(DatabaseGeneratedOption.None)]
-        public long SINo { get; set; }
-
-        [Key]
-        [Column(Order = 1)]
         [StringLength(4)]
         public string GroupId { get; set; }
 
         [Key]
-        [Column(Order = 2, TypeName = "numeric")]
+        [Column(Order = 1, TypeName = "numeric")]
         public decimal LoyaltyFees { get; set; }
 
         [Column(TypeName = "numeric")]
@@ -38,15 +33,37 @@ namespace BOTS_BL.Models.OnBoarding
         public decimal? TotalFeesA { get; set; }
 
         [Key]
-        [Column(Order = 3)]
-        public bool GST { get; set; }
+        [Column(Order = 2)]
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
+        public int GST { get; set; }
 
         [Column(TypeName = "numeric")]
         public decimal? TotalFeesB { get; set; }
 
         [Key]
-        [Column(Order = 4)]
+        [Column(Order = 3)]
         [StringLength(20)]
         public string PaymentFrequency { get; set; }
+
+        [StringLength(500)]
+        public string AnyOtherFeesDesc { get; set; }
+
+        [Column(TypeName = "numeric")]
+        public decimal? AmountReceived { get; set; }
+
+        [Column(TypeName = "numeric")]
+        public decimal? TDSDeducted { get; set; }
+
+        [StringLength(10)]
+        public string PaymentMode { get; set; }
+
+        [StringLength(10)]
+        public string PaymentStatus { get; set; }
+
+        [StringLength(10)]
+        public string GSTRate { get; set; }
+
+        [Column(TypeName = "numeric")]
+        public decimal? AdvanceAmount { get; set; }
     }
 }

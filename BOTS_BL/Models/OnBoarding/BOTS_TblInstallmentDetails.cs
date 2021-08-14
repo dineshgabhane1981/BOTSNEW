@@ -1,4 +1,4 @@
-namespace BOTS_BL.Models.OnBoarding
+namespace BOTS_BL.Models
 {
     using System;
     using System.Collections.Generic;
@@ -10,25 +10,20 @@ namespace BOTS_BL.Models.OnBoarding
     {
         [Key]
         [Column(Order = 0)]
-        [DatabaseGenerated(DatabaseGeneratedOption.None)]
-        public long SINo { get; set; }
-
-        [Key]
-        [Column(Order = 1)]
         [StringLength(4)]
         public string GroupId { get; set; }
 
         [Key]
-        [Column(Order = 2)]
+        [Column(Order = 1)]
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int Installment { get; set; }
 
         [Key]
-        [Column(Order = 3, TypeName = "date")]
+        [Column(Order = 2, TypeName = "date")]
         public DateTime PaymentDate { get; set; }
 
         [Key]
-        [Column(Order = 4, TypeName = "numeric")]
+        [Column(Order = 3, TypeName = "numeric")]
         public decimal PaymentAmount { get; set; }
 
         [Column(TypeName = "numeric")]

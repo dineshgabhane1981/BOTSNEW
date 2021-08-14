@@ -5,26 +5,22 @@ namespace BOTS_BL.Models
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Data.Entity.Spatial;
+    using System.Web;
 
     public partial class BOTS_TblGroupMaster
     {
         [Key]
         [Column(Order = 0)]
-        [DatabaseGenerated(DatabaseGeneratedOption.None)]
-        public long SINo { get; set; }
-
-        [Key]
-        [Column(Order = 1)]
         [StringLength(4)]
         public string GroupId { get; set; }
 
         [Key]
-        [Column(Order = 2)]
+        [Column(Order = 1)]
         [StringLength(50)]
         public string GroupName { get; set; }
 
         [Key]
-        [Column(Order = 3)]
+        [Column(Order = 2)]
         [StringLength(100)]
         public string OwnerName { get; set; }
 
@@ -102,12 +98,28 @@ namespace BOTS_BL.Models
         public string AnyOtherName { get; set; }
 
         [Key]
-        [Column(Order = 4)]
+        [Column(Order = 3)]
         public DateTime CreatedDate { get; set; }
 
         [Key]
-        [Column(Order = 5)]
+        [Column(Order = 4)]
         [StringLength(10)]
         public string CreatedBy { get; set; }
+
+        [Key]
+        [Column(Order = 5)]
+        public bool IsKeyAccount { get; set; }
+
+        [StringLength(50)]
+        public string CustomerStatus { get; set; }
+
+        [NotMapped]
+        public HttpPostedFileBase GSTDocumentFile { get; set; }
+        [NotMapped]
+        public HttpPostedFileBase PANDocumentFile { get; set; }
+        [NotMapped]
+        public string CategoryData { get; set; }
+        [NotMapped]
+        public string PaymentScheduleData { get; set; }
     }
 }

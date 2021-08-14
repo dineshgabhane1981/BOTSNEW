@@ -398,12 +398,6 @@
     <Content Include="Views\Shared\_OnBoardingLayout.cshtml" />
     <Content Include="Views\Shared\_HeaderOnboarding.cshtml" />
     <Content Include="Views\Shared\_SidebarMenuOnboarding.cshtml" />
-    <Content Include="Views\CustomerOnBoarding\CustomerDetail.cshtml" />
-    <Content Include="Views\CustomerOnBoarding\ProductAssignmentDetails.cshtml" />
-    <Content Include="Views\CustomerOnBoarding\DealDetails.cshtml" />
-    <Content Include="Views\CustomerOnBoarding\UpdatePaymentDetails.cshtml" />
-    <Content Include="Views\CustomerOnBoarding\Notifications.cshtml" />
-    <Content Include="Views\CustomerOnBoarding\PaymentSchedule.cshtml" />
     <Content Include="Views\CustomerOnBoarding\Index.cshtml" />
     <Content Include="Views\CustomerMaster\CategoryMaster.cshtml" />
     <Content Include="Views\CustomerMaster\SourceMaster.cshtml" />

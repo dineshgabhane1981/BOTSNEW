@@ -30,361 +30,2109 @@
         background-image: linear-gradient(147deg, #000000 0%, #04619f 74%) !important;
         font-size: 16px;
     }
+
+    .borderClass {
+        border: 1px solid red;
+    }
+    /* The Modal (background) */
+    .modal {
+        display: none; /* Hidden by default */
+        position: fixed; /* Stay in place */
+        z-index: 5000 !important; /* Sit on top */
+        padding-top: 100px; /* Location of the box */
+        left: 120px;
+        top: 0;
+        width: 100%; /* Full width */
+        height: 100%; /* Full height */
+        overflow: auto; /* Enable scroll if needed */
+        background-color: rgb(0,0,0); /* Fallback color */
+        background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+    }
+
+    /* Modal Content */
+    .modal-content {
+        background-color: #fefefe;
+        margin: auto;
+        padding: 20px;
+        border: 1px solid #888;
+        width: 70%;
+        border-radius: 25px;
+    }
+
+    /* The Close Button */
+    .close {
+        color: #aaaaaa;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+    }
+
+        .close:hover,
+        .close:focus {
+            color: #000;
+            text-decoration: none;
+            cursor: pointer;
+        }
 </style>
-<div class="app-main__inner">
-    <div class="row mb-3 card">
-        <div class="container-fluid pt-3 pl-3 pr-3 pb-3">
-            <div class="col-md-12 section-heading" data-toggle="collapse" data-target="#custdetails">Customer Detail</div>
-            <div id="custdetails" class="collapse show">
-                <div class="row" style="margin: 0; padding-top:10px;">
-                    <div style="float:left;text-align:right;width:100px;">
-                        Legal Name
+@using (Html.BeginForm("AddCustomer", "CustomerOnBoarding", FormMethod.Post, new { id = "frmaddcustomer", enctype = "multipart/form-data" }))
+{
+
+    @Html.HiddenFor(model => model.bots_TblGroupMaster.GroupId, new { @id = "hdnGroupID" })
+    @Html.HiddenFor(model => model.bots_TblGroupMaster.CategoryData, new { @id = "hdnCategoryData" })
+    @Html.HiddenFor(model => model.bots_TblGroupMaster.PaymentScheduleData, new { @id = "hdnPaymentScheduleData" })
+    @Html.HiddenFor(model => model.bots_TblGroupMaster.CustomerStatus, new { @id = "hdnCustomerStatus" })
+    <div class="app-main__inner">
+
+        @if (!string.IsNullOrEmpty(Convert.ToString(TempData["status"])))
+        {
+            <script>
+                    cuteAlert({
+                        type: "success",
+                        title: "Saved",
+                        message: "Data Saved Successfully!",
+                        buttonText: "Okay"
+                    }).then(() => {
+                        window.location.href = '@Url.Action("Index", "CustomerManagement")'
+                    })
+            </script>
+        }
+        @if (!string.IsNullOrEmpty(Convert.ToString(TempData["error"])))
+        {
+            <script>
+                cuteAlert({
+                    type: "error",
+                    title: "OOPS...",
+                    message: "There is problem in saving Data!",
+                    buttonText: "Okay"
+                })
+            </script>
+        }
+
+        <div class="row mb-3 card">
+            <div class="container-fluid pt-3 pl-3 pr-3 pb-3">
+                <div class="col-md-12 section-heading" data-toggle="collapse" data-target="#custdetails">Customer Detail</div>
+                <div id="custdetails" class="collapse show">
+                    <div class="row" style="margin: 0; padding-top:10px;">
+                        <div style="float:left;text-align:right;width:100px;">
+                            Legal Name
+                        </div>
+                        <div class="col-sm-4" style="float:left;">
+                            @Html.TextBoxFor(model => model.bots_TblGroupMaster.GroupName, new { @class = "input100", @id = "txtGroupName", tabindex = 1 })
+                        </div>
+                        <div style="float:left;text-align:right;width:115px;">
+                            Owner’s Name
+                        </div>
+                        <div class="col-sm-4" style="float:left;">
+                            @Html.TextBoxFor(model => model.bots_TblGroupMaster.OwnerName, new { @class = "input100", @id = "txtOwnerName", tabindex = 2 })
+                        </div>
                     </div>
-                    <div class="col-sm-4" style="float:left;">
-                        @Html.TextBoxFor(model => model.bots_TblGroupMaster.GroupName, new { @class = "input100", @id = "txtGroupName", tabindex = 1 })
+                    <div class="row" style="margin: 0;">
+                        <div style="float:left;text-align:right;width:100px;">
+                            Owner’s Mobile
+                        </div>
+                        <div class="col-sm-4" style="float:left;margin-top:10px;">
+                            @Html.TextBoxFor(model => model.bots_TblGroupMaster.OwnerMobileNo, new { @class = "input100", @id = "txtOwnerMobileNo", tabindex = 3 })
+                        </div>
+                        <div style="float:left;text-align:right;width:115px;">
+                            Owner’s Email
+                        </div>
+                        <div class="col-sm-4" style="float:left;margin-top:10px;">
+                            @Html.TextBoxFor(model => model.bots_TblGroupMaster.OwnerEmailId, new { @class = "input100", @id = "txtOwnerEmailId", tabindex = 4 })
+                        </div>
                     </div>
-                    <div style="float:left;text-align:right;width:115px;">
-                        Owner’s Name
+                    <div class="row" style="margin: 0;">
+                        <div style="float:left;text-align:right;width:100px;">
+                            Upload GST
+                        </div>
+                        <div class="col-sm-4" style="float:left;margin-top:10px;">
+                            @Html.TextBoxFor(model => model.bots_TblGroupMaster.GSTDocumentFile, new { type = "file", @id = "fileGSTDocumentFile", tabindex = "5" })
+                        </div>
+                        <div style="float:left;text-align:right;width:115px;">
+                            Upload PAN
+                        </div>
+                        <div class="col-sm-4" style="float:left;margin-top:10px;">
+                            @Html.TextBoxFor(model => model.bots_TblGroupMaster.PANDocumentFile, new { type = "file", @id = "filePANDocumentFile", tabindex = "6" })
+                        </div>
                     </div>
-                    <div class="col-sm-4" style="float:left;">
-                        @Html.TextBoxFor(model => model.bots_TblGroupMaster.OwnerName, new { @class = "input100", @id = "txtOwnerName", tabindex = 2 })
+                    <div class="row" style="margin: 0;">
+                        <div style="float:left;text-align:right;width:100px;">
+                            City
+                        </div>
+                        <div class="col-sm-4" style="float:left;margin-top:10px;">
+                            @Html.DropDownListFor(model => model.bots_TblGroupMaster.City, new SelectList(Model.lstCity, "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input100", @id = "ddlCity", tabindex = 10 })
+                        </div>
+                        <div style="float:left;text-align:right;width:115px;">
+                            Other Person Name
+                        </div>
+                        <div class="col-sm-4" style="float:left;margin-top:10px;">
+                            @Html.TextBoxFor(model => model.bots_TblGroupMaster.AnyOtherName, new { @class = "input100", tabindex = 8 })
+                        </div>
                     </div>
-                </div>
-                <div class="row" style="margin: 0;">
-                    <div style="float:left;text-align:right;width:100px;">
-                        Mobile No
+                    <div class="row" style="margin: 0;">
+                        <div style="float:left;text-align:right;width:100px;">
+                            Mobile No
+                        </div>
+                        <div class="col-sm-4" style="float:left;margin-top:10px;">
+                            @Html.TextBoxFor(model => model.bots_TblGroupMaster.AlternateMobileNo, new { @class = "input100", tabindex = 9 })
+                        </div>
+                        <div style="float:left;text-align:right;width:115px;">
+                            Email
+                        </div>
+                        <div class="col-sm-4" style="float:left;margin-top:10px;">
+                            @Html.TextBoxFor(model => model.bots_TblGroupMaster.AlternateEmailId, new { @class = "input100", tabindex = 10 })
+                        </div>
                     </div>
-                    <div class="col-sm-4" style="float:left;margin-top:10px;">
-                        @Html.TextBoxFor(model => model.bots_TblGroupMaster.OwnerMobileNo, new { @class = "input100", @id = "txtOwnerMobileNo", tabindex = 3 })
-                    </div>
-                    <div style="float:left;text-align:right;width:115px;">
-                        Owner’s Email
-                    </div>
-                    <div class="col-sm-4" style="float:left;margin-top:10px;">
-                        @Html.TextBoxFor(model => model.bots_TblGroupMaster.OwnerEmailId, new { @class = "input100", @id = "txtOwnerEmailId", tabindex = 4 })
-                    </div>
-                </div>
-                <div class="row" style="margin: 0;">
-                    <div style="float:left;text-align:right;width:100px;">
-                        Upload GST
-                    </div>
-                    <div class="col-sm-4" style="float:left;margin-top:10px;">
-                        @Html.TextBoxFor(model => model.bots_TblGroupMaster.GSTDocumentFile, new { type = "file", tabindex = "5" })
-                    </div>
-                    <div style="float:left;text-align:right;width:115px;">
-                        Upload PAN
-                    </div>
-                    <div class="col-sm-4" style="float:left;margin-top:10px;">
-                        @Html.TextBoxFor(model => model.bots_TblGroupMaster.PANDocumentFile, new { type = "file", tabindex = "6" })
-                    </div>
-                </div>
-                <div class="row" style="margin: 0;">
-                    <div style="float:left;text-align:right;width:100px;">
-                        City
-                    </div>
-                    <div class="col-sm-4" style="float:left;margin-top:10px;">
-                        @Html.DropDownListFor(model => model.bots_TblGroupMaster.City, new SelectList(Model.lstCity, "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input100", @id = "ddlCity", tabindex = 10 })
-                        <input type="text" id="txtCity" class="input100" placeholder="Enter City" style="margin-top:10px;display:none;" disabled />
-                    </div>
-                    <div style="float:left;text-align:right;width:115px;">
-                        Other Person Name
-                    </div>
-                    <div class="col-sm-4" style="float:left;margin-top:10px;">
-                        @Html.TextBoxFor(model => model.bots_TblGroupMaster.AnyOtherName, new { @class = "input100", tabindex = 8 })
-                    </div>
-                </div>
-                <div class="row" style="margin: 0;">
-                    <div style="float:left;text-align:right;width:100px;">
-                        Mobile No
-                    </div>
-                    <div class="col-sm-4" style="float:left;margin-top:10px;">
-                        @Html.TextBoxFor(model => model.bots_TblGroupMaster.AlternateMobileNo, new { @class = "input100", tabindex = 9 })
-                    </div>
-                    <div style="float:left;text-align:right;width:115px;">
-                        Email
-                    </div>
-                    <div class="col-sm-4" style="float:left;margin-top:10px;">
-                        @Html.TextBoxFor(model => model.bots_TblGroupMaster.AlternateEmailId, new { @class = "input100", tabindex = 10 })
-                    </div>
-                </div>
-                <div class="row" style="margin: 0;">
-                    <div style="float:left;text-align:right;width:100px;">
-                        No of Retail Categories
-                    </div>
-                    <div class="col-sm-4" style="float:left;margin-top:10px;">
-                        @Html.TextBoxFor(model => model.bots_TblGroupMaster.NoOfRetailCategory, new { @class = "input100", @id = "txtNoOfRetailCategory", tabindex = 11 })
+                    <div class="row" style="margin: 0;">
+                        <div style="float:left;text-align:right;width:100px;">
+                            No of Retail Categories
+                        </div>
+                        <div class="col-sm-4" style="float:left;margin-top:10px;">
+                            @Html.TextBoxFor(model => model.bots_TblGroupMaster.NoOfRetailCategory, new { @class = "input100", @id = "txtNoOfRetailCategory", tabindex = 11 })
+                        </div>
+                        <div style="float:left;text-align:right;width:115px;margin-top:10px;">
+                            Key Account
+                        </div>
+                        <div class="col-sm-4" style="float:left;margin-top:10px;" id="dvIsKeyAccount">
+                            @Html.RadioButtonFor(model => model.bots_TblGroupMaster.IsKeyAccount, "1", new { @id = "IsKeyAccountYes" }) Yes
+                            @Html.RadioButtonFor(model => model.bots_TblGroupMaster.IsKeyAccount, "0", new { @id = "IsKeyAccountNo" }) No
+                        </div>
                     </div>
 
-                </div>
+                    <div class="row" style="margin: 0;margin-top:20px;display:none;border:1px solid grey;border-radius:5px;" id="dvRetailCategory">
+                        <div class="col-sm-3" style="float:left;">
+                            <br /><br /><span>Retail Category</span><br /><br />
+                            <span>Retail / Brand Name</span><br /><br />
+                            <span>Total Outlets</span><br /><br />
+                            <span>Enrolled Outlets</span><br /><br />
+                            <span>BO Product </span><br /><br />
+                            <span>Billing Partner</span><br /><br />
+                            <span>Billing Product </span><br /><br />
+                        </div>
+                        <div class="col-sm-2" style="float:left;margin-top:10px;" id="dvCategory1">
+                            <span style="padding-left:10px;font-weight:bold;">Category 1</span>
+                            <br />
+                            @Html.DropDownListFor(model => model.bots_TblRetailMaster.CategoryId, new SelectList(Model.lstRetailCategory, "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input40", @id = "ddlCategory1" })
+                            @Html.TextBoxFor(model => model.bots_TblRetailMaster.BrandName, new { @class = "input40", @id = "txtBrandName1" })
+                            @Html.TextBoxFor(model => model.bots_TblRetailMaster.NoOfOutlets, new { @class = "input40", @id = "txtNoOfOutlets1" })
+                            @Html.TextBoxFor(model => model.bots_TblRetailMaster.NoOfEnrolled, new { @class = "input40", @id = "txtNoOfEnrolled1" })
+                            @Html.DropDownListFor(model => model.bots_TblRetailMaster.BOProduct, new SelectList(Model.BOProducts(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input40", @id = "ddlBOProduct1" })
+                            @Html.DropDownListFor(model => model.bots_TblRetailMaster.BillingPartner, new SelectList(Model.lstBillingPartner, "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input40", @id = "ddlBillingPartner1" })
+                            @Html.TextBoxFor(model => model.bots_TblRetailMaster.BOProduct, new { @class = "input40", @id = "txtBOProduct1" })
+                        </div>
+                        <div class="col-sm-2" style="float:left;margin-top:10px;" id="dvCategory2">
+                            <span style="padding-left: 10px; font-weight: bold;">Category 2</span>
+                            <br />
+                            @Html.DropDownListFor(model => model.bots_TblRetailMaster.CategoryId, new SelectList(Model.lstRetailCategory, "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input40", @id = "ddlCategory2" })
+                            @Html.TextBoxFor(model => model.bots_TblRetailMaster.BrandName, new { @class = "input40", @id = "txtBrandName2" })
+                            @Html.TextBoxFor(model => model.bots_TblRetailMaster.NoOfOutlets, new { @class = "input40", @id = "txtNoOfOutlets2" })
+                            @Html.TextBoxFor(model => model.bots_TblRetailMaster.NoOfEnrolled, new { @class = "input40", @id = "txtNoOfEnrolled2" })
+                            @Html.DropDownListFor(model => model.bots_TblRetailMaster.BOProduct, new SelectList(Model.BOProducts(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input40", @id = "ddlBOProduct2" })
+                            @Html.DropDownListFor(model => model.bots_TblRetailMaster.BillingPartner, new SelectList(Model.lstBillingPartner, "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input40", @id = "ddlBillingPartner2" })
+                            @Html.TextBoxFor(model => model.bots_TblRetailMaster.BOProduct, new { @class = "input40", @id = "txtBOProduct2" })
+                        </div>
+                        <div class="col-sm-2" style="float:left;margin-top:10px;" id="dvCategory3">
+                            <span style="padding-left: 10px; font-weight: bold;">Category 3</span>
+                            <br />
+                            @Html.DropDownListFor(model => model.bots_TblRetailMaster.CategoryId, new SelectList(Model.lstRetailCategory, "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input40", @id = "ddlCategory3" })
+                            @Html.TextBoxFor(model => model.bots_TblRetailMaster.BrandName, new { @class = "input40", @id = "txtBrandName3" })
+                            @Html.TextBoxFor(model => model.bots_TblRetailMaster.NoOfOutlets, new { @class = "input40", @id = "txtNoOfOutlets3" })
+                            @Html.TextBoxFor(model => model.bots_TblRetailMaster.NoOfEnrolled, new { @class = "input40", @id = "txtNoOfEnrolled3" })
+                            @Html.DropDownListFor(model => model.bots_TblRetailMaster.BOProduct, new SelectList(Model.BOProducts(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input40", @id = "ddlBOProduct3" })
+                            @Html.DropDownListFor(model => model.bots_TblRetailMaster.BillingPartner, new SelectList(Model.lstBillingPartner, "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input40", @id = "ddlBillingPartner3" })
+                            @Html.TextBoxFor(model => model.bots_TblRetailMaster.BOProduct, new { @class = "input40", @id = "txtBOProduct3" })
+                        </div>
+                        <div class="col-sm-2" style="float:left;margin-top:10px;" id="dvCategory4">
+                            <span style="padding-left: 10px; font-weight: bold;">Category 4</span>
+                            <br />
+                            @Html.DropDownListFor(model => model.bots_TblRetailMaster.CategoryId, new SelectList(Model.lstRetailCategory, "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input40", @id = "ddlCategory4" })
+                            @Html.TextBoxFor(model => model.bots_TblRetailMaster.BrandName, new { @class = "input40", @id = "txtBrandName4" })
+                            @Html.TextBoxFor(model => model.bots_TblRetailMaster.NoOfOutlets, new { @class = "input40", @id = "txtNoOfOutlets4" })
+                            @Html.TextBoxFor(model => model.bots_TblRetailMaster.NoOfEnrolled, new { @class = "input40", @id = "txtNoOfEnrolled4" })
+                            @Html.DropDownListFor(model => model.bots_TblRetailMaster.BOProduct, new SelectList(Model.BOProducts(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input40", @id = "ddlBOProduct4" })
+                            @Html.DropDownListFor(model => model.bots_TblRetailMaster.BillingPartner, new SelectList(Model.lstBillingPartner, "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input40", @id = "ddlBillingPartner4" })
+                            @Html.TextBoxFor(model => model.bots_TblRetailMaster.BOProduct, new { @class = "input40", @id = "txtBOProduct4" })
+                        </div>
+                    </div>
 
-
-                <div class="row" style="margin: 0;margin-top:20px;display:none;border:1px solid grey;border-radius:5px;" id="dvRetailCategory">
-                    <div class="col-sm-3" style="float:left;">
-                        <br /><br /><span>Retail Category</span><br /><br />
-                        <span>Retail / Brand Name</span><br /><br />
-                        <span>Total Outlets</span><br /><br />
-                        <span>Enrolled Outlets</span><br /><br />
-                        <span>BO Product </span><br /><br />
-                        <span>Billing Partner</span><br /><br />
-                        <span>Billing Product </span><br /><br />
+                    <div class="row" style="margin: 0;">
+                        <div style="float:left;text-align:right;width:100px;margin-top:10px;">
+                            MWP
+                        </div>
+                        <div class="col-sm-4" style="float:left;margin-top:10px;" id="dvIsMWP">
+                            @Html.RadioButtonFor(model => model.bots_TblGroupMaster.IsMWP, "1", new { @id = "IsMWPYes" }) Yes
+                            @Html.RadioButtonFor(model => model.bots_TblGroupMaster.IsMWP, "0", new { @id = "IsMWPNo" }) No
+                        </div>
                     </div>
-                    <div class="col-sm-2" style="float:left;margin-top:10px;" id="dvCategory1">
-                        <span style="padding-left:10px;font-weight:bold;">Category 1</span>
-                        <br />
-                        @Html.DropDownListFor(model => model.bots_TblRetailMaster.CategoryId, new SelectList(Model.lstRetailCategory, "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input40", @id = "ddlCategory1" })
-                        @Html.TextBoxFor(model => model.bots_TblRetailMaster.BrandName, new { @class = "input40", @id = "ddlBrandName1" })
-                        @Html.TextBoxFor(model => model.bots_TblRetailMaster.NoOfOutlets, new { @class = "input40", @id = "ddlNoOfOutlets1" })
-                        @Html.TextBoxFor(model => model.bots_TblRetailMaster.NoOfEnrolled, new { @class = "input40", @id = "ddlNoOfEnrolled1" })
-                        @Html.DropDownListFor(model => model.bots_TblRetailMaster.BOProduct, new SelectList(Model.BOProducts(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input40", @id = "ddlBOProduct1" })
-                        @Html.DropDownListFor(model => model.bots_TblRetailMaster.BillingPartner, new SelectList(Model.lstBillingPartner, "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input40", @id = "ddlBillingPartner1" })
-                        @Html.TextBoxFor(model => model.bots_TblRetailMaster.BOProduct, new { @class = "input40", @id = "ddlBOProduct1" })
+                    <div class="row" style="margin: 0;">
+                        <div style="float:left;text-align:right;width:100px;margin-top:10px;">
+                            Whataspp Int
+                        </div>
+                        <div class="col-sm-4" style="float:left;margin-top:10px;" id="dvIsWhatsApp">
+                            @Html.RadioButtonFor(model => model.bots_TblGroupMaster.IsWhatsApp, "1", new { @id = "IsWhatsAppYes" }) Yes
+                            @Html.RadioButtonFor(model => model.bots_TblGroupMaster.IsWhatsApp, "0", new { @id = "IsWhatsAppNo" }) No
+                        </div>
                     </div>
-                    <div class="col-sm-2" style="float:left;margin-top:10px;" id="dvCategory2">
-                        <span style="padding-left: 10px; font-weight: bold;">Category 2</span>
-                        <br />
-                        @Html.DropDownListFor(model => model.bots_TblRetailMaster.CategoryId, new SelectList(Model.lstRetailCategory, "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input40", @id = "ddlCategory2" })
-                        @Html.TextBoxFor(model => model.bots_TblRetailMaster.BrandName, new { @class = "input40", @id = "ddlBrandName2" })
-                        @Html.TextBoxFor(model => model.bots_TblRetailMaster.NoOfOutlets, new { @class = "input40", @id = "ddlNoOfOutlets2" })
-                        @Html.TextBoxFor(model => model.bots_TblRetailMaster.NoOfEnrolled, new { @class = "input40", @id = "ddlNoOfEnrolled2" })
-                        @Html.DropDownListFor(model => model.bots_TblRetailMaster.BOProduct, new SelectList(Model.BOProducts(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input40", @id = "ddlBOProduct2" })
-                        @Html.DropDownListFor(model => model.bots_TblRetailMaster.BillingPartner, new SelectList(Model.lstBillingPartner, "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input40", @id = "ddlBillingPartner2" })
-                        @Html.TextBoxFor(model => model.bots_TblRetailMaster.BOProduct, new { @class = "input40", @id = "ddlBOProduct2" })
+                    <div class="row" style="margin: 0;">
+                        <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
+                            WA Free Msgs
+                        </div>
+                        <div class="col-sm-4" style="float:left;margin-top:10px;">
+                            @Html.TextBoxFor(model => model.bots_TblGroupMaster.NoOfFreeWhatsAppMsg, new { @class = "input100", @readonly = "readonly", @id = "txtNoOfFreeWhatsAppMsg" })
+                        </div>
+                        <div style="float: left; text-align: right; width: 115px; margin-top: 10px;">
+                            WA Paid Msgs
+                        </div>
+                        <div class="col-sm-4" style="float:left;margin-top:10px;">
+                            @Html.TextBoxFor(model => model.bots_TblGroupMaster.NoOfPaidWhatsAppMsg, new { @class = "input100", @readonly = "readonly", @id = "txtNoOfPaidWhatsAppMsg" })
+                        </div>
                     </div>
-                    <div class="col-sm-2" style="float:left;margin-top:10px;" id="dvCategory3">
-                        <span style="padding-left: 10px; font-weight: bold;">Category 3</span>
-                        <br />
-                        @Html.DropDownListFor(model => model.bots_TblRetailMaster.CategoryId, new SelectList(Model.lstRetailCategory, "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input40", @id = "ddlCategory3" })
-                        @Html.TextBoxFor(model => model.bots_TblRetailMaster.BrandName, new { @class = "input40", @id = "ddlBrandName3" })
-                        @Html.TextBoxFor(model => model.bots_TblRetailMaster.NoOfOutlets, new { @class = "input40", @id = "ddlNoOfOutlets3" })
-                        @Html.TextBoxFor(model => model.bots_TblRetailMaster.NoOfEnrolled, new { @class = "input40", @id = "ddlNoOfEnrolled3" })
-                        @Html.DropDownListFor(model => model.bots_TblRetailMaster.BOProduct, new SelectList(Model.BOProducts(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input40", @id = "ddlBOProduct3" })
-                        @Html.DropDownListFor(model => model.bots_TblRetailMaster.BillingPartner, new SelectList(Model.lstBillingPartner, "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input40", @id = "ddlBillingPartner3" })
-                        @Html.TextBoxFor(model => model.bots_TblRetailMaster.BOProduct, new { @class = "input40", @id = "ddlBOProduct3" })
+                    <div class="row" style="margin: 0;">
+                        <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
+                            SMS Free Msgs
+                        </div>
+                        <div class="col-sm-4" style="float:left;margin-top:10px;">
+                            @Html.TextBoxFor(model => model.bots_TblGroupMaster.NoOfFreeSMS, new { @class = "input100", @id = "txtNoOfFreeSMS" })
+                        </div>
+                        <div style="float: left; text-align: right; width: 115px; margin-top: 10px;">
+                            SMS Paid Msgs
+                        </div>
+                        <div class="col-sm-4" style="float:left;margin-top:10px;">
+                            @Html.TextBoxFor(model => model.bots_TblGroupMaster.NoOfPaidSMS, new { @class = "input100", @id = "txtNoOfPaidSMS" })
+                        </div>
                     </div>
-                    <div class="col-sm-2" style="float:left;margin-top:10px;" id="dvCategory4">
-                        <span style="padding-left: 10px; font-weight: bold;">Category 4</span>
-                        <br />
-                        @Html.DropDownListFor(model => model.bots_TblRetailMaster.CategoryId, new SelectList(Model.lstRetailCategory, "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input40", @id = "ddlCategory4" })
-                        @Html.TextBoxFor(model => model.bots_TblRetailMaster.BrandName, new { @class = "input40", @id = "ddlBrandName4" })
-                        @Html.TextBoxFor(model => model.bots_TblRetailMaster.NoOfOutlets, new { @class = "input40", @id = "ddlNoOfOutlets4" })
-                        @Html.TextBoxFor(model => model.bots_TblRetailMaster.NoOfEnrolled, new { @class = "input40", @id = "ddlNoOfEnrolled4" })
-                        @Html.DropDownListFor(model => model.bots_TblRetailMaster.BOProduct, new SelectList(Model.BOProducts(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input40", @id = "ddlBOProduct4" })
-                        @Html.DropDownListFor(model => model.bots_TblRetailMaster.BillingPartner, new SelectList(Model.lstBillingPartner, "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input40", @id = "ddlBillingPartner4" })
-                        @Html.TextBoxFor(model => model.bots_TblRetailMaster.BOProduct, new { @class = "input40", @id = "ddlBOProduct4" })
-                    </div>
-                </div>
-
-
-
-                <div class="row" style="margin: 0;">
-                    <div style="float:left;text-align:right;width:100px;margin-top:10px;">
-                        MWP
-                    </div>
-                    <div class="col-sm-4" style="float:left;margin-top:10px;">
-                        @Html.RadioButtonFor(model => model.bots_TblGroupMaster.IsMWP, "1") Yes
-                        @Html.RadioButtonFor(model => model.bots_TblGroupMaster.IsMWP, "0") No
-                    </div>
-                </div>
-                <div class="row" style="margin: 0;">
-                    <div style="float:left;text-align:right;width:100px;margin-top:10px;">
-                        Whataspp Int
-                    </div>
-                    <div class="col-sm-4" style="float:left;margin-top:10px;">
-                        @Html.RadioButtonFor(model => model.bots_TblGroupMaster.IsWhatsApp, "1") Yes
-                        @Html.RadioButtonFor(model => model.bots_TblGroupMaster.IsWhatsApp, "0") No
-                    </div>
-                </div>
-                <div class="row" style="margin: 0;">
-                    <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
-                        WA Free Msgs
-                    </div>
-                    <div class="col-sm-4" style="float:left;margin-top:10px;">
-                        @Html.TextBoxFor(model => model.bots_TblGroupMaster.NoOfFreeWhatsAppMsg, new { @class = "input100", @id = "txtNoOfFreeWhatsAppMsg" })
-                    </div>
-                    <div style="float: left; text-align: right; width: 115px; margin-top: 10px;">
-                        WA Paid Msgs
-                    </div>
-                    <div class="col-sm-4" style="float:left;margin-top:10px;">
-                        @Html.TextBoxFor(model => model.bots_TblGroupMaster.NoOfPaidWhatsAppMsg, new { @class = "input100", @id = "txtNoOfPaidWhatsAppMsg" })
-                    </div>
-                </div>
-                <div class="row" style="margin: 0;">
-                    <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
-                        SMS Free Msgs
-                    </div>
-                    <div class="col-sm-4" style="float:left;margin-top:10px;">
-                        @Html.TextBoxFor(model => model.bots_TblGroupMaster.NoOfFreeSMS, new { @class = "input100", @id = "txtNoOfFreeSMS" })
-                    </div>
-                    <div style="float: left; text-align: right; width: 115px; margin-top: 10px;">
-                        SMS Paid Msgs
-                    </div>
-                    <div class="col-sm-4" style="float:left;margin-top:10px;">
-                        @Html.TextBoxFor(model => model.bots_TblGroupMaster.NoOfPaidSMS, new { @class = "input100", @id = "txtNoOfPaidSMS" })
-                    </div>
-                </div>
-                <div class="row" style="margin: 0;">
-                    <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
-                        Mobile App
-                    </div>
-                    <div class="col-sm-4" style="float:left;margin-top:10px;">
-                        @Html.DropDownListFor(model => model.bots_TblGroupMaster.IsMobileApp, new SelectList(Model.YesNo(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input100", @id = "ddlIsMobileApp" })
-                    </div>
-                    <div style="float: left; text-align: right; width: 115px; margin-top: 10px;">
-                        Mobile App Description
-                    </div>
-                    <div class="col-sm-4" style="float:left;margin-top:10px;">
-                        @Html.TextBoxFor(model => model.bots_TblGroupMaster.MobileAppDescription, new { @class = "input100", @id = "txtNoOfPaidSMS" })
+                    <div class="row" style="margin: 0;">
+                        <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
+                            Mobile App
+                        </div>
+                        <div class="col-sm-4" style="float:left;margin-top:10px;">
+                            @Html.DropDownListFor(model => model.bots_TblGroupMaster.IsMobileApp, new SelectList(Model.YesNo(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input100", @id = "ddlIsMobileApp" })
+                        </div>
+                        <div style="float: left; text-align: right; width: 115px; margin-top: 10px;">
+                            Mobile App Description
+                        </div>
+                        <div class="col-sm-4" style="float:left;margin-top:10px;">
+                            @Html.TextBoxFor(model => model.bots_TblGroupMaster.MobileAppDescription, new { @class = "input100", @id = "txtMobileAppDescription" })
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
 
-        <div class="container-fluid pt-3 pl-3 pr-3 pb-3">
-            <div class="col-md-12 section-heading" data-toggle="collapse" data-target="#productdetails">Assignment Details</div>
-            <div id="productdetails" class="collapse">
-                <div class="row" style="margin: 0;">
-                    <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
-                        Sourced By
+            <div class="container-fluid pt-3 pl-3 pr-3 pb-3">
+                <div class="col-md-12 section-heading" data-toggle="collapse" data-target="#assignmentdetails">Assignment Details</div>
+                <div id="assignmentdetails" class="collapse">
+                    <div class="row" style="margin: 0;">
+                        <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
+                            Sourced By
+                        </div>
+                        <div class="col-sm-4" style="float:left;margin-top:10px;">
+                            @Html.DropDownListFor(model => model.bots_TblGroupMaster.SourcedBy, new SelectList(Model.lstSourcedBy, "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input100", @id = "ddlSourcedBy" })
+                        </div>
+                        <div style="float: left; text-align: right; width: 115px; margin-top: 10px;">
+                            Assigned CS
+                        </div>
+                        <div class="col-sm-4" style="float:left;margin-top:10px;">
+                            @Html.DropDownListFor(model => model.bots_TblGroupMaster.AssignedCS, new SelectList(Model.lstRMAssigned, "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input100", @id = "ddlAssignedCS" })
+                        </div>
                     </div>
-                    <div class="col-sm-4" style="float:left;margin-top:10px;">
-                        @Html.DropDownListFor(model => model.bots_TblGroupMaster.SourcedBy, new SelectList(Model.lstSourcedBy, "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input100", @id = "ddlSourcedBy" })
+                    <div class="row" style="margin: 0;">
+                        <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
+                            Source Type
+                        </div>
+                        <div class="col-sm-4" style="float:left;margin-top:10px;">
+                            @Html.DropDownListFor(model => model.bots_TblGroupMaster.Referredby, new SelectList(Model.RefferedCategory(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input100", @id = "ddlReferredby" })
+                        </div>
+                        <div style="float: left; text-align: right; width: 115px; margin-top: 10px;">
+                            Referred Name
+                        </div>
+                        <div class="col-sm-4" style="float:left;margin-top:10px;">
+                            @Html.DropDownListFor(model => model.bots_TblGroupMaster.ReferredName, new SelectList(Model.lstAllGroups, "Value", "Text"), htmlAttributes: new { @class = "input100", @id = "ddlReferredName" })
+                        </div>
                     </div>
-                    <div style="float: left; text-align: right; width: 115px; margin-top: 10px;">
-                        Assigned CS
-                    </div>
-                    <div class="col-sm-4" style="float:left;margin-top:10px;">
-                        @Html.DropDownListFor(model => model.bots_TblGroupMaster.AssignedCS, new SelectList(Model.lstRMAssigned, "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input100", @id = "ddlAssignedCS" })
-                    </div>
-                </div>
-                <div class="row" style="margin: 0;">
-                    <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
-                        Referred by
-                    </div>
-                    <div class="col-sm-4" style="float:left;margin-top:10px;">
-                        @Html.DropDownListFor(model => model.bots_TblGroupMaster.Referredby, new SelectList(Model.RefferedCategory(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input100", @id = "ddlReferredby" })
-                    </div>
-                    <div style="float: left; text-align: right; width: 115px; margin-top: 10px;">
-                        Referred Name
-                    </div>
-                    <div class="col-sm-4" style="float:left;margin-top:10px;">
-                        @Html.DropDownListFor(model => model.bots_TblGroupMaster.ReferredName, new SelectList(Model.lstAllGroups, "Value", "Text"), htmlAttributes: new { @class = "input100", @id = "ddlReferredName" })
-                    </div>
-                </div>
-                <div class="row" style="margin: 0;">
-                    <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
-                        Comments
-                    </div>
-                    <div class="col-sm-8" style="float:left;margin-top:10px;">
-                        @Html.TextAreaFor(model => model.bots_TblGroupMaster.Comments, new { @class = "input100", @id = "txtComments" })
-                    </div>                   
-                </div>
-            </div>
-        </div>
-
-        <div class="container-fluid pt-3 pl-3 pr-3 pb-3">
-            <div class="col-md-12 section-heading" data-toggle="collapse" data-target="#dealdetails">Deal Details</div>
-            <div id="dealdetails" class="collapse">
-                <div class="row" style="margin: 0;">
-                    <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
-                        Loyalty Fees
-                    </div>
-                    <div class="col-sm-4" style="float:left;margin-top:10px;">
-                        @Html.TextBoxFor(model => model.bots_TblGroupMaster.fee, new { @class = "input100", @id = "txtNoOfFreeSMS" })
-                    </div>
-                    <div style="float: left; text-align: right; width: 115px; margin-top: 10px;">
-                        SMS Paid Msgs
-                    </div>
-                    <div class="col-sm-4" style="float:left;margin-top:10px;">
-                        @Html.TextBoxFor(model => model.bots_TblGroupMaster.NoOfPaidSMS, new { @class = "input100", @id = "txtNoOfPaidSMS" })
+                    <div class="row" style="margin: 0;">
+                        <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
+                            Comments
+                        </div>
+                        <div class="col-sm-8" style="float:left;margin-top:10px;">
+                            @Html.TextAreaFor(model => model.bots_TblGroupMaster.Comments, new { @class = "input100", @id = "txtComments" })
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
 
-        <div class="container-fluid pt-3 pl-3 pr-3 pb-3">
-            <div class="col-md-12 section-heading" data-toggle="collapse" data-target="#paymentmodule">Payment Schedule</div>
-            <div id="paymentmodule" class="collapse">
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit,
-                sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-                quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-            </div>
-        </div>
-        <div class="container-fluid pt-3 pl-3 pr-3 pb-3">
-            <div class="col-md-12 section-heading" data-toggle="collapse" data-target="#updatepaymentdetails">Update Payment Details</div>
-            <div id="updatepaymentdetails" class="collapse">
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit,
-                sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-                quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-            </div>
-        </div>
+            <div class="container-fluid pt-3 pl-3 pr-3 pb-3">
+                <div class="col-md-12 section-heading" data-toggle="collapse" data-target="#dealdetails">Deal Details</div>
+                <div id="dealdetails" class="collapse">
+                    <div class="row" style="margin: 0;">
+                        <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
+                            Loyalty Fees
+                        </div>
+                        <div class="col-sm-4" style="float:left;margin-top:10px;">
+                            @Html.TextBoxFor(model => model.bots_TblDealDetails.LoyaltyFees, new { @class = "input100", @id = "txtLoyaltyFees" })
+                        </div>
+                        <div style="float: left; text-align: right; width: 115px; margin-top: 10px;">
+                            WA Paid Pack Fees
+                        </div>
+                        <div class="col-sm-4" style="float:left;margin-top:10px;">
+                            @Html.TextBoxFor(model => model.bots_TblDealDetails.WAPaidPackFees, new { @class = "input100", @id = "txtWAPaidPackFees" })
+                        </div>
+                    </div>
+                    <div class="row" style="margin: 0;">
+                        <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
+                            SMS Paid Pack Fees
+                        </div>
+                        <div class="col-sm-4" style="float:left;margin-top:10px;">
+                            @Html.TextBoxFor(model => model.bots_TblDealDetails.SMSPaidPackFees, new { @class = "input100", @id = "txtSMSPaidPackFees" })
+                        </div>
+                        <div style="float: left; text-align: right; width: 115px; margin-top: 10px;">
+                            Ecomm Integration
+                        </div>
+                        <div class="col-sm-4" style="float:left;margin-top:10px;">
+                            @Html.TextBoxFor(model => model.bots_TblDealDetails.EcommIntegration, new { @class = "input100", @readonly = "readonly", @id = "txtEcommIntegration" })
+                        </div>
+                    </div>
+                    <div class="row" style="margin: 0;">
+                        <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
+                            Any Other Fees
+                        </div>
+                        <div class="col-sm-4" style="float:left;margin-top:10px;">
+                            @Html.TextBoxFor(model => model.bots_TblDealDetails.AnyOtherFees, new { @class = "input100", @id = "txtAnyOtherFees" })
+                        </div>
+                        <div style="float: left; text-align: right; width: 115px; margin-top: 10px;">
+                            Description
+                        </div>
+                        <div class="col-sm-4" style="float:left;margin-top:10px;">
+                            @Html.TextBoxFor(model => model.bots_TblDealDetails.AnyOtherFeesDesc, new { @class = "input100", @id = "txtAnyOtherFeesDesc" })
+                        </div>
+                    </div>
+                    <div class="row" style="margin: 0;">
+                        <div style="float: left; text-align: right; width: 100px; margin-top: 10px;font-weight:bold;">
+                            Total Fees (A)
+                        </div>
+                        <div class="col-sm-4" style="float:left;margin-top:10px;">
+                            @Html.TextBoxFor(model => model.bots_TblDealDetails.TotalFeesA, new { @class = "input100", @readonly = "readonly", @id = "txtTotalFeesA" })
+                        </div>
+                        <div style="float: left; text-align: right; width: 115px; margin-top: 10px;">
+                            Payment Frequency
+                        </div>
+                        <div class="col-sm-4" style="float:left;margin-top:10px;">
+                            @Html.DropDownListFor(model => model.bots_TblDealDetails.PaymentFrequency, new SelectList(Model.PaymentFrequency(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input100", @id = "ddlPaymentFrequency" })
+                        </div>
 
-        <div class="container-fluid pt-3 pl-3 pr-3 pb-3">
-            <div class="col-md-12 section-heading" data-toggle="collapse" data-target="#notifications">Notifications</div>
-            <div id="notifications" class="collapse">
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit,
-                sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-                quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                    </div>
+                    <div class="row" style="margin: 0;">
+                        <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
+                            GST
+                        </div>
+                        <div class="col-sm-4" style="float:left;margin-top:10px;" id="dvIsGST">
+                            @Html.RadioButtonFor(model => model.bots_TblDealDetails.GST, "1", new { @id = "IsCGST" }) CGST/SGST
+                            @Html.RadioButtonFor(model => model.bots_TblDealDetails.GST, "2", new { @id = "IsIGST" }) IGST
+                            @Html.RadioButtonFor(model => model.bots_TblDealDetails.GST, "0", new { @id = "IsGSTNo" }) No
+                            @Html.TextBoxFor(model => model.bots_TblDealDetails.GSTRate, new { @class = "input40", @id = "txtGSTRate", style = "display: none;" })
+                        </div>
+                        <div style="float: left; text-align: right; width: 115px; margin-top: 10px; font-weight: bold;">
+                            Total Fees (B)
+                        </div>
+                        <div class="col-sm-4" style="float:left;margin-top:10px;">
+                            @Html.TextBoxFor(model => model.bots_TblDealDetails.TotalFeesB, new { @class = "input100", @readonly = "readonly", @id = "txtTotalFeesB" })
+                        </div>
+                    </div>
+                    <div class="row" style="margin: 0;display:none;" id="dvAdvanceAmount">
+                        <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
+                            Advance Amount
+                        </div>
+                        <div class="col-sm-4" style="float:left;margin-top:10px;">
+                            @Html.TextBoxFor(model => model.bots_TblDealDetails.AdvanceAmount, new { @class = "input100", @id = "txtAdvanceAmount" })
+                        </div>
+
+                    </div>
+                    <div class="row" style="margin: 0;">
+                        <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
+                            Payment Mode
+                        </div>
+                        <div class="col-sm-4" style="float:left;margin-top:10px;">
+                            @Html.DropDownListFor(model => model.bots_TblDealDetails.PaymentMode, new SelectList(Model.PaymentType(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input100", @id = "ddlPaymentMode" })
+                        </div>
+                        <div style="float: left; text-align: right; width: 115px; margin-top: 10px;">
+                            Payment Status
+                        </div>
+                        <div class="col-sm-4" style="float:left;margin-top:10px;">
+                            @Html.DropDownListFor(model => model.bots_TblDealDetails.PaymentStatus, new SelectList(Model.PaymentStatus(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input100", @id = "ddlPaymentStatus" })
+                        </div>
+                    </div>
+                    <div class="row" style="margin: 0;">
+                        <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
+                            Amount Received
+                        </div>
+                        <div class="col-sm-4" style="float:left;margin-top:10px;">
+                            @Html.TextBoxFor(model => model.bots_TblDealDetails.AmountReceived, new { @class = "input100", @id = "txtAmountReceived" })
+                        </div>
+                        <div style="float: left; text-align: right; width: 115px; margin-top: 10px;">
+                            TDS Deducted
+                        </div>
+                        <div class="col-sm-4" style="float:left;margin-top:10px;">
+                            @Html.TextBoxFor(model => model.bots_TblDealDetails.TDSDeducted, new { @class = "input100", @readonly = "readonly", @id = "txtTDSDeducted" })
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="container-fluid pt-3 pl-3 pr-3 pb-3" id="dvPaymentSection" style="display:none;">
+                <div class="col-md-12 section-heading" data-toggle="collapse" data-target="#paymentmodule">Payment Schedule</div>
+                <div id="paymentmodule" class="collapse">
+
+                    <div class="row" style="margin: 0;">
+                        <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
+                            Amount Balance
+                        </div>
+                        <div class="col-sm-4" style="float:left;margin-top:10px;">
+                            @Html.TextBoxFor(model => model.bots_TblPaymentDetails.AmountBalance, new { @class = "input100", @readonly = "readonly", @id = "txtAmountBalance" })
+                        </div>
+                        <div style="float: left; text-align: right; width: 115px; margin-top: 10px;">
+                            No of Installments
+                        </div>
+                        <div class="col-sm-4" style="float:left;margin-top:10px;">
+                            @Html.TextBoxFor(model => model.bots_TblPaymentDetails.NoOfInstallments, new { @class = "input100", @id = "txtNoOfInstallments" })
+                        </div>
+                    </div>
+
+                    <div class="row" style="margin: 0;margin-top:20px;display:none;border:1px solid grey;border-radius:5px;" id="dvInstallmentsDetails">
+                        <div class="col-sm-3" style="float:left;">
+                            <br /><br /><span>Subsequent Payment Date </span><br /><br />
+                            <span>Subsequent Payment (Rs.)</span><br /><br />
+                        </div>
+                        <div class="col-sm-2" style="float:left;margin-top:10px;" id="dvInstallment1">
+                            <span style="padding-left:10px;font-weight:bold;">Installment 1</span>
+                            <br />
+                            @Html.TextBoxFor(model => model.bots_TblInstallmentDetails.PaymentDate, new { @class = "input40", @id = "txtPaymentDate1" })
+                            @Html.TextBoxFor(model => model.bots_TblInstallmentDetails.PaymentAmount, new { @class = "input40", @id = "txtPaymentAmount1" })
+                        </div>
+                        <div class="col-sm-2" style="float:left;margin-top:10px;" id="dvInstallment2">
+                            <span style="padding-left: 10px; font-weight: bold;">Installment 2</span>
+                            <br />
+                            @Html.TextBoxFor(model => model.bots_TblInstallmentDetails.PaymentDate, new { @class = "input40", @id = "txtPaymentDate2" })
+                            @Html.TextBoxFor(model => model.bots_TblInstallmentDetails.PaymentAmount, new { @class = "input40", @id = "txtPaymentAmount2" })
+                        </div>
+                        <div class="col-sm-2" style="float:left;margin-top:10px;" id="dvInstallment3">
+                            <span style="padding-left: 10px; font-weight: bold;">Installment 3</span>
+                            <br />
+                            @Html.TextBoxFor(model => model.bots_TblInstallmentDetails.PaymentDate, new { @class = "input40", @id = "txtPaymentDate3" })
+                            @Html.TextBoxFor(model => model.bots_TblInstallmentDetails.PaymentAmount, new { @class = "input40", @id = "txtPaymentAmount3" })
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="container-fluid pt-3 pl-3 pr-3 pb-3" id="dvPaymentDetailsSection" style="display:none;">
+                <div class="col-md-12 section-heading" data-toggle="collapse" data-target="#updatepaymentdetails">Update Payment Details</div>
+                <div id="updatepaymentdetails" class="collapse">
+                    <div class="row" style="margin: 0;margin-top:20px;display:block;border:1px solid grey;border-radius:5px;" id="dvUpdatePaymentDetails">
+                        <div class="col-sm-3" style="float:left;">
+                            <br /><br /><span>Balance Fees Pending </span><br /><br />
+                            <span>Installments </span><br /><br />
+                            <span>Subsequent Payment Date </span><br /><br />
+                            <span>Subsequent Payment Rs.  </span><br /><br />
+                            <span>Paid Amount (Rs.)  </span><br /><br />
+                            <span>Payment Type  </span><br /><br />
+                            <span>Cheque No  </span><br /><br />
+                            <span>Bank  </span><br /><br />
+                        </div>
+                        <div class="col-sm-2" style="float:left;margin-top:10px;" id="dvInstallment1">
+                            <span style="padding-left:10px;font-weight:bold;">Payment 1</span>
+                            <br />
+                            <span id="spnBalanceFeePending1"></span><br /><br />
+                            @Html.TextBoxFor(model => model.bots_TblInstallmentDetails.Installment, new { @class = "input40", @id = "txtInstallment1" })
+                            @Html.TextBoxFor(model => model.bots_TblInstallmentDetails.PaymentDate, new { @class = "input40", @id = "txtIPaymentDate1" })
+                            @Html.TextBoxFor(model => model.bots_TblInstallmentDetails.PaymentAmount, new { @class = "input40", @id = "txtIPaymentAmount1" })
+                            @Html.TextBoxFor(model => model.bots_TblInstallmentDetails.PaidAmount, new { @class = "input40", @id = "txtIPaidAmount1" })
+                            @Html.DropDownListFor(model => model.bots_TblInstallmentDetails.PaymentType, new SelectList(Model.PaymentType(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input40", @id = "ddlIPaymentType1" })
+                            @Html.TextBoxFor(model => model.bots_TblInstallmentDetails.ChequeNo, new { @class = "input40", @id = "txtIChequeNo1" })
+                            @Html.TextBoxFor(model => model.bots_TblInstallmentDetails.Bank, new { @class = "input40", @id = "txtIBank1" })
+                        </div>
+                        <div class="col-sm-2" style="float:left;margin-top:10px;" id="dvInstallment2">
+                            <span style="padding-left: 10px; font-weight: bold;">Payment 2</span>
+                            <br />
+                            <span id="spnBalanceFeePending2"></span><br /><br />
+                            @Html.TextBoxFor(model => model.bots_TblInstallmentDetails.Installment, new { @class = "input40", @id = "txtInstallment2" })
+                            @Html.TextBoxFor(model => model.bots_TblInstallmentDetails.PaymentDate, new { @class = "input40", @id = "txtIPaymentDate2" })
+                            @Html.TextBoxFor(model => model.bots_TblInstallmentDetails.PaymentAmount, new { @class = "input40", @id = "txtIPaymentAmount2" })
+                            @Html.TextBoxFor(model => model.bots_TblInstallmentDetails.PaidAmount, new { @class = "input40", @id = "txtIPaidAmount2" })
+                            @Html.DropDownListFor(model => model.bots_TblInstallmentDetails.PaymentType, new SelectList(Model.PaymentType(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input40", @id = "ddlIPaymentType2" })
+                            @Html.TextBoxFor(model => model.bots_TblInstallmentDetails.ChequeNo, new { @class = "input40", @id = "txtIChequeNo2" })
+                            @Html.TextBoxFor(model => model.bots_TblInstallmentDetails.Bank, new { @class = "input40", @id = "txtIBank2" })
+                        </div>
+                        <div class="col-sm-2" style="float:left;margin-top:10px;" id="dvInstallment3">
+                            <span style="padding-left: 10px; font-weight: bold;">Payment 3</span>
+                            <br />
+                            <span id="spnBalanceFeePending3"></span><br /><br />
+                            @Html.TextBoxFor(model => model.bots_TblInstallmentDetails.Installment, new { @class = "input40", @id = "txtInstallment2" })
+                            @Html.TextBoxFor(model => model.bots_TblInstallmentDetails.PaymentDate, new { @class = "input40", @id = "txtIPaymentDate2" })
+                            @Html.TextBoxFor(model => model.bots_TblInstallmentDetails.PaymentAmount, new { @class = "input40", @id = "txtIPaymentAmount2" })
+                            @Html.TextBoxFor(model => model.bots_TblInstallmentDetails.PaidAmount, new { @class = "input40", @id = "txtIPaidAmount2" })
+                            @Html.DropDownListFor(model => model.bots_TblInstallmentDetails.PaymentType, new SelectList(Model.PaymentType(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input40", @id = "ddlIPaymentType2" })
+                            @Html.TextBoxFor(model => model.bots_TblInstallmentDetails.ChequeNo, new { @class = "input40", @id = "txtIChequeNo2" })
+                            @Html.TextBoxFor(model => model.bots_TblInstallmentDetails.Bank, new { @class = "input40", @id = "txtIBank2" })
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="container-fluid pt-3 pl-3 pr-3 pb-3">
+                <button type="button" id="btnCustomerSubmit" class="btn btn-primary pull-right" onclick="return CheckValidation('Submit');" style="margin-right:10px;">Submit</button>
+                <button type="submit" id="btnCustomerSave" class="btn btn-primary pull-right" onclick="return CheckValidation();" style="margin-right:10px;">Save</button>
+
             </div>
         </div>
     </div>
-</div>
 
+    <div id="myModal" class="modal">
+        <!-- Modal content -->
+        <div class="modal-content">
+
+            Testing Submit
+
+
+
+            <div class="row justify-content-end pr-4" style="margin-top:20px;">
+                <button type="submit" id="btnSubmit" class="btn btn-primary profle-submit-btn mr-4" style="font-size:14px"> Submit</button>
+                <button type="button" id="btnPopupClose" class="btn btn-outline-primary cancel-btn" style="font-size:14px"> Close</button>
+            </div>
+        </div>
+    </div>
+
+}
 <script>
     $(document).ready(function () {
-        $('#ddlCity').change(function () {
-            if ($('#ddlCity').val() == "11") {
-                $('#txtCity').removeAttr("disabled");
-                $('#txtCity').show();
+        var today = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
+        $("#txtPaymentDate1").datepicker({
+            dateFormat: "yy-mm-dd",
+            minDate: today,
+        });
+        $("#txtPaymentDate2").datepicker({
+            dateFormat: "yy-mm-dd",
+            minDate: today,
+        });
+        $("#txtPaymentDate3").datepicker({
+            dateFormat: "yy-mm-dd",
+            minDate: today,
+        });
+        $("#txtNoOfRetailCategory").focusout(function () {
+            ShowRetailCategory();
+        });
+
+        $("#txtNoOfInstallments").focusout(function () {
+            ShowInstallments();
+        });
+        RemoveRequiredBorder();
+        RemoveRequiredBorderCategory();
+        RemoveRequiredBorderAssignment();
+        RemoveRequiredBorderDeal();
+        CheckInstallmentAmount();
+
+        $("#btnPopupClose").on("click", function () {
+            $("#hdnCustomerStatus").val("");
+            $("#myModal").hide(1000);
+        });
+    });
+    function ShowRetailCategory() {
+        if ($("#txtNoOfRetailCategory").val() > 4 || $("#txtNoOfRetailCategory").val() == 0) {
+            if ($("#txtNoOfRetailCategory").val() == "") {
+                $("#dvRetailCategory").hide();
             }
             else {
-                $('#txtCity').attr("disabled", "disabled");
-                $('#txtCity').hide();
+                cuteAlert({
+                    type: "error",
+                    title: "Oops..",
+                    message: "Retail Category can not be 0 or greater than 4",
+                    buttonText: "Okay"
+                })
+            }
+        }
+        else {
+            $("#dvRetailCategory").show();
+            if ($("#txtNoOfRetailCategory").val() == 1) {
+                $("#dvCategory1").show();
+                $("#dvCategory2").hide();
+                $("#dvCategory3").hide();
+                $("#dvCategory4").hide();
+            }
+            if ($("#txtNoOfRetailCategory").val() == 2) {
+                $("#dvCategory1").show();
+                $("#dvCategory2").show();
+                $("#dvCategory3").hide();
+                $("#dvCategory4").hide();
+            }
+            if ($("#txtNoOfRetailCategory").val() == 3) {
+                $("#dvCategory1").show();
+                $("#dvCategory2").show();
+                $("#dvCategory3").show();
+                $("#dvCategory4").hide();
+            }
+            if ($("#txtNoOfRetailCategory").val() == 4) {
+                $("#dvCategory1").show();
+                $("#dvCategory2").show();
+                $("#dvCategory3").show();
+                $("#dvCategory4").show();
+            }
+        }
+    }
+
+    function ShowInstallments() {
+        if ($("#txtNoOfInstallments").val() > 3 || $("#txtNoOfInstallments").val() == 0) {
+            $("#dvInstallmentsDetails").hide();
+            $('#txtNoOfInstallments').css('border-color', 'red');
+            cuteAlert({
+                type: "error",
+                title: "Oops..",
+                message: "Number of Installments can not be 0 or greater than 3",
+                buttonText: "Okay"
+            })
+
+        }
+        else {
+            $('#txtNoOfInstallments').css('border-color', '');
+            $("#dvInstallmentsDetails").show();
+            if ($("#txtNoOfInstallments").val() == 1) {
+                $("#dvInstallment1").show();
+                $("#dvInstallment2").hide();
+                $("#dvInstallment3").hide();
+
+            }
+            if ($("#txtNoOfInstallments").val() == 2) {
+                $("#dvInstallment1").show();
+                $("#dvInstallment2").show();
+                $("#dvInstallment3").hide();
+
+            }
+            if ($("#txtNoOfInstallments").val() == 3) {
+                $("#dvInstallment1").show();
+                $("#dvInstallment2").show();
+                $("#dvInstallment3").show();
+
+            }
+        }
+    }
+
+    function ShowHideSection(SectionName) {
+        $("#custdetails").removeClass("show");
+        $("#assignmentdetails").removeClass("show");
+        $("#dealdetails").removeClass("show");
+        $("#paymentmodule").removeClass("show");
+        $("#updatepaymentdetails").removeClass("show");
+        $("#" + SectionName).addClass("show");
+    }
+
+    function RemoveRequiredBorder() {
+        $("#txtGroupName").focusout(function () {
+            if ($("#txtGroupName").val() != "") {
+                $('#txtGroupName').css('border-color', '');
+            }
+            else {
+                $('#txtGroupName').css('border-color', 'red');
+            }
+        });
+        $("#txtOwnerName").focusout(function () {
+            if ($("#txtOwnerName").val() != "") {
+                $('#txtOwnerName').css('border-color', '');
+            }
+            else {
+                $('#txtOwnerName').css('border-color', 'red');
+            }
+        });
+        $("#txtOwnerMobileNo").focusout(function () {
+            if ($("#txtOwnerMobileNo").val() != "") {
+                $('#txtOwnerMobileNo').css('border-color', '');
+            }
+            else {
+                $('#txtOwnerMobileNo').css('border-color', 'red');
+            }
+        });
+        $("#txtOwnerEmailId").focusout(function () {
+            if ($("#txtOwnerEmailId").val() != "") {
+                $('#txtOwnerEmailId').css('border-color', '');
+            }
+            else {
+                $('#txtOwnerEmailId').css('border-color', 'red');
+            }
+        });
+        $("#fileGSTDocumentFile").focusout(function () {
+            if ($("#fileGSTDocumentFile").val() != "") {
+            }
+            else {
+                $('#fileGSTDocumentFile').removeClass('borderClass');
+            }
+        });
+        $("#filePANDocumentFile").focusout(function () {
+            if ($("#filePANDocumentFile").val() != "") {
+            }
+            else {
+                $('#filePANDocumentFile').removeClass('borderClass');
+            }
+        });
+        $('#ddlCity').change(function () {
+            var selectedVal = $('#ddlCity option:selected').attr('value');
+            if (selectedVal == "") {
+                $('#ddlCity').css('border-color', 'red');
+            }
+            else {
+                $('#ddlCity').css('border-color', '');
             }
         });
 
         $("#txtNoOfRetailCategory").focusout(function () {
-            if ($("#txtNoOfRetailCategory").val() > 4 || $("#txtNoOfRetailCategory").val() == 0) {
-                if ($("#txtNoOfRetailCategory").val() == "") {
-                    $("#dvRetailCategory").hide();
-                }
-                else {
-                    cuteAlert({
-                        type: "error",
-                        title: "Oops..",
-                        message: "Retail Category can not be 0 or greater than 4",
-                        buttonText: "Okay"
-                    })
-                }
+            if ($("#txtNoOfRetailCategory").val() != "") {
+                $('#txtNoOfRetailCategory').css('border-color', '');
             }
             else {
-                $("#dvRetailCategory").show();
-                if ($("#txtNoOfRetailCategory").val() == 1) {
-                    $("#dvCategory1").show();
-                    $("#dvCategory2").hide();
-                    $("#dvCategory3").hide();
-                    $("#dvCategory4").hide();
-                }
-                if ($("#txtNoOfRetailCategory").val() == 2) {
-                    $("#dvCategory1").show();
-                    $("#dvCategory2").show();
-                    $("#dvCategory3").hide();
-                    $("#dvCategory4").hide();
-                }
-                if ($("#txtNoOfRetailCategory").val() == 3) {
-                    $("#dvCategory1").show();
-                    $("#dvCategory2").show();
-                    $("#dvCategory3").show();
-                    $("#dvCategory4").hide();
-                }
-                if ($("#txtNoOfRetailCategory").val() == 4) {
-                    $("#dvCategory1").show();
-                    $("#dvCategory2").show();
-                    $("#dvCategory3").show();
-                    $("#dvCategory4").show();
-                }
+                $('#txtNoOfRetailCategory').css('border-color', 'red');
+            }
+        });
+
+        $('#IsMWPYes').on('change', function () {
+            $('#dvIsMWP').css('border', '');
+        });
+        $('#IsMWPNo').on('change', function () {
+            $('#dvIsMWP').css('border', '');
+        });
+        $('#IsWhatsAppYes').on('change', function () {
+            $('#dvIsWhatsApp').css('border', '');
+            $("#txtNoOfFreeWhatsAppMsg").attr("readonly", false);
+            $("#txtNoOfPaidWhatsAppMsg").attr("readonly", false);
+        });
+        $('#IsWhatsAppNo').on('change', function () {
+            $('#dvIsWhatsApp').css('border', '');
+            $("#txtNoOfFreeWhatsAppMsg").attr("readonly", false);
+            $("#txtNoOfPaidWhatsAppMsg").attr("readonly", false);
+        });
+        $('#IsKeyAccountYes').on('change', function () {
+            $('#dvIsKeyAccount').css('border', '');
+        });
+        $('#IsKeyAccountNo').on('change', function () {
+            $('#dvIsKeyAccount').css('border', '');
+        });
+
+        $("#txtNoOfFreeWhatsAppMsg").focusout(function () {
+            if ($("#txtNoOfFreeWhatsAppMsg").val() != "") {
+                $('#txtNoOfFreeWhatsAppMsg').css('border-color', '');
+            }
+            else {
+                $('#txtNoOfFreeWhatsAppMsg').css('border-color', 'red');
+            }
+        });
+
+        $("#txtNoOfPaidWhatsAppMsg").focusout(function () {
+            if ($("#txtNoOfPaidWhatsAppMsg").val() != "") {
+                $('#txtNoOfPaidWhatsAppMsg').css('border-color', '');
+                $("#txtWAPaidPackFees").val($("#txtNoOfPaidWhatsAppMsg").val() * 0.24);
+            }
+            else {
 
             }
         });
-    });
+        $("#txtNoOfFreeSMS").focusout(function () {
+            if ($("#txtNoOfFreeSMS").val() != "") {
+                $('#txtNoOfFreeSMS').css('border-color', '');
+            }
+            else {
+                $('#txtNoOfFreeSMS').css('border-color', 'red');
+            }
+        });
+        $("#txtNoOfPaidSMS").focusout(function () {
+            if ($("#txtNoOfPaidSMS").val() != "") {
+                $('#txtNoOfPaidSMS').css('border-color', '');
+                $("#txtSMSPaidPackFees").val($("#txtNoOfPaidSMS").val() * 0.16);
+            }
+            else {
+                //$('#txtNoOfPaidSMS').css('border-color', 'red');
+            }
+        });
+
+
+    }
+    function RemoveRequiredBorderCategory() {
+        $('#ddlCategory1').change(function () {
+            if ($("#ddlCategory1 option:selected").text() == "Please Select") {
+                $('#ddlCategory1').css('border-color', 'red');
+            }
+            else {
+                $('#ddlCategory1').css('border-color', '');
+            }
+        });
+        $('#ddlCategory2').change(function () {
+            if ($("#ddlCategory2 option:selected").text() == "Please Select") {
+                $('#ddlCategory2').css('border-color', 'red');
+            }
+            else {
+                $('#ddlCategory2').css('border-color', '');
+            }
+        });
+        $('#ddlCategory3').change(function () {
+            if ($("#ddlCategory3 option:selected").text() == "Please Select") {
+                $('#ddlCategory3').css('border-color', 'red');
+            }
+            else {
+                $('#ddlCategory3').css('border-color', '');
+            }
+        });
+        $('#ddlCategory4').change(function () {
+            if ($("#ddlCategory4 option:selected").text() == "Please Select") {
+                $('#ddlCategory4').css('border-color', 'red');
+            }
+            else {
+                $('#ddlCategory4').css('border-color', '');
+            }
+        });
+
+        $('#ddlBOProduct1').change(function () {
+            if ($("#ddlBOProduct1 option:selected").text() == "Please Select") {
+                $('#ddlBOProduct1').css('border-color', 'red');
+            }
+            else {
+                $('#ddlBOProduct1').css('border-color', '');
+            }
+        });
+        $('#ddlBOProduct2').change(function () {
+            if ($("#ddlBOProduct2 option:selected").text() == "Please Select") {
+                $('#ddlBOProduct2').css('border-color', 'red');
+            }
+            else {
+                $('#ddlBOProduct2').css('border-color', '');
+            }
+        });
+        $('#ddlBOProduct3').change(function () {
+            if ($("#ddlBOProduct3 option:selected").text() == "Please Select") {
+                $('#ddlBOProduct3').css('border-color', 'red');
+            }
+            else {
+                $('#ddlBOProduct3').css('border-color', '');
+            }
+        });
+        $('#ddlBOProduct4').change(function () {
+            if ($("#ddlBOProduct4 option:selected").text() == "Please Select") {
+                $('#ddlBOProduct4').css('border-color', 'red');
+            }
+            else {
+                $('#ddlBOProduct4').css('border-color', '');
+            }
+        });
+
+        $('#ddlBillingPartner1').change(function () {
+            if ($("#ddlBillingPartner1 option:selected").text() == "Please Select") {
+                $('#ddlBillingPartner1').css('border-color', 'red');
+            }
+            else {
+                $('#ddlBillingPartner1').css('border-color', '');
+            }
+        });
+        $('#ddlBillingPartner2').change(function () {
+            if ($("#ddlBillingPartner2 option:selected").text() == "Please Select") {
+                $('#ddlBillingPartner2').css('border-color', 'red');
+            }
+            else {
+                $('#ddlBillingPartner2').css('border-color', '');
+            }
+        });
+        $('#ddlBillingPartner3').change(function () {
+            if ($("#ddlBillingPartner3 option:selected").text() == "Please Select") {
+                $('#ddlBillingPartner3').css('border-color', 'red');
+            }
+            else {
+                $('#ddlBillingPartner3').css('border-color', '');
+            }
+        });
+        $('#ddlBillingPartner4').change(function () {
+            if ($("#ddlBillingPartner4 option:selected").text() == "Please Select") {
+                $('#ddlBillingPartner4').css('border-color', 'red');
+            }
+            else {
+                $('#ddlBillingPartner4').css('border-color', '');
+            }
+        });
+
+        $("#txtBrandName1").focusout(function () {
+            if ($("#txtBrandName1").val() != "") {
+                $('#txtBrandName1').css('border-color', '');
+            }
+            else {
+                $('#txtBrandName1').css('border-color', 'red');
+            }
+        });
+        $("#txtBrandName2").focusout(function () {
+            if ($("#txtBrandName2").val() != "") {
+                $('#txtBrandName2').css('border-color', '');
+            }
+            else {
+                $('#txtBrandName2').css('border-color', 'red');
+            }
+        });
+        $("#txtBrandName3").focusout(function () {
+            if ($("#txtBrandName3").val() != "") {
+                $('#txtBrandName3').css('border-color', '');
+            }
+            else {
+                $('#txtBrandName3').css('border-color', 'red');
+            }
+        });
+        $("#txtBrandName4").focusout(function () {
+            if ($("#txtBrandName4").val() != "") {
+                $('#txtBrandName4').css('border-color', '');
+            }
+            else {
+                $('#txtBrandName4').css('border-color', 'red');
+            }
+        });
+
+        $("#txtNoOfOutlets1").focusout(function () {
+            if ($("#txtNoOfOutlets1").val() != "") {
+                $('#txtNoOfOutlets1').css('border-color', '');
+            }
+            else {
+                $('#txtNoOfOutlets1').css('border-color', 'red');
+            }
+        });
+        $("#txtNoOfOutlets2").focusout(function () {
+            if ($("#txtNoOfOutlets2").val() != "") {
+                $('#txtNoOfOutlets2').css('border-color', '');
+            }
+            else {
+                $('#txtNoOfOutlets2').css('border-color', 'red');
+            }
+        });
+        $("#txtNoOfOutlets3").focusout(function () {
+            if ($("#txtNoOfOutlets3").val() != "") {
+                $('#txtNoOfOutlets3').css('border-color', '');
+            }
+            else {
+                $('#txtNoOfOutlets3').css('border-color', 'red');
+            }
+        });
+        $("#txtNoOfOutlets4").focusout(function () {
+            if ($("#txtNoOfOutlets4").val() != "") {
+                $('#txtNoOfOutlets4').css('border-color', '');
+            }
+            else {
+                $('#txtNoOfOutlets4').css('border-color', 'red');
+            }
+        });
+
+        $("#txtNoOfEnrolled1").focusout(function () {
+            if ($("#txtNoOfEnrolled1").val() != "") {
+                $('#txtNoOfEnrolled1').css('border-color', '');
+            }
+            else {
+                $('#txtNoOfEnrolled1').css('border-color', 'red');
+            }
+        });
+        $("#txtNoOfEnrolled2").focusout(function () {
+            if ($("#txtNoOfEnrolled2").val() != "") {
+                $('#txtNoOfEnrolled2').css('border-color', '');
+            }
+            else {
+                $('#txtNoOfEnrolled2').css('border-color', 'red');
+            }
+        });
+        $("#txtNoOfEnrolled3").focusout(function () {
+            if ($("#txtNoOfEnrolled3").val() != "") {
+                $('#txtNoOfEnrolled3').css('border-color', '');
+            }
+            else {
+                $('#txtNoOfEnrolled3').css('border-color', 'red');
+            }
+        });
+        $("#txtNoOfEnrolled4").focusout(function () {
+            if ($("#txtNoOfEnrolled4").val() != "") {
+                $('#txtNoOfEnrolled4').css('border-color', '');
+            }
+            else {
+                $('#txtNoOfEnrolled4').css('border-color', 'red');
+            }
+        });
+
+        $("#txtBOProduct1").focusout(function () {
+            if ($("#txtBOProduct1").val() != "") {
+                $('#txtBOProduct1').css('border-color', '');
+            }
+            else {
+                $('#txtBOProduct1').css('border-color', 'red');
+            }
+        });
+        $("#txtBOProduct2").focusout(function () {
+            if ($("#txtBOProduct2").val() != "") {
+                $('#txtBOProduct2').css('border-color', '');
+            }
+            else {
+                $('#txtBOProduct2').css('border-color', 'red');
+            }
+        });
+        $("#txtBOProduct3").focusout(function () {
+            if ($("#txtBOProduct3").val() != "") {
+                $('#txtBOProduct3').css('border-color', '');
+            }
+            else {
+                $('#txtBOProduct3').css('border-color', 'red');
+            }
+        });
+        $("#txtBOProduct4").focusout(function () {
+            if ($("#txtBOProduct4").val() != "") {
+                $('#txtBOProduct4').css('border-color', '');
+            }
+            else {
+                $('#txtBOProduct4').css('border-color', 'red');
+            }
+        });
+    }
+
+    function RemoveRequiredBorderAssignment() {
+
+        $('#ddlSourcedBy').change(function () {
+            if ($("#ddlSourcedBy option:selected").text() == "Please Select") {
+                $('#ddlSourcedBy').css('border-color', 'red');
+            }
+            else {
+                $('#ddlSourcedBy').css('border-color', '');
+            }
+        });
+        $('#ddlAssignedCS').change(function () {
+            if ($("#ddlAssignedCS option:selected").text() == "Please Select") {
+                $('#ddlAssignedCS').css('border-color', 'red');
+            }
+            else {
+                $('#ddlAssignedCS').css('border-color', '');
+            }
+        });
+        $('#ddlReferredby').change(function () {
+            if ($("#ddlReferredby option:selected").text() == "Please Select") {
+                $('#ddlReferredby').css('border-color', 'red');
+            }
+            else {
+                $('#ddlReferredby').css('border-color', '');
+            }
+        });
+        $('#ddlReferredName').change(function () {
+            if ($("#ddlReferredName option:selected").text() == "Please Select") {
+                $('#ddlReferredName').css('border-color', 'red');
+            }
+            else {
+                $('#ddlReferredName').css('border-color', '');
+            }
+        });
+
+        $("#txtComments").focusout(function () {
+            if ($("#txtComments").val() != "") {
+                $('#txtComments').css('border-color', '');
+            }
+            else {
+                $('#txtComments').css('border-color', 'red');
+            }
+        });
+    }
+    function RemoveRequiredBorderDeal() {
+        $("#txtLoyaltyFees").focusout(function () {
+            if ($("#txtLoyaltyFees").val() != "") {
+                $('#txtLoyaltyFees').css('border-color', '');
+                CalculateTotalFees();
+                CalculateTDS();
+            }
+            else {
+                $('#txtLoyaltyFees').css('border-color', 'red');
+            }
+        });
+        $("#txtAnyOtherFees").focusout(function () {
+            if ($("#txtAnyOtherFees").val() != "") {
+                CalculateTotalFees();
+                CalculateTDS();
+            }
+        });
+        $("#txtWAPaidPackFees").focusout(function () {
+            if ($("#txtWAPaidPackFees").val() != "") {
+                CalculateTotalFees();
+                CalculateTDS();
+            }
+        });
+        $("#txtSMSPaidPackFees").focusout(function () {
+            if ($("#txtSMSPaidPackFees").val() != "") {
+                CalculateTotalFees();
+                CalculateTDS();
+            }
+        });
+        $("#txtAmountReceived").focusout(function () {
+            if ($("#txtAmountReceived").val() != "" && $("#txtAmountReceived").val() != 0) {
+                if (parseFloat($("#txtAmountReceived").val()) > parseFloat($("#txtTotalFeesB").val())) {
+                    $('#txtAmountReceived').css('border-color', 'red');
+                    $('#txtAmountReceived').focus();
+                }
+                else {
+                    $('#txtAmountReceived').css('border-color', '');
+                    CalculateTDS();
+                    CalculateTotalFees();
+                }
+            }
+            else {
+                $('#txtAmountReceived').css('border-color', 'red');
+            }
+        });
+
+        $("#txtGSTRate").focusout(function () {
+            if ($("#txtGSTRate").val() != "" && $("#txtGSTRate").val() != 0) {
+                $('#txtGSTRate').css('border-color', '');
+                CalculateTotalFees();
+                CalculateTDS();
+            }
+            else {
+                $('#txtGSTRate').css('border-color', 'red');
+            }
+        });
+
+
+        $('#IsCGST').on('change', function () {
+            $('#dvIsGST').css('border', '');
+            $("#txtGSTRate").show();
+            CalculateTotalFees();
+            CalculateTDS();
+        });
+        $('#IsIGST').on('change', function () {
+            $('#dvIsGST').css('border', '');
+            $("#txtGSTRate").show();
+            CalculateTotalFees();
+            CalculateTDS();
+        });
+        $('#IsGSTNo').on('change', function () {
+            $('#dvIsGST').css('border', '');
+            $("#txtGSTRate").hide();
+            CalculateTotalFees();
+            CalculateTDS();
+        });
+
+        $("#txtAdvanceAmount").focusout(function () {
+            if ($("#txtAdvanceAmount").val() != "" && $("#txtAdvanceAmount").val() != 0) {
+
+                if (parseFloat($("#txtAdvanceAmount").val()) > parseFloat($("#txtTotalFeesB").val())) {
+                    $('#txtAdvanceAmount').css('border-color', 'red');
+                    $('#txtAdvanceAmount').focus();
+                }
+                else {
+                    $('#txtAdvanceAmount').css('border-color', '');
+                    CalculateTDS();
+                    CalculateTotalFees();
+                }
+            }
+            else {
+                $('#txtAdvanceAmount').css('border-color', 'red');
+            }
+        });
+
+        $('#ddlPaymentFrequency').change(function () {
+            if ($("#ddlPaymentFrequency option:selected").text() == "Please Select") {
+                $('#ddlPaymentFrequency').css('border-color', 'red');
+                $("#dvPaymentSection").hide();
+                $("#dvPaymentDetailsSection").hide();
+            }
+            else {
+                $('#ddlPaymentFrequency').css('border-color', '');
+                if ($("#ddlPaymentFrequency option:selected").text() == "Single") {
+                    $("#dvPaymentSection").hide();
+                    $("#dvPaymentDetailsSection").hide();
+                    $("#dvAdvanceAmount").hide();
+                }
+                else {
+                    $("#dvPaymentSection").show();
+                    $("#dvAdvanceAmount").show();
+                }
+            }
+        });
+        $('#ddlPaymentMode').change(function () {
+            if ($("#ddlPaymentMode option:selected").text() == "Please Select") {
+                $('#ddlPaymentMode').css('border-color', 'red');
+            }
+            else {
+                $('#ddlPaymentMode').css('border-color', '');
+            }
+        });
+        $('#ddlPaymentStatus').change(function () {
+            if ($("#ddlPaymentStatus option:selected").text() == "Please Select") {
+                $('#ddlPaymentStatus').css('border-color', 'red');
+            }
+            else {
+                $('#ddlPaymentStatus').css('border-color', '');
+            }
+        });
+    }
+
+    function CalculateTDS() {
+        var ReceivedFees = $("#txtAmountReceived").val();
+        if (parseFloat(ReceivedFees) > parseFloat($("#txtTotalFeesB").val())) {
+            $('#txtAmountReceived').focus();
+        }
+        else {
+            if ($("#ddlPaymentFrequency option:selected").text() == "Single" || $("#ddlPaymentFrequency option:selected").text() == "Please Select") {
+
+                if (ReceivedFees == "") {
+                    ReceivedFees = 0;
+                }
+                $("#txtTDSDeducted").val($("#txtTotalFeesB").val() - ReceivedFees);
+            }
+            if ($("#ddlPaymentFrequency option:selected").text() == "Installments") {
+                if (ReceivedFees == "") {
+                    ReceivedFees = 0;
+                }
+                var AdvanceAmount = $("#txtAdvanceAmount").val();
+                $("#txtTDSDeducted").val(AdvanceAmount - ReceivedFees);
+            }
+
+        }
+    }
+    function CalculateTotalFees() {
+        var LoyaltyFees = $("#txtLoyaltyFees").val();
+        if (LoyaltyFees == "") {
+            LoyaltyFees = 0;
+        }
+        var OtherFees = $("#txtAnyOtherFees").val();
+        if (OtherFees == "") {
+            OtherFees = 0;
+        }
+        var WAPaidFees = $("#txtWAPaidPackFees").val();
+        if (WAPaidFees == "") {
+            WAPaidFees = 0;
+        }
+        var SMSPaidFees = $("#txtSMSPaidPackFees").val();
+        if (SMSPaidFees == "") {
+            SMSPaidFees = 0;
+        }
+        var EComFees = $("#txtEcommIntegration").val();
+        if (EComFees == "") {
+            EComFees = 0;
+        }
+
+        var totalFeesA = parseFloat(LoyaltyFees) + parseFloat(WAPaidFees) + parseFloat(SMSPaidFees) + parseFloat(EComFees) + parseFloat(OtherFees);
+        $("#txtTotalFeesA").val(totalFeesA);
+
+        if ($("#IsCGST").is(":checked") || $("#IsIGST").is(":checked")) {
+            var rate = $("#txtGSTRate").val();
+            if (rate != "" || rate > 0) {
+                $("#txtTotalFeesB").val(parseFloat(totalFeesA) + (parseFloat(totalFeesA) * parseFloat(rate / 100)));
+            }
+            else {
+                $("#txtTotalFeesB").val(totalFeesA);
+            }
+        }
+        else {
+            $("#txtTotalFeesB").val(totalFeesA);
+        }
+
+        if ($("#ddlPaymentFrequency option:selected").text() == "Installments") {
+            var balance = parseFloat($("#txtTotalFeesB").val()) - (parseFloat($("#txtAmountReceived").val()) + parseFloat($("#txtTDSDeducted").val()));
+            if (!isNaN(balance)) {
+                $("#txtAmountBalance").val(balance);
+            }
+
+
+            if (balance > 0) {
+                //$('#txtNoOfInstallments').prop("disabled", false);
+                $("#txtNoOfInstallments").attr("readonly", false);
+            }
+            else {
+                //$('#txtNoOfInstallments').prop("disabled", true);
+                $("#txtNoOfInstallments").attr("readonly", true);
+            }
+        }
+
+
+    }
+
+    function CheckValidation(buttonType) {
+        var returnStatusCust = true;
+        var returnStatusAssign = true;
+        var returnStatusDeal = true;
+        var returnStatusPayment = true;
+        var returnStatusUpdatePayment = true;
+        returnStatusCust = CheckCustomerDetails();
+        if (returnStatusCust) {
+            returnStatusAssign = CheckAssignmentDetails();
+            if (returnStatusAssign) {
+                returnStatusDeal = CheckDealDetails();
+                if (returnStatusDeal) {
+                    returnStatusPayment = CheckPaymentSchedule();
+                }
+            }
+        }
+        if (returnStatusCust && returnStatusAssign && returnStatusDeal && returnStatusPayment) {
+            var datastatus = GetAllData();
+            if (buttonType == 'Submit') {
+                $("#hdnCustomerStatus").val("Submit");
+                $("#myModal").show(1000);
+            }
+            else {
+                return true;
+            }
+
+        }
+        else {
+            cuteAlert({
+                type: "error",
+                title: "Oops..",
+                message: "Please enter Required fields",
+                buttonText: "Okay"
+            })
+            return false;
+        }
+    }
+
+    function CheckCustomerDetails() {
+        var returnStatus = true;
+        if ($("#txtGroupName").val() == "") {
+            ShowHideSection("custdetails");
+            $('#txtGroupName').css('border-color', 'red');
+            returnStatus = false;
+        }
+        if ($("#txtOwnerName").val() == "") {
+            ShowHideSection("custdetails");
+            $('#txtOwnerName').css('border-color', 'red');
+            returnStatus = false;
+        }
+        if ($("#txtOwnerMobileNo").val() == "") {
+            ShowHideSection("custdetails");
+            $('#txtOwnerMobileNo').css('border-color', 'red');
+            returnStatus = false;
+        }
+        if ($("#txtOwnerEmailId").val() == "") {
+            ShowHideSection("custdetails");
+            $('#txtOwnerEmailId').css('border-color', 'red');
+            returnStatus = false;
+        }
+        if ($("#fileGSTDocumentFile").val() == "") {
+            ShowHideSection("custdetails");
+            $('#fileGSTDocumentFile').addClass('borderClass');
+            returnStatus = false;
+        }
+        if ($("#filePANDocumentFile").val() == "") {
+            ShowHideSection("custdetails");
+            $('#filePANDocumentFile').addClass('borderClass');
+            returnStatus = false;
+        }
+        if ($("#ddlCity").val() == "") {
+            ShowHideSection("custdetails");
+            $('#ddlCity').css('border-color', 'red');
+            returnStatus = false;
+        }
+        if ($("#txtNoOfRetailCategory").val() == "") {
+            ShowHideSection("custdetails");
+            $('#txtNoOfRetailCategory').css('border-color', 'red');
+            returnStatus = false;
+        }
+        if ($("#IsMWPYes").is(":checked") || $("#IsMWPNo").is(":checked")) {
+
+        }
+        else {
+            ShowHideSection("custdetails");
+            $('#dvIsMWP').css('border', '1px solid red');
+            returnStatus = false;
+        }
+
+        if ($("#IsWhatsAppYes").is(":checked") || $("#IsWhatsAppNo").is(":checked")) {
+
+        }
+        else {
+            ShowHideSection("custdetails");
+            $('#dvIsWhatsApp').css('border', '1px solid red');
+            returnStatus = false;
+        }
+
+        if ($("#IsKeyAccountYes").is(":checked") || $("#IsKeyAccountNo").is(":checked")) {
+
+        }
+        else {
+            ShowHideSection("custdetails");
+            $('#dvIsKeyAccount').css('border', '1px solid red');
+            returnStatus = false;
+        }
+
+        if ($("#IsWhatsAppYes").is(":checked")) {
+            if ($("#txtNoOfFreeWhatsAppMsg").val() == "") {
+                ShowHideSection("custdetails");
+                $('#txtNoOfFreeWhatsAppMsg').css('border-color', 'red');
+                returnStatus = false;
+            }
+            //if ($("#txtNoOfPaidWhatsAppMsg").val() == "") {
+            //    ShowHideSection("custdetails");
+            //    $('#txtNoOfPaidWhatsAppMsg').css('border-color', 'red');
+            //    returnStatus = false;
+            //}
+        }
+
+        if ($("#txtNoOfFreeSMS").val() == "") {
+            ShowHideSection("custdetails");
+            $('#txtNoOfFreeSMS').css('border-color', 'red');
+            returnStatus = false;
+        }
+
+        //if ($("#txtNoOfPaidSMS").val() == "") {
+        //    ShowHideSection("custdetails");
+        //    $('#txtNoOfPaidSMS').css('border-color', 'red');
+        //    returnStatus = false;
+        //}
+
+        var returnStatusCategory = CheckCategoryDetails();
+
+        if (returnStatus && returnStatusCategory) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+
+    function CheckCategoryDetails() {
+        var returnStatus = false;
+        var categoryNo = $("#txtNoOfRetailCategory").val();
+        if (categoryNo == 1) {
+            returnStatus = true;
+            if ($("#ddlCategory1 option:selected").text() == "Please Select") {
+                $('#ddlCategory1').css('border-color', 'red');
+                returnStatus = false;
+            }
+            if ($("#txtBrandName1").val() == "") {
+                ShowHideSection("custdetails");
+                $('#txtBrandName1').css('border-color', 'red');
+                returnStatus = false;
+            }
+            if ($("#txtNoOfOutlets1").val() == "") {
+                ShowHideSection("custdetails");
+                $('#txtNoOfOutlets1').css('border-color', 'red');
+                returnStatus = false;
+            }
+            if ($("#txtNoOfEnrolled1").val() == "") {
+                ShowHideSection("custdetails");
+                $('#txtNoOfEnrolled1').css('border-color', 'red');
+                returnStatus = false;
+            }
+
+            if ($("#ddlBOProduct1 option:selected").text() == "Please Select") {
+                $('#ddlBOProduct1').css('border-color', 'red');
+                returnStatus = false;
+            }
+            if ($("#ddlBillingPartner1 option:selected").text() == "Please Select") {
+                $('#ddlBillingPartner1').css('border-color', 'red');
+                returnStatus = false;
+            }
+            if ($("#txtBOProduct1").val() == "") {
+                ShowHideSection("custdetails");
+                $('#txtBOProduct1').css('border-color', 'red');
+                returnStatus = false;
+            }
+        }
+        if (categoryNo == 2) {
+            returnStatus = true;
+            if ($("#ddlCategory1 option:selected").text() == "Please Select") {
+                $('#ddlCategory1').css('border-color', 'red');
+                returnStatus = false;
+            }
+            if ($("#txtBrandName1").val() == "") {
+                ShowHideSection("custdetails");
+                $('#txtBrandName1').css('border-color', 'red');
+                returnStatus = false;
+            }
+            if ($("#txtNoOfOutlets1").val() == "") {
+                ShowHideSection("custdetails");
+                $('#txtNoOfOutlets1').css('border-color', 'red');
+                returnStatus = false;
+            }
+            if ($("#txtNoOfEnrolled1").val() == "") {
+                ShowHideSection("custdetails");
+                $('#txtNoOfEnrolled1').css('border-color', 'red');
+                returnStatus = false;
+            }
+
+            if ($("#ddlBOProduct1 option:selected").text() == "Please Select") {
+                $('#ddlBOProduct1').css('border-color', 'red');
+                returnStatus = false;
+            }
+            if ($("#ddlBillingPartner1 option:selected").text() == "Please Select") {
+                $('#ddlBillingPartner1').css('border-color', 'red');
+                returnStatus = false;
+            }
+            if ($("#txtBOProduct1").val() == "") {
+                ShowHideSection("custdetails");
+                $('#txtBOProduct1').css('border-color', 'red');
+                returnStatus = false;
+            }
+
+            if ($("#ddlCategory2 option:selected").text() == "Please Select") {
+                $('#ddlCategory2').css('border-color', 'red');
+                returnStatus = false;
+            }
+            if ($("#txtBrandName2").val() == "") {
+                ShowHideSection("custdetails");
+                $('#txtBrandName2').css('border-color', 'red');
+                returnStatus = false;
+            }
+            if ($("#txtNoOfOutlets2").val() == "") {
+                ShowHideSection("custdetails");
+                $('#txtNoOfOutlets2').css('border-color', 'red');
+                returnStatus = false;
+            }
+            if ($("#txtNoOfEnrolled2").val() == "") {
+                ShowHideSection("custdetails");
+                $('#txtNoOfEnrolled2').css('border-color', 'red');
+                returnStatus = false;
+            }
+
+            if ($("#ddlBOProduct2 option:selected").text() == "Please Select") {
+                $('#ddlBOProduct2').css('border-color', 'red');
+                returnStatus = false;
+            }
+            if ($("#ddlBillingPartner2 option:selected").text() == "Please Select") {
+                $('#ddlBillingPartner2').css('border-color', 'red');
+                returnStatus = false;
+            }
+            if ($("#txtBOProduct2").val() == "") {
+                ShowHideSection("custdetails");
+                $('#txtBOProduct2').css('border-color', 'red');
+                returnStatus = false;
+            }
+
+        }
+        if (categoryNo == 3) {
+            returnStatus = true;
+            if ($("#ddlCategory1 option:selected").text() == "Please Select") {
+                $('#ddlCategory1').css('border-color', 'red');
+                returnStatus = false;
+            }
+            if ($("#txtBrandName1").val() == "") {
+                ShowHideSection("custdetails");
+                $('#txtBrandName1').css('border-color', 'red');
+                returnStatus = false;
+            }
+            if ($("#txtNoOfOutlets1").val() == "") {
+                ShowHideSection("custdetails");
+                $('#txtNoOfOutlets1').css('border-color', 'red');
+                returnStatus = false;
+            }
+            if ($("#txtNoOfEnrolled1").val() == "") {
+                ShowHideSection("custdetails");
+                $('#txtNoOfEnrolled1').css('border-color', 'red');
+                returnStatus = false;
+            }
+
+            if ($("#ddlBOProduct1 option:selected").text() == "Please Select") {
+                $('#ddlBOProduct1').css('border-color', 'red');
+                returnStatus = false;
+            }
+            if ($("#ddlBillingPartner1 option:selected").text() == "Please Select") {
+                $('#ddlBillingPartner1').css('border-color', 'red');
+                returnStatus = false;
+            }
+            if ($("#txtBOProduct1").val() == "") {
+                ShowHideSection("custdetails");
+                $('#txtBOProduct1').css('border-color', 'red');
+                returnStatus = false;
+            }
+
+            if ($("#ddlCategory2 option:selected").text() == "Please Select") {
+                $('#ddlCategory2').css('border-color', 'red');
+                returnStatus = false;
+            }
+            if ($("#txtBrandName2").val() == "") {
+                ShowHideSection("custdetails");
+                $('#txtBrandName2').css('border-color', 'red');
+                returnStatus = false;
+            }
+            if ($("#txtNoOfOutlets2").val() == "") {
+                ShowHideSection("custdetails");
+                $('#txtNoOfOutlets2').css('border-color', 'red');
+                returnStatus = false;
+            }
+            if ($("#txtNoOfEnrolled2").val() == "") {
+                ShowHideSection("custdetails");
+                $('#txtNoOfEnrolled2').css('border-color', 'red');
+                returnStatus = false;
+            }
+
+            if ($("#ddlBOProduct2 option:selected").text() == "Please Select") {
+                $('#ddlBOProduct2').css('border-color', 'red');
+                returnStatus = false;
+            }
+            if ($("#ddlBillingPartner2 option:selected").text() == "Please Select") {
+                $('#ddlBillingPartner2').css('border-color', 'red');
+                returnStatus = false;
+            }
+            if ($("#txtBOProduct2").val() == "") {
+                ShowHideSection("custdetails");
+                $('#txtBOProduct2').css('border-color', 'red');
+                returnStatus = false;
+            }
+
+            if ($("#ddlCategory3 option:selected").text() == "Please Select") {
+                $('#ddlCategory3').css('border-color', 'red');
+                returnStatus = false;
+            }
+            if ($("#txtBrandName3").val() == "") {
+                ShowHideSection("custdetails");
+                $('#txtBrandName3').css('border-color', 'red');
+                returnStatus = false;
+            }
+            if ($("#txtNoOfOutlets3").val() == "") {
+                ShowHideSection("custdetails");
+                $('#txtNoOfOutlets3').css('border-color', 'red');
+                returnStatus = false;
+            }
+            if ($("#txtNoOfEnrolled3").val() == "") {
+                ShowHideSection("custdetails");
+                $('#txtNoOfEnrolled3').css('border-color', 'red');
+                returnStatus = false;
+            }
+
+            if ($("#ddlBOProduct3 option:selected").text() == "Please Select") {
+                $('#ddlBOProduct3').css('border-color', 'red');
+                returnStatus = false;
+            }
+            if ($("#ddlBillingPartner3 option:selected").text() == "Please Select") {
+                $('#ddlBillingPartner3').css('border-color', 'red');
+                returnStatus = false;
+            }
+            if ($("#txtBOProduct3").val() == "") {
+                ShowHideSection("custdetails");
+                $('#txtBOProduct3').css('border-color', 'red');
+                returnStatus = false;
+            }
+
+        }
+        if (categoryNo == 4) {
+            returnStatus = true;
+            if ($("#ddlCategory1 option:selected").text() == "Please Select") {
+                $('#ddlCategory1').css('border-color', 'red');
+                returnStatus = false;
+            }
+            if ($("#txtBrandName1").val() == "") {
+                ShowHideSection("custdetails");
+                $('#txtBrandName1').css('border-color', 'red');
+                returnStatus = false;
+            }
+            if ($("#txtNoOfOutlets1").val() == "") {
+                ShowHideSection("custdetails");
+                $('#txtNoOfOutlets1').css('border-color', 'red');
+                returnStatus = false;
+            }
+            if ($("#txtNoOfEnrolled1").val() == "") {
+                ShowHideSection("custdetails");
+                $('#txtNoOfEnrolled1').css('border-color', 'red');
+                returnStatus = false;
+            }
+
+            if ($("#ddlBOProduct1 option:selected").text() == "Please Select") {
+                $('#ddlBOProduct1').css('border-color', 'red');
+                returnStatus = false;
+            }
+            if ($("#ddlBillingPartner1 option:selected").text() == "Please Select") {
+                $('#ddlBillingPartner1').css('border-color', 'red');
+                returnStatus = false;
+            }
+            if ($("#txtBOProduct1").val() == "") {
+                ShowHideSection("custdetails");
+                $('#txtBOProduct1').css('border-color', 'red');
+                returnStatus = false;
+            }
+
+            if ($("#ddlCategory2 option:selected").text() == "Please Select") {
+                $('#ddlCategory2').css('border-color', 'red');
+                returnStatus = false;
+            }
+            if ($("#txtBrandName2").val() == "") {
+                ShowHideSection("custdetails");
+                $('#txtBrandName2').css('border-color', 'red');
+                returnStatus = false;
+            }
+            if ($("#txtNoOfOutlets2").val() == "") {
+                ShowHideSection("custdetails");
+                $('#txtNoOfOutlets2').css('border-color', 'red');
+                returnStatus = false;
+            }
+            if ($("#txtNoOfEnrolled2").val() == "") {
+                ShowHideSection("custdetails");
+                $('#txtNoOfEnrolled2').css('border-color', 'red');
+                returnStatus = false;
+            }
+
+            if ($("#ddlBOProduct2 option:selected").text() == "Please Select") {
+                $('#ddlBOProduct2').css('border-color', 'red');
+                returnStatus = false;
+            }
+            if ($("#ddlBillingPartner2 option:selected").text() == "Please Select") {
+                $('#ddlBillingPartner2').css('border-color', 'red');
+                returnStatus = false;
+            }
+            if ($("#txtBOProduct2").val() == "") {
+                ShowHideSection("custdetails");
+                $('#txtBOProduct2').css('border-color', 'red');
+                returnStatus = false;
+            }
+
+            if ($("#ddlCategory3 option:selected").text() == "Please Select") {
+                $('#ddlCategory3').css('border-color', 'red');
+                returnStatus = false;
+            }
+            if ($("#txtBrandName3").val() == "") {
+                ShowHideSection("custdetails");
+                $('#txtBrandName3').css('border-color', 'red');
+                returnStatus = false;
+            }
+            if ($("#txtNoOfOutlets3").val() == "") {
+                ShowHideSection("custdetails");
+                $('#txtNoOfOutlets3').css('border-color', 'red');
+                returnStatus = false;
+            }
+            if ($("#txtNoOfEnrolled3").val() == "") {
+                ShowHideSection("custdetails");
+                $('#txtNoOfEnrolled3').css('border-color', 'red');
+                returnStatus = false;
+            }
+
+            if ($("#ddlBOProduct3 option:selected").text() == "Please Select") {
+                $('#ddlBOProduct3').css('border-color', 'red');
+                returnStatus = false;
+            }
+            if ($("#ddlBillingPartner3 option:selected").text() == "Please Select") {
+                $('#ddlBillingPartner3').css('border-color', 'red');
+                returnStatus = false;
+            }
+            if ($("#txtBOProduct3").val() == "") {
+                ShowHideSection("custdetails");
+                $('#txtBOProduct3').css('border-color', 'red');
+                returnStatus = false;
+            }
+
+            if ($("#ddlCategory4 option:selected").text() == "Please Select") {
+                $('#ddlCategory4').css('border-color', 'red');
+                returnStatus = false;
+            }
+            if ($("#txtBrandName4").val() == "") {
+                ShowHideSection("custdetails");
+                $('#txtBrandName4').css('border-color', 'red');
+                returnStatus = false;
+            }
+            if ($("#txtNoOfOutlets4").val() == "") {
+                ShowHideSection("custdetails");
+                $('#txtNoOfOutlets4').css('border-color', 'red');
+                returnStatus = false;
+            }
+            if ($("#txtNoOfEnrolled4").val() == "") {
+                ShowHideSection("custdetails");
+                $('#txtNoOfEnrolled4').css('border-color', 'red');
+                returnStatus = false;
+            }
+
+            if ($("#ddlBOProduct4 option:selected").text() == "Please Select") {
+                $('#ddlBOProduct4').css('border-color', 'red');
+                returnStatus = false;
+            }
+            if ($("#ddlBillingPartner4 option:selected").text() == "Please Select") {
+                $('#ddlBillingPartner4').css('border-color', 'red');
+                returnStatus = false;
+            }
+            if ($("#txtBOProduct4").val() == "") {
+                ShowHideSection("custdetails");
+                $('#txtBOProduct4').css('border-color', 'red');
+                returnStatus = false;
+            }
+
+        }
+
+        if (returnStatus) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+
+    function CheckAssignmentDetails() {
+        var returnStatus = true;
+        if ($("#ddlSourcedBy option:selected").text() == "Please Select") {
+            $('#ddlSourcedBy').css('border-color', 'red');
+            ShowHideSection("assignmentdetails");
+            returnStatus = false;
+        }
+        if ($("#ddlAssignedCS option:selected").text() == "Please Select") {
+            $('#ddlAssignedCS').css('border-color', 'red');
+            ShowHideSection("assignmentdetails");
+            returnStatus = false;
+        }
+        if ($("#ddlReferredby option:selected").text() == "Please Select") {
+            $('#ddlReferredby').css('border-color', 'red');
+            ShowHideSection("assignmentdetails");
+            returnStatus = false;
+        }
+        //if ($("#ddlReferredName option:selected").text() == "Please Select") {
+        //    $('#ddlReferredName').css('border-color', 'red');
+        //    ShowHideSection("assignmentdetails");
+        //    returnStatus = false;
+        //}
+        if ($("#txtComments").val() == "") {
+            ShowHideSection("assignmentdetails");
+            $('#txtComments').css('border-color', 'red');
+            returnStatus = false;
+        }
+
+        if (returnStatus) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+
+    function CheckDealDetails() {
+        var returnStatus = true;
+        if ($("#txtLoyaltyFees").val() == "") {
+            ShowHideSection("dealdetails");
+            $('#txtLoyaltyFees').css('border-color', 'red');
+            returnStatus = false;
+        }
+        if ($("#IsCGST").is(":checked") || $("#IsIGST").is(":checked") || $("#IsGSTNo").is(":checked")) {
+
+        }
+        else {
+            ShowHideSection("dealdetails");
+            $('#dvIsGST').css('border', '1px solid red');
+            returnStatus = false;
+        }
+        if ($("#ddlPaymentFrequency option:selected").text() == "Please Select") {
+            $('#ddlPaymentFrequency').css('border-color', 'red');
+            ShowHideSection("dealdetails");
+            returnStatus = false;
+        }
+        if ($("#txtAmountReceived").val() == "" || $("#txtAmountReceived").val() == "0") {
+            ShowHideSection("dealdetails");
+            $('#txtAmountReceived').css('border-color', 'red');
+            returnStatus = false;
+        }
+
+        if ($("#ddlPaymentMode option:selected").text() == "Please Select") {
+            $('#ddlPaymentMode').css('border-color', 'red');
+            ShowHideSection("dealdetails");
+            returnStatus = false;
+        }
+
+        if ($("#ddlPaymentStatus option:selected").text() == "Please Select") {
+            $('#ddlPaymentStatus').css('border-color', 'red');
+            ShowHideSection("dealdetails");
+            returnStatus = false;
+        }
+
+
+        if (returnStatus) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+
+    function CheckInstallmentAmount() {
+        $("#txtPaymentAmount1").focusout(function () {
+            CalculateInstallmentAmount();
+            if ($("#txtPaymentAmount1").val() != "") {
+                $('#txtPaymentAmount1').css('border-color', '');
+            }
+            else {
+                $('#txtPaymentAmount1').css('border-color', 'red');
+            }
+        });
+        $("#txtPaymentAmount2").focusout(function () {
+            CalculateInstallmentAmount();
+            if ($("#txtPaymentAmount2").val() != "") {
+                $('#txtPaymentAmount2').css('border-color', '');
+            }
+            else {
+                $('#txtPaymentAmount2').css('border-color', 'red');
+            }
+        });
+        $("#txtPaymentAmount3").focusout(function () {
+            CalculateInstallmentAmount();
+            if ($("#txtPaymentAmount3").val() != "") {
+                $('#txtPaymentAmount3').css('border-color', '');
+            }
+            else {
+                $('#txtPaymentAmount3').css('border-color', 'red');
+            }
+        });
+
+        $("#txtPaymentDate1").focusout(function () {
+            if ($("#txtPaymentDate1").val() != "") {
+                $('#txtPaymentDate1').css('border-color', '');
+            }
+            else {
+                $('#txtPaymentDate1').css('border-color', 'red');
+            }
+        });
+        $("#txtPaymentDate2").focusout(function () {
+            if ($("#txtPaymentDate2").val() != "") {
+                $('#txtPaymentDate2').css('border-color', '');
+            }
+            else {
+                $('#txtPaymentDate2').css('border-color', 'red');
+            }
+        });
+        $("#txtPaymentDate3").focusout(function () {
+            if ($("#txtPaymentDate3").val() != "") {
+                $('#txtPaymentDate3').css('border-color', '');
+            }
+            else {
+                $('#txtPaymentDate3').css('border-color', 'red');
+            }
+        });
+    }
+
+    function CalculateInstallmentAmount() {
+        var AmountBalance = $("#txtAmountBalance").val();
+        var PaymentAmount1 = $("#txtPaymentAmount1").val();
+        var PaymentAmount2 = $("#txtPaymentAmount2").val();
+        var PaymentAmount3 = $("#txtPaymentAmount3").val();
+
+        if (PaymentAmount1 == "") {
+            PaymentAmount1 = 0;
+        }
+        if (PaymentAmount2 == "") {
+            PaymentAmount2 = 0;
+        }
+        if (PaymentAmount3 == "") {
+            PaymentAmount3 = 0;
+        }
+        var total = parseFloat(PaymentAmount1) + parseFloat(PaymentAmount2) + parseFloat(PaymentAmount3);
+
+        if (parseFloat(total) > parseFloat(AmountBalance)) {
+            cuteAlert({
+                type: "error",
+                title: "Oops..",
+                message: "Installments amount can not be greater than Balance Amount",
+                buttonText: "Okay"
+            })
+        }
+    }
+
+    function CheckPaymentSchedule() {
+        var returnStatus = true;
+        if ($("#txtAmountBalance").val() > 0) {
+            if ($("#txtNoOfInstallments").val() == "") {
+                ShowHideSection("paymentmodule");
+                $('#txtNoOfInstallments').css('border-color', 'red');
+                returnStatus = false;
+            }
+            if ($("#txtNoOfInstallments").val() == 1) {
+                if ($("#txtPaymentDate1").val() == "") {
+                    ShowHideSection("paymentmodule");
+                    $('#txtPaymentDate1').css('border-color', 'red');
+                    returnStatus = false;
+                }
+                if ($("#txtPaymentAmount1").val() == "") {
+                    ShowHideSection("paymentmodule");
+                    $('#txtPaymentAmount1').css('border-color', 'red');
+                    returnStatus = false;
+                }
+            }
+            if ($("#txtNoOfInstallments").val() == 2) {
+                if ($("#txtPaymentDate1").val() == "") {
+                    ShowHideSection("paymentmodule");
+                    $('#txtPaymentDate1').css('border-color', 'red');
+                    returnStatus = false;
+                }
+                if ($("#txtPaymentAmount1").val() == "") {
+                    ShowHideSection("paymentmodule");
+                    $('#txtPaymentAmount1').css('border-color', 'red');
+                    returnStatus = false;
+                }
+                if ($("#txtPaymentDate2").val() == "") {
+                    ShowHideSection("paymentmodule");
+                    $('#txtPaymentDate2').css('border-color', 'red');
+                    returnStatus = false;
+                }
+                if ($("#txtPaymentAmount2").val() == "") {
+                    ShowHideSection("paymentmodule");
+                    $('#txtPaymentAmount2').css('border-color', 'red');
+                    returnStatus = false;
+                }
+            }
+            if ($("#txtNoOfInstallments").val() == 3) {
+                if ($("#txtPaymentDate1").val() == "") {
+                    ShowHideSection("paymentmodule");
+                    $('#txtPaymentDate1').css('border-color', 'red');
+                    returnStatus = false;
+                }
+                if ($("#txtPaymentAmount1").val() == "") {
+                    ShowHideSection("paymentmodule");
+                    $('#txtPaymentAmount1').css('border-color', 'red');
+                    returnStatus = false;
+                }
+                if ($("#txtPaymentDate2").val() == "") {
+                    ShowHideSection("paymentmodule");
+                    $('#txtPaymentDate2').css('border-color', 'red');
+                    returnStatus = false;
+                }
+                if ($("#txtPaymentAmount2").val() == "") {
+                    ShowHideSection("paymentmodule");
+                    $('#txtPaymentAmount2').css('border-color', 'red');
+                    returnStatus = false;
+                }
+                if ($("#txtPaymentDate3").val() == "") {
+                    ShowHideSection("paymentmodule");
+                    $('#txtPaymentDate3').css('border-color', 'red');
+                    returnStatus = false;
+                }
+                if ($("#txtPaymentAmount3").val() == "") {
+                    ShowHideSection("paymentmodule");
+                    $('#txtPaymentAmount3').css('border-color', 'red');
+                    returnStatus = false;
+                }
+            }
+        }
+
+        if (returnStatus) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+
+    function GetAllData() {
+        //Get Category and Payment Schedule Data and bind it with Hidden Fields
+        //hdnCategoryData
+        var NoOfCategory = $("#txtNoOfRetailCategory").val();
+        var Categories = [];
+        for (let i = 1; i <= NoOfCategory; i++) {
+            item = {}
+            item["SINo"] = 0;
+            item["GroupId"] = $("#hdnGroupID").val();
+            item["CategoryId"] = $("#ddlCategory" + i).val();
+            item["CategoryName"] = $("#ddlCategory option:selected").text();
+            item["BrandName"] = $("#txtBrandName" + i).val();
+            item["NoOfOutlets"] = $("#txtNoOfOutlets" + i).val();
+            item["NoOfEnrolled"] = $("#txtNoOfEnrolled" + i).val();
+            item["BOProduct"] = $("#ddlBOProduct" + i).val();
+            item["BillingPartner"] = $("#ddlBillingPartner" + i).val();
+            item["BillingProduct"] = $("#txtBOProduct" + i).val();
+
+            Categories.push(item);
+        }
+        var CategoriesData = JSON.stringify(Categories);
+        $("#hdnCategoryData").val(CategoriesData);
+
+        //hdnPaymentScheduleData
+        var NoOfInstallments = $("#txtNoOfInstallments").val();
+        var Installments = [];
+        for (let i = 1; i <= NoOfInstallments; i++) {
+            item = {}
+            item["SINo"] = 0;
+            item["GroupId"] = $("#hdnGroupID").val();
+            item["Installment"] = i;
+            item["PaymentDate"] = $("#txtPaymentDate" + i).val();
+            item["PaymentAmount"] = $("#txtPaymentAmount" + i).val();
+            Installments.push(item);
+        }
+        $("#hdnPaymentScheduleData").val(JSON.stringify(Installments));
+    }
+
 
 </script>
+
+<script src="~/Scripts/jquery-ui-1.12.1.js"></script>
+<script src="~/Scripts/jquery-ui-1.12.1.min.js"></script>
+<link href="~/Content/themes/base/jquery-ui.min.css" rel="stylesheet" />
+<link href="~/Content/themes/base/jquery-ui.css" rel="stylesheet" />

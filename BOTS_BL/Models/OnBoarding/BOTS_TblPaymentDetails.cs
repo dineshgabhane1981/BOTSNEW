@@ -1,4 +1,4 @@
-namespace BOTS_BL.Models.OnBoarding
+namespace BOTS_BL.Models
 {
     using System;
     using System.Collections.Generic;
@@ -9,20 +9,12 @@ namespace BOTS_BL.Models.OnBoarding
     public partial class BOTS_TblPaymentDetails
     {
         [Key]
-        [Column(Order = 0)]
-        [DatabaseGenerated(DatabaseGeneratedOption.None)]
-        public long SINo { get; set; }
-
-        [Key]
-        [Column(Order = 1)]
         [StringLength(4)]
         public string GroupId { get; set; }
 
         [Column(TypeName = "numeric")]
         public decimal? TotalFees { get; set; }
 
-        [Key]
-        [Column(Order = 2)]
         [StringLength(150)]
         public string PaymentCleared { get; set; }
 

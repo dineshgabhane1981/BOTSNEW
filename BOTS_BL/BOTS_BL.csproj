@@ -179,7 +179,6 @@
     <Compile Include="Models\ChitaleModel\TgtVsAchParticipantWise.cs" />
     <Compile Include="Models\ChitaleModel\Top5LostParticipants.cs" />
     <Compile Include="Models\ChitaleModel\TransactionMaster.cs" />
-    <Compile Include="Models\CommonDB\BOTS_TblBillingPartnerProduct.cs" />
     <Compile Include="Models\CommonDB\CommonDBContext.cs" />
     <Compile Include="Models\CommonDB\CommonReferralURL.cs" />
     <Compile Include="Models\CommonDB\CustomerConnString.cs" />
@@ -230,10 +229,12 @@
     <Compile Include="Models\KeyIndecators\OnlyOnce.cs" />
     <Compile Include="Models\LoginDetail.cs" />
     <Compile Include="Models\LoginModel.cs" />
+    <Compile Include="Models\OnBoarding\BOTS_TblBillingPartnerProduct.cs" />
     <Compile Include="Models\OnBoarding\BOTS_TblDealDetails.cs" />
     <Compile Include="Models\OnBoarding\BOTS_TblGroupMaster.cs" />
     <Compile Include="Models\OnBoarding\BOTS_TblInstallmentDetails.cs" />
     <Compile Include="Models\OnBoarding\BOTS_TblPaymentDetails.cs" />
+    <Compile Include="Models\OnBoarding\BOTS_TblRetailCategoryMaster.cs" />
     <Compile Include="Models\OnBoarding\BOTS_TblRetailMaster.cs" />
     <Compile Include="Models\CommonDB\tblCategory.cs" />
     <Compile Include="Models\OutletDetail.cs" />
@@ -263,6 +264,7 @@
     <Compile Include="Repository\ManagementDashboardRepository.cs" />
     <Compile Include="Repository\NoActionRepository.cs" />
     <Compile Include="Repository\OnBoarding\CustomerOnBoardingRepository.cs" />
+    <Compile Include="Repository\OnBoarding\OnBoardingRepository.cs" />
     <Compile Include="Repository\OtherReportsRepository.cs" />
     <Compile Include="Repository\ParticipantRepository.cs" />
     <Compile Include="Repository\PointsLedgerRepository.cs" />

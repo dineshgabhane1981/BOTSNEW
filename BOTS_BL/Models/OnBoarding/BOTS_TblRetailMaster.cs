@@ -10,13 +10,11 @@ namespace BOTS_BL.Models
     {
         [Key]
         [Column(Order = 0)]
-        public long SINo { get; set; }
-
-        [Key]
-        [Column(Order = 1)]
         [StringLength(4)]
         public string GroupId { get; set; }
 
+        [Key]
+        [Column(Order = 1)]
         [StringLength(50)]
         public string CategoryId { get; set; }
 

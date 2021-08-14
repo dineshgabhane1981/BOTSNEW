@@ -11,6 +11,9 @@ namespace WebApp.ViewModel
     {
         public BOTS_TblGroupMaster bots_TblGroupMaster { get; set; }
         public BOTS_TblRetailMaster bots_TblRetailMaster { get; set; }
+        public BOTS_TblDealDetails bots_TblDealDetails { get; set; }
+        public BOTS_TblPaymentDetails bots_TblPaymentDetails { get; set; }
+        public BOTS_TblInstallmentDetails bots_TblInstallmentDetails { get; set; }        
         public List<SelectListItem> lstCity { get; set; }
         public List<SelectListItem> lstRetailCategory { get; set; }
         public List<SelectListItem> lstSourcedBy { get; set; }
@@ -25,9 +28,25 @@ namespace WebApp.ViewModel
         {
             return new SelectListItem[2] { new SelectListItem() { Text = "Yes", Value = "1" }, new SelectListItem() { Text = "No", Value = "0" } };
         }
+        public SelectListItem[] PaymentFrequency()
+        {
+            return new SelectListItem[2] { new SelectListItem() { Text = "Single", Value = "1" }, new SelectListItem() { Text = "Installments", Value = "2" } };
+        }
         public SelectListItem[] RefferedCategory()
         {
             return new SelectListItem[4] { new SelectListItem() { Text = "Customer", Value = "1" }, new SelectListItem() { Text = "Billing Partner", Value = "2" }, new SelectListItem() { Text = "Channel Partner", Value = "3" }, new SelectListItem() { Text = "Cold Call", Value = "4" }};
+        }
+        public SelectListItem[] PaymentCleared()
+        {
+            return new SelectListItem[4] { new SelectListItem() { Text = "Full Cleared", Value = "1" }, new SelectListItem() { Text = "Partial Cleared", Value = "2" }, new SelectListItem() { Text = "Full Pending", Value = "3" }, new SelectListItem() { Text = "Partial Pending", Value = "4" } };
+        }
+        public SelectListItem[] PaymentType()
+        {
+            return new SelectListItem[2] { new SelectListItem() { Text = "Online", Value = "1" }, new SelectListItem() { Text = "Cheque", Value = "2" } };
+        }
+        public SelectListItem[] PaymentStatus()
+        {
+            return new SelectListItem[2] { new SelectListItem() { Text = "Cleared", Value = "1" }, new SelectListItem() { Text = "Pending", Value = "2" } };
         }
     }
 }

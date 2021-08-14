@@ -1,22 +1,20 @@
 ﻿using BOTS_BL;
+using BOTS_BL.Models;
 using BOTS_BL.Repository;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using WebApp.ViewModel;
-using BOTS_BL.Models.OnBoarding;
-using BOTS_BL.Models.CommonDB;
-using BOTS_BL.Models;
 using System.Web.Script.Serialization;
+using WebApp.ViewModel;
 
 namespace WebApp.Controllers.OnBoarding
 {
     public class CustomerOnBoardingController : Controller
     {
         CustomerRepository CR = new CustomerRepository();
-        CustomerOnBoardingRepository COR = new CustomerOnBoardingRepository();
+        OnBoardingRepository OBR = new OnBoardingRepository();
         Exceptions newexception = new Exceptions();
         // GET: CustomerOnBoarding
         public ActionResult Index()
@@ -24,7 +22,6 @@ namespace WebApp.Controllers.OnBoarding
             OnBoardingSalesViewModel objData = new OnBoardingSalesViewModel();
             try
             {
-                
                 objData.lstCity = CR.GetCity();
                 objData.lstRetailCategory = CR.GetRetailCategory();
                 objData.lstBillingPartner = CR.GetBillingPartner();
@@ -45,31 +42,61 @@ namespace WebApp.Controllers.OnBoarding
             }
             return View(objData);
         }
-        public ActionResult CustomerDetail()
+        [HttpPost]
+        public ActionResult AddCustomer(OnBoardingSalesViewModel objData)
         {
-            return View();
-        }
-        public ActionResult ProductAssignmentDetails()
-        {
-            return View();
-        }
-        public ActionResult DealDetails()
-        {
-            return View();
-        }
-        public ActionResult PaymentSchedule()
-        {
-            return View();
+            bool status = false;
+            try
+            {
+                var userDetails = (CustomerLoginDetail)Session["UserSession"];
+                List<BOTS_TblRetailMaster> objLstRetail = new List<BOTS_TblRetailMaster>();
+                List<BOTS_TblInstallmentDetails> objLstInstallment = new List<BOTS_TblInstallmentDetails>();
+                JavaScriptSerializer json_serializer = new JavaScriptSerializer();
+                json_serializer.MaxJsonLength = int.MaxValue;
+                object[] objCategoryData = (object[])json_serializer.DeserializeObject(objData.bots_TblGroupMaster.CategoryData);
+                object[] objPaymentScheduleData = (object[])json_serializer.DeserializeObject(objData.bots_TblGroupMaster.PaymentScheduleData);
+
+                foreach (Dictionary<string, object> item in objCategoryData)
+                {
+                    BOTS_TblRetailMaster objItem = new BOTS_TblRetailMaster();
+                    objItem.GroupId = Convert.ToString(item["GroupId"]);
+                    objItem.CategoryId = Convert.ToString(item["CategoryId"]);
+                    objItem.CategoryName = Convert.ToString(item["CategoryName"]);
+                    objItem.BrandName = Convert.ToString(item["BrandName"]);
+                    objItem.NoOfOutlets = Convert.ToInt64(item["NoOfOutlets"]);
+                    objItem.NoOfEnrolled = Convert.ToInt64(item["NoOfEnrolled"]);
+                    objItem.BOProduct = Convert.ToString(item["BOProduct"]);
+                    objItem.BillingPartner = Convert.ToString(item["BillingPartner"]);
+                    objItem.BillingProduct = Convert.ToString(item["BillingProduct"]);
+
+                    objLstRetail.Add(objItem);
+                }
+                foreach (Dictionary<string, object> item in objPaymentScheduleData)
+                {
+                    BOTS_TblInstallmentDetails objItem = new BOTS_TblInstallmentDetails();
+
+                    objItem.GroupId = Convert.ToString(item["GroupId"]);
+                    objItem.Installment = Convert.ToInt32(item["Installment"]);
+                    objItem.PaymentDate = Convert.ToDateTime(item["PaymentDate"]);
+                    objItem.PaymentAmount = Convert.ToDecimal(item["PaymentAmount"]);
+
+                    objLstInstallment.Add(objItem);
+                }
+                if (string.IsNullOrEmpty(objData.bots_TblGroupMaster.GroupId))
+                    objData.bots_TblGroupMaster.CustomerStatus = "Draft";
+                objData.bots_TblGroupMaster.CreatedBy = userDetails.UserId;
+                objData.bots_TblGroupMaster.CreatedDate = DateTime.Now;
+                status = OBR.AddOnboardingCustomer(objData.bots_TblGroupMaster, objLstRetail, objData.bots_TblDealDetails, objData.bots_TblPaymentDetails, objLstInstallment);
+                TempData["status"] = status;
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "");
+                return View("Index");
+            }
+            return View("Index");
+
         }
 
-        public ActionResult UpdatePaymentDetails()
-        {
-            return View();
-        }
-        public ActionResult Notifications()
-        {
-            return View();
-        }
-        
     }
 }

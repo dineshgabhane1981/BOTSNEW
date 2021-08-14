@@ -1,5 +1,5 @@
 using BOTS_BL.Models.CommonDB;
-using BOTS_BL.Models.OnBoarding;
+using BOTS_BL.Models;
 using System;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity;
@@ -17,7 +17,11 @@ namespace BOTS_BL.Models
         public virtual DbSet<BOTS_TblBillingPartnerProduct> BOTS_TblBillingPartnerProduct { get; set; }
         public virtual DbSet<SMSGatewayMaster> SMSGatewayMasters { get; set; }
         public virtual DbSet<MobileAppOnceInMonthData> MobileAppOnceInMonthData { get; set; }
+        public virtual DbSet<BOTS_TblDealDetails> BOTS_TblDealDetails { get; set; }
         public virtual DbSet<BOTS_TblGroupMaster> BOTS_TblGroupMaster { get; set; }
+        public virtual DbSet<BOTS_TblInstallmentDetails> BOTS_TblInstallmentDetails { get; set; }
+        public virtual DbSet<BOTS_TblPaymentDetails> BOTS_TblPaymentDetails { get; set; }
+        public virtual DbSet<BOTS_TblRetailCategoryMaster> BOTS_TblRetailCategoryMaster { get; set; }
         public virtual DbSet<BOTS_TblRetailMaster> BOTS_TblRetailMaster { get; set; }
         public virtual DbSet<CommonReferralURL> CommonReferralURLs { get; set; }
         public virtual DbSet<DailyReport> DailyReports { get; set; }
