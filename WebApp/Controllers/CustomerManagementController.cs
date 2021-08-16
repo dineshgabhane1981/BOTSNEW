@@ -19,26 +19,22 @@ namespace WebApp.Controllers
     {
         CustomerRepository CR = new CustomerRepository();
         Exceptions newexception = new Exceptions();
+        OnBoardingRepository OBR = new OnBoardingRepository();
         // GET: CustomerManagement
         public ActionResult Index()
         {
-            List<CustomerListing> list = new List<CustomerListing>();
+            CustomerDashboardViewModel customerDashboardViewModel = new CustomerDashboardViewModel();
             try
             {
-                //string uri = "https://blueocktopus.in/MobileNewAPI/api/bots/GetToken?username=123&password=123";
-                //using (HttpClient httpClient = new HttpClient())
-                //{
-                //    Task<String> response = httpClient.GetStringAsync(uri);
-                //    var result= response.Result;
-                //    int abc = 0;
-                //}
-                list = CR.GetAllCustomer();
+                var userDetails = (CustomerLoginDetail)Session["UserSession"];
+                customerDashboardViewModel.customerListings = CR.GetAllCustomer();
+                customerDashboardViewModel.onBoardingListings = OBR.GetOnBoardingListings(userDetails.LoginType);
             }
             catch (Exception ex)
             {
                 newexception.AddException(ex,"");
             }
-            return View(list);
+            return View(customerDashboardViewModel);
         }
 
         public ActionResult SelectProduct()

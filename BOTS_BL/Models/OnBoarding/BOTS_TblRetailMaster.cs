@@ -9,12 +9,13 @@ namespace BOTS_BL.Models
     public partial class BOTS_TblRetailMaster
     {
         [Key]
-        [Column(Order = 0)]
+        public long SINo { get; set; }
+
+        [Required]
         [StringLength(4)]
         public string GroupId { get; set; }
 
-        [Key]
-        [Column(Order = 1)]
+        [Required]
         [StringLength(50)]
         public string CategoryId { get; set; }
 

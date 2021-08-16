@@ -9,6 +9,9 @@ namespace BOTS_BL.Models
     public partial class BOTS_TblPaymentDetails
     {
         [Key]
+        public long SINo { get; set; }
+
+        [Required]
         [StringLength(4)]
         public string GroupId { get; set; }
 

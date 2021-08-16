@@ -10,21 +10,21 @@ namespace BOTS_BL.Models
     public partial class BOTS_TblGroupMaster
     {
         [Key]
-        [Column(Order = 0)]
+        public long SINo { get; set; }
+
+        [Required]
         [StringLength(4)]
         public string GroupId { get; set; }
 
-        [Key]
-        [Column(Order = 1)]
+        [Required]
         [StringLength(50)]
         public string GroupName { get; set; }
 
-        [Key]
-        [Column(Order = 2)]
+        [Required]
         [StringLength(100)]
         public string OwnerName { get; set; }
 
-        [StringLength(10)]
+        [StringLength(50)]
         public string OwnerMobileNo { get; set; }
 
         [StringLength(100)]
@@ -39,7 +39,7 @@ namespace BOTS_BL.Models
         [StringLength(100)]
         public string City { get; set; }
 
-        [StringLength(10)]
+        [StringLength(50)]
         public string AlternateMobileNo { get; set; }
 
         [StringLength(100)]
@@ -60,7 +60,7 @@ namespace BOTS_BL.Models
 
         public string NoOfPaidSMS { get; set; }
 
-        public bool? IsMobileApp { get; set; }
+        public string IsMobileApp { get; set; }
 
         [Column(TypeName = "text")]
         public string MobileAppDescription { get; set; }
@@ -97,17 +97,12 @@ namespace BOTS_BL.Models
         [StringLength(100)]
         public string AnyOtherName { get; set; }
 
-        [Key]
-        [Column(Order = 3)]
         public DateTime CreatedDate { get; set; }
 
-        [Key]
-        [Column(Order = 4)]
-        [StringLength(10)]
+        [Required]
+        [StringLength(50)]
         public string CreatedBy { get; set; }
 
-        [Key]
-        [Column(Order = 5)]
         public bool IsKeyAccount { get; set; }
 
         [StringLength(50)]
@@ -121,5 +116,6 @@ namespace BOTS_BL.Models
         public string CategoryData { get; set; }
         [NotMapped]
         public string PaymentScheduleData { get; set; }
+
     }
 }

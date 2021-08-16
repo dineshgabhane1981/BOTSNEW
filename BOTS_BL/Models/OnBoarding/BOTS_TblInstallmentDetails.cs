@@ -9,21 +9,18 @@ namespace BOTS_BL.Models
     public partial class BOTS_TblInstallmentDetails
     {
         [Key]
-        [Column(Order = 0)]
+        public long SINo { get; set; }
+
+        [Required]
         [StringLength(4)]
         public string GroupId { get; set; }
 
-        [Key]
-        [Column(Order = 1)]
-        [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int Installment { get; set; }
 
-        [Key]
-        [Column(Order = 2, TypeName = "date")]
+        [Column(TypeName = "date")]
         public DateTime PaymentDate { get; set; }
 
-        [Key]
-        [Column(Order = 3, TypeName = "numeric")]
+        [Column(TypeName = "numeric")]
         public decimal PaymentAmount { get; set; }
 
         [Column(TypeName = "numeric")]
@@ -36,5 +33,8 @@ namespace BOTS_BL.Models
 
         [StringLength(150)]
         public string Bank { get; set; }
+
+        [NotMapped]
+        public string PaymentDateStr { get; set; }
     }
 }

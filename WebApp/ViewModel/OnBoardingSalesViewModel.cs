@@ -13,7 +13,9 @@ namespace WebApp.ViewModel
         public BOTS_TblRetailMaster bots_TblRetailMaster { get; set; }
         public BOTS_TblDealDetails bots_TblDealDetails { get; set; }
         public BOTS_TblPaymentDetails bots_TblPaymentDetails { get; set; }
-        public BOTS_TblInstallmentDetails bots_TblInstallmentDetails { get; set; }        
+        public BOTS_TblInstallmentDetails bots_TblInstallmentDetails { get; set; }    
+        public List<BOTS_TblRetailMaster> objRetailList { get; set; }
+        public List<BOTS_TblInstallmentDetails> objInstallmentList { get; set; }
         public List<SelectListItem> lstCity { get; set; }
         public List<SelectListItem> lstRetailCategory { get; set; }
         public List<SelectListItem> lstSourcedBy { get; set; }
@@ -42,11 +44,11 @@ namespace WebApp.ViewModel
         }
         public SelectListItem[] PaymentType()
         {
-            return new SelectListItem[2] { new SelectListItem() { Text = "Online", Value = "1" }, new SelectListItem() { Text = "Cheque", Value = "2" } };
+            return new SelectListItem[2] { new SelectListItem() { Text = "Online", Value = "Online" }, new SelectListItem() { Text = "Cheque", Value = "Cheque" } };
         }
         public SelectListItem[] PaymentStatus()
         {
-            return new SelectListItem[2] { new SelectListItem() { Text = "Cleared", Value = "1" }, new SelectListItem() { Text = "Pending", Value = "2" } };
+            return new SelectListItem[2] { new SelectListItem() { Text = "Cleared", Value = "Cleared" }, new SelectListItem() { Text = "Pending", Value = "Pending" } };
         }
     }
 }

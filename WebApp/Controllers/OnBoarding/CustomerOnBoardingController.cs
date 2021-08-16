@@ -17,8 +17,9 @@ namespace WebApp.Controllers.OnBoarding
         OnBoardingRepository OBR = new OnBoardingRepository();
         Exceptions newexception = new Exceptions();
         // GET: CustomerOnBoarding
-        public ActionResult Index()
+        public ActionResult Index(string groupId)
         {
+            JavaScriptSerializer json_serializer = new JavaScriptSerializer();
             OnBoardingSalesViewModel objData = new OnBoardingSalesViewModel();
             try
             {
@@ -33,10 +34,18 @@ namespace WebApp.Controllers.OnBoarding
                 item.Text = "Please Select";
                 refferedname.Add(item);
                 objData.lstAllGroups = refferedname;
-
-
+                if (!string.IsNullOrEmpty(groupId))
+                {
+                    objData.bots_TblGroupMaster = OBR.GetGroupMasterDetails(groupId);
+                    objData.bots_TblDealDetails = OBR.GetDealMasterDetails(groupId);
+                    objData.bots_TblPaymentDetails = OBR.GetPaymentDetails(groupId);
+                    objData.objRetailList = OBR.GetRetailDetails(groupId);
+                    objData.objInstallmentList = OBR.GetInstallmentDetails(groupId);
+                    objData.bots_TblGroupMaster.CategoryData = json_serializer.Serialize(objData.objRetailList);
+                    objData.bots_TblGroupMaster.PaymentScheduleData= json_serializer.Serialize(objData.objInstallmentList);
+                }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 newexception.AddException(ex, "");
             }
@@ -92,9 +101,21 @@ namespace WebApp.Controllers.OnBoarding
             catch (Exception ex)
             {
                 newexception.AddException(ex, "");
+                TempData["error"] = "Error Occured";
                 return View("Index");
             }
-            return View("Index");
+            List<SelectListItem> refferedname = new List<SelectListItem>();
+            SelectListItem item1 = new SelectListItem();
+            item1.Value = "0";
+            item1.Text = "Please Select";
+            refferedname.Add(item1);
+            objData.lstAllGroups = refferedname;
+            objData.lstCity = CR.GetCity();
+            objData.lstRetailCategory = CR.GetRetailCategory();
+            objData.lstBillingPartner = CR.GetBillingPartner();
+            objData.lstSourcedBy = CR.GetSourcedBy();
+            objData.lstRMAssigned = CR.GetRMAssigned();
+            return View("Index", objData);
 
         }
 

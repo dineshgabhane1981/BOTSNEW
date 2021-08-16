@@ -1,7 +1,24 @@
 ﻿@model WebApp.ViewModel.OnBoardingSalesViewModel
+@using System.Configuration;
 @{
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_OnBoardingLayout.cshtml";
+
+    var docURL = ConfigurationManager.AppSettings["CustomerDocumentsURL"].ToString();
+    var GSTURL = "#";
+    var PANURL = "#";
+    if (Model.bots_TblGroupMaster != null)
+    {
+        if (!string.IsNullOrEmpty(Model.bots_TblGroupMaster.GSTDocument))
+        {
+            GSTURL = docURL + "/" + Model.bots_TblGroupMaster.GroupId + "/" + Model.bots_TblGroupMaster.GSTDocument;
+        }
+
+        if (!string.IsNullOrEmpty(Model.bots_TblGroupMaster.PANDocument))
+        {
+            PANURL = docURL + "/" + Model.bots_TblGroupMaster.GroupId + "/" + Model.bots_TblGroupMaster.PANDocument;
+        }
+    }
 }
 <style>
     .row {
@@ -73,9 +90,15 @@
             text-decoration: none;
             cursor: pointer;
         }
+    input:read-only {
+        background-color: lightgray;
+    }
 </style>
 @using (Html.BeginForm("AddCustomer", "CustomerOnBoarding", FormMethod.Post, new { id = "frmaddcustomer", enctype = "multipart/form-data" }))
 {
+    @Html.HiddenFor(model => model.bots_TblGroupMaster.SINo)
+    @Html.HiddenFor(model => model.bots_TblDealDetails.SINo)
+    @Html.HiddenFor(model => model.bots_TblPaymentDetails.SINo)
 
     @Html.HiddenFor(model => model.bots_TblGroupMaster.GroupId, new { @id = "hdnGroupID" })
     @Html.HiddenFor(model => model.bots_TblGroupMaster.CategoryData, new { @id = "hdnCategoryData" })
@@ -146,12 +169,24 @@
                         </div>
                         <div class="col-sm-4" style="float:left;margin-top:10px;">
                             @Html.TextBoxFor(model => model.bots_TblGroupMaster.GSTDocumentFile, new { type = "file", @id = "fileGSTDocumentFile", tabindex = "5" })
+                            <br />
+                            @Html.HiddenFor(model => model.bots_TblGroupMaster.GSTDocument)
+                            @if (GSTURL != "#")
+                            {
+                                <a href="@GSTURL" target="_blank">GST Document</a>
+                            }
                         </div>
                         <div style="float:left;text-align:right;width:115px;">
                             Upload PAN
                         </div>
                         <div class="col-sm-4" style="float:left;margin-top:10px;">
                             @Html.TextBoxFor(model => model.bots_TblGroupMaster.PANDocumentFile, new { type = "file", @id = "filePANDocumentFile", tabindex = "6" })
+                            <br />
+                            @Html.HiddenFor(model => model.bots_TblGroupMaster.PANDocument)
+                            @if (PANURL != "#")
+                            {
+                                <a href="@PANURL" target="_blank">PAN Document</a>
+                            }
                         </div>
                     </div>
                     <div class="row" style="margin: 0;">
@@ -193,8 +228,8 @@
                             Key Account
                         </div>
                         <div class="col-sm-4" style="float:left;margin-top:10px;" id="dvIsKeyAccount">
-                            @Html.RadioButtonFor(model => model.bots_TblGroupMaster.IsKeyAccount, "1", new { @id = "IsKeyAccountYes" }) Yes
-                            @Html.RadioButtonFor(model => model.bots_TblGroupMaster.IsKeyAccount, "0", new { @id = "IsKeyAccountNo" }) No
+                            @Html.RadioButtonFor(model => model.bots_TblGroupMaster.IsKeyAccount, true, new { @id = "IsKeyAccountYes" }) Yes
+                            @Html.RadioButtonFor(model => model.bots_TblGroupMaster.IsKeyAccount, false, new { @id = "IsKeyAccountNo" }) No
                         </div>
                     </div>
 
@@ -256,11 +291,11 @@
 
                     <div class="row" style="margin: 0;">
                         <div style="float:left;text-align:right;width:100px;margin-top:10px;">
-                            MWP
+                            DLC
                         </div>
                         <div class="col-sm-4" style="float:left;margin-top:10px;" id="dvIsMWP">
-                            @Html.RadioButtonFor(model => model.bots_TblGroupMaster.IsMWP, "1", new { @id = "IsMWPYes" }) Yes
-                            @Html.RadioButtonFor(model => model.bots_TblGroupMaster.IsMWP, "0", new { @id = "IsMWPNo" }) No
+                            @Html.RadioButtonFor(model => model.bots_TblGroupMaster.IsMWP, true, new { @id = "IsMWPYes" }) Yes
+                            @Html.RadioButtonFor(model => model.bots_TblGroupMaster.IsMWP, false, new { @id = "IsMWPNo" }) No
                         </div>
                     </div>
                     <div class="row" style="margin: 0;">
@@ -268,8 +303,8 @@
                             Whataspp Int
                         </div>
                         <div class="col-sm-4" style="float:left;margin-top:10px;" id="dvIsWhatsApp">
-                            @Html.RadioButtonFor(model => model.bots_TblGroupMaster.IsWhatsApp, "1", new { @id = "IsWhatsAppYes" }) Yes
-                            @Html.RadioButtonFor(model => model.bots_TblGroupMaster.IsWhatsApp, "0", new { @id = "IsWhatsAppNo" }) No
+                            @Html.RadioButtonFor(model => model.bots_TblGroupMaster.IsWhatsApp, true, new { @id = "IsWhatsAppYes" }) Yes
+                            @Html.RadioButtonFor(model => model.bots_TblGroupMaster.IsWhatsApp, false, new { @id = "IsWhatsAppNo" }) No
                         </div>
                     </div>
                     <div class="row" style="margin: 0;">
@@ -587,10 +622,26 @@
         <!-- Modal content -->
         <div class="modal-content">
 
-            Testing Submit
-
-
-
+            <table border="1" style="border-color:grey;">
+                <tr>
+                    <td>111</td>
+                    <td>222</td>
+                    <td>333</td>
+                    <td>444</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            </table>
             <div class="row justify-content-end pr-4" style="margin-top:20px;">
                 <button type="submit" id="btnSubmit" class="btn btn-primary profle-submit-btn mr-4" style="font-size:14px"> Submit</button>
                 <button type="button" id="btnPopupClose" class="btn btn-outline-primary cancel-btn" style="font-size:14px"> Close</button>
@@ -631,6 +682,9 @@
             $("#hdnCustomerStatus").val("");
             $("#myModal").hide(1000);
         });
+
+        LoadEditData();
+
     });
     function ShowRetailCategory() {
         if ($("#txtNoOfRetailCategory").val() > 4 || $("#txtNoOfRetailCategory").val() == 0) {
@@ -792,15 +846,31 @@
         $('#IsMWPNo').on('change', function () {
             $('#dvIsMWP').css('border', '');
         });
-        $('#IsWhatsAppYes').on('change', function () {
-            $('#dvIsWhatsApp').css('border', '');
-            $("#txtNoOfFreeWhatsAppMsg").attr("readonly", false);
-            $("#txtNoOfPaidWhatsAppMsg").attr("readonly", false);
+        $('#IsWhatsAppYes').on('change', function () {            
+            if ($("#IsWhatsAppYes").is(":checked")) {
+                //$('#dvIsWhatsApp').css('border', '');
+                $("#txtNoOfFreeWhatsAppMsg").attr("readonly", false);
+                $("#txtNoOfPaidWhatsAppMsg").attr("readonly", false);
+            }
+            else {
+                $("#txtNoOfFreeWhatsAppMsg").attr("readonly", true);
+                $("#txtNoOfPaidWhatsAppMsg").attr("readonly", true);
+            }
         });
         $('#IsWhatsAppNo').on('change', function () {
-            $('#dvIsWhatsApp').css('border', '');
-            $("#txtNoOfFreeWhatsAppMsg").attr("readonly", false);
-            $("#txtNoOfPaidWhatsAppMsg").attr("readonly", false);
+            if ($("#IsWhatsAppNo").is(":checked")) {
+                $('#dvIsWhatsApp').css('border', '');
+                $("#txtNoOfFreeWhatsAppMsg").css('border', '');
+                $("#txtNoOfPaidWhatsAppMsg").css('border', '');
+                $("#txtNoOfFreeWhatsAppMsg").val("");
+                $("#txtNoOfPaidWhatsAppMsg").val("");
+                $("#txtNoOfFreeWhatsAppMsg").attr("readonly", true);
+                $("#txtNoOfPaidWhatsAppMsg").attr("readonly", true);
+            }
+            else {
+                $("#txtNoOfFreeWhatsAppMsg").attr("readonly", false);
+                $("#txtNoOfPaidWhatsAppMsg").attr("readonly", false);
+            }
         });
         $('#IsKeyAccountYes').on('change', function () {
             $('#dvIsKeyAccount').css('border', '');
@@ -810,21 +880,28 @@
         });
 
         $("#txtNoOfFreeWhatsAppMsg").focusout(function () {
-            if ($("#txtNoOfFreeWhatsAppMsg").val() != "") {
-                $('#txtNoOfFreeWhatsAppMsg').css('border-color', '');
+            if ($("#IsWhatsAppYes").is(":checked")) {
+                if ($("#txtNoOfFreeWhatsAppMsg").val() != "") {
+                    $('#txtNoOfFreeWhatsAppMsg').css('border-color', '');
+                }
+                else {
+                    $('#txtNoOfFreeWhatsAppMsg').css('border-color', 'red');
+                }
             }
             else {
-                $('#txtNoOfFreeWhatsAppMsg').css('border-color', 'red');
+
             }
         });
 
         $("#txtNoOfPaidWhatsAppMsg").focusout(function () {
-            if ($("#txtNoOfPaidWhatsAppMsg").val() != "") {
-                $('#txtNoOfPaidWhatsAppMsg').css('border-color', '');
-                $("#txtWAPaidPackFees").val($("#txtNoOfPaidWhatsAppMsg").val() * 0.24);
-            }
-            else {
+            if ($("#IsWhatsAppYes").is(":checked")) {
+                if ($("#txtNoOfPaidWhatsAppMsg").val() != "") {
+                    $('#txtNoOfPaidWhatsAppMsg').css('border-color', '');
+                    $("#txtWAPaidPackFees").val($("#txtNoOfPaidWhatsAppMsg").val() * 0.24);
+                }
+                else {
 
+                }
             }
         });
         $("#txtNoOfFreeSMS").focusout(function () {
@@ -1397,15 +1474,17 @@
             $('#txtOwnerEmailId').css('border-color', 'red');
             returnStatus = false;
         }
-        if ($("#fileGSTDocumentFile").val() == "") {
-            ShowHideSection("custdetails");
-            $('#fileGSTDocumentFile').addClass('borderClass');
-            returnStatus = false;
-        }
-        if ($("#filePANDocumentFile").val() == "") {
-            ShowHideSection("custdetails");
-            $('#filePANDocumentFile').addClass('borderClass');
-            returnStatus = false;
+        if ($("#hdnGroupID").val() == "" || $("#hdnGroupID").val() == 0) {
+            if ($("#fileGSTDocumentFile").val() == "") {
+                ShowHideSection("custdetails");
+                $('#fileGSTDocumentFile').addClass('borderClass');
+                returnStatus = false;
+            }
+            if ($("#filePANDocumentFile").val() == "") {
+                ShowHideSection("custdetails");
+                $('#filePANDocumentFile').addClass('borderClass');
+                returnStatus = false;
+            }
         }
         if ($("#ddlCity").val() == "") {
             ShowHideSection("custdetails");
@@ -1417,6 +1496,7 @@
             $('#txtNoOfRetailCategory').css('border-color', 'red');
             returnStatus = false;
         }
+
         if ($("#IsMWPYes").is(":checked") || $("#IsMWPNo").is(":checked")) {
 
         }
@@ -2129,6 +2209,37 @@
         $("#hdnPaymentScheduleData").val(JSON.stringify(Installments));
     }
 
+    function LoadEditData() {
+        var CategoryString = $("#hdnCategoryData").val();
+        var CategoryObj = $.parseJSON(CategoryString);
+
+        ShowRetailCategory();
+
+        for (let i = 0; i < CategoryObj.length; i++) {
+            $("#ddlCategory" + (i + 1)).val(CategoryObj[i].CategoryId);
+            $("#txtBrandName" + (i + 1)).val(CategoryObj[i].BrandName);
+            $("#txtNoOfOutlets" + (i + 1)).val(CategoryObj[i].NoOfOutlets);
+            $("#txtNoOfEnrolled" + (i + 1)).val(CategoryObj[i].NoOfEnrolled);
+            $("#ddlBOProduct" + (i + 1)).val(CategoryObj[i].BOProduct);
+            $("#ddlBillingPartner" + (i + 1)).val(CategoryObj[i].BillingPartner);
+            $("#txtBOProduct" + (i + 1)).val(CategoryObj[i].BillingProduct);
+        }
+        if ($("#ddlPaymentFrequency option:selected").text() == "Installments") {
+            $("#dvPaymentSection").show();
+            $("#dvAdvanceAmount").show();
+        }
+
+        var InstallmentString = $("#hdnPaymentScheduleData").val();
+        var InstallmentObj = $.parseJSON(InstallmentString);
+        ShowInstallments();
+        for (let i = 0; i < InstallmentObj.length; i++) {
+            $("#txtPaymentDate" + (i + 1)).val(InstallmentObj[i].PaymentDateStr);
+            $("#txtPaymentAmount" + (i + 1)).val(InstallmentObj[i].PaymentAmount);
+        }
+        if ($("#txtGSTRate").val() != "") {
+            $("#txtGSTRate").show();
+        }
+    }
 
 </script>
 

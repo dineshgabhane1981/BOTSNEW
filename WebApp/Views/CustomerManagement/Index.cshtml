@@ -1,4 +1,4 @@
-﻿@model List<BOTS_BL.Models.CustomerListing>
+﻿@model WebApp.ViewModel.CustomerDashboardViewModel
 @{
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -19,6 +19,58 @@
                     </div>
                 </div>
 
+
+                <div class="row mb-3 card">
+                    <div class="container-fluid pt-3 pl-3 pr-3">
+                        <div class="pt-3 pl-3 pr-3 col-md-12 col-lg-12">
+                            <div class="row">
+                                <div class="col search-container">
+                                    <i class="fas fa-search"></i>
+                                    <input class="input100" type="text" id="txtSearchOnBoarding" placeholder="Search activity..." />
+                                </div>
+                            </div>
+                            <div class="row mt-3" id="dvOnBoardingData">
+                                <div class="table-responsive">
+                                    <table class="table" id="OnBoardingTable">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col">GroupId</th>
+                                                <th scope="col">Group Name</th>
+                                                <th scope="col">Contact No</th>
+                                                <th scope="col">City</th>
+                                                <th scope="col">Payment Status</th>
+                                                <th scope="col" style="text-align:center;">Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @if(Model != null)
+                                            {
+                                                if(Model.onBoardingListings != null)
+                                                {
+                                                     foreach (var item in Model.onBoardingListings)
+                                                     {
+                                                        <tr>
+                                                            <td>@item.GroupId</td>
+                                                            <td>@item.GroupName</td>
+                                                            <td>@item.OwnerMobileNo</td>
+                                                            <td>@item.City</td>
+                                                            <td>@item.PaymentStatus</td>
+                                                            <td style="text-align:center;" >
+                                                                <a href="@Url.Action("Index", "CustomerOnBoarding", new { groupId = item.GroupId })" class="login" title="Edit"><img src="~/Content/assets/images/shape_editUser.png" /></a>
+                                                            </td>
+                                                        </tr>
+                                                     }
+                                                }
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
             </div>
         </div>
     </div>
@@ -30,7 +82,7 @@
                         <div class="col search-container">
                             <i class="fas fa-search"></i>
                             <input class="input100" type="text" id="txtSearch" placeholder="Search activity..." />
-                        </div>                        
+                        </div>
                     </div>
                     <div class="row mt-3" id="dvActivityData">
                         <div class="table-responsive">
@@ -52,9 +104,8 @@
                                 <tbody>
                                     @if (Model != null)
                                     {
-                                        if (Model.Count > 0)
-                                        {
-                                            foreach (var item in Model)
+
+                                            foreach (var item in Model.customerListings)
                                             {
 
                                                 WebApp.App_Start.CommonFunctions common = new WebApp.App_Start.CommonFunctions();
@@ -62,13 +113,13 @@
                                     <tr>
                                         <td>@item.RetailName</td>
                                         @if (item.Product == 1)
-                                                    {
+                                                {
                                         <td>Octa Plus</td>
-                                                    }
-                                                    else
-                                                    {
+                                                }
+                                                else
+                                                {
                                         <td>Octa XS</td>
-                                                    }
+                                                }
                                         <td>@item.StartedOn</td>
                                         <td style="text-align:center;">@item.RetailCategory</td>
                                         <td>@item.City</td>
@@ -83,7 +134,7 @@
                                         </td>
                                     </tr>
                                             }
-                                        }
+
                                     }
                                 </tbody>
                             </table>
@@ -181,6 +232,38 @@
             table.draw();
         });
 
+        $('#OnBoardingTable').DataTable({
+            "aaSorting": [[0, "asc"]],
+            "paging": true,
+            "ordering": true,
+            "info": true,
+            "bFilter": true,
+            "pageLength": 10,
+            "pagingType": "simple_numbers",
+            aoColumnDefs: [
+                {
+                    bSortable: false,
+                    aTargets: [-1, -2]
+                }
+            ]
+        });
+
+        $('#OnBoardingTable_filter').hide();
+
+        $('#txtSearchOnBoarding').on('keyup', function () {
+
+            $.fn.dataTable.ext.search.push(function (settings, searchData) {
+                var term = $('#txtSearchOnBoarding').val().toLowerCase()
+                for (var i = 0; i < searchData.length; i++) {
+                    if (searchData[i].toLowerCase().indexOf(term) >= 0) {
+                        return true;
+                    }
+                }
+                return false;
+            });
+            var table1 = $('#OnBoardingTable').DataTable();
+            table1.draw();
+        });
     });
     function ShowHideOnboarding() {
         $("#dvOnboarding").toggle(1000);

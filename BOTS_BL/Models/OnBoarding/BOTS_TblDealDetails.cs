@@ -9,12 +9,13 @@ namespace BOTS_BL.Models
     public partial class BOTS_TblDealDetails
     {
         [Key]
-        [Column(Order = 0)]
+        public long SINo { get; set; }
+
+        [Required]
         [StringLength(4)]
         public string GroupId { get; set; }
 
-        [Key]
-        [Column(Order = 1, TypeName = "numeric")]
+        [Column(TypeName = "numeric")]
         public decimal LoyaltyFees { get; set; }
 
         [Column(TypeName = "numeric")]
@@ -32,16 +33,12 @@ namespace BOTS_BL.Models
         [Column(TypeName = "numeric")]
         public decimal? TotalFeesA { get; set; }
 
-        [Key]
-        [Column(Order = 2)]
-        [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int GST { get; set; }
 
         [Column(TypeName = "numeric")]
         public decimal? TotalFeesB { get; set; }
 
-        [Key]
-        [Column(Order = 3)]
+        [Required]
         [StringLength(20)]
         public string PaymentFrequency { get; set; }
 
