@@ -56,6 +56,8 @@
                                                 {
                                                     foreach (var item in Model.onBoardingListings)
                                                     {
+                                                        WebApp.App_Start.CommonFunctions common = new WebApp.App_Start.CommonFunctions();
+                                                        string GroupId = common.EncryptString(Convert.ToString(item.GroupId));
                                                         <tr>
                                                             <td>@item.GroupId</td>
                                                             <td>@item.GroupName</td>
@@ -64,7 +66,7 @@
                                                             <td>@item.BillingPartnerName</td>
                                                             <td>@item.PaymentStatus</td>
                                                             <td style="text-align:center;">
-                                                                <a href="@Url.Action("Index", "CustomerOnBoarding", new { groupId = item.GroupId })" class="login" title="Edit"><img src="~/Content/assets/images/shape_editUser.png" /></a>
+                                                                <a href="@Url.Action("Index", "CustomerOnBoarding", new { groupId = GroupId })" class="login" title="Edit"><img src="~/Content/assets/images/shape_editUser.png" /></a>
                                                             </td>
                                                         </tr>
                                                     }

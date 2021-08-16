@@ -7,6 +7,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Script.Serialization;
+using WebApp.App_Start;
 using WebApp.ViewModel;
 
 namespace WebApp.Controllers.OnBoarding
@@ -19,6 +20,8 @@ namespace WebApp.Controllers.OnBoarding
         // GET: CustomerOnBoarding
         public ActionResult Index(string groupId)
         {
+            CommonFunctions common = new CommonFunctions();
+            groupId = common.DecryptString(groupId);
             JavaScriptSerializer json_serializer = new JavaScriptSerializer();
             OnBoardingSalesViewModel objData = new OnBoardingSalesViewModel();
             try
