@@ -344,10 +344,10 @@ namespace WebApp.Controllers.OnBoarding
         [HttpPost]
         public ActionResult GetBillingPartnerProductByPartner(int BillingpartnerId)
         {
-            BOTS_TblBillingPartnerProduct objbillingpartnerproduct = new BOTS_TblBillingPartnerProduct();
+            List<BOTS_TblBillingPartnerProduct> lstbillingpartnerproduct = new List<BOTS_TblBillingPartnerProduct>();
             try
             {
-                objbillingpartnerproduct = COR.GetBillingPartnerProductById(BillingpartnerId);
+                lstbillingpartnerproduct = COR.GetBillingPartnerProductById(BillingpartnerId);
 
             }
             catch (Exception ex)
@@ -355,7 +355,7 @@ namespace WebApp.Controllers.OnBoarding
 
             }
 
-            return Json(objbillingpartnerproduct, JsonRequestBehavior.AllowGet); 
+            return Json(lstbillingpartnerproduct, JsonRequestBehavior.AllowGet); 
         }
 
     }

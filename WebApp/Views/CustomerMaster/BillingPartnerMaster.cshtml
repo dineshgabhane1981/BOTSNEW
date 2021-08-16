@@ -133,11 +133,11 @@
     $('#btnSave').on("click", function () {
 
         if ($('#txtBillingPartnerNm').val() == "") {
-            toastr.error('Please enter Billing Category Name');
+            toastr.error('Please enter Billing Partner Name');
             $('#txtBillingPartnerNm').focus();
             return false;
         }
-        if (confirm("Are you sure? You want to Add Billing Category")) {
+        if (confirm("Are you sure? You want to Add Billing Partner")) {
             var BillingPartnerData = [];
             item = {}
             item["BillingPartnerNm"] = $("#txtBillingPartnerNm").val();

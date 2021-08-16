@@ -179,6 +179,7 @@
     <Compile Include="Models\ChitaleModel\TgtVsAchParticipantWise.cs" />
     <Compile Include="Models\ChitaleModel\Top5LostParticipants.cs" />
     <Compile Include="Models\ChitaleModel\TransactionMaster.cs" />
+    <Compile Include="Models\CommonDB\BOTS_TblBillingPartnerProduct.cs" />
     <Compile Include="Models\CommonDB\CommonDBContext.cs" />
     <Compile Include="Models\CommonDB\CommonReferralURL.cs" />
     <Compile Include="Models\CommonDB\CustomerConnString.cs" />
@@ -229,7 +230,6 @@
     <Compile Include="Models\KeyIndecators\OnlyOnce.cs" />
     <Compile Include="Models\LoginDetail.cs" />
     <Compile Include="Models\LoginModel.cs" />
-    <Compile Include="Models\OnBoarding\BOTS_TblBillingPartnerProduct.cs" />
     <Compile Include="Models\OnBoarding\BOTS_TblDealDetails.cs" />
     <Compile Include="Models\OnBoarding\BOTS_TblGroupMaster.cs" />
     <Compile Include="Models\OnBoarding\BOTS_TblInstallmentDetails.cs" />

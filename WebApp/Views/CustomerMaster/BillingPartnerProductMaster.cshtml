@@ -49,17 +49,17 @@
 
                 <div class="row mt-3" id="dvActivityData">
                     <div class="table-responsive">
-                        <table class="table" id="groupListTable">
+                        <table class="table" id="activityTable">
                             <thead>
                                 <tr>
-                                    <th scope="col" style="text-align:left;">Billing Partner Name</th>
+                                    <th scope="col" style="text-align:left;">BillingPartnerProductName</th>
                                     <th scope="col" style="text-align:left;">Created By</th>
                                     <th scope="col" style="text-align:left;">Created On</th>
                                     <th scope="col" style="text-align:left;">Action</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @if (Model != null)
+                                @*@if (Model != null)
                                 {
                                     if (Model.Count > 0)
                                     {
@@ -76,7 +76,7 @@
                                             </tr>
                                         }
                                     }
-                                }
+                                }*@
                             </tbody>
                         </table>
                     </div>
@@ -86,8 +86,10 @@
     </div>
 </div>
 <script>
+    var tableData = [];
     $("#ddlBillingPartnerProduct").change(function () {
         var selected = $("#ddlBillingPartnerProduct option:selected").val();
+
         $("#divLoader").show();
             $.ajax({
                 type: "POST",
@@ -96,10 +98,110 @@
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
                 success: function (responce) {
-                    console.log(responce);
-                    if (responce.BillingPartnerProductName != null) {
+                    if (responce != null) {
+                        tableData.length = 0;
+                        $.map(responce, function (item) {
+                            console.log(responce.BillingPartnerProductName);
+                            optionItem = {}
+                            optionItem["BillingPartnerProductName"] = item.BillingPartnerProductName;
+                            optionItem["UserName"] = item.CreatedBy;
+                            var date = item.CreatedDate;
+                            optionItem["CreatedDate"] = date;
+                            optionItem["BillingPartnerProductId"] = item.BillingPartnerProductId;
+                            
+                            tableData.push(optionItem);
+                            console.log(optionItem);
+                        });
+                        DrawTable();
+                    }
+                    $("#divLoader").hide();
+
+                },
+                error: function (result) {
+                    console.log(result.responseText)
+                    if (result.responseText == "True") {
+                        toastr.success("Data Updated Successfully");
                         $("#divLoader").hide();
-                       // $("#divadd").show(1000);                      
+                    }
+                    else {
+                        toastr.error('error occured while saving data');
+                        $("#divLoader").hide();
+                    }
+                }
+            });
+
+    });
+
+    function DrawTable() {
+        var table1 = $('#activityTable').DataTable();
+        table1.destroy();
+
+        var table = $('#activityTable').DataTable({
+            "data": tableData,
+            "paging": true,
+            "ordering": false,
+            "info": true,
+            "bFilter": true,
+            "pageLength": 10,
+            "pagingType": "simple_numbers",
+            "columns": [
+                { data: "BillingPartnerProductName" },
+                { data: "UserName" },
+                {
+                    data:"CreatedDate"
+                },
+                {
+
+                    "mData": "BillingPartnerProductId",
+                    "mRender": function (data, type, row) {
+                        return '<a href="#" onclick="EditBillingPartnerProduct(\'' + data + '\')" class="login" title="Edit"><img src="/Content/assets/images/shape_editUser.png" /></a>';
+                        
+                    }
+                }
+
+
+
+            ],
+            aoColumnDefs: [
+                {
+                    bSortable: false,
+                    aTargets: []
+                }
+            ]
+        });
+        $('#activityTable_filter').hide();
+        $('#txtSearch').on('keyup', function () {
+
+            $.fn.dataTable.ext.search.push(function (settings, searchData) {
+                var term = $('#txtSearch').val().toLowerCase()
+                for (var i = 0; i < searchData.length; i++) {
+                    if (searchData[i].toLowerCase().indexOf(term) == 0) {
+                        return true;
+                    }
+                }
+                return false;
+            });
+            var table = $('#activityTable').DataTable();
+            table.draw();
+        });
+
+    }
+    function EditBillingPartnerProduct(id) {
+
+        $("#divLoader").show();
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("GetBillingPartner", "CustomerMaster")',
+                data: '{BillingpartnerId: ' + JSON.stringify(id) + '}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (responce) {
+                    console.log(responce);
+                    if (responce.BillingPartnerName != null) {
+                        $("#divLoader").hide();
+                        $("#divadd").show(1000);
+                        $('#txtBillingPartnerNm').val(responce.BillingPartnerName);
+                        $("#hdnBillingPartnerId").text(id);
 
                     }
                     else {
@@ -119,8 +221,8 @@
                     }
                 }
             });
-        
-    });
+        console.log(id);
+    }
 </script>
 <style>
     table.dataTable thead .sorting_asc {

@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Data.Entity.Migrations;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Web.Mvc;
 using BOTS_BL.Models;
 using BOTS_BL.Models.CommonDB;
@@ -342,13 +340,44 @@ namespace BOTS_BL.Repository
             return BillingPartnerItem;
         }
 
-        public BOTS_TblBillingPartnerProduct GetBillingPartnerProductById(int BillingpartnerId)
+        public List<BOTS_TblBillingPartnerProduct> GetBillingPartnerProductById(int BillingpartnerId)
         {
-            BOTS_TblBillingPartnerProduct objbillingpartnerproduct = new BOTS_TblBillingPartnerProduct();
+            List<BOTS_TblBillingPartnerProduct> objbillingpartnerproduct = new List<BOTS_TblBillingPartnerProduct>();
             using (var context = new CommonDBContext())
             {
-                objbillingpartnerproduct = context.BOTS_TblBillingPartnerProduct.Where(x => x.BillingPartnerId == BillingpartnerId).FirstOrDefault();
+                objbillingpartnerproduct = context.BOTS_TblBillingPartnerProduct.Where(x => x.BillingPartnerId == BillingpartnerId).ToList();
+                    
+               
+                //objbillingpartnerproduct = (from r in context.BOTS_TblBillingPartnerProduct                                           
+                //                            join cl in context.CustomerLoginDetails on r.CreatedBy equals cl.LoginId
+                //                            where r.BillingPartnerId == BillingpartnerId
+                //                            select new BOTS_TblBillingPartnerProduct
+                //                            {
+                //                                BillingPartnerId = r.BillingPartnerId,
+                //                                BillingPartnerProductId = r.BillingPartnerProductId,
+                //                                BillingPartnerProductName = r.BillingPartnerProductName,
+                //                                CreatedBy = r.CreatedBy,
+                //                                CreatedDate = r.CreatedDate,
+                //                                UserName = cl.UserName
+                //                            }).ToList();
+
+
+                //objbillingpartnerproduct = (from r in context.CustomerLoginDetails
+                //                            join cl in context.BOTS_TblBillingPartnerProduct.Where(q => q.BillingPartnerId == BillingpartnerId)
+                //                            on r.LoginId equals cl.CreatedBy into billingpartnerproduct
+                //                            from p in billingpartnerproduct.DefaultIfEmpty()                                            
+                //                            select new BOTS_TblBillingPartnerProduct
+                //                            {
+                //                                BillingPartnerId = p.BillingPartnerId,
+                //                                BillingPartnerProductId = p.BillingPartnerProductId,
+                //                                BillingPartnerProductName = p.BillingPartnerProductName,
+                //                                CreatedBy = p.CreatedBy,
+                //                                CreatedDate = p.CreatedDate,
+                //                                UserName = r.UserName
+                //                            }).ToList();
+
             }
+           
             return objbillingpartnerproduct;
         }
 
