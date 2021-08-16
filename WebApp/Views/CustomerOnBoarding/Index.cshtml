@@ -618,36 +618,7 @@
         </div>
     </div>
 
-    <div id="myModal" class="modal">
-        <!-- Modal content -->
-        <div class="modal-content">
-
-            <table border="1" style="border-color:grey;">
-                <tr>
-                    <td>111</td>
-                    <td>222</td>
-                    <td>333</td>
-                    <td>444</td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                </tr>
-            </table>
-            <div class="row justify-content-end pr-4" style="margin-top:20px;">
-                <button type="submit" id="btnSubmit" class="btn btn-primary profle-submit-btn mr-4" style="font-size:14px"> Submit</button>
-                <button type="button" id="btnPopupClose" class="btn btn-outline-primary cancel-btn" style="font-size:14px"> Close</button>
-            </div>
-        </div>
-    </div>
+  
 
 }
 <script>
@@ -730,37 +701,39 @@
     }
 
     function ShowInstallments() {
-        if ($("#txtNoOfInstallments").val() > 3 || $("#txtNoOfInstallments").val() == 0) {
-            $("#dvInstallmentsDetails").hide();
-            $('#txtNoOfInstallments').css('border-color', 'red');
-            cuteAlert({
-                type: "error",
-                title: "Oops..",
-                message: "Number of Installments can not be 0 or greater than 3",
-                buttonText: "Okay"
-            })
-
-        }
-        else {
-            $('#txtNoOfInstallments').css('border-color', '');
-            $("#dvInstallmentsDetails").show();
-            if ($("#txtNoOfInstallments").val() == 1) {
-                $("#dvInstallment1").show();
-                $("#dvInstallment2").hide();
-                $("#dvInstallment3").hide();
+        if ($("#txtAmountBalance").val() != "" && $("#txtAmountBalance").val() > 0) {
+            if ($("#txtNoOfInstallments").val() > 3 || $("#txtNoOfInstallments").val() == 0) {
+                $("#dvInstallmentsDetails").hide();
+                $('#txtNoOfInstallments').css('border-color', 'red');
+                cuteAlert({
+                    type: "error",
+                    title: "Oops..",
+                    message: "Number of Installments can not be 0 or greater than 3",
+                    buttonText: "Okay"
+                })
 
             }
-            if ($("#txtNoOfInstallments").val() == 2) {
-                $("#dvInstallment1").show();
-                $("#dvInstallment2").show();
-                $("#dvInstallment3").hide();
+            else {
+                $('#txtNoOfInstallments').css('border-color', '');
+                $("#dvInstallmentsDetails").show();
+                if ($("#txtNoOfInstallments").val() == 1) {
+                    $("#dvInstallment1").show();
+                    $("#dvInstallment2").hide();
+                    $("#dvInstallment3").hide();
 
-            }
-            if ($("#txtNoOfInstallments").val() == 3) {
-                $("#dvInstallment1").show();
-                $("#dvInstallment2").show();
-                $("#dvInstallment3").show();
+                }
+                if ($("#txtNoOfInstallments").val() == 2) {
+                    $("#dvInstallment1").show();
+                    $("#dvInstallment2").show();
+                    $("#dvInstallment3").hide();
 
+                }
+                if ($("#txtNoOfInstallments").val() == 3) {
+                    $("#dvInstallment1").show();
+                    $("#dvInstallment2").show();
+                    $("#dvInstallment3").show();
+
+                }
             }
         }
     }
@@ -1434,7 +1407,18 @@
             var datastatus = GetAllData();
             if (buttonType == 'Submit') {
                 $("#hdnCustomerStatus").val("Submit");
-                $("#myModal").show(1000);
+                cuteAlert({
+                    type: "question",
+                    title: "Are you sure?",
+                    message: "Once you submit, you will not be able to change data",
+                    confirmText: "Okay",
+                    cancelText: "Cancel"
+                }).then((e) => {
+                    if (e == ("confirm")) {
+                        $("#btnCustomerSave").click();
+                    }
+                })
+               
             }
             else {
                 return true;

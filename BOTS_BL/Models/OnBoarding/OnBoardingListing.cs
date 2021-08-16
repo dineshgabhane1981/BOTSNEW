@@ -13,5 +13,6 @@ namespace BOTS_BL.Models
         public string OwnerMobileNo { get; set; }
         public string City { get; set; }
         public string PaymentStatus { get; set; }
+        public string BillingPartnerName { get; set; }
     }
 }

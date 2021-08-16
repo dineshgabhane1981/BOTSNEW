@@ -146,13 +146,25 @@ namespace BOTS_BL.Repository
             List<BOTS_TblGroupMaster> lstGroups = new List<BOTS_TblGroupMaster>();
             using (var context = new CommonDBContext())
             {
+                //SuperAdmin
                 if (loginType == "1")
                 {
                     lstGroups = context.BOTS_TblGroupMaster.ToList();
                 }
+                //Sales
                 if (loginType == "5")
                 {
                     lstGroups = context.BOTS_TblGroupMaster.Where(x => x.CustomerStatus == "Draft").ToList();
+                }
+                //Customer Success
+                if (loginType == "6")
+                {
+
+                }
+                //CS Head
+                if (loginType == "7")
+                {
+
                 }
 
                 foreach (var item in lstGroups)
@@ -164,6 +176,13 @@ namespace BOTS_BL.Repository
                     var city = COBR.GetCityById(Convert.ToInt32(item.City));
                     objItem.City = city.CityName;
                     objItem.PaymentStatus = context.BOTS_TblDealDetails.Where(x => x.GroupId == item.GroupId).Select(y => y.PaymentStatus).FirstOrDefault();
+                    
+                    var BPId = context.BOTS_TblRetailMaster.Where(x=>x.GroupId== item.GroupId).Select(y => y.BillingPartner).FirstOrDefault();
+                    var bId = Convert.ToInt32(BPId);
+
+                    objItem.BillingPartnerName = context.tblBillingPartners.Where(x => x.BillingPartnerId == bId).Select(y => y.BillingPartnerName).FirstOrDefault();
+
+
                     onBoardingListings.Add(objItem);
                 }
             }

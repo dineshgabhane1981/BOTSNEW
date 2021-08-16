@@ -1,7 +1,10 @@
 ﻿@model WebApp.ViewModel.CustomerDashboardViewModel
+@using BOTS_BL.Models;
 @{
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    var userDetails = (CustomerLoginDetail)Session["UserSession"];
+    var roleId = userDetails.LoginType;
 }
 
 <div class="app-main__inner">
@@ -10,14 +13,17 @@
         <div class="container-fluid pt-3 pl-3 pr-3">
             <span id="spnOnBoarding" onclick="ShowHideOnboarding();" style="text-align:center;font-weight:bold;cursor:pointer;color:blue;"><h4> OnBoarding Customers</h4></span>
             <div class="pt-3 pl-3 pr-3 col-md-12 col-lg-12" id="dvOnboarding" style="display:none;">
-                <div class="row">
-                    <div class="col search-container">
+                @if (roleId == "1" || roleId == "5")
+                {
+                    <div class="row">
+                        <div class="col search-container">
 
+                        </div>
+                        <div style="text-align:right;">
+                            <a href="@Url.Action("Index", "CustomerOnBoarding")" title="Add New Customer">  <img src="~/Content/assets/images/AddCustomer.png" /></a>
+                        </div>
                     </div>
-                    <div style="text-align:right;">
-                        <a href="@Url.Action("Index", "CustomerOnBoarding")" title="Add New Customer">  <img src="~/Content/assets/images/AddCustomer.png" /></a>
-                    </div>
-                </div>
+                }
 
 
                 <div class="row mb-3 card">
@@ -38,28 +44,30 @@
                                                 <th scope="col">Group Name</th>
                                                 <th scope="col">Contact No</th>
                                                 <th scope="col">City</th>
+                                                <th scope="col">Billing Partner</th>
                                                 <th scope="col">Payment Status</th>
                                                 <th scope="col" style="text-align:center;">Action</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            @if(Model != null)
+                                            @if (Model != null)
                                             {
-                                                if(Model.onBoardingListings != null)
+                                                if (Model.onBoardingListings != null)
                                                 {
-                                                     foreach (var item in Model.onBoardingListings)
-                                                     {
+                                                    foreach (var item in Model.onBoardingListings)
+                                                    {
                                                         <tr>
                                                             <td>@item.GroupId</td>
                                                             <td>@item.GroupName</td>
                                                             <td>@item.OwnerMobileNo</td>
                                                             <td>@item.City</td>
+                                                            <td>@item.BillingPartnerName</td>
                                                             <td>@item.PaymentStatus</td>
-                                                            <td style="text-align:center;" >
+                                                            <td style="text-align:center;">
                                                                 <a href="@Url.Action("Index", "CustomerOnBoarding", new { groupId = item.GroupId })" class="login" title="Edit"><img src="~/Content/assets/images/shape_editUser.png" /></a>
                                                             </td>
                                                         </tr>
-                                                     }
+                                                    }
                                                 }
                                             }
                                         </tbody>
@@ -73,6 +81,7 @@
 
             </div>
         </div>
+
     </div>
     <div id="dvOutletWiseData">
         <div class="row mb-3 card">
@@ -105,35 +114,35 @@
                                     @if (Model != null)
                                     {
 
-                                            foreach (var item in Model.customerListings)
-                                            {
+                                        foreach (var item in Model.customerListings)
+                                        {
 
-                                                WebApp.App_Start.CommonFunctions common = new WebApp.App_Start.CommonFunctions();
-                                                string GroupId = common.EncryptString(Convert.ToString(item.GroupId));
-                                    <tr>
-                                        <td>@item.RetailName</td>
-                                        @if (item.Product == 1)
+                                            WebApp.App_Start.CommonFunctions common = new WebApp.App_Start.CommonFunctions();
+                                            string GroupId = common.EncryptString(Convert.ToString(item.GroupId));
+                                            <tr>
+                                                <td>@item.RetailName</td>
+                                                @if (item.Product == 1)
                                                 {
-                                        <td>Octa Plus</td>
+                                                    <td>Octa Plus</td>
                                                 }
                                                 else
                                                 {
-                                        <td>Octa XS</td>
+                                                    <td>Octa XS</td>
                                                 }
-                                        <td>@item.StartedOn</td>
-                                        <td style="text-align:center;">@item.RetailCategory</td>
-                                        <td>@item.City</td>
-                                        <td style="text-align:center;">@item.SMSBalCount</td>
-                                        <td>@item.RenewalOn</td>
-                                        <td>@item.SourcedBy</td>
-                                        <td>@item.RMTeam</td>
-                                        <td style="text-align:center; width:100px;">
-                                            <a href="@Url.Action("AddNewCustomer", "CustomerManagement", new { groupId = GroupId })" class="login" title="Edit"><img src="~/Content/assets/images/shape_editUser.png" /></a>
-                                            <a href="@Url.Action("GoToDashboard", "CustomerManagement", new { groupId = GroupId })" class="login" title="Go To Dashboard"><img src="~/Content/assets/images/GoToDashboard.png" width="30" /></a>
-                                            <a href="@Url.Action("Index", "ITOperations", new { groupId = GroupId })" class="login" title="Go To IT Ops"><img src="~/Content/assets/images/itops.png" width="30" /></a>
-                                        </td>
-                                    </tr>
-                                            }
+                                                <td>@item.StartedOn</td>
+                                                <td style="text-align:center;">@item.RetailCategory</td>
+                                                <td>@item.City</td>
+                                                <td style="text-align:center;">@item.SMSBalCount</td>
+                                                <td>@item.RenewalOn</td>
+                                                <td>@item.SourcedBy</td>
+                                                <td>@item.RMTeam</td>
+                                                <td style="text-align:center; width:100px;">
+                                                    <a href="@Url.Action("AddNewCustomer", "CustomerManagement", new { groupId = GroupId })" class="login" title="Edit"><img src="~/Content/assets/images/shape_editUser.png" /></a>
+                                                    <a href="@Url.Action("GoToDashboard", "CustomerManagement", new { groupId = GroupId })" class="login" title="Go To Dashboard"><img src="~/Content/assets/images/GoToDashboard.png" width="30" /></a>
+                                                    <a href="@Url.Action("Index", "ITOperations", new { groupId = GroupId })" class="login" title="Go To IT Ops"><img src="~/Content/assets/images/itops.png" width="30" /></a>
+                                                </td>
+                                            </tr>
+                                        }
 
                                     }
                                 </tbody>
