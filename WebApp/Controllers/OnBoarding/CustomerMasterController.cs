@@ -247,7 +247,24 @@ namespace WebApp.Controllers.OnBoarding
 
 
         }
+        [HttpPost]
+        public ActionResult GetBillingPartnerProduct(int BillingpartnerId)
+        {
 
+            List<BOTS_TblBillingPartnerProduct> lstbilling = new List<BOTS_TblBillingPartnerProduct>();
+            try
+            {
+                lstbilling = COR.GetBillingPartnerProductById(BillingpartnerId);
+
+            }
+            catch (Exception ex)
+            {
+
+            }
+            return Json(lstbilling, JsonRequestBehavior.AllowGet);
+
+
+        }
         [HttpPost]
         public ActionResult GetRM(int RMId)
         {
@@ -342,20 +359,73 @@ namespace WebApp.Controllers.OnBoarding
 
         }
         [HttpPost]
-        public ActionResult GetBillingPartnerProductByPartner(int BillingpartnerId)
+        public ActionResult GetBillingPartnerProductByPartner(int BillingpartnerProductId)
         {
-            List<BOTS_TblBillingPartnerProduct> lstbillingpartnerproduct = new List<BOTS_TblBillingPartnerProduct>();
+            
+           BOTS_TblBillingPartnerProduct lstbillingpartnerproduct = new BOTS_TblBillingPartnerProduct();
             try
             {
-                lstbillingpartnerproduct = COR.GetBillingPartnerProductById(BillingpartnerId);
-
+                lstbillingpartnerproduct = COR.GetBillingPartnerProductByProductId(BillingpartnerProductId);
             }
             catch (Exception ex)
             {
 
             }
-
             return Json(lstbillingpartnerproduct, JsonRequestBehavior.AllowGet); 
+        }
+
+        [HttpPost]
+        public ActionResult AddBillingPartnerProduct(string jsonData)
+        {
+            SPResponse result = new SPResponse();
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            string BillingPartnerId = "";
+            try
+            {
+                JavaScriptSerializer json_serializer = new JavaScriptSerializer();
+                json_serializer.MaxJsonLength = int.MaxValue;
+                object[] objData = (object[])json_serializer.DeserializeObject(jsonData);
+                BOTS_TblBillingPartnerProduct objbillingpartnerproduct = new BOTS_TblBillingPartnerProduct();
+                foreach (Dictionary<string, object> item in objData)
+                {
+
+                    objbillingpartnerproduct.BillingPartnerProductName = Convert.ToString(item["BillingPartnerproductNm"]);
+                    objbillingpartnerproduct.BillingPartnerId = Convert.ToInt32(item["BillingPartnerId"]);
+                    objbillingpartnerproduct.CreatedBy = userDetails.LoginId;
+                    objbillingpartnerproduct.CreatedDate = DateTime.Now;
+                    BillingPartnerId = Convert.ToString(item["BillingPartnerId"]);
+                    if (BillingPartnerId != "")
+                    {
+                        objbillingpartnerproduct.BillingPartnerId = Convert.ToInt32(BillingPartnerId);
+                    }
+                    else
+                    {
+
+                    }
+                }
+                result = COR.AddBillingPartnerProduct(objbillingpartnerproduct);
+            }
+            catch (Exception ex)
+            {
+
+            }
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public ActionResult ActiveInactiveBillingPartner(int BillingpartnerId)
+        {
+            SPResponse response = new SPResponse();
+            try
+            {               
+                tblBillingPartner objbillingpartner = COR.GetBillingPartnerById(BillingpartnerId);
+                response = COR.ActiveInactiveBillingPartner(BillingpartnerId);
+            }
+            catch (Exception ex)
+            {
+               
+            }
+            return Json(response, JsonRequestBehavior.AllowGet);
         }
 
     }

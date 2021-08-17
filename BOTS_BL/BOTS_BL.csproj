@@ -208,6 +208,7 @@
     <Compile Include="Models\CommonDB\tblModulesPayment.cs" />
     <Compile Include="Models\CommonDB\tblRMAssigned.cs" />
     <Compile Include="Models\CommonDB\tblSourcedBy.cs" />
+    <Compile Include="Models\CommonDB\tblSourceType.cs" />
     <Compile Include="Models\Dashboard\DashboardMemberSegment.cs" />
     <Compile Include="Models\DBContext.cs" />
     <Compile Include="Models\ExecutiveSummary.cs" />

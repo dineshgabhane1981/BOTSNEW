@@ -21,6 +21,7 @@
                     <div class="col-md-12 col-lg-12 mt-2 mb-4">
                         Billing Partner Product Name  <input class="input100" type="text" id="txtBillingPartnerProductNm" />
                         <span id="hdnBillingPartnerProductId" style="display:none;"></span>
+                        <span id="hdnBillingPartnerId" style="display:none;"></span>
                         <button class="btn btn-primary login-btn ml-5 mr-2" type="button" id="btnSave">
                             Save
                         </button>
@@ -32,7 +33,7 @@
                 
                 <div class="row">
                     <div class="pr-2 ml-2">
-                        <b>Billing Partner Name</b> @Html.DropDownList("BillingPartnerProduct", new SelectList(ViewBag.lstBillingPartner, "Value", "Text"), htmlAttributes: new { @class = "input50", @id = "ddlBillingPartnerProduct" })
+                        <b>Billing Partner Name</b> @Html.DropDownList("BillingPartnerProduct", new SelectList(ViewBag.lstBillingPartner, "Value", "Text"), htmlAttributes: new { @class = "input100", @id = "ddlBillingPartnerProduct" })
 
                     </div>
                     <div style="text-align:right;" class="col search-container">
@@ -87,13 +88,22 @@
 </div>
 <script>
     var tableData = [];
+    $('#btnAdd').on("click", function () {
+        $("#divadd").show(1000);
+
+    });
+    $('#btnCancle').on("click", function () {
+        $("#divadd").hide(1000);
+        $('#divadd').find(':input').val('');
+        $("#hdnBillingPartnerProductId").text("");
+    });
     $("#ddlBillingPartnerProduct").change(function () {
         var selected = $("#ddlBillingPartnerProduct option:selected").val();
-
+        console.log(selected);
         $("#divLoader").show();
             $.ajax({
                 type: "POST",
-                url: '@Url.Action("GetBillingPartnerProductByPartner", "CustomerMaster")',
+                url: '@Url.Action("GetBillingPartnerProduct", "CustomerMaster")',
                 data: '{BillingpartnerId: ' + JSON.stringify(selected) + '}',
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
@@ -104,11 +114,9 @@
                             console.log(responce.BillingPartnerProductName);
                             optionItem = {}
                             optionItem["BillingPartnerProductName"] = item.BillingPartnerProductName;
-                            optionItem["UserName"] = item.CreatedBy;
-                            var date = item.CreatedDate;
-                            optionItem["CreatedDate"] = date;
-                            optionItem["BillingPartnerProductId"] = item.BillingPartnerProductId;
-                            
+                            optionItem["UserName"] = item.CreatedBy;                            
+                            optionItem["CreatedDate"] = item.CreatedDateStr;
+                            optionItem["BillingPartnerProductId"] = item.BillingPartnerProductId;                           
                             tableData.push(optionItem);
                             console.log(optionItem);
                         });
@@ -154,8 +162,8 @@
 
                     "mData": "BillingPartnerProductId",
                     "mRender": function (data, type, row) {
-                        return '<a href="#" onclick="EditBillingPartnerProduct(\'' + data + '\')" class="login" title="Edit"><img src="/Content/assets/images/shape_editUser.png" /></a>';
-                        
+                        return '<a href="#" onclick="EditBillingPartnerProduct( '+ data + ')" class="login" title="Edit"><img src="/Content/assets/images/shape_editUser.png" /></a>';
+
                     }
                 }
 
@@ -187,21 +195,21 @@
 
     }
     function EditBillingPartnerProduct(id) {
-
+        console.log(id);
         $("#divLoader").show();
             $.ajax({
                 type: "POST",
-                url: '@Url.Action("GetBillingPartner", "CustomerMaster")',
-                data: '{BillingpartnerId: ' + JSON.stringify(id) + '}',
+                url: '@Url.Action("GetBillingPartnerProductByPartner", "CustomerMaster")',
+                data: '{BillingpartnerProductId: ' + JSON.stringify(id) + '}',
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
                 success: function (responce) {
                     console.log(responce);
-                    if (responce.BillingPartnerName != null) {
+                    if (responce.BillingPartnerProductName != null) {
                         $("#divLoader").hide();
                         $("#divadd").show(1000);
-                        $('#txtBillingPartnerNm').val(responce.BillingPartnerName);
-                        $("#hdnBillingPartnerId").text(id);
+                        $('#txtBillingPartnerProductNm').val(responce.BillingPartnerProductName);
+                        $('#hdnBillingPartnerProductId').text(id);
 
                     }
                     else {
@@ -221,8 +229,70 @@
                     }
                 }
             });
-        console.log(id);
+        
     }
+     $('#btnSave').on("click", function () {
+
+         if ($('#txtBillingPartnerProductNm').val() == "") {
+            toastr.error('Please enter Billing Partner Product Name');
+             $('#txtBillingPartnerProductNm').focus();
+            return false;
+         }
+         var selected = $("#ddlBillingPartnerProduct option:selected").val();
+         if (selected == "0") {
+             toastr.error('Please select Billing Partner Name');             
+             return false;
+         }
+         if (confirm("Are you sure? You want to Add Billing Product Partner")) {
+            var BillingPartnerData = [];
+            item = {}
+             item["BillingPartnerproductNm"] = $("#txtBillingPartnerProductNm").val();
+             item["BillingPartnerId"] = selected;            
+             if ($('#hdnBillingPartnerProductId').text != 0) {
+                 item["BillingPartnerPartnerId"] = $('#hdnBillingPartnerProductId').text();
+                 //item["BillingPartnerId"] = selected;
+
+            }
+            else {
+                 item["BillingPartnerPartnerId"] = 0;
+            }
+            BillingPartnerData.push(item);
+            var data = JSON.stringify(BillingPartnerData);
+            console.log(data)
+            $("#divLoader").show();
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("AddBillingPartnerProduct", "CustomerMaster")',
+                data: '{jsonData: ' + JSON.stringify(data) + '}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (result) {
+                    if (result.ResponseCode == "00") {
+                        toastr.success(result.ResponseMessage);
+                        $("#divLoader").hide();
+                        $("#txtBillingPartnerNm").val("");
+                        $('#hdnBillingPartnerId').val("");
+                    }
+                    else {
+                        toastr.error(result.ResponseMessage);
+                        $("#divLoader").hide();
+                    }
+                },
+                error: function (result) {
+                    console.log(result.responseText)
+                    if (result.responseText == "True") {
+                        toastr.success("Data Updated Successfully");
+                        $("#divLoader").hide();
+                    }
+                    else {
+                        toastr.error('error occured while saving data');
+                        $("#divLoader").hide();
+                    }
+                }
+            });
+       // }
+    }
+    });
 </script>
 <style>
     table.dataTable thead .sorting_asc {

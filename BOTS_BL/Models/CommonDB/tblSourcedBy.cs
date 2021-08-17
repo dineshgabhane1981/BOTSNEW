@@ -21,21 +21,16 @@ namespace BOTS_BL.Models.CommonDB
 
         public DateTime? CreatedDate { get; set; }
 
-        
+        public bool? IsActive { get; set; }
     }
-    public  class SourcedDetails
+
+    public class SourcedDetails
     {
-        
-        public int SourcedbyId { get; set; }        
-        
+        public int SourcedbyId { get; set; }
         public string SourcedbyName { get; set; }
-        
         public string CreatedBy { get; set; }
-
         public DateTime? CreatedDate { get; set; }
-
+        public bool? IsActive { get; set; }
         public string UserName { get; set; }
-
-
     }
 }

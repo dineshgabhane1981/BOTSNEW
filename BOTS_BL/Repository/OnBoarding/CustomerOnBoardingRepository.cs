@@ -22,7 +22,8 @@ namespace BOTS_BL.Repository
                 {
 
                     objtblcategory = (from c in context.tblCategories
-                                      join cl in context.CustomerLoginDetails on c.CreatedBy equals cl.LoginId into category from m in category.DefaultIfEmpty()
+                                      join cl in context.CustomerLoginDetails on c.CreatedBy equals cl.LoginId into category
+                                      from m in category.DefaultIfEmpty()
                                       select new CategoryDetails
                                       {
                                           CategoryId = c.CategoryId,
@@ -67,9 +68,10 @@ namespace BOTS_BL.Repository
             try
             {
                 using (var context = new CommonDBContext())
-                {                  
+                {
                     objtblSourceBy = (from s in context.tblSourcedBies
-                                      join cl in context.CustomerLoginDetails on s.CreatedBy equals cl.LoginId into source from m in source.DefaultIfEmpty()
+                                      join cl in context.CustomerLoginDetails on s.CreatedBy equals cl.LoginId into source
+                                      from m in source.DefaultIfEmpty()
                                       select new SourcedDetails
                                       {
                                           SourcedbyId = s.SourcedbyId,
@@ -114,17 +116,18 @@ namespace BOTS_BL.Repository
             {
                 using (var context = new CommonDBContext())
                 {
-                    
+
                     objtblcity = (from c in context.tblCities
-                                      join cl in context.CustomerLoginDetails on c.CreatedBy equals cl.LoginId into city from m in city.DefaultIfEmpty()
-                                      select new CityDetails
-                                      {
-                                          CityId = c.CityId,
-                                          CityName = c.CityName,
-                                          CreatedBy = c.CreatedBy,
-                                          CreatedDate = c.CreatedDate,
-                                          UserName = m.UserName
-                                      }).ToList();
+                                  join cl in context.CustomerLoginDetails on c.CreatedBy equals cl.LoginId into city
+                                  from m in city.DefaultIfEmpty()
+                                  select new CityDetails
+                                  {
+                                      CityId = c.CityId,
+                                      CityName = c.CityName,
+                                      CreatedBy = c.CreatedBy,
+                                      CreatedDate = c.CreatedDate,
+                                      UserName = m.UserName
+                                  }).ToList();
                 }
             }
             catch (Exception ex)
@@ -162,15 +165,16 @@ namespace BOTS_BL.Repository
                 using (var context = new CommonDBContext())
                 {
                     objRMDetails = (from r in context.tblRMAssigneds
-                                  join cl in context.CustomerLoginDetails on r.CreatedBy equals cl.LoginId into RMAssigned from m in RMAssigned.DefaultIfEmpty()
+                                    join cl in context.CustomerLoginDetails on r.CreatedBy equals cl.LoginId into RMAssigned
+                                    from m in RMAssigned.DefaultIfEmpty()
                                     select new RMAssignedDetails
-                                  {
-                                      RMAssignedId = r.RMAssignedId,
-                                      RMAssignedName = r.RMAssignedName,
-                                      CreatedBy = r.CreatedBy,
-                                      CreatedDate = r.CreatedDate,
-                                      UserName = m.UserName
-                                  }).ToList();                  
+                                    {
+                                        RMAssignedId = r.RMAssignedId,
+                                        RMAssignedName = r.RMAssignedName,
+                                        CreatedBy = r.CreatedBy,
+                                        CreatedDate = r.CreatedDate,
+                                        UserName = m.UserName
+                                    }).ToList();
 
 
 
@@ -210,7 +214,7 @@ namespace BOTS_BL.Repository
             {
                 objcategory = context.tblCategories.Where(x => x.CategoryId == CategoryId).FirstOrDefault();
             }
-                return objcategory;
+            return objcategory;
         }
 
         public tblCity GetCityById(int CityId)
@@ -263,12 +267,42 @@ namespace BOTS_BL.Repository
             return result;
         }
 
+        public SPResponse AddBillingPartnerProduct(BOTS_TblBillingPartnerProduct objtblbillingpartnerproduct)
+        {
+            SPResponse result = new SPResponse();
+            try
+            {
+                using (var context = new CommonDBContext())
+                {
+                    context.BOTS_TblBillingPartnerProduct.AddOrUpdate(objtblbillingpartnerproduct);
+                    context.SaveChanges();
+                    result.ResponseCode = "00";
+                    result.ResponseMessage = "Billing Partner Product Added Successfully";
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "onboarding_master");
+            }
+            return result;
+        }
+
         public tblBillingPartner GetBillingPartnerById(int BillingpartnerId)
         {
             tblBillingPartner objbillingpartner = new tblBillingPartner();
             using (var context = new CommonDBContext())
             {
                 objbillingpartner = context.tblBillingPartners.Where(x => x.BillingPartnerId == BillingpartnerId).FirstOrDefault();
+            }
+            return objbillingpartner;
+        }
+        //for edit
+        public BOTS_TblBillingPartnerProduct GetBillingPartnerProductByProductId(int BillingpartnerProductId)
+        {
+            BOTS_TblBillingPartnerProduct objbillingpartner = new BOTS_TblBillingPartnerProduct();
+            using (var context = new CommonDBContext())
+            {
+                objbillingpartner = context.BOTS_TblBillingPartnerProduct.Where(x => x.BillingPartnerProductId == BillingpartnerProductId).FirstOrDefault();
             }
             return objbillingpartner;
         }
@@ -281,16 +315,16 @@ namespace BOTS_BL.Repository
                 using (var context = new CommonDBContext())
                 {
                     objbillingpartnerDetails = (from r in context.tblBillingPartners
-                                    join cl in context.CustomerLoginDetails on r.CreatedBy equals cl.LoginId into billingpartner
-                                    from p in billingpartner.DefaultIfEmpty()
-                                    select new BillingPartnerDetails
-                                    {
-                                        BillingPartnerId = r.BillingPartnerId,
-                                        BillingPartnerName = r.BillingPartnerName,
-                                        CreatedBy = r.CreatedBy,
-                                        CreatedDate = r.CreatedDate,
-                                        UserName = p.UserName
-                                    }).ToList();
+                                                join cl in context.CustomerLoginDetails on r.CreatedBy equals cl.LoginId into billingpartner
+                                                from p in billingpartner.DefaultIfEmpty()
+                                                select new BillingPartnerDetails
+                                                {
+                                                    BillingPartnerId = r.BillingPartnerId,
+                                                    BillingPartnerName = r.BillingPartnerName,
+                                                    CreatedBy = r.CreatedBy,
+                                                    CreatedDate = r.CreatedDate,
+                                                    UserName = p.UserName
+                                                }).ToList();
 
 
 
@@ -311,16 +345,16 @@ namespace BOTS_BL.Repository
                 using (var context = new CommonDBContext())
                 {
                     var lstbillingpartner = (from r in context.tblBillingPartners
-                                                join cl in context.CustomerLoginDetails on r.CreatedBy equals cl.LoginId into billingpartner
-                                                from p in billingpartner.DefaultIfEmpty()
-                                                select new BillingPartnerDetails
-                                                {
-                                                    BillingPartnerId = r.BillingPartnerId,
-                                                    BillingPartnerName = r.BillingPartnerName,
-                                                    CreatedBy = r.CreatedBy,
-                                                    CreatedDate = r.CreatedDate,
-                                                    UserName = p.UserName
-                                                }).ToList();
+                                             join cl in context.CustomerLoginDetails on r.CreatedBy equals cl.LoginId into billingpartner
+                                             from p in billingpartner.DefaultIfEmpty()
+                                             select new BillingPartnerDetails
+                                             {
+                                                 BillingPartnerId = r.BillingPartnerId,
+                                                 BillingPartnerName = r.BillingPartnerName,
+                                                 CreatedBy = r.CreatedBy,
+                                                 CreatedDate = r.CreatedDate,
+                                                 UserName = p.UserName
+                                             }).ToList();
 
                     foreach (var item in lstbillingpartner)
                     {
@@ -329,7 +363,14 @@ namespace BOTS_BL.Repository
                             Text = item.BillingPartnerName,
                             Value = Convert.ToString(item.BillingPartnerId)
                         });
+
                     }
+                    var Billingselect = new SelectListItem()
+                    {
+                        Value = "0",
+                        Text = "--Select Billing Partner--"
+                    };
+                    BillingPartnerItem.Insert(0, Billingselect);
 
                 }
             }
@@ -339,46 +380,83 @@ namespace BOTS_BL.Repository
             }
             return BillingPartnerItem;
         }
-
+        //togetallproduct
         public List<BOTS_TblBillingPartnerProduct> GetBillingPartnerProductById(int BillingpartnerId)
         {
             List<BOTS_TblBillingPartnerProduct> objbillingpartnerproduct = new List<BOTS_TblBillingPartnerProduct>();
-            using (var context = new CommonDBContext())
+            try
             {
-                objbillingpartnerproduct = context.BOTS_TblBillingPartnerProduct.Where(x => x.BillingPartnerId == BillingpartnerId).ToList();
-                    
-               
-                //objbillingpartnerproduct = (from r in context.BOTS_TblBillingPartnerProduct                                           
-                //                            join cl in context.CustomerLoginDetails on r.CreatedBy equals cl.LoginId
-                //                            where r.BillingPartnerId == BillingpartnerId
-                //                            select new BOTS_TblBillingPartnerProduct
-                //                            {
-                //                                BillingPartnerId = r.BillingPartnerId,
-                //                                BillingPartnerProductId = r.BillingPartnerProductId,
-                //                                BillingPartnerProductName = r.BillingPartnerProductName,
-                //                                CreatedBy = r.CreatedBy,
-                //                                CreatedDate = r.CreatedDate,
-                //                                UserName = cl.UserName
-                //                            }).ToList();
+                using (var context = new CommonDBContext())
+                {
+                    objbillingpartnerproduct = context.BOTS_TblBillingPartnerProduct.Where(x => x.BillingPartnerId == BillingpartnerId).ToList();
+                    foreach (var item in objbillingpartnerproduct)
+                    {
+                        if (!string.IsNullOrEmpty(Convert.ToString(item.CreatedDate)))
+                            item.CreatedDateStr = item.CreatedDate.ToString("yyyy-MM-dd");
+                    }
+
+                    //objbillingpartnerproduct = (from r in context.BOTS_TblBillingPartnerProduct                                           
+                    //                            join cl in context.CustomerLoginDetails on r.CreatedBy equals cl.LoginId
+                    //                            where r.BillingPartnerId == BillingpartnerId
+                    //                            select new BOTS_TblBillingPartnerProduct
+                    //                            {
+                    //                                BillingPartnerId = r.BillingPartnerId,
+                    //                                BillingPartnerProductId = r.BillingPartnerProductId,
+                    //                                BillingPartnerProductName = r.BillingPartnerProductName,
+                    //                                CreatedBy = r.CreatedBy,
+                    //                                CreatedDate = r.CreatedDate,
+                    //                                UserName = cl.UserName
+                    //                            }).ToList();
 
 
-                //objbillingpartnerproduct = (from r in context.CustomerLoginDetails
-                //                            join cl in context.BOTS_TblBillingPartnerProduct.Where(q => q.BillingPartnerId == BillingpartnerId)
-                //                            on r.LoginId equals cl.CreatedBy into billingpartnerproduct
-                //                            from p in billingpartnerproduct.DefaultIfEmpty()                                            
-                //                            select new BOTS_TblBillingPartnerProduct
-                //                            {
-                //                                BillingPartnerId = p.BillingPartnerId,
-                //                                BillingPartnerProductId = p.BillingPartnerProductId,
-                //                                BillingPartnerProductName = p.BillingPartnerProductName,
-                //                                CreatedBy = p.CreatedBy,
-                //                                CreatedDate = p.CreatedDate,
-                //                                UserName = r.UserName
-                //                            }).ToList();
+                    //objbillingpartnerproduct = (from r in context.CustomerLoginDetails
+                    //                            join cl in context.BOTS_TblBillingPartnerProduct.Where(q => q.BillingPartnerId == BillingpartnerId)
+                    //                            on r.LoginId equals cl.CreatedBy into billingpartnerproduct
+                    //                            from p in billingpartnerproduct.DefaultIfEmpty()                                            
+                    //                            select new BOTS_TblBillingPartnerProduct
+                    //                            {
+                    //                                BillingPartnerId = p.BillingPartnerId,
+                    //                                BillingPartnerProductId = p.BillingPartnerProductId,
+                    //                                BillingPartnerProductName = p.BillingPartnerProductName,
+                    //                                CreatedBy = p.CreatedBy,
+                    //                                CreatedDate = p.CreatedDate,
+                    //                                UserName = r.UserName
+                    //                            }).ToList();
+
+                }
+            }
+            catch(Exception ex)
+            {
 
             }
-           
+
             return objbillingpartnerproduct;
+        }
+
+        public SPResponse ActiveInactiveBillingPartner(int BillingpartnerId)
+        {
+            tblBillingPartner objbillingpartner = new tblBillingPartner();
+            SPResponse result = new SPResponse();
+            using (var context = new CommonDBContext())
+            {
+
+                objbillingpartner = context.tblBillingPartners.Where(x => x.BillingPartnerId == BillingpartnerId).FirstOrDefault();
+
+                if (objbillingpartner.IsActive == true)
+                {
+                    objbillingpartner.IsActive = false;
+                }
+                else
+                {
+                    objbillingpartner.IsActive = true;
+                }
+
+                context.tblBillingPartners.AddOrUpdate(objbillingpartner);
+                context.SaveChanges();
+                result.ResponseCode = "00";
+                result.ResponseMessage = "Billing Partner Updated Successfully";
+            }
+            return result;
         }
 
     }

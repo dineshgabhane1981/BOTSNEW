@@ -13,7 +13,7 @@ namespace BOTS_BL.Models
             : base("name=CommonDBContext")
         {
         }
-
+        public virtual DbSet<tblSourceType> tblSourceTypes { get; set; }
         public virtual DbSet<BOTS_TblBillingPartnerProduct> BOTS_TblBillingPartnerProduct { get; set; }
         public virtual DbSet<SMSGatewayMaster> SMSGatewayMasters { get; set; }
         public virtual DbSet<MobileAppOnceInMonthData> MobileAppOnceInMonthData { get; set; }

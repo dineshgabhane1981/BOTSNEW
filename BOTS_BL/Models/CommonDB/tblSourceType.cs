@@ -6,17 +6,15 @@ namespace BOTS_BL.Models.CommonDB
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Data.Entity.Spatial;
 
-    public partial class BOTS_TblBillingPartnerProduct
+    [Table("tblSourceType")]
+    public partial class tblSourceType
     {
-        public int BillingPartnerId { get; set; }
-
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.None)]
-        public int BillingPartnerProductId { get; set; }
+        public int SourceTypeId { get; set; }
 
         [Required]
-        [StringLength(100)]
-        public string BillingPartnerProductName { get; set; }
+        [StringLength(50)]
+        public string SourceTypeName { get; set; }
 
         [Required]
         [StringLength(50)]
@@ -24,7 +22,6 @@ namespace BOTS_BL.Models.CommonDB
 
         public DateTime CreatedDate { get; set; }
 
-        public bool? IsActive { get; set; }
-        public string CreatedDateStr { get; set; }
+        public bool IsActive { get; set; }
     }
 }

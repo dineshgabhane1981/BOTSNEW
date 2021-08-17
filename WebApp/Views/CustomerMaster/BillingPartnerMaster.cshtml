@@ -67,7 +67,14 @@
                                                 <td style="text-align:left;">@item.CreatedDate</td>
                                                 <td style="text-align:left; width:100px;">
                                                     <a href="#" class="login" onclick="EditCategory(@item.BillingPartnerId)" title="Edit"><img src="~/Content/assets/images/shape_editUser.png" /></a>
-
+                                                    @if (item.IsActive == true)
+                                                    {
+                                                        <a href="#" class="login" title="Deactivate"><img src="~/Content/assets/images/shape_deactivate.png" onclick="ActivateDeactivate(@item.BillingPartnerId,false);" /></a>
+                                                    }
+                                                    else
+                                                    {
+                                                        <a href="#" class="login" title="Activate"><img src="~/Content/assets/images/shape_activate.png" onclick="ActivateDeactivate(@item.BillingPartnerId,true);" /></a>
+                                                    }
                                                 </td>
                                             </tr>
                                         }
@@ -92,7 +99,7 @@
         $('#divadd').find(':input').val('');
         $("#hdnBillingPartnerId").text("");
     });
-    
+
     function EditCategory(id) {
 
         $("#divLoader").show();
@@ -107,7 +114,7 @@
                     if (responce.BillingPartnerName != null) {
                         $("#divLoader").hide();
                         $("#divadd").show(1000);
-                        $('#txtBillingPartnerNm').val(responce.BillingPartnerName);                      
+                        $('#txtBillingPartnerNm').val(responce.BillingPartnerName);
                         $("#hdnBillingPartnerId").text(id);
 
                     }
@@ -184,5 +191,52 @@
        // }
     }
     });
+
+    function ActivateDeactivate(BillingPartnerId, Status) {
+        //Swal.fire({
+        //    title: 'Are you sure?',
+        //    text: "You want to Activate/Deactivate this Billing Partner!",
+        //    icon: 'warning',
+        //    showCancelButton: true,
+        //    confirmButtonColor: '#3085d6',
+        //    cancelButtonColor: '#d33',
+        //    confirmButtonText: 'Yes, do it!'
+        //}).then((result) => {
+        //    if (result.value) {
+        if (confirm("Are you sure? You want to Active/Inactive Billing Product Partner")) {
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("ActiveInactiveBillingPartner", "CustomerMaster")',
+                data: '{BillingpartnerId: ' + JSON.stringify(BillingPartnerId) + '}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (response) {
+                    if (Status) {
+                        Swal.fire(
+                            'Activated!',
+                            'Billing Partner Activated Successfully !!!',
+                            'success'
+                        )
+
+                    }
+                    else {
+                        Swal.fire(
+                            'Deactivated!',
+                            'Billing Partner Deactivated Successfully !!!',
+                            'success'
+                        )
+                    }
+
+                },
+                failure: function (response) {
+                    console.log(response);
+                },
+                error: function (response) {
+                    console.log(response);
+                }
+            });
+
+        }
+    }
 </script>
 
