@@ -25,6 +25,7 @@ namespace BOTS_BL.Models.CommonDB
         public DateTime CreatedDate { get; set; }
 
         public bool? IsActive { get; set; }
+        [NotMapped]
         public string CreatedDateStr { get; set; }
     }
 }
