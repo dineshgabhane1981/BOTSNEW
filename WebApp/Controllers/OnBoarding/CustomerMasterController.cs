@@ -51,8 +51,14 @@ namespace WebApp.Controllers.OnBoarding
             lstbillingpartner = COR.GetBillingPartnerList();
             return View(lstbillingpartner);
         }
+        public ActionResult SourceType()
+        {
+            List<SourcedTypeDetails> lstsourcetype = new List<SourcedTypeDetails>();
+            lstsourcetype = COR.GetTblSourceType();
+            return View(lstsourcetype);
+        }
         public ActionResult BillingPartnerProductMaster()
-        {         
+        {
             var lstbillingpartner = COR.GetBillingPartner();
             ViewBag.lstBillingPartner = lstbillingpartner;
             return View();
@@ -78,11 +84,11 @@ namespace WebApp.Controllers.OnBoarding
                     categoryId = Convert.ToString(item["CategoryId"]);
                     if (categoryId != "")
                     {
-                        objcategory.CategoryId =Convert.ToInt32( categoryId);
+                        objcategory.CategoryId = Convert.ToInt32(categoryId);
                     }
                     else
                     {
-                        
+
                     }
                 }
                 result = COR.AddCategory(objcategory);
@@ -211,12 +217,12 @@ namespace WebApp.Controllers.OnBoarding
         [HttpPost]
         public ActionResult GetCategory(int CategoryId)
         {
-           
+
             tblCategory objcategory = new tblCategory();
-           // var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            // var userDetails = (CustomerLoginDetail)Session["UserSession"];
             try
             {
-               
+
                 objcategory = COR.GetCategoryById(CategoryId);
 
             }
@@ -225,7 +231,7 @@ namespace WebApp.Controllers.OnBoarding
 
             }
             return Json(objcategory, JsonRequestBehavior.AllowGet);
-            
+
 
         }
 
@@ -233,7 +239,7 @@ namespace WebApp.Controllers.OnBoarding
         public ActionResult GetCity(int CityId)
         {
 
-            tblCity objcity = new tblCity();            
+            tblCity objcity = new tblCity();
             try
             {
                 objcity = COR.GetCityById(CityId);
@@ -341,6 +347,43 @@ namespace WebApp.Controllers.OnBoarding
         }
 
         [HttpPost]
+        public ActionResult AddSourceType(string jsonData)
+        {
+            SPResponse result = new SPResponse();
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            string SourceTypeId = "";
+            try
+            {
+                JavaScriptSerializer json_serializer = new JavaScriptSerializer();
+                json_serializer.MaxJsonLength = int.MaxValue;
+                object[] objData = (object[])json_serializer.DeserializeObject(jsonData);
+                tblSourceType objsourcetype = new tblSourceType();
+                foreach (Dictionary<string, object> item in objData)
+                {
+
+                    objsourcetype.SourceTypeName = Convert.ToString(item["SourceTypeNm"]);
+                    objsourcetype.CreatedBy = userDetails.LoginId;
+                    objsourcetype.CreatedDate = DateTime.Now;
+                    SourceTypeId = Convert.ToString(item["SourceTypeId"]);
+                    if (SourceTypeId != "")
+                    {
+                        objsourcetype.SourceTypeId = Convert.ToInt32(SourceTypeId);
+                    }
+                    else
+                    {
+
+                    }
+                }
+                result = COR.AddSourceType(objsourcetype);
+            }
+            catch (Exception ex)
+            {
+
+            }
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
         public ActionResult GetBillingPartner(int BillingpartnerId)
         {
 
@@ -358,11 +401,30 @@ namespace WebApp.Controllers.OnBoarding
 
 
         }
+
+        [HttpPost]
+        public ActionResult GetSourceType(int SourceTypeId)
+        {
+
+            tblSourceType objSourceType = new tblSourceType();
+            try
+            {
+                objSourceType = COR.GetSourceTypeById(SourceTypeId);
+
+            }
+            catch (Exception ex)
+            {
+
+            }
+            return Json(objSourceType, JsonRequestBehavior.AllowGet);
+
+
+        }
         [HttpPost]
         public ActionResult GetBillingPartnerProductByPartner(int BillingpartnerProductId)
         {
-            
-           BOTS_TblBillingPartnerProduct lstbillingpartnerproduct = new BOTS_TblBillingPartnerProduct();
+
+            BOTS_TblBillingPartnerProduct lstbillingpartnerproduct = new BOTS_TblBillingPartnerProduct();
             try
             {
                 lstbillingpartnerproduct = COR.GetBillingPartnerProductByProductId(BillingpartnerProductId);
@@ -371,7 +433,7 @@ namespace WebApp.Controllers.OnBoarding
             {
 
             }
-            return Json(lstbillingpartnerproduct, JsonRequestBehavior.AllowGet); 
+            return Json(lstbillingpartnerproduct, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
@@ -415,18 +477,119 @@ namespace WebApp.Controllers.OnBoarding
         [HttpPost]
         public ActionResult ActiveInactiveBillingPartner(int BillingpartnerId)
         {
-            SPResponse response = new SPResponse();
+            SPResponse result = new SPResponse();
             try
-            {               
-                tblBillingPartner objbillingpartner = COR.GetBillingPartnerById(BillingpartnerId);
-                response = COR.ActiveInactiveBillingPartner(BillingpartnerId);
+            {
+                // tblBillingPartner objbillingpartner = COR.GetBillingPartnerById(BillingpartnerId);
+                result = COR.ActiveInactiveBillingPartner(BillingpartnerId);
             }
             catch (Exception ex)
             {
-               
+
             }
-            return Json(response, JsonRequestBehavior.AllowGet);
+            return Json(result, JsonRequestBehavior.AllowGet);
         }
 
+        [HttpPost]
+        public ActionResult ActiveInactiveCategory(int CategoryId)
+        {
+            SPResponse result = new SPResponse();
+            try
+            {
+                // tblCategory objcategory = COR.GetCategoryById(CategoryId);
+                result = COR.ActiveInactiveCategory(CategoryId);
+            }
+            catch (Exception ex)
+            {
+
+            }
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public ActionResult ActiveInactiveCity(int Cityid)
+        {
+            SPResponse result = new SPResponse();
+            try
+            {
+                // tblCity objcity = COR.GetCityById(Cityid);
+                result = COR.ActiveInactiveCity(Cityid);
+            }
+            catch (Exception ex)
+            {
+
+            }
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public ActionResult ActiveInactiveCustomerSuccess(int RmAssignedId)
+        {
+            SPResponse result = new SPResponse();
+            try
+            {
+
+                result = COR.ActiveInactiveCS(RmAssignedId);
+            }
+            catch (Exception ex)
+            {
+
+            }
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public ActionResult ActiveInactiveSourceBy(int Sourcedbyid)
+        {
+            SPResponse result = new SPResponse();
+            try
+            {
+
+                result = COR.ActiveInactiveSourceBy(Sourcedbyid);
+            }
+            catch (Exception ex)
+            {
+
+            }
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public ActionResult ActiveInactiveSourceType(int SourceTypeid)
+        {
+            SPResponse result = new SPResponse();
+            try
+            {
+
+                result = COR.ActiveInactiveSourceType(SourceTypeid);
+            }
+            catch (Exception ex)
+            {
+
+            }
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public ActionResult ActiveInactiveBillingPartnerProduct(int BillingPartnerProductId)
+        {
+            SPResponse result = new SPResponse();
+            try
+            {
+                result = COR.ActiveInactiveBillingPartnerProduct(BillingPartnerProductId);
+            }
+            catch (Exception ex)
+            {
+
+            }
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult CategoryMasterList()
+        {
+            List<CategoryDetails> lsttblcategory = new List<CategoryDetails>();
+            lsttblcategory = COR.GetTblCategories();
+            return PartialView("_CategoryMaster", lsttblcategory);
+        }
     }
 }

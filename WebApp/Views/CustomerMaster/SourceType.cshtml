@@ -1,7 +1,7 @@
-﻿@model List<BOTS_BL.Models.CommonDB.BillingPartnerDetails>
+﻿@model List<BOTS_BL.Models.CommonDB.SourcedTypeDetails>
 
 @{
-    ViewBag.Title = "BillingPartnerMaster";
+    ViewBag.Title = "SourceType";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -9,20 +9,20 @@
     <div class="row mb-3 card">
         <div class="container-fluid pt-3 pl-3 pr-3">
             <div class="pb-3">
-                <h4><b>Billing Partner Master</b></h4>
+                <h4><b>Source Type Master</b></h4>
             </div>
 
             <div class="pt-3 pl-3 pr-3 col-md-12 col-lg-12">
                 <div class="col-md-8 col-lg-8 mb-5" id="divadd" style="display:none; border:1px solid grey; border-radius:10px;">
                     <div class="mb-4">
-                        <h6><b>Add Billing Partner</b></h6>
+                        <h6><b>Add Source Type</b></h6>
                     </div>
                     <div class="col-md-12 col-lg-12 mt-2 mb-4">
-                        Billing Partner Name  <input class="input100" type="text" id="txtBillingPartnerNm" />
-                        <span id="hdnBillingPartnerId" style="display:none;"></span>
+                        Source Type Name  <input class="input100" type="text" id="txtSourceTypeNm" />
+                        <span id="hdnSourceTypeId" style="display:none;"></span>
                         <button class="btn btn-primary login-btn ml-5 mr-2" type="button" id="btnSave">
                             Save
-                        </button>                        
+                        </button>
                         <button class="btn btn-primary login-btn" type="button" id="btnCancle">
                             Cancel
                         </button>
@@ -47,7 +47,7 @@
                         <table class="table" id="groupListTable">
                             <thead>
                                 <tr>
-                                    <th scope="col" style="text-align:left;">Billing Partner Name</th>
+                                    <th scope="col" style="text-align:left;">Source Type Name</th>
                                     <th scope="col" style="text-align:left;">Created By</th>
                                     <th scope="col" style="text-align:left;">Created On</th>
                                     <th scope="col" style="text-align:left;">Action</th>
@@ -62,18 +62,18 @@
                                         {
 
                                             <tr>
-                                                <td style="text-align:left;">@item.BillingPartnerName</td>
+                                                <td style="text-align:left;">@item.SourceTypeName</td>
                                                 <td style="text-align:left;">@item.UserName</td>
                                                 <td style="text-align:left;">@item.CreatedDate</td>
                                                 <td style="text-align:left; width:100px;">
-                                                    <a href="#" class="login" onclick="EditCategory(@item.BillingPartnerId)" title="Edit"><img src="~/Content/assets/images/shape_editUser.png" /></a>
+                                                    <a href="#" class="login" onclick="EditSourceType(@item.SourceTypeId)" title="Edit"><img src="~/Content/assets/images/shape_editUser.png" /></a>
                                                     @if (item.IsActive == true)
                                                     {
-                                                        <a href="#" class="login" title="Deactivate"><img src="~/Content/assets/images/shape_activate.png" onclick="ActivateDeactivate(@item.BillingPartnerId);" /></a>
+                                                        <a href="#" class="login" title="Deactivate"><img src="~/Content/assets/images/shape_activate.png" onclick="ActivateDeactivate(@item.SourceTypeId);" /></a>
                                                     }
                                                     else
                                                     {
-                                                        <a href="#" class="login" title="Activate"><img src="~/Content/assets/images/shape_deactivate.png" onclick="ActivateDeactivate(@item.BillingPartnerId);" /></a>
+                                                        <a href="#" class="login" title="Activate"><img src="~/Content/assets/images/shape_deactivate.png" onclick="ActivateDeactivate(@item.SourceTypeId);" /></a>
                                                     }
                                                 </td>
                                             </tr>
@@ -97,25 +97,25 @@
     $('#btnCancle').on("click", function () {
         $("#divadd").hide(1000);
         $('#divadd').find(':input').val('');
-        $("#hdnBillingPartnerId").text("");
+        $("#hdnSourceTypeId").text("");
     });
 
-    function EditCategory(id) {
+    function EditSourceType(id) {
 
         $("#divLoader").show();
             $.ajax({
                 type: "POST",
-                url: '@Url.Action("GetBillingPartner", "CustomerMaster")',
-                data: '{BillingpartnerId: ' + JSON.stringify(id) + '}',
+                url: '@Url.Action("GetSourceType", "CustomerMaster")',
+                data: '{SourceTypeId: ' + JSON.stringify(id) + '}',
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
                 success: function (responce) {
                     console.log(responce);
-                    if (responce.BillingPartnerName != null) {
+                    if (responce.SourceTypeName != null) {
                         $("#divLoader").hide();
                         $("#divadd").show(1000);
-                        $('#txtBillingPartnerNm').val(responce.BillingPartnerName);
-                        $("#hdnBillingPartnerId").text(id);
+                        $('#txtSourceTypeNm').val(responce.SourceTypeName);
+                        $("#hdnSourceTypeId").text(id);
 
                     }
                     else {
@@ -139,28 +139,28 @@
     }
     $('#btnSave').on("click", function () {
 
-        if ($('#txtBillingPartnerNm').val() == "") {
-            toastr.error('Please enter Billing Partner Name');
-            $('#txtBillingPartnerNm').focus();
+        if ($('#txtSourceTypeNm').val() == "") {
+            toastr.error('Please enter Source Type Name');
+            $('#txtSourceTypeNm').focus();
             return false;
         }
-        if (confirm("Are you sure? You want to Add Billing Partner")) {
-            var BillingPartnerData = [];
+        if (confirm("Are you sure? You want to Add Source Type")) {
+            var SourceTypeData = [];
             item = {}
-            item["BillingPartnerNm"] = $("#txtBillingPartnerNm").val();
-            if ($('#hdnBillingPartnerId').text != 0) {
-                item["BillingPartnerId"] = $('#hdnBillingPartnerId').text();
+            item["SourceTypeNm"] = $("#txtSourceTypeNm").val();
+            if ($('#hdnSourceTypeId').text != 0) {
+                item["SourceTypeId"] = $('#hdnSourceTypeId').text();
             }
             else {
-                item["BillingPartnerId"] = 0;
+                item["SourceTypeId"] = 0;
             }
-            BillingPartnerData.push(item);
-            var data = JSON.stringify(BillingPartnerData);
+            SourceTypeData.push(item);
+            var data = JSON.stringify(SourceTypeData);
             console.log(data)
             $("#divLoader").show();
             $.ajax({
                 type: "POST",
-                url: '@Url.Action("AddBillingPartner", "CustomerMaster")',
+                url: '@Url.Action("AddSourceType", "CustomerMaster")',
                 data: '{jsonData: ' + JSON.stringify(data) + '}',
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
@@ -168,8 +168,8 @@
                     if (result.ResponseCode == "00") {
                         toastr.success(result.ResponseMessage);
                         $("#divLoader").hide();
-                        $("#txtBillingPartnerNm").val("");
-                        $('#hdnBillingPartnerId').val("");
+                        $("#txtSourceTypeNm").val("");
+                        $('#hdnSourceTypeId').val("");
                     }
                     else {
                         toastr.error(result.ResponseMessage);
@@ -192,13 +192,13 @@
     }
     });
 
-    function ActivateDeactivate(BillingPartnerId) {
-        
-        if (confirm("Are you sure? You want to Active/Inactive Billing Product Partner")) {
+    function ActivateDeactivate(SourceTypeId) {
+
+        if (confirm("Are you sure? You want to Active/Inactive Source Type")) {
             $.ajax({
                 type: "POST",
-                url: '@Url.Action("ActiveInactiveBillingPartner", "CustomerMaster")',
-                data: '{BillingpartnerId: ' + JSON.stringify(BillingPartnerId) + '}',
+                url: '@Url.Action("ActiveInactiveSourceType", "CustomerMaster")',
+                data: '{SourceTypeid: ' + JSON.stringify(SourceTypeId) + '}',
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
                 success: function (result) {
@@ -206,13 +206,13 @@
                     if (result.ResponseCode == "00") {
                         toastr.success(result.ResponseMessage);
                         $("#divLoader").hide();
-                       
+
                     }
                     else {
                         toastr.error(result.ResponseMessage);
                         $("#divLoader").hide();
                     }
- 
+
 
                 },
                 failure: function (result) {

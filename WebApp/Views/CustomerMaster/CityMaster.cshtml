@@ -65,8 +65,15 @@
                                                 <td style="text-align:left;">@item.UserName</td>
                                                 <td style="text-align:left;">@item.CreatedDate</td>
                                                 <td style="text-align:left; width:100px;">
-                                                    <a href="#" class="login" onclick="EditCategory(@item.CityId)" title="Edit"><img src="~/Content/assets/images/shape_editUser.png" /></a>
-
+                                                    <a href="#" class="login" onclick="EditCity(@item.CityId)" title="Edit"><img src="~/Content/assets/images/shape_editUser.png" /></a>
+                                                    @if (item.IsActive == true)
+                                                    {
+                                                        <a href="#" class="login" title="Deactivate"><img src="~/Content/assets/images/shape_activate.png" onclick="ActivateDeactivate(@item.CityId);" /></a>
+                                                    }
+                                                    else
+                                                    {
+                                                        <a href="#" class="login" title="Activate"><img src="~/Content/assets/images/shape_deactivate.png" onclick="ActivateDeactivate(@item.CityId);" /></a>
+                                                    }
                                                 </td>
                                             </tr>
                                         }
@@ -84,7 +91,7 @@
 
     $('#btnAdd').on("click", function () {
         $("#divadd").show(1000);
-        
+
     });
     $('#btnCancle').on("click", function () {
         $("#divadd").hide(1000);
@@ -147,7 +154,7 @@
        // }
     }
     });
-    function EditCategory(id) {
+    function EditCity(id) {
 
         $("#divLoader").show();
             $.ajax({
@@ -184,6 +191,40 @@
                 }
             });
         console.log(id);
+    }
+
+    function ActivateDeactivate(CityId) {
+
+        if (confirm("Are you sure? You want to Active/Inactive City")) {
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("ActiveInactiveCity", "CustomerMaster")',
+                data: '{Cityid: ' + JSON.stringify(CityId) + '}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (result) {
+                    console.log(result);
+                    if (result.ResponseCode == "00") {
+                        toastr.success(result.ResponseMessage);
+                        $("#divLoader").hide();
+
+                    }
+                    else {
+                        toastr.error(result.ResponseMessage);
+                        $("#divLoader").hide();
+                    }
+
+
+                },
+                failure: function (result) {
+                    console.log(result);
+                },
+                error: function (result) {
+                    console.log(result);
+                }
+            });
+
+        }
     }
 </script>
 

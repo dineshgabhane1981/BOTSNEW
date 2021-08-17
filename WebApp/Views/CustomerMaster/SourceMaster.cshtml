@@ -66,8 +66,15 @@
                                                 <td style="text-align:left;">@item.UserName</td>
                                                 <td style="text-align:left;">@item.CreatedDate</td>
                                                 <td style="text-align:left; width:100px;">
-                                                    <a href="#" class="login" onclick="EditCategory(@item.SourcedbyId)" title="Edit"><img src="~/Content/assets/images/shape_editUser.png" /></a>
-
+                                                    <a href="#" class="login" onclick="EditSourceBy(@item.SourcedbyId)" title="Edit"><img src="~/Content/assets/images/shape_editUser.png" /></a>
+                                                    @if (item.IsActive == true)
+                                                    {
+                                                        <a href="#" class="login" title="Deactivate"><img src="~/Content/assets/images/shape_activate.png" onclick="ActivateDeactivate(@item.SourcedbyId);" /></a>
+                                                    }
+                                                    else
+                                                    {
+                                                        <a href="#" class="login" title="Activate"><img src="~/Content/assets/images/shape_deactivate.png" onclick="ActivateDeactivate(@item.SourcedbyId);" /></a>
+                                                    }
                                                 </td>
                                             </tr>
                                         }
@@ -146,7 +153,7 @@
     }
     });
 
-    function EditCategory(id) {
+    function EditSourceBy(id) {
 
         $("#divLoader").show();
             $.ajax({
@@ -182,6 +189,40 @@
                     }
                 }
             });
+    }
+
+    function ActivateDeactivate(SourcedbyId) {
+
+        if (confirm("Are you sure? You want to Active/Inactive SourceBy")) {
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("ActiveInactiveSourceBy", "CustomerMaster")',
+                data: '{Sourcedbyid: ' + JSON.stringify(SourcedbyId) + '}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (result) {
+                    console.log(result);
+                    if (result.ResponseCode == "00") {
+                        toastr.success(result.ResponseMessage);
+                        $("#divLoader").hide();
+
+                    }
+                    else {
+                        toastr.error(result.ResponseMessage);
+                        $("#divLoader").hide();
+                    }
+
+
+                },
+                failure: function (result) {
+                    console.log(result);
+                },
+                error: function (result) {
+                    console.log(result);
+                }
+            });
+
+        }
     }
 </script>
 

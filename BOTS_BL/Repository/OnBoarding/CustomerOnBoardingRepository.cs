@@ -30,7 +30,8 @@ namespace BOTS_BL.Repository
                                           CategoryName = c.CategoryName,
                                           CreatedBy = c.CreatedBy,
                                           CreatedDate = c.CreatedDate,
-                                          UserName = m.UserName
+                                          UserName = m.UserName,
+                                          IsActive = c.IsActive
                                       }).ToList();
 
                 }
@@ -78,7 +79,8 @@ namespace BOTS_BL.Repository
                                           SourcedbyName = s.SourcedbyName,
                                           CreatedBy = s.CreatedBy,
                                           CreatedDate = s.CreatedDate,
-                                          UserName = m.UserName
+                                          UserName = m.UserName,
+                                          IsActive = s.IsActive
                                       }).ToList();
                 }
             }
@@ -109,6 +111,64 @@ namespace BOTS_BL.Repository
             return result;
         }
 
+        public List<SourcedTypeDetails> GetTblSourceType()
+        {
+            List<SourcedTypeDetails> objtblSourcetype = new List<SourcedTypeDetails>();
+            try
+            {
+                using (var context = new CommonDBContext())
+                {
+                    objtblSourcetype = (from s in context.tblSourceTypes
+                                        join cl in context.CustomerLoginDetails on s.CreatedBy equals cl.LoginId into source
+                                        from m in source.DefaultIfEmpty()
+                                        select new SourcedTypeDetails
+                                        {
+                                            SourceTypeId = s.SourceTypeId,
+                                            SourceTypeName = s.SourceTypeName,
+                                            CreatedBy = s.CreatedBy,
+                                            CreatedDate = s.CreatedDate,
+                                            UserName = m.UserName,
+                                            IsActive = s.IsActive
+                                        }).ToList();
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "onboarding_master");
+            }
+            return objtblSourcetype;
+        }
+
+        public SPResponse AddSourceType(tblSourceType objtblSourceType)
+        {
+            SPResponse result = new SPResponse();
+            try
+            {
+                using (var context = new CommonDBContext())
+                {
+                    context.tblSourceTypes.AddOrUpdate(objtblSourceType);
+                    context.SaveChanges();
+                    result.ResponseCode = "00";
+                    result.ResponseMessage = "Source Type Added Successfully";
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "onboarding_master");
+            }
+            return result;
+        }
+
+        public tblSourceType GetSourceTypeById(int SourceTypeId)
+        {
+            tblSourceType objSourcetype = new tblSourceType();
+            using (var context = new CommonDBContext())
+            {
+                objSourcetype = context.tblSourceTypes.Where(x => x.SourceTypeId == SourceTypeId).FirstOrDefault();
+            }
+            return objSourcetype;
+        }
+
         public List<CityDetails> GetCityList()
         {
             List<CityDetails> objtblcity = new List<CityDetails>();
@@ -126,7 +186,8 @@ namespace BOTS_BL.Repository
                                       CityName = c.CityName,
                                       CreatedBy = c.CreatedBy,
                                       CreatedDate = c.CreatedDate,
-                                      UserName = m.UserName
+                                      UserName = m.UserName,
+                                      IsActive = c.IsActive
                                   }).ToList();
                 }
             }
@@ -173,7 +234,8 @@ namespace BOTS_BL.Repository
                                         RMAssignedName = r.RMAssignedName,
                                         CreatedBy = r.CreatedBy,
                                         CreatedDate = r.CreatedDate,
-                                        UserName = m.UserName
+                                        UserName = m.UserName,
+                                        IsActive = r.IsActive
                                     }).ToList();
 
 
@@ -323,7 +385,8 @@ namespace BOTS_BL.Repository
                                                     BillingPartnerName = r.BillingPartnerName,
                                                     CreatedBy = r.CreatedBy,
                                                     CreatedDate = r.CreatedDate,
-                                                    UserName = p.UserName
+                                                    UserName = p.UserName,
+                                                    IsActive = r.IsActive
                                                 }).ToList();
 
 
@@ -346,14 +409,14 @@ namespace BOTS_BL.Repository
                 {
                     var lstbillingpartner = (from r in context.tblBillingPartners
                                              join cl in context.CustomerLoginDetails on r.CreatedBy equals cl.LoginId into billingpartner
-                                             from p in billingpartner.DefaultIfEmpty()
+                                             where r.IsActive == true
                                              select new BillingPartnerDetails
                                              {
                                                  BillingPartnerId = r.BillingPartnerId,
                                                  BillingPartnerName = r.BillingPartnerName,
                                                  CreatedBy = r.CreatedBy,
                                                  CreatedDate = r.CreatedDate,
-                                                 UserName = p.UserName
+                                                 IsActive = r.IsActive
                                              }).ToList();
 
                     foreach (var item in lstbillingpartner)
@@ -387,7 +450,7 @@ namespace BOTS_BL.Repository
             try
             {
                 using (var context = new CommonDBContext())
-                {                    
+                {
                     objbillingpartnerproduct = (from r in context.BOTS_TblBillingPartnerProduct
                                                 join cl in context.CustomerLoginDetails on r.CreatedBy equals cl.LoginId
                                                 where r.BillingPartnerId == BillingpartnerId
@@ -408,7 +471,7 @@ namespace BOTS_BL.Repository
                     }
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
 
             }
@@ -437,6 +500,162 @@ namespace BOTS_BL.Repository
                 context.SaveChanges();
                 result.ResponseCode = "00";
                 result.ResponseMessage = "Billing Partner Updated Successfully";
+            }
+            return result;
+        }
+
+        public SPResponse ActiveInactiveCategory(int CategoryId)
+        {
+            tblCategory objcategory = new tblCategory();
+            SPResponse result = new SPResponse();
+            using (var context = new CommonDBContext())
+            {
+
+                objcategory = context.tblCategories.Where(x => x.CategoryId == CategoryId).FirstOrDefault();
+
+                if (objcategory.IsActive == true)
+                {
+                    objcategory.IsActive = false;
+                }
+                else
+                {
+                    objcategory.IsActive = true;
+                }
+
+                context.tblCategories.AddOrUpdate(objcategory);
+                context.SaveChanges();
+                result.ResponseCode = "00";
+                result.ResponseMessage = "Category Updated Successfully";
+            }
+            return result;
+        }
+
+        public SPResponse ActiveInactiveCity(int CityId)
+        {
+            tblCity objcity = new tblCity();
+            SPResponse result = new SPResponse();
+            using (var context = new CommonDBContext())
+            {
+
+                objcity = context.tblCities.Where(x => x.CityId == CityId).FirstOrDefault();
+
+                if (objcity.IsActive == true)
+                {
+                    objcity.IsActive = false;
+                }
+                else
+                {
+                    objcity.IsActive = true;
+                }
+
+                context.tblCities.AddOrUpdate(objcity);
+                context.SaveChanges();
+                result.ResponseCode = "00";
+                result.ResponseMessage = "City Updated Successfully";
+            }
+            return result;
+        }
+
+        public SPResponse ActiveInactiveCS(int RmAssignedId)
+        {
+            tblRMAssigned objRM = new tblRMAssigned();
+            SPResponse result = new SPResponse();
+            using (var context = new CommonDBContext())
+            {
+
+                objRM = context.tblRMAssigneds.Where(x => x.RMAssignedId == RmAssignedId).FirstOrDefault();
+
+                if (objRM.IsActive == true)
+                {
+                    objRM.IsActive = false;
+                }
+                else
+                {
+                    objRM.IsActive = true;
+                }
+
+                context.tblRMAssigneds.AddOrUpdate(objRM);
+                context.SaveChanges();
+                result.ResponseCode = "00";
+                result.ResponseMessage = "CS Updated Successfully";
+            }
+            return result;
+        }
+
+        public SPResponse ActiveInactiveSourceBy(int Sourcedbyid)
+        {
+            tblSourcedBy objsource = new tblSourcedBy();
+            SPResponse result = new SPResponse();
+            using (var context = new CommonDBContext())
+            {
+
+                objsource = context.tblSourcedBies.Where(x => x.SourcedbyId == Sourcedbyid).FirstOrDefault();
+
+                if (objsource.IsActive == true)
+                {
+                    objsource.IsActive = false;
+                }
+                else
+                {
+                    objsource.IsActive = true;
+                }
+
+                context.tblSourcedBies.AddOrUpdate(objsource);
+                context.SaveChanges();
+                result.ResponseCode = "00";
+                result.ResponseMessage = "SourceBy Updated Successfully";
+            }
+            return result;
+        }
+
+        public SPResponse ActiveInactiveSourceType(int SourceTypeid)
+        {
+            tblSourceType objsourcetype = new tblSourceType();
+            SPResponse result = new SPResponse();
+            using (var context = new CommonDBContext())
+            {
+
+                objsourcetype = context.tblSourceTypes.Where(x => x.SourceTypeId == SourceTypeid).FirstOrDefault();
+
+                if (objsourcetype.IsActive == true)
+                {
+                    objsourcetype.IsActive = false;
+                }
+                else
+                {
+                    objsourcetype.IsActive = true;
+                }
+
+                context.tblSourceTypes.AddOrUpdate(objsourcetype);
+                context.SaveChanges();
+                result.ResponseCode = "00";
+                result.ResponseMessage = "Source Type Updated Successfully";
+            }
+            return result;
+        }
+
+        public SPResponse ActiveInactiveBillingPartnerProduct(int BillingPartnerProductId)
+        {
+            BOTS_TblBillingPartnerProduct objbillingpartnerproduct = new BOTS_TblBillingPartnerProduct();
+            SPResponse result = new SPResponse();
+            using (var context = new CommonDBContext())
+            {
+
+                objbillingpartnerproduct = context.BOTS_TblBillingPartnerProduct.Where(x => x.BillingPartnerProductId == BillingPartnerProductId).FirstOrDefault();
+
+                if (objbillingpartnerproduct.IsActive == true)
+                {
+                    objbillingpartnerproduct.IsActive = false;
+                }
+                else
+                {
+                    objbillingpartnerproduct.IsActive = true;
+                }
+
+                context.BOTS_TblBillingPartnerProduct.AddOrUpdate(objbillingpartnerproduct);
+                context.SaveChanges();
+                result.ResponseCode = "00";
+                result.ResponseMessage = "Billing Partner product Updated Successfully";
             }
             return result;
         }

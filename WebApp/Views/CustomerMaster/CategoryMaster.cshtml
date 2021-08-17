@@ -17,69 +17,36 @@
                         <h6><b>Add Category</b></h6>
                     </div>
                     <div class="col-md-12 col-lg-12 mt-2 mb-4">
-                        Category Name  <input class="input100" type="text" id="txtcategoryNm" />                       
-                        <span id="hdnCategoryId" style="display:none;" ></span>
+                        Category Name  <input class="input100" type="text" id="txtcategoryNm" />
+                        <span id="hdnCategoryId" style="display:none;"></span>
                         <button class="btn btn-primary login-btn ml-5 mr-2" type="button" id="btnSave">
                             Save
                         </button>
                         @*<button class="btn btn-primary login-btn ml-5 mr-2" type="button" id="btnUpdate" style="display:none;">
-                            Update
-                        </button>*@
+                    Update
+                </button>*@
                         <button class="btn btn-primary login-btn" type="button" id="btnCancle">
                             Cancel
                         </button>
                     </div>
-                 </div>
+                </div>
 
-                    <div class="row">
-                        <div class="col search-container">
-                            <i class="fas fa-search"></i>
-                            <input class="input100" type="text" id="txtSearch" placeholder="Search activity..." />
-                        </div>
-                        <div style="text-align:right;" class="pr-2">
-                            <button class="btn btn-primary login-btn" type="button" id="btnAdd">
-                                ADD
-                            </button>
-
-                        </div>
+                <div class="row">
+                    <div class="col search-container">
+                        <i class="fas fa-search"></i>
+                        <input class="input100" type="text" id="txtSearch" placeholder="Search activity..." />
                     </div>
+                    <div style="text-align:right;" class="pr-2">
+                        <button class="btn btn-primary login-btn" type="button" id="btnAdd">
+                            ADD
+                        </button>
 
-                    <div class="row mt-3" id="dvActivityData">
-                        <div class="table-responsive">
-                            <table class="table" id="groupListTable">
-                                <thead>
-                                    <tr>
-                                        <th scope="col" style="text-align:left;">Category Name</th>
-                                        <th scope="col" style="text-align:left;">Created By</th>
-                                        <th scope="col" style="text-align:left;">Created On</th>
-                                        <th scope="col" style="text-align:left;">Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @if (Model != null)
-                                    {
-                                        if (Model.Count > 0)
-                                        {
-                                            foreach (var item in Model)
-                                            {
-
-                                                <tr>
-                                                    <td style="text-align:left;">@item.CategoryName</td>
-                                                    <td style="text-align:left;">@item.UserName</td>
-                                                    <td style="text-align:left;">@item.CreatedDate</td>
-                                                    <td style="text-align:left; width:100px;">
-                                                        <a href="#" class="login" onclick="EditCategory(@item.CategoryId)" title="Edit"><img src="~/Content/assets/images/shape_editUser.png" /></a>
-
-                                                    </td>
-                                                </tr>
-                                            }
-                                        }
-                                    }
-                                </tbody>
-                            </table>
-                        </div>
                     </div>
                 </div>
+                <div id="divcategory">
+                    @Html.Partial("~/Views/CustomerMaster/_CategoryMaster.cshtml", Model)
+                </div>
+            </div>
         </div>
     </div>
 </div>
@@ -87,62 +54,34 @@
 
     $('#btnAdd').on("click", function () {
         $("#divadd").show(1000);
-       
+
     });
     $('#btnCancle').on("click", function () {
         $("#divadd").hide(1000);
         $('#divadd').find(':input').val('');
         $("#hdnCategoryId").text("");
     });
-    @*$('#btnUpdate').on("click", function () {
-        if ($('#txtcategoryNm').val() == "") {
-            toastr.error('Please enter Category Name');
-            $('#txtcategoryNm').focus();
-            return false;
-        }
-        if (confirm("Are you sure? You want to Update Category")) {
-            var CategoryData = [];
-            item = {}
-            item["CategoryNm"] = $("#txtcategoryNm").val();
-
-            CategoryData.push(item);
-            var data = JSON.stringify(CategoryData);
-            console.log(data)
-            $("#divLoader").show();
+    function BindCategoryList() {
+        $("#divLoader").show();
             $.ajax({
                 type: "POST",
-                url: '@Url.Action("AddCategory", "CustomerMaster")',
-                data: '{jsonData: ' + JSON.stringify(data) + '}',
+                url: '@Url.Action("CategoryMasterList", "CustomerMaster")',
+                //data: '{CategoryId: ' + JSON.stringify(id) + '}',
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
-                success: function (result) {
-                    if (result.ResponseCode == "00") {
-                        toastr.success(result.ResponseMessage);
-                        $("#divLoader").hide();
-                        $("#txtcategoryNm").val("");
+                success: function (responce) {
+                   
+                    $("#divcategory").html(responce);
 
-                    }
-                    else {
-                        toastr.error(result.ResponseMessage);
-                        $("#divLoader").hide();
-                    }
                 },
-                error: function (result) {
-                    console.log(result.responseText)
-                    if (result.responseText == "True") {
-                        toastr.success("Data Updated Successfully");
-                        $("#divLoader").hide();
-                    }
-                    else {
-                        toastr.error('error occured while saving data');
-                        $("#divLoader").hide();
-                    }
+                error: function (responce) {
+                    $("#divcategory").html(responce.responseText);
+                    
                 }
             });
-       // }
+        
     }
-    });*@
-    function EditCategory(id) {      
+    function EditCategory(id) {
 
         $("#divLoader").show();
             $.ajax({
@@ -156,13 +95,14 @@
                     if (responce.CategoryName != null) {
                         $("#divLoader").hide();
                         $("#divadd").show(1000);
-                        $('#txtcategoryNm').val(responce.CategoryName);                       
+                        $('#txtcategoryNm').val(responce.CategoryName);
                        // $("#btnSave").show();
                         $("#hdnCategoryId").text(id);
+                        BindCategoryList();
 
                     }
                     else {
-                      
+
                     }
 
                 },
@@ -177,11 +117,10 @@
                         $("#divLoader").hide();
                     }
                 }
-            });
-        console.log(id);
+            });        
     }
     $('#btnSave').on("click", function () {
-        
+
            if ($('#txtcategoryNm').val() == "") {
             toastr.error('Please enter Category Name');
                $('#txtcategoryNm').focus();
@@ -213,6 +152,7 @@
                         $("#divLoader").hide();
                         $("#txtcategoryNm").val("");
                         $('#hdnCategoryId').val("");
+                        BindCategoryList();
                     }
                     else {
                         toastr.error(result.ResponseMessage);
@@ -231,7 +171,42 @@
                     }
                 }
             });
-       // }
+
     }
     });
+    function ActivateDeactivate(CategoryId) {
+
+        if (confirm("Are you sure? You want to Active/Inactive Category")) {
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("ActiveInactiveCategory", "CustomerMaster")',
+                data: '{CategoryId: ' + JSON.stringify(CategoryId) + '}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (result) {
+                    console.log(result);
+                    if (result.ResponseCode == "00") {
+                        
+                        toastr.success(result.ResponseMessage);
+                        BindCategoryList();
+                        $("#divLoader").hide();
+
+                    }
+                    else {
+                        toastr.error(result.ResponseMessage);
+                        $("#divLoader").hide();
+                    }
+
+
+                },
+                failure: function (result) {
+                    console.log(result);
+                },
+                error: function (result) {
+                    console.log(result);
+                }
+            });
+
+        }
+    }
 </script>

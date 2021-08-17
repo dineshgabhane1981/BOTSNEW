@@ -30,7 +30,7 @@
                         </button>
                     </div>
                 </div>
-                
+
                 <div class="row">
                     <div class="pr-2 ml-2">
                         <b>Billing Partner Name</b> @Html.DropDownList("BillingPartnerProduct", new SelectList(ViewBag.lstBillingPartner, "Value", "Text"), htmlAttributes: new { @class = "input100", @id = "ddlBillingPartnerProduct" })
@@ -57,27 +57,10 @@
                                     <th scope="col" style="text-align:left;">Created By</th>
                                     <th scope="col" style="text-align:left;">Created On</th>
                                     <th scope="col" style="text-align:left;">Action</th>
+
                                 </tr>
                             </thead>
                             <tbody>
-                                @*@if (Model != null)
-                                {
-                                    if (Model.Count > 0)
-                                    {
-                                        foreach (var item in Model)
-                                        {
-
-                                            <tr>
-                                                <td style="text-align:left;">@item.BillingPartnerProductName</td>
-                                                <td style="text-align:left;">@item.UserName</td>
-                                                <td style="text-align:left;">@item.CreatedDate</td>
-                                                <td style="text-align:left; width:100px;">
-                                                    <a href="#" class="login" onclick="EditCategory(@item.BillingPartnerProductId)" title="Edit"><img src="~/Content/assets/images/shape_editUser.png" /></a>
-                                                </td>
-                                            </tr>
-                                        }
-                                    }
-                                }*@
                             </tbody>
                         </table>
                     </div>
@@ -114,9 +97,10 @@
                             console.log(responce.BillingPartnerProductName);
                             optionItem = {}
                             optionItem["BillingPartnerProductName"] = item.BillingPartnerProductName;
-                            optionItem["UserName"] = item.UserName;
+                            optionItem["UserName"] = item.CreatedBy;
                             optionItem["CreatedDate"] = item.CreatedDateStr;
-                            optionItem["BillingPartnerProductId"] = item.BillingPartnerProductId;                           
+                            optionItem["BillingPartnerProductId"] = item.BillingPartnerProductId;
+                            optionItem["IsActive"] = item.IsActive;
                             tableData.push(optionItem);
                             console.log(optionItem);
                         });
@@ -162,12 +146,18 @@
 
                     "mData": "BillingPartnerProductId",
                     "mRender": function (data, type, row) {
-                        return '<a href="#" onclick="EditBillingPartnerProduct( '+ data + ')" class="login" title="Edit"><img src="/Content/assets/images/shape_editUser.png" /></a>';
+                        var isActive = row.IsActive;
+
+                        if (isActive) {
+                            return '<a href="#" onclick="EditBillingPartnerProduct( ' + data + ')" class="login" title="Edit"><img src="/Content/assets/images/shape_editUser.png" /></a><a href="#" onclick="ActivateDeactivate(' + data + ')" class="login" title="Deactivate"><img src="/Content/assets/images/shape_activate.png"  /></a>';
+                        }
+                        else {
+                            return '<a href="#" onclick="EditBillingPartnerProduct( ' + data + ')" class="login" title="Edit"><img src="/Content/assets/images/shape_editUser.png" /></a><a href="#" onclick="ActivateDeactivate(' + data + ')"class="login" title="Activate"><img src="/Content/assets/images/shape_deactivate.png"  /></a>';
+                        }
+                        //return '<a href="#" onclick="EditBillingPartnerProduct( '+ data + ')" class="login" title="Edit"><img src="/Content/assets/images/shape_editUser.png" /></a>';
 
                     }
-                }
-
-
+                },
 
             ],
             aoColumnDefs: [
@@ -229,7 +219,7 @@
                     }
                 }
             });
-        
+
     }
      $('#btnSave').on("click", function () {
 
@@ -240,14 +230,14 @@
          }
          var selected = $("#ddlBillingPartnerProduct option:selected").val();
          if (selected == "0") {
-             toastr.error('Please select Billing Partner Name');             
+             toastr.error('Please select Billing Partner Name');
              return false;
          }
          if (confirm("Are you sure? You want to Add Billing Product Partner")) {
             var BillingPartnerData = [];
             item = {}
              item["BillingPartnerproductNm"] = $("#txtBillingPartnerProductNm").val();
-             item["BillingPartnerId"] = selected;            
+             item["BillingPartnerId"] = selected;
              if ($('#hdnBillingPartnerProductId').text != 0) {
                  item["BillingPartnerPartnerId"] = $('#hdnBillingPartnerProductId').text();
                  //item["BillingPartnerId"] = selected;
@@ -292,7 +282,40 @@
             });
        // }
     }
-    });
+     });
+    function ActivateDeactivate(BillingPartnerProductId) {
+
+        if (confirm("Are you sure? You want to Active/Inactive Billing Product Partner")) {
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("ActiveInactiveBillingPartnerProduct", "CustomerMaster")',
+                data: '{BillingPartnerProductId: ' + JSON.stringify(BillingPartnerProductId) + '}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (result) {
+                    console.log(result);
+                    if (result.ResponseCode == "00") {
+                        toastr.success(result.ResponseMessage);
+                        $("#divLoader").hide();
+
+                    }
+                    else {
+                        toastr.error(result.ResponseMessage);
+                        $("#divLoader").hide();
+                    }
+
+
+                },
+                failure: function (result) {
+                    console.log(result);
+                },
+                error: function (result) {
+                    console.log(result);
+                }
+            });
+
+        }
+    }
 </script>
 <style>
     table.dataTable thead .sorting_asc {

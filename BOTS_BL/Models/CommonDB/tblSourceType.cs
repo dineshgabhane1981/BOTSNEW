@@ -24,4 +24,14 @@ namespace BOTS_BL.Models.CommonDB
 
         public bool IsActive { get; set; }
     }
+
+    public class SourcedTypeDetails
+    {
+        public int SourceTypeId { get; set; }
+        public string SourceTypeName { get; set; }
+        public string CreatedBy { get; set; }
+        public DateTime? CreatedDate { get; set; }
+        public bool? IsActive { get; set; }
+        public string UserName { get; set; }
+    }
 }

@@ -90,6 +90,12 @@
                                     Billing Partner Product Master
                                 </a>
                             </li>
+                            <li class="@Html.IsSelected(controller: "CustomerMaster", action: "SourceType")">
+                                <a class="@Html.IsSelected(controller: "CustomerMaster", action: "SourceType")" href="@Url.Action("SourceType", "CustomerMaster")">
+                                    <i class="metismenu-icon"></i>
+                                    Source Type Master
+                                </a>
+                            </li>
                         </ul>
                     </li>
                 }

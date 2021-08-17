@@ -411,6 +411,8 @@
     <Content Include="Views\CustomerMaster\BillingPartnerProductMaster.cshtml" />
     <Content Include="Views\Discussion\AllDiscussions.cshtml" />
     <Content Include="Views\Discussion\_DiscussionList.cshtml" />
+    <Content Include="Views\CustomerMaster\SourceType.cshtml" />
+    <Content Include="Views\CustomerMaster\_CategoryMaster.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
