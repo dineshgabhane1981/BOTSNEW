@@ -381,55 +381,37 @@ namespace BOTS_BL.Repository
             return BillingPartnerItem;
         }
         //togetallproduct
-        public List<BOTS_TblBillingPartnerProduct> GetBillingPartnerProductById(int BillingpartnerId)
+        public List<BillingPartnerProductDetails> GetBillingPartnerProductById(int BillingpartnerId)
         {
-            List<BOTS_TblBillingPartnerProduct> objbillingpartnerproduct = new List<BOTS_TblBillingPartnerProduct>();
+            List<BillingPartnerProductDetails> objbillingpartnerproduct = new List<BillingPartnerProductDetails>();
             try
             {
                 using (var context = new CommonDBContext())
-                {
-                    objbillingpartnerproduct = context.BOTS_TblBillingPartnerProduct.Where(x => x.BillingPartnerId == BillingpartnerId).ToList();
+                {                    
+                    objbillingpartnerproduct = (from r in context.BOTS_TblBillingPartnerProduct
+                                                join cl in context.CustomerLoginDetails on r.CreatedBy equals cl.LoginId
+                                                where r.BillingPartnerId == BillingpartnerId
+                                                select new BillingPartnerProductDetails
+                                                {
+                                                    BillingPartnerId = r.BillingPartnerId,
+                                                    BillingPartnerProductId = r.BillingPartnerProductId,
+                                                    BillingPartnerProductName = r.BillingPartnerProductName,
+                                                    CreatedBy = r.CreatedBy,
+                                                    CreatedDate = r.CreatedDate,
+                                                    UserName = cl.UserName
+                                                }).ToList();
+
                     foreach (var item in objbillingpartnerproduct)
                     {
                         if (!string.IsNullOrEmpty(Convert.ToString(item.CreatedDate)))
                             item.CreatedDateStr = item.CreatedDate.ToString("yyyy-MM-dd");
                     }
-
-                    //objbillingpartnerproduct = (from r in context.BOTS_TblBillingPartnerProduct                                           
-                    //                            join cl in context.CustomerLoginDetails on r.CreatedBy equals cl.LoginId
-                    //                            where r.BillingPartnerId == BillingpartnerId
-                    //                            select new BOTS_TblBillingPartnerProduct
-                    //                            {
-                    //                                BillingPartnerId = r.BillingPartnerId,
-                    //                                BillingPartnerProductId = r.BillingPartnerProductId,
-                    //                                BillingPartnerProductName = r.BillingPartnerProductName,
-                    //                                CreatedBy = r.CreatedBy,
-                    //                                CreatedDate = r.CreatedDate,
-                    //                                UserName = cl.UserName
-                    //                            }).ToList();
-
-
-                    //objbillingpartnerproduct = (from r in context.CustomerLoginDetails
-                    //                            join cl in context.BOTS_TblBillingPartnerProduct.Where(q => q.BillingPartnerId == BillingpartnerId)
-                    //                            on r.LoginId equals cl.CreatedBy into billingpartnerproduct
-                    //                            from p in billingpartnerproduct.DefaultIfEmpty()                                            
-                    //                            select new BOTS_TblBillingPartnerProduct
-                    //                            {
-                    //                                BillingPartnerId = p.BillingPartnerId,
-                    //                                BillingPartnerProductId = p.BillingPartnerProductId,
-                    //                                BillingPartnerProductName = p.BillingPartnerProductName,
-                    //                                CreatedBy = p.CreatedBy,
-                    //                                CreatedDate = p.CreatedDate,
-                    //                                UserName = r.UserName
-                    //                            }).ToList();
-
                 }
             }
             catch(Exception ex)
             {
 
             }
-
             return objbillingpartnerproduct;
         }
 
