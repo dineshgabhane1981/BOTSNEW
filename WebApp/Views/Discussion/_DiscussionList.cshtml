@@ -1,0 +1,95 @@
+﻿@model List<BOTS_BL.Models.CommonDB.BOTS_TblDiscussion>
+
+
+<div class="row mb-3 card">
+    <div class="container-fluid pt-3 pl-3 pr-3">
+        <div class="pt-3 pl-3 pr-3 col-md-12 col-lg-12">
+            <div class="row">
+                <div class="col search-container">
+                    <i class="fas fa-search"></i>
+                    <input class="input100" type="text" id="txtSearch" placeholder="Search discussion..." />
+                </div>
+            </div>
+            <div class="row mt-3" id="dvDiscussionData">
+                <div class="table-responsive">
+                    <table class="table" id="discussionTable">
+                        <thead>
+                            <tr>
+                                <th scope="col">Date</th>
+                                <th scope="col">Number</th>
+                                <th scope="col">Call Type</th>
+                                <th scope="col">FollowUp Date</th>
+                                <th scope="col">Call Mode</th>
+                                @*<th scope="col" style="text-align:center;">Action</th>*@
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (Model != null)
+                            {
+
+                                foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td>@item.AddedDate</td>
+                                        <td>@item.ContactNo</td>
+                                        <td>@item.CallType</td>
+                                        <td>@item.FollowupDate</td>
+                                        <td>@item.CallMode</td>
+
+                                        @*<td style="text-align:center;">
+                                                <a href="@Url.Action("Index", "CustomerOnBoarding", new { groupId = GroupId })" class="login" title="Edit"><img src="~/Content/assets/images/shape_editUser.png" /></a>
+                                            </td>*@
+                                    </tr>
+                                }
+
+                            }
+                            else
+                            {
+                                <tr>
+                                    <td colspan="5" align="center">No Discussion Available</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+
+    $(document).ready(function () {
+        $('#discussionTable').DataTable({
+            "aaSorting": [[0, "asc"]],
+            "paging": true,
+            "ordering": true,
+            "info": true,
+            "bFilter": true,
+            "pageLength": 10,
+            "pagingType": "simple_numbers",
+            aoColumnDefs: [
+                {
+                    bSortable: false,
+                    aTargets: [-1, -2]
+                }
+            ]
+        });
+
+        $('#discussionTable_filter').hide();
+
+        $('#txtSearch').on('keyup', function () {
+
+            $.fn.dataTable.ext.search.push(function (settings, searchData) {
+                var term = $('#txtSearch').val().toLowerCase()
+                for (var i = 0; i < searchData.length; i++) {
+                    if (searchData[i].toLowerCase().indexOf(term) >= 0) {
+                        return true;
+                    }
+                }
+                return false;
+            });
+            var table1 = $('#discussionTable').DataTable();
+            table1.draw();
+        });
+    });
+</script>

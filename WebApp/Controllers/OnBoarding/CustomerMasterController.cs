@@ -251,7 +251,7 @@ namespace WebApp.Controllers.OnBoarding
         public ActionResult GetBillingPartnerProduct(int BillingpartnerId)
         {
 
-            List<BOTS_TblBillingPartnerProduct> lstbilling = new List<BOTS_TblBillingPartnerProduct>();
+            List<BillingPartnerProductDetails> lstbilling = new List<BillingPartnerProductDetails>();
             try
             {
                 lstbilling = COR.GetBillingPartnerProductById(BillingpartnerId);

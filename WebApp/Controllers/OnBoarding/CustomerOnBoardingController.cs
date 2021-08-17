@@ -21,7 +21,10 @@ namespace WebApp.Controllers.OnBoarding
         public ActionResult Index(string groupId)
         {
             CommonFunctions common = new CommonFunctions();
-            groupId = common.DecryptString(groupId);
+            if (!string.IsNullOrEmpty(groupId))
+            {
+                groupId = common.DecryptString(groupId);
+            }
             JavaScriptSerializer json_serializer = new JavaScriptSerializer();
             OnBoardingSalesViewModel objData = new OnBoardingSalesViewModel();
             try

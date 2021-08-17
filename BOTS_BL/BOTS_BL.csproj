@@ -180,6 +180,9 @@
     <Compile Include="Models\ChitaleModel\Top5LostParticipants.cs" />
     <Compile Include="Models\ChitaleModel\TransactionMaster.cs" />
     <Compile Include="Models\CommonDB\BOTS_TblBillingPartnerProduct.cs" />
+    <Compile Include="Models\CommonDB\BOTS_TblCallSubTypes.cs" />
+    <Compile Include="Models\CommonDB\BOTS_TblCallTypes.cs" />
+    <Compile Include="Models\CommonDB\BOTS_TblDiscussion.cs" />
     <Compile Include="Models\CommonDB\CommonDBContext.cs" />
     <Compile Include="Models\CommonDB\CommonReferralURL.cs" />
     <Compile Include="Models\CommonDB\CustomerConnString.cs" />
@@ -257,6 +260,7 @@
     <Compile Include="Repository\ChitaleDashboardRepository.cs" />
     <Compile Include="Repository\CustomerRepository.cs" />
     <Compile Include="Repository\DashboardRepository.cs" />
+    <Compile Include="Repository\DiscussionsRepository.cs" />
     <Compile Include="Repository\EmployeeRepository.cs" />
     <Compile Include="Repository\HeatMapsRepository.cs" />
     <Compile Include="Repository\ITOpsRepository.cs" />

@@ -48,6 +48,9 @@ namespace BOTS_BL.Models
         public virtual DbSet<ReferAndEarn> ReferAndEarns { get; set; }
 
         public virtual DbSet<tblAudit> tblAudits { get; set; }
+        public virtual DbSet<BOTS_TblDiscussion> BOTS_TblDiscussion { get; set; }
+        public virtual DbSet<BOTS_TblCallSubTypes> BOTS_TblCallSubTypes { get; set; }
+        public virtual DbSet<BOTS_TblCallTypes> BOTS_TblCallTypes { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {

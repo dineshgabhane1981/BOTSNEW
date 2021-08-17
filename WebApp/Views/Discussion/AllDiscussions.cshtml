@@ -1,0 +1,91 @@
+﻿@model WebApp.ViewModel.DiscussionViewModel
+@{
+    ViewBag.Title = "AllDiscussions";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="app-main__inner">
+    @Html.HiddenFor(model => model.objDiscussion.GroupId)
+    <div class="row mb-3 card">
+        <div class="container-fluid pt-3 pl-3 pr-3 pb-3">
+            @using (Html.BeginForm("AddCustomer", "CustomerOnBoarding", FormMethod.Post, new { id = "frmadddiscussion", enctype = "multipart/form-data" }))
+            {
+                <div id="dvAddDiscussion" class="card" style="display:none;padding:20px;">
+                    <div class="row" style="margin: 0;">
+                        <div style="float:left;text-align:right;width:100px;margin-top:10px;">
+                            Spoken To
+                        </div>
+                        <div class="col-sm-4" style="float:left;margin-top:10px;">
+                            @Html.TextBoxFor(model => model.objDiscussion.SpokenTo, new { @class = "input100" })
+                        </div>
+                        <div style="float: left; text-align: right; width: 115px; margin-top: 10px;">
+                            Contact No
+                        </div>
+                        <div class="col-sm-4" style="float:left;margin-top:10px;">
+                            @Html.TextBoxFor(model => model.objDiscussion.ContactNo, new { @class = "input100" })
+                        </div>
+                    </div>
+                    <div class="row" style="margin: 0;">
+                        <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
+                            Call Mode
+                        </div>
+                        <div class="col-sm-4" style="float:left;margin-top:10px;">
+                            @Html.DropDownListFor(model => model.objDiscussion.CallMode, new SelectList(Model.CallMode(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input100" })
+                        </div>
+                        <div style="float: left; text-align: right; width: 115px; margin-top: 10px;">
+                            Call Type
+                        </div>
+                        <div class="col-sm-4" style="float:left;margin-top:10px;">
+                            @Html.DropDownListFor(model => model.objDiscussion.CallType, new SelectList(Model.lstCallTypes, "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input100" })
+                        </div>
+                    </div>
+                    <div class="row" style="margin: 0;">
+                        <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
+                            Call Sub Type
+                        </div>
+                        <div class="col-sm-4" style="float:left;margin-top:10px;">
+                            @Html.DropDownListFor(model => model.objDiscussion.SubCallType, new SelectList(Model.lstCallSubTypes, "Value", "Text"), htmlAttributes: new { @class = "input100" })
+                        </div>
+                        <div style="float: left; text-align: right; width: 115px; margin-top: 10px;">
+                            FollowUp Date
+                        </div>
+                        <div class="col-sm-4" style="float:left;margin-top:10px;">
+                            @Html.TextBoxFor(model => model.objDiscussion.FollowupDate, new { @class = "input100", @id = "txtFollowupDate" })
+                        </div>
+                    </div>
+                </div>
+            }
+            <div class="row">
+                <div class="col search-container">
+
+                </div>
+                <div style="text-align:right;">
+                    <a href="#" onclick="ShowAddDiscussion();" title="Add New Discussion">  <img src="~/Content/assets/images/AddCustomer.png" /></a>
+                </div>
+            </div>
+
+            <div id="dvDiscussionList">
+
+                @Html.Partial("~/Views/Discussion/_DiscussionList.cshtml", Model.lstDiscussions)
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        var today = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
+        $("#txtFollowupDate").datepicker({
+            dateFormat: "yy-mm-dd",
+            minDate: today,
+        });
+    });
+    function ShowAddDiscussion() {
+        $("#dvAddDiscussion").show(1000);
+    }
+</script>
+<script src="~/Scripts/jquery-ui-1.12.1.js"></script>
+<script src="~/Scripts/jquery-ui-1.12.1.min.js"></script>
+<link href="~/Content/themes/base/jquery-ui.min.css" rel="stylesheet" />
+<link href="~/Content/themes/base/jquery-ui.css" rel="stylesheet" />

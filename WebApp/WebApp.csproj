@@ -151,6 +151,7 @@
     <Compile Include="Controllers\botsapiController.cs" />
     <Compile Include="Controllers\CampaignsController.cs" />
     <Compile Include="Controllers\CustomerManagementController.cs" />
+    <Compile Include="Controllers\DiscussionController.cs" />
     <Compile Include="Controllers\HeatMapsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ITOperationsController.cs" />
@@ -170,6 +171,7 @@
     <Compile Include="ViewModel\CustomerDashboardViewModel.cs" />
     <Compile Include="ViewModel\CustomerViewModel.cs" />
     <Compile Include="ViewModel\DataPoint.cs" />
+    <Compile Include="ViewModel\DiscussionViewModel.cs" />
     <Compile Include="ViewModel\OnBoardingSalesViewModel.cs" />
     <Compile Include="ViewModel\OtherReportProductwiseViewModel.cs" />
   </ItemGroup>
@@ -193,6 +195,7 @@
     <Content Include="Content\assets\images\avatars\9.jpg" />
     <Content Include="Content\assets\images\Blue-Ocktopus-TLC_white.jpg" />
     <Content Include="Content\assets\images\delete.png" />
+    <Content Include="Content\assets\images\discussion.png" />
     <Content Include="Content\assets\images\GoToDashboard.png" />
     <Content Include="Content\assets\images\itops.png" />
     <Content Include="Content\assets\images\logo-inverse.png" />
@@ -406,6 +409,8 @@
     <Content Include="Views\CustomerMaster\CityMaster.cshtml" />
     <Content Include="Views\CustomerMaster\BillingPartnerMaster.cshtml" />
     <Content Include="Views\CustomerMaster\BillingPartnerProductMaster.cshtml" />
+    <Content Include="Views\Discussion\AllDiscussions.cshtml" />
+    <Content Include="Views\Discussion\_DiscussionList.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
