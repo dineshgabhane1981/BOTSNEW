@@ -82,6 +82,7 @@ namespace WebApp.Controllers.OnBoarding
                     objcategory.CreatedBy = userDetails.LoginId;
                     objcategory.CreatedDate = DateTime.Now;
                     categoryId = Convert.ToString(item["CategoryId"]);
+                    objcategory.IsActive = Convert.ToBoolean(item["IsActive"]);
                     if (categoryId != "")
                     {
                         objcategory.CategoryId = Convert.ToInt32(categoryId);
@@ -119,6 +120,7 @@ namespace WebApp.Controllers.OnBoarding
                     objcity.CreatedBy = userDetails.LoginId;
                     objcity.CreatedDate = DateTime.Now;
                     CityId = Convert.ToString(item["CityId"]);
+                    objcity.IsActive = Convert.ToBoolean(item["IsActive"]);
                     if (CityId != "")
                     {
                         objcity.CityId = Convert.ToInt32(CityId);
@@ -157,6 +159,7 @@ namespace WebApp.Controllers.OnBoarding
                     objsource.CreatedBy = userDetails.LoginId;
                     objsource.CreatedDate = DateTime.Now;
                     SourceId = Convert.ToString(item["SourceId"]);
+                    objsource.IsActive = Convert.ToBoolean(item["IsActive"]);
                     if (SourceId != "")
                     {
                         objsource.SourcedbyId = Convert.ToInt32(SourceId);
@@ -195,6 +198,7 @@ namespace WebApp.Controllers.OnBoarding
                     objRM.CreatedBy = userDetails.LoginId;
                     objRM.CreatedDate = DateTime.Now;
                     CSId = Convert.ToString(item["CSId"]);
+                    objRM.IsActive = Convert.ToBoolean(item["IsActive"]);
                     if (CSId != "")
                     {
                         objRM.RMAssignedId = Convert.ToInt32(CSId);
@@ -328,6 +332,7 @@ namespace WebApp.Controllers.OnBoarding
                     objbillingpartner.CreatedBy = userDetails.LoginId;
                     objbillingpartner.CreatedDate = DateTime.Now;
                     BillingPartnerId = Convert.ToString(item["BillingPartnerId"]);
+                    objbillingpartner.IsActive = Convert.ToBoolean(item["IsActive"]);
                     if (BillingPartnerId != "")
                     {
                         objbillingpartner.BillingPartnerId = Convert.ToInt32(BillingPartnerId);
@@ -365,6 +370,7 @@ namespace WebApp.Controllers.OnBoarding
                     objsourcetype.CreatedBy = userDetails.LoginId;
                     objsourcetype.CreatedDate = DateTime.Now;
                     SourceTypeId = Convert.ToString(item["SourceTypeId"]);
+                    objsourcetype.IsActive = Convert.ToBoolean(item["IsActive"]);
                     if (SourceTypeId != "")
                     {
                         objsourcetype.SourceTypeId = Convert.ToInt32(SourceTypeId);
@@ -456,6 +462,7 @@ namespace WebApp.Controllers.OnBoarding
                     objbillingpartnerproduct.CreatedBy = userDetails.LoginId;
                     objbillingpartnerproduct.CreatedDate = DateTime.Now;
                     BillingPartnerId = Convert.ToString(item["BillingPartnerId"]);
+                    objbillingpartnerproduct.IsActive = Convert.ToBoolean(item["IsActive"]);
                     if (BillingPartnerId != "")
                     {
                         objbillingpartnerproduct.BillingPartnerId = Convert.ToInt32(BillingPartnerId);
@@ -590,6 +597,41 @@ namespace WebApp.Controllers.OnBoarding
             List<CategoryDetails> lsttblcategory = new List<CategoryDetails>();
             lsttblcategory = COR.GetTblCategories();
             return PartialView("_CategoryMaster", lsttblcategory);
+        }
+
+        public ActionResult CityMasterList()
+        {
+            List<CityDetails> lsttblcity = new List<CityDetails>();
+            lsttblcity = COR.GetCityList();
+            return PartialView("_CityMaster", lsttblcity);
+        }
+
+        public ActionResult CSMasterList()
+        {
+            List<RMAssignedDetails> lsttblRM = new List<RMAssignedDetails>();
+            lsttblRM = COR.GetRMList();
+            return PartialView("_CsMaster", lsttblRM);
+        }
+
+        public ActionResult SourceMasterList()
+        {
+            List<SourcedDetails> lsttblSource = new List<SourcedDetails>();
+            lsttblSource = COR.GetTblSourceBy();
+            return PartialView("_SourceMaster", lsttblSource);
+        }
+
+        public ActionResult SourceTypeMasterList()
+        {
+            List<SourcedTypeDetails> lsttblSourcetype = new List<SourcedTypeDetails>();
+            lsttblSourcetype = COR.GetTblSourceType();
+            return PartialView("_SourceType", lsttblSourcetype);
+        }
+
+        public ActionResult BillingPartnerList()
+        {
+            List<BillingPartnerDetails> lsttblbillingpartner = new List<BillingPartnerDetails>();
+            lsttblbillingpartner = COR.GetBillingPartnerList();
+            return PartialView("_BillingPartnerMaster", lsttblbillingpartner);
         }
     }
 }

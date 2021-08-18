@@ -22,6 +22,7 @@
                         Billing Partner Product Name  <input class="input100" type="text" id="txtBillingPartnerProductNm" />
                         <span id="hdnBillingPartnerProductId" style="display:none;"></span>
                         <span id="hdnBillingPartnerId" style="display:none;"></span>
+                        <span id="hdnBillingPartnerProductActive" style="display:none;"></span>
                         <button class="btn btn-primary login-btn ml-5 mr-2" type="button" id="btnSave">
                             Save
                         </button>
@@ -84,10 +85,13 @@
         var selected = $("#ddlBillingPartnerProduct option:selected").val();
         console.log(selected);
         $("#divLoader").show();
-            $.ajax({
+        BindBillingPartnerProductList(selected);
+    });
+    function BindBillingPartnerProductList(BillingPartnerId) {
+        $.ajax({
                 type: "POST",
                 url: '@Url.Action("GetBillingPartnerProduct", "CustomerMaster")',
-                data: '{BillingpartnerId: ' + JSON.stringify(selected) + '}',
+            data: '{BillingpartnerId: ' + JSON.stringify(BillingPartnerId) + '}',
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
                 success: function (responce) {
@@ -121,9 +125,7 @@
                     }
                 }
             });
-
-    });
-
+    }
     function DrawTable() {
         var table1 = $('#activityTable').DataTable();
         table1.destroy();
@@ -200,7 +202,10 @@
                         $("#divadd").show(1000);
                         $('#txtBillingPartnerProductNm').val(responce.BillingPartnerProductName);
                         $('#hdnBillingPartnerProductId').text(id);
-
+                        $('#hdnBillingPartnerId').text(responce.BillingPartnerId);
+                        $('#hdnBillingPartnerProductActive').text(responce.IsActive);
+                        
+                       // BindBillingPartnerProductList(responce.BillingPartnerId);
                     }
                     else {
 
@@ -238,6 +243,7 @@
             item = {}
              item["BillingPartnerproductNm"] = $("#txtBillingPartnerProductNm").val();
              item["BillingPartnerId"] = selected;
+             console.log($('#hdnBillingPartnerProductId').text());
              if ($('#hdnBillingPartnerProductId').text != 0) {
                  item["BillingPartnerPartnerId"] = $('#hdnBillingPartnerProductId').text();
                  //item["BillingPartnerId"] = selected;
@@ -245,7 +251,13 @@
             }
             else {
                  item["BillingPartnerPartnerId"] = 0;
-            }
+             }
+             if ($('#hdnBillingPartnerProductActive').text == false) {
+                 item["IsActive"] = false;
+             }
+             else {
+                 item["IsActive"] = true;
+             }
             BillingPartnerData.push(item);
             var data = JSON.stringify(BillingPartnerData);
             console.log(data)
@@ -259,9 +271,11 @@
                 success: function (result) {
                     if (result.ResponseCode == "00") {
                         toastr.success(result.ResponseMessage);
-                        $("#divLoader").hide();
-                        $("#txtBillingPartnerNm").val("");
+                       
+                        $("#txtBillingPartnerProductNm").val("");
                         $('#hdnBillingPartnerId').val("");
+                        BindBillingPartnerProductList(selected);
+                        $("#divLoader").hide();
                     }
                     else {
                         toastr.error(result.ResponseMessage);
@@ -284,7 +298,7 @@
     }
      });
     function ActivateDeactivate(BillingPartnerProductId) {
-
+        var selected = $("#ddlBillingPartnerProduct option:selected").val();
         if (confirm("Are you sure? You want to Active/Inactive Billing Product Partner")) {
             $.ajax({
                 type: "POST",
@@ -295,9 +309,9 @@
                 success: function (result) {
                     console.log(result);
                     if (result.ResponseCode == "00") {
-                        toastr.success(result.ResponseMessage);
+                        toastr.success(result.ResponseMessage);                      
+                        BindBillingPartnerProductList(selected);
                         $("#divLoader").hide();
-
                     }
                     else {
                         toastr.error(result.ResponseMessage);

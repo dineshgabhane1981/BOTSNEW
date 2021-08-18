@@ -461,6 +461,7 @@ namespace BOTS_BL.Repository
                                                     BillingPartnerProductName = r.BillingPartnerProductName,
                                                     CreatedBy = r.CreatedBy,
                                                     CreatedDate = r.CreatedDate,
+                                                    IsActive =r.IsActive,
                                                     UserName = cl.UserName
                                                 }).ToList();
 

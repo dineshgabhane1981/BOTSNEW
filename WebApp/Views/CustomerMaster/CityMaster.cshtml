@@ -16,6 +16,7 @@
                         <h6><b>Add City</b></h6>
                     </div>
                     <span id="hdnCityId" style="display:none;"></span>
+                    <span id="hdnCityActive" style="display:none;"></span>
                     <div class="col-md-12 col-lg-12 mt-2 mb-4">
                         City Name  <input class="input100" type="text" id="txtcityNm" />
                         <button class="btn btn-primary login-btn ml-5 mr-2" type="button" id="btnSave">
@@ -40,49 +41,10 @@
 
                     </div>
                 </div>
-
-                <div class="row mt-3" id="dvActivityData">
-                    <div class="table-responsive">
-                        <table class="table" id="groupListTable">
-                            <thead>
-                                <tr>
-                                    <th scope="col" style="text-align:left;">City Name</th>
-                                    <th scope="col" style="text-align:left;">Created By</th>
-                                    <th scope="col" style="text-align:left;">Created On</th>
-                                    <th scope="col" style="text-align:left;">Action</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @if (Model != null)
-                                {
-                                    if (Model.Count > 0)
-                                    {
-                                        foreach (var item in Model)
-                                        {
-
-                                            <tr>
-                                                <td style="text-align:left;">@item.CityName</td>
-                                                <td style="text-align:left;">@item.UserName</td>
-                                                <td style="text-align:left;">@item.CreatedDate</td>
-                                                <td style="text-align:left; width:100px;">
-                                                    <a href="#" class="login" onclick="EditCity(@item.CityId)" title="Edit"><img src="~/Content/assets/images/shape_editUser.png" /></a>
-                                                    @if (item.IsActive == true)
-                                                    {
-                                                        <a href="#" class="login" title="Deactivate"><img src="~/Content/assets/images/shape_activate.png" onclick="ActivateDeactivate(@item.CityId);" /></a>
-                                                    }
-                                                    else
-                                                    {
-                                                        <a href="#" class="login" title="Activate"><img src="~/Content/assets/images/shape_deactivate.png" onclick="ActivateDeactivate(@item.CityId);" /></a>
-                                                    }
-                                                </td>
-                                            </tr>
-                                        }
-                                    }
-                                }
-                            </tbody>
-                        </table>
-                    </div>
+                <div id="divcity">
+                    @Html.Partial("~/Views/CustomerMaster/_CityMaster.cshtml", Model)
                 </div>
+
             </div>
         </div>
     </div>
@@ -98,6 +60,26 @@
         $('#divadd').find(':input').val('');
         $("#hdnCityId").text("");
     });
+
+    function BindCityList() {
+        $("#divLoader").show();
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("CityMasterList", "CustomerMaster")',               
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (responce) {
+
+                    $("#divcity").html(responce);
+
+                },
+                error: function (responce) {
+                    $("#divcity").html(responce.responseText);
+
+                }
+            });
+
+    }
     $('#btnSave').on("click", function () {
 
         if ($('#txtcityNm').val() == "") {
@@ -116,6 +98,12 @@
             else {
                 item["CityId"] = 0;
             }
+            if ($('#hdnCityActive').text == false) {
+                item["IsActive"] = false;
+            }
+            else {
+                item["IsActive"] = true;
+            }
             CityData.push(item);
             var data = JSON.stringify(CityData);
             console.log(data)
@@ -128,11 +116,13 @@
                 dataType: "json",
                 success: function (result) {
                     if (result.ResponseCode == "00") {
-                        toastr.success(result.ResponseMessage);
+                        toastr.success(result.ResponseMessage);                       
+                        BindCityList();
                         $("#divLoader").hide();
                         $("#txtcityNm").val("");
                         $('#hdnCityId').val("");
-
+                        $('#hdnCityActive').val("");
+                        $("#divadd").hide(1000);
                     }
                     else {
                         toastr.error(result.ResponseMessage);
@@ -171,6 +161,8 @@
                         $('#txtcityNm').val(responce.CityName);
                         $("#btnSave").show();
                         $("#hdnCityId").text(id);
+                        $("#hdnCityActive").text(responce.IsActive);
+                        
 
                     }
                     else {
@@ -206,12 +198,14 @@
                     console.log(result);
                     if (result.ResponseCode == "00") {
                         toastr.success(result.ResponseMessage);
+                        BindCityList();
                         $("#divLoader").hide();
-
+                        
                     }
                     else {
                         toastr.error(result.ResponseMessage);
                         $("#divLoader").hide();
+                        
                     }
 
 

@@ -413,6 +413,12 @@
     <Content Include="Views\Discussion\_DiscussionList.cshtml" />
     <Content Include="Views\CustomerMaster\SourceType.cshtml" />
     <Content Include="Views\CustomerMaster\_CategoryMaster.cshtml" />
+    <Content Include="Views\CustomerMaster\_BillingPartnerMaster.cshtml" />
+    <Content Include="Views\CustomerMaster\_BillingPartnerProductMaster.cshtml" />
+    <Content Include="Views\CustomerMaster\_CityMaster.cshtml" />
+    <Content Include="Views\CustomerMaster\_CsMaster.cshtml" />
+    <Content Include="Views\CustomerMaster\_SourceMaster.cshtml" />
+    <Content Include="Views\CustomerMaster\_SourceType.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

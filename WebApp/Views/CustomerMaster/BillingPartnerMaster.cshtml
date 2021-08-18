@@ -20,9 +20,10 @@
                     <div class="col-md-12 col-lg-12 mt-2 mb-4">
                         Billing Partner Name  <input class="input100" type="text" id="txtBillingPartnerNm" />
                         <span id="hdnBillingPartnerId" style="display:none;"></span>
+                        <span id="hdnBillingPartnerActive" style="display:none;"></span>
                         <button class="btn btn-primary login-btn ml-5 mr-2" type="button" id="btnSave">
                             Save
-                        </button>                        
+                        </button>
                         <button class="btn btn-primary login-btn" type="button" id="btnCancle">
                             Cancel
                         </button>
@@ -41,48 +42,8 @@
 
                     </div>
                 </div>
-
-                <div class="row mt-3" id="dvActivityData">
-                    <div class="table-responsive">
-                        <table class="table" id="groupListTable">
-                            <thead>
-                                <tr>
-                                    <th scope="col" style="text-align:left;">Billing Partner Name</th>
-                                    <th scope="col" style="text-align:left;">Created By</th>
-                                    <th scope="col" style="text-align:left;">Created On</th>
-                                    <th scope="col" style="text-align:left;">Action</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @if (Model != null)
-                                {
-                                    if (Model.Count > 0)
-                                    {
-                                        foreach (var item in Model)
-                                        {
-
-                                            <tr>
-                                                <td style="text-align:left;">@item.BillingPartnerName</td>
-                                                <td style="text-align:left;">@item.UserName</td>
-                                                <td style="text-align:left;">@item.CreatedDate</td>
-                                                <td style="text-align:left; width:100px;">
-                                                    <a href="#" class="login" onclick="EditCategory(@item.BillingPartnerId)" title="Edit"><img src="~/Content/assets/images/shape_editUser.png" /></a>
-                                                    @if (item.IsActive == true)
-                                                    {
-                                                        <a href="#" class="login" title="Deactivate"><img src="~/Content/assets/images/shape_activate.png" onclick="ActivateDeactivate(@item.BillingPartnerId);" /></a>
-                                                    }
-                                                    else
-                                                    {
-                                                        <a href="#" class="login" title="Activate"><img src="~/Content/assets/images/shape_deactivate.png" onclick="ActivateDeactivate(@item.BillingPartnerId);" /></a>
-                                                    }
-                                                </td>
-                                            </tr>
-                                        }
-                                    }
-                                }
-                            </tbody>
-                        </table>
-                    </div>
+                <div id="divbillingpartner">
+                    @Html.Partial("~/Views/CustomerMaster/_BillingPartnerMaster.cshtml", Model)
                 </div>
             </div>
         </div>
@@ -111,12 +72,14 @@
                 dataType: "json",
                 success: function (responce) {
                     console.log(responce);
-                    if (responce.BillingPartnerName != null) {
-                        $("#divLoader").hide();
+                    if (responce.BillingPartnerName != null) {                        
                         $("#divadd").show(1000);
                         $('#txtBillingPartnerNm').val(responce.BillingPartnerName);
                         $("#hdnBillingPartnerId").text(id);
-
+                        $("#hdnBillingPartnerActive").text(responce.IsActive);
+                        
+                       // BindBillingPartnerList();
+                        $("#divLoader").hide();
                     }
                     else {
 
@@ -135,7 +98,7 @@
                     }
                 }
             });
-        console.log(id);
+       
     }
     $('#btnSave').on("click", function () {
 
@@ -154,6 +117,13 @@
             else {
                 item["BillingPartnerId"] = 0;
             }
+            if ($('#hdnBillingPartnerActive').text == false) {
+                item["IsActive"] = false;
+            }
+            else {
+                item["IsActive"] = true;
+            }
+            
             BillingPartnerData.push(item);
             var data = JSON.stringify(BillingPartnerData);
             console.log(data)
@@ -166,10 +136,13 @@
                 dataType: "json",
                 success: function (result) {
                     if (result.ResponseCode == "00") {
-                        toastr.success(result.ResponseMessage);
-                        $("#divLoader").hide();
+                        toastr.success(result.ResponseMessage);                        
+                       
+                        BindBillingPartnerList();
                         $("#txtBillingPartnerNm").val("");
                         $('#hdnBillingPartnerId').val("");
+                        $('#hdnBillingPartnerActive').val("");
+                        $("#divLoader").hide();
                     }
                     else {
                         toastr.error(result.ResponseMessage);
@@ -193,7 +166,7 @@
     });
 
     function ActivateDeactivate(BillingPartnerId) {
-        
+
         if (confirm("Are you sure? You want to Active/Inactive Billing Product Partner")) {
             $.ajax({
                 type: "POST",
@@ -205,14 +178,19 @@
                     console.log(result);
                     if (result.ResponseCode == "00") {
                         toastr.success(result.ResponseMessage);
-                        $("#divLoader").hide();
-                       
+                        BindBillingPartnerList();
+                        $("#divLoader").hide();        
+                        
+
                     }
                     else {
                         toastr.error(result.ResponseMessage);
                         $("#divLoader").hide();
+                        console.log(222);
+                       // BindBillingPartnerList();
+                        
                     }
- 
+
 
                 },
                 failure: function (result) {
@@ -224,6 +202,26 @@
             });
 
         }
+    }
+
+    function BindBillingPartnerList() {
+        $("#divLoader").show();
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("BillingPartnerList", "CustomerMaster")',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (responce) {
+
+                    $("#divbillingpartner").html(responce);
+
+                },
+                error: function (responce) {
+                    $("#divbillingpartner").html(responce.responseText);
+
+                }
+            });
+
     }
 </script>
 

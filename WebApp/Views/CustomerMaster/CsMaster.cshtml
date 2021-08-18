@@ -19,6 +19,7 @@
                     <div class="col-md-12 col-lg-12 mt-2 mb-4">
                         Customer Success Name  <input class="input100" type="text" id="txtCSNm" />
                         <span id="hdnCSId" style="display:none;"></span>
+                        <span id="hdnCSActive" style="display:none;"></span>
                         <button class="btn btn-primary login-btn ml-5 mr-2" type="button" id="btnSave">
                             Save
                         </button>
@@ -39,49 +40,10 @@
 
                         </div>
                     </div>
-
-                    <div class="row mt-3" id="dvActivityData">
-                        <div class="table-responsive">
-                            <table class="table" id="groupListTable">
-                                <thead>
-                                    <tr>
-                                        <th scope="col" style="text-align:left;">Customer Success Name</th>
-                                        <th scope="col" style="text-align:left;">Created By</th>
-                                        <th scope="col" style="text-align:left;">Created On</th>
-                                        <th scope="col" style="text-align:left;">Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @if (Model != null)
-                                    {
-                                        if (Model.Count > 0)
-                                        {
-                                            foreach (var item in Model)
-                                            {
-
-                                                <tr>
-                                                    <td style="text-align:left;">@item.RMAssignedName</td>
-                                                    <td style="text-align:left;">@item.UserName</td>
-                                                    <td style="text-align:left;">@item.CreatedDate</td>
-                                                    <td style="text-align:left; width:100px;">
-                                                        <a href="#" class="login" onclick="EditCS(@item.RMAssignedId)" title="Edit"><img src="~/Content/assets/images/shape_editUser.png" /></a>
-                                                        @if (item.IsActive == true)
-                                                        {
-                                                            <a href="#" class="login" title="Deactivate"><img src="~/Content/assets/images/shape_activate.png" onclick="ActivateDeactivate(@item.RMAssignedId);" /></a>
-                                                        }
-                                                        else
-                                                        {
-                                                            <a href="#" class="login" title="Activate"><img src="~/Content/assets/images/shape_deactivate.png" onclick="ActivateDeactivate(@item.RMAssignedId);" /></a>
-                                                        }
-                                                    </td>
-                                                </tr>
-                                            }
-                                        }
-                                    }
-                                </tbody>
-                            </table>
-                        </div>
+                    <div id="divCS">
+                        @Html.Partial("~/Views/CustomerMaster/_CsMaster.cshtml", Model)
                     </div>
+                    
                 </div>
         </div>
     </div>
@@ -96,7 +58,29 @@
         $("#divadd").hide(1000);
         $('#divadd').find(':input').val('');
         $("#hdnCSId").text("");
+        $('#hdnCSActive').val("");
     });
+
+    function BindCSList() {
+        $("#divLoader").show();
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("CSMasterList", "CustomerMaster")',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (responce) {
+
+                    $("#divCS").html(responce);
+
+                },
+                error: function (responce) {
+                    $("#divCS").html(responce.responseText);
+
+                }
+            });
+
+    }
+
     $('#btnSave').on("click", function () {
 
         if ($('#txtCSNm').val() == "") {
@@ -115,6 +99,12 @@
             else {
                 item["CSId"] = 0;
             }
+            if ($('#hdnCSActive').text == false) {
+                item["IsActive"] = false;
+            }
+            else {
+                item["IsActive"] = true;
+            }
             CSData.push(item);
             var data = JSON.stringify(CSData);
             console.log(data)
@@ -127,10 +117,13 @@
                 dataType: "json",
                 success: function (result) {
                     if (result.ResponseCode == "00") {
-                        toastr.success(result.ResponseMessage);
+                        toastr.success(result.ResponseMessage);                       
+                        BindCSList();
                         $("#divLoader").hide();
                         $("#txtCSNm").val("");
                         $('#hdnCSId').val("");
+                        $('#hdnCSActive').val("");
+                        $("#divadd").hide(1000);
 
                     }
                     else {
@@ -171,6 +164,8 @@
                         $('#txtCSNm').val(responce.RMAssignedName);
                         $("#btnSave").show();
                         $("#hdnCSId").text(id);
+                        $("#hdnCSActive").text(responce.IsActive);
+                        
 
                     }
                     else {
@@ -204,13 +199,14 @@
                 success: function (result) {
                     console.log(result);
                     if (result.ResponseCode == "00") {
-                        toastr.success(result.ResponseMessage);
+                        toastr.success(result.ResponseMessage);                        
+                        BindCSList();
                         $("#divLoader").hide();
-
                     }
                     else {
                         toastr.error(result.ResponseMessage);
                         $("#divLoader").hide();
+                        
                     }
 
 

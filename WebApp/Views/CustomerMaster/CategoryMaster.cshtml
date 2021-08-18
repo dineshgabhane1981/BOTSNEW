@@ -19,12 +19,13 @@
                     <div class="col-md-12 col-lg-12 mt-2 mb-4">
                         Category Name  <input class="input100" type="text" id="txtcategoryNm" />
                         <span id="hdnCategoryId" style="display:none;"></span>
+                        <span id="hdnCategoryActive" style="display:none;"></span>
                         <button class="btn btn-primary login-btn ml-5 mr-2" type="button" id="btnSave">
                             Save
                         </button>
                         @*<button class="btn btn-primary login-btn ml-5 mr-2" type="button" id="btnUpdate" style="display:none;">
-                    Update
-                </button>*@
+            Update
+        </button>*@
                         <button class="btn btn-primary login-btn" type="button" id="btnCancle">
                             Cancel
                         </button>
@@ -65,8 +66,7 @@
         $("#divLoader").show();
             $.ajax({
                 type: "POST",
-                url: '@Url.Action("CategoryMasterList", "CustomerMaster")',
-                //data: '{CategoryId: ' + JSON.stringify(id) + '}',
+                url: '@Url.Action("CategoryMasterList", "CustomerMaster")',                
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
                 success: function (responce) {
@@ -96,9 +96,9 @@
                         $("#divLoader").hide();
                         $("#divadd").show(1000);
                         $('#txtcategoryNm').val(responce.CategoryName);
-                       // $("#btnSave").show();
+                        $("#hdnCategoryActive").text(responce.IsActive);
                         $("#hdnCategoryId").text(id);
-                        BindCategoryList();
+                        
 
                     }
                     else {
@@ -136,6 +136,12 @@
             else {
                 item["CategoryId"] = 0;
             }
+            if ($('#hdnCategoryActive').text == false) {
+                item["IsActive"] = false;
+            }
+            else {
+                item["IsActive"] = true;
+            }
             CategoryData.push(item);
             var data = JSON.stringify(CategoryData);
             console.log(data)
@@ -148,11 +154,12 @@
                 dataType: "json",
                 success: function (result) {
                     if (result.ResponseCode == "00") {
-                        toastr.success(result.ResponseMessage);
-                        $("#divLoader").hide();
+                        toastr.success(result.ResponseMessage);                       
                         $("#txtcategoryNm").val("");
                         $('#hdnCategoryId').val("");
                         BindCategoryList();
+                        $("#divLoader").hide();
+                        $("#divadd").hide(1000);
                     }
                     else {
                         toastr.error(result.ResponseMessage);
@@ -185,8 +192,7 @@
                 dataType: "json",
                 success: function (result) {
                     console.log(result);
-                    if (result.ResponseCode == "00") {
-                        
+                    if (result.ResponseCode == "00") {                        
                         toastr.success(result.ResponseMessage);
                         BindCategoryList();
                         $("#divLoader").hide();
