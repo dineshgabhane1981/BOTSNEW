@@ -10,7 +10,7 @@ namespace WebApp.ViewModel
 {
     public class DiscussionViewModel
     {
-        public List<BOTS_TblDiscussion> lstDiscussions { get; set; }
+        public List<DiscussionDetails> lstDiscussions { get; set; }
         public BOTS_TblDiscussion objDiscussion { get; set; }
 
         public List<SelectListItem> lstCallTypes { get; set; }

@@ -18,14 +18,15 @@ namespace BOTS_BL.Models.CommonDB
         [StringLength(50)]
         public string SpokenTo { get; set; }
 
+        [Required]
         [StringLength(50)]
         public string ContactNo { get; set; }
 
+        [Required]
         [StringLength(50)]
         public string CallMode { get; set; }
 
-        [StringLength(50)]
-        public string CallType { get; set; }
+        public int CallType { get; set; }
 
         [StringLength(50)]
         public string SubCallType { get; set; }
@@ -42,5 +43,14 @@ namespace BOTS_BL.Models.CommonDB
         [Required]
         [StringLength(250)]
         public string AddedBy { get; set; }
+    }
+    public class DiscussionDetails
+    {
+        public DateTime AddedDate { get; set; }
+        public string SpokenTo { get; set; }
+        public string ContactNo { get; set; }
+        public string CallType { get; set; }
+        public DateTime? FollowupDate { get; set; }
+        public string CallMode { get; set; }
     }
 }

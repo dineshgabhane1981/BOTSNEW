@@ -11,8 +11,7 @@ namespace BOTS_BL.Models.CommonDB
     {
         [Key]
         public long Logid { get; set; }
-
-        [StringLength(100)]
+                
         public string ExceptionMsg { get; set; }
 
         [StringLength(100)]

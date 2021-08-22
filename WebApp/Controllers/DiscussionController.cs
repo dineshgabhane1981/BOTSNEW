@@ -29,7 +29,10 @@ namespace WebApp.Controllers
         {
             CommonFunctions common = new CommonFunctions();
             groupId = common.DecryptString(groupId);
-            DiscussionViewModel objData = new DiscussionViewModel();            
+            DiscussionViewModel objData = new DiscussionViewModel();
+            BOTS_TblDiscussion objDiscussion = new BOTS_TblDiscussion();
+            objDiscussion.GroupId = groupId;
+            objData.objDiscussion = objDiscussion;
             objData.lstDiscussions = DR.GetDiscussions(groupId);
             objData.lstCallTypes = DR.GetCallTypes();
             List<SelectListItem> callSubType = new List<SelectListItem>();
@@ -42,5 +45,29 @@ namespace WebApp.Controllers
             return View(objData);
         }
 
+        [HttpPost]
+        public JsonResult GetSubCallTypes(int callId)
+        {
+            var lstSubCallType = DR.GetSubCallTypes(callId);
+            return new JsonResult() { Data = lstSubCallType, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
+        }
+
+        [HttpPost]
+        public bool AddDiscussion(DiscussionViewModel objData)
+        {
+            bool status = false;
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            objData.objDiscussion.AddedDate = DateTime.Now;
+            objData.objDiscussion.AddedBy = userDetails.LoginId;
+            status = DR.AddDiscussions(objData.objDiscussion);
+
+            return status;
+        }
+
+        public ActionResult GetDiscussionList(string groupId)
+        {
+            var lstDiscussions = DR.GetDiscussions(groupId);
+            return PartialView("_DiscussionList", lstDiscussions);
+        }
     }
 }

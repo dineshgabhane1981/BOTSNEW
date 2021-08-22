@@ -90,6 +90,7 @@
             text-decoration: none;
             cursor: pointer;
         }
+
     input:read-only {
         background-color: lightgray;
     }
@@ -99,6 +100,7 @@
     @Html.HiddenFor(model => model.bots_TblGroupMaster.SINo)
     @Html.HiddenFor(model => model.bots_TblDealDetails.SINo)
     @Html.HiddenFor(model => model.bots_TblPaymentDetails.SINo)
+    @Html.HiddenFor(model => model.bots_TblGroupMaster.ReferredName, new { @id = "hdnReferredName" })
 
     @Html.HiddenFor(model => model.bots_TblGroupMaster.GroupId, new { @id = "hdnGroupID" })
     @Html.HiddenFor(model => model.bots_TblGroupMaster.CategoryData, new { @id = "hdnCategoryData" })
@@ -252,7 +254,8 @@
                             @Html.TextBoxFor(model => model.bots_TblRetailMaster.NoOfEnrolled, new { @class = "input40", @id = "txtNoOfEnrolled1" })
                             @Html.DropDownListFor(model => model.bots_TblRetailMaster.BOProduct, new SelectList(Model.BOProducts(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input40", @id = "ddlBOProduct1" })
                             @Html.DropDownListFor(model => model.bots_TblRetailMaster.BillingPartner, new SelectList(Model.lstBillingPartner, "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input40", @id = "ddlBillingPartner1" })
-                            @Html.TextBoxFor(model => model.bots_TblRetailMaster.BOProduct, new { @class = "input40", @id = "txtBOProduct1" })
+
+                            @Html.DropDownListFor(model => model.bots_TblRetailMaster.BOProduct, new SelectList(Model.lstAllGroups, "Value", "Text"), htmlAttributes: new { @class = "input40", @id = "ddlBPProduct1" })
                         </div>
                         <div class="col-sm-2" style="float:left;margin-top:10px;" id="dvCategory2">
                             <span style="padding-left: 10px; font-weight: bold;">Category 2</span>
@@ -263,7 +266,7 @@
                             @Html.TextBoxFor(model => model.bots_TblRetailMaster.NoOfEnrolled, new { @class = "input40", @id = "txtNoOfEnrolled2" })
                             @Html.DropDownListFor(model => model.bots_TblRetailMaster.BOProduct, new SelectList(Model.BOProducts(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input40", @id = "ddlBOProduct2" })
                             @Html.DropDownListFor(model => model.bots_TblRetailMaster.BillingPartner, new SelectList(Model.lstBillingPartner, "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input40", @id = "ddlBillingPartner2" })
-                            @Html.TextBoxFor(model => model.bots_TblRetailMaster.BOProduct, new { @class = "input40", @id = "txtBOProduct2" })
+                            @Html.DropDownListFor(model => model.bots_TblRetailMaster.BOProduct, new SelectList(Model.lstAllGroups, "Value", "Text"), htmlAttributes: new { @class = "input40", @id = "ddlBPProduct2" })
                         </div>
                         <div class="col-sm-2" style="float:left;margin-top:10px;" id="dvCategory3">
                             <span style="padding-left: 10px; font-weight: bold;">Category 3</span>
@@ -274,7 +277,7 @@
                             @Html.TextBoxFor(model => model.bots_TblRetailMaster.NoOfEnrolled, new { @class = "input40", @id = "txtNoOfEnrolled3" })
                             @Html.DropDownListFor(model => model.bots_TblRetailMaster.BOProduct, new SelectList(Model.BOProducts(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input40", @id = "ddlBOProduct3" })
                             @Html.DropDownListFor(model => model.bots_TblRetailMaster.BillingPartner, new SelectList(Model.lstBillingPartner, "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input40", @id = "ddlBillingPartner3" })
-                            @Html.TextBoxFor(model => model.bots_TblRetailMaster.BOProduct, new { @class = "input40", @id = "txtBOProduct3" })
+                            @Html.DropDownListFor(model => model.bots_TblRetailMaster.BOProduct, new SelectList(Model.lstAllGroups, "Value", "Text"), htmlAttributes: new { @class = "input40", @id = "ddlBPProduct3" })
                         </div>
                         <div class="col-sm-2" style="float:left;margin-top:10px;" id="dvCategory4">
                             <span style="padding-left: 10px; font-weight: bold;">Category 4</span>
@@ -285,7 +288,7 @@
                             @Html.TextBoxFor(model => model.bots_TblRetailMaster.NoOfEnrolled, new { @class = "input40", @id = "txtNoOfEnrolled4" })
                             @Html.DropDownListFor(model => model.bots_TblRetailMaster.BOProduct, new SelectList(Model.BOProducts(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input40", @id = "ddlBOProduct4" })
                             @Html.DropDownListFor(model => model.bots_TblRetailMaster.BillingPartner, new SelectList(Model.lstBillingPartner, "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input40", @id = "ddlBillingPartner4" })
-                            @Html.TextBoxFor(model => model.bots_TblRetailMaster.BOProduct, new { @class = "input40", @id = "txtBOProduct4" })
+                            @Html.DropDownListFor(model => model.bots_TblRetailMaster.BOProduct, new SelectList(Model.lstAllGroups, "Value", "Text"), htmlAttributes: new { @class = "input40", @id = "ddlBPProduct4" })
                         </div>
                     </div>
 
@@ -618,7 +621,7 @@
         </div>
     </div>
 
-  
+
 
 }
 <script>
@@ -653,8 +656,9 @@
             $("#hdnCustomerStatus").val("");
             $("#myModal").hide(1000);
         });
-
-        LoadEditData();
+        if ($("#hdnGroupID").val() != "") {
+            LoadEditData();
+        }
 
     });
     function ShowRetailCategory() {
@@ -819,7 +823,7 @@
         $('#IsMWPNo').on('change', function () {
             $('#dvIsMWP').css('border', '');
         });
-        $('#IsWhatsAppYes').on('change', function () {            
+        $('#IsWhatsAppYes').on('change', function () {
             if ($("#IsWhatsAppYes").is(":checked")) {
                 //$('#dvIsWhatsApp').css('border', '');
                 $("#txtNoOfFreeWhatsAppMsg").attr("readonly", false);
@@ -971,6 +975,7 @@
             else {
                 $('#ddlBillingPartner1').css('border-color', '');
             }
+            FillBillingPartnerProducts($("#ddlBillingPartner1").val(), "1","");
         });
         $('#ddlBillingPartner2').change(function () {
             if ($("#ddlBillingPartner2 option:selected").text() == "Please Select") {
@@ -979,6 +984,7 @@
             else {
                 $('#ddlBillingPartner2').css('border-color', '');
             }
+            FillBillingPartnerProducts($("#ddlBillingPartner2").val(), "2","");
         });
         $('#ddlBillingPartner3').change(function () {
             if ($("#ddlBillingPartner3 option:selected").text() == "Please Select") {
@@ -987,6 +993,7 @@
             else {
                 $('#ddlBillingPartner3').css('border-color', '');
             }
+            FillBillingPartnerProducts($("#ddlBillingPartner3").val(), "3","");
         });
         $('#ddlBillingPartner4').change(function () {
             if ($("#ddlBillingPartner4 option:selected").text() == "Please Select") {
@@ -995,6 +1002,7 @@
             else {
                 $('#ddlBillingPartner4').css('border-color', '');
             }
+            FillBillingPartnerProducts($("#ddlBillingPartner4").val(), "4","");
         });
 
         $("#txtBrandName1").focusout(function () {
@@ -1096,38 +1104,40 @@
             }
         });
 
-        $("#txtBOProduct1").focusout(function () {
-            if ($("#txtBOProduct1").val() != "") {
-                $('#txtBOProduct1').css('border-color', '');
+        $('#ddlBPProduct1').change(function () {
+            if ($("#ddlBPProduct1 option:selected").text() == "Please Select") {
+                $('#ddlBPProduct1').css('border-color', 'red');
             }
             else {
-                $('#txtBOProduct1').css('border-color', 'red');
+                $('#ddlBPProduct1').css('border-color', '');
             }
         });
-        $("#txtBOProduct2").focusout(function () {
-            if ($("#txtBOProduct2").val() != "") {
-                $('#txtBOProduct2').css('border-color', '');
+        $('#ddlBPProduct2').change(function () {
+            if ($("#ddlBPProduct2 option:selected").text() == "Please Select") {
+                $('#ddlBPProduct2').css('border-color', 'red');
             }
             else {
-                $('#txtBOProduct2').css('border-color', 'red');
+                $('#ddlBPProduct2').css('border-color', '');
             }
         });
-        $("#txtBOProduct3").focusout(function () {
-            if ($("#txtBOProduct3").val() != "") {
-                $('#txtBOProduct3').css('border-color', '');
+        $('#ddlBPProduct3').change(function () {
+            if ($("#ddlBPProduct3 option:selected").text() == "Please Select") {
+                $('#ddlBPProduct3').css('border-color', 'red');
             }
             else {
-                $('#txtBOProduct3').css('border-color', 'red');
+                $('#ddlBPProduct3').css('border-color', '');
             }
         });
-        $("#txtBOProduct4").focusout(function () {
-            if ($("#txtBOProduct4").val() != "") {
-                $('#txtBOProduct4').css('border-color', '');
+        $('#ddlBPProduct4').change(function () {
+            if ($("#ddlBPProduct4 option:selected").text() == "Please Select") {
+                $('#ddlBPProduct4').css('border-color', 'red');
             }
             else {
-                $('#txtBOProduct4').css('border-color', 'red');
+                $('#ddlBPProduct4').css('border-color', '');
             }
         });
+
+
     }
 
     function RemoveRequiredBorderAssignment() {
@@ -1155,6 +1165,7 @@
             else {
                 $('#ddlReferredby').css('border-color', '');
             }
+            FillRefferedName($("#ddlReferredby").val(),"");
         });
         $('#ddlReferredName').change(function () {
             if ($("#ddlReferredName option:selected").text() == "Please Select") {
@@ -1418,7 +1429,7 @@
                         $("#btnCustomerSave").click();
                     }
                 })
-               
+
             }
             else {
                 return true;
@@ -1576,9 +1587,8 @@
                 $('#ddlBillingPartner1').css('border-color', 'red');
                 returnStatus = false;
             }
-            if ($("#txtBOProduct1").val() == "") {
-                ShowHideSection("custdetails");
-                $('#txtBOProduct1').css('border-color', 'red');
+            if ($("#ddlBPProduct1 option:selected").text() == "Please Select") {
+                $('#ddlBPProduct1').css('border-color', 'red');
                 returnStatus = false;
             }
         }
@@ -1612,9 +1622,8 @@
                 $('#ddlBillingPartner1').css('border-color', 'red');
                 returnStatus = false;
             }
-            if ($("#txtBOProduct1").val() == "") {
-                ShowHideSection("custdetails");
-                $('#txtBOProduct1').css('border-color', 'red');
+            if ($("#ddlBPProduct2 option:selected").text() == "Please Select") {
+                $('#ddlBPProduct2').css('border-color', 'red');
                 returnStatus = false;
             }
 
@@ -1646,9 +1655,8 @@
                 $('#ddlBillingPartner2').css('border-color', 'red');
                 returnStatus = false;
             }
-            if ($("#txtBOProduct2").val() == "") {
-                ShowHideSection("custdetails");
-                $('#txtBOProduct2').css('border-color', 'red');
+            if ($("#ddlBPProduct2 option:selected").text() == "Please Select") {
+                $('#ddlBPProduct2').css('border-color', 'red');
                 returnStatus = false;
             }
 
@@ -1683,9 +1691,8 @@
                 $('#ddlBillingPartner1').css('border-color', 'red');
                 returnStatus = false;
             }
-            if ($("#txtBOProduct1").val() == "") {
-                ShowHideSection("custdetails");
-                $('#txtBOProduct1').css('border-color', 'red');
+            if ($("#ddlBPProduct1 option:selected").text() == "Please Select") {
+                $('#ddlBPProduct1').css('border-color', 'red');
                 returnStatus = false;
             }
 
@@ -1717,9 +1724,8 @@
                 $('#ddlBillingPartner2').css('border-color', 'red');
                 returnStatus = false;
             }
-            if ($("#txtBOProduct2").val() == "") {
-                ShowHideSection("custdetails");
-                $('#txtBOProduct2').css('border-color', 'red');
+            if ($("#ddlBPProduct2 option:selected").text() == "Please Select") {
+                $('#ddlBPProduct2').css('border-color', 'red');
                 returnStatus = false;
             }
 
@@ -1751,9 +1757,8 @@
                 $('#ddlBillingPartner3').css('border-color', 'red');
                 returnStatus = false;
             }
-            if ($("#txtBOProduct3").val() == "") {
-                ShowHideSection("custdetails");
-                $('#txtBOProduct3').css('border-color', 'red');
+            if ($("#ddlBPProduct3 option:selected").text() == "Please Select") {
+                $('#ddlBPProduct3').css('border-color', 'red');
                 returnStatus = false;
             }
 
@@ -1788,9 +1793,8 @@
                 $('#ddlBillingPartner1').css('border-color', 'red');
                 returnStatus = false;
             }
-            if ($("#txtBOProduct1").val() == "") {
-                ShowHideSection("custdetails");
-                $('#txtBOProduct1').css('border-color', 'red');
+            if ($("#ddlBPProduct1 option:selected").text() == "Please Select") {
+                $('#ddlBPProduct1').css('border-color', 'red');
                 returnStatus = false;
             }
 
@@ -1822,9 +1826,8 @@
                 $('#ddlBillingPartner2').css('border-color', 'red');
                 returnStatus = false;
             }
-            if ($("#txtBOProduct2").val() == "") {
-                ShowHideSection("custdetails");
-                $('#txtBOProduct2').css('border-color', 'red');
+            if ($("#ddlBPProduct2 option:selected").text() == "Please Select") {
+                $('#ddlBPProduct2').css('border-color', 'red');
                 returnStatus = false;
             }
 
@@ -1856,9 +1859,8 @@
                 $('#ddlBillingPartner3').css('border-color', 'red');
                 returnStatus = false;
             }
-            if ($("#txtBOProduct3").val() == "") {
-                ShowHideSection("custdetails");
-                $('#txtBOProduct3').css('border-color', 'red');
+            if ($("#ddlBPProduct3 option:selected").text() == "Please Select") {
+                $('#ddlBPProduct3').css('border-color', 'red');
                 returnStatus = false;
             }
 
@@ -1890,9 +1892,8 @@
                 $('#ddlBillingPartner4').css('border-color', 'red');
                 returnStatus = false;
             }
-            if ($("#txtBOProduct4").val() == "") {
-                ShowHideSection("custdetails");
-                $('#txtBOProduct4').css('border-color', 'red');
+            if ($("#ddlBPProduct4 option:selected").text() == "Please Select") {
+                $('#ddlBPProduct4').css('border-color', 'red');
                 returnStatus = false;
             }
 
@@ -2171,7 +2172,7 @@
             item["NoOfEnrolled"] = $("#txtNoOfEnrolled" + i).val();
             item["BOProduct"] = $("#ddlBOProduct" + i).val();
             item["BillingPartner"] = $("#ddlBillingPartner" + i).val();
-            item["BillingProduct"] = $("#txtBOProduct" + i).val();
+            item["BillingProduct"] = $("#ddlBPProduct" + i).val();
 
             Categories.push(item);
         }
@@ -2206,7 +2207,9 @@
             $("#txtNoOfEnrolled" + (i + 1)).val(CategoryObj[i].NoOfEnrolled);
             $("#ddlBOProduct" + (i + 1)).val(CategoryObj[i].BOProduct);
             $("#ddlBillingPartner" + (i + 1)).val(CategoryObj[i].BillingPartner);
-            $("#txtBOProduct" + (i + 1)).val(CategoryObj[i].BillingProduct);
+            FillBillingPartnerProducts($("#ddlBillingPartner" + (i + 1)).val(), i + 1, CategoryObj[i].BillingProduct);
+
+            $("#ddlBPProduct" + (i + 1)).val(CategoryObj[i].BillingProduct);
         }
         if ($("#ddlPaymentFrequency option:selected").text() == "Installments") {
             $("#dvPaymentSection").show();
@@ -2223,6 +2226,65 @@
         if ($("#txtGSTRate").val() != "") {
             $("#txtGSTRate").show();
         }
+        FillRefferedName($("#ddlReferredby").val(), $("#hdnReferredName").val());
+    }
+
+    function FillBillingPartnerProducts(id,dllId, setId)
+    {
+
+        if ($("#ddlBillingPartner" + dllId+" option:selected").text() != "Please Select") {
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("GetBillingPartnerProduct", "CustomerOnBoarding")',
+                    data: '{BPId: ' + JSON.stringify(id) + '}',
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (result) {
+                        $("#ddlBPProduct" + dllId).empty();
+                        $.each(result, function () {
+                            $("#ddlBPProduct" + dllId).append($("<option />").val(this.Value).text(this.Text));
+                        });
+                        if (setId != "") {
+                            $("#ddlBPProduct" + dllId).val(setId);
+                        }
+                    },
+                    error: function (result) {
+                        //console.log(result.responseText);
+                    }
+                });
+            }
+            else {
+                $("#ddlBPProduct" + dllId).empty();
+                $("#ddlBPProduct" + dllId).append($("<option />").val(0).text("Please Select"));
+            }
+    }
+
+    function FillRefferedName(id,refName) {
+        if ($("#ddlReferredby option:selected").text() != "Please Select") {
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("GetRefferedName", "CustomerOnBoarding")',
+                    data: '{SourceType: ' + JSON.stringify(id) + '}',
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (result) {
+                        $("#ddlReferredName").empty();
+                        $.each(result, function () {
+                            $("#ddlReferredName").append($("<option />").val(this.Value).text(this.Text));
+                        });
+                        if (refName != "") {
+                            $("#ddlReferredName").val(refName);
+                        }
+                    },
+                    error: function (result) {
+                        //console.log(result.responseText);
+                    }
+                });
+            }
+            else {
+            $("#ddlReferredName").empty();
+            $("#ddlReferredName").append($("<option />").val(0).text("Please Select"));
+            }
     }
 
 </script>

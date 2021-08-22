@@ -3,7 +3,12 @@ using BOTS_BL.Models;
 using BOTS_BL.Repository;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
+using System.Net.Http;
+using System.Net.Mail;
+using System.Text;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Script.Serialization;
@@ -60,12 +65,25 @@ namespace WebApp.Controllers.OnBoarding
         [HttpPost]
         public ActionResult AddCustomer(OnBoardingSalesViewModel objData)
         {
-            bool status = false;
+            int GroupdId = 0;
             try
             {
                 var userDetails = (CustomerLoginDetail)Session["UserSession"];
                 List<BOTS_TblRetailMaster> objLstRetail = new List<BOTS_TblRetailMaster>();
                 List<BOTS_TblInstallmentDetails> objLstInstallment = new List<BOTS_TblInstallmentDetails>();
+
+                List<SelectListItem> refferedname = new List<SelectListItem>();
+                SelectListItem item1 = new SelectListItem();
+                item1.Value = "0";
+                item1.Text = "Please Select";
+                refferedname.Add(item1);
+                objData.lstAllGroups = refferedname;
+                objData.lstCity = CR.GetCity();
+                objData.lstRetailCategory = CR.GetRetailCategory();
+                objData.lstBillingPartner = CR.GetBillingPartner();
+                objData.lstSourcedBy = CR.GetSourcedBy();
+                objData.lstRMAssigned = CR.GetRMAssigned();
+
                 JavaScriptSerializer json_serializer = new JavaScriptSerializer();
                 json_serializer.MaxJsonLength = int.MaxValue;
                 object[] objCategoryData = (object[])json_serializer.DeserializeObject(objData.bots_TblGroupMaster.CategoryData);
@@ -101,8 +119,17 @@ namespace WebApp.Controllers.OnBoarding
                     objData.bots_TblGroupMaster.CustomerStatus = "Draft";
                 objData.bots_TblGroupMaster.CreatedBy = userDetails.UserId;
                 objData.bots_TblGroupMaster.CreatedDate = DateTime.Now;
-                status = OBR.AddOnboardingCustomer(objData.bots_TblGroupMaster, objLstRetail, objData.bots_TblDealDetails, objData.bots_TblPaymentDetails, objLstInstallment);
-                TempData["status"] = status;
+                var newCuscomer = true;
+                if(Convert.ToInt32(objData.bots_TblGroupMaster.GroupId) >0)
+                {
+                    newCuscomer = false;
+                }
+                GroupdId = OBR.AddOnboardingCustomer(objData.bots_TblGroupMaster, objLstRetail, objData.bots_TblDealDetails, objData.bots_TblPaymentDetails, objLstInstallment);
+                //if(GroupdId > 0 && newCuscomer)
+                //{
+                    SendEmail(GroupdId);
+                //}
+                TempData["status"] = true;
             }
             catch (Exception ex)
             {
@@ -110,20 +137,146 @@ namespace WebApp.Controllers.OnBoarding
                 TempData["error"] = "Error Occured";
                 return View("Index");
             }
-            List<SelectListItem> refferedname = new List<SelectListItem>();
-            SelectListItem item1 = new SelectListItem();
-            item1.Value = "0";
-            item1.Text = "Please Select";
-            refferedname.Add(item1);
-            objData.lstAllGroups = refferedname;
-            objData.lstCity = CR.GetCity();
-            objData.lstRetailCategory = CR.GetRetailCategory();
-            objData.lstBillingPartner = CR.GetBillingPartner();
-            objData.lstSourcedBy = CR.GetSourcedBy();
-            objData.lstRMAssigned = CR.GetRMAssigned();
+            
+            
             return View("Index", objData);
 
         }
 
+
+        [HttpPost]
+        public JsonResult GetBillingPartnerProduct(string BPId)
+        {
+            var lstBillingPartnerProduct = OBR.GetBillingPartnerProduct(Convert.ToInt32(BPId));
+            return new JsonResult() { Data = lstBillingPartnerProduct, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
+        }
+
+        [HttpPost]
+        public JsonResult GetRefferedName(string SourceType)
+        {
+            var lstRefferedName = OBR.GetRefferedName(SourceType);
+            return new JsonResult() { Data = lstRefferedName, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
+        }
+
+        public void SendEmail(int groupId)
+        {
+            try
+            {
+                var GroupDetails = OBR.GetGroupMasterDetails(Convert.ToString(groupId));
+                var RetailList = OBR.GetRetailDetailsForEmail(Convert.ToString(groupId));
+
+                StringBuilder sb = new StringBuilder();
+                sb.Append("<table border=\"1\" cellpadding=\"5\" cellspacing=\"5\">");
+                sb.Append("<tr>");
+                sb.Append("<td>Retail Name:</td><td>" + GroupDetails.GroupName + "</td>");
+                sb.Append("</tr>");
+
+                sb.Append("<tr>");
+                sb.Append("<td>Customer Name:</td><td>" + GroupDetails.OwnerName + "</td>");
+                sb.Append("</tr>");
+
+                sb.Append("<tr>");
+                sb.Append("<td>Mobile No:</td><td>" + GroupDetails.OwnerMobileNo + "</td>");
+                sb.Append("</tr>");
+
+                int count = 1;
+                string Product = string.Empty;
+                string BillingPartner = string.Empty;
+                string Category = string.Empty;
+                string NoOfOutlets = "";
+                foreach (var item in RetailList)
+                {
+                    if (count == 1)
+                    {
+                        Category = item.CategoryName;
+                        NoOfOutlets = Convert.ToString(item.NoOfOutlets);
+                        BillingPartner = item.BillingPartner;
+                        Product = item.BOProduct;
+                    }
+                    else
+                    {
+                        Category += "," + item.CategoryName;
+                        NoOfOutlets += "," + item.NoOfOutlets;
+                        BillingPartner += "," + item.BillingPartner;
+                        Product += "," + item.BOProduct;
+                    }
+                    count++;
+                }
+
+                sb.Append("<tr>");
+                sb.Append("<td>Product:</td><td>" + Product + "</td>");
+                sb.Append("</tr>");
+
+                sb.Append("<tr>");
+                sb.Append("<td>Billing Partner:</td><td>" + BillingPartner + "</td>");
+                sb.Append("</tr>");
+
+                sb.Append("<tr>");
+                sb.Append("<td>Category:</td><td>" + Category + "</td>");
+                sb.Append("</tr>");
+
+                sb.Append("<tr>");
+                sb.Append("<td>No of Outlets:</td><td>" + NoOfOutlets + "</td>");
+                sb.Append("</tr>");
+
+                sb.Append("<tr>");
+                sb.Append("<td>Email:</td><td>" + GroupDetails.OwnerEmailId + "</td>");
+                sb.Append("</tr>");
+
+                sb.Append("<tr>");
+                sb.Append("<td>SMS Free Messages:</td><td>" + GroupDetails.NoOfFreeSMS + "</td>");
+                sb.Append("</tr>");
+
+                sb.Append("<tr>");
+                sb.Append("<td>SMS Prepaid Messages:</td><td>" + GroupDetails.NoOfPaidSMS + "</td>");
+                sb.Append("</tr>");
+
+                sb.Append("<tr>");
+                sb.Append("<td>Whatsapp:</td><td>" + GroupDetails.IsWhatsApp.ToString() + "</td>");
+                sb.Append("</tr>");
+
+                sb.Append("<tr>");
+                sb.Append("<td>Whatsapp Free Messages:</td><td>" + GroupDetails.NoOfFreeWhatsAppMsg + "</td>");
+                sb.Append("</tr>");
+
+                sb.Append("<tr>");
+                sb.Append("<td>Whatsapp Prepaid Messages:</td><td>" + GroupDetails.NoOfPaidWhatsAppMsg + "</td>");
+                sb.Append("</tr>");
+
+                sb.Append("<tr>");
+                sb.Append("<td>DLC:</td><td>" + GroupDetails.IsMWP.ToString() + "</td>");
+                sb.Append("</tr>");
+
+                sb.Append("<tr>");
+                sb.Append("<td>Comments:</td><td>" + GroupDetails.Comments + "</td>");
+                sb.Append("</tr>");
+
+                sb.Append("</table>");
+
+
+                var userName = ConfigurationManager.AppSettings["Email"].ToString();
+                var password = ConfigurationManager.AppSettings["EmailPassword"].ToString();
+                SmtpClient smtp = new SmtpClient();
+                smtp.UseDefaultCredentials = true;
+                smtp.Credentials = new System.Net.NetworkCredential(userName, password);
+                smtp.Host = "smtp.gmail.com";
+                smtp.Port = 587;
+                smtp.EnableSsl = true;
+                var userDetails = (CustomerLoginDetail)Session["UserSession"];
+                MailMessage email = new MailMessage(userName, userDetails.EmailId);
+                
+                email.Subject = "New Customer Onboarded - " + GroupDetails.GroupName;
+                email.Body = sb.ToString();
+                email.IsBodyHtml = true;
+                email.Priority = MailPriority.High;
+                smtp.Send(email);
+
+            }
+            catch(Exception ex)
+            {
+                newexception.AddException(ex, "Onboarding Email Error");
+            }
+
+        }
     }
 }

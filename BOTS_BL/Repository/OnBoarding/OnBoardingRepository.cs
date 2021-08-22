@@ -22,7 +22,7 @@ namespace BOTS_BL.Repository
     {
         Exceptions newexception = new Exceptions();
         CustomerOnBoardingRepository COBR = new CustomerOnBoardingRepository();
-        public bool AddOnboardingCustomer(BOTS_TblGroupMaster objGroup, List<BOTS_TblRetailMaster> objLstRetail,
+        public int AddOnboardingCustomer(BOTS_TblGroupMaster objGroup, List<BOTS_TblRetailMaster> objLstRetail,
             BOTS_TblDealDetails objDeal, BOTS_TblPaymentDetails objPayment, List<BOTS_TblInstallmentDetails> objLstInstallment)
         {
             bool status = false;
@@ -46,6 +46,10 @@ namespace BOTS_BL.Repository
                                 GroupId = 2001;
                             }
                             objGroup.GroupId = Convert.ToString(GroupId);
+                        }
+                        else
+                        {
+                            GroupId = Convert.ToInt32(objGroup.GroupId);
                         }
 
                         var path = ConfigurationManager.AppSettings["CustomerDocuments"].ToString();
@@ -84,13 +88,13 @@ namespace BOTS_BL.Repository
                             objGroup.GSTDocument = objGroup.GSTDocumentFile.FileName;
                         }
 
-                                               
-                        
+
+
                         context.BOTS_TblGroupMaster.AddOrUpdate(objGroup);
                         context.SaveChanges();
 
                         var lstRetail = context.BOTS_TblRetailMaster.Where(x => x.GroupId == objGroup.GroupId).ToList();
-                        foreach(var item in lstRetail)
+                        foreach (var item in lstRetail)
                         {
                             context.BOTS_TblRetailMaster.Remove(item);
                             context.SaveChanges();
@@ -98,6 +102,9 @@ namespace BOTS_BL.Repository
 
                         foreach (var item in objLstRetail)
                         {
+                            var id = Convert.ToInt32(item.CategoryId);
+                            var categoryName = context.tblCategories.Where(x => x.CategoryId == id).Select(y => y.CategoryName).FirstOrDefault();
+                            item.CategoryName = categoryName;
                             item.GroupId = Convert.ToString(objGroup.GroupId);
                             context.BOTS_TblRetailMaster.AddOrUpdate(item);
                             context.SaveChanges();
@@ -126,17 +133,17 @@ namespace BOTS_BL.Repository
                         }
 
                         transaction.Commit();
-                        status = true;
                     }
                     catch (Exception ex)
                     {
                         transaction.Rollback();
                         newexception.AddException(ex, "OnBoarding");
+                        GroupId = 0;
                         //throw ex;
                     }
                 }
             }
-            return status;
+            return GroupId;
         }
 
 
@@ -176,12 +183,11 @@ namespace BOTS_BL.Repository
                     var city = COBR.GetCityById(Convert.ToInt32(item.City));
                     objItem.City = city.CityName;
                     objItem.PaymentStatus = context.BOTS_TblDealDetails.Where(x => x.GroupId == item.GroupId).Select(y => y.PaymentStatus).FirstOrDefault();
-                    
-                    var BPId = context.BOTS_TblRetailMaster.Where(x=>x.GroupId== item.GroupId).Select(y => y.BillingPartner).FirstOrDefault();
+
+                    var BPId = context.BOTS_TblRetailMaster.Where(x => x.GroupId == item.GroupId).Select(y => y.BillingPartner).FirstOrDefault();
                     var bId = Convert.ToInt32(BPId);
 
                     objItem.BillingPartnerName = context.tblBillingPartners.Where(x => x.BillingPartnerId == bId).Select(y => y.BillingPartnerName).FirstOrDefault();
-
 
                     onBoardingListings.Add(objItem);
                 }
@@ -236,12 +242,104 @@ namespace BOTS_BL.Repository
             using (var context = new CommonDBContext())
             {
                 objData = context.BOTS_TblInstallmentDetails.Where(x => x.GroupId == GroupId).ToList();
-                foreach(var item in objData)
+                foreach (var item in objData)
                 {
                     item.PaymentDateStr = item.PaymentDate.ToString("yyyy-MM-dd");
                 }
             }
             return objData;
         }
+
+        public List<SelectListItem> GetBillingPartnerProduct(int Id)
+        {
+            List<SelectListItem> lstBillingPartnerProduct = new List<SelectListItem>();
+            SelectListItem item1 = new SelectListItem();
+            item1.Value = "0";
+            item1.Text = "Please Select";
+            lstBillingPartnerProduct.Add(item1);
+            using (var context = new CommonDBContext())
+            {
+                var BillingPartnerProduct = context.BOTS_TblBillingPartnerProduct.Where(x => x.BillingPartnerId == Id).ToList();
+                foreach (var item in BillingPartnerProduct)
+                {
+                    lstBillingPartnerProduct.Add(new SelectListItem
+                    {
+                        Text = item.BillingPartnerProductName,
+                        Value = Convert.ToString(item.BillingPartnerProductId)
+                    });
+                }
+            }
+            return lstBillingPartnerProduct;
+        }
+
+        public List<SelectListItem> GetRefferedName(string SourceType)
+        {
+            List<SelectListItem> lstRefferedName = new List<SelectListItem>();
+            SelectListItem item1 = new SelectListItem();
+            item1.Value = "0";
+            item1.Text = "Please Select";
+            lstRefferedName.Add(item1);
+            using (var context = new CommonDBContext())
+            {
+                if (SourceType == "1")
+                {
+                    var CustomerList = context.tblGroupDetails.ToList();
+                    foreach (var item in CustomerList)
+                    {
+                        lstRefferedName.Add(new SelectListItem
+                        {
+                            Text = item.GroupName,
+                            Value = item.GroupName
+                        });
+                    }
+                }
+                if (SourceType == "2")
+                {
+                    var BillingPartners = context.tblBillingPartners.ToList();
+                    foreach (var item in BillingPartners)
+                    {
+                        lstRefferedName.Add(new SelectListItem
+                        {
+                            Text = item.BillingPartnerName,
+                            Value = item.BillingPartnerName
+                        });
+                    }
+                }
+                if (SourceType == "3")
+                {
+
+                }
+            }
+            return lstRefferedName;
+        }
+
+        public List<RetailDetails> GetRetailDetailsForEmail(string GroupId)
+        {
+            List<RetailDetails> objData = new List<RetailDetails>();
+            using (var context = new CommonDBContext())
+            {
+                var data = context.BOTS_TblRetailMaster.Where(x => x.GroupId == GroupId).ToList();
+
+                foreach(var item in data)
+                {
+                    RetailDetails item1 = new RetailDetails();
+                    item1.CategoryName = item.CategoryName;
+                    item1.NoOfOutlets = item.NoOfOutlets;
+                    var id = Convert.ToInt32(item.BillingPartner);
+                    item1.BillingPartner = context.tblBillingPartners.Where(x => x.BillingPartnerId == id).Select(y => y.BillingPartnerName).FirstOrDefault();
+                    item1.BOProduct = item.BOProduct == "1" ? "Octa Plus" : "Octa XS";
+                    objData.Add(item1);
+                }
+            }
+            return objData;
+        }
+
+        public List<string> GetAllInternalEmailIds()
+        {
+            List<string> lstEmails = new List<string>();
+
+            return lstEmails;
+        }
+
     }
 }

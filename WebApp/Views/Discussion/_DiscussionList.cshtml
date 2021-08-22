@@ -1,4 +1,4 @@
-﻿@model List<BOTS_BL.Models.CommonDB.BOTS_TblDiscussion>
+﻿@model List<BOTS_BL.Models.CommonDB.DiscussionDetails>
 
 
 <div class="row mb-3 card">
@@ -16,11 +16,11 @@
                         <thead>
                             <tr>
                                 <th scope="col">Date</th>
+                                <th scope="col">Spoken To</th>
                                 <th scope="col">Number</th>
                                 <th scope="col">Call Type</th>
                                 <th scope="col">FollowUp Date</th>
                                 <th scope="col">Call Mode</th>
-                                @*<th scope="col" style="text-align:center;">Action</th>*@
                             </tr>
                         </thead>
                         <tbody>
@@ -29,24 +29,25 @@
 
                                 foreach (var item in Model)
                                 {
+                                    var followupdate = "--";
+                                    if (item.FollowupDate.HasValue)
+                                    {
+                                        followupdate = item.FollowupDate.Value.ToString("MM/dd/yyyy");
+                                    }
                                     <tr>
                                         <td>@item.AddedDate</td>
+                                        <td>@item.SpokenTo</td>
                                         <td>@item.ContactNo</td>
                                         <td>@item.CallType</td>
-                                        <td>@item.FollowupDate</td>
+                                        <td>@followupdate</td>
                                         <td>@item.CallMode</td>
-
-                                        @*<td style="text-align:center;">
-                                                <a href="@Url.Action("Index", "CustomerOnBoarding", new { groupId = GroupId })" class="login" title="Edit"><img src="~/Content/assets/images/shape_editUser.png" /></a>
-                                            </td>*@
                                     </tr>
                                 }
-
                             }
                             else
                             {
                                 <tr>
-                                    <td colspan="5" align="center">No Discussion Available</td>
+                                    <td colspan="6" align="center">No Discussion Available</td>
                                 </tr>
                             }
                         </tbody>
@@ -60,7 +61,7 @@
 
     $(document).ready(function () {
         $('#discussionTable').DataTable({
-            "aaSorting": [[0, "asc"]],
+            "aaSorting": [[0, "desc"]],
             "paging": true,
             "ordering": true,
             "info": true,

@@ -1,28 +1,29 @@
 ﻿@model WebApp.ViewModel.DiscussionViewModel
 @{
-    ViewBag.Title = "AllDiscussions";
+    ViewBag.Title = "Discussions";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <div class="app-main__inner">
-    @Html.HiddenFor(model => model.objDiscussion.GroupId)
+
     <div class="row mb-3 card">
         <div class="container-fluid pt-3 pl-3 pr-3 pb-3">
-            @using (Html.BeginForm("AddCustomer", "CustomerOnBoarding", FormMethod.Post, new { id = "frmadddiscussion", enctype = "multipart/form-data" }))
+            @using (Html.BeginForm("AddDiscussion", "Discussion", FormMethod.Post, new { id = "frmadddiscussion", enctype = "multipart/form-data" }))
             {
+                @Html.HiddenFor(model => model.objDiscussion.GroupId)
                 <div id="dvAddDiscussion" class="card" style="display:none;padding:20px;">
                     <div class="row" style="margin: 0;">
                         <div style="float:left;text-align:right;width:100px;margin-top:10px;">
                             Spoken To
                         </div>
                         <div class="col-sm-4" style="float:left;margin-top:10px;">
-                            @Html.TextBoxFor(model => model.objDiscussion.SpokenTo, new { @class = "input100" })
+                            @Html.TextBoxFor(model => model.objDiscussion.SpokenTo, new { @class = "input100", @id = "txtSpokenTo" })
                         </div>
                         <div style="float: left; text-align: right; width: 115px; margin-top: 10px;">
                             Contact No
                         </div>
                         <div class="col-sm-4" style="float:left;margin-top:10px;">
-                            @Html.TextBoxFor(model => model.objDiscussion.ContactNo, new { @class = "input100" })
+                            @Html.TextBoxFor(model => model.objDiscussion.ContactNo, new { @class = "input100", @id = "txtContactNo" })
                         </div>
                     </div>
                     <div class="row" style="margin: 0;">
@@ -30,13 +31,13 @@
                             Call Mode
                         </div>
                         <div class="col-sm-4" style="float:left;margin-top:10px;">
-                            @Html.DropDownListFor(model => model.objDiscussion.CallMode, new SelectList(Model.CallMode(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input100" })
+                            @Html.DropDownListFor(model => model.objDiscussion.CallMode, new SelectList(Model.CallMode(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input100", @id = "ddlCallMode" })
                         </div>
                         <div style="float: left; text-align: right; width: 115px; margin-top: 10px;">
                             Call Type
                         </div>
                         <div class="col-sm-4" style="float:left;margin-top:10px;">
-                            @Html.DropDownListFor(model => model.objDiscussion.CallType, new SelectList(Model.lstCallTypes, "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input100" })
+                            @Html.DropDownListFor(model => model.objDiscussion.CallType, new SelectList(Model.lstCallTypes, "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input100", @id = "ddlCallType" })
                         </div>
                     </div>
                     <div class="row" style="margin: 0;">
@@ -44,7 +45,7 @@
                             Call Sub Type
                         </div>
                         <div class="col-sm-4" style="float:left;margin-top:10px;">
-                            @Html.DropDownListFor(model => model.objDiscussion.SubCallType, new SelectList(Model.lstCallSubTypes, "Value", "Text"), htmlAttributes: new { @class = "input100" })
+                            @Html.DropDownListFor(model => model.objDiscussion.SubCallType, new SelectList(Model.lstCallSubTypes, "Value", "Text"), htmlAttributes: new { @class = "input100", @id = "ddlSubCallType" })
                         </div>
                         <div style="float: left; text-align: right; width: 115px; margin-top: 10px;">
                             FollowUp Date
@@ -53,6 +54,26 @@
                             @Html.TextBoxFor(model => model.objDiscussion.FollowupDate, new { @class = "input100", @id = "txtFollowupDate" })
                         </div>
                     </div>
+                    <div class="row" style="margin: 0;">
+                        <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
+                            Action Items
+                        </div>
+                        <div class="col-sm-4" style="float:left;margin-top:10px;">
+                            @Html.TextAreaFor(model => model.objDiscussion.ActionItems, new { @class = "input100" })
+                        </div>
+                        <div style="float: left; text-align: right; width: 115px; margin-top: 10px;">
+                            Description
+                        </div>
+                        <div class="col-sm-4" style="float:left;margin-top:10px;">
+                            @Html.TextAreaFor(model => model.objDiscussion.Description, new { @class = "input100" })
+                        </div>
+                    </div>
+
+                    <div class="container-fluid pt-3 pl-3 pr-3 pb-3">
+                        <button type="button" id="btnCancel" class="btn btn-primary pull-right" style="margin-right:10px;">Cancel</button>
+                        <button type="button" id="btnDiscussionSave" class="btn btn-primary pull-right" onclick="return CheckValidation();" style="margin-right:10px;">Save</button>
+                    </div>
+
                 </div>
             }
             <div class="row">
@@ -80,9 +101,147 @@
             dateFormat: "yy-mm-dd",
             minDate: today,
         });
+
+        $('#ddlCallType').change(function () {
+            if ($("#ddlCallType option:selected").text() != "Please Select") {
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("GetSubCallTypes", "Discussion")',
+                    //url: "/Discussion/GetSubCallTypes",
+                    data: '{callId: ' + JSON.stringify($("#ddlCallType").val()) + '}',
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (result) {
+                        $("#ddlSubCallType").empty();
+                        $.each(result, function () {
+                            $("#ddlSubCallType").append($("<option />").val(this.Value).text(this.Text));
+                        });
+                    },
+                    error: function (result) {
+                        console.log(result.responseText);
+                    }
+                });
+            }
+            else {
+                $("#ddlSubCallType").empty();
+                $("#ddlSubCallType").append($("<option />").val(0).text("Please Select"));
+            }
+        });
+
+        $("#btnCancel").on("click", function () {
+            $("#dvAddDiscussion").hide(1000);
+        });
     });
     function ShowAddDiscussion() {
         $("#dvAddDiscussion").show(1000);
+    }
+
+    function CheckValidation() {
+        var returnStatus = true;
+        if ($("#txtSpokenTo").val() == "") {
+
+            cuteAlert({
+                type: "error",
+                title: "Oops..",
+                message: "Please enter Required fields",
+                buttonText: "Okay"
+            })
+            $("#txtSpokenTo").focus();
+            returnStatus = false;
+            return false;
+        }
+        if ($("#txtContactNo").val() == "") {
+            cuteAlert({
+                type: "error",
+                title: "Oops..",
+                message: "Please enter Required fields",
+                buttonText: "Okay"
+            })
+            $("#txtContactNo").focus();
+            returnStatus = false;
+            return false;
+        }
+        if ($("#ddlCallMode option:selected").text() == "Please Select") {
+            cuteAlert({
+                type: "error",
+                title: "Oops..",
+                message: "Please enter Required fields",
+                buttonText: "Okay"
+            })
+            $("#ddlCallMode").focus();
+            returnStatus = false;
+            return false;
+        }
+        if ($("#ddlCallType option:selected").text() == "Please Select") {
+            cuteAlert({
+                type: "error",
+                title: "Oops..",
+                message: "Please enter Required fields",
+                buttonText: "Okay"
+            })
+            $("#ddlCallType").focus();
+            returnStatus = false;
+            return false;
+        }
+
+
+        if (returnStatus) {
+            var data = $('#frmadddiscussion').serialize();
+            $("#divLoader").show();
+            $.ajax({
+                url: $('#frmadddiscussion').attr('action'),
+                type: 'post',
+                dataType: "html",
+                data: data,
+                success: function (response) {
+                    console.log(response)
+                    if (response) {
+                        cuteAlert({
+                            type: "success",
+                            title: "Saved",
+                            message: "Discussion Details saved Successfully !!!",
+                            buttonText: "Okay"
+                        })
+                        $("#dvAddDiscussion").hide(1000);
+
+                        $("#divLoader").hide();
+
+                        $("#divLoader").show();
+                            $.ajax({
+                                type: "POST",
+                                url: '@Url.Action("GetDiscussionList", "Discussion")',
+                                //data: '{CategoryId: ' + JSON.stringify(id) + '}',
+                                contentType: "application/json; charset=utf-8",
+                                dataType: "json",
+                                success: function (responce) {
+                                    $("#dvDiscussionList").html(responce);
+                                    $("#divLoader").hide();
+                                },
+                                error: function (responce) {
+                                    $("#dvDiscussionList").html(responce.responseText);
+                                    $("#divLoader").hide();
+
+                                }
+                            });
+                    }
+                    else {
+
+                        $("#divLoader").hide();
+                        cuteAlert({
+                            type: "error",
+                            title: "Oops..",
+                            message: "Problem occured in saving Discussion Details",
+                            buttonText: "Okay"
+                        })
+
+
+                    }
+                }
+            });
+        }
+        else {
+            return false;
+        }
     }
 </script>
 <script src="~/Scripts/jquery-ui-1.12.1.js"></script>

@@ -18,14 +18,25 @@ namespace BOTS_BL.Repository
     public class DiscussionsRepository
     {
         Exceptions newexception = new Exceptions();
-        public List<BOTS_TblDiscussion> GetDiscussions(string GroupId)
+        public List<DiscussionDetails> GetDiscussions(string GroupId)
         {
-            List<BOTS_TblDiscussion> objData = new List<BOTS_TblDiscussion>();
+            List<DiscussionDetails> objData = new List<DiscussionDetails>();
             try
             {
                 using (var context = new CommonDBContext())
                 {
-                    objData = context.BOTS_TblDiscussion.Where(x => x.GroupId == GroupId).ToList();
+                    //objData = context.BOTS_TblDiscussion.Where(x => x.GroupId == GroupId).ToList();
+                    objData = (from c in context.BOTS_TblDiscussion
+                               join ct in context.BOTS_TblCallTypes on c.CallType equals ct.Id 
+                                      select new DiscussionDetails
+                                      {
+                                          AddedDate = c.AddedDate,
+                                          SpokenTo = c.SpokenTo,
+                                          ContactNo = c.ContactNo,
+                                          CallType = ct.CallType,
+                                          FollowupDate = c.FollowupDate,
+                                          CallMode = c.CallMode
+                                      }).OrderByDescending(x=>x.AddedDate).ToList();
                 }
             }
             catch (Exception ex)
@@ -33,6 +44,26 @@ namespace BOTS_BL.Repository
                 newexception.AddException(ex, GroupId);
             }
             return objData;
+        }
+
+        public bool AddDiscussions(BOTS_TblDiscussion objDiscussion)
+        {
+            bool status = false;
+            try
+            {
+                using (var context = new CommonDBContext())
+                {
+                    context.BOTS_TblDiscussion.AddOrUpdate(objDiscussion);
+                    context.SaveChanges();
+                    status = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, objDiscussion.GroupId);
+            }
+
+            return status;
         }
 
         public List<SelectListItem> GetCallTypes()
@@ -55,6 +86,10 @@ namespace BOTS_BL.Repository
         public List<SelectListItem> GetSubCallTypes(int Id)
         {
             List<SelectListItem> lstSubCallTypes = new List<SelectListItem>();
+            SelectListItem item1 = new SelectListItem();
+            item1.Value = "0";
+            item1.Text = "Please Select";
+            lstSubCallTypes.Add(item1);
             using (var context = new CommonDBContext())
             {
                 var SubCallTypes = context.BOTS_TblCallSubTypes.Where(x => x.CallTypeId == Id).ToList();
