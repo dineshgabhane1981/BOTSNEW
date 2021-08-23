@@ -320,7 +320,7 @@ namespace BOTS_BL.Repository
             {
                 var data = context.BOTS_TblRetailMaster.Where(x => x.GroupId == GroupId).ToList();
 
-                foreach(var item in data)
+                foreach (var item in data)
                 {
                     RetailDetails item1 = new RetailDetails();
                     item1.CategoryName = item.CategoryName;
@@ -337,6 +337,11 @@ namespace BOTS_BL.Repository
         public List<string> GetAllInternalEmailIds()
         {
             List<string> lstEmails = new List<string>();
+            using (var context = new CommonDBContext())
+            {
+                var loginTypeList = new List<string> { "2", "3", "4" };
+                lstEmails = context.CustomerLoginDetails.Where(x => x.EmailId != null && !loginTypeList.Contains(x.LoginType)).Select(y => y.EmailId).ToList();
+            }
 
             return lstEmails;
         }

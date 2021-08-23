@@ -125,10 +125,10 @@ namespace WebApp.Controllers.OnBoarding
                     newCuscomer = false;
                 }
                 GroupdId = OBR.AddOnboardingCustomer(objData.bots_TblGroupMaster, objLstRetail, objData.bots_TblDealDetails, objData.bots_TblPaymentDetails, objLstInstallment);
-                //if(GroupdId > 0 && newCuscomer)
-                //{
+                if (GroupdId > 0 && newCuscomer)
+                {
                     SendEmail(GroupdId);
-                //}
+                }
                 TempData["status"] = true;
             }
             catch (Exception ex)
@@ -164,7 +164,7 @@ namespace WebApp.Controllers.OnBoarding
             {
                 var GroupDetails = OBR.GetGroupMasterDetails(Convert.ToString(groupId));
                 var RetailList = OBR.GetRetailDetailsForEmail(Convert.ToString(groupId));
-
+                var emailIds = OBR.GetAllInternalEmailIds();
                 StringBuilder sb = new StringBuilder();
                 sb.Append("<table border=\"1\" cellpadding=\"5\" cellspacing=\"5\">");
                 sb.Append("<tr>");
@@ -263,8 +263,15 @@ namespace WebApp.Controllers.OnBoarding
                 smtp.Port = 587;
                 smtp.EnableSsl = true;
                 var userDetails = (CustomerLoginDetail)Session["UserSession"];
-                MailMessage email = new MailMessage(userName, userDetails.EmailId);
                 
+                MailMessage email = new MailMessage();
+                MailAddress from = new MailAddress(userName);
+                email.From = from;
+                foreach(var item in emailIds)
+                {
+                    email.To.Add(item);
+                }
+
                 email.Subject = "New Customer Onboarded - " + GroupDetails.GroupName;
                 email.Body = sb.ToString();
                 email.IsBodyHtml = true;

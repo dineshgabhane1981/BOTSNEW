@@ -156,7 +156,7 @@
                             Owner’s Mobile
                         </div>
                         <div class="col-sm-4" style="float:left;margin-top:10px;">
-                            @Html.TextBoxFor(model => model.bots_TblGroupMaster.OwnerMobileNo, new { @class = "input100", @id = "txtOwnerMobileNo", tabindex = 3 })
+                            @Html.TextBoxFor(model => model.bots_TblGroupMaster.OwnerMobileNo, new { @class = "input100", @type = "number", @id = "txtOwnerMobileNo", tabindex = 3 })
                         </div>
                         <div style="float:left;text-align:right;width:115px;">
                             Owner’s Email
@@ -1464,6 +1464,7 @@
             $('#txtOwnerMobileNo').css('border-color', 'red');
             returnStatus = false;
         }
+        
         if ($("#txtOwnerEmailId").val() == "") {
             ShowHideSection("custdetails");
             $('#txtOwnerEmailId').css('border-color', 'red');
@@ -1525,24 +1526,12 @@
                 $('#txtNoOfFreeWhatsAppMsg').css('border-color', 'red');
                 returnStatus = false;
             }
-            //if ($("#txtNoOfPaidWhatsAppMsg").val() == "") {
-            //    ShowHideSection("custdetails");
-            //    $('#txtNoOfPaidWhatsAppMsg').css('border-color', 'red');
-            //    returnStatus = false;
-            //}
-        }
-
+        }       
         if ($("#txtNoOfFreeSMS").val() == "") {
             ShowHideSection("custdetails");
             $('#txtNoOfFreeSMS').css('border-color', 'red');
             returnStatus = false;
         }
-
-        //if ($("#txtNoOfPaidSMS").val() == "") {
-        //    ShowHideSection("custdetails");
-        //    $('#txtNoOfPaidSMS').css('border-color', 'red');
-        //    returnStatus = false;
-        //}
 
         var returnStatusCategory = CheckCategoryDetails();
 
