@@ -11,7 +11,12 @@
             @using (Html.BeginForm("AddDiscussion", "Discussion", FormMethod.Post, new { id = "frmadddiscussion", enctype = "multipart/form-data" }))
             {
                 @Html.HiddenFor(model => model.objDiscussion.GroupId)
-                <div id="dvAddDiscussion" class="card" style="display:none;padding:20px;">
+                <div class="card" style="margin-bottom: 20px;">
+                    <div class="row" style="margin: 10px;align-self:center;font-size:22px;">
+                        Customer Name -  @Model.objDiscussion.GroupName
+                    </div>
+                </div>
+                <div id="dvAddDiscussion" class="card" style="display:none;padding:20px;margin-bottom:10px;">
                     <div class="row" style="margin: 0;">
                         <div style="float:left;text-align:right;width:100px;margin-top:10px;">
                             Spoken To

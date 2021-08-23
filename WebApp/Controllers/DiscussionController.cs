@@ -19,6 +19,7 @@ namespace WebApp.Controllers
     public class DiscussionController : Controller
     {
         DiscussionsRepository DR = new DiscussionsRepository();
+        CustomerRepository CR = new CustomerRepository();
         // GET: Discussion
         public ActionResult Index()
         {
@@ -31,7 +32,9 @@ namespace WebApp.Controllers
             groupId = common.DecryptString(groupId);
             DiscussionViewModel objData = new DiscussionViewModel();
             BOTS_TblDiscussion objDiscussion = new BOTS_TblDiscussion();
+            var objGroup = CR.GetGroupDetails(Convert.ToInt32(groupId));
             objDiscussion.GroupId = groupId;
+            objDiscussion.GroupName = objGroup.GroupName;
             objData.objDiscussion = objDiscussion;
             objData.lstDiscussions = DR.GetDiscussions(groupId);
             objData.lstCallTypes = DR.GetCallTypes();

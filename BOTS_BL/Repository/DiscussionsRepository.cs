@@ -27,16 +27,22 @@ namespace BOTS_BL.Repository
                 {
                     //objData = context.BOTS_TblDiscussion.Where(x => x.GroupId == GroupId).ToList();
                     objData = (from c in context.BOTS_TblDiscussion
-                               join ct in context.BOTS_TblCallTypes on c.CallType equals ct.Id 
-                                      select new DiscussionDetails
-                                      {
-                                          AddedDate = c.AddedDate,
-                                          SpokenTo = c.SpokenTo,
-                                          ContactNo = c.ContactNo,
-                                          CallType = ct.CallType,
-                                          FollowupDate = c.FollowupDate,
-                                          CallMode = c.CallMode
-                                      }).OrderByDescending(x=>x.AddedDate).ToList();
+                               join ct in context.BOTS_TblCallTypes on c.CallType equals ct.Id
+                               join cld in context.CustomerLoginDetails on c.AddedBy equals cld.LoginId
+                               where c.GroupId == GroupId
+                               select new DiscussionDetails
+                               {
+                                   AddedDate = c.AddedDate,
+                                   SpokenTo = c.SpokenTo,
+                                   ContactNo = c.ContactNo,
+                                   CallType = ct.CallType,
+                                   FollowupDate = c.FollowupDate,
+                                   CallMode = c.CallMode,
+                                   Description = c.Description,
+                                   ActionItems = c.ActionItems,
+                                   AddedBy = cld.UserName
+
+                               }).OrderByDescending(x => x.AddedDate).ToList();
                 }
             }
             catch (Exception ex)

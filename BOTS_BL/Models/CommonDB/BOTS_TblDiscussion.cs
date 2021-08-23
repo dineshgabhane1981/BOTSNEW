@@ -43,6 +43,9 @@ namespace BOTS_BL.Models.CommonDB
         [Required]
         [StringLength(250)]
         public string AddedBy { get; set; }
+
+        [NotMapped]
+        public string GroupName { get; set; }
     }
     public class DiscussionDetails
     {
@@ -52,5 +55,8 @@ namespace BOTS_BL.Models.CommonDB
         public string CallType { get; set; }
         public DateTime? FollowupDate { get; set; }
         public string CallMode { get; set; }
+        public string Description { get; set; }
+        public string ActionItems { get; set; }
+        public string AddedBy { get; set; }
     }
 }
