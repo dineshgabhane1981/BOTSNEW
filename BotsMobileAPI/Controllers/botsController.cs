@@ -693,15 +693,15 @@ namespace BotsMobileAPI.Controllers
                     str.Append("</table>");
 
                     MailMessage Msg = new MailMessage();
-                    Msg.From = new MailAddress("info@blueocktopus.in");
+                    Msg.From = new MailAddress("blueocktopus2015@gmail.com");
                     Msg.To.Add("ashlesha@blueocktopus.in");
                     Msg.Subject = "New Enquiry";
                     Msg.Body = str.ToString();
                     Msg.IsBodyHtml = true;
-                    SmtpClient smtp = new SmtpClient("smtp.zoho.com");
+                    SmtpClient smtp = new SmtpClient("smtp.gmail.com");
                     smtp.EnableSsl = true;
                     smtp.Port = 587;
-                    smtp.Credentials = new System.Net.NetworkCredential("info@blueocktopus.in", "Info@123");
+                    smtp.Credentials = new System.Net.NetworkCredential("blueocktopus2015@gmail.com", "blueocktopus$");
                     smtp.Send(Msg);
                     Msg.Dispose();
                
@@ -1021,6 +1021,97 @@ namespace BotsMobileAPI.Controllers
             }
             return "Invalid Token or Expired";
         }
+
+        [HttpPost]
+        public HttpResponseMessage MobileAppEmail(string PageName,string mobileNo)
+        {
+            
+                try
+                {
+                    CustomerLoginDetail objcustlogin = new CustomerLoginDetail();
+                    using (var context = new CommonDBContext())
+                    {
+                        objcustlogin = context.CustomerLoginDetails.Where(x => x.LoginId == mobileNo).FirstOrDefault();
+
+                        // var result = "";                   
+                        // string To = emailto;
+                        using (MailMessage mail = new MailMessage())
+                        {
+
+                            StringBuilder str = new StringBuilder();
+                            str.Append("<table>");
+                            str.Append("<tr>");
+                            str.AppendLine("<td>Dear Sir,</td>");
+                            str.AppendLine("</br>");
+                            str.Append("</tr>");
+                            str.Append("<tr>");
+                            str.AppendLine("<td>Following customer is contacted us through Mobile App</td>");
+                            str.Append("<tr>");
+                            str.Append("<td>");
+                            str.Append("Name:" + objcustlogin.UserName);
+                            str.Append("</td>");
+                            str.Append("</tr>");
+                            str.Append("<tr>");
+                            str.Append("<td>");
+                            str.Append("Email Id:</br>" + objcustlogin.EmailId);
+                            str.Append("</td>");
+                            str.Append("</tr>");
+                            str.Append("<tr>");
+                            str.Append("<td>");
+                            str.Append("Mobile No:</br>" + mobileNo);
+                            str.Append("</td>");
+                            str.Append("</tr>");
+                            str.Append("<tr>");
+                            str.Append("<td>");
+                            str.Append("Subject:" + PageName);
+                            str.Append("</td>");
+                            str.Append("</tr>");
+                            str.Append("<tr>");
+                            str.Append("<td>");
+                            str.Append("Message:" + "Please contact the customer");
+                            str.Append("</td>");
+                            str.Append("</tr>");
+                            str.Append("<tr>");
+                            str.Append("<td>");
+                            str.Append("Regards,");
+                            str.Append("</td>");
+                            str.Append("</tr>");
+                            str.Append("<tr>");
+                            str.Append("<td>");
+                            str.Append("- Blue Ocktopus Team");
+                            str.Append("</td>");
+                            str.Append("</tr>");
+                            str.Append("</table>");
+
+                            MailMessage Msg = new MailMessage();
+                            Msg.From = new MailAddress("sblueocktopus@gmail.com");
+                            Msg.To.Add("ashlesha@blueocktopus.in");
+                            Msg.Subject = "Customer Enquiry-"+ PageName;
+                            Msg.Body = str.ToString();
+                            Msg.IsBodyHtml = true;
+                            SmtpClient smtp = new SmtpClient("smtp.gmail.com");
+                            smtp.EnableSsl = true;
+                            smtp.Port = 587;
+                            smtp.Credentials = new System.Net.NetworkCredential("sblueocktopus@gmail.com", "Ocktopus@2016");
+                            smtp.Send(Msg);
+                            Msg.Dispose();
+
+                        }
+
+                        var message = Request.CreateResponse(HttpStatusCode.Created, "Email send Sucessfully");
+
+                        return message;
+                    }
+
+                }
+                catch (Exception ex)
+                {
+                    return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ex);
+                }
+
+            
+        }
+
 
     }
 }

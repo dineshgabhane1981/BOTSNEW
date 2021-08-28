@@ -643,7 +643,7 @@
         item["Gender"] = ($("#ddlGender").prop('selectedIndex') !== 0) ? $('#ddlGender :selected').val() : 0;
 
         item["Age-min"] = ($("#ddlAge").prop('selectedIndex') == 1) ? $('#txtAgemin').val() : 0;
-        item["Age-max"] = ($("#ddlAge").prop('selectedIndex') == 2) ? $('#txtAgemin').val() : 0;
+        item["Age-max"] = ($("#ddlAge").prop('selectedIndex') == 2) ? $('#txtAgemax').val() : 0;
          if ($("#ddlAge").prop('selectedIndex') == 3) {
              item["Age-max"] = $('#txtAgemax').val();
              item["Age-min"] = $('#txtAgemin').val();
@@ -670,14 +670,14 @@
             item["Spend-max"] = ($("#ddlSpend").prop('selectedIndex') == 3) ? $('#txtspendmax').val() : 0;
 
         item["txncount-min"] = ($("#ddltxncount").prop('selectedIndex') == 1) ? $('#txttxncountmin').val() : 0;
-        item["txncount-max"] = ($("#ddltxncount").prop('selectedIndex') == 2) ? $('#txttxncountmin').val() : 0;
+        item["txncount-max"] = ($("#ddltxncount").prop('selectedIndex') == 2) ? $('#txttxncountmax').val() : 0;
         if ($("#ddltxncount").prop('selectedIndex') == 3) {
             item["txncount-max"] = $('#txttxncountmax').val();
             item["txncount-min"] = $('#txttxncountmin').val();
         }
 
         item["pointBaln-min"] = ($("#ddlPointsBalance").prop('selectedIndex') == 1) ? $('#txtPointsBalnmin').val() : 0;
-        item["pointBaln-max"] = ($("#ddlPointsBalance").prop('selectedIndex') == 2) ? $('#txtPointsBalnmin').val() : 0;
+        item["pointBaln-max"] = ($("#ddlPointsBalance").prop('selectedIndex') == 2) ? $('#txtPointsBalnmax').val() : 0;
         if ($("#ddlPointsBalance").prop('selectedIndex') == 3) {
             item["pointBaln-max"] = $('#txtPointsBalnmax').val();
             item["pointBaln-min"] = $('#txtPointsBalnmin').val();
