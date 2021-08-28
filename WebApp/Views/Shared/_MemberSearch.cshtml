@@ -167,7 +167,7 @@
                 </div>
             </div>
 
-            <div class="row" style="margin-left:0px !important;margin-right:0px !important; background-color:white;" id="dvActivityData">
+            <div class="row" style="margin-left: 0px !important; margin-right: 0px !important; background-color: white; padding: 15px;" id="dvActivityData">
                 <h5>Transaction Details</h5>
                 <div class="table-responsive">
                     <table class="table" id="memberSearchTable">
@@ -266,7 +266,7 @@
 <script>
     $(document).ready(function () {
         $('#memberSearchTable').DataTable({
-            "aaSorting": [],
+            "aaSorting": [[7, "asc"]],
             "paging": true,
             "ordering": true,
             "info": true,
