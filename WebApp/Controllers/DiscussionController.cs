@@ -72,5 +72,15 @@ namespace WebApp.Controllers
             var lstDiscussions = DR.GetDiscussions(groupId);
             return PartialView("_DiscussionList", lstDiscussions);
         }
+
+        [HttpPost]
+        public bool UpdateStatusAndDiscussion(string dId, string Desc, string Status)
+        {
+            bool status = false;
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            status = DR.UpdateDiscussions(dId, Desc, Status, userDetails.LoginId);
+
+            return status;
+        }
     }
 }

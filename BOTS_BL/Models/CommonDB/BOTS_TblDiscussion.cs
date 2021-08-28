@@ -31,6 +31,9 @@ namespace BOTS_BL.Models.CommonDB
         [StringLength(50)]
         public string SubCallType { get; set; }
 
+        [StringLength(50)]
+        public string Status { get; set; }
+
         [Column(TypeName = "date")]
         public DateTime? FollowupDate { get; set; }
 
@@ -47,16 +50,22 @@ namespace BOTS_BL.Models.CommonDB
         [NotMapped]
         public string GroupName { get; set; }
     }
+
+
     public class DiscussionDetails
     {
+        public int Id { get; set; }
         public DateTime AddedDate { get; set; }
         public string SpokenTo { get; set; }
         public string ContactNo { get; set; }
         public string CallType { get; set; }
+        public string Status { get; set; }
         public DateTime? FollowupDate { get; set; }
         public string CallMode { get; set; }
         public string Description { get; set; }
         public string ActionItems { get; set; }
-        public string AddedBy { get; set; }
+        public string AddedBy { get; set; }       
+        
     }
+
 }

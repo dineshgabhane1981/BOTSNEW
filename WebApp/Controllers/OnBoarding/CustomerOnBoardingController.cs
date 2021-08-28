@@ -39,6 +39,7 @@ namespace WebApp.Controllers.OnBoarding
                 objData.lstBillingPartner = CR.GetBillingPartner();
                 objData.lstSourcedBy = CR.GetSourcedBy();
                 objData.lstRMAssigned = CR.GetRMAssigned();
+                objData.lstRefferedCategory = CR.GetAllRefferedCategory();
                 List<SelectListItem> refferedname = new List<SelectListItem>();
                 SelectListItem item = new SelectListItem();
                 item.Value = "0";
@@ -83,6 +84,7 @@ namespace WebApp.Controllers.OnBoarding
                 objData.lstBillingPartner = CR.GetBillingPartner();
                 objData.lstSourcedBy = CR.GetSourcedBy();
                 objData.lstRMAssigned = CR.GetRMAssigned();
+                objData.lstRefferedCategory = CR.GetAllRefferedCategory();
 
                 JavaScriptSerializer json_serializer = new JavaScriptSerializer();
                 json_serializer.MaxJsonLength = int.MaxValue;

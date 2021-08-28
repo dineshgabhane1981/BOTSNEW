@@ -1,6 +1,50 @@
 ﻿@model List<BOTS_BL.Models.CommonDB.DiscussionDetails>
 
+<style>
+    /* The Modal (background) */
+    .modal {
+        display: none; /* Hidden by default */
+        position: fixed; /* Stay in place */
+        z-index: 5000 !important; /* Sit on top */
+        padding-top: 100px; /* Location of the box */
+        left: 120px;
+        top: 0;
+        width: 100%; /* Full width */
+        height: 100%; /* Full height */
+        overflow: auto; /* Enable scroll if needed */
+        background-color: rgb(0,0,0); /* Fallback color */
+        background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+    }
 
+    /* Modal Content */
+    .modal-content {
+        background-color: #fefefe;
+        margin: auto;
+        padding: 20px;
+        border: 1px solid #888;
+        width: 70%;
+        border-radius: 25px;
+    }
+
+    /* The Close Button */
+    .close {
+        color: #aaaaaa;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+    }
+
+        .close:hover,
+        .close:focus {
+            color: #000;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+    input:read-only {
+        background-color: lightgray;
+    }
+</style>
 <div class="row mb-3 card">
     <div class="container-fluid pt-3 pl-3 pr-3">
         <div class="pt-3 pl-3 pr-3 col-md-12 col-lg-12">
@@ -21,15 +65,16 @@
                                 <th scope="col">Call Type</th>
                                 <th scope="col">FollowUp Date</th>
                                 <th scope="col">Call Mode</th>
+                                <th scope="col">Status</th>
                                 <th scope="col">Description</th>
                                 <th scope="col">Action Item</th>
                                 <th scope="col">Raised By</th>
+                                <th scope="col">Action</th>
                             </tr>
                         </thead>
                         <tbody>
                             @if (Model != null)
                             {
-
                                 foreach (var item in Model)
                                 {
                                     var followupdate = "--";
@@ -37,17 +82,57 @@
                                     {
                                         followupdate = item.FollowupDate.Value.ToString("MM/dd/yyyy");
                                     }
-                            <tr>
-                                <td>@item.AddedDate</td>
-                                <td>@item.SpokenTo</td>
-                                <td>@item.ContactNo</td>
-                                <td>@item.CallType</td>
-                                <td>@followupdate</td>
-                                <td>@item.CallMode</td>
-                                <td>@item.Description</td>
-                                <td>@item.ActionItems</td>
-                                <td>@item.AddedBy</td>
-                            </tr>
+                                    <tr>
+                                        <td>@item.AddedDate</td>
+                                        <td>@item.SpokenTo</td>
+                                        <td>@item.ContactNo</td>
+                                        <td>@item.CallType</td>
+                                        @if (followupdate == "--")
+                                        {
+                                            <td style="text-align:center;">--</td>
+                                        }
+                                        else
+                                        {
+                                            <td>@followupdate</td>
+                                        }
+                                        <td>@item.CallMode</td>
+                                        @if (item.Status == "Completed")
+                                        {
+                                            <td style="background-color:lightgreen;">@item.Status</td>
+                                        }
+                                        else if (item.Status == "WIP")
+                                        {
+                                            if (item.AddedDate <= DateTime.Now.AddDays(-3))
+                                            {
+                                                <td style="background-color:red;">@item.Status</td>
+                                            }
+                                            else
+                                            {
+                                                <td style="background-color:orange;">@item.Status</td>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <td style="text-align:center;">--</td>
+                                        }
+                                        <td>@item.Description</td>
+                                        <td>@item.ActionItems</td>
+                                        <td>@item.AddedBy</td>
+
+                                        @if (item.Status != "Completed")
+                                        {
+                                            <td style="text-align:center;">
+                                                <a href="#" onclick="OpenStatusPopup(@item.Id);">
+                                                    <img src="~/Content/assets/images/task.png" width="35" />
+                                                </a>
+                                            </td>
+                                        }
+                                        else
+                                        {
+                                            <td style="text-align:center;">--</td>
+                                        }
+
+                                    </tr>
                                 }
                             }
                             else
@@ -63,8 +148,37 @@
         </div>
     </div>
 </div>
-<script>
+<div id="myModal" class="modal">
+    <div class="modal-content">
+        <div class="row" style="margin: 0;">
+            <div style="float:left;text-align:right;width:100px;margin-top:10px;">
+                Description
+            </div>
+            <div class="col-sm-4" style="float:left;margin-top:10px;">
+                <textarea id="txtDesc" rows="5" cols="45" style="border-radius:10px;"></textarea>
+            </div>
+        </div>
+        <div class="row" style="margin: 0;">
+            <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
+                Status
+            </div>
+            <div class="col-sm-4" style="float:left;margin-top:10px;">
+                <select id="ddlPopupStatus" class="input100">
+                    <option value="WIP">WIP</option>
+                    <option value="Completed">Completed</option>
+                </select>
+            </div>
+        </div>
 
+        <div class="row justify-content-end pr-4" style="margin-top:20px;margin-right:465px;">
+            
+            <button type="button" id="btnUpdateStatus" class="btn btn-primary" style="margin-right:10px;"> Update</button>
+            <button type="button" id="btnPopupClose" class="btn btn-outline-primary cancel-btn"> Close</button>
+        </div>
+
+    </div>
+</div>
+<script>
     $(document).ready(function () {
         $('#discussionTable').DataTable({
             "aaSorting": [[0, "desc"]],
@@ -98,5 +212,18 @@
             var table1 = $('#discussionTable').DataTable();
             table1.draw();
         });
+
+        $('#btnPopupClose').on("click", function () {
+            $("#myModal").hide(1000);
+        });
+        $('#btnUpdateStatus').on("click", function () {
+            UpdateStatus();
+        });
     });
+
+    
+
+
+
+
 </script>

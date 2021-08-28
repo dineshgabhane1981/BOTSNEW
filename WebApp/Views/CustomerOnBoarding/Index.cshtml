@@ -221,7 +221,7 @@
                     </div>
                     <div class="row" style="margin: 0;">
                         <div style="float:left;text-align:right;width:100px;">
-                            No of Retail Categories
+                            No of Brands
                         </div>
                         <div class="col-sm-4" style="float:left;margin-top:10px;">
                             @Html.TextBoxFor(model => model.bots_TblGroupMaster.NoOfRetailCategory, new { @class = "input100", @id = "txtNoOfRetailCategory", tabindex = 11 })
@@ -230,8 +230,9 @@
                             Key Account
                         </div>
                         <div class="col-sm-4" style="float:left;margin-top:10px;" id="dvIsKeyAccount">
-                            @Html.RadioButtonFor(model => model.bots_TblGroupMaster.IsKeyAccount, true, new { @id = "IsKeyAccountYes" }) Yes
-                            @Html.RadioButtonFor(model => model.bots_TblGroupMaster.IsKeyAccount, false, new { @id = "IsKeyAccountNo" }) No
+                            @Html.RadioButtonFor(model => model.bots_TblGroupMaster.IsKeyAccount, "1", new { @id = "IsKeyAccount1" }) A
+                            @Html.RadioButtonFor(model => model.bots_TblGroupMaster.IsKeyAccount, "2", new { @id = "IsKeyAccount2" }) B
+                            @Html.RadioButtonFor(model => model.bots_TblGroupMaster.IsKeyAccount, "3", new { @id = "IsKeyAccount3" }) C
                         </div>
                     </div>
 
@@ -246,7 +247,7 @@
                             <span>Billing Product </span><br /><br />
                         </div>
                         <div class="col-sm-2" style="float:left;margin-top:10px;" id="dvCategory1">
-                            <span style="padding-left:10px;font-weight:bold;">Category 1</span>
+                            <span style="padding-left:10px;font-weight:bold;">Brand 1</span>
                             <br />
                             @Html.DropDownListFor(model => model.bots_TblRetailMaster.CategoryId, new SelectList(Model.lstRetailCategory, "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input40", @id = "ddlCategory1" })
                             @Html.TextBoxFor(model => model.bots_TblRetailMaster.BrandName, new { @class = "input40", @id = "txtBrandName1" })
@@ -258,7 +259,7 @@
                             @Html.DropDownListFor(model => model.bots_TblRetailMaster.BOProduct, new SelectList(Model.lstAllGroups, "Value", "Text"), htmlAttributes: new { @class = "input40", @id = "ddlBPProduct1" })
                         </div>
                         <div class="col-sm-2" style="float:left;margin-top:10px;" id="dvCategory2">
-                            <span style="padding-left: 10px; font-weight: bold;">Category 2</span>
+                            <span style="padding-left: 10px; font-weight: bold;">Brand 2</span>
                             <br />
                             @Html.DropDownListFor(model => model.bots_TblRetailMaster.CategoryId, new SelectList(Model.lstRetailCategory, "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input40", @id = "ddlCategory2" })
                             @Html.TextBoxFor(model => model.bots_TblRetailMaster.BrandName, new { @class = "input40", @id = "txtBrandName2" })
@@ -269,7 +270,7 @@
                             @Html.DropDownListFor(model => model.bots_TblRetailMaster.BOProduct, new SelectList(Model.lstAllGroups, "Value", "Text"), htmlAttributes: new { @class = "input40", @id = "ddlBPProduct2" })
                         </div>
                         <div class="col-sm-2" style="float:left;margin-top:10px;" id="dvCategory3">
-                            <span style="padding-left: 10px; font-weight: bold;">Category 3</span>
+                            <span style="padding-left: 10px; font-weight: bold;">Brand 3</span>
                             <br />
                             @Html.DropDownListFor(model => model.bots_TblRetailMaster.CategoryId, new SelectList(Model.lstRetailCategory, "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input40", @id = "ddlCategory3" })
                             @Html.TextBoxFor(model => model.bots_TblRetailMaster.BrandName, new { @class = "input40", @id = "txtBrandName3" })
@@ -280,7 +281,7 @@
                             @Html.DropDownListFor(model => model.bots_TblRetailMaster.BOProduct, new SelectList(Model.lstAllGroups, "Value", "Text"), htmlAttributes: new { @class = "input40", @id = "ddlBPProduct3" })
                         </div>
                         <div class="col-sm-2" style="float:left;margin-top:10px;" id="dvCategory4">
-                            <span style="padding-left: 10px; font-weight: bold;">Category 4</span>
+                            <span style="padding-left: 10px; font-weight: bold;">Brand 4</span>
                             <br />
                             @Html.DropDownListFor(model => model.bots_TblRetailMaster.CategoryId, new SelectList(Model.lstRetailCategory, "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input40", @id = "ddlCategory4" })
                             @Html.TextBoxFor(model => model.bots_TblRetailMaster.BrandName, new { @class = "input40", @id = "txtBrandName4" })
@@ -377,7 +378,7 @@
                             Source Type
                         </div>
                         <div class="col-sm-4" style="float:left;margin-top:10px;">
-                            @Html.DropDownListFor(model => model.bots_TblGroupMaster.Referredby, new SelectList(Model.RefferedCategory(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input100", @id = "ddlReferredby" })
+                            @Html.DropDownListFor(model => model.bots_TblGroupMaster.Referredby, new SelectList(Model.lstRefferedCategory, "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input100", @id = "ddlReferredby" })
                         </div>
                         <div style="float: left; text-align: right; width: 115px; margin-top: 10px;">
                             Referred Name
@@ -618,10 +619,9 @@
                 <button type="submit" id="btnCustomerSave" class="btn btn-primary pull-right" onclick="return CheckValidation();" style="margin-right:10px;">Save</button>
 
             </div>
+        
         </div>
     </div>
-
-
 
 }
 <script>
@@ -849,10 +849,13 @@
                 $("#txtNoOfPaidWhatsAppMsg").attr("readonly", false);
             }
         });
-        $('#IsKeyAccountYes').on('change', function () {
+        $('#IsKeyAccount1').on('change', function () {
             $('#dvIsKeyAccount').css('border', '');
         });
-        $('#IsKeyAccountNo').on('change', function () {
+        $('#IsKeyAccount2').on('change', function () {
+            $('#dvIsKeyAccount').css('border', '');
+        });
+        $('#IsKeyAccount3').on('change', function () {
             $('#dvIsKeyAccount').css('border', '');
         });
 
@@ -1511,7 +1514,7 @@
             returnStatus = false;
         }
 
-        if ($("#IsKeyAccountYes").is(":checked") || $("#IsKeyAccountNo").is(":checked")) {
+        if ($("#IsKeyAccount1").is(":checked") || $("#IsKeyAccount2").is(":checked") || $("#IsKeyAccount3").is(":checked")) {
 
         }
         else {
@@ -2275,6 +2278,7 @@
             $("#ddlReferredName").append($("<option />").val(0).text("Please Select"));
             }
     }
+      
 
 </script>
 

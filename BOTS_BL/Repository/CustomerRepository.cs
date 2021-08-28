@@ -130,6 +130,25 @@ namespace BOTS_BL.Repository
             return lstAllFroup;
         }
 
+        public List<SelectListItem> GetAllRefferedCategory()
+        {
+            List<SelectListItem> lstAllRefferedCategory = new List<SelectListItem>();
+            using (var context = new CommonDBContext())
+            {
+                var SourceTypes = context.tblSourceTypes.ToList();
+
+                foreach (var item in SourceTypes)
+                {
+                    lstAllRefferedCategory.Add(new SelectListItem
+                    {
+                        Text = item.SourceTypeName,
+                        Value = Convert.ToString(item.SourceTypeId)
+                    });
+                }
+            }
+            return lstAllRefferedCategory;
+        }
+
         public List<CustomerListing> GetAllCustomer()
         {
             List<CustomerListing> objGroupList = new List<CustomerListing>();

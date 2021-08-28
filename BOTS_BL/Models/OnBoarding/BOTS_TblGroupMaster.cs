@@ -39,6 +39,9 @@ namespace BOTS_BL.Models
         [StringLength(100)]
         public string City { get; set; }
 
+        [StringLength(100)]
+        public string State { get; set; }
+
         [StringLength(50)]
         public string AlternateMobileNo { get; set; }
 
@@ -60,6 +63,7 @@ namespace BOTS_BL.Models
 
         public string NoOfPaidSMS { get; set; }
 
+        [StringLength(50)]
         public string IsMobileApp { get; set; }
 
         [Column(TypeName = "text")]
@@ -103,10 +107,13 @@ namespace BOTS_BL.Models
         [StringLength(50)]
         public string CreatedBy { get; set; }
 
-        public bool IsKeyAccount { get; set; }
+        public int IsKeyAccount { get; set; }
 
         [StringLength(50)]
         public string CustomerStatus { get; set; }
+
+        [StringLength(150)]
+        public string Constitution { get; set; }
 
         [NotMapped]
         public HttpPostedFileBase GSTDocumentFile { get; set; }
@@ -116,6 +123,5 @@ namespace BOTS_BL.Models
         public string CategoryData { get; set; }
         [NotMapped]
         public string PaymentScheduleData { get; set; }
-
     }
 }
