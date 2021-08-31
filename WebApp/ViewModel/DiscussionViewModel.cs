@@ -20,5 +20,9 @@ namespace WebApp.ViewModel
         {
             return new SelectListItem[2] { new SelectListItem() { Text = "Phone", Value = "Phone" }, new SelectListItem() { Text = "Zoom", Value = "Zoom" } };
         }
+        public SelectListItem[] Status()
+        {
+            return new SelectListItem[2] { new SelectListItem() { Text = "Completed", Value = "Completed" }, new SelectListItem() { Text = "WIP", Value = "WIP" } };
+        }
     }
 }

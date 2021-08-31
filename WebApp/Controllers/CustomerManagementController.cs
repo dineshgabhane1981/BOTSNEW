@@ -210,5 +210,16 @@ namespace WebApp.Controllers
             }
             return Json(objData, JsonRequestBehavior.AllowGet);
         }
+    
+        public ActionResult GetCustomerDetails(string groupId)
+        {             
+            var objData = OBR.GetOnBoardingCustomerDetails(groupId);
+
+            return Json(objData, JsonRequestBehavior.AllowGet);
+        }
+
+
+
+
     }
 }

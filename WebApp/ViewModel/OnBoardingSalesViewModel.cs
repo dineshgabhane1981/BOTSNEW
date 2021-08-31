@@ -22,6 +22,7 @@ namespace WebApp.ViewModel
         public List<SelectListItem> lstRMAssigned { get; set; }
         public List<SelectListItem> lstBillingPartner { get; set; }
         public List<SelectListItem> lstAllGroups { get; set; }
+        public List<SelectListItem> lstRefferedCategory { get; set; }
         public SelectListItem[] BOProducts()
         {
             return new SelectListItem[2] { new SelectListItem() { Text = "Octa Plus", Value = "1" }, new SelectListItem() { Text = "Octa XS", Value = "2" } };
@@ -49,6 +50,10 @@ namespace WebApp.ViewModel
         public SelectListItem[] PaymentStatus()
         {
             return new SelectListItem[2] { new SelectListItem() { Text = "Cleared", Value = "Cleared" }, new SelectListItem() { Text = "Pending", Value = "Pending" } };
+        }
+        public SelectListItem[] ConstitutionType()
+        {
+            return new SelectListItem[3] { new SelectListItem() { Text = "Proprietary", Value = "Proprietary" }, new SelectListItem() { Text = "Partnership", Value = "Partnership" }, new SelectListItem() { Text = "Private Limited", Value = "Private Limited" } };
         }
     }
 }

@@ -293,7 +293,7 @@ namespace BOTS_BL.Repository
                         });
                     }
                 }
-                if (SourceType == "2")
+                if (SourceType == "3")
                 {
                     var BillingPartners = context.tblBillingPartners.ToList();
                     foreach (var item in BillingPartners)
@@ -340,10 +340,48 @@ namespace BOTS_BL.Repository
             using (var context = new CommonDBContext())
             {
                 var loginTypeList = new List<string> { "2", "3", "4" };
-                lstEmails = context.CustomerLoginDetails.Where(x => x.EmailId != null && !loginTypeList.Contains(x.LoginType)).Select(y => y.EmailId).ToList();
+                lstEmails = context.CustomerLoginDetails.Where(x => x.EmailId != null && x.LoginType !=null && !loginTypeList.Contains(x.LoginType)).Select(y => y.EmailId).ToList();
             }
 
             return lstEmails;
+        }
+
+        public OnBoardingCustomerDetails GetOnBoardingCustomerDetails(string groupId)
+        {
+            OnBoardingCustomerDetails objData = new OnBoardingCustomerDetails();
+            using (var context = new CommonDBContext())
+            {
+                var GroupDetails = context.BOTS_TblGroupMaster.Where(x => x.GroupId == groupId).FirstOrDefault();
+                objData.GroupId = GroupDetails.GroupId;
+                objData.GroupName = GroupDetails.GroupName;
+                objData.OwnerMobileNo = GroupDetails.OwnerMobileNo;
+                objData.OwnerEmailId = GroupDetails.OwnerEmailId;
+                objData.City = GroupDetails.City;
+                objData.AlternateMobileNo = GroupDetails.AlternateMobileNo;
+                objData.AlternateEmailId = GroupDetails.AlternateEmailId;
+                objData.NoOfRetailCategory = GroupDetails.NoOfRetailCategory;
+                objData.IsMWP = GroupDetails.IsMWP;
+                objData.IsWhatsApp = GroupDetails.IsWhatsApp;
+                objData.NoOfFreeWhatsAppMsg = GroupDetails.NoOfFreeWhatsAppMsg;
+                objData.NoOfFreeSMS = GroupDetails.NoOfFreeSMS;
+                objData.NoOfPaidWhatsAppMsg = GroupDetails.NoOfPaidWhatsAppMsg;
+                objData.NoOfPaidSMS = GroupDetails.NoOfPaidSMS;
+                objData.IsMobileApp = GroupDetails.IsMobileApp;
+                objData.SourcedBy = GroupDetails.SourcedBy;
+                objData.AssignedCS = GroupDetails.AssignedCS;
+                objData.Comments = GroupDetails.Comments;
+                objData.Referredby = GroupDetails.Referredby;
+                objData.ReferredName = GroupDetails.ReferredName;
+                objData.OtherFees = GroupDetails.OtherFees;
+                objData.OtherFeesDescription = GroupDetails.OtherFeesDescription;
+                objData.IsKeyAccount = GroupDetails.IsKeyAccount;
+                objData.CreatedDate = GroupDetails.CreatedDate;
+                objData.CreatedBy = GroupDetails.CreatedBy;
+                objData.GSTDocument = GroupDetails.GSTDocument;
+                objData.PANDocument = GroupDetails.PANDocument;
+
+            }
+            return objData;
         }
 
     }

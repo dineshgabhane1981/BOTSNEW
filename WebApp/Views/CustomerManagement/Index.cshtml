@@ -6,7 +6,51 @@
     var userDetails = (CustomerLoginDetail)Session["UserSession"];
     var roleId = userDetails.LoginType;
 }
+<style>
+    /* The Modal (background) */
+    .modal {
+        display: none; /* Hidden by default */
+        position: fixed; /* Stay in place */
+        z-index: 5000 !important; /* Sit on top */
+        padding-top: 100px; /* Location of the box */
+        left: 120px;
+        top: 0;
+        width: 100%; /* Full width */
+        height: 100%; /* Full height */
+        overflow: auto; /* Enable scroll if needed */
+        background-color: rgb(0,0,0); /* Fallback color */
+        background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+    }
 
+    /* Modal Content */
+    .modal-content {
+        background-color: #fefefe;
+        margin: auto;
+        padding: 20px;
+        border: 1px solid #888;
+        width: 70%;
+        border-radius: 25px;
+    }
+
+    /* The Close Button */
+    .close {
+        color: #aaaaaa;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+    }
+
+        .close:hover,
+        .close:focus {
+            color: #000;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+    input:read-only {
+        background-color: lightgray;
+    }
+</style>
 <div class="app-main__inner">
     <div class="row mb-3 card">
 
@@ -60,7 +104,7 @@
                                                         string GroupId = common.EncryptString(Convert.ToString(item.GroupId));
                                                         <tr>
                                                             <td>@item.GroupId</td>
-                                                            <td>@item.GroupName</td>
+                                                            <td><a href="#" onclick="ShowCustomerDetails(@item.GroupId);">@item.GroupName</a></td>
                                                             <td>@item.OwnerMobileNo</td>
                                                             <td>@item.City</td>
                                                             <td>@item.BillingPartnerName</td>
@@ -160,56 +204,23 @@
 
 
 </div>
+<div id="myModal" class="modal">
+    <div class="modal-content">
+        sdfsdf
+        <div class="row justify-content-end pr-4" style="margin-top:20px;">
 
+            <button type="button" id="btnPopupClose" class="btn btn-outline-primary cancel-btn"> Close</button>
+        </div>
+
+    </div>
+</div>
 <script>
 
     $(document).ready(function () {
 
-        //$.ajax({
-        //    url: "https://blueocktopus.in/MobileNewAPI/api/bots/GetToken?username=123&password=123",
-        //    method: "GET",      // The HTTP method to use for the request
-        //    contentType: "application/json; charset=utf-8",
-        //    dataType: "json", // The type of data that you're exerciseecting back
-
-        //    error: function () {
-
-        //        // A function to be called if the request fails.
-        //    },
-
-        //    success: function (response) {
-        //        console.log(response.data[0]);
-
-        //        $.ajax({
-        //            url: "https://blueocktopus.in/MobileNewAPI/api/bots/GetOutletList?GroupId=1051",
-        //            method: "GET",      // The HTTP method to use for the request
-        //            contentType: "application/json; charset=utf-8",
-        //            dataType: "json", // The type of data that you're exerciseecting back
-        //            Authorization: 'Bearer ' + response.data[0],
-        //            error: function () {
-        //                alert(111)
-        //                // A function to be called if the request fails.
-        //            },
-
-        //            success: function (response) {
-        //                alert(222)
-        //                console.log(response);
-
-        //                // A function to be called if the request succeeds.
-        //            },
-        //            complete: function (response) {
-        //                alert(333)
-        //                // A function to be called when the request finishes
-        //            }
-        //        });
-
-        //        // A function to be called if the request succeeds.
-        //    },
-        //    complete: function (response) {
-
-        //        // A function to be called when the request finishes
-        //    }
-        //});
-
+        $('#btnPopupClose').on("click", function () {
+            $("#myModal").hide(1000);
+        });
 
         $('#groupListTable').DataTable({
             "aaSorting": [[0, "asc"]],
@@ -279,5 +290,24 @@
     });
     function ShowHideOnboarding() {
         $("#dvOnboarding").toggle(1000);
+    }
+
+    function ShowCustomerDetails(groupId) {
+
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("GetCustomerDetails", "CustomerManagement")',
+                    data: '{groupId: ' + JSON.stringify(groupId) + '}',
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (result) {
+                        console.log(result)
+                    },
+                    error: function (result) {
+                        //console.log(result.responseText);
+                    }
+                });
+
+        $("#myModal").show(1000);
     }
 </script>

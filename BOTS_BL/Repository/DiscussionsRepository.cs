@@ -32,6 +32,7 @@ namespace BOTS_BL.Repository
                                where c.GroupId == GroupId
                                select new DiscussionDetails
                                {
+                                   Id=c.Id,
                                    AddedDate = c.AddedDate,
                                    SpokenTo = c.SpokenTo,
                                    ContactNo = c.ContactNo,
@@ -40,8 +41,8 @@ namespace BOTS_BL.Repository
                                    CallMode = c.CallMode,
                                    Description = c.Description,
                                    ActionItems = c.ActionItems,
-                                   AddedBy = cld.UserName
-
+                                   AddedBy = cld.UserName,
+                                   Status = c.Status
                                }).OrderByDescending(x => x.AddedDate).ToList();
                 }
             }
@@ -61,6 +62,36 @@ namespace BOTS_BL.Repository
                 {
                     context.BOTS_TblDiscussion.AddOrUpdate(objDiscussion);
                     context.SaveChanges();
+                    status = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, objDiscussion.GroupId);
+            }
+
+            return status;
+        }
+
+        public bool UpdateDiscussions(string id,string Desc,string Status,string LoginId)
+        {
+            BOTS_TblDiscussion objDiscussion = new BOTS_TblDiscussion();
+            bool status = false;
+            try
+            {
+                using (var context = new CommonDBContext())
+                {
+                    int discussionId = Convert.ToInt32(id);
+                    objDiscussion = context.BOTS_TblDiscussion.Where(x => x.Id == discussionId).FirstOrDefault();
+                    objDiscussion.Status = Status;
+                    objDiscussion.AddedBy = LoginId;
+                    if (!string.IsNullOrEmpty(Desc))
+                    {
+                        objDiscussion.Description = objDiscussion.Description + ", " + Desc;
+                    }
+                    context.BOTS_TblDiscussion.AddOrUpdate(objDiscussion);
+                    context.SaveChanges();
+
                     status = true;
                 }
             }
