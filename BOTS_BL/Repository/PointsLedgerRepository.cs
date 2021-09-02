@@ -169,7 +169,7 @@ namespace BOTS_BL.Repository
                 List<TransactionMaster> tgtTransactionSale = new List<TransactionMaster>();
                 if (isBTD == "1")
                 {
-                    tgtTransactionSale = context.TransactionMasters.Where(x => x.CustomerId == CustomerId && x.TxnType == "Sale" && x.SubType== "Invoice").ToList();
+                    tgtTransactionSale = context.TransactionMasters.Where(x => x.CustomerId == CustomerId && x.TxnType == "Sale" && x.SubType == "Invoice").ToList();
                 }
                 else
                 {
@@ -255,8 +255,8 @@ namespace BOTS_BL.Repository
                         foreach (var item in ObjInvoiceLst)
                         {
                             PointLedgerModel objPointLedger = new PointLedgerModel();
-                            var objTransaction = context.TransactionMasters.Where(x => x.OrderNo == item.OrderNo && ((x.TxnType == "Purchase" && x.SubType == "Order") 
-                            || (x.TxnType == "Cancel" && x.SubType == "Cancel") || (x.TxnType == "Modified" && x.SubType == "Re-order") 
+                            var objTransaction = context.TransactionMasters.Where(x => x.OrderNo == item.OrderNo && ((x.TxnType == "Purchase" && x.SubType == "Order")
+                            || (x.TxnType == "Cancel" && x.SubType == "Cancel") || (x.TxnType == "Modified" && x.SubType == "Re-order")
                             || (x.TxnType == "Bal-order" && x.SubType == "Bal-order") || (x.TxnType == "Sale" && x.SubType == "Invoice"))).FirstOrDefault();
                             if (objTransaction != null)
                             {
@@ -380,14 +380,22 @@ namespace BOTS_BL.Repository
                     var year = Convert.ToInt32(YearVal);
                     objTgtvsAchMaster = context.TgtvsAchMasters.Where(x => x.CustomerId == CustomerId && x.ProductType == "Over All"
                     && x.Date.Value.Month == month && x.Date.Value.Year == year).FirstOrDefault();
-                    if(DateTime.Now.Month == month && DateTime.Now.Year== year && objTgtvsAchMaster != null)
+                    if (DateTime.Now.Month == month && DateTime.Now.Year == year && objTgtvsAchMaster != null)
                     {
                         objTgtvsAchMaster.ValuePoints = null;
                         objTgtvsAchMaster.VolumePoints = null;
                     }
                 }
             }
-
+            if (objTgtvsAchMaster != null)
+            {
+                objTgtvsAchMaster.VolFocusStr = String.Format(new CultureInfo("en-IN", false), "{0:n}", Convert.ToDecimal(objTgtvsAchMaster.VolumeTgt));
+                objTgtvsAchMaster.VolAchStr = String.Format(new CultureInfo("en-IN", false), "{0:n}", Convert.ToDecimal(objTgtvsAchMaster.VolumeAch));
+                objTgtvsAchMaster.VolPtsStr = String.Format(new CultureInfo("en-IN", false), "{0:n}", Convert.ToDecimal(objTgtvsAchMaster.VolumePoints));
+                objTgtvsAchMaster.ValFocusStr = String.Format(new CultureInfo("en-IN", false), "{0:n}", Convert.ToDecimal(objTgtvsAchMaster.ValueTgt));
+                objTgtvsAchMaster.ValAchStr = String.Format(new CultureInfo("en-IN", false), "{0:n}", Convert.ToDecimal(objTgtvsAchMaster.ValueAch));
+                objTgtvsAchMaster.ValPtsStr = String.Format(new CultureInfo("en-IN", false), "{0:n}", Convert.ToDecimal(objTgtvsAchMaster.ValuePoints));
+            }
             return objTgtvsAchMaster;
         }
         public List<TgtvsAchMaster> GetCategoryData(string CustomerId, string MonthVal, string YearVal)
@@ -421,7 +429,21 @@ namespace BOTS_BL.Repository
                     }
                 }
             }
-
+            if(objTgtvsAchMaster!=null)
+            {
+                if(objTgtvsAchMaster.Count>0)
+                {
+                    foreach(var item in objTgtvsAchMaster)
+                    {
+                        item.VolFocusStr = String.Format(new CultureInfo("en-IN", false), "{0:n}", Convert.ToDecimal(item.VolumeTgt));
+                        item.VolAchStr = String.Format(new CultureInfo("en-IN", false), "{0:n}", Convert.ToDecimal(item.VolumeAch));
+                        item.VolPtsStr = String.Format(new CultureInfo("en-IN", false), "{0:n}", Convert.ToDecimal(item.VolumePoints));
+                        item.ValFocusStr = String.Format(new CultureInfo("en-IN", false), "{0:n}", Convert.ToDecimal(item.ValueTgt));
+                        item.ValAchStr = String.Format(new CultureInfo("en-IN", false), "{0:n}", Convert.ToDecimal(item.ValueAch));
+                        item.ValPtsStr = String.Format(new CultureInfo("en-IN", false), "{0:n}", Convert.ToDecimal(item.ValuePoints));
+                    }
+                }
+            }
             return objTgtvsAchMaster;
         }
         public List<TgtvsAchMaster> GetSubCategoryData(string CustomerId, string MonthVal, string YearVal)
@@ -455,7 +477,21 @@ namespace BOTS_BL.Repository
                     }
                 }
             }
-
+            if (objTgtvsAchMaster != null)
+            {
+                if (objTgtvsAchMaster.Count > 0)
+                {
+                    foreach (var item in objTgtvsAchMaster)
+                    {
+                        item.VolFocusStr = String.Format(new CultureInfo("en-IN", false), "{0:n}", Convert.ToDecimal(item.VolumeTgt));
+                        item.VolAchStr = String.Format(new CultureInfo("en-IN", false), "{0:n}", Convert.ToDecimal(item.VolumeAch));
+                        item.VolPtsStr = String.Format(new CultureInfo("en-IN", false), "{0:n}", Convert.ToDecimal(item.VolumePoints));
+                        item.ValFocusStr = String.Format(new CultureInfo("en-IN", false), "{0:n}", Convert.ToDecimal(item.ValueTgt));
+                        item.ValAchStr = String.Format(new CultureInfo("en-IN", false), "{0:n}", Convert.ToDecimal(item.ValueAch));
+                        item.ValPtsStr = String.Format(new CultureInfo("en-IN", false), "{0:n}", Convert.ToDecimal(item.ValuePoints));
+                    }
+                }
+            }
             return objTgtvsAchMaster;
         }
 
@@ -490,7 +526,21 @@ namespace BOTS_BL.Repository
                     }
                 }
             }
-
+            if (objTgtvsAchMaster != null)
+            {
+                if (objTgtvsAchMaster.Count > 0)
+                {
+                    foreach (var item in objTgtvsAchMaster)
+                    {
+                        item.VolFocusStr = String.Format(new CultureInfo("en-IN", false), "{0:n}", Convert.ToDecimal(item.VolumeTgt));
+                        item.VolAchStr = String.Format(new CultureInfo("en-IN", false), "{0:n}", Convert.ToDecimal(item.VolumeAch));
+                        item.VolPtsStr = String.Format(new CultureInfo("en-IN", false), "{0:n}", Convert.ToDecimal(item.VolumePoints));
+                        item.ValFocusStr = String.Format(new CultureInfo("en-IN", false), "{0:n}", Convert.ToDecimal(item.ValueTgt));
+                        item.ValAchStr = String.Format(new CultureInfo("en-IN", false), "{0:n}", Convert.ToDecimal(item.ValueAch));
+                        item.ValPtsStr = String.Format(new CultureInfo("en-IN", false), "{0:n}", Convert.ToDecimal(item.ValuePoints));
+                    }
+                }
+            }
             return objTgtvsAchMaster;
         }
 
