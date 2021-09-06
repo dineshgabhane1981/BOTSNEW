@@ -1,0 +1,300 @@
+﻿@model BOTS_BL.Models.CommonDB.Tbl_SinglePageSummaryTable
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+
+    body {
+        background: #CDDC39;
+        font-family: 'Arimo', sans-serif;
+    }
+
+    h2 {
+        color: #000;
+        text-align: center;
+        font-size: 2em;
+    }
+
+    .warpper {
+        display: grid;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .tab {
+        cursor: pointer;
+        padding: 10px 20px;
+        margin: 0px 2px;
+        background-color: #2f4353 !important;
+        display: inline-block;
+        color: #fff;
+        border-radius: 3px 3px 0px 0px;
+        box-shadow: 0 0.5rem 0.8rem #00000080;
+    }
+
+    .tabs {
+        padding-left: 25px;
+    }
+
+    .panels {
+        background: #ffffff;
+        box-shadow: 0 2rem 2rem #00000080;
+        width: 100%;
+        border-radius: 3px;
+        overflow: hidden;
+    }
+
+    .panel {
+        display: none;
+        animation: fadein .8s;
+    }
+
+    .panel-title {
+        font-size: 1.5em;
+        font-weight: bold
+    }
+
+    .radio {
+        display: none;
+    }
+
+    #one:checked ~ .panels #one-panel,
+    #two:checked ~ .panels #two-panel,
+    #three:checked ~ .panels #three-panel,
+    #four:checked ~ .panels #four-panel,
+    #five:checked ~ .panels #five-panel {
+        display: block
+    }
+
+    #one:checked ~ .tabs #one-tab,
+    #two:checked ~ .tabs #two-tab,
+    #three:checked ~ .tabs #three-tab,
+    #four:checked ~ .tabs #four-tab,
+    #five:checked ~ .tabs #five-tab {
+        background: #fff !important;
+        color: #000;
+        border-top: 3px solid #fff;
+        border-left: 3px solid #fff;
+        border-right: 3px solid #fff;
+        font-weight: bold;
+        border-top-left-radius: 7px;
+        border-top-right-radius: 7px;
+    }
+</style>
+<div class="app-main__inner">
+    <div class="row mb-3 pt-3 pl-3 pr-3 card">
+        @*<div class="warpper">*@
+            <input class="radio" id="one" name="group" type="radio" checked>
+            <input class="radio" id="two" name="group" type="radio">
+            <input class="radio" id="three" name="group" type="radio">
+            <input class="radio" id="four" name="group" type="radio">
+            <input class="radio" id="five" name="group" type="radio">
+            <div class="tabs">
+                <label class="tab" id="one-tab" for="one">Non-Transacting Group</label>
+                <label class="tab" id="two-tab" for="two">Communication</label>
+                <label class="tab" id="three-tab" for="three">Key Indicator</label>
+                <label class="tab" id="four-tab" for="four">CityWiseGroup</label>
+
+            </div>
+            <div class="panels">
+                <div class="multisteps-form__panel shadow p-4 m-4 list-box bg-white panel" id="one-panel">
+                    <div class="row mb-5 ml-2">
+                        <table border="1">
+                            <tr>
+                                <th scope="col" style="text-align:left;">Sr No</th>
+                                <th scope="col" style="text-align:left;">Group Name</th>                                
+                                <th scope="col" style="text-align:left;">Days Since Last Txn</th>
+                            </tr>
+                            <tbody>
+                                @{int indexnew = 1;}
+                                @if (ViewBag.NonTransactingGroup != null)
+                                {
+                                    if (ViewBag.NonTransactingGroup.Count > 0)
+                                    {
+                                        foreach (var item in ViewBag.NonTransactingGroup)
+                                        {
+                                            if (indexnew <= 5)
+                                            {
+                                            <tr>
+                                                <td>@indexnew</td>
+
+                                                <td style="text-align:left;">@item.GroupName</td>                                                
+                                                <td style="text-align:left;">@item.DaysSinceLastTxn</td>
+                                            </tr>
+                                            }
+                                            indexnew++;
+                                        }
+                                    }
+                                }
+                            </tbody>
+                        </table>
+                        <div>
+                            <table border="1">
+                                <thead></thead>
+                                <tbody>
+                                    <tr>
+                                        <td class="font-weight-bold">Total Enrolled Base</td>
+                                        <td>@Model.TotalEnrolledBase</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="font-weight-bold">Txn Count(Daily)</td>
+                                        <td>@Model.TxnCountDaily</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="font-weight-bold">Txn Count(MTD)</td>
+                                        <td>@Model.TxnCountMTD</td>
+                                    </tr>
+
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="mb-5 ml-3">
+                            <table border="1">
+                                <tr>
+                                    <th scope="col" style="text-align:left;">Sr No</th>
+                                    <th scope="col" style="text-align:left;">Group Name</th>
+                                    <th scope="col" style="text-align:left;">Last Txn Date</th>
+                                    <th scope="col" style="text-align:left;">Days Since Last Txn</th>
+                                </tr>
+                                <tbody>
+                                    @{int index = 1;}
+                                    @if (ViewBag.NonTransactingGroup != null)
+                                    {
+                                        if (ViewBag.NonTransactingGroup.Count > 0)
+                                        {
+                                            foreach (var item in ViewBag.NonTransactingGroup)
+                                            {
+
+                                                <tr>
+                                                    <td>@index</td>
+                                                    <td style="text-align:left;">@item.GroupName</td>
+                                                    <td style="text-align:left;">@item.LastTxnDate.ToString("yyyy/dd/MM")</td>
+                                                    <td style="text-align:left;">@item.DaysSinceLastTxn</td>
+                                                </tr>
+                                                index++;
+                                            }
+                                        }
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+
+                    <div class="row mb-5 ml-2">
+
+                        <div class="mb-5">
+                            <table border="1">
+                                <tr>
+                                    <th scope="col" style="text-align:left;">Sr No</th>
+                                    <th scope="col" style="text-align:left;">Group Name</th>
+                                    <th scope="col" style="text-align:left;">Outlet Name</th>
+                                    <th scope="col" style="text-align:right;">Avg Group Txns</th>
+                                    <th scope="col" style="text-align:left;">Last Txn Date</th>
+                                    <th scope="col" style="text-align:left;">Days Since Last Txn</th>
+
+                                </tr>
+                                <tbody>
+                                    @{int index1 = 1;}
+                                    @if (ViewBag.NonTransactingoutlet != null)
+                                    {
+                                        if (ViewBag.NonTransactingoutlet.Count > 0)
+                                        {
+                                            foreach (var item in ViewBag.NonTransactingoutlet)
+                                            {
+
+                                                <tr>
+                                                    <td>@index1</td>
+                                                    <td style="text-align:left;">@item.GroupName</td>
+                                                    <td style="text-align:left;">@item.OutletName</td>
+                                                    <td style="text-align:left;">@item.AvgGroupTxn</td>
+                                                    <td style="text-align:left;">@item.LastTxnDate.ToString("yyyy/dd/MM")</td>
+                                                    <td style="text-align:left;">@item.DaysSinceLastTxn</td>
+                                                </tr>
+                                                index1++;
+                                            }
+                                        }
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="mb-5">
+                            <table border="1">
+                                <tr>
+                                    <th scope="col" style="text-align:left;">Sr No</th>
+                                    <th scope="col" style="text-align:left;">Group Name</th>
+                                    <th scope="col" style="text-align:left;">Outlet Name</th>
+                                    <th scope="col" style="text-align:right;">Avg Txns</th>
+                                    <th scope="col" style="text-align:left;">Avg Group Txns/Avg 30 days</th>
+                                    <th scope="col" style="text-align:left;">Lower by %</th>
+
+                                </tr>
+                                <tbody>
+                                    @{int index2 = 1;}
+                                    @if (ViewBag.lowTransactingoutlet != null)
+                                    {
+                                        if (ViewBag.lowTransactingoutlet.Count > 0)
+                                        {
+                                            foreach (var item in ViewBag.lowTransactingoutlet)
+                                            {
+
+                                                <tr>
+                                                    <td>@index2</td>
+                                                    <td style="text-align:left;">@item.GroupName</td>
+                                                    <td style="text-align:left;">@item.OutletName</td>
+                                                    <td style="text-align:left;">@item.AvgTxn</td>
+                                                    <td style="text-align:left;">@item.AvgGroupTxnIn30Days</td>
+                                                    <td style="text-align:left;">@item.LowerByPercentage</td>
+                                                </tr>
+                                                index2++;
+                                            }
+                                        }
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="two-panel"class="multisteps-form__panel shadow p-4 m-4 list-box bg-white panel">
+                    <table border="1">
+                        <tr>
+                            <th scope="col" style="text-align:left;">Sr No</th>
+                            <th scope="col" style="text-align:left;">Group Name</th>
+                            <th scope="col" style="text-align:left;">Outlet Name</th>
+                            <th scope="col" style="text-align:left;">Low SMS Balance</th>
+                            <th scope="col" style="text-align:left;">Low Virtual SMS Balance</th>
+                            <th scope="col" style="text-align:left;">Low Whats App Balance</th>
+                            <th scope="col" style="text-align:left;">Whats App Expiry</th>
+                        </tr>
+                        <tbody>
+                            @{int indexcomm = 1;}
+                            @if (ViewBag.NonTransactingGroup != null)
+                            {
+                                if (ViewBag.NonTransactingGroup.Count > 0)
+                                {
+                                    foreach (var item in ViewBag.NonTransactingGroup)
+                                    {
+                                        
+                                            <tr>
+                                                <td>@indexcomm</td>
+
+                                                <td style="text-align:left;">@item.GroupName</td>
+                                                <td style="text-align:left;">@item.DaysSinceLastTxn</td>
+                                            </tr>
+                                        
+                                        indexcomm++;
+                                    }
+                                }
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            </div>
+        </div>
+@*</div>*@
+

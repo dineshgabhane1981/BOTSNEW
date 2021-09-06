@@ -193,6 +193,7 @@
     <Compile Include="Models\CommonDB\DailyWhatsAppSM.cs" />
     <Compile Include="Models\CommonDB\DashboardReport.cs" />
     <Compile Include="Models\CommonDB\DatabaseDetail.cs" />
+    <Compile Include="Models\CommonDB\ListOfGroup.cs" />
     <Compile Include="Models\CommonDB\MobileAppCommSecurityKey.cs" />
     <Compile Include="Models\CommonDB\MobileAppOnceInMonthData.cs" />
     <Compile Include="Models\CommonDB\MonthlyReport.cs" />
@@ -203,6 +204,7 @@
     <Compile Include="Models\CommonDB\ReferAndEarn.cs" />
     <Compile Include="Models\CommonDB\ReferralBonusSM.cs" />
     <Compile Include="Models\CommonDB\SMSGatewayMaster.cs" />
+    <Compile Include="Models\CommonDB\SMSWABalanceData.cs" />
     <Compile Include="Models\CommonDB\tblAudit.cs" />
     <Compile Include="Models\CommonDB\tblBillingPartner.cs" />
     <Compile Include="Models\CommonDB\tblCity.cs" />
@@ -212,6 +214,10 @@
     <Compile Include="Models\CommonDB\tblRMAssigned.cs" />
     <Compile Include="Models\CommonDB\tblSourcedBy.cs" />
     <Compile Include="Models\CommonDB\tblSourceType.cs" />
+    <Compile Include="Models\CommonDB\Tbl_SinglePageLowTransactingOutlet.cs" />
+    <Compile Include="Models\CommonDB\Tbl_SinglePageNonTransactingGroup.cs" />
+    <Compile Include="Models\CommonDB\Tbl_SinglePageNonTransactingOutlet.cs" />
+    <Compile Include="Models\CommonDB\Tbl_SinglePageSummaryTable.cs" />
     <Compile Include="Models\Dashboard\DashboardMemberSegment.cs" />
     <Compile Include="Models\DBContext.cs" />
     <Compile Include="Models\ExecutiveSummary.cs" />
@@ -278,6 +284,7 @@
     <Compile Include="Repository\PointsLedgerRepository.cs" />
     <Compile Include="Repository\RedemptionRepository.cs" />
     <Compile Include="Repository\ReportsRepository.cs" />
+    <Compile Include="Repository\SinglePageRepository.cs" />
     <Compile Include="Repository\TgtVsAchRepository.cs" />
   </ItemGroup>
   <ItemGroup>

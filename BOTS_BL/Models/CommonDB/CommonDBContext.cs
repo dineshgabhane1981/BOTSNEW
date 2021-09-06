@@ -13,6 +13,12 @@ namespace BOTS_BL.Models
             : base("name=CommonDBContext")
         {
         }
+        public virtual DbSet<SMSWABalanceData> SMSWABalanceData { get; set; }
+        public virtual DbSet<ListOfGroup> ListOfGroups { get; set; }
+        public virtual DbSet<Tbl_SinglePageSummaryTable> Tbl_SinglePageSummaryTable { get; set; }
+        public virtual DbSet<Tbl_SinglePageLowTransactingOutlet> Tbl_SinglePageLowTransactingOutlet { get; set; }
+        public virtual DbSet<Tbl_SinglePageNonTransactingGroup> Tbl_SinglePageNonTransactingGroup { get; set; }
+        public virtual DbSet<Tbl_SinglePageNonTransactingOutlet> Tbl_SinglePageNonTransactingOutlet { get; set; }
         public virtual DbSet<tblSourceType> tblSourceTypes { get; set; }
         public virtual DbSet<BOTS_TblBillingPartnerProduct> BOTS_TblBillingPartnerProduct { get; set; }
         public virtual DbSet<SMSGatewayMaster> SMSGatewayMasters { get; set; }
