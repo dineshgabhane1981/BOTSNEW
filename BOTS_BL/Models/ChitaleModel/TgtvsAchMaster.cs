@@ -62,5 +62,23 @@ namespace BOTS_BL.Models.ChitaleModel
 
         [Column(TypeName = "numeric")]
         public decimal? ValuePoints { get; set; }
+        
+        [NotMapped]
+        public string VolFocusStr { get; set; }
+        
+        [NotMapped]
+        public string VolAchStr { get; set; }
+        
+        [NotMapped]
+        public string VolPtsStr { get; set; }
+        
+        [NotMapped]
+        public string ValFocusStr { get; set; }
+        
+        [NotMapped]
+        public string ValAchStr { get; set; }
+        
+        [NotMapped]
+        public string ValPtsStr { get; set; }
     }
 }

@@ -14,5 +14,6 @@ namespace BOTS_BL.Models
         public string City { get; set; }
         public string PaymentStatus { get; set; }
         public string BillingPartnerName { get; set; }
+        public string CustomerStatus { get; set; }
     }
 }

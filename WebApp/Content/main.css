@@ -831,7 +831,7 @@ pre {
 .row {
     display: flex;
     flex-wrap: wrap;
-    margin-right: -15px;
+    margin-right: 0px;
     margin-left: -15px
 }
 

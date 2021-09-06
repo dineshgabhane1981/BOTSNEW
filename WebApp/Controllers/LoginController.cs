@@ -93,7 +93,7 @@ namespace WebApp.Controllers
             {
                 
                 var userDetail = LR.CheckUserType(LoginID);
-                if (userDetail.LoginType != "1" && string.IsNullOrEmpty(userDetail.OutletOrBrandId))
+                if (userDetail.LoginType != "1" && userDetail.LoginType != "5" && userDetail.LoginType != "6" && userDetail.LoginType != "7" && string.IsNullOrEmpty(userDetail.OutletOrBrandId))
                 {
                     var result = new HomeController().SendOTP(LoginID);
                     if (result)
