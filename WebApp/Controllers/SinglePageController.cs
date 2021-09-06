@@ -19,7 +19,7 @@ namespace WebApp.Controllers
             ViewBag.NonTransactingGroup = SPR.GetSinglePageNonTransactingGroups();
             ViewBag.NonTransactingoutlet = SPR.GetNonTransactingOutlet();
             ViewBag.lowTransactingoutlet = SPR.GetLowTransactingOutlet();
-            var data = SPR.GetCommunicationWhatsAppExpiryData();
+            ViewBag.communicationData = SPR.GetCommunicationWhatsAppExpiryData();
             return View(objsinglepagesummarytable);
 
             

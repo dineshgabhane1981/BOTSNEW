@@ -38,10 +38,10 @@ namespace BOTS_BL.Models.CommonDB
     }
     public class CommunicationsinglePageData
     {
-        public SMSBalance objSMSBalance { get; set; }
-        public WhatsAppBalance objWhatsAppBalance { get; set; }
-        public VirtualSMSBalance objVirtualSMSBalance { get; set; }
-        public WhatsAppExpiryDate objWhatsAppExpiryDate { get; set; }
+        public List<SMSBalance> objSMSBalance { get; set; }
+        public List<WhatsAppBalance> objWhatsAppBalance { get; set; }
+        public List<VirtualSMSBalance> objVirtualSMSBalance { get; set; }
+        public List<WhatsAppExpiryDate> objWhatsAppExpiryDate { get; set; }
     }
     public class SMSBalance
     {

@@ -5,6 +5,7 @@ using System.Data.Entity.Core.EntityClient;
 using System.Data.SqlClient;
 using System.Globalization;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using BOTS_BL.Models;
@@ -25,7 +26,7 @@ namespace BOTS_BL.Repository
                     //var query = from obj in context.Tbl_SinglePageNonTransactingGroup
                     //            where SqlFunctions.Format(obj.Number, "0.00").Contains("03.1")
                     //            select obj;
-                    
+
                     lstnontransactinggrp = context.Tbl_SinglePageNonTransactingGroup.OrderByDescending(p => p.DaysSinceLastTxn).ToList();
                     foreach (var item in lstnontransactinggrp)
                     {
@@ -36,9 +37,9 @@ namespace BOTS_BL.Repository
             }
             catch (Exception ex)
             {
-               // newexception.AddException(ex, GroupId);
+                // newexception.AddException(ex, GroupId);
             }
-            
+
             return lstnontransactinggrp;
         }
         public List<Tbl_SinglePageNonTransactingOutlet> GetNonTransactingOutlet()
@@ -48,8 +49,8 @@ namespace BOTS_BL.Repository
             {
                 using (var context = new CommonDBContext())
                 {
-                    lstnontransactingoutlet = context.Tbl_SinglePageNonTransactingOutlet.OrderByDescending(i =>i.DaysSinceLastTxn).ToList();
-                    foreach(var item in lstnontransactingoutlet)
+                    lstnontransactingoutlet = context.Tbl_SinglePageNonTransactingOutlet.OrderByDescending(i => i.DaysSinceLastTxn).ToList();
+                    foreach (var item in lstnontransactingoutlet)
                     {
                         item.DaySinceLastTxn = Convert.ToInt32(item.DaysSinceLastTxn);
                     }
@@ -88,11 +89,11 @@ namespace BOTS_BL.Repository
             {
                 using (var context = new CommonDBContext())
                 {
-                   // lstsummarytable = context.Tbl_SinglePageSummaryTable.ToList();
+                    // lstsummarytable = context.Tbl_SinglePageSummaryTable.ToList();
                     var totalenroll = context.Tbl_SinglePageSummaryTable.Sum(i => i.TotalEnrolledBase);
                     var sumtxncountdaily = context.Tbl_SinglePageSummaryTable.Sum(i => i.TxnCountDaily);
                     var sumtxncountmtd = context.Tbl_SinglePageSummaryTable.Sum(i => i.TxnCountMTD);
-                    lstsummarytable.TotalEnrolledBase= totalenroll;
+                    lstsummarytable.TotalEnrolledBase = totalenroll;
                     lstsummarytable.TxnCountDaily = sumtxncountdaily;
                     lstsummarytable.TxnCountMTD = sumtxncountmtd;
 
@@ -106,46 +107,31 @@ namespace BOTS_BL.Repository
             return lstsummarytable;
         }
 
-        public List<CommunicationsinglePageData> GetCommunicationWhatsAppExpiryData()
+        public CommunicationsinglePageData GetCommunicationWhatsAppExpiryData()
         {
-            List<CommunicationsinglePageData> lstSmsbalance = new List<CommunicationsinglePageData>();
+            CommunicationsinglePageData lstSmsbalance = new CommunicationsinglePageData();
             DateTime next10day = DateTime.Now.AddDays(10);
             List<SMSBalance> lstbalance = new List<SMSBalance>();
 
             DataSet retVal = new DataSet();
-            
-            SqlConnection sqlConn = new SqlConnection("Data Source=13.233.128.61;Initial Catalog=CommonDBLoyalty;user id = sa; password=BO%Admin#LY!4@");
 
-            SqlCommand cmdReport = new SqlCommand("sp_GetCommunicationDataforSinglePage", sqlConn);
-            SqlDataAdapter daReport = new SqlDataAdapter(cmdReport);
-            using (cmdReport)
-            {                 
-                cmdReport.CommandType = CommandType.StoredProcedure;                 
-                daReport.Fill(retVal);
-            }
-
-            int count = 10;
-            count = retVal.Tables.Count;
-            int newcount = count + 10;
             try
             {
-                using (var context = new CommonDBContext())
+                SqlConnection sqlConn = new SqlConnection("Data Source=13.233.128.61;Initial Catalog=CommonDBLoyalty;user id = sa; password=BO%Admin#LY!4@");
+
+                SqlCommand cmdReport = new SqlCommand("sp_GetCommunicationDataforSinglePage", sqlConn);
+                SqlDataAdapter daReport = new SqlDataAdapter(cmdReport);
+                using (cmdReport)
                 {
-                    newcount++;
-                    //Int32 locID = Convert.ToInt32(SMSBalance);
-                    // var id = context.SMSWABalanceData.Select(x => Convert.ToInt32(x.SMSBalance));
-                    lstSmsbalance = context.Database.SqlQuery<CommunicationsinglePageData>("sp_GetCommunicationDataforSinglePage").ToList<CommunicationsinglePageData>();
-                    //lstbalance = (from x in context.SMSWABalanceData
-                    //    where int.Parse(x.SMSBalance) < 1000 && int.Parse(x.SMSBalance) != -1
-                    //    select new SMSBalance{
-                    //        BrandName =x.BrandName,
-                    //        OutletName=x.OutletName,
-                    //        SmsBalance=x.SMSBalance
-                    //        }).ToList();
-                    newcount = lstSmsbalance.Count();
-
-
-                    newcount++;
+                    cmdReport.CommandType = CommandType.StoredProcedure;
+                    daReport.Fill(retVal);
+                }
+                if(retVal!=null)
+                {   
+                    lstSmsbalance.objSMSBalance = ConvertDataTable<SMSBalance>(retVal.Tables[0]);
+                    lstSmsbalance.objWhatsAppBalance = ConvertDataTable<WhatsAppBalance>(retVal.Tables[1]);
+                    lstSmsbalance.objVirtualSMSBalance = ConvertDataTable<VirtualSMSBalance>(retVal.Tables[2]);
+                    lstSmsbalance.objWhatsAppExpiryDate = ConvertDataTable<WhatsAppExpiryDate>(retVal.Tables[3]);
                 }
             }
             catch (Exception ex)
@@ -154,6 +140,34 @@ namespace BOTS_BL.Repository
             }
 
             return lstSmsbalance;
+        }
+
+        private static List<T> ConvertDataTable<T>(DataTable dt)
+        {
+            List<T> data = new List<T>();
+            foreach (DataRow row in dt.Rows)
+            {
+                T item = GetItem<T>(row);
+                data.Add(item);
+            }
+            return data;
+        }
+        private static T GetItem<T>(DataRow dr)
+        {
+            Type temp = typeof(T);
+            T obj = Activator.CreateInstance<T>();
+
+            foreach (DataColumn column in dr.Table.Columns)
+            {
+                foreach (PropertyInfo pro in temp.GetProperties())
+                {
+                    if (pro.Name == column.ColumnName)
+                        pro.SetValue(obj, dr[column.ColumnName], null);
+                    else
+                        continue;
+                }
+            }
+            return obj;
         }
     }
 }
