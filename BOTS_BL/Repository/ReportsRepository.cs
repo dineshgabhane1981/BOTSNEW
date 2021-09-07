@@ -36,7 +36,6 @@ namespace BOTS_BL.Repository
             {
                 using (var context = new BOTSDBContext(connstr))
                 {
-
                     var lstOutlet = context.Database.SqlQuery<OutletList>("sp_GetOutletList @pi_GroupId", new SqlParameter("@pi_GroupId", GroupId)).ToList<OutletList>();
                     foreach (var item in lstOutlet)
                     {
@@ -46,7 +45,6 @@ namespace BOTS_BL.Repository
                             Value = Convert.ToString(item.OutletId)
                         });
                     }
-
                 }
             }
             catch (Exception ex)
@@ -201,7 +199,6 @@ namespace BOTS_BL.Repository
             return pointExpiryTxn;
         }
 
-
         public MemberSearch GetMeamberSearchData(string GroupId,string searchData, string connstr, string loginId)
         {            
             MemberSearch memberSearch = new MemberSearch();
@@ -228,7 +225,6 @@ namespace BOTS_BL.Repository
             }
             return memberSearch;
         }
-
         public Celebrations GetCelebrationsData(string GroupId, string connstr)
         {
             Celebrations celebrationsData = new Celebrations();
@@ -248,7 +244,6 @@ namespace BOTS_BL.Repository
             }
             return celebrationsData;
         }
-
         public List<CelebrationsMoreDetails> GetCelebrationsTxnData(string GroupId, int month,int type, string connstr)
         {
             List<CelebrationsMoreDetails> celebrationTxnsData = new List<CelebrationsMoreDetails>();

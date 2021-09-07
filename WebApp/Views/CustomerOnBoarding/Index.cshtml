@@ -614,12 +614,48 @@
                 </div>
             </div>
 
+            @if (Model.bots_TblGroupMaster != null)
+            {
+                if (Model.bots_TblGroupMaster.CustomerStatus == "CS")
+                {
+                    <div class="container-fluid pt-3 pl-3 pr-3 pb-3" id="dvOutletSection">
+                        <div class="col-md-12 section-heading" data-toggle="collapse" data-target="#outletdetails">Outlet Details</div>
+                        <div id="outletdetails" class="collapse">
+                            @foreach (var item in Model.objRetailList)
+                            {
+                                <div>
+                                    @item.CategoryName
+
+                                </div>
+                                for (int i = 1; i <= item.NoOfEnrolled; i++)
+                                {
+                                    <div class="row" style="margin: 0;">
+                                        <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
+                                            Outlet Name
+                                        </div>
+                                        <div class="col-sm-4" style="float:left;margin-top:10px;">
+                                            @Html.TextBoxFor(model => model.bots_TblOutletMaster.OutletName, new { @class = "input100", @id = "txtOutletName" + i })
+                                        </div>
+                                        <div style="float: left; text-align: right; width: 115px; margin-top: 10px;">
+                                            Area Name
+                                        </div>
+                                        <div class="col-sm-4" style="float:left;margin-top:10px;">
+                                            @Html.TextBoxFor(model => model.bots_TblOutletMaster.AreaName, new { @class = "input100", @id = "txtAreaName" + i })
+                                        </div>
+                                    </div>
+                                }
+                            }
+                        </div>
+                    </div>
+                }
+            }
+
             <div class="container-fluid pt-3 pl-3 pr-3 pb-3">
-                <button type="button" id="btnCustomerSubmit" class="btn btn-primary pull-right" onclick="return CheckValidation('Submit');" style="margin-right:10px;">Submit</button>
+                <button type="button" id="btnCustomerSubmit" class="btn btn-primary pull-right" onclick="return CheckValidation('CS');" style="margin-right:10px;">Submit</button>
                 <button type="submit" id="btnCustomerSave" class="btn btn-primary pull-right" onclick="return CheckValidation();" style="margin-right:10px;">Save</button>
 
             </div>
-        
+
         </div>
     </div>
 
@@ -658,6 +694,10 @@
         });
         if ($("#hdnGroupID").val() != "") {
             LoadEditData();
+        }
+
+        if ($("#hdnCustomerStatus").val() == "CS") {
+            ShowHideSection("outletdetails");
         }
 
     });
@@ -748,6 +788,7 @@
         $("#dealdetails").removeClass("show");
         $("#paymentmodule").removeClass("show");
         $("#updatepaymentdetails").removeClass("show");
+        $("#outletdetails").removeClass("show");
         $("#" + SectionName).addClass("show");
     }
 
@@ -1419,8 +1460,8 @@
         }
         if (returnStatusCust && returnStatusAssign && returnStatusDeal && returnStatusPayment) {
             var datastatus = GetAllData();
-            if (buttonType == 'Submit') {
-                $("#hdnCustomerStatus").val("Submit");
+            if (buttonType == 'CS') {
+                $("#hdnCustomerStatus").val("CS");
                 cuteAlert({
                     type: "question",
                     title: "Are you sure?",
@@ -1467,7 +1508,7 @@
             $('#txtOwnerMobileNo').css('border-color', 'red');
             returnStatus = false;
         }
-        
+
         if ($("#txtOwnerEmailId").val() == "") {
             ShowHideSection("custdetails");
             $('#txtOwnerEmailId').css('border-color', 'red');
@@ -1529,7 +1570,7 @@
                 $('#txtNoOfFreeWhatsAppMsg').css('border-color', 'red');
                 returnStatus = false;
             }
-        }       
+        }
         if ($("#txtNoOfFreeSMS").val() == "") {
             ShowHideSection("custdetails");
             $('#txtNoOfFreeSMS').css('border-color', 'red');
@@ -2278,7 +2319,7 @@
             $("#ddlReferredName").append($("<option />").val(0).text("Please Select"));
             }
     }
-      
+
 
 </script>
 

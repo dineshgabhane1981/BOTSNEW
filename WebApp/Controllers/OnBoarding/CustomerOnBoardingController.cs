@@ -287,5 +287,48 @@ namespace WebApp.Controllers.OnBoarding
             }
 
         }
+
+        public ActionResult CSEditing(string groupId)
+        {
+            CommonFunctions common = new CommonFunctions();
+            if (!string.IsNullOrEmpty(groupId))
+            {
+                groupId = common.DecryptString(groupId);
+            }
+            JavaScriptSerializer json_serializer = new JavaScriptSerializer();
+            OnBoardingSalesViewModel objData = new OnBoardingSalesViewModel();
+            try
+            {
+                objData.lstCity = CR.GetCity();
+                objData.lstRetailCategory = CR.GetRetailCategory();
+                objData.lstBillingPartner = CR.GetBillingPartner();
+                objData.lstSourcedBy = CR.GetSourcedBy();
+                objData.lstRMAssigned = CR.GetRMAssigned();
+                objData.lstRefferedCategory = CR.GetAllRefferedCategory();
+                List<SelectListItem> refferedname = new List<SelectListItem>();
+                SelectListItem item = new SelectListItem();
+                item.Value = "0";
+                item.Text = "Please Select";
+                refferedname.Add(item);
+                objData.lstAllGroups = refferedname;
+                if (!string.IsNullOrEmpty(groupId))
+                {
+                    objData.bots_TblGroupMaster = OBR.GetGroupMasterDetails(groupId);
+                    objData.bots_TblDealDetails = OBR.GetDealMasterDetails(groupId);
+                    objData.bots_TblPaymentDetails = OBR.GetPaymentDetails(groupId);
+                    objData.objRetailList = OBR.GetRetailDetails(groupId);
+                    objData.objInstallmentList = OBR.GetInstallmentDetails(groupId);
+                    objData.bots_TblGroupMaster.CategoryData = json_serializer.Serialize(objData.objRetailList);
+                    objData.bots_TblGroupMaster.PaymentScheduleData = json_serializer.Serialize(objData.objInstallmentList);
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "");
+            }
+            return View(objData);
+        }
+
+
     }
 }

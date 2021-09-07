@@ -243,6 +243,7 @@
     <Compile Include="Models\OnBoarding\BOTS_TblDealDetails.cs" />
     <Compile Include="Models\OnBoarding\BOTS_TblGroupMaster.cs" />
     <Compile Include="Models\OnBoarding\BOTS_TblInstallmentDetails.cs" />
+    <Compile Include="Models\OnBoarding\BOTS_TblOutletMaster.cs" />
     <Compile Include="Models\OnBoarding\BOTS_TblPaymentDetails.cs" />
     <Compile Include="Models\OnBoarding\BOTS_TblRetailCategoryMaster.cs" />
     <Compile Include="Models\OnBoarding\BOTS_TblRetailMaster.cs" />

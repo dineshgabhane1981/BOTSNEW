@@ -166,7 +166,6 @@ namespace WebApp.Controllers
             return new JsonResult() { Data = transcount, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
 
-
         public JsonResult GetFilteredCountforDrillDown(string jsonData)
         {
 
@@ -195,7 +194,6 @@ namespace WebApp.Controllers
             }
             return new JsonResult() { Data = filtercount, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
-
 
         [HttpPost]
         public JsonResult GetPointsExpiryDataResult(int month, int year)
@@ -766,7 +764,6 @@ namespace WebApp.Controllers
 
 
         }
-
 
 
     }

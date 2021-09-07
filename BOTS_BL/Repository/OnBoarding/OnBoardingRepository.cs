@@ -166,7 +166,7 @@ namespace BOTS_BL.Repository
                 //Customer Success
                 if (loginType == "6")
                 {
-
+                    lstGroups = context.BOTS_TblGroupMaster.Where(x => x.CustomerStatus == "CS").ToList();
                 }
                 //CS Head
                 if (loginType == "7")
@@ -188,7 +188,7 @@ namespace BOTS_BL.Repository
                     var bId = Convert.ToInt32(BPId);
 
                     objItem.BillingPartnerName = context.tblBillingPartners.Where(x => x.BillingPartnerId == bId).Select(y => y.BillingPartnerName).FirstOrDefault();
-
+                    objItem.CustomerStatus = item.CustomerStatus;
                     onBoardingListings.Add(objItem);
                 }
             }

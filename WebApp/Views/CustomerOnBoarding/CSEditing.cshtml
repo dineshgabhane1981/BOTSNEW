@@ -1,0 +1,128 @@
+﻿@model WebApp.ViewModel.OnBoardingSalesViewModel
+@using System.Configuration;
+@{
+    ViewBag.Title = "CSEditing";
+    Layout = "~/Views/Shared/_OnBoardingLayout.cshtml";
+
+    var docURL = ConfigurationManager.AppSettings["CustomerDocumentsURL"].ToString();
+    var GSTURL = "#";
+    var PANURL = "#";
+    if (Model.bots_TblGroupMaster != null)
+    {
+        if (!string.IsNullOrEmpty(Model.bots_TblGroupMaster.GSTDocument))
+        {
+            GSTURL = docURL + "/" + Model.bots_TblGroupMaster.GroupId + "/" + Model.bots_TblGroupMaster.GSTDocument;
+        }
+
+        if (!string.IsNullOrEmpty(Model.bots_TblGroupMaster.PANDocument))
+        {
+            PANURL = docURL + "/" + Model.bots_TblGroupMaster.GroupId + "/" + Model.bots_TblGroupMaster.PANDocument;
+        }
+    }
+}
+<style>
+    .row {
+        margin-top: 40px;
+        padding: 0 10px;
+    }
+
+    .clickable {
+        cursor: pointer;
+    }
+
+    .panel-heading span {
+        margin-top: -20px;
+        font-size: 15px;
+    }
+
+    .section-heading {
+        cursor: pointer;
+        text-align: left;
+        /*background-color: #022C48;*/
+        color: white;
+        font-weight: bold;
+        padding: 10px;
+        border-radius: 5px;
+        background-color: #000000 !important;
+        background-image: linear-gradient(147deg, #000000 0%, #04619f 74%) !important;
+        font-size: 16px;
+    }
+</style>
+
+<div class="row mb-3 card">
+    <div class="container-fluid pt-3 pl-3 pr-3 pb-3">
+        <div class="col-md-12 section-heading" data-toggle="collapse" data-target="#custdetails"> Customer Detail</div>
+        <div id="custdetails" class="collapse show">
+            <table cellspacing="5" cellpadding="5" border="1" style="margin:20px;">
+                <tr><td colspan="8" style="text-align:center;font-size:18px;font-weight:bold;"> Basic Details </td></tr>
+                <tr>
+                    <td> Legal Name</td>
+                    <td style="font-weight:bold;">@Model.bots_TblGroupMaster.GroupName </td>
+                    <td> Owner’s Name</td>
+                    <td style="font-weight:bold;">@Model.bots_TblGroupMaster.OwnerName </td>
+                    <td> Owner’s Mobile</td>
+                    <td style="font-weight:bold;">@Model.bots_TblGroupMaster.OwnerMobileNo </td>
+                    <td> Owner’s Email</td>
+                    <td style="font-weight:bold;">@Model.bots_TblGroupMaster.OwnerEmailId </td>
+                </tr>
+                <tr>
+                    <td> Upload GST</td>
+                    <td style="font-weight:bold;">
+                        @if (GSTURL != "#")
+                        {
+                            <a href="@GSTURL" target="_blank"> GST Document</a>
+                        }
+                    </td>
+                    <td> Upload PAN</td>
+                    <td style="font-weight:bold;">
+                        @if (PANURL != "#")
+                        {
+                            <a href="@PANURL" target="_blank"> PAN Document</a>
+                        }
+                    </td>
+                    <td> City</td>
+                    <td style="font-weight:bold;">@Model.bots_TblGroupMaster.City </td>
+                    <td> Other Person Name</td>
+                    <td style="font-weight:bold;">@Model.bots_TblGroupMaster.AnyOtherName </td>
+                </tr>
+                <tr>
+                    <td> Mobile No</td>
+                    <td style="font-weight:bold;">@Model.bots_TblGroupMaster.AlternateMobileNo </td>
+                    <td> Email</td>
+                    <td style="font-weight:bold;">@Model.bots_TblGroupMaster.AlternateEmailId </td>
+                    <td> No of Brands</td>
+                    <td style="font-weight:bold;">@Model.bots_TblGroupMaster.NoOfRetailCategory </td>
+                    <td> Key Account</td>
+                    <td style="font-weight:bold;">@Model.bots_TblGroupMaster.IsKeyAccount </td>
+                </tr>
+                <tr>
+                    <td> DLC</td>
+                    <td style="font-weight:bold;">@Model.bots_TblGroupMaster.IsMWP </td>
+                    <td> Whatsapp Integration</td>
+                    <td style="font-weight:bold;">@Model.bots_TblGroupMaster.IsWhatsApp </td>
+                    <td> Mobile App</td>
+                    <td style="font-weight:bold;">@Model.bots_TblGroupMaster.IsMobileApp </td>
+                    <td> Mobile App Description</td>
+                    <td style="font-weight:bold;">@Model.bots_TblGroupMaster.MobileAppDescription </td>
+                </tr>
+                <tr>
+                    <td> WA Free Msgs</td>
+                    <td style="font-weight:bold;">@Model.bots_TblGroupMaster.NoOfFreeWhatsAppMsg </td>
+                    <td> WA Paid Msgs</td>
+                    <td style="font-weight:bold;">@Model.bots_TblGroupMaster.NoOfPaidWhatsAppMsg </td>
+                    <td> SMS Free Msgs</td>
+                    <td style="font-weight:bold;">@Model.bots_TblGroupMaster.NoOfFreeSMS </td>
+                    <td> SMS Paid Msgs</td>
+                    <td style="font-weight:bold;">@Model.bots_TblGroupMaster.NoOfPaidSMS </td>
+                </tr>
+                <tr><td colspan="8" style="text-align:center;font-size:18px;font-weight:bold;"> Category Details </td></tr>
+                @foreach (var item in Model.lstRetailCategory)
+                {
+
+                }
+            </table>
+        </div>
+    </div>
+</div>
+
+

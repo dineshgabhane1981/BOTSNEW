@@ -14,8 +14,10 @@ namespace WebApp.ViewModel
         public BOTS_TblDealDetails bots_TblDealDetails { get; set; }
         public BOTS_TblPaymentDetails bots_TblPaymentDetails { get; set; }
         public BOTS_TblInstallmentDetails bots_TblInstallmentDetails { get; set; }    
+        public BOTS_TblOutletMaster bots_TblOutletMaster { get; set; }
         public List<BOTS_TblRetailMaster> objRetailList { get; set; }
         public List<BOTS_TblInstallmentDetails> objInstallmentList { get; set; }
+        public List<BOTS_TblOutletMaster> lstOutlets { get; set; }
         public List<SelectListItem> lstCity { get; set; }
         public List<SelectListItem> lstRetailCategory { get; set; }
         public List<SelectListItem> lstSourcedBy { get; set; }
