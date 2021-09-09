@@ -66,6 +66,14 @@ namespace WebApp.Controllers
 
             return status;
         }
+        public JsonResult GetSubDiscussionList(int Id)
+        {
+             List<SubDiscussionData> lstsubdiscussionLists = new List<SubDiscussionData>();
+            // List<BOTS_TblSubDiscussionData> lstsubdiscussionlists = new List<BOTS_TblSubDiscussionData>();
+            lstsubdiscussionLists = DR.GetNestedDiscussionList(Id);
+
+            return new JsonResult() { Data = lstsubdiscussionLists, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
+        }
 
         public ActionResult GetDiscussionList(string groupId)
         {

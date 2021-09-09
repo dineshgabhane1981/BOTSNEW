@@ -1,22 +1,46 @@
 ﻿@model List<BOTS_BL.Models.CommonDB.DiscussionDetails>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.2.2/Chart.bundle.min.js"></script>
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.23/css/jquery.dataTables.css">
+
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.23/js/jquery.dataTables.js"></script>
+
 <style>
+    /*#myBtn {
+        display: none;*/ /* Hidden by default */
+        /*position: fixed;*/ /* Fixed/sticky position */
+        /*bottom: 10px;*/ /* Place the button at the bottom of the page */
+        /*right: 15px;*/ /* Place the button 30px from the right */
+        /*z-index: 99;*/ /* Make sure it does not overlap */
+        /*border: none;*/ /* Remove borders */
+        /*outline: none;*/ /* Remove outline */
+        /*background-color: deepskyblue;*/ /* Set a background color */
+        /*color: white;*/ /* Text color */
+        /*cursor: pointer;*/ /* Add a mouse pointer on hover */
+        /*padding: 7px;*/ /* Some padding */
+        /*border-radius: 7px;*/ /* Rounded corners */
+        /*font-size: 18px;*/ /* Increase font size */
+    /*}
+
+        #myBtn:hover {
+            background-color: #555;*/ /* Add a dark-grey background on hover */
+        /*}*/
     /* The Modal (background) */
     .modal {
-        display: none; /* Hidden by default */
-        position: fixed; /* Stay in place */
-        z-index: 5000 !important; /* Sit on top */
-        padding-top: 100px; /* Location of the box */
+        display: none;  Hidden by default 
+        position: fixed;  Stay in place 
+        z-index: 5000 !important;  Sit on top 
+        padding-top: 100px;  Location of the box 
         left: 120px;
         top: 0;
-        width: 100%; /* Full width */
-        height: 100%; /* Full height */
-        overflow: auto; /* Enable scroll if needed */
-        background-color: rgb(0,0,0); /* Fallback color */
-        background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+        width: 100%;  Full width 
+        height: 100%;  Full height 
+        overflow: auto;  Enable scroll if needed 
+        background-color: rgb(0,0,0);  Fallback color 
+        background-color: rgba(0,0,0,0.4);  Black w/ opacity 
     }
 
-    /* Modal Content */
+     Modal Content 
     .modal-content {
         background-color: #fefefe;
         margin: auto;
@@ -26,7 +50,7 @@
         border-radius: 25px;
     }
 
-    /* The Close Button */
+     The Close Button 
     .close {
         color: #aaaaaa;
         float: right;
@@ -59,9 +83,11 @@
                     <table class="table" id="discussionTable">
                         <thead>
                             <tr>
+                                <th scope="col"></th>
                                 <th scope="col">Date</th>
                                 <th scope="col">Spoken To</th>
                                 <th scope="col">Number</th>
+                                <th scope="col">Customer Type</th>
                                 <th scope="col">Call Type</th>
                                 <th scope="col">FollowUp Date</th>
                                 <th scope="col">Call Mode</th>
@@ -70,6 +96,7 @@
                                 <th scope="col">Action Item</th>
                                 <th scope="col">Raised By</th>
                                 <th scope="col">Action</th>
+                                
                             </tr>
                         </thead>
                         <tbody>
@@ -80,59 +107,93 @@
                                     var followupdate = "--";
                                     if (item.FollowupDate.HasValue)
                                     {
-                                        followupdate = item.FollowupDate.Value.ToString("MM/dd/yyyy");
+                                        followupdate = item.FollowupDate.Value.ToString("yyyy-MM-dd");
                                     }
-                                    <tr>
-                                        <td>@item.AddedDate</td>
-                                        <td>@item.SpokenTo</td>
-                                        <td>@item.ContactNo</td>
-                                        <td>@item.CallType</td>
-                                        @if (followupdate == "--")
-                                        {
-                                            <td style="text-align:center;">--</td>
-                                        }
-                                        else
-                                        {
-                                            <td>@followupdate</td>
-                                        }
-                                        <td>@item.CallMode</td>
-                                        @if (item.Status == "Completed")
-                                        {
-                                            <td style="background-color:lightgreen;">@item.Status</td>
-                                        }
-                                        else if (item.Status == "WIP")
-                                        {
-                                            if (item.AddedDate <= DateTime.Now.AddDays(-3))
-                                            {
-                                                <td style="background-color:red;">@item.Status</td>
-                                            }
-                                            else
-                                            {
-                                                <td style="background-color:orange;">@item.Status</td>
-                                            }
-                                        }
-                                        else
-                                        {
-                                            <td style="text-align:center;">--</td>
-                                        }
-                                        <td>@item.Description</td>
-                                        <td>@item.ActionItems</td>
-                                        <td>@item.AddedBy</td>
+                                    var imgId = "imgExpand" + item.Id;
+                            <tr>
+                                <td style="text-align:center;">
+                                    @*@if (item.Status == "WIP")
+            {*@
+                                    <img id="@imgId" src="~/Content/assets/images/details_open.png" style="cursor:pointer;" onclick="ShowActivities(@item.Id);" />
+                                    @*}*@
+                                </td>
+                                <td>@item.AddedDate</td>
+                                <td>@item.SpokenTo</td>
+                                <td>@item.ContactNo</td>
+                                <td>@item.CustomerType</td>
+                                <td>@item.CallType</td>
+                                @if (followupdate == "--")
+                                {
+                                    <td style="text-align:center;">--</td>
+                                }
+                                else
+                                {
+                                    <td>@followupdate</td>
+                                }
+                                <td>@item.CallMode</td>
+                                @if (item.Status == "Completed")
+                                {
+                                    <td style="background-color:lightgreen;">@item.Status</td>
+                                }
+                                else if (item.Status == "WIP")
+                                {
+                                    if (item.AddedDate <= DateTime.Now.AddDays(-3))
+                                    {
+                                        <td style="background-color:red;">@item.Status</td>
+                                    }
+                                    else
+                                    {
+                                        <td style="background-color:orange;">@item.Status</td>
+                                    }
+                                }
+                                else
+                                {
+                                    <td style="text-align:center;">--</td>
+                                }
+                                <td>@item.Description</td>
+                                <td>@item.ActionItems</td>
+                                <td>@item.AddedBy</td>
 
-                                        @if (item.Status != "Completed")
-                                        {
-                                            <td style="text-align:center;">
-                                                <a href="#" onclick="OpenStatusPopup(@item.Id);">
-                                                    <img src="~/Content/assets/images/task.png" width="35" />
-                                                </a>
-                                            </td>
-                                        }
-                                        else
-                                        {
-                                            <td style="text-align:center;">--</td>
-                                        }
+                                @if (item.Status != "Completed")
+                                {
+                                    <td style="text-align:center;">
+                                        <a href="#" onclick="OpenStatusPopup(@item.Id);">
+                                            <img src="~/Content/assets/images/task.png" width="35" />
+                                        </a>
+                                    </td>
+                                }
+                                else
+                                {
+                                    <td style="text-align:center;">--</td>
+                                }
+                                
+                            </tr>
 
-                                    </tr>
+                                    var dynamicIdTr = "trActivities" + item.Id;
+                                    var dynamicIdDiv = "dvDiscussionData" + item.Id;
+                                    
+                        <tr id="@dynamicIdTr" style="display:none;">
+                            <td colspan="10">
+                                <div id="@dynamicIdDiv" style="display:none;" class="table-responsive">
+
+                                </div>
+                            </td>
+                            <td style="display:none;"></td>
+                            <td style="display:none;"></td>
+                            <td style="display:none;"></td>
+                            <td style="display:none;"></td>
+                            <td style="display:none;"></td>
+                            <td style="display:none;"></td>
+                            <td style="display:none;"></td>
+                            <td style="display:none;"></td>
+                            <td style="display:none;"></td>
+                            <td style="display:none;"></td>
+                            <td style="display:none;"></td>
+                            <td style="display:none;"></td>
+                            
+
+                        </tr>
+
                                 }
                             }
                             else
@@ -171,7 +232,7 @@
         </div>
 
         <div class="row justify-content-end pr-4" style="margin-top:20px;margin-right:465px;">
-            
+
             <button type="button" id="btnUpdateStatus" class="btn btn-primary" style="margin-right:10px;"> Update</button>
             <button type="button" id="btnPopupClose" class="btn btn-outline-primary cancel-btn"> Close</button>
         </div>
@@ -221,9 +282,89 @@
         });
     });
 
-    
 
+    function ShowActivities(id) {
+      //  var pType = "Distributors";
+        if ($("#dvDiscussionData" + id).is(":visible")) {
+            $("#dvDiscussionData" + id).hide(1000);
+            $("#trActivities" + id).hide(1000);
 
+            $("#imgExpand" + id).attr("src", "/Content/assets/images/details_open.png");
+        }
+        else {
+            $("#divLoader").show();
+            $.ajax({
+                type: "POST",
+                 url: '@Url.Action("GetSubDiscussionList")',
+                data: '{Id:' + JSON.stringify(id) + '}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (response) {
+                    console.log(response);
+                    BindActivities(id,response);
+                    $("#divLoader").hide();
+                },
+                failure: function (response) {
 
+                    $("#divLoader").hide();
+                }
+            });
+        }
+    }
+
+    function BindActivities(id,data) {
+        console.log(data);
+        console.log(id);
+        var htmlStr = "<table border=\"2\" style=\"background-color:gray;margin-left: 11px;width: 98%;\" class=\"table\">";
+        htmlStr += "<tr style=\"text-align: center;\">"
+        htmlStr += "<th scope=\"col\">Date</th>";       
+        htmlStr += "<th scope=\"col\">Updated By</th>";
+        htmlStr += "<th scope=\"col\">Description</th>";
+        htmlStr += "<th scope=\"col\">Status</th>";
+        htmlStr += "</tr>";
+
+        $.map(data, function (item) {
+            var d = new Date();
+            d = item.FollowupDate;
+            console.log(d);
+            htmlStr += "<tr style=\"text-align: center;\">"
+            htmlStr += "<td>" + item.FollowupDate + "</td>";
+            htmlStr += "<td>" + item.UpdatedBy + "</td>";
+            htmlStr += "<td style=\"width: 100px;\">" + item.Description + "</td>";
+            htmlStr += "<td style=\"width: 100px;\">" + item.Status + "</td>";
+            htmlStr += "</tr>"
+        });
+
+        htmlStr += "</table>";
+        $("#dvDiscussionData" + id).html(htmlStr);
+        console.log(htmlStr);
+        //$('tr[id^="trActivities"]').hide(1000);
+        //$('div[id^="dvDiscussionData"]').hide(1000);
+        $('[id^="imgExpand"]').attr("src", "/Content/assets/images/details_open.png");
+
+        $("#trActivities" + id).show(1000);
+       
+        $("#dvDiscussionData" + id).show(1000);
+        $("#imgExpand" + id).attr("src", "/Content/assets/images/details_close.png");
+
+       
+    }
 
 </script>
+<style>
+    table.dataTable thead .sorting_asc {
+        background: url("https://cdn.datatables.net/1.10.0/images/sort_asc.png") no-repeat center left;
+    }
+
+    table.dataTable thead .sorting_desc {
+        background: url("https://cdn.datatables.net/1.10.0/images/sort_desc.png") no-repeat center left;
+    }
+
+    table.dataTable thead .sorting {
+        background: url("https://cdn.datatables.net/1.10.0/images/sort_both.png") no-repeat center left;
+    }
+</style>
+<script src="~/Scripts/jquery-ui-1.12.1.js"></script>
+<script src="~/Scripts/jquery-ui-1.12.1.min.js"></script>
+<link href="~/Content/themes/base/jquery-ui.min.css" rel="stylesheet" />
+<link href="~/Content/themes/base/jquery-ui.css" rel="stylesheet" />

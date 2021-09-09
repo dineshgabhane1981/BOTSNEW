@@ -13,6 +13,7 @@ namespace BOTS_BL.Models
             : base("name=CommonDBContext")
         {
         }
+        public virtual DbSet<BOTS_TblSubDiscussionData> BOTS_TblSubDiscussionData { get; set; }
         public virtual DbSet<BOTS_TblOutletMaster> BOTS_TblOutletMaster { get; set; }
         public virtual DbSet<SMSWABalanceData> SMSWABalanceData { get; set; }
         public virtual DbSet<ListOfGroup> ListOfGroups { get; set; }

@@ -13,7 +13,7 @@
                 @Html.HiddenFor(model => model.objDiscussion.GroupId, new { @id = "hdnGroupID" })
                 <div class="card" style="margin-bottom: 20px;">
                     <div class="row" style="margin: 10px;align-self:center;font-size:22px;">
-                        Customer Name -  @Model.objDiscussion.GroupName
+                       Customer Name -  @Model.objDiscussion.GroupName
                     </div>
                 </div>
                 <div id="dvAddDiscussion" class="card" style="display:none;padding:20px;margin-bottom:10px;">
@@ -32,22 +32,32 @@
                         </div>
                     </div>
                     <div class="row" style="margin: 0;">
+
                         <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
+                            Customer Type
+                        </div>
+                        <div class="col-sm-4" style="float:left;margin-top:10px;">
+                            @Html.DropDownListFor(model => model.objDiscussion.CustomerType, new SelectList(Model.CustomerType(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input100", @id = "ddlCustomerType" })
+
+                        </div>
+                        <div style="float: left; text-align: right; width: 115px; margin-top: 10px;">
                             Call Mode
                         </div>
                         <div class="col-sm-4" style="float:left;margin-top:10px;">
                             @Html.DropDownListFor(model => model.objDiscussion.CallMode, new SelectList(Model.CallMode(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input100", @id = "ddlCallMode" })
                         </div>
-                        <div style="float: left; text-align: right; width: 115px; margin-top: 10px;">
+                        
+
+                    </div>
+
+                    <div class="row" style="margin: 0;">
+                        <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
                             Call Type
                         </div>
                         <div class="col-sm-4" style="float:left;margin-top:10px;">
                             @Html.DropDownListFor(model => model.objDiscussion.CallType, new SelectList(Model.lstCallTypes, "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input100", @id = "ddlCallType" })
                         </div>
-                    </div>
-
-                    <div class="row" style="margin: 0;">
-                        <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
+                        <div style="float: left; text-align: right; width: 115px; margin-top: 10px;">
                             Call Sub Type
                         </div>
                         <div class="col-sm-4" style="float:left;margin-top:10px;">
@@ -249,6 +259,11 @@
             $('#ddlCallType').css('border-color', 'red');
             returnStatus = false;
             
+        }
+        if ($("#ddlCustomerType option:selected").text() == "Please Select") {
+            $('#ddlCustomerType').css('border-color', 'red');
+            returnStatus = false;
+
         }
         if ($("#ddlCallType option:selected").text() == "Issue") {
             if ($("#ddlSubCallType option:selected").text() == "Please Select") {
