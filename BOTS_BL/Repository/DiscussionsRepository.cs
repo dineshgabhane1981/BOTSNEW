@@ -32,17 +32,19 @@ namespace BOTS_BL.Repository
                                where c.GroupId == GroupId
                                select new DiscussionDetails
                                {
-                                   Id=c.Id,
+                                   Id = c.Id,
                                    AddedDate = c.AddedDate,
                                    SpokenTo = c.SpokenTo,
                                    ContactNo = c.ContactNo,
                                    CallType = ct.CallType,
+                                   CustomerType = c.CustomerType,
                                    FollowupDate = c.FollowupDate,
                                    CallMode = c.CallMode,
                                    Description = c.Description,
                                    ActionItems = c.ActionItems,
                                    AddedBy = cld.UserName,
-                                   Status = c.Status
+                                   Status = c.Status,
+                                  
                                }).OrderByDescending(x => x.AddedDate).ToList();
                 }
             }
@@ -56,12 +58,24 @@ namespace BOTS_BL.Repository
         public bool AddDiscussions(BOTS_TblDiscussion objDiscussion)
         {
             bool status = false;
+            BOTS_TblSubDiscussionData objsubdiscussion = new BOTS_TblSubDiscussionData();
             try
             {
                 using (var context = new CommonDBContext())
                 {
                     context.BOTS_TblDiscussion.AddOrUpdate(objDiscussion);
                     context.SaveChanges();
+                    if (objDiscussion.Status == "WIP")
+                    {
+                        objsubdiscussion.DiscussionId = objDiscussion.Id;
+                        objsubdiscussion.GroupId = objDiscussion.GroupId;
+                        objsubdiscussion.FollowupDate = objDiscussion.FollowupDate;
+                        objsubdiscussion.Description = objDiscussion.Description;
+                        objsubdiscussion.Status = objDiscussion.Status;
+                        objsubdiscussion.UpdatedBy = objDiscussion.AddedBy;
+                        context.BOTS_TblSubDiscussionData.AddOrUpdate(objsubdiscussion);
+                        context.SaveChanges();
+                    }
                     status = true;
                 }
             }
@@ -76,6 +90,7 @@ namespace BOTS_BL.Repository
         public bool UpdateDiscussions(string id,string Desc,string Status,string LoginId)
         {
             BOTS_TblDiscussion objDiscussion = new BOTS_TblDiscussion();
+            BOTS_TblSubDiscussionData objsubdiscussion = new BOTS_TblSubDiscussionData();
             bool status = false;
             try
             {
@@ -84,14 +99,22 @@ namespace BOTS_BL.Repository
                     int discussionId = Convert.ToInt32(id);
                     objDiscussion = context.BOTS_TblDiscussion.Where(x => x.Id == discussionId).FirstOrDefault();
                     objDiscussion.Status = Status;
-                    objDiscussion.AddedBy = LoginId;
-                    if (!string.IsNullOrEmpty(Desc))
-                    {
-                        objDiscussion.Description = objDiscussion.Description + ", " + Desc;
-                    }
+                    //objDiscussion.AddedBy = LoginId;
+                    //if (!string.IsNullOrEmpty(Desc))
+                    //{
+                    //    objDiscussion.Description = objDiscussion.Description + "-----------\n" +  Desc;
+                    //}
                     context.BOTS_TblDiscussion.AddOrUpdate(objDiscussion);
                     context.SaveChanges();
 
+                    objsubdiscussion.DiscussionId = objDiscussion.Id;
+                    objsubdiscussion.GroupId = objDiscussion.GroupId;
+                    objsubdiscussion.FollowupDate = objDiscussion.FollowupDate;
+                    objsubdiscussion.Description = objDiscussion.Description;
+                    objsubdiscussion.Status = objDiscussion.Status;
+                    objsubdiscussion.UpdatedBy = objDiscussion.AddedBy;
+                    context.BOTS_TblSubDiscussionData.AddOrUpdate(objsubdiscussion);
+                    context.SaveChanges();
                     status = true;
                 }
             }
@@ -103,6 +126,44 @@ namespace BOTS_BL.Repository
             return status;
         }
 
+        public List<SubDiscussionData> GetNestedDiscussionList(int Id)
+        {
+
+           // List<BOTS_TblSubDiscussionData> lstsubdiscussionLists = new List<BOTS_TblSubDiscussionData>();
+            List<SubDiscussionData> lstsubdiscussionlist = new List<SubDiscussionData>();
+            try
+            {
+                using (var context = new CommonDBContext())
+                {
+                     // lstsubdiscussionLists = context.BOTS_TblSubDiscussionData.Where(x => x.DiscussionId == Id).OrderBy(x=>x.FollowupDate).ToList();
+
+
+                    lstsubdiscussionlist = (from c in context.BOTS_TblDiscussion
+                                            join ct in context.BOTS_TblSubDiscussionData on c.Id equals ct.DiscussionId
+                                            join cld in context.CustomerLoginDetails on c.AddedBy equals cld.LoginId
+                                            where ct.DiscussionId == Id
+                                            select new SubDiscussionData
+                                            {
+                                                SubDiscussionId = ct.SubDiscussionId,
+                                                DiscussionId = ct.DiscussionId,
+                                                //GroupId = ct.GroupId,
+                                                FollowupDate = ct.FollowupDate.ToString(),
+                                                Description = ct.Description,
+                                                UpdatedBy = cld.UserName,
+                                                Status = ct.Status
+
+                                            }).OrderByDescending(x => x.FollowupDate).ToList();
+                }
+
+
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex,"");
+            }
+
+            return lstsubdiscussionlist;
+        }
         public List<SelectListItem> GetCallTypes()
         {
             List<SelectListItem> lstCallTypes = new List<SelectListItem>();
