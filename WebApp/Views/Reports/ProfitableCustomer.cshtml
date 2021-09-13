@@ -223,8 +223,26 @@
                         return '<span>' + addComma(data) + '</span>';
                     }
                 },
-                { data: "LastTxnDate" },
-                { data: "EnrolledDate" }
+                {
+                    "data": "LastTxnDate", "title": "Last Txn Date", "render": function (data, type) {
+                        var day = data.split('/')[0]
+                        var month = data.split('/')[1]
+                        var year = data.split('/')[2]
+                        var date = month + "/" + day + "/" + year;
+                        return date;
+                    }
+                },
+                {
+                    "data": "EnrolledDate", "title": "Enrolled Date", "render": function (data, type) {
+                        var day = data.split('/')[0]
+                        var month = data.split('/')[1]
+                        var year = data.split('/')[2]
+                        var date = month + "/" + day + "/" + year;
+                        return date;
+                    }
+                }
+                //{ data: "LastTxnDate" },
+                //{ data: "EnrolledDate" }
             ],
             "columnDefs": [
                 {
@@ -302,9 +320,20 @@
         if ($("#rdnVisit").is(":checked")) {
             ReportBasis = 2;
         }
+        var CountOrBusiness = "";
+        var Count = 0;
 
+        if ($('#TopTxnCount').val() != "") {
+            CountOrBusiness = "Count";
+            Count = $('#TopTxnCount').val();
+
+        }
+        if ($('#TopBusiness').val() != "") {
+            CountOrBusiness = "Business";
+            Count = $('#TopBusiness').val();
+        }
         var urlLink = "@Url.Action("ExportToProfitableCustomers", "Reports")";
-        urlLink = urlLink + "?DateRangeFlag=" + DateRangeFlag + "&fromDate=" + fromDate + "&toDate=" + toDate + "&outletId=" + outletId + "&ReportBasis=" + ReportBasis + "&ReportName=ProfitableCustomers";
+        urlLink = urlLink + "?CountOrBusiness=" + CountOrBusiness + "&Count=" + Count + "&ReportName=ProfitableCustomers";
         console.log(urlLink);
         window.location.href = urlLink;
         $("#divLoader").hide();

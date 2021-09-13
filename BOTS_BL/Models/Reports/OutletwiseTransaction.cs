@@ -15,9 +15,12 @@ namespace BOTS_BL.Models
         public string Type { get; set; }
         public string InvoiceNo { get; set; }
         public decimal? InvoiceAmt { get; set; }
+        public string InvoiceAmtStr { get; set; }
         public string TxnType { get; set; }
         public decimal? PointsEarned { get; set; }
+        public string PointsEarnedStr { get; set; }
         public decimal? PointsBurned { get; set; }
+        public string PointsBurnedStr { get; set; }
         public string TxnDatetime { get; set; }
         public string TxnUpdateDate { get; set; }
 

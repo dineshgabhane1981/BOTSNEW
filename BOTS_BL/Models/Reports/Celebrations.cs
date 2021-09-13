@@ -30,7 +30,9 @@ namespace BOTS_BL.Models
         public string MemberName { get; set; }
         public long? TxnCount { get; set; }
         public long? TotalSpend { get; set; }
+        public string TotalSpendStr { get; set; }
         public long? AvlPoints { get; set; }
+        public string AvlPointsStr { get; set; }
         public string LastTxnDate { get; set; }
         public long? PointsExpiry { get; set; }
         public string ExpiryDate { get; set; }

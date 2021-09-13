@@ -426,13 +426,33 @@ namespace WebApp.Controllers
                     table.Columns["MaskedMobileNo"].ColumnName = "MobileNo";
                 }
 
+                foreach (DataRow dr in table.Rows)
+                {
+                    dr["InvoiceAmtStr"] = String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(dr["InvoiceAmt"]));
+                    dr["PointsEarnedStr"] = String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(dr["PointsEarned"]));
+                    dr["PointsBurnedStr"] = String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(dr["PointsBurned"]));
+
+                }
+                table.Columns.Remove("InvoiceAmt");
+                table.Columns.Remove("PointsEarned");
+                table.Columns.Remove("PointsBurned");
+                table.Columns["InvoiceAmtStr"].ColumnName = "InvoiceAmt";
+                table.Columns["PointsEarnedStr"].ColumnName = "PointsEarned";
+                table.Columns["PointsBurnedStr"].ColumnName = "PointsBurned";
+
                 string fileName = ReportName + ".xlsx";
                 using (XLWorkbook wb = new XLWorkbook())
                 {
 
                     //excelSheet.Name
                     table.TableName = ReportName;
-                    wb.Worksheets.Add(table);
+                    IXLWorksheet worksheet = wb.AddWorksheet(sheetName: ReportName);
+                    worksheet.Cell(1, 1).Value = "Report Name";
+                    worksheet.Cell(1, 2).Value = "Transactionwise";
+                    worksheet.Cell(2, 1).Value = "Date";
+                    worksheet.Cell(2, 2).Value = DateTime.Now.ToString();
+                    worksheet.Cell(4, 1).InsertTable(table);
+                    //wb.Worksheets.Add(table);
                     using (MemoryStream stream = new MemoryStream())
                     {
                         wb.SaveAs(stream);
@@ -493,13 +513,118 @@ namespace WebApp.Controllers
                 }
                 table.Columns.Remove("OutletId");
 
+                foreach (DataRow dr in table.Rows)
+                {
+                    if (!string.IsNullOrEmpty(Convert.ToString(dr["TotalMember"])))
+                    {
+                        dr["TotalMemberStr"] = String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(dr["TotalMember"]));
+                    }
+                    else
+                    {
+                        dr["TotalMemberStr"] = 0;
+                    }
+                    if (!string.IsNullOrEmpty(Convert.ToString(dr["TotalTxn"])))
+                    {
+                        dr["TotalTxnStr"] = String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(dr["TotalTxn"]));
+                    }
+                    else
+                    {
+                        dr["TotalTxnStr"] = 0;
+                    }
+                    if (!string.IsNullOrEmpty(Convert.ToString(dr["TotalSpend"])))
+                    {
+                        dr["TotalSpendStr"] = String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(dr["TotalSpend"]));
+                    }
+                    else
+                    {
+                        dr["TotalSpendStr"] = 0;
+                    }
+                    //dr["TotalSpendStr"] = String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(dr["TotalSpend"]));
+                    if (!string.IsNullOrEmpty(Convert.ToString(dr["ATS"])))
+                    {
+                        dr["ATSStr"] = String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(dr["ATS"]));
+                    }
+                    else
+                    {
+                        dr["ATSStr"] = 0;
+                    }
+                    //dr["ATSStr"] = String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(dr["ATS"]));
+                    if (!string.IsNullOrEmpty(Convert.ToString(dr["PointsEarned"])))
+                    {
+                        dr["PointsEarnedStr"] = String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(dr["PointsEarned"]));
+                    }
+                    else
+                    {
+                        dr["PointsEarnedStr"] = 0;
+                    }
+                    //dr["PointsEarnedStr"] = String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(dr["PointsEarned"]));
+                    if (!string.IsNullOrEmpty(Convert.ToString(dr["PointsBurned"])))
+                    {
+                        dr["PointsBurnedStr"] = String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(dr["PointsBurned"]));
+                    }
+                    else
+                    {
+                        dr["PointsBurnedStr"] = 0;
+                    }
+                    //dr["PointsBurnedStr"] = String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(dr["PointsBurned"]));
+                    if (!string.IsNullOrEmpty(Convert.ToString(dr["PointsCancelled"])))
+                    {
+                        dr["PointsCancelledStr"] = String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(dr["PointsCancelled"]));
+                    }
+                    else
+                    {
+                        dr["PointsCancelledStr"] = 0;
+                    }
+                    //dr["PointsCancelledStr"] = String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(dr["PointsCancelled"]));
+                    if (!string.IsNullOrEmpty(Convert.ToString(dr["PointsExpired"])))
+                    {
+                        dr["PointsExpiredStr"] = String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(dr["PointsExpired"]));
+                    }
+                    else
+                    {
+                        dr["PointsExpiredStr"] = 0;
+                    }
+                    //dr["PointsExpiredStr"] = String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(dr["PointsExpired"]));
+                    
+                }
+                table.Columns.Remove("TotalMember");
+                table.Columns.Remove("TotalTxn");
+                table.Columns.Remove("TotalSpend");
+                table.Columns.Remove("ATS");
+                table.Columns.Remove("PointsEarned");
+                table.Columns.Remove("PointsBurned");
+                table.Columns.Remove("PointsCancelled");
+                table.Columns.Remove("PointsExpired");
+                
+                table.Columns["TotalMemberStr"].ColumnName = "TotalMember";
+                table.Columns["TotalTxnStr"].ColumnName = "TotalTxn";
+                table.Columns["TotalSpendStr"].ColumnName = "TotalSpend";
+                table.Columns["ATSStr"].ColumnName = "ATS";
+                table.Columns["PointsEarnedStr"].ColumnName = "PointsEarned";
+                table.Columns["PointsBurnedStr"].ColumnName = "PointsBurned";
+                table.Columns["PointsCancelledStr"].ColumnName = "PointsCancelled";
+                table.Columns["PointsExpiredStr"].ColumnName = "PointsExpired";
+
+                table.Columns.Remove("BizShare");
+                table.Columns.Remove("NonActiveColor");
+                table.Columns.Remove("OnlyOnceColor");
+                table.Columns.Remove("RedemptionRateColor");
+                table.Columns.Remove("NonActivePer");
+                table.Columns.Remove("OnlyOncePer");
+
                 string fileName = ReportName + ".xlsx";
                 using (XLWorkbook wb = new XLWorkbook())
                 {
 
                     //excelSheet.Name
                     table.TableName = ReportName;
-                    wb.Worksheets.Add(table);
+                    IXLWorksheet worksheet = wb.AddWorksheet(sheetName: ReportName);
+                    worksheet.Cell(1, 1).Value = "Report Name";
+                    worksheet.Cell(1, 2).Value = "Outletwise";
+                    worksheet.Cell(2, 1).Value = "Date";
+                    worksheet.Cell(2, 2).Value = DateTime.Now.ToString();
+                    worksheet.Cell(4, 1).InsertTable(table);
+                    //wb.Worksheets.Add(table);
                     using (MemoryStream stream = new MemoryStream())
                     {
                         wb.SaveAs(stream);
@@ -545,13 +670,34 @@ namespace WebApp.Controllers
                     table.Columns.Remove("MobileNo");
                     table.Columns["MaskedMobileNo"].ColumnName = "MobileNo";
                 }
+
+                foreach (DataRow dr in table.Rows)
+                {
+                    dr["TotalSpendStr"] = String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(dr["TotalSpend"]));
+                    dr["AvlPointsStr"] = String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(dr["AvlPoints"]));
+                    dr["PointsExpiryStr"] = String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(dr["PointsExpiry"]));
+
+                }
+                table.Columns.Remove("TotalSpend");
+                table.Columns.Remove("AvlPoints");
+                table.Columns.Remove("PointsExpiry");
+                table.Columns["TotalSpendStr"].ColumnName = "TotalSpend";
+                table.Columns["AvlPointsStr"].ColumnName = "AvlPoints";
+                table.Columns["PointsExpiryStr"].ColumnName = "PointsExpiry";
+
                 string fileName = ReportName + ".xlsx";
                 using (XLWorkbook wb = new XLWorkbook())
                 {
 
                     //excelSheet.Name
                     table.TableName = ReportName;
-                    wb.Worksheets.Add(table);
+                    IXLWorksheet worksheet = wb.AddWorksheet(sheetName: ReportName);
+                    worksheet.Cell(1, 1).Value = "Report Name";
+                    worksheet.Cell(1, 2).Value = "Point Expiry";
+                    worksheet.Cell(2, 1).Value = "Date";
+                    worksheet.Cell(2, 2).Value = DateTime.Now.ToString();
+                    worksheet.Cell(4, 1).InsertTable(table);
+                    //wb.Worksheets.Add(table);
                     using (MemoryStream stream = new MemoryStream())
                     {
                         wb.SaveAs(stream);
@@ -598,13 +744,31 @@ namespace WebApp.Controllers
                     table.Columns["MaskedMobileNo"].ColumnName = "MobileNo";
                 }
 
+                foreach (DataRow dr in table.Rows)
+                {
+                    dr["TotalSpendStr"] = String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(dr["TotalSpend"]));
+                    dr["AvlPointsStr"] = String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(dr["AvlPoints"]));
+                    
+                }
+                table.Columns.Remove("TotalSpend");
+                table.Columns.Remove("AvlPoints");
+                
+                table.Columns["TotalSpendStr"].ColumnName = "TotalSpend";
+                table.Columns["AvlPointsStr"].ColumnName = "AvlPoints";
+                 
                 string fileName = ReportName + ".xlsx";
                 using (XLWorkbook wb = new XLWorkbook())
                 {
 
                     //excelSheet.Name
                     table.TableName = ReportName;
-                    wb.Worksheets.Add(table);
+                    IXLWorksheet worksheet = wb.AddWorksheet(sheetName: ReportName);
+                    worksheet.Cell(1, 1).Value = "Report Name";
+                    worksheet.Cell(1, 2).Value = "Celebrations";
+                    worksheet.Cell(2, 1).Value = "Date";
+                    worksheet.Cell(2, 2).Value = DateTime.Now.ToString();
+                    worksheet.Cell(4, 1).InsertTable(table);
+                    //wb.Worksheets.Add(table);
                     using (MemoryStream stream = new MemoryStream())
                     {
                         wb.SaveAs(stream);
@@ -667,58 +831,23 @@ namespace WebApp.Controllers
             return new JsonResult() { Data = lstMember, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
 
-        public ActionResult ExportToProfitableCustomers(string DateRangeFlag, string fromDate, string toDate, string outletId, string ReportBasis, string ReportName)
+        public ActionResult ExportToProfitableCustomers(string CountOrBusiness, string Count, string ReportName)
         {
             System.Data.DataTable table = new System.Data.DataTable();
             try
             {
                 var userDetails = (CustomerLoginDetail)Session["UserSession"];
-                if (outletId.Equals("All"))
-                {
-                    outletId = "";
-                }
+                 
                 List<MemberList> lstMember = new List<MemberList>();
-                lstMember = RR.GetMemberList(userDetails.GroupId, outletId, userDetails.connectionString);
-
-                if (DateRangeFlag == "2")
+                lstMember = RR.GetMemberList(userDetails.GroupId, "", userDetails.connectionString);
+                int CountNumber = Convert.ToInt32(Count);
+                if (CountOrBusiness == "Count")
                 {
-                    foreach (var item in lstMember)
-                    {
-                        if (!string.IsNullOrEmpty(item.LastTxnDate))
-                        {
-                            var datenew = DateTime.ParseExact(item.LastTxnDate, "dd/MM/yyyy", CultureInfo.InvariantCulture)
-                            .ToString("MM/dd/yyyy", CultureInfo.InvariantCulture);
-                            item.txnDate = Convert.ToDateTime(datenew);
-                        }
-                        else
-                        {
-                            item.txnDate = null;
-                        }
-                    }
-                    DateTime fDate = Convert.ToDateTime(fromDate);
-                    DateTime tDate = Convert.ToDateTime(toDate);
-                    lstMember = lstMember.Where(x => x.txnDate >= fDate && x.txnDate <= tDate).ToList();
+                    lstMember = lstMember.OrderByDescending(x => x.TxnCount).Take(CountNumber).ToList();
                 }
-                if (ReportBasis != "")
+                if (CountOrBusiness == "Business")
                 {
-                    if (ReportBasis == "1")
-                    {
-                        var count = lstMember.Count;
-                        if (count > 10)
-                        {
-                            count = count / 10;
-                        }
-                        lstMember = lstMember.OrderByDescending(x => x.TotalSpend).Take(count).ToList();
-                    }
-                    if (ReportBasis == "2")
-                    {
-                        var count = lstMember.Count;
-                        if (count > 10)
-                        {
-                            count = count / 10;
-                        }
-                        lstMember = lstMember.OrderByDescending(x => x.TxnCount).Take(count).ToList();
-                    }
+                    lstMember = lstMember.OrderByDescending(x => x.TotalSpend).Take(CountNumber).ToList();
                 }
 
                 PropertyDescriptorCollection properties = TypeDescriptor.GetProperties(typeof(MemberList));
@@ -732,8 +861,21 @@ namespace WebApp.Controllers
                         row[prop.Name] = prop.GetValue(item) ?? DBNull.Value;
 
                     table.Rows.Add(row);
-                }                
-                table.Columns.Remove("txnDate");                
+                }
+                foreach (DataRow dr in table.Rows)
+                {
+                    dr["TotalSpendStr"] = String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(dr["TotalSpend"]));
+                    dr["AvlBalPointsStr"] = String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(dr["AvlBalPoints"]));
+                    dr["TotalBurnPointsStr"] = String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(dr["TotalBurnPoints"]));
+                }
+                
+                table.Columns.Remove("TotalSpend");
+                table.Columns.Remove("AvlBalPoints");
+                table.Columns.Remove("TotalBurnPoints");
+                table.Columns.Remove("txnDate");
+                table.Columns["TotalSpendStr"].ColumnName = "TotalSpend";
+                table.Columns["AvlBalPointsStr"].ColumnName = "AvlBalPoints";
+                table.Columns["TotalBurnPointsStr"].ColumnName = "TotalBurnPoints";
                 if (userDetails.LoginType == "1")
                 {
                     table.Columns.Remove("MaskedMobileNo");
@@ -749,7 +891,14 @@ namespace WebApp.Controllers
 
                     //excelSheet.Name
                     table.TableName = ReportName;
-                    wb.Worksheets.Add(table);
+
+                    IXLWorksheet worksheet = wb.AddWorksheet(sheetName: ReportName);
+                    worksheet.Cell(1, 1).Value = "Report Name";
+                    worksheet.Cell(1, 2).Value = "Profitable Customers";
+                    worksheet.Cell(2, 1).Value = "Date";
+                    worksheet.Cell(2, 2).Value = DateTime.Now.ToString();
+                    worksheet.Cell(4, 1).InsertTable(table);
+                    //wb.Worksheets.Add(table);
                     using (MemoryStream stream = new MemoryStream())
                     {
                         wb.SaveAs(stream);

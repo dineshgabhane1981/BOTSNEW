@@ -11,7 +11,7 @@
             <div class="col-md-6 col-xl-6">
                 <b>Txn Date Range</b><br /><br />&nbsp;&nbsp; <input type="radio" checked id="rdnMiniStatement" name="btdornot" /> Mini Statement &nbsp;&nbsp;&nbsp;&nbsp;
                 <input type="radio" id="rdn30Days" name="btdornot" /> Last 30 days &nbsp;&nbsp;&nbsp;&nbsp;
-                <input type="radio" id="rdnRange" name="btdornot" /> Range 
+                <input type="radio" id="rdnRange" name="btdornot" /> Range
             </div>
             <div class="col-md-3 col-xl-3">
                 From Date <br /><input type="text" class="input50" placeholder="From Date" readonly id="dtFrom" />&nbsp;&nbsp;&nbsp;&nbsp;
@@ -94,7 +94,6 @@
 <script src="~/Scripts/jquery-ui-1.12.1.min.js"></script>
 <link href="~/Content/themes/base/jquery-ui.min.css" rel="stylesheet" />
 <link href="~/Content/themes/base/jquery-ui.css" rel="stylesheet" />
-
 <script>
     var tableData = [];
     $("#OutletList").val('@ViewBag.OutletId');
@@ -108,7 +107,7 @@
         dateFormat: "yy-mm-dd",
         maxDate: today,
     });
-    $(document).ready(function () {
+    $(document).ready(function () {        
         SetFilter();
         GetData();
         $("#rdnMiniStatement").change(function () {
@@ -126,21 +125,25 @@
     });
     function SetFilter() {
         if ($("#rdnMiniStatement").is(":checked")) {
-            $('#dtFrom').prop('readonly', true);
-            $('#dtTo').prop('readonly', true);
+            $("#dtFrom").attr("disabled", "disabled");
+            $("#dtTo").attr("disabled", "disabled");
+            //$('#dtFrom').prop('readonly', true);
+            //$('#dtTo').prop('readonly', true);
             $('#dtFrom').val('');
             $('#dtTo').val('');
         }
         if ($("#rdn30Days").is(":checked")) {
-            $('#dtFrom').prop('readonly', true);
-            $('#dtTo').prop('readonly', true);
+            $("#dtFrom").attr("disabled", "disabled");
+            $("#dtTo").attr("disabled", "disabled");
             $('#dtFrom').val('');
             $('#dtTo').val('');
         }
 
         if ($("#rdnRange").is(":checked")) {
-            $('#dtFrom').prop('readonly', false);
-            $('#dtTo').prop('readonly', false);
+            //$('#dtFrom').prop('readonly', false);
+            //$('#dtTo').prop('readonly', false);
+            $("#dtFrom").removeAttr("disabled");
+            $("#dtTo").removeAttr("disabled");
         }
     }
     function GetData() {
@@ -175,7 +178,7 @@
         if ($("#chkAll").is(":checked")) {
             EnrolmentDataFlag = 4;
         }
-        
+
         $.ajax({
             type: "POST",
             url: '@Url.Action("GetOutletWiseTransactionResult", "Reports")',
@@ -254,8 +257,31 @@
                         return '<span>' + addComma(data) + '</span>';
                     }
                 },
-                { data: "TxnDatetime" },
-                { data: "TxnUpdateDate" }
+                /*{ data: "TxnDatetime" },*/
+                {
+                    "data": "TxnDatetime", "title": "Txn Datetime", "render": function (data, type) {                        
+                        var day = data.split('/')[0]
+                        var month = data.split('/')[1]
+                        var year = data.split('/')[2]
+                        var date = month + "/" + day + "/" + year;                        
+                        return date;  
+                    }
+                },
+                {
+                    "data": "TxnUpdateDate", "title": "Txn UpdateDate", "render": function (data, type) {
+                        if (data != null) {
+                            var day = data.split('/')[0]
+                            var month = data.split('/')[1]
+                            var year = data.split('/')[2]
+                            var date = month + "/" + day + "/" + year;
+                            return date;
+                        }
+                        else {
+                            return data;
+                        }
+                    }
+                }
+                 
             ],
             "columnDefs": [
                 {
@@ -269,6 +295,10 @@
                 {
                     "targets": 8,
                     "className": "text-right",
+                },
+                {
+                    "targets": 9,
+                    "type": 'date',
                 }],
             aoColumnDefs: [
                 {

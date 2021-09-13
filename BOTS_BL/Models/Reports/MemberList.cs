@@ -13,10 +13,13 @@ namespace BOTS_BL.Models
         public string MemberName { get; set; }
         public string Type { get; set; }
         public long? AvlBalPoints { get; set; }
+        public string AvlBalPointsStr { get; set; }
         public long TxnCount { get; set; }
         public long TotalSpend { get; set; }
+        public string TotalSpendStr { get; set; }
         public long TotalBurnTxn { get; set; }
         public long TotalBurnPoints { get; set; }
+        public string TotalBurnPointsStr { get; set; }
         public string LastTxnDate { get; set; }
         public string EnrooledOutlet { get; set; }
         public string EnrolledDate { get; set; }
