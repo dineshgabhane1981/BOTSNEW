@@ -19,31 +19,31 @@ namespace BOTS_BL.Repository
                 try
                 {
                     List<string> Ids = new List<string>();
-                    if (CustomerType == "Sales Executive")
+                    if (CustomerType == "SalesExecutive")
                     {
                         Ids = context.SalesmanMappings.Where(x => x.SalesExecutive == CustomerId).Select(y => y.ParticipantId).ToList();
                     }
-                    if (CustomerType == "ASM (Sales Manager)")
+                    if (CustomerType == "SalesManager")
                     {
                         Ids = context.SalesmanMappings.Where(x => x.AreaSalesManager == CustomerId).Select(y => y.ParticipantId).ToList();
                     }
-                    if (CustomerType == "Sales Officer")
+                    if (CustomerType == "SalesOfficer")
                     {
                         Ids = context.SalesmanMappings.Where(x => x.SalesOfficer == CustomerId).Select(y => y.ParticipantId).ToList();
                     }
-                    if (CustomerType == "Sales Representative")
+                    if (CustomerType == "SalesRepresentative")
                     {
                         Ids = context.SalesmanMappings.Where(x => x.SalesRepresentative == CustomerId).Select(y => y.ParticipantId).ToList();
                     }
-                    if (CustomerType == "National Head")
+                    if (CustomerType == "NationalHead")
                     {
                         Ids = context.SalesmanMappings.Where(x => x.NationalHead == CustomerId).Select(y => y.ParticipantId).ToList();
                     }
-                    if (CustomerType == "Zonal Head")
+                    if (CustomerType == "ZonalHead")
                     {
                         Ids = context.SalesmanMappings.Where(x => x.ZonalHead == CustomerId).Select(y => y.ParticipantId).ToList();
                     }
-                    if (CustomerType == "State Head")
+                    if (CustomerType == "StateHead")
                     {
                         Ids = context.SalesmanMappings.Where(x => x.StateHead == CustomerId).Select(y => y.ParticipantId).ToList();
                     }
@@ -69,31 +69,31 @@ namespace BOTS_BL.Repository
                 try
                 {
                     List<string> Ids = new List<string>();
-                    if (CustomerType == "Sales Executive")
+                    if (CustomerType == "SalesExecutive")
                     {
                         Ids = context.SalesmanMappings.Where(x => x.SalesExecutive == CustomerId).Select(y => y.ParticipantId).ToList();
                     }
-                    if (CustomerType == "ASM (Sales Manager)")
+                    if (CustomerType == "SalesManager")
                     {
                         Ids = context.SalesmanMappings.Where(x => x.AreaSalesManager == CustomerId).Select(y => y.ParticipantId).ToList();
                     }
-                    if (CustomerType == "Sales Officer")
+                    if (CustomerType == "SalesOfficer")
                     {
                         Ids = context.SalesmanMappings.Where(x => x.SalesOfficer == CustomerId).Select(y => y.ParticipantId).ToList();
                     }
-                    if (CustomerType == "Sales Representative")
+                    if (CustomerType == "SalesRepresentative")
                     {
                         Ids = context.SalesmanMappings.Where(x => x.SalesRepresentative == CustomerId).Select(y => y.ParticipantId).ToList();
                     }
-                    if (CustomerType == "National Head")
+                    if (CustomerType == "NationalHead")
                     {
                         Ids = context.SalesmanMappings.Where(x => x.NationalHead == CustomerId).Select(y => y.ParticipantId).ToList();
                     }
-                    if (CustomerType == "Zonal Head")
+                    if (CustomerType == "ZonalHead")
                     {
                         Ids = context.SalesmanMappings.Where(x => x.ZonalHead == CustomerId).Select(y => y.ParticipantId).ToList();
                     }
-                    if (CustomerType == "State Head")
+                    if (CustomerType == "StateHead")
                     {
                         Ids = context.SalesmanMappings.Where(x => x.StateHead == CustomerId).Select(y => y.ParticipantId).ToList();
                     }
@@ -144,31 +144,31 @@ namespace BOTS_BL.Repository
                 try
                 {
                     List<string> Ids = new List<string>();
-                    if (CustomerType == "Sales Executive")
+                    if (CustomerType == "SalesExecutive")
                     {
                         Ids = context.SalesmanMappings.Where(x => x.SalesExecutive == CustomerId).Select(y => y.ParticipantId).ToList();
                     }
-                    if (CustomerType == "ASM (Sales Manager)")
+                    if (CustomerType == "SalesManager")
                     {
                         Ids = context.SalesmanMappings.Where(x => x.AreaSalesManager == CustomerId).Select(y => y.ParticipantId).ToList();
                     }
-                    if (CustomerType == "Sales Officer")
+                    if (CustomerType == "SalesOfficer")
                     {
                         Ids = context.SalesmanMappings.Where(x => x.SalesOfficer == CustomerId).Select(y => y.ParticipantId).ToList();
                     }
-                    if (CustomerType == "Sales Representative")
+                    if (CustomerType == "SalesRepresentative")
                     {
                         Ids = context.SalesmanMappings.Where(x => x.SalesRepresentative == CustomerId).Select(y => y.ParticipantId).ToList();
                     }
-                    if (CustomerType == "National Head")
+                    if (CustomerType == "NationalHead")
                     {
                         Ids = context.SalesmanMappings.Where(x => x.NationalHead == CustomerId).Select(y => y.ParticipantId).ToList();
                     }
-                    if (CustomerType == "Zonal Head")
+                    if (CustomerType == "ZonalHead")
                     {
                         Ids = context.SalesmanMappings.Where(x => x.ZonalHead == CustomerId).Select(y => y.ParticipantId).ToList();
                     }
-                    if (CustomerType == "State Head")
+                    if (CustomerType == "StateHead")
                     {
                         Ids = context.SalesmanMappings.Where(x => x.StateHead == CustomerId).Select(y => y.ParticipantId).ToList();
                     }
@@ -235,34 +235,34 @@ namespace BOTS_BL.Repository
             try
             {
 
-                if (CustomerType == "Sales Executive")
-                {
-                    CustomerType = "SalesExecutive";
-                }
-                else if (CustomerType == "ASM (Sales Manager)")
-                {
-                    CustomerType = "AreaSalesManager";
-                }
-                else if (CustomerType == "Sales Officer")
-                {
-                    CustomerType = "SalesOfficer";
-                }
-                else if (CustomerType == "Sales Representative")
-                {
-                    CustomerType = "SalesRepresentative";
-                }
-                else if (CustomerType == "State Head")
-                {
-                    CustomerType = "StateHead";
-                }
-                else if (CustomerType == "Zonal Head")
-                {
-                    CustomerType = "ZonalHead";
-                }
-                else if (CustomerType == "National Head")
-                {
-                    CustomerType = "NationalHead";
-                }
+                //if (CustomerType == "SalesExecutive")
+                //{
+                //    CustomerType = "SalesExecutive";
+                //}
+                //else if (CustomerType == "SalesManager")
+                //{
+                //    CustomerType = "SalesManager";
+                //}
+                //else if (CustomerType == "SalesOfficer")
+                //{
+                //    CustomerType = "SalesOfficer";
+                //}
+                //else if (CustomerType == "SalesRepresentative")
+                //{
+                //    CustomerType = "SalesRepresentative";
+                //}
+                //else if (CustomerType == "StateHead")
+                //{
+                //    CustomerType = "StateHead";
+                //}
+                //else if (CustomerType == "ZonalHead")
+                //{
+                //    CustomerType = "ZonalHead";
+                //}
+                //else if (CustomerType == "NationalHead")
+                //{
+                //    CustomerType = "NationalHead";
+                //}
                 using (var context = new ChitaleDBContext())
                 {
                     lstparticipantListsformgt = context.Database.SqlQuery<ParticipantListForManagement>("sp_KYBLoad_Emp @pi_CustomerId, @pi_Datetime, @pi_CustomerType",
@@ -321,34 +321,34 @@ namespace BOTS_BL.Repository
             List<ParticipantListForManagement> lstparticipantListsformgt = new List<ParticipantListForManagement>();
             try
             {
-                if (CustomerType == "Sales Executive")
-                {
-                    CustomerType = "SalesExecutive";
-                }
-                else if (CustomerType == "ASM (Sales Manager)")
-                {
-                    CustomerType = "AreaSalesManager";
-                }
-                else if (CustomerType == "Sales Officer")
-                {
-                    CustomerType = "SalesOfficer";
-                }
-                else if (CustomerType == "Sales Representative")
-                {
-                    CustomerType = "SalesRepresentative";
-                }
-                else if (CustomerType == "State Head")
-                {
-                    CustomerType = "StateHead";
-                }
-                else if (CustomerType == "Zonal Head")
-                {
-                    CustomerType = "ZonalHead";
-                }
-                else if (CustomerType == "National Head")
-                {
-                    CustomerType = "NationalHead";
-                }
+                //if (CustomerType == "Sales Executive")
+                //{
+                //    CustomerType = "SalesExecutive";
+                //}
+                //else if (CustomerType == "ASM (Sales Manager)")
+                //{
+                //    CustomerType = "AreaSalesManager";
+                //}
+                //else if (CustomerType == "Sales Officer")
+                //{
+                //    CustomerType = "SalesOfficer";
+                //}
+                //else if (CustomerType == "Sales Representative")
+                //{
+                //    CustomerType = "SalesRepresentative";
+                //}
+                //else if (CustomerType == "State Head")
+                //{
+                //    CustomerType = "StateHead";
+                //}
+                //else if (CustomerType == "Zonal Head")
+                //{
+                //    CustomerType = "ZonalHead";
+                //}
+                //else if (CustomerType == "National Head")
+                //{
+                //    CustomerType = "NationalHead";
+                //}
                 using (var context = new ChitaleDBContext())
                 {
                     lstparticipantListsformgt = context.Database.SqlQuery<ParticipantListForManagement>("sp_KYBParticipant_Emp @pi_LoginId, @pi_Datetime, @pi_CustomerType,@pi_ParticipantId,@pi_ParticipantType",
@@ -382,31 +382,31 @@ namespace BOTS_BL.Repository
                 try
                 {
                     List<string> Ids = new List<string>();
-                    if (CustomerType == "Sales Executive")
+                    if (CustomerType == "SalesExecutive")
                     {
                         Ids = context.SalesmanMappings.Where(x => x.SalesExecutive == CustomerId).Select(y => y.ParticipantId).ToList();
                     }
-                    if (CustomerType == "ASM (Sales Manager)")
+                    if (CustomerType == "SalesManager")
                     {
                         Ids = context.SalesmanMappings.Where(x => x.AreaSalesManager == CustomerId).Select(y => y.ParticipantId).ToList();
                     }
-                    if (CustomerType == "Sales Officer")
+                    if (CustomerType == "SalesOfficer")
                     {
                         Ids = context.SalesmanMappings.Where(x => x.SalesOfficer == CustomerId).Select(y => y.ParticipantId).ToList();
                     }
-                    if (CustomerType == "Sales Representative")
+                    if (CustomerType == "SalesRepresentative")
                     {
                         Ids = context.SalesmanMappings.Where(x => x.SalesRepresentative == CustomerId).Select(y => y.ParticipantId).ToList();
                     }
-                    if (CustomerType == "National Head")
+                    if (CustomerType == "NationalHead")
                     {
                         Ids = context.SalesmanMappings.Where(x => x.NationalHead == CustomerId).Select(y => y.ParticipantId).ToList();
                     }
-                    if (CustomerType == "Zonal Head")
+                    if (CustomerType == "ZonalHead")
                     {
                         Ids = context.SalesmanMappings.Where(x => x.ZonalHead == CustomerId).Select(y => y.ParticipantId).ToList();
                     }
-                    if (CustomerType == "State Head")
+                    if (CustomerType == "StateHead")
                     {
                         Ids = context.SalesmanMappings.Where(x => x.StateHead == CustomerId).Select(y => y.ParticipantId).ToList();
                     }

@@ -59,14 +59,14 @@
                                     </td>
                                     <td>Overall</td>
                                     <td></td>
-                                    <td>@Model.objOverAll.VolumeTgt</td>
-                                    <td>@Model.objOverAll.VolumeAch</td>
+                                    <td>@Model.objOverAll.VolFocusStr</td>
+                                    <td>@Model.objOverAll.VolAchStr</td>
                                     <td>@Model.objOverAll.VolumeAchPercentage</td>
-                                    <td>@Model.objOverAll.VolumePoints</td>
-                                    <td>@Model.objOverAll.ValueTgt</td>
-                                    <td>@Model.objOverAll.ValueAch</td>
+                                    <td>@Model.objOverAll.VolPtsStr</td>
+                                    <td>@Model.objOverAll.ValFocusStr</td>
+                                    <td>@Model.objOverAll.ValAchStr</td>
                                     <td>@Model.objOverAll.ValueAchPercentage</td>
-                                    <td>@Model.objOverAll.ValuePoints</td>
+                                    <td>@Model.objOverAll.ValPtsStr</td>
 
 
                                 </tr>
@@ -81,14 +81,14 @@
                                             <td></td>
                                             <td><a href="#" onclick="ShowSubCategory('@dynamicIdSub');" style="color:red;">@item.Name</a></td>
                                             <td>Category</td>
-                                            <td>@item.VolumeTgt</td>
-                                            <td>@item.VolumeAch</td>
+                                            <td>@item.VolFocusStr</td>
+                                            <td>@item.VolAchStr</td>
                                             <td>@item.VolumeAchPercentage</td>
-                                            <td>@item.VolumePoints</td>
-                                            <td>@item.ValueTgt</td>
-                                            <td>@item.ValueAch</td>
+                                            <td>@item.VolPtsStr</td>
+                                            <td>@item.ValFocusStr</td>
+                                            <td>@item.ValAchStr</td>
                                             <td>@item.ValueAchPercentage</td>
-                                            <td>@item.ValuePoints</td>
+                                            <td>@item.ValPtsStr</td>
                                         </tr>
 
                                         if (Model.objSubCategory != null)
@@ -102,14 +102,14 @@
                                                         <td></td>
                                                         <td><a href="#" onclick="ShowProducts('@dynamicIdProd');" style="color:green;">@itemSub.Name</a></td>
                                                         <td>Sub Category</td>
-                                                        <td>@itemSub.VolumeTgt</td>
-                                                        <td>@itemSub.VolumeAch</td>
+                                                        <td>@itemSub.VolFocusStr</td>
+                                                        <td>@itemSub.VolAchStr</td>
                                                         <td>@itemSub.VolumeAchPercentage</td>
-                                                        <td>@itemSub.VolumePoints</td>
-                                                        <td>@itemSub.ValueTgt</td>
-                                                        <td>@itemSub.ValueAch</td>
+                                                        <td>@itemSub.VolPtsStr</td>
+                                                        <td>@itemSub.ValFocusStr</td>
+                                                        <td>@itemSub.ValAchStr</td>
                                                         <td>@itemSub.ValueAchPercentage</td>
-                                                        <td>@itemSub.ValuePoints</td>
+                                                        <td>@itemSub.ValPtsStr</td>
                                                     </tr>
 
 
@@ -123,14 +123,14 @@
                                                                     <td></td>
                                                                     <td style="color:brown;">@itemProd.Name</td>
                                                                     <td>Product</td>
-                                                                    <td>@itemProd.VolumeTgt</td>
-                                                                    <td>@itemProd.VolumeAch</td>
+                                                                    <td>@itemProd.VolFocusStr</td>
+                                                                    <td>@itemProd.VolAchStr</td>
                                                                     <td>@itemProd.VolumeAchPercentage</td>
-                                                                    <td>@itemProd.VolumePoints</td>
-                                                                    <td>@itemProd.ValueTgt</td>
-                                                                    <td>@itemProd.ValueAch</td>
+                                                                    <td>@itemProd.VolPtsStr</td>
+                                                                    <td>@itemProd.ValFocusStr</td>
+                                                                    <td>@itemProd.ValAchStr</td>
                                                                     <td>@itemProd.ValueAchPercentage</td>
-                                                                    <td>@itemProd.ValuePoints</td>
+                                                                    <td>@itemProd.ValPtsStr</td>
                                                                 </tr>
                                                             }
                                                         }
@@ -160,11 +160,12 @@
     $(document).ready(function () {
         $('#activityTable').DataTable({
             "aaSorting": [],
-            "paging": true,
+            "bPaginate": false,
+            //"paging": true,
             "ordering": false,
             "info": false,
             "bFilter": true,
-            "pageLength": 100,
+            /*"pageLength": 100,*/
             "pagingType": "simple_numbers",
             aoColumnDefs: [
                 {

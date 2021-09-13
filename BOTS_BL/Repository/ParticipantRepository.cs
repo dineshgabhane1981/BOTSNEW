@@ -162,34 +162,34 @@ namespace BOTS_BL.Repository
             {
                 try
                 {
-                    if (CustomerType == "Sales Executive")
-                    {
-                        CustomerType = "SalesExecutive";
-                    }
-                    else if (CustomerType == "ASM (Sales Manager)")
-                    {
-                        CustomerType = "AreaSalesManager";
-                    }
-                    else if (CustomerType == "Sales Officer")
-                    {
-                        CustomerType = "SalesOfficer";
-                    }
-                    else if (CustomerType == "Sales Representative")
-                    {
-                        CustomerType = "SalesRepresentative";
-                    }
-                    else if (CustomerType == "State Head")
-                    {
-                        CustomerType = "StateHead";
-                    }
-                    else if (CustomerType == "Zonal Head")
-                    {
-                        CustomerType = "ZonalHead";
-                    }
-                    else if (CustomerType == "National Head")
-                    {
-                        CustomerType = "NationalHead";
-                    }
+                    //if (CustomerType == "Sales Executive")
+                    //{
+                    //    CustomerType = "SalesExecutive";
+                    //}
+                    //else if (CustomerType == "ASM (Sales Manager)")
+                    //{
+                    //    CustomerType = "AreaSalesManager";
+                    //}
+                    //else if (CustomerType == "Sales Officer")
+                    //{
+                    //    CustomerType = "SalesOfficer";
+                    //}
+                    //else if (CustomerType == "Sales Representative")
+                    //{
+                    //    CustomerType = "SalesRepresentative";
+                    //}
+                    //else if (CustomerType == "State Head")
+                    //{
+                    //    CustomerType = "StateHead";
+                    //}
+                    //else if (CustomerType == "Zonal Head")
+                    //{
+                    //    CustomerType = "ZonalHead";
+                    //}
+                    //else if (CustomerType == "National Head")
+                    //{
+                    //    CustomerType = "NationalHead";
+                    //}
                     objData = context.Database.SqlQuery<NoActionModelTile>("Chitale_NoActionByParticipant1 @pi_Date, @pi_CustomerId, @pi_CustomerType",
                                   new SqlParameter("@pi_Date", DateTime.Now.ToString("yyyy-MM-dd")),
                                   new SqlParameter("@pi_CustomerId", CustomerId),
@@ -211,34 +211,34 @@ namespace BOTS_BL.Repository
             {
                 try
                 {
-                    if (CustomerType == "Sales Executive")
-                    {
-                        CustomerType = "SalesExecutive";
-                    }
-                    else if (CustomerType == "ASM (Sales Manager)")
-                    {
-                        CustomerType = "AreaSalesManager";
-                    }
-                    else if (CustomerType == "Sales Officer")
-                    {
-                        CustomerType = "SalesOfficer";
-                    }
-                    else if (CustomerType == "Sales Representative")
-                    {
-                        CustomerType = "SalesRepresentative";
-                    }
-                    else if (CustomerType == "State Head")
-                    {
-                        CustomerType = "StateHead";
-                    }
-                    else if (CustomerType == "Zonal Head")
-                    {
-                        CustomerType = "ZonalHead";
-                    }
-                    else if (CustomerType == "National Head")
-                    {
-                        CustomerType = "NationalHead";
-                    }
+                    //if (CustomerType == "Sales Executive")
+                    //{
+                    //    CustomerType = "SalesExecutive";
+                    //}
+                    //else if (CustomerType == "ASM (Sales Manager)")
+                    //{
+                    //    CustomerType = "AreaSalesManager";
+                    //}
+                    //else if (CustomerType == "Sales Officer")
+                    //{
+                    //    CustomerType = "SalesOfficer";
+                    //}
+                    //else if (CustomerType == "Sales Representative")
+                    //{
+                    //    CustomerType = "SalesRepresentative";
+                    //}
+                    //else if (CustomerType == "State Head")
+                    //{
+                    //    CustomerType = "StateHead";
+                    //}
+                    //else if (CustomerType == "Zonal Head")
+                    //{
+                    //    CustomerType = "ZonalHead";
+                    //}
+                    //else if (CustomerType == "National Head")
+                    //{
+                    //    CustomerType = "NationalHead";
+                    //}
                     objData = context.Database.SqlQuery<NoActionParticipantData>("Chitale_NoActionByParticipant2 @pi_Date, @pi_CustomerId, @pi_CustomerType,@pi_SelectedType",
                                   new SqlParameter("@pi_Date", DateTime.Now.ToString("yyyy-MM-dd")),
                                   new SqlParameter("@pi_CustomerId", CustomerId),

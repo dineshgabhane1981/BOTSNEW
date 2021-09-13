@@ -34,8 +34,8 @@ namespace Chitale.Controllers
                     return RedirectToAction("Index", "ManagementDashboard", new { CustomerId = CustomerId, CustomerType = CustomerType });
                 }
 
-                if (CustomerType == "Sales Executive" || CustomerType == "ASM (Sales Manager)" || CustomerType == "Sales Officer" || CustomerType == "Sales Representative" || CustomerType == "National Head"
-                    || CustomerType == "Zonal Head" || CustomerType == "State Head")
+                if (CustomerType == "SalesExecutive" || CustomerType == "SalesManager" || CustomerType == "SalesOfficer" || CustomerType == "SalesRepresentative" || CustomerType == "NationalHead"
+                    || CustomerType == "ZonalHead" || CustomerType == "StateHead")
                 {
                     objCust.CustomerCategory = "Employee";
                     Session["ChitaleEmployee"] = objCust;
