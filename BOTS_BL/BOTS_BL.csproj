@@ -270,6 +270,7 @@
     <Compile Include="Repository\CampaignRepository.cs" />
     <Compile Include="Repository\ChitaleDashboardRepository.cs" />
     <Compile Include="Repository\CustomerRepository.cs" />
+    <Compile Include="Repository\DashBoardCustomerLoginRepository.cs" />
     <Compile Include="Repository\DashboardRepository.cs" />
     <Compile Include="Repository\DiscussionsRepository.cs" />
     <Compile Include="Repository\EmployeeRepository.cs" />

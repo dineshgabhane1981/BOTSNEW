@@ -54,4 +54,22 @@ namespace BOTS_BL.Models
         [NotMapped]
         public string connectionString { get; set; }
     }
+
+    public class DashboardCustomerLogin
+    {
+        public long SlNo { get; set; }
+        public string CustLoginType { get; set; }
+        public string OutletOrBrandId { get; set; }
+        public string GroupId { get; set; }
+        public string LoginType { get; set; }
+        public string MobileNo { get; set; }
+        public bool? LoginStatus { get; set; }
+        public String CreatedDate { get; set; }
+        public string LevelIndicator { get; set; }
+        public string UserName { get; set; }
+        public string Password { get; set; }
+        public string LoginId { get; set; }
+        public string UserId { get; set; }
+        public string CustomerName { get; set; }
+    }
 }
