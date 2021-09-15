@@ -108,9 +108,9 @@
                     </div>
                 </div>
             </div>
-        
+
             <div class="col-md-6 col-xl-2" style="margin-left:20px; margin-top:20px;">
-                Legend                
+                Legend
                 <div class="card mb-2" style="background-color: #87CEEB; padding:5px;">
                     <div class="widget-content-wrapper text-white" style="display:block !important;">
                         <div class="widget-content-left">
@@ -143,11 +143,11 @@
                     </div>
                 </div>
             </div>
-        
-        
-        
+
+
+
         </div>
-               
+
     </div>
 
     <div class="row mb-3 pt-3 pl-3 pr-3 card" id="dvCelebrationTable" style="display:none;">
@@ -236,8 +236,8 @@
                 if (currentMonth == 2) {
                     $("#spnMonth").text('@nextMonth' + '-' + '@nextYear');
                 }
-                if (currentMonth == 3) {                     
-                    $("#spnMonth").text('@next2Month' + '-' + '@next2Year');                    
+                if (currentMonth == 3) {
+                    $("#spnMonth").text('@next2Month' + '-' + '@next2Year');
                 }
                 if (type == 1) {
                     $("#spnType").text("Birthdays | ");
@@ -310,20 +310,30 @@
                 },
                 {
                     "data": "LastTxnDate", "title": "Last Txn Date", "render": function (data, type) {
+                        if (data != "" && data != null) {
                         var day = data.split('/')[0]
                         var month = data.split('/')[1]
                         var year = data.split('/')[2]
                         var date = month + "/" + day + "/" + year;
-                        return date;
+                            return date;
+                        }
+                        else {
+                            return data;
+                        }
                     }
                 },
                 {
                     "data": "CelebrationDate", "title": "Celebration Date", "render": function (data, type) {
+                        if (data != "" && data != null) {
                         var day = data.split('/')[0]
                         var month = data.split('/')[1]
                         var year = data.split('/')[2]
                         var date = month + "/" + day + "/" + year;
-                        return date;
+                            return date;
+                        }
+                        else {
+                            return data;
+                        }
                     }
                 }
                 //{ data: "LastTxnDate" },

@@ -149,6 +149,10 @@
                         toastr.error('There is problem while sending OTP, please try after sometime');
                         $("#divLoader").hide();
                     }
+                    if (response.responseText == "NoUserFound") {
+                        toastr.error('No User exist');
+                        $("#divLoader").hide();
+                    }
                     $("#divLoader").hide();
                 }
             });

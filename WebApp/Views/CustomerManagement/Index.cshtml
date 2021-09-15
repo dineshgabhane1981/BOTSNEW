@@ -219,6 +219,59 @@
 <script>
 
     $(document).ready(function () {
+        var UserCredential = {UserName:"kirtesh",Password:"Demo1"};
+        console.log(JSON.stringify(UserCredential))
+        $.ajax({
+            
+            url: "https://localhost:44342/api/Test/authentication",
+            method: "POST",      // The HTTP method to use for the request
+            contentType: "application/json",
+            data: JSON.stringify(UserCredential),
+            //dataType: "json", // The type of data that you're exerciseecting back
+
+            error: function () {
+
+                // A function to be called if the request fails.
+            },
+
+            success: function (response) {
+                console.log(response);
+
+                $.ajax({
+
+                    url: "https://localhost:44342/api/Test/AllTest",
+                    method: "GET",      // The HTTP method to use for the request
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json", // The type of data that you're exerciseecting back
+                    headers: { "Authorization": response },
+
+                    //Authorization: 'Bearer ' + response.data[0],
+                    error: function () {
+                        alert(111)
+                        // A function to be called if the request fails.
+                    },
+
+                    success: function (response) {
+                        alert(222)
+                        console.log(response);
+
+                        // A function to be called if the request succeeds.
+                    },
+                    complete: function (response) {
+                        alert(333)
+                        // A function to be called when the request finishes
+                    }
+                });
+
+                // A function to be called if the request succeeds.
+            },
+            complete: function (response) {
+
+                // A function to be called when the request finishes
+            }
+        });
+
+
 
         $('#btnPopupClose').on("click", function () {
             $("#myModal").hide(1000);

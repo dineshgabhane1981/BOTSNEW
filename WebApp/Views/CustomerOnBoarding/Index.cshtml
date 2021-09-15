@@ -350,7 +350,7 @@
                             Mobile App Description
                         </div>
                         <div class="col-sm-4" style="float:left;margin-top:10px;">
-                            @Html.TextBoxFor(model => model.bots_TblGroupMaster.MobileAppDescription, new { @class = "input100", @id = "txtMobileAppDescription" })
+                            @Html.TextBoxFor(model => model.bots_TblGroupMaster.MobileAppDescription, new { @class = "input100", @readonly = "readonly", @id = "txtMobileAppDescription" })
                         </div>
                     </div>
                 </div>
@@ -653,9 +653,7 @@
             <div class="container-fluid pt-3 pl-3 pr-3 pb-3">
                 <button type="button" id="btnCustomerSubmit" class="btn btn-primary pull-right" onclick="return CheckValidation('CS');" style="margin-right:10px;">Submit</button>
                 <button type="submit" id="btnCustomerSave" class="btn btn-primary pull-right" onclick="return CheckValidation();" style="margin-right:10px;">Save</button>
-
             </div>
-
         </div>
     </div>
 
@@ -687,6 +685,7 @@
         RemoveRequiredBorderAssignment();
         RemoveRequiredBorderDeal();
         CheckInstallmentAmount();
+        
 
         $("#btnPopupClose").on("click", function () {
             $("#hdnCustomerStatus").val("");
@@ -943,8 +942,17 @@
             }
         });
 
-
+        $('#ddlIsMobileApp').change(function () {
+            if ($("#ddlIsMobileApp option:selected").text() == "Yes") {
+                $("#txtMobileAppDescription").attr("readonly", false);
+            }
+            else {
+                $("#txtMobileAppDescription").attr("readonly", true);
+                $("#txtMobileAppDescription").val("");
+            }
+        });
     }
+
     function RemoveRequiredBorderCategory() {
         $('#ddlCategory1').change(function () {
             if ($("#ddlCategory1 option:selected").text() == "Please Select") {
@@ -982,33 +990,82 @@
         $('#ddlBOProduct1').change(function () {
             if ($("#ddlBOProduct1 option:selected").text() == "Please Select") {
                 $('#ddlBOProduct1').css('border-color', 'red');
+                $('#ddlBillingPartner1').attr("disabled", false);
+                $('#ddlBPProduct1').attr("disabled", false);
             }
             else {
+                if ($("#ddlBOProduct1 option:selected").text() == "Octa XS") {
+                    $('#ddlBillingPartner1').attr("disabled", true);
+                    $('#ddlBPProduct1').attr("disabled", true);
+                }
+                else {
+                    $('#ddlBillingPartner1').attr("disabled", false);
+                    $('#ddlBPProduct1').attr("disabled", false);
+                }
                 $('#ddlBOProduct1').css('border-color', '');
+                $('#ddlBillingPartner1').css('border-color', '');
+                $('#ddlBPProduct1').css('border-color', '');
             }
         });
         $('#ddlBOProduct2').change(function () {
             if ($("#ddlBOProduct2 option:selected").text() == "Please Select") {
                 $('#ddlBOProduct2').css('border-color', 'red');
+                $('#ddlBillingPartner2').attr("disabled", false);
+                $('#ddlBPProduct2').attr("disabled", false);
             }
             else {
+                if ($("#ddlBOProduct2 option:selected").text() == "Octa XS") {
+                    $('#ddlBillingPartner2').attr("disabled", true);
+                    $('#ddlBPProduct2').attr("disabled", true);
+                }
+                else {
+                    $('#ddlBillingPartner2').attr("disabled", false);
+                    $('#ddlBPProduct2').attr("disabled", false);
+                }
                 $('#ddlBOProduct2').css('border-color', '');
+                $('#ddlBillingPartner2').css('border-color', '');
+                $('#ddlBPProduct2').css('border-color', '');
             }
         });
         $('#ddlBOProduct3').change(function () {
             if ($("#ddlBOProduct3 option:selected").text() == "Please Select") {
                 $('#ddlBOProduct3').css('border-color', 'red');
+                $('#ddlBillingPartner3').attr("disabled", false);
+                $('#ddlBPProduct3').attr("disabled", false);
             }
             else {
+
+                if ($("#ddlBOProduct3 option:selected").text() == "Octa XS") {
+                    $('#ddlBillingPartner3').attr("disabled", true);
+                    $('#ddlBPProduct3').attr("disabled", true);
+                }
+                else {
+                    $('#ddlBillingPartner3').attr("disabled", false);
+                    $('#ddlBPProduct3').attr("disabled", false);
+                }
                 $('#ddlBOProduct3').css('border-color', '');
+                $('#ddlBillingPartner3').css('border-color', '');
+                $('#ddlBPProduct3').css('border-color', '');
             }
         });
         $('#ddlBOProduct4').change(function () {
             if ($("#ddlBOProduct4 option:selected").text() == "Please Select") {
                 $('#ddlBOProduct4').css('border-color', 'red');
+                $('#ddlBillingPartner4').attr("disabled", false);
+                $('#ddlBPProduct4').attr("disabled", false);
             }
             else {
+                if ($("#ddlBOProduct4 option:selected").text() == "Octa XS") {
+                    $('#ddlBillingPartner4').attr("disabled", true);
+                    $('#ddlBPProduct4').attr("disabled", true);
+                }
+                else {
+                    $('#ddlBillingPartner4').attr("disabled", false);
+                    $('#ddlBPProduct4').attr("disabled", false);
+                }
                 $('#ddlBOProduct4').css('border-color', '');
+                $('#ddlBillingPartner4').css('border-color', '');
+                $('#ddlBPProduct4').css('border-color', '');
             }
         });
 
@@ -1180,9 +1237,7 @@
                 $('#ddlBPProduct4').css('border-color', '');
             }
         });
-
-
-    }
+ }
 
     function RemoveRequiredBorderAssignment() {
 
@@ -1616,13 +1671,16 @@
                 $('#ddlBOProduct1').css('border-color', 'red');
                 returnStatus = false;
             }
-            if ($("#ddlBillingPartner1 option:selected").text() == "Please Select") {
-                $('#ddlBillingPartner1').css('border-color', 'red');
-                returnStatus = false;
-            }
-            if ($("#ddlBPProduct1 option:selected").text() == "Please Select") {
-                $('#ddlBPProduct1').css('border-color', 'red');
-                returnStatus = false;
+
+            if ($("#ddlBOProduct1 option:selected").text() != "Octa XS") {
+                if ($("#ddlBillingPartner1 option:selected").text() == "Please Select") {
+                    $('#ddlBillingPartner1').css('border-color', 'red');
+                    returnStatus = false;
+                }
+                if ($("#ddlBPProduct1 option:selected").text() == "Please Select") {
+                    $('#ddlBPProduct1').css('border-color', 'red');
+                    returnStatus = false;
+                }
             }
         }
         if (categoryNo == 2) {
@@ -1647,19 +1705,6 @@
                 returnStatus = false;
             }
 
-            if ($("#ddlBOProduct1 option:selected").text() == "Please Select") {
-                $('#ddlBOProduct1').css('border-color', 'red');
-                returnStatus = false;
-            }
-            if ($("#ddlBillingPartner1 option:selected").text() == "Please Select") {
-                $('#ddlBillingPartner1').css('border-color', 'red');
-                returnStatus = false;
-            }
-            if ($("#ddlBPProduct2 option:selected").text() == "Please Select") {
-                $('#ddlBPProduct2').css('border-color', 'red');
-                returnStatus = false;
-            }
-
             if ($("#ddlCategory2 option:selected").text() == "Please Select") {
                 $('#ddlCategory2').css('border-color', 'red');
                 returnStatus = false;
@@ -1679,18 +1724,34 @@
                 $('#txtNoOfEnrolled2').css('border-color', 'red');
                 returnStatus = false;
             }
-
+            if ($("#ddlBOProduct1 option:selected").text() == "Please Select") {
+                $('#ddlBOProduct1').css('border-color', 'red');
+                returnStatus = false;
+            }
             if ($("#ddlBOProduct2 option:selected").text() == "Please Select") {
                 $('#ddlBOProduct2').css('border-color', 'red');
                 returnStatus = false;
             }
-            if ($("#ddlBillingPartner2 option:selected").text() == "Please Select") {
-                $('#ddlBillingPartner2').css('border-color', 'red');
-                returnStatus = false;
+            if ($("#ddlBOProduct1 option:selected").text() != "Octa XS") {
+                if ($("#ddlBillingPartner1 option:selected").text() == "Please Select") {
+                    $('#ddlBillingPartner1').css('border-color', 'red');
+                    returnStatus = false;
+                }
+                if ($("#ddlBPProduct1 option:selected").text() == "Please Select") {
+                    $('#ddlBPProduct1').css('border-color', 'red');
+                    returnStatus = false;
+                }
             }
-            if ($("#ddlBPProduct2 option:selected").text() == "Please Select") {
-                $('#ddlBPProduct2').css('border-color', 'red');
-                returnStatus = false;
+
+            if ($("#ddlBOProduct2 option:selected").text() != "Octa XS") {
+                if ($("#ddlBillingPartner2 option:selected").text() == "Please Select") {
+                    $('#ddlBillingPartner2').css('border-color', 'red');
+                    returnStatus = false;
+                }
+                if ($("#ddlBPProduct2 option:selected").text() == "Please Select") {
+                    $('#ddlBPProduct2').css('border-color', 'red');
+                    returnStatus = false;
+                }
             }
 
         }
@@ -1716,18 +1777,6 @@
                 returnStatus = false;
             }
 
-            if ($("#ddlBOProduct1 option:selected").text() == "Please Select") {
-                $('#ddlBOProduct1').css('border-color', 'red');
-                returnStatus = false;
-            }
-            if ($("#ddlBillingPartner1 option:selected").text() == "Please Select") {
-                $('#ddlBillingPartner1').css('border-color', 'red');
-                returnStatus = false;
-            }
-            if ($("#ddlBPProduct1 option:selected").text() == "Please Select") {
-                $('#ddlBPProduct1').css('border-color', 'red');
-                returnStatus = false;
-            }
 
             if ($("#ddlCategory2 option:selected").text() == "Please Select") {
                 $('#ddlCategory2').css('border-color', 'red');
@@ -1749,18 +1798,6 @@
                 returnStatus = false;
             }
 
-            if ($("#ddlBOProduct2 option:selected").text() == "Please Select") {
-                $('#ddlBOProduct2').css('border-color', 'red');
-                returnStatus = false;
-            }
-            if ($("#ddlBillingPartner2 option:selected").text() == "Please Select") {
-                $('#ddlBillingPartner2').css('border-color', 'red');
-                returnStatus = false;
-            }
-            if ($("#ddlBPProduct2 option:selected").text() == "Please Select") {
-                $('#ddlBPProduct2').css('border-color', 'red');
-                returnStatus = false;
-            }
 
             if ($("#ddlCategory3 option:selected").text() == "Please Select") {
                 $('#ddlCategory3').css('border-color', 'red');
@@ -1782,18 +1819,53 @@
                 returnStatus = false;
             }
 
+
+            if ($("#ddlBOProduct1 option:selected").text() == "Please Select") {
+                $('#ddlBOProduct1').css('border-color', 'red');
+                returnStatus = false;
+            }
+            if ($("#ddlBOProduct2 option:selected").text() == "Please Select") {
+                $('#ddlBOProduct2').css('border-color', 'red');
+                returnStatus = false;
+            }
             if ($("#ddlBOProduct3 option:selected").text() == "Please Select") {
                 $('#ddlBOProduct3').css('border-color', 'red');
                 returnStatus = false;
             }
-            if ($("#ddlBillingPartner3 option:selected").text() == "Please Select") {
-                $('#ddlBillingPartner3').css('border-color', 'red');
-                returnStatus = false;
+
+            if ($("#ddlBOProduct1 option:selected").text() != "Octa XS") {
+                if ($("#ddlBillingPartner1 option:selected").text() == "Please Select") {
+                    $('#ddlBillingPartner1').css('border-color', 'red');
+                    returnStatus = false;
+                }
+                if ($("#ddlBPProduct1 option:selected").text() == "Please Select") {
+                    $('#ddlBPProduct1').css('border-color', 'red');
+                    returnStatus = false;
+                }
             }
-            if ($("#ddlBPProduct3 option:selected").text() == "Please Select") {
-                $('#ddlBPProduct3').css('border-color', 'red');
-                returnStatus = false;
+
+            if ($("#ddlBOProduct2 option:selected").text() != "Octa XS") {
+                if ($("#ddlBillingPartner2 option:selected").text() == "Please Select") {
+                    $('#ddlBillingPartner2').css('border-color', 'red');
+                    returnStatus = false;
+                }
+                if ($("#ddlBPProduct2 option:selected").text() == "Please Select") {
+                    $('#ddlBPProduct2').css('border-color', 'red');
+                    returnStatus = false;
+                }
             }
+
+            if ($("#ddlBOProduct3 option:selected").text() != "Octa XS") {
+                if ($("#ddlBillingPartner3 option:selected").text() == "Please Select") {
+                    $('#ddlBillingPartner3').css('border-color', 'red');
+                    returnStatus = false;
+                }
+                if ($("#ddlBPProduct3 option:selected").text() == "Please Select") {
+                    $('#ddlBPProduct3').css('border-color', 'red');
+                    returnStatus = false;
+                }
+            }
+
 
         }
         if (categoryNo == 4) {
@@ -1818,18 +1890,7 @@
                 returnStatus = false;
             }
 
-            if ($("#ddlBOProduct1 option:selected").text() == "Please Select") {
-                $('#ddlBOProduct1').css('border-color', 'red');
-                returnStatus = false;
-            }
-            if ($("#ddlBillingPartner1 option:selected").text() == "Please Select") {
-                $('#ddlBillingPartner1').css('border-color', 'red');
-                returnStatus = false;
-            }
-            if ($("#ddlBPProduct1 option:selected").text() == "Please Select") {
-                $('#ddlBPProduct1').css('border-color', 'red');
-                returnStatus = false;
-            }
+
 
             if ($("#ddlCategory2 option:selected").text() == "Please Select") {
                 $('#ddlCategory2').css('border-color', 'red');
@@ -1851,18 +1912,7 @@
                 returnStatus = false;
             }
 
-            if ($("#ddlBOProduct2 option:selected").text() == "Please Select") {
-                $('#ddlBOProduct2').css('border-color', 'red');
-                returnStatus = false;
-            }
-            if ($("#ddlBillingPartner2 option:selected").text() == "Please Select") {
-                $('#ddlBillingPartner2').css('border-color', 'red');
-                returnStatus = false;
-            }
-            if ($("#ddlBPProduct2 option:selected").text() == "Please Select") {
-                $('#ddlBPProduct2').css('border-color', 'red');
-                returnStatus = false;
-            }
+
 
             if ($("#ddlCategory3 option:selected").text() == "Please Select") {
                 $('#ddlCategory3').css('border-color', 'red');
@@ -1881,19 +1931,6 @@
             if ($("#txtNoOfEnrolled3").val() == "") {
                 ShowHideSection("custdetails");
                 $('#txtNoOfEnrolled3').css('border-color', 'red');
-                returnStatus = false;
-            }
-
-            if ($("#ddlBOProduct3 option:selected").text() == "Please Select") {
-                $('#ddlBOProduct3').css('border-color', 'red');
-                returnStatus = false;
-            }
-            if ($("#ddlBillingPartner3 option:selected").text() == "Please Select") {
-                $('#ddlBillingPartner3').css('border-color', 'red');
-                returnStatus = false;
-            }
-            if ($("#ddlBPProduct3 option:selected").text() == "Please Select") {
-                $('#ddlBPProduct3').css('border-color', 'red');
                 returnStatus = false;
             }
 
@@ -1917,19 +1954,68 @@
                 returnStatus = false;
             }
 
+            if ($("#ddlBOProduct1 option:selected").text() == "Please Select") {
+                $('#ddlBOProduct1').css('border-color', 'red');
+                returnStatus = false;
+            }
+            if ($("#ddlBOProduct2 option:selected").text() == "Please Select") {
+                $('#ddlBOProduct2').css('border-color', 'red');
+                returnStatus = false;
+            }
+            if ($("#ddlBOProduct3 option:selected").text() == "Please Select") {
+                $('#ddlBOProduct3').css('border-color', 'red');
+                returnStatus = false;
+            }
             if ($("#ddlBOProduct4 option:selected").text() == "Please Select") {
                 $('#ddlBOProduct4').css('border-color', 'red');
                 returnStatus = false;
             }
-            if ($("#ddlBillingPartner4 option:selected").text() == "Please Select") {
-                $('#ddlBillingPartner4').css('border-color', 'red');
-                returnStatus = false;
-            }
-            if ($("#ddlBPProduct4 option:selected").text() == "Please Select") {
-                $('#ddlBPProduct4').css('border-color', 'red');
-                returnStatus = false;
+
+            if ($("#ddlBOProduct1 option:selected").text() != "Octa XS") {
+                if ($("#ddlBillingPartner1 option:selected").text() == "Please Select") {
+                    $('#ddlBillingPartner1').css('border-color', 'red');
+                    returnStatus = false;
+                }
+                if ($("#ddlBPProduct1 option:selected").text() == "Please Select") {
+                    $('#ddlBPProduct1').css('border-color', 'red');
+                    returnStatus = false;
+                }
             }
 
+            if ($("#ddlBOProduct2 option:selected").text() != "Octa XS") {
+                if ($("#ddlBillingPartner2 option:selected").text() == "Please Select") {
+                    $('#ddlBillingPartner2').css('border-color', 'red');
+                    returnStatus = false;
+                }
+                if ($("#ddlBPProduct2 option:selected").text() == "Please Select") {
+                    $('#ddlBPProduct2').css('border-color', 'red');
+                    returnStatus = false;
+                }
+            }
+
+            if ($("#ddlBOProduct3 option:selected").text() != "Octa XS") {
+
+                if ($("#ddlBillingPartner3 option:selected").text() == "Please Select") {
+
+                    $('#ddlBillingPartner3').css('border-color', 'red');
+                    returnStatus = false;
+                }
+                if ($("#ddlBPProduct3 option:selected").text() == "Please Select") {
+                    $('#ddlBPProduct3').css('border-color', 'red');
+                    returnStatus = false;
+                }
+            }
+
+            if ($("#ddlBOProduct4 option:selected").text() != "Octa XS") {
+                if ($("#ddlBillingPartner4 option:selected").text() == "Please Select") {
+                    $('#ddlBillingPartner4').css('border-color', 'red');
+                    returnStatus = false;
+                }
+                if ($("#ddlBPProduct4 option:selected").text() == "Please Select") {
+                    $('#ddlBPProduct4').css('border-color', 'red');
+                    returnStatus = false;
+                }
+            }
         }
 
         if (returnStatus) {
@@ -2258,6 +2344,13 @@
         }
         if ($("#txtGSTRate").val() != "") {
             $("#txtGSTRate").show();
+        }
+        if ($("#ddlIsMobileApp option:selected").text() == "Yes") {
+            $("#txtMobileAppDescription").attr("readonly", false);
+        }
+        else {
+            $("#txtMobileAppDescription").attr("readonly", true);
+            $("#txtMobileAppDescription").val("");
         }
         FillRefferedName($("#ddlReferredby").val(), $("#hdnReferredName").val());
     }

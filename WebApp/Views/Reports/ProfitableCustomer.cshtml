@@ -5,7 +5,7 @@
 }
 
 <div class="app-main__inner">
-    <div class="row mb-3 pt-3 pl-3 pr-3 card">        
+    <div class="row mb-3 pt-3 pl-3 pr-3 card">
         <div class="col-sm-10" style="margin-left:15px;padding-bottom:10px; display:flex;">
             <div class="col-md-10 col-xl-6">
                 Top
@@ -21,7 +21,7 @@
             <div style="margin-right:100px;margin-top:10px;">
                 <button id="btnFilter" class="btn btn-primary login-btn pull-right">Filter</button>
             </div>
-        </div>       
+        </div>
     </div>
 
     <div class="row mb-3 card">
@@ -116,14 +116,14 @@
     }
 
     function GetData() {
-        $("#divLoader").show();   
+        $("#divLoader").show();
         var CountOrBusiness = "";
         var Count = 0;
-        
+
         if ($('#TopTxnCount').val() != "") {
             CountOrBusiness = "Count";
             Count = $('#TopTxnCount').val();
-            
+
         }
         if ($('#TopBusiness').val() != "") {
             CountOrBusiness = "Business";
@@ -225,20 +225,30 @@
                 },
                 {
                     "data": "LastTxnDate", "title": "Last Txn Date", "render": function (data, type) {
-                        var day = data.split('/')[0]
-                        var month = data.split('/')[1]
-                        var year = data.split('/')[2]
-                        var date = month + "/" + day + "/" + year;
-                        return date;
+                        if (data != "" && data != null) {
+                            var day = data.split('/')[0]
+                            var month = data.split('/')[1]
+                            var year = data.split('/')[2]
+                            var date = month + "/" + day + "/" + year;
+                            return date;
+                        }
+                        else {
+                            return data;
+                        }
                     }
                 },
                 {
                     "data": "EnrolledDate", "title": "Enrolled Date", "render": function (data, type) {
-                        var day = data.split('/')[0]
-                        var month = data.split('/')[1]
-                        var year = data.split('/')[2]
-                        var date = month + "/" + day + "/" + year;
-                        return date;
+                        if (data != "" && data != null) {
+                            var day = data.split('/')[0]
+                            var month = data.split('/')[1]
+                            var year = data.split('/')[2]
+                            var date = month + "/" + day + "/" + year;
+                            return date;
+                        }
+                        else {
+                            return data;
+                        }
                     }
                 }
                 //{ data: "LastTxnDate" },
@@ -278,10 +288,10 @@
         });
         $('#activityTable_filter').hide();
 
-        $('#txtSearch').on('keyup', function () {            
-            $.fn.dataTable.ext.search.push(function (settings, searchData) {                
+        $('#txtSearch').on('keyup', function () {
+            $.fn.dataTable.ext.search.push(function (settings, searchData) {
                 var term = $('#txtSearch').val().toLowerCase()
-                for (var i = 0; i < searchData.length; i++) {                    
+                for (var i = 0; i < searchData.length; i++) {
                     if (searchData[i].toLowerCase().indexOf(term) >= 0) {
                         return true;
                     }

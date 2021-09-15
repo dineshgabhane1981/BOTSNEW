@@ -110,6 +110,24 @@ namespace BOTS_BL.Repository
             }
             return lstBillingPartner;
         }
+        public List<SelectListItem> GetBillingProduct(int BillingPartnerId)
+        {
+            List<SelectListItem> lstBillingProduct = new List<SelectListItem>();
+            using (var context = new CommonDBContext())
+            {
+                var BillingProduct = context.BOTS_TblBillingPartnerProduct.Where(x=>x.BillingPartnerProductId== BillingPartnerId).ToList();
+
+                foreach (var item in BillingProduct)
+                {
+                    lstBillingProduct.Add(new SelectListItem
+                    {
+                        Text = item.BillingPartnerProductName,
+                        Value = Convert.ToString(item.BillingPartnerProductId)
+                    });
+                }
+            }
+            return lstBillingProduct;
+        }
 
         public List<SelectListItem> GetAllGroups()
         {

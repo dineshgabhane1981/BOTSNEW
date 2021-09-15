@@ -93,21 +93,28 @@ namespace WebApp.Controllers
             {
                 
                 var userDetail = LR.CheckUserType(LoginID);
-                if (userDetail.LoginType != "1" && userDetail.LoginType != "5" && userDetail.LoginType != "6" && userDetail.LoginType != "7" && string.IsNullOrEmpty(userDetail.OutletOrBrandId))
+                if (userDetail != null)
                 {
-                    var result = new HomeController().SendOTP(LoginID);
-                    if (result)
+                    if (userDetail.LoginType != "1" && userDetail.LoginType != "5" && userDetail.LoginType != "6" && userDetail.LoginType != "7" && string.IsNullOrEmpty(userDetail.OutletOrBrandId))
                     {
-                        returnString = "OTP";
+                        var result = new HomeController().SendOTP(LoginID);
+                        if (result)
+                        {
+                            returnString = "OTP";
+                        }
+                        else
+                        {
+                            returnString = "error in sending OTP";
+                        }
                     }
                     else
                     {
-                        returnString = "error in sending OTP";
+                        returnString = "Password";
                     }
                 }
                 else
                 {
-                    returnString = "Password";
+                    returnString = "NoUserFound";
                 }
             }
             catch (Exception ex)
