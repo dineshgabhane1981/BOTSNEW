@@ -634,6 +634,22 @@ namespace BOTS_BL.Repository
 
         }
 
+        public List<LogDetailsRW> GetLogDetails(string search, string GroupId)
+        {
+            List<LogDetailsRW> lstLogDetails = new List<LogDetailsRW>();
+            string connStr = objCustRepo.GetCustomerConnString(GroupId);
+            using (var contextNew = new BOTSDBContext(connStr))
+            {
+                lstLogDetails = contextNew.LogDetailsRWs.Where(x => x.ReceivedData.Contains(search)).ToList();
+            }
+            foreach(var item in lstLogDetails)
+            {
+                item.datetimestr = item.Datetime.Value.ToString("MM/dd/yyyy");
+            }
+            lstLogDetails = lstLogDetails.OrderByDescending(x => x.Datetime).ToList();
+
+            return lstLogDetails;
+        }
     }
 
 }

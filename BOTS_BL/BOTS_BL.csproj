@@ -226,6 +226,7 @@
     <Compile Include="Models\HeatMaps\DaywiseHourwise.cs" />
     <Compile Include="Models\ITOps\CancelTxnModel.cs" />
     <Compile Include="Models\ITOps\CustomerDetail.cs" />
+    <Compile Include="Models\ITOps\LogDetailsRW.cs" />
     <Compile Include="Models\ITOps\MemberData.cs" />
     <Compile Include="Models\ITOps\OTPMaintenance.cs" />
     <Compile Include="Models\ITOps\PointsExpiry.cs" />

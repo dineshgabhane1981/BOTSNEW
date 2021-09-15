@@ -709,5 +709,12 @@ namespace WebApp.Controllers
             }
         }
 
+        [HttpPost]
+        public ActionResult GetLogDetailData(string GroupId, string search)
+        {
+            List<LogDetailsRW> lstLogDetails = new List<LogDetailsRW>();
+            lstLogDetails = ITOPS.GetLogDetails(search, GroupId);
+            return Json(lstLogDetails, JsonRequestBehavior.AllowGet);
+        }
     }
 }
