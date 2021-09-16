@@ -20,8 +20,18 @@ namespace WebApp.Controllers
             ViewBag.lstoutletlist = lstoutletlist;
             var lstlogintype = DR.GetLoginType();
             ViewBag.lstLogintype = lstlogintype;
-            return View();
+            List<DashboardCustomerLogin> objdashboard = new List<DashboardCustomerLogin>();
+            objdashboard = DR.GetDashboardcustomerlogin(userDetails.GroupId);
+            return View(objdashboard);
            
+        }
+
+        public ActionResult CustomerLoginList()
+        {
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            List<DashboardCustomerLogin> lstcustlogin = new List<DashboardCustomerLogin>();
+            lstcustlogin = DR.GetDashboardcustomerlogin(userDetails.GroupId);
+            return PartialView("_DashboardCustomerloginList", lstcustlogin);
         }
         [HttpPost]
         public JsonResult GetOutletList()

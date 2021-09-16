@@ -3,6 +3,8 @@
 @{
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
+ var userDetails = (CustomerLoginDetail)Session["UserSession"];
+    var logintype = userDetails.LoginType;
     
 }
 
@@ -54,8 +56,9 @@
                         </div>
                     </div>
                 </div>
-
-                <div class="row">
+                @if (logintype == "1")
+                {
+                <div class="row" id="divadd">
 
                     <div style="text-align:right;" class="col search-container">
                         <i class="fas fa-search"></i>
@@ -68,35 +71,18 @@
 
                     </div>
                 </div>
+                }
                 <div id="dvcustomer">
                     @Html.Partial("~/Views/DashBoardCustomerLogin/_DashboardCustomerloginList.cshtml", Model)
                 </div>
-                @*<div class="row mt-3" id="dvActivityData">
-                    <div class="table-responsive">
-                        <table class="table" id="activityTable">
-                            <thead>
-                                <tr>
-                                    <th scope="col" style="text-align:left;">Mobile Number</th>
-                                    <th scope="col" style="text-align:left;">Customer Number</th>
-                                    <th scope="col" style="text-align:left;">Created On</th>
-                                    <th scope="col" style="text-align:left;">Outlet Name</th>
 
-                                </tr>
-                            </thead>
-                            <tbody>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>*@
             </div>
         </div>
     </div>
 </div>
 <script>
 
-    $(document).ready(function () {
-        BindcustomerList();
-    });
+    
     var tableData = [];
     $('#btnAdd').on("click", function () {
         $("#divadd").show(1000);
@@ -123,7 +109,7 @@
         console.log("hi");
         $.ajax({
                 type: "POST",
-                url: '@Url.Action("GetDashboardlogins", "DashBoardCustomerLogin")',          
+                url: '@Url.Action("CustomerLoginList", "DashBoardCustomerLogin")',          
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
             success: function (responce) {
@@ -137,52 +123,7 @@
             }
             });
     }
-    //function DrawTable() {
-    //    var table1 = $('#activityTable').DataTable();
-    //    table1.destroy();
-
-    //    var table = $('#activityTable').DataTable({
-    //        "data": tableData,
-    //        "paging": true,
-    //        "ordering": false,
-    //        "info": true,
-    //        "bFilter": true,
-    //        "pageLength": 10,
-    //        "pagingType": "simple_numbers",
-    //        "columns": [
-    //            { data: "MobileNo" },
-    //            { data: "CustomerName" },
-    //            { data: "CreatedOn" },
-    //            {
-    //                data:"OutletName"
-    //            },
-                
-
-    //        ],
-    //        aoColumnDefs: [
-    //            {
-    //                bSortable: false,
-    //                aTargets: []
-    //            }
-    //        ]
-    //    });
-    //    $('#activityTable_filter').hide();
-    //    $('#txtSearch').on('keyup', function () {
-
-    //        $.fn.dataTable.ext.search.push(function (settings, searchData) {
-    //            var term = $('#txtSearch').val().toLowerCase()
-    //            for (var i = 0; i < searchData.length; i++) {
-    //                if (searchData[i].toLowerCase().indexOf(term) == 0) {
-    //                    return true;
-    //                }
-    //            }
-    //            return false;
-    //        });
-    //        var table = $('#activityTable').DataTable();
-    //        table.draw();
-    //    });
-
-    //}
+    
     
      $('#btnSave').on("click", function () {
 
@@ -223,9 +164,10 @@
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
                 success: function (result) {
+                    console.log(result);
                     if (result.ResponseCode == "00") {
                         toastr.success(result.ResponseMessage);
-                        console.log("hi");
+                        console.log("result");
                         $("#txtcustomerloginNm").val("");                        
                         BindcustomerList();
                         $("#divLoader").hide();
@@ -240,6 +182,11 @@
                     if (result.responseText == "True") {
                         toastr.success("Data Updated Successfully");
                         $("#divLoader").hide();
+                        BindcustomerList();
+                        $("#txtcustomerloginNm").val("");
+                        document.getElementById("#ddlCustomerlogintype").selectedIndex = 0;
+                        $("#divadd").hide(1000);
+                       
                     }
                     else {
                         toastr.error('error occured while saving data');
