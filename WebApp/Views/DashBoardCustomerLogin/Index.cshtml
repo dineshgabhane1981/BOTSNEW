@@ -182,10 +182,13 @@
                     if (result.responseText == "True") {
                         toastr.success("Data Updated Successfully");
                         $("#divLoader").hide();
+                        $("#divadd").hide(1000);
                         BindcustomerList();
                         $("#txtcustomerloginNm").val("");
-                        document.getElementById("#ddlCustomerlogintype").selectedIndex = 0;
-                        $("#divadd").hide(1000);
+                        $('#ddlCustomerlogintype').prop('selectedIndex', 0);
+                        $('#ddloutletlist').prop('selectedIndex', 0);
+                       
+                       
                        
                     }
                     else {

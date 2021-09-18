@@ -58,12 +58,14 @@ namespace BOTS_BL.Models.CommonDB
     {
         public int Id { get; set; }
         public DateTime AddedDate { get; set; }
+        public string Addeddt { get; set; }
         public string SpokenTo { get; set; }
         public string ContactNo { get; set; }
         public string CustomerType { get; set; }
         public string CallType { get; set; }
         public string Status { get; set; }
         public DateTime? FollowupDate { get; set; }
+        public string Followupdt { get; set; }
         public string CallMode { get; set; }
         public string Description { get; set; }
         public string ActionItems { get; set; }

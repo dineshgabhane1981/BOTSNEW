@@ -48,6 +48,16 @@ namespace WebApp.Controllers
             return View(objData);
         }
 
+        public ActionResult CommonDiscussion()
+        {          
+            ViewBag.lstcommonstatus = DR.CommonStatus();
+            ViewBag.lstgroupdetails = DR.GetGroupDetails();
+            ViewBag.lstCallTypes = DR.GetCallTypes();           
+            //var lstDiscussions = DR.GetAllDiscussions();
+            //return PartialView("_DiscussionList", lstDiscussions);
+            return View();
+        }
+
         [HttpPost]
         public JsonResult GetSubCallTypes(int callId)
         {
@@ -89,6 +99,26 @@ namespace WebApp.Controllers
             status = DR.UpdateDiscussions(dId, Desc, Status, userDetails.LoginId);
 
             return status;
+        }
+        
+        public ActionResult GetCommonFilteredDiscussion(string jsonData)
+        {
+            //var lstdashboard ="";
+            List<DiscussionDetails> lstdashboard = new List<DiscussionDetails>();
+            JavaScriptSerializer json_serializer = new JavaScriptSerializer();
+            json_serializer.MaxJsonLength = int.MaxValue;
+            object[] objData = (object[])json_serializer.DeserializeObject(jsonData);
+            foreach (Dictionary<string, object> item in objData)
+            {
+                string fromDate = Convert.ToString(item["fromDate"]);
+                string toDate = Convert.ToString(item["toDate"]);
+                string groupnm = Convert.ToString(item["selectedgrp"]);
+                int calltype = Convert.ToInt32(item["selectedcall"]);
+                string status = Convert.ToString(item["selectedstatus"]);
+               
+                lstdashboard = DR.GetfilteredDiscussionData(status, calltype, groupnm, fromDate, toDate);
+            }
+            return PartialView("_DiscussionList", lstdashboard);
         }
     }
 }

@@ -12,7 +12,7 @@ namespace WebApp.ViewModel
     {
         public List<DiscussionDetails> lstDiscussions { get; set; }
         public BOTS_TblDiscussion objDiscussion { get; set; }
-
+        
         public List<SelectListItem> lstCallTypes { get; set; }
         public List<SelectListItem> lstCallSubTypes { get; set; }
 
@@ -24,7 +24,7 @@ namespace WebApp.ViewModel
         {
             return new SelectListItem[2] { new SelectListItem() { Text = "Completed", Value = "Completed" }, new SelectListItem() { Text = "WIP", Value = "WIP" } };
         }
-
+       
         public SelectListItem[] CustomerType()
         {
             return new SelectListItem[5] 
