@@ -39,17 +39,17 @@
     <div class="scrollbar-sidebar">
         <div class="app-sidebar__inner">
             <ul class="vertical-nav-menu">
-                @if (roleId == "1")
-                {
+                @*@if (roleId == "1")
+                    {*@
 
-                    <li>
-                        <a href="@Url.Action("Index", "CustomerManagement")" class="@Html.IsSelected(controller: "CustomerManagement", action: "Index,SelectProduct,AddNewCustomer")">
-                            <i class="metismenu-icon pe-7s-rocket"></i>
-                            Customer Management
-                        </a>
-                    </li>
-                   
-                }
+                <li>
+                    <a href="@Url.Action("Index", "CustomerManagement")" class="@Html.IsSelected(controller: "CustomerManagement", action: "Index,SelectProduct,AddNewCustomer")">
+                        <i class="metismenu-icon pe-7s-rocket"></i>
+                        Customer Management
+                    </a>
+                </li>
+
+                @*}*@
 
             </ul>
         </div>

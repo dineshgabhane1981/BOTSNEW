@@ -23,7 +23,7 @@ namespace BOTS_BL.Repository
         Exceptions newexception = new Exceptions();
         CustomerOnBoardingRepository COBR = new CustomerOnBoardingRepository();
         public int AddOnboardingCustomer(BOTS_TblGroupMaster objGroup, List<BOTS_TblRetailMaster> objLstRetail,
-            BOTS_TblDealDetails objDeal, BOTS_TblPaymentDetails objPayment, List<BOTS_TblInstallmentDetails> objLstInstallment)
+            BOTS_TblDealDetails objDeal, BOTS_TblPaymentDetails objPayment, List<BOTS_TblInstallmentDetails> objLstInstallment, List<BOTS_TblOutletMaster> objLstOutlet)
         {
             bool status = false;
             var GroupId = 0;
@@ -89,48 +89,64 @@ namespace BOTS_BL.Repository
                         }
 
 
-
-                        context.BOTS_TblGroupMaster.AddOrUpdate(objGroup);
-                        context.SaveChanges();
-
-                        var lstRetail = context.BOTS_TblRetailMaster.Where(x => x.GroupId == objGroup.GroupId).ToList();
-                        foreach (var item in lstRetail)
+                        if (objGroup.CustomerStatus == "CSUpdate")
                         {
-                            context.BOTS_TblRetailMaster.Remove(item);
+                            var groupDetails = context.BOTS_TblGroupMaster.Where(x => x.GroupId == objGroup.GroupId).FirstOrDefault();
+                            groupDetails.CustomerStatus = "CSUpdate";
+                            context.BOTS_TblGroupMaster.AddOrUpdate(groupDetails);
                             context.SaveChanges();
-                        }
 
-                        foreach (var item in objLstRetail)
-                        {
-                            var id = Convert.ToInt32(item.CategoryId);
-                            var categoryName = context.tblCategories.Where(x => x.CategoryId == id).Select(y => y.CategoryName).FirstOrDefault();
-                            item.CategoryName = categoryName;
-                            item.GroupId = Convert.ToString(objGroup.GroupId);
-                            context.BOTS_TblRetailMaster.AddOrUpdate(item);
+                            foreach (var item in objLstOutlet)
+                            {
+                                context.BOTS_TblOutletMaster.AddOrUpdate(item);
+                                context.SaveChanges();
+                            }
+                        }
+                        else
+                        { 
+                            context.BOTS_TblGroupMaster.AddOrUpdate(objGroup);
                             context.SaveChanges();
-                        }
 
-                        objDeal.GroupId = Convert.ToString(objGroup.GroupId);
-                        context.BOTS_TblDealDetails.AddOrUpdate(objDeal);
-                        context.SaveChanges();
+                            var lstRetail = context.BOTS_TblRetailMaster.Where(x => x.GroupId == objGroup.GroupId).ToList();
+                            foreach (var item in lstRetail)
+                            {
+                                context.BOTS_TblRetailMaster.Remove(item);
+                                context.SaveChanges();
+                            }
 
-                        objPayment.GroupId = Convert.ToString(objGroup.GroupId);
-                        context.BOTS_TblPaymentDetails.AddOrUpdate(objPayment);
-                        context.SaveChanges();
+                            foreach (var item in objLstRetail)
+                            {
+                                var id = Convert.ToInt32(item.CategoryId);
+                                var categoryName = context.tblCategories.Where(x => x.CategoryId == id).Select(y => y.CategoryName).FirstOrDefault();
+                                item.CategoryName = categoryName;
+                                item.GroupId = Convert.ToString(objGroup.GroupId);
+                                context.BOTS_TblRetailMaster.AddOrUpdate(item);
+                                context.SaveChanges();
+                            }
 
-                        var lstInstallments = context.BOTS_TblInstallmentDetails.Where(x => x.GroupId == objGroup.GroupId).ToList();
-                        foreach (var item in lstInstallments)
-                        {
-                            context.BOTS_TblInstallmentDetails.Remove(item);
+                            objDeal.GroupId = Convert.ToString(objGroup.GroupId);
+                            context.BOTS_TblDealDetails.AddOrUpdate(objDeal);
                             context.SaveChanges();
-                        }
 
-                        foreach (var item in objLstInstallment)
-                        {
-                            item.GroupId = Convert.ToString(objGroup.GroupId);
-                            context.BOTS_TblInstallmentDetails.AddOrUpdate(item);
+                            objPayment.GroupId = Convert.ToString(objGroup.GroupId);
+                            context.BOTS_TblPaymentDetails.AddOrUpdate(objPayment);
                             context.SaveChanges();
+
+                            var lstInstallments = context.BOTS_TblInstallmentDetails.Where(x => x.GroupId == objGroup.GroupId).ToList();
+                            foreach (var item in lstInstallments)
+                            {
+                                context.BOTS_TblInstallmentDetails.Remove(item);
+                                context.SaveChanges();
+                            }
+                            foreach (var item in objLstInstallment)
+                            {
+                                item.GroupId = Convert.ToString(objGroup.GroupId);
+                                context.BOTS_TblInstallmentDetails.AddOrUpdate(item);
+                                context.SaveChanges();
+                            }
                         }
+                        
+                       
 
                         transaction.Commit();
                     }
@@ -151,48 +167,54 @@ namespace BOTS_BL.Repository
         {
             List<OnBoardingListing> onBoardingListings = new List<OnBoardingListing>();
             List<BOTS_TblGroupMaster> lstGroups = new List<BOTS_TblGroupMaster>();
-            using (var context = new CommonDBContext())
+            try
             {
-                //SuperAdmin
-                if (loginType == "1")
+                using (var context = new CommonDBContext())
                 {
-                    lstGroups = context.BOTS_TblGroupMaster.ToList();
-                }
-                //Sales
-                if (loginType == "5")
-                {
-                    lstGroups = context.BOTS_TblGroupMaster.Where(x => x.CustomerStatus == "Draft").ToList();
-                }
-                //Customer Success
-                if (loginType == "6")
-                {
-                    lstGroups = context.BOTS_TblGroupMaster.Where(x => x.CustomerStatus == "CS").ToList();
-                }
-                //CS Head
-                if (loginType == "7")
-                {
+                    //SuperAdmin
+                    if (loginType == "1")
+                    {
+                        lstGroups = context.BOTS_TblGroupMaster.ToList();
+                    }
+                    //Sales
+                    if (loginType == "5")
+                    {
+                        lstGroups = context.BOTS_TblGroupMaster.Where(x => x.CustomerStatus == "Draft").ToList();
+                    }
+                    //Customer Success
+                    if (loginType == "6")
+                    {
+                        lstGroups = context.BOTS_TblGroupMaster.Where(x => x.CustomerStatus == "CS" || x.CustomerStatus == "CSUpdate").ToList();
+                    }
+                    //CS Head
+                    if (loginType == "7")
+                    {
 
-                }
+                    }
 
-                foreach (var item in lstGroups)
-                {
-                    OnBoardingListing objItem = new OnBoardingListing();
-                    objItem.GroupId = Convert.ToInt32(item.GroupId);
-                    objItem.GroupName = item.GroupName;
-                    objItem.OwnerMobileNo = item.OwnerMobileNo;
-                    var city = COBR.GetCityById(Convert.ToInt32(item.City));
-                    objItem.City = city.CityName;
-                    objItem.PaymentStatus = context.BOTS_TblDealDetails.Where(x => x.GroupId == item.GroupId).Select(y => y.PaymentStatus).FirstOrDefault();
+                    foreach (var item in lstGroups)
+                    {
+                        OnBoardingListing objItem = new OnBoardingListing();
+                        objItem.GroupId = Convert.ToInt32(item.GroupId);
+                        objItem.GroupName = item.GroupName;
+                        objItem.OwnerMobileNo = item.OwnerMobileNo;
+                        var city = COBR.GetCityById(Convert.ToInt32(item.City));
+                        objItem.City = city.CityName;
+                        objItem.PaymentStatus = context.BOTS_TblDealDetails.Where(x => x.GroupId == item.GroupId).Select(y => y.PaymentStatus).FirstOrDefault();
 
-                    var BPId = context.BOTS_TblRetailMaster.Where(x => x.GroupId == item.GroupId).Select(y => y.BillingPartner).FirstOrDefault();
-                    var bId = Convert.ToInt32(BPId);
+                        var BPId = context.BOTS_TblRetailMaster.Where(x => x.GroupId == item.GroupId).Select(y => y.BillingPartner).FirstOrDefault();
+                        var bId = Convert.ToInt32(BPId);
 
-                    objItem.BillingPartnerName = context.tblBillingPartners.Where(x => x.BillingPartnerId == bId).Select(y => y.BillingPartnerName).FirstOrDefault();
-                    objItem.CustomerStatus = item.CustomerStatus;
-                    onBoardingListings.Add(objItem);
+                        objItem.BillingPartnerName = context.tblBillingPartners.Where(x => x.BillingPartnerId == bId).Select(y => y.BillingPartnerName).FirstOrDefault();
+                        objItem.CustomerStatus = item.CustomerStatus;
+                        onBoardingListings.Add(objItem);
+                    }
                 }
             }
-
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "OnBoarding");
+            }
             return onBoardingListings;
         }
 
@@ -232,6 +254,16 @@ namespace BOTS_BL.Repository
             using (var context = new CommonDBContext())
             {
                 objData = context.BOTS_TblRetailMaster.Where(x => x.GroupId == GroupId).ToList();
+            }
+            return objData;
+        }
+
+        public List<BOTS_TblOutletMaster> GetOutletDetails(string GroupId)
+        {
+            List<BOTS_TblOutletMaster> objData = new List<BOTS_TblOutletMaster>();
+            using (var context = new CommonDBContext())
+            {
+                objData = context.BOTS_TblOutletMaster.Where(x => x.GroupId == GroupId).ToList();
             }
             return objData;
         }

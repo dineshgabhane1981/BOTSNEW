@@ -289,6 +289,7 @@
     <Content Include="Views\DashBoardCustomerLogin\Index.cshtml" />
     <Content Include="Views\DashBoardCustomerLogin\_DashboardCustomerloginList.cshtml" />
     <Content Include="Views\Discussion\CommonDiscussion.cshtml" />
+    <Content Include="Views\CustomerOnBoarding\_CustomerDetails.cshtml" />
     <None Include="_bin_deployableAssemblies\x86\sqlcese40.dll" />
     <None Include="_bin_deployableAssemblies\x86\sqlceqp40.dll" />
     <None Include="_bin_deployableAssemblies\x86\sqlceme40.dll" />

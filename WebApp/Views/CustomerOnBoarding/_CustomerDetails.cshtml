@@ -1,0 +1,65 @@
+﻿@model WebApp.ViewModel.OnBoardingSalesViewModel
+
+
+<div class="container-fluid pt-3 pl-3 pr-3 pb-3" id="dvCustomerDetailSection">
+    <div class="col-md-12 section-heading" data-toggle="collapse" data-target="#customerdetailsreadonly">Customer Details</div>
+    <div id="customerdetailsreadonly" class="collapse">
+        <table border="1" cellpadding="4" cellspacing="4" style="margin-top:10px;" width="100%">
+            <tr><td colspan="8" style="font-weight:bold;">Customer Basic Details</td></tr>
+            <tr>
+                <td style="font-weight:bold;">
+                    Legal Name
+                </td>
+                <td>@Model.bots_TblGroupMaster.GroupName</td>
+                <td style="font-weight:bold;">
+                    Owner’s Name
+                </td>
+                <td>@Model.bots_TblGroupMaster.OwnerName</td>
+                <td style="font-weight:bold;">
+                    Owner’s Mobile
+                </td>
+                <td>@Model.bots_TblGroupMaster.OwnerMobileNo</td>
+                <td style="font-weight:bold;">
+                    Owner’s Email
+                </td>
+                <td>@Model.bots_TblGroupMaster.OwnerEmailId</td>
+            </tr>
+            <tr>
+                <td style="font-weight:bold;">
+                    Upload GST
+                </td>
+                <td>@Model.bots_TblGroupMaster.GroupName</td>
+                <td style="font-weight:bold;">
+                    Upload PAN
+                </td>
+                <td>@Model.bots_TblGroupMaster.OwnerName</td>
+                <td style="font-weight:bold;">
+                    City
+                </td>
+                <td>@Model.bots_TblGroupMaster.City</td>
+                <td style="font-weight:bold;">
+                    Other Person Name
+                </td>
+                <td>@Model.bots_TblGroupMaster.AnyOtherName</td>
+            </tr>
+            <tr>
+                <td style="font-weight:bold;">
+                    Mobile No
+                </td>
+                <td>@Model.bots_TblGroupMaster.AlternateMobileNo</td>
+                <td style="font-weight:bold;">
+                    Email
+                </td>
+                <td>@Model.bots_TblGroupMaster.AlternateEmailId</td>
+                <td style="font-weight:bold;">
+                    No of Brands
+                </td>
+                <td>@Model.bots_TblGroupMaster.NoOfRetailCategory</td>
+                <td style="font-weight:bold;">
+                    Key Account
+                </td>
+                <td>@Model.bots_TblGroupMaster.IsKeyAccount</td>
+            </tr>
+        </table>
+    </div>
+</div>

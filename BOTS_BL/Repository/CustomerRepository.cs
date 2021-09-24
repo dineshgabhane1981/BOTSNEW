@@ -43,7 +43,7 @@ namespace BOTS_BL.Repository
             List<SelectListItem> lstCity = new List<SelectListItem>();
             using (var context = new CommonDBContext())
             {
-                var RetailCategory = context.tblCities.ToList();
+                var RetailCategory = context.tblCities.OrderBy(x=>x.CityName).ToList();
 
                 foreach (var item in RetailCategory)
                 {
@@ -56,6 +56,26 @@ namespace BOTS_BL.Repository
             }
             return lstCity;
         }
+
+        public List<SelectListItem> GetStates()
+        {
+            List<SelectListItem> lstStates = new List<SelectListItem>();
+            using (var context = new CommonDBContext())
+            {
+                var RetailCategory = context.tblStates.ToList();
+
+                foreach (var item in RetailCategory)
+                {
+                    lstStates.Add(new SelectListItem
+                    {
+                        Text = item.StateName,
+                        Value = Convert.ToString(item.StateId)
+                    });
+                }
+            }
+            return lstStates;
+        }
+
         public List<SelectListItem> GetSourcedBy()
         {
             List<SelectListItem> lstSourcedBy = new List<SelectListItem>();

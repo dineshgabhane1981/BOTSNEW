@@ -25,6 +25,7 @@ namespace WebApp.ViewModel
         public List<SelectListItem> lstBillingPartner { get; set; }
         public List<SelectListItem> lstAllGroups { get; set; }
         public List<SelectListItem> lstRefferedCategory { get; set; }
+        public List<SelectListItem> lstStates { get; set; }
         public SelectListItem[] BOProducts()
         {
             return new SelectListItem[2] { new SelectListItem() { Text = "Octa Plus", Value = "1" }, new SelectListItem() { Text = "Octa XS", Value = "2" } };

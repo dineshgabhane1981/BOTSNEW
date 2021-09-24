@@ -123,5 +123,7 @@ namespace BOTS_BL.Models
         public string CategoryData { get; set; }
         [NotMapped]
         public string PaymentScheduleData { get; set; }
+        [NotMapped]
+        public string OutletData { get; set; }
     }
 }

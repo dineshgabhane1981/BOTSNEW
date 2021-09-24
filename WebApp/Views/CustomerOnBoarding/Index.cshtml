@@ -105,7 +105,9 @@
     @Html.HiddenFor(model => model.bots_TblGroupMaster.GroupId, new { @id = "hdnGroupID" })
     @Html.HiddenFor(model => model.bots_TblGroupMaster.CategoryData, new { @id = "hdnCategoryData" })
     @Html.HiddenFor(model => model.bots_TblGroupMaster.PaymentScheduleData, new { @id = "hdnPaymentScheduleData" })
+    @Html.HiddenFor(model => model.bots_TblGroupMaster.OutletData, new { @id = "hdnOutletData" })
     @Html.HiddenFor(model => model.bots_TblGroupMaster.CustomerStatus, new { @id = "hdnCustomerStatus" })
+    @Html.HiddenFor(model => model.lstOutlets.Count, new { @id = "hdnOutletCount" })
     <div class="app-main__inner">
 
         @if (!string.IsNullOrEmpty(Convert.ToString(TempData["status"])))
@@ -133,7 +135,128 @@
             </script>
         }
 
-        <div class="row mb-3 card">
+    <div class="row mb-3 card">
+
+
+        @if (Model.bots_TblGroupMaster != null)
+        {
+            if (Model.bots_TblGroupMaster.CustomerStatus == "CS" || Model.bots_TblGroupMaster.CustomerStatus == "CSUpdate")
+            {
+                <div>
+                    @Html.Partial("~/Views/CustomerOnBoarding/_CustomerDetails.cshtml", Model)
+                </div>
+                var Id = 1;
+                <div class="container-fluid pt-3 pl-3 pr-3 pb-3" id="dvOutletSection">
+                    <div class="col-md-12 section-heading" data-toggle="collapse" data-target="#outletdetails">Outlet Details</div>
+                    <div id="outletdetails" class="collapse">
+                        @foreach (var item in Model.lstOutlets)
+                        {
+
+                            Model.bots_TblOutletMaster = item;
+                            <div>
+                                <b>Brand -  @item.BrandName </b>
+                            </div>
+
+                            @Html.HiddenFor(model => item.Id, new { @id = "hdnID" + Id })
+                            @Html.HiddenFor(model => item.BrandId, new { @id = "hdnBrandID" + Id })
+                            @Html.HiddenFor(model => item.OutletId, new { @id = "hdnOutletID" + Id })
+                            <div class="row" style="margin: 0;">
+                                <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
+                                    Outlet Name
+                                </div>
+                                <div class="col-sm-4" style="float:left;margin-top:10px;">
+                                    @Html.TextBoxFor(model => item.OutletName, new { @class = "input100", @id = "txtOutletName" + Id })
+                                </div>
+                                <div style="float: left; text-align: right; width: 115px; margin-top: 10px;">
+                                    Area Name
+                                </div>
+                                <div class="col-sm-4" style="float:left;margin-top:10px;">
+                                    @Html.TextBoxFor(model => item.AreaName, new { @class = "input100", @id = "txtAreaName" + Id })
+                                </div>
+                            </div>
+
+                            <div class="row" style="margin: 0;">
+                                <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
+                                    Authorised Person
+                                </div>
+                                <div class="col-sm-4" style="float:left;margin-top:10px;">
+                                    @Html.TextBoxFor(model => item.AuthorisedPerson, new { @class = "input100", @id = "txtAuthorisedPerson" + Id })
+                                </div>
+                                <div style="float: left; text-align: right; width: 115px; margin-top: 10px;">
+                                    Registered Mobile No
+                                </div>
+                                <div class="col-sm-4" style="float:left;margin-top:10px;">
+                                    @Html.TextBoxFor(model => item.RegisterMobileNo, new { @class = "input100", @id = "txtRegisterMobileNo" + Id })
+                                </div>
+                            </div>
+
+                            <div class="row" style="margin: 0;">
+                                <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
+                                    Registered Email
+                                </div>
+                                <div class="col-sm-4" style="float:left;margin-top:10px;">
+                                    @Html.TextBoxFor(model => item.RegisterEmail, new { @class = "input100", @id = "txtRegisterEmail" + Id })
+                                </div>
+                                <div style="float: left; text-align: right; width: 115px; margin-top: 10px;">
+                                    Address
+                                </div>
+                                <div class="col-sm-4" style="float:left;margin-top:10px;">
+                                    @Html.TextBoxFor(model => item.Address, new { @class = "input100", @id = "txtAddress" + Id })
+                                </div>
+                            </div>
+
+                            <div class="row" style="margin: 0;">
+                                <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
+                                    Geo Latitude
+                                </div>
+                                <div class="col-sm-4" style="float:left;margin-top:10px;">
+                                    @Html.TextBoxFor(model => item.Latitude, new { @class = "input100", @id = "txtLatitude" + Id })
+                                </div>
+                                <div style="float: left; text-align: right; width: 115px; margin-top: 10px;">
+                                    Geo Longitude
+                                </div>
+                                <div class="col-sm-4" style="float:left;margin-top:10px;">
+                                    @Html.TextBoxFor(model => item.Longitude, new { @class = "input100", @id = "txtLongitude" + Id })
+                                </div>
+                            </div>
+                            <div class="row" style="margin: 0;">
+                                <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
+                                    State
+                                </div>
+                                <div class="col-sm-4" style="float:left;margin-top:10px;">
+                                    @Html.DropDownListFor(model => model.bots_TblOutletMaster.State, new SelectList(Model.lstStates, "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input100", @id = "ddlState" + Id })
+                                </div>
+                                <div style="float: left; text-align: right; width: 115px; margin-top: 10px;">
+                                    City
+                                </div>
+                                <div class="col-sm-4" style="float:left;margin-top:10px;">
+                                    @Html.DropDownListFor(model => model.bots_TblOutletMaster.City, new SelectList(Model.lstCity, "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input100", @id = "ddlCity" + Id })
+
+                                </div>
+                            </div>
+                            <div class="row" style="margin: 0;">
+                                <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
+                                    Pincode
+                                </div>
+                                <div class="col-sm-4" style="float:left;margin-top:10px;">
+                                    @Html.TextBoxFor(model => item.PinCode, new { @class = "input100", @id = "txtPinCode" + Id })
+                                </div>
+                            </div>
+
+                            <hr />
+
+                            Id++;
+                        }
+                    </div>
+                </div>
+            }
+            else
+            {
+
+            }
+        }
+        @if (Model.bots_TblGroupMaster == null || (Model.bots_TblGroupMaster != null && Model.bots_TblGroupMaster.CustomerStatus != "CS" && Model.bots_TblGroupMaster.CustomerStatus != "CSUpdate"))
+        {
             <div class="container-fluid pt-3 pl-3 pr-3 pb-3">
                 <div class="col-md-12 section-heading" data-toggle="collapse" data-target="#custdetails">Customer Detail</div>
                 <div id="custdetails" class="collapse show">
@@ -560,6 +683,7 @@
                     </div>
                 </div>
             </div>
+
             <div class="container-fluid pt-3 pl-3 pr-3 pb-3" id="dvPaymentDetailsSection" style="display:none;">
                 <div class="col-md-12 section-heading" data-toggle="collapse" data-target="#updatepaymentdetails">Update Payment Details</div>
                 <div id="updatepaymentdetails" class="collapse">
@@ -613,48 +737,31 @@
                     </div>
                 </div>
             </div>
+        }
 
+        <div class="container-fluid pt-3 pl-3 pr-3 pb-3">
+
+            @if (Model.bots_TblGroupMaster == null)
+            {
+                <button type="button" id="btnCustomerSubmit" class="btn btn-primary pull-right" onclick="return CheckValidationAndSubmit('CS');" style="margin-right:10px;">Submit</button>
+                <button type="submit" id="btnCustomerSave" class="btn btn-primary pull-right" onclick="return CheckValidationAndSubmit();" style="margin-right:10px;">Save</button>
+
+            }
             @if (Model.bots_TblGroupMaster != null)
             {
-                if (Model.bots_TblGroupMaster.CustomerStatus == "CS")
+                if (Model.bots_TblGroupMaster.CustomerStatus != "CS" && Model.bots_TblGroupMaster.CustomerStatus != "CSUpdate")
                 {
-                    <div class="container-fluid pt-3 pl-3 pr-3 pb-3" id="dvOutletSection">
-                        <div class="col-md-12 section-heading" data-toggle="collapse" data-target="#outletdetails">Outlet Details</div>
-                        <div id="outletdetails" class="collapse">
-                            @foreach (var item in Model.objRetailList)
-                            {
-                                <div>
-                                    @item.CategoryName
-
-                                </div>
-                                for (int i = 1; i <= item.NoOfEnrolled; i++)
-                                {
-                                    <div class="row" style="margin: 0;">
-                                        <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
-                                            Outlet Name
-                                        </div>
-                                        <div class="col-sm-4" style="float:left;margin-top:10px;">
-                                            @Html.TextBoxFor(model => model.bots_TblOutletMaster.OutletName, new { @class = "input100", @id = "txtOutletName" + i })
-                                        </div>
-                                        <div style="float: left; text-align: right; width: 115px; margin-top: 10px;">
-                                            Area Name
-                                        </div>
-                                        <div class="col-sm-4" style="float:left;margin-top:10px;">
-                                            @Html.TextBoxFor(model => model.bots_TblOutletMaster.AreaName, new { @class = "input100", @id = "txtAreaName" + i })
-                                        </div>
-                                    </div>
-                                }
-                            }
-                        </div>
-                    </div>
+                    <button type="button" id="btnCustomerSubmit" class="btn btn-primary pull-right" onclick="return CheckValidationAndSubmit('CS');" style="margin-right:10px;">Submit</button>
+                    <button type="submit" id="btnCustomerSave" class="btn btn-primary pull-right" onclick="return CheckValidationAndSubmit();" style="margin-right:10px;">Save</button>
+                }
+                else
+                {
+                    <button type="button" id="btnCustomerSubmit" class="btn btn-primary pull-right" onclick="return CheckOutletData('CSUpdate');" style="margin-right:10px;">Submit</button>
+                    <button type="submit" id="btnCustomerSave" class="btn btn-primary pull-right" onclick="return CheckOutletData('CSUpdate');" style="margin-right:10px;display:none;">Save</button>
                 }
             }
-
-            <div class="container-fluid pt-3 pl-3 pr-3 pb-3">
-                <button type="button" id="btnCustomerSubmit" class="btn btn-primary pull-right" onclick="return CheckValidation('CS');" style="margin-right:10px;">Submit</button>
-                <button type="submit" id="btnCustomerSave" class="btn btn-primary pull-right" onclick="return CheckValidation();" style="margin-right:10px;">Save</button>
-            </div>
         </div>
+    </div>
     </div>
 
 }
@@ -684,8 +791,12 @@
         RemoveRequiredBorderCategory();
         RemoveRequiredBorderAssignment();
         RemoveRequiredBorderDeal();
+        //var outletCount = $("#hdnOutletCount").val();
+
+            RemoveRequiredOutletDetails();
+
         CheckInstallmentAmount();
-        
+
 
         $("#btnPopupClose").on("click", function () {
             $("#hdnCustomerStatus").val("");
@@ -695,7 +806,7 @@
             LoadEditData();
         }
 
-        if ($("#hdnCustomerStatus").val() == "CS") {
+        if ($("#hdnCustomerStatus").val() == "CS" || $("#hdnCustomerStatus").val() == "CSUpdate") {
             ShowHideSection("outletdetails");
         }
 
@@ -1284,6 +1395,7 @@
             }
         });
     }
+
     function RemoveRequiredBorderDeal() {
         $("#txtLoyaltyFees").focusout(function () {
             if ($("#txtLoyaltyFees").val() != "") {
@@ -1416,6 +1528,101 @@
         });
     }
 
+    function RemoveRequiredOutletDetails() {
+        var outletCount = $("#hdnOutletCount").val();
+        for (let i = 1; i <= outletCount; i++) {
+            $("#txtOutletName" + i).focusout(function () {
+                if ($("#txtOutletName" + i).val() != "") {
+                    $('#txtOutletName' + i).css('border-color', '');
+                }
+                else {
+                    $('#txtOutletName' + i).css('border-color', 'red');
+                }
+            });
+            $("#txtAreaName" + i).focusout(function () {
+                if ($("#txtAreaName" + i).val() != "") {
+                    $('#txtAreaName' + i).css('border-color', '');
+                }
+                else {
+                    $('#txtAreaName' + i).css('border-color', 'red');
+                }
+            });
+            $("#txtAuthorisedPerson" + i).focusout(function () {
+                if ($("#txtAuthorisedPerson" + i).val() != "") {
+                    $('#txtAuthorisedPerson' + i).css('border-color', '');
+                }
+                else {
+                    $('#txtAuthorisedPerson' + i).css('border-color', 'red');
+                }
+            });
+            $("#txtRegisterMobileNo" + i).focusout(function () {
+                if ($("#txtRegisterMobileNo" + i).val() != "") {
+                    $('#txtRegisterMobileNo' + i).css('border-color', '');
+                }
+                else {
+                    $('#txtRegisterMobileNo' + i).css('border-color', 'red');
+                }
+            });
+            $("#txtRegisterEmail" + i).focusout(function () {
+                if ($("#txtRegisterEmail" + i).val() != "") {
+                    $('#txtRegisterEmail' + i).css('border-color', '');
+                }
+                else {
+                    $('#txtRegisterEmail' + i).css('border-color', 'red');
+                }
+            });
+            $("#txtAddress" + i).focusout(function () {
+                if ($("#txtAddress" + i).val() != "") {
+                    $('#txtAddress' + i).css('border-color', '');
+                }
+                else {
+                    $('#txtAddress' + i).css('border-color', 'red');
+                }
+            });
+            $("#txtLatitude" + i).focusout(function () {
+                if ($("#txtLatitude" + i).val() != "") {
+                    $('#txtLatitude' + i).css('border-color', '');
+                }
+                else {
+                    $('#txtLatitude' + i).css('border-color', 'red');
+                }
+            });
+            $("#txtLongitude" + i).focusout(function () {
+                if ($("#txtLongitude" + i).val() != "") {
+                    $('#txtLongitude' + i).css('border-color', '');
+                }
+                else {
+                    $('#txtLongitude' + i).css('border-color', 'red');
+                }
+            });
+            $("#txtPinCode" + i).focusout(function () {
+                if ($("#txtPinCode" + i).val() != "") {
+                    $('#txtPinCode' + i).css('border-color', '');
+                }
+                else {
+                    $('#txtPinCode' + i).css('border-color', 'red');
+                }
+            });
+
+            $('#ddlState' + i).change(function () {
+                if ($("#ddlState"+i+" option:selected").text() == "Please Select") {
+                    $('#ddlState' + i).css('border-color', 'red');
+                }
+                else {
+                    $('#ddlState' + i).css('border-color', '');
+                }
+            });
+            $('#ddlCity' + i).change(function () {
+                if ($("#ddlCity" + i + " option:selected").text() == "Please Select") {
+                    $('#ddlCity' + i).css('border-color', 'red');
+                }
+                else {
+                    $('#ddlCity' + i).css('border-color', '');
+                }
+            });
+        }
+    }
+
     function CalculateTDS() {
         var ReceivedFees = $("#txtAmountReceived").val();
         if (parseFloat(ReceivedFees) > parseFloat($("#txtTotalFeesB").val())) {
@@ -1439,6 +1646,7 @@
 
         }
     }
+
     function CalculateTotalFees() {
         var LoyaltyFees = $("#txtLoyaltyFees").val();
         if (LoyaltyFees == "") {
@@ -1497,11 +1705,12 @@
 
     }
 
-    function CheckValidation(buttonType) {
+    function CheckValidationAndSubmit(buttonType) {
         var returnStatusCust = true;
         var returnStatusAssign = true;
         var returnStatusDeal = true;
         var returnStatusPayment = true;
+        var returnStatusOutlet = true;
         var returnStatusUpdatePayment = true;
         returnStatusCust = CheckCustomerDetails();
         if (returnStatusCust) {
@@ -1509,7 +1718,7 @@
             if (returnStatusAssign) {
                 returnStatusDeal = CheckDealDetails();
                 if (returnStatusDeal) {
-                    returnStatusPayment = CheckPaymentSchedule();
+                    returnStatusPayment = CheckPaymentSchedule();                    
                 }
             }
         }
@@ -2310,7 +2519,7 @@
             item["PaymentAmount"] = $("#txtPaymentAmount" + i).val();
             Installments.push(item);
         }
-        $("#hdnPaymentScheduleData").val(JSON.stringify(Installments));
+        $("#hdnPaymentScheduleData").val(JSON.stringify(Installments));        
     }
 
     function LoadEditData() {
@@ -2413,6 +2622,121 @@
             }
     }
 
+    function CheckOutletData(buttonType) {
+        var returnStatus = true;
+        if (buttonType == 'CSUpdate') {
+            var noOfOutlet = $("#hdnOutletCount").val();
+            $("#hdnCustomerStatus").val("CSUpdate");
+            //alert(noOfOutlet)
+            for (var i = 1; i <= noOfOutlet; i++) {
+                if ($("#txtOutletName" + i).val() == "") {
+                    ShowHideSection("outletdetails");
+                    $('#txtOutletName' + i).css('border-color', 'red');
+                    returnStatus = false;
+                }
+                if ($("#txtAreaName" + i).val() == "") {
+                    ShowHideSection("outletdetails");
+                    $('#txtAreaName' + i).css('border-color', 'red');
+                    returnStatus = false;
+                }
+                if ($("#txtAuthorisedPerson" + i).val() == "") {
+                    ShowHideSection("outletdetails");
+                    $('#txtAuthorisedPerson' + i).css('border-color', 'red');
+                    returnStatus = false;
+                }
+                if ($("#txtRegisterMobileNo" + i).val() == "") {
+                    ShowHideSection("outletdetails");
+                    $('#txtRegisterMobileNo' + i).css('border-color', 'red');
+                    returnStatus = false;
+                }
+                if ($("#txtRegisterEmail" + i).val() == "") {
+                    ShowHideSection("outletdetails");
+                    $('#txtRegisterEmail' + i).css('border-color', 'red');
+                    returnStatus = false;
+                }
+                if ($("#txtAddress" + i).val() == "") {
+                    ShowHideSection("outletdetails");
+                    $('#txtAddress' + i).css('border-color', 'red');
+                    returnStatus = false;
+                }
+                if ($("#txtLatitude" + i).val() == "") {
+                    ShowHideSection("outletdetails");
+                    $('#txtLatitude' + i).css('border-color', 'red');
+                    returnStatus = false;
+                }
+                if ($("#txtLongitude" + i).val() == "") {
+                    ShowHideSection("outletdetails");
+                    $('#txtLongitude' + i).css('border-color', 'red');
+                    returnStatus = false;
+                }
+                if ($("#ddlState" + i +" option:selected").text() == "Please Select") {
+                    ShowHideSection("outletdetails");
+                    $("#ddlState" + i).css('border-color', 'red');
+                    returnStatus = false;
+                }
+
+                if ($("#ddlCity" + i + " option:selected").text() == "Please Select") {
+                    ShowHideSection("outletdetails");
+                    $("#ddlCity" + i).css('border-color', 'red');
+                    returnStatus = false;
+                }
+                if ($("#txtPinCode" + i).val() == "") {
+                    ShowHideSection("outletdetails");
+                    $('#txtPinCode' + i).css('border-color', 'red');
+                    returnStatus = false;
+                }
+            }
+        }
+
+        if (returnStatus) {
+            var outletCount = $("#hdnOutletCount").val();
+            var Outlets = [];
+            for (let i = 1; i <= outletCount; i++) {
+                item = {}
+                item["Id"] = $("#hdnID" + i).val();
+                item["GroupId"] = $("#hdnGroupID").val();
+                item["BrandId"] = $("#hdnBrandID" + i).val();
+                item["OutletId"] = $("#hdnOutletID" + i).val();
+                item["OutletName"] = $("#txtOutletName" + i).val();
+                item["AreaName"] = $("#txtAreaName" + i).val();
+                item["AuthorisedPerson"] = $("#txtAuthorisedPerson" + i).val();
+                item["RegisterMobileNo"] = $("#txtRegisterMobileNo" + i).val();
+                item["RegisterEmail"] = $("#txtRegisterEmail" + i).val();
+                item["Address"] = $("#txtAddress" + i).val();
+                item["Latitude"] = $("#txtLatitude" + i).val();
+                item["Longitude"] = $("#txtLongitude" + i).val();
+                item["City"] = $("#ddlCity" + i).val();
+                item["PinCode"] = $("#txtPinCode" + i).val();
+                item["State"] = $("#ddlState" + i).val();
+
+                Outlets.push(item);
+            }
+            var OutletsData = JSON.stringify(Outlets);
+            $("#hdnOutletData").val(OutletsData);
+            cuteAlert({
+                type: "question",
+                title: "Are you sure?",
+                message: "Once you submit, you will not be able to change data",
+                confirmText: "Okay",
+                cancelText: "Cancel"
+            }).then((e) => {
+                if (e == ("confirm")) {
+                    $("#btnCustomerSave").click();
+                }
+            })
+            return true;
+
+        }
+        else {
+            cuteAlert({
+                type: "error",
+                title: "Oops..",
+                message: "Please enter Required fields",
+                buttonText: "Okay"
+            })
+            return false;
+        }
+    }
 
 </script>
 

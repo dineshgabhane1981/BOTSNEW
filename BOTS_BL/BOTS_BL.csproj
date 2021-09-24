@@ -215,6 +215,7 @@
     <Compile Include="Models\CommonDB\tblRMAssigned.cs" />
     <Compile Include="Models\CommonDB\tblSourcedBy.cs" />
     <Compile Include="Models\CommonDB\tblSourceType.cs" />
+    <Compile Include="Models\CommonDB\tblState.cs" />
     <Compile Include="Models\CommonDB\Tbl_SinglePageLowTransactingOutlet.cs" />
     <Compile Include="Models\CommonDB\Tbl_SinglePageNonTransactingGroup.cs" />
     <Compile Include="Models\CommonDB\Tbl_SinglePageNonTransactingOutlet.cs" />
