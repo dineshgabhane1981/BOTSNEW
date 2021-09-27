@@ -1,13 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Data.Entity.Core.EntityClient;
 using System.Data.SqlClient;
-using System.Globalization;
 using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using BOTS_BL.Models;
 using BOTS_BL.Models.CommonDB;
 
@@ -23,11 +19,8 @@ namespace BOTS_BL.Repository
             {
                 using (var context = new CommonDBContext())
                 {
-                    //var query = from obj in context.Tbl_SinglePageNonTransactingGroup
-                    //            where SqlFunctions.Format(obj.Number, "0.00").Contains("03.1")
-                    //            select obj;
-
-                    lstnontransactinggrp = context.Tbl_SinglePageNonTransactingGroup.OrderByDescending(p => p.DaysSinceLastTxn).ToList();
+                    
+                    lstnontransactinggrp = context.Tbl_SinglePageNonTransactingGroup.Where(x =>x.Date == DateTime.Today).OrderByDescending(p => p.DaysSinceLastTxn).ToList();
                     foreach (var item in lstnontransactinggrp)
                     {
                         item.DaySinceLastTxn = Convert.ToInt32(item.DaysSinceLastTxn);
@@ -37,7 +30,7 @@ namespace BOTS_BL.Repository
             }
             catch (Exception ex)
             {
-                // newexception.AddException(ex, GroupId);
+                
             }
 
             return lstnontransactinggrp;
@@ -49,7 +42,7 @@ namespace BOTS_BL.Repository
             {
                 using (var context = new CommonDBContext())
                 {
-                    lstnontransactingoutlet = context.Tbl_SinglePageNonTransactingOutlet.OrderByDescending(i => i.DaysSinceLastTxn).ToList();
+                    lstnontransactingoutlet = context.Tbl_SinglePageNonTransactingOutlet.Where(x => x.Date == DateTime.Today).OrderByDescending(i => i.DaysSinceLastTxn).ToList();
                     foreach (var item in lstnontransactingoutlet)
                     {
                         item.DaySinceLastTxn = Convert.ToInt32(item.DaysSinceLastTxn);
@@ -72,7 +65,7 @@ namespace BOTS_BL.Repository
             {
                 using (var context = new CommonDBContext())
                 {
-                    lstlowtransactingoutlet = context.Tbl_SinglePageLowTransactingOutlet.OrderBy(i => i.LowerByPercentage).ToList();
+                    lstlowtransactingoutlet = context.Tbl_SinglePageLowTransactingOutlet.Where(x => x.Date == DateTime.Today).OrderBy(i => i.LowerByPercentage).ToList();
                 }
             }
             catch (Exception ex)
@@ -106,6 +99,241 @@ namespace BOTS_BL.Repository
 
             return lstsummarytable;
         }
+        public List<SinglepageLowerMetrics> GetLowerMetrics(String Id)
+        {
+            // SinglePageViewModel singlevm = new SinglePageViewModel();
+            List<SinglepageLowerMetrics> lstlowermetrics = new List<SinglepageLowerMetrics>();
+            List <Tbl_SinglePageLowReferralConversions> objlowreferralconversion = new List<Tbl_SinglePageLowReferralConversions>();
+            List<Tbl_SinglePageLowerRedemptionRate> objlowerredemption = new List<Tbl_SinglePageLowerRedemptionRate>();
+            List<Tbl_SinglePageLowProfileUpdates> objlowprofile = new List<Tbl_SinglePageLowProfileUpdates>();
+            List<Tbl_SinglePageLowReferral> objlowreferral = new List<Tbl_SinglePageLowReferral>();
+            List<Tbl_SinglePageHigherOnlyonceAndInactive> objhigheronlyonce = new List<Tbl_SinglePageHigherOnlyonceAndInactive>();
+            DataSet dsm = new DataSet();
+            using (var context = new CommonDBContext())
+            {
+               DateTime dt= DateTime.Now.Date;
+                if (Id == "1")
+                {
+                    objlowerredemption = context.Tbl_SinglePageLowerRedemptionRate.OrderByDescending(i => i.Value).ToList();
+                    dsm= CreateDataTable(objlowerredemption,Id);
+                    //.Where(x => x.Date == dt)
+                }
+                else if (Id == "3")
+                {
+                    objlowprofile = context.Tbl_SinglePageLowProfileUpdates.OrderByDescending(i => i.Value).ToList();
+                    dsm= CreateDataTable(objlowprofile,Id);
+
+                }
+                else if (Id == "2")
+                {
+                    objhigheronlyonce = context.Tbl_SinglePageHigherOnlyonceAndInactive.OrderByDescending(i => i.Value).ToList();
+                    dsm= CreateDataTable(objhigheronlyonce,Id);
+
+                }
+                else if (Id == "4")
+                {
+                    objlowreferral = context.Tbl_SinglePageLowReferral.OrderByDescending(i => i.Value).ToList();
+                    dsm=CreateDataTable(objlowreferral,Id);
+
+                }
+                else if (Id == "5")
+                {
+                    objlowreferralconversion = context.Tbl_SinglePageLowReferralConversions.OrderByDescending(i => i.Value).ToList();
+                    dsm= CreateDataTable(objlowreferralconversion,Id);
+                }               
+
+
+                 DataSet ds = new DataSet();
+                int fivecount = dsm.Tables[0].Rows.Count;
+                int tencount = dsm.Tables[1].Rows.Count;//dtlessten.Rows.Count;
+                int fifteencount = dsm.Tables[2].Rows.Count;//dtlessfifteen.Rows.Count;
+                int thirtycount = dsm.Tables[3].Rows.Count;//dtlessthirty.Rows.Count;
+                int fortycount = dsm.Tables[4].Rows.Count;//dtlessforty.Rows.Count;
+
+                int[] arr = new int[] { fivecount, tencount, fifteencount, thirtycount, fortycount };
+                Array.Sort<int>(arr, new Comparison<int>(
+                  (i1, i2) => i2.CompareTo(i1)));
+               
+                int count = arr[0];
+                DataTable Maindt = new DataTable();
+                Maindt.Columns.Add("GroupNamelessthan5");
+                Maindt.Columns.Add("Valuethanlessthan5",typeof(double));
+                Maindt.Columns.Add("GroupNamelessthan10");
+                Maindt.Columns.Add("Valuelessthan10", typeof(double));
+                Maindt.Columns.Add("GroupNamelessthan15");
+                Maindt.Columns.Add("Valuelessthan15", typeof(double));
+                Maindt.Columns.Add("GroupNamelessthan30");
+                Maindt.Columns.Add("Valuelessthan30", typeof(double));
+                Maindt.Columns.Add("GroupNamelessthan40");
+                Maindt.Columns.Add("Valuelessthan40", typeof(double));
+                for(int a=0; a<count; a++)
+                {
+                    DataRow dr = Maindt.NewRow();
+                    if (dsm.Tables[0].Rows.Count >= a+1)
+                    {
+                        dr["GroupNamelessthan5"] = Convert.ToString(dsm.Tables[0].Rows[a]["GroupName5"]);
+                        dr["Valuethanlessthan5"] = Convert.ToString(dsm.Tables[0].Rows[a]["value5"]);
+                    }
+                    if (dsm.Tables[1].Rows.Count >= a + 1)
+                    {
+                        dr["GroupNamelessthan10"] = Convert.ToString(dsm.Tables[1].Rows[a]["GroupName10"]);
+                        dr["Valuelessthan10"] = Convert.ToString(dsm.Tables[1].Rows[a]["value10"]);
+                    }
+                    if (dsm.Tables[2].Rows.Count >= a + 1)
+                    {
+                        dr["GroupNamelessthan15"] = Convert.ToString(dsm.Tables[2].Rows[a]["GroupName15"]);
+                        dr["Valuelessthan15"] = Convert.ToString(dsm.Tables[2].Rows[a]["value15"]);
+                    }
+                    if (dsm.Tables[3].Rows.Count >= a + 1)
+                    {
+                        dr["GroupNamelessthan30"] = Convert.ToString(dsm.Tables[3].Rows[a]["GroupName30"]);
+                        dr["Valuelessthan30"] = Convert.ToString(dsm.Tables[3].Rows[a]["value30"]);
+                    }
+                    if (dsm.Tables[4].Rows.Count >= a + 1)
+                    {
+                        dr["GroupNamelessthan40"] = Convert.ToString(dsm.Tables[4].Rows[a]["GroupName40"]);
+                        dr["Valuelessthan40"] = Convert.ToString(dsm.Tables[4].Rows[a]["value40"]);
+                    }
+                   
+
+                    Maindt.Rows.Add(dr);
+
+                }
+                //
+                //  List< SinglepageLowerMetrics > = Maindt.ToCollection<SinglepageLowerMetrics>();
+                lstlowermetrics = Maindt.AsEnumerable()
+                                  .Select(x => new SinglepageLowerMetrics()
+                                  {
+                                      GroupNamelessthan5 = WrapDbNullValue<string>(x.Field<string>("GroupNamelessthan5")),
+                                      Valuethanlessthan5 = x.Field<double?>("Valuethanlessthan5"),
+                                      GroupNamelessthan10 = WrapDbNullValue<string>(x.Field<string>("GroupNamelessthan10")),
+                                      Valuelessthan10 = x.Field<double?>("Valuelessthan10"),
+                                      GroupNamelessthan15 = WrapDbNullValue<string>(x.Field<string>("GroupNamelessthan15")),
+                                      Valuelessthan15 = x.Field<double?>("Valuelessthan15"),
+                                      GroupNamelessthan30 = WrapDbNullValue<string>(x.Field<string>("GroupNamelessthan30")),
+                                      Valuelessthan30 = x.Field<double?>("Valuelessthan30"),
+                                      GroupNamelessthan40 = WrapDbNullValue<string>(x.Field<string>("GroupNamelessthan40")),
+                                      Valuelessthan40 = x.Field<double?>("Valuelessthan40")
+                                  }).ToList();
+
+            }
+
+           
+            return lstlowermetrics;
+
+        }
+
+        public DataSet CreateDataTable<T>(List<T> list,string Id)
+        {
+            DataSet dsmain = new DataSet();
+            double val5;
+            double val10;
+            double val15;
+            double val30;
+            double val40;
+
+            DataTable dtlessfive = new DataTable();
+            dtlessfive.Columns.Add("GroupName5");
+            dtlessfive.Columns.Add("value5");
+
+
+            DataTable dtlessten = new DataTable();
+            dtlessten.Columns.Add("GroupName10");
+            dtlessten.Columns.Add("value10");
+
+            DataTable dtlessfifteen = new DataTable();
+            dtlessfifteen.Columns.Add("GroupName15");
+            dtlessfifteen.Columns.Add("value15");
+
+
+            DataTable dtlessthirty = new DataTable();
+            dtlessthirty.Columns.Add("GroupName30");
+            dtlessthirty.Columns.Add("value30");
+
+
+            DataTable dtlessforty = new DataTable();
+            dtlessforty.Columns.Add("GroupName40");
+            dtlessforty.Columns.Add("value40");
+
+            int count = typeof(T).GetProperties().Count();
+            for (int y = 0 ; y < list.Count; y++)
+            {
+                object propertyValue ;
+                if (Id == "3")
+                {
+                    propertyValue = typeof(T).GetProperties()[5].GetValue(list[y], null);
+                }
+                else
+                {
+                    propertyValue = typeof(T).GetProperties()[4].GetValue(list[y], null);
+                }
+                var propertygroupname = typeof(T).GetProperties()[1].GetValue(list[y], null);
+                   
+                        if (Convert.ToInt32(propertyValue) < 5 && Convert.ToInt32(propertyValue)> 0)
+                        {
+                            DataRow dr5 = dtlessfive.NewRow();
+                            val5 = Convert.ToDouble(propertyValue);
+                            dr5[0] = propertygroupname;
+                            dr5[1] = val5;
+                            dtlessfive.Rows.Add(dr5);
+                            
+                        }
+                else if (Convert.ToInt32(propertyValue) < 10 && Convert.ToInt32(propertyValue) > 5)
+                {
+                    DataRow dr10 = dtlessten.NewRow();
+
+                    val10 = Convert.ToDouble(propertyValue);
+                    dr10[0] = propertygroupname;
+                    dr10[1] = val10;
+                    dtlessten.Rows.Add(dr10);
+                    
+                }
+                else if (Convert.ToInt32(propertyValue) < 15 && Convert.ToInt32(propertyValue) > 10)
+                {
+                    DataRow dr15 = dtlessfifteen.NewRow();
+                    val15 = Convert.ToDouble(propertyValue);
+                    dr15[0] = propertygroupname;
+                    dr15[1] = val15;
+                    dtlessfifteen.Rows.Add(dr15);
+                    
+                }
+                else if (Convert.ToInt32(propertyValue) < 30 && Convert.ToInt32(propertyValue) > 15)
+                {
+                    DataRow dr30 = dtlessthirty.NewRow();
+                    val30 = Convert.ToDouble(propertyValue);
+                    dr30[0] = propertygroupname;
+                    dr30[1] = val30;
+                    dtlessthirty.Rows.Add(dr30);
+                    
+                }
+                else if (Convert.ToInt32(propertyValue) < 40 && Convert.ToInt32(propertyValue) > 30)
+                {
+                    DataRow dr40 = dtlessforty.NewRow();
+                    val40 = Convert.ToDouble(propertyValue);
+                    dr40[0] = propertygroupname;
+                    dr40[1] = val40;
+                    dtlessforty.Rows.Add(dr40);
+                    
+                }
+
+                
+            }
+            dsmain.Tables.Add(dtlessfive);
+            dsmain.Tables.Add(dtlessten);
+            dsmain.Tables.Add(dtlessfifteen);
+            dsmain.Tables.Add(dtlessthirty);
+            dsmain.Tables.Add(dtlessforty);
+            return dsmain;
+        }
+        private static T WrapDbNullValue<T>(object value)
+        {
+            if (value != null && value == DBNull.Value)
+            {
+                return default(T);
+            }
+
+            return (T)Convert.ChangeType(value, typeof(T));
+        }
 
         public CommunicationsinglePageData GetCommunicationWhatsAppExpiryData()
         {
@@ -128,10 +356,10 @@ namespace BOTS_BL.Repository
                 }
                 if(retVal!=null)
                 {   
-                    lstSmsbalance.objSMSBalance = ConvertDataTable<SMSBalance>(retVal.Tables[0]);
+                    lstSmsbalance.objSMSBalance = ConvertDataTable<SMSBalance>(retVal.Tables[3]);
                     lstSmsbalance.objWhatsAppBalance = ConvertDataTable<WhatsAppBalance>(retVal.Tables[1]);
                     lstSmsbalance.objVirtualSMSBalance = ConvertDataTable<VirtualSMSBalance>(retVal.Tables[2]);
-                    lstSmsbalance.objWhatsAppExpiryDate = ConvertDataTable<WhatsAppExpiryDate>(retVal.Tables[3]);
+                    lstSmsbalance.objWhatsAppExpiryDate = ConvertDataTable<WhatsAppExpiryDate>(retVal.Tables[0]);
                 }
             }
             catch (Exception ex)

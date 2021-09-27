@@ -104,6 +104,12 @@
                             Common Discussion
                         </a>
                     </li>
+                    <li>
+                        <a href="@Url.Action("Index", "SinglePage")" class="@Html.IsSelected(controller: "SinglePage", action: "Index")">
+                            <i class="metismenu-icon pe-7s-rocket"></i>
+                            Single Page
+                        </a>
+                    </li>
                 }
 
                 @if (GroupId != null && level == "02")

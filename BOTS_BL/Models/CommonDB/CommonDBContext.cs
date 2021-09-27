@@ -13,6 +13,11 @@ namespace BOTS_BL.Models
             : base("name=CommonDBContext")
         {
         }
+        public virtual DbSet<Tbl_SinglePageHigherOnlyonceAndInactive> Tbl_SinglePageHigherOnlyonceAndInactive { get; set; }
+        public virtual DbSet<Tbl_SinglePageLowerRedemptionRate> Tbl_SinglePageLowerRedemptionRate { get; set; }
+        public virtual DbSet<Tbl_SinglePageLowProfileUpdates> Tbl_SinglePageLowProfileUpdates { get; set; }
+        public virtual DbSet<Tbl_SinglePageLowReferral> Tbl_SinglePageLowReferral { get; set; }
+        public virtual DbSet<Tbl_SinglePageLowReferralConversions> Tbl_SinglePageLowReferralConversions { get; set; }
         public virtual DbSet<BOTS_TblSubDiscussionData> BOTS_TblSubDiscussionData { get; set; }
         public virtual DbSet<BOTS_TblOutletMaster> BOTS_TblOutletMaster { get; set; }
         public virtual DbSet<SMSWABalanceData> SMSWABalanceData { get; set; }

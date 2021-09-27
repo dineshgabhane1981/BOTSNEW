@@ -248,7 +248,44 @@
         });
     });
 
-
+    function UpdateStatus() {
+        var id = $("#hdnId").val();
+        var Desc = $("#txtDesc").val();
+        var Status = $("#ddlPopupStatus").val();
+        if (Desc != "") {
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("UpdateStatusAndDiscussion", "Discussion")',
+                data: '{dId: ' + JSON.stringify(id) + ',Desc: ' + JSON.stringify(Desc) + ',Status: ' + JSON.stringify(Status) + '}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (result) {
+                    $("#myModal").hide(1000);
+                },
+                error: function (result) {
+                    if (result.responseText == "True") {
+                        cuteAlert({
+                            type: "success",
+                            title: "Saved",
+                            message: "Status updated Successfully !!!",
+                            buttonText: "Okay"
+                        })
+                        BindListing();
+                        $("#myModal").hide(1000);
+                    }
+                }
+            });
+        }
+        else {
+            cuteAlert({
+                type: "error",
+                title: "Oops..",
+                message: "Please enter Required fields",
+                buttonText: "Okay"
+            })
+            $('#txtDesc').css('border-color', 'red');
+        }
+    }
 
 
 </script>

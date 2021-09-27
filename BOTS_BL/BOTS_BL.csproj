@@ -215,6 +215,11 @@
     <Compile Include="Models\CommonDB\tblRMAssigned.cs" />
     <Compile Include="Models\CommonDB\tblSourcedBy.cs" />
     <Compile Include="Models\CommonDB\tblSourceType.cs" />
+    <Compile Include="Models\CommonDB\Tbl_SinglePageHigherOnlyonceAndInactive.cs" />
+    <Compile Include="Models\CommonDB\Tbl_SinglePageLowerRedemptionRate.cs" />
+    <Compile Include="Models\CommonDB\Tbl_SinglePageLowProfileUpdates.cs" />
+    <Compile Include="Models\CommonDB\Tbl_SinglePageLowReferral.cs" />
+    <Compile Include="Models\CommonDB\Tbl_SinglePageLowReferralConversions.cs" />
     <Compile Include="Models\CommonDB\Tbl_SinglePageLowTransactingOutlet.cs" />
     <Compile Include="Models\CommonDB\Tbl_SinglePageNonTransactingGroup.cs" />
     <Compile Include="Models\CommonDB\Tbl_SinglePageNonTransactingOutlet.cs" />
