@@ -55,5 +55,8 @@ namespace BOTS_BL.Models
 
         [StringLength(50)]
         public string State { get; set; }
+
+        [NotMapped]
+        public string BrandName { get; set; }
     }
 }

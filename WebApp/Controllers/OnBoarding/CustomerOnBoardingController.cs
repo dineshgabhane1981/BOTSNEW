@@ -40,6 +40,7 @@ namespace WebApp.Controllers.OnBoarding
                 objData.lstSourcedBy = CR.GetSourcedBy();
                 objData.lstRMAssigned = CR.GetRMAssigned();
                 objData.lstRefferedCategory = CR.GetAllRefferedCategory();
+                objData.lstStates = CR.GetStates();
                 List<SelectListItem> refferedname = new List<SelectListItem>();
                 SelectListItem item = new SelectListItem();
                 item.Value = "0";
@@ -53,8 +54,38 @@ namespace WebApp.Controllers.OnBoarding
                     objData.bots_TblPaymentDetails = OBR.GetPaymentDetails(groupId);
                     objData.objRetailList = OBR.GetRetailDetails(groupId);
                     objData.objInstallmentList = OBR.GetInstallmentDetails(groupId);
+                    objData.lstOutlets = OBR.GetOutletDetails(groupId);
+                    if (objData.lstOutlets.Count == 0)
+                    {
+                        var brandId = 1;
+                        var outletId = 1;
+                        foreach (var item1 in objData.objRetailList)
+                        {                            
+                            for (int i = 1; i <= item1.NoOfEnrolled; i++)
+                            {
+                                BOTS_TblOutletMaster outlet = new BOTS_TblOutletMaster();
+                                outlet.Id = 0;
+                                outlet.BrandId = Convert.ToString(brandId);
+                                outlet.OutletId = Convert.ToString(outletId);
+                                outlet.BrandName = item1.BrandName;
+                                objData.lstOutlets.Add(outlet);
+                                outletId++;
+                            }
+                            brandId++;
+                        }                        
+                    }
+                    else
+                    {
+                        foreach (var item1 in objData.objRetailList)
+                        {
+                            foreach (var item2 in objData.lstOutlets)
+                            {
+                                item2.BrandName = item1.BrandName; 
+                            }                             
+                        }
+                    }
                     objData.bots_TblGroupMaster.CategoryData = json_serializer.Serialize(objData.objRetailList);
-                    objData.bots_TblGroupMaster.PaymentScheduleData= json_serializer.Serialize(objData.objInstallmentList);
+                    objData.bots_TblGroupMaster.PaymentScheduleData = json_serializer.Serialize(objData.objInstallmentList);
                 }
             }
             catch (Exception ex)
@@ -72,6 +103,7 @@ namespace WebApp.Controllers.OnBoarding
                 var userDetails = (CustomerLoginDetail)Session["UserSession"];
                 List<BOTS_TblRetailMaster> objLstRetail = new List<BOTS_TblRetailMaster>();
                 List<BOTS_TblInstallmentDetails> objLstInstallment = new List<BOTS_TblInstallmentDetails>();
+                List<BOTS_TblOutletMaster> objLstOutlet = new List<BOTS_TblOutletMaster>();
 
                 List<SelectListItem> refferedname = new List<SelectListItem>();
                 SelectListItem item1 = new SelectListItem();
@@ -85,11 +117,13 @@ namespace WebApp.Controllers.OnBoarding
                 objData.lstSourcedBy = CR.GetSourcedBy();
                 objData.lstRMAssigned = CR.GetRMAssigned();
                 objData.lstRefferedCategory = CR.GetAllRefferedCategory();
+                objData.lstStates = CR.GetStates();
 
                 JavaScriptSerializer json_serializer = new JavaScriptSerializer();
                 json_serializer.MaxJsonLength = int.MaxValue;
                 object[] objCategoryData = (object[])json_serializer.DeserializeObject(objData.bots_TblGroupMaster.CategoryData);
                 object[] objPaymentScheduleData = (object[])json_serializer.DeserializeObject(objData.bots_TblGroupMaster.PaymentScheduleData);
+                
 
                 foreach (Dictionary<string, object> item in objCategoryData)
                 {
@@ -117,16 +151,69 @@ namespace WebApp.Controllers.OnBoarding
 
                     objLstInstallment.Add(objItem);
                 }
+              
+
                 if (string.IsNullOrEmpty(objData.bots_TblGroupMaster.GroupId))
                     objData.bots_TblGroupMaster.CustomerStatus = "Draft";
                 objData.bots_TblGroupMaster.CreatedBy = userDetails.UserId;
                 objData.bots_TblGroupMaster.CreatedDate = DateTime.Now;
                 var newCuscomer = true;
-                if(Convert.ToInt32(objData.bots_TblGroupMaster.GroupId) >0)
+                if (Convert.ToInt32(objData.bots_TblGroupMaster.GroupId) > 0)
                 {
                     newCuscomer = false;
                 }
-                GroupdId = OBR.AddOnboardingCustomer(objData.bots_TblGroupMaster, objLstRetail, objData.bots_TblDealDetails, objData.bots_TblPaymentDetails, objLstInstallment);
+                if (objData.bots_TblGroupMaster.CustomerStatus == "CSUpdate")
+                {
+                    object[] objOutletData = (object[])json_serializer.DeserializeObject(objData.bots_TblGroupMaster.OutletData);
+                    foreach (Dictionary<string, object> item in objOutletData)
+                    {
+                        BOTS_TblOutletMaster objItem = new BOTS_TblOutletMaster();
+                        objItem.Id = Convert.ToInt32(item["Id"]);
+                        objItem.GroupId = Convert.ToString(item["GroupId"]);
+                        objItem.BrandId = Convert.ToString(item["BrandId"]);
+                        objItem.OutletId = Convert.ToString(item["OutletId"]);
+                        objItem.OutletName = Convert.ToString(item["OutletName"]);
+                        objItem.AreaName = Convert.ToString(item["AreaName"]);
+                        objItem.AuthorisedPerson = Convert.ToString(item["AuthorisedPerson"]);
+                        objItem.RegisterMobileNo = Convert.ToString(item["RegisterMobileNo"]);
+                        objItem.RegisterEmail = Convert.ToString(item["RegisterEmail"]);
+                        objItem.Address = Convert.ToString(item["Address"]);
+                        objItem.Latitude = Convert.ToString(item["Latitude"]);
+                        objItem.Longitude = Convert.ToString(item["Longitude"]);
+                        objItem.City = Convert.ToString(item["City"]);
+                        objItem.PinCode = Convert.ToString(item["PinCode"]);
+                        objItem.State = Convert.ToString(item["State"]);
+
+                        objLstOutlet.Add(objItem);
+                    }
+                    GroupdId = OBR.AddOnboardingCustomer(objData.bots_TblGroupMaster, objLstRetail, objData.bots_TblDealDetails, objData.bots_TblPaymentDetails, objLstInstallment, objLstOutlet);
+                }
+                else
+                {
+                    GroupdId = OBR.AddOnboardingCustomer(objData.bots_TblGroupMaster, objLstRetail, objData.bots_TblDealDetails, objData.bots_TblPaymentDetails, objLstInstallment, objLstOutlet);
+                }
+                objData.objRetailList = OBR.GetRetailDetails(Convert.ToString(GroupdId));
+                objData.lstOutlets = OBR.GetOutletDetails(Convert.ToString(GroupdId));
+                if (objData.lstOutlets.Count > 0)
+                {
+                    var brandId = 1;
+                    var outletId = 1;
+                    foreach (var item2 in objData.objRetailList)
+                    {
+                        for (int i = 1; i <= item2.NoOfEnrolled; i++)
+                        {
+                            BOTS_TblOutletMaster outlet = new BOTS_TblOutletMaster();
+                            outlet.Id = 0;
+                            outlet.BrandId = Convert.ToString(brandId);
+                            outlet.OutletId = Convert.ToString(outletId);
+                            outlet.BrandName = item2.BrandName;
+                            objData.lstOutlets.Add(outlet);
+                            outletId++;
+                        }
+                        brandId++;
+                    }
+
+                }
                 if (GroupdId > 0 && newCuscomer)
                 {
                     SendEmail(GroupdId);
@@ -139,8 +226,7 @@ namespace WebApp.Controllers.OnBoarding
                 TempData["error"] = "Error Occured";
                 return View("Index");
             }
-            
-            
+
             return View("Index", objData);
 
         }
@@ -265,11 +351,11 @@ namespace WebApp.Controllers.OnBoarding
                 smtp.Port = 587;
                 smtp.EnableSsl = true;
                 var userDetails = (CustomerLoginDetail)Session["UserSession"];
-                
+
                 MailMessage email = new MailMessage();
                 MailAddress from = new MailAddress(userName);
                 email.From = from;
-                foreach(var item in emailIds)
+                foreach (var item in emailIds)
                 {
                     email.To.Add(item);
                 }
@@ -281,7 +367,7 @@ namespace WebApp.Controllers.OnBoarding
                 smtp.Send(email);
 
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 newexception.AddException(ex, "Onboarding Email Error");
             }
@@ -329,6 +415,6 @@ namespace WebApp.Controllers.OnBoarding
             return View(objData);
         }
 
-        
+
     }
 }
