@@ -56,6 +56,7 @@ namespace BOTS_BL.Models.CommonDB
 
     public class DiscussionDetails
     {
+        //public string GroupName { get; set; }
         public int Id { get; set; }
         public DateTime AddedDate { get; set; }
         public string Addeddt { get; set; }

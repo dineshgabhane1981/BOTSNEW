@@ -52,10 +52,10 @@ namespace WebApp.Controllers
         {          
             ViewBag.lstcommonstatus = DR.CommonStatus();
             ViewBag.lstgroupdetails = DR.GetGroupDetails();
-            ViewBag.lstCallTypes = DR.GetCallTypes();           
+            ViewBag.lstCallTypes = DR.GetCallTypes();
             //var lstDiscussions = DR.GetAllDiscussions();
-            //return PartialView("_DiscussionList", lstDiscussions);
-            return View();
+            //return PartialView("_CommonDiscussionList", lstDiscussions);
+             return View();
         }
 
         [HttpPost]
@@ -118,7 +118,7 @@ namespace WebApp.Controllers
                
                 lstdashboard = DR.GetfilteredDiscussionData(status, calltype, groupnm, fromDate, toDate);
             }
-            return PartialView("_DiscussionList", lstdashboard);
+            return PartialView("_CommonDiscussionList", lstdashboard);
         }
     }
 }

@@ -107,14 +107,43 @@
                     <a href="#" onclick="ShowAddDiscussion();" title="Add New Discussion">  <img src="~/Content/assets/images/AddCustomer.png" /></a>
                 </div>
             </div>
-
+           
             <div id="dvDiscussionList">
                 @Html.Partial("~/Views/Discussion/_DiscussionList.cshtml", Model.lstDiscussions)
             </div>
         </div>
     </div>
 </div>
+<div id="myModal" class="modal">
+    <div class="modal-content">
+        <div class="row" style="margin: 0;">
+            <div style="float:left;text-align:right;width:100px;margin-top:10px;">
+                Description
+            </div>
+            <div class="col-sm-4" style="float:left;margin-top:10px;">
+                <textarea id="txtDesc" rows="5" cols="45" style="border-radius:10px;"></textarea>
+            </div>
+        </div>
+        <div class="row" style="margin: 0;">
+            <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
+                Status
+            </div>
+            <div class="col-sm-4" style="float:left;margin-top:10px;">
+                <select id="ddlPopupStatus" class="input100">
+                    <option value="WIP">WIP</option>
+                    <option value="Completed">Completed</option>
+                </select>
+            </div>
+        </div>
 
+        <div class="row justify-content-end pr-4" style="margin-top:20px;margin-right:465px;">
+
+            <button type="button" id="btnUpdateStatus" class="btn btn-primary" style="margin-right:10px;"> Update</button>
+            <button type="button" id="btnPopupClose" class="btn btn-outline-primary cancel-btn"> Close</button>
+        </div>
+
+    </div>
+</div>
 <script>
     $(document).ready(function () {
         var today = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());

@@ -1,4 +1,4 @@
-﻿@*@model WebApp.ViewModel.DiscussionViewModel*@
+﻿@model WebApp.ViewModel.DiscussionViewModel
 
 @{
     ViewBag.Title = "CommonDiscussion";
@@ -43,7 +43,7 @@
             <div class="pt-3 pl-3 pr-3 col-md-12 col-lg-12">
                 @*<div class="row" id="dvDiscussionList">*@
                 <div class="row" id="dvListing">
-
+                    @Html.Partial("~/Views/Discussion/_CommonDiscussionList.cshtml", Model.lstDiscussions)
                 </div>
 
                 @*</div>*@
@@ -69,6 +69,7 @@
         maxDate: today,
     });
     $(document).ready(function () {
+        GetData();
         SetFilter();
         $("#rdnnorange").change(function () {
             SetFilter();

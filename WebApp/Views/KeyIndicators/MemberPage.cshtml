@@ -185,8 +185,8 @@
                                     <tr>
                                         <th scope="col">Source</th>
                                         <th scope="col">Source Description</th>
-                                        <th scope="col">Reg Count</th>
-                                        <th scope="col">%</th>
+                                        <th scope="col">Unique Reg Count</th>
+                                        <th scope="col">Business Generated</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -535,7 +535,7 @@
                     optionItem["Source"] = item.Source;
                     optionItem["SourceDesc"] = item.SourceDesc;
                     optionItem["RegCount"] = item.RegCount;
-                    optionItem["Percentage"] = item.Percentage;
+                    optionItem["BusinessGenerated"] = item.BusinessGenerated;
                     tableDataNewRegistration.push(optionItem);
                 });
                 console.log(tableDataNewRegistration)
@@ -572,7 +572,7 @@
                 { data: "Source" },
                 { data: "SourceDesc" },
                 { data: "RegCount" },
-                { data: "Percentage" }
+                { data: "BusinessGenerated" }
             ]
         });
         $('#newRegistrationTable_filter').hide();
