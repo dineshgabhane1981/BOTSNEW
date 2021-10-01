@@ -265,7 +265,7 @@
     });
 
 
-    function ShowActivities(id) {
+    @*function ShowActivities(id) {
       //  var pType = "Distributors";
         if ($("#dvDiscussionData" + id).is(":visible")) {
             $("#dvDiscussionData" + id).hide(1000);
@@ -292,45 +292,45 @@
                 }
             });
         }
-    }
+    }*@
 
-    function BindActivities(id,data) {
-        console.log(data);
-        console.log(id);
-        var htmlStr = "<table border=\"2\" style=\"background-color:gray;margin-left: 11px;width: 98%;\" class=\"table\">";
-        htmlStr += "<tr style=\"text-align: center;\">"
-        htmlStr += "<th scope=\"col\">Date</th>";
-        htmlStr += "<th scope=\"col\">Updated By</th>";
-        htmlStr += "<th scope=\"col\">Description</th>";
-        htmlStr += "<th scope=\"col\">Status</th>";
-        htmlStr += "</tr>";
+    //function BindActivities(id,data) {
+    //    console.log(data);
+    //    console.log(id);
+    //    var htmlStr = "<table border=\"2\" style=\"background-color:gray;margin-left: 11px;width: 98%;\" class=\"table\">";
+    //    htmlStr += "<tr style=\"text-align: center;\">"
+    //    htmlStr += "<th scope=\"col\">Date</th>";
+    //    htmlStr += "<th scope=\"col\">Updated By</th>";
+    //    htmlStr += "<th scope=\"col\">Description</th>";
+    //    htmlStr += "<th scope=\"col\">Status</th>";
+    //    htmlStr += "</tr>";
 
-        $.map(data, function (item) {
-            var d = new Date();
-            d = item.FollowupDate;
-            console.log(d);
-            htmlStr += "<tr style=\"text-align: center;\">"
-            htmlStr += "<td>" + item.FollowupDate + "</td>";
-            htmlStr += "<td>" + item.UpdatedBy + "</td>";
-            htmlStr += "<td style=\"width: 100px;\">" + item.Description + "</td>";
-            htmlStr += "<td style=\"width: 100px;\">" + item.Status + "</td>";
-            htmlStr += "</tr>"
-        });
+    //    $.map(data, function (item) {
+    //        var d = new Date();
+    //        d = item.FollowupDate;
+    //        console.log(d);
+    //        htmlStr += "<tr style=\"text-align: center;\">"
+    //        htmlStr += "<td>" + item.FollowupDate + "</td>";
+    //        htmlStr += "<td>" + item.UpdatedBy + "</td>";
+    //        htmlStr += "<td style=\"width: 100px;\">" + item.Description + "</td>";
+    //        htmlStr += "<td style=\"width: 100px;\">" + item.Status + "</td>";
+    //        htmlStr += "</tr>"
+    //    });
 
-        htmlStr += "</table>";
-        $("#dvDiscussionData" + id).html(htmlStr);
-        console.log(htmlStr);
-        //$('tr[id^="trActivities"]').hide(1000);
-        //$('div[id^="dvDiscussionData"]').hide(1000);
-        $('[id^="imgExpand"]').attr("src", "../Content/assets/images/details_open.png");
+    //    htmlStr += "</table>";
+    //    $("#dvDiscussionData" + id).html(htmlStr);
+    //    console.log(htmlStr);
+    //    //$('tr[id^="trActivities"]').hide(1000);
+    //    //$('div[id^="dvDiscussionData"]').hide(1000);
+    //    $('[id^="imgExpand"]').attr("src", "../Content/assets/images/details_open.png");
 
-        $("#trActivities" + id).show(1000);
+    //    $("#trActivities" + id).show(1000);
 
-        $("#dvDiscussionData" + id).show(1000);
-        $("#imgExpand" + id).attr("src", "../Content/assets/images/details_close.png");
+    //    $("#dvDiscussionData" + id).show(1000);
+    //    $("#imgExpand" + id).attr("src", "../Content/assets/images/details_close.png");
 
 
-    }
+    //}
 
 </script>
 <style>

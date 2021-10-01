@@ -49,13 +49,13 @@ namespace WebApp.Controllers
         }
 
         public ActionResult CommonDiscussion()
-        {          
+        {         
+            List<DiscussionDetails> lstdashboard = new List<DiscussionDetails>();
             ViewBag.lstcommonstatus = DR.CommonStatus();
             ViewBag.lstgroupdetails = DR.GetGroupDetails();
             ViewBag.lstCallTypes = DR.GetCallTypes();
-            //var lstDiscussions = DR.GetAllDiscussions();
-            //return PartialView("_CommonDiscussionList", lstDiscussions);
-             return View();
+            lstdashboard = DR.GetfilteredDiscussionData("", 0, "", "", "");
+            return View(lstdashboard);
         }
 
         [HttpPost]
@@ -100,7 +100,7 @@ namespace WebApp.Controllers
 
             return status;
         }
-        
+       
         public ActionResult GetCommonFilteredDiscussion(string jsonData)
         {
             //var lstdashboard ="";

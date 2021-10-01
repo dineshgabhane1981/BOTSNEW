@@ -66,7 +66,7 @@
                         <thead>
                             <tr>
                                 <th scope="col"></th>
-                                <th scope="col">Group Name</th>
+                                @*<th scope="col">Group Name</th>*@
                                 <th scope="col">Date</th>
                                 <th scope="col">Spoken To</th>
                                 <th scope="col">Number</th>
@@ -93,64 +93,52 @@
                                         followupdate = item.FollowupDate.Value.ToString("yyyy-MM-dd");
                                     }
                                     var imgId = "imgExpand" + item.Id;
-                                    <tr>
-                                        
-                                        <td style="text-align:center;">
-                                            <img id="@imgId" src="~/Content/assets/images/details_open.png" style="cursor:pointer;" onclick="ShowActivities(@item.Id);" />
+                            <tr>
 
-                                        </td>
-                                        @*<td>@item.g</td>*@
-                                        <td>@item.AddedDate</td>
-                                        <td>@item.SpokenTo</td>
-                                        <td>@item.ContactNo</td>
-                                        <td>@item.CustomerType</td>
-                                        <td>@item.CallType</td>
-                                        @if (followupdate == "--")
-                                        {
-                                            <td style="text-align:center;">--</td>
-                                        }
-                                        else
-                                        {
-                                            <td>@followupdate</td>
-                                        }
-                                        <td>@item.CallMode</td>
-                                        @if (item.Status == "Completed")
-                                        {
-                                            <td style="background-color:lightgreen;">@item.Status</td>
-                                        }
-                                        else if (item.Status == "WIP")
-                                        {
-                                            if (item.AddedDate <= DateTime.Now.AddDays(-3))
-                                            {
-                                                <td style="background-color:red;">@item.Status</td>
-                                            }
-                                            else
-                                            {
-                                                <td style="background-color:orange;">@item.Status</td>
-                                            }
-                                        }
-                                        else
-                                        {
-                                            <td style="text-align:center;">--</td>
-                                        }
-                                        <td>@item.Description</td>
-                                        <td>@item.ActionItems</td>
-                                        <td>@item.AddedBy</td>
-                                        <td>@item.Status</td>
-                                        @*@if (item.Status != "Completed")
-                                        {
-                                            <td style="text-align:center;">
-                                                <a href="#" onclick="OpenStatusPopup(@item.Id);">
-                                                    <img src="~/Content/assets/images/task.png" width="35" />
-                                                </a>
-                                            </td>
-                                        }
-                                        else
-                                        {
-                                            <td style="text-align:center;">--</td>
-                                        }*@
+                                <td style="text-align:center;">
+                                    <img id="@imgId" src="~/Content/assets/images/details_open.png" style="cursor:pointer;" onclick="ShowActivities(@item.Id);" />
 
-                                    </tr>
+                                </td>
+                                @*<td>@item.g</td>*@
+                                <td>@item.AddedDate</td>
+                                <td>@item.SpokenTo</td>
+                                <td>@item.ContactNo</td>
+                                <td>@item.CustomerType</td>
+                                <td>@item.CallType</td>
+                                @if (followupdate == "--")
+                                {
+                                    <td style="text-align:center;">--</td>
+                                }
+                                else
+                                {
+                                    <td>@followupdate</td>
+                                }
+                                <td>@item.CallMode</td>
+
+                                @if (item.Status == "Completed")
+                                {
+                                    <td style="background-color:lightgreen;">@item.Status</td>
+                                }
+                                else if (item.Status == "WIP")
+                                {
+                                    if (item.AddedDate <= DateTime.Now.AddDays(-3))
+                                    {
+                                        <td style="background-color:red;">@item.Status</td>
+                                    }
+                                    else
+                                    {
+                                        <td style="background-color:orange;">@item.Status</td>
+                                    }
+                                }
+
+
+                                <td>@item.Description</td>
+                                <td>@item.ActionItems</td>
+                                <td>@item.AddedBy</td>
+
+
+
+                            </tr>
 
                                     var dynamicIdTr = "trActivities" + item.Id;
                                     var dynamicIdDiv = "dvDiscussionData" + item.Id;
@@ -182,7 +170,7 @@
 <script>
     $(document).ready(function () {
         $('#discussionTable').DataTable({
-            //"aaSorting": [[0, "desc"]],
+            "aaSorting": [[0, "desc"]],
             "paging": true,
             "ordering": true,
             "info": true,
@@ -214,12 +202,7 @@
             table1.draw();
         });
 
-        //$('#btnPopupClose').on("click", function () {
-        //    $("#myModal").hide(1000);
-        //});
-        //$('#btnUpdateStatus').on("click", function () {
-        //    UpdateStatus();
-        //});
+        
     });
 
    

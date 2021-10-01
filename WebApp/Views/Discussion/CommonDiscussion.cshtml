@@ -1,4 +1,4 @@
-﻿@model WebApp.ViewModel.DiscussionViewModel
+﻿@model List<BOTS_BL.Models.CommonDB.DiscussionDetails>
 
 @{
     ViewBag.Title = "CommonDiscussion";
@@ -40,18 +40,19 @@
                 </div>
             </div>
 
-            <div class="pt-3 pl-3 pr-3 col-md-12 col-lg-12">
+            
+
                 @*<div class="row" id="dvDiscussionList">*@
-                <div class="row" id="dvListing">
-                    @Html.Partial("~/Views/Discussion/_CommonDiscussionList.cshtml", Model.lstDiscussions)
+                <div  id="dvListing">
+                    @Html.Partial("~/Views/Discussion/_CommonDiscussionList.cshtml", Model)
                 </div>
 
                 @*</div>*@
 
 
-            </div>
-            </div>
+            
         </div>
+    </div>
 </div>
 <script src="~/Scripts/jquery-ui-1.12.1.js"></script>
 <script src="~/Scripts/jquery-ui-1.12.1.min.js"></script>
@@ -69,7 +70,7 @@
         maxDate: today,
     });
     $(document).ready(function () {
-        GetData();
+       // GetData();
         SetFilter();
         $("#rdnnorange").change(function () {
             SetFilter();
@@ -114,7 +115,7 @@
     }
 
     function GetData() {
-              
+
         var FilterData = [];
         item = {};
         $("#divLoader").show();
@@ -162,10 +163,10 @@
             success: function (response) {
                 console.log(response)
                 if (response != null) {
-                    $("#dvListing").html(response);
+                    $("#dvDiscussionData").html(response);
                     $("#divLoader").hide();
                 }
-                
+
             },
             failure: function (response) {
                 $("#divLoader").hide();
@@ -174,11 +175,11 @@
                // console.log(response)
                 $("#dvListing").html(response.responseText);
                 $("#divLoader").hide();
-                
+
             }
         });
     }
-    
+
 
     function ShowActivities(id) {
       //  var pType = "Distributors";
@@ -237,12 +238,12 @@
         console.log(htmlStr);
         //$('tr[id^="trActivities"]').hide(1000);
         //$('div[id^="dvDiscussionData"]').hide(1000);
-        $('[id^="imgExpand"]').attr("src", "/Content/assets/images/details_open.png");
+        $('[id^="imgExpand"]').attr("src", "../Content/assets/images/details_open.png");
 
         $("#trActivities" + id).show(1000);
 
         $("#dvDiscussionData" + id).show(1000);
-        $("#imgExpand" + id).attr("src", "/Content/assets/images/details_close.png");
+        $("#imgExpand" + id).attr("src", "../Content/assets/images/details_close.png");
 
 
     }
