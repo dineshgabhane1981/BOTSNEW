@@ -1,5 +1,8 @@
 ﻿@model WebApp.ViewModel.OnBoardingSalesViewModel
-
+@{
+    var retailcount = Model.objRetailList.Count;
+    var count = 0;
+}
 
 <div class="container-fluid pt-3 pl-3 pr-3 pb-3" id="dvCustomerDetailSection">
     <div class="col-md-12 section-heading" data-toggle="collapse" data-target="#customerdetailsreadonly">Customer Details</div>
@@ -7,59 +10,334 @@
         <table border="1" cellpadding="4" cellspacing="4" style="margin-top:10px;" width="100%">
             <tr><td colspan="8" style="font-weight:bold;">Customer Basic Details</td></tr>
             <tr>
-                <td style="font-weight:bold;">
+                <td>
                     Legal Name
                 </td>
                 <td>@Model.bots_TblGroupMaster.GroupName</td>
-                <td style="font-weight:bold;">
+                <td>
                     Owner’s Name
                 </td>
                 <td>@Model.bots_TblGroupMaster.OwnerName</td>
-                <td style="font-weight:bold;">
+                <td>
                     Owner’s Mobile
                 </td>
                 <td>@Model.bots_TblGroupMaster.OwnerMobileNo</td>
-                <td style="font-weight:bold;">
+                <td>
                     Owner’s Email
                 </td>
                 <td>@Model.bots_TblGroupMaster.OwnerEmailId</td>
             </tr>
             <tr>
-                <td style="font-weight:bold;">
+                <td>
                     Upload GST
                 </td>
                 <td>@Model.bots_TblGroupMaster.GroupName</td>
-                <td style="font-weight:bold;">
+                <td>
                     Upload PAN
                 </td>
                 <td>@Model.bots_TblGroupMaster.OwnerName</td>
-                <td style="font-weight:bold;">
+                <td>
                     City
                 </td>
-                <td>@Model.bots_TblGroupMaster.City</td>
-                <td style="font-weight:bold;">
+                <td>@Model.bots_TblGroupMaster.CityName</td>
+                <td>
                     Other Person Name
                 </td>
                 <td>@Model.bots_TblGroupMaster.AnyOtherName</td>
             </tr>
             <tr>
-                <td style="font-weight:bold;">
+                <td>
                     Mobile No
                 </td>
                 <td>@Model.bots_TblGroupMaster.AlternateMobileNo</td>
-                <td style="font-weight:bold;">
+                <td>
                     Email
                 </td>
                 <td>@Model.bots_TblGroupMaster.AlternateEmailId</td>
-                <td style="font-weight:bold;">
+                <td>
                     No of Brands
                 </td>
                 <td>@Model.bots_TblGroupMaster.NoOfRetailCategory</td>
-                <td style="font-weight:bold;">
+                <td>
                     Key Account
                 </td>
-                <td>@Model.bots_TblGroupMaster.IsKeyAccount</td>
+                @if (Model.bots_TblGroupMaster.IsKeyAccount == 1)
+                {
+                    <td>A</td>
+                }
+                @if (Model.bots_TblGroupMaster.IsKeyAccount == 2)
+                {
+                    <td>B</td>
+                }
+                @if (Model.bots_TblGroupMaster.IsKeyAccount == 3)
+                {
+                    <td>C</td>
+                }
             </tr>
+            <tr>
+                <td>
+                    DLC
+                </td>
+                @if (Model.bots_TblGroupMaster.IsMWP.Value)
+                {
+                    <td>Yes</td>
+                }
+                @if (!Model.bots_TblGroupMaster.IsMWP.Value)
+                {
+                    <td>No</td>
+                }
+                <td>
+                    Whataspp Integration
+                </td>
+                @if (Model.bots_TblGroupMaster.IsWhatsApp.Value)
+                {
+                    <td>Yes</td>
+                }
+                @if (!Model.bots_TblGroupMaster.IsWhatsApp.Value)
+                {
+                    <td>No</td>
+                }
+                <td>
+                    WA Free Msgs
+                </td>
+                <td>@Model.bots_TblGroupMaster.NoOfFreeWhatsAppMsg</td>
+                <td>
+                    WA Paid Msgs
+                </td>
+                <td>@Model.bots_TblGroupMaster.NoOfPaidWhatsAppMsg</td>
+            </tr>
+            <tr>
+                <td>
+                    SMS Free Msgs
+                </td>
+                <td>@Model.bots_TblGroupMaster.NoOfFreeSMS</td>
+                <td>
+                    SMS Paid Msgs
+                </td>
+                <td>@Model.bots_TblGroupMaster.NoOfPaidSMS</td>
+                <td>
+                    Mobile App
+                </td>
+                @if (Model.bots_TblGroupMaster.IsMobileApp == "1")
+                {
+                    <td>Yes</td>
+                }
+                @if (Model.bots_TblGroupMaster.IsMobileApp == "0")
+                {
+                    <td>No</td>
+                }
+
+                <td>
+                    Mobile App Description
+                </td>
+
+                <td>@Model.bots_TblGroupMaster.MobileAppDescription</td>
+            </tr>
+
+
+            <tr><td colspan="8" style="font-weight:bold;">Retail Category Details</td></tr>
+
+            @foreach (var item in Model.objRetailList)
+            {
+                count++;
+                <tr>
+                    <td>
+                        Retail Category
+                    </td>
+                    <td>@item.CategoryName</td>
+                    <td>
+                        Retail / Brand Name
+                    </td>
+                    <td>@item.BrandName</td>
+                    <td>
+                        Total Outlets
+                    </td>
+                    <td>@item.NoOfOutlets</td>
+                    <td>
+                        Enrolled Outlets
+                    </td>
+                    <td>@item.NoOfEnrolled</td>
+                </tr>
+                <tr>
+                    <td>
+                        BO Product
+                    </td>
+                    @if (item.BOProduct == "1")
+                    {
+                        <td>Octa Plus</td>
+                    }
+                    @if (item.BOProduct == "2")
+                    {
+                        <td>Octa XS</td>
+                    }
+
+                    <td>
+                        Billing Partner
+                    </td>
+                    <td>@item.BillingPartnerName</td>
+                    <td>
+                        Billing Product
+                    </td>
+                    <td>@item.BillingProductName</td>
+
+                    <td colspan="2"></td>
+
+                </tr>
+                if (count != retailcount)
+                {
+                    <tr><td colspan="8" style="font-weight:bold;"></td></tr>
+                }
+            }
+
+            <tr><td colspan="8" style="font-weight:bold;">Assignment Details</td></tr>
+            <tr>
+                <td>
+                    Sourced By
+                </td>
+                <td>@Model.bots_TblGroupMaster.SourceByName</td>
+                <td>
+                    Assigned CS
+                </td>
+                <td>@Model.bots_TblGroupMaster.AssignedCSName</td>
+                <td>
+                    Source Type
+                </td>
+                <td>@Model.bots_TblGroupMaster.SourceTypeName</td>
+                <td>
+                    Referred Name
+                </td>
+                <td>@Model.bots_TblGroupMaster.ReferredName</td>
+            </tr>
+            <tr>
+                <td>
+                    Comments
+                </td>
+                <td>@Model.bots_TblGroupMaster.Comments</td>
+                <td colspan="6"></td>
+
+            </tr>
+
+
+            <tr><td colspan="8" style="font-weight:bold;">Deal Details</td></tr>
+            <tr>
+                <td>
+                    Loyalty Fees
+                </td>
+                <td>@Model.bots_TblDealDetails.LoyaltyFees</td>
+                <td>
+                    WA Paid Pack Fees
+                </td>
+                <td>@Model.bots_TblDealDetails.WAPaidPackFees</td>
+                <td>
+                    SMS Paid Pack Fees
+                </td>
+                <td>@Model.bots_TblDealDetails.SMSPaidPackFees</td>
+                <td>
+                    Ecomm Integration
+                </td>
+                <td>@Model.bots_TblDealDetails.EcommIntegration</td>
+            </tr>
+            <tr>
+                <td>
+                    Any Other Fees
+                </td>
+                <td>@Model.bots_TblDealDetails.AnyOtherFees</td>
+                <td>
+                    Description
+                </td>
+                <td>@Model.bots_TblDealDetails.AnyOtherFeesDesc</td>
+                <td>
+                    Total Fees (A)
+                </td>
+                <td>@Model.bots_TblDealDetails.TotalFeesA</td>
+                <td>
+                    Payment Frequency
+                </td>
+                @if (Model.bots_TblDealDetails.PaymentFrequency == "1")
+                {
+                    <td>Single</td>
+                }
+                @if (Model.bots_TblDealDetails.PaymentFrequency == "2")
+                {
+                    <td>Installments</td>
+                }
+            </tr>
+            <tr>
+                <td>
+                    GST
+                </td>
+                @if (Model.bots_TblDealDetails.GST == 1)
+                {
+                    <td>CGST/SGST</td>
+                }
+                @if (Model.bots_TblDealDetails.GST == 2)
+                {
+                    <td>IGST</td>
+                }
+                @if (Model.bots_TblDealDetails.GST == 3)
+                {
+                    <td>No</td>
+                }
+                <td>
+                    GST Rate
+                </td>
+                <td>@Model.bots_TblDealDetails.GSTRate</td>
+                <td>
+                    Total Fees (B)
+                </td>
+                <td>@Model.bots_TblDealDetails.TotalFeesB</td>
+                <td>
+                    Advance Amount
+                </td>
+                <td>@Model.bots_TblDealDetails.AdvanceAmount</td>
+            </tr>
+            <tr>
+                <td>
+                    Payment Mode
+                </td>
+                <td>@Model.bots_TblDealDetails.PaymentMode</td>
+                <td>
+                    Payment Status
+                </td>
+                <td>@Model.bots_TblDealDetails.PaymentStatus</td>
+                <td>
+                    Amount Received
+                </td>
+                <td>@Model.bots_TblDealDetails.AmountReceived</td>
+                <td>
+                    TDS Deducted
+                </td>
+                <td>@Model.bots_TblDealDetails.TotalFeesA</td>
+            </tr>
+
+            <tr><td colspan="8" style="font-weight:bold;">Payment Details</td></tr>
+            <tr>
+                <td>
+                    Amount Balance
+                </td>
+                <td>@Model.bots_TblPaymentDetails.AmountBalance</td>
+                <td>
+                    
+                </td>
+                
+                <td colspan="5">
+                </td>
+            </tr>
+
+            @foreach (var item in Model.objInstallmentList)
+            {
+                <tr>
+                    <td>
+                        Installment @item.Installment
+                    </td>
+                    <td>@item.PaymentAmount</td>
+                    <td>
+                        @item.PaymentDate.ToString("dd/MM/yyyy")
+                    </td>
+                    <td colspan="5"></td>
+                </tr>
+            }
+
         </table>
     </div>
 </div>

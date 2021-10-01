@@ -224,6 +224,14 @@ namespace BOTS_BL.Repository
             using (var context = new CommonDBContext())
             {
                 objData = context.BOTS_TblGroupMaster.Where(x => x.GroupId == GroupId).FirstOrDefault();
+                var cityId = Convert.ToInt32(objData.City);
+                objData.CityName = context.tblCities.Where(x => x.CityId == cityId).Select(y => y.CityName).FirstOrDefault();
+                var SBy = Convert.ToInt32(objData.SourcedBy);
+                objData.SourceByName = context.tblSourcedBies.Where(x => x.SourcedbyId == SBy).Select(y => y.SourcedbyName).FirstOrDefault();
+                var AssignedCS = Convert.ToInt32(objData.AssignedCS);
+                objData.AssignedCSName = context.tblRMAssigneds.Where(x => x.RMAssignedId == AssignedCS).Select(y => y.RMAssignedName).FirstOrDefault();
+                var SourceType = Convert.ToInt32(objData.Referredby);
+                objData.SourceTypeName = context.tblSourceTypes.Where(x => x.SourceTypeId == SourceType).Select(y => y.SourceTypeName).FirstOrDefault();
             }
             return objData;
         }
@@ -254,6 +262,13 @@ namespace BOTS_BL.Repository
             using (var context = new CommonDBContext())
             {
                 objData = context.BOTS_TblRetailMaster.Where(x => x.GroupId == GroupId).ToList();
+                foreach(var item in objData)
+                {
+                    var BillingPartner = Convert.ToInt32(item.BillingPartner);
+                    item.BillingPartnerName = context.tblBillingPartners.Where(x => x.BillingPartnerId == BillingPartner).Select(y => y.BillingPartnerName).FirstOrDefault();
+                    var BillingProduct = Convert.ToInt32(item.BillingProduct);
+                    item.BillingProductName = context.BOTS_TblBillingPartnerProduct.Where(x => x.BillingPartnerProductId == BillingProduct).Select(y => y.BillingPartnerProductName).FirstOrDefault();
+                }
             }
             return objData;
         }
