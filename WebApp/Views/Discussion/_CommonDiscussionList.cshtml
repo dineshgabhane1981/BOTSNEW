@@ -66,7 +66,7 @@
                         <thead>
                             <tr>
                                 <th scope="col"></th>
-                                @*<th scope="col">Group Name</th>*@
+                                <th scope="col">Group Name</th>
                                 <th scope="col">Date</th>
                                 <th scope="col">Spoken To</th>
                                 <th scope="col">Number</th>
@@ -78,9 +78,8 @@
                                 <th scope="col">Description</th>
                                 <th scope="col">Action Item</th>
                                 <th scope="col">Raised By</th>
-                               
-
                             </tr>
+
                         </thead>
                         <tbody>
                             @if (Model != null)
@@ -93,62 +92,75 @@
                                         followupdate = item.FollowupDate.Value.ToString("yyyy-MM-dd");
                                     }
                                     var imgId = "imgExpand" + item.Id;
-                            <tr>
+                                    <tr>
 
-                                <td style="text-align:center;">
-                                    <img id="@imgId" src="~/Content/assets/images/details_open.png" style="cursor:pointer;" onclick="ShowActivities(@item.Id);" />
+                                        <td style="text-align:center;">
+                                            <img id="@imgId" src="~/Content/assets/images/details_open.png" style="cursor:pointer;" onclick="ShowActivities(@item.Id);" />
 
-                                </td>
-                                @*<td>@item.g</td>*@
-                                <td>@item.AddedDate</td>
-                                <td>@item.SpokenTo</td>
-                                <td>@item.ContactNo</td>
-                                <td>@item.CustomerType</td>
-                                <td>@item.CallType</td>
-                                @if (followupdate == "--")
-                                {
-                                    <td style="text-align:center;">--</td>
-                                }
-                                else
-                                {
-                                    <td>@followupdate</td>
-                                }
-                                <td>@item.CallMode</td>
+                                        </td>
+                                        <td>@item.GroupName</td>
+                                        <td>@item.AddedDate</td>
+                                        <td>@item.SpokenTo</td>
+                                        <td>@item.ContactNo</td>
+                                        <td>@item.CustomerType</td>
+                                        <td>@item.CallType</td>
+                                        @if (followupdate == "--")
+                                        {
+                                            <td style="text-align:center;">--</td>
+                                        }
+                                        else
+                                        {
+                                            <td>@followupdate</td>
+                                        }
+                                        <td>@item.CallMode</td>
 
-                                @if (item.Status == "Completed")
-                                {
-                                    <td style="background-color:lightgreen;">@item.Status</td>
-                                }
-                                else if (item.Status == "WIP")
-                                {
-                                    if (item.AddedDate <= DateTime.Now.AddDays(-3))
-                                    {
-                                        <td style="background-color:red;">@item.Status</td>
-                                    }
-                                    else
-                                    {
-                                        <td style="background-color:orange;">@item.Status</td>
-                                    }
-                                }
+                                        @if (item.Status == "Completed")
+                                        {
+                                            <td style="background-color:lightgreen;">@item.Status</td>
+                                        }
+                                        else if (item.Status == "WIP")
+                                        {
+                                            if (item.AddedDate <= DateTime.Now.AddDays(-3))
+                                            {
+                                                <td style="background-color:red;">@item.Status</td>
+                                            }
+                                            else
+                                            {
+                                                <td style="background-color:orange;">@item.Status</td>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <td>--</td>
+                                        }
 
-
-                                <td>@item.Description</td>
-                                <td>@item.ActionItems</td>
-                                <td>@item.AddedBy</td>
-
-
-
-                            </tr>
+                                        <td>@item.Description</td>
+                                        <td>@item.ActionItems</td>
+                                        <td>@item.AddedBy</td>
+                                    </tr>
 
                                     var dynamicIdTr = "trActivities" + item.Id;
                                     var dynamicIdDiv = "dvDiscussionData" + item.Id;
 
-                                    <tr id="@dynamicIdTr" style="display:none;">
-                                        <td colspan="10">
-                                            <div id="@dynamicIdDiv" style="display:none;" class="table-responsive">
+                                    <tr id="@dynamicIdTr" style="display: none; border: 1px solid red;">
+                                        @*<td colspan="13">
+                                                <div id="@dynamicIdDiv" style="display: block;" class="table-responsive">
 
-                                            </div>
-                                        </td>
+                                                </div>
+                                            </td>*@
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
                                     </tr>
 
                                 }
@@ -156,7 +168,7 @@
                             else
                             {
                                 <tr>
-                                    <td colspan="6" align="center">No Discussion Available</td>
+                                    <td colspan="13" align="center">No Discussion Available</td>
                                 </tr>
                             }
                         </tbody>
@@ -202,10 +214,10 @@
             table1.draw();
         });
 
-        
+
     });
 
-   
+
 
 
 </script>

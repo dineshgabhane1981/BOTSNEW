@@ -331,15 +331,16 @@ namespace BOTS_BL.Repository
                     }
 
                     lstdiscuss = (from c in list
-                                  //join gd in context.tblGroupDetails on c.GroupId equals gd.GroupId
+                                  join gd in context.tblGroupDetails on c.GroupId equals gd.GroupId.ToString()
                                   join ct in context.BOTS_TblCallTypes on c.CallType equals ct.Id                                  
                                   join cld in context.CustomerLoginDetails on c.AddedBy equals cld.LoginId
-                                  
+
+
 
 
                                   select new DiscussionDetails
                                   {
-                                      //GroupName =gd.GroupName,
+                                      GroupName =gd.GroupName,
                                       Id = c.Id,
                                       AddedDate = c.AddedDate,
                                       SpokenTo = c.SpokenTo,
@@ -353,7 +354,7 @@ namespace BOTS_BL.Repository
                                       AddedBy = cld.UserName,
                                       Status = c.Status,
 
-                                  }).OrderByDescending(x => x.AddedDate).ToList();
+                                  }).OrderByDescending(x => x.AddedDate).Take(5).ToList();
                 }
                 else
                 {
