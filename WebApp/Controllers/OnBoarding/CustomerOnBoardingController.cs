@@ -153,8 +153,8 @@ namespace WebApp.Controllers.OnBoarding
                 }
               
 
-                if (string.IsNullOrEmpty(objData.bots_TblGroupMaster.GroupId))
-                    objData.bots_TblGroupMaster.CustomerStatus = "Draft";
+                //if (string.IsNullOrEmpty(objData.bots_TblGroupMaster.GroupId))
+                //    objData.bots_TblGroupMaster.CustomerStatus = "Draft";
                 objData.bots_TblGroupMaster.CreatedBy = userDetails.UserId;
                 objData.bots_TblGroupMaster.CreatedDate = DateTime.Now;
                 var newCuscomer = true;

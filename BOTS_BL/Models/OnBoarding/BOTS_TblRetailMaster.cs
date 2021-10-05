@@ -37,5 +37,10 @@ namespace BOTS_BL.Models
 
         [StringLength(100)]
         public string BillingProduct { get; set; }
+        
+        [NotMapped]
+        public string BillingPartnerName { get; set; }
+        [NotMapped]
+        public string BillingProductName { get; set; }
     }
 }

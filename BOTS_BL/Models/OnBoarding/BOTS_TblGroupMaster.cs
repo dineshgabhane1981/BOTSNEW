@@ -115,6 +115,8 @@ namespace BOTS_BL.Models
         [StringLength(150)]
         public string Constitution { get; set; }
 
+        public long? ExpectedTransaction { get; set; }
+
         [NotMapped]
         public HttpPostedFileBase GSTDocumentFile { get; set; }
         [NotMapped]
@@ -125,5 +127,14 @@ namespace BOTS_BL.Models
         public string PaymentScheduleData { get; set; }
         [NotMapped]
         public string OutletData { get; set; }
+
+        [NotMapped]
+        public string CityName { get; set; }
+        [NotMapped]
+        public string SourceByName { get; set; }
+        [NotMapped]
+        public string AssignedCSName { get; set; }
+        [NotMapped]
+        public string SourceTypeName { get; set; }
     }
 }
