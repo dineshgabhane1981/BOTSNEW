@@ -106,7 +106,7 @@ namespace BOTS_BL.Repository
                     lstRMAssigned.Add(new SelectListItem
                     {
                         Text = item.RMAssignedName,
-                        Value = Convert.ToString(item.RMAssignedId)
+                        Value = Convert.ToString(item.LoginId)
                     });
                 }
             }

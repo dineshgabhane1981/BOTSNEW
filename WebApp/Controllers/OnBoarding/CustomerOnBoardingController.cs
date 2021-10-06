@@ -34,6 +34,13 @@ namespace WebApp.Controllers.OnBoarding
             OnBoardingSalesViewModel objData = new OnBoardingSalesViewModel();
             try
             {
+                List<SelectListItem> refferedname = new List<SelectListItem>();
+                SelectListItem item = new SelectListItem();
+                item.Value = "0";
+                item.Text = "Please Select";
+                refferedname.Add(item);
+                objData.lstAllGroups = refferedname;
+
                 objData.lstCity = CR.GetCity();
                 objData.lstRetailCategory = CR.GetRetailCategory();
                 objData.lstBillingPartner = CR.GetBillingPartner();
@@ -41,12 +48,7 @@ namespace WebApp.Controllers.OnBoarding
                 objData.lstRMAssigned = CR.GetRMAssigned();
                 objData.lstRefferedCategory = CR.GetAllRefferedCategory();
                 objData.lstStates = CR.GetStates();
-                List<SelectListItem> refferedname = new List<SelectListItem>();
-                SelectListItem item = new SelectListItem();
-                item.Value = "0";
-                item.Text = "Please Select";
-                refferedname.Add(item);
-                objData.lstAllGroups = refferedname;
+                
                 if (!string.IsNullOrEmpty(groupId))
                 {
                     objData.bots_TblGroupMaster = OBR.GetGroupMasterDetails(groupId);

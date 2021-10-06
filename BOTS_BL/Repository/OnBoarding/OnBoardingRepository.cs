@@ -163,7 +163,7 @@ namespace BOTS_BL.Repository
         }
 
 
-        public List<OnBoardingListing> GetOnBoardingListings(string loginType)
+        public List<OnBoardingListing> GetOnBoardingListings(CustomerLoginDetail userDetails)
         {
             List<OnBoardingListing> onBoardingListings = new List<OnBoardingListing>();
             List<BOTS_TblGroupMaster> lstGroups = new List<BOTS_TblGroupMaster>();
@@ -172,24 +172,24 @@ namespace BOTS_BL.Repository
                 using (var context = new CommonDBContext())
                 {
                     //SuperAdmin
-                    if (loginType == "1")
+                    if (userDetails.LoginType == "1")
                     {
                         lstGroups = context.BOTS_TblGroupMaster.ToList();
                     }
-                    //Sales
-                    if (loginType == "5")
+                    //Sales Head
+                    if (userDetails.LoginType == "5")
                     {
                         lstGroups = context.BOTS_TblGroupMaster.Where(x => x.CustomerStatus == "Draft").ToList();
                     }
-                    //Customer Success
-                    if (loginType == "6")
+                    //CS Head
+                    if (userDetails.LoginType == "6")
                     {
                         lstGroups = context.BOTS_TblGroupMaster.Where(x => x.CustomerStatus == "CS" || x.CustomerStatus == "CSUpdate").ToList();
                     }
-                    //CS Head
-                    if (loginType == "7")
+                    //CS Success
+                    if (userDetails.LoginType == "7")
                     {
-
+                        lstGroups = context.BOTS_TblGroupMaster.Where(x => x.AssignedCS == userDetails.LoginId).ToList();
                     }
 
                     foreach (var item in lstGroups)
@@ -228,8 +228,8 @@ namespace BOTS_BL.Repository
                 objData.CityName = context.tblCities.Where(x => x.CityId == cityId).Select(y => y.CityName).FirstOrDefault();
                 var SBy = Convert.ToInt32(objData.SourcedBy);
                 objData.SourceByName = context.tblSourcedBies.Where(x => x.SourcedbyId == SBy).Select(y => y.SourcedbyName).FirstOrDefault();
-                var AssignedCS = Convert.ToInt32(objData.AssignedCS);
-                objData.AssignedCSName = context.tblRMAssigneds.Where(x => x.RMAssignedId == AssignedCS).Select(y => y.RMAssignedName).FirstOrDefault();
+                //var AssignedCS = Convert.ToInt32(objData.AssignedCS);
+                objData.AssignedCSName = context.tblRMAssigneds.Where(x => x.LoginId == objData.AssignedCS).Select(y => y.RMAssignedName).FirstOrDefault();
                 var SourceType = Convert.ToInt32(objData.Referredby);
                 objData.SourceTypeName = context.tblSourceTypes.Where(x => x.SourceTypeId == SourceType).Select(y => y.SourceTypeName).FirstOrDefault();
             }

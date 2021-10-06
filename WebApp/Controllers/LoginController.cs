@@ -43,10 +43,10 @@ namespace WebApp.Controllers
                 {
                     userDetails = LR.AuthenticateUser(objLogin);
                 }
-                else 
+                else
                 {
                     var status = DR.VerifyOTP(objLogin.LoginId, Convert.ToInt32(objLogin.OTP));
-                    if(status)
+                    if (status)
                     {
                         userDetails = LR.GetUserDetailsByLoginID(objLogin.LoginId);
                     }
@@ -55,17 +55,26 @@ namespace WebApp.Controllers
                         TempData["InvalidUserMessage"] = "There is problem in verifying OTP. Please check once";
                     }
                 }
-
-                if (userDetails.LoginId != null)
+                if (userDetails != null)
                 {
-                    Session["UserSession"] = userDetails;
-                    if (!string.IsNullOrEmpty(userDetails.GroupId) )
+                    if (userDetails.LoginId != null)
                     {
-                        return RedirectToAction("Index", "Home");
+                        Session["UserSession"] = userDetails;
+                        if (!string.IsNullOrEmpty(userDetails.GroupId))
+                        {
+                            return RedirectToAction("Index", "Home");
+                        }
+                        else// if (string.IsNullOrEmpty(objLogin.OTP))
+                        {
+                            return RedirectToAction("Index", "CustomerManagement");
+                        }
                     }
-                    else// if (string.IsNullOrEmpty(objLogin.OTP))
+                    else
                     {
-                        return RedirectToAction("Index", "CustomerManagement");
+                        if (!string.IsNullOrEmpty(Convert.ToString(TempData["InvalidUserMessage"])))
+                        {
+                            TempData["InvalidUserMessage"] = "User Does not Exist";
+                        }
                     }
                 }
                 else
@@ -91,7 +100,7 @@ namespace WebApp.Controllers
             string returnString = string.Empty;
             try
             {
-                
+
                 var userDetail = LR.CheckUserType(LoginID);
                 if (userDetail != null)
                 {

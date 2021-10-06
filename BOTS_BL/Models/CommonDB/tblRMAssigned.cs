@@ -22,6 +22,7 @@ namespace BOTS_BL.Models.CommonDB
         public DateTime? CreatedDate { get; set; }
 
         public bool? IsActive { get; set; }
+        public string LoginId { get; set; }
     }
 
     public class RMAssignedDetails
@@ -36,5 +37,6 @@ namespace BOTS_BL.Models.CommonDB
         public DateTime? CreatedDate { get; set; }
         public bool? IsActive { get; set; }
         public string UserName { get; set; }
+        public string LoginId { get; set; }
     }
 }

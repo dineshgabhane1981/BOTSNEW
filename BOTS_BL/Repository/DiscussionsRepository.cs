@@ -354,7 +354,7 @@ namespace BOTS_BL.Repository
                                       AddedBy = cld.UserName,
                                       Status = c.Status,
 
-                                  }).OrderByDescending(x => x.AddedDate).Take(5).ToList();
+                                  }).OrderByDescending(x => x.AddedDate).ToList();
                 }
                 else
                 {

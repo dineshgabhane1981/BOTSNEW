@@ -870,22 +870,22 @@
             ]
         });
      
-      //  $('#newRegistrationDetailedTable').hide();
+        $('#newRegistrationDetailedTable_filter').hide();
 
-        //$('#txtSearch').on('keyup', function () {
-        //    $.fn.dataTable.ext.search.push(function (settings, searchData) {
-        //        var term = $('#txtSearch').val().toLowerCase()
-        //        for (var i = 0; i < searchData.length; i++) {
-        //            if (searchData[i].toLowerCase().indexOf(term) >= 0) {
-        //                return true;
-        //            }
-        //        }
-        //        return false;
-        //    });
-        //    var table = $('#newRegistrationDetailedTable').DataTable();
-        //    console.log(table);
-        //    table.draw();
-        //});
+        $('#txtSearch').on('keyup', function () {
+            $.fn.dataTable.ext.search.push(function (settings, searchData) {
+                var term = $('#txtSearch').val().toLowerCase()
+                for (var i = 0; i < searchData.length; i++) {
+                    if (searchData[i].toLowerCase().indexOf(term) >= 0) {
+                        return true;
+                    }
+                }
+                return false;
+            });
+            var table = $('#newRegistrationDetailedTable').DataTable();
+            console.log(table);
+            table.draw();
+        });
     }
 
 </script>
