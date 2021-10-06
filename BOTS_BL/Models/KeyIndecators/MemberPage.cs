@@ -41,4 +41,15 @@ namespace BOTS_BL.Models
 
     }
 
+    public class MemberPageNewRegisterationData
+    {
+        public string MobileNo { get; set; }
+        public string MemberName { get; set; }
+        public string RegDate { get; set; }
+        public string OutletName { get; set; }
+        public string FirstTxnDate { get; set; }
+        public string TotalSpend { get; set; }
+        public string TxnCount { get; set; }
+    }
+
 }

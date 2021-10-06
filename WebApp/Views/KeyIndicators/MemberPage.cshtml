@@ -200,7 +200,31 @@
         <div class="row" id="dvNewRegistrationData" style="display:none;">
 
         </div>
-
+        <div class="row" id="dvNewRegistrationDetailedData" style="display:none;">
+            <div class="container-fluid pt-3 pl-3 pr-3">
+                <div class="pt-3 pl-3 pr-3 col-md-12 col-lg-12">
+                    @*<div class="row mt-3" id="dvNewRegistrationDetailedData">*@
+                        <div class="table-responsive">
+                            <table class="table" id="newRegistrationDetailedTable">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Mobile No</th>
+                                        <th scope="col">Member Name</th>
+                                        <th scope="col">Registration Date</th>
+                                        <th scope="col">Outlet Name</th>
+                                        <th scope="col">First Transaction Date</th>
+                                        <th scope="col">Total Spend</th>
+                                        <th scope="col">Txn Count</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
+                    @*</div>*@
+                </div>
+            </div>
+        </div>
 
         <div class="row card" id="dvMembersInformation" style="display:none;">
             <div class="row" style="margin-left:35px;margin-bottom:10px;">
@@ -364,6 +388,7 @@
     var tableData = [];
     var tableDataRefGenConv = [];
     var tableDataNewRegistration = [];
+    var tableDataNewRegistrationDetailedList = [];
 
     function GetReferingBase() {
         var type = 1;
@@ -570,7 +595,14 @@
             "pagingType": "simple_numbers",
             "columns": [
                 { data: "Source" },
-                { data: "SourceDesc" },
+                {
+                    "mdata": "SourceDesc",
+                    "mRender": function (data, type, row) {
+                        var id = row.Source;
+                        var source = row.SourceDesc;
+                        return '<a href="#" onclick="GetNewRegistrationDetailedList(\'' + id + '\'\)" class="login" >' + source + '</a>';
+                    }
+                },
                 { data: "RegCount" },
                 { data: "BusinessGenerated" }
             ]
@@ -779,6 +811,81 @@
 
 
     }
+    function GetNewRegistrationDetailedList(id) {
+       
+        $("#divLoader").show();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("GetNewRegistrationList", "KeyIndicators")',
+            data: "{'SourceId': " + id + "}",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                tableDataNewRegistrationDetailedList.length = 0;
+                console.log(response);
+                $.map(response, function (item) {
+                    optionItem = {}
+                    optionItem["MobileNo"] = item.MobileNo;
+                    optionItem["MemberName"] = item.MemberName;
+                    optionItem["RegDate"] = item.RegDate;
+                    optionItem["Outletnm"] = item.OutletName;
+                    optionItem["FirstTxnDt"] = item.FirstTxnDate;
+                    optionItem["TotalSpend"] = item.TotalSpend;
+                    optionItem["TxnCount"] = item.TxnCount;
+                    tableDataNewRegistrationDetailedList.push(optionItem);
+                });
+                console.log(tableDataNewRegistrationDetailedList);
+                $("#dvNewRegistrationDetailedData").show();
+                DrawNewRegistrationDetailedTable();
+                $("#divLoader").hide();
+            },
+            failure: function (response) {
+                $("#divLoader").hide();
+            },
+            error: function (response) {
+                $("#divLoader").hide();
+            }
+        });
+    }
+    function DrawNewRegistrationDetailedTable() {
+        var table1 = $('#newRegistrationDetailedTable').DataTable();
+        table1.destroy();
 
+        var table = $('#newRegistrationDetailedTable').DataTable({
+            "data": tableDataNewRegistrationDetailedList,
+            "paging": true,
+            "ordering": true,
+            "info": true,
+            "bFilter": true,
+            "pageLength": 25,
+            "pagingType": "simple_numbers",
+            "columns": [
+                { data: "MobileNo" },
+                { data: "MemberName" },
+                { data: "RegDate" },
+                { data: "Outletnm" },
+                { data: "FirstTxnDt" },
+                { data: "TotalSpend" },
+                { data: "TxnCount" }
+            ]
+        });
+     
+      //  $('#newRegistrationDetailedTable').hide();
+
+        //$('#txtSearch').on('keyup', function () {
+        //    $.fn.dataTable.ext.search.push(function (settings, searchData) {
+        //        var term = $('#txtSearch').val().toLowerCase()
+        //        for (var i = 0; i < searchData.length; i++) {
+        //            if (searchData[i].toLowerCase().indexOf(term) >= 0) {
+        //                return true;
+        //            }
+        //        }
+        //        return false;
+        //    });
+        //    var table = $('#newRegistrationDetailedTable').DataTable();
+        //    console.log(table);
+        //    table.draw();
+        //});
+    }
 
 </script>

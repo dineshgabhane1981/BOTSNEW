@@ -239,6 +239,13 @@ namespace WebApp.Controllers
             objNonRedemptionTxn = KR.GetNonRedemptionTxnData(userDetails.GroupId, type, daysType, userDetails.connectionString);
             return new JsonResult() { Data = objNonRedemptionTxn, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
+        public JsonResult GetNewRegistrationList(string SourceId)
+        {
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            List<MemberPageNewRegisterationData> lstnewregdata = new List<MemberPageNewRegisterationData>();
+            lstnewregdata = KR.GetNewRegistrationData(userDetails.GroupId, SourceId, userDetails.connectionString);
+            return new JsonResult() { Data = lstnewregdata, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
+        }
 
         [HttpPost]
         public JsonResult GetMemberMisinformationData()

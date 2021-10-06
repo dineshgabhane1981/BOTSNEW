@@ -141,7 +141,26 @@ namespace BOTS_BL.Repository
 
             return objNonRedemptionTxn;
         }
+        public List<MemberPageNewRegisterationData> GetNewRegistrationData(string GroupId,string SourceId, string connstr)
+        {
+            List<MemberPageNewRegisterationData> objNonRedemptionTxn = new List<MemberPageNewRegisterationData>();
+            try
+            {
+                using (var context = new BOTSDBContext(connstr))
+                {
+                    objNonRedemptionTxn = context.Database.SqlQuery<MemberPageNewRegisterationData>("sp_BOTS_MemberWebPage4 @pi_GroupId,@source ",
+                        new SqlParameter("@pi_GroupId", GroupId),                       
+                        new SqlParameter("@source", SourceId)
+                      ).ToList<MemberPageNewRegisterationData>();
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, GroupId);
+            }
 
+            return objNonRedemptionTxn;
+        }
         public MemberWebPage GetMemberWebPageData(string GroupId, string connstr)
         {
             MemberWebPage objMemberWebPage = new MemberWebPage();
