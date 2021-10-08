@@ -1,10 +1,5 @@
 ﻿@model List<BOTS_BL.Models.CommonDB.DiscussionDetails>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.2.2/Chart.bundle.min.js"></script>
-<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.23/css/jquery.dataTables.css">
-
-<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.23/js/jquery.dataTables.js"></script>
-
 <style>
 
     /* The Modal (background) */
@@ -93,79 +88,92 @@
                                         followupdate = item.FollowupDate.Value.ToString();//.ToString("yyyy-MM-dd");
                                     }
                                     var imgId = "imgExpand" + item.Id;
-                            <tr>
+                                    <tr>
 
-                                <td style="text-align:center;">
-                                    <img id="@imgId" src="~/Content/assets/images/details_open.png" style="cursor:pointer;" onclick="ShowActivities(@item.Id);" />
+                                        <td style="text-align:center;">
+                                            <img id="@imgId" src="~/Content/assets/images/details_open.png" style="cursor:pointer;" onclick="ShowActivities(@item.Id);" />
 
-                                </td>
-                                <td>@item.GroupName</td>
-                                <td>@item.AddedDate</td>
-                                <td>@item.SpokenTo</td>
-                                <td>@item.ContactNo</td>
-                                <td>@item.CustomerType</td>
-                                <td>@item.CallType</td>
-                                @if (followupdate == "--")
-                                {
-                                    <td style="text-align:center;">--</td>
-                                }
-                                else
-                                {
-                                    <td>@followupdate</td>
-                                }
-                                <td>@item.CallMode</td>
+                                        </td>
+                                        <td>@item.GroupName</td>
+                                        <td>@item.AddedDate</td>
+                                        <td>@item.SpokenTo</td>
+                                        <td>@item.ContactNo</td>
+                                        <td>@item.CustomerType</td>
+                                        <td>@item.CallType</td>
+                                        @if (followupdate == "--")
+                                        {
+                                            <td style="text-align:center;">--</td>
+                                        }
+                                        else
+                                        {
+                                            <td>@followupdate</td>
+                                        }
+                                        <td>@item.CallMode</td>
 
-                                @if (item.Status == "Completed")
-                                {
-                                    <td style="background-color:lightgreen;">@item.Status</td>
-                                }
-                                else if (item.Status == "WIP")
-                                {
-                                    if (item.AddedDate <= DateTime.Now.AddDays(-3))
-                                    {
-                                        <td style="background-color:red;">@item.Status</td>
-                                    }
-                                    else
-                                    {
-                                        <td style="background-color:orange;">@item.Status</td>
-                                    }
-                                }
-                                else
-                                {
-                                    <td style="background-color:orange;">--</td>
-                                }
+                                        @if (item.Status == "Completed")
+                                        {
+                                            <td style="background-color:lightgreen;">@item.Status</td>
+                                        }
+                                        else if (item.Status == "WIP")
+                                        {
+                                            if (item.AddedDate <= DateTime.Now.AddDays(-3))
+                                            {
+                                                <td style="background-color:red;">@item.Status</td>
+                                            }
+                                            else
+                                            {
+                                                <td style="background-color:orange;">@item.Status</td>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <td style="background-color:orange;">--</td>
+                                        }
 
-                                @if (!string.IsNullOrEmpty(item.Description))
-                                {
-                                    <td>@item.Description</td>
-                                }
-                                else
-                                {
-                                    <td>--</td>
-                                }
-                                @if (!string.IsNullOrEmpty(item.ActionItems))
-                                {
-                                    <td>@item.ActionItems</td>
-                                }
-                                else
-                                {
-                                    <td>--</td>
-                                }
+                                        @if (!string.IsNullOrEmpty(item.Description))
+                                        {
+                                            <td>@item.Description</td>
+                                        }
+                                        else
+                                        {
+                                            <td>--</td>
+                                        }
+                                        @if (!string.IsNullOrEmpty(item.ActionItems))
+                                        {
+                                            <td>@item.ActionItems</td>
+                                        }
+                                        else
+                                        {
+                                            <td>--</td>
+                                        }
 
 
-                                <td>@item.AddedBy</td>
+                                        <td>@item.AddedBy</td>
 
-                            </tr>
+                                    </tr>
 
                                     var dynamicIdTr = "trActivities" + item.Id;
                                     var dynamicIdDiv = "dvDiscussionData" + item.Id;
 
                                     <tr id="@dynamicIdTr" style="display:none;">
-                                        <td colspan="12">
+                                        <td colspan="13">
                                             <div id="@dynamicIdDiv" style="display:none;" class="table-responsive">
 
                                             </div>
                                         </td>
+                                        <td style="display:none;"></td>
+                                        <td style="display:none;"></td>
+                                        <td style="display:none;"></td>
+                                        <td style="display:none;"></td>
+                                        <td style="display:none;"></td>
+                                        <td style="display:none;"></td>
+                                        <td style="display:none;"></td>
+                                        <td style="display:none;"></td>
+                                        <td style="display:none;"></td>
+                                        <td style="display:none;"></td>
+                                        <td style="display:none;"></td>
+                                        <td style="display:none;"></td>
+                                        <td style="display:none;"></td>
                                     </tr>
 
                                 }
@@ -173,7 +181,7 @@
                             else
                             {
                                 <tr>
-                                    <td colspan="12" align="center">No Discussion Available</td>
+                                    <td colspan="13" align="center">No Discussion Available</td>
                                 </tr>
                             }
                         </tbody>
@@ -187,12 +195,12 @@
 <script>
     $(document).ready(function () {
         $('#discussionTable').DataTable({
-            "aaSorting": [[0, "desc"]],
+            "aaSorting": [],
             "paging": true,
-            "ordering": true,
+            "ordering": false,
             "info": true,
             "bFilter": true,
-            "pageLength": 10,
+            "pageLength": 50,
             "pagingType": "simple_numbers"
         });
 

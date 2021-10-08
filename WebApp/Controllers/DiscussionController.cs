@@ -26,15 +26,25 @@ namespace WebApp.Controllers
             return View();
         }
 
-        public ActionResult AllDiscussions(string groupId)
+        public ActionResult AllDiscussions(string groupId, string isOnboarding)
         {
             CommonFunctions common = new CommonFunctions();
             groupId = common.DecryptString(groupId);
             DiscussionViewModel objData = new DiscussionViewModel();
             BOTS_TblDiscussion objDiscussion = new BOTS_TblDiscussion();
-            var objGroup = CR.GetGroupDetails(Convert.ToInt32(groupId));
+            string GroupName = string.Empty;
+            if (string.IsNullOrEmpty(isOnboarding))
+            {
+                var objGroup = CR.GetGroupDetails(Convert.ToInt32(groupId));
+                GroupName = objGroup.GroupName;
+            }
+            else
+            {
+                var objGroup = CR.GetOnboardingGroupDetails(groupId);
+                GroupName = objGroup.GroupName;
+            }
             objDiscussion.GroupId = groupId;
-            objDiscussion.GroupName = objGroup.GroupName;
+            objDiscussion.GroupName = GroupName;
             objData.objDiscussion = objDiscussion;
             objData.lstDiscussions = DR.GetDiscussions(groupId);
             objData.lstCallTypes = DR.GetCallTypes();
@@ -49,7 +59,7 @@ namespace WebApp.Controllers
         }
 
         public ActionResult CommonDiscussion()
-        {         
+        {
             List<DiscussionDetails> lstdashboard = new List<DiscussionDetails>();
             ViewBag.lstcommonstatus = DR.CommonStatus();
             ViewBag.lstgroupdetails = DR.GetGroupDetails();
@@ -78,7 +88,7 @@ namespace WebApp.Controllers
         }
         public JsonResult GetSubDiscussionList(int Id)
         {
-             List<SubDiscussionData> lstsubdiscussionLists = new List<SubDiscussionData>();
+            List<SubDiscussionData> lstsubdiscussionLists = new List<SubDiscussionData>();
             // List<BOTS_TblSubDiscussionData> lstsubdiscussionlists = new List<BOTS_TblSubDiscussionData>();
             lstsubdiscussionLists = DR.GetNestedDiscussionList(Id);
 
@@ -100,7 +110,7 @@ namespace WebApp.Controllers
 
             return status;
         }
-       
+
         public ActionResult GetCommonFilteredDiscussion(string jsonData)
         {
             //var lstdashboard ="";
@@ -115,7 +125,7 @@ namespace WebApp.Controllers
                 string groupnm = Convert.ToString(item["selectedgrp"]);
                 int calltype = Convert.ToInt32(item["selectedcall"]);
                 string status = Convert.ToString(item["selectedstatus"]);
-               
+
                 lstdashboard = DR.GetfilteredDiscussionData(status, calltype, groupnm, fromDate, toDate);
             }
             return PartialView("_CommonDiscussionList", lstdashboard);

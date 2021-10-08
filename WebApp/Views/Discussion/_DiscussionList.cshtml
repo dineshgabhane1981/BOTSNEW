@@ -1,58 +1,8 @@
 ﻿@model List<BOTS_BL.Models.CommonDB.DiscussionDetails>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.2.2/Chart.bundle.min.js"></script>
-<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.23/css/jquery.dataTables.css">
 
-<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.23/js/jquery.dataTables.js"></script>
-
-<style>
-
-    /* The Modal (background) */
-    .modal {
-        display: none; /*Hidden by default */
-        position: fixed; /*Stay in place */
-        z-index: 5000 !important; /*Sit on top */
-        padding-top: 100px; /*Location of the box */
-        left: 120px;
-        top: 0;
-        width: 100%; /*Full width */
-        height: 100%; /*Full height */
-        overflow: auto; /*Enable scroll if needed */
-        background-color: rgb(0,0,0); /*Fallback color */
-        background-color: rgba(0,0,0,0.4); /*Black w/ opacity*/
-    }
-
-    Modal Content
-    .modal-content {
-        background-color: #fefefe;
-        margin: auto;
-        padding: 20px;
-        border: 1px solid #888;
-        width: 70%;
-        border-radius: 25px;
-    }
-
-    The Close Button
-    .close {
-        color: #aaaaaa;
-        float: right;
-        font-size: 28px;
-        font-weight: bold;
-    }
-
-    .close:hover,
-    .close:focus {
-        color: #000;
-        text-decoration: none;
-        cursor: pointer;
-    }
-
-    input:read-only {
-        background-color: lightgray;
-    }
-</style>
-<div class="row mb-3 card">
-    <div class="container-fluid pt-3 pl-3 pr-3">
+<div class="row mb-3">
+    <div class="pt-3 pl-3 pr-3">
         <div class="pt-3 pl-3 pr-3 col-md-12 col-lg-12">
             <div class="row">
                 <div class="col search-container">
@@ -92,86 +42,92 @@
                                         followupdate = item.FollowupDate.Value.ToString("yyyy-MM-dd");
                                     }
                                     var imgId = "imgExpand" + item.Id;
-                            <tr>
-                                <td style="text-align:center;">
-                                    @*@if (item.Status == "WIP")
-                                        {*@
-                                    <img id="@imgId" src="~/Content/assets/images/details_open.png" style="cursor:pointer;" onclick="ShowActivities(@item.Id);" />
-                                    @*}*@
-                                </td>
-                                <td>@item.AddedDate</td>
-                                <td>@item.SpokenTo</td>
-                                <td>@item.ContactNo</td>
-                                <td>@item.CustomerType</td>
-                                <td>@item.CallType</td>
-                                @if (followupdate == "--")
-                                {
-                                <td style="text-align:center;">--</td>
-                                }
-                                else
-                                {
-                                <td>@followupdate</td>
-                                }
-                                <td>@item.CallMode</td>
-                                @if (item.Status == "Completed")
-                                {
-                                <td style="background-color:lightgreen;">@item.Status</td>
-                                }
-                                else if (item.Status == "WIP")
-                                {
-                                    if (item.AddedDate <= DateTime.Now.AddDays(-3))
-                                    {
-                                <td style="background-color:red;">@item.Status</td>
-                                    }
-                                    else
-                                    {
-                                <td style="background-color:orange;">@item.Status</td>
-                                    }
-                                }
-                                else
-                                {
-                                <td style="text-align:center;">--</td>
-                                }
-                                <td>@item.Description</td>
-                                <td>@item.ActionItems</td>
-                                <td>@item.AddedBy</td>
+                                    <tr>
+                                        <td style="text-align:center;">
+                                            <img id="@imgId" src="~/Content/assets/images/details_open.png" style="cursor:pointer;" onclick="ShowActivities(@item.Id);" />
+                                        </td>
+                                        <td>@item.AddedDate</td>
+                                        <td>@item.SpokenTo</td>
+                                        <td>@item.ContactNo</td>
+                                        <td>@item.CustomerType</td>
+                                        <td>@item.CallType</td>
+                                        @if (followupdate == "--")
+                                        {
+                                            <td style="text-align:center;">--</td>
+                                        }
+                                        else
+                                        {
+                                            <td>@followupdate</td>
+                                        }
+                                        <td>@item.CallMode</td>
+                                        @if (item.Status == "Completed")
+                                        {
+                                            <td style="background-color:lightgreen;">@item.Status</td>
+                                        }
+                                        else if (item.Status == "WIP")
+                                        {
+                                            if (item.AddedDate <= DateTime.Now.AddDays(-3))
+                                            {
+                                                <td style="background-color:red;">@item.Status</td>
+                                            }
+                                            else
+                                            {
+                                                <td style="background-color:orange;">@item.Status</td>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <td style="text-align:center;">--</td>
+                                        }
+                                        <td>@item.Description</td>
+                                        <td>@item.ActionItems</td>
+                                        <td>@item.AddedBy</td>
 
-                                @if (item.Status != "Completed")
-                                {
-                                <td style="text-align:center;">
-                                    <a href="#" onclick="OpenStatusPopup(@item.Id);">
-                                        <img src="~/Content/assets/images/task.png" width="35" />
-                                    </a>
-                                </td>
-                                }
-                                else
-                                {
-                                <td style="text-align:center;">--</td>
-                                }
+                                        @if (item.Status != "Completed")
+                                        {
+                                            <td style="text-align:center;">
+                                                <a href="#" onclick="OpenStatusPopup(@item.Id);">
+                                                    <img src="~/Content/assets/images/task.png" width="35" />
+                                                </a>
+                                            </td>
+                                        }
+                                        else
+                                        {
+                                            <td style="text-align:center;">--</td>
+                                        }
 
-                            </tr>
+                                    </tr>
 
                                     var dynamicIdTr = "trActivities" + item.Id;
                                     var dynamicIdDiv = "dvDiscussionData" + item.Id;
 
-                            <tr id="@dynamicIdTr" style="display:none;">
-                                <td colspan="13">
-                                    <div id="@dynamicIdDiv" style="display:none;" class="table-responsive">
+                                    <tr id="@dynamicIdTr" style="display: none;">
+                                        <td colspan="13">
+                                            <div id="@dynamicIdDiv" style="display:none;" class="table-responsive">
 
-                                    </div>
-                                </td>
-                                
-
-
-                            </tr>
+                                            </div>
+                                        </td>
+                                        <td style="display:none;"></td>
+                                        <td style="display:none;"></td>
+                                        <td style="display:none;"></td>
+                                        <td style="display:none;"></td>
+                                        <td style="display:none;"></td>
+                                        <td style="display:none;"></td>
+                                        <td style="display:none;"></td>
+                                        <td style="display:none;"></td>
+                                        <td style="display:none;"></td>
+                                        <td style="display:none;"></td>
+                                        <td style="display:none;"></td>
+                                        <td style="display:none;"></td>
+                                    </tr>
 
                                 }
                             }
                             else
                             {
-                            <tr>
-                                <td colspan="13" align="center">No Discussion Available</td>
-                            </tr>
+                                <tr>
+                                    <td colspan="13" align="center">No Discussion Available</td>
+                                </tr>
                             }
                         </tbody>
                     </table>
@@ -213,12 +169,12 @@
 <script>
     $(document).ready(function () {
         $('#discussionTable').DataTable({
-            "aaSorting": [[0, "desc"]],
+            "aaSorting": [],
             "paging": true,
-            "ordering": true,
+            "ordering": false,
             "info": true,
             "bFilter": true,
-            "pageLength": 10,
+            "pageLength": 50,
             "pagingType": "simple_numbers",
             aoColumnDefs: [
                 {

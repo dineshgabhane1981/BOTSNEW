@@ -3,7 +3,53 @@
     ViewBag.Title = "Discussions";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+<style>
 
+    /* The Modal (background) */
+    /* The Modal (background) */
+    .modal {
+        display: none; /* Hidden by default */
+        position: fixed; /* Stay in place */
+        z-index: 5 !important; /* Sit on top */
+        padding-top: 100px; /* Location of the box */
+        left: 120px;
+        top: 0;
+        width: 100%; /* Full width */
+        height: 100%; /* Full height */
+        overflow: auto; /* Enable scroll if needed */
+        background-color: rgb(0,0,0); /* Fallback color */
+        background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+    }
+
+    /* Modal Content */
+    .modal-content {
+        background-color: #fefefe;
+        margin: auto;
+        padding: 20px;
+        border: 1px solid #888;
+        width: 70%;
+        border-radius: 25px;
+    }
+
+    The Close Button
+    .close {
+        color: #aaaaaa;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+    }
+
+    .close:hover,
+    .close:focus {
+        color: #000;
+        text-decoration: none;
+        cursor: pointer;
+    }
+
+    input:read-only {
+        background-color: lightgray;
+    }
+</style>
 <div class="app-main__inner">
 
     <div class="row mb-3 card">
@@ -13,7 +59,7 @@
                 @Html.HiddenFor(model => model.objDiscussion.GroupId, new { @id = "hdnGroupID" })
                 <div class="card" style="margin-bottom: 20px;">
                     <div class="row" style="margin: 10px;align-self:center;font-size:22px;">
-                       Customer Name -  @Model.objDiscussion.GroupName
+                        Customer Name -  @Model.objDiscussion.GroupName
                     </div>
                 </div>
                 <div id="dvAddDiscussion" class="card" style="display:none;padding:20px;margin-bottom:10px;">
@@ -46,7 +92,7 @@
                         <div class="col-sm-4" style="float:left;margin-top:10px;">
                             @Html.DropDownListFor(model => model.objDiscussion.CallMode, new SelectList(Model.CallMode(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input100", @id = "ddlCallMode" })
                         </div>
-                        
+
 
                     </div>
 
@@ -107,7 +153,7 @@
                     <a href="#" onclick="ShowAddDiscussion();" title="Add New Discussion">  <img src="~/Content/assets/images/AddCustomer.png" /></a>
                 </div>
             </div>
-           
+
             <div id="dvDiscussionList">
                 @Html.Partial("~/Views/Discussion/_DiscussionList.cshtml", Model.lstDiscussions)
             </div>
@@ -446,42 +492,49 @@
         }
     }
 
-    function BindActivities(id,data) {
-        console.log(data);
-        console.log(id);
-        var htmlStr = "<table border=\"2\" style=\"background-color:gray;margin-left: 11px;width: 98%;\" class=\"table\">";
-        htmlStr += "<tr style=\"text-align: center;\">"
-        htmlStr += "<th scope=\"col\">Date</th>";
-        htmlStr += "<th scope=\"col\">Updated By</th>";
-        htmlStr += "<th scope=\"col\">Description</th>";
-        htmlStr += "<th scope=\"col\">Status</th>";
-        htmlStr += "</tr>";
-
-        $.map(data, function (item) {
-            var d = new Date();
-            d = item.FollowupDate;
-            console.log(d);
+    function BindActivities(id,data) {        
+        if (data != "") {
+            var htmlStr = "<table border=\"2\" style=\"background-color:gray;margin-left: 11px;width: 98%;\" class=\"table\">";
             htmlStr += "<tr style=\"text-align: center;\">"
-            htmlStr += "<td>" + item.FollowupDate + "</td>";
-            htmlStr += "<td>" + item.UpdatedBy + "</td>";
-            htmlStr += "<td style=\"width: 100px;\">" + item.Description + "</td>";
-            htmlStr += "<td style=\"width: 100px;\">" + item.Status + "</td>";
-            htmlStr += "</tr>"
-        });
+            htmlStr += "<th scope=\"col\">Date</th>";
+            htmlStr += "<th scope=\"col\">Updated By</th>";
+            htmlStr += "<th scope=\"col\">Description</th>";
+            htmlStr += "<th scope=\"col\">Status</th>";
+            htmlStr += "</tr>";
 
-        htmlStr += "</table>";
-        $("#dvDiscussionData" + id).html(htmlStr);
-        console.log(htmlStr);
-        //$('tr[id^="trActivities"]').hide(1000);
-        //$('div[id^="dvDiscussionData"]').hide(1000);
-        $('[id^="imgExpand"]').attr("src", "../Content/assets/images/details_open.png");
+            $.map(data, function (item) {
+                var d = new Date();
+                d = item.FollowupDate;
+                console.log(d);
+                htmlStr += "<tr style=\"text-align: center;\">"
+                htmlStr += "<td>" + item.FollowupDate + "</td>";
+                htmlStr += "<td>" + item.UpdatedBy + "</td>";
+                htmlStr += "<td style=\"width: 100px;\">" + item.Description + "</td>";
+                htmlStr += "<td style=\"width: 100px;\">" + item.Status + "</td>";
+                htmlStr += "</tr>"
+            });
 
-        $("#trActivities" + id).show(1000);
+            htmlStr += "</table>";
+            $("#dvDiscussionData" + id).html(htmlStr);
+            console.log(htmlStr);
+            //$('tr[id^="trActivities"]').hide(1000);
+            //$('div[id^="dvDiscussionData"]').hide(1000);
+            $('[id^="imgExpand"]').attr("src", "../Content/assets/images/details_open.png");
 
-        $("#dvDiscussionData" + id).show(1000);
-        $("#imgExpand" + id).attr("src", "../Content/assets/images/details_close.png");
+            $("#trActivities" + id).show(1000);
 
+            $("#dvDiscussionData" + id).show(1000);
+            $("#imgExpand" + id).attr("src", "../Content/assets/images/details_close.png");
 
+        }
+        else {
+            cuteAlert({
+                type: "warning",
+                title: "Oops..",
+                message: "No tracking available",
+                buttonText: "Okay"
+            })
+        }
     }
 </script>
 <script src="~/Scripts/jquery-ui-1.12.1.js"></script>

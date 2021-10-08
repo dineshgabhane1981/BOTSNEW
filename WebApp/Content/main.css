@@ -5762,7 +5762,7 @@ a.close.disabled {
     padding: .75rem
 }
 
-.modal-open {
+/*.modal-open {
     overflow: hidden
 }
 
@@ -5774,7 +5774,7 @@ a.close.disabled {
 .modal {
     position: fixed;
     top: 0;
-    left: 0;
+    left: 120px;
     z-index: 1050;
     display: none;
     width: 100%;
@@ -5898,7 +5898,7 @@ a.close.disabled {
     width: 50px;
     height: 50px;
     overflow: scroll
-}
+}*/
 
 @media (min-width: 576px) {
     .modal-dialog {
