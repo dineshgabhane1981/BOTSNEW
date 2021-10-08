@@ -65,6 +65,7 @@ namespace BOTS_BL.Models
         public virtual DbSet<BOTS_TblCallSubTypes> BOTS_TblCallSubTypes { get; set; }
         public virtual DbSet<BOTS_TblCallTypes> BOTS_TblCallTypes { get; set; }
         public virtual DbSet<tblState> tblStates { get; set; }
+        public virtual DbSet<tblChannelPartner> tblChannelPartners { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {

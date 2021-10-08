@@ -63,6 +63,13 @@ namespace WebApp.Controllers.OnBoarding
             ViewBag.lstBillingPartner = lstbillingpartner;
             return View();
         }
+        public ActionResult ChannelPartner()
+        {
+            var lstchannelpartner = COR.GetChannelPartner();
+            ViewBag.lstChannelPartner = lstchannelpartner;
+            return View();
+        }
+
         [HttpPost]
         public ActionResult AddCategory(string jsonData)
         {

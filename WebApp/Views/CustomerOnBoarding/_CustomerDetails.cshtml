@@ -100,7 +100,7 @@
                 <td style="font-style: italic;">
                     WA Free Msgs
                 </td>
-                <td  style="font-weight:bold;">@Model.bots_TblGroupMaster.NoOfFreeWhatsAppMsg</td>
+                <td style="font-weight:bold;">@Model.bots_TblGroupMaster.NoOfFreeWhatsAppMsg</td>
                 <td style="font-style: italic;">
                     WA Paid Msgs
                 </td>
@@ -307,7 +307,7 @@
                 <td style="font-style: italic;">
                     TDS Deducted
                 </td>
-                <td style="font-weight:bold;">@Model.bots_TblDealDetails.TotalFeesA</td>
+                <td style="font-weight:bold;">@Model.bots_TblDealDetails.TDSDeducted</td>
             </tr>
 
             <tr style="background-color:lightgrey;"><td colspan="8" style="font-weight: bold; font-size: 18px;">Payment Details</td></tr>
@@ -323,7 +323,9 @@
                 </td>
             </tr>
 
-            @foreach (var item in Model.objInstallmentList)
+            @if(Model.objInstallmentList !=null)
+            { 
+                foreach (var item in Model.objInstallmentList)
             {
                 <tr>
                     <td style="font-style: italic;">
@@ -336,7 +338,7 @@
                     <td colspan="5"></td>
                 </tr>
             }
-
+            }
         </table>
     </div>
 </div>

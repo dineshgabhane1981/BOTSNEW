@@ -443,6 +443,54 @@ namespace BOTS_BL.Repository
             }
             return BillingPartnerItem;
         }
+
+
+        public List<SelectListItem> GetChannelPartner()
+        {
+            List<SelectListItem> lstChannelPartner = new List<SelectListItem>();
+            try
+            {
+                using (var context = new CommonDBContext())
+                {
+                    var lstchannelpartner = (from r in context.tblChannelPartners
+                                             join cl in context.CustomerLoginDetails on r.CreatedBy equals cl.LoginId into channelpartner
+                                             where r.IsActive == true
+                                             select new ChannelPartnerDetails
+                                             {
+                                                 ChannelPartnerId = r.CPId,
+                                                 ChannelPartnerName = r.CPartnerName,
+                                                 CreatedBy = r.CreatedBy,
+                                                 CreatedDate = r.CreatedDate,
+                                                 IsActive = r.IsActive
+                                             }).ToList();
+
+                    foreach (var item in lstchannelpartner)
+                    {
+                        lstChannelPartner.Add(new SelectListItem
+                        {
+                            Text = item.ChannelPartnerName,
+                            Value = Convert.ToString(item.ChannelPartnerId)
+                        });
+
+                    }
+                    var Billingselect = new SelectListItem()
+                    {
+                        Value = "0",
+                        Text = "--Select Billing Partner--"
+                    };
+                    lstChannelPartner.Insert(0, Billingselect);
+
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "onboarding_master");
+            }
+            return lstChannelPartner;
+        }
+
+
+
         //togetallproduct
         public List<BillingPartnerProductDetails> GetBillingPartnerProductById(int BillingpartnerId)
         {

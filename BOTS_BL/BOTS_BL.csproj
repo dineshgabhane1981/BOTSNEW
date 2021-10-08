@@ -208,6 +208,7 @@
     <Compile Include="Models\CommonDB\SMSWABalanceData.cs" />
     <Compile Include="Models\CommonDB\tblAudit.cs" />
     <Compile Include="Models\CommonDB\tblBillingPartner.cs" />
+    <Compile Include="Models\CommonDB\tblChannelPartner.cs" />
     <Compile Include="Models\CommonDB\tblCity.cs" />
     <Compile Include="Models\CommonDB\tblErrorLog.cs" />
     <Compile Include="Models\CommonDB\tblGroupDetail.cs" />
