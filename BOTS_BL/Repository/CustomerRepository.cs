@@ -262,6 +262,16 @@ namespace BOTS_BL.Repository
             return objGroupDetail;
         }
 
+        public BOTS_TblGroupMaster GetOnboardingGroupDetails(string GroupId)
+        {
+            BOTS_TblGroupMaster objGroupDetail = new BOTS_TblGroupMaster();
+            using (var context = new CommonDBContext())
+            {
+                objGroupDetail = context.BOTS_TblGroupMaster.Where(x => x.GroupId == GroupId).FirstOrDefault();
+            }
+            return objGroupDetail;
+        }
+
         public tblModulesPayment GetModulesAndPayments(int GroupId)
         {
             tblModulesPayment objModulesPayment = new tblModulesPayment();
