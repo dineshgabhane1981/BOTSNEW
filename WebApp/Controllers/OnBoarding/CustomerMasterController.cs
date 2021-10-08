@@ -33,6 +33,12 @@ namespace WebApp.Controllers.OnBoarding
             lsttblcity = COR.GetCityList();
             return View(lsttblcity);
         }
+        public ActionResult ChannelPartnerMaster()
+        {
+            List<ChannelPartnerDetails> lsttblchannel = new List<ChannelPartnerDetails>();
+            lsttblchannel = COR.GetChannelPartnerList();
+            return View(lsttblchannel);
+        }
         public ActionResult CsMaster()
         {
             List<RMAssignedDetails> lsttblRMAssigned = new List<RMAssignedDetails>();
@@ -146,7 +152,44 @@ namespace WebApp.Controllers.OnBoarding
             }
             return Json(result, JsonRequestBehavior.AllowGet);
         }
+        [HttpPost]
+        public ActionResult AddChannelPartner(string jsonData)
+        {
+            SPResponse result = new SPResponse();
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            string ChannelId = "";
+            try
+            {
+                JavaScriptSerializer json_serializer = new JavaScriptSerializer();
+                json_serializer.MaxJsonLength = int.MaxValue;
+                object[] objData = (object[])json_serializer.DeserializeObject(jsonData);
+                tblChannelPartner objchannel = new tblChannelPartner();
+                foreach (Dictionary<string, object> item in objData)
+                {
 
+                    objchannel.CPartnerName = Convert.ToString(item["channelNm"]);
+                    objchannel.CreatedBy = userDetails.LoginId;
+                    objchannel.CreatedDate = DateTime.Now;
+                    ChannelId = Convert.ToString(item["ChannelId"]);
+                    objchannel.IsActive = Convert.ToBoolean(item["IsActive"]);
+                    if (ChannelId != "")
+                    {
+                        objchannel.CPId = Convert.ToInt32(ChannelId);
+                    }
+                    else
+                    {
+
+                    }
+
+                }
+                result = COR.AddChannelPartner(objchannel);
+            }
+            catch (Exception ex)
+            {
+
+            }
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
         [HttpPost]
         public ActionResult AddSource(string jsonData)
         {
@@ -261,6 +304,25 @@ namespace WebApp.Controllers.OnBoarding
 
             }
             return Json(objcity, JsonRequestBehavior.AllowGet);
+
+
+        }
+
+        [HttpPost]
+        public ActionResult GetChannelPartner(int ChannelPartnerId)
+        {
+
+            tblChannelPartner objchannel = new tblChannelPartner();
+            try
+            {
+                objchannel = COR.GetchannelById(ChannelPartnerId);
+
+            }
+            catch (Exception ex)
+            {
+
+            }
+            return Json(objchannel, JsonRequestBehavior.AllowGet);
 
 
         }
@@ -537,6 +599,22 @@ namespace WebApp.Controllers.OnBoarding
         }
 
         [HttpPost]
+        public ActionResult ActiveInactiveChannelPartner(int ChannelPartnerid)
+        {
+            SPResponse result = new SPResponse();
+            try
+            {
+                
+                result = COR.ActiveInactiveChannelPartner(ChannelPartnerid);
+            }
+            catch (Exception ex)
+            {
+
+            }
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
         public ActionResult ActiveInactiveCustomerSuccess(int RmAssignedId)
         {
             SPResponse result = new SPResponse();
@@ -611,6 +689,13 @@ namespace WebApp.Controllers.OnBoarding
             List<CityDetails> lsttblcity = new List<CityDetails>();
             lsttblcity = COR.GetCityList();
             return PartialView("_CityMaster", lsttblcity);
+        }
+
+        public ActionResult ChannelPartnerMasterList()
+        {
+            List<ChannelPartnerDetails> lsttblchannel = new List<ChannelPartnerDetails>();
+            lsttblchannel = COR.GetChannelPartnerList();
+            return PartialView("_ChannelPartnerMaster", lsttblchannel);
         }
 
         public ActionResult CSMasterList()

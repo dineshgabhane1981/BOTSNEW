@@ -135,18 +135,14 @@ namespace BOTS_BL.Repository
                     int discussionId = Convert.ToInt32(id);
                     objDiscussion = context.BOTS_TblDiscussion.Where(x => x.Id == discussionId).FirstOrDefault();
                     objDiscussion.Status = Status;
-                    //objDiscussion.AddedBy = LoginId;
-                    //if (!string.IsNullOrEmpty(Desc))
-                    //{
-                    //    objDiscussion.Description = objDiscussion.Description + "-----------\n" +  Desc;
-                    //}
+                    
                     context.BOTS_TblDiscussion.AddOrUpdate(objDiscussion);
                     context.SaveChanges();
 
                     objsubdiscussion.DiscussionId = objDiscussion.Id;
                     objsubdiscussion.GroupId = objDiscussion.GroupId;
                     objsubdiscussion.FollowupDate = objDiscussion.FollowupDate;
-                    objsubdiscussion.Description = objDiscussion.Description;
+                    objsubdiscussion.Description = Desc;
                     objsubdiscussion.Status = objDiscussion.Status;
                     objsubdiscussion.UpdatedBy = objDiscussion.AddedBy;
                     context.BOTS_TblSubDiscussionData.AddOrUpdate(objsubdiscussion);

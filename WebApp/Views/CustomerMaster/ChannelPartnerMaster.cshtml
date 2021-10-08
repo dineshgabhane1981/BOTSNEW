@@ -1,8 +1,228 @@
-﻿
+﻿@model List<BOTS_BL.Models.CommonDB.ChannelPartnerDetails>
+
 @{
     ViewBag.Title = "ChannelPartnerMaster";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>ChannelPartnerMaster</h2>
+
+<div class="app-main__inner">
+    <div class="row mb-3 card">
+        <div class="container-fluid pt-3 pl-3 pr-3">
+            <div class="pb-3">
+                <h4><b>Channel Partner Master</b></h4>
+            </div>
+            <div class="pt-3 pl-3 pr-3 col-md-12 col-lg-12">
+                <div class="col-md-8 col-lg-8 mb-5" id="divadd" style="display:none; border:1px solid grey; border-radius:10px;">
+                    <div class="mb-4">
+                        <h6><b>Add Channel Partner</b></h6>
+                    </div>
+                    <span id="hdnChannelId" style="display:none;"></span>
+                    <span id="hdnChannelActive" style="display:none;"></span>
+                    <div class="col-md-12 col-lg-12 mt-2 mb-4">
+                        Channel Partner Name  <input class="input100" type="text" id="txtchannelNm" />
+                        <button class="btn btn-primary login-btn ml-5 mr-2" type="button" id="btnSave">
+                            Save
+                        </button>
+                        <button class="btn btn-primary login-btn" type="button" id="btnCancle">
+                            Cancel
+                        </button>
+                    </div>
+                </div>
+
+
+                <div class="row">
+                    <div class="col search-container">
+                        <i class="fas fa-search"></i>
+                        <input class="input100" type="text" id="txtSearch" placeholder="Search activity..." />
+                    </div>
+                    <div style="text-align:right;" class="pr-2">
+                        <button class="btn btn-primary login-btn" type="button" id="btnAdd">
+                            ADD
+                        </button>
+
+                    </div>
+                </div>
+                <div id="divchannel">
+                    @Html.Partial("~/Views/CustomerMaster/_ChannelPartnerMaster.cshtml", Model)
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+
+    $('#btnAdd').on("click", function () {
+        $("#divadd").show(1000);
+
+    });
+    $('#btnCancle').on("click", function () {
+        $("#divadd").hide(1000);
+        $('#divadd').find(':input').val('');
+        $("#hdnChannelId").text("");
+    });
+
+    function BindChannelPartnerList() {
+        $("#divLoader").show();
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("ChannelPartnerMasterList", "CustomerMaster")',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (responce) {
+
+                    $("#divchannel").html(responce);
+
+                },
+                error: function (responce) {
+                    $("#divchannel").html(responce.responseText);
+
+                }
+            });
+
+    }
+    $('#btnSave').on("click", function () {
+
+        if ($('#txtchannelNm').val() == "") {
+            toastr.error('Please enter Channel Partner Name');
+            $('#txtchannelNm').focus();
+            return false;
+        }
+
+        if (confirm("Are you sure? You want to Add Channel Partner")) {
+            var CityData = [];
+            item = {}
+            item["channelNm"] = $("#txtchannelNm").val();
+            if ($('#hdnChannelId').text != 0) {
+                item["ChannelId"] = $('#hdnChannelId').text();
+            }
+            else {
+                item["ChannelId"] = 0;
+            }
+            if ($('#hdnChannelActive').text == false) {
+                item["IsActive"] = false;
+            }
+            else {
+                item["IsActive"] = true;
+            }
+            CityData.push(item);
+            var data = JSON.stringify(CityData);
+            console.log(data)
+            $("#divLoader").show();
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("AddChannelPartner", "CustomerMaster")',
+                data: '{jsonData: ' + JSON.stringify(data) + '}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (result) {
+                    if (result.ResponseCode == "00") {
+                        toastr.success(result.ResponseMessage);
+                        BindChannelPartnerList();
+                        $("#divLoader").hide();
+                        $("#txtchannelNm").val("");
+                        $('#hdnChannelId').val("");
+                        $('#hdnChannelActive').val("");
+                        $("#divadd").hide(1000);
+                    }
+                    else {
+                        toastr.error(result.ResponseMessage);
+                        $("#divLoader").hide();
+                    }
+                },
+                error: function (result) {
+                    console.log(result.responseText)
+                    if (result.responseText == "True") {
+                        toastr.success("Data Updated Successfully");
+                        $("#divLoader").hide();
+                    }
+                    else {
+                        toastr.error('error occured while saving data');
+                        $("#divLoader").hide();
+                    }
+                }
+            });
+       // }
+    }
+    });
+    function EditChannelPartner(id) {
+
+        $("#divLoader").show();
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("GetChannelPartner", "CustomerMaster")',
+                data: '{ChannelPartnerId: ' + JSON.stringify(id) + '}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (responce) {
+                    console.log(responce);
+                    if (responce.CPartnerName != null) {
+                        $("#divLoader").hide();
+                        $("#divadd").show(1000);
+                        $('#txtchannelNm').val(responce.CPartnerName);
+                        $("#btnSave").show();
+                        $("#hdnChannelId").text(id);
+                        $("#hdnChannelActive").text(responce.IsActive);
+
+
+                    }
+                    else {
+
+                    }
+
+                },
+                error: function (result) {
+                    console.log(result.responseText)
+                    if (result.responseText == "True") {
+                        toastr.success("Data Updated Successfully");
+                        $("#divLoader").hide();
+                    }
+                    else {
+                        toastr.error('error occured while saving data');
+                        $("#divLoader").hide();
+                    }
+                }
+            });
+        console.log(id);
+    }
+
+    function ActivateDeactivate(ChannelId) {
+
+        if (confirm("Are you sure? You want to Active/Inactive Channel Partner")) {
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("ActiveInactiveChannelPartner", "CustomerMaster")',
+                data: '{ChannelPartnerid: ' + JSON.stringify(ChannelId) + '}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (result) {
+                    console.log(result);
+                    if (result.ResponseCode == "00") {
+                        toastr.success(result.ResponseMessage);
+                        BindChannelPartnerList();
+                        $("#divLoader").hide();
+
+                    }
+                    else {
+                        toastr.error(result.ResponseMessage);
+                        $("#divLoader").hide();
+
+                    }
+
+
+                },
+                failure: function (result) {
+                    console.log(result);
+                },
+                error: function (result) {
+                    console.log(result);
+                }
+            });
+
+        }
+    }
+</script>
+
+
 

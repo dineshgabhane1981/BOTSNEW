@@ -197,6 +197,34 @@ namespace BOTS_BL.Repository
             }
             return objtblcity;
         }
+        public List<ChannelPartnerDetails> GetChannelPartnerList()
+        {
+            List<ChannelPartnerDetails> objchannelpartner = new List<ChannelPartnerDetails>();
+            try
+            {
+                using (var context = new CommonDBContext())
+                {
+
+                    objchannelpartner = (from c in context.tblChannelPartners
+                                  join cl in context.CustomerLoginDetails on c.CreatedBy equals cl.LoginId into channelpartner
+                                  from m in channelpartner.DefaultIfEmpty()
+                                  select new ChannelPartnerDetails
+                                  {
+                                      ChannelPartnerId = c.CPId,
+                                      ChannelPartnerName = c.CPartnerName,
+                                      CreatedBy = c.CreatedBy,
+                                      CreatedDate = c.CreatedDate,
+                                      UserName = m.UserName,
+                                      IsActive = c.IsActive
+                                  }).ToList();
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "onboarding_master");
+            }
+            return objchannelpartner;
+        }
 
         public SPResponse AddCity(tblCity objtblcity)
         {
@@ -209,6 +237,25 @@ namespace BOTS_BL.Repository
                     context.SaveChanges();
                     result.ResponseCode = "00";
                     result.ResponseMessage = "City Added Successfully";
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "onboarding_master");
+            }
+            return result;
+        }
+        public SPResponse AddChannelPartner(tblChannelPartner objtblchannel)
+        {
+            SPResponse result = new SPResponse();
+            try
+            {
+                using (var context = new CommonDBContext())
+                {
+                    context.tblChannelPartners.AddOrUpdate(objtblchannel);
+                    context.SaveChanges();
+                    result.ResponseCode = "00";
+                    result.ResponseMessage = "Channel Partner Added Successfully";
                 }
             }
             catch (Exception ex)
@@ -287,6 +334,16 @@ namespace BOTS_BL.Repository
                 objcity = context.tblCities.Where(x => x.CityId == CityId).FirstOrDefault();
             }
             return objcity;
+        }
+
+        public tblChannelPartner GetchannelById(int ChannelPartnerid)
+        {
+            tblChannelPartner objchannel = new tblChannelPartner();
+            using (var context = new CommonDBContext())
+            {
+                objchannel = context.tblChannelPartners.Where(x => x.CPId == ChannelPartnerid).FirstOrDefault();
+            }
+            return objchannel;
         }
 
         public tblRMAssigned GetRMById(int RMId)
@@ -601,6 +658,32 @@ namespace BOTS_BL.Repository
                 context.SaveChanges();
                 result.ResponseCode = "00";
                 result.ResponseMessage = "City Updated Successfully";
+            }
+            return result;
+        }
+
+        public SPResponse ActiveInactiveChannelPartner(int ChannelPartnerId)
+        {
+            tblChannelPartner objchannel = new tblChannelPartner();
+            SPResponse result = new SPResponse();
+            using (var context = new CommonDBContext())
+            {
+
+                objchannel = context.tblChannelPartners.Where(x => x.CPId == ChannelPartnerId).FirstOrDefault();
+
+                if (objchannel.IsActive == true)
+                {
+                    objchannel.IsActive = false;
+                }
+                else
+                {
+                    objchannel.IsActive = true;
+                }
+
+                context.tblChannelPartners.AddOrUpdate(objchannel);
+                context.SaveChanges();
+                result.ResponseCode = "00";
+                result.ResponseMessage = "Channel Partner Updated Successfully";
             }
             return result;
         }
