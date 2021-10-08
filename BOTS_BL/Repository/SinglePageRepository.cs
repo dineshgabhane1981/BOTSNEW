@@ -114,31 +114,37 @@ namespace BOTS_BL.Repository
                DateTime dt= DateTime.Now.Date;
                 if (Id == "1")
                 {
-                    objlowerredemption = context.Tbl_SinglePageLowerRedemptionRate.OrderByDescending(i => i.Value).ToList();
+                    objlowerredemption = context.Tbl_SinglePageLowerRedemptionRate.Where(x => x.Date == dt).OrderByDescending(i => i.Value).ToList();
                     dsm= CreateDataTable(objlowerredemption,Id);
                     //.Where(x => x.Date == dt)
                 }
                 else if (Id == "3")
                 {
-                    objlowprofile = context.Tbl_SinglePageLowProfileUpdates.OrderByDescending(i => i.Value).ToList();
+                    objlowprofile = context.Tbl_SinglePageLowProfileUpdates.Where(x => x.Date == dt).OrderByDescending(i => i.Value).ToList();
                     dsm= CreateDataTable(objlowprofile,Id);
 
                 }
                 else if (Id == "2")
                 {
-                    objhigheronlyonce = context.Tbl_SinglePageHigherOnlyonceAndInactive.OrderByDescending(i => i.Value).ToList();
+                    objhigheronlyonce = context.Tbl_SinglePageHigherOnlyonceAndInactive.Where(x => x.Date == dt && x.CustomerVintage== "Higher Only Once").OrderByDescending(i => i.Value).ToList();
                     dsm= CreateDataTable(objhigheronlyonce,Id);
+
+                }
+                else if (Id == "6")
+                {
+                    objhigheronlyonce = context.Tbl_SinglePageHigherOnlyonceAndInactive.Where(x => x.Date == dt && x.CustomerVintage == "Higher InActive Rate").OrderByDescending(i => i.Value).ToList();
+                    dsm = CreateDataTable(objhigheronlyonce, Id);
 
                 }
                 else if (Id == "4")
                 {
-                    objlowreferral = context.Tbl_SinglePageLowReferral.OrderByDescending(i => i.Value).ToList();
+                    objlowreferral = context.Tbl_SinglePageLowReferral.Where(x => x.Date == dt).OrderByDescending(i => i.Value).ToList();
                     dsm=CreateDataTable(objlowreferral,Id);
 
                 }
                 else if (Id == "5")
                 {
-                    objlowreferralconversion = context.Tbl_SinglePageLowReferralConversions.OrderByDescending(i => i.Value).ToList();
+                    objlowreferralconversion = context.Tbl_SinglePageLowReferralConversions.Where(x => x.Date == dt).OrderByDescending(i => i.Value).ToList();
                     dsm= CreateDataTable(objlowreferralconversion,Id);
                 }               
 

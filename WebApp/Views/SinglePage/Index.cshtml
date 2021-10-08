@@ -304,7 +304,7 @@
                             </tbody>
                         </table>
                     </div>
-                    <div class="mr-1">
+                    <div class="mr-1 mt-5">
                         <table border="1">
                             <thead><h6><b>Low Whats App Balance</b></h6></thead>
                             <tr>
@@ -414,6 +414,7 @@
                 <div class="row mb-2">
                     <input type="radio" id="rdnlowerRedemRate" checked name="cust_type" />&nbsp; Lower Redemption Rate &nbsp;&nbsp;&nbsp;&nbsp;
                     <input type="radio" id="rdndHigherOnly" name="cust_type" />&nbsp; Higher Only Once &nbsp;&nbsp;&nbsp;&nbsp;
+                    <input type="radio" id="rdnHigherInactive" name="cust_type" />&nbsp; Higher Inactive &nbsp;&nbsp;&nbsp;&nbsp;
                     <input type="radio" id="rdnLowProfile" name="cust_type" />&nbsp; Low Profile Updates &nbsp;&nbsp;&nbsp;&nbsp;
                     <input type="radio" id="rdnLowReferrals" name="cust_type" />&nbsp; Low Referrals &nbsp;&nbsp;&nbsp;&nbsp;
                     <input type="radio" id="rdnLowReferralconversion" name="cust_type" />&nbsp; Low Referrals Conversions<br /><br />
@@ -437,15 +438,15 @@
                             <tr>
 
                                 <th>Group Name</th>
-                                <th>Value</th>
+                                <th>Value %</th>
                                 <th>Group Name</th>
-                                <th>Value</th>
+                                <th>Value %</th>
                                 <th>Group Name</th>
-                                <th>Value</th>
+                                <th>Value %</th>
                                 <th>Group Name</th>
-                                <th>Value</th>
+                                <th>Value %</th>
                                 <th>Group Name</th>
-                                <th>Value</th>
+                                <th>Value %</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -516,7 +517,9 @@
             else if ($("#rdnLowReferralconversion").is(":checked")) {
                 TableId = "5";
             }
-
+            else if ($("#rdnHigherInactive").is(":checked")) {
+                TableId = "6";
+            }
              $.ajax({
              type: "POST",
             url: '@Url.Action("GetLowerMetricsData", "SinglePage")',
