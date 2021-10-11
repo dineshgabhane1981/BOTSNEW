@@ -48,8 +48,8 @@ namespace BOTS_BL.Models
         public string RegDate { get; set; }
         public string OutletName { get; set; }
         public string FirstTxnDate { get; set; }
-        public string TotalSpend { get; set; }
-        public string TxnCount { get; set; }
+        public decimal? TotalSpend { get; set; }
+        public int? TxnCount { get; set; }
     }
 
 }
