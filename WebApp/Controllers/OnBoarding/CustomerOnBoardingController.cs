@@ -279,7 +279,7 @@ namespace WebApp.Controllers.OnBoarding
                     if (count == 1)
                     {
                         Category = item.CategoryName;
-                        NoOfOutlets = Convert.ToString(item.NoOfOutlets);
+                        NoOfOutlets = Convert.ToString(item.NoOfEnrolled);
                         BillingPartner = item.BillingPartner;
                         Product = item.BOProduct;
                     }
@@ -306,7 +306,7 @@ namespace WebApp.Controllers.OnBoarding
                 sb.Append("</tr>");
 
                 sb.Append("<tr>");
-                sb.Append("<td>No of Outlets:</td><td>" + NoOfOutlets + "</td>");
+                sb.Append("<td>No of Enrolled Outlets:</td><td>" + NoOfOutlets + "</td>");
                 sb.Append("</tr>");
 
                 sb.Append("<tr>");
