@@ -15,6 +15,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BusinessLoyaltyWebPage", "BusinessLoyaltyWebPage\BusinessLoyaltyWebPage.csproj", "{B26E132F-4FDD-457F-BAB9-8D25D94EF36A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LeadGeneration", "LeadGeneration\LeadGeneration.csproj", "{BB8FC649-9327-464C-9BC3-E50EC67E136C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -41,6 +43,10 @@ Global
 		{B26E132F-4FDD-457F-BAB9-8D25D94EF36A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B26E132F-4FDD-457F-BAB9-8D25D94EF36A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B26E132F-4FDD-457F-BAB9-8D25D94EF36A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BB8FC649-9327-464C-9BC3-E50EC67E136C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BB8FC649-9327-464C-9BC3-E50EC67E136C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BB8FC649-9327-464C-9BC3-E50EC67E136C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BB8FC649-9327-464C-9BC3-E50EC67E136C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

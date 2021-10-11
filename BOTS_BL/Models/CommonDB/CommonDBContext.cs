@@ -67,6 +67,9 @@ namespace BOTS_BL.Models
         public virtual DbSet<tblState> tblStates { get; set; }
         public virtual DbSet<tblChannelPartner> tblChannelPartners { get; set; }
 
+        public virtual DbSet<SALES_tblLeads> SALES_tblLeads { get; set; }
+        public virtual DbSet<SALES_tblLeadTracking> SALES_tblLeadTracking { get; set; }
+
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             modelBuilder.Entity<CommonReferralURL>()

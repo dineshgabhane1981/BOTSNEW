@@ -1,0 +1,204 @@
+﻿@model BOTS_BL.Models.LoginModel
+@{
+    ViewBag.Title = "Index";
+    Layout = null;
+}
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+      integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+<link rel="stylesheet" href="~/Content/style.css" />
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+<link href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" rel="stylesheet" />
+<style>
+    #loader {
+        display: flex;
+        width: 100%;
+        height: 100%;
+        position: fixed;
+        opacity: 1;
+        z-index: 1021;
+        background: rgba(255, 255, 255, .7);
+    }
+
+    .loader-inner {
+        width: 100px;
+        height: 100px;
+        border-radius: 100%;
+        position: relative;
+        margin: auto;
+    }
+
+        .loader-inner:before,
+        .loader-inner:after {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 100%;
+            height: 100%;
+            /* border-radius: 100%;
+                border: 10px solid transparent;
+                border-top-color: darkblue;*/
+        }
+
+        .loader-inner:before {
+            z-index: 100;
+            /*background-image: url(~/Content/assets/BlueocktopusLoadingGIF.mp4);
+                animation: spinner-border 1s infinite;*/
+        }
+
+        .loader-inner:after {
+            /*border: 10px solid lightblue;*/
+        }
+</style>
+<div id="divLoader" runat="server" style="display:none">
+    <div id="loader">
+        <div class="loader-inner">
+            <img src="~/Content/assets/BlueocktopusLoadingGIF.gif" width="100px" height="100px" />
+        </div>
+    </div>
+</div>
+<div class="container-fluid" style="background-image:url('../../Content/assets/BotsLoginBackground.jpeg'); background-position: center;background-repeat: no-repeat;background-size: cover;height: 100%;">
+    <div class="row justify-content-end h-100" style="margin-right:10px;">
+
+        <div class="col-12 align-self-center text-center login-section" style="border-radius:50px;box-shadow:5px 5px 5px 5px #0A0A0A; margin-bottom:100px;">
+            <div class="text-center">
+                <img src="~/Content/assets/images/Blue-Ocktopus-TLC_white.jpg" width="70%">
+            </div>
+            <div class="text-center" style="font-size:20px; color:#1C699F;">SAAS Platform for Retail</div>
+            <div class="text-center" style="font-size:20px; color:#1C699F;"><b>Growth | Retention | Intelligence</b></div>
+            @using (Html.BeginForm("UserAuthentication", "Login", FormMethod.Post, new { enctype = "multipart/form-data", @class = "text-center mt-4" }))
+            {
+
+                if (!string.IsNullOrEmpty(Convert.ToString(TempData["InvalidUserMessage"])))
+                {
+                    <script>
+                        toastr.error('@Convert.ToString(TempData["InvalidUserMessage"])');
+                    </script>
+                }
+                <input type="hidden" id="hdnOTPOrPassword" />
+                <div id="dvLogin">
+                    @Html.TextBoxFor(model => model.LoginId, new { @class = "input100", placeholder = "Login ID" })
+                </div>
+                <div id="dvOTP" style="display:none;">
+                    @Html.TextBoxFor(model => model.OTP, new { @class = "input100", placeholder = "Enter OTP", @id = "txtOTP" })
+                </div>
+                <div id="dvPassword" style="display:none;">
+                    @Html.PasswordFor(model => model.Password, new { @class = "input100", placeholder = "Password", @id = "txtPassword" })
+                </div>
+                <div class="mt-3">
+                    <button type="button" id="btnProceed" onclick="return SendOTP();" class="btn btn-primary" style="width:76%;background-color:#1C699F;"><i>Proceed</i></button>
+                    <button type="submit" id="btnSubmit" onclick="return Validate();" class="btn btn-primary" style="width:76%;background-color:#1C699F;display:none;"><i>Submit</i></button>
+                </div>
+                <div class="mt-3 align-self-center text-center" style="display:none;">
+                    <a href="@Url.Action("ResetPassword", "Home")" style="cursor:pointer;color:darkslategrey;"><u>Forgot Password</u></a>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $(".app-header").hide();
+        $(".app-sidebar").hide();
+        $(".app-wrapper-footer").hide();
+        //textAPI();
+    });
+    function SendOTP() {
+
+        if ($("#LoginId").val() == "") {
+            $("#LoginId").focus();
+            toastr.error('Please enter Login ID');
+            return false;
+        }
+        $("#divLoader").show();
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("CheckUserAndSendOTP", "Login")',
+                data: "{'LoginID': '" + $("#LoginId").val() + "'}",
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (response) {
+                    $("#divLoader").hide();
+                },
+                failure: function (response) {
+                    toastr.error('There is problem while sending OTP, please try after sometime');
+                    $("#divLoader").hide();
+                },
+                error: function (response) {
+                    if (response.responseText == "Password") {
+                        $("#dvLogin").hide();
+                        $("#dvPassword").show();
+                        $("#btnProceed").hide();
+                        $("#btnSubmit").show();
+                        $("#hdnOTPOrPassword").val(1);
+
+                    }
+                    if (response.responseText == "OTP") {
+                        $("#dvLogin").hide();
+                        $("#dvOTP").show();
+                        $("#btnProceed").hide();
+                        $("#btnSubmit").show();
+                        $("#hdnOTPOrPassword").val(2);
+                        toastr.success('OTP Sent Successfully');
+                    }
+                    if (response.responseText == "error in sending OTP") {
+                        toastr.error('There is problem while sending OTP, please try after sometime');
+                        $("#divLoader").hide();
+                    }
+                    if (response.responseText == "NoUserFound") {
+                        toastr.error('No User exist');
+                        $("#divLoader").hide();
+                    }
+                    $("#divLoader").hide();
+                }
+            });
+
+        return true;
+    }
+
+    function Validate() {
+        if ($("#hdnOTPOrPassword").val() == "1" && $("#txtPassword").val() == "") {
+            toastr.error('Please enter Password');
+            return false;
+        }
+        if ($("#hdnOTPOrPassword").val() == 2 && $("#txtOTP").val() == "") {
+            toastr.error('Please enter OTP');
+            return false;
+        }
+        return true;
+    }
+
+    function textAPI()
+    {
+        $.ajax({
+            url: "https://blueocktopus.in/MobileNewAPI/api/bots/GetToken?username=123&password=123",
+            method: "GET",      // The HTTP method to use for the request
+            contentType: "application/json; charset=utf-8",
+            dataType: "json", // The type of data that you're exerciseecting back
+
+            error: function () {
+                
+                // A function to be called if the request fails.
+            },
+
+            success: function (response) {
+               
+                console.log(response);
+                // A function to be called if the request succeeds.
+            },
+            complete: function (response) {
+               
+                // A function to be called when the request finishes
+            },
+            failure: function (response) {
+                
+                // A function to be called when the request finishes
+            },
+
+        });
+    }
+</script>

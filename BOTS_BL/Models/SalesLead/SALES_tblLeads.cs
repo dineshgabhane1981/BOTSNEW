@@ -1,0 +1,89 @@
+namespace BOTS_BL.Models
+{
+    using System;
+    using System.Collections.Generic;
+    using System.ComponentModel.DataAnnotations;
+    using System.ComponentModel.DataAnnotations.Schema;
+    using System.Data.Entity.Spatial;
+
+    public partial class SALES_tblLeads
+    {
+        [Key]
+        public int LeadId { get; set; }
+
+        [Required]
+        [StringLength(250)]
+        public string BusinessName { get; set; }
+
+        [StringLength(50)]
+        public string Category { get; set; }
+
+        [StringLength(50)]
+        public string Product { get; set; }
+
+        [StringLength(50)]
+        public string BillingPartner { get; set; }
+
+        public bool? EcomIntegration { get; set; }
+
+        public int? NoOfOutlet { get; set; }
+
+        [StringLength(1000)]
+        public string Address { get; set; }
+
+        [StringLength(50)]
+        public string State { get; set; }
+
+        [StringLength(50)]
+        public string City { get; set; }
+
+        public int? Pincode { get; set; }
+
+        [StringLength(50)]
+        public string ContactType { get; set; }
+
+        [StringLength(250)]
+        public string SpokeWith { get; set; }
+
+        [StringLength(50)]
+        public string MobileNo { get; set; }
+
+        [StringLength(50)]
+        public string AlternateNo { get; set; }
+
+        [StringLength(150)]
+        public string EmailId { get; set; }
+
+        [StringLength(250)]
+        public string AuthorizedPerson { get; set; }
+
+        [StringLength(50)]
+        public string APMobileNo { get; set; }
+
+        [StringLength(50)]
+        public string LeadStatus { get; set; }
+
+        [StringLength(50)]
+        public string PriceQuoted { get; set; }
+
+        [StringLength(50)]
+        public string MeetingType { get; set; }
+
+        public DateTime? FollowupDate { get; set; }
+
+        [StringLength(50)]
+        public string LeadSource { get; set; }
+
+        [StringLength(250)]
+        public string LeadSourceName { get; set; }
+
+        public string Comments { get; set; }
+
+        [StringLength(50)]
+        public string AddedBy { get; set; }
+
+        public DateTime? AddedDate { get; set; }
+
+        public DateTime? UpdatedDate { get; set; }
+    }
+}
