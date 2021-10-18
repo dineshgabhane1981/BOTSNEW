@@ -631,8 +631,36 @@
             "columns": [
                 { data: "MobileNo" },
                 { data: "MemberName" },
-                { data: "CelebrationDate" },
-                { data: "TxnDate" },
+                /*{ data: "CelebrationDate" },*/
+                {
+                    "data": "CelebrationDate", "title": "Celebration Date", "render": function (data, type) {
+                        if (data != "" && data != null) {
+                            var day = data.split('/')[0]
+                            var month = data.split('/')[1]
+                            var year = data.split('/')[2]
+                            var date = month + "/" + day + "/" + year;
+                            return date;
+                        }
+                        else {
+                            return data;
+                        }
+                    }
+                },
+                /*{ data: "TxnDate" },*/
+                {
+                    "data": "TxnDate", "title": "Txn Date", "render": function (data, type) {
+                        if (data != "" && data != null) {
+                            var day = data.split('/')[0]
+                            var month = data.split('/')[1]
+                            var year = data.split('/')[2]
+                            var date = month + "/" + day + "/" + year;
+                            return date;
+                        }
+                        else {
+                            return data;
+                        }
+                    }
+                },
                 { data: "NoOfTxn" },
                 { data: "PointsRedeemed" }
             ]
@@ -762,8 +790,36 @@
             "columns": [
                 { data: "MobileNo" },
                 { data: "MemberName" },
-                { data: "ExpiryDate" },
-                { data: "TxnDate" },
+                /*{ data: "ExpiryDate" },*/
+                {
+                    "data": "ExpiryDate", "title": "Expiry Date", "render": function (data, type) {
+                        if (data != "" && data != null) {
+                            var day = data.split('/')[0]
+                            var month = data.split('/')[1]
+                            var year = data.split('/')[2]
+                            var date = month + "/" + day + "/" + year;
+                            return date;
+                        }
+                        else {
+                            return data;
+                        }
+                    }
+                },
+                /*{ data: "TxnDate" },*/
+                {
+                    "data": "TxnDate", "title": "Txn Date", "render": function (data, type) {
+                        if (data != "" && data != null) {
+                            var day = data.split('/')[0]
+                            var month = data.split('/')[1]
+                            var year = data.split('/')[2]
+                            var date = month + "/" + day + "/" + year;
+                            return date;
+                        }
+                        else {
+                            return data;
+                        }
+                    }
+                },
                 { data: "NoOfTxn" },
                 { data: "PointsRedeemed" },
                 { data: "TotalSpend"}
@@ -887,9 +943,37 @@
             "columns": [
                 { data: "MobileNo" },
                 { data: "MemberName" },
-                { data: "InActiveDate" },
+                /*{ data: "InActiveDate" },*/
+                {
+                    "data": "InActiveDate", "title": "Inactive Date", "render": function (data, type) {
+                        if (data != "" && data != null) {
+                            var year = data.split('-')[0]
+                            var month = data.split('-')[1]
+                            var day = data.split('-')[2]
+                            var date = month + "/" + day + "/" + year;
+                            return date;
+                        }
+                        else {
+                            return data;
+                        }
+                    }
+                },
                 { data: "Status" },
-                { data: "TxnDate" },
+               /* { data: "TxnDate" },*/
+                {
+                    "data": "TxnDate", "title": "Txn Date", "render": function (data, type) {
+                        if (data != "" && data != null) {
+                            var year = data.split('-')[0]
+                            var month = data.split('-')[1]
+                            var day = data.split('-')[2]
+                            var date = month + "/" + day + "/" + year;
+                            return date;
+                        }
+                        else {
+                            return data;
+                        }
+                    }
+                },
                 { data: "TotalSpend" }
             ]
         });
@@ -959,8 +1043,36 @@
                     }
                 },
                 { data: "Status" },
-                { data: "StartDate" },
-                { data: "EndDate" },
+                /*{ data: "StartDate" },*/
+                {
+                    "data": "StartDate", "title": "Start Date", "render": function (data, type) {
+                        if (data != "" && data != null) {
+                            var day = data.split('/')[0]
+                            var month = data.split('/')[1]
+                            var year = data.split('/')[2]
+                            var date = month + "/" + day + "/" + year;
+                            return date;
+                        }
+                        else {
+                            return data;
+                        }
+                    }
+                },
+                /*{ data: "EndDate" },*/
+                {
+                    "data": "EndDate", "title": "End Date", "render": function (data, type) {
+                        if (data != "" && data != null) {
+                            var day = data.split('/')[0]
+                            var month = data.split('/')[1]
+                            var year = data.split('/')[2]
+                            var date = month + "/" + day + "/" + year;
+                            return date;
+                        }
+                        else {
+                            return data;
+                        }
+                    }
+                },
                 { data: "CampaignMemberCount" },
                 { data: "UniqueMemberTransacted" },
                 { data: "Transactions" },
@@ -1149,7 +1261,21 @@
                     }
                 },
                 { data: "Status" },
-                { data: "SendDate" },
+                /*{ data: "SendDate" },*/
+                {
+                    "data": "SendDate", "title": "Send Date", "render": function (data, type) {
+                        if (data != "" && data != null) {
+                            var day = data.split('/')[0]
+                            var month = data.split('/')[1]
+                            var year = data.split('/')[2]
+                            var date = month + "/" + day + "/" + year;
+                            return date;
+                        }
+                        else {
+                            return data;
+                        }
+                    }
+                },
                 { data: "CampaignMemberCount" },
                 { data: "UniqueMemberTransacted" },
                 { data: "Transactions" },

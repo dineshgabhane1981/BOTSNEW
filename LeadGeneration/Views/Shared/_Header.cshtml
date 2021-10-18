@@ -43,26 +43,9 @@
         </span>
     </div>    <div class="app-header__content">
         <div class="app-header-left">
-            <div class="search-wrapper">
-                <div class="input-holder">
-                    <input id="txtMember" type="text" class="search-input" placeholder="Search a Member">
-                    <button id="btnMemberSearch" type="submit" class="search-icon"><span></span></button>
-                </div>
-                <button id="btnCloseMemberSearch" class="close"></button>
-            </div>
+             
             <ul class="header-menu nav">
-                <li class="dropdown nav-item">
-                    <a href="javascript:void(0);" class="nav-link" style="color:white !important;">
-                        <i class="nav-link-icon fa fa-cog"></i>
-                        Operations
-                    </a>
-                </li>
-                <li class="btn-group nav-item">
-                    <a href="javascript:void(0);" class="nav-link" style="color:white !important;">
-                        <i class="nav-link-icon fa fa-edit"></i>
-                        Refer & Earn
-                    </a>
-                </li>
+               
                 @if (!string.IsNullOrEmpty(userDetails.CustomerName))
                 {
                 <li class="btn-group nav-item">                    

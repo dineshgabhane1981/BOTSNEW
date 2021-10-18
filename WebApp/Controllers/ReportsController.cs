@@ -428,9 +428,37 @@ namespace WebApp.Controllers
 
                 foreach (DataRow dr in table.Rows)
                 {
-                    dr["InvoiceAmtStr"] = String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(dr["InvoiceAmt"]));
-                    dr["PointsEarnedStr"] = String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(dr["PointsEarned"]));
-                    dr["PointsBurnedStr"] = String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(dr["PointsBurned"]));
+                    if (!string.IsNullOrEmpty(Convert.ToString(dr["InvoiceAmt"])))
+                    {
+                        dr["InvoiceAmtStr"] = String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(dr["InvoiceAmt"]));
+
+                    }
+                    if (!string.IsNullOrEmpty(Convert.ToString(dr["PointsEarned"])))
+                    {
+                        dr["PointsEarnedStr"] = String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(dr["PointsEarned"]));
+                    }
+                    if (!string.IsNullOrEmpty(Convert.ToString(dr["PointsBurned"])))
+                    {
+                        dr["PointsBurnedStr"] = String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(dr["PointsBurned"]));
+                    }
+                    if (!string.IsNullOrEmpty(Convert.ToString(dr["TxnDatetime"])))
+                    {
+                        //dr["TxnDatetime"] = Convert.ToDateTime(dr["TxnDatetime"]).ToString("MM/dd/yyyy");
+                        var subDate = Convert.ToString(dr["TxnDatetime"]).Substring(0, 10);
+                        var subTime = Convert.ToString(dr["TxnDatetime"]).Substring(11, 8);
+                        var convertedDate = DateTime.ParseExact(subDate, "dd/MM/yyyy", CultureInfo.InvariantCulture)
+                        .ToString("MM/dd/yyyy", CultureInfo.InvariantCulture);
+                        dr["TxnDatetime"] = convertedDate + " " + subTime;
+                    }
+                    if (!string.IsNullOrEmpty(Convert.ToString(dr["TxnUpdateDate"])))
+                    {
+                        //dr["TxnUpdateDate"] = Convert.ToDateTime(dr["TxnUpdateDate"]).ToString("MM/dd/yyyy hh:mm:ss");
+                        var subDate = Convert.ToString(dr["TxnUpdateDate"]).Substring(0, 10);
+                        var subTime = Convert.ToString(dr["TxnUpdateDate"]).Substring(11, 8);
+                        var convertedDate = DateTime.ParseExact(subDate, "dd/MM/yyyy", CultureInfo.InvariantCulture)
+                        .ToString("MM/dd/yyyy", CultureInfo.InvariantCulture);
+                        dr["TxnUpdateDate"] = convertedDate + " " + subTime;
+                    }
 
                 }
                 table.Columns.Remove("InvoiceAmt");
@@ -673,10 +701,30 @@ namespace WebApp.Controllers
 
                 foreach (DataRow dr in table.Rows)
                 {
-                    dr["TotalSpendStr"] = String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(dr["TotalSpend"]));
-                    dr["AvlPointsStr"] = String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(dr["AvlPoints"]));
-                    dr["PointsExpiryStr"] = String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(dr["PointsExpiry"]));
-
+                    if (!string.IsNullOrEmpty(Convert.ToString(dr["TotalSpend"])))
+                    {
+                        dr["TotalSpendStr"] = String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(dr["TotalSpend"]));
+                    }
+                    if (!string.IsNullOrEmpty(Convert.ToString(dr["AvlPoints"])))
+                    {
+                        dr["AvlPointsStr"] = String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(dr["AvlPoints"]));
+                    }
+                    if (!string.IsNullOrEmpty(Convert.ToString(dr["PointsExpiry"])))
+                    {
+                        dr["PointsExpiryStr"] = String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(dr["PointsExpiry"]));
+                    }
+                    if (!string.IsNullOrEmpty(Convert.ToString(dr["LastTxnDate"])))
+                    {
+                        //dr["TxnDatetime"] = Convert.ToDateTime(dr["TxnDatetime"]).ToString("MM/dd/yyyy");
+                        dr["LastTxnDate"] = DateTime.ParseExact(Convert.ToString(dr["LastTxnDate"]), "dd/MM/yyyy", CultureInfo.InvariantCulture)
+                        .ToString("MM/dd/yyyy", CultureInfo.InvariantCulture);                        
+                    }
+                    if (!string.IsNullOrEmpty(Convert.ToString(dr["ExpiryDate"])))
+                    {
+                        //dr["TxnDatetime"] = Convert.ToDateTime(dr["TxnDatetime"]).ToString("MM/dd/yyyy");
+                        dr["ExpiryDate"] = DateTime.ParseExact(Convert.ToString(dr["ExpiryDate"]), "dd/MM/yyyy", CultureInfo.InvariantCulture)
+                        .ToString("MM/dd/yyyy", CultureInfo.InvariantCulture);
+                    }
                 }
                 table.Columns.Remove("TotalSpend");
                 table.Columns.Remove("AvlPoints");
@@ -709,7 +757,6 @@ namespace WebApp.Controllers
             {
                 return null;
             }
-
 
         }
 
@@ -746,9 +793,26 @@ namespace WebApp.Controllers
 
                 foreach (DataRow dr in table.Rows)
                 {
-                    dr["TotalSpendStr"] = String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(dr["TotalSpend"]));
-                    dr["AvlPointsStr"] = String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(dr["AvlPoints"]));
-                    
+                    if (!string.IsNullOrEmpty(Convert.ToString(dr["TotalSpend"])))
+                    {
+                        dr["TotalSpendStr"] = String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(dr["TotalSpend"]));
+                    }
+                    if (!string.IsNullOrEmpty(Convert.ToString(dr["AvlPoints"])))
+                    {
+                        dr["AvlPointsStr"] = String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(dr["AvlPoints"]));
+                    }
+                    if (!string.IsNullOrEmpty(Convert.ToString(dr["LastTxnDate"])))
+                    {
+                        //dr["TxnDatetime"] = Convert.ToDateTime(dr["TxnDatetime"]).ToString("MM/dd/yyyy");
+                        dr["LastTxnDate"] = DateTime.ParseExact(Convert.ToString(dr["LastTxnDate"]), "dd/MM/yyyy", CultureInfo.InvariantCulture)
+                        .ToString("MM/dd/yyyy", CultureInfo.InvariantCulture);
+                    }
+                    if (!string.IsNullOrEmpty(Convert.ToString(dr["CelebrationDate"])))
+                    {
+                        //dr["TxnDatetime"] = Convert.ToDateTime(dr["TxnDatetime"]).ToString("MM/dd/yyyy");
+                        dr["CelebrationDate"] = DateTime.ParseExact(Convert.ToString(dr["CelebrationDate"]), "dd/MM/yyyy", CultureInfo.InvariantCulture)
+                        .ToString("MM/dd/yyyy", CultureInfo.InvariantCulture);
+                    }
                 }
                 table.Columns.Remove("TotalSpend");
                 table.Columns.Remove("AvlPoints");
@@ -864,9 +928,30 @@ namespace WebApp.Controllers
                 }
                 foreach (DataRow dr in table.Rows)
                 {
-                    dr["TotalSpendStr"] = String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(dr["TotalSpend"]));
-                    dr["AvlBalPointsStr"] = String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(dr["AvlBalPoints"]));
-                    dr["TotalBurnPointsStr"] = String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(dr["TotalBurnPoints"]));
+                    if (!string.IsNullOrEmpty(Convert.ToString(dr["TotalSpend"])))
+                    {
+                        dr["TotalSpendStr"] = String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(dr["TotalSpend"]));
+                    }
+                    if (!string.IsNullOrEmpty(Convert.ToString(dr["AvlBalPoints"])))
+                    {
+                        dr["AvlBalPointsStr"] = String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(dr["AvlBalPoints"]));
+                    }
+                    if (!string.IsNullOrEmpty(Convert.ToString(dr["TotalBurnPoints"])))
+                    {
+                        dr["TotalBurnPointsStr"] = String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(dr["TotalBurnPoints"]));
+                    }
+                    if (!string.IsNullOrEmpty(Convert.ToString(dr["LastTxnDate"])))
+                    {
+                        //dr["TxnDatetime"] = Convert.ToDateTime(dr["TxnDatetime"]).ToString("MM/dd/yyyy");
+                        dr["LastTxnDate"] = DateTime.ParseExact(Convert.ToString(dr["LastTxnDate"]), "dd/MM/yyyy", CultureInfo.InvariantCulture)
+                        .ToString("MM/dd/yyyy", CultureInfo.InvariantCulture);
+                    }
+                    if (!string.IsNullOrEmpty(Convert.ToString(dr["EnrolledDate"])))
+                    {
+                        //dr["TxnDatetime"] = Convert.ToDateTime(dr["TxnDatetime"]).ToString("MM/dd/yyyy");
+                        dr["EnrolledDate"] = DateTime.ParseExact(Convert.ToString(dr["EnrolledDate"]), "dd/MM/yyyy", CultureInfo.InvariantCulture)
+                        .ToString("MM/dd/yyyy", CultureInfo.InvariantCulture);
+                    }
                 }
                 
                 table.Columns.Remove("TotalSpend");

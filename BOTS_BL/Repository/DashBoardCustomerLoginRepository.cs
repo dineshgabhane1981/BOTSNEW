@@ -93,7 +93,7 @@ namespace BOTS_BL.Repository
                                LoginType = c.LoginType,
                                MobileNo = c.MobileNo,
                                LoginStatus = c.LoginStatus,
-                               CreatedDate = c.CreatedDate.ToString(),
+                               CreatedDate = c.CreatedDate,
                                LevelIndicator = c.LevelIndicator,
                                UserName = c.UserName,
                                Password = c.Password,
@@ -102,6 +102,11 @@ namespace BOTS_BL.Repository
                                CustomerName =c.UserName,
 
                            }).OrderByDescending(x => x.CreatedDate).ToList();
+
+                foreach(var item in objdashboard)
+                {
+                    item.CreatedDateStr = item.CreatedDate.Value.ToString("MM/dd/yyyy");
+                }
 
             }
             return objdashboard;

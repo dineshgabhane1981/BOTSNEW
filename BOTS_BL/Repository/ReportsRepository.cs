@@ -9,7 +9,7 @@ using System.Data.Entity.Migrations;
 using System.Data.SqlClient;
 using System.Web.Mvc;
 using BOTS_BL.Models.Reports;
-
+using System.Globalization;
 
 namespace BOTS_BL.Repository
 {
@@ -194,7 +194,7 @@ namespace BOTS_BL.Repository
             }
             catch (Exception ex)
             {
-                throw ex;
+                newexception.AddException(ex, GroupId);
             }
             return pointExpiryTxn;
         }
@@ -217,6 +217,24 @@ namespace BOTS_BL.Repository
                         new SqlParameter("@pi_Date", DateTime.Now.ToShortDateString()),
                         new SqlParameter("@pi_LoginId", loginId),
                         new SqlParameter("@pi_SearchData", searchData)).ToList<MemberSearchTxn>();
+
+                    foreach(var item in memberSearch.lstMemberSearchTxn)
+                    {
+                        if (!string.IsNullOrEmpty(item.TxnDatetime))
+                        {
+                            var subDate = Convert.ToString(item.TxnDatetime).Substring(0, 10);                             
+                            var convertedDate = DateTime.ParseExact(subDate, "dd/MM/yyyy", CultureInfo.InvariantCulture)
+                            .ToString("MM/dd/yyyy", CultureInfo.InvariantCulture);
+                            item.TxnDatetime = convertedDate;                           
+                        }
+                        if (!string.IsNullOrEmpty(item.TxnUpdateDate))
+                        {
+                            var subDate = Convert.ToString(item.TxnUpdateDate).Substring(0, 10);
+                            var convertedDate = DateTime.ParseExact(subDate, "dd/MM/yyyy", CultureInfo.InvariantCulture)
+                            .ToString("MM/dd/yyyy", CultureInfo.InvariantCulture);
+                            item.TxnUpdateDate = convertedDate;
+                        }
+                    }
                 }
             }
             catch (Exception ex)

@@ -62,8 +62,8 @@ namespace BOTS_BL.Repository
                 }
                 if (FromDate.HasValue)
                 {
-                    dashboardMemberSegment.FromDate = FromDate.Value.ToString("dd-MM-yyyy");
-                    dashboardMemberSegment.ToDate = DateTime.Now.ToString("dd-MM-yyyy");
+                    dashboardMemberSegment.FromDate = FromDate.Value.ToString("MM-dd-yyyy");
+                    dashboardMemberSegment.ToDate = DateTime.Now.ToString("MM-dd-yyyy");
                 }
             }
 

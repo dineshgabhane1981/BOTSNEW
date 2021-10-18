@@ -103,7 +103,7 @@ namespace BOTS_BL.Repository
                             }
                         }
                         else
-                        { 
+                        {
                             context.BOTS_TblGroupMaster.AddOrUpdate(objGroup);
                             context.SaveChanges();
 
@@ -145,8 +145,8 @@ namespace BOTS_BL.Repository
                                 context.SaveChanges();
                             }
                         }
-                        
-                       
+
+
 
                         transaction.Commit();
                     }
@@ -203,9 +203,11 @@ namespace BOTS_BL.Repository
                         objItem.PaymentStatus = context.BOTS_TblDealDetails.Where(x => x.GroupId == item.GroupId).Select(y => y.PaymentStatus).FirstOrDefault();
 
                         var BPId = context.BOTS_TblRetailMaster.Where(x => x.GroupId == item.GroupId).Select(y => y.BillingPartner).FirstOrDefault();
-                        var bId = Convert.ToInt32(BPId);
-
-                        objItem.BillingPartnerName = context.tblBillingPartners.Where(x => x.BillingPartnerId == bId).Select(y => y.BillingPartnerName).FirstOrDefault();
+                        if (!string.IsNullOrEmpty(BPId))
+                        {
+                            var bId = Convert.ToInt32(BPId);
+                            objItem.BillingPartnerName = context.tblBillingPartners.Where(x => x.BillingPartnerId == bId).Select(y => y.BillingPartnerName).FirstOrDefault();
+                        }
                         objItem.CustomerStatus = item.CustomerStatus;
                         onBoardingListings.Add(objItem);
                     }
@@ -262,10 +264,13 @@ namespace BOTS_BL.Repository
             using (var context = new CommonDBContext())
             {
                 objData = context.BOTS_TblRetailMaster.Where(x => x.GroupId == GroupId).ToList();
-                foreach(var item in objData)
+                foreach (var item in objData)
                 {
-                    var BillingPartner = Convert.ToInt32(item.BillingPartner);
-                    item.BillingPartnerName = context.tblBillingPartners.Where(x => x.BillingPartnerId == BillingPartner).Select(y => y.BillingPartnerName).FirstOrDefault();
+                    if (!string.IsNullOrEmpty(item.BillingPartner))
+                    {
+                        var BillingPartner = Convert.ToInt32(item.BillingPartner);
+                        item.BillingPartnerName = context.tblBillingPartners.Where(x => x.BillingPartnerId == BillingPartner).Select(y => y.BillingPartnerName).FirstOrDefault();
+                    }
                     var BillingProduct = Convert.ToInt32(item.BillingProduct);
                     item.BillingProductName = context.BOTS_TblBillingPartnerProduct.Where(x => x.BillingPartnerProductId == BillingProduct).Select(y => y.BillingPartnerProductName).FirstOrDefault();
                 }
@@ -387,7 +392,7 @@ namespace BOTS_BL.Repository
             using (var context = new CommonDBContext())
             {
                 var loginTypeList = new List<string> { "2", "3", "4" };
-                lstEmails = context.CustomerLoginDetails.Where(x => x.EmailId != null && x.LoginType !=null && !loginTypeList.Contains(x.LoginType)).Select(y => y.EmailId).ToList();
+                lstEmails = context.CustomerLoginDetails.Where(x => x.EmailId != null && x.LoginType != null && !loginTypeList.Contains(x.LoginType)).Select(y => y.EmailId).ToList();
             }
 
             return lstEmails;

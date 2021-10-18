@@ -169,8 +169,17 @@ namespace WebApp.Controllers
 
                     table.Rows.Add(row);
                 }
-                //table.Columns.Remove("OutletId");
-                table.Columns.Remove("MobileNo");
+                foreach (DataRow dr in table.Rows)
+                {
+                    if (!string.IsNullOrEmpty(Convert.ToString(dr["LastTxnDate"])))
+                    {
+                        //dr["TxnDatetime"] = Convert.ToDateTime(dr["TxnDatetime"]).ToString("MM/dd/yyyy");
+                        dr["LastTxnDate"] = DateTime.ParseExact(Convert.ToString(dr["LastTxnDate"]), "dd/MM/yyyy", CultureInfo.InvariantCulture)
+                        .ToString("MM/dd/yyyy", CultureInfo.InvariantCulture);
+                    }
+                }
+                    //table.Columns.Remove("OutletId");
+                    table.Columns.Remove("MobileNo");
                 table.Columns["MaskedMobileNo"].ColumnName = "MobileNo";
                 string fileName = ReportName + ".xlsx";
                 using (XLWorkbook wb = new XLWorkbook())
@@ -299,6 +308,15 @@ namespace WebApp.Controllers
                     table.Columns.Remove("MobileNo");
                     table.Columns["MaskedMobileNo"].ColumnName = "MobileNo";
                 }
+                foreach (DataRow dr in table.Rows)
+                {
+                    if (!string.IsNullOrEmpty(Convert.ToString(dr["LastTxnDate"])))
+                    {
+                        //dr["TxnDatetime"] = Convert.ToDateTime(dr["TxnDatetime"]).ToString("MM/dd/yyyy");
+                        dr["LastTxnDate"] = DateTime.ParseExact(Convert.ToString(dr["LastTxnDate"]), "dd/MM/yyyy", CultureInfo.InvariantCulture)
+                        .ToString("MM/dd/yyyy", CultureInfo.InvariantCulture);
+                    }
+                }
                 string fileName = ReportName + ".xlsx";
                 using (XLWorkbook wb = new XLWorkbook())
                 {
@@ -342,6 +360,15 @@ namespace WebApp.Controllers
                         row[prop.Name] = prop.GetValue(item) ?? DBNull.Value;
 
                     table.Rows.Add(row);
+                }
+                foreach (DataRow dr in table.Rows)
+                {
+                    if (!string.IsNullOrEmpty(Convert.ToString(dr["LastTxnDate"])))
+                    {
+                        //dr["TxnDatetime"] = Convert.ToDateTime(dr["TxnDatetime"]).ToString("MM/dd/yyyy");
+                        dr["LastTxnDate"] = DateTime.ParseExact(Convert.ToString(dr["LastTxnDate"]), "dd/MM/yyyy", CultureInfo.InvariantCulture)
+                        .ToString("MM/dd/yyyy", CultureInfo.InvariantCulture);
+                    }
                 }
                 if (userDetails.LoginType == "1")
                 {

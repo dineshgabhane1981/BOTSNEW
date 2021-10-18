@@ -94,6 +94,8 @@
 <script src="~/Scripts/jquery-ui-1.12.1.min.js"></script>
 <link href="~/Content/themes/base/jquery-ui.min.css" rel="stylesheet" />
 <link href="~/Content/themes/base/jquery-ui.css" rel="stylesheet" />
+<!-- Data table Scripts-->
+
 <script>
     var tableData = [];
     $("#OutletList").val('@ViewBag.OutletId');
@@ -107,7 +109,8 @@
         dateFormat: "yy-mm-dd",
         maxDate: today,
     });
-    $(document).ready(function () {        
+    $(document).ready(function () {
+         
         SetFilter();
         GetData();
         $("#rdnMiniStatement").change(function () {
@@ -219,9 +222,10 @@
     }
 
     function DrawTable() {
+        
         var table1 = $('#activityTable').DataTable();
         table1.destroy();
-
+        
         var table = $('#activityTable').DataTable({
             "data": tableData,
             "paging": true,
@@ -231,8 +235,7 @@
             "pageLength": 25,
             "pagingType": "simple_numbers",
             "columns": [
-                { data: "OutletName" },
-                //{ data: "MaskedMobileNo" },
+                { data: "OutletName" },                
                 {
                     "mData": "MaskedMobileNo",
                     "mRender": function (data, type, row) {
@@ -286,7 +289,7 @@
                         }
                     }
                 }
-                 
+
             ],
             "columnDefs": [
                 {
@@ -303,9 +306,10 @@
                 },
                 {
                     "targets": 9,
-                    "type": 'date',
-                }],
-            aoColumnDefs: [
+                    type: 'datetime-moment',
+                }
+                ],
+                aoColumnDefs: [
                 {
                     bSortable: false,
                     aTargets: [-9, -10, -11]
@@ -326,7 +330,7 @@
                 return false;
             });
             var table = $('#activityTable').DataTable();
-            table.draw();
+            table.draw();           
         });
     }
 
