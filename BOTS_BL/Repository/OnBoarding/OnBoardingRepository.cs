@@ -357,9 +357,17 @@ namespace BOTS_BL.Repository
                         });
                     }
                 }
-                if (SourceType == "3")
+                if (SourceType == "4")
                 {
-
+                    var ChannelPartners = context.tblChannelPartners.ToList();
+                    foreach(var item in ChannelPartners)
+                    {
+                        lstRefferedName.Add(new SelectListItem
+                        {
+                            Text = item.CPartnerName,
+                            Value = Convert.ToString(item.CPId)
+                        });
+                    }
                 }
             }
             return lstRefferedName;
