@@ -501,7 +501,6 @@ namespace BOTS_BL.Repository
             return BillingPartnerItem;
         }
 
-
         public List<SelectListItem> GetChannelPartner()
         {
             List<SelectListItem> lstChannelPartner = new List<SelectListItem>();
@@ -545,8 +544,6 @@ namespace BOTS_BL.Repository
             }
             return lstChannelPartner;
         }
-
-
 
         //togetallproduct
         public List<BillingPartnerProductDetails> GetBillingPartnerProductById(int BillingpartnerId)
