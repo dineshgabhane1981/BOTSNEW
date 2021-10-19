@@ -1,102 +1,163 @@
-﻿@model BOTS_BL.Models.SALES_tblLeads
+﻿@model LeadGeneration.ViewModel.LeadViewModel
 @{
     ViewBag.Title = "Add Lead";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+@using (Html.BeginForm("AddSalesLead", "Lead", FormMethod.Post, new { id = "frmaddlead", enctype = "multipart/form-data" }))
+{
+    <div class="app-main__inner">
+        <div class="mb-3 card" style="padding-top:20px;">
+            <div class="content">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-md-6 col-sm-6">
+                            Business Name <br /> @Html.TextBoxFor(model => model.sALES_TblLeads.BusinessName, new { @class = "input40", @id = "txtbusinessnm" })
+                        </div>
+                        <div class="col-md-6 col-sm-6">
+                            Categry <br />@Html.DropDownListFor(model => model.sALES_TblLeads.Category, new SelectList(Model.lstcategory, "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input40", @id = "ddlCategory3" })
 
-<div class="app-main__inner">
-    <div class="mb-3 card" style="padding-top:20px;">
-        <div class="content">
-            <div class="container-fluid">
-                <div class="row">
-                    <div class="col-md-6 col-sm-6">
-                        Business Name <br /> <input class="input100" />
+                        </div>
                     </div>
-                    <div class="col-md-6 col-sm-6">
-                        Categry <br /> <input class="input100" />
+                    <div class="row">
+                        <div class="col-md-6 col-sm-6">
+                            Product <br />@Html.DropDownListFor(model => model.sALES_TblLeads.Product, new SelectList(Model.BOProducts(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input40", @id = "ddlBOProduct1" })
+                        </div>
+                        <div class="col-md-6 col-sm-6">
+                            Billing partner <br /> @Html.DropDownListFor(model => model.sALES_TblLeads.BillingPartner, new SelectList(Model.lstBillingPartner, "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input40", @id = "ddlBillingPartner2" })
+                        </div>
                     </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-6 col-sm-6">
-                        Product <br /> <input class="input100" />
+                    <div class="row">
+                        <div class="col-md-6 col-sm-6">
+                            E-Commerce integration <br /> 
+                            @Html.RadioButtonFor(model => model.sALES_TblLeads.EcomIntegration, true, new { @id = "IsEcommerceYes" }) Yes
+                            @Html.RadioButtonFor(model => model.sALES_TblLeads.EcomIntegration, false, new { @id = "IsEcommerceNo" }) No
+                        </div>
+                        <div class="col-md-6 col-sm-6">
+                            Number of outlet <br /> @Html.TextBoxFor(model => model.sALES_TblLeads.NoOfOutlet, new { @class = "input40", @id = "txtnoofoutlet" })
+                        </div>
                     </div>
-                    <div class="col-md-6 col-sm-6">
-                        Billing partner <br /> <input class="input100" />
+                    <div class="row">
+                        <div class="col-md-6 col-sm-6">
+                            Address <br />@Html.TextBoxFor(model => model.sALES_TblLeads.Address, new { @class = "input40", @id = "txtaddress" })
+                        </div>
+                        <div class="col-md-6 col-sm-6">
+                            State <br />@Html.DropDownListFor(model => model.sALES_TblLeads.State, new SelectList(Model.lstStates, "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input100", @id = "ddlState"})
+                        </div>
                     </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-6 col-sm-6">
-                        E-Commerce integration <br /> <input class="input100" />
+                    <div class="row">
+                        <div class="col-md-6 col-sm-6">
+                            City <br />@Html.DropDownListFor(model => model.sALES_TblLeads.City, new SelectList(Model.lstCity, "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input100", @id = "ddlCity"})
+                        </div>
+                        <div class="col-md-6 col-sm-6">
+                            Pincode <br /> @Html.TextBoxFor(model => model.sALES_TblLeads.Pincode, new { @class = "input40", @id = "txtpincode" })
+                        </div>
+                    </div>                    
+                    <div class="row">
+                        <div class="col-md-6 col-sm-6">
+                            Contact type <br />@Html.DropDownListFor(model => model.sALES_TblLeads.ContactType, new SelectList(Model.ContactType(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input40", @id = "ddlcontacttype" })
+                        </div>
+                        <div class="col-md-6 col-sm-6">
+                            Met /spoke with <br />@Html.TextBoxFor(model => model.sALES_TblLeads.SpokeWith, new { @class = "input40", @id = "txtspokenwith" })
+                        </div>
                     </div>
-                    <div class="col-md-6 col-sm-6">
-                        Number of outlet <br /> <input class="input100" />
+                    <div class="row">
+                        <div class="col-md-6 col-sm-6">
+                            Mobile no<br /> @Html.TextBoxFor(model => model.sALES_TblLeads.MobileNo, new { @class = "input40", @id = "txtmobileno" })
+                        </div>
+                        <div class="col-md-6 col-sm-6">
+                            Lead status <br />@Html.DropDownListFor(model => model.sALES_TblLeads.LeadStatus, new SelectList(Model.LeadStatus(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input40", @id = "ddlleadstatus" })
+                        </div>
                     </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-6 col-sm-6">
-                        Address <br /><input class="input100" />
+                    <div class="row">
+                        <div class="col-md-6 col-sm-6">
+                            Price quoted <br />@Html.TextBoxFor(model => model.sALES_TblLeads.PriceQuoted, new { @class = "input40", @id = "txtpricequoted" })
+                        </div>
+                        <div class="col-md-6 col-sm-6">
+                            Meeting type  <br />@Html.DropDownListFor(model => model.sALES_TblLeads.MeetingType, new SelectList(Model.MeetingType(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input40", @id = "ddlmeetingtype" })
+                        </div>
                     </div>
-                    <div class="col-md-6 col-sm-6">
-                        State <br /><input class="input100" />
+                    <div class="row">
+                        <div class="col-md-6 col-sm-6">
+                            Follow up date <br />@Html.TextBoxFor(model => model.sALES_TblLeads.FollowupDate, new { @class = "input40", @id = "txtfollowupdt" })
+                        </div>
+                        <div class="col-md-6 col-sm-6">
+                            Lead source <br />@Html.DropDownListFor(model => model.sALES_TblLeads.LeadSource, new SelectList(Model.ContactType(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input40", @id = "ddlleadsource" })
+                        </div>
                     </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-6 col-sm-6">
-                        City <br /><input class="input100" />
+                    <div class="row">
+                        <div class="col-md-6 col-sm-6">
+                            Lead source Name <br />@Html.TextBoxFor(model => model.sALES_TblLeads.LeadSourceName, new { @class = "input40", @id = "txtleadsourcenm" })
+                        </div>
+                        <div class="col-md-6 col-sm-6">
+                            Comments <br />@Html.TextBoxFor(model => model.sALES_TblLeads.Comments, new { @class = "input40", @id = "txtcomment" })
+                        </div>
                     </div>
-                    <div class="col-md-6 col-sm-6">
-                        Pincode <br /> <input class="input100" />
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-6 col-sm-6">
-                        Business Name <br /><input class="input100" />
-                    </div>
-                    <div class="col-md-6 col-sm-6">
-                        Categry<br /> <input class="input100" />
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-6 col-sm-6">
-                        Contact type <br /><input class="input100" />
-                    </div>
-                    <div class="col-md-6 col-sm-6">
-                        Met /spoke with <br /><input class="input100" />
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-6 col-sm-6">
-                        Mobile no<br /> <input class="input100" />
-                    </div>
-                    <div class="col-md-6 col-sm-6">
-                        Lead status <br /><input class="input100" />
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-6 col-sm-6">
-                        Price quoted <br /><input class="input100" />
-                    </div>
-                    <div class="col-md-6 col-sm-6">
-                        Meeting type  <br /><input class="input100" />
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-6 col-sm-6">
-                        Follow up date <br /><input class="input100" />
-                    </div>
-                    <div class="col-md-6 col-sm-6">
-                        Lead source <br /><input class="input100" />
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-6 col-sm-6">
-                        Lead source Name <br /><input class="input100" />
-                    </div>
-                    <div class="col-md-6 col-sm-6">
-                        Comments <br /><input class="input100" />
+                    <div class="row">
+                        <div class="col-md-6 col-sm-6">
+
+                            <button type="button" id="btnCustomerSubmit" class="btn btn-primary pull-right" style="margin-right:10px;">Submit</button>
+                            <button type="submit" id="btnCustomerSave" class="btn btn-primary pull-right"onclick="return CheckValidation();" style="margin-right:10px;">Save</button>
+
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
+}
+<script>
+    $(document).ready(function () {
+        var today = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
+        $("#txtfollowupdt").datepicker({
+            dateFormat: "yy-mm-dd",
+            minDate: today,
+        });
+    });
+    function CheckValidation() {
+        var returnStatus = true;      
+
+        if (returnStatus) {
+           // var data = $('#frmaddlead').serialize();
+           // var id = $("#hdnGroupID").val();
+            $("#divLoader").show();
+            $.ajax({
+                url: $('#frmaddlead').attr('action'),
+                type: 'post',
+                dataType: "html",
+                data: data,
+                success: function (response) {
+                    console.log(response)
+                    if (response) {
+                        cuteAlert({
+                            type: "success",
+                            title: "Saved",
+                            message: "Sales Lead saved Successfully !!!",
+                            buttonText: "Okay"
+                        })
+                       // BindListing();
+                      //  $("#dvAddDiscussion").hide(1000);
+                        $("#divLoader").hide();
+                    }
+                    else {
+                        $("#divLoader").hide();
+                        cuteAlert({
+                            type: "error",
+                            title: "Oops..",
+                            message: "Problem occured in saving Sales Lead",
+                            buttonText: "Okay"
+                        })
+                    }
+                }
+            });
+        }
+        else {
+            cuteAlert({
+                type: "error",
+                title: "Oops..",
+                message: "Please enter Required fields",
+                buttonText: "Okay"
+            })
+            return false;
+        }
+    }
+</script>
