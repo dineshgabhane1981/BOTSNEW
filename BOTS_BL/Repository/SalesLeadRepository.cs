@@ -35,5 +35,18 @@ namespace BOTS_BL.Repository
             }
                 return status;
         }
+
+        public List<SALES_tblLeads> GetSalesLeads()
+        {
+            List<SALES_tblLeads> lstsaleslead = new List<SALES_tblLeads>();
+            DateTime today = DateTime.Today;
+            DateTime tommrowdt = today.AddDays(1);
+            using(var context = new CommonDBContext())
+            {
+                lstsaleslead = context.SALES_tblLeads.Where(x => x.FollowupDate == today || x.FollowupDate == tommrowdt).ToList();
+            }
+            return lstsaleslead;
+        }
+
     }
 }

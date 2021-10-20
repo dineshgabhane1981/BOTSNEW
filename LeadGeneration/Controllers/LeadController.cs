@@ -18,18 +18,29 @@ namespace LeadGeneration.Controllers
         SalesLeadRepository SLR = new SalesLeadRepository();
         public ActionResult Index()
         {
-            return View();
-        }
+            LeadViewModel objviewmodel = new LeadViewModel();
+            objviewmodel.lstsALES_TblLeads = SLR.GetSalesLeads();
+            return View(objviewmodel);
 
-        public ActionResult AddLead()
+        }
+        public ActionResult AddLead(string leadId)
         {
             LeadViewModel objviewmodel = new LeadViewModel();
             SALES_tblLeads objData = new SALES_tblLeads();
-            objviewmodel.lstBillingPartner = CR.GetBillingPartner();
-            objviewmodel.lstcategory = CR.GetRetailCategory();
-            objviewmodel.lstStates = CR.GetStates();
-            objviewmodel.lstCity = CR.GetCity();
-            objviewmodel.sALES_TblLeads = objData;
+            if (!string.IsNullOrEmpty(leadId))
+            {
+
+            }
+            else
+            {
+                objviewmodel.lstBillingPartner = CR.GetBillingPartner();
+                objviewmodel.lstcategory = CR.GetRetailCategory();
+                objviewmodel.lstStates = CR.GetStates();
+                objviewmodel.lstCity = CR.GetCity();
+                objviewmodel.sALES_TblLeads = objData;
+            }
+                
+            
             return View(objviewmodel);
         }
         [HttpPost]

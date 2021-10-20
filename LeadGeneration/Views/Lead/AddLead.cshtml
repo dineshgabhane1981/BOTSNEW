@@ -28,7 +28,7 @@
                     </div>
                     <div class="row">
                         <div class="col-md-6 col-sm-6">
-                            E-Commerce integration <br /> 
+                            E-Commerce integration <br />
                             @Html.RadioButtonFor(model => model.sALES_TblLeads.EcomIntegration, true, new { @id = "IsEcommerceYes" }) Yes
                             @Html.RadioButtonFor(model => model.sALES_TblLeads.EcomIntegration, false, new { @id = "IsEcommerceNo" }) No
                         </div>
@@ -41,17 +41,17 @@
                             Address <br />@Html.TextBoxFor(model => model.sALES_TblLeads.Address, new { @class = "input40", @id = "txtaddress" })
                         </div>
                         <div class="col-md-6 col-sm-6">
-                            State <br />@Html.DropDownListFor(model => model.sALES_TblLeads.State, new SelectList(Model.lstStates, "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input100", @id = "ddlState"})
+                            State <br />@Html.DropDownListFor(model => model.sALES_TblLeads.State, new SelectList(Model.lstStates, "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input100", @id = "ddlState" })
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-6 col-sm-6">
-                            City <br />@Html.DropDownListFor(model => model.sALES_TblLeads.City, new SelectList(Model.lstCity, "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input100", @id = "ddlCity"})
+                            City <br />@Html.DropDownListFor(model => model.sALES_TblLeads.City, new SelectList(Model.lstCity, "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input100", @id = "ddlCity" })
                         </div>
                         <div class="col-md-6 col-sm-6">
                             Pincode <br /> @Html.TextBoxFor(model => model.sALES_TblLeads.Pincode, new { @class = "input40", @id = "txtpincode" })
                         </div>
-                    </div>                    
+                    </div>
                     <div class="row">
                         <div class="col-md-6 col-sm-6">
                             Contact type <br />@Html.DropDownListFor(model => model.sALES_TblLeads.ContactType, new SelectList(Model.ContactType(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input40", @id = "ddlcontacttype" })
@@ -95,8 +95,8 @@
                     <div class="row">
                         <div class="col-md-6 col-sm-6">
 
-                            <button type="button" id="btnCustomerSubmit" class="btn btn-primary pull-right" style="margin-right:10px;">Submit</button>
-                            <button type="submit" id="btnCustomerSave" class="btn btn-primary pull-right"onclick="return CheckValidation();" style="margin-right:10px;">Save</button>
+                            <button type="submit" id="btnCustomerSave" class="btn btn-primary pull-right" onclick="return CheckValidation();" style="margin-right:10px;">Save</button>
+                            <button type="button" id="btnCustomerSubmit" class="btn btn-primary pull-right" style="margin-right:10px;">cancel</button>
 
                         </div>
                     </div>
@@ -114,50 +114,57 @@
         });
     });
     function CheckValidation() {
-        var returnStatus = true;      
 
-        if (returnStatus) {
-           // var data = $('#frmaddlead').serialize();
-           // var id = $("#hdnGroupID").val();
-            $("#divLoader").show();
-            $.ajax({
-                url: $('#frmaddlead').attr('action'),
-                type: 'post',
-                dataType: "html",
-                data: data,
-                success: function (response) {
-                    console.log(response)
-                    if (response) {
-                        cuteAlert({
-                            type: "success",
-                            title: "Saved",
-                            message: "Sales Lead saved Successfully !!!",
-                            buttonText: "Okay"
-                        })
-                       // BindListing();
-                      //  $("#dvAddDiscussion").hide(1000);
-                        $("#divLoader").hide();
-                    }
-                    else {
-                        $("#divLoader").hide();
-                        cuteAlert({
-                            type: "error",
-                            title: "Oops..",
-                            message: "Problem occured in saving Sales Lead",
-                            buttonText: "Okay"
-                        })
-                    }
+        //var returnStatus = true;
+
+        //if (returnStatus) {
+        // var data = $('#frmaddlead').serialize();
+        // var id = $("#hdnGroupID").val();
+        $("#divLoader").show();
+        $.ajax({
+            url: $('#frmaddlead').attr('action'),
+            type: 'post',
+            dataType: "html",
+            data: data,
+            success: function (response) {
+                console.log(response)
+                if (response) {
+                    cuteAlert({
+                        type: "success",
+                        title: "Saved",
+                        message: "Sales Lead saved Successfully !!!",
+                        buttonText: "Okay"
+                    })
+                    // BindListing();
+                    //  $("#dvAddDiscussion").hide(1000);
+                    $("#divLoader").hide();
                 }
-            });
-        }
-        else {
-            cuteAlert({
-                type: "error",
-                title: "Oops..",
-                message: "Please enter Required fields",
-                buttonText: "Okay"
-            })
-            return false;
-        }
+                else {
+                    $("#divLoader").hide();
+                    cuteAlert({
+                        type: "error",
+                        title: "Oops..",
+                        message: "Problem occured in saving Sales Lead",
+                        buttonText: "Okay"
+                    })
+                }
+            }
+        });
+        // }
+        //else {
+        //    cuteAlert({
+        //        type: "error",
+        //        title: "Oops..",
+        //        message: "Please enter Required fields",
+        //        buttonText: "Okay"
+        //    })
+        //    return false;
+        //}
     }
 </script>
+<script src="~/Scripts/jquery-ui-1.12.1.js"></script>
+<script src="~/Scripts/jquery-ui-1.12.1.min.js"></script>
+<link href="~/Content/themes/base/jquery-ui.min.css" rel="stylesheet" />
+<link href="~/Content/themes/base/jquery-ui.css" rel="stylesheet" />
+
+

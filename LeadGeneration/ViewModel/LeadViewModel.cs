@@ -12,6 +12,7 @@ namespace LeadGeneration.ViewModel
     public class LeadViewModel
     {
         public SALES_tblLeads sALES_TblLeads { get; set; }
+        public List<SALES_tblLeads> lstsALES_TblLeads { get; set; }
         public List<SelectListItem> lstcategory { get; set; }
         public List<SelectListItem> lstBillingPartner { get; set; }
         public List<SelectListItem> lstLeadSource { get; set; }
@@ -33,9 +34,6 @@ namespace LeadGeneration.ViewModel
         {
             return new SelectListItem[6] { new SelectListItem() { Text = "1st Call", Value = "1stcall" }, new SelectListItem() { Text = "1st Meeting", Value = "1stMeeting" }, new SelectListItem() { Text = "Follow Up", Value = "followup" }, new SelectListItem() { Text = "Closure", Value = "Closure" }, new SelectListItem() { Text = "Sales Done", Value = "salesdone" }, new SelectListItem() { Text = "Other", Value = "other" } };
         }
-        //public SelectListItem[] LeadSource()
-        //{
-        //    return new SelectListItem[5] { new SelectListItem() { Text = "Self", Value = "self" }, new SelectListItem() { Text = "Tele Caller", Value = "telecaller" }, new SelectListItem() { Text = "Reference", Value = "reference" }, new SelectListItem() { Text = "BillingPartner", Value = "salesdone" }, new SelectListItem() { Text = "Other", Value = "other" } };
-        //}
+        
     }
 }
