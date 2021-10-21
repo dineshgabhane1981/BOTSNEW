@@ -136,5 +136,7 @@ namespace BOTS_BL.Models
         public string AssignedCSName { get; set; }
         [NotMapped]
         public string SourceTypeName { get; set; }
+        [NotMapped]
+        public string ReferredNameNew { get; set; }
     }
 }

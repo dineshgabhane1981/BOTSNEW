@@ -104,6 +104,13 @@ namespace BOTS_BL.Repository
                         }
                         else
                         {
+                            if(objGroup.Referredby!="1" && objGroup.Referredby != "3" && objGroup.Referredby != "4" && objGroup.Referredby != "6")
+                            {
+                                if(!string.IsNullOrEmpty(objGroup.ReferredNameNew))
+                                {
+                                    objGroup.ReferredName = objGroup.ReferredNameNew;
+                                }
+                            }
                             context.BOTS_TblGroupMaster.AddOrUpdate(objGroup);
                             context.SaveChanges();
 

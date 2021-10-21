@@ -264,6 +264,55 @@
     </div>
 </div>
 <script>
+    (function () {
+
+        var customDateDDMMMYYYYToOrd = function (date) {
+            var dateTime = date.split(' '),
+                dateObj = new Date(dateTime[0].replace(/-/g, ' ')),
+                time = "00:00",
+                type = "AM";
+            if (dateTime.length > 1) { // if time part and am/pm part is available
+                time = dateTime[1],
+                    type = dateTime[2];
+            }
+
+            var splitTime = time.split(":"),
+                hours = type == "PM" ? Number(splitTime[0]) + 12 : Number(splitTime[0]),
+                minutes = Number(splitTime[1]),
+                seconds = 0,
+                milliseconds = 0;
+            return new Date(dateObj.getFullYear(), dateObj.getMonth(), dateObj.getDate(), hours, minutes, seconds, milliseconds);
+        };
+
+        // This will help DataTables magic detect the "dd-MMM-yyyy" format; Unshift
+        // so that it's the first data type (so it takes priority over existing)
+        jQuery.fn.dataTableExt.aTypes.unshift(
+            function (sData) {
+                "use strict"; //let's avoid tom-foolery in this function
+                if (/^([0-2]?\d|3[0-1])-(jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)-\d{4}/i.test(sData)) {
+                    return 'date-dd-mmm-yyyy';
+                }
+                return null;
+            }
+        );
+
+        // define the sorts
+        jQuery.fn.dataTableExt.oSort['date-dd-mmm-yyyy-asc'] = function (a, b) {
+            "use strict"; //let's avoid tom-foolery in this function
+            var ordA = customDateDDMMMYYYYToOrd(a),
+                ordB = customDateDDMMMYYYYToOrd(b);
+            return (ordA < ordB) ? -1 : ((ordA > ordB) ? 1 : 0);
+        };
+
+        jQuery.fn.dataTableExt.oSort['date-dd-mmm-yyyy-desc'] = function (a, b) {
+            "use strict"; //let's avoid tom-foolery in this function
+            var ordA = customDateDDMMMYYYYToOrd(a),
+                ordB = customDateDDMMMYYYYToOrd(b);
+            return (ordA < ordB) ? 1 : ((ordA > ordB) ? -1 : 0);
+        };
+
+    })();
+
     $(document).ready(function () {
         $('#memberSearchTable').DataTable({
             "aaSorting": [[7, "asc"]],
@@ -273,6 +322,9 @@
             "bFilter": true,
             "pageLength": 10,
             "pagingType": "simple_numbers",
+            columnDefs: [
+                { type: 'date-dd-mmm-yyyy', targets: 7 } //add this part
+            ],
             //language: {
             //    paginate: {
             //        next: '&#8594;', // or '→'

@@ -440,7 +440,7 @@
                                 @Html.RadioButtonFor(model => model.bots_TblGroupMaster.IsWhatsApp, false, new { @id = "IsWhatsAppNo" }) No
                             </div>
 
-                            
+
                         </div>
                         <div class="row" style="margin: 0;">
                             <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
@@ -516,6 +516,7 @@
                             </div>
                             <div class="col-sm-4" style="float:left;margin-top:10px;">
                                 @Html.DropDownListFor(model => model.bots_TblGroupMaster.ReferredName, new SelectList(Model.lstAllGroups, "Value", "Text"), htmlAttributes: new { @class = "input100", @id = "ddlReferredName" })
+                                @Html.TextBoxFor(model => model.bots_TblGroupMaster.ReferredNameNew, new { @class = "input100", style = "display: none;",  @id = "txtReferredName" })
                             </div>
                         </div>
                         <div class="row" style="margin: 0;">
@@ -2531,6 +2532,9 @@
             Installments.push(item);
         }
         $("#hdnPaymentScheduleData").val(JSON.stringify(Installments));
+        //alert($("#ddlReferredName").val());
+        $("#hdnReferredName").val($("#ddlReferredName").val());
+        
     }
 
     function LoadEditData() {
@@ -2606,7 +2610,8 @@
     }
 
     function FillRefferedName(id,refName) {
-        if ($("#ddlReferredby option:selected").text() != "Please Select") {
+        if (id == 1 || id == 3 || id == 4) {
+
                 $.ajax({
                     type: "POST",
                     url: '@Url.Action("GetRefferedName", "CustomerOnBoarding")',
@@ -2621,16 +2626,35 @@
                         if (refName != "") {
                             $("#ddlReferredName").val(refName);
                         }
+                        $("#ddlReferredName").show();
+                        $("#txtReferredName").hide();
                     },
                     error: function (result) {
                         //console.log(result.responseText);
                     }
                 });
+        }
+        else
+        {
+            if ($("#ddlReferredby option:selected").text() == "Please Select") {
+                $("#ddlReferredName").empty();
+                $("#ddlReferredName").append($("<option />").val(0).text("Please Select"));
+                $("#ddlReferredName").show();
+                $("#txtReferredName").hide();
+            }
+            else if ($("#ddlReferredby option:selected").text() == "Cold Call")
+            {
+                $("#ddlReferredName").hide();
+                $("#txtReferredName").hide();
             }
             else {
                 $("#ddlReferredName").empty();
-                $("#ddlReferredName").append($("<option />").val(0).text("Please Select"));
+                $("#ddlReferredName").hide();
+                $("#txtReferredName").show();
+                $("#txtReferredName").val(refName);
+                
             }
+        }
     }
 
     function CheckOutletData(buttonType) {

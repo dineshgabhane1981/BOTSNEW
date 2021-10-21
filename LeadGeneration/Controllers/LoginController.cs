@@ -38,7 +38,7 @@ namespace LeadGeneration.Controllers
                     }
                     else
                     {
-                        TempData["InvalidUserMessage"] = "User Does not Exist";
+                        TempData["InvalidUserMessage"] = "User Does not Exist"; 
                     }
                 }
                 else
