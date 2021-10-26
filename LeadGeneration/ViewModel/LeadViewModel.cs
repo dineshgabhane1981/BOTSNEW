@@ -12,7 +12,7 @@ namespace LeadGeneration.ViewModel
     public class LeadViewModel
     {
         public SALES_tblLeads sALES_TblLeads { get; set; }
-        public List<SALES_tblLeads> lstsALES_TblLeads { get; set; }
+        public List<SalesLead> lstsALES_TblLeads { get; set; }
         public List<SelectListItem> lstcategory { get; set; }
         public List<SelectListItem> lstBillingPartner { get; set; }
         public List<SelectListItem> lstLeadSource { get; set; }

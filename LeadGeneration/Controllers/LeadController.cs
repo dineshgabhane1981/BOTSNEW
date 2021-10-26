@@ -55,7 +55,9 @@ namespace LeadGeneration.Controllers
             try
             {
                 var userDetails = (CustomerLoginDetail)Session["UserSession"];
-
+                
+                objData.sALES_TblLeads.AddedDate = DateTime.Now;
+                objData.sALES_TblLeads.AddedBy = userDetails.LoginId;
                 status = SLR.AddSalesLead(objData.sALES_TblLeads);
                
             }

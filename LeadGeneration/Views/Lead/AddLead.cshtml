@@ -5,6 +5,7 @@
 }
 @using (Html.BeginForm("AddSalesLead", "Lead", FormMethod.Post, new { id = "frmaddlead", enctype = "multipart/form-data" }))
 {
+    @Html.HiddenFor(model => model.sALES_TblLeads.LeadId, new { @id = "hdnLeadId" })
     <div class="app-main__inner">
         <div class="mb-3 card" style="padding-top:20px;">
             <div class="content">
@@ -14,16 +15,16 @@
                             Business Name <br /> @Html.TextBoxFor(model => model.sALES_TblLeads.BusinessName, new { @class = "input100", @id = "txtbusinessnm" })
                         </div>
                         <div class="col-md-6 col-sm-6">
-                            Categry <br />@Html.DropDownListFor(model => model.sALES_TblLeads.Category, new SelectList(Model.lstcategory, "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input100", @id = "ddlCategory3" })
+                            Categry <br />@Html.DropDownListFor(model => model.sALES_TblLeads.Category, new SelectList(Model.lstcategory, "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input100", @id = "ddlCategory" })
 
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-6 col-sm-6">
-                            Product <br />@Html.DropDownListFor(model => model.sALES_TblLeads.Product, new SelectList(Model.BOProducts(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input100", @id = "ddlBOProduct1" })
+                            Product <br />@Html.DropDownListFor(model => model.sALES_TblLeads.Product, new SelectList(Model.BOProducts(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input100", @id = "ddlBOProduct" })
                         </div>
                         <div class="col-md-6 col-sm-6">
-                            Billing partner <br /> @Html.DropDownListFor(model => model.sALES_TblLeads.BillingPartner, new SelectList(Model.lstBillingPartner, "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input100", @id = "ddlBillingPartner2" })
+                            Billing partner <br /> @Html.DropDownListFor(model => model.sALES_TblLeads.BillingPartner, new SelectList(Model.lstBillingPartner, "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input100", @id = "ddlBillingPartner" })
                         </div>
                     </div>
                     <div class="row">
@@ -95,7 +96,7 @@
                     <div class="row">
                         <div class="col-md-6 col-sm-6">
 
-                            <button type="submit" id="btnCustomerSave" class="btn btn-primary pull-right" onclick="return CheckValidation();" style="margin-right:10px;">Save</button>
+                            <button type="submit" id="btnCustomerSave" class="btn btn-primary pull-right"  style="margin-right:10px;">Save</button>
                             <button type="button" id="btnCustomerSubmit" class="btn btn-primary pull-right" style="margin-right:10px;">cancel</button>
 
                         </div>
@@ -116,7 +117,7 @@
 
             var dt = $("#hdnLeadId").val();
             //console.log(dt);
-            //EnableDisableData();
+            EnableDisableData();
             //$("#hdnLeadId").val("");
         }
     });
@@ -124,15 +125,15 @@
         $("#txtbusinessnm").attr("readonly", true);
         $('#txtbusinessnm').css('background-color', '#d3d3d3');
         $("#ddlCategory").attr("disabled", true);
-        // $('#ddlCategory').css('background-color', '#d3d3d3');
+         $('#ddlCategory').css('background-color', '#d3d3d3');
         $("#ddlBOProduct").attr("disabled", true);
-        // $('#ddlBOProduct').css('background-color', '#d3d3d3');
-        $("#txtnoofoutlet").attr("readonly", true);
+         $('#ddlBOProduct').css('background-color', '#d3d3d3');
+        //$("#txtnoofoutlet").attr("readonly", true);
         // $('#txtnoofoutlet').css('background-color', '#d3d3d3');
         $("#ddlCity").attr("disabled", true);
-        // $('#ddlCity').css('background-color', '#d3d3d3');
+         $('#ddlCity').css('background-color', '#d3d3d3');
         $("#txtpincode").attr("readonly", true);
-        // $('#txtpincode').css('background-color', '#d3d3d3');
+         $('#txtpincode').css('background-color', '#d3d3d3');
         $("#txtmobileno").attr("readonly", true);
 
     }
