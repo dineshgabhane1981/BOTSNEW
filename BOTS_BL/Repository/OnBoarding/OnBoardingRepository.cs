@@ -117,6 +117,14 @@ namespace BOTS_BL.Repository
                             var lstRetail = context.BOTS_TblRetailMaster.Where(x => x.GroupId == objGroup.GroupId).ToList();
                             foreach (var item in lstRetail)
                             {
+                                if(string.IsNullOrEmpty(item.BillingPartner))
+                                {
+                                    item.BillingPartner = "0";
+                                }
+                                if (string.IsNullOrEmpty(item.BillingProduct))
+                                {
+                                    item.BillingProduct = "0";
+                                }
                                 context.BOTS_TblRetailMaster.Remove(item);
                                 context.SaveChanges();
                             }

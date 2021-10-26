@@ -10,8 +10,7 @@ namespace BOTS_BL.Models.CommonDB
     {
         public int BillingPartnerId { get; set; }
 
-        [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.None)]
+        [Key]        
         public int BillingPartnerProductId { get; set; }
 
         [Required]

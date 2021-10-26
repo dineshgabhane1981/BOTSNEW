@@ -11,19 +11,19 @@
                 <div class="container-fluid">
                     <div class="row">
                         <div class="col-md-6 col-sm-6">
-                            Business Name <br /> @Html.TextBoxFor(model => model.sALES_TblLeads.BusinessName, new { @class = "input40", @id = "txtbusinessnm" })
+                            Business Name <br /> @Html.TextBoxFor(model => model.sALES_TblLeads.BusinessName, new { @class = "input100", @id = "txtbusinessnm" })
                         </div>
                         <div class="col-md-6 col-sm-6">
-                            Categry <br />@Html.DropDownListFor(model => model.sALES_TblLeads.Category, new SelectList(Model.lstcategory, "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input40", @id = "ddlCategory3" })
+                            Categry <br />@Html.DropDownListFor(model => model.sALES_TblLeads.Category, new SelectList(Model.lstcategory, "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input100", @id = "ddlCategory3" })
 
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-6 col-sm-6">
-                            Product <br />@Html.DropDownListFor(model => model.sALES_TblLeads.Product, new SelectList(Model.BOProducts(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input40", @id = "ddlBOProduct1" })
+                            Product <br />@Html.DropDownListFor(model => model.sALES_TblLeads.Product, new SelectList(Model.BOProducts(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input100", @id = "ddlBOProduct1" })
                         </div>
                         <div class="col-md-6 col-sm-6">
-                            Billing partner <br /> @Html.DropDownListFor(model => model.sALES_TblLeads.BillingPartner, new SelectList(Model.lstBillingPartner, "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input40", @id = "ddlBillingPartner2" })
+                            Billing partner <br /> @Html.DropDownListFor(model => model.sALES_TblLeads.BillingPartner, new SelectList(Model.lstBillingPartner, "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input100", @id = "ddlBillingPartner2" })
                         </div>
                     </div>
                     <div class="row">
@@ -33,12 +33,12 @@
                             @Html.RadioButtonFor(model => model.sALES_TblLeads.EcomIntegration, false, new { @id = "IsEcommerceNo" }) No
                         </div>
                         <div class="col-md-6 col-sm-6">
-                            Number of outlet <br /> @Html.TextBoxFor(model => model.sALES_TblLeads.NoOfOutlet, new { @class = "input40", @id = "txtnoofoutlet" })
+                            Number of outlet <br /> @Html.TextBoxFor(model => model.sALES_TblLeads.NoOfOutlet, new { @class = "input100", @id = "txtnoofoutlet" })
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-6 col-sm-6">
-                            Address <br />@Html.TextBoxFor(model => model.sALES_TblLeads.Address, new { @class = "input40", @id = "txtaddress" })
+                            Address <br />@Html.TextBoxFor(model => model.sALES_TblLeads.Address, new { @class = "input100", @id = "txtaddress" })
                         </div>
                         <div class="col-md-6 col-sm-6">
                             State <br />@Html.DropDownListFor(model => model.sALES_TblLeads.State, new SelectList(Model.lstStates, "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input100", @id = "ddlState" })
@@ -49,47 +49,47 @@
                             City <br />@Html.DropDownListFor(model => model.sALES_TblLeads.City, new SelectList(Model.lstCity, "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input100", @id = "ddlCity" })
                         </div>
                         <div class="col-md-6 col-sm-6">
-                            Pincode <br /> @Html.TextBoxFor(model => model.sALES_TblLeads.Pincode, new { @class = "input40", @id = "txtpincode" })
+                            Pincode <br /> @Html.TextBoxFor(model => model.sALES_TblLeads.Pincode, new { @class = "input100", @id = "txtpincode" })
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-6 col-sm-6">
-                            Contact type <br />@Html.DropDownListFor(model => model.sALES_TblLeads.ContactType, new SelectList(Model.ContactType(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input40", @id = "ddlcontacttype" })
+                            Contact type <br />@Html.DropDownListFor(model => model.sALES_TblLeads.ContactType, new SelectList(Model.ContactType(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input100", @id = "ddlcontacttype" })
                         </div>
                         <div class="col-md-6 col-sm-6">
-                            Met /spoke with <br />@Html.TextBoxFor(model => model.sALES_TblLeads.SpokeWith, new { @class = "input40", @id = "txtspokenwith" })
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6 col-sm-6">
-                            Mobile no<br /> @Html.TextBoxFor(model => model.sALES_TblLeads.MobileNo, new { @class = "input40", @id = "txtmobileno" })
-                        </div>
-                        <div class="col-md-6 col-sm-6">
-                            Lead status <br />@Html.DropDownListFor(model => model.sALES_TblLeads.LeadStatus, new SelectList(Model.LeadStatus(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input40", @id = "ddlleadstatus" })
+                            Met /spoke with <br />@Html.TextBoxFor(model => model.sALES_TblLeads.SpokeWith, new { @class = "input100", @id = "txtspokenwith" })
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-6 col-sm-6">
-                            Price quoted <br />@Html.TextBoxFor(model => model.sALES_TblLeads.PriceQuoted, new { @class = "input40", @id = "txtpricequoted" })
+                            Mobile no<br /> @Html.TextBoxFor(model => model.sALES_TblLeads.MobileNo, new { @class = "input100", @id = "txtmobileno" })
                         </div>
                         <div class="col-md-6 col-sm-6">
-                            Meeting type  <br />@Html.DropDownListFor(model => model.sALES_TblLeads.MeetingType, new SelectList(Model.MeetingType(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input40", @id = "ddlmeetingtype" })
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6 col-sm-6">
-                            Follow up date <br />@Html.TextBoxFor(model => model.sALES_TblLeads.FollowupDate, new { @class = "input40", @id = "txtfollowupdt" })
-                        </div>
-                        <div class="col-md-6 col-sm-6">
-                            Lead source <br />@Html.DropDownListFor(model => model.sALES_TblLeads.LeadSource, new SelectList(Model.ContactType(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input40", @id = "ddlleadsource" })
+                            Lead status <br />@Html.DropDownListFor(model => model.sALES_TblLeads.LeadStatus, new SelectList(Model.LeadStatus(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input100", @id = "ddlleadstatus" })
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-6 col-sm-6">
-                            Lead source Name <br />@Html.TextBoxFor(model => model.sALES_TblLeads.LeadSourceName, new { @class = "input40", @id = "txtleadsourcenm" })
+                            Price quoted <br />@Html.TextBoxFor(model => model.sALES_TblLeads.PriceQuoted, new { @class = "input100", @id = "txtpricequoted" })
                         </div>
                         <div class="col-md-6 col-sm-6">
-                            Comments <br />@Html.TextBoxFor(model => model.sALES_TblLeads.Comments, new { @class = "input40", @id = "txtcomment" })
+                            Meeting type  <br />@Html.DropDownListFor(model => model.sALES_TblLeads.MeetingType, new SelectList(Model.MeetingType(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input100", @id = "ddlmeetingtype" })
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 col-sm-6">
+                            Follow up date <br />@Html.TextBoxFor(model => model.sALES_TblLeads.FollowupDate, new { @class = "input100", @id = "txtfollowupdt" })
+                        </div>
+                        <div class="col-md-6 col-sm-6">
+                            Lead source <br />@Html.DropDownListFor(model => model.sALES_TblLeads.LeadSource, new SelectList(Model.ContactType(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input100", @id = "ddlleadsource" })
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 col-sm-6">
+                            Lead source Name <br />@Html.TextBoxFor(model => model.sALES_TblLeads.LeadSourceName, new { @class = "input100", @id = "txtleadsourcenm" })
+                        </div>
+                        <div class="col-md-6 col-sm-6">
+                            Comments <br />@Html.TextBoxFor(model => model.sALES_TblLeads.Comments, new { @class = "input100", @id = "txtcomment" })
                         </div>
                     </div>
                     <div class="row">

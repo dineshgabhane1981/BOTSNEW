@@ -1109,12 +1109,14 @@
 
         $('#ddlBOProduct1').change(function () {
             if ($("#ddlBOProduct1 option:selected").text() == "Please Select") {
-                $('#ddlBOProduct1').css('border-color', 'red');
+                $('#ddlBOProduct1').css('border-color', 'red');               
                 $('#ddlBillingPartner1').attr("disabled", false);
                 $('#ddlBPProduct1').attr("disabled", false);
             }
             else {
                 if ($("#ddlBOProduct1 option:selected").text() == "Octa XS") {
+                    $('#ddlBillingPartner1').prop('selectedIndex', 0);
+                    $('#ddlBPProduct1').prop('selectedIndex', 0);
                     $('#ddlBillingPartner1').attr("disabled", true);
                     $('#ddlBPProduct1').attr("disabled", true);
                 }
@@ -1135,6 +1137,8 @@
             }
             else {
                 if ($("#ddlBOProduct2 option:selected").text() == "Octa XS") {
+                    $('#ddlBillingPartner2').prop('selectedIndex', 0);
+                    $('#ddlBPProduct2').prop('selectedIndex', 0);
                     $('#ddlBillingPartner2').attr("disabled", true);
                     $('#ddlBPProduct2').attr("disabled", true);
                 }
@@ -1156,6 +1160,8 @@
             else {
 
                 if ($("#ddlBOProduct3 option:selected").text() == "Octa XS") {
+                    $('#ddlBillingPartner3').prop('selectedIndex', 0);
+                    $('#ddlBPProduct3').prop('selectedIndex', 0);
                     $('#ddlBillingPartner3').attr("disabled", true);
                     $('#ddlBPProduct3').attr("disabled", true);
                 }
@@ -1176,6 +1182,8 @@
             }
             else {
                 if ($("#ddlBOProduct4 option:selected").text() == "Octa XS") {
+                    $('#ddlBillingPartner4').prop('selectedIndex', 0);
+                    $('#ddlBPProduct4').prop('selectedIndex', 0);
                     $('#ddlBillingPartner4').attr("disabled", true);
                     $('#ddlBPProduct4').attr("disabled", true);
                 }
@@ -2549,10 +2557,16 @@
             $("#txtNoOfOutlets" + (i + 1)).val(CategoryObj[i].NoOfOutlets);
             $("#txtNoOfEnrolled" + (i + 1)).val(CategoryObj[i].NoOfEnrolled);
             $("#ddlBOProduct" + (i + 1)).val(CategoryObj[i].BOProduct);
-            $("#ddlBillingPartner" + (i + 1)).val(CategoryObj[i].BillingPartner);
-            FillBillingPartnerProducts($("#ddlBillingPartner" + (i + 1)).val(), i + 1, CategoryObj[i].BillingProduct);
+            if (CategoryObj[i].BOProduct == 1) {
+                $("#ddlBillingPartner" + (i + 1)).val(CategoryObj[i].BillingPartner);
+                FillBillingPartnerProducts($("#ddlBillingPartner" + (i + 1)).val(), i + 1, CategoryObj[i].BillingProduct);
 
-            $("#ddlBPProduct" + (i + 1)).val(CategoryObj[i].BillingProduct);
+                $("#ddlBPProduct" + (i + 1)).val(CategoryObj[i].BillingProduct);
+            }
+            else {
+                $("#ddlBillingPartner" + (i + 1)).attr("disabled", true);
+                $("#ddlBPProduct" + (i + 1)).attr("disabled", true);
+            }
         }
         if ($("#ddlPaymentFrequency option:selected").text() == "Installments") {
             $("#dvPaymentSection").show();
