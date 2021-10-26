@@ -29,7 +29,12 @@ namespace LeadGeneration.Controllers
             SALES_tblLeads objData = new SALES_tblLeads();
             if (!string.IsNullOrEmpty(leadId))
             {
-
+                objviewmodel.lstBillingPartner = CR.GetBillingPartner();
+                objviewmodel.lstcategory = CR.GetRetailCategory();
+                objviewmodel.lstStates = CR.GetStates();
+                objviewmodel.lstCity = CR.GetCity();
+                objData = SLR.GetsalesLeadByLeadId(Convert.ToInt32(leadId));
+                objviewmodel.sALES_TblLeads = objData;
             }
             else
             {
@@ -43,13 +48,14 @@ namespace LeadGeneration.Controllers
             
             return View(objviewmodel);
         }
-        [HttpPost]
+        
         public bool AddSalesLead(LeadViewModel objData)
         {
             bool status = false;
             try
             {
                 var userDetails = (CustomerLoginDetail)Session["UserSession"];
+
                 status = SLR.AddSalesLead(objData.sALES_TblLeads);
                
             }

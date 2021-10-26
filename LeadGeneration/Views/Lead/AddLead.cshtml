@@ -112,7 +112,30 @@
             dateFormat: "yy-mm-dd",
             minDate: today,
         });
+        if ($("#hdnLeadId").val() != 0) {
+
+            var dt = $("#hdnLeadId").val();
+            //console.log(dt);
+            //EnableDisableData();
+            //$("#hdnLeadId").val("");
+        }
     });
+    function EnableDisableData() {
+        $("#txtbusinessnm").attr("readonly", true);
+        $('#txtbusinessnm').css('background-color', '#d3d3d3');
+        $("#ddlCategory").attr("disabled", true);
+        // $('#ddlCategory').css('background-color', '#d3d3d3');
+        $("#ddlBOProduct").attr("disabled", true);
+        // $('#ddlBOProduct').css('background-color', '#d3d3d3');
+        $("#txtnoofoutlet").attr("readonly", true);
+        // $('#txtnoofoutlet').css('background-color', '#d3d3d3');
+        $("#ddlCity").attr("disabled", true);
+        // $('#ddlCity').css('background-color', '#d3d3d3');
+        $("#txtpincode").attr("readonly", true);
+        // $('#txtpincode').css('background-color', '#d3d3d3');
+        $("#txtmobileno").attr("readonly", true);
+
+    }
     function CheckValidation() {
 
         //var returnStatus = true;
@@ -125,9 +148,8 @@
             url: $('#frmaddlead').attr('action'),
             type: 'post',
             dataType: "html",
-            data: data,
             success: function (response) {
-                console.log(response)
+                alert(response);
                 if (response) {
                     cuteAlert({
                         type: "success",
@@ -135,8 +157,7 @@
                         message: "Sales Lead saved Successfully !!!",
                         buttonText: "Okay"
                     })
-                    // BindListing();
-                    //  $("#dvAddDiscussion").hide(1000);
+
                     $("#divLoader").hide();
                 }
                 else {
