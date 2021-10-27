@@ -120,6 +120,18 @@
             EnableDisableData();
             //$("#hdnLeadId").val("");
         }
+
+        $('#ddlmeetingtype option').each(function (item) {
+            if ($("#hdnLeadId").val() != 0) {
+                if (item == 0 || item == 1) {
+                    
+                    $("#ddlmeetingtype option[value*='" + item + "']").prop('disabled', true);
+                    $("#ddlmeetingtype option[value*='" + item + "']").addClass('optionClass');
+
+                }
+            }
+
+        });
     });
     function EnableDisableData() {
         $("#txtbusinessnm").attr("readonly", true);

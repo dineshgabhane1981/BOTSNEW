@@ -314,6 +314,7 @@
     <Content Include="Views\Shared\_SidebarMenu.cshtml" />
     <Content Include="Views\Lead\Index.cshtml" />
     <Content Include="Views\Lead\AddLead.cshtml" />
+    <Content Include="Views\Lead\SalesCount.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
