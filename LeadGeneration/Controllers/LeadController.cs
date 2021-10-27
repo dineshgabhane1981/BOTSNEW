@@ -20,6 +20,9 @@ namespace LeadGeneration.Controllers
         {
             LeadViewModel objviewmodel = new LeadViewModel();
             objviewmodel.lstsALES_TblLeads = SLR.GetSalesLeads();
+            objviewmodel.lstCity = CR.GetCity();
+            objviewmodel.lstBillingPartner = CR.GetBillingPartner();
+            objviewmodel.lstSalesManager = SLR.GetSalesManager();
             return View(objviewmodel);
 
         }

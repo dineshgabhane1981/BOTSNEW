@@ -64,7 +64,10 @@
 
                         <div class="widget-content-left  ml-3 header-user-info">
                             <div class="widget-heading">
-                                @userDetails.UserName
+                                @if (userDetails != null)
+                                {
+                                    @userDetails.UserName
+                                }
                             </div>
                         </div>
                         <div class="widget-content-left">

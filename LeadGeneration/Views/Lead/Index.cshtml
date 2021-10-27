@@ -1,70 +1,185 @@
 ﻿@model LeadGeneration.ViewModel.LeadViewModel
+@using BOTS_BL.Models;
 @{
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    var userDetails = (CustomerLoginDetail)Session["UserSession"];
 }
 
+
 <div class="app-main__inner">
-    <div class="row">
-        <div style="text-align:right;">
-            <a href="@Url.Action("AddLead", "Lead")" title="Add Lead">  <img src="~/Content/assets/images/AddCustomer.png" /></a>
-        </div>
-    </div>
-    <div class="pt-3 pl-3 pr-3 col-md-12 col-lg-12">
-        <div class="row">
-            <div class="col search-container">
-                <i class="fas fa-search"></i>
-                <input class="input100" type="text" id="txtSearchOnBoarding" placeholder="Search activity..." />
-            </div>
-        </div>
-        <div class="row mt-3" id="dvOnBoardingData">
-            <div class="table-responsive">
-                <table class="table" id="OnBoardingTable">
-                    <thead>
-                        <tr>
-                            <th scope="col">LeadId</th>
-                            <th scope="col">Business Name</th>
-                            <th scope="col">Mobile No</th>
-                            <th scope="col">Contact Type</th>
-                            <th scope="col">Lead Status</th>
-                            <th scope="col">Follow Up Date</th>
-                            <th scope="col">City</th>
-                            <th scope="col" style="text-align:center;">Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @if (Model != null)
+    <div class="row card">
+        <div class="container-fluid pt-3 pl-3 pr-3 pb-3">
+            <h4> Search Lead</h4>
+            <div class="content">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-md-6 col-sm-6">
+                            Mobile Number <br /> <input id="txtMobileNo" type="text" class="input100" />
+                        </div>
+                        <div class="col-md-6 col-sm-6">
+                            Business Name
+                            <br /><input id="txtBusinessName" type="text" class="input100" />
+
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 col-sm-6">
+                            Date Range <br /> <input id="txtDtFrom" type="text" class="input40" />
+                            <input id="txtDtTo" type="text" class="input40" />
+                        </div>
+                        <div class="col-md-6 col-sm-6">
+                            Billing partner <br /> @Html.DropDownListFor(model => model.sALES_TblLeads.BillingPartner, new SelectList(Model.lstBillingPartner, "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input100", @id = "ddlBillingPartner" })
+                        </div>
+
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 col-sm-6">
+                            Lead status <br />@Html.DropDownListFor(model => model.sALES_TblLeads.LeadStatus, new SelectList(Model.LeadStatus(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input100", @id = "ddlleadstatus" })
+                        </div>
+                        <div class="col-md-6 col-sm-6">
+                            Contact type <br />@Html.DropDownListFor(model => model.sALES_TblLeads.ContactType, new SelectList(Model.ContactType(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input100", @id = "ddlcontacttype" })
+
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 col-sm-6">
+                            Meeting type  <br />@Html.DropDownListFor(model => model.sALES_TblLeads.MeetingType, new SelectList(Model.MeetingType(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input100", @id = "ddlmeetingtype" })
+                        </div>
+                        <div class="col-md-6 col-sm-6">
+                            City <br />@Html.DropDownListFor(model => model.sALES_TblLeads.City, new SelectList(Model.lstCity, "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input100", @id = "ddlCity" })
+
+                        </div>
+                    </div>
+                    <div class="row">
+
+                        @if (userDetails != null)
                         {
-                            if (Model.lstsALES_TblLeads != null)
+                            if (userDetails.LoginType == "1" || userDetails.LoginType == "5")
                             {
-                                foreach (var item in Model.lstsALES_TblLeads)
-                                {
-
-                                    string LeadId = Convert.ToString(item.LeadId);
-                        <tr>
-                            
-                            <td><a href="#" onclick="ShowCustomerDetails(@item.LeadId);">@item.LeadId</a></td>
-
-                            <td>@item.BusinessName</td>
-                            <td>@item.MobileNo</td>
-                            <td>@item.ContactType</td>
-                            <td>@item.LeadStatus</td>
-                            <td>@item.FollowupDate</td>
-                            <td>@item.CityName</td>
-                            <td style="text-align:center;">
-                                <a href="@Url.Action("AddLead", "Lead", new {leadId= LeadId})"  class="login" title="Edit"><img src="~/Content/assets/images/shape_editUser.png" /></a>
-
-                            </td>
-
-                        </tr>
-                                }
+                                <div class="col-md-6 col-sm-6">
+                                    Sales Manager <br />@Html.DropDownListFor(model => model.sALES_TblLeads.AddedBy, new SelectList(Model.lstSalesManager, "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input100", @id = "ddlSalesManager" })
+                                </div>
                             }
                         }
-                    </tbody>
-                </table>
+                    </div>
+
+                    <div class="row pb-3 pt-3">
+                        <div class="col-md-12 col-sm-12 pull-right">
+                            <button type="button" id="btnReset" class="btn btn-primary pull-right" style="margin-right:10px;">Reset</button>
+                            <button type="button" id="btnSearch" class="btn btn-primary pull-right" style="margin-right:10px;">Search</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="container-fluid pt-3 pl-3 pr-3 pb-3" id="dvSearchLeads" style="display:none;">
+            List
+        </div>
+    </div>
+</div>
+<div class="app-main__inner">
+    <div class="row  card">
+        <div class="container-fluid pt-3 pl-3 pr-3">
+            <div style="text-align:left;">
+                <h4>Today / Tomorrow's Follow Ups</h4>
+            </div>
+            <div style="text-align:right;">
+                <a href="@Url.Action("AddLead", "Lead")" title="Add Lead">  <img src="~/Content/assets/images/AddCustomer.png" /></a>
+            </div>
+        </div>
+        <div class="pt-3 pl-3 pr-3 col-md-12 col-lg-12">
+            <div class="row">
+                <div class="col search-container">
+                    <i class="fas fa-search"></i>
+                    <input class="input100" type="text" id="txtSearchOnBoarding" placeholder="Search activity..." />
+                </div>
+            </div>
+            <div class="row mt-3" id="dvOnBoardingData">
+                <div class="table-responsive">
+                    <table class="table" id="OnBoardingTable">
+                        <thead>
+                            <tr>
+                                <th scope="col">LeadId</th>
+                                <th scope="col">Business Name</th>
+                                <th scope="col">Mobile No</th>
+                                <th scope="col">Contact Type</th>
+                                <th scope="col">Lead Status</th>
+                                <th scope="col">Follow Up Date</th>
+                                <th scope="col">City</th>
+                                <th scope="col" style="text-align:center;">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (Model != null)
+                            {
+                                if (Model.lstsALES_TblLeads != null)
+                                {
+                                    foreach (var item in Model.lstsALES_TblLeads)
+                                    {
+
+                                        string LeadId = Convert.ToString(item.LeadId);
+                            <tr>
+
+                                <td><a href="#" onclick="ShowCustomerDetails(@item.LeadId);">@item.LeadId</a></td>
+
+                                <td>@item.BusinessName</td>
+                                <td>@item.MobileNo</td>
+                                <td>@item.ContactType</td>
+                                <td>@item.LeadStatus</td>
+                                <td>@item.FollowupDate</td>
+                                <td>@item.CityName</td>
+                                <td style="text-align:center;">
+                                    <a href="@Url.Action("AddLead", "Lead", new {leadId= LeadId})" class="login" title="Edit"><img src="~/Content/assets/images/shape_editUser.png" /></a>
+
+                                </td>
+                            </tr>
+                                    }
+                                }
+                            }
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
 </div>
 
+<script>
+    $(document).ready(function () {
+        var today = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
+        $("#txtDtFrom").datepicker({
+            dateFormat: "yy-mm-dd",
+            minDate: today,
+        });
+
+        $("#txtDtTo").datepicker({
+            dateFormat: "yy-mm-dd",
+            minDate: today,
+        });
+
+        $('#btnSearch').on("click", function () {
+            GetSearchLeads();
+        });
+    });
+
+    function GetSearchLeads() {
+        var SeardhData = [];
+        item = {}
+        item["MobileNo"] = $("#txtMobileNo").val();
+        item["BusinessName"] = $("#txtBusinessName").val();
+        item["DtFrom"] = $("#txtDtFrom").val();
+        item["DtTo"] = $("#txtDtTo").val();
+        item["BillingPartner"] = $("#ddlBillingPartner").val();
+        item["LeadStatus"] = $("#ddlleadstatus :selected").text();
+        item["ContactType"] = $("#ddlcontacttype :selected").text();
+        item["MeetingType"] = $("#ddlcontacttype :selected").text();
+        item["City"] = $("#ddlCity").val();
+        item["SalesManager"] = $("#ddlSalesManager").val();
+
+        SeardhData.push(item);
+    }
+
+</script>
 

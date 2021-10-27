@@ -128,6 +128,23 @@ namespace BOTS_BL.Repository
             }
             return lstsaleslead;
         }
+        public List<SelectListItem> GetSalesManager()
+        {
+            List<SelectListItem> lstSalesManager = new List<SelectListItem>();
+            using (var context = new CommonDBContext())
+            {
+                var SalesManagers = context.CustomerLoginDetails.Where(x=>x.LoginType == "8").ToList();
 
-   }
+                foreach (var item in SalesManagers)
+                {
+                    lstSalesManager.Add(new SelectListItem
+                    {
+                        Text = item.UserName,
+                        Value = Convert.ToString(item.LoginId)
+                    });
+                }
+            }
+            return lstSalesManager;
+        }
+    }
 }

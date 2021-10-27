@@ -394,9 +394,10 @@ namespace WebApp.Controllers
         public ActionResult ExportToExcelTransactionwise(string DateRangeFlag, string fromDate, string toDate, string outletId, string EnrolmentDataFlag, string ReportName)
         {
             System.Data.DataTable table = new System.Data.DataTable();
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
             try
             {
-                var userDetails = (CustomerLoginDetail)Session["UserSession"];
+                
                 if (outletId.Equals("All"))
                 {
                     outletId = "";
@@ -454,10 +455,10 @@ namespace WebApp.Controllers
                     {
                         //dr["TxnUpdateDate"] = Convert.ToDateTime(dr["TxnUpdateDate"]).ToString("MM/dd/yyyy hh:mm:ss");
                         var subDate = Convert.ToString(dr["TxnUpdateDate"]).Substring(0, 10);
-                        var subTime = Convert.ToString(dr["TxnUpdateDate"]).Substring(11, 8);
+                        //var subTime = Convert.ToString(dr["TxnUpdateDate"]).Substring(11, 8);
                         var convertedDate = DateTime.ParseExact(subDate, "dd/MM/yyyy", CultureInfo.InvariantCulture)
                         .ToString("MM/dd/yyyy", CultureInfo.InvariantCulture);
-                        dr["TxnUpdateDate"] = convertedDate + " " + subTime;
+                        dr["TxnUpdateDate"] = convertedDate;// + " " + subTime;
                     }
 
                 }
@@ -490,6 +491,7 @@ namespace WebApp.Controllers
             }
             catch (Exception ex)
             {
+                newexception.AddException(ex, userDetails.GroupId);
                 return null;
             }
 

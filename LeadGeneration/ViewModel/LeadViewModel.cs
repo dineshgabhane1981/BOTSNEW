@@ -18,6 +18,7 @@ namespace LeadGeneration.ViewModel
         public List<SelectListItem> lstLeadSource { get; set; }
         public List<SelectListItem> lstStates { get; set; }
         public List<SelectListItem> lstCity { get; set; }
+        public List<SelectListItem> lstSalesManager { get; set; }
         public SelectListItem[] BOProducts()
         {
             return new SelectListItem[2] { new SelectListItem() { Text = "Octa Plus", Value = "1" }, new SelectListItem() { Text = "Octa XS", Value = "2" } };
