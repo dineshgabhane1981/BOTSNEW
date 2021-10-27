@@ -149,15 +149,15 @@
 <script>
     $(document).ready(function () {
         var today = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
-        $("#txtDtFrom").datepicker({
-            dateFormat: "yy-mm-dd",
-            minDate: today,
-        });
+        //$("#txtDtFrom").datepicker({
+        //    dateFormat: "yy-mm-dd",
+        //    minDate: today,
+        //});
 
-        $("#txtDtTo").datepicker({
-            dateFormat: "yy-mm-dd",
-            minDate: today,
-        });
+        //$("#txtDtTo").datepicker({
+        //    dateFormat: "yy-mm-dd",
+        //    minDate: today,
+        //});
 
         $('#btnSearch').on("click", function () {
             GetSearchLeads();
@@ -179,6 +179,31 @@
         item["SalesManager"] = $("#ddlSalesManager").val();
 
         SeardhData.push(item);
+        var data = JSON.stringify(SeardhData);
+        console.log(data)
+        $("#divLoader").show();
+        
+
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("GetSearchLeads", "Lead")',             
+            data: '{searchData: ' + JSON.stringify(data) + '}',
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                $('#dvSearchLeads').html(response);
+                $('#dvSearchLeads').show(1000);
+                $("#divLoader").hide();
+            },
+            failure: function (response) {
+                $("#divLoader").hide();
+            },
+            error: function (response) {
+                $('#dvSearchLeads').html(response.responseText);
+                $('#dvSearchLeads').show(1000);
+                $("#divLoader").hide();
+            }
+        });
     }
 
 </script>
