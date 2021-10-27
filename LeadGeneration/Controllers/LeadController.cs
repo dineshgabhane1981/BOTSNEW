@@ -74,5 +74,13 @@ namespace LeadGeneration.Controllers
             return status;
 
         }
+    
+        public ActionResult GetSearchLeads(string searchData)
+        {
+            LeadViewModel objviewmodel = new LeadViewModel();
+            return PartialView("_SearchLeadListing", objviewmodel);
+        }
+    
+    
     }
 }
