@@ -1,4 +1,4 @@
-namespace BOTS_BL.Models
+namespace BOTS_BL.Models.SalesLead
 {
     using System;
     using System.Collections.Generic;
@@ -67,5 +67,8 @@ namespace BOTS_BL.Models
         public string AddedBy { get; set; }
 
         public DateTime? AddedDate { get; set; }
+
+        [StringLength(50)]
+        public string AssignedLead { get; set; }
     }
 }

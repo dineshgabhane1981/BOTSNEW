@@ -15,6 +15,7 @@ using System.Data.Entity.Validation;
 using System.Net;
 using System.Web.Script.Serialization;
 using System.Configuration;
+using BOTS_BL.Models.SalesLead;
 
 namespace BOTS_BL.Repository
 {

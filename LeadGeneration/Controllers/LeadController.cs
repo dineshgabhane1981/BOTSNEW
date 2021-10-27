@@ -6,6 +6,7 @@ using System.Web.Mvc;
 using System.Web.Script.Serialization;
 using BOTS_BL;
 using BOTS_BL.Models;
+using BOTS_BL.Models.SalesLead;
 using BOTS_BL.Repository;
 using LeadGeneration.ViewModel;
 

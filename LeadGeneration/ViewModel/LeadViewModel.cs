@@ -5,7 +5,7 @@ using System.Web;
 using System.Web.Mvc;
 using BOTS_BL.Models.CommonDB;
 using BOTS_BL.Models;
-
+using BOTS_BL.Models.SalesLead;
 
 namespace LeadGeneration.ViewModel
 {
