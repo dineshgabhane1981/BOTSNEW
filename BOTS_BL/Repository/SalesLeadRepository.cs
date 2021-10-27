@@ -146,5 +146,14 @@ namespace BOTS_BL.Repository
             }
             return lstSalesManager;
         }
+
+        public List<SalesLead> GetSearchedLeads()
+        {
+            List<SalesLead> lstLeads = new List<SalesLead>();
+
+
+
+            return lstLeads;
+        }
     }
 }

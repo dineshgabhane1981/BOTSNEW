@@ -78,9 +78,9 @@ namespace LeadGeneration.Controllers
         public ActionResult GetSearchLeads(string searchData)
         {
             LeadViewModel objviewmodel = new LeadViewModel();
+            objviewmodel.lstsALES_TblLeads = SLR.GetSearchedLeads();
             return PartialView("_SearchLeadListing", objviewmodel);
-        }
-    
+        }   
     
     }
 }
