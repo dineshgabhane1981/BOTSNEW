@@ -29,7 +29,7 @@ namespace BOTS_BL.Models
         public string MemberName { get; set; }
         public long? ReferralGenerated { get; set; }
         public long? ReferralTransacted { get; set; }
-        public decimal? BusinessGenerated { get; set; }
+        public long? BusinessGenerated { get; set; }
         public string ReferralMobileNo { get; set; }
         public string ReferralName { get; set; }
         public int? TransactionCount { get; set; }
