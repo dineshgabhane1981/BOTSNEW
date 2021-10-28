@@ -109,6 +109,9 @@ namespace WebApp.Controllers.OnBoarding
         {
             BOTS_TblGroupMaster objGroupDetails = new BOTS_TblGroupMaster();
             objGroupDetails.GroupName = leadDetails.BusinessName;
+            objGroupDetails.OwnerName = leadDetails.AuthorizedPerson;
+            objGroupDetails.OwnerMobileNo = leadDetails.MobileNo;
+            objGroupDetails.City = leadDetails.City;
 
             return objGroupDetails;
         }
@@ -116,6 +119,7 @@ namespace WebApp.Controllers.OnBoarding
         [HttpPost]
         public ActionResult AddCustomer(OnBoardingSalesViewModel objData)
         {
+            bool status = false;
             int GroupdId = 0;
             try
             {
@@ -123,7 +127,7 @@ namespace WebApp.Controllers.OnBoarding
                 List<BOTS_TblRetailMaster> objLstRetail = new List<BOTS_TblRetailMaster>();
                 List<BOTS_TblInstallmentDetails> objLstInstallment = new List<BOTS_TblInstallmentDetails>();
                 List<BOTS_TblOutletMaster> objLstOutlet = new List<BOTS_TblOutletMaster>();
-
+                SALES_tblLeads leadDetails = new SALES_tblLeads();
                 List<SelectListItem> refferedname = new List<SelectListItem>();
                 SelectListItem item1 = new SelectListItem();
                 item1.Value = "0";
@@ -202,11 +206,20 @@ namespace WebApp.Controllers.OnBoarding
                         objLstOutlet.Add(objItem);
                     }
                     GroupdId = OBR.AddOnboardingCustomer(objData.bots_TblGroupMaster, objLstRetail, objData.bots_TblDealDetails, objData.bots_TblPaymentDetails, objLstInstallment, objLstOutlet);
+                    if(objData.LeadId != null)
+                    {
+                        status= SLR.UpdateStatus(Convert.ToInt32(objData.LeadId), Convert.ToString(GroupdId));
+                    }
                 }
                 else
                 {
                     GroupdId = OBR.AddOnboardingCustomer(objData.bots_TblGroupMaster, objLstRetail, objData.bots_TblDealDetails, objData.bots_TblPaymentDetails, objLstInstallment, objLstOutlet);
+                    if (objData.LeadId != null)
+                    {
+                        status = SLR.UpdateStatus(Convert.ToInt32(objData.LeadId), Convert.ToString(GroupdId));
+                    }
                 }
+
                 objData.objRetailList = OBR.GetRetailDetails(Convert.ToString(GroupdId));
                 objData.lstOutlets = OBR.GetOutletDetails(Convert.ToString(GroupdId));
                 if (objData.lstOutlets.Count > 0)

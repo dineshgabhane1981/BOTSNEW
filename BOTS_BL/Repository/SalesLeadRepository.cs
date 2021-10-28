@@ -245,5 +245,52 @@ namespace BOTS_BL.Repository
 
             return lstLeads;
         }
+
+        public bool UpdateStatus( int LeadId,string GroupId)
+        {
+            bool status =false;
+            SALES_tblLeads objlead = new SALES_tblLeads();
+            SALES_tblLeadTracking objsalestracking = new SALES_tblLeadTracking();
+            using (var context = new CommonDBContext())
+            {
+                objlead = context.SALES_tblLeads.Where(x => x.LeadId == LeadId).FirstOrDefault();
+                objlead.UpdatedDate = DateTime.Now;
+                objlead.MeetingType = "salesdone";
+                objlead.GroupId = GroupId;
+                context.SALES_tblLeads.AddOrUpdate(objlead);
+                context.SaveChanges();
+
+                objsalestracking.LeadId = objlead.LeadId;
+                objsalestracking.ContactType = objlead.ContactType;
+                objsalestracking.SpokeWith = objlead.SpokeWith;
+                objsalestracking.LeadStatus = objlead.LeadStatus;
+                objsalestracking.MeetingType = "salesdone";
+
+                objsalestracking.FollowupDate = objlead.FollowupDate;
+                objsalestracking.BillingPartner = objlead.BillingPartner;
+                objsalestracking.NoOfOutlet = objlead.NoOfOutlet;
+                objsalestracking.EcomIntegration = objlead.EcomIntegration;
+                objsalestracking.Address = objlead.Address;
+                objsalestracking.State = objlead.State;
+                objsalestracking.AlternateNo = objlead.AlternateNo;
+                objsalestracking.EmailId = objlead.EmailId;
+                objsalestracking.AuthorizedPerson = objlead.AuthorizedPerson;
+                objsalestracking.APMobileNo = objlead.APMobileNo;
+                objsalestracking.PriceQuoted = objlead.PriceQuoted;
+                objsalestracking.LeadSource = objlead.LeadSource;
+                objsalestracking.LeadSourceName = objlead.LeadSourceName;
+                objsalestracking.Comments = objlead.Comments;
+                objsalestracking.AddedBy = objlead.AddedBy;
+                objsalestracking.AddedDate = DateTime.Now;
+
+                context.SALES_tblLeadTracking.AddOrUpdate(objsalestracking);
+                context.SaveChanges();
+                status = true;
+
+            }
+
+            return status;
+
+        }
     }
 }

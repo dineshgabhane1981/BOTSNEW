@@ -158,7 +158,7 @@
                                 <div class="card mb-3 widget-chart widget-chart2 text-left w-100" >
                                     <div class="widget-chat-wrapper-outer" >
                                         <div  id="containerOutlet">
-                                            <canvas id="cvOutlet"></canvas>
+                                            <canvas id="cvOutlet" style=" width:100%; height:100%" !important></canvas>
                                             @*// widget-chart-wrapper widget-chart-wrapper-lg opacity-10 m-0*@
                                         </div>
                                     </div>
@@ -731,6 +731,7 @@
 
                         labels: [...names],
                         datasets: [{
+                          
                             label: '',
                             backgroundColor: [
                                 "#f990a7",
@@ -761,12 +762,23 @@
                                     }
                                 },
                                 scales: {
-                                    xAxes: [{
+                                    xAxes: [{                                        
+                                       
                                         ticks: {
                                             beginAtZero: true
                                         }
-                                    }]
+                                    }],
+                                    //yAxes: [{                                       
+                                    //    categoryPercentage: 0.9,
+                                    //   // barThickness: 10,
+                                    //    stacked: true,
+                                    //    ticks: {
+                                    //        beginAtZero: true
+                                    //    },
+                                    //}]
+                                    
                                 },
+                               
                                 title:
                                 {
                                     display: true,
@@ -794,13 +806,14 @@
                                         ctx.font = Chart.helpers.fontString(Chart.defaults.global.defaultFontSize, Chart.defaults.global.defaultFontStyle, Chart.defaults.global.defaultFontFamily);
                                         ctx.textAlign = 'center';
                                         ctx.textBaseline = 'bottom';
+                                        
 
                                         this.data.datasets.forEach(function (dataset, i) {
                                             var meta = chartInstance.controller.getDatasetMeta(i);
                                             meta.data.forEach(function (bar, index) {
                                                 var data = dataset.data[index];
                                                 ctx.fillStyle = 'rgba(0, 0, 0, 1)';
-                                                ctx.fillText(addComma(data), bar._model.x, bar._model.y - 5);
+                                                ctx.fillText(addComma(data), bar._model.x, bar._model.y);
                                             });
                                         });
                                     }

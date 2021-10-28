@@ -88,58 +88,62 @@ namespace BOTS_BL.Models.SalesLead
 
         [StringLength(50)]
         public string AssignedLead { get; set; }
+
+        [StringLength(4)]
+        public string GroupId { get; set; }
     }
 
     public class SalesLead
     {
         public int LeadId { get; set; }
-        
+
         public string BusinessName { get; set; }
-        
+
         public string Category { get; set; }
-        
+
         public string Product { get; set; }
-       
+
         public string BillingPartner { get; set; }
 
         public bool? EcomIntegration { get; set; }
 
         public int? NoOfOutlet { get; set; }
-       
+
         public string Address { get; set; }
-       
+
         public string State { get; set; }
-        
+
         public string City { get; set; }
-        public int? Pincode { get; set; }        
+        public int? Pincode { get; set; }
         public string ContactType { get; set; }
-        
+
         public string SpokeWith { get; set; }
-        
+
         public string MobileNo { get; set; }
-       
+
         public string AlternateNo { get; set; }
-        
+
         public string EmailId { get; set; }
-        
+
         public string AuthorizedPerson { get; set; }
-       
+
         public string APMobileNo { get; set; }
-        
+
         public string LeadStatus { get; set; }
-       
+
         public string PriceQuoted { get; set; }
-        
+
         public string MeetingType { get; set; }
 
-        public DateTime? FollowupDate { get; set; }        
-        public string LeadSource { get; set; }        
+        public DateTime? FollowupDate { get; set; }
+        public string LeadSource { get; set; }
         public string LeadSourceName { get; set; }
-        public string Comments { get; set; }       
+        public string Comments { get; set; }
         public string AddedBy { get; set; }
         public DateTime? AddedDate { get; set; }
-        public DateTime? UpdatedDate { get; set; }        
+        public DateTime? UpdatedDate { get; set; }
         public string AssignedLead { get; set; }
         public string CityName { get; set; }
+        public string GroupId { get; set; }
     }
 }
