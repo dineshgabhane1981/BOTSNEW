@@ -84,7 +84,7 @@ namespace LeadGeneration.Controllers
             objData.lstStates = CR.GetStates();
             objData.lstCity = CR.GetCity();
             
-            return View("AddLead", objData);
+            return View("AddLead", objData); 
 
         }
 
