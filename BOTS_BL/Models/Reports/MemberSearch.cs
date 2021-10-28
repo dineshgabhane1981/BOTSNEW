@@ -32,6 +32,7 @@ namespace BOTS_BL.Models
         public decimal? BonusPoints { get; set; }
         public string BonusPointsExpiryDate { get; set; }
         public decimal? BonusPointsExpiry { get; set; }
+        public string CardNo { get; set; }
 
         public List<MemberSearchTxn> lstMemberSearchTxn { get; set; }
     }

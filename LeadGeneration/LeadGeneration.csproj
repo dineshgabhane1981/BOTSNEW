@@ -316,6 +316,7 @@
     <Content Include="Views\Lead\AddLead.cshtml" />
     <Content Include="Views\Lead\SalesCount.cshtml" />
     <Content Include="Views\Lead\_SearchLeadListing.cshtml" />
+    <Content Include="Views\Lead\LeadTransfer.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
