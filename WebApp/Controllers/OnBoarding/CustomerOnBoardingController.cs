@@ -112,6 +112,7 @@ namespace WebApp.Controllers.OnBoarding
             objGroupDetails.OwnerName = leadDetails.AuthorizedPerson;
             objGroupDetails.OwnerMobileNo = leadDetails.MobileNo;
             objGroupDetails.City = leadDetails.City;
+            objGroupDetails.OwnerEmailId = leadDetails.EmailId;
 
             return objGroupDetails;
         }
