@@ -14,6 +14,7 @@ using System.Web.Mvc;
 using System.Web.Script.Serialization;
 using WebApp.App_Start;
 using WebApp.ViewModel;
+using BOTS_BL.Models.SalesLead;
 
 namespace WebApp.Controllers.OnBoarding
 {
@@ -21,9 +22,10 @@ namespace WebApp.Controllers.OnBoarding
     {
         CustomerRepository CR = new CustomerRepository();
         OnBoardingRepository OBR = new OnBoardingRepository();
+        SalesLeadRepository SLR = new SalesLeadRepository();
         Exceptions newexception = new Exceptions();
         // GET: CustomerOnBoarding
-        public ActionResult Index(string groupId)
+        public ActionResult Index(string groupId, string LeadId)
         {
             CommonFunctions common = new CommonFunctions();
             if (!string.IsNullOrEmpty(groupId))
@@ -48,7 +50,13 @@ namespace WebApp.Controllers.OnBoarding
                 objData.lstRMAssigned = CR.GetRMAssigned();
                 objData.lstRefferedCategory = CR.GetAllRefferedCategory();
                 objData.lstStates = CR.GetStates();
-                
+                if (!string.IsNullOrEmpty(LeadId))
+                {
+                    var leadDetails = SLR.GetsalesLeadByLeadId(Convert.ToInt32(LeadId));
+                    objData.bots_TblGroupMaster = MeargeLeadeData(leadDetails);
+                    objData.LeadId = LeadId;
+                }
+
                 if (!string.IsNullOrEmpty(groupId))
                 {
                     objData.bots_TblGroupMaster = OBR.GetGroupMasterDetails(groupId);
@@ -96,6 +104,15 @@ namespace WebApp.Controllers.OnBoarding
             }
             return View(objData);
         }
+
+        public BOTS_TblGroupMaster MeargeLeadeData(SALES_tblLeads leadDetails)
+        {
+            BOTS_TblGroupMaster objGroupDetails = new BOTS_TblGroupMaster();
+            objGroupDetails.GroupName = leadDetails.BusinessName;
+
+            return objGroupDetails;
+        }
+
         [HttpPost]
         public ActionResult AddCustomer(OnBoardingSalesViewModel objData)
         {
@@ -126,7 +143,6 @@ namespace WebApp.Controllers.OnBoarding
                 object[] objCategoryData = (object[])json_serializer.DeserializeObject(objData.bots_TblGroupMaster.CategoryData);
                 object[] objPaymentScheduleData = (object[])json_serializer.DeserializeObject(objData.bots_TblGroupMaster.PaymentScheduleData);
                 
-
                 foreach (Dictionary<string, object> item in objCategoryData)
                 {
                     BOTS_TblRetailMaster objItem = new BOTS_TblRetailMaster();
@@ -153,10 +169,7 @@ namespace WebApp.Controllers.OnBoarding
 
                     objLstInstallment.Add(objItem);
                 }
-              
-
-                //if (string.IsNullOrEmpty(objData.bots_TblGroupMaster.GroupId))
-                //    objData.bots_TblGroupMaster.CustomerStatus = "Draft";
+               
                 objData.bots_TblGroupMaster.CreatedBy = userDetails.UserId;
                 objData.bots_TblGroupMaster.CreatedDate = DateTime.Now;
                 var newCuscomer = true;

@@ -97,6 +97,7 @@
 </style>
 @using (Html.BeginForm("AddCustomer", "CustomerOnBoarding", FormMethod.Post, new { id = "frmaddcustomer", enctype = "multipart/form-data" }))
 {
+    @Html.HiddenFor(model => model.LeadId)
     @Html.HiddenFor(model => model.bots_TblGroupMaster.SINo)
     @Html.HiddenFor(model => model.bots_TblDealDetails.SINo)
     @Html.HiddenFor(model => model.bots_TblPaymentDetails.SINo)
@@ -516,7 +517,7 @@
                             </div>
                             <div class="col-sm-4" style="float:left;margin-top:10px;">
                                 @Html.DropDownListFor(model => model.bots_TblGroupMaster.ReferredName, new SelectList(Model.lstAllGroups, "Value", "Text"), htmlAttributes: new { @class = "input100", @id = "ddlReferredName" })
-                                @Html.TextBoxFor(model => model.bots_TblGroupMaster.ReferredNameNew, new { @class = "input100", style = "display: none;",  @id = "txtReferredName" })
+                                @Html.TextBoxFor(model => model.bots_TblGroupMaster.ReferredNameNew, new { @class = "input100", style = "display: none;", @id = "txtReferredName" })
                             </div>
                         </div>
                         <div class="row" style="margin: 0;">
@@ -1109,7 +1110,7 @@
 
         $('#ddlBOProduct1').change(function () {
             if ($("#ddlBOProduct1 option:selected").text() == "Please Select") {
-                $('#ddlBOProduct1').css('border-color', 'red');               
+                $('#ddlBOProduct1').css('border-color', 'red');
                 $('#ddlBillingPartner1').attr("disabled", false);
                 $('#ddlBPProduct1').attr("disabled", false);
             }
@@ -2542,7 +2543,7 @@
         $("#hdnPaymentScheduleData").val(JSON.stringify(Installments));
         //alert($("#ddlReferredName").val());
         $("#hdnReferredName").val($("#ddlReferredName").val());
-        
+
     }
 
     function LoadEditData() {
@@ -2666,7 +2667,7 @@
                 $("#ddlReferredName").hide();
                 $("#txtReferredName").show();
                 $("#txtReferredName").val(refName);
-                
+
             }
         }
     }

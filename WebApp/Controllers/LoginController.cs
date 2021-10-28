@@ -15,8 +15,14 @@ namespace WebApp.Controllers
         DashboardRepository DR = new DashboardRepository();
         Exceptions newexception = new Exceptions();
         // GET: Login
-        public ActionResult Index(string MobileNo)
+        public ActionResult Index(string MobileNo, string LeadId, string LoginID)
         {
+            if (!string.IsNullOrEmpty(LoginID) && !string.IsNullOrEmpty(LeadId))
+            {
+                var userDetails = LR.GetUserDetailsByLoginID(LoginID);
+                Session["UserSession"] = userDetails;
+                return RedirectToAction("Index", "CustomerOnBoarding", new { @LeadId = LeadId });
+            }
             if (!string.IsNullOrEmpty(MobileNo))
             {
                 var userDetails = LR.GetUserDetailsByLoginID(MobileNo);

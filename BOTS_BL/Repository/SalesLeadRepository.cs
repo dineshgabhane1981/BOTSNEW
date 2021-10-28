@@ -22,37 +22,47 @@ namespace BOTS_BL.Repository
    public class SalesLeadRepository
    {
         Exceptions newexception = new Exceptions();
-        public bool AddSalesLead(SALES_tblLeads objtbllead)
+        public int AddSalesLead(SALES_tblLeads objtbllead)
         {
             SALES_tblLeads objlead = new SALES_tblLeads();
             SALES_tblLeadTracking objsalestracking = new SALES_tblLeadTracking();
-            bool status = false;
+            int leadId = 0;
             using (var context = new CommonDBContext())
             {
                 if (objtbllead.LeadId == 0)
                 {
                     context.SALES_tblLeads.Add(objtbllead);
                     context.SaveChanges();
-                    status = true;
+                    leadId = objtbllead.LeadId;
                 }
                 else
                 {
                     objlead = context.SALES_tblLeads.Where(x => x.LeadId == objtbllead.LeadId).FirstOrDefault();
-                     objtbllead.UpdatedDate = DateTime.Now;
+                    
+                    objtbllead.UpdatedDate = DateTime.Now;
                     objtbllead.Category = objlead.Category;
                     objtbllead.Product = objlead.Product;
                     objtbllead.City = objlead.City;
+                    if (objtbllead.MeetingType == "salesdone")
+                    {
+                        objtbllead.MeetingType = objlead.MeetingType;
+                    }
+                    
                     context.SALES_tblLeads.AddOrUpdate(objtbllead);
                     context.SaveChanges();
+                    //leadId = objtbllead.LeadId;
+
                     objsalestracking.LeadId = objlead.LeadId;
                     objsalestracking.ContactType = objtbllead.ContactType;
                     objsalestracking.SpokeWith = objtbllead.SpokeWith;
                     objsalestracking.LeadStatus = objtbllead.LeadStatus;
-                    objsalestracking.MeetingType = objtbllead.MeetingType;
+                    if (objtbllead.MeetingType == "salesdone")
+                    {
+                        objsalestracking.MeetingType = objlead.MeetingType;
+                    }
                     objsalestracking.FollowupDate = objtbllead.FollowupDate;
                     objsalestracking.BillingPartner = objtbllead.BillingPartner;
                     objsalestracking.NoOfOutlet = objtbllead.NoOfOutlet;
-
                     objsalestracking.EcomIntegration = objtbllead.EcomIntegration;
                     objsalestracking.Address = objtbllead.Address;
                     objsalestracking.State = objtbllead.State;
@@ -66,12 +76,14 @@ namespace BOTS_BL.Repository
                     objsalestracking.Comments = objtbllead.Comments;
                     objsalestracking.AddedBy = objtbllead.AddedBy;
                     objsalestracking.AddedDate = objtbllead.AddedDate;
+                    
                     context.SALES_tblLeadTracking.AddOrUpdate(objsalestracking);
                     context.SaveChanges();
-                    status = true;
+
+                    leadId = objtbllead.LeadId;
                 }
             }
-                return status;
+                return leadId;
         }
         public SALES_tblLeads GetsalesLeadByLeadId(int LeadId)
         {

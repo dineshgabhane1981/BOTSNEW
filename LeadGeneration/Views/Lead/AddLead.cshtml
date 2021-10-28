@@ -6,6 +6,51 @@
 @using (Html.BeginForm("AddSalesLead", "Lead", FormMethod.Post, new { id = "frmaddlead", enctype = "multipart/form-data" }))
 {
     @Html.HiddenFor(model => model.sALES_TblLeads.LeadId, new { @id = "hdnLeadId" })
+
+    if (!string.IsNullOrEmpty(Convert.ToString(ViewData["URL"])))
+    {
+        <script>
+     
+                    cuteAlert({
+                        type: "success",
+                        title: "Saved",
+                        message: "Data Saved Successfully!",
+                        buttonText: "Okay"
+                    }).then(() => {
+                        var RUrl = '@Convert.ToString(ViewData["URL"])' + '&LeadId=' + '@Convert.ToString(ViewData["LeadId"])';
+                        alert(RUrl)
+                        window.open(RUrl, '_blank');
+                    })
+        </script>
+    }
+    else if (!string.IsNullOrEmpty(Convert.ToString(ViewData["Status"])))
+    {
+        if (Convert.ToString(ViewData["Status"]) == "0")
+        {
+            <script>
+                cuteAlert({
+                    type: "error",
+                    title: "OOPS...",
+                    message: "There is problem in saving Data!",
+                    buttonText: "Okay"
+                })
+            </script>
+        }
+        if (Convert.ToString(ViewData["Status"]) != "0")
+        {
+            <script>
+                cuteAlert({
+                        type: "success",
+                        title: "Saved",
+                        message: "Data Saved Successfully!",
+                        buttonText: "Okay"
+                    }).then(() => {
+                        window.location.href = '@Url.Action("Index", "Lead")'
+                    })
+            </script>
+        }
+    }
+
     <div class="app-main__inner">
         <div class="mb-3 card" style="padding-top:20px;">
             <div class="content">
@@ -96,7 +141,7 @@
                     <div class="row">
                         <div class="col-md-6 col-sm-6">
 
-                            <button type="submit" id="btnCustomerSave" class="btn btn-primary pull-right"  style="margin-right:10px;">Save</button>
+                            <button type="submit" id="btnCustomerSave" class="btn btn-primary pull-right" style="margin-right:10px;">Save</button>
                             <button type="button" id="btnCustomerSubmit" class="btn btn-primary pull-right" style="margin-right:10px;">cancel</button>
 
                         </div>
@@ -124,7 +169,7 @@
         $('#ddlmeetingtype option').each(function (item) {
             if ($("#hdnLeadId").val() != 0) {
                 if (item == 0 || item == 1) {
-                    
+
                     $("#ddlmeetingtype option[value*='" + item + "']").prop('disabled', true);
                     $("#ddlmeetingtype option[value*='" + item + "']").addClass('optionClass');
 
@@ -137,15 +182,15 @@
         $("#txtbusinessnm").attr("readonly", true);
         $('#txtbusinessnm').css('background-color', '#d3d3d3');
         $("#ddlCategory").attr("disabled", true);
-         $('#ddlCategory').css('background-color', '#d3d3d3');
+        $('#ddlCategory').css('background-color', '#d3d3d3');
         $("#ddlBOProduct").attr("disabled", true);
-         $('#ddlBOProduct').css('background-color', '#d3d3d3');
+        $('#ddlBOProduct').css('background-color', '#d3d3d3');
         //$("#txtnoofoutlet").attr("readonly", true);
         // $('#txtnoofoutlet').css('background-color', '#d3d3d3');
         $("#ddlCity").attr("disabled", true);
-         $('#ddlCity').css('background-color', '#d3d3d3');
+        $('#ddlCity').css('background-color', '#d3d3d3');
         $("#txtpincode").attr("readonly", true);
-         $('#txtpincode').css('background-color', '#d3d3d3');
+        $('#txtpincode').css('background-color', '#d3d3d3');
         $("#txtmobileno").attr("readonly", true);
 
     }

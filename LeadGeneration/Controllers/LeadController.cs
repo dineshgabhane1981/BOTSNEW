@@ -48,40 +48,52 @@ namespace LeadGeneration.Controllers
                 objviewmodel.lstCity = CR.GetCity();
                 objviewmodel.sALES_TblLeads = objData;
             }
-                
-            
+
             return View(objviewmodel);
         }
-        
-        public bool AddSalesLead(LeadViewModel objData)
+
+        public ActionResult AddSalesLead(LeadViewModel objData)
         {
-            bool status = false;
+            int LeadId = 0;
             try
             {
                 var userDetails = (CustomerLoginDetail)Session["UserSession"];
-                
+
                 objData.sALES_TblLeads.AddedDate = DateTime.Now;
                 objData.sALES_TblLeads.AddedBy = userDetails.LoginId;
-                status = SLR.AddSalesLead(objData.sALES_TblLeads);
-               
+                var meetingType = objData.sALES_TblLeads.MeetingType;
+                LeadId = SLR.AddSalesLead(objData.sALES_TblLeads);
+                if (meetingType == "salesdone")
+                {
+                    //string url = "https://blueocktopus.in/bots?LoginID=" + userDetails.LoginId + "&LeadId=" + objData.sALES_TblLeads.LeadId + "";
+                    string url = "http://localhost:57265?LoginID=" + userDetails.LoginId + "";
+                    ViewData["LeadId"] = LeadId;
+                    ViewData["URL"] = url;                    
+                }
+
             }
             catch (Exception ex)
             {
                 newexception.AddException(ex, "");
                 TempData["error"] = "Error Occured";
-               // return View("AddLead");
+                // return View("AddLead");
             }
-
-            return status;
+            ViewData["Status"] = LeadId;
+            objData.lstBillingPartner = CR.GetBillingPartner();
+            objData.lstcategory = CR.GetRetailCategory();
+            objData.lstStates = CR.GetStates();
+            objData.lstCity = CR.GetCity();
+            
+            return View("AddLead", objData);
 
         }
-    
+
         public ActionResult GetSearchLeads(string searchData)
         {
             LeadViewModel objviewmodel = new LeadViewModel();
             objviewmodel.lstsALES_TblLeads = SLR.GetSearchedLeads();
             return PartialView("_SearchLeadListing", objviewmodel);
-        }   
-    
+        }
+
     }
 }
