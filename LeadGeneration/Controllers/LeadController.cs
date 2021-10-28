@@ -68,7 +68,7 @@ namespace LeadGeneration.Controllers
                     //string url = "https://blueocktopus.in/bots?LoginID=" + userDetails.LoginId + "&LeadId=" + objData.sALES_TblLeads.LeadId + "";
                     string url = "http://localhost:57265?LoginID=" + userDetails.LoginId + "";
                     ViewData["LeadId"] = LeadId;
-                    ViewData["URL"] = url;                    
+                    ViewData["URL"] = url;
                 }
 
             }
@@ -83,15 +83,25 @@ namespace LeadGeneration.Controllers
             objData.lstcategory = CR.GetRetailCategory();
             objData.lstStates = CR.GetStates();
             objData.lstCity = CR.GetCity();
-            
-            return View("AddLead", objData); 
+
+            return View("AddLead", objData);
 
         }
 
         public ActionResult GetSearchLeads(string searchData)
         {
             LeadViewModel objviewmodel = new LeadViewModel();
-            objviewmodel.lstsALES_TblLeads = SLR.GetSearchedLeads();
+            JavaScriptSerializer json_serializer = new JavaScriptSerializer();
+            json_serializer.MaxJsonLength = int.MaxValue;
+            object[] objData = (object[])json_serializer.DeserializeObject(searchData);
+            foreach (Dictionary<string, object> item in objData)
+            {
+                objviewmodel.lstsALES_TblLeads = SLR.GetSearchedLeads(Convert.ToString(item["MobileNo"]), Convert.ToString(item["BusinessName"]), 
+                    Convert.ToString(item["DtFrom"]), Convert.ToString(item["DtTo"]), Convert.ToString(item["LeadStatus"]), 
+                    Convert.ToString(item["ContactType"]), Convert.ToString(item["MeetingType"]), Convert.ToString(item["City"]),
+                    Convert.ToString(item["BillingPartner"]), Convert.ToString(item["SalesManager"]));
+            }
+            
             return PartialView("_SearchLeadListing", objviewmodel);
         }
 

@@ -19,8 +19,8 @@ using BOTS_BL.Models.SalesLead;
 
 namespace BOTS_BL.Repository
 {
-   public class SalesLeadRepository
-   {
+    public class SalesLeadRepository
+    {
         Exceptions newexception = new Exceptions();
         public int AddSalesLead(SALES_tblLeads objtbllead)
         {
@@ -38,7 +38,7 @@ namespace BOTS_BL.Repository
                 else
                 {
                     objlead = context.SALES_tblLeads.Where(x => x.LeadId == objtbllead.LeadId).FirstOrDefault();
-                    
+
                     objtbllead.UpdatedDate = DateTime.Now;
                     objtbllead.Category = objlead.Category;
                     objtbllead.Product = objlead.Product;
@@ -47,7 +47,7 @@ namespace BOTS_BL.Repository
                     {
                         objtbllead.MeetingType = objlead.MeetingType;
                     }
-                    
+
                     context.SALES_tblLeads.AddOrUpdate(objtbllead);
                     context.SaveChanges();
                     //leadId = objtbllead.LeadId;
@@ -76,14 +76,14 @@ namespace BOTS_BL.Repository
                     objsalestracking.Comments = objtbllead.Comments;
                     objsalestracking.AddedBy = objtbllead.AddedBy;
                     objsalestracking.AddedDate = objtbllead.AddedDate;
-                    
+
                     context.SALES_tblLeadTracking.AddOrUpdate(objsalestracking);
                     context.SaveChanges();
 
                     leadId = objtbllead.LeadId;
                 }
             }
-                return leadId;
+            return leadId;
         }
         public SALES_tblLeads GetsalesLeadByLeadId(int LeadId)
         {
@@ -99,45 +99,45 @@ namespace BOTS_BL.Repository
             List<SalesLead> lstsaleslead = new List<SalesLead>();
             DateTime today = DateTime.Today;
             DateTime tommrowdt = today.AddDays(1);
-            using(var context = new CommonDBContext())
+            using (var context = new CommonDBContext())
             {
-               // lstsaleslead = context.SALES_tblLeads.Where(x => x.FollowupDate == today || x.FollowupDate == tommrowdt).ToList();
+                // lstsaleslead = context.SALES_tblLeads.Where(x => x.FollowupDate == today || x.FollowupDate == tommrowdt).ToList();
 
                 lstsaleslead = (from c in context.SALES_tblLeads
-                           join ct in context.tblCities on c.City equals ct.CityId.ToString()                           
-                           where (c.FollowupDate == today || c.FollowupDate == tommrowdt)
-                           select new SalesLead
-                           {
-                               LeadId = c.LeadId,
-                               BusinessName = c.BusinessName,
-                               Category = c.Category,
-                               Product = c.Product,
-                               BillingPartner = c.BillingPartner,
-                               NoOfOutlet = c.NoOfOutlet,
-                               Address = c.Address,
-                               State = c.State,
-                               City = c.City,
-                               Pincode = c.Pincode,
-                               ContactType = c.ContactType,
-                               SpokeWith = c.SpokeWith,
-                               MobileNo = c.MobileNo,
-                               AlternateNo = c.AlternateNo,
-                               EmailId = c.EmailId,
-                               AuthorizedPerson = c.AuthorizedPerson,
-                               APMobileNo = c.APMobileNo,
-                               LeadStatus = c.LeadStatus,
-                               PriceQuoted = c.PriceQuoted,
-                               MeetingType = c.MeetingType,
-                               FollowupDate = c.FollowupDate,
-                               LeadSource = c.LeadSource,
-                               LeadSourceName = c.LeadSourceName,
-                               Comments = c.Comments,
-                               AddedBy = c.AddedBy,
-                               AddedDate = c.AddedDate,
-                               UpdatedDate = c.UpdatedDate,
-                               CityName = ct.CityName
+                                join ct in context.tblCities on c.City equals ct.CityId.ToString()
+                                where (c.FollowupDate == today || c.FollowupDate == tommrowdt)
+                                select new SalesLead
+                                {
+                                    LeadId = c.LeadId,
+                                    BusinessName = c.BusinessName,
+                                    Category = c.Category,
+                                    Product = c.Product,
+                                    BillingPartner = c.BillingPartner,
+                                    NoOfOutlet = c.NoOfOutlet,
+                                    Address = c.Address,
+                                    State = c.State,
+                                    City = c.City,
+                                    Pincode = c.Pincode,
+                                    ContactType = c.ContactType,
+                                    SpokeWith = c.SpokeWith,
+                                    MobileNo = c.MobileNo,
+                                    AlternateNo = c.AlternateNo,
+                                    EmailId = c.EmailId,
+                                    AuthorizedPerson = c.AuthorizedPerson,
+                                    APMobileNo = c.APMobileNo,
+                                    LeadStatus = c.LeadStatus,
+                                    PriceQuoted = c.PriceQuoted,
+                                    MeetingType = c.MeetingType,
+                                    FollowupDate = c.FollowupDate,
+                                    LeadSource = c.LeadSource,
+                                    LeadSourceName = c.LeadSourceName,
+                                    Comments = c.Comments,
+                                    AddedBy = c.AddedBy,
+                                    AddedDate = c.AddedDate,
+                                    UpdatedDate = c.UpdatedDate,
+                                    CityName = ct.CityName
 
-                           }).ToList();
+                                }).ToList();
             }
             return lstsaleslead;
         }
@@ -146,7 +146,7 @@ namespace BOTS_BL.Repository
             List<SelectListItem> lstSalesManager = new List<SelectListItem>();
             using (var context = new CommonDBContext())
             {
-                var SalesManagers = context.CustomerLoginDetails.Where(x=>x.LoginType == "8").ToList();
+                var SalesManagers = context.CustomerLoginDetails.Where(x => x.LoginType == "8").ToList();
 
                 foreach (var item in SalesManagers)
                 {
@@ -160,7 +160,8 @@ namespace BOTS_BL.Repository
             return lstSalesManager;
         }
 
-        public List<SalesLead> GetSearchedLeads()
+        public List<SalesLead> GetSearchedLeads(string MobileNo, string BusinessName, string FrmDate, string ToDate, string LeadStatus,
+            string ContactType, string MeetingType, string City, string BillingPartner, string SalesManager)
         {
             List<SalesLead> lstLeads = new List<SalesLead>();
             List<SalesLead> lstsaleslead = new List<SalesLead>();
@@ -168,43 +169,6 @@ namespace BOTS_BL.Repository
             DateTime tommrowdt = today.AddDays(1);
             using (var context = new CommonDBContext())
             {
-                // lstsaleslead = context.SALES_tblLeads.Where(x => x.FollowupDate == today || x.FollowupDate == tommrowdt).ToList();
-
-                //lstsaleslead = (from c in context.SALES_tblLeads
-                //                join ct in context.tblCities on c.City equals ct.CityId.ToString()
-                //                where (c.FollowupDate == today || c.FollowupDate == tommrowdt)
-                //                select new SalesLead
-                //                {
-                //                    LeadId = c.LeadId,
-                //                    BusinessName = c.BusinessName,
-                //                    Category = c.Category,
-                //                    Product = c.Product,
-                //                    BillingPartner = c.BillingPartner,
-                //                    NoOfOutlet = c.NoOfOutlet,
-                //                    Address = c.Address,
-                //                    State = c.State,
-                //                    City = c.City,
-                //                    Pincode = c.Pincode,
-                //                    ContactType = c.ContactType,
-                //                    SpokeWith = c.SpokeWith,
-                //                    MobileNo = c.MobileNo,
-                //                    AlternateNo = c.AlternateNo,
-                //                    EmailId = c.EmailId,
-                //                    AuthorizedPerson = c.AuthorizedPerson,
-                //                    APMobileNo = c.APMobileNo,
-                //                    LeadStatus = c.LeadStatus,
-                //                    PriceQuoted = c.PriceQuoted,
-                //                    MeetingType = c.MeetingType,
-                //                    FollowupDate = c.FollowupDate,
-                //                    LeadSource = c.LeadSource,
-                //                    LeadSourceName = c.LeadSourceName,
-                //                    Comments = c.Comments,
-                //                    AddedBy = c.AddedBy,
-                //                    AddedDate = c.AddedDate,
-                //                    UpdatedDate = c.UpdatedDate,
-                //                    CityName = ct.CityName
-
-                //                }).ToList();
 
                 lstLeads = (from c in context.SALES_tblLeads
                             join ct in context.tblCities on c.City equals ct.CityId.ToString()
@@ -238,17 +202,29 @@ namespace BOTS_BL.Repository
                                 AddedDate = c.AddedDate,
                                 UpdatedDate = c.UpdatedDate,
                                 CityName = ct.CityName
-
                             }).ToList();
+
+                if(!string.IsNullOrEmpty(MobileNo))
+                {
+                    lstLeads = lstLeads.Where(x => x.MobileNo == MobileNo).ToList();
+                }
+                if (!string.IsNullOrEmpty(BusinessName))
+                {
+                    lstLeads = lstLeads.Where(x => x.BusinessName == BusinessName).ToList();
+                }
+                if (!string.IsNullOrEmpty(LeadStatus) && LeadStatus != "Please Select")
+                {
+                    lstLeads = lstLeads.Where(x => x.LeadStatus == LeadStatus).ToList();
+                }
             }
 
 
             return lstLeads;
         }
 
-        public bool UpdateStatus( int LeadId,string GroupId)
+        public bool UpdateStatus(int LeadId, string GroupId)
         {
-            bool status =false;
+            bool status = false;
             SALES_tblLeads objlead = new SALES_tblLeads();
             SALES_tblLeadTracking objsalestracking = new SALES_tblLeadTracking();
             using (var context = new CommonDBContext())

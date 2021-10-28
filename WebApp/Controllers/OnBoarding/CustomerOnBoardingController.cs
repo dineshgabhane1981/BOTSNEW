@@ -49,11 +49,11 @@ namespace WebApp.Controllers.OnBoarding
                 objData.lstSourcedBy = CR.GetSourcedBy();
                 objData.lstRMAssigned = CR.GetRMAssigned();
                 objData.lstRefferedCategory = CR.GetAllRefferedCategory();
-                objData.lstStates = CR.GetStates();
+                objData.lstStates = CR.GetStates();                
                 if (!string.IsNullOrEmpty(LeadId))
                 {
                     var leadDetails = SLR.GetsalesLeadByLeadId(Convert.ToInt32(LeadId));
-                    objData.bots_TblGroupMaster = MeargeLeadeData(leadDetails);
+                    objData.bots_TblGroupMaster = MeargeLeadData(leadDetails);
                     objData.LeadId = LeadId;
                 }
 
@@ -105,7 +105,7 @@ namespace WebApp.Controllers.OnBoarding
             return View(objData);
         }
 
-        public BOTS_TblGroupMaster MeargeLeadeData(SALES_tblLeads leadDetails)
+        public BOTS_TblGroupMaster MeargeLeadData(SALES_tblLeads leadDetails)
         {
             BOTS_TblGroupMaster objGroupDetails = new BOTS_TblGroupMaster();
             objGroupDetails.GroupName = leadDetails.BusinessName;
