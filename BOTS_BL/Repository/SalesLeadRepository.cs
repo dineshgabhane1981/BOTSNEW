@@ -151,7 +151,84 @@ namespace BOTS_BL.Repository
         public List<SalesLead> GetSearchedLeads()
         {
             List<SalesLead> lstLeads = new List<SalesLead>();
+            List<SalesLead> lstsaleslead = new List<SalesLead>();
+            DateTime today = DateTime.Today;
+            DateTime tommrowdt = today.AddDays(1);
+            using (var context = new CommonDBContext())
+            {
+                // lstsaleslead = context.SALES_tblLeads.Where(x => x.FollowupDate == today || x.FollowupDate == tommrowdt).ToList();
 
+                //lstsaleslead = (from c in context.SALES_tblLeads
+                //                join ct in context.tblCities on c.City equals ct.CityId.ToString()
+                //                where (c.FollowupDate == today || c.FollowupDate == tommrowdt)
+                //                select new SalesLead
+                //                {
+                //                    LeadId = c.LeadId,
+                //                    BusinessName = c.BusinessName,
+                //                    Category = c.Category,
+                //                    Product = c.Product,
+                //                    BillingPartner = c.BillingPartner,
+                //                    NoOfOutlet = c.NoOfOutlet,
+                //                    Address = c.Address,
+                //                    State = c.State,
+                //                    City = c.City,
+                //                    Pincode = c.Pincode,
+                //                    ContactType = c.ContactType,
+                //                    SpokeWith = c.SpokeWith,
+                //                    MobileNo = c.MobileNo,
+                //                    AlternateNo = c.AlternateNo,
+                //                    EmailId = c.EmailId,
+                //                    AuthorizedPerson = c.AuthorizedPerson,
+                //                    APMobileNo = c.APMobileNo,
+                //                    LeadStatus = c.LeadStatus,
+                //                    PriceQuoted = c.PriceQuoted,
+                //                    MeetingType = c.MeetingType,
+                //                    FollowupDate = c.FollowupDate,
+                //                    LeadSource = c.LeadSource,
+                //                    LeadSourceName = c.LeadSourceName,
+                //                    Comments = c.Comments,
+                //                    AddedBy = c.AddedBy,
+                //                    AddedDate = c.AddedDate,
+                //                    UpdatedDate = c.UpdatedDate,
+                //                    CityName = ct.CityName
+
+                //                }).ToList();
+
+                lstLeads = (from c in context.SALES_tblLeads
+                            join ct in context.tblCities on c.City equals ct.CityId.ToString()
+                            select new SalesLead
+                            {
+                                LeadId = c.LeadId,
+                                BusinessName = c.BusinessName,
+                                Category = c.Category,
+                                Product = c.Product,
+                                BillingPartner = c.BillingPartner,
+                                NoOfOutlet = c.NoOfOutlet,
+                                Address = c.Address,
+                                State = c.State,
+                                City = c.City,
+                                Pincode = c.Pincode,
+                                ContactType = c.ContactType,
+                                SpokeWith = c.SpokeWith,
+                                MobileNo = c.MobileNo,
+                                AlternateNo = c.AlternateNo,
+                                EmailId = c.EmailId,
+                                AuthorizedPerson = c.AuthorizedPerson,
+                                APMobileNo = c.APMobileNo,
+                                LeadStatus = c.LeadStatus,
+                                PriceQuoted = c.PriceQuoted,
+                                MeetingType = c.MeetingType,
+                                FollowupDate = c.FollowupDate,
+                                LeadSource = c.LeadSource,
+                                LeadSourceName = c.LeadSourceName,
+                                Comments = c.Comments,
+                                AddedBy = c.AddedBy,
+                                AddedDate = c.AddedDate,
+                                UpdatedDate = c.UpdatedDate,
+                                CityName = ct.CityName
+
+                            }).ToList();
+            }
 
 
             return lstLeads;
