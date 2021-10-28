@@ -216,6 +216,33 @@ namespace BOTS_BL.Repository
                 {
                     lstLeads = lstLeads.Where(x => x.LeadStatus == LeadStatus).ToList();
                 }
+                if (!string.IsNullOrEmpty(ContactType) && ContactType != "Please Select")
+                {
+                    lstLeads = lstLeads.Where(x => x.ContactType == ContactType).ToList();
+                }
+                if (!string.IsNullOrEmpty(MeetingType) && MeetingType != "Please Select")
+                {
+                    lstLeads = lstLeads.Where(x => x.MeetingType == MeetingType).ToList();
+                }
+                if (!string.IsNullOrEmpty(City) && City != "Please Select")
+                {
+                    lstLeads = lstLeads.Where(x => x.City == City).ToList();
+                }
+                if (!string.IsNullOrEmpty(BillingPartner) && BillingPartner != "Please Select")
+                {
+                    lstLeads = lstLeads.Where(x => x.BillingPartner == BillingPartner).ToList();
+                }
+                if (!string.IsNullOrEmpty(SalesManager) && SalesManager != "Please Select")
+                {
+                    lstLeads = lstLeads.Where(x => x.AddedBy == SalesManager).ToList();
+                    
+                }
+                if (!string.IsNullOrEmpty(FrmDate) && !string.IsNullOrEmpty(ToDate))
+                {
+                    DateTime frmdt = Convert.ToDateTime(FrmDate).Date;
+                    DateTime todt = Convert.ToDateTime(ToDate).Date;
+                    lstLeads = lstLeads.Where(x => x.AddedDate >= frmdt && x.AddedDate <= todt).ToList();
+                }
             }
 
 
