@@ -70,5 +70,18 @@ namespace BOTS_BL.Models.SalesLead
 
         [StringLength(50)]
         public string AssignedLead { get; set; }
+        
     }
+
+    public class LeadTracking
+    {
+        public string AddedDate { get; set; }
+        public string AddedByName { get; set; }
+        public string ContactType { get; set; }       
+        public string LeadStatus { get; set; }       
+        public string MeetingType { get; set; }
+        public string Comments { get; set; }
+    }
+
+
 }
