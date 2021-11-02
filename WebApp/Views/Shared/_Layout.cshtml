@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@ViewBag.Title - BOTS</title>   
+    <title>@ViewBag.Title - BOTS</title>
     <link href="~/Content/main.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css" />
 
@@ -89,7 +89,7 @@
     @*@Scripts.Render("~/bundles/jquery")
         @Scripts.Render("~/bundles/bootstrap")
         @RenderSection("scripts", required: false)*@
-<script>
+    <script>
         $(document).ajaxError(function (xhr, props) {
             if (props.status === 401) {
             window.location.href = '@Url.Action("Index", "Login")';
@@ -143,28 +143,37 @@
                 }
             });
         }
-    function addComma(data) {
+        function addComma(data) {
 
-        var x = data;
-        if (x != null) {
-            if (Math.round(x).length > 3) {
-                x = x.toString();
-                var lastThree = x.substring(x.length - 3);
-                var otherNumbers = x.substring(0, x.length - 3);
-                if (otherNumbers != '')
-                    lastThree = ',' + lastThree;
-                var res = otherNumbers.replace(/\B(?=(\d{2})+(?!\d))/g, ",") + lastThree;
-                return res;
+            var x = data;
+            if (x != null) {
+                var str = x.toString();
+                var numarray = str.split('.');
+                if (numarray.length > 1) {
+                    x = numarray[0].toString();
+                    var lastThree = x.substring(x.length - 3);
+                    var otherNumbers = x.substring(0, x.length - 3);
+                    if (otherNumbers != '')
+                        lastThree = ',' + lastThree;
+                    var res = otherNumbers.replace(/\B(?=(\d{2})+(?!\d))/g, ",") + lastThree;
+                    return res + "." + numarray[1];
+                }
+                else {
+                    x = x.toString();
+                    var lastThree = x.substring(x.length - 3);
+                    var otherNumbers = x.substring(0, x.length - 3);
+                    if (otherNumbers != '')
+                        lastThree = ',' + lastThree;
+                    var res = otherNumbers.replace(/\B(?=(\d{2})+(?!\d))/g, ",") + lastThree;
+                    return res;
+                }
             }
             else {
-                return x;
+                return 0;
             }
         }
-        else {
-            return 0;
-        }
-    }
-</script>
+
+    </script>
 
 
 </body>
