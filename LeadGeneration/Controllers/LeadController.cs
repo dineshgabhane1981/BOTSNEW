@@ -118,18 +118,33 @@ namespace LeadGeneration.Controllers
         public ActionResult GetSearchLeadsforLeadTransfer(string searchData)
         {
             LeadViewModel objviewmodel = new LeadViewModel();
-            JavaScriptSerializer json_serializer = new JavaScriptSerializer();
-            json_serializer.MaxJsonLength = int.MaxValue;
-            object[] objData = (object[])json_serializer.DeserializeObject(searchData);
-            foreach (Dictionary<string, object> item in objData)
+            try
             {
-                objviewmodel.lstsALES_TblLeads = SLR.GetSearchedLeads(Convert.ToString(item["MobileNo"]), Convert.ToString(item["BusinessName"]),
-                    Convert.ToString(item["DtFrom"]), Convert.ToString(item["DtTo"]), Convert.ToString(item["LeadStatus"]),
-                    Convert.ToString(item["ContactType"]), Convert.ToString(item["MeetingType"]), Convert.ToString(item["City"]),
-                    Convert.ToString(item["BillingPartner"]), Convert.ToString(item["SalesManager"]));
+                JavaScriptSerializer json_serializer = new JavaScriptSerializer();
+                json_serializer.MaxJsonLength = int.MaxValue;
+                object[] objData = (object[])json_serializer.DeserializeObject(searchData);
+                foreach (Dictionary<string, object> item in objData)
+                {
+                    objviewmodel.lstsALES_TblLeads = SLR.GetSearchedLeads(Convert.ToString(item["MobileNo"]), Convert.ToString(item["BusinessName"]),
+                        Convert.ToString(item["DtFrom"]), Convert.ToString(item["DtTo"]), Convert.ToString(item["LeadStatus"]),
+                        Convert.ToString(item["ContactType"]), Convert.ToString(item["MeetingType"]), Convert.ToString(item["City"]),
+                        Convert.ToString(item["BillingPartner"]), Convert.ToString(item["SalesManager"]));
+                }
+            }
+            catch(Exception ex)
+            {
+                newexception.AddException(ex, "Get Lead");
             }
 
             return PartialView("_LeadTransferList", objviewmodel);
+        }
+
+        public JsonResult GetLeadTrackingList(string Id)
+        {
+            List<LeadTracking> lstLeadTracking = new List<LeadTracking>();
+            lstLeadTracking = SLR.GetLeadTracking(Id);
+
+            return new JsonResult() { Data = lstLeadTracking, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
 
     }

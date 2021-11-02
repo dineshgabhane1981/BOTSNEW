@@ -206,6 +206,75 @@
         });
     }
 
+    function ShowTrackingDetails(LeadId) {
+        if ($("#dvLeadTrackingData" + LeadId).is(":visible")) {
+            $("#dvLeadTrackingData" + LeadId).hide(1000);
+            $("#trLeadTracking" + LeadId).hide(1000);
+
+          //  $("#imgExpand" + id).attr("src", "/Content/assets/images/details_open.png");
+        }
+        else {
+            $("#divLoader").show();
+            $.ajax({
+                type: "POST",
+                 url: '@Url.Action("GetLeadTrackingList")',
+                data: '{Id:' + JSON.stringify(LeadId) + '}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (response) {
+                    console.log(response);
+                    BindActivities(LeadId,response);
+                    $("#divLoader").hide();
+                },
+                failure: function (response) {
+
+                    $("#divLoader").hide();
+                }
+            });
+        }
+    }
+
+    function BindActivities(id, data) {
+        if (data != "") {
+            var htmlStr = "<table border=\"2\" style=\"margin-left: 11px;width: 98%;\" class=\"table\">";
+            htmlStr += "<tr style=\"text-align: center;\">"
+            htmlStr += "<th scope=\"col\">Date</th>";
+            htmlStr += "<th scope=\"col\">Updated By</th>";
+            htmlStr += "<th scope=\"col\">Contact Type</th>";
+            htmlStr += "<th scope=\"col\">Meeting Type</th>";
+            htmlStr += "<th scope=\"col\">Lead Status</th>";
+            htmlStr += "<th scope=\"col\">Comments</th>";
+            htmlStr += "</tr>";
+
+            $.map(data, function (item) {
+                var d = new Date();
+                d = item.FollowupDate;
+                console.log(d);
+                htmlStr += "<tr style=\"text-align: center;\">"
+                htmlStr += "<td>" + item.AddedDate + "</td>";
+                htmlStr += "<td>" + item.AddedByName + "</td>";
+                htmlStr += "<td style=\"width: 100px;\">" + item.ContactType + "</td>";
+                htmlStr += "<td style=\"width: 100px;\">" + item.MeetingType + "</td>";
+                htmlStr += "<td>" + item.LeadStatus + "</td>";
+                htmlStr += "<td>" + item.Comments + "</td>";
+                htmlStr += "</tr>"
+            });
+
+            htmlStr += "</table>";
+            $("#dvLeadTrackingData" + id).html(htmlStr);            
+            $("#trLeadTracking" + id).show(1000);
+            $("#dvLeadTrackingData" + id).show(1000);
+        }
+        else {
+            cuteAlert({
+                type: "warning",
+                title: "Oops..",
+                message: "No tracking available",
+                buttonText: "Okay"
+            })
+        }
+    }
+
 </script>
 
 <script src="~/Scripts/jquery-ui-1.12.1.js"></script>

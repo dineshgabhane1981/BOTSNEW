@@ -204,7 +204,7 @@ namespace BOTS_BL.Repository
                                 CityName = ct.CityName
                             }).ToList();
 
-                if(!string.IsNullOrEmpty(MobileNo))
+                if (!string.IsNullOrEmpty(MobileNo))
                 {
                     lstLeads = lstLeads.Where(x => x.MobileNo == MobileNo).ToList();
                 }
@@ -235,7 +235,7 @@ namespace BOTS_BL.Repository
                 if (!string.IsNullOrEmpty(SalesManager) && SalesManager != "Please Select")
                 {
                     lstLeads = lstLeads.Where(x => x.AddedBy == SalesManager).ToList();
-                    
+
                 }
                 if (!string.IsNullOrEmpty(FrmDate) && !string.IsNullOrEmpty(ToDate))
                 {
@@ -249,6 +249,29 @@ namespace BOTS_BL.Repository
             return lstLeads;
         }
 
+
+        public List<LeadTracking> GetLeadTracking(string LeadId)
+        {
+            List<LeadTracking> lstLeadTracking = new List<LeadTracking>();
+            using (var context = new CommonDBContext())
+            {
+                var Id = Convert.ToInt32(LeadId);
+                
+                lstLeadTracking = (from c in context.SALES_tblLeadTracking
+                                   join ct in context.CustomerLoginDetails on c.AddedBy equals ct.LoginId
+                                   where c.LeadId == Id
+                                   select new LeadTracking
+                                   {
+                                       AddedDate = c.AddedDate.ToString(),
+                                       AddedByName = ct.UserName,
+                                       ContactType = c.ContactType,
+                                       MeetingType = c.MeetingType,
+                                       LeadStatus = c.LeadStatus,
+                                       Comments = c.Comments
+                                   }).AsNoTracking().ToList();
+            }
+            return lstLeadTracking;
+        }
         public bool UpdateStatus(int LeadId, string GroupId)
         {
             bool status = false;
