@@ -145,10 +145,11 @@
                 }
             });
         }
-        function addComma(data) {
+    function addComma(data) {
 
-            var x = data;
-            if (x != null) {
+        var x = data;
+        if (x != null) {
+            if (Math.round(x).length > 3) {
                 x = x.toString();
                 var lastThree = x.substring(x.length - 3);
                 var otherNumbers = x.substring(0, x.length - 3);
@@ -158,9 +159,13 @@
                 return res;
             }
             else {
-                return 0;
+                return x;
             }
         }
+        else {
+            return 0;
+        }
+    }
 </script>
 
 
