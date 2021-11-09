@@ -306,8 +306,9 @@ namespace BOTS_BL.Repository
                                 list = list.Where(x => x.AddedDate > FromDate && x.AddedDate < ToDate && x.Status == "WIP").ToList();
                                 break;
                             case "WIP15":
-                                ToDate = ToDate.AddDays(-15);
-                                list = list.Where(x => x.AddedDate > FromDate && x.AddedDate < ToDate && x.Status == "WIP").ToList();
+                                FromDate = ToDate.AddDays(-7);
+                                ToDate = ToDate.AddDays(-15);                                
+                                list = list.Where(x => x.AddedDate < FromDate && x.AddedDate > ToDate && x.Status == "WIP").ToList();
                                 break;
                         }
 
@@ -330,9 +331,6 @@ namespace BOTS_BL.Repository
                                   join gd in context.tblGroupDetails on c.GroupId equals gd.GroupId.ToString()
                                   join ct in context.BOTS_TblCallTypes on c.CallType equals ct.Id                                  
                                   join cld in context.CustomerLoginDetails on c.AddedBy equals cld.LoginId
-
-
-
 
                                   select new DiscussionDetails
                                   {

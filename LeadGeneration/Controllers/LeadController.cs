@@ -71,6 +71,7 @@ namespace LeadGeneration.Controllers
 
                 objData.sALES_TblLeads.AddedDate = DateTime.Now;
                 objData.sALES_TblLeads.AddedBy = userDetails.LoginId;
+                objData.sALES_TblLeads.AssignedLead = userDetails.LoginId;
                 var meetingType = objData.sALES_TblLeads.MeetingType;
                 LeadId = SLR.AddSalesLead(objData.sALES_TblLeads);
                 if (meetingType == "salesdone")
@@ -145,6 +146,14 @@ namespace LeadGeneration.Controllers
             lstLeadTracking = SLR.GetLeadTracking(Id);
 
             return new JsonResult() { Data = lstLeadTracking, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
+        }
+
+        public ActionResult TransferLead(int[] LeadId, string SaleManagerId)
+        {
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            LeadViewModel objviewmodel = new LeadViewModel();
+            bool result = SLR.LeadTransfer(LeadId, SaleManagerId, userDetails.LoginId);
+            return PartialView("_LeadTransferList", objviewmodel);
         }
 
     }

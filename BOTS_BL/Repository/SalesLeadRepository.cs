@@ -76,6 +76,7 @@ namespace BOTS_BL.Repository
                     objsalestracking.Comments = objtbllead.Comments;
                     objsalestracking.AddedBy = objtbllead.AddedBy;
                     objsalestracking.AddedDate = objtbllead.AddedDate;
+                    objsalestracking.AssignedLead = objtbllead.AddedBy;
 
                     context.SALES_tblLeadTracking.AddOrUpdate(objsalestracking);
                     context.SaveChanges();
@@ -317,6 +318,48 @@ namespace BOTS_BL.Repository
 
             return status;
 
+        }
+
+        public bool LeadTransfer(int[] LeadId, string SaleManagerId,string addedby)
+        {
+            bool result = false;
+            try
+            {
+                SALES_tblLeads objsaleslead = new SALES_tblLeads();
+                SALES_tblLeadTracking objsalesleadtracking = new SALES_tblLeadTracking();
+               // string connStr = objCustRepo.GetCustomerConnString(GroupId);
+                using (var contextNew = new CommonDBContext())
+                {
+                    
+                        foreach (int leadid in LeadId)
+                        {
+
+                            objsaleslead = contextNew.SALES_tblLeads.Where(x => x.LeadId == leadid).FirstOrDefault();
+                            objsaleslead.AssignedLead = SaleManagerId;
+                            objsaleslead.UpdatedDate = DateTime.Now;
+                            contextNew.SALES_tblLeads.AddOrUpdate(objsaleslead);
+                            contextNew.SaveChanges();
+                            objsalesleadtracking = contextNew.SALES_tblLeadTracking.Where(x => x.LeadId == leadid).FirstOrDefault();
+                            if (objsalesleadtracking != null)
+                            {
+                            objsalesleadtracking.AssignedLead = SaleManagerId;
+                            objsalesleadtracking.AddedBy = addedby;
+                            objsalesleadtracking.AddedDate = DateTime.Now;
+                            contextNew.SALES_tblLeadTracking.AddOrUpdate(objsalesleadtracking);
+                            contextNew.SaveChanges();
+                            }
+                            result = true;
+                        }   
+                    //}
+                    
+                }
+
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "LeadTransfer");
+            }
+            return result;
         }
     }
 }

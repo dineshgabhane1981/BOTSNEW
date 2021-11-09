@@ -61,7 +61,7 @@
                             if (userDetails.LoginType == "1" || userDetails.LoginType == "5")
                             {
                                 <div class="col-md-6 col-sm-6">
-                                    Sales Manager <br />@Html.DropDownListFor(model => model.sALES_TblLeads.AddedBy, new SelectList(Model.lstSalesManager, "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input100", @id = "ddlSalesManager" })
+                                    Billing Partner <br />@Html.DropDownListFor(model => model.sALES_TblLeads.BillingPartner, new SelectList(Model.lstBillingPartner, "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input100", @id = "ddlBillingPartner" })
                                 </div>
                             }
                         }
@@ -78,7 +78,7 @@
         </div>
         <div class="row">
             <div class="col-md-6 col-sm-6">
-                Sales Manager Name <br />@Html.DropDownListFor(model => model.lstSalesManager, new SelectList(Model.lstBillingPartner, "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input100", @id = "ddlBillingPartner" })
+                Sales Manager Name <br />@Html.DropDownListFor(model => model.lstSalesManager, new SelectList(Model.lstSalesManager, "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input100", @id = "ddlSalesManager" })
             </div>
             <div class="col-md-6 col-sm-6">
                 <button type="button" id="btntransfer" class="btn btn-primary pull-right" onclick ="TransferLead()"style="margin-right:10px;">Transfer</button>
@@ -151,6 +151,37 @@
     }
 
     function TransferLead() {
+        var checkboxValues = [];
+        $('input[type="checkbox"]:checked').each(function (index, elem) {
+            checkboxValues.push($(elem).val());
+        });
+        var smId = $("#ddlSalesManager").val();
+       
+        $("#divLoader").show();
+         $("#divLoader").show();
+
+
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("TransferLead", "Lead")',
+            data: '{LeadId: ' + JSON.stringify(checkboxValues) + ',SaleManagerId:' + JSON.stringify(smId) +'}',
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                //$('#dvSearchLeads').html(response);
+                //$('#dvSearchLeads').show(1000);
+                $("#divLoader").hide();
+            },
+            failure: function (response) {
+                $("#divLoader").hide();
+            },
+            error: function (response) {
+                //$('#dvSearchLeads').html(response.responseText);
+                //$('#dvSearchLeads').show(1000);
+                $("#divLoader").hide();
+            }
+        });
+        //console.log(checkboxValues);
 
     }
 </script>
