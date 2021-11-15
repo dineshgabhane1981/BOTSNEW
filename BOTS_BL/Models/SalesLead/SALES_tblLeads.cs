@@ -146,4 +146,30 @@ namespace BOTS_BL.Models.SalesLead
         public string CityName { get; set; }
         public string GroupId { get; set; }
     }
+
+    public class SalesCount
+    {
+        public int? NoOfMeeting { get; set; }
+        public int? NoOfSalesDone { get; set; }
+        public int? NoOfBrand { get; set; }
+        public int? NoOfOutlet { get; set; }
+        public int? octaplus { get; set; }
+        public int? octaxs { get; set; }
+        public decimal? TotalAmount { get; set; }
+        public int? SalesAvg { get; set; }        
+        public int? NoOfBillingpartner { get; set; }
+        public List<salesCountDetails> lstSalesCountDetaile { get; set; }
+        
+
+    }
+    public class salesCountDetails
+    {
+        public int? LeadId { get; set; }
+        public string BusinessName { get; set; }
+        public string Product { get; set; }
+        public string BillingPartner { get; set; }
+        public decimal? Amount { get; set; }
+        public long? OutletName { get; set; }
+    }
+
 }
