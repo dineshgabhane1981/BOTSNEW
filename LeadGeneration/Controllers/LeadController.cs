@@ -156,5 +156,19 @@ namespace LeadGeneration.Controllers
             return PartialView("_LeadTransferList", objviewmodel);
         }
 
+        public ActionResult SalesCount()
+        {
+            LeadViewModel objviewmodel = new LeadViewModel();
+            objviewmodel.lstSalesManager = SLR.GetSalesManager();           
+            return View(objviewmodel);
+        }
+
+        public JsonResult GetSalesCount(DateTime Fromdate,DateTime ToDate)
+        {
+            List<SalesCount> lstsalescount = SLR.GetSalesCounts(Fromdate, ToDate);
+            return new JsonResult() { Data = lstsalescount, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
+
+        }
+
     }
 }
