@@ -26,5 +26,11 @@ namespace LeadGeneration.Controllers
 
             return View();
         }
+
+        public ActionResult Logout()
+        {
+            Session.Abandon();
+            return RedirectToAction("Index", "Login");
+        }
     }
 }
