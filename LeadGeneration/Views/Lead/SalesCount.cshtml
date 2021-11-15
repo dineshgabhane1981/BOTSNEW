@@ -103,21 +103,25 @@
             $('#txttodt').css('border-color', 'red');
             returnStatus = false;
         }
-
-        if (returnStatus == true) {
-            if ($("#ddlBOProduct option:selected").text() == "Please Select") {
-
+        var smId = "";
+        if (returnStatus == true) {            
+            if ($("#ddlSalesManager option:selected").text() == "Please Select") {
+                alert(222)
             }
-            else {
-
+            else {                
+                smId = $("#ddlSalesManager").val();
+                if (smId == undefined) {
+                    smId = "";
+                }
             }
+            
             var fromdt = $("#txtfromdt").val();
             var todt = $("#txttodt").val();
             console.log(fromdt);
            $.ajax({
             type: "POST",
             url: '@Url.Action("GetSalesCount", "Lead")',
-               data: '{Fromdate: ' + JSON.stringify(fromdt) + ', ToDate:' + JSON.stringify(todt) +'}',
+               data: '{Fromdate: ' + JSON.stringify(fromdt) + ', ToDate:' + JSON.stringify(todt) + ', SalesManager:' + JSON.stringify(smId) +'}',
             contentType: "application/json; charset=utf-8",
             dataType: "json",
                success: function (response) {
@@ -137,9 +141,10 @@
 
                            tablesalesData.push(optionItem);
                        });
-
+                       
+                       tablesalesDatalist.length = 0;
                        $.map(response[0].lstSalesCountDetail, function (item) {
-                           console.log(response[0].lstSalesCountDetail);
+                           
                            optionItem = {}
                            optionItem["LeadId"] = item.LeadId;
                            optionItem["BusinessName"] = item.BusinessName;

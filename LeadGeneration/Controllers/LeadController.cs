@@ -175,9 +175,14 @@ namespace LeadGeneration.Controllers
             return View(objviewmodel);
         }
 
-        public JsonResult GetSalesCount(DateTime Fromdate,DateTime ToDate)
+        public JsonResult GetSalesCount(DateTime Fromdate,DateTime ToDate, string SalesManager)
         {
-            List<SalesCount> lstsalescount = SLR.GetSalesCounts(Fromdate, ToDate);
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            if(userDetails.LoginType!="1" && userDetails.LoginType!="5")
+            {
+                SalesManager = userDetails.LoginId;
+            }
+            List<SalesCount> lstsalescount = SLR.GetSalesCounts(Fromdate, ToDate, SalesManager);
             return new JsonResult() { Data = lstsalescount, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
 
         }
