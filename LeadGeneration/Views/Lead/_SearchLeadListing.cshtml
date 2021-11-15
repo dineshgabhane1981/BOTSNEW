@@ -32,21 +32,28 @@
                                 {
 
                                     string LeadId = Convert.ToString(item.LeadId);
-                                    <tr>
+                        <tr>
 
-                                        <td><a href="#" onclick="ShowTrackingDetails(@item.LeadId);">@item.LeadId</a></td>
+                            <td><a href="#" onclick="ShowTrackingDetails(@item.LeadId);">@item.LeadId</a></td>
 
-                                        <td>@item.BusinessName</td>
-                                        <td>@item.MobileNo</td>
-                                        <td>@item.ContactType</td>
-                                        <td>@item.LeadStatus</td>
-                                        <td>@item.FollowupDate</td>
-                                        <td>@item.CityName</td>
-                                        <td style="text-align:center;">
-                                            <a href="@Url.Action("AddLead", "Lead", new {leadId= LeadId})" class="login" title="Edit"><img src="~/Content/assets/images/shape_editUser.png" /></a>
+                            <td>@item.BusinessName</td>
+                            <td>@item.MobileNo</td>
+                            <td>@item.ContactType</td>
+                            <td>@item.LeadStatus</td>
+                            @if (item.FollowupDate.HasValue)
+                            {
+                                <td>@item.FollowupDate.Value.ToShortDateString()</td>
+                            }
+                            else
+                            {
+                                <td>--</td>
+                            }
+                            <td>@item.CityName</td>
+                            <td style="text-align:center;">
+                                <a href="@Url.Action("AddLead", "Lead", new {leadId= LeadId})" class="login" title="Edit"><img src="~/Content/assets/images/shape_editUser.png" /></a>
 
-                                        </td>
-                                    </tr>
+                            </td>
+                        </tr>
                                     var dynamicIdTr = "trLeadTracking" + item.LeadId;
                                     var dynamicIdDiv = "dvLeadTrackingData" + item.LeadId;
 
@@ -75,3 +82,36 @@
     </div>
 
 </div>
+
+<script>
+    $(document).ready(function () {
+        $('#OnBoardingTable').DataTable({
+            "aaSorting": [],
+            "paging": true,
+            "ordering": true,
+            "info": true,
+            "bFilter": true,
+            "pageLength": 25,
+            "pagingType": "simple_numbers"
+        });
+
+        $('#OnBoardingTable_filter').hide();
+
+        $('#txtSearchOnBoarding').on('keyup', function () {
+
+            $.fn.dataTable.ext.search.push(function (settings, searchData) {
+                var term = $('#txtSearchOnBoarding').val().toLowerCase()
+                for (var i = 0; i < searchData.length; i++) {
+                    if (searchData[i].toLowerCase().indexOf(term) >= 0) {
+                        return true;
+                    }
+                }
+                return false;
+            });
+            var table = $('#OnBoardingTable').DataTable();
+            table.draw();
+        });
+
+        //$(".first.paginate_button, .last.paginate_button").hide();
+    });
+</script>

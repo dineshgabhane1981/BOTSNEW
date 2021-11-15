@@ -38,8 +38,8 @@ namespace BOTS_BL.Repository
                     objsalestracking.LeadId = objtbllead.LeadId;
                     objsalestracking.ContactType = objtbllead.ContactType;
                     objsalestracking.SpokeWith = objtbllead.SpokeWith;
-                    objsalestracking.LeadStatus = objtbllead.LeadStatus;                   
-                    objsalestracking.MeetingType = objtbllead.MeetingType;          
+                    objsalestracking.LeadStatus = objtbllead.LeadStatus;
+                    objsalestracking.MeetingType = objtbllead.MeetingType;
                     objsalestracking.FollowupDate = objtbllead.FollowupDate;
                     objsalestracking.BillingPartner = objtbllead.BillingPartner;
                     objsalestracking.NoOfOutlet = objtbllead.NoOfOutlet;
@@ -70,11 +70,11 @@ namespace BOTS_BL.Repository
                     objtbllead.Category = objlead.Category;
                     objtbllead.Product = objlead.Product;
                     objtbllead.City = objlead.City;
-                    
+
                     if (objtbllead.MeetingType == "salesdone")
                     {
                         objtbllead.MeetingType = objlead.MeetingType;
-                    }                    
+                    }
 
                     context.SALES_tblLeads.AddOrUpdate(objtbllead);
                     context.SaveChanges();
@@ -127,7 +127,7 @@ namespace BOTS_BL.Repository
             }
             return objsaleslead;
         }
-        public List<SalesLead> GetSalesLeads()
+        public List<SalesLead> GetSalesLeads(CustomerLoginDetail objCust)
         {
             List<SalesLead> lstsaleslead = new List<SalesLead>();
             DateTime today = DateTime.Today;
@@ -168,9 +168,14 @@ namespace BOTS_BL.Repository
                                     AddedBy = c.AddedBy,
                                     AddedDate = c.AddedDate,
                                     UpdatedDate = c.UpdatedDate,
-                                    CityName = ct.CityName
+                                    CityName = ct.CityName,
+                                    AssignedLead = c.AssignedLead
 
                                 }).ToList();
+                if(objCust.LoginType != "1" || objCust.LoginType != "5")
+                {
+                    lstsaleslead = lstsaleslead.Where(x => x.AssignedLead == objCust.LoginId).ToList();
+                }
             }
             return lstsaleslead;
         }
@@ -234,7 +239,8 @@ namespace BOTS_BL.Repository
                                 AddedBy = c.AddedBy,
                                 AddedDate = c.AddedDate,
                                 UpdatedDate = c.UpdatedDate,
-                                CityName = ct.CityName
+                                CityName = ct.CityName,
+                                AssignedLead = c.AssignedLead
                             }).ToList();
 
                 if (!string.IsNullOrEmpty(MobileNo))
@@ -267,7 +273,7 @@ namespace BOTS_BL.Repository
                 }
                 if (!string.IsNullOrEmpty(SalesManager) && SalesManager != "Please Select")
                 {
-                    lstLeads = lstLeads.Where(x => x.AddedBy == SalesManager).ToList();
+                    lstLeads = lstLeads.Where(x => x.AssignedLead == SalesManager).ToList();
 
                 }
                 if (!string.IsNullOrEmpty(FrmDate) && !string.IsNullOrEmpty(ToDate))
@@ -289,7 +295,7 @@ namespace BOTS_BL.Repository
             using (var context = new CommonDBContext())
             {
                 var Id = Convert.ToInt32(LeadId);
-                
+
                 lstLeadTracking = (from c in context.SALES_tblLeadTracking
                                    join ct in context.CustomerLoginDetails on c.AddedBy equals ct.LoginId
                                    where c.LeadId == Id
@@ -352,20 +358,21 @@ namespace BOTS_BL.Repository
 
         }
 
-        public bool LeadTransfer(int[] LeadId, string SaleManagerId,string addedby)
+        public bool LeadTransfer(int[] LeadId, string SaleManagerId, string addedby)
         {
             bool result = false;
             try
             {
                 SALES_tblLeads objsaleslead = new SALES_tblLeads();
                 SALES_tblLeadTracking objsalesleadtracking = new SALES_tblLeadTracking();
-               // string connStr = objCustRepo.GetCustomerConnString(GroupId);
+                // string connStr = objCustRepo.GetCustomerConnString(GroupId);
                 using (var contextNew = new CommonDBContext())
                 {
-                    
-                        foreach (int leadid in LeadId)
-                        {
 
+                    foreach (int leadid in LeadId)
+                    {
+                        if (leadid != 0)
+                        {
                             objsaleslead = contextNew.SALES_tblLeads.Where(x => x.LeadId == leadid).FirstOrDefault();
                             objsaleslead.AssignedLead = SaleManagerId;
                             objsaleslead.UpdatedDate = DateTime.Now;
@@ -374,16 +381,17 @@ namespace BOTS_BL.Repository
                             objsalesleadtracking = contextNew.SALES_tblLeadTracking.Where(x => x.LeadId == leadid).FirstOrDefault();
                             if (objsalesleadtracking != null)
                             {
-                            objsalesleadtracking.AssignedLead = SaleManagerId;
-                            objsalesleadtracking.AddedBy = addedby;
-                            objsalesleadtracking.AddedDate = DateTime.Now;
-                            contextNew.SALES_tblLeadTracking.AddOrUpdate(objsalesleadtracking);
-                            contextNew.SaveChanges();
+                                objsalesleadtracking.AssignedLead = SaleManagerId;
+                                objsalesleadtracking.AddedBy = addedby;
+                                objsalesleadtracking.AddedDate = DateTime.Now;
+                                contextNew.SALES_tblLeadTracking.AddOrUpdate(objsalesleadtracking);
+                                contextNew.SaveChanges();
                             }
                             result = true;
-                        }   
+                        }
+                    }
                     //}
-                    
+
                 }
 
             }
@@ -394,9 +402,9 @@ namespace BOTS_BL.Repository
             return result;
         }
 
-        public List<SalesCount> GetSalesCounts(DateTime Fromdt,DateTime Todt)
+        public List<SalesCount> GetSalesCounts(DateTime Fromdt, DateTime Todt)
         {
-           // List<salesCountDetails> lstsalescountdetailes = new List<salesCountDetails>();
+            // List<salesCountDetails> lstsalescountdetailes = new List<salesCountDetails>();
             SalesCount objsalescount = new SalesCount();
             salesCountDetails objsalesCountDetails = new salesCountDetails();
             List<salesCountDetails> lstsalesCountDetails = new List<salesCountDetails>();
@@ -405,41 +413,42 @@ namespace BOTS_BL.Repository
             List<SALES_tblLeads> lstleads = new List<SALES_tblLeads>();
             using (var context = new CommonDBContext())
             {
-                objsalescount.NoOfMeeting = context.SALES_tblLeadTracking.Where(x => x.MeetingType == "1stMeeting" && x.AddedDate >=Fromdt && x.AddedDate <= Todt).Count();
+                objsalescount.NoOfMeeting = context.SALES_tblLeadTracking.Where(x => x.MeetingType == "1stMeeting" && x.AddedDate >= Fromdt && x.AddedDate <= Todt).Count();
                 objsalescount.NoOfSalesDone = context.SALES_tblLeads.Where(x => x.MeetingType == "salesdone" && x.UpdatedDate >= Fromdt && x.UpdatedDate <= Todt).Count();
-                
+
 
                 objsalescount.NoOfBrand = (from s in context.SALES_tblLeads
-                                  join r in context.BOTS_TblRetailMaster on
-                                  s.GroupId equals r.GroupId
-                                  where (s.MeetingType == "salesdone" && s.UpdatedDate >= Fromdt && s.UpdatedDate <= Todt)
-                                  select new { s.GroupId}).Count();
+                                           join r in context.BOTS_TblRetailMaster on
+                                           s.GroupId equals r.GroupId
+                                           where (s.MeetingType == "salesdone" && s.UpdatedDate >= Fromdt && s.UpdatedDate <= Todt)
+                                           select new { s.GroupId }).Count();
 
                 objsalescount.NoOfOutlet = (from s in context.SALES_tblLeads
-                                  join r in context.BOTS_TblRetailMaster on
-                                  s.GroupId equals r.GroupId
-                                  where (s.MeetingType == "salesdone" && s.UpdatedDate >= Fromdt && s.UpdatedDate <= Todt)
-                                  select new { r.NoOfEnrolled }).Count();
+                                            join r in context.BOTS_TblRetailMaster on
+                                            s.GroupId equals r.GroupId
+                                            where (s.MeetingType == "salesdone" && s.UpdatedDate >= Fromdt && s.UpdatedDate <= Todt)
+                                            select new { r.NoOfEnrolled }).Count();
 
                 objsalescount.TotalAmount = (from s in context.SALES_tblLeads
                                              join d in context.BOTS_TblDealDetails on
                                              s.GroupId equals d.GroupId
-                                             where (s.MeetingType == "salesdone" && s.UpdatedDate >= Fromdt && s.UpdatedDate <= Todt) 
-                                             select new {
-                                              d.TotalFeesA
-                                             }).Sum(x=>x.TotalFeesA);
+                                             where (s.MeetingType == "salesdone" && s.UpdatedDate >= Fromdt && s.UpdatedDate <= Todt)
+                                             select new
+                                             {
+                                                 d.TotalFeesA
+                                             }).Sum(x => x.TotalFeesA);
 
                 objsalescount.octaplus = (from s in context.SALES_tblLeads
                                           join r in context.BOTS_TblRetailMaster on
                                           s.GroupId equals r.GroupId
                                           where (s.MeetingType == "salesdone" && r.BOProduct == "1" && s.UpdatedDate >= Fromdt && s.UpdatedDate <= Todt)
-                                          select new { r.BOProduct}).Count();
+                                          select new { r.BOProduct }).Count();
 
                 objsalescount.octaxs = (from s in context.SALES_tblLeads
-                                          join r in context.BOTS_TblRetailMaster on
-                                          s.GroupId equals r.GroupId
-                                          where (s.MeetingType == "salesdone" && r.BOProduct == "2" && s.UpdatedDate >= Fromdt && s.UpdatedDate <= Todt)
-                                          select new { r.BOProduct }).Count();
+                                        join r in context.BOTS_TblRetailMaster on
+                                        s.GroupId equals r.GroupId
+                                        where (s.MeetingType == "salesdone" && r.BOProduct == "2" && s.UpdatedDate >= Fromdt && s.UpdatedDate <= Todt)
+                                        select new { r.BOProduct }).Count();
 
                 objsalescount.NoOfBillingpartner = (from s in context.SALES_tblLeads
                                                     join r in context.BOTS_TblRetailMaster on
@@ -448,26 +457,26 @@ namespace BOTS_BL.Repository
                                                     select new { r.BillingPartner }).Distinct().Count();
 
                 objsalescount.lstSalesCountDetail = (from s in context.SALES_tblLeads
-                                         join r in context.BOTS_TblRetailMaster on
-                                         s.GroupId equals r.GroupId
-                                         join d in context.BOTS_TblDealDetails on
-                                         r.GroupId equals d.GroupId
-                                         where (s.MeetingType == "salesdone" && s.UpdatedDate >= Fromdt && s.UpdatedDate <= Todt)
-                                         select new salesCountDetails
-                                         {
-                                            LeadId =s.LeadId,
-                                             BusinessName =r.BrandName,
-                                             Product =r.BOProduct,
-                                             BillingPartner =r.BillingProduct,
-                                             Amount =d.TotalFeesA,
-                                             OutletName = r.NoOfEnrolled
+                                                     join r in context.BOTS_TblRetailMaster on
+                                                     s.GroupId equals r.GroupId
+                                                     join d in context.BOTS_TblDealDetails on
+                                                     r.GroupId equals d.GroupId
+                                                     where (s.MeetingType == "salesdone" && s.UpdatedDate >= Fromdt && s.UpdatedDate <= Todt)
+                                                     select new salesCountDetails
+                                                     {
+                                                         LeadId = s.LeadId,
+                                                         BusinessName = r.BrandName,
+                                                         Product = r.BOProduct,
+                                                         BillingPartner = r.BillingProduct,
+                                                         Amount = d.TotalFeesA,
+                                                         OutletName = r.NoOfEnrolled
 
-                                         }).ToList();
+                                                     }).ToList();
 
 
             }
             lstsalescount.Add(objsalescount);
-           
+
             return lstsalescount;
         }
     }

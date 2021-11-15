@@ -35,18 +35,44 @@
                                     string chkId = "chk" + item.LeadId;
                                     <tr>
 
-                                        <td><a href="#" onclick="ShowCustomerDetails(@item.LeadId);">@item.LeadId</a></td>
+                                        <td><a href="#" onclick="ShowLeadTrackingDetails(@item.LeadId);">@item.LeadId</a></td>
 
                                         <td>@item.BusinessName</td>
                                         <td>@item.MobileNo</td>
                                         <td>@item.ContactType</td>
                                         <td>@item.LeadStatus</td>
-                                        <td>@item.FollowupDate</td>
+                                        @if (item.FollowupDate.HasValue)
+                                        {
+                                            <td>@item.FollowupDate.Value.ToShortDateString()</td>
+                                        }
+                                        else
+                                        {
+                                            <td>--</td>
+                                        }
                                         <td>@item.CityName</td>
                                         <td style="text-align:center;">
                                             <input id="@chkId" type="checkbox" value="@item.LeadId" class="w3-check" /> <br />
 
                                         </td>
+                                    </tr>
+
+                                    var dynamicIdTr = "trLeadTracking" + item.LeadId;
+                                    var dynamicIdDiv = "dvLeadTrackingData" + item.LeadId;
+
+                                    <tr id="@dynamicIdTr" style="display:none;">
+                                        <td colspan="8">
+                                            <div id="@dynamicIdDiv" style="display:none;" class="table-responsive">
+
+                                            </div>
+                                        </td>
+                                        <td style="display:none;"></td>
+                                        <td style="display:none;"></td>
+                                        <td style="display:none;"></td>
+                                        <td style="display:none;"></td>
+                                        <td style="display:none;"></td>
+                                        <td style="display:none;"></td>
+                                        <td style="display:none;"></td>
+                                        <td style="display:none;"></td>
                                     </tr>
                                 }
                             }
@@ -67,7 +93,36 @@
             $(".w3-check").prop('checked', false);
         }
     });
+    $(document).ready(function () {
+        $('#OnBoardingTable').DataTable({
+            "aaSorting": [],
+            "paging": true,
+            "ordering": true,
+            "info": true,
+            "bFilter": true,
+            "pageLength": 25,
+            "pagingType": "simple_numbers"
+        });
 
+        $('#OnBoardingTable_filter').hide();
+
+        $('#txtSearchOnBoarding').on('keyup', function () {
+
+            $.fn.dataTable.ext.search.push(function (settings, searchData) {
+                var term = $('#txtSearchOnBoarding').val().toLowerCase()
+                for (var i = 0; i < searchData.length; i++) {
+                    if (searchData[i].toLowerCase().indexOf(term) >= 0) {
+                        return true;
+                    }
+                }
+                return false;
+            });
+            var table = $('#OnBoardingTable').DataTable();
+            table.draw();
+        });
+
+        //$(".first.paginate_button, .last.paginate_button").hide();
+    });
 
 </script>
 

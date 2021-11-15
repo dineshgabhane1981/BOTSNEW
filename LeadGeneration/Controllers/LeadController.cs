@@ -19,8 +19,9 @@ namespace LeadGeneration.Controllers
         SalesLeadRepository SLR = new SalesLeadRepository();
         public ActionResult Index()
         {
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
             LeadViewModel objviewmodel = new LeadViewModel();
-            objviewmodel.lstsALES_TblLeads = SLR.GetSalesLeads();
+            objviewmodel.lstsALES_TblLeads = SLR.GetSalesLeads(userDetails);
             objviewmodel.lstCity = CR.GetCity();
             objviewmodel.lstBillingPartner = CR.GetBillingPartner();
             objviewmodel.lstSalesManager = SLR.GetSalesManager();
@@ -29,8 +30,9 @@ namespace LeadGeneration.Controllers
         }
         public ActionResult LeadTransfer()
         {
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
             LeadViewModel objviewmodel = new LeadViewModel();
-            objviewmodel.lstsALES_TblLeads = SLR.GetSalesLeads();
+            objviewmodel.lstsALES_TblLeads = SLR.GetSalesLeads(userDetails);
             objviewmodel.lstCity = CR.GetCity();
             objviewmodel.lstBillingPartner = CR.GetBillingPartner();
             objviewmodel.lstSalesManager = SLR.GetSalesManager();
@@ -107,10 +109,20 @@ namespace LeadGeneration.Controllers
             object[] objData = (object[])json_serializer.DeserializeObject(searchData);
             foreach (Dictionary<string, object> item in objData)
             {
-                objviewmodel.lstsALES_TblLeads = SLR.GetSearchedLeads(Convert.ToString(item["MobileNo"]), Convert.ToString(item["BusinessName"]), 
+                string salesManager = string.Empty;
+                if (item.ContainsKey("SalesManager"))
+                {
+                    salesManager = Convert.ToString(item["SalesManager"]);
+                }
+                else
+                {
+                    var userDetails = (CustomerLoginDetail)Session["UserSession"];
+                    salesManager = userDetails.LoginId;
+                }
+                    objviewmodel.lstsALES_TblLeads = SLR.GetSearchedLeads(Convert.ToString(item["MobileNo"]), Convert.ToString(item["BusinessName"]), 
                     Convert.ToString(item["DtFrom"]), Convert.ToString(item["DtTo"]), Convert.ToString(item["LeadStatus"]), 
                     Convert.ToString(item["ContactType"]), Convert.ToString(item["MeetingType"]), Convert.ToString(item["City"]),
-                    Convert.ToString(item["BillingPartner"]), Convert.ToString(item["SalesManager"]));
+                    Convert.ToString(item["BillingPartner"]), salesManager);
             }
             
             return PartialView("_SearchLeadListing", objviewmodel);
