@@ -158,7 +158,7 @@ namespace BOTS_BL.Models.SalesLead
         public decimal? TotalAmount { get; set; }
         public int? SalesAvg { get; set; }        
         public int? NoOfBillingpartner { get; set; }
-        public List<salesCountDetails> lstSalesCountDetaile { get; set; }
+        public List<salesCountDetails> lstSalesCountDetail { get; set; }
         
 
     }

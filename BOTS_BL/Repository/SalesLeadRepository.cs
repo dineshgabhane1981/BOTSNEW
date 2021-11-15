@@ -398,6 +398,8 @@ namespace BOTS_BL.Repository
         {
            // List<salesCountDetails> lstsalescountdetailes = new List<salesCountDetails>();
             SalesCount objsalescount = new SalesCount();
+            salesCountDetails objsalesCountDetails = new salesCountDetails();
+            List<salesCountDetails> lstsalesCountDetails = new List<salesCountDetails>();
             List<SalesCount> lstsalescount = new List<SalesCount>();
             List<SALES_tblLeadTracking> lstleadtracking = new List<SALES_tblLeadTracking>();
             List<SALES_tblLeads> lstleads = new List<SALES_tblLeads>();
@@ -445,7 +447,7 @@ namespace BOTS_BL.Repository
                                                     where (s.MeetingType == "salesdone" && s.UpdatedDate >= Fromdt && s.UpdatedDate <= Todt)
                                                     select new { r.BillingPartner }).Distinct().Count();
 
-                objsalescount.lstSalesCountDetaile = (from s in context.SALES_tblLeads
+                objsalescount.lstSalesCountDetail = (from s in context.SALES_tblLeads
                                          join r in context.BOTS_TblRetailMaster on
                                          s.GroupId equals r.GroupId
                                          join d in context.BOTS_TblDealDetails on
@@ -465,6 +467,7 @@ namespace BOTS_BL.Repository
 
             }
             lstsalescount.Add(objsalescount);
+           
             return lstsalescount;
         }
     }

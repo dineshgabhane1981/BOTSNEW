@@ -112,6 +112,7 @@
 </div>
 <script>
     var tablesalesData = [];
+    var tablesalesDatalist = [];
     $(document).ready(function () {
         var today = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
         $("#txtfromdt").datepicker({
@@ -151,9 +152,9 @@
                success: function (response) {
                    if (response != null) {
                        console.log(response);
+                       console.log(response[0].lstSalesCountDetail);
                        tablesalesData.length = 0;
-                       $.map(response, function (item) {
-                           console.log(item.NoOfMeeting);
+                       $.map(response, function (item) {                           
                            optionItem = {}
                            optionItem["Noofmeetings"] = item.NoOfMeeting;
                            optionItem["Noofsalesdone"] = item.NoOfSalesDone;
@@ -167,8 +168,24 @@
                            
                            tablesalesData.push(optionItem);
                        });
-                       console.log(tablesalesData)
+                      
+                       $.map(response[0].lstSalesCountDetail, function (item) {
+                           console.log(response[0].lstSalesCountDetail);
+                           optionItem = {}
+                           optionItem["LeadId"] = item.LeadId;
+                           optionItem["BusinessName"] = item.BusinessName;
+                           optionItem["Product"] = item.Product;
+                           optionItem["BillingPartner"] = item.BillingPartner;
+                           optionItem["Amount"] = item.Amount;
+                           optionItem["OutletName"] = item.OutletName;
+
+                           tablesalesDatalist.push(optionItem);
+                       });
+                       console.log(tablesalesDatalist);
+                       DrawTablesalesdetail();
+                       console.log(tablesalesData);
                        DrawTableLog();
+
 
                    }
                
@@ -271,6 +288,47 @@
                 return false;
             });
             var table = $('#summarytable').DataTable();
+            table.draw();
+        });
+
+    }
+    function DrawTablesalesdetail() {
+        var table1 = $('#detailedlisttable').DataTable();
+        table1.destroy();
+
+        var table = $('#detailedlisttable').DataTable({
+            "data": tablesalesDatalist,
+            "paging": true,
+            "ordering": false,
+            "info": true,
+            "bFilter": false,
+            "pageLength": 10,
+            "pagingType": "simple_numbers",
+
+            "columns": [
+                { data: "LeadId" },
+                { data: "BusinessName" },
+                { data: "Product" },
+                { data: "BillingPartner" },
+                { data: "Amount" },
+                { data: "OutletName" },
+                
+            ],
+
+        });
+        $('#detailedlisttable_filter').hide();
+        $('#txtSearch').on('keyup', function () {
+
+            $.fn.dataTable.ext.search.push(function (settings, searchData) {
+                var term = $('#txtSearch').val().toLowerCase()
+                for (var i = 0; i < searchData.length; i++) {
+                    if (searchData[i].toLowerCase().indexOf(term) >= 0) {
+                        return true;
+                    }
+                }
+                return false;
+            });
+            var table = $('#detailedlisttable').DataTable();
             table.draw();
         });
 
