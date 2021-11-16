@@ -886,7 +886,20 @@
                     }
                 },
                 { data: "Outletnm" },
-                { data: "FirstTxnDt" },
+                {
+                    "data": "FirstTxnDt", "title": "First Transaction Date", "render": function (data, type) {
+                        if (data != "" && data != null) {
+                            var year = data.split('/')[0]
+                            var month = data.split('/')[1]
+                            var day = data.split('/')[2]
+                            var date = month + "/" + day + "/" + year;
+                            return date;
+                        }
+                        else {
+                            return data;
+                        }
+                    }
+                },
                 { data: "TotalSpend" },
                 { data: "TxnCount" }
             ]

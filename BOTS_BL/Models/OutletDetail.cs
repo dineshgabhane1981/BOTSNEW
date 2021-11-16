@@ -57,5 +57,8 @@ namespace BOTS_BL.Models
 
         [StringLength(4)]
         public string GroupId { get; set; }
+
+        [Column(TypeName = "numeric")]
+        public decimal? FeedBackPoints { get; set; }
     }
 }
