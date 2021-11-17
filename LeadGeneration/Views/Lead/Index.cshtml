@@ -15,7 +15,7 @@
                 <div class="container-fluid">
                     <div class="row">
                         <div class="col-md-6 col-sm-6">
-                            Mobile Number <br /> <input id="txtMobileNo" type="text" class="input100" />
+                            Mobile Number <br /> <input id="txtMobileNo" type="number" class="input100" />
                         </div>
                         <div class="col-md-6 col-sm-6">
                             Business Name
@@ -66,7 +66,7 @@
 
                     <div class="row pb-3 pt-3">
                         <div class="col-md-12 col-sm-12 pull-right">
-                            <button type="button" id="btnReset" class="btn btn-primary pull-right" style="margin-right:10px;">Reset</button>
+                            <button type="button" id="btnReset" class="btn btn-primary pull-right" onclick="ResetSearch();" style="margin-right:10px;">Reset</button>
                             <button type="button" id="btnSearch" class="btn btn-primary pull-right" style="margin-right:10px;">Search</button>
                         </div>
                     </div>
@@ -395,6 +395,10 @@
                 buttonText: "Okay"
             })
         }
+    }
+
+    function ResetSearch() {
+        alert(111)
     }
 
 </script>

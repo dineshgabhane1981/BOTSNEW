@@ -307,7 +307,7 @@ namespace BOTS_BL.Repository
                                        MeetingType = c.MeetingType,
                                        LeadStatus = c.LeadStatus,
                                        Comments = c.Comments
-                                   }).AsNoTracking().ToList();
+                                   }).AsNoTracking().OrderByDescending(x=>x.AddedDate).ToList();
             }
             return lstLeadTracking;
         }

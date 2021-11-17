@@ -247,7 +247,8 @@ namespace BOTS_BL.Repository
             string CustomerName = string.Empty;
             using (var context = new CommonDBContext())
             {
-                CustomerName = context.CustomerLoginDetails.Where(x => x.GroupId == GroupId).Select(y => y.UserName).FirstOrDefault();
+                var TgroupId = Convert.ToInt32(GroupId);
+                CustomerName = context.tblGroupDetails.Where(x => x.GroupId == TgroupId).Select(y => y.GroupName).FirstOrDefault();
             }
             return CustomerName;
         }

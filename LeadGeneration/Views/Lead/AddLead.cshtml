@@ -107,7 +107,7 @@
                     </div>
                     <div class="row">
                         <div class="col-md-6 col-sm-6">
-                            Mobile no<br /> @Html.TextBoxFor(model => model.sALES_TblLeads.MobileNo, new { @class = "input100", @id = "txtmobileno" })
+                            Mobile no<br /> @Html.TextBoxFor(model => model.sALES_TblLeads.MobileNo, new { @type = "number", @class = "input100", @id = "txtmobileno" })
                         </div>
                         <div class="col-md-6 col-sm-6">
                             Lead status <br />@Html.DropDownListFor(model => model.sALES_TblLeads.LeadStatus, new SelectList(Model.LeadStatus(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input100", @id = "ddlleadstatus" })
@@ -126,7 +126,7 @@
                             Follow up date <br />@Html.TextBoxFor(model => model.sALES_TblLeads.FollowupDate, new { @class = "input100", @id = "txtfollowupdt" })
                         </div>
                         <div class="col-md-6 col-sm-6">
-                            Lead source <br />@Html.DropDownListFor(model => model.sALES_TblLeads.LeadSource, new SelectList(Model.ContactType(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input100", @id = "ddlleadsource" })
+                            Lead source <br />@Html.DropDownListFor(model => model.sALES_TblLeads.LeadSource, new SelectList(Model.LeadSource(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input100", @id = "ddlleadsource" })
                         </div>
                     </div>
                     <div class="row">
