@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -69,8 +70,21 @@ namespace LeadGeneration.Controllers
             int LeadId = 0;
             try
             {
+                objData.lstBillingPartner = CR.GetBillingPartner();
+                objData.lstcategory = CR.GetRetailCategory();
+                objData.lstStates = CR.GetStates();
+                objData.lstCity = CR.GetCity();
                 var userDetails = (CustomerLoginDetail)Session["UserSession"];
 
+                if(objData.sALES_TblLeads.LeadId == 0)
+                {
+                    var exist = SLR.isMobileNoExist(objData.sALES_TblLeads.MobileNo);
+                    if(exist)
+                    {
+                        ViewData["Status"] = "exist";
+                        return View("AddLead", objData);
+                    }
+                }
                 objData.sALES_TblLeads.AddedDate = DateTime.Now;
                 objData.sALES_TblLeads.AddedBy = userDetails.LoginId;
                 objData.sALES_TblLeads.AssignedLead = userDetails.LoginId;
@@ -78,8 +92,9 @@ namespace LeadGeneration.Controllers
                 LeadId = SLR.AddSalesLead(objData.sALES_TblLeads);
                 if (meetingType == "salesdone")
                 {
+                    string url = ConfigurationManager.AppSettings["CustomerDocumentsURL"].ToString();
                     //string url = "https://blueocktopus.in/bots?LoginID=" + userDetails.LoginId + "&LeadId=" + objData.sALES_TblLeads.LeadId + "";
-                    string url = "http://localhost:57265?LoginID=" + userDetails.LoginId + "";
+                    url = url+"?LoginID=" + userDetails.LoginId + "";
                     ViewData["LeadId"] = LeadId;
                     ViewData["URL"] = url;
                 }
@@ -92,11 +107,6 @@ namespace LeadGeneration.Controllers
                 // return View("AddLead");
             }
             ViewData["Status"] = LeadId;
-            objData.lstBillingPartner = CR.GetBillingPartner();
-            objData.lstcategory = CR.GetRetailCategory();
-            objData.lstStates = CR.GetStates();
-            objData.lstCity = CR.GetCity();
-
             return View("AddLead", objData);
 
         }
