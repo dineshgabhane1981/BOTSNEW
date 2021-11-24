@@ -20,6 +20,7 @@
                             <th scope="col">Lead Status</th>
                             <th scope="col">Follow Up Date</th>
                             <th scope="col">City</th>
+                            <th scope="col">Sales Manager</th>
                             <th scope="col" style="text-align:center;">Action</th>
                         </tr>
                     </thead>
@@ -49,6 +50,7 @@
                                 <td>--</td>
                             }
                             <td>@item.CityName</td>
+                            <td>@item.AssignedLead</td>
                             <td style="text-align:center;">
                                 <a href="@Url.Action("AddLead", "Lead", new {leadId= LeadId})" class="login" title="Edit"><img src="~/Content/assets/images/shape_editUser.png" /></a>
 

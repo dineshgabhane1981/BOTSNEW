@@ -138,6 +138,7 @@ namespace BOTS_BL.Repository
 
                 lstsaleslead = (from c in context.SALES_tblLeads
                                 join ct in context.tblCities on c.City equals ct.CityId.ToString()
+                                join cd in context.CustomerLoginDetails on c.AssignedLead equals cd.LoginId
                                 where (c.FollowupDate == today || c.FollowupDate == tommrowdt)
                                 select new SalesLead
                                 {
@@ -169,10 +170,10 @@ namespace BOTS_BL.Repository
                                     AddedDate = c.AddedDate,
                                     UpdatedDate = c.UpdatedDate,
                                     CityName = ct.CityName,
-                                    AssignedLead = c.AssignedLead
+                                    AssignedLead = cd.UserName
 
                                 }).ToList();
-                if (objCust.LoginType != "1" || objCust.LoginType != "5")
+                if (objCust.LoginType != "1" && objCust.LoginType != "5")
                 {
                     lstsaleslead = lstsaleslead.Where(x => x.AssignedLead == objCust.LoginId).ToList();
                 }
@@ -210,6 +211,7 @@ namespace BOTS_BL.Repository
 
                 lstLeads = (from c in context.SALES_tblLeads
                             join ct in context.tblCities on c.City equals ct.CityId.ToString()
+                            join cd in context.CustomerLoginDetails on c.AssignedLead equals cd.LoginId
                             select new SalesLead
                             {
                                 LeadId = c.LeadId,
@@ -240,7 +242,7 @@ namespace BOTS_BL.Repository
                                 AddedDate = c.AddedDate,
                                 UpdatedDate = c.UpdatedDate,
                                 CityName = ct.CityName,
-                                AssignedLead = c.AssignedLead
+                                AssignedLead = cd.UserName
                             }).ToList();
 
                 if (!string.IsNullOrEmpty(MobileNo))
@@ -531,13 +533,15 @@ namespace BOTS_BL.Repository
                                                          s.GroupId equals r.GroupId
                                                          join d in context.BOTS_TblDealDetails on
                                                          r.GroupId equals d.GroupId
+                                                         join b in context.tblBillingPartners on
+                                                         s.BillingPartner equals b.BillingPartnerId.ToString()
                                                          where (s.MeetingType == "salesdone" && s.UpdatedDate >= Fromdt && s.UpdatedDate <= Todt)
                                                          select new salesCountDetails
                                                          {
                                                              LeadId = s.LeadId,
                                                              BusinessName = r.BrandName,
                                                              Product = r.BOProduct,
-                                                             BillingPartner = r.BillingProduct,
+                                                             BillingPartner = b.BillingPartnerName,
                                                              Amount = d.TotalFeesA,
                                                              OutletName = r.NoOfEnrolled
 

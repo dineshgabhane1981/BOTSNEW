@@ -92,7 +92,7 @@ namespace LeadGeneration.Controllers
                 LeadId = SLR.AddSalesLead(objData.sALES_TblLeads);
                 if (meetingType == "salesdone")
                 {
-                    string url = ConfigurationManager.AppSettings["CustomerDocumentsURL"].ToString();
+                    string url = ConfigurationManager.AppSettings["BOTSURL"].ToString();
                     //string url = "https://blueocktopus.in/bots?LoginID=" + userDetails.LoginId + "&LeadId=" + objData.sALES_TblLeads.LeadId + "";
                     url = url+"?LoginID=" + userDetails.LoginId + "";
                     ViewData["LeadId"] = LeadId;

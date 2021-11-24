@@ -118,7 +118,7 @@
                     </div>
                     <div class="row">
                         <div class="col-md-6 col-sm-6">
-                            Mobile no<br /> @Html.TextBoxFor(model => model.sALES_TblLeads.MobileNo, new { @type = "number", @class = "input100", @id = "txtmobileno" })
+                            Mobile no<br /> @Html.TextBoxFor(model => model.sALES_TblLeads.MobileNo, new { @maxlength = "10", @pattern = "\\d*", @class = "input100", @id = "txtmobileno" })
                         </div>
                         <div class="col-md-6 col-sm-6">
                             Lead status <br />@Html.DropDownListFor(model => model.sALES_TblLeads.LeadStatus, new SelectList(Model.LeadStatus(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input100", @id = "ddlleadstatus" })
@@ -212,19 +212,34 @@
                 $('#ddlCategory').css('border-color', '');
             }
         });
-        $('#ddlBOProduct').change(function () {
+        $('#ddlBOProduct').change(function () {            
             if ($("#ddlBOProduct option:selected").text() == "Please Select") {
                 $('#ddlBOProduct').css('border-color', 'red');
+                $('#ddlBillingPartner').attr("disabled", false);
             }
             else {
+                if ($('#ddlBOProduct').val() == "2") {
+                    $('#ddlBillingPartner').css('border-color', '');
+                    $('#ddlBillingPartner').prop('selectedIndex', 0);
+                    $('#ddlBillingPartner').attr("disabled", true);
+                    
+                }
+                else {
+                    $('#ddlBillingPartner').attr("disabled", false);
+                }
                 $('#ddlBOProduct').css('border-color', '');
             }
         });
         $('#ddlBillingPartner').change(function () {
             if ($("#ddlBillingPartner option:selected").text() == "Please Select") {
-                $('#ddlBillingPartner').css('border-color', 'red');
+                if ($('#ddlBOProduct').val() == "2") {
+                }
+                else {
+                    $('#ddlBillingPartner').css('border-color', 'red');
+                }
             }
             else {
+
                 $('#ddlBillingPartner').css('border-color', '');
             }
         });
@@ -280,7 +295,7 @@
             if ($("#ddlleadstatus option:selected").text() == "Please Select") {
                 $('#ddlleadstatus').css('border-color', 'red');
             }
-            else {
+            else {                
                 $('#ddlleadstatus').css('border-color', '');
             }
         });
@@ -327,9 +342,11 @@
             $("#ddlBOProduct").css('border-color', 'red');
             returnStatus = false;
         }
-        if ($("#ddlBillingPartner option:selected").text() == "Please Select") {
-            $("#ddlBillingPartner").css('border-color', 'red');
-            returnStatus = false;
+        if ($("#ddlBOProduct").val() != "2") {
+            if ($("#ddlBillingPartner option:selected").text() == "Please Select") {
+                $("#ddlBillingPartner").css('border-color', 'red');
+                returnStatus = false;
+            }
         }
 
         if ($("#txtnoofoutlet").val() == "") {

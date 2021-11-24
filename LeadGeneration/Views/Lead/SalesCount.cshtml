@@ -1,7 +1,7 @@
 ﻿@model LeadGeneration.ViewModel.LeadViewModel
 @using BOTS_BL.Models;
 @{
-    ViewBag.Title = "SalesCount";
+    ViewBag.Title = "Sales Count";
     Layout = "~/Views/Shared/_Layout.cshtml";
     var userDetails = (CustomerLoginDetail)Session["UserSession"];
     var roleId = userDetails.LoginType;
@@ -117,7 +117,7 @@
             
             var fromdt = $("#txtfromdt").val();
             var todt = $("#txttodt").val();
-            console.log(fromdt);
+            $("#divLoader").show();
            $.ajax({
             type: "POST",
             url: '@Url.Action("GetSalesCount", "Lead")',
@@ -148,7 +148,12 @@
                            optionItem = {}
                            optionItem["LeadId"] = item.LeadId;
                            optionItem["BusinessName"] = item.BusinessName;
-                           optionItem["Product"] = item.Product;
+                           if (item.Product == "1") {
+                               optionItem["Product"] = "Octa Plus";
+                           }
+                           else {
+                               optionItem["Product"] = "Octa XS";
+                           }
                            optionItem["BillingPartner"] = item.BillingPartner;
                            optionItem["Amount"] = item.Amount;
                            optionItem["OutletName"] = item.OutletName;

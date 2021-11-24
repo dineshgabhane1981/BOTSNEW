@@ -17,23 +17,31 @@ namespace WebApp.Controllers
         // GET: Login
         public ActionResult Index(string MobileNo, string LeadId, string LoginID)
         {
-            if (!string.IsNullOrEmpty(LoginID) && !string.IsNullOrEmpty(LeadId))
+            try
             {
-                var userDetails = LR.GetUserDetailsByLoginID(LoginID);
-                Session["UserSession"] = userDetails;
-                return RedirectToAction("Index", "CustomerOnBoarding", new { @LeadId = LeadId });
-            }
-            if (!string.IsNullOrEmpty(MobileNo))
-            {
-                var userDetails = LR.GetUserDetailsByLoginID(MobileNo);
-                if (userDetails != null)
+                
+                if (!string.IsNullOrEmpty(LoginID) && !string.IsNullOrEmpty(LeadId))
                 {
-                    if (userDetails.GroupId == "1088")
+                    var userDetails = LR.GetUserDetailsByLoginID(LoginID);                    
+                    Session["UserSession"] = userDetails;
+                    return RedirectToAction("Index", "CustomerOnBoarding", new { @LeadId = LeadId });
+                }
+                if (!string.IsNullOrEmpty(MobileNo))
+                {
+                    var userDetails = LR.GetUserDetailsByLoginID(MobileNo);
+                    if (userDetails != null)
                     {
-                        Session["UserSession"] = userDetails;
-                        return RedirectToAction("Index", "Home");
+                        if (userDetails.GroupId == "1088")
+                        {
+                            Session["UserSession"] = userDetails;
+                            return RedirectToAction("Index", "Home");
+                        }
                     }
                 }
+            }
+            catch(Exception ex)
+            {               
+                newexception.AddException(ex, "");
             }
             LoginModel objLogin = new LoginModel();
             return View(objLogin);
