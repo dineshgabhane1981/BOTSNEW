@@ -229,6 +229,11 @@
     <Compile Include="Models\Dashboard\DashboardMemberSegment.cs" />
     <Compile Include="Models\DBContext.cs" />
     <Compile Include="Models\ExecutiveSummary.cs" />
+    <Compile Include="Models\FeedBack\FeedBackMaster.cs" />
+    <Compile Include="Models\FeedBack\FeedBackMobileMaster.cs" />
+    <Compile Include="Models\FeedBack\FeedBackQuestionMaster.cs" />
+    <Compile Include="Models\FeedBack\KonwAboutYouMaster.cs" />
+    <Compile Include="Models\FeedBack\LocationMaster.cs" />
     <Compile Include="Models\GroupDetail.cs" />
     <Compile Include="Models\HeatMaps\DaywiseHourwise.cs" />
     <Compile Include="Models\ITOps\CancelTxnModel.cs" />
@@ -273,6 +278,7 @@
     <Compile Include="Models\SalesLead\SALES_tblLeads.cs" />
     <Compile Include="Models\SalesLead\SALES_tblLeadTracking.cs" />
     <Compile Include="Models\SMSDetail.cs" />
+    <Compile Include="Models\SMSEmailMaster.cs" />
     <Compile Include="Models\StoreDetail.cs" />
     <Compile Include="Models\TransferPointsDetail.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -283,6 +289,7 @@
     <Compile Include="Repository\DashboardRepository.cs" />
     <Compile Include="Repository\DiscussionsRepository.cs" />
     <Compile Include="Repository\EmployeeRepository.cs" />
+    <Compile Include="Repository\FeedBackRepository.cs" />
     <Compile Include="Repository\HeatMapsRepository.cs" />
     <Compile Include="Repository\ITOpsRepository.cs" />
     <Compile Include="Repository\KeyIndecatorsRepository.cs" />

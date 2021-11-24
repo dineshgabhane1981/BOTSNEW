@@ -1,4 +1,7 @@
-﻿using System;
+﻿using BOTS_BL;
+using BOTS_BL.Models;
+using BOTS_BL.Repository;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -8,10 +11,76 @@ namespace Feedback.Controllers
 {
     public class FeedbackController : Controller
     {
-        // GET: Feedback
+        Exceptions newexception = new Exceptions();
+        FeedBackRepository FBR = new FeedBackRepository();// GET: Feedback
         public ActionResult Index(string outletid)
         {
+            string groupid = outletid.Substring(0, 4);
+            ViewBag.GroupId = groupid;
+            ViewBag.OutletId = outletid;
+            ViewBag.lstlocation = FBR.GetLocationList(groupid);
             return View();
+        }
+        
+        public ActionResult GetCustomerStatus(string mobileNo,string GroupId)
+        {
+            // CustomerDetail objcustomerdetails = new CustomerDetail();
+            CustomerDetailwithFeedback obj = new CustomerDetailwithFeedback();
+            try
+            {
+
+                // objcustomerdetails = FBR.GetCustomerInfo(mobileNo, GroupId);
+                obj = FBR.GetCustomerInfo(mobileNo, GroupId);
+
+
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "Get feedbackcust");
+            }
+            return new JsonResult() { Data = obj, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
+           
+        }
+        public ActionResult SubmitRating(string mobileNo,int[] ranking, string GroupId,string outletId)
+        {
+            bool status = false;
+            //string smsresponce = "";
+            CustomerDetail objcustomerdetails = new CustomerDetail();
+            try
+            {
+               
+              //  objcustomerdetails = FBR.GetCustomerInfo(mobileNo, GroupId);
+
+                status = FBR.SubmitRating(mobileNo, ranking, GroupId, outletId);
+
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "submit rating");
+            }
+            return new JsonResult() { Data = status, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
+
+        }
+
+        public ActionResult SubmitPoints(string BirthDt,string mobileNo,string AnniversaryDt,  string LiveIn,string Knowabt, string GroupId,string OutletId)
+        {
+            bool status = false;
+            //string smsresponce="";
+            CustomerDetail objcustomerdetails = new CustomerDetail();
+            try
+            {
+               
+               // objcustomerdetails = FBR.GetCustomerInfo(mobileNo, GroupId);
+
+                status = FBR.SubmitPoints(BirthDt,mobileNo, AnniversaryDt, LiveIn, Knowabt,GroupId, OutletId);
+
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "submit points");
+            }
+            return new JsonResult() { Data = status, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
+
         }
     }
 }

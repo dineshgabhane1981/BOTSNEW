@@ -553,106 +553,106 @@ namespace BOTS_BL.Repository
             return lstOutlets;
         }        
 
-        public ProfilePage GetprofilePageData(string GroupId)
-        {
-            ProfilePage objprofilePage = new ProfilePage();
-            string connectionString = GetCustomerConnString(GroupId);
-            tblGroupDetail objgrpdetails = new tblGroupDetail();
-            tblCategory objtblcategory = new tblCategory();
-            SMSGatewayMaster objsmsgateway = new SMSGatewayMaster();
+        //public ProfilePage GetprofilePageData(string GroupId)
+        //{
+        //    ProfilePage objprofilePage = new ProfilePage();
+        //    string connectionString = GetCustomerConnString(GroupId);
+        //    tblGroupDetail objgrpdetails = new tblGroupDetail();
+        //    tblCategory objtblcategory = new tblCategory();
+        //    SMSGatewayMaster objsmsgateway = new SMSGatewayMaster();
 
-            using (var context = new CommonDBContext())
-            {
-                int gId = Convert.ToInt32(GroupId);
-                objgrpdetails = context.tblGroupDetails.Where(x => x.GroupId == gId).FirstOrDefault();
-                objtblcategory = context.tblCategories.Where(x => x.CategoryId == objgrpdetails.RetailCategory).FirstOrDefault();
+        //    using (var context = new CommonDBContext())
+        //    {
+        //        int gId = Convert.ToInt32(GroupId);
+        //        objgrpdetails = context.tblGroupDetails.Where(x => x.GroupId == gId).FirstOrDefault();
+        //        objtblcategory = context.tblCategories.Where(x => x.CategoryId == objgrpdetails.RetailCategory).FirstOrDefault();
 
-            }
-            SMSDetail objsMSDetail = new SMSDetail();
-            GroupDetail objgroupdetails = new GroupDetail();
-            using (var Context = new BOTSDBContext(connectionString))
-            {
-                var objsms = Context.SMSDetails;
-                string whatsAppbaln = null;
-                string Smsbalance = null;
-                // string SmsgatewayId = null;
-                foreach (var sms in objsms)
-                {
-                    if (sms.SMSGatewayId == "2")
-                    {
-                        if (!string.IsNullOrEmpty(sms.WhatsappTokenId))
-                        {
-                            ServicePointManager.Expect100Continue = true;
-                            ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls;
-                            ServicePointManager.SecurityProtocol = (SecurityProtocolType)3072;
-                            WebClient client = new WebClient();
-                            client.Headers["Content-type"] = "application/json";
-                            client.Encoding = Encoding.UTF8;
-                            var uri = string.Concat("https://enotify.app/api/checkBal?token=", sms.WhatsappTokenId);
-                            var result = client.DownloadString(uri);
-                            Dictionary<string, dynamic> whatsappbalance = (new JavaScriptSerializer()).Deserialize<Dictionary<string, dynamic>>(result);
+        //    }
+        //    SMSDetail objsMSDetail = new SMSDetail();
+        //    GroupDetail objgroupdetails = new GroupDetail();
+        //    using (var Context = new BOTSDBContext(connectionString))
+        //    {
+        //        var objsms = Context.SMSDetails;
+        //        string whatsAppbaln = null;
+        //        string Smsbalance = null;
+        //        // string SmsgatewayId = null;
+        //        foreach (var sms in objsms)
+        //        {
+        //            //if (sms.SMSGatewayId == "2")
+        //            //{
+        //                if (!string.IsNullOrEmpty(sms.WhatsAppTokenId))
+        //                {
+        //                    ServicePointManager.Expect100Continue = true;
+        //                    ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls;
+        //                    ServicePointManager.SecurityProtocol = (SecurityProtocolType)3072;
+        //                    WebClient client = new WebClient();
+        //                    client.Headers["Content-type"] = "application/json";
+        //                    client.Encoding = Encoding.UTF8;
+        //                    var uri = string.Concat("https://enotify.app/api/checkBal?token=", sms.WhatsAppTokenId);
+        //                    var result = client.DownloadString(uri);
+        //                    Dictionary<string, dynamic> whatsappbalance = (new JavaScriptSerializer()).Deserialize<Dictionary<string, dynamic>>(result);
 
-                            string whatsappexpirydt = whatsappbalance["data"]["expiryDate"];
-                            string whatsappdate = whatsappexpirydt.Substring(0, 19);
-                            // whatsexpdt = Convert.ToDateTime(whatsappdate).ToString("yyyy-MM-dd");
-                            whatsAppbaln = Convert.ToInt32(whatsappbalance["data"]["quota"]);
+        //                    string whatsappexpirydt = whatsappbalance["data"]["expiryDate"];
+        //                    string whatsappdate = whatsappexpirydt.Substring(0, 19);
+        //                    // whatsexpdt = Convert.ToDateTime(whatsappdate).ToString("yyyy-MM-dd");
+        //                    whatsAppbaln = Convert.ToInt32(whatsappbalance["data"]["quota"]);
 
-                        }
-                        if (!string.IsNullOrEmpty(sms.TxnUserName) && !string.IsNullOrEmpty(sms.TxnPassword))
-                        {
-                            ServicePointManager.Expect100Continue = true;
-                            ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls;
-                            ServicePointManager.SecurityProtocol = (SecurityProtocolType)3072;
-                            WebClient client = new WebClient();
-                            client.Headers["Content-type"] = "application/json";
-                            client.Encoding = Encoding.UTF8;
-                            var uri = string.Concat("https://smsnotify.one/SMSApi/account/readstatus?userid=", sms.TxnUserName, "&password=", sms.TxnPassword, "&output=json");
-                            var result = client.DownloadString(uri);
-                            Dictionary<string, dynamic> smsbalance = (new JavaScriptSerializer()).Deserialize<Dictionary<string, dynamic>>(result);
-                            if (smsbalance["response"]["status"].Equals("success"))
-                            {
-                                Dictionary<string, dynamic> accountdata = smsbalance["response"]["account"];
-                                Smsbalance = Convert.ToInt32(accountdata["smsBalance"]);
-                            }
+        //                }
+        //                if (!string.IsNullOrEmpty(sms.TxnUserName) && !string.IsNullOrEmpty(sms.TxnPassword))
+        //                {
+        //                    ServicePointManager.Expect100Continue = true;
+        //                    ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls;
+        //                    ServicePointManager.SecurityProtocol = (SecurityProtocolType)3072;
+        //                    WebClient client = new WebClient();
+        //                    client.Headers["Content-type"] = "application/json";
+        //                    client.Encoding = Encoding.UTF8;
+        //                    var uri = string.Concat("https://smsnotify.one/SMSApi/account/readstatus?userid=", sms.TxnUserName, "&password=", sms.TxnPassword, "&output=json");
+        //                    var result = client.DownloadString(uri);
+        //                    Dictionary<string, dynamic> smsbalance = (new JavaScriptSerializer()).Deserialize<Dictionary<string, dynamic>>(result);
+        //                    if (smsbalance["response"]["status"].Equals("success"))
+        //                    {
+        //                        Dictionary<string, dynamic> accountdata = smsbalance["response"]["account"];
+        //                        Smsbalance = Convert.ToInt32(accountdata["smsBalance"]);
+        //                    }
 
-                        }
+        //                }
 
-                    }
-                    else
-                    {
+        //            //}
+        //            //else
+        //            //{
 
-                    }
-                    objprofilePage.GroupId = objgrpdetails.GroupId;
-                    objprofilePage.Logo = objgrpdetails.Logo;
-                    objprofilePage.LegalName = objgrpdetails.GroupName;
-                    objprofilePage.RetailName = objgrpdetails.GroupName;
-                    objprofilePage.OwnerName = objgrpdetails.OwnerName;
-                    objprofilePage.OwnerNumber = objgrpdetails.OwnerMobileNo;
-                    using (var Context1 = new BOTSDBContext(connectionString))
-                    {
-                        string gid = objgrpdetails.GroupId.ToString();
-                        objgroupdetails = Context1.GroupDetails.Where(x => x.GroupId == gid).FirstOrDefault();
-                    }
-                    objprofilePage.City = objgroupdetails.City;
-                    objprofilePage.RetailCategory = objtblcategory.CategoryName.ToString();
-                    objprofilePage.OutletEnrolled = objgrpdetails.OutletCount.ToString();
-                    using (var context = new CommonDBContext())
-                    {
-                        objsmsgateway = context.SMSGatewayMasters.Where(x => x.SMSGatewayId == sms.SMSGatewayId).FirstOrDefault();
-                    }
-                    objprofilePage.SMSGateway = objsmsgateway.SMSGatewayName;
-                    objprofilePage.GSTNo = objgrpdetails.GSTNO;
-                    objprofilePage.SMSBalance = Smsbalance;
-                    objprofilePage.WhatsAppBalance = whatsAppbaln;
-                    objprofilePage.NextPaymentDate = DateTime.Now.ToString();
-                    objprofilePage.NextPaymentAmount = "";
-                }
+        //            //}
+        //            objprofilePage.GroupId = objgrpdetails.GroupId;
+        //            objprofilePage.Logo = objgrpdetails.Logo;
+        //            objprofilePage.LegalName = objgrpdetails.GroupName;
+        //            objprofilePage.RetailName = objgrpdetails.GroupName;
+        //            objprofilePage.OwnerName = objgrpdetails.OwnerName;
+        //            objprofilePage.OwnerNumber = objgrpdetails.OwnerMobileNo;
+        //            using (var Context1 = new BOTSDBContext(connectionString))
+        //            {
+        //                string gid = objgrpdetails.GroupId.ToString();
+        //                objgroupdetails = Context1.GroupDetails.Where(x => x.GroupId == gid).FirstOrDefault();
+        //            }
+        //            objprofilePage.City = objgroupdetails.City;
+        //            objprofilePage.RetailCategory = objtblcategory.CategoryName.ToString();
+        //            objprofilePage.OutletEnrolled = objgrpdetails.OutletCount.ToString();
+        //            using (var context = new CommonDBContext())
+        //            {
+        //                objsmsgateway = context.SMSGatewayMasters.Where(x => x.SMSGatewayId == sms.SMSGatewayId).FirstOrDefault();
+        //            }
+        //            objprofilePage.SMSGateway = objsmsgateway.SMSGatewayName;
+        //            objprofilePage.GSTNo = objgrpdetails.GSTNO;
+        //            objprofilePage.SMSBalance = Smsbalance;
+        //            objprofilePage.WhatsAppBalance = whatsAppbaln;
+        //            objprofilePage.NextPaymentDate = DateTime.Now.ToString();
+        //            objprofilePage.NextPaymentAmount = "";
+        //        }
 
 
-            }
+        //    }
 
-            return objprofilePage;
-        }
+        //    return objprofilePage;
+        //}
 
         public MobileAppOnceInMonthData GetMonthlySnapShotForMobileApp(string GroupId)
         {

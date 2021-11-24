@@ -1,4 +1,5 @@
 using BOTS_BL.Models;
+using BOTS_BL.Models.FeedBack;
 using System;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity;
@@ -17,6 +18,12 @@ namespace BOTS_BL.Models
             : base(connectionStringName)
         {
         }
+        public virtual DbSet<SMSEmailMaster> SMSEmailMasters { get; set; }
+        public virtual DbSet<FeedBackMobileMaster> FeedBackMobileMasters { get; set; }
+        public virtual DbSet<FeedBackMaster> FeedBackMasters { get; set; }
+        public virtual DbSet<FeedBackQuestionMaster> FeedBackQuestionMasters { get; set; }
+        public virtual DbSet<KonwAboutYouMaster> KonwAboutYouMasters { get; set; }
+        public virtual DbSet<LocationMaster> LocationMasters { get; set; }
         public virtual DbSet<GroupDetail> GroupDetails { get; set; }
         public virtual DbSet<LoginDetail> LoginDetails { get; set; }
         public virtual DbSet<BrandDetail> BrandDetails { get; set; }

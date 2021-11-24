@@ -35,11 +35,8 @@ namespace BOTS_BL.Models
         [StringLength(50)]
         public string OTPUrl { get; set; }
 
-        [StringLength(100)]
-        public string WhatsappTokenId { get; set; }
-
-        [StringLength(50)]
-        public string SMSGatewayId { get; set; }
+        [StringLength(500)]
+        public string WhatsAppTokenId { get; set; }
 
         [StringLength(25)]
         public string VirtualSmsUserName { get; set; }
@@ -53,7 +50,7 @@ namespace BOTS_BL.Models
         [StringLength(25)]
         public string VirtualWhatsAppPassword { get; set; }
 
-        [StringLength(25)]
+        [StringLength(8)]
         public string OutletId { get; set; }
     }
 }

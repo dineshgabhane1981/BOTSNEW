@@ -65,4 +65,47 @@ namespace BOTS_BL.Models
 
         public bool? IsSMS { get; set; }
     }
+
+    public class CustomerDetailwithFeedback
+    {
+        public long SlNo { get; set; }
+
+        public string MobileNo { get; set; }
+
+        public string CustomerId { get; set; }
+
+        public string CustomerName { get; set; }
+
+        public string CardNumber { get; set; }
+
+        public string EmailId { get; set; }
+
+        public DateTime? DOB { get; set; }
+
+        public string Gender { get; set; }
+
+        public DateTime? DOJ { get; set; }
+
+        public string MaritalStatus { get; set; }
+
+        public DateTime? AnniversaryDate { get; set; }
+
+        public string EnrollingOutlet { get; set; }
+
+        public string Status { get; set; }
+
+        public decimal? Points { get; set; }
+
+        public string MemberGroupId { get; set; }
+
+        public string CustomerCategory { get; set; }
+
+        public string BillingCustomerId { get; set; }
+
+        public string CustomerThrough { get; set; }
+
+        public bool? IsSMS { get; set; }
+        public bool IsFeedBackGiven { get; set; }
+    }
+
 }
