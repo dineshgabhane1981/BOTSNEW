@@ -10,7 +10,7 @@
     if (!string.IsNullOrEmpty(Convert.ToString(ViewData["URL"])))
     {
         <script>
-     
+
                     cuteAlert({
                         type: "success",
                         title: "Saved",
@@ -35,7 +35,18 @@
                 })
             </script>
         }
-        if (Convert.ToString(ViewData["Status"]) != "0")
+        else if (Convert.ToString(ViewData["Status"]) == "exist")
+        {
+            <script>
+                cuteAlert({
+                    type: "error",
+                    title: "OOPS...",
+                    message: "Mobile Number is already exist!",
+                    buttonText: "Okay"
+                })
+            </script>
+        }
+        else if (Convert.ToString(ViewData["Status"]) != "0")
         {
             <script>
                 cuteAlert({
@@ -107,7 +118,7 @@
                     </div>
                     <div class="row">
                         <div class="col-md-6 col-sm-6">
-                            Mobile no<br /> @Html.TextBoxFor(model => model.sALES_TblLeads.MobileNo, new { @class = "input100", @id = "txtmobileno" })
+                            Mobile no<br /> @Html.TextBoxFor(model => model.sALES_TblLeads.MobileNo, new { @maxlength = "10", @pattern = "\\d*", @class = "input100", @id = "txtmobileno" })
                         </div>
                         <div class="col-md-6 col-sm-6">
                             Lead status <br />@Html.DropDownListFor(model => model.sALES_TblLeads.LeadStatus, new SelectList(Model.LeadStatus(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input100", @id = "ddlleadstatus" })
@@ -126,7 +137,7 @@
                             Follow up date <br />@Html.TextBoxFor(model => model.sALES_TblLeads.FollowupDate, new { @class = "input100", @id = "txtfollowupdt" })
                         </div>
                         <div class="col-md-6 col-sm-6">
-                            Lead source <br />@Html.DropDownListFor(model => model.sALES_TblLeads.LeadSource, new SelectList(Model.ContactType(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input100", @id = "ddlleadsource" })
+                            Lead source <br />@Html.DropDownListFor(model => model.sALES_TblLeads.LeadSource, new SelectList(Model.LeadSource(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input100", @id = "ddlleadsource" })
                         </div>
                     </div>
                     <div class="row">
@@ -153,7 +164,7 @@
     $(document).ready(function () {
         var today = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
         $("#txtfollowupdt").datepicker({
-            dateFormat: "yy-mm-dd",           
+            dateFormat: "yy-mm-dd",
         });
         if ($("#hdnLeadId").val() != 0) {
             var dt = $("#hdnLeadId").val();
@@ -176,7 +187,7 @@
         $("#ddlCategory").attr("disabled", true);
         $('#ddlCategory').css('background-color', '#d3d3d3');
         $("#ddlBOProduct").attr("disabled", true);
-        $('#ddlBOProduct').css('background-color', '#d3d3d3');        
+        $('#ddlBOProduct').css('background-color', '#d3d3d3');
         $("#ddlCity").attr("disabled", true);
         $('#ddlCity').css('background-color', '#d3d3d3');
         $("#txtpincode").attr("readonly", true);
@@ -187,7 +198,7 @@
     function RemoveRedBorder() {
         $("#txtbusinessnm").focusout(function () {
             if ($("#txtbusinessnm").val() != "") {
-                $('#txtbusinessnm').css('border-color', '');                
+                $('#txtbusinessnm').css('border-color', '');
             }
             else {
                 $('#txtbusinessnm').css('border-color', 'red');
@@ -201,19 +212,34 @@
                 $('#ddlCategory').css('border-color', '');
             }
         });
-        $('#ddlBOProduct').change(function () {
+        $('#ddlBOProduct').change(function () {            
             if ($("#ddlBOProduct option:selected").text() == "Please Select") {
                 $('#ddlBOProduct').css('border-color', 'red');
+                $('#ddlBillingPartner').attr("disabled", false);
             }
             else {
+                if ($('#ddlBOProduct').val() == "2") {
+                    $('#ddlBillingPartner').css('border-color', '');
+                    $('#ddlBillingPartner').prop('selectedIndex', 0);
+                    $('#ddlBillingPartner').attr("disabled", true);
+                    
+                }
+                else {
+                    $('#ddlBillingPartner').attr("disabled", false);
+                }
                 $('#ddlBOProduct').css('border-color', '');
             }
         });
         $('#ddlBillingPartner').change(function () {
             if ($("#ddlBillingPartner option:selected").text() == "Please Select") {
-                $('#ddlBillingPartner').css('border-color', 'red');
+                if ($('#ddlBOProduct').val() == "2") {
+                }
+                else {
+                    $('#ddlBillingPartner').css('border-color', 'red');
+                }
             }
             else {
+
                 $('#ddlBillingPartner').css('border-color', '');
             }
         });
@@ -269,7 +295,7 @@
             if ($("#ddlleadstatus option:selected").text() == "Please Select") {
                 $('#ddlleadstatus').css('border-color', 'red');
             }
-            else {
+            else {                
                 $('#ddlleadstatus').css('border-color', '');
             }
         });
@@ -316,9 +342,11 @@
             $("#ddlBOProduct").css('border-color', 'red');
             returnStatus = false;
         }
-        if ($("#ddlBillingPartner option:selected").text() == "Please Select") {
-            $("#ddlBillingPartner").css('border-color', 'red');
-            returnStatus = false;
+        if ($("#ddlBOProduct").val() != "2") {
+            if ($("#ddlBillingPartner option:selected").text() == "Please Select") {
+                $("#ddlBillingPartner").css('border-color', 'red');
+                returnStatus = false;
+            }
         }
 
         if ($("#txtnoofoutlet").val() == "") {
@@ -375,7 +403,7 @@
             })
             return false;
         }
-        
+
     }
 </script>
 <script src="~/Scripts/jquery-ui-1.12.1.js"></script>

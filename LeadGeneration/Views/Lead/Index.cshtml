@@ -15,7 +15,7 @@
                 <div class="container-fluid">
                     <div class="row">
                         <div class="col-md-6 col-sm-6">
-                            Mobile Number <br /> <input id="txtMobileNo" type="text" class="input100" />
+                            Mobile Number <br /> <input id="txtMobileNo" type="text" pattern="\d*" maxlength="10" class="input100" />
                         </div>
                         <div class="col-md-6 col-sm-6">
                             Business Name
@@ -66,7 +66,7 @@
 
                     <div class="row pb-3 pt-3">
                         <div class="col-md-12 col-sm-12 pull-right">
-                            <button type="button" id="btnReset" class="btn btn-primary pull-right" style="margin-right:10px;">Reset</button>
+                            <button type="button" id="btnReset" class="btn btn-primary pull-right" onclick="ResetSearch();" style="margin-right:10px;">Reset</button>
                             <button type="button" id="btnSearch" class="btn btn-primary pull-right" style="margin-right:10px;">Search</button>
                         </div>
                     </div>
@@ -108,6 +108,7 @@
                                 <th scope="col">Lead Status</th>
                                 <th scope="col">Follow Up Date</th>
                                 <th scope="col">City</th>
+                                <th scope="col">Sales Manager</th>
                                 <th scope="col" style="text-align:center;">Action</th>
                             </tr>
                         </thead>
@@ -137,6 +138,7 @@
                                                 <td>--</td>
                                             }
                                             <td>@item.CityName</td>
+                                            <td>@item.AssignedLead</td>
                                             <td style="text-align:center;">
                                                 <a href="@Url.Action("AddLead", "Lead", new {leadId= LeadId})" class="login" title="Edit"><img src="~/Content/assets/images/shape_editUser.png" /></a>
 
@@ -147,11 +149,12 @@
                                         var dynamicIdDiv = "dvLeadTrackingFollowupData" + item.LeadId;
 
                                         <tr id="@dynamicIdTr" style="display:none;">
-                                            <td colspan="8">
+                                            <td colspan="9">
                                                 <div id="@dynamicIdDiv" style="display:none;" class="table-responsive">
 
                                                 </div>
                                             </td>
+                                            <td style="display:none;"></td>
                                             <td style="display:none;"></td>
                                             <td style="display:none;"></td>
                                             <td style="display:none;"></td>
@@ -233,9 +236,7 @@
 
         SeardhData.push(item);
         var data = JSON.stringify(SeardhData);
-        console.log(data)
         $("#divLoader").show();
-
 
         $.ajax({
             type: "POST",
@@ -395,6 +396,19 @@
                 buttonText: "Okay"
             })
         }
+    }
+
+    function ResetSearch() {
+        $("#txtMobileNo").val("");
+        $("#txtBusinessName").val("");
+        $("#txtDtFrom").val("");
+        $("#txtDtTo").val("");
+        $('#ddlBillingPartner').prop('selectedIndex', 0);
+        $('#ddlleadstatus').prop('selectedIndex', 0);
+        $('#ddlcontacttype').prop('selectedIndex', 0);
+        $('#ddlmeetingtype').prop('selectedIndex', 0);
+        $('#ddlCity').prop('selectedIndex', 0);
+        $('#ddlSalesManager').prop('selectedIndex', 0);
     }
 
 </script>

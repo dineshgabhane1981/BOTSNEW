@@ -26,7 +26,7 @@ namespace WebApp.Controllers.OnBoarding
         Exceptions newexception = new Exceptions();
         // GET: CustomerOnBoarding
         public ActionResult Index(string groupId, string LeadId)
-        {
+        {            
             CommonFunctions common = new CommonFunctions();
             if (!string.IsNullOrEmpty(groupId))
             {
@@ -93,13 +93,13 @@ namespace WebApp.Controllers.OnBoarding
                                 item2.BrandName = item1.BrandName; 
                             }                             
                         }
-                    }
+                    }                   
                     objData.bots_TblGroupMaster.CategoryData = json_serializer.Serialize(objData.objRetailList);
                     objData.bots_TblGroupMaster.PaymentScheduleData = json_serializer.Serialize(objData.objInstallmentList);
                 }
             }
             catch (Exception ex)
-            {
+            {                
                 newexception.AddException(ex, "");
             }
             return View(objData);
