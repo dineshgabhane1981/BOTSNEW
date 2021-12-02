@@ -14,7 +14,7 @@
                     cuteAlert({
                         type: "success",
                         title: "Saved",
-                        message: "Data Saved Successfully!",
+                        message: "Sale Done Successfully!",
                         buttonText: "Okay"
                     }).then(() => {
                         var RUrl = '@Convert.ToString(ViewData["URL"])' + '&LeadId=' + '@Convert.ToString(ViewData["LeadId"])';
@@ -105,7 +105,7 @@
                             City <br />@Html.DropDownListFor(model => model.sALES_TblLeads.City, new SelectList(Model.lstCity, "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input100", @id = "ddlCity" })
                         </div>
                         <div class="col-md-6 col-sm-6">
-                            Pincode <br /> @Html.TextBoxFor(model => model.sALES_TblLeads.Pincode, new { @class = "input100", @id = "txtpincode" })
+                            Pincode <br /> @Html.TextBoxFor(model => model.sALES_TblLeads.Pincode, new { @class = "input100", @oninput = "numberOnly(this.id);", @maxlength = "6", @id = "txtpincode" })
                         </div>
                     </div>
                     <div class="row">
@@ -113,39 +113,48 @@
                             Contact type <br />@Html.DropDownListFor(model => model.sALES_TblLeads.ContactType, new SelectList(Model.ContactType(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input100", @id = "ddlcontacttype" })
                         </div>
                         <div class="col-md-6 col-sm-6">
-                            Met /spoke with <br />@Html.TextBoxFor(model => model.sALES_TblLeads.SpokeWith, new { @class = "input100", @id = "txtspokenwith" })
+                            Meeting type  <br />@Html.DropDownListFor(model => model.sALES_TblLeads.MeetingType, new SelectList(Model.MeetingType(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input100", @id = "ddlmeetingtype" })
+
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-6 col-sm-6">
-                            Mobile no<br /> @Html.TextBoxFor(model => model.sALES_TblLeads.MobileNo, new { @maxlength = "10", @pattern = "\\d*", @class = "input100", @id = "txtmobileno" })
-                        </div>
-                        <div class="col-md-6 col-sm-6">
                             Lead status <br />@Html.DropDownListFor(model => model.sALES_TblLeads.LeadStatus, new SelectList(Model.LeadStatus(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input100", @id = "ddlleadstatus" })
                         </div>
+                        <div class="col-md-6 col-sm-6">
+                            Mobile no<br /> @Html.TextBoxFor(model => model.sALES_TblLeads.MobileNo, new { @maxlength = "10", @oninput = "numberOnly(this.id);", @class = "input100", @id = "txtmobileno" })
+                        </div>
+
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 col-sm-6">
+                            Met /spoke with <br />@Html.TextBoxFor(model => model.sALES_TblLeads.SpokeWith, new { @class = "input100", @id = "txtspokenwith" })
+                        </div>
+                        <div class="col-md-6 col-sm-6">
+                            Customer Type <br />@Html.DropDownListFor(model => model.sALES_TblLeads.CustomerType, new SelectList(Model.CustomerType(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input100", @id = "ddlcustomertype" })
+                        </div>
+
                     </div>
                     <div class="row">
                         <div class="col-md-6 col-sm-6">
                             Price quoted <br />@Html.TextBoxFor(model => model.sALES_TblLeads.PriceQuoted, new { @class = "input100", @id = "txtpricequoted" })
                         </div>
                         <div class="col-md-6 col-sm-6">
-                            Meeting type  <br />@Html.DropDownListFor(model => model.sALES_TblLeads.MeetingType, new SelectList(Model.MeetingType(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input100", @id = "ddlmeetingtype" })
+                            Follow up date <br />@Html.TextBoxFor(model => model.sALES_TblLeads.FollowupDate, new { @class = "input100", @id = "txtfollowupdt" })
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-md-6 col-sm-6">
-                            Follow up date <br />@Html.TextBoxFor(model => model.sALES_TblLeads.FollowupDate, new { @class = "input100", @id = "txtfollowupdt" })
-                        </div>
                         <div class="col-md-6 col-sm-6">
                             Lead source <br />@Html.DropDownListFor(model => model.sALES_TblLeads.LeadSource, new SelectList(Model.LeadSource(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input100", @id = "ddlleadsource" })
                         </div>
-                    </div>
-                    <div class="row">
                         <div class="col-md-6 col-sm-6">
                             Lead source Name <br />@Html.TextBoxFor(model => model.sALES_TblLeads.LeadSourceName, new { @class = "input100", @id = "txtleadsourcenm" })
                         </div>
+                    </div>
+                    <div class="row">
+                        
                         <div class="col-md-6 col-sm-6">
-                            Comments <br />@Html.TextBoxFor(model => model.sALES_TblLeads.Comments, new { @class = "input100", @id = "txtcomment" })
+                            Comments <br />@Html.TextAreaFor(model => model.sALES_TblLeads.Comments, new { @class = "input100", @rows = 5, @id = "txtcomment" })
                         </div>
                     </div>
                     <div class="row">
@@ -181,6 +190,15 @@
         });
         RemoveRedBorder();
     });
+
+    function numberOnly(id) {
+        // Get element by id which passed as parameter within HTML element event
+        var element = document.getElementById(id);
+        // This removes any other character but numbers as entered by user
+        element.value = element.value.replace(/[^0-9]/gi, "");
+    }
+
+
     function EnableDisableData() {
         $("#txtbusinessnm").attr("readonly", true);
         $('#txtbusinessnm').css('background-color', '#d3d3d3');
@@ -312,7 +330,12 @@
                 $('#txtfollowupdt').css('border-color', '');
             }
             else {
-                $('#txtfollowupdt').css('border-color', 'red');
+                if ($('#ddlleadstatus').val() == "NotInterested") {
+                    $('#txtfollowupdt').css('border-color', '');
+                }
+                else {
+                    $('#txtfollowupdt').css('border-color', 'red');
+                }
             }
         });
         $("#txtcomment").focusout(function () {

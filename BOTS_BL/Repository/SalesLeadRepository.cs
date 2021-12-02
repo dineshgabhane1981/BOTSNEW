@@ -139,6 +139,8 @@ namespace BOTS_BL.Repository
                 lstsaleslead = (from c in context.SALES_tblLeads
                                 join ct in context.tblCities on c.City equals ct.CityId.ToString()
                                 join cd in context.CustomerLoginDetails on c.AssignedLead equals cd.LoginId
+                                join bp in context.tblBillingPartners on c.BillingPartner equals bp.BillingPartnerId.ToString()
+                                into ps from bp in ps.DefaultIfEmpty()
                                 where (c.FollowupDate == today || c.FollowupDate == tommrowdt)
                                 select new SalesLead
                                 {
@@ -146,7 +148,7 @@ namespace BOTS_BL.Repository
                                     BusinessName = c.BusinessName,
                                     Category = c.Category,
                                     Product = c.Product,
-                                    BillingPartner = c.BillingPartner,
+                                    BillingPartner = bp.BillingPartnerName,
                                     NoOfOutlet = c.NoOfOutlet,
                                     Address = c.Address,
                                     State = c.State,
@@ -212,13 +214,15 @@ namespace BOTS_BL.Repository
                 lstLeads = (from c in context.SALES_tblLeads
                             join ct in context.tblCities on c.City equals ct.CityId.ToString()
                             join cd in context.CustomerLoginDetails on c.AssignedLead equals cd.LoginId
+                            join bp in context.tblBillingPartners on c.BillingPartner equals bp.BillingPartnerId.ToString()
+                            into ps from bp in ps.DefaultIfEmpty()
                             select new SalesLead
                             {
                                 LeadId = c.LeadId,
                                 BusinessName = c.BusinessName,
                                 Category = c.Category,
                                 Product = c.Product,
-                                BillingPartner = c.BillingPartner,
+                                BillingPartner = bp.BillingPartnerName,
                                 NoOfOutlet = c.NoOfOutlet,
                                 Address = c.Address,
                                 State = c.State,
@@ -302,13 +306,19 @@ namespace BOTS_BL.Repository
                                    where c.LeadId == Id
                                    select new LeadTracking
                                    {
-                                       AddedDate = c.AddedDate.ToString(),
+                                       AddedDate = c.AddedDate,
                                        AddedByName = ct.UserName,
                                        ContactType = c.ContactType,
                                        MeetingType = c.MeetingType,
                                        LeadStatus = c.LeadStatus,
                                        Comments = c.Comments
                                    }).AsNoTracking().OrderByDescending(x => x.AddedDate).ToList();
+
+                foreach(var item in lstLeadTracking)
+                {
+                    if (item.AddedDate.HasValue)
+                        item.AddedDateStr = item.AddedDate.Value.ToString("MM/dd/yyyy h:mmtt");
+                }
             }
             return lstLeadTracking;
         }

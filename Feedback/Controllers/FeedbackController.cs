@@ -15,44 +15,42 @@ namespace Feedback.Controllers
         FeedBackRepository FBR = new FeedBackRepository();// GET: Feedback
         public ActionResult Index(string outletid)
         {
-            string groupid = outletid.Substring(0, 4);
-            ViewBag.GroupId = groupid;
-            ViewBag.OutletId = outletid;
-            ViewBag.lstlocation = FBR.GetLocationList(groupid);
+            string groupid = string.Empty;
+            if (!string.IsNullOrEmpty(outletid))
+            {
+                groupid = outletid.Substring(0, 4);
+                ViewBag.GroupId = groupid;
+                ViewBag.OutletId = outletid;
+                ViewBag.lstlocation = FBR.GetLocationList(groupid);
+            }
+            else
+            {
+                ViewBag.lstlocation = "";
+            }            
             return View();
         }
-        
-        public ActionResult GetCustomerStatus(string mobileNo,string GroupId)
-        {
-            // CustomerDetail objcustomerdetails = new CustomerDetail();
+
+        public ActionResult GetCustomerStatus(string mobileNo, string GroupId)
+        {           
             CustomerDetailwithFeedback obj = new CustomerDetailwithFeedback();
             try
             {
-
-                // objcustomerdetails = FBR.GetCustomerInfo(mobileNo, GroupId);
                 obj = FBR.GetCustomerInfo(mobileNo, GroupId);
-
-
             }
             catch (Exception ex)
             {
                 newexception.AddException(ex, "Get feedbackcust");
             }
             return new JsonResult() { Data = obj, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
-           
+
         }
-        public ActionResult SubmitRating(string mobileNo,int[] ranking, string GroupId,string outletId)
+        public ActionResult SubmitRating(string mobileNo, int[] ranking, string GroupId, string outletId)
         {
-            bool status = false;
-            //string smsresponce = "";
+            bool status = false;            
             CustomerDetail objcustomerdetails = new CustomerDetail();
             try
             {
-               
-              //  objcustomerdetails = FBR.GetCustomerInfo(mobileNo, GroupId);
-
                 status = FBR.SubmitRating(mobileNo, ranking, GroupId, outletId);
-
             }
             catch (Exception ex)
             {
@@ -62,18 +60,13 @@ namespace Feedback.Controllers
 
         }
 
-        public ActionResult SubmitPoints(string BirthDt,string mobileNo,string AnniversaryDt,  string LiveIn,string Knowabt, string GroupId,string OutletId)
+        public ActionResult SubmitPoints(string BirthDt, string mobileNo, string AnniversaryDt, string LiveIn, string Knowabt, string GroupId, string OutletId)
         {
             bool status = false;
-            //string smsresponce="";
             CustomerDetail objcustomerdetails = new CustomerDetail();
             try
             {
-               
-               // objcustomerdetails = FBR.GetCustomerInfo(mobileNo, GroupId);
-
-                status = FBR.SubmitPoints(BirthDt,mobileNo, AnniversaryDt, LiveIn, Knowabt,GroupId, OutletId);
-
+                status = FBR.SubmitPoints(BirthDt, mobileNo, AnniversaryDt, LiveIn, Knowabt, GroupId, OutletId);
             }
             catch (Exception ex)
             {

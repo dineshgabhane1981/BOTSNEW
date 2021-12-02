@@ -39,6 +39,10 @@ namespace LeadGeneration.ViewModel
         {
             return new SelectListItem[5] { new SelectListItem() { Text = "Self", Value = "Self" }, new SelectListItem() { Text = "Telecaller", Value = "Telecaller" }, new SelectListItem() { Text = "Reference", Value = "Reference" }, new SelectListItem() { Text = "Billing Partner", Value = "billingpartner" }, new SelectListItem() { Text = "Channel Partner", Value = "channelpartner" } };
         }
+        public SelectListItem[] CustomerType()
+        {
+            return new SelectListItem[4] { new SelectListItem() { Text = "Manger/Cashier", Value = "Manger/Cashier" }, new SelectListItem() { Text = "Owner/Partner", Value = "Owner/Partner" }, new SelectListItem() { Text = "Decision Maker", Value = "DecisionMaker" }, new SelectListItem() { Text = "Others", Value = "Others" } };
+        }
 
     }
 }

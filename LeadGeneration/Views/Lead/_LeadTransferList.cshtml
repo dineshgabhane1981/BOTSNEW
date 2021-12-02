@@ -13,13 +13,14 @@
                 <table class="table" id="OnBoardingTable">
                     <thead>
                         <tr>
-                            <th scope="col">LeadId</th>
                             <th scope="col">Business Name</th>
                             <th scope="col">Mobile No</th>
-                            <th scope="col">Contact Type</th>
+                            <th scope="col">City</th>
+                            <th scope="col">Billing Partner</th>
+                            <th scope="col">No of Outlet</th>
                             <th scope="col">Lead Status</th>
                             <th scope="col">Follow Up Date</th>
-                            <th scope="col">City</th>
+                            <th scope="col">Sales Manager</th>
                             <th scope="col" style="text-align:center;">SelectAll &nbsp;&nbsp;<input id="cboAll" type="checkbox" value="CheckAll / unCheck" /> </th>
                         </tr>
                     </thead>
@@ -32,14 +33,12 @@
                                 {
 
                                     string LeadId = Convert.ToString(item.LeadId);
-                                    string chkId = "chk" + item.LeadId;
                                     <tr>
-
-                                        <td><a href="#" onclick="ShowLeadTrackingDetails(@item.LeadId);">@item.LeadId</a></td>
-
-                                        <td>@item.BusinessName</td>
+                                        <td><a href="#" onclick="ShowLeadTrackingDetails(@item.LeadId);">@item.BusinessName</a></td>
                                         <td>@item.MobileNo</td>
-                                        <td>@item.ContactType</td>
+                                        <td>@item.CityName</td>
+                                        <td>@item.BillingPartner</td>
+                                        <td>@item.NoOfOutlet</td>
                                         <td>@item.LeadStatus</td>
                                         @if (item.FollowupDate.HasValue)
                                         {
@@ -49,22 +48,23 @@
                                         {
                                             <td>--</td>
                                         }
-                                        <td>@item.CityName</td>
+
+                                        <td>@item.AssignedLead</td>
                                         <td style="text-align:center;">
-                                            <input id="@chkId" type="checkbox" value="@item.LeadId" class="w3-check" /> <br />
+                                            <a href="@Url.Action("AddLead", "Lead", new {leadId= LeadId})" class="login" title="Edit"><img src="~/Content/assets/images/shape_editUser.png" /></a>
 
                                         </td>
                                     </tr>
-
                                     var dynamicIdTr = "trLeadTracking" + item.LeadId;
                                     var dynamicIdDiv = "dvLeadTrackingData" + item.LeadId;
 
                                     <tr id="@dynamicIdTr" style="display:none;">
-                                        <td colspan="8">
+                                        <td colspan="9">
                                             <div id="@dynamicIdDiv" style="display:none;" class="table-responsive">
 
                                             </div>
                                         </td>
+                                        <td style="display:none;"></td>
                                         <td style="display:none;"></td>
                                         <td style="display:none;"></td>
                                         <td style="display:none;"></td>

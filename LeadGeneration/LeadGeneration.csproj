@@ -179,6 +179,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LeadController.cs" />
+    <Compile Include="Controllers\LeadReportController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -329,6 +330,12 @@
     <Content Include="Scripts\jquery-3.4.1.min.map" />
     <Content Include="Scripts\jquery-3.4.1.slim.min.map" />
     <Content Include="Views\Lead\_LeadTransferList.cshtml" />
+    <Content Include="Views\LeadReport\MeetingMatrix.cshtml" />
+    <Content Include="Views\LeadReport\SalesMatrix.cshtml" />
+    <Content Include="Views\LeadReport\CallingMatrix.cshtml" />
+    <Content Include="Views\LeadReport\_MeetingMatrixListing.cshtml" />
+    <Content Include="Views\LeadReport\_SalesMatrixListing.cshtml" />
+    <Content Include="Views\LeadReport\_CallingMatrixListing.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -18,6 +18,7 @@ using System.Configuration;
 using BOTS_BL.Models.SalesLead;
 using BOTS_BL.Models.FeedBack;
 using System.Web;
+using System.Globalization;
 
 namespace BOTS_BL.Repository
 {
@@ -53,9 +54,9 @@ namespace BOTS_BL.Repository
             string connStr = objCustRepo.GetCustomerConnString(GroupId);
             using (var context = new BOTSDBContext(connStr))
             {
-                objfeedback = context.FeedBackMasters.Where(x => x.MobileNo == mobileNo).FirstOrDefault();
+                objfeedback = context.FeedBackMasters.Where(x => x.MobileNo == mobileNo).OrderByDescending(y=>y.FeedBackId).FirstOrDefault();
                 var customer = context.CustomerDetails.Where(x => x.MobileNo == mobileNo).FirstOrDefault();
-                if (objfeedback != null)
+                if (objfeedback != null && objfeedback.DOJ.Value.Date==DateTime.Now.Date)
                 {                   
                     obj.IsFeedBackGiven = true;
                     if (customer != null)
@@ -63,8 +64,7 @@ namespace BOTS_BL.Repository
                         obj.CustomerName = customer.CustomerName;
                         obj.MobileNo = customer.MobileNo;
                         obj.Points = customer.Points;
-                    }
-                    
+                    }                    
                 }
                 else
                 {
@@ -74,12 +74,9 @@ namespace BOTS_BL.Repository
                         obj.CustomerName = customer.CustomerName;
                         obj.MobileNo = customer.MobileNo;
                         obj.Points = customer.Points;
-                    }
-                    
+                    }                    
                 }
-
-            }
-            
+            }            
             return obj;
         }
 
@@ -97,14 +94,11 @@ namespace BOTS_BL.Repository
                 int Combinedpoint = 0;
                 foreach (int points in ranking)
                 {
-
                     if (points != 0)
-                    {
-                        int feedbackid;
+                    {                        
                         if (objcustdetails != null)
                         {
                             objfeedback.CustomerName = objcustdetails.CustomerName;
-
                         }
                         else
                         {
@@ -121,9 +115,7 @@ namespace BOTS_BL.Repository
                         status = true;
                     }
                     queid++;
-
                 }
-
                 if (Combinedpoint <= 4)
                 {
                     SMSDetail objsmsdetails = new SMSDetail();
@@ -136,7 +128,6 @@ namespace BOTS_BL.Repository
                     if (objcustdetails != null)
                     {
                         message = message.Replace("#01", objcustdetails.CustomerName);
-
                     }
                     else
                     {
@@ -178,8 +169,7 @@ namespace BOTS_BL.Repository
                     context.SaveChanges();
                 }
                 if (objcustdetails == null)
-                {
-                    
+                {                    
                     var CustomerId = context.CustomerDetails.OrderByDescending(x => x.CustomerId).Select(y => y.CustomerId).FirstOrDefault();
                     DateTime datet = new DateTime(1900, 01, 01);
                     var NewId = Convert.ToInt64(CustomerId) + 1;
@@ -189,13 +179,14 @@ namespace BOTS_BL.Repository
                     objnewcust.CustomerCategory = null;
                     objnewcust.CardNumber = "";
                     objnewcust.CustomerThrough = "2";
+                   
                     objnewcust.DOB = Convert.ToDateTime(BirthDt);
                     objnewcust.MaritalStatus = "";
                     objnewcust.MemberGroupId = "1000";
                     objnewcust.MobileNo = mobileNo;
                     objnewcust.Status = "00";
                     if (AnniversaryDt != null)
-                    {
+                    {                       
                         objnewcust.AnniversaryDate = Convert.ToDateTime(AnniversaryDt);
                     }
                     objnewcust.DOJ = DateTime.Now;
@@ -238,8 +229,7 @@ namespace BOTS_BL.Repository
 
                 context.TransactionMasters.Add(objtransactionMaster);
                 context.SaveChanges();
-
-               // objpointsExpiry = context.PointsExpiries.Where(x => x.MobileNo == mobileNo).FirstOrDefault();
+              
                 objpointsExpiry.MobileNo = mobileNo;
                 objpointsExpiry.CounterId = outletid + "01";
                 if(objcustdetails != null)
@@ -274,14 +264,14 @@ namespace BOTS_BL.Repository
                 context.PointsExpiries.Add(objpointsExpiry);
                 context.SaveChanges();
                 FeedBackMaster objfeedback = new FeedBackMaster();
-                lstfeedback = context.FeedBackMasters.Where(x => x.MobileNo == mobileNo).ToList();
+                lstfeedback = context.FeedBackMasters.Where(x => x.MobileNo == mobileNo).OrderByDescending(y=>y.DOJ).Take(2).ToList();
                 foreach (var feedback in lstfeedback)
                 {
                     feedback.Location = LiveIn;
-                    feedback.HowToKonwAbout = Knowabt;
+                    feedback.HowToKonwAbout = Knowabt;                    
                     feedback.DOB = Convert.ToDateTime(BirthDt);
                     if (AnniversaryDt != null)
-                    {
+                    {                        
                         feedback.DOA = Convert.ToDateTime(AnniversaryDt);
                     }
                     feedback.Points = objoutlet.FeedBackPoints;
@@ -304,7 +294,6 @@ namespace BOTS_BL.Repository
                     if (objcustdetails != null)
                     {
                         message = message.Replace("#01", objcustdetails.CustomerName);
-
                     }
                     else
                     {
@@ -312,8 +301,7 @@ namespace BOTS_BL.Repository
                     }
 
                     message = message.Replace("#30", mobileNo);
-                    message = message.Replace("#08", Convert.ToString(date));
-                    
+                    message = message.Replace("#08", Convert.ToString(date));                    
 
                     objsmsdetails = context.SMSDetails.Where(x => x.OutletId == outletid).FirstOrDefault();
                      SendMessage(objmobilemaster.MobileNo, objsmsdetails.SenderId, message, objsmsdetails.TxnUrl, objsmsdetails.TxnUserName, objsmsdetails.TxnPassword);
@@ -322,28 +310,21 @@ namespace BOTS_BL.Repository
                     if (objcustdetails != null)
                     {
                         message1 = message1.Replace("#01", objcustdetails.CustomerName);
-
                     }
                     else
                     {
                         message1 = message1.Replace("#01", "Member");
                     }
                     SendMessage(mobileNo, objsmsdetails.SenderId, message1, objsmsdetails.TxnUrl, objsmsdetails.TxnUserName, objsmsdetails.TxnPassword);
-
                 }
-
-
             }
             return status;
         }
 
         public void SendMessage(string MobileNo, string Sender, string MobileMessage, string Url, string UserName, string Password)
-        {
-            
+        {            
             try
-            {
-                //var UserName = System.Configuration.ConfigurationManager.AppSettings["SMSUserID"];
-                //var Password = System.Configuration.ConfigurationManager.AppSettings["SMSPassword"];
+            {               
 
                 MobileMessage = HttpUtility.UrlEncode(MobileMessage);
                 string type1 = "TEXT";
@@ -378,6 +359,7 @@ namespace BOTS_BL.Repository
             catch (Exception ex)
             {
                 newexception.AddException(ex, "feedbacksmssend");
+                
             }
            
         }

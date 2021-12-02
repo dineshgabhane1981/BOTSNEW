@@ -1,0 +1,46 @@
+﻿@model BOTS_BL.Models.MeetingMatrix
+
+<div>
+    <div class="pt-3 pl-3 pr-3 col-md-12 col-lg-12">
+        <div class="row">
+            <div class="col search-container">
+                <i class="fas fa-search"></i>
+                <input class="input100" type="text" id="txtSearchOnBoarding" placeholder="Search activity..." />
+            </div>
+        </div>
+        <div class="row mt-3" id="dvOnBoardingData">
+            <div class="table-responsive">
+                <table class="table" id="OnBoardingTable">
+                    <thead>
+                        <tr>
+                            <th scope="col">SM Name</th>
+                            <th scope="col">Total Meeting / calls</th>
+                            <th scope="col">No. of Unique meeting/ calls</th>
+                            <th scope="col">Untouched Followup  date meetings/ calls</th>
+                            @*<th scope="col">Fresh to follow up meeting ratio</th>*@
+                            <th scope="col">Interested cases & %</th>
+                            <th scope="col">Personal Meeting %</th>                           
+                            <th scope="col">Zoom Meeting%</th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model != null)
+                        {
+                        <tr>
+                            <td>@Model.SMName</td>
+                            <td>@Model.TotalMeeting</td>
+                            <td>@Model.TotalUniqueMeeting</td>
+                            <td>@Model.UntouchedFollowUp</td>
+                            <td>@Model.IntrestedCases / @Model.IntrestedCasesPer</td>
+                            <td>@Model.PersonalMeetingPer</td>
+                            <td>@Model.ZoomMeetingPer</td>
+                        </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+</div>

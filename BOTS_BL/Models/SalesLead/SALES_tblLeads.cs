@@ -91,8 +91,10 @@ namespace BOTS_BL.Models.SalesLead
 
         [StringLength(4)]
         public string GroupId { get; set; }
-    }
 
+        [StringLength(50)]
+        public string CustomerType { get; set; }
+    }
     public class SalesLead
     {
         public int LeadId { get; set; }
@@ -145,6 +147,7 @@ namespace BOTS_BL.Models.SalesLead
         public string AssignedLead { get; set; }
         public string CityName { get; set; }
         public string GroupId { get; set; }
+        public string CustomerType { get; set; }
     }
 
     public class SalesCount
@@ -156,10 +159,10 @@ namespace BOTS_BL.Models.SalesLead
         public int? octaplus { get; set; }
         public int? octaxs { get; set; }
         public decimal? TotalAmount { get; set; }
-        public int? SalesAvg { get; set; }        
+        public int? SalesAvg { get; set; }
         public int? NoOfBillingpartner { get; set; }
         public List<salesCountDetails> lstSalesCountDetail { get; set; }
-        
+
 
     }
     public class salesCountDetails
@@ -171,5 +174,4 @@ namespace BOTS_BL.Models.SalesLead
         public decimal? Amount { get; set; }
         public long? OutletName { get; set; }
     }
-
 }

@@ -41,13 +41,8 @@
         filter: none;
         border:2px solid red;
         border-radius:25px;
-    }
+    }   
    
-    /*.remove {
-         -webkit-filter: brightness(1.8) grayscale(1) opacity(.7);
-        -moz-filter: brightness(1.8) grayscale(1) opacity(.7);
-        filter: brightness(1.8) grayscale(1) opacity(.7);
-    }*/
     .drinkcard-cc {
         cursor: pointer;
         background-size: contain;
@@ -64,13 +59,9 @@
         /* -webkit-filter: brightness(1.8) grayscale(1) opacity(.7);
         -moz-filter: brightness(1.8) grayscale(1) opacity(.7);
         filter: brightness(1.8) grayscale(1) opacity(.7);*/
-    }    
+    }   
 
-      /*  .drinkcard-cc:hover {
-            -webkit-filter: brightness(1.2) grayscale(.5) opacity(.9);
-            -moz-filter: brightness(1.2) grayscale(.5) opacity(.9);
-            filter: brightness(1.2) grayscale(.5) opacity(.9);
-        }*/
+    
 
 </style>
 <div class="app-main__inner">
@@ -94,8 +85,8 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-12 col-sm-12 pt-5 pl-5 pr-5 pb-5" style="text-align:center;">
-                    <input type="number" class="input100" id="txtMobileNo" />
+                <div class="col-md-12 col-sm-12 pt-5 pl-5 pr-5 pb-5" style="text-align:center;">                    
+                    <input type="number" class="input100" id="txtMobileNo" placeholder="Enter Mobile number" />
 
                 </div>
                 <div class="col-md-12 col-sm-12 pb-5" style="text-align:center;">
@@ -104,7 +95,7 @@
             </div>
         </div>
 
-        @*<div class="row card"  >*@
+       
         <div class="container-fluid pt-3 pl-3 pr-3 pb-3" style="display:none;" id="divmember">
             <div class="row">
                 <div class="col-md-12 col-sm-12 pt-3 pl-3 pr-3" style="text-align:center;">
@@ -117,24 +108,11 @@
                     </h2>
                 </div>
 
-                <div class="col-md-12 col-sm-12 pt-5 pl-5 pr-5" style="text-align:center;">
-                    @*@if (Model != null)
-        {
-            if (Model.Count > 0)
-            {
-                foreach (var item in Model)
-                {*@
+                <div class="col-md-12 col-sm-12 pt-5 pl-5 pr-5" style="text-align:center;">                    
                     <h3 style="font-size:20px;">
                         How did you find our <b>Variety</b>?
-
-                        @*@item.Question*@
                     </h3>
-                    @*<div class="mt-4">
-            <input type="radio" name="variety" id="rbtvariety1" /><img src="../Content/assets/images/15.png" style="width:40px;height:40px;" />
-            <input type="radio" name="variety" id="rbtvariety2" /><img src="../Content/assets/images/3.png" style="width:40px;height:40px;" />
-            <input type="radio" name="variety" id="rbtvariety3" /><img src="../Content/assets/images/7.png" style="width:40px;height:40px;" />
-            <input type="radio" name="variety" id="rbtvariety4" /><img src="../Content/assets/images/14.png" style="width:40px;height:40px;" />
-        </div>*@
+                   
                 <div class="cc-selector">
                     <input id="rbtvariety1" type="radio" name="variety"  />
                     <label class="drinkcard-cc rbtvariety1" for="rbtvariety1"></label>
@@ -145,21 +123,13 @@
                     <input id="rbtvariety4" type="radio" name="variety" />
                     <label class="drinkcard-cc rbtvariety4" for="rbtvariety4"></label>                   
                 </div>
-                    @*}
-
-            }
-        }*@
+                    
                 </div>
                 <div class="col-md-12 col-sm-12 pt-5 pl-5 pr-5 mb-2" style="text-align:center;">
                     <h3 style="font-size:20px;">
                         What do you feel about our <b>Service</b>?
                     </h3>
-                    @*<div class="mt-4">
-            <input type="radio" name="service" id="rbtservice1" /><img src="../Content/assets/images/15.png" style="width:40px;height:40px;" />
-            <input type="radio" name="service" id="rbtservice2" /><img src="../Content/assets/images/3.png" style="width:40px;height:40px;" />
-            <input type="radio" name="service" id="rbtservice3" /><img src="../Content/assets/images/7.png" style="width:40px;height:40px;" />
-            <input type="radio" name="service" id="rbtservice4" /><img src="../Content/assets/images/14.png" style="width:40px;height:40px;" />
-        </div>*@
+                    
                     <div class="cc-selector">
                         <input id="rbtservice1" type="radio" name="service"   />
                         <label class="drinkcard-cc rbtvariety1" for="rbtservice1"style="padding-right:2px;"></label>
@@ -178,8 +148,7 @@
                 </div>
             </div>
         </div>
-        @*</div>*@
-        @*<div class="row card" >*@
+        
             <div class="container-fluid pt-3 pl-3 pr-3 pb-3" id="divthankyou" style="display:none;">
                 <div class="row">
                     <div class="col-md-12 col-sm-12 pt-3 pl-3 pr-3" style="text-align:center;">
@@ -191,28 +160,22 @@
                         <h2 style="font-size:26px;">
                             Enter your details below to unlock 50 Loyalty points!!
                         </h2>
-                    </div>
-                    @*<div class="col-md-12 col-sm-12 pt-5 pl-5 pr-5" style="text-align:center;">
-            <h4 style="font-size:18px;">Your Birth Date*</h4><input type="text" class="input50" id="txtbirthdt" />
-        </div>*@
+                    </div>                   
                     <div class="row col-md-12 col-xl-12 mt-5" style="text-align:center;">
                         <div class=" col-md-12 col-xl-12 pt-5 pl-5">
-                            <span style="font-size:18px; padding-right:10px;">Your Birth Date*</span><input type="text" class="input50" id="txtbirthdt" />
+                            <span style="font-size:18px; padding-right:10px;">Your Birth Date*</span><input type="date" class="input50" id="txtbirthdt" />
                         </div>
                     </div>
                     <div class="row col-md-12 col-xl-12 " style="text-align:center;">
                         <div class=" col-md-12 col-xl-12 pt-5 pl-5">
-                            <span style="font-size:18px; padding-right:10px;">Your Anniversary</span><input type="text" class="input50" id="txtanniversary" />
+                            <span style="font-size:18px; padding-right:10px;">Your Anniversary</span><input type="date" class="input50" id="txtanniversary" />
                         </div>
                     </div>
                     <div class="row col-md-12 col-xl-12" style="text-align:center;">
                         <div class=" col-md-12 col-xl-12 pt-5 pl-5">
                             <span style="font-size:18px; padding-right:10px;">You live in*</span>@Html.DropDownList("location", new SelectList(ViewBag.lstlocation, "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input50", @id = "ddllivein" })
                         </div>
-                    </div>
-
-
-                    
+                    </div>                    
                     <div class="row col-md-12 col-sm-12 pl-5" id="divknowabt" style="float:left;display:none;">
                         <div class="col-md-6 col-sm-6 pt-5" style="text-align:right;">
                             <h4 style="font-size:18px;">
@@ -234,7 +197,6 @@
                 </div>
 
                 <div class="row">
-
                     <div class="col-md-12 col-sm-12 pb-5 pt-5" style="text-align:center;">
                         <button type="button" class="btn btn-primary" style="width: 280px; background-color: #1C699F; color:white; font-weight:bold; font-size:18px; border-radius:5px;" id="btnsubmit" onclick="SubmitPoints();">SUBMIT</button>
                     </div>
@@ -249,16 +211,27 @@
 <script>
     $(document).ready(function () {
         var today = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
-        $("#txtbirthdt").datepicker({
+        //$("#txtbirthdt").datepicker({
+        //    dateFormat: "dd-mm-yy",
+        //});
+        //$("#txtanniversary").datepicker({
+        //    dateFormat: "dd-mm-yy",
+        //});
+        var dtToday = new Date();       
+       
+        var month = dtToday.getMonth() + 1;
+        var day = dtToday.getDate();
+        var year = dtToday.getFullYear();
 
-            dateFormat: "yy-mm-dd",
+        if (month < 10)
+            month = '0' + month.toString();
+        if (day < 10)
+            day = '0' + day.toString();
 
-        });
-        $("#txtanniversary").datepicker({
+        var maxDate = year + '-' + month + '-' + day;
+        $('#txtbirthdt').attr('max', maxDate);
+        $('#txtanniversary').attr('max', maxDate);
 
-            dateFormat: "yy-mm-dd",
-
-        });
         $("#txtMobileNo").focusout(function () {
             if ($("#txtMobileNo").val() != "") {
                 $('#txtMobileNo').css('border-color', '');
@@ -287,22 +260,26 @@
     });
     
     function CheckCustomer() {
-        console.log("hi");
+         
         var returnStatus = true;
         var MobileNo = $('#txtMobileNo').val();
         if ($("#txtMobileNo").val() == "") {
+            alert("Please enter Required fields");
             $('#txtMobileNo').css('border-color', 'red');
             returnStatus = false;
-        }
-        if (/^[6789]\d{9,9}$/.test(MobileNo)) {
-
         }
         else {
-            $('#txtMobileNo').css('border-color', 'red');
-            returnStatus = false;
+            if (/^[6789]\d{9,9}$/.test(MobileNo)) {
+
+            }
+            else {
+                alert("Mobile Number entered seems incorrect. Please try again");
+                $('#txtMobileNo').css('border-color', 'red');
+                returnStatus = false;
+            }
         }
         if (returnStatus == true) {
-            console.log($("#hdngroupid").val());
+            
             $("#divLoader").show();
              $.ajax({
             type: "POST",
@@ -311,8 +288,7 @@
             contentType: "application/json; charset=utf-8",
             dataType: "json",
                  success: function (response) {
-                     console.log(response);
-                     console.log(response.IsFeedBackGiven);
+                     
                      if (response.IsFeedBackGiven) {
                          cuteAlert({
                              type: "error",
@@ -323,7 +299,7 @@
                          $('#txtMobileNo').val("");
                      }
                      else {
-                         console.log("inside");
+                          
                          
                              if (response.CustomerName != null) {
                                  $('#spnCustName').text(response.CustomerName);
@@ -377,14 +353,14 @@
 
         }
         else {
-            console.log("hi");
+            
             returnStatus = false;
         }
         if ($("#rbtservice1").is(":checked") || $("#rbtservice2").is(":checked") || $("#rbtservice3").is(":checked") || $("#rbtservice4").is(":checked")) {
 
         }
         else {
-            console.log("hi");
+            
             returnStatus = false;
         }
         if (returnStatus == true) {
@@ -417,8 +393,7 @@
             }
             var SeardhData = [];
             item = {}
-            console.log(ratevariety);
-            console.log(rateservice);           
+                      
 
             SeardhData.push(ratevariety);
             SeardhData.push(rateservice);
@@ -432,7 +407,7 @@
             contentType: "application/json; charset=utf-8",
             dataType: "json",
                  success: function (response) {
-                     console.log(response);
+                      
                     // console.log(response.CustomerName);
                      if (response) {
                          var nm = $('#spnCustName').text();
@@ -483,15 +458,41 @@
     {
         var returnStatus = true;
         if ($("#txtbirthdt").val() == "") {
+            cuteAlert({
+                type: "error",
+                title: "Oops..",
+                message: "Please enter Date of Birth",
+                buttonText: "Okay"
+            })
             $('#txtbirthdt').css('border-color', 'red');
             returnStatus = false;
         }
         if ($("#ddllivein option:selected").text() == "Please Select") {
+            cuteAlert({
+                type: "error",
+                title: "Oops..",
+                message: "Please select you live in",
+                buttonText: "Okay"
+            })
             $("#ddllivein").css('border-color', 'red');
             returnStatus = false;
         }
+        var dtToday = new Date();
+        var selecteddate = new Date($('#txtbirthdt').val())        
+        dtToday.setFullYear(dtToday.getFullYear() - 18);
+      
+        if (selecteddate > dtToday) {
+            cuteAlert({
+                type: "error",
+                title: "Oops..",
+                message: "Date of Birth must be older than 18 years",
+                buttonText: "Okay"
+            })
+            returnStatus = false;
+        }
+
         if ($("#rbtknowabt1").is(":checked") || $("#rbtknowabt2").is(":checked") || $("#rbtknowabt3").is(":checked") || $("#rbtknowabt4").is(":checked") || $("#rbtknowabt5").is(":checked") || $("#rbtknowabt6").is(":checked")) {
-            console.log("hi111");
+            
         }
         else {
             if ($('#spnCustName1').text() != "Esteemed Patron") {
@@ -499,20 +500,20 @@
 
             }
             else {
-                console.log("hi");
+                
                 returnStatus = false;
             }
         }
         if (returnStatus == true) {
             var knowabout ="";
             if ($("#rbtknowabt1").is(":checked")) {
-                console.log("1");
+                 
                 knowabout = 1;
-                console.log(knowabout);
+                
             }
             if ($("#rbtknowabt2").is(":checked")) {
                 knowabout = 2;
-                console.log("2");
+                
             }
             if ($("#rbtknowabt3").is(":checked")) {
                 knowabout = 3;
@@ -526,11 +527,8 @@
             if ($("#rbtknowabt6").is(":checked")) {
                 knowabout = 6;
             }
-            //else {
-            //    console.log("else");
-            //    knowabout = "";
-            //}
-            console.log(knowabout);
+            
+            
             var annidt;
             if ($("#txtanniversary").val() == null || $("#txtanniversary").val() == "") {
                 annidt = null;
@@ -545,42 +543,53 @@
                  data: '{BirthDt: ' + JSON.stringify($("#txtbirthdt").val()) + ', mobileNo: ' + JSON.stringify($("#txtMobileNo").val()) + ', AnniversaryDt: ' + JSON.stringify(annidt) + ', LiveIn: ' + JSON.stringify($("#ddllivein").val()) + ', Knowabt: ' + JSON.stringify(knowabout) + ', GroupId: ' + JSON.stringify($("#hdngroupid").val()) + ', OutletId: ' + JSON.stringify($("#hdnoutletid").val()) +'}',
             contentType: "application/json; charset=utf-8",
             dataType: "json",
-                 success: function (response) {
-                     console.log(response);
+                 success: function (response) {                     
                      if (response) {
                          $("#divLoader").hide();
                          $("#txtbirthdt").val("");
                          $("#txtanniversary").val("");
                          $('#ddllivein').prop('selectedIndex', 0);
-                         console.log("success");
+
                          setTimeout(cuteAlert({
                              type: "success",
                              title: "Save",
                              message: "FeedBack Save Successfully!",
                              buttonText: "Okay"
                          }), 10000);
-                         //window.setTimeout(cuteAlert,"50000");
-                         window.location.replace('https://blueocktopus.in/GM_feedback?outletid=10131001');
-                         
 
+                         window.location.replace('https://blueocktopus.in/GM_feedback?outletid=10131001');
+                     }
+                     else {
+                         setTimeout(cuteAlert({
+                             type: "success",
+                             title: "Save",
+                             message: "FeedBack Save Successfully!",
+                             buttonText: "Okay"
+                         }), 10000);
+
+                         window.location.replace('https://blueocktopus.in/GM_feedback?outletid=10131001');
                      }
                  },
                  failure: function (response) {
+                    
                      $("#divLoader").hide();
                  },
                  error: function (response) {
+                    
+                     $("#divLoader").hide();
+                     setTimeout(cuteAlert({
+                         type: "success",
+                         title: "Save",
+                         message: "FeedBack Save Successfully!",
+                         buttonText: "Okay"
+                     }), 10000);
                      
+                     window.location.replace('https://blueocktopus.in/GM_feedback?outletid=10131001');
                  }
              });
         }
         else
-        {
-            cuteAlert({
-                type: "error",
-                title: "Oops..",
-                message: "Please enter Required fields",
-                buttonText: "Okay"
-            })
+        {            
             return false;
         }
     }

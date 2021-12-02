@@ -10,12 +10,16 @@
 <div class="app-main__inner">
     <div class="row card">
         <div class="container-fluid pt-3 pl-3 pr-3 pb-3">
-            <h4> Search Lead</h4>
-            <div class="content">
+            <div class="card-header-tab card-header-tab-animation" style="border-bottom-width:0px !important;">
+                <div style="cursor:pointer;" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+                    <h4> Search Leads</h4>
+                </div>
+            </div>
+            <div class="content collapse" id="collapseExample">
                 <div class="container-fluid">
                     <div class="row">
                         <div class="col-md-6 col-sm-6">
-                            Mobile Number <br /> <input id="txtMobileNo" type="text" pattern="\d*" maxlength="10" class="input100" />
+                            Mobile Number <br /> <input id="txtMobileNo" type="text" oninput="numberOnly(this.id);" maxlength="10" class="input100" />
                         </div>
                         <div class="col-md-6 col-sm-6">
                             Business Name
@@ -101,13 +105,13 @@
                     <table class="table" id="OnBoardingFollowupTable">
                         <thead>
                             <tr>
-                                <th scope="col">LeadId</th>
                                 <th scope="col">Business Name</th>
                                 <th scope="col">Mobile No</th>
-                                <th scope="col">Contact Type</th>
+                                <th scope="col">City</th>
+                                <th scope="col">Billing Partner</th>
+                                <th scope="col">No of Outlet</th>
                                 <th scope="col">Lead Status</th>
                                 <th scope="col">Follow Up Date</th>
-                                <th scope="col">City</th>
                                 <th scope="col">Sales Manager</th>
                                 <th scope="col" style="text-align:center;">Action</th>
                             </tr>
@@ -122,12 +126,11 @@
 
                                         string LeadId = Convert.ToString(item.LeadId);
                                         <tr>
-
-                                            <td><a href="#" onclick="ShowFollowUpTrackingDetails(@item.LeadId);">@item.LeadId</a></td>
-
-                                            <td>@item.BusinessName</td>
+                                            <td><a href="#" onclick="ShowTrackingDetails(@item.LeadId);">@item.BusinessName</a></td>
                                             <td>@item.MobileNo</td>
-                                            <td>@item.ContactType</td>
+                                            <td>@item.CityName</td>
+                                            <td>@item.BillingPartner</td>
+                                            <td>@item.NoOfOutlet</td>
                                             <td>@item.LeadStatus</td>
                                             @if (item.FollowupDate.HasValue)
                                             {
@@ -137,16 +140,15 @@
                                             {
                                                 <td>--</td>
                                             }
-                                            <td>@item.CityName</td>
+
                                             <td>@item.AssignedLead</td>
                                             <td style="text-align:center;">
                                                 <a href="@Url.Action("AddLead", "Lead", new {leadId= LeadId})" class="login" title="Edit"><img src="~/Content/assets/images/shape_editUser.png" /></a>
 
                                             </td>
                                         </tr>
-
-                                        var dynamicIdTr = "trLeadTrackingFollowup" + item.LeadId;
-                                        var dynamicIdDiv = "dvLeadTrackingFollowupData" + item.LeadId;
+                                        var dynamicIdTr = "trLeadTracking" + item.LeadId;
+                                        var dynamicIdDiv = "dvLeadTrackingData" + item.LeadId;
 
                                         <tr id="@dynamicIdTr" style="display:none;">
                                             <td colspan="9">
@@ -220,6 +222,12 @@
         });
     });
 
+    function numberOnly(id) {
+        // Get element by id which passed as parameter within HTML element event
+        var element = document.getElementById(id);
+        // This removes any other character but numbers as entered by user
+        element.value = element.value.replace(/[^0-9]/gi, "");
+    }
     function GetSearchLeads() {
         var SeardhData = [];
         item = {}
@@ -305,7 +313,7 @@
                 d = item.FollowupDate;
                 console.log(d);
                 htmlStr += "<tr style=\"text-align: center;\">"
-                htmlStr += "<td>" + item.AddedDate + "</td>";
+                htmlStr += "<td>" + item.AddedDateStr + "</td>";
                 htmlStr += "<td>" + item.AddedByName + "</td>";
                 htmlStr += "<td style=\"width: 100px;\">" + item.ContactType + "</td>";
                 htmlStr += "<td style=\"width: 100px;\">" + item.MeetingType + "</td>";
@@ -374,7 +382,7 @@
                 d = item.FollowupDate;
                 console.log(d);
                 htmlStr += "<tr style=\"text-align: center;\">"
-                htmlStr += "<td>" + item.AddedDate + "</td>";
+                htmlStr += "<td>" + item.AddedDateStr + "</td>";
                 htmlStr += "<td>" + item.AddedByName + "</td>";
                 htmlStr += "<td style=\"width: 100px;\">" + item.ContactType + "</td>";
                 htmlStr += "<td style=\"width: 100px;\">" + item.MeetingType + "</td>";

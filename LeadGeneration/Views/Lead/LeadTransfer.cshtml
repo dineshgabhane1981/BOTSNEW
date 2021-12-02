@@ -76,7 +76,7 @@
         </div>
         <div class="row pl-4">
             <div class="col-md-6 col-sm-6">
-                Sales Manager Name <br />@Html.DropDownListFor(model => model.lstSalesManager, new SelectList(Model.lstSalesManager, "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input100", @id = "ddlSalesManager" })
+                Sales Manager to Transfer <br />@Html.DropDownListFor(model => model.lstSalesManager, new SelectList(Model.lstSalesManager, "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input100", @id = "ddlSalesManager" })
                 <button type="button" id="btntransfer" class="btn btn-primary" onclick="TransferLead()" style="margin-left:10px;">Transfer</button>
             </div>            
         </div>
@@ -230,7 +230,7 @@
                 var d = new Date();
                 d = item.FollowupDate;               
                 htmlStr += "<tr style=\"text-align: center;\">"
-                htmlStr += "<td>" + item.AddedDate + "</td>";
+                htmlStr += "<td>" + item.AddedDateStr + "</td>";
                 htmlStr += "<td>" + item.AddedByName + "</td>";
                 htmlStr += "<td style=\"width: 100px;\">" + item.ContactType + "</td>";
                 htmlStr += "<td style=\"width: 100px;\">" + item.MeetingType + "</td>";

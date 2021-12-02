@@ -275,6 +275,7 @@
     <Compile Include="Models\Reports\OutletwiseTransaction.cs" />
     <Compile Include="Models\Reports\PointExpiryTmp.cs" />
     <Compile Include="Models\Reports\ReportFilterCount.cs" />
+    <Compile Include="Models\SalesLead\SalesReports.cs" />
     <Compile Include="Models\SalesLead\SALES_tblLeads.cs" />
     <Compile Include="Models\SalesLead\SALES_tblLeadTracking.cs" />
     <Compile Include="Models\SMSDetail.cs" />
@@ -293,6 +294,7 @@
     <Compile Include="Repository\HeatMapsRepository.cs" />
     <Compile Include="Repository\ITOpsRepository.cs" />
     <Compile Include="Repository\KeyIndecatorsRepository.cs" />
+    <Compile Include="Repository\LeadReportsRepository.cs" />
     <Compile Include="Repository\LoginRepository.cs" />
     <Compile Include="Repository\LoyaltyKPIsRepository.cs" />
     <Compile Include="Repository\ManagementDashboardRepository.cs" />

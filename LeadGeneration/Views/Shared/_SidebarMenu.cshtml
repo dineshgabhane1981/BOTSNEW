@@ -69,6 +69,30 @@
                         Sales Count
                     </a>
                 </li>
+                @if (userDetails != null)
+                {
+                    if (userDetails.LoginType == "1" || userDetails.LoginType == "5")
+                    {
+                        <li>
+                            <a href="@Url.Action("MeetingMatrix", "LeadReport")" class="@Html.IsSelected(controller: "LeadReport", action: "MeetingMatrix")">
+                                <i class="metismenu-icon pe-7s-rocket"></i>
+                                Meeting Matrix
+                            </a>
+                        </li>
+                        <li>
+                            <a href="@Url.Action("SalesMatrix", "LeadReport")" class="@Html.IsSelected(controller: "LeadReport", action: "SalesMatrix")">
+                                <i class="metismenu-icon pe-7s-rocket"></i>
+                                Sales Matrix
+                            </a>
+                        </li>
+                        <li>
+                            <a href="@Url.Action("CallingMatrix", "LeadReport")" class="@Html.IsSelected(controller: "LeadReport", action: "CallingMatrix")">
+                                <i class="metismenu-icon pe-7s-rocket"></i>
+                                Calling/lead Matrix
+                            </a>
+                        </li>
+                    }
+                }
             </ul>
         </div>
     </div>
