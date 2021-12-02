@@ -1,7 +1,7 @@
 ﻿@*@model List<BOTS_BL.Models.FeedBack.FeedBackQuestionMaster>*@
 
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Feedback";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 <style>
@@ -540,7 +540,7 @@
              $.ajax({
             type: "POST",
                  url: '@Url.Action("SubmitPoints", "Feedback")',                
-                 data: '{BirthDt: ' + JSON.stringify($("#txtbirthdt").val()) + ', mobileNo: ' + JSON.stringify($("#txtMobileNo").val()) + ', AnniversaryDt: ' + JSON.stringify(annidt) + ', LiveIn: ' + JSON.stringify($("#ddllivein").val()) + ', Knowabt: ' + JSON.stringify(knowabout) + ', GroupId: ' + JSON.stringify($("#hdngroupid").val()) + ', OutletId: ' + JSON.stringify($("#hdnoutletid").val()) +'}',
+                 data: '{MemberName: ' + JSON.stringify("") + ', Gender: ' + JSON.stringify("") + ',BirthDt: ' + JSON.stringify($("#txtbirthdt").val()) + ', mobileNo: ' + JSON.stringify($("#txtMobileNo").val()) + ', AnniversaryDt: ' + JSON.stringify(annidt) + ', LiveIn: ' + JSON.stringify($("#ddllivein").val()) + ', Knowabt: ' + JSON.stringify(knowabout) + ', GroupId: ' + JSON.stringify($("#hdngroupid").val()) + ', OutletId: ' + JSON.stringify($("#hdnoutletid").val()) +'}',
             contentType: "application/json; charset=utf-8",
             dataType: "json",
                  success: function (response) {                     

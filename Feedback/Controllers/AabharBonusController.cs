@@ -14,8 +14,20 @@ namespace Feedback.Controllers
         Exceptions newexception = new Exceptions();
         FeedBackRepository FBR = new FeedBackRepository();// GET: Feedback
         // GET: AabharBonus
-        public ActionResult Index(string groupid)
+        public ActionResult Index(string outletid)
         {
+            string groupid = string.Empty;
+            if (!string.IsNullOrEmpty(outletid))
+            {
+                groupid = outletid.Substring(0, 4);
+                ViewBag.GroupId = groupid;
+                ViewBag.OutletId = outletid;
+                ViewBag.lstlocation = FBR.GetLocationList(groupid);
+            }
+            else
+            {
+                ViewBag.lstlocation = "";
+            }
             return View();
         }
     }

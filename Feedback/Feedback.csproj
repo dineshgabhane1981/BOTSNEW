@@ -158,6 +158,7 @@
     <Content Include="Content\assets\images\discussion.png" />
     <Content Include="Content\assets\images\GoToDashboard.png" />
     <Content Include="Content\assets\images\itops.png" />
+    <Content Include="Content\assets\images\JBJ.jpg" />
     <Content Include="Content\assets\images\logo-inverse.png" />
     <Content Include="Content\assets\images\logo.png" />
     <Content Include="Content\assets\images\Man.jpg" />
@@ -269,12 +270,12 @@
     <Content Include="Views\Feedback\Index.cshtml" />
     <Content Include="Scripts\jquery-3.4.1.min.map" />
     <Content Include="Scripts\jquery-3.4.1.slim.min.map" />
+    <Content Include="Views\AabharBonus\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Content\assets\images\CustomerLogo\" />
     <Folder Include="Models\" />
-    <Folder Include="Views\AabharBonus\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />

@@ -60,13 +60,13 @@ namespace Feedback.Controllers
 
         }
 
-        public ActionResult SubmitPoints(string BirthDt, string mobileNo, string AnniversaryDt, string LiveIn, string Knowabt, string GroupId, string OutletId)
+        public ActionResult SubmitPoints(string MemberName, string Gender,string BirthDt, string mobileNo, string AnniversaryDt, string LiveIn, string Knowabt, string GroupId, string OutletId)
         {
             bool status = false;
             CustomerDetail objcustomerdetails = new CustomerDetail();
             try
             {
-                status = FBR.SubmitPoints(BirthDt, mobileNo, AnniversaryDt, LiveIn, Knowabt, GroupId, OutletId);
+                status = FBR.SubmitPoints(MemberName, Gender, BirthDt, mobileNo, AnniversaryDt, LiveIn, Knowabt, GroupId, OutletId);
             }
             catch (Exception ex)
             {
