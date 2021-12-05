@@ -127,20 +127,19 @@ namespace BOTS_BL.Repository
             }
             return objsaleslead;
         }
-        public List<SalesLead> GetSalesLeads(CustomerLoginDetail objCust)
+        public List<SalesLead> GetFollowupLeads(CustomerLoginDetail objCust)
         {
             List<SalesLead> lstsaleslead = new List<SalesLead>();
             DateTime today = DateTime.Today;
             DateTime tommrowdt = today.AddDays(1);
             using (var context = new CommonDBContext())
             {
-                // lstsaleslead = context.SALES_tblLeads.Where(x => x.FollowupDate == today || x.FollowupDate == tommrowdt).ToList();
-
                 lstsaleslead = (from c in context.SALES_tblLeads
                                 join ct in context.tblCities on c.City equals ct.CityId.ToString()
                                 join cd in context.CustomerLoginDetails on c.AssignedLead equals cd.LoginId
                                 join bp in context.tblBillingPartners on c.BillingPartner equals bp.BillingPartnerId.ToString()
-                                into ps from bp in ps.DefaultIfEmpty()
+                                into ps
+                                from bp in ps.DefaultIfEmpty()
                                 where (c.FollowupDate == today || c.FollowupDate == tommrowdt)
                                 select new SalesLead
                                 {
@@ -172,9 +171,115 @@ namespace BOTS_BL.Repository
                                     AddedDate = c.AddedDate,
                                     UpdatedDate = c.UpdatedDate,
                                     CityName = ct.CityName,
-                                    AssignedLead = cd.UserName
+                                    AssignedLead = c.AssignedLead,
+                                    SalesManagerName = cd.UserName
 
                                 }).ToList();
+
+                var lstsalesleadold = (from c in context.SALES_tblLeads
+                                       join cc in context.SALES_tblLeadTracking on c.LeadId equals cc.LeadId
+                                       join ct in context.tblCities on c.City equals ct.CityId.ToString()
+                                       join cd in context.CustomerLoginDetails on c.AssignedLead equals cd.LoginId
+                                       join bp in context.tblBillingPartners on c.BillingPartner equals bp.BillingPartnerId.ToString()
+                                       into ps
+                                       from bp in ps.DefaultIfEmpty()
+                                       where c.FollowupDate < today && c.LeadId == cc.LeadId && cc.AddedDate < today
+                                       && c.LeadStatus != "NotInterested" && c.MeetingType!= "salesdone" && c.MeetingType != "Closure"
+                                       select new SalesLead
+                                       {
+                                           LeadId = c.LeadId,
+                                           BusinessName = c.BusinessName,
+                                           Category = c.Category,
+                                           Product = c.Product,
+                                           BillingPartner = bp.BillingPartnerName,
+                                           NoOfOutlet = c.NoOfOutlet,
+                                           Address = c.Address,
+                                           State = c.State,
+                                           City = c.City,
+                                           Pincode = c.Pincode,
+                                           ContactType = c.ContactType,
+                                           SpokeWith = c.SpokeWith,
+                                           MobileNo = c.MobileNo,
+                                           AlternateNo = c.AlternateNo,
+                                           EmailId = c.EmailId,
+                                           AuthorizedPerson = c.AuthorizedPerson,
+                                           APMobileNo = c.APMobileNo,
+                                           LeadStatus = c.LeadStatus,
+                                           PriceQuoted = c.PriceQuoted,
+                                           MeetingType = c.MeetingType,
+                                           FollowupDate = c.FollowupDate,
+                                           LeadSource = c.LeadSource,
+                                           LeadSourceName = c.LeadSourceName,
+                                           Comments = c.Comments,
+                                           AddedBy = c.AddedBy,
+                                           AddedDate = c.AddedDate,
+                                           UpdatedDate = c.UpdatedDate,
+                                           CityName = ct.CityName,
+                                           AssignedLead = c.AssignedLead,
+                                           SalesManagerName = cd.UserName
+
+                                       }).ToList();
+
+                lstsaleslead.AddRange(lstsalesleadold);
+                if (objCust.LoginType != "1" && objCust.LoginType != "5")
+                {
+                    lstsaleslead = lstsaleslead.Where(x => x.AssignedLead == objCust.LoginId).ToList();
+                }
+            }
+            return lstsaleslead;
+        }
+        public List<SalesLead> GetSalesLeads(CustomerLoginDetail objCust)
+        {
+            List<SalesLead> lstsaleslead = new List<SalesLead>();
+            DateTime today = DateTime.Today;
+            DateTime tommrowdt = today.AddDays(1);
+            using (var context = new CommonDBContext())
+            {
+                // lstsaleslead = context.SALES_tblLeads.Where(x => x.FollowupDate == today || x.FollowupDate == tommrowdt).ToList();
+
+                lstsaleslead = (from c in context.SALES_tblLeads
+                                join ct in context.tblCities on c.City equals ct.CityId.ToString()
+                                join cd in context.CustomerLoginDetails on c.AssignedLead equals cd.LoginId
+                                join bp in context.tblBillingPartners on c.BillingPartner equals bp.BillingPartnerId.ToString()
+                                into ps
+                                from bp in ps.DefaultIfEmpty()
+                                where (c.FollowupDate == today || c.FollowupDate == tommrowdt)
+                                select new SalesLead
+                                {
+                                    LeadId = c.LeadId,
+                                    BusinessName = c.BusinessName,
+                                    Category = c.Category,
+                                    Product = c.Product,
+                                    BillingPartner = bp.BillingPartnerName,
+                                    NoOfOutlet = c.NoOfOutlet,
+                                    Address = c.Address,
+                                    State = c.State,
+                                    City = c.City,
+                                    Pincode = c.Pincode,
+                                    ContactType = c.ContactType,
+                                    SpokeWith = c.SpokeWith,
+                                    MobileNo = c.MobileNo,
+                                    AlternateNo = c.AlternateNo,
+                                    EmailId = c.EmailId,
+                                    AuthorizedPerson = c.AuthorizedPerson,
+                                    APMobileNo = c.APMobileNo,
+                                    LeadStatus = c.LeadStatus,
+                                    PriceQuoted = c.PriceQuoted,
+                                    MeetingType = c.MeetingType,
+                                    FollowupDate = c.FollowupDate,
+                                    LeadSource = c.LeadSource,
+                                    LeadSourceName = c.LeadSourceName,
+                                    Comments = c.Comments,
+                                    AddedBy = c.AddedBy,
+                                    AddedDate = c.AddedDate,
+                                    UpdatedDate = c.UpdatedDate,
+                                    CityName = ct.CityName,
+                                    AssignedLead = c.AssignedLead,
+                                    SalesManagerName = cd.UserName
+
+                                }).ToList();
+
+
                 if (objCust.LoginType != "1" && objCust.LoginType != "5")
                 {
                     lstsaleslead = lstsaleslead.Where(x => x.AssignedLead == objCust.LoginId).ToList();
@@ -215,7 +320,8 @@ namespace BOTS_BL.Repository
                             join ct in context.tblCities on c.City equals ct.CityId.ToString()
                             join cd in context.CustomerLoginDetails on c.AssignedLead equals cd.LoginId
                             join bp in context.tblBillingPartners on c.BillingPartner equals bp.BillingPartnerId.ToString()
-                            into ps from bp in ps.DefaultIfEmpty()
+                            into ps
+                            from bp in ps.DefaultIfEmpty()
                             select new SalesLead
                             {
                                 LeadId = c.LeadId,
@@ -246,7 +352,8 @@ namespace BOTS_BL.Repository
                                 AddedDate = c.AddedDate,
                                 UpdatedDate = c.UpdatedDate,
                                 CityName = ct.CityName,
-                                AssignedLead = cd.UserName
+                                AssignedLead = c.AssignedLead,
+                                SalesManagerName = cd.UserName
                             }).ToList();
 
                 if (!string.IsNullOrEmpty(MobileNo))
@@ -314,7 +421,7 @@ namespace BOTS_BL.Repository
                                        Comments = c.Comments
                                    }).AsNoTracking().OrderByDescending(x => x.AddedDate).ToList();
 
-                foreach(var item in lstLeadTracking)
+                foreach (var item in lstLeadTracking)
                 {
                     if (item.AddedDate.HasValue)
                         item.AddedDateStr = item.AddedDate.Value.ToString("MM/dd/yyyy h:mmtt");

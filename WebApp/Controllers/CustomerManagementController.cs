@@ -27,6 +27,7 @@ namespace WebApp.Controllers
             try
             {
                 var userDetails = (CustomerLoginDetail)Session["UserSession"];
+                userDetails.CustomerName = "";
                 customerDashboardViewModel.onBoardingListings = OBR.GetOnBoardingListings(userDetails);
                 customerDashboardViewModel.customerListings = CR.GetAllCustomer();
                

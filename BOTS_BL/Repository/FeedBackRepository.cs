@@ -172,23 +172,14 @@ namespace BOTS_BL.Repository
                 lstfeedback = context.FeedBackMasters.Where(x => x.MobileNo == mobileNo).OrderByDescending(y => y.DOJ).Take(2).ToList();
                 if (objcustdetails != null)
                 {
-                    if (GroupId != "1163")
+                    if (AnniversaryDt != null)
                     {
-                        var point = objcustdetails.Points;
-                        objcustdetails.Points = point + objoutlet.FeedBackPoints;
-                        context.CustomerDetails.AddOrUpdate(objcustdetails);
-                        context.SaveChanges();
+                        objcustdetails.AnniversaryDate = Convert.ToDateTime(AnniversaryDt);
                     }
-                    else
-                    {
-                        if (AnniversaryDt != null)
-                        {
-                            objcustdetails.AnniversaryDate = Convert.ToDateTime(AnniversaryDt);
-                        }
-                        objcustdetails.CustomerName = MemberName;
-                        context.CustomerDetails.AddOrUpdate(objcustdetails);
-                        context.SaveChanges();
-                    }
+                    var point = objcustdetails.Points;
+                    objcustdetails.Points = point + objoutlet.FeedBackPoints;
+                    context.CustomerDetails.AddOrUpdate(objcustdetails);
+                    context.SaveChanges();
                 }
                 if (objcustdetails == null)
                 {

@@ -5,7 +5,12 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
     var userDetails = (CustomerLoginDetail)Session["UserSession"];
 }
-
+<style>
+    .RedRow{
+        background-color:red !important;
+        color:white;        
+    }
+</style>
 
 <div class="app-main__inner">
     <div class="row card">
@@ -123,9 +128,13 @@
                                 {
                                     foreach (var item in Model.lstsALES_TblLeads)
                                     {
-
+                                        string cssClass = "";
+                                        if (item.AddedDate < DateTime.Today && item.FollowupDate < DateTime.Today)
+                                        {
+                                            cssClass = "RedRow";
+                                        }
                                         string LeadId = Convert.ToString(item.LeadId);
-                                        <tr>
+                                        <tr class="@cssClass">
                                             <td><a href="#" onclick="ShowTrackingDetails(@item.LeadId);">@item.BusinessName</a></td>
                                             <td>@item.MobileNo</td>
                                             <td>@item.CityName</td>
@@ -141,7 +150,7 @@
                                                 <td>--</td>
                                             }
 
-                                            <td>@item.AssignedLead</td>
+                                            <td>@item.SalesManagerName</td>
                                             <td style="text-align:center;">
                                                 <a href="@Url.Action("AddLead", "Lead", new {leadId= LeadId})" class="login" title="Edit"><img src="~/Content/assets/images/shape_editUser.png" /></a>
 

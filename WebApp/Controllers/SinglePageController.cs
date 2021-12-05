@@ -6,14 +6,20 @@ using System.Web.Mvc;
 using BOTS_BL.Repository;
 using BOTS_BL.Models.CommonDB;
 using WebApp.ViewModel;
+using BOTS_BL.Models;
 
 namespace WebApp.Controllers
 {
     public class SinglePageController : Controller
     {
         SinglePageRepository SPR = new SinglePageRepository();
+        CustomerRepository CR = new CustomerRepository();
         public ActionResult Index()
         {
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            userDetails.CustomerName = CR.GetCustomerName(userDetails.GroupId);
+            Session["UserSession"] = userDetails;
+
             SinglePageViewModel singlevm = new SinglePageViewModel();
             //  dynamic mymodel = new ExpandoObject();
             // Tbl_SinglePageSummaryTable objsinglepagesummarytable = new Tbl_SinglePageSummaryTable();

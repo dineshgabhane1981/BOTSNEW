@@ -117,6 +117,8 @@ namespace BOTS_BL.Models
 
         public long? ExpectedTransaction { get; set; }
 
+        public bool IsExistingLoyalty { get; set; }
+
         [NotMapped]
         public HttpPostedFileBase GSTDocumentFile { get; set; }
         [NotMapped]

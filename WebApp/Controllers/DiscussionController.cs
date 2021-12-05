@@ -28,8 +28,14 @@ namespace WebApp.Controllers
 
         public ActionResult AllDiscussions(string groupId, string isOnboarding)
         {
+            
             CommonFunctions common = new CommonFunctions();
             groupId = common.DecryptString(groupId);
+
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            userDetails.CustomerName = CR.GetCustomerName(groupId);
+            Session["UserSession"] = userDetails;
+
             DiscussionViewModel objData = new DiscussionViewModel();
             BOTS_TblDiscussion objDiscussion = new BOTS_TblDiscussion();
             string GroupName = string.Empty;
@@ -60,6 +66,8 @@ namespace WebApp.Controllers
 
         public ActionResult CommonDiscussion()
         {
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            userDetails.CustomerName = "";
             List<DiscussionDetails> lstdashboard = new List<DiscussionDetails>();
             ViewBag.lstcommonstatus = DR.CommonStatus();
             ViewBag.lstgroupdetails = DR.GetGroupDetails();

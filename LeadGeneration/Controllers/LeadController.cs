@@ -22,7 +22,7 @@ namespace LeadGeneration.Controllers
         {
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
             LeadViewModel objviewmodel = new LeadViewModel();
-            objviewmodel.lstsALES_TblLeads = SLR.GetSalesLeads(userDetails);
+            objviewmodel.lstsALES_TblLeads = SLR.GetFollowupLeads(userDetails);
             objviewmodel.lstCity = CR.GetCity();
             objviewmodel.lstBillingPartner = CR.GetBillingPartner();
             objviewmodel.lstSalesManager = SLR.GetSalesManager();

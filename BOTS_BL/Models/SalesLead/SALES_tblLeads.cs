@@ -148,6 +148,7 @@ namespace BOTS_BL.Models.SalesLead
         public string CityName { get; set; }
         public string GroupId { get; set; }
         public string CustomerType { get; set; }
+        public string SalesManagerName { get; set; }
     }
 
     public class SalesCount

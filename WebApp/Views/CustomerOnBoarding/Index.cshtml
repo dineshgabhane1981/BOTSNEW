@@ -440,7 +440,13 @@
                                 @Html.RadioButtonFor(model => model.bots_TblGroupMaster.IsWhatsApp, true, new { @id = "IsWhatsAppYes" }) Yes
                                 @Html.RadioButtonFor(model => model.bots_TblGroupMaster.IsWhatsApp, false, new { @id = "IsWhatsAppNo" }) No
                             </div>
-
+                            <div style="float:left;text-align:right;width:100px;margin-top:10px;">
+                                Existing Loyalty
+                            </div>
+                            <div class="col-sm-4" style="float:left;margin-top:10px;" id="dvIsWhatsApp">
+                                @Html.CheckBoxFor(model => model.bots_TblGroupMaster.IsExistingLoyalty)
+                                
+                            </div>
 
                         </div>
                         <div class="row" style="margin: 0;">
