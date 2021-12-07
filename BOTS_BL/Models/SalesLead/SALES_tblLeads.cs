@@ -149,6 +149,7 @@ namespace BOTS_BL.Models.SalesLead
         public string GroupId { get; set; }
         public string CustomerType { get; set; }
         public string SalesManagerName { get; set; }
+        public long? noOfOutlet { get; set; }
     }
 
     public class SalesCount

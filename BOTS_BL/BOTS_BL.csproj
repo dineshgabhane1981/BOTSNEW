@@ -275,6 +275,7 @@
     <Compile Include="Models\Reports\OutletwiseTransaction.cs" />
     <Compile Include="Models\Reports\PointExpiryTmp.cs" />
     <Compile Include="Models\Reports\ReportFilterCount.cs" />
+    <Compile Include="Models\SalesLead\PartnerReport.cs" />
     <Compile Include="Models\SalesLead\SalesReports.cs" />
     <Compile Include="Models\SalesLead\SALES_tblLeads.cs" />
     <Compile Include="Models\SalesLead\SALES_tblLeadTracking.cs" />

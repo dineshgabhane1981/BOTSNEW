@@ -1,0 +1,79 @@
+﻿@model List<BOTS_BL.Models.SalesLead.PartnerReport>
+@using System.Globalization
+<div>
+    <div class="pt-3 pl-3 pr-3 col-md-12 col-lg-12">
+        <div class="row">
+            <div class="col search-container">
+                <i class="fas fa-search"></i>
+                <input class="input100" type="text" id="txtSearchOnBoarding" placeholder="Search activity..." />
+            </div>
+        </div>
+        <div class="row mt-3" id="dvOnBoardingData">
+            <div class="table-responsive">
+                <table class="table" id="OnBoardingTable">
+                    <thead>
+                        <tr>
+                            <th scope="col">Partner Name</th>
+                            <th scope="col">No Of  Account</th>
+                            <th scope="col">No Of Outlets</th>
+                            <th scope="col">Total Amount</th>
+                            <th scope="col">Contribution %  in total  revenue</th>
+                            <th scope="col">Average Revenue per outlet</th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model != null)
+                        {
+                            foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>@item.PartnerName</td>
+                                    <td>@item.NoOfAccounts</td>
+                                    <td>@item.NoOfOutlets</td>
+
+                                    <td>@String.Format(new CultureInfo("en-IN", false), "{0:n2}", Convert.ToDouble(item.TotalAmount))</td>
+                                    <td>@item.ContributionInRevenue</td>
+                                    <td>@String.Format(new CultureInfo("en-IN", false), "{0:n2}", Convert.ToDouble(item.AvgRevenuePerOutlet))</td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+</div>
+<script>
+    $(document).ready(function () {
+        $('#OnBoardingTable').DataTable({
+            "aaSorting": [],
+            "paging": true,
+            "ordering": true,
+            "info": true,
+            "bFilter": true,
+            "pageLength": 10,
+            "pagingType": "simple_numbers"
+        });
+
+        $('#OnBoardingTable_filter').hide();
+
+        $('#txtSearchOnBoarding').on('keyup', function () {
+
+            $.fn.dataTable.ext.search.push(function (settings, searchData) {
+                var term = $('#txtSearchOnBoarding').val().toLowerCase()
+                for (var i = 0; i < searchData.length; i++) {
+                    if (searchData[i].toLowerCase().indexOf(term) >= 0) {
+                        return true;
+                    }
+                }
+                return false;
+            });
+            var table = $('#OnBoardingTable').DataTable();
+            table.draw();
+        });
+
+        //$(".first.paginate_button, .last.paginate_button").hide();
+    });
+</script>

@@ -30,14 +30,61 @@
 
                             foreach (var item in Model)
                             {
+                                var SMId = item.LoginId;
                                 <tr>
                                     <td>@item.SMName</td>
-                                    <td>@item.TotalMeeting</td>
-                                    <td>@item.TotalUniqueMeeting</td>
-                                    <td>@item.UntouchedFollowUp</td>
-                                    <td>@item.IntrestedCases / @item.IntrestedCasesPer</td>
-                                    <td>@item.PersonalMeeting / @item.PersonalMeetingPer</td>
-                                    <td>@item.ZoomMeeting / @item.ZoomMeetingPer</td>
+                                    @if (item.TotalMeeting > 0)
+                                    {
+                                        <td><a href="#" onclick="ShowData(@SMId,1)"> @item.TotalMeeting </a></td>
+                                    }
+                                    else
+                                    {
+                                        <td>@item.TotalMeeting</td>
+                                    }
+                                    @if (item.TotalUniqueMeeting > 0)
+                                    {
+                                        <td><a href="#" onclick="ShowData(@SMId,2)">@item.TotalUniqueMeeting</a></td>
+                                    }
+                                    else
+                                    {
+                                        <td>@item.TotalUniqueMeeting</td>
+                                    }
+                                    @if (item.UntouchedFollowUp > 0)
+                                    {
+                                        <td><a href="#" onclick="ShowData(@SMId,3)">@item.UntouchedFollowUp</a></td>
+                                    }
+                                    else
+                                    {
+                                        <td>@item.UntouchedFollowUp</td>
+                                    }
+
+                                    @if (item.IntrestedCases > 0)
+                                    {
+                                        <td><a href="#" onclick="ShowData(@SMId,4)">@item.IntrestedCases</a> / @item.IntrestedCasesPer</td>
+                                    }
+                                    else
+                                    {
+                                        <td>@item.IntrestedCases / @item.IntrestedCasesPer</td>
+                                    }
+
+                                    @if (item.PersonalMeeting > 0)
+                                    {
+                                        <td><a href="#" onclick="ShowData(@SMId,5)">@item.PersonalMeeting</a> / @item.PersonalMeetingPer</td>
+                                    }
+                                    else
+                                    {
+                                        <td>@item.PersonalMeeting / @item.PersonalMeetingPer</td>
+                                    }
+
+                                    @if (item.ZoomMeeting > 0)
+                                    {
+                                        <td><a href="#" onclick="ShowData(@SMId,6)">@item.ZoomMeeting</a> / @item.ZoomMeetingPer</td>
+                                    }
+                                    else
+                                    {
+                                        <td>@item.ZoomMeeting / @item.ZoomMeetingPer</td>
+                                    }
+
                                 </tr>
                             }
                         }
@@ -48,3 +95,35 @@
     </div>
 
 </div>
+<script>
+    $(document).ready(function () {
+        $('#OnBoardingTable').DataTable({
+            "aaSorting": [],
+            "paging": true,
+            "ordering": true,
+            "info": true,
+            "bFilter": true,
+            "pageLength": 10,
+            "pagingType": "simple_numbers"
+        });
+
+        $('#OnBoardingTable_filter').hide();
+
+        $('#txtSearchOnBoarding').on('keyup', function () {
+
+            $.fn.dataTable.ext.search.push(function (settings, searchData) {
+                var term = $('#txtSearchOnBoarding').val().toLowerCase()
+                for (var i = 0; i < searchData.length; i++) {
+                    if (searchData[i].toLowerCase().indexOf(term) >= 0) {
+                        return true;
+                    }
+                }
+                return false;
+            });
+            var table = $('#OnBoardingTable').DataTable();
+            table.draw();
+        });
+
+        //$(".first.paginate_button, .last.paginate_button").hide();
+    });
+</script>

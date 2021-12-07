@@ -1,0 +1,84 @@
+﻿@model List<BOTS_BL.Models.SalesLead.PartnerReport>
+@{
+    ViewBag.Title = "PartnerReport";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="app-main__inner">
+    <div class="mb-3 card" style="padding-top:20px;">
+        <div class="content">
+            <div class="container-fluid">
+                <div class="row mt-2 mb-5">
+                    <div class="col-md-4 col-sm-4">
+                        Date Range From <br /> <input type="text" id="txtfromdt" class="input50" />
+                    </div>
+                    <div class="col-md-4 col-sm-4">
+                        To <br /> <input type="text" id="txttodt" class="input50" />
+                    </div>
+                    <div class="col-md-2 col-sm-2">
+                        <br />
+                        <button type="submit" id="btnGetReport" class="btn btn-primary pull-left" style="margin-right:10px;" onclick="return GetReport();">Search</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="container-fluid pt-3 pl-3 pr-3 pb-3" id="dvReport" style="display:none;">
+
+            </div>          
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        var today = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
+        $("#txtfromdt").datepicker({
+            dateFormat: "yy-mm-dd",
+            maxDate: today,
+        });
+
+        $("#txttodt").datepicker({
+            dateFormat: "yy-mm-dd",
+            maxDate: today,
+        });
+    });
+
+    function GetReport() {
+        var SearchData = [];
+        item = {}
+
+        item["frmDate"] = $("#txtfromdt").val();
+        item["toDate"] = $("#txttodt").val();
+
+        SearchData.push(item);
+        var data = JSON.stringify(SearchData);
+        $("#divLoader").show();
+
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("GetPartnerReportList", "LeadReport")',
+            data: '{searchData: ' + JSON.stringify(data) + '}',
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                $('#dvReport').html(response);               
+                $('#dvReport').show(1000);
+                $("#divLoader").hide();
+            },
+            failure: function (response) {
+                $("#divLoader").hide();
+            },
+            error: function (response) {
+                $('#dvReport').html(response.responseText);               
+                $('#dvReport').show(1000);
+                $("#divLoader").hide();
+            }
+        });
+    }
+</script>
+
+
+<script src="~/Scripts/jquery-ui-1.12.1.js"></script>
+<script src="~/Scripts/jquery-ui-1.12.1.min.js"></script>
+<link href="~/Content/themes/base/jquery-ui.min.css" rel="stylesheet" />
+<link href="~/Content/themes/base/jquery-ui.css" rel="stylesheet" />

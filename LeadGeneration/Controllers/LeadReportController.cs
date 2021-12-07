@@ -46,16 +46,55 @@ namespace LeadGeneration.Controllers
                 var MeetingOrCall = Convert.ToString(item["MeetingOrCall"]);
                 objMeetingMatrix = LRR.GetMeetingMatrixReport(salesManager, frmDate, toDate, MeetingOrCall);
             }
-                
+
             return PartialView("_MeetingMatrixListing", objMeetingMatrix);
         }
+
+        public ActionResult GetMeetingMatrixDetailReport(string searchData)
+        {
+            List<SalesLead> objLeads = new List<SalesLead>();
+            JavaScriptSerializer json_serializer = new JavaScriptSerializer();
+            json_serializer.MaxJsonLength = int.MaxValue;
+            object[] objData = (object[])json_serializer.DeserializeObject(searchData);
+            foreach (Dictionary<string, object> item in objData)
+            {
+                var salesManager = Convert.ToString(item["SalesManager"]);
+                var frmDate = Convert.ToString(item["frmDate"]);
+                var toDate = Convert.ToString(item["toDate"]);
+                var MeetingOrCall = Convert.ToString(item["MeetingOrCall"]);
+                var type = Convert.ToString(item["type"]);
+
+                objLeads = LRR.GetDetailMatrixReportData(salesManager, frmDate, toDate, MeetingOrCall, type);
+            }
+
+            return PartialView("_MeetingMatrixDetails", objLeads);
+        }
+
+
         public ActionResult SalesMatrix()
         {
             return View();
         }
-        public ActionResult CallingMatrix()
+        public ActionResult PartnerReport()
         {
-            return View();
+            return View(); 
+        }
+
+        public ActionResult GetPartnerReportList(string searchData)
+        {
+            List<PartnerReport> objPartnerReport = new List<PartnerReport>();
+            JavaScriptSerializer json_serializer = new JavaScriptSerializer();
+            json_serializer.MaxJsonLength = int.MaxValue;
+            object[] objData = (object[])json_serializer.DeserializeObject(searchData);
+            foreach (Dictionary<string, object> item in objData)
+            {                
+                var frmDate = Convert.ToString(item["frmDate"]);
+                var toDate = Convert.ToString(item["toDate"]);
+
+                objPartnerReport = LRR.GetPartnerReportData(frmDate, toDate);
+            }
+
+            return PartialView("_PartnerReportListing", objPartnerReport);
         }
     }
 }
