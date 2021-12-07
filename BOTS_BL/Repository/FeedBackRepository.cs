@@ -93,7 +93,8 @@ namespace BOTS_BL.Repository
             // string smsresponce = "";
             FeedBackMaster objfeedback = new FeedBackMaster();
             string connStr = objCustRepo.GetCustomerConnString(GroupId);
-
+            TimeZoneInfo IND_ZONE = TimeZoneInfo.FindSystemTimeZoneById("India Standard Time");
+            DateTime date = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, IND_ZONE);
             using (var context = new BOTSDBContext(connStr))
             {
                 CustomerDetail objcustdetails = context.CustomerDetails.Where(x => x.MobileNo == mobileNo).FirstOrDefault();
@@ -115,7 +116,8 @@ namespace BOTS_BL.Repository
                         objfeedback.QuestionPoints = points.ToString();
                         objfeedback.QuestionId = queid.ToString();
                         objfeedback.OutletId = outletId;
-                        objfeedback.DOJ = DateTime.Now;
+                       
+                        objfeedback.DOJ = date;
                         Combinedpoint += points;
                         objfeedback = context.FeedBackMasters.Add(objfeedback);
                         context.SaveChanges();
@@ -128,8 +130,7 @@ namespace BOTS_BL.Repository
                     SMSDetail objsmsdetails = new SMSDetail();
                     FeedBackMobileMaster objmobilemaster = context.FeedBackMobileMasters.Where(x => x.MessageId == "203").FirstOrDefault();
                     SMSEmailMaster objsmsemailmaster = context.SMSEmailMasters.Where(x => x.MessageId == "203").FirstOrDefault();
-                    TimeZoneInfo IND_ZONE = TimeZoneInfo.FindSystemTimeZoneById("India Standard Time");
-                    DateTime date = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, IND_ZONE);
+                    
 
                     string message = objsmsemailmaster.SMS;
                     if (objcustdetails != null)
@@ -163,7 +164,8 @@ namespace BOTS_BL.Repository
             PointsExpiry objpointsExpiry = new PointsExpiry();
             CustomerDetail objnewcust = new CustomerDetail();
             string connStr = objCustRepo.GetCustomerConnString(GroupId);
-
+            TimeZoneInfo IND_ZONE = TimeZoneInfo.FindSystemTimeZoneById("India Standard Time");
+            DateTime date = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, IND_ZONE);
             using (var context = new BOTSDBContext(connStr))
             {
                 CustomerDetail objcustdetails = context.CustomerDetails.Where(x => x.MobileNo == mobileNo).FirstOrDefault();
@@ -205,7 +207,7 @@ namespace BOTS_BL.Repository
                     {
                         objnewcust.AnniversaryDate = Convert.ToDateTime(AnniversaryDt);
                     }
-                    objnewcust.DOJ = DateTime.Now;
+                    objnewcust.DOJ = date;
                     objnewcust.EmailId = "";
                     objnewcust.EnrollingOutlet = outletid;
                     if (string.IsNullOrEmpty(Gender))
@@ -231,7 +233,7 @@ namespace BOTS_BL.Repository
 
                 objtransactionMaster.CounterId = outletid + "01";
                 objtransactionMaster.MobileNo = mobileNo;
-                objtransactionMaster.Datetime = DateTime.Now;
+                objtransactionMaster.Datetime = date;
                 objtransactionMaster.TransType = "1";
                 objtransactionMaster.TransSource = "1";
                 if (GroupId != "1163")
@@ -275,16 +277,16 @@ namespace BOTS_BL.Repository
                 }
 
                 objpointsExpiry.BurnDate = null;
-                objpointsExpiry.Datetime = DateTime.Now;
-                objpointsExpiry.EarnDate = DateTime.Now;
-                DateTime today = DateTime.Today;
-                DateTime next = today.AddYears(1);
+                objpointsExpiry.Datetime = date;
+                objpointsExpiry.EarnDate = date;
+               // DateTime today = date;
+                DateTime next = date.AddYears(1);
                 var currentmonth = DateTime.DaysInMonth(next.Year, next.Month);
 
                 if (next.Day < currentmonth)
                 {
                     var days = (currentmonth - next.Day);
-                    next = today.AddDays(days).AddYears(1);
+                    next = date.AddDays(days).AddYears(1);
                 }
                 objpointsExpiry.ExpiryDate = next;
                 objpointsExpiry.Points = objoutlet.FeedBackPoints;
@@ -361,8 +363,8 @@ namespace BOTS_BL.Repository
                         objmobilemaster = context.FeedBackMobileMasters.Where(x => x.MessageId == "202").FirstOrDefault();
                         objsmsemailmaster = context.SMSEmailMasters.Where(x => x.MessageId == "202").FirstOrDefault();
                         string message = objsmsemailmaster.SMS;
-                        TimeZoneInfo IND_ZONE = TimeZoneInfo.FindSystemTimeZoneById("India Standard Time");
-                        DateTime date = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, IND_ZONE);
+                        //TimeZoneInfo IND_ZONE = TimeZoneInfo.FindSystemTimeZoneById("India Standard Time");
+                        //DateTime date = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, IND_ZONE);
                         if (objcustdetails != null)
                         {
                             message = message.Replace("#01", objcustdetails.CustomerName);
