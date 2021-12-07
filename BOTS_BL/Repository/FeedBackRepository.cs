@@ -56,6 +56,7 @@ namespace BOTS_BL.Repository
             {
                 objfeedback = context.FeedBackMasters.Where(x => x.MobileNo == mobileNo).OrderByDescending(y => y.FeedBackId).FirstOrDefault();
                 var customer = context.CustomerDetails.Where(x => x.MobileNo == mobileNo).FirstOrDefault();
+               
                 if (objfeedback != null && GroupId == "1163")
                 {
                     obj.IsFeedBackGiven = true;
@@ -81,15 +82,16 @@ namespace BOTS_BL.Repository
                             obj.MobileNo = customer.MobileNo;
                             obj.Points = customer.Points;
                         }
+                        
                     }
                 }
             }
             return obj;
         }
 
-        public bool SubmitRating(string mobileNo, int[] ranking, string GroupId, string outletId)
+        public string SubmitRating(string mobileNo, int[] ranking, string GroupId, string outletId)
         {
-            bool status = false;
+            string status ="false";
             // string smsresponce = "";
             FeedBackMaster objfeedback = new FeedBackMaster();
             string connStr = objCustRepo.GetCustomerConnString(GroupId);
@@ -98,6 +100,11 @@ namespace BOTS_BL.Repository
             using (var context = new BOTSDBContext(connStr))
             {
                 CustomerDetail objcustdetails = context.CustomerDetails.Where(x => x.MobileNo == mobileNo).FirstOrDefault();
+                OutletDetail objoutlet = context.OutletDetails.Where(x => x.OutletId == outletId).FirstOrDefault();
+                TransactionMaster objtransactionMaster = new TransactionMaster();
+                PointsExpiry objpointsExpiry = new PointsExpiry();
+                var transaction = context.TransactionMasters.Where(x => x.MobileNo == mobileNo).OrderByDescending(y => y.Datetime).Take(2).ToList();
+                var pointexpiry = context.PointsExpiries.Where(x => x.MobileNo == mobileNo).OrderByDescending(y => y.Datetime).Take(2).ToList();
                 int queid = 1;
                 int Combinedpoint = 0;
                 foreach (int points in ranking)
@@ -121,7 +128,7 @@ namespace BOTS_BL.Repository
                         Combinedpoint += points;
                         objfeedback = context.FeedBackMasters.Add(objfeedback);
                         context.SaveChanges();
-                        status = true;
+                        status = "true";
                     }
                     queid++;
                 }
@@ -150,6 +157,59 @@ namespace BOTS_BL.Repository
                     objsmsdetails = context.SMSDetails.Where(x => x.OutletId == outletId).FirstOrDefault();
                     SendMessage(objmobilemaster.MobileNo, objsmsdetails.SenderId, message, objsmsdetails.TxnUrl, objsmsdetails.TxnUserName, objsmsdetails.TxnPassword);
 
+                }
+                if (transaction.Count > 0)
+                {
+                    if (transaction[0].InvoiceNo == "B_Feedbackpoints" && pointexpiry[0].InvoiceNo == "B_Feedbackpoints")
+                    {
+                        var point = objcustdetails.Points;
+                        objcustdetails.Points = point + objoutlet.FeedBackPoints;
+                        context.CustomerDetails.AddOrUpdate(objcustdetails);
+                        context.SaveChanges();
+                        objtransactionMaster.CustomerId = objcustdetails.CustomerId;
+                        objtransactionMaster.CustomerPoints = objcustdetails.Points;
+                        objtransactionMaster.CounterId = outletId + "01";
+                        objtransactionMaster.MobileNo = mobileNo;
+                        objtransactionMaster.Datetime = date;
+                        objtransactionMaster.TransType = "1";
+                        objtransactionMaster.TransSource = "1";
+                        objtransactionMaster.InvoiceNo = "B_Feedbackpoints";
+                        objtransactionMaster.InvoiceAmt = 0;
+                        objtransactionMaster.Status = "06";
+                        objtransactionMaster.PointsEarned = objoutlet.FeedBackPoints;
+                        objtransactionMaster.PointsBurned = 0;
+                        objtransactionMaster.CampaignPoints = 0;
+                        objtransactionMaster.TxnAmt = 0;
+                        objtransactionMaster.Synchronization = "";
+                        objtransactionMaster.SyncDatetime = null;
+                        context.TransactionMasters.Add(objtransactionMaster);
+                        context.SaveChanges();
+                        objpointsExpiry.MobileNo = mobileNo;
+                        objpointsExpiry.CounterId = outletId + "01";
+                        objpointsExpiry.CustomerId = objcustdetails.CustomerId;
+                        objpointsExpiry.BurnDate = null;
+                        objpointsExpiry.Datetime = date;
+                        objpointsExpiry.EarnDate = date;
+                        // DateTime today = date;
+                        DateTime next = date.AddYears(1);
+                        var currentmonth = DateTime.DaysInMonth(next.Year, next.Month);
+
+                        if (next.Day < currentmonth)
+                        {
+                            var days = (currentmonth - next.Day);
+                            next = date.AddDays(days).AddYears(1);
+                        }
+                        objpointsExpiry.ExpiryDate = next;
+                        objpointsExpiry.Points = objoutlet.FeedBackPoints;
+                        objpointsExpiry.Status = "00";
+                        objpointsExpiry.InvoiceNo = "B_Feedbackpoints";
+                        objpointsExpiry.GroupId = objoutlet.GroupId;
+                        objpointsExpiry.OriginalInvoiceNo = "";
+                        objpointsExpiry.TransRefNo = null;
+                        context.PointsExpiries.Add(objpointsExpiry);
+                        context.SaveChanges();
+                        status = "pointsGiven";
+                    }
                 }
             }
             return status;
