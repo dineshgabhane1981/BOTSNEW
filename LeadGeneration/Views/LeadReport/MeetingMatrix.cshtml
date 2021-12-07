@@ -20,10 +20,19 @@
                     </div>
                     <div class="col-md-4 col-sm-4">
                         To <br /> <input type="text" id="txttodt" class="input50" />
+                    </div>                    
+                </div>
+                <div class="row mt-2 mb-5">
+                    <div class="col-md-4 col-sm-4" >
+                        <div id="dvType">
+                            <input type="radio" name="callmeeting" id="rbtnMeeting"  /> Meeting 
+                            <input type="radio" name="callmeeting" id="rbtnCalling" style="margin-left:50px;"/> Calling
+                        </div>
                     </div>
+                    
                     <div class="col-md-2 col-sm-2">
                         <br />
-                        <button type="submit" id="btnGetReport" class="btn btn-primary pull-right" style="margin-right:10px;" onclick="return GetReport();">Search</button>
+                        <button type="submit" id="btnGetReport" class="btn btn-primary pull-left" style="margin-right:10px;" onclick="return GetReport();">Search</button>
                     </div>
                 </div>
             </div>
@@ -48,42 +57,102 @@
             maxDate: today,
         });
 
-
+        RemoveRedBorder();
     });
 
-    function GetReport() {
-        var SeardhData = [];
-        item = {}
-        
-        item["frmDate"] = $("#txtfromdt").val();
-        item["toDate"] = $("#txttodt").val();
-        item["SalesManager"] = $("#ddlSalesManager").val();
-        item["MeetingOrCall"] = "1stMeeting";
-
-        SeardhData.push(item);
-        var data = JSON.stringify(SeardhData);
-        $("#divLoader").show();
-
-        $.ajax({
-            type: "POST",
-            url: '@Url.Action("GetMeetingMatrixList", "LeadReport")',
-            data: '{searchData: ' + JSON.stringify(data) + '}',
-            contentType: "application/json; charset=utf-8",
-            dataType: "json",
-            success: function (response) {
-                $('#dvReport').html(response);
-                $('#dvReport').show(1000);
-                $("#divLoader").hide();
-            },
-            failure: function (response) {
-                $("#divLoader").hide();
-            },
-            error: function (response) {
-                $('#dvReport').html(response.responseText);
-                $('#dvReport').show(1000);
-                $("#divLoader").hide();
+    function RemoveRedBorder() {
+        $("#txtfromdt").change(function () {
+            if ($("#txtfromdt").val() != "") {
+                $('#txtfromdt').css('border-color', '');
+            }
+            else {
+                $('#txtfromdt').css('border-color', 'red');
             }
         });
+        $("#txttodt").change(function () {
+            if ($("#txttodt").val() != "") {
+                $('#txttodt').css('border-color', '');
+            }
+            else {
+                $('#txttodt').css('border-color', 'red');
+            }
+        });
+        $('#rbtnMeeting').on('change', function () {
+            $('#dvType').css('border', '');
+        });
+        $('#rbtnCalling').on('change', function () {
+            $('#dvType').css('border', '');
+        });
+    }
+    function GetReport() {
+        var returnStatus = true;
+        if ($("#txtfromdt").val() == "") {
+            $('#txtfromdt').css('border-color', 'red');
+            returnStatus = false;
+        }
+        if ($("#txttodt").val() == "") {
+            $('#txttodt').css('border-color', 'red');
+            returnStatus = false;
+        }
+        if ($("#rbtnMeeting").is(":checked") || $("#rbtnCalling").is(":checked")) {
+
+        }
+        else {
+           
+            $('#dvType').css('border', '1px solid red');
+            returnStatus = false;
+        }
+        if (returnStatus == true) {
+            var SeardhData = [];
+            item = {}
+
+            item["frmDate"] = $("#txtfromdt").val();
+            item["toDate"] = $("#txttodt").val();
+            item["SalesManager"] = $("#ddlSalesManager").val();
+            if ($("#rbtnMeeting").is(":checked")) {
+                item["MeetingOrCall"] = "Meeting";
+            }
+            else if ($("#rbtnCalling").is(":checked")) {
+                item["MeetingOrCall"] = "Calling";
+            }
+            else {
+                item["MeetingOrCall"] = "None";
+            }
+            
+            SeardhData.push(item);
+            var data = JSON.stringify(SeardhData);
+            $("#divLoader").show();
+
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("GetMeetingMatrixList", "LeadReport")',
+                data: '{searchData: ' + JSON.stringify(data) + '}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (response) {
+                    $('#dvReport').html(response);
+                    $('#dvReport').show(1000);
+                    $("#divLoader").hide();
+                },
+                failure: function (response) {
+                    $("#divLoader").hide();
+                },
+                error: function (response) {
+                    $('#dvReport').html(response.responseText);
+                    $('#dvReport').show(1000);
+                    $("#divLoader").hide();
+                }
+            });
+        }
+        else {
+            cuteAlert({
+                type: "error",
+                title: "Oops..",
+                message: "Please enter Required fields",
+                buttonText: "Okay"
+            })
+            return false;
+        }
     }
 
 </script>

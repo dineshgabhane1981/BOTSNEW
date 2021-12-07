@@ -34,7 +34,7 @@ namespace LeadGeneration.Controllers
 
         public ActionResult GetMeetingMatrixList(string searchData)
         {
-            MeetingMatrix objMeetingMatrix = new MeetingMatrix();
+            List<MeetingMatrix> objMeetingMatrix = new List<MeetingMatrix>();
             JavaScriptSerializer json_serializer = new JavaScriptSerializer();
             json_serializer.MaxJsonLength = int.MaxValue;
             object[] objData = (object[])json_serializer.DeserializeObject(searchData);

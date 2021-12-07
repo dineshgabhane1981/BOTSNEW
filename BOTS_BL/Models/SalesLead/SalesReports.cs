@@ -21,12 +21,14 @@ namespace BOTS_BL.Models
         public decimal IntrestedCases { get; set; }
         public string IntrestedCasesPer { get; set; }
         public string FollowupCases { get; set; }
-        public string UntouchedFollowUp { get; set; }        
+        public int UntouchedFollowUp { get; set; }        
         public string SalesConversion { get; set; }
         public string NotIntrestedCases { get; set; }
         public string NotIntrestedCasesPer { get; set; }
         public string NonIntegratedMeetingPer { get; set; }
+        public int PersonalMeeting { get; set; }
         public string PersonalMeetingPer { get; set; }
+        public int ZoomMeeting { get; set; }
         public string ZoomMeetingPer { get; set; }
     }
 

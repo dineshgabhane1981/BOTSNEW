@@ -1,4 +1,4 @@
-﻿@model BOTS_BL.Models.MeetingMatrix
+﻿@model List<BOTS_BL.Models.MeetingMatrix>
 
 <div>
     <div class="pt-3 pl-3 pr-3 col-md-12 col-lg-12">
@@ -19,7 +19,7 @@
                             <th scope="col">Untouched Followup  date meetings/ calls</th>
                             @*<th scope="col">Fresh to follow up meeting ratio</th>*@
                             <th scope="col">Interested cases & %</th>
-                            <th scope="col">Personal Meeting %</th>                           
+                            <th scope="col">Personal Meeting %</th>
                             <th scope="col">Zoom Meeting%</th>
 
                         </tr>
@@ -27,15 +27,19 @@
                     <tbody>
                         @if (Model != null)
                         {
-                        <tr>
-                            <td>@Model.SMName</td>
-                            <td>@Model.TotalMeeting</td>
-                            <td>@Model.TotalUniqueMeeting</td>
-                            <td>@Model.UntouchedFollowUp</td>
-                            <td>@Model.IntrestedCases / @Model.IntrestedCasesPer</td>
-                            <td>@Model.PersonalMeetingPer</td>
-                            <td>@Model.ZoomMeetingPer</td>
-                        </tr>
+
+                            foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>@item.SMName</td>
+                                    <td>@item.TotalMeeting</td>
+                                    <td>@item.TotalUniqueMeeting</td>
+                                    <td>@item.UntouchedFollowUp</td>
+                                    <td>@item.IntrestedCases / @item.IntrestedCasesPer</td>
+                                    <td>@item.PersonalMeeting / @item.PersonalMeetingPer</td>
+                                    <td>@item.ZoomMeeting / @item.ZoomMeetingPer</td>
+                                </tr>
+                            }
                         }
                     </tbody>
                 </table>

@@ -89,7 +89,7 @@
                             @Html.RadioButtonFor(model => model.sALES_TblLeads.EcomIntegration, false, new { @id = "IsEcommerceNo" }) No
                         </div>
                         <div class="col-md-6 col-sm-6">
-                            Number of outlet <br /> @Html.TextBoxFor(model => model.sALES_TblLeads.NoOfOutlet, new { @class = "input100", @id = "txtnoofoutlet" })
+                            Number of outlet <br /> @Html.TextBoxFor(model => model.sALES_TblLeads.NoOfOutlet, new { @class = "input100", @oninput = "numberOnly(this.id);", @id = "txtnoofoutlet" })
                         </div>
                     </div>
                     <div class="row">
