@@ -46,7 +46,7 @@ namespace Feedback.Controllers
         }
         public ActionResult SubmitRating(string mobileNo, int[] ranking, string GroupId, string outletId)
         {
-            bool status = false;            
+            string status = "false";            
             CustomerDetail objcustomerdetails = new CustomerDetail();
             try
             {

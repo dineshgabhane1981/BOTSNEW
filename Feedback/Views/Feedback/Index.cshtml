@@ -409,7 +409,7 @@
                  success: function (response) {
                       
                     // console.log(response.CustomerName);
-                     if (response) {
+                     if (response =="true") {
                          var nm = $('#spnCustName').text();
                          $('#spnCustName1').text(nm);
                          if (nm == "Esteemed Patron") {
@@ -421,14 +421,24 @@
                              $("#divmember").hide();
                              $("#divwelcome").hide();
 
-
-
                      }
-                     else {
+                     if (response == "false") {
                          // $('#spnCustName').text("Esteemed Patron,");
                          $("#divLoader").hide();
                          $("#divmember").hide();
                          $("#divwelcome").hide();
+                     }
+                     if (response == "pointsGiven") {
+                         $("#divLoader").hide();
+                         setTimeout(cuteAlert({
+                             type: "success",
+                             title: "Save",
+                             message: "FeedBack Save Successfully!",
+                             buttonText: "Okay"
+                         }), 10000);
+
+                         window.location.replace('https://blueocktopus.in/GM_feedback?outletid=10131001');
+
                      }
 
 
