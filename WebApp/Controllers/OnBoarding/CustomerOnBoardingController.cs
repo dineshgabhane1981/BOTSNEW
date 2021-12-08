@@ -175,7 +175,7 @@ namespace WebApp.Controllers.OnBoarding
                     objLstInstallment.Add(objItem);
                 }
                
-                objData.bots_TblGroupMaster.CreatedBy = userDetails.UserId;
+                objData.bots_TblGroupMaster.CreatedBy = userDetails.LoginId;
                 objData.bots_TblGroupMaster.CreatedDate = DateTime.Now;
                 var newCuscomer = true;
                 if (Convert.ToInt32(objData.bots_TblGroupMaster.GroupId) > 0)
