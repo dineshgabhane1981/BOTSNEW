@@ -23,54 +23,63 @@ namespace WebApp.Controllers.OnBoarding
         }
         public ActionResult CategoryMaster()
         {
+            ResetCustomerName();
             List<CategoryDetails> lsttblcategory = new List<CategoryDetails>();
             lsttblcategory = COR.GetTblCategories();
             return View(lsttblcategory);
         }
         public ActionResult CityMaster()
         {
+            ResetCustomerName();
             List<CityDetails> lsttblcity = new List<CityDetails>();
             lsttblcity = COR.GetCityList();
             return View(lsttblcity);
         }
         public ActionResult ChannelPartnerMaster()
         {
+            ResetCustomerName();
             List<ChannelPartnerDetails> lsttblchannel = new List<ChannelPartnerDetails>();
             lsttblchannel = COR.GetChannelPartnerList();
             return View(lsttblchannel);
         }
         public ActionResult CsMaster()
         {
+            ResetCustomerName();
             List<RMAssignedDetails> lsttblRMAssigned = new List<RMAssignedDetails>();
             lsttblRMAssigned = COR.GetRMList();
             return View(lsttblRMAssigned);
         }
         public ActionResult SourceMaster()
         {
+            ResetCustomerName();
             List<SourcedDetails> lsttblsourceBy = new List<SourcedDetails>();
             lsttblsourceBy = COR.GetTblSourceBy();
             return View(lsttblsourceBy);
         }
         public ActionResult BillingPartnerMaster()
         {
+            ResetCustomerName();
             List<BillingPartnerDetails> lstbillingpartner = new List<BillingPartnerDetails>();
             lstbillingpartner = COR.GetBillingPartnerList();
             return View(lstbillingpartner);
         }
         public ActionResult SourceType()
         {
+            ResetCustomerName();
             List<SourcedTypeDetails> lstsourcetype = new List<SourcedTypeDetails>();
             lstsourcetype = COR.GetTblSourceType();
             return View(lstsourcetype);
         }
         public ActionResult BillingPartnerProductMaster()
         {
+            ResetCustomerName();
             var lstbillingpartner = COR.GetBillingPartner();
             ViewBag.lstBillingPartner = lstbillingpartner;
             return View();
         }
         public ActionResult ChannelPartner()
         {
+            ResetCustomerName();
             var lstchannelpartner = COR.GetChannelPartner();
             ViewBag.lstChannelPartner = lstchannelpartner;
             return View();
@@ -724,6 +733,13 @@ namespace WebApp.Controllers.OnBoarding
             List<BillingPartnerDetails> lsttblbillingpartner = new List<BillingPartnerDetails>();
             lsttblbillingpartner = COR.GetBillingPartnerList();
             return PartialView("_BillingPartnerMaster", lsttblbillingpartner);
+        }
+    
+        public void ResetCustomerName()
+        {
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            userDetails.CustomerName = "";
+            Session["UserSession"] = userDetails;
         }
     }
 }

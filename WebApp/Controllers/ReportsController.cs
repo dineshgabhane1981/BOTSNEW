@@ -268,7 +268,7 @@ namespace WebApp.Controllers
                         lstOutletFinal.Add(item);
                     }
                 }
-                lstOutletFinal.Add(objAdmin);
+                //lstOutletFinal.Add(objAdmin);
             }
             else
             {

@@ -39,11 +39,14 @@ namespace BOTS_BL.Repository
                     var lstOutlet = context.Database.SqlQuery<OutletList>("sp_GetOutletList @pi_GroupId", new SqlParameter("@pi_GroupId", GroupId)).ToList<OutletList>();
                     foreach (var item in lstOutlet)
                     {
-                        countriesItem.Add(new SelectListItem
+                        if (!item.OutletName.ToLower().Contains("admin"))
                         {
-                            Text = item.OutletName,
-                            Value = Convert.ToString(item.OutletId)
-                        });
+                            countriesItem.Add(new SelectListItem
+                            {
+                                Text = item.OutletName,
+                                Value = Convert.ToString(item.OutletId)
+                            });
+                        }
                     }
                 }
             }
