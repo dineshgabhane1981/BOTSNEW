@@ -176,14 +176,13 @@ namespace BOTS_BL.Repository
 
                                 }).ToList();
 
-                var lstsalesleadold = (from c in context.SALES_tblLeads
-                                       join cc in context.SALES_tblLeadTracking on c.LeadId equals cc.LeadId
+                var lstsalesleadold = (from c in context.SALES_tblLeads                                       
                                        join ct in context.tblCities on c.City equals ct.CityId.ToString()
                                        join cd in context.CustomerLoginDetails on c.AssignedLead equals cd.LoginId
                                        join bp in context.tblBillingPartners on c.BillingPartner equals bp.BillingPartnerId.ToString()
                                        into ps
                                        from bp in ps.DefaultIfEmpty()
-                                       where c.FollowupDate < today && c.LeadId == cc.LeadId && cc.AddedDate < today
+                                       where c.FollowupDate < today && c.UpdatedDate < today
                                        && c.LeadStatus != "NotInterested" && c.MeetingType!= "salesdone" && c.MeetingType != "Closure"
                                        select new SalesLead
                                        {
@@ -362,7 +361,7 @@ namespace BOTS_BL.Repository
                 }
                 if (!string.IsNullOrEmpty(BusinessName))
                 {
-                    lstLeads = lstLeads.Where(x => x.BusinessName == BusinessName).ToList();
+                    lstLeads = lstLeads.Where(x => x.BusinessName.ToLower().Contains(BusinessName.ToLower())).ToList();
                 }
                 if (!string.IsNullOrEmpty(LeadStatus) && LeadStatus != "Please Select")
                 {

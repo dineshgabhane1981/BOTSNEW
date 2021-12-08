@@ -150,8 +150,11 @@ namespace WebApp.Controllers
                 List<long> dataList = new List<long>();
                 foreach (var item in dataOutletEnrolment)
                 {
-                    nameList.Add(item.OutletName);
-                    dataList.Add(item.EnrollmentCount);
+                    if (!item.OutletName.ToLower().Contains("admin"))
+                    {
+                        nameList.Add(item.OutletName);
+                        dataList.Add(item.EnrollmentCount);
+                    }
                 }
                 lstData.Add(nameList);
                 lstData.Add(dataList);
