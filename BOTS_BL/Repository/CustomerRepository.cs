@@ -194,8 +194,8 @@ namespace BOTS_BL.Repository
             {
                 List<tblGroupDetail> objGroupDetails = new List<tblGroupDetail>();
                 using (var context = new CommonDBContext())
-                {                    
-                    objGroupDetails = context.tblGroupDetails.ToList();                    
+                {
+                    objGroupDetails = context.tblGroupDetails.Where(x => x.IsActive.Value == true).ToList();               
                     if (objGroupDetails != null)
                     {
                         foreach (var item in objGroupDetails)

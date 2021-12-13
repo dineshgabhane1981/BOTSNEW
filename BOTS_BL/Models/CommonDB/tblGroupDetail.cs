@@ -64,6 +64,10 @@ namespace BOTS_BL.Models
 
         public DateTime? WentLiveDate { get; set; }
 
+        public bool? IsActive { get; set; }
+
+        public bool? IsFeedback { get; set; }
+
         [NotMapped]
         public string OtherRetailCategory { get; set; }
 
