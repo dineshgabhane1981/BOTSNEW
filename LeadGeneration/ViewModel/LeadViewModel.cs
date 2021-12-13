@@ -19,6 +19,7 @@ namespace LeadGeneration.ViewModel
         public List<SelectListItem> lstStates { get; set; }
         public List<SelectListItem> lstCity { get; set; }
         public List<SelectListItem> lstSalesManager { get; set; }
+        public List<SalesMatrix> lstsalesMatrices { get; set; }
         public SelectListItem[] BOProducts()
         {
             return new SelectListItem[2] { new SelectListItem() { Text = "Octa Plus", Value = "1" }, new SelectListItem() { Text = "Octa XS", Value = "2" } };
@@ -43,6 +44,8 @@ namespace LeadGeneration.ViewModel
         {
             return new SelectListItem[4] { new SelectListItem() { Text = "Manger/Cashier", Value = "Manger/Cashier" }, new SelectListItem() { Text = "Owner/Partner", Value = "Owner/Partner" }, new SelectListItem() { Text = "Decision Maker", Value = "DecisionMaker" }, new SelectListItem() { Text = "Others", Value = "Others" } };
         }
+        public List<SelectListItem> lstMonthlist { get; set; }
+        public List<SelectListItem> lstYearlist { get; set; }
 
     }
 }

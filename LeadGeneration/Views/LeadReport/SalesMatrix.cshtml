@@ -1,8 +1,175 @@
-﻿
+﻿@model LeadGeneration.ViewModel.LeadViewModel
+@using BOTS_BL.Models;
 @{
     ViewBag.Title = "SalesMatrix";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+<div class="app-main__inner">
+    <div class="mb-3 card" style="padding-top:20px;">
+        <div class="content">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-4 col-sm-4">
+                        Sales Manager Name <br /> @Html.DropDownListFor(model => model.lstSalesManager, new SelectList(Model.lstSalesManager, "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input50", @id = "ddlSalesManager" })
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4 col-sm-4">
+                        Month <br /> @Html.DropDownListFor(x => Model.lstMonthlist, new SelectList(ViewBag.MonthList, "Value", "Text"), "Month", htmlAttributes: new { @class = "smallDDL", @id = "ddlMonthList" })
+                    </div>
+                    <div class="col-md-2 col-sm-2">
+                        year <br /> @Html.DropDownListFor(x => Model.lstYearlist, new SelectList(ViewBag.YearList, "Value", "Text"),"Year", htmlAttributes: new { @class = "smallDDL", @id = "ddlYearList" })
+                    </div>
+                </div>
+                <div class="row mt-2 mb-5">
+                    <div class="col-md-4 col-sm-4">
+                        <div id="dvType">
+                            <input type="radio" name="period" id="rbtnMTD" /> MTD
+                            <input type="radio" name="period" id="rbtnQTD" style="margin-left:50px;" /> QTD
+                            <input type="radio" name="period" id="rbtnBTD" style="margin-left:50px;" checked="checked" /> BTD
+                        </div>
+                    </div>
 
-<h2>SalesMatrix</h2>
+                    <div class="col-md-2 col-sm-2">
+                        <br />
+                        <button type="submit" id="btnGetReport" class="btn btn-primary pull-left" style="margin-right:10px;" onclick="return GetReport();">Search</button>
+                    </div>
+                </div>
+            </div>
 
+            <div class="container-fluid pt-3 pl-3 pr-3 pb-3" id="dvReport" style="display:none;">
+
+            </div>
+            <div class="container-fluid pt-3 pl-3 pr-3 pb-3" id="dvDetailReport" style="display:none;">
+
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+            $(document).ready(function () {
+                GetReport();
+            });
+    $('#ddlMonthList').change(function () {
+        $("#rbtnQTD").prop("checked", false);
+        $("#rbtnMTD").prop('checked', false);
+        $("#rbtnBTD").prop('checked', false);
+    });
+            $('#rbtnMTD').change(function () {
+                $('#ddlMonthList').prop('selectedIndex', 0);
+                $('#ddlYearList').prop('selectedIndex', 0);
+            });
+            $('#rbtnQTD').change(function () {
+                $('#ddlMonthList').prop('selectedIndex', 0);
+                $('#ddlYearList').prop('selectedIndex', 0);
+            });
+            $('#rbtnBTD').change(function () {
+                $('#ddlMonthList').prop('selectedIndex', 0);
+                $('#ddlYearList').prop('selectedIndex', 0);
+            });
+            $('#ddlYearList').change(function () {
+                $("#rbtnQTD").prop("checked", false);
+                $("#rbtnMTD").prop('checked', false);
+                $("#rbtnBTD").prop('checked', false);
+            });
+            if ($("#period").is(":checked")) {
+                $('#ddlMonthList').prop('selectedIndex', 0);
+            }
+   
+function GetReport() {
+        var returnStatus = true;
+
+        if ($("#rbtnMTD").is(":checked") || $("#rbtnQTD").is(":checked") || $("#rbtnBTD").is(":checked")) {
+
+            $('#ddlMonthList').prop('selectedIndex', 0);
+            $('#ddlYearList').prop('selectedIndex', 0);
+
+        }
+        else {
+
+            //$('#dvType').css('border', '1px solid red');
+            //returnStatus = false;
+        }
+        if (returnStatus == true) {
+            var SeardhData = [];
+            var radiovalue ="";
+            item = {}
+            if ($("#rbtnMTD").is(":checked")) {
+                radiovalue = "mtd";
+            }
+            else if ($("#rbtnQTD").is(":checked")) {
+                radiovalue = "qtd";
+            }
+            else if ($("#rbtnBTD").is(":checked")) {
+                radiovalue = "btd";
+            }
+            else {
+                radiovalue = "none";
+            }
+            var month;
+            month = $("#ddlMonthList").val();
+            var year;
+            year = $("#ddlYearList").val();          
+            item["radio"] = radiovalue;
+            var sm = $("#ddlSalesManager").val();
+            if (month == "") {
+                item["month"] = 0;
+            }
+            else {
+                item["month"] = month;
+            }
+            if (sm == "") {
+                item["SalesManager"] = "";
+            }
+            else {
+                item["SalesManager"] = sm;
+            }
+            
+            if (year == "") {
+                item["year"] = 0;
+            }
+            else {
+                item["year"] = year;
+            }
+            SeardhData.push(item);
+            var data = JSON.stringify(SeardhData);
+            $("#divLoader").show();
+
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("GetSalesMatrix", "LeadReport")',
+                data: '{searchData: ' + JSON.stringify(data) + '}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (response) {
+                    $('#dvReport').html(response);
+                    $('#dvDetailReport').hide();
+                    $('#dvReport').show(1000);
+                    $("#divLoader").hide();
+                },
+                failure: function (response) {
+                    $("#divLoader").hide();
+                },
+                error: function (response) {
+                    $('#dvReport').html(response.responseText);
+                    $('#dvDetailReport').hide();
+                    $('#dvReport').show(1000);
+                    $("#divLoader").hide();
+                }
+            });
+        }
+        else {
+            cuteAlert({
+                type: "error",
+                title: "Oops..",
+                message: "Please enter Required fields",
+                buttonText: "Okay"
+            })
+            return false;
+        }
+    }
+</script>
+<script src="~/Scripts/jquery-ui-1.12.1.js"></script>
+<script src="~/Scripts/jquery-ui-1.12.1.min.js"></script>
+<link href="~/Content/themes/base/jquery-ui.min.css" rel="stylesheet" />
+<link href="~/Content/themes/base/jquery-ui.css" rel="stylesheet" />

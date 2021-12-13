@@ -438,7 +438,8 @@ namespace BOTS_BL.Repository
                         message = message.Replace("#08", Convert.ToString(date));
 
                         objsmsdetails = context.SMSDetails.Where(x => x.OutletId == outletid).FirstOrDefault();
-                        SendMessage(objmobilemaster.MobileNo, objsmsdetails.SenderId, message, objsmsdetails.TxnUrl, objsmsdetails.TxnUserName, objsmsdetails.TxnPassword);
+                        SendBulkSMSMessageTxn(objmobilemaster.MobileNo, objsmsdetails.SenderId, message);
+                        //SendMessage(objmobilemaster.MobileNo, objsmsdetails.SenderId, message, url, objsmsdetails.TxnUserName, objsmsdetails.TxnPassword);
                     }
 
                     objsmsemailmaster = context.SMSEmailMasters.Where(x => x.MessageId == "201").FirstOrDefault();
@@ -472,6 +473,7 @@ namespace BOTS_BL.Repository
                 sbposdata1.AppendFormat("&text={0}", MobileMessage);
                 sbposdata1.AppendFormat("&dlr-mask={0}", "19");
                 sbposdata1.AppendFormat("&dlr-url");
+
                 ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls | (SecurityProtocolType)3072;
                 ServicePointManager.ServerCertificateValidationCallback += (sender, cert, chain, sslPolicyErrors) => true;
                 HttpWebRequest httpWReq1 = (HttpWebRequest)WebRequest.Create(Url);
@@ -499,5 +501,43 @@ namespace BOTS_BL.Repository
             }
 
         }
+
+        public void SendBulkSMSMessageTxn(string MobileNo, string Sender, string MobileMessage)
+        {
+            string responseString;
+            try
+            {
+                ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls | (SecurityProtocolType)3072;
+                ServicePointManager.ServerCertificateValidationCallback += (sender, cert, chain, sslPolicyErrors) => true;
+                HttpWebRequest httpWReq = (HttpWebRequest)WebRequest.Create("https://203.212.70.210/smpp/sendsms?username=bluhtployalty&password=blue8621&to=" + MobileNo + "&from="+ Sender + "&text=" + MobileMessage + "&category=bulk");
+                UTF8Encoding encoding = new UTF8Encoding();
+                // byte[] data = encoding.GetBytes(sbposdata.ToString());
+                httpWReq.Method = "GET";
+                httpWReq.ContentType = "application/x-www-form-urlencoded";
+                //httpWReq.ContentLength = data.Length;
+                //using (Stream stream = httpWReq.GetRequestStream())
+                //{
+                //    stream.Write(data, 0, data.Length);
+                //}
+                HttpWebResponse response = (HttpWebResponse)httpWReq.GetResponse();
+                StreamReader reader = new StreamReader(response.GetResponseStream());
+                responseString = reader.ReadToEnd();
+                reader.Close();
+                response.Close();
+            }
+            catch (ArgumentException ex)
+            {
+                responseString = string.Format("HTTP_ERROR :: The second HttpWebRequest object has raised an Argument Exception as 'Connection' Property is set to 'Close' :: {0}", ex.Message);
+            }
+            catch (WebException ex)
+            {
+                responseString = string.Format("HTTP_ERROR :: WebException raised! :: {0}", ex.Message);
+            }
+            catch (Exception ex)
+            {
+                responseString = string.Format("HTTP_ERROR :: Exception raised! :: {0}", ex.Message);
+            }
+        }
+
     }
 }

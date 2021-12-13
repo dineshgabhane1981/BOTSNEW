@@ -73,7 +73,66 @@ namespace LeadGeneration.Controllers
 
         public ActionResult SalesMatrix()
         {
-            return View();
+            List<SalesMatrix> lstsalesmatrix = new List<SalesMatrix>();
+            List<SelectListItem> MonthList = new List<SelectListItem>();
+            int month = DateTime.Now.Month;
+
+            int count = 1;
+            for (int i = 1; i <= 12; i++)
+            {
+                //MonthList.Add(new SelectListItem
+                //{
+                //    Text = "Select Month",
+                //    Value = "0"
+                //});
+                MonthList.Add(new SelectListItem
+                {
+                    Text = Convert.ToString(DateTime.Now.AddMonths(i).ToString("MMM")),
+                    Value = Convert.ToString(DateTime.Now.AddMonths(i).Month)
+                });
+                count++;
+            }
+            List<SelectListItem> YearList = new List<SelectListItem>();
+            int year = DateTime.Now.Year;
+            for (int i = 0; i <= 9; i++)
+            {
+                //YearList.Add(new SelectListItem
+                //{
+                //    Text = "Select Year",
+                //    Value = "0"
+                //});
+                YearList.Add(new SelectListItem
+                {
+                    Text = Convert.ToString(DateTime.Now.AddYears(i).Year.ToString()),
+                    Value = Convert.ToString(year + i)
+                });
+            }           
+           
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            LeadViewModel objviewmodel = new LeadViewModel();
+            objviewmodel.lstSalesManager = SLR.GetSalesManager();
+            ViewBag.MonthList = MonthList;
+            ViewBag.YearList = YearList;
+           // lstsalesmatrix = LRR.GetSalesMatrix("btd",0,0,"");
+           // objviewmodel.lstsalesMatrices = lstsalesmatrix;
+            return View(objviewmodel);
+           // return PartialView("_SalesMatrixListing", lstsalesmatrix);
+        }
+        public ActionResult GetSalesMatrix(string searchData)
+        {
+            List<SalesMatrix> lstsalesmatrix = new List<SalesMatrix>();
+            JavaScriptSerializer json_serializer = new JavaScriptSerializer();
+            json_serializer.MaxJsonLength = int.MaxValue;
+            object[] objData = (object[])json_serializer.DeserializeObject(searchData);
+            foreach (Dictionary<string, object> item in objData)
+            {
+                var radiovalue = Convert.ToString(item["radio"]);
+                var month = Convert.ToInt32(item["month"]);
+                var sm = Convert.ToString(item["SalesManager"]);
+                var year = Convert.ToInt32(item["year"]);
+                lstsalesmatrix = LRR.GetSalesMatrix(radiovalue,month, year, sm);
+            }
+            return PartialView("_SalesMatrixListing", lstsalesmatrix);
         }
         public ActionResult PartnerReport()
         {
