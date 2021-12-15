@@ -1,5 +1,12 @@
 ﻿@model List<BOTS_BL.Models.OutletWise>
 @using System.Globalization
+@using BOTS_BL.Models;
+@{
+   
+    var userDetails = (CustomerLoginDetail)Session["UserSession"];
+    var logintype = userDetails.LoginType;
+}
+
 
 <div class="row mb-3 card">
     <div class="container-fluid pt-3 pl-3 pr-3">
@@ -13,10 +20,24 @@
                     <ul class="list-inline progress-list mt-2">
                         <li class="list-inline-item">
                             <div class="dropdown">
-                                <button class="btn btn-primary login-btn" onclick='ExportDataExcel();' type="button" id="btnExport">
+                                <button class="btn btn-primary login-btn" onclick='ExportDataExcel("0");' type="button" id="btnExport">
                                     <i class="fas fa-file-export"></i> Export
                                 </button>
+
                             </div>
+                            @if (logintype == "1" || logintype == "7" || logintype == "6")
+                            {
+                                <div>
+                                    <a href="#" onclick="showReport();">Send Report</a>
+                                </div>
+                                <div class="dropdown" id="divsendemail" style="display:none">
+                                    <input type="text" id="txtemailsend" class="input50" placeholder="Enter Email Ids" />
+                                    <button class="btn btn-primary login-btn" onclick='ExportDataExcel("1");' type="button" id="btnExport">
+                                        <i class="fas fa-file-export"></i> Send
+                                    </button>
+
+                                </div>
+                            }
                         </li>
                     </ul>
                 </div>

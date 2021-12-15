@@ -1,7 +1,10 @@
 ﻿@model List<BOTS_BL.Models.OutletWise>
+
+
 @{
     ViewBag.Title = "Outletwise";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    
 }
 
 <div class="app-main__inner">
@@ -51,7 +54,9 @@
             GetData();
         });
     });
-
+    function showReport() {
+        $("#divsendemail").show();
+    }
     function SetFilter() {
         if ($("#rdnBTD").is(":checked")) {
             $('#dtFrom').prop('readonly', true);
@@ -78,7 +83,7 @@
 
         $.ajax({
             type: "POST",
-            url: '@Url.Action("GetOutletWiseResult", "Reports")',            
+            url: '@Url.Action("GetOutletWiseResult", "Reports")',
             data: "{'DateRangeFlag': " + DateRangeFlag + ", 'fromDate': '" + fromDate + "','toDate': '" + toDate + "'}",
             contentType: "application/json; charset=utf-8",
             dataType: "json",
@@ -96,23 +101,46 @@
         });
     }
 
-     function ExportDataExcel() {
+     function ExportDataExcel(Id) {
          var DateRangeFlag = 0;
          var fromDate = '';
          var toDate = '';
+         var emailid = '';
+         console.log(Id);
+         var returnStatus = true;
+         if (Id == "1") {
+             emailid = $("#txtemailsend").val();
+         }
+
          $("#divLoader").show();
          if ($("#rdnRange").is(":checked")) {
              DateRangeFlag = 1;
              fromDate = $('#dtFrom').val();
              toDate = $('#dtTo').val();
          }
+         //if ($("#txtemailsend").val() == "") {
+         //    $('#txtemailsend').css('border-color', 'red');
+         //    returnStatus = false;
+         //}
 
+         //var regex =  ''/^w+([.-]?w+)w+([.-]?w+)*(.w{2,3})+$/';
 
-        var urlLink = "@Url.Action("ExportToExcelOutletwise", "Reports")";
-        urlLink = urlLink + "?DateRangeFlag=" + DateRangeFlag + "&fromDate=" + fromDate + "&toDate=" + toDate + "&ReportName=Outletwise";
-        console.log(urlLink);
-        window.location.href = urlLink;
-        $("#divLoader").hide();
+         //if (emailid.value(regex)) {
+         //    console.log("hi");
+         //}
+         //else {
+
+         //    returnStatus = false;
+         //}
+         /*if (returnStatus) {*/
+                var urlLink = "@Url.Action("ExportToExcelOutletwise", "Reports")";
+             urlLink = urlLink + "?DateRangeFlag=" + DateRangeFlag + "&fromDate=" + fromDate + "&toDate=" + toDate + "&ReportName=Outletwise" + "&EmailId=" + emailid +"";
+            console.log(urlLink);
+            window.location.href = urlLink;
+         $("#divLoader").hide();
+         $("#txtemailsend").val('');
+         //}
+
 
     }
 

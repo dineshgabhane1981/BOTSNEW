@@ -13,6 +13,8 @@ using BOTS_BL;
 using System.Globalization;
 using System.Web.Script.Serialization;
 using BOTS_BL.Models.Reports;
+using System.Net.Mail;
+using System.Text;
 
 namespace WebApp.Controllers
 {
@@ -42,6 +44,8 @@ namespace WebApp.Controllers
 
         public ActionResult Outletwise()
         {
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            ViewBag.userdetail = userDetails;
             return View();
         }
 
@@ -49,6 +53,7 @@ namespace WebApp.Controllers
         {
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
             var lstOutlet = RR.GetOutletList(userDetails.GroupId, userDetails.connectionString);
+            ViewBag.userdetail = userDetails;
             ViewBag.OutletList = lstOutlet;
             ViewBag.OutletId = OutletId;
             return View();
@@ -391,7 +396,7 @@ namespace WebApp.Controllers
             return PartialView("_MemberSearch", objMemberSearch);
         }
 
-        public ActionResult ExportToExcelTransactionwise(string DateRangeFlag, string fromDate, string toDate, string outletId, string EnrolmentDataFlag, string ReportName)
+        public ActionResult ExportToExcelTransactionwise(string DateRangeFlag, string fromDate, string toDate, string outletId, string EnrolmentDataFlag, string ReportName, string EmailId)
         {
             System.Data.DataTable table = new System.Data.DataTable();
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
@@ -417,7 +422,7 @@ namespace WebApp.Controllers
 
                     table.Rows.Add(row);
                 }
-                if (userDetails.LoginType == "1")
+                if (userDetails.LoginType == "1" || userDetails.LoginType == "6" || userDetails.LoginType == "7")
                 {                    
                     table.Columns.Remove("MaskedMobileNo");
                 }
@@ -480,11 +485,18 @@ namespace WebApp.Controllers
                     worksheet.Cell(1, 2).Value = "Transactionwise";
                     worksheet.Cell(2, 1).Value = "Date";
                     worksheet.Cell(2, 2).Value = DateTime.Now.ToString();
-                    worksheet.Cell(4, 1).InsertTable(table);
+                    worksheet.Cell(3, 1).Value = "Period";
+                    worksheet.Cell(3, 2).Value = fromDate + "-" + toDate;
+                    worksheet.Cell(5, 1).InsertTable(table);
                     //wb.Worksheets.Add(table);
                     using (MemoryStream stream = new MemoryStream())
                     {
                         wb.SaveAs(stream);
+                        if (EmailId != "")
+                        {
+                            RR.email_send(EmailId, ReportName, stream.ToArray(), userDetails.EmailId);
+
+                        }
                         return File(stream.ToArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
                     }
                 }
@@ -498,7 +510,7 @@ namespace WebApp.Controllers
 
         }
 
-        public ActionResult ExportToExcelOutletwise(string DateRangeFlag, string fromDate, string toDate, string ReportName)
+        public ActionResult ExportToExcelOutletwise(string DateRangeFlag, string fromDate, string toDate, string ReportName,string EmailId)
         {
             System.Data.DataTable table = new System.Data.DataTable();
             try
@@ -653,13 +665,23 @@ namespace WebApp.Controllers
                     worksheet.Cell(1, 2).Value = "Outletwise";
                     worksheet.Cell(2, 1).Value = "Date";
                     worksheet.Cell(2, 2).Value = DateTime.Now.ToString();
-                    worksheet.Cell(4, 1).InsertTable(table);
+                    worksheet.Cell(3, 1).Value = "Period";
+                    worksheet.Cell(3, 2).Value = fromDate + "-" + toDate;
+                    worksheet.Cell(5, 1).InsertTable(table);
                     //wb.Worksheets.Add(table);
                     using (MemoryStream stream = new MemoryStream())
                     {
                         wb.SaveAs(stream);
+                        if (EmailId != "")
+                        {
+                            RR.email_send(EmailId, ReportName, stream.ToArray(),userDetails.EmailId);
+                            
+                        }
+                        
                         return File(stream.ToArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
+                        
                     }
+                    
                 }
             }
             catch (Exception ex)
@@ -670,7 +692,7 @@ namespace WebApp.Controllers
 
         }
 
-        public ActionResult ExportToExcelPointExpiry(int month, int year, string ReportName)
+        public ActionResult ExportToExcelPointExpiry(int month, int year, string ReportName, string EmailId)
         {
             System.Data.DataTable table = new System.Data.DataTable();
             try
@@ -691,7 +713,7 @@ namespace WebApp.Controllers
 
                     table.Rows.Add(row);
                 }
-                if (userDetails.LoginType == "1")
+                if (userDetails.LoginType == "1" || userDetails.LoginType == "6" || userDetails.LoginType == "7")
                 {
                     table.Columns.Remove("MaskedMobileNo");
                 }
@@ -746,11 +768,18 @@ namespace WebApp.Controllers
                     worksheet.Cell(1, 2).Value = "Point Expiry";
                     worksheet.Cell(2, 1).Value = "Date";
                     worksheet.Cell(2, 2).Value = DateTime.Now.ToString();
-                    worksheet.Cell(4, 1).InsertTable(table);
+                    worksheet.Cell(3, 1).Value = "Period";
+                    worksheet.Cell(3, 2).Value = month + "-" + year;
+                    worksheet.Cell(5, 1).InsertTable(table);
                     //wb.Worksheets.Add(table);
                     using (MemoryStream stream = new MemoryStream())
                     {
                         wb.SaveAs(stream);
+                        if (EmailId != "")
+                        {
+                            RR.email_send(EmailId, ReportName, stream.ToArray(), userDetails.EmailId);
+
+                        }
                         return File(stream.ToArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
                     }
                 }
@@ -762,7 +791,7 @@ namespace WebApp.Controllers
 
         }
 
-        public ActionResult ExportToExcelCelebrations(int month, int type, string ReportName)
+        public ActionResult ExportToExcelCelebrations(int month, int type, string ReportName, string EmailId)
         {
             System.Data.DataTable table = new System.Data.DataTable();
             try
@@ -783,7 +812,7 @@ namespace WebApp.Controllers
 
                     table.Rows.Add(row);
                 }
-                if (userDetails.LoginType == "1")
+                if (userDetails.LoginType == "1" || userDetails.LoginType == "6" || userDetails.LoginType == "7")
                 {
                     table.Columns.Remove("MaskedMobileNo");
                 }
@@ -833,11 +862,18 @@ namespace WebApp.Controllers
                     worksheet.Cell(1, 2).Value = "Celebrations";
                     worksheet.Cell(2, 1).Value = "Date";
                     worksheet.Cell(2, 2).Value = DateTime.Now.ToString();
-                    worksheet.Cell(4, 1).InsertTable(table);
+                    worksheet.Cell(3, 1).Value = "Period";
+                    worksheet.Cell(3, 2).Value = month;
+                    worksheet.Cell(5, 1).InsertTable(table);
                     //wb.Worksheets.Add(table);
                     using (MemoryStream stream = new MemoryStream())
                     {
                         wb.SaveAs(stream);
+                        if (EmailId != "")
+                        {
+                            RR.email_send(EmailId, ReportName, stream.ToArray(), userDetails.EmailId);
+
+                        }
                         return File(stream.ToArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
                     }
                 }
@@ -897,7 +933,7 @@ namespace WebApp.Controllers
             return new JsonResult() { Data = lstMember, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
 
-        public ActionResult ExportToProfitableCustomers(string CountOrBusiness, string Count, string ReportName)
+        public ActionResult ExportToProfitableCustomers(string CountOrBusiness, string Count, string ReportName, string EmailId)
         {
             System.Data.DataTable table = new System.Data.DataTable();
             try
@@ -963,7 +999,7 @@ namespace WebApp.Controllers
                 table.Columns["TotalSpendStr"].ColumnName = "TotalSpend";
                 table.Columns["AvlBalPointsStr"].ColumnName = "AvlBalPoints";
                 table.Columns["TotalBurnPointsStr"].ColumnName = "TotalBurnPoints";
-                if (userDetails.LoginType == "1")
+                if (userDetails.LoginType == "1" || userDetails.LoginType == "6" || userDetails.LoginType == "7")
                 {
                     table.Columns.Remove("MaskedMobileNo");
                 }
@@ -989,7 +1025,14 @@ namespace WebApp.Controllers
                     using (MemoryStream stream = new MemoryStream())
                     {
                         wb.SaveAs(stream);
+                        if (EmailId != "")
+                        {
+                            RR.email_send(EmailId, ReportName, stream.ToArray(), userDetails.EmailId);
+
+                        }
                         return File(stream.ToArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
+
+                        
                     }
                 }
             }
@@ -1001,6 +1044,7 @@ namespace WebApp.Controllers
 
         }
 
+        
 
     }
 }

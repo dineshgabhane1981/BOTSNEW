@@ -1,7 +1,11 @@
 ﻿@model List<BOTS_BL.Models.OutletwiseTransaction>
+@using BOTS_BL.Models;
+
 @{
     ViewBag.Title = "Transactionwise";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    var userDetails = (CustomerLoginDetail)Session["UserSession"];
+    var logintype = userDetails.LoginType;
 }
 
 <div class="app-main__inner">
@@ -51,10 +55,23 @@
                             <ul class="list-inline progress-list mt-2">
                                 <li class="list-inline-item">
                                     <div class="dropdown">
-                                        <button class="btn btn-primary login-btn" onclick='ExportDataExcel();' type="button" id="btnExport">
+                                        <button class="btn btn-primary login-btn" onclick='ExportDataExcel("0");' type="button" id="btnExport">
                                             <i class="fas fa-file-export"></i> Export
                                         </button>
                                     </div>
+                                    @if (logintype == "1" || logintype == "7" || logintype == "6")
+                                    {
+                                        <div>
+                                            <a href="#" onclick="showReport();">Send Report</a>
+                                        </div>
+                                        <div class="dropdown" id="divsendemail" style="display:none">
+                                            <input type="text" id="txtemailsend" class="input50" placeholder="Enter Email Ids" />
+                                            <button class="btn btn-primary login-btn" onclick='ExportDataExcel("1");' type="button" id="btnExport">
+                                                <i class="fas fa-file-export"></i> Send
+                                            </button>
+
+                                        </div>
+                                    }
                                 </li>
                             </ul>
                         </div>
@@ -110,7 +127,7 @@
         maxDate: today,
     });
     $(document).ready(function () {
-         
+
         SetFilter();
         GetData();
         $("#rdnMiniStatement").change(function () {
@@ -126,6 +143,9 @@
             GetData();
         });
     });
+    function showReport() {
+        $("#divsendemail").show();
+    }
     function SetFilter() {
         if ($("#rdnMiniStatement").is(":checked")) {
             $("#dtFrom").attr("disabled", "disabled");
@@ -222,10 +242,10 @@
     }
 
     function DrawTable() {
-        
+
         var table1 = $('#activityTable').DataTable();
         table1.destroy();
-        
+
         var table = $('#activityTable').DataTable({
             "data": tableData,
             "paging": true,
@@ -235,7 +255,7 @@
             "pageLength": 25,
             "pagingType": "simple_numbers",
             "columns": [
-                { data: "OutletName" },                
+                { data: "OutletName" },
                 {
                     "mData": "MaskedMobileNo",
                     "mRender": function (data, type, row) {
@@ -330,14 +350,15 @@
                 return false;
             });
             var table = $('#activityTable').DataTable();
-            table.draw();           
+            table.draw();
         });
     }
 
-    function ExportDataExcel() {
+    function ExportDataExcel(Id) {
         var DateRangeFlag = "0";
         var fromDate = '';
         var toDate = '';
+        var emailid = '';
         $("#divLoader").show();
         if ($("#rdn30Days").is(":checked")) {
             DateRangeFlag = "1";
@@ -363,12 +384,15 @@
         if ($("#chkRedeem").is(":checked")) {
             EnrolmentDataFlag = 3;
         }
-
+        if (Id == "1") {
+            emailid = $("#txtemailsend").val();
+        }
         var urlLink = "@Url.Action("ExportToExcelTransactionwise", "Reports")";
-        urlLink = urlLink + "?DateRangeFlag=" + DateRangeFlag + "&fromDate=" + fromDate + "&toDate=" + toDate + "&outletId=" + outletId + "&EnrolmentDataFlag=" + EnrolmentDataFlag + "&ReportName=Transactionwise";
+        urlLink = urlLink + "?DateRangeFlag=" + DateRangeFlag + "&fromDate=" + fromDate + "&toDate=" + toDate + "&outletId=" + outletId + "&EnrolmentDataFlag=" + EnrolmentDataFlag + "&ReportName=Transactionwise" + "&EmailId=" + emailid + "";
         console.log(urlLink);
         window.location.href = urlLink;
         $("#divLoader").hide();
+        $("#txtemailsend").val('');
 
     }
 

@@ -10,6 +10,7 @@ using System.Data.SqlClient;
 using System.Web.Mvc;
 using BOTS_BL.Models.Reports;
 using System.Globalization;
+using System.Net.Mail;
 
 namespace BOTS_BL.Repository
 {
@@ -822,6 +823,100 @@ namespace BOTS_BL.Repository
                 }
             }
                 return filterCount;
+        }
+
+        public void email_send(string emailid, string subject, byte[] ms, string BCC)
+        {
+
+
+            StringBuilder str = new StringBuilder();
+            str.Append("<table>");
+            str.Append("<tr>");
+
+            str.AppendLine("<td>Dear Customer,</td>");
+            str.AppendLine("</br>");
+            str.Append("</tr>");
+
+            str.Append("<tr>");
+            str.Append("<td>&nbsp;</td>");
+            str.Append("</tr>");
+            str.Append("<tr>");
+
+            str.AppendLine("<td>Please find the detailed report attached.</td>");
+            str.AppendLine("</br>");
+            str.Append("</tr>");
+
+            str.Append("<tr>");
+            str.Append("<td>&nbsp;</td>");
+            str.Append("</tr>");
+
+            str.Append("<tr>");
+            str.AppendLine("<td>If you have any questions on this report, please do not reply to this email, as this email report is being sent from is an unmonitored email alias. Instead, write to info@blueocktopus.in or call us for information / clarification.</td>");
+            str.AppendLine("</br>");
+            str.AppendLine("</br>");
+            str.Append("</tr>");
+            str.Append("<tr>");
+            str.Append("<td>&nbsp;</td>");
+            str.Append("</tr>");
+            str.Append("<tr>");
+            str.Append("<td>&nbsp;</td>");
+            str.Append("</tr>");
+            str.Append("<tr>");
+            str.Append("<td>&nbsp;</td>");
+            str.Append("</tr>");
+
+            str.Append("<tr>");
+            str.AppendLine("<td>Regards,</td>");
+            str.AppendLine("</br>");
+            str.Append("</tr>");
+            str.Append("<tr>");
+            str.Append("<td>&nbsp;</td>");
+            str.Append("</tr>");
+            str.Append("<tr>");
+            str.AppendLine("<td>Blue Ocktopus team</td>");
+            str.Append("</tr>");
+            str.Append("<tr>");
+            str.Append("<td>&nbsp;</td>");
+            str.Append("</tr>");
+            str.Append("<tr>");
+            str.AppendLine("<td>info@blueocktopus.in</td>");
+            str.AppendLine("</br>");
+            str.AppendLine("</br>");
+            str.Append("</tr>");
+            str.Append("<tr>");
+            str.Append("<td>&nbsp;</td>");
+            str.Append("</tr>");
+            str.Append("<tr>");
+            str.Append("<td>&nbsp;</td>");
+            str.Append("</tr>");
+            str.Append("<tr>");
+            str.Append("<td>&nbsp;</td>");
+            str.Append("</tr>");
+            str.Append("<tr>");
+            str.AppendLine("<td>Disclaimer: The information/contents of this e-mail message and any attachments are confidential and are intended solely for the addressee. Any review, re-transmission, dissemination or other use of, or taking of any action in reliance upon, this information by persons or entities other than the intended recipient is prohibited. If you have received this transmission in error, please immediately notify the sender by return e-mail and delete this message and its attachments. Any unauthorized use, copying or dissemination of this transmission is prohibited. Neither the confidentiality nor the integrity of this message can be vouched for following transmission on the internet.</td>");
+            str.Append("</tr>");
+            str.Append("</table>");
+
+            MailMessage mail = new MailMessage();
+            SmtpClient SmtpServer = new SmtpClient("smtp.zoho.com");
+            mail.From = new MailAddress("report@blueocktopus.in");
+            mail.IsBodyHtml = true;
+            mail.To.Add(emailid);
+            mail.Bcc.Add(BCC);
+            mail.Subject = "BOTS_" + subject;
+            mail.Body = str.ToString();
+            System.IO.MemoryStream stream1 = new System.IO.MemoryStream(ms, true);
+
+            stream1.Write(ms, 0, ms.Length);
+            stream1.Position = 0;
+            mail.Attachments.Add(new Attachment(stream1, subject + ".xlsx"));
+
+            SmtpServer.Port = 587;
+            SmtpServer.Credentials = new System.Net.NetworkCredential("report@blueocktopus.in", "Report@123");
+            SmtpServer.EnableSsl = true;
+
+            SmtpServer.Send(mail);
+
         }
     }
 }

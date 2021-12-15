@@ -148,7 +148,7 @@ namespace WebApp.Controllers
             return new JsonResult() { Data = objOnlyOnceTxn, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
 
-        public ActionResult ExportToExcelOnlyOnce(string outletId, string type, string ReportName)
+        public ActionResult ExportToExcelOnlyOnce(string outletId, string type, string ReportName, string EmailId)
         {
             System.Data.DataTable table = new System.Data.DataTable();
             try
@@ -187,10 +187,21 @@ namespace WebApp.Controllers
 
                     //excelSheet.Name
                     table.TableName = ReportName;
-                    wb.Worksheets.Add(table);
+                    IXLWorksheet worksheet = wb.AddWorksheet(sheetName: ReportName);
+                    worksheet.Cell(1, 1).Value = "Report Name";
+                    worksheet.Cell(1, 2).Value = "OnlyOnce";
+                    worksheet.Cell(2, 1).Value = "Date";
+                    worksheet.Cell(2, 2).Value = DateTime.Now.ToString();                    
+                    worksheet.Cell(5, 1).InsertTable(table);
+                    //wb.Worksheets.Add(table);
                     using (MemoryStream stream = new MemoryStream())
                     {
                         wb.SaveAs(stream);
+                        if (EmailId != "")
+                        {
+                            RR.email_send(EmailId, ReportName, stream.ToArray(), userDetails.EmailId);
+
+                        }
                         return File(stream.ToArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
                     }
                 }
@@ -265,7 +276,7 @@ namespace WebApp.Controllers
             return new JsonResult() { Data = objMembersInformation, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
 
-        public ActionResult ExportToExcelNonTransacting(string outletId, string type, string ReportName)
+        public ActionResult ExportToExcelNonTransacting(string outletId, string type, string ReportName, string EmailId)
         {
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
             System.Data.DataTable table = new System.Data.DataTable();
@@ -299,7 +310,7 @@ namespace WebApp.Controllers
 
                     table.Rows.Add(row);
                 }               
-                if (userDetails.LoginType == "1")
+                if (userDetails.LoginType == "1" || userDetails.LoginType == "6" || userDetails.LoginType == "7")
                 {
                     table.Columns.Remove("MaskedMobileNo");
                 }
@@ -323,10 +334,21 @@ namespace WebApp.Controllers
 
                     //excelSheet.Name
                     table.TableName = ReportName;
-                    wb.Worksheets.Add(table);
+                    IXLWorksheet worksheet = wb.AddWorksheet(sheetName: ReportName);
+                    worksheet.Cell(1, 1).Value = "Report Name";
+                    worksheet.Cell(1, 2).Value = "NonTransacting";
+                    worksheet.Cell(2, 1).Value = "Date";
+                    worksheet.Cell(2, 2).Value = DateTime.Now.ToString();                   
+                    worksheet.Cell(5, 1).InsertTable(table);
+                    // wb.Worksheets.Add(table);
                     using (MemoryStream stream = new MemoryStream())
                     {
                         wb.SaveAs(stream);
+                        if (EmailId != "")
+                        {
+                            RR.email_send(EmailId, ReportName, stream.ToArray(), userDetails.EmailId);
+
+                        }
                         return File(stream.ToArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
                     }
                 }
@@ -339,7 +361,7 @@ namespace WebApp.Controllers
 
         }
 
-        public ActionResult ExportToExcelNonRedemption(int type, int daysType, string ReportName)
+        public ActionResult ExportToExcelNonRedemption(int type, int daysType, string ReportName, string EmailId)
         {
             System.Data.DataTable table = new System.Data.DataTable();
             try
@@ -370,7 +392,7 @@ namespace WebApp.Controllers
                         .ToString("MM/dd/yyyy", CultureInfo.InvariantCulture);
                     }
                 }
-                if (userDetails.LoginType == "1")
+                if (userDetails.LoginType == "1" || userDetails.LoginType == "6" || userDetails.LoginType == "7")
                 {
                     table.Columns.Remove("MaskedMobileNo");
                 }
@@ -385,10 +407,21 @@ namespace WebApp.Controllers
 
                     //excelSheet.Name
                     table.TableName = ReportName;
-                    wb.Worksheets.Add(table);
+                    IXLWorksheet worksheet = wb.AddWorksheet(sheetName: ReportName);
+                    worksheet.Cell(1, 1).Value = "Report Name";
+                    worksheet.Cell(1, 2).Value = "NonRedemption";
+                    worksheet.Cell(2, 1).Value = "Date";
+                    worksheet.Cell(2, 2).Value = DateTime.Now.ToString();                   
+                    worksheet.Cell(5, 1).InsertTable(table);
+                    //wb.Worksheets.Add(table);
                     using (MemoryStream stream = new MemoryStream())
                     {
                         wb.SaveAs(stream);
+                        if (EmailId != "")
+                        {
+                            RR.email_send(EmailId, ReportName, stream.ToArray(), userDetails.EmailId);
+
+                        }
                         return File(stream.ToArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
                     }
                 }
