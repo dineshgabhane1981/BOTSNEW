@@ -474,7 +474,7 @@ namespace WebApp.Controllers
                 table.Columns["PointsEarnedStr"].ColumnName = "PointsEarned";
                 table.Columns["PointsBurnedStr"].ColumnName = "PointsBurned";
 
-                string fileName = ReportName + ".xlsx";
+                string fileName = "BOTS_" + ReportName + ".xlsx";
                 using (XLWorkbook wb = new XLWorkbook())
                 {
 
@@ -654,7 +654,7 @@ namespace WebApp.Controllers
                 table.Columns.Remove("NonActivePer");
                 table.Columns.Remove("OnlyOncePer");
 
-                string fileName = ReportName + ".xlsx";
+                string fileName = "BOTS_" + ReportName + ".xlsx";
                 using (XLWorkbook wb = new XLWorkbook())
                 {
 
@@ -665,9 +665,17 @@ namespace WebApp.Controllers
                     worksheet.Cell(1, 2).Value = "Outletwise";
                     worksheet.Cell(2, 1).Value = "Date";
                     worksheet.Cell(2, 2).Value = DateTime.Now.ToString();
-                    worksheet.Cell(3, 1).Value = "Period";
-                    worksheet.Cell(3, 2).Value = fromDate + "-" + toDate;
-                    worksheet.Cell(5, 1).InsertTable(table);
+                    if(DateRangeFlag=="1")
+                    {
+                        worksheet.Cell(3, 1).Value = "Period";
+                        worksheet.Cell(3, 2).Value = fromDate + "-" + toDate;
+                    }
+                    if (DateRangeFlag == "0")
+                    {
+                        worksheet.Cell(3, 1).Value = "BTD";
+                       
+                    }
+                        worksheet.Cell(5, 1).InsertTable(table);
                     //wb.Worksheets.Add(table);
                     using (MemoryStream stream = new MemoryStream())
                     {
@@ -757,7 +765,7 @@ namespace WebApp.Controllers
                 table.Columns["AvlPointsStr"].ColumnName = "AvlPoints";
                 table.Columns["PointsExpiryStr"].ColumnName = "PointsExpiry";
 
-                string fileName = ReportName + ".xlsx";
+                string fileName = "BOTS_" + ReportName + ".xlsx";
                 using (XLWorkbook wb = new XLWorkbook())
                 {
 
@@ -851,7 +859,7 @@ namespace WebApp.Controllers
                 table.Columns["TotalSpendStr"].ColumnName = "TotalSpend";
                 table.Columns["AvlPointsStr"].ColumnName = "AvlPoints";
                  
-                string fileName = ReportName + ".xlsx";
+                string fileName = "BOTS_" + ReportName + ".xlsx";
                 using (XLWorkbook wb = new XLWorkbook())
                 {
 
@@ -862,9 +870,36 @@ namespace WebApp.Controllers
                     worksheet.Cell(1, 2).Value = "Celebrations";
                     worksheet.Cell(2, 1).Value = "Date";
                     worksheet.Cell(2, 2).Value = DateTime.Now.ToString();
-                    worksheet.Cell(3, 1).Value = "Period";
-                    worksheet.Cell(3, 2).Value = month;
-                    worksheet.Cell(5, 1).InsertTable(table);
+                    worksheet.Cell(3, 1).Value = "Celebration";
+                    DateTime today = DateTime.Now;
+                    DateTime nxtmnt =today.AddMonths(1).AddSeconds(-1);
+                    DateTime nxt2mnt = nxtmnt.AddMonths(1).AddSeconds(-1);
+                    string currentmonth = today.ToString("MMM", CultureInfo.InvariantCulture);
+                    string nextmonth = nxtmnt.ToString("MMM", CultureInfo.InvariantCulture);
+                    string next2month = nxt2mnt.ToString("MMM", CultureInfo.InvariantCulture);
+                    if (type ==1)
+                    { worksheet.Cell(3, 2).Value = "Birthday"; }
+                    if (type ==2)
+                    {
+                        worksheet.Cell(3, 2).Value = "M.Anniversary";
+                    }
+                    if (type == 3)
+                    {
+                        worksheet.Cell(3, 2).Value = "Enr Anniversary";
+                    }
+                    worksheet.Cell(4, 1).Value = "Month";
+
+                    if (month == 1)
+                    { worksheet.Cell(4, 2).Value = currentmonth; }
+                    if (month == 2)
+                    {
+                        worksheet.Cell(4, 2).Value = nextmonth;
+                    }
+                    if (month == 3)
+                    {
+                        worksheet.Cell(4, 2).Value = next2month;
+                    }
+                    worksheet.Cell(6, 1).InsertTable(table);
                     //wb.Worksheets.Add(table);
                     using (MemoryStream stream = new MemoryStream())
                     {
@@ -1008,7 +1043,7 @@ namespace WebApp.Controllers
                     table.Columns.Remove("MobileNo");
                     table.Columns["MaskedMobileNo"].ColumnName = "MobileNo";
                 }                       
-                string fileName = ReportName + ".xlsx";
+                string fileName = "BOTS_" + ReportName + ".xlsx";
                 using (XLWorkbook wb = new XLWorkbook())
                 {
 
@@ -1020,7 +1055,16 @@ namespace WebApp.Controllers
                     worksheet.Cell(1, 2).Value = "Profitable Customers";
                     worksheet.Cell(2, 1).Value = "Date";
                     worksheet.Cell(2, 2).Value = DateTime.Now.ToString();
-                    worksheet.Cell(4, 1).InsertTable(table);
+                    worksheet.Cell(3, 1).Value = "Filter";
+                    if (CountOrBusiness == "Count")
+                    {
+                        worksheet.Cell(3, 2).Value = "Top" + Count + "Members as per Txn Count";
+                    }
+                    if(CountOrBusiness == "Business")
+                    {
+                        worksheet.Cell(3, 2).Value = "Top"+ Count + "Members as per Business";
+                    }
+                    worksheet.Cell(5, 1).InsertTable(table);
                     //wb.Worksheets.Add(table);
                     using (MemoryStream stream = new MemoryStream())
                     {

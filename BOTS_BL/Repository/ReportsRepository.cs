@@ -909,7 +909,7 @@ namespace BOTS_BL.Repository
 
             stream1.Write(ms, 0, ms.Length);
             stream1.Position = 0;
-            mail.Attachments.Add(new Attachment(stream1, subject + ".xlsx"));
+            mail.Attachments.Add(new Attachment(stream1, "BOTS_"+subject + ".xlsx"));
 
             SmtpServer.Port = 587;
             SmtpServer.Credentials = new System.Net.NetworkCredential("report@blueocktopus.in", "Report@123");

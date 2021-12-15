@@ -181,7 +181,7 @@ namespace WebApp.Controllers
                     //table.Columns.Remove("OutletId");
                     table.Columns.Remove("MobileNo");
                 table.Columns["MaskedMobileNo"].ColumnName = "MobileNo";
-                string fileName = ReportName + ".xlsx";
+                string fileName = "BOTS_" + ReportName + ".xlsx";
                 using (XLWorkbook wb = new XLWorkbook())
                 {
 
@@ -191,8 +191,31 @@ namespace WebApp.Controllers
                     worksheet.Cell(1, 1).Value = "Report Name";
                     worksheet.Cell(1, 2).Value = "OnlyOnce";
                     worksheet.Cell(2, 1).Value = "Date";
-                    worksheet.Cell(2, 2).Value = DateTime.Now.ToString();                    
-                    worksheet.Cell(5, 1).InsertTable(table);
+                    worksheet.Cell(2, 2).Value = DateTime.Now.ToString();
+                    worksheet.Cell(3, 1).Value = "Filter";
+                    string category = "";
+                    if(type =="1")
+                    {
+                        category = "High Spend, Recent Member";
+                    }
+                    if (type == "2")
+                    {
+                        category = "Low Spend, Recent Member";
+                    }
+                    if (type == "3")
+                    {
+                        category = "High Spend, Long time no see member";
+                    }
+                    if (type == "4")
+                    {
+                        category = "Low Spend, Long time no see member";
+                    }
+                    if (type == "5")
+                    {
+                        category = "All";
+                    }
+                    worksheet.Cell(3, 2).Value = category;
+                    worksheet.Cell(6, 1).InsertTable(table);
                     //wb.Worksheets.Add(table);
                     using (MemoryStream stream = new MemoryStream())
                     {
@@ -328,7 +351,7 @@ namespace WebApp.Controllers
                         .ToString("MM/dd/yyyy", CultureInfo.InvariantCulture);
                     }
                 }
-                string fileName = ReportName + ".xlsx";
+                string fileName = "BOTS_" + ReportName + ".xlsx";
                 using (XLWorkbook wb = new XLWorkbook())
                 {
 
@@ -338,8 +361,10 @@ namespace WebApp.Controllers
                     worksheet.Cell(1, 1).Value = "Report Name";
                     worksheet.Cell(1, 2).Value = "NonTransacting";
                     worksheet.Cell(2, 1).Value = "Date";
-                    worksheet.Cell(2, 2).Value = DateTime.Now.ToString();                   
-                    worksheet.Cell(5, 1).InsertTable(table);
+                    worksheet.Cell(2, 2).Value = DateTime.Now.ToString();
+                    worksheet.Cell(3, 1).Value = "NonTransacting from";
+                    worksheet.Cell(3, 2).Value = type;
+                    worksheet.Cell(6, 1).InsertTable(table);
                     // wb.Worksheets.Add(table);
                     using (MemoryStream stream = new MemoryStream())
                     {
@@ -401,7 +426,7 @@ namespace WebApp.Controllers
                     table.Columns.Remove("MobileNo");
                     table.Columns["MaskedMobileNo"].ColumnName = "MobileNo";
                 }
-                string fileName = ReportName + ".xlsx";
+                string fileName = "BOTS_" + ReportName + ".xlsx";
                 using (XLWorkbook wb = new XLWorkbook())
                 {
 
@@ -411,8 +436,30 @@ namespace WebApp.Controllers
                     worksheet.Cell(1, 1).Value = "Report Name";
                     worksheet.Cell(1, 2).Value = "NonRedemption";
                     worksheet.Cell(2, 1).Value = "Date";
-                    worksheet.Cell(2, 2).Value = DateTime.Now.ToString();                   
-                    worksheet.Cell(5, 1).InsertTable(table);
+                    worksheet.Cell(2, 2).Value = DateTime.Now.ToString();
+                    worksheet.Cell(3, 1).Value = "Duration";
+                    string pointbalance = "";
+                    if (type ==1)
+                    { pointbalance = "High"; }
+                    if (type == 2)
+                    {  pointbalance = "Medium"; }
+                    if (type == 3)
+                    {  pointbalance = "Low"; }
+                    string days = "";
+                    if(daysType ==1)
+                    {
+                        days = "Less than 90 days";
+                    }
+                    if (daysType == 2)
+                    {
+                        days = "Between 90 & 180";
+                    }
+                    if (daysType == 3)
+                    {
+                        days = "More than 180 days";
+                    }
+                    worksheet.Cell(3, 2).Value = pointbalance + "-"+ days;
+                    worksheet.Cell(6, 1).InsertTable(table);
                     //wb.Worksheets.Add(table);
                     using (MemoryStream stream = new MemoryStream())
                     {
