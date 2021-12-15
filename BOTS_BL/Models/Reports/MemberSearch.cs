@@ -27,7 +27,7 @@ namespace BOTS_BL.Models
         public string ReferredBy { get; set; }
         public string LastTxnDate { get; set; }
         public string ProfileUpdateStatus { get; set; }
-        public long? ReferralGiven { get; set; }
+        public string ReferralGiven { get; set; }
         public string ReferralBiz { get; set; }
         public decimal? BonusPoints { get; set; }
         public string BonusPointsExpiryDate { get; set; }
