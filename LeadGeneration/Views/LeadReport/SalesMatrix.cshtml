@@ -48,7 +48,7 @@
 </div>
 <script>
             $(document).ready(function () {
-                GetReport();
+                GetReport("0");
             });
     $('#ddlMonthList').change(function () {
         $("#rbtnQTD").prop("checked", false);
@@ -76,20 +76,31 @@
                 $('#ddlMonthList').prop('selectedIndex', 0);
             }
    
-function GetReport() {
+function GetReport(Id) {
         var returnStatus = true;
 
         if ($("#rbtnMTD").is(":checked") || $("#rbtnQTD").is(":checked") || $("#rbtnBTD").is(":checked")) {
 
             $('#ddlMonthList').prop('selectedIndex', 0);
             $('#ddlYearList').prop('selectedIndex', 0);
+            Id = "0";
 
         }
         else {
 
             //$('#dvType').css('border', '1px solid red');
             //returnStatus = false;
+    }
+    if (Id != "0") {
+        if ($("#ddlMonthList option:selected").text() == "Month") {
+            $("#ddlMonthList").css('border-color', 'red');
+            returnStatus = false;
         }
+        if ($("#ddlYearList option:selected").text() == "Year") {
+            $("#ddlYearList").css('border-color', 'red');
+            returnStatus = false;
+        }
+    }
         if (returnStatus == true) {
             var SeardhData = [];
             var radiovalue ="";

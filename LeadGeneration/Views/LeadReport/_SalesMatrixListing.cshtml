@@ -37,7 +37,10 @@
                                 // var SMId = item.LoginId;
                                 <tr>
                                     <td>@item.SMName</td>
-                                    <td>@String.Format(new CultureInfo("en-IN", false), "{0:n2}", Convert.ToDouble(@item.TotalRevenue)) / @item.NoOfSales</td>
+                                    <td>
+                                        @String.Format(new CultureInfo("en-IN", false), "{0:n2}", Convert.ToDouble(@item.TotalRevenue)) / @item.NoOfSales<br/>
+                                        @String.Format(new CultureInfo("en-IN", false), "{0:n2}", Convert.ToDouble(@item.PreviousMonthTotalRevenue)) / @item.PreviousMonthNoOfSales
+                                    </td>
                                     <td>@String.Format(new CultureInfo("en-IN", false), "{0:n2}", Convert.ToDouble(@item.AvgRevenueOctaXs))</td>
                                     <td>@String.Format(new CultureInfo("en-IN", false), "{0:n2}", Convert.ToDouble(@item.AvgRevenueOctaPlus))</td>
                                     <td>@String.Format(new CultureInfo("en-IN", false), "{0:n2}", Convert.ToDouble(@item.AvgRevenuesingleoutlet))</td>
