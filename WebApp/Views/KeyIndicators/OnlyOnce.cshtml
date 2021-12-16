@@ -1,12 +1,16 @@
 ﻿@model BOTS_BL.Models.OnlyOnce
+@using BOTS_BL.Models;
 @{
     ViewBag.Title = "Only Once";
     Layout = "~/Views/Shared/_Layout.cshtml";
+
+    var userDetails = (CustomerLoginDetail)Session["UserSession"];
+    var logintype = userDetails.LoginType;
 }
 
 <div class="app-main__inner">
 
-    <div class="row mb-3 pt-3 pl-3 pr-3 card" >
+    <div class="row mb-3 pt-3 pl-3 pr-3 card">
         <div class="col-sm-12" style="margin-bottom:20px;">
             Select Outlet  @Html.DropDownListFor(x => Model.TotalMember, new SelectList(ViewBag.OutletList, "Value", "Text"), "All", htmlAttributes: new { @class = "input100", @id = "OutletList" })
 
@@ -60,9 +64,9 @@
             </div>
         </div>
         <div class="col-sm-10" id="dvRecency" style="display:none;margin-bottom:20px;">
-           
 
-            <table class="col-sm-12"  cellpadding="10" cellspacing="10">
+
+            <table class="col-sm-12" cellpadding="10" cellspacing="10">
                 <tr style="text-align:center;">
                     <td style="border-bottom:1px solid black;background-color:#DCE6F0;">High Spend, Long time no see member <br /><u><b><span id="spnNotSeenHigh" style="cursor:pointer;" onclick="GetTxnData('3')"></span></b></u> </td>
                     <td style="border-bottom:1px solid black; border-left:1px solid black;background-color:#DBEDF7;">High Spend, Recent Member <br /><u><b><span id="spnRecentVisitHigh" style="cursor:pointer;" onclick="GetTxnData('1')"></span></b></u></td>
@@ -92,10 +96,23 @@
                                 <ul class="list-inline progress-list mt-2">
                                     <li class="list-inline-item">
                                         <div class="dropdown">
-                                            <button class="btn btn-primary login-btn" onclick='ExportDataExcel();' type="button" id="btnExport">
+                                            <button class="btn btn-primary login-btn" onclick='ExportDataExcel("0");' type="button" id="btnExport">
                                                 <i class="fas fa-file-export"></i> Export
                                             </button>
                                         </div>
+                                        @if (logintype == "1" || logintype == "7" || logintype == "6")
+                                        {
+                                            <div>
+                                                <a href="#" onclick="showReport();">Send Report</a>
+                                            </div>
+                                            <div class="dropdown" id="divsendemail" style="display:none">
+                                                <input type="text" id="txtemailsend" class="input50" placeholder="Enter Email Ids" />
+                                                <button class="btn btn-primary login-btn" onclick='ExportDataExcel("1");' type="button" id="btnExport">
+                                                    <i class="fas fa-file-export"></i> Send
+                                                </button>
+
+                                            </div>
+                                        }
                                     </li>
                                 </ul>
                             </div>
@@ -178,7 +195,9 @@
             }
         });
     }
-
+    function showReport() {
+        $("#divsendemail").show();
+    }
     function GetTxnData(mtype) {
         clickedType = mtype;
         $("#divLoader").show();
@@ -326,13 +345,18 @@
         });
     }
 
-    function ExportDataExcel() {
-
+    function ExportDataExcel(Id) {
+        var emailid = '';
+        console.log(Id);       
+        if (Id == "1") {
+            emailid = $("#txtemailsend").val();
+        }
         var urlLink = "@Url.Action("ExportToExcelOnlyOnce", "KeyIndicators")";
-        urlLink = urlLink + "?outletId=" + $("#OutletList").val() + "&type=" + clickedType + "&ReportName=OnlyOnce";
+        urlLink = urlLink + "?outletId=" + $("#OutletList").val() + "&type=" + clickedType + "&ReportName=OnlyOnce" + "&EmailId=" + emailid + "";
         console.log(urlLink);
         window.location.href = urlLink;
         $("#divLoader").hide();
+        $("#txtemailsend").val('');
 
     }
 

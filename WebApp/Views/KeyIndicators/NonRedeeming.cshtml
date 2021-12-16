@@ -1,8 +1,12 @@
 ﻿@model BOTS_BL.Models.NonRedemptionCls
 @using System.Globalization
+@using BOTS_BL.Models;
+
 @{
     ViewBag.Title = "Non Redeeming";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    var userDetails = (CustomerLoginDetail)Session["UserSession"];
+    var logintype = userDetails.LoginType;
 }
 
 <div class="app-main__inner">
@@ -121,10 +125,23 @@
                                 <ul class="list-inline progress-list mt-2">
                                     <li class="list-inline-item">
                                         <div class="dropdown">
-                                            <button class="btn btn-primary login-btn" onclick='ExportDataExcel();' type="button" id="btnExport">
+                                            <button class="btn btn-primary login-btn" onclick='ExportDataExcel("0");' type="button" id="btnExport">
                                                 <i class="fas fa-file-export"></i> Export
                                             </button>
                                         </div>
+                                        @if (logintype == "1" || logintype == "7" || logintype == "6")
+                                        {
+                                            <div>
+                                                <a href="#" onclick="showReport();">Send Report</a>
+                                            </div>
+                                            <div class="dropdown" id="divsendemail" style="display:none">
+                                                <input type="text" id="txtemailsend" class="input50" placeholder="Enter Email Ids" />
+                                                <button class="btn btn-primary login-btn" onclick='ExportDataExcel("1");' type="button" id="btnExport">
+                                                    <i class="fas fa-file-export"></i> Send
+                                                </button>
+
+                                            </div>
+                                        }
                                     </li>
                                 </ul>
                             </div>
@@ -145,7 +162,7 @@
                                             <th scope="col">Last Txn Date</th>
                                         </tr>
                                     </thead>
-                                    <tbody>                                        
+                                    <tbody>
                                     </tbody>
                                 </table>
                             </div>
@@ -300,14 +317,22 @@
             table.draw();
         });
     }
-
-        function ExportDataExcel() {
-
+    function showReport() {
+        $("#divsendemail").show();
+    }
+        function ExportDataExcel(Id) {
+            var emailid = '';
+            console.log(Id);
+            if (Id == "1") {
+                emailid = $("#txtemailsend").val();
+            }
+            $("#divLoader").show();
         var urlLink = "@Url.Action("ExportToExcelNonRedemption", "KeyIndicators")";
-            urlLink = urlLink + "?type=" + clickedType + "&daysType=" + clickedDaysType + "&ReportName=NonRedemption";
+            urlLink = urlLink + "?type=" + clickedType + "&daysType=" + clickedDaysType + "&ReportName=NonRedemption" + "&EmailId=" + emailid + "";
         console.log(urlLink);
         window.location.href = urlLink;
-        $("#divLoader").hide();
+            $("#divLoader").hide();
+            $("#txtemailsend").val('');
 
     }
 

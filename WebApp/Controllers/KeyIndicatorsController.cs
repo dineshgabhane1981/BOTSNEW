@@ -148,7 +148,7 @@ namespace WebApp.Controllers
             return new JsonResult() { Data = objOnlyOnceTxn, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
 
-        public ActionResult ExportToExcelOnlyOnce(string outletId, string type, string ReportName)
+        public ActionResult ExportToExcelOnlyOnce(string outletId, string type, string ReportName, string EmailId)
         {
             System.Data.DataTable table = new System.Data.DataTable();
             try
@@ -181,16 +181,50 @@ namespace WebApp.Controllers
                     //table.Columns.Remove("OutletId");
                     table.Columns.Remove("MobileNo");
                 table.Columns["MaskedMobileNo"].ColumnName = "MobileNo";
-                string fileName = ReportName + ".xlsx";
+                string fileName = "BOTS_" + ReportName + ".xlsx";
                 using (XLWorkbook wb = new XLWorkbook())
                 {
 
                     //excelSheet.Name
                     table.TableName = ReportName;
-                    wb.Worksheets.Add(table);
+                    IXLWorksheet worksheet = wb.AddWorksheet(sheetName: ReportName);
+                    worksheet.Cell(1, 1).Value = "Report Name";
+                    worksheet.Cell(1, 2).Value = "OnlyOnce";
+                    worksheet.Cell(2, 1).Value = "Date";
+                    worksheet.Cell(2, 2).Value = DateTime.Now.ToString();
+                    worksheet.Cell(3, 1).Value = "Filter";
+                    string category = "";
+                    if(type =="1")
+                    {
+                        category = "High Spend, Recent Member";
+                    }
+                    if (type == "2")
+                    {
+                        category = "Low Spend, Recent Member";
+                    }
+                    if (type == "3")
+                    {
+                        category = "High Spend, Long time no see member";
+                    }
+                    if (type == "4")
+                    {
+                        category = "Low Spend, Long time no see member";
+                    }
+                    if (type == "5")
+                    {
+                        category = "All";
+                    }
+                    worksheet.Cell(3, 2).Value = category;
+                    worksheet.Cell(6, 1).InsertTable(table);
+                    //wb.Worksheets.Add(table);
                     using (MemoryStream stream = new MemoryStream())
                     {
                         wb.SaveAs(stream);
+                        if (EmailId != "")
+                        {
+                            RR.email_send(EmailId, ReportName, stream.ToArray(), userDetails.EmailId);
+
+                        }
                         return File(stream.ToArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
                     }
                 }
@@ -265,7 +299,7 @@ namespace WebApp.Controllers
             return new JsonResult() { Data = objMembersInformation, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
 
-        public ActionResult ExportToExcelNonTransacting(string outletId, string type, string ReportName)
+        public ActionResult ExportToExcelNonTransacting(string outletId, string type, string ReportName, string EmailId)
         {
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
             System.Data.DataTable table = new System.Data.DataTable();
@@ -299,7 +333,7 @@ namespace WebApp.Controllers
 
                     table.Rows.Add(row);
                 }               
-                if (userDetails.LoginType == "1")
+                if (userDetails.LoginType == "1" || userDetails.LoginType == "6" || userDetails.LoginType == "7")
                 {
                     table.Columns.Remove("MaskedMobileNo");
                 }
@@ -317,16 +351,29 @@ namespace WebApp.Controllers
                         .ToString("MM/dd/yyyy", CultureInfo.InvariantCulture);
                     }
                 }
-                string fileName = ReportName + ".xlsx";
+                string fileName = "BOTS_" + ReportName + ".xlsx";
                 using (XLWorkbook wb = new XLWorkbook())
                 {
 
                     //excelSheet.Name
                     table.TableName = ReportName;
-                    wb.Worksheets.Add(table);
+                    IXLWorksheet worksheet = wb.AddWorksheet(sheetName: ReportName);
+                    worksheet.Cell(1, 1).Value = "Report Name";
+                    worksheet.Cell(1, 2).Value = "NonTransacting";
+                    worksheet.Cell(2, 1).Value = "Date";
+                    worksheet.Cell(2, 2).Value = DateTime.Now.ToString();
+                    worksheet.Cell(3, 1).Value = "NonTransacting from";
+                    worksheet.Cell(3, 2).Value = type;
+                    worksheet.Cell(6, 1).InsertTable(table);
+                    // wb.Worksheets.Add(table);
                     using (MemoryStream stream = new MemoryStream())
                     {
                         wb.SaveAs(stream);
+                        if (EmailId != "")
+                        {
+                            RR.email_send(EmailId, ReportName, stream.ToArray(), userDetails.EmailId);
+
+                        }
                         return File(stream.ToArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
                     }
                 }
@@ -339,7 +386,7 @@ namespace WebApp.Controllers
 
         }
 
-        public ActionResult ExportToExcelNonRedemption(int type, int daysType, string ReportName)
+        public ActionResult ExportToExcelNonRedemption(int type, int daysType, string ReportName, string EmailId)
         {
             System.Data.DataTable table = new System.Data.DataTable();
             try
@@ -370,7 +417,7 @@ namespace WebApp.Controllers
                         .ToString("MM/dd/yyyy", CultureInfo.InvariantCulture);
                     }
                 }
-                if (userDetails.LoginType == "1")
+                if (userDetails.LoginType == "1" || userDetails.LoginType == "6" || userDetails.LoginType == "7")
                 {
                     table.Columns.Remove("MaskedMobileNo");
                 }
@@ -379,16 +426,49 @@ namespace WebApp.Controllers
                     table.Columns.Remove("MobileNo");
                     table.Columns["MaskedMobileNo"].ColumnName = "MobileNo";
                 }
-                string fileName = ReportName + ".xlsx";
+                string fileName = "BOTS_" + ReportName + ".xlsx";
                 using (XLWorkbook wb = new XLWorkbook())
                 {
 
                     //excelSheet.Name
                     table.TableName = ReportName;
-                    wb.Worksheets.Add(table);
+                    IXLWorksheet worksheet = wb.AddWorksheet(sheetName: ReportName);
+                    worksheet.Cell(1, 1).Value = "Report Name";
+                    worksheet.Cell(1, 2).Value = "NonRedemption";
+                    worksheet.Cell(2, 1).Value = "Date";
+                    worksheet.Cell(2, 2).Value = DateTime.Now.ToString();
+                    worksheet.Cell(3, 1).Value = "Duration";
+                    string pointbalance = "";
+                    if (type ==1)
+                    { pointbalance = "High"; }
+                    if (type == 2)
+                    {  pointbalance = "Medium"; }
+                    if (type == 3)
+                    {  pointbalance = "Low"; }
+                    string days = "";
+                    if(daysType ==1)
+                    {
+                        days = "Less than 90 days";
+                    }
+                    if (daysType == 2)
+                    {
+                        days = "Between 90 & 180";
+                    }
+                    if (daysType == 3)
+                    {
+                        days = "More than 180 days";
+                    }
+                    worksheet.Cell(3, 2).Value = pointbalance + "-"+ days;
+                    worksheet.Cell(6, 1).InsertTable(table);
+                    //wb.Worksheets.Add(table);
                     using (MemoryStream stream = new MemoryStream())
                     {
                         wb.SaveAs(stream);
+                        if (EmailId != "")
+                        {
+                            RR.email_send(EmailId, ReportName, stream.ToArray(), userDetails.EmailId);
+
+                        }
                         return File(stream.ToArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
                     }
                 }

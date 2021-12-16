@@ -1,5 +1,6 @@
 ﻿@model BOTS_BL.Models.PointExpiryTmp
 @using System.Globalization
+@using BOTS_BL.Models;
 @{
     ViewBag.Title = "Points Expiry";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -16,6 +17,8 @@
     var nextYear = DateTime.Now.AddMonths(1).Year.ToString();
     var next2Year = DateTime.Now.AddMonths(2).Year.ToString();
 
+    var userDetails = (CustomerLoginDetail)Session["UserSession"];
+    var logintype = userDetails.LoginType;
 }
 
 <div class="app-main__inner">
@@ -124,10 +127,23 @@
                         <ul class="list-inline progress-list mt-2">
                             <li class="list-inline-item">
                                 <div class="dropdown">
-                                    <button class="btn btn-primary login-btn" onclick='ExportDataExcel();' type="button" id="btnExport">
+                                    <button class="btn btn-primary login-btn" onclick='ExportDataExcel("0");' type="button" id="btnExport">
                                         <i class="fas fa-file-export"></i> Export
                                     </button>
                                 </div>
+                                @if (logintype == "1" || logintype == "7" || logintype == "6")
+                                {
+                                    <div>
+                                        <a href="#" onclick="showReport();">Send Report</a>
+                                    </div>
+                                    <div class="dropdown" id="divsendemail" style="display:none">
+                                        <input type="text" id="txtemailsend" class="input50" placeholder="Enter Email Ids" />
+                                        <button class="btn btn-primary login-btn" onclick='ExportDataExcel("1");' type="button" id="btnExport">
+                                            <i class="fas fa-file-export"></i> Send
+                                        </button>
+
+                                    </div>
+                                }
                             </li>
                         </ul>
                     </div>
@@ -176,20 +192,20 @@
             data: "{'month': " + month + ",'year': " + year + "}",
             contentType: "application/json; charset=utf-8",
             dataType: "json",
-            success: function (response) {               
+            success: function (response) {
                 $("#spnFutureMonth").text($("#MonthList option:selected").text());
                 $("#spnFutureYear").text($("#YearList option:selected").text());
 
                 $("#spnSelectedMemberCount").text(addComma(response.SelectedCount));
                 $("#spnSelectedMemberPoints").text(addComma(response.SelectedPoints));
-                
+
                 $("#dvSelectedMonth").show();
                 $("#divLoader").hide();
             },
             failure: function (response) {
                 $("#divLoader").hide();
             },
-            error: function (response) {                
+            error: function (response) {
                 $("#divLoader").hide();
             }
         });
@@ -200,8 +216,10 @@
         var year = $("#YearList").val();
         GetData(month, year);
     }
-
-    function GetData(month, year) {        
+    function showReport() {
+        $("#divsendemail").show();
+    }
+    function GetData(month, year) {
         clickedMonth = month;
         clickedYear = year;
 
@@ -365,13 +383,20 @@
         });
     }
 
-    function ExportDataExcel() {
+    function ExportDataExcel(Id) {
+        var emailid = '';
+        console.log(Id);
+        
+        if (Id == "1") {
+            emailid = $("#txtemailsend").val();
+        }
 
         var urlLink = "@Url.Action("ExportToExcelPointExpiry", "Reports")";
-        urlLink = urlLink + "?month=" + clickedMonth + "&year=" + clickedYear + "&ReportName=PointExpiry";
+        urlLink = urlLink + "?month=" + clickedMonth + "&year=" + clickedYear + "&ReportName=PointExpiry" + "&EmailId=" + emailid + "";
         console.log(urlLink);
         window.location.href = urlLink;
         $("#divLoader").hide();
+        $("#txtemailsend").val('');
 
     }
 

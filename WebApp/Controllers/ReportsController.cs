@@ -13,6 +13,8 @@ using BOTS_BL;
 using System.Globalization;
 using System.Web.Script.Serialization;
 using BOTS_BL.Models.Reports;
+using System.Net.Mail;
+using System.Text;
 
 namespace WebApp.Controllers
 {
@@ -42,6 +44,8 @@ namespace WebApp.Controllers
 
         public ActionResult Outletwise()
         {
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            ViewBag.userdetail = userDetails;
             return View();
         }
 
@@ -49,6 +53,7 @@ namespace WebApp.Controllers
         {
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
             var lstOutlet = RR.GetOutletList(userDetails.GroupId, userDetails.connectionString);
+            ViewBag.userdetail = userDetails;
             ViewBag.OutletList = lstOutlet;
             ViewBag.OutletId = OutletId;
             return View();
@@ -391,7 +396,7 @@ namespace WebApp.Controllers
             return PartialView("_MemberSearch", objMemberSearch);
         }
 
-        public ActionResult ExportToExcelTransactionwise(string DateRangeFlag, string fromDate, string toDate, string outletId, string EnrolmentDataFlag, string ReportName)
+        public ActionResult ExportToExcelTransactionwise(string DateRangeFlag, string fromDate, string toDate, string outletId, string EnrolmentDataFlag, string ReportName, string EmailId)
         {
             System.Data.DataTable table = new System.Data.DataTable();
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
@@ -417,7 +422,7 @@ namespace WebApp.Controllers
 
                     table.Rows.Add(row);
                 }
-                if (userDetails.LoginType == "1")
+                if (userDetails.LoginType == "1" || userDetails.LoginType == "6" || userDetails.LoginType == "7")
                 {                    
                     table.Columns.Remove("MaskedMobileNo");
                 }
@@ -469,7 +474,7 @@ namespace WebApp.Controllers
                 table.Columns["PointsEarnedStr"].ColumnName = "PointsEarned";
                 table.Columns["PointsBurnedStr"].ColumnName = "PointsBurned";
 
-                string fileName = ReportName + ".xlsx";
+                string fileName = "BOTS_" + ReportName + ".xlsx";
                 using (XLWorkbook wb = new XLWorkbook())
                 {
 
@@ -480,11 +485,18 @@ namespace WebApp.Controllers
                     worksheet.Cell(1, 2).Value = "Transactionwise";
                     worksheet.Cell(2, 1).Value = "Date";
                     worksheet.Cell(2, 2).Value = DateTime.Now.ToString();
-                    worksheet.Cell(4, 1).InsertTable(table);
+                    worksheet.Cell(3, 1).Value = "Period";
+                    worksheet.Cell(3, 2).Value = fromDate + "-" + toDate;
+                    worksheet.Cell(5, 1).InsertTable(table);
                     //wb.Worksheets.Add(table);
                     using (MemoryStream stream = new MemoryStream())
                     {
                         wb.SaveAs(stream);
+                        if (EmailId != "")
+                        {
+                            RR.email_send(EmailId, ReportName, stream.ToArray(), userDetails.EmailId);
+
+                        }
                         return File(stream.ToArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
                     }
                 }
@@ -498,7 +510,7 @@ namespace WebApp.Controllers
 
         }
 
-        public ActionResult ExportToExcelOutletwise(string DateRangeFlag, string fromDate, string toDate, string ReportName)
+        public ActionResult ExportToExcelOutletwise(string DateRangeFlag, string fromDate, string toDate, string ReportName,string EmailId)
         {
             System.Data.DataTable table = new System.Data.DataTable();
             try
@@ -642,7 +654,7 @@ namespace WebApp.Controllers
                 table.Columns.Remove("NonActivePer");
                 table.Columns.Remove("OnlyOncePer");
 
-                string fileName = ReportName + ".xlsx";
+                string fileName = "BOTS_" + ReportName + ".xlsx";
                 using (XLWorkbook wb = new XLWorkbook())
                 {
 
@@ -653,13 +665,31 @@ namespace WebApp.Controllers
                     worksheet.Cell(1, 2).Value = "Outletwise";
                     worksheet.Cell(2, 1).Value = "Date";
                     worksheet.Cell(2, 2).Value = DateTime.Now.ToString();
-                    worksheet.Cell(4, 1).InsertTable(table);
+                    if(DateRangeFlag=="1")
+                    {
+                        worksheet.Cell(3, 1).Value = "Period";
+                        worksheet.Cell(3, 2).Value = fromDate + "-" + toDate;
+                    }
+                    if (DateRangeFlag == "0")
+                    {
+                        worksheet.Cell(3, 1).Value = "BTD";
+                       
+                    }
+                        worksheet.Cell(5, 1).InsertTable(table);
                     //wb.Worksheets.Add(table);
                     using (MemoryStream stream = new MemoryStream())
                     {
                         wb.SaveAs(stream);
+                        if (EmailId != "")
+                        {
+                            RR.email_send(EmailId, ReportName, stream.ToArray(),userDetails.EmailId);
+                            
+                        }
+                        
                         return File(stream.ToArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
+                        
                     }
+                    
                 }
             }
             catch (Exception ex)
@@ -670,7 +700,7 @@ namespace WebApp.Controllers
 
         }
 
-        public ActionResult ExportToExcelPointExpiry(int month, int year, string ReportName)
+        public ActionResult ExportToExcelPointExpiry(int month, int year, string ReportName, string EmailId)
         {
             System.Data.DataTable table = new System.Data.DataTable();
             try
@@ -691,7 +721,7 @@ namespace WebApp.Controllers
 
                     table.Rows.Add(row);
                 }
-                if (userDetails.LoginType == "1")
+                if (userDetails.LoginType == "1" || userDetails.LoginType == "6" || userDetails.LoginType == "7")
                 {
                     table.Columns.Remove("MaskedMobileNo");
                 }
@@ -735,7 +765,7 @@ namespace WebApp.Controllers
                 table.Columns["AvlPointsStr"].ColumnName = "AvlPoints";
                 table.Columns["PointsExpiryStr"].ColumnName = "PointsExpiry";
 
-                string fileName = ReportName + ".xlsx";
+                string fileName = "BOTS_" + ReportName + ".xlsx";
                 using (XLWorkbook wb = new XLWorkbook())
                 {
 
@@ -746,11 +776,18 @@ namespace WebApp.Controllers
                     worksheet.Cell(1, 2).Value = "Point Expiry";
                     worksheet.Cell(2, 1).Value = "Date";
                     worksheet.Cell(2, 2).Value = DateTime.Now.ToString();
-                    worksheet.Cell(4, 1).InsertTable(table);
+                    worksheet.Cell(3, 1).Value = "Period";
+                    worksheet.Cell(3, 2).Value = month + "-" + year;
+                    worksheet.Cell(5, 1).InsertTable(table);
                     //wb.Worksheets.Add(table);
                     using (MemoryStream stream = new MemoryStream())
                     {
                         wb.SaveAs(stream);
+                        if (EmailId != "")
+                        {
+                            RR.email_send(EmailId, ReportName, stream.ToArray(), userDetails.EmailId);
+
+                        }
                         return File(stream.ToArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
                     }
                 }
@@ -762,7 +799,7 @@ namespace WebApp.Controllers
 
         }
 
-        public ActionResult ExportToExcelCelebrations(int month, int type, string ReportName)
+        public ActionResult ExportToExcelCelebrations(int month, int type, string ReportName, string EmailId)
         {
             System.Data.DataTable table = new System.Data.DataTable();
             try
@@ -783,7 +820,7 @@ namespace WebApp.Controllers
 
                     table.Rows.Add(row);
                 }
-                if (userDetails.LoginType == "1")
+                if (userDetails.LoginType == "1" || userDetails.LoginType == "6" || userDetails.LoginType == "7")
                 {
                     table.Columns.Remove("MaskedMobileNo");
                 }
@@ -822,7 +859,7 @@ namespace WebApp.Controllers
                 table.Columns["TotalSpendStr"].ColumnName = "TotalSpend";
                 table.Columns["AvlPointsStr"].ColumnName = "AvlPoints";
                  
-                string fileName = ReportName + ".xlsx";
+                string fileName = "BOTS_" + ReportName + ".xlsx";
                 using (XLWorkbook wb = new XLWorkbook())
                 {
 
@@ -833,11 +870,45 @@ namespace WebApp.Controllers
                     worksheet.Cell(1, 2).Value = "Celebrations";
                     worksheet.Cell(2, 1).Value = "Date";
                     worksheet.Cell(2, 2).Value = DateTime.Now.ToString();
-                    worksheet.Cell(4, 1).InsertTable(table);
+                    worksheet.Cell(3, 1).Value = "Celebration";
+                    DateTime today = DateTime.Now;
+                    DateTime nxtmnt =today.AddMonths(1).AddSeconds(-1);
+                    DateTime nxt2mnt = nxtmnt.AddMonths(1).AddSeconds(-1);
+                    string currentmonth = today.ToString("MMM", CultureInfo.InvariantCulture);
+                    string nextmonth = nxtmnt.ToString("MMM", CultureInfo.InvariantCulture);
+                    string next2month = nxt2mnt.ToString("MMM", CultureInfo.InvariantCulture);
+                    if (type ==1)
+                    { worksheet.Cell(3, 2).Value = "Birthday"; }
+                    if (type ==2)
+                    {
+                        worksheet.Cell(3, 2).Value = "M.Anniversary";
+                    }
+                    if (type == 3)
+                    {
+                        worksheet.Cell(3, 2).Value = "Enr Anniversary";
+                    }
+                    worksheet.Cell(4, 1).Value = "Month";
+
+                    if (month == 1)
+                    { worksheet.Cell(4, 2).Value = currentmonth; }
+                    if (month == 2)
+                    {
+                        worksheet.Cell(4, 2).Value = nextmonth;
+                    }
+                    if (month == 3)
+                    {
+                        worksheet.Cell(4, 2).Value = next2month;
+                    }
+                    worksheet.Cell(6, 1).InsertTable(table);
                     //wb.Worksheets.Add(table);
                     using (MemoryStream stream = new MemoryStream())
                     {
                         wb.SaveAs(stream);
+                        if (EmailId != "")
+                        {
+                            RR.email_send(EmailId, ReportName, stream.ToArray(), userDetails.EmailId);
+
+                        }
                         return File(stream.ToArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
                     }
                 }
@@ -897,7 +968,7 @@ namespace WebApp.Controllers
             return new JsonResult() { Data = lstMember, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
 
-        public ActionResult ExportToProfitableCustomers(string CountOrBusiness, string Count, string ReportName)
+        public ActionResult ExportToProfitableCustomers(string CountOrBusiness, string Count, string ReportName, string EmailId)
         {
             System.Data.DataTable table = new System.Data.DataTable();
             try
@@ -963,7 +1034,7 @@ namespace WebApp.Controllers
                 table.Columns["TotalSpendStr"].ColumnName = "TotalSpend";
                 table.Columns["AvlBalPointsStr"].ColumnName = "AvlBalPoints";
                 table.Columns["TotalBurnPointsStr"].ColumnName = "TotalBurnPoints";
-                if (userDetails.LoginType == "1")
+                if (userDetails.LoginType == "1" || userDetails.LoginType == "6" || userDetails.LoginType == "7")
                 {
                     table.Columns.Remove("MaskedMobileNo");
                 }
@@ -972,7 +1043,7 @@ namespace WebApp.Controllers
                     table.Columns.Remove("MobileNo");
                     table.Columns["MaskedMobileNo"].ColumnName = "MobileNo";
                 }                       
-                string fileName = ReportName + ".xlsx";
+                string fileName = "BOTS_" + ReportName + ".xlsx";
                 using (XLWorkbook wb = new XLWorkbook())
                 {
 
@@ -984,12 +1055,28 @@ namespace WebApp.Controllers
                     worksheet.Cell(1, 2).Value = "Profitable Customers";
                     worksheet.Cell(2, 1).Value = "Date";
                     worksheet.Cell(2, 2).Value = DateTime.Now.ToString();
-                    worksheet.Cell(4, 1).InsertTable(table);
+                    worksheet.Cell(3, 1).Value = "Filter";
+                    if (CountOrBusiness == "Count")
+                    {
+                        worksheet.Cell(3, 2).Value = "Top" + Count + "Members as per Txn Count";
+                    }
+                    if(CountOrBusiness == "Business")
+                    {
+                        worksheet.Cell(3, 2).Value = "Top"+ Count + "Members as per Business";
+                    }
+                    worksheet.Cell(5, 1).InsertTable(table);
                     //wb.Worksheets.Add(table);
                     using (MemoryStream stream = new MemoryStream())
                     {
                         wb.SaveAs(stream);
+                        if (EmailId != "")
+                        {
+                            RR.email_send(EmailId, ReportName, stream.ToArray(), userDetails.EmailId);
+
+                        }
                         return File(stream.ToArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
+
+                        
                     }
                 }
             }
@@ -1001,6 +1088,7 @@ namespace WebApp.Controllers
 
         }
 
+        
 
     }
 }
