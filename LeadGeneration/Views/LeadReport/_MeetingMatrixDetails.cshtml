@@ -21,6 +21,7 @@
                             <th scope="col">No of Outlet</th>
                             <th scope="col">Lead Status</th>
                             <th scope="col">Follow Up Date</th>
+                            <th scope="col">Meeting/Call Date</th>
                             <th scope="col">Comments</th>
 
                         </tr>
@@ -32,23 +33,24 @@
                             foreach (var item in Model)
                             {
 
-                                <tr>
-                                    <td>@item.BusinessName</td>
-                                    <td>@item.MobileNo</td>
-                                    <td>@item.CityName</td>
-                                    <td>@item.BillingPartner</td>
-                                    <td>@item.NoOfOutlet</td>
-                                    <td>@item.LeadStatus</td>
-                                    @if (item.FollowupDate.HasValue)
-                                    {
-                                        <td>@item.FollowupDate.Value.ToShortDateString()</td>
-                                    }
-                                    else
-                                    {
-                                        <td>--</td>
-                                    }
-                                    <td>@item.Comments</td>
-                                </tr>
+                        <tr>
+                            <td>@item.BusinessName</td>
+                            <td>@item.MobileNo</td>
+                            <td>@item.CityName</td>
+                            <td>@item.BillingPartner</td>
+                            <td>@item.NoOfOutlet</td>
+                            <td>@item.LeadStatus</td>
+                            @if (item.FollowupDate.HasValue)
+                            {
+                                <td>@item.FollowupDate.Value.ToShortDateString()</td>
+                            }
+                            else
+                            {
+                                <td>--</td>
+                            }
+                            <td>@item.AddedDate</td>
+                            <td>@item.Comments</td>
+                        </tr>
                             }
                         }
                     </tbody>

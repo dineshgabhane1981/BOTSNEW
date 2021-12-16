@@ -197,7 +197,6 @@
     <Compile Include="Models\CommonDB\ListOfGroup.cs" />
     <Compile Include="Models\CommonDB\MobileAppCommSecurityKey.cs" />
     <Compile Include="Models\CommonDB\MobileAppOnceInMonthData.cs" />
-    <Compile Include="Models\CommonDB\Model1.cs" />
     <Compile Include="Models\CommonDB\MonthlyReport.cs" />
     <Compile Include="Models\CommonDB\NPCSM.cs" />
     <Compile Include="Models\CommonDB\OTPDetails.cs" />
@@ -230,6 +229,7 @@
     <Compile Include="Models\Dashboard\DashboardMemberSegment.cs" />
     <Compile Include="Models\DBContext.cs" />
     <Compile Include="Models\ExecutiveSummary.cs" />
+    <Compile Include="Models\FeedbackModule\Feedback_FeedbackDetails.cs" />
     <Compile Include="Models\FeedBack\FeedBackMaster.cs" />
     <Compile Include="Models\FeedBack\FeedBackMobileMaster.cs" />
     <Compile Include="Models\FeedBack\FeedBackQuestionMaster.cs" />
@@ -292,6 +292,7 @@
     <Compile Include="Repository\DashboardRepository.cs" />
     <Compile Include="Repository\DiscussionsRepository.cs" />
     <Compile Include="Repository\EmployeeRepository.cs" />
+    <Compile Include="Repository\FeedbackModuleRepository.cs" />
     <Compile Include="Repository\FeedBackRepository.cs" />
     <Compile Include="Repository\HeatMapsRepository.cs" />
     <Compile Include="Repository\ITOpsRepository.cs" />

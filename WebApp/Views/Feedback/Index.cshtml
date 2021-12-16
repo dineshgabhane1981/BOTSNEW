@@ -1,0 +1,189 @@
+﻿@model WebApp.ViewModel.FeedbackConfigViewModel
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    h2 {
+        color: #000;
+        text-align: center;
+        font-size: 2em;
+    }
+
+    .warpper {
+        display: grid;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .tab {
+        cursor: pointer;
+        padding: 10px 20px;
+        margin: 0px 2px;
+        background-color: #2f4353 !important;
+        display: inline-block;
+        color: #fff;
+        border-radius: 3px 3px 0px 0px;
+        box-shadow: 0 0.5rem 0.8rem #00000080;
+    }
+
+    .tabs {
+        padding-left: 25px;
+    }
+
+    .panels {
+        background: #ffffff;
+        box-shadow: 0 2rem 2rem #00000080;
+        width: 100%;
+        border-radius: 3px;
+        overflow: hidden;
+    }
+
+    .panel {
+        display: none;
+        animation: fadein .8s;
+    }
+
+    .panel-title {
+        font-size: 1.5em;
+        font-weight: bold
+    }
+
+    .radio {
+        display: none;
+    }
+
+    #one:checked ~ .panels #one-panel,
+    #two:checked ~ .panels #two-panel,
+    #three:checked ~ .panels #three-panel {
+        display: block
+    }
+
+    #one:checked ~ .tabs #one-tab,
+    #two:checked ~ .tabs #two-tab,
+    #three:checked ~ .tabs #three-tab {
+        background: #fff !important;
+        color: #000;
+        border-top: 3px solid #fff;
+        border-left: 3px solid #fff;
+        border-right: 3px solid #fff;
+        font-weight: bold;
+        border-top-left-radius: 7px;
+        border-top-right-radius: 7px;
+    }
+</style>
+
+<div class="app-main__inner">
+    <input class="radio" id="one" name="group" type="radio" checked>
+    <input class="radio" id="two" name="group" type="radio">
+    <input class="radio" id="three" name="group" type="radio">
+    <div class="tabs">
+        <label class="tab" id="one-tab" for="one">Never Opted For</label>
+        <label class="tab" id="two-tab" for="two">Active</label>
+        <label class="tab" id="three-tab" for="three">De-active</label>
+    </div>
+
+    <div class="panels">
+        <div class="multisteps-form__panel shadow  list-box bg-white panel" id="one-panel">
+            <div class="container-fluid pt-3 pl-3 pr-3" id="dvNeverOptedFor">
+                @Html.Partial("~/Views/Feedback/_NeverOptedFor.cshtml", Model.lstNeverOptFor)
+            </div>
+        </div>
+
+        <div class="multisteps-form__panel shadow  list-box bg-white panel" id="two-panel">
+            <div class="container-fluid pt-3 pl-3 pr-3" id="dvActiveGroup">
+                @Html.Partial("~/Views/Feedback/_ActiveGroup.cshtml", Model.lstActiveGroup)
+            </div>
+        </div>
+
+        <div class="multisteps-form__panel shadow  list-box bg-white panel" id="three-panel">
+            <div class="container-fluid pt-3 pl-3 pr-3" id="dvDeActiveGroup">
+                @Html.Partial("~/Views/Feedback/_DeActiveGroup.cshtml", Model.lstDeActivatedGroup)
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+
+    function ShowEnableDetails(GroupId) {
+        $("#hdnGroupId").val(GroupId);
+        $("#ShowEnableDetails").show(1000);
+    }
+    function ShowStopDetails(GroupId) {
+        $("#hdnStopGroupId").val(GroupId);
+        $("#ShowStopDetails").show(1000);
+    }
+    function ShowRenewDeActiveDetails(GroupId) {
+        $("#hdnDeActiveGroupId").val(GroupId);
+        $("#ShowRenewDeActiveDetails").show(1000);
+    }
+    function ShowRenewDetails(GroupId) {
+        $("#hdnRenewGroupId").val(GroupId);
+        $("#ShowRenewDetails").show(1000);
+    }
+
+    function BindAllData() {
+        BindNeverOpt();
+        BindActive();
+        BindDeActivated();
+    }
+    function BindNeverOpt() {
+        $.ajax({
+            type: "GET",
+            url: '@Url.Action("BindNeverOpt", "Feedback")',
+            data: '',
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                $("#dvNeverOptedFor").html(response);
+            },
+            failure: function (response) {
+                $("#divLoader").hide();
+            },
+            error: function (response) {
+                $("#dvNeverOptedFor").html(response.responseText);
+                $("#divLoader").hide();
+            }
+        });
+    }
+    function BindActive() {
+        $.ajax({
+            type: "GET",
+            url: '@Url.Action("BindActive", "Feedback")',
+            data: '',
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                $("#dvActiveGroup").html(response);
+            },
+            failure: function (response) {
+                $("#divLoader").hide();
+            },
+            error: function (response) {
+                $("#dvActiveGroup").html(response.responseText);
+                $("#divLoader").hide();
+            }
+        });
+    }
+    function BindDeActivated() {
+        $.ajax({
+            type: "GET",
+            url: '@Url.Action("BindDeActivated", "Feedback")',
+            data: '',
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                $("#dvDeActiveGroup").html(response);
+            },
+            failure: function (response) {
+                $("#divLoader").hide();
+            },
+            error: function (response) {
+                $("#dvDeActiveGroup").html(response.responseText);
+                $("#divLoader").hide();
+            }
+        });
+    }
+</script>

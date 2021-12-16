@@ -1,0 +1,279 @@
+﻿@model List<BOTS_BL.Models.FeedbackActiveGroup>
+
+<div class="pt-3 pl-3 pr-3 col-md-12 col-lg-12">
+    <div class="row" id="ShowRenewDetails" style="display:none; margin-bottom:20px;padding-bottom:20px;">
+        <div class="col search-container" style="border:2px solid grey; padding:20px; border-radius:10px;">
+            <input type="hidden" id="hdnRenewGroupId" />
+            <div class="row" style="margin: 0; padding-top:10px;">
+                <div style="float:left;text-align:right;width:50px;">
+                    Fees
+                </div>
+                <div class="col-sm-3" style="float:left;">
+                    <input id="txtReFees" type="number" class="input50" />
+                </div>
+                @*<div style="float:left;text-align:right;width:50px;">
+                    Start Date
+                </div>
+                <div class="col-sm-3" style="float:left;">
+                    <input id="txtReStartDate" type="date" class="input50" />
+                </div>*@
+                <div style="float:left;text-align:right;width:50px;">
+                    Payment Mode
+                </div>
+                <div class="col-sm-3" style="float:left;">
+                    <select id="ddlRePaymentMode" class="input50">
+                        <option value="0">Please Select</option>
+                        <option value="Online">Online</option>
+                        <option value="Cheque">Cheque</option>
+                    </select>
+                </div>
+                <div class="col-sm-1" style="float:left;margin-top:10px;">
+                    <button class="btn btn-primary" onclick="RenewFeedback();">Save</button>
+                </div>
+            </div>
+        </div>        
+    </div>
+    <div class="row" id="ShowStopDetails" style="display:none; margin-bottom:20px;padding-bottom:20px;">
+        <div class="col search-container" style="border:2px solid grey; padding:20px; border-radius:10px;">
+            <input type="hidden" id="hdnStopGroupId" />
+            <div class="row" style="margin: 0; padding-top:10px;">
+                <div style="float:left;text-align:right;width:50px;">
+                    Reason
+                </div>
+                <div class="col-sm-4" style="float:left;">                    
+                    <textarea rows="5" cols="40" id="txtReason" class="input100"></textarea>
+                </div>                
+                <div class="col-sm-1" style="float:left;margin-top:95px;">
+                    <button class="btn btn-primary" onclick="StopFeedback();">Save</button>
+                </div>
+            </div>
+        </div>         
+    </div>
+    <div class="row">
+        <div class="col search-container">
+            <i class="fas fa-search"></i>
+            <input class="input100" type="text" id="txtSearchActive" placeholder="Search Groups..." />
+        </div>
+    </div>
+    <div class="row mt-3" id="dvActiveData">
+        <div class="table-responsive">
+            <table class="table" id="activeTable">
+                <thead>
+                    <tr>
+                        <th scope="col" style="text-align:left;">Group Name</th>
+                        <th scope="col" style="text-align: center;">Status</th>
+                        <th scope="col" style="text-align: center;">Valid From</th>
+                        <th scope="col" style="text-align: center;">Valid To</th>
+                        <th scope="col" style="text-align: center;">Amount (Rs.)</th>
+                        <th scope="col" style="text-align: center;">Expiring in</th>
+                        <th scope="col" style="text-align: center;">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model != null)
+                    {
+                        if (Model.Count > 0)
+                        {
+                            foreach (var item in Model)
+                            {
+
+                                <tr>
+                                    <td>@item.GroupName</td>
+                                    <td style="text-align:center;">@item.Status</td>
+                                    <td style="text-align:center;">@item.ValidFrom.ToString("MM/dd/yyy")</td>
+                                    <td style="text-align:center;">@item.ValidTo.ToString("MM/dd/yyy")</td>
+                                    <td style="text-align:center;">@item.Amount</td>
+                                    <td style="text-align:center;">@item.ExpiringInDays days</td>
+                                    <td style="text-align:center;"><a href="#" onclick="ShowRenewDetails(@item.GroupId);">Renew</a> |  
+                                                                   <a href="#" onclick="ShowStopDetails(@item.GroupId);">Stop</a></td>
+                                </tr>
+                            }
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        $('#activeTable').DataTable({
+            "aaSorting": [],
+            "paging": true,
+            "ordering": false,
+            "info": true,
+            "bFilter": true,
+            "pageLength": 10,
+            "pagingType": "simple_numbers"
+        });
+
+        $('#activeTable_filter').hide();
+
+        $('#txtSearchActive').on('keyup', function () {
+            $.fn.dataTable.ext.search.push(function (settings, searchData) {
+                var term = $('#txtSearchActive').val().toLowerCase()
+                for (var i = 0; i < searchData.length; i++) {
+                    if (searchData[i].toLowerCase().indexOf(term) >= 0) {
+                        return true;
+                    }
+                }
+                return false;
+            });
+            var table1 = $('#activeTable').DataTable();
+            table1.draw();
+        });
+
+        $("#txtReason").focusout(function () {
+            if ($("#txtReason").val() != "") {
+                $('#txtReason').css('border-color', '');
+            }
+            else {
+                $('#txtReason').css('border-color', 'red');
+            }
+        });
+    });
+
+    function StopFeedback() {
+        var returnStatus = true;
+        if ($("#txtReason").val() == "") {
+            cuteAlert({
+                type: "error",
+                title: "Oops..",
+                message: "Please enter Reason",
+                buttonText: "Okay"
+            })
+            $('#txtReason').css('border-color', 'red');
+            returnStatus = false;
+        }
+         if (returnStatus == true) {
+
+            $("#divLoader").show();
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("StopFeedbackModule", "Feedback")',
+                data: '{GroupId: ' + JSON.stringify($("#hdnStopGroupId").val()) + ',Reason: ' + JSON.stringify($("#txtReason").val()) + '}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (response) {
+                    console.log(response);
+                    if (response) {
+                        $("#divLoader").hide();
+                        $("#txtReason").val("");
+                        $("#hdnStopGroupId").val("");
+
+                        setTimeout(cuteAlert({
+                            type: "success",
+                            title: "Save",
+                            message: "Feedback Subscription Stopped Successfully!",
+                            buttonText: "Okay"
+                        }), 10000);
+                    }
+                    else {
+                        setTimeout(cuteAlert({
+                            type: "success",
+                            title: "Save",
+                            message: "Feedback Subscription Stopped Successfully!",
+                            buttonText: "Okay"
+                        }), 10000);
+                    }
+                    BindAllData();
+                    $("#ShowStopDetails").hide(1000);
+
+                },
+                failure: function (response) {
+                    $("#divLoader").hide();
+                },
+                error: function (response) {
+                    $("#divLoader").hide();
+                }
+            });
+        }
+    }
+
+    function RenewFeedback() {
+        var returnStatus = true;
+        if ($("#txtReFees").val() == "") {
+            cuteAlert({
+                type: "error",
+                title: "Oops..",
+                message: "Please enter Fees",
+                buttonText: "Okay"
+            })
+            $('#txtReFees').css('border-color', 'red');
+            returnStatus = false;
+        }
+        if ($("#txtReStartDate").val() == "") {
+            cuteAlert({
+                type: "error",
+                title: "Oops..",
+                message: "Please enter Start Date",
+                buttonText: "Okay"
+            })
+            $('#txtReStartDate').css('border-color', 'red');
+            returnStatus = false;
+        }
+
+        if ($("#ddlRePaymentMode option:selected").text() == "Please Select") {
+            cuteAlert({
+                type: "error",
+                title: "Oops..",
+                message: "Please select Payment Mode",
+                buttonText: "Okay"
+            })
+            $("#ddlRePaymentMode").css('border-color', 'red');
+            returnStatus = false;
+        }
+        if (returnStatus == true) {
+            var SeardhData = [];
+            item = {}
+            item["GroupId"] = $("#hdnRenewGroupId").val();
+            item["Fees"] = $("#txtReFees").val();
+            //item["StartDate"] = $("#txtReStartDate").val();
+            item["PaymentMode"] = $("#ddlRePaymentMode").val();
+
+            SeardhData.push(item);
+            var data = JSON.stringify(SeardhData);
+
+            $("#divLoader").show();
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("RenewActiveFeedbackModule", "Feedback")',
+                data: '{jsonData: ' + JSON.stringify(data) + '}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (response) {                    
+                    if (response) {
+                        $("#divLoader").hide();
+                        $("#txtReFees").val("");
+                        //$("#txtStartDate").val("");
+                        $('#ddlRePaymentMode').prop('selectedIndex', 0);
+                        $("#hdnRenewGroupId").val("");
+
+                        setTimeout(cuteAlert({
+                            type: "success",
+                            title: "Save",
+                            message: "Feedback Module Renewed Successfully!",
+                            buttonText: "Okay"
+                        }), 10000);
+                    }
+                    else {
+                        setTimeout(cuteAlert({
+                            type: "success",
+                            title: "Save",
+                            message: "Feedback Module Ractivated Successfully!",
+                            buttonText: "Okay"
+                        }), 10000);
+                    }
+                    BindAllData();
+                    $("#ShowRenewDeActiveDetails").hide(1000);
+                },
+                failure: function (response) {
+                    $("#divLoader").hide();
+                },
+                error: function (response) {
+                    $("#divLoader").hide();
+                }
+            });
+        }
+    }
+</script>

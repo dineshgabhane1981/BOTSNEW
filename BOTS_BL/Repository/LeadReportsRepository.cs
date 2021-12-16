@@ -138,7 +138,7 @@ namespace BOTS_BL.Repository
                                      join cc in context.SALES_tblLeadTracking on c.LeadId equals cc.LeadId
                                      where c.MeetingType == "Followup" && c.UpdatedDate == null
                                      && (c.ContactType == "OnlineMeeting" || c.ContactType == "PersonalMeeting")
-                                     && c.AddedDate >= FromDate && c.AddedDate <= ToDateNew
+                                     && c.AddedDate >= FromDate && c.AddedDate <= ToDateNew && c.FollowupDate < DateTime.Today
                                      && c.AssignedLead == item.LoginId
                                      select new SalesLead
                                      {
@@ -150,7 +150,7 @@ namespace BOTS_BL.Repository
                             count = (from c in context.SALES_tblLeads
                                      join cc in context.SALES_tblLeadTracking on c.LeadId equals cc.LeadId
                                      where c.MeetingType == "Followup" && c.UpdatedDate == null
-                                     && c.ContactType == "Call" && c.AddedDate >= FromDate && c.AddedDate <= ToDateNew
+                                     && c.ContactType == "Call" && c.AddedDate >= FromDate && c.AddedDate <= ToDateNew && c.FollowupDate < DateTime.Today
                                      && c.AssignedLead == item.LoginId
                                      select new SalesLead
                                      {
@@ -203,7 +203,7 @@ namespace BOTS_BL.Repository
                                        join cc in context.SALES_tblLeadTracking on c.LeadId equals cc.LeadId
                                        where c.MeetingType == "Followup" && c.UpdatedDate == null
                                        && (c.ContactType == "OnlineMeeting" || c.ContactType == "PersonalMeeting")
-                                       && c.AddedDate >= FromDate && c.AddedDate <= ToDateNew
+                                       && c.AddedDate >= FromDate && c.AddedDate <= ToDateNew && c.FollowupDate<DateTime.Today
                                        && c.AssignedLead == SalesManager
                                        select new SalesLead
                                        {
@@ -215,7 +215,8 @@ namespace BOTS_BL.Repository
                                            NoOfOutlet = c.NoOfOutlet,
                                            LeadStatus = c.LeadStatus,
                                            FollowupDate = c.FollowupDate,
-                                           Comments = c.Comments
+                                           Comments = c.Comments,
+                                           AddedDate = cc.AddedDate
 
                                        }).ToList();
                         foreach(var item in newdata)
@@ -255,6 +256,7 @@ namespace BOTS_BL.Repository
                             lead.LeadStatus = item.LeadStatus;
                             lead.FollowupDate = item.FollowupDate;
                             lead.Comments = item.Comments;
+                            lead.AddedDate = item.AddedDate;
                             //lead.SalesManagerName = context.CustomerLoginDetails.Where(x => x.LoginId == item.AssignedLead).Select(y => y.UserName).FirstOrDefault();
 
                             lstData.Add(lead);
@@ -286,7 +288,7 @@ namespace BOTS_BL.Repository
                         newdata = (from c in context.SALES_tblLeads
                                        join cc in context.SALES_tblLeadTracking on c.LeadId equals cc.LeadId
                                        where c.MeetingType == "Followup" && c.UpdatedDate == null
-                                       && c.ContactType == "Call" && c.AddedDate >= FromDate && c.AddedDate <= ToDateNew
+                                       && c.ContactType == "Call" && c.AddedDate >= FromDate && c.AddedDate <= ToDateNew && c.FollowupDate < DateTime.Today
                                        && c.AssignedLead == SalesManager
                                        select new SalesLead
                                        {
@@ -298,7 +300,8 @@ namespace BOTS_BL.Repository
                                            NoOfOutlet = c.NoOfOutlet,
                                            LeadStatus = c.LeadStatus,
                                            FollowupDate = c.FollowupDate,
-                                           Comments = c.Comments
+                                           Comments = c.Comments,
+                                           AddedDate = cc.AddedDate
                                        }).ToList();
 
                     }
@@ -330,6 +333,7 @@ namespace BOTS_BL.Repository
                             lead.LeadStatus = item.LeadStatus;
                             lead.FollowupDate = item.FollowupDate;
                             lead.Comments = item.Comments;
+                            lead.AddedDate = item.AddedDate;
                             //lead.SalesManagerName = context.CustomerLoginDetails.Where(x => x.LoginId == item.AssignedLead).Select(y => y.UserName).FirstOrDefault();
 
                             lstData.Add(lead);

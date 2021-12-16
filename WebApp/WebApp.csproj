@@ -146,6 +146,7 @@
     <Compile Include="Controllers\CustomerManagementController.cs" />
     <Compile Include="Controllers\DashBoardCustomerLoginController.cs" />
     <Compile Include="Controllers\DiscussionController.cs" />
+    <Compile Include="Controllers\FeedbackController.cs" />
     <Compile Include="Controllers\HeatMapsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ITOperationsController.cs" />
@@ -168,6 +169,7 @@
     <Compile Include="ViewModel\CustomerViewModel.cs" />
     <Compile Include="ViewModel\DataPoint.cs" />
     <Compile Include="ViewModel\DiscussionViewModel.cs" />
+    <Compile Include="ViewModel\FeedbackConfigViewModel.cs" />
     <Compile Include="ViewModel\OnBoardingSalesViewModel.cs" />
     <Compile Include="ViewModel\OtherReportProductwiseViewModel.cs" />
     <Compile Include="ViewModel\SinglePageViewModel.cs" />
@@ -282,6 +284,10 @@
     <Content Include="Views\Discussion\_CommonDiscussionList.cshtml" />
     <Content Include="Views\CustomerMaster\_ChannelPartnerMaster.cshtml" />
     <Content Include="Views\CustomerMaster\ChannelPartnerMaster.cshtml" />
+    <Content Include="Views\Feedback\Index.cshtml" />
+    <Content Include="Views\Feedback\_NeverOptedFor.cshtml" />
+    <Content Include="Views\Feedback\_ActiveGroup.cshtml" />
+    <Content Include="Views\Feedback\_DeActiveGroup.cshtml" />
     <None Include="_bin_deployableAssemblies\x86\sqlcese40.dll" />
     <None Include="_bin_deployableAssemblies\x86\sqlceqp40.dll" />
     <None Include="_bin_deployableAssemblies\x86\sqlceme40.dll" />
