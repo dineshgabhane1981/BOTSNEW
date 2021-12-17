@@ -501,7 +501,7 @@ namespace BOTS_BL.Repository
                     objsalesmatrix.SMName = item.UserName;
                     var grouprecord = (from d in context.BOTS_TblDealDetails
                                        join g in context.BOTS_TblGroupMaster
- on d.GroupId equals g.GroupId
+                                       on d.GroupId equals g.GroupId
                                        join r in context.BOTS_TblRetailMaster on g.GroupId equals r.GroupId
                                        where g.CreatedBy == item.LoginId && g.CreatedDate >= first && g.CreatedDate <= last && g.CustomerStatus != "Draft"
                                        select new
