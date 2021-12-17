@@ -172,9 +172,12 @@ namespace BOTS_BL.Models.SalesLead
         public int? LeadId { get; set; }
         public string SalesManager { get; set; }
         public string BusinessName { get; set; }
+        public string PaymentFrequency { get; set; }
         public string Product { get; set; }
         public string BillingPartner { get; set; }
-        public decimal? Amount { get; set; }
+        //public decimal? Amount { get; set; }
+        public decimal? AdvanceAmount { get; set; }
+        public decimal?  AmountReceived { get; set; }
         public long? OutletName { get; set; }
     }
 }

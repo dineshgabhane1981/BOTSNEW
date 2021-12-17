@@ -98,6 +98,9 @@
     var tablesalesData = [];
     var tablesalesDatalist = [];
     $(document).ready(function () {
+        
+        CheckValidationAndSubmit('0');
+       
         var today = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
         $("#txtfromdt").datepicker({
             dateFormat: "yy-mm-dd",
@@ -107,18 +110,33 @@
         });
         $("#dvsummarytable").hide();
         $("#dvdetailedlist").hide();
+        
+        //CheckValidationAndSubmit('0');
     });
-    function CheckValidationAndSubmit() {
+    function CheckValidationAndSubmit(Id) {
+       
         var returnStatus = true;
-        if ($("#txtfromdt").val() == "") {
-            $('#txtfromdt').css('border-color', 'red');
-            returnStatus = false;
-        }
-        if ($("#txttodt").val() == "") {
-            $('#txttodt').css('border-color', 'red');
-            returnStatus = false;
-        }
+        var fromdt;
+        var todt;
+       
         var smId = "";
+        if (Id == '0') {           
+            returnStatus == true;
+            var date = new Date(), y = date.getFullYear(), m = date.getMonth();
+             fromdt = new Date(y, m, 1);
+            todt = date;          
+           
+        }
+        else {
+            if ($("#txtfromdt").val() == "") {
+                $('#txtfromdt').css('border-color', 'red');
+                returnStatus = false;
+            }
+            if ($("#txttodt").val() == "") {
+                $('#txttodt').css('border-color', 'red');
+                returnStatus = false;
+            }
+        }
         if (returnStatus == true) {
             if ($("#ddlSalesManager option:selected").text() == "Please Select") {
 
@@ -129,14 +147,16 @@
                     smId = "";
                 }
             }
-
-            var fromdt = $("#txtfromdt").val();
-            var todt = $("#txttodt").val();
+            if (fromdt == '' && todt == '') {
+                fromdt = $("#txtfromdt").val();
+                todt = $("#txttodt").val();
+            }
+             
             $("#divLoader").show();
            $.ajax({
             type: "POST",
             url: '@Url.Action("GetSalesCount", "Lead")',
-               data: '{Fromdate: ' + JSON.stringify(fromdt) + ', ToDate:' + JSON.stringify(todt) + ', SalesManager:' + JSON.stringify(smId) +'}',
+            data: '{Fromdate: ' + JSON.stringify(fromdt) + ', ToDate:' + JSON.stringify(todt) + ', SalesManager:' + JSON.stringify(smId) +'}',
             contentType: "application/json; charset=utf-8",
             dataType: "json",
                success: function (response) {
@@ -173,7 +193,13 @@
                                optionItem["Product"] = "Octa XS";
                            }
                            optionItem["BillingPartner"] = item.BillingPartner;
-                           optionItem["Amount"] = item.Amount;
+                           if (item.PaymentFrequency == "2") {
+                               optionItem["Amount"] = item.AdvanceAmount;
+                           }
+                           else {
+                               optionItem["Amount"] = item.AmountReceived;
+                           }
+                          // optionItem["Amount"] = item.Amount;
                            optionItem["OutletName"] = item.OutletName;
 
                            tablesalesDatalist.push(optionItem);
