@@ -1022,26 +1022,14 @@ namespace BOTS_BL.Repository
                                                         {
                                                             GroupId = d.GroupId,
                                                             SMId = g.CreatedBy,
-                                                            LoyaltyFees = d.LoyaltyFees,
-                                                            WAPaidPackFees = d.WAPaidPackFees,
-                                                            SMSPaidPackFees = d.SMSPaidPackFees,
-                                                            EcommIntegration = d.EcommIntegration,
-                                                            AnyOtherFees = d.AnyOtherFees,
-                                                            TotalFeesA = d.TotalFeesA,
-                                                            GST = d.GST,
-                                                            TotalFeesB = d.TotalFeesB,
                                                             PaymentFrequency = d.PaymentFrequency,
-                                                            AnyOtherFeesDesc = d.AnyOtherFeesDesc,
                                                             AmountReceived = d.AmountReceived,
-                                                            TDSDeducted = d.TDSDeducted,
-                                                            PaymentMode = d.PaymentMode,
-                                                            PaymentStatus = d.PaymentStatus,
-                                                            GSTRate = d.GSTRate,
                                                             AdvanceAmount = d.AdvanceAmount,
+                                                            createddate = g.CreatedDate,                                         
                                                             Boproduct = r.BOProduct,
                                                             Noofoutlets = r.NoOfEnrolled,
-                                                            createddate = g.CreatedDate,
-                                                            billingPartner = b.BillingPartnerName,
+                                                            
+                                                            //billingPartner = b.BillingPartnerName,
                                                             GroupName = g.GroupName
 
                                                         }).ToList();
@@ -1060,7 +1048,7 @@ namespace BOTS_BL.Repository
                                     objsalesmatrixdetails.Product = "Octa XS";
                                 }
 
-                                objsalesmatrixdetails.BillingPartner = itemdetail.billingPartner;
+                                //objsalesmatrixdetails.BillingPartner = itemdetail.billingPartner;
                                 if (itemdetail.PaymentFrequency == "2")
                                 {
                                     objsalesmatrixdetails.Amount = itemdetail.AdvanceAmount;
@@ -1089,32 +1077,19 @@ namespace BOTS_BL.Repository
                                                         join g in context.BOTS_TblGroupMaster
                                                         on d.GroupId equals g.GroupId
                                                         join r in context.BOTS_TblRetailMaster on g.GroupId equals r.GroupId
-                                                        join b in context.tblBillingPartners on r.BillingPartner equals b.BillingPartnerId.ToString()
+                                                       join b in context.tblBillingPartners on r.BillingPartner equals b.BillingPartnerId.ToString()
                                                         where g.CreatedBy == item.LoginId && g.CreatedDate > previousmonthto && g.CreatedDate <= first && g.CustomerStatus != "Draft"
                                                         select new
                                                         {
                                                             GroupId = d.GroupId,
                                                             SMId = g.CreatedBy,
-                                                            LoyaltyFees = d.LoyaltyFees,
-                                                            WAPaidPackFees = d.WAPaidPackFees,
-                                                            SMSPaidPackFees = d.SMSPaidPackFees,
-                                                            EcommIntegration = d.EcommIntegration,
-                                                            AnyOtherFees = d.AnyOtherFees,
-                                                            TotalFeesA = d.TotalFeesA,
-                                                            GST = d.GST,
-                                                            TotalFeesB = d.TotalFeesB,
                                                             PaymentFrequency = d.PaymentFrequency,
-                                                            AnyOtherFeesDesc = d.AnyOtherFeesDesc,
                                                             AmountReceived = d.AmountReceived,
-                                                            TDSDeducted = d.TDSDeducted,
-                                                            PaymentMode = d.PaymentMode,
-                                                            PaymentStatus = d.PaymentStatus,
-                                                            GSTRate = d.GSTRate,
                                                             AdvanceAmount = d.AdvanceAmount,
+                                                            createddate = g.CreatedDate,                                                  
                                                             Boproduct = r.BOProduct,
-                                                            Noofoutlets = r.NoOfEnrolled,
-                                                            createddate = g.CreatedDate,
-                                                            billingPartner = b.BillingPartnerName,
+                                                            Noofoutlets = r.NoOfEnrolled,                                                            
+                                                           // billingPartner = b.BillingPartnerName,
                                                             GroupName = g.GroupName
 
                                                         }).ToList();
@@ -1133,7 +1108,7 @@ namespace BOTS_BL.Repository
                                     objsalesmatrixdetails.Product = "Octa XS";
                                 }
 
-                                objsalesmatrixdetails.BillingPartner = itemdetail.billingPartner;
+                               // objsalesmatrixdetails.BillingPartner = itemdetail.billingPartner;
                                 if (itemdetail.PaymentFrequency == "2")
                                 {
                                     objsalesmatrixdetails.Amount = itemdetail.AdvanceAmount;
