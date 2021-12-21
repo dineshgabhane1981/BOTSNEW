@@ -120,6 +120,7 @@ namespace LeadGeneration.Controllers
         }
         public ActionResult GetSalesMatrix(string searchData)
         {
+            SalesMatrix objsales = new SalesMatrix();
             List<SalesMatrix> lstsalesmatrix = new List<SalesMatrix>();
             JavaScriptSerializer json_serializer = new JavaScriptSerializer();
             json_serializer.MaxJsonLength = int.MaxValue;
@@ -131,8 +132,34 @@ namespace LeadGeneration.Controllers
                 var sm = Convert.ToString(item["SalesManager"]);
                 var year = Convert.ToInt32(item["year"]);
                 lstsalesmatrix = LRR.GetSalesMatrix(radiovalue,month, year, sm);
+              //  lstsalesmatrix.Add(objsales);
             }
             return PartialView("_SalesMatrixListing", lstsalesmatrix);
+        }
+        public ActionResult GetSalesMatrixDetails(string searchData)
+        {
+            SalesMatrix objsalesmatrix = new SalesMatrix();
+            List<SalesMatrix> lstsalesmatrix = new List<SalesMatrix>();
+            SalesMatrixDetail objsalesdetails = new SalesMatrixDetail();
+            List<SalesMatrixDetail> lstsalesmatrixdetails = new List<SalesMatrixDetail>();
+            JavaScriptSerializer json_serializer = new JavaScriptSerializer();
+            json_serializer.MaxJsonLength = int.MaxValue;
+            object[] objData = (object[])json_serializer.DeserializeObject(searchData);
+            foreach (Dictionary<string, object> item in objData)
+            {
+                var radiovalue = Convert.ToString(item["radio"]);
+                var month = Convert.ToInt32(item["month"]);
+                var sm = Convert.ToString(item["SalesManager"]);
+                var year = Convert.ToInt32(item["year"]);
+                var type = Convert.ToString(item["type"]);
+                lstsalesmatrix = LRR.GetSalesMatrix(radiovalue, month, year, sm);
+                foreach(var itemdetail in lstsalesmatrix)
+                {
+                    lstsalesmatrixdetails = itemdetail.lstsalesmatrixdetails;
+                }
+
+            }
+            return PartialView("_SalesMatrixDetails", lstsalesmatrixdetails);
         }
         public ActionResult PartnerReport()
         {

@@ -75,7 +75,7 @@
             if ($("#period").is(":checked")) {
                 $('#ddlMonthList').prop('selectedIndex', 0);
             }
-   
+
 function GetReport(Id) {
         var returnStatus = true;
 
@@ -88,9 +88,8 @@ function GetReport(Id) {
         }
         else {
 
-            //$('#dvType').css('border', '1px solid red');
-            //returnStatus = false;
-    }
+
+         }
     if (Id != "0") {
         if ($("#ddlMonthList option:selected").text() == "Month") {
             $("#ddlMonthList").css('border-color', 'red');
@@ -120,7 +119,7 @@ function GetReport(Id) {
             var month;
             month = $("#ddlMonthList").val();
             var year;
-            year = $("#ddlYearList").val();          
+            year = $("#ddlYearList").val();
             item["radio"] = radiovalue;
             var sm = $("#ddlSalesManager").val();
             if (month == "") {
@@ -135,7 +134,7 @@ function GetReport(Id) {
             else {
                 item["SalesManager"] = sm;
             }
-            
+
             if (year == "") {
                 item["year"] = 0;
             }
@@ -178,6 +177,82 @@ function GetReport(Id) {
             })
             return false;
         }
+    }
+
+    function ShowData(SMId, type) {
+        
+            var SeardhData = [];
+            var radiovalue ="";
+            item = {}
+            if ($("#rbtnMTD").is(":checked")) {
+                radiovalue = "mtd";
+            }
+            else if ($("#rbtnQTD").is(":checked")) {
+                radiovalue = "qtd";
+            }
+            else if ($("#rbtnBTD").is(":checked")) {
+                radiovalue = "btd";
+            }
+            else {
+                radiovalue = "none";
+            }
+            var month;
+            month = $("#ddlMonthList").val();
+            var year;
+            year = $("#ddlYearList").val();
+            item["radio"] = radiovalue;
+            var sm = SMId;
+            if (month == "") {
+                item["month"] = 0;
+            }
+            else {
+                item["month"] = month;
+            }
+            if (sm == "") {
+                item["SalesManager"] = "";
+            }
+            else {
+                item["SalesManager"] = SMId;
+            }
+
+            if (year == "") {
+                item["year"] = 0;
+            }
+            else {
+                item["year"] = year;
+        }
+        if (type == 1) {
+            item["type"] = "current";
+        }
+        else {
+            item["type"] = "previous";
+        }
+            SeardhData.push(item);
+            var data = JSON.stringify(SeardhData);
+            $("#divLoader").show();
+
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("GetSalesMatrixDetails", "LeadReport")',
+                data: '{searchData: ' + JSON.stringify(data) + '}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (response) {
+                    console.log(response.lstsalesmatrixdetails);
+                    $('#dvDetailReport').html(response.lstsalesmatrixdetails);
+                    $('#dvDetailReport').show(1000);                  
+                    $("#divLoader").hide();
+                },
+                failure: function (response) {
+                    $("#divLoader").hide();
+                },
+                error: function (response) {
+                    $('#dvDetailReport').html(response.responseText);
+                    $('#dvDetailReport').show(1000);                  
+                    $("#divLoader").hide();
+                }
+            });
+       
     }
 </script>
 <script src="~/Scripts/jquery-ui-1.12.1.js"></script>
