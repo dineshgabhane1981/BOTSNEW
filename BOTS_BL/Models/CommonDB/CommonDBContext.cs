@@ -14,6 +14,8 @@ namespace BOTS_BL.Models
             : base("name=CommonDBContext")
         {
         }
+
+        public virtual DbSet<Feedback_PointwsAndMessages> Feedback_PointwsAndMessages { get; set; }
         public virtual DbSet<Feedback_Headings> Feedback_Headings { get; set; }
         public virtual DbSet<Feedback_Questions> Feedback_Questions { get; set; }
         public virtual DbSet<Feedback_FeedbackConfig> Feedback_FeedbackConfig { get; set; }

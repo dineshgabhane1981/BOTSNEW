@@ -46,5 +46,7 @@ namespace BOTS_BL.Models
 
         [StringLength(50)]
         public string UpdatedBy { get; set; }
+
+        public bool? IsOtherInfoEnabled { get; set; }
     }
 }

@@ -12,5 +12,6 @@ namespace WebApp.ViewModel
     {
         public Feedback_Headings headings { get; set; }
         public Feedback_Questions questions { get; set; }
+        public Feedback_PointwsAndMessages PointwsAndMessages { get; set; }
     }
 }

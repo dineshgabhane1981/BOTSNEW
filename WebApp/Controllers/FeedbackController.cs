@@ -179,8 +179,8 @@ namespace WebApp.Controllers
             headings.HomeHeading2 = node1.InnerText;
             XmlNode node2 = doc.DocumentElement.SelectSingleNode("/data/HomePage/Heading3");
             headings.HomeHeading3 = node2.InnerText;
-            XmlNode node3 = doc.DocumentElement.SelectSingleNode("/data/HomePage/Representative");
-            headings.HomeHeading3 = node3.InnerText;
+            //XmlNode node3 = doc.DocumentElement.SelectSingleNode("/data/HomePage/Representative");
+            //headings.HomeRepresentative = node3.InnerText;
 
             XmlNode node4 = doc.DocumentElement.SelectSingleNode("/data/FeedbackQuestions/Heading1");
             headings.QuestionsHeading1 = node4.InnerText;
@@ -227,8 +227,10 @@ namespace WebApp.Controllers
         {
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
             FeedbackAuthorViewModel objFeedbackAuthor = new FeedbackAuthorViewModel();
+            Feedback_PointwsAndMessages PointwsAndMessages = new Feedback_PointwsAndMessages();
             objFeedbackAuthor.headings = FMR.GetHeadings(userDetails.GroupId);
             objFeedbackAuthor.questions = FMR.GetQuestions(userDetails.GroupId);
+            objFeedbackAuthor.PointwsAndMessages = PointwsAndMessages;
             return View(objFeedbackAuthor);
         }
     }
