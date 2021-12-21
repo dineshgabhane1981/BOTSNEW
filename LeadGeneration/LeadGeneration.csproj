@@ -340,6 +340,7 @@
     <Content Include="Views\LeadReport\_MeetingMatrixDetails.cshtml" />
     <Content Include="Views\LeadReport\PartnerReport.cshtml" />
     <Content Include="Views\LeadReport\_PartnerReportListing.cshtml" />
+    <Content Include="Views\LeadReport\_SalesMatrixDetails.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

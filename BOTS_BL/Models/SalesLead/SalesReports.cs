@@ -35,30 +35,34 @@ namespace BOTS_BL.Models
     public class SalesMatrix
     {
         public string SMName { get; set; }
+        public string SMId { get; set; }
         public decimal? TotalRevenue { get; set; }
         public int NoOfSales { get; set; }
         public decimal? PreviousMonthTotalRevenue { get; set; }
         public int PreviousMonthNoOfSales { get; set; }
-        public decimal? AvgRevenueOctaXs { get; set; }
-      //  public decimal? OctaXsTotalRevenue { get; set; }
-      //  public int OctaXsNoOfSales { get; set; }
-        public decimal? AvgRevenueOctaPlus { get; set; }
-       // public decimal? OctaPlusTotalRevenue { get; set; }
-       // public int OctaPlusNoOfSales { get; set; }
-        public decimal? AvgRevenuesingleoutlet { get; set; }
-       // public decimal? SingleOutletTotalRevenue { get; set; }
-       // public int SingleOutletNoOfSales { get; set; }
-        public decimal? AvgRevenueMultipleOutlet { get; set; }
-       // public decimal? MultipleOutletTotalRevenue { get; set; }
-       // public int MultipleOutletNoOfSales { get; set; }
+        public decimal? AvgRevenueOctaXs { get; set; }     
+        public decimal? AvgRevenueOctaPlus { get; set; }      
+        public decimal? AvgRevenuesingleoutlet { get; set; }      
+        public decimal? AvgRevenueMultipleOutlet { get; set; }       
         public decimal? LastMonthRevenue { get; set; }
         public decimal? Revenuepercentage { get; set; }
         public decimal? AvgRevenuepermonth { get; set; }
         public decimal? BTDNoofSalesDone { get; set; }
         public int MultipleOutlet { get; set; }
+       // public List<SalesMatrixDetail> lstsalesmatrixdetails { get; set; }
     }
+    public class SalesMatrixDetail
+    {
+        public string SMName { get; set; }
+        public string BusinessNm { get; set; }
+        public string Product { get; set; }
+        public string BillingPartner { get; set; }
+        public decimal? Amount { get; set; }
+        public long? NoofOutlet { get; set; }
+        public DateTime CreatedOn { get; set; }
 
-    public class CallingMatrix
+    }
+        public class CallingMatrix
     {
     }    
 }

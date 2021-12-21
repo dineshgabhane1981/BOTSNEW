@@ -38,9 +38,13 @@
                                 <tr>
                                     <td>@item.SMName</td>
                                     <td>
-                                        @String.Format(new CultureInfo("en-IN", false), "{0:n2}", Convert.ToDouble(@item.TotalRevenue)) / @item.NoOfSales<br/>
-                                        @String.Format(new CultureInfo("en-IN", false), "{0:n2}", Convert.ToDouble(@item.PreviousMonthTotalRevenue)) / @item.PreviousMonthNoOfSales
-                                    </td>
+                                        <a href="#" onclick="ShowData(@item.SMId,1)">
+                                            @String.Format(new CultureInfo("en-IN", false), "{0:n2}", Convert.ToDouble(@item.TotalRevenue)) / @item.NoOfSales
+                                        </a><br />
+                                            <a href="#" onclick="ShowData(@item.SMId,2)">
+                                                @String.Format(new CultureInfo("en-IN", false), "{0:n2}", Convert.ToDouble(@item.PreviousMonthTotalRevenue)) / @item.PreviousMonthNoOfSales
+                                            </a>
+                                     </td>
                                     <td>@String.Format(new CultureInfo("en-IN", false), "{0:n2}", Convert.ToDouble(@item.AvgRevenueOctaXs))</td>
                                     <td>@String.Format(new CultureInfo("en-IN", false), "{0:n2}", Convert.ToDouble(@item.AvgRevenueOctaPlus))</td>
                                     <td>@String.Format(new CultureInfo("en-IN", false), "{0:n2}", Convert.ToDouble(@item.AvgRevenuesingleoutlet))</td>

@@ -52,6 +52,7 @@ namespace LeadGeneration.Controllers
                 objviewmodel.lstCity = CR.GetCity();
                 objData = SLR.GetsalesLeadByLeadId(Convert.ToInt32(leadId));
                 objData.FollowupDate = objData.FollowupDate.Value.Date;
+                objData.Comments = "";
                 objviewmodel.sALES_TblLeads = objData;
             }
             else
