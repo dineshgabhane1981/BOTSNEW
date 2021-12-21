@@ -42,7 +42,7 @@
                                 <thead>
                                     <tr>
                                         <th scope="col">Meeting To Conversion Ratio</th>
-                                        <th scope="col">No Of Brands to outlet Ratio</th>
+                                        <th scope="col">No Of Enrolled outlet to No of sale done Ratio</th>
                                         <th scope="col">Per Sale Avg price</th>
                                         <th scope="col">Octa plus to Octa xs Ratio</th>
                                         <th scope="col">Billing Partner Penetration</th>
@@ -61,7 +61,9 @@
                             <table class="table" id="detailedlisttable">
                                 <thead>
                                     <tr>
+                                        <th scope="col">Sr No.</th>
                                         <th scope="col">LeadId</th>
+                                        <th scope="col">Sales Manager Name</th>
                                         <th scope="col">Business Name</th>
                                         <th scope="col">Product</th>
                                         <th scope="col">Billing Partner</th>
@@ -69,8 +71,21 @@
                                         <th scope="col">Outlet</th>
 
                                     </tr>
-                                </thead>
 
+                                </thead>
+                                @*<tfoot>
+                                    <tr>
+
+                                        <th></th>
+                                        <th></th>
+                                        <th></th>
+                                        <th></th>
+                                        <th></th>
+                                        <th></th>
+                                        <th ></th>
+                                        <th></th>
+                                    </tr>
+                                </tfoot>*@
                             </table>
                         </div>
                     </div>
@@ -83,6 +98,9 @@
     var tablesalesData = [];
     var tablesalesDatalist = [];
     $(document).ready(function () {
+        
+        CheckValidationAndSubmit('0');
+       
         var today = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
         $("#txtfromdt").datepicker({
             dateFormat: "yy-mm-dd",
@@ -92,36 +110,53 @@
         });
         $("#dvsummarytable").hide();
         $("#dvdetailedlist").hide();
+        
+        //CheckValidationAndSubmit('0');
     });
-    function CheckValidationAndSubmit() {
+    function CheckValidationAndSubmit(Id) {
+       
         var returnStatus = true;
-        if ($("#txtfromdt").val() == "") {
-            $('#txtfromdt').css('border-color', 'red');
-            returnStatus = false;
-        }
-        if ($("#txttodt").val() == "") {
-            $('#txttodt').css('border-color', 'red');
-            returnStatus = false;
-        }
+        var fromdt;
+        var todt;
+       
         var smId = "";
-        if (returnStatus == true) {            
-            if ($("#ddlSalesManager option:selected").text() == "Please Select") {
-               
+        if (Id == '0') {           
+            returnStatus == true;
+            var date = new Date(), y = date.getFullYear(), m = date.getMonth();
+             fromdt = new Date(y, m, 1);
+            todt = date;          
+           
+        }
+        else {
+            if ($("#txtfromdt").val() == "") {
+                $('#txtfromdt').css('border-color', 'red');
+                returnStatus = false;
             }
-            else {                
+            if ($("#txttodt").val() == "") {
+                $('#txttodt').css('border-color', 'red');
+                returnStatus = false;
+            }
+        }
+        if (returnStatus == true) {
+            if ($("#ddlSalesManager option:selected").text() == "Please Select") {
+
+            }
+            else {
                 smId = $("#ddlSalesManager").val();
                 if (smId == undefined) {
                     smId = "";
                 }
             }
-            
-            var fromdt = $("#txtfromdt").val();
-            var todt = $("#txttodt").val();
+            if (fromdt == '' && todt == '') {
+                fromdt = $("#txtfromdt").val();
+                todt = $("#txttodt").val();
+            }
+             
             $("#divLoader").show();
            $.ajax({
             type: "POST",
             url: '@Url.Action("GetSalesCount", "Lead")',
-               data: '{Fromdate: ' + JSON.stringify(fromdt) + ', ToDate:' + JSON.stringify(todt) + ', SalesManager:' + JSON.stringify(smId) +'}',
+            data: '{Fromdate: ' + JSON.stringify(fromdt) + ', ToDate:' + JSON.stringify(todt) + ', SalesManager:' + JSON.stringify(smId) +'}',
             contentType: "application/json; charset=utf-8",
             dataType: "json",
                success: function (response) {
@@ -130,8 +165,9 @@
                        $.map(response, function (item) {
                            optionItem = {}
                            optionItem["Noofmeetings"] = item.NoOfMeeting;
+                           optionItem["ratio"] = item.ratio;
                            optionItem["Noofsalesdone"] = item.NoOfSalesDone;
-                           optionItem["Noofbrand"] = item.NoOfBrand;
+                           //optionItem["Noofbrand"] = item.NoOfBrand;
                            optionItem["Noofoutlet"] = item.NoOfOutlet;
                            optionItem["octaplus"] = item.octaplus;
                            optionItem["octaxs"] = item.octaxs;
@@ -141,12 +177,14 @@
 
                            tablesalesData.push(optionItem);
                        });
-                       
+
                        tablesalesDatalist.length = 0;
                        $.map(response[0].lstSalesCountDetail, function (item) {
-                           
+
                            optionItem = {}
+                           /*optionItem["SrNo"] = item.LeadId;*/
                            optionItem["LeadId"] = item.LeadId;
+                           optionItem["SalesManager"] = item.SalesManager;
                            optionItem["BusinessName"] = item.BusinessName;
                            if (item.Product == "1") {
                                optionItem["Product"] = "Octa Plus";
@@ -155,7 +193,13 @@
                                optionItem["Product"] = "Octa XS";
                            }
                            optionItem["BillingPartner"] = item.BillingPartner;
-                           optionItem["Amount"] = item.Amount;
+                           if (item.PaymentFrequency == "2") {
+                               optionItem["Amount"] = item.AdvanceAmount;
+                           }
+                           else {
+                               optionItem["Amount"] = item.AmountReceived;
+                           }
+                          // optionItem["Amount"] = item.Amount;
                            optionItem["OutletName"] = item.OutletName;
 
                            tablesalesDatalist.push(optionItem);
@@ -209,7 +253,7 @@
                 },
                 {
                     "mData": function (data, type) {
-                        return data.Noofbrand + ":" + data.Noofoutlet;
+                        return data.ratio;
                     }
                 },
                 {
@@ -274,14 +318,36 @@
             "pagingType": "simple_numbers",
 
             "columns": [
+                { data: "SrNo" },
                 { data: "LeadId" },
+                { data: "SalesManager" },
                 { data: "BusinessName" },
                 { data: "Product" },
                 { data: "BillingPartner" },
                 { data: "Amount" },
                 { data: "OutletName" },
 
+
             ],
+            "columnDefs": [{
+                "render": function (data, type, full, meta) {
+                    tablesalesDatalist[meta.row].id = meta.row + 1; // adds id to dataset
+                    return meta.row + 1; // adds id to serial no
+                },
+                "targets": 0
+            }],
+            //"footerCallback": function (row, data, start, end, display) {
+            //    //Get data here           
+            //    //Do whatever you want. Example:
+            //    var totalAmount = 0;
+            //    for (var i = 0; i < tablesalesDatalist.length; i++) {
+            //        console.log(tablesalesDatalist[i]["Amount"]);
+            //        totalAmount += parseFloat(tablesalesDatalist[i]["Amount"]);
+            //    }
+            //    console.log(totalAmount);               
+               
+            //}
+
 
         });
         $('#detailedlisttable_filter').hide();
@@ -289,6 +355,7 @@
 
     }
 </script>
+
 <script src="~/Scripts/jquery-ui-1.12.1.js"></script>
 <script src="~/Scripts/jquery-ui-1.12.1.min.js"></script>
 <link href="~/Content/themes/base/jquery-ui.min.css" rel="stylesheet" />

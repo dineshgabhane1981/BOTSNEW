@@ -156,8 +156,8 @@ namespace BOTS_BL.Models.SalesLead
     {
         public int? NoOfMeeting { get; set; }
         public int? NoOfSalesDone { get; set; }
-        public int? NoOfBrand { get; set; }
-        public int? NoOfOutlet { get; set; }
+        public long? NoofEnrolledOutlet { get; set; }
+        public long? ratio { get; set; }       
         public int? octaplus { get; set; }
         public int? octaxs { get; set; }
         public decimal? TotalAmount { get; set; }
@@ -170,10 +170,14 @@ namespace BOTS_BL.Models.SalesLead
     public class salesCountDetails
     {
         public int? LeadId { get; set; }
+        public string SalesManager { get; set; }
         public string BusinessName { get; set; }
+        public string PaymentFrequency { get; set; }
         public string Product { get; set; }
         public string BillingPartner { get; set; }
-        public decimal? Amount { get; set; }
+        //public decimal? Amount { get; set; }
+        public decimal? AdvanceAmount { get; set; }
+        public decimal?  AmountReceived { get; set; }
         public long? OutletName { get; set; }
     }
 }

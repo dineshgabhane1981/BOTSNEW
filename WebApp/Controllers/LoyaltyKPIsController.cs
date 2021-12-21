@@ -28,13 +28,14 @@ namespace WebApp.Controllers
             LoyaltyKPIs objLoyaltyKPIs = new LoyaltyKPIs();
             objLoyaltyKPIs = LKR.GetobjLoyaltyKPIsData(userDetails.GroupId, userDetails.connectionString);
             var Sum = objLoyaltyKPIs.Redemption + objLoyaltyKPIs.Referrals + objLoyaltyKPIs.Campaigns + objLoyaltyKPIs.SMSBlastWA + objLoyaltyKPIs.NewMWPRegistration;
-
-            objLoyaltyKPIs.RedemptionPer = Math.Round(((Convert.ToDecimal(objLoyaltyKPIs.Redemption) / Convert.ToDecimal(Sum)) * 100),2);
-            objLoyaltyKPIs.ReferralsPer = Math.Round(((Convert.ToDecimal(objLoyaltyKPIs.Referrals) / Convert.ToDecimal(Sum)) * 100), 2);
-            objLoyaltyKPIs.CampaignsPer = Math.Round(((Convert.ToDecimal(objLoyaltyKPIs.Campaigns) / Convert.ToDecimal(Sum)) * 100), 2);
-            objLoyaltyKPIs.SMSBlastWAPer = Math.Round(((Convert.ToDecimal(objLoyaltyKPIs.SMSBlastWA) / Convert.ToDecimal(Sum)) * 100), 2);
-            objLoyaltyKPIs.NewMWPRegistrationPer = Math.Round(((Convert.ToDecimal(objLoyaltyKPIs.NewMWPRegistration) / Convert.ToDecimal(Sum)) * 100), 2);
-
+            if (Sum != 0)
+            {
+                objLoyaltyKPIs.RedemptionPer = Math.Round(((Convert.ToDecimal(objLoyaltyKPIs.Redemption) / Convert.ToDecimal(Sum)) * 100), 2);
+                objLoyaltyKPIs.ReferralsPer = Math.Round(((Convert.ToDecimal(objLoyaltyKPIs.Referrals) / Convert.ToDecimal(Sum)) * 100), 2);
+                objLoyaltyKPIs.CampaignsPer = Math.Round(((Convert.ToDecimal(objLoyaltyKPIs.Campaigns) / Convert.ToDecimal(Sum)) * 100), 2);
+                objLoyaltyKPIs.SMSBlastWAPer = Math.Round(((Convert.ToDecimal(objLoyaltyKPIs.SMSBlastWA) / Convert.ToDecimal(Sum)) * 100), 2);
+                objLoyaltyKPIs.NewMWPRegistrationPer = Math.Round(((Convert.ToDecimal(objLoyaltyKPIs.NewMWPRegistration) / Convert.ToDecimal(Sum)) * 100), 2);
+            }
 
             return View(objLoyaltyKPIs);
         }
