@@ -49,7 +49,7 @@ namespace BOTS_BL.Models
         public decimal? AvgRevenuepermonth { get; set; }
         public decimal? BTDNoofSalesDone { get; set; }
         public int MultipleOutlet { get; set; }
-        public List<SalesMatrixDetail> lstsalesmatrixdetails { get; set; }
+       // public List<SalesMatrixDetail> lstsalesmatrixdetails { get; set; }
     }
     public class SalesMatrixDetail
     {

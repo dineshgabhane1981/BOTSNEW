@@ -138,8 +138,8 @@ namespace LeadGeneration.Controllers
         }
         public ActionResult GetSalesMatrixDetails(string searchData)
         {
-            SalesMatrix objsalesmatrix = new SalesMatrix();
-            List<SalesMatrix> lstsalesmatrix = new List<SalesMatrix>();
+            //SalesMatrix objsalesmatrix = new SalesMatrix();
+            //List<SalesMatrix> lstsalesmatrix = new List<SalesMatrix>();
             SalesMatrixDetail objsalesdetails = new SalesMatrixDetail();
             List<SalesMatrixDetail> lstsalesmatrixdetails = new List<SalesMatrixDetail>();
             JavaScriptSerializer json_serializer = new JavaScriptSerializer();
@@ -152,11 +152,8 @@ namespace LeadGeneration.Controllers
                 var sm = Convert.ToString(item["SalesManager"]);
                 var year = Convert.ToInt32(item["year"]);
                 var type = Convert.ToString(item["type"]);
-                lstsalesmatrix = LRR.GetSalesMatrix(radiovalue, month, year, sm);
-                foreach(var itemdetail in lstsalesmatrix)
-                {
-                    lstsalesmatrixdetails = itemdetail.lstsalesmatrixdetails;
-                }
+                lstsalesmatrixdetails = LRR.GetSalesMatrixDetails(radiovalue, month, year, sm,type);
+                
 
             }
             return PartialView("_SalesMatrixDetails", lstsalesmatrixdetails);
