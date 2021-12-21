@@ -14,7 +14,9 @@ namespace BOTS_BL.Models
             : base("name=CommonDBContext")
         {
         }
-        public virtual DbSet<Feedback_FeedbackDetails> Feedback_FeedbackDetails { get; set; }
+        public virtual DbSet<Feedback_Headings> Feedback_Headings { get; set; }
+        public virtual DbSet<Feedback_Questions> Feedback_Questions { get; set; }
+        public virtual DbSet<Feedback_FeedbackConfig> Feedback_FeedbackConfig { get; set; }
         public virtual DbSet<Tbl_SinglePageHigherOnlyonceAndInactive> Tbl_SinglePageHigherOnlyonceAndInactive { get; set; }
         public virtual DbSet<Tbl_SinglePageLowerRedemptionRate> Tbl_SinglePageLowerRedemptionRate { get; set; }
         public virtual DbSet<Tbl_SinglePageLowProfileUpdates> Tbl_SinglePageLowProfileUpdates { get; set; }

@@ -54,6 +54,7 @@ namespace WebApp.Controllers
                 userDetails.GroupId = groupId;
                 userDetails.connectionString = CR.GetCustomerConnString(groupId);
                 userDetails.CustomerName= CR.GetCustomerName(groupId);
+                userDetails.IsFeedback = CR.GetIsFeedback(groupId);
 
                 Session["UserSession"] = userDetails;
             }

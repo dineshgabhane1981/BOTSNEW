@@ -252,6 +252,21 @@ namespace BOTS_BL.Repository
             }
             return CustomerName;
         }
+        public bool GetIsFeedback(string GroupId)
+        {
+            bool IsFeedback = false;
+            using (var context = new CommonDBContext())
+            {
+                var TgroupId = Convert.ToInt32(GroupId);
+               var groupDetail = context.tblGroupDetails.Where(x => x.GroupId == TgroupId).Select(y => y.IsFeedback).FirstOrDefault();
+                if(groupDetail.HasValue)
+                {
+                    if (groupDetail.Value)
+                        IsFeedback = true;
+                }
+            }
+            return IsFeedback;
+        }
 
         public tblGroupDetail GetGroupDetails(int GroupId)
         {

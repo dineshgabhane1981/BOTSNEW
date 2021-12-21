@@ -230,6 +230,8 @@
     <Compile Include="Models\DBContext.cs" />
     <Compile Include="Models\ExecutiveSummary.cs" />
     <Compile Include="Models\FeedbackModule\Feedback_FeedbackDetails.cs" />
+    <Compile Include="Models\FeedbackModule\Feedback_Headings.cs" />
+    <Compile Include="Models\FeedbackModule\Feedback_Questions.cs" />
     <Compile Include="Models\FeedBack\FeedBackMaster.cs" />
     <Compile Include="Models\FeedBack\FeedBackMobileMaster.cs" />
     <Compile Include="Models\FeedBack\FeedBackQuestionMaster.cs" />

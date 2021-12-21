@@ -1,0 +1,24 @@
+﻿@model  WebApp.ViewModel.FeedbackAuthorViewModel
+@{
+    ViewBag.Title = "CreateFeedback";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="app-main__inner">
+    <div class="mb-3 pr-3 pt-3 pl-3 card" style="padding-bottom:20px;">
+        <div class="row">
+            <div class="col-md-6 col-xl-3" style="margin-left:20px; margin-top:20px;">
+                Home Screen
+            </div>
+        </div>
+        <div class="row">
+            @Html.HiddenFor(model => model.headings.GroupId)
+            @Html.HiddenFor(model => model.questions.GroupId)
+
+            <div class="col-md-6 col-xl-3" style="margin-left:20px; margin-top:20px;">
+                Heading 1 - @Html.TextBoxFor(model => model.headings.HomeHeading1, new { @class = "input200" })
+            </div>
+        </div>
+    </div>
+</div>
+
