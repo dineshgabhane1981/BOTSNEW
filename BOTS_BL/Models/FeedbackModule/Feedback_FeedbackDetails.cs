@@ -6,7 +6,7 @@ namespace BOTS_BL.Models
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Data.Entity.Spatial;
 
-    public partial class Feedback_FeedbackDetails
+    public partial class Feedback_FeedbackConfig
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.None)]

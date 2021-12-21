@@ -53,6 +53,8 @@ namespace BOTS_BL.Models
 
         [NotMapped]
         public string connectionString { get; set; }
+        [NotMapped]
+        public bool IsFeedback { get; set; }
     }
 
     public class DashboardCustomerLogin

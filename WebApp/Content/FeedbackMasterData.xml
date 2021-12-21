@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<data>
+  <HomePage>
+    <Heading1>Welcome to BrandName</Heading1>
+    <Heading2>Your feedback is critical!!!</Heading2>
+    <Heading3>Get rewarded with 50 Loyalty Points on Feedback Completion!!!</Heading3>
+    <Representative>Your Sales Representative</Representative>
+  </HomePage>
+  <FeedbackQuestions>
+    <Heading1>Welcome Esteemed Patron</Heading1>
+    <Heading2>Please rate your today’s experience at our store!!!</Heading2>
+    <Question1>How did you find our Variety?</Question1>
+    <Question2>What do you feel about our Service?</Question2>
+    <Question3>How was your overall experience at our Store?</Question3>
+    <Question4></Question4>
+  </FeedbackQuestions>
+  <OtherInformation>
+    <Heading1>Thank you for your valuable feedback!</Heading1>
+    <Heading2>Enter your details below to unlock 50 Loyalty points!!</Heading2>
+    <Question1>Your Gender?</Question1>
+    <Question2>Your Date of Birth?</Question2>
+    <Question3>Your Anniversary Date?</Question3>
+    <Question4>How did you know about us?</Question4>
+  </OtherInformation>
+</data>

@@ -53,7 +53,7 @@ namespace BOTS_BL.Repository
                 {
 
                     lstData1 = (from c in context.tblGroupDetails
-                               join cc in context.Feedback_FeedbackDetails on c.GroupId equals cc.GroupId
+                               join cc in context.Feedback_FeedbackConfig on c.GroupId equals cc.GroupId
                                where cc.Status == "Active" || cc.Status == "Renew"
                                select new FeedbackActiveGroup
                                {
@@ -92,7 +92,7 @@ namespace BOTS_BL.Repository
                 using (var context = new CommonDBContext())
                 {                    
                     lstData1 = (from c in context.tblGroupDetails
-                               join cc in context.Feedback_FeedbackDetails on c.GroupId equals cc.GroupId
+                               join cc in context.Feedback_FeedbackConfig on c.GroupId equals cc.GroupId
                                //where cc.Status == "Stop"
                                select new FeedbackDeActivatedGroup
                                {
@@ -127,29 +127,41 @@ namespace BOTS_BL.Repository
             return lstData;
         }
 
-        public Feedback_FeedbackDetails GetFeedbackByGroupId(string GroupId)
+        public Feedback_FeedbackConfig GetFeedbackByGroupId(string GroupId)
         {
-            Feedback_FeedbackDetails objData = new Feedback_FeedbackDetails();
+            Feedback_FeedbackConfig objData = new Feedback_FeedbackConfig();
             using (var context = new CommonDBContext())
             {
                 int gId = Convert.ToInt32(GroupId);
-                objData = context.Feedback_FeedbackDetails.Where(x => x.GroupId == gId).FirstOrDefault();               
+                objData = context.Feedback_FeedbackConfig.Where(x => x.GroupId == gId).FirstOrDefault();               
             }
             return objData;
 
         }
-        public bool EnableFeedbackModule(Feedback_FeedbackDetails objFeedback)
+        public bool EnableFeedbackModule(Feedback_FeedbackConfig objFeedback, Feedback_Headings headings, Feedback_Questions questions)
         {
             bool status = false;
             try
             {
                 using (var context = new CommonDBContext())
                 {
-                    context.Feedback_FeedbackDetails.AddOrUpdate(objFeedback);
+                    context.Feedback_FeedbackConfig.AddOrUpdate(objFeedback);
                     context.SaveChanges();
                     var groupDetails = context.tblGroupDetails.Where(x => x.GroupId == objFeedback.GroupId).FirstOrDefault();
                     groupDetails.IsFeedback = true;
                     context.SaveChanges();
+                    if(!string.IsNullOrEmpty(headings.GroupId))
+                    {
+                        context.Feedback_Headings.AddOrUpdate(headings);
+                        context.SaveChanges();
+                    }
+
+                    if (!string.IsNullOrEmpty(questions.GroupId))
+                    {
+                        context.Feedback_Questions.AddOrUpdate(questions);
+                        context.SaveChanges();
+                    }
+
                     status = true;
                 }
             }
@@ -161,14 +173,14 @@ namespace BOTS_BL.Repository
             return status;
         }
 
-        public bool StopFeedbackModule(Feedback_FeedbackDetails objFeedback)
+        public bool StopFeedbackModule(Feedback_FeedbackConfig objFeedback)
         {
             bool status = false;
             try
             {
                 using (var context = new CommonDBContext())
                 {
-                    context.Feedback_FeedbackDetails.AddOrUpdate(objFeedback);
+                    context.Feedback_FeedbackConfig.AddOrUpdate(objFeedback);
                     context.SaveChanges();
                     status = true;
                 }
@@ -180,5 +192,41 @@ namespace BOTS_BL.Repository
 
             return status;
         }
+   
+        public Feedback_Headings GetHeadings(string GroupId)
+        {
+            Feedback_Headings headings = new Feedback_Headings();
+            try
+            {
+                using (var context = new CommonDBContext())
+                {
+                    headings = context.Feedback_Headings.Where(x => x.GroupId == GroupId).FirstOrDefault();
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetHeadings");
+            }
+            return headings;
+        }
+
+        public Feedback_Questions GetQuestions(string GroupId)
+        {
+            Feedback_Questions questions = new Feedback_Questions();
+            try
+            {
+                using (var context = new CommonDBContext())
+                {
+                    questions = context.Feedback_Questions.Where(x => x.GroupId == GroupId).FirstOrDefault();
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetHeadings");
+            }
+            return questions;
+        }
+
+
     }
 }
