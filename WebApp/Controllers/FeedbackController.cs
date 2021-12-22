@@ -13,6 +13,7 @@ using System.Threading.Tasks;
 using System.Net.Http;
 using Newtonsoft.Json;
 using System.Xml;
+using BOTS_BL.Models.FeedbackModule;
 
 namespace WebApp.Controllers
 {
@@ -232,6 +233,22 @@ namespace WebApp.Controllers
             objFeedbackAuthor.questions = FMR.GetQuestions(userDetails.GroupId);
             objFeedbackAuthor.PointwsAndMessages = PointwsAndMessages;
             return View(objFeedbackAuthor);
+        }
+
+        public ActionResult GetFeedBack(string Id)
+        {
+            string groupid = string.Empty;
+            if (!string.IsNullOrEmpty(Id))
+            {
+                groupid = Id.Substring(0, 4);
+                ViewBag.GroupId = groupid;
+                ViewBag.OutletId = Id;
+                ViewBag.lsthowtoknow = FMR.GetHowToKnowAboutList();
+            }
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            List<Feedback_GetFeedBack> lstfbget = new List<Feedback_GetFeedBack>();
+            lstfbget = FMR.GetFeedback(groupid);
+            return View(lstfbget);
         }
     }
 }

@@ -5,6 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity;
 using System.Linq;
 using BOTS_BL.Models.SalesLead;
+using BOTS_BL.Models.FeedbackModule;
 
 namespace BOTS_BL.Models
 {
@@ -14,7 +15,7 @@ namespace BOTS_BL.Models
             : base("name=CommonDBContext")
         {
         }
-
+        public virtual DbSet<Feedback_KnowAboutYou> Feedback_KnowAboutYou { get; set; }
         public virtual DbSet<Feedback_PointwsAndMessages> Feedback_PointwsAndMessages { get; set; }
         public virtual DbSet<Feedback_Headings> Feedback_Headings { get; set; }
         public virtual DbSet<Feedback_Questions> Feedback_Questions { get; set; }
