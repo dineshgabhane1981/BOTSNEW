@@ -25,7 +25,7 @@ namespace BOTS_BL.Repository
             List<SelectListItem> lstRetailCategory = new List<SelectListItem>();
             using (var context = new CommonDBContext())
             {
-                var RetailCategory = context.tblCategories.ToList();
+                var RetailCategory = context.tblCategories.Where(x => x.IsActive == true).ToList();
 
                 foreach (var item in RetailCategory)
                 {
@@ -43,7 +43,7 @@ namespace BOTS_BL.Repository
             List<SelectListItem> lstCity = new List<SelectListItem>();
             using (var context = new CommonDBContext())
             {
-                var RetailCategory = context.tblCities.OrderBy(x=>x.CityName).ToList();
+                var RetailCategory = context.tblCities.Where(x => x.IsActive == true).OrderBy(x=>x.CityName).ToList();
 
                 foreach (var item in RetailCategory)
                 {
@@ -81,7 +81,7 @@ namespace BOTS_BL.Repository
             List<SelectListItem> lstSourcedBy = new List<SelectListItem>();
             using (var context = new CommonDBContext())
             {
-                var RetailCategory = context.tblSourcedBies.ToList();
+                var RetailCategory = context.tblSourcedBies.Where(x => x.IsActive == true).ToList();
 
                 foreach (var item in RetailCategory)
                 {
@@ -99,7 +99,7 @@ namespace BOTS_BL.Repository
             List<SelectListItem> lstRMAssigned = new List<SelectListItem>();
             using (var context = new CommonDBContext())
             {
-                var RetailCategory = context.tblRMAssigneds.ToList();
+                var RetailCategory = context.tblRMAssigneds.Where(x=>x.IsActive==true).ToList();
 
                 foreach (var item in RetailCategory)
                 {
@@ -117,7 +117,7 @@ namespace BOTS_BL.Repository
             List<SelectListItem> lstBillingPartner = new List<SelectListItem>();
             using (var context = new CommonDBContext())
             {
-                var RetailCategory = context.tblBillingPartners.ToList();
+                var RetailCategory = context.tblBillingPartners.Where(x=>x.IsActive==true).ToList();
 
                 foreach (var item in RetailCategory)
                 {
@@ -135,7 +135,7 @@ namespace BOTS_BL.Repository
             List<SelectListItem> lstBillingProduct = new List<SelectListItem>();
             using (var context = new CommonDBContext())
             {
-                var BillingProduct = context.BOTS_TblBillingPartnerProduct.Where(x=>x.BillingPartnerProductId== BillingPartnerId).ToList();
+                var BillingProduct = context.BOTS_TblBillingPartnerProduct.Where(x=>x.BillingPartnerProductId== BillingPartnerId && x.IsActive ==true).ToList();
 
                 foreach (var item in BillingProduct)
                 {
@@ -173,7 +173,7 @@ namespace BOTS_BL.Repository
             List<SelectListItem> lstAllRefferedCategory = new List<SelectListItem>();
             using (var context = new CommonDBContext())
             {
-                var SourceTypes = context.tblSourceTypes.ToList();
+                var SourceTypes = context.tblSourceTypes.Where(x => x.IsActive == true).ToList();
 
                 foreach (var item in SourceTypes)
                 {
