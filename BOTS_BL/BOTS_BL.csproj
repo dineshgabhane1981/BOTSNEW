@@ -229,6 +229,8 @@
     <Compile Include="Models\Dashboard\DashboardMemberSegment.cs" />
     <Compile Include="Models\DBContext.cs" />
     <Compile Include="Models\ExecutiveSummary.cs" />
+    <Compile Include="Models\FeedbackModule\Feedback_Content.cs" />
+    <Compile Include="Models\FeedbackModule\Feedback_ContentMaster.cs" />
     <Compile Include="Models\FeedbackModule\Feedback_FeedbackDetails.cs" />
     <Compile Include="Models\FeedbackModule\Feedback_GetFeedBack.cs" />
     <Compile Include="Models\FeedbackModule\Feedback_Headings.cs" />

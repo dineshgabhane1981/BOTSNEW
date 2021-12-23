@@ -140,7 +140,18 @@ namespace BOTS_BL.Repository
             return objData;
 
         }
-        public bool EnableFeedbackModule(Feedback_FeedbackConfig objFeedback, Feedback_Headings headings, Feedback_Questions questions)
+
+        public List<Feedback_ContentMaster> GetFeedbackMasterData()
+        {
+            List<Feedback_ContentMaster> lstData = new List<Feedback_ContentMaster>();
+            using (var context = new CommonDBContext())
+            {
+                lstData = context.Feedback_ContentMaster.ToList();
+            }
+
+            return lstData;
+        }
+        public bool EnableFeedbackModule(Feedback_FeedbackConfig objFeedback, List<Feedback_Content> contentData)
         {
             bool status = false;
             try
@@ -152,18 +163,14 @@ namespace BOTS_BL.Repository
                     var groupDetails = context.tblGroupDetails.Where(x => x.GroupId == objFeedback.GroupId).FirstOrDefault();
                     groupDetails.IsFeedback = true;
                     context.SaveChanges();
-                    if (!string.IsNullOrEmpty(headings.GroupId))
+                    if (contentData != null)
                     {
-                        context.Feedback_Headings.AddOrUpdate(headings);
-                        context.SaveChanges();
+                        foreach(var item in contentData)
+                        {
+                            context.Feedback_Content.AddOrUpdate(item);
+                            context.SaveChanges();
+                        }
                     }
-
-                    if (!string.IsNullOrEmpty(questions.GroupId))
-                    {
-                        context.Feedback_Questions.AddOrUpdate(questions);
-                        context.SaveChanges();
-                    }
-
                     status = true;
                 }
             }
@@ -193,6 +200,23 @@ namespace BOTS_BL.Repository
             }
 
             return status;
+        }
+
+        public List<Feedback_Content> GetFeedback_Contents(string GroupId)
+        {
+            List<Feedback_Content> lstData = new List<Feedback_Content>();
+            try
+            {
+                using (var context = new CommonDBContext())
+                {
+                    lstData = context.Feedback_Content.Where(x => x.GroupId == GroupId).ToList();
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetFeedback_Contents");
+            }
+            return lstData;
         }
 
         public Feedback_Headings GetHeadings(string GroupId)
@@ -240,36 +264,36 @@ namespace BOTS_BL.Repository
                 using (var context = new CommonDBContext())
                 {
                     objfeedback = (from fh in context.Feedback_Headings
-                                    join fq in context.Feedback_Questions
-                                    on fh.GroupId equals fq.GroupId
-                                    where fh.GroupId == GroupId
-                                    select new Feedback_GetFeedBack
-                                    {
-                                        GroupId = fh.GroupId,
-                                        ImagePath ="",
-                                        HomeHeading1 = fh.HomeHeading1,
-                                        HomeHeading2 = fh.HomeHeading2,
-                                        HomeHeading3 = fh.HomeHeading3,
-                                        HomeRepresentative = fh.HomeRepresentative,
-                                        QuestionsHeading1 = fh.QuestionsHeading1,
-                                        QuestionsHeading2 = fh.QuestionsHeading2,
-                                        OtherInfoHeading1 = fh.OtherInfoHeading1,
-                                        OtherInfoHeading2 = fh.OtherInfoHeading2,
-                                        FeedbackQuestion1 = fq.FeedbackQuestion1,
-                                        FeedbackQuestion2 = fq.FeedbackQuestion2,
-                                        FeedbackQuestion3 = fq.FeedbackQuestion3,
-                                        FeedbackQuestion4 = fq.FeedbackQuestion4,
-                                        OtherInfoQuestion1 = fq.OtherInfoQuestion1,
-                                        OtherInfoQuestion2 = fq.OtherInfoQuestion2,
-                                        OtherInfoQuestion3 = fq.OtherInfoQuestion3,
-                                        OtherInfoQuestion4 = fq.OtherInfoQuestion4,
-                                        IsOtherInfoEnabled = (bool)fq.IsOtherInfoEnabled
-                                    }).FirstOrDefault();
+                                   join fq in context.Feedback_Questions
+                                   on fh.GroupId equals fq.GroupId
+                                   where fh.GroupId == GroupId
+                                   select new Feedback_GetFeedBack
+                                   {
+                                       GroupId = fh.GroupId,
+                                       ImagePath = "",
+                                       HomeHeading1 = fh.HomeHeading1,
+                                       HomeHeading2 = fh.HomeHeading2,
+                                       HomeHeading3 = fh.HomeHeading3,
+                                       HomeRepresentative = fh.HomeRepresentative,
+                                       QuestionsHeading1 = fh.QuestionsHeading1,
+                                       QuestionsHeading2 = fh.QuestionsHeading2,
+                                       OtherInfoHeading1 = fh.OtherInfoHeading1,
+                                       OtherInfoHeading2 = fh.OtherInfoHeading2,
+                                       FeedbackQuestion1 = fq.FeedbackQuestion1,
+                                       FeedbackQuestion2 = fq.FeedbackQuestion2,
+                                       FeedbackQuestion3 = fq.FeedbackQuestion3,
+                                       FeedbackQuestion4 = fq.FeedbackQuestion4,
+                                       OtherInfoQuestion1 = fq.OtherInfoQuestion1,
+                                       OtherInfoQuestion2 = fq.OtherInfoQuestion2,
+                                       OtherInfoQuestion3 = fq.OtherInfoQuestion3,
+                                       OtherInfoQuestion4 = fq.OtherInfoQuestion4,
+                                       IsOtherInfoEnabled = (bool)fq.IsOtherInfoEnabled
+                                   }).FirstOrDefault();
 
                     CustomerDetail objCustomerDetail = new CustomerDetail();
                     string connStr = CR.GetCustomerConnString(GroupId);
                     using (var contextdb = new BOTSDBContext(connStr))
-                    {                       
+                    {
                         objbrandDetail = contextdb.BrandDetails.Where(x => x.GroupId == GroupId).FirstOrDefault();
                     }
                     objfeedback.ImagePath = objbrandDetail.BrandLogoUrl;
@@ -286,7 +310,7 @@ namespace BOTS_BL.Repository
         public List<SelectListItem> GetHowToKnowAboutList()
         {
             CustomerDetail objcustdetails = new CustomerDetail();
-           // string connStr = objCustRepo.GetCustomerConnString(GroupId);
+            // string connStr = objCustRepo.GetCustomerConnString(GroupId);
             List<SelectListItem> lstlocation = new List<SelectListItem>();
             using (var context = new CommonDBContext())
             {

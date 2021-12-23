@@ -4,6 +4,8 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+@using (Html.BeginForm("UpdateFeedback", "Feedback", FormMethod.Post, new { id = "frmupdatefeedback", enctype = "multipart/form-data" }))
+{
 <div class="app-main__inner">
     <div class="mb-3 pr-3 pt-3 pl-3 card" style="padding-bottom:20px;">
         <div class="container-fluid pl-3 pr-3 pb-3" style="border:2px solid grey; border-radius:10px;">
@@ -12,9 +14,24 @@
                     <h3> Feedback Home Page </h3>
                 </div>
             </div>
+            @if(Model.lstFeedbackData!=null)
+            {
+            foreach(var item in Model.lstFeedbackData)
+            {
+
+            <div class="row">
+                <div class="col-md-6 col-xl-3" style="margin-left:20px; margin-top:20px;">
+
+                </div>
+            </div>
+
+            }
+            }
             <div class="row">
                 @Html.HiddenFor(model => model.headings.GroupId)
                 @Html.HiddenFor(model => model.questions.GroupId)
+                @Html.HiddenFor(model => model.lstOutletDetail.Count, new { @id = "hdnOutletCount" })
+                @Html.HiddenFor(model => model.outletJson, new { @id = "hdnOutletJson" })
 
                 <div class="col-md-6 col-xl-3" style="margin-left:20px; margin-top:20px;">
                     Heading 1 @Html.TextBoxFor(model => model.headings.HomeHeading1, new { @class = "input200" })
@@ -117,26 +134,113 @@
             </div>
         </div>
 
-
         <div class="container-fluid   pl-3 pr-3 pb-3 mt-2" style="border:2px solid grey; border-radius:10px;">
             <div class="row">
                 <div class="col-md-6 col-xl-6" style="margin-left:20px; margin-top:20px;">
                     <h3> Bonus Feedback Points </h3>
                 </div>
-                <div class="row">
-                    <div class="col-md-12 col-xl-12" style="margin-left:20px; margin-top:20px;">
+                <div class="row col-md-12 col-xl-12">
+                    <div class="col-md-12 col-xl-12">
                         @Html.CheckBoxFor(model => model.PointwsAndMessages.IsFeedbackPoints, new { @id = "chkIsFeedbackPoints" }) Do you want to give any bonus points for submitting the feedback?
                     </div>
                 </div>
                 <div class="row" id="dvAwardPoints" style="display:none;">
                     <div class="col-md-6 col-xl-6" style="margin-left:20px; margin-top:20px;">
-                        how many points? @Html.TextBoxFor(model => model.PointwsAndMessages.AwardFeedbackPoints, new { @class = "input100", @id = "txtAwardFeedbackPoints" })
+                        How many points? @Html.TextBoxFor(model => model.PointwsAndMessages.AwardFeedbackPoints, new { @class = "input100", @id = "txtAwardFeedbackPoints" })
                     </div>
-                </div>                
+                </div>
+            </div>
+        </div>
+
+        <div class="container-fluid   pl-3 pr-3 pb-3 mt-2" style="border:2px solid grey; border-radius:10px;">
+            <div class="row">
+                <div class="col-md-6 col-xl-6" style="margin-left:20px; margin-top:20px;">
+                    <h3> Message Scripts </h3>
+                </div>
+                <div class="row col-md-12 col-xl-12">
+                    <div class="col-md-12 col-xl-12" style="margin-left:20px; margin-top:20px;">
+                        Thank You Message to Customer (will be sent through your whatsapp account) @Html.TextAreaFor(model => model.PointwsAndMessages.MsgToCustomer, new { @class = "input100", rows = "3", @style = "width:100% !important;" })
+                    </div>
+                </div>
+
+                <div class="row col-md-12 col-xl-12">
+                    <div class="col-md-12 col-xl-12" style="margin-left:20px; margin-top:20px;">
+                        Negative Feedback real-time to some numbers (will be sent from blue ocktopus sender id) @Html.TextAreaFor(model => model.PointwsAndMessages.MsgNegativeFeedback, new { @class = "input100", rows = "3", @style = "width:100% !important;" })
+                    </div>
+                </div>
+                @if (Model.lstOutletDetail != null)
+                    {
+                        int count = 0;
+                <div class="row col-md-12 col-xl-12">
+                    <div class="col-md-12 col-xl-12" style="margin-left:20px; margin-top:20px;">
+                        <table border="1" cellpadding="10" cellspacing="10">
+                            <tr>
+                                <td style="font-weight:bold;">Outlet Name</td>
+                                <td style="font-weight:bold;">Mobile Numbers (separate with a comma (,))</td>
+                            </tr>
+
+                            @foreach (var item in Model.lstOutletDetail)
+                                    {
+                                        var id = "txtOutlet" + item.Value;
+                            <tr>
+                                <td>@item.Text</td>
+                                <td><input type="text" id="@id" class="input200" /></td>
+                            </tr>
+                                    }
+                        </table>
+                    </div>
+                </div>
+                    }
+                <div class="row col-md-12 col-xl-12">
+                    <div class="col-md-12 col-xl-12" style="margin-left:20px; margin-top:20px;">
+                        <b>All members who have transacted but not given feedback, can be approached the next day through an SMS / message <br /></b>
+                        <input type="checkbox" id="chkMissedMessage" /> Do you want to send a message
+                    </div>
+                </div>
+
+                <div class="row col-md-12 col-xl-12" id="dvMsgMissedFeedback" style="display:none;">
+                    <div class="col-md-12 col-xl-12" style="margin-left:20px; margin-top:20px;">
+                        @Html.TextAreaFor(model => model.PointwsAndMessages.MsgMissedFeedback, new { @class = "input100", @id = "txtMsgMissedFeedback", rows = "3", @style = "width:100% !important;" })
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container-fluid pt-3 pl-3 pr-3 pb-3">
+            <button type="submit" id="btnFeedbackSave" class="btn btn-primary pull-right" onclick="return CheckValidationAndSubmit();" style="margin-right:10px;">Submit</button>
+        </div>
+        <div class="container-fluid   pl-3 pr-3 pb-3 mt-2" style="border:2px solid grey; border-radius:10px;">
+            <div class="row">
+                <div class="col-md-6 col-xl-6" style="margin-left:20px; margin-top:20px;">
+                    <h3> Feedback Links </h3>
+                </div>
+                @if (Model.lstOutletDetail != null)
+                    {
+                <div class="row col-md-12 col-xl-12">
+                    <div class="col-md-12 col-xl-12" style="margin-left:20px; margin-top:20px;">
+                        <table border="1" cellpadding="10" cellspacing="10">
+                            <tr>
+                                <td style="font-weight:bold;">Outlet Name</td>
+                                <td style="font-weight:bold;">Feedback Links to be used at Respective Outlets</td>
+                            </tr>
+
+                            @foreach (var item in Model.lstOutletDetail)
+                                    {
+                                        var id = "http://localhost:57265/Feedback/GetFeedBack/Id?" + item.Value;
+                            <tr>
+                                <td>@item.Text</td>
+                                <td><a href="@id" target="_blank">@id</a></td>
+                            </tr>
+                                    }
+                        </table>
+                    </div>
+                </div>
+                    }
             </div>
         </div>
     </div>
 </div>
+}
+
 
 <script>
     $(document).ready(function () {
@@ -161,5 +265,40 @@
 
             }
         });
+
+        $('#chkMissedMessage').click(function () {
+            if ($(this).is(':checked')) {
+                $("#dvMsgMissedFeedback").show();
+            }
+            else {
+                $("#txtMsgMissedFeedback").val("");
+                $("#dvMsgMissedFeedback").hide();
+
+            }
+        });
     });
+
+    function CheckValidationAndSubmit() {
+        var count = $("#hdnOutletCount").val();
+        //hdnOutletJson
+        var OutletMobileNos = [];
+        $('[id^=txtOutlet]').each(function (i, item) {
+            alert(item);
+            var grade = $(item).val();
+            alert(grade);
+        });
+        for (var i = 0; i < count; i++) {
+            item = {}
+            item["GroupId"] = $("#hdnGroupId").val();
+            item["Fees"] = $("#txtFees").val();
+            item["StartDate"] = $("#txtStartDate").val();
+            item["PaymentMode"] = $("#ddlPaymentMode").val();
+
+            SeardhData.push(item);
+            var data = JSON.stringify(SeardhData);
+        }
+        alert(111);
+        return true;
+    }
+
 </script>

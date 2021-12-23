@@ -13,5 +13,8 @@ namespace WebApp.ViewModel
         public Feedback_Headings headings { get; set; }
         public Feedback_Questions questions { get; set; }
         public Feedback_PointwsAndMessages PointwsAndMessages { get; set; }
+        public List<Feedback_Content> lstFeedbackData { get; set; }
+        public List<SelectListItem> lstOutletDetail { get; set; }
+        public string outletJson { get; set; }
     }
 }
