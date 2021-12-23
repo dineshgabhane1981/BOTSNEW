@@ -36,5 +36,7 @@ namespace BOTS_BL.Models
 
         [StringLength(50)]
         public string UpdatedBy { get; set; }
+        [NotMapped]
+        public string ImagePath { get; set; }
     }
 }

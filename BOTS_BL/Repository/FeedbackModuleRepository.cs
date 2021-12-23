@@ -253,51 +253,44 @@ namespace BOTS_BL.Repository
             return questions;
         }
 
-        public List<Feedback_GetFeedBack> GetFeedback(string GroupId)
+        public List<Feedback_Content> GetFeedback(string GroupId)
         {
-            List<Feedback_GetFeedBack> lstfbget = new List<Feedback_GetFeedBack>();
-            Feedback_GetFeedBack objfeedback = new Feedback_GetFeedBack();
+            List<Feedback_Content> lstfbget = new List<Feedback_Content>();
+            Feedback_Content objfeedback = new Feedback_Content();
             BrandDetail objbrandDetail = new BrandDetail();
 
             try
             {
+                CustomerDetail objCustomerDetail = new CustomerDetail();
+                string connStr = CR.GetCustomerConnString(GroupId);
+                using (var contextdb = new BOTSDBContext(connStr))
+                {
+                    objbrandDetail = contextdb.BrandDetails.Where(x => x.GroupId == GroupId).FirstOrDefault();
+                }
+                string imageurl = objbrandDetail.BrandLogoUrl;
                 using (var context = new CommonDBContext())
                 {
-                    objfeedback = (from fh in context.Feedback_Headings
-                                   join fq in context.Feedback_Questions
-                                   on fh.GroupId equals fq.GroupId
-                                   where fh.GroupId == GroupId
-                                   select new Feedback_GetFeedBack
-                                   {
-                                       GroupId = fh.GroupId,
-                                       ImagePath = "",
-                                       HomeHeading1 = fh.HomeHeading1,
-                                       HomeHeading2 = fh.HomeHeading2,
-                                       HomeHeading3 = fh.HomeHeading3,
-                                       HomeRepresentative = fh.HomeRepresentative,
-                                       QuestionsHeading1 = fh.QuestionsHeading1,
-                                       QuestionsHeading2 = fh.QuestionsHeading2,
-                                       OtherInfoHeading1 = fh.OtherInfoHeading1,
-                                       OtherInfoHeading2 = fh.OtherInfoHeading2,
-                                       FeedbackQuestion1 = fq.FeedbackQuestion1,
-                                       FeedbackQuestion2 = fq.FeedbackQuestion2,
-                                       FeedbackQuestion3 = fq.FeedbackQuestion3,
-                                       FeedbackQuestion4 = fq.FeedbackQuestion4,
-                                       OtherInfoQuestion1 = fq.OtherInfoQuestion1,
-                                       OtherInfoQuestion2 = fq.OtherInfoQuestion2,
-                                       OtherInfoQuestion3 = fq.OtherInfoQuestion3,
-                                       OtherInfoQuestion4 = fq.OtherInfoQuestion4,
-                                       IsOtherInfoEnabled = (bool)fq.IsOtherInfoEnabled
-                                   }).FirstOrDefault();
+                    //lstfbget = (from fh in context.Feedback_Content
+                    //               where fh.GroupId == GroupId && fh.IsDisplay == true
+                    //               select new Feedback_Content
+                    //               {
+                    //                   Id = fh.Id,
+                    //                   Type =fh.Type,
+                    //                   TypeId =fh.TypeId,
+                    //                   GroupId = fh.GroupId,
+                    //                   ImagePath = "",
+                    //                   Text = fh.Text,
+                    //                   IsMandatory = fh.IsMandatory,
+                    //                   Section = fh.Section,
+                    //                   IsDisplay=fh.IsDisplay,
+                    //                   AddedDate = fh.AddedDate,
+                    //                   AddedBy = fh.AddedBy,
+                    //                   UpdatedDate = fh.UpdatedDate,
+                    //                   UpdatedBy =fh.UpdatedBy
+                    //               }).ToList();                   
+                    lstfbget = context.Feedback_Content.Where(x => x.GroupId == GroupId && x.IsDisplay == true).ToList();
 
-                    CustomerDetail objCustomerDetail = new CustomerDetail();
-                    string connStr = CR.GetCustomerConnString(GroupId);
-                    using (var contextdb = new BOTSDBContext(connStr))
-                    {
-                        objbrandDetail = contextdb.BrandDetails.Where(x => x.GroupId == GroupId).FirstOrDefault();
-                    }
-                    objfeedback.ImagePath = objbrandDetail.BrandLogoUrl;
-                    lstfbget.Add(objfeedback);
+                    lstfbget[0].ImagePath = imageurl;
                 }
             }
             catch (Exception ex)
