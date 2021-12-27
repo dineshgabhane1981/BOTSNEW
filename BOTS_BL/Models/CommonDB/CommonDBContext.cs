@@ -15,10 +15,12 @@ namespace BOTS_BL.Models
             : base("name=CommonDBContext")
         {
         }
+
+        public virtual DbSet<Feedback_SMSNumbers> Feedback_SMSNumbers { get; set; }
         public virtual DbSet<Feedback_Content> Feedback_Content { get; set; }
         public virtual DbSet<Feedback_ContentMaster> Feedback_ContentMaster { get; set; }
         public virtual DbSet<Feedback_KnowAboutYou> Feedback_KnowAboutYou { get; set; }
-        public virtual DbSet<Feedback_PointsAndMessages> Feedback_PointwsAndMessages { get; set; }
+        public virtual DbSet<Feedback_PointsAndMessages> Feedback_PointsAndMessages { get; set; }
         public virtual DbSet<Feedback_Headings> Feedback_Headings { get; set; }
         public virtual DbSet<Feedback_Questions> Feedback_Questions { get; set; }
         public virtual DbSet<Feedback_FeedbackConfig> Feedback_FeedbackConfig { get; set; }

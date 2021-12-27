@@ -5,9 +5,11 @@
 }
 
 
-    <div class="app-main__inner">
-        <div class="mb-3 pr-3 pt-3 pl-3 card" style="padding-bottom:20px;">
-            <div class="container-fluid pl-3 pr-3 pb-3" style="border:2px solid grey; border-radius:10px;">
+<div class="app-main__inner">
+    
+    <div class="mb-3 pr-3 pt-3 pl-3 card" style="padding-bottom:20px; display:flex !important;">
+        <div class="col-md-8 col-xl-8">
+            <div class="col-md-12 col-xl-12 pl-3 pr-3 pb-3" style="border:2px solid grey; border-radius:10px;">
                 <div class="row">
                     <div class="col-md-6 col-xl-6" style="margin-left:20px; margin-top:20px;">
                         <h4> Home Section </h4>
@@ -27,10 +29,10 @@
                         {
 
                             <div class="row">
-                                <div class="col-md-12 col-xl-12" style="margin-left:20px; margin-top:20px;">
+                                <div class="col-md-8 col-xl-8" style="margin-left:20px; margin-top:20px;">
                                     @Html.CheckBoxFor(model => item.IsDisplay, new { @id = "chkIsDisplayHome" + count })
-                                    @Html.TextBoxFor(model => item.Text, new { @class = "input200", @id = "txtHomeHeadingText" + count })
-                                    @Html.DropDownListFor(model => item.IsMandatory.Value, new SelectList(Model.MandatoryOrNot(), "Value", "Text"), htmlAttributes: new { @class = "input50", @id = "ddlIsMandatoryHome" + count })
+                                    @Html.TextBoxFor(model => item.Text, new { @class = "input100", @id = "txtHomeHeadingText" + count })
+                                    @*@Html.DropDownListFor(model => item.IsMandatory.Value, new SelectList(Model.MandatoryOrNot(), "Value", "Text"), htmlAttributes: new { @class = "input50", @id = "ddlIsMandatoryHome" + count })*@
 
                                 </div>
                             </div>
@@ -41,10 +43,10 @@
                     if (Model.PointsAndMessages != null)
                     {
                         <div class="row">
-                            <div class="col-md-6 col-xl-3" style="margin-left:20px; margin-top:20px;">
+                            <div class="col-md-6 col-xl-6" style="margin-left:20px; margin-top:20px;">
                                 @Html.CheckBoxFor(model => model.PointsAndMessages.IsAddRepresentative, new { @id = "chkSalesRep" }) Add Sales Representative
-                               <div id="dvSalesRep" style="display:none;">
-                                    @Html.TextBoxFor(model => model.PointsAndMessages.RepresentativesList, new { @class = "input200", @id = "txtHomeRepresentative", @placeholder = "Enter with comma separated" })
+                                <div id="dvSalesRep" style="display:none;">
+                                    @Html.TextBoxFor(model => model.PointsAndMessages.RepresentativesList, new { @class = "input100", @id = "txtHomeRepresentative", @placeholder = "Enter with comma separated" })
                                 </div>
                             </div>
                         </div>
@@ -53,8 +55,7 @@
 
             </div>
 
-
-            <div class="container-fluid  pl-3 pr-3 pb-3 mt-2" style="border:2px solid grey; border-radius:10px;">
+            <div class="col-md-12 col-xl-12  pl-3 pr-3 pb-3 mt-2" style="border:2px solid grey; border-radius:10px;">
                 <div class="row">
                     <div class="col-md-6 col-xl-6" style="margin-left:20px; margin-top:20px;">
                         <h4> Question Section </h4>
@@ -71,9 +72,12 @@
                             <div class="row">
                                 <div class="col-md-12 col-xl-12" style="margin-left:20px; margin-top:20px;">
                                     @Html.CheckBoxFor(model => item.IsDisplay, new { @id = "chkIsDisplayQuestion" + count })
-                                    @Html.TextBoxFor(model => item.Text, new { @class = "input200", @id = "txtQuestionHeadingText" + count })
-                                    @Html.DropDownListFor(model => item.IsMandatory.Value, new SelectList(Model.MandatoryOrNot(), "Value", "Text"), htmlAttributes: new { @class = "input50", @id = "ddlIsMandatoryQuestion" + count })
+                                    @Html.TextBoxFor(model => item.Text, new { @class = "input100", @id = "txtQuestionHeadingText" + count })
+                                    @if (item.Type == "Question")
+                                    {
+                                        @Html.DropDownListFor(model => item.IsMandatory.Value, new SelectList(Model.MandatoryOrNot(), "Value", "Text"), htmlAttributes: new { @class = "input50", @id = "ddlIsMandatoryQuestion" + count })
 
+                                    }
                                 </div>
                             </div>
                         }
@@ -81,55 +85,58 @@
                 }
             </div>
 
-            <div class="container-fluid   pl-3 pr-3 pb-3 mt-2" style="border:2px solid grey; border-radius:10px;">
+            <div class="col-md-12 col-xl-12   pl-3 pr-3 pb-3 mt-2" style="border:2px solid grey; border-radius:10px;">
                 <div class="row">
                     <div class="col-md-6 col-xl-6" style="margin-left:20px; margin-top:20px;">
                         <h4> Other information </h4>
                     </div>
-                    @if (Model.lstFeedbackData != null)
+                </div>
+                @if (Model.lstFeedbackData != null)
+                {
+                    int count = 0;
+                    foreach (var item in Model.lstFeedbackData)
                     {
-                        int count = 0;
-                        foreach (var item in Model.lstFeedbackData)
+                        count++;
+                        if (item.Section == "OtherInformation")
                         {
-                            count++;
-                            if (item.Section == "OtherInformation")
-                            {
-                                <div class="row">
-                                    <div class="col-md-12 col-xl-12" style="margin-left:20px; margin-top:20px;">
-                                        @Html.CheckBoxFor(model => item.IsDisplay, new { @id = "chkIsDisplayOther" + count })
-                                        @Html.TextBoxFor(model => item.Text, new { @class = "input200", @id = "txtOtherHeadingText" + count })
+                            <div class="row">
+                                <div class="col-md-12 col-xl-12" style="margin-left:20px; margin-top:20px;">
+                                    @Html.CheckBoxFor(model => item.IsDisplay, new { @id = "chkIsDisplayOther" + count })
+                                    @Html.TextBoxFor(model => item.Text, new { @class = "input100", @id = "txtOtherHeadingText" + count })
+                                    @if (item.Type == "Question")
+                                    {
                                         @Html.DropDownListFor(model => item.IsMandatory.Value, new SelectList(Model.MandatoryOrNot(), "Value", "Text"), htmlAttributes: new { @class = "input50", @id = "ddlIsMandatoryOther" + count })
-
-                                    </div>
+                                    }
                                 </div>
-                            }
+                            </div>
                         }
                     }
-                </div>
+                }
+
             </div>
 
-            <div class="container-fluid   pl-3 pr-3 pb-3 mt-2" style="border:2px solid grey; border-radius:10px;">
+            <div class="col-md-12 col-xl-12   pl-3 pr-3 pb-3 mt-2" style="border:2px solid grey; border-radius:10px;">
                 <div class="row">
                     <div class="col-md-6 col-xl-6" style="margin-left:20px; margin-top:20px;">
                         <h4> Bonus Points </h4>
                     </div>
                     <div class="row col-md-12 col-xl-12">
-                        <div class="col-md-12 col-xl-12">
+                        <div class="col-md-12 col-xl-12" style="margin-left:20px; margin-top:20px;">
                             @Html.CheckBoxFor(model => model.PointsAndMessages.IsFeedbackPoints, new { @id = "chkIsFeedbackPoints" }) Do you want to give any bonus points for submitting the feedback?
                         </div>
                     </div>
-                    <div class="row" id="dvAwardPoints" style="display:none;">
-                        <div class="col-md-6 col-xl-6" style="margin-left:20px; margin-top:20px;">
+                    <div class="row" id="dvAwardPoints" style="display: none; margin-left: 20px; ">
+                        <div class="col-md-6 col-xl-6" style="margin-top:20px;">
                             How many points? @Html.TextBoxFor(model => model.PointsAndMessages.AwardFeedbackPoints, new { @class = "input100", @id = "txtAwardFeedbackPoints" })
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div class="container-fluid   pl-3 pr-3 pb-3 mt-2" style="border:2px solid grey; border-radius:10px;">
+            <div class="col-md-12 col-xl-12   pl-3 pr-3 pb-3 mt-2" style="border:2px solid grey; border-radius:10px;">
                 <div class="row">
                     <div class="col-md-6 col-xl-6" style="margin-left:20px; margin-top:20px;">
-                        <h3> Message Scripts </h3>
+                        <h4> Message Scripts </h4>
                     </div>
                     <div class="row col-md-12 col-xl-12">
                         <div class="col-md-12 col-xl-12" style="margin-left:20px; margin-top:20px;">
@@ -153,12 +160,14 @@
                                         <td style="font-weight:bold;">Mobile Numbers (separate with a comma (,))</td>
                                     </tr>
 
-                                    @foreach (var item in Model.lstOutletDetail)
+                                    @foreach (var item in Model.lstOutletData)
                                     {
-                                        var id = "txtOutlet" + item.Value;
+                                        var id = "txtOutlet" + item.outletId;
                                         <tr>
-                                            <td>@item.Text</td>
-                                            <td><input type="text" id="@id" class="input200" /></td>
+                                            <td>@item.outletName</td>
+                                            <td>
+                                                @Html.TextBoxFor(model => item.mobileNos, new { @class = "input100", @id = "txtOutlet" + item.outletId })
+                                            </td>
                                         </tr>
                                     }
                                 </table>
@@ -181,11 +190,11 @@
                 </div>
             </div>
 
-            <div class="container-fluid pt-3 pl-3 pr-3 pb-3">
+            <div class="col-md-12 col-xl-12 pt-3 pl-3 pr-3 pb-3">
                 <button type="button" id="btnFeedbackSave" class="btn btn-primary pull-right" onclick="return CheckValidationAndSubmit();" style="margin-right:10px;">Submit</button>
             </div>
 
-            <div class="container-fluid   pl-3 pr-3 pb-3 mt-2" style="border:2px solid grey; border-radius:10px;">
+            <div class="col-md-12 col-xl-12   pl-3 pr-3 pb-3 mt-5" style="border:2px solid grey; border-radius:10px;">
                 <div class="row">
                     <div class="col-md-6 col-xl-6" style="margin-left:20px; margin-top:20px;">
                         <h3> Feedback Links </h3>
@@ -215,18 +224,23 @@
                 </div>
             </div>
         </div>
+
+
+        <div class="col-md-2 col-xl-2" style="border:2px solid grey; border-radius:10px;">asdasd</div>
+
     </div>
+   
+</div>
 
 
 
-<script>
+    <script>
     $(document).ready(function () {
         $('#chkSalesRep').click(function () {
             if ($(this).is(':checked')) {
                 $("#dvSalesRep").show();
             }
-            else {
-                $("#txtHomeRepresentative").val("");
+            else {                
                 $("#dvSalesRep").hide();
 
             }
@@ -236,8 +250,7 @@
             if ($(this).is(':checked')) {
                 $("#dvAwardPoints").show();
             }
-            else {
-                $("#txtAwardFeedbackPoints").val("");
+            else {                
                 $("#dvAwardPoints").hide();
 
             }
@@ -247,25 +260,36 @@
             if ($(this).is(':checked')) {
                 $("#dvMsgMissedFeedback").show();
             }
-            else {
-                $("#txtMsgMissedFeedback").val("");
+            else {               
                 $("#dvMsgMissedFeedback").hide();
 
             }
         });
+
+        if ($("#chkSalesRep").is(":checked")) {
+            $("#dvSalesRep").show();
+        }
+        if ($("#chkIsFeedbackPoints").is(":checked")) {
+            $("#dvAwardPoints").show();
+        }
+        if ($("#chkMissedMessage").is(":checked")) {
+            $("#dvMsgMissedFeedback").show();
+        }
+
+
     });
 
-    function CheckValidationAndSubmit() {       
+    function CheckValidationAndSubmit() {
         var HomeData = [];
         var countHome = 3;
         for (var i = 1; i <= countHome; i++) {
             itemHome = {}
             itemHome["Id"] = i;
-            itemHome["Text"] = $("#txtHomeHeadingText" + i).val(); 
-            itemHome["IsDisplay"] = $("#chkIsDisplayHome" + i).is(":checked"); 
-            itemHome["IsMandatory"] = $("#ddlIsMandatoryHome" + i).val();
+            itemHome["Text"] = $("#txtHomeHeadingText" + i).val();
+            itemHome["IsDisplay"] = $("#chkIsDisplayHome" + i).is(":checked");
+            /*itemHome["IsMandatory"] = $("#ddlIsMandatoryHome" + i).val();*/
             HomeData.push(itemHome);
-        }        
+        }
 
         var QuestionData = [];
         var countQue = 9;
@@ -274,10 +298,12 @@
             itemQuestion["Id"] = i;
             itemQuestion["Text"] = $("#txtQuestionHeadingText" + i).val();
             itemQuestion["IsDisplay"] = $("#chkIsDisplayQuestion" + i).is(":checked");
-            itemQuestion["IsMandatory"] = $("#ddlIsMandatoryQuestion" + i).val();
+            if (i > 5) {
+                itemQuestion["IsMandatory"] = $("#ddlIsMandatoryQuestion" + i).val();
+            }
             QuestionData.push(itemQuestion);
         }
-        
+
         var OtherInfoData = [];
         var countOtherInfo = 15;
         for (var i = 10; i <= countOtherInfo; i++) {
@@ -285,10 +311,12 @@
             itemOtherInfo["Id"] = i;
             itemOtherInfo["Text"] = $("#txtOtherHeadingText" + i).val();
             itemOtherInfo["IsDisplay"] = $("#chkIsDisplayOther" + i).is(":checked");
-            itemOtherInfo["IsMandatory"] = $("#ddlIsMandatoryOther" + i).val();
+            if (i > 11) {
+                itemOtherInfo["IsMandatory"] = $("#ddlIsMandatoryOther" + i).val();
+            }
             OtherInfoData.push(itemOtherInfo);
         }
-       
+
         var OtherConfigData = [];
         itemOtherConfig = {}
         itemOtherConfig["IsRepresentative"] = $("#chkSalesRep").is(":checked");
@@ -298,35 +326,63 @@
         itemOtherConfig["MsgToCustomer"] = $("#txtMsgToCustomer").val();
         itemOtherConfig["MsgNegativeFeedback"] = $("#txtMsgNegativeFeedback").val();
         itemOtherConfig["IsMsgMissedFeedback"] = $("#chkMissedMessage").is(":checked");
-        itemOtherConfig["MsgMissedFeedback"] = $("#txtMsgMissedFeedback").val();        
-        OtherConfigData.push(itemOtherConfig);        
+        itemOtherConfig["MsgMissedFeedback"] = $("#txtMsgMissedFeedback").val();
+        OtherConfigData.push(itemOtherConfig);
 
         var OutletMobileNos = [];
         $('[id^=txtOutlet]').each(function (i, item) {
-            itemOutlet = {}            
+            itemOutlet = {}
             itemOutlet["OutletId"] = item.id.substr(9);
-            
+
             itemOutlet["Numbers"] = $(item).val();
 
             OutletMobileNos.push(itemOutlet);
-        });        
+        });
 
-        var AllData = [];
-        item = {}
-        item["Home"] = HomeData;
-        item["Question"] = QuestionData;
-        item["OtherInfo"] = OtherInfoData;
-        item["OtherConfig"] = OtherConfigData;
-        item["OutletMobileNos"] = OutletMobileNos;
-        AllData.push(item);
+        //var AllData = [];
+        //item = {}
+        //item["Home"] = HomeData;
+        //item["Question"] = QuestionData;
+        //item["OtherInfo"] = OtherInfoData;
+        //item["OtherConfig"] = OtherConfigData;
+        //item["OutletMobileNos"] = OutletMobileNos;
+        //AllData.push(item);
 
-        console.log(JSON.stringify(AllData));
-        console.log(AllData);
+        //var data = JSON.stringify(AllData);
 
-
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("UpdateFeedbackDetails", "Feedback")',
+            data: '{HomeData: ' + JSON.stringify(JSON.stringify(HomeData)) + ',QuestionData: ' + JSON.stringify(JSON.stringify(QuestionData)) + ',OtherInfoData: ' + JSON.stringify(JSON.stringify(OtherInfoData)) + ',OtherConfigData: ' + JSON.stringify(JSON.stringify(OtherConfigData)) + ',OutletMobileNos: ' + JSON.stringify(JSON.stringify(OutletMobileNos)) + '}',
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (result) {
+                if (result) {
+                    setTimeout(cuteAlert({
+                        type: "success",
+                        title: "Save",
+                        message: "Record Save Successfully!",
+                        buttonText: "Okay"
+                    }), 10000);
+                }
+                else {
+                    setTimeout(cuteAlert({
+                        type: "error",
+                        title: "OOPS",
+                        message: "Some Problem encountered. Please contact Administrator!",
+                        buttonText: "Okay"
+                    }), 10000);
+                }
+                $("#divLoader").hide();
+            },
+            error: function (result) {
+                console.log(result.responseText)
+                $("#divLoader").hide();
+            }
+        });
 
 
         return false;
     }
 
-</script>
+    </script>

@@ -165,7 +165,7 @@ namespace BOTS_BL.Repository
                     context.SaveChanges();
                     if (contentData != null)
                     {
-                        foreach(var item in contentData)
+                        foreach (var item in contentData)
                         {
                             context.Feedback_Content.AddOrUpdate(item);
                             context.SaveChanges();
@@ -320,5 +320,179 @@ namespace BOTS_BL.Repository
             }
             return lstlocation;
         }
+
+        public bool UpdateFeedbackDetails(object[] HomeData, object[] QuestionData, object[] OtherInfoData, object[] OtherConfigData, object[] OutletMobileNosData, string GroupId, string LoginId)
+        {
+            bool status = false;
+            try
+            {
+                using (var context = new CommonDBContext())
+                {
+                    foreach (Dictionary<string, object> item in HomeData)
+                    {
+                        var Id = Convert.ToInt32(item["Id"]);
+                        var objFeedback = context.Feedback_Content.Where(x => x.Id == Id && x.GroupId == GroupId).FirstOrDefault();
+                        objFeedback.Text = Convert.ToString(item["Text"]);
+                        objFeedback.IsDisplay = Convert.ToBoolean(item["IsDisplay"]);
+                        //objFeedback.IsMandatory = Convert.ToInt32(item["IsMandatory"]);
+                        objFeedback.UpdatedDate = DateTime.Now;
+                        objFeedback.UpdatedBy = LoginId;
+
+                        context.Feedback_Content.AddOrUpdate(objFeedback);
+                        context.SaveChanges();
+                    }
+                    foreach (Dictionary<string, object> item in QuestionData)
+                    {
+                        var Id = Convert.ToInt32(item["Id"]);
+                        var objFeedback = context.Feedback_Content.Where(x => x.Id == Id && x.GroupId == GroupId).FirstOrDefault();
+                        objFeedback.Text = Convert.ToString(item["Text"]);
+                        objFeedback.IsDisplay = Convert.ToBoolean(item["IsDisplay"]);
+                        if (Id > 5)
+                        {
+                            objFeedback.IsMandatory = Convert.ToInt32(item["IsMandatory"]);
+                        }
+                        objFeedback.UpdatedDate = DateTime.Now;
+                        objFeedback.UpdatedBy = LoginId;
+
+                        context.Feedback_Content.AddOrUpdate(objFeedback);
+                        context.SaveChanges();
+                    }
+                    foreach (Dictionary<string, object> item in OtherInfoData)
+                    {
+                        var Id = Convert.ToInt32(item["Id"]);
+                        var objFeedback = context.Feedback_Content.Where(x => x.Id == Id && x.GroupId == GroupId).FirstOrDefault();
+                        objFeedback.Text = Convert.ToString(item["Text"]);
+                        objFeedback.IsDisplay = Convert.ToBoolean(item["IsDisplay"]);
+                        if (Id > 11)
+                        {
+                            objFeedback.IsMandatory = Convert.ToInt32(item["IsMandatory"]);
+                        }
+                        objFeedback.UpdatedDate = DateTime.Now;
+                        objFeedback.UpdatedBy = LoginId;
+
+                        context.Feedback_Content.AddOrUpdate(objFeedback);
+                        context.SaveChanges();
+                    }
+
+                    Feedback_PointsAndMessages objPointsAndMessages = new Feedback_PointsAndMessages();
+
+                    var objexisting = context.Feedback_PointsAndMessages.Where(x => x.GroupId == GroupId).FirstOrDefault();
+                    if (objexisting != null)
+                    {
+                        objPointsAndMessages = objexisting;
+                    }
+                    objPointsAndMessages.GroupId = GroupId;
+                    foreach (Dictionary<string, object> item in OtherConfigData)
+                    {
+                        objPointsAndMessages.IsAddRepresentative = Convert.ToBoolean(item["IsRepresentative"]);
+                        if (objPointsAndMessages.IsAddRepresentative)
+                            objPointsAndMessages.RepresentativesList = Convert.ToString(item["RepresentativeList"]);
+                        else
+                            objPointsAndMessages.RepresentativesList = "";
+
+                        objPointsAndMessages.IsFeedbackPoints = Convert.ToBoolean(item["IsFeedbackPoints"]);
+                        if (objPointsAndMessages.IsFeedbackPoints)
+                            objPointsAndMessages.AwardFeedbackPoints = Convert.ToInt32(item["AwardFeedbackPoints"]);
+                        else
+                            objPointsAndMessages.AwardFeedbackPoints = 0;
+
+                        objPointsAndMessages.MsgToCustomer = Convert.ToString(item["MsgToCustomer"]);
+                        objPointsAndMessages.MsgNegativeFeedback = Convert.ToString(item["MsgNegativeFeedback"]);
+
+                        objPointsAndMessages.IsMsgMissedFeedback = Convert.ToBoolean(item["IsMsgMissedFeedback"]);
+                        if (objPointsAndMessages.IsMsgMissedFeedback)
+                            objPointsAndMessages.MsgMissedFeedback = Convert.ToString(item["MsgMissedFeedback"]);
+                        else
+                            objPointsAndMessages.MsgMissedFeedback = "";
+                    }
+                    if (objPointsAndMessages.AddedBy == null)
+                    {
+                        objPointsAndMessages.AddedBy = LoginId;
+                        objPointsAndMessages.AddedDate = DateTime.Now;
+                    }
+                    else
+                    {
+                        objPointsAndMessages.UpdatedBy = LoginId;
+                        objPointsAndMessages.UpdatedDate = DateTime.Now;
+                    }
+                    context.Feedback_PointsAndMessages.AddOrUpdate(objPointsAndMessages);
+                    context.SaveChanges();
+
+                    foreach (Dictionary<string, object> item in OutletMobileNosData)
+                    {
+                        Feedback_SMSNumbers objSMSNumber = new Feedback_SMSNumbers();
+                        var outletId = Convert.ToString(item["OutletId"]);
+
+                        var objExisting = context.Feedback_SMSNumbers.Where(x => x.GroupId == GroupId && x.OutletId == outletId).FirstOrDefault();
+                        if (objExisting != null)
+                        {
+                            objSMSNumber = objExisting;
+                            objSMSNumber.UpdatedBy = LoginId;
+                            objSMSNumber.UpdatedDate = DateTime.Now;
+                        }
+                        else
+                        {
+                            objSMSNumber.AddedBy = LoginId;
+                            objSMSNumber.AddedDate = DateTime.Now;
+                        }
+                        objSMSNumber.GroupId = GroupId;
+                        objSMSNumber.OutletId = outletId;
+                        objSMSNumber.MobileNos = Convert.ToString(item["Numbers"]);
+
+                        context.Feedback_SMSNumbers.AddOrUpdate(objSMSNumber);
+                        context.SaveChanges();
+
+                    }
+
+                    status = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "UpdateFeedbackDetails");
+            }
+            return status;
+        }
+
+        public Feedback_PointsAndMessages GetPointsAndMessages(string GroupId)
+        {
+            Feedback_PointsAndMessages objData = new Feedback_PointsAndMessages();
+            try
+            {
+                using (var context = new CommonDBContext())
+                {
+                    objData = context.Feedback_PointsAndMessages.Where(x => x.GroupId == GroupId).FirstOrDefault();
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetPointsAndMessages");
+            }
+
+            return objData;
+        }
+
+        public string GetOutletMobileNos(string GroupId, string OutletId)
+        {
+            string MobileNo = string.Empty;
+            try
+            {
+                using (var context = new CommonDBContext())
+                {
+                    var outletDetails = context.Feedback_SMSNumbers.Where(x => x.GroupId == GroupId && x.OutletId == OutletId).FirstOrDefault();
+                    if (outletDetails != null)
+                    {
+                        MobileNo = outletDetails.MobileNos;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetOutletMobileNos");
+            }
+
+            return MobileNo;
+        }
+
     }
 }

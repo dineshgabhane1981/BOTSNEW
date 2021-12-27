@@ -174,6 +174,7 @@
     <Compile Include="ViewModel\FeedbackGetFeedbackViewModel.cs" />
     <Compile Include="ViewModel\OnBoardingSalesViewModel.cs" />
     <Compile Include="ViewModel\OtherReportProductwiseViewModel.cs" />
+    <Compile Include="ViewModel\OutletDetailsViewModel.cs" />
     <Compile Include="ViewModel\SinglePageViewModel.cs" />
   </ItemGroup>
   <ItemGroup>

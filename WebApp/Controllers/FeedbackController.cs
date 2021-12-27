@@ -56,7 +56,7 @@ namespace WebApp.Controllers
                 //Get XML File and send all content with this call to insert
                 var masterData = FMR.GetFeedbackMasterData();
                 List<Feedback_Content> lstData = new List<Feedback_Content>();
-                foreach(var newItem in masterData)
+                foreach (var newItem in masterData)
                 {
                     Feedback_Content objNew = new Feedback_Content();
                     objNew.GroupId = GroupId;
@@ -69,7 +69,7 @@ namespace WebApp.Controllers
                     objNew.AddedDate = DateTime.Now;
                     objNew.AddedBy = userDetails.LoginId;
                     lstData.Add(objNew);
-                }              
+                }
 
                 status = FMR.EnableFeedbackModule(objFeedback, lstData);
             }
@@ -82,7 +82,7 @@ namespace WebApp.Controllers
             bool status = false;
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
             Feedback_FeedbackConfig objFeedback = new Feedback_FeedbackConfig();
-           
+
             objFeedback = FMR.GetFeedbackByGroupId(GroupId);
             objFeedback.GroupId = Convert.ToInt32(GroupId);
             objFeedback.StoppedReason = Reason;
@@ -111,7 +111,7 @@ namespace WebApp.Controllers
                 string PaymentMode = Convert.ToString(item["PaymentMode"]);
 
                 Feedback_FeedbackConfig objFeedback = new Feedback_FeedbackConfig();
-                
+
                 objFeedback = FMR.GetFeedbackByGroupId(GroupId);
                 objFeedback.Fees = Fees;
                 objFeedback.PaymentMode = PaymentMode;
@@ -141,7 +141,7 @@ namespace WebApp.Controllers
                 string PaymentMode = Convert.ToString(item["PaymentMode"]);
 
                 Feedback_FeedbackConfig objFeedback = new Feedback_FeedbackConfig();
-                
+
                 objFeedback = FMR.GetFeedbackByGroupId(GroupId);
                 objFeedback.Fees = Fees;
                 objFeedback.PaymentMode = PaymentMode;
@@ -169,15 +169,27 @@ namespace WebApp.Controllers
             var lstDeActivatedGroup = FMR.GetDeActivatedGroups();
             return PartialView("_DeActiveGroup", lstDeActivatedGroup);
         }
-        
+
         public ActionResult CreateFeedback()
         {
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
             FeedbackAuthorViewModel objFeedbackAuthor = new FeedbackAuthorViewModel();
             Feedback_PointsAndMessages PointsAndMessages = new Feedback_PointsAndMessages();
+            List<OutletDetailsViewModel> objOutletData = new List<OutletDetailsViewModel>();
             objFeedbackAuthor.GroupId = userDetails.GroupId;
             objFeedbackAuthor.lstFeedbackData = FMR.GetFeedback_Contents(userDetails.GroupId);
-            objFeedbackAuthor.lstOutletDetail = RR.GetOutletList(userDetails.GroupId, userDetails.connectionString);        
+            objFeedbackAuthor.lstOutletDetail = RR.GetOutletList(userDetails.GroupId, userDetails.connectionString);
+            foreach(var item in objFeedbackAuthor.lstOutletDetail)
+            {
+                OutletDetailsViewModel objOT = new OutletDetailsViewModel();
+                objOT.mobileNos = FMR.GetOutletMobileNos(userDetails.GroupId, item.Value);
+                objOT.outletId = item.Value;
+                objOT.outletName = item.Text;
+
+                objOutletData.Add(objOT);
+            }
+            objFeedbackAuthor.lstOutletData = objOutletData;
+            PointsAndMessages = FMR.GetPointsAndMessages(userDetails.GroupId);
             objFeedbackAuthor.PointsAndMessages = PointsAndMessages;
             return View(objFeedbackAuthor);
         }
@@ -197,5 +209,28 @@ namespace WebApp.Controllers
             lstfbget = FMR.GetFeedback(groupid);
             return View(lstfbget);
         }
+
+        public ActionResult UpdateFeedbackDetails(string HomeData, string QuestionData,string OtherInfoData,string OtherConfigData,string OutletMobileNos)
+        {
+            bool status = false;
+
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            JavaScriptSerializer json_serializer = new JavaScriptSerializer();
+            json_serializer.MaxJsonLength = int.MaxValue;
+            object[] objHomeData = (object[])json_serializer.DeserializeObject(HomeData);
+            object[] objQuestionData = (object[])json_serializer.DeserializeObject(QuestionData);
+            object[] objOtherInfoData = (object[])json_serializer.DeserializeObject(OtherInfoData);
+            object[] objOtherConfigData = (object[])json_serializer.DeserializeObject(OtherConfigData);
+            object[] objOutletMobileNos = (object[])json_serializer.DeserializeObject(OutletMobileNos);
+            
+            status = FMR.UpdateFeedbackDetails(objHomeData, objQuestionData, objOtherInfoData, objOtherConfigData, objOutletMobileNos, userDetails.GroupId, userDetails.LoginId);
+
+
+            return new JsonResult() { Data = status, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
+        }
+
+
+
+
     }
 }
