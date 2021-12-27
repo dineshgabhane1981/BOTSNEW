@@ -25,7 +25,7 @@ namespace BOTS_BL.Models
 
         public bool IsDisplay { get; set; }
 
-        public bool IsMandatory { get; set; }
+        public int? IsMandatory { get; set; }
 
         public DateTime? AddedDate { get; set; }
 

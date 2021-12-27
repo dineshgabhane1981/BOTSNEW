@@ -20,6 +20,7 @@ namespace WebApp.Controllers
     public class FeedbackController : Controller
     {
         FeedbackModuleRepository FMR = new FeedbackModuleRepository();
+        ReportsRepository RR = new ReportsRepository();
         // GET: Feedback
         public ActionResult Index()
         {
@@ -173,11 +174,11 @@ namespace WebApp.Controllers
         {
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
             FeedbackAuthorViewModel objFeedbackAuthor = new FeedbackAuthorViewModel();
-            Feedback_PointsAndMessages PointwsAndMessages = new Feedback_PointsAndMessages();
+            Feedback_PointsAndMessages PointsAndMessages = new Feedback_PointsAndMessages();
+            objFeedbackAuthor.GroupId = userDetails.GroupId;
             objFeedbackAuthor.lstFeedbackData = FMR.GetFeedback_Contents(userDetails.GroupId);
-            objFeedbackAuthor.headings = FMR.GetHeadings(userDetails.GroupId);
-            objFeedbackAuthor.questions = FMR.GetQuestions(userDetails.GroupId);
-            objFeedbackAuthor.PointwsAndMessages = PointwsAndMessages;
+            objFeedbackAuthor.lstOutletDetail = RR.GetOutletList(userDetails.GroupId, userDetails.connectionString);        
+            objFeedbackAuthor.PointsAndMessages = PointsAndMessages;
             return View(objFeedbackAuthor);
         }
 

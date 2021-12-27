@@ -13,17 +13,19 @@ namespace BOTS_BL.Models
         [StringLength(4)]
         public string GroupId { get; set; }
 
-        public bool? IsAddRepresentative { get; set; }
+        public bool IsAddRepresentative { get; set; }
 
         public string RepresentativesList { get; set; }
 
-        public bool? IsFeedbackPoints { get; set; }
+        public bool IsFeedbackPoints { get; set; }
 
-        public int? AwardFeedbackPoints { get; set; }
+        public int AwardFeedbackPoints { get; set; }
 
         public string MsgToCustomer { get; set; }
 
         public string MsgNegativeFeedback { get; set; }
+
+        public bool IsMsgMissedFeedback { get; set; }
 
         public string MsgMissedFeedback { get; set; }
 

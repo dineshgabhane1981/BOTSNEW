@@ -1,156 +1,126 @@
 ﻿@model  WebApp.ViewModel.FeedbackAuthorViewModel
 @{
-    ViewBag.Title = "CreateFeedback";
+    ViewBag.Title = "Create Feedback";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-@using (Html.BeginForm("UpdateFeedback", "Feedback", FormMethod.Post, new { id = "frmupdatefeedback", enctype = "multipart/form-data" }))
-{
+
     <div class="app-main__inner">
         <div class="mb-3 pr-3 pt-3 pl-3 card" style="padding-bottom:20px;">
             <div class="container-fluid pl-3 pr-3 pb-3" style="border:2px solid grey; border-radius:10px;">
                 <div class="row">
                     <div class="col-md-6 col-xl-6" style="margin-left:20px; margin-top:20px;">
-                        <h3> Feedback Home Page </h3>
+                        <h4> Home Section </h4>
                     </div>
                 </div>
+                @Html.HiddenFor(model => model.GroupId)
+                @Html.HiddenFor(model => model.lstOutletDetail.Count, new { @id = "hdnOutletCount" })
+
+
                 @if (Model.lstFeedbackData != null)
                 {
+                    int count = 0;
                     foreach (var item in Model.lstFeedbackData)
                     {
+                        count++;
                         if (item.Section == "Home")
                         {
+
                             <div class="row">
                                 <div class="col-md-12 col-xl-12" style="margin-left:20px; margin-top:20px;">
-                                    @Html.CheckBoxFor(model => item.IsDisplay, new { @id = "chkIsDisplay" })
-                                    @Html.TextBoxFor(model => item.Text, new { @class = "input200" })
-                                    @Html.DropDownListFor(model => item.IsMandatory, Model.IsMandatory(), htmlAttributes: new { @class = "input50", @id = "ddlIsMandatory" })
+                                    @Html.CheckBoxFor(model => item.IsDisplay, new { @id = "chkIsDisplayHome" + count })
+                                    @Html.TextBoxFor(model => item.Text, new { @class = "input200", @id = "txtHomeHeadingText" + count })
+                                    @Html.DropDownListFor(model => item.IsMandatory.Value, new SelectList(Model.MandatoryOrNot(), "Value", "Text"), htmlAttributes: new { @class = "input50", @id = "ddlIsMandatoryHome" + count })
+
                                 </div>
                             </div>
+
                         }
 
                     }
-                }
-                <div class="row">
-                    @Html.HiddenFor(model => model.headings.GroupId)
-                    @Html.HiddenFor(model => model.questions.GroupId)
-                    @Html.HiddenFor(model => model.lstOutletDetail.Count, new { @id = "hdnOutletCount" })
-                    @Html.HiddenFor(model => model.outletJson, new { @id = "hdnOutletJson" })
-
-                    <div class="col-md-6 col-xl-3" style="margin-left:20px; margin-top:20px;">
-                        Heading 1 @Html.TextBoxFor(model => model.headings.HomeHeading1, new { @class = "input200" })
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-6 col-xl-3" style="margin-left:20px; margin-top:20px;">
-                        Heading 2 @Html.TextBoxFor(model => model.headings.HomeHeading2, new { @class = "input200" })
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-6 col-xl-3" style="margin-left:20px; margin-top:20px;">
-                        Heading 3 @Html.TextBoxFor(model => model.headings.HomeHeading3, new { @class = "input200" })
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-6 col-xl-3" style="margin-left:20px; margin-top:20px;">
-                        <input type="checkbox" id="chkSalesRep" /> Add Sales Representative
-                        <div id="dvSalesRep" style="display:none;">
-                            @Html.TextBoxFor(model => model.headings.HomeRepresentative, new { @class = "input200", @id = "txtHomeRepresentative", @placeholder = "Enter with comma separated" })
+                    if (Model.PointsAndMessages != null)
+                    {
+                        <div class="row">
+                            <div class="col-md-6 col-xl-3" style="margin-left:20px; margin-top:20px;">
+                                @Html.CheckBoxFor(model => model.PointsAndMessages.IsAddRepresentative, new { @id = "chkSalesRep" }) Add Sales Representative
+                               <div id="dvSalesRep" style="display:none;">
+                                    @Html.TextBoxFor(model => model.PointsAndMessages.RepresentativesList, new { @class = "input200", @id = "txtHomeRepresentative", @placeholder = "Enter with comma separated" })
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                </div>
+                    }
+                }
+
             </div>
 
 
             <div class="container-fluid  pl-3 pr-3 pb-3 mt-2" style="border:2px solid grey; border-radius:10px;">
                 <div class="row">
                     <div class="col-md-6 col-xl-6" style="margin-left:20px; margin-top:20px;">
-                        <h3> Feedback Questions </h3>
+                        <h4> Question Section </h4>
                     </div>
-                    <div class="row">
-                        <div class="col-md-6 col-xl-3" style="margin-left:20px; margin-top:20px;">
-                            Heading 1 @Html.TextBoxFor(model => model.headings.QuestionsHeading1, new { @class = "input200" })
-                        </div>
+                </div>
+                @if (Model.lstFeedbackData != null)
+                {
+                    int count = 0;
+                    foreach (var item in Model.lstFeedbackData)
+                    {
+                        count++;
+                        if (item.Section == "FeedbackQuestions")
+                        {
+                            <div class="row">
+                                <div class="col-md-12 col-xl-12" style="margin-left:20px; margin-top:20px;">
+                                    @Html.CheckBoxFor(model => item.IsDisplay, new { @id = "chkIsDisplayQuestion" + count })
+                                    @Html.TextBoxFor(model => item.Text, new { @class = "input200", @id = "txtQuestionHeadingText" + count })
+                                    @Html.DropDownListFor(model => item.IsMandatory.Value, new SelectList(Model.MandatoryOrNot(), "Value", "Text"), htmlAttributes: new { @class = "input50", @id = "ddlIsMandatoryQuestion" + count })
+
+                                </div>
+                            </div>
+                        }
+                    }
+                }
+            </div>
+
+            <div class="container-fluid   pl-3 pr-3 pb-3 mt-2" style="border:2px solid grey; border-radius:10px;">
+                <div class="row">
+                    <div class="col-md-6 col-xl-6" style="margin-left:20px; margin-top:20px;">
+                        <h4> Other information </h4>
                     </div>
-                    <div class="row">
-                        <div class="col-md-6 col-xl-3" style="margin-left:20px; margin-top:20px;">
-                            Heading 2 @Html.TextBoxFor(model => model.headings.QuestionsHeading2, new { @class = "input200" })
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6 col-xl-3" style="margin-left:20px; margin-top:20px;">
-                            Question 1 @Html.TextBoxFor(model => model.questions.FeedbackQuestion1, new { @class = "input200" })
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6 col-xl-3" style="margin-left:20px; margin-top:20px;">
-                            Question 2 @Html.TextBoxFor(model => model.questions.FeedbackQuestion2, new { @class = "input200" })
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6 col-xl-3" style="margin-left:20px; margin-top:20px;">
-                            Question 3 @Html.TextBoxFor(model => model.questions.FeedbackQuestion3, new { @class = "input200" })
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6 col-xl-3" style="margin-left:20px; margin-top:20px;">
-                            Question 4 @Html.TextBoxFor(model => model.questions.FeedbackQuestion4, new { @class = "input200" })
-                        </div>
-                    </div>
+                    @if (Model.lstFeedbackData != null)
+                    {
+                        int count = 0;
+                        foreach (var item in Model.lstFeedbackData)
+                        {
+                            count++;
+                            if (item.Section == "OtherInformation")
+                            {
+                                <div class="row">
+                                    <div class="col-md-12 col-xl-12" style="margin-left:20px; margin-top:20px;">
+                                        @Html.CheckBoxFor(model => item.IsDisplay, new { @id = "chkIsDisplayOther" + count })
+                                        @Html.TextBoxFor(model => item.Text, new { @class = "input200", @id = "txtOtherHeadingText" + count })
+                                        @Html.DropDownListFor(model => item.IsMandatory.Value, new SelectList(Model.MandatoryOrNot(), "Value", "Text"), htmlAttributes: new { @class = "input50", @id = "ddlIsMandatoryOther" + count })
+
+                                    </div>
+                                </div>
+                            }
+                        }
+                    }
                 </div>
             </div>
 
             <div class="container-fluid   pl-3 pr-3 pb-3 mt-2" style="border:2px solid grey; border-radius:10px;">
                 <div class="row">
                     <div class="col-md-6 col-xl-6" style="margin-left:20px; margin-top:20px;">
-                        <h3> Other information </h3>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6 col-xl-3" style="margin-left:20px; margin-top:20px;">
-                            Heading 1 @Html.TextBoxFor(model => model.headings.OtherInfoHeading1, new { @class = "input200" })
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6 col-xl-3" style="margin-left:20px; margin-top:20px;">
-                            Heading 2 @Html.TextBoxFor(model => model.headings.OtherInfoHeading2, new { @class = "input200" })
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6 col-xl-3" style="margin-left:20px; margin-top:20px;">
-                            Question 1 @Html.TextBoxFor(model => model.questions.OtherInfoQuestion1, new { @class = "input200" })
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6 col-xl-3" style="margin-left:20px; margin-top:20px;">
-                            Question 2 @Html.TextBoxFor(model => model.questions.OtherInfoQuestion2, new { @class = "input200" })
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6 col-xl-3" style="margin-left:20px; margin-top:20px;">
-                            Question 3 @Html.TextBoxFor(model => model.questions.OtherInfoQuestion3, new { @class = "input200" })
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6 col-xl-3" style="margin-left:20px; margin-top:20px;">
-                            Question 4 @Html.TextBoxFor(model => model.questions.OtherInfoQuestion4, new { @class = "input200" })
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="container-fluid   pl-3 pr-3 pb-3 mt-2" style="border:2px solid grey; border-radius:10px;">
-                <div class="row">
-                    <div class="col-md-6 col-xl-6" style="margin-left:20px; margin-top:20px;">
-                        <h3> Bonus Feedback Points </h3>
+                        <h4> Bonus Points </h4>
                     </div>
                     <div class="row col-md-12 col-xl-12">
                         <div class="col-md-12 col-xl-12">
-                            @Html.CheckBoxFor(model => model.PointwsAndMessages.IsFeedbackPoints, new { @id = "chkIsFeedbackPoints" }) Do you want to give any bonus points for submitting the feedback?
+                            @Html.CheckBoxFor(model => model.PointsAndMessages.IsFeedbackPoints, new { @id = "chkIsFeedbackPoints" }) Do you want to give any bonus points for submitting the feedback?
                         </div>
                     </div>
                     <div class="row" id="dvAwardPoints" style="display:none;">
                         <div class="col-md-6 col-xl-6" style="margin-left:20px; margin-top:20px;">
-                            How many points? @Html.TextBoxFor(model => model.PointwsAndMessages.AwardFeedbackPoints, new { @class = "input100", @id = "txtAwardFeedbackPoints" })
+                            How many points? @Html.TextBoxFor(model => model.PointsAndMessages.AwardFeedbackPoints, new { @class = "input100", @id = "txtAwardFeedbackPoints" })
                         </div>
                     </div>
                 </div>
@@ -163,13 +133,13 @@
                     </div>
                     <div class="row col-md-12 col-xl-12">
                         <div class="col-md-12 col-xl-12" style="margin-left:20px; margin-top:20px;">
-                            Thank You Message to Customer (will be sent through your whatsapp account) @Html.TextAreaFor(model => model.PointwsAndMessages.MsgToCustomer, new { @class = "input100", rows = "3", @style = "width:100% !important;" })
+                            Thank You Message to Customer (will be sent through your whatsapp account) @Html.TextAreaFor(model => model.PointsAndMessages.MsgToCustomer, new { @class = "input100", rows = "3", @style = "width:100% !important;", @id = "txtMsgToCustomer" })
                         </div>
                     </div>
 
                     <div class="row col-md-12 col-xl-12">
                         <div class="col-md-12 col-xl-12" style="margin-left:20px; margin-top:20px;">
-                            Negative Feedback real-time to some numbers (will be sent from blue ocktopus sender id) @Html.TextAreaFor(model => model.PointwsAndMessages.MsgNegativeFeedback, new { @class = "input100", rows = "3", @style = "width:100% !important;" })
+                            Negative Feedback real-time to some numbers (will be sent from blue ocktopus sender id) @Html.TextAreaFor(model => model.PointsAndMessages.MsgNegativeFeedback, new { @class = "input100", rows = "3", @style = "width:100% !important;", @id = "txtMsgNegativeFeedback" })
                         </div>
                     </div>
                     @if (Model.lstOutletDetail != null)
@@ -198,20 +168,23 @@
                     <div class="row col-md-12 col-xl-12">
                         <div class="col-md-12 col-xl-12" style="margin-left:20px; margin-top:20px;">
                             <b>All members who have transacted but not given feedback, can be approached the next day through an SMS / message <br /></b>
-                            <input type="checkbox" id="chkMissedMessage" /> Do you want to send a message
+                            @Html.CheckBoxFor(model => model.PointsAndMessages.IsMsgMissedFeedback, new { @id = "chkMissedMessage" })  Do you want to send a message
+
                         </div>
                     </div>
 
                     <div class="row col-md-12 col-xl-12" id="dvMsgMissedFeedback" style="display:none;">
                         <div class="col-md-12 col-xl-12" style="margin-left:20px; margin-top:20px;">
-                            @Html.TextAreaFor(model => model.PointwsAndMessages.MsgMissedFeedback, new { @class = "input100", @id = "txtMsgMissedFeedback", rows = "3", @style = "width:100% !important;" })
+                            @Html.TextAreaFor(model => model.PointsAndMessages.MsgMissedFeedback, new { @class = "input100", @id = "txtMsgMissedFeedback", rows = "3", @style = "width:100% !important;" })
                         </div>
                     </div>
                 </div>
             </div>
+
             <div class="container-fluid pt-3 pl-3 pr-3 pb-3">
-                <button type="submit" id="btnFeedbackSave" class="btn btn-primary pull-right" onclick="return CheckValidationAndSubmit();" style="margin-right:10px;">Submit</button>
+                <button type="button" id="btnFeedbackSave" class="btn btn-primary pull-right" onclick="return CheckValidationAndSubmit();" style="margin-right:10px;">Submit</button>
             </div>
+
             <div class="container-fluid   pl-3 pr-3 pb-3 mt-2" style="border:2px solid grey; border-radius:10px;">
                 <div class="row">
                     <div class="col-md-6 col-xl-6" style="margin-left:20px; margin-top:20px;">
@@ -243,7 +216,7 @@
             </div>
         </div>
     </div>
-}
+
 
 
 <script>
@@ -282,27 +255,78 @@
         });
     });
 
-    function CheckValidationAndSubmit() {
-        var count = $("#hdnOutletCount").val();
-        //hdnOutletJson
+    function CheckValidationAndSubmit() {       
+        var HomeData = [];
+        var countHome = 3;
+        for (var i = 1; i <= countHome; i++) {
+            itemHome = {}
+            itemHome["Id"] = i;
+            itemHome["Text"] = $("#txtHomeHeadingText" + i).val(); 
+            itemHome["IsDisplay"] = $("#chkIsDisplayHome" + i).is(":checked"); 
+            itemHome["IsMandatory"] = $("#ddlIsMandatoryHome" + i).val();
+            HomeData.push(itemHome);
+        }        
+
+        var QuestionData = [];
+        var countQue = 9;
+        for (var i = 4; i <= countQue; i++) {
+            itemQuestion = {}
+            itemQuestion["Id"] = i;
+            itemQuestion["Text"] = $("#txtQuestionHeadingText" + i).val();
+            itemQuestion["IsDisplay"] = $("#chkIsDisplayQuestion" + i).is(":checked");
+            itemQuestion["IsMandatory"] = $("#ddlIsMandatoryQuestion" + i).val();
+            QuestionData.push(itemQuestion);
+        }
+        
+        var OtherInfoData = [];
+        var countOtherInfo = 15;
+        for (var i = 10; i <= countOtherInfo; i++) {
+            itemOtherInfo = {}
+            itemOtherInfo["Id"] = i;
+            itemOtherInfo["Text"] = $("#txtOtherHeadingText" + i).val();
+            itemOtherInfo["IsDisplay"] = $("#chkIsDisplayOther" + i).is(":checked");
+            itemOtherInfo["IsMandatory"] = $("#ddlIsMandatoryOther" + i).val();
+            OtherInfoData.push(itemOtherInfo);
+        }
+       
+        var OtherConfigData = [];
+        itemOtherConfig = {}
+        itemOtherConfig["IsRepresentative"] = $("#chkSalesRep").is(":checked");
+        itemOtherConfig["RepresentativeList"] = $("#txtHomeRepresentative").val();
+        itemOtherConfig["IsFeedbackPoints"] = $("#chkIsFeedbackPoints").is(":checked");
+        itemOtherConfig["AwardFeedbackPoints"] = $("#txtAwardFeedbackPoints").val();
+        itemOtherConfig["MsgToCustomer"] = $("#txtMsgToCustomer").val();
+        itemOtherConfig["MsgNegativeFeedback"] = $("#txtMsgNegativeFeedback").val();
+        itemOtherConfig["IsMsgMissedFeedback"] = $("#chkMissedMessage").is(":checked");
+        itemOtherConfig["MsgMissedFeedback"] = $("#txtMsgMissedFeedback").val();        
+        OtherConfigData.push(itemOtherConfig);        
+
         var OutletMobileNos = [];
         $('[id^=txtOutlet]').each(function (i, item) {
-            alert(item);
-            var grade = $(item).val();
-            alert(grade);
-        });
-        for (var i = 0; i < count; i++) {
-            item = {}
-            item["GroupId"] = $("#hdnGroupId").val();
-            item["Fees"] = $("#txtFees").val();
-            item["StartDate"] = $("#txtStartDate").val();
-            item["PaymentMode"] = $("#ddlPaymentMode").val();
+            itemOutlet = {}            
+            itemOutlet["OutletId"] = item.id.substr(9);
+            
+            itemOutlet["Numbers"] = $(item).val();
 
-            SeardhData.push(item);
-            var data = JSON.stringify(SeardhData);
-        }
-        alert(111);
-        return true;
+            OutletMobileNos.push(itemOutlet);
+        });        
+
+        var AllData = [];
+        item = {}
+        item["Home"] = HomeData;
+        item["Question"] = QuestionData;
+        item["OtherInfo"] = OtherInfoData;
+        item["OtherConfig"] = OtherConfigData;
+        item["OutletMobileNos"] = OutletMobileNos;
+        AllData.push(item);
+
+        console.log(JSON.stringify(AllData));
+        console.log(AllData);
+
+
+
+
+        return false;
     }
 
 </script>

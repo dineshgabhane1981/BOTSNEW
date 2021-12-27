@@ -28,7 +28,7 @@ namespace BOTS_BL.Models
 
         [Key]
         [Column(Order = 2)]
-        public bool IsMandatory { get; set; }
+        public int? IsMandatory { get; set; }
 
         public DateTime? AddedDate { get; set; }
 
