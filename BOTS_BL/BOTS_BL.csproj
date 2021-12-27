@@ -235,7 +235,7 @@
     <Compile Include="Models\FeedbackModule\Feedback_GetFeedBack.cs" />
     <Compile Include="Models\FeedbackModule\Feedback_Headings.cs" />
     <Compile Include="Models\FeedbackModule\Feedback_KnowAboutYou.cs" />
-    <Compile Include="Models\FeedbackModule\Feedback_PointwsAndMessages.cs" />
+    <Compile Include="Models\FeedbackModule\Feedback_PointsAndMessages.cs" />
     <Compile Include="Models\FeedbackModule\Feedback_Questions.cs" />
     <Compile Include="Models\FeedBack\FeedBackMaster.cs" />
     <Compile Include="Models\FeedBack\FeedBackMobileMaster.cs" />

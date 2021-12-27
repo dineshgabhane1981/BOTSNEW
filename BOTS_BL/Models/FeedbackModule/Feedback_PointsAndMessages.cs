@@ -6,14 +6,18 @@ namespace BOTS_BL.Models
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Data.Entity.Spatial;
 
-    public partial class Feedback_PointwsAndMessages
+    public partial class Feedback_PointsAndMessages
     {
         public int Id { get; set; }
 
         [StringLength(4)]
         public string GroupId { get; set; }
 
-        public bool IsFeedbackPoints { get; set; }
+        public bool? IsAddRepresentative { get; set; }
+
+        public string RepresentativesList { get; set; }
+
+        public bool? IsFeedbackPoints { get; set; }
 
         public int? AwardFeedbackPoints { get; set; }
 

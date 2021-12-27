@@ -173,7 +173,7 @@ namespace WebApp.Controllers
         {
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
             FeedbackAuthorViewModel objFeedbackAuthor = new FeedbackAuthorViewModel();
-            Feedback_PointwsAndMessages PointwsAndMessages = new Feedback_PointwsAndMessages();
+            Feedback_PointsAndMessages PointwsAndMessages = new Feedback_PointsAndMessages();
             objFeedbackAuthor.lstFeedbackData = FMR.GetFeedback_Contents(userDetails.GroupId);
             objFeedbackAuthor.headings = FMR.GetHeadings(userDetails.GroupId);
             objFeedbackAuthor.questions = FMR.GetQuestions(userDetails.GroupId);
@@ -192,7 +192,7 @@ namespace WebApp.Controllers
                 ViewBag.lsthowtoknow = FMR.GetHowToKnowAboutList();
             }
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
-            List<Feedback_GetFeedBack> lstfbget = new List<Feedback_GetFeedBack>();
+            List<Feedback_Content> lstfbget = new List<Feedback_Content>();
             lstfbget = FMR.GetFeedback(groupid);
             return View(lstfbget);
         }
