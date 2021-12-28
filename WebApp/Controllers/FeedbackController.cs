@@ -205,9 +205,15 @@ namespace WebApp.Controllers
                 ViewBag.lsthowtoknow = FMR.GetHowToKnowAboutList();
             }
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
-            List<Feedback_Content> lstfbget = new List<Feedback_Content>();
-            lstfbget = FMR.GetFeedback(groupid);
-            return View(lstfbget);
+            FeedbackGetFeedbackViewModel objgetfeedbackviewmodel = new FeedbackGetFeedbackViewModel();
+            // List<Feedback_Content> lstfbget = new List<Feedback_Content>();
+            objgetfeedbackviewmodel.lstHomeHeading = FMR.GetHomeHeading(groupid);
+            objgetfeedbackviewmodel.lstFeedbackHeading = FMR.GetFeedbackHeading(groupid);
+            objgetfeedbackviewmodel.lstFeedbackQuestion = FMR.GetFeedbackQuestion(groupid);
+            objgetfeedbackviewmodel.lstOtherInfoHeading = FMR.GetOtherinfoHeading(groupid);
+            objgetfeedbackviewmodel.lstOtherInfoQuestion = FMR.GetOtherinfoQuestion(groupid);
+
+            return View(objgetfeedbackviewmodel);
         }
 
         public ActionResult UpdateFeedbackDetails(string HomeData, string QuestionData,string OtherInfoData,string OtherConfigData,string OutletMobileNos)
