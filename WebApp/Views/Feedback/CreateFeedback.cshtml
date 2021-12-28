@@ -6,9 +6,9 @@
 
 
 <div class="app-main__inner">
-    
-    <div class="mb-3 pr-3 pt-3 pl-3 card" style="padding-bottom:20px; display:flex !important;">
-        <div class="col-md-8 col-xl-8">
+
+    <div class="mb-3 pr-3 pt-3 pl-3" style="padding-bottom:20px; background-color:white;display:flex;">
+        <div class="col-md-8 col-xl-8" style="width: 70% !important; float: left;">
             <div class="col-md-12 col-xl-12 pl-3 pr-3 pb-3" style="border:2px solid grey; border-radius:10px;">
                 <div class="row">
                     <div class="col-md-6 col-xl-6" style="margin-left:20px; margin-top:20px;">
@@ -21,19 +21,15 @@
 
                 @if (Model.lstFeedbackData != null)
                 {
-                    int count = 0;
                     foreach (var item in Model.lstFeedbackData)
                     {
-                        count++;
                         if (item.Section == "Home")
                         {
 
                             <div class="row">
-                                <div class="col-md-8 col-xl-8" style="margin-left:20px; margin-top:20px;">
-                                    @Html.CheckBoxFor(model => item.IsDisplay, new { @id = "chkIsDisplayHome" + count })
-                                    @Html.TextBoxFor(model => item.Text, new { @class = "input100", @id = "txtHomeHeadingText" + count })
-                                    @*@Html.DropDownListFor(model => item.IsMandatory.Value, new SelectList(Model.MandatoryOrNot(), "Value", "Text"), htmlAttributes: new { @class = "input50", @id = "ddlIsMandatoryHome" + count })*@
-
+                                <div class="col-md-12 col-xl-12" style="margin-left:20px; margin-top:20px;">
+                                    @Html.CheckBoxFor(model => item.IsDisplay, new { @id = "chkIsDisplayHome" + item.Id })
+                                    @Html.TextBoxFor(model => item.Text, new { @class = "input150", @id = "txtHomeHeadingText" + item.Id })
                                 </div>
                             </div>
 
@@ -46,7 +42,7 @@
                             <div class="col-md-6 col-xl-6" style="margin-left:20px; margin-top:20px;">
                                 @Html.CheckBoxFor(model => model.PointsAndMessages.IsAddRepresentative, new { @id = "chkSalesRep" }) Add Sales Representative
                                 <div id="dvSalesRep" style="display:none;">
-                                    @Html.TextBoxFor(model => model.PointsAndMessages.RepresentativesList, new { @class = "input100", @id = "txtHomeRepresentative", @placeholder = "Enter with comma separated" })
+                                    @Html.TextBoxFor(model => model.PointsAndMessages.RepresentativesList, new { @class = "input150", @id = "txtHomeRepresentative", @placeholder = "Enter with comma separated" })
                                 </div>
                             </div>
                         </div>
@@ -63,19 +59,18 @@
                 </div>
                 @if (Model.lstFeedbackData != null)
                 {
-                    int count = 0;
                     foreach (var item in Model.lstFeedbackData)
                     {
-                        count++;
                         if (item.Section == "FeedbackQuestions")
                         {
                             <div class="row">
                                 <div class="col-md-12 col-xl-12" style="margin-left:20px; margin-top:20px;">
-                                    @Html.CheckBoxFor(model => item.IsDisplay, new { @id = "chkIsDisplayQuestion" + count })
-                                    @Html.TextBoxFor(model => item.Text, new { @class = "input100", @id = "txtQuestionHeadingText" + count })
+                                    @Html.HiddenFor(model => item.Type, new { @id = "hdnQuestionType" + item.Id })
+                                    @Html.CheckBoxFor(model => item.IsDisplay, new { @id = "chkIsDisplayQuestion" + item.Id })
+                                    @Html.TextBoxFor(model => item.Text, new { @class = "input100", @id = "txtQuestionHeadingText" + item.Id })
                                     @if (item.Type == "Question")
                                     {
-                                        @Html.DropDownListFor(model => item.IsMandatory.Value, new SelectList(Model.MandatoryOrNot(), "Value", "Text"), htmlAttributes: new { @class = "input50", @id = "ddlIsMandatoryQuestion" + count })
+                                        @Html.DropDownListFor(model => item.IsMandatory.Value, new SelectList(Model.MandatoryOrNot(), "Value", "Text"), htmlAttributes: new { @class = "input50", @id = "ddlIsMandatoryQuestion" + item.Id })
 
                                     }
                                 </div>
@@ -93,19 +88,20 @@
                 </div>
                 @if (Model.lstFeedbackData != null)
                 {
-                    int count = 0;
+
                     foreach (var item in Model.lstFeedbackData)
                     {
-                        count++;
+
                         if (item.Section == "OtherInformation")
                         {
                             <div class="row">
                                 <div class="col-md-12 col-xl-12" style="margin-left:20px; margin-top:20px;">
-                                    @Html.CheckBoxFor(model => item.IsDisplay, new { @id = "chkIsDisplayOther" + count })
-                                    @Html.TextBoxFor(model => item.Text, new { @class = "input100", @id = "txtOtherHeadingText" + count })
+                                    @Html.HiddenFor(model => item.Type, new { @id = "hdnOtherInfoType" + item.Id })
+                                    @Html.CheckBoxFor(model => item.IsDisplay, new { @id = "chkIsDisplayOther" + item.Id })
+                                    @Html.TextBoxFor(model => item.Text, new { @class = "input100", @id = "txtOtherHeadingText" + item.Id })
                                     @if (item.Type == "Question")
                                     {
-                                        @Html.DropDownListFor(model => item.IsMandatory.Value, new SelectList(Model.MandatoryOrNot(), "Value", "Text"), htmlAttributes: new { @class = "input50", @id = "ddlIsMandatoryOther" + count })
+                                        @Html.DropDownListFor(model => item.IsMandatory.Value, new SelectList(Model.MandatoryOrNot(), "Value", "Text"), htmlAttributes: new { @class = "input50", @id = "ddlIsMandatoryOther" + item.Id })
                                     }
                                 </div>
                             </div>
@@ -151,7 +147,6 @@
                     </div>
                     @if (Model.lstOutletDetail != null)
                     {
-                        int count = 0;
                         <div class="row col-md-12 col-xl-12">
                             <div class="col-md-12 col-xl-12" style="margin-left:20px; margin-top:20px;">
                                 <table border="1" cellpadding="10" cellspacing="10">
@@ -226,21 +221,55 @@
         </div>
 
 
-        <div class="col-md-2 col-xl-2" style="border:2px solid grey; border-radius:10px;">asdasd</div>
+        <div class="col-md-4 col-xl-4" style="border: 2px solid grey; border-radius: 10px; width: 30% !important;float:left;background-color:seashell;">
+            <div style="border: 2px solid lightgray; border-radius: 10px; margin-top:10px;margin-bottom:10px;">
+                @if (Model.lstFeedbackData != null)
+                {
+                    foreach (var item in Model.lstFeedbackData)
+                    {
+                        if (item.Section == "Home")
+                        {
+                            var Id = "spnHome" + item.Id;
+                            if (item.Type == "Footer")
+                            {
+                                <div class="row">
+                                    <div class="col-md-12 col-xl-12" style="margin-left:20px; margin-top:20px;text-align:center;">
+                                        <input type="number" class="input50" /> <button class="btn btn-primary">Go</button>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12 col-xl-12  mb-5" style="margin-left:20px; margin-top:20px;text-align:center;">
+                                        <span id="@Id">@item.Text</span>
+                                    </div>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="row">
+                                    <div class="col-md-12 col-xl-12 mb-2" style="margin-left:20px; margin-top:20px;text-align:center;">
+                                        <span id="@Id">@item.Text</span>
+                                    </div>
+                                </div>
+                            }
+                        }
+                    }
+                }
+            </div>
+        </div>
 
     </div>
-   
+
 </div>
 
 
 
-    <script>
+<script>
     $(document).ready(function () {
         $('#chkSalesRep').click(function () {
             if ($(this).is(':checked')) {
                 $("#dvSalesRep").show();
             }
-            else {                
+            else {
                 $("#dvSalesRep").hide();
 
             }
@@ -250,7 +279,7 @@
             if ($(this).is(':checked')) {
                 $("#dvAwardPoints").show();
             }
-            else {                
+            else {
                 $("#dvAwardPoints").hide();
 
             }
@@ -260,7 +289,7 @@
             if ($(this).is(':checked')) {
                 $("#dvMsgMissedFeedback").show();
             }
-            else {               
+            else {
                 $("#dvMsgMissedFeedback").hide();
 
             }
@@ -276,46 +305,48 @@
             $("#dvMsgMissedFeedback").show();
         }
 
-
+        LoadPreview();
     });
 
     function CheckValidationAndSubmit() {
         var HomeData = [];
-        var countHome = 3;
-        for (var i = 1; i <= countHome; i++) {
+        $('[id^=chkIsDisplayHome]').each(function (i, item) {
+            var id = item.id.substr(16);
             itemHome = {}
-            itemHome["Id"] = i;
-            itemHome["Text"] = $("#txtHomeHeadingText" + i).val();
-            itemHome["IsDisplay"] = $("#chkIsDisplayHome" + i).is(":checked");
-            /*itemHome["IsMandatory"] = $("#ddlIsMandatoryHome" + i).val();*/
+            itemHome["Id"] = id;
+            itemHome["Text"] = $("#txtHomeHeadingText" + id).val();
+            itemHome["IsDisplay"] = $("#chkIsDisplayHome" + id).is(":checked");
+
             HomeData.push(itemHome);
-        }
+        });
 
         var QuestionData = [];
-        var countQue = 9;
-        for (var i = 4; i <= countQue; i++) {
+        $('[id^=chkIsDisplayQuestion]').each(function (i, item) {
+            var id = item.id.substr(20);
             itemQuestion = {}
-            itemQuestion["Id"] = i;
-            itemQuestion["Text"] = $("#txtQuestionHeadingText" + i).val();
-            itemQuestion["IsDisplay"] = $("#chkIsDisplayQuestion" + i).is(":checked");
-            if (i > 5) {
-                itemQuestion["IsMandatory"] = $("#ddlIsMandatoryQuestion" + i).val();
+            itemQuestion["Id"] = id;
+            itemQuestion["Text"] = $("#txtQuestionHeadingText" + id).val();
+            itemQuestion["IsDisplay"] = $("#chkIsDisplayQuestion" + id).is(":checked");
+            if ($("#hdnQuestionType" + id).val() == "Question") {
+                itemQuestion["IsMandatory"] = $("#ddlIsMandatoryQuestion" + id).val();
             }
+
             QuestionData.push(itemQuestion);
-        }
+        });
 
         var OtherInfoData = [];
-        var countOtherInfo = 15;
-        for (var i = 10; i <= countOtherInfo; i++) {
+        $('[id^=chkIsDisplayOther]').each(function (i, item) {
+            var id = item.id.substr(17);
             itemOtherInfo = {}
-            itemOtherInfo["Id"] = i;
-            itemOtherInfo["Text"] = $("#txtOtherHeadingText" + i).val();
-            itemOtherInfo["IsDisplay"] = $("#chkIsDisplayOther" + i).is(":checked");
-            if (i > 11) {
-                itemOtherInfo["IsMandatory"] = $("#ddlIsMandatoryOther" + i).val();
+            itemOtherInfo["Id"] = id;
+            itemOtherInfo["Text"] = $("#txtOtherHeadingText" + id).val();
+            itemOtherInfo["IsDisplay"] = $("#chkIsDisplayOther" + id).is(":checked");
+            if ($("#hdnOtherInfoType" + id).val() == "Question") {
+                itemOtherInfo["IsMandatory"] = $("#ddlIsMandatoryOther" + id).val();
             }
+
             OtherInfoData.push(itemOtherInfo);
-        }
+        });
 
         var OtherConfigData = [];
         itemOtherConfig = {}
@@ -333,22 +364,15 @@
         $('[id^=txtOutlet]').each(function (i, item) {
             itemOutlet = {}
             itemOutlet["OutletId"] = item.id.substr(9);
-
             itemOutlet["Numbers"] = $(item).val();
-
             OutletMobileNos.push(itemOutlet);
         });
 
-        //var AllData = [];
-        //item = {}
-        //item["Home"] = HomeData;
-        //item["Question"] = QuestionData;
-        //item["OtherInfo"] = OtherInfoData;
-        //item["OtherConfig"] = OtherConfigData;
-        //item["OutletMobileNos"] = OutletMobileNos;
-        //AllData.push(item);
-
-        //var data = JSON.stringify(AllData);
+        console.log(HomeData);
+        console.log(QuestionData);
+        console.log(OtherInfoData);
+        console.log(OtherConfigData);
+        console.log(OutletMobileNos);
 
         $.ajax({
             type: "POST",
@@ -382,7 +406,30 @@
         });
 
 
-        return false;
     }
 
-    </script>
+    function LoadPreview() {
+        $('[id^=chkIsDisplayHome]').each(function (i, item) {
+            $("#" + item.id).change(function () {
+                if (this.checked) {
+                    var id = item.id.substr(16);
+                    $("#spnHome" + id).text($("#txtHomeHeadingText" + id).val());
+                }
+                else {
+                    var id = item.id.substr(16);
+                    $("#spnHome" + id).text("");
+                }
+            });
+        });
+
+        $('[id^=txtHomeHeadingText]').each(function (i, item) {
+            $("#" + item.id).focusout(function () {               
+                var id = item.id.substr(18);               
+                $("#spnHome" + id).text($("#" + item.id).val());
+            });
+        });
+
+    }
+    
+
+</script>

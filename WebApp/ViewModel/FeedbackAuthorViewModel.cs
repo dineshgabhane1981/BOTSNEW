@@ -20,7 +20,7 @@ namespace WebApp.ViewModel
         public string outletJson { get; set; }
         public SelectListItem[] MandatoryOrNot()
         {
-            return new SelectListItem[2] { new SelectListItem() { Text = "Yes", Value = "1" }, new SelectListItem() { Text = "No", Value = "0" } };
+            return new SelectListItem[2] { new SelectListItem() { Text = "Mandatory", Value = "1" }, new SelectListItem() { Text = "Non Mandatory", Value = "0" } };
         }
     }
 }

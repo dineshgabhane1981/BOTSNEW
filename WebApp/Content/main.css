@@ -24297,6 +24297,12 @@ a.fc-more {
     border-radius: 10px !important;
     border: solid 1px #e1e1e1;
 }
+.input150 {
+    width: 450px;
+    padding: 12px 10px 12px 15px !important;
+    border-radius: 10px !important;
+    border: solid 1px #e1e1e1;
+}
 .input100 {
     width: 300px;
    

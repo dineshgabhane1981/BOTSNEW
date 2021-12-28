@@ -146,7 +146,7 @@ namespace BOTS_BL.Repository
             List<Feedback_ContentMaster> lstData = new List<Feedback_ContentMaster>();
             using (var context = new CommonDBContext())
             {
-                lstData = context.Feedback_ContentMaster.ToList();
+                lstData = context.Feedback_ContentMaster.OrderBy(x=>x.Id).ToList();
             }
 
             return lstData;
@@ -347,7 +347,7 @@ namespace BOTS_BL.Repository
                         var objFeedback = context.Feedback_Content.Where(x => x.Id == Id && x.GroupId == GroupId).FirstOrDefault();
                         objFeedback.Text = Convert.ToString(item["Text"]);
                         objFeedback.IsDisplay = Convert.ToBoolean(item["IsDisplay"]);
-                        if (Id > 5)
+                        if (objFeedback.Type == "Question")
                         {
                             objFeedback.IsMandatory = Convert.ToInt32(item["IsMandatory"]);
                         }
@@ -363,7 +363,7 @@ namespace BOTS_BL.Repository
                         var objFeedback = context.Feedback_Content.Where(x => x.Id == Id && x.GroupId == GroupId).FirstOrDefault();
                         objFeedback.Text = Convert.ToString(item["Text"]);
                         objFeedback.IsDisplay = Convert.ToBoolean(item["IsDisplay"]);
-                        if (Id > 11)
+                        if (objFeedback.Type == "Question")
                         {
                             objFeedback.IsMandatory = Convert.ToInt32(item["IsMandatory"]);
                         }
@@ -461,7 +461,11 @@ namespace BOTS_BL.Repository
             {
                 using (var context = new CommonDBContext())
                 {
-                    objData = context.Feedback_PointsAndMessages.Where(x => x.GroupId == GroupId).FirstOrDefault();
+                    var objExisting = context.Feedback_PointsAndMessages.Where(x => x.GroupId == GroupId).FirstOrDefault();
+                    if(objExisting !=null)
+                    {
+                        objData = objExisting;
+                    }
                 }
             }
             catch (Exception ex)
