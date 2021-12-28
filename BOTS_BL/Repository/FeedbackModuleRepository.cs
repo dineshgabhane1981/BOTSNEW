@@ -251,9 +251,8 @@ namespace BOTS_BL.Repository
                 newexception.AddException(ex, "GetHeadings");
             }
             return questions;
-        }
-
-        public List<Feedback_Content> GetFeedback(string GroupId)
+        }        
+        public List<Feedback_Content> GetHomeHeading(string GroupId)
         {
             List<Feedback_Content> lstfbget = new List<Feedback_Content>();
             Feedback_Content objfeedback = new Feedback_Content();
@@ -270,25 +269,7 @@ namespace BOTS_BL.Repository
                 string imageurl = objbrandDetail.BrandLogoUrl;
                 using (var context = new CommonDBContext())
                 {
-                    //lstfbget = (from fh in context.Feedback_Content
-                    //               where fh.GroupId == GroupId && fh.IsDisplay == true
-                    //               select new Feedback_Content
-                    //               {
-                    //                   Id = fh.Id,
-                    //                   Type =fh.Type,
-                    //                   TypeId =fh.TypeId,
-                    //                   GroupId = fh.GroupId,
-                    //                   ImagePath = "",
-                    //                   Text = fh.Text,
-                    //                   IsMandatory = fh.IsMandatory,
-                    //                   Section = fh.Section,
-                    //                   IsDisplay=fh.IsDisplay,
-                    //                   AddedDate = fh.AddedDate,
-                    //                   AddedBy = fh.AddedBy,
-                    //                   UpdatedDate = fh.UpdatedDate,
-                    //                   UpdatedBy =fh.UpdatedBy
-                    //               }).ToList();                   
-                    lstfbget = context.Feedback_Content.Where(x => x.GroupId == GroupId && x.IsDisplay == true).ToList();
+                    lstfbget = context.Feedback_Content.Where(x => x.GroupId == GroupId && x.IsDisplay == true && x.Section == "Home" && x.Type == "Heading").ToList();
 
                     lstfbget[0].ImagePath = imageurl;
                 }
@@ -299,7 +280,90 @@ namespace BOTS_BL.Repository
             }
             return lstfbget;
         }
+        public List<Feedback_Content> GetFeedbackHeading(string GroupId)
+        {
+            List<Feedback_Content> lstfbget = new List<Feedback_Content>();
+            Feedback_Content objfeedback = new Feedback_Content();
+            BrandDetail objbrandDetail = new BrandDetail();
 
+            try
+            {
+                using (var context = new CommonDBContext())
+                {
+                    lstfbget = context.Feedback_Content.Where(x => x.GroupId == GroupId && x.IsDisplay == true && x.Section == "FeedbackQuestions" && x.Type == "Heading").ToList();
+
+                    // lstfbget[0].ImagePath = imageurl;
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "Getfeedback");
+            }
+            return lstfbget;
+        }
+        public List<Feedback_Content> GetFeedbackQuestion(string GroupId)
+        {
+            List<Feedback_Content> lstfbget = new List<Feedback_Content>();
+            Feedback_Content objfeedback = new Feedback_Content();
+            BrandDetail objbrandDetail = new BrandDetail();
+
+            try
+            {
+                using (var context = new CommonDBContext())
+                {
+                    lstfbget = context.Feedback_Content.Where(x => x.GroupId == GroupId && x.IsDisplay == true && x.Section == "FeedbackQuestions" && x.Type == "Question").ToList();
+
+                    // lstfbget[0].ImagePath = imageurl;
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "Getfeedback");
+            }
+            return lstfbget;
+        }
+        public List<Feedback_Content> GetOtherinfoQuestion(string GroupId)
+        {
+            List<Feedback_Content> lstfbget = new List<Feedback_Content>();
+            Feedback_Content objfeedback = new Feedback_Content();
+            BrandDetail objbrandDetail = new BrandDetail();
+
+            try
+            {
+                using (var context = new CommonDBContext())
+                {
+                    lstfbget = context.Feedback_Content.Where(x => x.GroupId == GroupId && x.IsDisplay == true && x.Section == "OtherInformation" && x.Type == "Question").ToList();
+
+                    // lstfbget[0].ImagePath = imageurl;
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "Getfeedback");
+            }
+            return lstfbget;
+        }
+        public List<Feedback_Content> GetOtherinfoHeading(string GroupId)
+        {
+            List<Feedback_Content> lstfbget = new List<Feedback_Content>();
+            Feedback_Content objfeedback = new Feedback_Content();
+            BrandDetail objbrandDetail = new BrandDetail();
+
+            try
+            {
+                using (var context = new CommonDBContext())
+                {
+                    lstfbget = context.Feedback_Content.Where(x => x.GroupId == GroupId && x.IsDisplay == true && x.Section == "OtherInformation" && x.Type == "Heading").ToList();
+
+                    // lstfbget[0].ImagePath = imageurl;
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "Getfeedback");
+            }
+            return lstfbget;
+        }
         public List<SelectListItem> GetHowToKnowAboutList()
         {
             CustomerDetail objcustdetails = new CustomerDetail();

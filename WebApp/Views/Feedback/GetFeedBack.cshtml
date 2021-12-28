@@ -1,4 +1,4 @@
-﻿@model List<BOTS_BL.Models.Feedback_Content>
+﻿@model WebApp.ViewModel.FeedbackGetFeedbackViewModel
 
 @{
     ViewBag.Title = "GetFeedBack";
@@ -70,206 +70,247 @@
         <div class="row card">
             @if (Model != null)
             {
-                foreach (var item in Model.Where(x => x.Type == "Heading" && x.Section == "Home"))
+                if (Model.lstHomeHeading != null)
                 {
-                    <div class="col-md-12 col-sm-12 pt-3 pl-3 pr-3" style="text-align:center;">
-                        <img src=@item.ImagePath style="width:300px;">
-                        @*<img src="../Content/assets/images/GoldMartLogo.png" />*@
-                    </div>
-                    <div class="container-fluid pt-3 pl-3 pr-3 pb-3" id="divwelcome">
-                        <div class="row">
-                            <div class="col-md-12 col-sm-12 pt-3 pl-3 pr-3" style="text-align:center;">
-                                @*<h1 style="font-size:34px;">Welcome!</h1>*@
-                                @if (Model[0].TypeId == 1)
-                                {
-                                    <h1 style="font-size:34px;">@Model[0].Text</h1>
-                                }
+                    foreach (var item in Model.lstHomeHeading)
+                    {
+                        <div class="col-md-12 col-sm-12 pt-3 pl-3 pr-3" style="text-align:center;">
+                            <img src=@item.ImagePath style="width:300px;">
+                            @*<img src="../Content/assets/images/GoldMartLogo.png" />*@
+                        </div>
+                        <div class="container-fluid pt-3 pl-3 pr-3 pb-3" id="divwelcome">
+                            <div class="row">
+                                <div class="col-md-12 col-sm-12 pt-3 pl-3 pr-3" style="text-align:center;">
+                                    @*<h1 style="font-size:34px;">Welcome!</h1>*@
+                                    @if (Model.lstHomeHeading[0].TypeId == 1)
+                                    {
+                                        <h1 style="font-size:34px;">@Model.lstHomeHeading[0].Text</h1>
+                                    }
+                                </div>
+                                <div class="col-md-12 col-sm-12 pt-5 pl-5 pr-5" style="text-align:center;">
+                                    @*<h2 style="font-size:26px;">Your feedback is critical!!</h2>*@
+                                    @if (Model.lstHomeHeading[1].TypeId == 2)
+                                    {
+                                        <h2 style="font-size:26px;">@Model.lstHomeHeading[1].Text</h2>
+                                    }
+                                </div>
+                                <div class="col-md-12 col-sm-12 pt-5 pl-5 pr-5" style="text-align:center;">
+                                    @*<h3 style="font-size:20px;">Get rewarded with <b style="color:red;">50 Loyalty Points</b> on completion!!!</h3>*@
+                                    @if (Model.lstHomeHeading[2].TypeId == 3)
+                                    {
+                                        <h3 style="font-size:20px;">@Model.lstHomeHeading[2].Text</h3>
+                                    }
+                                </div>
                             </div>
-                            <div class="col-md-12 col-sm-12 pt-5 pl-5 pr-5" style="text-align:center;">
-                                @*<h2 style="font-size:26px;">Your feedback is critical!!</h2>*@
-                                @if (Model[1].TypeId == 2)
-                                {
-                                    <h2 style="font-size:26px;">@Model[1].Text</h2>
-                                }
-                            </div>
-                            <div class="col-md-12 col-sm-12 pt-5 pl-5 pr-5" style="text-align:center;">
-                                @*<h3 style="font-size:20px;">Get rewarded with <b style="color:red;">50 Loyalty Points</b> on completion!!!</h3>*@
-                                @if (Model[2].TypeId == 3)
-                                {
-                                    <h3 style="font-size:20px;">@Model[2].Text</h3>
-                                }
+                            <div class="row">
+                                <div class="col-md-12 col-sm-12 pt-5 pl-5 pr-5 pb-5" style="text-align:center;">
+                                    <input type="number" class="input100" id="txtMobileNo" placeholder="Enter Mobile number" />
+
+                                </div>
+                                <div class="col-md-12 col-sm-12 pb-5" style="text-align:center;">
+                                    <button type="button" class="btn btn-primary" style="width: 280px; background-color: #1C699F; color:white; font-weight:bold; font-size:18px; border-radius:5px;" id="btnProceed" onclick="return CheckCustomer();">ENTER</button>
+                                </div>
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="col-md-12 col-sm-12 pt-5 pl-5 pr-5 pb-5" style="text-align:center;">
-                                <input type="number" class="input100" id="txtMobileNo" placeholder="Enter Mobile number" />
 
-                            </div>
-                            <div class="col-md-12 col-sm-12 pb-5" style="text-align:center;">
-                                <button type="button" class="btn btn-primary" style="width: 280px; background-color: #1C699F; color:white; font-weight:bold; font-size:18px; border-radius:5px;" id="btnProceed" onclick="return CheckCustomer();">ENTER</button>
-                            </div>
-                        </div>
-                    </div>
-
+                    }
                 }
-                foreach (var item in Model.Where(x => x.Section == "FeedbackQuestions"))
+                if (Model.lstFeedbackHeading != null)
                 {
-                    <div class="container-fluid pt-3 pl-3 pr-3 pb-3" style="display:none;" id="divmember">
-                        <div class="row">
-                            @if (Model[0].TypeId == 1 && Model[0].Type == "Heading")
-                            {
+                    foreach (var item in Model.lstFeedbackHeading)
+                    {
+                        <div class="container-fluid pt-3 pl-3 pr-3 pb-3" style="display:none;" id="divmember">
+                            <div class="row">
 
                                 <div class="col-md-12 col-sm-12 pt-3 pl-3 pr-3" style="text-align:center;">
-                                    <h1 style="color: red; font-size: 34px;">@Model[3].Text</h1>
+                                    <h1 style="color: red; font-size: 34px;">@Model.lstFeedbackHeading[0].Text</h1>
                                     @*<h1 style="color: red; font-size: 34px;">Welcome <span id="spnCustName"></span>,</h1>*@
                                 </div>
-                            }
-                            @if (Model[1].TypeId == 2 && Model[0].Type == "Heading")
-                            {
 
                                 <div class="col-md-12 col-sm-12 pt-5 pl-5 pr-5" style="text-align:center;">
                                     <h2 style="font-size:26px;">
                                         @*Please rate us for today’s experience!!!*@
-                                        @Model[4].Text
+                                        @Model.lstFeedbackHeading[1].Text
                                     </h2>
                                 </div>
-                            }
-                                <div class="col-md-12 col-sm-12 pt-5 pl-5 pr-5" style="text-align:center;">
-                                    <h3 style="font-size:20px;">
-                                        @*How did you find our <b>Variety</b>?*@
-                                        @Model[5].Text
-                                    </h3>
-
-                                    <div class="cc-selector">
-                                        <input id="FQone1" type="radio" name="FQ1" />
-                                        <label class="drinkcard-cc FQone1" for="FQone1"></label>
-                                        <input id="FQone2" type="radio" name="FQ1" />
-                                        <label class="drinkcard-cc FQone2" for="FQone2"></label>
-                                        <input id="FQone3" type="radio" name="FQ1" />
-                                        <label class="drinkcard-cc FQone3" for="FQone3"></label>
-                                        <input id="FQone4" type="radio" name="FQ1" />
-                                        <label class="drinkcard-cc FQone4" for="FQone4"></label>
-                                    </div>
-
-                                </div>
-
-                                <div class="col-md-12 col-sm-12 pt-5 pl-5 pr-5 mb-2" style="text-align:center;">
-                                    <h3 style="font-size:20px;">
-                                        @*What do you feel about our <b>Service</b>?*@
-                                        @Model[6].Text
-                                    </h3>
-                                    <div class="cc-selector">
-                                        <input id="FQtwo1" type="radio" name="FQtwo" />
-                                        <label class="drinkcard-cc rbtvariety1" for="FQtwo1" style="padding-right:2px;"></label>
-                                        <input id="FQtwo2" type="radio" name="FQtwo" />
-                                        <label class="drinkcard-cc rbtvariety2" for="FQtwo2"></label>
-                                        <input id="FQtwo3" type="radio" name="FQtwo" />
-                                        <label class="drinkcard-cc rbtvariety3" for="FQtwo3"></label>
-                                        <input id="FQtwo4" type="radio" name="FQtwo" />
-                                        <label class="drinkcard-cc rbtvariety4" for="FQtwo4"></label>
-                                    </div>
-                                </div>
-                                <div class="col-md-12 col-sm-12 pt-5 pl-5 pr-5 mb-2" style="text-align:center;">
-                                    <h3 style="font-size:20px;">
-                                        @*What do you feel about our <b>Service</b>?*@
-                                        @Model[7].Text
-                                    </h3>
-                                    <div class="cc-selector">
-                                        <input id="FQthree1" type="radio" name="FQthree" />
-                                        <label class="drinkcard-cc rbtvariety1" for="FQthree1" style="padding-right:2px;"></label>
-                                        <input id="FQthree2" type="radio" name="FQthree" />
-                                        <label class="drinkcard-cc rbtvariety2" for="FQthree2"></label>
-                                        <input id="FQthree3" type="radio" name="FQthree" />
-                                        <label class="drinkcard-cc rbtvariety3" for="FQthree3"></label>
-                                        <input id="FQthree4" type="radio" name="FQthree" />
-                                        <label class="drinkcard-cc rbtvariety4" for="FQthree4"></label>
-                                    </div>
-                                </div>
-                                <div class="col-md-12 col-sm-12 pt-5 pl-5 pr-5 mb-2" style="text-align:center;">
-                                    <h3 style="font-size:20px;">
-                                        @*What do you feel about our <b>Service</b>?*@
-                                        @Model[8].Text
-                                    </h3>
-                                    <div class="cc-selector">
-                                        <input id="FQfour1" type="radio" name="FQfour" />
-                                        <label class="drinkcard-cc rbtvariety1" for="FQfour1" style="padding-right:2px;"></label>
-                                        <input id="FQfour2" type="radio" name="FQfour" />
-                                        <label class="drinkcard-cc rbtvariety2" for="FQfour2"></label>
-                                        <input id="FQfour3" type="radio" name="FQfour" />
-                                        <label class="drinkcard-cc rbtvariety3" for="FQfour3"></label>
-                                        <input id="FQfour4" type="radio" name="FQfour" />
-                                        <label class="drinkcard-cc rbtvariety4" for="FQfour4"></label>
-                                    </div>
-                                </div>
-
-                            </div>
-                        <div class="row mt-3">
-                            <div class="col-md-12 col-sm-12 pb-5" style="text-align:center;">
-                                <button type="button" class="btn btn-primary" style="width: 280px; background-color: #1C699F; color:white; font-weight:bold; font-size:18px; border-radius:5px;" id="btnNextpg" onclick="SubmitRating();">Next Page</button>
                             </div>
                         </div>
-                    </div>
+                     }
                 }
-                foreach (var item in Model.Where(x => x.Section == "OtherInformation"))
+                         if (Model.lstFeedbackQuestion != null)
+                         {
+                                        var i = Model.lstFeedbackQuestion.Count();
+                                        var j = 0;
+                                        foreach (var item1 in Model.lstFeedbackQuestion)
+                                        {
+
+                                            <div class="col-md-12 col-sm-12 pt-5 pl-5 pr-5" style="text-align:center;">
+                                        <h3 style="font-size:20px;">
+                                            @*How did you find our <b>Variety</b>?*@
+                                            @Model.lstFeedbackQuestion[j].Text
+                                        </h3>
+
+                                        <div class="cc-selector">
+                                            <input id="FQone1" type="radio" name="FQ1" />
+                                            <label class="drinkcard-cc FQone1" for="FQone1"></label>
+                                            <input id="FQone2" type="radio" name="FQ1" />
+                                            <label class="drinkcard-cc FQone2" for="FQone2"></label>
+                                            <input id="FQone3" type="radio" name="FQ1" />
+                                            <label class="drinkcard-cc FQone3" for="FQone3"></label>
+                                            <input id="FQone4" type="radio" name="FQ1" />
+                                            <label class="drinkcard-cc FQone4" for="FQone4"></label>
+                                        </div>
+
+                                        </div>
+                                            j++;
+                                        <div class="col-md-12 col-sm-12 pt-5 pl-5 pr-5 mb-2" style="text-align:center;">
+                                            <h3 style="font-size:20px;">
+                                                @*What do you feel about our <b>Service</b>?*@
+                                                @Model.lstFeedbackQuestion[j].Text
+                                            </h3>
+                                            <div class="cc-selector">
+                                                <input id="FQtwo1" type="radio" name="FQtwo" />
+                                                <label class="drinkcard-cc rbtvariety1" for="FQtwo1" style="padding-right:2px;"></label>
+                                                <input id="FQtwo2" type="radio" name="FQtwo" />
+                                                <label class="drinkcard-cc rbtvariety2" for="FQtwo2"></label>
+                                                <input id="FQtwo3" type="radio" name="FQtwo" />
+                                                <label class="drinkcard-cc rbtvariety3" for="FQtwo3"></label>
+                                                <input id="FQtwo4" type="radio" name="FQtwo" />
+                                                <label class="drinkcard-cc rbtvariety4" for="FQtwo4"></label>
+                                            </div>
+                                        </div>
+                                        j++;
+                                        if (j==i-1 || j<i-1 )
+                                        {
+                                        <div class="col-md-12 col-sm-12 pt-5 pl-5 pr-5 mb-2" style="text-align:center;">
+                                            <h3 style="font-size:20px;">
+                                                @*What do you feel about our <b>Service</b>?*@
+                                                @Model.lstFeedbackQuestion[j].Text
+                                            </h3>
+                                            <div class="cc-selector">
+                                                <input id="FQthree1" type="radio" name="FQthree" />
+                                                <label class="drinkcard-cc rbtvariety1" for="FQthree1" style="padding-right:2px;"></label>
+                                                <input id="FQthree2" type="radio" name="FQthree" />
+                                                <label class="drinkcard-cc rbtvariety2" for="FQthree2"></label>
+                                                <input id="FQthree3" type="radio" name="FQthree" />
+                                                <label class="drinkcard-cc rbtvariety3" for="FQthree3"></label>
+                                                <input id="FQthree4" type="radio" name="FQthree" />
+                                                <label class="drinkcard-cc rbtvariety4" for="FQthree4"></label>
+                                            </div>
+                                        </div>
+                                            j++;
+                                        }
+                                        if (j == i - 1 || j < i - 1)
+                                        {
+                                        <div class="col-md-12 col-sm-12 pt-5 pl-5 pr-5 mb-2" style="text-align:center;">
+                                            <h3 style="font-size:20px;">
+                                                @*What do you feel about our <b>Service</b>?*@
+                                                @Model.lstFeedbackQuestion[j].Text
+                                            </h3>
+                                            <div class="cc-selector">
+                                                <input id="FQfour1" type="radio" name="FQfour" />
+                                                <label class="drinkcard-cc rbtvariety1" for="FQfour1" style="padding-right:2px;"></label>
+                                                <input id="FQfour2" type="radio" name="FQfour" />
+                                                <label class="drinkcard-cc rbtvariety2" for="FQfour2"></label>
+                                                <input id="FQfour3" type="radio" name="FQfour" />
+                                                <label class="drinkcard-cc rbtvariety3" for="FQfour3"></label>
+                                                <input id="FQfour4" type="radio" name="FQfour" />
+                                                <label class="drinkcard-cc rbtvariety4" for="FQfour4"></label>
+                                            </div>
+                                        </div>
+                                        }
+                                        }
+                         }
+                        
+                            <div class="row mt-3">
+                                <div class="col-md-12 col-sm-12 pb-5" style="text-align:center;">
+                                    <button type="button" class="btn btn-primary" style="width: 280px; background-color: #1C699F; color:white; font-weight:bold; font-size:18px; border-radius:5px;" id="btnNextpg" onclick="SubmitRating();">Next Page</button>
+                                </div>
+                            </div>
+                       // </div>
+                    //}
+               // }
+                if (Model.lstOtherInfoHeading != null)
                 {
+
+                    foreach (var item in Model.lstOtherInfoHeading)
+                    {
                         <div class="container-fluid pt-3 pl-3 pr-3 pb-3" id="divthankyou" style="display:none;">
                             <div class="row">
                                 <div class="col-md-12 col-sm-12 pt-3 pl-3 pr-3" style="text-align:center;">
                                     <h1 style="color:red; font-size:34px;">
-                                        <b>@item.Text</b>
+                                        <b>@Model.lstOtherInfoHeading[0].Text</b>
                                         @*<b> Thank you <span id="spnCustName1"></span> for your valuable feedback!</b>*@
                                     </h1>
                                 </div>
                                 <div class="col-md-12 col-sm-12 pt-5 pl-5 pr-5" style="text-align:center;">
                                     <h2 style="font-size:26px;">
-                                        @item.Text
+                                        @Model.lstOtherInfoHeading[1].Text
                                         @*Enter your details below to unlock 50 Loyalty points!!*@
                                     </h2>
                                 </div>
-                                @*@if (item.Text)
-                                {
-                                    <div class="row col-md-12 col-xl-12 mt-5" style="text-align:center;">
-                                        <div class=" col-md-12 col-xl-12 pt-5 pl-5">
-                                            <span style="font-size:18px; padding-right:10px;">Gender*</span><input type="date" class="input50" id="txtgender" />
-                                        </div>
-                                    </div>
-                                    <div class="row col-md-12 col-xl-12 mt-5" style="text-align:center;">
-                                        <div class=" col-md-12 col-xl-12 pt-5 pl-5">
-                                            <span style="font-size:18px; padding-right:10px;">Your Birth Date*</span><input type="date" class="input50" id="txtbirthdt" />
-                                        </div>
-                                    </div>
-                                    <div class="row col-md-12 col-xl-12 " style="text-align:center;">
-                                        <div class=" col-md-12 col-xl-12 pt-5 pl-5">
-                                            <span style="font-size:18px; padding-right:10px;">Your Anniversary</span><input type="date" class="input50" id="txtanniversary" />
-                                        </div>
-                                    </div>
+                            </div>
+                            <div>
+                    }
+                 }
+                @if (Model.lstOtherInfoQuestion != null)
+                 {
 
-                            <div class="row col-md-12 col-sm-12 pl-5" id="divknowabt" style="float:left;display:none;">
-                                <div class="col-md-6 col-sm-6 pt-5" style="text-align:right;">
-                                    <h4 style="font-size:18px;">
-                                        <b>
-                                            How do you know about<br />
-                                            Goldmart Jeweller?*
-                                        </b>
-                                    </h4>
-                                </div>
-                                @Html.DropDownList("location", new SelectList(ViewBag.lsthowtoknow, "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input50", @id = "ddlhowtoknow" })
+                   foreach (var item1 in Model.lstOtherInfoQuestion)
+                                    {
+                                        @*@if ()
+                                        {
+                                            <div class="container-fluid pt-3 pl-3 pr-3 pb-3" id="divthankyou" style="display:none;">
+                                                <div class="row">
+
+                                                    <div class="row col-md-12 col-xl-12 mt-5" style="text-align:center;">
+                                                        <div class=" col-md-12 col-xl-12 pt-5 pl-5">
+                                                            <span style="font-size:18px; padding-right:10px;">Gender*</span><input type="date" class="input50" id="txtgender" />
+                                                        </div>
+                                                    </div>
+                                                    <div class="row col-md-12 col-xl-12 mt-5" style="text-align:center;">
+                                                        <div class=" col-md-12 col-xl-12 pt-5 pl-5">
+                                                            <span style="font-size:18px; padding-right:10px;">Your Birth Date*</span><input type="date" class="input50" id="txtbirthdt" />
+                                                        </div>
+                                                    </div>
+                                                    <div class="row col-md-12 col-xl-12 " style="text-align:center;">
+                                                        <div class=" col-md-12 col-xl-12 pt-5 pl-5">
+                                                            <span style="font-size:18px; padding-right:10px;">Your Anniversary</span><input type="date" class="input50" id="txtanniversary" />
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="row col-md-12 col-sm-12 pl-5" id="divknowabt" style="float:left;display:none;">
+                                                        <div class="col-md-6 col-sm-6 pt-5" style="text-align:right;">
+                                                            <h4 style="font-size:18px;">
+                                                                <b>
+                                                                    How do you know about<br />
+                                                                    Goldmart Jeweller?*
+                                                                </b>
+                                                            </h4>
+                                                        </div>
+                                                        @Html.DropDownList("location", new SelectList(ViewBag.lsthowtoknow, "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input50", @id = "ddlhowtoknow" })
+
+                                                    </div>
+                                                    }
+                                                </div>
+
+                                                <div class="row">
+                                                    <div class="col-md-12 col-sm-12 pb-5 pt-5" style="text-align:center;">
+                                                        <button type="button" class="btn btn-primary" style="width: 280px; background-color: #1C699F; color:white; font-weight:bold; font-size:18px; border-radius:5px;" id="btnsubmit" onclick="SubmitPoints();">SUBMIT</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        }*@
+                                        //}
+                                    }
+                 }
 
                             </div>
-                                }*@
-                            </div>
-
-                            <div class="row">
-                                <div class="col-md-12 col-sm-12 pb-5 pt-5" style="text-align:center;">
-                                    <button type="button" class="btn btn-primary" style="width: 280px; background-color: #1C699F; color:white; font-weight:bold; font-size:18px; border-radius:5px;" id="btnsubmit" onclick="SubmitPoints();">SUBMIT</button>
-                                </div>
-                            </div>
-                        </div>
+                         </div>
                     }
                 }
             }
-        </div>
-</div>
+</div></div>
 <script>
     $(document).ready(function () {
         var today = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
