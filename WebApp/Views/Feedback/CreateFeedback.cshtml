@@ -39,10 +39,10 @@
                     if (Model.PointsAndMessages != null)
                     {
                         <div class="row">
-                            <div class="col-md-6 col-xl-6" style="margin-left:20px; margin-top:20px;">
-                                @Html.CheckBoxFor(model => model.PointsAndMessages.IsAddRepresentative, new { @id = "chkSalesRep" }) Add Sales Representative
+                            <div class="col-md-12 col-xl-12" style="margin-left:20px; margin-top:20px;">
+                                @Html.CheckBoxFor(model => model.PointsAndMessages.IsAddRepresentative, new { @id = "chkSalesRep" }) Add Sales Representative(Enter with comma(,) separated)
                                 <div id="dvSalesRep" style="display:none;">
-                                    @Html.TextBoxFor(model => model.PointsAndMessages.RepresentativesList, new { @class = "input150", @id = "txtHomeRepresentative", @placeholder = "Enter with comma separated" })
+                                    @Html.TextBoxFor(model => model.PointsAndMessages.RepresentativesList, new { @class = "input150", @id = "txtHomeRepresentative" })
                                 </div>
                             </div>
                         </div>
@@ -86,30 +86,37 @@
                         <h4> Other information </h4>
                     </div>
                 </div>
-                @if (Model.lstFeedbackData != null)
-                {
-
-                    foreach (var item in Model.lstFeedbackData)
+                <div class="row">
+                    <div class="col-md-12 col-xl-12" style="margin-left:20px; margin-top:20px;">
+                        @Html.CheckBoxFor(model => model.PointsAndMessages.IsOtherInfoShow, new { @id = "chkIsOtherInfoShow" }) Do you want this page, where you can collect more information of your customer?
+                    </div>
+                </div>
+                <div id="dvShowOtherInfo">
+                    @if (Model.lstFeedbackData != null)
                     {
 
-                        if (item.Section == "OtherInformation")
+                        foreach (var item in Model.lstFeedbackData)
                         {
-                            <div class="row">
-                                <div class="col-md-12 col-xl-12" style="margin-left:20px; margin-top:20px;">
-                                    @Html.HiddenFor(model => item.Type, new { @id = "hdnOtherInfoType" + item.Id })
-                                    @Html.CheckBoxFor(model => item.IsDisplay, new { @id = "chkIsDisplayOther" + item.Id })
-                                    @Html.TextBoxFor(model => item.Text, new { @class = "input100", @id = "txtOtherHeadingText" + item.Id })
-                                    @if (item.Type == "Question")
-                                    {
-                                        
-                                        @Html.DropDownListFor(model => item.IsMandatory, new SelectList(Model.MandatoryOrNotNew(), "Value", "Text", @item.IsMandatory), htmlAttributes: new { @class = "input50", @id = "ddlIsMandatoryOther" + item.Id })
-                                        
-                                    }
+
+                            if (item.Section == "OtherInformation")
+                            {
+                                <div class="row">
+                                    <div class="col-md-12 col-xl-12" style="margin-left:20px; margin-top:20px;">
+                                        @Html.HiddenFor(model => item.Type, new { @id = "hdnOtherInfoType" + item.Id })
+                                        @Html.CheckBoxFor(model => item.IsDisplay, new { @id = "chkIsDisplayOther" + item.Id })
+                                        @Html.TextBoxFor(model => item.Text, new { @class = "input100", @id = "txtOtherHeadingText" + item.Id })
+                                        @if (item.Type == "Question")
+                                        {
+
+                                            @Html.DropDownListFor(model => item.IsMandatory, new SelectList(Model.MandatoryOrNotNew(), "Value", "Text", @item.IsMandatory), htmlAttributes: new { @class = "input50", @id = "ddlIsMandatoryOther" + item.Id })
+
+                                        }
+                                    </div>
                                 </div>
-                            </div>
+                            }
                         }
                     }
-                }
+                </div>
 
             </div>
 
@@ -222,7 +229,6 @@
             </div>
         </div>
 
-
         <div class="col-md-4 col-xl-4" style="border: 2px solid grey; border-radius: 10px; width: 30% !important;float:left;background-color:seashell;">
             <div class="col-md-12 col-xl-12" style="text-align:center;"><h4>Preview</h4></div>
             <div style="border: 2px solid lightgray; border-radius: 10px; margin-top:10px;margin-bottom:10px;">
@@ -318,7 +324,14 @@
                                         }
                                         else
                                         {
-                                            <input type="number" class="input50" />
+                                            if (item.TypeId == 1)
+                                            {
+                                                @Html.DropDownList("abc", new SelectList(Model.Gender(), "Value", "Text"), htmlAttributes: new { @class = "input50" })
+                                            }
+                                            if (item.TypeId == 4)
+                                            {
+                                                @Html.DropDownList("abc", new SelectList(Model.Gender(), "Value", "Text"), htmlAttributes: new { @class = "input50" })
+                                            }
                                         }
                                         @if (item.IsMandatory == "Mandatory")
                                         {
@@ -442,6 +455,7 @@
         itemOtherConfig["MsgNegativeFeedback"] = $("#txtMsgNegativeFeedback").val();
         itemOtherConfig["IsMsgMissedFeedback"] = $("#chkMissedMessage").is(":checked");
         itemOtherConfig["MsgMissedFeedback"] = $("#txtMsgMissedFeedback").val();
+        itemOtherConfig["IsOtherInfoShow"] = $("#chkIsOtherInfoShow").is(":checked");
         OtherConfigData.push(itemOtherConfig);
 
         var OutletMobileNos = [];
@@ -488,8 +502,6 @@
                 $("#divLoader").hide();
             }
         });
-
-
     }
 
     function LoadPreview() {
@@ -553,6 +565,13 @@
                 }
             }
         });
+        if ($("#chkIsOtherInfoShow").is(":checked")) {
+            $("#dvShowOtherInfo").show();
+        }
+        else {
+            $("#dvShowOtherInfo").hide();
+        }       
+
     }
 
     function ChangePreview() {
@@ -642,6 +661,15 @@
                 var id = item.id.substr(19);
                 $("#spnOtherInformation" + id).text($("#" + item.id).val());
             });
+        });
+
+        $("#chkIsOtherInfoShow").change(function () {
+            if (this.checked) {
+                $("#dvShowOtherInfo").show();
+            }
+            else {
+                $("#dvShowOtherInfo").hide();
+            }
         });
     }
 

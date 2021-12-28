@@ -468,6 +468,8 @@ namespace BOTS_BL.Repository
                             objPointsAndMessages.MsgMissedFeedback = Convert.ToString(item["MsgMissedFeedback"]);
                         else
                             objPointsAndMessages.MsgMissedFeedback = "";
+
+                        objPointsAndMessages.IsOtherInfoShow= Convert.ToBoolean(item["IsOtherInfoShow"]);
                     }
                     if (objPointsAndMessages.AddedBy == null)
                     {
