@@ -70,7 +70,7 @@
                                     @Html.TextBoxFor(model => item.Text, new { @class = "input100", @id = "txtQuestionHeadingText" + item.Id })
                                     @if (item.Type == "Question")
                                     {
-                                        @Html.DropDownListFor(model => item.IsMandatory.Value, new SelectList(Model.MandatoryOrNot(), "Value", "Text"), htmlAttributes: new { @class = "input50", @id = "ddlIsMandatoryQuestion" + item.Id })
+                                        @Html.DropDownListFor(model => item.IsMandatory, new SelectList(Model.MandatoryOrNot(), "Value", "Text", @item.IsMandatory), htmlAttributes: new { @class = "input50", @id = "ddlIsMandatoryQuestion" + item.Id })
 
                                     }
                                 </div>
@@ -101,7 +101,9 @@
                                     @Html.TextBoxFor(model => item.Text, new { @class = "input100", @id = "txtOtherHeadingText" + item.Id })
                                     @if (item.Type == "Question")
                                     {
-                                        @Html.DropDownListFor(model => item.IsMandatory.Value, new SelectList(Model.MandatoryOrNot(), "Value", "Text"), htmlAttributes: new { @class = "input50", @id = "ddlIsMandatoryOther" + item.Id })
+                                        
+                                        @Html.DropDownListFor(model => item.IsMandatory, new SelectList(Model.MandatoryOrNotNew(), "Value", "Text", @item.IsMandatory), htmlAttributes: new { @class = "input50", @id = "ddlIsMandatoryOther" + item.Id })
+                                        
                                     }
                                 </div>
                             </div>
@@ -222,6 +224,7 @@
 
 
         <div class="col-md-4 col-xl-4" style="border: 2px solid grey; border-radius: 10px; width: 30% !important;float:left;background-color:seashell;">
+            <div class="col-md-12 col-xl-12" style="text-align:center;"><h4>Preview</h4></div>
             <div style="border: 2px solid lightgray; border-radius: 10px; margin-top:10px;margin-bottom:10px;">
                 @if (Model.lstFeedbackData != null)
                 {
@@ -233,12 +236,12 @@
                             if (item.Type == "Footer")
                             {
                                 <div class="row">
-                                    <div class="col-md-12 col-xl-12" style="margin-left:20px; margin-top:20px;text-align:center;">
+                                    <div class="col-md-12 col-xl-12" style="margin-top:20px;text-align:center;">
                                         <input type="number" class="input50" /> <button class="btn btn-primary">Go</button>
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <div class="col-md-12 col-xl-12  mb-5" style="margin-left:20px; margin-top:20px;text-align:center;">
+                                    <div class="col-md-12 col-xl-12  mb-5" style="margin-top:20px;text-align:center;">
                                         <span id="@Id">@item.Text</span>
                                     </div>
                                 </div>
@@ -246,7 +249,7 @@
                             else
                             {
                                 <div class="row">
-                                    <div class="col-md-12 col-xl-12 mb-2" style="margin-left:20px; margin-top:20px;text-align:center;">
+                                    <div class="col-md-12 col-xl-12 mb-2" style="margin-top:20px;text-align:center;">
                                         <span id="@Id">@item.Text</span>
                                     </div>
                                 </div>
@@ -255,10 +258,90 @@
                     }
                 }
             </div>
+
+            <div style="border: 2px solid lightgray; border-radius: 10px; margin-top:10px;margin-bottom:10px;padding-bottom:20px;">
+                @if (Model.lstFeedbackData != null)
+                {
+                    foreach (var item in Model.lstFeedbackData)
+                    {
+                        if (item.Section == "FeedbackQuestions")
+                        {
+                            var Id = "spnFeedbackQuestions" + item.Id;
+                            var dvId = "dvFeedbackQuestions" + item.Id;
+                            var spnMandatory = "spnMandatory" + item.Id;
+                            if (item.Type == "Question")
+                            {
+
+                                <div class="row">
+                                    <div class="col-md-12 col-xl-12" style="margin-top:20px;text-align:center;" id="@dvId">
+                                        <span id="@Id">@item.Text</span><br />
+                                        <span><b>Rating Images</b></span>
+                                        @if (item.IsMandatory == "Mandatory")
+                                        {
+                                            <span style="color:red;" id="@spnMandatory">*</span>
+                                        }
+                                    </div>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="row">
+                                    <div class="col-md-12 col-xl-12 mb-2" style="margin-top:20px;text-align:center;">
+                                        <span id="@Id">@item.Text</span>
+                                    </div>
+                                </div>
+                            }
+                        }
+                    }
+                }
+            </div>
+
+            <div style="border: 2px solid lightgray; border-radius: 10px; margin-top:10px;margin-bottom:10px;padding-bottom:20px;">
+                @if (Model.lstFeedbackData != null)
+                {
+                    foreach (var item in Model.lstFeedbackData)
+                    {
+                        if (item.Section == "OtherInformation")
+                        {
+                            var Id = "spnOtherInformation" + item.Id;
+                            var dvId = "dvOtherInformation" + item.Id;
+                            var spnMandatory = "spnMandatoryOther" + item.Id;
+                            if (item.Type == "Question")
+                            {
+
+                                <div class="row">
+                                    <div class="col-md-12 col-xl-12" style="margin-top:20px;text-align:center;" id="@dvId">
+                                        <span id="@Id">@item.Text</span><br />
+                                        @if (item.TypeId == 2 || item.TypeId == 3)
+                                        {
+                                            <input type="date" class="input50" />
+                                        }
+                                        else
+                                        {
+                                            <input type="number" class="input50" />
+                                        }
+                                        @if (item.IsMandatory == "Mandatory")
+                                        {
+                                            <span style="color:red;" id="@spnMandatory">*</span>
+                                        }
+                                    </div>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="row">
+                                    <div class="col-md-12 col-xl-12 mb-2" style="margin-top:20px;text-align:center;">
+                                        <span id="@Id">@item.Text</span>
+                                    </div>
+                                </div>
+                            }
+                        }
+                    }
+                }
+            </div>
+
         </div>
-
     </div>
-
 </div>
 
 
@@ -306,6 +389,7 @@
         }
 
         LoadPreview();
+        ChangePreview();
     });
 
     function CheckValidationAndSubmit() {
@@ -373,7 +457,7 @@
         console.log(OtherInfoData);
         console.log(OtherConfigData);
         console.log(OutletMobileNos);
-
+        $("#divLoader").show();
         $.ajax({
             type: "POST",
             url: '@Url.Action("UpdateFeedbackDetails", "Feedback")',
@@ -410,6 +494,69 @@
 
     function LoadPreview() {
         $('[id^=chkIsDisplayHome]').each(function (i, item) {
+                if (this.checked) {
+                    var id = item.id.substr(16);
+                    $("#spnHome" + id).text($("#txtHomeHeadingText" + id).val());
+                }
+                else {
+                    var id = item.id.substr(16);
+                    $("#spnHome" + id).text("");
+                }
+        });
+
+        $('[id^=chkIsDisplayQuestion]').each(function (i, item) {
+            if (this.checked) {
+                var id = item.id.substr(20);
+                if ($("#hdnQuestionType" + id).val() == "Question") {
+
+                    $("#spnFeedbackQuestions" + id).text($("#txtQuestionHeadingText" + id).val());
+                    $("#dvFeedbackQuestions" + id).show();
+                }
+                else {
+                    $("#spnFeedbackQuestions" + id).text($("#txtQuestionHeadingText" + id).val());
+                }
+            }
+            else {
+                var id = item.id.substr(20);
+                if ($("#hdnQuestionType" + id).val() == "Question") {
+                    $("#spnFeedbackQuestions" + id).text("");
+                    $("#dvFeedbackQuestions" + id).hide();
+                }
+                else {
+                    $("#spnFeedbackQuestions" + id).text("");
+                }
+            }
+        });
+
+        $('[id^=chkIsDisplayOther]').each(function (i, item) {
+            if (this.checked) {
+
+                var id = item.id.substr(17);
+                if ($("#hdnOtherInfoType" + id).val() == "Question") {
+
+                    $("#spnOtherInformation" + id).text($("#txtQuestionHeadingText" + id).val());
+                    $("#dvOtherInformation" + id).show();
+                }
+                else {
+                    $("#spnOtherInformation" + id).text($("#txtQuestionHeadingText" + id).val());
+                }
+            }
+            else {
+
+                var id = item.id.substr(17);
+                if ($("#hdnOtherInfoType" + id).val() == "Question") {
+                    $("#spnOtherInformation" + id).text("");
+                    $("#dvOtherInformation" + id).hide();
+                }
+                else {
+                    $("#spnOtherInformation" + id).text("");
+                }
+            }
+        });
+    }
+
+    function ChangePreview() {
+        $('[id^=chkIsDisplayHome]').each(function (i, item) {
             $("#" + item.id).change(function () {
                 if (this.checked) {
                     var id = item.id.substr(16);
@@ -423,13 +570,80 @@
         });
 
         $('[id^=txtHomeHeadingText]').each(function (i, item) {
-            $("#" + item.id).focusout(function () {               
-                var id = item.id.substr(18);               
+            $("#" + item.id).focusout(function () {
+                var id = item.id.substr(18);
                 $("#spnHome" + id).text($("#" + item.id).val());
             });
         });
 
+        $('[id^=chkIsDisplayQuestion]').each(function (i, item) {
+            $("#" + item.id).change(function () {
+                if (this.checked) {
+                    var id = item.id.substr(20);
+                    if ($("#hdnQuestionType" + id).val() == "Question") {
+
+                        $("#spnFeedbackQuestions" + id).text($("#txtQuestionHeadingText" + id).val());
+                        $("#dvFeedbackQuestions" + id).show();
+                    }
+                    else {
+                        $("#spnFeedbackQuestions" + id).text($("#txtQuestionHeadingText" + id).val());
+                    }
+                }
+                else {
+                    var id = item.id.substr(20);
+                    if ($("#hdnQuestionType" + id).val() == "Question") {
+                        $("#spnFeedbackQuestions" + id).text("");
+                        $("#dvFeedbackQuestions" + id).hide();
+                    }
+                    else {
+                        $("#spnFeedbackQuestions" + id).text("");
+                    }
+                }
+            });
+        });
+
+        $('[id^=txtQuestionHeadingText]').each(function (i, item) {
+            $("#" + item.id).focusout(function () {
+                var id = item.id.substr(22);
+                $("#spnFeedbackQuestions" + id).text($("#" + item.id).val());
+            });
+        });
+
+        $('[id^=chkIsDisplayOther]').each(function (i, item) {
+            $("#" + item.id).change(function () {
+
+                if (this.checked) {
+
+                    var id = item.id.substr(17);
+                if ($("#hdnOtherInfoType" + id).val() == "Question") {
+                    $("#spnOtherInformation" + id).text($("#txtOtherHeadingText" + id).val());
+                    $("#dvOtherInformation" + id).show();
+                }
+                else {
+                    $("#spnOtherInformation" + id).text($("#txtOtherHeadingText" + id).val());
+                }
+            }
+                else {
+
+                var id = item.id.substr(17);
+                if ($("#hdnOtherInfoType" + id).val() == "Question") {
+                    $("#spnOtherInformation" + id).text("");
+                    $("#dvOtherInformation" + id).hide();
+                }
+                else {
+                    $("#spnOtherInformation" + id).text("");
+                }
+            }
+            });
+        });
+
+        $('[id^=txtOtherHeadingText]').each(function (i, item) {
+            $("#" + item.id).focusout(function () {
+                var id = item.id.substr(19);
+                $("#spnOtherInformation" + id).text($("#" + item.id).val());
+            });
+        });
     }
-    
+
 
 </script>

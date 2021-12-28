@@ -65,7 +65,7 @@ namespace WebApp.Controllers
                     objNew.TypeId = newItem.TypeId;
                     objNew.Text = newItem.Text;
                     objNew.IsDisplay = newItem.IsDisplay;
-                    objNew.IsMandatory = newItem.IsMandatory;
+                    objNew.IsMandatory = Convert.ToString(newItem.IsMandatory);
                     objNew.AddedDate = DateTime.Now;
                     objNew.AddedBy = userDetails.LoginId;
                     lstData.Add(objNew);

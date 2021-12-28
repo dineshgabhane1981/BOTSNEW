@@ -413,7 +413,7 @@ namespace BOTS_BL.Repository
                         objFeedback.IsDisplay = Convert.ToBoolean(item["IsDisplay"]);
                         if (objFeedback.Type == "Question")
                         {
-                            objFeedback.IsMandatory = Convert.ToInt32(item["IsMandatory"]);
+                            objFeedback.IsMandatory = Convert.ToString(item["IsMandatory"]);
                         }
                         objFeedback.UpdatedDate = DateTime.Now;
                         objFeedback.UpdatedBy = LoginId;
@@ -429,7 +429,7 @@ namespace BOTS_BL.Repository
                         objFeedback.IsDisplay = Convert.ToBoolean(item["IsDisplay"]);
                         if (objFeedback.Type == "Question")
                         {
-                            objFeedback.IsMandatory = Convert.ToInt32(item["IsMandatory"]);
+                            objFeedback.IsMandatory = Convert.ToString(item["IsMandatory"]);
                         }
                         objFeedback.UpdatedDate = DateTime.Now;
                         objFeedback.UpdatedBy = LoginId;
