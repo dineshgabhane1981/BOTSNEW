@@ -177,11 +177,11 @@ namespace WebApp.Controllers.OnBoarding
                
                 objData.bots_TblGroupMaster.CreatedBy = userDetails.LoginId;
                 objData.bots_TblGroupMaster.CreatedDate = DateTime.Now;
-                var newCuscomer = true;
-                if (Convert.ToInt32(objData.bots_TblGroupMaster.GroupId) > 0)
-                {
-                    newCuscomer = false;
-                }
+                //var newCuscomer = true;
+                //if (Convert.ToInt32(objData.bots_TblGroupMaster.GroupId) > 0)
+                //{
+                //    newCuscomer = false;
+                //}
                 if (objData.bots_TblGroupMaster.CustomerStatus == "CSUpdate")
                 {
                     object[] objOutletData = (object[])json_serializer.DeserializeObject(objData.bots_TblGroupMaster.OutletData);
@@ -243,7 +243,7 @@ namespace WebApp.Controllers.OnBoarding
                     }
 
                 }
-                if (GroupdId > 0 && newCuscomer)
+                if (GroupdId > 0 && objData.bots_TblGroupMaster.CustomerStatus == "CS")
                 {
                     SendEmail(GroupdId);
                 }
