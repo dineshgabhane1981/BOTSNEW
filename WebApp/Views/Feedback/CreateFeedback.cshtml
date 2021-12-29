@@ -1,7 +1,10 @@
 ﻿@model  WebApp.ViewModel.FeedbackAuthorViewModel
+@using System.Configuration;
 @{
     ViewBag.Title = "Create Feedback";
     Layout = "~/Views/Shared/_Layout.cshtml";
+
+    var feedbackURL = ConfigurationManager.AppSettings["FeedbackOutletLink"].ToString();
 }
 
 
@@ -38,6 +41,7 @@
                     }
                     if (Model.PointsAndMessages != null)
                     {
+                        @Html.HiddenFor(model => model.PointsAndMessages.IsAddRepresentative, new { @id = "hdnIsAddRepresentative" })
                         <div class="row">
                             <div class="col-md-12 col-xl-12" style="margin-left:20px; margin-top:20px;">
                                 @Html.CheckBoxFor(model => model.PointsAndMessages.IsAddRepresentative, new { @id = "chkSalesRep" }) Add Sales Representative(Enter with comma(,) separated)
@@ -215,10 +219,10 @@
 
                                     @foreach (var item in Model.lstOutletDetail)
                                     {
-                                        var id = "http://localhost:57265/Feedback/GetFeedBack/Id?" + item.Value;
+                                        var link = feedbackURL + item.Value;
                                         <tr>
                                             <td>@item.Text</td>
-                                            <td><a href="@id" target="_blank">@id</a></td>
+                                            <td><a href="@link" target="_blank">@link</a></td>
                                         </tr>
                                     }
                                 </table>
@@ -241,13 +245,20 @@
                             var Id = "spnHome" + item.Id;
                             if (item.Type == "Footer")
                             {
+                                
+                                <div class="row" id="dvSalesRepresentative">
+                                    <div class="col-md-12 col-xl-12" style="margin-top:20px;text-align:center;">
+                                       <select id="ddlSalesRep" class="input50"><option value="Select">Select</option></select>
+                                    </div>
+                                </div>
+                               
                                 <div class="row">
                                     <div class="col-md-12 col-xl-12" style="margin-top:20px;text-align:center;">
-                                        <input type="number" class="input50" /> <button class="btn btn-primary">Go</button>
+                                        <input type="number" class="input50" /> <br /><br /> <button class="btn btn-primary">Go</button>
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <div class="col-md-12 col-xl-12  mb-5" style="margin-top:20px;text-align:center;">
+                                    <div class="col-md-12 col-xl-12  mb-1" style="margin-top:20px;text-align:center;">
                                         <span id="@Id">@item.Text</span>
                                     </div>
                                 </div>
@@ -280,12 +291,17 @@
 
                                 <div class="row">
                                     <div class="col-md-12 col-xl-12" style="margin-top:20px;text-align:center;" id="@dvId">
-                                        <span id="@Id">@item.Text</span><br />
-                                        <span><b>Rating Images</b></span>
+                                        <span id="@Id">@item.Text</span>
                                         @if (item.IsMandatory == "Mandatory")
                                         {
                                             <span style="color:red;" id="@spnMandatory">*</span>
                                         }
+                                        else
+
+                                        {
+                                            <span style="color:red;" id="@spnMandatory"></span>
+                                        }
+                                    <br /><span><b>Rating Images</b></span>
                                     </div>
                                 </div>
                             }
@@ -302,7 +318,7 @@
                 }
             </div>
 
-            <div style="border: 2px solid lightgray; border-radius: 10px; margin-top:10px;margin-bottom:10px;padding-bottom:20px;">
+            <div id="dvOtherInfoPreview" style="border: 2px solid lightgray; border-radius: 10px; margin-top:10px;margin-bottom:10px;padding-bottom:20px;">
                 @if (Model.lstFeedbackData != null)
                 {
                     foreach (var item in Model.lstFeedbackData)
@@ -317,7 +333,16 @@
 
                                 <div class="row">
                                     <div class="col-md-12 col-xl-12" style="margin-top:20px;text-align:center;" id="@dvId">
-                                        <span id="@Id">@item.Text</span><br />
+                                        <span id="@Id">@item.Text</span>
+                                        @if (item.IsMandatory == "Mandatory")
+                                        {
+                                            <span style="color:red;" id="@spnMandatory">*</span>
+                                        }
+                                        else
+                                        {
+                                            <span style="color:red;" id="@spnMandatory"></span>
+                                        }
+                                        <br />
                                         @if (item.TypeId == 2 || item.TypeId == 3)
                                         {
                                             <input type="date" class="input50" />
@@ -330,13 +355,10 @@
                                             }
                                             if (item.TypeId == 4)
                                             {
-                                                @Html.DropDownList("abc", new SelectList(Model.Gender(), "Value", "Text"), htmlAttributes: new { @class = "input50" })
+                                                @Html.DropDownList("abc", new SelectList(Model.lstKnowAboutUs, "Value", "Text"),"Select", htmlAttributes: new { @class = "input50" })
                                             }
                                         }
-                                        @if (item.IsMandatory == "Mandatory")
-                                        {
-                                            <span style="color:red;" id="@spnMandatory">*</span>
-                                        }
+
                                     </div>
                                 </div>
                             }
@@ -567,10 +589,29 @@
         });
         if ($("#chkIsOtherInfoShow").is(":checked")) {
             $("#dvShowOtherInfo").show();
+            $("#dvOtherInfoPreview").show();
         }
         else {
             $("#dvShowOtherInfo").hide();
-        }       
+            $("#dvOtherInfoPreview").hide();
+        }
+        
+        if ($("#hdnIsAddRepresentative").val()=="True") {
+            $("#dvSalesRepresentative").show();
+            var lstSalesRepresentative = $("#txtHomeRepresentative").val();            
+            var lst = lstSalesRepresentative.split(",");
+            
+            var selectList = document.getElementById('ddlSalesRep');
+            for (var i = 0; i < lst.length; i++) {
+                var option = document.createElement("option");
+                option.value = lst[i];
+                option.text = lst[i];
+                selectList.appendChild(option);
+            }
+        }
+        else {
+            $("#dvSalesRepresentative").hide();
+        }
 
     }
 
@@ -666,11 +707,82 @@
         $("#chkIsOtherInfoShow").change(function () {
             if (this.checked) {
                 $("#dvShowOtherInfo").show();
+                $("#dvOtherInfoPreview").show();
             }
             else {
                 $("#dvShowOtherInfo").hide();
+                $("#dvOtherInfoPreview").hide();
             }
         });
+
+        $('[id^=ddlIsMandatoryQuestion]').each(function (i, item) {
+            $("#" + item.id).change(function () {
+                if ($("#" + item.id).val() == "Mandatory") {                   
+                    var id = item.id.substr(22);
+                    $("#spnMandatory" + id).text("*");
+                }
+                else {
+                    var id = item.id.substr(22);
+                    $("#spnMandatory" + id).text("");
+                }                
+            });
+        });
+
+        $('[id^=ddlIsMandatoryOther]').each(function (i, item) {
+            $("#" + item.id).change(function () {
+                if ($("#" + item.id).val() == "Mandatory") {
+                    var id = item.id.substr(19);
+                    $("#spnMandatoryOther" + id).text("*");
+                }
+                else {
+                    var id = item.id.substr(19);
+                    $("#spnMandatoryOther" + id).text("");
+                }
+            });
+        });
+
+        $("#chkSalesRep").change(function () {
+            if (this.checked) {
+                $("#dvSalesRepresentative").show();
+                var lstSalesRepresentative = $("#txtHomeRepresentative").val();
+                var lst = lstSalesRepresentative.split(",");
+
+                var selectList = document.getElementById('ddlSalesRep');
+                var option1 = document.createElement("option");
+                option1.value = "Select";
+                option1.text = "Select";
+                selectList.appendChild(option1);
+                for (var i = 0; i < lst.length; i++) {
+                    var option = document.createElement("option");
+                    option.value = lst[i];
+                    option.text = lst[i];
+                    selectList.appendChild(option);
+                }
+            }
+            else {
+                $('#ddlSalesRep').find('option').remove().end();                
+                $("#dvSalesRepresentative").hide();
+            }
+        });
+
+        $("#txtHomeRepresentative").focusout(function () {
+            $('#ddlSalesRep').find('option').remove().end();
+            var lstSalesRepresentative = $("#txtHomeRepresentative").val();
+            var lst = lstSalesRepresentative.split(",");
+
+            var selectList = document.getElementById('ddlSalesRep');
+            var option1 = document.createElement("option");
+            option1.value = "Select";
+            option1.text = "Select";
+            selectList.appendChild(option1);
+            for (var i = 0; i < lst.length; i++) {
+                var option = document.createElement("option");
+                option.value = lst[i];
+                option.text = lst[i];
+                selectList.appendChild(option);
+            }
+        });
+
     }
 
 

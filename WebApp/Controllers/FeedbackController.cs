@@ -191,6 +191,7 @@ namespace WebApp.Controllers
             objFeedbackAuthor.lstOutletData = objOutletData;
             PointsAndMessages = FMR.GetPointsAndMessages(userDetails.GroupId);
             objFeedbackAuthor.PointsAndMessages = PointsAndMessages;
+            objFeedbackAuthor.lstKnowAboutUs = FMR.GetHowToKnowAboutList();
             return View(objFeedbackAuthor);
         }
 
@@ -235,7 +236,16 @@ namespace WebApp.Controllers
             return new JsonResult() { Data = status, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
 
+        public ActionResult Dashboard()
+        {
+            return View();
 
+        }
+        public ActionResult Report()
+        {
+            return View();
+
+        }
 
 
     }

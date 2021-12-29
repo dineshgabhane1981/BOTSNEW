@@ -253,11 +253,11 @@
                                 </a>
                             </li>
                             @*<li class="@Html.IsSelected(controller: "HeatMaps", action: "SMSConversion")">
-                                    <a class="@Html.IsSelected(controller: "HeatMaps", action: "SMSConversion")" href="@Url.Action("SMSConversion", "HeatMaps")">
-                                        <i class="metismenu-icon"></i>
-                                        SMS Conversion
-                                    </a>
-                                </li>*@
+                        <a class="@Html.IsSelected(controller: "HeatMaps", action: "SMSConversion")" href="@Url.Action("SMSConversion", "HeatMaps")">
+                            <i class="metismenu-icon"></i>
+                            SMS Conversion
+                        </a>
+                    </li>*@
                         </ul>
                     </li>
                     <li>
@@ -308,11 +308,28 @@
                     if (userDetails.IsFeedback)
                     {
                         <li>
-                            <a href="@Url.Action("CreateFeedback", "Feedback")" class="@Html.IsSelected(controller: "Feedback", action: "CreateFeedback")">
-                                <i class="metismenu-icon pe-7s-rocket"></i>
+                            <a href="#">
+                                <i class="metismenu-icon pe-7s-car"></i>
                                 Feedback Module
+                                <i class="metismenu-state-icon pe-7s-angle-down caret-left"></i>
                             </a>
+
+                            <ul>
+                                <li class="@Html.IsSelected(controller: "Feedback", action: "Dashboard")">
+                                    <a href="@Url.Action("Dashboard", "Feedback")" class="@Html.IsSelected(controller: "Feedback", action: "Dashboard")">
+                                        <i class="metismenu-icon pe-7s-rocket"></i>
+                                        Dashboard
+                                    </a>
+                                </li>
+                                <li class="@Html.IsSelected(controller: "Feedback", action: "Report")">
+                                    <a href="@Url.Action("Report", "Feedback")" class="@Html.IsSelected(controller: "Feedback", action: "Report")">
+                                        <i class="metismenu-icon pe-7s-rocket"></i>
+                                        Report
+                                    </a>
+                                </li>
+                            </ul>
                         </li>
+                        
                     }
                 }
 
