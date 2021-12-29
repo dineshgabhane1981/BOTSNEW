@@ -294,6 +294,8 @@
     <Content Include="Views\Feedback\_DeActiveGroup.cshtml" />
     <Content Include="Views\Feedback\CreateFeedback.cshtml" />
     <Content Include="Views\Feedback\GetFeedBack.cshtml" />
+    <Content Include="Views\Feedback\Dashboard.cshtml" />
+    <Content Include="Views\Feedback\Report.cshtml" />
     <None Include="_bin_deployableAssemblies\x86\sqlcese40.dll" />
     <None Include="_bin_deployableAssemblies\x86\sqlceqp40.dll" />
     <None Include="_bin_deployableAssemblies\x86\sqlceme40.dll" />

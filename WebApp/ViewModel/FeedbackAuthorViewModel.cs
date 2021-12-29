@@ -16,6 +16,7 @@ namespace WebApp.ViewModel
         public Feedback_PointsAndMessages PointsAndMessages { get; set; }
         public List<Feedback_Content> lstFeedbackData { get; set; }
         public List<SelectListItem> lstOutletDetail { get; set; }
+        public List<SelectListItem> lstKnowAboutUs { get; set; }
         public List<OutletDetailsViewModel> lstOutletData { get; set; }
         public string outletJson { get; set; }
         public SelectListItem[] MandatoryOrNot()

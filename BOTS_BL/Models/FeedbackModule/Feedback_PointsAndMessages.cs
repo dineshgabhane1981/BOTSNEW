@@ -20,6 +20,7 @@ namespace BOTS_BL.Models
         public bool IsFeedbackPoints { get; set; }
 
         public int AwardFeedbackPoints { get; set; }
+        public bool IsOtherInfoShow { get; set; }        
 
         public string MsgToCustomer { get; set; }
 
