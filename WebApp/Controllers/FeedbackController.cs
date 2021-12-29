@@ -207,12 +207,16 @@ namespace WebApp.Controllers
             }
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
             FeedbackGetFeedbackViewModel objgetfeedbackviewmodel = new FeedbackGetFeedbackViewModel();
+            Feedback_PointsAndMessages PointsAndMessages = new Feedback_PointsAndMessages();
             // List<Feedback_Content> lstfbget = new List<Feedback_Content>();
-            objgetfeedbackviewmodel.lstHomeHeading = FMR.GetHomeHeading(groupid);
-            objgetfeedbackviewmodel.lstFeedbackHeading = FMR.GetFeedbackHeading(groupid);
-            objgetfeedbackviewmodel.lstFeedbackQuestion = FMR.GetFeedbackQuestion(groupid);
-            objgetfeedbackviewmodel.lstOtherInfoHeading = FMR.GetOtherinfoHeading(groupid);
-            objgetfeedbackviewmodel.lstOtherInfoQuestion = FMR.GetOtherinfoQuestion(groupid);
+            objgetfeedbackviewmodel.OutletId = Id;
+            objgetfeedbackviewmodel.GroupId = groupid;
+            objgetfeedbackviewmodel.lstFeedbackData = FMR.GetFeedback_VisibleContents(groupid);
+            objgetfeedbackviewmodel.LogoUrl = FMR.GetLogo(groupid);
+            PointsAndMessages = FMR.GetPointsAndMessages(groupid);
+            objgetfeedbackviewmodel.PointsAndMessages = PointsAndMessages;
+
+            objgetfeedbackviewmodel.lstKnowAboutUs = FMR.GetHowToKnowAboutList();
 
             return View(objgetfeedbackviewmodel);
         }

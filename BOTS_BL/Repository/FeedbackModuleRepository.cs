@@ -219,6 +219,23 @@ namespace BOTS_BL.Repository
             return lstData;
         }
 
+        public List<Feedback_Content> GetFeedback_VisibleContents(string GroupId)
+        {
+            List<Feedback_Content> lstData = new List<Feedback_Content>();
+            try
+            {
+                using (var context = new CommonDBContext())
+                {
+                    lstData = context.Feedback_Content.Where(x => x.GroupId == GroupId && x.IsDisplay == true).ToList();
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetFeedback_Contents");
+            }
+            return lstData;
+        }
+
         public Feedback_Headings GetHeadings(string GroupId)
         {
             Feedback_Headings headings = new Feedback_Headings();
@@ -279,6 +296,19 @@ namespace BOTS_BL.Repository
                 newexception.AddException(ex, "Getfeedback");
             }
             return lstfbget;
+        }
+        public string GetLogo(string groupId)
+        {
+            string logoUrl = string.Empty;
+            CustomerDetail objCustomerDetail = new CustomerDetail();
+            string connStr = CR.GetCustomerConnString(groupId);
+            using (var contextdb = new BOTSDBContext(connStr))
+            {
+               var  objbrandDetail = contextdb.BrandDetails.Where(x => x.GroupId == groupId).FirstOrDefault();
+                logoUrl = objbrandDetail.BrandLogoUrl;
+            }
+            return logoUrl;
+
         }
         public List<Feedback_Content> GetFeedbackHeading(string GroupId)
         {

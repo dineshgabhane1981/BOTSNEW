@@ -184,6 +184,10 @@
     <Content Include="Content\assets\BotsLoginBackground.jpeg" />
     <Content Include="Content\assets\fonts\fa-solid-900.svg" />
     <Content Include="Content\assets\fonts\Pe-icon-7-stroke.svg" />
+    <Content Include="Content\assets\images\14.png" />
+    <Content Include="Content\assets\images\15.png" />
+    <Content Include="Content\assets\images\3.png" />
+    <Content Include="Content\assets\images\7.png" />
     <Content Include="Content\assets\images\AddCustomer.png" />
     <Content Include="Content\assets\images\avatars\1.jpg" />
     <Content Include="Content\assets\images\avatars\10.jpg" />

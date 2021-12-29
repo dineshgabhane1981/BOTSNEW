@@ -11,6 +11,7 @@ namespace WebApp.ViewModel
     public class FeedbackAuthorViewModel
     {
         public string GroupId { get; set; }
+        public string OutletId { get; set; }
         public Feedback_Headings headings { get; set; }
         public Feedback_Questions questions { get; set; }
         public Feedback_PointsAndMessages PointsAndMessages { get; set; }

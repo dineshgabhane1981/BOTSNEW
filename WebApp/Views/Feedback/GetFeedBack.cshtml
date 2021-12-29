@@ -2,8 +2,18 @@
 
 @{
     ViewBag.Title = "GetFeedBack";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    Layout = null;
 }
+<link href="~/Content/main.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css" />
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script type="text/javascript" src="~/Content/assets/scripts/main.js"></script>
+<script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+<link href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" rel="stylesheet" />
+<script src="~/Scripts/cute-alert-master/cute-alert.js"></script>
+<link href="~/Scripts/cute-alert-master/style-alert.css" rel="stylesheet" />
 <style>
     body {
         font-size: 16px !important;
@@ -18,19 +28,19 @@
     }
 
     .rbtvariety1 {
-        background-image: url("../Content/assets/images/15.png");
+        background-image: url("../../Content/assets/images/15.png");
     }
 
     .rbtvariety2 {
-        background-image: url("../Content/assets/images/3.png");
+        background-image: url("../../Content/assets/images/3.png");
     }
 
     .rbtvariety3 {
-        background-image: url("../Content/assets/images/7.png");
+        background-image: url("../../Content/assets/images/7.png");
     }
 
     .rbtvariety4 {
-        background-image: url("../Content/assets/images/14.png");
+        background-image: url("../../Content/assets/images/14.png");
     }
 
     .cc-selector input:active + .drinkcard-cc {
@@ -64,43 +74,43 @@
     }
 </style>
 <div class="app-main__inner">
-    <input type="hidden" id="hdnoutletid" value="@ViewBag.OutletId" />
-    <input type="hidden" id="hdngroupid" value="@ViewBag.GroupId" />
-
     <div class="row card">
         @if (Model != null)
         {
-            if (Model.lstHomeHeading.Count > 0)
+            if (Model.lstFeedbackData != null)
             {
-
+                @Html.HiddenFor(model => model.GroupId)
+                @Html.HiddenFor(model => model.OutletId)
                 <div class="col-md-12 col-sm-12 pt-3 pl-3 pr-3" style="text-align:center;">
-                    <img src=@Model.lstHomeHeading[0].ImagePath style="width:300px;">
-                    @*<img src="../Content/assets/images/GoldMartLogo.png" />*@
+                    <img src="@Model.LogoUrl" style="width:300px;" alt="Logo">
                 </div>
                 <div class="container-fluid pt-3 pl-3 pr-3 pb-3" id="divwelcome">
-                    <div class="row">
-                        <div class="col-md-12 col-sm-12 pt-3 pl-3 pr-3" style="text-align:center;">
-                            @*<h1 style="font-size:34px;">Welcome!</h1>*@
-                            @if (Model.lstHomeHeading[0].TypeId == 1)
-                            {
-                                <h1 style="font-size:34px;">@Model.lstHomeHeading[0].Text</h1>
-                            }
-                        </div>
-                        <div class="col-md-12 col-sm-12 pt-5 pl-5 pr-5" style="text-align:center;">
-                            @*<h2 style="font-size:26px;">Your feedback is critical!!</h2>*@
-                            @if (Model.lstHomeHeading[1].TypeId == 2)
-                            {
-                                <h2 style="font-size:26px;">@Model.lstHomeHeading[1].Text</h2>
-                            }
-                        </div>
-                        <div class="col-md-12 col-sm-12 pt-5 pl-5 pr-5" style="text-align:center;">
-                            @*<h3 style="font-size:20px;">Get rewarded with <b style="color:red;">50 Loyalty Points</b> on completion!!!</h3>*@
-                            @if (Model.lstHomeHeading[2].TypeId == 3)
-                            {
-                                <h3 style="font-size:20px;">@Model.lstHomeHeading[2].Text</h3>
-                            }
-                        </div>
-                    </div>
+                    @foreach (var item in Model.lstFeedbackData)
+                    {
+                        if (item.Section == "Home")
+                        {
+                            <div class="row">
+                                <div class="col-md-12 col-xl-12  mb-1" style="margin-top:20px;text-align:center;">
+                                    @if (item.Type == "Heading")
+                                    {
+                                        if (item.TypeId == 1)
+                                        {
+                                            <h1 style="font-size:34px;"> @item.Text</h1>
+                                        }
+                                        if (item.TypeId == 2)
+                                        {
+                                            <h2 style="font-size:26px;"> @item.Text</h2>
+                                        }
+                                        if (item.TypeId == 3)
+                                        {
+                                            <h3 style="font-size:20px;"> @item.Text</h3>
+                                        }
+                                    }
+
+                                </div>
+                            </div>
+                        }
+                    }
                     <div class="row">
                         <div class="col-md-12 col-sm-12 pt-5 pl-5 pr-5 pb-5" style="text-align:center;">
                             <input type="number" class="input100" id="txtMobileNo" placeholder="Enter Mobile number" />
@@ -112,219 +122,127 @@
                     </div>
                 </div>
 
-
-            }
-            if (Model.lstFeedbackHeading.Count > 0)
-            {
-
-                <div class="container-fluid pt-3 pl-3 pr-3 pb-3" style="display:none;" id="divmember">
+                <div class="container-fluid pt-3 pl-3 pr-3 pb-3" style="display:none;" id="divquestions">
                     <div class="row">
-
-                        <div class="col-md-12 col-sm-12 pt-3 pl-3 pr-3" style="text-align:center;">
-                            <h1 style="color: red; font-size: 34px;">@Model.lstFeedbackHeading[0].Text</h1>
-                            @*<h1 style="color: red; font-size: 34px;">Welcome <span id="spnCustName"></span>,</h1>*@
-                        </div>
-
-                        <div class="col-md-12 col-sm-12 pt-5 pl-5 pr-5" style="text-align:center;">
-                            <h2 style="font-size:26px;">
-                                @*Please rate us for today’s experience!!!*@
-                                @Model.lstFeedbackHeading[1].Text
-                            </h2>
-                        </div>
-                    </div>
-                </div>
-
-            }
-            if (Model.lstFeedbackQuestion.Count > 0)
-            {
-                var i = Model.lstFeedbackQuestion.Count();
-                var j = 0;
-                <div class="container-fluid pt-3 pl-3 pr-3 pb-3" style="display:none;" id="divmember1">
-                    <div class="row">
-                        <div class="col-md-12 col-sm-12 pt-5 pl-5 pr-5" style="text-align:center;">
-                            <h3 style="font-size:20px;">
-                                @*How did you find our <b>Variety</b>?*@
-                                @Model.lstFeedbackQuestion[j].Text
-                            </h3>
-
-                            <div class="cc-selector">
-                                <input id="FQone1" type="radio" name="FQ1" />
-                                <label class="drinkcard-cc FQone1" for="FQone1"></label>
-                                <input id="FQone2" type="radio" name="FQ1" />
-                                <label class="drinkcard-cc FQone2" for="FQone2"></label>
-                                <input id="FQone3" type="radio" name="FQ1" />
-                                <label class="drinkcard-cc FQone3" for="FQone3"></label>
-                                <input id="FQone4" type="radio" name="FQ1" />
-                                <label class="drinkcard-cc FQone4" for="FQone4"></label>
-                            </div>
-
-
-                            @if (j == 0)
-                            {
-                                j++;
-                                <div class="col-md-12 col-sm-12 pt-5 pl-5 pr-5 mb-2" style="text-align:center;">
-
-                                    <h3 style="font-size:20px;">
-                                        @*What do you feel about our <b>Service</b>?*@
-                                        @Model.lstFeedbackQuestion[j].Text
-                                    </h3>
-                                    <div class="cc-selector">
-                                        <input id="FQtwo1" type="radio" name="FQtwo" />
-                                        <label class="drinkcard-cc rbtvariety1" for="FQtwo1" style="padding-right:2px;"></label>
-                                        <input id="FQtwo2" type="radio" name="FQtwo" />
-                                        <label class="drinkcard-cc rbtvariety2" for="FQtwo2"></label>
-                                        <input id="FQtwo3" type="radio" name="FQtwo" />
-                                        <label class="drinkcard-cc rbtvariety3" for="FQtwo3"></label>
-                                        <input id="FQtwo4" type="radio" name="FQtwo" />
-                                        <label class="drinkcard-cc rbtvariety4" for="FQtwo4"></label>
-                                    </div>
-                                </div>
-                            }
-                            @if (j == i - 1 || j < i - 1)
-                            {
-
-
-                            }
-                            else
-                            {
-                                j++;
-                                <div class="col-md-12 col-sm-12 pt-5 pl-5 pr-5 mb-2" style="text-align:center;">
-                                    <h3 style="font-size:20px;">
-                                        @*What do you feel about our <b>Service</b>?*@
-                                        @Model.lstFeedbackQuestion[j].Text
-                                    </h3>
-                                    <div class="cc-selector">
-                                        <input id="FQthree1" type="radio" name="FQthree" />
-                                        <label class="drinkcard-cc rbtvariety1" for="FQthree1" style="padding-right:2px;"></label>
-                                        <input id="FQthree2" type="radio" name="FQthree" />
-                                        <label class="drinkcard-cc rbtvariety2" for="FQthree2"></label>
-                                        <input id="FQthree3" type="radio" name="FQthree" />
-                                        <label class="drinkcard-cc rbtvariety3" for="FQthree3"></label>
-                                        <input id="FQthree4" type="radio" name="FQthree" />
-                                        <label class="drinkcard-cc rbtvariety4" for="FQthree4"></label>
-                                    </div>
-                                </div>
-                            }
-                            @if (j == i - 1 || j < i - 1)
-                            {
-
-                            }
-                            else
-                            {
-                                j++;
-                                <div class="col-md-12 col-sm-12 pt-5 pl-5 pr-5 mb-2" style="text-align:center;">
-                                    <h3 style="font-size:20px;">
-                                        @*What do you feel about our <b>Service</b>?*@
-                                        @Model.lstFeedbackQuestion[j].Text
-                                    </h3>
-                                    <div class="cc-selector">
-                                        <input id="FQfour1" type="radio" name="FQfour" />
-                                        <label class="drinkcard-cc rbtvariety1" for="FQfour1" style="padding-right:2px;"></label>
-                                        <input id="FQfour2" type="radio" name="FQfour" />
-                                        <label class="drinkcard-cc rbtvariety2" for="FQfour2"></label>
-                                        <input id="FQfour3" type="radio" name="FQfour" />
-                                        <label class="drinkcard-cc rbtvariety3" for="FQfour3"></label>
-                                        <input id="FQfour4" type="radio" name="FQfour" />
-                                        <label class="drinkcard-cc rbtvariety4" for="FQfour4"></label>
-                                    </div>
-                                </div>
-                            }
-
-                            <div class="row mt-3">
-                                <div class="col-md-12 col-sm-12 pb-5" style="text-align:center;">
-                                    <button type="button" class="btn btn-primary" style="width: 280px; background-color: #1C699F; color:white; font-weight:bold; font-size:18px; border-radius:5px;" id="btnNextpg" onclick="SubmitRating();">Next Page</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                </div>
-            }
-            //</div>
-            if (Model.lstOtherInfoHeading.Count > 0)
-            {
-
-                <div class="container-fluid pt-3 pl-3 pr-3 pb-3" id="divthankyou" style="display:none;">
-                    <div class="row">
-                        <div class="col-md-12 col-sm-12 pt-3 pl-3 pr-3" style="text-align:center;">
-                            <h1 style="color:red; font-size:34px;">
-                                <b>@Model.lstOtherInfoHeading[0].Text</b>
-                                @*<b> Thank you <span id="spnCustName1"></span> for your valuable feedback!</b>*@
-                            </h1>
-                        </div>
-                        <div class="col-md-12 col-sm-12 pt-5 pl-5 pr-5" style="text-align:center;">
-                            <h2 style="font-size:26px;">
-                                @Model.lstOtherInfoHeading[1].Text
-                                @*Enter your details below to unlock 50 Loyalty points!!*@
-                            </h2>
-                        </div>
-                    </div>
-                    <div>
-                        }
-                        }
-                        @if (Model.lstOtherInfoQuestion != null)
+                        @foreach (var item in Model.lstFeedbackData)
                         {
-
-                            foreach (var item1 in Model.lstOtherInfoQuestion)
+                            if (item.Section == "FeedbackQuestions")
                             {
-                                @*@if ()
+                                <div class="col-md-12 col-sm-12 pt-3 pl-3 pr-3" style="text-align:center;">
+                                    @if (item.Type == "Heading")
                                     {
-                                        <div class="container-fluid pt-3 pl-3 pr-3 pb-3" id="divthankyou" style="display:none;">
-                                            <div class="row">
+                                        if (item.TypeId == 1)
+                                        {
+                                            <h1 style="font-size: 34px; color: red;"> @item.Text</h1>
+                                        }
+                                        if (item.TypeId == 2)
+                                        {
+                                            <h2 style="font-size: 34px;"> @item.Text</h2>
+                                        }
+                                    }
+                                </div>
+                            }
 
-                                                <div class="row col-md-12 col-xl-12 mt-5" style="text-align:center;">
-                                                    <div class=" col-md-12 col-xl-12 pt-5 pl-5">
-                                                        <span style="font-size:18px; padding-right:10px;">Gender*</span><input type="date" class="input50" id="txtgender" />
-                                                    </div>
-                                                </div>
-                                                <div class="row col-md-12 col-xl-12 mt-5" style="text-align:center;">
-                                                    <div class=" col-md-12 col-xl-12 pt-5 pl-5">
-                                                        <span style="font-size:18px; padding-right:10px;">Your Birth Date*</span><input type="date" class="input50" id="txtbirthdt" />
-                                                    </div>
-                                                </div>
-                                                <div class="row col-md-12 col-xl-12 " style="text-align:center;">
-                                                    <div class=" col-md-12 col-xl-12 pt-5 pl-5">
-                                                        <span style="font-size:18px; padding-right:10px;">Your Anniversary</span><input type="date" class="input50" id="txtanniversary" />
-                                                    </div>
-                                                </div>
-
-                                                <div class="row col-md-12 col-sm-12 pl-5" id="divknowabt" style="float:left;display:none;">
-                                                    <div class="col-md-6 col-sm-6 pt-5" style="text-align:right;">
-                                                        <h4 style="font-size:18px;">
-                                                            <b>
-                                                                How do you know about<br />
-                                                                Goldmart Jeweller?*
-                                                            </b>
-                                                        </h4>
-                                                    </div>
-                                                    @Html.DropDownList("location", new SelectList(ViewBag.lsthowtoknow, "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input50", @id = "ddlhowtoknow" })
-
-                                                </div>
-                                                }
-                                            </div>
-
-                                            <div class="row">
-                                                <div class="col-md-12 col-sm-12 pb-5 pt-5" style="text-align:center;">
-                                                    <button type="button" class="btn btn-primary" style="width: 280px; background-color: #1C699F; color:white; font-weight:bold; font-size:18px; border-radius:5px;" id="btnsubmit" onclick="SubmitPoints();">SUBMIT</button>
-                                                </div>
-                                            </div>
+                            if (item.Section == "FeedbackQuestions")
+                            {
+                                <div class="col-md-12 col-sm-12 pt-3 pl-3 pr-3" style="text-align:center;">
+                                    @if (item.Type == "Question")
+                                    {
+                                        var rbtn1 = "rbtvariety" + item.Id + "1";
+                                        var rbtn2 = "rbtvariety" + item.Id + "2";
+                                        var rbtn3 = "rbtvariety" + item.Id + "3";
+                                        var rbtn4 = "rbtvariety" + item.Id + "4";
+                                        var name = "variety" + item.Id;
+                                        <h3 style="font-size:20px;">
+                                            @item.Text
+                                        </h3>
+                                        <div class="cc-selector">
+                                            <input id="@rbtn1" type="radio" name="@name" />
+                                            <label class="drinkcard-cc rbtvariety1" for="@rbtn1"></label>
+                                            <input id="@rbtn2" type="radio" name="@name" />
+                                            <label class="drinkcard-cc rbtvariety2" for="@rbtn2"></label>
+                                            <input id="@rbtn3" type="radio" name="@name" />
+                                            <label class="drinkcard-cc rbtvariety3" for="@rbtn3"></label>
+                                            <input id="@rbtn4" type="radio" name="@name" />
+                                            <label class="drinkcard-cc rbtvariety4" for="@rbtn4"></label>
                                         </div>
-                                    }*@
-                                //}
+                                    }
+                                </div>
                             }
                         }
-
+                    </div>
+                    <div class="row mt-5">
+                        <div class="col-md-12 col-sm-12 pb-5" style="text-align:center;">
+                            <button type="button" class="btn btn-primary" style="width: 280px; background-color: #1C699F; color:white; font-weight:bold; font-size:18px; border-radius:5px;" id="btnNextpg" onclick="SubmitRating();">Next Page</button>
+                        </div>
                     </div>
                 </div>
+                if (Model.PointsAndMessages.IsOtherInfoShow)
+                {
+                    <div class="container-fluid pt-3 pl-3 pr-3 pb-3" id="divthankyou" style="display:none;">
+                        <div class="row">
+                            @foreach (var item in Model.lstFeedbackData)
+                            {
+                                if (item.Section == "OtherInformation")
+                                {
+                                    <div class="col-md-12 col-sm-12 pt-3 pl-3 pr-3" style="text-align:center;">
+                                        @if (item.Type == "Heading")
+                                        {
+                                            if (item.TypeId == 1)
+                                            {
+                                                <h1 style="color:red; font-size:34px;">
+                                                    @item.Text
+                                                </h1>
+                                            }
+                                            if (item.TypeId == 2)
+                                            {
+                                                <h1 style="font-size: 26px;">
+                                                    @item.Text
+                                                </h1>
+                                            }
+                                        }
+                                        @if (item.Type == "Question")
+                                        {
+                                            <span style="padding-right:5px;"> @item.Text </span>
+                                            if (item.TypeId == 1)
+                                            {
+                                                @Html.DropDownList("abc", new SelectList(Model.Gender(), "Value", "Text"), htmlAttributes: new { @class = "input50", @id = "ddlGender" })
+                                            }
+                                            if (item.TypeId == 2)
+                                            {
+                                                <input type="date" class="input50" id="txtBirthDate" />
+                                            }
+                                            if (item.TypeId == 3)
+                                            {
+                                                <input type="date" class="input50" id="txtAniversary" />
+                                            }
 
+                                            if (item.TypeId == 4)
+                                            {
+                                                @Html.DropDownList("abc", new SelectList(Model.lstKnowAboutUs, "Value", "Text"), htmlAttributes: new { @class = "input50", @id = "ddlKnowAboutUs" })
+                                            }
+                                        }
+
+                                    </div>
+                                }
+                            }
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12 col-sm-12 pb-5 pt-5" style="text-align:center;">
+                                <button type="button" class="btn btn-primary" style="width: 280px; background-color: #1C699F; color:white; font-weight:bold; font-size:18px; border-radius:5px;" id="btnsubmit" onclick="SubmitPoints();">SUBMIT</button>
+                            </div>
+                        </div>
+                    </div>
+                }
             }
+
         }
     </div>
-                </div>
+</div>
 <script>
     $(document).ready(function () {
         var today = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
-        
+
         var dtToday = new Date();
 
         var month = dtToday.getMonth() + 1;
@@ -369,8 +287,7 @@
     function SubmitRating() {
 
         $("#divthankyou").show();
-        $("#divmember").hide();
-        $("#divmember1").hide();
+        $("#divquestions").hide();
         $("#divwelcome").hide();
         @*var returnStatus = true;
         if ($("#txtMobileNo").val() == "") {
@@ -492,9 +409,8 @@
         }*@
     }
     function CheckCustomer() {
-        $("#divmember").show();
         $("#divwelcome").hide();
-        $("#divmember1").show();
+        $("#divquestions").show();
         $("#divthankyou").hide();
         @*var returnStatus = true;
         var MobileNo = $('#txtMobileNo').val();
