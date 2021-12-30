@@ -11,7 +11,7 @@ namespace WebApp.ViewModel
     {
         public string GroupId { get; set; }
         public string OutletId { get; set; }
-
+        public string GroupName { get; set; }
         public string LogoUrl { get; set; }
         public List<Feedback_Content> lstFeedbackData { get; set; }
         public Feedback_PointsAndMessages PointsAndMessages { get; set; }

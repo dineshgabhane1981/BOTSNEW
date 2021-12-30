@@ -106,6 +106,9 @@ namespace BOTS_BL.Models
 
         public bool? IsSMS { get; set; }
         public bool IsFeedBackGiven { get; set; }
+        public bool IsDateOfBirth { get; set; }
+        public bool IsDOA { get; set; }
+        public bool IsHowtoKnow { get; set; }
     }
 
 }

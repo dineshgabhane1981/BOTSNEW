@@ -79,8 +79,12 @@
         {
             if (Model.lstFeedbackData != null)
             {
-                @Html.HiddenFor(model => model.GroupId)
-                @Html.HiddenFor(model => model.OutletId)
+                @Html.HiddenFor(model => model.GroupId, new { @id = "hdGroupId" })
+                @Html.HiddenFor(model => model.GroupName, new { @id = "hdGroupNm" })
+                @Html.HiddenFor(model => model.OutletId, new { @id = "hdoutletId" })
+                @Html.Hidden("HiddenDOB", null, new { @id = "hdDOB" })
+                @Html.Hidden("HiddenDOA", null, new { @id = "hdDOA" })
+                @Html.Hidden("HiddenHowToKnow", null, new { @id = "hdHowToKnow" })
                 <div class="col-md-12 col-sm-12 pt-3 pl-3 pr-3" style="text-align:center;">
                     <img src="@Model.LogoUrl" style="width:300px;" alt="Logo">
                 </div>
@@ -95,7 +99,7 @@
                                     {
                                         if (item.TypeId == 1)
                                         {
-                                            <h1 style="font-size:34px;"><span id="spnCustomerName"> @item.Text</span></h1>
+                                    <h1 style="font-size:34px;">@item.Text + @Model.GroupName</h1>
                                         }
                                         if (item.TypeId == 2)
                                         {
@@ -133,7 +137,7 @@
                                     {
                                         if (item.TypeId == 1)
                                         {
-                                            <h1 style="font-size: 34px; color: red;"> @item.Text</h1>
+                                            <h1 style="font-size: 34px; color: red;">Welcome <span id="spnCustomerName"></span></h1>
                                         }
                                         if (item.TypeId == 2)
                                         {
@@ -145,29 +149,30 @@
 
                             if (item.Section == "FeedbackQuestions")
                             {
-                                <div class="col-md-12 col-sm-12 pt-3 pl-3 pr-3" style="text-align:center;">
-                                    @if (item.Type == "Question")
-                                    {
-                                        var rbtn1 = "rbtvariety" + item.Id + "1";
-                                        var rbtn2 = "rbtvariety" + item.Id + "2";
-                                        var rbtn3 = "rbtvariety" + item.Id + "3";
-                                        var rbtn4 = "rbtvariety" + item.Id + "4";
-                                        var name = "variety" + item.Id;
-                                        <h3 style="font-size:20px;">
-                                            @item.Text
-                                        </h3>
-                                        <div class="cc-selector">
-                                            <input id="@rbtn1" type="radio" name="@name" />
-                                            <label class="drinkcard-cc rbtvariety1" for="@rbtn1"></label>
-                                            <input id="@rbtn2" type="radio" name="@name" />
-                                            <label class="drinkcard-cc rbtvariety2" for="@rbtn2"></label>
-                                            <input id="@rbtn3" type="radio" name="@name" />
-                                            <label class="drinkcard-cc rbtvariety3" for="@rbtn3"></label>
-                                            <input id="@rbtn4" type="radio" name="@name" />
-                                            <label class="drinkcard-cc rbtvariety4" for="@rbtn4"></label>
-                                        </div>
-                                    }
-                                </div>
+                    <div class="col-md-12 col-sm-12 pt-3 pl-3 pr-3" style="text-align:center;">
+                        @if (item.Type == "Question")
+                        {
+                            @Html.HiddenFor(model => item.Id, new { @id = "hdnQuestionId" + item.Id })
+                            var rbtn1 = "rbtvariety" + item.Id + "1";
+                            var rbtn2 = "rbtvariety" + item.Id + "2";
+                            var rbtn3 = "rbtvariety" + item.Id + "3";
+                            var rbtn4 = "rbtvariety" + item.Id + "4";
+                            var name = "variety" + item.Id;
+                            <h3 style="font-size:20px;">
+                                @item.Text
+                            </h3>
+                            <div class="cc-selector">
+                                <input id="@rbtn1" type="radio" name="@name" />
+                                <label class="drinkcard-cc rbtvariety1" for="@rbtn1"></label>
+                                <input id="@rbtn2" type="radio" name="@name" />
+                                <label class="drinkcard-cc rbtvariety2" for="@rbtn2"></label>
+                                <input id="@rbtn3" type="radio" name="@name" />
+                                <label class="drinkcard-cc rbtvariety3" for="@rbtn3"></label>
+                                <input id="@rbtn4" type="radio" name="@name" />
+                                <label class="drinkcard-cc rbtvariety4" for="@rbtn4"></label>
+                            </div>
+                        }
+                    </div>
                             }
                         }
                     </div>
@@ -283,71 +288,37 @@
         });
 
     });
-    function SubmitRating() {
-
-        $("#divthankyou").show();
-        $("#divquestions").hide();
-        $("#divwelcome").hide();
-        @*var returnStatus = true;
-        if ($("#txtMobileNo").val() == "") {
-            $('#txtMobileNo').css('border-color', 'red');
-            returnStatus = false;
-        }
-        if ($("#rbtvariety1").is(":checked") || $("#rbtvariety2").is(":checked") || $("#rbtvariety3").is(":checked") || $("#rbtvariety4").is(":checked")) {
-
-        }
-        else {
-
-            returnStatus = false;
-        }
-        if ($("#rbtservice1").is(":checked") || $("#rbtservice2").is(":checked") || $("#rbtservice3").is(":checked") || $("#rbtservice4").is(":checked")) {
-
-        }
-        else {
-
-            returnStatus = false;
-        }
+    function SubmitRating() {        
+        var returnStatus = true;
+        var HomeData = [];
+        
+        
         if (returnStatus == true) {
+            $('[id^=hdnQuestionId]').each(function (i, itemid) {
 
-            var ratevariety;
-            var rateservice;
-            if ($("#rbtvariety1").is(":checked")) {
-                ratevariety = 4;
-            }
-            if ($("#rbtvariety2").is(":checked")) {
-                ratevariety = 3;
-            }
-            if ($("#rbtvariety3").is(":checked")) {
-                ratevariety = 2;
-            }
-            if ($("#rbtvariety4").is(":checked")) {
-                ratevariety = 1;
-            }
-            if ($("#rbtservice1").is(":checked")) {
-                rateservice = 4;
-            }
-            if ($("#rbtservice2").is(":checked")) {
-                rateservice = 3;
-            }
-            if ($("#rbtservice3").is(":checked")) {
-                rateservice = 2;
-            }
-            if ($("#rbtservice4").is(":checked")) {
-                rateservice = 1;
-            }
-            var SeardhData = [];
-            item = {}
+                var id11 = itemid.id.substr(13);
 
+                $('[id^=rbtvariety' + id11 + ']').each(function (i, itemradio) {
+                    
 
-            SeardhData.push(ratevariety);
-            SeardhData.push(rateservice);
+                    if ($("#" + itemradio.id).is(":checked")) {
+                        console.log("hi");
+                        itemHome = {}
+                        itemHome["Checked"] = itemradio.id;
+                        HomeData.push(itemHome);
+                        console.log(HomeData);
+                    }
+                });
+
+            });
+            console.log(HomeData);          
 
 
             $("#divLoader").show();
             $.ajax({
                 type: "POST",
-                url: '@Url.Action("SubmitRating", "Feedback")',
-                data: '{mobileNo: ' + JSON.stringify($("#txtMobileNo").val()) + ', ranking: ' + JSON.stringify(SeardhData) + ', GroupId: ' + JSON.stringify($("#hdngroupid").val()) + ', outletId: ' + JSON.stringify($("#hdnoutletid").val()) + '}',
+                url: '@Url.Action("SubmitPoints", "Feedback")',
+                data: '{mobileNo: ' + JSON.stringify($("#txtMobileNo").val()) + ', ranking: ' + JSON.stringify(JSON.stringify(HomeData)) + ', GroupId: ' + JSON.stringify($("#hdGroupId").val()) + ', outletId: ' + JSON.stringify($("#hdoutletId").val()) + '}',
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
                 success: function (response) {
@@ -405,40 +376,59 @@
                 buttonText: "Okay"
             })
             return false;
-        }*@
+        }
     }
     function CheckCustomer() {
-        $("#divwelcome").hide();
-        $("#divquestions").show();
-        $("#divthankyou").hide();
-        @*var returnStatus = true;
+        //$("#divwelcome").hide();
+        //$("#divquestions").show();
+        //$("#divthankyou").hide();
+        var returnStatus = true;
         var MobileNo = $('#txtMobileNo').val();
         if ($("#txtMobileNo").val() == "") {
-            alert("Please enter Required fields");
+            console.log(111);
+            cuteAlert({
+                type: "error",
+                title: "Oops..",
+                message: "Please enter mobile number",
+                buttonText: "Okay"
+            })
+            /*alert("Please enter mobile number");*/
             $('#txtMobileNo').css('border-color', 'red');
             returnStatus = false;
+           
         }
         else {
+            console.log(222);
             if (/^[6789]\d{9,9}$/.test(MobileNo)) {
 
             }
             else {
-                alert("Mobile Number entered seems incorrect. Please try again");
+               // alert("Mobile Number entered seems incorrect. Please try again");
+                cuteAlert({
+                    type: "error",
+                    title: "Oops..",
+                    message: "Mobile Number entered seems incorrect. Please try again",
+                    buttonText: "Okay"
+                })
                 $('#txtMobileNo').css('border-color', 'red');
                 returnStatus = false;
             }
         }
         if (returnStatus == true) {
-
+            console.log($('#txtMobileNo').val());
             $("#divLoader").show();
             $.ajax({
                 type: "POST",
-                url: '@Url.Action("GetCustomerStatus", "Feedback")',
-                data: '{mobileNo: ' + JSON.stringify($("#txtMobileNo").val()) + ', GroupId: ' + JSON.stringify($("#hdngroupid").val()) + '}',
+                url: '@Url.Action("GetIsCustomerExist", "Feedback")',
+                data: '{mobileNo: ' + JSON.stringify($("#txtMobileNo").val()) + ', GroupId: ' + JSON.stringify($("#hdGroupId").val()) + '}',
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
                 success: function (response) {
-
+                    if (response !=null) {
+                        $('#hdDOB').val(response.IsDateOfBirth);
+                        $('#hdDOA').val(response.IsDOA);
+                        $('#hdHowToKnow').val(response.IsHowtoKnow);
+                    }
                     if (response.IsFeedBackGiven) {
                         cuteAlert({
                             type: "error",
@@ -452,16 +442,16 @@
 
 
                         if (response.CustomerName != null) {
-                            $('#spnCustName').text(response.CustomerName);
+                            $('#spnCustomerName').text(response.CustomerName);
                             $("#divLoader").hide();
-                            $("#divmember").show();
+                            $("#divquestions").show();
                             $("#divwelcome").hide();
                         }
                         else {
-
-                            $('#spnCustName').text("Esteemed Patron");
+                            console.log("hi");
+                            $('#spnCustomerName').text("Esteemed Patron");
                             $("#divLoader").hide();
-                            $("#divmember").show();
+                            $("#divquestions").show();
                             $("#divwelcome").hide();
                         }
 
@@ -483,14 +473,14 @@
             });
         }
         else {
-            cuteAlert({
-                type: "error",
-                title: "Oops..",
-                message: "Please enter Required fields",
-                buttonText: "Okay"
-            })
+            //cuteAlert({
+            //    type: "error",
+            //    title: "Oops..",
+            //    message: "Please enter Required fields",
+            //    buttonText: "Okay"
+            //})
             return false;
-        }*@
+        }
 
     }
 </script>
