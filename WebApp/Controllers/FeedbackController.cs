@@ -192,6 +192,7 @@ namespace WebApp.Controllers
             PointsAndMessages = FMR.GetPointsAndMessages(userDetails.GroupId);
             objFeedbackAuthor.PointsAndMessages = PointsAndMessages;
             objFeedbackAuthor.lstKnowAboutUs = FMR.GetHowToKnowAboutList();
+            objFeedbackAuthor.LogoUrl = FMR.GetLogo(userDetails.GroupId);
             return View(objFeedbackAuthor);
         }
 
