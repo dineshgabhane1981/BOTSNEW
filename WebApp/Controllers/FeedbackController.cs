@@ -19,6 +19,7 @@ namespace WebApp.Controllers
 {
     public class FeedbackController : Controller
     {
+        Exceptions newexception = new Exceptions();
         FeedbackModuleRepository FMR = new FeedbackModuleRepository();
         ReportsRepository RR = new ReportsRepository();
         // GET: Feedback
@@ -211,6 +212,7 @@ namespace WebApp.Controllers
             // List<Feedback_Content> lstfbget = new List<Feedback_Content>();
             objgetfeedbackviewmodel.OutletId = Id;
             objgetfeedbackviewmodel.GroupId = groupid;
+            objgetfeedbackviewmodel.GroupName = FMR.GetGroupName(groupid);
             objgetfeedbackviewmodel.lstFeedbackData = FMR.GetFeedback_VisibleContents(groupid);
             objgetfeedbackviewmodel.LogoUrl = FMR.GetLogo(groupid);
             PointsAndMessages = FMR.GetPointsAndMessages(groupid);
@@ -250,7 +252,35 @@ namespace WebApp.Controllers
             return View();
 
         }
+        public ActionResult GetIsCustomerExist(string mobileNo, string GroupId)
+        {
+            CustomerDetailwithFeedback obj = new CustomerDetailwithFeedback();
+            try
+            {
+                obj = FMR.GetCustomerInfo(mobileNo, GroupId);
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "Get feedbackcust");
+            }
+            return new JsonResult() { Data = obj, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
 
+        }
+        public ActionResult SubmitPoints(string mobileNo, string ranking, string GroupId, string outletId)
+        {
+            string status = "false";
+            CustomerDetail objcustomerdetails = new CustomerDetail();
+            try
+            {
+                status = FMR.SubmitRating(mobileNo, ranking, GroupId, outletId);
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "submit rating");
+            }
+            return new JsonResult() { Data = status, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
+
+        }
 
     }
 }
