@@ -18,6 +18,7 @@ namespace BOTS_BL.Models
             : base(connectionStringName)
         {
         }
+        public virtual DbSet<FeedBackModuleMaster> FeedBackModuleMasters { get; set; }
         public virtual DbSet<SMSEmailMaster> SMSEmailMasters { get; set; }
         public virtual DbSet<FeedBackMobileMaster> FeedBackMobileMasters { get; set; }
         public virtual DbSet<FeedBackMaster> FeedBackMasters { get; set; }
