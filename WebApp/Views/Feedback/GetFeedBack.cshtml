@@ -99,7 +99,7 @@
                                     {
                                         if (item.TypeId == 1)
                                         {
-                                    <h1 style="font-size:34px;">@item.Text + @Model.GroupName</h1>
+                                    <h1 style="font-size:34px;">@item.Text @Model.GroupName!!!</h1>
                                         }
                                         if (item.TypeId == 2)
                                         {
@@ -115,15 +115,19 @@
                             </div>
                         }
                     }
-                    <div class="row">
-                        <div class="col-md-12 col-sm-12 pt-5 pl-5 pr-5 pb-5" style="text-align:center;">
-                            <input type="number" class="input100" id="txtMobileNo" placeholder="Enter Mobile number" />
+                <div class="row">
+                    <div class="col-md-12 col-sm-12 pt-3 pl-5 pr-5 pb-5" style="text-align:center;">
+                        <h6>Sales Representive</h6> @Html.DropDownList("abc", new SelectList(Model.lstsalesRepresentive, "Value", "Text"), htmlAttributes: new { @class = "input50", @id = "ddlsaleslist" })
 
-                        </div>
-                        <div class="col-md-12 col-sm-12 pb-5" style="text-align:center;">
-                            <button type="button" class="btn btn-primary" style="width: 280px; background-color: #1C699F; color:white; font-weight:bold; font-size:18px; border-radius:5px;" id="btnProceed" onclick="return CheckCustomer();">ENTER</button>
-                        </div>
+</div>
+                    <div class="col-md-12 col-sm-12 pb-5" style="text-align:center;">
+                        <input type="number" class="input100" id="txtMobileNo" placeholder="Enter Mobile number" />
+
                     </div>
+                    <div class="col-md-12 col-sm-12 pb-5" style="text-align:center;">
+                        <button type="button" class="btn btn-primary" style="width: 280px; background-color: #1C699F; color:white; font-weight:bold; font-size:18px; border-radius:5px;" id="btnProceed" onclick="return CheckCustomer();">ENTER</button>
+                    </div>
+                </div>
                 </div>
 
                 <div class="container-fluid pt-3 pl-3 pr-3 pb-3" style="display:none;" id="divquestions">
@@ -298,31 +302,26 @@
 
                 var id11 = itemid.id.substr(13);
 
-                $('[id^=rbtvariety' + id11 + ']').each(function (i, itemradio) {
-                    
+                $('[id^=rbtvariety' + id11 + ']').each(function (i, itemradio) {                
 
                     if ($("#" + itemradio.id).is(":checked")) {
-                        console.log("hi");
-                        itemHome = {}
-                        itemHome["Checked"] = itemradio.id;
-                        HomeData.push(itemHome);
+                        //console.log("hi");                        
+                        HomeData.push(itemradio.id);
                         console.log(HomeData);
                     }
                 });
 
             });
-            console.log(HomeData);          
-
-
+            var sales = $("#ddlsaleslist").val();
+            console.log(HomeData);
             $("#divLoader").show();
             $.ajax({
                 type: "POST",
                 url: '@Url.Action("SubmitPoints", "Feedback")',
-                data: '{mobileNo: ' + JSON.stringify($("#txtMobileNo").val()) + ', ranking: ' + JSON.stringify(JSON.stringify(HomeData)) + ', GroupId: ' + JSON.stringify($("#hdGroupId").val()) + ', outletId: ' + JSON.stringify($("#hdoutletId").val()) + '}',
+                data: '{mobileNo: ' + JSON.stringify($("#txtMobileNo").val()) + ', ranking: ' + JSON.stringify(JSON.stringify(HomeData)) + ', GroupId: ' + JSON.stringify($("#hdGroupId").val()) + ', SalesRepresentative: ' + JSON.stringify(sales) + ', outletId: ' + JSON.stringify($("#hdoutletId").val()) + '}',
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
                 success: function (response) {
-
                     // console.log(response.CustomerName);
                     if (response == "true") {
                         var nm = $('#spnCustName').text();
@@ -330,7 +329,6 @@
                         if (nm == "Esteemed Patron") {
                             $("#divknowabt").show();
                         }
-
                         $("#divLoader").hide();
                         $("#divthankyou").show();
                         $("#divmember").hide();
@@ -351,11 +349,8 @@
                             message: "FeedBack Save Successfully!",
                             buttonText: "Okay"
                         }), 10000);
-
                         window.location.replace('https://blueocktopus.in/GM_feedback?outletid=10131001');
-
                     }
-
 
                     $("#divLoader").hide();
                 },

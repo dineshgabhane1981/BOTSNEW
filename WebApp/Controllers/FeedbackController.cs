@@ -204,7 +204,7 @@ namespace WebApp.Controllers
                 groupid = Id.Substring(0, 4);
                 ViewBag.GroupId = groupid;
                 ViewBag.OutletId = Id;
-                ViewBag.lsthowtoknow = FMR.GetHowToKnowAboutList();
+               // ViewBag.lsthowtoknow = FMR.GetHowToKnowAboutList();
             }
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
             FeedbackGetFeedbackViewModel objgetfeedbackviewmodel = new FeedbackGetFeedbackViewModel();
@@ -215,6 +215,8 @@ namespace WebApp.Controllers
             objgetfeedbackviewmodel.GroupName = FMR.GetGroupName(groupid);
             objgetfeedbackviewmodel.lstFeedbackData = FMR.GetFeedback_VisibleContents(groupid);
             objgetfeedbackviewmodel.LogoUrl = FMR.GetLogo(groupid);
+            objgetfeedbackviewmodel.lstKnowAboutUs = FMR.GetHowToKnowAboutList();            
+            objgetfeedbackviewmodel.lstsalesRepresentive = FMR.GetSalesRepresentiveList(groupid);
             PointsAndMessages = FMR.GetPointsAndMessages(groupid);
             objgetfeedbackviewmodel.PointsAndMessages = PointsAndMessages;
 
@@ -266,13 +268,13 @@ namespace WebApp.Controllers
             return new JsonResult() { Data = obj, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
 
         }
-        public ActionResult SubmitPoints(string mobileNo, string ranking, string GroupId, string outletId)
+        public ActionResult SubmitPoints(string mobileNo, string ranking, string GroupId, string SalesRepresentative,string outletId)
         {
             string status = "false";
             CustomerDetail objcustomerdetails = new CustomerDetail();
             try
             {
-                status = FMR.SubmitRating(mobileNo, ranking, GroupId, outletId);
+                status = FMR.SubmitRating(mobileNo, ranking, GroupId, SalesRepresentative, outletId);
             }
             catch (Exception ex)
             {
