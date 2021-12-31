@@ -7,7 +7,65 @@
     var feedbackURL = ConfigurationManager.AppSettings["FeedbackOutletLink"].ToString();
 }
 
+<style>
+    body {
+        font-size: 16px !important;
+    }
 
+    .cc-selector input {
+        margin: 0;
+        padding-right: 5px;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+    }
+
+    .rbtvariety1 {
+        background-image: url("../../Content/assets/images/15.png");
+    }
+
+    .rbtvariety2 {
+        background-image: url("../../Content/assets/images/3.png");
+    }
+
+    .rbtvariety3 {
+        background-image: url("../../Content/assets/images/7.png");
+    }
+
+    .rbtvariety4 {
+        background-image: url("../../Content/assets/images/14.png");
+    }
+
+    .cc-selector input:active + .drinkcard-cc {
+        opacity: .9;
+    }
+
+    .cc-selector input:checked + .drinkcard-cc {
+        -webkit-filter: none;
+        -moz-filter: none;
+        filter: none;
+        border: 2px solid red;
+        border-radius: 25px;
+    }
+
+    .drinkcard-cc {
+        cursor: pointer;
+        background-size: contain;
+        background-repeat: no-repeat;
+        display: inline-block;
+        width: 45px;
+        height: 45px;
+        -webkit-transition: all 100ms ease-in;
+        -moz-transition: all 100ms ease-in;
+        transition: all 100ms ease-in;
+        -webkit-filter: brightness(1.2) grayscale(.5) opacity(.9);
+        -moz-filter: brightness(1.2) grayscale(.5) opacity(.9);
+        filter: brightness(1.2) grayscale(.5) opacity(.9);
+        /* -webkit-filter: brightness(1.8) grayscale(1) opacity(.7);
+        -moz-filter: brightness(1.8) grayscale(1) opacity(.7);
+        filter: brightness(1.8) grayscale(1) opacity(.7);*/
+    }
+</style>
 <div class="app-main__inner">
 
     <div class="mb-3 pr-3 pt-3 pl-3" style="padding-bottom:20px; background-color:white;display:flex;">
@@ -58,7 +116,7 @@
             <div class="col-md-12 col-xl-12  pl-3 pr-3 pb-3 mt-2" style="border:2px solid grey; border-radius:10px;">
                 <div class="row">
                     <div class="col-md-6 col-xl-6" style="margin-left:20px; margin-top:20px;">
-                        <h4> Question Section </h4>
+                        <h4> Questions Section </h4>
                     </div>
                 </div>
                 @if (Model.lstFeedbackData != null)
@@ -87,7 +145,7 @@
             <div class="col-md-12 col-xl-12   pl-3 pr-3 pb-3 mt-2" style="border:2px solid grey; border-radius:10px;">
                 <div class="row">
                     <div class="col-md-6 col-xl-6" style="margin-left:20px; margin-top:20px;">
-                        <h4> Other information </h4>
+                        <h4> Other informations </h4>
                     </div>
                 </div>
                 <div class="row">
@@ -233,9 +291,12 @@
             </div>
         </div>
 
-        <div class="col-md-4 col-xl-4" style="border: 2px solid grey; border-radius: 10px; width: 30% !important;float:left;background-color:seashell;">
-            <div class="col-md-12 col-xl-12" style="text-align:center;"><h4>Preview</h4></div>
+        <div class="col-md-4 col-xl-4" style="border: 2px solid grey; border-radius: 10px; width: 30% !important;float:left;">
+            <div class="col-md-12 col-xl-12" style="text-align:center;"><h4 style="font-weight:bold;">Preview</h4></div>
             <div style="border: 2px solid lightgray; border-radius: 10px; margin-top:10px;margin-bottom:10px;">
+                <div class="col-md-12 col-sm-12 pt-3 pl-3 pr-3" style="text-align:center;">
+                    <img src="@Model.LogoUrl" style="width:200px;" alt="Logo">
+                </div>
                 @if (Model.lstFeedbackData != null)
                 {
                     foreach (var item in Model.lstFeedbackData)
@@ -245,13 +306,13 @@
                             var Id = "spnHome" + item.Id;
                             if (item.Type == "Footer")
                             {
-                                
+
                                 <div class="row" id="dvSalesRepresentative">
                                     <div class="col-md-12 col-xl-12" style="margin-top:20px;text-align:center;">
-                                       <select id="ddlSalesRep" class="input50"><option value="Select">Select</option></select>
+                                        <select id="ddlSalesRep" class="input50"><option value="Select">Select</option></select>
                                     </div>
                                 </div>
-                               
+
                                 <div class="row">
                                     <div class="col-md-12 col-xl-12" style="margin-top:20px;text-align:center;">
                                         <input type="number" class="input50" /> <br /><br /> <button class="btn btn-primary">Go</button>
@@ -267,7 +328,18 @@
                             {
                                 <div class="row">
                                     <div class="col-md-12 col-xl-12 mb-2" style="margin-top:20px;text-align:center;">
-                                        <span id="@Id">@item.Text</span>
+                                        @if (item.TypeId == 1)
+                                        {
+                                            <h1 style="font-size:22px;"><span id="@Id">@item.Text</span></h1>
+                                        }
+                                        @if (item.TypeId == 2)
+                                        {
+                                            <h1 style="font-size:19px;"><span id="@Id">@item.Text</span></h1>
+                                        }
+                                        @if (item.TypeId == 3)
+                                        {
+                                            <h1 style="font-size:16px;"><span id="@Id">@item.Text</span></h1>
+                                        }
                                     </div>
                                 </div>
                             }
@@ -286,6 +358,13 @@
                             var Id = "spnFeedbackQuestions" + item.Id;
                             var dvId = "dvFeedbackQuestions" + item.Id;
                             var spnMandatory = "spnMandatory" + item.Id;
+
+                            var rbtn1 = "rbtvariety" + item.Id + "1";
+                            var rbtn2 = "rbtvariety" + item.Id + "2";
+                            var rbtn3 = "rbtvariety" + item.Id + "3";
+                            var rbtn4 = "rbtvariety" + item.Id + "4";
+                            var name = "variety" + item.Id;
+
                             if (item.Type == "Question")
                             {
 
@@ -301,7 +380,17 @@
                                         {
                                             <span style="color:red;" id="@spnMandatory"></span>
                                         }
-                                    <br /><span><b>Rating Images</b></span>
+                                        <br />
+                                        <div class="cc-selector">
+                                            <input id="@rbtn1" type="radio" name="@name" />
+                                            <label class="drinkcard-cc rbtvariety1" for="@rbtn1"></label>
+                                            <input id="@rbtn2" type="radio" name="@name" />
+                                            <label class="drinkcard-cc rbtvariety2" for="@rbtn2"></label>
+                                            <input id="@rbtn3" type="radio" name="@name" />
+                                            <label class="drinkcard-cc rbtvariety3" for="@rbtn3"></label>
+                                            <input id="@rbtn4" type="radio" name="@name" />
+                                            <label class="drinkcard-cc rbtvariety4" for="@rbtn4"></label>
+                                        </div>
                                     </div>
                                 </div>
                             }
@@ -309,7 +398,15 @@
                             {
                                 <div class="row">
                                     <div class="col-md-12 col-xl-12 mb-2" style="margin-top:20px;text-align:center;">
-                                        <span id="@Id">@item.Text</span>
+                                        @if (item.TypeId == 1)
+                                        {
+                                            <h1 style="font-size: 22px; color: red;"> <span id="@Id">@item.Text</span></h1>
+
+                                        }
+                                        @if (item.TypeId == 2)
+                                        {
+                                            <h1 style="font-size: 22px; "> <span id="@Id">@item.Text</span></h1>
+                                        }
                                     </div>
                                 </div>
                             }
@@ -355,7 +452,7 @@
                                             }
                                             if (item.TypeId == 4)
                                             {
-                                                @Html.DropDownList("abc", new SelectList(Model.lstKnowAboutUs, "Value", "Text"),"Select", htmlAttributes: new { @class = "input50" })
+                                                @Html.DropDownList("abc", new SelectList(Model.lstKnowAboutUs, "Value", "Text"), "Select", htmlAttributes: new { @class = "input50" })
                                             }
                                         }
 
@@ -366,7 +463,16 @@
                             {
                                 <div class="row">
                                     <div class="col-md-12 col-xl-12 mb-2" style="margin-top:20px;text-align:center;">
-                                        <span id="@Id">@item.Text</span>
+                                        @if (item.TypeId == 1)
+                                        {
+                                            <h1 style="color:red; font-size:22px;"><span id="@Id">@item.Text</span></h1>
+
+                                        }
+                                        @if (item.TypeId == 2)
+                                        {
+                                            <h1 style="font-size:19px;"><span id="@Id">@item.Text</span></h1>
+
+                                        }
                                     </div>
                                 </div>
                             }
@@ -595,12 +701,12 @@
             $("#dvShowOtherInfo").hide();
             $("#dvOtherInfoPreview").hide();
         }
-        
+
         if ($("#hdnIsAddRepresentative").val()=="True") {
             $("#dvSalesRepresentative").show();
-            var lstSalesRepresentative = $("#txtHomeRepresentative").val();            
+            var lstSalesRepresentative = $("#txtHomeRepresentative").val();
             var lst = lstSalesRepresentative.split(",");
-            
+
             var selectList = document.getElementById('ddlSalesRep');
             for (var i = 0; i < lst.length; i++) {
                 var option = document.createElement("option");
@@ -717,14 +823,14 @@
 
         $('[id^=ddlIsMandatoryQuestion]').each(function (i, item) {
             $("#" + item.id).change(function () {
-                if ($("#" + item.id).val() == "Mandatory") {                   
+                if ($("#" + item.id).val() == "Mandatory") {
                     var id = item.id.substr(22);
                     $("#spnMandatory" + id).text("*");
                 }
                 else {
                     var id = item.id.substr(22);
                     $("#spnMandatory" + id).text("");
-                }                
+                }
             });
         });
 
@@ -760,7 +866,7 @@
                 }
             }
             else {
-                $('#ddlSalesRep').find('option').remove().end();                
+                $('#ddlSalesRep').find('option').remove().end();
                 $("#dvSalesRepresentative").hide();
             }
         });
