@@ -34,14 +34,17 @@ namespace WebApp.Controllers
             }
             List<SelectListItem> YearList = new List<SelectListItem>();
             int year = DateTime.Now.Year;
-            for (int i = 0; i <= 9; i++)
+            objCampaignTiles.year= DateTime.Now.Year;
+            objCampaignTiles.month = DateTime.Now.Month;
+            for (int i = -5; i <= 9; i++)
             {
                 YearList.Add(new SelectListItem
                 {
                     Text = Convert.ToString(DateTime.Now.AddYears(i).Year.ToString()),
-                    Value = Convert.ToString(year + i)
+                    Value = Convert.ToString(year + i)              
                 });
             }
+
 
             objCampaignTiles.lstMonth = MonthList;
             objCampaignTiles.lstYear = YearList;

@@ -106,8 +106,8 @@
         <div class="row" id="dvCelebrationsFirst" style="display: none;">
             <div class="mb-3 pt-3 pl-3 pr-3">
                 <span><u>CELEBRATIONS</u></span> <br /><br />
-                @Html.DropDownListFor(x => Model.month, new SelectList(Model.lstYear, "Value", "Text"), htmlAttributes: new { @class = "smallDDL", @id = "YearList" })
-                @Html.DropDownListFor(x => Model.year, new SelectList(Model.lstMonth, "Value", "Text"), htmlAttributes: new { @class = "smallDDL", @id = "MonthList" })
+                @Html.DropDownListFor(x => Model.year, new SelectList(Model.lstYear, "Value", "Text", Model.year), htmlAttributes: new { @class = "smallDDL", @id = "YearList" })
+                @Html.DropDownListFor(x => Model.month, new SelectList(Model.lstMonth, "Value", "Text", Model.month), htmlAttributes: new { @class = "smallDDL", @id = "MonthList" })
                 <button id="btnGo" class="btn btn-primary" onclick="GetCelebrationData()">GO</button>
             </div>
             <div class="pt-3 pl-3 pr-3 col-md-12 col-lg-12">
@@ -160,8 +160,8 @@
         <div class="row" id="dvPointsExpiryFirst" style="display:none;">
             <div class="mb-3 pt-3 pl-3 pr-3">
                 <span><u>POINTS EXPIRY</u></span> <br /><br />
-                @Html.DropDownListFor(x => Model.month, new SelectList(Model.lstYear, "Value", "Text"), htmlAttributes: new { @class = "smallDDL", @id = "YearListExpiry" })
-                @Html.DropDownListFor(x => Model.year, new SelectList(Model.lstMonth, "Value", "Text"), htmlAttributes: new { @class = "smallDDL", @id = "MonthListExpiry" })
+                @Html.DropDownListFor(x => Model.year, new SelectList(Model.lstYear, "Value", "Text", Model.year), htmlAttributes: new { @class = "smallDDL", @id = "YearListExpiry" })
+                @Html.DropDownListFor(x => Model.month, new SelectList(Model.lstMonth, "Value", "Text", Model.month), htmlAttributes: new { @class = "smallDDL", @id = "MonthListExpiry" })
                 <button id="btnGo" class="btn btn-primary" onclick="GetPointsExpiryData()">GO</button>
             </div>
             <div class="pt-3 pl-3 pr-3 col-md-12 col-lg-12">
@@ -215,8 +215,8 @@
         <div class="row" id="dvInactiveFirst" style="display:none;">
             <div class="mb-3 pt-3 pl-3 pr-3">
                 <span><u>INACTIVE TO ACTIVE</u></span> <br /><br />
-                @Html.DropDownListFor(x => Model.month, new SelectList(Model.lstYear, "Value", "Text"), htmlAttributes: new { @class = "smallDDL", @id = "YearListInactive" })
-                @Html.DropDownListFor(x => Model.year, new SelectList(Model.lstMonth, "Value", "Text"), htmlAttributes: new { @class = "smallDDL", @id = "MonthListInactive" })
+                @Html.DropDownListFor(x => Model.year, new SelectList(Model.lstYear, "Value", "Text", Model.year), htmlAttributes: new { @class = "smallDDL", @id = "YearListInactive" })
+                @Html.DropDownListFor(x => Model.month, new SelectList(Model.lstMonth, "Value", "Text", Model.month), htmlAttributes: new { @class = "smallDDL", @id = "MonthListInactive" })
                 <button id="btnGo" class="btn btn-primary" onclick="GetInactiveData()">GO</button>
             </div>
             <div class="pt-3 pl-3 pr-3 col-md-12 col-lg-12">
@@ -267,8 +267,8 @@
         <div class="row" id="dvCampaignsFirst" style="display:none;">
             <div class="mb-3 pt-3 pl-3 pr-3">
                 <span><u>CAMPAIGNS</u></span> <br /><br />
-                @Html.DropDownListFor(x => Model.month, new SelectList(Model.lstYear, "Value", "Text"), htmlAttributes: new { @class = "smallDDL", @id = "YearListCampaigns" })
-                @Html.DropDownListFor(x => Model.year, new SelectList(Model.lstMonth, "Value", "Text"), htmlAttributes: new { @class = "smallDDL", @id = "MonthListCampaigns" })
+                @Html.DropDownListFor(x => Model.year, new SelectList(Model.lstYear, "Value", "Text", Model.year), htmlAttributes: new { @class = "smallDDL", @id = "YearListCampaigns" })
+                @Html.DropDownListFor(x => Model.month, new SelectList(Model.lstMonth, "Value", "Text", Model.month), htmlAttributes: new { @class = "smallDDL", @id = "MonthListCampaigns" })
                 <button id="btnGo" class="btn btn-primary" onclick="GetCampaignsData()">GO</button>
             </div>
             <div class="pt-3 pl-3 pr-3 col-md-12 col-lg-12">
@@ -344,8 +344,8 @@
         <div class="row" id="dvSMSBlastsFirst" style="display:none;">
             <div class="mb-3 pt-3 pl-3 pr-3">
                 <span><u>SMS BLASTS</u></span> <br /><br />
-                @Html.DropDownListFor(x => Model.month, new SelectList(Model.lstYear, "Value", "Text"), htmlAttributes: new { @class = "smallDDL", @id = "YearListSMSBlasts" })
-                @Html.DropDownListFor(x => Model.year, new SelectList(Model.lstMonth, "Value", "Text"), htmlAttributes: new { @class = "smallDDL", @id = "MonthListSMSBlasts" })
+                @Html.DropDownListFor(x => Model.year, new SelectList(Model.lstYear, "Value", "Text", Model.year), htmlAttributes: new { @class = "smallDDL", @id = "YearListSMSBlasts" })
+                @Html.DropDownListFor(x => Model.month, new SelectList(Model.lstMonth, "Value", "Text", Model.month), htmlAttributes: new { @class = "smallDDL", @id = "MonthListSMSBlasts" })
                 <button id="btnGo" class="btn btn-primary" onclick="GetSMSBlastsData()">GO</button>
             </div>
             <div class="pt-3 pl-3 pr-3 col-md-12 col-lg-12">
