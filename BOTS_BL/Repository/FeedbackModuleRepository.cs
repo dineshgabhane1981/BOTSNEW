@@ -828,6 +828,7 @@ namespace BOTS_BL.Repository
                             context.PointsExpiries.Add(objpointsExpiry);
                             context.SaveChanges();
                             status = "pointsGiven";
+
                         }
                     }
                 }
@@ -835,7 +836,7 @@ namespace BOTS_BL.Repository
             return status;
         }
 
-        public bool SubmitPoints(string MemberName, string Gender, string BirthDt, string mobileNo, string AnniversaryDt, string LiveIn, string Knowabt, string GroupId, string outletid)
+        public bool Submitotherinfo(string MemberName, string Gender, string BirthDt, string mobileNo, string AnniversaryDt,string Knowabt, string GroupId, string outletid)
         {
             bool status = false;
             // string smsresponce="";
@@ -1000,7 +1001,7 @@ namespace BOTS_BL.Repository
                     feedback.MobileNo = mobileNo;
                     feedback.CustomerName = MemberName;
                     feedback.OutletId = outletid;
-                    feedback.Location = LiveIn;
+                   // feedback.Location = LiveIn;
                     feedback.HowToKonwAbout = Knowabt;
                     feedback.DOB = Convert.ToDateTime(BirthDt);
                     if (AnniversaryDt != null)
@@ -1017,7 +1018,7 @@ namespace BOTS_BL.Repository
                 {
                     foreach (var feedback in lstfeedback)
                     {
-                        feedback.Location = LiveIn;
+                       // feedback.Location = LiveIn;
                         feedback.HowToKonwAbout = Knowabt;
                         feedback.DOB = Convert.ToDateTime(BirthDt);
                         if (AnniversaryDt != null)

@@ -284,6 +284,21 @@ namespace WebApp.Controllers
             return new JsonResult() { Data = status, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
 
         }
+        public ActionResult SubmitotherinfowithPoints(string MemberName, string Gender, string BirthDt, string mobileNo, string AnniversaryDt, string Knowabt, string GroupId, string OutletId)
+        {
+            bool status = false;
+            CustomerDetail objcustomerdetails = new CustomerDetail();
+            try
+            {
+                status = FMR.Submitotherinfo(MemberName, Gender, BirthDt, mobileNo, AnniversaryDt,Knowabt, GroupId, OutletId);
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "submit points");
+            }
+            return new JsonResult() { Data = status, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
+
+        }
 
     }
 }
