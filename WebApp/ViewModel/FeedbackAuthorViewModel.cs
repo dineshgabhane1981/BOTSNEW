@@ -33,5 +33,9 @@ namespace WebApp.ViewModel
         {
             return new SelectListItem[3] { new SelectListItem() { Text = "Select", Value = "0" }, new SelectListItem() { Text = "Male", Value = "1" }, new SelectListItem() { Text = "Female", Value = "2" } };
         }
+        public SelectListItem[] PointsConfig()
+        {
+            return new SelectListItem[2] { new SelectListItem() { Text = "On Feedback", Value = "OnFeedback" }, new SelectListItem() { Text = "On Other Info", Value = "OnOtherInfo" } };
+        }
     }
 }

@@ -29,6 +29,7 @@ namespace BOTS_BL.Models
         public bool IsMsgMissedFeedback { get; set; }
 
         public string MsgMissedFeedback { get; set; }
+        public string PointsConfig { get; set; }
 
         [StringLength(50)]
         public string AddedBy { get; set; }

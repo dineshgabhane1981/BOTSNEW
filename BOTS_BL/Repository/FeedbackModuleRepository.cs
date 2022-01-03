@@ -500,9 +500,16 @@ namespace BOTS_BL.Repository
 
                         objPointsAndMessages.IsFeedbackPoints = Convert.ToBoolean(item["IsFeedbackPoints"]);
                         if (objPointsAndMessages.IsFeedbackPoints)
+                        {
                             objPointsAndMessages.AwardFeedbackPoints = Convert.ToInt32(item["AwardFeedbackPoints"]);
+                            objPointsAndMessages.PointsConfig = Convert.ToString(item["PointsConfig"]);
+                        }
                         else
+                        {
                             objPointsAndMessages.AwardFeedbackPoints = 0;
+                            objPointsAndMessages.PointsConfig = null;
+                        }
+                           
 
                         objPointsAndMessages.MsgToCustomer = Convert.ToString(item["MsgToCustomer"]);
                         objPointsAndMessages.MsgNegativeFeedback = Convert.ToString(item["MsgNegativeFeedback"]);
