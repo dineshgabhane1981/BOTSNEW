@@ -88,10 +88,7 @@
                 <span id="url" style="display:none;">@feedbackURL</span>
                 @Html.Hidden("HiddenDOB", null, new { @id = "hdDOB" })
                 @Html.Hidden("HiddenDOA", null, new { @id = "hdDOA" })
-                @Html.Hidden("HiddenHowToKnow", null, new { @id = "hdHowToKnow" })
-                
-                
-                
+                @Html.Hidden("HiddenHowToKnow", null, new { @id = "hdHowToKnow" })        
                
                 <div class="col-md-12 col-sm-12 pt-3 pl-3 pr-3" style="text-align:center;">
                     <img src="@Model.LogoUrl" style="width:300px;" alt="Logo">
@@ -123,19 +120,24 @@
                             </div>
                         }
                     }
-                    <div class="row">
+                <div class="row">
+
+                    @if (Model.PointsAndMessages.IsAddRepresentative)
+                    {
+                    <span id="hdshowrepresentative" style="display:none;">@Model.PointsAndMessages.IsAddRepresentative</span>
                         <div class="col-md-12 col-sm-12 pt-3 pl-5 pr-5 pb-5" style="text-align:center;">
                             <h6>Sales Representive</h6> @Html.DropDownList("abc", new SelectList(Model.lstsalesRepresentive, "Value", "Text"), htmlAttributes: new { @class = "input50", @id = "ddlsaleslist" })
 
                         </div>
-                        <div class="col-md-12 col-sm-12 pb-5" style="text-align:center;">
-                            <input type="number" class="input100" id="txtMobileNo" placeholder="Enter Mobile number" />
+                    }
+                    <div class="col-md-12 col-sm-12 pb-5" style="text-align:center;">
+                        <input type="number" class="input100" id="txtMobileNo" placeholder="Enter Mobile number" />
 
-                        </div>
-                        <div class="col-md-12 col-sm-12 pb-5" style="text-align:center;">
-                            <button type="button" class="btn btn-primary" style="width: 280px; background-color: #1C699F; color:white; font-weight:bold; font-size:18px; border-radius:5px;" id="btnProceed" onclick="return CheckCustomer();">ENTER</button>
-                        </div>
                     </div>
+                    <div class="col-md-12 col-sm-12 pb-5" style="text-align:center;">
+                        <button type="button" class="btn btn-primary" style="width: 280px; background-color: #1C699F; color:white; font-weight:bold; font-size:18px; border-radius:5px;" id="btnProceed" onclick="return CheckCustomer();">ENTER</button>
+                    </div>
+                </div>
                 </div>
 
                 <div class="container-fluid pt-3 pl-3 pr-3 pb-3" style="display:none;" id="divquestions">
@@ -313,7 +315,7 @@
     function SubmitRating() {
         var returnStatus = false;
         var HomeData = [];
-       
+        //hdshowrepresentative
             $('[id^=hdnQuestionId]').each(function (i, itemid) {
                 var id11 = itemid.id.substr(13); //hdnMandatoryQuestionId
               
@@ -327,25 +329,38 @@
                                     returnStatus = true;
                                 }
                             });
-                            if (!returnStatus) {
-                                console.log("required");
-                                cuteAlert({
-                                    type: "error",
-                                    title: "Oops..",
-                                    message: "Please enter Required fields",
-                                    buttonText: "Okay"
-                                })
-                                return false;
+                            
                                
-                            }
-                        }
+                    }
+                    if (!returnStatus) {
+                        console.log("required");
+                        cuteAlert({
+                            type: "error",
+                            title: "Oops..",
+                            message: "Please enter Required fields",
+                            buttonText: "Okay"
+                        })
+                        return false;
+                     }
                         
                 });
                 
                 
             });
+       // }
+        if ($("#hdshowrepresentative").text()) {
+            console.log(333);
+            if ($("#ddlsaleslist option:selected").text() == "Please Select") {
+                cuteAlert({
+                    type: "error",
+                    title: "Oops..",
+                    message: "Please select Sales Reprentative",
+                    buttonText: "Okay"
+                })
+                $("#ddlsaleslist").css('border-color', 'red');
+                returnStatus = false;
+            }
         }
-        
         if (returnStatus == true) {
         $('[id^=hdnQuestionId]').each(function (i, itemid) {
 
@@ -376,9 +391,6 @@
                         console.log("111");
                         var nm = $('#spnCustName').text();
                         $('#spnCustName1').text(nm);
-                        //if (nm == "Esteemed Patron") {
-                        // $("#divknowabt").show();
-                        //}
                         $("#divLoader").hide();
                         $("#divthankyou").show();
                         $("#divquestions").hide();
@@ -530,7 +542,7 @@
     function SubmitOtherInfo()
     {
         var returnStatus = true;
-        var howtoknow = 0;
+        
         if ($("#hdMandatorygender").text() == "Mandatory") {
             console.log(333);
             if ($("#ddlGender option:selected").text() == "Please Select") {
@@ -595,13 +607,13 @@
             })
             returnStatus = false;
         }
-        if ($("#ddlKnowAboutUs").is(":selected")) {
-            howtoknow = $("#ddlKnowAboutUs").val();
+        
+        if ($("#ddlKnowAboutUs").prop('selectedIndex') !== 0) {
+            howtoknow = $("#ddlKnowAboutUs :selected").text();
         }
         
-        
         if (returnStatus == true) {
-
+            console.log(howtoknow);
             var annidt;
             if ($("#txtAniversary").val() == null || $("#txtAniversary").val() == "") {
                 annidt = null;

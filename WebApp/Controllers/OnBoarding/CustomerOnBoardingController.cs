@@ -361,6 +361,10 @@ namespace WebApp.Controllers.OnBoarding
                 sb.Append("</tr>");
 
                 sb.Append("<tr>");
+                sb.Append("<td>Existing Loyalty:</td><td>" + GroupDetails.IsExistingLoyalty.ToString() + "</td>");
+                sb.Append("</tr>");
+
+                sb.Append("<tr>");
                 sb.Append("<td>DLC:</td><td>" + GroupDetails.IsMWP.ToString() + "</td>");
                 sb.Append("</tr>");
 

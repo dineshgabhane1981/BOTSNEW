@@ -603,27 +603,27 @@ namespace BOTS_BL.Repository
             string connStr = CR.GetCustomerConnString(GroupId);
             using (var context = new BOTSDBContext(connStr))
             {
-                objfeedback = context.feedback_FeedbackMaster.Where(x => x.MobileNo == mobileNo).OrderByDescending(y => y.FeedbackId).FirstOrDefault();
+                objfeedback = context.feedback_FeedbackMaster.Where(x => x.MobileNo == mobileNo ).OrderByDescending(y => y.FeedbackId).FirstOrDefault();
                 var customer = context.CustomerDetails.Where(x => x.MobileNo == mobileNo).FirstOrDefault();
 
-                if (objfeedback != null && objfeedback.GroupId == GroupId)
-                {
-                    obj.IsFeedBackGiven = true;
-                    if(objfeedback.DOA != null)
-                    {
-                        obj.IsDOA = true;
-                    }
-                    if(objfeedback.DOB != null)
-                    {
-                        obj.IsDateOfBirth = true;
-                    }
-                    if(objfeedback.HowToKnowAbout != null)
-                    {
-                        obj.IsHowtoKnow = true;
-                    }
-                }
-                else
-                {
+                //if (objfeedback != null && objfeedback.GroupId == GroupId)
+                //{
+                //    obj.IsFeedBackGiven = true;
+                //    if(objfeedback.DOA != null)
+                //    {
+                //        obj.IsDOA = true;
+                //    }
+                //    if(objfeedback.DOB != null)
+                //    {
+                //        obj.IsDateOfBirth = true;
+                //    }
+                //    if(objfeedback.HowToKnowAbout != null)
+                //    {
+                //        obj.IsHowtoKnow = true;
+                //    }
+                //}
+                //else
+                //{
                     if (objfeedback != null && objfeedback.AddedDate.Value.Date == DateTime.Now.Date)
                     {
                         obj.IsFeedBackGiven = true;
@@ -657,7 +657,7 @@ namespace BOTS_BL.Repository
                         }
 
                     }
-                }
+                //}
             }
             return obj;
         }
@@ -765,9 +765,66 @@ namespace BOTS_BL.Repository
                 }
                 if (feedbackpointsmsg.IsFeedbackPoints)
                 {
+                    if (feedbackpointsmsg.PointsConfig == "OnFeedback")
+                    {
+                        var custpoint = objcustdetails.Points;
+                        objcustdetails.Points = custpoint + feedbackpointsmsg.AwardFeedbackPoints;
+                        context.CustomerDetails.AddOrUpdate(objcustdetails);
+                        context.SaveChanges();
+                        objtransactionMaster.CustomerId = objcustdetails.CustomerId;
+                        objtransactionMaster.CustomerPoints = objcustdetails.Points;
+                        objtransactionMaster.CounterId = outletId + "01";
+                        objtransactionMaster.MobileNo = mobileNo;
+                        objtransactionMaster.Datetime = date;
+                        objtransactionMaster.TransType = "1";
+                        objtransactionMaster.TransSource = "1";
+                        objtransactionMaster.InvoiceNo = "B_Feedbackpoints";
+                        objtransactionMaster.InvoiceAmt = 0;
+                        objtransactionMaster.Status = "06";
+                        objtransactionMaster.PointsEarned = feedbackpointsmsg.AwardFeedbackPoints;
+                        objtransactionMaster.PointsBurned = 0;
+                        objtransactionMaster.CampaignPoints = 0;
+                        objtransactionMaster.TxnAmt = 0;
+                        objtransactionMaster.Synchronization = "";
+                        objtransactionMaster.SyncDatetime = null;
+                        context.TransactionMasters.Add(objtransactionMaster);
+                        context.SaveChanges();
+                        objpointsExpiry.MobileNo = mobileNo;
+                        objpointsExpiry.CounterId = outletId + "01";
+                        objpointsExpiry.CustomerId = objcustdetails.CustomerId;
+                        objpointsExpiry.BurnDate = null;
+                        objpointsExpiry.Datetime = date;
+                        objpointsExpiry.EarnDate = date;
+                        // DateTime today = date;
+                        DateTime next = date.AddYears(1);
+                        var currentmonth = DateTime.DaysInMonth(next.Year, next.Month);
+
+                        if (next.Day < currentmonth)
+                        {
+                            var days = (currentmonth - next.Day);
+                            next = date.AddDays(days).AddYears(1);
+                        }
+                        objpointsExpiry.ExpiryDate = next;
+                        objpointsExpiry.Points = feedbackpointsmsg.AwardFeedbackPoints;
+                        objpointsExpiry.Status = "00";
+                        objpointsExpiry.InvoiceNo = "B_Feedbackpoints";
+                        objpointsExpiry.GroupId = GroupId;
+                        objpointsExpiry.OriginalInvoiceNo = "";
+                        objpointsExpiry.TransRefNo = null;
+                        context.PointsExpiries.Add(objpointsExpiry);
+                        context.SaveChanges();
+                        if (feedbackpointsmsg.IsOtherInfoShow)
+                        {
+                            status = "true";
+                        }
+                        else
+                        {
+                            status = "pointsGiven";
+                        }
+                    }
                     if (transaction.Count > 0)
                     {
-                        if (transaction[0].InvoiceNo == "B_Feedbackpoints" && pointexpiry[0].InvoiceNo == "B_Feedbackpoints")
+                        if (transaction[0].InvoiceNo == "B_Feedbackpoints" && pointexpiry[0].InvoiceNo == "B_Feedbackpoints" && feedbackpointsmsg.PointsConfig == "OnOtherInfo")
                         {
                             var custpoint = objcustdetails.Points;
                             objcustdetails.Points = custpoint + feedbackpointsmsg.AwardFeedbackPoints;
@@ -849,169 +906,118 @@ namespace BOTS_BL.Repository
                 FeedBackMaster objfeedback = new FeedBackMaster();
                 // lstfeedback = context.feedback_FeedbackMaster.Where(x => x.MobileNo == mobileNo && x.AddedDate == DateTime.Now.Date).ToList();
                 lstfeedback = context.feedback_FeedbackMaster.Where(x => x.MobileNo == mobileNo && x.AddedDate.Value > DateTime.Today).ToList();
-                if (objcustdetails != null)
+                if (feedbackpointsmsg.PointsConfig == "OnOtherInfo")
                 {
-                    if (AnniversaryDt != null)
+                    if (objcustdetails != null)
                     {
-                        objcustdetails.AnniversaryDate = Convert.ToDateTime(AnniversaryDt);
+                        if (AnniversaryDt != null)
+                        {
+                            objcustdetails.AnniversaryDate = Convert.ToDateTime(AnniversaryDt);
+                        }
+                        var point = objcustdetails.Points;
+                        objcustdetails.Points = point + feedbackpointsmsg.AwardFeedbackPoints;
+                        context.CustomerDetails.AddOrUpdate(objcustdetails);
+                        context.SaveChanges();
                     }
-                    var point = objcustdetails.Points;
-                    objcustdetails.Points = point + feedbackpointsmsg.AwardFeedbackPoints;
-                    context.CustomerDetails.AddOrUpdate(objcustdetails);
-                    context.SaveChanges();
-                }
-                if (objcustdetails == null)
-                {
-                    var CustomerId = context.CustomerDetails.OrderByDescending(x => x.CustomerId).Select(y => y.CustomerId).FirstOrDefault();
-                    DateTime datet = new DateTime(1900, 01, 01);
-                    var NewId = Convert.ToInt64(CustomerId) + 1;
-                    objnewcust.CustomerId = Convert.ToString(NewId);
-                    objnewcust.Points = feedbackpointsmsg.AwardFeedbackPoints;
-                    if (string.IsNullOrEmpty(MemberName))
-                        objnewcust.CustomerName = "Member";
-                    else
-                        objnewcust.CustomerName = MemberName;
-                    objnewcust.CustomerCategory = null;
-                    objnewcust.CardNumber = "";
-                    objnewcust.CustomerThrough = "2";
-
-                    objnewcust.DOB = Convert.ToDateTime(BirthDt);
-                    objnewcust.MaritalStatus = "";
-                    objnewcust.MemberGroupId = "1000";
-                    objnewcust.MobileNo = mobileNo;
-                    objnewcust.Status = "00";
-                    if (AnniversaryDt != null)
+                    if (objcustdetails == null)
                     {
-                        objnewcust.AnniversaryDate = Convert.ToDateTime(AnniversaryDt);
+                        var CustomerId = context.CustomerDetails.OrderByDescending(x => x.CustomerId).Select(y => y.CustomerId).FirstOrDefault();
+                        DateTime datet = new DateTime(1900, 01, 01);
+                        var NewId = Convert.ToInt64(CustomerId) + 1;
+                        objnewcust.CustomerId = Convert.ToString(NewId);
+                        objnewcust.Points = feedbackpointsmsg.AwardFeedbackPoints;
+                        if (string.IsNullOrEmpty(MemberName))
+                            objnewcust.CustomerName = "Member";
+                        else
+                            objnewcust.CustomerName = MemberName;
+                        objnewcust.CustomerCategory = null;
+                        objnewcust.CardNumber = "";
+                        objnewcust.CustomerThrough = "2";
+
+                        objnewcust.DOB = Convert.ToDateTime(BirthDt);
+                        objnewcust.MaritalStatus = "";
+                        objnewcust.MemberGroupId = "1000";
+                        objnewcust.MobileNo = mobileNo;
+                        objnewcust.Status = "00";
+                        if (AnniversaryDt != null)
+                        {
+                            objnewcust.AnniversaryDate = Convert.ToDateTime(AnniversaryDt);
+                        }
+                        objnewcust.DOJ = date;
+                        objnewcust.EmailId = "";
+                        objnewcust.EnrollingOutlet = outletid;
+                        if (string.IsNullOrEmpty(Gender))
+                            objnewcust.Gender = "";
+                        else
+                            objnewcust.Gender = Gender;
+                        objnewcust.IsSMS = null;
+                        objnewcust.BillingCustomerId = null;
+
+                        context.CustomerDetails.Add(objnewcust);
+                        context.SaveChanges();
                     }
-                    objnewcust.DOJ = date;
-                    objnewcust.EmailId = "";
-                    objnewcust.EnrollingOutlet = outletid;
-                    if (string.IsNullOrEmpty(Gender))
-                        objnewcust.Gender = "";
+                    if (objcustdetails != null)
+                    {
+                        objtransactionMaster.CustomerId = objcustdetails.CustomerId;
+                        objtransactionMaster.CustomerPoints = objcustdetails.Points;
+                    }
                     else
-                        objnewcust.Gender = Gender;
-                    objnewcust.IsSMS = null;
-                    objnewcust.BillingCustomerId = null;
+                    {
+                        objtransactionMaster.CustomerId = objnewcust.CustomerId;
+                        objtransactionMaster.CustomerPoints = objnewcust.Points;
+                    }
 
-                    context.CustomerDetails.Add(objnewcust);
+                    objtransactionMaster.CounterId = outletid + "01";
+                    objtransactionMaster.MobileNo = mobileNo;
+                    objtransactionMaster.Datetime = date;
+                    objtransactionMaster.TransType = "1";
+                    objtransactionMaster.TransSource = "1";                    
+                    objtransactionMaster.InvoiceNo = "B_Feedbackpoints";                    
+                    objtransactionMaster.InvoiceAmt = 0;
+                    objtransactionMaster.Status = "06";
+                    objtransactionMaster.PointsEarned = feedbackpointsmsg.AwardFeedbackPoints;
+                    objtransactionMaster.PointsBurned = 0;
+                    objtransactionMaster.CampaignPoints = 0;
+                    objtransactionMaster.TxnAmt = 0;
+                    objtransactionMaster.Synchronization = "";
+                    objtransactionMaster.SyncDatetime = null;                   
+                    context.TransactionMasters.Add(objtransactionMaster);
                     context.SaveChanges();
+                    objpointsExpiry.MobileNo = mobileNo;
+                    objpointsExpiry.CounterId = outletid + "01";
+                    if (objcustdetails != null)
+                    {
+                        objpointsExpiry.CustomerId = objcustdetails.CustomerId;
+                    }
+                    else
+                    {
+                        objpointsExpiry.CustomerId = objnewcust.CustomerId;
+                    }
+
+                    objpointsExpiry.BurnDate = null;
+                    objpointsExpiry.Datetime = date;
+                    objpointsExpiry.EarnDate = date;
+                    // DateTime today = date;
+                    DateTime next = date.AddYears(1);
+                    var currentmonth = DateTime.DaysInMonth(next.Year, next.Month);
+
+                    if (next.Day < currentmonth)
+                    {
+                        var days = (currentmonth - next.Day);
+                        next = date.AddDays(days).AddYears(1);
+                    }
+                    objpointsExpiry.ExpiryDate = next;
+                    objpointsExpiry.Points = feedbackpointsmsg.AwardFeedbackPoints;
+                    objpointsExpiry.Status = "00";                    
+                    objpointsExpiry.InvoiceNo = "B_Feedbackpoints";
+                    
+                    objpointsExpiry.GroupId = GroupId;
+                    objpointsExpiry.OriginalInvoiceNo = "";
+                    objpointsExpiry.TransRefNo = null;                   
+                    context.PointsExpiries.Add(objpointsExpiry);
+                    context.SaveChanges();
+                                        
                 }
-                if (objcustdetails != null)
-                {
-                    objtransactionMaster.CustomerId = objcustdetails.CustomerId;
-                    objtransactionMaster.CustomerPoints = objcustdetails.Points;
-                }
-                else
-                {
-                    objtransactionMaster.CustomerId = objnewcust.CustomerId;
-                    objtransactionMaster.CustomerPoints = objnewcust.Points;
-                }
-
-                objtransactionMaster.CounterId = outletid + "01";
-                objtransactionMaster.MobileNo = mobileNo;
-                objtransactionMaster.Datetime = date;
-                objtransactionMaster.TransType = "1";
-                objtransactionMaster.TransSource = "1";
-                //if (GroupId != "1163")
-                //{
-                objtransactionMaster.InvoiceNo = "B_Feedbackpoints";
-                //}
-                //else
-                //{
-                //    objtransactionMaster.InvoiceNo = "AabharBonus";
-                //}
-                objtransactionMaster.InvoiceAmt = 0;
-                objtransactionMaster.Status = "06";
-                objtransactionMaster.PointsEarned = feedbackpointsmsg.AwardFeedbackPoints;
-                objtransactionMaster.PointsBurned = 0;
-                objtransactionMaster.CampaignPoints = 0;
-                objtransactionMaster.TxnAmt = 0;
-
-                objtransactionMaster.Synchronization = "";
-                objtransactionMaster.SyncDatetime = null;
-
-                //if (GroupId != "1163")
-                //{
-                context.TransactionMasters.Add(objtransactionMaster);
-                context.SaveChanges();
-                //}
-                //if (lstfeedback.Count == 0 && GroupId == "1163")
-                //{
-                //    context.TransactionMasters.Add(objtransactionMaster);
-                //    context.SaveChanges();
-                //}
-
-                objpointsExpiry.MobileNo = mobileNo;
-                objpointsExpiry.CounterId = outletid + "01";
-                if (objcustdetails != null)
-                {
-                    objpointsExpiry.CustomerId = objcustdetails.CustomerId;
-                }
-                else
-                {
-                    objpointsExpiry.CustomerId = objnewcust.CustomerId;
-                }
-
-                objpointsExpiry.BurnDate = null;
-                objpointsExpiry.Datetime = date;
-                objpointsExpiry.EarnDate = date;
-                // DateTime today = date;
-                DateTime next = date.AddYears(1);
-                var currentmonth = DateTime.DaysInMonth(next.Year, next.Month);
-
-                if (next.Day < currentmonth)
-                {
-                    var days = (currentmonth - next.Day);
-                    next = date.AddDays(days).AddYears(1);
-                }
-                objpointsExpiry.ExpiryDate = next;
-                objpointsExpiry.Points = feedbackpointsmsg.AwardFeedbackPoints;
-                objpointsExpiry.Status = "00";
-                //if (GroupId != "1163")
-                //{
-                objpointsExpiry.InvoiceNo = "B_Feedbackpoints";
-                //}
-                //else
-                //{
-                //    objpointsExpiry.InvoiceNo = "AabharBonus";
-                //}
-                //objpointsExpiry.InvoiceNo = "B_Feedbackpoints";
-                objpointsExpiry.GroupId = GroupId;
-                objpointsExpiry.OriginalInvoiceNo = "";
-                objpointsExpiry.TransRefNo = null;
-                //if (GroupId != "1163")
-                //{
-                context.PointsExpiries.Add(objpointsExpiry);
-                context.SaveChanges();
-                //}
-                //if (lstfeedback.Count == 0 && GroupId == "1163")
-                //{
-                //    context.PointsExpiries.Add(objpointsExpiry);
-                //    context.SaveChanges();
-                //}
-
-                //if (lstfeedback.Count == 0 && GroupId == "1163")
-                //{
-                //    FeedBackMaster feedback = new FeedBackMaster();
-                //    feedback.MobileNo = mobileNo;
-                //    feedback.CustomerName = MemberName;
-                //    feedback.OutletId = outletid;
-                //   // feedback.Location = LiveIn;
-                //    feedback.HowToKonwAbout = Knowabt;
-                //    feedback.DOB = Convert.ToDateTime(BirthDt);
-                //    if (AnniversaryDt != null)
-                //    {
-                //        feedback.DOA = Convert.ToDateTime(AnniversaryDt);
-                //    }
-                //    feedback.Points = objoutlet.FeedBackPoints;
-
-                //    context.FeedBackMasters.AddOrUpdate(feedback);
-                //    context.SaveChanges();
-                //    status = true;
-                //}
-                //else
-                //{
                 foreach (var feedback in lstfeedback)
                 {
                     // feedback.Location = LiveIn;
