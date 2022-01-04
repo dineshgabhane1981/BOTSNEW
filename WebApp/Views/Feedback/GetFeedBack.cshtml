@@ -1,8 +1,11 @@
 ﻿@model WebApp.ViewModel.FeedbackGetFeedbackViewModel
+@using System.Configuration;
 
 @{
     ViewBag.Title = "GetFeedBack";
     Layout = null;
+    var feedbackURL = ConfigurationManager.AppSettings["FeedbackOutletLink"].ToString();
+
 }
 <link href="~/Content/main.css" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css" />
@@ -82,9 +85,14 @@
                 @Html.HiddenFor(model => model.GroupId, new { @id = "hdGroupId" })
                 @Html.HiddenFor(model => model.GroupName, new { @id = "hdGroupNm" })
                 @Html.HiddenFor(model => model.OutletId, new { @id = "hdoutletId" })
+                <span id="url" style="display:none;">@feedbackURL</span>
                 @Html.Hidden("HiddenDOB", null, new { @id = "hdDOB" })
                 @Html.Hidden("HiddenDOA", null, new { @id = "hdDOA" })
                 @Html.Hidden("HiddenHowToKnow", null, new { @id = "hdHowToKnow" })
+                
+                
+                
+               
                 <div class="col-md-12 col-sm-12 pt-3 pl-3 pr-3" style="text-align:center;">
                     <img src="@Model.LogoUrl" style="width:300px;" alt="Logo">
                 </div>
@@ -99,7 +107,7 @@
                                     {
                                         if (item.TypeId == 1)
                                         {
-                                    <h1 style="font-size:34px;">@item.Text @Model.GroupName!!!</h1>
+                                            <h1 style="font-size:34px;">@item.Text @Model.GroupName!!!</h1>
                                         }
                                         if (item.TypeId == 2)
                                         {
@@ -115,19 +123,19 @@
                             </div>
                         }
                     }
-                <div class="row">
-                    <div class="col-md-12 col-sm-12 pt-3 pl-5 pr-5 pb-5" style="text-align:center;">
-                        <h6>Sales Representive</h6> @Html.DropDownList("abc", new SelectList(Model.lstsalesRepresentive, "Value", "Text"), htmlAttributes: new { @class = "input50", @id = "ddlsaleslist" })
+                    <div class="row">
+                        <div class="col-md-12 col-sm-12 pt-3 pl-5 pr-5 pb-5" style="text-align:center;">
+                            <h6>Sales Representive</h6> @Html.DropDownList("abc", new SelectList(Model.lstsalesRepresentive, "Value", "Text"), htmlAttributes: new { @class = "input50", @id = "ddlsaleslist" })
 
-</div>
-                    <div class="col-md-12 col-sm-12 pb-5" style="text-align:center;">
-                        <input type="number" class="input100" id="txtMobileNo" placeholder="Enter Mobile number" />
+                        </div>
+                        <div class="col-md-12 col-sm-12 pb-5" style="text-align:center;">
+                            <input type="number" class="input100" id="txtMobileNo" placeholder="Enter Mobile number" />
 
+                        </div>
+                        <div class="col-md-12 col-sm-12 pb-5" style="text-align:center;">
+                            <button type="button" class="btn btn-primary" style="width: 280px; background-color: #1C699F; color:white; font-weight:bold; font-size:18px; border-radius:5px;" id="btnProceed" onclick="return CheckCustomer();">ENTER</button>
+                        </div>
                     </div>
-                    <div class="col-md-12 col-sm-12 pb-5" style="text-align:center;">
-                        <button type="button" class="btn btn-primary" style="width: 280px; background-color: #1C699F; color:white; font-weight:bold; font-size:18px; border-radius:5px;" id="btnProceed" onclick="return CheckCustomer();">ENTER</button>
-                    </div>
-                </div>
                 </div>
 
                 <div class="container-fluid pt-3 pl-3 pr-3 pb-3" style="display:none;" id="divquestions">
@@ -157,6 +165,7 @@
                         @if (item.Type == "Question")
                         {
                             @Html.HiddenFor(model => item.Id, new { @id = "hdnQuestionId" + item.Id })
+                            @Html.HiddenFor(model => item.IsMandatory, new { @id = "hdnMandatoryQuestionId" + item.Id })
                             var rbtn1 = "rbtvariety" + item.Id + "1";
                             var rbtn2 = "rbtvariety" + item.Id + "2";
                             var rbtn3 = "rbtvariety" + item.Id + "3";
@@ -194,51 +203,58 @@
                             {
                                 if (item.Section == "OtherInformation")
                                 {
-                                    <div class="col-md-12 col-sm-12 pt-3 pl-3 pr-3" style="text-align:center;">
-                                        @if (item.Type == "Heading")
-                                        {
-                                            if (item.TypeId == 1)
-                                            {
-                                                <h1 style="color:red; font-size:34px;">
-                                                    @item.Text
-                                                </h1>
-                                            }
-                                            if (item.TypeId == 2)
-                                            {
-                                                <h1 style="font-size: 26px;">
-                                                    @item.Text
-                                                </h1>
-                                            }
-                                        }
-                                        @if (item.Type == "Question")
-                                        {
-                                            <span style="padding-right:5px;"> @item.Text </span>
-                                            if (item.TypeId == 1)
-                                            {
-                                                @Html.DropDownList("abc", new SelectList(Model.Gender(), "Value", "Text"), htmlAttributes: new { @class = "input50", @id = "ddlGender" })
-                                            }
-                                            if (item.TypeId == 2)
-                                            {
-                                                <input type="date" class="input50" id="txtBirthDate" />
-                                            }
-                                            if (item.TypeId == 3)
-                                            {
-                                                <input type="date" class="input50" id="txtAniversary" />
-                                            }
+                            <div class="col-md-12 col-sm-12 pt-3 pl-3 pr-3" style="text-align:center;">
+                                @if (item.Type == "Heading")
+                                {
+                                    if (item.TypeId == 1)
+                                    {
+                                        <h1 style="color:red; font-size:34px;">
+                                            @item.Text
+                                        </h1>
+                                    }
+                                    if (item.TypeId == 2)
+                                    {
+                                        <h1 style="font-size: 26px;">
+                                            @item.Text
+                                        </h1>
+                                    }
+                                }
+                                @if (item.Type == "Question")
+                                {
+                                    <span style="padding-right:5px;"> @item.Text </span>
 
-                                            if (item.TypeId == 4)
-                                            {
-                                                @Html.DropDownList("abc", new SelectList(Model.lstKnowAboutUs, "Value", "Text"), htmlAttributes: new { @class = "input50", @id = "ddlKnowAboutUs" })
-                                            }
-                                        }
+                                    if (item.TypeId == 1)
+                                    {
+                                        @*@Html.Hidden(item.IsMandatory, new { @id = "hdMandatorygender" })*@
+                                        <span id="hdMandatorygender" style="display:none;">@item.IsMandatory</span>
+                                        @Html.DropDownList("abc", new SelectList(Model.Gender(), "Value", "Text"), htmlAttributes: new { @class = "input50", @id = "ddlGender" })
+                                    }
 
-                                    </div>
+                                    if (item.TypeId == 2)
+                                    {
+                                        <span id="hdMandatoryDtBirth" style="display:none;">@item.IsMandatory</span>                                        
+                                        <input type="date" class="input50" id="txtBirthDate" />
+                                    }
+                                    if (item.TypeId == 3)
+                                    {
+                                        <span id="hdMandatoryDtAnni" style="display:none;">@item.IsMandatory</span>                                        
+                                        <input type="date" class="input50" id="txtAniversary" />
+                                    }
+
+                                    if (item.TypeId == 4)
+                                    {
+                                        <span id="hdMandatoryHowTo" style="display:none;">@item.IsMandatory</span>                                       
+                                        @Html.DropDownList("abc", new SelectList(Model.lstKnowAboutUs, "Value", "Text"), htmlAttributes: new { @class = "input50", @id = "ddlKnowAboutUs" })
+                                    }
+                                }
+
+                            </div>
                                 }
                             }
                         </div>
                         <div class="row">
                             <div class="col-md-12 col-sm-12 pb-5 pt-5" style="text-align:center;">
-                                <button type="button" class="btn btn-primary" style="width: 280px; background-color: #1C699F; color:white; font-weight:bold; font-size:18px; border-radius:5px;" id="btnsubmit" onclick="SubmitPoints();">SUBMIT</button>
+                                <button type="button" class="btn btn-primary" style="width: 280px; background-color: #1C699F; color:white; font-weight:bold; font-size:18px; border-radius:5px;" id="btnsubmit" onclick="SubmitOtherInfo();">SUBMIT</button>
                             </div>
                         </div>
                     </div>
@@ -250,7 +266,7 @@
 <script>
     $(document).ready(function () {
         var today = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
-
+       
         var dtToday = new Date();
 
         var month = dtToday.getMonth() + 1;
@@ -274,44 +290,77 @@
                 $('#txtMobileNo').css('border-color', 'red');
             }
         });
-        $("#txtbirthdt").focusout(function () {
-            if ($("#txtbirthdt").val() != "") {
-                $('#txtbirthdt').css('border-color', '');
+        $("#txtBirthDate").focusout(function () {
+            if ($("#txtBirthDate").val() != "") {
+                $('#txtBirthDate').css('border-color', '');
             }
             else {
-                $('#txtbirthdt').css('border-color', 'red');
+                $('#txtBirthDate').css('border-color', 'red');
             }
         });
-        $('#ddllivein').change(function () {
-            if ($("#ddllivein option:selected").text() == "Please Select") {
-                $('#ddllivein').css('border-color', 'red');
+
+
+        $('#ddlKnowAboutUs').change(function () {
+            if ($("#ddlKnowAboutUs option:selected").text() == "Please Select") {
+                $('#ddlKnowAboutUs').css('border-color', 'red');
             }
             else {
-                $('#ddllivein').css('border-color', '');
+                $('#ddlKnowAboutUs').css('border-color', '');
             }
         });
 
     });
-    function SubmitRating() {        
-        var returnStatus = true;
+    function SubmitRating() {
+        var returnStatus = false;
         var HomeData = [];
-        
+       
+            $('[id^=hdnQuestionId]').each(function (i, itemid) {
+                var id11 = itemid.id.substr(13); //hdnMandatoryQuestionId
+              
+                $('[id^=hdnMandatoryQuestionId' + id11 + ']').each(function (i, itemman) {
+
+                        if (itemman.value == "Mandatory") {
+                            $('[id^=rbtvariety' + id11 + ']').each(function (i, itemradio) {
+                                
+                                if ($("#" + itemradio.id).is(":checked")) {
+                                    console.log(itemradio.id);
+                                    returnStatus = true;
+                                }
+                            });
+                            if (!returnStatus) {
+                                console.log("required");
+                                cuteAlert({
+                                    type: "error",
+                                    title: "Oops..",
+                                    message: "Please enter Required fields",
+                                    buttonText: "Okay"
+                                })
+                                return false;
+                               
+                            }
+                        }
+                        
+                });
+                
+                
+            });
+        }
         
         if (returnStatus == true) {
-            $('[id^=hdnQuestionId]').each(function (i, itemid) {
+        $('[id^=hdnQuestionId]').each(function (i, itemid) {
 
-                var id11 = itemid.id.substr(13);
+            var id11 = itemid.id.substr(13);
 
-                $('[id^=rbtvariety' + id11 + ']').each(function (i, itemradio) {                
+            $('[id^=rbtvariety' + id11 + ']').each(function (i, itemradio) {
 
-                    if ($("#" + itemradio.id).is(":checked")) {
-                        //console.log("hi");                        
-                        HomeData.push(itemradio.id);
-                        console.log(HomeData);
-                    }
-                });
-
+                if ($("#" + itemradio.id).is(":checked")) {
+                    HomeData.push(itemradio.id);
+                    console.log(HomeData);
+                }
             });
+
+        });        
+            
             var sales = $("#ddlsaleslist").val();
             console.log(HomeData);
             $("#divLoader").show();
@@ -322,26 +371,29 @@
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
                 success: function (response) {
-                    // console.log(response.CustomerName);
+                     console.log(response);
                     if (response == "true") {
+                        console.log("111");
                         var nm = $('#spnCustName').text();
                         $('#spnCustName1').text(nm);
-                        if (nm == "Esteemed Patron") {
-                            $("#divknowabt").show();
-                        }
+                        //if (nm == "Esteemed Patron") {
+                        // $("#divknowabt").show();
+                        //}
                         $("#divLoader").hide();
                         $("#divthankyou").show();
-                        $("#divmember").hide();
+                        $("#divquestions").hide();
                         $("#divwelcome").hide();
 
                     }
                     if (response == "false") {
+                        console.log("222");
                         // $('#spnCustName').text("Esteemed Patron,");
                         $("#divLoader").hide();
-                        $("#divmember").hide();
+                        $("#divquestions").hide();
                         $("#divwelcome").hide();
                     }
                     if (response == "pointsGiven") {
+                        console.log("333");
                         $("#divLoader").hide();
                         setTimeout(cuteAlert({
                             type: "success",
@@ -349,7 +401,7 @@
                             message: "FeedBack Save Successfully!",
                             buttonText: "Okay"
                         }), 10000);
-                        window.location.replace('https://blueocktopus.in/GM_feedback?outletid=10131001');
+                        window.location.replace($("#url").text() + $("#hdoutletId").val());
                     }
 
                     $("#divLoader").hide();
@@ -390,7 +442,7 @@
             /*alert("Please enter mobile number");*/
             $('#txtMobileNo').css('border-color', 'red');
             returnStatus = false;
-           
+
         }
         else {
             console.log(222);
@@ -449,10 +501,6 @@
                             $("#divquestions").show();
                             $("#divwelcome").hide();
                         }
-
-
-
-
                     }
 
 
@@ -477,6 +525,148 @@
             return false;
         }
 
+    }
+
+    function SubmitOtherInfo()
+    {
+        var returnStatus = true;
+        var howtoknow = 0;
+        if ($("#hdMandatorygender").text() == "Mandatory") {
+            console.log(333);
+            if ($("#ddlGender option:selected").text() == "Please Select") {
+                cuteAlert({
+                    type: "error",
+                    title: "Oops..",
+                    message: "Please select gender",
+                    buttonText: "Okay"
+                })
+                $("#ddlGender").css('border-color', 'red');
+                returnStatus = false;
+            }
+        }
+        if ($("#hdMandatoryDtBirth").text() == "Mandatory") {
+            if ($("#txtBirthDate").val() == "") {
+                cuteAlert({
+                    type: "error",
+                    title: "Oops..",
+                    message: "Please enter Date of Birth",
+                    buttonText: "Okay"
+                })
+                $('#txtBirthDate').css('border-color', 'red');
+                returnStatus = false;
+            }
+        }
+        if ($("#hdMandatoryDtAnni").text() == "Mandatory") {
+            console.log(444);
+            if ($("#txtAniversary").val() == "") {
+                cuteAlert({
+                    type: "error",
+                    title: "Oops..",
+                    message: "Please enter Date of Anniversary",
+                    buttonText: "Okay"
+                })
+                $('#txtAniversary').css('border-color', 'red');
+                returnStatus = false;
+            }
+        }
+        if ($("#hdMandatoryHowTo").text() == "Mandatory") {
+            console.log(222);
+            if ($("#ddlKnowAboutUs option:selected").text() == "Please Select") {
+                cuteAlert({
+                    type: "error",
+                    title: "Oops..",
+                    message: "Please select How To Know about us",
+                    buttonText: "Okay"
+                })
+                $("#ddlKnowAboutUs").css('border-color', 'red');
+                returnStatus = false;
+            }
+        }
+        var dtToday = new Date();
+        var selecteddate = new Date($('#txtBirthDate').val())
+        dtToday.setFullYear(dtToday.getFullYear() - 18);
+
+        if (selecteddate > dtToday) {
+            cuteAlert({
+                type: "error",
+                title: "Oops..",
+                message: "Date of Birth must be older than 18 years",
+                buttonText: "Okay"
+            })
+            returnStatus = false;
+        }
+        if ($("#ddlKnowAboutUs").is(":selected")) {
+            howtoknow = $("#ddlKnowAboutUs").val();
+        }
+        
+        
+        if (returnStatus == true) {
+
+            var annidt;
+            if ($("#txtAniversary").val() == null || $("#txtAniversary").val() == "") {
+                annidt = null;
+            }
+            else {
+                annidt = $("#txtAniversary").val();
+            }
+            var urlnew = $("#url").text();
+            $("#divLoader").show();
+             $.ajax({
+            type: "POST",
+                 url: '@Url.Action("SubmitotherinfowithPoints", "Feedback")',
+                 data: '{MemberName: ' + JSON.stringify("") + ', Gender: ' + JSON.stringify($("#ddlGender").val()) + ',BirthDt: ' + JSON.stringify($("#txtBirthDate").val()) + ', mobileNo: ' + JSON.stringify($("#txtMobileNo").val()) + ', AnniversaryDt: ' + JSON.stringify(annidt) + ', Knowabt: ' + JSON.stringify(howtoknow) + ', GroupId: ' + JSON.stringify($("#hdGroupId").val()) + ', OutletId: ' + JSON.stringify($("#hdoutletId").val()) +'}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                 success: function (response) {
+                     if (response) {
+                         $("#divLoader").hide();
+                         $("#txtbirthdt").val("");
+                         $("#txtanniversary").val("");
+                        /* $('#ddllivein').prop('selectedIndex', 0);*/
+
+                         setTimeout(cuteAlert({
+                             type: "success",
+                             title: "Save",
+                             message: "FeedBack Save Successfully!",
+                             buttonText: "Okay"
+                         }), 10000);
+                         //feedbackURL
+                         console.log(urlnew);
+                         window.location.replace(urlnew + $("#hdoutletId").val());
+                     }
+                     else {
+                         setTimeout(cuteAlert({
+                             type: "success",
+                             title: "Save",
+                             message: "FeedBack Save Successfully!",
+                             buttonText: "Okay"
+                         }), 10000);
+
+                         window.location.replace(urlnew + $("#hdoutletId").val());
+                     }
+                 },
+                 failure: function (response) {
+
+                     $("#divLoader").hide();
+                 },
+                 error: function (response) {
+
+                     $("#divLoader").hide();
+                     setTimeout(cuteAlert({
+                         type: "success",
+                         title: "Save",
+                         message: "FeedBack Save Successfully!",
+                         buttonText: "Okay"
+                     }), 10000);
+
+                     window.location.replace(urlnew + $("#hdoutletId").val());
+                 }
+             });
+        }
+        else
+        {
+            return false;
+        }
     }
 </script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.6/jquery.min.js" type="text/javascript"></script>

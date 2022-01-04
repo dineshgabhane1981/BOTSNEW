@@ -19,7 +19,7 @@ namespace WebApp.ViewModel
         public List<SelectListItem> lstsalesRepresentive { get; set; }
         public SelectListItem[] Gender()
         {
-            return new SelectListItem[3] { new SelectListItem() { Text = "Select", Value = "0" }, new SelectListItem() { Text = "Male", Value = "1" }, new SelectListItem() { Text = "Female", Value = "2" } };
+            return new SelectListItem[3] { new SelectListItem() { Text = "Please Select", Value = "0" }, new SelectListItem() { Text = "Male", Value = "1" }, new SelectListItem() { Text = "Female", Value = "2" } };
         }
     }
 }
