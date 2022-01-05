@@ -30,7 +30,7 @@ namespace LeadGeneration.Controllers
 
                 if (userDetails != null)
                 {
-                    if (userDetails.LoginId != null && (userDetails.LoginType == "5" || userDetails.LoginType == "8" || userDetails.LoginType == "1"))
+                    if (userDetails.LoginId != null && (userDetails.LoginType == "5" || userDetails.LoginType == "8" || userDetails.LoginType == "1") && userDetails.LoginId !="123")
                     {
                         Session["UserSession"] = userDetails;
 

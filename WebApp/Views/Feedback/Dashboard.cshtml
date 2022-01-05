@@ -3,12 +3,39 @@
     ViewBag.Title = "Dashboard";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@0.4.0/dist/chartjs-plugin-datalabels.min.js"></script>
 <div class="app-main__inner">
     <div class="container-fluid pt-3 pl-3 pr-3">
         <div class="pt-3 pl-3 pr-3 pb-3 col-md-12 col-lg-12 card">
             <a href="@Url.Action("CreateFeedback", "Feedback")"> <button type="button" class="btn btn-primary pull-right">Update Feedback Details</button></a>
 
         </div>
+
+        <div class="row">
+            <div class="col-md-12 col-lg-6">
+                <div class="card">
+                    <div class="card-header-tab card-header-tab-animation card-header">
+                        <div class="card-header-title">
+                           
+                            Source Wise
+                        </div>                       
+                    </div>
+                    
+                    <div class="card-body">
+                        <div class="tab-content">
+                            <div class="tab-pane fade show active" id="tabs-eg-77">
+                                <div class="card mb-3 widget-chart widget-chart2 text-left w-100">
+                                    <div class="widget-chat-wrapper-outer">
+                                        <div id="containerSourceWise">
+                                            <canvas id="cvSourceWise" style=" width:100%; height:100%" !important></canvas>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-    </div>
+</div>
