@@ -1214,5 +1214,140 @@ namespace BOTS_BL.Repository
             }
             return lstlocation;
         }
+
+        public List<Feedback_Report> GetReportData(string groupId,DateTime fromdt,DateTime todt,string salesr,string outletid)
+        {
+            
+            List<Feedback_Report> lstobjreport = new List<Feedback_Report>();
+            List<feedback_FeedbackMaster> objfeedbackmaster = new List<feedback_FeedbackMaster>();
+            List<int> queid = new List<int>();
+            string connStr = CR.GetCustomerConnString(groupId);
+            DateTime today = DateTime.Today.Date;
+             fromdt = fromdt.Date;
+            todt = todt.Date;
+            try
+            {
+                using (var context = new CommonDBContext())
+                {
+                    queid = context.Feedback_Content.Where(x => x.GroupId == groupId && x.Section == "FeedbackQuestions" && x.Type == "Question" && x.IsDisplay == true).Select(x => x.Id).ToList();
+                }
+                using (var context = new BOTSDBContext(connStr))
+                {                    
+                    var mobileno = (from f in context.feedback_FeedbackMaster
+                                    where f.SalesRepresentative == salesr && f.OutletId == outletid && f.AddedDate >= fromdt && f.AddedDate <= todt
+                                    select new
+                                    {
+                                        mobileo = f.MobileNo,
+                                        date = f.AddedDate
+                                    }).Distinct().ToList();
+                    foreach (var item in mobileno)
+                    {
+                        Feedback_Report objreport = new Feedback_Report();
+                        string a = "";
+                        string b = "";
+                        string c = "";
+                        string d = "";
+                        int i = 0;
+
+                        if (Convert.ToString(queid[i]) != null)
+                        {
+                            a = queid[i].ToString();
+                            i++;
+                        }
+                        else
+                        {
+                            a = "0";
+                        }
+                        if (queid.Count > i)
+                        {
+                            if (Convert.ToString(queid[i]) != null)
+                            {
+                                b = queid[i].ToString();
+                                i++;
+                            }
+                            else
+                            {
+                                b = "0";
+                            }
+                        }
+                        if (queid.Count > i)
+                        {
+                            if (Convert.ToString(queid[i]) != null)
+                            {
+                                c = queid[i].ToString();
+                                i++;
+                            }
+                            else
+                            {
+                                c = "0";
+                            }
+                        }
+                        if (queid.Count > i)
+                        {
+                            if (Convert.ToString(queid[i]) != null)
+                            {
+                                d = queid[i].ToString();
+                                i++;
+                            }
+                            else
+                            {
+                                d = "0";
+                            }
+                        }
+                        var feedback = (from f in context.feedback_FeedbackMaster
+                                        where f.MobileNo == item.mobileo && f.AddedDate == item.date
+                                        group f by f.MobileNo into result
+                                        select new
+                                        {
+                                            Mobilenumber = result.Key,
+                                            q1 = result.Where(x => x.QuestionId == a).Select(x => x.QuestionPoints).FirstOrDefault(),
+                                            q2 = result.Where(x => x.QuestionId == b).Select(x => x.QuestionPoints).FirstOrDefault(),
+                                            q3 = result.Where(x => x.QuestionId == c).Select(x => x.QuestionPoints).FirstOrDefault(),
+                                            q4 = result.Where(x => x.QuestionId == d).Select(x => x.QuestionPoints).FirstOrDefault(),
+                                            salesR = result.Select(x => x.SalesRepresentative).FirstOrDefault(),
+                                            outletid = result.Select(x => x.OutletId).FirstOrDefault(),
+                                            howtoknow = result.Select(x => x.HowToKnowAbout).FirstOrDefault(),
+                                            datetime = result.Select(x => x.AddedDate).FirstOrDefault(),
+                                        }).FirstOrDefault();
+
+                        var invoiceamt = context.TransactionMasters.Where(x => x.MobileNo == feedback.Mobilenumber && x.Datetime == today).GroupBy(x => x.MobileNo)
+                            .Select(g => new
+                            {
+                                g.Key,
+                                totalamt = g.Sum(s => s.InvoiceAmt >0 ? s.InvoiceAmt:0),
+                                txnstatus = g.Sum(s => s.InvoiceAmt).ToString()
+                            }).ToList();
+                        var custinfo = context.CustomerDetails.Where(x => x.MobileNo == feedback.Mobilenumber).Select(g => new
+                        {
+                            cust = g.DOJ == today ? "1st time" : "Existing",
+                            custname = g.CustomerName
+                        }).ToList();
+
+                        var outlet = context.OutletDetails.Where(x => x.OutletId == feedback.outletid).FirstOrDefault();
+                        objreport.GroupId = groupId;
+                        objreport.MemberName = custinfo.Select(x => x.custname).FirstOrDefault();
+                        objreport.MobileNo = feedback.Mobilenumber;
+                        objreport.Q1 = feedback.q1;
+                        objreport.Q2 = feedback.q2;
+                        objreport.Q3 = feedback.q3;
+                        objreport.Q4 = feedback.q4;
+                        objreport.Source = feedback.howtoknow;
+                        objreport.Datetime = feedback.datetime.ToString();
+                        objreport.OutletName = outlet.OutletName;
+                        objreport.SalesRName = feedback.salesR;
+                        objreport.Type = custinfo.Select(x => x.cust).FirstOrDefault();
+                        objreport.TxnAmount = invoiceamt.Select(x => x.totalamt).FirstOrDefault();
+                        objreport.Txn = invoiceamt.Select(x => x.txnstatus).FirstOrDefault();
+                        lstobjreport.Add(objreport);
+                    }
+                   
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetReportData");
+            }
+            return lstobjreport;
+        }
     }
 }

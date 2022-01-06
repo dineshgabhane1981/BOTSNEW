@@ -1,4 +1,5 @@
-﻿
+﻿@model WebApp.ViewModel.FeedbackGetFeedbackViewModel
+
 @{
     ViewBag.Title = "Report";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -8,50 +9,136 @@
 
     <div class="row mb-3 card">
         <div class="container-fluid pt-3 pl-3 pr-3 pb-3">
+            @Html.HiddenFor(model => model.GroupId, new { @id = "hdGroupId" })
             <b>Report</b>
-            <div class="row mt-2">
-                <div class="col-md-4 col-xl-6">
-                   Feedback Name
 
-                    @*@Html.DropDownList("Group", new SelectList(ViewBag.lstgroupdetails, "Value", "Text"), htmlAttributes: new { @class = "input100", @id = "ddlGroupnm" })*@
-                </div>
-                <div class="col-md-4 col-xl-6 ">
-                    Date Range
-
-                </div>
-
-            </div>
 
             <div class="row mt-3 mb-4">
                 <div class="col-md-4 col-xl-6">
                     Select Outlet
-
+                    @Html.DropDownList("Outlet", new SelectList(Model.lstoutletlist, "Value", "Text"), htmlAttributes: new { @class = "input100", @id = "ddloutlet" })
                 </div>
-                <div class="col-md-4 col-xl-6">
-                    Select Avg Feedback score
-
-                </div>
+                @if (Model.PointsAndMessages.IsAddRepresentative)
+                {
+                <span id="hdshowrepresentative" style="display:none;">@Model.PointsAndMessages.IsAddRepresentative</span>
                 <div class="col-md-4 col-xl-6">
                     Select Sales Representative
-
+                    @Html.DropDownList("Group", new SelectList(Model.lstsalesRepresentive, "Value", "Text"), htmlAttributes: new { @class = "input100", @id = "ddlsalesR" })
                 </div>
-                <div class="col-md-4 col-xl-6">
-                    <input type="radio" id="rdnnorange" checked name="cust_type" /> No Range &nbsp;&nbsp;&nbsp;&nbsp;
-                    <input type="radio" id="rdndaterange" name="cust_type" /> Date Range <br /><br />
+                }
+            </div>
+            <div class="row mt-2">
+                <div class="col-md-4 col-xl-8">
+                    Date Range
                     <input id="txtFromDate" placeholder="From Date" class="input50" />&nbsp;&nbsp;&nbsp;&nbsp;
                     <input id="txtToDate" placeholder="To Date" class="input50" />
                     <button type="button" id="btnFilter" style="margin-left:17px;margin-top:5px;" class="btn btn-primary"><b>FILTER</b></button>
                     <button type="button" id="btncancel" style="margin-left:17px;margin-top:5px;" class="btn btn-primary"><b>CANCEL</b></button>
-                </div>
-            </div>
 
-            <div id="dvListing">
-                @Html.Partial("~/Views/Feedback/_ReportListing.cshtml",)
+
+                </div>
+                <div class="col-md-4 col-xl-6 ">
+
+
+                </div>
+
+            </div>
+            <div id="dvReportData">
+
             </div>
         </div>
     </div>
 </div>
-@*<script src="~/Scripts/jquery-ui-1.12.1.js"></script>
+<script src="~/Scripts/jquery-ui-1.12.1.js"></script>
 <script src="~/Scripts/jquery-ui-1.12.1.min.js"></script>
 <link href="~/Content/themes/base/jquery-ui.min.css" rel="stylesheet" />
-<link href="~/Content/themes/base/jquery-ui.css" rel="stylesheet" />*@
+<link href="~/Content/themes/base/jquery-ui.css" rel="stylesheet" />
+<script>
+    var tableData = [];
+    var today = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
+    $("#txtFromDate").datepicker({
+        dateFormat: "yy-mm-dd",
+        maxDate: today,
+    });
+    $("#txtToDate").datepicker({
+        dateFormat: "yy-mm-dd",
+        maxDate: today,
+    });
+
+    $(document).ready(function () {
+
+        $("#btnFilter").click(function () {
+            GetData();
+        });
+        $("#btncancel").click(function () {
+            resetAll();
+        });
+    });
+    function GetData() {
+
+        var FilterData = [];
+        item = {};
+        $("#divLoader").show();        
+        if ($('#txtFromDate').val() != "") {
+            item["fromDate"] = $('#txtFromDate').val();
+        }
+        else {
+            item["fromDate"] = null;
+        }
+        if ($('#txtToDate').val()!="") {
+            item["toDate"] = $('#txtToDate').val();
+        }
+        else {
+            item["toDate"] = null;
+        }
+            
+        if ($("#hdshowrepresentative").text()) {
+
+            if ($("#ddlsalesR").prop('selectedIndex') !== 0) {
+                item["selectedsalesR"] = $("#ddlsalesR option:selected").text();
+
+            }
+            else {
+                item["selectedsalesR"] = null;
+            }
+        }
+
+       
+        if ($("#ddloutlet").prop('selectedIndex') !== 0) {
+            console.log($("#ddloutlet option:selected").val());
+            item["selectedoutlet"] = $("#ddloutlet option:selected").val();
+
+        }
+        else {
+            item["selectedoutlet"] = null;
+        }
+        item["groupId"] = $("#hdGroupId").val();
+        FilterData.push(item);
+        var data = JSON.stringify(FilterData);
+        $.ajax({
+            async: true,
+            type: "POST",
+            url: '@Url.Action("GetFilteredReport", "Feedback")',
+            data: '{jsonData: ' + JSON.stringify(data) + '}',
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                console.log(response)
+                if (response != null) {
+                    $("#dvReportData").html(response);
+                    $("#divLoader").hide();
+                }
+
+            },
+            failure: function (response) {
+                $("#divLoader").hide();
+            },
+            error: function (response) {
+               // console.log(response)
+                $("#dvReportData").html(response.responseText);
+                $("#divLoader").hide();
+
+            }
+        });
+    }
+</script>

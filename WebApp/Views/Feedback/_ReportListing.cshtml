@@ -1,1 +1,164 @@
-﻿
+﻿@model List<BOTS_BL.Models.FeedbackModule.Feedback_Report>
+
+<div class="row mb-3 card">
+    <div class="container-fluid pt-3 pl-3 pr-3">
+        <div class="pt-3 pl-3 pr-3 col-md-12 col-lg-12">
+            <div class="row">
+                <div class="col search-container">
+                    <i class="fas fa-search"></i>
+                    <input class="input100" type="text" id="txtSearch" placeholder="Search Feedback..." />
+                </div>
+            </div>
+            <div class="row mt-3" id="dvReportDataNew">
+                <div class="table-responsive">
+                    <table class="table" id="reportTable">
+                        <thead>
+                            <tr>
+                                <th scope="col">Outlet Name</th>
+                                <th scope="col">SR Name</th>
+                                <th scope="col">Mobile No</th>
+                                <th scope="col">Member Name</th>
+                                <th scope="col">Type</th>
+                                <th scope="col">Date Time</th>
+                                <th scope="col">Q1</th>
+                                <th scope="col">Q2</th>
+                                <th scope="col">Q3</th>
+                                <th scope="col">Q4</th>
+                                <th scope="col">Source</th>
+                                <th scope="col">Txn</th>
+                                <th scope="col">Txn Amount</th>
+
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (Model != null)
+                            {
+                                foreach (var item in Model)
+                                {
+                                    //var followupdate = "--";
+                                    //if (item.FollowupDate.HasValue)
+                                    //{
+                                    //    followupdate = item.FollowupDate.Value.ToString();//.ToString("yyyy-MM-dd");
+                                    //}
+                                    //  var imgId = "imgExpand" + item.Id;
+                            <tr>
+
+                                <td>@item.OutletName</td>
+                                <td>@item.SalesRName</td>
+                                <td>@item.MobileNo</td>
+                                <td>@item.MemberName</td>
+                                <td>@item.Type</td>
+                                <td>@item.Datetime</td>
+                                @if (!string.IsNullOrEmpty(item.Q1))
+                                {
+                                    <td>@item.Q1</td>
+                                }
+                                else
+                                {
+                                    <td>--</td>
+                                }
+                                @if (!string.IsNullOrEmpty(item.Q2))
+                                {
+                                    <td>@item.Q2</td>
+                                }
+                                else
+                                {
+                                    <td>--</td>
+                                }
+                                @if (!string.IsNullOrEmpty(item.Q3))
+                                {
+                                    <td>@item.Q3</td>
+                                }
+                                else
+                                {
+                                    <td>--</td>
+                                }
+                                @if (!string.IsNullOrEmpty(item.Q4))
+                                {
+                                    <td>@item.Q4</td>
+                                }
+                                else
+                                {
+                                    <td>--</td>
+                                }
+
+                                @if (!string.IsNullOrEmpty(item.Source))
+                                {
+                                    <td>@item.Source</td>
+                                }
+                                else
+                                {
+                                    <td>--</td>
+                                }
+                                @if (!string.IsNullOrEmpty(item.Txn))
+                                {
+                                    <td>Yes</td>
+                                }
+                                else
+                                {
+                                    <td>No</td>
+                                }
+                                @if ((item.TxnAmount != 0))
+                                {
+                                    <td>@item.TxnAmount</td>
+                                }
+                                else
+                                {
+                                    <td>--</td>
+                                }
+                            </tr>
+
+                                }
+                            }
+                            else
+                            {
+                                <tr>
+                                    <td colspan="13" align="center">No Feedback Available</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $('#reportTable').DataTable({
+            "aaSorting": [],
+            "paging": true,
+            "ordering": false,
+            "info": true,
+            "bFilter": true,
+            "pageLength": 50,
+            "pagingType": "simple_numbers"
+        });
+
+        $('#reportTable_filter').hide();
+
+        $('#txtSearch').on('keyup', function () {
+
+            $.fn.dataTable.ext.search.push(function (settings, searchData) {
+                var term = $('#txtSearch').val().toLowerCase()
+                for (var i = 0; i < searchData.length; i++) {
+                    if (searchData[i].toLowerCase().indexOf(term) >= 0) {
+                        return true;
+                    }
+                }
+                return false;
+            });
+            var table1 = $('#reportTable').DataTable();
+            table1.draw();
+        });
+
+
+    });
+
+
+
+
+</script>
+
