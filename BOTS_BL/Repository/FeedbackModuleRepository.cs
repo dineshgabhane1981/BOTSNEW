@@ -25,7 +25,7 @@ namespace BOTS_BL.Repository
 {
     public class FeedbackModuleRepository
     {
-       
+
         CustomerRepository CR = new CustomerRepository();
         Exceptions newexception = new Exceptions();
 
@@ -157,6 +157,7 @@ namespace BOTS_BL.Repository
             bool status = false;
             try
             {
+
                 using (var context = new CommonDBContext())
                 {
                     context.Feedback_FeedbackConfig.AddOrUpdate(objFeedback);
@@ -173,6 +174,22 @@ namespace BOTS_BL.Repository
                         }
                     }
                     status = true;
+                }
+                if (status)
+                {
+                    if (contentData != null)
+                    {
+                        string connStr = CR.GetCustomerConnString(Convert.ToString(objFeedback.GroupId));
+                        using (var contextdb = new BOTSDBContext(connStr))
+                        {
+                            string tableScript = "CREATE TABLE [dbo].[feedback_FeedbackMaster]([FeedbackId][int] IDENTITY(1, 1) NOT NULL,[GroupId] [varchar](4) NULL,[OutletId] [varchar](10) NULL," +
+                                                "[MobileNo] [varchar](10) NULL,	[CustomerName] [varchar](100) NULL,	[QuestionId] [varchar](5) NULL,	[QuestionPoints] [varchar](5) NULL,	[DOB] [date] NULL," +
+                                                "[DOA] [date] NULL,	[HowToKnowAbout] [varchar](10) NULL,[AddedDate] [datetime] NULL,[SalesRepresentative] [varchar](10) NULL," +
+                                                "CONSTRAINT[PK_FeedBackModuleMaster] PRIMARY KEY CLUSTERED([FeedbackId] ASC)WITH(PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON[PRIMARY]) ON[PRIMARY]";
+                            contextdb.Database.CreateIfNotExists();
+                            contextdb.Database.ExecuteSqlCommand(tableScript);
+                        }
+                    }
                 }
             }
             catch (Exception ex)
@@ -407,7 +424,7 @@ namespace BOTS_BL.Repository
                 newexception.AddException(ex, "Getfeedback");
             }
             return lstfbget;
-        }       
+        }
 
         public bool UpdateFeedbackDetails(object[] HomeData, object[] QuestionData, object[] OtherInfoData, object[] OtherConfigData, object[] OutletMobileNosData, string GroupId, string LoginId)
         {
@@ -489,7 +506,7 @@ namespace BOTS_BL.Repository
                             objPointsAndMessages.AwardFeedbackPoints = 0;
                             objPointsAndMessages.PointsConfig = null;
                         }
-                           
+
 
                         objPointsAndMessages.MsgToCustomer = Convert.ToString(item["MsgToCustomer"]);
                         objPointsAndMessages.MsgNegativeFeedback = Convert.ToString(item["MsgNegativeFeedback"]);
@@ -603,7 +620,7 @@ namespace BOTS_BL.Repository
             string connStr = CR.GetCustomerConnString(GroupId);
             using (var context = new BOTSDBContext(connStr))
             {
-                objfeedback = context.feedback_FeedbackMaster.Where(x => x.MobileNo == mobileNo ).OrderByDescending(y => y.FeedbackId).FirstOrDefault();
+                objfeedback = context.feedback_FeedbackMaster.Where(x => x.MobileNo == mobileNo).OrderByDescending(y => y.FeedbackId).FirstOrDefault();
                 var customer = context.CustomerDetails.Where(x => x.MobileNo == mobileNo).FirstOrDefault();
 
                 //if (objfeedback != null && objfeedback.GroupId == GroupId)
@@ -624,39 +641,39 @@ namespace BOTS_BL.Repository
                 //}
                 //else
                 //{
-                    if (objfeedback != null && objfeedback.AddedDate.Value.Date == DateTime.Now.Date)
+                if (objfeedback != null && objfeedback.AddedDate.Value.Date == DateTime.Now.Date)
+                {
+                    obj.IsFeedBackGiven = true;
+                    if (objfeedback.DOA != null)
                     {
-                        obj.IsFeedBackGiven = true;
-                        if (objfeedback.DOA != null)
-                        {
-                            obj.IsDOA = true;
-                        }
-                        if (objfeedback.DOB != null)
-                        {
-                            obj.IsDateOfBirth = true;
-                        }
-                        if (objfeedback.HowToKnowAbout != null)
-                        {
-                            obj.IsHowtoKnow = true;
-                        }
-                        if (customer != null)
-                        {
-                            obj.CustomerName = customer.CustomerName;
-                            obj.MobileNo = customer.MobileNo;
-                            obj.Points = customer.Points;
-                        }
+                        obj.IsDOA = true;
                     }
-                    else
+                    if (objfeedback.DOB != null)
                     {
-                        obj.IsFeedBackGiven = false;
-                        if (customer != null)
-                        {
-                            obj.CustomerName = customer.CustomerName;
-                            obj.MobileNo = customer.MobileNo;
-                            obj.Points = customer.Points;
-                        }
+                        obj.IsDateOfBirth = true;
+                    }
+                    if (objfeedback.HowToKnowAbout != null)
+                    {
+                        obj.IsHowtoKnow = true;
+                    }
+                    if (customer != null)
+                    {
+                        obj.CustomerName = customer.CustomerName;
+                        obj.MobileNo = customer.MobileNo;
+                        obj.Points = customer.Points;
+                    }
+                }
+                else
+                {
+                    obj.IsFeedBackGiven = false;
+                    if (customer != null)
+                    {
+                        obj.CustomerName = customer.CustomerName;
+                        obj.MobileNo = customer.MobileNo;
+                        obj.Points = customer.Points;
+                    }
 
-                    }
+                }
                 //}
             }
             return obj;
@@ -971,8 +988,8 @@ namespace BOTS_BL.Repository
                     objtransactionMaster.MobileNo = mobileNo;
                     objtransactionMaster.Datetime = date;
                     objtransactionMaster.TransType = "1";
-                    objtransactionMaster.TransSource = "1";                    
-                    objtransactionMaster.InvoiceNo = "B_Feedbackpoints";                    
+                    objtransactionMaster.TransSource = "1";
+                    objtransactionMaster.InvoiceNo = "B_Feedbackpoints";
                     objtransactionMaster.InvoiceAmt = 0;
                     objtransactionMaster.Status = "06";
                     objtransactionMaster.PointsEarned = feedbackpointsmsg.AwardFeedbackPoints;
@@ -980,7 +997,7 @@ namespace BOTS_BL.Repository
                     objtransactionMaster.CampaignPoints = 0;
                     objtransactionMaster.TxnAmt = 0;
                     objtransactionMaster.Synchronization = "";
-                    objtransactionMaster.SyncDatetime = null;                   
+                    objtransactionMaster.SyncDatetime = null;
                     context.TransactionMasters.Add(objtransactionMaster);
                     context.SaveChanges();
                     objpointsExpiry.MobileNo = mobileNo;
@@ -1008,15 +1025,15 @@ namespace BOTS_BL.Repository
                     }
                     objpointsExpiry.ExpiryDate = next;
                     objpointsExpiry.Points = feedbackpointsmsg.AwardFeedbackPoints;
-                    objpointsExpiry.Status = "00";                    
+                    objpointsExpiry.Status = "00";
                     objpointsExpiry.InvoiceNo = "B_Feedbackpoints";
-                    
+
                     objpointsExpiry.GroupId = GroupId;
                     objpointsExpiry.OriginalInvoiceNo = "";
-                    objpointsExpiry.TransRefNo = null;                   
+                    objpointsExpiry.TransRefNo = null;
                     context.PointsExpiries.Add(objpointsExpiry);
                     context.SaveChanges();
-                                        
+
                 }
                 foreach (var feedback in lstfeedback)
                 {

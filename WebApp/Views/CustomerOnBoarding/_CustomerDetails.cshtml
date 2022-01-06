@@ -105,10 +105,7 @@
                     WA Paid Msgs
                 </td>
                 <td style="font-weight:bold;">@Model.bots_TblGroupMaster.NoOfPaidWhatsAppMsg</td>
-                <td style="font-style: italic;">
-                    Existing Loyalty
-                </td>
-                <td style="font-weight:bold;">@Model.bots_TblGroupMaster.IsExistingLoyalty</td>
+
             </tr>
             <tr>
                 <td style="font-style: italic;">
@@ -130,12 +127,26 @@
                 {
                     <td style="font-weight:bold;">No</td>
                 }
+                @if (Model.bots_TblGroupMaster.IsMobileApp == null)
+                {
+                    <td style="font-weight:bold;">No</td>
+                }
 
                 <td style="font-style: italic;">
                     Mobile App Description
                 </td>
 
                 <td style="font-weight:bold;">@Model.bots_TblGroupMaster.MobileAppDescription</td>
+            </tr>
+
+            <tr>
+                <td style="font-style: italic;">
+                    Existing Loyalty
+                </td>
+                <td style="font-weight:bold;">@Model.bots_TblGroupMaster.IsExistingLoyalty</td>
+                
+
+                
             </tr>
 
 
@@ -327,21 +338,21 @@
                 </td>
             </tr>
 
-            @if(Model.objInstallmentList !=null)
-            { 
-                foreach (var item in Model.objInstallmentList)
+            @if (Model.objInstallmentList != null)
             {
-                <tr>
-                    <td style="font-style: italic;">
-                        Installment @item.Installment
-                    </td>
-                    <td style="font-weight:bold;">@item.PaymentAmount</td>
-                    <td style="font-weight:bold;">
-                        @item.PaymentDate.ToString("dd/MM/yyyy")
-                    </td>
-                    <td colspan="5"></td>
-                </tr>
-            }
+                foreach (var item in Model.objInstallmentList)
+                {
+                    <tr>
+                        <td style="font-style: italic;">
+                            Installment @item.Installment
+                        </td>
+                        <td style="font-weight:bold;">@item.PaymentAmount</td>
+                        <td style="font-weight:bold;">
+                            @item.PaymentDate.ToString("dd/MM/yyyy")
+                        </td>
+                        <td colspan="5"></td>
+                    </tr>
+                }
             }
         </table>
     </div>
