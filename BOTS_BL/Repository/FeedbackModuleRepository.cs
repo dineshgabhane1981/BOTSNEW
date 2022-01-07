@@ -1240,24 +1240,80 @@ namespace BOTS_BL.Repository
             List<int> queid = new List<int>();
             string connStr = CR.GetCustomerConnString(groupId);
             DateTime today = DateTime.Today.Date;
-             fromdt = fromdt.Date;
+            DateTime fmdt = new DateTime();
+            fmdt= fmdt.Date;
+            fromdt = fromdt.Date;
             todt = todt.Date;
             try
             {
+               
                 using (var context = new CommonDBContext())
                 {
                     queid = context.Feedback_Content.Where(x => x.GroupId == groupId && x.Section == "FeedbackQuestions" && x.Type == "Question" && x.IsDisplay == true).Select(x => x.Id).ToList();
                 }
                 using (var context = new BOTSDBContext(connStr))
-                {                    
-                    var mobileno = (from f in context.feedback_FeedbackMaster
-                                    where f.SalesRepresentative == salesr && f.OutletId == outletid && f.AddedDate >= fromdt && f.AddedDate <= todt
-                                    select new
-                                    {
-                                        mobileo = f.MobileNo,
-                                        date = f.AddedDate
-                                    }).Distinct().ToList();
-                    foreach (var item in mobileno)
+                {
+                    List<Feedback_MobileNo> objmobile = new List<Feedback_MobileNo>();
+                    //List<feedback_FeedbackMaster> lstfeedbackmaster = new List<feedback_FeedbackMaster>();
+
+                    //if (groupId != "" && fromdt == fmdt && todt == fmdt && salesr=="" && outletid=="")
+                    //{
+                        objmobile = (from f in context.feedback_FeedbackMaster
+                                         // where f.SalesRepresentative == salesr && f.OutletId == outletid && f.AddedDate >= fromdt && f.AddedDate <= todt
+                                     select new Feedback_MobileNo
+                                     {
+                                         MobileNo = f.MobileNo,
+                                         Datetime = f.AddedDate,
+                                         OutletName = f.OutletId,
+                                         SalesRName = f.SalesRepresentative
+                                     }).Distinct().ToList();
+
+                       // lstfeedbackmaster = context.feedback_FeedbackMaster.Distinct().ToList();
+                    //}
+                    //else 
+                    //{                        
+                        if(salesr !="")
+                        {
+                            objmobile = (from f in objmobile
+                                                 where f.SalesRName == salesr //&& f.OutletId == outletid && f.AddedDate >= fromdt && f.AddedDate <= todt
+                                         select new Feedback_MobileNo
+                                         {
+                                             MobileNo = f.MobileNo,
+                                             Datetime = f.Datetime,
+                                             OutletName = f.OutletName,
+                                             SalesRName = f.SalesRName
+                                         }).Distinct().ToList();
+                        }
+                        if(outletid!="")
+                        {
+                            objmobile = (from f in objmobile
+                                                 where f.OutletName == outletid 
+                                                 select new Feedback_MobileNo
+                                                 {
+                                                     MobileNo = f.MobileNo,
+                                                     Datetime = f.Datetime,
+                                                     OutletName = f.OutletName,
+                                                     SalesRName = f.SalesRName
+
+                                                 }).Distinct().ToList();
+
+                        }
+                        if (fromdt != fmdt && todt != fmdt)
+                        {
+                           
+                            objmobile = (from f in objmobile
+                                         where f.Datetime >= fromdt && f.Datetime <= todt
+                                         select new Feedback_MobileNo
+                                         {
+                                             MobileNo = f.MobileNo,
+                                             Datetime = f.Datetime,
+                                             OutletName = f.OutletName,
+                                             SalesRName = f.SalesRName
+                                         }).Distinct().ToList();
+                        }
+
+                   // }
+                    foreach (var item in objmobile)
                     {
                         Feedback_Report objreport = new Feedback_Report();
                         string a = "";
@@ -1312,7 +1368,7 @@ namespace BOTS_BL.Repository
                             }
                         }
                         var feedback = (from f in context.feedback_FeedbackMaster
-                                        where f.MobileNo == item.mobileo && f.AddedDate == item.date
+                                        where f.MobileNo == item.MobileNo && f.AddedDate == item.Datetime
                                         group f by f.MobileNo into result
                                         select new
                                         {
