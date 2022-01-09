@@ -246,9 +246,37 @@ namespace WebApp.Controllers
         }
 
         public ActionResult Dashboard()
-        {
+        {            
             return View();
+        }
 
+        public JsonResult DashboardNewData()
+        {
+            List<int> lstData = new List<int>();
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            try
+            {
+                lstData = FMR.GetDashboardNewExistingData(userDetails.GroupId, "New");
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, userDetails.GroupId);
+            }
+            return new JsonResult() { Data = lstData, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
+        }
+        public JsonResult DashboardExistingData()
+        {
+            List<int> lstData = new List<int>();
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            try
+            {
+                lstData = FMR.GetDashboardNewExistingData(userDetails.GroupId, "Existing");
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, userDetails.GroupId);
+            }
+            return new JsonResult() { Data = lstData, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
         public ActionResult Report()
         {

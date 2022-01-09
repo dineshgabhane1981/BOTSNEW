@@ -1232,6 +1232,54 @@ namespace BOTS_BL.Repository
             return lstlocation;
         }
 
+        public List<int> GetDashboardNewExistingData(string GroupId, string neworexisting)
+        {
+            List<DashboardNewAndExisting> lstData = new List<DashboardNewAndExisting>();
+            List<DashboardNewAndExisting> lstReturnData = new List<DashboardNewAndExisting>();
+            List<int> lstCount = new List<int>();
+            string connStr = CR.GetCustomerConnString(GroupId);
+            using (var contextdb = new BOTSDBContext(connStr))
+            {
+                lstData = contextdb.Database.SqlQuery<DashboardNewAndExisting>("select T.MobileNo,T.QuestionPoints,(case when C.DOJ = cast(T.AddedDate as date) Then 'New' Else 'Existing' End) as MemberType from feedback_FeedbackMaster T left join CustomerDetails C on T.MobileNo = C.MobileNo").ToList();
+                if (neworexisting == "New")
+                {
+                    lstData = lstData.Where(x => x.MemberType == "New").Select(y => y).ToList();
+                }
+                if (neworexisting == "Existing")
+                {
+                    lstData = lstData.Where(x => x.MemberType == "Existing").Select(y => y).ToList();
+                }
+                var uniqueMobileNo = lstData.GroupBy(x => x.MobileNo).Select(y => y.First()).ToList();
+
+                foreach (var item in uniqueMobileNo)
+                {
+                    decimal sum = 0;
+                    DashboardNewAndExisting objItem = new DashboardNewAndExisting();
+                    var oneuserData = lstData.Where(x => x.MobileNo == item.MobileNo).ToList();
+                    foreach (var points in oneuserData)
+                    {
+                        sum = sum + Convert.ToDecimal(points.QuestionPoints);
+                    }
+                    objItem.MobileNo = item.MobileNo;
+                    objItem.AvgPoints = sum / oneuserData.Count();
+                    lstReturnData.Add(objItem);
+                }
+
+
+                var lessthanone = lstReturnData.Where(x => x.AvgPoints < 1).Count();
+                var onetotwo = lstReturnData.Where(x => x.AvgPoints >= 1 && x.AvgPoints <= 2).Count();
+                var twotothree = lstReturnData.Where(x => x.AvgPoints > 2 && x.AvgPoints <= 3).Count();
+                var morethanthree = lstReturnData.Where(x => x.AvgPoints > 3).Count();
+
+                lstCount.Add(lessthanone);
+                lstCount.Add(onetotwo);
+                lstCount.Add(twotothree);
+                lstCount.Add(morethanthree);
+
+            }
+
+            return lstCount;
+        }
         public List<Feedback_Report> GetReportData(string groupId,DateTime fromdt,DateTime todt,string salesr,string outletid)
         {
             

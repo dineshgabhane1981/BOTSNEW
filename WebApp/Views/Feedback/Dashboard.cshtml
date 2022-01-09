@@ -16,18 +16,40 @@
                 <div class="card">
                     <div class="card-header-tab card-header-tab-animation card-header">
                         <div class="card-header-title">
-                           
-                            Source Wise
-                        </div>                       
+                            New Customer
+                        </div>
                     </div>
-                    
+
                     <div class="card-body">
                         <div class="tab-content">
                             <div class="tab-pane fade show active" id="tabs-eg-77">
                                 <div class="card mb-3 widget-chart widget-chart2 text-left w-100">
                                     <div class="widget-chat-wrapper-outer">
-                                        <div id="containerSourceWise">
-                                            <canvas id="cvSourceWise" style=" width:100%; height:100%" !important></canvas>
+                                        <div id="containerNewCustomer">
+                                            <canvas id="cvNewCustomer" style=" width:100%; height:100%" !important></canvas>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12 col-lg-6">
+                <div class="card">
+                    <div class="card-header-tab card-header-tab-animation card-header">
+                        <div class="card-header-title">
+                            Existing Customer
+                        </div>
+                    </div>
+
+                    <div class="card-body">
+                        <div class="tab-content">
+                            <div class="tab-pane fade show active" id="tabs-eg-77">
+                                <div class="card mb-3 widget-chart widget-chart2 text-left w-100">
+                                    <div class="widget-chat-wrapper-outer">
+                                        <div id="containerExistingCustomer">
+                                            <canvas id="cvExistingCustomer" style=" width:100%; height:100%" !important></canvas>
                                         </div>
                                     </div>
                                 </div>
@@ -39,3 +61,144 @@
         </div>
     </div>
 </div>
+
+<script>
+    $(document).ready(function () {
+        GetNewUserChart();
+        GetExistingUserChart();
+    });
+
+    function GetNewUserChart() {
+        $("#divLoader").show();
+        $.ajax({
+            type: "POST",
+             url: '@Url.Action("DashboardNewData", "Feedback")',
+            data: "",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                console.log(response)
+                if (response != null) {
+
+                    $('#cvNewCustomer').remove(); // this is my <canvas> element
+                    $('#containerNewCustomer').append('<canvas id="cvNewCustomer"><canvas>');
+                        var options = {
+                            plugins: {
+                                datalabels: {
+                                    display: false
+                                }
+                            },
+                            rotation: (-0.5 * Math.PI) - (-90 / 180 * Math.PI),
+                            legend: {
+                                display: true,
+                                position: 'bottom'
+                            }
+                        }
+                        var label1 = 'Less than 1';
+                    var label2 = 'Between 1 and 2';
+                    var label3 = 'Between 2 and 3';
+                    var label4 = 'Greater than 3';
+
+                        var data = {
+                            datasets: [{
+                                data: [...response],
+                                backgroundColor: ["#f990a7", "#aad2ed", "#9966FF", "#99e5e5"]
+                            }],
+
+                            labels: [
+                                label1,
+                                label2,
+                                label3,
+                                label4
+                            ],
+
+                        };
+
+                    var ctx4 = document.getElementById("cvNewCustomer").getContext("2d");
+                        window.myBar = new Chart(ctx4, {
+                            type: 'pie',
+                            data: data,
+                            options: options
+
+                        });
+                }
+                $("#divLoader").hide();
+            },
+            failure: function (response) {
+                $("#divLoader").hide();
+            },
+            error: function (response) {
+                $("#divLoader").hide();
+            }
+        });
+
+    }
+
+    function GetExistingUserChart() {
+        $("#divLoader").show();
+        $.ajax({
+            type: "POST",
+             url: '@Url.Action("DashboardExistingData", "Feedback")',
+            data: "",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                console.log(response)
+                if (response != null) {
+
+                    $('#cvExistingCustomer').remove(); // this is my <canvas> element
+                    $('#containerExistingCustomer').append('<canvas id="cvExistingCustomer"><canvas>');
+                        var options = {
+                            plugins: {
+                                datalabels: {
+                                    display: false
+                                }
+                            },
+                            rotation: (-0.5 * Math.PI) - (-90 / 180 * Math.PI),
+                            legend: {
+                                display: true,
+                                position: 'bottom'
+                            }
+                        }
+                        var label1 = 'Less than 1';
+                    var label2 = 'Between 1 and 2';
+                    var label3 = 'Between 2 and 3';
+                    var label4 = 'Greater than 3';
+
+                        var data = {
+                            datasets: [{
+                                data: [...response],
+                                backgroundColor: ["#f990a7", "#aad2ed", "#9966FF", "#99e5e5"]
+                            }],
+
+                            labels: [
+                                label1,
+                                label2,
+                                label3,
+                                label4
+                            ],
+
+                        };
+
+                    var ctx4 = document.getElementById("cvExistingCustomer").getContext("2d");
+                        window.myBar = new Chart(ctx4, {
+                            type: 'pie',
+                            data: data,
+                            options: options
+
+                        });
+                }
+                $("#divLoader").hide();
+            },
+            failure: function (response) {
+                $("#divLoader").hide();
+            },
+            error: function (response) {
+                $("#divLoader").hide();
+            }
+        });
+
+    }
+
+
+</script>
