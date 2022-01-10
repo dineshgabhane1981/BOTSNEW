@@ -349,16 +349,8 @@
             });
        // }
         if ($("#hdshowrepresentative").text()) {
-            console.log(333);
-            if ($("#ddlsaleslist option:selected").text() == "Please Select") {
-                cuteAlert({
-                    type: "error",
-                    title: "Oops..",
-                    message: "Please select Sales Reprentative",
-                    buttonText: "Okay"
-                })
-                $("#ddlsaleslist").css('border-color', 'red');
-                returnStatus = false;
+            if ($("#ddlsaleslist").prop('selectedIndex') !== 0) {
+                var sales = $("#ddlsaleslist option:selected").text();
             }
         }
         if (returnStatus == true) {
@@ -376,7 +368,7 @@
 
         });        
             
-            var sales = $("#ddlsaleslist").text();
+            
             console.log(HomeData);
             $("#divLoader").show();
             $.ajax({
@@ -443,6 +435,19 @@
         //$("#divthankyou").hide();
         var returnStatus = true;
         var MobileNo = $('#txtMobileNo').val();
+        if ($("#hdshowrepresentative").text()) {
+            console.log(333);
+            if ($("#ddlsaleslist option:selected").text() == "Please Select") {
+                cuteAlert({
+                    type: "error",
+                    title: "Oops..",
+                    message: "Please select Sales Reprentative",
+                    buttonText: "Okay"
+                })
+                $("#ddlsaleslist").css('border-color', 'red');
+                returnStatus = false;
+            }
+        }
         if ($("#txtMobileNo").val() == "") {
             console.log(111);
             cuteAlert({
