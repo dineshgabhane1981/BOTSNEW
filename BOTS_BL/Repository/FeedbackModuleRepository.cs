@@ -741,7 +741,7 @@ namespace BOTS_BL.Repository
                     }
                     objfeedback.GroupId = GroupId;
                     objfeedback.MobileNo = mobileNo;
-                    objfeedback.QuestionPoints = point.ToString();
+                    objfeedback.QuestionPoints = point;
                     objfeedback.QuestionId = id;
                     objfeedback.OutletId = outletId;
                     objfeedback.SalesRepresentative = salesid;
@@ -1265,7 +1265,6 @@ namespace BOTS_BL.Repository
                     lstReturnData.Add(objItem);
                 }
 
-
                 var lessthanone = lstReturnData.Where(x => x.AvgPoints < 1).Count();
                 var onetotwo = lstReturnData.Where(x => x.AvgPoints >= 1 && x.AvgPoints <= 2).Count();
                 var twotothree = lstReturnData.Where(x => x.AvgPoints > 2 && x.AvgPoints <= 3).Count();
@@ -1275,26 +1274,148 @@ namespace BOTS_BL.Repository
                 lstCount.Add(onetotwo);
                 lstCount.Add(twotothree);
                 lstCount.Add(morethanthree);
-
             }
-
             return lstCount;
         }
-        public List<Feedback_Report> GetReportData(string groupId,DateTime fromdt,DateTime todt,string salesr,string outletid)
+        public List<int> GetTimeWiseData(string GroupId, string timeIndicator)
         {
-            
+            List<int> lstCount = new List<int>();
+            List<DashboardTimeWise> lstData = new List<DashboardTimeWise>();
+            string connStr = CR.GetCustomerConnString(GroupId);
+            using (var contextdb = new BOTSDBContext(connStr))
+            {
+                var data = contextdb.feedback_FeedbackMaster.Where(x => x.GroupId == GroupId).ToList();
+                var uniqueMobileNoData = data.GroupBy(x => x.MobileNo).Select(y => y.First()).ToList();
+
+                foreach(var item in uniqueMobileNoData)
+                {
+                    DashboardTimeWise objItem = new DashboardTimeWise();
+                    decimal sum = 0;                    
+                    var oneuserData = data.Where(x => x.MobileNo == item.MobileNo).ToList();
+                    int rowCount = 0;
+                    foreach (var points in oneuserData)
+                    {
+                        var added = points.AddedDate.Value.TimeOfDay.Hours;
+                        if (timeIndicator == "1")
+                        {
+                            if (added <= 12)
+                            {
+                                sum = sum + Convert.ToDecimal(points.QuestionPoints);
+                                rowCount++;
+                            }
+                        }
+                        if (timeIndicator == "2")
+                        {
+                            if (added > 12 && added<=15)
+                            {
+                                sum = sum + Convert.ToDecimal(points.QuestionPoints);
+                                rowCount++;
+                            }
+                        }
+                        if (timeIndicator == "3")
+                        {
+                            if (added > 15 && added <= 18)
+                            {
+                                sum = sum + Convert.ToDecimal(points.QuestionPoints);
+                                rowCount++;
+                            }
+                        }
+                        if (timeIndicator == "4")
+                        {
+                            if (added > 18)
+                            {
+                                sum = sum + Convert.ToDecimal(points.QuestionPoints);
+                                rowCount++;
+                            }
+                        }
+                    }
+                    if(sum==0)                    
+                        objItem.AvgPoints = 0;                    
+                    else
+                    objItem.AvgPoints= sum / rowCount;
+
+                    lstData.Add(objItem);
+                }
+                var lessthanone = lstData.Where(x => x.AvgPoints < 1).Count();
+                var onetotwo = lstData.Where(x => x.AvgPoints >= 1 && x.AvgPoints <= 2).Count();
+                var twotothree = lstData.Where(x => x.AvgPoints > 2 && x.AvgPoints <= 3).Count();
+                var morethanthree = lstData.Where(x => x.AvgPoints > 3).Count();
+
+                lstCount.Add(lessthanone);
+                lstCount.Add(onetotwo);
+                lstCount.Add(twotothree);
+                lstCount.Add(morethanthree);
+            }
+
+
+            return lstCount;
+
+        }
+
+        
+        public List<DashboardOutletWise> GetOutletWiseData(string GroupId)
+        {
+            List<DashboardOutletWise> lstData = new List<DashboardOutletWise>();
+            string connStr = CR.GetCustomerConnString(GroupId);
+            using (var contextdb = new BOTSDBContext(connStr))
+            {
+                var data = contextdb.feedback_FeedbackMaster.Where(x => x.GroupId == GroupId).ToList();
+                var uniqueOutlet = data.GroupBy(x => x.OutletId).Select(y => y.First()).ToList();
+                foreach (var item in uniqueOutlet)
+                {
+                    var outlet = contextdb.OutletDetails.Where(x => x.OutletId == item.OutletId).FirstOrDefault();
+                    var outletAvgPoints = contextdb.feedback_FeedbackMaster.Where(x => x.OutletId == item.OutletId).Average(y => y.QuestionPoints);
+
+                    outletAvgPoints = Math.Round(outletAvgPoints, 2);
+                    DashboardOutletWise objItem = new DashboardOutletWise();
+                    objItem.AvgPoints = outletAvgPoints;
+                    objItem.OutletName = outlet.OutletName;
+
+                    lstData.Add(objItem);
+                }
+            }
+            return lstData;
+        }
+
+        public List<DashboardSRWise> GetSRWiseData(string GroupId)
+        {
+            List<DashboardSRWise> lstData = new List<DashboardSRWise>();
+            string connStr = CR.GetCustomerConnString(GroupId);
+            using (var contextdb = new BOTSDBContext(connStr))
+            {
+                var data = contextdb.feedback_FeedbackMaster.Where(x => x.GroupId == GroupId).ToList();
+                var uniqueSR = data.GroupBy(x => x.SalesRepresentative).Select(y => y.First()).ToList();
+                foreach (var item in uniqueSR)
+                {
+
+                    var outletAvgPoints = contextdb.feedback_FeedbackMaster.Where(x => x.SalesRepresentative == item.SalesRepresentative).Average(y => y.QuestionPoints);
+
+                    outletAvgPoints = Math.Round(outletAvgPoints, 2);
+                    DashboardSRWise objItem = new DashboardSRWise();
+                    objItem.AvgPoints = outletAvgPoints;
+                    objItem.SRName = item.SalesRepresentative;
+
+                    lstData.Add(objItem);
+                }
+            }
+            return lstData;
+        }
+
+        public List<Feedback_Report> GetReportData(string groupId, DateTime fromdt, DateTime todt, string salesr, string outletid)
+        {
+
             List<Feedback_Report> lstobjreport = new List<Feedback_Report>();
             List<feedback_FeedbackMaster> objfeedbackmaster = new List<feedback_FeedbackMaster>();
             List<int> queid = new List<int>();
             string connStr = CR.GetCustomerConnString(groupId);
             DateTime today = DateTime.Today.Date;
             DateTime fmdt = new DateTime();
-            fmdt= fmdt.Date;
+            fmdt = fmdt.Date;
             fromdt = fromdt.Date;
             todt = todt.Date;
             try
             {
-               
+
                 using (var context = new CommonDBContext())
                 {
                     queid = context.Feedback_Content.Where(x => x.GroupId == groupId && x.Section == "FeedbackQuestions" && x.Type == "Question" && x.IsDisplay == true).Select(x => x.Id).ToList();
@@ -1306,61 +1427,61 @@ namespace BOTS_BL.Repository
 
                     //if (groupId != "" && fromdt == fmdt && todt == fmdt && salesr=="" && outletid=="")
                     //{
-                        objmobile = (from f in context.feedback_FeedbackMaster
-                                         // where f.SalesRepresentative == salesr && f.OutletId == outletid && f.AddedDate >= fromdt && f.AddedDate <= todt
-                                     select new Feedback_MobileNo
-                                     {
-                                         MobileNo = f.MobileNo,
-                                         Datetime = f.AddedDate,
-                                         OutletName = f.OutletId,
-                                         SalesRName = f.SalesRepresentative
-                                     }).Distinct().ToList();
+                    objmobile = (from f in context.feedback_FeedbackMaster
+                                     // where f.SalesRepresentative == salesr && f.OutletId == outletid && f.AddedDate >= fromdt && f.AddedDate <= todt
+                                 select new Feedback_MobileNo
+                                 {
+                                     MobileNo = f.MobileNo,
+                                     Datetime = f.AddedDate,
+                                     OutletName = f.OutletId,
+                                     SalesRName = f.SalesRepresentative
+                                 }).Distinct().ToList();
 
-                       // lstfeedbackmaster = context.feedback_FeedbackMaster.Distinct().ToList();
+                    // lstfeedbackmaster = context.feedback_FeedbackMaster.Distinct().ToList();
                     //}
                     //else 
                     //{                        
-                        if(salesr !="")
-                        {
-                            objmobile = (from f in objmobile
-                                                 where f.SalesRName == salesr //&& f.OutletId == outletid && f.AddedDate >= fromdt && f.AddedDate <= todt
-                                         select new Feedback_MobileNo
-                                         {
-                                             MobileNo = f.MobileNo,
-                                             Datetime = f.Datetime,
-                                             OutletName = f.OutletName,
-                                             SalesRName = f.SalesRName
-                                         }).Distinct().ToList();
-                        }
-                        if(outletid!="")
-                        {
-                            objmobile = (from f in objmobile
-                                                 where f.OutletName == outletid 
-                                                 select new Feedback_MobileNo
-                                                 {
-                                                     MobileNo = f.MobileNo,
-                                                     Datetime = f.Datetime,
-                                                     OutletName = f.OutletName,
-                                                     SalesRName = f.SalesRName
+                    if (salesr != "")
+                    {
+                        objmobile = (from f in objmobile
+                                     where f.SalesRName == salesr //&& f.OutletId == outletid && f.AddedDate >= fromdt && f.AddedDate <= todt
+                                     select new Feedback_MobileNo
+                                     {
+                                         MobileNo = f.MobileNo,
+                                         Datetime = f.Datetime,
+                                         OutletName = f.OutletName,
+                                         SalesRName = f.SalesRName
+                                     }).Distinct().ToList();
+                    }
+                    if (outletid != "")
+                    {
+                        objmobile = (from f in objmobile
+                                     where f.OutletName == outletid
+                                     select new Feedback_MobileNo
+                                     {
+                                         MobileNo = f.MobileNo,
+                                         Datetime = f.Datetime,
+                                         OutletName = f.OutletName,
+                                         SalesRName = f.SalesRName
 
-                                                 }).Distinct().ToList();
+                                     }).Distinct().ToList();
 
-                        }
-                        if (fromdt != fmdt && todt != fmdt)
-                        {
-                           
-                            objmobile = (from f in objmobile
-                                         where f.Datetime >= fromdt && f.Datetime <= todt
-                                         select new Feedback_MobileNo
-                                         {
-                                             MobileNo = f.MobileNo,
-                                             Datetime = f.Datetime,
-                                             OutletName = f.OutletName,
-                                             SalesRName = f.SalesRName
-                                         }).Distinct().ToList();
-                        }
+                    }
+                    if (fromdt != fmdt && todt != fmdt)
+                    {
 
-                   // }
+                        objmobile = (from f in objmobile
+                                     where f.Datetime >= fromdt && f.Datetime <= todt
+                                     select new Feedback_MobileNo
+                                     {
+                                         MobileNo = f.MobileNo,
+                                         Datetime = f.Datetime,
+                                         OutletName = f.OutletName,
+                                         SalesRName = f.SalesRName
+                                     }).Distinct().ToList();
+                    }
+
+                    // }
                     foreach (var item in objmobile)
                     {
                         Feedback_Report objreport = new Feedback_Report();
@@ -1435,7 +1556,7 @@ namespace BOTS_BL.Repository
                             .Select(g => new
                             {
                                 g.Key,
-                                totalamt = g.Sum(s => s.InvoiceAmt >0 ? s.InvoiceAmt:0),
+                                totalamt = g.Sum(s => s.InvoiceAmt > 0 ? s.InvoiceAmt : 0),
                                 txnstatus = g.Sum(s => s.InvoiceAmt).ToString()
                             }).ToList();
                         var custinfo = context.CustomerDetails.Where(x => x.MobileNo == feedback.Mobilenumber).Select(g => new
@@ -1461,7 +1582,7 @@ namespace BOTS_BL.Repository
                         objreport.Txn = invoiceamt.Select(x => x.txnstatus).FirstOrDefault();
                         lstobjreport.Add(objreport);
                     }
-                   
+
                 }
             }
             catch (Exception ex)

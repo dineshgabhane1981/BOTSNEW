@@ -180,7 +180,7 @@ namespace WebApp.Controllers
             objFeedbackAuthor.GroupId = userDetails.GroupId;
             objFeedbackAuthor.lstFeedbackData = FMR.GetFeedback_Contents(userDetails.GroupId);
             objFeedbackAuthor.lstOutletDetail = RR.GetOutletList(userDetails.GroupId, userDetails.connectionString);
-            foreach(var item in objFeedbackAuthor.lstOutletDetail)
+            foreach (var item in objFeedbackAuthor.lstOutletDetail)
             {
                 OutletDetailsViewModel objOT = new OutletDetailsViewModel();
                 objOT.mobileNos = FMR.GetOutletMobileNos(userDetails.GroupId, item.Value);
@@ -205,7 +205,7 @@ namespace WebApp.Controllers
                 groupid = Id.Substring(0, 4);
                 ViewBag.GroupId = groupid;
                 ViewBag.OutletId = Id;
-               // ViewBag.lsthowtoknow = FMR.GetHowToKnowAboutList();
+                // ViewBag.lsthowtoknow = FMR.GetHowToKnowAboutList();
             }
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
             FeedbackGetFeedbackViewModel objgetfeedbackviewmodel = new FeedbackGetFeedbackViewModel();
@@ -216,7 +216,7 @@ namespace WebApp.Controllers
             objgetfeedbackviewmodel.GroupName = FMR.GetGroupName(groupid);
             objgetfeedbackviewmodel.lstFeedbackData = FMR.GetFeedback_VisibleContents(groupid);
             objgetfeedbackviewmodel.LogoUrl = FMR.GetLogo(groupid);
-            objgetfeedbackviewmodel.lstKnowAboutUs = FMR.GetHowToKnowAboutList();            
+            objgetfeedbackviewmodel.lstKnowAboutUs = FMR.GetHowToKnowAboutList();
             objgetfeedbackviewmodel.lstsalesRepresentive = FMR.GetSalesRepresentiveList(groupid);
             PointsAndMessages = FMR.GetPointsAndMessages(groupid);
             objgetfeedbackviewmodel.PointsAndMessages = PointsAndMessages;
@@ -226,7 +226,7 @@ namespace WebApp.Controllers
             return View(objgetfeedbackviewmodel);
         }
 
-        public ActionResult UpdateFeedbackDetails(string HomeData, string QuestionData,string OtherInfoData,string OtherConfigData,string OutletMobileNos)
+        public ActionResult UpdateFeedbackDetails(string HomeData, string QuestionData, string OtherInfoData, string OtherConfigData, string OutletMobileNos)
         {
             bool status = false;
 
@@ -238,7 +238,7 @@ namespace WebApp.Controllers
             object[] objOtherInfoData = (object[])json_serializer.DeserializeObject(OtherInfoData);
             object[] objOtherConfigData = (object[])json_serializer.DeserializeObject(OtherConfigData);
             object[] objOutletMobileNos = (object[])json_serializer.DeserializeObject(OutletMobileNos);
-            
+
             status = FMR.UpdateFeedbackDetails(objHomeData, objQuestionData, objOtherInfoData, objOtherConfigData, objOutletMobileNos, userDetails.GroupId, userDetails.LoginId);
 
 
@@ -246,7 +246,7 @@ namespace WebApp.Controllers
         }
 
         public ActionResult Dashboard()
-        {            
+        {
             return View();
         }
 
@@ -278,6 +278,121 @@ namespace WebApp.Controllers
             }
             return new JsonResult() { Data = lstData, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
+
+        public JsonResult DashboardOutletWiseData()
+        {
+            List<object> lstData = new List<object>();
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            try
+            {
+                var lstOutletWise = FMR.GetOutletWiseData(userDetails.GroupId);
+                List<string> nameList = new List<string>();
+                List<double> dataList = new List<double>();
+
+                foreach (var item in lstOutletWise)
+                {
+                    nameList.Add(item.OutletName);
+                    dataList.Add(item.AvgPoints);
+                }
+                lstData.Add(nameList);
+                lstData.Add(dataList);
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, userDetails.GroupId);
+            }
+
+            return new JsonResult() { Data = lstData, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
+        }
+        public JsonResult DashboardSRWiseData()
+        {
+            List<object> lstData = new List<object>();
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            try
+            {
+                var lstSRWise = FMR.GetSRWiseData(userDetails.GroupId);
+                List<string> nameList = new List<string>();
+                List<double> dataList = new List<double>();
+
+                foreach (var item in lstSRWise)
+                {
+                    if(!string.IsNullOrEmpty(item.SRName))
+                    {
+                        nameList.Add(item.SRName);
+                    }
+                    else
+                    {
+                        nameList.Add("Other");
+                    }
+                    
+                    dataList.Add(item.AvgPoints);
+                }
+                lstData.Add(nameList);
+                lstData.Add(dataList);
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, userDetails.GroupId);
+            }
+
+            return new JsonResult() { Data = lstData, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
+        }
+        public JsonResult DashboardLessThank12Data()
+        {
+            List<int> lstData = new List<int>();
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            try
+            {
+                lstData = FMR.GetTimeWiseData(userDetails.GroupId,"1");
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, userDetails.GroupId);
+            }
+            return new JsonResult() { Data = lstData, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
+        }
+        public JsonResult Dashboard12To3Data()
+        {
+            List<int> lstData = new List<int>();
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            try
+            {
+                lstData = FMR.GetTimeWiseData(userDetails.GroupId,"2");
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, userDetails.GroupId);
+            }
+            return new JsonResult() { Data = lstData, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
+        }
+        public JsonResult Dashboard3To6Data()
+        {
+            List<int> lstData = new List<int>();
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            try
+            {
+                lstData = FMR.GetTimeWiseData(userDetails.GroupId, "3");
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, userDetails.GroupId);
+            }
+            return new JsonResult() { Data = lstData, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
+        }
+        public JsonResult DashboardMoreThan6Data()
+        {
+            List<int> lstData = new List<int>();
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            try
+            {
+                lstData = FMR.GetTimeWiseData(userDetails.GroupId, "4");
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, userDetails.GroupId);
+            }
+            return new JsonResult() { Data = lstData, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
+        }
         public ActionResult Report()
         {
             FeedbackGetFeedbackViewModel objviewmodel = new FeedbackGetFeedbackViewModel();
@@ -285,7 +400,7 @@ namespace WebApp.Controllers
             objviewmodel.GroupId = userDetails.GroupId;
             objviewmodel.PointsAndMessages = FMR.GetPointsAndMessages(objviewmodel.GroupId);
             objviewmodel.lstsalesRepresentive = FMR.GetSalesRepresentiveList(objviewmodel.GroupId);
-            objviewmodel.lstoutletlist =RR.GetOutletList(userDetails.GroupId, userDetails.connectionString);
+            objviewmodel.lstoutletlist = RR.GetOutletList(userDetails.GroupId, userDetails.connectionString);
             return View(objviewmodel);
 
         }
@@ -300,13 +415,13 @@ namespace WebApp.Controllers
             {
                 DateTime fromDate = Convert.ToDateTime(item["fromDate"]);
                 DateTime toDate = Convert.ToDateTime(item["toDate"]);
-                string Groupid= Convert.ToString(item["groupId"]);
+                string Groupid = Convert.ToString(item["groupId"]);
                 string salesR = Convert.ToString(item["selectedsalesR"]);
                 string outletId = Convert.ToString(item["selectedoutlet"]);
 
-                lstreport = FMR.GetReportData(Groupid,fromDate,toDate,salesR,outletId);
+                lstreport = FMR.GetReportData(Groupid, fromDate, toDate, salesR, outletId);
             }
-            
+
             return PartialView("_ReportListing", lstreport);
         }
         public ActionResult GetIsCustomerExist(string mobileNo, string GroupId)
@@ -323,7 +438,7 @@ namespace WebApp.Controllers
             return new JsonResult() { Data = obj, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
 
         }
-        public ActionResult SubmitPoints(string mobileNo, string ranking, string GroupId, string SalesRepresentative,string outletId)
+        public ActionResult SubmitPoints(string mobileNo, string ranking, string GroupId, string SalesRepresentative, string outletId)
         {
             string status = "false";
             CustomerDetail objcustomerdetails = new CustomerDetail();
@@ -344,7 +459,7 @@ namespace WebApp.Controllers
             CustomerDetail objcustomerdetails = new CustomerDetail();
             try
             {
-                status = FMR.Submitotherinfo(MemberName, Gender, BirthDt, mobileNo, AnniversaryDt,Knowabt, GroupId, OutletId);
+                status = FMR.Submitotherinfo(MemberName, Gender, BirthDt, mobileNo, AnniversaryDt, Knowabt, GroupId, OutletId);
             }
             catch (Exception ex)
             {

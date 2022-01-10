@@ -8,10 +8,9 @@
     <div class="container-fluid pt-3 pl-3 pr-3">
         <div class="pt-3 pl-3 pr-3 pb-3 col-md-12 col-lg-12 card">
             <a href="@Url.Action("CreateFeedback", "Feedback")"> <button type="button" class="btn btn-primary pull-right">Update Feedback Details</button></a>
-
         </div>
 
-        <div class="row">
+        <div class="row" style="margin-top:10px;">
             <div class="col-md-12 col-lg-6">
                 <div class="card">
                     <div class="card-header-tab card-header-tab-animation card-header">
@@ -59,6 +58,104 @@
                 </div>
             </div>
         </div>
+        <div class="row" style="margin-top:10px;">
+            <div class="col-md-12 col-lg-12">
+                <div class="card">
+                    <div class="card-header-tab card-header-tab-animation card-header">
+                        <div class="card-header-title">
+                            Time wise
+                        </div>
+                    </div>
+
+                    <div class="card-body">
+                        <div class="tab-content">
+                            <div class="tab-pane fade show active" id="tabs-eg-77">
+                                <div class="card mb-3 widget-chart widget-chart2 text-left w-100">
+                                    <div class="widget-chat-wrapper-outer">
+                                        <div style="display:flex;margin-top:30px;">
+                                            <div class="widget-chart-wrapper widget-chart-wrapper-lg opacity-10 m-0" id="containerLessThan12" style="width:230px;border-right:1px solid black;text-align:center;margin-bottom:10px !important;">
+                                                <span style="font-weight:bold;">Before 12 PM</span>
+                                                <canvas id="cvLessThan12"></canvas>
+                                            </div>
+                                            <div class="widget-chart-wrapper widget-chart-wrapper-lg opacity-10 m-0" id="container12To3" style="width: 230px; border-right: 1px solid black; text-align: center; margin-bottom: 10px !important; ">
+                                                <span style="font-weight:bold;">Between 12 PM to 3 PM</span>
+                                                <canvas id="cv12To3"></canvas>
+                                            </div>
+                                            <div class="widget-chart-wrapper widget-chart-wrapper-lg opacity-10 m-0" id="container3To6" style="width: 230px; border-right: 1px solid black; text-align: center; margin-bottom: 10px !important; ">
+                                                <span style="font-weight:bold;">Between 3 PM to 6 PM</span>
+                                                <canvas id="cv3To6"></canvas>
+                                            </div>
+                                            <div class="widget-chart-wrapper widget-chart-wrapper-lg opacity-10 m-0" id="containerMoreThan6" style="width: 230px; text-align: center; margin-bottom: 10px !important; ">
+                                                <span style="font-weight:bold;">After 6 PM</span>
+                                                <canvas id="cvMoreThan6"></canvas>
+                                            </div>
+                                        </div>                                       
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div> 
+                    <div style="align-items: center; justify-content:center; display: flex; margin-bottom: 20px; margin-top: -25px;">
+                        <div style="width: 20px; height: 10px; border: 1px solid #f990a7; background-color: #f990a7; "></div> &nbsp; Less than 1 &nbsp;&nbsp;&nbsp;
+                        <div style="width: 20px; height: 10px; border: 1px solid #aad2ed; background-color: #aad2ed; "></div> &nbsp; Between 1 and 2 &nbsp;&nbsp;&nbsp;
+                        <div style="width: 20px; height: 10px; border: 1px solid #9966FF; background-color: #9966FF; "></div> &nbsp; Between 2 and 3 &nbsp;&nbsp;&nbsp;
+                        <div style="width: 20px; height: 10px; border: 1px solid #99e5e5; background-color: #99e5e5; "></div> &nbsp; More Than 3 &nbsp;&nbsp;&nbsp;
+                    </div>
+                </div>
+            </div>
+             
+        </div>
+
+        <div class="row" style="margin-top:10px;">
+            <div class="col-md-12 col-lg-6">
+                <div class="card">
+                    <div class="card-header-tab card-header-tab-animation card-header">
+                        <div class="card-header-title">
+                            Outlet wise
+                        </div>
+                    </div>
+
+                    <div class="card-body">
+                        <div class="tab-content">
+                            <div class="tab-pane fade show active" id="tabs-eg-77">
+                                <div class="card mb-3 widget-chart widget-chart2 text-left w-100">
+                                    <div class="widget-chat-wrapper-outer">
+                                        <div id="containerOutletWise">
+                                            <canvas id="cvOutletWise" style=" width:100%; height:100%" !important></canvas>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-12 col-lg-6">
+                <div class="card">
+                    <div class="card-header-tab card-header-tab-animation card-header">
+                        <div class="card-header-title">
+                            Sales Representative wise
+                        </div>
+                    </div>
+
+                    <div class="card-body">
+                        <div class="tab-content">
+                            <div class="tab-pane fade show active" id="tabs-eg-77">
+                                <div class="card mb-3 widget-chart widget-chart2 text-left w-100">
+                                    <div class="widget-chat-wrapper-outer">
+                                        <div id="containerSRWise">
+                                            <canvas id="cvSRWise" style=" width:100%; height:100%" !important></canvas>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
 </div>
 
@@ -66,6 +163,12 @@
     $(document).ready(function () {
         GetNewUserChart();
         GetExistingUserChart();
+        GetLessThan12Chart();
+        Get12To3Chart();
+        Get3To6Chart();
+        GetMoreThan6Chart();
+        GetOutletWiseChart();
+        GetSRWiseChart();
     });
 
     function GetNewUserChart() {
@@ -77,7 +180,6 @@
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             success: function (response) {
-                console.log(response)
                 if (response != null) {
 
                     $('#cvNewCustomer').remove(); // this is my <canvas> element
@@ -92,6 +194,23 @@
                             legend: {
                                 display: true,
                                 position: 'bottom'
+                            },
+                            tooltips: {
+                                enabled: false
+                            },
+                            hover: { mode: null },
+                            plugins: {
+                                datalabels: {
+                                    formatter: (value, ctx) => {
+                                        if (value != 0) {
+                                            return value;
+                                        }
+                                        else {
+                                            return "";
+                                        }
+                                    },
+                                    color: '#000',
+                                }
                             }
                         }
                         var label1 = 'Less than 1';
@@ -143,7 +262,6 @@
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             success: function (response) {
-                console.log(response)
                 if (response != null) {
 
                     $('#cvExistingCustomer').remove(); // this is my <canvas> element
@@ -158,6 +276,20 @@
                             legend: {
                                 display: true,
                                 position: 'bottom'
+                            },
+                            hover: { mode: null },
+                            plugins: {
+                                datalabels: {
+                                    formatter: (value, ctx) => {
+                                        if (value != 0) {
+                                            return value;
+                                        }
+                                        else {
+                                            return "";
+                                        }
+                                    },
+                                    color: '#000',
+                                }
                             }
                         }
                         var label1 = 'Less than 1';
@@ -200,5 +332,550 @@
 
     }
 
+    function GetLessThan12Chart() {
+        $("#divLoader").show();
+        $.ajax({
+            type: "POST",
+             url: '@Url.Action("DashboardLessThank12Data", "Feedback")',
+            data: "",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                if (response != null) {
+                    $('#cvLessThan12').remove(); // this is my <canvas> element
+                    $('#containerLessThan12').append('<canvas id="cvLessThan12"><canvas>');
+                        var options = {
+                            plugins: {
+                                datalabels: {
+                                    display: false
+                                }
+                            },
+                            rotation: (-0.5 * Math.PI) - (-90 / 180 * Math.PI),
+                            legend: {
+                                display: false,
+                                position: 'bottom'
+                            },
+                            tooltips: {
+                                enabled: false
+                            },
+                            hover: { mode: null },
+                            plugins: {
+                                datalabels: {
+                                    formatter: (value, ctx) => {
+                                        if (value != 0) {
+                                            return value;
+                                        }
+                                        else {
+                                            return "";
+                                        }
+                                    },
+                                    color: '#000',
+                                }
+                            }
+                        }
+                        var label1 = 'Less than 1';
+                        var label2 = 'Between 1 and 2';
+                        var label3 = 'Between 2 and 3';
+                        var label4 = 'Greater than 3';
 
+                        var data = {
+                            datasets: [{
+                                data: [...response],
+                                backgroundColor: ["#f990a7", "#aad2ed", "#9966FF", "#99e5e5"]
+                            }],
+
+                            labels: [
+                                label1,
+                                label2,
+                                label3,
+                                label4
+                            ],
+
+                        };
+
+                    var ctx5 = document.getElementById("cvLessThan12").getContext("2d");
+                        window.myBar = new Chart(ctx5, {
+                            type: 'pie',
+                            data: data,
+                            options: options
+
+                        });
+                }
+                $("#divLoader").hide();
+            },
+            failure: function (response) {
+                $("#divLoader").hide();
+            },
+            error: function (response) {
+                $("#divLoader").hide();
+            }
+        });
+
+    }
+
+    function Get12To3Chart() {
+        $("#divLoader").show();
+        $.ajax({
+            type: "POST",
+             url: '@Url.Action("Dashboard12To3Data", "Feedback")',
+            data: "",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                console.log(response)
+                if (response != null) {
+                    $('#cv12To3').remove(); // this is my <canvas> element
+                    $('#container12To3').append('<canvas id="cv12To3"><canvas>');
+                        var options = {
+                            plugins: {
+                                datalabels: {
+                                    display: false
+                                }
+                            },
+                            rotation: (-0.5 * Math.PI) - (-90 / 180 * Math.PI),
+                            legend: {
+                                display: false,
+                                position: 'bottom'
+                            },
+                            tooltips: {
+                                enabled: false
+                            },
+                            hover: { mode: null },
+                            plugins: {
+                                datalabels: {
+                                    formatter: (value, ctx) => {
+                                        if (value != 0) {
+                                            return value;
+                                        }
+                                        else {
+                                            return "";
+                                        }
+                                    },
+                                    color: '#000',
+                                }
+                            }
+                        }
+                        var label1 = 'Less than 1';
+                        var label2 = 'Between 1 and 2';
+                        var label3 = 'Between 2 and 3';
+                        var label4 = 'Greater than 3';
+
+                        var data = {
+                            datasets: [{
+                                data: [...response],
+                                backgroundColor: ["#f990a7", "#aad2ed", "#9966FF", "#99e5e5"]
+                            }],
+
+                            labels: [
+                                label1,
+                                label2,
+                                label3,
+                                label4
+                            ],
+
+                        };
+
+                    var ctx6 = document.getElementById("cv12To3").getContext("2d");
+                        window.myBar = new Chart(ctx6, {
+                            type: 'pie',
+                            data: data,
+                            options: options
+
+                        });
+                }
+                $("#divLoader").hide();
+            },
+            failure: function (response) {
+                $("#divLoader").hide();
+            },
+            error: function (response) {
+                $("#divLoader").hide();
+            }
+        });
+
+    }
+
+    function Get3To6Chart() {
+        $("#divLoader").show();
+        $.ajax({
+            type: "POST",
+             url: '@Url.Action("Dashboard3To6Data", "Feedback")',
+            data: "",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                console.log(response)
+                if (response != null) {
+                    $('#cv3To6').remove(); // this is my <canvas> element
+                    $('#container3To6').append('<canvas id="cv3To6"><canvas>');
+                        var options = {
+                            plugins: {
+                                datalabels: {
+                                    display: false
+                                }
+                            },
+                            rotation: (-0.5 * Math.PI) - (-90 / 180 * Math.PI),
+                            legend: {
+                                display: false,
+                                position: 'bottom'
+                            },
+                            tooltips: {
+                                enabled: false
+                            },
+                            hover: { mode: null },
+                            plugins: {
+                                datalabels: {
+                                    formatter: (value, ctx) => {
+                                        if (value != 0) {                                            
+                                            return value;
+                                        }
+                                        else {
+                                            return "";
+                                        }
+                                    },
+                                    color: '#000',
+                                }
+                            }
+                        }
+                        var label1 = 'Less than 1';
+                        var label2 = 'Between 1 and 2';
+                        var label3 = 'Between 2 and 3';
+                        var label4 = 'Greater than 3';
+
+                        var data = {
+                            datasets: [{
+                                data: [...response],
+                                backgroundColor: ["#f990a7", "#aad2ed", "#9966FF", "#99e5e5"]
+                            }],
+
+                            labels: [
+                                label1,
+                                label2,
+                                label3,
+                                label4
+                            ],
+                        };
+
+                    var ctx7 = document.getElementById("cv3To6").getContext("2d");
+                        window.myBar = new Chart(ctx7, {
+                            type: 'pie',
+                            data: data,
+                            options: options
+
+                        });
+                }
+                $("#divLoader").hide();
+            },
+            failure: function (response) {
+                $("#divLoader").hide();
+            },
+            error: function (response) {
+                $("#divLoader").hide();
+            }
+        });
+
+    }
+
+     function GetMoreThan6Chart() {
+        $("#divLoader").show();
+        $.ajax({
+            type: "POST",
+             url: '@Url.Action("DashboardMoreThan6Data", "Feedback")',
+            data: "",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                console.log(response)
+                if (response != null) {
+                    $('#cvMoreThan6').remove(); // this is my <canvas> element
+                    $('#containerMoreThan6').append('<canvas id="cvMoreThan6"><canvas>');
+                        var options = {
+                            plugins: {
+                                datalabels: {
+                                    display: false
+                                }
+                            },
+                            rotation: (-0.5 * Math.PI) - (-90 / 180 * Math.PI),
+                            legend: {
+                                display: false,
+                                position: 'bottom'
+                            },
+                            tooltips: {
+                                enabled: false
+                            },
+                            hover: { mode: null },
+                            plugins: {
+                                datalabels: {
+                                    formatter: (value, ctx) => {
+                                        if (value != 0) {
+                                            return value;
+                                        }
+                                        else {
+                                            return "";
+                                        }
+                                    },
+                                    color: '#000',
+                                }
+                            }
+                        }
+                        var label1 = 'Less than 1';
+                        var label2 = 'Between 1 and 2';
+                        var label3 = 'Between 2 and 3';
+                        var label4 = 'Greater than 3';
+
+                        var data = {
+                            datasets: [{
+                                data: [...response],
+                                backgroundColor: ["#f990a7", "#aad2ed", "#9966FF", "#99e5e5"]
+                            }],
+
+                            labels: [
+                                label1,
+                                label2,
+                                label3,
+                                label4
+                            ],
+                        };
+
+                    var ctx7 = document.getElementById("cvMoreThan6").getContext("2d");
+                        window.myBar = new Chart(ctx7, {
+                            type: 'pie',
+                            data: data,
+                            options: options
+
+                        });
+                }
+                $("#divLoader").hide();
+            },
+            failure: function (response) {
+                $("#divLoader").hide();
+            },
+            error: function (response) {
+                $("#divLoader").hide();
+            }
+        });
+
+    }
+
+    function GetOutletWiseChart() {
+        $("#divLoader").show();
+        $.ajax({
+            type: "POST",
+             url: '@Url.Action("DashboardOutletWiseData", "Feedback")',
+            data: "",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                if (response != null) {
+                    var names = response[0];
+                    var data = response[1];
+                    $('#cvOutletWise').remove(); // this is my <canvas> element
+                    $('#containerOutletWise').append('<canvas id="cvOutletWise"><canvas>');
+                    var colors = [];
+
+                    jQuery.each(data, function (index, item) {
+                        colors.push(getRandomColor());
+                    });
+
+                    var barChartData =
+                    {
+                        labels: [...names],
+                        datasets: [{
+                            label: '',
+                            backgroundColor: colors,
+                            borderWidth: 2,
+                            data: [...data]
+                        }]
+                    };
+
+
+                    var ctx10 = document.getElementById("cvOutletWise").getContext("2d");
+                    var myChart = new Chart(ctx10,
+                        {
+                            type: 'bar',
+                            data: barChartData,
+                            options:
+                            {
+                                plugins: {
+                                    datalabels: {
+                                        display: false
+                                    }
+                                },
+                                scales: {
+                                    yAxes: [{
+                                        ticks: {
+                                            beginAtZero: true
+                                        }
+                                    }]
+                                },
+                                title:
+                                {
+                                    display: true,
+                                    text: ""
+                                },
+                                legend: {
+                                    display: false
+                                },
+                                responsive: true,
+                                maintainAspectRatio: true,
+                                tooltips: { enabled: false },
+                                hover: { mode: null },
+
+                                "hover": {
+                                    "animationDuration": 0,
+                                    mode: null
+                                },
+                                "animation": {
+                                    "duration": 1,
+                                    "onComplete": function () {
+                                        var chartInstance = this.chart,
+                                            ctx = chartInstance.ctx;
+
+                                        ctx.font = Chart.helpers.fontString(Chart.defaults.global.defaultFontSize, Chart.defaults.global.defaultFontStyle, Chart.defaults.global.defaultFontFamily);
+                                        ctx.textAlign = 'center';
+                                        ctx.textBaseline = 'bottom';
+
+                                        this.data.datasets.forEach(function (dataset, i) {
+                                            var meta = chartInstance.controller.getDatasetMeta(i);
+                                            meta.data.forEach(function (bar, index) {
+                                                var data = dataset.data[index];
+                                                ctx.fillStyle = 'rgba(0, 0, 0, 1)';
+
+                                                var res = addComma(data);
+                                                ctx.fillText(res, bar._model.x, bar._model.y - 5);
+                                            });
+                                        });
+                                    }
+                                }
+                            }
+                        });
+                }
+                $("#divLoader").hide();
+            },
+            failure: function (response) {
+                $("#divLoader").hide();
+            },
+            error: function (response) {
+                $("#divLoader").hide();
+            }
+        });
+
+    }
+
+    function GetSRWiseChart() {
+        $("#divLoader").show();
+        $.ajax({
+            type: "POST",
+             url: '@Url.Action("DashboardSRWiseData", "Feedback")',
+            data: "",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+
+                if (response != null) {
+                    var names = response[0];
+                    var data = response[1];
+                    $('#cvSRWise').remove(); // this is my <canvas> element
+                    $('#containerSRWise').append('<canvas id="cvSRWise"><canvas>');
+                    var colors = [];
+
+                    jQuery.each(data, function (index, item) {
+                        colors.push(getRandomColor());
+                    });
+
+                    var barChartData =
+                    {
+                        labels: [...names],
+                        datasets: [{
+                            label: '',
+                            backgroundColor: colors,
+                            borderWidth: 2,
+                            data: [...data]
+                        }]
+                    };
+
+
+                    var ctx10 = document.getElementById("cvSRWise").getContext("2d");
+                    var myChart = new Chart(ctx10,
+                        {
+                            type: 'bar',
+                            data: barChartData,
+                            options:
+                            {
+                                plugins: {
+                                    datalabels: {
+                                        display: false
+                                    }
+                                },
+                                scales: {
+                                    yAxes: [{
+                                        ticks: {
+                                            beginAtZero: true
+                                        }
+                                    }]
+                                },
+                                title:
+                                {
+                                    display: true,
+                                    text: ""
+                                },
+                                legend: {
+                                    display: false
+                                },
+                                responsive: true,
+                                maintainAspectRatio: true,
+                                tooltips: { enabled: false },
+                                hover: { mode: null },
+
+                                "hover": {
+                                    "animationDuration": 0,
+                                    mode: null
+                                },
+                                "animation": {
+                                    "duration": 1,
+                                    "onComplete": function () {
+                                        var chartInstance = this.chart,
+                                            ctx = chartInstance.ctx;
+
+                                        ctx.font = Chart.helpers.fontString(Chart.defaults.global.defaultFontSize, Chart.defaults.global.defaultFontStyle, Chart.defaults.global.defaultFontFamily);
+                                        ctx.textAlign = 'center';
+                                        ctx.textBaseline = 'bottom';
+
+                                        this.data.datasets.forEach(function (dataset, i) {
+                                            var meta = chartInstance.controller.getDatasetMeta(i);
+                                            meta.data.forEach(function (bar, index) {
+                                                var data = dataset.data[index];
+                                                ctx.fillStyle = 'rgba(0, 0, 0, 1)';
+
+                                                var res = addComma(data);
+                                                ctx.fillText(res, bar._model.x, bar._model.y - 5);
+                                            });
+                                        });
+                                    }
+                                }
+                            }
+                        });
+                }
+                $("#divLoader").hide();
+            },
+            failure: function (response) {
+                $("#divLoader").hide();
+            },
+            error: function (response) {
+                $("#divLoader").hide();
+            }
+        });
+
+    }
+
+
+
+    function getRandomColor() {
+        var letters = '0123456789ABCDEF';
+        var color = '#';
+        for (var i = 0; i < 6; i++) {
+            color += letters[Math.floor(Math.random() * 16)];
+        }
+        return color;
+    }
 </script>

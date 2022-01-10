@@ -26,8 +26,7 @@ namespace BOTS_BL.Models
         [StringLength(5)]
         public string QuestionId { get; set; }
 
-        [StringLength(5)]
-        public string QuestionPoints { get; set; }
+        public int QuestionPoints { get; set; }
 
         [Column(TypeName = "date")]
         public DateTime? DOB { get; set; }

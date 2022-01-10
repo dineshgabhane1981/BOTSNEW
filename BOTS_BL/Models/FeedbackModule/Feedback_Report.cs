@@ -15,10 +15,10 @@ namespace BOTS_BL.Models.FeedbackModule
         public string MemberName { get; set; }
         public string Type { get; set; }
         public string Datetime { get; set; }
-        public string Q1 { get; set; }
-        public string Q2 { get; set; }
-        public string Q3 { get; set; }
-        public string Q4 { get; set; }
+        public int Q1 { get; set; }
+        public int Q2 { get; set; }
+        public int Q3 { get; set; }
+        public int Q4 { get; set; }
         public string Source { get; set; }
         public string Txn { get; set; }
         public decimal? TxnAmount { get; set; }

@@ -9,8 +9,25 @@ namespace BOTS_BL.Models
     public class DashboardNewAndExisting
     {
         public string MobileNo { get; set; }
-        public string QuestionPoints { get; set; }
+        public int QuestionPoints { get; set; }
         public string MemberType { get; set; }
+        public decimal AvgPoints { get; set; }
+    }
+
+    public class DashboardOutletWise
+    {
+        public string OutletName { get; set; }
+        public double AvgPoints { get; set; }
+    }
+    public class DashboardSRWise
+    {
+        public string SRName { get; set; }
+        public double AvgPoints { get; set; }
+    }
+
+    public class DashboardTimeWise
+    {
+        public int timeHr { get; set; }
         public decimal AvgPoints { get; set; }
     }
 }
