@@ -252,8 +252,34 @@ namespace WebApp.Controllers
         }
         public ActionResult Report()
         {
-            return View();
+            FeedbackGetFeedbackViewModel objviewmodel = new FeedbackGetFeedbackViewModel();
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            objviewmodel.GroupId = userDetails.GroupId;
+            objviewmodel.PointsAndMessages = FMR.GetPointsAndMessages(objviewmodel.GroupId);
+            objviewmodel.lstsalesRepresentive = FMR.GetSalesRepresentiveList(objviewmodel.GroupId);
+            objviewmodel.lstoutletlist =RR.GetOutletList(userDetails.GroupId, userDetails.connectionString);
+            return View(objviewmodel);
 
+        }
+        public ActionResult GetFilteredReport(string jsonData)
+        {
+            FeedbackGetFeedbackViewModel objviewmodel = new FeedbackGetFeedbackViewModel();
+            List<Feedback_Report> lstreport = new List<Feedback_Report>();
+            JavaScriptSerializer json_serializer = new JavaScriptSerializer();
+            json_serializer.MaxJsonLength = int.MaxValue;
+            object[] objData = (object[])json_serializer.DeserializeObject(jsonData);
+            foreach (Dictionary<string, object> item in objData)
+            {
+                DateTime fromDate = Convert.ToDateTime(item["fromDate"]);
+                DateTime toDate = Convert.ToDateTime(item["toDate"]);
+                string Groupid= Convert.ToString(item["groupId"]);
+                string salesR = Convert.ToString(item["selectedsalesR"]);
+                string outletId = Convert.ToString(item["selectedoutlet"]);
+
+                lstreport = FMR.GetReportData(Groupid,fromDate,toDate,salesR,outletId);
+            }
+            
+            return PartialView("_ReportListing", lstreport);
         }
         public ActionResult GetIsCustomerExist(string mobileNo, string GroupId)
         {
