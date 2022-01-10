@@ -171,6 +171,7 @@
     <Compile Include="ViewModel\DiscussionViewModel.cs" />
     <Compile Include="ViewModel\FeedbackAuthorViewModel.cs" />
     <Compile Include="ViewModel\FeedbackConfigViewModel.cs" />
+    <Compile Include="ViewModel\FeedbackDashboardViewModel.cs" />
     <Compile Include="ViewModel\FeedbackGetFeedbackViewModel.cs" />
     <Compile Include="ViewModel\OnBoardingSalesViewModel.cs" />
     <Compile Include="ViewModel\OtherReportProductwiseViewModel.cs" />

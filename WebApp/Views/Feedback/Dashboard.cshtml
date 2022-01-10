@@ -1,4 +1,4 @@
-﻿
+﻿@model  WebApp.ViewModel.FeedbackDashboardViewModel
 @{
     ViewBag.Title = "Dashboard";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -7,10 +7,30 @@
 <div class="app-main__inner">
     <div class="container-fluid pt-3 pl-3 pr-3">
         <div class="pt-3 pl-3 pr-3 pb-3 col-md-12 col-lg-12 card">
-            <a href="@Url.Action("CreateFeedback", "Feedback")"> <button type="button" class="btn btn-primary pull-right">Update Feedback Details</button></a>
+            <div style="text-align:right;">
+                <a href="@Url.Action("CreateFeedback", "Feedback")"><button type="button" class="btn btn-primary pull-right">Update Feedback Details</button></a>
+            </div>
+
+            <div style="margin-bottom:20px;">
+                Select Outlet :  @Html.DropDownListFor(x => Model.SRChart, new SelectList(Model.lstOutlet, "Value", "Text"), "All", htmlAttributes: new { @class = "input100", @id = "OutletList" })
+            </div>
+            <div class="row">
+                <div class="col-md-4 col-xl-4">
+                    From Date  <input type="text" class="input50" placeholder="From Date" readonly id="dtFrom" />&nbsp;&nbsp;&nbsp;&nbsp;
+                </div>
+                <div class="col-md-4 col-xl-4">
+                    To Date  <input type="text" class="input50" placeholder="To Date" readonly id="dtTo" />
+                </div>
+                <div class="col-md-2 col-xl-2">
+                    <button id="btnFilter" class="btn btn-primary login-btn" style="margin-top:10px;">Filter</button>
+                </div>
+            </div>
+
         </div>
 
         <div class="row" style="margin-top:10px;">
+            @Html.HiddenFor(model => model.SRChart, new { @id = "hdnSRChart" })
+
             <div class="col-md-12 col-lg-6">
                 <div class="card">
                     <div class="card-header-tab card-header-tab-animation card-header">
@@ -66,7 +86,6 @@
                             Time wise
                         </div>
                     </div>
-
                     <div class="card-body">
                         <div class="tab-content">
                             <div class="tab-pane fade show active" id="tabs-eg-77">
@@ -89,12 +108,12 @@
                                                 <span style="font-weight:bold;">After 6 PM</span>
                                                 <canvas id="cvMoreThan6"></canvas>
                                             </div>
-                                        </div>                                       
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div> 
+                    </div>
                     <div style="align-items: center; justify-content:center; display: flex; margin-bottom: 20px; margin-top: -25px;">
                         <div style="width: 20px; height: 10px; border: 1px solid #f990a7; background-color: #f990a7; "></div> &nbsp; Less than 1 &nbsp;&nbsp;&nbsp;
                         <div style="width: 20px; height: 10px; border: 1px solid #aad2ed; background-color: #aad2ed; "></div> &nbsp; Between 1 and 2 &nbsp;&nbsp;&nbsp;
@@ -103,7 +122,6 @@
                     </div>
                 </div>
             </div>
-             
         </div>
 
         <div class="row" style="margin-top:10px;">
@@ -130,37 +148,55 @@
                     </div>
                 </div>
             </div>
+            @if (Model.feedbackConfig != null)
+            {
+                if (Model.feedbackConfig.IsAddRepresentative)
+                {
+                    <div class="col-md-12 col-lg-6">
+                        <div class="card">
+                            <div class="card-header-tab card-header-tab-animation card-header">
+                                <div class="card-header-title">
+                                    Sales Representative wise
+                                </div>
+                            </div>
 
-            <div class="col-md-12 col-lg-6">
-                <div class="card">
-                    <div class="card-header-tab card-header-tab-animation card-header">
-                        <div class="card-header-title">
-                            Sales Representative wise
-                        </div>
-                    </div>
-
-                    <div class="card-body">
-                        <div class="tab-content">
-                            <div class="tab-pane fade show active" id="tabs-eg-77">
-                                <div class="card mb-3 widget-chart widget-chart2 text-left w-100">
-                                    <div class="widget-chat-wrapper-outer">
-                                        <div id="containerSRWise">
-                                            <canvas id="cvSRWise" style=" width:100%; height:100%" !important></canvas>
+                            <div class="card-body">
+                                <div class="tab-content">
+                                    <div class="tab-pane fade show active" id="tabs-eg-77">
+                                        <div class="card mb-3 widget-chart widget-chart2 text-left w-100">
+                                            <div class="widget-chat-wrapper-outer">
+                                                <div id="containerSRWise">
+                                                    <canvas id="cvSRWise" style="width:100%; height:100% !important"></canvas>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            </div>
+
+                }
+            }
         </div>
 
     </div>
 </div>
-
+<script src="~/Scripts/jquery-ui-1.12.1.js"></script>
+<script src="~/Scripts/jquery-ui-1.12.1.min.js"></script>
+<link href="~/Content/themes/base/jquery-ui.min.css" rel="stylesheet" />
+<link href="~/Content/themes/base/jquery-ui.css" rel="stylesheet" />
 <script>
     $(document).ready(function () {
+        var today = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
+        $("#dtFrom").datepicker({
+            dateFormat: "yy-mm-dd",
+            maxDate: today,
+        });
+        $("#dtTo").datepicker({
+            dateFormat: "yy-mm-dd",
+            maxDate: today,
+        });
         GetNewUserChart();
         GetExistingUserChart();
         GetLessThan12Chart();
@@ -168,7 +204,10 @@
         Get3To6Chart();
         GetMoreThan6Chart();
         GetOutletWiseChart();
-        GetSRWiseChart();
+
+        if ($("#hdnSRChart").val()=="True") {
+            GetSRWiseChart();
+        }
     });
 
     function GetNewUserChart() {
@@ -526,7 +565,7 @@
                             plugins: {
                                 datalabels: {
                                     formatter: (value, ctx) => {
-                                        if (value != 0) {                                            
+                                        if (value != 0) {
                                             return value;
                                         }
                                         else {

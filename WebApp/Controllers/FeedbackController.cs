@@ -247,7 +247,21 @@ namespace WebApp.Controllers
 
         public ActionResult Dashboard()
         {
-            return View();
+            FeedbackDashboardViewModel objData = new FeedbackDashboardViewModel();
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            objData.feedbackConfig = FMR.GetPointsAndMessages(userDetails.GroupId);
+            if (objData.feedbackConfig != null)
+            {
+                if (objData.feedbackConfig.IsAddRepresentative)
+                    objData.SRChart = true;
+                else
+                    objData.SRChart = false;
+
+            }
+            else
+                objData.SRChart = false;
+            objData.lstOutlet = RR.GetOutletList(userDetails.GroupId, userDetails.connectionString);
+            return View(objData);
         }
 
         public JsonResult DashboardNewData()
@@ -316,7 +330,7 @@ namespace WebApp.Controllers
 
                 foreach (var item in lstSRWise)
                 {
-                    if(!string.IsNullOrEmpty(item.SRName))
+                    if (!string.IsNullOrEmpty(item.SRName))
                     {
                         nameList.Add(item.SRName);
                     }
@@ -324,7 +338,7 @@ namespace WebApp.Controllers
                     {
                         nameList.Add("Other");
                     }
-                    
+
                     dataList.Add(item.AvgPoints);
                 }
                 lstData.Add(nameList);
@@ -343,7 +357,7 @@ namespace WebApp.Controllers
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
             try
             {
-                lstData = FMR.GetTimeWiseData(userDetails.GroupId,"1");
+                lstData = FMR.GetTimeWiseData(userDetails.GroupId, "1");
             }
             catch (Exception ex)
             {
@@ -357,7 +371,7 @@ namespace WebApp.Controllers
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
             try
             {
-                lstData = FMR.GetTimeWiseData(userDetails.GroupId,"2");
+                lstData = FMR.GetTimeWiseData(userDetails.GroupId, "2");
             }
             catch (Exception ex)
             {
