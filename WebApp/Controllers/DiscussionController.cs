@@ -13,6 +13,11 @@ using System.Threading.Tasks;
 using System.Net.Http;
 using Newtonsoft.Json;
 using BOTS_BL.Models.CommonDB;
+using System.ComponentModel;
+using System.Data;
+using ClosedXML.Excel;
+using System.Globalization;
+using System.IO;
 
 namespace WebApp.Controllers
 {
@@ -20,7 +25,7 @@ namespace WebApp.Controllers
     {
         DiscussionsRepository DR = new DiscussionsRepository();
         CustomerRepository CR = new CustomerRepository();
-       // CustomerOnBoardingRepository COR = new CustomerOnBoardingRepository();
+        Exceptions newexception = new Exceptions();
         // GET: Discussion
         public ActionResult Index()
         {
@@ -140,6 +145,65 @@ namespace WebApp.Controllers
                 lstdashboard = DR.GetfilteredDiscussionData(status, calltype, groupnm, fromDate, toDate, raisedby);
             }
             return PartialView("_CommonDiscussionList", lstdashboard);
+        }
+        public ActionResult ExportToExcelCommonFilteredDiscussion(string fromdt, string Todt, string Groupnm, int calltype, string status, string raised,string ReportName)
+        {
+            System.Data.DataTable table = new System.Data.DataTable();
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            try
+            {
+                List<DiscussionDetails> lstdashboard = new List<DiscussionDetails>();
+               // List<OutletwiseTransaction> lstOutletWiseTransaction = new List<OutletwiseTransaction>();
+               // lstOutletWiseTransaction = RR.GetOutletWiseTransactionList(userDetails.GroupId, DateRangeFlag, fromDate, toDate, outletId, EnrolmentDataFlag, userDetails.connectionString);
+                lstdashboard = DR.GetfilteredDiscussionData(status, calltype, Groupnm, fromdt, Todt, raised);
+                PropertyDescriptorCollection properties = TypeDescriptor.GetProperties(typeof(DiscussionDetails));
+                foreach (PropertyDescriptor prop in properties)
+                    table.Columns.Add(prop.Name, Nullable.GetUnderlyingType(prop.PropertyType) ?? prop.PropertyType);
+
+                foreach (DiscussionDetails item in lstdashboard)
+                {
+                    DataRow row = table.NewRow();
+                    foreach (PropertyDescriptor prop in properties)
+                        row[prop.Name] = prop.GetValue(item) ?? DBNull.Value;
+
+                    table.Rows.Add(row);
+                }
+                string fileName = "BOTS_" + ReportName + ".xlsx";
+                using (XLWorkbook wb = new XLWorkbook())
+                {
+
+                    //excelSheet.Name
+                    table.TableName = ReportName;
+                    IXLWorksheet worksheet = wb.AddWorksheet(sheetName: ReportName);
+                    worksheet.Cell(1, 1).Value = "Report Name";
+                    worksheet.Cell(1, 2).Value = "Discussion Report";
+                    worksheet.Cell(2, 1).Value = "Group Name";
+                    worksheet.Cell(2, 2).Value = Groupnm;
+                    worksheet.Cell(3, 1).Value = "Period";
+                    worksheet.Cell(3, 2).Value = fromdt + "-" + Todt;
+                    worksheet.Cell(4, 1).Value = "Call Type";
+                    worksheet.Cell(4, 2).Value = calltype;
+                    worksheet.Cell(5, 1).Value = "Status";
+                    worksheet.Cell(5, 2).Value = status;
+                    worksheet.Cell(6, 1).Value = "Raised By";
+                    worksheet.Cell(6, 2).Value = raised;
+                    worksheet.Cell(9, 1).InsertTable(table);
+                    //wb.Worksheets.Add(table);
+                    using (MemoryStream stream = new MemoryStream())
+                    {
+                        wb.SaveAs(stream);
+                        
+                        return File(stream.ToArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, userDetails.GroupId);
+                return null;
+            }
+
+
         }
     }
 }
