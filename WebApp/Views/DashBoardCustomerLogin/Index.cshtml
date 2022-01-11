@@ -186,14 +186,22 @@
                         BindcustomerList();
                         $("#txtcustomerloginNm").val("");
                         $('#ddlCustomerlogintype').prop('selectedIndex', 0);
-                        $('#ddloutletlist').prop('selectedIndex', 0);
-                       
-                       
+                        $('#ddloutletlist').prop('selectedIndex', 0);            
                        
                     }
-                    else {
-                        toastr.error('error occured while saving data');
+                    if (result.responseText == "False") {
+                       // toastr.error('error occured while saving data');
                         $("#divLoader").hide();
+                        cuteAlert({
+                            type: "error",
+                            title: "Oops..",
+                            message: "Customer Login Already Created",
+                            buttonText: "Okay"
+                        })
+                        $("#txtcustomerloginNm").val("");
+                        $('#ddlCustomerlogintype').prop('selectedIndex', 0);
+                        $('#ddloutletlist').prop('selectedIndex', 0);
+                        return false;
                     }
                 }
             });

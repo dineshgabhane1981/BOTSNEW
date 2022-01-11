@@ -21,36 +21,44 @@ namespace BOTS_BL.Repository
             {
                 using (var context = new CommonDBContext())
                 {
-                    objdashboardlogindeatils.UserId = objdashboardlogin.GroupId;
-                    objdashboardlogindeatils.LoginId = objdashboardlogin.MobileNo;
-                    objdashboardlogindeatils.Password = "123";
-                    objdashboardlogindeatils.UserName = objdashboardlogin.CustomerName;
-                    if (objdashboardlogin.LoginType == "02")
+                    objdashboardlogindeatils = context.CustomerLoginDetails.Where(x => x.LoginId == objdashboardlogin.MobileNo && x.GroupId == objdashboardlogin.GroupId).FirstOrDefault();
+                    if (objdashboardlogindeatils == null)
                     {
-                        objdashboardlogindeatils.LevelIndicator = "02";
-                        objdashboardlogindeatils.CreatedDate = DateTime.UtcNow.Date;
-                        objdashboardlogindeatils.LoginStatus = true;
-                        objdashboardlogindeatils.UserStatus = true;
-                        
+                        objdashboardlogindeatils.UserId = objdashboardlogin.GroupId;
+                        objdashboardlogindeatils.LoginId = objdashboardlogin.MobileNo;
+                        objdashboardlogindeatils.Password = "123";
+                        objdashboardlogindeatils.UserName = objdashboardlogin.CustomerName;
+                        if (objdashboardlogin.LoginType == "02")
+                        {
+                            objdashboardlogindeatils.LevelIndicator = "02";
+                            objdashboardlogindeatils.CreatedDate = DateTime.UtcNow.Date;
+                            objdashboardlogindeatils.LoginStatus = true;
+                            objdashboardlogindeatils.UserStatus = true;
 
+
+                        }
+                        else
+                        {
+                            objdashboardlogindeatils.LevelIndicator = "04";
+                            objdashboardlogindeatils.CreatedDate = DateTime.UtcNow.Date;
+                            objdashboardlogindeatils.LoginStatus = true;
+                            objdashboardlogindeatils.UserStatus = true;
+                            objdashboardlogindeatils.OutletOrBrandId = objdashboardlogin.OutletOrBrandId;
+                        }
+                        objdashboardlogindeatils.GroupId = objdashboardlogin.GroupId;
+                        objdashboardlogindeatils.EmailId = null;
+                        objdashboardlogindeatils.MobileNo = null;
+                        objdashboardlogindeatils.LoginType = null;
+
+                        context.CustomerLoginDetails.AddOrUpdate(objdashboardlogindeatils);
+                        context.SaveChanges();
+
+                        status = true;
                     }
                     else
                     {
-                        objdashboardlogindeatils.LevelIndicator = "04";
-                        objdashboardlogindeatils.CreatedDate = DateTime.UtcNow.Date;
-                        objdashboardlogindeatils.LoginStatus = true;
-                        objdashboardlogindeatils.UserStatus = true;
-                        objdashboardlogindeatils.OutletOrBrandId = objdashboardlogin.OutletOrBrandId;
+                        status = false;
                     }
-                    objdashboardlogindeatils.GroupId = objdashboardlogin.GroupId;
-                    objdashboardlogindeatils.EmailId = null;
-                    objdashboardlogindeatils.MobileNo = null;
-                    objdashboardlogindeatils.LoginType = null;
-
-                    context.CustomerLoginDetails.AddOrUpdate(objdashboardlogindeatils);
-                    context.SaveChanges();
-
-                    status = true;
                 }
             }
             catch (Exception ex)
