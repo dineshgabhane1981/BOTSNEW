@@ -50,7 +50,7 @@
                                 <td>@item.MemberName</td>
                                 <td>@item.Type</td>
                                 <td>@item.Datetime</td>
-                                @if (!string.IsNullOrEmpty(item.Q1))
+                                @if (item.Q1 >0)
                                 {
                                     <td>@item.Q1</td>
                                 }
@@ -58,7 +58,7 @@
                                 {
                                     <td>--</td>
                                 }
-                                @if (!string.IsNullOrEmpty(item.Q2))
+                                @if (item.Q2 >0)
                                 {
                                     <td>@item.Q2</td>
                                 }
@@ -66,7 +66,7 @@
                                 {
                                     <td>--</td>
                                 }
-                                @if (!string.IsNullOrEmpty(item.Q3))
+                                @if (item.Q3>0)
                                 {
                                     <td>@item.Q3</td>
                                 }
@@ -74,7 +74,7 @@
                                 {
                                     <td>--</td>
                                 }
-                                @if (!string.IsNullOrEmpty(item.Q4))
+                                @if (item.Q4>0)
                                 {
                                     <td>@item.Q4</td>
                                 }
