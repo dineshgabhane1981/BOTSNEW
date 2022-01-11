@@ -23,28 +23,35 @@
                 </div>
 
             </div>
-
             <div class="row mt-3 mb-4">
                 <div class="col-md-4 col-xl-6">
-                    Select Call Type
+                    Select Raise by                    
 
-                    @Html.DropDownList("calltype", new SelectList(ViewBag.lstCallTypes, "Value", "Text"), htmlAttributes: new { @class = "input100", @id = "ddlcalltype" })
+                    @Html.DropDownList("RaisedBy", new SelectList(ViewBag.lstRMAssigned, "Value", "Text"), htmlAttributes: new { @class = "input100", @id = "ddlRaisedBy" })
                 </div>
-                <div class="col-md-4 col-xl-6">
-                    <input type="radio" id="rdnnorange" checked name="cust_type" /> No Range &nbsp;&nbsp;&nbsp;&nbsp;
-                    <input type="radio" id="rdndaterange" name="cust_type" /> Date Range <br /><br />
-                    <input id="txtFromDate" placeholder="From Date" class="input50" />&nbsp;&nbsp;&nbsp;&nbsp;
-                    <input id="txtToDate" placeholder="To Date" class="input50" />
-                    <button type="button" id="btnFilter" style="margin-left:17px;margin-top:5px;" class="btn btn-primary"><b>FILTER</b></button>
-                    <button type="button" id="btncancel" style="margin-left:17px;margin-top:5px;" class="btn btn-primary"><b>CANCEL</b></button>
-                </div>
+
             </div>
+                <div class="row mt-3 mb-4">
+                    <div class="col-md-4 col-xl-6">
+                        Select Call Type
 
-            <div id="dvListing">
-                @Html.Partial("~/Views/Discussion/_CommonDiscussionList.cshtml", Model)
+                        @Html.DropDownList("calltype", new SelectList(ViewBag.lstCallTypes, "Value", "Text"), htmlAttributes: new { @class = "input100", @id = "ddlcalltype" })
+                    </div>
+                    <div class="col-md-4 col-xl-6">
+                        <input type="radio" id="rdnnorange" checked name="cust_type" /> No Range &nbsp;&nbsp;&nbsp;&nbsp;
+                        <input type="radio" id="rdndaterange" name="cust_type" /> Date Range <br /><br />
+                        <input id="txtFromDate" placeholder="From Date" class="input50" />&nbsp;&nbsp;&nbsp;&nbsp;
+                        <input id="txtToDate" placeholder="To Date" class="input50" />
+                        <button type="button" id="btnFilter" style="margin-left:17px;margin-top:5px;" class="btn btn-primary"><b>FILTER</b></button>
+                        <button type="button" id="btncancel" style="margin-left:17px;margin-top:5px;" class="btn btn-primary"><b>CANCEL</b></button>
+                    </div>
+                </div>
+
+                <div id="dvListing">
+                    @Html.Partial("~/Views/Discussion/_CommonDiscussionList.cshtml", Model)
+                </div>
             </div>
         </div>
-    </div>
 </div>
 <script src="~/Scripts/jquery-ui-1.12.1.js"></script>
 <script src="~/Scripts/jquery-ui-1.12.1.min.js"></script>
@@ -88,6 +95,7 @@
         $('#ddlGroupnm').prop('selectedIndex', 0);
         $('#ddlstatus').prop('selectedIndex', 0);
         $('#ddlcalltype').prop('selectedIndex', 0);
+        $('#ddlRaisedBy').prop('selectedIndex', 0);
         $("#dvListing").hide();
 
     }
@@ -142,6 +150,13 @@
         }
         else {
             item["selectedstatus"] = null;
+        }
+        if ($("#ddlRaisedBy").prop('selectedIndex') !== 0) {
+
+            item["selectedRaisedBy"] = $("#ddlRaisedBy option:selected").val();
+        }
+        else {
+            item["selectedRaisedBy"] = null;
         }
         FilterData.push(item);
         var data = JSON.stringify(FilterData);

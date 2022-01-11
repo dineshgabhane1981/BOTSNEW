@@ -20,6 +20,7 @@ namespace WebApp.Controllers
     {
         DiscussionsRepository DR = new DiscussionsRepository();
         CustomerRepository CR = new CustomerRepository();
+       // CustomerOnBoardingRepository COR = new CustomerOnBoardingRepository();
         // GET: Discussion
         public ActionResult Index()
         {
@@ -72,7 +73,8 @@ namespace WebApp.Controllers
             ViewBag.lstcommonstatus = DR.CommonStatus();
             ViewBag.lstgroupdetails = DR.GetGroupDetails();
             ViewBag.lstCallTypes = DR.GetCallTypes();
-            lstdashboard = DR.GetfilteredDiscussionData("", 0, "", "", "");
+            ViewBag.lstRMAssigned = DR.GetRaisedby();
+            lstdashboard = DR.GetfilteredDiscussionData("", 0, "", "", "","");
             return View(lstdashboard);
         }
 
@@ -133,8 +135,9 @@ namespace WebApp.Controllers
                 string groupnm = Convert.ToString(item["selectedgrp"]);
                 int calltype = Convert.ToInt32(item["selectedcall"]);
                 string status = Convert.ToString(item["selectedstatus"]);
+                string raisedby = Convert.ToString(item["selectedRaisedBy"]);
 
-                lstdashboard = DR.GetfilteredDiscussionData(status, calltype, groupnm, fromDate, toDate);
+                lstdashboard = DR.GetfilteredDiscussionData(status, calltype, groupnm, fromDate, toDate, raisedby);
             }
             return PartialView("_CommonDiscussionList", lstdashboard);
         }

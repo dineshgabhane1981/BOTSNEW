@@ -264,8 +264,25 @@ namespace BOTS_BL.Repository
         {
             return new SelectListItem[6] { new SelectListItem() { Text = "--Select--", Value = "0" }, new SelectListItem() { Text = "Completed", Value = "Completed" }, new SelectListItem() { Text = "WIP", Value = "WIP" }, new SelectListItem() { Text = "WIP>3days", Value = "WIP3" }, new SelectListItem() { Text = "WIP>7days", Value = "WIP7" }, new SelectListItem() { Text = "WIP>15days", Value = "WIP15" } };
         }
-
-        public List<DiscussionDetails> GetfilteredDiscussionData(string status, int calltype, string groupnm, string fromDate, string toDate)
+        public List<SelectListItem> GetRaisedby()
+        {
+            List<SelectListItem> lstRMAssigned = new List<SelectListItem>();
+            using (var context = new CommonDBContext())
+            {
+                var raised = context.CustomerLoginDetails.Where(x => x.LoginType == "7").ToList();
+                lstRMAssigned.Add(new SelectListItem() { Text = "--Select--", Value = "0" });
+                foreach (var item in raised)
+                {
+                    lstRMAssigned.Add(new SelectListItem
+                    {
+                        Text = item.UserName,
+                        Value = Convert.ToString(item.LoginId)
+                    });
+                }
+            }
+            return lstRMAssigned;
+        }
+        public List<DiscussionDetails> GetfilteredDiscussionData(string status, int calltype, string groupnm, string fromDate, string toDate,string raisedby)
         {
             List<DiscussionDetails> lstdiscuss = new List<DiscussionDetails>();
             List<BOTS_TblDiscussion> lsttbldiscuss = new List<BOTS_TblDiscussion>();
@@ -326,7 +343,10 @@ namespace BOTS_BL.Repository
                         list = list.Where(x => x.AddedDate > fmdt && x.AddedDate < todt).ToList();
 
                     }
-
+                    if(raisedby !="")
+                    {
+                        list = list.Where(x => x.AddedBy == raisedby).ToList();
+                    }
                     lstdiscuss = (from c in list
                                   join gd in context.tblGroupDetails on c.GroupId equals gd.GroupId.ToString()
                                   join ct in context.BOTS_TblCallTypes on c.CallType equals ct.Id                                  
