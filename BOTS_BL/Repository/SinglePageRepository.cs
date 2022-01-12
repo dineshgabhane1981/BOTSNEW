@@ -3,9 +3,13 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Reflection;
 using BOTS_BL.Models;
 using BOTS_BL.Models.CommonDB;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace BOTS_BL.Repository
 {
@@ -344,38 +348,76 @@ namespace BOTS_BL.Repository
         public CommunicationsinglePageData GetCommunicationWhatsAppExpiryData()
         {
             CommunicationsinglePageData lstSmsbalance = new CommunicationsinglePageData();
-            DateTime next10day = DateTime.Now.AddDays(10);
+            Root objroot = new Root();
+            Response objresponce = new Response();
+            UserList objuserlist = new UserList();
+            User objuser = new User();
             List<SMSBalance> lstbalance = new List<SMSBalance>();
+            DateTime next10day = DateTime.Now.AddDays(10);
+            
 
             DataSet retVal = new DataSet();
-
-            try
+            var baseAddress = "https://smsnotify.one/SMSApi/reseller/readuser?userid=Blueotrans&password=123456&output=json";
+            using (var client = new HttpClient())
             {
-                SqlConnection sqlConn = new SqlConnection("Data Source=13.233.128.61;Initial Catalog=CommonDBLoyalty;user id = sa; password=BO%Admin#LY!4@");
-
-                SqlCommand cmdReport = new SqlCommand("sp_GetCommunicationDataforSinglePage", sqlConn);
-                SqlDataAdapter daReport = new SqlDataAdapter(cmdReport);
-                using (cmdReport)
+                using (var response1 = client.GetAsync(baseAddress).Result)
                 {
-                    cmdReport.CommandType = CommandType.StoredProcedure;
-                    daReport.Fill(retVal);
-                }
-                if(retVal!=null)
-                {   
-                    lstSmsbalance.objSMSBalance = ConvertDataTable<SMSBalance>(retVal.Tables[3]);
-                    lstSmsbalance.objWhatsAppBalance = ConvertDataTable<WhatsAppBalance>(retVal.Tables[1]);
-                    lstSmsbalance.objVirtualSMSBalance = ConvertDataTable<VirtualSMSBalance>(retVal.Tables[2]);
-                    lstSmsbalance.objWhatsAppExpiryDate = ConvertDataTable<WhatsAppExpiryDate>(retVal.Tables[0]);
-                }
-            }
-            catch (Exception ex)
-            {
-                newexception.AddException(ex, "");
-            }
+                    if (response1.IsSuccessStatusCode)
+                    {
+                        client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                        var response2 = client.GetStringAsync(new Uri(baseAddress)).Result;
+                      
+                        var rootlist = JsonConvert.DeserializeObject<Dictionary<string, dynamic>>(response2);
+                        JObject jsonObj = JObject.Parse(response2);
+                         IList<JToken> hotels = jsonObj["response"]["userList"].Children().ToList();
+                        IEnumerable<JToken> pricyProducts = jsonObj.SelectTokens("$..user");
+                        
+                        
 
+                        foreach (JToken item in pricyProducts)
+                        {
+                            SMSBalance objbalance = new SMSBalance();
+                            objbalance.OutletName = item["userName"].ToString();
+                            objbalance.BrandName = item["userName"].ToString();
+                            objbalance.SmsBalance = (string)item["smsBalance"];
+                            objbalance.Status = (string)item["userStatus"];
+                            lstbalance.Add(objbalance);
+                        }
+                        
+                    }
+                    else
+                    {
+                        Console.WriteLine("{0} ({1})", (int)response1.StatusCode, response1.ReasonPhrase);
+                    }
+                }
+            }
+            //try
+            //{
+            //    SqlConnection sqlConn = new SqlConnection("Data Source=13.233.128.61;Initial Catalog=CommonDBLoyalty;user id = sa; password=BO%Admin#LY!4@");
+
+            //    SqlCommand cmdReport = new SqlCommand("sp_GetCommunicationDataforSinglePage", sqlConn);
+            //    SqlDataAdapter daReport = new SqlDataAdapter(cmdReport);
+            //    using (cmdReport)
+            //    {
+            //        cmdReport.CommandType = CommandType.StoredProcedure;
+            //        daReport.Fill(retVal);
+            //    }
+            //    if(retVal!=null)
+            //    {   
+            //        lstSmsbalance.objSMSBalance = ConvertDataTable<SMSBalance>(retVal.Tables[3]);
+            //        lstSmsbalance.objWhatsAppBalance = ConvertDataTable<WhatsAppBalance>(retVal.Tables[1]);
+            //        lstSmsbalance.objVirtualSMSBalance = ConvertDataTable<VirtualSMSBalance>(retVal.Tables[2]);
+            //        lstSmsbalance.objWhatsAppExpiryDate = ConvertDataTable<WhatsAppExpiryDate>(retVal.Tables[0]);
+            //    }
+            //}
+            //catch (Exception ex)
+            //{
+            //    newexception.AddException(ex, "");
+            //}
+            lstSmsbalance.objSMSBalance = lstbalance.OrderBy(x=>x.SmsBalance).ToList();
             return lstSmsbalance;
         }
-
+        
         private static List<T> ConvertDataTable<T>(DataTable dt)
         {
             List<T> data = new List<T>();
