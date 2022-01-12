@@ -12,6 +12,8 @@ namespace BOTS_BL.Models
         public int QuestionPoints { get; set; }
         public string MemberType { get; set; }
         public decimal AvgPoints { get; set; }
+        public string OutletId { get; set; }
+        public DateTime AddedDate { get; set; }
     }
 
     public class DashboardOutletWise

@@ -12,7 +12,7 @@
             </div>
 
             <div style="margin-bottom:20px;">
-                Select Outlet :  @Html.DropDownListFor(x => Model.SRChart, new SelectList(Model.lstOutlet, "Value", "Text"), "All", htmlAttributes: new { @class = "input100", @id = "OutletList" })
+                Select Outlet :  @Html.DropDownListFor(x => Model.SRChart, new SelectList(Model.lstOutlet, "Value", "Text"), "All", htmlAttributes: new { @class = "input100", @id = "ddlOutletList" })
             </div>
             <div class="row">
                 <div class="col-md-4 col-xl-4">
@@ -22,7 +22,7 @@
                     To Date  <input type="text" class="input50" placeholder="To Date" readonly id="dtTo" />
                 </div>
                 <div class="col-md-2 col-xl-2">
-                    <button id="btnFilter" class="btn btn-primary login-btn" style="margin-top:10px;">Filter</button>
+                    <button id="btnFilter" class="btn btn-primary login-btn" style="margin-top:10px;" onclick="FilterData();">Filter</button>
                 </div>
             </div>
 
@@ -211,16 +211,18 @@
     });
 
     function GetNewUserChart() {
+        var OutletId = $("#ddlOutletList").val();
+        var FromDt = $("#dtFrom").val();
+        var ToDT = $("#dtTo").val();
         $("#divLoader").show();
         $.ajax({
             type: "POST",
              url: '@Url.Action("DashboardNewData", "Feedback")',
-            data: "",
+            data: '{OutletId: ' + JSON.stringify(OutletId) + ',FromDt: ' + JSON.stringify(FromDt) + ',ToDT: ' + JSON.stringify(ToDT) + '}',
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             success: function (response) {
                 if (response != null) {
-
                     $('#cvNewCustomer').remove(); // this is my <canvas> element
                     $('#containerNewCustomer').append('<canvas id="cvNewCustomer"><canvas>');
                         var options = {
@@ -253,23 +255,21 @@
                             }
                         }
                         var label1 = 'Less than 1';
-                    var label2 = 'Between 1 and 2';
-                    var label3 = 'Between 2 and 3';
-                    var label4 = 'Greater than 3';
+                        var label2 = 'Between 1 and 2';
+                        var label3 = 'Between 2 and 3';
+                        var label4 = 'Greater than 3';
 
                         var data = {
                             datasets: [{
                                 data: [...response],
                                 backgroundColor: ["#f990a7", "#aad2ed", "#9966FF", "#99e5e5"]
                             }],
-
                             labels: [
                                 label1,
                                 label2,
                                 label3,
                                 label4
                             ],
-
                         };
 
                     var ctx4 = document.getElementById("cvNewCustomer").getContext("2d");
@@ -277,7 +277,6 @@
                             type: 'pie',
                             data: data,
                             options: options
-
                         });
                 }
                 $("#divLoader").hide();
@@ -293,11 +292,12 @@
     }
 
     function GetExistingUserChart() {
+        var OutletId = $("#ddlOutletList").val();
         $("#divLoader").show();
         $.ajax({
             type: "POST",
              url: '@Url.Action("DashboardExistingData", "Feedback")',
-            data: "",
+            data: '{OutletId: ' + JSON.stringify(OutletId) + '}',
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             success: function (response) {
@@ -907,6 +907,20 @@
 
     }
 
+    function FilterData() {
+        
+        GetNewUserChart();
+        GetExistingUserChart();
+        GetLessThan12Chart();
+        Get12To3Chart();
+        Get3To6Chart();
+        GetMoreThan6Chart();
+        GetOutletWiseChart();
+
+        if ($("#hdnSRChart").val() == "True") {
+            GetSRWiseChart();
+        }
+    }
 
 
     function getRandomColor() {

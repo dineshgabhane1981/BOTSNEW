@@ -369,6 +369,10 @@ namespace WebApp.Controllers.OnBoarding
                 sb.Append("</tr>");
 
                 sb.Append("<tr>");
+                sb.Append("<td>Assigned CS:</td><td>" + Convert.ToString(GroupDetails.AssignedCSName) + "</td>");
+                sb.Append("</tr>");
+
+                sb.Append("<tr>");
                 sb.Append("<td>Comments:</td><td>" + GroupDetails.Comments + "</td>");
                 sb.Append("</tr>");
 

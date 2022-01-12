@@ -264,13 +264,13 @@ namespace WebApp.Controllers
             return View(objData);
         }
 
-        public JsonResult DashboardNewData()
+        public JsonResult DashboardNewData(string OutletId, string FromDt, string ToDT)
         {
             List<int> lstData = new List<int>();
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
             try
             {
-                lstData = FMR.GetDashboardNewExistingData(userDetails.GroupId, "New");
+                lstData = FMR.GetDashboardNewExistingData(userDetails.GroupId, OutletId, FromDt, ToDT, "New");
             }
             catch (Exception ex)
             {
@@ -278,13 +278,13 @@ namespace WebApp.Controllers
             }
             return new JsonResult() { Data = lstData, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
-        public JsonResult DashboardExistingData()
+        public JsonResult DashboardExistingData(string OutletId, string FromDt, string ToDT)
         {
             List<int> lstData = new List<int>();
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
             try
             {
-                lstData = FMR.GetDashboardNewExistingData(userDetails.GroupId, "Existing");
+                lstData = FMR.GetDashboardNewExistingData(userDetails.GroupId, OutletId, FromDt, ToDT, "Existing");
             }
             catch (Exception ex)
             {
