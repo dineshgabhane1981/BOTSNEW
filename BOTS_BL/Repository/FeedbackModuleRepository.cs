@@ -1232,7 +1232,7 @@ namespace BOTS_BL.Repository
             return lstlocation;
         }
 
-        public List<int> GetDashboardNewExistingData(string GroupId, string neworexisting)
+        public List<int> GetDashboardNewExistingData(string GroupId,string OutletId, string FromDt, string ToDT, string neworexisting)
         {
             List<DashboardNewAndExisting> lstData = new List<DashboardNewAndExisting>();
             List<DashboardNewAndExisting> lstReturnData = new List<DashboardNewAndExisting>();
@@ -1240,7 +1240,7 @@ namespace BOTS_BL.Repository
             string connStr = CR.GetCustomerConnString(GroupId);
             using (var contextdb = new BOTSDBContext(connStr))
             {
-                lstData = contextdb.Database.SqlQuery<DashboardNewAndExisting>("select T.MobileNo,T.QuestionPoints,(case when C.DOJ = cast(T.AddedDate as date) Then 'New' Else 'Existing' End) as MemberType from feedback_FeedbackMaster T left join CustomerDetails C on T.MobileNo = C.MobileNo").ToList();
+                lstData = contextdb.Database.SqlQuery<DashboardNewAndExisting>("select T.MobileNo,T.QuestionPoints,T.OutletId,T.AddedDate,(case when C.DOJ = cast(T.AddedDate as date) Then 'New' Else 'Existing' End) as MemberType from feedback_FeedbackMaster T left join CustomerDetails C on T.MobileNo = C.MobileNo").ToList();
                 if (neworexisting == "New")
                 {
                     lstData = lstData.Where(x => x.MemberType == "New").Select(y => y).ToList();
@@ -1248,6 +1248,20 @@ namespace BOTS_BL.Repository
                 if (neworexisting == "Existing")
                 {
                     lstData = lstData.Where(x => x.MemberType == "Existing").Select(y => y).ToList();
+                }
+                if(!string.IsNullOrEmpty(OutletId))
+                {
+                    lstData = lstData.Where(x => x.OutletId == OutletId).Select(y => y).ToList();
+                }
+                if (!string.IsNullOrEmpty(FromDt))
+                {
+                    var dt = Convert.ToDateTime(FromDt);
+                    lstData = lstData.Where(x => x.AddedDate >= dt).Select(y => y).ToList();
+                }
+                if (!string.IsNullOrEmpty(ToDT))
+                {
+                    var dt = Convert.ToDateTime(ToDT);
+                    lstData = lstData.Where(x => x.AddedDate <= dt).Select(y => y).ToList();
                 }
                 var uniqueMobileNo = lstData.GroupBy(x => x.MobileNo).Select(y => y.First()).ToList();
 
@@ -1295,10 +1309,10 @@ namespace BOTS_BL.Repository
                     int rowCount = 0;
                     foreach (var points in oneuserData)
                     {
-                        var added = points.AddedDate.Value.TimeOfDay.Hours;
+                        var timeslot = points.AddedDate.Value.TimeOfDay.Hours;
                         if (timeIndicator == "1")
                         {
-                            if (added <= 12)
+                            if (timeslot <= 12)
                             {
                                 sum = sum + Convert.ToDecimal(points.QuestionPoints);
                                 rowCount++;
@@ -1306,7 +1320,7 @@ namespace BOTS_BL.Repository
                         }
                         if (timeIndicator == "2")
                         {
-                            if (added > 12 && added<=15)
+                            if (timeslot > 12 && timeslot <= 15)
                             {
                                 sum = sum + Convert.ToDecimal(points.QuestionPoints);
                                 rowCount++;
@@ -1314,7 +1328,7 @@ namespace BOTS_BL.Repository
                         }
                         if (timeIndicator == "3")
                         {
-                            if (added > 15 && added <= 18)
+                            if (timeslot > 15 && timeslot <= 18)
                             {
                                 sum = sum + Convert.ToDecimal(points.QuestionPoints);
                                 rowCount++;
@@ -1322,7 +1336,7 @@ namespace BOTS_BL.Repository
                         }
                         if (timeIndicator == "4")
                         {
-                            if (added > 18)
+                            if (timeslot > 18)
                             {
                                 sum = sum + Convert.ToDecimal(points.QuestionPoints);
                                 rowCount++;
@@ -1346,10 +1360,7 @@ namespace BOTS_BL.Repository
                 lstCount.Add(twotothree);
                 lstCount.Add(morethanthree);
             }
-
-
             return lstCount;
-
         }
 
         
