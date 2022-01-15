@@ -137,30 +137,35 @@
 
         </div>
     }
-    <div class="row">
-        @if (level == "02")
+<div class="row">
+    @if (level == "02")
+    {
+        var cssClass = "col-md-12 col-lg-6";
+        if (ViewBag.OutletCount > 8)
         {
-            <div class="col-md-12 col-lg-6">
-                <div class="mb-3 card">
-                    <div class="card-header-tab card-header-tab-animation card-header">
-                        <div class="card-header-title">
-                            <i class="header-icon lnr-apartment icon-gradient bg-love-kiss"> </i>
-                            OUTLET ENROLMENTS
-                        </div>
-                        <ul class="nav">
-                            <li class="nav-item"><a href="javascript:void(0);" onclick="showOutletEnrolmentChart('')" id="outletTillDate" class="active nav-link">Till Date</a></li>
-                            <li class="nav-item"><a href="javascript:void(0);" onclick="showOutletEnrolmentChart('1')" id="outletCurrentDate" class="nav-link second-tab-toggle">Current Month</a></li>
-                        </ul>
+            cssClass = "col-md-12 col-lg-12";
+        }
+
+        <div class="@cssClass">
+            <div class="mb-3 card">
+                <div class="card-header-tab card-header-tab-animation card-header">
+                    <div class="card-header-title">
+                        <i class="header-icon lnr-apartment icon-gradient bg-love-kiss"> </i>
+                        OUTLET ENROLMENTS
                     </div>
-                    <div class="card-body">
-                        <div class="tab-content">
-                            <div class="tab-pane fade show active" id="tabs-eg-77">
-                                <div class="card mb-3 widget-chart widget-chart2 text-left w-100" >
-                                    <div class="widget-chat-wrapper-outer" >
-                                        <div  id="containerOutlet">
-                                            <canvas id="cvOutlet" style=" width:100%; height:100%" !important></canvas>
-                                            @*// widget-chart-wrapper widget-chart-wrapper-lg opacity-10 m-0*@
-                                        </div>
+                    <ul class="nav">
+                        <li class="nav-item"><a href="javascript:void(0);" onclick="showOutletEnrolmentChart('')" id="outletTillDate" class="active nav-link">Till Date</a></li>
+                        <li class="nav-item"><a href="javascript:void(0);" onclick="showOutletEnrolmentChart('1')" id="outletCurrentDate" class="nav-link second-tab-toggle">Current Month</a></li>
+                    </ul>
+                </div>
+                <div class="card-body">
+                    <div class="tab-content">
+                        <div class="tab-pane fade show active" id="tabs-eg-77">
+                            <div class="card mb-3 widget-chart widget-chart2 text-left w-100">
+                                <div class="widget-chat-wrapper-outer">
+                                    <div id="containerOutlet">
+                                        <canvas id="cvOutlet" style=" width:100%; height:100%" !important></canvas>
+                                        @*// widget-chart-wrapper widget-chart-wrapper-lg opacity-10 m-0*@
                                     </div>
                                 </div>
                             </div>
@@ -168,29 +173,35 @@
                     </div>
                 </div>
             </div>
-        }
-        @if (level == "02" || level == "04")
+        </div>
+    }
+    @if (level == "02" || level == "04")
+    {
+        var cssClass = "col-md-12 col-lg-6";
+        if (ViewBag.OutletCount > 8)
         {
-            <div class="col-md-12 col-lg-6">
-                <div class="mb-3 card">
-                    <div class="card-header-tab card-header-tab-animation card-header">
-                        <div class="card-header-title">
-                            <i class="header-icon lnr-apartment icon-gradient bg-love-kiss"> </i>
-                            TRANSACTION POINTS SUMMARY
-                        </div>
-                        <ul class="nav">
-                            <li class="nav-item"><a href="javascript:void(0);" onclick="showPointSummeryChart('')" id="pointsTillDate" class="active nav-link">Till Date</a></li>
-                            <li class="nav-item"><a href="javascript:void(0);" onclick="showPointSummeryChart('1')" id="pointsCurrentMonth" class="nav-link second-tab-toggle">Current Month</a></li>
-                        </ul>
+            cssClass = "col-md-12 col-lg-12";
+        }
+
+        <div class="@cssClass">
+            <div class="mb-3 card">
+                <div class="card-header-tab card-header-tab-animation card-header">
+                    <div class="card-header-title">
+                        <i class="header-icon lnr-apartment icon-gradient bg-love-kiss"> </i>
+                        TRANSACTION POINTS SUMMARY
                     </div>
-                    <div class="card-body">
-                        <div class="tab-content">
-                            <div class="tab-pane fade show active" id="tabs-eg-77">
-                                <div class="card mb-3 widget-chart widget-chart2 text-left w-100">
-                                    <div class="widget-chat-wrapper-outer">
-                                        <div class="widget-chart-wrapper widget-chart-wrapper-lg opacity-10 m-0" id="containerPointSummery">
-                                            <canvas id="cvPointSummery"></canvas>
-                                        </div>
+                    <ul class="nav">
+                        <li class="nav-item"><a href="javascript:void(0);" onclick="showPointSummeryChart('')" id="pointsTillDate" class="active nav-link">Till Date</a></li>
+                        <li class="nav-item"><a href="javascript:void(0);" onclick="showPointSummeryChart('1')" id="pointsCurrentMonth" class="nav-link second-tab-toggle">Current Month</a></li>
+                    </ul>
+                </div>
+                <div class="card-body">
+                    <div class="tab-content">
+                        <div class="tab-pane fade show active" id="tabs-eg-77">
+                            <div class="card mb-3 widget-chart widget-chart2 text-left w-100">
+                                <div class="widget-chat-wrapper-outer">
+                                    <div class="widget-chart-wrapper widget-chart-wrapper-lg opacity-10 m-0" id="containerPointSummery">
+                                        <canvas id="cvPointSummery"></canvas>
                                     </div>
                                 </div>
                             </div>
@@ -198,8 +209,9 @@
                     </div>
                 </div>
             </div>
-        }
-    </div>
+        </div>
+    }
+</div>
     @if (level == "02")
     {
         <div class="row">
@@ -407,7 +419,7 @@
                                                 <tr id="trNoOfProfileUpdate">
                                                     <td style="text-align:center;" colspan="4">
                                                         No of Profile Update: <span id="spnNoOfProfileUpdate"></span>
-                                                    </td>                                                    
+                                                    </td>
                                                 </tr>
                                             </table>
                                         </div>
@@ -550,7 +562,7 @@
                         });
 
 
-                    
+
                     var resp1 = response[1];
                     console.log("aaa - "+resp1);
                     if (resp1[0] != null && resp1[1] != null) {
@@ -591,7 +603,7 @@
                                 tableHTML += "<td>" + addComma(resp[4]) + "</td>";
                                 tableHTML += "</tr>";
 
-                                
+
 
                                 $.map(response, function (item) {
                                     tableHTML += "<tr style=\"text-align:center;\">";
@@ -720,7 +732,7 @@
             success: function (response) {
 
                 var names = response[0];
-                var count = names.length;
+               
 
                 var dataList = response[1];
                 if (response != null) {
@@ -731,7 +743,7 @@
 
                         labels: [...names],
                         datasets: [{
-                          
+
                             label: '',
                             backgroundColor: [
                                 "#f990a7",
@@ -762,13 +774,13 @@
                                     }
                                 },
                                 scales: {
-                                    xAxes: [{                                        
-                                       
+                                    xAxes: [{
+
                                         ticks: {
                                             beginAtZero: true
                                         }
                                     }],
-                                    //yAxes: [{                                       
+                                    //yAxes: [{
                                     //    categoryPercentage: 0.9,
                                     //   // barThickness: 10,
                                     //    stacked: true,
@@ -776,9 +788,9 @@
                                     //        beginAtZero: true
                                     //    },
                                     //}]
-                                    
+
                                 },
-                               
+
                                 title:
                                 {
                                     display: true,
@@ -806,7 +818,7 @@
                                         ctx.font = Chart.helpers.fontString(Chart.defaults.global.defaultFontSize, Chart.defaults.global.defaultFontStyle, Chart.defaults.global.defaultFontFamily);
                                         ctx.textAlign = 'center';
                                         ctx.textBaseline = 'bottom';
-                                        
+
 
                                         this.data.datasets.forEach(function (dataset, i) {
                                             var meta = chartInstance.controller.getDatasetMeta(i);
@@ -986,7 +998,7 @@
                         var label1 = 'Total Member Base';
                         var label2 = 'No of Profile Update';
                         if (flag == 1) {
-                            label2 = 'Referring Base'; 
+                            label2 = 'Referring Base';
                         }
                         var data1 = response[0];
                         var data2 = response[6];
@@ -1025,7 +1037,7 @@
                             $("#trNoOfProfileUpdate").hide()
                         }
                         else {
-                            $("#trNoOfProfileUpdate").show();                            
+                            $("#trNoOfProfileUpdate").show();
                             $("#spnNoOfProfileUpdate").text(addComma(response[6]));
                         }
                     }
