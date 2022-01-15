@@ -293,11 +293,13 @@
 
     function GetExistingUserChart() {
         var OutletId = $("#ddlOutletList").val();
+        var FromDt = $("#dtFrom").val();
+        var ToDT = $("#dtTo").val();
         $("#divLoader").show();
         $.ajax({
             type: "POST",
              url: '@Url.Action("DashboardExistingData", "Feedback")',
-            data: '{OutletId: ' + JSON.stringify(OutletId) + '}',
+            data: '{OutletId: ' + JSON.stringify(OutletId) + ',FromDt: ' + JSON.stringify(FromDt) + ',ToDT: ' + JSON.stringify(ToDT) + '}',
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             success: function (response) {
@@ -372,11 +374,14 @@
     }
 
     function GetLessThan12Chart() {
+        var OutletId = $("#ddlOutletList").val();
+        var FromDt = $("#dtFrom").val();
+        var ToDT = $("#dtTo").val();
         $("#divLoader").show();
         $.ajax({
             type: "POST",
              url: '@Url.Action("DashboardLessThank12Data", "Feedback")',
-            data: "",
+            data: '{OutletId: ' + JSON.stringify(OutletId) + ',FromDt: ' + JSON.stringify(FromDt) + ',ToDT: ' + JSON.stringify(ToDT) + '}',
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             success: function (response) {
@@ -453,15 +458,18 @@
     }
 
     function Get12To3Chart() {
+        var OutletId = $("#ddlOutletList").val();
+        var FromDt = $("#dtFrom").val();
+        var ToDT = $("#dtTo").val();
         $("#divLoader").show();
         $.ajax({
             type: "POST",
              url: '@Url.Action("Dashboard12To3Data", "Feedback")',
-            data: "",
+            data: '{OutletId: ' + JSON.stringify(OutletId) + ',FromDt: ' + JSON.stringify(FromDt) + ',ToDT: ' + JSON.stringify(ToDT) + '}',
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             success: function (response) {
-                console.log(response)
+                 
                 if (response != null) {
                     $('#cv12To3').remove(); // this is my <canvas> element
                     $('#container12To3').append('<canvas id="cv12To3"><canvas>');
@@ -535,15 +543,18 @@
     }
 
     function Get3To6Chart() {
+        var OutletId = $("#ddlOutletList").val();
+        var FromDt = $("#dtFrom").val();
+        var ToDT = $("#dtTo").val();
         $("#divLoader").show();
         $.ajax({
             type: "POST",
              url: '@Url.Action("Dashboard3To6Data", "Feedback")',
-            data: "",
+            data: '{OutletId: ' + JSON.stringify(OutletId) + ',FromDt: ' + JSON.stringify(FromDt) + ',ToDT: ' + JSON.stringify(ToDT) + '}',
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             success: function (response) {
-                console.log(response)
+                 
                 if (response != null) {
                     $('#cv3To6').remove(); // this is my <canvas> element
                     $('#container3To6').append('<canvas id="cv3To6"><canvas>');
@@ -615,16 +626,19 @@
 
     }
 
-     function GetMoreThan6Chart() {
+    function GetMoreThan6Chart() {
+        var OutletId = $("#ddlOutletList").val();
+        var FromDt = $("#dtFrom").val();
+        var ToDT = $("#dtTo").val();
         $("#divLoader").show();
         $.ajax({
             type: "POST",
              url: '@Url.Action("DashboardMoreThan6Data", "Feedback")',
-            data: "",
+            data: '{OutletId: ' + JSON.stringify(OutletId) + ',FromDt: ' + JSON.stringify(FromDt) + ',ToDT: ' + JSON.stringify(ToDT) + '}',
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             success: function (response) {
-                console.log(response)
+                
                 if (response != null) {
                     $('#cvMoreThan6').remove(); // this is my <canvas> element
                     $('#containerMoreThan6').append('<canvas id="cvMoreThan6"><canvas>');
@@ -697,16 +711,20 @@
     }
 
     function GetOutletWiseChart() {
+        var OutletId = $("#ddlOutletList").val();
+        var FromDt = $("#dtFrom").val();
+        var ToDT = $("#dtTo").val();
         $("#divLoader").show();
         $.ajax({
             type: "POST",
              url: '@Url.Action("DashboardOutletWiseData", "Feedback")',
-            data: "",
+            data: '{OutletId: ' + JSON.stringify(OutletId) + ',FromDt: ' + JSON.stringify(FromDt) + ',ToDT: ' + JSON.stringify(ToDT) + '}',
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             success: function (response) {
                 if (response != null) {
                     var names = response[0];
+                    console.log(names)
                     var data = response[1];
                     $('#cvOutletWise').remove(); // this is my <canvas> element
                     $('#containerOutletWise').append('<canvas id="cvOutletWise"><canvas>');
@@ -802,98 +820,108 @@
     }
 
     function GetSRWiseChart() {
+        var OutletId = $("#ddlOutletList").val();
+        var FromDt = $("#dtFrom").val();
+        var ToDT = $("#dtTo").val();
         $("#divLoader").show();
         $.ajax({
             type: "POST",
              url: '@Url.Action("DashboardSRWiseData", "Feedback")',
-            data: "",
+            data: '{OutletId: ' + JSON.stringify(OutletId) + ',FromDt: ' + JSON.stringify(FromDt) + ',ToDT: ' + JSON.stringify(ToDT) + '}',
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             success: function (response) {
 
                 if (response != null) {
                     var names = response[0];
+                    console.log(names)
                     var data = response[1];
-                    $('#cvSRWise').remove(); // this is my <canvas> element
-                    $('#containerSRWise').append('<canvas id="cvSRWise"><canvas>');
-                    var colors = [];
+                    if (names != undefined) {
+                        $('#cvSRWise').remove(); // this is my <canvas> element
+                        $('#containerSRWise').append('<canvas id="cvSRWise"><canvas>');
+                        var colors = [];
 
-                    jQuery.each(data, function (index, item) {
-                        colors.push(getRandomColor());
-                    });
+                        jQuery.each(data, function (index, item) {
+                            colors.push(getRandomColor());
+                        });
 
-                    var barChartData =
-                    {
-                        labels: [...names],
-                        datasets: [{
-                            label: '',
-                            backgroundColor: colors,
-                            borderWidth: 2,
-                            data: [...data]
-                        }]
-                    };
-
-
-                    var ctx10 = document.getElementById("cvSRWise").getContext("2d");
-                    var myChart = new Chart(ctx10,
+                        var barChartData =
                         {
-                            type: 'bar',
-                            data: barChartData,
-                            options:
+                            labels: [...names],
+                            datasets: [{
+                                label: '',
+                                backgroundColor: colors,
+                                borderWidth: 2,
+                                data: [...data]
+                            }]
+                        };
+
+
+                        var ctx10 = document.getElementById("cvSRWise").getContext("2d");
+                        var myChart = new Chart(ctx10,
                             {
-                                plugins: {
-                                    datalabels: {
-                                        display: false
-                                    }
-                                },
-                                scales: {
-                                    yAxes: [{
-                                        ticks: {
-                                            beginAtZero: true
-                                        }
-                                    }]
-                                },
-                                title:
+                                type: 'bar',
+                                data: barChartData,
+                                options:
                                 {
-                                    display: true,
-                                    text: ""
-                                },
-                                legend: {
-                                    display: false
-                                },
-                                responsive: true,
-                                maintainAspectRatio: true,
-                                tooltips: { enabled: false },
-                                hover: { mode: null },
+                                    plugins: {
+                                        datalabels: {
+                                            display: false
+                                        }
+                                    },
+                                    scales: {
+                                        yAxes: [{
+                                            ticks: {
+                                                beginAtZero: true
+                                            }
+                                        }]
+                                    },
+                                    title:
+                                    {
+                                        display: true,
+                                        text: ""
+                                    },
+                                    legend: {
+                                        display: false
+                                    },
+                                    responsive: true,
+                                    maintainAspectRatio: true,
+                                    tooltips: { enabled: false },
+                                    hover: { mode: null },
 
-                                "hover": {
-                                    "animationDuration": 0,
-                                    mode: null
-                                },
-                                "animation": {
-                                    "duration": 1,
-                                    "onComplete": function () {
-                                        var chartInstance = this.chart,
-                                            ctx = chartInstance.ctx;
+                                    "hover": {
+                                        "animationDuration": 0,
+                                        mode: null
+                                    },
+                                    "animation": {
+                                        "duration": 1,
+                                        "onComplete": function () {
+                                            var chartInstance = this.chart,
+                                                ctx = chartInstance.ctx;
 
-                                        ctx.font = Chart.helpers.fontString(Chart.defaults.global.defaultFontSize, Chart.defaults.global.defaultFontStyle, Chart.defaults.global.defaultFontFamily);
-                                        ctx.textAlign = 'center';
-                                        ctx.textBaseline = 'bottom';
+                                            ctx.font = Chart.helpers.fontString(Chart.defaults.global.defaultFontSize, Chart.defaults.global.defaultFontStyle, Chart.defaults.global.defaultFontFamily);
+                                            ctx.textAlign = 'center';
+                                            ctx.textBaseline = 'bottom';
 
-                                        this.data.datasets.forEach(function (dataset, i) {
-                                            var meta = chartInstance.controller.getDatasetMeta(i);
-                                            meta.data.forEach(function (bar, index) {
-                                                var data = dataset.data[index];
-                                                ctx.fillStyle = 'rgba(0, 0, 0, 1)';
+                                            this.data.datasets.forEach(function (dataset, i) {
+                                                var meta = chartInstance.controller.getDatasetMeta(i);
+                                                meta.data.forEach(function (bar, index) {
+                                                    var data = dataset.data[index];
+                                                    ctx.fillStyle = 'rgba(0, 0, 0, 1)';
 
-                                                var res = addComma(data);
-                                                ctx.fillText(res, bar._model.x, bar._model.y - 5);
+                                                    var res = addComma(data);
+                                                    ctx.fillText(res, bar._model.x, bar._model.y - 5);
+                                                });
                                             });
-                                        });
+                                        }
                                     }
                                 }
-                            }
-                        });
+                            });
+                    }
+                    else {
+                        $('#cvSRWise').remove(); // this is my <canvas> element
+                        $('#containerSRWise').append('<canvas id="cvSRWise"><canvas>');
+                    }
                 }
                 $("#divLoader").hide();
             },
