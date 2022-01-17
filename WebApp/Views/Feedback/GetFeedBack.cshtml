@@ -88,8 +88,8 @@
                 <span id="url" style="display:none;">@feedbackURL</span>
                 @Html.Hidden("HiddenDOB", null, new { @id = "hdDOB" })
                 @Html.Hidden("HiddenDOA", null, new { @id = "hdDOA" })
-                @Html.Hidden("HiddenHowToKnow", null, new { @id = "hdHowToKnow" })        
-               
+                @Html.Hidden("HiddenHowToKnow", null, new { @id = "hdHowToKnow" })
+
                 <div class="col-md-12 col-sm-12 pt-3 pl-3 pr-3" style="text-align:center;">
                     <img src="@Model.LogoUrl" style="width:300px;" alt="Logo">
                 </div>
@@ -120,24 +120,24 @@
                             </div>
                         }
                     }
-                <div class="row">
+                    <div class="row">
 
-                    @if (Model.PointsAndMessages.IsAddRepresentative)
-                    {
-                    <span id="hdshowrepresentative" style="display:none;">@Model.PointsAndMessages.IsAddRepresentative</span>
-                        <div class="col-md-12 col-sm-12 pt-3 pl-5 pr-5 pb-5" style="text-align:center;">
-                            <h6>Sales Representive</h6> @Html.DropDownList("abc", new SelectList(Model.lstsalesRepresentive, "Value", "Text"), htmlAttributes: new { @class = "input50", @id = "ddlsaleslist" })
+                        @if (Model.PointsAndMessages.IsAddRepresentative)
+                        {
+                            <span id="hdshowrepresentative" style="display:none;">@Model.PointsAndMessages.IsAddRepresentative</span>
+                            <div class="col-md-12 col-sm-12 pt-3 pl-5 pr-5 pb-5" style="text-align:center;">
+                                <h6>Sales Representive</h6> @Html.DropDownList("abc", new SelectList(Model.lstsalesRepresentive, "Value", "Text"), htmlAttributes: new { @class = "input50", @id = "ddlsaleslist" })
+
+                            </div>
+                        }
+                        <div class="col-md-12 col-sm-12 pb-5" style="text-align:center;">
+                            <input type="number" class="input100" id="txtMobileNo" placeholder="Enter Mobile number" />
 
                         </div>
-                    }
-                    <div class="col-md-12 col-sm-12 pb-5" style="text-align:center;">
-                        <input type="number" class="input100" id="txtMobileNo" placeholder="Enter Mobile number" />
-
+                        <div class="col-md-12 col-sm-12 pb-5" style="text-align:center;">
+                            <button type="button" class="btn btn-primary" style="width: 280px; background-color: #1C699F; color:white; font-weight:bold; font-size:18px; border-radius:5px;" id="btnProceed" onclick="return CheckCustomer();">ENTER</button>
+                        </div>
                     </div>
-                    <div class="col-md-12 col-sm-12 pb-5" style="text-align:center;">
-                        <button type="button" class="btn btn-primary" style="width: 280px; background-color: #1C699F; color:white; font-weight:bold; font-size:18px; border-radius:5px;" id="btnProceed" onclick="return CheckCustomer();">ENTER</button>
-                    </div>
-                </div>
                 </div>
 
                 <div class="container-fluid pt-3 pl-3 pr-3 pb-3" style="display:none;" id="divquestions">
@@ -163,31 +163,31 @@
 
                             if (item.Section == "FeedbackQuestions")
                             {
-                    <div class="col-md-12 col-sm-12 pt-3 pl-3 pr-3" style="text-align:center;">
-                        @if (item.Type == "Question")
-                        {
-                            @Html.HiddenFor(model => item.Id, new { @id = "hdnQuestionId" + item.Id })
-                            @Html.HiddenFor(model => item.IsMandatory, new { @id = "hdnMandatoryQuestionId" + item.Id })
-                            var rbtn1 = "rbtvariety" + item.Id + "1";
-                            var rbtn2 = "rbtvariety" + item.Id + "2";
-                            var rbtn3 = "rbtvariety" + item.Id + "3";
-                            var rbtn4 = "rbtvariety" + item.Id + "4";
-                            var name = "variety" + item.Id;
-                            <h3 style="font-size:20px;">
-                                @item.Text
-                            </h3>
-                            <div class="cc-selector">
-                                <input id="@rbtn1" type="radio" name="@name" />
-                                <label class="drinkcard-cc rbtvariety1" for="@rbtn1"></label>
-                                <input id="@rbtn2" type="radio" name="@name" />
-                                <label class="drinkcard-cc rbtvariety2" for="@rbtn2"></label>
-                                <input id="@rbtn3" type="radio" name="@name" />
-                                <label class="drinkcard-cc rbtvariety3" for="@rbtn3"></label>
-                                <input id="@rbtn4" type="radio" name="@name" />
-                                <label class="drinkcard-cc rbtvariety4" for="@rbtn4"></label>
-                            </div>
-                        }
-                    </div>
+                                <div class="col-md-12 col-sm-12 pt-3 pl-3 pr-3" style="text-align:center;">
+                                    @if (item.Type == "Question")
+                                    {
+                                        @Html.HiddenFor(model => item.Id, new { @id = "hdnQuestionId" + item.Id })
+                                        @Html.HiddenFor(model => item.IsMandatory, new { @id = "hdnMandatoryQuestionId" + item.Id })
+                                        var rbtn1 = "rbtvariety" + item.Id + "1";
+                                        var rbtn2 = "rbtvariety" + item.Id + "2";
+                                        var rbtn3 = "rbtvariety" + item.Id + "3";
+                                        var rbtn4 = "rbtvariety" + item.Id + "4";
+                                        var name = "variety" + item.Id;
+                                        <h3 style="font-size:20px;">
+                                            @item.Text
+                                        </h3>
+                                        <div class="cc-selector">
+                                            <input id="@rbtn1" type="radio" name="@name" />
+                                            <label class="drinkcard-cc rbtvariety1" for="@rbtn1"></label>
+                                            <input id="@rbtn2" type="radio" name="@name" />
+                                            <label class="drinkcard-cc rbtvariety2" for="@rbtn2"></label>
+                                            <input id="@rbtn3" type="radio" name="@name" />
+                                            <label class="drinkcard-cc rbtvariety3" for="@rbtn3"></label>
+                                            <input id="@rbtn4" type="radio" name="@name" />
+                                            <label class="drinkcard-cc rbtvariety4" for="@rbtn4"></label>
+                                        </div>
+                                    }
+                                </div>
                             }
                         }
                     </div>
@@ -205,52 +205,52 @@
                             {
                                 if (item.Section == "OtherInformation")
                                 {
-                            <div class="col-md-12 col-sm-12 pt-3 pl-3 pr-3" style="text-align:center;">
-                                @if (item.Type == "Heading")
-                                {
-                                    if (item.TypeId == 1)
-                                    {
-                                        <h1 style="color:red; font-size:34px;">
-                                            @item.Text
-                                        </h1>
-                                    }
-                                    if (item.TypeId == 2)
-                                    {
-                                        <h1 style="font-size: 26px;">
-                                            @item.Text
-                                        </h1>
-                                    }
-                                }
-                                @if (item.Type == "Question")
-                                {
-                                    <span style="padding-right:5px;"> @item.Text </span>
+                                    <div class="col-md-12 col-sm-12 pt-3 pl-3 pr-3" style="text-align:center;">
+                                        @if (item.Type == "Heading")
+                                        {
+                                            if (item.TypeId == 1)
+                                            {
+                                                <h1 style="color:red; font-size:34px;">
+                                                    @item.Text
+                                                </h1>
+                                            }
+                                            if (item.TypeId == 2)
+                                            {
+                                                <h1 style="font-size: 26px;">
+                                                    @item.Text
+                                                </h1>
+                                            }
+                                        }
+                                        @if (item.Type == "Question")
+                                        {
+                                            <span style="padding-right:5px;"> @item.Text </span>
 
-                                    if (item.TypeId == 1)
-                                    {
-                                        @*@Html.Hidden(item.IsMandatory, new { @id = "hdMandatorygender" })*@
-                                        <span id="hdMandatorygender" style="display:none;">@item.IsMandatory</span>
-                                        @Html.DropDownList("abc", new SelectList(Model.Gender(), "Value", "Text"), htmlAttributes: new { @class = "input50", @id = "ddlGender" })
-                                    }
+                                            if (item.TypeId == 1)
+                                            {
+                                                @*@Html.Hidden(item.IsMandatory, new { @id = "hdMandatorygender" })*@
+                                                <span id="hdMandatorygender" style="display:none;">@item.IsMandatory</span>
+                                                @Html.DropDownList("abc", new SelectList(Model.Gender(), "Value", "Text"), htmlAttributes: new { @class = "input50", @id = "ddlGender" })
+                                            }
 
-                                    if (item.TypeId == 2)
-                                    {
-                                        <span id="hdMandatoryDtBirth" style="display:none;">@item.IsMandatory</span>                                        
-                                        <input type="date" class="input50" id="txtBirthDate" />
-                                    }
-                                    if (item.TypeId == 3)
-                                    {
-                                        <span id="hdMandatoryDtAnni" style="display:none;">@item.IsMandatory</span>                                        
-                                        <input type="date" class="input50" id="txtAniversary" />
-                                    }
+                                            if (item.TypeId == 2)
+                                            {
+                                                <span id="hdMandatoryDtBirth" style="display:none;">@item.IsMandatory</span>
+                                                <input type="date" class="input50" id="txtBirthDate" />
+                                            }
+                                            if (item.TypeId == 3)
+                                            {
+                                                <span id="hdMandatoryDtAnni" style="display:none;">@item.IsMandatory</span>
+                                                <input type="date" class="input50" id="txtAniversary" />
+                                            }
 
-                                    if (item.TypeId == 4)
-                                    {
-                                        <span id="hdMandatoryHowTo" style="display:none;">@item.IsMandatory</span>                                       
-                                        @Html.DropDownList("abc", new SelectList(Model.lstKnowAboutUs, "Value", "Text"), htmlAttributes: new { @class = "input50", @id = "ddlKnowAboutUs" })
-                                    }
-                                }
+                                            if (item.TypeId == 4)
+                                            {
+                                                <span id="hdMandatoryHowTo" style="display:none;">@item.IsMandatory</span>
+                                                @Html.DropDownList("abc", new SelectList(Model.lstKnowAboutUs, "Value", "Text"), htmlAttributes: new { @class = "input50", @id = "ddlKnowAboutUs" })
+                                            }
+                                        }
 
-                            </div>
+                                    </div>
                                 }
                             }
                         </div>
@@ -268,7 +268,7 @@
 <script>
     $(document).ready(function () {
         var today = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
-       
+
         var dtToday = new Date();
 
         var month = dtToday.getMonth() + 1;
@@ -318,35 +318,41 @@
         //hdshowrepresentative
             $('[id^=hdnQuestionId]').each(function (i, itemid) {
                 var id11 = itemid.id.substr(13); //hdnMandatoryQuestionId
-              
-                $('[id^=hdnMandatoryQuestionId' + id11 + ']').each(function (i, itemman) {
 
-                        if (itemman.value == "Mandatory") {
+                $('[id^=hdnMandatoryQuestionId' + id11 + ']').each(function (i, itemman) {
+                    if (itemman.value == "Mandatory") {
+                        var count = 0;
                             $('[id^=rbtvariety' + id11 + ']').each(function (i, itemradio) {
-                                
+
                                 if ($("#" + itemradio.id).is(":checked")) {
-                                    console.log(itemradio.id);
-                                    returnStatus = true;
+                                    console.log(itemradio.id + "  - Checked");
+                                    count = 1;                                    
                                 }
                             });
-                            
-                               
+                        if (count == 1)
+                            returnStatus = true;
+                        else {
+                            returnStatus = false;
+                            return false;
+                        }
                     }
-                    if (!returnStatus) {
-                        console.log("required");
-                        cuteAlert({
-                            type: "error",
-                            title: "Oops..",
-                            message: "Please enter Required fields",
-                            buttonText: "Okay"
-                        })
-                        return false;
-                     }
-                        
+
                 });
-                
-                
+                if (!returnStatus) {
+                    return false;
+                }
             });
+       
+        if (!returnStatus) {
+            console.log("required");
+            cuteAlert({
+                type: "error",
+                title: "Oops..",
+                message: "Please enter Required fields",
+                buttonText: "Okay"
+            })
+            return false;
+        }
        // }
         if ($("#hdshowrepresentative").text()) {
             if ($("#ddlsaleslist").prop('selectedIndex') !== 0) {
@@ -362,13 +368,13 @@
 
                 if ($("#" + itemradio.id).is(":checked")) {
                     HomeData.push(itemradio.id);
-                    console.log(HomeData);
+                    //console.log(HomeData);
                 }
             });
 
-        });        
-            
-            
+        });
+
+
             console.log(HomeData);
             $("#divLoader").show();
             $.ajax({
@@ -419,24 +425,12 @@
                 }
             });
         }
-        else {
-            cuteAlert({
-                type: "error",
-                title: "Oops..",
-                message: "Please enter Required fields",
-                buttonText: "Okay"
-            })
-            return false;
-        }
+        
     }
-    function CheckCustomer() {
-        //$("#divwelcome").hide();
-        //$("#divquestions").show();
-        //$("#divthankyou").hide();
+    function CheckCustomer() {        
         var returnStatus = true;
         var MobileNo = $('#txtMobileNo').val();
-        if ($("#hdshowrepresentative").text()) {
-            console.log(333);
+        if ($("#hdshowrepresentative").text()) {            
             if ($("#ddlsaleslist option:selected").text() == "Please Select") {
                 cuteAlert({
                     type: "error",
@@ -448,26 +442,23 @@
                 returnStatus = false;
             }
         }
-        if ($("#txtMobileNo").val() == "") {
-            console.log(111);
+        if ($("#txtMobileNo").val() == "") {           
             cuteAlert({
                 type: "error",
                 title: "Oops..",
                 message: "Please enter mobile number",
                 buttonText: "Okay"
             })
-            /*alert("Please enter mobile number");*/
+            
             $('#txtMobileNo').css('border-color', 'red');
             returnStatus = false;
 
         }
         else {
-            console.log(222);
+            
             if (/^[6789]\d{9,9}$/.test(MobileNo)) {
-
             }
-            else {
-               // alert("Mobile Number entered seems incorrect. Please try again");
+            else {               
                 cuteAlert({
                     type: "error",
                     title: "Oops..",
@@ -478,8 +469,7 @@
                 returnStatus = false;
             }
         }
-        if (returnStatus == true) {
-            console.log($('#txtMobileNo').val());
+        if (returnStatus == true) {           
             $("#divLoader").show();
             $.ajax({
                 type: "POST",
@@ -503,8 +493,6 @@
                         $('#txtMobileNo').val("");
                     }
                     else {
-
-
                         if (response.CustomerName != null) {
                             $('#spnCustomerName').text(response.CustomerName);
                             $("#divLoader").hide();
@@ -520,7 +508,6 @@
                         }
                     }
 
-
                     $("#divLoader").hide();
                 },
                 failure: function (response) {
@@ -532,13 +519,7 @@
                 }
             });
         }
-        else {
-            //cuteAlert({
-            //    type: "error",
-            //    title: "Oops..",
-            //    message: "Please enter Required fields",
-            //    buttonText: "Okay"
-            //})
+        else {           
             return false;
         }
 
@@ -547,7 +528,6 @@
     function SubmitOtherInfo()
     {
         var returnStatus = true;
-        
         if ($("#hdMandatorygender").text() == "Mandatory") {
             console.log(333);
             if ($("#ddlGender option:selected").text() == "Please Select") {
@@ -573,8 +553,7 @@
                 returnStatus = false;
             }
         }
-        if ($("#hdMandatoryDtAnni").text() == "Mandatory") {
-            console.log(444);
+        if ($("#hdMandatoryDtAnni").text() == "Mandatory") {            
             if ($("#txtAniversary").val() == "") {
                 cuteAlert({
                     type: "error",
@@ -586,8 +565,7 @@
                 returnStatus = false;
             }
         }
-        if ($("#hdMandatoryHowTo").text() == "Mandatory") {
-            console.log(222);
+        if ($("#hdMandatoryHowTo").text() == "Mandatory") {           
             if ($("#ddlKnowAboutUs option:selected").text() == "Please Select") {
                 cuteAlert({
                     type: "error",
@@ -612,11 +590,11 @@
             })
             returnStatus = false;
         }
-        
+
         if ($("#ddlKnowAboutUs").prop('selectedIndex') !== 0) {
             howtoknow = $("#ddlKnowAboutUs :selected").text();
         }
-        
+
         if (returnStatus == true) {
             console.log(howtoknow);
             var annidt;
@@ -639,8 +617,7 @@
                          $("#divLoader").hide();
                          $("#txtbirthdt").val("");
                          $("#txtanniversary").val("");
-                        /* $('#ddllivein').prop('selectedIndex', 0);*/
-
+                        
                          setTimeout(cuteAlert({
                              type: "success",
                              title: "Save",
