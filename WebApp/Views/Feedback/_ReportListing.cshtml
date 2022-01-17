@@ -25,10 +25,9 @@
                                 <th scope="col">Q3</th>
                                 <th scope="col">Q4</th>
                                 <th scope="col">Source</th>
+                                <th scope="col">Comments</th>
                                 <th scope="col">Txn</th>
                                 <th scope="col">Txn Amount</th>
-
-
                             </tr>
                         </thead>
                         <tbody>
@@ -36,78 +35,81 @@
                             {
                                 foreach (var item in Model)
                                 {
-                                    //var followupdate = "--";
-                                    //if (item.FollowupDate.HasValue)
-                                    //{
-                                    //    followupdate = item.FollowupDate.Value.ToString();//.ToString("yyyy-MM-dd");
-                                    //}
-                                    //  var imgId = "imgExpand" + item.Id;
-                            <tr>
 
-                                <td>@item.OutletName</td>
-                                <td>@item.SalesRName</td>
-                                <td>@item.MobileNo</td>
-                                <td>@item.MemberName</td>
-                                <td>@item.Type</td>
-                                <td>@item.Datetime</td>
-                                @if (item.Q1 >0)
-                                {
-                                    <td>@item.Q1</td>
-                                }
-                                else
-                                {
-                                    <td>--</td>
-                                }
-                                @if (item.Q2 >0)
-                                {
-                                    <td>@item.Q2</td>
-                                }
-                                else
-                                {
-                                    <td>--</td>
-                                }
-                                @if (item.Q3>0)
-                                {
-                                    <td>@item.Q3</td>
-                                }
-                                else
-                                {
-                                    <td>--</td>
-                                }
-                                @if (item.Q4>0)
-                                {
-                                    <td>@item.Q4</td>
-                                }
-                                else
-                                {
-                                    <td>--</td>
-                                }
+                                    <tr>
 
-                                @if (!string.IsNullOrEmpty(item.Source))
-                                {
-                                    <td>@item.Source</td>
-                                }
-                                else
-                                {
-                                    <td>--</td>
-                                }
-                                @if (!string.IsNullOrEmpty(item.Txn))
-                                {
-                                    <td>Yes</td>
-                                }
-                                else
-                                {
-                                    <td>No</td>
-                                }
-                                @if ((item.TxnAmount != 0))
-                                {
-                                    <td>@item.TxnAmount</td>
-                                }
-                                else
-                                {
-                                    <td>--</td>
-                                }
-                            </tr>
+                                        <td>@item.OutletName</td>
+                                        <td>@item.SalesRName</td>
+                                        <td>@item.MobileNo</td>
+                                        <td>@item.MemberName</td>
+                                        <td>@item.Type</td>
+                                        <td>@item.Datetime</td>
+                                        @if (item.Q1 > 0)
+                                        {
+                                            <td>@item.Q1</td>
+                                        }
+                                        else
+                                        {
+                                            <td style="text-align:center;">--</td>
+                                        }
+                                        @if (item.Q2 > 0)
+                                        {
+                                            <td>@item.Q2</td>
+                                        }
+                                        else
+                                        {
+                                            <td style="text-align:center;">--</td>
+                                        }
+                                        @if (item.Q3 > 0)
+                                        {
+                                            <td>@item.Q3</td>
+                                        }
+                                        else
+                                        {
+                                            <td style="text-align:center;">--</td>
+                                        }
+                                        @if (item.Q4 > 0)
+                                        {
+                                            <td>@item.Q4</td>
+                                        }
+                                        else
+                                        {
+                                            <td style="text-align:center;">--</td>
+                                        }
+
+                                        @if (!string.IsNullOrEmpty(item.Source))
+                                        {
+                                            <td>@item.Source</td>
+                                        }
+                                        else
+                                        {
+                                            <td style="text-align:center;">--</td>
+                                        }
+                                        @if (!string.IsNullOrEmpty(item.Comments))
+                                        {
+                                            <td style="text-align:center;">@item.Comments</td>
+                                        }
+                                        else
+                                        {
+                                            <td style="text-align:center;">--</td>
+                                        }
+                                        @if (!string.IsNullOrEmpty(item.Txn))
+                                        {
+                                            <td>Yes</td>
+                                        }
+                                        else
+                                        {
+                                            <td>No</td>
+                                        }
+                                        @if ((item.TxnAmount != 0))
+                                        {
+                                            <td>@item.TxnAmount</td>
+                                        }
+                                        else
+                                        {
+                                            <td style="text-align:center;">--</td>
+                                        }
+                                    </tr>
 
                                 }
                             }

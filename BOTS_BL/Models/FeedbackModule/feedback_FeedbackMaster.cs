@@ -41,5 +41,8 @@ namespace BOTS_BL.Models
 
         [StringLength(10)]
         public string SalesRepresentative { get; set; }
+
+        public string Comments { get; set; }
+        
     }
 }

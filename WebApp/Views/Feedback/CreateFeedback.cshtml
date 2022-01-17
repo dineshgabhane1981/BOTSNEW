@@ -86,6 +86,7 @@
                     {
                         if (item.Section == "Home")
                         {
+                            @Html.HiddenFor(model => item.Type, new { @id = "hdnHomeType" + item.Id })
 
                             <div class="row">
                                 <div class="col-md-12 col-xl-12" style="margin-left:20px; margin-top:20px;">
@@ -93,7 +94,6 @@
                                     @Html.TextBoxFor(model => item.Text, new { @class = "input150", @id = "txtHomeHeadingText" + item.Id })
                                 </div>
                             </div>
-
                         }
 
                     }
@@ -128,12 +128,22 @@
                             <div class="row">
                                 <div class="col-md-12 col-xl-12" style="margin-left:20px; margin-top:20px;">
                                     @Html.HiddenFor(model => item.Type, new { @id = "hdnQuestionType" + item.Id })
-                                    @Html.CheckBoxFor(model => item.IsDisplay, new { @id = "chkIsDisplayQuestion" + item.Id })
-                                    @Html.TextBoxFor(model => item.Text, new { @class = "input100", @id = "txtQuestionHeadingText" + item.Id })
-                                    @if (item.Type == "Question")
+                                    @if (item.Type == "Textbox")
                                     {
-                                        @Html.DropDownListFor(model => item.IsMandatory, new SelectList(Model.MandatoryOrNot(), "Value", "Text", @item.IsMandatory), htmlAttributes: new { @class = "input50", @id = "ddlIsMandatoryQuestion" + item.Id })
+                                        @Html.CheckBoxFor(model => item.IsDisplay, new { @id = "chkIsDisplayQuestion" + item.Id })
+                                        @Html.TextBoxFor(model => item.Text, new { @class = "input100", @disabled = "disabled", @id = "txtQuestionHeadingText" + item.Id })
 
+                                        @Html.DropDownListFor(model => item.IsMandatory, new SelectList(Model.MandatoryOrNot(), "Value", "Text", @item.IsMandatory), htmlAttributes: new { @class = "input50", @id = "ddlIsMandatoryQuestion" + item.Id })
+                                    }
+                                    else
+                                    {
+                                        @Html.CheckBoxFor(model => item.IsDisplay, new { @id = "chkIsDisplayQuestion" + item.Id })
+                                        @Html.TextBoxFor(model => item.Text, new { @class = "input100", @id = "txtQuestionHeadingText" + item.Id })
+                                        if (item.Type == "Question")
+                                        {
+                                            @Html.DropDownListFor(model => item.IsMandatory, new SelectList(Model.MandatoryOrNot(), "Value", "Text", @item.IsMandatory), htmlAttributes: new { @class = "input50", @id = "ddlIsMandatoryQuestion" + item.Id })
+
+                                        }
                                     }
                                 </div>
                             </div>
@@ -200,7 +210,7 @@
                 </div>
                 <div class="row">
                     <div class="row" id="dvAwardPointsWhen" style="display: none; margin-left: 20px; ">
-                        <div class="col-md-6 col-xl-6" style="margin-top:20px;">                            
+                        <div class="col-md-6 col-xl-6" style="margin-top:20px;">
                             When award points? @Html.DropDownListFor(model => model.PointsAndMessages.PointsConfig, new SelectList(Model.PointsConfig(), "Value", "Text", Model.PointsAndMessages.PointsConfig), new { @class = "input100", @id = "ddlPointsConfig" })
                         </div>
                     </div>
@@ -403,19 +413,40 @@
                             }
                             else
                             {
-                                <div class="row">
-                                    <div class="col-md-12 col-xl-12 mb-2" style="margin-top:20px;text-align:center;">
-                                        @if (item.TypeId == 1)
-                                        {
-                                            <h1 style="font-size: 22px; color: red;"> <span id="@Id">@item.Text</span></h1>
+                                if (item.Type == "Textbox")
+                                {
+                                    <div class="row">
+                                        <div class="col-md-12 col-xl-12 mb-2" style="margin-top:20px;text-align:center;" id="@dvId">
+                                            Comments
+                                            @if (item.IsMandatory == "Mandatory")
+                                            {
+                                                <span style="color:red;" id="@spnMandatory">*</span>
+                                            }
+                                            else
 
-                                        }
-                                        @if (item.TypeId == 2)
-                                        {
-                                            <h1 style="font-size: 22px; "> <span id="@Id">@item.Text</span></h1>
-                                        }
+                                            {
+                                                <span style="color:red;" id="@spnMandatory"></span>
+                                            }
+                                            <textarea cols="30" rows="5" style="border-radius:10px;"></textarea>
+                                        </div>
                                     </div>
-                                </div>
+                                }
+                                else
+                                {
+                                    <div class="row">
+                                        <div class="col-md-12 col-xl-12 mb-2" style="margin-top:20px;text-align:center;">
+                                            @if (item.TypeId == 1)
+                                            {
+                                                <h1 style="font-size: 22px; color: red;"> <span id="@Id">@item.Text</span></h1>
+
+                                            }
+                                            @if (item.TypeId == 2)
+                                            {
+                                                <h1 style="font-size: 22px; "> <span id="@Id">@item.Text</span></h1>
+                                            }
+                                        </div>
+                                    </div>
+                                }
                             }
                         }
                     }
@@ -510,7 +541,7 @@
             if ($(this).is(':checked')) {
                 $("#dvAwardPoints").show();
                 $("#dvAwardPointsWhen").show();
-                
+
             }
             else {
                 $("#dvAwardPoints").hide();
@@ -564,6 +595,9 @@
             itemQuestion["Text"] = $("#txtQuestionHeadingText" + id).val();
             itemQuestion["IsDisplay"] = $("#chkIsDisplayQuestion" + id).is(":checked");
             if ($("#hdnQuestionType" + id).val() == "Question") {
+                itemQuestion["IsMandatory"] = $("#ddlIsMandatoryQuestion" + id).val();
+            }
+            if ($("#hdnQuestionType" + id).val() == "Textbox") {
                 itemQuestion["IsMandatory"] = $("#ddlIsMandatoryQuestion" + id).val();
             }
 
@@ -663,18 +697,19 @@
 
                     $("#spnFeedbackQuestions" + id).text($("#txtQuestionHeadingText" + id).val());
                     $("#dvFeedbackQuestions" + id).show();
-                }
+                }                
                 else {
                     $("#spnFeedbackQuestions" + id).text($("#txtQuestionHeadingText" + id).val());
                 }
             }
-            else {
+            else {                
                 var id = item.id.substr(20);
                 if ($("#hdnQuestionType" + id).val() == "Question") {
+                    
                     $("#spnFeedbackQuestions" + id).text("");
                     $("#dvFeedbackQuestions" + id).hide();
-                }
-                else {
+                }                
+                else {                    
                     $("#spnFeedbackQuestions" + id).text("");
                 }
             }
@@ -763,6 +798,9 @@
                         $("#spnFeedbackQuestions" + id).text($("#txtQuestionHeadingText" + id).val());
                         $("#dvFeedbackQuestions" + id).show();
                     }
+                    else if ($("#hdnQuestionType" + id).val() == "Textbox") {
+                        $("#dvFeedbackQuestions" + id).show();
+                    }
                     else {
                         $("#spnFeedbackQuestions" + id).text($("#txtQuestionHeadingText" + id).val());
                     }
@@ -771,6 +809,9 @@
                     var id = item.id.substr(20);
                     if ($("#hdnQuestionType" + id).val() == "Question") {
                         $("#spnFeedbackQuestions" + id).text("");
+                        $("#dvFeedbackQuestions" + id).hide();
+                    }
+                    else if ($("#hdnQuestionType" + id).val() == "Textbox") {
                         $("#dvFeedbackQuestions" + id).hide();
                     }
                     else {

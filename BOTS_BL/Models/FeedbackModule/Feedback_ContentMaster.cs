@@ -10,6 +10,7 @@ namespace BOTS_BL.Models
     {
         [Key]
         [Column(Order = 0)]
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int Id { get; set; }
 
         [StringLength(50)]
@@ -26,8 +27,6 @@ namespace BOTS_BL.Models
         [Column(Order = 1)]
         public bool IsDisplay { get; set; }
 
-        [Key]
-        [Column(Order = 2)]
         public int? IsMandatory { get; set; }
 
         public DateTime? AddedDate { get; set; }

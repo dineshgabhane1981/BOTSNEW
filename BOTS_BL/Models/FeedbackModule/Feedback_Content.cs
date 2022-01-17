@@ -25,6 +25,7 @@ namespace BOTS_BL.Models
 
         public bool IsDisplay { get; set; }
 
+        [StringLength(50)]
         public string IsMandatory { get; set; }
 
         public DateTime? AddedDate { get; set; }
@@ -36,6 +37,7 @@ namespace BOTS_BL.Models
 
         [StringLength(50)]
         public string UpdatedBy { get; set; }
+        
         [NotMapped]
         public string ImagePath { get; set; }
     }

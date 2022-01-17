@@ -177,6 +177,10 @@
                                             var name = "variety" + item.Id;
                                             <h3 style="font-size:20px;">
                                                 @item.Text
+                                                @if (item.IsMandatory == "Mandatory")
+                                                {
+                                                    <span style="color:red;">*</span>
+                                                }
                                             </h3>
                                             <div class="cc-selector">
                                                 <input id="@rbtn1" type="radio" name="@name" />
@@ -189,11 +193,26 @@
                                                 <label class="drinkcard-cc rbtvariety4" for="@rbtn4"></label>
                                             </div>
                                         }
+                                        @if (item.Type == "Textbox")
+                                        {
+                                            @Html.HiddenFor(model => item.Id, new { @id = "hdnQuestionId" + item.Id })
+                                            @Html.HiddenFor(model => item.IsMandatory, new { @id = "hdnQuestionType" + item.Id })
+                                            <h3 style="font-size:20px;">
+                                                Comments
+                                                @if (item.IsMandatory == "Mandatory")
+                                                {
+                                                    <span style="color:red;">*</span>
+                                                }
+                                            </h3>
+                                            <div class="col-md-12 col-sm-12 pb-5" style="text-align:center;">
+                                                <textarea class="input100" id="txtComments" cols="50" rows="5" placeholder="Enter Comments"></textarea>
+                                            </div>
+                                        }
                                     </div>
                                 }
                             }
                         </div>
-                        <div class="row mt-5">
+                        <div class="row mt-3">
                             <div class="col-md-12 col-sm-12 pb-5" style="text-align:center;">
                                 <button type="button" class="btn btn-primary" style="width: 280px; background-color: #1C699F; color:white; font-weight:bold; font-size:18px; border-radius:5px;" id="btnNextpg" onclick="SubmitRating();">Next Page</button>
                             </div>
@@ -225,7 +244,11 @@
                                             }
                                             @if (item.Type == "Question")
                                             {
-                                                <span style="padding-right:5px;"> @item.Text </span>
+                                                <span style="padding-right:5px;"> @item.Text  </span>
+                                                if (item.IsMandatory == "Mandatory")
+                                                {
+                                                    <span style="color:red;">*</span>
+                                                }
 
                                                 if (item.TypeId == 1)
                                                 {
@@ -322,7 +345,7 @@
     function SubmitRating() {
         var returnStatus = false;
         var HomeData = [];
-        //hdshowrepresentative
+        var Comments = "";
             $('[id^=hdnQuestionId]').each(function (i, itemid) {
                 var id11 = itemid.id.substr(13); //hdnMandatoryQuestionId
 
@@ -343,13 +366,24 @@
                             return false;
                         }
                     }
-
                 });
                 if (!returnStatus) {
                     return false;
                 }
             });
 
+            $('[id^=hdnQuestionType]').each(function (i, itemid) {
+                console.log($("#" + itemid.id).val())
+                if ($("#" + itemid.id).val() == "Mandatory") {
+                    if ($("#txtComments").val() == "") {
+                        returnStatus = false;
+                        return false;
+                    }
+                    else {
+                        Comments = $("#txtComments").val();
+                    }
+                }
+            });
         if (!returnStatus) {
             console.log("required");
             cuteAlert({
@@ -360,34 +394,32 @@
             })
             return false;
         }
-       // }
-        if ($("#hdshowrepresentative").text()) {
-            if ($("#ddlsaleslist").prop('selectedIndex') !== 0) {
-                var sales = $("#ddlsaleslist option:selected").text();
-            }
-        }
+
         if (returnStatus == true) {
-        $('[id^=hdnQuestionId]').each(function (i, itemid) {
+            $('[id^=hdnQuestionId]').each(function (i, itemid) {
 
-            var id11 = itemid.id.substr(13);
+                var id11 = itemid.id.substr(13);
+                $('[id^=rbtvariety' + id11 + ']').each(function (i, itemradio) {
+                    if ($("#" + itemradio.id).is(":checked")) {
+                        HomeData.push(itemradio.id);
+                        //console.log(HomeData);
+                    }
+                });
 
-            $('[id^=rbtvariety' + id11 + ']').each(function (i, itemradio) {
-
-                if ($("#" + itemradio.id).is(":checked")) {
-                    HomeData.push(itemradio.id);
-                    //console.log(HomeData);
-                }
             });
 
-        });
+            var sales = "";
+            if ($("#hdshowrepresentative").text()=="True") {
+                if ($("#ddlsaleslist").prop('selectedIndex') !== 0) {
+                    sales = $("#ddlsaleslist option:selected").text();
+                }
+            }
 
-
-            console.log(HomeData);
             $("#divLoader").show();
             $.ajax({
                 type: "POST",
                 url: '@Url.Action("SubmitPoints", "Feedback")',
-                data: '{mobileNo: ' + JSON.stringify($("#txtMobileNo").val()) + ', ranking: ' + JSON.stringify(JSON.stringify(HomeData)) + ', GroupId: ' + JSON.stringify($("#hdGroupId").val()) + ', SalesRepresentative: ' + JSON.stringify(sales) + ', outletId: ' + JSON.stringify($("#hdoutletId").val()) + '}',
+                data: '{mobileNo: ' + JSON.stringify($("#txtMobileNo").val()) + ', ranking: ' + JSON.stringify(JSON.stringify(HomeData)) + ', GroupId: ' + JSON.stringify($("#hdGroupId").val()) + ', SalesRepresentative: ' + JSON.stringify(sales) + ',Comments: ' + JSON.stringify(Comments) + ', outletId: ' + JSON.stringify($("#hdoutletId").val()) + '}',
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
                 success: function (response) {

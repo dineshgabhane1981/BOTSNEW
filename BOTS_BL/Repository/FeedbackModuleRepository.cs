@@ -341,6 +341,33 @@ namespace BOTS_BL.Repository
             return GroupNm;
 
         }
+
+        public bool CheckActiveLink(string groupId)
+        {
+            bool isActive = true;
+            try
+            {
+                using (var context = new CommonDBContext())
+                {
+                    var grpId = Convert.ToInt32(groupId);
+                    var config = context.Feedback_FeedbackConfig.Where(x => x.GroupId == grpId).FirstOrDefault();
+                    if ((config.EndDate.Value.AddDays(7) < DateTime.Today))
+                    {
+                        isActive = false;
+                    }
+                    if (config.Status == "Stop")
+                    {
+                        isActive = false;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "CheckActiveLink");
+            }
+
+            return isActive;
+        }
         public List<Feedback_Content> GetFeedbackHeading(string GroupId)
         {
             List<Feedback_Content> lstfbget = new List<Feedback_Content>();
@@ -439,7 +466,7 @@ namespace BOTS_BL.Repository
                         var objFeedback = context.Feedback_Content.Where(x => x.Id == Id && x.GroupId == GroupId).FirstOrDefault();
                         objFeedback.Text = Convert.ToString(item["Text"]);
                         objFeedback.IsDisplay = Convert.ToBoolean(item["IsDisplay"]);
-                        //objFeedback.IsMandatory = Convert.ToInt32(item["IsMandatory"]);
+                        
                         objFeedback.UpdatedDate = DateTime.Now;
                         objFeedback.UpdatedBy = LoginId;
 
@@ -453,6 +480,10 @@ namespace BOTS_BL.Repository
                         objFeedback.Text = Convert.ToString(item["Text"]);
                         objFeedback.IsDisplay = Convert.ToBoolean(item["IsDisplay"]);
                         if (objFeedback.Type == "Question")
+                        {
+                            objFeedback.IsMandatory = Convert.ToString(item["IsMandatory"]);
+                        }
+                        if (objFeedback.Type == "Textbox")
                         {
                             objFeedback.IsMandatory = Convert.ToString(item["IsMandatory"]);
                         }
@@ -661,7 +692,7 @@ namespace BOTS_BL.Repository
             return obj;
         }
 
-        public string SubmitRating(string mobileNo, string ranking, string GroupId, string salesid, string outletId)
+        public string SubmitRating(string mobileNo, string ranking, string GroupId, string salesid, string Comments, string outletId)
         {
             string status = "false";
             // string smsresponce = "";
@@ -727,13 +758,12 @@ namespace BOTS_BL.Repository
                     objfeedback.QuestionId = id;
                     objfeedback.OutletId = outletId;
                     objfeedback.SalesRepresentative = salesid;
+                    objfeedback.Comments = Comments;
                     objfeedback.AddedDate = date;
                     Combinedpoint += point;
                     objfeedback = context.feedback_FeedbackMaster.Add(objfeedback);
                     context.SaveChanges();
                     status = "true";
-
-
                 }
 
                 if (Combinedpoint <= 4)
@@ -1172,7 +1202,7 @@ namespace BOTS_BL.Repository
                 int id = 1;
                 lstsales.Add(new SelectListItem
                 {
-                    Text = "Please Select",
+                    Text = "All",
                     Value = "0"
                 });
                 foreach (var item in salesList)
@@ -1584,6 +1614,7 @@ namespace BOTS_BL.Repository
                                             outletid = result.Select(x => x.OutletId).FirstOrDefault(),
                                             howtoknow = result.Select(x => x.HowToKnowAbout).FirstOrDefault(),
                                             datetime = result.Select(x => x.AddedDate).FirstOrDefault(),
+                                            comments= result.Select(x => x.Comments).FirstOrDefault(),
                                         }).FirstOrDefault();
 
                         var invoiceamt = context.TransactionMasters.Where(x => x.MobileNo == feedback.Mobilenumber && x.Datetime == today).GroupBy(x => x.MobileNo)
@@ -1611,6 +1642,7 @@ namespace BOTS_BL.Repository
                         objreport.Datetime = feedback.datetime.ToString();
                         objreport.OutletName = outlet.OutletName;
                         objreport.SalesRName = feedback.salesR;
+                        objreport.Comments = feedback.comments;
                         objreport.Type = custinfo.Select(x => x.cust).FirstOrDefault();
                         objreport.TxnAmount = invoiceamt.Select(x => x.totalamt).FirstOrDefault();
                         objreport.Txn = invoiceamt.Select(x => x.txnstatus).FirstOrDefault();
