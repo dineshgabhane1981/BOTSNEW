@@ -8,7 +8,7 @@
     <div class="container-fluid pt-3 pl-3 pr-3">
         <div class="pt-3 pl-3 pr-3 pb-3 col-md-12 col-lg-12 card">
             <div style="text-align:right;">
-                <a href="@Url.Action("CreateFeedback", "Feedback")"><button type="button" class="btn btn-primary pull-right">Update Feedback Details</button></a>
+                <a href="@Url.Action("CreateFeedback", "Feedback")"><button type="button" class="btn btn-primary pull-right">Add/Modify Feedback</button></a>
             </div>
 
             <div style="margin-bottom:20px;">
@@ -25,8 +25,12 @@
                     <button id="btnFilter" class="btn btn-primary login-btn" style="margin-top:10px;" onclick="FilterData();">Filter</button>
                 </div>
             </div>
-
-        </div>
+            <div class="row" style="margin-top:20px;font-size:12px;">
+                <div class="col-md-4 col-xl-4">
+                    * Default : Yesterday's Report
+                </div>
+            </div>
+            </div>
 
         <div class="row" style="margin-top:10px;">
             @Html.HiddenFor(model => model.SRChart, new { @id = "hdnSRChart" })
@@ -92,19 +96,19 @@
                                 <div class="card mb-3 widget-chart widget-chart2 text-left w-100">
                                     <div class="widget-chat-wrapper-outer">
                                         <div style="display:flex;margin-top:30px;">
-                                            <div class="widget-chart-wrapper widget-chart-wrapper-lg opacity-10 m-0" id="containerLessThan12" style="width:230px;border-right:1px solid black;text-align:center;margin-bottom:10px !important;">
+                                            <div class="widget-chart-wrapper widget-chart-wrapper-lg opacity-10 m-0" id="containerLessThan12" style="width:24%;border-right:1px solid black;text-align:center;margin-bottom:10px !important;">
                                                 <span style="font-weight:bold;">Before 12 PM</span>
                                                 <canvas id="cvLessThan12"></canvas>
                                             </div>
-                                            <div class="widget-chart-wrapper widget-chart-wrapper-lg opacity-10 m-0" id="container12To3" style="width: 230px; border-right: 1px solid black; text-align: center; margin-bottom: 10px !important; ">
+                                            <div class="widget-chart-wrapper widget-chart-wrapper-lg opacity-10 m-0" id="container12To3" style="width: 24%; border-right: 1px solid black; text-align: center; margin-bottom: 10px !important; ">
                                                 <span style="font-weight:bold;">Between 12 PM to 3 PM</span>
                                                 <canvas id="cv12To3"></canvas>
                                             </div>
-                                            <div class="widget-chart-wrapper widget-chart-wrapper-lg opacity-10 m-0" id="container3To6" style="width: 230px; border-right: 1px solid black; text-align: center; margin-bottom: 10px !important; ">
+                                            <div class="widget-chart-wrapper widget-chart-wrapper-lg opacity-10 m-0" id="container3To6" style="width: 24%; border-right: 1px solid black; text-align: center; margin-bottom: 10px !important; ">
                                                 <span style="font-weight:bold;">Between 3 PM to 6 PM</span>
                                                 <canvas id="cv3To6"></canvas>
                                             </div>
-                                            <div class="widget-chart-wrapper widget-chart-wrapper-lg opacity-10 m-0" id="containerMoreThan6" style="width: 230px; text-align: center; margin-bottom: 10px !important; ">
+                                            <div class="widget-chart-wrapper widget-chart-wrapper-lg opacity-10 m-0" id="containerMoreThan6" style="width: 24%; text-align: center; margin-bottom: 10px !important; ">
                                                 <span style="font-weight:bold;">After 6 PM</span>
                                                 <canvas id="cvMoreThan6"></canvas>
                                             </div>
@@ -469,7 +473,7 @@
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             success: function (response) {
-                 
+
                 if (response != null) {
                     $('#cv12To3').remove(); // this is my <canvas> element
                     $('#container12To3').append('<canvas id="cv12To3"><canvas>');
@@ -554,7 +558,7 @@
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             success: function (response) {
-                 
+
                 if (response != null) {
                     $('#cv3To6').remove(); // this is my <canvas> element
                     $('#container3To6').append('<canvas id="cv3To6"><canvas>');
@@ -638,7 +642,7 @@
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             success: function (response) {
-                
+
                 if (response != null) {
                     $('#cvMoreThan6').remove(); // this is my <canvas> element
                     $('#containerMoreThan6').append('<canvas id="cvMoreThan6"><canvas>');
@@ -936,7 +940,7 @@
     }
 
     function FilterData() {
-        
+
         GetNewUserChart();
         GetExistingUserChart();
         GetLessThan12Chart();

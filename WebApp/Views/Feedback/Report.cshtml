@@ -16,7 +16,7 @@
             <div class="row mt-3 mb-4">
                 <div class="col-md-4 col-xl-6">
                     Select Outlet
-                    @Html.DropDownList("Outlet", new SelectList(Model.lstoutletlist, "Value", "Text"),"Please Select ", htmlAttributes: new { @class = "input100", @id = "ddloutlet" })
+                    @Html.DropDownList("Outlet", new SelectList(Model.lstoutletlist, "Value", "Text"),"All", htmlAttributes: new { @class = "input100", @id = "ddloutlet" })
                 </div>
                 @if (Model.PointsAndMessages.IsAddRepresentative)
                 {
@@ -43,7 +43,7 @@
                 </div>
 
             </div>
-            <div id="dvReportData">
+            <div id="dvReportData" class="mt-5">
 
             </div>
         </div>

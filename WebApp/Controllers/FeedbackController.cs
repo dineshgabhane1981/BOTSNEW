@@ -177,23 +177,30 @@ namespace WebApp.Controllers
             FeedbackAuthorViewModel objFeedbackAuthor = new FeedbackAuthorViewModel();
             Feedback_PointsAndMessages PointsAndMessages = new Feedback_PointsAndMessages();
             List<OutletDetailsViewModel> objOutletData = new List<OutletDetailsViewModel>();
-            objFeedbackAuthor.GroupId = userDetails.GroupId;
-            objFeedbackAuthor.lstFeedbackData = FMR.GetFeedback_Contents(userDetails.GroupId);
-            objFeedbackAuthor.lstOutletDetail = RR.GetOutletList(userDetails.GroupId, userDetails.connectionString);
-            foreach (var item in objFeedbackAuthor.lstOutletDetail)
+            try
             {
-                OutletDetailsViewModel objOT = new OutletDetailsViewModel();
-                objOT.mobileNos = FMR.GetOutletMobileNos(userDetails.GroupId, item.Value);
-                objOT.outletId = item.Value;
-                objOT.outletName = item.Text;
+                objFeedbackAuthor.GroupId = userDetails.GroupId;
+                objFeedbackAuthor.lstFeedbackData = FMR.GetFeedback_Contents(userDetails.GroupId);
+                objFeedbackAuthor.lstOutletDetail = RR.GetOutletList(userDetails.GroupId, userDetails.connectionString);
+                foreach (var item in objFeedbackAuthor.lstOutletDetail)
+                {
+                    OutletDetailsViewModel objOT = new OutletDetailsViewModel();
+                    objOT.mobileNos = FMR.GetOutletMobileNos(userDetails.GroupId, item.Value);
+                    objOT.outletId = item.Value;
+                    objOT.outletName = item.Text;
 
-                objOutletData.Add(objOT);
+                    objOutletData.Add(objOT);
+                }
+                objFeedbackAuthor.lstOutletData = objOutletData;
+                PointsAndMessages = FMR.GetPointsAndMessages(userDetails.GroupId);
+                objFeedbackAuthor.PointsAndMessages = PointsAndMessages;
+                objFeedbackAuthor.lstKnowAboutUs = FMR.GetHowToKnowAboutList();
+                objFeedbackAuthor.LogoUrl = FMR.GetLogo(userDetails.GroupId);
             }
-            objFeedbackAuthor.lstOutletData = objOutletData;
-            PointsAndMessages = FMR.GetPointsAndMessages(userDetails.GroupId);
-            objFeedbackAuthor.PointsAndMessages = PointsAndMessages;
-            objFeedbackAuthor.lstKnowAboutUs = FMR.GetHowToKnowAboutList();
-            objFeedbackAuthor.LogoUrl = FMR.GetLogo(userDetails.GroupId);
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "CreateFeedback");
+            }
             return View(objFeedbackAuthor);
         }
 
@@ -210,9 +217,11 @@ namespace WebApp.Controllers
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
             FeedbackGetFeedbackViewModel objgetfeedbackviewmodel = new FeedbackGetFeedbackViewModel();
             Feedback_PointsAndMessages PointsAndMessages = new Feedback_PointsAndMessages();
+            
             // List<Feedback_Content> lstfbget = new List<Feedback_Content>();
             objgetfeedbackviewmodel.OutletId = Id;
             objgetfeedbackviewmodel.GroupId = groupid;
+            objgetfeedbackviewmodel.IsExpiredOrStopped = FMR.CheckActiveLink(groupid);
             objgetfeedbackviewmodel.GroupName = FMR.GetGroupName(groupid);
             objgetfeedbackviewmodel.lstFeedbackData = FMR.GetFeedback_VisibleContents(groupid);
             objgetfeedbackviewmodel.LogoUrl = FMR.GetLogo(groupid);
