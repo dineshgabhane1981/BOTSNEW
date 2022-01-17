@@ -21,36 +21,38 @@ namespace BOTS_BL.Repository
             {
                 using (var context = new CommonDBContext())
                 {
+                    CustomerLoginDetail objcustexist = new CustomerLoginDetail();
                     objdashboardlogindeatils = context.CustomerLoginDetails.Where(x => x.LoginId == objdashboardlogin.MobileNo && x.GroupId == objdashboardlogin.GroupId).FirstOrDefault();
                     if (objdashboardlogindeatils == null)
                     {
-                        objdashboardlogindeatils.UserId = objdashboardlogin.GroupId;
-                        objdashboardlogindeatils.LoginId = objdashboardlogin.MobileNo;
-                        objdashboardlogindeatils.Password = "123";
-                        objdashboardlogindeatils.UserName = objdashboardlogin.CustomerName;
+
+                        objcustexist.UserId = objdashboardlogin.GroupId;
+                        objcustexist.LoginId = objdashboardlogin.MobileNo;
+                        objcustexist.Password = "123";
+                        objcustexist.UserName = objdashboardlogin.CustomerName;
                         if (objdashboardlogin.LoginType == "02")
                         {
-                            objdashboardlogindeatils.LevelIndicator = "02";
-                            objdashboardlogindeatils.CreatedDate = DateTime.UtcNow.Date;
-                            objdashboardlogindeatils.LoginStatus = true;
-                            objdashboardlogindeatils.UserStatus = true;
+                            objcustexist.LevelIndicator = "02";
+                            objcustexist.CreatedDate = DateTime.UtcNow.Date;
+                            objcustexist.LoginStatus = true;
+                            objcustexist.UserStatus = true;
 
 
                         }
                         else
                         {
-                            objdashboardlogindeatils.LevelIndicator = "04";
-                            objdashboardlogindeatils.CreatedDate = DateTime.UtcNow.Date;
-                            objdashboardlogindeatils.LoginStatus = true;
-                            objdashboardlogindeatils.UserStatus = true;
-                            objdashboardlogindeatils.OutletOrBrandId = objdashboardlogin.OutletOrBrandId;
+                            objcustexist.LevelIndicator = "04";
+                            objcustexist.CreatedDate = DateTime.UtcNow.Date;
+                            objcustexist.LoginStatus = true;
+                            objcustexist.UserStatus = true;
+                            objcustexist.OutletOrBrandId = objdashboardlogin.OutletOrBrandId;
                         }
-                        objdashboardlogindeatils.GroupId = objdashboardlogin.GroupId;
-                        objdashboardlogindeatils.EmailId = null;
-                        objdashboardlogindeatils.MobileNo = null;
-                        objdashboardlogindeatils.LoginType = null;
+                        objcustexist.GroupId = objdashboardlogin.GroupId;
+                        objcustexist.EmailId = null;
+                        objcustexist.MobileNo = null;
+                        objcustexist.LoginType = null;
 
-                        context.CustomerLoginDetails.AddOrUpdate(objdashboardlogindeatils);
+                        context.CustomerLoginDetails.AddOrUpdate(objcustexist);
                         context.SaveChanges();
 
                         status = true;
