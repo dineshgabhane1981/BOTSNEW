@@ -116,5 +116,10 @@ namespace BOTS_BL.Models.CommonDB
         public Response response { get; set; }
     }
 
+    public class visionclass
+    {
+        public string balance { get; set; }
+        public string username { get; set; }
+    }
     
 }

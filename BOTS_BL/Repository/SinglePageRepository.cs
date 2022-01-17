@@ -2,12 +2,19 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Reflection;
+using System.Text;
+using System.Web;
+using System.Xml;
+using System.Xml.Linq;
+using System.Xml.Serialization;
 using BOTS_BL.Models;
 using BOTS_BL.Models.CommonDB;
+using DocumentFormat.OpenXml.Spreadsheet;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
@@ -354,8 +361,6 @@ namespace BOTS_BL.Repository
             User objuser = new User();
             List<SMSBalance> lstbalance = new List<SMSBalance>();
             DateTime next10day = DateTime.Now.AddDays(10);
-            
-
             DataSet retVal = new DataSet();
             var baseAddress = "https://smsnotify.one/SMSApi/reseller/readuser?userid=Blueotrans&password=123456&output=json";
             using (var client = new HttpClient())
@@ -370,9 +375,7 @@ namespace BOTS_BL.Repository
                         var rootlist = JsonConvert.DeserializeObject<Dictionary<string, dynamic>>(response2);
                         JObject jsonObj = JObject.Parse(response2);
                          IList<JToken> hotels = jsonObj["response"]["userList"].Children().ToList();
-                        IEnumerable<JToken> pricyProducts = jsonObj.SelectTokens("$..user");
-                        
-                        
+                        IEnumerable<JToken> pricyProducts = jsonObj.SelectTokens("$..user");                       
 
                         foreach (JToken item in pricyProducts)
                         {
@@ -391,6 +394,37 @@ namespace BOTS_BL.Repository
                     }
                 }
             }
+            //vision
+            var baseAddressvision = "https://sms.visionhlt.com/api/mt/GetCreditReport?userid=4438&password=123456";
+            using (var client = new HttpClient())
+            {
+                using (var response1 = client.GetAsync(baseAddressvision).Result)
+                {
+                    if (response1.IsSuccessStatusCode)
+                    {
+                        client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/xml"));
+                        // var response2 = client.GetStringAsync(new Uri(baseAddressvision)).Result;
+
+                        // var rootlist = XmlConvert.DeserializeObject<Dictionary<string, dynamic>>(response2);
+
+                        string users = response1.Content.ReadAsStringAsync().Result;
+
+                        XmlSerializer serializer = new XmlSerializer(typeof(List<User>), new XmlRootAttribute("CreditReport"));
+                        StringReader stringReader = new StringReader(users);
+                        List<User> productList = (List<User>)serializer.Deserialize(stringReader);
+
+                    }
+                    else
+                    {
+                        Console.WriteLine("{0} ({1})", (int)response1.StatusCode, response1.ReasonPhrase);
+                    }
+                }
+            }
+
+
+
+
+
             //try
             //{
             //    SqlConnection sqlConn = new SqlConnection("Data Source=13.233.128.61;Initial Catalog=CommonDBLoyalty;user id = sa; password=BO%Admin#LY!4@");
