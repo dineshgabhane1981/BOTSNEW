@@ -293,13 +293,13 @@ namespace WebApp.Controllers
             return new JsonResult() { Data = lstData, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
 
-        public JsonResult DashboardOutletWiseData()
+        public JsonResult DashboardOutletWiseData(string OutletId, string FromDt, string ToDT)
         {
             List<object> lstData = new List<object>();
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
             try
             {
-                var lstOutletWise = FMR.GetOutletWiseData(userDetails.GroupId);
+                var lstOutletWise = FMR.GetOutletWiseData(userDetails.GroupId, OutletId, FromDt, ToDT);
                 List<string> nameList = new List<string>();
                 List<double> dataList = new List<double>();
 
@@ -318,13 +318,13 @@ namespace WebApp.Controllers
 
             return new JsonResult() { Data = lstData, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
-        public JsonResult DashboardSRWiseData()
+        public JsonResult DashboardSRWiseData(string OutletId, string FromDt, string ToDT)
         {
             List<object> lstData = new List<object>();
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
             try
             {
-                var lstSRWise = FMR.GetSRWiseData(userDetails.GroupId);
+                var lstSRWise = FMR.GetSRWiseData(userDetails.GroupId, OutletId, FromDt, ToDT);
                 List<string> nameList = new List<string>();
                 List<double> dataList = new List<double>();
 
@@ -351,13 +351,13 @@ namespace WebApp.Controllers
 
             return new JsonResult() { Data = lstData, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
-        public JsonResult DashboardLessThank12Data()
+        public JsonResult DashboardLessThank12Data(string OutletId, string FromDt, string ToDT)
         {
             List<int> lstData = new List<int>();
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
             try
             {
-                lstData = FMR.GetTimeWiseData(userDetails.GroupId, "1");
+                lstData = FMR.GetTimeWiseData(userDetails.GroupId, OutletId, FromDt, ToDT, "1");
             }
             catch (Exception ex)
             {
@@ -365,13 +365,13 @@ namespace WebApp.Controllers
             }
             return new JsonResult() { Data = lstData, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
-        public JsonResult Dashboard12To3Data()
+        public JsonResult Dashboard12To3Data(string OutletId, string FromDt, string ToDT)
         {
             List<int> lstData = new List<int>();
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
             try
             {
-                lstData = FMR.GetTimeWiseData(userDetails.GroupId, "2");
+                lstData = FMR.GetTimeWiseData(userDetails.GroupId, OutletId, FromDt, ToDT, "2");
             }
             catch (Exception ex)
             {
@@ -379,13 +379,13 @@ namespace WebApp.Controllers
             }
             return new JsonResult() { Data = lstData, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
-        public JsonResult Dashboard3To6Data()
+        public JsonResult Dashboard3To6Data(string OutletId, string FromDt, string ToDT)
         {
             List<int> lstData = new List<int>();
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
             try
             {
-                lstData = FMR.GetTimeWiseData(userDetails.GroupId, "3");
+                lstData = FMR.GetTimeWiseData(userDetails.GroupId, OutletId, FromDt, ToDT, "3");
             }
             catch (Exception ex)
             {
@@ -393,13 +393,13 @@ namespace WebApp.Controllers
             }
             return new JsonResult() { Data = lstData, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
-        public JsonResult DashboardMoreThan6Data()
+        public JsonResult DashboardMoreThan6Data(string OutletId, string FromDt, string ToDT)
         {
             List<int> lstData = new List<int>();
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
             try
             {
-                lstData = FMR.GetTimeWiseData(userDetails.GroupId, "4");
+                lstData = FMR.GetTimeWiseData(userDetails.GroupId, OutletId, FromDt, ToDT, "4");
             }
             catch (Exception ex)
             {
