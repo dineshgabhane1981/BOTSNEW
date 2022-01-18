@@ -32,4 +32,9 @@ namespace BOTS_BL.Models
         public int timeHr { get; set; }
         public decimal AvgPoints { get; set; }
     }
+    public class DashboardSourceWise
+    {
+        public string SourceName { get; set; }
+        public double AvgPoints { get; set; }
+    }
 }

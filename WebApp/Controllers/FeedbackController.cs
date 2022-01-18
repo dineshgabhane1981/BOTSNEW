@@ -420,6 +420,33 @@ namespace WebApp.Controllers
             }
             return new JsonResult() { Data = lstData, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
+
+        public JsonResult DashboardSourceWiseData(string OutletId, string FromDt, string ToDT)
+        {
+            List<object> lstData = new List<object>();
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            try
+            {
+                var lstOutletWise = FMR.GetSourceWiseData(userDetails.GroupId, OutletId, FromDt, ToDT);
+                List<string> nameList = new List<string>();
+                List<double> dataList = new List<double>();
+
+                foreach (var item in lstOutletWise)
+                {
+                    nameList.Add(item.SourceName);
+                    dataList.Add(item.AvgPoints);
+                }
+                lstData.Add(nameList);
+                lstData.Add(dataList);
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, userDetails.GroupId);
+            }
+
+            return new JsonResult() { Data = lstData, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
+        }
+
         public ActionResult Report()
         {
             FeedbackGetFeedbackViewModel objviewmodel = new FeedbackGetFeedbackViewModel();
