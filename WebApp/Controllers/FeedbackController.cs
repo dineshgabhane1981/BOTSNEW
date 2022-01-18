@@ -14,6 +14,10 @@ using System.Net.Http;
 using Newtonsoft.Json;
 using System.Xml;
 using BOTS_BL.Models.FeedbackModule;
+using System.ComponentModel;
+using System.Data;
+using ClosedXML.Excel;
+using System.IO;
 
 namespace WebApp.Controllers
 {
@@ -491,6 +495,61 @@ namespace WebApp.Controllers
             return new JsonResult() { Data = status, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
 
         }
+        public ActionResult ExportToExcelFeedbackReport(string fromdt, string Todt, string GroupId, string salesR, string Outlet, string ReportName)
+        {
+            System.Data.DataTable table = new System.Data.DataTable();
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            try
+            {
+                DateTime fromdate = new DateTime();
+                DateTime ToDate = new DateTime();
+                if (fromdt != "" && Todt !="")
+                {
+                    fromdate= Convert.ToDateTime(fromdt);
+                    ToDate = Convert.ToDateTime(Todt);
+                }               
+                List<Feedback_Report> lstreport = new List<Feedback_Report>();
+                lstreport = lstreport = FMR.GetReportData(GroupId, fromdate, ToDate, salesR, Outlet);
+                PropertyDescriptorCollection properties = TypeDescriptor.GetProperties(typeof(Feedback_Report));
+                foreach (PropertyDescriptor prop in properties)
+                    table.Columns.Add(prop.Name, Nullable.GetUnderlyingType(prop.PropertyType) ?? prop.PropertyType);
 
+                foreach (Feedback_Report item in lstreport)
+                {
+                    DataRow row = table.NewRow();
+                    foreach (PropertyDescriptor prop in properties)
+                        row[prop.Name] = prop.GetValue(item) ?? DBNull.Value;
+
+                    table.Rows.Add(row);
+                }
+                string fileName = "BOTS_" + ReportName + ".xlsx";
+                using (XLWorkbook wb = new XLWorkbook())
+                {                   
+                    table.TableName = ReportName;
+                    IXLWorksheet worksheet = wb.AddWorksheet(sheetName: ReportName);
+                    worksheet.Cell(1, 1).Value = "Report Name";
+                    worksheet.Cell(1, 2).Value = "FeedBack Report";
+                    worksheet.Cell(2, 1).Value = "Period";
+                    worksheet.Cell(2, 2).Value = fromdt + "-" + Todt;
+                    worksheet.Cell(3, 1).Value = "Sales Reprentative";
+                    worksheet.Cell(3, 2).Value = salesR;                    
+                    worksheet.Cell(6, 1).InsertTable(table);
+                    //wb.Worksheets.Add(table);
+                    using (MemoryStream stream = new MemoryStream())
+                    {
+                        wb.SaveAs(stream);
+
+                        return File(stream.ToArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, userDetails.GroupId);
+                return null;
+            }
+
+
+        }
     }
 }
