@@ -17,6 +17,7 @@ namespace WebApp.Controllers
     {
         KeyIndecatorsRepository KR = new KeyIndecatorsRepository();
         ReportsRepository RR = new ReportsRepository();
+        CustomerRepository CR = new CustomerRepository();
         // GET: KeyIndicators
         public ActionResult Index()
         {
@@ -145,6 +146,15 @@ namespace WebApp.Controllers
             }
             List<OnlyOnceTxn> objOnlyOnceTxn = new List<OnlyOnceTxn>();
             objOnlyOnceTxn = KR.GetOnlyOnceTxnData(userDetails.GroupId, outletId, type, userDetails.connectionString);
+
+            var GroupDetails = CR.GetGroupDetails(Convert.ToInt32(userDetails.GroupId));
+            if (!GroupDetails.IsMasked)
+            {
+                foreach (var item in objOnlyOnceTxn)
+                {
+                    item.MaskedMobileNo = item.MobileNo;
+                }
+            }
             return new JsonResult() { Data = objOnlyOnceTxn, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
 
@@ -178,9 +188,20 @@ namespace WebApp.Controllers
                         .ToString("MM/dd/yyyy", CultureInfo.InvariantCulture);
                     }
                 }
-                    //table.Columns.Remove("OutletId");
+                var GroupDetails = CR.GetGroupDetails(Convert.ToInt32(userDetails.GroupId));
+               
+                if (!GroupDetails.IsMasked)
+                {
+                    table.Columns.Remove("MaskedMobileNo");
+                }
+                else
+                {
                     table.Columns.Remove("MobileNo");
-                table.Columns["MaskedMobileNo"].ColumnName = "MobileNo";
+                    table.Columns["MaskedMobileNo"].ColumnName = "MobileNo";
+                }
+                //table.Columns.Remove("OutletId");
+                //table.Columns.Remove("MobileNo");
+                //table.Columns["MaskedMobileNo"].ColumnName = "MobileNo";
                 string fileName = "BOTS_" + ReportName + ".xlsx";
                 using (XLWorkbook wb = new XLWorkbook())
                 {
@@ -272,6 +293,15 @@ namespace WebApp.Controllers
             }
             List<NonTransactingTxn> objNonTransactingTxn = new List<NonTransactingTxn>();
             objNonTransactingTxn = KR.GetNonTransactingTxnData(userDetails.GroupId, outletId, barType, userDetails.connectionString);
+            var GroupDetails = CR.GetGroupDetails(Convert.ToInt32(userDetails.GroupId));
+            if (!GroupDetails.IsMasked)
+            {
+                foreach (var item in objNonTransactingTxn)
+                {
+                    item.MaskedMobileNo = item.MobileNo;
+                }
+            }
+
             return new JsonResult() { Data = objNonTransactingTxn, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
 
@@ -280,6 +310,15 @@ namespace WebApp.Controllers
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
             List<NonRedemptionTxn> objNonRedemptionTxn = new List<NonRedemptionTxn>();
             objNonRedemptionTxn = KR.GetNonRedemptionTxnData(userDetails.GroupId, type, daysType, userDetails.connectionString);
+            var GroupDetails = CR.GetGroupDetails(Convert.ToInt32(userDetails.GroupId));
+            if (!GroupDetails.IsMasked)
+            {
+                foreach (var item in objNonRedemptionTxn)
+                {
+                    item.MaskedMobileNo = item.MobileNo;
+                }
+            }
+
             return new JsonResult() { Data = objNonRedemptionTxn, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
         public JsonResult GetNewRegistrationList(string SourceId)
@@ -339,8 +378,16 @@ namespace WebApp.Controllers
                 }
                 else
                 {
-                    table.Columns.Remove("MobileNo");
-                    table.Columns["MaskedMobileNo"].ColumnName = "MobileNo";
+                    var GroupDetails = CR.GetGroupDetails(Convert.ToInt32(userDetails.GroupId));
+                    if (!GroupDetails.IsMasked)
+                    {
+                        table.Columns.Remove("MaskedMobileNo");
+                    }
+                    else
+                    {
+                        table.Columns.Remove("MobileNo");
+                        table.Columns["MaskedMobileNo"].ColumnName = "MobileNo";
+                    }
                 }
                 foreach (DataRow dr in table.Rows)
                 {
@@ -354,7 +401,6 @@ namespace WebApp.Controllers
                 string fileName = "BOTS_" + ReportName + ".xlsx";
                 using (XLWorkbook wb = new XLWorkbook())
                 {
-
                     //excelSheet.Name
                     table.TableName = ReportName;
                     IXLWorksheet worksheet = wb.AddWorksheet(sheetName: ReportName);
@@ -382,8 +428,6 @@ namespace WebApp.Controllers
             {
                 return null;
             }
-
-
         }
 
         public ActionResult ExportToExcelNonRedemption(int type, int daysType, string ReportName, string EmailId)
@@ -393,8 +437,7 @@ namespace WebApp.Controllers
             {
                 var userDetails = (CustomerLoginDetail)Session["UserSession"];
                 List<NonRedemptionTxn> objNonRedemptionTxn = new List<NonRedemptionTxn>();
-                objNonRedemptionTxn = KR.GetNonRedemptionTxnData(userDetails.GroupId, type, daysType, userDetails.connectionString);
-                
+                objNonRedemptionTxn = KR.GetNonRedemptionTxnData(userDetails.GroupId, type, daysType, userDetails.connectionString);                
 
                 PropertyDescriptorCollection properties = TypeDescriptor.GetProperties(typeof(NonRedemptionTxn));
                 foreach (PropertyDescriptor prop in properties)
@@ -423,8 +466,16 @@ namespace WebApp.Controllers
                 }
                 else
                 {
-                    table.Columns.Remove("MobileNo");
-                    table.Columns["MaskedMobileNo"].ColumnName = "MobileNo";
+                    var GroupDetails = CR.GetGroupDetails(Convert.ToInt32(userDetails.GroupId));
+                    if (!GroupDetails.IsMasked)
+                    {
+                        table.Columns.Remove("MaskedMobileNo");
+                    }
+                    else
+                    {
+                        table.Columns.Remove("MobileNo");
+                        table.Columns["MaskedMobileNo"].ColumnName = "MobileNo";
+                    }
                 }
                 string fileName = "BOTS_" + ReportName + ".xlsx";
                 using (XLWorkbook wb = new XLWorkbook())
@@ -477,9 +528,6 @@ namespace WebApp.Controllers
             {
                 return null;
             }
-
-
         }
-
     }
 }

@@ -9,7 +9,7 @@ using System.Web.Mvc;
 
 namespace BOTS_BL.Repository
 {
-  public class DashBoardCustomerLoginRepository
+    public class DashBoardCustomerLoginRepository
     {
         CustomerRepository objCustRepo = new CustomerRepository();
         Exceptions newexception = new Exceptions();
@@ -70,7 +70,7 @@ namespace BOTS_BL.Repository
 
             return status;
         }
-        
+
         public List<SelectListItem> GetLoginType()
         {
             List<SelectListItem> lstlogintype = new List<SelectListItem>();
@@ -78,7 +78,7 @@ namespace BOTS_BL.Repository
             {
                 // var RetailCategory = context.tblCategories.ToList();
 
-                 lstlogintype.Add(new SelectListItem { Selected = true, Text = "---Select---", Value = "0" });
+                lstlogintype.Add(new SelectListItem { Selected = true, Text = "---Select---", Value = "0" });
                 lstlogintype.Add(new SelectListItem { Text = "Admin Login", Value = "Admin" });
                 lstlogintype.Add(new SelectListItem { Text = "Outlet Login", Value = "Outlet" });
 
@@ -89,31 +89,31 @@ namespace BOTS_BL.Repository
         public List<DashboardCustomerLogin> GetDashboardcustomerlogin(string GroupId)
         {
             List<DashboardCustomerLogin> objdashboard = new List<DashboardCustomerLogin>();
-          //  string connStr = objCustRepo.GetCustomerConnString(GroupId);
+            //  string connStr = objCustRepo.GetCustomerConnString(GroupId);
             using (var context = new CommonDBContext())
             {
-                objdashboard = (from c in context.CustomerLoginDetails                          
-                           where c.GroupId == GroupId
-                           select new DashboardCustomerLogin
-                           {
-                               SlNo = c.SlNo,
-                               OutletOrBrandId = c.OutletOrBrandId,
-                               CustLoginType= c.OutletOrBrandId !=null ? "OutletWise":"Admin",                        
-                               GroupId = c.GroupId,
-                               LoginType = c.LoginType,
-                               MobileNo = c.MobileNo,
-                               LoginStatus = c.LoginStatus,
-                               CreatedDate = c.CreatedDate,
-                               LevelIndicator = c.LevelIndicator,
-                               UserName = c.UserName,
-                               Password = c.Password,
-                               LoginId = c.LoginId,
-                               UserId =c.GroupId,
-                               CustomerName =c.UserName,
+                objdashboard = (from c in context.CustomerLoginDetails
+                                where c.GroupId == GroupId
+                                select new DashboardCustomerLogin
+                                {
+                                    SlNo = c.SlNo,
+                                    OutletOrBrandId = c.OutletOrBrandId,
+                                    CustLoginType = c.OutletOrBrandId != null ? "OutletWise" : "Admin",
+                                    GroupId = c.GroupId,
+                                    LoginType = c.LoginType,
+                                    MobileNo = c.MobileNo,
+                                    LoginStatus = c.LoginStatus,
+                                    CreatedDate = c.CreatedDate,
+                                    LevelIndicator = c.LevelIndicator,
+                                    UserName = c.UserName,
+                                    Password = c.Password,
+                                    LoginId = c.LoginId,
+                                    UserId = c.GroupId,
+                                    CustomerName = c.UserName,
 
-                           }).OrderByDescending(x => x.CreatedDate).ToList();
+                                }).OrderByDescending(x => x.CreatedDate).ToList();
 
-                foreach(var item in objdashboard)
+                foreach (var item in objdashboard)
                 {
                     item.CreatedDateStr = item.CreatedDate.Value.ToString("MM/dd/yyyy");
                 }
@@ -122,5 +122,27 @@ namespace BOTS_BL.Repository
             return objdashboard;
         }
 
+        public bool UpdateMaskedValue(int GroupId, string value)
+        {
+            bool status = false;
+            
+            using (var context = new CommonDBContext())
+            {
+                try
+                {
+                    var groupdetails = context.tblGroupDetails.Where(x => x.GroupId == GroupId).FirstOrDefault();
+                    groupdetails.IsMasked = Convert.ToBoolean(value);
+                    context.tblGroupDetails.AddOrUpdate(groupdetails);
+                    context.SaveChanges();
+                    status = true;
+                }
+                catch (Exception ex)
+                {
+                    newexception.AddException(ex, "UpdateMaskedValue");
+                }
+            }
+
+            return status;
+        }
     }
 }

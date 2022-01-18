@@ -68,6 +68,8 @@ namespace BOTS_BL.Models
 
         public bool? IsFeedback { get; set; }
 
+        public bool IsMasked { get; set; }
+
         [NotMapped]
         public string OtherRetailCategory { get; set; }
 

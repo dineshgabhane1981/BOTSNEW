@@ -13,6 +13,7 @@ namespace WebApp.Controllers
     {
         ReportsRepository RR = new ReportsRepository();
         DashBoardCustomerLoginRepository DR = new DashBoardCustomerLoginRepository();
+        CustomerRepository CR = new CustomerRepository();
         public ActionResult Index()
         {
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
@@ -24,6 +25,20 @@ namespace WebApp.Controllers
             objdashboard = DR.GetDashboardcustomerlogin(userDetails.GroupId);
             return View(objdashboard);
            
+        }
+        public ActionResult Security()
+        {
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            var GroupDetails = CR.GetGroupDetails(Convert.ToInt32(userDetails.GroupId));
+            return View("MaskSetting", GroupDetails);
+        }
+
+        public JsonResult UpdateMasked(string value)
+        {
+            bool result = false;
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            result = DR.UpdateMaskedValue(Convert.ToInt32(userDetails.GroupId), value);
+            return new JsonResult() { Data = result, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
 
         public ActionResult CustomerLoginList()
