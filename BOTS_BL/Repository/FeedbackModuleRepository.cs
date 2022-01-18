@@ -1450,9 +1450,9 @@ namespace BOTS_BL.Repository
                 {
                     data = data.Where(x => x.OutletId == OutletId).ToList();
                 }
-                var uniqueSouece = data.GroupBy(x => x.HowToKnowAbout).Select(y => y.First()).ToList();
+                var uniqueSource = data.GroupBy(x => x.HowToKnowAbout).Select(y => y.First()).ToList();
                 int total = 0;
-                foreach (var item in uniqueSouece)
+                foreach (var item in uniqueSource)
                 {                    
                     var numberOfCustomer = contextdb.feedback_FeedbackMaster.Where(x => x.HowToKnowAbout == item.HowToKnowAbout && x.AddedDate >= Frmdt && x.AddedDate < Tdt).Count();
 
