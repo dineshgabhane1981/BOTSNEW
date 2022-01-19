@@ -27,7 +27,7 @@ namespace WebApp.Controllers
             singlevm.lstnontransactingGrp = SPR.GetSinglePageNonTransactingGroups();
             singlevm.lstnontransactingOutlet = SPR.GetNonTransactingOutlet();
             singlevm.lstlowtransactingOutlet = SPR.GetLowTransactingOutlet();
-            singlevm.lstCommunication = SPR.GetCommunicationWhatsAppExpiryData();
+            //singlevm.lstCommunication = SPR.GetCommunicationWhatsAppExpiryData();
             //singlevm.lstlowermetrics = 
 
             return View(singlevm);
