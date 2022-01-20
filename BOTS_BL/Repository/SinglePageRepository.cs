@@ -94,9 +94,10 @@ namespace BOTS_BL.Repository
                 using (var context = new CommonDBContext())
                 {
                     // lstsummarytable = context.Tbl_SinglePageSummaryTable.ToList();
-                    var totalenroll = context.Tbl_SinglePageSummaryTable.Sum(i => i.TotalEnrolledBase);
-                    var sumtxncountdaily = context.Tbl_SinglePageSummaryTable.Sum(i => i.TxnCountDaily);
-                    var sumtxncountmtd = context.Tbl_SinglePageSummaryTable.Sum(i => i.TxnCountMTD);
+                    var totalenroll = context.Tbl_SinglePageSummaryTable.Where(x=>x.Date==DateTime.Today).Sum(i => i.TotalEnrolledBase);
+                    var sumtxncountdaily = context.Tbl_SinglePageSummaryTable.Where(x => x.Date == DateTime.Today).Sum(i => i.TxnCountDaily);
+                    var firstDayOfMonth = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
+                    var sumtxncountmtd = context.Tbl_SinglePageSummaryTable.Where(x => x.Date >= firstDayOfMonth).Sum(i => i.TxnCountMTD);
                     lstsummarytable.TotalEnrolledBase = totalenroll;
                     lstsummarytable.TxnCountDaily = sumtxncountdaily;
                     lstsummarytable.TxnCountMTD = sumtxncountmtd;

@@ -1,4 +1,5 @@
 ﻿@model WebApp.ViewModel.SinglePageViewModel
+@using System.Globalization
 
 @{
     ViewBag.Title = "Index";
@@ -101,27 +102,61 @@
         </div>
         <div class="panels">
             <div class="multisteps-form__panel shadow p-4 m-4 list-box bg-white panel" id="one-panel">
-                <div class="row mb-5 ml-2">
-                    <div class=" mr-2">
-                        <table border="1">
-                            <thead><h6><b>Summary</b></h6></thead>
-                            <tbody>
-                                <tr>
-                                    <td class="font-weight-bold">Total Enrolled Base</td>
-                                    <td>@Model.lstsummarytable.TotalEnrolledBase</td>
-                                </tr>
-                                <tr>
-                                    <td class="font-weight-bold">Txn Count(Daily)</td>
-                                    <td>@Model.lstsummarytable.TxnCountDaily</td>
-                                </tr>
-                                <tr>
-                                    <td class="font-weight-bold">Txn Count(MTD)</td>
-                                    <td>@Model.lstsummarytable.TxnCountMTD</td>
-                                </tr>
+                <div class="row">
+                    <div class="col-md-6 col-xl-4">
+                        <div class="card mb-3 widget-content bg-midnight-bloom">
+                            <div class="widget-content-wrapper text-white">
+                                <div class="widget-content-left">
+                                    <div class="widget-heading">
+                                        Total Enrolled Base
+                                    </div>
 
-                            </tbody>
-                        </table>
+                                </div>
+                                <div class="widget-content-right">
+                                    <div class="widget-numbers text-white"><span>@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(Model.lstsummarytable.TotalEnrolledBase))</span></div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
+                    <div class="col-md-6 col-xl-4">
+                        <div class="card mb-3 widget-content bg-arielle-smile">
+                            <div class="widget-content-wrapper text-white">
+                                <div class="widget-content-left">
+                                    <div class="widget-heading">
+                                        Txn Count (Daily)
+                                    </div>
+
+                                </div>
+                                <div class="widget-content-right">
+                                    <div class="widget-numbers text-white"><span>@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(Model.lstsummarytable.TxnCountDaily))</span></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-xl-4">
+                        <div class="card mb-3 widget-content bg-grow-early">
+                            <div class="widget-content-wrapper text-white">
+                                <div class="widget-content-left">
+                                    <div class="widget-heading">
+                                        Txn Count (MTD)
+                                    </div>
+
+                                </div>
+                                <div class="widget-content-right">
+                                    <div class="widget-numbers text-white">
+                                        <span>
+                                            @String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(Model.lstsummarytable.TxnCountMTD))
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="row mb-5 ml-2">
+                   
                     <div class="mb-5 ml-3">
                         <table border="1">
                             <thead><h6><b>Non Transacting Group</b></h6></thead>
@@ -291,13 +326,13 @@
                                             foreach (var item in Model.lstCommunication.objWhatsAppExpiryDate)
                                             {
 
-                                            <tr>
-                                                <td>@indexcomm</td>
+                                                <tr>
+                                                    <td>@indexcomm</td>
 
-                                                <td style="text-align:left;">@item.BrandName</td>
-                                                <td style="text-align:left;">@item.OutletName</td>
-                                                <td style="text-align:left;">@item.WAExpiryDate</td>
-                                            </tr>
+                                                    <td style="text-align:left;">@item.BrandName</td>
+                                                    <td style="text-align:left;">@item.OutletName</td>
+                                                    <td style="text-align:left;">@item.WAExpiryDate</td>
+                                                </tr>
 
                                                 indexcomm++;
                                             }
@@ -462,37 +497,37 @@
                             </tr>
                         </thead>
                         <tbody>
-                            
+
                             @*@if (Model != null)
-        {
-            if (Model.Count > 0)
-            {
-                foreach (var item in Model)
-                {
+                                {
+                                    if (Model.Count > 0)
+                                    {
+                                        foreach (var item in Model)
+                                        {
 
-                    <tr>
-
-
-                        <td style="text-align:left;">@item.GroupNamelessthan5</td>
-                        <td style="text-align:left;">@item.Valuethanlessthan5</td>
-
-                        <td style="text-align:left;">@item.GroupNamelessthan10</td>
-                        <td style="text-align:left;">@item.Valuelessthan10</td>
-
-                        <td style="text-align:left;">@item.GroupNamelessthan15</td>
-                        <td style="text-align:left;">@item.Valuelessthan15</td>
-
-                        <td style="text-align:left;">@item.GroupNamelessthan30</td>
-                        <td style="text-align:left;">@item.Valuelessthan30</td>
-
-                        <td style="text-align:left;">@item.GroupNamelessthan40</td>
-                        <td style="text-align:left;">@item.Valuelessthan40</td>
-                    </tr>
+                                            <tr>
 
 
-                }
-            }
-        }*@
+                                                <td style="text-align:left;">@item.GroupNamelessthan5</td>
+                                                <td style="text-align:left;">@item.Valuethanlessthan5</td>
+
+                                                <td style="text-align:left;">@item.GroupNamelessthan10</td>
+                                                <td style="text-align:left;">@item.Valuelessthan10</td>
+
+                                                <td style="text-align:left;">@item.GroupNamelessthan15</td>
+                                                <td style="text-align:left;">@item.Valuelessthan15</td>
+
+                                                <td style="text-align:left;">@item.GroupNamelessthan30</td>
+                                                <td style="text-align:left;">@item.Valuelessthan30</td>
+
+                                                <td style="text-align:left;">@item.GroupNamelessthan40</td>
+                                                <td style="text-align:left;">@item.Valuelessthan40</td>
+                                            </tr>
+
+
+                                        }
+                                    }
+                                }*@
                         </tbody>
                     </table>
                 </div>
