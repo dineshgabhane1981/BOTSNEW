@@ -184,6 +184,7 @@ namespace WebApp.Controllers
                 string InvoiceNumber = "";
                 string InvoiceAmount = "";
                 string OutletId = "";
+                int points = 0;
 
                 foreach (Dictionary<string, object> item in objData)
                 {
@@ -193,7 +194,10 @@ namespace WebApp.Controllers
                     TransactionDate = Convert.ToString(item["TransactionDate"]);
                     InvoiceNumber = Convert.ToString(item["InvoiceNumber"]);
                     InvoiceAmount = Convert.ToString(item["InvoiceAmount"]);
-
+                    if(!string.IsNullOrEmpty(Convert.ToString(item["Points"])))
+                    {
+                        points = Convert.ToInt32(item["Points"]);
+                    }
                     objAudit.GroupId = GroupId;
                     objAudit.RequestedFor = "Add / Earn";
                     objAudit.RequestedEntity = "Mobile No - " + MobileNo;
@@ -203,7 +207,7 @@ namespace WebApp.Controllers
                     IsSMS = Convert.ToBoolean(item["IsSMS"]);
                 }
 
-                result = ITOPS.AddEarnData(GroupId, MobileNo, OutletId, Convert.ToDateTime(TransactionDate), DateTime.Now, InvoiceNumber, InvoiceAmount, Convert.ToString(IsSMS), objAudit);
+                result = ITOPS.AddEarnData(GroupId, MobileNo, OutletId, Convert.ToDateTime(TransactionDate), DateTime.Now, InvoiceNumber, InvoiceAmount, Convert.ToString(IsSMS), points, objAudit);
                 if (result.ResponseCode == "00")
                 {
                     var subject = "Earning updated for mobile no  - " + MobileNo;

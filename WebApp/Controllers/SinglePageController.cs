@@ -7,6 +7,7 @@ using BOTS_BL.Repository;
 using BOTS_BL.Models.CommonDB;
 using WebApp.ViewModel;
 using BOTS_BL.Models;
+using BOTS_BL;
 
 namespace WebApp.Controllers
 {
@@ -14,22 +15,32 @@ namespace WebApp.Controllers
     {
         SinglePageRepository SPR = new SinglePageRepository();
         CustomerRepository CR = new CustomerRepository();
+        Exceptions newexception = new Exceptions();
         public ActionResult Index()
         {
+            SinglePageViewModel singlevm = new SinglePageViewModel();
+            try
+            {
+
+            
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
             userDetails.CustomerName = CR.GetCustomerName(userDetails.GroupId);
             Session["UserSession"] = userDetails;
 
-            SinglePageViewModel singlevm = new SinglePageViewModel();
+            
             //  dynamic mymodel = new ExpandoObject();
             // Tbl_SinglePageSummaryTable objsinglepagesummarytable = new Tbl_SinglePageSummaryTable();
             singlevm.lstsummarytable = SPR.GetSinglePageSummaryTable();
             singlevm.lstnontransactingGrp = SPR.GetSinglePageNonTransactingGroups();
             singlevm.lstnontransactingOutlet = SPR.GetNonTransactingOutlet();
             singlevm.lstlowtransactingOutlet = SPR.GetLowTransactingOutlet();
-            //singlevm.lstCommunication = SPR.GetCommunicationWhatsAppExpiryData();
-            //singlevm.lstlowermetrics = 
-
+                //singlevm.lstCommunication = SPR.GetCommunicationWhatsAppExpiryData();
+                //singlevm.lstlowermetrics = 
+            }
+            catch (Exception ex)
+            {
+                 newexception.AddException(ex, "Single Page");
+            }
             return View(singlevm);
 
             
