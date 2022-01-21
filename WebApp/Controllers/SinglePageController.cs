@@ -21,29 +21,32 @@ namespace WebApp.Controllers
             SinglePageViewModel singlevm = new SinglePageViewModel();
             try
             {
+                var userDetails = (CustomerLoginDetail)Session["UserSession"];
+                userDetails.CustomerName = CR.GetCustomerName(userDetails.GroupId);
+                Session["UserSession"] = userDetails;
+                
+                // Tbl_SinglePageSummaryTable objsinglepagesummarytable = new Tbl_SinglePageSummaryTable();
+                singlevm.lstsummarytable = SPR.GetSinglePageSummaryTable();
+                singlevm.lstnontransactingGrp = SPR.GetSinglePageNonTransactingGroups();
+                singlevm.lstnontransactingOutlet = SPR.GetNonTransactingOutlet();
+                singlevm.lstlowtransactingOutlet = SPR.GetLowTransactingOutlet();
 
-            
-            var userDetails = (CustomerLoginDetail)Session["UserSession"];
-            userDetails.CustomerName = CR.GetCustomerName(userDetails.GroupId);
-            Session["UserSession"] = userDetails;
+                singlevm.lstCitywiseData = SPR.GetCityWiseData();
+                var cities = singlevm.lstCitywiseData.GroupBy(x => x.CityName).Select(y => y.First()).ToList();
+                singlevm.lstCities = cities;
+                var categories = singlevm.lstCitywiseData.GroupBy(x => x.CategoryName).Select(y => y.First()).ToList();
+                singlevm.lstCategories = categories;
 
-            
-            //  dynamic mymodel = new ExpandoObject();
-            // Tbl_SinglePageSummaryTable objsinglepagesummarytable = new Tbl_SinglePageSummaryTable();
-            singlevm.lstsummarytable = SPR.GetSinglePageSummaryTable();
-            singlevm.lstnontransactingGrp = SPR.GetSinglePageNonTransactingGroups();
-            singlevm.lstnontransactingOutlet = SPR.GetNonTransactingOutlet();
-            singlevm.lstlowtransactingOutlet = SPR.GetLowTransactingOutlet();
                 //singlevm.lstCommunication = SPR.GetCommunicationWhatsAppExpiryData();
                 //singlevm.lstlowermetrics = 
             }
             catch (Exception ex)
             {
-                 newexception.AddException(ex, "Single Page");
+                newexception.AddException(ex, "Single Page");
             }
             return View(singlevm);
 
-            
+
         }
         [HttpPost]
         public JsonResult GetLowerMetricsData(string Id)

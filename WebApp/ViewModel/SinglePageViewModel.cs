@@ -15,6 +15,9 @@ namespace WebApp.ViewModel
         public List<Tbl_SinglePageNonTransactingGroup> lstnontransactingGrp { get; set; }
         public List<Tbl_SinglePageNonTransactingOutlet> lstnontransactingOutlet { get; set; }
         public List<Tbl_SinglePageLowTransactingOutlet> lstlowtransactingOutlet { get; set; }
+        public List<CitywiseReport> lstCitywiseData { get; set; }
+        public List<CitywiseReport> lstCities { get; set; }
+        public List<CitywiseReport> lstCategories { get; set; }
         public CommunicationsinglePageData lstCommunication { get; set; }
     }
 }

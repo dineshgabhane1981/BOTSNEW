@@ -22,6 +22,7 @@ namespace BOTS_BL.Repository
 {
     public class SinglePageRepository
     {
+        CustomerRepository CR = new CustomerRepository();
         Exceptions newexception = new Exceptions();
         public List<Tbl_SinglePageNonTransactingGroup> GetSinglePageNonTransactingGroups()
         {
@@ -30,8 +31,8 @@ namespace BOTS_BL.Repository
             {
                 using (var context = new CommonDBContext())
                 {
-                    
-                    lstnontransactinggrp = context.Tbl_SinglePageNonTransactingGroup.Where(x =>x.Date == DateTime.Today).OrderByDescending(p => p.DaysSinceLastTxn).ToList();
+
+                    lstnontransactinggrp = context.Tbl_SinglePageNonTransactingGroup.Where(x => x.Date == DateTime.Today).OrderByDescending(p => p.DaysSinceLastTxn).ToList();
                     foreach (var item in lstnontransactinggrp)
                     {
                         item.DaySinceLastTxn = Convert.ToInt32(item.DaysSinceLastTxn);
@@ -41,7 +42,7 @@ namespace BOTS_BL.Repository
             }
             catch (Exception ex)
             {
-                
+
             }
 
             return lstnontransactinggrp;
@@ -94,7 +95,7 @@ namespace BOTS_BL.Repository
                 using (var context = new CommonDBContext())
                 {
                     // lstsummarytable = context.Tbl_SinglePageSummaryTable.ToList();
-                    var totalenroll = context.Tbl_SinglePageSummaryTable.Where(x=>x.Date==DateTime.Today).Sum(i => i.TotalEnrolledBase);
+                    var totalenroll = context.Tbl_SinglePageSummaryTable.Where(x => x.Date == DateTime.Today).Sum(i => i.TotalEnrolledBase);
                     var sumtxncountdaily = context.Tbl_SinglePageSummaryTable.Where(x => x.Date == DateTime.Today).Sum(i => i.TxnCountDaily);
                     var firstDayOfMonth = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
                     var sumtxncountmtd = context.Tbl_SinglePageSummaryTable.Where(x => x.Date >= firstDayOfMonth).Sum(i => i.TxnCountMTD);
@@ -115,7 +116,7 @@ namespace BOTS_BL.Repository
         {
             // SinglePageViewModel singlevm = new SinglePageViewModel();
             List<SinglepageLowerMetrics> lstlowermetrics = new List<SinglepageLowerMetrics>();
-            List <Tbl_SinglePageLowReferralConversions> objlowreferralconversion = new List<Tbl_SinglePageLowReferralConversions>();
+            List<Tbl_SinglePageLowReferralConversions> objlowreferralconversion = new List<Tbl_SinglePageLowReferralConversions>();
             List<Tbl_SinglePageLowerRedemptionRate> objlowerredemption = new List<Tbl_SinglePageLowerRedemptionRate>();
             List<Tbl_SinglePageLowProfileUpdates> objlowprofile = new List<Tbl_SinglePageLowProfileUpdates>();
             List<Tbl_SinglePageLowReferral> objlowreferral = new List<Tbl_SinglePageLowReferral>();
@@ -123,23 +124,23 @@ namespace BOTS_BL.Repository
             DataSet dsm = new DataSet();
             using (var context = new CommonDBContext())
             {
-               DateTime dt= DateTime.Now.Date;
+                DateTime dt = DateTime.Now.Date;
                 if (Id == "1")
                 {
                     objlowerredemption = context.Tbl_SinglePageLowerRedemptionRate.Where(x => x.Date == dt).OrderByDescending(i => i.Value).ToList();
-                    dsm= CreateDataTable(objlowerredemption,Id);
+                    dsm = CreateDataTable(objlowerredemption, Id);
                     //.Where(x => x.Date == dt)
                 }
                 else if (Id == "3")
                 {
                     objlowprofile = context.Tbl_SinglePageLowProfileUpdates.Where(x => x.Date == dt).OrderByDescending(i => i.Value).ToList();
-                    dsm= CreateDataTable(objlowprofile,Id);
+                    dsm = CreateDataTable(objlowprofile, Id);
 
                 }
                 else if (Id == "2")
                 {
-                    objhigheronlyonce = context.Tbl_SinglePageHigherOnlyonceAndInactive.Where(x => x.Date == dt && x.CustomerVintage== "Higher Only Once").OrderByDescending(i => i.Value).ToList();
-                    dsm= CreateDataTable(objhigheronlyonce,Id);
+                    objhigheronlyonce = context.Tbl_SinglePageHigherOnlyonceAndInactive.Where(x => x.Date == dt && x.CustomerVintage == "Higher Only Once").OrderByDescending(i => i.Value).ToList();
+                    dsm = CreateDataTable(objhigheronlyonce, Id);
 
                 }
                 else if (Id == "6")
@@ -151,17 +152,17 @@ namespace BOTS_BL.Repository
                 else if (Id == "4")
                 {
                     objlowreferral = context.Tbl_SinglePageLowReferral.Where(x => x.Date == dt).OrderByDescending(i => i.Value).ToList();
-                    dsm=CreateDataTable(objlowreferral,Id);
+                    dsm = CreateDataTable(objlowreferral, Id);
 
                 }
                 else if (Id == "5")
                 {
                     objlowreferralconversion = context.Tbl_SinglePageLowReferralConversions.Where(x => x.Date == dt).OrderByDescending(i => i.Value).ToList();
-                    dsm= CreateDataTable(objlowreferralconversion,Id);
-                }               
+                    dsm = CreateDataTable(objlowreferralconversion, Id);
+                }
 
 
-                 DataSet ds = new DataSet();
+                DataSet ds = new DataSet();
                 int fivecount = dsm.Tables[0].Rows.Count;
                 int tencount = dsm.Tables[1].Rows.Count;//dtlessten.Rows.Count;
                 int fifteencount = dsm.Tables[2].Rows.Count;//dtlessfifteen.Rows.Count;
@@ -171,11 +172,11 @@ namespace BOTS_BL.Repository
                 int[] arr = new int[] { fivecount, tencount, fifteencount, thirtycount, fortycount };
                 Array.Sort<int>(arr, new Comparison<int>(
                   (i1, i2) => i2.CompareTo(i1)));
-               
+
                 int count = arr[0];
                 DataTable Maindt = new DataTable();
                 Maindt.Columns.Add("GroupNamelessthan5");
-                Maindt.Columns.Add("Valuethanlessthan5",typeof(double));
+                Maindt.Columns.Add("Valuethanlessthan5", typeof(double));
                 Maindt.Columns.Add("GroupNamelessthan10");
                 Maindt.Columns.Add("Valuelessthan10", typeof(double));
                 Maindt.Columns.Add("GroupNamelessthan15");
@@ -184,10 +185,10 @@ namespace BOTS_BL.Repository
                 Maindt.Columns.Add("Valuelessthan30", typeof(double));
                 Maindt.Columns.Add("GroupNamelessthan40");
                 Maindt.Columns.Add("Valuelessthan40", typeof(double));
-                for(int a=0; a<count; a++)
+                for (int a = 0; a < count; a++)
                 {
                     DataRow dr = Maindt.NewRow();
-                    if (dsm.Tables[0].Rows.Count >= a+1)
+                    if (dsm.Tables[0].Rows.Count >= a + 1)
                     {
                         dr["GroupNamelessthan5"] = Convert.ToString(dsm.Tables[0].Rows[a]["GroupName5"]);
                         dr["Valuethanlessthan5"] = Convert.ToString(dsm.Tables[0].Rows[a]["value5"]);
@@ -212,7 +213,7 @@ namespace BOTS_BL.Repository
                         dr["GroupNamelessthan40"] = Convert.ToString(dsm.Tables[4].Rows[a]["GroupName40"]);
                         dr["Valuelessthan40"] = Convert.ToString(dsm.Tables[4].Rows[a]["value40"]);
                     }
-                   
+
 
                     Maindt.Rows.Add(dr);
 
@@ -236,12 +237,12 @@ namespace BOTS_BL.Repository
 
             }
 
-           
+
             return lstlowermetrics;
 
         }
 
-        public DataSet CreateDataTable<T>(List<T> list,string Id)
+        public DataSet CreateDataTable<T>(List<T> list, string Id)
         {
             DataSet dsmain = new DataSet();
             double val5;
@@ -274,9 +275,9 @@ namespace BOTS_BL.Repository
             dtlessforty.Columns.Add("value40");
 
             int count = typeof(T).GetProperties().Count();
-            for (int y = 0 ; y < list.Count; y++)
+            for (int y = 0; y < list.Count; y++)
             {
-                object propertyValue ;
+                object propertyValue;
                 if (Id == "3")
                 {
                     propertyValue = typeof(T).GetProperties()[5].GetValue(list[y], null);
@@ -286,16 +287,16 @@ namespace BOTS_BL.Repository
                     propertyValue = typeof(T).GetProperties()[4].GetValue(list[y], null);
                 }
                 var propertygroupname = typeof(T).GetProperties()[1].GetValue(list[y], null);
-                   
-                        if (Convert.ToInt32(propertyValue) < 5 && Convert.ToInt32(propertyValue)> 0)
-                        {
-                            DataRow dr5 = dtlessfive.NewRow();
-                            val5 = Convert.ToDouble(propertyValue);
-                            dr5[0] = propertygroupname;
-                            dr5[1] = val5;
-                            dtlessfive.Rows.Add(dr5);
-                            
-                        }
+
+                if (Convert.ToInt32(propertyValue) < 5 && Convert.ToInt32(propertyValue) > 0)
+                {
+                    DataRow dr5 = dtlessfive.NewRow();
+                    val5 = Convert.ToDouble(propertyValue);
+                    dr5[0] = propertygroupname;
+                    dr5[1] = val5;
+                    dtlessfive.Rows.Add(dr5);
+
+                }
                 else if (Convert.ToInt32(propertyValue) < 10 && Convert.ToInt32(propertyValue) > 5)
                 {
                     DataRow dr10 = dtlessten.NewRow();
@@ -304,7 +305,7 @@ namespace BOTS_BL.Repository
                     dr10[0] = propertygroupname;
                     dr10[1] = val10;
                     dtlessten.Rows.Add(dr10);
-                    
+
                 }
                 else if (Convert.ToInt32(propertyValue) < 15 && Convert.ToInt32(propertyValue) > 10)
                 {
@@ -313,7 +314,7 @@ namespace BOTS_BL.Repository
                     dr15[0] = propertygroupname;
                     dr15[1] = val15;
                     dtlessfifteen.Rows.Add(dr15);
-                    
+
                 }
                 else if (Convert.ToInt32(propertyValue) < 30 && Convert.ToInt32(propertyValue) > 15)
                 {
@@ -322,7 +323,7 @@ namespace BOTS_BL.Repository
                     dr30[0] = propertygroupname;
                     dr30[1] = val30;
                     dtlessthirty.Rows.Add(dr30);
-                    
+
                 }
                 else if (Convert.ToInt32(propertyValue) < 40 && Convert.ToInt32(propertyValue) > 30)
                 {
@@ -331,10 +332,10 @@ namespace BOTS_BL.Repository
                     dr40[0] = propertygroupname;
                     dr40[1] = val40;
                     dtlessforty.Rows.Add(dr40);
-                    
+
                 }
 
-                
+
             }
             dsmain.Tables.Add(dtlessfive);
             dsmain.Tables.Add(dtlessten);
@@ -372,11 +373,11 @@ namespace BOTS_BL.Repository
                     {
                         client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
                         var response2 = client.GetStringAsync(new Uri(baseAddress)).Result;
-                      
+
                         var rootlist = JsonConvert.DeserializeObject<Dictionary<string, dynamic>>(response2);
                         JObject jsonObj = JObject.Parse(response2);
-                         IList<JToken> hotels = jsonObj["response"]["userList"].Children().ToList();
-                        IEnumerable<JToken> pricyProducts = jsonObj.SelectTokens("$..user");                       
+                        IList<JToken> hotels = jsonObj["response"]["userList"].Children().ToList();
+                        IEnumerable<JToken> pricyProducts = jsonObj.SelectTokens("$..user");
 
                         foreach (JToken item in pricyProducts)
                         {
@@ -387,7 +388,7 @@ namespace BOTS_BL.Repository
                             objbalance.Status = (string)item["userStatus"];
                             lstbalance.Add(objbalance);
                         }
-                        
+
                     }
                     else
                     {
@@ -449,10 +450,10 @@ namespace BOTS_BL.Repository
             //{
             //    newexception.AddException(ex, "");
             //}
-            lstSmsbalance.objSMSBalance = lstbalance.OrderBy(x=>x.SmsBalance).ToList();
+            lstSmsbalance.objSMSBalance = lstbalance.OrderBy(x => x.SmsBalance).ToList();
             return lstSmsbalance;
         }
-        
+
         private static List<T> ConvertDataTable<T>(DataTable dt)
         {
             List<T> data = new List<T>();
@@ -479,6 +480,116 @@ namespace BOTS_BL.Repository
                 }
             }
             return obj;
+        }
+
+        public List<CitywiseReport> GetCityWiseData()
+        {
+            List<CityWiseData> objData = new List<CityWiseData>();
+            List<CitywiseReport> lstCitywiseReport = new List<CitywiseReport>();
+            List<CitywiseReport> lstCitywiseReportNew = new List<CitywiseReport>();
+            List<CitywiseReport> lstFinalData = new List<CitywiseReport>();
+            try
+            {
+                using (var context = new CommonDBContext())
+                {
+                    var groups = context.tblGroupDetails.Where(x => x.IsActive == true).ToList();
+                    foreach (var item in groups)
+                    {
+                        var groupId = Convert.ToInt32(item.GroupId);
+                        CityWiseData objItem = new CityWiseData();
+
+                        objItem.GroupId = Convert.ToString(item.GroupId);
+                        objItem.GroupName = item.GroupName;
+                        var category = (from c in context.tblGroupDetails
+                                        join ct in context.tblCategories on c.RetailCategory equals ct.CategoryId
+                                        where c.GroupId == groupId
+                                        select new
+                                        {
+                                            ct.CategoryName
+                                        }).FirstOrDefault();
+                        objItem.CategoryName = category.CategoryName;
+
+                        var city = (from c in context.tblGroupDetails
+                                    join ct in context.tblCities on c.City equals ct.CityId
+                                    where c.GroupId == groupId
+                                    select new
+                                    {
+                                        ct.CityName
+                                    }).FirstOrDefault();
+
+                        objItem.CityName = city.CityName;
+
+                        string connStr = CR.GetCustomerConnString(Convert.ToString(item.GroupId));
+                        using (var contextdb = new BOTSDBContext(connStr))
+                        {
+
+                            objItem.MemberBase = contextdb.CustomerDetails.Count();
+
+                            var sqlQ = $"SELECT COUNT(*) as Count FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = 'BulkUploadCustList'";
+                            var exist = contextdb.Database.SqlQuery<int>(sqlQ).FirstOrDefault();
+                            if (exist > 0)
+                            {
+                                objItem.MemberBulkUpload = contextdb.BulkUploadCustLists.Count();
+                                objItem.TotalMemberBase = objItem.MemberBase + contextdb.BulkUploadCustLists.Count();
+                            }
+                            else
+                            {
+                                objItem.MemberBulkUpload = 0;
+                                objItem.TotalMemberBase = objItem.MemberBase;
+                            }
+
+                        }
+                        objData.Add(objItem);
+                    }
+
+                    var uniqueCities = objData.GroupBy(x => x.CityName).Select(y => y.First()).ToList();
+                    var uniqueCategories = objData.GroupBy(x => x.CategoryName).Select(y => y.First()).ToList();
+
+                    var Cities = context.tblCities.ToList();
+                    var Categories = context.tblCategories.ToList();
+
+                    foreach (var city in Cities)
+                    {
+
+                        foreach (var category in Categories)
+                        {
+                            CitywiseReport objReport = new CitywiseReport();
+                            objReport.CityName = city.CityName;
+                            objReport.CategoryName = category.CategoryName;
+                            var lst = objData.Where(x => x.CityName == city.CityName && x.CategoryName == category.CategoryName).ToList();
+                            var total = lst.Sum(x => x.TotalMemberBase);
+                            objReport.MemberBase = total;
+                            lstCitywiseReport.Add(objReport);
+                        }
+
+                    }
+
+                    foreach (var city in Cities)
+                    {
+                        var count = lstCitywiseReport.Where(x => x.CityName == city.CityName && x.MemberBase != 0).Count();
+                        if (count > 0)
+                        {
+                            var filterList = lstCitywiseReport.Where(x => x.CityName == city.CityName).ToList();
+                            lstCitywiseReportNew.AddRange(filterList);
+                        }
+                    }
+                    foreach (var category in Categories)
+                    {
+                        var count = lstCitywiseReportNew.Where(x => x.CategoryName == category.CategoryName && x.MemberBase != 0).Count();
+                        if (count > 0)
+                        {
+                            var filterList = lstCitywiseReportNew.Where(x => x.CategoryName == category.CategoryName).ToList();
+                            lstFinalData.AddRange(filterList);
+
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
+            return lstFinalData;
         }
     }
 }
