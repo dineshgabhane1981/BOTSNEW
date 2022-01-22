@@ -534,8 +534,8 @@
                 {
                     long allCityTotal = 0;
                     <table border="2" cellpadding="5" cellspacing="5">
-                        <tr>
-                            <th>City</th>
+                        <tr style="background-color:lightgray;">
+                            <th style="width:150px;">City</th>
                             <th>Total</th>
                             @foreach (var item in Model.lstCategories)
                             {
@@ -547,7 +547,7 @@
                         {
                             long total = 0;
                             <tr>
-                                <td>@item.CityName</td>
+                                <td style="background-color:lightgray;font-weight:bold;">@item.CityName</td>
 
                                 @foreach (var item1 in Model.lstCitywiseData)
                                 {
@@ -556,13 +556,13 @@
                                         total = total + item1.MemberBase;
                                     }
                                 }
-                                <td>@total</td>
+                                <td style="font-weight:bold; text-align:right;">@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(total))</td>
 
                                 @foreach (var item1 in Model.lstCitywiseData)
                                 {
                                     if (item.CityName == item1.CityName)
                                     {
-                                        <td>@item1.MemberBase</td>
+                                        <td style="text-align:right;">@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(item1.MemberBase))</td>
                                     }
                                 }
                                 @if (total > 0)
@@ -572,7 +572,10 @@
 
                             </tr>
                         }
-                        <tr><td>@allCityTotal</td></tr>
+                        <tr style="background-color: lightgray; font-weight: bold; ">
+                            <td>Total Count</td>
+                            <td style="text-align:right;">@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(allCityTotal))</td>
+                        </tr>
 
                     </table>
 
@@ -587,170 +590,118 @@
     $(document).ready(function () {
         GetData();
     });
-        function GetData() {
-            $("#divLoader").show();
-            var TableId;
-            if ($("#rdnlowerRedemRate").is(":checked")) {
+    function GetData() {
+        $("#divLoader").show();
+        var TableId;
+        if ($("#rdnlowerRedemRate").is(":checked")) {
 
-                TableId = "1";
-            }
-            else if ($("#rdndHigherOnly").is(":checked")) {
-                TableId = "2";
-            }
-            else if ($("#rdnLowProfile").is(":checked")) {
-                TableId = "3";
-            }
-            else if ($("#rdnLowReferrals").is(":checked")) {
-                TableId = "4";
-            }
-            else if ($("#rdnLowReferralconversion").is(":checked")) {
-                TableId = "5";
-            }
-            else if ($("#rdnHigherInactive").is(":checked")) {
-                TableId = "6";
-            }
-             $.ajax({
-             type: "POST",
+            TableId = "1";
+        }
+        else if ($("#rdndHigherOnly").is(":checked")) {
+            TableId = "2";
+        }
+        else if ($("#rdnLowProfile").is(":checked")) {
+            TableId = "3";
+        }
+        else if ($("#rdnLowReferrals").is(":checked")) {
+            TableId = "4";
+        }
+        else if ($("#rdnLowReferralconversion").is(":checked")) {
+            TableId = "5";
+        }
+        else if ($("#rdnHigherInactive").is(":checked")) {
+            TableId = "6";
+        }
+        $.ajax({
+            type: "POST",
             url: '@Url.Action("GetLowerMetricsData", "SinglePage")',
-                 data: '{Id:' + JSON.stringify(TableId) + '}',
+            data: '{Id:' + JSON.stringify(TableId) + '}',
             contentType: "application/json; charset=utf-8",
             dataType: "json",
-                 success: function (response) {
-                     if (response != null) {
-                         console.log(response);
-                         tableData.length = 0;
-                         $.map(response, function (item) {
-                             optionItem = {}
-                             optionItem["GroupNameLT5"] = item.GroupNamelessthan5;
-                             optionItem["ValueLT5"] = item.Valuethanlessthan5;
-                             optionItem["GroupNameLT10"] = item.GroupNamelessthan10;
-                             optionItem["ValueLT10"] = item.Valuelessthan10;
-                             optionItem["GroupNameLT15"] = item.GroupNamelessthan15;
-                             optionItem["ValueLT15"] = item.Valuelessthan15;
-                             optionItem["GroupNameLT30"] = item.GroupNamelessthan30;
-                             optionItem["ValueLT30"] = item.Valuelessthan30;
-                             optionItem["GroupNameLT40"] = item.GroupNamelessthan40;
-                             optionItem["ValueLT40"] = item.Valuelessthan40;
-                             tableData.push(optionItem);
-                             console.log(tableData);
-                         });
-                         DrawTable();
-
-                     }
-                     $("#divLoader").hide();
-            },
-                 failure: function (response) {
-                     console.log(response);
+            success: function (response) {
+                if (response != null) {                       
+                    tableData.length = 0;
+                    $.map(response, function (item) {
+                        optionItem = {}
+                        optionItem["GroupNameLT5"] = item.GroupNamelessthan5;
+                        optionItem["ValueLT5"] = item.Valuethanlessthan5;
+                        optionItem["GroupNameLT10"] = item.GroupNamelessthan10;
+                        optionItem["ValueLT10"] = item.Valuelessthan10;
+                        optionItem["GroupNameLT15"] = item.GroupNamelessthan15;
+                        optionItem["ValueLT15"] = item.Valuelessthan15;
+                        optionItem["GroupNameLT30"] = item.GroupNamelessthan30;
+                        optionItem["ValueLT30"] = item.Valuelessthan30;
+                        optionItem["GroupNameLT40"] = item.GroupNamelessthan40;
+                        optionItem["ValueLT40"] = item.Valuelessthan40;
+                        tableData.push(optionItem);
+                        console.log(tableData);
+                    });
+                    DrawTable();
+                }
                 $("#divLoader").hide();
             },
-                 error: function (response) {
-                     console.log(response);
-               // $("#dvmetrics").html(response.responseText);
+            failure: function (response) {
+                console.log(response);
                 $("#divLoader").hide();
-
+            },
+            error: function (response) {
+                console.log(response);
+                $("#divLoader").hide();
             }
+    });
+    }
+    $("#btnFilter").click(function () {
+        GetData();
+    });
+    function DrawTable() {
+        var table1 = $('#activityTable').DataTable();
+        table1.destroy();
+        console.log(tableData)
+        var table = $('#activityTable').DataTable({
+            "data": tableData,
+            "paging": true,
+            "ordering": false,
+            "info": true,
+            "bFilter": true,
+            "pageLength": 10,
+            "pagingType": "simple_numbers",
+            "columns": [
+                { data: "GroupNameLT5" },
+                { data: "ValueLT5" },
+                { data: "GroupNameLT10" },
+                { data: "ValueLT10" },
+                { data: "GroupNameLT15" },
+                { data: "ValueLT15" },
+                { data: "GroupNameLT30" },
+                { data: "ValueLT30" },
+                { data: "GroupNameLT40" },
+                { data: "ValueLT40" }
+            ],
+            aoColumnDefs: [
+                {
+                    bSortable: false,
+                    aTargets: []
+                }
+            ]
         });
-        }
-        $("#btnFilter").click(function () {
-            GetData();
+        $('#activityTable_filter').hide();
+        $('#txtSearch').on('keyup', function () {
+
+            $.fn.dataTable.ext.search.push(function (settings, searchData) {
+                var term = $('#txtSearch').val().toLowerCase()
+                for (var i = 0; i < searchData.length; i++) {
+                    if (searchData[i].toLowerCase().indexOf(term) == 0) {
+                        return true;
+                    }
+                }
+                return false;
+            });
+            var table = $('#activityTable').DataTable();
+            table.draw();
         });
-        function DrawTable() {
-            var table1 = $('#activityTable').DataTable();
-            table1.destroy();
-            console.log(tableData)
-            var table = $('#activityTable').DataTable({
-                "data": tableData,
-                "paging": true,
-                "ordering": false,
-                "info": true,
-                "bFilter": true,
-                "pageLength": 10,
-                "pagingType": "simple_numbers",
-                "columns": [
-                    { data: "GroupNameLT5" },
-                    { data: "ValueLT5" },
-                    { data: "GroupNameLT10" },
-                    { data: "ValueLT10" },
-                    { data: "GroupNameLT15" },
-                    { data: "ValueLT15" },
-                    { data: "GroupNameLT30" },
-                    { data: "ValueLT30" },
-                    { data: "GroupNameLT40" },
-                    { data: "ValueLT40" }
-                ],
-                aoColumnDefs: [
-                    {
-                        bSortable: false,
-                        aTargets: []
-                    }
-                ]
-            });
-            $('#activityTable_filter').hide();
-            $('#txtSearch').on('keyup', function () {
 
-                $.fn.dataTable.ext.search.push(function (settings, searchData) {
-                    var term = $('#txtSearch').val().toLowerCase()
-                    for (var i = 0; i < searchData.length; i++) {
-                        if (searchData[i].toLowerCase().indexOf(term) == 0) {
-                            return true;
-                        }
-                    }
-                    return false;
-                });
-                var table = $('#activityTable').DataTable();
-                table.draw();
-            });
+    }
 
-        }
-        //function DrawTable() {
-        //    var table1 = $('#activityTable').DataTable();
-        //    table1.destroy();
-
-        //    var table = $('#activityTable').DataTable({
-        //        "data": tableData,
-        //        "paging": true,
-        //        "ordering": false,
-        //        "info": true,
-        //        "bFilter": true,
-        //        "pageLength": 10,
-        //        "pagingType": "simple_numbers",
-        //        "columns": [
-        //            { data: "GroupNameLT5" },
-        //            { data: "ValueLT5" },
-        //            { data: "GroupNameLT10" },
-        //            { data: "ValueLT10" },
-        //            { data: "GroupNameLT15" },
-        //            { data: "ValueLT15" },
-        //            { data: "GroupNameLT30" },
-        //            { data: "ValueLT30" },
-        //            { data: "GroupNameLT40" },
-        //            { data: "ValueLT40" }
-
-        //        ],
-        //        aoColumnDefs: [
-        //            {
-        //                bSortable: false,
-        //                aTargets: []
-        //            }
-        //        ]
-        //    });
-        //    $('#activityTable_filter').hide();
-        //    $('#txtSearch').on('keyup', function () {
-
-        //        $.fn.dataTable.ext.search.push(function (settings, searchData) {
-        //            var term = $('#txtSearch').val().toLowerCase()
-        //            for (var i = 0; i < searchData.length; i++) {
-        //                if (searchData[i].toLowerCase().indexOf(term) >= 0) {
-        //                    return true;
-        //                }
-        //            }
-        //            return false;
-        //        });
-        //        var table = $('#activityTable').DataTable();
-        //        table.draw();
-        //    });
-
-        //}
 </script>
 <script src="~/Scripts/jquery-ui-1.12.1.js"></script>
 <script src="~/Scripts/jquery-ui-1.12.1.min.js"></script>
