@@ -95,7 +95,7 @@
             <label class="tab" id="one-tab" for="one">Non-Transacting Group</label>
             <label class="tab" id="two-tab" for="two">Communication</label>
             <label class="tab" id="three-tab" for="three">Key Indicator</label>
-            <label class="tab" id="four-tab" for="four">CityWiseGroup</label>
+            <label class="tab" id="four-tab" for="four">City Wise</label>
         </div>
         <div class="panels">
             <div class="multisteps-form__panel shadow p-4 m-4 list-box bg-white panel" id="one-panel">
@@ -533,50 +533,53 @@
                 @if (Model.lstCitywiseData != null)
                 {
                     long allCityTotal = 0;
-                    <table border="2" cellpadding="5" cellspacing="5">
-                        <tr style="background-color:lightgray;">
-                            <th style="width:150px;">City</th>
-                            <th>Total</th>
-                            @foreach (var item in Model.lstCategories)
-                            {
-                                <th>@item.CategoryName</th>
-                            }
-                        </tr>
-
-                        @foreach (var item in Model.lstCities)
-                        {
-                            long total = 0;
-                            <tr>
-                                <td style="background-color:lightgray;font-weight:bold;">@item.CityName</td>
-
-                                @foreach (var item1 in Model.lstCitywiseData)
+                    <table border="1" cellpadding="5" cellspacing="5" id="tblCityWise">
+                        <thead>
+                            <tr style="background-color:lightgray;">
+                                <th style="width:150px;">City</th>
+                                <th>Total</th>
+                                @foreach (var item in Model.lstCategories)
                                 {
-                                    if (item.CityName == item1.CityName)
-                                    {
-                                        total = total + item1.MemberBase;
-                                    }
+                                    <th>@item.CategoryName</th>
                                 }
-                                <td style="font-weight:bold; text-align:right;">@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(total))</td>
-
-                                @foreach (var item1 in Model.lstCitywiseData)
-                                {
-                                    if (item.CityName == item1.CityName)
-                                    {
-                                        <td style="text-align:right;">@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(item1.MemberBase))</td>
-                                    }
-                                }
-                                @if (total > 0)
-                                {
-                                    allCityTotal = allCityTotal + total;
-                                }
-
                             </tr>
-                        }
-                        <tr style="background-color: lightgray; font-weight: bold; ">
-                            <td>Total Count</td>
-                            <td style="text-align:right;">@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(allCityTotal))</td>
-                        </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.lstCities)
+                            {
+                                long total = 0;
+                                <tr>
+                                    <td style="background-color:lightgray;font-weight:bold;">@item.CityName</td>
 
+                                    @foreach (var item1 in Model.lstCitywiseData)
+                                    {
+                                        if (item.CityName == item1.CityName)
+                                        {
+                                            total = total + item1.MemberBase;
+                                        }
+                                    }
+                                    <td style="font-weight:bold; text-align:right;">@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(total))</td>
+
+                                    @foreach (var item1 in Model.lstCitywiseData)
+                                    {
+                                        if (item.CityName == item1.CityName)
+                                        {
+                                            <td style="text-align:right;">@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(item1.MemberBase))</td>
+                                        }
+                                    }
+                                    @if (total > 0)
+                                    {
+                                        allCityTotal = allCityTotal + total;
+                                    }
+
+                                </tr>
+                            }
+                            <tr style="background-color: lightgray; font-weight: bold; ">
+                                <td>Total Count</td>
+                                <td style="text-align:right;">@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(allCityTotal))</td>
+                            <td colspan="10"></td>
+                            </tr>
+                        </tbody>
                     </table>
 
                 }
@@ -589,6 +592,7 @@
         var tableData = [];
     $(document).ready(function () {
         GetData();
+         
     });
     function GetData() {
         $("#divLoader").show();
@@ -619,7 +623,7 @@
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             success: function (response) {
-                if (response != null) {                       
+                if (response != null) {
                     tableData.length = 0;
                     $.map(response, function (item) {
                         optionItem = {}

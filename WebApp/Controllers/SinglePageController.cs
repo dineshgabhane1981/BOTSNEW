@@ -32,10 +32,25 @@ namespace WebApp.Controllers
                 singlevm.lstlowtransactingOutlet = SPR.GetLowTransactingOutlet();
 
                 singlevm.lstCitywiseData = SPR.GetCityWiseData();
-                var cities = singlevm.lstCitywiseData.GroupBy(x => x.CityName).Select(y => y.First()).ToList();
-                singlevm.lstCities = cities;
                 var categories = singlevm.lstCitywiseData.GroupBy(x => x.CategoryName).Select(y => y.First()).ToList();
                 singlevm.lstCategories = categories;
+                var cities = singlevm.lstCitywiseData.GroupBy(x => x.CityName).Select(y => y.First()).ToList();
+                List<CitywiseReport> objData = new List<CitywiseReport>();
+                foreach(var item in cities)
+                {
+                    CitywiseReport objItem = new CitywiseReport();
+                    long count = singlevm.lstCitywiseData.Where(x => x.CityName == item.CityName).Sum(y => y.MemberBase);
+                    objItem.CityName = item.CityName;
+                    objItem.CategoryName = item.CategoryName;
+                    objItem.MemberBase = count;
+
+                    objData.Add(objItem);
+                }
+                objData = objData.OrderByDescending(x => x.MemberBase).ToList();
+                cities = objData.GroupBy(x => x.CityName).Select(y => y.First()).ToList();
+
+                singlevm.lstCities = cities;
+               
 
                 //singlevm.lstCommunication = SPR.GetCommunicationWhatsAppExpiryData();
                 //singlevm.lstlowermetrics = 
