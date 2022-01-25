@@ -641,6 +641,12 @@ namespace WebApp.Controllers
 
             return Json(objData, JsonRequestBehavior.AllowGet);
         }
+        public ActionResult GetModifyTxnData(string GroupId, string TransactionId)
+        {
+            CancelTxnViewModel objData = new CancelTxnViewModel();
+            objData.objCancelTxnModel = ITOPS.GetTransactionByTransactionId(GroupId, TransactionId);
+            return Json(objData, JsonRequestBehavior.AllowGet);
+        }
 
         public ActionResult DeleteTransaction(string GroupId, string InvoiceNo, string MobileNo, string InvoiceAmt, string ip_Date, string RequestedBy, string RequestedForum, string RequestedDate)
         {
@@ -720,5 +726,44 @@ namespace WebApp.Controllers
             lstLogDetails = ITOPS.GetLogDetails(search, GroupId);
             return Json(lstLogDetails, JsonRequestBehavior.AllowGet);
         }
+
+        public bool ModifyTransaction(string jsonData)
+        {
+            bool result = false;
+            try
+            {
+                JavaScriptSerializer json_serializer = new JavaScriptSerializer();
+                json_serializer.MaxJsonLength = int.MaxValue;
+                object[] objData = (object[])json_serializer.DeserializeObject(jsonData);
+                tblAudit objAudit = new tblAudit();
+                string GroupId = "";
+                string TransactionId = "";
+                decimal points = 0;
+
+                foreach (Dictionary<string, object> item in objData)
+                {
+                    GroupId = Convert.ToString(item["GroupID"]);
+                    TransactionId = Convert.ToString(item["TransactionId"]);
+                    if (!string.IsNullOrEmpty(Convert.ToString(item["Points"])))
+                    {
+                        points = Convert.ToDecimal(item["Points"]);
+                    }
+                    objAudit.GroupId = GroupId;
+                    objAudit.RequestedFor = "Add / Earn";
+                    objAudit.RequestedEntity = "Transaction For  - " + TransactionId;
+                    objAudit.RequestedBy = Convert.ToString(item["RequestedBy"]);
+                    objAudit.RequestedOnForum = Convert.ToString(item["RequestedForum"]);
+                    objAudit.RequestedOn = Convert.ToDateTime(item["RequestedOn"]);
+                     
+                }
+                result = ITOPS.ModifyTransaction(GroupId, Convert.ToInt64(TransactionId), points, objAudit);
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "ModifyTransaction");
+            }
+            return result;
+        }
+        
     }
 }

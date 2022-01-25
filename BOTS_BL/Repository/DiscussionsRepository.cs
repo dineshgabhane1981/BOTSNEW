@@ -144,7 +144,8 @@ namespace BOTS_BL.Repository
                     objsubdiscussion.FollowupDate = objDiscussion.FollowupDate;
                     objsubdiscussion.Description = Desc;
                     objsubdiscussion.Status = objDiscussion.Status;
-                    objsubdiscussion.UpdatedBy = objDiscussion.AddedBy;
+                    objsubdiscussion.UpdatedBy = LoginId;
+                    objsubdiscussion.AddedDate = DateTime.Now;
                     context.BOTS_TblSubDiscussionData.AddOrUpdate(objsubdiscussion);
                     context.SaveChanges();
                     status = true;
@@ -172,7 +173,7 @@ namespace BOTS_BL.Repository
 
                     lstsubdiscussionlist = (from c in context.BOTS_TblDiscussion
                                             join ct in context.BOTS_TblSubDiscussionData on c.Id equals ct.DiscussionId
-                                            join cld in context.CustomerLoginDetails on c.AddedBy equals cld.LoginId
+                                            join cld in context.CustomerLoginDetails on ct.UpdatedBy equals cld.LoginId
                                             where ct.DiscussionId == Id
                                             select new SubDiscussionData
                                             {
@@ -182,16 +183,25 @@ namespace BOTS_BL.Repository
                                                 FollowupDate = ct.FollowupDate.ToString(),
                                                 Description = ct.Description,
                                                 UpdatedBy = cld.UserName,
-                                                Status = ct.Status
+                                                Status = ct.Status,
+                                                AddedDate = ct.AddedDate
 
                                             }).OrderByDescending(x => x.FollowupDate).ToList();
+
+                    foreach(var item in lstsubdiscussionlist)
+                    {
+                        if (item.AddedDate.HasValue)
+                            item.UpdatedDate = Convert.ToString(item.AddedDate);
+                        else
+                            item.UpdatedDate = "--";
+                    }
                 }
 
 
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex,"");
+                newexception.AddException(ex, "GetNestedDiscussionList");
             }
 
             return lstsubdiscussionlist;

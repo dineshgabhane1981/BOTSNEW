@@ -279,7 +279,7 @@
         if (data != "") {
             var htmlStr = "<table border=\"2\" style=\"background-color:gray;margin-left: 11px;width: 98%;\" class=\"table\">";
             htmlStr += "<tr style=\"text-align: center;\">"
-            htmlStr += "<th scope=\"col\">Date</th>";
+            htmlStr += "<th scope=\"col\">Updated Date</th>";
             htmlStr += "<th scope=\"col\">Updated By</th>";
             htmlStr += "<th scope=\"col\">Description</th>";
             htmlStr += "<th scope=\"col\">Status</th>";
@@ -290,9 +290,9 @@
                 d = item.FollowupDate;
                 console.log(d);
                 htmlStr += "<tr style=\"text-align: center;\">"
-                htmlStr += "<td>" + item.FollowupDate + "</td>";
+                htmlStr += "<td>" + item.UpdatedDate + "</td>";
                 htmlStr += "<td>" + item.UpdatedBy + "</td>";
-                htmlStr += "<td style=\"width: 100px;\">" + item.Description + "</td>";
+                htmlStr += "<td style=\"width: 600px;\">" + item.Description + "</td>";
                 htmlStr += "<td style=\"width: 100px;\">" + item.Status + "</td>";
                 htmlStr += "</tr>"
             });
