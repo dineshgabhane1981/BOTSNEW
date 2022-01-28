@@ -42,19 +42,26 @@ namespace BOTS_BL.Repository
             }
             catch (Exception ex)
             {
-
+                newexception.AddException(ex, "GetSinglePageNonTransactingGroups");
             }
 
             return lstnontransactinggrp;
         }
-        public List<Tbl_SinglePageNonTransactingOutlet> GetNonTransactingOutlet()
+        public List<Tbl_SinglePageNonTransactingOutlet> GetNonTransactingOutlet(string all)
         {
             List<Tbl_SinglePageNonTransactingOutlet> lstnontransactingoutlet = new List<Tbl_SinglePageNonTransactingOutlet>();
             try
             {
                 using (var context = new CommonDBContext())
                 {
-                    lstnontransactingoutlet = context.Tbl_SinglePageNonTransactingOutlet.Where(x => x.Date == DateTime.Today).OrderByDescending(i => i.DaysSinceLastTxn).ToList();
+                    if (string.IsNullOrEmpty(all))
+                    {
+                        lstnontransactingoutlet = context.Tbl_SinglePageNonTransactingOutlet.Where(x => x.Date == DateTime.Today).OrderByDescending(i => i.DaysSinceLastTxn).Take(5).ToList();
+                    }
+                    else
+                    {
+                        lstnontransactingoutlet = context.Tbl_SinglePageNonTransactingOutlet.Where(x => x.Date == DateTime.Today).OrderByDescending(i => i.DaysSinceLastTxn).ToList();
+                    }
                     foreach (var item in lstnontransactingoutlet)
                     {
                         item.DaySinceLastTxn = Convert.ToInt32(item.DaysSinceLastTxn);
@@ -64,25 +71,32 @@ namespace BOTS_BL.Repository
             }
             catch (Exception ex)
             {
-                // newexception.AddException(ex, GroupId);
+                newexception.AddException(ex, "GetNonTransactingOutlet");
             }
 
             return lstnontransactingoutlet;
         }
 
-        public List<Tbl_SinglePageLowTransactingOutlet> GetLowTransactingOutlet()
+        public List<Tbl_SinglePageLowTransactingOutlet> GetLowTransactingOutlet(string all)
         {
             List<Tbl_SinglePageLowTransactingOutlet> lstlowtransactingoutlet = new List<Tbl_SinglePageLowTransactingOutlet>();
             try
             {
                 using (var context = new CommonDBContext())
                 {
-                    lstlowtransactingoutlet = context.Tbl_SinglePageLowTransactingOutlet.Where(x => x.Date == DateTime.Today).OrderBy(i => i.LowerByPercentage).ToList();
+                    if (string.IsNullOrEmpty(all))
+                    {
+                        lstlowtransactingoutlet = context.Tbl_SinglePageLowTransactingOutlet.Where(x => x.Date == DateTime.Today).OrderBy(i => i.LowerByPercentage).Take(5).ToList();
+                    }
+                    else
+                    {
+                        lstlowtransactingoutlet = context.Tbl_SinglePageLowTransactingOutlet.Where(x => x.Date == DateTime.Today).OrderBy(i => i.LowerByPercentage).ToList();
+                    }
                 }
             }
             catch (Exception ex)
             {
-                // newexception.AddException(ex, GroupId);
+                newexception.AddException(ex, "GetLowTransactingOutlet");
             }
 
             return lstlowtransactingoutlet;
@@ -492,7 +506,7 @@ namespace BOTS_BL.Repository
             {
                 using (var context = new CommonDBContext())
                 {
-                    var groups = context.tblGroupDetails.Where(x => x.IsActive == true).ToList();
+                    var groups = context.tblGroupDetails.Where(x => x.IsActive == true && x.IsLive == true).ToList();
                     foreach (var item in groups)
                     {
                         var groupId = Convert.ToInt32(item.GroupId);
@@ -587,7 +601,7 @@ namespace BOTS_BL.Repository
             }
             catch (Exception ex)
             {
-
+                newexception.AddException(ex, "GetCityWiseData");
             }
             return lstFinalData;
         }

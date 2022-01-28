@@ -28,28 +28,31 @@ namespace WebApp.Controllers
                 // Tbl_SinglePageSummaryTable objsinglepagesummarytable = new Tbl_SinglePageSummaryTable();
                 singlevm.lstsummarytable = SPR.GetSinglePageSummaryTable();
                 singlevm.lstnontransactingGrp = SPR.GetSinglePageNonTransactingGroups();
-                singlevm.lstnontransactingOutlet = SPR.GetNonTransactingOutlet();
-                singlevm.lstlowtransactingOutlet = SPR.GetLowTransactingOutlet();
+                singlevm.lstnontransactingOutlet = SPR.GetNonTransactingOutlet("");
+                singlevm.lstlowtransactingOutlet = SPR.GetLowTransactingOutlet("");
 
                 singlevm.lstCitywiseData = SPR.GetCityWiseData();
-                var categories = singlevm.lstCitywiseData.GroupBy(x => x.CategoryName).Select(y => y.First()).ToList();
-                singlevm.lstCategories = categories;
-                var cities = singlevm.lstCitywiseData.GroupBy(x => x.CityName).Select(y => y.First()).ToList();
-                List<CitywiseReport> objData = new List<CitywiseReport>();
-                foreach(var item in cities)
+                if (singlevm.lstCitywiseData != null)
                 {
-                    CitywiseReport objItem = new CitywiseReport();
-                    long count = singlevm.lstCitywiseData.Where(x => x.CityName == item.CityName).Sum(y => y.MemberBase);
-                    objItem.CityName = item.CityName;
-                    objItem.CategoryName = item.CategoryName;
-                    objItem.MemberBase = count;
+                    var categories = singlevm.lstCitywiseData.GroupBy(x => x.CategoryName).Select(y => y.First()).ToList();
+                    singlevm.lstCategories = categories;
+                    var cities = singlevm.lstCitywiseData.GroupBy(x => x.CityName).Select(y => y.First()).ToList();
+                    List<CitywiseReport> objData = new List<CitywiseReport>();
+                    foreach (var item in cities)
+                    {
+                        CitywiseReport objItem = new CitywiseReport();
+                        long count = singlevm.lstCitywiseData.Where(x => x.CityName == item.CityName).Sum(y => y.MemberBase);
+                        objItem.CityName = item.CityName;
+                        objItem.CategoryName = item.CategoryName;
+                        objItem.MemberBase = count;
 
-                    objData.Add(objItem);
+                        objData.Add(objItem);
+                    }
+                    objData = objData.OrderByDescending(x => x.MemberBase).ToList();
+                    cities = objData.GroupBy(x => x.CityName).Select(y => y.First()).ToList();
+
+                    singlevm.lstCities = cities;
                 }
-                objData = objData.OrderByDescending(x => x.MemberBase).ToList();
-                cities = objData.GroupBy(x => x.CityName).Select(y => y.First()).ToList();
-
-                singlevm.lstCities = cities;
                
 
                 //singlevm.lstCommunication = SPR.GetCommunicationWhatsAppExpiryData();
@@ -76,6 +79,15 @@ namespace WebApp.Controllers
 
         }
 
-
+        public ActionResult GetAllNonTransactingOutletData()
+        {
+            var lstData= SPR.GetNonTransactingOutlet("All");
+            return PartialView("_NonTransactingAll", lstData);
+        }
+        public ActionResult GetAllLowTransactingOutletData()
+        {
+            var lstData = SPR.GetLowTransactingOutlet("All");
+            return PartialView("_LowTransactingAll", lstData);
+        }
     }
 }

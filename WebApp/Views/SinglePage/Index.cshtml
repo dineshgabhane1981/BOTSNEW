@@ -96,6 +96,7 @@
             <label class="tab" id="two-tab" for="two">Communication</label>
             <label class="tab" id="three-tab" for="three">Key Indicator</label>
             <label class="tab" id="four-tab" for="four">City Wise</label>
+            <label class="tab" id="five-tab" for="five">Discussion</label>
         </div>
         <div class="panels">
             <div class="multisteps-form__panel shadow p-4 m-4 list-box bg-white panel" id="one-panel">
@@ -152,118 +153,67 @@
 
                 </div>
 
-                <div class="row mb-5 ml-2">
-
-                    <div class="mb-5 ml-3">
-                        <table border="1">
-                            <thead><h6><b>Non Transacting Group</b></h6></thead>
+                <div class="row">
+                    <div class="mb-5 col-md-3 col-xl-3">
+                        <table border="1" cellpadding="5" cellspacing="5">
+                            <thead><b>Non Transacting Group</b></thead>
                             <tr>
-                                <th scope="col" style="text-align:left;">Sr No</th>
                                 <th scope="col" style="text-align:left;">Group Name</th>
-                                <th scope="col" style="text-align:left;">Days Since Last Txn</th>
+                                <th scope="col" style="text-align:left;">DSLT</th>
                             </tr>
                             <tbody>
-                                @{int indexnew = 1;}
                                 @if (Model.lstnontransactingGrp != null)
                                 {
                                     if (Model.lstnontransactingGrp.Count > 0)
                                     {
                                         foreach (var item in Model.lstnontransactingGrp)
                                         {
-                                            if (indexnew <= 5)
-                                            {
-                                                <tr>
-                                                    <td>@indexnew</td>
-
-                                                    <td style="text-align:left;">@item.GroupName</td>
-                                                    <td style="text-align:left;">@item.DaysSinceLastTxn</td>
-                                                </tr>
-                                            }
-                                            indexnew++;
-                                        }
-                                    }
-                                }
-                            </tbody>
-                        </table>
-
-                    </div>
-                    <div class="mb-5 ml-3">
-                        <table border="1">
-                            <thead><h6><b>Non Transacting Group</b></h6></thead>
-                            <tr>
-                                <th scope="col" style="text-align:left;">Sr No</th>
-                                <th scope="col" style="text-align:left;">Group Name</th>
-                                <th scope="col" style="text-align:left;">Last Txn Date</th>
-                                <th scope="col" style="text-align:left;">Days Since Last Txn</th>
-                            </tr>
-                            <tbody>
-                                @{int index = 1;}
-                                @if (Model.lstnontransactingGrp != null)
-                                {
-                                    if (Model.lstnontransactingGrp.Count > 0)
-                                    {
-                                        foreach (var item in Model.lstnontransactingGrp)
-                                        {
-
                                             <tr>
-                                                <td>@index</td>
                                                 <td style="text-align:left;">@item.GroupName</td>
-                                                <td style="text-align:left;">@item.LastTxnDate</td>
                                                 <td style="text-align:left;">@item.DaysSinceLastTxn</td>
                                             </tr>
-                                            index++;
                                         }
                                     }
                                 }
                             </tbody>
                         </table>
                     </div>
-                </div>
-
-
-                <div class="row mb-5 ml-2">
-
-                    <div class="mb-5">
-                        <table border="1">
-                            <thead><h6><b>Non Transacting Outlet</b></h6></thead>
+                 
+                    <div class="mb-5 col-md-4 col-xl-4" style="margin-left:-20px !important;">
+                        <table border="1" cellpadding="5" cellspacing="5">
+                            <thead><b>Non Transacting Outlet</b>&nbsp;&nbsp;<a href="#" onclick="ShowAllNonTransactingOutlet();">Show All</a></thead>
                             <tr>
-                                <th scope="col" style="text-align:left;">Sr No</th>
                                 <th scope="col" style="text-align:left;">Group Name</th>
                                 <th scope="col" style="text-align:left;">Outlet Name</th>
-                                <th scope="col" style="text-align:right;">Avg Group Txns</th>
-                                <th scope="col" style="text-align:left;">Last Txn Date</th>
-                                <th scope="col" style="text-align:left;">Days Since Last Txn</th>
-
+                                @*<th scope="col" style="text-align:right;">Avg Group Txns</th>*@
+                                <th scope="col" style="text-align:left;">LTD</th>
+                                <th scope="col" style="text-align:left;">DSLT</th>
                             </tr>
                             <tbody>
-                                @{int index1 = 1;}
                                 @if (Model.lstnontransactingOutlet != null)
                                 {
                                     if (Model.lstnontransactingOutlet.Count > 0)
                                     {
                                         foreach (var item in Model.lstnontransactingOutlet)
                                         {
-
                                             <tr>
-                                                <td>@index1</td>
                                                 <td style="text-align:left;">@item.GroupName</td>
                                                 <td style="text-align:left;">@item.OutletName</td>
-                                                <td style="text-align:left;">@item.AvgGroupTxn</td>
-                                                <td style="text-align:left;">@item.LastTxnDate</td>
+                                                @*<td style="text-align:left;">@item.AvgGroupTxn</td>*@
+                                                <td style="text-align:left;">@item.LastTxnDate.Value.ToString("MM/dd/yyyy")</td>
                                                 <td style="text-align:left;">@item.DaysSinceLastTxn</td>
                                             </tr>
-                                            index1++;
                                         }
                                     }
                                 }
                             </tbody>
                         </table>
                     </div>
-                    <div class="mb-5">
-                        <table border="1">
-                            <thead><h6><b>Low Transacting Outlet</b></h6></thead>
-                            <tr>
-                                <th scope="col" style="text-align:left;">Sr No</th>
+
+                    <div class="mb-5 col-md-5 col-xl-5" style="margin-left:20px !important;">
+                        <table border="1" cellpadding="5" cellspacing="5">
+                            <thead><b>Low Transacting Outlet</b>&nbsp;&nbsp; <a href="#" onclick="ShowAllLowTransactingOutlet();">Show All</a></thead>
+                            <tr>                                
                                 <th scope="col" style="text-align:left;">Group Name</th>
                                 <th scope="col" style="text-align:left;">Outlet Name</th>
                                 <th scope="col" style="text-align:right;">Avg Txns</th>
@@ -271,8 +221,7 @@
                                 <th scope="col" style="text-align:left;">Lower by %</th>
 
                             </tr>
-                            <tbody>
-                                @{int index2 = 1;}
+                            <tbody>                                
                                 @if (Model.lstlowtransactingOutlet != null)
                                 {
                                     if (Model.lstlowtransactingOutlet.Count > 0)
@@ -280,21 +229,24 @@
                                         foreach (var item in Model.lstlowtransactingOutlet)
                                         {
 
-                                            <tr>
-                                                <td>@index2</td>
+                                            <tr>                                               
                                                 <td style="text-align:left;">@item.GroupName</td>
                                                 <td style="text-align:left;">@item.OutletName</td>
                                                 <td style="text-align:left;">@item.AvgTxn</td>
                                                 <td style="text-align:left;">@item.AvgGroupTxnIn30Days</td>
                                                 <td style="text-align:left;">@item.LowerByPercentage</td>
                                             </tr>
-                                            index2++;
+                                           
                                         }
                                     }
                                 }
                             </tbody>
                         </table>
+
                     </div>
+                </div>
+
+                <div class="row mb-5 ml-2" id="dvAllData">                   
                 </div>
             </div>
 
@@ -577,22 +529,29 @@
                             <tr style="background-color: lightgray; font-weight: bold; ">
                                 <td>Total Count</td>
                                 <td style="text-align:right;">@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(allCityTotal))</td>
-                            <td colspan="10"></td>
+                                <td colspan="10"></td>
                             </tr>
                         </tbody>
                     </table>
 
                 }
             </div>
+
+            <div id="five-panel" class="multisteps-form__panel shadow p-4 m-4 list-box bg-white panel">
+
+
+
+
+            </div>
         </div>
     </div>
 </div>
 
 <script>
-        var tableData = [];
+    var tableData = [];
     $(document).ready(function () {
         GetData();
-         
+
     });
     function GetData() {
         $("#divLoader").show();
@@ -706,6 +665,48 @@
 
     }
 
+    function ShowAllNonTransactingOutlet() {
+        $("#divLoader").show();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("GetAllNonTransactingOutletData", "SinglePage")',
+            data: '',
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                $("#dvAllData").html(response);
+                $("#divLoader").hide();
+            },
+            failure: function (response) {               
+                $("#divLoader").hide();
+            },
+            error: function (response) {                
+                $("#dvAllData").html(response.responseText);
+                $("#divLoader").hide();
+            }
+        });
+    }
+    function ShowAllLowTransactingOutlet() {
+        $("#divLoader").show();
+         $.ajax({
+            type: "POST",
+            url: '@Url.Action("GetAllLowTransactingOutletData", "SinglePage")',
+            data: '',
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+             success: function (response) {
+                 $("#dvAllData").html(response);
+                 $("#divLoader").hide();
+             },
+             failure: function (response) {
+                 $("#divLoader").hide();
+             },
+             error: function (response) {
+                 $("#dvAllData").html(response.responseText);
+                 $("#divLoader").hide();
+             }
+        });
+    }
 </script>
 <script src="~/Scripts/jquery-ui-1.12.1.js"></script>
 <script src="~/Scripts/jquery-ui-1.12.1.min.js"></script>
