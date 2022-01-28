@@ -378,67 +378,72 @@ namespace BOTS_BL.Repository
             List<SMSBalance> lstbalance = new List<SMSBalance>();
             DateTime next10day = DateTime.Now.AddDays(10);
             DataSet retVal = new DataSet();
-            var baseAddress = "https://smsnotify.one/SMSApi/reseller/readuser?userid=Blueotrans&password=123456&output=json";
-            using (var client = new HttpClient())
+            try
             {
-                using (var response1 = client.GetAsync(baseAddress).Result)
+                var baseAddress = "https://smsnotify.one/SMSApi/reseller/readuser?userid=Blueotrans&password=123456&output=json";
+                using (var client = new HttpClient())
                 {
-                    if (response1.IsSuccessStatusCode)
+                    using (var response1 = client.GetAsync(baseAddress).Result)
                     {
-                        client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                        var response2 = client.GetStringAsync(new Uri(baseAddress)).Result;
-
-                        var rootlist = JsonConvert.DeserializeObject<Dictionary<string, dynamic>>(response2);
-                        JObject jsonObj = JObject.Parse(response2);
-                        IList<JToken> hotels = jsonObj["response"]["userList"].Children().ToList();
-                        IEnumerable<JToken> pricyProducts = jsonObj.SelectTokens("$..user");
-
-                        foreach (JToken item in pricyProducts)
+                        if (response1.IsSuccessStatusCode)
                         {
-                            SMSBalance objbalance = new SMSBalance();
-                            objbalance.OutletName = item["userName"].ToString();
-                            objbalance.BrandName = item["userName"].ToString();
-                            objbalance.SmsBalance = (string)item["smsBalance"];
-                            objbalance.Status = (string)item["userStatus"];
-                            lstbalance.Add(objbalance);
+                            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                            var response2 = client.GetStringAsync(new Uri(baseAddress)).Result;
+
+                            var rootlist = JsonConvert.DeserializeObject<Dictionary<string, dynamic>>(response2);
+                            JObject jsonObj = JObject.Parse(response2);
+                            IList<JToken> hotels = jsonObj["response"]["userList"].Children().ToList();
+                            IEnumerable<JToken> pricyProducts = jsonObj.SelectTokens("$..user");
+
+                            foreach (JToken item in pricyProducts)
+                            {
+                                SMSBalance objbalance = new SMSBalance();
+                                objbalance.OutletName = item["userName"].ToString();
+                                objbalance.BrandName = item["userName"].ToString();
+                                objbalance.SmsBalance = (string)item["smsBalance"];
+                                objbalance.Status = (string)item["userStatus"];
+                                lstbalance.Add(objbalance);
+                            }
+
                         }
-
-                    }
-                    else
-                    {
-                        Console.WriteLine("{0} ({1})", (int)response1.StatusCode, response1.ReasonPhrase);
+                        else
+                        {
+                            Console.WriteLine("{0} ({1})", (int)response1.StatusCode, response1.ReasonPhrase);
+                        }
                     }
                 }
-            }
-            //vision
-            var baseAddressvision = "https://sms.visionhlt.com/api/mt/GetCreditReport?userid=4438&password=123456";
-            using (var client = new HttpClient())
-            {
-                using (var response1 = client.GetAsync(baseAddressvision).Result)
+                //vision
+                var baseAddressvision = "https://sms.visionhlt.com/api/mt/GetCreditReport?userid=4438&password=123456";
+                using (var client = new HttpClient())
                 {
-                    if (response1.IsSuccessStatusCode)
+                    using (var response1 = client.GetAsync(baseAddressvision).Result)
                     {
-                        client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/xml"));
-                        // var response2 = client.GetStringAsync(new Uri(baseAddressvision)).Result;
+                        if (response1.IsSuccessStatusCode)
+                        {
+                            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/xml"));
+                            // var response2 = client.GetStringAsync(new Uri(baseAddressvision)).Result;
 
-                        // var rootlist = XmlConvert.DeserializeObject<Dictionary<string, dynamic>>(response2);
+                            // var rootlist = XmlConvert.DeserializeObject<Dictionary<string, dynamic>>(response2);
 
-                        string users = response1.Content.ReadAsStringAsync().Result;
+                            string users = response1.Content.ReadAsStringAsync().Result;
 
-                        XmlSerializer serializer = new XmlSerializer(typeof(List<User>), new XmlRootAttribute("CreditReport"));
-                        StringReader stringReader = new StringReader(users);
-                        List<User> productList = (List<User>)serializer.Deserialize(stringReader);
+                            XmlSerializer serializer = new XmlSerializer(typeof(List<User>), new XmlRootAttribute("CreditReport"));
+                            StringReader stringReader = new StringReader(users);
+                            List<User> productList = (List<User>)serializer.Deserialize(stringReader);
 
-                    }
-                    else
-                    {
-                        Console.WriteLine("{0} ({1})", (int)response1.StatusCode, response1.ReasonPhrase);
+                        }
+                        else
+                        {
+                            Console.WriteLine("{0} ({1})", (int)response1.StatusCode, response1.ReasonPhrase);
+                        }
                     }
                 }
+
             }
-
-
-
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetCommunicationWhatsAppExpiryData");
+            }
 
 
             //try

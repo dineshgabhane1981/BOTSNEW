@@ -31,7 +31,7 @@ namespace WebApp.Controllers
                 singlevm.lstnontransactingOutlet = SPR.GetNonTransactingOutlet("");
                 singlevm.lstlowtransactingOutlet = SPR.GetLowTransactingOutlet("");
 
-                singlevm.lstCitywiseData = SPR.GetCityWiseData();
+                //singlevm.lstCitywiseData = SPR.GetCityWiseData();
                 if (singlevm.lstCitywiseData != null)
                 {
                     var categories = singlevm.lstCitywiseData.GroupBy(x => x.CategoryName).Select(y => y.First()).ToList();
@@ -55,7 +55,7 @@ namespace WebApp.Controllers
                 }
                
 
-                //singlevm.lstCommunication = SPR.GetCommunicationWhatsAppExpiryData();
+                singlevm.lstCommunication = SPR.GetCommunicationWhatsAppExpiryData();
                 //singlevm.lstlowermetrics = 
             }
             catch (Exception ex)
