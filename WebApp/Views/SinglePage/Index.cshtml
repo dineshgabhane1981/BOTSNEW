@@ -92,7 +92,7 @@
         <input class="radio" id="four" name="group" type="radio">
         <input class="radio" id="five" name="group" type="radio">
         <div class="tabs">
-            <label class="tab" id="one-tab" for="one">Non-Transacting Group</label>
+            <label class="tab" id="one-tab" for="one">Non-Transacting</label>
             <label class="tab" id="two-tab" for="two">Communication</label>
             <label class="tab" id="three-tab" for="three">Key Indicator</label>
             <label class="tab" id="four-tab" for="four">City Wise</label>
@@ -178,7 +178,7 @@
                             </tbody>
                         </table>
                     </div>
-                 
+
                     <div class="mb-5 col-md-4 col-xl-4" style="margin-left:-20px !important;">
                         <table border="1" cellpadding="5" cellspacing="5">
                             <thead><b>Non Transacting Outlet</b>&nbsp;&nbsp;<a href="#" onclick="ShowAllNonTransactingOutlet();">Show All</a></thead>
@@ -213,7 +213,7 @@
                     <div class="mb-5 col-md-5 col-xl-5" style="margin-left:20px !important;">
                         <table border="1" cellpadding="5" cellspacing="5">
                             <thead><b>Low Transacting Outlet</b>&nbsp;&nbsp; <a href="#" onclick="ShowAllLowTransactingOutlet();">Show All</a></thead>
-                            <tr>                                
+                            <tr>
                                 <th scope="col" style="text-align:left;">Group Name</th>
                                 <th scope="col" style="text-align:left;">Outlet Name</th>
                                 <th scope="col" style="text-align:right;">Avg Txns</th>
@@ -221,7 +221,7 @@
                                 <th scope="col" style="text-align:left;">Lower by %</th>
 
                             </tr>
-                            <tbody>                                
+                            <tbody>
                                 @if (Model.lstlowtransactingOutlet != null)
                                 {
                                     if (Model.lstlowtransactingOutlet.Count > 0)
@@ -229,14 +229,14 @@
                                         foreach (var item in Model.lstlowtransactingOutlet)
                                         {
 
-                                            <tr>                                               
+                                            <tr>
                                                 <td style="text-align:left;">@item.GroupName</td>
                                                 <td style="text-align:left;">@item.OutletName</td>
                                                 <td style="text-align:left;">@item.AvgTxn</td>
                                                 <td style="text-align:left;">@item.AvgGroupTxnIn30Days</td>
                                                 <td style="text-align:left;">@item.LowerByPercentage</td>
                                             </tr>
-                                           
+
                                         }
                                     }
                                 }
@@ -246,7 +246,7 @@
                     </div>
                 </div>
 
-                <div class="row mb-5 ml-2" id="dvAllData">                   
+                <div class="row mb-5 ml-2" id="dvAllData">
                 </div>
             </div>
 
@@ -483,16 +483,23 @@
 
             <div id="four-panel" class="multisteps-form__panel shadow p-4 m-4 list-box bg-white panel">
                 @if (Model.lstCitywiseData != null)
-                {
-                    long allCityTotal = 0;
+                {                    
                     <table border="1" cellpadding="5" cellspacing="5" id="tblCityWise">
                         <thead>
                             <tr style="background-color:lightgray;">
                                 <th style="width:150px;">City</th>
-                                <th>Total</th>
+                                <th style="background-color: palegreen;">City Total</th>
                                 @foreach (var item in Model.lstCategories)
                                 {
-                                    <th>@item.CategoryName</th>
+                                    <th style="font-weight:bold; text-align:right;">@item.CategoryName</th>
+                                }
+                            </tr>
+                            <tr style="background-color: palegreen;">
+                                <td>Category Total</td>
+                                <td style="font-weight: bold; text-align: right; background-color: gold;">@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(Model.GrandTotal))</td>
+                                @foreach (var itemCategory in Model.lstCategoriesTotal)
+                                {
+                                    <td style="font-weight:bold; text-align:right;">@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(itemCategory.MemberBase))</td>
                                 }
                             </tr>
                         </thead>
@@ -510,38 +517,46 @@
                                             total = total + item1.MemberBase;
                                         }
                                     }
-                                    <td style="font-weight:bold; text-align:right;">@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(total))</td>
+                                    <td style="font-weight: bold; text-align: right; background-color: palegreen;">@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(total))</td>
 
                                     @foreach (var item1 in Model.lstCitywiseData)
                                     {
                                         if (item.CityName == item1.CityName)
                                         {
                                             <td style="text-align:right;">@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(item1.MemberBase))</td>
+
                                         }
-                                    }
-                                    @if (total > 0)
-                                    {
-                                        allCityTotal = allCityTotal + total;
-                                    }
+                                    }                                    
 
                                 </tr>
-                            }
-                            <tr style="background-color: lightgray; font-weight: bold; ">
-                                <td>Total Count</td>
-                                <td style="text-align:right;">@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(allCityTotal))</td>
-                                <td colspan="10"></td>
-                            </tr>
+                            }                           
                         </tbody>
                     </table>
 
                 }
             </div>
 
-            <div id="five-panel" class="multisteps-form__panel shadow p-4 m-4 list-box bg-white panel">
+            <div id="five-panel" class="multisteps-form__panel shadow p-4 list-box bg-white panel">
 
+                <div class="card-body">
+                    <div style="margin-bottom:20px;font-weight:bold;">
+                        Select CS
+                        @Html.DropDownListFor(model => model.CSMember, new SelectList(Model.lstCSMembers, "Value", "Text"), "All", htmlAttributes: new { @class = "input100", @id = "ddlCSMember" })
+                    </div>
+                    <div style="text-align:center;margin-bottom:20px;font-weight:bold;">Customer Categorywise Campaign / DB discussions – not touched</div>
+                    <div class="tab-content">
+                        <div class="tab-pane fade show active" id="tabs-eg-77">
+                            <div class="card mb-3 widget-chart widget-chart2 text-left w-100">
+                                <div class="widget-chat-wrapper-outer">
+                                    <div class="widget-chart-wrapper widget-chart-wrapper-lg opacity-10 m-0" id="canvasContainer">
+                                        <canvas id="barcanvas"></canvas>
+                                    </div>
+                                </div>
+                            </div>
 
-
-
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -551,7 +566,10 @@
     var tableData = [];
     $(document).ready(function () {
         GetData();
-
+        GetDiscussionGraphData();
+        $('#ddlCSMember').change(function () {
+            GetDiscussionGraphData();
+        });
     });
     function GetData() {
         $("#divLoader").show();
@@ -597,7 +615,7 @@
                         optionItem["GroupNameLT40"] = item.GroupNamelessthan40;
                         optionItem["ValueLT40"] = item.Valuelessthan40;
                         tableData.push(optionItem);
-                        console.log(tableData);
+                        //console.log(tableData);
                     });
                     DrawTable();
                 }
@@ -619,7 +637,6 @@
     function DrawTable() {
         var table1 = $('#activityTable').DataTable();
         table1.destroy();
-        console.log(tableData)
         var table = $('#activityTable').DataTable({
             "data": tableData,
             "paging": true,
@@ -677,10 +694,10 @@
                 $("#dvAllData").html(response);
                 $("#divLoader").hide();
             },
-            failure: function (response) {               
+            failure: function (response) {
                 $("#divLoader").hide();
             },
-            error: function (response) {                
+            error: function (response) {
                 $("#dvAllData").html(response.responseText);
                 $("#divLoader").hide();
             }
@@ -707,6 +724,145 @@
              }
         });
     }
+
+    function GetDiscussionGraphData() {
+        $("#divLoader").show();
+        var CsMember = $('#ddlCSMember').val();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("GetDiscussionGraphData", "SinglePage")',
+            data: '{CsMember:' + JSON.stringify(CsMember) + '}',
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                if (response != null) {
+                    console.log(response);
+
+                    $('#barcanvas').remove();
+                    $('#canvasContainer').append('<canvas id="barcanvas"><canvas>');
+
+                    var barChartData =
+                    {
+                        labels: ['A', 'B', 'C'],
+                            datasets: [{
+                                label: '7 to 21 days',
+                                backgroundColor: "#4472C4",
+                                borderWidth: 2,
+                                data: [...response[0]]
+                            },
+                            {
+                                label: '22 to 35 days',
+                                backgroundColor: "#ED7D31",
+                                borderWidth: 2,
+                                data: [...response[1]]
+                            },
+                            {
+                                label: 'More than 36 days',
+                                backgroundColor: "#FF0101",
+                                borderWidth: 2,
+                                data: [...response[2]]
+                            }
+                        ]
+                    };
+
+
+                    var ctx10 = document.getElementById("barcanvas").getContext("2d");
+                    var myChart = new Chart(ctx10,
+                        {
+                            type: 'bar',
+                            data: barChartData,
+                            options:
+                            {
+                                plugins: {
+                                    datalabels: {
+                                        display: true
+                                    }
+                                },
+                                scales: {
+                                    xAxes: [{
+                                        ticks: {
+                                            beginAtZero: true
+                                        }
+                                    }]
+                                },
+
+                                title:
+                                {
+                                    display: true,
+                                    text: ""
+                                },
+                                legend: {
+                                    display: true,
+                                    position: 'bottom'
+                                },
+                                onClick: function (c, i) {
+                                    console.log(c)
+                                    e = i[0];
+                                    console.log(e._index)
+                                    var x_value = this.data.labels[e._index];
+                                    var y_value = this.data.datasets[e._index].data[e._index];
+                                    console.log(x_value);
+                                    console.log(y_value);
+                                },
+                                responsive: true,
+                                maintainAspectRatio: true,
+                                tooltips: { enabled: false },
+                                hover: { mode: null },
+                                hover: {
+                                    onHover: function (e) {
+                                        $("#barcanvas").css("cursor", e[0] ? "pointer" : "default");
+                                    }
+                                },
+
+                                "hover": {
+                                    "animationDuration": 0,
+                                    onHover: function (e) {
+                                        $("#barcanvas").css("cursor", e[0] ? "pointer" : "default");
+                                    }
+                                },
+                                "animation": {
+                                    "duration": 1,
+                                    "onComplete": function () {
+                                        var chartInstance = this.chart,
+                                            ctx = chartInstance.ctx;
+
+                                        ctx.font = Chart.helpers.fontString(Chart.defaults.global.defaultFontSize, Chart.defaults.global.defaultFontStyle, Chart.defaults.global.defaultFontFamily);
+                                        ctx.textAlign = 'center';
+                                        ctx.textBaseline = 'bottom';
+
+                                        this.data.datasets.forEach(function (dataset, i) {
+                                            var meta = chartInstance.controller.getDatasetMeta(i);
+                                            meta.data.forEach(function (bar, index) {
+                                                var data = dataset.data[index];
+                                                ctx.fillStyle = 'rgba(0, 0, 0, 1)';
+
+                                                var res = addComma(data);
+                                                ctx.fillText(res, bar._model.x, bar._model.y - 5);
+                                            });
+                                        });
+                                    }
+                                }
+                            }
+                        });
+                }
+                $("#divLoader").hide();
+            },
+            failure: function (response) {
+                $("#divLoader").hide();
+            },
+            error: function (response) {
+                $("#divLoader").hide();
+            }
+    });
+    }
+
+    function GetTypeWiseData(type, section) {
+        console.log(type);
+        console.log(section);
+    }
+
+
+
 </script>
 <script src="~/Scripts/jquery-ui-1.12.1.js"></script>
 <script src="~/Scripts/jquery-ui-1.12.1.min.js"></script>

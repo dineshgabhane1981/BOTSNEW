@@ -18,6 +18,10 @@ namespace WebApp.ViewModel
         public List<CitywiseReport> lstCitywiseData { get; set; }
         public List<CitywiseReport> lstCities { get; set; }
         public List<CitywiseReport> lstCategories { get; set; }
+        public List<CitywiseReport> lstCategoriesTotal { get; set; }
         public CommunicationsinglePageData lstCommunication { get; set; }
+        public List<SelectListItem> lstCSMembers { get; set; }
+        public long GrandTotal { get; set; }
+        public string CSMember { get; set; }
     }
 }

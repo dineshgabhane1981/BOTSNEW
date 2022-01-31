@@ -413,31 +413,31 @@ namespace BOTS_BL.Repository
                     }
                 }
                 //vision
-                var baseAddressvision = "https://sms.visionhlt.com/api/mt/GetCreditReport?userid=4438&password=123456";
-                using (var client = new HttpClient())
-                {
-                    using (var response1 = client.GetAsync(baseAddressvision).Result)
-                    {
-                        if (response1.IsSuccessStatusCode)
-                        {
-                            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/xml"));
-                            // var response2 = client.GetStringAsync(new Uri(baseAddressvision)).Result;
+                //var baseAddressvision = "https://sms.visionhlt.com/api/mt/GetCreditReport?userid=4438&password=123456";
+                //using (var client = new HttpClient())
+                //{
+                //    using (var response1 = client.GetAsync(baseAddressvision).Result)
+                //    {
+                //        if (response1.IsSuccessStatusCode)
+                //        {
+                //            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/xml"));
+                //            // var response2 = client.GetStringAsync(new Uri(baseAddressvision)).Result;
 
-                            // var rootlist = XmlConvert.DeserializeObject<Dictionary<string, dynamic>>(response2);
+                //            // var rootlist = XmlConvert.DeserializeObject<Dictionary<string, dynamic>>(response2);
 
-                            string users = response1.Content.ReadAsStringAsync().Result;
+                //            string users = response1.Content.ReadAsStringAsync().Result;
 
-                            XmlSerializer serializer = new XmlSerializer(typeof(List<User>), new XmlRootAttribute("CreditReport"));
-                            StringReader stringReader = new StringReader(users);
-                            List<User> productList = (List<User>)serializer.Deserialize(stringReader);
+                //            XmlSerializer serializer = new XmlSerializer(typeof(List<User>), new XmlRootAttribute("CreditReport"));
+                //            StringReader stringReader = new StringReader(users);
+                //            List<User> productList = (List<User>)serializer.Deserialize(stringReader);
 
-                        }
-                        else
-                        {
-                            Console.WriteLine("{0} ({1})", (int)response1.StatusCode, response1.ReasonPhrase);
-                        }
-                    }
-                }
+                //        }
+                //        else
+                //        {
+                //            Console.WriteLine("{0} ({1})", (int)response1.StatusCode, response1.ReasonPhrase);
+                //        }
+                //    }
+                //}
 
             }
             catch (Exception ex)
@@ -610,5 +610,42 @@ namespace BOTS_BL.Repository
             }
             return lstFinalData;
         }
+
+        public List<DiscussionDataForGraph> GetDiscussionDataForGraph(string type,string CSMember)
+        {
+            List<DiscussionDataForGraph> lstData = new List<DiscussionDataForGraph>();
+            
+            using (var context = new CommonDBContext())
+            {
+                var result = context.Database.SqlQuery<DiscussionDataForGraph>("sp_GetUntouchedDiscussionDataForGraph @type, @CSMember",
+                              new SqlParameter("@type", type),
+                              new SqlParameter("@CSMember", CSMember)).ToList<DiscussionDataForGraph>();
+
+                var ACount = result.Where(x => x.CustomerType == "A").Count();
+                var BCount = result.Where(x => x.CustomerType == "B").Count();
+                var CCount = result.Where(x => x.CustomerType == "C").Count();
+
+                DiscussionDataForGraph objdataA = new DiscussionDataForGraph();
+                objdataA.CustomerType = "A";
+                objdataA.count = ACount;
+                lstData.Add(objdataA);
+
+                DiscussionDataForGraph objdataB = new DiscussionDataForGraph();
+                objdataB.CustomerType = "B";
+                objdataB.count = BCount;
+                lstData.Add(objdataB);
+
+                DiscussionDataForGraph objdataC = new DiscussionDataForGraph();
+                objdataC.CustomerType = "C";
+                objdataC.count = CCount;
+                lstData.Add(objdataC);
+            }
+
+            return lstData;
+        }
+
+
+
+
     }
 }

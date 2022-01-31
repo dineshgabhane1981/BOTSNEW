@@ -237,7 +237,7 @@ namespace BOTS_BL.Repository
             return result;
         }
 
-        public SPResponse AddEarnData(string GroupId, string MobileNo, string OutletId, DateTime TxnDate, DateTime RequestDate, string InvoiceNo, string InvoiceAmt, string IsSMS, int Points, tblAudit objAudit)
+        public SPResponse AddEarnData(string GroupId, string MobileNo, string OutletId, DateTime TxnDate, DateTime RequestDate, string InvoiceNo, string InvoiceAmt, string IsSMS, decimal Points, tblAudit objAudit)
         {
             SPResponse result = new SPResponse();
             try

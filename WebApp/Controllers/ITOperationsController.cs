@@ -184,7 +184,7 @@ namespace WebApp.Controllers
                 string InvoiceNumber = "";
                 string InvoiceAmount = "";
                 string OutletId = "";
-                int points = 0;
+                decimal points = 0;
 
                 foreach (Dictionary<string, object> item in objData)
                 {
@@ -196,7 +196,7 @@ namespace WebApp.Controllers
                     InvoiceAmount = Convert.ToString(item["InvoiceAmount"]);
                     if(!string.IsNullOrEmpty(Convert.ToString(item["Points"])))
                     {
-                        points = Convert.ToInt32(item["Points"]);
+                        points = Convert.ToDecimal(item["Points"]);
                     }
                     objAudit.GroupId = GroupId;
                     objAudit.RequestedFor = "Add / Earn";
