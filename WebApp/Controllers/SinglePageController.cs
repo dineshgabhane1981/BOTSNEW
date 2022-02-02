@@ -30,10 +30,10 @@ namespace WebApp.Controllers
                 singlevm.lstnontransactingOutlet = SPR.GetNonTransactingOutlet("");
                 singlevm.lstlowtransactingOutlet = SPR.GetLowTransactingOutlet("");
 
-                singlevm.lstCitywiseData = SPR.GetCityWiseData();
+                //singlevm.lstCitywiseData = SPR.GetCityWiseData();
                 if (singlevm.lstCitywiseData != null)
                 {
-                    var categories = singlevm.lstCitywiseData.GroupBy(x => x.CategoryName).Select(y => y.First()).ToList();                    
+                    var categories = singlevm.lstCitywiseData.GroupBy(x => x.CategoryName).Select(y => y.First()).ToList();
                     singlevm.lstCategories = categories;
 
                     var cities = singlevm.lstCitywiseData.GroupBy(x => x.CityName).Select(y => y.First()).ToList();
@@ -68,7 +68,7 @@ namespace WebApp.Controllers
                     singlevm.lstCities = cities;
                 }
 
-                singlevm.lstCommunication = SPR.GetCommunicationWhatsAppExpiryData();                
+                singlevm.lstCommunication = SPR.GetCommunicationWhatsAppExpiryData();
             }
             catch (Exception ex)
             {
@@ -105,40 +105,34 @@ namespace WebApp.Controllers
         public JsonResult GetDiscussionGraphData(string CsMember)
         {
             List<object> lstData = new List<object>();
-            var firstGraph = SPR.GetDiscussionDataForGraph("1", CsMember);
-            var secondGraph = SPR.GetDiscussionDataForGraph("2", CsMember);
-            var thirdGraph = SPR.GetDiscussionDataForGraph("3", CsMember);
-            List<string> nameList = new List<string>();
             List<long> dataList1 = new List<long>();
             List<long> dataList2 = new List<long>();
             List<long> dataList3 = new List<long>();
-            foreach (var item in firstGraph)
-            {
-                if (item.CustomerType == "A")
-                    dataList1.Add(item.count);
-                if (item.CustomerType == "B")
-                    dataList2.Add(item.count);
-                if (item.CustomerType == "C")
-                    dataList3.Add(item.count);
-            }
-            foreach (var item in secondGraph)
-            {
-                if (item.CustomerType == "A")
-                    dataList1.Add(item.count);
-                if (item.CustomerType == "B")
-                    dataList2.Add(item.count);
-                if (item.CustomerType == "C")
-                    dataList3.Add(item.count);
-            }
-            foreach (var item in thirdGraph)
-            {
-                if (item.CustomerType == "A")
-                    dataList1.Add(item.count);
-                if (item.CustomerType == "B")
-                    dataList2.Add(item.count);
-                if (item.CustomerType == "C")
-                    dataList3.Add(item.count);
-            }
+            var allData = SPR.GetDiscussionData();
+
+            var first = allData.Where(x => x.days >= 7 && x.days <= 21).ToList();
+            var firstA = first.Where(x => x.CustomerType == "A").Count();
+            var firstB = first.Where(x => x.CustomerType == "B").Count();
+            var firstC = first.Where(x => x.CustomerType == "C").Count();
+            dataList1.Add(firstA);
+            dataList1.Add(firstB);
+            dataList1.Add(firstC);
+
+            var second = allData.Where(x => x.days >= 22 && x.days <= 35).ToList();
+            var secondA = second.Where(x => x.CustomerType == "A").Count();
+            var secondB = second.Where(x => x.CustomerType == "B").Count();
+            var secondC = second.Where(x => x.CustomerType == "C").Count();
+            dataList2.Add(secondA);
+            dataList2.Add(secondB);
+            dataList2.Add(secondC);
+
+            var third = allData.Where(x => x.days >= 36).ToList();
+            var thirdA = third.Where(x => x.CustomerType == "A").Count();
+            var thirdB = third.Where(x => x.CustomerType == "B").Count();
+            var thirdC = third.Where(x => x.CustomerType == "C").Count();
+            dataList3.Add(thirdA);
+            dataList3.Add(thirdB);
+            dataList3.Add(thirdC);
 
             lstData.Add(dataList1);
             lstData.Add(dataList2);
@@ -147,7 +141,37 @@ namespace WebApp.Controllers
             return new JsonResult() { Data = lstData, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
 
+        public ActionResult GetCSWiseReport(string type, string CSMember, string CustomerType)
+        {
+            CSWiseDataViewModel objData = new CSWiseDataViewModel();
+            List<DiscussionDataForGraph> typeData = new List<DiscussionDataForGraph>();
 
+            var allData = SPR.GetDiscussionData();
+
+            if (type.Equals("7 to 21 days"))
+            {
+                typeData = allData.Where(x => x.days >= 7 && x.days <= 21).ToList();
+            }
+            if (type.Equals("22 to 35 days"))
+            {
+                typeData = allData.Where(x => x.days >= 22 && x.days <= 35).ToList();
+            }
+            if (type.Equals("More than 36 days"))
+            {
+                typeData = allData.Where(x => x.days >= 36).ToList();
+            }
+
+            objData.lstData = typeData.Where(x => x.CustomerType == CustomerType).ToList();
+            objData.lstUniqueCSNames = objData.lstData.GroupBy(x => x.RMAssignedName).Select(y => y.First()).ToList();
+
+            return PartialView("_CSWiseData", objData);
+        }
+
+        public ActionResult GetNoCustomerConnect()
+        {
+            var objData = SPR.GetNoCustomerConnect();
+            return PartialView("_NoCustomerConnect", objData);
+        }
 
     }
 }

@@ -1,0 +1,31 @@
+﻿@model List<BOTS_BL.Models.NoCustomerConnect>
+
+
+<div class="row mb-3 pt-3 pl-3 pr-3">
+    @if (Model != null)
+    {
+        int count = 1;
+        <div>
+            <table border="1" cellpadding="10" cellspacing="10">
+                <tr style="background-color:lightgray;">
+                    <th>Sr.No</th>
+                    <th>Group Name</th>
+                    <th>Customer Type</th>
+                    <th>Last Connect Date</th>
+                </tr>
+
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@count</td>
+                        <td>@item.GroupName</td>
+                        <td>@item.CustomerType</td>
+                        <td>@item.LastConnectDate</td>
+                    </tr>
+                    count++;
+                }
+
+            </table>
+        </div>
+    }
+</div>

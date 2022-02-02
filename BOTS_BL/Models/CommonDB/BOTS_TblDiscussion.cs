@@ -42,6 +42,7 @@ namespace BOTS_BL.Models.CommonDB
         public string ActionItems { get; set; }
 
         public DateTime AddedDate { get; set; }
+        public DateTime? UpdatedDate { get; set; }        
 
         [Required]
         [StringLength(250)]

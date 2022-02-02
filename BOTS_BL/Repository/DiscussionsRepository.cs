@@ -134,6 +134,7 @@ namespace BOTS_BL.Repository
                 {
                     int discussionId = Convert.ToInt32(id);
                     objDiscussion = context.BOTS_TblDiscussion.Where(x => x.Id == discussionId).FirstOrDefault();
+                    objDiscussion.UpdatedDate= DateTime.Now;
                     objDiscussion.Status = Status;
                     
                     context.BOTS_TblDiscussion.AddOrUpdate(objDiscussion);

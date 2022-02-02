@@ -611,10 +611,39 @@ namespace BOTS_BL.Repository
             return lstFinalData;
         }
 
-        public List<DiscussionDataForGraph> GetDiscussionDataForGraph(string type,string CSMember)
+        public List<DiscussionDataForGraph> GetDiscussionData()
         {
             List<DiscussionDataForGraph> lstData = new List<DiscussionDataForGraph>();
-            
+            using (var context = new CommonDBContext())
+            {
+                var groups = context.tblGroupDetails.Where(x => x.IsActive == true && x.IsLive == true).ToList();
+                foreach (var group in groups)
+                {
+                    DiscussionDataForGraph objItem = new DiscussionDataForGraph();
+                    objItem.groupid = group.GroupId;
+                    objItem.CustomerType = group.CustomerType;
+                    objItem.GroupName = group.GroupName;
+                    string grpId = Convert.ToString(group.GroupId);
+                    var discussedDate = context.BOTS_TblDiscussion.Where(y => y.GroupId == grpId && (y.CallType == 2 || y.CallType == 3)).OrderByDescending(x => x.UpdatedDate).Select(z => z.UpdatedDate).FirstOrDefault();
+                    if (discussedDate.HasValue)
+                    {
+                        var days = (DateTime.Today - discussedDate.Value).Days;
+                        if (days > 6)
+                        {
+                            objItem.days = days;
+                            lstData.Add(objItem);
+                            objItem.RMAssignedName = context.tblRMAssigneds.Where(x => x.RMAssignedId == group.RMAssigned).Select(y => y.RMAssignedName).FirstOrDefault();
+                        }
+                    }
+
+                }
+            }
+            return lstData;
+        }
+        public List<DiscussionDataForGraph> GetDiscussionDataForGraph(string type, string CSMember)
+        {
+            List<DiscussionDataForGraph> lstData = new List<DiscussionDataForGraph>();
+
             using (var context = new CommonDBContext())
             {
                 var result = context.Database.SqlQuery<DiscussionDataForGraph>("sp_GetUntouchedDiscussionDataForGraph @type, @CSMember",
@@ -644,8 +673,64 @@ namespace BOTS_BL.Repository
             return lstData;
         }
 
+        public List<DiscussionDataForGraph> GetCSData(string type, string CSMember)
+        {
+            List<DiscussionDataForGraph> lstData = new List<DiscussionDataForGraph>();
 
+            using (var context = new CommonDBContext())
+            {
+                lstData = context.Database.SqlQuery<DiscussionDataForGraph>("sp_GetUntouchedDiscussionDataForGraph @type, @CSMember",
+                              new SqlParameter("@type", type),
+                              new SqlParameter("@CSMember", CSMember)).ToList<DiscussionDataForGraph>();
 
+            }
+            return lstData;
+        }
 
+        public double GetDays(string groupId)
+        {
+            double days = 0;
+            using (var context = new CommonDBContext())
+            {
+                var lastUpdatedDate = context.BOTS_TblDiscussion.Where(a => a.GroupId == groupId && (a.CallType == 2 || a.CallType == 3)).OrderByDescending(x => x.UpdatedDate).Select(y => y.UpdatedDate).FirstOrDefault();
+                if (lastUpdatedDate.HasValue)
+                {
+                    days = (DateTime.Today - lastUpdatedDate.Value).Days;
+                }
+            }
+
+            return days;
+        }
+
+        public List<NoCustomerConnect> GetNoCustomerConnect()
+        {
+            List<NoCustomerConnect> lstData = new List<NoCustomerConnect>();
+
+            using (var context = new CommonDBContext())
+            {
+                var groups = context.tblGroupDetails.Where(x => x.IsActive == true && x.IsLive == true).ToList();
+                foreach (var group in groups)
+                {
+                    string grpId = Convert.ToString(group.GroupId);
+                    var discussedDate = context.BOTS_TblDiscussion.Where(y => y.GroupId == grpId).OrderByDescending(x => x.UpdatedDate).Select(z => z.UpdatedDate).FirstOrDefault();
+                    if (discussedDate.HasValue)
+                    {
+                        var days = (DateTime.Today - discussedDate.Value).Days;
+                        if (days > 15)
+                        {
+                            NoCustomerConnect objItem = new NoCustomerConnect();
+                            objItem.Groupid = group.GroupId;
+                            objItem.GroupName = group.GroupName;
+                            objItem.CustomerType = group.CustomerType;
+                            objItem.LastConnectDate = discussedDate.Value;
+
+                            lstData.Add(objItem);
+                        }
+                    }
+                }
+
+            }
+            return lstData;
+        }
     }
 }
