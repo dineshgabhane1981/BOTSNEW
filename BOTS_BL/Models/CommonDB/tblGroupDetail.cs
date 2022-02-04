@@ -51,6 +51,8 @@ namespace BOTS_BL.Models
 
         public int? BillingPartner { get; set; }
 
+        public int? BillingProduct { get; set; }
+
         [StringLength(500)]
         public string Logo { get; set; }
 
@@ -65,11 +67,14 @@ namespace BOTS_BL.Models
         public DateTime? WentLiveDate { get; set; }
 
         public bool? IsActive { get; set; }
-        public bool? IsLive { get; set; }
 
         public bool? IsFeedback { get; set; }
 
         public bool IsMasked { get; set; }
+
+        public bool? IsLive { get; set; }
+
+        [StringLength(1)]
         public string CustomerType { get; set; }
 
         [NotMapped]
@@ -95,5 +100,6 @@ namespace BOTS_BL.Models
 
         [NotMapped]
         public string RMTeamName { get; set; }
+        
     }
 }
