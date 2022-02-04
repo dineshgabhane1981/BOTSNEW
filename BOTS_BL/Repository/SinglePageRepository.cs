@@ -633,6 +633,7 @@ namespace BOTS_BL.Repository
                             objItem.days = days;
                             lstData.Add(objItem);
                             objItem.RMAssignedName = context.tblRMAssigneds.Where(x => x.RMAssignedId == group.RMAssigned).Select(y => y.RMAssignedName).FirstOrDefault();
+                            objItem.RMLoginId = context.tblRMAssigneds.Where(x => x.RMAssignedId == group.RMAssigned).Select(y => y.LoginId).FirstOrDefault();
                         }
                     }
 
@@ -730,6 +731,41 @@ namespace BOTS_BL.Repository
                 }
 
             }
+            return lstData;
+        }
+
+        public List<MostConnectedCustomers> GetMostConnectedCustomers()
+        {
+            List<MostConnectedCustomers> lstData = new List<MostConnectedCustomers>();
+            using (var context = new CommonDBContext())
+            {
+                lstData = context.Database.SqlQuery<MostConnectedCustomers>("sp_GetMostConnectedCustomers @pi_Date", new SqlParameter("@pi_Date", DateTime.Today.AddDays(-30))).ToList<MostConnectedCustomers>();
+                foreach(var item in lstData)
+                {
+                    int grpid = Convert.ToInt32(item.GroupId);
+                    item.GroupName = context.tblGroupDetails.Where(x => x.GroupId == grpid && x.IsActive==true && x.IsLive==true).Select(y => y.GroupName).FirstOrDefault();
+                    item.CustomerType = context.tblGroupDetails.Where(x => x.GroupId == grpid && x.IsActive == true && x.IsLive == true).Select(y => y.CustomerType).FirstOrDefault();
+                   
+                }
+            }
+
+            return lstData;
+        }
+        public List<MostConnectedCustomers> GetLeastConnectedCustomers()
+        {
+            List<MostConnectedCustomers> lstData = new List<MostConnectedCustomers>();
+            using (var context = new CommonDBContext())
+            {
+                lstData = context.Database.SqlQuery<MostConnectedCustomers>("sp_GetLeastConnectedCustomers @pi_Date", new SqlParameter("@pi_Date", DateTime.Today.AddDays(-180))).ToList<MostConnectedCustomers>();
+                foreach (var item in lstData)
+                {
+                    int grpid = Convert.ToInt32(item.GroupId);
+                    item.GroupName = context.tblGroupDetails.Where(x => x.GroupId == grpid && x.IsActive == true && x.IsLive == true).Select(y => y.GroupName).FirstOrDefault();
+                    item.CustomerType = context.tblGroupDetails.Where(x => x.GroupId == grpid && x.IsActive == true && x.IsLive == true).Select(y => y.CustomerType).FirstOrDefault();
+
+                }
+            }
+
             return lstData;
         }
     }

@@ -557,11 +557,19 @@
                         </div>
                     </div>
                 </div>
-                <div class="card-body" id="dvCSViseData">
+                <div class="card-body" id="dvCSViseData" style="display:none;">
 
                 </div>
-                <div class="card-body" id="dvGetNoCustomerConnect">
+                <div class="card-body col-md-12 col-xl-12" id="dvGetNoCustomerConnect">
 
+                </div>
+                <div class="row col-md-12 col-xl-12">
+                    <div class="card-body col-md-6 col-xl-6" id="dvGetMostConnectedCustomers">
+
+                    </div>
+                    <div class="card-body col-md-6 col-xl-6" id="dvGetLeastConnectedCustomers">
+
+                    </div>
                 </div>
             </div>
         </div>
@@ -577,11 +585,98 @@
             GetDiscussionGraphData();
         });
         NoCustomerConnect();
+        GetMostConnectedCustomers();
+        GetLeastConnectedCustomers();
+
 
 
     });
+    function RenderNoCustomerConnectTable() {
 
+        var table = $('#NoCustomerConnectTable').DataTable({
+            "paging": true,
+            "ordering": true,
+            "info": true,
+            "bFilter": true,
+            "bAutoWidth": false,
+            "pageLength": 10,
+            "pagingType": "simple_numbers"
+        });
+        $('#NoCustomerConnectTable_filter').hide();
 
+        $('#txtSearch').on('keyup', function () {
+
+            $.fn.dataTable.ext.search.push(function (settings, searchData) {
+                var term = $('#txtSearch').val().toLowerCase()
+                for (var i = 0; i < searchData.length; i++) {
+                    if (searchData[i].toLowerCase().indexOf(term) >= 0) {
+                        return true;
+                    }
+                }
+                return false;
+            });
+            var table = $('#NoCustomerConnectTable').DataTable();
+            table.draw();
+        });
+    }
+
+    function RenderMostConnectedCustomersTable() {
+
+        var table = $('#MostConnectedCustomersTable').DataTable({
+            "paging": true,
+            "ordering": true,
+            "info": true,
+            "bFilter": true,
+            "bAutoWidth": false,
+            "pageLength": 10,
+            "pagingType": "simple_numbers"
+        });
+        $('#MostConnectedCustomersTable_filter').hide();
+
+        $('#txtSearch').on('keyup', function () {
+
+            $.fn.dataTable.ext.search.push(function (settings, searchData) {
+                var term = $('#txtSearch').val().toLowerCase()
+                for (var i = 0; i < searchData.length; i++) {
+                    if (searchData[i].toLowerCase().indexOf(term) >= 0) {
+                        return true;
+                    }
+                }
+                return false;
+            });
+            var table = $('#MostConnectedCustomersTable').DataTable();
+            table.draw();
+        });
+    }
+
+    function RenderLeastConnectedCustomersTable() {
+
+        var table = $('#LeastConnectedCustomersTable').DataTable({
+            "paging": true,
+            "ordering": true,
+            "info": true,
+            "bFilter": true,
+            "bAutoWidth": false,
+            "pageLength": 10,
+            "pagingType": "simple_numbers"
+        });
+        $('#LeastConnectedCustomersTable_filter').hide();
+
+        $('#txtSearch').on('keyup', function () {
+
+            $.fn.dataTable.ext.search.push(function (settings, searchData) {
+                var term = $('#txtSearch').val().toLowerCase()
+                for (var i = 0; i < searchData.length; i++) {
+                    if (searchData[i].toLowerCase().indexOf(term) >= 0) {
+                        return true;
+                    }
+                }
+                return false;
+            });
+            var table = $('#LeastConnectedCustomersTable').DataTable();
+            table.draw();
+        });
+    }
 
     function GetData() {
         $("#divLoader").show();
@@ -877,6 +972,7 @@
             success: function (response) {
                 if (response != null) {
                     $("#dvCSViseData").html(response);
+                    $("#dvCSViseData").show(1000);
                     $("#divLoader").hide();
                 }
             },
@@ -886,6 +982,7 @@
             error: function (response) {
                 $("#dvCSViseData").html("");
                 $("#dvCSViseData").html(response.responseText);
+                $("#dvCSViseData").show(1000);
                 $("#divLoader").hide();
             }
 
@@ -913,13 +1010,73 @@
              error: function (response) {
                  console.log(222)
                 $("#dvGetNoCustomerConnect").html("");
-                $("#dvGetNoCustomerConnect").html(response.responseText);
+                 $("#dvGetNoCustomerConnect").html(response.responseText);
+                 RenderNoCustomerConnectTable();
+                $("#divLoader").hide();
+             }
+            
+
+         });
+        
+    }
+
+    function GetMostConnectedCustomers() {
+        $("#divLoader").show();
+         $.ajax({
+            type: "POST",
+            url: '@Url.Action("GetMostConnectedCustomers", "SinglePage")',
+            data: '',
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                if (response != null) {
+                    console.log(111)
+                    $("#dvGetMostConnectedCustomers").html(response);
+                    $("#divLoader").hide();
+                }
+            },
+            failure: function (response) {
+                $("#divLoader").hide();
+            },
+             error: function (response) {
+                 console.log(222)
+                 $("#dvGetMostConnectedCustomers").html("");
+                 $("#dvGetMostConnectedCustomers").html(response.responseText);
+                 RenderMostConnectedCustomersTable()
                 $("#divLoader").hide();
             }
 
         });
     }
 
+    function GetLeastConnectedCustomers() {
+        $("#divLoader").show();
+         $.ajax({
+            type: "POST",
+            url: '@Url.Action("GetLeastConnectedCustomers", "SinglePage")',
+            data: '',
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                if (response != null) {
+                    console.log(111)
+                    $("#dvGetLeastConnectedCustomers").html(response);
+                    $("#divLoader").hide();
+                }
+            },
+            failure: function (response) {
+                $("#divLoader").hide();
+            },
+             error: function (response) {
+                 console.log(222)
+                 $("#dvGetLeastConnectedCustomers").html("");
+                 $("#dvGetLeastConnectedCustomers").html(response.responseText);
+                 RenderLeastConnectedCustomersTable();
+                $("#divLoader").hide();
+            }
+
+        });
+    }
 </script>
 <script src="~/Scripts/jquery-ui-1.12.1.js"></script>
 <script src="~/Scripts/jquery-ui-1.12.1.min.js"></script>

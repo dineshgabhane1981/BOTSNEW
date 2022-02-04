@@ -1,0 +1,38 @@
+﻿@model List<BOTS_BL.Models.MostConnectedCustomers>
+
+<div class="row mb-3 pt-3 pl-3 pr-3">
+    @if (Model != null)
+    {
+        int count = 1;
+    <span style="font-size:20px;font-weight:bold;margin-bottom:20px;">Least Connected Customers (last 180 days)</span>
+        <div class="table-responsive ">
+
+            <table class="table" id="LeastConnectedCustomersTable">
+                <thead>
+                    <tr>
+                        <th>Sr.No</th>
+                        <th>Group Name</th>
+                        <th style="text-align:center;">Customer Type</th>
+                        <th style="text-align:center;">No of Times</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        if (!string.IsNullOrEmpty(item.GroupName))
+                        {
+                            <tr>
+                                <td>@count</td>
+                                <td>@item.GroupName</td>
+                                <td style="text-align:center;">@item.CustomerType</td>
+                                <td style="text-align:center;">@item.Count</td>
+                            </tr>
+                            count++;
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+</div>
+

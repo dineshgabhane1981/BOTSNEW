@@ -5,26 +5,30 @@
     @if (Model != null)
     {
         int count = 1;
-        <div>
-            <table border="1" cellpadding="10" cellspacing="10">
-                <tr style="background-color:lightgray;">
-                    <th>Sr.No</th>
-                    <th>Group Name</th>
-                    <th>Customer Type</th>
-                    <th>Last Connect Date</th>
-                </tr>
+        <span style="font-size:20px;font-weight:bold;margin-bottom:20px;">No Customer Connect (more than 15 days)</span>
+        <div class="table-responsive ">
 
-                @foreach (var item in Model)
-                {
+            <table class="table" id="NoCustomerConnectTable">
+                <thead>
                     <tr>
-                        <td>@count</td>
-                        <td>@item.GroupName</td>
-                        <td>@item.CustomerType</td>
-                        <td>@item.LastConnectDate</td>
+                        <th>Sr.No</th>
+                        <th>Group Name</th>
+                        <th style="text-align:center;">Customer Type</th>
+                        <th>Last Connect Date</th>
                     </tr>
-                    count++;
-                }
-
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>@count</td>
+                            <td>@item.GroupName</td>
+                            <td style="text-align:center;">@item.CustomerType</td>
+                            <td>@item.LastConnectDate</td>
+                        </tr>
+                        count++;
+                    }
+                </tbody>
             </table>
         </div>
     }

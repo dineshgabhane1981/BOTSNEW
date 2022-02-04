@@ -109,7 +109,10 @@ namespace WebApp.Controllers
             List<long> dataList2 = new List<long>();
             List<long> dataList3 = new List<long>();
             var allData = SPR.GetDiscussionData();
-
+            if(!string.IsNullOrEmpty(CsMember))
+            {
+                allData = allData.Where(x => x.RMLoginId == CsMember).ToList();
+            }
             var first = allData.Where(x => x.days >= 7 && x.days <= 21).ToList();
             var firstA = first.Where(x => x.CustomerType == "A").Count();
             var firstB = first.Where(x => x.CustomerType == "B").Count();
@@ -161,7 +164,11 @@ namespace WebApp.Controllers
                 typeData = allData.Where(x => x.days >= 36).ToList();
             }
 
-            objData.lstData = typeData.Where(x => x.CustomerType == CustomerType).ToList();
+            objData.lstData = typeData.Where(x => x.CustomerType == CustomerType).OrderByDescending(y=>y.days).ToList();
+            if(!string.IsNullOrEmpty(CSMember))
+            {
+                objData.lstData = objData.lstData.Where(x => x.RMLoginId == CSMember).ToList();
+            }
             objData.lstUniqueCSNames = objData.lstData.GroupBy(x => x.RMAssignedName).Select(y => y.First()).ToList();
 
             return PartialView("_CSWiseData", objData);
@@ -171,6 +178,16 @@ namespace WebApp.Controllers
         {
             var objData = SPR.GetNoCustomerConnect();
             return PartialView("_NoCustomerConnect", objData);
+        }
+        public ActionResult GetMostConnectedCustomers()
+        {
+            var objData = SPR.GetMostConnectedCustomers();
+            return PartialView("_MostConnectedCustomers", objData);
+        }
+        public ActionResult GetLeastConnectedCustomers()
+        {
+            var objData = SPR.GetLeastConnectedCustomers();
+            return PartialView("_LeastConnectedCustomers", objData);
         }
 
     }
