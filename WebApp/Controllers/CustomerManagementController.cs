@@ -227,9 +227,13 @@ namespace WebApp.Controllers
             GroupConfigDetailsViewModel objData = new GroupConfigDetailsViewModel();
             objData.objGroupDetails = CR.GetGroupDetails(Convert.ToInt32(groupId));
             objData.objGroupDetails.Logo = FMR.GetLogo(groupId);
-            objData.lstBrandDetails = CR.GetAllBrandsByGroupId(groupId);
-            objData.objGroupDetails.MemberBase = CR.GetMemberBase(groupId);
             
+            objData.lstBrandDetails = CR.GetAllBrandsByGroupId(groupId);
+            objData.objGroupConfig = CR.GetGroupConfig(objData.objGroupDetails);
+            objData.objGroupConfig.MemberBase = CR.GetMemberBase(groupId);
+            objData.lstOutlets = CR.GetAllOutletsByGroupId(groupId);
+
+
             return PartialView("_GroupConfigDetails", objData);
         }
 

@@ -10,5 +10,7 @@ namespace WebApp.ViewModel
     {
         public tblGroupDetail objGroupDetails { get; set; }
         public List<BrandDetail> lstBrandDetails { get; set; }
+        public GroupConfig objGroupConfig { get; set; }
+        public List<OutletDetail> lstOutlets { get; set; }
     }
 }

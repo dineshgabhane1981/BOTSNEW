@@ -97,7 +97,7 @@
     </div>
     <div class="col-md-2 col-lg-2">
         <b>Member Base</b><br />
-        @String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(Model.objGroupDetails.MemberBase))
+        @String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(Model.objGroupConfig.MemberBase))
 
     </div>
     <div class="col-md-3 col-lg-3"><img src="@Model.objGroupDetails.Logo" style="width:200px;" alt="Logo"></div>
@@ -120,28 +120,133 @@
 <div class="panels1">
 
     <div class="multisteps-form__panel p-3 m-3 list-box bg-white panel1" id="one-panel1">
-        <table border="1" cellpadding="5" cellspacing="5">
-            <tr>
-                <td>Authorized Person</td>
-                <td>@Model.objGroupDetails.OwnerName</td>
-            </tr>
-            <tr>
-                <td>Reg Mobile No </td>
-                <td>@Model.objGroupDetails.OwnerMobileNo</td>
-            </tr>
-            <tr>
-                <td>Reg Email </td>
-                <td>@Model.objGroupDetails.OwnerEmail</td>
-            </tr>
-            <tr>
-                <td>City</td>
-                <td>@Model.objGroupDetails.CityName</td>
-            </tr>
-            <tr>
-                <td>No of Outlets </td>
-                <td>@Model.objGroupDetails.OutletCount</td>
-            </tr>
-        </table>
+        <div class="row">
+            <div style="margin-left:20px;">
+                <table border="1" cellpadding="5" cellspacing="5">
+                    <tr>
+                        <td>Authorized Person</td>
+                        <td>@Model.objGroupDetails.OwnerName</td>
+                    </tr>
+                    <tr>
+                        <td>Reg Mobile No </td>
+                        <td>@Model.objGroupDetails.OwnerMobileNo</td>
+                    </tr>
+                    <tr>
+                        <td>Reg Email </td>
+                        <td>@Model.objGroupDetails.OwnerEmail</td>
+                    </tr>
+                    <tr>
+                        <td>City</td>
+                        <td>@Model.objGroupConfig.CityName</td>
+                    </tr>
+                    <tr>
+                        <td>No of Outlets </td>
+                        <td>@Model.objGroupDetails.OutletCount</td>
+                    </tr>
+                </table>
+            </div>
+
+            <div style="margin-left:20px;">
+                <table border="1" cellpadding="5" cellspacing="5">
+                    <tr>
+                        <td>Start Date</td>
+                        @if (Model.objGroupDetails.WentLiveDate.HasValue)
+                        {
+                            <td>@Model.objGroupDetails.WentLiveDate.Value.ToString("dd-MMM-yyyy")</td>
+                        }
+                        else
+                        {
+                            <td>-</td>
+                        }
+                    </tr>
+                    <tr>
+                        <td>Retail Category</td>
+                        <td>@Model.objGroupConfig.CategoryName</td>
+                    </tr>
+                    <tr>
+                        <td>Billing Partner</td>
+                        <td>@Model.objGroupConfig.BillingPartnerName</td>
+                    </tr>
+                    <tr>
+                        <td>Billing System</td>
+                        <td>@Model.objGroupConfig.BillingSystemName</td>
+                    </tr>
+
+                </table>
+            </div>
+
+            <div style="margin-left:20px;">
+                <table border="1" cellpadding="5" cellspacing="5">
+                    <tr>
+                        <td>
+                            Daily / Monthly Email
+                        </td>
+                        <td>--</td>
+
+                    </tr>
+                    <tr>
+                        <td>Whatsapp Enabled</td>
+                        <td>--</td>
+                    </tr>
+                    <tr>
+                        <td>DLC Enabled</td>
+                        <td>--</td>
+                    </tr>
+                    <tr>
+                        <td>Feedback Enabled</td>
+                        @if (Model.objGroupDetails.IsFeedback.Value)
+                        {
+                            <td>Yes</td>
+                        }
+                        else
+                        {
+                            <td>No</td>
+                        }
+                    </tr>
+                    <tr>
+                        <td>Sourced by</td>
+                        <td>@Model.objGroupConfig.SourceByName</td>
+                    </tr>
+                    <tr>
+                        <td>CS Assigned</td>
+                        <td>@Model.objGroupConfig.CSAssignedName</td>
+                    </tr>
+
+                </table>
+            </div>
+
+        </div>
+        <div class="row" style="overflow-x:auto;padding-right:10px;margin-top:20px;">
+            <table border="1" cellpadding="5" cellspacing="5">
+                <tr>
+                    <th>Outlet Name</th>
+                    <th>Outlet Code (Clients)</th>
+                    <th>Store Manager Name</th>
+                    <th>Reg Mobile No</th>
+                    <th>Reg Email ID</th>
+                    <th>Store Address</th>
+                    <th>City</th>
+                    <th>Pincode</th>
+                    <th>Geo Lat Long</th>
+                    <th>Mobile No (for Octa XS)</th>
+                </tr>
+                @foreach (var item in Model.lstOutlets)
+                {
+                    <tr>
+                        <td>@item.OutletName</td>
+                        <td style="text-align:center;">--</td>
+                        <td>@item.AuthorisedPerson</td>
+                        <td>@item.ContactNo</td>
+                        <td>@item.EmailId</td>
+                        <td>@item.Address</td>
+                        <td>@item.City</td>
+                        <td>@item.PinCode</td>
+                        <td>Lat - @item.Latitude <br /> Lon - @item.Longitude</td>
+                        <td style="text-align:center;">--</td>
+                    </tr>
+                }
+            </table>
+        </div>
     </div>
 
     <div class="multisteps-form__panel  p-3 m-3 list-box bg-white panel1" id="two-panel1">

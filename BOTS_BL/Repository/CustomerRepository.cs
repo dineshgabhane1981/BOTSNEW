@@ -274,8 +274,7 @@ namespace BOTS_BL.Repository
             tblGroupDetail objGroupDetail = new tblGroupDetail();
             using (var context = new CommonDBContext())
             {
-                objGroupDetail = context.tblGroupDetails.Where(x => x.GroupId == GroupId).FirstOrDefault();
-                objGroupDetail.CityName = context.tblCities.Where(x => x.CityId == objGroupDetail.City).Select(y => y.CityName).FirstOrDefault();
+                objGroupDetail = context.tblGroupDetails.Where(x => x.GroupId == GroupId).FirstOrDefault();                
             }
             return objGroupDetail;
         }
@@ -699,5 +698,22 @@ namespace BOTS_BL.Repository
             }
             return MemberBase;
         }
+    
+        public GroupConfig GetGroupConfig(tblGroupDetail objGroupDetails)
+        {
+            GroupConfig objGroupConfig = new GroupConfig();
+            using (var context = new CommonDBContext())
+            {
+                objGroupConfig.CityName = context.tblCities.Where(x => x.CityId == objGroupDetails.City).Select(y => y.CityName).FirstOrDefault();
+                objGroupConfig.CategoryName = context.tblCategories.Where(x => x.CategoryId == objGroupDetails.RetailCategory).Select(y => y.CategoryName).FirstOrDefault();
+                objGroupConfig.BillingPartnerName= context.tblBillingPartners.Where(x => x.BillingPartnerId == objGroupDetails.BillingPartner).Select(y => y.BillingPartnerName).FirstOrDefault();
+                objGroupConfig.BillingSystemName = context.BOTS_TblBillingPartnerProduct.Where(x => x.BillingPartnerProductId == objGroupDetails.BillingProduct).Select(y => y.BillingPartnerProductName).FirstOrDefault();
+                objGroupConfig.SourceByName = context.tblSourcedBies.Where(x => x.SourcedbyId == objGroupDetails.SourcedBy).Select(y => y.SourcedbyName).FirstOrDefault();
+                objGroupConfig.CSAssignedName = context.tblRMAssigneds.Where(x => x.RMAssignedId == objGroupDetails.RMAssigned).Select(y => y.RMAssignedName).FirstOrDefault();
+            }
+                return objGroupConfig;
+        }
+
+
     }
 }
