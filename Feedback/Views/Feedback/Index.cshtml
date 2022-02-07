@@ -260,7 +260,7 @@
     });
     
     function CheckCustomer() {
-         
+        
         var returnStatus = true;
         var MobileNo = $('#txtMobileNo').val();
         if ($("#txtMobileNo").val() == "") {
@@ -341,9 +341,12 @@
             })
             return false;
         }
+
     }
 
     function SubmitRating() {
+
+       
         var returnStatus = true;
         if ($("#txtMobileNo").val() == "") {
             $('#txtMobileNo').css('border-color', 'red');

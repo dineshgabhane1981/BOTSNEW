@@ -116,7 +116,7 @@
                                         }
                                         else if (item.Status == "WIP")
                                         {
-                                            if (item.AddedDate <= DateTime.Now.AddDays(-3))
+                                            if (item.FollowupDate <= DateTime.Now.AddDays(-3))
                                             {
                                                 <td style="background-color:red;">@item.Status</td>
                                             }

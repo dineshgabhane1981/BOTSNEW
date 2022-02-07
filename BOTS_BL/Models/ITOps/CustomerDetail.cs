@@ -110,5 +110,42 @@ namespace BOTS_BL.Models
         public bool IsDOA { get; set; }
         public bool IsHowtoKnow { get; set; }
     }
+    public class CustomerTypeReport
+    {
+        public string OutletName { get; set; }
+        public string MobileNo { get; set; }
+        public string CustomerName { get; set; }
+        public DateTime? FirstTxnDt { get; set; }
+        public int? NoofTxn { get; set; }
+        public DateTime? EnrolledDt { get; set; }
+        public decimal? TotalAvailablePoints { get; set; }
+        public decimal? TotalEarn { get; set; }
+        public decimal? TotalBurn { get; set; }
+        public decimal? TotalSpend { get; set; }        
+        public decimal? BonusPoints { get; set; }
+        public DateTime? LastTxnDt { get; set; }
+    }
+    public class TransactionTypeReport
+    {
+        public string OutletName { get; set; }
+        public string MobileNo { get; set; }
+        public string CustomerName { get; set; }
+        public string FirstTxnDt { get; set; }
+        public string TransType { get; set; }
+        public string LastTxnDt { get; set; }
+        public decimal? PointsEarn { get; set; }
+        public decimal? PointsBurn { get; set; }
+        public string InvoiceNo { get; set; }
+        public DateTime? EnrolledDt { get; set; }
+        public DateTime TxnDt { get; set; }
+        public decimal? InvoiceAmt { get; set; }
+        public decimal? BonusPoints { get; set; }
 
+    }
+    public class CustomerIdListAndCount
+    {
+        public int? txncount { get; set; }
+        public int? Filteredcount { get; set; }
+        public List<CustomerDetail> lstcustomerDetails { get; set; }
+    }
 }

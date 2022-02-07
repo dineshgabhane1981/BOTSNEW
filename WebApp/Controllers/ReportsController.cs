@@ -114,20 +114,22 @@ namespace WebApp.Controllers
         {
 
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
-            var lstEnrolledList = RR.GetEnrolledList(userDetails.GroupId, userDetails.connectionString);
-            ViewBag.lstEnrolledList = lstEnrolledList;
+            //var lstEnrolledList = RR.GetEnrolledList(userDetails.GroupId, userDetails.connectionString);
+            //ViewBag.lstEnrolledList = lstEnrolledList;
             var lstnontransactedList = RR.GetNonTransactedList(userDetails.GroupId, userDetails.connectionString);
             ViewBag.lstnontransactedList = lstnontransactedList;
             var lstSpendList = RR.GetSpendList(userDetails.GroupId, userDetails.connectionString);
             ViewBag.lstSpendList = lstSpendList;
-            var lstGenderList = RR.GetGenderList(userDetails.GroupId, userDetails.connectionString);
-            ViewBag.lstGenderList = lstGenderList;
-            var lstSourceList = RR.GetSourseList(userDetails.GroupId, userDetails.connectionString);
-            ViewBag.lstSourceList = lstSourceList;
+            //var lstGenderList = RR.GetGenderList(userDetails.GroupId, userDetails.connectionString);
+            //ViewBag.lstGenderList = lstGenderList;
+            //var lstSourceList = RR.GetSourseList(userDetails.GroupId, userDetails.connectionString);
+            //ViewBag.lstSourceList = lstSourceList;
             var lstRedeemedList = RR.GetRedeemedList(userDetails.GroupId, userDetails.connectionString);
             ViewBag.lstRedeemedList = lstRedeemedList;
             var lstOutlet = RR.GetOutletListForSliceAndDice(userDetails.GroupId, userDetails.connectionString);
             ViewBag.lstOutlet = lstOutlet;
+            DateTime startdt = RR.GetStartDtOfProgram(userDetails.GroupId, userDetails.connectionString);
+            ViewBag.StartDate = startdt;
             var TotalCount = RR.GetTotalMemberCount(userDetails.GroupId, userDetails.connectionString);
             ViewBag.TotalMemberCount = TotalCount;
             var lstBrandList = RR.GetBrandList(userDetails.GroupId, userDetails.connectionString);
@@ -138,7 +140,8 @@ namespace WebApp.Controllers
         }
         public JsonResult GetFilteredData(string jsonData)
         {
-            var transcount = 0;
+            // var transcount = 0;
+            CustomerIdListAndCount objcounts = new CustomerIdListAndCount();
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
             List<CustomerDetail> listCustD = new List<CustomerDetail>();
             JavaScriptSerializer json_serializer = new JavaScriptSerializer();
@@ -146,14 +149,16 @@ namespace WebApp.Controllers
             object[] objData = (object[])json_serializer.DeserializeObject(jsonData);
             foreach (Dictionary<string, object> item in objData)
             {
-                string gender = Convert.ToString(item["Gender"]);
-                string Age_min = Convert.ToString(item["Age-min"]);
-                string Age_max = Convert.ToString(item["Age-max"]);
-                string source = Convert.ToString(item["Source"]);
+                //string gender = Convert.ToString(item["Gender"]);
+                //string Age_min = Convert.ToString(item["Age-min"]);
+                //string Age_max = Convert.ToString(item["Age-max"]);
+                //string source = Convert.ToString(item["Source"]);
                 string Enroll_min = Convert.ToString(item["Enroll-min"]);
                 string Enroll_max = Convert.ToString(item["Enroll-max"]);
                 string Nontransacted_min = Convert.ToString(item["Nontransacted-min"]);
-                string Nontransacted_max = Convert.ToString(item["Nontransacted-max"]);
+                //string Nontransacted_max = Convert.ToString(item["Nontransacted-max"]);
+                DateTime fromdtforall = Convert.ToDateTime(item["fromdtall"]);
+                DateTime todtforall = Convert.ToDateTime(item["todtall"]);
                 int Spend_min = Convert.ToInt32(item["Spend-min"]);
                 int Spend_max = Convert.ToInt32(item["Spend-max"]);
                 int txncount_min = Convert.ToInt32(item["txncount-min"]);
@@ -161,16 +166,43 @@ namespace WebApp.Controllers
                 int pointBaln_min = Convert.ToInt32(item["pointBaln-min"]);
                 int pointBaln_max = Convert.ToInt32(item["pointBaln-max"]);
                 string Redeem = Convert.ToString(item["Redeem"]);
-                int TicketSize_min = Convert.ToInt32(item["TicketSize-min"]);
-                int TicketSize_max = Convert.ToInt32(item["TicketSize-max"]);
+                //int TicketSize_min = Convert.ToInt32(item["TicketSize-min"]);
+                //int TicketSize_max = Convert.ToInt32(item["TicketSize-max"]);
                 string Brand = Convert.ToString(item["Brand"]);
                 object[] outletId = (object[])item["Outlet"];
 
-                transcount = RR.GetSliceAndDiceFilteredData(gender, Age_min, Age_max, source, Enroll_max, Enroll_min, Nontransacted_max, Nontransacted_min, Spend_min, Spend_max, txncount_min, txncount_max, pointBaln_min, pointBaln_max, Redeem, TicketSize_min, TicketSize_max, Brand, outletId, userDetails.GroupId, userDetails.connectionString);
+                objcounts = RR.GetSliceAndDiceFilteredData(fromdtforall, todtforall,Enroll_max, Enroll_min, Nontransacted_min, Spend_min, Spend_max, txncount_min, txncount_max, pointBaln_min, pointBaln_max, Redeem,Brand, outletId, userDetails.GroupId, userDetails.connectionString);
+                Session["customerId"] = objcounts.lstcustomerDetails;
             }
-            return new JsonResult() { Data = transcount, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
+            return new JsonResult() { Data = objcounts, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
+        public JsonResult GenerateReport(string jsonData)
+        {
+            // var transcount = 0;
+            List<int> lstcounts = new List<int>();
+            List<CustomerDetail> lstcustomerdetails = (List<CustomerDetail>)Session["customerId"];
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            List<CustomerTypeReport> listCustR = new List<CustomerTypeReport>();
+            List<TransactionTypeReport> listTxnR = new List<TransactionTypeReport>();
+            JavaScriptSerializer json_serializer = new JavaScriptSerializer();
+            json_serializer.MaxJsonLength = int.MaxValue;
+            object[] objData = (object[])json_serializer.DeserializeObject(jsonData);
+            foreach (Dictionary<string, object> item in objData)
+            {
+                string ReportType = Convert.ToString(item["reporttype"]);
+                object[] ColumnId = (object[])item["ColumnId"];
 
+                if(ReportType== "customer")
+                {
+                    listCustR = RR.GenerateCustomerTypeReport(ColumnId, lstcustomerdetails, userDetails.GroupId, userDetails.connectionString);
+                }
+                else if(ReportType == "transaction")
+                {
+                    listTxnR = RR.GenerateTxnTypeReport(ColumnId, lstcustomerdetails, userDetails.GroupId, userDetails.connectionString);
+                }
+            }
+            return new JsonResult() { Data = listCustR, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
+        }
         public JsonResult GetFilteredCountforDrillDown(string jsonData)
         {
 

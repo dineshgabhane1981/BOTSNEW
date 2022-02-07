@@ -11,6 +11,11 @@ using System.Web.Mvc;
 using BOTS_BL.Models.Reports;
 using System.Globalization;
 using System.Net.Mail;
+using LinqKit;
+using System.Data.Entity.Core.Objects;
+using DocumentFormat.OpenXml.Office2019.Excel.RichData2;
+using System.Web;
+using System.Collections;
 
 namespace BOTS_BL.Repository
 {
@@ -463,110 +468,301 @@ namespace BOTS_BL.Repository
             return mySkills;
         }
 
-        public int GetSliceAndDiceFilteredData(string Gender, string Age_min, string Age_max, string source, string Enroll_min, string Enroll_max, string Nontransacted_max, string Nontransacted_min, int Spend_min, int Spend_max, int txncount_min, int txncount_max, int pointBaln_min, int pointBaln_max, string Redeem, int TicketSize_min, int TicketSize_max, string Brand, object[] outletId, string GroupId, string connstr)
+        public CustomerIdListAndCount GetSliceAndDiceFilteredData(DateTime Fromdtforall,DateTime Todtforall,string Enroll_min, string Enroll_max,string Nontransacted_min, int Spend_min, int Spend_max, int txncount_min, int txncount_max, int pointBaln_min, int pointBaln_max, string Redeem,string Brand, object[] outletId, string GroupId, string connstr)
         {
-
+            CustomerIdListAndCount objcount = new CustomerIdListAndCount();
             List<TransactionMaster> objtrans = new List<TransactionMaster>();
             List<CustomerDetail> objcust = new List<CustomerDetail>();
-
-            var transcount = 0;
-            using (var context = new BOTSDBContext(connstr))
+           // List<customerIdDetails> lstcustomerId = new List<customerIdDetails>();
+           // var transcount = 0;
+            using (var context = new BOTSDBContext(connstr))           
             {
+                /*
+                var names1 = new string[] { "2", "4", "5", "7" };
+                var customer = (from c in context.CustomerDetails where (names1.Contains(c.CustomerThrough) && c.Status == "00") select c);
+
+                var predicate = PredicateBuilder.True<CustomerDetail>();
+                var predicate2 = PredicateBuilder.True<TransactionMaster>();
+
+                if (Enroll_max != "0")
+                {
+                    DateTime FromDate;
+                    DateTime ToDate = DateTime.Now.Date;
+                    FromDate = ToDate.Date;
+                    switch (Enroll_max)
+                    {
+                        case "Recently Enrolled":
+                            ToDate = ToDate.AddDays(-30);
+                            break;
+                        case "31-90":
+                            ToDate = ToDate.AddDays(-31);
+                            FromDate = FromDate.AddDays(-60);
+                            break;
+                        case "91-180":
+                            ToDate = ToDate.AddDays(-91);
+                            FromDate = FromDate.AddDays(-180);
+                            break;
+                        case "181-365":
+                            ToDate = ToDate.AddDays(-181);
+                            FromDate = FromDate.AddDays(-365);
+                            break;
+                        case "1-2 Years":
+                            ToDate = ToDate.AddDays(-365);
+                            FromDate = DateTime.Now.AddYears(-2).Date;
+                            break;
+                        case "2-3 Years":
+                            ToDate = DateTime.Now.AddYears(-2);
+                            FromDate = DateTime.Now.AddYears(-3);
+                            break;
+                        case "3+ Years":
+                            ToDate = DateTime.Now.AddYears(-3);
+                            FromDate = DateTime.Now.AddYears(-25);
+                            break;
+                        case "Custom":
+                            ToDate = Convert.ToDateTime(Enroll_min);
+                            FromDate = Convert.ToDateTime(Enroll_max);
+                            break;
+
+                    }
+
+                    predicate = predicate.And(x => x.DOJ >= FromDate && x.DOJ <= ToDate);
+
+                }
+                if (Gender != "0")
+                {
+                    predicate = predicate.And(i => i.Gender == Gender);
+                }
+
+                if (Age_min != "0" && Age_max != "0")
+                {
+                    int age_min;
+                    int age_max;
+                    Int32.TryParse(Age_min, out age_min);
+                    Int32.TryParse(Age_max, out age_max);
+                    DateTime Birthyearmin = DateTime.Now.AddYears(-age_min).Date;
+                    DateTime Birthyearmax = DateTime.Now.AddYears(-age_max).Date;
+                    predicate = predicate.And(i => i.DOB <= Birthyearmin && i.DOB >= Birthyearmax);
+                }
+                if (Age_min != "0")
+                {
+                    int age_min = Convert.ToInt32(Age_min);
+                    int currentyear = DateTime.Now.Year;
+                    DateTime Birthyear = DateTime.Now.AddYears(-age_min).Date;
+                    predicate = predicate.And(x => x.DOB <= Birthyear);
+                }
+                if (Age_max != "0")
+                {
+                    int age_max = Convert.ToInt32(Age_max);
+                    int currentyear = DateTime.Now.Year;
+                    DateTime Birthyear = DateTime.Now.AddYears(-age_max).Date;
+                    predicate = predicate.And(x => x.DOB >= Birthyear);
+                }
+                if (source != "0")
+                {
+                    predicate = predicate.And(x => x.CustomerThrough == source);
+                }
+                if (pointBaln_min > 0 && pointBaln_max > 0)
+                {
+                    predicate = predicate.And(x => x.Points >= pointBaln_min && x.Points <= pointBaln_max);
+
+                }
+                else if (pointBaln_min > 0)
+                {
+                    predicate = predicate.And(x => x.Points < pointBaln_max);
+
+                }
+                else if (pointBaln_max > 0)
+                {
+                    predicate = predicate.And(x => x.Points > pointBaln_max);
+
+                }
+                var filterCustomerlist = customer.Where(predicate).Select(i => i).ToList();
+
+                var type1 = new string[] { "1", "2" };
+                var transaction = (from x in context.TransactionMasters where (type1.Contains(x.TransType) && x.InvoiceNo != "B_Birthday" && x.InvoiceNo != "B_Anniversary" && x.InvoiceNo != "B_Anniversary" && x.InvoiceNo != "B_ProfileUpdate" && x.InvoiceNo != "B_ReferralBonus" && x.InvoiceNo != "B_RefereePoints" && x.InvoiceNo != "B_GiftingPoints" && x.InvoiceNo != "Bonus") select x);
+                if (Redeem == "1")
+                {
+                    predicate2 = predicate2.And(p => p.TransType == "2");
+                }
+                if (Redeem == "2")
+                {
+                    predicate2 = predicate2.And(p => p.TransType == "1");
+                }
+
+                var filterallData = transaction.Where(predicate2).Select(i => i).ToList();
+
+                // var filterallData = transaction.Where(predicate2).Select(i => i).ToList();
+
+                var final = (from c in filterCustomerlist
+                             join t in filterallData on c.CustomerId equals t.CustomerId
+                             select new
+                             {
+                                 c.CustomerId,
+                                 c.CustomerName,
+                                 c.DOJ,
+                                 c.EnrollingOutlet,
+                                 c.MobileNo,
+                                 c.Gender,
+                                 t.TransType,
+                                 t.TxnAmt,
+                                 t.Datetime,
+                                 t.CustomerPoints
+
+                             }).ToList();
+                return View(patients.ToList()); */
+
+                //////////////////////////////////////////////////////////////////////////////////////////////////////////
+               /*
+                if (Gender != "0")
+                {
+                    objcust = objcust.Where(x => x.Gender == Gender).ToList();
+
+                }
+
+                if (Age_min != "0" && Age_max != "0")
+                {
+                    int age_min = Convert.ToInt32(Age_min);
+                    int age_max = Convert.ToInt32(Age_max);
+                    int currentyear = DateTime.Now.Year;
+                    DateTime Birthyearmin = DateTime.Now.AddYears(-age_min).Date;
+                    DateTime Birthyearmax = DateTime.Now.AddYears(-age_max).Date;
+                    objcust = objcust.Where(x => x.DOB <= Birthyearmin && x.DOB >= Birthyearmax).ToList();
+
+                }
+                else if (Age_min != "0")
+                {
+                    int age_min = Convert.ToInt32(Age_min);
+                    int currentyear = DateTime.Now.Year;
+                    DateTime Birthyear = DateTime.Now.AddYears(-age_min).Date;
+                    objcust = objcust.Where(x => x.DOB <= Birthyear).ToList();
+
+                }
+                else if (Age_max != "0")
+                {
+                    int age_max = Convert.ToInt32(Age_max);
+                    int currentyear = DateTime.Now.Year;
+                    DateTime Birthyear = DateTime.Now.AddYears(-age_max).Date;
+                    objcust = objcust.Where(x => x.DOB >= Birthyear).ToList();
+
+                }
+
+                if (source != "0")
+                {
+                    objcust = objcust.Where(x => x.CustomerThrough == source).ToList();
+                }
+                if (TicketSize_min > 0 && TicketSize_max > 0)
+                {
+                    // var type = new string[] { "1", "2" };
+                    // objtrans = (from x in context.TransactionMasters where (type.Contains(x.TransType) && x.InvoiceNo != "B_Birthday" && x.InvoiceNo != "B_Anniversary" && x.InvoiceNo != "B_Anniversary" && x.InvoiceNo != "B_ProfileUpdate" && x.InvoiceNo != "B_ReferralBonus" && x.InvoiceNo != "B_RefereePoints" && x.InvoiceNo != "B_GiftingPoints" && x.InvoiceNo != "Bonus") select x).ToList();
+
+                    var items = (from t in objtrans
+                                 group t by t.CustomerId into g
+                                 where g.Sum(x => x.InvoiceAmt) / g.Count() > TicketSize_min && g.Sum(x => x.InvoiceAmt) / g.Count() < TicketSize_max
+                                 select g.Key).ToList();
+                    objcust = objcust.Where(x => items.Contains(x.CustomerId)).ToList();
+
+                }
+                else if (TicketSize_min > 0)
+                {
+                    //  var type = new string[] { "1", "2" };
+                    //objtrans = (from x in context.TransactionMasters where (type.Contains(x.TransType) && x.InvoiceNo != "B_Birthday" && x.InvoiceNo != "B_Anniversary" && x.InvoiceNo != "B_Anniversary" && x.InvoiceNo != "B_ProfileUpdate" && x.InvoiceNo != "B_ReferralBonus" && x.InvoiceNo != "B_RefereePoints" && x.InvoiceNo != "B_GiftingPoints" && x.InvoiceNo != "Bonus") select x).ToList();
+
+                    var items = (from t in objtrans
+                                 group t by t.CustomerId into g
+                                 where g.Sum(x => x.InvoiceAmt) / g.Count() < TicketSize_min
+                                 select g.Key).ToList();
+                    objcust = objcust.Where(x => items.Contains(x.CustomerId)).ToList();
+                }
+                else if (TicketSize_max > 0)
+                {
+                    // var type = new string[] { "1", "2" };
+                    //objtrans = (from x in context.TransactionMasters where (type.Contains(x.TransType) && x.InvoiceNo != "B_Birthday" && x.InvoiceNo != "B_Anniversary" && x.InvoiceNo != "B_Anniversary" && x.InvoiceNo != "B_ProfileUpdate" && x.InvoiceNo != "B_ReferralBonus" && x.InvoiceNo != "B_RefereePoints" && x.InvoiceNo != "B_GiftingPoints" && x.InvoiceNo != "Bonus") select x).ToList();
+
+                    var items = (from t in objtrans
+                                 group t by t.CustomerId into g
+                                 where g.Sum(x => x.InvoiceAmt) / g.Count() > TicketSize_max
+                                 select g.Key).ToList();
+                    objcust = objcust.Where(x => items.Contains(x.CustomerId)).ToList();
+
+                } */
                 var names = new string[] { "2", "4", "5", "7" };
                 objcust = (from c in context.CustomerDetails where (names.Contains(c.CustomerThrough) && c.Status == "00")select c).ToList();
+                objtrans = context.Database.SqlQuery<TransactionMaster>("select * from TransactionMaster where InvoiceNo != 'B_Birthday' and InvoiceNo!= 'B_Anniversary'and InvoiceNo!= 'B_ProfileUpdate'and InvoiceNo!= 'B_ReferralBonus' and InvoiceNo!= 'B_GiftingPoints'and InvoiceNo!= 'Bonus'and TransType in(1, 2)").ToList();
+                
                 try
                 {
-                    if (Enroll_max != "0")
+                    if (Enroll_max != "0" )
                     {
-                        DateTime FromDate;
-                        DateTime ToDate = DateTime.Now.Date;
-                        FromDate = ToDate.Date;
-                        switch (Enroll_max)
+                        if (!string.IsNullOrEmpty(Enroll_max))
                         {
-                            case "Recently Enrolled":
-                                ToDate = ToDate.AddDays(-30);
-                                break;
-                            case "31-90":
-                                ToDate = ToDate.AddDays(-31);
-                                FromDate = FromDate.AddDays(-60);
-                                break;
-                            case "91-180":
-                                ToDate = ToDate.AddDays(-91);
-                                FromDate = FromDate.AddDays(-180);
-                                break;
-                            case "181-365":
-                                ToDate = ToDate.AddDays(-181);
-                                FromDate = FromDate.AddDays(-365);
-                                break;
-                            case "1-2 Years":
-                                ToDate = ToDate.AddDays(-365);
-                                FromDate = DateTime.Now.AddYears(-2).Date;
-                                break;
-                            case "2-3 Years":
-                                ToDate = DateTime.Now.AddYears(-2);
-                                FromDate = DateTime.Now.AddYears(-3);
-                                break;
-                            case "3+ Years":
-                                ToDate = DateTime.Now.AddYears(-3);
-                                FromDate = DateTime.Now.AddYears(-25);
-                                break;
-                            case "Custom":
+                            DateTime FromDate;
+                            DateTime ToDate = DateTime.Now.Date;
+                            FromDate = ToDate.Date;
+
+                            if (Enroll_min != "0" && Enroll_max != "0")
+                            {
                                 ToDate = Convert.ToDateTime(Enroll_min);
                                 FromDate = Convert.ToDateTime(Enroll_max);
-                                break;
+                            }
+                            else
+                            {
+                                int days = Convert.ToInt32(Enroll_max);
+                                FromDate = FromDate.AddDays(-days);
+                            }
+                            //switch (Enroll_max)
+                            //{
+                            //    case "Recently Enrolled":
+                            //        FromDate = FromDate.AddDays(-30);
+                            //        break;
+                            //    case "31-90":
+                            //        ToDate = ToDate.AddDays(-31);
+                            //        FromDate = FromDate.AddDays(-60);
+                            //        break;
+                            //    case "91-180":
+                            //        ToDate = ToDate.AddDays(-91);
+                            //        FromDate = FromDate.AddDays(-180);
+                            //        break;
+                            //    case "181-365":
+                            //        ToDate = ToDate.AddDays(-181);
+                            //        FromDate = FromDate.AddDays(-365);
+                            //        break;
+                            //    case "1-2 Years":
+                            //        ToDate = ToDate.AddDays(-365);
+                            //        FromDate = DateTime.Now.AddYears(-2).Date;
+                            //        break;
+                            //    case "2-3 Years":
+                            //        ToDate = DateTime.Now.AddYears(-2);
+                            //        FromDate = DateTime.Now.AddYears(-3);
+                            //        break;
+                            //    case "3+ Years":
+                            //        ToDate = DateTime.Now.AddYears(-3);
+                            //        FromDate = DateTime.Now.AddYears(-25);
+                            //        break;
+                            //    case "Custom":
+                            //        ToDate = Convert.ToDateTime(Enroll_min);
+                            //        FromDate = Convert.ToDateTime(Enroll_max);
+                            //        break;
 
+                            //}
+
+                            objcust = objcust.Where(x => x.DOJ >= FromDate && x.DOJ <= ToDate).ToList();
                         }
-
-                        objcust = objcust.Where(x => x.DOJ >= FromDate && x.DOJ <= ToDate).ToList();
-                        
                     }
-
-                    if (Gender != "0")
-                    {
-                        objcust = objcust.Where(x => x.Gender == Gender).ToList();                       
-
-                    }
-
-                    if (Age_min != "0" && Age_max != "0")
-                    {
-                        int age_min = Convert.ToInt32(Age_min);
-                        int age_max = Convert.ToInt32(Age_max);
-                        int currentyear = DateTime.Now.Year;
-                        DateTime Birthyearmin = DateTime.Now.AddYears(-age_min).Date;
-                        DateTime Birthyearmax = DateTime.Now.AddYears(-age_max).Date;
-                        objcust = objcust.Where(x => x.DOB <= Birthyearmin && x.DOB >= Birthyearmax).ToList();                        
-
-                    }
-                    else if (Age_min != "0")
-                    {
-                        int age_min = Convert.ToInt32(Age_min);
-                        int currentyear = DateTime.Now.Year;
-                        DateTime Birthyear = DateTime.Now.AddYears(-age_min).Date;
-                        objcust = objcust.Where(x => x.DOB <= Birthyear).ToList();                       
-
-                    }
-                    else if (Age_max != "0")
-                    {
-                        int age_max = Convert.ToInt32(Age_max);
-                        int currentyear = DateTime.Now.Year;
-                        DateTime Birthyear = DateTime.Now.AddYears(-age_max).Date;
-                        objcust = objcust.Where(x => x.DOB >= Birthyear).ToList();
-                       
-                    }
-
-                    if (source != "0")
-                    {
-                        objcust = objcust.Where(x => x.CustomerThrough == source).ToList();                       
-                    }
+                                   
 
                     if (pointBaln_min > 0 && pointBaln_max > 0)
                     {
+                        //lstcustomerId = (from c in objcust where c.Points >= pointBaln_min && c.Points <= pointBaln_max
+                        //                        select new customerIdDetails
+                        //                        { 
+                        //                            CustomerId = c.CustomerId,
+                        //                        }).ToList();
                         objcust = objcust.Where(x => x.Points >= pointBaln_min && x.Points <= pointBaln_max).ToList();
 
                     }
                     else if (pointBaln_min > 0)
                     {
-                        objcust = objcust.Where(x => x.Points < pointBaln_max).ToList();
+                        objcust = objcust.Where(x => x.Points < pointBaln_min).ToList();
 
                     }
                     else if (pointBaln_max > 0)
@@ -577,38 +773,31 @@ namespace BOTS_BL.Repository
 
                     if (Redeem == "1")
                     {
-                        var type = new string[] { "1", "2" };
-                        objtrans = (from x in context.TransactionMasters where (type.Contains(x.TransType) && x.InvoiceNo != "B_Birthday" && x.InvoiceNo != "B_Anniversary" && x.InvoiceNo != "B_Anniversary" && x.InvoiceNo != "B_ProfileUpdate" && x.InvoiceNo != "B_ReferralBonus" && x.InvoiceNo != "B_RefereePoints" && x.InvoiceNo != "B_GiftingPoints" && x.InvoiceNo != "Bonus") select x).ToList();
                         objcust = (from c in objcust
                                    join t in objtrans on c.CustomerId equals t.CustomerId
-                                   where t.TransType.Contains("2")
+                                   where t.TransType.Contains("2") && t.Datetime >= Fromdtforall && t.Datetime <=Todtforall
                                    select c).Distinct().ToList();
                     }
                     else if (Redeem == "2")
                     {
-                        var type = new string[] { "1", "2" };
-                        objtrans = (from x in context.TransactionMasters where (type.Contains(x.TransType) && x.InvoiceNo != "B_Birthday" && x.InvoiceNo != "B_Anniversary" && x.InvoiceNo != "B_Anniversary" && x.InvoiceNo != "B_ProfileUpdate" && x.InvoiceNo != "B_ReferralBonus" && x.InvoiceNo != "B_RefereePoints" && x.InvoiceNo != "B_GiftingPoints" && x.InvoiceNo != "Bonus") select x).ToList();
-                        objcust = (from c in objcust
+                       objcust = (from c in objcust
                                    join t in objtrans on c.CustomerId equals t.CustomerId
-                                   where t.TransType.Contains("1")
-                                   select c).Distinct().ToList();
+                                   where t.TransType.Contains("1") && t.Datetime >= Fromdtforall && t.Datetime <= Todtforall
+                                  select c).Distinct().ToList();
                     }
 
                     if (txncount_min > 0 && txncount_max > 0)
                     {
-                        var type = new string[] { "1", "2" };
-                        objtrans = (from x in context.TransactionMasters where (type.Contains(x.TransType) && x.InvoiceNo != "B_Birthday" && x.InvoiceNo != "B_Anniversary" && x.InvoiceNo != "B_Anniversary" && x.InvoiceNo != "B_ProfileUpdate" && x.InvoiceNo != "B_ReferralBonus" && x.InvoiceNo != "B_RefereePoints" && x.InvoiceNo != "B_GiftingPoints" && x.InvoiceNo != "Bonus") select x).ToList();
+                        
                         var items = (from t in objtrans
                                      group t by t.CustomerId into grouped
-                                     where grouped.Count() > txncount_min && grouped.Count() < txncount_max
+                                     where grouped.Count() > txncount_min && grouped.Count() < txncount_max 
                                      select grouped.Key).ToList();
                         objcust = objcust.Where(x => items.Contains(x.CustomerId)).ToList();
                     }
                     else if (txncount_min > 0)
                     {
-                        var type = new string[] { "1", "2" };
-                        objtrans = (from x in context.TransactionMasters where (type.Contains(x.TransType) && x.InvoiceNo != "B_Birthday" && x.InvoiceNo != "B_Anniversary" && x.InvoiceNo != "B_Anniversary" && x.InvoiceNo != "B_ProfileUpdate" && x.InvoiceNo != "B_ReferralBonus" && x.InvoiceNo != "B_RefereePoints" && x.InvoiceNo != "B_GiftingPoints" && x.InvoiceNo != "Bonus") select x).ToList();
-                        var items = (from t in objtrans
+                       var items = (from t in objtrans
                                      group t by t.CustomerId into grouped
                                      where grouped.Count() < txncount_min
                                      select grouped.Key).ToList();
@@ -616,9 +805,7 @@ namespace BOTS_BL.Repository
                     }
                     else if (txncount_max > 0)
                     {
-                        var type = new string[] { "1", "2" };
-                        objtrans = (from x in context.TransactionMasters where (type.Contains(x.TransType) && x.InvoiceNo != "B_Birthday" && x.InvoiceNo != "B_Anniversary" && x.InvoiceNo != "B_Anniversary" && x.InvoiceNo != "B_ProfileUpdate" && x.InvoiceNo != "B_ReferralBonus" && x.InvoiceNo != "B_RefereePoints" && x.InvoiceNo != "B_GiftingPoints" && x.InvoiceNo != "Bonus") select x).ToList();
-                        var items = (from t in objtrans
+                       var items = (from t in objtrans
                                      group t by t.CustomerId into grouped
                                      where grouped.Count() > txncount_max
                                      select grouped.Key).ToList();
@@ -628,8 +815,6 @@ namespace BOTS_BL.Repository
 
                     if (Spend_min > 0 && Spend_max > 0)
                     {
-                        var type = new string[] { "1", "2" };
-                        objtrans = (from x in context.TransactionMasters where (type.Contains(x.TransType) && x.InvoiceNo != "B_Birthday" && x.InvoiceNo != "B_Anniversary" && x.InvoiceNo != "B_Anniversary" && x.InvoiceNo != "B_ProfileUpdate" && x.InvoiceNo != "B_ReferralBonus" && x.InvoiceNo != "B_RefereePoints" && x.InvoiceNo != "B_GiftingPoints" && x.InvoiceNo != "Bonus") select x).ToList();
 
                         var items = (from t in objtrans
                                      group t by t.CustomerId into g
@@ -637,13 +822,18 @@ namespace BOTS_BL.Repository
                                      select g.Key).ToList();
                         objcust = objcust.Where(x => items.Contains(x.CustomerId)).ToList();
 
+                        //var item = (from t in objtrans join c in objcust on t.CustomerId equals c.CustomerId
+                        //            where t.Datetime >= Fromdtforall && t.Datetime <= Todtforall
+                        //            group t by new
+                        //            {
+                        //                t.CustomerId
+                        //            } into g
+                        //            select new { 
+                        //            customerid = g.Sum(t =>t.InvoiceAmt) > Spend_min && g.Sum(t => t.InvoiceAmt) < Spend_max
+                        //            }).ToList();
                     }
                     else if (Spend_min > 0)
-                    {
-
-                        var type = new string[] { "1", "2" };
-                        objtrans = (from x in context.TransactionMasters where (type.Contains(x.TransType) && x.InvoiceNo != "B_Birthday" && x.InvoiceNo != "B_Anniversary" && x.InvoiceNo != "B_Anniversary" && x.InvoiceNo != "B_ProfileUpdate" && x.InvoiceNo != "B_ReferralBonus" && x.InvoiceNo != "B_RefereePoints" && x.InvoiceNo != "B_GiftingPoints" && x.InvoiceNo != "Bonus") select x).ToList();
-
+                    {                       
                         var items = (from t in objtrans
                                      group t by t.CustomerId into g
                                      where g.Sum(x => x.InvoiceAmt) < Spend_min
@@ -652,98 +842,66 @@ namespace BOTS_BL.Repository
                     }
                     else if (Spend_max > 0)
                     {
-                        var type = new string[] { "1", "2" };
-                        objtrans = (from x in context.TransactionMasters where (type.Contains(x.TransType) && x.InvoiceNo != "B_Birthday" && x.InvoiceNo != "B_Anniversary" && x.InvoiceNo != "B_Anniversary" && x.InvoiceNo != "B_ProfileUpdate" && x.InvoiceNo != "B_ReferralBonus" && x.InvoiceNo != "B_RefereePoints" && x.InvoiceNo != "B_GiftingPoints" && x.InvoiceNo != "Bonus") select x).ToList();
-
+                      
                         var items = (from t in objtrans
                                      group t by t.CustomerId into g
                                      where g.Sum(x => x.InvoiceAmt) > Spend_max
                                      select g.Key).ToList();
-                        objcust = objcust.Where(x => items.Contains(x.CustomerId)).ToList();
+                       
+                        objcust = objcust.Where(x => items.Contains(x.CustomerId)).ToList();                        
 
                     }
 
-                    if (TicketSize_min > 0 && TicketSize_max > 0)
-                    {
-                        var type = new string[] { "1", "2" };
-                        objtrans = (from x in context.TransactionMasters where (type.Contains(x.TransType) && x.InvoiceNo != "B_Birthday" && x.InvoiceNo != "B_Anniversary" && x.InvoiceNo != "B_Anniversary" && x.InvoiceNo != "B_ProfileUpdate" && x.InvoiceNo != "B_ReferralBonus" && x.InvoiceNo != "B_RefereePoints" && x.InvoiceNo != "B_GiftingPoints" && x.InvoiceNo != "Bonus") select x).ToList();
-
-                        var items = (from t in objtrans
-                                     group t by t.CustomerId into g
-                                     where g.Sum(x => x.InvoiceAmt) / g.Count() > TicketSize_min && g.Sum(x => x.InvoiceAmt) / g.Count() < TicketSize_max
-                                     select g.Key).ToList();
-                        objcust = objcust.Where(x => items.Contains(x.CustomerId)).ToList();
-
-                    }
-                    else if (TicketSize_min > 0)
-                    {
-                        var type = new string[] { "1", "2" };
-                        objtrans = (from x in context.TransactionMasters where (type.Contains(x.TransType) && x.InvoiceNo != "B_Birthday" && x.InvoiceNo != "B_Anniversary" && x.InvoiceNo != "B_Anniversary" && x.InvoiceNo != "B_ProfileUpdate" && x.InvoiceNo != "B_ReferralBonus" && x.InvoiceNo != "B_RefereePoints" && x.InvoiceNo != "B_GiftingPoints" && x.InvoiceNo != "Bonus") select x).ToList();
-
-                        var items = (from t in objtrans
-                                     group t by t.CustomerId into g
-                                     where g.Sum(x => x.InvoiceAmt) / g.Count() < TicketSize_min
-                                     select g.Key).ToList();
-                        objcust = objcust.Where(x => items.Contains(x.CustomerId)).ToList();
-                    }
-                    else if (TicketSize_max > 0)
-                    {
-                        var type = new string[] { "1", "2" };
-                        objtrans = (from x in context.TransactionMasters where (type.Contains(x.TransType) && x.InvoiceNo != "B_Birthday" && x.InvoiceNo != "B_Anniversary" && x.InvoiceNo != "B_Anniversary" && x.InvoiceNo != "B_ProfileUpdate" && x.InvoiceNo != "B_ReferralBonus" && x.InvoiceNo != "B_RefereePoints" && x.InvoiceNo != "B_GiftingPoints" && x.InvoiceNo != "Bonus") select x).ToList();
-
-                        var items = (from t in objtrans
-                                     group t by t.CustomerId into g
-                                     where g.Sum(x => x.InvoiceAmt) / g.Count() > TicketSize_max
-                                     select g.Key).ToList();
-                        objcust = objcust.Where(x => items.Contains(x.CustomerId)).ToList();
-
-                    }
+                
                     if (Nontransacted_min != "0")
                     {
-                        DateTime ToDate;
-                        DateTime FromDate = DateTime.Now.Date;
-                        ToDate = FromDate.Date;
-                        switch (Nontransacted_min)
+                        if (!string.IsNullOrEmpty(Nontransacted_min))
                         {
-                            case "Within 30":
-                                FromDate = FromDate.AddDays(-30);
-                                break;
-                            case "31-60":
-                                FromDate = FromDate.AddDays(-60);
-                                ToDate = ToDate.AddDays(-31);
-                                break;
-                            case "61-90":
-                                FromDate = FromDate.AddDays(-90);
-                                ToDate = ToDate.AddDays(-61);
-                                break;
-                            case "91-180":
-                                FromDate = FromDate.AddDays(-180);
-                                ToDate = ToDate.AddDays(-91);
-                                break;
-                            case "180-365":
-                                FromDate = FromDate.AddDays(-365);
-                                ToDate = ToDate.AddDays(-181);
-                                break;
-                            case "365+":
-                                FromDate = DateTime.Now.AddYears(-25).Date;
-                                ToDate = DateTime.Now.AddDays(-365);
-                                break;
-                            case "Custom":
-                                FromDate = Convert.ToDateTime(Nontransacted_min);
-                                ToDate = Convert.ToDateTime(Nontransacted_max);
-                                break;
+                            DateTime ToDate;
+                            DateTime FromDate = DateTime.Now.Date;
+                            ToDate = FromDate.Date;
+                            int days = Convert.ToInt32(Nontransacted_min);
+                            FromDate = FromDate.AddDays(-days);
 
+                            //switch (Nontransacted_min)
+                            //{
+                            //    case "Within 30":
+                            //        FromDate = FromDate.AddDays(-30);
+                            //        break;
+                            //    case "31-60":
+                            //        FromDate = FromDate.AddDays(-60);
+                            //        ToDate = ToDate.AddDays(-31);
+                            //        break;
+                            //    case "61-90":
+                            //        FromDate = FromDate.AddDays(-90);
+                            //        ToDate = ToDate.AddDays(-61);
+                            //        break;
+                            //    case "91-180":
+                            //        FromDate = FromDate.AddDays(-180);
+                            //        ToDate = ToDate.AddDays(-91);
+                            //        break;
+                            //    case "180-365":
+                            //        FromDate = FromDate.AddDays(-365);
+                            //        ToDate = ToDate.AddDays(-181);
+                            //        break;
+                            //    case "365+":
+                            //        FromDate = DateTime.Now.AddYears(-25).Date;
+                            //        ToDate = DateTime.Now.AddDays(-365);
+                            //        break;
+                            //    case "Custom":
+                            //        FromDate = Convert.ToDateTime(Nontransacted_min);
+                            //        ToDate = Convert.ToDateTime(Nontransacted_max);
+                            //        break;
+
+                            //}
+
+                            var items = (from t in objtrans
+                                         group t by t.CustomerId into g
+                                         orderby g.Key
+                                         where g.Max(x => x.Datetime) >= FromDate && g.Max(x => x.Datetime) <= ToDate
+                                         select g.Key).ToList();
+                            objcust = objcust.Where(x => items.Contains(x.CustomerId)).ToList();
                         }
-                        var type = new string[] { "1", "2" };
-                        objtrans = (from x in context.TransactionMasters where (type.Contains(x.TransType) && x.InvoiceNo != "B_Birthday" && x.InvoiceNo != "B_Anniversary" && x.InvoiceNo != "B_Anniversary" && x.InvoiceNo != "B_ProfileUpdate" && x.InvoiceNo != "B_ReferralBonus" && x.InvoiceNo != "B_RefereePoints" && x.InvoiceNo != "B_GiftingPoints" && x.InvoiceNo != "Bonus") select x).ToList();
-
-                        var items = (from t in objtrans
-                                     group t by t.CustomerId into g
-                                     orderby g.Key
-                                     where g.Max(x => x.Datetime) >= FromDate && g.Max(x => x.Datetime) <= ToDate
-                                     select g.Key).ToList();
-                        objcust = objcust.Where(x => items.Contains(x.CustomerId)).ToList();
-
                     }
 
                     if (Brand != "0")
@@ -764,13 +922,21 @@ namespace BOTS_BL.Repository
                              str = String.Join(",", lstoutletId.Select(x=>x.Value).ToArray());
                         }
                         
-                            var item = context.Database.SqlQuery<string>("sp_BOTS_GetOutletIdBySubStrings @outletId",
+                        var item = context.Database.SqlQuery<string>("sp_BOTS_GetOutletIdBySubStrings @outletId",
                                 new SqlParameter("@outletId", str)).ToList();
-                            objcust = objcust.Where(x => item.Contains(x.CustomerId)).ToList();
+                        objcust = objcust.Where(x => item.Contains(x.CustomerId)).ToList();
                         
                     }
+                    objtrans = (from t in objtrans join c in objcust on t.CustomerId equals c.CustomerId 
+                                select new TransactionMaster { 
+                                }).ToList();                    
+                    
+                    objcount.Filteredcount = objcust.Count();
+                    objcount.txncount = objtrans.Count();
+                    objcount.lstcustomerDetails = objcust;
 
-                    transcount = objcust.Count();
+
+
 
                 }
                 catch (Exception ex)
@@ -779,10 +945,132 @@ namespace BOTS_BL.Repository
                 }
 
             }
-            return transcount;
+            return objcount;
 
         }
-        
+
+        [Obsolete]
+        public List<CustomerTypeReport> GenerateCustomerTypeReport(object[] ColumnId, List<CustomerDetail> lstcustdetails, string GroupId, string connstr)
+        {
+            List<CustomerTypeReport> lstcusttype = new List<CustomerTypeReport>();
+
+            List<TransactionMaster> objtrans = new List<TransactionMaster>();
+            var str = String.Join(",", ColumnId);
+            var query = from val in str.Split(',')
+                        select int.Parse(val);
+            using (var context = new BOTSDBContext(connstr))
+            {
+                // var predicate = PredicateBuilder.True<CustomerDetail>();
+                objtrans = context.Database.SqlQuery<TransactionMaster>("select * from TransactionMaster where InvoiceNo != 'B_Birthday' and InvoiceNo!= 'B_Anniversary'and InvoiceNo!= 'B_ProfileUpdate'and InvoiceNo!= 'B_ReferralBonus' and InvoiceNo!= 'B_GiftingPoints'and InvoiceNo!= 'Bonus'and TransType in(1, 2)").ToList();
+                
+                if (lstcustdetails != null)
+                {
+                    
+                    foreach (var id in lstcustdetails)
+                    {
+                        CustomerTypeReport objcustomertypereport = new CustomerTypeReport();
+                        //foreach (int c in query)
+                        //{
+                        //mobilename
+                        if (str.Contains("1"))
+                            {
+                                objcustomertypereport.MobileNo = id.MobileNo;
+                            }
+                            //customername
+                            if(str.Contains("2"))
+                            {
+                                objcustomertypereport.CustomerName = id.CustomerName;
+                            }
+                            //outletname
+                            if (str.Contains("3"))
+                            {
+                            var outletname = context.Database.SqlQuery<string>("select OutletDetails.OutletName from CustomerDetails join OutletDetails on CustomerDetails.EnrollingOutlet = OutletDetails.OutletId where CustomerId="+id.CustomerId+ "").FirstOrDefault();
+
+                            objcustomertypereport.OutletName = outletname;
+                            }
+                            //firsttxndt
+                            if (str.Contains("4"))
+                            {
+                            
+                             var itemfirstdt = context.Database.SqlQuery<DateTime>("select Min(datetime) as firsttxndate from transactionmaster where CustomerId=" + id.CustomerId + " group by customerid ").FirstOrDefault();
+                                objcustomertypereport.FirstTxnDt = itemfirstdt;
+                            } 
+                            //lasttxndt
+                            if (str.Contains("5"))
+                            {
+                                
+                            var Lasttxndate = context.Database.SqlQuery<DateTime>("select Max(datetime) as firsttxndate from transactionmaster where CustomerId=" + id.CustomerId + " group by customerid ").FirstOrDefault();
+
+                            objcustomertypereport.LastTxnDt = Lasttxndate;
+                            }
+                            //totalpoints
+                            if (str.Contains("6"))
+                            {
+                                objcustomertypereport.TotalAvailablePoints = id.Points;
+                            }
+                            //totalearn
+                            if (str.Contains("7"))
+                            {
+                            
+                            var TotalEarn = context.Database.SqlQuery<decimal>("select sum(pointsearned) from transactionmaster where TransType in(1, 2) and CustomerId=" + id.CustomerId + " group by customerid ").FirstOrDefault();
+
+                            objcustomertypereport.TotalEarn = TotalEarn;
+                            }
+                            //totalburn
+                            if (str.Contains("8"))
+                            {
+                           var TotalBurn = context.Database.SqlQuery<decimal>("select sum(PointsBurned) from transactionmaster where TransType ='2' and CustomerId=" + id.CustomerId + " group by customerid ").FirstOrDefault();
+
+                            objcustomertypereport.TotalBurn = TotalBurn;
+                            }
+                            //enrolleddate
+                            if (str.Contains("9"))
+                            {
+                                objcustomertypereport.EnrolledDt = id.DOJ;
+                            }
+                            //totalspend
+                            if (str.Contains("10"))
+                            {
+                                var Totalspend = context.Database.SqlQuery<decimal>("select sum(InvoiceAmt) from transactionmaster where CustomerId=" + id.CustomerId + " group by customerid ").FirstOrDefault();
+                                objcustomertypereport.TotalSpend = Totalspend;
+                            }
+                            //No of txn
+                            if (str.Contains("11"))
+                            {
+                                var NoofTxn = context.Database.SqlQuery<int>("select count(CustomerId) from transactionmaster where CustomerId=" + id.CustomerId + " group by customerid ").FirstOrDefault();
+
+                                objcustomertypereport.NoofTxn = NoofTxn;
+                                
+                            }
+                            //bonuspoints
+                            if (str.Contains("12"))
+                            {
+                                //var txn = context.Database.SqlQuery<TransactionMaster>("select * from transactionmaster where InvoiceNo in('B_Birthday', 'B_Anniversary','B_ProfileUpdate','B_ReferralBonus', 'B_GiftingPoints', 'Bonus')and TransType in(1, 2)").ToList();
+
+                                //var item = (from x in txn
+                                //            group x by new { x.CustomerId } into g
+                                //            select new
+                                //            {
+
+                                //                Bonus = g.Sum(x => x.PointsEarned)
+                                //            }).FirstOrDefault();
+                                var Bonus = context.Database.SqlQuery<decimal>("select sum(pointsearned),CustomerId from transactionmaster where InvoiceNo in('B_Birthday', 'B_Anniversary','B_ProfileUpdate','B_ReferralBonus', 'B_GiftingPoints', 'Bonus')and TransType in(1, 2) and CustomerId="+id.CustomerId+" group by customerid  ").FirstOrDefault();
+                            objcustomertypereport.BonusPoints = Bonus;
+                            }
+                        lstcusttype.Add(objcustomertypereport);
+                        // }
+                    }
+                   
+                }
+            }
+            return lstcusttype;
+        }
+        public List<TransactionTypeReport> GenerateTxnTypeReport(object[] ColumnId, List<CustomerDetail> lstcustdetails, string GroupId, string connstr)
+        {
+            List<TransactionTypeReport> lstTxntype = new List<TransactionTypeReport>();
+
+            return lstTxntype;
+        }
         public List<ReportFilterCount> GetFilterCountOfDrillDown(int Elementtype, int Elementfilter, long Element1, long Element2, string BillSizeFilter, long BillSize_min, long BillSize_max,int periodsfilter,string periodFrm,string periodTo,string outletIds, string GroupId, string connstr)
         {
             
@@ -824,7 +1112,22 @@ namespace BOTS_BL.Repository
             }
                 return filterCount;
         }
-
+        public DateTime GetStartDtOfProgram(string GroupId, string connstr)
+        {
+            DateTime dt = new DateTime();
+            try
+            {
+                using (var context = new BOTSDBContext(connstr))
+                {
+                    dt = (DateTime)context.TransactionMasters.Min(x => x.Datetime);
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, GroupId);
+            }
+            return dt;
+        }
         public void email_send(string emailid, string subject, byte[] ms, string BCC)
         {
 
