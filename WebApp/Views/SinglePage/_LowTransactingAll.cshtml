@@ -1,0 +1,91 @@
+﻿@model List<BOTS_BL.Models.CommonDB.Tbl_SinglePageLowTransactingOutlet>
+
+<div class="row mb-3 card">
+    <div class="container-fluid pt-3 pl-3 pr-3">
+        <div class="pt-3 pl-3 pr-3">
+            <div class="row">
+                <div class="col search-container">
+                    <i class="fas fa-search"></i>
+                    <input class="input100" type="text" id="txtLowSearch" placeholder="Search outlet..." />
+                </div>
+            </div>
+            <div class="row mt-3" id="dvlowActivityData">
+                <table class="table" id="lowTransactingOutlet">
+
+                    <thead>
+                        <tr>
+                            <th scope="col" style="text-align:left;">Group Name</th>
+                            <th scope="col" style="text-align:left;">Outlet Name</th>
+                            <th scope="col" style="text-align:right;">Avg Txns</th>
+                            <th scope="col" style="text-align:left;">Avg Group Txns/Avg 30 days</th>
+                            <th scope="col" style="text-align:left;">Lower by %</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model != null)
+                        {
+                            if (Model.Count > 0)
+                            {
+                                foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td style="text-align:left;">@item.GroupName</td>
+                                        <td style="text-align:left;">@item.OutletName</td>
+                                        <td style="text-align:left;">@item.AvgTxn</td>
+                                        <td style="text-align:left;">@item.AvgGroupTxnIn30Days</td>
+                                        <td style="text-align:left;">@item.LowerByPercentage</td>
+                                    </tr>
+                                }
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        $('#lowTransactingOutlet').DataTable({
+            "aaSorting": [],
+            "paging": true,
+            "ordering": true,
+            "info": true,
+            "bFilter": true,
+            "pageLength": 10,
+            "pagingType": "simple_numbers"
+        });
+
+        $('#lowTransactingOutlet_filter').hide();
+
+        $('#txtLowSearch').on('keyup', function () {
+            $.fn.dataTable.ext.search.push(function (settings, searchData) {
+                var term = $('#txtLowSearch').val().toLowerCase()
+                for (var i = 0; i < searchData.length; i++) {
+                    if (searchData[i].toLowerCase().indexOf(term) >= 0) {
+                        return true;
+                    }
+                }
+                return false;
+            });
+            var table1 = $('#lowTransactingOutlet').DataTable();
+            table1.draw();
+        });
+    });
+
+</script>
+
+<style>
+    table.dataTable thead .sorting_asc {
+        background: url("https://cdn.datatables.net/1.10.0/images/sort_asc.png") no-repeat center left;
+    }
+
+    table.dataTable thead .sorting_desc {
+        background: url("https://cdn.datatables.net/1.10.0/images/sort_desc.png") no-repeat center left;
+    }
+
+    table.dataTable thead .sorting {
+        background: url("https://cdn.datatables.net/1.10.0/images/sort_both.png") no-repeat center left;
+    }
+</style>
+

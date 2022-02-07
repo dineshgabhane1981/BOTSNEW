@@ -182,6 +182,29 @@
 
                 }
             }
+            <div class="col-md-12 col-lg-6">
+                <div class="card">
+                    <div class="card-header-tab card-header-tab-animation card-header">
+                        <div class="card-header-title">
+                            Source wise
+                        </div>
+                    </div>
+
+                    <div class="card-body">
+                        <div class="tab-content">
+                            <div class="tab-pane fade show active" id="tabs-eg-77">
+                                <div class="card mb-3 widget-chart widget-chart2 text-left w-100">
+                                    <div class="widget-chat-wrapper-outer">
+                                        <div id="containerSourceWise">
+                                            <canvas id="cvSourceWise" style=" width:100%; height:100%" !important></canvas>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
 
     </div>
@@ -208,6 +231,7 @@
         Get3To6Chart();
         GetMoreThan6Chart();
         GetOutletWiseChart();
+        GetSourceWiseChart();
 
         if ($("#hdnSRChart").val()=="True") {
             GetSRWiseChart();
@@ -728,7 +752,7 @@
             success: function (response) {
                 if (response != null) {
                     var names = response[0];
-                    console.log(names)
+                    //console.log(names)
                     var data = response[1];
                     $('#cvOutletWise').remove(); // this is my <canvas> element
                     $('#containerOutletWise').append('<canvas id="cvOutletWise"><canvas>');
@@ -838,7 +862,7 @@
 
                 if (response != null) {
                     var names = response[0];
-                    console.log(names)
+                    //console.log(names)
                     var data = response[1];
                     if (names != undefined) {
                         $('#cvSRWise').remove(); // this is my <canvas> element
@@ -939,6 +963,86 @@
 
     }
 
+    function GetSourceWiseChart() {
+        var OutletId = $("#ddlOutletList").val();
+        var FromDt = $("#dtFrom").val();
+        var ToDT = $("#dtTo").val();
+        $("#divLoader").show();
+        $.ajax({
+            type: "POST",
+             url: '@Url.Action("DashboardSourceWiseData", "Feedback")',
+            data: '{OutletId: ' + JSON.stringify(OutletId) + ',FromDt: ' + JSON.stringify(FromDt) + ',ToDT: ' + JSON.stringify(ToDT) + '}',
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                if (response != null) {
+                    var names = response[0];
+                    console.log(names)
+                    var data = response[1];
+                    console.log(data)
+                    $('#cvSourceWise').remove(); // this is my <canvas> element
+                    $('#containerSourceWise').append('<canvas id="cvSourceWise"><canvas>');
+                        var options = {
+                            plugins: {
+                                datalabels: {
+                                    display: false
+                                }
+                            },
+                            rotation: (-0.5 * Math.PI) - (-90 / 180 * Math.PI),
+                            legend: {
+                                display: true,
+                                position: 'bottom'
+                            },
+                            hover: { mode: null },
+                            plugins: {
+                                datalabels: {
+                                    formatter: (value, ctx) => {
+                                        if (value != 0) {
+                                            return value + '%';
+                                        }
+                                        else {
+                                            return "";
+                                        }
+                                    },
+                                    color: '#000',
+                                }
+                            }
+                    }
+                    var colors = [];
+                    jQuery.each(data, function (index, item) {
+                        colors.push(getRandomColor());
+                    });
+
+                        var data = {
+                            datasets: [{
+                                data: [...data],
+                                backgroundColor: colors
+                            }],
+
+                            labels: [...names],
+
+                        };
+
+                    var ctx4 = document.getElementById("cvSourceWise").getContext("2d");
+                        window.myBar = new Chart(ctx4, {
+                            type: 'pie',
+                            data: data,
+                            options: options
+
+                        });
+                }
+                $("#divLoader").hide();
+            },
+            failure: function (response) {
+                $("#divLoader").hide();
+            },
+            error: function (response) {
+                $("#divLoader").hide();
+            }
+        });
+
+    }
+
     function FilterData() {
 
         GetNewUserChart();
@@ -948,7 +1052,7 @@
         Get3To6Chart();
         GetMoreThan6Chart();
         GetOutletWiseChart();
-
+        GetSourceWiseChart();
         if ($("#hdnSRChart").val() == "True") {
             GetSRWiseChart();
         }

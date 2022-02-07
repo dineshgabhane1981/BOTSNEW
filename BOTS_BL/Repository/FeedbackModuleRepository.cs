@@ -1428,6 +1428,57 @@ namespace BOTS_BL.Repository
             return lstData;
         }
 
+        public List<DashboardSourceWise> GetSourceWiseData(string GroupId, string OutletId, string FromDt, string ToDT)
+        {
+            List<DashboardSourceWise> lstData = new List<DashboardSourceWise>();
+            List<DashboardSourceWise> lstData1 = new List<DashboardSourceWise>();
+            string connStr = CR.GetCustomerConnString(GroupId);
+            using (var contextdb = new BOTSDBContext(connStr))
+            {
+                DateTime Frmdt = DateTime.Now.AddDays(-1).Date;
+                DateTime Tdt = DateTime.Now.Date;
+                if (!string.IsNullOrEmpty(FromDt))
+                {
+                    Frmdt = Convert.ToDateTime(FromDt);
+                }
+                if (!string.IsNullOrEmpty(ToDT))
+                {
+                    Tdt = Convert.ToDateTime(ToDT).AddDays(1);
+                }
+                var data = contextdb.feedback_FeedbackMaster.Where(x => x.GroupId == GroupId && x.AddedDate >= Frmdt && x.AddedDate < Tdt).ToList();
+                if (!string.IsNullOrEmpty(OutletId))
+                {
+                    data = data.Where(x => x.OutletId == OutletId).ToList();
+                }
+                var uniqueSource = data.GroupBy(x => x.HowToKnowAbout).Select(y => y.First()).ToList();
+                int total = 0;
+                foreach (var item in uniqueSource)
+                {                    
+                    var numberOfCustomer = contextdb.feedback_FeedbackMaster.Where(x => x.HowToKnowAbout == item.HowToKnowAbout && x.AddedDate >= Frmdt && x.AddedDate < Tdt).Count();
+
+                    total = total + numberOfCustomer;
+                    DashboardSourceWise objItem = new DashboardSourceWise();
+                    objItem.AvgPoints = numberOfCustomer;
+                    if (item.HowToKnowAbout == null)
+                    {
+                        objItem.SourceName = "Other";
+                    }
+                    else
+                    {
+                        objItem.SourceName = item.HowToKnowAbout;
+                    }
+
+                    lstData.Add(objItem);
+                }
+                foreach(var item in lstData)
+                {
+                    item.AvgPoints = Math.Round((item.AvgPoints * 100 / total),2);
+                }
+
+            }
+            return lstData;
+        }
+
         public List<DashboardSRWise> GetSRWiseData(string GroupId, string OutletId, string FromDt, string ToDT)
         {
             List<DashboardSRWise> lstData = new List<DashboardSRWise>();

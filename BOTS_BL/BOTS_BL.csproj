@@ -138,6 +138,7 @@
     <Compile Include="Class1.cs" />
     <Compile Include="Exceptions.cs" />
     <Compile Include="Models\BrandDetail.cs" />
+    <Compile Include="Models\BulkUploadCustList.cs" />
     <Compile Include="Models\Campaign\CampaignTiles.cs" />
     <Compile Include="Models\Campaign\LoyaltyKPIs.cs" />
     <Compile Include="Models\ChitaleModel\CancelOrderDetail.cs" />
@@ -186,6 +187,7 @@
     <Compile Include="Models\ChitaleModel\TgtVsAchParticipantWise.cs" />
     <Compile Include="Models\ChitaleModel\Top5LostParticipants.cs" />
     <Compile Include="Models\ChitaleModel\TransactionMaster.cs" />
+    <Compile Include="Models\CityWiseData.cs" />
     <Compile Include="Models\CommonDB\BOTS_TblBillingPartnerProduct.cs" />
     <Compile Include="Models\CommonDB\BOTS_TblCallSubTypes.cs" />
     <Compile Include="Models\CommonDB\BOTS_TblCallTypes.cs" />
@@ -235,6 +237,7 @@
     <Compile Include="Models\CommonDB\Tbl_SinglePageSummaryTable.cs" />
     <Compile Include="Models\Dashboard\DashboardMemberSegment.cs" />
     <Compile Include="Models\DBContext.cs" />
+    <Compile Include="Models\DiscussionReport.cs" />
     <Compile Include="Models\ExecutiveSummary.cs" />
     <Compile Include="Models\FeedbackModule\DashboardNewAndExisting.cs" />
     <Compile Include="Models\FeedbackModule\Feedback_Content.cs" />

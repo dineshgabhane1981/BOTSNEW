@@ -1,0 +1,61 @@
+﻿@model BOTS_BL.Models.tblGroupDetail
+@{
+    ViewBag.Title = "Security";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="app-main__inner">
+    <div class="row mb-3 card">
+        <div class="container-fluid pt-3 pl-3 pr-3" style="text-align:center;">
+            @Html.RadioButtonFor(model => model.IsMasked, true, new { @id = "IsMasked1" }) Masked &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            @Html.RadioButtonFor(model => model.IsMasked, false, new { @id = "IsMasked0" }) Unmasked
+            <br /><br />
+            <button class="btn btn-primary login-btn ml-2 mr-2" type="button" id="btnSave" onclick="SaveMasked();">
+                Save
+            </button>
+            <br /><br />
+        </div>
+    </div>
+</div>
+<script>
+    function SaveMasked() {
+        var value = true;
+        if ($("#IsMasked0").is(":checked")) {
+            value = false;
+        }
+        $("#divLoader").show();
+         $.ajax({
+                type: "POST",
+                url: '@Url.Action("UpdateMasked", "DashBoardCustomerLogin")',
+                data: '{value: ' + JSON.stringify(value) + '}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (result) {                    
+                    if (result == true) {
+                        cuteAlert({
+                            type: "success",
+                            title: "Saved",
+                            message: "Setting Saved Successfully !!!",
+                            buttonText: "Okay"
+                        })
+                    }
+                    else {
+                        cuteAlert({
+                            type: "error",
+                            title: "Oops..",
+                            message: "Something went Wrong...",
+                            buttonText: "Okay"
+                        })
+                    }
+                    $("#divLoader").hide();
+
+                },
+                error: function (result) {                   
+                    $("#divLoader").hide();
+                }
+            });
+
+    }
+
+</script>
+

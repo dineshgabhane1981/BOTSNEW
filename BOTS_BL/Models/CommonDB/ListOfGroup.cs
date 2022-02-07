@@ -19,5 +19,6 @@ namespace BOTS_BL.Models.CommonDB
 
         [StringLength(4)]
         public string GroupId { get; set; }
+        public bool IsActive { get; set; }
     }
 }

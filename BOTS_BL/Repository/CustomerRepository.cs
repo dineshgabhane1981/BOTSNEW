@@ -195,7 +195,7 @@ namespace BOTS_BL.Repository
                 List<tblGroupDetail> objGroupDetails = new List<tblGroupDetail>();
                 using (var context = new CommonDBContext())
                 {
-                    objGroupDetails = context.tblGroupDetails.Where(x => x.IsActive.Value == true).ToList();               
+                    objGroupDetails = context.tblGroupDetails.Where(x => x.IsActive.Value == true && x.IsLive == true).ToList();               
                     if (objGroupDetails != null)
                     {
                         foreach (var item in objGroupDetails)
@@ -205,17 +205,18 @@ namespace BOTS_BL.Repository
                             objGroup.Product = item.ProductType;
                             objGroup.RetailName = item.RetailName;
                             objGroup.StartedOn = item.WentLiveDate;
+                            objGroup.CustomerType = item.CustomerType;
+                            objGroup.OutletCount = item.OutletCount;
 
                             var RetailCategoryName = context.tblCategories.Where(x => x.CategoryId == item.RetailCategory).Select(y => y.CategoryName).FirstOrDefault();
                             objGroup.RetailCategory = RetailCategoryName;
                             var CityName = context.tblCities.Where(x => x.CityId == item.City).Select(y => y.CityName).FirstOrDefault();
-                            objGroup.City = CityName;
-                            //SMSBalCount
-                            //RenewalOn
+                            objGroup.City = CityName;                            
                             var SourcedByName = context.tblSourcedBies.Where(x => x.SourcedbyId == item.SourcedBy).Select(y => y.SourcedbyName).FirstOrDefault();
                             objGroup.SourcedBy = SourcedByName;
                             var RMTeamName = context.tblRMAssigneds.Where(x => x.RMAssignedId == item.RMAssigned).Select(y => y.RMAssignedName).FirstOrDefault();
                             objGroup.RMTeam = RMTeamName;
+                            objGroup.BillingProductName = context.BOTS_TblBillingPartnerProduct.Where(x => x.BillingPartnerProductId == item.BillingProduct).Select(y => y.BillingPartnerProductName).FirstOrDefault();
 
                             objGroupList.Add(objGroup);
                         }

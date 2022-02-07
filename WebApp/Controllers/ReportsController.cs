@@ -21,6 +21,7 @@ namespace WebApp.Controllers
     public class ReportsController : Controller
     {
         ReportsRepository RR = new ReportsRepository();
+        CustomerRepository CR = new CustomerRepository();
         Exceptions newexception = new Exceptions();
         // GET: Reports
         public ActionResult Index()
@@ -107,6 +108,14 @@ namespace WebApp.Controllers
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
             List<CelebrationsMoreDetails> objCelebrationsMoreDetails = new List<CelebrationsMoreDetails>();
             objCelebrationsMoreDetails = RR.GetCelebrationsTxnData(userDetails.GroupId, month, type, userDetails.connectionString);
+            var GroupDetails = CR.GetGroupDetails(Convert.ToInt32(userDetails.GroupId));
+            if (!GroupDetails.IsMasked)
+            {
+                foreach (var item in objCelebrationsMoreDetails)
+                {
+                    item.MaskedMobileNo = item.MobileNo;
+                }
+            }
             return new JsonResult() { Data = objCelebrationsMoreDetails, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
 
@@ -247,6 +256,14 @@ namespace WebApp.Controllers
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
             List<PointExpiryTxn> objPointExpiryTxn = new List<PointExpiryTxn>();
             objPointExpiryTxn = RR.GetPointExpiryTxnData(userDetails.GroupId, Convert.ToInt32(month), Convert.ToInt32(year), userDetails.connectionString);
+            var GroupDetails = CR.GetGroupDetails(Convert.ToInt32(userDetails.GroupId));
+            if (!GroupDetails.IsMasked)
+            {
+                foreach (var item in objPointExpiryTxn)
+                {
+                    item.MaskedMobileNo = item.MobileNo;
+                }
+            }
             return new JsonResult() { Data = objPointExpiryTxn, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
 
@@ -311,7 +328,7 @@ namespace WebApp.Controllers
             {
                 lstOutletFinal = lstOutlet;
             }
-           
+
             int totalCount = lstOutletFinal.Count;
             int nonActiveRed = totalCount * 30 / 100;
             int nonActiveOrange = totalCount * 45 / 100;
@@ -395,6 +412,14 @@ namespace WebApp.Controllers
             }
             List<OutletwiseTransaction> lstOutletWiseTransaction = new List<OutletwiseTransaction>();
             lstOutletWiseTransaction = RR.GetOutletWiseTransactionList(userDetails.GroupId, DateRangeFlag, fromDate, toDate, outletId, EnrolmentDataFlag, userDetails.connectionString);
+            var GroupDetails = CR.GetGroupDetails(Convert.ToInt32(userDetails.GroupId));
+            if (!GroupDetails.IsMasked)
+            {
+                foreach (var item in lstOutletWiseTransaction)
+                {
+                    item.MaskedMobileNo = item.MobileNo;
+                }
+            }
             return new JsonResult() { Data = lstOutletWiseTransaction, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
 
@@ -434,7 +459,7 @@ namespace WebApp.Controllers
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
             try
             {
-                
+
                 if (outletId.Equals("All"))
                 {
                     outletId = "";
@@ -455,13 +480,21 @@ namespace WebApp.Controllers
                     table.Rows.Add(row);
                 }
                 if (userDetails.LoginType == "1" || userDetails.LoginType == "6" || userDetails.LoginType == "7")
-                {                    
+                {
                     table.Columns.Remove("MaskedMobileNo");
                 }
                 else
                 {
-                    table.Columns.Remove("MobileNo");
-                    table.Columns["MaskedMobileNo"].ColumnName = "MobileNo";
+                    var GroupDetails = CR.GetGroupDetails(Convert.ToInt32(userDetails.GroupId));
+                    if (!GroupDetails.IsMasked)
+                    {
+                        table.Columns.Remove("MaskedMobileNo");
+                    }
+                    else
+                    {
+                        table.Columns.Remove("MobileNo");
+                        table.Columns["MaskedMobileNo"].ColumnName = "MobileNo";
+                    }
                 }
 
                 foreach (DataRow dr in table.Rows)
@@ -542,7 +575,7 @@ namespace WebApp.Controllers
 
         }
 
-        public ActionResult ExportToExcelOutletwise(string DateRangeFlag, string fromDate, string toDate, string ReportName,string EmailId)
+        public ActionResult ExportToExcelOutletwise(string DateRangeFlag, string fromDate, string toDate, string ReportName, string EmailId)
         {
             System.Data.DataTable table = new System.Data.DataTable();
             try
@@ -659,7 +692,7 @@ namespace WebApp.Controllers
                         dr["PointsExpiredStr"] = 0;
                     }
                     //dr["PointsExpiredStr"] = String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(dr["PointsExpired"]));
-                    
+
                 }
                 table.Columns.Remove("TotalMember");
                 table.Columns.Remove("TotalTxn");
@@ -669,7 +702,7 @@ namespace WebApp.Controllers
                 table.Columns.Remove("PointsBurned");
                 table.Columns.Remove("PointsCancelled");
                 table.Columns.Remove("PointsExpired");
-                
+
                 table.Columns["TotalMemberStr"].ColumnName = "TotalMember";
                 table.Columns["TotalTxnStr"].ColumnName = "TotalTxn";
                 table.Columns["TotalSpendStr"].ColumnName = "TotalSpend";
@@ -697,7 +730,7 @@ namespace WebApp.Controllers
                     worksheet.Cell(1, 2).Value = "Outletwise";
                     worksheet.Cell(2, 1).Value = "Date";
                     worksheet.Cell(2, 2).Value = DateTime.Now.ToString();
-                    if(DateRangeFlag=="1")
+                    if (DateRangeFlag == "1")
                     {
                         worksheet.Cell(3, 1).Value = "Period";
                         worksheet.Cell(3, 2).Value = fromDate + "-" + toDate;
@@ -705,23 +738,23 @@ namespace WebApp.Controllers
                     if (DateRangeFlag == "0")
                     {
                         worksheet.Cell(3, 1).Value = "BTD";
-                       
+
                     }
-                        worksheet.Cell(5, 1).InsertTable(table);
+                    worksheet.Cell(5, 1).InsertTable(table);
                     //wb.Worksheets.Add(table);
                     using (MemoryStream stream = new MemoryStream())
                     {
                         wb.SaveAs(stream);
                         if (EmailId != "")
                         {
-                            RR.email_send(EmailId, ReportName, stream.ToArray(),userDetails.EmailId);
-                            
+                            RR.email_send(EmailId, ReportName, stream.ToArray(), userDetails.EmailId);
+
                         }
-                        
+
                         return File(stream.ToArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
-                        
+
                     }
-                    
+
                 }
             }
             catch (Exception ex)
@@ -759,8 +792,16 @@ namespace WebApp.Controllers
                 }
                 else
                 {
-                    table.Columns.Remove("MobileNo");
-                    table.Columns["MaskedMobileNo"].ColumnName = "MobileNo";
+                    var GroupDetails = CR.GetGroupDetails(Convert.ToInt32(userDetails.GroupId));
+                    if (!GroupDetails.IsMasked)
+                    {
+                        table.Columns.Remove("MaskedMobileNo");
+                    }
+                    else
+                    {
+                        table.Columns.Remove("MobileNo");
+                        table.Columns["MaskedMobileNo"].ColumnName = "MobileNo";
+                    }
                 }
 
                 foreach (DataRow dr in table.Rows)
@@ -781,7 +822,7 @@ namespace WebApp.Controllers
                     {
                         //dr["TxnDatetime"] = Convert.ToDateTime(dr["TxnDatetime"]).ToString("MM/dd/yyyy");
                         dr["LastTxnDate"] = DateTime.ParseExact(Convert.ToString(dr["LastTxnDate"]), "dd/MM/yyyy", CultureInfo.InvariantCulture)
-                        .ToString("MM/dd/yyyy", CultureInfo.InvariantCulture);                        
+                        .ToString("MM/dd/yyyy", CultureInfo.InvariantCulture);
                     }
                     if (!string.IsNullOrEmpty(Convert.ToString(dr["ExpiryDate"])))
                     {
@@ -858,8 +899,16 @@ namespace WebApp.Controllers
                 }
                 else
                 {
-                    table.Columns.Remove("MobileNo");
-                    table.Columns["MaskedMobileNo"].ColumnName = "MobileNo";
+                    var GroupDetails = CR.GetGroupDetails(Convert.ToInt32(userDetails.GroupId));
+                    if (!GroupDetails.IsMasked)
+                    {
+                        table.Columns.Remove("MaskedMobileNo");
+                    }
+                    else
+                    {
+                        table.Columns.Remove("MobileNo");
+                        table.Columns["MaskedMobileNo"].ColumnName = "MobileNo";
+                    }
                 }
 
                 foreach (DataRow dr in table.Rows)
@@ -887,10 +936,10 @@ namespace WebApp.Controllers
                 }
                 table.Columns.Remove("TotalSpend");
                 table.Columns.Remove("AvlPoints");
-                
+
                 table.Columns["TotalSpendStr"].ColumnName = "TotalSpend";
                 table.Columns["AvlPointsStr"].ColumnName = "AvlPoints";
-                 
+
                 string fileName = "BOTS_" + ReportName + ".xlsx";
                 using (XLWorkbook wb = new XLWorkbook())
                 {
@@ -904,14 +953,14 @@ namespace WebApp.Controllers
                     worksheet.Cell(2, 2).Value = DateTime.Now.ToString();
                     worksheet.Cell(3, 1).Value = "Celebration";
                     DateTime today = DateTime.Now;
-                    DateTime nxtmnt =today.AddMonths(1).AddSeconds(-1);
+                    DateTime nxtmnt = today.AddMonths(1).AddSeconds(-1);
                     DateTime nxt2mnt = nxtmnt.AddMonths(1).AddSeconds(-1);
                     string currentmonth = today.ToString("MMM", CultureInfo.InvariantCulture);
                     string nextmonth = nxtmnt.ToString("MMM", CultureInfo.InvariantCulture);
                     string next2month = nxt2mnt.ToString("MMM", CultureInfo.InvariantCulture);
-                    if (type ==1)
+                    if (type == 1)
                     { worksheet.Cell(3, 2).Value = "Birthday"; }
-                    if (type ==2)
+                    if (type == 2)
                     {
                         worksheet.Cell(3, 2).Value = "M.Anniversary";
                     }
@@ -962,7 +1011,7 @@ namespace WebApp.Controllers
             newItem.Text = "50";
             ListFilter.Add(newItem);
 
-            SelectListItem newItem1 = new SelectListItem();            
+            SelectListItem newItem1 = new SelectListItem();
             newItem1.Value = "100";
             newItem1.Text = "100";
             ListFilter.Add(newItem1);
@@ -976,7 +1025,7 @@ namespace WebApp.Controllers
             newItem3.Value = "1000";
             newItem3.Text = "1000";
             ListFilter.Add(newItem3);
-           
+
             ViewBag.ListFilter = ListFilter;
             return View();
         }
@@ -984,11 +1033,11 @@ namespace WebApp.Controllers
         [HttpPost]
         public JsonResult GetProfitableCustomersResult(string CountOrBusiness, string Count)
         {
-            var userDetails = (CustomerLoginDetail)Session["UserSession"];            
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
             List<MemberList> lstMember = new List<MemberList>();
             lstMember = RR.GetMemberList(userDetails.GroupId, "", userDetails.connectionString);
             int CountNumber = Convert.ToInt32(Count);
-            if (CountOrBusiness== "Count")
+            if (CountOrBusiness == "Count")
             {
                 lstMember = lstMember.OrderByDescending(x => x.TxnCount).Take(CountNumber).ToList();
             }
@@ -996,7 +1045,14 @@ namespace WebApp.Controllers
             {
                 lstMember = lstMember.OrderByDescending(x => x.TotalSpend).Take(CountNumber).ToList();
             }
-
+            var GroupDetails = CR.GetGroupDetails(Convert.ToInt32(userDetails.GroupId));
+            if (!GroupDetails.IsMasked)
+            {
+                foreach (var item in lstMember)
+                {
+                    item.MaskedMobileNo = item.MobileNo;
+                }
+            }
             return new JsonResult() { Data = lstMember, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
 
@@ -1006,7 +1062,7 @@ namespace WebApp.Controllers
             try
             {
                 var userDetails = (CustomerLoginDetail)Session["UserSession"];
-                 
+
                 List<MemberList> lstMember = new List<MemberList>();
                 lstMember = RR.GetMemberList(userDetails.GroupId, "", userDetails.connectionString);
                 int CountNumber = Convert.ToInt32(Count);
@@ -1058,7 +1114,7 @@ namespace WebApp.Controllers
                         .ToString("MM/dd/yyyy", CultureInfo.InvariantCulture);
                     }
                 }
-                
+
                 table.Columns.Remove("TotalSpend");
                 table.Columns.Remove("AvlBalPoints");
                 table.Columns.Remove("TotalBurnPoints");
@@ -1069,12 +1125,20 @@ namespace WebApp.Controllers
                 if (userDetails.LoginType == "1" || userDetails.LoginType == "6" || userDetails.LoginType == "7")
                 {
                     table.Columns.Remove("MaskedMobileNo");
-                }
+                }                
                 else
                 {
-                    table.Columns.Remove("MobileNo");
-                    table.Columns["MaskedMobileNo"].ColumnName = "MobileNo";
-                }                       
+                    var GroupDetails = CR.GetGroupDetails(Convert.ToInt32(userDetails.GroupId));
+                    if (!GroupDetails.IsMasked)
+                    {
+                        table.Columns.Remove("MaskedMobileNo");
+                    }
+                    else
+                    {
+                        table.Columns.Remove("MobileNo");
+                        table.Columns["MaskedMobileNo"].ColumnName = "MobileNo";
+                    }
+                }
                 string fileName = "BOTS_" + ReportName + ".xlsx";
                 using (XLWorkbook wb = new XLWorkbook())
                 {
@@ -1092,9 +1156,9 @@ namespace WebApp.Controllers
                     {
                         worksheet.Cell(3, 2).Value = "Top" + Count + "Members as per Txn Count";
                     }
-                    if(CountOrBusiness == "Business")
+                    if (CountOrBusiness == "Business")
                     {
-                        worksheet.Cell(3, 2).Value = "Top"+ Count + "Members as per Business";
+                        worksheet.Cell(3, 2).Value = "Top" + Count + "Members as per Business";
                     }
                     worksheet.Cell(5, 1).InsertTable(table);
                     //wb.Worksheets.Add(table);
@@ -1108,7 +1172,7 @@ namespace WebApp.Controllers
                         }
                         return File(stream.ToArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
 
-                        
+
                     }
                 }
             }
@@ -1120,7 +1184,7 @@ namespace WebApp.Controllers
 
         }
 
-        
+
 
     }
 }

@@ -113,13 +113,13 @@ namespace BOTS_BL.Repository
                 {
                     objstore = contextNew.StoreDetails.Where(x => x.CounterId == counterId).FirstOrDefault();
                     objstore.Status = "01";
-                    
+
                     contextNew.StoreDetails.AddOrUpdate(objstore);
                     contextNew.SaveChanges();
-                   
+
                     result = true;
                 }
-                
+
             }
             catch (Exception ex)
             {
@@ -165,21 +165,21 @@ namespace BOTS_BL.Repository
             {
                 CustomerDetail objCustomerDetail = new CustomerDetail();
                 List<TransactionMaster> lstObjTxn = new List<TransactionMaster>();
-                List<PointsExpiry> lstobjpoints = new List<PointsExpiry>();            
+                List<PointsExpiry> lstobjpoints = new List<PointsExpiry>();
                 TransferPointsDetail objtransferPointsDetail = new TransferPointsDetail();
-                
+
                 string connStr = objCustRepo.GetCustomerConnString(GroupId);
                 using (var contextNew = new BOTSDBContext(connStr))
                 {
-                    
-                    var objExisting= contextNew.CustomerDetails.Where(x => x.MobileNo == MobileNo).FirstOrDefault();
+
+                    var objExisting = contextNew.CustomerDetails.Where(x => x.MobileNo == MobileNo).FirstOrDefault();
                     if (objExisting == null)
                     {
                         objCustomerDetail = contextNew.CustomerDetails.Where(x => x.CustomerId == CustomerId).FirstOrDefault();
                         string oldno = objCustomerDetail.MobileNo;
                         objCustomerDetail.MobileNo = MobileNo;
 
-                       lstObjTxn = contextNew.TransactionMasters.Where(x => x.CustomerId == CustomerId).Take(10000).ToList(); 
+                        lstObjTxn = contextNew.TransactionMasters.Where(x => x.CustomerId == CustomerId).Take(10000).ToList();
                         if (lstObjTxn != null)
                         {
                             foreach (var trans in lstObjTxn)
@@ -201,7 +201,7 @@ namespace BOTS_BL.Repository
                             }
 
                         }
-                       
+
                         objtransferPointsDetail.NewMobileNo = MobileNo;
                         objtransferPointsDetail.OldMobileNo = oldno;
                         objtransferPointsDetail.GroupId = GroupId;
@@ -221,7 +221,7 @@ namespace BOTS_BL.Repository
                         result.ResponseCode = "01";
                         result.ResponseMessage = "Mobile Number Already Exist";
                     }
-                    
+
 
                 }
                 using (var context = new CommonDBContext())
@@ -237,7 +237,7 @@ namespace BOTS_BL.Repository
             return result;
         }
 
-        public SPResponse AddEarnData(string GroupId, string MobileNo, string OutletId, DateTime TxnDate, DateTime RequestDate, string InvoiceNo, string InvoiceAmt, string IsSMS, tblAudit objAudit)
+        public SPResponse AddEarnData(string GroupId, string MobileNo, string OutletId, DateTime TxnDate, DateTime RequestDate, string InvoiceNo, string InvoiceAmt, string IsSMS, decimal Points, tblAudit objAudit)
         {
             SPResponse result = new SPResponse();
             try
@@ -245,7 +245,7 @@ namespace BOTS_BL.Repository
                 string connStr = objCustRepo.GetCustomerConnString(GroupId);
                 using (var contextNew = new BOTSDBContext(connStr))
                 {
-                    result = contextNew.Database.SqlQuery<SPResponse>("sp_EarnRW_New_ITOPS @pi_MobileNo, @pi_OutletId, @pi_TxnDate, @pi_RequestDate, @pi_InvoiceNo, @pi_InvoiceAmt, @pi_LoginId, @pi_RequestBy, @pi_RequestedOnForum, @pi_SMSFlag",
+                    result = contextNew.Database.SqlQuery<SPResponse>("sp_EarnRW_New_ITOPS @pi_MobileNo, @pi_OutletId, @pi_TxnDate, @pi_RequestDate, @pi_InvoiceNo, @pi_InvoiceAmt, @pi_LoginId, @pi_RequestBy, @pi_RequestedOnForum, @pi_SMSFlag,@pi_Points",
                               new SqlParameter("@pi_MobileNo", MobileNo),
                               new SqlParameter("@pi_OutletId", OutletId),
                               new SqlParameter("@pi_TxnDate", TxnDate.ToString("yyyy-MM-dd")),
@@ -255,7 +255,10 @@ namespace BOTS_BL.Repository
                               new SqlParameter("@pi_LoginId", ""),
                               new SqlParameter("@pi_RequestBy", objAudit.RequestedBy),
                               new SqlParameter("@pi_RequestedOnForum", objAudit.RequestedOnForum),
-                              new SqlParameter("@pi_SMSFlag", IsSMS)).FirstOrDefault<SPResponse>();
+                              new SqlParameter("@pi_SMSFlag", IsSMS),
+                              new SqlParameter("@pi_Points", Points)).FirstOrDefault<SPResponse>();
+
+
                     //DateTime.Now.ToString("yyyy-MM-dd")
 
 
@@ -272,7 +275,7 @@ namespace BOTS_BL.Repository
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex, "");
+                newexception.AddException(ex, GroupId);
             }
 
             return result;
@@ -298,7 +301,7 @@ namespace BOTS_BL.Repository
                               new SqlParameter("@pi_RequestBy", objAudit.RequestedBy),
                               new SqlParameter("@pi_RequestedOnForum", objAudit.RequestedOnForum),
                               new SqlParameter("@pi_SMSFlag", IsSMS),
-                              new SqlParameter("@pi_TxnType", TxnType)).FirstOrDefault<SPResponse>();                   
+                              new SqlParameter("@pi_TxnType", TxnType)).FirstOrDefault<SPResponse>();
                 }
                 using (var context = new CommonDBContext())
                 {
@@ -332,7 +335,7 @@ namespace BOTS_BL.Repository
                               new SqlParameter("@pi_RequestBy", objAudit.RequestedBy),
                               new SqlParameter("@pi_RequestedOnForum", objAudit.RequestedOnForum),
                               new SqlParameter("@pi_SMSFlag", IsSMS)).FirstOrDefault<SPResponse>();
-                    
+
                 }
                 using (var context = new CommonDBContext())
                 {
@@ -374,7 +377,7 @@ namespace BOTS_BL.Repository
                         result.ResponseCode = "01";
                         result.ResponseMessage = "Mobile Number Already Exist";
                     }
-                    
+
                 }
                 using (var context = new CommonDBContext())
                 {
@@ -495,10 +498,46 @@ namespace BOTS_BL.Repository
                 string connStr = objCustRepo.GetCustomerConnString(GroupId);
                 using (var contextNew = new BOTSDBContext(connStr))
                 {
-                    objTxn = contextNew.TransactionMasters.Where(x => x.InvoiceNo == InvoiceNo && x.Status=="06").FirstOrDefault();
+                    objTxn = contextNew.TransactionMasters.Where(x => x.InvoiceNo == InvoiceNo && x.Status == "06").FirstOrDefault();
                 }
                 if (objTxn != null)
                 {
+                    objReturn.InvoiceNo = objTxn.InvoiceNo;
+                    objReturn.InvoiceAmt = objTxn.InvoiceAmt;
+                    objReturn.MobileNo = objTxn.MobileNo;
+                    objReturn.Points = Convert.ToString(objTxn.PointsEarned);
+                    objReturn.Datetime = Convert.ToDateTime(objTxn.Datetime).ToString("dd/MM/yyyy HH:mm:ss");
+                    objReturn.DatetimeOriginal = Convert.ToString(objTxn.Datetime);
+                    var OutletId = objTxn.CounterId.Substring(0, objTxn.CounterId.Length - 2);
+                    using (var contextNew = new BOTSDBContext(connStr))
+                    {
+                        objReturn.OutletName = contextNew.OutletDetails.Where(x => x.OutletId == OutletId).Select(y => y.OutletName).FirstOrDefault();
+                        objReturn.TransactionName = contextNew.TransactionTypeMasters.Where(x => x.TransactionType == objTxn.TransType).Select(y => y.TransactionName).FirstOrDefault();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, GroupId);
+            }
+            return objReturn;
+        }
+        public CancelTxnModel GetTransactionByTransactionId(string GroupId, string TransactionId)
+        {
+            CancelTxnModel objReturn = new CancelTxnModel();
+            try
+            {
+                TransactionMaster objTxn = new TransactionMaster();
+                CustomerDetail objCustomerDetail = new CustomerDetail();
+                string connStr = objCustRepo.GetCustomerConnString(GroupId);
+                long TxnId = Convert.ToInt64(TransactionId);
+                using (var contextNew = new BOTSDBContext(connStr))
+                {
+                    objTxn = contextNew.TransactionMasters.Where(x => x.SlNo == TxnId).FirstOrDefault();
+                }
+                if (objTxn != null)
+                {
+                    objReturn.TransactionId = objTxn.SlNo;
                     objReturn.InvoiceNo = objTxn.InvoiceNo;
                     objReturn.InvoiceAmt = objTxn.InvoiceAmt;
                     objReturn.MobileNo = objTxn.MobileNo;
@@ -536,6 +575,7 @@ namespace BOTS_BL.Repository
                     foreach (var objTxn in lstObjTxn)
                     {
                         CancelTxnModel objReturn = new CancelTxnModel();
+                        objReturn.TransactionId = objTxn.SlNo;
                         objReturn.InvoiceNo = objTxn.InvoiceNo;
                         objReturn.InvoiceAmt = objTxn.InvoiceAmt;
                         objReturn.MobileNo = objTxn.MobileNo;
@@ -575,8 +615,6 @@ namespace BOTS_BL.Repository
             return objCustomerDetail;
         }
 
-        
-
         public SPResponse DeleteTransaction(string GroupId, string InvoiceNo, string MobileNo, string InvoiceAmt, DateTime ip_Date, tblAudit objAudit)
         {
             SPResponse result = new SPResponse();
@@ -595,7 +633,7 @@ namespace BOTS_BL.Repository
                               new SqlParameter("@pi_RequestBy", objAudit.RequestedBy),
                               new SqlParameter("@pi_RequestedOnForum", objAudit.RequestedOnForum),
                               new SqlParameter("@pi_SMSFlag", "0")).FirstOrDefault<SPResponse>();
-                   
+
                 }
                 using (var context = new CommonDBContext())
                 {
@@ -611,7 +649,7 @@ namespace BOTS_BL.Repository
 
         }
 
-        public List<LoginIdByOutlet> GetLoginIdByOutlet(string GroupId,int outletId)
+        public List<LoginIdByOutlet> GetLoginIdByOutlet(string GroupId, int outletId)
         {
             List<LoginIdByOutlet> loginidbyoutlet = new List<LoginIdByOutlet>();
 
@@ -624,7 +662,7 @@ namespace BOTS_BL.Repository
                         // new SqlParameter("@groupId", GroupId),                       
                         new SqlParameter("@outletId", outletId)).ToList<LoginIdByOutlet>();
                 }
-                
+
             }
             catch (Exception ex)
             {
@@ -642,7 +680,7 @@ namespace BOTS_BL.Repository
             {
                 lstLogDetails = contextNew.LogDetailsRWs.Where(x => x.ReceivedData.Contains(search)).ToList();
             }
-            foreach(var item in lstLogDetails)
+            foreach (var item in lstLogDetails)
             {
                 item.datetimestr = item.Datetime.Value.ToString("MM/dd/yyyy");
             }
@@ -650,6 +688,75 @@ namespace BOTS_BL.Repository
 
             return lstLogDetails;
         }
+
+        public bool ModifyTransaction(string GroupId, long TransactionId, decimal points, tblAudit objAudit)
+        {
+            bool status = false;
+            string connStr = objCustRepo.GetCustomerConnString(GroupId);
+
+            using (var contextNew = new BOTSDBContext(connStr))
+            {
+                using (DbContextTransaction transaction = contextNew.Database.BeginTransaction())
+                {
+                    try
+                    {
+                        var objTransaction = contextNew.TransactionMasters.Where(x => x.SlNo == TransactionId).FirstOrDefault();
+                        var customerDetails = contextNew.CustomerDetails.Where(x => x.MobileNo == objTransaction.MobileNo).FirstOrDefault();
+                        var PointExpiry = contextNew.PointsExpiries.Where(x => x.MobileNo == objTransaction.MobileNo && x.Status == "00").ToList();
+                        var NewPointExpiry = contextNew.PointsExpiries.Where(x => x.MobileNo == objTransaction.MobileNo && x.Status == "00").OrderByDescending(y => y.ExpiryDate).FirstOrDefault();
+
+                        var oldTransactionPoints = objTransaction.PointsEarned;
+
+                        objTransaction.PointsEarned = points;
+                        contextNew.TransactionMasters.AddOrUpdate(objTransaction);
+                        contextNew.SaveChanges();
+
+                        foreach (var item in PointExpiry)
+                        {
+                            item.Status = "01";
+                            contextNew.PointsExpiries.AddOrUpdate(item);
+                            contextNew.SaveChanges();
+                        }
+
+                        PointsExpiry objPointExpiry = new PointsExpiry();
+                        objPointExpiry.Points = (customerDetails.Points - oldTransactionPoints) + points;
+                        objPointExpiry.CounterId = NewPointExpiry.CounterId;
+                        objPointExpiry.MobileNo = NewPointExpiry.MobileNo;
+                        objPointExpiry.Datetime = DateTime.Now;
+                        objPointExpiry.EarnDate = NewPointExpiry.EarnDate;
+                        objPointExpiry.ExpiryDate = NewPointExpiry.ExpiryDate;
+                        objPointExpiry.Status = "00";
+                        objPointExpiry.InvoiceNo = NewPointExpiry.InvoiceNo;
+                        objPointExpiry.GroupId = NewPointExpiry.GroupId;
+                        objPointExpiry.CustomerId = NewPointExpiry.CustomerId;
+
+                        contextNew.PointsExpiries.AddOrUpdate(objPointExpiry);
+                        contextNew.SaveChanges();
+
+                        customerDetails.Points = (customerDetails.Points - oldTransactionPoints) + points;
+                        contextNew.CustomerDetails.AddOrUpdate(customerDetails);
+                        contextNew.SaveChanges();
+
+                        using (var context = new CommonDBContext())
+                        {
+                            context.tblAudits.Add(objAudit);
+                            context.SaveChanges();
+                        }
+                        transaction.Commit();
+                        status = true;
+                    }
+                    catch (Exception ex)
+                    {
+                        transaction.Rollback();
+                        newexception.AddException(ex, "ModifyTransaction");
+                    }
+                }
+            }
+            return status;
+        }
+
+
+
     }
 
 }

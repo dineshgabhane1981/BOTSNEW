@@ -30,6 +30,8 @@ namespace BOTS_BL.Models.CommonDB
         [Required]
         [StringLength(50)]
         public string Status { get; set; }
+
+        public DateTime? AddedDate { get; set; }
     }
 
     public class SubDiscussionData
@@ -41,5 +43,7 @@ namespace BOTS_BL.Models.CommonDB
         public string Description { get; set; }
         public string UpdatedBy { get; set; }
         public string Status { get; set; }
+        public string UpdatedDate { get; set; }
+        public DateTime? AddedDate { get; set; }
     }
 }

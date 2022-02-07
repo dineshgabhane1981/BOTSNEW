@@ -16,5 +16,6 @@ namespace BOTS_BL.Models
         public string OutletName { get; set; }
         public string Datetime { get; set; }
         public string DatetimeOriginal { get; set; }
+        public long TransactionId { get; set; }
     }
 }

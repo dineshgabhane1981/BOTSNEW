@@ -96,6 +96,7 @@ namespace WebApp.Controllers
             bool status = false;
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
             objData.objDiscussion.AddedDate = DateTime.Now;
+            objData.objDiscussion.UpdatedDate = DateTime.Now;
             objData.objDiscussion.AddedBy = userDetails.LoginId;
             status = DR.AddDiscussions(objData.objDiscussion);
 

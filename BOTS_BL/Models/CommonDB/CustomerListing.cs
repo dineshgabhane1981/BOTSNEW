@@ -14,9 +14,11 @@ namespace BOTS_BL.Models
         public DateTime? StartedOn { get; set; }
         public string RetailCategory { get; set; }
         public string City { get; set; }
-        public int SMSBalCount { get; set; }
+        public int? OutletCount { get; set; }
         public DateTime? RenewalOn { get; set; }
         public string SourcedBy { get; set; }
         public string RMTeam { get; set; }
+        public string CustomerType { get; set; }
+        public string BillingProductName { get; set; }
     }
 }

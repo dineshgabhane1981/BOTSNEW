@@ -54,7 +54,7 @@
                                     Customers
                                 </a>
                             </li>
-                            @if (roleId == "1" || roleId == "5" || roleId == "6")
+                            @if (roleId == "1" || roleId == "5" || roleId == "7")
                             {
                                 <li>
                                     <a href="#">
@@ -126,7 +126,7 @@
                                     Single Page
                                 </a>
                             </li>
-                            @if (roleId == "1" || roleId == "5" || roleId == "6")
+                            @if (roleId == "1" || roleId == "6" || roleId == "7")
                             {
                                 <li class="@Html.IsSelected(controller: "Feedback", action: "Index")">
                                     <a href="@Url.Action("Index", "Feedback")" class="@Html.IsSelected(controller: "Feedback", action: "Index")">
@@ -147,7 +147,6 @@
                             Executive Summary
                         </a>
                     </li>
-
                     <li>
                         <a href="#">
                             <i class="metismenu-icon pe-7s-diamond"></i>
@@ -311,7 +310,12 @@
                                     Dashboard Login
                                 </a>
                             </li>
-
+                            <li class="@Html.IsSelected(controller: "DashBoardCustomerLogin", action: "Security")">
+                                <a href="@Url.Action("Security", "DashBoardCustomerLogin")" class="@Html.IsSelected(controller: "DashBoardCustomerLogin", action: "Security")">
+                                    <i class="metismenu-icon pe-7s-rocket"></i>
+                                    Security
+                                </a>
+                            </li>
                         </ul>
                     </li>
 

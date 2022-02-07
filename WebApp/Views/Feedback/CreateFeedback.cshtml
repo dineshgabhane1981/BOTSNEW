@@ -430,6 +430,11 @@
                                             <textarea cols="30" rows="5" style="border-radius:10px;"></textarea>
                                         </div>
                                     </div>
+                                    <div class="row">
+                                        <div class="col-md-12 col-xl-12" style="margin-top:20px;text-align:center;">
+                                            <button class="btn btn-primary">Next Page</button>
+                                        </div>
+                                    </div>
                                 }
                                 else
                                 {
@@ -697,19 +702,19 @@
 
                     $("#spnFeedbackQuestions" + id).text($("#txtQuestionHeadingText" + id).val());
                     $("#dvFeedbackQuestions" + id).show();
-                }                
+                }
                 else {
                     $("#spnFeedbackQuestions" + id).text($("#txtQuestionHeadingText" + id).val());
                 }
             }
-            else {                
+            else {
                 var id = item.id.substr(20);
                 if ($("#hdnQuestionType" + id).val() == "Question") {
-                    
+
                     $("#spnFeedbackQuestions" + id).text("");
                     $("#dvFeedbackQuestions" + id).hide();
-                }                
-                else {                    
+                }
+                else {
                     $("#spnFeedbackQuestions" + id).text("");
                 }
             }
