@@ -100,6 +100,8 @@ namespace BOTS_BL.Models
 
         [NotMapped]
         public string RMTeamName { get; set; }
-        
+        [NotMapped]
+        public long MemberBase { get; set; }
+
     }
 }

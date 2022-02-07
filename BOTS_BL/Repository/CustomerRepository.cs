@@ -275,6 +275,7 @@ namespace BOTS_BL.Repository
             using (var context = new CommonDBContext())
             {
                 objGroupDetail = context.tblGroupDetails.Where(x => x.GroupId == GroupId).FirstOrDefault();
+                objGroupDetail.CityName = context.tblCities.Where(x => x.CityId == objGroupDetail.City).Select(y => y.CityName).FirstOrDefault();
             }
             return objGroupDetail;
         }
@@ -683,5 +684,20 @@ namespace BOTS_BL.Repository
             return objmobileappdata;
         }
 
+        public long GetMemberBase(string GroupId)
+        {
+            long MemberBase = 0;
+            string ConnectionString = string.Empty;
+            using (var context = new CommonDBContext())
+            {
+                var DBDetails = context.DatabaseDetails.Where(x => x.GroupId == GroupId).FirstOrDefault();
+                ConnectionString = "Data Source = " + DBDetails.IPAddress + "; Initial Catalog = " + DBDetails.DBName + "; user id = " + DBDetails.DBId + "; password = " + DBDetails.DBPassword + "";
+                using (var contextNew = new BOTSDBContext(ConnectionString))
+                {
+                    MemberBase = contextNew.CustomerDetails.Count();
+                }
+            }
+            return MemberBase;
+        }
     }
 }

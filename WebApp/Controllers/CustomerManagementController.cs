@@ -20,6 +20,7 @@ namespace WebApp.Controllers
         CustomerRepository CR = new CustomerRepository();
         Exceptions newexception = new Exceptions();
         OnBoardingRepository OBR = new OnBoardingRepository();
+        FeedbackModuleRepository FMR = new FeedbackModuleRepository();
         // GET: CustomerManagement
         public ActionResult Index()
         {
@@ -221,7 +222,16 @@ namespace WebApp.Controllers
             return Json(objData, JsonRequestBehavior.AllowGet);
         }
 
-
+        public ActionResult GetCustomerConfigDetails(string groupId)
+        {
+            GroupConfigDetailsViewModel objData = new GroupConfigDetailsViewModel();
+            objData.objGroupDetails = CR.GetGroupDetails(Convert.ToInt32(groupId));
+            objData.objGroupDetails.Logo = FMR.GetLogo(groupId);
+            objData.lstBrandDetails = CR.GetAllBrandsByGroupId(groupId);
+            objData.objGroupDetails.MemberBase = CR.GetMemberBase(groupId);
+            
+            return PartialView("_GroupConfigDetails", objData);
+        }
 
 
     }
