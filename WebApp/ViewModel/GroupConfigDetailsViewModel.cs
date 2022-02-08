@@ -13,6 +13,6 @@ namespace WebApp.ViewModel
         public GroupConfig objGroupConfig { get; set; }
         public List<OutletDetail> lstOutlets { get; set; }
         public List<PointsRulesEarnConfig> objEarnConfig { get; set; }
-        public List<PointsRulesBurnConfig> objBurnConfig { get; set; }
+        public List<PointsRulesBurnConfig> objBurnConfig { get; set; } 
     }
 }
