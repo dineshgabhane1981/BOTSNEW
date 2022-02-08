@@ -43,7 +43,7 @@ namespace BOTS_BL.Repository
             List<SelectListItem> lstCity = new List<SelectListItem>();
             using (var context = new CommonDBContext())
             {
-                var RetailCategory = context.tblCities.Where(x => x.IsActive == true).OrderBy(x=>x.CityName).ToList();
+                var RetailCategory = context.tblCities.Where(x => x.IsActive == true).OrderBy(x => x.CityName).ToList();
 
                 foreach (var item in RetailCategory)
                 {
@@ -99,7 +99,7 @@ namespace BOTS_BL.Repository
             List<SelectListItem> lstRMAssigned = new List<SelectListItem>();
             using (var context = new CommonDBContext())
             {
-                var RetailCategory = context.tblRMAssigneds.Where(x=>x.IsActive==true).ToList();
+                var RetailCategory = context.tblRMAssigneds.Where(x => x.IsActive == true).ToList();
 
                 foreach (var item in RetailCategory)
                 {
@@ -117,7 +117,7 @@ namespace BOTS_BL.Repository
             List<SelectListItem> lstBillingPartner = new List<SelectListItem>();
             using (var context = new CommonDBContext())
             {
-                var RetailCategory = context.tblBillingPartners.Where(x=>x.IsActive==true).ToList();
+                var RetailCategory = context.tblBillingPartners.Where(x => x.IsActive == true).ToList();
 
                 foreach (var item in RetailCategory)
                 {
@@ -135,7 +135,7 @@ namespace BOTS_BL.Repository
             List<SelectListItem> lstBillingProduct = new List<SelectListItem>();
             using (var context = new CommonDBContext())
             {
-                var BillingProduct = context.BOTS_TblBillingPartnerProduct.Where(x=>x.BillingPartnerProductId== BillingPartnerId && x.IsActive ==true).ToList();
+                var BillingProduct = context.BOTS_TblBillingPartnerProduct.Where(x => x.BillingPartnerProductId == BillingPartnerId && x.IsActive == true).ToList();
 
                 foreach (var item in BillingProduct)
                 {
@@ -195,11 +195,11 @@ namespace BOTS_BL.Repository
                 List<tblGroupDetail> objGroupDetails = new List<tblGroupDetail>();
                 using (var context = new CommonDBContext())
                 {
-                    objGroupDetails = context.tblGroupDetails.Where(x => x.IsActive.Value == true && x.IsLive == true).ToList();               
+                    objGroupDetails = context.tblGroupDetails.Where(x => x.IsActive.Value == true && x.IsLive == true).ToList();
                     if (objGroupDetails != null)
                     {
                         foreach (var item in objGroupDetails)
-                        {                            
+                        {
                             CustomerListing objGroup = new CustomerListing();
                             objGroup.GroupId = item.GroupId;
                             objGroup.Product = item.ProductType;
@@ -211,7 +211,7 @@ namespace BOTS_BL.Repository
                             var RetailCategoryName = context.tblCategories.Where(x => x.CategoryId == item.RetailCategory).Select(y => y.CategoryName).FirstOrDefault();
                             objGroup.RetailCategory = RetailCategoryName;
                             var CityName = context.tblCities.Where(x => x.CityId == item.City).Select(y => y.CityName).FirstOrDefault();
-                            objGroup.City = CityName;                            
+                            objGroup.City = CityName;
                             var SourcedByName = context.tblSourcedBies.Where(x => x.SourcedbyId == item.SourcedBy).Select(y => y.SourcedbyName).FirstOrDefault();
                             objGroup.SourcedBy = SourcedByName;
                             var RMTeamName = context.tblRMAssigneds.Where(x => x.RMAssignedId == item.RMAssigned).Select(y => y.RMAssignedName).FirstOrDefault();
@@ -225,7 +225,7 @@ namespace BOTS_BL.Repository
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex,"");
+                newexception.AddException(ex, "");
             }
             return objGroupList;
         }
@@ -259,8 +259,8 @@ namespace BOTS_BL.Repository
             using (var context = new CommonDBContext())
             {
                 var TgroupId = Convert.ToInt32(GroupId);
-               var groupDetail = context.tblGroupDetails.Where(x => x.GroupId == TgroupId).Select(y => y.IsFeedback).FirstOrDefault();
-                if(groupDetail.HasValue)
+                var groupDetail = context.tblGroupDetails.Where(x => x.GroupId == TgroupId).Select(y => y.IsFeedback).FirstOrDefault();
+                if (groupDetail.HasValue)
                 {
                     if (groupDetail.Value)
                         IsFeedback = true;
@@ -274,7 +274,7 @@ namespace BOTS_BL.Repository
             tblGroupDetail objGroupDetail = new tblGroupDetail();
             using (var context = new CommonDBContext())
             {
-                objGroupDetail = context.tblGroupDetails.Where(x => x.GroupId == GroupId).FirstOrDefault();                
+                objGroupDetail = context.tblGroupDetails.Where(x => x.GroupId == GroupId).FirstOrDefault();
             }
             return objGroupDetail;
         }
@@ -698,7 +698,7 @@ namespace BOTS_BL.Repository
             }
             return MemberBase;
         }
-    
+
         public GroupConfig GetGroupConfig(tblGroupDetail objGroupDetails)
         {
             GroupConfig objGroupConfig = new GroupConfig();
@@ -706,14 +706,75 @@ namespace BOTS_BL.Repository
             {
                 objGroupConfig.CityName = context.tblCities.Where(x => x.CityId == objGroupDetails.City).Select(y => y.CityName).FirstOrDefault();
                 objGroupConfig.CategoryName = context.tblCategories.Where(x => x.CategoryId == objGroupDetails.RetailCategory).Select(y => y.CategoryName).FirstOrDefault();
-                objGroupConfig.BillingPartnerName= context.tblBillingPartners.Where(x => x.BillingPartnerId == objGroupDetails.BillingPartner).Select(y => y.BillingPartnerName).FirstOrDefault();
+                objGroupConfig.BillingPartnerName = context.tblBillingPartners.Where(x => x.BillingPartnerId == objGroupDetails.BillingPartner).Select(y => y.BillingPartnerName).FirstOrDefault();
                 objGroupConfig.BillingSystemName = context.BOTS_TblBillingPartnerProduct.Where(x => x.BillingPartnerProductId == objGroupDetails.BillingProduct).Select(y => y.BillingPartnerProductName).FirstOrDefault();
                 objGroupConfig.SourceByName = context.tblSourcedBies.Where(x => x.SourcedbyId == objGroupDetails.SourcedBy).Select(y => y.SourcedbyName).FirstOrDefault();
                 objGroupConfig.CSAssignedName = context.tblRMAssigneds.Where(x => x.RMAssignedId == objGroupDetails.RMAssigned).Select(y => y.RMAssignedName).FirstOrDefault();
             }
-                return objGroupConfig;
+            return objGroupConfig;
         }
 
+        public List<PointsRulesEarnConfig> GetPointsEarnConfig(string groupId)
+        {
+            List<PointsRulesEarnConfig> objData = new List<PointsRulesEarnConfig>();
+            string ConnectionString = string.Empty;
+            using (var context = new CommonDBContext())
+            {
+                var DBDetails = context.DatabaseDetails.Where(x => x.GroupId == groupId).FirstOrDefault();
+                ConnectionString = "Data Source = " + DBDetails.IPAddress + "; Initial Catalog = " + DBDetails.DBName + "; user id = " + DBDetails.DBId + "; password = " + DBDetails.DBPassword + "";
+                using (var contextNew = new BOTSDBContext(ConnectionString))
+                {
+                    var lstBrands = contextNew.BrandDetails.OrderBy(x => x.BrandId).ToList();
+                    var lstEarnData = contextNew.EarnRules.OrderBy(x => x.RuleId).ToList();
+
+                    int count = 0;
+                    foreach (var item in lstBrands)
+                    {
+                        PointsRulesEarnConfig objItem = new PointsRulesEarnConfig();
+                        var objEarnData = lstEarnData.ElementAt(count);
+                        objItem.PointsAllocation = objEarnData.PointsAllocation.Value;
+                        objItem.PointsExpiryVariableDate = objEarnData.PointsExpiryVariableDate.Value;
+                        objItem.MinTxnAmt = objEarnData.MinTxnAmt.Value;
+                        objItem.MaxPointsEarned = objEarnData.MaxPointsEarned.Value;
+                        objItem.PointsProductORBase = item.PointsProductORBase;
+                        objItem.PointsPrecentage = objEarnData.PointsPrecentage.Value;
+
+                        objData.Add(objItem);
+                        count++;
+                    }
+                }
+            }
+            return objData;
+        }
+        public List<PointsRulesBurnConfig> GetPointsBurnConfig(string groupId)
+        {
+            List<PointsRulesBurnConfig> objData = new List<PointsRulesBurnConfig>();
+            string ConnectionString = string.Empty;
+            using (var context = new CommonDBContext())
+            {
+                var DBDetails = context.DatabaseDetails.Where(x => x.GroupId == groupId).FirstOrDefault();
+                ConnectionString = "Data Source = " + DBDetails.IPAddress + "; Initial Catalog = " + DBDetails.DBName + "; user id = " + DBDetails.DBId + "; password = " + DBDetails.DBPassword + "";
+                using (var contextNew = new BOTSDBContext(ConnectionString))
+                {
+                    var lstBurnData = contextNew.BurnRules.OrderBy(x => x.RuleId).ToList();
+                    var lstBrands = contextNew.BrandDetails.OrderBy(x => x.BrandId).ToList();
+                    int count = 0;
+                    foreach (var item in lstBrands)
+                    {
+                        PointsRulesBurnConfig objItem = new PointsRulesBurnConfig();
+                        var objBurnData = lstBurnData.ElementAt(count);
+                        objItem.MinThresholdPointsFirstTime = objBurnData.MinThresholdPointsFirstTime.Value;
+                        objItem.MinThresholdPointsEveryTime = objBurnData.MinThresholdPointsEveryTime.Value;
+                        objItem.MinTxnAmt = objBurnData.MinTxnAmt.Value;                        
+                        objItem.EarnFullWhileBurnFlag = objBurnData.EarnFullWhileBurnFlag;
+
+                        objData.Add(objItem);
+                        count++;
+                    }
+                }
+            }
+            return objData;
+        }
 
     }
 }

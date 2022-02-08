@@ -117,6 +117,7 @@
     <label class="tab1" id="five-tab1" for="five1"> DLC Link</label>
     <label class="tab1" id="six-tab1" for="six1"> Others</label>
 </div>
+
 <div class="panels1">
 
     <div class="multisteps-form__panel p-3 m-3 list-box bg-white panel1" id="one-panel1">
@@ -241,7 +242,7 @@
                         <td>@item.Address</td>
                         <td>@item.City</td>
                         <td>@item.PinCode</td>
-                        <td>Lat - @item.Latitude <br /> Lon - @item.Longitude</td>
+                        <td>Latitude - @item.Latitude <br /> Longitude - @item.Longitude</td>
                         <td style="text-align:center;">--</td>
                     </tr>
                 }
@@ -250,7 +251,206 @@
     </div>
 
     <div class="multisteps-form__panel  p-3 m-3 list-box bg-white panel1" id="two-panel1">
-        Points Rule
+        <table border="1" cellpadding="5" cellspacing="5">
+            <tr>
+                <td>
+                </td>
+                @foreach (var item in Model.lstBrandDetails)
+                {
+                    <td style="font-weight:bold;">@item.BrandName</td>
+                }
+            </tr>
+            <tr>
+                <td>
+                    1 point is Rs.
+                </td>
+                @foreach (var item in Model.objEarnConfig)
+                {
+                    <td>@item.PointsAllocation</td>
+                }
+            </tr>
+            <tr>
+                <td>
+                    Expiry (months)
+                </td>
+                @foreach (var item in Model.objEarnConfig)
+                {
+                    <td>@item.PointsExpiryVariableDate</td>
+                }
+            </tr>
+            <tr>
+                <td>
+                    Type
+                </td>
+                <td>--</td>
+            </tr>
+        </table>
+        <div class="row">
+            <div style="margin-right:20px;">
+                @if (Model.lstBrandDetails.Count > 0)
+                {
+                    var cellCount = Model.lstBrandDetails.Count + 1;
+                    <table border="1" cellpadding="5" cellspacing="5" style="margin-top:20px;">
+                        <tr>
+                            <td style="text-align:center;background-color:lightgray;font-weight:bold;" colspan="@cellCount">
+                                EARN RULES
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                            </td>
+                            @foreach (var item in Model.lstBrandDetails)
+                            {
+                                <td style="font-weight:bold;">@item.BrandName</td>
+                            }
+                        </tr>
+                        <tr>
+                            <td>Min Txn Amt for issuance</td>
+                            @foreach (var item in Model.objEarnConfig)
+                            {
+                                <td>@item.MinTxnAmt</td>
+                            }
+                        </tr>
+                        <tr>
+                            <td>Max Pts Earned (per txn)</td>
+                            @foreach (var item in Model.objEarnConfig)
+                            {
+                                <td>@item.MaxPointsEarned</td>
+                            }
+                        </tr>
+                        <tr>
+                            <td>
+                                Earn on Invoice / Category, Sub-Category,  Products
+                            </td>
+                            @foreach (var item in Model.objEarnConfig)
+                            {
+                                <td>@item.PointsProductORBase</td>
+                            }
+                        </tr>
+                        <tr>
+                            <td>
+                                Earn % Rate
+                            </td>
+                            @foreach (var item in Model.objEarnConfig)
+                            {
+                                <td>@item.PointsPrecentage</td>
+                            }
+                        </tr>
+                        <tr>
+                            <td>
+                                Multiple Earn % Rate
+                            </td>
+                            @foreach (var item in Model.objEarnConfig)
+                            {
+                                <td>--</td>
+                            }
+                        </tr>
+                        <tr>
+                            <td>
+                                Earn Block on
+                            </td>
+                            @foreach (var item in Model.objEarnConfig)
+                            {
+                                <td>--</td>
+                            }
+                        </tr>
+                        <tr>
+                            <td>
+                                Block Codes
+                            </td>
+                            @foreach (var item in Model.objEarnConfig)
+                            {
+                                <td>--</td>
+                            }
+                        </tr>
+                    </table>
+                }
+            </div>
+            <div >
+                @if (Model.lstBrandDetails.Count > 0)
+                {
+                    var cellCount = Model.lstBrandDetails.Count + 1;
+                    <table border="1" cellpadding="5" cellspacing="5" style="margin-top:20px;">
+                        <tr>
+                            <td style="text-align:center;background-color:lightgray;font-weight:bold;" colspan="@cellCount">
+                                BURN RULES
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                            </td>
+                            @foreach (var item in Model.lstBrandDetails)
+                            {
+                                <td style="font-weight:bold;">@item.BrandName</td>
+                            }
+                        </tr>
+                        <tr>
+                            <td>
+                                Min Points Threshold (1st time)
+                            </td>
+                            @foreach (var item in Model.objBurnConfig)
+                            {
+                                <td>@item.MinThresholdPointsFirstTime</td>
+                            }
+                        </tr>
+                        <tr>
+                            <td>
+                                Min Points Threshold (Subsequent time)
+                            </td>
+                            @foreach (var item in Model.objBurnConfig)
+                            {
+                                <td>@item.MinThresholdPointsEveryTime</td>
+                            }
+                        </tr>
+                        <tr>
+                            <td>
+                                Min Invoice Amt
+                            </td>
+                            @foreach (var item in Model.objBurnConfig)
+                            {
+                                <td>@item.MinTxnAmt</td>
+                            }
+                        </tr>
+                        <tr>
+                            <td>
+                                Points as a % of Invoice Amt
+                            </td>
+                            @foreach (var item in Model.objBurnConfig)
+                            {
+                                <td>--</td>
+                            }
+                        </tr>
+                        <tr>
+                            <td>
+                                Earn while Burn
+                            </td>
+                            @foreach (var item in Model.objBurnConfig)
+                            {
+                                <td>@item.EarnFullWhileBurnFlag</td>
+                            }
+                        </tr>
+                        <tr>
+                            <td>
+                                Burn Block on
+                            </td>
+                            @foreach (var item in Model.objBurnConfig)
+                            {
+                                <td>--</td>
+                            }
+                        </tr>
+                        <tr>
+                            <td>
+                                Block Codes
+                            </td>
+                            @foreach (var item in Model.objBurnConfig)
+                            {
+                                <td>--</td>
+                            }
+                        </tr>
+                    </table>
+                }
+            </div>
+        </div>
     </div>
     <div class="multisteps-form__panel  p-3 m-3 list-box bg-white panel1" id="three-panel1">
         Communication

@@ -18,6 +18,8 @@ namespace BOTS_BL.Models
             : base(connectionStringName)
         {
         }
+        public virtual DbSet<BurnRule> BurnRules { get; set; }
+        public virtual DbSet<EarnRule> EarnRules { get; set; }
         public virtual DbSet<BulkUploadCustList> BulkUploadCustLists { get; set; }
         public virtual DbSet<feedback_FeedbackMaster> feedback_FeedbackMaster { get; set; }
         public virtual DbSet<SMSEmailMaster> SMSEmailMasters { get; set; }

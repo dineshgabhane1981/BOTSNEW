@@ -139,6 +139,7 @@
     <Compile Include="Exceptions.cs" />
     <Compile Include="Models\BrandDetail.cs" />
     <Compile Include="Models\BulkUploadCustList.cs" />
+    <Compile Include="Models\BurnRule.cs" />
     <Compile Include="Models\Campaign\CampaignTiles.cs" />
     <Compile Include="Models\Campaign\LoyaltyKPIs.cs" />
     <Compile Include="Models\ChitaleModel\CancelOrderDetail.cs" />
@@ -211,6 +212,7 @@
     <Compile Include="Models\CommonDB\NPCSM.cs" />
     <Compile Include="Models\CommonDB\OTPDetails.cs" />
     <Compile Include="Models\CommonDB\PODetail.cs" />
+    <Compile Include="Models\CommonDB\PointsRulesConfig.cs" />
     <Compile Include="Models\CommonDB\POItem.cs" />
     <Compile Include="Models\CommonDB\ReferAndEarn.cs" />
     <Compile Include="Models\CommonDB\ReferralBonusSM.cs" />
@@ -239,6 +241,7 @@
     <Compile Include="Models\Dashboard\DashboardMemberSegment.cs" />
     <Compile Include="Models\DBContext.cs" />
     <Compile Include="Models\DiscussionReport.cs" />
+    <Compile Include="Models\EarnRule.cs" />
     <Compile Include="Models\ExecutiveSummary.cs" />
     <Compile Include="Models\FeedbackModule\DashboardNewAndExisting.cs" />
     <Compile Include="Models\FeedbackModule\Feedback_Content.cs" />

@@ -232,7 +232,8 @@ namespace WebApp.Controllers
             objData.objGroupConfig = CR.GetGroupConfig(objData.objGroupDetails);
             objData.objGroupConfig.MemberBase = CR.GetMemberBase(groupId);
             objData.lstOutlets = CR.GetAllOutletsByGroupId(groupId);
-
+            objData.objEarnConfig = CR.GetPointsEarnConfig(groupId);
+            objData.objBurnConfig = CR.GetPointsBurnConfig(groupId);
 
             return PartialView("_GroupConfigDetails", objData);
         }
