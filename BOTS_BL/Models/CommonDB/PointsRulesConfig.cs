@@ -33,4 +33,29 @@ namespace BOTS_BL.Models
         public string BlockCodes { get; set; }
     }
 
+    public class SMSConfig
+    {
+        public string Enrollment { get; set; }
+        public string EnrollmentAndEarn  { get; set; }
+        public string Earn { get; set; }
+        public string OTP { get; set; }
+        public string Burn { get; set; }
+        public string CancelEarn  { get; set; }
+        public string CancelBurn { get; set; }
+        public string AnyCancel  { get; set; }
+        public string BalanceInquiry { get; set; }
+    }
+    public class WAConfig
+    {
+        public string Enrollment { get; set; }
+        public string EnrollmentAndEarn { get; set; }
+        public string Earn { get; set; }
+        public string OTP { get; set; }
+        public string Burn { get; set; }
+        public string CancelEarn { get; set; }
+        public string CancelBurn { get; set; }
+        public string AnyCancel { get; set; }
+        public string BalanceInquiry { get; set; }
+    }
+
 }

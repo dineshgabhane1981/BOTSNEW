@@ -44,7 +44,8 @@
     #three1:checked ~ .panels1 #three-panel1,
     #four1:checked ~ .panels1 #four-panel1,
     #five1:checked ~ .panels1 #five-panel1,
-    #six1:checked ~ .panels1 #six-panel1 {
+    #six1:checked ~ .panels1 #six-panel1,
+    #seven1:checked ~ .panels1 #seven-panel1 {
         display: block
     }
 
@@ -53,7 +54,8 @@
     #three1:checked ~ .tabs1 #three-tab1,
     #four1:checked ~ .tabs1 #four-tab1,
     #five1:checked ~ .tabs1 #five-tab1,
-    #six1:checked ~ .tabs1 #six-tab1 {
+    #six1:checked ~ .tabs1 #six-tab1,
+    #seven1:checked ~ .tabs1 #seven-tab1 {
         background: #fff !important;
         color: #000;
         border-top: 3px solid #fff;
@@ -109,6 +111,7 @@
 <input class="radio1" id="four1" name="group" type="radio">
 <input class="radio1" id="five1" name="group" type="radio">
 <input class="radio1" id="six1" name="group" type="radio">
+<input class="radio1" id="seven1" name="group" type="radio">
 <div class="tabs1">
     <label class="tab1" id="one-tab1" for="one1"> Group, Brand & Outlet</label>
     <label class="tab1" id="two-tab1" for="two1"> Points Rule</label>
@@ -116,6 +119,7 @@
     <label class="tab1" id="four-tab1" for="four1"> Perpetual Campaigns</label>
     <label class="tab1" id="five-tab1" for="five1"> DLC Link</label>
     <label class="tab1" id="six-tab1" for="six1"> Others</label>
+    <label class="tab1" id="seven-tab1" for="seven1"> Discussions</label>
 </div>
 
 <div class="panels1">
@@ -453,7 +457,317 @@
         </div>
     </div>
     <div class="multisteps-form__panel  p-3 m-3 list-box bg-white panel1" id="three-panel1">
-        Communication
+        @Html.HiddenFor(model => model.SMSDetailsCount, new { @id = "hdnSMSDetailsCount" })
+        @Html.DropDownListFor(x => Model.lstOutletList.Count, new SelectList(Model.lstOutletList, "Value", "Text"), "Select Outlet", htmlAttributes: new { @class = "input50", @id = "ddlOutlets", style = "margin-top:20px;" })
+        <div class="row" style="margin-top:20px;">
+            <div style="margin-right:20px;">
+                <table border="1" cellpadding="5" cellspacing="5">
+                    <tr>
+                        <td>SMS</td>
+                        <td>NA</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            SMS Sender ID
+                        </td>
+                        @if (Model.objSMSDetails != null)
+                        {
+                            <td>@Model.objSMSDetails.SenderId</td>
+                        }
+                        else
+                        {
+                            <td></td>
+                        }
+
+                    </tr>
+                    <tr>
+                        <td>
+                            SMS Username
+                        </td>
+                        @if (Model.objSMSDetails != null)
+                        {
+                            <td>@Model.objSMSDetails.TxnUserName</td>
+                        }
+                        else
+                        {
+                            <td></td>
+                        }
+                    </tr>
+                    <tr>
+                        <td>
+                            SMS Password
+                        </td>
+                        @if (Model.objSMSDetails != null)
+                        {
+                            <td>@Model.objSMSDetails.TxnPassword</td>
+                        }
+                        else
+                        {
+                            <td></td>
+                        }
+                    </tr>
+                    <tr>
+                        <td>
+                            SMS link
+                        </td>
+                        @if (Model.objSMSDetails != null)
+                        {
+                            <td>@Model.objSMSDetails.TxnUrl</td>
+                        }
+                        else
+                        {
+                            <td></td>
+                        }
+                    </tr>
+                </table>
+            </div>
+            <div style="margin-left:20px;">
+                <table border="1" cellpadding="5" cellspacing="5">
+                    <tr>
+                        <td>Whatsapp </td>
+                        <td>NA</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Whatsapp Number
+                        </td>
+                        <td>NA</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            WA Username
+                        </td>
+                        <td>NA</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            WA Password
+                        </td>
+                        <td>NA</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            WA link
+                        </td>
+                        <td>NA</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        <div class="row" style="margin-top:20px;">
+            <div style="margin-right:20px;">
+                <table border="1" cellpadding="5" cellspacing="5">
+                    <tr style="background-color: lightgray; font-weight: bold;">
+                        <td>Element</td>
+                        <td>
+                            SMS Script
+                        </td>
+                        <td style="width:50px;"></td>
+                        <td>WA Script</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Enrollment
+                        </td>
+                        @if (Model.objSMSConfig != null)
+                        {
+                            <td>@Model.objSMSConfig.Enrollment</td>
+                        }
+                        else
+                        {
+                            <td></td>
+                        }
+                        <td></td>
+                        @if (Model.objWAConfig != null)
+                        {
+                            <td>@Model.objWAConfig.Enrollment</td>
+                        }
+                        else
+                        {
+                            <td></td>
+                        }
+
+                    </tr>
+                    <tr>
+                        <td>
+                            Enrollment & Earn
+                        </td>
+                        @if (Model.objSMSConfig != null)
+                        {
+                            <td>@Model.objSMSConfig.EnrollmentAndEarn</td>
+                        }
+                        else
+                        {
+                            <td></td>
+                        }
+                        <td></td>
+                        @if (Model.objWAConfig != null)
+                        {
+                            <td>@Model.objWAConfig.EnrollmentAndEarn</td>
+                        }
+                        else
+                        {
+                            <td></td>
+                        }
+                    </tr>
+                    <tr>
+                        <td>
+                            Earn
+                        </td>
+                        @if (Model.objSMSConfig != null)
+                        {
+                            <td>@Model.objSMSConfig.Earn</td>
+                        }
+                        else
+                        {
+                            <td></td>
+                        }
+                        <td></td>
+                        @if (Model.objWAConfig != null)
+                        {
+                            <td>@Model.objWAConfig.Earn</td>
+                        }
+                        else
+                        {
+                            <td></td>
+                        }
+                    </tr>
+                    <tr>
+                        <td>
+                            OTP
+                        </td>
+                        @if (Model.objSMSConfig != null)
+                        {
+                            <td>@Model.objSMSConfig.OTP</td>
+                        }
+                        else
+                        {
+                            <td></td>
+                        }
+                        <td></td>
+                        @if (Model.objWAConfig != null)
+                        {
+                            <td>@Model.objWAConfig.OTP</td>
+                        }
+                        else
+                        {
+                            <td></td>
+                        }
+                    </tr>
+                    <tr>
+                        <td>
+                            Burn
+                        </td>
+                        @if (Model.objSMSConfig != null)
+                        {
+                            <td>@Model.objSMSConfig.Burn</td>
+                        }
+                        else
+                        {
+                            <td></td>
+                        }
+                        <td></td>
+                        @if (Model.objWAConfig != null)
+                        {
+                            <td>@Model.objWAConfig.Burn</td>
+                        }
+                        else
+                        {
+                            <td></td>
+                        }
+                    </tr>
+                    <tr>
+                        <td>
+                            Cancel Earn
+                        </td>
+                        @if (Model.objSMSConfig != null)
+                        {
+                            <td>@Model.objSMSConfig.CancelEarn</td>
+                        }
+                        else
+                        {
+                            <td></td>
+                        }
+                        <td></td>
+                        @if (Model.objWAConfig != null)
+                        {
+                            <td>@Model.objWAConfig.CancelEarn</td>
+                        }
+                        else
+                        {
+                            <td></td>
+                        }
+                    </tr>
+                    <tr>
+                        <td>
+                            Cancel Burn
+                        </td>
+                        @if (Model.objSMSConfig != null)
+                        {
+                            <td>@Model.objSMSConfig.CancelBurn</td>
+                        }
+                        else
+                        {
+                            <td></td>
+                        }
+                        <td></td>
+                        @if (Model.objWAConfig != null)
+                        {
+                            <td>@Model.objWAConfig.CancelBurn</td>
+                        }
+                        else
+                        {
+                            <td></td>
+                        }
+                    </tr>
+                    <tr>
+                        <td>
+                            Any Cancel
+                        </td>
+                        @if (Model.objSMSConfig != null)
+                        {
+                            <td>@Model.objSMSConfig.AnyCancel</td>
+                        }
+                        else
+                        {
+                            <td></td>
+                        }
+                        <td></td>
+                        @if (Model.objWAConfig != null)
+                        {
+                            <td>@Model.objWAConfig.AnyCancel</td>
+                        }
+                        else
+                        {
+                            <td></td>
+                        }
+                    </tr>
+                    <tr>
+                        <td>
+                            Balance Inquiry
+                        </td>
+                        @if (Model.objSMSConfig != null)
+                        {
+                            <td>@Model.objSMSConfig.BalanceInquiry</td>
+                        }
+                        else
+                        {
+                            <td></td>
+                        }
+                        <td></td>
+                        @if (Model.objWAConfig != null)
+                        {
+                            <td>@Model.objWAConfig.BalanceInquiry</td>
+                        }
+                        else
+                        {
+                            <td></td>
+                        }
+                    </tr>
+                </table>
+            </div>
+        </div>
     </div>
     <div class="multisteps-form__panel  p-3 m-3 list-box bg-white panel1" id="four-panel1">
         <div class="row">
@@ -515,7 +829,7 @@
                 </table>
             </div>
         </div>
-      
+
         <div class="row" style="margin-top:20px;">
             <div>
                 <table border="1" cellpadding="5" cellspacing="5">
@@ -653,7 +967,7 @@
             </div>
 
         </div>
-        
+
         <div class="row" style="margin-top:20px;">
             <div>
                 <table border="1" cellpadding="5" cellspacing="5">
@@ -700,7 +1014,7 @@
             <div style="margin-right:20px;">
                 <table border="1" cellpadding="10" cellspacing="10">
                     <tr>
-                        <td colspan="4" style="text-align:center;">Based on TXN COUNT</td>
+                        <td colspan="4" style="text-align:center;background-color:lightgray;font-weight:bold;">Based on TXN COUNT</td>
                     </tr>
                     <tr>
                         <td colspan="2">
@@ -727,7 +1041,7 @@
             <div style="margin-right:20px;">
                 <table border="1" cellpadding="10" cellspacing="10">
                     <tr>
-                        <td colspan="4" style="text-align:center;">
+                        <td colspan="4" style="text-align: center; background-color: lightgray; font-weight: bold; ">
                             Based on INVOICE AMOUNT (CUMM)
                         </td>
                     </tr>
@@ -756,7 +1070,7 @@
             <div>
                 <table border="1" cellpadding="10" cellspacing="10">
                     <tr>
-                        <td colspan="3" style="text-align:center;">
+                        <td colspan="3" style="text-align: center; background-color: lightgray; font-weight: bold; ">
                             Based on INVOICE AMOUNT (CUMM)
                         </td>
                     </tr>
@@ -782,5 +1096,10 @@
             </div>
         </div>
     </div>
-</div>
 
+    <div class="multisteps-form__panel  p-3 m-3 list-box bg-white panel1" id="seven-panel1">
+        <div id="dvDiscussionList" style="overflow-x:auto;">
+            
+        </div>
+    </div>
+</div>

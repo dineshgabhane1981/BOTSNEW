@@ -21,6 +21,7 @@ namespace WebApp.Controllers
         Exceptions newexception = new Exceptions();
         OnBoardingRepository OBR = new OnBoardingRepository();
         FeedbackModuleRepository FMR = new FeedbackModuleRepository();
+        ReportsRepository RR = new ReportsRepository();
         // GET: CustomerManagement
         public ActionResult Index()
         {
@@ -234,6 +235,23 @@ namespace WebApp.Controllers
             objData.lstOutlets = CR.GetAllOutletsByGroupId(groupId);
             objData.objEarnConfig = CR.GetPointsEarnConfig(groupId);
             objData.objBurnConfig = CR.GetPointsBurnConfig(groupId);
+
+            var connectionString = CR.GetCustomerConnString(groupId);            
+            objData.lstOutletList = RR.GetOutletList(groupId, connectionString);
+            objData.objSMSDetails = CR.GetAllSMSDetails(groupId);
+            if(objData.objSMSDetails !=null)
+            {
+                objData.SMSDetailsCount = 1;
+            }
+            else
+            {
+                objData.SMSDetailsCount = 0;
+            }
+            if(objData.SMSDetailsCount==1)
+            {
+                objData.objSMSConfig = CR.GetSMSEmailMasterDetails(groupId);
+                objData.objWAConfig = CR.GetWAEmailMasterDetails(groupId);
+            }
 
             return PartialView("_GroupConfigDetails", objData);
         }

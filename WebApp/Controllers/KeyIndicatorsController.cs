@@ -78,14 +78,14 @@ namespace WebApp.Controllers
             referralnameList.Add("'Issued'");
             referralnameList.Add("'Redeemed'");
             referralnameList.Add("'Expired'");
-            referralnameList.Add("'Unused'");            
+            referralnameList.Add("'Unused'");
             var lstreferralNames = string.Join(",", referralnameList);
 
             List<long> referraldataList = new List<long>();
             referraldataList.Add(objMemberWebPage.ReferralPointsIssued);
             referraldataList.Add(objMemberWebPage.ReferralPointsRedeem);
             referraldataList.Add(objMemberWebPage.ReferralPointsExpired);
-            referraldataList.Add(objMemberWebPage.ReferralPointsUnused);            
+            referraldataList.Add(objMemberWebPage.ReferralPointsUnused);
             var lstreferraldata = string.Join(",", referraldataList);
 
             ViewBag.ReferralNames = lstreferralNames.Trim();
@@ -111,7 +111,7 @@ namespace WebApp.Controllers
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
 
             List<MemberPageRefData> objMemberPageRefData = new List<MemberPageRefData>();
-            objMemberPageRefData = KR.GetMemberPageRefData(userDetails.GroupId, type, userDetails.connectionString);           
+            objMemberPageRefData = KR.GetMemberPageRefData(userDetails.GroupId, type, userDetails.connectionString);
             return new JsonResult() { Data = objMemberPageRefData, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
 
@@ -189,7 +189,7 @@ namespace WebApp.Controllers
                     }
                 }
                 var GroupDetails = CR.GetGroupDetails(Convert.ToInt32(userDetails.GroupId));
-               
+
                 if (!GroupDetails.IsMasked)
                 {
                     table.Columns.Remove("MaskedMobileNo");
@@ -215,7 +215,7 @@ namespace WebApp.Controllers
                     worksheet.Cell(2, 2).Value = DateTime.Now.ToString();
                     worksheet.Cell(3, 1).Value = "Filter";
                     string category = "";
-                    if(type =="1")
+                    if (type == "1")
                     {
                         category = "High Spend, Recent Member";
                     }
@@ -305,7 +305,7 @@ namespace WebApp.Controllers
             return new JsonResult() { Data = objNonTransactingTxn, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
 
-        public JsonResult GetNonRedemptionTxnResult(int type,int daysType)
+        public JsonResult GetNonRedemptionTxnResult(int type, int daysType)
         {
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
             List<NonRedemptionTxn> objNonRedemptionTxn = new List<NonRedemptionTxn>();
@@ -371,7 +371,7 @@ namespace WebApp.Controllers
                         row[prop.Name] = prop.GetValue(item) ?? DBNull.Value;
 
                     table.Rows.Add(row);
-                }               
+                }
                 if (userDetails.LoginType == "1" || userDetails.LoginType == "6" || userDetails.LoginType == "7")
                 {
                     table.Columns.Remove("MaskedMobileNo");
@@ -437,7 +437,7 @@ namespace WebApp.Controllers
             {
                 var userDetails = (CustomerLoginDetail)Session["UserSession"];
                 List<NonRedemptionTxn> objNonRedemptionTxn = new List<NonRedemptionTxn>();
-                objNonRedemptionTxn = KR.GetNonRedemptionTxnData(userDetails.GroupId, type, daysType, userDetails.connectionString);                
+                objNonRedemptionTxn = KR.GetNonRedemptionTxnData(userDetails.GroupId, type, daysType, userDetails.connectionString);
 
                 PropertyDescriptorCollection properties = TypeDescriptor.GetProperties(typeof(NonRedemptionTxn));
                 foreach (PropertyDescriptor prop in properties)
@@ -490,14 +490,14 @@ namespace WebApp.Controllers
                     worksheet.Cell(2, 2).Value = DateTime.Now.ToString();
                     worksheet.Cell(3, 1).Value = "Duration";
                     string pointbalance = "";
-                    if (type ==1)
+                    if (type == 1)
                     { pointbalance = "High"; }
                     if (type == 2)
-                    {  pointbalance = "Medium"; }
+                    { pointbalance = "Medium"; }
                     if (type == 3)
-                    {  pointbalance = "Low"; }
+                    { pointbalance = "Low"; }
                     string days = "";
-                    if(daysType ==1)
+                    if (daysType == 1)
                     {
                         days = "Less than 90 days";
                     }
@@ -509,7 +509,7 @@ namespace WebApp.Controllers
                     {
                         days = "More than 180 days";
                     }
-                    worksheet.Cell(3, 2).Value = pointbalance + "-"+ days;
+                    worksheet.Cell(3, 2).Value = pointbalance + "-" + days;
                     worksheet.Cell(6, 1).InsertTable(table);
                     //wb.Worksheets.Add(table);
                     using (MemoryStream stream = new MemoryStream())
@@ -528,6 +528,14 @@ namespace WebApp.Controllers
             {
                 return null;
             }
+        }
+
+        public ActionResult DLCCreation()
+        {
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            List<DLCCreation> lstData = new List<DLCCreation>();
+            lstData = KR.GetDLCCreationData(userDetails.GroupId);
+            return View(lstData);
         }
     }
 }

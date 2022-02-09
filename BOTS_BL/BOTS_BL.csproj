@@ -249,6 +249,7 @@
     <Compile Include="Models\Dashboard\DashboardMemberSegment.cs" />
     <Compile Include="Models\DBContext.cs" />
     <Compile Include="Models\DiscussionReport.cs" />
+    <Compile Include="Models\DLCCreation.cs" />
     <Compile Include="Models\EarnRule.cs" />
     <Compile Include="Models\ExecutiveSummary.cs" />
     <Compile Include="Models\FeedbackModule\DashboardNewAndExisting.cs" />
@@ -317,6 +318,7 @@
     <Compile Include="Models\SMSEmailMaster.cs" />
     <Compile Include="Models\StoreDetail.cs" />
     <Compile Include="Models\TransferPointsDetail.cs" />
+    <Compile Include="Models\WhatsAppSMSMaster.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repository\CampaignRepository.cs" />
     <Compile Include="Repository\ChitaleDashboardRepository.cs" />

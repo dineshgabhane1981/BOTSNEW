@@ -244,6 +244,15 @@
                                     Digital Loyalty Card
                                 </a>
                             </li>
+                            @if (roleId != null)
+                            {
+                                <li class="@Html.IsSelected(controller: "KeyIndicators", action: "DLCCreation")">
+                                    <a class="@Html.IsSelected(controller: "KeyIndicators", action: "DLCCreation")" href="@Url.Action("DLCCreation", "KeyIndicators")">
+                                        <i class="metismenu-icon"></i>
+                                        DLC Creation
+                                    </a>
+                                </li>
+                            }
                         </ul>
                     </li>
 
@@ -268,7 +277,7 @@
                                 </li>*@
                         </ul>
                     </li>
-                    
+
                     <li>
                         <a href="#">
                             <i class="metismenu-icon pe-7s-speaker"></i>

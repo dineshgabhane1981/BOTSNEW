@@ -18,6 +18,8 @@ namespace BOTS_BL.Models
             : base(connectionStringName)
         {
         }
+        public virtual DbSet<DLCCreation> DLCCreations { get; set; }
+        public virtual DbSet<WhatsAppSMSMaster> WhatsAppSMSMasters { get; set; }
         public virtual DbSet<BurnRule> BurnRules { get; set; }
         public virtual DbSet<EarnRule> EarnRules { get; set; }
         public virtual DbSet<BulkUploadCustList> BulkUploadCustLists { get; set; }

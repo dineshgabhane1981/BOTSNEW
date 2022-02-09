@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using System.Web.Mvc;
 using BOTS_BL.Models;
 
 namespace WebApp.ViewModel
@@ -13,6 +14,11 @@ namespace WebApp.ViewModel
         public GroupConfig objGroupConfig { get; set; }
         public List<OutletDetail> lstOutlets { get; set; }
         public List<PointsRulesEarnConfig> objEarnConfig { get; set; }
-        public List<PointsRulesBurnConfig> objBurnConfig { get; set; } 
+        public List<PointsRulesBurnConfig> objBurnConfig { get; set; }
+        public List<SelectListItem> lstOutletList { get; set; }
+        public SMSDetail objSMSDetails { get; set; }
+        public int SMSDetailsCount { get; set; }
+        public SMSConfig objSMSConfig { get; set; }
+        public WAConfig objWAConfig { get; set; }
     }
 }
