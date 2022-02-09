@@ -115,15 +115,21 @@ namespace BOTS_BL.Models
         public string OutletName { get; set; }
         public string MobileNo { get; set; }
         public string CustomerName { get; set; }
-        public DateTime? FirstTxnDt { get; set; }
-        public int? NoofTxn { get; set; }
-        public DateTime? EnrolledDt { get; set; }
+        public DateTime? FirstTxnDate { get; set; }
+        public DateTime? LastTxnDate { get; set; }
+        public int? NoOfTxn { get; set; }
+        public DateTime? EnrolledDate { get; set; }
         public decimal? TotalAvailablePoints { get; set; }
         public decimal? TotalEarn { get; set; }
         public decimal? TotalBurn { get; set; }
         public decimal? TotalSpend { get; set; }        
         public decimal? BonusPoints { get; set; }
-        public DateTime? LastTxnDt { get; set; }
+        public decimal? PointsEarn { get; set; }
+        public decimal? PointsBurn { get; set; }
+        public string InvoiceNo { get; set; }
+        public string Type { get; set; }
+        public DateTime TxnDate { get; set; }
+        public decimal? InvoiceAmt { get; set; }
     }
     public class TransactionTypeReport
     {

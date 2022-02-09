@@ -1,29 +1,31 @@
-﻿
+﻿@model WebApp.ViewModel.CreateOwnReportViewModel
+
 @{
     ViewBag.Title = "CreateOwnSegment";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <div class="app-main__inner" id="dvall">
-    <div class="mb-3 pr-3 pt-3 pl-3 card" style="padding-bottom:20px;">
-        @*<div class="col-sm-8" style="display:flex;padding-bottom: 10px;margin-top:5px;">*@
-        <div class="row mt-4">
-            <div class="col-md-8 col-xl-8">
-                <input type="radio" checked id="rdnSliceandDice" name="btdornot" /><b> Slice And Dice </b> &nbsp;&nbsp;&nbsp;&nbsp;
-                <input type="radio" id="rdnTxncnt" name="btdornot" /><b> Txn Count and Spend DrillDown</b> &nbsp;&nbsp;&nbsp;&nbsp;
+    <div class="container-fluid pt-3 pl-3 pr-3 pb-3">
+        <div class="mb-3 pr-3 pt-3 pl-3 card" style="padding-bottom:20px;">
+            @*<div class="col-sm-8" style="display:flex;padding-bottom: 10px;margin-top:5px;">*@
+            <div class="row mt-4">
+                <div class="col-md-8 col-xl-8">
+                    <input type="radio" checked id="rdnSliceandDice" name="btdornot" /><b> Slice And Dice </b> &nbsp;&nbsp;&nbsp;&nbsp;
+                    <input type="radio" id="rdnTxncnt" name="btdornot" /><b> Txn Count and Spend DrillDown</b> &nbsp;&nbsp;&nbsp;&nbsp;
+                </div>
             </div>
-        </div>
 
-        @*</div>*@
-    </div>
-    <div class="mb-3 pr-3 pt-3 pl-3 card" style="padding-bottom:20px;" id="divSliceDice">
-        <div class="row mt-4">
-            <div class="col-md-8 col-xl-8">
-                <span id="spnFilter" style="font-size:17px;font-weight:bold;"></span>
-            </div>
+            @*</div>*@
         </div>
-       
-        @*<h6><b>Select Member Demographics</b></h6>
+        <div class="mb-3 pr-3 pt-3 pl-3 card" style="padding-bottom:20px;" id="divSliceDice">
+            <div class="row mt-4">
+                <div class="col-md-8 col-xl-8">
+                    <span id="spnFilter" style="font-size:17px;font-weight:bold;"></span>
+                </div>
+            </div>
+
+            @*<h6><b>Select Member Demographics</b></h6>
         <div class="row mt-4" id="secmember">
             <div class="col-md-3 col-xl-3">
                 Gender
@@ -52,92 +54,92 @@
                 @Html.DropDownList("Source", new SelectList(ViewBag.lstSourceList, "Value", "Text"), htmlAttributes: new { @class = "input50", @id = "ddlSource" })
             </div>
         </div>*@
-        <h6><b>Select Transactional Variables</b></h6>
+            <h6><b>Select Transactional Variables</b></h6>
 
-        <div class="row mt-4" id="secTransaction">
-            <div class="col-md-3 col-xl-3">
-                Enrolled Since (days)
-            </div>
-            <div class="col-md-3 col-xl-3">
-                <input type="radio" id="rdndaterange" name="btdornot" /> Date Range &nbsp;&nbsp;
-                <input type="radio" id="rdnenrolled" name="btdornot" /> Enrolled Since
-            </div>
-            @*<div class="col-md-2 col-xl-2">
+            <div class="row mt-4" id="secTransaction">
+                <div class="col-md-3 col-xl-3">
+                    Enrolled Since (days)
+                </div>
+                <div class="col-md-3 col-xl-3">
+                    <input type="radio" id="rdndaterange" name="btdornot" /> Date Range &nbsp;&nbsp;
+                    <input type="radio" id="rdnenrolled" name="btdornot" /> Enrolled Since
+                </div>
+                @*<div class="col-md-2 col-xl-2">
                 @Html.DropDownList("Entrolled", new SelectList(ViewBag.lstEnrolledList, "Value", "Text"), htmlAttributes: new { @class = "input50", @id = "ddlEnrolled" })
             </div>*@
-            <div id="divdaterange" class="col-md-6 col-xl-4" style="display:none">
-                <input type="date" id="txtEnrollfromdt" class="input50" placeholder="From Enrolled" />
-                <input type="date" id="txtEnrolltodt" class="input50" placeholder="To Enrolled" />
+                <div id="divdaterange" class="col-md-6 col-xl-4" style="display:none">
+                    <input type="date" id="txtEnrollfromdt" class="input50" placeholder="From Enrolled" />
+                    <input type="date" id="txtEnrolltodt" class="input50" placeholder="To Enrolled" />
 
+                </div>
+                <div id="divdays" class="col-md-6 col-xl-4" style="display:none">
+                    <input type="text" id="txtEnrolldays" class="input50" placeholder="Enter no of days" />
+
+
+                </div>
             </div>
-            <div id="divdays" class="col-md-6 col-xl-4" style="display:none">
-                <input type="text" id="txtEnrolldays" class="input50" placeholder="Enter no of days" />
+            <div class="row mt-2">
+                <div class="col-md-3 col-xl-3">
+                    Not transacted since (days)
+                </div>
 
-
-            </div>
-        </div>
-        <div class="row mt-2">
-            <div class="col-md-3 col-xl-3">
-                Not transacted since (days)
-            </div>
-
-            @*<div class="col-md-2 col-xl-2">
+                @*<div class="col-md-2 col-xl-2">
                 @Html.DropDownList("NonTransacted", new SelectList(ViewBag.lstnontransactedList, "Value", "Text"), htmlAttributes: new { @class = "input50", @id = "ddlNontrasacted" })
             </div>*@
-            <div class="col-md-6 col-xl-4">
-                @*<input type="text" id="txtnontransactedmin" class="input50" placeholder="From NotTransacted" style="display:none" />
+                <div class="col-md-6 col-xl-4">
+                    @*<input type="text" id="txtnontransactedmin" class="input50" placeholder="From NotTransacted" style="display:none" />
                 <input type="text" id="txtnontransactedmax" class="input50" placeholder="To NotTransacted" style="display:none" />*@
-                <input type="text" id="txtnontransactedmax" class="input50" placeholder="Enter no of days" />
+                    <input type="text" id="txtnontransactedmax" class="input50" placeholder="Enter no of days" />
+                </div>
             </div>
-        </div>
-        <div class="row mt-2">
-            <div class="col-md-3 col-xl-3">
-                Spends(Rs.)
-            </div>
-            <div class="col-md-2 col-xl-2">
-                @Html.DropDownList("Spends", new SelectList(ViewBag.lstSpendList, "Value", "Text"), htmlAttributes: new { @class = "input50", @id = "ddlSpend" })
-            </div>
-            <div class="col-md-6 col-xl-4">
-                <input type="number" id="txtspendmin" class="input50" placeholder="From Spend" style="display:none" />
-                <input type="number" id="txtspendmax" class="input50" placeholder="To Spend" style="display:none" />
+            <div class="row mt-2">
+                <div class="col-md-3 col-xl-3">
+                    Spends(Rs.)
+                </div>
+                <div class="col-md-2 col-xl-2">
+                    @Html.DropDownList("Spends", new SelectList(Model.LstSpendList, "Value", "Text"), htmlAttributes: new { @class = "input50", @id = "ddlSpend" })
+                </div>
+                <div class="col-md-6 col-xl-4">
+                    <input type="number" id="txtspendmin" class="input50" placeholder="From Spend" style="display:none" />
+                    <input type="number" id="txtspendmax" class="input50" placeholder="To Spend" style="display:none" />
 
+                </div>
             </div>
-        </div>
-        <div class="row mt-2">
-            <div class="col-md-3 col-xl-3">
-                Txn Count
-            </div>
-            <div class="col-md-2 col-xl-2">
-                @Html.DropDownList("TxnCount", new SelectList(ViewBag.lstSpendList, "Value", "Text"), htmlAttributes: new { @class = "input50", @id = "ddltxncount" })
-            </div>
-            <div class="col-md-3 col-xl-4">
-                <input type="number" id="txttxncountmin" class="input50" placeholder="From Txn Count" style="display:none" />
-                <input type="number" id="txttxncountmax" class="input50" placeholder="To Txn Count" style="display:none" />
+            <div class="row mt-2">
+                <div class="col-md-3 col-xl-3">
+                    Txn Count
+                </div>
+                <div class="col-md-2 col-xl-2">
+                    @Html.DropDownList("TxnCount", new SelectList(Model.LstSpendList, "Value", "Text"), htmlAttributes: new { @class = "input50", @id = "ddltxncount" })
+                </div>
+                <div class="col-md-3 col-xl-4">
+                    <input type="number" id="txttxncountmin" class="input50" placeholder="From Txn Count" style="display:none" />
+                    <input type="number" id="txttxncountmax" class="input50" placeholder="To Txn Count" style="display:none" />
 
+                </div>
             </div>
-        </div>
-        <div class="row mt-2">
-            <div class="col-md-3 col-xl-3">
-                Redeemed
+            <div class="row mt-2">
+                <div class="col-md-3 col-xl-3">
+                    Redeemed
+                </div>
+                <div class="col-md-2 col-xl-2">
+                    @Html.DropDownList("Redeemed", new SelectList(Model.LstRedeemedList, "Value", "Text"), htmlAttributes: new { @class = "input50", @id = "ddlRedeemed" })
+                </div>
             </div>
-            <div class="col-md-2 col-xl-2">
-                @Html.DropDownList("Redeemed", new SelectList(ViewBag.lstRedeemedList, "Value", "Text"), htmlAttributes: new { @class = "input50", @id = "ddlRedeemed" })
-            </div>
-        </div>
-        <div class="row mt-2">
-            <div class="col-md-3 col-xl-3">
-                Points Balance
-            </div>
-            <div class="col-md-2 col-xl-2">
-                @Html.DropDownList("PointsBalance", new SelectList(ViewBag.lstSpendList, "Value", "Text"), htmlAttributes: new { @class = "input50", @id = "ddlPointsBalance" })
-            </div>
-            <div class="col-md-6 col-xl-4">
-                <input type="number" id="txtPointsBalnmin" class="input50" placeholder="From PointBalance" style="display:none" />
-                <input type="number" id="txtPointsBalnmax" class="input50" placeholder="To PointBalance" style="display:none" />
+            <div class="row mt-2">
+                <div class="col-md-3 col-xl-3">
+                    Points Balance
+                </div>
+                <div class="col-md-2 col-xl-2">
+                    @Html.DropDownList("PointsBalance", new SelectList(Model.LstSpendList, "Value", "Text"), htmlAttributes: new { @class = "input50", @id = "ddlPointsBalance" })
+                </div>
+                <div class="col-md-6 col-xl-4">
+                    <input type="number" id="txtPointsBalnmin" class="input50" placeholder="From PointBalance" style="display:none" />
+                    <input type="number" id="txtPointsBalnmax" class="input50" placeholder="To PointBalance" style="display:none" />
 
+                </div>
             </div>
-        </div>
-        @*<div class="row mt-2">
+            @*<div class="row mt-2">
             <div class="col-md-3 col-xl-3">
                 Avg Ticket Size
             </div>
@@ -150,187 +152,55 @@
             </div>
         </div>*@
 
-        <h6><b>Brand And Outlet Selection</b></h6>
-        <div class="row mt-4" id="secbrandOutlet">
-            <div class="col-md-3 col-xl-3">
-                Select Brand
-            </div>
-            <div class="col-md-3 col-xl-3">
-                @Html.DropDownList("SelectBrand", new SelectList(ViewBag.lstBrandList, "Value", "Text"), "--Select--", htmlAttributes: new { @class = "input50", @id = "ddlBrand" })
-            </div>
+            <h6><b>Brand And Outlet Selection</b></h6>
+            <div class="row mt-4" id="secbrandOutlet">
+                <div class="col-md-3 col-xl-3">
+                    Select Brand
+                </div>
+                <div class="col-md-3 col-xl-3">
+                    @Html.DropDownList("SelectBrand", new SelectList(Model.LstBrandList, "Value", "Text"), "--Select--", htmlAttributes: new { @class = "input50", @id = "ddlBrand" })
+                </div>
 
-        </div>
-        <div class="row mt-2">
-            <div class="col-md-3 col-xl-3">
-                Select Outlet
             </div>
-            <div class="col-md-3 col-xl-3">
-                @Html.ListBox("SelectOutlet", new MultiSelectList(ViewBag.lstOutlet, "Value", "Text"), new { @class = "input50", @style = "width:80%", Multiple = "multiple", @id = "ddlOutlet" })
-            </div>
-        </div>
-        <div class="row mt-2">
-            <div class="col-md-3 col-xl-3">
-               Report Date Range
-            </div>
-            <div class="col-md-3 col-xl-3">
-                <hidden id="spnStartDate" style="display:none">@ViewBag.StartDate</hidden>
-                <input type="radio" checked id="rdnBTD" name="btdaterange" /> BTD &nbsp;&nbsp;
-                <input type="radio" id="rdnalldaterange" name="btdaterange" /> Date Range
-            </div>
-            <div id="divalldaterange" class="col-md-6 col-xl-4" style="display:none">
-                <input type="date" id="txtallfmdt" class="input50" placeholder="From Date" />
-                <input type="date" id="txtalltodt" class="input50" placeholder="To Date" />
-            </div>
-        </div>
-        <div class="row mt-5">
-            <div class="col-md-3 col-xl-3">
-                <button class="btn btn-primary login-btn" type="button" id="btnFilter">
-                    Filter
-                </button>
-                <button class="btn btn-primary login-btn" type="button" id="btnReset" onclick="ResetAll();">
-                    Reset
-                </button>
-            </div>
-            <div class="col-md-4 col-xl-4">
-                <table style="border:2px solid black;width:80%">
-                    <tr style="border:2px solid black;">
-                        <td style="border:2px solid black;">
-                            Total Member Count
-                        </td>
-                        <td style="border:2px solid black;">
-                            <span id="spnMemberCount">@ViewBag.TotalMemberCount</span>
-                        </td>
-                    </tr>
-                    <tr style="border:2px solid black; ">
-                        <td style="border:2px solid black;text-align:left;">
-                            <span id="spnfilteredCount"></span>Filtered Count
-                        </td>
-                        <td style="border:2px solid black;">
-                            <span id="spnfilteredCountnum"></span>
-                        </td>
-                    </tr>
-                    <tr style="border:2px solid black; ">
-                        <td style="border:2px solid black;text-align:left;">
-                            <span id="spntxnCount"></span>Total No Of Transaction
-                        </td>
-                        <td style="border:2px solid black;">
-                            <span id="spnnooftxnCountnum"></span>
-                        </td>
-                    </tr>
-                </table>
-            </div>
-        </div>
-        <div class="row mt-5">
-            <div class="col-md-3 col-xl-3">
-                <input type="radio" id="rdncustwise" name="btreportwise" /> CustomerWise &nbsp;&nbsp;
-                <input type="radio" id="rdntransactionwise" name="btreportwise" /> TransactionWise
-            </div>
-            <div class="col-md-3 col-xl-3">
-                <button class="btn btn-primary login-btn" type="button" id="btnshow" onclick="showbutton();">
-                    Show
-                </button>
-                <button class="btn btn-primary login-btn" type="button" id="btngenerate" onclick="GenerateReport();" style="display:none;">
-                    Generate Report
-                </button>
-            </div>
-            <div id ="divcolumnlist"class="col-md-6 col-xl-6" style="display:none;" >
-                <select id="ChooseLeft" multiple="multiple" style="height: 250px; width: 100px;">                    
-                </select>
-                <input id="ShiftRight" type="button" value=" ShiftRight (>>) " />
-                <input id="ShiftLeft" type="button" value="ShiftLeft(<<) " />
-                <select id="ChooseRight" multiple="multiple" style="height:250px;width:100px;">
-                </select>
-            </div>
-        </div>
-       
-        <div class="mb-3 pr-3 pt-3 pl-3 card" id="divTxncount" style="padding-bottom:20px;display:none; text-align:center;">
-            <div class="row mt-4">
-                <div class="col-md-8 col-xl-8">
-                    <span id="spnFilterDrillDown" style="font-size:17px;font-weight:bold;"></span>
+            <div class="row mt-2">
+                <div class="col-md-3 col-xl-3">
+                    Select Outlet
+                </div>
+                <div class="col-md-3 col-xl-3">
+                    @Html.ListBox("SelectOutlet", new MultiSelectList(Model.LstOutlet, "Value", "Text"), new { @class = "input50", @style = "width:80%", Multiple = "multiple", @id = "ddlOutlet" })
                 </div>
             </div>
-            <div class="row mt-4">
-                <div class="col-md-6 col-xl-4 ">
-                    <b>Select Outlet</b>
-                    @*</div>
-                    <div class="col-md-2 col-xl-2">*@
-                    @Html.DropDownList("Outlet", new SelectList(ViewBag.lstOutlet, "Value", "Text"), "--Select--", htmlAttributes: new { @class = "input50", @id = "ddloutletId" })
+            <div class="row mt-2">
+                <div class="col-md-3 col-xl-3">
+                    Report Date Range
+                </div>
+                <div class="col-md-3 col-xl-3">
+                    <hidden id="spnStartDate" style="display:none">@Model.StartDt</hidden>
+                    <input type="radio" checked id="rdnBTD" name="btdaterange" /> BTD &nbsp;&nbsp;
+                    <input type="radio" id="rdnalldaterange" name="btdaterange" /> Date Range
+                </div>
+                <div id="divalldaterange" class="col-md-6 col-xl-4" style="display:none">
+                    <input type="date" id="txtallfmdt" class="input50" placeholder="From Date" />
+                    <input type="date" id="txtalltodt" class="input50" placeholder="To Date" />
                 </div>
             </div>
-            <div class="row mt-8 ">
-                <div class="col-md-4 col-xl-4 border" style="margin-left:20px; margin-top:20px; text-align:center;">
-                    <b> Elements </b>
-                    <hr />
-                    <div class="row mb-3">
-                        <div class="col text-center ">
-                            <input type="radio" id="rdnNooftxn" name="bt2" /> No Of Txn  &nbsp;&nbsp;&nbsp;&nbsp;
-                            <input type="radio" id="rdnSpend" name="bt2" /> Spend &nbsp;&nbsp;&nbsp;&nbsp;<br />
-                        </div>
-                    </div>
-                    <div class="row mb-3 text-center">
-                        <div class="col text-center">
-                            @Html.DropDownList("Spends", new SelectList(ViewBag.lstSpendList, "Value", "Text"), htmlAttributes: new { @class = "input50", @id = "ddlSpendTxn" })
-                        </div>
-                    </div>
-                    <div class="row mb-3 ">
-                        <div class="col text-center">
-                            <input type="text" id="txtEnterminval" class="input50" placeholder="From Spend" style="display:none" />
-                            <input type="text" id="txtEntermaxval" class="input50" placeholder="To Spend" style="display:none" />
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4 col-xl-4 border" style="margin-left:20px; margin-top:20px; text-align:center;">
-                    <b> Avg Bill Size</b>
-                    <hr />
-                    <div class="row mb-3 text-center">
-                        <div class="col text-center">
-                            @Html.DropDownList("Spends", new SelectList(ViewBag.lstSpendList, "Value", "Text"), htmlAttributes: new { @class = "input50", @id = "ddlAvgBill" })
-                        </div>
-                    </div>
-                    <div class="row mb-3 text-center">
-                        <div class="col text-center">
-                            <input type="text" id="txtBillSizemin" class="input50" placeholder="From Bill" style="display:none" />
-                            <input type="text" id="txtBillSizemax" class="input50" placeholder="To Bill" style="display:none" />
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4 col-xl-3 border" style="margin-left:20px; margin-top:20px;text-align:center;">
-                    <b>  Period </b>
-                    <hr />
-                    <div class="row mb-3">
-                    </div>
-                    <div class="row mb-3  text-center">
-                        <div class="col text-center">
-                            <input type="radio" checked id="rdnevryMonth" name="bt3" /> Every Month  &nbsp;&nbsp;&nbsp;&nbsp;
-                            <input type="radio" id="rdnDuration" name="bt3" /> Duration &nbsp;&nbsp;&nbsp;&nbsp;<br />
-                        </div>
-                    </div>
-                    <div class="row mb-3">
-                        <div class="col text-center">
-                            <input type="text" id="txtperiodFrom" class="date-picker" placeholder="Select Period From" />
-                            <input type="text" id="txtperiodTo" class="date-picker" placeholder="Select Period To" />
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-            <div class="row mt-4 ">
-                <div class="col-md-6 col-xl-2 ">
-                    <button class="btn btn-primary login-btn" type="button" id="btnFilterdrilldown">
+            <div class="row mt-5">
+                <div class="col-md-3 col-xl-3">
+                    <button class="btn btn-primary login-btn" type="button" id="btnFilter">
                         Filter
                     </button>
-                    <button class="btn btn-primary login-btn" type="button" id="btnResetForDrillDown" onclick="ResetAllForDrillDown();">
+                    <button class="btn btn-primary login-btn" type="button" id="btnReset" onclick="ResetAll();">
                         Reset
                     </button>
                 </div>
-                <div class="col-md-6 col-xl-4 ">
+                <div class="col-md-4 col-xl-4">
                     <table style="border:2px solid black;width:80%">
                         <tr style="border:2px solid black;">
-                            <td style="border:2px solid black;text-align:left;">
+                            <td style="border:2px solid black;">
                                 Total Member Count
                             </td>
                             <td style="border:2px solid black;">
-                                <span id="spnMemberCount">@ViewBag.TotalMemberCount</span>
+                                <span id="spnMemberCount">@Model.TotalCount</span>
                             </td>
                         </tr>
                         <tr style="border:2px solid black; ">
@@ -338,40 +208,172 @@
                                 <span id="spnfilteredCount"></span>Filtered Count
                             </td>
                             <td style="border:2px solid black;">
-                                <span id="spnfilteredCountDrillDown"></span>
+                                <span id="spnfilteredCountnum"></span>
+                            </td>
+                        </tr>
+                        <tr style="border:2px solid black; ">
+                            <td style="border:2px solid black;text-align:left;">
+                                <span id="spntxnCount"></span>Total No Of Transaction
+                            </td>
+                            <td style="border:2px solid black;">
+                                <span id="spnnooftxnCountnum"></span>
                             </td>
                         </tr>
                     </table>
                 </div>
             </div>
+            <div class="row mt-5">
+                <div class="col-md-3 col-xl-3">
+                    <input type="radio" id="rdncustwise" name="btreportwise" /> CustomerWise &nbsp;&nbsp;
+                    <input type="radio" id="rdntransactionwise" name="btreportwise" /> TransactionWise
+                </div>
+                <div class="col-md-3 col-xl-3">
+                    <button class="btn btn-primary login-btn" type="button" id="btnshow" onclick="showbutton();" style="display:none;">
+                        Show
+                    </button>
+                </div>
+
+
+            </div>
+            <div class="row mt-5">
+                <div id="divcolumnlist" class="row mt-3 ml-3 col-md-10 col-xl-10 " style="display:none;">
+                    <div>
+                        <select id="ChooseLeft" multiple="multiple" style="height: 300px; width: 200px;">
+                        </select>
+                    </div>
+                    <div style="margin-top:140px;margin-left:30px;margin-right:30px;">
+                        <input id="ShiftRight" type="button" value=" ShiftRight (>>) " style="margin-right:10px;" />
+                        <input id="ShiftLeft" type="button" value="ShiftLeft(<<) " />
+                    </div>
+                    <div>                        
+                        <select id="ChooseRight" multiple="multiple" style="height:300px;width:200px;">
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="row mt-5" >
+                <button class=" ml-3 btn btn-primary login-btn" type="button" id="btngenerate" onclick="GenerateReport();" style="display:none; text-align:right;">
+                    Generate Report
+                </button>
+                @*<button class=" ml-3 btn btn-primary login-btn" onclick='ExportDataExcel("0");' type="button" id="btnExport" style="text-align: right;">
+                    <i class="fas fa-file-export"></i> Export
+                </button>*@
+            </div>
+                <div id="dvListing" style="display:none;">
+                    @*@Html.Partial("~/Views/Reports/_CreateOwnReportCustomerWise.cshtml", Model)*@
+                </div>
+                <div class="mb-3 pr-3 pt-3 pl-3 card" id="divTxncount" style="padding-bottom:20px;display:none; text-align:center;">
+                    <div class="row mt-4">
+                        <div class="col-md-8 col-xl-8">
+                            <span id="spnFilterDrillDown" style="font-size:17px;font-weight:bold;"></span>
+                        </div>
+                    </div>
+                    <div class="row mt-4">
+                        <div class="col-md-6 col-xl-4 ">
+                            <b>Select Outlet</b>
+                            @*</div>
+                        <div class="col-md-2 col-xl-2">*@
+                            @Html.DropDownList("Outlet", new SelectList(Model.LstOutlet, "Value", "Text"), "--Select--", htmlAttributes: new { @class = "input50", @id = "ddloutletId" })
+                        </div>
+                    </div>
+                    <div class="row mt-8 ">
+                        <div class="col-md-4 col-xl-4 border" style="margin-left:20px; margin-top:20px; text-align:center;">
+                            <b> Elements </b>
+                            <hr />
+                            <div class="row mb-3">
+                                <div class="col text-center ">
+                                    <input type="radio" id="rdnNooftxn" name="bt2" /> No Of Txn  &nbsp;&nbsp;&nbsp;&nbsp;
+                                    <input type="radio" id="rdnSpend" name="bt2" /> Spend &nbsp;&nbsp;&nbsp;&nbsp;<br />
+                                </div>
+                            </div>
+                            <div class="row mb-3 text-center">
+                                <div class="col text-center">
+                                    @Html.DropDownList("Spends", new SelectList(Model.LstSpendList, "Value", "Text"), htmlAttributes: new { @class = "input50", @id = "ddlSpendTxn" })
+                                </div>
+                            </div>
+                            <div class="row mb-3 ">
+                                <div class="col text-center">
+                                    <input type="text" id="txtEnterminval" class="input50" placeholder="From Spend" style="display:none" />
+                                    <input type="text" id="txtEntermaxval" class="input50" placeholder="To Spend" style="display:none" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 col-xl-4 border" style="margin-left:20px; margin-top:20px; text-align:center;">
+                            <b> Avg Bill Size</b>
+                            <hr />
+                            <div class="row mb-3 text-center">
+                                <div class="col text-center">
+                                    @Html.DropDownList("Spends", new SelectList(Model.LstSpendList, "Value", "Text"), htmlAttributes: new { @class = "input50", @id = "ddlAvgBill" })
+                                </div>
+                            </div>
+                            <div class="row mb-3 text-center">
+                                <div class="col text-center">
+                                    <input type="text" id="txtBillSizemin" class="input50" placeholder="From Bill" style="display:none" />
+                                    <input type="text" id="txtBillSizemax" class="input50" placeholder="To Bill" style="display:none" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 col-xl-3 border" style="margin-left:20px; margin-top:20px;text-align:center;">
+                            <b>  Period </b>
+                            <hr />
+                            <div class="row mb-3">
+                            </div>
+                            <div class="row mb-3  text-center">
+                                <div class="col text-center">
+                                    <input type="radio" checked id="rdnevryMonth" name="bt3" /> Every Month  &nbsp;&nbsp;&nbsp;&nbsp;
+                                    <input type="radio" id="rdnDuration" name="bt3" /> Duration &nbsp;&nbsp;&nbsp;&nbsp;<br />
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col text-center">
+                                    <input type="text" id="txtperiodFrom" class="date-picker" placeholder="Select Period From" />
+                                    <input type="text" id="txtperiodTo" class="date-picker" placeholder="Select Period To" />
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="row mt-4 ">
+                        <div class="col-md-6 col-xl-2 ">
+                            <button class="btn btn-primary login-btn" type="button" id="btnFilterdrilldown">
+                                Filter
+                            </button>
+                            <button class="btn btn-primary login-btn" type="button" id="btnResetForDrillDown" onclick="ResetAllForDrillDown();">
+                                Reset
+                            </button>
+                        </div>
+                        <div class="col-md-6 col-xl-4 ">
+                            <table style="border:2px solid black;width:80%">
+                                <tr style="border:2px solid black;">
+                                    <td style="border:2px solid black;text-align:left;">
+                                        Total Member Count
+                                    </td>
+                                    <td style="border:2px solid black;">
+                                        <span id="spnMemberCount">@Model.TotalCount</span>
+                                    </td>
+                                </tr>
+                                <tr style="border:2px solid black; ">
+                                    <td style="border:2px solid black;text-align:left;">
+                                        <span id="spnfilteredCount"></span>Filtered Count
+                                    </td>
+                                    <td style="border:2px solid black;">
+                                        <span id="spnfilteredCountDrillDown"></span>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-    </div>
+</div>
 
-@*<script src="http://code.jquery.com/jquery-1.12.4.min.js"></script>*@
-<link href="~/Content/themes/base/jquery-ui.min.css" rel="stylesheet" />
-<link href="~/Content/themes/base/jquery-ui.css" rel="stylesheet" />
-@*<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.1/jquery.js"></script>
-    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.2/jquery-ui.min.js"></script>
-    <link rel="stylesheet" type="text/css" media="screen" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.2/themes/base/jquery-ui.css">*@
-<script src="~/Scripts/jquery-ui-1.12.1.js"></script>
-<script src="~/Scripts/jquery-ui-1.12.1.min.js"></script>
-@*<script src="~/Content/scriptSteps.js"></script>*@
-<style>
-    .ui-datepicker-calendar {
-        display: none;
-    }    
-    input::-webkit-outer-spin-button,
-    input::-webkit-inner-spin-button {
-        -webkit-appearance: none;
-        margin: 0;
-    }
+    <script src="~/Scripts/jquery-ui-1.12.1.js"></script>
+    <script src="~/Scripts/jquery-ui-1.12.1.min.js"></script>
+    <link href="~/Content/themes/base/jquery-ui.min.css" rel="stylesheet" />
+    <link href="~/Content/themes/base/jquery-ui.css" rel="stylesheet" />
 
-    input[type="number"] {
-        -moz-appearance: textfield;
-    }
-
-</style>
-<script>
+    <script>
 
     $(function () {
         $('.date-picker').datepicker({
@@ -434,24 +436,25 @@
             $("#ChooseRight").empty();
             let myOptions = [
 
-                { "ColumnId": 1, "ColumnName": "Mobile No" },
-                { "ColumnId": 2, "ColumnName": "Customer Name" },
-                { "ColumnId": 3, "ColumnName": "Outlet Name" },
-                { "ColumnId": 4, "ColumnName": "1st Txn Date" },
+                { "ColumnId": 1, "ColumnName": "Outlet Name" },
+                { "ColumnId": 2, "ColumnName": "Mobile No" },
+                { "ColumnId": 3, "ColumnName": "Customer Name" },
+                { "ColumnId": 4, "ColumnName": "First Txn Date" },
                 { "ColumnId": 5, "ColumnName": "Last Txn Date" },
-                { "ColumnId": 6, "ColumnName": "Total Points" },
-                { "ColumnId": 7, "ColumnName": "Total Earn" },
-                { "ColumnId": 8, "ColumnName": "Total Burn" },
-                { "ColumnId": 9, "ColumnName": "Enrolled Date" },
-                { "ColumnId": 10, "ColumnName": "Total Spend" },
-                { "ColumnId": 11, "ColumnName": "No Of Txn" },
-                { "ColumnId": 12, "ColumnName": "Bonus Points" },
+                { "ColumnId": 6, "ColumnName": "No Of Txn" },
+                { "ColumnId": 7, "ColumnName": "Enrolled Date" },
+                { "ColumnId": 8, "ColumnName": "Total Available Points" },
+                { "ColumnId": 9, "ColumnName": "Total Earn" },
+                { "ColumnId": 10, "ColumnName": "Total Burn" },                
+                { "ColumnId": 11, "ColumnName": "Total Spend" },                
+                { "ColumnId": 12, "ColumnName": "Bonus Points" }
             ];
 
             myOptions.forEach(function (e, i) {
                 $('#ChooseLeft').append($('<option></option>').val(e.ColumnId).text(e.ColumnName));
             });
-
+            $('#divcolumnlist').show();
+            $('#btngenerate').show();
         });
         $('#rdntransactionwise').change(function () {
             $("#ChooseLeft").empty();
@@ -462,21 +465,22 @@
                 { "ColumnId": 2, "ColumnName": "Customer Name" },
                 { "ColumnId": 3, "ColumnName": "Outlet Name" },
                 { "ColumnId": 4, "ColumnName": "1st Txn Date" },
-                { "ColumnId": 5, "ColumnName": "Last Txn Date" },
+                { "ColumnId": 5, "ColumnName": "Last Txn Date" },                
+                { "ColumnId": 9, "ColumnName": "Enrolled Date" },                
+                { "ColumnId": 12, "ColumnName": "Bonus Points" },
                 { "ColumnId": 13, "ColumnName": "Points Burn" },
                 { "ColumnId": 14, "ColumnName": "Points Earn" },
                 { "ColumnId": 15, "ColumnName": "Invoice No" },
-                { "ColumnId": 9, "ColumnName": "Enrolled Date" },
                 { "ColumnId": 16, "ColumnName": "Type" },
                 { "ColumnId": 17, "ColumnName": "Txn Date" },
-                { "ColumnId": 18, "ColumnName": "Invoice Amt" },
-                { "ColumnId": 12, "ColumnName": "Bonus Points" }
+                { "ColumnId": 18, "ColumnName": "Invoice Amt" }
             ];
 
             myOptions.forEach(function (e, i) {
                 $('#ChooseLeft').append($('<option></option>').val(e.ColumnId).text(e.ColumnName));
             });
-
+            $('#divcolumnlist').show();
+            $('#btngenerate').show();
 
         });
         $("#spnFilter").text('');
@@ -778,29 +782,33 @@
     }
     function GenerateReport() {
         var returnStatus = true;
-        if ($("#ChooseRight").prop('selected') !== 0) {
+
             var Array = [];
+            var ArrayColumnName = [];
             $('#ChooseRight :selected').each(function (i, selected) {
                 Array.push($(selected).val());
+                ArrayColumnName.push($(selected).text());
             });
+        if (Array.length >0) {
             console.log(Array);
             if (returnStatus) {
                 $("#divLoader").show();
                 var custreport = $("#rdncustwise").val();
                 var txnreport = $("#rdntransactionwise").val();
-                var type;
-                if ($("#rdncustwise").is(":checked")) {
-                    type = "customer";
-                }
-                else if ($("#rdntransactionwise").is(":checked")) {
-                    type = "transaction";
-                }
+                //var type;
+                //if ($("#rdncustwise").is(":checked")) {
+                //    type = "customer";
+                //}
+                //else if ($("#rdntransactionwise").is(":checked")) {
+                //    type = "transaction";
+                //}
                 console.log(custreport);
                 console.log(txnreport);
                 var FilterData = [];
                 item = {};
                 item["ColumnId"] = Array;
-                item["reporttype"] = type;
+                item["columnnm"] = ArrayColumnName;
+                //item["reporttype"] = type;
                 FilterData.push(item);
                 var data = JSON.stringify(FilterData);
             $.ajax({
@@ -809,13 +817,13 @@
                 data: '{jsonData: ' + JSON.stringify(data) + '}',
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
-
                 success: function (response) {
-                    console.log(response[1]);
+                    console.log(response);
                     if (response != null) {
-                        $("#spnfilteredCountnum").text(response[0]);
-                        $("#spnnooftxnCountnum").text(response[1]);
+                        $("#dvListing").html(response);
+                        $("#dvListing").show();
                         $("#divLoader").hide();
+
                     }
                     else {
 
@@ -823,6 +831,9 @@
                 },
                 error: function (response) {
                     console.log(response.responseText);
+                    $("#dvListing").html(response.responseText);
+                    $("#dvListing").show();
+                    $("#divLoader").hide();
                 }
             });
             }
@@ -1223,7 +1234,24 @@
         });
 
     }
-</script>
+
+
+    </script>
+    <style>
+        .ui-datepicker-calendar {
+            display: none;
+        }
+
+        input::-webkit-outer-spin-button,
+        input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        input[type="number"] {
+            -moz-appearance: textfield;
+        }
+    </style>
 
 
 

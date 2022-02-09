@@ -15,6 +15,8 @@ using System.Web.Script.Serialization;
 using BOTS_BL.Models.Reports;
 using System.Net.Mail;
 using System.Text;
+using WebApp.ViewModel;
+using System.Reflection;
 
 namespace WebApp.Controllers
 {
@@ -121,29 +123,34 @@ namespace WebApp.Controllers
 
         public ActionResult CreateOwnSegment()
         {
-
+            CreateOwnReportViewModel createownviewmodel = new CreateOwnReportViewModel();
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
             //var lstEnrolledList = RR.GetEnrolledList(userDetails.GroupId, userDetails.connectionString);
             //ViewBag.lstEnrolledList = lstEnrolledList;
             var lstnontransactedList = RR.GetNonTransactedList(userDetails.GroupId, userDetails.connectionString);
-            ViewBag.lstnontransactedList = lstnontransactedList;
+            // ViewBag.lstnontransactedList = lstnontransactedList;
+            createownviewmodel.LstnontransactedList = lstnontransactedList;
             var lstSpendList = RR.GetSpendList(userDetails.GroupId, userDetails.connectionString);
-            ViewBag.lstSpendList = lstSpendList;
+            createownviewmodel.LstSpendList = lstSpendList;
+            // ViewBag.lstSpendList = lstSpendList;
             //var lstGenderList = RR.GetGenderList(userDetails.GroupId, userDetails.connectionString);
             //ViewBag.lstGenderList = lstGenderList;
             //var lstSourceList = RR.GetSourseList(userDetails.GroupId, userDetails.connectionString);
             //ViewBag.lstSourceList = lstSourceList;
             var lstRedeemedList = RR.GetRedeemedList(userDetails.GroupId, userDetails.connectionString);
-            ViewBag.lstRedeemedList = lstRedeemedList;
+            createownviewmodel.LstRedeemedList = lstRedeemedList;
             var lstOutlet = RR.GetOutletListForSliceAndDice(userDetails.GroupId, userDetails.connectionString);
-            ViewBag.lstOutlet = lstOutlet;
+            createownviewmodel.LstOutlet = lstOutlet;
             DateTime startdt = RR.GetStartDtOfProgram(userDetails.GroupId, userDetails.connectionString);
-            ViewBag.StartDate = startdt;
+            createownviewmodel.StartDt = startdt;
             var TotalCount = RR.GetTotalMemberCount(userDetails.GroupId, userDetails.connectionString);
-            ViewBag.TotalMemberCount = TotalCount;
+            createownviewmodel.TotalCount = TotalCount;
             var lstBrandList = RR.GetBrandList(userDetails.GroupId, userDetails.connectionString);
-            ViewBag.lstBrandList = lstBrandList;
-            return View();
+            createownviewmodel.LstBrandList = lstBrandList;
+            List<string> columnname = new List<string>();
+            //object[] columnname = new object[15];
+            createownviewmodel.lstcolumnlist = columnname;
+            return View(createownviewmodel);
 
 
         }
@@ -180,15 +187,16 @@ namespace WebApp.Controllers
                 string Brand = Convert.ToString(item["Brand"]);
                 object[] outletId = (object[])item["Outlet"];
 
-                objcounts = RR.GetSliceAndDiceFilteredData(fromdtforall, todtforall,Enroll_max, Enroll_min, Nontransacted_min, Spend_min, Spend_max, txncount_min, txncount_max, pointBaln_min, pointBaln_max, Redeem,Brand, outletId, userDetails.GroupId, userDetails.connectionString);
+                objcounts = RR.GetSliceAndDiceFilteredData(fromdtforall, todtforall, Enroll_max, Enroll_min, Nontransacted_min, Spend_min, Spend_max, txncount_min, txncount_max, pointBaln_min, pointBaln_max, Redeem, Brand, outletId, userDetails.GroupId, userDetails.connectionString);
                 Session["customerId"] = objcounts.lstcustomerDetails;
             }
             return new JsonResult() { Data = objcounts, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
-        public JsonResult GenerateReport(string jsonData)
+        public ActionResult GenerateReport(string jsonData)
         {
             // var transcount = 0;
-            List<int> lstcounts = new List<int>();
+            // List<int> lstcounts = new List<int>();
+            CreateOwnReportViewModel createownviewmodel = new CreateOwnReportViewModel();
             List<CustomerDetail> lstcustomerdetails = (List<CustomerDetail>)Session["customerId"];
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
             List<CustomerTypeReport> listCustR = new List<CustomerTypeReport>();
@@ -198,19 +206,48 @@ namespace WebApp.Controllers
             object[] objData = (object[])json_serializer.DeserializeObject(jsonData);
             foreach (Dictionary<string, object> item in objData)
             {
-                string ReportType = Convert.ToString(item["reporttype"]);
+               // string ReportType = Convert.ToString(item["reporttype"]);
                 object[] ColumnId = (object[])item["ColumnId"];
-
-                if(ReportType== "customer")
+                object[] columnname = (object[])item["columnnm"];
+                List<string> lstcolumnlist = new List<string>();
+                foreach (var itemNew1 in (columnname))
                 {
-                    listCustR = RR.GenerateCustomerTypeReport(ColumnId, lstcustomerdetails, userDetails.GroupId, userDetails.connectionString);
+                    string name = Convert.ToString(itemNew1);
+                    lstcolumnlist.Add(name);
                 }
-                else if(ReportType == "transaction")
+                List<string> lstcolumnIdlist = new List<string>();
+                foreach (var itemNew1 in (columnname))
                 {
-                    listTxnR = RR.GenerateTxnTypeReport(ColumnId, lstcustomerdetails, userDetails.GroupId, userDetails.connectionString);
+                    //string name = Convert.ToString(itemNew1);
+                    string name = string.Concat(Convert.ToString(itemNew1).Where(c => !char.IsWhiteSpace(c)));
+                    lstcolumnIdlist.Add(name);
                 }
+                createownviewmodel.lstcolumnlist = lstcolumnlist;
+                createownviewmodel.lstcolumnIdlist = lstcolumnIdlist;
+                //if (ReportType == "customer")
+                //{
+                    List<object> lstcustlist = new List<object>();
+                    createownviewmodel.listCustR = RR.GenerateCustomerTypeReport(ColumnId, lstcustomerdetails, userDetails.GroupId, userDetails.connectionString);
+                //var entriesToCopy = from cust in listCustR
+                //                    where cust != null
+                //                    select cust;
+                //lstcustlist.AddRange(entriesToCopy.Cast<object>());
+                //foreach (var cust in listCustR)
+                //{
+                //    if (cust != null)
+                //    {
+                //        lstcustlist.Add(cust);
+                //    }
+                //}
+                //createownviewmodel.listCustr = lstcustlist;
             }
-            return new JsonResult() { Data = listCustR, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
+            //    else if (ReportType == "transaction")
+            //{
+            //    createownviewmodel.listTxnR = RR.GenerateTxnTypeReport(ColumnId, lstcustomerdetails, userDetails.GroupId, userDetails.connectionString);
+            //    }
+            //}
+            return PartialView("_CreateOwnReportCustomerWise", createownviewmodel);
+            //return new JsonResult() { Data = createownviewmodel, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
         public JsonResult GetFilteredCountforDrillDown(string jsonData)
         {
@@ -1125,7 +1162,7 @@ namespace WebApp.Controllers
                 if (userDetails.LoginType == "1" || userDetails.LoginType == "6" || userDetails.LoginType == "7")
                 {
                     table.Columns.Remove("MaskedMobileNo");
-                }                
+                }
                 else
                 {
                     var GroupDetails = CR.GetGroupDetails(Convert.ToInt32(userDetails.GroupId));
