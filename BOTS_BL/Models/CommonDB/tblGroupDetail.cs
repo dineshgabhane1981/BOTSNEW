@@ -99,7 +99,7 @@ namespace BOTS_BL.Models
         public string CityName { get; set; }
 
         [NotMapped]
-        public string RMTeamName { get; set; }
-        
+        public string RMTeamName { get; set; }        
+
     }
 }

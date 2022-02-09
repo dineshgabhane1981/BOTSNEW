@@ -32,7 +32,7 @@ namespace BOTS_BL.Repository
                     {
                         item.DaySinceLastTxn = Convert.ToInt32(item.DaysSinceLastTxn);
                     }
-                    lstnontransactinggrp = lstnontransactinggrp.OrderByDescending(x => x.DaySinceLastTxn).ToList();
+                    lstnontransactinggrp = lstnontransactinggrp.OrderByDescending(x => x.DaySinceLastTxn).Take(5).ToList();
                 }
             }
             catch (Exception ex)

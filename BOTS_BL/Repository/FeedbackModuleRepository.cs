@@ -184,7 +184,7 @@ namespace BOTS_BL.Repository
                         {
                             string tableScript = "CREATE TABLE [dbo].[feedback_FeedbackMaster]([FeedbackId][int] IDENTITY(1, 1) NOT NULL,[GroupId] [varchar](4) NULL,[OutletId] [varchar](10) NULL," +
                                                 "[MobileNo] [varchar](10) NULL,	[CustomerName] [varchar](100) NULL,	[QuestionId] [varchar](5) NULL,	[QuestionPoints] [varchar](5) NULL,	[DOB] [date] NULL," +
-                                                "[DOA] [date] NULL,	[HowToKnowAbout] [varchar](10) NULL,[AddedDate] [datetime] NULL,[SalesRepresentative] [varchar](10) NULL," +
+                                                "[DOA] [date] NULL,	[HowToKnowAbout] [varchar](10) NULL,[AddedDate] [datetime] NULL,[SalesRepresentative] [varchar](10) NULL, [Comments] [nvarchar](max) NULL," +
                                                 "CONSTRAINT[PK_FeedBackModuleMaster] PRIMARY KEY CLUSTERED([FeedbackId] ASC)WITH(PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON[PRIMARY]) ON[PRIMARY]";
                             contextdb.Database.CreateIfNotExists();
                             contextdb.Database.ExecuteSqlCommand(tableScript);
@@ -1198,13 +1198,16 @@ namespace BOTS_BL.Repository
             using (var context = new CommonDBContext())
             {
                 var representative = context.Feedback_PointsAndMessages.Where(x => x.GroupId == GroupId).Select(x => x.RepresentativesList).FirstOrDefault();
-                string[] salesList = representative.Split(',');
+                string[] salesList = new string[0];
+                if (!string.IsNullOrEmpty(representative))
+                    salesList = representative.Split(',');
                 int id = 1;
                 lstsales.Add(new SelectListItem
                 {
                     Text = "All",
                     Value = "0"
                 });
+               
                 foreach (var item in salesList)
                 {
 

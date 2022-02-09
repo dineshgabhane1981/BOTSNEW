@@ -1,0 +1,786 @@
+﻿@model WebApp.ViewModel.GroupConfigDetailsViewModel
+@using System.Globalization
+
+<style>
+    .tab1 {
+        cursor: pointer;
+        padding: 10px 20px;
+        margin: 0px 2px;
+        background-color: #2f4353 !important;
+        display: inline-block;
+        color: #fff;
+        border-radius: 3px 3px 0px 0px;
+        box-shadow: 0 0.5rem 0.8rem #00000080;
+    }
+
+    .tabs1 {
+        padding-left: 25px;
+    }
+
+    .panels1 {
+        background: #ffffff;
+        box-shadow: 0 1rem 1rem #00000010;
+        width: 100%;
+        border-radius: 3px;
+        overflow: hidden;
+    }
+
+    .panel1 {
+        display: none;
+        animation: fadein .8s;
+    }
+
+    .panel-title1 {
+        font-size: 1.5em;
+        font-weight: bold
+    }
+
+    .radio1 {
+        display: none;
+    }
+
+    #one1:checked ~ .panels1 #one-panel1,
+    #two1:checked ~ .panels1 #two-panel1,
+    #three1:checked ~ .panels1 #three-panel1,
+    #four1:checked ~ .panels1 #four-panel1,
+    #five1:checked ~ .panels1 #five-panel1,
+    #six1:checked ~ .panels1 #six-panel1 {
+        display: block
+    }
+
+    #one1:checked ~ .tabs1 #one-tab1,
+    #two1:checked ~ .tabs1 #two-tab1,
+    #three1:checked ~ .tabs1 #three-tab1,
+    #four1:checked ~ .tabs1 #four-tab1,
+    #five1:checked ~ .tabs1 #five-tab1,
+    #six1:checked ~ .tabs1 #six-tab1 {
+        background: #fff !important;
+        color: #000;
+        border-top: 3px solid #fff;
+        border-left: 3px solid #fff;
+        border-right: 3px solid #fff;
+        font-weight: bold;
+        border-top-left-radius: 7px;
+        border-top-right-radius: 7px;
+    }
+</style>
+
+<div class="row col-md-12 col-lg-12 p-2">
+    <div class="col-md-3 col-lg-3">
+        <b>   Group Name </b> <br /> @Model.objGroupDetails.GroupName
+    </div>
+    <div class="col-md-4 col-lg-4">
+        <b>Brand Name </b><br />
+        @{
+            var count = 0;
+        }
+        @foreach (var item in Model.lstBrandDetails)
+        {
+            count++;
+            if (Model.lstBrandDetails.Count > 1)
+            {
+                if (Model.lstBrandDetails.Count == count)
+                {
+                    <div> @item.BrandName</div>
+                }
+                else
+                {
+                    <div> @item.BrandName,</div>
+                }
+            }
+            else
+            {
+                <div> @item.BrandName</div>
+            }
+
+        }
+    </div>
+    <div class="col-md-2 col-lg-2">
+        <b>Member Base</b><br />
+        @String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(Model.objGroupConfig.MemberBase))
+
+    </div>
+    <div class="col-md-3 col-lg-3"><img src="@Model.objGroupDetails.Logo" style="width:200px;" alt="Logo"></div>
+</div>
+
+<input class="radio1" id="one1" name="group" type="radio" checked>
+<input class="radio1" id="two1" name="group" type="radio">
+<input class="radio1" id="three1" name="group" type="radio">
+<input class="radio1" id="four1" name="group" type="radio">
+<input class="radio1" id="five1" name="group" type="radio">
+<input class="radio1" id="six1" name="group" type="radio">
+<div class="tabs1">
+    <label class="tab1" id="one-tab1" for="one1"> Group, Brand & Outlet</label>
+    <label class="tab1" id="two-tab1" for="two1"> Points Rule</label>
+    <label class="tab1" id="three-tab1" for="three1"> Communication</label>
+    <label class="tab1" id="four-tab1" for="four1"> Perpetual Campaigns</label>
+    <label class="tab1" id="five-tab1" for="five1"> DLC Link</label>
+    <label class="tab1" id="six-tab1" for="six1"> Others</label>
+</div>
+
+<div class="panels1">
+
+    <div class="multisteps-form__panel p-3 m-3 list-box bg-white panel1" id="one-panel1">
+        <div class="row">
+            <div style="margin-left:20px;">
+                <table border="1" cellpadding="5" cellspacing="5">
+                    <tr>
+                        <td>Authorized Person</td>
+                        <td>@Model.objGroupDetails.OwnerName</td>
+                    </tr>
+                    <tr>
+                        <td>Reg Mobile No </td>
+                        <td>@Model.objGroupDetails.OwnerMobileNo</td>
+                    </tr>
+                    <tr>
+                        <td>Reg Email </td>
+                        <td>@Model.objGroupDetails.OwnerEmail</td>
+                    </tr>
+                    <tr>
+                        <td>City</td>
+                        <td>@Model.objGroupConfig.CityName</td>
+                    </tr>
+                    <tr>
+                        <td>No of Outlets </td>
+                        <td>@Model.objGroupDetails.OutletCount</td>
+                    </tr>
+                </table>
+            </div>
+
+            <div style="margin-left:20px;">
+                <table border="1" cellpadding="5" cellspacing="5">
+                    <tr>
+                        <td>Start Date</td>
+                        @if (Model.objGroupDetails.WentLiveDate.HasValue)
+                        {
+                            <td>@Model.objGroupDetails.WentLiveDate.Value.ToString("dd-MMM-yyyy")</td>
+                        }
+                        else
+                        {
+                            <td>-</td>
+                        }
+                    </tr>
+                    <tr>
+                        <td>Retail Category</td>
+                        <td>@Model.objGroupConfig.CategoryName</td>
+                    </tr>
+                    <tr>
+                        <td>Billing Partner</td>
+                        <td>@Model.objGroupConfig.BillingPartnerName</td>
+                    </tr>
+                    <tr>
+                        <td>Billing System</td>
+                        <td>@Model.objGroupConfig.BillingSystemName</td>
+                    </tr>
+
+                </table>
+            </div>
+
+            <div style="margin-left:20px;">
+                <table border="1" cellpadding="5" cellspacing="5">
+                    <tr>
+                        <td>
+                            Daily / Monthly Email
+                        </td>
+                        <td>NA</td>
+
+                    </tr>
+                    <tr>
+                        <td>Whatsapp Enabled</td>
+                        <td>NA</td>
+                    </tr>
+                    <tr>
+                        <td>DLC Enabled</td>
+                        <td>NA</td>
+                    </tr>
+                    <tr>
+                        <td>Feedback Enabled</td>
+                        @if (Model.objGroupDetails.IsFeedback.Value)
+                        {
+                            <td>Yes</td>
+                        }
+                        else
+                        {
+                            <td>No</td>
+                        }
+                    </tr>
+                    <tr>
+                        <td>Sourced by</td>
+                        <td>@Model.objGroupConfig.SourceByName</td>
+                    </tr>
+                    <tr>
+                        <td>CS Assigned</td>
+                        <td>@Model.objGroupConfig.CSAssignedName</td>
+                    </tr>
+
+                </table>
+            </div>
+
+        </div>
+        <div class="row" style="overflow-x:auto;padding-right:10px;margin-top:20px;">
+            <table border="1" cellpadding="5" cellspacing="5">
+                <tr>
+                    <th>Outlet Name</th>
+                    <th>Outlet Code (Clients)</th>
+                    <th>Store Manager Name</th>
+                    <th>Reg Mobile No</th>
+                    <th>Reg Email ID</th>
+                    <th>Store Address</th>
+                    <th>City</th>
+                    <th>Pincode</th>
+                    <th>Geo Lat Long</th>
+                    <th>Mobile No (for Octa XS)</th>
+                </tr>
+                @foreach (var item in Model.lstOutlets)
+                {
+                    <tr>
+                        <td>@item.OutletName</td>
+                        <td style="text-align:center;">--</td>
+                        <td>@item.AuthorisedPerson</td>
+                        <td>@item.ContactNo</td>
+                        <td>@item.EmailId</td>
+                        <td>@item.Address</td>
+                        <td>@item.City</td>
+                        <td>@item.PinCode</td>
+                        <td>Latitude - @item.Latitude <br /> Longitude - @item.Longitude</td>
+                        <td style="text-align:center;">--</td>
+                    </tr>
+                }
+            </table>
+        </div>
+    </div>
+
+    <div class="multisteps-form__panel  p-3 m-3 list-box bg-white panel1" id="two-panel1">
+        <table border="1" cellpadding="5" cellspacing="5">
+            <tr>
+                <td>
+                </td>
+                @foreach (var item in Model.lstBrandDetails)
+                {
+                    <td style="font-weight:bold;">@item.BrandName</td>
+                }
+            </tr>
+            <tr>
+                <td>
+                    1 point is Rs.
+                </td>
+                @foreach (var item in Model.objEarnConfig)
+                {
+                    <td>@item.PointsAllocation</td>
+                }
+            </tr>
+            <tr>
+                <td>
+                    Expiry (months)
+                </td>
+                @foreach (var item in Model.objEarnConfig)
+                {
+                    <td>@item.PointsExpiryVariableDate</td>
+                }
+            </tr>
+            <tr>
+                <td>
+                    Type
+                </td>
+                <td>NA</td>
+            </tr>
+        </table>
+        <div class="row">
+            <div style="margin-right:20px;">
+                @if (Model.lstBrandDetails.Count > 0)
+                {
+                    var cellCount = Model.lstBrandDetails.Count + 1;
+                    <table border="1" cellpadding="5" cellspacing="5" style="margin-top:20px;">
+                        <tr>
+                            <td style="text-align:center;background-color:lightgray;font-weight:bold;" colspan="@cellCount">
+                                EARN RULES
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                            </td>
+                            @foreach (var item in Model.lstBrandDetails)
+                            {
+                                <td style="font-weight:bold;">@item.BrandName</td>
+                            }
+                        </tr>
+                        <tr>
+                            <td>Min Txn Amt for issuance</td>
+                            @foreach (var item in Model.objEarnConfig)
+                            {
+                                <td>@item.MinTxnAmt</td>
+                            }
+                        </tr>
+                        <tr>
+                            <td>Max Pts Earned (per txn)</td>
+                            @foreach (var item in Model.objEarnConfig)
+                            {
+                                <td>@item.MaxPointsEarned</td>
+                            }
+                        </tr>
+                        <tr>
+                            <td>
+                                Earn on Invoice / Category, Sub-Category,  Products
+                            </td>
+                            @foreach (var item in Model.objEarnConfig)
+                            {
+                                <td>@item.PointsProductORBase</td>
+                            }
+                        </tr>
+                        <tr>
+                            <td>
+                                Earn % Rate
+                            </td>
+                            @foreach (var item in Model.objEarnConfig)
+                            {
+                                <td>@item.PointsPrecentage</td>
+                            }
+                        </tr>
+                        <tr>
+                            <td>
+                                Multiple Earn % Rate
+                            </td>
+                            @foreach (var item in Model.objEarnConfig)
+                            {
+                                <td>NA</td>
+                            }
+                        </tr>
+                        <tr>
+                            <td>
+                                Earn Block on
+                            </td>
+                            @foreach (var item in Model.objEarnConfig)
+                            {
+                                <td>NA</td>
+                            }
+                        </tr>
+                        <tr>
+                            <td>
+                                Block Codes
+                            </td>
+                            @foreach (var item in Model.objEarnConfig)
+                            {
+                                <td>NA</td>
+                            }
+                        </tr>
+                    </table>
+                }
+            </div>
+            <div>
+                @if (Model.lstBrandDetails.Count > 0)
+                {
+                    var cellCount = Model.lstBrandDetails.Count + 1;
+                    <table border="1" cellpadding="5" cellspacing="5" style="margin-top:20px;">
+                        <tr>
+                            <td style="text-align:center;background-color:lightgray;font-weight:bold;" colspan="@cellCount">
+                                BURN RULES
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                            </td>
+                            @foreach (var item in Model.lstBrandDetails)
+                            {
+                                <td style="font-weight:bold;">@item.BrandName</td>
+                            }
+                        </tr>
+                        <tr>
+                            <td>
+                                Min Points Threshold (1st time)
+                            </td>
+                            @foreach (var item in Model.objBurnConfig)
+                            {
+                                <td>@item.MinThresholdPointsFirstTime</td>
+                            }
+                        </tr>
+                        <tr>
+                            <td>
+                                Min Points Threshold (Subsequent time)
+                            </td>
+                            @foreach (var item in Model.objBurnConfig)
+                            {
+                                <td>@item.MinThresholdPointsEveryTime</td>
+                            }
+                        </tr>
+                        <tr>
+                            <td>
+                                Min Invoice Amt
+                            </td>
+                            @foreach (var item in Model.objBurnConfig)
+                            {
+                                <td>@item.MinTxnAmt</td>
+                            }
+                        </tr>
+                        <tr>
+                            <td>
+                                Points as a % of Invoice Amt
+                            </td>
+                            @foreach (var item in Model.objBurnConfig)
+                            {
+                                <td>NA</td>
+                            }
+                        </tr>
+                        <tr>
+                            <td>
+                                Earn while Burn
+                            </td>
+                            @foreach (var item in Model.objBurnConfig)
+                            {
+                                <td>@item.EarnFullWhileBurnFlag</td>
+                            }
+                        </tr>
+                        <tr>
+                            <td>
+                                Burn Block on
+                            </td>
+                            @foreach (var item in Model.objBurnConfig)
+                            {
+                                <td>NA</td>
+                            }
+                        </tr>
+                        <tr>
+                            <td>
+                                Block Codes
+                            </td>
+                            @foreach (var item in Model.objBurnConfig)
+                            {
+                                <td>NA</td>
+                            }
+                        </tr>
+                    </table>
+                }
+            </div>
+        </div>
+    </div>
+    <div class="multisteps-form__panel  p-3 m-3 list-box bg-white panel1" id="three-panel1">
+        Communication
+    </div>
+    <div class="multisteps-form__panel  p-3 m-3 list-box bg-white panel1" id="four-panel1">
+        <div class="row">
+            <div>
+                <table border="1" cellpadding="5" cellspacing="5">
+                    <tr>
+                        <td rowspan="5" style="text-align:center; width:100px;font-size:18px;font-weight:bold;">1 <br /> Birthday</td>
+
+                    </tr>
+                    <tr>
+                        <td>Bonus Points</td>
+                        <td>NA</td>
+                    </tr>
+                    <tr>
+                        <td>Valid Period </td>
+                        <td>NA</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            SMS count per birthday
+                        </td>
+                        <td>NA</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Sending through
+                        </td>
+                        <td>NA</td>
+                    </tr>
+                </table>
+            </div>
+            <div style="margin-left:20px;">
+                <table border="1" cellpadding="5" cellspacing="5">
+                    <tr>
+                        <td>Count</td>
+                        <td>When</td>
+                        <td>Script</td>
+                    </tr>
+                    <tr>
+                        <td>Message 1</td>
+                        <td>NA</td>
+                        <td>NA</td>
+                    </tr>
+                    <tr>
+                        <td>Message 2</td>
+                        <td>NA</td>
+                        <td>NA</td>
+                    </tr>
+                    <tr>
+                        <td>Message 3</td>
+                        <td>NA</td>
+                        <td>NA</td>
+                    </tr>
+                    <tr>
+                        <td>Message 4</td>
+                        <td>NA</td>
+                        <td>NA</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+      
+        <div class="row" style="margin-top:20px;">
+            <div>
+                <table border="1" cellpadding="5" cellspacing="5">
+                    <tr>
+                        <td rowspan="5" style="text-align: center; width: 100px; font-size: 18px; font-weight: bold;">
+                            2 <br /> Anniversary
+                        </td>
+
+                    </tr>
+                    <tr>
+                        <td>Bonus Points</td>
+                        <td>NA</td>
+                    </tr>
+                    <tr>
+                        <td>Valid Period </td>
+                        <td>NA</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            SMS count per anniversary
+                        </td>
+                        <td>NA</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Sending through
+                        </td>
+                        <td>NA</td>
+                    </tr>
+                </table>
+            </div>
+            <div style="margin-left:20px;">
+                <table border="1" cellpadding="5" cellspacing="5">
+                    <tr>
+                        <td>Count</td>
+                        <td>When</td>
+                        <td>Script</td>
+                    </tr>
+                    <tr>
+                        <td>Message 1</td>
+                        <td>NA</td>
+                        <td>NA</td>
+                    </tr>
+                    <tr>
+                        <td>Message 2</td>
+                        <td>NA</td>
+                        <td>NA</td>
+                    </tr>
+                    <tr>
+                        <td>Message 3</td>
+                        <td>NA</td>
+                        <td>NA</td>
+                    </tr>
+                    <tr>
+                        <td>Message 4</td>
+                        <td>NA</td>
+                        <td>NA</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        <div class="row" style="margin-top:20px;">
+            <div>
+                <table border="1" cellpadding="5" cellspacing="5">
+                    <tr>
+                        <td rowspan="5" style="text-align: center; width: 100px; font-size: 18px; font-weight: bold;">
+                            3 <br /> Active
+                        </td>
+
+                    </tr>
+                    <tr>
+                        <td>Count</td>
+                        <td>Days Since Last txn</td>
+                        <td>Script</td>
+                    </tr>
+                    <tr>
+                        <td>Message 1 </td>
+                        <td>NA</td>
+                        <td>NA</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Message 2
+                        </td>
+                        <td>NA</td>
+                        <td>NA</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Message3
+                        </td>
+                        <td>NA</td>
+                        <td>NA</td>
+                    </tr>
+                </table>
+            </div>
+
+        </div>
+
+        <div class="row" style="margin-top:20px;">
+            <div>
+                <table border="1" cellpadding="5" cellspacing="5">
+                    <tr>
+                        <td rowspan="5" style="text-align: center; width: 100px; font-size: 18px; font-weight: bold;">
+                            4 <br /> Points Expiry
+                        </td>
+
+                    </tr>
+                    <tr>
+                        <td>Count</td>
+                        <td>Days Since Last txn</td>
+                        <td>Script</td>
+                    </tr>
+                    <tr>
+                        <td>Message 1 </td>
+                        <td>NA</td>
+                        <td>NA</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Message 2
+                        </td>
+                        <td>NA</td>
+                        <td>NA</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Message3
+                        </td>
+                        <td>NA</td>
+                        <td>NA</td>
+                    </tr>
+                </table>
+            </div>
+
+        </div>
+        
+        <div class="row" style="margin-top:20px;">
+            <div>
+                <table border="1" cellpadding="5" cellspacing="5">
+                    <tr>
+                        <td rowspan="5" style="text-align: center; width: 100px; font-size: 18px; font-weight: bold;">
+                            5 <br /> Non - redeem campaign
+                        </td>
+
+                    </tr>
+                    <tr>
+                        <td>Count</td>
+                        <td>Days Since Last txn</td>
+                        <td>Script</td>
+                    </tr>
+                    <tr>
+                        <td>Message 1 </td>
+                        <td>NA</td>
+                        <td>NA</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Message 2
+                        </td>
+                        <td>NA</td>
+                        <td>NA</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Message3
+                        </td>
+                        <td>NA</td>
+                        <td>NA</td>
+                    </tr>
+                </table>
+            </div>
+
+        </div>
+    </div>
+    <div class="multisteps-form__panel  p-3 m-3 list-box bg-white panel1" id="five-panel1">
+        DLC Link
+    </div>
+    <div class="multisteps-form__panel  p-3 m-3 list-box bg-white panel1" id="six-panel1">
+        <div class="row">
+            <div style="margin-right:20px;">
+                <table border="1" cellpadding="10" cellspacing="10">
+                    <tr>
+                        <td colspan="4" style="text-align:center;">Based on TXN COUNT</td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            Txn Count
+                        </td>
+                        <td rowspan="2">Last XX days</td>
+                        <td rowspan="2">Action</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            From
+                        </td>
+                        <td>To</td>
+                    </tr>
+                    <tr style="text-align:center;">
+                        <td>NA</td>
+                        <td>NA</td>
+                        <td>NA</td>
+                        <td>NA</td>
+                    </tr>
+                </table>
+            </div>
+
+            <div style="margin-right:20px;">
+                <table border="1" cellpadding="10" cellspacing="10">
+                    <tr>
+                        <td colspan="4" style="text-align:center;">
+                            Based on INVOICE AMOUNT (CUMM)
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            Inv Amt
+                        </td>
+                        <td rowspan="2">Last XX days</td>
+                        <td rowspan="2">Action</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            From
+                        </td>
+                        <td>To</td>
+                    </tr>
+                    <tr style="text-align:center;">
+                        <td>NA</td>
+                        <td>NA</td>
+                        <td>NA</td>
+                        <td>NA</td>
+                    </tr>
+                </table>
+            </div>
+
+            <div>
+                <table border="1" cellpadding="10" cellspacing="10">
+                    <tr>
+                        <td colspan="3" style="text-align:center;">
+                            Based on INVOICE AMOUNT (CUMM)
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            Single Txn Amt
+                        </td>
+                        <td rowspan="2">Action</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            From
+                        </td>
+                        <td>To</td>
+                    </tr>
+                    <tr style="text-align:center;">
+                        <td>NA</td>
+                        <td>NA</td>
+                        <td>NA</td>
+
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+

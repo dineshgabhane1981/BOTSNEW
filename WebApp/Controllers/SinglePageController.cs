@@ -30,7 +30,7 @@ namespace WebApp.Controllers
                 singlevm.lstnontransactingOutlet = SPR.GetNonTransactingOutlet("");
                 singlevm.lstlowtransactingOutlet = SPR.GetLowTransactingOutlet("");
 
-                //singlevm.lstCitywiseData = SPR.GetCityWiseData();
+                singlevm.lstCitywiseData = SPR.GetCityWiseData();
                 if (singlevm.lstCitywiseData != null)
                 {
                     var categories = singlevm.lstCitywiseData.GroupBy(x => x.CategoryName).Select(y => y.First()).ToList();
@@ -56,9 +56,9 @@ namespace WebApp.Controllers
                     foreach (var category in categories)
                     {
                         CitywiseReport objItem = new CitywiseReport();
-                        long categotyCount = singlevm.lstCitywiseData.Where(x => x.CategoryName == category.CategoryName).Sum(y => y.MemberBase);
+                        long categoryCount = singlevm.lstCitywiseData.Where(x => x.CategoryName == category.CategoryName).Sum(y => y.MemberBase);
                         objItem.CategoryName = category.CategoryName;
-                        objItem.MemberBase = categotyCount;
+                        objItem.MemberBase = categoryCount;
 
                         objCategoryData.Add(objItem);
                     }
