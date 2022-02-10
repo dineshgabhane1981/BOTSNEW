@@ -748,7 +748,7 @@ namespace BOTS_BL.Repository
                     catch (Exception ex)
                     {
                         transaction.Rollback();
-                        newexception.AddException(ex, "ModifyTransaction");
+                        newexception.AddException(ex, GroupId);
                     }
                 }
             }

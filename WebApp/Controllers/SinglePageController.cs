@@ -68,7 +68,7 @@ namespace WebApp.Controllers
                     singlevm.lstCities = cities;
                 }
 
-                singlevm.lstCommunication = SPR.GetCommunicationWhatsAppExpiryData();
+                //singlevm.lstCommunication = SPR.GetCommunicationWhatsAppExpiryData();
             }
             catch (Exception ex)
             {
