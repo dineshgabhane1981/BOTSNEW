@@ -537,5 +537,9 @@ namespace WebApp.Controllers
             lstData = KR.GetDLCCreationData(userDetails.GroupId);
             return View(lstData);
         }
+        public ActionResult AddEditDLCCreation(string SlNo)
+        {
+            return View();
+        }
     }
 }
