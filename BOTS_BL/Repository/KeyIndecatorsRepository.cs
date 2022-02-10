@@ -253,5 +253,71 @@ namespace BOTS_BL.Repository
 
             return lstData;
         }
+        public List<SelectListItem> GetMemberType()
+        {
+            List<SelectListItem> countriesItem = new List<SelectListItem>();
+
+            countriesItem.Add(new SelectListItem
+            {
+                Text = "New",
+                Value = "1"
+            });
+            countriesItem.Add(new SelectListItem
+            {
+                Text = "Existing",
+                Value = "2"
+            });
+
+            return countriesItem;
+        }
+        public List<SelectListItem> GetPointsExpiryType()
+        {
+            List<SelectListItem> countriesItem = new List<SelectListItem>();
+
+            countriesItem.Add(new SelectListItem
+            {
+                Text = "Fixed",
+                Value = "1"
+            });
+            countriesItem.Add(new SelectListItem
+            {
+                Text = "Variable",
+                Value = "2"
+            });
+
+            return countriesItem;
+        }
+
+        public bool UpdateDLCCreation(DLCCreation objDLCCreation, string GroupId)
+        {
+            bool status = false;
+            try
+            {
+                var connStr = CR.GetCustomerConnString(GroupId);
+                using (var context = new BOTSDBContext(connStr))
+                {
+                    context.DLCCreations.AddOrUpdate(objDLCCreation);
+                    context.SaveChanges();
+                    status = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, GroupId);
+            }
+
+            return status;
+        }
+
+        public DLCCreation GetDLCForEdit(long SlNo, string GroupId)
+        {
+            DLCCreation objData = new DLCCreation();
+            var connStr = CR.GetCustomerConnString(GroupId);
+            using (var context = new BOTSDBContext(connStr))
+            {
+                objData = context.DLCCreations.Where(x => x.SlNo == SlNo).FirstOrDefault();
+            }
+            return objData;
+        }
     }
 }

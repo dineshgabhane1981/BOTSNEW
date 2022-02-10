@@ -51,7 +51,14 @@
                                         <td>@item.LinkExpiryDate.Value.ToString("dd-MMM-yyyy")</td>
                                         <td>@item.PointsExpiryDate.Value.ToString("dd-MMM-yyyy")</td>
                                         <td>@item.AddedBy</td>
-                                        <td>@item.AddedDate.Value.ToString("dd-MMM-yyyy")</td>
+                                        @if (item.AddedDate.HasValue)
+                                        {
+                                            <td>@item.AddedDate.Value.ToString("dd-MMM-yyyy")</td>
+                                        }
+                                        else
+                                        {
+                                            <td></td>
+                                        }
                                         <td style="text-align:center; width:160px;">
                                             <a href="@Url.Action("AddEditDLCCreation", "KeyIndicators", new { SlNo = Id })" class="login" title="Edit"><img src="~/Content/assets/images/shape_editUser.png" /></a>
                                         </td>
@@ -74,7 +81,7 @@
             "bFilter": true,
             "bAutoWidth": false,
             "pageLength": 25,
-            "pagingType": "simple_numbers"             
+            "pagingType": "simple_numbers"
         });
         $('#groupListTable_filter').hide();
 

@@ -539,7 +539,35 @@ namespace WebApp.Controllers
         }
         public ActionResult AddEditDLCCreation(string SlNo)
         {
-            return View();
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            ViewBag.MemberType = KR.GetMemberType();
+            ViewBag.PointsExpiryType = KR.GetPointsExpiryType();
+            DLCCreation objData = new DLCCreation();
+            if(!string.IsNullOrEmpty(SlNo))
+            {
+                objData = KR.GetDLCForEdit(Convert.ToInt64(SlNo), userDetails.GroupId);
+            }
+            return View(objData);
+        }
+        public ActionResult UpdateDLCCreation(DLCCreation objDLCCreation)
+        {
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            if(objDLCCreation.SlNo>0)
+            {
+                objDLCCreation.UpdatedBy = userDetails.LoginId;
+                objDLCCreation.UpdatedDate = DateTime.Now;
+            }
+            else
+            {
+                objDLCCreation.AddedBy = userDetails.LoginId;
+                objDLCCreation.AddedDate = DateTime.Now;
+            }
+            objDLCCreation.GroupId = userDetails.GroupId;
+            var status = KR.UpdateDLCCreation(objDLCCreation, userDetails.GroupId);
+            ViewBag.MemberType = KR.GetMemberType();
+            ViewBag.PointsExpiryType = KR.GetPointsExpiryType();
+           var objData = KR.GetDLCForEdit(Convert.ToInt64(objDLCCreation.SlNo), userDetails.GroupId);
+            return View("AddEditDLCCreation", objData);
         }
     }
 }
