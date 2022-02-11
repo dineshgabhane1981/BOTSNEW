@@ -1,0 +1,147 @@
+﻿@model BOTS_BL.Models.DLCCreation
+@{
+    ViewBag.Title = "AddEdit DLC Creation";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@using (Html.BeginForm("UpdateDLCCreation", "KeyIndicators", FormMethod.Post, new { id = "frmaddDLC", enctype = "multipart/form-data" }))
+{
+    @Html.HiddenFor(model => model.SlNo)
+    @Html.HiddenFor(model => model.AddedBy)
+    @Html.HiddenFor(model => model.AddedDate)
+    <div class="app-main__inner">
+        <div class="row mb-3 card">
+            <div class="container-fluid pt-3 pl-3 pr-3 pb-3">
+                <div class="row" style="margin: 0; padding-top:10px;">
+                    <div style="float:left;text-align:right;width:100px;">
+                        Date
+                    </div>
+
+                    <div class="col-sm-4" style="float:left;">
+                        @Html.TextBoxFor(model => model.Date, new { @class = "input100", @readonly = "readonly", @id = "txtDate", tabindex = 1 })
+
+                    </div>
+                    <div style="float:left;text-align:right;width:100px;">
+
+                        Points
+                    </div>
+
+                    <div class="col-sm-4" style="float:left;">
+                        @Html.TextBoxFor(model => model.Points, new { @class = "input100", @type = "number", @id = "txtPoints", tabindex = 2 })
+
+                    </div>
+                </div>
+                <div class="row" style="margin: 0; padding-top:10px;">
+                    <div style="float:left;text-align:right;width:100px;">
+                        MemberType
+                    </div>
+
+                    <div class="col-sm-4" style="float:left;">
+                        @Html.DropDownListFor(model => model.MemberType, new SelectList(ViewBag.MemberType, "Value", "Text", Model.MemberType), "Please Select", htmlAttributes: new { @class = "input100", @id = "ddlMemberType", tabindex = 10 })
+
+                    </div>
+                    <div style="float:left;text-align:right;width:100px;">
+                        SMS
+                    </div>
+
+                    <div class="col-sm-4" style="float:left;">
+                        @Html.TextBoxFor(model => model.SMS, new { @class = "input100", @id = "txtSMS", tabindex = 4 })
+
+                    </div>
+                </div>
+                <div class="row" style="margin: 0; padding-top:10px;">
+                    <div style="float:left;text-align:right;width:100px;">
+                        WhatsApp
+                    </div>
+
+                    <div class="col-sm-4" style="float:left;">
+                        @Html.TextBoxFor(model => model.WhatsApp, new { @class = "input100", @id = "txtWhatsApp", tabindex = 4 })
+
+                    </div>
+                    <div style="float:left;text-align:right;width:100px;">
+                        SMS Remainder
+                    </div>
+
+                    <div class="col-sm-4" style="float:left;">
+                        @Html.TextBoxFor(model => model.SMSRemainder, new { @class = "input100", @id = "txtSMSRemainder", tabindex = 4 })
+
+                    </div>
+                </div>
+                <div class="row" style="margin: 0; padding-top:10px;">
+                    <div style="float:left;text-align:right;width:100px;">
+                        WhatsApp Remainder
+                    </div>
+
+                    <div class="col-sm-4" style="float:left;">
+                        @Html.TextBoxFor(model => model.WhatsAppRemainder, new { @class = "input100", @id = "txtWhatsAppRemainder", tabindex = 4 })
+
+                    </div>
+                    <div style="float:left;text-align:right;width:100px;">
+                        Remainder Days
+                    </div>
+
+                    <div class="col-sm-4" style="float:left;">
+                        @Html.TextBoxFor(model => model.RemainderDays, new { @class = "input100", @type = "number", @id = "txtRemainderDays", tabindex = 4 })
+
+                    </div>
+                </div>
+                <div class="row" style="margin: 0; padding-top:10px;">
+                    <div style="float:left;text-align:right;width:100px;">
+                        LinkExpiry Date
+                    </div>
+
+                    <div class="col-sm-4" style="float:left;">
+                        @Html.TextBoxFor(model => model.LinkExpiryDate, new { @class = "input100", @readonly = "readonly", @id = "txtLinkExpiryDate", tabindex = 1 })
+
+                    </div>
+                    <div style="float:left;text-align:right;width:100px;">
+                        PointsExpiry Type
+                    </div>
+
+                    <div class="col-sm-4" style="float:left;">
+                        @Html.DropDownListFor(model => model.PointsExpiryType, new SelectList(ViewBag.PointsExpiryType, "Value", "Text", Model.PointsExpiryType), "Please Select", htmlAttributes: new { @class = "input100", @id = "ddlPointsExpiryType", tabindex = 10 })
+                    </div>
+                </div>
+                <div class="row" style="margin: 0; padding-top:10px;">
+                    <div style="float:left;text-align:right;width:100px;">
+                        PointsExpiry Date
+                    </div>
+
+                    <div class="col-sm-4" style="float:left;">
+                        @Html.TextBoxFor(model => model.PointsExpiryDate, new { @class = "input100", @readonly = "readonly", @id = "txtPointsExpiryDate", tabindex = 1 })
+
+                    </div>
+                    <div style="float:left;text-align:right;width:100px;">
+                        PointsExpiry Variable Days
+                    </div>
+
+                    <div class="col-sm-4" style="float:left;">
+                        @Html.TextBoxFor(model => model.PointsExpiryVariableDays, new { @class = "input100", @type = "number", @id = "txtPointsExpiryVariableDays", tabindex = 4 })
+
+                    </div>
+                </div>
+                <div class="container-fluid pt-3 pl-3 pr-3 pb-3">
+                    <button type="submit" id="btnDLCSave" class="btn btn-primary pull-right" style="margin-right:10px;">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+<script src="~/Scripts/jquery-ui-1.12.1.js"></script>
+<script src="~/Scripts/jquery-ui-1.12.1.min.js"></script>
+<link href="~/Content/themes/base/jquery-ui.min.css" rel="stylesheet" />
+<link href="~/Content/themes/base/jquery-ui.css" rel="stylesheet" />
+
+<script>
+    $("#txtDate").datepicker({
+        dateFormat: "yy-mm-dd",
+        /*maxDate: today,*/
+    });
+    $("#txtPointsExpiryDate").datepicker({
+        dateFormat: "yy-mm-dd",
+        /*maxDate: today,*/
+    });
+    $("#txtLinkExpiryDate").datepicker({
+        dateFormat: "yy-mm-dd",
+        /*maxDate: today,*/
+    });
+</script>

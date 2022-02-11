@@ -4,61 +4,101 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<div class="container-fluid pt-3 pl-3 pr-3">
+<div class="app-main__inner">
+    <div class="container-fluid pt-3 pl-3 pr-3 card">
+        <div class="row">
+            <div class="col search-container">
 
-    <div class="row mt-3" id="dvActivityData">
-        <div class="table-responsive">
-            <table class="table" id="groupListTable">
-                <thead>
-                    <tr>
-                        <th scope="col" style="text-align:center;">Type</th>
-                        <th scope="col" style="text-align:left;">Group Name</th>
-                        <th scope="col" style="text-align:center;">Category</th>
-                        <th scope="col" style="text-align: left;">City</th>
-                        <th scope="col" style="text-align:center;">Outlets</th>
-                        <th scope="col" style="text-align:center;">CS Name</th>
-                        <th scope="col" style="text-align:center;">Billing Product</th>
-                        <th scope="col" style="text-align:center;">Sourced by</th>
-                        <th scope="col" style="text-align:center;">Started On</th>
-                        <th scope="col" style="text-align:center;">Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @if (Model != null)
-                    {
-                        foreach (var item in Model)
-                        {
-
-                            WebApp.App_Start.CommonFunctions common = new WebApp.App_Start.CommonFunctions();
-                            string GroupId = common.EncryptString(Convert.ToString(item.GroupId));
+            </div>
+            <div style="text-align:right;">
+                <a href="@Url.Action("AddEditDLCCreation", "KeyIndicators")" title="Add New Customer">  <img src="~/Content/assets/images/AddCustomer.png" /></a>
+            </div>
+        </div>
+        <div class="pt-3 pl-3 pr-3 col-md-12 col-lg-12">
+            <div class="row mt-3" id="dvActivityData">
+                <div class="table-responsive">
+                    <table class="table" id="groupListTable">
+                        <thead>
                             <tr>
-                                <td>@item.CustomerType</td>
-                                <td><a href="#" onclick="OpenStatusPopup(@item.GroupId);">@item.RetailName</a></td>
-                                <td style="text-align:center;">@item.RetailCategory</td>
-                                <td>@item.City</td>
-                                <td style="text-align:center;">@item.OutletCount</td>
-                                <td>@item.RMTeam</td>
-                                <td>@item.BillingProductName</td>
-                                <td>@item.SourcedBy</td>
-                                @if (item.StartedOn.HasValue)
-                                {
-                                    <td>@item.StartedOn.Value.ToString("dd-MMM-yyyy")</td>
-                                }
-                                else
-                                {
-                                    <td></td>
-                                }
-                                <td style="text-align:center; width:160px;">
-                                    <a href="@Url.Action("AddNewCustomer", "CustomerManagement", new { groupId = GroupId })" class="login" title="Edit"><img src="~/Content/assets/images/shape_editUser.png" /></a>
-                                    <a href="@Url.Action("GoToDashboard", "CustomerManagement", new { groupId = GroupId })" class="login" title="Go To Dashboard"><img src="~/Content/assets/images/GoToDashboard.png" width="30" /></a>
-                                    <a href="@Url.Action("Index", "ITOperations", new { groupId = GroupId })" class="login" title="Go To IT Ops"><img src="~/Content/assets/images/itops.png" width="30" /></a>
-                                    <a href="@Url.Action("AllDiscussions", "Discussion", new { groupId = GroupId })" class="login" title="Go To Discussions"><img src="~/Content/assets/images/discussion.png" width="30" /></a>
-                                </td>
+                                <th scope="col" style="text-align:center;">Date</th>
+                                <th scope="col" style="text-align:left;">Points</th>
+                                <th scope="col" style="text-align:center;">SMS</th>
+                                <th scope="col" style="text-align: left;">WhatsApp</th>
+                                <th scope="col" style="text-align:center;">SMS Remainder</th>
+                                <th scope="col" style="text-align:center;">WhatsApp Remainder</th>
+                                @*<th scope="col" style="text-align:center;">Remainder Days</th>*@
+                                <th scope="col" style="text-align:center;">LinkExpiry Date</th>
+                                <th scope="col" style="text-align:center;">PointsExpiry Date</th>
+                                <th scope="col" style="text-align:center;">AddedBy</th>
+                                <th scope="col" style="text-align:center;">AddedDate</th>
+                                <th scope="col" style="text-align:center;">Action</th>
                             </tr>
-                        }
-                    }
-                </tbody>
-            </table>
+                        </thead>
+                        <tbody>
+                            @if (Model != null)
+                            {
+                                foreach (var item in Model)
+                                {
+                                    string Id = Convert.ToString(item.SlNo);
+                                    <tr>
+                                        <td>@item.Date.Value.ToString("dd-MMM-yyyy")</td>
+                                        <td>@item.Points</td>
+                                        <td>@item.SMS</td>
+                                        <td>@item.WhatsApp</td>
+                                        <td>@item.SMSRemainder</td>
+                                        <td>@item.WhatsAppRemainder</td>
+                                        @*<td>@item.RemainderDays</td>*@
+                                        <td>@item.LinkExpiryDate.Value.ToString("dd-MMM-yyyy")</td>
+                                        <td>@item.PointsExpiryDate.Value.ToString("dd-MMM-yyyy")</td>
+                                        <td>@item.AddedBy</td>
+                                        @if (item.AddedDate.HasValue)
+                                        {
+                                            <td>@item.AddedDate.Value.ToString("dd-MMM-yyyy")</td>
+                                        }
+                                        else
+                                        {
+                                            <td></td>
+                                        }
+                                        <td style="text-align:center; width:160px;">
+                                            <a href="@Url.Action("AddEditDLCCreation", "KeyIndicators", new { SlNo = Id })" class="login" title="Edit"><img src="~/Content/assets/images/shape_editUser.png" /></a>
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
     </div>
 </div>
+<script>
+    $(document).ready(function () {
+        var table = $('#groupListTable').DataTable({
+            "paging": true,
+            "ordering": true,
+            "info": true,
+            "bFilter": true,
+            "bAutoWidth": false,
+            "pageLength": 25,
+            "pagingType": "simple_numbers"
+        });
+        $('#groupListTable_filter').hide();
+
+        $('#txtSearch').on('keyup', function () {
+
+            $.fn.dataTable.ext.search.push(function (settings, searchData) {
+                var term = $('#txtSearch').val().toLowerCase()
+                for (var i = 0; i < searchData.length; i++) {
+                    if (searchData[i].toLowerCase().indexOf(term) >= 0) {
+                        return true;
+                    }
+                }
+                return false;
+            });
+            var table = $('#groupListTable').DataTable();
+            table.draw();
+        });
+    });
+
+</script>

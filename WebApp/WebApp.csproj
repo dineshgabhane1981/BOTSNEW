@@ -354,6 +354,7 @@
     <Content Include="Views\Reports\_CreateOwnReportTransactionWise.cshtml" />
     <Content Include="Views\CustomerManagement\_GroupConfigDetails.cshtml" />
     <Content Include="Views\KeyIndicators\DLCCreation.cshtml" />
+    <Content Include="Views\KeyIndicators\AddEditDLCCreation.cshtml" />
     <None Include="_bin_deployableAssemblies\x86\sqlcese40.dll" />
     <None Include="_bin_deployableAssemblies\x86\sqlceqp40.dll" />
     <None Include="_bin_deployableAssemblies\x86\sqlceme40.dll" />
