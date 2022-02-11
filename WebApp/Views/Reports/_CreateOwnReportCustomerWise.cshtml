@@ -10,54 +10,63 @@
                     <input class="input100" type="text" id="txtSearch" placeholder="Search Member..." />
                 </div>
             </div>
-            <div class="row mt-3" id="dvActivityData">
-                <div class="table-responsive">
-                    <table class="table" id="activityTable">
-                        <thead>
-                            <tr>
-                                @foreach (var item in Model.lstcolumnlist)
+            @if (Model.listCustR != null)
+            {
+                <div class="row mt-3" id="dvActivityData">
+                    <div class="table-responsive">
+                        <table class="table" id="activityTable">
+                            <thead>
+                                <tr>
+                                    @foreach (var item in Model.lstcolumnlist)
                                     {
                                         <th style="font-weight:bold;">@item</th>
                                     }
-                                @*@if (Model.listCustR != null)
+                                    @*@if (Model.listCustR != null)
                                 {
                                     foreach (var property in Model.listCustR.GetType().GetGenericArguments()[0].GetProperties())
                                     {
                                         <th>@property.Name</th>
                                     }
                                 }*@
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @if (Model.listCustR != null)
-                            {
-                                if (Model.listCustR.Count > 0)
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (Model.listCustR != null)
                                 {
+                                    if (Model.listCustR.Count > 0)
+                                    {
 
-                                    foreach (var customer in Model.listCustR)
+                                        foreach (var customer in Model.listCustR)
+                                        {
+                                            <tr>
+                                                @foreach (var property in customer.GetType().GetProperties())
+                                                {
+                                                    var isExist = Model.lstcolumnIdlist.Contains(property.Name);
+                                                    if (isExist)
+                                                    {
+                                                        <td>@property.GetValue(customer)</td>
+                                                    }
+                                                }
+                                                @*<td>@customer.MobileNo</td>
+                                            <td>@customer.CustomerName</td>
+                                            <td>@customer.OutletName</td>
+                                            <td>@customer.FirstTxnDt</td>
+                                            <td>@customer.LastTxnDt</td>
+                                            <td>@customer.TotalAvailablePoints</td>
+                                            <td>@customer.TotalEarn</td>
+                                            <td>@customer.TotalBurn</td>
+                                            <td>@customer.EnrolledDt</td>
+                                            <td>@customer.TotalSpend</td>
+                                            <td>@customer.NoofTxn</td>
+                                            <td>@customer.BonusPoints</td>*@
+
+                                            </tr>
+                                        }
+                                    }
+                                    else
                                     {
                                         <tr>
-                                            @foreach (var property in customer.GetType().GetProperties())
-                                            {
-                                                var isExist = Model.lstcolumnIdlist.Contains(property.Name);
-                                                if (isExist)
-                                                {
-                                                <td>@property.GetValue(customer)</td>
-                                                }
-                                            }
-                                            @*<td>@customer.MobileNo</td>
-                                                <td>@customer.CustomerName</td>
-                                                <td>@customer.OutletName</td>
-                                                <td>@customer.FirstTxnDt</td>
-                                                <td>@customer.LastTxnDt</td>
-                                                <td>@customer.TotalAvailablePoints</td>
-                                                <td>@customer.TotalEarn</td>
-                                                <td>@customer.TotalBurn</td>
-                                                <td>@customer.EnrolledDt</td>
-                                                <td>@customer.TotalSpend</td>
-                                                <td>@customer.NoofTxn</td>
-                                                <td>@customer.BonusPoints</td>*@
-
+                                            <td colspan="12" align="center"></td>
                                         </tr>
                                     }
                                 }
@@ -67,19 +76,65 @@
                                         <td colspan="12" align="center"></td>
                                     </tr>
                                 }
-                            }
-                            else
-                            {
-                                <tr>
-                                    <td colspan="12" align="center"></td>
-                                </tr>
-                            }
-                        </tbody>
-                    </table>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
-            </div>            
+            }
+            @if (Model.listTxnR != null)
+                {
+                    <div class="row mt-3" id="dvActivityData">
+                        <div class="table-responsive">
+                            <table class="table" id="activityTable">
+                                <thead>
+                                    <tr>
+                                        @foreach (var item in Model.lstcolumnlist)
+                                        {
+                                            <th style="font-weight:bold;">@item</th>
+                                        }
 
-        </div>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @if (Model.listTxnR != null)
+                                    {
+                                        if (Model.listTxnR.Count > 0)
+                                        {
+
+                                            foreach (var customer in Model.listTxnR)
+                                            {
+                                                <tr>
+                                                    @foreach (var property in customer.GetType().GetProperties())
+                                                    {
+                                                        var isExist = Model.lstcolumnIdlist.Contains(property.Name);
+                                                        if (isExist)
+                                                        {
+                                                            <td>@property.GetValue(customer)</td>
+                                                        }
+                                                    }
+
+                                                </tr>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <tr>
+                                                <td colspan="12" align="center"></td>
+                                            </tr>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <tr>
+                                            <td colspan="12" align="center"></td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                }
+         </div>
     </div>
 </div>
 

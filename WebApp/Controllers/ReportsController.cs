@@ -206,7 +206,7 @@ namespace WebApp.Controllers
             object[] objData = (object[])json_serializer.DeserializeObject(jsonData);
             foreach (Dictionary<string, object> item in objData)
             {
-               // string ReportType = Convert.ToString(item["reporttype"]);
+                string ReportType = Convert.ToString(item["reporttype"]);
                 object[] ColumnId = (object[])item["ColumnId"];
                 object[] columnname = (object[])item["columnnm"];
                 List<string> lstcolumnlist = new List<string>();
@@ -224,28 +224,30 @@ namespace WebApp.Controllers
                 }
                 createownviewmodel.lstcolumnlist = lstcolumnlist;
                 createownviewmodel.lstcolumnIdlist = lstcolumnIdlist;
-                //if (ReportType == "customer")
-                //{
+                if (ReportType == "customer")
+                {
                     List<object> lstcustlist = new List<object>();
                     createownviewmodel.listCustR = RR.GenerateCustomerTypeReport(ColumnId, lstcustomerdetails, userDetails.GroupId, userDetails.connectionString);
-                //var entriesToCopy = from cust in listCustR
-                //                    where cust != null
-                //                    select cust;
-                //lstcustlist.AddRange(entriesToCopy.Cast<object>());
-                //foreach (var cust in listCustR)
-                //{
-                //    if (cust != null)
-                //    {
-                //        lstcustlist.Add(cust);
-                //    }
-                //}
-                //createownviewmodel.listCustr = lstcustlist;
+                    //var entriesToCopy = from cust in listCustR
+                    //                    where cust != null
+                    //                    select cust;
+                    //lstcustlist.AddRange(entriesToCopy.Cast<object>());
+                    //foreach (var cust in listCustR)
+                    //{
+                    //    if (cust != null)
+                    //    {
+                    //        lstcustlist.Add(cust);
+                    //    }
+                    //}
+                    //createownviewmodel.listCustr = lstcustlist;
+                }
+                else if (ReportType == "transaction")
+                {
+                    createownviewmodel.listTxnR = RR.GenerateTxnTypeReport(ColumnId, lstcustomerdetails, userDetails.GroupId, userDetails.connectionString);
+                }
+                
             }
-            //    else if (ReportType == "transaction")
-            //{
-            //    createownviewmodel.listTxnR = RR.GenerateTxnTypeReport(ColumnId, lstcustomerdetails, userDetails.GroupId, userDetails.connectionString);
-            //    }
-            //}
+
             return PartialView("_CreateOwnReportCustomerWise", createownviewmodel);
             //return new JsonResult() { Data = createownviewmodel, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }

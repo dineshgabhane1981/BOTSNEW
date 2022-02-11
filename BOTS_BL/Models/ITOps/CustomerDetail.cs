@@ -123,30 +123,54 @@ namespace BOTS_BL.Models
         public decimal? TotalEarn { get; set; }
         public decimal? TotalBurn { get; set; }
         public decimal? TotalSpend { get; set; }        
-        public decimal? BonusPoints { get; set; }
-        public decimal? PointsEarn { get; set; }
-        public decimal? PointsBurn { get; set; }
-        public string InvoiceNo { get; set; }
-        public string Type { get; set; }
-        public DateTime TxnDate { get; set; }
-        public decimal? InvoiceAmt { get; set; }
+        public decimal? BonusPoints { get; set; }        
     }
     public class TransactionTypeReport
     {
         public string OutletName { get; set; }
         public string MobileNo { get; set; }
         public string CustomerName { get; set; }
-        public string FirstTxnDt { get; set; }
-        public string TransType { get; set; }
-        public string LastTxnDt { get; set; }
+        public DateTime? FirstTxnDate { get; set; }
+        public DateTime? LastTxnDate { get; set; }
+        public DateTime? EnrolledDate { get; set; }
+        public decimal? BonusPoints { get; set; }             
         public decimal? PointsEarn { get; set; }
         public decimal? PointsBurn { get; set; }
+        public string Type { get; set; }
         public string InvoiceNo { get; set; }
-        public DateTime? EnrolledDt { get; set; }
-        public DateTime TxnDt { get; set; }
         public decimal? InvoiceAmt { get; set; }
-        public decimal? BonusPoints { get; set; }
+        public DateTime? TxnDate { get; set; }      
 
+    }    
+    public class ListEarn
+    {
+        public string CustomerId { get; set; }
+        public decimal? PointsEarn { get; set; }
+    }
+    public class ListBurn
+    {
+        public string CustomerId { get; set; }
+        public decimal? PointsBurn { get; set; }
+    }
+    public class ListType
+    {
+        public string CustomerId { get; set; }
+        public string Type { get; set; }
+    }
+    public class ListInvoiceNo
+    {
+        public string CustomerId { get; set; }
+        public string InvoiceNo { get; set; }
+    }
+    public class ListInvoiceAmt
+    {
+        public string CustomerId { get; set; }
+        public decimal? InvoiceAmt { get; set; }
+    }
+    public class ListTxnDate
+    {
+        public string CustomerId { get; set; }
+        public DateTime? TxnDate { get; set; }
     }
     public class CustomerIdListAndCount
     {

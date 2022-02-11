@@ -461,19 +461,19 @@
             $("#ChooseRight").empty();
             let myOptions = [
 
-                { "ColumnId": 1, "ColumnName": "Mobile No" },
-                { "ColumnId": 2, "ColumnName": "Customer Name" },
-                { "ColumnId": 3, "ColumnName": "Outlet Name" },
-                { "ColumnId": 4, "ColumnName": "1st Txn Date" },
+                { "ColumnId": 1, "ColumnName": "Outlet Name" },
+                { "ColumnId": 2, "ColumnName": "Mobile No" },
+                { "ColumnId": 3, "ColumnName": "Customer Name" },
+                { "ColumnId": 4, "ColumnName": "First Txn Date" },
                 { "ColumnId": 5, "ColumnName": "Last Txn Date" },                
                 { "ColumnId": 9, "ColumnName": "Enrolled Date" },                
                 { "ColumnId": 12, "ColumnName": "Bonus Points" },
-                { "ColumnId": 13, "ColumnName": "Points Burn" },
-                { "ColumnId": 14, "ColumnName": "Points Earn" },
-                { "ColumnId": 15, "ColumnName": "Invoice No" },
-                { "ColumnId": 16, "ColumnName": "Type" },
-                { "ColumnId": 17, "ColumnName": "Txn Date" },
-                { "ColumnId": 18, "ColumnName": "Invoice Amt" }
+                { "ColumnId": 13, "ColumnName": "Points Earn" },
+                { "ColumnId": 14, "ColumnName": "Points Burn" },
+                { "ColumnId": 15, "ColumnName": "Type" },
+                { "ColumnId": 16, "ColumnName": "Invoice No" },
+                { "ColumnId": 17, "ColumnName": "Invoice Amt" },               
+                { "ColumnId": 18, "ColumnName": "Txn Date" }               
             ];
 
             myOptions.forEach(function (e, i) {
@@ -795,20 +795,20 @@
                 $("#divLoader").show();
                 var custreport = $("#rdncustwise").val();
                 var txnreport = $("#rdntransactionwise").val();
-                //var type;
-                //if ($("#rdncustwise").is(":checked")) {
-                //    type = "customer";
-                //}
-                //else if ($("#rdntransactionwise").is(":checked")) {
-                //    type = "transaction";
-                //}
+                var type;
+                if ($("#rdncustwise").is(":checked")) {
+                    type = "customer";
+                }
+                else if ($("#rdntransactionwise").is(":checked")) {
+                    type = "transaction";
+                }
                 console.log(custreport);
                 console.log(txnreport);
                 var FilterData = [];
                 item = {};
                 item["ColumnId"] = Array;
                 item["columnnm"] = ArrayColumnName;
-                //item["reporttype"] = type;
+                item["reporttype"] = type;
                 FilterData.push(item);
                 var data = JSON.stringify(FilterData);
             $.ajax({

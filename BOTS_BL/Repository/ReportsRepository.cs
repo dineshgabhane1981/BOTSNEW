@@ -950,7 +950,6 @@ namespace BOTS_BL.Repository
             return objcount;
 
         }
-
         
         public List<CustomerTypeReport> GenerateCustomerTypeReport(object[] ColumnId, List<CustomerDetail> lstcustdetails, string GroupId, string connstr)
         {
@@ -962,7 +961,7 @@ namespace BOTS_BL.Repository
                         select int.Parse(val);
             using (var context = new BOTSDBContext(connstr))
             {
-                var predicate = PredicateBuilder.True<TransactionMaster>();
+               // var predicate = PredicateBuilder.True<TransactionMaster>();
                 objtrans = context.Database.SqlQuery<TransactionMaster>("select * from TransactionMaster where InvoiceNo != 'B_Birthday' and InvoiceNo!= 'B_Anniversary'and InvoiceNo!= 'B_ProfileUpdate'and InvoiceNo!= 'B_ReferralBonus' and InvoiceNo!= 'B_GiftingPoints'and InvoiceNo!= 'Bonus'and TransType in(1, 2)").ToList();
 
                 if (lstcustdetails != null)
@@ -1064,23 +1063,7 @@ namespace BOTS_BL.Repository
                             var Bonus = context.Database.SqlQuery<decimal>("select sum(pointsearned) from transactionmaster where InvoiceNo in('B_Birthday', 'B_Anniversary','B_ProfileUpdate','B_ReferralBonus', 'B_GiftingPoints', 'Bonus')and TransType in(1, 2) and CustomerId=" + id.CustomerId + " group by customerid  ").FirstOrDefault();
                             objcustomertypereport.BonusPoints = Bonus;
                         }
-                        //pointsearn
-                        //if(str.Contains("13"))
-                        //{
-                        //    //var pointsEarn = context.Database.SqlQuery<decimal>("select PointsEarned from TransactionMaster where TransType='1'and CustomerId=" + id.CustomerId + "").ToList();
-                        //    //objcustomertypereport.PointsEarn = pointsEarn;
-                        //    predicate = predicate.And(p => p.TransType == "1");
-                        //}
-                        //pointsburn
-                        //if (str.Contains("14"))
-                        //{
-                        //    predicate = predicate.And(p => p.TransType == "2");
-                        //}
-                        ////
-                        //if (str.Contains("15"))
-                        //{
-                        //    predicate = predicate.And(p => p.TransType == "2");
-                        //}
+                        
                        
                         lstcusttype.Add(objcustomertypereport);
                         // }
@@ -1092,8 +1075,219 @@ namespace BOTS_BL.Repository
         }
         public List<TransactionTypeReport> GenerateTxnTypeReport(object[] ColumnId, List<CustomerDetail> lstcustdetails, string GroupId, string connstr)
         {
-            List<TransactionTypeReport> lstTxntype = new List<TransactionTypeReport>();
 
+            List<TransactionTypeReport> lstTxntype = new List<TransactionTypeReport>();
+            List<TransactionMaster> objtrans = new List<TransactionMaster>();
+            var str = String.Join(",", ColumnId);
+            var query = from val in str.Split(',')
+                        select int.Parse(val);
+            using (var context = new BOTSDBContext(connstr))
+            {                
+                objtrans = context.Database.SqlQuery<TransactionMaster>("select * from TransactionMaster where InvoiceNo != 'B_Birthday' and InvoiceNo!= 'B_Anniversary'and InvoiceNo!= 'B_ProfileUpdate'and InvoiceNo!= 'B_ReferralBonus' and InvoiceNo!= 'B_GiftingPoints'and InvoiceNo!= 'Bonus'and TransType in(1, 2)").ToList();
+
+                if (lstcustdetails != null)
+                {
+
+                    foreach (var id in lstcustdetails)
+                    {
+                        TransactionTypeReport objtranstypereport = new TransactionTypeReport();                      
+                        
+                        ListEarn objearn = new ListEarn();
+                        ListBurn objburn = new ListBurn();
+                        ListType objtype = new ListType();
+                        ListInvoiceNo objinvoiceno = new ListInvoiceNo();
+                        ListInvoiceAmt objinvoiceamt = new ListInvoiceAmt();
+                        ListTxnDate objtxndt = new ListTxnDate();
+                        List<ListEarn> lstearn = new List<ListEarn>();
+                        List<ListBurn> lstburn = new List<ListBurn>();
+                        List<ListType> lsttype = new List<ListType>();
+                        List<ListInvoiceNo> lstinvoiceno = new List<ListInvoiceNo>();
+                        List<ListInvoiceAmt> lstinvoiceamt = new List<ListInvoiceAmt>();
+                        List<ListTxnDate> lsttxndate = new List<ListTxnDate>();
+                        
+
+                        // pointsearn
+                        if (str.Contains("13"))
+                        {
+                            var pointsEarn = context.Database.SqlQuery<decimal?>("select PointsEarned from TransactionMaster where TransType='1'and CustomerId=" + id.CustomerId + "").ToList();
+                            
+                            if (pointsEarn.Count > 0)
+                            {
+                                foreach (var item in pointsEarn)
+                                {
+                                    // dicearnlist.Add(id.CustomerId, item);
+                                    objearn.CustomerId = id.CustomerId;
+                                    objearn.PointsEarn = item;
+                                    lstearn.Add(objearn);
+                                   
+                                }
+                            }
+                            //objtranstypereport.PointsEarn = pointsEarn;
+
+                        }
+                        //pointsburn
+                        if (str.Contains("14"))
+                        {
+                            var pointsBurn = context.Database.SqlQuery<decimal?>("select PointsBurned from TransactionMaster where TransType='2'and CustomerId=" + id.CustomerId + "").ToList();
+                            if (pointsBurn.Count > 0)
+                            {
+                                foreach (var item in pointsBurn)
+                                {
+                                    //dicburnlist.Add(id.CustomerId, item);
+                                    objburn.CustomerId = id.CustomerId;
+                                    objburn.PointsBurn = item;
+                                    lstburn.Add(objburn);
+                                }
+                            }
+                        }
+                        //type
+                        if (str.Contains("15"))
+                        {
+                            var type = context.Database.SqlQuery<string>("select ( case when TransType='1'then'Earn'Else 'Burn' end) as Type from TransactionMaster where CustomerId=" + id.CustomerId + "").ToList();
+                            if (type.Count > 0)
+                            {
+                                foreach (var item in type)
+                                {
+                                    //dictypelist.Add(id.CustomerId, item);
+                                    objtype.CustomerId = id.CustomerId;
+                                    objtype.Type = item;
+                                    lsttype.Add(objtype);
+                                }
+                            }
+                        }
+                        //invoiceno
+                        if (str.Contains("16"))
+                        {
+                            var invoiceno = context.Database.SqlQuery<string>("select InvoiceNo from TransactionMaster where CustomerId=" + id.CustomerId + "").ToList();
+                            if (invoiceno.Count > 0)
+                            {
+                                foreach (var item in invoiceno)
+                                {
+                                    // dicinvoicenolist.Add(id.CustomerId, item);
+                                    objinvoiceno.CustomerId = id.CustomerId;
+                                    objinvoiceno.InvoiceNo = item;
+                                    lstinvoiceno.Add(objinvoiceno);
+                                }
+                            }
+                        }
+                        //invoiceamt
+                        if (str.Contains("17"))
+                        {
+                            
+                            var invoiceamt = context.Database.SqlQuery<decimal?>("select InvoiceAmt from TransactionMaster where CustomerId =" + id.CustomerId + "").ToList();
+                            if (invoiceamt.Count > 0)
+                            {
+                                foreach (var item in invoiceamt)
+                                {
+                                    // dicinvoiceamtlist.Add(id.CustomerId, item);
+                                    objinvoiceamt.CustomerId = id.CustomerId;
+                                    objinvoiceamt.InvoiceAmt = item;
+                                    lstinvoiceamt.Add(objinvoiceamt);
+                                }
+                            }
+                        }
+                        //txndate
+                        if (str.Contains("18"))
+                        {
+                            var txndate = context.Database.SqlQuery<DateTime?>("select Datetime from TransactionMaster where CustomerId =" + id.CustomerId + "").ToList();
+                            if (txndate.Count > 0)
+                            {
+                                foreach (var item in txndate)
+                                {
+                                    //dictxndatelist.Add(id.CustomerId, item);
+                                    objtxndt.CustomerId = id.CustomerId;
+                                    objtxndt.TxnDate = item;
+                                    lsttxndate.Add(objtxndt);
+                                }
+                            }
+                        }
+                        //outletnm
+                        if (str.Contains("1"))
+                        {
+                            var outletname = context.Database.SqlQuery<string>("select OutletDetails.OutletName from CustomerDetails join OutletDetails on CustomerDetails.EnrollingOutlet = OutletDetails.OutletId where CustomerId=" + id.CustomerId + "").FirstOrDefault();
+
+                            objtranstypereport.OutletName = outletname;
+
+                        }
+                        //mobileno
+                        if (str.Contains("2"))
+                        {
+                            objtranstypereport.MobileNo = id.MobileNo;
+
+                        }
+                        //customername
+                        if (str.Contains("3"))
+                        {
+                            objtranstypereport.CustomerName = id.CustomerName;
+                        }
+                        //firsttxndt
+                        if (str.Contains("4"))
+                        {
+
+                            var itemfirstdt = context.Database.SqlQuery<DateTime>("select Min(datetime) as firsttxndate from transactionmaster where CustomerId=" + id.CustomerId + " group by customerid ").FirstOrDefault();
+                            objtranstypereport.FirstTxnDate = itemfirstdt;
+                        }
+                        //lasttxndt
+                        if (str.Contains("5"))
+                        {
+
+                            var Lasttxndate = context.Database.SqlQuery<DateTime>("select Max(datetime) as firsttxndate from transactionmaster where CustomerId=" + id.CustomerId + " group by customerid ").FirstOrDefault();
+
+                            objtranstypereport.LastTxnDate = Lasttxndate;
+                        }                      
+                        //enrolleddate
+                        if (str.Contains("7"))
+                        {
+                            objtranstypereport.EnrolledDate = id.DOJ;
+
+                        }                        
+                        //bonuspoints
+                        if (str.Contains("12"))
+                        {
+                            
+                            var Bonus = context.Database.SqlQuery<decimal>("select sum(pointsearned) from transactionmaster where InvoiceNo in('B_Birthday', 'B_Anniversary','B_ProfileUpdate','B_ReferralBonus', 'B_GiftingPoints', 'Bonus')and TransType in(1, 2) and CustomerId=" + id.CustomerId + " group by customerid  ").FirstOrDefault();
+                            objtranstypereport.BonusPoints = Bonus;
+                        }
+                        
+                        int[] arr = new int[] { lstearn.Count, lsttxndate.Count, lsttype.Count, lstinvoiceno.Count, lstinvoiceamt.Count, lstburn.Count };
+                        System.Array.Sort<int>(arr, new Comparison<int>(
+                          (i1, i2) => i2.CompareTo(i1)));
+
+                        int count = arr[0];
+                        for (int a = 0; a < count; a++)
+                        {
+                            if (lstearn.Count >= a + 1)
+                            {
+                                objtranstypereport.PointsEarn = lstearn[a].PointsEarn;
+                            }
+                            if (lsttxndate.Count >= a + 1)
+                            {
+                                objtranstypereport.TxnDate = lsttxndate[a].TxnDate;
+                            }
+                            if (lsttype.Count >= a + 1)
+                            {
+                                objtranstypereport.Type = lsttype[a].Type;
+                            }
+                            if (lstinvoiceno.Count >= a + 1)
+                            {
+                                objtranstypereport.InvoiceNo = lstinvoiceno[a].InvoiceNo;
+                            }
+                            if (lstinvoiceamt.Count >= a + 1)
+                            {
+                                objtranstypereport.InvoiceAmt = lstinvoiceamt[a].InvoiceAmt;
+                            }
+                            if (lstburn.Count >= a + 1)
+                            {
+                                objtranstypereport.PointsBurn = lstburn[a].PointsBurn;
+                            }
+                            lstTxntype.Add(objtranstypereport);
+                        }
+                            
+                        
+                    }
+
+                }
+            }
             return lstTxntype;
         }
         public List<ReportFilterCount> GetFilterCountOfDrillDown(int Elementtype, int Elementfilter, long Element1, long Element2, string BillSizeFilter, long BillSize_min, long BillSize_max, int periodsfilter, string periodFrm, string periodTo, string outletIds, string GroupId, string connstr)
