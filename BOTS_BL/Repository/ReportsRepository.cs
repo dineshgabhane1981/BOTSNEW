@@ -994,14 +994,12 @@ namespace BOTS_BL.Repository
                         //firsttxndt
                         if (str.Contains("4"))
                         {
-
                             var itemfirstdt = context.Database.SqlQuery<DateTime>("select Min(datetime) as firsttxndate from transactionmaster where CustomerId=" + id.CustomerId + " group by customerid ").FirstOrDefault();
                             objcustomertypereport.FirstTxnDate = itemfirstdt;
                         }
                         //lasttxndt
                         if (str.Contains("5"))
                         {
-
                             var Lasttxndate = context.Database.SqlQuery<DateTime>("select Max(datetime) as firsttxndate from transactionmaster where CustomerId=" + id.CustomerId + " group by customerid ").FirstOrDefault();
 
                             objcustomertypereport.LastTxnDate = Lasttxndate;
@@ -1012,8 +1010,6 @@ namespace BOTS_BL.Repository
                             var NoofTxn = context.Database.SqlQuery<int>("select count(CustomerId) from transactionmaster where CustomerId=" + id.CustomerId + " group by customerid ").FirstOrDefault();
 
                             objcustomertypereport.NoOfTxn = NoofTxn;
-
-
                         }
                         //enrolleddate
                         if (str.Contains("7"))
@@ -1256,31 +1252,39 @@ namespace BOTS_BL.Repository
                         int count = arr[0];
                         for (int a = 0; a < count; a++)
                         {
+                            TransactionTypeReport objmultipletxn = new TransactionTypeReport();
+                            var propInfo = objtranstypereport.GetType().GetProperties();
+                            foreach (var item in propInfo)
+                            {
+                                objmultipletxn.GetType().GetProperty(item.Name).SetValue(objmultipletxn, item.GetValue(objtranstypereport, null), null);
+                            }
+
+                            //objmultipletxn.   
                             if (lstearn.Count >= a + 1)
                             {
-                                objtranstypereport.PointsEarn = lstearn[a].PointsEarn;
+                                objmultipletxn.PointsEarn = lstearn[a].PointsEarn;
                             }
                             if (lsttxndate.Count >= a + 1)
                             {
-                                objtranstypereport.TxnDate = lsttxndate[a].TxnDate;
+                                objmultipletxn.TxnDate = lsttxndate[a].TxnDate;
                             }
                             if (lsttype.Count >= a + 1)
                             {
-                                objtranstypereport.Type = lsttype[a].Type;
+                                objmultipletxn.Type = lsttype[a].Type;
                             }
                             if (lstinvoiceno.Count >= a + 1)
                             {
-                                objtranstypereport.InvoiceNo = lstinvoiceno[a].InvoiceNo;
+                                objmultipletxn.InvoiceNo = lstinvoiceno[a].InvoiceNo;
                             }
                             if (lstinvoiceamt.Count >= a + 1)
                             {
-                                objtranstypereport.InvoiceAmt = lstinvoiceamt[a].InvoiceAmt;
+                                objmultipletxn.InvoiceAmt = lstinvoiceamt[a].InvoiceAmt;
                             }
                             if (lstburn.Count >= a + 1)
                             {
-                                objtranstypereport.PointsBurn = lstburn[a].PointsBurn;
+                                objmultipletxn.PointsBurn = lstburn[a].PointsBurn;
                             }
-                            lstTxntype.Add(objtranstypereport);
+                            lstTxntype.Add(objmultipletxn);
                         }
                             
                         

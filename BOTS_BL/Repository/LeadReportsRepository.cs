@@ -34,6 +34,10 @@ namespace BOTS_BL.Repository
                 {
                     DateTime FromDate = Convert.ToDateTime(FrmDate);
                     DateTime ToDateNew = Convert.ToDateTime(ToDate);
+                    if(FromDate == ToDateNew)
+                    {
+                        ToDateNew = ToDateNew.AddDays(1).Date.AddSeconds(-1);
+                    }
                     var SMDetails = context.CustomerLoginDetails.Where(x => x.LoginType == "8").ToList();
                     foreach (var item in SMDetails)
                     {

@@ -228,26 +228,16 @@ namespace WebApp.Controllers
                 {
                     List<object> lstcustlist = new List<object>();
                     createownviewmodel.listCustR = RR.GenerateCustomerTypeReport(ColumnId, lstcustomerdetails, userDetails.GroupId, userDetails.connectionString);
-                    //var entriesToCopy = from cust in listCustR
-                    //                    where cust != null
-                    //                    select cust;
-                    //lstcustlist.AddRange(entriesToCopy.Cast<object>());
-                    //foreach (var cust in listCustR)
-                    //{
-                    //    if (cust != null)
-                    //    {
-                    //        lstcustlist.Add(cust);
-                    //    }
-                    //}
-                    //createownviewmodel.listCustr = lstcustlist;
+                    Session["ExportCustomerReport"] = createownviewmodel.listCustR;
                 }
                 else if (ReportType == "transaction")
                 {
                     createownviewmodel.listTxnR = RR.GenerateTxnTypeReport(ColumnId, lstcustomerdetails, userDetails.GroupId, userDetails.connectionString);
+                    Session["ExportTransactionReport"] = createownviewmodel.listTxnR;
                 }
                 
             }
-
+            
             return PartialView("_CreateOwnReportCustomerWise", createownviewmodel);
             //return new JsonResult() { Data = createownviewmodel, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
@@ -1223,6 +1213,71 @@ namespace WebApp.Controllers
 
         }
 
+        public ActionResult ExportToExcelCreateOwnReport(string ReportName)
+        {
+            System.Data.DataTable table = new System.Data.DataTable();
+            try
+            {               
+                var userDetails = (CustomerLoginDetail)Session["UserSession"];
+               
+
+                if (Session["ExportCustomerReport"] != null)
+                {
+                    List<CustomerTypeReport> lstcustreport = (List<CustomerTypeReport>)Session["ExportCustomerReport"];
+                    PropertyDescriptorCollection properties1 = TypeDescriptor.GetProperties(typeof(CustomerTypeReport));
+                    foreach (PropertyDescriptor prop in properties1)
+                        table.Columns.Add(prop.Name, Nullable.GetUnderlyingType(prop.PropertyType) ?? prop.PropertyType);
+
+                   
+                    foreach (CustomerTypeReport item in lstcustreport)
+                    {
+                        DataRow row = table.NewRow();
+                        foreach (PropertyDescriptor prop in properties1)
+                            row[prop.Name] = prop.GetValue(item) ?? DBNull.Value;
+
+                        table.Rows.Add(row);
+                    }
+
+                }
+                else if(Session["ExportTransactionReport"] != null)
+                {
+                    PropertyDescriptorCollection properties = TypeDescriptor.GetProperties(typeof(TransactionTypeReport));
+                    foreach (PropertyDescriptor prop in properties)
+                        table.Columns.Add(prop.Name, Nullable.GetUnderlyingType(prop.PropertyType) ?? prop.PropertyType);
+
+                    List<TransactionTypeReport> lsttransactionreport = (List<TransactionTypeReport>)Session["ExportTransactionReport"];
+                    foreach (TransactionTypeReport item in lsttransactionreport)
+                    {
+                        DataRow row = table.NewRow();
+                        foreach (PropertyDescriptor prop in properties)
+                            row[prop.Name] = prop.GetValue(item) ?? DBNull.Value;
+
+                        table.Rows.Add(row);
+                    }
+                }                    
+
+                string fileName = "BOTS_" + ReportName + ".xlsx";
+                using (XLWorkbook wb = new XLWorkbook())
+                {
+
+                    table.TableName = ReportName;
+                    IXLWorksheet worksheet = wb.AddWorksheet(sheetName: ReportName);
+                    worksheet.Cell(1, 1).Value = "Report Name";
+                    worksheet.Cell(1, 2).Value = ReportName;                    
+                    worksheet.Cell(5, 1).InsertTable(table);                  
+                    using (MemoryStream stream = new MemoryStream())
+                    {
+                        wb.SaveAs(stream);
+
+                        return File(stream.ToArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
 
 
     }

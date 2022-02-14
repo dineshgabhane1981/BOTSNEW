@@ -628,7 +628,13 @@ namespace WebApp.Controllers
         {
             MemberData objCustomerDetail = new MemberData();
             CancelTxnViewModel objData = new CancelTxnViewModel();
-            if (!string.IsNullOrEmpty(InvoiceNo))
+            if (!string.IsNullOrEmpty(InvoiceNo) && !string.IsNullOrEmpty(MobileNo))
+            {
+                
+                objData.objCancelTxnModel = ITOPS.GetTransactionByInvoiceNoAndMobileNo(GroupId,MobileNo,InvoiceNo);
+                objData.objCustomerDetail = ITOPS.GetCustomerByMobileNo(GroupId, objData.objCancelTxnModel.MobileNo);
+            }            
+            else if(!string.IsNullOrEmpty(InvoiceNo))
             {
                 objData.objCancelTxnModel = ITOPS.GetTransactionByInvoiceNo(GroupId, InvoiceNo);
                 objData.objCustomerDetail = ITOPS.GetCustomerByMobileNo(GroupId, objData.objCancelTxnModel.MobileNo);
@@ -638,7 +644,6 @@ namespace WebApp.Controllers
                 objData.objCustomerDetail = ITOPS.GetCustomerByMobileNo(GroupId, MobileNo);
                 objData.lstCancelTxnModel = ITOPS.GetTransactionByMobileNo(GroupId, MobileNo);
             }
-
             return Json(objData, JsonRequestBehavior.AllowGet);
         }
         public ActionResult GetModifyTxnData(string GroupId, string TransactionId)

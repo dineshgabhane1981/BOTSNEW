@@ -255,9 +255,9 @@
                 <button class=" ml-3 btn btn-primary login-btn" type="button" id="btngenerate" onclick="GenerateReport();" style="display:none; text-align:right;">
                     Generate Report
                 </button>
-                @*<button class=" ml-3 btn btn-primary login-btn" onclick='ExportDataExcel("0");' type="button" id="btnExport" style="text-align: right;">
+                <button class="btn btn-primary login-btn" onclick='ExportDataExcel("0");' type="button" id="btnExport" style="display:none;">
                     <i class="fas fa-file-export"></i> Export
-                </button>*@
+                </button>
             </div>
                 <div id="dvListing" style="display:none;">
                     @*@Html.Partial("~/Views/Reports/_CreateOwnReportCustomerWise.cshtml", Model)*@
@@ -445,8 +445,8 @@
                 { "ColumnId": 7, "ColumnName": "Enrolled Date" },
                 { "ColumnId": 8, "ColumnName": "Total Available Points" },
                 { "ColumnId": 9, "ColumnName": "Total Earn" },
-                { "ColumnId": 10, "ColumnName": "Total Burn" },                
-                { "ColumnId": 11, "ColumnName": "Total Spend" },                
+                { "ColumnId": 10, "ColumnName": "Total Burn" },
+                { "ColumnId": 11, "ColumnName": "Total Spend" },
                 { "ColumnId": 12, "ColumnName": "Bonus Points" }
             ];
 
@@ -465,15 +465,15 @@
                 { "ColumnId": 2, "ColumnName": "Mobile No" },
                 { "ColumnId": 3, "ColumnName": "Customer Name" },
                 { "ColumnId": 4, "ColumnName": "First Txn Date" },
-                { "ColumnId": 5, "ColumnName": "Last Txn Date" },                
-                { "ColumnId": 9, "ColumnName": "Enrolled Date" },                
+                { "ColumnId": 5, "ColumnName": "Last Txn Date" },
+                { "ColumnId": 9, "ColumnName": "Enrolled Date" },
                 { "ColumnId": 12, "ColumnName": "Bonus Points" },
                 { "ColumnId": 13, "ColumnName": "Points Earn" },
                 { "ColumnId": 14, "ColumnName": "Points Burn" },
                 { "ColumnId": 15, "ColumnName": "Type" },
                 { "ColumnId": 16, "ColumnName": "Invoice No" },
-                { "ColumnId": 17, "ColumnName": "Invoice Amt" },               
-                { "ColumnId": 18, "ColumnName": "Txn Date" }               
+                { "ColumnId": 17, "ColumnName": "Invoice Amt" },
+                { "ColumnId": 18, "ColumnName": "Txn Date" }
             ];
 
             myOptions.forEach(function (e, i) {
@@ -512,29 +512,6 @@
             });
 
             }
-    //$("#ddlTicketsize").change(function () {
-    //    var selected = $("#ddlTicketsize option:selected").text();
-    //    if (selected == 'Between') {
-    //        $("#txtTicketmin").show();
-    //        $("#txtTicketmax").show();
-    //        $('#txtTicketmin').attr('placeholder', 'From Ticket Size');
-    //        $('#txtTicketmax').attr('placeholder', 'To Ticket Size');
-    //    }
-    //    else if (selected == 'Less than') {
-    //        $("#txtTicketmin").show();
-    //        $("#txtTicketmax").hide();
-    //        $('#txtTicketmin').attr('placeholder', 'Less Than TicketSize');
-    //    }
-    //    else if (selected == 'More than') {
-    //        $("#txtTicketmax").show();
-    //        $("#txtTicketmin").hide();
-    //        $('#txtTicketmax').attr('placeholder', 'More Than TicketSize');
-    //    }
-    //    else if (selected == '---Select---') {
-    //        $("#txtTicketmin").hide();
-    //        $("#txtTicketmax").hide();
-    //    }
-    //});
     $("#ddlPointsBalance").change(function () {
         var selected = $("#ddlPointsBalance option:selected").text();
         if (selected == 'Between') {
@@ -595,8 +572,8 @@
             $('#txtspendmin').attr('placeholder', 'Less Than Spend Amt');
         }
         else if (selected == 'More than') {
-            $("#txtspendmax").show();
-            $("#txtspendmin").hide();
+            $("#txtspendmin").show();
+            $("#txtspendmax").hide();
             $('#txtspendmax').attr('placeholder', 'More Than Spend Amt');
         }
         else if (selected == '---Select---') {
@@ -604,52 +581,6 @@
             $("#txtspendmax").hide();
         }
     });
-    //$("#ddlNontrasacted").change(function () {
-    //    var selected = $("#ddlNontrasacted option:selected").text();
-    //    if (selected == 'Custom') {
-    //        $("#txtnontransactedmin").show();
-    //        $("#txtnontransactedmax").show();
-    //    }
-    //    else if (selected == '---Select---') {
-    //        $("#txtnontransactedmin").hide();
-    //        $("#txtnontransactedmax").hide();
-    //    }
-
-    //});
-    //$("#ddlEnrolled").change(function () {
-    //    var selected = $("#ddlEnrolled option:selected").text();
-    //    if (selected == 'Custom') {
-    //        $("#txtEnrollmin").show();
-    //        $("#txtEnrollmax").show();
-    //    }
-    //    else if (selected == '---Select---') {
-    //        $("#txtEnrollmin").hide();
-    //        $("#txtEnrollmax").hide();
-    //    }
-    //});
-    //$("#ddlAge").change(function () {
-    //  var selected = $("#ddlAge option:selected").text();
-    //    if (selected == 'Between') {
-    //        $("#txtAgemin").show();
-    //        $("#txtAgemax").show();
-    //        $('#txtAgemin').attr('placeholder', 'From Age');
-    //        $('#txtAgemax').attr('placeholder', 'To Age');
-    //    }
-    //    else if (selected == 'Less than') {
-    //        $("#txtAgemin").show();
-    //        $("#txtAgemax").hide();
-    //        $('#txtAgemin').attr('placeholder', 'Less Than Age');
-    //    }
-    //    else if (selected == 'More than') {
-    //        $("#txtAgemax").show();
-    //        $("#txtAgemin").hide();
-    //        $('#txtAgemax').attr('placeholder', 'More Than Age');
-    //    }
-    //    else if (selected == '---Select---') {
-    //        $("#txtAgemin").hide();
-    //        $("#txtAgemax").hide();
-    //    }
-    //});
     $("#ddlSpendTxn").change(function () {
      var selected = $("#ddlSpendTxn option:selected").text();
         if (selected == 'Between') {
@@ -822,6 +753,7 @@
                     if (response != null) {
                         $("#dvListing").html(response);
                         $("#dvListing").show();
+                        $("#btnExport").show();
                         $("#divLoader").hide();
 
                     }
@@ -833,6 +765,7 @@
                     console.log(response.responseText);
                     $("#dvListing").html(response.responseText);
                     $("#dvListing").show();
+                    $("#btnExport").show();
                     $("#divLoader").hide();
                 }
             });
@@ -876,10 +809,23 @@
                 returnStatus = false;
             }
         }
-        if ($("#rdndaterange").is(":checked")) {
-
+        if ($("#rdndaterange").is(":checked")) {            
             var dtToday = new Date();
-            if (($('#txtEnrollfromdt').val() > startdate && $('#txtEnrolltodt').val() > dtToday) || ($('#txtallfmdt').val() < $('#txtEnrollfromdt').val() && $('#txtalltodt').val() < $('#txtEnrolltodt').val())) {
+            console.log(startdate);
+            console.log(dtToday);
+            console.log($('#txtEnrollfromdt').val());
+            console.log($('#txtallfmdt').val());
+            console.log($('#txtEnrolltodt').val());
+            console.log($('#txtalltodt').val());
+            var date1 = $('#txtallfmdt').val();
+            if ($('#txtallfmdt').val() == "" || $('#txtallfmdt').val() == null) {
+                date1 = startdate;                
+            }
+            else {
+
+            }
+            console.log(date1);
+            if (($('#txtEnrollfromdt').val() > startdate && $('#txtEnrolltodt').val() >= dtToday) || (date1 < $('#txtEnrollfromdt').val() && $('#txtalltodt').val() < $('#txtEnrolltodt').val())) {
 
                 cuteAlert({
                     type: "error",
@@ -902,7 +848,7 @@
                 cuteAlert({
                     type: "error",
                     title: "Oops..",
-                    message: "Enrollment Date should be less than Report Date Range",
+                    message: "Enrollment Date should be less than Report Date Range!",
                     buttonText: "Okay"
                 })
                 returnStatus = false;
@@ -1234,7 +1180,21 @@
         });
 
     }
-
+    function ExportDataExcel(Id)
+    {
+        var type;
+        if ($("#rdncustwise").is(":checked")) {
+            type = "CustomerWiseReport";
+        }
+        else if ($("#rdntransactionwise").is(":checked")) {
+            type = "TransactionWiseReport";
+        }
+         var urlLink = "@Url.Action("ExportToExcelCreateOwnReport", "Reports")";
+        urlLink = urlLink + "?ReportName=" + type+"";
+        console.log(urlLink);
+        window.location.href = urlLink;
+        $("#divLoader").hide();
+    }
 
     </script>
     <style>

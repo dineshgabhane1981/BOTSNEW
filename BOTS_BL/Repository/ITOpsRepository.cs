@@ -558,7 +558,40 @@ namespace BOTS_BL.Repository
             }
             return objReturn;
         }
-
+        public CancelTxnModel GetTransactionByInvoiceNoAndMobileNo(string GroupId, string MobileNo, string InvoiceNo)
+        {
+            CancelTxnModel objReturn = new CancelTxnModel();
+            try
+            {
+                TransactionMaster objTxn = new TransactionMaster();
+                CustomerDetail objCustomerDetail = new CustomerDetail();
+                string connStr = objCustRepo.GetCustomerConnString(GroupId);
+                using (var contextNew = new BOTSDBContext(connStr))
+                {
+                    objTxn = contextNew.TransactionMasters.Where(x => x.InvoiceNo == InvoiceNo && x.MobileNo == MobileNo && x.Status == "06").FirstOrDefault();
+                }
+                if (objTxn != null)
+                {
+                    objReturn.InvoiceNo = objTxn.InvoiceNo;
+                    objReturn.InvoiceAmt = objTxn.InvoiceAmt;
+                    objReturn.MobileNo = objTxn.MobileNo;
+                    objReturn.Points = Convert.ToString(objTxn.PointsEarned);
+                    objReturn.Datetime = Convert.ToDateTime(objTxn.Datetime).ToString("dd/MM/yyyy HH:mm:ss");
+                    objReturn.DatetimeOriginal = Convert.ToString(objTxn.Datetime);
+                    var OutletId = objTxn.CounterId.Substring(0, objTxn.CounterId.Length - 2);
+                    using (var contextNew = new BOTSDBContext(connStr))
+                    {
+                        objReturn.OutletName = contextNew.OutletDetails.Where(x => x.OutletId == OutletId).Select(y => y.OutletName).FirstOrDefault();
+                        objReturn.TransactionName = contextNew.TransactionTypeMasters.Where(x => x.TransactionType == objTxn.TransType).Select(y => y.TransactionName).FirstOrDefault();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, GroupId);
+            }
+            return objReturn;
+        }
         public List<CancelTxnModel> GetTransactionByMobileNo(string GroupId, string MobileNo)
         {
             List<CancelTxnModel> lstObjReturn = new List<CancelTxnModel>();
