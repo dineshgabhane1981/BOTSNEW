@@ -224,6 +224,7 @@ namespace WebApp.Controllers
                 }
                 createownviewmodel.lstcolumnlist = lstcolumnlist;
                 createownviewmodel.lstcolumnIdlist = lstcolumnIdlist;
+                Session["ExportColumnList"] = createownviewmodel.lstcolumnlist;
                 if (ReportType == "customer")
                 {
                     List<object> lstcustlist = new List<object>();
@@ -1219,20 +1220,21 @@ namespace WebApp.Controllers
             try
             {               
                 var userDetails = (CustomerLoginDetail)Session["UserSession"];
-               
+                CreateOwnReportViewModel objmodelview = new CreateOwnReportViewModel();
+                objmodelview.lstcolumnlist = (List<string>)Session["ExportColumnList"];
 
                 if (Session["ExportCustomerReport"] != null)
                 {
+                    
                     List<CustomerTypeReport> lstcustreport = (List<CustomerTypeReport>)Session["ExportCustomerReport"];
-                    PropertyDescriptorCollection properties1 = TypeDescriptor.GetProperties(typeof(CustomerTypeReport));
-                    foreach (PropertyDescriptor prop in properties1)
+                    PropertyDescriptorCollection properties = TypeDescriptor.GetProperties(typeof(CustomerTypeReport));
+                    foreach (PropertyDescriptor prop in properties)
                         table.Columns.Add(prop.Name, Nullable.GetUnderlyingType(prop.PropertyType) ?? prop.PropertyType);
-
-                   
+                
                     foreach (CustomerTypeReport item in lstcustreport)
                     {
                         DataRow row = table.NewRow();
-                        foreach (PropertyDescriptor prop in properties1)
+                        foreach (PropertyDescriptor prop in properties)
                             row[prop.Name] = prop.GetValue(item) ?? DBNull.Value;
 
                         table.Rows.Add(row);
