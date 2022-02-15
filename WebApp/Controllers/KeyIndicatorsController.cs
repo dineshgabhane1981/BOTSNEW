@@ -543,7 +543,7 @@ namespace WebApp.Controllers
             ViewBag.MemberType = KR.GetMemberType();
             ViewBag.PointsExpiryType = KR.GetPointsExpiryType();
             DLCCreation objData = new DLCCreation();
-            if(!string.IsNullOrEmpty(SlNo))
+            if (!string.IsNullOrEmpty(SlNo))
             {
                 objData = KR.GetDLCForEdit(Convert.ToInt64(SlNo), userDetails.GroupId);
             }
@@ -552,21 +552,37 @@ namespace WebApp.Controllers
         public ActionResult UpdateDLCCreation(DLCCreation objDLCCreation)
         {
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
-            if(objDLCCreation.SlNo>0)
+            if (objDLCCreation.SlNo > 0)
             {
                 objDLCCreation.UpdatedBy = userDetails.LoginId;
                 objDLCCreation.UpdatedDate = DateTime.Now;
             }
             else
             {
+                var count = KR.GetDLCRecordCount(userDetails.GroupId);
+
+                if (count > 0)
+                    objDLCCreation.DescId = Convert.ToString(count + 1);
+                else
+                    objDLCCreation.DescId = "1";
+
                 objDLCCreation.AddedBy = userDetails.LoginId;
                 objDLCCreation.AddedDate = DateTime.Now;
             }
             objDLCCreation.GroupId = userDetails.GroupId;
             var status = KR.UpdateDLCCreation(objDLCCreation, userDetails.GroupId);
+            if (status)
+            {
+                TempData["status"] = "Data Saved";
+            }
+            else
+            {
+                TempData["error"] = "Data Not Saved";
+            }
             ViewBag.MemberType = KR.GetMemberType();
             ViewBag.PointsExpiryType = KR.GetPointsExpiryType();
-           var objData = KR.GetDLCForEdit(Convert.ToInt64(objDLCCreation.SlNo), userDetails.GroupId);
+            var objData = KR.GetDLCForEdit(Convert.ToInt64(objDLCCreation.SlNo), userDetails.GroupId);
+
             return View("AddEditDLCCreation", objData);
         }
     }

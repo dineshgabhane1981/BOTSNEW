@@ -536,9 +536,10 @@ namespace BOTS_BL.Repository
                             using (var contextdb = new BOTSDBContext(connStr))
                             {
 
-                                objItem.MemberBase = contextdb.CustomerDetails.Count();
+                            //objItem.MemberBase = contextdb.CustomerDetails.Count();
+                            objItem.MemberBase = contextdb.CustomerDetails.Count();
 
-                                var sqlQ = $"SELECT COUNT(*) as Count FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = 'BulkUploadCustList'";
+                            var sqlQ = $"SELECT COUNT(*) as Count FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = 'BulkUploadCustList'";
                                 var exist = contextdb.Database.SqlQuery<int>(sqlQ).FirstOrDefault();
                                 if (exist > 0)
                                 {
