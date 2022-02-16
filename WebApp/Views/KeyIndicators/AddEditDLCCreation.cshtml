@@ -6,8 +6,34 @@
 @using (Html.BeginForm("UpdateDLCCreation", "KeyIndicators", FormMethod.Post, new { id = "frmaddDLC", enctype = "multipart/form-data" }))
 {
     @Html.HiddenFor(model => model.SlNo)
+    @Html.HiddenFor(model => model.DescId)
     @Html.HiddenFor(model => model.AddedBy)
     @Html.HiddenFor(model => model.AddedDate)
+
+    if (!string.IsNullOrEmpty(Convert.ToString(TempData["status"])))
+    {
+        <script>
+                    cuteAlert({
+                        type: "success",
+                        title: "Saved",
+                        message: "Data Saved Successfully!",
+                        buttonText: "Okay"
+                    }).then(() => {
+                        window.location.href = '@Url.Action("DLCCreation", "KeyIndicators")'
+                    })
+        </script>
+    }
+    if (!string.IsNullOrEmpty(Convert.ToString(TempData["error"])))
+    {
+        <script>
+            cuteAlert({
+                type: "error",
+                title: "OOPS...",
+                message: "There is problem in saving Data!",
+                buttonText: "Okay"
+            })
+        </script>
+    }
     <div class="app-main__inner">
         <div class="row mb-3 card">
             <div class="container-fluid pt-3 pl-3 pr-3 pb-3">
@@ -21,7 +47,6 @@
 
                     </div>
                     <div style="float:left;text-align:right;width:100px;">
-
                         Points
                     </div>
 
@@ -36,43 +61,26 @@
                     </div>
 
                     <div class="col-sm-4" style="float:left;">
-                        @Html.DropDownListFor(model => model.MemberType, new SelectList(ViewBag.MemberType, "Value", "Text", Model.MemberType), "Please Select", htmlAttributes: new { @class = "input100", @id = "ddlMemberType", tabindex = 10 })
+                        @Html.DropDownListFor(model => model.MemberType, new SelectList(ViewBag.MemberType, "Value", "Text", Model.MemberType), htmlAttributes: new { @class = "input100", @id = "ddlMemberType", tabindex = 10 })
 
                     </div>
                     <div style="float:left;text-align:right;width:100px;">
-                        SMS
+                        Desc Message
                     </div>
 
                     <div class="col-sm-4" style="float:left;">
-                        @Html.TextBoxFor(model => model.SMS, new { @class = "input100", @id = "txtSMS", tabindex = 4 })
+                        @Html.TextBoxFor(model => model.DescMessage, new { @class = "input100", @id = "txtDescMessage", tabindex = 4 })
 
                     </div>
                 </div>
+
                 <div class="row" style="margin: 0; padding-top:10px;">
                     <div style="float:left;text-align:right;width:100px;">
-                        WhatsApp
+                        LinkExpiry Date
                     </div>
 
                     <div class="col-sm-4" style="float:left;">
-                        @Html.TextBoxFor(model => model.WhatsApp, new { @class = "input100", @id = "txtWhatsApp", tabindex = 4 })
-
-                    </div>
-                    <div style="float:left;text-align:right;width:100px;">
-                        SMS Remainder
-                    </div>
-
-                    <div class="col-sm-4" style="float:left;">
-                        @Html.TextBoxFor(model => model.SMSRemainder, new { @class = "input100", @id = "txtSMSRemainder", tabindex = 4 })
-
-                    </div>
-                </div>
-                <div class="row" style="margin: 0; padding-top:10px;">
-                    <div style="float:left;text-align:right;width:100px;">
-                        WhatsApp Remainder
-                    </div>
-
-                    <div class="col-sm-4" style="float:left;">
-                        @Html.TextBoxFor(model => model.WhatsAppRemainder, new { @class = "input100", @id = "txtWhatsAppRemainder", tabindex = 4 })
+                        @Html.TextBoxFor(model => model.LinkExpiryDate, new { @class = "input100", @readonly = "readonly", @id = "txtLinkExpiryDate", tabindex = 1 })
 
                     </div>
                     <div style="float:left;text-align:right;width:100px;">
@@ -85,23 +93,14 @@
                     </div>
                 </div>
                 <div class="row" style="margin: 0; padding-top:10px;">
-                    <div style="float:left;text-align:right;width:100px;">
-                        LinkExpiry Date
-                    </div>
 
-                    <div class="col-sm-4" style="float:left;">
-                        @Html.TextBoxFor(model => model.LinkExpiryDate, new { @class = "input100", @readonly = "readonly", @id = "txtLinkExpiryDate", tabindex = 1 })
-
-                    </div>
                     <div style="float:left;text-align:right;width:100px;">
                         PointsExpiry Type
                     </div>
 
                     <div class="col-sm-4" style="float:left;">
-                        @Html.DropDownListFor(model => model.PointsExpiryType, new SelectList(ViewBag.PointsExpiryType, "Value", "Text", Model.PointsExpiryType), "Please Select", htmlAttributes: new { @class = "input100", @id = "ddlPointsExpiryType", tabindex = 10 })
+                        @Html.DropDownListFor(model => model.PointsExpiryType, new SelectList(ViewBag.PointsExpiryType, "Value", "Text", Model.PointsExpiryType), htmlAttributes: new { @class = "input100", @id = "ddlPointsExpiryType", tabindex = 10 })
                     </div>
-                </div>
-                <div class="row" style="margin: 0; padding-top:10px;">
                     <div style="float:left;text-align:right;width:100px;">
                         PointsExpiry Date
                     </div>
@@ -110,6 +109,9 @@
                         @Html.TextBoxFor(model => model.PointsExpiryDate, new { @class = "input100", @readonly = "readonly", @id = "txtPointsExpiryDate", tabindex = 1 })
 
                     </div>
+                </div>
+                <div class="row" style="margin: 0; padding-top:10px;">
+
                     <div style="float:left;text-align:right;width:100px;">
                         PointsExpiry Variable Days
                     </div>
@@ -119,8 +121,46 @@
 
                     </div>
                 </div>
+                <div class="row" style="margin: 0; padding-top:10px;">
+                    <div style="float:left;text-align:right;width:100px;">
+                        SMS Script
+                    </div>
+
+                    <div class="col-sm-4" style="float:left;">
+                        @Html.TextAreaFor(model => model.SMS, new { @class = "input100", @id = "txtSMS", tabindex = 4 })
+
+                    </div>
+
+                    <div style="float:left;text-align:right;width:100px;">
+                        SMS Remainder Script
+                    </div>
+
+                    <div class="col-sm-4" style="float:left;">
+                        @Html.TextAreaFor(model => model.SMSRemainder, new { @class = "input100", @id = "txtSMSRemainder", tabindex = 4 })
+
+                    </div>
+                </div>
+                <div class="row" style="margin: 0; padding-top:10px;">
+                    <div style="float:left;text-align:right;width:100px;">
+                        WhatsApp Script
+                    </div>
+
+                    <div class="col-sm-4" style="float:left;">
+                        @Html.TextAreaFor(model => model.WhatsApp, new { @class = "input100", @id = "txtWhatsApp", tabindex = 4 })
+
+                    </div>
+                    <div style="float:left;text-align:right;width:100px;">
+                        WhatsApp Remainder Script
+                    </div>
+
+                    <div class="col-sm-4" style="float:left;">
+                        @Html.TextAreaFor(model => model.WhatsAppRemainder, new { @class = "input100", @id = "txtWhatsAppRemainder", tabindex = 4 })
+
+                    </div>
+
+                </div>
                 <div class="container-fluid pt-3 pl-3 pr-3 pb-3">
-                    <button type="submit" id="btnDLCSave" class="btn btn-primary pull-right" style="margin-right:10px;">Save</button>
+                    <button type="submit" id="btnDLCSave" onclick="return CheckValidation();" class="btn btn-primary pull-right" style="margin-right:10px;">Save</button>
                 </div>
             </div>
         </div>
@@ -132,16 +172,165 @@
 <link href="~/Content/themes/base/jquery-ui.css" rel="stylesheet" />
 
 <script>
-    $("#txtDate").datepicker({
-        dateFormat: "yy-mm-dd",
-        /*maxDate: today,*/
+    $(document).ready(function () {
+        $("#txtDate").datepicker({
+            dateFormat: "yy-mm-dd",
+            /*maxDate: today,*/
+        });
+        $("#txtPointsExpiryDate").datepicker({
+            dateFormat: "yy-mm-dd",
+            /*maxDate: today,*/
+        });
+        $("#txtLinkExpiryDate").datepicker({
+            dateFormat: "yy-mm-dd",
+            /*maxDate: today,*/
+        });
+        removeBorder();
     });
-    $("#txtPointsExpiryDate").datepicker({
-        dateFormat: "yy-mm-dd",
-        /*maxDate: today,*/
-    });
-    $("#txtLinkExpiryDate").datepicker({
-        dateFormat: "yy-mm-dd",
-        /*maxDate: today,*/
-    });
+
+    function CheckValidation() {
+        var returnFalse = true;
+        if ($("#txtDate").val() == "") {
+            $('#txtDate').css('border-color', 'red');
+            returnFalse = false;
+        }
+        if ($("#txtPoints").val() == "") {
+            $('#txtPoints').css('border-color', 'red');
+            returnFalse = false;
+        }
+        if ($("#txtDescMessage").val() == "") {
+            $('#txtDescMessage').css('border-color', 'red');
+            returnFalse = false;
+        }
+        if ($("#txtLinkExpiryDate").val() == "") {
+            $('#txtLinkExpiryDate').css('border-color', 'red');
+            returnFalse = false;
+        }
+        if ($("#txtRemainderDays").val() == "") {
+            $('#txtRemainderDays').css('border-color', 'red');
+            returnFalse = false;
+        }
+        if ($("#txtPointsExpiryDate").val() == "") {
+            $('#txtPointsExpiryDate').css('border-color', 'red');
+            returnFalse = false;
+        }
+        if ($("#txtPointsExpiryVariableDays").val() == "") {
+            $('#txtPointsExpiryVariableDays').css('border-color', 'red');
+            returnFalse = false;
+        }
+        if ($("#txtSMS").val() == "") {
+            $('#txtSMS').css('border-color', 'red');
+            returnFalse = false;
+        }
+        if ($("#txtSMSRemainder").val() == "") {
+            $('#txtSMSRemainder').css('border-color', 'red');
+            returnFalse = false;
+        }
+        if ($("#txtWhatsApp").val() == "") {
+            $('#txtWhatsApp').css('border-color', 'red');
+            returnFalse = false;
+        }
+        if ($("#txtWhatsAppRemainder").val() == "") {
+            $('#txtWhatsAppRemainder').css('border-color', 'red');
+            returnFalse = false;
+        }
+
+        if (returnFalse == true) {
+            return true;
+        }
+        else {
+            cuteAlert({
+                type: "error",
+                title: "OOPS...",
+                message: "Please enter SMS Script!",
+                buttonText: "Okay"
+            })
+            return false;
+        }
+    }
+
+    function removeBorder() {
+        $("#txtDate").focusout(function () {
+            if ($("#txtDate").val() != "") {
+                $('#txtDate').css('border-color', '');
+            }
+            else {
+                $('#txtDate').css('border-color', 'red');
+            }
+        });
+        $("#txtPoints").focusout(function () {
+            if ($("#txtPoints").val() != "") {
+                $('#txtPoints').css('border-color', '');
+            }
+            else {
+                $('#txtPoints').css('border-color', 'red');
+            }
+        });
+        $("#txtDescMessage").focusout(function () {
+            if ($("#txtDescMessage").val() != "") {
+                $('#txtDescMessage').css('border-color', '');
+            }
+            else {
+                $('#txtDescMessage').css('border-color', 'red');
+            }
+        });
+        $("#txtLinkExpiryDate").focusout(function () {
+            if ($("#txtLinkExpiryDate").val() != "") {
+                $('#txtLinkExpiryDate').css('border-color', '');
+            }
+            else {
+                $('#txtLinkExpiryDate').css('border-color', 'red');
+            }
+        });
+        $("#txtRemainderDays").focusout(function () {
+            if ($("#txtRemainderDays").val() != "") {
+                $('#txtRemainderDays').css('border-color', '');
+            }
+            else {
+                $('#txtRemainderDays').css('border-color', 'red');
+            }
+        });
+        $("#txtPointsExpiryDate").focusout(function () {
+            if ($("#txtPointsExpiryDate").val() != "") {
+                $('#txtPointsExpiryDate').css('border-color', '');
+            }
+            else {
+                $('#txtPointsExpiryDate').css('border-color', 'red');
+            }
+        });
+        $("#txtSMS").focusout(function () {
+            if ($("#txtSMS").val() != "") {
+                $('#txtSMS').css('border-color', '');
+            }
+            else {
+                $('#txtSMS').css('border-color', 'red');
+            }
+        });
+        $("#txtSMSRemainder").focusout(function () {
+            if ($("#txtSMSRemainder").val() != "") {
+                $('#txtSMSRemainder').css('border-color', '');
+            }
+            else {
+                $('#txtSMSRemainder').css('border-color', 'red');
+            }
+        });
+        $("#txtWhatsApp").focusout(function () {
+            if ($("#txtWhatsApp").val() != "") {
+                $('#txtWhatsApp').css('border-color', '');
+            }
+            else {
+                $('#txtWhatsApp').css('border-color', 'red');
+            }
+        });
+        $("#txtWhatsAppRemainder").focusout(function () {
+            if ($("#txtWhatsAppRemainder").val() != "") {
+                $('#txtWhatsAppRemainder').css('border-color', '');
+            }
+            else {
+                $('#txtWhatsAppRemainder').css('border-color', 'red');
+            }
+        });
+    }
+
+
 </script>

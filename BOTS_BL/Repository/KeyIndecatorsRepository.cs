@@ -319,5 +319,18 @@ namespace BOTS_BL.Repository
             }
             return objData;
         }
+    
+        public int GetDLCRecordCount(string GroupId)
+        {
+            int count = 0;
+            var connStr = CR.GetCustomerConnString(GroupId);
+            using (var context = new BOTSDBContext(connStr))
+            {
+                count = context.DLCCreations.Count();                
+            }
+
+            return count;
+        }
+    
     }
 }
