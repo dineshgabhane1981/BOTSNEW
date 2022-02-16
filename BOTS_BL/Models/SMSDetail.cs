@@ -55,7 +55,7 @@ namespace BOTS_BL.Models
         [StringLength(25)]
         public string VirtualWhatsAppPassword { get; set; }
 
-        [NotMapped]
+        
         [StringLength(8)]
         public string OutletId { get; set; }
     }

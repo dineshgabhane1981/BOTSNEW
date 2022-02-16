@@ -470,39 +470,39 @@
     function SubmitPoints()
     {
         var returnStatus = true;
-        if ($("#txtbirthdt").val() == "") {
-            cuteAlert({
-                type: "error",
-                title: "Oops..",
-                message: "Please enter Date of Birth",
-                buttonText: "Okay"
-            })
-            $('#txtbirthdt').css('border-color', 'red');
-            returnStatus = false;
-        }
-        if ($("#ddllivein option:selected").text() == "Please Select") {
-            cuteAlert({
-                type: "error",
-                title: "Oops..",
-                message: "Please select you live in",
-                buttonText: "Okay"
-            })
-            $("#ddllivein").css('border-color', 'red');
-            returnStatus = false;
-        }
-        var dtToday = new Date();
-        var selecteddate = new Date($('#txtbirthdt').val())        
-        dtToday.setFullYear(dtToday.getFullYear() - 18);
+        //if ($("#txtbirthdt").val() == "") {
+        //    cuteAlert({
+        //        type: "error",
+        //        title: "Oops..",
+        //        message: "Please enter Date of Birth",
+        //        buttonText: "Okay"
+        //    })
+        //    $('#txtbirthdt').css('border-color', 'red');
+        //    returnStatus = false;
+        //}
+        //if ($("#ddllivein option:selected").text() == "Please Select") {
+        //    cuteAlert({
+        //        type: "error",
+        //        title: "Oops..",
+        //        message: "Please select you live in",
+        //        buttonText: "Okay"
+        //    })
+        //    $("#ddllivein").css('border-color', 'red');
+        //    returnStatus = false;
+        //}
+        //var dtToday = new Date();
+        //var selecteddate = new Date($('#txtbirthdt').val())        
+        //dtToday.setFullYear(dtToday.getFullYear() - 18);
       
-        if (selecteddate > dtToday) {
-            cuteAlert({
-                type: "error",
-                title: "Oops..",
-                message: "Date of Birth must be older than 18 years",
-                buttonText: "Okay"
-            })
-            returnStatus = false;
-        }
+        //if (selecteddate > dtToday) {
+        //    cuteAlert({
+        //        type: "error",
+        //        title: "Oops..",
+        //        message: "Date of Birth must be older than 18 years",
+        //        buttonText: "Okay"
+        //    })
+        //    returnStatus = false;
+        //}
 
         if ($("#rbtknowabt1").is(":checked") || $("#rbtknowabt2").is(":checked") || $("#rbtknowabt3").is(":checked") || $("#rbtknowabt4").is(":checked") || $("#rbtknowabt5").is(":checked") || $("#rbtknowabt6").is(":checked")) {
             
@@ -514,7 +514,7 @@
             }
             else {
                 
-                returnStatus = false;
+              //  returnStatus = false;
             }
         }
         if (returnStatus == true) {
@@ -539,8 +539,7 @@
             }
             if ($("#rbtknowabt6").is(":checked")) {
                 knowabout = 6;
-            }
-            
+            }           
             
             var annidt;
             if ($("#txtanniversary").val() == null || $("#txtanniversary").val() == "") {

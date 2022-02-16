@@ -19,6 +19,7 @@ using BOTS_BL.Models.SalesLead;
 using BOTS_BL.Models.FeedBack;
 using System.Web;
 using System.Globalization;
+using BOTS_BL.Models;
 
 namespace BOTS_BL.Repository
 {
@@ -155,8 +156,8 @@ namespace BOTS_BL.Repository
                     message = message.Replace("#32", Convert.ToString(ranking[1]));
 
                     objsmsdetails = context.SMSDetails.Where(x => x.OutletId == outletId).FirstOrDefault();
-                    SendMessage(objmobilemaster.MobileNo, objsmsdetails.SenderId, message, objsmsdetails.TxnUrl, objsmsdetails.TxnUserName, objsmsdetails.TxnPassword);
-
+                   // SendMessage(objmobilemaster.MobileNo, objsmsdetails.SenderId, message, objsmsdetails.TxnUrl, objsmsdetails.TxnUserName, objsmsdetails.TxnPassword);
+                    SendMessageVision(objsmsdetails.TxnUrl, objmobilemaster.MobileNo, message, objsmsdetails.SenderId, objsmsdetails.TxnPassword);
                 }
                 if (transaction.Count > 0)
                 {
@@ -257,8 +258,10 @@ namespace BOTS_BL.Repository
                     objnewcust.CustomerCategory = null;
                     objnewcust.CardNumber = "";
                     objnewcust.CustomerThrough = "2";
-
-                    objnewcust.DOB = Convert.ToDateTime(BirthDt);
+                    if (BirthDt != "")
+                    {
+                        objnewcust.DOB = Convert.ToDateTime(BirthDt);
+                    }
                     objnewcust.MaritalStatus = "";
                     objnewcust.MemberGroupId = "1000";
                     objnewcust.MobileNo = mobileNo;
@@ -399,7 +402,10 @@ namespace BOTS_BL.Repository
                     {
                         feedback.Location = LiveIn;
                         feedback.HowToKonwAbout = Knowabt;
-                        feedback.DOB = Convert.ToDateTime(BirthDt);
+                        if (BirthDt != "")
+                        {
+                            feedback.DOB = Convert.ToDateTime(BirthDt);
+                        }
                         if (AnniversaryDt != null)
                         {
                             feedback.DOA = Convert.ToDateTime(AnniversaryDt);
@@ -438,10 +444,10 @@ namespace BOTS_BL.Repository
                         message = message.Replace("#08", Convert.ToString(date));
 
                         objsmsdetails = context.SMSDetails.Where(x => x.OutletId == outletid).FirstOrDefault();
-                        SendBulkSMSMessageTxn(objmobilemaster.MobileNo, objsmsdetails.SenderId, message);
-                        //SendMessage(objmobilemaster.MobileNo, objsmsdetails.SenderId, message, url, objsmsdetails.TxnUserName, objsmsdetails.TxnPassword);
-                    }
+                        // SendBulkSMSMessageTxn(objmobilemaster.MobileNo, objsmsdetails.SenderId, message);
+                        SendBulkSMSMessagevision(objmobilemaster.MobileNo, objsmsdetails.SenderId, message);
 
+                    }
                     objsmsemailmaster = context.SMSEmailMasters.Where(x => x.MessageId == "201").FirstOrDefault();
                     message1 = objsmsemailmaster.SMS;
                     if (objcustdetails != null)
@@ -452,7 +458,9 @@ namespace BOTS_BL.Repository
                     {
                         message1 = message1.Replace("#01", "Member");
                     }
-                    SendMessage(mobileNo, objsmsdetails.SenderId, message1, objsmsdetails.TxnUrl, objsmsdetails.TxnUserName, objsmsdetails.TxnPassword);
+                    // SendMessage(mobileNo, objsmsdetails.SenderId, message1, objsmsdetails.TxnUrl, objsmsdetails.TxnUserName, objsmsdetails.TxnPassword);
+                    SendMessageVision(objsmsdetails.TxnUrl, mobileNo, message1, objsmsdetails.SenderId, objsmsdetails.TxnPassword);
+
                 }
             }
             return status;
@@ -501,7 +509,7 @@ namespace BOTS_BL.Repository
             }
 
         }
-
+        //send bulk sms through technocore
         public void SendBulkSMSMessageTxn(string MobileNo, string Sender, string MobileMessage)
         {
             string responseString;
@@ -538,6 +546,63 @@ namespace BOTS_BL.Repository
                 responseString = string.Format("HTTP_ERROR :: Exception raised! :: {0}", ex.Message);
             }
         }
-
+        //send sms through vender vision
+        public void SendMessageVision(string Url, string MobileNo, string MobileMessage, string SenderId, string Password)
+        { 
+            var httpWebRequest_12211 = (HttpWebRequest)WebRequest.Create(Url);
+            httpWebRequest_12211.ContentType = "application/json";
+                            httpWebRequest_12211.Method = "POST";
+                            using (var streamWriter_12211 = new StreamWriter(httpWebRequest_12211.GetRequestStream()))
+                            {
+                                string json_12211 = "{\"Account\":" +
+                                                "{\"APIKey\":\"" + Password + "\"," +
+                                                "\"SenderId\":\"" + SenderId + "\"," +
+                                                "\"Channel\":\"Trans\"," +
+                                                "\"DCS\":\"0\"," +
+                                                "\"SchedTime\":null," +
+                                                "\"GroupId\":null}," +
+                                                "\"Messages\":[{\"Number\":\"91" + MobileNo + "\"," +
+                                                "\"Text\":\"" + MobileMessage + "\"}]" +
+                                                "}";
+                                streamWriter_12211.Write(json_12211);
+                            }
+                var httpResponse_12211 = (HttpWebResponse)httpWebRequest_12211.GetResponse();
+                using (var streamReader_12211 = new StreamReader(httpResponse_12211.GetResponseStream()))
+                {
+                    var result_12211 = streamReader_12211.ReadToEnd();
+                }
+        }
+        //send bulk sms through vision
+        public void SendBulkSMSMessagevision(string MobileNo, string Sender, string MobileMessage)
+        {
+            string responseString;
+            try
+            {
+                ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls | (SecurityProtocolType)3072;
+                ServicePointManager.ServerCertificateValidationCallback += (sender, cert, chain, sslPolicyErrors) => true;
+              //  HttpWebRequest httpWReq = (HttpWebRequest)WebRequest.Create("https://203.212.70.210/smpp/sendsms?username=bluhtployalty&password=blue8621&to=" + MobileNo + "&from=" + Sender + "&text=" + MobileMessage + "&category=bulk");
+                HttpWebRequest httpWReq = (HttpWebRequest)WebRequest.Create("https://sms.visionhlt.com/api/mt/SendSms?User=Goldmart&Password=goldmart&SenderId=GOLDMT&Channel=Trans&DCS=0&FlashSms=0&Number=" +MobileNo + "&Text=" +MobileMessage +"");
+                UTF8Encoding encoding = new UTF8Encoding();               
+                httpWReq.Method = "GET";
+                httpWReq.ContentType = "application/json";                
+                HttpWebResponse response = (HttpWebResponse)httpWReq.GetResponse();
+                StreamReader reader = new StreamReader(response.GetResponseStream());
+                responseString = reader.ReadToEnd();
+                reader.Close();
+                response.Close();
+            }
+            catch (ArgumentException ex)
+            {
+                responseString = string.Format("HTTP_ERROR :: The second HttpWebRequest object has raised an Argument Exception as 'Connection' Property is set to 'Close' :: {0}", ex.Message);
+            }
+            catch (WebException ex)
+            {
+                responseString = string.Format("HTTP_ERROR :: WebException raised! :: {0}", ex.Message);
+            }
+            catch (Exception ex)
+            {
+                responseString = string.Format("HTTP_ERROR :: Exception raised! :: {0}", ex.Message);
+            }
+        }
     }
 }
