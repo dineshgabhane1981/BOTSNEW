@@ -270,11 +270,11 @@
                                 </a>
                             </li>
                             @*<li class="@Html.IsSelected(controller: "HeatMaps", action: "SMSConversion")">
-                                    <a class="@Html.IsSelected(controller: "HeatMaps", action: "SMSConversion")" href="@Url.Action("SMSConversion", "HeatMaps")">
-                                        <i class="metismenu-icon"></i>
-                                        SMS Conversion
-                                    </a>
-                                </li>*@
+                        <a class="@Html.IsSelected(controller: "HeatMaps", action: "SMSConversion")" href="@Url.Action("SMSConversion", "HeatMaps")">
+                            <i class="metismenu-icon"></i>
+                            SMS Conversion
+                        </a>
+                    </li>*@
                         </ul>
                     </li>
 
@@ -378,6 +378,12 @@
                                 </a>
                             </li>
                         </ul>
+                    </li>
+                    <li>
+                        <a href="@Url.Action("Index", "Telecaller")" class="@Html.IsSelected(controller: "Telecaller", action: "Index")">
+                            <i class="metismenu-icon pe-7s-rocket"></i>
+                            Telecaller
+                        </a>
                     </li>
                 }
             </ul>

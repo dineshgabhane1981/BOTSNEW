@@ -1,0 +1,236 @@
+﻿@model BOTS_BL.Models.TelecallerCustomerData
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="app-main__inner">
+    <div class="row mb-3 card">
+        <div class="container-fluid pt-3 pl-3 pr-3" style="text-align:center;">
+
+            <input type="number" id="txtmobileNo" class="input50" placeholder="Enter Mobile No" />
+            <button class="btn btn-primary login-btn ml-2 mr-2" type="button" id="btnSave" onclick="Submit();">
+                Submit
+            </button>
+            <br /><br />
+        </div>
+    </div>
+    <div class="row mb-3 card">
+        <div class="container-fluid pt-3 pl-3 pr-3" id="divdata" style="display:none;">
+            <div class="row mb-3">
+                <div class="col-md-3 col-xl-3">
+                    Customer Name: <span id="spCustName"></span>
+                </div>
+                <div class="col-md-3 col-xl-3">
+                    Mobile No:<span id="spMobileNo"></span>
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-md-3 col-xl-3">
+                    Enrollment Date: <span id="spenrolldt"></span>
+                </div>
+                <div class="col-md-3 col-xl-3">
+                    Gender:<span id="spGender"></span>
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-md-3 col-xl-3">
+                    Total Balance Points: <span id="sptotalpoints"></span>
+                </div>
+                <div class="col-md-3 col-xl-3">
+                    Last Txn Date:<span id="spLasttxndt"></span>
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-md-3 col-xl-3">
+                    Outlet Name: <span id="spoutletNm"></span>
+                    <span id="spoutletId"></span>
+                </div>
+                <div class="col-md-3 col-xl-3">
+                    Date Of Birth: <input type="date" id="txtDOB" class="input50" />
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-md-6 col-xl-6">
+                    Date Of Anniversary:<input type="date" id="txtDOA" class="input50" />
+                </div>
+                <div class="col-md-6 col-xl-5">
+                    
+                    Comments:<textarea class="input100" id="txtcomment" cols="80" rows="5" placeholder="Enter Comments"></textarea>
+
+                </div>
+            </div>
+            <div class="row">
+
+                <div class="col-md-3 col-xl-3">
+                    <button class="btn btn-primary login-btn ml-2 mr-2" type="button" id="btnSave" onclick="SaveData();">
+                        Save
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+
+       // var today = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
+
+        //var dtToday = new Date();
+
+        //var month = dtToday.getMonth() + 1;
+        //var day = dtToday.getDate();
+        //var year = dtToday.getFullYear();
+
+        //if (month < 10)
+        //    month = '0' + month.toString();
+        //if (day < 10)
+        //    day = '0' + day.toString();
+
+        //var maxDate = year + '-' + month + '-' + day;
+        //$('#txtDOB').attr('max', maxDate);
+        //$('#txtDOA').attr('max', maxDate);
+
+        $("#txtmobileNo").focusout(function () {
+            if ($("#txtmobileNo").val() != "") {
+                $('#txtmobileNo').css('border-color', '');
+            }
+            else {
+                $('#txtmobileNo').css('border-color', 'red');
+            }
+        });
+
+    });
+    function Submit() {
+        var returnStatus = true;
+        var MobileNo = $("#txtmobileNo").val();
+        if ($("#txtmobileNo").val() == "") {
+            cuteAlert({
+                type: "error",
+                title: "Oops..",
+                message: "Please Enter Mobile No",
+                buttonText: "Okay"
+            })
+            $('#txtmobileNo').css('border-color', 'red');
+            returnStatus = false;
+        }
+        else {
+            if (/^[6789]\d{9,9}$/.test(MobileNo)) {
+
+            }
+            else {
+                cuteAlert({
+                type: "error",
+                title: "Oops..",
+                message: "Please Enter Correct Mobile No",
+                buttonText: "Okay"
+            })
+                $('#txtmobileNo').css('border-color', 'red');
+                returnStatus = false;
+            }
+        }
+        if (returnStatus == true) {
+            $("#divLoader").show();
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("GetCustomerData", "Telecaller")',
+                data: '{MobileNo: ' + JSON.stringify($('#txtmobileNo').val()) + '}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (response) {
+
+                    if (response != null) {
+                        console.log(response);
+                        $("#spCustName").text(response.CustomerName);
+                        $("#spGender").text(response.Gender);
+                        $("#txtDOB").val(response.DOB);
+                        $("#txtDOA").val(response.DOA);
+                        $("#spMobileNo").text(response.MobileNo);
+                        $("#spenrolldt").text(response.EnrollmentDate);
+                        $("#sptotalpoints").text(response.TotalBalPoints);
+                        $("#spLasttxndt").text(response.LastTxnDate);
+                        $("#spoutletNm").text(response.OutletName);
+                        $("#spoutletId").text(response.outletid);
+
+                        $("#divdata").show();
+                    }
+                    $("#divLoader").hide();
+
+                },
+                error: function (result) {
+                    console.log(result.responseText);
+                    $("#divLoader").hide();
+                }
+            });
+        }
+    }
+    function SaveData() {
+       // if (returnStatus == true) {
+        $("#divLoader").show();
+        var FilterData = [];
+        item = {};
+        item["MobileNo"] = $("#txtmobileNo").val();
+        item["CustNm"] = $("#spCustName").text();
+        item["Gender"] = $("#spGender").text();
+        item["DOB"] = $("#txtDOB").val();
+        item["DOA"] = $("#txtDOA").val();
+        item["Points"] = 0;
+        item["outletId"] = $("#spoutletId").text();
+        item["Comments"] = $("#txtcomment").val();
+        FilterData.push(item);
+        var data = JSON.stringify(FilterData);
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("SaveTelecallerData", "Telecaller")',
+                data: '{jsonData: ' + JSON.stringify(data) + '}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (response) {
+                    console.log("Hi");
+                    if (response) {
+                        $("#divLoader").hide();                        
+                        $("#divdata").hide();
+                        $("#txtmobileNo").val("");                       
+
+                        setTimeout(cuteAlert({
+                            type: "success",
+                            title: "Save",
+                            message: "Data Save Successfully!",
+                            buttonText: "Okay"
+                        }), 10000);
+
+                        window.location.replace('');
+                    }
+                    else {
+                        setTimeout(cuteAlert({
+                            type: "success",
+                            title: "Save",
+                            message: "Data Save Successfully!",
+                            buttonText: "Okay"
+                        }), 10000);
+
+                        window.location.replace('');
+                    }
+
+                },
+                error: function (result) {
+                    console.log(result.responseText);
+                    $("#divLoader").hide();
+                }
+            });
+        //}
+    }
+</script>
+
+<style>
+
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+
+    input[type="number"] {
+        -moz-appearance: textfield;
+    }
+</style>

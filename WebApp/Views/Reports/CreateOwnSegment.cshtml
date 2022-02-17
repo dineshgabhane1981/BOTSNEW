@@ -23,37 +23,7 @@
                 <div class="col-md-8 col-xl-8">
                     <span id="spnFilter" style="font-size:17px;font-weight:bold;"></span>
                 </div>
-            </div>
-
-            @*<h6><b>Select Member Demographics</b></h6>
-        <div class="row mt-4" id="secmember">
-            <div class="col-md-3 col-xl-3">
-                Gender
-            </div>
-            <div class="col-md-2 col-xl-2">
-                @Html.DropDownList("Gender", new SelectList(ViewBag.lstGenderList, "Value", "Text"), htmlAttributes: new { @class = "input50", @id = "ddlGender" })
-            </div>
-        </div>
-        <div class="row mt-2">
-            <div class="col-md-3 col-xl-3">
-                Age
-            </div>
-            <div class="col-md-2 col-xl-2">
-                @Html.DropDownList("Age", new SelectList(ViewBag.lstSpendList, "Value", "Text"), htmlAttributes: new { @class = "input50", @id = "ddlAge" })
-            </div>
-            <div class="col-md-6 col-xl-4">
-                <input type="text" id="txtAgemin" class="input50" placeholder="From Age" style="display:none" />
-                <input type="text" id="txtAgemax" class="input50" placeholder="To Age" style="display:none" />
-            </div>
-        </div>
-        <div class="row mt-2">
-            <div class="col-md-3 col-xl-3">
-                Source
-            </div>
-            <div class="col-md-2 col-xl-2">
-                @Html.DropDownList("Source", new SelectList(ViewBag.lstSourceList, "Value", "Text"), htmlAttributes: new { @class = "input50", @id = "ddlSource" })
-            </div>
-        </div>*@
+            </div>           
             <h6><b>Select Transactional Variables</b></h6>
 
             <div class="row mt-4" id="secTransaction">
@@ -64,9 +34,7 @@
                     <input type="radio" id="rdndaterange" name="btdornot" /> Date Range &nbsp;&nbsp;
                     <input type="radio" id="rdnenrolled" name="btdornot" /> Enrolled Since
                 </div>
-                @*<div class="col-md-2 col-xl-2">
-                @Html.DropDownList("Entrolled", new SelectList(ViewBag.lstEnrolledList, "Value", "Text"), htmlAttributes: new { @class = "input50", @id = "ddlEnrolled" })
-            </div>*@
+               
                 <div id="divdaterange" class="col-md-6 col-xl-4" style="display:none">
                     <input type="date" id="txtEnrollfromdt" class="input50" placeholder="From Enrolled" />
                     <input type="date" id="txtEnrolltodt" class="input50" placeholder="To Enrolled" />
@@ -81,14 +49,8 @@
             <div class="row mt-2">
                 <div class="col-md-3 col-xl-3">
                     Not transacted since (days)
-                </div>
-
-                @*<div class="col-md-2 col-xl-2">
-                @Html.DropDownList("NonTransacted", new SelectList(ViewBag.lstnontransactedList, "Value", "Text"), htmlAttributes: new { @class = "input50", @id = "ddlNontrasacted" })
-            </div>*@
-                <div class="col-md-6 col-xl-4">
-                    @*<input type="text" id="txtnontransactedmin" class="input50" placeholder="From NotTransacted" style="display:none" />
-                <input type="text" id="txtnontransactedmax" class="input50" placeholder="To NotTransacted" style="display:none" />*@
+                </div>              
+                <div class="col-md-6 col-xl-4">                    
                     <input type="text" id="txtnontransactedmax" class="input50" placeholder="Enter no of days" />
                 </div>
             </div>
@@ -138,19 +100,7 @@
                     <input type="number" id="txtPointsBalnmax" class="input50" placeholder="To PointBalance" style="display:none" />
 
                 </div>
-            </div>
-            @*<div class="row mt-2">
-            <div class="col-md-3 col-xl-3">
-                Avg Ticket Size
-            </div>
-            <div class="col-md-2 col-xl-2">
-                @Html.DropDownList("Avg ticket", new SelectList(ViewBag.lstSpendList, "Value", "Text"), htmlAttributes: new { @class = "input50", @id = "ddlTicketsize" })
-            </div>
-            <div class="col-md-6 col-xl-4">
-                <input type="text" id="txtTicketmin" class="input50" placeholder="From Ticket Size" style="display:none" />
-                <input type="text" id="txtTicketmax" class="input50" placeholder="To Ticket Size" style="display:none" />
-            </div>
-        </div>*@
+            </div>           
 
             <h6><b>Brand And Outlet Selection</b></h6>
             <div class="row mt-4" id="secbrandOutlet">

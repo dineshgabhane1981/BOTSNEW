@@ -18,6 +18,7 @@ namespace BOTS_BL.Models
             : base(connectionStringName)
         {
         }
+        public virtual DbSet<TelecallerTracking> TelecallerTrackings { get; set; }
         public virtual DbSet<MWPSourceMaster> MWPSourceMasters { get; set; }
         public virtual DbSet<MWP_Details> MWP_Details { get; set; }
         public virtual DbSet<DLCCreation> DLCCreations { get; set; }
