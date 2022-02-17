@@ -19,7 +19,8 @@
         <div class="container-fluid pt-3 pl-3 pr-3" id="divdata" style="display:none;">
             <div class="row mb-3">
                 <div class="col-md-3 col-xl-3">
-                    Customer Name: <span id="spCustName"></span>
+                    Customer Name: <input type="text" id="spCustName" class="input50" />
+                    @*<span id="spCustName"></span>*@
                 </div>
                 <div class="col-md-3 col-xl-3">
                     Mobile No:<span id="spMobileNo"></span>
@@ -143,7 +144,7 @@
 
                     if (response != null) {
                         console.log(response);
-                        $("#spCustName").text(response.CustomerName);
+                        $("#spCustName").val(response.CustomerName);
                         $("#spGender").text(response.Gender);
                         $("#txtDOB").val(response.DOB);
                         $("#txtDOA").val(response.DOA);
@@ -173,7 +174,7 @@
         var FilterData = [];
         item = {};
         item["MobileNo"] = $("#txtmobileNo").val();
-        item["CustNm"] = $("#spCustName").text();
+        item["CustNm"] = $("#spCustName").val();
         item["Gender"] = $('#ddlgender :selected').val();
         item["DOB"] = $("#txtDOB").val();
         item["DOA"] = $("#txtDOA").val();
