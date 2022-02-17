@@ -21,6 +21,7 @@ namespace WebApp.Controllers
             SinglePageViewModel singlevm = new SinglePageViewModel();
             try
             {
+                singlevm.lstCommunication = SPR.GetCommunicationWhatsAppExpiryData();
                 var userDetails = (CustomerLoginDetail)Session["UserSession"];
                 userDetails.CustomerName = CR.GetCustomerName(userDetails.GroupId);
                 Session["UserSession"] = userDetails;
@@ -68,7 +69,7 @@ namespace WebApp.Controllers
                     singlevm.lstCities = cities;
                 }
 
-                //singlevm.lstCommunication = SPR.GetCommunicationWhatsAppExpiryData();
+               
             }
             catch (Exception ex)
             {

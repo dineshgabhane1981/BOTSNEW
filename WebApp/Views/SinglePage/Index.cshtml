@@ -253,15 +253,15 @@
             <div id="two-panel" class="multisteps-form__panel shadow p-4 m-4 list-box bg-white panel">
                 <div class="row mb-5 ml-2">
                     <div class="mr-3">
-                        <table border="1">
+                        <table border="1" cellpadding="10" cellspacing="10">
                             <thead><h6><b>Whats App Expiry Date</b></h6></thead>
                             <tr>
                                 <th scope="col" style="text-align:left;">Sr No</th>
                                 <th scope="col" style="text-align:left;">Group Name</th>
-                                <th scope="col" style="text-align:left;">Outlet Name</th>
-                                @*<th scope="col" style="text-align:left;">Low SMS Balance</th>
-                                    <th scope="col" style="text-align:left;">Low Virtual SMS Balance</th>
-                                    <th scope="col" style="text-align:left;">Low Whats App Balance</th>*@
+                                @* <th scope="col" style="text-align:left;">Outlet Name</th>
+                                    <th scope="col" style="text-align:left;">Low SMS Balance</th>
+                                         <th scope="col" style="text-align:left;">Low Virtual SMS Balance</th>
+                                         <th scope="col" style="text-align:left;">Low Whats App Balance</th>*@
                                 <th scope="col" style="text-align:left;">Whats App Expiry</th>
                             </tr>
                             <tbody>
@@ -279,8 +279,8 @@
                                                     <td>@indexcomm</td>
 
                                                     <td style="text-align:left;">@item.BrandName</td>
-                                                    <td style="text-align:left;">@item.OutletName</td>
-                                                    <td style="text-align:left;">@item.WAExpiryDate</td>
+                                                    @*<td style="text-align:left;">@item.OutletName</td>*@
+                                                    <td style="text-align:left;">@item.WAExpiryDate.ToString("dd-MMM-yyyy")</td>
                                                 </tr>
 
                                                 indexcomm++;
@@ -291,14 +291,16 @@
                             </tbody>
                         </table>
                     </div>
-                    <div class="mr-1 mt-5">
-                        <table border="1">
+                    <div class="mr-1">
+                        <table border="1" cellpadding="10" cellspacing="10">
                             <thead><h6><b>Low Whats App Balance</b></h6></thead>
                             <tr>
                                 <th scope="col" style="text-align:left;">Sr No</th>
                                 <th scope="col" style="text-align:left;">Group Name</th>
-                                <th scope="col" style="text-align:left;">Outlet Name</th>
+
                                 <th scope="col" style="text-align:left;">WhatsApp Balance</th>
+                                <th scope="col" style="text-align:left;">Instance Name</th>
+                                <th scope="col" style="text-align:left;">Login Status</th>
                             </tr>
                             <tbody>
                                 @{int indexcomm1 = 1;}
@@ -315,8 +317,10 @@
                                                     <td>@indexcomm1</td>
 
                                                     <td style="text-align:left;">@item.BrandName</td>
-                                                    <td style="text-align:left;">@item.OutletName</td>
+                                                    @*<td style="text-align:left;">@item.OutletName</td>*@
                                                     <td style="text-align:left;">@item.WABalance</td>
+                                                    <td style="text-align:left;">@item.OutletName</td>
+                                                    <td style="text-align:left;">@item.Status</td>
                                                 </tr>
 
                                                 indexcomm1++;
@@ -330,13 +334,14 @@
                 </div>
                 <div class="row mb-5 ml-2">
                     <div class="mr-2">
-                        <table border="1">
+                        <table border="1" cellpadding="10" cellspacing="10">
                             <thead><h6><b>Low SMS Balance</b></h6></thead>
                             <tr>
                                 <th scope="col" style="text-align:left;">Sr No</th>
                                 <th scope="col" style="text-align:left;">Group Name</th>
-                                <th scope="col" style="text-align:left;">Outlet Name</th>
+                                @*<th scope="col" style="text-align:left;">Outlet Name</th>*@
                                 <th scope="col" style="text-align:left;">SMS Balance</th>
+                                <th scope="col" style="text-align:left;">Provider</th>
                             </tr>
                             <tbody>
                                 @{int indexcomm2 = 1;}
@@ -353,8 +358,9 @@
                                                     <td>@indexcomm2</td>
 
                                                     <td style="text-align:left;">@item.BrandName</td>
-                                                    <td style="text-align:left;">@item.OutletName</td>
-                                                    <td style="text-align:left;">@item.SmsBalance</td>
+                                                    @*<td style="text-align:left;">@item.OutletName</td>*@
+                                                    <td style="text-align:left;">@item.SmsBalance1</td>
+                                                    <td style="text-align:left;">@item.CompanyName</td>
                                                 </tr>
 
                                                 indexcomm2++;
@@ -366,12 +372,12 @@
                         </table>
                     </div>
                     <div class="mr-2">
-                        <table border="1">
+                        <table border="1" cellpadding="10" cellspacing="10">
                             <thead><h6><b>Low Virtual SMS Balance</b></h6></thead>
                             <tr>
                                 <th scope="col" style="text-align:left;">Sr No</th>
                                 <th scope="col" style="text-align:left;">Group Name</th>
-                                <th scope="col" style="text-align:left;">Outlet Name</th>
+                                @*<th scope="col" style="text-align:left;">Outlet Name</th>*@
                                 <th scope="col" style="text-align:left;">Virtual SMS Balance</th>
                             </tr>
                             <tbody>
@@ -387,9 +393,8 @@
 
                                                 <tr>
                                                     <td>@indexcomm3</td>
-
                                                     <td style="text-align:left;">@item.BrandName</td>
-                                                    <td style="text-align:left;">@item.OutletName</td>
+                                                    @*<td style="text-align:left;">@item.OutletName</td>*@
                                                     <td style="text-align:left;">@item.VirtualsmsBalance</td>
                                                 </tr>
 
@@ -1014,10 +1019,10 @@
                  RenderNoCustomerConnectTable();
                 $("#divLoader").hide();
              }
-            
+
 
          });
-        
+
     }
 
     function GetMostConnectedCustomers() {

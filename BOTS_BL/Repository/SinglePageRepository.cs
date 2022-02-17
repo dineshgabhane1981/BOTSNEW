@@ -7,6 +7,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Reflection;
+using System.Web.Script.Serialization;
 using System.Xml.Serialization;
 using BOTS_BL.Models;
 using BOTS_BL.Models.CommonDB;
@@ -371,10 +372,12 @@ namespace BOTS_BL.Repository
             UserList objuserlist = new UserList();
             User objuser = new User();
             List<SMSBalance> lstbalance = new List<SMSBalance>();
+            List<WhatsAppBalance> lstWAbalance = new List<WhatsAppBalance>();
             DateTime next10day = DateTime.Now.AddDays(10);
             DataSet retVal = new DataSet();
             try
             {
+                //Technocore SMS Balance (Narayan)
                 var baseAddress = "https://smsnotify.one/SMSApi/reseller/readuser?userid=Blueotrans&password=123456&output=json";
                 using (var client = new HttpClient())
                 {
@@ -397,9 +400,9 @@ namespace BOTS_BL.Repository
                                 objbalance.BrandName = item["userName"].ToString();
                                 objbalance.SmsBalance = (string)item["smsBalance"];
                                 objbalance.Status = (string)item["userStatus"];
+                                objbalance.CompanyName = "Technocore";
                                 lstbalance.Add(objbalance);
                             }
-
                         }
                         else
                         {
@@ -407,25 +410,43 @@ namespace BOTS_BL.Repository
                         }
                     }
                 }
-                //vision
-                var baseAddressvision = "https://sms.visionhlt.com/api/mt/GetCreditReport?userid=4438&password=123456";
+                lstbalance = lstbalance.Where(x => x.SmsBalance != "0 Credits").ToList();
+                foreach (var item in lstbalance)
+                {
+                    item.SmsBalance1 = Convert.ToInt32(item.SmsBalance.Substring(0, item.SmsBalance.IndexOf(" ")));
+                }
+                
+
+                //Technocore Whats App Balance (Narayan)
+                baseAddress = "https://technocorelogic.com/api/checkbalance";
                 using (var client = new HttpClient())
                 {
-                    using (var response1 = client.GetAsync(baseAddressvision).Result)
+                    using (var response1 = client.GetAsync(baseAddress).Result)
                     {
                         if (response1.IsSuccessStatusCode)
                         {
-                            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/xml"));
-                            // var response2 = client.GetStringAsync(new Uri(baseAddressvision)).Result;
+                            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                            var response2 = client.GetStringAsync(new Uri(baseAddress)).Result;
 
-                            // var rootlist = XmlConvert.DeserializeObject<Dictionary<string, dynamic>>(response2);
-
-                            string users = response1.Content.ReadAsStringAsync().Result;
-
-                            XmlSerializer serializer = new XmlSerializer(typeof(List<User>), new XmlRootAttribute("CreditReport"));
-                            StringReader stringReader = new StringReader(users);
-                            List<User> productList = (List<User>)serializer.Deserialize(stringReader);
-
+                            var rootlist = JsonConvert.DeserializeObject<Dictionary<string, dynamic>>(response2);
+                            JObject jsonObj = JObject.Parse(response2);
+                            var WAData = jsonObj.Children().ToList();
+                            IEnumerable<JToken> pricyProducts = jsonObj.SelectTokens("0");
+                            int count = 0;
+                            foreach (JToken item in WAData)
+                            {
+                                if (count > 0)
+                                {
+                                    WhatsAppBalance objbalance = new WhatsAppBalance();
+                                    objbalance.BrandName = Convert.ToString(((Newtonsoft.Json.Linq.JProperty)item).Value["ClientName"]);
+                                    objbalance.OutletName = Convert.ToString(((Newtonsoft.Json.Linq.JProperty)item).Value["InstanceName"]);
+                                    objbalance.WABalance = Convert.ToInt32(((Newtonsoft.Json.Linq.JProperty)item).Value["BalanceQuota"]);
+                                    objbalance.Status = Convert.ToString(((Newtonsoft.Json.Linq.JProperty)item).Value["LoginStatus"]);
+                                    objbalance.WAExpiryDate = Convert.ToDateTime(((Newtonsoft.Json.Linq.JProperty)item).Value["Expiry"]);
+                                    lstWAbalance.Add(objbalance);
+                                }
+                                count++;
+                            }
                         }
                         else
                         {
@@ -434,32 +455,43 @@ namespace BOTS_BL.Repository
                     }
                 }
 
+                lstSmsbalance.objWhatsAppBalance = lstWAbalance.Where(y => y.WABalance < 1000 && y.WABalance > 0).OrderByDescending(x => x.WABalance).ToList();
+                //lstSmsbalance.objWhatsAppBalance = lstWAbalance.OrderByDescending(x => x.WABalance).ToList();
+                DateTime checkDate = DateTime.Today.AddDays(10);
 
-                //try
-                //{
-                //    SqlConnection sqlConn = new SqlConnection("Data Source=13.233.128.61;Initial Catalog=CommonDBLoyalty;user id = sa; password=BO%Admin#LY!4@");
+                lstSmsbalance.objWhatsAppExpiryDate = lstWAbalance.Where(x => x.WAExpiryDate < checkDate && x.WAExpiryDate > DateTime.Today).OrderByDescending(y => y.WAExpiryDate).ToList();
+                //vision SMS Balance
+                baseAddress = "https://sms.visionhlt.com/api/mt/GetCreditReport?userid=4438%20&password=123456";
+                using (var client = new HttpClient())
+                {
+                    using (var response1 = client.GetAsync(baseAddress).Result)
+                    {
+                        if (response1.IsSuccessStatusCode)
+                        {
+                            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                            var response2 = client.GetStringAsync(new Uri(baseAddress)).Result;
 
-                //    SqlCommand cmdReport = new SqlCommand("sp_GetCommunicationDataforSinglePage", sqlConn);
-                //    SqlDataAdapter daReport = new SqlDataAdapter(cmdReport);
-                //    using (cmdReport)
-                //    {
-                //        cmdReport.CommandType = CommandType.StoredProcedure;
-                //        daReport.Fill(retVal);
-                //    }
-                //    if(retVal!=null)
-                //    {   
-                //        lstSmsbalance.objSMSBalance = ConvertDataTable<SMSBalance>(retVal.Tables[3]);
-                //        lstSmsbalance.objWhatsAppBalance = ConvertDataTable<WhatsAppBalance>(retVal.Tables[1]);
-                //        lstSmsbalance.objVirtualSMSBalance = ConvertDataTable<VirtualSMSBalance>(retVal.Tables[2]);
-                //        lstSmsbalance.objWhatsAppExpiryDate = ConvertDataTable<WhatsAppExpiryDate>(retVal.Tables[0]);
-                //    }
-                //}
-                //catch (Exception ex)
-                //{
-                //    newexception.AddException(ex, "");
-                //}
-                lstSmsbalance.objSMSBalance = lstbalance.OrderBy(x => x.SmsBalance).ToList();
-               
+                            var rootlist = JsonConvert.DeserializeObject<Dictionary<string, dynamic>>(response2);
+                            JObject jsonObj = JObject.Parse(response2);
+                            //CreditReports
+                            var WAData = jsonObj.Children().ToList();
+                            IEnumerable<JToken> pricyProducts = jsonObj.SelectTokens("CreditReports").Children().ToList();
+                            
+                            foreach (JToken item in pricyProducts)
+                            {
+                                var lst = item.Children().ToList();
+                                SMSBalance objbalance = new SMSBalance();
+                                objbalance.BrandName = Convert.ToString(((Newtonsoft.Json.Linq.JProperty)lst[1]).Value);
+                                objbalance.SmsBalance = Convert.ToString(((Newtonsoft.Json.Linq.JProperty)lst[0]).Value);
+                                objbalance.SmsBalance1 = Convert.ToInt32(((Newtonsoft.Json.Linq.JProperty)lst[0]).Value);
+                                objbalance.CompanyName = "Vision";
+                                lstbalance.Add(objbalance);
+                            }
+                        }
+                    }
+                }
+                lstbalance = lstbalance.Where(x => x.SmsBalance1 < 1000).ToList();
+                lstSmsbalance.objSMSBalance = lstbalance.OrderByDescending(x => x.SmsBalance1).ToList();
             }
             catch (Exception ex)
             {
@@ -467,302 +499,303 @@ namespace BOTS_BL.Repository
             }
             return lstSmsbalance;
         }
-            private static List<T> ConvertDataTable<T>(DataTable dt)
+        private static List<T> ConvertDataTable<T>(DataTable dt)
+        {
+            List<T> data = new List<T>();
+            foreach (DataRow row in dt.Rows)
             {
-                List<T> data = new List<T>();
-                foreach (DataRow row in dt.Rows)
-                {
-                    T item = GetItem<T>(row);
-                    data.Add(item);
-                }
-                return data;
+                T item = GetItem<T>(row);
+                data.Add(item);
             }
-            private static T GetItem<T>(DataRow dr)
-            {
-                Type temp = typeof(T);
-                T obj = Activator.CreateInstance<T>();
+            return data;
+        }
+        private static T GetItem<T>(DataRow dr)
+        {
+            Type temp = typeof(T);
+            T obj = Activator.CreateInstance<T>();
 
-                foreach (DataColumn column in dr.Table.Columns)
+            foreach (DataColumn column in dr.Table.Columns)
+            {
+                foreach (PropertyInfo pro in temp.GetProperties())
                 {
-                    foreach (PropertyInfo pro in temp.GetProperties())
-                    {
-                        if (pro.Name == column.ColumnName)
-                            pro.SetValue(obj, dr[column.ColumnName], null);
-                        else
-                            continue;
-                    }
+                    if (pro.Name == column.ColumnName)
+                        pro.SetValue(obj, dr[column.ColumnName], null);
+                    else
+                        continue;
                 }
-                return obj;
             }
+            return obj;
+        }
 
-            public List<CitywiseReport> GetCityWiseData()
+        public List<CitywiseReport> GetCityWiseData()
+        {
+            List<CityWiseData> objData = new List<CityWiseData>();
+            List<CitywiseReport> lstCitywiseReport = new List<CitywiseReport>();
+            List<CitywiseReport> lstCitywiseReportNew = new List<CitywiseReport>();
+            List<CitywiseReport> lstFinalData = new List<CitywiseReport>();
+            try
             {
-                List<CityWiseData> objData = new List<CityWiseData>();
-                List<CitywiseReport> lstCitywiseReport = new List<CitywiseReport>();
-                List<CitywiseReport> lstCitywiseReportNew = new List<CitywiseReport>();
-                List<CitywiseReport> lstFinalData = new List<CitywiseReport>();
-                try
+                using (var context = new CommonDBContext())
                 {
-                    using (var context = new CommonDBContext())
+                    var groups = context.tblGroupDetails.Where(x => x.IsActive == true && x.IsLive == true).ToList();
+                    foreach (var item in groups)
                     {
-                        var groups = context.tblGroupDetails.Where(x => x.IsActive == true && x.IsLive == true).ToList();
-                        foreach (var item in groups)
-                        {
-                            var groupId = Convert.ToInt32(item.GroupId);
-                            CityWiseData objItem = new CityWiseData();
+                        var groupId = Convert.ToInt32(item.GroupId);
+                        CityWiseData objItem = new CityWiseData();
 
-                            objItem.GroupId = Convert.ToString(item.GroupId);
-                            objItem.GroupName = item.GroupName;
-                            var category = (from c in context.tblGroupDetails
-                                            join ct in context.tblCategories on c.RetailCategory equals ct.CategoryId
-                                            where c.GroupId == groupId
-                                            select new
-                                            {
-                                                ct.CategoryName
-                                            }).FirstOrDefault();
-                            objItem.CategoryName = category.CategoryName;
-
-                            var city = (from c in context.tblGroupDetails
-                                        join ct in context.tblCities on c.City equals ct.CityId
+                        objItem.GroupId = Convert.ToString(item.GroupId);
+                        objItem.GroupName = item.GroupName;
+                        var category = (from c in context.tblGroupDetails
+                                        join ct in context.tblCategories on c.RetailCategory equals ct.CategoryId
                                         where c.GroupId == groupId
                                         select new
                                         {
-                                            ct.CityName
+                                            ct.CategoryName
                                         }).FirstOrDefault();
+                        objItem.CategoryName = category.CategoryName;
 
-                            objItem.CityName = city.CityName;
+                        var city = (from c in context.tblGroupDetails
+                                    join ct in context.tblCities on c.City equals ct.CityId
+                                    where c.GroupId == groupId
+                                    select new
+                                    {
+                                        ct.CityName
+                                    }).FirstOrDefault();
 
-                            string connStr = CR.GetCustomerConnString(Convert.ToString(item.GroupId));
-                            using (var contextdb = new BOTSDBContext(connStr))
-                            {
+                        objItem.CityName = city.CityName;
+
+                        string connStr = CR.GetCustomerConnString(Convert.ToString(item.GroupId));
+                        using (var contextdb = new BOTSDBContext(connStr))
+                        {
 
                             //objItem.MemberBase = contextdb.CustomerDetails.Count();
                             objItem.MemberBase = contextdb.CustomerDetails.Count();
 
                             var sqlQ = $"SELECT COUNT(*) as Count FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = 'BulkUploadCustList'";
-                                var exist = contextdb.Database.SqlQuery<int>(sqlQ).FirstOrDefault();
-                                if (exist > 0)
-                                {
-                                    objItem.MemberBulkUpload = contextdb.BulkUploadCustLists.Count();
-                                    objItem.TotalMemberBase = objItem.MemberBase + contextdb.BulkUploadCustLists.Count();
-                                }
-                                else
-                                {
-                                    objItem.MemberBulkUpload = 0;
-                                    objItem.TotalMemberBase = objItem.MemberBase;
-                                }
-
-                            }
-                            objData.Add(objItem);
-                        }
-
-                        var uniqueCities = objData.GroupBy(x => x.CityName).Select(y => y.First()).ToList();
-                        var uniqueCategories = objData.GroupBy(x => x.CategoryName).Select(y => y.First()).ToList();
-
-                        var Cities = context.tblCities.ToList();
-                        var Categories = context.tblCategories.ToList();
-
-                        foreach (var city in Cities)
-                        {
-
-                            foreach (var category in Categories)
+                            var exist = contextdb.Database.SqlQuery<int>(sqlQ).FirstOrDefault();
+                            if (exist > 0)
                             {
-                                CitywiseReport objReport = new CitywiseReport();
-                                objReport.CityName = city.CityName;
-                                objReport.CategoryName = category.CategoryName;
-                                var lst = objData.Where(x => x.CityName == city.CityName && x.CategoryName == category.CategoryName).ToList();
-                                var total = lst.Sum(x => x.TotalMemberBase);
-                                objReport.MemberBase = total;
-                                lstCitywiseReport.Add(objReport);
+                                objItem.MemberBulkUpload = contextdb.BulkUploadCustLists.Count();
+                                objItem.TotalMemberBase = objItem.MemberBase + contextdb.BulkUploadCustLists.Count();
                             }
-
-                        }
-
-                        foreach (var city in Cities)
-                        {
-                            var count = lstCitywiseReport.Where(x => x.CityName == city.CityName && x.MemberBase != 0).Count();
-                            if (count > 0)
+                            else
                             {
-                                var filterList = lstCitywiseReport.Where(x => x.CityName == city.CityName).ToList();
-                                lstCitywiseReportNew.AddRange(filterList);
+                                objItem.MemberBulkUpload = 0;
+                                objItem.TotalMemberBase = objItem.MemberBase;
                             }
+
                         }
+                        objData.Add(objItem);
+                    }
+
+                    var uniqueCities = objData.GroupBy(x => x.CityName).Select(y => y.First()).ToList();
+                    var uniqueCategories = objData.GroupBy(x => x.CategoryName).Select(y => y.First()).ToList();
+
+                    var Cities = context.tblCities.ToList();
+                    var Categories = context.tblCategories.ToList();
+
+                    foreach (var city in Cities)
+                    {
+
                         foreach (var category in Categories)
                         {
-                            var count = lstCitywiseReportNew.Where(x => x.CategoryName == category.CategoryName && x.MemberBase != 0).Count();
-                            if (count > 0)
-                            {
-                                var filterList = lstCitywiseReportNew.Where(x => x.CategoryName == category.CategoryName).ToList();
-                                lstFinalData.AddRange(filterList);
-
-                            }
+                            CitywiseReport objReport = new CitywiseReport();
+                            objReport.CityName = city.CityName;
+                            objReport.CategoryName = category.CategoryName;
+                            var lst = objData.Where(x => x.CityName == city.CityName && x.CategoryName == category.CategoryName).ToList();
+                            var total = lst.Sum(x => x.TotalMemberBase);
+                            objReport.MemberBase = total;
+                            lstCitywiseReport.Add(objReport);
                         }
-                    }
-                }
-                catch (Exception ex)
-                {
-                    newexception.AddException(ex, "GetCityWiseData");
-                }
-                return lstFinalData;
-            }
 
-            public List<DiscussionDataForGraph> GetDiscussionData()
-            {
-                List<DiscussionDataForGraph> lstData = new List<DiscussionDataForGraph>();
-                using (var context = new CommonDBContext())
-                {
-                    var groups = context.tblGroupDetails.Where(x => x.IsActive == true && x.IsLive == true).ToList();
-                    foreach (var group in groups)
+                    }
+
+                    foreach (var city in Cities)
                     {
-                        DiscussionDataForGraph objItem = new DiscussionDataForGraph();
-                        objItem.groupid = group.GroupId;
-                        objItem.CustomerType = group.CustomerType;
-                        objItem.GroupName = group.GroupName;
-                        string grpId = Convert.ToString(group.GroupId);
-                        var discussedDate = context.BOTS_TblDiscussion.Where(y => y.GroupId == grpId && (y.CallType == 2 || y.CallType == 3)).OrderByDescending(x => x.UpdatedDate).Select(z => z.UpdatedDate).FirstOrDefault();
-                        if (discussedDate.HasValue)
+                        var count = lstCitywiseReport.Where(x => x.CityName == city.CityName && x.MemberBase != 0).Count();
+                        if (count > 0)
                         {
-                            var days = (DateTime.Today - discussedDate.Value).Days;
-                            if (days > 6)
-                            {
-                                objItem.days = days;
-                                lstData.Add(objItem);
-                                objItem.RMAssignedName = context.tblRMAssigneds.Where(x => x.RMAssignedId == group.RMAssigned).Select(y => y.RMAssignedName).FirstOrDefault();
-                                objItem.RMLoginId = context.tblRMAssigneds.Where(x => x.RMAssignedId == group.RMAssigned).Select(y => y.LoginId).FirstOrDefault();
-                            }
+                            var filterList = lstCitywiseReport.Where(x => x.CityName == city.CityName).ToList();
+                            lstCitywiseReportNew.AddRange(filterList);
                         }
-
                     }
-                }
-                return lstData;
-            }
-            public List<DiscussionDataForGraph> GetDiscussionDataForGraph(string type, string CSMember)
-            {
-                List<DiscussionDataForGraph> lstData = new List<DiscussionDataForGraph>();
-
-                using (var context = new CommonDBContext())
-                {
-                    var result = context.Database.SqlQuery<DiscussionDataForGraph>("sp_GetUntouchedDiscussionDataForGraph @type, @CSMember",
-                                  new SqlParameter("@type", type),
-                                  new SqlParameter("@CSMember", CSMember)).ToList<DiscussionDataForGraph>();
-
-                    var ACount = result.Where(x => x.CustomerType == "A").Count();
-                    var BCount = result.Where(x => x.CustomerType == "B").Count();
-                    var CCount = result.Where(x => x.CustomerType == "C").Count();
-
-                    DiscussionDataForGraph objdataA = new DiscussionDataForGraph();
-                    objdataA.CustomerType = "A";
-                    objdataA.count = ACount;
-                    lstData.Add(objdataA);
-
-                    DiscussionDataForGraph objdataB = new DiscussionDataForGraph();
-                    objdataB.CustomerType = "B";
-                    objdataB.count = BCount;
-                    lstData.Add(objdataB);
-
-                    DiscussionDataForGraph objdataC = new DiscussionDataForGraph();
-                    objdataC.CustomerType = "C";
-                    objdataC.count = CCount;
-                    lstData.Add(objdataC);
-                }
-
-                return lstData;
-            }
-
-            public List<DiscussionDataForGraph> GetCSData(string type, string CSMember)
-            {
-                List<DiscussionDataForGraph> lstData = new List<DiscussionDataForGraph>();
-
-                using (var context = new CommonDBContext())
-                {
-                    lstData = context.Database.SqlQuery<DiscussionDataForGraph>("sp_GetUntouchedDiscussionDataForGraph @type, @CSMember",
-                                  new SqlParameter("@type", type),
-                                  new SqlParameter("@CSMember", CSMember)).ToList<DiscussionDataForGraph>();
-
-                }
-                return lstData;
-            }
-
-            public double GetDays(string groupId)
-            {
-                double days = 0;
-                using (var context = new CommonDBContext())
-                {
-                    var lastUpdatedDate = context.BOTS_TblDiscussion.Where(a => a.GroupId == groupId && (a.CallType == 2 || a.CallType == 3)).OrderByDescending(x => x.UpdatedDate).Select(y => y.UpdatedDate).FirstOrDefault();
-                    if (lastUpdatedDate.HasValue)
+                    foreach (var category in Categories)
                     {
-                        days = (DateTime.Today - lastUpdatedDate.Value).Days;
-                    }
-                }
-
-                return days;
-            }
-
-            public List<NoCustomerConnect> GetNoCustomerConnect()
-            {
-                List<NoCustomerConnect> lstData = new List<NoCustomerConnect>();
-
-                using (var context = new CommonDBContext())
-                {
-                    var groups = context.tblGroupDetails.Where(x => x.IsActive == true && x.IsLive == true).ToList();
-                    foreach (var group in groups)
-                    {
-                        string grpId = Convert.ToString(group.GroupId);
-                        var discussedDate = context.BOTS_TblDiscussion.Where(y => y.GroupId == grpId).OrderByDescending(x => x.UpdatedDate).Select(z => z.UpdatedDate).FirstOrDefault();
-                        if (discussedDate.HasValue)
+                        var count = lstCitywiseReportNew.Where(x => x.CategoryName == category.CategoryName && x.MemberBase != 0).Count();
+                        if (count > 0)
                         {
-                            var days = (DateTime.Today - discussedDate.Value).Days;
-                            if (days > 15)
-                            {
-                                NoCustomerConnect objItem = new NoCustomerConnect();
-                                objItem.Groupid = group.GroupId;
-                                objItem.GroupName = group.GroupName;
-                                objItem.CustomerType = group.CustomerType;
-                                objItem.LastConnectDate = discussedDate.Value;
+                            var filterList = lstCitywiseReportNew.Where(x => x.CategoryName == category.CategoryName).ToList();
+                            lstFinalData.AddRange(filterList);
 
-                                lstData.Add(objItem);
-                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetCityWiseData");
+            }
+            return lstFinalData;
+        }
+
+        public List<DiscussionDataForGraph> GetDiscussionData()
+        {
+            List<DiscussionDataForGraph> lstData = new List<DiscussionDataForGraph>();
+            using (var context = new CommonDBContext())
+            {
+                var groups = context.tblGroupDetails.Where(x => x.IsActive == true && x.IsLive == true).ToList();
+                foreach (var group in groups)
+                {
+                    DiscussionDataForGraph objItem = new DiscussionDataForGraph();
+                    objItem.groupid = group.GroupId;
+                    objItem.CustomerType = group.CustomerType;
+                    objItem.GroupName = group.GroupName;
+                    string grpId = Convert.ToString(group.GroupId);
+                    var discussedDate = context.BOTS_TblDiscussion.Where(y => y.GroupId == grpId && (y.CallType == 2 || y.CallType == 3)).OrderByDescending(x => x.UpdatedDate).Select(z => z.UpdatedDate).FirstOrDefault();
+                    if (discussedDate.HasValue)
+                    {
+                        var days = (DateTime.Today - discussedDate.Value).Days;
+                        if (days > 6)
+                        {
+                            objItem.days = days;
+                            lstData.Add(objItem);
+                            objItem.RMAssignedName = context.tblRMAssigneds.Where(x => x.RMAssignedId == group.RMAssigned).Select(y => y.RMAssignedName).FirstOrDefault();
+                            objItem.RMLoginId = context.tblRMAssigneds.Where(x => x.RMAssignedId == group.RMAssigned).Select(y => y.LoginId).FirstOrDefault();
                         }
                     }
 
                 }
-                return lstData;
+            }
+            return lstData;
+        }
+        public List<DiscussionDataForGraph> GetDiscussionDataForGraph(string type, string CSMember)
+        {
+            List<DiscussionDataForGraph> lstData = new List<DiscussionDataForGraph>();
+
+            using (var context = new CommonDBContext())
+            {
+                var result = context.Database.SqlQuery<DiscussionDataForGraph>("sp_GetUntouchedDiscussionDataForGraph @type, @CSMember",
+                              new SqlParameter("@type", type),
+                              new SqlParameter("@CSMember", CSMember)).ToList<DiscussionDataForGraph>();
+
+                var ACount = result.Where(x => x.CustomerType == "A").Count();
+                var BCount = result.Where(x => x.CustomerType == "B").Count();
+                var CCount = result.Where(x => x.CustomerType == "C").Count();
+
+                DiscussionDataForGraph objdataA = new DiscussionDataForGraph();
+                objdataA.CustomerType = "A";
+                objdataA.count = ACount;
+                lstData.Add(objdataA);
+
+                DiscussionDataForGraph objdataB = new DiscussionDataForGraph();
+                objdataB.CustomerType = "B";
+                objdataB.count = BCount;
+                lstData.Add(objdataB);
+
+                DiscussionDataForGraph objdataC = new DiscussionDataForGraph();
+                objdataC.CustomerType = "C";
+                objdataC.count = CCount;
+                lstData.Add(objdataC);
             }
 
-            public List<MostConnectedCustomers> GetMostConnectedCustomers()
-            {
-                List<MostConnectedCustomers> lstData = new List<MostConnectedCustomers>();
-                using (var context = new CommonDBContext())
-                {
-                    lstData = context.Database.SqlQuery<MostConnectedCustomers>("sp_GetMostConnectedCustomers @pi_Date", new SqlParameter("@pi_Date", DateTime.Today.AddDays(-30))).ToList<MostConnectedCustomers>();
-                    foreach (var item in lstData)
-                    {
-                        int grpid = Convert.ToInt32(item.GroupId);
-                        item.GroupName = context.tblGroupDetails.Where(x => x.GroupId == grpid && x.IsActive == true && x.IsLive == true).Select(y => y.GroupName).FirstOrDefault();
-                        item.CustomerType = context.tblGroupDetails.Where(x => x.GroupId == grpid && x.IsActive == true && x.IsLive == true).Select(y => y.CustomerType).FirstOrDefault();
+            return lstData;
+        }
 
+        public List<DiscussionDataForGraph> GetCSData(string type, string CSMember)
+        {
+            List<DiscussionDataForGraph> lstData = new List<DiscussionDataForGraph>();
+
+            using (var context = new CommonDBContext())
+            {
+                lstData = context.Database.SqlQuery<DiscussionDataForGraph>("sp_GetUntouchedDiscussionDataForGraph @type, @CSMember",
+                              new SqlParameter("@type", type),
+                              new SqlParameter("@CSMember", CSMember)).ToList<DiscussionDataForGraph>();
+
+            }
+            return lstData;
+        }
+
+        public double GetDays(string groupId)
+        {
+            double days = 0;
+            using (var context = new CommonDBContext())
+            {
+                var lastUpdatedDate = context.BOTS_TblDiscussion.Where(a => a.GroupId == groupId && (a.CallType == 2 || a.CallType == 3)).OrderByDescending(x => x.UpdatedDate).Select(y => y.UpdatedDate).FirstOrDefault();
+                if (lastUpdatedDate.HasValue)
+                {
+                    days = (DateTime.Today - lastUpdatedDate.Value).Days;
+                }
+            }
+
+            return days;
+        }
+
+        public List<NoCustomerConnect> GetNoCustomerConnect()
+        {
+            List<NoCustomerConnect> lstData = new List<NoCustomerConnect>();
+
+            using (var context = new CommonDBContext())
+            {
+                var groups = context.tblGroupDetails.Where(x => x.IsActive == true && x.IsLive == true).ToList();
+                foreach (var group in groups)
+                {
+                    string grpId = Convert.ToString(group.GroupId);
+                    var discussedDate = context.BOTS_TblDiscussion.Where(y => y.GroupId == grpId).OrderByDescending(x => x.UpdatedDate).Select(z => z.UpdatedDate).FirstOrDefault();
+                    if (discussedDate.HasValue)
+                    {
+                        var days = (DateTime.Today - discussedDate.Value).Days;
+                        if (days > 15)
+                        {
+                            NoCustomerConnect objItem = new NoCustomerConnect();
+                            objItem.Groupid = group.GroupId;
+                            objItem.GroupName = group.GroupName;
+                            objItem.CustomerType = group.CustomerType;
+                            objItem.LastConnectDate = discussedDate.Value;
+
+                            lstData.Add(objItem);
+                        }
                     }
                 }
 
-                return lstData;
             }
-            public List<MostConnectedCustomers> GetLeastConnectedCustomers()
+            return lstData;
+        }
+
+        public List<MostConnectedCustomers> GetMostConnectedCustomers()
+        {
+            List<MostConnectedCustomers> lstData = new List<MostConnectedCustomers>();
+            using (var context = new CommonDBContext())
             {
-                List<MostConnectedCustomers> lstData = new List<MostConnectedCustomers>();
-                using (var context = new CommonDBContext())
+                lstData = context.Database.SqlQuery<MostConnectedCustomers>("sp_GetMostConnectedCustomers @pi_Date", new SqlParameter("@pi_Date", DateTime.Today.AddDays(-30))).ToList<MostConnectedCustomers>();
+                foreach (var item in lstData)
                 {
-                    lstData = context.Database.SqlQuery<MostConnectedCustomers>("sp_GetLeastConnectedCustomers @pi_Date", new SqlParameter("@pi_Date", DateTime.Today.AddDays(-180))).ToList<MostConnectedCustomers>();
-                    foreach (var item in lstData)
-                    {
-                        int grpid = Convert.ToInt32(item.GroupId);
-                        item.GroupName = context.tblGroupDetails.Where(x => x.GroupId == grpid && x.IsActive == true && x.IsLive == true).Select(y => y.GroupName).FirstOrDefault();
-                        item.CustomerType = context.tblGroupDetails.Where(x => x.GroupId == grpid && x.IsActive == true && x.IsLive == true).Select(y => y.CustomerType).FirstOrDefault();
+                    int grpid = Convert.ToInt32(item.GroupId);
+                    item.GroupName = context.tblGroupDetails.Where(x => x.GroupId == grpid && x.IsActive == true && x.IsLive == true).Select(y => y.GroupName).FirstOrDefault();
+                    item.CustomerType = context.tblGroupDetails.Where(x => x.GroupId == grpid && x.IsActive == true && x.IsLive == true).Select(y => y.CustomerType).FirstOrDefault();
 
-                    }
                 }
-
-                return lstData;
             }
-        
+
+            return lstData;
+        }
+        public List<MostConnectedCustomers> GetLeastConnectedCustomers()
+        {
+            List<MostConnectedCustomers> lstData = new List<MostConnectedCustomers>();
+            using (var context = new CommonDBContext())
+            {
+                lstData = context.Database.SqlQuery<MostConnectedCustomers>("sp_GetLeastConnectedCustomers @pi_Date", new SqlParameter("@pi_Date", DateTime.Today.AddDays(-180))).ToList<MostConnectedCustomers>();
+                foreach (var item in lstData)
+                {
+                    int grpid = Convert.ToInt32(item.GroupId);
+                    item.GroupName = context.tblGroupDetails.Where(x => x.GroupId == grpid && x.IsActive == true && x.IsLive == true).Select(y => y.GroupName).FirstOrDefault();
+                    item.CustomerType = context.tblGroupDetails.Where(x => x.GroupId == grpid && x.IsActive == true && x.IsLive == true).Select(y => y.CustomerType).FirstOrDefault();
+
+                }
+            }
+
+            return lstData;
+        }
+
+       
     }
 }

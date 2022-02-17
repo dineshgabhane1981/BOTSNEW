@@ -20,5 +20,8 @@ namespace WebApp.ViewModel
         public int SMSDetailsCount { get; set; }
         public SMSConfig objSMSConfig { get; set; }
         public WAConfig objWAConfig { get; set; }
+        public List<MWP_Details> lstMWPDetails { get; set; }
+        public List<MWPSourceMaster> objMWPSourceMaster { get; set; }
+        
     }
 }

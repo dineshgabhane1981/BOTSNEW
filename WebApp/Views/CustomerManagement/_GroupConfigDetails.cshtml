@@ -1007,7 +1007,149 @@
         </div>
     </div>
     <div class="multisteps-form__panel  p-3 m-3 list-box bg-white panel1" id="five-panel1">
-        DLC Link
+
+        @if (Model.lstMWPDetails != null)
+        {
+            var ProfileUpdatePoints = Model.lstMWPDetails.Where(x => x.MWP_Id == "04").Select(y => y.MWP_Name).FirstOrDefault();
+            var ReferralPoints = Model.lstMWPDetails.Where(x => x.MWP_Id == "09").Select(y => y.MWP_Name).FirstOrDefault();
+            var ReferredPoints = Model.lstMWPDetails.Where(x => x.MWP_Id == "06").Select(y => y.MWP_Name).FirstOrDefault();
+
+            <table border="1" cellpadding="5" cellspacing="5">
+                <tr>
+                    <td>
+                        Profile Update Points
+                    </td>
+                    <td>@ProfileUpdatePoints</td>
+                </tr>
+                <tr>
+                    <td>
+                        Referral Points
+                    </td>
+                    <td>@ReferralPoints</td>
+                </tr>
+                <tr>
+                    <td>
+                        Referred Points
+                    </td>
+                    <td>@ReferredPoints</td>
+                </tr>
+                <tr>
+                    <td>
+                        Max no of referrals
+                    </td>
+                    <td>NA</td>
+                </tr>
+                <tr>
+                    <td>
+                        Validity of Referral points
+                    </td>
+                    <td>NA</td>
+                </tr>
+                <tr>
+                    <td>
+                        Referral reminder (days before expiry)
+                    </td>
+                    <td>NA</td>
+                </tr>
+            </table>
+
+            var ToTheReferal = Model.lstMWPDetails.Where(x => x.MWP_Id == "07").Select(y => y.MWP_Name).FirstOrDefault();
+            var RemForPointsUsage = Model.lstMWPDetails.Where(x => x.MWP_Id == "19").Select(y => y.MWP_Name).FirstOrDefault();
+            var ReferredSuccess = Model.lstMWPDetails.Where(x => x.MWP_Id == "10").Select(y => y.MWP_Name).FirstOrDefault();
+            var ToTheReferal1 = Model.lstMWPDetails.Where(x => x.MWP_Id == "20").Select(y => y.MWP_Name).FirstOrDefault();
+            var RemForPointsUsage1 = Model.lstMWPDetails.Where(x => x.MWP_Id == "21").Select(y => y.MWP_Name).FirstOrDefault();
+            var ReferredSuccess1 = Model.lstMWPDetails.Where(x => x.MWP_Id == "22").Select(y => y.MWP_Name).FirstOrDefault();
+
+            <table border="1" cellpadding="5" cellspacing="5" style="margin-top:20px;">
+                <tr>
+                    <th>Element</th>
+                    <th style="width:300px !important;">SMS Script</th>
+                    <th>Len</th>
+                    <th style="width:30px !important;"></th>
+                    <th style="width:300px !important;">WA Script</th>
+                    <th>Len</th>
+                </tr>
+                <tr>
+                    <td>
+                        To the referral
+                    </td>
+                    <td>@ToTheReferal</td>
+                    <td>NA</td>
+                    <td></td>
+                    <td>@ToTheReferal1</td>
+                    <td>NA</td>
+                </tr>
+                <tr>
+                    <td>
+                        Reminder for points usage
+                    </td>
+                    <td>@RemForPointsUsage</td>
+                    <td>NA</td>
+                    <td></td>
+                    <td>@RemForPointsUsage1</td>
+                    <td>NA</td>
+                </tr>
+                <tr>
+                    <td>
+                        Referred success on referral txn
+                    </td>
+                    <td>@ReferredSuccess</td>
+                    <td>NA</td>
+                    <td></td>
+                    <td>@ReferredSuccess1</td>
+                    <td>NA</td>
+                </tr>
+            </table>
+
+
+        }
+        <div class="row" style="margin-top:20px;">
+            <div>
+                <table border="1" cellpadding="5" cellspacing="5">
+                    <tr>
+                        <td colspan="3" style="font-weight:bold;">Active DLC Links </td>
+
+                    </tr>
+                    <tr>
+                        <td>Source</td>
+                        <td>Source Description</td>
+                        <td>Link</td>
+                    </tr>
+                    @if (Model.objMWPSourceMaster != null)
+                    {
+                        foreach (var item in Model.objMWPSourceMaster)
+                        {
+                            <tr>
+                                <td>@item.SourceCode</td>
+                                <td>@item.SourceDesc</td>
+                                <td>@item.SourceLink</td>
+                            </tr>
+                        }
+                    }
+                </table>
+            </div>
+            <div style="margin-left:20px;">
+                <table border="1" cellpadding="5" cellspacing="5">
+
+                    <tr>
+                        <td>Outlet Name</td>
+                        <td>Geo Lat Long</td>
+
+                    </tr>
+                    @if (Model.lstOutlets != null)
+                    {
+                        foreach (var item in Model.lstOutlets)
+                        {
+                            <tr>
+                                <td>@item.OutletName</td>
+                                <td>@item.Latitude / @item.Longitude</td>
+                                
+                            </tr>
+                        }
+                    }
+                </table>
+            </div>
+        </div>
     </div>
     <div class="multisteps-form__panel  p-3 m-3 list-box bg-white panel1" id="six-panel1">
         <div class="row">
@@ -1099,7 +1241,7 @@
 
     <div class="multisteps-form__panel  p-3 m-3 list-box bg-white panel1" id="seven-panel1">
         <div id="dvDiscussionList" style="overflow-x:auto;">
-            
+
         </div>
     </div>
 </div>

@@ -286,8 +286,11 @@ namespace BOTS_BL.Repository
                         var BillingPartner = Convert.ToInt32(item.BillingPartner);
                         item.BillingPartnerName = context.tblBillingPartners.Where(x => x.BillingPartnerId == BillingPartner).Select(y => y.BillingPartnerName).FirstOrDefault();
                     }
-                    var BillingProduct = Convert.ToInt32(item.BillingProduct);
-                    item.BillingProductName = context.BOTS_TblBillingPartnerProduct.Where(x => x.BillingPartnerProductId == BillingProduct).Select(y => y.BillingPartnerProductName).FirstOrDefault();
+                    if (!string.IsNullOrEmpty(item.BillingProduct))
+                    {
+                        var BillingProduct = Convert.ToInt32(item.BillingProduct);
+                        item.BillingProductName = context.BOTS_TblBillingPartnerProduct.Where(x => x.BillingPartnerProductId == BillingProduct).Select(y => y.BillingPartnerProductName).FirstOrDefault();
+                    }
                 }
             }
             return objData;

@@ -20,7 +20,7 @@ namespace BOTS_BL.Repository
     public class CustomerRepository
     {
         Exceptions newexception = new Exceptions();
-        
+
         public List<SelectListItem> GetRetailCategory()
         {
             List<SelectListItem> lstRetailCategory = new List<SelectListItem>();
@@ -731,17 +731,20 @@ namespace BOTS_BL.Repository
                     int count = 0;
                     foreach (var item in lstBrands)
                     {
-                        PointsRulesEarnConfig objItem = new PointsRulesEarnConfig();
-                        var objEarnData = lstEarnData.ElementAt(count);
-                        objItem.PointsAllocation = objEarnData.PointsAllocation.Value;
-                        objItem.PointsExpiryVariableDate = objEarnData.PointsExpiryVariableDate.Value;
-                        objItem.MinTxnAmt = objEarnData.MinTxnAmt.Value;
-                        objItem.MaxPointsEarned = objEarnData.MaxPointsEarned.Value;
-                        objItem.PointsProductORBase = item.PointsProductORBase;
-                        objItem.PointsPrecentage = objEarnData.PointsPrecentage.Value;
+                        if (lstEarnData.Count >= (count + 1))
+                        {
+                            PointsRulesEarnConfig objItem = new PointsRulesEarnConfig();
+                            var objEarnData = lstEarnData.ElementAt(count);
+                            objItem.PointsAllocation = objEarnData.PointsAllocation.Value;
+                            objItem.PointsExpiryVariableDate = objEarnData.PointsExpiryVariableDate.Value;
+                            objItem.MinTxnAmt = objEarnData.MinTxnAmt.Value;
+                            objItem.MaxPointsEarned = objEarnData.MaxPointsEarned.Value;
+                            objItem.PointsProductORBase = item.PointsProductORBase;
+                            objItem.PointsPrecentage = objEarnData.PointsPrecentage.Value;
 
-                        objData.Add(objItem);
-                        count++;
+                            objData.Add(objItem);
+                            count++;
+                        }
                     }
                 }
             }
@@ -751,28 +754,38 @@ namespace BOTS_BL.Repository
         {
             List<PointsRulesBurnConfig> objData = new List<PointsRulesBurnConfig>();
             string ConnectionString = string.Empty;
-            using (var context = new CommonDBContext())
+            try
             {
-                var DBDetails = context.DatabaseDetails.Where(x => x.GroupId == groupId).FirstOrDefault();
-                ConnectionString = "Data Source = " + DBDetails.IPAddress + "; Initial Catalog = " + DBDetails.DBName + "; user id = " + DBDetails.DBId + "; password = " + DBDetails.DBPassword + "";
-                using (var contextNew = new BOTSDBContext(ConnectionString))
+                using (var context = new CommonDBContext())
                 {
-                    var lstBurnData = contextNew.BurnRules.OrderBy(x => x.RuleId).ToList();
-                    var lstBrands = contextNew.BrandDetails.OrderBy(x => x.BrandId).ToList();
-                    int count = 0;
-                    foreach (var item in lstBrands)
+                    var DBDetails = context.DatabaseDetails.Where(x => x.GroupId == groupId).FirstOrDefault();
+                    ConnectionString = "Data Source = " + DBDetails.IPAddress + "; Initial Catalog = " + DBDetails.DBName + "; user id = " + DBDetails.DBId + "; password = " + DBDetails.DBPassword + "";
+                    using (var contextNew = new BOTSDBContext(ConnectionString))
                     {
-                        PointsRulesBurnConfig objItem = new PointsRulesBurnConfig();
-                        var objBurnData = lstBurnData.ElementAt(count);
-                        objItem.MinThresholdPointsFirstTime = objBurnData.MinThresholdPointsFirstTime.Value;
-                        objItem.MinThresholdPointsEveryTime = objBurnData.MinThresholdPointsEveryTime.Value;
-                        objItem.MinTxnAmt = objBurnData.MinTxnAmt.Value;
-                        objItem.EarnFullWhileBurnFlag = objBurnData.EarnFullWhileBurnFlag;
+                        var lstBurnData = contextNew.BurnRules.OrderBy(x => x.RuleId).ToList();
+                        var lstBrands = contextNew.BrandDetails.OrderBy(x => x.BrandId).ToList();
+                        int count = 0;
+                        foreach (var item in lstBrands)
+                        {
+                            if (lstBurnData.Count >= (count + 1))
+                            {
+                                PointsRulesBurnConfig objItem = new PointsRulesBurnConfig();
+                                var objBurnData = lstBurnData.ElementAt(count);
+                                objItem.MinThresholdPointsFirstTime = objBurnData.MinThresholdPointsFirstTime.Value;
+                                objItem.MinThresholdPointsEveryTime = objBurnData.MinThresholdPointsEveryTime.Value;
+                                objItem.MinTxnAmt = objBurnData.MinTxnAmt.Value;
+                                objItem.EarnFullWhileBurnFlag = objBurnData.EarnFullWhileBurnFlag;
 
-                        objData.Add(objItem);
-                        count++;
+                                objData.Add(objItem);
+                                count++;
+                            }
+                        }
                     }
                 }
+            }
+            catch (Exception ex)
+            {
+
             }
             return objData;
         }
@@ -781,16 +794,23 @@ namespace BOTS_BL.Repository
         {
             SMSDetail SMSDetails = new SMSDetail();
             var connectionString = GetCustomerConnString(groupId);
-            using (var contextNew = new BOTSDBContext(connectionString))
+            try
             {
-                var lstSMSDetails = contextNew.SMSDetails.ToList();
-                if(lstSMSDetails!=null)
+                using (var contextNew = new BOTSDBContext(connectionString))
                 {
-                    if(lstSMSDetails.Count==1)
+                    var lstSMSDetails = contextNew.SMSDetails.ToList();
+                    if (lstSMSDetails != null)
                     {
-                        SMSDetails = lstSMSDetails.ElementAt(0);
+                        if (lstSMSDetails.Count == 1)
+                        {
+                            SMSDetails = lstSMSDetails.ElementAt(0);
+                        }
                     }
                 }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "");
             }
             return SMSDetails;
         }
@@ -844,6 +864,42 @@ namespace BOTS_BL.Repository
                         objData.EnrollmentAndEarn = lstWAEmail.Where(x => x.MessageId == "107").Select(y => y.SMS).FirstOrDefault();
                     }
                 }
+            }
+            return objData;
+        }
+
+        public List<MWP_Details> GetDLCDetails(string groupId)
+        {
+            List<MWP_Details> lstData = new List<MWP_Details>();
+            try
+            {
+                var connectionString = GetCustomerConnString(groupId);
+                using (var contextNew = new BOTSDBContext(connectionString))
+                {
+                    lstData = contextNew.MWP_Details.ToList();
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
+            return lstData;
+        }
+
+        public List<MWPSourceMaster> GetMWPSourceMaster(string groupId)
+        {
+            List<MWPSourceMaster> objData = new List<MWPSourceMaster>();
+            try
+            {
+                var connectionString = GetCustomerConnString(groupId);
+                using (var contextNew = new BOTSDBContext(connectionString))
+                {
+                    objData = contextNew.MWPSourceMasters.ToList();
+                }
+            }
+            catch (Exception ex)
+            {
+
             }
             return objData;
         }

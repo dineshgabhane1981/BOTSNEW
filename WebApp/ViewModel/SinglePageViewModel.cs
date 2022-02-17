@@ -23,5 +23,6 @@ namespace WebApp.ViewModel
         public List<SelectListItem> lstCSMembers { get; set; }
         public long GrandTotal { get; set; }
         public string CSMember { get; set; }
+        
     }
 }

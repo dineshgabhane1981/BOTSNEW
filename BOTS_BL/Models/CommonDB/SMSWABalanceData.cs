@@ -42,7 +42,7 @@ namespace BOTS_BL.Models.CommonDB
         public List<SMSBalance> objSMSBalance { get; set; }
         public List<WhatsAppBalance> objWhatsAppBalance { get; set; }
         public List<VirtualSMSBalance> objVirtualSMSBalance { get; set; }
-        public List<WhatsAppExpiryDate> objWhatsAppExpiryDate { get; set; }
+        public List<WhatsAppBalance> objWhatsAppExpiryDate { get; set; }
     }
     public class SMSBalance
     {
@@ -50,12 +50,17 @@ namespace BOTS_BL.Models.CommonDB
         public string Status { get; set; }
         public string OutletName { get; set; }
         public string SmsBalance { get; set; }
+        public int SmsBalance1 { get; set; }
+        public string CompanyName { get; set; }
     }
     public class WhatsAppBalance
     {
         public string BrandName { get; set; }
         public string OutletName { get; set; }
-        public string WABalance { get; set; }
+        public int WABalance { get; set; }
+        public DateTime WAExpiryDate { get; set; }
+        public int WABalance1 { get; set; }
+        public string Status { get; set; }
 
     }
     public class VirtualSMSBalance

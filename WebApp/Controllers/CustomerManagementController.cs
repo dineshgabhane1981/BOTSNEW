@@ -252,7 +252,8 @@ namespace WebApp.Controllers
                 objData.objSMSConfig = CR.GetSMSEmailMasterDetails(groupId);
                 objData.objWAConfig = CR.GetWAEmailMasterDetails(groupId);
             }
-
+            objData.lstMWPDetails = CR.GetDLCDetails(groupId);
+            objData.objMWPSourceMaster = CR.GetMWPSourceMaster(groupId);
             return PartialView("_GroupConfigDetails", objData);
         }
 

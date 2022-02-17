@@ -34,27 +34,21 @@ namespace BOTS_BL.Models
 
         [StringLength(50)]
         public string OTPUrl { get; set; }
-
-        [NotMapped]
+        
         [StringLength(500)]
         public string WhatsAppTokenId { get; set; }
-
-        [NotMapped]
+        
         [StringLength(25)]
         public string VirtualSmsUserName { get; set; }
-
-        [NotMapped]
+        
         [StringLength(25)]
         public string VirtualSmsPassword { get; set; }
-
-        [NotMapped]
+        
         [StringLength(25)]
         public string VirtualWhatsAppUserName { get; set; }
-
-        [NotMapped]
+        
         [StringLength(25)]
         public string VirtualWhatsAppPassword { get; set; }
-
         
         [StringLength(8)]
         public string OutletId { get; set; }
