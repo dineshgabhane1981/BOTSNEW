@@ -12,10 +12,14 @@ namespace WebApp.Controllers
     public class TelecallerController : Controller
     {
         TelecallerRepository TR = new TelecallerRepository();
+        ReportsRepository RR = new ReportsRepository();
         // GET: Telecaller
         public ActionResult Index()
         {
             TelecallerCustomerData objteledata = new TelecallerCustomerData();
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            var lstGenderList = RR.GetGenderList(userDetails.GroupId, userDetails.connectionString);
+            ViewBag.lstGenderList = lstGenderList;
             return View(objteledata);
         }
         public JsonResult GetCustomerData(string MobileNo)

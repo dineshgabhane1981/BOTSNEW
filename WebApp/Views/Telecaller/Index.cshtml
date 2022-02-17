@@ -30,7 +30,9 @@
                     Enrollment Date: <span id="spenrolldt"></span>
                 </div>
                 <div class="col-md-3 col-xl-3">
-                    Gender:<span id="spGender"></span>
+                    @*Gender:<span id="spGender"></span>*@
+                    Gender @Html.DropDownList("Gender", new SelectList(ViewBag.lstGenderList, "Value", "Text"), htmlAttributes: new { @class = "input50", @id = "ddlgender" })
+
                 </div>
             </div>
             <div class="row mb-3">
@@ -151,6 +153,7 @@
                         $("#spLasttxndt").text(response.LastTxnDate);
                         $("#spoutletNm").text(response.OutletName);
                         $("#spoutletId").text(response.outletid);
+                        
 
                         $("#divdata").show();
                     }
@@ -171,7 +174,7 @@
         item = {};
         item["MobileNo"] = $("#txtmobileNo").val();
         item["CustNm"] = $("#spCustName").text();
-        item["Gender"] = $("#spGender").text();
+        item["Gender"] = $('#ddlgender :selected').val();
         item["DOB"] = $("#txtDOB").val();
         item["DOA"] = $("#txtDOA").val();
         item["Points"] = 0;
