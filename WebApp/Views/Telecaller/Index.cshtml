@@ -16,56 +16,61 @@
         </div>
     </div>
     <div class="row mb-3 card">
-        <div class="container-fluid pt-3 pl-3 pr-3" id="divdata" style="display:none;">
+        <div class="container-fluid pt-3 pl-3 pr-3" id="divdata" style="display:none;padding-left:300px !important;">
             <div class="row mb-3">
-                <div class="col-md-3 col-xl-3">
-                    Customer Name: <input type="text" id="spCustName" class="input50" />
+                <div class="col-md-4 col-xl-4">
+                    <b>Mobile No: </b><span id="spMobileNo"></span>
+                </div>
+                <div class="col-md-4 col-xl-4">
+                    <b>Customer Name: </b> <input type="text" id="spCustName" class="input100" />
                     @*<span id="spCustName"></span>*@
                 </div>
-                <div class="col-md-3 col-xl-3">
-                    Mobile No:<span id="spMobileNo"></span>
-                </div>
+
             </div>
             <div class="row mb-3">
-                <div class="col-md-3 col-xl-3">
-                    Enrollment Date: <span id="spenrolldt"></span>
+                <div class="col-md-4 col-xl-4">
+                    <b>Enrollment Date: </b><span id="spenrolldt"></span>
                 </div>
-                <div class="col-md-3 col-xl-3">
+                <div class="col-md-4 col-xl-4">
                     @*Gender:<span id="spGender"></span>*@
-                    Gender @Html.DropDownList("Gender", new SelectList(ViewBag.lstGenderList, "Value", "Text"), htmlAttributes: new { @class = "input50", @id = "ddlgender" })
+                    <b> Gender </b><br /> @Html.DropDownList("Gender", new SelectList(ViewBag.lstGenderList, "Value", "Text"), htmlAttributes: new { @class = "input50", @id = "ddlgender" })
 
                 </div>
             </div>
             <div class="row mb-3">
-                <div class="col-md-3 col-xl-3">
-                    Total Balance Points: <span id="sptotalpoints"></span>
+                <div class="col-md-4 col-xl-4">
+                    <b>Total Balance Points: </b> <span id="sptotalpoints"></span>
                 </div>
-                <div class="col-md-3 col-xl-3">
-                    Last Txn Date:<span id="spLasttxndt"></span>
+                <div class="col-md-4 col-xl-4">
+                    <b>Date Of Anniversary: </b><br /><input type="date" id="txtDOA" class="input50" />
+                </div>
+               
+            </div>
+            <div class="row mb-3">
+                <div class="col-md-4 col-xl-4">
+                    <b>
+                        Outlet Name:
+                    </b>
+                    <span id="spoutletNm"></span>
+                    <span style="display:none;" id="spoutletId"></span>
+                </div>
+                <div class="col-md-4 col-xl-4">
+                    <b>Date Of Birth: </b> <br /><input type="date" id="txtDOB" class="input50" />
                 </div>
             </div>
             <div class="row mb-3">
-                <div class="col-md-3 col-xl-3">
-                    Outlet Name: <span id="spoutletNm"></span>
-                    <span id="spoutletId"></span>
+                <div class="col-md-4 col-xl-4">
+                    <b>Last Txn Date: </b><span id="spLasttxndt"></span>
                 </div>
-                <div class="col-md-3 col-xl-3">
-                    Date Of Birth: <input type="date" id="txtDOB" class="input50" />
-                </div>
-            </div>
-            <div class="row mb-3">
-                <div class="col-md-6 col-xl-6">
-                    Date Of Anniversary:<input type="date" id="txtDOA" class="input50" />
-                </div>
-                <div class="col-md-6 col-xl-5">
-                    
-                    Comments:<textarea class="input100" id="txtcomment" cols="80" rows="5" placeholder="Enter Comments"></textarea>
+                <div class="col-md-4 col-xl-4">
+
+                    <b> Comments: </b> <textarea class="input100" id="txtcomment" cols="80" rows="5" placeholder="Enter Comments"></textarea>
 
                 </div>
             </div>
             <div class="row">
 
-                <div class="col-md-3 col-xl-3">
+                <div class="col-md-6 col-xl-6" style="text-align:center;margin-bottom:20px;">
                     <button class="btn btn-primary login-btn ml-2 mr-2" type="button" id="btnSave" onclick="SaveData();">
                         Save
                     </button>
@@ -76,24 +81,6 @@
 </div>
 <script>
     $(document).ready(function () {
-
-       // var today = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
-
-        //var dtToday = new Date();
-
-        //var month = dtToday.getMonth() + 1;
-        //var day = dtToday.getDate();
-        //var year = dtToday.getFullYear();
-
-        //if (month < 10)
-        //    month = '0' + month.toString();
-        //if (day < 10)
-        //    day = '0' + day.toString();
-
-        //var maxDate = year + '-' + month + '-' + day;
-        //$('#txtDOB').attr('max', maxDate);
-        //$('#txtDOA').attr('max', maxDate);
-
         $("#txtmobileNo").focusout(function () {
             if ($("#txtmobileNo").val() != "") {
                 $('#txtmobileNo').css('border-color', '');
@@ -145,7 +132,7 @@
                     if (response != null) {
                         console.log(response);
                         $("#spCustName").val(response.CustomerName);
-                        $("#spGender").text(response.Gender);
+                        $("#ddlgender").val(response.Gender);
                         $("#txtDOB").val(response.DOB);
                         $("#txtDOA").val(response.DOA);
                         $("#spMobileNo").text(response.MobileNo);
@@ -154,7 +141,7 @@
                         $("#spLasttxndt").text(response.LastTxnDate);
                         $("#spoutletNm").text(response.OutletName);
                         $("#spoutletId").text(response.outletid);
-                        
+
 
                         $("#divdata").show();
                     }
@@ -162,6 +149,12 @@
 
                 },
                 error: function (result) {
+                    cuteAlert({
+                        type: "error",
+                        title: "Oops..",
+                        message: "Mobile No does not exist, please check again",
+                        buttonText: "Okay"
+                    })
                     console.log(result.responseText);
                     $("#divLoader").hide();
                 }
@@ -169,7 +162,7 @@
         }
     }
     function SaveData() {
-       // if (returnStatus == true) {
+       
         $("#divLoader").show();
         var FilterData = [];
         item = {};
@@ -189,40 +182,30 @@
                 data: '{jsonData: ' + JSON.stringify(data) + '}',
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
-                success: function (response) {
-                    console.log("Hi");
+                success: function (response) {                    
                     if (response) {
-                        $("#divLoader").hide();                        
+                        $("#divLoader").hide();
                         $("#divdata").hide();
-                        $("#txtmobileNo").val("");                       
+                        $("#txtmobileNo").val("");
 
-                        setTimeout(cuteAlert({
+                        cuteAlert({
                             type: "success",
                             title: "Save",
                             message: "Data Save Successfully!",
                             buttonText: "Okay"
-                        }), 10000);
-
-                        window.location.replace('');
+                        }).then(() => {
+                        window.location.reload();
+                    });                         
                     }
-                    else {
-                        setTimeout(cuteAlert({
-                            type: "success",
-                            title: "Save",
-                            message: "Data Save Successfully!",
-                            buttonText: "Okay"
-                        }), 10000);
-
-                        window.location.replace('');
-                    }
-
+                    $("#divLoader").hide();
                 },
                 error: function (result) {
+                    
                     console.log(result.responseText);
                     $("#divLoader").hide();
                 }
             });
-        //}
+        
     }
 </script>
 

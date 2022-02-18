@@ -42,6 +42,8 @@ namespace WebApp.Controllers
         public ActionResult SaveTelecallerData(string jsonData)
         {
             bool status = false;
+            DateTime? DateofBirth = null;
+            DateTime? DateOfAnni = null;
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
             JavaScriptSerializer json_serializer = new JavaScriptSerializer();
             json_serializer.MaxJsonLength = int.MaxValue;
@@ -51,15 +53,21 @@ namespace WebApp.Controllers
                 string mobileNo = Convert.ToString(item["MobileNo"]);
                 string CustomerNm = Convert.ToString(item["CustNm"]);
                 string Gender = Convert.ToString(item["Gender"]);
-                DateTime DateofBirth = Convert.ToDateTime(item["DOB"]);
-                DateTime DateOfAnni = Convert.ToDateTime(item["DOA"]);
+                if (!string.IsNullOrEmpty(Convert.ToString(item["DOB"])))
+                {
+                    DateofBirth = Convert.ToDateTime(item["DOB"]);
+                }                
+                if (!string.IsNullOrEmpty(Convert.ToString(item["DOA"])))
+                {
+                    DateOfAnni = Convert.ToDateTime(item["DOA"]);
+                }
                 int PointsGiven = Convert.ToInt32(item["Points"]);
                 string OutletId = Convert.ToString(item["outletId"]);
                 string Comments = Convert.ToString(item["Comments"]);
 
                 status = TR.SaveTelecallerTracking(userDetails.connectionString, userDetails.LoginId, mobileNo, CustomerNm, Gender, DateofBirth, DateOfAnni, PointsGiven, OutletId, Comments);
             }
-                return new JsonResult() { Data = status, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
+            return new JsonResult() { Data = status, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
 
         }
         public JsonResult GetReportData(string searchData)
