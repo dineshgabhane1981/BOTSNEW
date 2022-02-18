@@ -22,6 +22,13 @@ namespace WebApp.Controllers
             ViewBag.lstGenderList = lstGenderList;
             return View(objteledata);
         }
+        public ActionResult Telecaller()
+        {
+           // TelecallerCustomerData objteledata = new TelecallerCustomerData();
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            
+            return View();
+        }
         public JsonResult GetCustomerData(string MobileNo)
         {
             TelecallerCustomerData objteledata = new TelecallerCustomerData();
@@ -31,6 +38,7 @@ namespace WebApp.Controllers
 
 
         }
+        
         public ActionResult SaveTelecallerData(string jsonData)
         {
             bool status = false;
@@ -52,6 +60,23 @@ namespace WebApp.Controllers
                 status = TR.SaveTelecallerTracking(userDetails.connectionString, userDetails.LoginId, mobileNo, CustomerNm, Gender, DateofBirth, DateOfAnni, PointsGiven, OutletId, Comments);
             }
                 return new JsonResult() { Data = status, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
+
+        }
+        public JsonResult GetReportData(string searchData)
+        {
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            List<TelecallerTracking> lsttelecaller = new List<TelecallerTracking>();
+            JavaScriptSerializer json_serializer = new JavaScriptSerializer();
+            json_serializer.MaxJsonLength = int.MaxValue;
+            object[] objData = (object[])json_serializer.DeserializeObject(searchData);
+            foreach (Dictionary<string, object> item in objData)
+            {
+                DateTime fromdt = Convert.ToDateTime(item["frmDate"]);
+                DateTime todt = Convert.ToDateTime(item["toDate"]);
+
+                lsttelecaller = TR.GetTelecallerReportData(fromdt,todt,userDetails.connectionString,userDetails.GroupId);
+            }
+            return new JsonResult() { Data = lsttelecaller, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
 
         }
     }

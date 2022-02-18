@@ -1,0 +1,112 @@
+﻿@{
+    ViewBag.Title = "Telecaller";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="app-main__inner">
+    <div class="row mb-3 pt-3 pl-3 pr-3 card">
+        <div class="col-sm-10" style="margin-left:15px;padding-bottom:10px; display:flex;">
+            <div class="row">
+                @*<div class="col-md-10 col-xl-6">*@
+                    <div class="col-md-4 col-sm-4">
+                        Date Range From <br /> <input type="text" id="txtfromdt" class="input50" />
+                    </div>
+                    <div class="col-md-4 col-sm-4">
+                        To <br /> <input type="text" id="txttodt" class="input50" />
+                    </div>
+                @*</div>*@
+            </div>
+            <div style="margin-right:100px;margin-top:10px;">
+                <button id="btnFilter" class="btn btn-primary login-btn pull-right" onclick="return GetReport();">Filter</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mb-3 card">
+        <div class="container-fluid pt-3 pl-3 pr-3">
+            <div class="pt-3 pl-3 pr-3 col-md-12 col-lg-12">
+                <div class="container-fluid pt-3 pl-3 pr-3 pb-3" id="dvReport" style="display:none;">
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script src="~/Scripts/jquery-ui-1.12.1.js"></script>
+<script src="~/Scripts/jquery-ui-1.12.1.min.js"></script>
+<link href="~/Content/themes/base/jquery-ui.min.css" rel="stylesheet" />
+<link href="~/Content/themes/base/jquery-ui.css" rel="stylesheet" />
+
+<script>
+    $(document).ready(function () {
+        var today = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
+        $("#txtfromdt").datepicker({
+            dateFormat: "yy-mm-dd",
+            maxDate: today,
+        });
+
+        $("#txttodt").datepicker({
+            dateFormat: "yy-mm-dd",
+            maxDate: today,
+        });
+
+        RemoveRedBorder();
+    });
+    function GetReport() {
+        var returnStatus = true;
+        if ($("#txtfromdt").val() == "") {
+            $('#txtfromdt').css('border-color', 'red');
+            returnStatus = false;
+        }
+        if ($("#txttodt").val() == "") {
+            $('#txttodt').css('border-color', 'red');
+            returnStatus = false;
+        }
+        if (returnStatus == true) {
+            var SeardhData = [];
+            item = {}
+
+            item["frmDate"] = $("#txtfromdt").val();
+            item["toDate"] = $("#txttodt").val();
+
+            SeardhData.push(item);
+            var data = JSON.stringify(SeardhData);
+            console.log(data);
+            $("#divLoader").show();
+
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("GetReportData", "Telecaller")',
+                data: '{searchData: ' + JSON.stringify(data) + '}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (response) {
+                    $('#dvReport').html(response);
+                    $('#dvDetailReport').hide();
+                    $('#dvReport').show(1000);
+                    $("#divLoader").hide();
+                },
+                failure: function (response) {
+                    $("#divLoader").hide();
+                },
+                error: function (response) {
+                    $('#dvReport').html(response.responseText);
+                    $('#dvDetailReport').hide();
+                    $('#dvReport').show(1000);
+                    $("#divLoader").hide();
+                }
+            });
+        }
+        else {
+            cuteAlert({
+                type: "error",
+                title: "Oops..",
+                message: "Please enter Required fields",
+                buttonText: "Okay"
+            })
+            return false;
+        }
+    }
+</script>

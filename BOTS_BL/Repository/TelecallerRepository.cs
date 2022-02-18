@@ -134,7 +134,70 @@ namespace BOTS_BL.Repository
 
             return status;
         }
+        public List<TelecallerTracking> GetTelecallerReportData(DateTime fromdt, DateTime todate, string connstr,string GroupId)
+        {
+            List<TelecallerTracking> lsttelereportdata = new List<TelecallerTracking>();
+            try
+            {
+                using (var context = new BOTSDBContext(connstr))
+                {
+                    lsttelereportdata = (from t in context.TelecallerTrackings
+                                         join o in context.OutletDetails on t.OutletId equals o.OutletId
+                                         where t.AddedDate > fromdt && t.AddedDate < todate
+                                         select new TelecallerTracking
+                                         {
+                                             MobileNo = t.MobileNo,
+                                             CustomerName = t.CustomerName,
+                                             Gender = t.Gender,
+                                             DOB = t.DOB,
+                                             DOA = t.DOA,
+                                             Points = t.Points,
+                                             OutletId = t.OutletId,
+                                             OutletName = t.OutletName,
+                                             IsSMSSend = t.IsSMSSend,
+                                             Comments = t.Comments,
+                                             AddedBy = t.AddedBy,
+                                             AddedDate = t.AddedDate
 
+
+                                         }).ToList();
+
+                }
+                using (var context = new CommonDBContext())
+                {
+                    //foreach(var item in lsttelereportdata)
+                    //{
+                    //    var name = context.CustomerLoginDetails.Where(x => x.LoginId == item.AddedBy).Select(x => x.UserName);
+                    //    item.AddedBy = name;
+                    //}
+                    lsttelereportdata = (from t in lsttelereportdata
+                                     join c in context.CustomerLoginDetails
+                                        on t.AddedBy equals c.CustomerName
+                                     select new TelecallerTracking
+                                     {
+                                         MobileNo = t.MobileNo,
+                                         CustomerName = t.CustomerName,
+                                         Gender = t.Gender,
+                                         DOB = t.DOB,
+                                         DOA = t.DOA,
+                                         Points = t.Points,
+                                         OutletId = t.OutletId,
+                                         OutletName = t.OutletName,
+                                         IsSMSSend = t.IsSMSSend,
+                                         Comments = t.Comments,
+                                         AddedBy = c.CustomerName,
+                                         AddedDate = t.AddedDate
+                                         
+                                     }).ToList();
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, GroupId);
+            }
+            return lsttelereportdata;
+
+        }
         public void SendWhatsTextOnly(string _MobileNo, string _Message, string _Token)
         {
             string responseString;

@@ -40,6 +40,8 @@ namespace BOTS_BL.Models
 
         [StringLength(8)]
         public string OutletId { get; set; }
+        [NotMapped]
+        public string OutletName { get; set; }
     }
 
     public class TelecallerCustomerData

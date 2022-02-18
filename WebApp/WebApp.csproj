@@ -357,7 +357,8 @@
     <Content Include="Views\KeyIndicators\DLCCreation.cshtml" />
     <Content Include="Views\KeyIndicators\AddEditDLCCreation.cshtml" />
     <Content Include="Views\Telecaller\Index.cshtml" />
-    <Content Include="Views\OtherReports\Telecaller.cshtml" />
+    <Content Include="Views\Telecaller\Telecaller.cshtml" />
+    <Content Include="Views\Telecaller\_TelecallerList.cshtml" />
     <None Include="_bin_deployableAssemblies\x86\sqlcese40.dll" />
     <None Include="_bin_deployableAssemblies\x86\sqlceqp40.dll" />
     <None Include="_bin_deployableAssemblies\x86\sqlceme40.dll" />
