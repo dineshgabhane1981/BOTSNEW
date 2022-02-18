@@ -35,7 +35,7 @@ namespace BOTS_BL.Repository
             return objteledata;
 
         }
-        public bool SaveTelecallerTracking(string connstr,string AddedBy,string MobileNo,string CustomerNm,string Gender,DateTime DateofBirth,DateTime DateOfAnni,int PointsGiven,string OutletId,string Comments)
+        public bool SaveTelecallerTracking(string connstr,string AddedBy,string MobileNo,string CustomerNm,string Gender,DateTime? DateofBirth,DateTime? DateOfAnni,int PointsGiven,string OutletId,string Comments)
         {
             bool status = false;
             bool updatetable = false;            
@@ -47,53 +47,36 @@ namespace BOTS_BL.Repository
                     TelecallerTracking objtracking = new TelecallerTracking();
                     if (objcustomer != null)
                     {
-                        if (objcustomer.CustomerName == CustomerNm)
-                        {
-                            updatetable = false;
-                        }
-                        else
-                        {
+                        if (objcustomer.CustomerName != CustomerNm)
+                        {                        
                             if (CustomerNm != null)
                             {
                                 updatetable = true;
                                 objcustomer.CustomerName = CustomerNm;
                             }
                         }
-                        if (objcustomer.Gender == Gender)
-                        {
-                            updatetable = false;
-                        }
-                        else
-                        {
+                        if (objcustomer.Gender != Gender)
+                        {                           
                             if(Gender != null)
                             {
                                 updatetable = true;
                                 objcustomer.Gender = Gender;
                             }
                         }
-                        if(objcustomer.DOB == DateofBirth)
-                        {
-                            updatetable = false;
-                        }
-                        else
-                        {
+                        if(objcustomer.DOB != DateofBirth)
+                        {                            
                             if (DateofBirth != null)
                             {
                                 updatetable = true;
                                 objcustomer.DOB = DateofBirth;
                             }
                         }
-                        if (objcustomer.AnniversaryDate == DateOfAnni)
-                        {
-                            updatetable = false;
-                        }
-                        else
-                        {
+                        if (objcustomer.AnniversaryDate != DateOfAnni)
+                        {                            
                             if (DateOfAnni != null)
                             {
                                 updatetable = true;
                                 objcustomer.AnniversaryDate = DateOfAnni;
-
                             }
                         }
                         if(Comments != null)
@@ -124,8 +107,7 @@ namespace BOTS_BL.Repository
                             status = true;
                         }
                     }
-                }
-               
+                }               
             }
             catch (Exception ex)
             {
