@@ -558,15 +558,23 @@ namespace BOTS_BL.Repository
         public List<OutletDetail> GetAllOutletsByGroupId(string GroupId)
         {
             List<OutletDetail> lstOutlets = new List<OutletDetail>();
-            string ConnectionString = string.Empty;
-            using (var context = new CommonDBContext())
+            try
             {
-                var DBDetails = context.DatabaseDetails.Where(x => x.GroupId == GroupId).FirstOrDefault();
-                ConnectionString = "Data Source = " + DBDetails.IPAddress + "; Initial Catalog = " + DBDetails.DBName + "; user id = " + DBDetails.DBId + "; password = " + DBDetails.DBPassword + "";
+                string ConnectionString = string.Empty;
+
+                using (var context = new CommonDBContext())
+                {
+                    var DBDetails = context.DatabaseDetails.Where(x => x.GroupId == GroupId).FirstOrDefault();
+                    ConnectionString = "Data Source = " + DBDetails.IPAddress + "; Initial Catalog = " + DBDetails.DBName + "; user id = " + DBDetails.DBId + "; password = " + DBDetails.DBPassword + "";
+                }
+                using (var contextNew = new BOTSDBContext(ConnectionString))
+                {
+                    lstOutlets = contextNew.OutletDetails.Where(x => x.GroupId == GroupId).ToList();
+                }
             }
-            using (var contextNew = new BOTSDBContext(ConnectionString))
+            catch (Exception ex)
             {
-                lstOutlets = contextNew.OutletDetails.Where(x => x.GroupId == GroupId).ToList();
+
             }
             return lstOutlets;
         }
@@ -718,35 +726,42 @@ namespace BOTS_BL.Repository
         public List<PointsRulesEarnConfig> GetPointsEarnConfig(string groupId)
         {
             List<PointsRulesEarnConfig> objData = new List<PointsRulesEarnConfig>();
-            string ConnectionString = string.Empty;
-            using (var context = new CommonDBContext())
+            try
             {
-                var DBDetails = context.DatabaseDetails.Where(x => x.GroupId == groupId).FirstOrDefault();
-                ConnectionString = "Data Source = " + DBDetails.IPAddress + "; Initial Catalog = " + DBDetails.DBName + "; user id = " + DBDetails.DBId + "; password = " + DBDetails.DBPassword + "";
-                using (var contextNew = new BOTSDBContext(ConnectionString))
+                string ConnectionString = string.Empty;
+                using (var context = new CommonDBContext())
                 {
-                    var lstBrands = contextNew.BrandDetails.OrderBy(x => x.BrandId).ToList();
-                    var lstEarnData = contextNew.EarnRules.OrderBy(x => x.RuleId).ToList();
-
-                    int count = 0;
-                    foreach (var item in lstBrands)
+                    var DBDetails = context.DatabaseDetails.Where(x => x.GroupId == groupId).FirstOrDefault();
+                    ConnectionString = "Data Source = " + DBDetails.IPAddress + "; Initial Catalog = " + DBDetails.DBName + "; user id = " + DBDetails.DBId + "; password = " + DBDetails.DBPassword + "";
+                    using (var contextNew = new BOTSDBContext(ConnectionString))
                     {
-                        if (lstEarnData.Count >= (count + 1))
-                        {
-                            PointsRulesEarnConfig objItem = new PointsRulesEarnConfig();
-                            var objEarnData = lstEarnData.ElementAt(count);
-                            objItem.PointsAllocation = objEarnData.PointsAllocation.Value;
-                            objItem.PointsExpiryVariableDate = objEarnData.PointsExpiryVariableDate.Value;
-                            objItem.MinTxnAmt = objEarnData.MinTxnAmt.Value;
-                            objItem.MaxPointsEarned = objEarnData.MaxPointsEarned.Value;
-                            objItem.PointsProductORBase = item.PointsProductORBase;
-                            objItem.PointsPrecentage = objEarnData.PointsPrecentage.Value;
+                        var lstBrands = contextNew.BrandDetails.OrderBy(x => x.BrandId).ToList();
+                        var lstEarnData = contextNew.EarnRules.OrderBy(x => x.RuleId).ToList();
 
-                            objData.Add(objItem);
-                            count++;
+                        int count = 0;
+                        foreach (var item in lstBrands)
+                        {
+                            if (lstEarnData.Count >= (count + 1))
+                            {
+                                PointsRulesEarnConfig objItem = new PointsRulesEarnConfig();
+                                var objEarnData = lstEarnData.ElementAt(count);
+                                objItem.PointsAllocation = objEarnData.PointsAllocation.Value;
+                                objItem.PointsExpiryVariableDate = objEarnData.PointsExpiryVariableDate.Value;
+                                objItem.MinTxnAmt = objEarnData.MinTxnAmt.Value;
+                                objItem.MaxPointsEarned = objEarnData.MaxPointsEarned.Value;
+                                objItem.PointsProductORBase = item.PointsProductORBase;
+                                objItem.PointsPrecentage = objEarnData.PointsPrecentage.Value;
+
+                                objData.Add(objItem);
+                                count++;
+                            }
                         }
                     }
                 }
+            }
+            catch (Exception ex)
+            {
+
             }
             return objData;
         }
@@ -818,21 +833,28 @@ namespace BOTS_BL.Repository
         public SMSConfig GetSMSEmailMasterDetails(string groupId)
         {
             SMSConfig objData = new SMSConfig();
-            var connectionString = GetCustomerConnString(groupId);
-            using (var contextNew = new BOTSDBContext(connectionString))
+            try
             {
-                var lstSMSEmail = contextNew.SMSEmailMasters.ToList();
-                if (lstSMSEmail != null)
+                var connectionString = GetCustomerConnString(groupId);
+                using (var contextNew = new BOTSDBContext(connectionString))
                 {
-                    objData.Enrollment = lstSMSEmail.Where(x => x.MessageId == "100").Select(y => y.SMS).FirstOrDefault();
-                    objData.Earn = lstSMSEmail.Where(x => x.MessageId == "101").Select(y => y.SMS).FirstOrDefault();
-                    objData.Burn = lstSMSEmail.Where(x => x.MessageId == "102").Select(y => y.SMS).FirstOrDefault();
-                    objData.CancelEarn = lstSMSEmail.Where(x => x.MessageId == "103").Select(y => y.SMS).FirstOrDefault();
-                    objData.CancelBurn = lstSMSEmail.Where(x => x.MessageId == "104").Select(y => y.SMS).FirstOrDefault();
-                    objData.OTP = lstSMSEmail.Where(x => x.MessageId == "105").Select(y => y.SMS).FirstOrDefault();
-                    objData.BalanceInquiry = lstSMSEmail.Where(x => x.MessageId == "106").Select(y => y.SMS).FirstOrDefault();
-                    objData.EnrollmentAndEarn = lstSMSEmail.Where(x => x.MessageId == "107").Select(y => y.SMS).FirstOrDefault();
+                    var lstSMSEmail = contextNew.SMSEmailMasters.ToList();
+                    if (lstSMSEmail != null)
+                    {
+                        objData.Enrollment = lstSMSEmail.Where(x => x.MessageId == "100").Select(y => y.SMS).FirstOrDefault();
+                        objData.Earn = lstSMSEmail.Where(x => x.MessageId == "101").Select(y => y.SMS).FirstOrDefault();
+                        objData.Burn = lstSMSEmail.Where(x => x.MessageId == "102").Select(y => y.SMS).FirstOrDefault();
+                        objData.CancelEarn = lstSMSEmail.Where(x => x.MessageId == "103").Select(y => y.SMS).FirstOrDefault();
+                        objData.CancelBurn = lstSMSEmail.Where(x => x.MessageId == "104").Select(y => y.SMS).FirstOrDefault();
+                        objData.OTP = lstSMSEmail.Where(x => x.MessageId == "105").Select(y => y.SMS).FirstOrDefault();
+                        objData.BalanceInquiry = lstSMSEmail.Where(x => x.MessageId == "106").Select(y => y.SMS).FirstOrDefault();
+                        objData.EnrollmentAndEarn = lstSMSEmail.Where(x => x.MessageId == "107").Select(y => y.SMS).FirstOrDefault();
+                    }
                 }
+            }
+            catch (Exception ex)
+            {
+
             }
             return objData;
         }
@@ -840,30 +862,37 @@ namespace BOTS_BL.Repository
         public WAConfig GetWAEmailMasterDetails(string groupId)
         {
             WAConfig objData = new WAConfig();
-            var connectionString = GetCustomerConnString(groupId);
-            using (var contextNew = new BOTSDBContext(connectionString))
+            try
             {
-                bool exists = contextNew.Database
-                     .SqlQuery<int?>(@"
+                var connectionString = GetCustomerConnString(groupId);
+                using (var contextNew = new BOTSDBContext(connectionString))
+                {
+                    bool exists = contextNew.Database
+                         .SqlQuery<int?>(@"
                          SELECT 1 FROM sys.tables AS T
                          INNER JOIN sys.schemas AS S ON T.schema_id = S.schema_id
                          WHERE S.Name = 'dbo' AND T.Name = 'WhatsAppSMSMaster'")
-                     .SingleOrDefault() != null;
-                if (exists)
-                {
-                    var lstWAEmail = contextNew.WhatsAppSMSMasters.ToList();
-                    if (lstWAEmail != null)
+                         .SingleOrDefault() != null;
+                    if (exists)
                     {
-                        objData.Enrollment = lstWAEmail.Where(x => x.MessageId == "100").Select(y => y.SMS).FirstOrDefault();
-                        objData.Earn = lstWAEmail.Where(x => x.MessageId == "101").Select(y => y.SMS).FirstOrDefault();
-                        objData.Burn = lstWAEmail.Where(x => x.MessageId == "102").Select(y => y.SMS).FirstOrDefault();
-                        objData.CancelEarn = lstWAEmail.Where(x => x.MessageId == "103").Select(y => y.SMS).FirstOrDefault();
-                        objData.CancelBurn = lstWAEmail.Where(x => x.MessageId == "104").Select(y => y.SMS).FirstOrDefault();
-                        objData.OTP = lstWAEmail.Where(x => x.MessageId == "105").Select(y => y.SMS).FirstOrDefault();
-                        objData.BalanceInquiry = lstWAEmail.Where(x => x.MessageId == "106").Select(y => y.SMS).FirstOrDefault();
-                        objData.EnrollmentAndEarn = lstWAEmail.Where(x => x.MessageId == "107").Select(y => y.SMS).FirstOrDefault();
+                        var lstWAEmail = contextNew.WhatsAppSMSMasters.ToList();
+                        if (lstWAEmail != null)
+                        {
+                            objData.Enrollment = lstWAEmail.Where(x => x.MessageId == "100").Select(y => y.SMS).FirstOrDefault();
+                            objData.Earn = lstWAEmail.Where(x => x.MessageId == "101").Select(y => y.SMS).FirstOrDefault();
+                            objData.Burn = lstWAEmail.Where(x => x.MessageId == "102").Select(y => y.SMS).FirstOrDefault();
+                            objData.CancelEarn = lstWAEmail.Where(x => x.MessageId == "103").Select(y => y.SMS).FirstOrDefault();
+                            objData.CancelBurn = lstWAEmail.Where(x => x.MessageId == "104").Select(y => y.SMS).FirstOrDefault();
+                            objData.OTP = lstWAEmail.Where(x => x.MessageId == "105").Select(y => y.SMS).FirstOrDefault();
+                            objData.BalanceInquiry = lstWAEmail.Where(x => x.MessageId == "106").Select(y => y.SMS).FirstOrDefault();
+                            objData.EnrollmentAndEarn = lstWAEmail.Where(x => x.MessageId == "107").Select(y => y.SMS).FirstOrDefault();
+                        }
                     }
                 }
+            }
+            catch (Exception ex)
+            {
+
             }
             return objData;
         }

@@ -27,7 +27,7 @@ namespace WebApp.Controllers
         public class Report
         {
 
-            SqlConnection _Con = new SqlConnection("Data source=13.233.128.61;initial catalog=CommonDBLoyalty;user id=sa; password=BO%Admin#LY!4@;");
+            SqlConnection _Con = new SqlConnection("Data source=3.110.77.122;initial catalog=CommonDBLoyalty;user id=sa; password=BO%Admin#LY!4@;");
             DataTable _dtConnection = new DataTable();
             string _IPAddress, _DBName, _DBPassword, _DBId, _ConnectionString, _GroupId, _BrandId, _GroupName, _ToEmailId, _ServiceFlag;
 
