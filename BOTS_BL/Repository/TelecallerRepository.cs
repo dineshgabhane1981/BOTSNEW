@@ -8,6 +8,8 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web;
+using System.Data.Entity.Migrations;
+
 
 namespace BOTS_BL.Repository
 {
@@ -36,11 +38,7 @@ namespace BOTS_BL.Repository
         public bool SaveTelecallerTracking(string connstr,string AddedBy,string MobileNo,string CustomerNm,string Gender,DateTime DateofBirth,DateTime DateOfAnni,int PointsGiven,string OutletId,string Comments)
         {
             bool status = false;
-            bool updatetable = false;
-            bool updatecustnm = false;
-            bool updategender = false;
-            bool updatedob = false;
-            bool updatedoa = false;
+            bool updatetable = false;            
             try
             {
                 using (var context = new BOTSDBContext(connstr))
@@ -58,7 +56,7 @@ namespace BOTS_BL.Repository
                             if (CustomerNm != null)
                             {
                                 updatetable = true;
-                                updatecustnm = true;
+                                objcustomer.CustomerName = CustomerNm;
                             }
                         }
                         if (objcustomer.Gender == Gender)
@@ -70,6 +68,7 @@ namespace BOTS_BL.Repository
                             if(Gender != null)
                             {
                                 updatetable = true;
+                                objcustomer.Gender = Gender;
                             }
                         }
                         if(objcustomer.DOB == DateofBirth)
@@ -81,6 +80,7 @@ namespace BOTS_BL.Repository
                             if (DateofBirth != null)
                             {
                                 updatetable = true;
+                                objcustomer.DOB = DateofBirth;
                             }
                         }
                         if (objcustomer.AnniversaryDate == DateOfAnni)
@@ -92,15 +92,18 @@ namespace BOTS_BL.Repository
                             if (DateOfAnni != null)
                             {
                                 updatetable = true;
+                                objcustomer.AnniversaryDate = DateOfAnni;
+
                             }
+                        }
+                        if(Comments != null)
+                        {
+                            updatetable = true;
                         }
                         if (updatetable)
                         {
-                            if(updatecustnm)
-                            {
-                                
-                               
-                            }
+                            context.CustomerDetails.AddOrUpdate(objcustomer);
+                            context.SaveChanges();
                             objtracking.AddedBy = AddedBy;
                             objtracking.AddedDate = DateTime.Now;
                             objtracking.Comments = Comments;
@@ -115,9 +118,9 @@ namespace BOTS_BL.Repository
                             context.TelecallerTrackings.Add(objtracking);
                             context.SaveChanges();
 
-                            SMSDetail objsMSDetail = new SMSDetail(); 
-                            string Message = "";
-                            SendWhatsTextOnly(MobileNo, Message, objsMSDetail.WhatsAppTokenId);
+                           // SMSDetail objsMSDetail = new SMSDetail(); 
+                           // string Message = "";
+                           // SendWhatsTextOnly(MobileNo, Message, objsMSDetail.WhatsAppTokenId);
                             status = true;
                         }
                     }
