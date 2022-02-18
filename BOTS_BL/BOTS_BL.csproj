@@ -317,6 +317,7 @@
     <Compile Include="Models\SMSDetail.cs" />
     <Compile Include="Models\SMSEmailMaster.cs" />
     <Compile Include="Models\StoreDetail.cs" />
+    <Compile Include="Models\TelecallerReport.cs" />
     <Compile Include="Models\TelecallerTracking.cs" />
     <Compile Include="Models\TransferPointsDetail.cs" />
     <Compile Include="Models\WhatsAppSMSMaster.cs" />

@@ -116,9 +116,9 @@ namespace BOTS_BL.Repository
 
             return status;
         }
-        public List<TelecallerTracking> GetTelecallerReportData(DateTime fromdt, DateTime todate, string connstr,string GroupId)
+        public List<TelecallerReport> GetTelecallerReportData(DateTime fromdt, DateTime todate, string connstr,string GroupId)
         {
-            List<TelecallerTracking> lsttelereportdata = new List<TelecallerTracking>();
+            List<TelecallerReport> lsttelereportdata = new List<TelecallerReport>();
             try
             {
                 using (var context = new BOTSDBContext(connstr))
@@ -126,7 +126,7 @@ namespace BOTS_BL.Repository
                     lsttelereportdata = (from t in context.TelecallerTrackings
                                          join o in context.OutletDetails on t.OutletId equals o.OutletId
                                          where t.AddedDate > fromdt && t.AddedDate < todate
-                                         select new TelecallerTracking
+                                         select new TelecallerReport
                                          {
                                              MobileNo = t.MobileNo,
                                              CustomerName = t.CustomerName,
@@ -135,13 +135,11 @@ namespace BOTS_BL.Repository
                                              DOA = t.DOA,
                                              Points = t.Points,
                                              OutletId = t.OutletId,
-                                             OutletName = t.OutletName,
+                                             OutletName = o.OutletName,
                                              IsSMSSend = t.IsSMSSend,
                                              Comments = t.Comments,
                                              AddedBy = t.AddedBy,
                                              AddedDate = t.AddedDate
-
-
                                          }).ToList();
 
                 }
@@ -154,8 +152,8 @@ namespace BOTS_BL.Repository
                     //}
                     lsttelereportdata = (from t in lsttelereportdata
                                      join c in context.CustomerLoginDetails
-                                        on t.AddedBy equals c.CustomerName
-                                     select new TelecallerTracking
+                                        on t.AddedBy equals c.LoginId
+                                     select new TelecallerReport
                                      {
                                          MobileNo = t.MobileNo,
                                          CustomerName = t.CustomerName,
@@ -167,7 +165,7 @@ namespace BOTS_BL.Repository
                                          OutletName = t.OutletName,
                                          IsSMSSend = t.IsSMSSend,
                                          Comments = t.Comments,
-                                         AddedBy = c.CustomerName,
+                                         AddedBy = c.UserName,
                                          AddedDate = t.AddedDate
                                          
                                      }).ToList();

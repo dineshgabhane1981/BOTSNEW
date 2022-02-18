@@ -73,7 +73,7 @@ namespace WebApp.Controllers
         public JsonResult GetReportData(string searchData)
         {
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
-            List<TelecallerTracking> lsttelecaller = new List<TelecallerTracking>();
+            List<TelecallerReport> lsttelecaller = new List<TelecallerReport>();
             JavaScriptSerializer json_serializer = new JavaScriptSerializer();
             json_serializer.MaxJsonLength = int.MaxValue;
             object[] objData = (object[])json_serializer.DeserializeObject(searchData);

@@ -24,7 +24,7 @@ namespace BOTS_BL.Repository
     {
         Exceptions newexception = new Exceptions();
 
-        public List<MeetingMatrix> GetMeetingMatrixReport(string SalesManager, string FrmDate, string ToDate, string MeetingOrCall)
+        public List<MeetingMatrix> GetMeetingMatrixReport(string isMTD,string SalesManager, string FrmDate, string ToDate, string MeetingOrCall)
         {
             MeetingMatrix objMeetingMatrix = new MeetingMatrix();
             List<MeetingMatrix> lstMeetingMatrix = new List<MeetingMatrix>();
@@ -32,11 +32,20 @@ namespace BOTS_BL.Repository
             {
                 using (var context = new CommonDBContext())
                 {
-                    DateTime FromDate = Convert.ToDateTime(FrmDate);
-                    DateTime ToDateNew = Convert.ToDateTime(ToDate);
-                    if(FromDate == ToDateNew)
+                    DateTime FromDate = new DateTime();
+                    DateTime ToDateNew = new DateTime();
+                    if (!string.IsNullOrEmpty(FrmDate) && !string.IsNullOrEmpty(FrmDate))
                     {
-                        ToDateNew = ToDateNew.AddDays(1).Date.AddSeconds(-1);
+                        FromDate = Convert.ToDateTime(FrmDate);
+                        ToDateNew = Convert.ToDateTime(ToDate);                        
+                            ToDateNew = ToDateNew.AddDays(1).Date.AddSeconds(-1);
+                       
+                    }
+                    if(isMTD=="1")
+                    {
+                        var date = DateTime.Now;
+                        FromDate = new DateTime(date.Year, date.Month, 1);
+                        ToDateNew = DateTime.Today.AddDays(1).Date.AddSeconds(-1);
                     }
                     var SMDetails = context.CustomerLoginDetails.Where(x => x.LoginType == "8").ToList();
                     foreach (var item in SMDetails)

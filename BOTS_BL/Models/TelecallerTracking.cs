@@ -39,9 +39,7 @@ namespace BOTS_BL.Models
         public DateTime? AddedDate { get; set; }
 
         [StringLength(8)]
-        public string OutletId { get; set; }
-        [NotMapped]
-        public string OutletName { get; set; }
+        public string OutletId { get; set; }       
     }
 
     public class TelecallerCustomerData
