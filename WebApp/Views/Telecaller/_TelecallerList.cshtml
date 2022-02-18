@@ -1,4 +1,4 @@
-﻿@model List<BOTS_BL.Models.TelecallerTracking>
+﻿@model List<BOTS_BL.Models.TelecallerReport>
 
 <div>
     <div class="pt-3 pl-3 pr-3 col-md-12 col-lg-12">
@@ -45,7 +45,7 @@
                                 <td>@item.Gender</td>
                             }
 
-                            @if (item.DOB > '')
+                            @if (item.DOB !=null )
                             {
                                 <td>@item.DOB</td>
                             }
@@ -53,7 +53,7 @@
                             {
                                 <td>-</td>
                             }
-                            @if (item.DOA > '')
+                            @if (item.DOA != null)
                             {
                                 <td>@item.DOA</td>
                             }
@@ -61,7 +61,7 @@
                             {
                                 <td>-</td>
                             }
-                            <td>@item.OutletId</td>
+                            <td>@item.OutletName</td>
                             @if (item.Comments != null)
                             {
                                 <td>@item.Comments</td>

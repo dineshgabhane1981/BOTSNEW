@@ -5,21 +5,26 @@
 
 <div class="app-main__inner">
     <div class="row mb-3 pt-3 pl-3 pr-3 card">
-        <div class="col-sm-10" style="margin-left:15px;padding-bottom:10px; display:flex;">
-            <div class="row">
-                @*<div class="col-md-10 col-xl-6">*@
-                    <div class="col-md-4 col-sm-4">
-                        Date Range From <br /> <input type="text" id="txtfromdt" class="input50" />
-                    </div>
-                    <div class="col-md-4 col-sm-4">
-                        To <br /> <input type="text" id="txttodt" class="input50" />
-                    </div>
-                @*</div>*@
+        @*<div class="col-sm-10" style="margin-left:15px;padding-bottom:10px; display:flex;">*@
+        <div class="row">
+            <div class="col-md-2 col-xl-2">
+                
             </div>
-            <div style="margin-right:100px;margin-top:10px;">
-                <button id="btnFilter" class="btn btn-primary login-btn pull-right" onclick="return GetReport();">Filter</button>
+            <div class="col-md-3 col-xl-3">
+                From  <input type="text" id="txtfromdt" class="input50" />
+            </div>
+            <div class="col-md-3 col-xl-3">
+                To  <input type="text" id="txttodt" class="input50" />
+            </div>
+            @*</div>*@
+            <div class="col-md-2 col-xl-2">
+                <button id="btnFilter" class="btn btn-primary login-btn" onclick="return GetReport();">Filter</button>
             </div>
         </div>
+            @*<div style="margin-right:100px;margin-top:10px;">
+                
+            </div>*@
+        @*</div>*@
     </div>
 
     <div class="row mb-3 card">
@@ -83,9 +88,9 @@
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
                 success: function (response) {
+                    console.log(response);
                     $('#dvReport').html(response);
-                    $('#dvDetailReport').hide();
-                    $('#dvReport').show(1000);
+                    $('#dvReport').show();
                     $("#divLoader").hide();
                 },
                 failure: function (response) {
@@ -93,8 +98,7 @@
                 },
                 error: function (response) {
                     $('#dvReport').html(response.responseText);
-                    $('#dvDetailReport').hide();
-                    $('#dvReport').show(1000);
+                    $('#dvReport').show();
                     $("#divLoader").hide();
                 }
             });
