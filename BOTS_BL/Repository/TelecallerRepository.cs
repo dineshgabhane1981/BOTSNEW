@@ -119,6 +119,7 @@ namespace BOTS_BL.Repository
         public List<TelecallerReport> GetTelecallerReportData(DateTime fromdt, DateTime todate, string connstr,string GroupId)
         {
             List<TelecallerReport> lsttelereportdata = new List<TelecallerReport>();
+            todate = todate.AddDays(1).Date.AddSeconds(-1);
             try
             {
                 using (var context = new BOTSDBContext(connstr))
@@ -144,12 +145,7 @@ namespace BOTS_BL.Repository
 
                 }
                 using (var context = new CommonDBContext())
-                {
-                    //foreach(var item in lsttelereportdata)
-                    //{
-                    //    var name = context.CustomerLoginDetails.Where(x => x.LoginId == item.AddedBy).Select(x => x.UserName);
-                    //    item.AddedBy = name;
-                    //}
+                {                    
                     lsttelereportdata = (from t in lsttelereportdata
                                      join c in context.CustomerLoginDetails
                                         on t.AddedBy equals c.LoginId

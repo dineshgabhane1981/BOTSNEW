@@ -70,7 +70,7 @@ namespace WebApp.Controllers
             return new JsonResult() { Data = status, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
 
         }
-        public JsonResult GetReportData(string searchData)
+        public ActionResult GetReportData(string searchData)
         {
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
             List<TelecallerReport> lsttelecaller = new List<TelecallerReport>();
@@ -84,7 +84,7 @@ namespace WebApp.Controllers
 
                 lsttelecaller = TR.GetTelecallerReportData(fromdt,todt,userDetails.connectionString,userDetails.GroupId);
             }
-            return new JsonResult() { Data = lsttelecaller, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
+            return PartialView("_TelecallerList", lsttelecaller);
 
         }
     }
