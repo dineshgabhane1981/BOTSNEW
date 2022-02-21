@@ -135,6 +135,11 @@ namespace BOTS_BL.Repository
                                 var categoryName = context.tblCategories.Where(x => x.CategoryId == id).Select(y => y.CategoryName).FirstOrDefault();
                                 item.CategoryName = categoryName;
                                 item.GroupId = Convert.ToString(objGroup.GroupId);
+                                if(item.BOProduct=="2")
+                                {
+                                    var BillingPId = context.tblBillingPartners.Where(x => x.BillingPartnerName == "OctaXS").Select(y => y.BillingPartnerId).FirstOrDefault();
+                                    item.BillingPartner = Convert.ToString(BillingPId);
+                                }
                                 context.BOTS_TblRetailMaster.AddOrUpdate(item);
                                 context.SaveChanges();
                             }
