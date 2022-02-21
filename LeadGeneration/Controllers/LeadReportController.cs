@@ -40,11 +40,12 @@ namespace LeadGeneration.Controllers
             object[] objData = (object[])json_serializer.DeserializeObject(searchData);
             foreach (Dictionary<string, object> item in objData)
             {
+                var isMTD= Convert.ToString(item["isMTD"]);
                 var salesManager = Convert.ToString(item["SalesManager"]);
                 var frmDate = Convert.ToString(item["frmDate"]);
                 var toDate = Convert.ToString(item["toDate"]);
                 var MeetingOrCall = Convert.ToString(item["MeetingOrCall"]);
-                objMeetingMatrix = LRR.GetMeetingMatrixReport(salesManager, frmDate, toDate, MeetingOrCall);
+                objMeetingMatrix = LRR.GetMeetingMatrixReport(isMTD,salesManager, frmDate, toDate, MeetingOrCall);
             }
 
             return PartialView("_MeetingMatrixListing", objMeetingMatrix);

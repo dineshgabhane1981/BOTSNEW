@@ -15,17 +15,21 @@
                     </div>
                 </div>
                 <div class="row mt-2 mb-5">
-                    <div class="col-md-4 col-sm-4">
-                        Date Range From <br /> <input type="text" id="txtfromdt" class="input50" />
+                    <div class="col-md-3 col-xl-3">                       
+                        <input type="radio" id="rdnMTD" checked name="btdornot" /> MTD &nbsp;&nbsp;&nbsp;&nbsp;
+                        <input type="radio" id="rdnRange" name="btdornot" /> Range
                     </div>
-                    <div class="col-md-4 col-sm-4">
+                    <div class="col-md-4 col-xl-4">
+                        From <br /> <input type="text" id="txtfromdt" class="input50" />
+                    </div>
+                    <div class="col-md-4 col-xl-4">
                         To <br /> <input type="text" id="txttodt" class="input50" />
                     </div>
                 </div>
                 <div class="row mt-2 mb-5">
                     <div class="col-md-4 col-sm-4">
                         <div id="dvType">
-                            <input type="radio" name="callmeeting" id="rbtnMeeting" /> Meeting
+                            <input type="radio" name="callmeeting" id="rbtnMeeting" checked /> Meeting
                             <input type="radio" name="callmeeting" id="rbtnCalling" style="margin-left:50px;" /> Calling
                         </div>
                     </div>
@@ -49,6 +53,7 @@
 
 <script>
     $(document).ready(function () {
+        SetFilter();
         var today = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
         $("#txtfromdt").datepicker({
             dateFormat: "yy-mm-dd",
@@ -59,10 +64,29 @@
             dateFormat: "yy-mm-dd",
             maxDate: today,
         });
-
+        
+        $("#rdnMTD").change(function () {
+            SetFilter();
+        });
+        $("#rdnRange").change(function () {
+            SetFilter();
+        });
         RemoveRedBorder();
+        GetReport();
     });
+    function SetFilter() {
+        if ($("#rdnMTD").is(":checked")) {
+            $("#txtfromdt").attr("disabled", "disabled");
+            $("#txttodt").attr("disabled", "disabled");
+            $('#txtfromdt').val('');
+            $('#txttodt').val('');
+        }
 
+        if ($("#rdnRange").is(":checked")) {
+            $("#txtfromdt").removeAttr("disabled");
+            $("#txttodt").removeAttr("disabled");
+        }
+    }
     function RemoveRedBorder() {
         $("#txtfromdt").change(function () {
             if ($("#txtfromdt").val() != "") {
@@ -89,26 +113,17 @@
     }
     function GetReport() {
         var returnStatus = true;
-        if ($("#txtfromdt").val() == "") {
-            $('#txtfromdt').css('border-color', 'red');
-            returnStatus = false;
-        }
-        if ($("#txttodt").val() == "") {
-            $('#txttodt').css('border-color', 'red');
-            returnStatus = false;
-        }
-        if ($("#rbtnMeeting").is(":checked") || $("#rbtnCalling").is(":checked")) {
-
-        }
-        else {
-
-            $('#dvType').css('border', '1px solid red');
-            returnStatus = false;
-        }
+        
         if (returnStatus == true) {
             var SeardhData = [];
             item = {}
-
+            if ($("#rdnMTD").is(":checked")) {
+                item["isMTD"] = "1";
+            }
+            if ($("#rdnRange").is(":checked")) {
+                item["isMTD"] = "0";
+            }
+            
             item["frmDate"] = $("#txtfromdt").val();
             item["toDate"] = $("#txttodt").val();
             item["SalesManager"] = $("#ddlSalesManager").val();
