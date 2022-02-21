@@ -30,7 +30,7 @@ namespace LeadGeneration.ViewModel
         }
         public SelectListItem[] LeadStatus()
         {
-            return new SelectListItem[4] { new SelectListItem() { Text = "Interested", Value = "Interested" }, new SelectListItem() { Text = "Not Interested", Value = "NotInterested" }, new SelectListItem() { Text = "Follow Up", Value = "Followup" }, new SelectListItem() { Text = "Long Follow Up", Value = "LongFollowUp" } };
+            return new SelectListItem[5] { new SelectListItem() { Text = "Interested", Value = "Interested" }, new SelectListItem() { Text = "Not Interested", Value = "NotInterested" }, new SelectListItem() { Text = "Follow Up", Value = "Followup" }, new SelectListItem() { Text = "Long Follow Up", Value = "LongFollowUp" }, new SelectListItem() { Text = "Sales Done", Value = "salesdone" }};
         }
         public SelectListItem[] MeetingType()
         {

@@ -95,17 +95,18 @@ namespace LeadGeneration.Controllers
             }
             List<SelectListItem> YearList = new List<SelectListItem>();
             int year = DateTime.Now.Year;
-            for (int i = 0; i <= 9; i++)
+            YearList.Add(new SelectListItem
             {
-                //YearList.Add(new SelectListItem
-                //{
-                //    Text = "Select Year",
-                //    Value = "0"
-                //});
+                Text = Convert.ToString(DateTime.Now.AddYears(1).Year.ToString()),
+                Value = Convert.ToString(year+1)
+            });
+            for (int i = 0; i <= 10; i++)
+            {
+               
                 YearList.Add(new SelectListItem
                 {
-                    Text = Convert.ToString(DateTime.Now.AddYears(i).Year.ToString()),
-                    Value = Convert.ToString(year + i)
+                    Text = Convert.ToString(DateTime.Now.AddYears(-i).Year.ToString()),
+                    Value = Convert.ToString(year - i)
                 });
             }           
            
