@@ -140,7 +140,7 @@ namespace BOTS_BL.Repository
                                 join bp in context.tblBillingPartners on c.BillingPartner equals bp.BillingPartnerId.ToString()
                                 into ps
                                 from bp in ps.DefaultIfEmpty()
-                                where (c.FollowupDate == today || c.FollowupDate == tommrowdt)
+                                where (c.FollowupDate == today || c.FollowupDate == tommrowdt) && c.MeetingType != "salesdone"
                                 select new SalesLead
                                 {
                                     LeadId = c.LeadId,
