@@ -50,10 +50,17 @@
                                         }
 
                                         <td>@item.SalesManagerName</td>
-                                        <td style="text-align:center;">
-                                            <a href="@Url.Action("AddLead", "Lead", new {leadId= LeadId})" class="login" title="Edit"><img src="~/Content/assets/images/shape_editUser.png" /></a>
+                                        @if (item.MeetingType == "salesdone")
+                                        {
+                                            <td style="text-align:center;">--</td>
+                                        }
+                                        else
+                                        {
+                                            <td style="text-align:center;">
+                                                <a href="@Url.Action("AddLead", "Lead", new { leadId = LeadId })" class="login" title="Edit"><img src="~/Content/assets/images/shape_editUser.png" /></a>
 
-                                        </td>
+                                            </td>
+                                        }
                                     </tr>
                                     var dynamicIdTr = "trLeadTracking" + item.LeadId;
                                     var dynamicIdDiv = "dvLeadTrackingData" + item.LeadId;

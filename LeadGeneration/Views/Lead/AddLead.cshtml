@@ -413,6 +413,19 @@
             returnStatus = false;
         }
 
+        if ($("#hdnLeadId").val() != 0) {            
+            if ($("#ddlmeetingtype option:selected").text() == "1st Call" || $("#ddlmeetingtype option:selected").text() == "1st Meeting") {
+                
+                $("#ddlmeetingtype").css('border-color', 'red');
+                cuteAlert({
+                    type: "error",
+                    title: "Oops..",
+                    message: "Meeting Type should not 1st Call or 1st Meeting",
+                    buttonText: "Okay"
+                })
+                returnStatus = false;
+            }
+        }
 
         if (returnStatus == true) {
             return true;

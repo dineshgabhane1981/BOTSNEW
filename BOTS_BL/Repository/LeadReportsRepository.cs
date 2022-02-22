@@ -364,16 +364,13 @@ namespace BOTS_BL.Repository
         }
 
 
-        public List<PartnerReport> GetPartnerReportData(string FrmDate, string ToDate)
+        public List<PartnerReport> GetPartnerReportData(string FrmDate, string ToDate,string isMTD)
         {
             List<PartnerReport> lstData = new List<PartnerReport>();
             try
             {
                 using (var context = new CommonDBContext())
-                {
-                    //DateTime FromDate = Convert.ToDateTime(FrmDate);
-                    //DateTime ToDateNew = Convert.ToDateTime(ToDate);
-
+                { 
                     var list = context.BOTS_TblRetailMaster.Select(x => x.BillingPartner).Distinct().ToList();
                     decimal? TotalAmountAll = 0;
                     List<string> groupids = new List<string>();
@@ -384,11 +381,23 @@ namespace BOTS_BL.Repository
                             PartnerReport objPartner = new PartnerReport();
                             var pId = Convert.ToInt32(item);
                             objPartner.PartnerName = context.tblBillingPartners.Where(x => x.BillingPartnerId == pId).Select(y => y.BillingPartnerName).FirstOrDefault();
-                            
+
+                            DateTime FromDate = new DateTime();
+                            DateTime ToDateNew = new DateTime();
                             if (!string.IsNullOrEmpty(FrmDate) && !string.IsNullOrEmpty(FrmDate))
                             {
-                                DateTime FromDate = Convert.ToDateTime(FrmDate);
-                                DateTime ToDateNew = Convert.ToDateTime(ToDate);
+                                FromDate = Convert.ToDateTime(FrmDate);
+                                ToDateNew = Convert.ToDateTime(ToDate);
+                                ToDateNew = ToDateNew.AddDays(1).Date.AddSeconds(-1);
+
+                            }
+                            if (isMTD == "1")
+                            {
+                                var date = DateTime.Now;
+                                FromDate = new DateTime(date.Year, date.Month, 1);
+                                ToDateNew = DateTime.Today.AddDays(1).Date.AddSeconds(-1);
+                            }
+                            
                                 objPartner.NoOfAccounts = (from c in context.BOTS_TblGroupMaster
                                              join cc in context.BOTS_TblRetailMaster on c.GroupId equals cc.GroupId
                                              where cc.BillingPartner == item && c.CreatedDate >= FromDate && c.CreatedDate <= ToDateNew                                             
@@ -411,15 +420,7 @@ namespace BOTS_BL.Repository
                                                           select new SalesLead
                                                           {
                                                               GroupId = c.GroupId
-                                                          }).Select(x => x.GroupId).ToList();
-                                 
-                            }
-                            else
-                            {
-                                objPartner.NoOfAccounts = context.BOTS_TblRetailMaster.Where(x => x.BillingPartner == item).Select(y => y.GroupId).Distinct().Count();
-                                objPartner.NoOfOutlets = context.BOTS_TblRetailMaster.Where(x => x.BillingPartner == item).Sum(y => y.NoOfOutlets);
-                                groupids = context.BOTS_TblRetailMaster.Where(x => x.BillingPartner == item).Select(y => y.GroupId).Distinct().ToList();
-                            }                            
+                                                          }).Select(x => x.GroupId).ToList();                                                        
                             
                             decimal? TotalAmount = 0;
                             foreach(var groupid in groupids)

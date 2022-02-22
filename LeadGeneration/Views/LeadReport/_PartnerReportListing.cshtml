@@ -14,11 +14,11 @@
                     <thead>
                         <tr>
                             <th scope="col">Partner Name</th>
-                            <th scope="col">No Of  Account</th>
-                            <th scope="col">No Of Outlets</th>
-                            <th scope="col">Total Amount</th>
-                            <th scope="col">Contribution %  in total  revenue</th>
-                            <th scope="col">Average Revenue per outlet</th>
+                            <th scope="col" style="text-align:center;">No Of  Account</th>
+                            <th scope="col" style="text-align:center;">No Of Outlets</th>
+                            <th scope="col" style="text-align:right;">Total Amount</th>
+                            <th scope="col" style="text-align:center;">Contribution %  in total  revenue</th>
+                            <th scope="col" style="text-align:right;">Average Revenue per outlet</th>
 
                         </tr>
                     </thead>
@@ -29,12 +29,12 @@
                             {
                                 <tr>
                                     <td>@item.PartnerName</td>
-                                    <td>@item.NoOfAccounts</td>
-                                    <td>@item.NoOfOutlets</td>
+                                    <td style="text-align:center;">@item.NoOfAccounts</td>
+                                    <td style="text-align:center;">@item.NoOfOutlets</td>
 
-                                    <td>@String.Format(new CultureInfo("en-IN", false), "{0:n2}", Convert.ToDouble(item.TotalAmount))</td>
-                                    <td>@item.ContributionInRevenue</td>
-                                    <td>@String.Format(new CultureInfo("en-IN", false), "{0:n2}", Convert.ToDouble(item.AvgRevenuePerOutlet))</td>
+                                    <td style="text-align:right;">@String.Format(new CultureInfo("en-IN", false), "{0:n2}", Convert.ToDouble(item.TotalAmount))</td>
+                                    <td style="text-align:center;">@item.ContributionInRevenue</td>
+                                    <td style="text-align:right;">@String.Format(new CultureInfo("en-IN", false), "{0:n2}", Convert.ToDouble(item.AvgRevenuePerOutlet))</td>
                                 </tr>
                             }
                         }

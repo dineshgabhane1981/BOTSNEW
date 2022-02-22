@@ -172,11 +172,12 @@ namespace LeadGeneration.Controllers
             json_serializer.MaxJsonLength = int.MaxValue;
             object[] objData = (object[])json_serializer.DeserializeObject(searchData);
             foreach (Dictionary<string, object> item in objData)
-            {                
+            {
+                var isMTD = Convert.ToString(item["isMTD"]);
                 var frmDate = Convert.ToString(item["frmDate"]);
                 var toDate = Convert.ToString(item["toDate"]);
 
-                objPartnerReport = LRR.GetPartnerReportData(frmDate, toDate);
+                objPartnerReport = LRR.GetPartnerReportData(frmDate, toDate, isMTD);
             }
 
             return PartialView("_PartnerReportListing", objPartnerReport);
