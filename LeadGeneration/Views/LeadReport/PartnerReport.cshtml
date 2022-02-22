@@ -9,6 +9,10 @@
         <div class="content">
             <div class="container-fluid">
                 <div class="row mt-2 mb-5">
+                    <div class="col-md-3 col-xl-3">
+                        <input type="radio" id="rdnMTD" checked name="btdornot" /> MTD &nbsp;&nbsp;&nbsp;&nbsp;
+                        <input type="radio" id="rdnRange" name="btdornot" /> Range
+                    </div>
                     <div class="col-md-4 col-sm-4">
                         Date Range From <br /> <input type="text" id="txtfromdt" class="input50" />
                     </div>
@@ -31,6 +35,7 @@
 
 <script>
     $(document).ready(function () {
+        SetFilter();
         var today = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
         $("#txtfromdt").datepicker({
             dateFormat: "yy-mm-dd",
@@ -41,12 +46,36 @@
             dateFormat: "yy-mm-dd",
             maxDate: today,
         });
+        $("#rdnMTD").change(function () {
+            SetFilter();
+        });
+        $("#rdnRange").change(function () {
+            SetFilter();
+        });
+        GetReport();
     });
+    function SetFilter() {
+        if ($("#rdnMTD").is(":checked")) {
+            $("#txtfromdt").attr("disabled", "disabled");
+            $("#txttodt").attr("disabled", "disabled");
+            $('#txtfromdt').val('');
+            $('#txttodt').val('');
+        }
 
+        if ($("#rdnRange").is(":checked")) {
+            $("#txtfromdt").removeAttr("disabled");
+            $("#txttodt").removeAttr("disabled");
+        }
+    }
     function GetReport() {
         var SearchData = [];
         item = {}
-
+        if ($("#rdnMTD").is(":checked")) {
+            item["isMTD"] = "1";
+        }
+        if ($("#rdnRange").is(":checked")) {
+            item["isMTD"] = "0";
+        }
         item["frmDate"] = $("#txtfromdt").val();
         item["toDate"] = $("#txttodt").val();
 
