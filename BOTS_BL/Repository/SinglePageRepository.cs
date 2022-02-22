@@ -387,12 +387,8 @@ namespace BOTS_BL.Repository
                         {
                             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
                             var response2 = client.GetStringAsync(new Uri(baseAddress)).Result;
-
-                            var rootlist = JsonConvert.DeserializeObject<Dictionary<string, dynamic>>(response2);
                             JObject jsonObj = JObject.Parse(response2);
-                            IList<JToken> hotels = jsonObj["response"]["userList"].Children().ToList();
                             IEnumerable<JToken> pricyProducts = jsonObj.SelectTokens("$..user");
-
                             foreach (JToken item in pricyProducts)
                             {
                                 SMSBalance objbalance = new SMSBalance();
@@ -415,51 +411,7 @@ namespace BOTS_BL.Repository
                 {
                     item.SmsBalance1 = Convert.ToInt32(item.SmsBalance.Substring(0, item.SmsBalance.IndexOf(" ")));
                 }
-                
 
-                //Technocore Whats App Balance (Narayan)
-                baseAddress = "https://technocorelogic.com/api/checkbalance";
-                using (var client = new HttpClient())
-                {
-                    using (var response1 = client.GetAsync(baseAddress).Result)
-                    {
-                        if (response1.IsSuccessStatusCode)
-                        {
-                            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                            var response2 = client.GetStringAsync(new Uri(baseAddress)).Result;
-
-                            var rootlist = JsonConvert.DeserializeObject<Dictionary<string, dynamic>>(response2);
-                            JObject jsonObj = JObject.Parse(response2);
-                            var WAData = jsonObj.Children().ToList();
-                            IEnumerable<JToken> pricyProducts = jsonObj.SelectTokens("0");
-                            int count = 0;
-                            foreach (JToken item in WAData)
-                            {
-                                if (count > 0)
-                                {
-                                    WhatsAppBalance objbalance = new WhatsAppBalance();
-                                    objbalance.BrandName = Convert.ToString(((Newtonsoft.Json.Linq.JProperty)item).Value["ClientName"]);
-                                    objbalance.OutletName = Convert.ToString(((Newtonsoft.Json.Linq.JProperty)item).Value["InstanceName"]);
-                                    objbalance.WABalance = Convert.ToInt32(((Newtonsoft.Json.Linq.JProperty)item).Value["BalanceQuota"]);
-                                    objbalance.Status = Convert.ToString(((Newtonsoft.Json.Linq.JProperty)item).Value["LoginStatus"]);
-                                    objbalance.WAExpiryDate = Convert.ToDateTime(((Newtonsoft.Json.Linq.JProperty)item).Value["Expiry"]);
-                                    lstWAbalance.Add(objbalance);
-                                }
-                                count++;
-                            }
-                        }
-                        else
-                        {
-                            Console.WriteLine("{0} ({1})", (int)response1.StatusCode, response1.ReasonPhrase);
-                        }
-                    }
-                }
-
-                lstSmsbalance.objWhatsAppBalance = lstWAbalance.Where(y => y.WABalance < 1000 && y.WABalance > 0).OrderByDescending(x => x.WABalance).ToList();
-                //lstSmsbalance.objWhatsAppBalance = lstWAbalance.OrderByDescending(x => x.WABalance).ToList();
-                DateTime checkDate = DateTime.Today.AddDays(10);
-
-                lstSmsbalance.objWhatsAppExpiryDate = lstWAbalance.Where(x => x.WAExpiryDate < checkDate && x.WAExpiryDate > DateTime.Today).OrderByDescending(y => y.WAExpiryDate).ToList();
                 //vision SMS Balance
                 baseAddress = "https://sms.visionhlt.com/api/mt/GetCreditReport?userid=4438%20&password=123456";
                 using (var client = new HttpClient())
@@ -471,12 +423,10 @@ namespace BOTS_BL.Repository
                             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
                             var response2 = client.GetStringAsync(new Uri(baseAddress)).Result;
 
-                            var rootlist = JsonConvert.DeserializeObject<Dictionary<string, dynamic>>(response2);
                             JObject jsonObj = JObject.Parse(response2);
-                            //CreditReports
                             var WAData = jsonObj.Children().ToList();
                             IEnumerable<JToken> pricyProducts = jsonObj.SelectTokens("CreditReports").Children().ToList();
-                            
+
                             foreach (JToken item in pricyProducts)
                             {
                                 var lst = item.Children().ToList();
@@ -492,6 +442,74 @@ namespace BOTS_BL.Repository
                 }
                 lstbalance = lstbalance.Where(x => x.SmsBalance1 < 1000).ToList();
                 lstSmsbalance.objSMSBalance = lstbalance.OrderByDescending(x => x.SmsBalance1).ToList();
+
+                baseAddress = "https://technocorelogic.com/api/checkbalance?user=919561124670&pass=9930005673&url=https://www.enotify.app";
+                using (var client = new HttpClient())
+                {
+                    using (var response1 = client.GetAsync(baseAddress).Result)
+                    {
+                        if (response1.IsSuccessStatusCode)
+                        {
+                            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                            var response2 = client.GetStringAsync(new Uri(baseAddress)).Result;
+                            JObject jsonObj = JObject.Parse(response2);
+                            var WAData = jsonObj.Children().ToList();
+                            int count = 0;
+                            foreach (JToken item in WAData)
+                            {
+                                if (count > 0)
+                                {
+                                    WhatsAppBalance objbalance = new WhatsAppBalance();
+                                    objbalance.BrandName = Convert.ToString(((Newtonsoft.Json.Linq.JProperty)item).Value["ClientName"]);
+                                    objbalance.OutletName = Convert.ToString(((Newtonsoft.Json.Linq.JProperty)item).Value["InstanceName"]);
+                                    objbalance.WABalance = Convert.ToInt32(((Newtonsoft.Json.Linq.JProperty)item).Value["BalanceQuota"]);
+                                    objbalance.Status = Convert.ToString(((Newtonsoft.Json.Linq.JProperty)item).Value["LoginStatus"]);
+                                    objbalance.WAExpiryDate = Convert.ToDateTime(((Newtonsoft.Json.Linq.JProperty)item).Value["Expiry"]);
+                                    objbalance.InstanceID = Convert.ToString(((Newtonsoft.Json.Linq.JProperty)item).Value["InstanceID"]);
+                                    lstWAbalance.Add(objbalance);
+                                }
+                                count++;
+                            }
+                        }
+                        else
+                        {
+                            Console.WriteLine("{0} ({1})", (int)response1.StatusCode, response1.ReasonPhrase);
+                        }
+                    }
+                }
+                List<WhatsAppBalance> lstWAbalance1 = new List<WhatsAppBalance>();
+                baseAddress = "https://technocorelogic.com/api/checkqueue?user=919561124670&pass=9930005673&url=https://www.enotify.app";
+                using (var client = new HttpClient())
+                {
+                    using (var response1 = client.GetAsync(baseAddress).Result)
+                    {
+                        if (response1.IsSuccessStatusCode)
+                        {
+                            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                            var response2 = client.GetStringAsync(new Uri(baseAddress)).Result;
+                            JObject jsonObj = JObject.Parse(response2);
+                            var WAData = jsonObj.Children().ToList();
+                            WAData = jsonObj.SelectTokens("data").Children().ToList();
+                            foreach (JToken item in WAData)
+                            {
+                                var lst = item.Children().ToList();
+                                WhatsAppBalance objbalance = new WhatsAppBalance();                                
+                                objbalance.InstanceID = Convert.ToString(((Newtonsoft.Json.Linq.JProperty)lst[4]).Value);
+                                objbalance.queue= Convert.ToInt32(((Newtonsoft.Json.Linq.JProperty)lst[9]).Value);
+                                lstWAbalance1.Add(objbalance);
+                            }
+                        }
+                    }
+                }
+                foreach(var item in lstWAbalance)
+                {
+                    item.queue = lstWAbalance1.Where(x => x.InstanceID == item.InstanceID).Select(y => y.queue).FirstOrDefault();
+                }
+
+                lstSmsbalance.objWhatsAppBalance = lstWAbalance.Where(y => y.WABalance < 1000 && y.WABalance > 0).OrderByDescending(x => x.WABalance).ToList();
+                DateTime checkDate = DateTime.Today.AddDays(10);
+
+                lstSmsbalance.objWhatsAppExpiryDate = lstWAbalance.Where(x => x.WAExpiryDate < checkDate && x.WAExpiryDate > DateTime.Today).OrderByDescending(y => y.WAExpiryDate).ToList();
             }
             catch (Exception ex)
             {
@@ -796,6 +814,6 @@ namespace BOTS_BL.Repository
             return lstData;
         }
 
-       
+
     }
 }

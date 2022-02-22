@@ -258,10 +258,6 @@
                             <tr>
                                 <th scope="col" style="text-align:left;">Sr No</th>
                                 <th scope="col" style="text-align:left;">Group Name</th>
-                                @* <th scope="col" style="text-align:left;">Outlet Name</th>
-                                    <th scope="col" style="text-align:left;">Low SMS Balance</th>
-                                         <th scope="col" style="text-align:left;">Low Virtual SMS Balance</th>
-                                         <th scope="col" style="text-align:left;">Low Whats App Balance</th>*@
                                 <th scope="col" style="text-align:left;">Whats App Expiry</th>
                             </tr>
                             <tbody>
@@ -279,7 +275,6 @@
                                                     <td>@indexcomm</td>
 
                                                     <td style="text-align:left;">@item.BrandName</td>
-                                                    @*<td style="text-align:left;">@item.OutletName</td>*@
                                                     <td style="text-align:left;">@item.WAExpiryDate.ToString("dd-MMM-yyyy")</td>
                                                 </tr>
 
@@ -301,6 +296,7 @@
                                 <th scope="col" style="text-align:left;">WhatsApp Balance</th>
                                 <th scope="col" style="text-align:left;">Instance Name</th>
                                 <th scope="col" style="text-align:left;">Login Status</th>
+                                <th scope="col" style="text-align:left;">Queue</th>
                             </tr>
                             <tbody>
                                 @{int indexcomm1 = 1;}
@@ -317,10 +313,10 @@
                                                     <td>@indexcomm1</td>
 
                                                     <td style="text-align:left;">@item.BrandName</td>
-                                                    @*<td style="text-align:left;">@item.OutletName</td>*@
                                                     <td style="text-align:left;">@item.WABalance</td>
                                                     <td style="text-align:left;">@item.OutletName</td>
                                                     <td style="text-align:left;">@item.Status</td>
+                                                    <td style="text-align:left;">@item.queue</td>
                                                 </tr>
 
                                                 indexcomm1++;
