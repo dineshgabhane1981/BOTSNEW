@@ -6,6 +6,11 @@ using System.Web;
 using System.Web.Mvc;
 using BOTS_BL.Repository;
 using System.Web.Script.Serialization;
+using System.ComponentModel;
+using System.Data;
+using ClosedXML.Excel;
+using System.IO;
+using BOTS_BL;
 
 namespace WebApp.Controllers
 {
@@ -13,6 +18,7 @@ namespace WebApp.Controllers
     {
         TelecallerRepository TR = new TelecallerRepository();
         ReportsRepository RR = new ReportsRepository();
+        Exceptions newexception = new Exceptions();
         // GET: Telecaller
         public ActionResult Index()
         {
@@ -35,7 +41,6 @@ namespace WebApp.Controllers
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
             objteledata = TR.GetTelecallerCustomer(MobileNo, userDetails.GroupId, userDetails.connectionString);
             return new JsonResult() { Data = objteledata, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
-
 
         }
         
@@ -74,17 +79,78 @@ namespace WebApp.Controllers
         {
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
             List<TelecallerReport> lsttelecaller = new List<TelecallerReport>();
-            JavaScriptSerializer json_serializer = new JavaScriptSerializer();
-            json_serializer.MaxJsonLength = int.MaxValue;
-            object[] objData = (object[])json_serializer.DeserializeObject(searchData);
-            foreach (Dictionary<string, object> item in objData)
+            try
             {
-                DateTime fromdt = Convert.ToDateTime(item["frmDate"]);
-                DateTime todt = Convert.ToDateTime(item["toDate"]);
+                
+                JavaScriptSerializer json_serializer = new JavaScriptSerializer();
+                json_serializer.MaxJsonLength = int.MaxValue;
+                object[] objData = (object[])json_serializer.DeserializeObject(searchData);
+                foreach (Dictionary<string, object> item in objData)
+                {
+                    DateTime fromdt = Convert.ToDateTime(item["frmDate"]);
+                    DateTime todt = Convert.ToDateTime(item["toDate"]);
 
-                lsttelecaller = TR.GetTelecallerReportData(fromdt,todt,userDetails.connectionString,userDetails.GroupId);
+                    lsttelecaller = TR.GetTelecallerReportData(fromdt, todt, userDetails.connectionString, userDetails.GroupId);
+                }
             }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, userDetails.GroupId);
+                return null;
+            }
+
             return PartialView("_TelecallerList", lsttelecaller);
+
+        }
+
+        public ActionResult ExportToExcelTelecallerReport(DateTime fromdt, DateTime Todt,string ReportName)
+        {
+            System.Data.DataTable table = new System.Data.DataTable();
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            try
+            {
+                List<TelecallerReport> lsttelecaller = new List<TelecallerReport>();
+              
+                lsttelecaller = TR.GetTelecallerReportData(fromdt, Todt, userDetails.connectionString, userDetails.GroupId);
+                PropertyDescriptorCollection properties = TypeDescriptor.GetProperties(typeof(TelecallerReport));
+                foreach (PropertyDescriptor prop in properties)
+                    table.Columns.Add(prop.Name, Nullable.GetUnderlyingType(prop.PropertyType) ?? prop.PropertyType);
+
+                foreach (TelecallerReport item in lsttelecaller)
+                {
+                    DataRow row = table.NewRow();
+                    foreach (PropertyDescriptor prop in properties)
+                        row[prop.Name] = prop.GetValue(item) ?? DBNull.Value;
+
+                    table.Rows.Add(row);
+                }
+                string fileName = "BOTS_" + ReportName + ".xlsx";
+                using (XLWorkbook wb = new XLWorkbook())
+                {
+
+                    //excelSheet.Name
+                    table.TableName = ReportName;
+                    IXLWorksheet worksheet = wb.AddWorksheet(sheetName: ReportName);
+                    worksheet.Cell(1, 1).Value = "Report Name";
+                    worksheet.Cell(1, 2).Value = "Telecaller Report";
+                    worksheet.Cell(2, 1).Value = "Period";
+                    worksheet.Cell(2, 2).Value = fromdt + "-" + Todt;                    
+                    worksheet.Cell(5, 1).InsertTable(table);
+                    //wb.Worksheets.Add(table);
+                    using (MemoryStream stream = new MemoryStream())
+                    {
+                        wb.SaveAs(stream);
+
+                        return File(stream.ToArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, userDetails.GroupId);
+                return null;
+            }
+
 
         }
     }
