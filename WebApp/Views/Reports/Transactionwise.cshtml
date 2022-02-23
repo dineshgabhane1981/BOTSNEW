@@ -36,6 +36,7 @@
                 <input type="radio" id="chkEnrollmentData" name="EnrollmentParam" style="margin-right:5px;height:15px;width:15px;" /> Only Enrollment data &nbsp;&nbsp;&nbsp;&nbsp;
                 <input type="radio" id="chkEarn" name="EnrollmentParam" style="margin-right:5px;height:15px;width:15px;" /> Earn &nbsp;&nbsp;&nbsp;&nbsp;
                 <input type="radio" id="chkRedeem" name="EnrollmentParam" style="margin-right:5px;height:15px;width:15px;" /> Redeem &nbsp;&nbsp;&nbsp;&nbsp;
+                <input type="radio" id="chkCancel" name="EnrollmentParam" style="margin-right:5px;height:15px;width:15px;" /> Cancel &nbsp;&nbsp;&nbsp;&nbsp;
                 <button id="btnFilter" class="btn btn-primary login-btn" style="margin-left:40px;">Filter</button>
             </div>
         </div>
@@ -201,7 +202,9 @@
         if ($("#chkAll").is(":checked")) {
             EnrolmentDataFlag = 4;
         }
-
+        if ($("#chkCancel").is(":checked")) {
+            EnrolmentDataFlag = 5;
+        }
         $.ajax({
             type: "POST",
             url: '@Url.Action("GetOutletWiseTransactionResult", "Reports")',
