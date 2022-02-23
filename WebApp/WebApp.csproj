@@ -359,6 +359,12 @@
     <Content Include="Views\Telecaller\Index.cshtml" />
     <Content Include="Views\Telecaller\Telecaller.cshtml" />
     <Content Include="Views\Telecaller\_TelecallerList.cshtml" />
+    <Content Include="Views\CustomerOnBoarding\_PointsRule.cshtml" />
+    <Content Include="Views\CustomerOnBoarding\_Communications.cshtml" />
+    <Content Include="Views\CustomerOnBoarding\_PerpetualCampaigns.cshtml" />
+    <Content Include="Views\CustomerOnBoarding\_DLCLink.cshtml" />
+    <Content Include="Views\CustomerOnBoarding\_VelocityChecks.cshtml" />
+    <Content Include="Views\CustomerOnBoarding\_BulkUpload.cshtml" />
     <None Include="_bin_deployableAssemblies\x86\sqlcese40.dll" />
     <None Include="_bin_deployableAssemblies\x86\sqlceqp40.dll" />
     <None Include="_bin_deployableAssemblies\x86\sqlceme40.dll" />
