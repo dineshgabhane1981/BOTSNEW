@@ -61,6 +61,8 @@ namespace BOTS_BL.Models.CommonDB
         public DateTime WAExpiryDate { get; set; }
         public int WABalance1 { get; set; }
         public string Status { get; set; }
+        public string InstanceID { get; set; }
+        public int? queue { get; set; }
 
     }
     public class VirtualSMSBalance
