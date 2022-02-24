@@ -297,6 +297,8 @@
     <Compile Include="Models\OnBoarding\BOTS_TblRetailCategoryMaster.cs" />
     <Compile Include="Models\OnBoarding\BOTS_TblRetailMaster.cs" />
     <Compile Include="Models\CommonDB\tblCategory.cs" />
+    <Compile Include="Models\OnBoarding\BOTS_TblSMSConfig.cs" />
+    <Compile Include="Models\OnBoarding\BOTS_TblWAConfig.cs" />
     <Compile Include="Models\OnBoarding\OnBoardingCustomerDetails.cs" />
     <Compile Include="Models\OnBoarding\OnBoardingListing.cs" />
     <Compile Include="Models\OnBoarding\RetailDetails.cs" />

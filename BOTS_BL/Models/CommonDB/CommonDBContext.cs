@@ -80,6 +80,8 @@ namespace BOTS_BL.Models
 
         public virtual DbSet<SALES_tblLeads> SALES_tblLeads { get; set; }
         public virtual DbSet<SALES_tblLeadTracking> SALES_tblLeadTracking { get; set; }
+        public virtual DbSet<BOTS_TblSMSConfig> BOTS_TblSMSConfig { get; set; }
+        public virtual DbSet<BOTS_TblWAConfig> BOTS_TblWAConfig { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
