@@ -6,6 +6,7 @@ using System.Data.Entity;
 using System.Linq;
 using BOTS_BL.Models.SalesLead;
 using BOTS_BL.Models.FeedbackModule;
+using BOTS_BL.Models.OnBoarding;
 
 namespace BOTS_BL.Models
 {
@@ -15,7 +16,9 @@ namespace BOTS_BL.Models
             : base("name=CommonDBContext")
         {
         }
-
+        public virtual DbSet<BOTS_TblEarnPointsSlabConfig> BOTS_TblEarnPointsSlabConfig { get; set; }
+        public virtual DbSet<BOTS_TblPointsBurnRuleConfig> BOTS_TblPointsBurnRuleConfig { get; set; }
+        public virtual DbSet<BOTS_TblPointsEarnRuleConfig> BOTS_TblPointsEarnRuleConfig { get; set; }
         public virtual DbSet<Feedback_SMSNumbers> Feedback_SMSNumbers { get; set; }
         public virtual DbSet<Feedback_Content> Feedback_Content { get; set; }
         public virtual DbSet<Feedback_ContentMaster> Feedback_ContentMaster { get; set; }
