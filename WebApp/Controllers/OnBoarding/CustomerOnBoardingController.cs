@@ -37,11 +37,13 @@ namespace WebApp.Controllers.OnBoarding
             try
             {
                 List<SelectListItem> refferedname = new List<SelectListItem>();
+                
                 SelectListItem item = new SelectListItem();
                 item.Value = "0";
                 item.Text = "Please Select";
                 refferedname.Add(item);
                 objData.lstAllGroups = refferedname;
+                objData.lstNewOutlets = refferedname;
 
                 objData.lstCity = CR.GetCity();
                 objData.lstRetailCategory = CR.GetRetailCategory();
@@ -65,6 +67,17 @@ namespace WebApp.Controllers.OnBoarding
                     objData.objRetailList = OBR.GetRetailDetails(groupId);
                     objData.objInstallmentList = OBR.GetInstallmentDetails(groupId);
                     objData.lstOutlets = OBR.GetOutletDetails(groupId);
+
+                    foreach(var outlet in objData.lstOutlets)
+                    {
+                        objData.lstNewOutlets.Add(new SelectListItem
+                        {
+                            Text = outlet.OutletName,
+                            Value = Convert.ToString(outlet.OutletId)
+                        });
+                    }
+
+
                     if (objData.lstOutlets.Count == 0)
                     {
                         var brandId = 1;

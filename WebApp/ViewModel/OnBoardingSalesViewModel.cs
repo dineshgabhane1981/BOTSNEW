@@ -26,6 +26,7 @@ namespace WebApp.ViewModel
         public List<SelectListItem> lstAllGroups { get; set; }
         public List<SelectListItem> lstRefferedCategory { get; set; }
         public List<SelectListItem> lstStates { get; set; }
+        public List<SelectListItem> lstNewOutlets { get; set; }
 
         public string LeadId { get; set; }
         public SelectListItem[] BOProducts()

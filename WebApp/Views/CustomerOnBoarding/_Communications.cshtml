@@ -1,7 +1,16 @@
-﻿
+﻿@model WebApp.ViewModel.OnBoardingSalesViewModel
 
 <div class="row">
     <div style="margin-left:20px;">
-        Communication
+        @Html.DropDownListFor(x => Model.lstNewOutlets.Count, new SelectList(Model.lstNewOutlets, "Value", "Text"), htmlAttributes: new { @class = "input50", @id = "ddlOutletsComm", style = "margin-top:20px;" })
     </div>
 </div>
+
+
+<script>
+    $(document).ready(function () {
+        $('#ddlOutletsComm').change(function () {
+            alert($('#ddlOutletsComm').val());
+        });
+    });
+</script>
