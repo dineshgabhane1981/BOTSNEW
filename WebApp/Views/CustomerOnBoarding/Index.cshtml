@@ -175,6 +175,7 @@
     @Html.HiddenFor(model => model.bots_TblGroupMaster.OutletData, new { @id = "hdnOutletData" })
     @Html.HiddenFor(model => model.bots_TblGroupMaster.CustomerStatus, new { @id = "hdnCustomerStatus" })
     @Html.HiddenFor(model => model.lstOutlets.Count, new { @id = "hdnOutletCount" })
+    <input type="hidden" id="hdnOutletSubmit" value="0" />
     <div class="app-main__inner">
 
         @if (!string.IsNullOrEmpty(Convert.ToString(TempData["status"])))
@@ -2635,6 +2636,7 @@
             item["CategoryId"] = $("#ddlCategory" + i).val();
             item["CategoryName"] = $("#ddlCategory option:selected").text();
             item["BrandName"] = $("#txtBrandName" + i).val();
+            item["BrandId"] = i;
             item["NoOfOutlets"] = $("#txtNoOfOutlets" + i).val();
             item["NoOfEnrolled"] = $("#txtNoOfEnrolled" + i).val();
             item["BOProduct"] = $("#ddlBOProduct" + i).val();
@@ -2791,118 +2793,121 @@
     }
 
     function CheckOutletData(buttonType) {
-        var returnStatus = true;
-        if (buttonType == 'CSUpdate') {
-            var noOfOutlet = $("#hdnOutletCount").val();
-            $("#hdnCustomerStatus").val("CSUpdate");
-            //alert(noOfOutlet)
-            for (var i = 1; i <= noOfOutlet; i++) {
-                if ($("#txtOutletName" + i).val() == "") {
-                    ShowHideSection("outletdetails");
-                    $('#txtOutletName' + i).css('border-color', 'red');
-                    returnStatus = false;
-                }
-                if ($("#txtAreaName" + i).val() == "") {
-                    ShowHideSection("outletdetails");
-                    $('#txtAreaName' + i).css('border-color', 'red');
-                    returnStatus = false;
-                }
-                if ($("#txtAuthorisedPerson" + i).val() == "") {
-                    ShowHideSection("outletdetails");
-                    $('#txtAuthorisedPerson' + i).css('border-color', 'red');
-                    returnStatus = false;
-                }
-                if ($("#txtRegisterMobileNo" + i).val() == "") {
-                    ShowHideSection("outletdetails");
-                    $('#txtRegisterMobileNo' + i).css('border-color', 'red');
-                    returnStatus = false;
-                }
-                if ($("#txtRegisterEmail" + i).val() == "") {
-                    ShowHideSection("outletdetails");
-                    $('#txtRegisterEmail' + i).css('border-color', 'red');
-                    returnStatus = false;
-                }
-                if ($("#txtAddress" + i).val() == "") {
-                    ShowHideSection("outletdetails");
-                    $('#txtAddress' + i).css('border-color', 'red');
-                    returnStatus = false;
-                }
-                if ($("#txtLatitude" + i).val() == "") {
-                    ShowHideSection("outletdetails");
-                    $('#txtLatitude' + i).css('border-color', 'red');
-                    returnStatus = false;
-                }
-                if ($("#txtLongitude" + i).val() == "") {
-                    ShowHideSection("outletdetails");
-                    $('#txtLongitude' + i).css('border-color', 'red');
-                    returnStatus = false;
-                }
-                if ($("#ddlState" + i +" option:selected").text() == "Please Select") {
-                    ShowHideSection("outletdetails");
-                    $("#ddlState" + i).css('border-color', 'red');
-                    returnStatus = false;
-                }
+        if ($("#hdnOutletSubmit").val() == "0") {            
+            var returnStatus = true;
+            if (buttonType == 'CSUpdate') {
+                var noOfOutlet = $("#hdnOutletCount").val();
+                $("#hdnCustomerStatus").val("CSUpdate");
+                //alert(noOfOutlet)
+                for (var i = 1; i <= noOfOutlet; i++) {
+                    if ($("#txtOutletName" + i).val() == "") {
+                        ShowHideSection("outletdetails");
+                        $('#txtOutletName' + i).css('border-color', 'red');
+                        returnStatus = false;
+                    }
+                    if ($("#txtAreaName" + i).val() == "") {
+                        ShowHideSection("outletdetails");
+                        $('#txtAreaName' + i).css('border-color', 'red');
+                        returnStatus = false;
+                    }
+                    if ($("#txtAuthorisedPerson" + i).val() == "") {
+                        ShowHideSection("outletdetails");
+                        $('#txtAuthorisedPerson' + i).css('border-color', 'red');
+                        returnStatus = false;
+                    }
+                    if ($("#txtRegisterMobileNo" + i).val() == "") {
+                        ShowHideSection("outletdetails");
+                        $('#txtRegisterMobileNo' + i).css('border-color', 'red');
+                        returnStatus = false;
+                    }
+                    if ($("#txtRegisterEmail" + i).val() == "") {
+                        ShowHideSection("outletdetails");
+                        $('#txtRegisterEmail' + i).css('border-color', 'red');
+                        returnStatus = false;
+                    }
+                    if ($("#txtAddress" + i).val() == "") {
+                        ShowHideSection("outletdetails");
+                        $('#txtAddress' + i).css('border-color', 'red');
+                        returnStatus = false;
+                    }
+                    if ($("#txtLatitude" + i).val() == "") {
+                        ShowHideSection("outletdetails");
+                        $('#txtLatitude' + i).css('border-color', 'red');
+                        returnStatus = false;
+                    }
+                    if ($("#txtLongitude" + i).val() == "") {
+                        ShowHideSection("outletdetails");
+                        $('#txtLongitude' + i).css('border-color', 'red');
+                        returnStatus = false;
+                    }
+                    if ($("#ddlState" + i + " option:selected").text() == "Please Select") {
+                        ShowHideSection("outletdetails");
+                        $("#ddlState" + i).css('border-color', 'red');
+                        returnStatus = false;
+                    }
 
-                if ($("#ddlCity" + i + " option:selected").text() == "Please Select") {
-                    ShowHideSection("outletdetails");
-                    $("#ddlCity" + i).css('border-color', 'red');
-                    returnStatus = false;
-                }
-                if ($("#txtPinCode" + i).val() == "") {
-                    ShowHideSection("outletdetails");
-                    $('#txtPinCode' + i).css('border-color', 'red');
-                    returnStatus = false;
+                    if ($("#ddlCity" + i + " option:selected").text() == "Please Select") {
+                        ShowHideSection("outletdetails");
+                        $("#ddlCity" + i).css('border-color', 'red');
+                        returnStatus = false;
+                    }
+                    if ($("#txtPinCode" + i).val() == "") {
+                        ShowHideSection("outletdetails");
+                        $('#txtPinCode' + i).css('border-color', 'red');
+                        returnStatus = false;
+                    }
                 }
             }
-        }
 
-        if (returnStatus) {
-            var outletCount = $("#hdnOutletCount").val();
-            var Outlets = [];
-            for (let i = 1; i <= outletCount; i++) {
-                item = {}
-                item["Id"] = $("#hdnID" + i).val();
-                item["GroupId"] = $("#hdnGroupID").val();
-                item["BrandId"] = $("#hdnBrandID" + i).val();
-                item["OutletId"] = $("#hdnOutletID" + i).val();
-                item["OutletName"] = $("#txtOutletName" + i).val();
-                item["AreaName"] = $("#txtAreaName" + i).val();
-                item["AuthorisedPerson"] = $("#txtAuthorisedPerson" + i).val();
-                item["RegisterMobileNo"] = $("#txtRegisterMobileNo" + i).val();
-                item["RegisterEmail"] = $("#txtRegisterEmail" + i).val();
-                item["Address"] = $("#txtAddress" + i).val();
-                item["Latitude"] = $("#txtLatitude" + i).val();
-                item["Longitude"] = $("#txtLongitude" + i).val();
-                item["City"] = $("#ddlCity" + i).val();
-                item["PinCode"] = $("#txtPinCode" + i).val();
-                item["State"] = $("#ddlState" + i).val();
+            if (returnStatus) {
+                var outletCount = $("#hdnOutletCount").val();
+                var Outlets = [];
+                for (let i = 1; i <= outletCount; i++) {
+                    item = {}
+                    item["Id"] = $("#hdnID" + i).val();
+                    item["GroupId"] = $("#hdnGroupID").val();
+                    item["BrandId"] = $("#hdnBrandID" + i).val();
+                    item["OutletId"] = $("#hdnOutletID" + i).val();
+                    item["OutletName"] = $("#txtOutletName" + i).val();
+                    item["AreaName"] = $("#txtAreaName" + i).val();
+                    item["AuthorisedPerson"] = $("#txtAuthorisedPerson" + i).val();
+                    item["RegisterMobileNo"] = $("#txtRegisterMobileNo" + i).val();
+                    item["RegisterEmail"] = $("#txtRegisterEmail" + i).val();
+                    item["Address"] = $("#txtAddress" + i).val();
+                    item["Latitude"] = $("#txtLatitude" + i).val();
+                    item["Longitude"] = $("#txtLongitude" + i).val();
+                    item["City"] = $("#ddlCity" + i).val();
+                    item["PinCode"] = $("#txtPinCode" + i).val();
+                    item["State"] = $("#ddlState" + i).val();
 
-                Outlets.push(item);
-            }
-            var OutletsData = JSON.stringify(Outlets);
-            $("#hdnOutletData").val(OutletsData);
-            cuteAlert({
-                type: "question",
-                title: "Are you sure?",
-                message: "Once you submit, you will not be able to change data",
-                confirmText: "Okay",
-                cancelText: "Cancel"
-            }).then((e) => {
-                if (e == ("confirm")) {
-                    $("#btnCustomerSave").click();
+                    Outlets.push(item);
                 }
-            })
-            return true;
+                var OutletsData = JSON.stringify(Outlets);
+                $("#hdnOutletData").val(OutletsData);
+                cuteAlert({
+                    type: "question",
+                    title: "Are you sure?",
+                    message: "Once you submit, you will not be able to change data",
+                    confirmText: "Okay",
+                    cancelText: "Cancel"
+                }).then((e) => {
+                    if (e == ("confirm")) {
+                        $("#hdnOutletSubmit").val("1");
+                        $("#btnCustomerSave").click();
+                    }
+                })
+                return true;
 
-        }
-        else {
-            cuteAlert({
-                type: "error",
-                title: "Oops..",
-                message: "Please enter Required fields",
-                buttonText: "Okay"
-            })
-            return false;
+            }
+            else {
+                cuteAlert({
+                    type: "error",
+                    title: "Oops..",
+                    message: "Please enter Required fields",
+                    buttonText: "Okay"
+                })
+                return false;
+            }
         }
     }
 

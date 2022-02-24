@@ -22,6 +22,8 @@ namespace BOTS_BL.Models
         [StringLength(100)]
         public string CategoryName { get; set; }
 
+        public string BrandId { get; set; }
+
         [StringLength(100)]
         public string BrandName { get; set; }
 
@@ -37,7 +39,7 @@ namespace BOTS_BL.Models
 
         [StringLength(100)]
         public string BillingProduct { get; set; }
-        
+
         [NotMapped]
         public string BillingPartnerName { get; set; }
         [NotMapped]

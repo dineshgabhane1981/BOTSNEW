@@ -90,7 +90,8 @@ namespace WebApp.Controllers.OnBoarding
                         {
                             foreach (var item2 in objData.lstOutlets)
                             {
-                                item2.BrandName = item1.BrandName; 
+                                if (item1.BrandId == item2.BrandId)
+                                    item2.BrandName = item1.BrandName;
                             }                             
                         }
                     }                   
@@ -155,6 +156,7 @@ namespace WebApp.Controllers.OnBoarding
                     objItem.CategoryId = Convert.ToString(item["CategoryId"]);
                     objItem.CategoryName = Convert.ToString(item["CategoryName"]);
                     objItem.BrandName = Convert.ToString(item["BrandName"]);
+                    objItem.BrandId = Convert.ToString(item["BrandId"]);
                     objItem.NoOfOutlets = Convert.ToInt64(item["NoOfOutlets"]);
                     objItem.NoOfEnrolled = Convert.ToInt64(item["NoOfEnrolled"]);
                     objItem.BOProduct = Convert.ToString(item["BOProduct"]);
@@ -177,11 +179,7 @@ namespace WebApp.Controllers.OnBoarding
                
                 objData.bots_TblGroupMaster.CreatedBy = userDetails.LoginId;
                 objData.bots_TblGroupMaster.CreatedDate = DateTime.Now;
-                //var newCuscomer = true;
-                //if (Convert.ToInt32(objData.bots_TblGroupMaster.GroupId) > 0)
-                //{
-                //    newCuscomer = false;
-                //}
+                
                 if (objData.bots_TblGroupMaster.CustomerStatus == "CSUpdate")
                 {
                     object[] objOutletData = (object[])json_serializer.DeserializeObject(objData.bots_TblGroupMaster.OutletData);
@@ -255,9 +253,11 @@ namespace WebApp.Controllers.OnBoarding
                 TempData["error"] = "Error Occured";
                 return View("Index");
             }
-
-            return View("Index", objData);
-
+            CommonFunctions common = new CommonFunctions();
+            var groupId = common.EncryptString(Convert.ToString(GroupdId));
+            //return View("Index", objData);
+            //return RedirectToAction("Index", "CustomerOnBoarding", groupId);
+            return RedirectToAction("Index", "CustomerOnBoarding", new { @groupId = groupId });
         }
 
 
