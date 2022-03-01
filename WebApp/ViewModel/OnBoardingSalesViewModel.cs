@@ -61,5 +61,13 @@ namespace WebApp.ViewModel
         {
             return new SelectListItem[3] { new SelectListItem() { Text = "Proprietary", Value = "Proprietary" }, new SelectListItem() { Text = "Partnership", Value = "Partnership" }, new SelectListItem() { Text = "Private Limited", Value = "Private Limited" } };
         }
+        public SelectListItem[] SMSProvider()
+        {
+            return new SelectListItem[3] { new SelectListItem() { Text = "Technocore", Value = "Technocore" }, new SelectListItem() { Text = "Vision HLT", Value = "Vision HLT" }, new SelectListItem() { Text = "Value First", Value = "Value First" } };
+        }
+        public SelectListItem[] WAProvider()
+        {
+            return new SelectListItem[3] { new SelectListItem() { Text = "Technocore", Value = "Technocore" }, new SelectListItem() { Text = "Technocore Verified", Value = "Technocore Verified" }, new SelectListItem() { Text = "Pinnacle Verified", Value = "Pinnacle Verified" } };
+        }
     }
 }

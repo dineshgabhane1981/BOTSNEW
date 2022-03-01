@@ -19,6 +19,12 @@ namespace BOTS_BL.Models
 
         public bool IsWA { get; set; }
 
+        [StringLength(50)]
+        public string PEID { get; set; }
+
+        [StringLength(50)]
+        public string WAProvider { get; set; }
+
         [StringLength(150)]
         public string WANumber { get; set; }
 

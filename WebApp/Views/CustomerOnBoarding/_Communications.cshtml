@@ -15,6 +15,9 @@
             <input type="checkbox" id="chkIsSMS" /> Is SMS
         </div>
         <div style="margin-left: 20px; margin-top: 20px;">
+            SMS Provider <br /> @Html.DropDownListFor(x => Model.lstBrands.Count, new SelectList(Model.SMSProvider(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input100", @id = "ddlSMSProvider", style = "margin-top:20px;" })
+        </div>
+        <div style="margin-left: 20px; margin-top: 20px;">
             SMS Sender ID <br /> <input type="text" id="txtSMSSenderId" class="input100" />
         </div>
         <div style="margin-left: 20px; margin-top: 10px;">
@@ -57,6 +60,9 @@
     <div style="float:left;" class="col-md-6 col-lg-6">
         <div style="margin-left:20px;">
             <input type="checkbox" id="chkIsWA" /> Is WhatsApp
+        </div>
+        <div style="margin-left: 20px; margin-top: 20px;">
+            WhatsApp Provider <br /> @Html.DropDownListFor(x => Model.lstBrands.Count, new SelectList(Model.WAProvider(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input100", @id = "ddlWAProvider", style = "margin-top:20px;" })
         </div>
         <div style="margin-left: 20px; margin-top: 20px;">
             WhatsApp Number <br /> <input type="text" id="txtWANumber" class="input100" />
@@ -351,6 +357,10 @@
         if (data != null) {
             console.log(data)
             $("#hdnCommSMSConfigId").val(data.Id);
+            if (data.SMSProvider != "0" && data.SMSProvider != "") {                
+                $('#ddlSMSProvider').val(data.SMSProvider);
+            }          
+                
             $("#txtSMSSenderId").val(data.SMSSenderID);
             $("#txtSMSUserName").val(data.SMSUsername);
             $("#txtSMSPassword").val(data.SMSPassword);
@@ -373,6 +383,9 @@
         if (data != null) {
             console.log(data)
             $("#hdnCommWAConfigId").val(data.Id);
+            if (data.WAProvider != "0" && data.WAProvider != "") {                
+                $('#ddlWAProvider').val(data.WAProvider);
+            }
             $("#txtWANumber").val(data.WANumber);
             $("#txtWAUserName").val(data.WAUsername);
             $("#txtWAPassword").val(data.WAPassword);
@@ -405,6 +418,7 @@
             if ($('#chkIsSMS').is(":checked")) {
                 item["SMSId"] = $("#hdnCommSMSConfigId").val();
                 item["IsSMS"] = 1;
+                item["SMSProvider"] = $('#ddlSMSProvider').val();
                 item["SMSSenderId"] = $('#txtSMSSenderId').val();
                 item["SMSUserName"] = $('#txtSMSUserName').val();
                 item["SMSPassword"] = $('#txtSMSPassword').val();
@@ -426,6 +440,7 @@
             if ($('#chkIsWA').is(":checked")) {
                 item["WAId"] = $("#hdnCommWAConfigId").val();
                 item["IsWA"] = 1;
+                item["WAProvider"] = $('#ddlWAProvider').val();
                 item["WANumber"] = $('#txtWANumber').val();
                 item["WAUserName"] = $('#txtWAUserName').val();
                 item["WAPassword"] = $('#txtWAPassword').val();

@@ -19,6 +19,12 @@ namespace BOTS_BL.Models
 
         public bool IsSMS { get; set; }
 
+        [StringLength(50)]
+        public string PEID { get; set; }
+
+        [StringLength(50)]
+        public string SMSProvider { get; set; }
+
         [StringLength(150)]
         public string SMSSenderID { get; set; }
 

@@ -493,6 +493,7 @@ namespace WebApp.Controllers.OnBoarding
                         objSMSConfig.IsSMS = true;
                         if (!string.IsNullOrEmpty(Convert.ToString(item["SMSId"])))
                             objSMSConfig.Id = Convert.ToInt32(item["SMSId"]);
+                        objSMSConfig.SMSProvider = Convert.ToString(item["SMSProvider"]);
                         objSMSConfig.GroupId= Convert.ToString(item["GroupId"]);
                         objSMSConfig.BrandId = Convert.ToString(item["BrandId"]);
                         objSMSConfig.SMSSenderID = Convert.ToString(item["SMSSenderId"]);
@@ -529,6 +530,7 @@ namespace WebApp.Controllers.OnBoarding
                         objWAConfig.IsWA = true;
                         if (!string.IsNullOrEmpty(Convert.ToString(item["WAId"])))
                             objWAConfig.Id = Convert.ToInt32(item["WAId"]);
+                        objWAConfig.WAProvider = Convert.ToString(item["WAProvider"]);
                         objWAConfig.GroupId = Convert.ToString(item["GroupId"]);
                         objWAConfig.BrandId = Convert.ToString(item["BrandId"]);
                         objWAConfig.WANumber = Convert.ToString(item["WANumber"]);
