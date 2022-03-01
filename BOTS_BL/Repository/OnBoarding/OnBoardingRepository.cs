@@ -104,9 +104,9 @@ namespace BOTS_BL.Repository
                         }
                         else
                         {
-                            if(objGroup.Referredby!="1" && objGroup.Referredby != "3" && objGroup.Referredby != "4" && objGroup.Referredby != "6")
+                            if (objGroup.Referredby != "1" && objGroup.Referredby != "3" && objGroup.Referredby != "4" && objGroup.Referredby != "6")
                             {
-                                if(!string.IsNullOrEmpty(objGroup.ReferredNameNew))
+                                if (!string.IsNullOrEmpty(objGroup.ReferredNameNew))
                                 {
                                     objGroup.ReferredName = objGroup.ReferredNameNew;
                                 }
@@ -117,7 +117,7 @@ namespace BOTS_BL.Repository
                             var lstRetail = context.BOTS_TblRetailMaster.Where(x => x.GroupId == objGroup.GroupId).ToList();
                             foreach (var item in lstRetail)
                             {
-                                if(string.IsNullOrEmpty(item.BillingPartner))
+                                if (string.IsNullOrEmpty(item.BillingPartner))
                                 {
                                     item.BillingPartner = "0";
                                 }
@@ -135,7 +135,7 @@ namespace BOTS_BL.Repository
                                 var categoryName = context.tblCategories.Where(x => x.CategoryId == id).Select(y => y.CategoryName).FirstOrDefault();
                                 item.CategoryName = categoryName;
                                 item.GroupId = Convert.ToString(objGroup.GroupId);
-                                if(item.BOProduct=="2")
+                                if (item.BOProduct == "2")
                                 {
                                     var BillingPId = context.tblBillingPartners.Where(x => x.BillingPartnerName == "OctaXS").Select(y => y.BillingPartnerId).FirstOrDefault();
                                     item.BillingPartner = Convert.ToString(BillingPId);
@@ -383,7 +383,7 @@ namespace BOTS_BL.Repository
                 if (SourceType == "4")
                 {
                     var ChannelPartners = context.tblChannelPartners.ToList();
-                    foreach(var item in ChannelPartners)
+                    foreach (var item in ChannelPartners)
                     {
                         lstRefferedName.Add(new SelectListItem
                         {
@@ -467,5 +467,122 @@ namespace BOTS_BL.Repository
             return objData;
         }
 
+        public bool SaveCommunicationConfig(BOTS_TblSMSConfig objSMSData, BOTS_TblWAConfig objWAData)
+        {
+            bool status = false;
+            try
+            {
+                using (var context = new CommonDBContext())
+                {
+                    if (objSMSData.IsSMS)
+                    {
+                        if(objSMSData.BrandId=="All")
+                        {
+                            var allBrandData = context.BOTS_TblSMSConfig.Where(x => x.BrandId != "All").ToList();
+                            foreach(var item in allBrandData)
+                            {
+                                context.BOTS_TblSMSConfig.Remove(item);
+                                context.SaveChanges();
+                            }
+                        }
+                        else
+                        {
+                            var allBrandData = context.BOTS_TblSMSConfig.Where(x => x.BrandId == "All").ToList();
+                            foreach (var item in allBrandData)
+                            {
+                                context.BOTS_TblSMSConfig.Remove(item);
+                                context.SaveChanges();
+                            }
+                        }
+                        if(objSMSData.Id>0)
+                        {
+                            var oldData = context.BOTS_TblSMSConfig.Where(x => x.Id == objSMSData.Id).FirstOrDefault();
+                            if(oldData!=null)
+                            {
+                                objSMSData.AddedBy = oldData.AddedBy;
+                                objSMSData.AddedDate = oldData.AddedDate;
+                            }
+                        }
+                        context.BOTS_TblSMSConfig.AddOrUpdate(objSMSData);
+                        context.SaveChanges();
+                        status = true;
+                    }
+                    if (objWAData.IsWA)
+                    {
+                        if (objWAData.BrandId == "All")
+                        {
+                            var allBrandData = context.BOTS_TblWAConfig.Where(x => x.BrandId != "All").ToList();
+                            foreach (var item in allBrandData)
+                            {
+                                context.BOTS_TblWAConfig.Remove(item);
+                                context.SaveChanges();
+                            }
+                        }
+                        else
+                        {
+                            var allBrandData = context.BOTS_TblWAConfig.Where(x => x.BrandId == "All").ToList();
+                            foreach (var item in allBrandData)
+                            {
+                                context.BOTS_TblWAConfig.Remove(item);
+                                context.SaveChanges();
+                            }
+                        }
+                        if (objWAData.Id > 0)
+                        {
+                            var oldData = context.BOTS_TblWAConfig.Where(x => x.Id == objWAData.Id).FirstOrDefault();
+                            if (oldData != null)
+                            {
+                                objWAData.AddedBy = oldData.AddedBy;
+                                objWAData.AddedDate = oldData.AddedDate;
+                            }
+                        }
+                        context.BOTS_TblWAConfig.AddOrUpdate(objWAData);
+                        context.SaveChanges();
+                        status = true;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "SaveCommunicationConfig");
+            }
+
+            return status;
+        }
+        public BOTS_TblSMSConfig GetCommunicationSMSConfig(string GroupId, string BrandId)
+        {
+            BOTS_TblSMSConfig objData = new BOTS_TblSMSConfig();
+            using (var context = new CommonDBContext())
+            {
+                if(BrandId!="0")
+                {
+                    objData = context.BOTS_TblSMSConfig.Where(x => x.GroupId == GroupId && x.BrandId == BrandId).FirstOrDefault();
+                }
+                else
+                {
+                    objData = context.BOTS_TblSMSConfig.Where(x => x.GroupId == GroupId && x.BrandId =="All").FirstOrDefault();
+                }
+            }
+
+            return objData;
+        }
+
+        public BOTS_TblWAConfig GetCommunicationWAConfig(string GroupId, string BrandId)
+        {
+            BOTS_TblWAConfig objData = new BOTS_TblWAConfig();
+            using (var context = new CommonDBContext())
+            {
+                if (BrandId != "0")
+                {
+                    objData = context.BOTS_TblWAConfig.Where(x => x.GroupId == GroupId && x.BrandId == BrandId).FirstOrDefault();
+                }
+                else
+                {
+                    objData = context.BOTS_TblWAConfig.Where(x => x.GroupId == GroupId && x.BrandId == "All").FirstOrDefault();
+                }
+            }
+
+            return objData;
+        }
     }
 }

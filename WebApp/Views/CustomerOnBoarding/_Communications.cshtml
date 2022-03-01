@@ -1,16 +1,497 @@
 ﻿@model WebApp.ViewModel.OnBoardingSalesViewModel
 
-<div class="row">
+<div class="row" style="margin-top:10px;">
     <div style="margin-left:20px;">
-        @Html.DropDownListFor(x => Model.lstNewOutlets.Count, new SelectList(Model.lstNewOutlets, "Value", "Text"), htmlAttributes: new { @class = "input50", @id = "ddlOutletsComm", style = "margin-top:20px;" })
+        @Html.DropDownListFor(x => Model.lstBrands.Count, new SelectList(Model.lstBrands, "Value", "Text"), htmlAttributes: new { @class = "input50", @id = "ddlBrandsComm", style = "margin-top:20px;" })
+    </div>
+    <div style="margin-left:25px;margin-top:35px;"><input type="checkbox" id="chkAllOutlets" /> Groupwise</div>
+</div>
+
+<div id="dvEditable" style="display:none;margin-top:20px;">
+    <input type="hidden" id="hdnCommSMSConfigId" />
+    <input type="hidden" id="hdnCommWAConfigId" />
+    <div style="float:left;" class="col-md-6 col-lg-6">
+        <div style="margin-left:20px;">
+            <input type="checkbox" id="chkIsSMS" /> Is SMS
+        </div>
+        <div style="margin-left: 20px; margin-top: 20px;">
+            SMS Sender ID <br /> <input type="text" id="txtSMSSenderId" class="input100" />
+        </div>
+        <div style="margin-left: 20px; margin-top: 10px;">
+            SMS Username <br /> <input type="text" id="txtSMSUserName" class="input100" />
+        </div>
+        <div style="margin-left: 20px; margin-top: 10px;">
+            SMS Password <br /> <input type="text" id="txtSMSPassword" class="input100" />
+        </div>
+        <div style="margin-left: 20px; margin-top: 10px;">
+            SMS Link <br /> <input type="text" id="txtSMSLink" class="input100" />
+        </div>
+        <div style="margin-left: 20px; margin-top: 10px;">
+            Enrollment Script <br /> <textarea id="txtSMSEnrollment" rows="3" cols="50" class="input100"></textarea>
+        </div>
+        <div style="margin-left: 20px; margin-top: 10px;">
+            Enrollment & Earn Script<br /> <textarea id="txtSMSEnrollmentAndEarn" rows="3" cols="50" class="input100"></textarea>
+        </div>
+        <div style="margin-left: 20px; margin-top: 10px;">
+            Earn Script<br /> <textarea id="txtSMSEarn" rows="3" cols="50" class="input100"></textarea>
+        </div>
+        <div style="margin-left: 20px; margin-top: 10px;">
+            OTP Script<br /> <textarea id="txtSMSOTP" rows="3" cols="50" class="input100"></textarea>
+        </div>
+        <div style="margin-left: 20px; margin-top: 10px;">
+            Burn Script<br /> <textarea id="txtSMSBurn" rows="3" cols="50" class="input100"></textarea>
+        </div>
+        <div style="margin-left: 20px; margin-top: 10px;">
+            Cancel Earn Script<br /> <textarea id="txtSMSCancelEarn" rows="3" cols="50" class="input100"></textarea>
+        </div>
+        <div style="margin-left: 20px; margin-top: 10px;">
+            Cancel Burn Script<br /> <textarea id="txtSMSCancelBurn" rows="3" cols="50" class="input100"></textarea>
+        </div>
+        <div style="margin-left: 20px; margin-top: 10px;">
+            Any Cancel Script<br /> <textarea id="txtSMSAnyCancel" rows="3" cols="50" class="input100"></textarea>
+        </div>
+        <div style="margin-left: 20px; margin-top: 10px;">
+            Balance Inquiry Script<br /> <textarea id="txtSMSBalanceInquiry" rows="3" cols="50" class="input100"></textarea>
+        </div>
+    </div>
+    <div style="float:left;" class="col-md-6 col-lg-6">
+        <div style="margin-left:20px;">
+            <input type="checkbox" id="chkIsWA" /> Is WhatsApp
+        </div>
+        <div style="margin-left: 20px; margin-top: 20px;">
+            WhatsApp Number <br /> <input type="text" id="txtWANumber" class="input100" />
+        </div>
+        <div style="margin-left: 20px; margin-top: 10px;">
+            WhatsApp Username <br /> <input type="text" id="txtWAUserName" class="input100" />
+        </div>
+        <div style="margin-left: 20px; margin-top: 10px;">
+            WhatsApp Password <br /> <input type="text" id="txtWAPassword" class="input100" />
+        </div>
+        <div style="margin-left: 20px; margin-top: 10px;">
+            WhatsApp Link <br /> <input type="text" id="txtWALink" class="input100" />
+        </div>
+        <div style="margin-left: 20px; margin-top: 10px;">
+            Enrollment Script <br /> <textarea id="txtWAEnrollment" rows="3" cols="50" class="input100"></textarea>
+        </div>
+        <div style="margin-left: 20px; margin-top: 10px;">
+            Enrollment & Earn Script <br /> <textarea id="txtWAEnrollmentAndEarn" rows="3" cols="50" class="input100"></textarea>
+        </div>
+        <div style="margin-left: 20px; margin-top: 10px;">
+            Earn Script <br /> <textarea id="txtWAEarn" rows="3" cols="50" class="input100"></textarea>
+        </div>
+        <div style="margin-left: 20px; margin-top: 10px;">
+            OTP Script <br /> <textarea id="txtWAOTP" rows="3" cols="50" class="input100"></textarea>
+        </div>
+        <div style="margin-left: 20px; margin-top: 10px;">
+            Burn Script <br /> <textarea id="txtWABurn" rows="3" cols="50" class="input100"></textarea>
+        </div>
+        <div style="margin-left: 20px; margin-top: 10px;">
+            Cancel Earn Script <br /> <textarea id="txtWACancelEarn" rows="3" cols="50" class="input100"></textarea>
+        </div>
+        <div style="margin-left: 20px; margin-top: 10px;">
+            Cancel Burn Script <br /> <textarea id="txtWACancelBurn" rows="3" cols="50" class="input100"></textarea>
+        </div>
+        <div style="margin-left: 20px; margin-top: 10px;">
+            Any Cancel Script <br /> <textarea id="txtWAAnyCancel" rows="3" cols="50" class="input100"></textarea>
+        </div>
+        <div style="margin-left: 20px; margin-top: 10px;">
+            Balance Inquiry Script <br /> <textarea id="txtWABalanceInquiry" rows="3" cols="50" class="input100"></textarea>
+        </div>
+    </div>
+
+    <div class="container-fluid pt-3 pl-3 pr-3 pb-3">
+        <button type="button" id="btnCommunicationSave" class="btn btn-primary pull-right" style="margin-right:10px;">Save</button>
     </div>
 </div>
 
 
 <script>
     $(document).ready(function () {
-        $('#ddlOutletsComm').change(function () {
-            alert($('#ddlOutletsComm').val());
+        LoadEditableCommunication();
+        $('#ddlBrandsComm').change(function () {
+            if ($('#ddlBrandsComm').val() > 0) {
+                LoadEditableCommunication();
+                $("#dvEditable").show(1000);
+                //$("#chkIsSMS").prop('checked', false);
+                //$("#chkIsWA").prop('checked', false);
+                //SMSEnableDisable(0);
+                //WAEnableDisable(0);
+            }
+            else {
+                $("#dvEditable").hide(1000);
+                SMSEnableDisable(1);
+                WAEnableDisable(1);
+            }
+        });
+        $('#chkAllOutlets').change(function () {
+            if (this.checked) {
+                $('#ddlBrandsComm').prop('selectedIndex', 0);
+                $('#ddlBrandsComm').attr("disabled", true);
+                $("#chkIsSMS").prop('checked', false);
+                $("#chkIsWA").prop('checked', false);
+                $("#dvEditable").show(1000);
+                LoadEditableCommunication();
+                SMSEnableDisable(0);
+                WAEnableDisable(0);
+            }
+            else {
+                $('#ddlBrandsComm').attr("disabled", false);
+                $("#dvEditable").hide(1000);
+                SMSEnableDisable(1);
+                WAEnableDisable(1);
+            }
+        });
+        $('#chkIsSMS').change(function () {
+            if (this.checked) {
+                SMSEnableDisable(1);
+            }
+            else {
+                SMSEnableDisable(0);
+
+            }
+        });
+        $('#chkIsWA').change(function () {
+            if (this.checked) {
+                WAEnableDisable(1);
+            }
+            else {
+                WAEnableDisable(0);
+
+            }
+        });
+
+        $("#btnCommunicationSave").on("click", function () {
+            SaveCommunicationConfig();
         });
     });
+
+    function SMSEnableDisable(flag) {
+        if (flag == 0) {
+            $('#txtSMSSenderId').attr("disabled", true);
+            $('#txtSMSUserName').attr("disabled", true);
+            $('#txtSMSPassword').attr("disabled", true);
+            $('#txtSMSLink').attr("disabled", true);
+            $('#txtSMSEnrollment').attr("disabled", true);
+            $('#txtSMSEnrollmentAndEarn').attr("disabled", true);
+            $('#txtSMSEarn').attr("disabled", true);
+            $('#txtSMSOTP').attr("disabled", true);
+            $('#txtSMSBurn').attr("disabled", true);
+            $('#txtSMSCancelEarn').attr("disabled", true);
+            $('#txtSMSCancelBurn').attr("disabled", true);
+            $('#txtSMSAnyCancel').attr("disabled", true);
+            $('#txtSMSBalanceInquiry').attr("disabled", true);
+        }
+        else {
+            $('#txtSMSSenderId').attr("disabled", false);
+            $('#txtSMSUserName').attr("disabled", false);
+            $('#txtSMSPassword').attr("disabled", false);
+            $('#txtSMSLink').attr("disabled", false);
+            $('#txtSMSEnrollment').attr("disabled", false);
+            $('#txtSMSEnrollmentAndEarn').attr("disabled", false);
+            $('#txtSMSEarn').attr("disabled", false);
+            $('#txtSMSOTP').attr("disabled", false);
+            $('#txtSMSBurn').attr("disabled", false);
+            $('#txtSMSCancelEarn').attr("disabled", false);
+            $('#txtSMSCancelBurn').attr("disabled", false);
+            $('#txtSMSAnyCancel').attr("disabled", false);
+            $('#txtSMSBalanceInquiry').attr("disabled", false);
+        }
+    }
+    function WAEnableDisable(flag) {
+        if (flag == 0) {
+            $('#txtWANumber').attr("disabled", true);
+            $('#txtWAUserName').attr("disabled", true);
+            $('#txtWAPassword').attr("disabled", true);
+            $('#txtWALink').attr("disabled", true);
+
+            $('#txtWAEnrollment').attr("disabled", true);
+            $('#txtWAEnrollmentAndEarn').attr("disabled", true);
+            $('#txtWAEarn').attr("disabled", true);
+            $('#txtWAOTP').attr("disabled", true);
+            $('#txtWABurn').attr("disabled", true);
+            $('#txtWACancelEarn').attr("disabled", true);
+            $('#txtWACancelBurn').attr("disabled", true);
+            $('#txtWAAnyCancel').attr("disabled", true);
+            $('#txtWABalanceInquiry').attr("disabled", true);
+        }
+        else {
+            $('#txtWANumber').attr("disabled", false);
+            $('#txtWAUserName').attr("disabled", false);
+            $('#txtWAPassword').attr("disabled", false);
+            $('#txtWALink').attr("disabled", false);
+
+            $('#txtWAEnrollment').attr("disabled", false);
+            $('#txtWAEnrollmentAndEarn').attr("disabled", false);
+            $('#txtWAEarn').attr("disabled", false);
+            $('#txtWAOTP').attr("disabled", false);
+            $('#txtWABurn').attr("disabled", false);
+            $('#txtWACancelEarn').attr("disabled", false);
+            $('#txtWACancelBurn').attr("disabled", false);
+            $('#txtWAAnyCancel').attr("disabled", false);
+            $('#txtWABalanceInquiry').attr("disabled", false);
+        }
+    }
+    function LoadEditableCommunication() {
+        var BrandId = 0;
+        if ($('#ddlBrandsComm').val() > 0) {
+            BrandId = $('#ddlBrandsComm').val();
+        }
+        
+         $("#divLoader").show();
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("GetSMSandWAData", "CustomerOnBoarding")',
+                data: '{groupId: ' + JSON.stringify($('#hdnGroupID').val()) + ',brandId: ' + JSON.stringify(BrandId) + '}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (result) {
+                    
+                    LoadControls(result);
+                    $("#divLoader").hide();
+
+                },
+                error: function (result) {                   
+                    $("#divLoader").hide();
+                }
+            });
+    }
+    function LoadControls(ObjData) {       
+        var SMSConfig = ObjData["SMSConfig"];
+        var WAConfig = ObjData["WAConfig"];
+                
+        if (SMSConfig != null) {
+            if (SMSConfig.BrandId == "All") {
+                $("#chkAllOutlets").prop('checked', true);
+                $('#ddlBrandsComm').prop('selectedIndex', 0);
+                $('#ddlBrandsComm').attr("disabled", true);
+                $("#dvEditable").show(1000);
+            }
+            else {
+                $('#ddlBrandsComm').prop('selectedIndex', SMSConfig.BrandId);
+                $('#ddlBrandsComm').attr("disabled", false);
+                $("#dvEditable").show(1000);
+            }
+            if (SMSConfig.IsSMS) {
+                $("#chkIsSMS").prop('checked', true);
+                SMSEnableDisable(1);
+                BindSMSValues(SMSConfig);
+            }
+            else {
+                $("#chkIsSMS").prop('checked', false);
+                SMSEnableDisable(0);
+            }
+        }
+        else {
+            $("#chkIsSMS").prop('checked', false);
+            SMSEnableDisable(0);
+            ClearAllSMSControls();
+        }
+        if (WAConfig != null) {
+            if (WAConfig.BrandId == "All") {
+                $("#chkAllOutlets").prop('checked', true);
+                $('#ddlBrandsComm').prop('selectedIndex', 0);
+                $('#ddlBrandsComm').attr("disabled", true);
+                $("#dvEditable").show(1000);
+            }
+            else {
+                $('#ddlBrandsComm').prop('selectedIndex', WAConfig.BrandId);
+                $('#ddlBrandsComm').attr("disabled", false);
+                $("#dvEditable").show(1000);
+            }
+            if (WAConfig.IsWA) {
+                $("#chkIsWA").prop('checked', true);
+                WAEnableDisable(1);
+                BindWAValues(WAConfig);
+            }
+            else {
+                $("#chkIsWA").prop('checked', false);
+                WAEnableDisable(0);
+            }             
+        }
+        else {
+            $("#chkIsWA").prop('checked', false);
+            WAEnableDisable(0);
+            ClearAllWAControls();
+        }        
+    }
+
+    function ClearAllSMSControls() {
+        $("#hdnCommSMSConfigId").val("");
+        $("#txtSMSSenderId").val("");
+        $("#txtSMSUserName").val("");
+        $("#txtSMSPassword").val("");
+        $("#txtSMSLink").val("");
+        $("#txtSMSEnrollment").val("");
+        $("#txtSMSEnrollmentAndEarn").val("");
+        $("#txtSMSEarn").val("");
+        $("#txtSMSOTP").val("");
+        $("#txtSMSBurn").val("");
+        $("#txtSMSCancelEarn").val("");
+        $("#txtSMSCancelBurn").val("");
+        $("#txtSMSAnyCancel").val("");
+        $("#txtSMSBalanceInquiry").val("");
+    }
+    function ClearAllWAControls() {
+        $("#hdnCommWAConfigId").val("");
+        $("#txtWANumber").val("");
+        $("#txtWAUserName").val("");
+        $("#txtWAPassword").val("");
+        $("#txtWALink").val("");
+        $("#txtWAEnrollment").val("");
+        $("#txtWAEnrollmentAndEarn").val("");
+        $("#txtWAEarn").val("");
+        $("#txtWAOTP").val("");
+        $("#txtWABurn").val("");
+        $("#txtWACancelEarn").val("");
+        $("#txtWACancelBurn").val("");
+        $("#txtWAAnyCancel").val("");
+        $("#txtWABalanceInquiry").val("");
+    }
+    function BindSMSValues(data) {
+        if (data != null) {
+            console.log(data)
+            $("#hdnCommSMSConfigId").val(data.Id);
+            $("#txtSMSSenderId").val(data.SMSSenderID);
+            $("#txtSMSUserName").val(data.SMSUsername);
+            $("#txtSMSPassword").val(data.SMSPassword);
+            $("#txtSMSLink").val(data.SMSlink);
+            $("#txtSMSEnrollment").val(data.EnrolmentSMSScript);
+            $("#txtSMSEnrollmentAndEarn").val(data.EnrollmentEarnSMSScript);
+            $("#txtSMSEarn").val(data.EarnSMSScript);
+            $("#txtSMSOTP").val(data.OTPSMSScript);
+            $("#txtSMSBurn").val(data.BurnSMSScript);
+            $("#txtSMSCancelEarn").val(data.CancelEarnSMSScript);
+            $("#txtSMSCancelBurn").val(data.CancelBurnSMSScript);
+            $("#txtSMSAnyCancel").val(data.AnyCancelSMSScript);
+            $("#txtSMSBalanceInquiry").val(data.BalanceInquirySMSScript);
+        }
+        else {
+            $("#hdnCommSMSConfigId").val("");
+        }
+    }
+    function BindWAValues(data) {
+        if (data != null) {
+            console.log(data)
+            $("#hdnCommWAConfigId").val(data.Id);
+            $("#txtWANumber").val(data.WANumber);
+            $("#txtWAUserName").val(data.WAUsername);
+            $("#txtWAPassword").val(data.WAPassword);
+            $("#txtWALink").val(data.WAlink);
+            $("#txtWAEnrollment").val(data.EnrolmentWAScript);
+            $("#txtWAEnrollmentAndEarn").val(data.EnrollmentEarnWAScript);
+            $("#txtWAEarn").val(data.EarnWAScript);
+            $("#txtWAOTP").val(data.OTPWAScript);
+            $("#txtWABurn").val(data.BurnWAScript);
+            $("#txtWACancelEarn").val(data.CancelEarnWAScript);
+            $("#txtWACancelBurn").val(data.CancelBurnWAScript);
+            $("#txtWAAnyCancel").val(data.AnyCancelWAScript);
+            $("#txtWABalanceInquiry").val(data.BalanceInquiryWAScript);
+        }
+        else {
+            $("#hdnCommWAConfigId").val("");
+        }
+    }
+    function SaveCommunicationConfig() {
+        if ($('#chkIsSMS').is(":checked") || $('#chkIsWA').is(":checked")) {
+            var CommConfig = [];
+            item = {}
+            item["GroupId"] = $('#hdnGroupID').val();
+            if ($('#chkAllOutlets').is(":checked")) {
+                item["BrandId"] = "All";
+            }
+            else {
+                item["BrandId"] = $('#ddlBrandsComm').val();
+            }
+            if ($('#chkIsSMS').is(":checked")) {
+                item["SMSId"] = $("#hdnCommSMSConfigId").val();
+                item["IsSMS"] = 1;
+                item["SMSSenderId"] = $('#txtSMSSenderId').val();
+                item["SMSUserName"] = $('#txtSMSUserName').val();
+                item["SMSPassword"] = $('#txtSMSPassword').val();
+                item["SMSLink"] = $('#txtSMSLink').val();
+                item["SMSEnrollment"] = $('#txtSMSEnrollment').val();
+                item["SMSEnrollmentAndEarn"] = $('#txtSMSEnrollmentAndEarn').val();
+                item["SMSEarn"] = $('#txtSMSEarn').val();
+                item["SMSOTP"] = $('#txtSMSOTP').val();
+                item["SMSBurn"] = $('#txtSMSBurn').val();
+                item["SMSCancelEarn"] = $('#txtSMSCancelEarn').val();
+                item["SMSCancelBurn"] = $('#txtSMSCancelBurn').val();
+                item["SMSAnyCancel"] = $('#txtSMSAnyCancel').val();
+                item["SMSBalanceInquiry"] = $('#txtSMSBalanceInquiry').val();
+            }
+            else {
+                item["IsSMS"] = 0;
+            }
+
+            if ($('#chkIsWA').is(":checked")) {
+                item["WAId"] = $("#hdnCommWAConfigId").val();
+                item["IsWA"] = 1;
+                item["WANumber"] = $('#txtWANumber').val();
+                item["WAUserName"] = $('#txtWAUserName').val();
+                item["WAPassword"] = $('#txtWAPassword').val();
+                item["WALink"] = $('#txtWALink').val();
+                item["WAEnrollment"] = $('#txtWAEnrollment').val();
+                item["WAEnrollmentAndEarn"] = $('#txtWAEnrollmentAndEarn').val();
+                item["WAEarn"] = $('#txtWAEarn').val();
+                item["WAOTP"] = $('#txtWAOTP').val();
+                item["WABurn"] = $('#txtWABurn').val();
+                item["WACancelEarn"] = $('#txtWACancelEarn').val();
+                item["WACancelBurn"] = $('#txtWACancelBurn').val();
+                item["WAAnyCancel"] = $('#txtWAAnyCancel').val();
+                item["WABalanceInquiry"] = $('#txtWABalanceInquiry').val();
+            }
+            else {
+                item["IsWA"] = 0;
+            }
+
+            CommConfig.push(item);
+            var CommConfigData = JSON.stringify(CommConfig);
+
+             $("#divLoader").show();
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("SaveCommunicationConfig", "CustomerOnBoarding")',
+                data: '{jsonData: ' + JSON.stringify(CommConfigData) + '}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (result) {
+                    
+                    console.log(result)
+                    if (result == true) {
+                        cuteAlert({
+                            type: "success",
+                            title: "Saved..",
+                            message: "Communication Data Saved Successfully!",
+                            buttonText: "Okay"
+                        })
+                    }
+                    else {
+                        cuteAlert({
+                            type: "error",
+                            title: "Oops..",
+                            message: "There is some problem while saving Communication Data",
+                            buttonText: "Okay"
+                        })
+                    }
+
+
+                    $("#divLoader").hide();
+
+                },
+                error: function (result) {
+                    console.log(2222)
+                    console.log(result.responseText)
+                    $("#divLoader").hide();
+                }
+            });
+        }
+        else {
+            cuteAlert({
+                type: "error",
+                title: "Oops..",
+                message: "Please Enter SMS OR WhatsApp Script",
+                buttonText: "Okay"
+            })
+        }
+    }
 </script>

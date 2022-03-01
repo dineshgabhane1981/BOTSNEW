@@ -26,7 +26,7 @@ namespace WebApp.Controllers.OnBoarding
         Exceptions newexception = new Exceptions();
         // GET: CustomerOnBoarding
         public ActionResult Index(string groupId, string LeadId)
-        {            
+        {
             CommonFunctions common = new CommonFunctions();
             if (!string.IsNullOrEmpty(groupId))
             {
@@ -37,13 +37,13 @@ namespace WebApp.Controllers.OnBoarding
             try
             {
                 List<SelectListItem> refferedname = new List<SelectListItem>();
-                
+
                 SelectListItem item = new SelectListItem();
                 item.Value = "0";
                 item.Text = "Please Select";
                 refferedname.Add(item);
                 objData.lstAllGroups = refferedname;
-                objData.lstNewOutlets = refferedname;
+                objData.lstBrands = refferedname;
 
                 objData.lstCity = CR.GetCity();
                 objData.lstRetailCategory = CR.GetRetailCategory();
@@ -51,7 +51,7 @@ namespace WebApp.Controllers.OnBoarding
                 objData.lstSourcedBy = CR.GetSourcedBy();
                 objData.lstRMAssigned = CR.GetRMAssigned();
                 objData.lstRefferedCategory = CR.GetAllRefferedCategory();
-                objData.lstStates = CR.GetStates();                
+                objData.lstStates = CR.GetStates();
                 if (!string.IsNullOrEmpty(LeadId))
                 {
                     var leadDetails = SLR.GetsalesLeadByLeadId(Convert.ToInt32(LeadId));
@@ -68,12 +68,12 @@ namespace WebApp.Controllers.OnBoarding
                     objData.objInstallmentList = OBR.GetInstallmentDetails(groupId);
                     objData.lstOutlets = OBR.GetOutletDetails(groupId);
 
-                    foreach(var outlet in objData.lstOutlets)
+                    foreach (var brand in objData.objRetailList)
                     {
-                        objData.lstNewOutlets.Add(new SelectListItem
+                        objData.lstBrands.Add(new SelectListItem
                         {
-                            Text = outlet.OutletName,
-                            Value = Convert.ToString(outlet.OutletId)
+                            Text = brand.BrandName,
+                            Value = Convert.ToString(brand.BrandId)
                         });
                     }
 
@@ -83,7 +83,7 @@ namespace WebApp.Controllers.OnBoarding
                         var brandId = 1;
                         var outletId = 1;
                         foreach (var item1 in objData.objRetailList)
-                        {                            
+                        {
                             for (int i = 1; i <= item1.NoOfEnrolled; i++)
                             {
                                 BOTS_TblOutletMaster outlet = new BOTS_TblOutletMaster();
@@ -95,7 +95,7 @@ namespace WebApp.Controllers.OnBoarding
                                 outletId++;
                             }
                             brandId++;
-                        }                        
+                        }
                     }
                     else
                     {
@@ -105,15 +105,15 @@ namespace WebApp.Controllers.OnBoarding
                             {
                                 if (item1.BrandId == item2.BrandId)
                                     item2.BrandName = item1.BrandName;
-                            }                             
+                            }
                         }
-                    }                   
+                    }
                     objData.bots_TblGroupMaster.CategoryData = json_serializer.Serialize(objData.objRetailList);
                     objData.bots_TblGroupMaster.PaymentScheduleData = json_serializer.Serialize(objData.objInstallmentList);
                 }
             }
             catch (Exception ex)
-            {                
+            {
                 newexception.AddException(ex, "");
             }
             return View(objData);
@@ -161,7 +161,7 @@ namespace WebApp.Controllers.OnBoarding
                 json_serializer.MaxJsonLength = int.MaxValue;
                 object[] objCategoryData = (object[])json_serializer.DeserializeObject(objData.bots_TblGroupMaster.CategoryData);
                 object[] objPaymentScheduleData = (object[])json_serializer.DeserializeObject(objData.bots_TblGroupMaster.PaymentScheduleData);
-                
+
                 foreach (Dictionary<string, object> item in objCategoryData)
                 {
                     BOTS_TblRetailMaster objItem = new BOTS_TblRetailMaster();
@@ -189,10 +189,10 @@ namespace WebApp.Controllers.OnBoarding
 
                     objLstInstallment.Add(objItem);
                 }
-               
+
                 objData.bots_TblGroupMaster.CreatedBy = userDetails.LoginId;
                 objData.bots_TblGroupMaster.CreatedDate = DateTime.Now;
-                
+
                 if (objData.bots_TblGroupMaster.CustomerStatus == "CSUpdate")
                 {
                     object[] objOutletData = (object[])json_serializer.DeserializeObject(objData.bots_TblGroupMaster.OutletData);
@@ -218,9 +218,9 @@ namespace WebApp.Controllers.OnBoarding
                         objLstOutlet.Add(objItem);
                     }
                     GroupdId = OBR.AddOnboardingCustomer(objData.bots_TblGroupMaster, objLstRetail, objData.bots_TblDealDetails, objData.bots_TblPaymentDetails, objLstInstallment, objLstOutlet);
-                    if(objData.LeadId != null)
+                    if (objData.LeadId != null)
                     {
-                        status= SLR.UpdateStatus(Convert.ToInt32(objData.LeadId), Convert.ToString(GroupdId));
+                        status = SLR.UpdateStatus(Convert.ToInt32(objData.LeadId), Convert.ToString(GroupdId));
                     }
                 }
                 else
@@ -465,6 +465,112 @@ namespace WebApp.Controllers.OnBoarding
             return View(objData);
         }
 
+        public JsonResult GetSMSandWAData(string groupId,string brandId)
+        {
+            CommunicationConfigViewModel objData = new CommunicationConfigViewModel();
+            objData.SMSConfig = OBR.GetCommunicationSMSConfig(groupId, brandId);
+            objData.WAConfig = OBR.GetCommunicationWAConfig(groupId, brandId);
+            return new JsonResult() { Data = objData, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
+        }
 
+        public ActionResult SaveCommunicationConfig(string jsonData)
+        {
+            bool status = false;
+            try
+            {
+                
+                var userDetails = (CustomerLoginDetail)Session["UserSession"];
+                BOTS_TblSMSConfig objSMSConfig = new BOTS_TblSMSConfig();
+                BOTS_TblWAConfig objWAConfig = new BOTS_TblWAConfig();
+                JavaScriptSerializer json_serializer = new JavaScriptSerializer();
+                json_serializer.MaxJsonLength = int.MaxValue;
+                object[] objCommConfigData = (object[])json_serializer.DeserializeObject(jsonData);
+                foreach (Dictionary<string, object> item in objCommConfigData)
+                {
+                    var isSMS = Convert.ToBoolean(item["IsSMS"]);
+                    if(isSMS)
+                    {
+                        objSMSConfig.IsSMS = true;
+                        if (!string.IsNullOrEmpty(Convert.ToString(item["SMSId"])))
+                            objSMSConfig.Id = Convert.ToInt32(item["SMSId"]);
+                        objSMSConfig.GroupId= Convert.ToString(item["GroupId"]);
+                        objSMSConfig.BrandId = Convert.ToString(item["BrandId"]);
+                        objSMSConfig.SMSSenderID = Convert.ToString(item["SMSSenderId"]);
+                        objSMSConfig.SMSUsername = Convert.ToString(item["SMSUserName"]);
+                        objSMSConfig.SMSPassword = Convert.ToString(item["SMSPassword"]);
+                        objSMSConfig.SMSlink = Convert.ToString(item["SMSLink"]);
+                        objSMSConfig.EnrolmentSMSScript = Convert.ToString(item["SMSEnrollment"]);
+                        objSMSConfig.EnrollmentEarnSMSScript = Convert.ToString(item["SMSEnrollmentAndEarn"]);
+                        objSMSConfig.EarnSMSScript = Convert.ToString(item["SMSEarn"]);
+                        objSMSConfig.OTPSMSScript = Convert.ToString(item["SMSOTP"]);
+                        objSMSConfig.BurnSMSScript = Convert.ToString(item["SMSBurn"]);
+                        objSMSConfig.CancelEarnSMSScript = Convert.ToString(item["SMSCancelEarn"]);
+                        objSMSConfig.CancelBurnSMSScript = Convert.ToString(item["SMSCancelBurn"]);
+                        objSMSConfig.AnyCancelSMSScript = Convert.ToString(item["SMSAnyCancel"]);
+                        objSMSConfig.BalanceInquirySMSScript = Convert.ToString(item["SMSBalanceInquiry"]);
+                        if(objSMSConfig.Id>0)
+                        {
+                            objSMSConfig.UpdatedBy = userDetails.LoginId;
+                            objSMSConfig.UpdatedDate = DateTime.Now;
+                        }
+                        else
+                        {
+                            objSMSConfig.AddedBy = userDetails.LoginId;
+                            objSMSConfig.AddedDate = DateTime.Now;
+                        }                        
+                    }
+                    else
+                    {
+                        objSMSConfig.IsSMS = false;
+                    }
+                    var isWA = Convert.ToBoolean(item["IsWA"]);
+                    if (isWA)
+                    {
+                        objWAConfig.IsWA = true;
+                        if (!string.IsNullOrEmpty(Convert.ToString(item["WAId"])))
+                            objWAConfig.Id = Convert.ToInt32(item["WAId"]);
+                        objWAConfig.GroupId = Convert.ToString(item["GroupId"]);
+                        objWAConfig.BrandId = Convert.ToString(item["BrandId"]);
+                        objWAConfig.WANumber = Convert.ToString(item["WANumber"]);
+                        objWAConfig.WAUsername = Convert.ToString(item["WAUserName"]);
+                        objWAConfig.WAPassword = Convert.ToString(item["WAPassword"]);
+                        objWAConfig.WAlink = Convert.ToString(item["WALink"]);
+                        objWAConfig.EnrolmentWAScript = Convert.ToString(item["WAEnrollment"]);
+                        objWAConfig.EnrollmentEarnWAScript = Convert.ToString(item["WAEnrollmentAndEarn"]);
+                        objWAConfig.EarnWAScript = Convert.ToString(item["WAEarn"]);
+                        objWAConfig.OTPWAScript = Convert.ToString(item["WAOTP"]);
+                        objWAConfig.BurnWAScript = Convert.ToString(item["WABurn"]);
+                        objWAConfig.CancelEarnWAScript = Convert.ToString(item["WACancelEarn"]);
+                        objWAConfig.CancelBurnWAScript = Convert.ToString(item["WACancelBurn"]);
+                        objWAConfig.AnyCancelWAScript = Convert.ToString(item["WAAnyCancel"]);
+                        objWAConfig.BalanceInquiryWAScript = Convert.ToString(item["WABalanceInquiry"]);
+                        if (objWAConfig.Id > 0)
+                        {
+                            objWAConfig.UpdatedBy = userDetails.LoginId;
+                            objWAConfig.UpdatedDate = DateTime.Now;
+                        }
+                        else
+                        {
+                            objWAConfig.AddedBy = userDetails.LoginId;
+                            objWAConfig.AddedDate = DateTime.Now;
+                        }
+                       
+                    }
+                    else
+                    {
+                        objWAConfig.IsWA = false;
+                    }
+                }
+                status = OBR.SaveCommunicationConfig(objSMSConfig, objWAConfig);
+
+            }
+            catch (Exception ex)
+            {
+
+            }
+            return new JsonResult() { Data = status, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
+        }
+
+        
     }
 }

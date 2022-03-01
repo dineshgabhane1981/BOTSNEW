@@ -15,7 +15,7 @@ namespace BOTS_BL.Models
         public string GroupId { get; set; }
 
         [StringLength(50)]
-        public string OutletId { get; set; }
+        public string BrandId { get; set; }
 
         public bool IsWA { get; set; }
 

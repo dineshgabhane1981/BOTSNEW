@@ -406,7 +406,7 @@ namespace BOTS_BL.Repository
                         }
                     }
                 }
-                lstbalance = lstbalance.Where(x => x.SmsBalance != "0 Credits").ToList();
+                //lstbalance = lstbalance.Where(x => x.SmsBalance != "0 Credits").ToList();
                 foreach (var item in lstbalance)
                 {
                     item.SmsBalance1 = Convert.ToInt32(item.SmsBalance.Substring(0, item.SmsBalance.IndexOf(" ")));
@@ -441,7 +441,7 @@ namespace BOTS_BL.Repository
                     }
                 }
                 lstbalance = lstbalance.Where(x => x.SmsBalance1 < 1000).ToList();
-                lstSmsbalance.objSMSBalance = lstbalance.OrderByDescending(x => x.SmsBalance1).ToList();
+                lstSmsbalance.objSMSBalance = lstbalance.OrderBy(x => x.SmsBalance1).ToList();
 
                 baseAddress = "https://technocorelogic.com/api/checkbalance?user=919561124670&pass=9930005673&url=https://www.enotify.app";
                 using (var client = new HttpClient())
@@ -477,39 +477,39 @@ namespace BOTS_BL.Repository
                         }
                     }
                 }
-                List<WhatsAppBalance> lstWAbalance1 = new List<WhatsAppBalance>();
-                baseAddress = "https://technocorelogic.com/api/checkqueue?user=919561124670&pass=9930005673&url=https://www.enotify.app";
-                using (var client = new HttpClient())
-                {
-                    using (var response1 = client.GetAsync(baseAddress).Result)
-                    {
-                        if (response1.IsSuccessStatusCode)
-                        {
-                            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                            var response2 = client.GetStringAsync(new Uri(baseAddress)).Result;
-                            JObject jsonObj = JObject.Parse(response2);
-                            var WAData = jsonObj.Children().ToList();
-                            WAData = jsonObj.SelectTokens("data").Children().ToList();
-                            foreach (JToken item in WAData)
-                            {
-                                var lst = item.Children().ToList();
-                                WhatsAppBalance objbalance = new WhatsAppBalance();                                
-                                objbalance.InstanceID = Convert.ToString(((Newtonsoft.Json.Linq.JProperty)lst[4]).Value);
-                                objbalance.queue= Convert.ToInt32(((Newtonsoft.Json.Linq.JProperty)lst[9]).Value);
-                                lstWAbalance1.Add(objbalance);
-                            }
-                        }
-                    }
-                }
-                foreach(var item in lstWAbalance)
-                {
-                    item.queue = lstWAbalance1.Where(x => x.InstanceID == item.InstanceID).Select(y => y.queue).FirstOrDefault();
-                }
+                //List<WhatsAppBalance> lstWAbalance1 = new List<WhatsAppBalance>();
+                //baseAddress = "https://technocorelogic.com/api/checkqueue?user=919561124670&pass=9930005673&url=https://www.enotify.app";
+                //using (var client = new HttpClient())
+                //{
+                //    using (var response1 = client.GetAsync(baseAddress).Result)
+                //    {
+                //        if (response1.IsSuccessStatusCode)
+                //        {
+                //            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                //            var response2 = client.GetStringAsync(new Uri(baseAddress)).Result;
+                //            JObject jsonObj = JObject.Parse(response2);
+                //            var WAData = jsonObj.Children().ToList();
+                //            WAData = jsonObj.SelectTokens("data").Children().ToList();
+                //            foreach (JToken item in WAData)
+                //            {
+                //                var lst = item.Children().ToList();
+                //                WhatsAppBalance objbalance = new WhatsAppBalance();                                
+                //                objbalance.InstanceID = Convert.ToString(((Newtonsoft.Json.Linq.JProperty)lst[4]).Value);
+                //                objbalance.queue= Convert.ToInt32(((Newtonsoft.Json.Linq.JProperty)lst[9]).Value);
+                //                lstWAbalance1.Add(objbalance);
+                //            }
+                //        }
+                //    }
+                //}
+                //foreach(var item in lstWAbalance)
+                //{
+                //    item.queue = lstWAbalance1.Where(x => x.InstanceID == item.InstanceID).Select(y => y.queue).FirstOrDefault();
+                //}
 
-                lstSmsbalance.objWhatsAppBalance = lstWAbalance.Where(y => y.WABalance < 1000 && y.WABalance > 0).OrderByDescending(x => x.WABalance).ToList();
+                lstSmsbalance.objWhatsAppBalance = lstWAbalance.Where(y => y.WABalance < 1000).OrderBy(x => x.WABalance).ToList();
                 DateTime checkDate = DateTime.Today.AddDays(10);
 
-                lstSmsbalance.objWhatsAppExpiryDate = lstWAbalance.Where(x => x.WAExpiryDate < checkDate && x.WAExpiryDate > DateTime.Today).OrderByDescending(y => y.WAExpiryDate).ToList();
+                lstSmsbalance.objWhatsAppExpiryDate = lstWAbalance.Where(x => x.WAExpiryDate < checkDate && x.WAExpiryDate > DateTime.Today).OrderBy(y => y.WAExpiryDate).ToList();
             }
             catch (Exception ex)
             {

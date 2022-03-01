@@ -21,7 +21,7 @@ namespace BOTS_BL.Repository
             CustomerLoginDetail userDetail = new CustomerLoginDetail();
             using (var context = new CommonDBContext())
             {
-                userDetail = context.CustomerLoginDetails.Where(a => a.LoginId == objLoginModel.LoginId && a.Password == objLoginModel.Password).FirstOrDefault();
+                userDetail = context.CustomerLoginDetails.Where(a => a.LoginId == objLoginModel.LoginId && a.Password == objLoginModel.Password && a.UserStatus.Value == true).FirstOrDefault();
 
                 if (userDetail != null)
                 {

@@ -202,6 +202,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ViewModel\BrandAndOutletViewModel.cs" />
     <Compile Include="ViewModel\CancelTxnViewModel.cs" />
+    <Compile Include="ViewModel\CommunicationConfigViewModel.cs" />
     <Compile Include="ViewModel\CreateOwnReportViewModel.cs" />
     <Compile Include="ViewModel\CSWiseDataViewModel.cs" />
     <Compile Include="ViewModel\CustomerDashboardViewModel.cs" />

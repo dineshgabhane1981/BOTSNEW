@@ -6,14 +6,18 @@
 
 <div class="app-main__inner">
     <div class="row mb-3 card">
-        <div class="container-fluid pt-3 pl-3 pr-3" style="text-align:center;">
-            @Html.RadioButtonFor(model => model.IsMasked, true, new { @id = "IsMasked1" }) Masked &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            @Html.RadioButtonFor(model => model.IsMasked, false, new { @id = "IsMasked0" }) Unmasked
-            <br /><br />
-            <button class="btn btn-primary login-btn ml-2 mr-2" type="button" id="btnSave" onclick="SaveMasked();">
-                Save
-            </button>
-            <br /><br />
+        <div class="container-fluid pt-3 pl-3 pr-3 row" style="text-align:center;">
+            <div style="width:50%;">Your User data is Secured/Masked. Do you want to Unmasked?</div>
+            <div style="width:50%;margin-left:-125px;">
+                @Html.RadioButtonFor(model => model.IsMasked, true, new { @id = "IsMasked1" }) Masked &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                @Html.RadioButtonFor(model => model.IsMasked, false, new { @id = "IsMasked0" }) Unmasked
+                <br /><br />
+                <button class="btn btn-primary login-btn ml-2 mr-2" type="button" id="btnSave" onclick="SaveMasked();">
+                    Save
+                </button>
+                <br /><br />
+            </div>
+            
         </div>
     </div>
 </div>
@@ -30,7 +34,7 @@
                 data: '{value: ' + JSON.stringify(value) + '}',
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
-                success: function (result) {                    
+                success: function (result) {
                     if (result == true) {
                         cuteAlert({
                             type: "success",
@@ -50,7 +54,7 @@
                     $("#divLoader").hide();
 
                 },
-                error: function (result) {                   
+                error: function (result) {
                     $("#divLoader").hide();
                 }
             });
