@@ -1,3 +1,150 @@
 ﻿
 
-<div>DLC Link</div>
+<div style="margin-top:20px;">
+    <input type="hidden" id="hdnDLCLinkConfigId" />
+    <div style="float:left;" class="col-md-6 col-lg-6">
+        <div style="margin-left: 20px; margin-top: 20px;">
+            Profile Update Points <br /> <input type="text" id="txtProfileUpdatePoints" class="input100" />
+        </div>
+        <div style="margin-left: 20px; margin-top: 10px;">
+            Referral Points	 <br /> <input type="text" id="txtReferralPoints" class="input100" />
+        </div>
+        <div style="margin-left: 20px; margin-top: 10px;">
+            Referred Points	 <br /> <input type="text" id="txtReferredPoints" class="input100" />
+        </div>
+        <div style="margin-left: 20px; margin-top: 10px;">
+            To the referral (SMS) <br /> <textarea id="txtSMSToTheReferral" rows="3" cols="50" class="input100"></textarea>
+        </div>
+        <div style="margin-left: 20px; margin-top: 10px;">
+            Reminder for points usage (SMS) <br /> <textarea id="txtSMSReminderForPointsUsage" rows="3" cols="50" class="input100"></textarea>
+        </div>
+        <div style="margin-left: 20px; margin-top: 10px;">
+            Referred success on referral txn (SMS) <br /> <textarea id="txtSMSReferredSuccessOnReferralTxn" rows="3" cols="50" class="input100"></textarea>
+        </div>
+    </div>
+
+    <div style="float:left;" class="col-md-6 col-lg-6">
+        <div style="margin-left: 20px; margin-top: 20px;">
+            Max no of referrals <br /> <input type="text" id="txtMaxNoOfReferrals" class="input100" />
+        </div>
+        <div style="margin-left: 20px; margin-top: 10px;">
+            Validity of Referral points <br /> <input type="text" id="txtValidityOfReferralPoints" class="input100" />
+        </div>
+        <div style="margin-left: 20px; margin-top: 10px;">
+            Referral reminder (days before expiry)	 <br /> <input type="text" id="txtReferralReminder" class="input100" />
+        </div>
+        <div style="margin-left: 20px; margin-top: 10px;">
+            To the referral (WA) <br /> <textarea id="txtWAToTheReferral" rows="3" cols="50" class="input100"></textarea>
+        </div>
+        <div style="margin-left: 20px; margin-top: 10px;">
+            Reminder for points usage (WA) <br /> <textarea id="txtWAReminderForPointsUsage" rows="3" cols="50" class="input100"></textarea>
+        </div>
+        <div style="margin-left: 20px; margin-top: 10px;">
+            Referred success on referral txn (WA) <br /> <textarea id="txtWAReferredSuccessOnReferralTxn" rows="3" cols="50" class="input100"></textarea>
+        </div>
+    </div>
+</div>
+<div class="container-fluid pt-3 pl-3 pr-3 pb-3">
+    <button type="button" id="btnDLCLinkSave" class="btn btn-primary pull-right" style="margin-right: 10px; margin-bottom: 20px;">Save</button>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $("#btnDLCLinkSave").on("click", function () {
+            SaveDLCLinkConfig();
+        });
+        LoadExistingDLCLinkData();
+    });
+
+    function LoadExistingDLCLinkData() {
+        $("#divLoader").show();
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("GetDLCLinkData", "CustomerOnBoarding")',
+                data: '{groupId: ' + JSON.stringify($('#hdnGroupID').val()) + '}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (result) {
+
+                    LoadDLCControls(result);
+                    $("#divLoader").hide();
+
+                },
+                error: function (result) {
+                    $("#divLoader").hide();
+                }
+            });
+    }
+
+    function LoadDLCControls(data) {
+        $("#hdnDLCLinkConfigId").val(data.Id);
+        $('#txtProfileUpdatePoints').val(data.ProfileUpdatePoints);
+        $('#txtReferralPoints').val(data.ReferralPoints);
+        $('#txtReferredPoints').val(data.ReferredPoints);
+        $('#txtMaxNoOfReferrals').val(data.MaxNoOfReferrals);
+        $('#txtValidityOfReferralPoints').val(data.ValidityOfReferralPoints);
+        $('#txtReferralReminder').val(data.ReferralReminder);
+        $('#txtSMSToTheReferral').val(data.ToTheReferralSMSScript);
+        $('#txtSMSReminderForPointsUsage').val(data.ReminderForPointsUsageSMSScript);
+        $('#txtSMSReferredSuccessOnReferralTxn').val(data.ReferredSuccessOnReferralTxnSMSScript);
+        $('#txtWAToTheReferral').val(data.ToTheReferralWAScript);
+        $('#txtWAReminderForPointsUsage').val(data.ReminderForPointsUsageWAScript);
+        $('#txtWAReferredSuccessOnReferralTxn').val(data.ReferredSuccessOnReferralTxnWAScript);
+    }
+    function SaveDLCLinkConfig() {
+        var DLCConfig = [];
+        item = {}
+        item["Id"] = $('#hdnDLCLinkConfigId').val();
+        item["GroupId"] = $('#hdnGroupID').val();
+        item["ProfileUpdatePoints"] = $('#txtProfileUpdatePoints').val();
+        item["ReferralPoints"] = $('#txtReferralPoints').val();
+        item["ReferredPoints"] = $('#txtReferredPoints').val();
+        item["MaxNoOfReferrals"] = $('#txtMaxNoOfReferrals').val();
+        item["ValidityOfReferralPoints"] = $('#txtValidityOfReferralPoints').val();
+        item["ReferralReminder"] = $('#txtReferralReminder').val();
+        item["SMSToTheReferral"] = $('#txtSMSToTheReferral').val();
+        item["SMSReminderForPointsUsage"] = $('#txtSMSReminderForPointsUsage').val();
+        item["SMSReferredSuccessOnReferralTxn"] = $('#txtSMSReferredSuccessOnReferralTxn').val();
+        item["WAToTheReferral"] = $('#txtWAToTheReferral').val();
+        item["WAReminderForPointsUsage"] = $('#txtWAReminderForPointsUsage').val();
+        item["WAReferredSuccessOnReferralTxn"] = $('#txtWAReferredSuccessOnReferralTxn').val();
+
+        DLCConfig.push(item);
+        var DLCConfigData = JSON.stringify(DLCConfig);
+
+         $("#divLoader").show();
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("SaveDLCLinkConfig", "CustomerOnBoarding")',
+                data: '{jsonData: ' + JSON.stringify(DLCConfigData) + '}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (result) {
+                    console.log(result)
+                    if (result == true) {
+                        cuteAlert({
+                            type: "success",
+                            title: "Saved..",
+                            message: "DLC Link Data Saved Successfully!",
+                            buttonText: "Okay"
+                        })
+                    }
+                    else {
+                        cuteAlert({
+                            type: "error",
+                            title: "Oops..",
+                            message: "There is some problem while saving DLC Link Data",
+                            buttonText: "Okay"
+                        })
+                    }
+                    $("#divLoader").hide();
+                },
+                error: function (result) {
+                    console.log(2222)
+                    console.log(result.responseText)
+                    $("#divLoader").hide();
+                }
+            });
+    }
+
+</script>

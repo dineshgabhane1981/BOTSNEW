@@ -465,7 +465,7 @@ namespace WebApp.Controllers.OnBoarding
             return View(objData);
         }
 
-        public JsonResult GetSMSandWAData(string groupId,string brandId)
+        public JsonResult GetSMSandWAData(string groupId, string brandId)
         {
             CommunicationConfigViewModel objData = new CommunicationConfigViewModel();
             objData.SMSConfig = OBR.GetCommunicationSMSConfig(groupId, brandId);
@@ -478,7 +478,7 @@ namespace WebApp.Controllers.OnBoarding
             bool status = false;
             try
             {
-                
+
                 var userDetails = (CustomerLoginDetail)Session["UserSession"];
                 BOTS_TblSMSConfig objSMSConfig = new BOTS_TblSMSConfig();
                 BOTS_TblWAConfig objWAConfig = new BOTS_TblWAConfig();
@@ -488,13 +488,13 @@ namespace WebApp.Controllers.OnBoarding
                 foreach (Dictionary<string, object> item in objCommConfigData)
                 {
                     var isSMS = Convert.ToBoolean(item["IsSMS"]);
-                    if(isSMS)
+                    if (isSMS)
                     {
                         objSMSConfig.IsSMS = true;
                         if (!string.IsNullOrEmpty(Convert.ToString(item["SMSId"])))
                             objSMSConfig.Id = Convert.ToInt32(item["SMSId"]);
                         objSMSConfig.SMSProvider = Convert.ToString(item["SMSProvider"]);
-                        objSMSConfig.GroupId= Convert.ToString(item["GroupId"]);
+                        objSMSConfig.GroupId = Convert.ToString(item["GroupId"]);
                         objSMSConfig.BrandId = Convert.ToString(item["BrandId"]);
                         objSMSConfig.SMSSenderID = Convert.ToString(item["SMSSenderId"]);
                         objSMSConfig.SMSUsername = Convert.ToString(item["SMSUserName"]);
@@ -509,7 +509,7 @@ namespace WebApp.Controllers.OnBoarding
                         objSMSConfig.CancelBurnSMSScript = Convert.ToString(item["SMSCancelBurn"]);
                         objSMSConfig.AnyCancelSMSScript = Convert.ToString(item["SMSAnyCancel"]);
                         objSMSConfig.BalanceInquirySMSScript = Convert.ToString(item["SMSBalanceInquiry"]);
-                        if(objSMSConfig.Id>0)
+                        if (objSMSConfig.Id > 0)
                         {
                             objSMSConfig.UpdatedBy = userDetails.LoginId;
                             objSMSConfig.UpdatedDate = DateTime.Now;
@@ -518,7 +518,7 @@ namespace WebApp.Controllers.OnBoarding
                         {
                             objSMSConfig.AddedBy = userDetails.LoginId;
                             objSMSConfig.AddedDate = DateTime.Now;
-                        }                        
+                        }
                     }
                     else
                     {
@@ -556,7 +556,7 @@ namespace WebApp.Controllers.OnBoarding
                             objWAConfig.AddedBy = userDetails.LoginId;
                             objWAConfig.AddedDate = DateTime.Now;
                         }
-                       
+
                     }
                     else
                     {
@@ -573,6 +573,61 @@ namespace WebApp.Controllers.OnBoarding
             return new JsonResult() { Data = status, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
 
-        
+        public ActionResult SaveDLCLinkConfig(string jsonData)
+        {
+            bool status = false;
+            try
+            {
+                var userDetails = (CustomerLoginDetail)Session["UserSession"];
+                JavaScriptSerializer json_serializer = new JavaScriptSerializer();
+                json_serializer.MaxJsonLength = int.MaxValue;
+                object[] objDLCConfigData = (object[])json_serializer.DeserializeObject(jsonData);
+                BOTS_TblDLCLinkConfig objDLCLink = new BOTS_TblDLCLinkConfig();
+                foreach (Dictionary<string, object> item in objDLCConfigData)
+                {
+                    if(!string.IsNullOrEmpty(Convert.ToString(item["Id"])))
+                    {
+                        objDLCLink.Id= Convert.ToInt32(item["Id"]);
+                    }
+                    objDLCLink.GroupId = Convert.ToString(item["GroupId"]);
+                    objDLCLink.ProfileUpdatePoints = Convert.ToInt32(item["ProfileUpdatePoints"]);
+                    objDLCLink.ReferralPoints = Convert.ToInt32(item["ReferralPoints"]);
+                    objDLCLink.ReferredPoints = Convert.ToInt32(item["ReferredPoints"]);
+                    objDLCLink.MaxNoOfReferrals = Convert.ToInt32(item["MaxNoOfReferrals"]);
+                    objDLCLink.ValidityOfReferralPoints = Convert.ToInt32(item["ValidityOfReferralPoints"]);
+                    objDLCLink.ReferralReminder = Convert.ToInt32(item["ReferralReminder"]);
+                    objDLCLink.ToTheReferralSMSScript = Convert.ToString(item["SMSToTheReferral"]);
+                    objDLCLink.ReminderForPointsUsageSMSScript = Convert.ToString(item["SMSReminderForPointsUsage"]);
+                    objDLCLink.ReferredSuccessOnReferralTxnSMSScript = Convert.ToString(item["SMSReferredSuccessOnReferralTxn"]);
+                    objDLCLink.ToTheReferralWAScript = Convert.ToString(item["WAToTheReferral"]);
+                    objDLCLink.ReminderForPointsUsageWAScript = Convert.ToString(item["WAReminderForPointsUsage"]);
+                    objDLCLink.ReferredSuccessOnReferralTxnWAScript = Convert.ToString(item["WAReferredSuccessOnReferralTxn"]);
+                    if(objDLCLink.Id>0)
+                    {
+                        objDLCLink.UpdatedBy = userDetails.LoginId;
+                        objDLCLink.UpdatedDate = DateTime.Now;
+                    }
+                    else
+                    {
+                        objDLCLink.AddedBy = userDetails.LoginId;
+                        objDLCLink.AddedDate = DateTime.Now;
+                    }
+                }
+                status = OBR.SaveDLCLinkConfig(objDLCLink);
+
+            }
+            catch (Exception ex)
+            {
+
+            }
+            return new JsonResult() { Data = status, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
+        }
+        public JsonResult GetDLCLinkData(string groupId)
+        {
+            BOTS_TblDLCLinkConfig objData = new BOTS_TblDLCLinkConfig();
+            objData = OBR.GetDLCLinkData(groupId);
+           
+            return new JsonResult() { Data = objData, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
+        }
     }
 }

@@ -182,7 +182,6 @@ namespace BOTS_BL.Repository
             return GroupId;
         }
 
-
         public List<OnBoardingListing> GetOnBoardingListings(CustomerLoginDetail userDetails)
         {
             List<OnBoardingListing> onBoardingListings = new List<OnBoardingListing>();
@@ -476,10 +475,10 @@ namespace BOTS_BL.Repository
                 {
                     if (objSMSData.IsSMS)
                     {
-                        if(objSMSData.BrandId=="All")
+                        if (objSMSData.BrandId == "All")
                         {
                             var allBrandData = context.BOTS_TblSMSConfig.Where(x => x.BrandId != "All").ToList();
-                            foreach(var item in allBrandData)
+                            foreach (var item in allBrandData)
                             {
                                 context.BOTS_TblSMSConfig.Remove(item);
                                 context.SaveChanges();
@@ -494,10 +493,10 @@ namespace BOTS_BL.Repository
                                 context.SaveChanges();
                             }
                         }
-                        if(objSMSData.Id>0)
+                        if (objSMSData.Id > 0)
                         {
                             var oldData = context.BOTS_TblSMSConfig.Where(x => x.Id == objSMSData.Id).FirstOrDefault();
-                            if(oldData!=null)
+                            if (oldData != null)
                             {
                                 objSMSData.AddedBy = oldData.AddedBy;
                                 objSMSData.AddedDate = oldData.AddedDate;
@@ -554,13 +553,13 @@ namespace BOTS_BL.Repository
             BOTS_TblSMSConfig objData = new BOTS_TblSMSConfig();
             using (var context = new CommonDBContext())
             {
-                if(BrandId!="0")
+                if (BrandId != "0")
                 {
                     objData = context.BOTS_TblSMSConfig.Where(x => x.GroupId == GroupId && x.BrandId == BrandId).FirstOrDefault();
                 }
                 else
                 {
-                    objData = context.BOTS_TblSMSConfig.Where(x => x.GroupId == GroupId && x.BrandId =="All").FirstOrDefault();
+                    objData = context.BOTS_TblSMSConfig.Where(x => x.GroupId == GroupId && x.BrandId == "All").FirstOrDefault();
                 }
             }
 
@@ -584,5 +583,49 @@ namespace BOTS_BL.Repository
 
             return objData;
         }
+
+        public bool SaveDLCLinkConfig(BOTS_TblDLCLinkConfig objData)
+        {
+            bool status = false;
+            try
+            {
+                using (var context = new CommonDBContext())
+                {
+                    if (objData.Id > 0)
+                    {
+                        var oldData = context.BOTS_TblDLCLinkConfig.Where(x => x.Id == objData.Id).FirstOrDefault();
+                        if (oldData != null)
+                        {
+                            objData.AddedBy = oldData.AddedBy;
+                            objData.AddedDate = oldData.AddedDate;
+                        }
+                    }
+                    context.BOTS_TblDLCLinkConfig.AddOrUpdate(objData);
+                    context.SaveChanges();
+                    status = true;
+                }
+
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "SaveDLCLinkConfig");
+            }
+
+
+            return status;
+        }
+
+        public BOTS_TblDLCLinkConfig GetDLCLinkData(string groupId)
+        {
+            BOTS_TblDLCLinkConfig objData = new BOTS_TblDLCLinkConfig();
+            using (var context = new CommonDBContext())
+            {
+
+                objData = context.BOTS_TblDLCLinkConfig.Where(x => x.GroupId == groupId).FirstOrDefault();
+            }
+
+            return objData;
+        }
+
     }
 }
