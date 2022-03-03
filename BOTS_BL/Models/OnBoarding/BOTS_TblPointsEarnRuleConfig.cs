@@ -64,5 +64,14 @@ namespace BOTS_BL.Models.OnBoarding
 
         [Column(TypeName = "numeric")]
         public decimal? IncrementedFixedPercentage { get; set; }
+
+        [StringLength(50)]
+        public string PercentageType { get; set; }
+    }
+
+    public class EarnPointLevel
+    {
+        public string EarnPointLevelId { get; set; }
+        public string EarnPointLevelName { get; set; }
     }
 }

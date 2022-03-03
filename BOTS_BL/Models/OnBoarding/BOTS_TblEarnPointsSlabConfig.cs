@@ -34,5 +34,9 @@ namespace BOTS_BL.Models.OnBoarding
 
         [StringLength(50)]
         public string EarnSlab { get; set; }
+
+        [StringLength(50)]
+        public string SlabType { get; set; }
+        
     }
 }
