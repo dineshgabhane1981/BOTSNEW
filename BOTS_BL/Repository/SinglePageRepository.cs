@@ -656,6 +656,80 @@ namespace BOTS_BL.Repository
             return lstFinalData;
         }
 
+        public List<GroupWiseDetails> GetGroupWiseData()
+        {
+            List<GroupWiseDetails> ObjData = new List<GroupWiseDetails>();
+            try
+            {
+                using (var context = new CommonDBContext())
+                {
+                    var groups = context.tblGroupDetails.Where(x => x.IsActive == true && x.IsLive == true && x.GroupId != 1051).ToList();
+                    foreach (var item in groups)
+                    {
+                        GroupWiseDetails objItem = new GroupWiseDetails();
+                        var groupId = Convert.ToInt32(item.GroupId);
+                        objItem.CustId = Convert.ToString(item.GroupId);
+                        objItem.CustName = item.GroupName;
+                        objItem.BusinessCategory = item.CustomerType;
+                        var category = (from c in context.tblGroupDetails
+                                        join ct in context.tblCategories on c.RetailCategory equals ct.CategoryId
+                                        where c.GroupId == groupId 
+                                        select new
+                                        {
+                                            ct.CategoryName
+                                        }).FirstOrDefault();
+                        objItem.CustCategory = category.CategoryName;
+
+                        var city = (from c in context.tblGroupDetails
+                                    join ct in context.tblCities on c.City equals ct.CityId
+                                    where c.GroupId == groupId 
+                                    select new
+                                    {
+                                        ct.CityName
+                                    }).FirstOrDefault();
+
+                        objItem.Location = city.CityName;
+
+                        var CSName = (from c in context.tblGroupDetails
+                                      join ct in context.tblRMAssigneds on c.RMAssigned equals ct.RMAssignedId
+                                      where c.GroupId == groupId 
+                                      select new
+                                      {
+                                          ct.RMAssignedName
+                                      }).FirstOrDefault();
+
+                        objItem.CSName = CSName.RMAssignedName;
+
+                        string connStr = CR.GetCustomerConnString(Convert.ToString(item.GroupId));
+                        using (var contextdb = new BOTSDBContext(connStr))
+                        {
+                            objItem.CustCount = contextdb.CustomerDetails.Count();
+
+                            var sqlQ = $"SELECT COUNT(*) as Count FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = 'BulkUploadCustList'";
+                            var exist = contextdb.Database.SqlQuery<int>(sqlQ).FirstOrDefault();
+                            if (exist > 0)
+                            {
+                                objItem.BulkUploadCount = contextdb.BulkUploadCustLists.Count();
+                                objItem.Total = objItem.CustCount + contextdb.BulkUploadCustLists.Count();
+                            }
+                            else
+                            {
+                                objItem.BulkUploadCount = 0;
+                                objItem.Total = objItem.CustCount;
+                            }
+                        }
+
+                        ObjData.Add(objItem);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetGroupWiseData");
+            }
+            ObjData = ObjData.OrderByDescending(x => x.Total).ToList();
+            return ObjData;
+        }
         public List<DiscussionDataForGraph> GetDiscussionData()
         {
             List<DiscussionDataForGraph> lstData = new List<DiscussionDataForGraph>();

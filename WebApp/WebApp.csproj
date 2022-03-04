@@ -366,6 +366,7 @@
     <Content Include="Views\CustomerOnBoarding\_DLCLink.cshtml" />
     <Content Include="Views\CustomerOnBoarding\_VelocityChecks.cshtml" />
     <Content Include="Views\CustomerOnBoarding\_BulkUpload.cshtml" />
+    <Content Include="Views\SinglePage\_GroupWiseData.cshtml" />
     <None Include="_bin_deployableAssemblies\x86\sqlcese40.dll" />
     <None Include="_bin_deployableAssemblies\x86\sqlceqp40.dll" />
     <None Include="_bin_deployableAssemblies\x86\sqlceme40.dll" />

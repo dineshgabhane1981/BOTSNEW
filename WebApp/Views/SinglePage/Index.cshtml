@@ -64,7 +64,8 @@
     #two:checked ~ .panels #two-panel,
     #three:checked ~ .panels #three-panel,
     #four:checked ~ .panels #four-panel,
-    #five:checked ~ .panels #five-panel {
+    #five:checked ~ .panels #five-panel,
+    #six:checked ~ .panels #six-panel {
         display: block
     }
 
@@ -72,7 +73,8 @@
     #two:checked ~ .tabs #two-tab,
     #three:checked ~ .tabs #three-tab,
     #four:checked ~ .tabs #four-tab,
-    #five:checked ~ .tabs #five-tab {
+    #five:checked ~ .tabs #five-tab,
+    #six:checked ~ .tabs #six-tab {
         background: #fff !important;
         color: #000;
         border-top: 3px solid #fff;
@@ -91,12 +93,14 @@
         <input class="radio" id="three" name="group" type="radio">
         <input class="radio" id="four" name="group" type="radio">
         <input class="radio" id="five" name="group" type="radio">
+        <input class="radio" id="six" name="group" type="radio">
         <div class="tabs">
             <label class="tab" id="one-tab" for="one">Non-Transacting</label>
             <label class="tab" id="two-tab" for="two">Communication</label>
             <label class="tab" id="three-tab" for="three">Key Indicator</label>
             <label class="tab" id="four-tab" for="four">City Wise</label>
             <label class="tab" id="five-tab" for="five">Discussion</label>
+            <label class="tab" id="six-tab" for="six">Group Wise</label>
         </div>
         <div class="panels">
             <div class="multisteps-form__panel shadow p-4 m-4 list-box bg-white panel" id="one-panel">
@@ -573,6 +577,11 @@
                     </div>
                 </div>
             </div>
+
+            <div id="six-panel" class="multisteps-form__panel shadow p-4 list-box bg-white panel">
+                @Html.Partial("~/Views/SinglePage/_GroupWiseData.cshtml", Model)               
+            </div>
+
         </div>
     </div>
 </div>

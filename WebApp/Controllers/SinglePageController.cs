@@ -8,6 +8,10 @@ using BOTS_BL.Models.CommonDB;
 using WebApp.ViewModel;
 using BOTS_BL.Models;
 using BOTS_BL;
+using System.ComponentModel;
+using System.Data;
+using ClosedXML.Excel;
+using System.IO;
 
 namespace WebApp.Controllers
 {
@@ -21,6 +25,19 @@ namespace WebApp.Controllers
             SinglePageViewModel singlevm = new SinglePageViewModel();
             try
             {
+                GroupWiseDetails objGrpWise = new GroupWiseDetails();
+                singlevm.lstGroupWiseDetails = SPR.GetGroupWiseData();
+                foreach(var item in singlevm.lstGroupWiseDetails)
+                {
+                    objGrpWise.CustCount = objGrpWise.CustCount + item.CustCount;
+                    objGrpWise.BulkUploadCount = objGrpWise.BulkUploadCount + item.BulkUploadCount;
+                    objGrpWise.Total = objGrpWise.Total + item.Total;
+                }
+                objGrpWise.CustName = "Total";
+                singlevm.lstGroupWiseDetails.Add(objGrpWise);
+
+
+
                 singlevm.lstCommunication = SPR.GetCommunicationWhatsAppExpiryData();
                 var userDetails = (CustomerLoginDetail)Session["UserSession"];
                 userDetails.CustomerName = CR.GetCustomerName(userDetails.GroupId);
@@ -68,16 +85,12 @@ namespace WebApp.Controllers
                     singlevm.GrandTotal = objCategoryData.Sum(x => x.MemberBase);
                     singlevm.lstCities = cities;
                 }
-
-               
             }
             catch (Exception ex)
             {
                 newexception.AddException(ex, "Single Page");
             }
             return View(singlevm);
-
-
         }
         [HttpPost]
         public JsonResult GetLowerMetricsData(string Id)
@@ -191,5 +204,57 @@ namespace WebApp.Controllers
             return PartialView("_LeastConnectedCustomers", objData);
         }
 
+        public ActionResult ExportGroupWise()
+        {
+            System.Data.DataTable table = new System.Data.DataTable();
+            try
+            {
+                List<GroupWiseDetails> lstGroupWiseDetails = new List<GroupWiseDetails>();
+                lstGroupWiseDetails = SPR.GetGroupWiseData();
+
+                GroupWiseDetails objGrpWise = new GroupWiseDetails();
+                lstGroupWiseDetails = SPR.GetGroupWiseData();
+                foreach (var item in lstGroupWiseDetails)
+                {
+                    objGrpWise.CustCount = objGrpWise.CustCount + item.CustCount;
+                    objGrpWise.BulkUploadCount = objGrpWise.BulkUploadCount + item.BulkUploadCount;
+                    objGrpWise.Total = objGrpWise.Total + item.Total;
+                }
+                objGrpWise.CustName = "Total";
+                lstGroupWiseDetails.Add(objGrpWise);
+
+                PropertyDescriptorCollection properties = TypeDescriptor.GetProperties(typeof(GroupWiseDetails));
+                foreach (PropertyDescriptor prop in properties)
+                    table.Columns.Add(prop.Name, Nullable.GetUnderlyingType(prop.PropertyType) ?? prop.PropertyType);
+
+                foreach (GroupWiseDetails item in lstGroupWiseDetails)
+                {
+                    DataRow row = table.NewRow();
+                    foreach (PropertyDescriptor prop in properties)
+                        row[prop.Name] = prop.GetValue(item) ?? DBNull.Value;
+
+                    table.Rows.Add(row);
+                }
+                var ReportName = "GroupWiseData";
+                string fileName = "BOTS_" + ReportName + ".xlsx";
+                using (XLWorkbook wb = new XLWorkbook())
+                {
+                    table.TableName = ReportName;
+                    wb.Worksheets.Add(table);
+                    using (MemoryStream stream = new MemoryStream())
+                    {
+                        wb.SaveAs(stream);                        
+
+                        return File(stream.ToArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
+
+                    }
+                }
+                    
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
     }
 }

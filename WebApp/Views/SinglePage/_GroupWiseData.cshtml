@@ -1,0 +1,126 @@
+﻿@model WebApp.ViewModel.SinglePageViewModel
+@using System.Globalization
+@if (Model.lstGroupWiseDetails != null)
+{
+
+    <div class="container-fluid ">
+        <div class="col-md-12 col-lg-12">
+            <div class="col search-container">
+                <i class="fas fa-search"></i>
+                <input class="input100" type="text" id="txtSearch" placeholder="Search Group..." />
+            </div>
+
+            <div class="col text-right">
+                <div class="dropdown">
+                    <button class="btn btn-primary login-btn" onclick='ExportDataExcel();' type="button" id="btnExport">
+                        <i class="fas fa-file-export"></i> Export
+                    </button>
+                </div>
+                <div class="row mt-3" id="dvActivityData">
+                    <div class="table-responsive">
+                        <table class="table" id="groupListTable">
+                            <thead>
+                                <tr>
+                                    <th scope="col" style="text-align:left;">Customer Name</th>
+                                    <th scope="col" style="text-align:left;">Customer Category</th>
+                                    <th scope="col" style="text-align:left;">Business Category</th>
+                                    <th scope="col" style="text-align:left;">Location</th>
+                                    <th scope="col" style="text-align:left;">CS Assigned</th>
+                                    <th scope="col" style="text-align: right;">Customer Count</th>
+                                    <th scope="col" style="text-align: right;">Bulk Upload Count</th>
+                                    <th scope="col" style="text-align: right;">Total</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (Model != null)
+                                {
+                                    if (Model.lstGroupWiseDetails != null)
+                                    {
+                                        var count = 0;
+                                        foreach (var item in Model.lstGroupWiseDetails)
+                                        {
+                                            count++;
+                                            if (count != Model.lstGroupWiseDetails.Count)
+                                            {
+                                                <tr>
+                                                    <td style="text-align:left;">@Html.Raw(item.CustName)</td>
+                                                    <td style="text-align:left;">@item.CustCategory</td>
+                                                    <td style="text-align:left;">@item.BusinessCategory</td>
+                                                    <td style="text-align:left;">@item.Location</td>
+                                                    <td style="text-align:left;">@item.CSName</td>
+                                                    <td style="text-align: right;">@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(item.CustCount))</td>
+                                                    <td style="text-align: right;">@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(item.BulkUploadCount))</td>
+                                                    <td style="text-align:right;">@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(item.Total))</td>
+                                                </tr>
+                                            }
+                                            else
+                                            {
+                                                <tr>
+                                                    <td style="text-align: left; font-weight: bold;">@Html.Raw(item.CustName)</td>
+                                                    <td style="text-align:left;">@item.CustCategory</td>
+                                                    <td style="text-align:left;">@item.BusinessCategory</td>
+                                                    <td style="text-align:left;">@item.Location</td>
+                                                    <td style="text-align:left;">@item.CSName</td>
+                                                    <td style="text-align: right; font-weight: bold;">@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(item.CustCount))</td>
+                                                    <td style="text-align: right; font-weight: bold; ">@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(item.BulkUploadCount))</td>
+                                                    <td style="text-align: right; font-weight: bold;">@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(item.Total))</td>
+                                                </tr>
+                                            }
+
+                                        }
+                                    }
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+}
+<script>
+    $(document).ready(function () {
+        $("#btnExport").click(function () {
+            ExportData();
+        });
+
+
+        $('#groupListTable').DataTable({
+            "aaSorting": [],
+            "paging": true,
+            "ordering": false,
+            "info": true,
+            "bFilter": true,
+            "pageLength": 25,
+            "pagingType": "simple_numbers"
+
+        });
+
+        $('#groupListTable_filter').hide();
+
+        $('#txtSearch').on('keyup', function () {
+
+            $.fn.dataTable.ext.search.push(function (settings, searchData) {
+                var term = $('#txtSearch').val().toLowerCase()
+                for (var i = 0; i < searchData.length; i++) {
+                    if (searchData[i].toLowerCase().indexOf(term) >= 0) {
+                        return true;
+                    }
+                }
+                return false;
+            });
+            var table = $('#groupListTable').DataTable();
+            table.draw();
+        });
+    });
+
+    function ExportData() {
+        $("#divLoader").show();
+        var urlLink = "@Url.Action("ExportGroupWise", "SinglePage")";
+            // urlLink = urlLink + "?DateRangeFlag=" + DateRangeFlag + "&fromDate=" + fromDate + "&toDate=" + toDate + "&ReportName=Outletwise" + "&EmailId=" + emailid +"";
+            console.log(urlLink);
+            window.location.href = urlLink;
+         $("#divLoader").hide();
+    }
+</script>
