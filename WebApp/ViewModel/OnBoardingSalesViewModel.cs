@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using BOTS_BL.Models;
+using BOTS_BL.Models.OnBoarding;
 
 namespace WebApp.ViewModel
 {
@@ -13,7 +14,7 @@ namespace WebApp.ViewModel
         public BOTS_TblRetailMaster bots_TblRetailMaster { get; set; }
         public BOTS_TblDealDetails bots_TblDealDetails { get; set; }
         public BOTS_TblPaymentDetails bots_TblPaymentDetails { get; set; }
-        public BOTS_TblInstallmentDetails bots_TblInstallmentDetails { get; set; }    
+        public BOTS_TblInstallmentDetails bots_TblInstallmentDetails { get; set; }
         public BOTS_TblOutletMaster bots_TblOutletMaster { get; set; }
         public List<BOTS_TblRetailMaster> objRetailList { get; set; }
         public List<BOTS_TblInstallmentDetails> objInstallmentList { get; set; }
@@ -27,6 +28,10 @@ namespace WebApp.ViewModel
         public List<SelectListItem> lstRefferedCategory { get; set; }
         public List<SelectListItem> lstStates { get; set; }
         public List<SelectListItem> lstBrands { get; set; }
+        public BOTS_TblPointsEarnRuleConfig objpointsearnruleconfig { get; set; }
+        public BOTS_TblEarnPointsSlabConfig objearnpointslab { get; set; }
+        public List<BOTS_TblEarnPointsSlabConfig> lstearnpointslabconfig { get; set; }
+        public List<EarnPointLevel> lstearnpoint { get; set; }
 
         public string LeadId { get; set; }
         public SelectListItem[] BOProducts()
@@ -43,7 +48,7 @@ namespace WebApp.ViewModel
         }
         public SelectListItem[] RefferedCategory()
         {
-            return new SelectListItem[4] { new SelectListItem() { Text = "Customer", Value = "1" }, new SelectListItem() { Text = "Billing Partner", Value = "2" }, new SelectListItem() { Text = "Channel Partner", Value = "3" }, new SelectListItem() { Text = "Cold Call", Value = "4" }};
+            return new SelectListItem[4] { new SelectListItem() { Text = "Customer", Value = "1" }, new SelectListItem() { Text = "Billing Partner", Value = "2" }, new SelectListItem() { Text = "Channel Partner", Value = "3" }, new SelectListItem() { Text = "Cold Call", Value = "4" } };
         }
         public SelectListItem[] PaymentCleared()
         {
@@ -69,5 +74,10 @@ namespace WebApp.ViewModel
         {
             return new SelectListItem[3] { new SelectListItem() { Text = "Technocore", Value = "Technocore" }, new SelectListItem() { Text = "Technocore Verified", Value = "Technocore Verified" }, new SelectListItem() { Text = "Pinnacle Verified", Value = "Pinnacle Verified" } };
         }
+        public SelectListItem[] Percentage()
+        {
+            return new SelectListItem[2] { new SelectListItem() { Text = "% with", Value = "percentwith" }, new SelectListItem() { Text = "Fixed Percentage", Value = "fixedpercentage" } };
+
+        }
     }
-}
+    }

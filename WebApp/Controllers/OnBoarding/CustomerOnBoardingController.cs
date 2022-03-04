@@ -15,6 +15,7 @@ using System.Web.Script.Serialization;
 using WebApp.App_Start;
 using WebApp.ViewModel;
 using BOTS_BL.Models.SalesLead;
+using BOTS_BL.Models.OnBoarding;
 
 namespace WebApp.Controllers.OnBoarding
 {
@@ -36,6 +37,8 @@ namespace WebApp.Controllers.OnBoarding
             OnBoardingSalesViewModel objData = new OnBoardingSalesViewModel();
             try
             {
+                BOTS_TblPointsEarnRuleConfig objpointsearncofig = new BOTS_TblPointsEarnRuleConfig();
+                BOTS_TblEarnPointsSlabConfig objpointsslabconfig = new BOTS_TblEarnPointsSlabConfig();
                 List<SelectListItem> refferedname = new List<SelectListItem>();
 
                 SelectListItem item = new SelectListItem();
@@ -111,6 +114,9 @@ namespace WebApp.Controllers.OnBoarding
                     objData.bots_TblGroupMaster.CategoryData = json_serializer.Serialize(objData.objRetailList);
                     objData.bots_TblGroupMaster.PaymentScheduleData = json_serializer.Serialize(objData.objInstallmentList);
                 }
+                objData.lstearnpoint = FillEarnPointLevel();
+                objData.objpointsearnruleconfig = objpointsearncofig;
+                objData.objearnpointslab = objpointsslabconfig;
             }
             catch (Exception ex)
             {
@@ -628,6 +634,19 @@ namespace WebApp.Controllers.OnBoarding
             objData = OBR.GetDLCLinkData(groupId);
            
             return new JsonResult() { Data = objData, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
+        }
+
+        public List<EarnPointLevel> FillEarnPointLevel()
+        {
+            List<EarnPointLevel> lstearn = new List<EarnPointLevel>();
+
+            lstearn.Add(new EarnPointLevel { EarnPointLevelId = "invoiceamt", EarnPointLevelName = "Invoice Amount" });
+            lstearn.Add(new EarnPointLevel { EarnPointLevelId = "department", EarnPointLevelName = "Department" });
+            lstearn.Add(new EarnPointLevel { EarnPointLevelId = "product", EarnPointLevelName = "Product" });
+            lstearn.Add(new EarnPointLevel { EarnPointLevelId = "Category", EarnPointLevelName = "Category" });
+            lstearn.Add(new EarnPointLevel { EarnPointLevelId = "subcategory", EarnPointLevelName = "Sub Category" });
+            lstearn.Add(new EarnPointLevel { EarnPointLevelId = "brand", EarnPointLevelName = "Brand" });
+            return lstearn;
         }
     }
 }
