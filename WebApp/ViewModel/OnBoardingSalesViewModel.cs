@@ -79,5 +79,9 @@ namespace WebApp.ViewModel
             return new SelectListItem[2] { new SelectListItem() { Text = "% with", Value = "percentwith" }, new SelectListItem() { Text = "Fixed Percentage", Value = "fixedpercentage" } };
 
         }
+        public SelectListItem[] VelocityAction()
+        {
+            return new SelectListItem[3] { new SelectListItem() { Text = "Block Transaction", Value = "Block Transaction" }, new SelectListItem() { Text = "Report", Value = "Report" }, new SelectListItem() { Text = "Block Redeemption", Value = "Block Redeemption" } };
+        }
     }
-    }
+}

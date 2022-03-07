@@ -16,6 +16,7 @@ namespace BOTS_BL.Models
             : base("name=CommonDBContext")
         {
         }
+        public virtual DbSet<BOTS_TblVelocityChecksConfig> BOTS_TblVelocityChecksConfig { get; set; }
         public virtual DbSet<BOTS_TblDLCLinkConfig> BOTS_TblDLCLinkConfig { get; set; }
         public virtual DbSet<BOTS_TblEarnPointsSlabConfig> BOTS_TblEarnPointsSlabConfig { get; set; }
         public virtual DbSet<BOTS_TblPointsBurnRuleConfig> BOTS_TblPointsBurnRuleConfig { get; set; }

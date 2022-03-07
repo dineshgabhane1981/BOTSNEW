@@ -1,3 +1,270 @@
-﻿
+﻿@model WebApp.ViewModel.OnBoardingSalesViewModel
 
-<div>Velocity Checks</div>
+<h6><b>Based on Transaction Count</b></h6>
+<div class="col-md-12 col-lg-12" style="display:flex; border:1px solid grey; border-radius:10px;margin-bottom:20px;padding:20px;">
+
+    <div class="col-md-2 col-lg-2">
+        <div>
+            From <br /> <input type="text" id="txtTxnCountFrom1" class="input20" />
+        </div>
+        <div>
+            To <br /> <input type="text" id="txtTxnCountTo1" class="input20" />
+        </div>
+        <div>
+            Last Days <br /> <input type="text" id="txtTxnLastDays1" class="input20" />
+        </div>
+        <div>
+            Action <br /> @Html.DropDownListFor(x => Model.lstAllGroups.Count, new SelectList(Model.VelocityAction(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input20", @id = "ddlVelocityAction1" })
+        </div>
+    </div>
+    <div class="col-md-2 col-lg-2">
+        <div style="margin-left: 10px;">
+            From <br /> <input type="text" id="txtTxnCountFrom2" class="input20" />
+        </div>
+        <div style="margin-left: 10px;">
+            To <br /> <input type="text" id="txtTxnCountTo2" class="input20" />
+        </div>
+        <div style="margin-left: 10px;">
+            Last Days <br /> <input type="text" id="txtTxnLastDays2" class="input20" />
+        </div>
+        <div style="margin-left: 10px;">
+            Action <br /> @Html.DropDownListFor(x => Model.lstAllGroups.Count, new SelectList(Model.VelocityAction(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input20", @id = "ddlVelocityAction2" })
+        </div>
+    </div>
+    <div class="col-md-2 col-lg-2">
+        <div style="margin-left: 20px;">
+            From <br /> <input type="text" id="txtTxnCountFrom3" class="input20" />
+        </div>
+        <div style="margin-left: 20px;">
+            To <br /> <input type="text" id="txtTxnCountTo3" class="input20" />
+        </div>
+        <div style="margin-left: 20px;">
+            Last Days <br /> <input type="text" id="txtTxnLastDays3" class="input20" />
+        </div>
+        <div style="margin-left: 20px;">
+            Action <br /> @Html.DropDownListFor(x => Model.lstAllGroups.Count, new SelectList(Model.VelocityAction(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input20", @id = "ddlVelocityAction3" })
+        </div>
+    </div>
+    <div class="col-md-2 col-lg-2">
+        <div style="margin-left: 20px;">
+            From <br /> <input type="text" id="txtTxnCountFrom4" class="input20" />
+        </div>
+        <div style="margin-left: 20px;">
+            To <br /> <input type="text" id="txtTxnCountTo4" class="input20" />
+        </div>
+        <div style="margin-left: 20px;">
+            Last Days <br /> <input type="text" id="txtTxnLastDays4" class="input20" />
+        </div>
+        <div style="margin-left: 20px;">
+            Action <br /> @Html.DropDownListFor(x => Model.lstAllGroups.Count, new SelectList(Model.VelocityAction(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input20", @id = "ddlVelocityAction4" })
+        </div>
+    </div>
+    <div class="col-md-2 col-lg-2">
+        <div style="margin-left: 20px;">
+            From <br /> <input type="text" id="txtTxnCountFrom5" class="input20" />
+        </div>
+        <div style="margin-left: 20px;">
+            To <br /> <input type="text" id="txtTxnCountTo5" class="input20" />
+        </div>
+        <div style="margin-left: 20px;">
+            Last Days <br /> <input type="text" id="txtTxnLastDays5" class="input20" />
+        </div>
+        <div style="margin-left: 20px;">
+            Action <br /> @Html.DropDownListFor(x => Model.lstAllGroups.Count, new SelectList(Model.VelocityAction(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input20", @id = "ddlVelocityAction5" })
+        </div>
+    </div>
+    <div class="col-md-2 col-lg-2">
+        <div style="margin-left: 20px;">
+            From <br /> <input type="text" id="txtTxnCountFrom6" class="input20" />
+        </div>
+        <div style="margin-left: 20px;">
+            To <br /> <input type="text" id="txtTxnCountTo6" class="input20" />
+        </div>
+        <div style="margin-left: 20px;">
+            Last Days <br /> <input type="text" id="txtTxnLastDays6" class="input20" />
+        </div>
+        <div style="margin-left: 20px;">
+            Action <br /> @Html.DropDownListFor(x => Model.lstAllGroups.Count, new SelectList(Model.VelocityAction(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input20", @id = "ddlVelocityAction6" })
+        </div>
+    </div>
+</div>
+<h6>
+    <b>Based on INVOICE AMOUNT (CUMM)</b>
+</h6>
+<div class="col-md-12 col-lg-12" style="display:flex; border:1px solid grey; border-radius:10px;margin-bottom:20px;padding:20px;">
+
+    <div style="float:left;" class="col-md-2 col-lg-2">
+        <div style="margin-left: 10px;">
+            From <br /> <input type="text" id="txtIACFrom1" class="input20" />
+        </div>
+        <div style="margin-left: 10px;">
+            To <br /> <input type="text" id="txtIACTo1" class="input20" />
+        </div>
+        <div style="margin-left: 10px; ">
+            Last Days <br /> <input type="text" id="txtIACLastDays1" class="input20" />
+        </div>
+        <div style="margin-left: 10px; ">
+            Action <br /> @Html.DropDownListFor(x => Model.lstAllGroups.Count, new SelectList(Model.VelocityAction(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input20", @id = "ddlIACVelocityAction1" })
+        </div>
+    </div>
+    <div style="float:left;" class="col-md-2 col-lg-2">
+        <div style="margin-left: 20px;">
+            From <br /> <input type="text" id="txtIACFrom2" class="input20" />
+        </div>
+        <div style="margin-left: 20px; ">
+            To <br /> <input type="text" id="txtIACTo2" class="input20" />
+        </div>
+        <div style="margin-left: 20px; ">
+            Last Days <br /> <input type="text" id="txtIACLastDays2" class="input20" />
+        </div>
+        <div style="margin-left: 20px;">
+            Action <br /> @Html.DropDownListFor(x => Model.lstAllGroups.Count, new SelectList(Model.VelocityAction(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input20", @id = "ddlIACVelocityAction2" })
+        </div>
+    </div>
+    <div style="float:left;" class="col-md-2 col-lg-2">
+        <div style="margin-left: 20px; ">
+            From <br /> <input type="text" id="txtIACFrom3" class="input20" />
+        </div>
+        <div style="margin-left: 20px;">
+            To <br /> <input type="text" id="txtIACTo3" class="input20" />
+        </div>
+        <div style="margin-left: 20px;">
+            Last Days <br /> <input type="text" id="txtIACLastDays3" class="input20" />
+        </div>
+        <div style="margin-left: 20px; ">
+            Action <br /> @Html.DropDownListFor(x => Model.lstAllGroups.Count, new SelectList(Model.VelocityAction(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input20", @id = "ddlIACVelocityAction3" })
+        </div>
+    </div>
+    <div style="float:left;" class="col-md-2 col-lg-2">
+        <div style="margin-left: 20px; ">
+            From <br /> <input type="text" id="txtIACFrom4" class="input20" />
+        </div>
+        <div style="margin-left: 20px;">
+            To <br /> <input type="text" id="txtIACTo4" class="input20" />
+        </div>
+        <div style="margin-left: 20px;">
+            Last Days <br /> <input type="text" id="txtIACLastDays4" class="input20" />
+        </div>
+        <div style="margin-left: 20px; ">
+            Action <br /> @Html.DropDownListFor(x => Model.lstAllGroups.Count, new SelectList(Model.VelocityAction(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input20", @id = "ddlIACVelocityAction4" })
+        </div>
+    </div>
+    <div style="float:left;" class="col-md-2 col-lg-2">
+        <div style="margin-left: 20px; ">
+            From <br /> <input type="text" id="txtIACFrom5" class="input20" />
+        </div>
+        <div style="margin-left: 20px;">
+            To <br /> <input type="text" id="txtIACTo5" class="input20" />
+        </div>
+        <div style="margin-left: 20px;">
+            Last Days <br /> <input type="text" id="txtIACLastDays5" class="input20" />
+        </div>
+        <div style="margin-left: 20px; ">
+            Action <br /> @Html.DropDownListFor(x => Model.lstAllGroups.Count, new SelectList(Model.VelocityAction(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input20", @id = "ddlIACVelocityAction5" })
+        </div>
+    </div>
+    <div style="float:left;" class="col-md-2 col-lg-2">
+        <div style="margin-left: 20px; ">
+            From <br /> <input type="text" id="txtIACFrom6" class="input20" />
+        </div>
+        <div style="margin-left: 20px;">
+            To <br /> <input type="text" id="txtIACTo6" class="input20" />
+        </div>
+        <div style="margin-left: 20px;">
+            Last Days <br /> <input type="text" id="txtIACLastDays6" class="input20" />
+        </div>
+        <div style="margin-left: 20px; ">
+            Action <br /> @Html.DropDownListFor(x => Model.lstAllGroups.Count, new SelectList(Model.VelocityAction(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input20", @id = "ddlIACVelocityAction6" })
+        </div>
+    </div>
+</div>
+<h6><b>Based on INVOICE AMOUNT</b></h6>
+<div class="col-md-12 col-lg-12" style="display:flex; border:1px solid grey; border-radius:10px;margin-bottom:20px;padding:20px;">
+    
+    <div style="float:left;" class="col-md-4 col-lg-4">
+        <div style="margin-left: 20px;">
+            From <br /> <input type="text" id="txtIAFrom1" class="input20" />
+        </div>
+        <div style="margin-left: 20px;">
+            To <br /> <input type="text" id="txtIATo1" class="input20" />
+        </div>
+        <div style="margin-left: 20px;">
+            Last Days <br /> <input type="text" id="txtIALastDays1" class="input20" />
+        </div>
+        <div style="margin-left: 20px;">
+            Action <br /> @Html.DropDownListFor(x => Model.lstAllGroups.Count, new SelectList(Model.VelocityAction(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input20", @id = "ddlIAVelocityAction1" })
+        </div>
+    </div>
+    <div style="float:left;" class="col-md-4 col-lg-4">
+        <div style="margin-left: 20px;">
+            From <br /> <input type="text" id="txtIAFrom2" class="input20" />
+        </div>
+        <div style="margin-left: 20px;">
+            To <br /> <input type="text" id="txtIATo2" class="input20" />
+        </div>
+        <div style="margin-left: 20px;">
+            Last Days <br /> <input type="text" id="txtIALastDays2" class="input20" />
+        </div>
+        <div style="margin-left: 20px;">
+            Action <br /> @Html.DropDownListFor(x => Model.lstAllGroups.Count, new SelectList(Model.VelocityAction(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input20", @id = "ddlIAVelocityAction2" })
+        </div>
+    </div>
+    <div style="float: left;" class="col-md-4 col-lg-4">
+        <div style="margin-left: 20px;">
+            From <br /> <input type="text" id="txtIAFrom3" class="input20" />
+        </div>
+        <div style="margin-left: 20px;">
+            To <br /> <input type="text" id="txtIATo3" class="input20" />
+        </div>
+        <div style="margin-left: 20px;">
+            Last Days <br /> <input type="text" id="txtIALastDays3" class="input20" />
+        </div>
+        <div style="margin-left: 20px;">
+            Action <br /> @Html.DropDownListFor(x => Model.lstAllGroups.Count, new SelectList(Model.VelocityAction(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input20", @id = "ddlIAVelocityAction3" })
+        </div>
+    </div>
+</div>
+
+<div class="container-fluid pt-3 pl-3 pr-3 pb-3">
+    <button type="button" id="btnVelocityCheckSave" class="btn btn-primary pull-right" style="margin-right: 10px; margin-bottom: 20px;">Save</button>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $("#btnVelocityCheckSave").on("click", function () {
+            SaveVelocityCheckConfig();
+        });
+        //LoadExistingDLCLinkData();
+    });
+
+    function SaveVelocityCheckConfig() {
+        var TxnCountConfig = [];
+        
+        if ($("#txtTxnCountFrom1").val() != "") {
+            item = {}
+            item["From"] = $("#txtTxnCountFrom1").val();
+            item["To"] = $("#txtTxnCountTo1").val();
+            item["LastDays"] = $("#txtTxnLastDays1").val();
+            item["Action"] = $("#ddlVelocityAction1").val();
+            TxnCountConfig.push(item);
+        }
+        if ($("#txtTxnCountFrom2").val() != "") {
+            item = {}
+            item["From"] = $("#txtTxnCountFrom2").val();
+            item["To"] = $("#txtTxnCountTo2").val();
+            item["LastDays"] = $("#txtTxnLastDays2").val();
+            item["Action"] = $("#ddlVelocityAction2").val();
+            TxnCountConfig.push(item);
+        }
+        if ($("#txtTxnCountFrom3").val() != "") {
+            item = {}
+            item["From"] = $("#txtTxnCountFrom3").val();
+            item["To"] = $("#txtTxnCountTo3").val();
+            item["LastDays"] = $("#txtTxnLastDays3").val();
+            item["Action"] = $("#ddlVelocityAction3").val();
+            TxnCountConfig.push(item);
+        }
+        console.log(TxnCountConfig);
+
+    }
+</script>
