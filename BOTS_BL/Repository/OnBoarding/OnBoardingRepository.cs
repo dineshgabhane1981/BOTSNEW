@@ -15,6 +15,7 @@ using System.Data.Entity.Validation;
 using System.Net;
 using System.Web.Script.Serialization;
 using System.Configuration;
+using BOTS_BL.Models.OnBoarding;
 
 namespace BOTS_BL.Repository
 {
@@ -625,6 +626,56 @@ namespace BOTS_BL.Repository
             }
 
             return objData;
+        }
+
+        public bool AddEarnAndBurnRule(BOTS_TblPointsEarnRuleConfig earnrule,object[] slab,string slabType)
+        {
+            bool status = false;
+            try
+            {
+                using (var context = new CommonDBContext())
+                {
+                    BOTS_TblPointsEarnRuleConfig objpointearnburn = new BOTS_TblPointsEarnRuleConfig();
+                   
+                    objpointearnburn = earnrule;
+                   foreach(var item in slab)
+                    {
+                        BOTS_TblEarnPointsSlabConfig objslabearn = new BOTS_TblEarnPointsSlabConfig();
+                        string str = String.Join(",", item.ToString());
+                        string[] val1 = str.Split('-', (char)2);
+                        objslabearn.GroupId = earnrule.GroupId;
+                        objslabearn.BrandId = earnrule.BrandId;
+                        objslabearn.CategoryId = earnrule.CategoryId;
+                        objslabearn.SlabType = slabType;
+                       // objslabearn.EarnSlab
+                        if (slabType == "makingslabin%")
+                        {
+                            objslabearn.EarnPointSlabFromPercentage = Convert.ToDecimal(Convert.ToString(val1[0]));
+                            objslabearn.EarnPointSlabToPercentage = Convert.ToDecimal(Convert.ToString(val1[1]));
+                        }
+                        if(slabType == "makingslabinRs")
+                        {
+                            objslabearn.EarnPointSlabFromPercentage = Convert.ToDecimal(Convert.ToString(val1[0]));
+                            objslabearn.EarnPointSlabToPercentage = Convert.ToDecimal(Convert.ToString(val1[1]));
+
+                        }
+                        context.BOTS_TblEarnPointsSlabConfig.AddOrUpdate(objslabearn);
+                        context.SaveChanges();
+                    }
+
+                    context.BOTS_TblPointsEarnRuleConfig.AddOrUpdate(objpointearnburn);
+                    context.SaveChanges();
+                    status = true;
+                }
+
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "AddEarnBurnRule");
+            }
+
+
+            return status;
         }
 
     }

@@ -648,5 +648,65 @@ namespace WebApp.Controllers.OnBoarding
             lstearn.Add(new EarnPointLevel { EarnPointLevelId = "brand", EarnPointLevelName = "Brand" });
             return lstearn;
         }
+        
+        public ActionResult AddEarnRule(string EarnRule, string BlockOnearnrule)
+        {
+            OnBoardingSalesViewModel objdata = new OnBoardingSalesViewModel();
+            bool status = false;
+            try
+            {             
+
+                var userDetails = (CustomerLoginDetail)Session["UserSession"];
+                BOTS_TblPointsEarnRuleConfig objpointearn = new BOTS_TblPointsEarnRuleConfig();
+                JavaScriptSerializer json_serializer = new JavaScriptSerializer();
+                json_serializer.MaxJsonLength = int.MaxValue;
+                object[] objEarnrule = (object[])json_serializer.DeserializeObject(EarnRule);
+                object[] objBurnrule = (object[])json_serializer.DeserializeObject(BlockOnearnrule);
+                object[] slab = new object[20];
+                string slabtype="";
+                foreach (Dictionary<string, object> item in objEarnrule)
+                {
+                    objpointearn.CategoryId   = Convert.ToString(item["CategoryId"]);
+                    objpointearn.GroupId = Convert.ToString(item["Groupid"]);
+                    objpointearn.BrandId = Convert.ToString(item["brandid"]);
+                    objpointearn.OnePointValueInRs = Convert.ToDecimal(item["pointvalue"]);
+                    objpointearn.EarnPointLevel = Convert.ToString(item["earnlevel"]);
+                    objpointearn.EarnPointLevelType= Convert.ToString(item["jwlLevel"]);
+                    if (objpointearn.EarnPointLevelType == "Making")
+                    {
+                        objpointearn.EarnOnMaking = Convert.ToString(item["makingfixedorslab"]);
+                        if (objpointearn.EarnOnMaking == "makingFixed")
+                        {
+                            if (Convert.ToString(item["makingFixed%"]) != null)
+                                objpointearn.FixedEarnPointPecentageWith = Convert.ToDecimal(item["making%with"]);
+                            else
+                                objpointearn.FixedEarnPointPercentage = Convert.ToDecimal(item["makingFixed%"]);
+                        }
+                        else if (objpointearn.EarnOnMaking == "makingSlab")
+                        {
+                            slabtype = Convert.ToString(item["slabtype"]);
+                            slab = (object[])item["slab"];
+                        }
+                    }
+                    if (objpointearn.EarnPointLevelType == "FullAmount")
+                    {
+
+                    }
+                }
+                foreach (Dictionary<string, object> item in objBurnrule)
+                {
+                    objpointearn.BlockOnEarnType = Convert.ToString(item["Blockonearnrule"]);                   
+                    objpointearn.BlockOnInvoiceAmtMin = Convert.ToDecimal(item["Minvalofinvamt"]);
+                    objpointearn.BlockOnInvoiceAmtMax = Convert.ToDecimal(item["Maxvalofinvamt"]);
+                }
+                status = OBR.AddEarnAndBurnRule(objpointearn, slab, slabtype);
+
+            }
+            catch (Exception ex)
+            {
+
+            }
+            return new JsonResult() { Data = status, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
+        }
     }
 }
