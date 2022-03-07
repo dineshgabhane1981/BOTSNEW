@@ -470,82 +470,90 @@ namespace BOTS_BL.Repository
         public bool SaveCommunicationConfig(BOTS_TblSMSConfig objSMSData, BOTS_TblWAConfig objWAData)
         {
             bool status = false;
-            try
+
+            using (var context = new CommonDBContext())
             {
-                using (var context = new CommonDBContext())
+                using (DbContextTransaction transaction = context.Database.BeginTransaction())
                 {
-                    if (objSMSData.IsSMS)
+                    try
                     {
-                        if (objSMSData.BrandId == "All")
+                        if (objSMSData.IsSMS)
                         {
-                            var allBrandData = context.BOTS_TblSMSConfig.Where(x => x.BrandId != "All").ToList();
-                            foreach (var item in allBrandData)
+                            if (objSMSData.BrandId == "All")
                             {
-                                context.BOTS_TblSMSConfig.Remove(item);
-                                context.SaveChanges();
+                                var allBrandData = context.BOTS_TblSMSConfig.Where(x => x.BrandId != "All").ToList();
+                                foreach (var item in allBrandData)
+                                {
+                                    context.BOTS_TblSMSConfig.Remove(item);
+                                    context.SaveChanges();
+                                }
                             }
+                            else
+                            {
+                                var allBrandData = context.BOTS_TblSMSConfig.Where(x => x.BrandId == "All").ToList();
+                                foreach (var item in allBrandData)
+                                {
+                                    context.BOTS_TblSMSConfig.Remove(item);
+                                    context.SaveChanges();
+                                }
+                            }
+                            if (objSMSData.Id > 0)
+                            {
+                                var oldData = context.BOTS_TblSMSConfig.Where(x => x.Id == objSMSData.Id).FirstOrDefault();
+                                if (oldData != null)
+                                {
+                                    objSMSData.AddedBy = oldData.AddedBy;
+                                    objSMSData.AddedDate = oldData.AddedDate;
+                                }
+                            }
+                            context.BOTS_TblSMSConfig.AddOrUpdate(objSMSData);
+                            context.SaveChanges();
+                            status = true;
                         }
-                        else
+                        if (objWAData.IsWA)
                         {
-                            var allBrandData = context.BOTS_TblSMSConfig.Where(x => x.BrandId == "All").ToList();
-                            foreach (var item in allBrandData)
+                            if (objWAData.BrandId == "All")
                             {
-                                context.BOTS_TblSMSConfig.Remove(item);
-                                context.SaveChanges();
+                                var allBrandData = context.BOTS_TblWAConfig.Where(x => x.BrandId != "All").ToList();
+                                foreach (var item in allBrandData)
+                                {
+                                    context.BOTS_TblWAConfig.Remove(item);
+                                    context.SaveChanges();
+                                }
                             }
-                        }
-                        if (objSMSData.Id > 0)
-                        {
-                            var oldData = context.BOTS_TblSMSConfig.Where(x => x.Id == objSMSData.Id).FirstOrDefault();
-                            if (oldData != null)
+                            else
                             {
-                                objSMSData.AddedBy = oldData.AddedBy;
-                                objSMSData.AddedDate = oldData.AddedDate;
+                                var allBrandData = context.BOTS_TblWAConfig.Where(x => x.BrandId == "All").ToList();
+                                foreach (var item in allBrandData)
+                                {
+                                    context.BOTS_TblWAConfig.Remove(item);
+                                    context.SaveChanges();
+                                }
                             }
+                            if (objWAData.Id > 0)
+                            {
+                                var oldData = context.BOTS_TblWAConfig.Where(x => x.Id == objWAData.Id).FirstOrDefault();
+                                if (oldData != null)
+                                {
+                                    objWAData.AddedBy = oldData.AddedBy;
+                                    objWAData.AddedDate = oldData.AddedDate;
+                                }
+                            }
+                            context.BOTS_TblWAConfig.AddOrUpdate(objWAData);
+                            context.SaveChanges();
+                            status = true;
                         }
-                        context.BOTS_TblSMSConfig.AddOrUpdate(objSMSData);
-                        context.SaveChanges();
-                        status = true;
+
+                        transaction.Commit();
                     }
-                    if (objWAData.IsWA)
+                    catch (Exception ex)
                     {
-                        if (objWAData.BrandId == "All")
-                        {
-                            var allBrandData = context.BOTS_TblWAConfig.Where(x => x.BrandId != "All").ToList();
-                            foreach (var item in allBrandData)
-                            {
-                                context.BOTS_TblWAConfig.Remove(item);
-                                context.SaveChanges();
-                            }
-                        }
-                        else
-                        {
-                            var allBrandData = context.BOTS_TblWAConfig.Where(x => x.BrandId == "All").ToList();
-                            foreach (var item in allBrandData)
-                            {
-                                context.BOTS_TblWAConfig.Remove(item);
-                                context.SaveChanges();
-                            }
-                        }
-                        if (objWAData.Id > 0)
-                        {
-                            var oldData = context.BOTS_TblWAConfig.Where(x => x.Id == objWAData.Id).FirstOrDefault();
-                            if (oldData != null)
-                            {
-                                objWAData.AddedBy = oldData.AddedBy;
-                                objWAData.AddedDate = oldData.AddedDate;
-                            }
-                        }
-                        context.BOTS_TblWAConfig.AddOrUpdate(objWAData);
-                        context.SaveChanges();
-                        status = true;
+                        transaction.Rollback();
+                        newexception.AddException(ex, "SaveCommunicationConfig");
                     }
                 }
             }
-            catch (Exception ex)
-            {
-                newexception.AddException(ex, "SaveCommunicationConfig");
-            }
+
 
             return status;
         }
@@ -628,7 +636,7 @@ namespace BOTS_BL.Repository
             return objData;
         }
 
-        public bool AddEarnAndBurnRule(BOTS_TblPointsEarnRuleConfig earnrule,object[] slab,string slabType)
+        public bool AddEarnAndBurnRule(BOTS_TblPointsEarnRuleConfig earnrule, object[] slab, string slabType)
         {
             bool status = false;
             try
@@ -636,9 +644,9 @@ namespace BOTS_BL.Repository
                 using (var context = new CommonDBContext())
                 {
                     BOTS_TblPointsEarnRuleConfig objpointearnburn = new BOTS_TblPointsEarnRuleConfig();
-                   
+
                     objpointearnburn = earnrule;
-                   foreach(var item in slab)
+                    foreach (var item in slab)
                     {
                         BOTS_TblEarnPointsSlabConfig objslabearn = new BOTS_TblEarnPointsSlabConfig();
                         string str = String.Join(",", item.ToString());
@@ -647,13 +655,13 @@ namespace BOTS_BL.Repository
                         objslabearn.BrandId = earnrule.BrandId;
                         objslabearn.CategoryId = earnrule.CategoryId;
                         objslabearn.SlabType = slabType;
-                       // objslabearn.EarnSlab
+                        // objslabearn.EarnSlab
                         if (slabType == "makingslabin%")
                         {
                             objslabearn.EarnPointSlabFromPercentage = Convert.ToDecimal(Convert.ToString(val1[0]));
                             objslabearn.EarnPointSlabToPercentage = Convert.ToDecimal(Convert.ToString(val1[1]));
                         }
-                        if(slabType == "makingslabinRs")
+                        if (slabType == "makingslabinRs")
                         {
                             objslabearn.EarnPointSlabFromPercentage = Convert.ToDecimal(Convert.ToString(val1[0]));
                             objslabearn.EarnPointSlabToPercentage = Convert.ToDecimal(Convert.ToString(val1[1]));
@@ -678,5 +686,49 @@ namespace BOTS_BL.Repository
             return status;
         }
 
+        public bool SaveVelocityCheckConfig(List<BOTS_TblVelocityChecksConfig> lstVelocityCheck,string groupId)
+        {
+            bool status = false;
+            using (var context = new CommonDBContext())
+            {
+                using (DbContextTransaction transaction = context.Database.BeginTransaction())
+                {
+                    try
+                    {
+                        var oldData = context.BOTS_TblVelocityChecksConfig.Where(x => x.GroupId == groupId).ToList();
+                        foreach(var item in oldData)
+                        {
+                            context.BOTS_TblVelocityChecksConfig.Remove(item);
+                            context.SaveChanges();
+                        }
+                        foreach (var item in lstVelocityCheck)
+                        {
+                            context.BOTS_TblVelocityChecksConfig.AddOrUpdate(item);
+                            context.SaveChanges();
+                            status = true;
+                        }
+                        transaction.Commit();
+                    }
+                    catch (Exception ex)
+                    {
+                        transaction.Rollback();
+                        newexception.AddException(ex, "SaveVelocityCheckConfig");
+                    }
+                }
+            }
+
+            return status;
+        }
+
+        public List<BOTS_TblVelocityChecksConfig> GetVelocityChecksData(string groupId)
+        {
+            List<BOTS_TblVelocityChecksConfig> objData = new List<BOTS_TblVelocityChecksConfig>();
+            using (var context = new CommonDBContext())
+            {
+                objData = context.BOTS_TblVelocityChecksConfig.Where(x => x.GroupId == groupId).OrderBy(y => y.VelocityType).ToList();
+            }
+
+            return objData;
+        }
     }
 }

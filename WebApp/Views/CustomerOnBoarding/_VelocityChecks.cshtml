@@ -180,8 +180,8 @@
 </div>
 <h6><b>Based on INVOICE AMOUNT</b></h6>
 <div class="col-md-12 col-lg-12" style="display:flex; border:1px solid grey; border-radius:10px;margin-bottom:20px;padding:20px;">
-    
-    <div style="float:left;" class="col-md-4 col-lg-4">
+
+    <div style="float:left;" class="col-md-2 col-lg-2">
         <div style="margin-left: 20px;">
             From <br /> <input type="text" id="txtIAFrom1" class="input20" />
         </div>
@@ -195,7 +195,7 @@
             Action <br /> @Html.DropDownListFor(x => Model.lstAllGroups.Count, new SelectList(Model.VelocityAction(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input20", @id = "ddlIAVelocityAction1" })
         </div>
     </div>
-    <div style="float:left;" class="col-md-4 col-lg-4">
+    <div style="float:left;" class="col-md-2 col-lg-2">
         <div style="margin-left: 20px;">
             From <br /> <input type="text" id="txtIAFrom2" class="input20" />
         </div>
@@ -209,7 +209,7 @@
             Action <br /> @Html.DropDownListFor(x => Model.lstAllGroups.Count, new SelectList(Model.VelocityAction(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input20", @id = "ddlIAVelocityAction2" })
         </div>
     </div>
-    <div style="float: left;" class="col-md-4 col-lg-4">
+    <div style="float: left;" class="col-md-2 col-lg-2">
         <div style="margin-left: 20px;">
             From <br /> <input type="text" id="txtIAFrom3" class="input20" />
         </div>
@@ -223,6 +223,48 @@
             Action <br /> @Html.DropDownListFor(x => Model.lstAllGroups.Count, new SelectList(Model.VelocityAction(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input20", @id = "ddlIAVelocityAction3" })
         </div>
     </div>
+    <div style="float: left;" class="col-md-2 col-lg-2">
+        <div style="margin-left: 20px;">
+            From <br /> <input type="text" id="txtIAFrom4" class="input20" />
+        </div>
+        <div style="margin-left: 20px;">
+            To <br /> <input type="text" id="txtIATo4" class="input20" />
+        </div>
+        <div style="margin-left: 20px;">
+            Last Days <br /> <input type="text" id="txtIALastDays4" class="input20" />
+        </div>
+        <div style="margin-left: 20px;">
+            Action <br /> @Html.DropDownListFor(x => Model.lstAllGroups.Count, new SelectList(Model.VelocityAction(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input20", @id = "ddlIAVelocityAction4" })
+        </div>
+    </div>
+    <div style="float: left;" class="col-md-2 col-lg-2">
+        <div style="margin-left: 20px;">
+            From <br /> <input type="text" id="txtIAFrom5" class="input20" />
+        </div>
+        <div style="margin-left: 20px;">
+            To <br /> <input type="text" id="txtIATo5" class="input20" />
+        </div>
+        <div style="margin-left: 20px;">
+            Last Days <br /> <input type="text" id="txtIALastDays5" class="input20" />
+        </div>
+        <div style="margin-left: 20px;">
+            Action <br /> @Html.DropDownListFor(x => Model.lstAllGroups.Count, new SelectList(Model.VelocityAction(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input20", @id = "ddlIAVelocityAction5" })
+        </div>
+    </div>
+    <div style="float: left;" class="col-md-2 col-lg-2">
+        <div style="margin-left: 20px;">
+            From <br /> <input type="text" id="txtIAFrom6" class="input20" />
+        </div>
+        <div style="margin-left: 20px;">
+            To <br /> <input type="text" id="txtIATo6" class="input20" />
+        </div>
+        <div style="margin-left: 20px;">
+            Last Days <br /> <input type="text" id="txtIALastDays6" class="input20" />
+        </div>
+        <div style="margin-left: 20px;">
+            Action <br /> @Html.DropDownListFor(x => Model.lstAllGroups.Count, new SelectList(Model.VelocityAction(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input20", @id = "ddlIAVelocityAction6" })
+        </div>
+    </div>
 </div>
 
 <div class="container-fluid pt-3 pl-3 pr-3 pb-3">
@@ -234,14 +276,65 @@
         $("#btnVelocityCheckSave").on("click", function () {
             SaveVelocityCheckConfig();
         });
-        //LoadExistingDLCLinkData();
+        LoadExistingVelocityCheckData();
     });
 
     function SaveVelocityCheckConfig() {
+        var VelocityCheckConfig = [];
+        item1 = {}
+
+        var TxnCountConfigReturn = GetTxnCountConfig();
+        var IACConfigReturn = GetIACConfig();
+        var IAConfigReturn = GetIAConfig();
+        item1["TxnCountConfig"] = TxnCountConfigReturn;
+        item1["IACConfig"] = IACConfigReturn;
+        item1["IAConfig"] = IAConfigReturn;
+
+        VelocityCheckConfig.push(item1);
+        var VelocityCheckData = JSON.stringify(VelocityCheckConfig);
+        console.log(VelocityCheckConfig);
+
+         $("#divLoader").show();
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("SaveVelocityCheckConfig", "CustomerOnBoarding")',
+                data: '{jsonData: ' + JSON.stringify(VelocityCheckData) + '}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (result) {
+                    console.log(result)
+                    if (result == true) {
+                        cuteAlert({
+                            type: "success",
+                            title: "Saved..",
+                            message: "Velocity Check Data Saved Successfully!",
+                            buttonText: "Okay"
+                        })
+                    }
+                    else {
+                        cuteAlert({
+                            type: "error",
+                            title: "Oops..",
+                            message: "There is some problem while saving DLC Link Data",
+                            buttonText: "Okay"
+                        })
+                    }
+                    $("#divLoader").hide();
+                },
+                error: function (result) {
+                    console.log(2222)
+                    console.log(result.responseText)
+                    $("#divLoader").hide();
+                }
+            });
+
+    }
+
+    function GetTxnCountConfig() {
         var TxnCountConfig = [];
-        
         if ($("#txtTxnCountFrom1").val() != "") {
             item = {}
+            item["GroupId"] = $('#hdnGroupID').val();
             item["From"] = $("#txtTxnCountFrom1").val();
             item["To"] = $("#txtTxnCountTo1").val();
             item["LastDays"] = $("#txtTxnLastDays1").val();
@@ -250,6 +343,7 @@
         }
         if ($("#txtTxnCountFrom2").val() != "") {
             item = {}
+            item["GroupId"] = $('#hdnGroupID').val();
             item["From"] = $("#txtTxnCountFrom2").val();
             item["To"] = $("#txtTxnCountTo2").val();
             item["LastDays"] = $("#txtTxnLastDays2").val();
@@ -258,13 +352,207 @@
         }
         if ($("#txtTxnCountFrom3").val() != "") {
             item = {}
+            item["GroupId"] = $('#hdnGroupID').val();
             item["From"] = $("#txtTxnCountFrom3").val();
             item["To"] = $("#txtTxnCountTo3").val();
             item["LastDays"] = $("#txtTxnLastDays3").val();
             item["Action"] = $("#ddlVelocityAction3").val();
             TxnCountConfig.push(item);
         }
-        console.log(TxnCountConfig);
+        if ($("#txtTxnCountFrom4").val() != "") {
+            item = {}
+            item["GroupId"] = $('#hdnGroupID').val();
+            item["From"] = $("#txtTxnCountFrom4").val();
+            item["To"] = $("#txtTxnCountTo4").val();
+            item["LastDays"] = $("#txtTxnLastDays4").val();
+            item["Action"] = $("#ddlVelocityAction4").val();
+            TxnCountConfig.push(item);
+        }
+        if ($("#txtTxnCountFrom5").val() != "") {
+            item = {}
+            item["GroupId"] = $('#hdnGroupID').val();
+            item["From"] = $("#txtTxnCountFrom5").val();
+            item["To"] = $("#txtTxnCountTo5").val();
+            item["LastDays"] = $("#txtTxnLastDays5").val();
+            item["Action"] = $("#ddlVelocityAction5").val();
+            TxnCountConfig.push(item);
+        }
+        if ($("#txtTxnCountFrom6").val() != "") {
+            item = {}
+            item["GroupId"] = $('#hdnGroupID').val();
+            item["From"] = $("#txtTxnCountFrom6").val();
+            item["To"] = $("#txtTxnCountTo6").val();
+            item["LastDays"] = $("#txtTxnLastDays6").val();
+            item["Action"] = $("#ddlVelocityAction6").val();
+            TxnCountConfig.push(item);
+        }
+        return TxnCountConfig;
+    }
 
+    function GetIACConfig() {
+        var IACConfig = [];
+        if ($("#txtIACFrom1").val() != "") {
+            item = {}
+            item["GroupId"] = $('#hdnGroupID').val();
+            item["From"] = $("#txtIACFrom1").val();
+            item["To"] = $("#txtIACTo1").val();
+            item["LastDays"] = $("#txtIACLastDays1").val();
+            item["Action"] = $("#ddlIACVelocityAction1").val();
+            IACConfig.push(item);
+        }
+        if ($("#txtIACFrom2").val() != "") {
+            item = {}
+            item["GroupId"] = $('#hdnGroupID').val();
+            item["From"] = $("#txtIACFrom2").val();
+            item["To"] = $("#txtIACTo2").val();
+            item["LastDays"] = $("#txtIACLastDays2").val();
+            item["Action"] = $("#ddlIACVelocityAction2").val();
+            IACConfig.push(item);
+        }
+        if ($("#txtIACFrom3").val() != "") {
+            item = {}
+            item["GroupId"] = $('#hdnGroupID').val();
+            item["From"] = $("#txtIACFrom3").val();
+            item["To"] = $("#txtIACTo3").val();
+            item["LastDays"] = $("#txtIACLastDays3").val();
+            item["Action"] = $("#ddlIACVelocityAction3").val();
+            IACConfig.push(item);
+        }
+        if ($("#txtIACFrom4").val() != "") {
+            item = {}
+            item["GroupId"] = $('#hdnGroupID').val();
+            item["From"] = $("#txtIACFrom4").val();
+            item["To"] = $("#txtIACTo4").val();
+            item["LastDays"] = $("#txtIACLastDays4").val();
+            item["Action"] = $("#ddlIACVelocityAction4").val();
+            IACConfig.push(item);
+        }
+        if ($("#txtIACFrom5").val() != "") {
+            item = {}
+            item["GroupId"] = $('#hdnGroupID').val();
+            item["From"] = $("#txtIACFrom5").val();
+            item["To"] = $("#txtIACTo5").val();
+            item["LastDays"] = $("#txtIACLastDays5").val();
+            item["Action"] = $("#ddlIACVelocityAction5").val();
+            IACConfig.push(item);
+        }
+        if ($("#txtIACFrom6").val() != "") {
+            item = {}
+            item["GroupId"] = $('#hdnGroupID').val();
+            item["From"] = $("#txtIACFrom6").val();
+            item["To"] = $("#txtIACTo6").val();
+            item["LastDays"] = $("#txtIACLastDays6").val();
+            item["Action"] = $("#ddlIACVelocityAction6").val();
+            IACConfig.push(item);
+        }
+        return IACConfig;
+    }
+
+    function GetIAConfig() {
+        var IAConfig = [];
+        if ($("#txtIAFrom1").val() != "") {
+            item = {}
+            item["GroupId"] = $('#hdnGroupID').val();
+            item["From"] = $("#txtIAFrom1").val();
+            item["To"] = $("#txtIATo1").val();
+            item["LastDays"] = $("#txtIALastDays1").val();
+            item["Action"] = $("#ddlIAVelocityAction1").val();
+            IAConfig.push(item);
+        }
+        if ($("#txtIAFrom2").val() != "") {
+            item = {}
+            item["GroupId"] = $('#hdnGroupID').val();
+            item["From"] = $("#txtIAFrom2").val();
+            item["To"] = $("#txtIATo2").val();
+            item["LastDays"] = $("#txtIALastDays2").val();
+            item["Action"] = $("#ddlIAVelocityAction2").val();
+            IAConfig.push(item);
+        }
+        if ($("#txtIAFrom3").val() != "") {
+            item = {}
+            item["GroupId"] = $('#hdnGroupID').val();
+            item["From"] = $("#txtIAFrom3").val();
+            item["To"] = $("#txtIATo3").val();
+            item["LastDays"] = $("#txtIALastDays3").val();
+            item["Action"] = $("#ddlIAVelocityAction3").val();
+            IAConfig.push(item);
+        }
+        if ($("#txtIAFrom4").val() != "") {
+            item = {}
+            item["GroupId"] = $('#hdnGroupID').val();
+            item["From"] = $("#txtIAFrom4").val();
+            item["To"] = $("#txtIATo4").val();
+            item["LastDays"] = $("#txtIALastDays4").val();
+            item["Action"] = $("#ddlIAVelocityAction4").val();
+            IAConfig.push(item);
+        }
+        if ($("#txtIAFrom5").val() != "") {
+            item = {}
+            item["GroupId"] = $('#hdnGroupID').val();
+            item["From"] = $("#txtIAFrom5").val();
+            item["To"] = $("#txtIATo5").val();
+            item["LastDays"] = $("#txtIALastDays5").val();
+            item["Action"] = $("#ddlIAVelocityAction5").val();
+            IAConfig.push(item);
+        }
+        if ($("#txtIAFrom6").val() != "") {
+            item = {}
+            item["GroupId"] = $('#hdnGroupID').val();
+            item["From"] = $("#txtIAFrom6").val();
+            item["To"] = $("#txtIATo6").val();
+            item["LastDays"] = $("#txtIALastDays6").val();
+            item["Action"] = $("#ddlIAVelocityAction6").val();
+            IAConfig.push(item);
+        }
+        return IAConfig;
+    }
+
+    function LoadExistingVelocityCheckData() {
+        $("#divLoader").show();
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("GetVelocityCheckData", "CustomerOnBoarding")',
+                data: '{groupId: ' + JSON.stringify($('#hdnGroupID').val()) + '}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (result) {
+                    LoadVelocityCheckControls(result);
+                    $("#divLoader").hide();
+
+                },
+                error: function (result) {
+                    $("#divLoader").hide();
+                }
+            });
+    }
+
+    function LoadVelocityCheckControls(data) {
+        console.log(data);
+        var TxnCount = 1;
+        var IACCount = 1;
+        var IACount = 1;
+        $.each(data, function (index, item) {
+            if (item.VelocityType == 1) {
+                $("#txtTxnCountFrom" + TxnCount).val(item.CountFrom)
+                $("#txtTxnCountTo" + TxnCount).val(item.CountTo)
+                $("#txtTxnLastDays" + TxnCount).val(item.LastDays)
+                $("#ddlVelocityAction" + TxnCount).val(item.Action)
+                TxnCount++;
+            }
+            if (item.VelocityType == 2) {
+                $("#txtIACFrom" + IACCount).val(item.CountFrom)
+                $("#txtIACTo" + IACCount).val(item.CountTo)
+                $("#txtIACLastDays" + IACCount).val(item.LastDays)
+                $("#ddlIACVelocityAction" + IACCount).val(item.Action)
+                IACCount++;
+            }
+            if (item.VelocityType == 3) {
+                $("#txtIAFrom" + IACount).val(item.CountFrom)
+                $("#txtIATo" + IACount).val(item.CountTo)
+                $("#txtIALastDays" + IACount).val(item.LastDays)
+                $("#ddlIAVelocityAction" + IACount).val(item.Action)
+                IACount++;
+            }
+        });
     }
 </script>

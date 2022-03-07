@@ -591,9 +591,9 @@ namespace WebApp.Controllers.OnBoarding
                 BOTS_TblDLCLinkConfig objDLCLink = new BOTS_TblDLCLinkConfig();
                 foreach (Dictionary<string, object> item in objDLCConfigData)
                 {
-                    if(!string.IsNullOrEmpty(Convert.ToString(item["Id"])))
+                    if (!string.IsNullOrEmpty(Convert.ToString(item["Id"])))
                     {
-                        objDLCLink.Id= Convert.ToInt32(item["Id"]);
+                        objDLCLink.Id = Convert.ToInt32(item["Id"]);
                     }
                     objDLCLink.GroupId = Convert.ToString(item["GroupId"]);
                     objDLCLink.ProfileUpdatePoints = Convert.ToInt32(item["ProfileUpdatePoints"]);
@@ -608,7 +608,7 @@ namespace WebApp.Controllers.OnBoarding
                     objDLCLink.ToTheReferralWAScript = Convert.ToString(item["WAToTheReferral"]);
                     objDLCLink.ReminderForPointsUsageWAScript = Convert.ToString(item["WAReminderForPointsUsage"]);
                     objDLCLink.ReferredSuccessOnReferralTxnWAScript = Convert.ToString(item["WAReferredSuccessOnReferralTxn"]);
-                    if(objDLCLink.Id>0)
+                    if (objDLCLink.Id > 0)
                     {
                         objDLCLink.UpdatedBy = userDetails.LoginId;
                         objDLCLink.UpdatedDate = DateTime.Now;
@@ -632,7 +632,7 @@ namespace WebApp.Controllers.OnBoarding
         {
             BOTS_TblDLCLinkConfig objData = new BOTS_TblDLCLinkConfig();
             objData = OBR.GetDLCLinkData(groupId);
-           
+
             return new JsonResult() { Data = objData, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
 
@@ -648,13 +648,13 @@ namespace WebApp.Controllers.OnBoarding
             lstearn.Add(new EarnPointLevel { EarnPointLevelId = "brand", EarnPointLevelName = "Brand" });
             return lstearn;
         }
-        
+
         public ActionResult AddEarnRule(string EarnRule, string BlockOnearnrule)
         {
             OnBoardingSalesViewModel objdata = new OnBoardingSalesViewModel();
             bool status = false;
             try
-            {             
+            {
 
                 var userDetails = (CustomerLoginDetail)Session["UserSession"];
                 BOTS_TblPointsEarnRuleConfig objpointearn = new BOTS_TblPointsEarnRuleConfig();
@@ -663,15 +663,15 @@ namespace WebApp.Controllers.OnBoarding
                 object[] objEarnrule = (object[])json_serializer.DeserializeObject(EarnRule);
                 object[] objBurnrule = (object[])json_serializer.DeserializeObject(BlockOnearnrule);
                 object[] slab = new object[20];
-                string slabtype="";
+                string slabtype = "";
                 foreach (Dictionary<string, object> item in objEarnrule)
                 {
-                    objpointearn.CategoryId   = Convert.ToString(item["CategoryId"]);
+                    objpointearn.CategoryId = Convert.ToString(item["CategoryId"]);
                     objpointearn.GroupId = Convert.ToString(item["Groupid"]);
                     objpointearn.BrandId = Convert.ToString(item["brandid"]);
                     objpointearn.OnePointValueInRs = Convert.ToDecimal(item["pointvalue"]);
                     objpointearn.EarnPointLevel = Convert.ToString(item["earnlevel"]);
-                    objpointearn.EarnPointLevelType= Convert.ToString(item["jwlLevel"]);
+                    objpointearn.EarnPointLevelType = Convert.ToString(item["jwlLevel"]);
                     if (objpointearn.EarnPointLevelType == "Making")
                     {
                         objpointearn.EarnOnMaking = Convert.ToString(item["makingfixedorslab"]);
@@ -695,7 +695,7 @@ namespace WebApp.Controllers.OnBoarding
                 }
                 foreach (Dictionary<string, object> item in objBurnrule)
                 {
-                    objpointearn.BlockOnEarnType = Convert.ToString(item["Blockonearnrule"]);                   
+                    objpointearn.BlockOnEarnType = Convert.ToString(item["Blockonearnrule"]);
                     objpointearn.BlockOnInvoiceAmtMin = Convert.ToDecimal(item["Minvalofinvamt"]);
                     objpointearn.BlockOnInvoiceAmtMax = Convert.ToDecimal(item["Maxvalofinvamt"]);
                 }
@@ -707,6 +707,107 @@ namespace WebApp.Controllers.OnBoarding
 
             }
             return new JsonResult() { Data = status, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
+        }
+
+
+        public ActionResult SaveVelocityCheckConfig(string jsonData)
+        {
+            bool status = false;
+            try
+            {
+                string groupId = string.Empty;
+                var userDetails = (CustomerLoginDetail)Session["UserSession"];
+                JavaScriptSerializer json_serializer = new JavaScriptSerializer();
+                json_serializer.MaxJsonLength = int.MaxValue;
+                object[] objVelocityChecksConfigData = (object[])json_serializer.DeserializeObject(jsonData);
+                List<BOTS_TblVelocityChecksConfig> objData = new List<BOTS_TblVelocityChecksConfig>();
+                foreach (Dictionary<string, object> item in objVelocityChecksConfigData)
+                {
+                    var TxnCountConfig = (object[])item["TxnCountConfig"];
+                    var IACConfig = (object[])item["IACConfig"];
+                    var IAConfig = (object[])item["IAConfig"];
+                    foreach (Dictionary<string, object> item1 in TxnCountConfig)
+                    {
+                        BOTS_TblVelocityChecksConfig objItem = new BOTS_TblVelocityChecksConfig();
+                        objItem.GroupId= Convert.ToString(item1["GroupId"]);
+                        groupId= Convert.ToString(item1["GroupId"]);
+                        objItem.VelocityType = 1;
+                        objItem.CountFrom= Convert.ToInt32(item1["From"]);
+                        objItem.CountTo = Convert.ToInt32(item1["To"]);
+                        objItem.LastDays = Convert.ToInt32(item1["LastDays"]);
+                        objItem.Action = Convert.ToString(item1["Action"]);
+                        if (objItem.Id > 0)
+                        {
+                            objItem.UpdatedBy = userDetails.LoginId;
+                            objItem.UpdatedDate = DateTime.Now;
+                        }
+                        else
+                        {
+                            objItem.AddedBy = userDetails.LoginId;
+                            objItem.AddedDate = DateTime.Now;
+                        }
+                        objData.Add(objItem);
+                    }
+                    foreach (Dictionary<string, object> item1 in IACConfig)
+                    {
+                        BOTS_TblVelocityChecksConfig objItem = new BOTS_TblVelocityChecksConfig();
+                        objItem.GroupId = Convert.ToString(item1["GroupId"]);
+                        groupId = Convert.ToString(item1["GroupId"]);
+                        objItem.VelocityType = 2;
+                        objItem.CountFrom = Convert.ToInt32(item1["From"]);
+                        objItem.CountTo = Convert.ToInt32(item1["To"]);
+                        objItem.LastDays = Convert.ToInt32(item1["LastDays"]);
+                        objItem.Action = Convert.ToString(item1["Action"]);
+                        if (objItem.Id > 0)
+                        {
+                            objItem.UpdatedBy = userDetails.LoginId;
+                            objItem.UpdatedDate = DateTime.Now;
+                        }
+                        else
+                        {
+                            objItem.AddedBy = userDetails.LoginId;
+                            objItem.AddedDate = DateTime.Now;
+                        }
+                        objData.Add(objItem);
+                    }
+                    foreach (Dictionary<string, object> item1 in IAConfig)
+                    {
+                        BOTS_TblVelocityChecksConfig objItem = new BOTS_TblVelocityChecksConfig();
+                        objItem.GroupId = Convert.ToString(item1["GroupId"]);
+                        groupId = Convert.ToString(item1["GroupId"]);
+                        objItem.VelocityType = 3;
+                        objItem.CountFrom = Convert.ToInt32(item1["From"]);
+                        objItem.CountTo = Convert.ToInt32(item1["To"]);
+                        objItem.LastDays = Convert.ToInt32(item1["LastDays"]);
+                        objItem.Action = Convert.ToString(item1["Action"]);
+                        if (objItem.Id > 0)
+                        {
+                            objItem.UpdatedBy = userDetails.LoginId;
+                            objItem.UpdatedDate = DateTime.Now;
+                        }
+                        else
+                        {
+                            objItem.AddedBy = userDetails.LoginId;
+                            objItem.AddedDate = DateTime.Now;
+                        }
+                        objData.Add(objItem);
+                    }
+                }
+                status = OBR.SaveVelocityCheckConfig(objData, groupId);
+            }
+            catch (Exception ex)
+            {
+
+            }
+            return new JsonResult() { Data = status, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
+        }
+
+        public JsonResult GetVelocityCheckData(string groupId)
+        {
+            List<BOTS_TblVelocityChecksConfig> objData = new List<BOTS_TblVelocityChecksConfig>();
+            objData = OBR.GetVelocityChecksData(groupId);
+
+            return new JsonResult() { Data = objData, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
     }
 }

@@ -9,12 +9,16 @@ namespace BOTS_BL.Models.OnBoarding
     public partial class BOTS_TblVelocityChecksConfig
     {
         public int Id { get; set; }
+        
+        [Required]
+        [StringLength(50)]
+        public string GroupId { get; set; }
 
         public int VelocityType { get; set; }
 
-        public int? TxnCountFrom { get; set; }
+        public int? CountFrom { get; set; }
 
-        public int? TxnCountTo { get; set; }
+        public int? CountTo { get; set; }
 
         public int? LastDays { get; set; }
 
