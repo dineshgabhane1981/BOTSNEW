@@ -1,3 +1,79 @@
 ﻿
 
-<div>Customer Upload / Product Upload</div>
+<div style="margin-top:20px;">
+    <input type="radio" name="bulkupload" id="rbtnCustUpload" /> Customer Upload
+    <input type="radio" name="bulkupload" id="rbtnProductUpload" /> Product Upload
+</div>
+<div style="margin-top:20px;">
+    <input type="file" id="FileUpload1" />
+    <input type="button" id="btnUpload" value="Upload Data" />
+</div>
+
+<script>
+    $(document).ready(function () {
+        $("#btnUpload").on("click", function () {
+            UploadData();
+        });
+    });
+
+    function UploadData() {
+        if ($("#rbtnCustUpload").prop("checked") || $("#rbtnProductUpload").prop("checked")) {
+            if (window.FormData !== undefined) {
+                var fileUpload = $("#FileUpload1").get(0);
+
+                var files = fileUpload.files;
+                if (files.length > 0) {
+                    var fileData = new FormData();
+                    for (var i = 0; i < files.length; i++) {
+                        fileData.append(files[i].name, files[i]);
+                    }
+                    fileData.append("groupId", $('#hdnGroupID').val());
+                    if ($("#rbtnCustUpload").prop("checked")) {
+                        $.ajax({
+                            url: '@Url.Action("UploadCustomers", "CustomerOnBoarding")',
+                            type: "POST",
+                            contentType: false, // Not to set any content header
+                            processData: false, // Not to process data
+                            data: fileData,
+                            success: function (result) {
+                                cuteAlert({
+                                    type: "error",
+                                    title: "Oops..",
+                                    message: "Data Uploaded Successfully!",
+                                    buttonText: "Okay"
+                                })
+                                //alert(result);
+                            },
+                            error: function (err) {
+                                cuteAlert({
+                                    type: "error",
+                                    title: "Oops..",
+                                    message: "There is some problem in uploading data",
+                                    buttonText: "Okay"
+                                })
+                                //alert(err.statusText);
+                            }
+                        });
+                    }
+
+                }
+                else {
+                    cuteAlert({
+                        type: "error",
+                        title: "Oops..",
+                        message: "Please select file to upload",
+                        buttonText: "Okay"
+                    })
+                }
+            }
+        }
+        else {
+            cuteAlert({
+                type: "error",
+                title: "Oops..",
+                message: "Please select Upload Type",
+                buttonText: "Okay"
+            })
+        }
+    }
+</script>

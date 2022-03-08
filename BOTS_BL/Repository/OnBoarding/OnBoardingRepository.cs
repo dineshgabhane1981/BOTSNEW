@@ -16,6 +16,7 @@ using System.Net;
 using System.Web.Script.Serialization;
 using System.Configuration;
 using BOTS_BL.Models.OnBoarding;
+using System.Data;
 
 namespace BOTS_BL.Repository
 {
@@ -730,5 +731,40 @@ namespace BOTS_BL.Repository
 
             return objData;
         }
+    
+        public bool BulkInsert(DataTable dt)
+        {
+            bool status = false;
+            var conStr= ConfigurationManager.ConnectionStrings["CommonDBContext"].ToString();
+
+            SqlConnection con = new SqlConnection(conStr);            
+            SqlBulkCopy objbulk = new SqlBulkCopy(con);           
+            objbulk.DestinationTableName = "BOTS_TblBulkUpload";
+
+            objbulk.ColumnMappings.Add("GroupId", "GroupId");
+            objbulk.ColumnMappings.Add("CustId", "CustId");
+            objbulk.ColumnMappings.Add("CustName", "CustName");
+            objbulk.ColumnMappings.Add("MobileNo", "MobileNo");
+            objbulk.ColumnMappings.Add("OutletId", "OutletId");
+            objbulk.ColumnMappings.Add("Gender", "Gender");
+            objbulk.ColumnMappings.Add("Status", "Status");
+            objbulk.ColumnMappings.Add("DOB", "DOB");
+            objbulk.ColumnMappings.Add("AOB", "AOB");
+            objbulk.ColumnMappings.Add("EmailId", "EmailId");
+            objbulk.ColumnMappings.Add("City", "City");
+            objbulk.ColumnMappings.Add("Area", "Area");
+            objbulk.ColumnMappings.Add("CustomerCategory", "CustomerCategory");
+            objbulk.ColumnMappings.Add("CardNo", "CardNo");
+            objbulk.ColumnMappings.Add("Points", "Points");
+
+            con.Open();            
+            objbulk.WriteToServer(dt);
+            con.Close();
+
+
+            return status;
+        }
+    
+    
     }
 }

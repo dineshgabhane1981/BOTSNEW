@@ -30,7 +30,7 @@ namespace BOTS_BL.Models.OnBoarding
         [StringLength(50)]
         public string Gender { get; set; }
 
-        public bool? Status { get; set; }
+        public string Status { get; set; }
 
         [StringLength(50)]
         public string DOB { get; set; }

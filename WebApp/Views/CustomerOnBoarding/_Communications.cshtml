@@ -355,7 +355,7 @@
     }
     function BindSMSValues(data) {
         if (data != null) {
-            console.log(data)
+            //console.log(data)
             $("#hdnCommSMSConfigId").val(data.Id);
             if (data.SMSProvider != "0" && data.SMSProvider != "") {                
                 $('#ddlSMSProvider').val(data.SMSProvider);
@@ -381,7 +381,7 @@
     }
     function BindWAValues(data) {
         if (data != null) {
-            console.log(data)
+            //console.log(data)
             $("#hdnCommWAConfigId").val(data.Id);
             if (data.WAProvider != "0" && data.WAProvider != "") {                
                 $('#ddlWAProvider').val(data.WAProvider);
@@ -471,7 +471,7 @@
                 dataType: "json",
                 success: function (result) {
                     
-                    console.log(result)
+                    //console.log(result)
                     if (result == true) {
                         cuteAlert({
                             type: "success",

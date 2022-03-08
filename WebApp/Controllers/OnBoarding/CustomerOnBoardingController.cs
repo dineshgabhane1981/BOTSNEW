@@ -16,6 +16,9 @@ using WebApp.App_Start;
 using WebApp.ViewModel;
 using BOTS_BL.Models.SalesLead;
 using BOTS_BL.Models.OnBoarding;
+using OfficeOpenXml;
+using System.Data.OleDb;
+using System.Data;
 
 namespace WebApp.Controllers.OnBoarding
 {
@@ -729,10 +732,10 @@ namespace WebApp.Controllers.OnBoarding
                     foreach (Dictionary<string, object> item1 in TxnCountConfig)
                     {
                         BOTS_TblVelocityChecksConfig objItem = new BOTS_TblVelocityChecksConfig();
-                        objItem.GroupId= Convert.ToString(item1["GroupId"]);
-                        groupId= Convert.ToString(item1["GroupId"]);
+                        objItem.GroupId = Convert.ToString(item1["GroupId"]);
+                        groupId = Convert.ToString(item1["GroupId"]);
                         objItem.VelocityType = 1;
-                        objItem.CountFrom= Convert.ToInt32(item1["From"]);
+                        objItem.CountFrom = Convert.ToInt32(item1["From"]);
                         objItem.CountTo = Convert.ToInt32(item1["To"]);
                         objItem.LastDays = Convert.ToInt32(item1["LastDays"]);
                         objItem.Action = Convert.ToString(item1["Action"]);
@@ -808,6 +811,67 @@ namespace WebApp.Controllers.OnBoarding
             objData = OBR.GetVelocityChecksData(groupId);
 
             return new JsonResult() { Data = objData, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
+        }
+
+        [HttpPost]
+        public ActionResult UploadCustomers(string groupId)
+        {
+            if (Request.Files.Count > 0)
+            {
+                try
+                {
+                    DataSet ds = new DataSet();
+                    HttpPostedFileBase files = Request.Files[0];
+                    string fileName = "CustomerUpload_" + groupId + "_" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".xlsx";
+                    var path = ConfigurationManager.AppSettings["CustomerDocuments"].ToString();
+                    var fullFilePath = path + "\\" + fileName;
+                    files.SaveAs(path + "\\" + fileName);
+
+                    string conString = string.Empty;
+                    
+                    conString = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" + fullFilePath + ";Extended Properties=\"Excel 12.0;HDR=Yes;IMEX=1\"";
+                    
+                    using (OleDbConnection connExcel = new OleDbConnection(conString))
+                    {
+                        using (OleDbCommand cmdExcel = new OleDbCommand())
+                        {
+                            using (OleDbDataAdapter odaExcel = new OleDbDataAdapter())
+                            {
+                                cmdExcel.Connection = connExcel;
+                                //Get the name of First Sheet.
+                                connExcel.Open();
+                                DataTable dtExcelSchema;
+                                dtExcelSchema = connExcel.GetOleDbSchemaTable(OleDbSchemaGuid.Tables, null);
+                                string sheetName = dtExcelSchema.Rows[0]["TABLE_NAME"].ToString();
+                                connExcel.Close();
+
+                                //Read Data from First Sheet.
+                                connExcel.Open();
+                                cmdExcel.CommandText = "SELECT * From [" + sheetName + "]";
+                                odaExcel.SelectCommand = cmdExcel;
+                                odaExcel.Fill(ds);
+                                connExcel.Close();
+                            }
+                        }
+                    }
+                    ds.Tables[0].Columns.Add("GroupId");
+                    foreach (DataRow dr in ds.Tables[0].Rows)
+                    {
+                        dr["GroupId"] = groupId;
+                    }
+
+                    var status = OBR.BulkInsert(ds.Tables[0]);
+
+                    return Json("File Uploaded Successfully!");
+                }
+                catch (Exception ex)
+                {
+
+                }
+
+            }
+            return Json("File Not Uploaded Successfully!");
+
         }
     }
 }
