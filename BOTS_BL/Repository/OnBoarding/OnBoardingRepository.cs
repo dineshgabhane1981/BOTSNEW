@@ -735,32 +735,38 @@ namespace BOTS_BL.Repository
         public bool BulkInsert(DataTable dt)
         {
             bool status = false;
-            var conStr= ConfigurationManager.ConnectionStrings["CommonDBContext"].ToString();
+            try
+            {
+                var conStr = ConfigurationManager.ConnectionStrings["CommonDBContext"].ToString();
 
-            SqlConnection con = new SqlConnection(conStr);            
-            SqlBulkCopy objbulk = new SqlBulkCopy(con);           
-            objbulk.DestinationTableName = "BOTS_TblBulkUpload";
+                SqlConnection con = new SqlConnection(conStr);
+                SqlBulkCopy objbulk = new SqlBulkCopy(con);
+                objbulk.DestinationTableName = "BOTS_TblBulkUpload";
 
-            objbulk.ColumnMappings.Add("GroupId", "GroupId");
-            objbulk.ColumnMappings.Add("CustId", "CustId");
-            objbulk.ColumnMappings.Add("CustName", "CustName");
-            objbulk.ColumnMappings.Add("MobileNo", "MobileNo");
-            objbulk.ColumnMappings.Add("OutletId", "OutletId");
-            objbulk.ColumnMappings.Add("Gender", "Gender");
-            objbulk.ColumnMappings.Add("Status", "Status");
-            objbulk.ColumnMappings.Add("DOB", "DOB");
-            objbulk.ColumnMappings.Add("AOB", "AOB");
-            objbulk.ColumnMappings.Add("EmailId", "EmailId");
-            objbulk.ColumnMappings.Add("City", "City");
-            objbulk.ColumnMappings.Add("Area", "Area");
-            objbulk.ColumnMappings.Add("CustomerCategory", "CustomerCategory");
-            objbulk.ColumnMappings.Add("CardNo", "CardNo");
-            objbulk.ColumnMappings.Add("Points", "Points");
+                objbulk.ColumnMappings.Add("GroupId", "GroupId");
+                objbulk.ColumnMappings.Add("CustId", "CustId");
+                objbulk.ColumnMappings.Add("CustName", "CustName");
+                objbulk.ColumnMappings.Add("MobileNo", "MobileNo");
+                objbulk.ColumnMappings.Add("OutletId", "OutletId");
+                objbulk.ColumnMappings.Add("Gender", "Gender");
+                objbulk.ColumnMappings.Add("Status", "Status");
+                objbulk.ColumnMappings.Add("DOB", "DOB");
+                objbulk.ColumnMappings.Add("AOB", "AOB");
+                objbulk.ColumnMappings.Add("EmailId", "EmailId");
+                objbulk.ColumnMappings.Add("City", "City");
+                objbulk.ColumnMappings.Add("Area", "Area");
+                objbulk.ColumnMappings.Add("CustomerCategory", "CustomerCategory");
+                objbulk.ColumnMappings.Add("CardNo", "CardNo");
+                objbulk.ColumnMappings.Add("Points", "Points");
 
-            con.Open();            
-            objbulk.WriteToServer(dt);
-            con.Close();
-
+                con.Open();
+                objbulk.WriteToServer(dt);
+                con.Close();
+            }
+            catch (Exception ex)
+            {                
+                newexception.AddException(ex, "BulkInsert");
+            }
 
             return status;
         }

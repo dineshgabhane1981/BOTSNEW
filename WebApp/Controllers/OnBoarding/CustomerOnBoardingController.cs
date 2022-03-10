@@ -866,7 +866,7 @@ namespace WebApp.Controllers.OnBoarding
                 }
                 catch (Exception ex)
                 {
-
+                    newexception.AddException(ex, "UploadCustomers");
                 }
 
             }
