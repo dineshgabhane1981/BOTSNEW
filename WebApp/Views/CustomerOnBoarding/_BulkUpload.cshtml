@@ -29,6 +29,7 @@
                     }
                     fileData.append("groupId", $('#hdnGroupID').val());
                     if ($("#rbtnCustUpload").prop("checked")) {
+                        $("#divLoader").show();
                         $.ajax({
                             url: '@Url.Action("UploadCustomers", "CustomerOnBoarding")',
                             type: "POST",
@@ -42,6 +43,7 @@
                                     message: "Data Uploaded Successfully!",
                                     buttonText: "Okay"
                                 })
+                                $("#divLoader").hide();
                                 //alert(result);
                             },
                             error: function (err) {
@@ -51,6 +53,7 @@
                                     message: "There is some problem in uploading data",
                                     buttonText: "Okay"
                                 })
+                                $("#divLoader").hide();
                                 //alert(err.statusText);
                             }
                         });

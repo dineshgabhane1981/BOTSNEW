@@ -828,9 +828,9 @@ namespace WebApp.Controllers.OnBoarding
                     files.SaveAs(path + "\\" + fileName);
 
                     string conString = string.Empty;
-                    
+
                     conString = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" + fullFilePath + ";Extended Properties=\"Excel 12.0;HDR=Yes;IMEX=1\"";
-                    
+
                     using (OleDbConnection connExcel = new OleDbConnection(conString))
                     {
                         using (OleDbCommand cmdExcel = new OleDbCommand())
@@ -873,5 +873,71 @@ namespace WebApp.Controllers.OnBoarding
             return Json("File Not Uploaded Successfully!");
 
         }
+
+        public ActionResult SaveBirthdayAndAnniversaryConfig(string jsonData)
+        {
+            bool status = false;
+            try
+            {
+                var userDetails = (CustomerLoginDetail)Session["UserSession"];
+                BOTS_TblCampaignBirthdayAnniversaryConfig objData = new BOTS_TblCampaignBirthdayAnniversaryConfig();
+                JavaScriptSerializer json_serializer = new JavaScriptSerializer();
+                json_serializer.MaxJsonLength = int.MaxValue;
+                object[] objBirthdayAndAnniversaryConfigData = (object[])json_serializer.DeserializeObject(jsonData);
+
+                foreach (Dictionary<string, object> item in objBirthdayAndAnniversaryConfigData)
+                {
+                    if(!string.IsNullOrEmpty(Convert.ToString(item["Id"])))
+                    {
+                        objData.Id = Convert.ToInt32(item["Id"]);
+                    }
+                    objData.GroupId = Convert.ToString(item["GroupId"]);
+                    objData.CampaignType = Convert.ToString(item["CampaignType"]);
+                    objData.SMSType = Convert.ToString(item["SMSType"]);
+                    objData.BonusPoints = Convert.ToInt32(item["BonusPoints"]);
+                    objData.Frequency = Convert.ToString(item["Frequency"]);
+                    
+                    objData.IntroDays1 = Convert.ToInt32(item["IntroDays1"]);
+                    objData.IntroScript1 = Convert.ToString(item["IntroScript1"]);
+                    objData.IntroDays2 = Convert.ToInt32(item["IntroDays2"]);
+                    objData.IntroScript2 = Convert.ToString(item["IntroScript2"]);
+                    objData.ReminderDays1 = Convert.ToInt32(item["ReminderDays1"]);
+                    objData.ReminderWhen1 = Convert.ToString(item["ReminderWhen1"]);
+                    objData.ReminderScript1 = Convert.ToString(item["ReminderScript1"]);
+                    objData.ReminderDays2 = Convert.ToInt32(item["ReminderDays2"]);
+                    objData.ReminderWhen2 = Convert.ToString(item["ReminderWhen2"]);
+                    objData.ReminderScript2 = Convert.ToString(item["ReminderScript2"]);
+                    objData.OnDayType = Convert.ToString(item["OnDayType"]);
+                    objData.OnDayScript = Convert.ToString(item["OnDayScript"]);
+
+                    if (objData.Id > 0)
+                    {
+                        objData.UpdatedBy = userDetails.LoginId;
+                        objData.UpdatedDate = DateTime.Now;                        
+                    }
+                    else
+                    {
+                        objData.AddedBy = userDetails.LoginId;
+                        objData.AddedDate = DateTime.Now;
+                    }
+                    status = OBR.SaveBirthdayAndAnniversaryConfig(objData);
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "SaveBirthdayAndAnniversaryConfig");
+            }
+
+            return new JsonResult() { Data = status, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
+        }
+
+        public JsonResult GetBirthdayAndAnniversaryConfig(string GroupId, string Type)
+        {
+            BOTS_TblCampaignBirthdayAnniversaryConfig objData = new BOTS_TblCampaignBirthdayAnniversaryConfig();
+            objData = OBR.GetCampaignBirthdayAnniversaryConfig(GroupId, Type);
+            return new JsonResult() { Data = objData, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
+        }
+
+
     }
 }

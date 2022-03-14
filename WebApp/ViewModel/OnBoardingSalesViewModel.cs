@@ -83,5 +83,14 @@ namespace WebApp.ViewModel
         {
             return new SelectListItem[3] { new SelectListItem() { Text = "Block Transaction", Value = "Block Transaction" }, new SelectListItem() { Text = "Report", Value = "Report" }, new SelectListItem() { Text = "Block Redeemption", Value = "Block Redeemption" } };
         }
+        public SelectListItem[] BeforeAfter()
+        {
+            return new SelectListItem[2] { new SelectListItem() { Text = "Before", Value = "Before" }, new SelectListItem() { Text = "After", Value = "After" } };
+
+        }
+        public SelectListItem[] PointsUsedOrNot()
+        {
+            return new SelectListItem[3] { new SelectListItem() { Text = "Points Used", Value = "Points Used" }, new SelectListItem() { Text = "Points Not Used", Value = "Points Not Used" }, new SelectListItem() { Text = "N/A", Value = "N/A" } };
+        }
     }
 }

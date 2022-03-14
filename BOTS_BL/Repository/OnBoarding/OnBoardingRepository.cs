@@ -687,7 +687,7 @@ namespace BOTS_BL.Repository
             return status;
         }
 
-        public bool SaveVelocityCheckConfig(List<BOTS_TblVelocityChecksConfig> lstVelocityCheck,string groupId)
+        public bool SaveVelocityCheckConfig(List<BOTS_TblVelocityChecksConfig> lstVelocityCheck, string groupId)
         {
             bool status = false;
             using (var context = new CommonDBContext())
@@ -697,7 +697,7 @@ namespace BOTS_BL.Repository
                     try
                     {
                         var oldData = context.BOTS_TblVelocityChecksConfig.Where(x => x.GroupId == groupId).ToList();
-                        foreach(var item in oldData)
+                        foreach (var item in oldData)
                         {
                             context.BOTS_TblVelocityChecksConfig.Remove(item);
                             context.SaveChanges();
@@ -731,7 +731,7 @@ namespace BOTS_BL.Repository
 
             return objData;
         }
-    
+
         public bool BulkInsert(DataTable dt)
         {
             bool status = false;
@@ -764,13 +764,46 @@ namespace BOTS_BL.Repository
                 con.Close();
             }
             catch (Exception ex)
-            {                
+            {
                 newexception.AddException(ex, "BulkInsert");
             }
 
             return status;
         }
-    
-    
+
+        public bool SaveBirthdayAndAnniversaryConfig(BOTS_TblCampaignBirthdayAnniversaryConfig objData)
+        {
+            bool status = false;
+            using (var context = new CommonDBContext())
+            {
+                try
+                {
+                    if (objData.Id > 0)
+                    {
+                        var oldRecord = context.BOTS_TblCampaignBirthdayAnniversaryConfig.Where(x => x.Id == objData.Id).FirstOrDefault();
+                        objData.AddedBy = oldRecord.AddedBy;
+                        objData.AddedDate = oldRecord.AddedDate;
+                    }
+                    context.BOTS_TblCampaignBirthdayAnniversaryConfig.AddOrUpdate(objData);
+                    context.SaveChanges();
+                    status = true;
+                }
+                catch (Exception ex)
+                {
+                    newexception.AddException(ex, "SaveBirthdayAndAnniversaryConfig");
+                }
+            }
+            return status;
+        }
+
+        public BOTS_TblCampaignBirthdayAnniversaryConfig GetCampaignBirthdayAnniversaryConfig(string groupId, string type)
+        {
+            BOTS_TblCampaignBirthdayAnniversaryConfig objData = new BOTS_TblCampaignBirthdayAnniversaryConfig();
+            using (var context = new CommonDBContext())
+            {
+                objData = context.BOTS_TblCampaignBirthdayAnniversaryConfig.Where(x => x.GroupId == groupId && x.CampaignType == type).FirstOrDefault();
+            }
+            return objData;
+        }
     }
 }

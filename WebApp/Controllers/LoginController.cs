@@ -74,6 +74,10 @@ namespace WebApp.Controllers
                     if (userDetails.LoginId != null)
                     {
                         Session["UserSession"] = userDetails;
+                        if(userDetails.LoginId== "8698877771")
+                        {
+                            return RedirectToAction("MemberPage", "KeyIndicators");
+                        }
                         if (!string.IsNullOrEmpty(userDetails.GroupId))
                         {
                             return RedirectToAction("Index", "Home");
