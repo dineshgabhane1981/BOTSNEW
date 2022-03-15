@@ -409,6 +409,7 @@ namespace BOTS_BL.Repository
                     RetailDetails item1 = new RetailDetails();
                     item1.CategoryName = item.CategoryName;
                     item1.NoOfOutlets = item.NoOfOutlets;
+                    item1.NoOfEnrolled = item.NoOfEnrolled;
                     var id = Convert.ToInt32(item.BillingPartner);
                     item1.BillingPartner = context.tblBillingPartners.Where(x => x.BillingPartnerId == id).Select(y => y.BillingPartnerName).FirstOrDefault();
                     item1.BOProduct = item.BOProduct == "1" ? "Octa Plus" : "Octa XS";

@@ -5,8 +5,8 @@
         height: 20px;
         width: 20px;
         vertical-align: middle;
-        cursor:pointer;
-        margin-left:20px;
+        cursor: pointer;
+        margin-left: 20px;
     }
 </style>
 
@@ -20,82 +20,145 @@
 
 </div>
 
-    <div id="dvBirthday" style="border:1px solid grey;border-radius:10px;padding:5px;">
-        <input type="hidden" id="hdnBirthId" />
+@* Birthday *@
+<div id="dvBirthday" style="border:1px solid grey;border-radius:10px;padding:5px;">
+    <input type="hidden" id="hdnBirthId" />
+    <div style="margin-top:20px;">
+        <input type="radio" name="SMStype" id="rbtnVWA" /> Varified Whatsapp
+        <input type="radio" name="SMStype" id="rbtnWA" /> Whatsapp
+        <input type="radio" name="SMStype" id="rbtnSMS" /> SMS
+    </div>
+    <div style="margin-top:20px;">
+        Bonus Points <input type="number" class="input20" id="txtBonusPoints" />
+    </div>
+    <div style="margin-top:20px;">
+        <input type="radio" name="frequency" id="rbtnDays" /> Days
+        <input type="radio" name="frequency" id="rbtnMonth" /> Month
+    </div>
+    <div style="margin-top:20px;border:1px solid grey;padding:10px;border-radius:10px;">
+        <b> Introduction Message</b>
+        <div>
+            <input type="number" class="input20" id="txtIntroDays1" /> Days before event
+            <textarea id="txtIntroScript1" class="input100" style="padding-top:20px;vertical-align:middle;"> </textarea>
+        </div>
         <div style="margin-top:20px;">
-            <input type="radio" name="SMStype" id="rbtnVWA" /> Varified Whatsapp
-            <input type="radio" name="SMStype" id="rbtnWA" /> Whatsapp
-            <input type="radio" name="SMStype" id="rbtnSMS" /> SMS
+            <input type="number" class="input20" id="txtIntroDays2" /> Days before event
+            <textarea id="txtIntroScript2" class="input100" style="padding-top: 20px; vertical-align: middle;"> </textarea>
+        </div>
+    </div>
+    <div style="margin-top:20px;border:1px solid grey;padding:10px;border-radius:10px;">
+        <b> Reminder Message</b>
+        <div>
+            <input type="number" class="input20" id="txtRemDays1" /> Days
+            @Html.DropDownListFor(x => Model.lstBrands.Count, new SelectList(Model.BeforeAfter(), "Value", "Text"), htmlAttributes: new { @class = "input50", @id = "ddlBeforeAfter1", style = "margin-top:20px;" })
+            event
+            <textarea id="txtRemScript1" class="input100" style="padding-top:20px;vertical-align:middle;"> </textarea>
         </div>
         <div style="margin-top:20px;">
-            Bonus Points <input type="number" class="input20" id="txtBonusPoints" />
+            <input type="number" class="input20" id="txtRemDays2" /> Days
+            @Html.DropDownListFor(x => Model.lstBrands.Count, new SelectList(Model.BeforeAfter(), "Value", "Text"), htmlAttributes: new { @class = "input50", @id = "ddlBeforeAfter2", style = "margin-top:20px;" })
+            event
+            <textarea id="txtRemScript2" class="input100" style="padding-top: 20px; vertical-align: middle;"> </textarea>
+        </div>
+    </div>
+    <div style="margin-top:20px;border:1px solid grey;padding:10px;border-radius:10px;">
+        <b> On Birthday Message</b>
+        <div>
+            @Html.DropDownListFor(x => Model.lstBrands.Count, new SelectList(Model.PointsUsedOrNot(), "Value", "Text"), htmlAttributes: new { @class = "input50", @id = "ddlPointsUsedOrNot", style = "margin-top:20px;" })
+            event
+            <textarea id="txtOnBirthdayScript" class="input100" style="padding-top:20px;vertical-align:middle;"> </textarea>
+        </div>
+    </div>
+    <div class="container-fluid pt-3 pl-3 pr-3 pb-5">
+        <button type="button" id="btnBirthdaySave" class="btn btn-primary pull-right" style="margin-right: 10px; margin-bottom: 20px;"> Save</button>
+    </div>
+</div>
+
+@* Anniversary *@
+<div id="dvAnniversary" style="border:1px solid grey;border-radius:10px;padding:5px;">
+    <input type="hidden" id="hdnAnniversaryId" />
+    <div style="margin-top:20px;">
+        <input type="radio" name="SMStype" id="rbtnVWA1" /> Varified Whatsapp
+        <input type="radio" name="SMStype" id="rbtnWA1" /> Whatsapp
+        <input type="radio" name="SMStype" id="rbtnSMS1" /> SMS
+    </div>
+    <div style="margin-top:20px;">
+        Bonus Points <input type="number" class="input20" id="txtBonusPoints1" />
+    </div>
+    <div style="margin-top:20px;">
+        <input type="radio" name="frequency" id="rbtnDays1" /> Days
+        <input type="radio" name="frequency" id="rbtnMonth1" /> Month
+    </div>
+    <div style="margin-top:20px;border:1px solid grey;padding:10px;border-radius:10px;">
+        <b> Introduction Message</b>
+        <div>
+            <input type="number" class="input20" id="txtIntroDays11" /> Days before event
+            <textarea id="txtIntroScript11" class="input100" style="padding-top:20px;vertical-align:middle;"> </textarea>
         </div>
         <div style="margin-top:20px;">
-            <input type="radio" name="frequency" id="rbtnDays" /> Days
-            <input type="radio" name="frequency" id="rbtnMonth" /> Month
-        </div>
-        <div style="margin-top:20px;border:1px solid grey;padding:10px;border-radius:10px;">
-            <b> Introduction Message</b>
-            <div>
-                <input type="number" class="input20" id="txtIntroDays1" /> Days before event
-                <textarea id="txtIntroScript1" class="input100" style="padding-top:20px;vertical-align:middle;"> </textarea>
-            </div>
-            <div style="margin-top:20px;">
-                <input type="number" class="input20" id="txtIntroDays2" /> Days before event
-                <textarea id="txtIntroScript2" class="input100" style="padding-top: 20px; vertical-align: middle;"> </textarea>
-            </div>
-        </div>
-        <div style="margin-top:20px;border:1px solid grey;padding:10px;border-radius:10px;">
-            <b> Reminder Message</b>
-            <div>
-                <input type="number" class="input20" id="txtRemDays1" /> Days
-                @Html.DropDownListFor(x => Model.lstBrands.Count, new SelectList(Model.BeforeAfter(), "Value", "Text"), htmlAttributes: new { @class = "input50", @id = "ddlBeforeAfter1", style = "margin-top:20px;" })
-                event
-                <textarea id="txtRemScript1" class="input100" style="padding-top:20px;vertical-align:middle;"> </textarea>
-            </div>
-            <div style="margin-top:20px;">
-                <input type="number" class="input20" id="txtRemDays2" /> Days
-                @Html.DropDownListFor(x => Model.lstBrands.Count, new SelectList(Model.BeforeAfter(), "Value", "Text"), htmlAttributes: new { @class = "input50", @id = "ddlBeforeAfter2", style = "margin-top:20px;" })
-                event
-                <textarea id="txtRemScript2" class="input100" style="padding-top: 20px; vertical-align: middle;"> </textarea>
-            </div>
-        </div>
-        <div style="margin-top:20px;border:1px solid grey;padding:10px;border-radius:10px;">
-            <b> On Birthday Message</b>
-            <div>
-                @Html.DropDownListFor(x => Model.lstBrands.Count, new SelectList(Model.PointsUsedOrNot(), "Value", "Text"), htmlAttributes: new { @class = "input50", @id = "ddlPointsUsedOrNot", style = "margin-top:20px;" })
-                event
-                <textarea id="txtOnBirthdayScript" class="input100" style="padding-top:20px;vertical-align:middle;"> </textarea>
-            </div>
-        </div>
-        <div class="container-fluid pt-3 pl-3 pr-3 pb-5">
-            <button type="button" id="btnBirthdaySave" class="btn btn-primary pull-right" style="margin-right: 10px; margin-bottom: 20px;"> Save</button>
+            <input type="number" class="input20" id="txtIntroDays21" /> Days before event
+            <textarea id="txtIntroScript21" class="input100" style="padding-top: 20px; vertical-align: middle;"> </textarea>
         </div>
     </div>
-    <div id="dvAnniversary" style="border:1px solid grey;border-radius:10px;padding:5px;">
-        Anniversary
+    <div style="margin-top:20px;border:1px solid grey;padding:10px;border-radius:10px;">
+        <b> Reminder Message</b>
+        <div>
+            <input type="number" class="input20" id="txtRemDays11" /> Days
+            @Html.DropDownListFor(x => Model.lstBrands.Count, new SelectList(Model.BeforeAfter(), "Value", "Text"), htmlAttributes: new { @class = "input50", @id = "ddlBeforeAfter11", style = "margin-top:20px;" })
+            event
+            <textarea id="txtRemScript11" class="input100" style="padding-top:20px;vertical-align:middle;"> </textarea>
+        </div>
+        <div style="margin-top:20px;">
+            <input type="number" class="input20" id="txtRemDays21" /> Days
+            @Html.DropDownListFor(x => Model.lstBrands.Count, new SelectList(Model.BeforeAfter(), "Value", "Text"), htmlAttributes: new { @class = "input50", @id = "ddlBeforeAfter21", style = "margin-top:20px;" })
+            event
+            <textarea id="txtRemScript21" class="input100" style="padding-top: 20px; vertical-align: middle;"> </textarea>
+        </div>
     </div>
-    <div id="dvInactive" style="border:1px solid grey;border-radius:10px;padding:5px;">
-        Inactive
+    <div style="margin-top:20px;border:1px solid grey;padding:10px;border-radius:10px;">
+        <b> On Birthday Message</b>
+        <div>
+            @Html.DropDownListFor(x => Model.lstBrands.Count, new SelectList(Model.PointsUsedOrNot(), "Value", "Text"), htmlAttributes: new { @class = "input50", @id = "ddlPointsUsedOrNot1", style = "margin-top:20px;" })
+            event
+            <textarea id="txtOnBirthdayScript1" class="input100" style="padding-top:20px;vertical-align:middle;"> </textarea>
+        </div>
     </div>
-    <div id="dvOOInactive" style="border:1px solid grey;border-radius:10px;padding:5px;">
-        Only Once Inactive
+    <div class="container-fluid pt-3 pl-3 pr-3 pb-5">
+        <button type="button" id="btnAnniversarySave" class="btn btn-primary pull-right" style="margin-right: 10px; margin-bottom: 20px;"> Save</button>
     </div>
-    <div id="dvNRInactive" style="border:1px solid grey;border-radius:10px;padding:5px;">
-        Non Redeemption Inactive
-    </div>
-    <div id="dvPointsExpiry" style="border:1px solid grey;border-radius:10px;padding:5px;">
-        Points Expiry
-    </div>
+</div>
+
+@* Inactive *@
+<div id="dvInactive" style="border:1px solid grey;border-radius:10px;padding:5px;">
+    Inactive
+</div>
+
+@* Only Once Inactive *@
+<div id="dvOOInactive" style="border:1px solid grey;border-radius:10px;padding:5px;">
+    Only Once Inactive
+</div>
+
+@* Non Redeemption Inactive *@
+<div id="dvNRInactive" style="border:1px solid grey;border-radius:10px;padding:5px;">
+    Non Redeemption Inactive
+</div>
+
+@* Points Expiry *@
+<div id="dvPointsExpiry" style="border:1px solid grey;border-radius:10px;padding:5px;">
+    Points Expiry
+</div>
 
 
 
-    <script>
+<script>
     $(document).ready(function () {
         ShowHideCampaignSection("dvBirthday");
         LoadBirthdayAnniversaryConfig("Birthday");
         $("#btnBirthdaySave").on("click", function () {
             SaveBirthdayConfig();
+        });
+        $("#btnAnniversarySave").on("click", function () {
+            SaveAnniversaryConfig();
         });
         $('#rbtnBirthday').click(function () {
             ShowHideCampaignSection("dvBirthday");
@@ -132,7 +195,7 @@
     }
 
     function SaveBirthdayConfig() {
-        if ($("#rbtnVWA").prop("checked") || $("#rbtnWA").prop("checked") || $("#rbtnWA").prop("checked")) {
+        if ($("#rbtnVWA").prop("checked") || $("#rbtnWA").prop("checked") || $("#rbtnSMS").prop("checked")) {
         }
         else {
             cuteAlert({
@@ -232,6 +295,107 @@
             });
     }
 
+    function SaveAnniversaryConfig() {
+        if ($("#rbtnVWA1").prop("checked") || $("#rbtnWA1").prop("checked") || $("#rbtnSMS1").prop("checked")) {
+        }
+        else {
+            cuteAlert({
+                type: "error",
+                title: "Oops..",
+                message: "Please select SMS Type",
+                buttonText: "Okay"
+            })
+            return false;
+        }
+        if ($("#txtBonusPoints1").val() == "") {
+            cuteAlert({
+                type: "error",
+                title: "Oops..",
+                message: "Please enter Bonus Points",
+                buttonText: "Okay"
+            })
+            return false;
+        }
+        if ($("#rbtnDays1").prop("checked") || $("#rbtnMonth1").prop("checked")) {
+        }
+        else {
+            cuteAlert({
+                type: "error",
+                title: "Oops..",
+                message: "Please select Frequency Days/Month",
+                buttonText: "Okay"
+            })
+            return false;
+        }
+
+        var AnniversaryConfig = [];
+        item = {}
+
+        item["Id"] = $('#hdnAnniversaryId').val();
+        item["GroupId"] = $('#hdnGroupID').val();
+        item["CampaignType"] = "Anniversary";
+
+        if ($("#rbtnVWA1").prop("checked"))
+            item["SMSType"] = "VWA";
+        if ($("#rbtnWA1").prop("checked"))
+            item["SMSType"] = "WA";
+        if ($("#rbtnSMS1").prop("checked"))
+            item["SMSType"] = "SMS";
+
+        item["BonusPoints"] = $('#txtBonusPoints1').val();
+        if ($("#rbtnDays1").prop("checked"))
+            item["Frequency"] = "Days";
+        if ($("#rbtnMonth1").prop("checked"))
+            item["Frequency"] = "Month";
+
+        item["IntroDays1"] = $('#txtIntroDays11').val();
+        item["IntroScript1"] = $('#txtIntroScript11').val();
+        item["IntroDays2"] = $('#txtIntroDays21').val();
+        item["IntroScript2"] = $('#txtIntroScript21').val();
+        item["ReminderDays1"] = $('#txtRemDays11').val();
+        item["ReminderWhen1"] = $('#ddlBeforeAfter11').val();
+        item["ReminderScript1"] = $('#txtRemScript11').val();
+        item["ReminderDays2"] = $('#txtRemDays21').val();
+        item["ReminderWhen2"] = $('#ddlBeforeAfter21').val();
+        item["ReminderScript2"] = $('#txtRemScript21').val();
+        item["OnDayType"] = $('#ddlPointsUsedOrNot1').val();
+        item["OnDayScript"] = $('#txtOnBirthdayScript1').val();
+
+        AnniversaryConfig.push(item);
+        var AnniversaryConfigData = JSON.stringify(AnniversaryConfig);
+
+        $("#divLoader").show();
+        $.ajax({
+                type: "POST",
+                url: '@Url.Action("SaveBirthdayAndAnniversaryConfig", "CustomerOnBoarding")',
+            data: '{jsonData: ' + JSON.stringify(AnniversaryConfigData) + '}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (result) {
+                    if (result) {
+                        cuteAlert({
+                            type: "success",
+                            title: "Saved",
+                            message: "Anniversary Configuration Saved Successfully !!!",
+                            buttonText: "Okay"
+                        })
+                    }
+                    else {
+                        cuteAlert({
+                            type: "error",
+                            title: "Oops..",
+                            message: "There is a problem while saving Anniversary Configuration",
+                            buttonText: "Okay"
+                        })
+                    }
+                    $("#divLoader").hide();
+                },
+                error: function (result) {
+                    $("#divLoader").hide();
+                }
+            });
+    }
+
     function LoadBirthdayAnniversaryConfig(type) {
         $("#divLoader").show();
             $.ajax({
@@ -241,7 +405,7 @@
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
                 success: function (result) {
-                    LoadControls(result, type);
+                    LoadCampaignControls(result, type);
                     $("#divLoader").hide();
                 },
                 error: function (result) {
@@ -250,7 +414,7 @@
             });
         }
 
-        function LoadControls(data, type) {
+    function LoadCampaignControls(data, type) {
             if (type == "Birthday") {
                 console.log(data)
                 if (data.SMSType == "VWA") {
@@ -282,11 +446,40 @@
                 $('#ddlPointsUsedOrNot').val(data.OnDayType);
                 $('#txtOnBirthdayScript').val(data.OnDayScript);
                 $('#hdnBirthId').val(data.Id);
-                
+
             }
             if (type == "Anniversary") {
-
+                console.log(data)
+                if (data.SMSType == "VWA") {
+                    $("#rbtnVWA1").prop("checked", true);
+                }
+                if (data.SMSType == "WA") {
+                    $("#rbtnWA1").prop("checked", true);
+                }
+                if (data.SMSType == "SMS") {
+                    $("#rbtnSMS1").prop("checked", true);
+                }
+                $('#txtBonusPoints1').val(data.BonusPoints);
+                if (data.Frequency == "Days") {
+                    $("#rbtnDays1").prop("checked", true);
+                }
+                if (data.Frequency == "Month") {
+                    $("#rbtnMonth1").prop("checked", true);
+                }
+                $('#txtIntroDays11').val(data.IntroDays1);
+                $('#txtIntroScript11').val(data.IntroScript1);
+                $('#txtIntroDays21').val(data.IntroDays2);
+                $('#txtIntroScript21').val(data.IntroScript2);
+                $('#txtRemDays11').val(data.ReminderDays1);
+                $('#ddlBeforeAfter11').val(data.ReminderWhen1);
+                $('#txtRemScript11').val(data.ReminderScript1);
+                $('#txtRemDays21').val(data.ReminderDays2);
+                $('#ddlBeforeAfter21').val(data.ReminderWhen2);
+                $('#txtRemScript21').val(data.ReminderScript2);
+                $('#ddlPointsUsedOrNot1').val(data.OnDayType);
+                $('#txtOnBirthdayScript1').val(data.OnDayScript);
+                $('#hdnAnniversaryId').val(data.Id);
             }
         }
 
-    </script>
+</script>

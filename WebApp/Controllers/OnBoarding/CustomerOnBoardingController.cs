@@ -335,7 +335,7 @@ namespace WebApp.Controllers.OnBoarding
                     else
                     {
                         Category += "," + item.CategoryName;
-                        NoOfOutlets += "," + item.NoOfOutlets;
+                        NoOfOutlets += "," + Convert.ToString(item.NoOfEnrolled);
                         BillingPartner += "," + item.BillingPartner;
                         Product += "," + item.BOProduct;
                     }
