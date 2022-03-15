@@ -292,6 +292,7 @@
     <Compile Include="Models\MWP_Details.cs" />
     <Compile Include="Models\OnBoarding\BOTS_TblBulkUpload.cs" />
     <Compile Include="Models\OnBoarding\BOTS_TblCampaignBirthdayAnniversaryConfig.cs" />
+    <Compile Include="Models\OnBoarding\BOTS_TblCampaignInactive.cs" />
     <Compile Include="Models\OnBoarding\BOTS_TblDealDetails.cs" />
     <Compile Include="Models\OnBoarding\BOTS_TblDLCLinkConfig.cs" />
     <Compile Include="Models\OnBoarding\BOTS_TblEarnPointsSlabConfig.cs" />

@@ -130,7 +130,26 @@
 
 @* Inactive *@
 <div id="dvInactive" style="border:1px solid grey;border-radius:10px;padding:5px;">
-    Inactive
+    <input type="hidden" id="hdnInactiveId" />
+    <div style="margin-top:20px;">
+        No of Message Count <input type="number" id="txtMessageCount" class="input20" />
+    </div>
+    <div style="margin-top:20px;display:flex;" id="dvInactive1">
+        <div style="padding-top:50px;">
+            <input type="number" id="txtMessageCount" style="padding-top: 20px; vertical-align: middle;" class="input20" /> days after last transaction
+        </div>
+        <div style="margin-left:30px;">
+            <div>
+                less than
+                <input type="number" id="txtMessageDays" class="input20" />
+                <textarea id="txtLessThanScript" class="input100" style="padding-top: 20px; vertical-align: middle;"> </textarea>
+            </div>
+            <div>
+                <br />greater or equal <input type="number" id="txtMessageDays" class="input20" />
+                <textarea id="txtLessThanScript" class="input100" style="padding-top: 20px; vertical-align: middle;"> </textarea>
+            </div>
+        </div>
+    </div>
 </div>
 
 @* Only Once Inactive *@
