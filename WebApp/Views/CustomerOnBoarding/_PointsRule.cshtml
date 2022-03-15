@@ -16,7 +16,7 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-md-12 col-sm-12">
+        <div class="col-md-10 col-sm-10">
             <b>Earn Point Level</b> &nbsp;
             @Html.RadioButtonFor(model => model.objpointsearnruleconfig.EarnPointLevel, "InvoiceAmount", new { @id = "rbgearnpointlevelinvoiceamt", @class = "radiolevel" }) Invoice Amount
             @Html.RadioButtonFor(model => model.objpointsearnruleconfig.EarnPointLevel, "Department", new { @id = "rbgearnpointleveldepartment", @class = "radiolevel" }) Department
@@ -25,12 +25,20 @@
             @Html.RadioButtonFor(model => model.objpointsearnruleconfig.EarnPointLevel, "SubCategory", new { @id = "rbgearnpointlevelsubcategory", @class = "radiolevel" }) Sub Category
             @Html.RadioButtonFor(model => model.objpointsearnruleconfig.EarnPointLevel, "Brand", new { @id = "rbgearnpointlevelbrand", @class = "radiolevel" }) Brand
 
-            @*@foreach (var item in Model.lstearnpoint)
-                {
-                    @Html.RadioButtonFor(x => x.lstearnpoint, item.EarnPointLevelId, new { @id = "rbgearnpointlevel" + item.EarnPointLevelId })@:&nbsp;
-                    @item.EarnPointLevelName
-                    @:&nbsp;
-                }*@
+        </div>
+        <div id="divEarnUpload" class="col-md-2 col-sm-2" style="padding-right:50px; display:none;" >
+
+            <a href="/User/DownloadExcel/"><img src="~/excel.ico" width="25" height="25" title="Download Excel format" alt="excel" /></a>
+
+
+            <div class="control-label">Excel:</div>
+
+            <input type="file" id="FileUpload" name="FileUpload" class="" />
+
+
+
+            @*<input type="submit" value="Upload" id="btnSubmit" class="btn btn-primary" onclick="UploadFile();" />*@
+
         </div>
     </div>
     <div class="row">
@@ -43,8 +51,8 @@
         @*common fixed box*@
         <div class="col-md-12 col-sm-12" id="divnonjel" style="display:none;">
             <b>Type</b>
-            @Html.RadioButtonFor(model => model.objpointsearnruleconfig.EarnPointLevelType, "commonFixed", new { @id = "rdbFixed" }) Fixed
-            @Html.RadioButtonFor(model => model.objpointsearnruleconfig.EarnPointLevelType, "commonSlab", new { @id = "rdbSlab" }) Slab
+            @Html.RadioButtonFor(model => model.objpointsearnruleconfig.EarnPointLevelType, "commonFixed", new { @id = "rdbFixed", @class = "commonfixedorslab" }) Fixed
+            @Html.RadioButtonFor(model => model.objpointsearnruleconfig.EarnPointLevelType, "commonSlab", new { @id = "rdbSlab", @class = "commonfixedorslab" }) Slab
         </div>
     </div>
     <div class="row">
@@ -55,74 +63,57 @@
             @Html.RadioButtonFor(model => model.objpointsearnruleconfig.EarnPointLevelType, "makingSlab", new { @id = "rdbmakingSlab", @class = "makingfixedorslab" }) Slab
         </div>
         @*making slab box*@
-        <div class="col-md-6 col-sm-6" id="divslab" style="display:none;">
+        <!--<div class="col-md-6 col-sm-6" id="divslab" style="display:none;">
             <b>Slab Type</b>
-            @Html.RadioButtonFor(model => model.objearnpointslab.SlabType, true, new { @id = "rdbmakingFrmToPercentage" }) Slab In Percentage
-            @Html.RadioButtonFor(model => model.objearnpointslab.SlabType, false, new { @id = "rdbmakingFrmToRs" }) Slab In RS
-            @*<div class="row" id="slabdynamictxt">
-                    <div id='TextBoxesGroup'>
-                        <div id="TextBoxDiv">
-                            <label>From </label><input type='textbox' id='textbox1' placeholder="From">
-                            <label>To </label><input type='textbox' id='textbox2' placeholder="To">
-                        </div>
-                        <input type='button' value='+' id='addButton'>
-                        <input type='button' value='-' id='removeButton'>
+            @Html.RadioButtonFor(model => model.objearnpointslab.SlabType, true, new { @id = "rdbmakingFrmToPercentage"  }) Slab In Percentage
+            @Html.RadioButtonFor(model => model.objearnpointslab.SlabType, false, new { @id = "rdbmakingFrmToRs" }) Slab In RS-->
+        @*<div class="row" id="slabdynamictxt">
+                <div id='TextBoxesGroup'>
+                    <div id="TextBoxDiv">
+                        <label>From </label><input type='textbox' id='textbox1' placeholder="From">
+                        <label>To </label><input type='textbox' id='textbox2' placeholder="To">
                     </div>
-                </div>*@
-        </div>
+                    <input type='button' value='+' id='addButton'>
+                    <input type='button' value='-' id='removeButton'>
+                </div>
+            </div>*@
+        <!--</div>-->
 
     </div>
     @* jwl making fixed %with box*@
     <div class="row">
         <div class="col-md-12 col-sm-12" id="divmakingfixed" style="display:none;">
-            <b>Percentage</b> @Html.DropDownListFor(model => model.objpointsearnruleconfig.PercentageType, new SelectList(Model.Percentage(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input50", @id = "ddlmakingpercentage" })
+            <b>Percentage</b> @Html.DropDownListFor(model => model.objpointsearnruleconfig.commonfixedpercentageorwithperce, new SelectList(Model.Percentage(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input50", @id = "ddlmakingpercentage" })
             @Html.TextBoxFor(model => model.objpointsearnruleconfig.FixedEarnPointPecentageWith, new { @class = "input50", @id = "txtmakingPercentagewith", style = "display: none;" })
             @Html.TextBoxFor(model => model.objpointsearnruleconfig.FixedEarnPointPercentage, new { @class = "input50", @id = "txtmakingPercentage", style = "display: none;" })
         </div>
-        @*Full amt slab box*@
-        <div class="col-md-6 col-sm-6" id="divfullamtslab" style="display:none;">
-            <b>Slab Type</b>
-            @Html.RadioButtonFor(model => model.objearnpointslab.SlabType, "FullamtSlabIn%", new { @id = "rdbfullamtFrmToPercentage" }) Slab In Percentage
-            @Html.RadioButtonFor(model => model.objearnpointslab.SlabType, "FullamtSlabInRS", new { @id = "rdbfullamtFrmToRs" }) Slab In RS
-            @*<div class="row" id="slabdynamictxt">
-                    <div id='TextBoxesGroup2'>
-                        <div id="TextBoxDiv1">
-                            <label>From </label><input type='textbox' id='textbox1' placeholder="From">
-                            <label>To </label><input type='textbox' id='textbox2' placeholder="To">
-                        </div>
-                        <input type='button' value='+' id='addButton2'>
-                        <input type='button' value='-' id='removeButton2'>
-                    </div>
-                </div>*@
 
-
-        </div>
     </div>
     <div class="row">
         @*fullamt gstnongst box*@
         <div class="col-md-12 col-sm-12" id="divfullamt" style="display:none;">
             <b>Type</b>
-            @Html.RadioButtonFor(model => model.objpointsearnruleconfig.EarnFullAmtWithGst, "FullamtWithGST", new { @id = "rdbGST", @class = "fullamtGstorNongst" }) With GST
-            @Html.RadioButtonFor(model => model.objpointsearnruleconfig.EarnFullAmtWithoutGst, "FullamtNonGST", new { @id = "rdbNonGST", @class = "fullamtGstorNongst" }) Non GST
+            @Html.RadioButtonFor(model => model.objpointsearnruleconfig.EarnFullAmtGstOrWithoutGst, "FullamtWithGST", new { @id = "rdbGST", @class = "fullamtGstorNongst" }) With GST
+            @Html.RadioButtonFor(model => model.objpointsearnruleconfig.EarnFullAmtGstOrWithoutGst, "FullamtNonGST", new { @id = "rdbNonGST", @class = "fullamtGstorNongst" }) Non GST
         </div>
     </div>
     <div class="row">
         @* jwl fullamt fixed percentage box*@
         <div class="col-md-12 col-sm-12" id="divfullamtwithGST" style="display:none;">
             <b>Type</b>
-            @Html.RadioButtonFor(model => model.objpointsearnruleconfig.EarnFullAmtWithGst, "Fullamtwith%", new { @id = "rdbfullamtFixed", @class = "fullamtfixedorslab" }) Fixed
-            @Html.RadioButtonFor(model => model.objpointsearnruleconfig.EarnFullAmtWithGst, "Fullamtfixed%", new { @id = "rdbfullamtSlab", @class = "fullamtfixedorslab" }) Slab
+            @Html.RadioButtonFor(model => model.objpointsearnruleconfig.EarnFullAmtFixedOrSlab, "FullamtFixed", new { @id = "rdbfullamtFixed", @class = "fullamtfixedorslab" }) Fixed
+            @Html.RadioButtonFor(model => model.objpointsearnruleconfig.EarnFullAmtFixedOrSlab, "FullamtSlab", new { @id = "rdbfullamtSlab", @class = "fullamtfixedorslab" }) Slab
         </div>
         @*making slab box*@
         <div class="col-md-6 col-sm-6" id="divmakingslab" style="display:none;">
             <b>Slab Type</b>
-            @Html.RadioButtonFor(model => model.objearnpointslab.SlabType, "makingslabin%", new { @id = "rdbmakingFrmToPercentage",@class = "makingslabtype" }) Slab In Percentage
+            @Html.RadioButtonFor(model => model.objearnpointslab.SlabType, "makingslabin%", new { @id = "rdbmakingFrmToPercentage", @class = "makingslabtype" }) Slab In Percentage
             @Html.RadioButtonFor(model => model.objearnpointslab.SlabType, "makingslabinRs", new { @id = "rdbmakingFrmToRs", @class = "makingslabtype" }) Slab In RS
             <div class="row" id="slabdynamictxt">
                 <div id='TextBoxesGroup'>
                     <div id="TextBoxDiv0">
                         <label>From </label><input type='textbox' name="textboxfrom" id='textboxfrom0' placeholder="From" class="input50">
-                        <label>To </label><input type='textbox' name="textboxto" id='textboxto0' placeholder="To" class="input50">
+                        <label>To </label><input type='textbox' name="textboxto" id='textboxto0' placeholder="To" class="input50">&nbsp;<input type='textbox' name="textboxvalue" id='textboxvalue0' placeholder="value" style="width:50px;">
                     </div>
                     <input type='button' value='+' id='addButton'>
                     <input type='button' value='-' id='removeButton'>
@@ -130,89 +121,125 @@
 
 
             </div>
+            <div class="row" id="divslabdirectortelescoping" style="display:none;">
+                @Html.RadioButtonFor(model => model.objearnpointslab.EarnSlabDirectOrTelescoping, "makingslabDirect", new { @id = "rdbmakingslabdirect", @class = "makingslabtypeDirect" }) Direct
+                @Html.RadioButtonFor(model => model.objearnpointslab.EarnSlabDirectOrTelescoping, "makingslabtescopic", new { @id = "rdbmakingslabtelescopic", @class = "makingslabtypeDirect" }) Telescopic
+                @Html.TextBoxFor(model => model.objearnpointslab.SlabDirectOrTelescopingValue, new { @class = "input50", @id = "txtmakingslabdirect", style = "display: none;" })
+                @Html.TextBoxFor(model => model.objearnpointslab.SlabDirectOrTelescopingValue, new { @class = "input50", @id = "txtmakingslabtelescopic", style = "display: none;" })
+
+            </div>
         </div>
+
+    </div>
+    <div class="row">
+        @*Full amt slab box*@
+        <div class="col-md-6 col-sm-6" id="divfullamtslab" style="display:none;">
+            <b>Slab Type</b>
+            @Html.RadioButtonFor(model => model.objearnpointslab.SlabType, "FullamtSlabIn%", new { @id = "rdbfullamtFrmToPercentage", @class = "fullAmtslabtype" }) Slab In Percentage
+            @Html.RadioButtonFor(model => model.objearnpointslab.SlabType, "FullamtSlabInRS", new { @id = "rdbfullamtFrmToRs", @class = "fullAmtslabtype" }) Slab In RS
+            <div class="row" id="fullamtslabdynamictxt">
+                <div id='fullamtTextBoxesGroup'>
+                    <div id="fullamtTextBoxDiv0">
+                        <label>From </label><input type='textbox' name="fullamttextboxfrom" id='fullamttextboxfrom0' placeholder="From" class="input50">
+                        <label>To </label><input type='textbox' name="fullamttextboxto" id='fullamttextboxto0' placeholder="To" class="input50">&nbsp;<input type='textbox' name="fullamttextboxvalue" id='fullamttextboxvalue0' placeholder="value" style="width:50px;">
+                    </div>
+                    <input type='button' value='+' id='fullamtaddButton'>
+                    <input type='button' value='-' id='fullamtremoveButton'>
+                </div>
+            </div>
+
+            <div class="row" id="divfullamtslabdirectortelescoping" style="display:none;">
+                @Html.RadioButtonFor(model => model.objearnpointslab.EarnSlabDirectOrTelescoping, "fullamtslabDirect", new { @id = "rdbfullamtslabdirect", @class = "fullamtslabtypeDirect" }) Direct
+                @Html.RadioButtonFor(model => model.objearnpointslab.EarnSlabDirectOrTelescoping, "fullamtslabtescopic", new { @id = "rdbfullamtslabtelescopic", @class = "fullamtslabtypeDirect" }) Telescopic
+                @Html.TextBoxFor(model => model.objearnpointslab.SlabDirectOrTelescopingValue, new { @class = "input50", @id = "txtfullamtslabdirect", style = "display: none;" })
+                @Html.TextBoxFor(model => model.objearnpointslab.SlabDirectOrTelescopingValue, new { @class = "input50", @id = "txtfullamtslabtelescopic", style = "display: none;" })
+
+            </div>
+        </div>
+
     </div>
     @* jwl fullamt fixed %with box*@
     <div class="row" id="divfullamtfixed" style="display:none;">
-        <b>Percentage</b> @Html.DropDownListFor(model => model.objpointsearnruleconfig.PercentageType, new SelectList(Model.Percentage(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input50", @id = "ddlFullamtpercentage" })
-        @Html.TextBoxFor(model => model.objpointsearnruleconfig.FixedEarnPointPecentageWith, new { @class = "input50", @id = "txtfullAmtWithGstPercentagewith", style = "display: none;" })
-        @Html.TextBoxFor(model => model.objpointsearnruleconfig.FixedEarnPointPercentage, new { @class = "input50", @id = "txtfullAmtWithGstPercentage", style = "display: none;" })
+        <b>Percentage</b> @Html.DropDownListFor(model => model.objpointsearnruleconfig, new SelectList(Model.Percentage(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input50", @id = "ddlFullamtpercentage" })
+        @Html.TextBoxFor(model => model.objpointsearnruleconfig.EarnFullAmtPercentageWith, new { @class = "input50", @id = "txtfullAmtWithGstPercentagewith", style = "display: none;" })
+        @Html.TextBoxFor(model => model.objpointsearnruleconfig.EarnFullAmtFixedPercentage, new { @class = "input50", @id = "txtfullAmtWithGstPercentage", style = "display: none;" })
 
     </div>
     @*jwl full amt % with Incremented box*@
     <div class="row">
         <div class="col-md-6 col-sm-6" id="divfullamtpercentagewithincrement" style="display:none;">
             <b>Increment</b>
-            @Html.RadioButtonFor(model => model.objpointsearnruleconfig.IncrementedValue, "jwlfullamtsingle", new { @id = "rdbfullamtsingle", @class = "fullamtincremented" }) Single
-            @Html.RadioButtonFor(model => model.objpointsearnruleconfig.IncrementedValue, "jwlfullamtcumulative", new { @id = "rdbfullamtcumulative", @class = "fullamtincremented" }) Cumulative
+            @Html.RadioButtonFor(model => model.objpointsearnruleconfig.EarnFullAmtIncremented, "jwlfullamtsingle", new { @id = "rdbfullamtsingle", @class = "fullamtincremented" }) Single
+            @Html.RadioButtonFor(model => model.objpointsearnruleconfig.EarnFullAmtIncremented, "jwlfullamtcumulative", new { @id = "rdbfullamtcumulative", @class = "fullamtincremented" }) Cumulative
         </div>
 
     </div>
     @*jwl full amt incremented single value or cumulative box*@
     <div class="row">
         <div class="col-md-6 col-sm-6" id="divfullamtincrementedpersentage" style="display:none;">
-            <b>Percentage</b> @Html.DropDownListFor(model => model.objpointsearnruleconfig.PercentageType, new SelectList(Model.Percentage(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input50", @id = "ddlfullamtincrementedpercentage" })
-            @Html.TextBoxFor(model => model.objpointsearnruleconfig.IncrementedpercentageWith, new { @class = "input50", @id = "txtfullamtIncrementpercentagewith", style = "display: none;" })
-            @Html.TextBoxFor(model => model.objpointsearnruleconfig.IncrementedFixedPercentage, new { @class = "input50", @id = "txtfullamtIncrementpercentage", style = "display: none;" })
+            <b>Percentage</b> @Html.DropDownListFor(model => model.objpointsearnruleconfig, new SelectList(Model.Percentage(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input50", @id = "ddlfullamtincrementedpercentage" })
+            @Html.TextBoxFor(model => model.objpointsearnruleconfig.EarnFullAmtSingleOrCumulativeWithPercentage, new { @class = "input50", @id = "txtfullamtIncrementpercentagewith", style = "display: none;" })
+            @Html.TextBoxFor(model => model.objpointsearnruleconfig.EarnFullAmtSingleOrCumulativeFixedPercentage, new { @class = "input50", @id = "txtfullamtIncrementpercentage", style = "display: none;" })
 
         </div>
     </div>
     <div class="row">
-        @*non jwl 1st fixed percentage box*@
+        @*common 1st fixed percentage box*@
         <div class="col-md-6 col-sm-6" id="divfixed" style="display:none;">
-            <b>Percentage</b> @Html.DropDownListFor(model => model.objpointsearnruleconfig.PercentageType, new SelectList(Model.Percentage(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input50", @id = "ddlpercentage" })
+            <b>Percentage</b> @Html.DropDownListFor(model => model.objpointsearnruleconfig.commonfixedpercentageorwithperce, new SelectList(Model.Percentage(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input50", @id = "ddlpercentage" })
             @Html.TextBoxFor(model => model.objpointsearnruleconfig.FixedEarnPointPecentageWith, new { @class = "input50", @id = "txtpercentagewith", style = "display: none;" })
             @Html.TextBoxFor(model => model.objpointsearnruleconfig.FixedEarnPointPercentage, new { @class = "input50", @id = "txtpercentage", style = "display: none;" })
 
         </div>
-        @*slab box*@
+        @*common slab box*@
         <div class="col-md-6 col-sm-6" id="divslab" style="display:none;">
             <b>Slab Type</b>
-            @Html.RadioButtonFor(model => model.objearnpointslab.SlabType, "commonslabin%", new { @id = "rdbFrmToPercentage" }) Slab In Percentage
-            @Html.RadioButtonFor(model => model.objearnpointslab.SlabType, "commonSlabInRs", new { @id = "rdbFrmToRs" }) Slab In RS
-            @*<div class="row" id="slabdynamictxt">
-                    <div id='TextBoxesGroup1'>
-                        <div id="TextBoxDiv1">
-                            <label>From </label><input type='textbox' id='textbox1' placeholder="From">
-                            <label>To </label><input type='textbox' id='textbox2' placeholder="To">
-                        </div>
-                        <input type='button' value='+' id='addButton1'>
-                        <input type='button' value='-' id='removeButton1'>
+            @Html.RadioButtonFor(model => model.objearnpointslab.SlabType, "commonslabin%", new { @id = "rdbFrmToPercentage", @class = "commonslabin%orRs" }) Slab In Percentage
+            @Html.RadioButtonFor(model => model.objearnpointslab.SlabType, "commonSlabInRs", new { @id = "rdbFrmToRs", @class = "commonslabin%orRs" }) Slab In RS
+            <div class="row" id="commonslabdynamictxt">
+                <div id='CommonTextBoxesGroup'>
+                    <div id="CommonTextBoxDiv0">
+                        <label>From </label><input type='textbox' name="commontextboxfrom" id='commontextboxfrom0' class="input50" placeholder="From">
+                        <label>To </label><input type='textbox' name="commontextboxto" id='commontextboxto0' class="input50" placeholder="To">&nbsp;<input type='textbox' name="commontextboxvalue" id='commontextboxvalue0' placeholder="value" style="width:50px;">
                     </div>
-                </div>*@
+                    <input type='button' value='+' id='commonaddButton'>
+                    <input type='button' value='-' id='commonremoveButton'>
+                </div>
+            </div>
         </div>
 
     </div>
-    @*slab direct or telescope box*@
+    @*common slab direct or telescope box*@
     <div class="row">
         <div class="col-md-6 col-sm-6" id="divslabDirectTelescoping" style="display:none;">
             <b>Slab Type</b>
-            @Html.RadioButtonFor(model => model.objearnpointslab.EarnSlab, "commonslabdirect", new { @id = "rdbDirect" }) Direct
-            @Html.RadioButtonFor(model => model.objearnpointslab.EarnSlab, "commonslabtelescoping", new { @id = "rdbTelescoping" }) Telescoping
-
+            @Html.RadioButtonFor(model => model.objearnpointslab.EarnSlabDirectOrTelescoping, "commonslabdirect", new { @id = "rdbDirect", @class = "commonslabtypeDirect" }) Direct
+            @Html.RadioButtonFor(model => model.objearnpointslab.EarnSlabDirectOrTelescoping, "commonslabtelescoping", new { @id = "rdbTelescoping", @class = "commonslabtypeDirect" }) Telescoping
+            @Html.TextBoxFor(model => model.objearnpointslab.SlabDirectOrTelescopingValue, new { @class = "input50", @id = "txtcommonslabdirect", style = "display: none;" })
+            @Html.TextBoxFor(model => model.objearnpointslab.SlabDirectOrTelescopingValue, new { @class = "input50", @id = "txtcommonslabtelescopic", style = "display: none;" })
         </div>
 
     </div>
-    @*% with Incremented box*@
+    @*common % with Incremented box*@
     <div class="row">
         <div class="col-md-6 col-sm-6" id="divincrement" style="display:none;">
             <b>Increment</b>
-            @Html.RadioButtonFor(model => model.objpointsearnruleconfig.IncrementedValue, "commonincrementedsingle", new { @id = "rdbsingle" }) Single
-            @Html.RadioButtonFor(model => model.objpointsearnruleconfig.IncrementedValue, "commonincrementedcumulative", new { @id = "rdbcumulative" }) Cumulative
+            @Html.RadioButtonFor(model => model.objpointsearnruleconfig.IncrementedValue, "commonincrementedsingle", new { @id = "rdbsingle", @class = "commonsingleorcumulative" }) Single
+            @Html.RadioButtonFor(model => model.objpointsearnruleconfig.IncrementedValue, "commonincrementedcumulative", new { @id = "rdbcumulative", @class = "commonsingleorcumulative" }) Cumulative
         </div>
 
     </div>
-    @*incremented single value or cumulative box*@
+    @* common incremented single value or cumulative box*@
     <div class="row">
         <div class="col-md-6 col-sm-6" id="divincrementedpersentage" style="display:none;">
-            <b>Percentage</b> @Html.DropDownListFor(model => model.objpointsearnruleconfig.PercentageType, new SelectList(Model.Percentage(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input50", @id = "ddlincrementedpercentage" })
+            <b>Percentage</b> @Html.DropDownListFor(model => model.objpointsearnruleconfig.CommonIncrementedPercentageType, new SelectList(Model.Percentage(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input50", @id = "ddlincrementedpercentage" })
             @Html.TextBoxFor(model => model.objpointsearnruleconfig.IncrementedpercentageWith, new { @class = "input50", @id = "txtIncrementpercentagewith", style = "display: none;" })
             @Html.TextBoxFor(model => model.objpointsearnruleconfig.IncrementedFixedPercentage, new { @class = "input50", @id = "txtIncrementpercentage", style = "display: none;" })
 
         </div>
     </div>
     <div class="row">
-        <div class="col-md-12 col-sm-12">
+        <div class="col-md-10 col-sm-10">
             <b>Block For Earn</b> &nbsp;
 
             @Html.RadioButtonFor(model => model.objpointsearnruleconfig.BlockOnEarnType, "InvoiceAmount", new { @id = "rbgburnforearnpointlevelinvoiceamt", @class = "Burnforearnlevel" }) Invoice Amount
@@ -223,9 +250,16 @@
             @Html.RadioButtonFor(model => model.objpointsearnruleconfig.BlockOnEarnType, "Brand", new { @id = "rbgburnforearnpointlevelbrand", @class = "Burnforearnlevel" }) Brand
 
         </div>
+        <div id="divBurnonEarnUpload" class="col-md-2 col-sm-2" style="padding-right:50px; display:none;">
+
+            <a href="/User/DownloadExcel/"><img src="~/excel.ico" width="25" height="25" title="Download Excel format" alt="excel" /></a>
+            <div class="control-label">Excel:</div>
+            <input type="file" id="BurnOnEarnUpload" name="BurnOnEarnUpload" class="" />          
+
+        </div>
     </div>
     <div class="row">
-        <div class="col-md-12 col-sm-12" id="divblockearnInvamtMinMax">
+        <div class="col-md-12 col-sm-12" id="divblockearnInvamtMinMax" style="display:none;">
             <b>Min Amount</b>  @Html.TextBoxFor(model => model.objpointsearnruleconfig.BlockOnInvoiceAmtMin, new { @class = "input50", @id = "txtBlockEarnMin" })
             <b>Max Amount</b> @Html.TextBoxFor(model => model.objpointsearnruleconfig.BlockOnInvoiceAmtMax, new { @class = "input50", @id = "txtBlockEarnMax" })
         </div>
@@ -247,8 +281,9 @@
                 var CategoryObj = $.parseJSON(categoryData);
                 var counter = 2;
 
-
+               // rdbfullamtslabdirect
                 $("input[type='radio'].radiolevel").change(function () {
+                    console.log(111);
                     console.log(CategoryObj[0].CategoryId);
                     if (CategoryObj[0].CategoryId == 8) {
                         $("#divjel").show();
@@ -258,9 +293,42 @@
                         $("#divjel").hide();
                         $("#divnonjel").show();
                     }
+                    if ($("input[type='radio'].radiolevel:checked").val() != "InvoiceAmount") {
+                        $("#divEarnUpload").show();
+                        
+                    }
+                    else {
+                        $('input[id=rbgburnforearnpointleveldepartment]').attr("disabled", true);
+                        $('input[id=rbgburnforearnpointlevelproduct]').attr("disabled", true);
+                        $('input[id=rbgburnforearnpointlevelCategory]').attr("disabled", true);
+                        $('input[id=rbgburnforearnpointlevelsubcategory]').attr("disabled", true);
+                        $('input[id=rbgburnforearnpointlevelbrand]').attr("disabled", true);
+                    }
+
+                    
+
+                });
+                $("input[type='radio'].Burnforearnlevel").change(function () {
+                    //if ($("input[type='radio'].radiolevel:checked").val() == "InvoiceAmount") {
+
+                    //    $('input[id=rbgburnforearnpointleveldepartment]').attr("disabled", true);
+                    //    $('input[id=rbgburnforearnpointlevelproduct]').attr("disabled", true);
+                    //    $('input[id=rbgburnforearnpointlevelCategory]').attr("disabled", true);
+                    //    $('input[id=rbgburnforearnpointlevelsubcategory]').attr("disabled", true);
+                    //    $('input[id=rbgburnforearnpointlevelbrand]').attr("disabled", true);
+                    //}
+                    console.log(222);
+                    if ($("input[type='radio'].Burnforearnlevel:checked").val() == "InvoiceAmount") {
+                        $("#divblockearnInvamtMinMax").show();
+                       
+                    }
+                    else {
+                        $("#divBurnonEarnUpload").show();
+                    }
                 });
                 $("#rdbMaking").change(function () {
                     $("#divmakingjwl").show();//divmakingfixed
+                    $("#divfullamt").hide();
 
                 });
                 $("#rdbmakingFixed").change(function () {
@@ -270,12 +338,15 @@
                 $("#rdbmakingSlab").change(function () {
                     $("#divmakingslab").show();//rdbmakingSlab
                     $("#divmakingfixed").hide();
+                    $("#divslabdirectortelescoping").show();
+                    $("#divfullamt").hide();
                 });
                 $("#rdbFullAmt").change(function () {
                     $("#divnonjel").hide();
                     $("#divmakingslab").hide();
                     $("#divmakingfixed").hide();
                     $("#divmakingjwl").hide();
+                    $("#divslabdirectortelescoping").hide();
                     $("#divfullamt").show();
                     //divmakingjwl
                 });//rdbfullamtsingle
@@ -287,39 +358,78 @@
                     $("#divfullamtincrementedpersentage").show();
 
                 });
+                $("#rdbmakingslabdirect").change(function () {
+                    $("#txtmakingslabdirect").show();
+
+                });
+                $("#rdbmakingslabtelescopic").change(function () {
+                    $("#txtmakingslabtelescopic").show();
+
+                });//
+                $("#rdbfullamtslabdirect").change(function () {
+                    $("#txtfullamtslabdirect").show();
+                    $("#txtfullamtslabtelescopic").hide();
+
+                });
+                $("#rdbfullamtslabtelescopic").change(function () {
+                    $("#txtfullamtslabtelescopic").show();
+                    $("#txtfullamtslabdirect").hide();
+
+                });
+                $("#rdbDirect").change(function () {
+                    $("#txtcommonslabdirect").show();
+                    $("#txtcommonslabtelescopic").hide();
+
+                });
+                $("#rdbTelescoping").change(function () {
+                    $("#txtcommonslabtelescopic").show();
+                    $("#txtcommonslabdirect").hide();
+
+                });
                 $("#rdbFixed").change(function () {
                     $("#divfixed").show();
                     $("#divslab").hide();
+                    $("#divslabDirectTelescoping").hide();
                 });
                 $("#rdbSlab").change(function () {
                     $("#divfixed").hide();
                     $("#divslab").show();
+                    $("#divslabDirectTelescoping").show();
+                    $("#divincrement").hide();
+                    $("#divincrementedpersentage").hide();
+
                 });
                 $("#ddlpercentage").change(function () {
                     console.log(666);
                     if ($("#ddlpercentage").val() == 'percentwith') {
                         $("#txtpercentagewith").show();
-                        $("#txtpercentage").hide();
+                        $("#txtfixedpercentage").hide();
+                        $("#divincrement").show();
                     }
                     else if ($("#ddlpercentage").val() == 'fixedpercentage') {
-                        $("#txtpercentage").show();
+                        $("#txtfixedpercentage").show();
                         $("#divincrement").hide();
-                        $("#txtpercentagewith").hide();
+                        $("#txtfixedpercentage").hide();
+                        $("#divincrementedpersentage").hide();
                     }
                 });//ddlincrementedpercentage
                 $("#ddlincrementedpercentage").change(function () {
                     console.log(555);
                     if ($("#ddlincrementedpercentage").val() == 'percentwith') {
                         $("#txtIncrementpercentagewith").show();
-                        // $("#txtIncrementpercentage").hide();
+                         $("#txtIncrementpercentage").hide();
                     }
                     else if ($("#ddlincrementedpercentage").val() == 'fixedpercentage') {
                         $("#txtIncrementpercentage").show();
-                        $("#divincrementedpersentage").hide();
+                        $("#divincrementedpersentage").show();
                         $("#txtIncrementpercentagewith").hide();
                     }
                 });
                 $("#rdbsingle").change(function () {
+
+                    $("#divincrementedpersentage").show();
+                });
+                $("#rdbcumulative").change(function () {
 
                     $("#divincrementedpersentage").show();
                 });
@@ -339,8 +449,10 @@
                 $("#rdbfullamtSlab").change(function () {
                     $("#divfullamtslab").show();
                     $("#divfullamtwithGST").show();
+                    $("#divfullamtslabdirectortelescoping").show();
                     $("#divfullamtfixed").hide();
-
+                    $("#divfullamtincrementedpersentage").hide();
+                    $("#divfullamtpercentagewithincrement").hide();
                 });
                 $("#ddlFullamtpercentage").change(function () {
                     console.log(444);
@@ -386,6 +498,17 @@
                         // $("#divincrement").hide();
                     }
                 });
+                $("#ddlfullamtincrementedpercentage").change(function () {
+                    console.log(333);
+                    if ($("#ddlfullamtincrementedpercentage").val() == 'percentwith') {
+                        $("#txtfullamtIncrementpercentagewith").show();
+                        $("#txtfullamtIncrementpercentage").hide();
+                    }
+                    else if ($("#ddlfullamtincrementedpercentage").val() == 'fixedpercentage') {
+                        $("#txtfullamtIncrementpercentage").show();
+                        $("#txtfullamtIncrementpercentagewith").hide();
+                    }
+                });
                 $("#addButton").click(function () {
 
                     if (counter > 15) {
@@ -398,7 +521,7 @@
                     newTextBoxDiv.after().html(
                         '<input type="text" name="textboxfrom' + counter +
                         '" id="textboxfrom' + counter + '" value="" class="input50" placeholder="From" >' + '&nbsp;&nbsp;' + '<input type="text" name="textboxto' + counter +
-                        '" id="textboxto' + counter + '" value="" class="input50" placeholder="To">');
+                        '" id="textboxto' + counter + '" value="" class="input50" placeholder="To">' + '&nbsp;' + '<input type="textbox" name="textboxvalue' + counter + '" id="textboxvalue' + counter+'" placeholder="value" style="width:50px;">');
 
                     newTextBoxDiv.appendTo("#TextBoxesGroup");
                     counter++;
@@ -413,8 +536,63 @@
                     $("#TextBoxDiv" + counter).remove();
 
                 });
+
+                $("#fullamtaddButton").click(function () {
+
+                    if (counter > 15) {
+                        alert("Only 15 textboxes allow");
+                        return false;
+                    }
+                    var newTextBoxDiv = $(document.createElement('div'))
+                        .attr("id", 'fullamtTextBoxDiv' + counter);
+                    newTextBoxDiv.after().html(
+                        '<input type="text" name="fullamttextboxfrom' + counter +
+                        '" id="fullamttextboxfrom' + counter + '" value="" class="input50" placeholder="From" >' + '&nbsp;&nbsp;' + '<input type="text" name="fullamttextboxto' + counter +
+                        '"id="fullamttextboxto' + counter + '" value="" class="input50" placeholder="To">' + '&nbsp;' + '<input type="textbox" name="fullamttextboxvalue' + counter +
+                        '"  id="fullamttextboxvalue' + counter + '" placeholder="value" style="width:50px;">');
+
+                    newTextBoxDiv.appendTo("#fullamtTextBoxesGroup");
+                    counter++;
+                });
+
+                $("#fullamtremoveButton").click(function () {
+                    if (counter == 1) {
+                        alert("No more textbox to remove");
+                        return false;
+                    }
+                    counter--;
+                    $("#fullamtTextBoxDiv" + counter).remove();
+
+                });
+                $("#commonaddButton").click(function () {
+
+                    if (counter > 15) {
+                        alert("Only 15 textboxes allow");
+                        return false;
+                    }
+                    var newTextBoxDiv = $(document.createElement('div'))
+                        .attr("id", 'CommonTextBoxDiv' + counter);
+                    newTextBoxDiv.after().html(
+                        '<input type="text" name="commontextboxfrom' + counter +
+                        '" id="commontextboxfrom' + counter + '" value="" class="input50" placeholder="From" >' + '&nbsp;&nbsp;' + '<input type="text" name="commontextboxto' + counter +
+                        '"id="commontextboxto' + counter + '" value="" class="input50" placeholder="To">' + '&nbsp;' + '<input type="textbox" name="commontextboxvalue' + counter +
+                        '"  id="commontextboxvalue' + counter + '" placeholder="value" style="width:50px;">');
+
+                    newTextBoxDiv.appendTo("#CommonTextBoxesGroup");
+                    counter++;
+                });
+
+                $("#commonremoveButton").click(function () {
+                    if (counter == 1) {
+                        alert("No more textbox to remove");
+                        return false;
+                    }
+                    counter--;
+                    $("#CommonTextBoxDiv" + counter).remove();
+
+                });
             });
-    function AddEarnRule() {
+            function AddEarnRule() {
         var categoryData = $("#hdnCategoryData").val();
         var CategoryObj = $.parseJSON(categoryData);
         var GroupId = $("#hdnGroupID").val();
@@ -435,11 +613,26 @@
                     // console.log($("input[type='radio'].radiolevel:checked").val());
                     $("input[type='radio'].Burnforearnlevel").css('border-color', 'red');
                     returnStatus = false;
-        }
-        //if ($('#ddlBrandsComm').val() > 0) {
-        //    $('#ddlBrandsComm').css('border-color', 'red');
-        //    returnStatus = false;
-        //}
+                 }
+                //if ($("input[type='radio'].radiolevel:checked").val() != "InvoiceAmount") {
+                //    // console.log($("input[type='radio'].radiolevel:checked").val());
+                //    if ($("#FileUpload").val() != "") {
+                //        var regex = /^([a-zA-Z0-9\s_\\.\-:])+(.xlsx|.xls)$/;
+                //        /*Checks whether the file is a valid excel file*/
+                //        if (!regex.test($("#FileUpload").val().toLowerCase())) {
+                //            $('#FileUpload').css('border-color', 'red');
+                //            return false;
+                //        }
+                //        else {
+                //            console.log(111);
+                //          //  UploadSelectedExcelsheet();
+                //        }
+                //    }
+                //    else {
+                //        $('#FileUpload').css('border-color', 'red');
+                //        return false;
+                //    }
+                //}
                 if (returnStatus == true) {
                     var Earnrule = [];
                     var BlockOnearnRule = [];
@@ -450,50 +643,162 @@
                     item["brandid"] = $("#ddlBrandsComm").val();
                     console.log($("#ddlBrandsComm").val());
                     item["pointvalue"] = $("#txtpointvalue").val();
-                    item["earnlevel"] = $("input[type='radio'].radiolevel:checked").val();
-                    item["jwlLevel"] = $("input[type='radio'].jwllevel:checked").val();
+                    item["earnlevel"] = $("input[type='radio'].radiolevel:checked").val();                   
 
-                   // console.log($("input[type='radio'].makingfixedorslab:checked").val());
+                    item["jwlLevel"] = $("input[type='radio'].jwllevel:checked").val();
+                    item["commonfixedorslab"] = $("input[type='radio'].commonfixedorslab:checked").val();
+                    if ($("input[type='radio'].commonfixedorslab:checked").val() == "commonFixed") {
+                        item["common%withorFixed"] = $("#ddlpercentage").val();
+                        if ($("#ddlpercentage").val() == 'fixedpercentage') {
+                            item["commonFixed%"] = $("#txtfixedpercentage").val();
+                            console.log($("#txtfixedpercentage").val());
+                        }
+                        else if ($("#ddlpercentage").val() == 'percentwith') {
+                            item["common%with"] = $("#txtpercentagewith").val();
+                            console.log($("#txtpercentagewith").val());
+                        }
+                        item["commonsingleorcumulative"] = $("input[type='radio'].commonsingleorcumulative:checked").val();
+                        if ($("input[type='radio'].commonsingleorcumulative:checked").val() == "commonincrementedsingle") {
+                            item["commonsingle%withorFixed"] = $("#ddlincrementedpercentage").val();
+                            if ($("#ddlincrementedpercentage").val() == 'fixedpercentage') {
+                                item["commonsingleFixed%"] = $("#txtIncrementpercentage").val();
+                                console.log($("#txtIncrementpercentage").val());
+                            }
+                            else if ($("#ddlincrementedpercentage").val() == 'percentwith') {
+                                item["commoncumulative%with"] = $("#txtIncrementpercentagewith").val();
+                                console.log($("#txtIncrementpercentagewith").val());
+                            }
+                        }
+                        else if ($("input[type='radio'].commonsingleorcumulative:checked").val() == "commonincrementedcumulative") {
+                            item["commoncumulative%withorFixed"] = $("#ddlincrementedpercentage").val();
+                            if ($("#ddlincrementedpercentage").val() == 'fixedpercentage') {
+                                item["commoncumulativeFixed%"] = $("#txtIncrementpercentage").val();
+                                console.log($("#txtIncrementpercentage").val());
+                            }
+                            else if ($("#ddlpercentage").val() == 'percentwith') {
+                                item["commoncumulative%with"] = $("#txtIncrementpercentagewith").val();
+                                console.log($("#txtIncrementpercentagewith").val());
+                            }
+                        }
+
+                    }
+                    if ($("input[type='radio'].commonfixedorslab:checked").val() == "commonSlab") {
+                        console.log($("input[type='radio'].commonslabin%orRs:checked").val());
+                        item["commonslabtype"] = $("input[type='radio'].commonslabin%orRs:checked").val();
+                        var commonslabs = [];
+
+                        $('[id^=CommonTextBoxDiv]').each(function (i, item) {
+                            var id = item.id.substr(16);
+
+                            var fromval = $('input[id="commontextboxfrom' + id + '"]').val();
+                            var Toval = $('input[id="commontextboxto' + id + '"]').val();
+                            var value = $('input[id="commontextboxvalue' + id + '"]').val();
+                            if (fromval != "" && Toval != "" && value != "") {
+                                commonslabs.push(fromval + '-' + Toval + '-' + value);
+                            }
+                            console.log(commonslabs);
+                        });
+                        item["Commonslab"] = commonslabs;
+                    }
+
+                    item["commonslabdirectortelescopic"] = $("input[type='radio'].commonslabtypeDirect:checked").val();
+                    if ($("input[type='radio'].commonslabtypeDirect:checked").val() == "commonslabdirect") {
+                        item["commonslabdirectvalue"] = $("#txtcommonslabdirect").val();
+                    }
+                    else if ($("input[type='radio'].commonslabtypeDirect:checked").val() == "commonslabtelescoping") {
+                        item["commonslabtelescopicvalue"] = $("#txtcommonslabtelescopic").val();
+                    }
+
+                    //}
+
+                    // console.log($("input[type='radio'].makingfixedorslab:checked").val());
                     if ($("input[type='radio'].jwllevel:checked").val() == "Making") {
                         item["makingfixedorslab"] = $("input[type='radio'].makingfixedorslab:checked").val();
                         if ($("input[type='radio'].makingfixedorslab:checked").val() == "makingFixed") {
                             item["making%withorFixed"] = $("#ddlmakingpercentage").val();
                             if ($("#ddlmakingpercentage").val() == 'fixedpercentage') {
                                 item["makingFixed%"] = $("#txtmakingPercentage").val();
+                                console.log($("#txtmakingPercentage").val());
                             }
                             else if ($("#ddlmakingpercentage").val() == 'percentwith') {
                                 item["making%with"] = $("#txtmakingPercentagewith").val();
+                                console.log($("#txtmakingPercentagewith").val());
                             }
                         }
                         if ($("input[type='radio'].makingfixedorslab:checked").val() == "makingSlab") {
+                            console.log($("input[type='radio'].makingslabtype:checked").val());
                             item["slabtype"] = $("input[type='radio'].makingslabtype:checked").val();
                             var slabs = [];
 
                             $('[id^=TextBoxDiv]').each(function (i, item) {
                                 var id = item.id.substr(10);
+
                                 var fromval = $('input[id="textboxfrom' + id + '"]').val();
                                 var Toval = $('input[id="textboxto' + id + '"]').val();
-                                slabs.push(fromval +'-' +Toval);
+                                var value = $('input[id="textboxvalue' + id + '"]').val();
+                                if (fromval != "" && Toval != "" && value != "") {
+                                    slabs.push(fromval + '-' + Toval + '-' + value);
+                                }
                                 console.log(slabs);
                             });
                             item["slab"] = slabs;
+                        }
+
+                        item["makingslabdirectortelescopic"] = $("input[type='radio'].makingslabtypeDirect:checked").val();
+                        if ($("input[type='radio'].makingslabtypeDirect:checked").val() == "makingslabDirect") {
+                            item["makingslabdirectvalue"] = $("#txtmakingslabdirect").val();
+                        }
+                        else if ($("input[type='radio'].makingslabtypeDirect:checked").val() == "makingslabtescopic") {
+                            item["makingslabtelescopicvalue"] = $("#txtmakingslabtelescopic").val();
                         }
                     }
                     if ($("input[type='radio'].jwllevel:checked").val() == "FullAmount") {
                         item["fullamtwithgstornongst"] = $("input[type='radio'].fullamtGstorNongst:checked").val();
                         item["fullamtfixedorslab"] = $("input[type='radio'].fullamtfixedorslab:checked").val();
                         item["fullamt%withorfixed%"] = $("#ddlFullamtpercentage").val();
-                        if ($("#ddlFullamtpercentage").val() == 'fixedpercentage') {
-                            item["fullamtFixed%"] = $("#txtfullAmtWithGstPercentage").val();
-                        }
-                        else if ($("#ddlFullamtpercentage").val() == 'percentwith') {
-                            item["fullamt%with"] = $("#txtfullAmtWithGstPercentagewith").val();
-                            item["fullamtincrement"] = $("input[type='radio'].fullamtincremented:checked").val();
-                            if ($("#ddlfullamtincrementedpercentage").val() == 'fixedpercentage') {
-                                item["fullamtincrementedfixed%"] = $("#txtfullamtIncrementpercentage").val();
+                        if ($("input[type='radio'].fullamtfixedorslab:checked").val() == "FullamtFixed") {
+                            item["fullamtslabtype"] = $("input[type='radio'].fullAmtslabtype:checked").val();
+                            if ($("#ddlFullamtpercentage").val() == 'fixedpercentage') {
+                                item["fullamtFixed%"] = $("#txtfullAmtWithGstPercentage").val();
                             }
-                            else if ($("#ddlfullamtincrementedpercentage").val() == 'percentwith') {
-                                item["fullamtincremented%with"] = $("#txtfullamtIncrementpercentagewith").val();
+                            else if ($("#ddlFullamtpercentage").val() == 'percentwith') {
+                                item["fullamt%with"] = $("#txtfullAmtWithGstPercentagewith").val();
+                                item["fullamtincrement"] = $("input[type='radio'].fullamtincremented:checked").val();
+                                if ($("#ddlfullamtincrementedpercentage").val() == 'fixedpercentage') {
+                                    item["fullamtincrementedfixed%"] = $("#txtfullamtIncrementpercentage").val();
+                                }
+                                else if ($("#ddlfullamtincrementedpercentage").val() == 'percentwith') {
+                                    item["fullamtincremented%with"] = $("#txtfullamtIncrementpercentagewith").val();
+                                }
+
+
+                            }
+                        }
+                        if ($("input[type='radio'].fullamtfixedorslab:checked").val() == "FullamtSlab") {
+                            item["fullamtslabtype"] = $("input[type='radio'].fullAmtslabtype:checked").val();
+                            var fullAmtslabs = [];
+
+                            $('[id^=fullamtTextBoxDiv]').each(function (i, item) {
+                                console.log(item);
+                                var id = item.id.substr(17);
+                                console.log(id);
+                                var fromval = $('input[id="fullamttextboxfrom' + id + '"]').val();
+                                var Toval = $('input[id="fullamttextboxto' + id + '"]').val();
+                                var value = $('input[id="fullamttextboxvalue' + id + '"]').val();
+                                if (fromval != "" && Toval != "" && value != "") {
+                                    fullAmtslabs.push(fromval + '-' + Toval + '-' + value);
+                                }
+                                console.log(fullAmtslabs);
+                            });
+                            item["fullamtslab"] = fullAmtslabs;
+                            console.log($("input[type='radio'].fullamtslabtypeDirect:checked").val());
+                            item["fullamtslabdirectortele"] = $("input[type='radio'].fullamtslabtypeDirect:checked").val();
+                            console.log(item["fullamtslabdirectortele"]);
+                            if ($("input[type='radio'].fullamtslabtypeDirect:checked").val() == "fullamtslabDirect") {
+                                item["fullamtslabdirect"] = $("#txtfullamtslabdirect").val();
+                            }
+                            else if ($("input[type='radio'].fullamtslabtypeDirect:checked").val() == "fullamtslabtescopic") {
+                                item["fullamtslabtele"] = $("#txtfullamtslabtelescopic").val();
                             }
 
 
@@ -509,16 +814,31 @@
                         //itemburn["Minvalofinvamt"] = 0.00;
                         //itemburn["Maxvalofinvamt"] = 0.00;
                     }
-
+                   /* if ($("input[type='radio'].radiolevel:checked").val() != "InvoiceAmount") {*/
                     Earnrule.push(item);
                     BlockOnearnRule.push(itemburn);
+                    var files = $("#FileUpload").get(0).files;                    
+                    var filesburn = $("#BurnOnEarnUpload").get(0).files;
+                    var formData = new FormData();
+                    formData.append('FileuploadEarn', files[0]);
+                    formData.append('Fileuploadburnonearn', filesburn[0]);
+                    formData.append('EarnRule', JSON.stringify(Earnrule));
+                    formData.append('BlockOnearnrule', JSON.stringify(BlockOnearnRule));
+                    console.log(formData);
+                      
+
+                   //}
+                    
                     console.log(Earnrule);
-                     $("#divLoader").show();
+                    $("#divLoader").show();
+                }
         $.ajax({
             type: "POST",
             url: '@Url.Action("AddEarnRule", "CustomerOnBoarding")',
-            data: '{EarnRule: ' + JSON.stringify(JSON.stringify(Earnrule)) + ',BlockOnearnrule: ' + JSON.stringify(JSON.stringify(BlockOnearnRule)) + '}',
-            contentType: "application/json; charset=utf-8",
+           // data: '{EarnRule: ' + JSON.stringify(JSON.stringify(Earnrule)) + ',BlockOnearnrule: ' + JSON.stringify(JSON.stringify(BlockOnearnRule)) + '}',
+            data: formData,
+            contentType: false,
+            processData: false,
             dataType: "json",
             success: function (result) {
                 if (result) {
@@ -545,16 +865,41 @@
             }
         });
                 }
-                else {
-                    cuteAlert({
-                        type: "error",
-                        title: "Oops..",
-                        message: "Please enter Required fields",
-                        buttonText: "Okay"
-                    })
-                    return false;
+            //    else {
+            //        cuteAlert({
+            //            type: "error",
+            //            title: "Oops..",
+            //            message: "Please enter Required fields",
+            //            buttonText: "Okay"
+            //        })
+            //        return false;
+            //    }
+            //}
+    @*function UploadFile() {
+        var files = $("#FileUpload").get(0).files;
+
+        var formData = new FormData();
+        formData.append('FileUpload', files[0]);
+
+        $.ajax({
+            url: '@Url.Action("", "CustomerOnBoarding")',
+            data: function () {
+                var data = new FormData();
+                data.append("file", jQuery("#file").get(0).files[0]);
+                return data;
+            }(),
+            type: 'POST',
+            contentType: false,
+            processData: false,
+            success: function (data) {
+                if (data.Status === 1) {
+                    alert(data.Message);
+                } else {
+                    alert("Failed to Import");
                 }
             }
+        });
+    }*@
             function ClearAll() {
 
             }
@@ -576,3 +921,7 @@
         background: url("https://cdn.datatables.net/1.10.0/images/sort_both.png") no-repeat center left;
     }
 </style>
+
+
+
+

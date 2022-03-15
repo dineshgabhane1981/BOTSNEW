@@ -4,11 +4,8 @@ using BOTS_BL.Repository;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
-using System.Linq;
-using System.Net.Http;
 using System.Net.Mail;
 using System.Text;
-using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Script.Serialization;
@@ -16,7 +13,6 @@ using WebApp.App_Start;
 using WebApp.ViewModel;
 using BOTS_BL.Models.SalesLead;
 using BOTS_BL.Models.OnBoarding;
-using OfficeOpenXml;
 using System.Data.OleDb;
 using System.Data;
 
@@ -652,10 +648,13 @@ namespace WebApp.Controllers.OnBoarding
             return lstearn;
         }
 
+
         public ActionResult AddEarnRule(string EarnRule, string BlockOnearnrule)
         {
+
             OnBoardingSalesViewModel objdata = new OnBoardingSalesViewModel();
             bool status = false;
+
             try
             {
 
@@ -667,48 +666,169 @@ namespace WebApp.Controllers.OnBoarding
                 object[] objBurnrule = (object[])json_serializer.DeserializeObject(BlockOnearnrule);
                 object[] slab = new object[20];
                 string slabtype = "";
+                decimal makingslabdirectortelescopic = 0;
+                decimal fullamtslabdirectortelescopic = 0;
+                string makingSlabdirectortele = "";
+                string fullamtSlabdirectortele = "";
+                string CommonSlabdirectortele = "";
+                decimal commonlabdirectortelescopic = 0;
                 foreach (Dictionary<string, object> item in objEarnrule)
                 {
                     objpointearn.CategoryId = Convert.ToString(item["CategoryId"]);
                     objpointearn.GroupId = Convert.ToString(item["Groupid"]);
                     objpointearn.BrandId = Convert.ToString(item["brandid"]);
+                    objpointearn.AddedBy = userDetails.LoginId;
+                    objpointearn.AddedDate = DateTime.Today;
                     objpointearn.OnePointValueInRs = Convert.ToDecimal(item["pointvalue"]);
                     objpointearn.EarnPointLevel = Convert.ToString(item["earnlevel"]);
-                    objpointearn.EarnPointLevelType = Convert.ToString(item["jwlLevel"]);
+                    if (objpointearn.CategoryId == "8")
+                    {
+                        objpointearn.EarnPointLevelType = Convert.ToString(item["jwlLevel"]);
+                    }
+                    else
+                    {
+                        objpointearn.EarnPointLevelType = Convert.ToString(item["commonfixedorslab"]);
+                    }
+                    if (objpointearn.EarnPointLevelType == "commonFixed")
+                    {
+                        objpointearn.commonfixedpercentageorwithperce = Convert.ToString(item["common%withorFixed"]);
+                        if ((Convert.ToString(item["common%withorFixed"])) == "fixedpercentage")
+                            objpointearn.FixedEarnPointPercentage = Convert.ToDecimal(item["commonFixed%"]);
+                        if ((Convert.ToString(item["common%withorFixed"])) == "percentwith")
+                            objpointearn.FixedEarnPointPecentageWith = Convert.ToDecimal(item["common%with"]);
+
+                        if (!string.IsNullOrEmpty(Convert.ToString(item["commonsingleorcumulative"])))
+                        {
+                            objpointearn.IncrementedValue = Convert.ToString(item["commonsingleorcumulative"]);
+                            if ((Convert.ToString(item["commonsingle%withorFixed"])) == "fixedpercentage")
+                                objpointearn.IncrementedFixedPercentage = Convert.ToDecimal(item["commonsingleFixed%"]);
+                            if ((Convert.ToString(item["commonsingle%withorFixed"])) == "percentwith")
+                                objpointearn.IncrementedpercentageWith = Convert.ToDecimal(item["commoncumulative%with"]);
+                        }
+                    }
+                    if (objpointearn.EarnPointLevelType == "commonSlab")
+                    {
+                        slabtype = Convert.ToString(item["commonslabtype"]);
+                        slab = (object[])item["Commonslab"];
+                        CommonSlabdirectortele = Convert.ToString(item["commonslabdirectortelescopic"]);
+
+                        if ((Convert.ToString(item["commonslabdirectortelescopic"])) == "commonslabdirect")
+                        {
+                            commonlabdirectortelescopic = Convert.ToDecimal(item["commonslabdirectvalue"]);
+                        }
+                        else if ((Convert.ToString(item["commonslabdirectortelescopic"])) == "commonslabtelescoping")
+                        {
+                            commonlabdirectortelescopic = Convert.ToDecimal(item["commonslabtelescopicvalue"]);
+                        }
+                    }
                     if (objpointearn.EarnPointLevelType == "Making")
                     {
                         objpointearn.EarnOnMaking = Convert.ToString(item["makingfixedorslab"]);
                         if (objpointearn.EarnOnMaking == "makingFixed")
                         {
-                            if (Convert.ToString(item["makingFixed%"]) != null)
-                                objpointearn.FixedEarnPointPecentageWith = Convert.ToDecimal(item["making%with"]);
-                            else
-                                objpointearn.FixedEarnPointPercentage = Convert.ToDecimal(item["makingFixed%"]);
+                            if (!string.IsNullOrEmpty(Convert.ToString(item["making%withorFixed"])))
+                            {
+                                if ((Convert.ToString(item["making%withorFixed"])) == "fixedpercentage")
+                                    objpointearn.FixedEarnPointPercentage = Convert.ToDecimal(item["makingFixed%"]);
+                                if ((Convert.ToString(item["making%withorFixed"])) == "percentwith")
+                                    objpointearn.FixedEarnPointPecentageWith = Convert.ToDecimal(item["making%with"]);
+                            }
                         }
                         else if (objpointearn.EarnOnMaking == "makingSlab")
                         {
                             slabtype = Convert.ToString(item["slabtype"]);
                             slab = (object[])item["slab"];
+                            makingSlabdirectortele = Convert.ToString(item["makingslabdirectortelescopic"]);
+
+                            if ((Convert.ToString(item["makingslabdirectortelescopic"])) == "makingslabDirect")
+                            {
+                                makingslabdirectortelescopic = Convert.ToDecimal(item["makingslabdirectvalue"]);
+                            }
+                            else if ((Convert.ToString(item["makingslabdirectortelescopic"])) == "makingslabtescopic")
+                            {
+                                makingslabdirectortelescopic = Convert.ToDecimal(item["makingslabtelescopicvalue"]);
+
+                            }
+
                         }
                     }
                     if (objpointearn.EarnPointLevelType == "FullAmount")
                     {
+                        objpointearn.EarnFullAmtGstOrWithoutGst = Convert.ToString(item["fullamtwithgstornongst"]);
+                        objpointearn.EarnFullAmtFixedOrSlab = Convert.ToString(item["fullamtfixedorslab"]);
+
+                        if (objpointearn.EarnFullAmtFixedOrSlab == "FullamtFixed")
+                        {
+                            if (!string.IsNullOrEmpty(Convert.ToString(item["fullamt%withorfixed%"])))
+                            {
+                                if ((Convert.ToString(item["fullamt%withorfixed%"])) == "fixedpercentage")
+                                    objpointearn.EarnFullAmtFixedPercentage = Convert.ToDecimal(item["fullamtFixed%"]);
+                                if ((Convert.ToString(item["fullamt%withorfixed%"])) == "percentwith")
+                                    objpointearn.EarnFullAmtPercentageWith = Convert.ToDecimal(item["fullamt%with"]);
+                            }
+                            if (!string.IsNullOrEmpty(Convert.ToString(item["fullamtincrement"])))
+                            {
+                                objpointearn.EarnFullAmtIncremented = Convert.ToString(item["fullamtincrement"]);
+                                if ((Convert.ToString(item["fullamt%withorfixed%"])) == "fixedpercentage")
+                                    objpointearn.EarnFullAmtSingleOrCumulativeFixedPercentage = Convert.ToDecimal(item["fullamtincrementedfixed%"]);
+                                if ((Convert.ToString(item["fullamt%withorfixed%"])) == "percentwith")
+                                    objpointearn.EarnFullAmtSingleOrCumulativeWithPercentage = Convert.ToDecimal(item["fullamtincremented%with"]);
+                            }
+
+                        }
+                        else if (objpointearn.EarnFullAmtFixedOrSlab == "FullamtSlab")
+                        {
+                            slabtype = Convert.ToString(item["fullamtslabtype"]);
+                            slab = (object[])item["fullamtslab"];
+                            fullamtSlabdirectortele = Convert.ToString(item["fullamtslabdirectortele"]);
+
+                            if ((Convert.ToString(item["fullamtslabdirectortele"])) == "fullamtslabDirect")
+                            {
+                                fullamtslabdirectortelescopic = Convert.ToDecimal(item["fullamtslabdirect"]);
+                            }
+                            else if ((Convert.ToString(item["fullamtslabdirectortele"])) == "fullamtslabtescopic")
+                            {
+                                fullamtslabdirectortelescopic = Convert.ToDecimal(item["fullamtslabtele"]);
+                            }
+
+                        }
+
+
 
                     }
                 }
                 foreach (Dictionary<string, object> item in objBurnrule)
                 {
                     objpointearn.BlockOnEarnType = Convert.ToString(item["Blockonearnrule"]);
-                    objpointearn.BlockOnInvoiceAmtMin = Convert.ToDecimal(item["Minvalofinvamt"]);
-                    objpointearn.BlockOnInvoiceAmtMax = Convert.ToDecimal(item["Maxvalofinvamt"]);
+                    if (objpointearn.BlockOnEarnType == "InvoiceAmount")
+                    {
+                        objpointearn.BlockOnInvoiceAmtMin = Convert.ToDecimal(item["Minvalofinvamt"]);
+                        objpointearn.BlockOnInvoiceAmtMax = Convert.ToDecimal(item["Maxvalofinvamt"]);
+                    }
                 }
-                status = OBR.AddEarnAndBurnRule(objpointearn, slab, slabtype);
-
+                if (Request.Files.Count > 0)
+                {
+                    HttpPostedFileBase fileearn = Request.Files["FileuploadEarn"];
+                    HttpPostedFileBase fileburnonearn = Request.Files["Fileuploadburnonearn"];
+                }
+                if (objpointearn.EarnPointLevelType == "Making")
+                {
+                    status = OBR.AddEarnAndBurnRule(objpointearn, slab, slabtype, makingslabdirectortelescopic, makingSlabdirectortele, userDetails.LoginId);
+                }
+                if (objpointearn.EarnPointLevelType == "FullAmount")
+                {
+                    status = OBR.AddEarnAndBurnRule(objpointearn, slab, slabtype, fullamtslabdirectortelescopic, fullamtSlabdirectortele, userDetails.LoginId);
+                }
+                if (objpointearn.EarnPointLevelType == "commonFixed" || objpointearn.EarnPointLevelType == "commonSlab")
+                {
+                    status = OBR.AddEarnAndBurnRule(objpointearn, slab, slabtype, commonlabdirectortelescopic, CommonSlabdirectortele, userDetails.LoginId);
+                }
             }
             catch (Exception ex)
             {
 
             }
+
             return new JsonResult() { Data = status, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
 

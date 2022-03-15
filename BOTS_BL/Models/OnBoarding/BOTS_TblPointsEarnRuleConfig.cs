@@ -54,19 +54,48 @@ namespace BOTS_BL.Models.OnBoarding
         public string EarnOnFullAmt { get; set; }
 
         [StringLength(50)]
-        public string EarnFullAmtWithGst { get; set; }
-
-        [StringLength(50)]
-        public string EarnFullAmtWithoutGst { get; set; }
+        public string EarnFullAmtFixedOrSlab { get; set; }
 
         [Column(TypeName = "numeric")]
+        public decimal? EarnFullAmtPercentageWith { get; set; }
+
+        [Column(TypeName = "numeric")]
+        public decimal? EarnFullAmtFixedPercentage { get; set; }
+        
+        [StringLength(50)]
+        public string EarnFullAmtIncremented { get; set; }
+        
+        [Column(TypeName = "numeric")]
         public decimal? IncrementedpercentageWith { get; set; }
+
+        [Column(TypeName = "numeric")]
+        public decimal? EarnFullAmtSingleOrCumulativeWithPercentage { get; set; }
+
+        [Column(TypeName = "numeric")]
+        public decimal? EarnFullAmtSingleOrCumulativeFixedPercentage { get; set; }
 
         [Column(TypeName = "numeric")]
         public decimal? IncrementedFixedPercentage { get; set; }
 
         [StringLength(50)]
-        public string PercentageType { get; set; }
+        public string CommonIncrementedPercentageType { get; set; }
+
+        [StringLength(50)]
+        public string commonfixedpercentageorwithperce { get; set; }
+
+
+        [StringLength(50)]
+        public string EarnFullAmtGstOrWithoutGst { get; set; }
+
+        [StringLength(50)]
+        public string AddedBy { get; set; }
+
+        [StringLength(50)]
+        public string UpdatedBy { get; set; }
+
+        public DateTime? AddedDate { get; set; }
+
+        public DateTime? UpdatedDate { get; set; }
     }
 
     public class EarnPointLevel

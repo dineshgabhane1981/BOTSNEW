@@ -32,11 +32,26 @@ namespace BOTS_BL.Models.OnBoarding
         [Column(TypeName = "numeric")]
         public decimal? EarnPointSlabToRs { get; set; }
 
-        [StringLength(50)]
-        public string EarnSlab { get; set; }
+        //[StringLength(50)]
+        //public string EarnSlab { get; set; }
 
         [StringLength(50)]
         public string SlabType { get; set; }
-        
+
+        [StringLength(50)]
+        public string EarnSlabDirectOrTelescoping { get; set; }
+
+        [Column(TypeName = "numeric")]
+        public decimal? SlabDirectOrTelescopingValue { get; set; }
+
+        [StringLength(50)]
+        public string AddedBy { get; set; }
+
+        [StringLength(50)]
+        public string UpdatedBy { get; set; }
+
+        public DateTime? AddedDate { get; set; }
+        public DateTime? UpdatedDate { get; set; }
+
     }
 }

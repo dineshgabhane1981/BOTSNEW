@@ -522,8 +522,8 @@
             $('#txtspendmin').attr('placeholder', 'Less Than Spend Amt');
         }
         else if (selected == 'More than') {
-            $("#txtspendmin").show();
-            $("#txtspendmax").hide();
+            $("#txtspendmin").hide();
+            $("#txtspendmax").show();
             $('#txtspendmax').attr('placeholder', 'More Than Spend Amt');
         }
         else if (selected == '---Select---') {
@@ -876,8 +876,14 @@
 
             }
 
-            item["Spend-min"] = ($("#ddlSpend").prop('selectedIndex') !== 0) ? $('#txtspendmin').val() : 0;
-            item["Spend-max"] = ($("#ddlSpend").prop('selectedIndex') == 3) ? $('#txtspendmax').val() : 0;
+            //item["Spend-min"] = ($("#ddlSpend").prop('selectedIndex') !== 0) ? $('#txtspendmin').val() : 0;
+            //item["Spend-max"] = ($("#ddlSpend").prop('selectedIndex') == 3) ? $('#txtspendmax').val() : 0;
+            item["Spend-min"] = ($("#ddlSpend").prop('selectedIndex') == 1) ? $('#txtspendmin').val() : 0;
+            item["Spend-max"] = ($("#ddlSpend").prop('selectedIndex') == 2) ? $('#txtspendmax').val() : 0;
+            if ($("#ddlSpend").prop('selectedIndex') == 3) {
+                item["Spend-max"] = $('#txtspendmax').val();
+                item["Spend-min"] = $('#txtspendmin').val();
+            }
 
             item["txncount-min"] = ($("#ddltxncount").prop('selectedIndex') == 1) ? $('#txttxncountmin').val() : 0;
             item["txncount-max"] = ($("#ddltxncount").prop('selectedIndex') == 2) ? $('#txttxncountmax').val() : 0;
