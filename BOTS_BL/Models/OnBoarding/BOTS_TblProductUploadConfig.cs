@@ -24,7 +24,7 @@ namespace BOTS_BL.Models
         public string DepartmentId { get; set; }
 
         [StringLength(50)]
-        public string BrandCode { get; set; }
+        public string ProductBrandCode { get; set; }
 
         [StringLength(50)]
         public string ProductCode { get; set; }
@@ -38,7 +38,7 @@ namespace BOTS_BL.Models
         [StringLength(50)]
         public string Carret { get; set; }
 
-        [StringLength(50)]
+        [StringLength(100)]
         public string Name { get; set; }
 
         [Column(TypeName = "numeric")]

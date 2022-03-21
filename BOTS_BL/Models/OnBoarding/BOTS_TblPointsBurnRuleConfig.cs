@@ -23,8 +23,14 @@ namespace BOTS_BL.Models.OnBoarding
         [StringLength(50)]
         public string BurnType { get; set; }
 
+        [StringLength(50)]
+        public string PointBurnfirsttimeorsubsequent { get; set; }
+
         [Column(TypeName = "numeric")]
-        public decimal? FirstTime { get; set; }
+        public decimal? FirstTime { get; set; }       
+
+        [Column(TypeName = "numeric")]
+        public decimal? PointValidityValue { get; set; }
 
         [Column(TypeName = "numeric")]
         public decimal? SubsequentTime { get; set; }

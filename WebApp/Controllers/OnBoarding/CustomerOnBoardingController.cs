@@ -649,7 +649,7 @@ namespace WebApp.Controllers.OnBoarding
         }
 
 
-        public ActionResult AddEarnRule(string EarnRule, string BlockOnearnrule)
+        public ActionResult AddEarnRule(string EarnRule, string BlockOnearnrule, string Redemptionrule)
         {
 
             OnBoardingSalesViewModel objdata = new OnBoardingSalesViewModel();
@@ -660,10 +660,12 @@ namespace WebApp.Controllers.OnBoarding
 
                 var userDetails = (CustomerLoginDetail)Session["UserSession"];
                 BOTS_TblPointsEarnRuleConfig objpointearn = new BOTS_TblPointsEarnRuleConfig();
+                BOTS_TblPointsBurnRuleConfig objpointburn = new BOTS_TblPointsBurnRuleConfig();
                 JavaScriptSerializer json_serializer = new JavaScriptSerializer();
                 json_serializer.MaxJsonLength = int.MaxValue;
                 object[] objEarnrule = (object[])json_serializer.DeserializeObject(EarnRule);
                 object[] objBurnrule = (object[])json_serializer.DeserializeObject(BlockOnearnrule);
+                object[] objredemption = (object[])json_serializer.DeserializeObject(Redemptionrule);
                 object[] slab = new object[20];
                 string slabtype = "";
                 decimal makingslabdirectortelescopic = 0;
@@ -672,6 +674,11 @@ namespace WebApp.Controllers.OnBoarding
                 string fullamtSlabdirectortele = "";
                 string CommonSlabdirectortele = "";
                 decimal commonlabdirectortelescopic = 0;
+                DataSet ds = new DataSet();
+                //DataTable dt = new DataTable();
+                //DataTable dt1 = new DataTable();
+                //ds.Tables.Add(dt);
+                //ds.Tables.Add(dt1);
                 foreach (Dictionary<string, object> item in objEarnrule)
                 {
                     objpointearn.CategoryId = Convert.ToString(item["CategoryId"]);
@@ -700,9 +707,9 @@ namespace WebApp.Controllers.OnBoarding
                         if (!string.IsNullOrEmpty(Convert.ToString(item["commonsingleorcumulative"])))
                         {
                             objpointearn.IncrementedValue = Convert.ToString(item["commonsingleorcumulative"]);
-                            if ((Convert.ToString(item["commonsingle%withorFixed"])) == "fixedpercentage")
+                            if ((Convert.ToString(item["commoncumulative%withorFixed"])) == "fixedpercentage")
                                 objpointearn.IncrementedFixedPercentage = Convert.ToDecimal(item["commonsingleFixed%"]);
-                            if ((Convert.ToString(item["commonsingle%withorFixed"])) == "percentwith")
+                            if ((Convert.ToString(item["commoncumulative%withorFixed"])) == "percentwith")
                                 objpointearn.IncrementedpercentageWith = Convert.ToDecimal(item["commoncumulative%with"]);
                         }
                     }
@@ -806,22 +813,163 @@ namespace WebApp.Controllers.OnBoarding
                         objpointearn.BlockOnInvoiceAmtMax = Convert.ToDecimal(item["Maxvalofinvamt"]);
                     }
                 }
+                foreach (Dictionary<string, object> item in objredemption)
+                {
+                    objpointburn.GroupId = objpointearn.GroupId;
+                    objpointburn.BrandId = objpointearn.BrandId;
+                    objpointburn.CategoryId = objpointburn.CategoryId;
+                    if (Convert.ToString(item["redemptionlevel"]) != "")
+                    {
+                        objpointburn.BurnType = Convert.ToString(item["redemptionlevel"]);
+
+                        objpointburn.PointBurnfirsttimeorsubsequent = Convert.ToString(item["burntimetype"]);
+                        if (objpointburn.PointBurnfirsttimeorsubsequent == "firsttime")
+                        {
+                            objpointburn.FirstTime = Convert.ToDecimal(item["burnfirsttime"]);
+
+                        }
+                        else if (objpointburn.PointBurnfirsttimeorsubsequent == "Subsequent")
+                        {
+                            objpointburn.SubsequentTime = Convert.ToDecimal(item["burnsubsequenttime"]);
+                        }
+                        objpointburn.EarnWhileBurn = Convert.ToString(item["Earnwhileburn"]);
+                        objpointburn.PointValidity = Convert.ToString(item["pointvalidity"]);
+                        if (Convert.ToDecimal(item["pointvalidityvalue"]) != 0)
+                        {
+                            objpointburn.PointValidityValue = Convert.ToDecimal(item["pointvalidityvalue"]);
+                        }
+                    }
+                }
                 if (Request.Files.Count > 0)
                 {
-                    HttpPostedFileBase fileearn = Request.Files["FileuploadEarn"];
+
                     HttpPostedFileBase fileburnonearn = Request.Files["Fileuploadburnonearn"];
+
+                    HttpPostedFileBase fileearn = Request.Files["FileuploadEarn"];
+                    if (fileearn != null)
+                    {
+                        string fileName = "ProductUpload_" + objpointearn.GroupId + "_" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".xlsx";
+                        var path = ConfigurationManager.AppSettings["CustomerDocuments"].ToString();
+                        var fullFilePath = path + "\\" + fileName;
+                        fileearn.SaveAs(path + "\\" + fileName);
+
+                        string conString = string.Empty;
+
+                        conString = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" + fullFilePath + ";Extended Properties=\"Excel 12.0;HDR=Yes;IMEX=1\"";
+
+                        using (OleDbConnection connExcel = new OleDbConnection(conString))
+                        {
+                            using (OleDbCommand cmdExcel = new OleDbCommand())
+                            {
+                                using (OleDbDataAdapter odaExcel = new OleDbDataAdapter())
+                                {
+                                    cmdExcel.Connection = connExcel;
+                                    //Get the name of First Sheet.
+                                    connExcel.Open();
+                                    DataTable dtExcelSchema;
+                                    dtExcelSchema = connExcel.GetOleDbSchemaTable(OleDbSchemaGuid.Tables, null);
+                                    string sheetName = dtExcelSchema.Rows[0]["TABLE_NAME"].ToString();
+                                    connExcel.Close();
+
+                                    //Read Data from First Sheet.
+                                    connExcel.Open();
+                                    cmdExcel.CommandText = "SELECT * From [" + sheetName + "]";
+                                    odaExcel.SelectCommand = cmdExcel;
+                                    odaExcel.Fill(ds);
+                                    connExcel.Close();
+                                }
+                            }
+                        }
+                        ds.Tables[0].Columns.Add("GroupId");
+                        ds.Tables[0].Columns.Add("BrandId");
+                        ds.Tables[0].Columns.Add("CategoryId");
+                        ds.Tables[0].Columns.Add("UploadType");
+                        ds.Tables[0].Columns.Add("AddedBy");
+                        ds.Tables[0].Columns.Add("AddedDate");
+                        ds.Tables[0].Columns.Add("UpdatedBy");
+                        ds.Tables[0].Columns.Add("UpdatedDate");
+                        foreach (DataRow dr in ds.Tables[0].Rows)
+                        {
+                            dr["GroupId"] = objpointearn.GroupId;
+                            dr["BrandId"] = objpointearn.BrandId;
+                            dr["CategoryId"] = objpointearn.CategoryId;
+                            dr["UploadType"] = "Earn";
+                            dr["AddedBy"] = userDetails.LoginId;
+                            dr["AddedDate"] = DateTime.Now;
+                            dr["UpdatedBy"] = "";
+                            dr["UpdatedDate"] = DateTime.Now;
+                        }
+
+                    }
+                    if (fileburnonearn != null)
+                    {
+                        DataTable dt = new DataTable();
+                        string fileName = "ProductUploadForBUrn_" + objpointearn.GroupId + "_" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".xlsx";
+                        var path = ConfigurationManager.AppSettings["CustomerDocuments"].ToString();
+                        var fullFilePath = path + "\\" + fileName;
+                        fileearn.SaveAs(path + "\\" + fileName);
+
+                        string conString = string.Empty;
+
+                        conString = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" + fullFilePath + ";Extended Properties=\"Excel 12.0;HDR=Yes;IMEX=1\"";
+
+                        using (OleDbConnection connExcel = new OleDbConnection(conString))
+                        {
+                            using (OleDbCommand cmdExcel = new OleDbCommand())
+                            {
+                                using (OleDbDataAdapter odaExcel = new OleDbDataAdapter())
+                                {
+                                    cmdExcel.Connection = connExcel;
+                                    //Get the name of First Sheet.
+                                    connExcel.Open();
+                                    DataTable dtExcelSchema;
+                                    dtExcelSchema = connExcel.GetOleDbSchemaTable(OleDbSchemaGuid.Tables, null);
+                                    string sheetName = dtExcelSchema.Rows[0]["TABLE_NAME"].ToString();
+                                    connExcel.Close();
+
+                                    //Read Data from First Sheet.
+                                    connExcel.Open();
+                                    cmdExcel.CommandText = "SELECT * From [" + sheetName + "]";
+                                    odaExcel.SelectCommand = cmdExcel;
+                                    odaExcel.Fill(dt);
+                                    connExcel.Close();
+                                }
+                            }
+                        }
+                        dt.Columns.Add("GroupId");
+                        dt.Columns.Add("BrandId");
+                        dt.Columns.Add("CategoryId");
+                        dt.Columns.Add("UploadType");
+                        dt.Columns.Add("AddedBy");
+                        dt.Columns.Add("AddedDate");
+                        dt.Columns.Add("UpdatedBy");
+                        dt.Columns.Add("UpdatedDate");
+                        foreach (DataRow dr in dt.Rows)
+                        {
+                            dr["GroupId"] = objpointearn.GroupId;
+                            dr["BrandId"] = objpointearn.BrandId;
+                            dr["CategoryId"] = objpointearn.CategoryId;
+                            dr["UploadType"] = "Burn";
+                            dr["AddedBy"] = userDetails.LoginId;
+                            dr["AddedDate"] = DateTime.Now;
+                            dr["UpdatedBy"] = "";
+                            dr["UpdatedDate"] = DateTime.Now;
+                        }
+                        ds.Tables.Add(dt);
+                    }
+
                 }
                 if (objpointearn.EarnPointLevelType == "Making")
                 {
-                    status = OBR.AddEarnAndBurnRule(objpointearn, slab, slabtype, makingslabdirectortelescopic, makingSlabdirectortele, userDetails.LoginId);
+                    status = OBR.AddEarnAndBurnRule(objpointearn, slab, slabtype, makingslabdirectortelescopic, makingSlabdirectortele, userDetails.LoginId, ds, objpointburn);
                 }
                 if (objpointearn.EarnPointLevelType == "FullAmount")
                 {
-                    status = OBR.AddEarnAndBurnRule(objpointearn, slab, slabtype, fullamtslabdirectortelescopic, fullamtSlabdirectortele, userDetails.LoginId);
+                    status = OBR.AddEarnAndBurnRule(objpointearn, slab, slabtype, fullamtslabdirectortelescopic, fullamtSlabdirectortele, userDetails.LoginId, ds, objpointburn);
                 }
                 if (objpointearn.EarnPointLevelType == "commonFixed" || objpointearn.EarnPointLevelType == "commonSlab")
                 {
-                    status = OBR.AddEarnAndBurnRule(objpointearn, slab, slabtype, commonlabdirectortelescopic, CommonSlabdirectortele, userDetails.LoginId);
+                    status = OBR.AddEarnAndBurnRule(objpointearn, slab, slabtype, commonlabdirectortelescopic, CommonSlabdirectortele, userDetails.LoginId, ds, objpointburn);
                 }
             }
             catch (Exception ex)
@@ -1118,7 +1266,12 @@ namespace WebApp.Controllers.OnBoarding
             lstExistingData = OBR.GetInactiveConfigData(GroupId, Type);
             return new JsonResult() { Data = lstExistingData, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
-
+        public OnBoardingSalesViewModel GetEarnBurnDataAndUploaddata(string GroupId)
+        {
+            OnBoardingSalesViewModel objonboardingviewmodel = new OnBoardingSalesViewModel();
+            // objonboardingviewmodel = OBR.
+            return objonboardingviewmodel;
+        }
 
     }
 }

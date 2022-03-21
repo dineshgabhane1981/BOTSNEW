@@ -29,6 +29,7 @@ namespace WebApp.ViewModel
         public List<SelectListItem> lstStates { get; set; }
         public List<SelectListItem> lstBrands { get; set; }
         public BOTS_TblPointsEarnRuleConfig objpointsearnruleconfig { get; set; }
+        public BOTS_TblPointsBurnRuleConfig objpointsburnruleconfig { get; set; }
         public BOTS_TblEarnPointsSlabConfig objearnpointslab { get; set; }
         public List<BOTS_TblEarnPointsSlabConfig> lstearnpointslabconfig { get; set; }
         public List<EarnPointLevel> lstearnpoint { get; set; }
@@ -91,6 +92,12 @@ namespace WebApp.ViewModel
         public SelectListItem[] PointsUsedOrNot()
         {
             return new SelectListItem[3] { new SelectListItem() { Text = "Points Used", Value = "Points Used" }, new SelectListItem() { Text = "Points Not Used", Value = "Points Not Used" }, new SelectListItem() { Text = "N/A", Value = "N/A" } };
+        }
+
+        public SelectListItem[] RedemptionType()
+        {
+            return new SelectListItem[2] { new SelectListItem() { Text = "1st Time", Value = "firsttime" }, new SelectListItem() { Text = "Subsequent Times", Value = "Subsequent" } };
+
         }
     }
 }

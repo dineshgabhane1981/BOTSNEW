@@ -638,7 +638,7 @@ namespace BOTS_BL.Repository
             return objData;
         }
 
-        public bool AddEarnAndBurnRule(BOTS_TblPointsEarnRuleConfig earnrule, object[] slab, string slabType, decimal slabdirectortelevalue, string SlabDirectOrTelescopic, string Addedby)
+        public bool AddEarnAndBurnRule(BOTS_TblPointsEarnRuleConfig earnrule, object[] slab, string slabType, decimal slabdirectortelevalue, string SlabDirectOrTelescopic, string Addedby, DataSet ds, BOTS_TblPointsBurnRuleConfig objpointburn)
         {
             bool status = false;
             try
@@ -646,7 +646,7 @@ namespace BOTS_BL.Repository
                 using (var context = new CommonDBContext())
                 {
                     BOTS_TblPointsEarnRuleConfig objpointearnburn = new BOTS_TblPointsEarnRuleConfig();
-
+                    BOTS_TblPointsBurnRuleConfig objpointburnrule = new BOTS_TblPointsBurnRuleConfig();
                     objpointearnburn = earnrule;
                     if (earnrule.EarnPointLevelType == "Making")
                     {
@@ -813,6 +813,48 @@ namespace BOTS_BL.Repository
                         context.SaveChanges();
                         status = true;
                     }
+                    if (ds.Tables.Count > 0)
+                    {
+
+                        for (int i = 0; i < ds.Tables.Count; i++)
+                        {
+                            var conStr = ConfigurationManager.ConnectionStrings["CommonDBContext"].ToString();
+
+                            SqlConnection con = new SqlConnection(conStr);
+                            SqlBulkCopy objbulk = new SqlBulkCopy(con);
+                            objbulk.DestinationTableName = "BOTS_TblProductUploadConfig";
+
+                            objbulk.ColumnMappings.Add("GroupId", "GroupId");
+                            objbulk.ColumnMappings.Add("BrandId", "BrandId");
+                            objbulk.ColumnMappings.Add("CategoryId", "CategoryId");
+                            objbulk.ColumnMappings.Add("DepartmentId", "DepartmentId");
+                            objbulk.ColumnMappings.Add("ProductBrandCode", "ProductBrandCode");
+                            objbulk.ColumnMappings.Add("ProductCode", "ProductCode");
+                            objbulk.ColumnMappings.Add("ProductSubCategoryCode", "ProductSubCategoryCode");
+                            objbulk.ColumnMappings.Add("ProductCategoryCode", "ProductCategoryCode");
+                            objbulk.ColumnMappings.Add("Carret", "Carret");
+                            objbulk.ColumnMappings.Add("ProductName", "ProductName");
+                            objbulk.ColumnMappings.Add("LoyaltyPercentage", "LoyaltyPercentage");
+                            objbulk.ColumnMappings.Add("UploadType", "UploadType");
+                            objbulk.ColumnMappings.Add("AddedBy", "AddedBy");
+                            objbulk.ColumnMappings.Add("AddedDate", "AddedDate");
+                            objbulk.ColumnMappings.Add("UpdatedBy", "UpdatedBy");
+                            objbulk.ColumnMappings.Add("UpdatedDate", "UpdatedDate");
+
+                            con.Open();
+                            objbulk.WriteToServer(ds.Tables[i]);
+                            con.Close();
+                        }
+
+
+                    }
+                    if (objpointburn != null)
+                    {
+                        objpointburnrule = objpointburn;
+                        context.BOTS_TblPointsBurnRuleConfig.Add(objpointburnrule);
+                        context.SaveChanges();
+                    }
+
                 }
 
             }
@@ -1003,6 +1045,19 @@ namespace BOTS_BL.Repository
                 newexception.AddException(ex, "GetInactiveConfigData");
             }
             return lstData;
+        }
+
+        public BOTS_TblPointsEarnRuleConfig GetAllEarnRuleData(string GroupId)
+        {
+            BOTS_TblPointsEarnRuleConfig objearnrule = new BOTS_TblPointsEarnRuleConfig();
+
+            return objearnrule;
+        }
+        public BOTS_TblPointsBurnRuleConfig GetAllBurnRuleData(string GroupId)
+        {
+            BOTS_TblPointsBurnRuleConfig objburnrule = new BOTS_TblPointsBurnRuleConfig();
+
+            return objburnrule;
         }
     }
 }

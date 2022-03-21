@@ -103,4 +103,6 @@ namespace BOTS_BL.Models.OnBoarding
         public string EarnPointLevelId { get; set; }
         public string EarnPointLevelName { get; set; }
     }
+
+   
 }
