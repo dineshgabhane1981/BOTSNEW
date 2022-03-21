@@ -17,6 +17,9 @@ namespace BOTS_BL.Models.OnBoarding
         [Required]
         [StringLength(50)]
         public string GroupId { get; set; }
+        
+        [StringLength(50)]
+        public string SMSorWA { get; set; }
 
         public int Days { get; set; }
 
@@ -26,11 +29,16 @@ namespace BOTS_BL.Models.OnBoarding
 
         public int? GreaterThanDays { get; set; }
 
-        public string GreaterThanDaysScript1 { get; set; }
+        public string GreaterThanDaysScript { get; set; }
 
         [StringLength(50)]
-        public string CreatedBy { get; set; }
+        public string AddedBy { get; set; }
 
-        public DateTime? CreatedDate { get; set; }
+        public DateTime? AddedDate { get; set; }
+
+        [StringLength(50)]
+        public string UpdatedBy { get; set; }
+
+        public DateTime? UpdatedDate { get; set; }
     }
 }

@@ -130,55 +130,351 @@
 
 @* Inactive *@
 <div id="dvInactive" style="border:1px solid grey;border-radius:10px;padding:5px;">
-    <input type="hidden" id="hdnInactiveId" />
     <div style="margin-top:20px;">
         No of Message Count <input type="number" id="txtMessageCount" class="input20" />
+        Message Type <input type="radio" name="InactiveType" id="rbtnInactiveSMS" /> SMS
+        <input type="radio" name="InactiveType" id="rbtnInactiveWA" /> WhatsApp
     </div>
-    <div style="margin-top:20px;display:flex;" id="dvInactive1">
+
+    <div style="margin-top: 20px; display: flex; border: 1px solid grey; padding: 10px; border-radius: 10px; display:none;" id="dvInactive1">
+        <input type="hidden" id="hdnInactive1" />
         <div style="padding-top:50px;">
-            <input type="number" id="txtMessageCount" style="padding-top: 20px; vertical-align: middle;" class="input20" /> days after last transaction
+            <input type="number" id="txtDaysCount1" style="padding-top: 20px; vertical-align: middle;" class="input20" /> days after last transaction
         </div>
         <div style="margin-left:30px;">
             <div>
                 less than
-                <input type="number" id="txtMessageDays" class="input20" />
-                <textarea id="txtLessThanScript" class="input100" style="padding-top: 20px; vertical-align: middle;"> </textarea>
+                <input type="number" id="txtLessThanDays1" class="input20" />
+                <textarea id="txtLessThanDaysScript1" class="input100" style="padding-top: 20px; vertical-align: middle;"> </textarea>
             </div>
             <div>
-                <br />greater or equal <input type="number" id="txtMessageDays" class="input20" />
-                <textarea id="txtLessThanScript" class="input100" style="padding-top: 20px; vertical-align: middle;"> </textarea>
+                <br />greater or equal <input type="number" id="txtGreaterThanDays1" class="input20" />
+                <textarea id="txtGreaterThanDaysScript1" class="input100" style="padding-top: 20px; vertical-align: middle;"> </textarea>
             </div>
         </div>
+    </div>
+
+    <div style="margin-top: 20px; display: flex; border: 1px solid grey; padding: 10px; border-radius: 10px; display: none;" id="dvInactive2">
+        <input type="hidden" id="hdnInactive2" />
+        <div style="padding-top:50px;">
+            <input type="number" id="txtDaysCount2" style="padding-top: 20px; vertical-align: middle;" class="input20" /> days after last transaction
+        </div>
+        <div style="margin-left:30px;">
+            <div>
+                less than
+                <input type="number" id="txtLessThanDays2" class="input20" />
+                <textarea id="txtLessThanDaysScript2" class="input100" style="padding-top: 20px; vertical-align: middle;"> </textarea>
+            </div>
+            <div>
+                <br />greater or equal <input type="number" id="txtGreaterThanDays2" class="input20" />
+                <textarea id="txtGreaterThanDaysScript2" class="input100" style="padding-top: 20px; vertical-align: middle;"> </textarea>
+            </div>
+        </div>
+    </div>
+
+    <div style="margin-top: 20px; display: flex; border: 1px solid grey; padding: 10px; border-radius: 10px; display: none;" id="dvInactive3">
+        <input type="hidden" id="hdnInactive3" />
+        <div style="padding-top:50px;">
+            <input type="number" id="txtDaysCount3" style="padding-top: 20px; vertical-align: middle;" class="input20" /> days after last transaction
+        </div>
+        <div style="margin-left:30px;">
+            <div>
+                less than
+                <input type="number" id="txtLessThanDays3" class="input20" />
+                <textarea id="txtLessThanDaysScript3" class="input100" style="padding-top: 20px; vertical-align: middle;"> </textarea>
+            </div>
+            <div>
+                <br />greater or equal <input type="number" id="txtGreaterThanDays3" class="input20" />
+                <textarea id="txtGreaterThanDaysScript3" class="input100" style="padding-top: 20px; vertical-align: middle;"> </textarea>
+            </div>
+        </div>
+    </div>
+
+    <div style="margin-top: 20px; display: flex; border: 1px solid grey; padding: 10px; border-radius: 10px; display: none;" id="dvInactive4">
+        <input type="hidden" id="hdnInactive4" />
+        <div style="padding-top:50px;">
+            <input type="number" id="txtDaysCount4" style="padding-top: 20px; vertical-align: middle;" class="input20" /> days after last transaction
+        </div>
+        <div style="margin-left:30px;">
+            <div>
+                less than
+                <input type="number" id="txtLessThanDays4" class="input20" />
+                <textarea id="txtLessThanDaysScript4" class="input100" style="padding-top: 20px; vertical-align: middle;"> </textarea>
+            </div>
+            <div>
+                <br />greater or equal <input type="number" id="txtGreaterThanDays4" class="input20" />
+                <textarea id="txtGreaterThanDaysScript4" class="input100" style="padding-top: 20px; vertical-align: middle;"> </textarea>
+            </div>
+        </div>
+    </div>
+
+    <div class="container-fluid pt-3 pl-3 pr-3 pb-5">
+        <button type="button" id="btnInactiveSave" class="btn btn-primary pull-right" style="margin-right: 10px; margin-bottom: 20px;">Save</button>
     </div>
 </div>
 
 @* Only Once Inactive *@
 <div id="dvOOInactive" style="border:1px solid grey;border-radius:10px;padding:5px;">
-    Only Once Inactive
+    <div style="margin-top:20px;">
+        No of Message Count <input type="number" id="txtOOMessageCount" class="input20" />
+        Message Type <input type="radio" name="InactiveTypeOO" id="rbtnOOInactiveSMS" /> SMS
+        <input type="radio" name="InactiveTypeOO" id="rbtnOOInactiveWA" /> WhatsApp
+    </div>
+
+    <div style="margin-top: 20px; display: flex; border: 1px solid grey; padding: 10px; border-radius: 10px; display:none;" id="dvOOInactive1">
+        <input type="hidden" id="hdnOOInactive1" />
+        <div style="padding-top:50px;">
+            <input type="number" id="txtOODaysCount1" style="padding-top: 20px; vertical-align: middle;" class="input20" /> days after last transaction
+        </div>
+        <div style="margin-left:30px;">
+            <div>
+                less than
+                <input type="number" id="txtOOLessThanDays1" class="input20" />
+                <textarea id="txtOOLessThanDaysScript1" class="input100" style="padding-top: 20px; vertical-align: middle;"> </textarea>
+            </div>
+            <div>
+                <br />greater or equal <input type="number" id="txtOOGreaterThanDays1" class="input20" />
+                <textarea id="txtOOGreaterThanDaysScript1" class="input100" style="padding-top: 20px; vertical-align: middle;"> </textarea>
+            </div>
+        </div>
+    </div>
+
+    <div style="margin-top: 20px; display: flex; border: 1px solid grey; padding: 10px; border-radius: 10px; display: none;" id="dvOOInactive2">
+        <input type="hidden" id="hdnOOInactive2" />
+        <div style="padding-top:50px;">
+            <input type="number" id="txtOODaysCount2" style="padding-top: 20px; vertical-align: middle;" class="input20" /> days after last transaction
+        </div>
+        <div style="margin-left:30px;">
+            <div>
+                less than
+                <input type="number" id="txtOOLessThanDays2" class="input20" />
+                <textarea id="txtOOLessThanDaysScript2" class="input100" style="padding-top: 20px; vertical-align: middle;"> </textarea>
+            </div>
+            <div>
+                <br />greater or equal <input type="number" id="txtOOGreaterThanDays2" class="input20" />
+                <textarea id="txtOOGreaterThanDaysScript2" class="input100" style="padding-top: 20px; vertical-align: middle;"> </textarea>
+            </div>
+        </div>
+    </div>
+
+    <div style="margin-top: 20px; display: flex; border: 1px solid grey; padding: 10px; border-radius: 10px; display: none;" id="dvOOInactive3">
+        <input type="hidden" id="hdnOOInactive3" />
+        <div style="padding-top:50px;">
+            <input type="number" id="txtOODaysCount3" style="padding-top: 20px; vertical-align: middle;" class="input20" /> days after last transaction
+        </div>
+        <div style="margin-left:30px;">
+            <div>
+                less than
+                <input type="number" id="txtOOLessThanDays3" class="input20" />
+                <textarea id="txtOOLessThanDaysScript3" class="input100" style="padding-top: 20px; vertical-align: middle;"> </textarea>
+            </div>
+            <div>
+                <br />greater or equal <input type="number" id="txtOOGreaterThanDays3" class="input20" />
+                <textarea id="txtOOGreaterThanDaysScript3" class="input100" style="padding-top: 20px; vertical-align: middle;"> </textarea>
+            </div>
+        </div>
+    </div>
+
+    <div style="margin-top: 20px; display: flex; border: 1px solid grey; padding: 10px; border-radius: 10px; display: none;" id="dvOOInactive4">
+        <input type="hidden" id="hdnOOInactive4" />
+        <div style="padding-top:50px;">
+            <input type="number" id="txtOODaysCount4" style="padding-top: 20px; vertical-align: middle;" class="input20" /> days after last transaction
+        </div>
+        <div style="margin-left:30px;">
+            <div>
+                less than
+                <input type="number" id="txtOOLessThanDays4" class="input20" />
+                <textarea id="txtOOLessThanDaysScript4" class="input100" style="padding-top: 20px; vertical-align: middle;"> </textarea>
+            </div>
+            <div>
+                <br />greater or equal <input type="number" id="txtOOGreaterThanDays4" class="input20" />
+                <textarea id="txtOOGreaterThanDaysScript4" class="input100" style="padding-top: 20px; vertical-align: middle;"> </textarea>
+            </div>
+        </div>
+    </div>
+
+    <div class="container-fluid pt-3 pl-3 pr-3 pb-5">
+        <button type="button" id="btnOOInactiveSave" class="btn btn-primary pull-right" style="margin-right: 10px; margin-bottom: 20px;">Save</button>
+    </div>
 </div>
 
 @* Non Redeemption Inactive *@
 <div id="dvNRInactive" style="border:1px solid grey;border-radius:10px;padding:5px;">
-    Non Redeemption Inactive
+    <div style="margin-top:20px;">
+        No of Message Count <input type="number" id="txtNRMessageCount" class="input20" />
+        Message Type <input type="radio" name="InactiveTypeNR" id="rbtnNRInactiveSMS" /> SMS
+        <input type="radio" name="InactiveTypeNR" id="rbtnNRInactiveWA" /> WhatsApp
+    </div>
+
+    <div style="margin-top: 20px; display: flex; border: 1px solid grey; padding: 10px; border-radius: 10px; display:none;" id="dvNRInactive1">
+        <input type="hidden" id="hdnNRInactive1" />
+        <div style="padding-top:50px;">
+            <input type="number" id="txtNRDaysCount1" style="padding-top: 20px; vertical-align: middle;" class="input20" /> days after last transaction
+        </div>
+        <div style="margin-left:30px;">
+            <div>
+                less than
+                <input type="number" id="txtNRLessThanDays1" class="input20" />
+                <textarea id="txtNRLessThanDaysScript1" class="input100" style="padding-top: 20px; vertical-align: middle;"> </textarea>
+            </div>
+            <div>
+                <br />greater or equal <input type="number" id="txtNRGreaterThanDays1" class="input20" />
+                <textarea id="txtNRGreaterThanDaysScript1" class="input100" style="padding-top: 20px; vertical-align: middle;"> </textarea>
+            </div>
+        </div>
+    </div>
+
+    <div style="margin-top: 20px; display: flex; border: 1px solid grey; padding: 10px; border-radius: 10px; display: none;" id="dvNRInactive2">
+        <input type="hidden" id="hdnNRInactive2" />
+        <div style="padding-top:50px;">
+            <input type="number" id="txtNRDaysCount2" style="padding-top: 20px; vertical-align: middle;" class="input20" /> days after last transaction
+        </div>
+        <div style="margin-left:30px;">
+            <div>
+                less than
+                <input type="number" id="txtNRLessThanDays2" class="input20" />
+                <textarea id="txtNRLessThanDaysScript2" class="input100" style="padding-top: 20px; vertical-align: middle;"> </textarea>
+            </div>
+            <div>
+                <br />greater or equal <input type="number" id="txtNRGreaterThanDays2" class="input20" />
+                <textarea id="txtNRGreaterThanDaysScript2" class="input100" style="padding-top: 20px; vertical-align: middle;"> </textarea>
+            </div>
+        </div>
+    </div>
+
+    <div style="margin-top: 20px; display: flex; border: 1px solid grey; padding: 10px; border-radius: 10px; display: none;" id="dvNRInactive3">
+        <input type="hidden" id="hdnNRInactive3" />
+        <div style="padding-top:50px;">
+            <input type="number" id="txtNRDaysCount3" style="padding-top: 20px; vertical-align: middle;" class="input20" /> days after last transaction
+        </div>
+        <div style="margin-left:30px;">
+            <div>
+                less than
+                <input type="number" id="txtNRLessThanDays3" class="input20" />
+                <textarea id="txtNRLessThanDaysScript3" class="input100" style="padding-top: 20px; vertical-align: middle;"> </textarea>
+            </div>
+            <div>
+                <br />greater or equal <input type="number" id="txtNRGreaterThanDays3" class="input20" />
+                <textarea id="txtNRGreaterThanDaysScript3" class="input100" style="padding-top: 20px; vertical-align: middle;"> </textarea>
+            </div>
+        </div>
+    </div>
+
+    <div style="margin-top: 20px; display: flex; border: 1px solid grey; padding: 10px; border-radius: 10px; display: none;" id="dvNRInactive4">
+        <input type="hidden" id="hdnNRInactive4" />
+        <div style="padding-top:50px;">
+            <input type="number" id="txtNRDaysCount4" style="padding-top: 20px; vertical-align: middle;" class="input20" /> days after last transaction
+        </div>
+        <div style="margin-left:30px;">
+            <div>
+                less than
+                <input type="number" id="txtNRLessThanDays4" class="input20" />
+                <textarea id="txtNRLessThanDaysScript4" class="input100" style="padding-top: 20px; vertical-align: middle;"> </textarea>
+            </div>
+            <div>
+                <br />greater or equal <input type="number" id="txtNRGreaterThanDays4" class="input20" />
+                <textarea id="txtNRGreaterThanDaysScript4" class="input100" style="padding-top: 20px; vertical-align: middle;"> </textarea>
+            </div>
+        </div>
+    </div>
+
+    <div class="container-fluid pt-3 pl-3 pr-3 pb-5">
+        <button type="button" id="btnNRInactiveSave" class="btn btn-primary pull-right" style="margin-right: 10px; margin-bottom: 20px;">Save</button>
+    </div>
 </div>
 
 @* Points Expiry *@
 <div id="dvPointsExpiry" style="border:1px solid grey;border-radius:10px;padding:5px;">
-    Points Expiry
-</div>
+    <div style="margin-top:20px;">
+        No of Message Count <input type="number" id="txtPEMessageCount" class="input20" />
+        Message Type <input type="radio" name="InactiveTypePE" id="rbtnPEInactiveSMS" /> SMS
+        <input type="radio" name="InactiveTypePE" id="rbtnPEInactiveWA" /> WhatsApp
+    </div>
 
+    <div style="margin-top: 20px; display: flex; border: 1px solid grey; padding: 10px; border-radius: 10px; display:none;" id="dvPEInactive1">
+        <input type="hidden" id="hdnPEInactive1" />
+        <div style="padding-top:50px;">
+            <input type="number" id="txtPEDaysCount1" style="padding-top: 20px; vertical-align: middle;" class="input20" /> days after last transaction
+        </div>
+        <div style="margin-left:30px;">
+            <div>
+                less than
+                <input type="number" id="txtPELessThanDays1" class="input20" />
+                <textarea id="txtPELessThanDaysScript1" class="input100" style="padding-top: 20px; vertical-align: middle;"> </textarea>
+            </div>
+            <div>
+                <br />greater or equal <input type="number" id="txtPEGreaterThanDays1" class="input20" />
+                <textarea id="txtPEGreaterThanDaysScript1" class="input100" style="padding-top: 20px; vertical-align: middle;"> </textarea>
+            </div>
+        </div>
+    </div>
+
+    <div style="margin-top: 20px; display: flex; border: 1px solid grey; padding: 10px; border-radius: 10px; display: none;" id="dvPEInactive2">
+        <input type="hidden" id="hdnPEInactive2" />
+        <div style="padding-top:50px;">
+            <input type="number" id="txtPEDaysCount2" style="padding-top: 20px; vertical-align: middle;" class="input20" /> days after last transaction
+        </div>
+        <div style="margin-left:30px;">
+            <div>
+                less than
+                <input type="number" id="txtPELessThanDays2" class="input20" />
+                <textarea id="txtPELessThanDaysScript2" class="input100" style="padding-top: 20px; vertical-align: middle;"> </textarea>
+            </div>
+            <div>
+                <br />greater or equal <input type="number" id="txtPEGreaterThanDays2" class="input20" />
+                <textarea id="txtPEGreaterThanDaysScript2" class="input100" style="padding-top: 20px; vertical-align: middle;"> </textarea>
+            </div>
+        </div>
+    </div>
+
+    <div style="margin-top: 20px; display: flex; border: 1px solid grey; padding: 10px; border-radius: 10px; display: none;" id="dvPEInactive3">
+        <input type="hidden" id="hdnPEInactive3" />
+        <div style="padding-top:50px;">
+            <input type="number" id="txtPEDaysCount3" style="padding-top: 20px; vertical-align: middle;" class="input20" /> days after last transaction
+        </div>
+        <div style="margin-left:30px;">
+            <div>
+                less than
+                <input type="number" id="txtPELessThanDays3" class="input20" />
+                <textarea id="txtPELessThanDaysScript3" class="input100" style="padding-top: 20px; vertical-align: middle;"> </textarea>
+            </div>
+            <div>
+                <br />greater or equal <input type="number" id="txtPEGreaterThanDays3" class="input20" />
+                <textarea id="txtPEGreaterThanDaysScript3" class="input100" style="padding-top: 20px; vertical-align: middle;"> </textarea>
+            </div>
+        </div>
+    </div>   
+
+    <div class="container-fluid pt-3 pl-3 pr-3 pb-5">
+        <button type="button" id="btnPEInactiveSave" class="btn btn-primary pull-right" style="margin-right: 10px; margin-bottom: 20px;">Save</button>
+    </div>
+</div>
 
 
 <script>
     $(document).ready(function () {
         ShowHideCampaignSection("dvBirthday");
         LoadBirthdayAnniversaryConfig("Birthday");
+
         $("#btnBirthdaySave").on("click", function () {
             SaveBirthdayConfig();
         });
         $("#btnAnniversarySave").on("click", function () {
             SaveAnniversaryConfig();
         });
+        $("#btnInactiveSave").on("click", function () {
+            SaveInactiveConfig("Inactive");
+        });
+        $("#btnOOInactiveSave").on("click", function () {
+            SaveInactiveConfig("OOInactive");
+        });
+        $("#btnNRInactiveSave").on("click", function () {
+            SaveInactiveConfig("NRInactive");
+        });
+        $("#btnPEInactiveSave").on("click", function () {
+            SaveInactiveConfig("PEInactive");
+        });
+
         $('#rbtnBirthday').click(function () {
             ShowHideCampaignSection("dvBirthday");
             LoadBirthdayAnniversaryConfig("Birthday");
@@ -189,18 +485,205 @@
         });
         $('#rbtnInactive').click(function () {
             ShowHideCampaignSection("dvInactive");
+            LoadInactiveData("Inactive");
         });
         $('#rbtnOnlyOnceInactive').click(function () {
             ShowHideCampaignSection("dvOOInactive");
+            LoadInactiveData("Only Once Inactive");
         });
         $('#rbtnNonRedeemptionInactive').click(function () {
             ShowHideCampaignSection("dvNRInactive");
+            LoadInactiveData("Non Redemption Inactive");
         });
         $('#rbtnPointsExpiry').click(function () {
             ShowHideCampaignSection("dvPointsExpiry");
+            LoadInactiveData("Point Expiry");
         });
-
+        $("#txtMessageCount").focusout(function () {
+            ShowMessageSections();
+        });
+        $("#txtOOMessageCount").focusout(function () {
+            ShowOOMessageSections();
+        });
+        $("#txtNRMessageCount").focusout(function () {
+            ShowNRMessageSections();
+        });
+        $("#txtPEMessageCount").focusout(function () {
+            ShowPEMessageSections();
+        });
     });
+
+    function ShowMessageSections() {
+
+        if ($("#txtMessageCount").val() < 2 || $("#txtMessageCount").val() > 4) {
+            cuteAlert({
+                type: "error",
+                title: "Oops..",
+                message: "Message count should be between 2 to 4",
+                buttonText: "Okay"
+            })
+            $("#txtMessageCount").val("");
+            return false;
+        }
+        else {
+            $("#dvInactive1").hide();
+            $("#dvInactive2").hide();
+            $("#dvInactive3").hide();
+            $("#dvInactive4").hide();
+            if ($("#txtMessageCount").val() == 2) {
+                $("#dvInactive1").show();
+                $("#dvInactive2").show();
+                $("#dvInactive1").css('display', 'flex');
+                $("#dvInactive2").css('display', 'flex');
+            }
+            if ($("#txtMessageCount").val() == 3) {
+                $("#dvInactive1").show();
+                $("#dvInactive2").show();
+                $("#dvInactive3").show();
+                $("#dvInactive1").css('display', 'flex');
+                $("#dvInactive2").css('display', 'flex');
+                $("#dvInactive3").css('display', 'flex');
+            }
+            if ($("#txtMessageCount").val() == 4) {
+                $("#dvInactive1").show();
+                $("#dvInactive2").show();
+                $("#dvInactive3").show();
+                $("#dvInactive4").show();
+                $("#dvInactive1").css('display', 'flex');
+                $("#dvInactive2").css('display', 'flex');
+                $("#dvInactive3").css('display', 'flex');
+                $("#dvInactive4").css('display', 'flex');
+            }
+        }
+    }
+
+    function ShowOOMessageSections() {
+
+        if ($("#txtOOMessageCount").val() < 2 || $("#txtOOMessageCount").val() > 4) {
+            cuteAlert({
+                type: "error",
+                title: "Oops..",
+                message: "Message count should be between 2 to 4",
+                buttonText: "Okay"
+            })
+            $("#txtOOMessageCount").val("");
+            return false;
+        }
+        else {
+            $("#dvOOInactive1").hide();
+            $("#dvOOInactive2").hide();
+            $("#dvOOInactive3").hide();
+            $("#dvOOInactive4").hide();
+            if ($("#txtOOMessageCount").val() == 2) {
+                $("#dvOOInactive1").show();
+                $("#dvOOInactive2").show();
+                $("#dvOOInactive1").css('display', 'flex');
+                $("#dvOOInactive2").css('display', 'flex');
+            }
+            if ($("#txtOOMessageCount").val() == 3) {
+                $("#dvOOInactive1").show();
+                $("#dvOOInactive2").show();
+                $("#dvOOInactive3").show();
+                $("#dvOOInactive1").css('display', 'flex');
+                $("#dvOOInactive2").css('display', 'flex');
+                $("#dvOOInactive3").css('display', 'flex');
+            }
+            if ($("#txtOOMessageCount").val() == 4) {
+                $("#dvOOInactive1").show();
+                $("#dvOOInactive2").show();
+                $("#dvOOInactive3").show();
+                $("#dvOOInactive4").show();
+                $("#dvOOInactive1").css('display', 'flex');
+                $("#dvOOInactive2").css('display', 'flex');
+                $("#dvOOInactive3").css('display', 'flex');
+                $("#dvOOInactive4").css('display', 'flex');
+            }
+        }
+    }
+
+    function ShowNRMessageSections() {
+
+        if ($("#txtNRMessageCount").val() < 2 || $("#txtNRMessageCount").val() > 4) {
+            cuteAlert({
+                type: "error",
+                title: "Oops..",
+                message: "Message count should be between 2 to 4",
+                buttonText: "Okay"
+            })
+            $("#txtNRMessageCount").val("");
+            return false;
+        }
+        else {
+            $("#dvNRInactive1").hide();
+            $("#dvNRInactive2").hide();
+            $("#dvNRInactive3").hide();
+            $("#dvNRInactive4").hide();
+            if ($("#txtNRMessageCount").val() == 2) {
+                $("#dvNRInactive1").show();
+                $("#dvNRInactive2").show();
+                $("#dvNRInactive1").css('display', 'flex');
+                $("#dvNRInactive2").css('display', 'flex');
+            }
+            if ($("#txtNRMessageCount").val() == 3) {
+                $("#dvNRInactive1").show();
+                $("#dvNRInactive2").show();
+                $("#dvNRInactive3").show();
+                $("#dvNRInactive1").css('display', 'flex');
+                $("#dvNRInactive2").css('display', 'flex');
+                $("#dvNRInactive3").css('display', 'flex');
+            }
+            if ($("#txtNRMessageCount").val() == 4) {
+                $("#dvNRInactive1").show();
+                $("#dvNRInactive2").show();
+                $("#dvNRInactive3").show();
+                $("#dvNRInactive4").show();
+                $("#dvNRInactive1").css('display', 'flex');
+                $("#dvNRInactive2").css('display', 'flex');
+                $("#dvNRInactive3").css('display', 'flex');
+                $("#dvNRInactive4").css('display', 'flex');
+            }
+        }
+    }
+
+    function ShowPEMessageSections() {
+        console.log($("#txtPEMessageCount").val())
+        if ($("#txtPEMessageCount").val() != "") {
+            if ($("#txtPEMessageCount").val() < 1 || $("#txtPEMessageCount").val() > 3) {
+                cuteAlert({
+                    type: "error",
+                    title: "Oops..",
+                    message: "Message count should be between 1 to 3",
+                    buttonText: "Okay"
+                })
+                $("#txtPEMessageCount").val("");
+                return false;
+            }
+            else {
+                $("#dvPEInactive1").hide();
+                $("#dvPEInactive2").hide();
+                $("#dvPEInactive3").hide();
+
+                if ($("#txtPEMessageCount").val() == 1) {
+                    $("#dvPEInactive1").show();
+                    $("#dvPEInactive1").css('display', 'flex');
+                }
+                if ($("#txtPEMessageCount").val() == 2) {
+                    $("#dvPEInactive1").show();
+                    $("#dvPEInactive2").show();
+                    $("#dvPEInactive1").css('display', 'flex');
+                    $("#dvPEInactive2").css('display', 'flex');
+                }
+                if ($("#txtPEMessageCount").val() == 3) {
+                    $("#dvPEInactive1").show();
+                    $("#dvPEInactive2").show();
+                    $("#dvPEInactive3").show();
+                    $("#dvPEInactive1").css('display', 'flex');
+                    $("#dvPEInactive2").css('display', 'flex');
+                    $("#dvPEInactive3").css('display', 'flex');
+                }
+            }
+        }
+    }
 
     function ShowHideCampaignSection(Id) {
         $("#dvBirthday").hide();
@@ -435,7 +918,7 @@
 
     function LoadCampaignControls(data, type) {
             if (type == "Birthday") {
-                console.log(data)
+                //console.log(data)
                 if (data.SMSType == "VWA") {
                     $("#rbtnVWA").prop("checked", true);
                 }
@@ -468,7 +951,7 @@
 
             }
             if (type == "Anniversary") {
-                console.log(data)
+                //console.log(data)
                 if (data.SMSType == "VWA") {
                     $("#rbtnVWA1").prop("checked", true);
                 }
@@ -500,5 +983,291 @@
                 $('#hdnAnniversaryId').val(data.Id);
             }
         }
+
+    function SaveInactiveConfig(type) {
+        var InactiveConfig = [];
+        var status = false;
+        if (type == "Inactive") {
+            if ($("#txtMessageCount").val() == "" || $("#txtMessageCount").val() < 2 || $("#txtMessageCount").val() > 4) {
+                cuteAlert({
+                    type: "error",
+                    title: "Oops..",
+                    message: "Message count should be between 2 to 4",
+                    buttonText: "Okay"
+                })
+                $("#txtMessageCount").val("");
+                return false;
+            }
+            else {
+                var msgCount = $("#txtMessageCount").val();
+
+                for (var i = 1; i <= msgCount; i++) {
+                    item = {}
+                    item["Id"] = $('#hdnInactive' + i).val();
+                    item["InactiveType"] = "Inactive";
+                    item["GroupId"] = $('#hdnGroupID').val();
+                    if ($("#rbtnInactiveSMS").prop("checked"))
+                        item["SMSorWA"] = "SMS";
+                    if ($("#rbtnInactiveWA").prop("checked"))
+                        item["SMSorWA"] = "WA";
+                    item["Days"] = $('#txtDaysCount' + i).val();
+                    item["LessThanDays"] = $('#txtLessThanDays' + i).val();
+                    item["LessThanDaysScript"] = $('#txtLessThanDaysScript' + i).val();
+                    item["GreaterThanDays"] = $('#txtGreaterThanDays' + i).val();
+                    item["GreaterThanDaysScript"] = $('#txtGreaterThanDaysScript' + i).val();
+                    InactiveConfig.push(item);
+                }
+                status = true;
+            }
+        }
+        if (type == "OOInactive") {
+            if ($("#txtOOMessageCount").val() == "" || $("#txtOOMessageCount").val() < 2 || $("#txtOOMessageCount").val() > 4) {
+                cuteAlert({
+                    type: "error",
+                    title: "Oops..",
+                    message: "Message count should be between 2 to 4",
+                    buttonText: "Okay"
+                })
+                $("#txtOOMessageCount").val("");
+                return false;
+            }
+            else {
+                var msgCount = $("#txtOOMessageCount").val();
+
+                for (var i = 1; i <= msgCount; i++) {
+                    item = {}
+                    item["Id"] = $('#hdnOOInactive' + i).val();
+                    item["InactiveType"] = "Only Once Inactive";
+                    item["GroupId"] = $('#hdnGroupID').val();
+                    if ($("#rbtnOOInactiveSMS").prop("checked"))
+                        item["SMSorWA"] = "SMS";
+                    if ($("#rbtnOOInactiveWA").prop("checked"))
+                        item["SMSorWA"] = "WA";
+                    item["Days"] = $('#txtOODaysCount' + i).val();
+                    item["LessThanDays"] = $('#txtOOLessThanDays' + i).val();
+                    item["LessThanDaysScript"] = $('#txtOOLessThanDaysScript' + i).val();
+                    item["GreaterThanDays"] = $('#txtOOGreaterThanDays' + i).val();
+                    item["GreaterThanDaysScript"] = $('#txtOOGreaterThanDaysScript' + i).val();
+                    InactiveConfig.push(item);
+                }
+                status = true;
+            }
+        }
+        if (type == "NRInactive") {
+            if ($("#txtNRMessageCount").val() == "" || $("#txtNRMessageCount").val() < 2 || $("#txtNRMessageCount").val() > 4) {
+                cuteAlert({
+                    type: "error",
+                    title: "Oops..",
+                    message: "Message count should be between 2 to 4",
+                    buttonText: "Okay"
+                })
+                $("#txtNRMessageCount").val("");
+                return false;
+            }
+            else {
+                var msgCount = $("#txtNRMessageCount").val();
+
+                for (var i = 1; i <= msgCount; i++) {
+                    item = {}
+                    item["Id"] = $('#hdnNRInactive' + i).val();
+                    item["InactiveType"] = "Non Redemption Inactive";
+                    item["GroupId"] = $('#hdnGroupID').val();
+                    if ($("#rbtnNRInactiveSMS").prop("checked"))
+                        item["SMSorWA"] = "SMS";
+                    if ($("#rbtnNRInactiveWA").prop("checked"))
+                        item["SMSorWA"] = "WA";
+                    item["Days"] = $('#txtNRDaysCount' + i).val();
+                    item["LessThanDays"] = $('#txtNRLessThanDays' + i).val();
+                    item["LessThanDaysScript"] = $('#txtNRLessThanDaysScript' + i).val();
+                    item["GreaterThanDays"] = $('#txtNRGreaterThanDays' + i).val();
+                    item["GreaterThanDaysScript"] = $('#txtNRGreaterThanDaysScript' + i).val();
+                    InactiveConfig.push(item);
+                }
+                status = true;
+            }
+        }
+        if (type == "PEInactive") {
+            if ($("#txtPEMessageCount").val() == "" || $("#txtPEMessageCount").val() < 1 || $("#txtNRMessageCount").val() > 3) {
+                cuteAlert({
+                    type: "error",
+                    title: "Oops..",
+                    message: "Message count should be between 2 to 4",
+                    buttonText: "Okay"
+                })
+                $("#txtPEMessageCount").val("");
+                return false;
+            }
+            else {
+                var msgCount = $("#txtPEMessageCount").val();
+
+                for (var i = 1; i <= msgCount; i++) {
+                    item = {}
+                    item["Id"] = $('#hdnPEInactive' + i).val();
+                    item["InactiveType"] = "Point Expiry";
+                    item["GroupId"] = $('#hdnGroupID').val();
+                    if ($("#rbtnPEInactiveSMS").prop("checked"))
+                        item["SMSorWA"] = "SMS";
+                    if ($("#rbtnPEInactiveWA").prop("checked"))
+                        item["SMSorWA"] = "WA";
+                    item["Days"] = $('#txtPEDaysCount' + i).val();
+                    item["LessThanDays"] = $('#txtPELessThanDays' + i).val();
+                    item["LessThanDaysScript"] = $('#txtPELessThanDaysScript' + i).val();
+                    item["GreaterThanDays"] = $('#txtPEGreaterThanDays' + i).val();
+                    item["GreaterThanDaysScript"] = $('#txtPEGreaterThanDaysScript' + i).val();
+                    InactiveConfig.push(item);
+                }
+                status = true;
+            }
+        }
+        if (status) {
+            var InactiveConfigData = JSON.stringify(InactiveConfig);
+
+            $("#divLoader").show();
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("SaveInactiveConfig", "CustomerOnBoarding")',
+                data: '{jsonData: ' + JSON.stringify(InactiveConfigData) + '}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (result) {
+                    if (result) {
+                        cuteAlert({
+                            type: "success",
+                            title: "Saved",
+                            message: "Inactive Configuration Saved Successfully !!!",
+                            buttonText: "Okay"
+                        }).then(() => {
+                            location.reload();
+                        })
+                    }
+                    else {
+                        cuteAlert({
+                            type: "error",
+                            title: "Oops..",
+                            message: "There is a problem while saving Inactive Configuration",
+                            buttonText: "Okay"
+                        })
+                    }
+                    $("#divLoader").hide();
+                },
+                error: function (result) {
+                    $("#divLoader").hide();
+                }
+            });
+        }
+
+    }
+
+    function LoadInactiveData(type) {
+        $("#divLoader").show();
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("GetInactiveConfig", "CustomerOnBoarding")',
+                data: '{GroupId: ' + JSON.stringify($('#hdnGroupID').val()) + ',Type: ' + JSON.stringify(type) + '}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (result) {
+                    LoadInactiveControls(result, type);
+                    $("#divLoader").hide();
+                },
+                error: function (result) {
+                    $("#divLoader").hide();
+                }
+            });
+        }
+
+    function LoadInactiveControls(data, type) {
+        console.log(type)
+        console.log(data)
+        if (type == "Inactive") {
+            var dataCount = data.length;
+            if (dataCount > 0) {
+                $("#txtMessageCount").val(dataCount);
+            }
+            ShowMessageSections();
+            for (var i = 0; i < dataCount; i++) {
+                console.log(data[i])
+                $("#hdnInactive" + (i + 1)).val(data[i].Id);
+                $("#txtDaysCount" + (i + 1)).val(data[i].Days);
+                $("#txtLessThanDays" + (i + 1)).val(data[i].LessThanDays);
+                $("#txtLessThanDaysScript" + (i + 1)).val(data[i].LessThanDaysScript);
+                $("#txtGreaterThanDays" + (i + 1)).val(data[i].GreaterThanDays);
+                $("#txtGreaterThanDaysScript" + (i + 1)).val(data[i].GreaterThanDaysScript);
+                if (data[i].SMSorWA == "WA") {
+                    $("#rbtnInactiveWA").prop("checked", true);
+                }
+                if (data[i].SMSorWA == "SMS") {
+                    $("#rbtnInactiveSMS").prop("checked", true);
+                }
+            }
+        }
+        if (type == "Only Once Inactive") {
+            var dataCount = data.length;
+            if (dataCount > 0) {
+                $("#txtOOMessageCount").val(dataCount);
+            }           
+            ShowOOMessageSections();
+            for (var i = 0; i < dataCount; i++) {
+                console.log(data[i])
+                $("#hdnOOInactive" + (i + 1)).val(data[i].Id);
+                $("#txtOODaysCount" + (i + 1)).val(data[i].Days);
+                $("#txtOOLessThanDays" + (i + 1)).val(data[i].LessThanDays);
+                $("#txtOOLessThanDaysScript" + (i + 1)).val(data[i].LessThanDaysScript);
+                $("#txtOOGreaterThanDays" + (i + 1)).val(data[i].GreaterThanDays);
+                $("#txtOOGreaterThanDaysScript" + (i + 1)).val(data[i].GreaterThanDaysScript);
+                if (data[i].SMSorWA == "WA") {
+                    $("#rbtnOOInactiveWA").prop("checked", true);
+                }
+                if (data[i].SMSorWA == "SMS") {
+                    $("#rbtnOOInactiveSMS").prop("checked", true);
+                }
+            }
+        }
+        if (type == "Non Redemption Inactive") {
+            var dataCount = data.length;
+            if (dataCount > 0) {
+                $("#txtNRMessageCount").val(dataCount);
+            }            
+            ShowNRMessageSections();
+            for (var i = 0; i < dataCount; i++) {
+                console.log(data[i])
+                $("#hdnNRInactive" + (i + 1)).val(data[i].Id);
+                $("#txtNRDaysCount" + (i + 1)).val(data[i].Days);
+                $("#txtNRLessThanDays" + (i + 1)).val(data[i].LessThanDays);
+                $("#txtNRLessThanDaysScript" + (i + 1)).val(data[i].LessThanDaysScript);
+                $("#txtNRGreaterThanDays" + (i + 1)).val(data[i].GreaterThanDays);
+                $("#txtNRGreaterThanDaysScript" + (i + 1)).val(data[i].GreaterThanDaysScript);
+                if (data[i].SMSorWA == "WA") {
+                    $("#rbtnNRInactiveWA").prop("checked", true);
+                }
+                if (data[i].SMSorWA == "SMS") {
+                    $("#rbtnNRInactiveSMS").prop("checked", true);
+                }
+            }
+        }
+
+        if (type == "Point Expiry") {
+            var dataCount = data.length;
+            if (dataCount > 0) {
+                $("#txtPEMessageCount").val(dataCount);
+            }           
+            ShowPEMessageSections();
+            for (var i = 0; i < dataCount; i++) {
+                console.log(data[i])
+                $("#hdnPEInactive" + (i + 1)).val(data[i].Id);
+                $("#txtPEDaysCount" + (i + 1)).val(data[i].Days);
+                $("#txtPELessThanDays" + (i + 1)).val(data[i].LessThanDays);
+                $("#txtPELessThanDaysScript" + (i + 1)).val(data[i].LessThanDaysScript);
+                $("#txtPEGreaterThanDays" + (i + 1)).val(data[i].GreaterThanDays);
+                $("#txtPEGreaterThanDaysScript" + (i + 1)).val(data[i].GreaterThanDaysScript);
+                if (data[i].SMSorWA == "WA") {
+                    $("#rbtnPEInactiveWA").prop("checked", true);
+                }
+                if (data[i].SMSorWA == "SMS") {
+                    $("#rbtnPEInactiveSMS").prop("checked", true);
+                }
+            }
+        }
+    }
 
 </script>

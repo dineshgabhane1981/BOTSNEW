@@ -251,7 +251,7 @@
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
                 success: function (result) {
-                    console.log(result)
+                    //console.log(result)
                     LoadControls(result);
                     $("#divLoader").hide();
 
@@ -494,8 +494,8 @@
 
                 },
                 error: function (result) {
-                    console.log(2222)
-                    console.log(result.responseText)
+                    //console.log(2222)
+                    //console.log(result.responseText)
                     $("#divLoader").hide();
                 }
             });

@@ -1058,6 +1058,67 @@ namespace WebApp.Controllers.OnBoarding
             return new JsonResult() { Data = objData, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
 
+        public ActionResult SaveInactiveConfig(string jsonData)
+        {
+            bool status = false;
+            try
+            {
+                var userDetails = (CustomerLoginDetail)Session["UserSession"];
+                List<BOTS_TblCampaignInactive> lstNewData = new List<BOTS_TblCampaignInactive>();
+                
+                JavaScriptSerializer json_serializer = new JavaScriptSerializer();
+                json_serializer.MaxJsonLength = int.MaxValue;
+                object[] objInactiveConfigData = (object[])json_serializer.DeserializeObject(jsonData);
+                string groupID = string.Empty;
+                string type = string.Empty;
+                foreach (Dictionary<string, object> item in objInactiveConfigData)
+                {
+                    BOTS_TblCampaignInactive objData = new BOTS_TblCampaignInactive();
+                    if (!string.IsNullOrEmpty(Convert.ToString(item["Id"])))
+                    {
+                        objData.Id = Convert.ToInt32(item["Id"]);                        
+                    }
+                    objData.GroupId = Convert.ToString(item["GroupId"]);
+                    objData.InactiveType= Convert.ToString(item["InactiveType"]);
+                    objData.SMSorWA = Convert.ToString(item["SMSorWA"]);
+                    objData.Days = Convert.ToInt32(item["Days"]);
+                    objData.LessThanDays = Convert.ToInt32(item["LessThanDays"]);
+                    objData.LessThanDaysScript = Convert.ToString(item["LessThanDaysScript"]);
+                    objData.GreaterThanDays = Convert.ToInt32(item["GreaterThanDays"]);
+                    objData.GreaterThanDaysScript = Convert.ToString(item["GreaterThanDaysScript"]);
+
+                    if (objData.Id > 0)
+                    {
+                        objData.UpdatedBy = userDetails.LoginId;
+                        objData.UpdatedDate = DateTime.Now;
+                    }
+                    else
+                    {
+                        objData.AddedBy = userDetails.LoginId;
+                        objData.AddedDate = DateTime.Now;
+                    }
+                    groupID = objData.GroupId;
+                    type = objData.InactiveType;
+                    lstNewData.Add(objData);                   
+                }
+                status = OBR.SaveInactiveConfig(lstNewData, groupID, type);
+
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "SaveBirthdayAndAnniversaryConfig");
+            }
+
+            return new JsonResult() { Data = status, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
+        }
+
+        public JsonResult GetInactiveConfig(string GroupId, string Type)
+        {
+            List<BOTS_TblCampaignInactive> lstExistingData = new List<BOTS_TblCampaignInactive>();
+            lstExistingData = OBR.GetInactiveConfigData(GroupId, Type);
+            return new JsonResult() { Data = lstExistingData, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
+        }
+
 
     }
 }

@@ -943,5 +943,66 @@ namespace BOTS_BL.Repository
             }
             return objData;
         }
+
+        public bool SaveInactiveConfig(List<BOTS_TblCampaignInactive> lstData, string GroupID,string type)
+        {
+            bool status = false;
+
+            using (var context = new CommonDBContext())
+            {
+                using (DbContextTransaction transaction = context.Database.BeginTransaction())
+                {
+                    try
+                    {
+                        var existingRecords = context.BOTS_TblCampaignInactive.Where(x => x.GroupId == GroupID && x.InactiveType== type).ToList();
+                        foreach (var item in existingRecords)
+                        {
+                            var oldItem = lstData.Where(x => x.Id == item.Id).FirstOrDefault();
+                            if (oldItem == null)
+                            {
+                                context.BOTS_TblCampaignInactive.Remove(item);
+                                context.SaveChanges();
+                            }
+                        }
+                        foreach (var objItem in lstData)
+                        {
+                            if (objItem.Id > 0)
+                            {
+                                var oldRecord = context.BOTS_TblCampaignInactive.Where(x => x.Id == objItem.Id).FirstOrDefault();
+                                objItem.AddedBy = oldRecord.AddedBy;
+                                objItem.AddedDate = oldRecord.AddedDate;
+                            }
+                            context.BOTS_TblCampaignInactive.AddOrUpdate(objItem);
+                            context.SaveChanges();
+                        }
+                        status = true;
+                        transaction.Commit();
+                    }
+                    catch (Exception ex)
+                    {
+                        transaction.Rollback();
+                        newexception.AddException(ex, "SaveInactiveConfig");
+                    }
+                }
+            }
+            return status;
+        }
+
+        public List<BOTS_TblCampaignInactive> GetInactiveConfigData(string groupId, string type)
+        {
+            List<BOTS_TblCampaignInactive> lstData = new List<BOTS_TblCampaignInactive>();
+            try
+            {
+                using (var context = new CommonDBContext())
+                {
+                    lstData = context.BOTS_TblCampaignInactive.Where(x => x.GroupId == groupId && x.InactiveType == type).ToList();
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetInactiveConfigData");
+            }
+            return lstData;
+        }
     }
 }
