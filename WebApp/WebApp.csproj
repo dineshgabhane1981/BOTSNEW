@@ -56,6 +56,9 @@
     <Reference Include="DocumentFormat.OpenXml, Version=2.7.2.0, Culture=neutral, PublicKeyToken=8fb06cb64d019a17, processorArchitecture=MSIL">
       <HintPath>..\packages\DocumentFormat.OpenXml.2.7.2\lib\net46\DocumentFormat.OpenXml.dll</HintPath>
     </Reference>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.4.4\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
     <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.4.4\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
@@ -85,7 +88,8 @@
       <HintPath>..\packages\Microsoft.Win32.Primitives.4.3.0\lib\net46\Microsoft.Win32.Primitives.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.13.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\packages\Newtonsoft.Json.12.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="System" />
@@ -108,7 +112,8 @@
       <HintPath>..\packages\System.IO.FileSystem.4.3.0\lib\net46\System.IO.FileSystem.dll</HintPath>
     </Reference>
     <Reference Include="System.IO.FileSystem.Primitives, Version=4.0.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.IO.FileSystem.Primitives.4.3.0\lib\net46\System.IO.FileSystem.Primitives.dll</HintPath>
+      <HintPath>..\packages\System.IO.FileSystem.Primitives.4.0.1\lib\net46\System.IO.FileSystem.Primitives.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System.IO.Packaging, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\System.IO.Packaging.4.0.0\lib\net46\System.IO.Packaging.dll</HintPath>
@@ -193,6 +198,13 @@
     <Compile Include="Controllers\HeatMapsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ITOperationsController.cs" />
+    <Compile Include="Controllers\ITOPS\AddMemberController.cs" />
+    <Compile Include="Controllers\ITOPS\BonusPointController.cs" />
+    <Compile Include="Controllers\ITOPS\EarnBurnController.cs" />
+    <Compile Include="Controllers\ITOPS\NameAndMobileController.cs" />
+    <Compile Include="Controllers\ITOPS\OTPAndLogController.cs" />
+    <Compile Include="Controllers\ITOPS\SMSAndSecurityController.cs" />
+    <Compile Include="Controllers\ITOPS\TransactionController.cs" />
     <Compile Include="Controllers\KeyIndicatorsController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Controllers\LoyaltyKPIsController.cs" />
@@ -326,6 +338,10 @@
     <Content Include="Content\assets\fonts\Pe-icon-7-stroke.woff" />
     <Content Include="Downloads\Bulkupload.xlsx" />
     <Content Include="Downloads\BulkUpload.xls" />
+    <Content Include="Scripts\bootstrap.js" />
+    <Content Include="Scripts\bootstrap.min.js" />
+    <Content Include="Scripts\cute-alert-master\LICENSE" />
+    <Content Include="Scripts\cute-alert-master\README.md" />
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
     <Content Include="fonts\glyphicons-halflings-regular.ttf" />
@@ -334,8 +350,17 @@
     <Content Include="Content\bootstrap.css.map" />
     <Content Include="Content\bootstrap-theme.min.css.map" />
     <Content Include="Content\bootstrap-theme.css.map" />
-    <Content Include="Scripts\cute-alert-master\LICENSE" />
-    <Content Include="Scripts\cute-alert-master\README.md" />
+    <None Include="Scripts\jquery-3.4.1.intellisense.js" />
+    <Content Include="Scripts\jquery-3.4.1.js" />
+    <Content Include="Scripts\jquery-3.4.1.min.js" />
+    <Content Include="Scripts\jquery-3.4.1.slim.js" />
+    <Content Include="Scripts\jquery-3.4.1.slim.min.js" />
+    <None Include="Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts\jquery.validate.js" />
+    <Content Include="Scripts\jquery.validate.min.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
+    <Content Include="Scripts\modernizr-2.8.3.js" />
     <Content Include="Views\DashBoardCustomerLogin\Index.cshtml" />
     <Content Include="Views\DashBoardCustomerLogin\_DashboardCustomerloginList.cshtml" />
     <Content Include="Views\Discussion\CommonDiscussion.cshtml" />
@@ -374,6 +399,24 @@
     <Content Include="Views\CustomerOnBoarding\_VelocityChecks.cshtml" />
     <Content Include="Views\CustomerOnBoarding\_BulkUpload.cshtml" />
     <Content Include="Views\SinglePage\_GroupWiseData.cshtml" />
+    <None Include="packages.config" />
+    <Content Include="Scripts\jquery-3.4.1.slim.min.map" />
+    <Content Include="Scripts\jquery-3.4.1.min.map" />
+    <Content Include="Views\Shared\_LayoutITOPS.cshtml" />
+    <Content Include="Views\Shared\_SidebarMenuITOPS.cshtml" />
+    <Content Include="Views\NameAndMobile\Index.cshtml" />
+    <Content Include="Views\NameAndMobile\ChangeMobile.cshtml" />
+    <Content Include="Views\EarnBurn\Index.cshtml" />
+    <Content Include="Views\EarnBurn\Burn.cshtml" />
+    <Content Include="Views\AddMember\Index.cshtml" />
+    <Content Include="Views\AddMember\BulkImport.cshtml" />
+    <Content Include="Views\BonusPoint\Index.cshtml" />
+    <Content Include="Views\BonusPoint\CancelTransaction.cshtml" />
+    <Content Include="Views\SMSAndSecurity\Index.cshtml" />
+    <Content Include="Views\SMSAndSecurity\SecurityKey.cshtml" />
+    <Content Include="Views\OTPAndLog\Index.cshtml" />
+    <Content Include="Views\OTPAndLog\Log.cshtml" />
+    <Content Include="Views\Transaction\Index.cshtml" />
     <None Include="_bin_deployableAssemblies\x86\sqlcese40.dll" />
     <None Include="_bin_deployableAssemblies\x86\sqlceqp40.dll" />
     <None Include="_bin_deployableAssemblies\x86\sqlceme40.dll" />
@@ -390,9 +433,6 @@
     <None Include="_bin_deployableAssemblies\amd64\sqlceca40.dll" />
     <None Include="_bin_deployableAssemblies\amd64\Microsoft.VC90.CRT\README_ENU.txt" />
     <None Include="_bin_deployableAssemblies\amd64\Microsoft.VC90.CRT\msvcr90.dll" />
-    <None Include="Scripts\jquery-3.4.1.intellisense.js" />
-    <Content Include="Scripts\bootstrap.js" />
-    <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Scripts\cute-alert-master\cute-alert.js" />
     <Content Include="Scripts\cute-alert-master\img\error.svg" />
     <Content Include="Scripts\cute-alert-master\img\info.svg" />
@@ -400,18 +440,8 @@
     <Content Include="Scripts\cute-alert-master\img\success.svg" />
     <Content Include="Scripts\cute-alert-master\img\warning.svg" />
     <Content Include="Scripts\cute-alert-master\style-alert.css" />
-    <Content Include="Scripts\jquery-3.4.1.js" />
-    <Content Include="Scripts\jquery-3.4.1.min.js" />
-    <Content Include="Scripts\jquery-3.4.1.slim.js" />
-    <Content Include="Scripts\jquery-3.4.1.slim.min.js" />
     <Content Include="Scripts\jquery-ui-1.12.1.js" />
     <Content Include="Scripts\jquery-ui-1.12.1.min.js" />
-    <None Include="Scripts\jquery.validate-vsdoc.js" />
-    <Content Include="Scripts\jquery.validate.js" />
-    <Content Include="Scripts\jquery.validate.min.js" />
-    <Content Include="Scripts\jquery.validate.unobtrusive.js" />
-    <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
-    <Content Include="Scripts\modernizr-2.8.3.js" />
     <Content Include="TemplateDesign\assets\fonts\fa-solid-900.svg" />
     <Content Include="TemplateDesign\assets\fonts\Pe-icon-7-stroke.svg" />
     <Content Include="TemplateDesign\assets\images\avatars\1.jpg" />
@@ -549,11 +579,6 @@
       <Project>{91b6424d-678c-4df3-89d7-af08c652d574}</Project>
       <Name>BOTS_BL</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
-    <Content Include="Scripts\jquery-3.4.1.slim.min.map" />
-    <Content Include="Scripts\jquery-3.4.1.min.map" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
