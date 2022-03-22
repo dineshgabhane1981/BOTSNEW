@@ -95,6 +95,9 @@
             WhatsApp Link <br /> <input type="text" id="txtWALink" class="input100" />
         </div>
         <div style="margin-left: 20px; margin-top: 10px;">
+            Token Id <br /> <input type="text" id="txtWATokenId" class="input100" />
+        </div>
+        <div style="margin-left: 20px; margin-top: 10px;">
             Enrollment Script <br /> <textarea id="txtWAEnrollment" rows="3" cols="50" class="input100"></textarea>
         </div>
         <div style="margin-left: 20px; margin-top: 10px;">
@@ -460,6 +463,7 @@
             $("#txtWAUserName").val(newdata1[0].WAUsername);
             $("#txtWAPassword").val(newdata1[0].WAPassword);
             $("#txtWALink").val(newdata1[0].WAlink);
+            $('#txtWATokenId').val(newdata1[0].TokenId)
             for (var i = 0; i < newdata1.length; i++) {
                 if (newdata1[i].MessageId == "100") {
                     $("#txtWAEnrollment").val(newdata1[i].WAScript);
@@ -549,6 +553,7 @@
                 item["WAUserName"] = $('#txtWAUserName').val();
                 item["WAPassword"] = $('#txtWAPassword').val();
                 item["WALink"] = $('#txtWALink').val();
+                item["WATokenId"] = $('#txtWATokenId').val();                
                 item["WAEnrollmentId"] = $('#hdnCommWAConfigId1').val();
                 item["WAEnrollment"] = $('#txtWAEnrollment').val();
                 item["WAEnrollmentAndEarnId"] = $('#hdnCommWAConfigId2').val();

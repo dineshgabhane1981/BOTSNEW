@@ -504,7 +504,7 @@ namespace WebApp.Controllers.OnBoarding
                         objSMSConfig.SMSUsername = Convert.ToString(item["SMSUserName"]);
                         objSMSConfig.SMSPassword = Convert.ToString(item["SMSPassword"]);
                         objSMSConfig.SMSlink = Convert.ToString(item["SMSLink"]);
-
+                        
                         SMSTemplate objSMSTemplate1 = new SMSTemplate();
                         objSMSTemplate1.MessageId = 100;
                         if (!string.IsNullOrEmpty(Convert.ToString(item["SMSEnrollmentId"])))
@@ -583,6 +583,7 @@ namespace WebApp.Controllers.OnBoarding
                         objWAConfig.WAUsername = Convert.ToString(item["WAUserName"]);
                         objWAConfig.WAPassword = Convert.ToString(item["WAPassword"]);
                         objWAConfig.WAlink = Convert.ToString(item["WALink"]);
+                        objWAConfig.TokenId = Convert.ToString(item["WATokenId"]);
 
                         SMSTemplate objWATemplate1 = new SMSTemplate();
                         objWATemplate1.MessageId = 100;
@@ -657,7 +658,7 @@ namespace WebApp.Controllers.OnBoarding
             }
             catch (Exception ex)
             {
-
+                newexception.AddException(ex, "SaveCommunicationConfigController");
             }
             return new JsonResult() { Data = status, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
