@@ -20,9 +20,6 @@ namespace BOTS_BL.Models
         public bool IsWA { get; set; }
 
         [StringLength(50)]
-        public string PEID { get; set; }
-
-        [StringLength(50)]
         public string WAProvider { get; set; }
 
         [StringLength(150)]
@@ -37,23 +34,12 @@ namespace BOTS_BL.Models
         [StringLength(250)]
         public string WAlink { get; set; }
 
-        public string EnrolmentWAScript { get; set; }
+        public int? MessageId { get; set; }
 
-        public string EnrollmentEarnWAScript { get; set; }
+        [StringLength(100)]
+        public string TokenId { get; set; }
 
-        public string EarnWAScript { get; set; }
-
-        public string OTPWAScript { get; set; }
-
-        public string BurnWAScript { get; set; }
-
-        public string CancelEarnWAScript { get; set; }
-
-        public string CancelBurnWAScript { get; set; }
-
-        public string AnyCancelWAScript { get; set; }
-
-        public string BalanceInquiryWAScript { get; set; }
+        public string WAScript { get; set; }
 
         [StringLength(50)]
         public string AddedBy { get; set; }

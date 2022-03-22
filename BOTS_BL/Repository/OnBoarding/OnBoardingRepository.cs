@@ -469,7 +469,7 @@ namespace BOTS_BL.Repository
             return objData;
         }
 
-        public bool SaveCommunicationConfig(BOTS_TblSMSConfig objSMSData, BOTS_TblWAConfig objWAData)
+        public bool SaveCommunicationConfig(BOTS_TblSMSConfig objSMSData, BOTS_TblWAConfig objWAData,List<SMSTemplate> lstSMS, List<SMSTemplate> lstWA,string loginId)
         {
             bool status = false;
 
@@ -481,71 +481,78 @@ namespace BOTS_BL.Repository
                     {
                         if (objSMSData.IsSMS)
                         {
-                            if (objSMSData.BrandId == "All")
+                            foreach (var itemSMS in lstSMS)
                             {
-                                var allBrandData = context.BOTS_TblSMSConfig.Where(x => x.BrandId != "All").ToList();
-                                foreach (var item in allBrandData)
-                                {
-                                    context.BOTS_TblSMSConfig.Remove(item);
-                                    context.SaveChanges();
-                                }
+                                BOTS_TblSMSConfig objItemNew = new BOTS_TblSMSConfig();
+                                objItemNew.IsSMS = objSMSData.IsSMS;
+                                objItemNew.SMSProvider = objSMSData.SMSProvider;
+                                objItemNew.GroupId = objSMSData.GroupId;
+                                objItemNew.BrandId = objSMSData.BrandId;
+                                objItemNew.SMSSenderID = objSMSData.SMSSenderID;
+                                objItemNew.SMSUsername = objSMSData.SMSUsername;
+                                objItemNew.SMSPassword = objSMSData.SMSPassword;
+                                objItemNew.SMSlink = objSMSData.SMSlink;
+                                 
+                                objItemNew.AddedBy = loginId;
+                                objItemNew.AddedDate = DateTime.Now;
+                                objItemNew.Id = itemSMS.Id;
+
+                                if (objItemNew.Id > 0)
+                                {                                    
+                                    var oldData = context.BOTS_TblSMSConfig.Where(x => x.Id == objItemNew.Id).FirstOrDefault();
+                                    if (oldData != null)
+                                    {                                        
+                                        objItemNew.AddedBy = oldData.AddedBy;
+                                        objItemNew.AddedDate = oldData.AddedDate;
+                                    }
+                                    objItemNew.UpdatedBy = loginId;
+                                    objItemNew.UpdatedDate = DateTime.Now;
+                                }                                
+                                objItemNew.MessageId = itemSMS.MessageId;
+                                objItemNew.SMSScript = itemSMS.TemplateScript;
+                                context.BOTS_TblSMSConfig.AddOrUpdate(objItemNew);
+                                context.SaveChanges();
                             }
-                            else
-                            {
-                                var allBrandData = context.BOTS_TblSMSConfig.Where(x => x.BrandId == "All").ToList();
-                                foreach (var item in allBrandData)
-                                {
-                                    context.BOTS_TblSMSConfig.Remove(item);
-                                    context.SaveChanges();
-                                }
-                            }
-                            if (objSMSData.Id > 0)
-                            {
-                                var oldData = context.BOTS_TblSMSConfig.Where(x => x.Id == objSMSData.Id).FirstOrDefault();
-                                if (oldData != null)
-                                {
-                                    objSMSData.AddedBy = oldData.AddedBy;
-                                    objSMSData.AddedDate = oldData.AddedDate;
-                                }
-                            }
-                            context.BOTS_TblSMSConfig.AddOrUpdate(objSMSData);
-                            context.SaveChanges();
                             status = true;
                         }
                         if (objWAData.IsWA)
-                        {
-                            if (objWAData.BrandId == "All")
+                        {                            
+                            foreach (var itemWA in lstWA)
                             {
-                                var allBrandData = context.BOTS_TblWAConfig.Where(x => x.BrandId != "All").ToList();
-                                foreach (var item in allBrandData)
-                                {
-                                    context.BOTS_TblWAConfig.Remove(item);
-                                    context.SaveChanges();
+                                BOTS_TblWAConfig objItemWA = new BOTS_TblWAConfig();
+                                objItemWA.IsWA = objWAData.IsWA;
+
+                                objItemWA.WAProvider = objWAData.WAProvider;
+                                objItemWA.GroupId = objWAData.GroupId;
+                                objItemWA.BrandId = objWAData.BrandId;
+                                objItemWA.WANumber = objWAData.WANumber;
+                                objItemWA.WAUsername = objWAData.WAUsername;
+                                objItemWA.WAPassword = objWAData.WAPassword;
+                                objItemWA.WAlink = objWAData.WAlink;
+                                objItemWA.TokenId = objWAData.TokenId;
+
+                                objItemWA.AddedBy = loginId;
+                                objItemWA.AddedDate = DateTime.Now;
+                                objItemWA.Id = itemWA.Id;
+
+                                if (objItemWA.Id > 0)
+                                {                                    
+                                    var oldData = context.BOTS_TblWAConfig.Where(x => x.Id == objItemWA.Id).FirstOrDefault();
+                                    if (oldData != null)
+                                    {
+                                        objItemWA.AddedBy = oldData.AddedBy;
+                                        objItemWA.AddedDate = oldData.AddedDate;
+                                    }
+                                    objItemWA.UpdatedBy = loginId;
+                                    objItemWA.UpdatedDate = DateTime.Now;
                                 }
+                                objItemWA.MessageId = itemWA.MessageId;
+                                objItemWA.WAScript = itemWA.TemplateScript;
+                                context.BOTS_TblWAConfig.AddOrUpdate(objItemWA);
+                                context.SaveChanges();
                             }
-                            else
-                            {
-                                var allBrandData = context.BOTS_TblWAConfig.Where(x => x.BrandId == "All").ToList();
-                                foreach (var item in allBrandData)
-                                {
-                                    context.BOTS_TblWAConfig.Remove(item);
-                                    context.SaveChanges();
-                                }
-                            }
-                            if (objWAData.Id > 0)
-                            {
-                                var oldData = context.BOTS_TblWAConfig.Where(x => x.Id == objWAData.Id).FirstOrDefault();
-                                if (oldData != null)
-                                {
-                                    objWAData.AddedBy = oldData.AddedBy;
-                                    objWAData.AddedDate = oldData.AddedDate;
-                                }
-                            }
-                            context.BOTS_TblWAConfig.AddOrUpdate(objWAData);
-                            context.SaveChanges();
                             status = true;
                         }
-
                         transaction.Commit();
                     }
                     catch (Exception ex)
@@ -555,40 +562,38 @@ namespace BOTS_BL.Repository
                     }
                 }
             }
-
-
             return status;
         }
-        public BOTS_TblSMSConfig GetCommunicationSMSConfig(string GroupId, string BrandId)
+        public List<BOTS_TblSMSConfig> GetCommunicationSMSConfig(string GroupId, string BrandId)
         {
-            BOTS_TblSMSConfig objData = new BOTS_TblSMSConfig();
+            List<BOTS_TblSMSConfig> objData = new List<BOTS_TblSMSConfig>();
             using (var context = new CommonDBContext())
             {
                 if (BrandId != "0")
                 {
-                    objData = context.BOTS_TblSMSConfig.Where(x => x.GroupId == GroupId && x.BrandId == BrandId).FirstOrDefault();
+                    objData = context.BOTS_TblSMSConfig.Where(x => x.GroupId == GroupId && x.BrandId == BrandId).ToList();
                 }
                 else
                 {
-                    objData = context.BOTS_TblSMSConfig.Where(x => x.GroupId == GroupId && x.BrandId == "All").FirstOrDefault();
+                    objData = context.BOTS_TblSMSConfig.Where(x => x.GroupId == GroupId && x.BrandId == "All").ToList();
                 }
             }
 
             return objData;
         }
 
-        public BOTS_TblWAConfig GetCommunicationWAConfig(string GroupId, string BrandId)
+        public List<BOTS_TblWAConfig> GetCommunicationWAConfig(string GroupId, string BrandId)
         {
-            BOTS_TblWAConfig objData = new BOTS_TblWAConfig();
+            List<BOTS_TblWAConfig> objData = new List<BOTS_TblWAConfig>();
             using (var context = new CommonDBContext())
             {
                 if (BrandId != "0")
                 {
-                    objData = context.BOTS_TblWAConfig.Where(x => x.GroupId == GroupId && x.BrandId == BrandId).FirstOrDefault();
+                    objData = context.BOTS_TblWAConfig.Where(x => x.GroupId == GroupId && x.BrandId == BrandId).ToList();
                 }
                 else
                 {
-                    objData = context.BOTS_TblWAConfig.Where(x => x.GroupId == GroupId && x.BrandId == "All").FirstOrDefault();
+                    objData = context.BOTS_TblWAConfig.Where(x => x.GroupId == GroupId && x.BrandId == "All").ToList();
                 }
             }
 

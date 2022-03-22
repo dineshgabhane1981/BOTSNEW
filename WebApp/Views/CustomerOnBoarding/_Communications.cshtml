@@ -8,8 +8,26 @@
 </div>
 
 <div id="dvEditable" style="display:none;margin-top:20px;">
-    <input type="hidden" id="hdnCommSMSConfigId" />
-    <input type="hidden" id="hdnCommWAConfigId" />
+    <input type="hidden" id="hdnCommSMSConfigId1" />
+    <input type="hidden" id="hdnCommSMSConfigId2" />
+    <input type="hidden" id="hdnCommSMSConfigId3" />
+    <input type="hidden" id="hdnCommSMSConfigId4" />
+    <input type="hidden" id="hdnCommSMSConfigId5" />
+    <input type="hidden" id="hdnCommSMSConfigId6" />
+    <input type="hidden" id="hdnCommSMSConfigId7" />
+    <input type="hidden" id="hdnCommSMSConfigId8" />
+    <input type="hidden" id="hdnCommSMSConfigId9" />
+
+    <input type="hidden" id="hdnCommWAConfigId1" />
+    <input type="hidden" id="hdnCommWAConfigId2" />
+    <input type="hidden" id="hdnCommWAConfigId3" />
+    <input type="hidden" id="hdnCommWAConfigId4" />
+    <input type="hidden" id="hdnCommWAConfigId5" />
+    <input type="hidden" id="hdnCommWAConfigId6" />
+    <input type="hidden" id="hdnCommWAConfigId7" />
+    <input type="hidden" id="hdnCommWAConfigId8" />
+    <input type="hidden" id="hdnCommWAConfigId9" />
+
     <div style="float:left;" class="col-md-6 col-lg-6">
         <div style="margin-left:20px;">
             <input type="checkbox" id="chkIsSMS" /> Is SMS
@@ -186,6 +204,8 @@
             $('#txtSMSCancelBurn').attr("disabled", true);
             $('#txtSMSAnyCancel').attr("disabled", true);
             $('#txtSMSBalanceInquiry').attr("disabled", true);
+            $('#ddlSMSProvider').attr("disabled", true); 
+            
         }
         else {
             $('#txtSMSSenderId').attr("disabled", false);
@@ -201,6 +221,7 @@
             $('#txtSMSCancelBurn').attr("disabled", false);
             $('#txtSMSAnyCancel').attr("disabled", false);
             $('#txtSMSBalanceInquiry').attr("disabled", false);
+            $('#ddlSMSProvider').attr("disabled", false);
         }
     }
     function WAEnableDisable(flag) {
@@ -219,6 +240,7 @@
             $('#txtWACancelBurn').attr("disabled", true);
             $('#txtWAAnyCancel').attr("disabled", true);
             $('#txtWABalanceInquiry').attr("disabled", true);
+            $('#ddlWAProvider').attr("disabled", true);
         }
         else {
             $('#txtWANumber').attr("disabled", false);
@@ -235,6 +257,7 @@
             $('#txtWACancelBurn').attr("disabled", false);
             $('#txtWAAnyCancel').attr("disabled", false);
             $('#txtWABalanceInquiry').attr("disabled", false);
+            $('#ddlWAProvider').attr("disabled", false);
         }
     }
     function LoadEditableCommunication() {
@@ -261,12 +284,14 @@
                 }
             });
     }
-    function LoadControls(ObjData) {       
+    function LoadControls(ObjData) {
+        console.log(ObjData);
         var SMSConfig = ObjData["SMSConfig"];
         var WAConfig = ObjData["WAConfig"];
-                
-        if (SMSConfig != null) {
-            if (SMSConfig.BrandId == "All") {
+        //console.log(SMSConfig);
+        //console.log(WAConfig);
+        if (SMSConfig.length > 0) {
+            if (SMSConfig[0].BrandId == "All") {
                 $("#chkAllOutlets").prop('checked', true);
                 $('#ddlBrandsComm').prop('selectedIndex', 0);
                 $('#ddlBrandsComm').attr("disabled", true);
@@ -277,7 +302,7 @@
                 $('#ddlBrandsComm').attr("disabled", false);
                 $("#dvEditable").show(1000);
             }
-            if (SMSConfig.IsSMS) {
+            if (SMSConfig[0].IsSMS) {
                 $("#chkIsSMS").prop('checked', true);
                 SMSEnableDisable(1);
                 BindSMSValues(SMSConfig);
@@ -292,29 +317,30 @@
             SMSEnableDisable(0);
             ClearAllSMSControls();
         }
-        if (WAConfig != null) {
-            if (WAConfig.BrandId == "All") {
+        if (WAConfig.length > 0) {
+            if (WAConfig[0].BrandId == "All") {
                 $("#chkAllOutlets").prop('checked', true);
                 $('#ddlBrandsComm').prop('selectedIndex', 0);
                 $('#ddlBrandsComm').attr("disabled", true);
                 $("#dvEditable").show(1000);
             }
             else {
-                $('#ddlBrandsComm').prop('selectedIndex', WAConfig.BrandId);
+                $('#ddlBrandsComm').prop('selectedIndex', WAConfig[0].BrandId);
                 $('#ddlBrandsComm').attr("disabled", false);
                 $("#dvEditable").show(1000);
             }
-            if (WAConfig.IsWA) {
+            if (WAConfig[0].IsWA) {
                 $("#chkIsWA").prop('checked', true);
                 WAEnableDisable(1);
                 BindWAValues(WAConfig);
             }
-            else {
+            else {                
                 $("#chkIsWA").prop('checked', false);
                 WAEnableDisable(0);
             }             
         }
         else {
+            
             $("#chkIsWA").prop('checked', false);
             WAEnableDisable(0);
             ClearAllWAControls();
@@ -353,56 +379,126 @@
         $("#txtWAAnyCancel").val("");
         $("#txtWABalanceInquiry").val("");
     }
-    function BindSMSValues(data) {
-        if (data != null) {
-            //console.log(data)
-            $("#hdnCommSMSConfigId").val(data.Id);
-            if (data.SMSProvider != "0" && data.SMSProvider != "") {                
-                $('#ddlSMSProvider').val(data.SMSProvider);
-            }          
-                
-            $("#txtSMSSenderId").val(data.SMSSenderID);
-            $("#txtSMSUserName").val(data.SMSUsername);
-            $("#txtSMSPassword").val(data.SMSPassword);
-            $("#txtSMSLink").val(data.SMSlink);
-            $("#txtSMSEnrollment").val(data.EnrolmentSMSScript);
-            $("#txtSMSEnrollmentAndEarn").val(data.EnrollmentEarnSMSScript);
-            $("#txtSMSEarn").val(data.EarnSMSScript);
-            $("#txtSMSOTP").val(data.OTPSMSScript);
-            $("#txtSMSBurn").val(data.BurnSMSScript);
-            $("#txtSMSCancelEarn").val(data.CancelEarnSMSScript);
-            $("#txtSMSCancelBurn").val(data.CancelBurnSMSScript);
-            $("#txtSMSAnyCancel").val(data.AnyCancelSMSScript);
-            $("#txtSMSBalanceInquiry").val(data.BalanceInquirySMSScript);
-        }
-        else {
-            $("#hdnCommSMSConfigId").val("");
-        }
-    }
-    function BindWAValues(data) {
-        if (data != null) {
-            //console.log(data)
-            $("#hdnCommWAConfigId").val(data.Id);
-            if (data.WAProvider != "0" && data.WAProvider != "") {                
-                $('#ddlWAProvider').val(data.WAProvider);
+    function BindSMSValues(newdata) {
+        //console.log(newdata)
+        if (newdata != null) {
+            
+            $("#hdnCommSMSConfigId").val(newdata[0].Id);
+            if (newdata[0].SMSProvider != "0" && newdata[0].SMSProvider != "") {
+                $('#ddlSMSProvider').val(newdata[0].SMSProvider);
             }
-            $("#txtWANumber").val(data.WANumber);
-            $("#txtWAUserName").val(data.WAUsername);
-            $("#txtWAPassword").val(data.WAPassword);
-            $("#txtWALink").val(data.WAlink);
-            $("#txtWAEnrollment").val(data.EnrolmentWAScript);
-            $("#txtWAEnrollmentAndEarn").val(data.EnrollmentEarnWAScript);
-            $("#txtWAEarn").val(data.EarnWAScript);
-            $("#txtWAOTP").val(data.OTPWAScript);
-            $("#txtWABurn").val(data.BurnWAScript);
-            $("#txtWACancelEarn").val(data.CancelEarnWAScript);
-            $("#txtWACancelBurn").val(data.CancelBurnWAScript);
-            $("#txtWAAnyCancel").val(data.AnyCancelWAScript);
-            $("#txtWABalanceInquiry").val(data.BalanceInquiryWAScript);
-        }
-        else {
-            $("#hdnCommWAConfigId").val("");
-        }
+            if (newdata[0].BrandId == "All") {
+                $("#chkAllOutlets").prop("checked", true);
+                $('#ddlBrandsComm').prop('selectedIndex', 0);
+                $('#ddlBrandsComm').attr("disabled", true);
+            }
+            else {
+                $('#ddlBrandsComm').val(newdata[0].BrandId);
+                $('#ddlBrandsComm').attr("disabled", false);
+            }
+            $("#txtSMSSenderId").val(newdata[0].SMSSenderID);
+            $("#txtSMSUserName").val(newdata[0].SMSUsername);
+            $("#txtSMSPassword").val(newdata[0].SMSPassword);
+            $("#txtSMSLink").val(newdata[0].SMSlink);
+            for (var i = 0; i < newdata.length; i++) {
+                 
+                if (newdata[i].MessageId == "100") {                    
+                    $("#txtSMSEnrollment").val(newdata[i].SMSScript);
+                    $("#hdnCommSMSConfigId1").val(newdata[i].Id);
+                }
+                if (newdata[i].MessageId == "101") {
+                    $("#txtSMSEarn").val(newdata[i].SMSScript);
+                    $("#hdnCommSMSConfigId3").val(newdata[i].Id);
+                }
+                if (newdata[i].MessageId == "102") {
+                    $("#txtSMSBurn").val(newdata[i].SMSScript);
+                    $("#hdnCommSMSConfigId5").val(newdata[i].Id);
+                }
+                if (newdata[i].MessageId == "103") {
+                    $("#txtSMSCancelEarn").val(newdata[i].SMSScript);
+                    $("#hdnCommSMSConfigId6").val(newdata[i].Id);
+                }
+                if (newdata[i].MessageId == "104") {
+                    $("#txtSMSCancelBurn").val(newdata[i].SMSScript);
+                    $("#hdnCommSMSConfigId7").val(newdata[i].Id);
+                }
+                if (newdata[i].MessageId == "105") {
+                    $("#txtSMSOTP").val(newdata[i].SMSScript);
+                    $("#hdnCommSMSConfigId4").val(newdata[i].Id);
+                }
+                if (newdata[i].MessageId == "106") {
+                    $("#txtSMSBalanceInquiry").val(newdata[i].SMSScript);
+                    $("#hdnCommSMSConfigId9").val(newdata[i].Id);
+                }
+                if (newdata[i].MessageId == "107") {
+                    $("#txtSMSAnyCancel").val(newdata[i].SMSScript);
+                    $("#hdnCommSMSConfigId8").val(newdata[i].Id);
+                }
+                if (newdata[i].MessageId == "108") {
+                    $("#txtSMSEnrollmentAndEarn").val(newdata[i].SMSScript);
+                    $("#hdnCommSMSConfigId2").val(newdata[i].Id);
+                }
+            }           
+        }         
+    }
+    function BindWAValues(newdata1) {
+        if (newdata1 != null) {
+            console.log(newdata1)            
+            if (newdata1[0].WAProvider != "0" && newdata1[0].WAProvider != "") {
+                $('#ddlWAProvider').val(newdata1[0].WAProvider);
+            }
+            if (newdata1[0].BrandId == "All") {
+                $("#chkAllOutlets").prop("checked", true);
+                $('#ddlBrandsComm').prop('selectedIndex', 0);
+                $('#ddlBrandsComm').attr("disabled", true);
+            }
+            else {
+                $('#ddlBrandsComm').val(newdata1[0].BrandId);
+                $('#ddlBrandsComm').attr("disabled", false);
+            }
+            $("#txtWANumber").val(newdata1[0].WANumber);
+            $("#txtWAUserName").val(newdata1[0].WAUsername);
+            $("#txtWAPassword").val(newdata1[0].WAPassword);
+            $("#txtWALink").val(newdata1[0].WAlink);
+            for (var i = 0; i < newdata1.length; i++) {
+                if (newdata1[i].MessageId == "100") {
+                    $("#txtWAEnrollment").val(newdata1[i].WAScript);
+                    $("#hdnCommWAConfigId1").val(newdata1[i].Id);
+                }
+                if (newdata1[i].MessageId == "101") {
+                    $("#txtWAEarn").val(newdata1[i].WAScript);
+                    $("#hdnCommWAConfigId3").val(newdata1[i].Id);
+                }
+                if (newdata1[i].MessageId == "102") {
+                    $("#txtWABurn").val(newdata1[i].WAScript);
+                    $("#hdnCommWAConfigId5").val(newdata1[i].Id);
+                }
+                if (newdata1[i].MessageId == "103") {
+                    $("#txtWACancelEarn").val(newdata1[i].WAScript);
+                    $("#hdnCommWAConfigId6").val(newdata1[i].Id);
+                }
+                if (newdata1[i].MessageId == "104") {
+                    $("#txtWACancelBurn").val(newdata1[i].WAScript);
+                    $("#hdnCommWAConfigId7").val(newdata1[i].Id);
+                }
+                if (newdata1[i].MessageId == "105") {
+                    $("#txtWAOTP").val(newdata1[i].WAScript);
+                    $("#hdnCommWAConfigId4").val(newdata1[i].Id);
+                }
+                if (newdata1[i].MessageId == "106") {
+                    $("#txtWABalanceInquiry").val(newdata1[i].WAScript);
+                    $("#hdnCommWAConfigId9").val(newdata1[i].Id);
+                }
+                if (newdata1[i].MessageId == "107") {
+                    $("#txtWAAnyCancel").val(newdata1[i].WAScript);
+                    $("#hdnCommWAConfigId8").val(newdata1[i].Id);
+                }
+                if (newdata1[i].MessageId == "108") {
+                    $("#txtWAEnrollmentAndEarn").val(newdata1[i].WAScript);
+                    $("#hdnCommWAConfigId2").val(newdata1[i].Id);
+                }
+            }
+        }        
     }
     function SaveCommunicationConfig() {
         if ($('#chkIsSMS').is(":checked") || $('#chkIsWA').is(":checked")) {
@@ -416,43 +512,60 @@
                 item["BrandId"] = $('#ddlBrandsComm').val();
             }
             if ($('#chkIsSMS').is(":checked")) {
-                item["SMSId"] = $("#hdnCommSMSConfigId").val();
+                //item["SMSId"] = $("#hdnCommSMSConfigId").val();
                 item["IsSMS"] = 1;
                 item["SMSProvider"] = $('#ddlSMSProvider').val();
                 item["SMSSenderId"] = $('#txtSMSSenderId').val();
                 item["SMSUserName"] = $('#txtSMSUserName').val();
                 item["SMSPassword"] = $('#txtSMSPassword').val();
                 item["SMSLink"] = $('#txtSMSLink').val();
+                item["SMSEnrollmentId"] = $('#hdnCommSMSConfigId1').val();
                 item["SMSEnrollment"] = $('#txtSMSEnrollment').val();
+                item["SMSEnrollmentAndEarnId"] = $('#hdnCommSMSConfigId2').val();
                 item["SMSEnrollmentAndEarn"] = $('#txtSMSEnrollmentAndEarn').val();
+                item["SMSEarnId"] = $('#hdnCommSMSConfigId3').val();
                 item["SMSEarn"] = $('#txtSMSEarn').val();
+                item["SMSOTPId"] = $('#hdnCommSMSConfigId4').val();
                 item["SMSOTP"] = $('#txtSMSOTP').val();
+                item["SMSBurnId"] = $('#hdnCommSMSConfigId5').val();
                 item["SMSBurn"] = $('#txtSMSBurn').val();
+                item["SMSCancelEarnId"] = $('#hdnCommSMSConfigId6').val();
                 item["SMSCancelEarn"] = $('#txtSMSCancelEarn').val();
+                item["SMSCancelBurnId"] = $('#hdnCommSMSConfigId7').val();
                 item["SMSCancelBurn"] = $('#txtSMSCancelBurn').val();
+                item["SMSAnyCancelId"] = $('#hdnCommSMSConfigId8').val();
                 item["SMSAnyCancel"] = $('#txtSMSAnyCancel').val();
+                item["SMSBalanceInquiryId"] = $('#hdnCommSMSConfigId9').val();
                 item["SMSBalanceInquiry"] = $('#txtSMSBalanceInquiry').val();
             }
             else {
                 item["IsSMS"] = 0;
             }
 
-            if ($('#chkIsWA').is(":checked")) {
-                item["WAId"] = $("#hdnCommWAConfigId").val();
+            if ($('#chkIsWA').is(":checked")) {                
                 item["IsWA"] = 1;
                 item["WAProvider"] = $('#ddlWAProvider').val();
                 item["WANumber"] = $('#txtWANumber').val();
                 item["WAUserName"] = $('#txtWAUserName').val();
                 item["WAPassword"] = $('#txtWAPassword').val();
                 item["WALink"] = $('#txtWALink').val();
+                item["WAEnrollmentId"] = $('#hdnCommWAConfigId1').val();
                 item["WAEnrollment"] = $('#txtWAEnrollment').val();
+                item["WAEnrollmentAndEarnId"] = $('#hdnCommWAConfigId2').val();
                 item["WAEnrollmentAndEarn"] = $('#txtWAEnrollmentAndEarn').val();
+                item["WAEarnId"] = $('#hdnCommWAConfigId3').val();
                 item["WAEarn"] = $('#txtWAEarn').val();
+                item["WAOTPId"] = $('#hdnCommWAConfigId4').val();
                 item["WAOTP"] = $('#txtWAOTP').val();
+                item["WABurnId"] = $('#hdnCommWAConfigId5').val();
                 item["WABurn"] = $('#txtWABurn').val();
+                item["WACancelEarnId"] = $('#hdnCommWAConfigId6').val();
                 item["WACancelEarn"] = $('#txtWACancelEarn').val();
+                item["WACancelBurnId"] = $('#hdnCommWAConfigId7').val();
                 item["WACancelBurn"] = $('#txtWACancelBurn').val();
+                item["WAAnyCancelId"] = $('#hdnCommWAConfigId8').val();
                 item["WAAnyCancel"] = $('#txtWAAnyCancel').val();
+                item["WABalanceInquiryId"] = $('#hdnCommWAConfigId9').val();
                 item["WABalanceInquiry"] = $('#txtWABalanceInquiry').val();
             }
             else {

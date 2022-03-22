@@ -483,10 +483,11 @@ namespace WebApp.Controllers.OnBoarding
             bool status = false;
             try
             {
-
                 var userDetails = (CustomerLoginDetail)Session["UserSession"];
                 BOTS_TblSMSConfig objSMSConfig = new BOTS_TblSMSConfig();
                 BOTS_TblWAConfig objWAConfig = new BOTS_TblWAConfig();
+                List<SMSTemplate> lstSMSTemplate = new List<SMSTemplate>();
+                List<SMSTemplate> lstWATemplate = new List<SMSTemplate>();
                 JavaScriptSerializer json_serializer = new JavaScriptSerializer();
                 json_serializer.MaxJsonLength = int.MaxValue;
                 object[] objCommConfigData = (object[])json_serializer.DeserializeObject(jsonData);
@@ -495,9 +496,7 @@ namespace WebApp.Controllers.OnBoarding
                     var isSMS = Convert.ToBoolean(item["IsSMS"]);
                     if (isSMS)
                     {
-                        objSMSConfig.IsSMS = true;
-                        if (!string.IsNullOrEmpty(Convert.ToString(item["SMSId"])))
-                            objSMSConfig.Id = Convert.ToInt32(item["SMSId"]);
+                        objSMSConfig.IsSMS = true;                       
                         objSMSConfig.SMSProvider = Convert.ToString(item["SMSProvider"]);
                         objSMSConfig.GroupId = Convert.ToString(item["GroupId"]);
                         objSMSConfig.BrandId = Convert.ToString(item["BrandId"]);
@@ -505,25 +504,69 @@ namespace WebApp.Controllers.OnBoarding
                         objSMSConfig.SMSUsername = Convert.ToString(item["SMSUserName"]);
                         objSMSConfig.SMSPassword = Convert.ToString(item["SMSPassword"]);
                         objSMSConfig.SMSlink = Convert.ToString(item["SMSLink"]);
-                        objSMSConfig.EnrolmentSMSScript = Convert.ToString(item["SMSEnrollment"]);
-                        objSMSConfig.EnrollmentEarnSMSScript = Convert.ToString(item["SMSEnrollmentAndEarn"]);
-                        objSMSConfig.EarnSMSScript = Convert.ToString(item["SMSEarn"]);
-                        objSMSConfig.OTPSMSScript = Convert.ToString(item["SMSOTP"]);
-                        objSMSConfig.BurnSMSScript = Convert.ToString(item["SMSBurn"]);
-                        objSMSConfig.CancelEarnSMSScript = Convert.ToString(item["SMSCancelEarn"]);
-                        objSMSConfig.CancelBurnSMSScript = Convert.ToString(item["SMSCancelBurn"]);
-                        objSMSConfig.AnyCancelSMSScript = Convert.ToString(item["SMSAnyCancel"]);
-                        objSMSConfig.BalanceInquirySMSScript = Convert.ToString(item["SMSBalanceInquiry"]);
-                        if (objSMSConfig.Id > 0)
-                        {
-                            objSMSConfig.UpdatedBy = userDetails.LoginId;
-                            objSMSConfig.UpdatedDate = DateTime.Now;
-                        }
-                        else
-                        {
-                            objSMSConfig.AddedBy = userDetails.LoginId;
-                            objSMSConfig.AddedDate = DateTime.Now;
-                        }
+
+                        SMSTemplate objSMSTemplate1 = new SMSTemplate();
+                        objSMSTemplate1.MessageId = 100;
+                        if (!string.IsNullOrEmpty(Convert.ToString(item["SMSEnrollmentId"])))
+                            objSMSTemplate1.Id = Convert.ToInt32(item["SMSEnrollmentId"]);
+                        objSMSTemplate1.TemplateScript = Convert.ToString(item["SMSEnrollment"]);
+                        lstSMSTemplate.Add(objSMSTemplate1);
+
+                        SMSTemplate objSMSTemplate2 = new SMSTemplate();
+                        objSMSTemplate2.MessageId = 101;
+                        if (!string.IsNullOrEmpty(Convert.ToString(item["SMSEarnId"])))
+                            objSMSTemplate2.Id = Convert.ToInt32(item["SMSEarnId"]);
+                        objSMSTemplate2.TemplateScript = Convert.ToString(item["SMSEarn"]);
+                        lstSMSTemplate.Add(objSMSTemplate2);
+
+                        SMSTemplate objSMSTemplate3 = new SMSTemplate();
+                        objSMSTemplate3.MessageId = 102;
+                        if (!string.IsNullOrEmpty(Convert.ToString(item["SMSBurnId"])))
+                            objSMSTemplate3.Id = Convert.ToInt32(item["SMSBurnId"]);
+                        objSMSTemplate3.TemplateScript = Convert.ToString(item["SMSBurn"]);
+                        lstSMSTemplate.Add(objSMSTemplate3);
+
+                        SMSTemplate objSMSTemplate4 = new SMSTemplate();
+                        objSMSTemplate4.MessageId = 103;
+                        if (!string.IsNullOrEmpty(Convert.ToString(item["SMSCancelEarnId"])))
+                            objSMSTemplate4.Id = Convert.ToInt32(item["SMSCancelEarnId"]);
+                        objSMSTemplate4.TemplateScript = Convert.ToString(item["SMSCancelEarn"]);
+                        lstSMSTemplate.Add(objSMSTemplate4);
+
+                        SMSTemplate objSMSTemplate5 = new SMSTemplate();
+                        objSMSTemplate5.MessageId = 104;
+                        if (!string.IsNullOrEmpty(Convert.ToString(item["SMSCancelBurnId"])))
+                            objSMSTemplate5.Id = Convert.ToInt32(item["SMSCancelBurnId"]);
+                        objSMSTemplate5.TemplateScript = Convert.ToString(item["SMSCancelBurn"]);
+                        lstSMSTemplate.Add(objSMSTemplate5);
+
+                        SMSTemplate objSMSTemplate6 = new SMSTemplate();
+                        objSMSTemplate6.MessageId = 105;
+                        if (!string.IsNullOrEmpty(Convert.ToString(item["SMSOTPId"])))
+                            objSMSTemplate6.Id = Convert.ToInt32(item["SMSOTPId"]);
+                        objSMSTemplate6.TemplateScript = Convert.ToString(item["SMSOTP"]);
+                        lstSMSTemplate.Add(objSMSTemplate6);
+
+                        SMSTemplate objSMSTemplate7 = new SMSTemplate();
+                        objSMSTemplate7.MessageId = 106;
+                        if (!string.IsNullOrEmpty(Convert.ToString(item["SMSBalanceInquiryId"])))
+                            objSMSTemplate7.Id = Convert.ToInt32(item["SMSBalanceInquiryId"]);
+                        objSMSTemplate7.TemplateScript = Convert.ToString(item["SMSBalanceInquiry"]);
+                        lstSMSTemplate.Add(objSMSTemplate7);
+
+                        SMSTemplate objSMSTemplate8 = new SMSTemplate();
+                        objSMSTemplate8.MessageId = 107;
+                        if (!string.IsNullOrEmpty(Convert.ToString(item["SMSAnyCancelId"])))
+                            objSMSTemplate8.Id = Convert.ToInt32(item["SMSAnyCancelId"]);
+                        objSMSTemplate8.TemplateScript = Convert.ToString(item["SMSAnyCancel"]);
+                        lstSMSTemplate.Add(objSMSTemplate8);
+
+                        SMSTemplate objSMSTemplate9 = new SMSTemplate();
+                        objSMSTemplate9.MessageId = 108;
+                        if (!string.IsNullOrEmpty(Convert.ToString(item["SMSEnrollmentAndEarnId"])))
+                            objSMSTemplate9.Id = Convert.ToInt32(item["SMSEnrollmentAndEarnId"]);
+                        objSMSTemplate9.TemplateScript = Convert.ToString(item["SMSEnrollmentAndEarn"]);
+                        lstSMSTemplate.Add(objSMSTemplate9);                       
                     }
                     else
                     {
@@ -532,9 +575,7 @@ namespace WebApp.Controllers.OnBoarding
                     var isWA = Convert.ToBoolean(item["IsWA"]);
                     if (isWA)
                     {
-                        objWAConfig.IsWA = true;
-                        if (!string.IsNullOrEmpty(Convert.ToString(item["WAId"])))
-                            objWAConfig.Id = Convert.ToInt32(item["WAId"]);
+                        objWAConfig.IsWA = true;                        
                         objWAConfig.WAProvider = Convert.ToString(item["WAProvider"]);
                         objWAConfig.GroupId = Convert.ToString(item["GroupId"]);
                         objWAConfig.BrandId = Convert.ToString(item["BrandId"]);
@@ -542,33 +583,76 @@ namespace WebApp.Controllers.OnBoarding
                         objWAConfig.WAUsername = Convert.ToString(item["WAUserName"]);
                         objWAConfig.WAPassword = Convert.ToString(item["WAPassword"]);
                         objWAConfig.WAlink = Convert.ToString(item["WALink"]);
-                        objWAConfig.EnrolmentWAScript = Convert.ToString(item["WAEnrollment"]);
-                        objWAConfig.EnrollmentEarnWAScript = Convert.ToString(item["WAEnrollmentAndEarn"]);
-                        objWAConfig.EarnWAScript = Convert.ToString(item["WAEarn"]);
-                        objWAConfig.OTPWAScript = Convert.ToString(item["WAOTP"]);
-                        objWAConfig.BurnWAScript = Convert.ToString(item["WABurn"]);
-                        objWAConfig.CancelEarnWAScript = Convert.ToString(item["WACancelEarn"]);
-                        objWAConfig.CancelBurnWAScript = Convert.ToString(item["WACancelBurn"]);
-                        objWAConfig.AnyCancelWAScript = Convert.ToString(item["WAAnyCancel"]);
-                        objWAConfig.BalanceInquiryWAScript = Convert.ToString(item["WABalanceInquiry"]);
-                        if (objWAConfig.Id > 0)
-                        {
-                            objWAConfig.UpdatedBy = userDetails.LoginId;
-                            objWAConfig.UpdatedDate = DateTime.Now;
-                        }
-                        else
-                        {
-                            objWAConfig.AddedBy = userDetails.LoginId;
-                            objWAConfig.AddedDate = DateTime.Now;
-                        }
 
+                        SMSTemplate objWATemplate1 = new SMSTemplate();
+                        objWATemplate1.MessageId = 100;
+                        if (!string.IsNullOrEmpty(Convert.ToString(item["WAEnrollmentId"])))
+                            objWATemplate1.Id = Convert.ToInt32(item["WAEnrollmentId"]);
+                        objWATemplate1.TemplateScript = Convert.ToString(item["WAEnrollment"]);
+                        lstWATemplate.Add(objWATemplate1);
+
+                        SMSTemplate objWATemplate2 = new SMSTemplate();
+                        objWATemplate2.MessageId = 101;
+                        if (!string.IsNullOrEmpty(Convert.ToString(item["WAEarnId"])))
+                            objWATemplate2.Id = Convert.ToInt32(item["WAEarnId"]);
+                        objWATemplate2.TemplateScript = Convert.ToString(item["WAEarn"]);
+                        lstWATemplate.Add(objWATemplate2);
+
+                        SMSTemplate objWATemplate3 = new SMSTemplate();
+                        objWATemplate3.MessageId = 102;
+                        if (!string.IsNullOrEmpty(Convert.ToString(item["WABurnId"])))
+                            objWATemplate3.Id = Convert.ToInt32(item["WABurnId"]);
+                        objWATemplate3.TemplateScript = Convert.ToString(item["WABurn"]);
+                        lstWATemplate.Add(objWATemplate3);
+
+                        SMSTemplate objWATemplate4 = new SMSTemplate();
+                        objWATemplate4.MessageId = 103;
+                        if (!string.IsNullOrEmpty(Convert.ToString(item["WACancelEarnId"])))
+                            objWATemplate4.Id = Convert.ToInt32(item["WACancelEarnId"]);
+                        objWATemplate4.TemplateScript = Convert.ToString(item["WACancelEarn"]);
+                        lstWATemplate.Add(objWATemplate4);
+
+                        SMSTemplate objWATemplate5 = new SMSTemplate();
+                        objWATemplate5.MessageId = 104;
+                        if (!string.IsNullOrEmpty(Convert.ToString(item["WACancelBurnId"])))
+                            objWATemplate5.Id = Convert.ToInt32(item["WACancelBurnId"]);
+                        objWATemplate5.TemplateScript = Convert.ToString(item["WACancelBurn"]);
+                        lstWATemplate.Add(objWATemplate5);
+
+                        SMSTemplate objWATemplate6 = new SMSTemplate();
+                        objWATemplate6.MessageId = 105;
+                        if (!string.IsNullOrEmpty(Convert.ToString(item["WAOTPId"])))
+                            objWATemplate6.Id = Convert.ToInt32(item["WAOTPId"]);
+                        objWATemplate6.TemplateScript = Convert.ToString(item["WAOTP"]);
+                        lstWATemplate.Add(objWATemplate6);
+
+                        SMSTemplate objWATemplate7 = new SMSTemplate();
+                        objWATemplate7.MessageId = 106;
+                        if (!string.IsNullOrEmpty(Convert.ToString(item["WABalanceInquiryId"])))
+                            objWATemplate7.Id = Convert.ToInt32(item["WABalanceInquiryId"]);
+                        objWATemplate7.TemplateScript = Convert.ToString(item["WABalanceInquiry"]);
+                        lstWATemplate.Add(objWATemplate7);
+
+                        SMSTemplate objWATemplate8 = new SMSTemplate();
+                        objWATemplate8.MessageId = 107;
+                        if (!string.IsNullOrEmpty(Convert.ToString(item["WAAnyCancelId"])))
+                            objWATemplate8.Id = Convert.ToInt32(item["WAAnyCancelId"]);
+                        objWATemplate8.TemplateScript = Convert.ToString(item["WAAnyCancel"]);
+                        lstWATemplate.Add(objWATemplate8);
+
+                        SMSTemplate objWATemplate9 = new SMSTemplate();
+                        objWATemplate9.MessageId = 108;
+                        if (!string.IsNullOrEmpty(Convert.ToString(item["WAEnrollmentAndEarnId"])))
+                            objWATemplate9.Id = Convert.ToInt32(item["WAEnrollmentAndEarnId"]);
+                        objWATemplate9.TemplateScript = Convert.ToString(item["WAEnrollmentAndEarn"]);
+                        lstWATemplate.Add(objWATemplate9); 
                     }
                     else
                     {
                         objWAConfig.IsWA = false;
                     }
                 }
-                status = OBR.SaveCommunicationConfig(objSMSConfig, objWAConfig);
+                status = OBR.SaveCommunicationConfig(objSMSConfig, objWAConfig, lstSMSTemplate, lstWATemplate, userDetails.LoginId);
 
             }
             catch (Exception ex)

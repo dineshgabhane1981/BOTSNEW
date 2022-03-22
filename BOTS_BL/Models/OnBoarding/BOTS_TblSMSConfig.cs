@@ -37,23 +37,18 @@ namespace BOTS_BL.Models
         [StringLength(250)]
         public string SMSlink { get; set; }
 
-        public string EnrolmentSMSScript { get; set; }
+        public int? MessageId { get; set; }
 
-        public string EnrollmentEarnSMSScript { get; set; }
+        [StringLength(100)]
+        public string TemplateId { get; set; }
 
-        public string EarnSMSScript { get; set; }
+        [StringLength(250)]
+        public string TemplateName { get; set; }
 
-        public string OTPSMSScript { get; set; }
+        [StringLength(100)]
+        public string TemplateType { get; set; }
 
-        public string BurnSMSScript { get; set; }
-
-        public string CancelEarnSMSScript { get; set; }
-
-        public string CancelBurnSMSScript { get; set; }
-
-        public string AnyCancelSMSScript { get; set; }
-
-        public string BalanceInquirySMSScript { get; set; }
+        public string SMSScript { get; set; }
 
         [StringLength(50)]
         public string AddedBy { get; set; }

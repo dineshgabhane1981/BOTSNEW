@@ -8,7 +8,7 @@ namespace WebApp.ViewModel
 {
     public class CommunicationConfigViewModel
     {
-        public BOTS_TblSMSConfig SMSConfig { get; set; }
-        public BOTS_TblWAConfig WAConfig { get; set; }
+        public List<BOTS_TblSMSConfig> SMSConfig { get; set; }
+        public List<BOTS_TblWAConfig> WAConfig { get; set; }
     }
 }
