@@ -956,7 +956,7 @@ namespace BOTS_BL.Repository
             return status;
         }
 
-        public bool SaveBirthdayAndAnniversaryConfig(BOTS_TblCampaignBirthdayAnniversaryConfig objData)
+        public bool SaveCampaignOtherConfig(BOTS_TblCampaignOtherConfig objData)
         {
             bool status = false;
             using (var context = new CommonDBContext())
@@ -965,28 +965,28 @@ namespace BOTS_BL.Repository
                 {
                     if (objData.Id > 0)
                     {
-                        var oldRecord = context.BOTS_TblCampaignBirthdayAnniversaryConfig.Where(x => x.Id == objData.Id).FirstOrDefault();
+                        var oldRecord = context.BOTS_TblCampaignOtherConfig.Where(x => x.Id == objData.Id).FirstOrDefault();
                         objData.AddedBy = oldRecord.AddedBy;
                         objData.AddedDate = oldRecord.AddedDate;
                     }
-                    context.BOTS_TblCampaignBirthdayAnniversaryConfig.AddOrUpdate(objData);
+                    context.BOTS_TblCampaignOtherConfig.AddOrUpdate(objData);
                     context.SaveChanges();
                     status = true;
                 }
                 catch (Exception ex)
                 {
-                    newexception.AddException(ex, "SaveBirthdayAndAnniversaryConfig");
+                    newexception.AddException(ex, "SaveCampaignOtherConfig");
                 }
             }
             return status;
         }
 
-        public BOTS_TblCampaignBirthdayAnniversaryConfig GetCampaignBirthdayAnniversaryConfig(string groupId, string type)
+        public BOTS_TblCampaignOtherConfig GetCampaignOtherConfig(string groupId, string type)
         {
-            BOTS_TblCampaignBirthdayAnniversaryConfig objData = new BOTS_TblCampaignBirthdayAnniversaryConfig();
+            BOTS_TblCampaignOtherConfig objData = new BOTS_TblCampaignOtherConfig();
             using (var context = new CommonDBContext())
             {
-                objData = context.BOTS_TblCampaignBirthdayAnniversaryConfig.Where(x => x.GroupId == groupId && x.CampaignType == type).FirstOrDefault();
+                objData = context.BOTS_TblCampaignOtherConfig.Where(x => x.GroupId == groupId && x.CampaignType == type).FirstOrDefault();
             }
             return objData;
         }

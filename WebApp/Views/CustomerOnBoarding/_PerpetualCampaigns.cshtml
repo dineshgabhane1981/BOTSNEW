@@ -6,7 +6,7 @@
         width: 20px;
         vertical-align: middle;
         cursor: pointer;
-        margin-left: 20px;
+        margin-left: 10px;
     }
 </style>
 
@@ -16,7 +16,11 @@
     <input id="rbtnInactive" name="campaign" type="radio" class="rbtnClass"> Inactive
     <input id="rbtnOnlyOnceInactive" name="campaign" type="radio" class="rbtnClass"> Only Once Inactive
     <input id="rbtnNonRedeemptionInactive" name="campaign" type="radio" class="rbtnClass"> Non Redeemption Inactive
-    <input id="rbtnPointsExpiry" name="campaign" type="radio" class="rbtnClass"> Points Expiry
+    <input id="rbtnPointsExpiry" name="campaign" type="radio" class="rbtnClass"> Points Expiry <br /><br />
+    <input id="rbtnDLCRR" name="campaign" type="radio" class="rbtnClass"> DLC Referral Reminder
+    <input id="rbtnDLCUR" name="campaign" type="radio" class="rbtnClass"> DLC Update Reminder
+    <input id="rbtnBalanceUpdate" name="campaign" type="radio" class="rbtnClass"> Points Balance
+    <input id="rbtnBUUR" name="campaign" type="radio" class="rbtnClass"> Reminder to Bulk Uploaded Users
 
 </div>
 
@@ -443,18 +447,68 @@
                 <textarea id="txtPEGreaterThanDaysScript3" class="input100" style="padding-top: 20px; vertical-align: middle;"> </textarea>
             </div>
         </div>
-    </div>   
+    </div>
 
     <div class="container-fluid pt-3 pl-3 pr-3 pb-5">
         <button type="button" id="btnPEInactiveSave" class="btn btn-primary pull-right" style="margin-right: 10px; margin-bottom: 20px;">Save</button>
     </div>
 </div>
 
+<div id="dvDLCRR" style="border:1px solid grey;border-radius:10px;padding:5px;">    
+    <input type="hidden" id="hdnDLCRRId" />
+    <div style="margin-top:20px;">
+        <input type="radio" name="DLCRR" id="rbtnDLCRRVWA" /> Varified Whatsapp
+        <input type="radio" name="DLCRR" id="rbtnDLCRRWA" /> Whatsapp
+        <input type="radio" name="DLCRR" id="rbtnDLCRRSMS" /> SMS
+    </div>
+    <div style="margin-top:20px;border:1px solid grey;padding:10px;border-radius:10px;">
+        <b> Configuration</b>
+        <div>
+            <input type="number" class="input20" id="txtDLCRRDays1" /> Frequency in Days
+            <textarea id="txtDLCRRScript1" class="input100" style="padding-top:20px;vertical-align:middle;"> </textarea>
+        </div>
+        <div style="margin-top:20px;">
+            <input type="number" class="input20" id="txtDLCRRDays2" /> Frequency in Days
+            <textarea id="txtDLCRRScript2" class="input100" style="padding-top: 20px; vertical-align: middle;"> </textarea>
+        </div>
+    </div>
+    <div class="container-fluid pt-3 pl-3 pr-3 pb-5">
+        <button type="button" id="btnDLCRRSave" class="btn btn-primary pull-right" style="margin-right: 10px; margin-bottom: 20px;"> Save</button>
+    </div>
+</div>
+<div id="dvDLCUR" style="border:1px solid grey;border-radius:10px;padding:5px;">
+    <input type="hidden" id="hdnDLCURId" />
+    <div style="margin-top:20px;">
+        <input type="radio" name="DLCUR" id="rbtnDLCURVWA" /> Varified Whatsapp
+        <input type="radio" name="DLCUR" id="rbtnDLCURWA" /> Whatsapp
+        <input type="radio" name="DLCUR" id="rbtnDLCURSMS" /> SMS
+    </div>
+    <div style="margin-top:20px;border:1px solid grey;padding:10px;border-radius:10px;">
+        <b> Configuration</b>
+        <div>
+            <input type="number" class="input20" id="txtDLCURDays1" /> Frequency in Days
+            <textarea id="txtDLCURScript1" class="input100" style="padding-top:20px;vertical-align:middle;"> </textarea>
+        </div>
+        <div style="margin-top:20px;">
+            <input type="number" class="input20" id="txtDLCURDays2" /> Frequency in Days
+            <textarea id="txtDLCURScript2" class="input100" style="padding-top: 20px; vertical-align: middle;"> </textarea>
+        </div>
+    </div>
+    <div class="container-fluid pt-3 pl-3 pr-3 pb-5">
+        <button type="button" id="btnDLCURSave" class="btn btn-primary pull-right" style="margin-right: 10px; margin-bottom: 20px;"> Save</button>
+    </div>
+</div>
+<div id="dvBalanceUpdate" style="border:1px solid grey;border-radius:10px;padding:5px;">
+    Points Balance
+</div>
+<div id="dvBUUR" style="border:1px solid grey;border-radius:10px;padding:5px;">
+    Reminder to Bulk Uploaded Users
+</div>
 
 <script>
     $(document).ready(function () {
         ShowHideCampaignSection("dvBirthday");
-        LoadBirthdayAnniversaryConfig("Birthday");
+        LoadCampaignOtherConfig("Birthday");
 
         $("#btnBirthdaySave").on("click", function () {
             SaveBirthdayConfig();
@@ -474,14 +528,20 @@
         $("#btnPEInactiveSave").on("click", function () {
             SaveInactiveConfig("PEInactive");
         });
+        $("#btnDLCRRSave").on("click", function () {
+            SaveDLCRRConfig();
+        });
+        $("#btnDLCURSave").on("click", function () {
+            SaveDLCURConfig();
+        });
 
         $('#rbtnBirthday').click(function () {
             ShowHideCampaignSection("dvBirthday");
-            LoadBirthdayAnniversaryConfig("Birthday");
+            LoadCampaignOtherConfig("Birthday");
         });
         $('#rbtnAnniversary').click(function () {
             ShowHideCampaignSection("dvAnniversary");
-            LoadBirthdayAnniversaryConfig("Anniversary");
+            LoadCampaignOtherConfig("Anniversary");
         });
         $('#rbtnInactive').click(function () {
             ShowHideCampaignSection("dvInactive");
@@ -499,6 +559,21 @@
             ShowHideCampaignSection("dvPointsExpiry");
             LoadInactiveData("Point Expiry");
         });
+        $('#rbtnDLCRR').click(function () {
+            ShowHideCampaignSection("dvDLCRR");
+            LoadCampaignOtherConfig("DLC Referral Reminder");
+        });
+        $('#rbtnDLCUR').click(function () {
+            ShowHideCampaignSection("dvDLCUR");
+            LoadCampaignOtherConfig("DLC Update Reminder")
+        });
+        $('#rbtnBalanceUpdate').click(function () {
+            ShowHideCampaignSection("dvBalanceUpdate");
+        });
+        $('#rbtnBUUR').click(function () {
+            ShowHideCampaignSection("dvBUUR");
+        });
+
         $("#txtMessageCount").focusout(function () {
             ShowMessageSections();
         });
@@ -645,7 +720,7 @@
         }
     }
 
-    function ShowPEMessageSections() {        
+    function ShowPEMessageSections() {
         if ($("#txtPEMessageCount").val() != "") {
             if ($("#txtPEMessageCount").val() < 1 || $("#txtPEMessageCount").val() > 3) {
                 cuteAlert({
@@ -691,6 +766,10 @@
         $("#dvOOInactive").hide();
         $("#dvNRInactive").hide();
         $("#dvPointsExpiry").hide();
+        $("#dvDLCRR").hide();
+        $("#dvDLCUR").hide();
+        $("#dvBalanceUpdate").hide();
+        $("#dvBUUR").hide();
 
         $("#" + Id).show();
     }
@@ -767,7 +846,7 @@
         $("#divLoader").show();
         $.ajax({
                 type: "POST",
-                url: '@Url.Action("SaveBirthdayAndAnniversaryConfig", "CustomerOnBoarding")',
+                url: '@Url.Action("SaveCampaignOtherConfig", "CustomerOnBoarding")',
                 data: '{jsonData: ' + JSON.stringify(BirthdayConfigData) + '}',
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
@@ -868,7 +947,7 @@
         $("#divLoader").show();
         $.ajax({
                 type: "POST",
-                url: '@Url.Action("SaveBirthdayAndAnniversaryConfig", "CustomerOnBoarding")',
+                url: '@Url.Action("SaveCampaignOtherConfig", "CustomerOnBoarding")',
             data: '{jsonData: ' + JSON.stringify(AnniversaryConfigData) + '}',
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
@@ -897,11 +976,167 @@
             });
     }
 
-    function LoadBirthdayAnniversaryConfig(type) {
+    function SaveDLCRRConfig() {
+        if ($("#rbtnDLCRRVWA").prop("checked") || $("#rbtnDLCRRWA").prop("checked") || $("#rbtnDLCRRSMS").prop("checked")) {
+        }
+        else {
+            cuteAlert({
+                type: "error",
+                title: "Oops..",
+                message: "Please select SMS Type",
+                buttonText: "Okay"
+            })
+            return false;
+        }
+
+        var DLCRRConfig = [];
+        item = {}
+
+        item["Id"] = $('#hdnDLCRRId').val();
+        item["GroupId"] = $('#hdnGroupID').val();
+        item["CampaignType"] = "DLC Referral Reminder";
+
+        if ($("#rbtnDLCRRVWA").prop("checked"))
+            item["SMSType"] = "VWA";
+        if ($("#rbtnDLCRRWA").prop("checked"))
+            item["SMSType"] = "WA";
+        if ($("#rbtnDLCRRSMS").prop("checked"))
+            item["SMSType"] = "SMS";
+
+        item["BonusPoints"] = 0;
+        item["Frequency"] = "";
+
+        item["IntroDays1"] = $('#txtDLCRRDays1').val();
+        item["IntroScript1"] = $('#txtDLCRRScript1').val();
+        item["IntroDays2"] = $('#txtDLCRRDays2').val();
+        item["IntroScript2"] = $('#txtDLCRRScript2').val();
+        item["ReminderDays1"] = 0;
+        item["ReminderWhen1"] = "";
+        item["ReminderScript1"] = "";
+        item["ReminderDays2"] = 0;
+        item["ReminderWhen2"] = "";
+        item["ReminderScript2"] = "";
+        item["OnDayType"] = "";
+        item["OnDayScript"] = "";
+
+        DLCRRConfig.push(item);
+        var DLCRRConfigData = JSON.stringify(DLCRRConfig);
+
+        $("#divLoader").show();
+        $.ajax({
+                type: "POST",
+                url: '@Url.Action("SaveCampaignOtherConfig", "CustomerOnBoarding")',
+            data: '{jsonData: ' + JSON.stringify(DLCRRConfigData) + '}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (result) {
+                    if (result) {
+                        cuteAlert({
+                            type: "success",
+                            title: "Saved",
+                            message: "DLC Referral Reminder Configuration Saved Successfully !!!",
+                            buttonText: "Okay"
+                        })
+                    }
+                    else {
+                        cuteAlert({
+                            type: "error",
+                            title: "Oops..",
+                            message: "There is a problem while saving Birthday Configuration",
+                            buttonText: "Okay"
+                        })
+                    }
+                    $("#divLoader").hide();
+                },
+                error: function (result) {
+                    $("#divLoader").hide();
+                }
+            });
+    }
+
+    function SaveDLCURConfig() {
+        if ($("#rbtnDLCURVWA").prop("checked") || $("#rbtnDLCURWA").prop("checked") || $("#rbtnDLCURSMS").prop("checked")) {
+        }
+        else {
+            cuteAlert({
+                type: "error",
+                title: "Oops..",
+                message: "Please select SMS Type",
+                buttonText: "Okay"
+            })
+            return false;
+        }
+
+        var DLCRRConfig = [];
+        item = {}
+
+        item["Id"] = $('#hdnDLCURId').val();
+        item["GroupId"] = $('#hdnGroupID').val();
+        item["CampaignType"] = "DLC Referral Reminder";
+
+        if ($("#rbtnDLCURVWA").prop("checked"))
+            item["SMSType"] = "VWA";
+        if ($("#rbtnDLCURWA").prop("checked"))
+            item["SMSType"] = "WA";
+        if ($("#rbtnDLCURSMS").prop("checked"))
+            item["SMSType"] = "SMS";
+
+        item["BonusPoints"] = 0;
+        item["Frequency"] = "";
+
+        item["IntroDays1"] = $('#txtDLCURDays1').val();
+        item["IntroScript1"] = $('#txtDLCURScript1').val();
+        item["IntroDays2"] = $('#txtDLCURDays2').val();
+        item["IntroScript2"] = $('#txtDLCURScript2').val();
+        item["ReminderDays1"] = 0;
+        item["ReminderWhen1"] = "";
+        item["ReminderScript1"] = "";
+        item["ReminderDays2"] = 0;
+        item["ReminderWhen2"] = "";
+        item["ReminderScript2"] = "";
+        item["OnDayType"] = "";
+        item["OnDayScript"] = "";
+
+        DLCRRConfig.push(item);
+        var DLCRRConfigData = JSON.stringify(DLCRRConfig);
+
+        $("#divLoader").show();
+        $.ajax({
+                type: "POST",
+                url: '@Url.Action("SaveCampaignOtherConfig", "CustomerOnBoarding")',
+            data: '{jsonData: ' + JSON.stringify(DLCRRConfigData) + '}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (result) {
+                    if (result) {
+                        cuteAlert({
+                            type: "success",
+                            title: "Saved",
+                            message: "DLC Update Reminder Configuration Saved Successfully !!!",
+                            buttonText: "Okay"
+                        })
+                    }
+                    else {
+                        cuteAlert({
+                            type: "error",
+                            title: "Oops..",
+                            message: "There is a problem while saving Birthday Configuration",
+                            buttonText: "Okay"
+                        })
+                    }
+                    $("#divLoader").hide();
+                },
+                error: function (result) {
+                    $("#divLoader").hide();
+                }
+            });
+    }
+        
+    function LoadCampaignOtherConfig(type) {
         $("#divLoader").show();
             $.ajax({
                 type: "POST",
-                url: '@Url.Action("GetBirthdayAndAnniversaryConfig", "CustomerOnBoarding")',
+                url: '@Url.Action("GetCampaignOtherConfig", "CustomerOnBoarding")',
                 data: '{GroupId: ' + JSON.stringify($('#hdnGroupID').val()) + ',Type: ' + JSON.stringify(type) + '}',
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
@@ -916,40 +1151,40 @@
         }
 
     function LoadCampaignControls(data, type) {
-            if (type == "Birthday") {
-                //console.log(data)
-                if (data.SMSType == "VWA") {
-                    $("#rbtnVWA").prop("checked", true);
-                }
-                if (data.SMSType == "WA") {
-                    $("#rbtnWA").prop("checked", true);
-                }
-                if (data.SMSType == "SMS") {
-                    $("#rbtnSMS").prop("checked", true);
-                }
-                $('#txtBonusPoints').val(data.BonusPoints);
-                if (data.Frequency == "Days") {
-                    $("#rbtnDays").prop("checked", true);
-                }
-                if (data.Frequency == "Month") {
-                    $("#rbtnMonth").prop("checked", true);
-                }
-                $('#txtIntroDays1').val(data.IntroDays1);
-                $('#txtIntroScript1').val(data.IntroScript1);
-                $('#txtIntroDays2').val(data.IntroDays2);
-                $('#txtIntroScript2').val(data.IntroScript2);
-                $('#txtRemDays1').val(data.ReminderDays1);
-                $('#ddlBeforeAfter1').val(data.ReminderWhen1);
-                $('#txtRemScript1').val(data.ReminderScript1);
-                $('#txtRemDays2').val(data.ReminderDays2);
-                $('#ddlBeforeAfter2').val(data.ReminderWhen2);
-                $('#txtRemScript2').val(data.ReminderScript2);
-                $('#ddlPointsUsedOrNot').val(data.OnDayType);
-                $('#txtOnBirthdayScript').val(data.OnDayScript);
-                $('#hdnBirthId').val(data.Id);
-
+        if (type == "Birthday") {
+            //console.log(data)
+            if (data.SMSType == "VWA") {
+                $("#rbtnVWA").prop("checked", true);
             }
-            if (type == "Anniversary") {
+            if (data.SMSType == "WA") {
+                $("#rbtnWA").prop("checked", true);
+            }
+            if (data.SMSType == "SMS") {
+                $("#rbtnSMS").prop("checked", true);
+            }
+            $('#txtBonusPoints').val(data.BonusPoints);
+            if (data.Frequency == "Days") {
+                $("#rbtnDays").prop("checked", true);
+            }
+            if (data.Frequency == "Month") {
+                $("#rbtnMonth").prop("checked", true);
+            }
+            $('#txtIntroDays1').val(data.IntroDays1);
+            $('#txtIntroScript1').val(data.IntroScript1);
+            $('#txtIntroDays2').val(data.IntroDays2);
+            $('#txtIntroScript2').val(data.IntroScript2);
+            $('#txtRemDays1').val(data.ReminderDays1);
+            $('#ddlBeforeAfter1').val(data.ReminderWhen1);
+            $('#txtRemScript1').val(data.ReminderScript1);
+            $('#txtRemDays2').val(data.ReminderDays2);
+            $('#ddlBeforeAfter2').val(data.ReminderWhen2);
+            $('#txtRemScript2').val(data.ReminderScript2);
+            $('#ddlPointsUsedOrNot').val(data.OnDayType);
+            $('#txtOnBirthdayScript').val(data.OnDayScript);
+            $('#hdnBirthId').val(data.Id);
+
+        }
+        if (type == "Anniversary") {
                 //console.log(data)
                 if (data.SMSType == "VWA") {
                     $("#rbtnVWA1").prop("checked", true);
@@ -981,7 +1216,26 @@
                 $('#txtOnBirthdayScript1').val(data.OnDayScript);
                 $('#hdnAnniversaryId').val(data.Id);
             }
+        if (type == "DLC Referral Reminder") {
+            if (data.SMSType == "VWA") {
+                $("#rbtnDLCRRVWA").prop("checked", true);
+            }
+            if (data.SMSType == "WA") {
+                $("#rbtnDLCRRWA").prop("checked", true);
+            }
+            if (data.SMSType == "SMS") {
+                $("#rbtnDLCRRSMS").prop("checked", true);
+            }
+
+            $('#txtDLCRRDays1').val(data.IntroDays1);
+            $('#txtDLCRRScript1').val(data.IntroScript1);
+            $('#txtDLCRRDays2').val(data.IntroDays2);
+            $('#txtDLCRRScript2').val(data.IntroScript2);
+
+            $('#hdnDLCRRId').val(data.Id);
         }
+
+    }
 
     function SaveInactiveConfig(type) {
         var InactiveConfig = [];
@@ -1118,6 +1372,7 @@
                 status = true;
             }
         }
+
         if (status) {
             var InactiveConfigData = JSON.stringify(InactiveConfig);
 
@@ -1176,8 +1431,7 @@
         }
 
     function LoadInactiveControls(data, type) {
-        console.log(type)
-        console.log(data)
+
         if (type == "Inactive") {
             var dataCount = data.length;
             if (dataCount > 0) {
@@ -1185,7 +1439,7 @@
             }
             ShowMessageSections();
             for (var i = 0; i < dataCount; i++) {
-                console.log(data[i])
+
                 $("#hdnInactive" + (i + 1)).val(data[i].Id);
                 $("#txtDaysCount" + (i + 1)).val(data[i].Days);
                 $("#txtLessThanDays" + (i + 1)).val(data[i].LessThanDays);
@@ -1204,10 +1458,10 @@
             var dataCount = data.length;
             if (dataCount > 0) {
                 $("#txtOOMessageCount").val(dataCount);
-            }           
+            }
             ShowOOMessageSections();
             for (var i = 0; i < dataCount; i++) {
-                console.log(data[i])
+
                 $("#hdnOOInactive" + (i + 1)).val(data[i].Id);
                 $("#txtOODaysCount" + (i + 1)).val(data[i].Days);
                 $("#txtOOLessThanDays" + (i + 1)).val(data[i].LessThanDays);
@@ -1226,10 +1480,10 @@
             var dataCount = data.length;
             if (dataCount > 0) {
                 $("#txtNRMessageCount").val(dataCount);
-            }            
+            }
             ShowNRMessageSections();
             for (var i = 0; i < dataCount; i++) {
-                console.log(data[i])
+
                 $("#hdnNRInactive" + (i + 1)).val(data[i].Id);
                 $("#txtNRDaysCount" + (i + 1)).val(data[i].Days);
                 $("#txtNRLessThanDays" + (i + 1)).val(data[i].LessThanDays);
@@ -1249,10 +1503,10 @@
             var dataCount = data.length;
             if (dataCount > 0) {
                 $("#txtPEMessageCount").val(dataCount);
-            }           
+            }
             ShowPEMessageSections();
             for (var i = 0; i < dataCount; i++) {
-                console.log(data[i])
+
                 $("#hdnPEInactive" + (i + 1)).val(data[i].Id);
                 $("#txtPEDaysCount" + (i + 1)).val(data[i].Days);
                 $("#txtPELessThanDays" + (i + 1)).val(data[i].LessThanDays);

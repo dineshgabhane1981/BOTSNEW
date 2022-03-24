@@ -278,7 +278,6 @@ namespace WebApp.Controllers.OnBoarding
             return RedirectToAction("Index", "CustomerOnBoarding", new { @groupId = groupId });
         }
 
-
         [HttpPost]
         public JsonResult GetBillingPartnerProduct(string BPId)
         {
@@ -712,6 +711,7 @@ namespace WebApp.Controllers.OnBoarding
             }
             return new JsonResult() { Data = status, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
+        
         public JsonResult GetDLCLinkData(string groupId)
         {
             BOTS_TblDLCLinkConfig objData = new BOTS_TblDLCLinkConfig();
@@ -732,7 +732,6 @@ namespace WebApp.Controllers.OnBoarding
             lstearn.Add(new EarnPointLevel { EarnPointLevelId = "brand", EarnPointLevelName = "Brand" });
             return lstearn;
         }
-
 
         public ActionResult AddEarnRule(string EarnRule, string BlockOnearnrule, string Redemptionrule)
         {
@@ -1065,7 +1064,6 @@ namespace WebApp.Controllers.OnBoarding
             return new JsonResult() { Data = status, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
 
-
         public ActionResult SaveVelocityCheckConfig(string jsonData)
         {
             bool status = false;
@@ -1227,13 +1225,13 @@ namespace WebApp.Controllers.OnBoarding
 
         }
 
-        public ActionResult SaveBirthdayAndAnniversaryConfig(string jsonData)
+        public ActionResult SaveCampaignOtherConfig(string jsonData)
         {
             bool status = false;
             try
             {
                 var userDetails = (CustomerLoginDetail)Session["UserSession"];
-                BOTS_TblCampaignBirthdayAnniversaryConfig objData = new BOTS_TblCampaignBirthdayAnniversaryConfig();
+                BOTS_TblCampaignOtherConfig objData = new BOTS_TblCampaignOtherConfig();
                 JavaScriptSerializer json_serializer = new JavaScriptSerializer();
                 json_serializer.MaxJsonLength = int.MaxValue;
                 object[] objBirthdayAndAnniversaryConfigData = (object[])json_serializer.DeserializeObject(jsonData);
@@ -1273,7 +1271,7 @@ namespace WebApp.Controllers.OnBoarding
                         objData.AddedBy = userDetails.LoginId;
                         objData.AddedDate = DateTime.Now;
                     }
-                    status = OBR.SaveBirthdayAndAnniversaryConfig(objData);
+                    status = OBR.SaveCampaignOtherConfig(objData);
                 }
             }
             catch (Exception ex)
@@ -1284,10 +1282,10 @@ namespace WebApp.Controllers.OnBoarding
             return new JsonResult() { Data = status, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
 
-        public JsonResult GetBirthdayAndAnniversaryConfig(string GroupId, string Type)
+        public JsonResult GetCampaignOtherConfig(string GroupId, string Type)
         {
-            BOTS_TblCampaignBirthdayAnniversaryConfig objData = new BOTS_TblCampaignBirthdayAnniversaryConfig();
-            objData = OBR.GetCampaignBirthdayAnniversaryConfig(GroupId, Type);
+            BOTS_TblCampaignOtherConfig objData = new BOTS_TblCampaignOtherConfig();
+            objData = OBR.GetCampaignOtherConfig(GroupId, Type);
             return new JsonResult() { Data = objData, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
 
@@ -1351,6 +1349,7 @@ namespace WebApp.Controllers.OnBoarding
             lstExistingData = OBR.GetInactiveConfigData(GroupId, Type);
             return new JsonResult() { Data = lstExistingData, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
+        
         public OnBoardingSalesViewModel GetEarnBurnDataAndUploaddata(string GroupId)
         {
             OnBoardingSalesViewModel objonboardingviewmodel = new OnBoardingSalesViewModel();
