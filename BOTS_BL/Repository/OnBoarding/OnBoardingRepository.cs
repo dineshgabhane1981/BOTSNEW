@@ -701,6 +701,7 @@ namespace BOTS_BL.Repository
                                 {
                                     objslabearn.EarnPointSlabFromPercentage = Convert.ToDecimal(Convert.ToString(val1[0]));
                                     objslabearn.EarnPointSlabToPercentage = Convert.ToDecimal(Convert.ToString(val1[1]));
+                                    objslabearn.EarnPointSlabValue = Convert.ToDecimal(Convert.ToString(val1[2]));
                                     if (SlabDirectOrTelescopic == "makingslabDirect")
                                     {
                                         objslabearn.EarnSlabDirectOrTelescoping = SlabDirectOrTelescopic;
@@ -714,8 +715,9 @@ namespace BOTS_BL.Repository
                                 }
                                 if (slabType == "makingslabinRs")
                                 {
-                                    objslabearn.EarnPointSlabFromPercentage = Convert.ToDecimal(Convert.ToString(val1[0]));
-                                    objslabearn.EarnPointSlabToPercentage = Convert.ToDecimal(Convert.ToString(val1[1]));
+                                    objslabearn.EarnPointSlabFromRs = Convert.ToDecimal(Convert.ToString(val1[0]));
+                                    objslabearn.EarnPointSlabToRs = Convert.ToDecimal(Convert.ToString(val1[1]));
+                                    objslabearn.EarnPointSlabValue = Convert.ToDecimal(Convert.ToString(val1[2]));
                                     if (SlabDirectOrTelescopic == "makingslabDirect")
                                     {
                                         objslabearn.EarnSlabDirectOrTelescoping = SlabDirectOrTelescopic;
@@ -756,6 +758,7 @@ namespace BOTS_BL.Repository
                                 {
                                     objslabearn.EarnPointSlabFromPercentage = Convert.ToDecimal(Convert.ToString(val1[0]));
                                     objslabearn.EarnPointSlabToPercentage = Convert.ToDecimal(Convert.ToString(val1[1]));
+                                    objslabearn.EarnPointSlabValue = Convert.ToDecimal(Convert.ToString(val1[2]));
                                     if (SlabDirectOrTelescopic == "fullamtslabDirect")
                                     {
                                         objslabearn.EarnSlabDirectOrTelescoping = SlabDirectOrTelescopic;
@@ -769,8 +772,9 @@ namespace BOTS_BL.Repository
                                 }
                                 if (slabType == "FullamtSlabInRS")
                                 {
-                                    objslabearn.EarnPointSlabFromPercentage = Convert.ToDecimal(Convert.ToString(val1[0]));
-                                    objslabearn.EarnPointSlabToPercentage = Convert.ToDecimal(Convert.ToString(val1[1]));
+                                    objslabearn.EarnPointSlabFromRs = Convert.ToDecimal(Convert.ToString(val1[0]));
+                                    objslabearn.EarnPointSlabToRs = Convert.ToDecimal(Convert.ToString(val1[1]));
+                                    objslabearn.EarnPointSlabValue = Convert.ToDecimal(Convert.ToString(val1[2]));
                                     if (SlabDirectOrTelescopic == "fullamtslabDirect")
                                     {
                                         objslabearn.EarnSlabDirectOrTelescoping = SlabDirectOrTelescopic;
@@ -811,6 +815,7 @@ namespace BOTS_BL.Repository
                                 {
                                     objslabearn.EarnPointSlabFromPercentage = Convert.ToDecimal(Convert.ToString(val1[0]));
                                     objslabearn.EarnPointSlabToPercentage = Convert.ToDecimal(Convert.ToString(val1[1]));
+                                    objslabearn.EarnPointSlabValue = Convert.ToDecimal(Convert.ToString(val1[2]));
                                     if (SlabDirectOrTelescopic == "commonslabdirect")
                                     {
                                         objslabearn.EarnSlabDirectOrTelescoping = SlabDirectOrTelescopic;
@@ -824,8 +829,9 @@ namespace BOTS_BL.Repository
                                 }
                                 if (slabType == "commonSlabInRs")
                                 {
-                                    objslabearn.EarnPointSlabFromPercentage = Convert.ToDecimal(Convert.ToString(val1[0]));
-                                    objslabearn.EarnPointSlabToPercentage = Convert.ToDecimal(Convert.ToString(val1[1]));
+                                    objslabearn.EarnPointSlabToRs = Convert.ToDecimal(Convert.ToString(val1[0]));
+                                    objslabearn.EarnPointSlabToRs = Convert.ToDecimal(Convert.ToString(val1[1]));
+                                    objslabearn.EarnPointSlabValue = Convert.ToDecimal(Convert.ToString(val1[2]));
                                     if (SlabDirectOrTelescopic == "commonslabdirect")
                                     {
                                         objslabearn.EarnSlabDirectOrTelescoping = SlabDirectOrTelescopic;
@@ -1083,14 +1089,34 @@ namespace BOTS_BL.Repository
         public BOTS_TblPointsEarnRuleConfig GetAllEarnRuleData(string GroupId)
         {
             BOTS_TblPointsEarnRuleConfig objearnrule = new BOTS_TblPointsEarnRuleConfig();
+            using (var context = new CommonDBContext())
+            {
+                objearnrule = context.BOTS_TblPointsEarnRuleConfig.Where(x => x.GroupId == GroupId).FirstOrDefault();
 
+            }
             return objearnrule;
         }
         public BOTS_TblPointsBurnRuleConfig GetAllBurnRuleData(string GroupId)
         {
             BOTS_TblPointsBurnRuleConfig objburnrule = new BOTS_TblPointsBurnRuleConfig();
+            using (var context = new CommonDBContext())
+            {
+                objburnrule = context.BOTS_TblPointsBurnRuleConfig.Where(x => x.GroupId == GroupId).FirstOrDefault();
 
+            }
             return objburnrule;
         }
+        public List<BOTS_TblEarnPointsSlabConfig> GetPointsSlabData(string GroupId)
+        {
+            List<BOTS_TblEarnPointsSlabConfig> lstslabdata = new List<BOTS_TblEarnPointsSlabConfig>();
+            using (var context = new CommonDBContext())
+            {
+                lstslabdata = context.BOTS_TblEarnPointsSlabConfig.Where(x => x.GroupId == GroupId).ToList();
+
+            }
+            return lstslabdata;
+        }
+
+
     }
 }
