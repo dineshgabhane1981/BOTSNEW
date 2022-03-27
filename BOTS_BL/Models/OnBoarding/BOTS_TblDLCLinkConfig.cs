@@ -29,17 +29,44 @@ namespace BOTS_BL.Models
         [StringLength(500)]
         public string ToTheReferralSMSScript { get; set; }
 
+        [StringLength(100)]
+        public string TemplateId1 { get; set; }
+
+        [StringLength(250)]
+        public string TemplateName1 { get; set; }
+
+        [StringLength(100)]
+        public string TemplateType1 { get; set; }
+
         [StringLength(500)]
         public string ToTheReferralWAScript { get; set; }
 
         [StringLength(500)]
         public string ReminderForPointsUsageSMSScript { get; set; }
 
+        [StringLength(100)]
+        public string TemplateId2 { get; set; }
+
+        [StringLength(250)]
+        public string TemplateName2 { get; set; }
+
+        [StringLength(100)]
+        public string TemplateType2 { get; set; }
+
         [StringLength(500)]
         public string ReminderForPointsUsageWAScript { get; set; }
 
         [StringLength(500)]
         public string ReferredSuccessOnReferralTxnSMSScript { get; set; }
+
+        [StringLength(100)]
+        public string TemplateId3 { get; set; }
+
+        [StringLength(250)]
+        public string TemplateName3 { get; set; }
+
+        [StringLength(100)]
+        public string TemplateType3 { get; set; }
 
         [StringLength(500)]
         public string ReferredSuccessOnReferralTxnWAScript { get; set; }
