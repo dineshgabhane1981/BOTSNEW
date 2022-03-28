@@ -18,7 +18,7 @@ namespace BOTS_BL.Models
         }
         public virtual DbSet<BOTS_TblProductUploadConfig> BOTS_TblProductUploadConfig { get; set; }
         public virtual DbSet<BOTS_TblCampaignInactive> BOTS_TblCampaignInactive { get; set; }
-        public virtual DbSet<BOTS_TblCampaignBirthdayAnniversaryConfig> BOTS_TblCampaignBirthdayAnniversaryConfig { get; set; }
+        public virtual DbSet<BOTS_TblCampaignOtherConfig> BOTS_TblCampaignOtherConfig { get; set; }
         public virtual DbSet<BOTS_TblBulkUpload> BOTS_TblBulkUpload { get; set; }
         public virtual DbSet<BOTS_TblVelocityChecksConfig> BOTS_TblVelocityChecksConfig { get; set; }
         public virtual DbSet<BOTS_TblDLCLinkConfig> BOTS_TblDLCLinkConfig { get; set; }

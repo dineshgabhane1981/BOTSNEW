@@ -15,7 +15,6 @@ namespace WebApp.Controllers.ITOPS
 {
     public class NameAndMobileController : Controller
     {
-
         ITOpsRepository ITOPS = new ITOpsRepository();
         ReportsRepository RR = new ReportsRepository();
         CustomerRepository objCustRepo = new CustomerRepository();
@@ -35,29 +34,27 @@ namespace WebApp.Controllers.ITOPS
             return View();
         }
 
-
         public ActionResult GetChangeNameData(string MobileNo, string CardNo)
         {
-            var GroupId = (string)Session["GroupId"];
             MemberData objCustomerDetail = new MemberData();
+            var groupId = (string)Session["GroupId"];
             if (!string.IsNullOrEmpty(MobileNo))
             {
-                objCustomerDetail = ITOPS.GetChangeNameByMobileNo(GroupId, MobileNo);
+                objCustomerDetail = ITOPS.GetChangeNameByMobileNo(groupId, MobileNo);
             }
             if (!string.IsNullOrEmpty(CardNo))
             {
-                objCustomerDetail = ITOPS.GetChangeNameByCardNo(GroupId, CardNo);
+                objCustomerDetail = ITOPS.GetChangeNameByCardNo(groupId, CardNo);
             }
 
             return Json(objCustomerDetail, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
-        public bool ChangeMemberName(string jsonData)
+        public ActionResult ChangeMemberMobile(string jsonData)
         {
-            bool result = false;
-             
-            var GroupId = (string)Session["GroupId"];
+            SPResponse result = new SPResponse();
+            var groupId = (string)Session["GroupId"];
             try
             {
                 JavaScriptSerializer json_serializer = new JavaScriptSerializer();
@@ -67,13 +64,15 @@ namespace WebApp.Controllers.ITOPS
                 bool IsSMS = false;
 
                 string CustomerId = "";
-                string Name = "";
+                string MobileNo = "";
                 foreach (Dictionary<string, object> item in objData)
-                {    
+                {
+                    var GroupId = (string)Session["GroupId"];
                     CustomerId = Convert.ToString(item["CustomerId"]);
-                    Name = Convert.ToString(item["Name"]);
-                    objAudit.GroupId = GroupId;
-                    objAudit.RequestedFor = "Name Change";
+                    MobileNo = Convert.ToString(item["MobileNo"]);
+
+                    objAudit.GroupId = groupId;
+                    objAudit.RequestedFor = "Mobile Number Change";
                     objAudit.RequestedEntity = "CustomerId - " + CustomerId;
                     objAudit.RequestedBy = Convert.ToString(item["RequestedBy"]);
                     objAudit.RequestedOnForum = Convert.ToString(item["RequestedForum"]);
@@ -81,14 +80,14 @@ namespace WebApp.Controllers.ITOPS
                     IsSMS = Convert.ToBoolean(item["IsSMS"]);
                 }
 
-                result = ITOPS.UpdateNameOfMember(GroupId, CustomerId, Name, objAudit);
-                if (result)
+                result = ITOPS.UpdateMobileOfMember(groupId, CustomerId, MobileNo, objAudit);
+                if (result.ResponseCode == "00")
                 {
-                    var subject = "Customer name changed for CustomerId - " + CustomerId;
-                    var body = "Customer name changed for CustomerId - " + CustomerId;
+                    var subject = "Customer Mobile Number changed for CustomerId - " + CustomerId;
+                    var body = "Customer Mobile Number changed for CustomerId - " + CustomerId;
                     body += "<br/><br/> Regards <br/> Blue Ocktopus Team";
 
-                    SendEmail(GroupId, subject, body);
+                    SendEmail(groupId, subject, body);
                 }
 
                 if (IsSMS)
@@ -99,9 +98,9 @@ namespace WebApp.Controllers.ITOPS
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex, GroupId);
+                newexception.AddException(ex, groupId);
             }
-            return result;
+            return Json(result, JsonRequestBehavior.AllowGet);
         }
 
         public void SendEmail(string GroupId, string Subject, string EmailBody)
@@ -138,10 +137,6 @@ namespace WebApp.Controllers.ITOPS
                 }
             }
         }
-
-
-
-
 
 
     }
