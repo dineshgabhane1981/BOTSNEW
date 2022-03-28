@@ -43,8 +43,8 @@
             @*jwl making box*@
             <div class="col-md-12 col-sm-12" id="divjel" style="display:none;">
                 <b>Type</b>
-                @Html.RadioButtonFor(model => model.objpointsearnruleconfig.EarnOnMaking, "Making", new { @id = "rdbMaking", @class = "jwllevel" }) Making
-                @Html.RadioButtonFor(model => model.objpointsearnruleconfig.EarnOnFullAmt, "FullAmount", new { @id = "rdbFullAmt", @class = "jwllevel" }) Full Amount
+                @Html.RadioButtonFor(model => model.objpointsearnruleconfig.EarnPointLevelType, "Making", new { @id = "rdbMaking", @class = "jwllevel" }) Making
+                @Html.RadioButtonFor(model => model.objpointsearnruleconfig.EarnPointLevelType, "FullAmount", new { @id = "rdbFullAmt", @class = "jwllevel" }) Full Amount
             </div>
             @*common fixed box*@
             <div class="col-md-12 col-sm-12" id="divnonjel" style="display:none;">
@@ -57,8 +57,8 @@
             @*making fixed box*@
             <div class="col-md-12 col-sm-12" id="divmakingjwl" style="display:none;">
                 <b>Type</b>
-                @Html.RadioButtonFor(model => model.objpointsearnruleconfig.EarnPointLevelType, "makingFixed", new { @id = "rdbmakingFixed", @class = "makingfixedorslab" }) Fixed
-                @Html.RadioButtonFor(model => model.objpointsearnruleconfig.EarnPointLevelType, "makingSlab", new { @id = "rdbmakingSlab", @class = "makingfixedorslab" }) Slab
+                @Html.RadioButtonFor(model => model.objpointsearnruleconfig.EarnOnMaking, "makingFixed", new { @id = "rdbmakingFixed", @class = "makingfixedorslab" }) Fixed
+                @Html.RadioButtonFor(model => model.objpointsearnruleconfig.EarnOnMaking, "makingSlab", new { @id = "rdbmakingSlab", @class = "makingfixedorslab" }) Slab
             </div>
             @*making slab box*@
             <!--<div class="col-md-6 col-sm-6" id="divslab" style="display:none;">
@@ -192,8 +192,8 @@
             @*common slab box*@
             <div class="col-md-6 col-sm-6" id="divslab" style="display:none;">
                 <b>Slab Type</b>
-                @Html.RadioButtonFor(model => model.objearnpointslab.SlabType, "commonslabin%", new { @id = "rdbFrmToPercentage", @class = "commonslabin%orRs" }) Slab In Percentage
-                @Html.RadioButtonFor(model => model.objearnpointslab.SlabType, "commonSlabInRs", new { @id = "rdbFrmToRs", @class = "commonslabin%orRs" }) Slab In RS
+                @Html.RadioButtonFor(model => model.objearnpointslab.SlabType, "commonslabin%", new { @id = "rdbFrmToPercentage", @class = "commonslabinpercentageorRs" }) Slab In Percentage
+                @Html.RadioButtonFor(model => model.objearnpointslab.SlabType, "commonSlabInRs", new { @id = "rdbFrmToRs", @class = "commonslabinpercentageorRs" }) Slab In RS
                 <div class="row" id="commonslabdynamictxt">
                     <div id='CommonTextBoxesGroup'>
                         <div id="CommonTextBoxDiv0">
@@ -322,9 +322,7 @@
             $(document).ready(function () {
                 var categoryData = $("#hdnCategoryData").val();
                 var CategoryObj = $.parseJSON(categoryData);
-                var counter = 2;
-
-               // rdbfullamtslabdirect
+                var counter = 2;             
                 $("input[type='radio'].radiolevel").change(function () {
                     console.log(111);
                     console.log(CategoryObj[0].CategoryId);
@@ -351,7 +349,7 @@
 
 
                 });
-                $("input[type='radio'].Burnforearnlevel").change(function () {                    
+                $("input[type='radio'].Burnforearnlevel").change(function () {
                     console.log(222);
                     if ($("input[type='radio'].Burnforearnlevel:checked").val() == "InvoiceAmount") {
                         $("#divblockearnInvamtMinMax").show();
@@ -361,22 +359,22 @@
                     }
                 });
                 $("input[type='radio'].redemptionlevel").change(function () {
-                    
+
                     $("#divtype").show();
                 });
                 $("#rdbMaking").change(function () {
                     $("#divmakingjwl").show();//divmakingfixed
                     $("#divfullamt").hide();
 
-                }); 
+                });
                 $("#rbgpointvalidityfixed").change(function () {
                     $("#divpointexpiryvalue").show();
-                    
+
 
                 });
                 $("#rbgpointvalidityrevolving").change(function () {
                     $("#divpointexpiryvalue").show();
-                   
+
 
                 });
                 $("#rdbmakingFixed").change(function () {
@@ -569,14 +567,12 @@
                     }
                 });
                 $("#addButton").click(function () {
-
                     if (counter > 15) {
                         alert("Only 15 textboxes allow");
                         return false;
                     }
                     var newTextBoxDiv = $(document.createElement('div'))
-                        .attr("id", 'TextBoxDiv' + counter);
-                   // var newTextBoxDiv = $('#slabdynamictxt');
+                        .attr("id", 'TextBoxDiv' + counter);                   
                     newTextBoxDiv.after().html(
                         '<input type="text" name="textboxfrom' + counter +
                         '" id="textboxfrom' + counter + '" value="" class="input50" placeholder="From" >' + '&nbsp;&nbsp;' + '<input type="text" name="textboxto' + counter +
@@ -650,6 +646,8 @@
                     $("#CommonTextBoxDiv" + counter).remove();
 
                 });
+
+                GetAllEarnBurnData();
             });
             function AddEarnRule() {
         var categoryData = $("#hdnCategoryData").val();
@@ -705,8 +703,105 @@
                     console.log($("#ddlBrandsComm").val());
                     item["pointvalue"] = $("#txtpointvalue").val();
                     item["earnlevel"] = $("input[type='radio'].radiolevel:checked").val();
+                    if ($("input[type='radio'].jwllevel").is(":checked")) {
+                        item["jwlLevel"] = $("input[type='radio'].jwllevel:checked").val();
+                        if ($("input[type='radio'].jwllevel:checked").val() == "Making") {
+                            item["makingfixedorslab"] = $("input[type='radio'].makingfixedorslab:checked").val();
+                            if ($("input[type='radio'].makingfixedorslab:checked").val() == "makingFixed") {
+                                item["making%withorFixed"] = $("#ddlmakingpercentage").val();
+                                if ($("#ddlmakingpercentage").val() == 'fixedpercentage') {
+                                    item["makingFixed%"] = $("#txtmakingPercentage").val();
+                                    console.log($("#txtmakingPercentage").val());
+                                }
+                                else if ($("#ddlmakingpercentage").val() == 'percentwith') {
+                                    item["making%with"] = $("#txtmakingPercentagewith").val();
+                                    console.log($("#txtmakingPercentagewith").val());
+                                }
+                            }
+                            if ($("input[type='radio'].makingfixedorslab:checked").val() == "makingSlab") {
+                                console.log($("input[type='radio'].makingslabtype:checked").val());
+                                item["slabtype"] = $("input[type='radio'].makingslabtype:checked").val();
+                                var slabs = [];
 
-                    item["jwlLevel"] = $("input[type='radio'].jwllevel:checked").val();
+                                $('[id^=TextBoxDiv]').each(function (i, item) {
+                                    var id = item.id.substr(10);
+
+                                    var fromval = $('input[id="textboxfrom' + id + '"]').val();
+                                    var Toval = $('input[id="textboxto' + id + '"]').val();
+                                    var value = $('input[id="textboxvalue' + id + '"]').val();
+                                    if (fromval != "" && Toval != "" && value != "") {
+                                        slabs.push(fromval + '-' + Toval + '-' + value);
+                                    }
+                                    console.log(slabs);
+                                });
+                                item["slab"] = slabs;
+                            }
+
+                            item["makingslabdirectortelescopic"] = $("input[type='radio'].makingslabtypeDirect:checked").val();
+                            if ($("input[type='radio'].makingslabtypeDirect:checked").val() == "makingslabDirect") {
+                                item["makingslabdirectvalue"] = $("#txtmakingslabdirect").val();
+                            }
+                            else if ($("input[type='radio'].makingslabtypeDirect:checked").val() == "makingslabtescopic") {
+                                item["makingslabtelescopicvalue"] = $("#txtmakingslabtelescopic").val();
+                            }
+                        }
+                        if ($("input[type='radio'].jwllevel:checked").val() == "FullAmount") {
+                            item["fullamtwithgstornongst"] = $("input[type='radio'].fullamtGstorNongst:checked").val();
+                            item["fullamtfixedorslab"] = $("input[type='radio'].fullamtfixedorslab:checked").val();
+                            item["fullamt%withorfixed%"] = $("#ddlFullamtpercentage").val();
+                            if ($("input[type='radio'].fullamtfixedorslab:checked").val() == "FullamtFixed") {
+                                item["fullamtslabtype"] = $("input[type='radio'].fullAmtslabtype:checked").val();
+                                if ($("#ddlFullamtpercentage").val() == 'fixedpercentage') {
+                                    item["fullamtFixed%"] = $("#txtfullAmtWithGstPercentage").val();
+                                }
+                                else if ($("#ddlFullamtpercentage").val() == 'percentwith') {
+                                    item["fullamt%with"] = $("#txtfullAmtWithGstPercentagewith").val();
+                                    item["fullamtincrement"] = $("input[type='radio'].fullamtincremented:checked").val();
+                                    if ($("#ddlfullamtincrementedpercentage").val() == 'fixedpercentage') {
+                                        item["fullamtincrementedfixed%"] = $("#txtfullamtIncrementpercentage").val();
+                                    }
+                                    else if ($("#ddlfullamtincrementedpercentage").val() == 'percentwith') {
+                                        item["fullamtincremented%with"] = $("#txtfullamtIncrementpercentagewith").val();
+                                    }
+
+
+                                }
+                            }
+                            if ($("input[type='radio'].fullamtfixedorslab:checked").val() == "FullamtSlab") {
+                                item["fullamtslabtype"] = $("input[type='radio'].fullAmtslabtype:checked").val();
+                                var fullAmtslabs = [];
+
+                                $('[id^=fullamtTextBoxDiv]').each(function (i, item) {
+                                    console.log(item);
+                                    var id = item.id.substr(17);
+                                    console.log(id);
+                                    var fromval = $('input[id="fullamttextboxfrom' + id + '"]').val();
+                                    var Toval = $('input[id="fullamttextboxto' + id + '"]').val();
+                                    var value = $('input[id="fullamttextboxvalue' + id + '"]').val();
+                                    if (fromval != "" && Toval != "" && value != "") {
+                                        fullAmtslabs.push(fromval + '-' + Toval + '-' + value);
+                                    }
+                                    console.log(fullAmtslabs);
+                                });
+                                item["fullamtslab"] = fullAmtslabs;
+                                console.log($("input[type='radio'].fullamtslabtypeDirect:checked").val());
+                                item["fullamtslabdirectortele"] = $("input[type='radio'].fullamtslabtypeDirect:checked").val();
+                                console.log(item["fullamtslabdirectortele"]);
+                                if ($("input[type='radio'].fullamtslabtypeDirect:checked").val() == "fullamtslabDirect") {
+                                    item["fullamtslabdirect"] = $("#txtfullamtslabdirect").val();
+                                }
+                                else if ($("input[type='radio'].fullamtslabtypeDirect:checked").val() == "fullamtslabtescopic") {
+                                    item["fullamtslabtele"] = $("#txtfullamtslabtelescopic").val();
+                                }
+
+
+                            }
+                        }
+
+                    } else {
+                        item["jwlLevel"] = "";
+                    }
+                    
                     if ($("input[type='radio'].commonfixedorslab").is(":checked")) {
                         item["commonfixedorslab"] = $("input[type='radio'].commonfixedorslab:checked").val();
                         if ($("input[type='radio'].commonfixedorslab:checked").val() == "commonFixed") {
@@ -750,13 +845,12 @@
                             }
                         }
                         if ($("input[type='radio'].commonfixedorslab:checked").val() == "commonSlab") {
-                            console.log($("input[type='radio'].commonslabin%orRs:checked").val());
-                            item["commonslabtype"] = $("input[type='radio'].commonslabin%orRs:checked").val();
+                           // console.log($("input[type='radio'].commonslabinpercentageorRs:checked").val());
+                            item["commonslabtype"] = $("input[type='radio'].commonslabinpercentageorRs:checked").val();
                             var commonslabs = [];
 
                             $('[id^=CommonTextBoxDiv]').each(function (i, item) {
                                 var id = item.id.substr(16);
-
                                 var fromval = $('input[id="commontextboxfrom' + id + '"]').val();
                                 var Toval = $('input[id="commontextboxto' + id + '"]').val();
                                 var value = $('input[id="commontextboxvalue' + id + '"]').val();
@@ -779,98 +873,7 @@
                     else {
                         item["commonfixedorslab"] = "";
                     }
-                    if ($("input[type='radio'].jwllevel:checked").val() == "Making") {
-                        item["makingfixedorslab"] = $("input[type='radio'].makingfixedorslab:checked").val();
-                        if ($("input[type='radio'].makingfixedorslab:checked").val() == "makingFixed") {
-                            item["making%withorFixed"] = $("#ddlmakingpercentage").val();
-                            if ($("#ddlmakingpercentage").val() == 'fixedpercentage') {
-                                item["makingFixed%"] = $("#txtmakingPercentage").val();
-                                console.log($("#txtmakingPercentage").val());
-                            }
-                            else if ($("#ddlmakingpercentage").val() == 'percentwith') {
-                                item["making%with"] = $("#txtmakingPercentagewith").val();
-                                console.log($("#txtmakingPercentagewith").val());
-                            }
-                        }
-                        if ($("input[type='radio'].makingfixedorslab:checked").val() == "makingSlab") {
-                            console.log($("input[type='radio'].makingslabtype:checked").val());
-                            item["slabtype"] = $("input[type='radio'].makingslabtype:checked").val();
-                            var slabs = [];
-
-                            $('[id^=TextBoxDiv]').each(function (i, item) {
-                                var id = item.id.substr(10);
-
-                                var fromval = $('input[id="textboxfrom' + id + '"]').val();
-                                var Toval = $('input[id="textboxto' + id + '"]').val();
-                                var value = $('input[id="textboxvalue' + id + '"]').val();
-                                if (fromval != "" && Toval != "" && value != "") {
-                                    slabs.push(fromval + '-' + Toval + '-' + value);
-                                }
-                                console.log(slabs);
-                            });
-                            item["slab"] = slabs;
-                        }
-
-                        item["makingslabdirectortelescopic"] = $("input[type='radio'].makingslabtypeDirect:checked").val();
-                        if ($("input[type='radio'].makingslabtypeDirect:checked").val() == "makingslabDirect") {
-                            item["makingslabdirectvalue"] = $("#txtmakingslabdirect").val();
-                        }
-                        else if ($("input[type='radio'].makingslabtypeDirect:checked").val() == "makingslabtescopic") {
-                            item["makingslabtelescopicvalue"] = $("#txtmakingslabtelescopic").val();
-                        }
-                    }
-                    if ($("input[type='radio'].jwllevel:checked").val() == "FullAmount") {
-                        item["fullamtwithgstornongst"] = $("input[type='radio'].fullamtGstorNongst:checked").val();
-                        item["fullamtfixedorslab"] = $("input[type='radio'].fullamtfixedorslab:checked").val();
-                        item["fullamt%withorfixed%"] = $("#ddlFullamtpercentage").val();
-                        if ($("input[type='radio'].fullamtfixedorslab:checked").val() == "FullamtFixed") {
-                            item["fullamtslabtype"] = $("input[type='radio'].fullAmtslabtype:checked").val();
-                            if ($("#ddlFullamtpercentage").val() == 'fixedpercentage') {
-                                item["fullamtFixed%"] = $("#txtfullAmtWithGstPercentage").val();
-                            }
-                            else if ($("#ddlFullamtpercentage").val() == 'percentwith') {
-                                item["fullamt%with"] = $("#txtfullAmtWithGstPercentagewith").val();
-                                item["fullamtincrement"] = $("input[type='radio'].fullamtincremented:checked").val();
-                                if ($("#ddlfullamtincrementedpercentage").val() == 'fixedpercentage') {
-                                    item["fullamtincrementedfixed%"] = $("#txtfullamtIncrementpercentage").val();
-                                }
-                                else if ($("#ddlfullamtincrementedpercentage").val() == 'percentwith') {
-                                    item["fullamtincremented%with"] = $("#txtfullamtIncrementpercentagewith").val();
-                                }
-
-
-                            }
-                        }
-                        if ($("input[type='radio'].fullamtfixedorslab:checked").val() == "FullamtSlab") {
-                            item["fullamtslabtype"] = $("input[type='radio'].fullAmtslabtype:checked").val();
-                            var fullAmtslabs = [];
-
-                            $('[id^=fullamtTextBoxDiv]').each(function (i, item) {
-                                console.log(item);
-                                var id = item.id.substr(17);
-                                console.log(id);
-                                var fromval = $('input[id="fullamttextboxfrom' + id + '"]').val();
-                                var Toval = $('input[id="fullamttextboxto' + id + '"]').val();
-                                var value = $('input[id="fullamttextboxvalue' + id + '"]').val();
-                                if (fromval != "" && Toval != "" && value != "") {
-                                    fullAmtslabs.push(fromval + '-' + Toval + '-' + value);
-                                }
-                                console.log(fullAmtslabs);
-                            });
-                            item["fullamtslab"] = fullAmtslabs;
-                            console.log($("input[type='radio'].fullamtslabtypeDirect:checked").val());
-                            item["fullamtslabdirectortele"] = $("input[type='radio'].fullamtslabtypeDirect:checked").val();
-                            console.log(item["fullamtslabdirectortele"]);
-                            if ($("input[type='radio'].fullamtslabtypeDirect:checked").val() == "fullamtslabDirect") {
-                                item["fullamtslabdirect"] = $("#txtfullamtslabdirect").val();
-                            }
-                            else if ($("input[type='radio'].fullamtslabtypeDirect:checked").val() == "fullamtslabtescopic") {
-                                item["fullamtslabtele"] = $("#txtfullamtslabtelescopic").val();
-                            }
-
-
-                        }
-                    }
+                    
                     if ($("input[type='radio'].Burnforearnlevel").is(":checked")) {
                         itemburn["Blockonearnrule"] = $("input[type='radio'].Burnforearnlevel:checked").val();
                         if ($("input[type='radio'].Burnforearnlevel:checked").val() == "InvoiceAmount") {
@@ -921,7 +924,7 @@
                         itemredemption["redemptionlevel"] = "";
                         itemredemption["burntimetype"] = "";
                     }
-                  
+
                     Earnrule.push(item);
                     BlockOnearnRule.push(itemburn);
                     RedemptionRule.push(itemredemption);
@@ -934,10 +937,6 @@
                     formData.append('BlockOnearnrule', JSON.stringify(BlockOnearnRule));
                     formData.append('Redemptionrule', JSON.stringify(RedemptionRule));
                     console.log(formData);
-
-
-                   
-
                     console.log(Earnrule);
                     $("#divLoader").show();
                 }
@@ -974,47 +973,163 @@
             }
         });
                 }
-            //    else {
-            //        cuteAlert({
-            //            type: "error",
-            //            title: "Oops..",
-            //            message: "Please enter Required fields",
-            //            buttonText: "Okay"
-            //        })
-            //        return false;
-            //    }
-            //}
-    @*function UploadFile() {
-        var files = $("#FileUpload").get(0).files;
 
-        var formData = new FormData();
-        formData.append('FileUpload', files[0]);
-
-        $.ajax({
-            url: '@Url.Action("", "CustomerOnBoarding")',
-            data: function () {
-                var data = new FormData();
-                data.append("file", jQuery("#file").get(0).files[0]);
-                return data;
-            }(),
-            type: 'POST',
-            contentType: false,
-            processData: false,
-            success: function (data) {
-                if (data.Status === 1) {
-                    alert(data.Message);
-                } else {
-                    alert("Failed to Import");
-                }
-            }
-        });
-    }*@
             function ClearAll() {
 
             }
             function checkValidation() {
 
+    }
+
+    function GetAllEarnBurnData() {
+        console.log($("#hdnGroupID").val());
+        var GroupId = $("#hdnGroupID").val();
+        console.log(GroupId);
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("GetEarnBurnDataAndUploaddata", "CustomerOnBoarding")',
+            data: '{Groupid: ' + JSON.stringify(GroupId) + '}',
+            contentType: "application/json; charset=utf-8",            
+            dataType: "json",
+            success: function (data) {
+                if (data.objpointsearnruleconfig != null) {
+                    console.log("Hi");
+                    $("#txtpointvalue").val(data.objpointsearnruleconfig.OnePointValueInRs);
+                    console.log(data.objpointsearnruleconfig.EarnPointLevel);                
+                    $('input[class="radiolevel"][value="' + data.objpointsearnruleconfig.EarnPointLevel + '"]').attr('checked', true);
+                 
+                    if (data.objpointsearnruleconfig.EarnPointLevelType != null) {
+                        console.log(data.objpointsearnruleconfig.EarnPointLevelType);
+
+                        if (data.objpointsearnruleconfig.EarnPointLevelType == "commonFixed" || data.objpointsearnruleconfig.EarnPointLevelType == "commonSlab" ) {
+                            $("#divnonjel").show();
+                            $('input[class="commonfixedorslab"][value="' + data.objpointsearnruleconfig.EarnPointLevelType + '"]').attr('checked', true);
+                            if (data.objpointsearnruleconfig.EarnPointLevelType == "commonFixed") {
+                                $('#ddlpercentage').val(data.objpointsearnruleconfig.commonfixedpercentageorwithperce);
+                                if (data.objpointsearnruleconfig.commonfixedpercentageorwithperce == "fixedpercentage") {    
+                                    $("#divfixed").show();
+                                    $('#txtpercentage').val(data.objpointsearnruleconfig.FixedEarnPointPercentage);
+                                    
+                                }
+                                else if (data.objpointsearnruleconfig.commonfixedpercentageorwithperce == "percentwith") {
+                                    
+                                    $("#divfixed").show();
+                                    $('#txtpercentagewith').val(data.objpointsearnruleconfig.FixedEarnPointPecentageWith);
+                                   
+                                    if (data.objpointsearnruleconfig.IncrementedValue != null) {
+                                        $("#divincrement").show();
+                                        $('input[class="commonsingleorcumulative"][value="' + data.objpointsearnruleconfig.IncrementedValue + '"]').attr('checked', true);
+
+                                        $("#divincrementedpersentage").show();
+                                        if (data.objpointsearnruleconfig.IncrementedpercentageWith != null) {
+
+                                            $('#ddlincrementedpercentage').val("percentwith");
+                                            $('#txtIncrementpercentagewith').val(data.objpointsearnruleconfig.IncrementedpercentageWith);
+                                        }
+                                        else if (data.objpointsearnruleconfig.IncrementedFixedPercentage != null) {
+                                            $('#ddlincrementedpercentage').val("fixedpercentage");
+                                            $('#txtIncrementpercentage').val(data.objpointsearnruleconfig.IncrementedFixedPercentage);
+
+                                        }
+                                    }
+                                    
+                                }
+
+                            }
+                            if (data.objpointsearnruleconfig.EarnPointLevelType == "commonSlab") {                                
+                                console.log(data.lstearnpointslabconfig);
+                                if (data.lstearnpointslabconfig.length > 0) {
+                                    if (data.lstearnpointslabconfig[0].EarnPointSlabFromPercentage != null || data.lstearnpointslabconfig[0].EarnPointSlabFromPercentage != "") {
+
+                                      //  $("#divslab").show();
+                                        $('input[id="rdbFrmToPercentage"]').attr('checked', true);
+
+                                        for (var i = 0; i < data.lstearnpointslabconfig.length; i++) {
+                                           // console.log(data.lstearnpointslabconfig[0].EarnPointSlabFromPercentage);
+                                            var newTextBoxDiv = $(document.createElement('div'))
+                                                .attr("id", 'TextBoxDiv' + i);
+                                            newTextBoxDiv.after().html(
+                                                '<input type="text" name="textboxfrom' + i +
+                                                '" id="textboxfrom' + i + '" value="' + data.lstearnpointslabconfig[i].EarnPointSlabFromPercentage + '" class="input50" placeholder="From" >' + '&nbsp;&nbsp;' + '<input type="text" name="textboxto' + i +
+                                                '" id="textboxto' + i + '" value="' + data.lstearnpointslabconfig[i].EarnPointSlabToPercentage + '" class="input50" placeholder="To">' + '&nbsp;' + '<input type="textbox" name="textboxvalue' + i + '" id="textboxvalue' + i + '" value="' + data.lstearnpointslabconfig[i].EarnPointSlabValue +'"placeholder="value" style="width:50px;">');
+
+                                            newTextBoxDiv.appendTo("#TextBoxesGroup");
+                                        
+                                        }
+                                    }
+                                    if (data.lstearnpointslabconfig[0].EarnPointSlabFromRs != null || data.lstearnpointslabconfig[0].EarnPointSlabFromRs != "") {
+                                        
+                                        $('input[id="rdbFrmToRs"]').attr('checked', true);
+                                       // $("#divslab").show();
+                                        for (var i = 0; i < data.lstearnpointslabconfig.length; i++) {                                           
+                                            var newTextBoxDiv = $(document.createElement('div'))
+                                                .attr("id", 'TextBoxDiv' + i);
+                                            newTextBoxDiv.after().html(
+                                                '<input type="text" name="textboxfrom' + i +
+                                                '" id="textboxfrom' + i + '" value="' + data.lstearnpointslabconfig[i].EarnPointSlabFromRs + '" class="input50" placeholder="From" >' + '&nbsp;&nbsp;' + '<input type="text" name="textboxto' + i +
+                                                '" id="textboxto' + i + '" value="' + data.lstearnpointslabconfig[i].EarnPointSlabToRs+'" class="input50" placeholder="To">' + '&nbsp;' + '<input type="textbox" name="textboxvalue' + i + '" id="textboxvalue' + i + '" value="' + data.lstearnpointslabconfig[i].EarnPointSlabValue +'" placeholder="value" style="width:50px;">');
+
+                                            newTextBoxDiv.appendTo("#TextBoxesGroup");
+                                            
+                                        }
+                                    }
+                                }
+                            }
+
+
+                        }
+
+                        else if (data.objpointsearnruleconfig.EarnPointLevelType == "Making" || data.objpointsearnruleconfig.EarnPointLevelType == "FullAmount" ){
+                            $("#divjel").show();                         
+                            $('input[class="jwlLevel"][value="' + data.objpointsearnruleconfig.EarnPointLevelType + '"]').attr('checked', true);
+                            if (data.objpointsearnruleconfig.lstearnpointslabconfig.length > 0) {
+                                if (data.objonboardingviewmodel.lstearnpointslabconfig[0].EarnPointSlabFromPercentage != null) {
+
+                                    $('input[id="rdbFrmToPercentage"]').attr('checked', true);
+
+                                    for (var i = 0; i < data.objpointsearnruleconfig.lstearnpointslabconfig.length; i++) {
+                                        var newTextBoxDiv = $(document.createElement('div'))
+                                            .attr("id", 'TextBoxDiv' + i);
+                                        newTextBoxDiv.after().html(
+                                            '<input type="text" name="textboxfrom' + i +
+                                            '" id="textboxfrom' + i + '" value="' + data.objpointsearnruleconfig.lstearnpointslabconfig[i].EarnPointSlabFromPercentage + '" class="input50" placeholder="From" >' + '&nbsp;&nbsp;' + '<input type="text" name="textboxto' + i +
+                                            '" id="textboxto' + i + '" value="' + data.objpointsearnruleconfig.lstearnpointslabconfig[i].EarnPointSlabToPercentage + '" class="input50" placeholder="To">' + '&nbsp;' + '<input type="textbox" name="textboxvalue' + i + '" id="textboxvalue' + i + '" value="' + data.objpointsearnruleconfig.lstearnpointslabconfig[i].EarnPointSlabValue + '"placeholder="value" style="width:50px;">');
+
+                                        newTextBoxDiv.appendTo("#TextBoxesGroup");
+
+                                    }
+                                }
+                                if (data.objonboardingviewmodel.lstearnpointslabconfig[0].EarnPointSlabFromRs != null) {
+                                    $('input[id="rdbFrmToRs"]').attr('checked', true);
+
+                                    for (var i = 0; i < data.objpointsearnruleconfig.lstearnpointslabconfig.length; i++) {
+                                        var newTextBoxDiv = $(document.createElement('div'))
+                                            .attr("id", 'TextBoxDiv' + i);
+                                        newTextBoxDiv.after().html(
+                                            '<input type="text" name="textboxfrom' + i +
+                                            '" id="textboxfrom' + i + '" value="' + data.objpointsearnruleconfig.lstearnpointslabconfig[i].EarnPointSlabFromRs + '" class="input50" placeholder="From" >' + '&nbsp;&nbsp;' + '<input type="text" name="textboxto' + i +
+                                            '" id="textboxto' + i + '" value="' + data.objpointsearnruleconfig.lstearnpointslabconfig[i].EarnPointSlabToRs + '" class="input50" placeholder="To">' + '&nbsp;' + '<input type="textbox" name="textboxvalue' + i + '" id="textboxvalue' + i + '" value="' + data.objpointsearnruleconfig.lstearnpointslabconfig[i].EarnPointSlabValue + '" placeholder="value" style="width:50px;">');
+
+                                        newTextBoxDiv.appendTo("#TextBoxesGroup");                                        
+
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    
+                }
+                else {
+                    
+                }
+                $("#divLoader").hide();
+            },
+            error: function (result) {
+                console.log(result.responseText)
+                $("#divLoader").hide();
             }
+        });
+    }
 </script>
 
 <style>

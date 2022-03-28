@@ -469,7 +469,7 @@ namespace BOTS_BL.Repository
             return objData;
         }
 
-        public bool SaveCommunicationConfig(BOTS_TblSMSConfig objSMSData, BOTS_TblWAConfig objWAData,List<SMSTemplate> lstSMS, List<SMSTemplate> lstWA,string loginId)
+        public bool SaveCommunicationConfig(BOTS_TblSMSConfig objSMSData, BOTS_TblWAConfig objWAData, List<SMSTemplate> lstSMS, List<SMSTemplate> lstWA, string loginId)
         {
             bool status = false;
 
@@ -492,22 +492,23 @@ namespace BOTS_BL.Repository
                                 objItemNew.SMSUsername = objSMSData.SMSUsername;
                                 objItemNew.SMSPassword = objSMSData.SMSPassword;
                                 objItemNew.SMSlink = objSMSData.SMSlink;
-                                 
+                                //objItemNew.DLTStatus = objSMSData.DLTStatus;
+
                                 objItemNew.AddedBy = loginId;
                                 objItemNew.AddedDate = DateTime.Now;
                                 objItemNew.Id = itemSMS.Id;
 
                                 if (objItemNew.Id > 0)
-                                {                                    
+                                {
                                     var oldData = context.BOTS_TblSMSConfig.Where(x => x.Id == objItemNew.Id).FirstOrDefault();
                                     if (oldData != null)
-                                    {                                        
+                                    {
                                         objItemNew.AddedBy = oldData.AddedBy;
                                         objItemNew.AddedDate = oldData.AddedDate;
                                     }
                                     objItemNew.UpdatedBy = loginId;
                                     objItemNew.UpdatedDate = DateTime.Now;
-                                }                                
+                                }
                                 objItemNew.MessageId = itemSMS.MessageId;
                                 objItemNew.SMSScript = itemSMS.TemplateScript;
                                 context.BOTS_TblSMSConfig.AddOrUpdate(objItemNew);
@@ -516,7 +517,7 @@ namespace BOTS_BL.Repository
                             status = true;
                         }
                         if (objWAData.IsWA)
-                        {                            
+                        {
                             foreach (var itemWA in lstWA)
                             {
                                 BOTS_TblWAConfig objItemWA = new BOTS_TblWAConfig();
@@ -536,7 +537,7 @@ namespace BOTS_BL.Repository
                                 objItemWA.Id = itemWA.Id;
 
                                 if (objItemWA.Id > 0)
-                                {                                    
+                                {
                                     var oldData = context.BOTS_TblWAConfig.Where(x => x.Id == objItemWA.Id).FirstOrDefault();
                                     if (oldData != null)
                                     {
@@ -564,6 +565,33 @@ namespace BOTS_BL.Repository
             }
             return status;
         }
+
+        public bool SendCommunicationToDLT(string groupId, string loginId)
+        {
+            bool status = false;
+            using (var context = new CommonDBContext())
+            {
+                try
+                {
+                    var lstComm = context.BOTS_TblSMSConfig.Where(x => x.GroupId == groupId).ToList();
+                    foreach (var itemNew in lstComm)
+                    {
+                        itemNew.DLTStatus = "Submitted";
+                        itemNew.UpdatedBy = loginId;
+                        itemNew.UpdatedDate = DateTime.Now;
+                        context.BOTS_TblSMSConfig.AddOrUpdate(itemNew);
+                        context.SaveChanges();
+                    }
+                    status = true;
+                }
+                catch(Exception ex)
+                {
+                    newexception.AddException(ex, "SendCommunicationToDLT");
+                }
+            }
+            return status;
+        }
+
         public List<BOTS_TblSMSConfig> GetCommunicationSMSConfig(string GroupId, string BrandId)
         {
             List<BOTS_TblSMSConfig> objData = new List<BOTS_TblSMSConfig>();
@@ -673,6 +701,7 @@ namespace BOTS_BL.Repository
                                 {
                                     objslabearn.EarnPointSlabFromPercentage = Convert.ToDecimal(Convert.ToString(val1[0]));
                                     objslabearn.EarnPointSlabToPercentage = Convert.ToDecimal(Convert.ToString(val1[1]));
+                                    objslabearn.EarnPointSlabValue = Convert.ToDecimal(Convert.ToString(val1[2]));
                                     if (SlabDirectOrTelescopic == "makingslabDirect")
                                     {
                                         objslabearn.EarnSlabDirectOrTelescoping = SlabDirectOrTelescopic;
@@ -686,8 +715,9 @@ namespace BOTS_BL.Repository
                                 }
                                 if (slabType == "makingslabinRs")
                                 {
-                                    objslabearn.EarnPointSlabFromPercentage = Convert.ToDecimal(Convert.ToString(val1[0]));
-                                    objslabearn.EarnPointSlabToPercentage = Convert.ToDecimal(Convert.ToString(val1[1]));
+                                    objslabearn.EarnPointSlabFromRs = Convert.ToDecimal(Convert.ToString(val1[0]));
+                                    objslabearn.EarnPointSlabToRs = Convert.ToDecimal(Convert.ToString(val1[1]));
+                                    objslabearn.EarnPointSlabValue = Convert.ToDecimal(Convert.ToString(val1[2]));
                                     if (SlabDirectOrTelescopic == "makingslabDirect")
                                     {
                                         objslabearn.EarnSlabDirectOrTelescoping = SlabDirectOrTelescopic;
@@ -728,6 +758,7 @@ namespace BOTS_BL.Repository
                                 {
                                     objslabearn.EarnPointSlabFromPercentage = Convert.ToDecimal(Convert.ToString(val1[0]));
                                     objslabearn.EarnPointSlabToPercentage = Convert.ToDecimal(Convert.ToString(val1[1]));
+                                    objslabearn.EarnPointSlabValue = Convert.ToDecimal(Convert.ToString(val1[2]));
                                     if (SlabDirectOrTelescopic == "fullamtslabDirect")
                                     {
                                         objslabearn.EarnSlabDirectOrTelescoping = SlabDirectOrTelescopic;
@@ -741,8 +772,9 @@ namespace BOTS_BL.Repository
                                 }
                                 if (slabType == "FullamtSlabInRS")
                                 {
-                                    objslabearn.EarnPointSlabFromPercentage = Convert.ToDecimal(Convert.ToString(val1[0]));
-                                    objslabearn.EarnPointSlabToPercentage = Convert.ToDecimal(Convert.ToString(val1[1]));
+                                    objslabearn.EarnPointSlabFromRs = Convert.ToDecimal(Convert.ToString(val1[0]));
+                                    objslabearn.EarnPointSlabToRs = Convert.ToDecimal(Convert.ToString(val1[1]));
+                                    objslabearn.EarnPointSlabValue = Convert.ToDecimal(Convert.ToString(val1[2]));
                                     if (SlabDirectOrTelescopic == "fullamtslabDirect")
                                     {
                                         objslabearn.EarnSlabDirectOrTelescoping = SlabDirectOrTelescopic;
@@ -783,6 +815,7 @@ namespace BOTS_BL.Repository
                                 {
                                     objslabearn.EarnPointSlabFromPercentage = Convert.ToDecimal(Convert.ToString(val1[0]));
                                     objslabearn.EarnPointSlabToPercentage = Convert.ToDecimal(Convert.ToString(val1[1]));
+                                    objslabearn.EarnPointSlabValue = Convert.ToDecimal(Convert.ToString(val1[2]));
                                     if (SlabDirectOrTelescopic == "commonslabdirect")
                                     {
                                         objslabearn.EarnSlabDirectOrTelescoping = SlabDirectOrTelescopic;
@@ -796,8 +829,9 @@ namespace BOTS_BL.Repository
                                 }
                                 if (slabType == "commonSlabInRs")
                                 {
-                                    objslabearn.EarnPointSlabFromPercentage = Convert.ToDecimal(Convert.ToString(val1[0]));
-                                    objslabearn.EarnPointSlabToPercentage = Convert.ToDecimal(Convert.ToString(val1[1]));
+                                    objslabearn.EarnPointSlabToRs = Convert.ToDecimal(Convert.ToString(val1[0]));
+                                    objslabearn.EarnPointSlabToRs = Convert.ToDecimal(Convert.ToString(val1[1]));
+                                    objslabearn.EarnPointSlabValue = Convert.ToDecimal(Convert.ToString(val1[2]));
                                     if (SlabDirectOrTelescopic == "commonslabdirect")
                                     {
                                         objslabearn.EarnSlabDirectOrTelescoping = SlabDirectOrTelescopic;
@@ -991,7 +1025,7 @@ namespace BOTS_BL.Repository
             return objData;
         }
 
-        public bool SaveInactiveConfig(List<BOTS_TblCampaignInactive> lstData, string GroupID,string type)
+        public bool SaveInactiveConfig(List<BOTS_TblCampaignInactive> lstData, string GroupID, string type)
         {
             bool status = false;
 
@@ -1001,7 +1035,7 @@ namespace BOTS_BL.Repository
                 {
                     try
                     {
-                        var existingRecords = context.BOTS_TblCampaignInactive.Where(x => x.GroupId == GroupID && x.InactiveType== type).ToList();
+                        var existingRecords = context.BOTS_TblCampaignInactive.Where(x => x.GroupId == GroupID && x.InactiveType == type).ToList();
                         foreach (var item in existingRecords)
                         {
                             var oldItem = lstData.Where(x => x.Id == item.Id).FirstOrDefault();
@@ -1055,14 +1089,34 @@ namespace BOTS_BL.Repository
         public BOTS_TblPointsEarnRuleConfig GetAllEarnRuleData(string GroupId)
         {
             BOTS_TblPointsEarnRuleConfig objearnrule = new BOTS_TblPointsEarnRuleConfig();
+            using (var context = new CommonDBContext())
+            {
+                objearnrule = context.BOTS_TblPointsEarnRuleConfig.Where(x => x.GroupId == GroupId).FirstOrDefault();
 
+            }
             return objearnrule;
         }
         public BOTS_TblPointsBurnRuleConfig GetAllBurnRuleData(string GroupId)
         {
             BOTS_TblPointsBurnRuleConfig objburnrule = new BOTS_TblPointsBurnRuleConfig();
+            using (var context = new CommonDBContext())
+            {
+                objburnrule = context.BOTS_TblPointsBurnRuleConfig.Where(x => x.GroupId == GroupId).FirstOrDefault();
 
+            }
             return objburnrule;
         }
+        public List<BOTS_TblEarnPointsSlabConfig> GetPointsSlabData(string GroupId)
+        {
+            List<BOTS_TblEarnPointsSlabConfig> lstslabdata = new List<BOTS_TblEarnPointsSlabConfig>();
+            using (var context = new CommonDBContext())
+            {
+                lstslabdata = context.BOTS_TblEarnPointsSlabConfig.Where(x => x.GroupId == GroupId).ToList();
+
+            }
+            return lstslabdata;
+        }
+
+
     }
 }

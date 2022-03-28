@@ -51,6 +51,9 @@ namespace BOTS_BL.Models
         public string SMSScript { get; set; }
 
         [StringLength(50)]
+        public string DLTStatus { get; set; }
+
+        [StringLength(50)]
         public string AddedBy { get; set; }
 
         public DateTime? AddedDate { get; set; }

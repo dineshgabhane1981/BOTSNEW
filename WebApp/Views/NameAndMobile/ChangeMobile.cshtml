@@ -6,3 +6,251 @@
 
 <h2>ChangeMobile</h2>
 
+<div class="multisteps-form__panel shadow p-4 list-box bg-white" id="sec2" data-animation="scaleIn">
+    <div class="multisteps-form__content">
+        <div>
+            <label style="padding-right:5px;padding-top:10px;">Enter Mobile Number </label>
+            <input type="number" id="txtMobileNo1" class="input50" />
+
+            <label style="padding-right:30px;padding-top:10px;padding-left:30px;"><b>(OR)</b> </label>
+
+            <label style="padding-right:5px;padding-top:10px;">Enter Card Number </label>
+            <input type="number" id="txtCardNo1" class="input50" />
+            <button type="button" id="btnSearchMember1" style="margin-left:15px;margin-top:10px;" class="btn btn-primary">Go</button>
+        </div>
+        <div>
+            <div style="margin-left:30px;margin-bottom:30px;margin-top:30px;">
+                <input type="radio" name="first_item1" id="rbtnSMS1" /> Send SMS
+                <input type="radio" name="first_item1" style="margin-left:30px;" checked id="rbtnNOSMS1" /> Don't Send SMS
+            </div>
+            <div style="display:flex;">
+                <input type="hidden" id="hdnCustomerId1" />
+                <table border="2" cellpadding="5" cellspacing="5">
+                    <tr>
+                        <th colspan="2" style="padding:10px;text-align:center;">Existing Member Details</th>
+                    </tr>
+                    <tr>
+                        <td style="padding:10px;">Member Name</td>
+                        <td style="padding:10px;width:200px;"><span style="color:red;" id="spnMemberName1"></span></td>
+                    </tr>
+                    <tr>
+                        <td style="padding:10px;">Mobile No</td>
+                        <td style="padding:10px;"><span id="spnMobileno1"></span></td>
+                    </tr>
+                    <tr>
+                        <td style="padding:10px;">Card No</td>
+                        <td style="padding:10px;"><span id="spnCardNo1"></span></td>
+                    </tr>
+                    <tr>
+                        <td style="padding:10px;">Points Balance</td>
+                        <td style="padding:10px;"><span id="spnPtBalance1"></span></td>
+                    </tr>
+                    <tr>
+                        <td style="padding:10px;">Enrolled Outlet</td>
+                        <td style="padding:10px;"><span id="spnEnrolledOutlet1"></span></td>
+                    </tr>
+                    <tr>
+                        <td style="padding:10px;">Enrolled On</td>
+                        <td style="padding:10px;">
+                            <span id="spnEnrolledOn1"></span>
+                        </td>
+                    </tr>
+
+                </table>
+
+                <table border="2" cellpadding="5" cellspacing="5" id="tblUpdateData1" style="margin-left:50px;display:none;">
+                    <tr>
+                        <th colspan="2" style="padding:10px;text-align:center;">Modify Mobile Number</th>
+                    </tr>
+                    <tr>
+                        <td style="padding:10px;width:100px;">Enter New Mobile Number</td>
+                        <td style="padding:10px;width:250px;">
+                            <input type="number" id="txtNewMobileNo" placeholder="Mobile No" class="input50" />
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding:10px;">Requested by</td>
+                        <td style="padding:10px;">
+                            <input type="text" id="txtRequestedByName1" placeholder="Requested By" class="input50" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding:10px;">Requested on Forum</td>
+                        <td style="padding:10px;">
+                            <select name="ddlRequestedForum1" id="ddlRequestedForum1" class="input50">
+                                <option value="Whatsapp">Whatsapp</option>
+                                <option value="Email">Email</option>
+                                <option value="Phone">Phone</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding:10px;">Transaction Date</td>
+                        <td style="padding:10px;"><input type="text" id="dtEnrolledOn2" class="input50" /></td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="button-row d-flex mt-4">
+        <button class="btn btn-primary ml-auto" type="button" title="Next" id="btnSaveMemberMobile" tabindex="20">Save</button>
+    </div>
+
+</div>
+
+<script>
+    $(document).ready(function () {
+
+        var today = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
+        // alert(today);
+        $("#dtEnrolledOn2").datepicker({
+
+            dateFormat: "yy-mm-dd",
+            maxDate: today,
+            //  minDate: '-4'
+        });
+    });
+
+    $('#btnchgmob').on("click", function () {
+        GetClearAllTab();
+    });
+    $('#btnSearchMember1').on("click", function () {
+        GetChangeMobileData();
+    });
+    $('#btnSaveMemberMobile').on("click", function () {
+        SaveMemberMobile();
+    });
+    function GetChangeMobileData() {
+        if ($('#txtMobileNo1').val() == "" && $('#txtCardNo1').val() == "") {
+            toastr.error('Please enter Mobile Number OR Card Number');
+            return false
+        }
+        //if ($('#txtCardNo1').val() == "") {
+        //    toastr.error('Please enter Mobile Number OR Card Number');
+        //    return false
+        //}
+        $("#divLoader").show();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("GetChangeNameData", "NameAndMobile")',
+            data: '{MobileNo:' + JSON.stringify($('#txtMobileNo1').val()) + ',CardNo: ' + JSON.stringify($('#txtCardNo1').val()) + '}',
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (result) {
+                if (result.MemberName != null) {
+                    $("#spnMemberName1").text(result.MemberName);
+                    $("#spnMobileno1").text(result.MobileNo);
+                    $("#spnCardNo1").text(result.CardNo);
+                    $("#spnPtBalance1").text(result.PointsBalance);
+                    $("#spnEnrolledOutlet1").text(result.EnrolledOutletName);
+                    $("#spnEnrolledOn1").text(result.EnrolledOn);
+                    $("#hdnCustomerId1").val(result.CustomerId);
+
+                    $('#txtNewMobileNo').val("");
+                    $('#txtRequestedByName1').val("");
+                    $('#ddlRequestedForum1').prop('selectedIndex', 0);
+                    $("#dtEnrolledOn2").val("");
+                    $("#tblUpdateData1").show();
+                }
+                else {
+                    toastr.error('Member not present. Please check entered Mobile Number OR Card Number');
+                    $("#spnMemberName1").text("");
+                    $("#spnMobileno1").text("");
+                    $("#spnCardNo1").text("");
+                    $("#spnPtBalance1").text("");
+                    $("#spnEnrolledOutlet1").text("");
+                    $("#spnEnrolledOn1").text("");
+                    $("#hdnCustomerId1").val("");
+
+                    $('#txtNewMobileNo').val("");
+                    $('#txtRequestedByName1').val("");
+                    $('#ddlRequestedForum1').prop('selectedIndex', 0);
+                    $("#tblUpdateData1").hide();
+                }
+                $("#divLoader").hide();
+            },
+            error: function (result) {
+                console.log(result.responseText)
+                $("#divLoader").hide();
+            }
+        });
+    }
+    function SaveMemberMobile() {
+        if ($('#txtNewMobileNo').val() == "") {
+            toastr.error('Please enter Mobile No');
+            $('#txtNewMobileNo').focus();
+            return false;
+        }
+        if ($('#txtNewMobileNo').val().length != 10) {
+            toastr.error('Mobile No should be 10 digits');
+            $('#txtNewMobileNo').focus();
+            return false;
+        }
+        if ($('#txtRequestedByName1').val() == "") {
+            toastr.error('Please enter Requested Person name');
+            $('#txtRequestedByName1').focus();
+            return false;
+        }
+        if ($('#dtEnrolledOn2').val() == "") {
+            toastr.error('Please select transaction date');
+            $('#dtEnrolledOn2').focus();
+            return false;
+        }
+        if (confirm("Are you sure? You want to change Mobile No")) {
+            var MemberData = [];
+            item = {}
+            item["GroupID"] = $("#hdnGroupId").val();
+            item["CustomerId"] = $("#hdnCustomerId1").val();
+            item["MobileNo"] = $("#txtNewMobileNo").val();
+            item["RequestedBy"] = $("#txtRequestedByName1").val();
+            item["RequestedForum"] = $('#ddlRequestedForum1 :selected').text();
+            item["RequestedOn"] = $("#dtEnrolledOn2").val();
+            console.log($("#dtEnrolledOn2").val());
+            if ($('#rbtnSMS1').is(":checked")) {
+                item["IsSMS"] = 1;
+            }
+            if ($('#rbtnNOSMS1').is(":checked")) {
+                item["IsSMS"] = 0;
+            }
+            MemberData.push(item);
+            var data = JSON.stringify(MemberData);
+          //  console.log(data)
+            $("#divLoader").show();
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("ChangeMemberMobile", "NameAndMobile")',//"/ITOperations/ChangeMemberMobile",
+                data: '{jsonData: ' + JSON.stringify(data) + '}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (result) {
+                    if (result.ResponseCode == "00") {
+                        toastr.success(result.ResponseMessage);
+                        $("#divLoader").hide();
+                        $('#sec2').find(':input').val('');
+                    }
+                    else {
+                        toastr.error(result.ResponseMessage);
+                        $("#divLoader").hide();
+                    }
+                },
+                error: function (result) {
+                    console.log(result.responseText)
+                    if (result.responseText == "True") {
+                        toastr.success("Mobile No Updated Successfully");
+                        $("#divLoader").hide();
+                        $('#sec2').find(':input').val('');
+                    }
+                    else {
+                        toastr.error('error occured while saving data');
+                        $("#divLoader").hide();
+                    }
+                }
+            });
+        }
+    }
+</script>
+<script src="~/Scripts/jquery-ui-1.12.1.js"></script>
+<script src="~/Scripts/jquery-ui-1.12.1.min.js"></script>
+<link href="~/Content/themes/base/jquery-ui.min.css" rel="stylesheet" />
+<link href="~/Content/themes/base/jquery-ui.css" rel="stylesheet" />

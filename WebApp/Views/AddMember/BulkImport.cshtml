@@ -1,8 +1,326 @@
 ﻿
 @{
     ViewBag.Title = "BulkImport";
-    Layout = "~/Views/Shared/_LayoutITOPS.cshtml";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <h2>BulkImport</h2>
+<div class="app-main__inner">
+    <div class="container" style="text-align:center;padding-bottom:20px;color:darkblue;">
+
+
+    </div>
+
+
+    <!--Add New Member-->
+
+    <div class="multisteps-form__panel shadow p-4 list-box bg-white" id="sec5" data-animation="scaleIn">
+        <h4 class="multisteps-form__title" style="color:blue;">Add New Member</h4><br />
+        <div class="multisteps-form__content">
+            <div>
+                <div style="margin-left:30px;margin-bottom:30px;margin-top:30px;">
+                    <input type="radio" name="addmember" checked id="rbtnNewMember" /> Add Single Member
+                    <input type="radio" name="addmember" style="margin-left:30px;" id="rbtnBulkUpload" /> Bulk Upload
+                </div>
+                <div style="height:650px;">
+                    <div id="dvSingleMember">
+                        <table border="2" cellpadding="5" cellspacing="5">
+                            <tr>
+                                <th colspan="2" style="padding:10px;text-align:center;">New Member Details</th>
+                            </tr>
+                            <tr>
+                                <td style="padding:10px;">Enter Mobile Number</td>
+                                <td style="padding:10px;">
+                                    <input type="number" id="txtNewMobileNoAdd" placeholder="Mobile No" class="input50" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="padding:10px;">Enter Card Number</td>
+                                <td style="padding:10px;">
+                                    <input type="number" id="txtNewCardNoAdd" placeholder="Card No" class="input50" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="padding:10px;">Enter Member Name</td>
+                                <td style="padding:10px;width:450px;">
+                                    <input type="text" id="txtNewFirstNameAdd" placeholder="First Name" class="input50" />
+                                    <input type="text" id="txtNewLastNameAdd" placeholder="Last Name" class="input50" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="padding:10px;">Select Gender</td>
+                                <td style="padding:10px;">
+                                    <input type="radio" name="gender" checked id="rbtnMale" /> Male
+                                    <input type="radio" name="gender" style="margin-left:5px;" id="rbtnFemale" /> Female
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="padding:10px;">Enter BirthDate</td>
+                                <td style="padding:10px;"><input type="date" id="dtBirthday" class="input50" /></td>
+                            </tr>
+                            <tr>
+                                <td style="padding:10px;">Select Source</td>
+                                <td style="padding:10px;">
+                                    <select name="ddlSource" id="ddlSource" class="input50">
+                                        <option value="2" selected>Walkin</option>
+                                        <option value="3">Referral</option>
+                                        <option value="4">Bulk Upload</option>
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="padding:10px;">Enrolling Outlet</td>
+                                <td style="padding:10px;width:200px;">
+                                    @Html.DropDownList("Outlet", new SelectList(ViewBag.OutletList, "Value", "Text"), "Select Outlet", htmlAttributes: new { @class = "input50", @id = "ddlOutletListAddMember" })
+
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="padding:10px;">Requested by</td>
+                                <td style="padding:10px;">
+                                    <input type="text" id="txtRequestedByNameAddMember" placeholder="Requested By" class="input50" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="padding:10px;">Requested on Forum</td>
+                                <td style="padding:10px;">
+                                    <select name="ddlRequestedForumAddMember" id="ddlRequestedForumAddMember" class="input50">
+                                        <option value="Whatsapp">Whatsapp</option>
+                                        <option value="Email">Email</option>
+                                        <option value="Phone">Phone</option>
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="padding:10px;">Transaction Date</td>
+                                <td style="padding:10px;"><input type="text" id="txtRequestedDateAddMember" class="input50" /></td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div id="dvBulkUpload" style="display:none;">
+                        <table border="2" cellpadding="5" cellspacing="5">
+                            <tr>
+                                <th colspan="2" style="padding:10px;text-align:center;">Bulk Upload</th>
+                            </tr>
+                            <tr>
+                                <td style="padding:10px;">Customer Bulk Upload data</td>
+
+                                <td style="padding:10px;">
+                                    <input type="file" id="file" class="input50" style="width:80%" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="padding:10px;">Upload Source Type</td>
+                                <td style="padding:10px;">
+                                    <select name="ddlSource" id="ddlSource" class="input50">
+                                        <option value="2" selected>Walkin</option>
+                                        <option value="3">Referral</option>
+                                        <option value="4">Bulk Upload</option>
+                                    </select>
+                                </td>
+
+                            </tr>
+                            <tr>
+                                <td style="padding:10px">
+                                    <a href="#" target="_blank" onclick="DownloadFile();" style="color: blue">DownLoad Sample File</a>
+                                </td>
+                                <td>
+                                    
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="button-row d-flex mt-5">
+            <button class="btn btn-primary ml-auto" type="button" title="Next" id="btnSaveMember" tabindex="20">Save</button>
+        </div>
+
+    </div>
+</div>
+
+
+
+<script>
+
+
+
+
+        function DownloadFile() {
+            var fileName = "../Downloads/Bulkupload.xlsx";
+            window.location = fileName;
+        }
+        //var tableData = [];
+        //var tableLogData = [];
+
+        $(document).ready(function () {
+
+            var today = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
+            // alert(today);
+            $("#txtRequestedDateAddMember").datepicker({
+
+                dateFormat: "yy-mm-dd",
+                maxDate: today,
+                // minDate: '-4'
+            });
+
+        $('#rbtnNewMember').on("click", function () {
+            $('#dvSingleMember').show();
+            $('#dvBulkUpload').hide();
+        });
+        $('#rbtnBulkUpload').on("click", function () {
+            $('#dvSingleMember').hide();
+            $('#dvBulkUpload').show();
+        });
+        $('#btnSaveMember').on("click", function () {
+            if ($('#rbtnNewMember').is(':checked')) {
+                AddSingleMemberData();
+            }
+            if ($('#rbtnBulkUpload').is(':checked')) {
+                BulkMemberData();
+            }
+        });
+    });
+
+         function AddSingleMemberData() {
+        if ($('#txtNewMobileNoAdd').val() == "") {
+            toastr.error('Please enter Mobile Number');
+            $('#txtNewMobileNoAdd').focus();
+            return false;
+        }
+        if ($('#txtNewFirstNameAdd').val() == "") {
+            toastr.error('Please enter Name');
+            $('#txtNewFirstNameAdd').focus();
+            return false;
+        }
+        if ($('#ddlOutletListAddMember').val() == "") {
+            toastr.error('Please select Outlet');
+            $('#ddlOutletListAddMember').focus();
+            return false;
+        }
+        if ($('#txtRequestedByNameAddMember').val() == "") {
+            toastr.error('Please enter Requested Person name');
+            $('#txtRequestedByNameAddMember').focus();
+            return false;
+        }
+        if ($('#txtRequestedDateAddMember').val() == "") {
+            toastr.error('Please select transaction date');
+            $('#txtRequestedDateAddMember').focus();
+            return false;
+        }
+
+        if (confirm("Are you sure? You want to Add Member")) {
+            var MemberData = [];
+            item = {}
+            item["GroupID"] = $("#hdnGroupId").val();
+            item["MobileNo"] = $("#txtNewMobileNoAdd").val();
+            item["CardNo"] = $("#txtNewCardNoAdd").val();
+            item["FullName"] = $("#txtNewFirstNameAdd").val() + " " + $("#txtNewLastNameAdd").val();
+            if ($('#rbtnMale').is(':checked')) {
+                item["Gender"] = "M";
+            }
+            if ($('#rbtnFemale').is(':checked')) {
+                item["Gender"] = "F";
+            }
+            item["BirthDay"] = $("#dtBirthday").val();
+            item["Source"] = $("#ddlSource").val();
+            item["OutletId"] = $("#ddlOutletListAddMember").val();
+            item["RequestedBy"] = $("#txtRequestedByNameAddMember").val();
+            item["RequestedDate"] = $("#txtRequestedDateAddMember").val();
+            item["RequestedForum"] = $('#ddlRequestedForumAddMember :selected').text();
+
+            MemberData.push(item);
+            var data = JSON.stringify(MemberData);
+            console.log(data)
+            $("#divLoader").show();
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("AddSingleMember", "AddMember")',//"/ITOperations/AddSingleMember",
+                data: '{jsonData: ' + JSON.stringify(data) + '}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (result) {
+                    if (result.ResponseCode == "00") {
+                        toastr.success(result.ResponseMessage);
+                        $("#divLoader").hide();
+                        $('#sec5').find(':input').val('');
+                    }
+                    else {
+                        toastr.error(result.ResponseMessage);
+                        $("#divLoader").hide();
+                    }
+                },
+                error: function (result) {
+                    console.log(result.responseText)
+                    if (result.responseText == "True") {
+                        toastr.success("Data Updated Successfully");
+                        $("#divLoader").hide();
+                    }
+                    else {
+                        toastr.error('error occured while saving data');
+                        $("#divLoader").hide();
+                    }
+                }
+            });
+        }
+    }
+
+    function BulkMemberData() {
+        $("#divLoader").show();
+            $.ajax({
+                url: '@Url.Action("AddBulkMemberData", "AddMember")',
+                type: "POST",
+
+                data: function () {
+                    var data = new FormData();
+                    data.append("GroupId",jQuery("#hdnGroupId").val());
+                    data.append("file", jQuery("#file").get(0).files[0]);
+                    return data;
+                }(),
+                contentType: false,
+                processData: false,
+                success: function (result) {
+
+                    if (result.ResponseSucessCount >= 0 && result.ResponseFailCount >= 0 && result.ResponseInValidFormatCount >= 0 && result.ResponseCode != -1) {
+
+                        toastr.success("Records Updated Successfully", result.ResponseSucessCount);
+                        toastr.success("Records Already Exist", result.ResponseFailCount);
+                        toastr.success("Records has Invalid Format", result.ResponseInValidFormatCount);
+                        $("#divLoader").hide();
+                           $('#sec5').find(':input').val('');
+                    }
+                    else {
+                        toastr.error("File Format is Not Valid", result.ResponseMessage);
+                      //  toastr.error('error occured while saving data');
+                        $("#divLoader").hide();
+                    }
+
+                },
+                error: function (result) {
+                    //console.log(result.responseText)
+                    //alert(result.ResponseSucessCount);
+                    //alert(result.ResponseFailCount);
+                    //if (result.ResponseSucessCount >= 0 && result.ResponseFailCount >=0) {
+                    //    toastr.success("No of Records Updated Successfully-", result.ResponseSucessCount);
+                    //    toastr.success("No of records Not Updated-", result.ResponseFailCount);
+                    //    $("#divLoader").hide();
+                    //}
+                    //else {
+                    //    toastr.error('error occured while saving data');
+                    //    $("#divLoader").hide();
+                    //}
+                }
+            });
+
+    }
+
+
+</script>
+<script src="~/Scripts/jquery-ui-1.12.1.js"></script>
+<script src="~/Scripts/jquery-ui-1.12.1.min.js"></script>
+<link href="~/Content/themes/base/jquery-ui.min.css" rel="stylesheet" />
+<link href="~/Content/themes/base/jquery-ui.css" rel="stylesheet" />
+
+
 
