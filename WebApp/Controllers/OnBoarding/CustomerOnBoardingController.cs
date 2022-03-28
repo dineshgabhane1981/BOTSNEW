@@ -38,6 +38,7 @@ namespace WebApp.Controllers.OnBoarding
             {
                 BOTS_TblPointsEarnRuleConfig objpointsearncofig = new BOTS_TblPointsEarnRuleConfig();
                 BOTS_TblEarnPointsSlabConfig objpointsslabconfig = new BOTS_TblEarnPointsSlabConfig();
+                BOTS_TblPointsBurnRuleConfig objpointsburncofig = new BOTS_TblPointsBurnRuleConfig();
                 List<SelectListItem> refferedname = new List<SelectListItem>();
 
                 SelectListItem item = new SelectListItem();
@@ -116,6 +117,7 @@ namespace WebApp.Controllers.OnBoarding
                 objData.lstearnpoint = FillEarnPointLevel();
                 objData.objpointsearnruleconfig = objpointsearncofig;
                 objData.objearnpointslab = objpointsslabconfig;
+                objData.objpointsburnruleconfig = objpointsburncofig;
             }
             catch (Exception ex)
             {
@@ -277,7 +279,6 @@ namespace WebApp.Controllers.OnBoarding
             //return RedirectToAction("Index", "CustomerOnBoarding", groupId);
             return RedirectToAction("Index", "CustomerOnBoarding", new { @groupId = groupId });
         }
-
 
         [HttpPost]
         public JsonResult GetBillingPartnerProduct(string BPId)
@@ -504,7 +505,8 @@ namespace WebApp.Controllers.OnBoarding
                         objSMSConfig.SMSUsername = Convert.ToString(item["SMSUserName"]);
                         objSMSConfig.SMSPassword = Convert.ToString(item["SMSPassword"]);
                         objSMSConfig.SMSlink = Convert.ToString(item["SMSLink"]);
-                        
+                        //objSMSConfig.DLTStatus = "Submitted";
+
                         SMSTemplate objSMSTemplate1 = new SMSTemplate();
                         objSMSTemplate1.MessageId = 100;
                         if (!string.IsNullOrEmpty(Convert.ToString(item["SMSEnrollmentId"])))
@@ -663,6 +665,23 @@ namespace WebApp.Controllers.OnBoarding
             return new JsonResult() { Data = status, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
 
+        public ActionResult SendCommunicationToDLT(string GroupId)
+        {
+            bool status = false;
+            try
+            {
+                var userDetails = (CustomerLoginDetail)Session["UserSession"];
+                
+                status = OBR.SendCommunicationToDLT(GroupId, userDetails.LoginId);
+
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "SaveCommunicationConfigController");
+            }
+            return new JsonResult() { Data = status, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
+        }
+
         public ActionResult SaveDLCLinkConfig(string jsonData)
         {
             bool status = false;
@@ -712,6 +731,7 @@ namespace WebApp.Controllers.OnBoarding
             }
             return new JsonResult() { Data = status, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
+        
         public JsonResult GetDLCLinkData(string groupId)
         {
             BOTS_TblDLCLinkConfig objData = new BOTS_TblDLCLinkConfig();
@@ -732,7 +752,6 @@ namespace WebApp.Controllers.OnBoarding
             lstearn.Add(new EarnPointLevel { EarnPointLevelId = "brand", EarnPointLevelName = "Brand" });
             return lstearn;
         }
-
 
         public ActionResult AddEarnRule(string EarnRule, string BlockOnearnrule, string Redemptionrule)
         {
@@ -760,10 +779,6 @@ namespace WebApp.Controllers.OnBoarding
                 string CommonSlabdirectortele = "";
                 decimal commonlabdirectortelescopic = 0;
                 DataSet ds = new DataSet();
-                //DataTable dt = new DataTable();
-                //DataTable dt1 = new DataTable();
-                //ds.Tables.Add(dt);
-                //ds.Tables.Add(dt1);
                 foreach (Dictionary<string, object> item in objEarnrule)
                 {
                     objpointearn.CategoryId = Convert.ToString(item["CategoryId"]);
@@ -1065,7 +1080,6 @@ namespace WebApp.Controllers.OnBoarding
             return new JsonResult() { Data = status, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
 
-
         public ActionResult SaveVelocityCheckConfig(string jsonData)
         {
             bool status = false;
@@ -1227,13 +1241,13 @@ namespace WebApp.Controllers.OnBoarding
 
         }
 
-        public ActionResult SaveBirthdayAndAnniversaryConfig(string jsonData)
+        public ActionResult SaveCampaignOtherConfig(string jsonData)
         {
             bool status = false;
             try
             {
                 var userDetails = (CustomerLoginDetail)Session["UserSession"];
-                BOTS_TblCampaignBirthdayAnniversaryConfig objData = new BOTS_TblCampaignBirthdayAnniversaryConfig();
+                BOTS_TblCampaignOtherConfig objData = new BOTS_TblCampaignOtherConfig();
                 JavaScriptSerializer json_serializer = new JavaScriptSerializer();
                 json_serializer.MaxJsonLength = int.MaxValue;
                 object[] objBirthdayAndAnniversaryConfigData = (object[])json_serializer.DeserializeObject(jsonData);
@@ -1273,7 +1287,7 @@ namespace WebApp.Controllers.OnBoarding
                         objData.AddedBy = userDetails.LoginId;
                         objData.AddedDate = DateTime.Now;
                     }
-                    status = OBR.SaveBirthdayAndAnniversaryConfig(objData);
+                    status = OBR.SaveCampaignOtherConfig(objData);
                 }
             }
             catch (Exception ex)
@@ -1284,10 +1298,10 @@ namespace WebApp.Controllers.OnBoarding
             return new JsonResult() { Data = status, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
 
-        public JsonResult GetBirthdayAndAnniversaryConfig(string GroupId, string Type)
+        public JsonResult GetCampaignOtherConfig(string GroupId, string Type)
         {
-            BOTS_TblCampaignBirthdayAnniversaryConfig objData = new BOTS_TblCampaignBirthdayAnniversaryConfig();
-            objData = OBR.GetCampaignBirthdayAnniversaryConfig(GroupId, Type);
+            BOTS_TblCampaignOtherConfig objData = new BOTS_TblCampaignOtherConfig();
+            objData = OBR.GetCampaignOtherConfig(GroupId, Type);
             return new JsonResult() { Data = objData, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
 
@@ -1350,12 +1364,17 @@ namespace WebApp.Controllers.OnBoarding
             List<BOTS_TblCampaignInactive> lstExistingData = new List<BOTS_TblCampaignInactive>();
             lstExistingData = OBR.GetInactiveConfigData(GroupId, Type);
             return new JsonResult() { Data = lstExistingData, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
-        }
-        public OnBoardingSalesViewModel GetEarnBurnDataAndUploaddata(string GroupId)
+        }     
+
+
+        public JsonResult GetEarnBurnDataAndUploaddata(string Groupid)
         {
             OnBoardingSalesViewModel objonboardingviewmodel = new OnBoardingSalesViewModel();
-            // objonboardingviewmodel = OBR.
-            return objonboardingviewmodel;
+            objonboardingviewmodel.objpointsburnruleconfig = OBR.GetAllBurnRuleData(Groupid);
+            objonboardingviewmodel.objpointsearnruleconfig = OBR.GetAllEarnRuleData(Groupid);
+            objonboardingviewmodel.lstearnpointslabconfig = OBR.GetPointsSlabData(Groupid);
+            return new JsonResult() { Data = objonboardingviewmodel, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
+
         }
 
     }

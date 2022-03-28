@@ -6,3 +6,234 @@
 
 <h2>Index</h2>
 
+<!--Disable SMS-->
+<div class="multisteps-form__panel shadow p-4 list-box bg-white" id="sec8" data-animation="scaleIn">
+    <h4 class="multisteps-form__title" style="color:blue;">Disable SMS</h4><br />
+    <div class="multisteps-form__content">
+        <div>
+            <label style="padding-right:5px;padding-top:10px;">Enter Mobile Number </label>
+            <input type="number" id="txtMobileNoSMS" class="input50" />
+
+            <label style="padding-right:30px;padding-top:10px;padding-left:30px;"><b>(OR)</b> </label>
+
+            <label style="padding-right:5px;padding-top:10px;">Enter Card Number </label>
+            <input type="number" id="txtCardNoSMS" class="input50" />
+            <button type="button" id="btnSearchMemberSMS" style="margin-left:15px;margin-top:10px;" class="btn btn-primary">Go</button>
+        </div>
+        <div>
+            <div style="margin-left:30px;margin-bottom:30px;margin-top:30px;">
+                <input type="radio" name="first_item5" id="rbtnSMSSMS" /> Send SMS
+                <input type="radio" name="first_item5" style="margin-left:30px;" checked id="rbtnNOSMSSMS" /> Don't Send SMS
+            </div>
+            <div style="display:flex;">
+                <input type="hidden" id="hdnCustomerIdSMS" />
+                <table border="2" cellpadding="5" cellspacing="5">
+                    <tr>
+                        <th colspan="2" style="padding:10px;text-align:center;">Existing Member Details</th>
+                    </tr>
+                    <tr>
+                        <td style="padding:10px;">Member Name</td>
+                        <td style="padding:10px;width:200px;"><span style="color:red;" id="spnMemberNameSMS"></span></td>
+                    </tr>
+                    <tr>
+                        <td style="padding:10px;">Mobile No</td>
+                        <td style="padding:10px;"><span id="spnMobilenoSMS"></span></td>
+                    </tr>
+                    <tr>
+                        <td style="padding:10px;">Card No</td>
+                        <td style="padding:10px;"><span id="spnCardNoSMS"></span></td>
+                    </tr>
+                    <tr>
+                        <td style="padding:10px;">Points Balance</td>
+                        <td style="padding:10px;"><span id="spnPtBalanceSMS"></span></td>
+                    </tr>
+                    <tr>
+                        <td style="padding:10px;">Enrolled Outlet</td>
+                        <td style="padding:10px;"><span id="spnEnrolledOutletSMS"></span></td>
+                    </tr>
+                    <tr>
+                        <td style="padding:10px;">Enrolled On</td>
+                        <td style="padding:10px;"><span id="spnEnrolledOnSMS"></span></td>
+                    </tr>
+
+                </table>
+
+                <table border="2" cellpadding="5" cellspacing="5" id="tblUpdateDataSMS" style="margin-left:50px;display:none;">
+                    <tr>
+                        <th colspan="2" style="padding:10px;text-align:center;">Disable Promotional SMS </th>
+                    </tr>
+                    <tr>
+                        <td style="padding:10px;">Disable</td>
+                        <td style="padding:10px;">
+                            <select name="ddlDisableSMS" id="ddlDisableSMS" class="input50">
+                                <option value="1">Yes</option>
+                                <option value="0">No</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding:10px;">Requested by</td>
+                        <td style="padding:10px;">
+                            <input type="text" id="txtRequestedByNameSMS" placeholder="Requested By" class="input50" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding:10px;">Requested on Forum</td>
+                        <td style="padding:10px;">
+                            <select name="ddlRequestedForumSMS" id="ddlRequestedForumSMS" class="input50">
+                                <option value="Whatsapp">Whatsapp</option>
+                                <option value="Email">Email</option>
+                                <option value="Phone">Phone</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding:10px;">Transaction Date</td>
+                        <td style="padding:10px;"><input type="text" id="txtRequestedDateSMS" class="input50" /></td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="button-row d-flex mt-4">
+        <button class="btn btn-primary ml-auto" type="button" title="Next" id="btnSaveSMS" tabindex="20">Save</button>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+
+        var today = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
+        // alert(today);
+        $("#txtRequestedDateSMS").datepicker({
+
+            dateFormat: "yy-mm-dd",
+            maxDate: today,
+            // minDate: '-4'
+        });
+    });
+        $('#btndissms').on("click", function () {
+            GetClearAllTab();
+        });
+        $('#btnSearchMemberSMS').on("click", function () {
+            GetSMSData();
+        });
+        $('#btnSaveSMS').on("click", function () {
+            SaveSMSData();
+        });
+
+    function GetSMSData() {
+        if ($('#txtMobileNoSMS').val() == "" && $('#txtCardNoSMS').val() == "") {
+            toastr.error('Please enter Mobile Number OR Card Number');
+            return false
+        }
+        if ($('#txtMobileNoSMS').val() != "" && $('#txtCardNoSMS').val() != "") {
+            toastr.error('Please enter Mobile Number OR Card Number');
+            return false
+        }
+        $("#divLoader").show();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("GetChangeNameData", "SMSAndSecurity")',//"/ITOperations/GetChangeNameData",
+            data: '{MobileNo: ' + JSON.stringify($('#txtMobileNoSMS').val()) + ',CardNo: ' + JSON.stringify($('#txtCardNoSMS').val()) + '}',
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (result) {
+                if (result.MemberName != null) {
+                    $("#spnMemberNameSMS").text(result.MemberName);
+                    $("#spnMobilenoSMS").text(result.MobileNo);
+                    $("#spnCardNoSMS").text(result.CardNo);
+                    $("#spnPtBalanceSMS").text(result.PointsBalance);
+                    $("#spnEnrolledOutletSMS").text(result.EnrolledOutletName);
+                    $("#spnEnrolledOnSMS").text(result.EnrolledOn);
+                    $("#hdnCustomerIdSMS").val(result.CustomerId);
+
+                    $('#txtRequestedByNameSMS').val("");
+                    $('#ddlRequestedForumSMS').prop('selectedIndex', 0);
+                    $("#tblUpdateDataSMS").show();
+                }
+                else {
+                    toastr.error('Member not present. Please check entered Mobile Number OR Card Number');
+                    $("#spnMemberNameSMS").text("");
+                    $("#spnMobilenoSMS").text("");
+                    $("#spnCardNoSMS").text("");
+                    $("#spnPtBalanceSMS").text("");
+                    $("#spnEnrolledOutletSMS").text("");
+                    $("#spnEnrolledOnSMS").text("");
+                    $("#hdnCustomerIdSMS").val("");
+
+
+                    $('#txtRequestedByNameSMS').val("");
+                    $('#ddlRequestedForumSMS').prop('selectedIndex', 0);
+                    $("#tblUpdateDataSMS").hide();
+                }
+                $("#divLoader").hide();
+            },
+            error: function (result) {
+                console.log(result.responseText)
+                $("#divLoader").hide();
+            }
+        });
+    }
+
+    function SaveSMSData() {
+
+        if ($('#txtRequestedByNameSMS').val() == "") {
+            toastr.error('Please enter Requested Person name');
+            $('#txtRequestedByName').focus();
+            return false;
+        }
+        if ($('#txtRequestedDateSMS').val() == "") {
+            toastr.error('Please enter transaction date');
+            $('#txtRequestedDateSMS').focus();
+            return false;
+        }
+        if (confirm("Are you sure? You want to change SMS Setting")) {
+            var MemberData = [];
+            item = {}
+            item["GroupID"] = $("#hdnGroupId").val();
+            item["CustomerId"] = $("#hdnCustomerIdSMS").val();
+            item["Disable"] = $("#ddlDisableSMS").val();
+            item["RequestedBy"] = $("#txtRequestedByNameSMS").val();
+            item["RequestedForum"] = $('#ddlRequestedForumSMS :selected').text();
+            item["RequestedDate"] = $("#txtRequestedDateSMS").val();
+
+            if ($('#rbtnSMSSMS').is(":checked")) {
+                item["IsSMS"] = 1;
+            }
+            if ($('#rbtnNOSMSSMS').is(":checked")) {
+                item["IsSMS"] = 0;
+            }
+            MemberData.push(item);
+            var data = JSON.stringify(MemberData);
+            console.log(data)
+            $("#divLoader").show();
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("ChangeSMSDetails", "SMSAndSecurity")',//"/ITOperations/ChangeSMSDetails",
+                data: '{jsonData: ' + JSON.stringify(data) + '}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (result) {
+                    console.log(111)
+                },
+                error: function (result) {
+                    console.log(result.responseText)
+                    if (result.responseText == "True") {
+                        toastr.success("Member Name Updated Successfully");
+                        $("#divLoader").hide();
+                    }
+                    else {
+                        toastr.error('error occured while saving data');
+                        $("#divLoader").hide();
+                    }
+                }
+            });
+        }
+    }
+</script>
+
+<script src="~/Scripts/jquery-ui-1.12.1.js"></script>
+<script src="~/Scripts/jquery-ui-1.12.1.min.js"></script>
+<link href="~/Content/themes/base/jquery-ui.min.css" rel="stylesheet" />
+<link href="~/Content/themes/base/jquery-ui.css" rel="stylesheet" />

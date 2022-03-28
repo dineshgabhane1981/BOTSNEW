@@ -1,4 +1,4 @@
-namespace BOTS_BL.Models.OnBoarding
+namespace BOTS_BL.Models
 {
     using System;
     using System.Collections.Generic;
@@ -6,7 +6,7 @@ namespace BOTS_BL.Models.OnBoarding
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Data.Entity.Spatial;
 
-    public partial class BOTS_TblCampaignBirthdayAnniversaryConfig
+    public partial class BOTS_TblCampaignOtherConfig
     {
         public int Id { get; set; }
 
@@ -29,9 +29,27 @@ namespace BOTS_BL.Models.OnBoarding
 
         public string IntroScript1 { get; set; }
 
+        [StringLength(100)]
+        public string TemplateId1 { get; set; }
+
+        [StringLength(250)]
+        public string TemplateName1 { get; set; }
+
+        [StringLength(100)]
+        public string TemplateType1 { get; set; }
+
         public int? IntroDays2 { get; set; }
 
         public string IntroScript2 { get; set; }
+
+        [StringLength(100)]
+        public string TemplateId2 { get; set; }
+
+        [StringLength(250)]
+        public string TemplateName2 { get; set; }
+
+        [StringLength(100)]
+        public string TemplateType2 { get; set; }
 
         public int? ReminderDays1 { get; set; }
 
@@ -40,6 +58,15 @@ namespace BOTS_BL.Models.OnBoarding
 
         public string ReminderScript1 { get; set; }
 
+        [StringLength(100)]
+        public string TemplateId3 { get; set; }
+
+        [StringLength(250)]
+        public string TemplateName3 { get; set; }
+
+        [StringLength(100)]
+        public string TemplateType3 { get; set; }
+
         public int? ReminderDays2 { get; set; }
 
         [StringLength(50)]
@@ -47,10 +74,28 @@ namespace BOTS_BL.Models.OnBoarding
 
         public string ReminderScript2 { get; set; }
 
+        [StringLength(100)]
+        public string TemplateId4 { get; set; }
+
+        [StringLength(250)]
+        public string TemplateName4 { get; set; }
+
+        [StringLength(100)]
+        public string TemplateType4 { get; set; }
+
         [StringLength(50)]
         public string OnDayType { get; set; }
 
         public string OnDayScript { get; set; }
+
+        [StringLength(100)]
+        public string TemplateId5 { get; set; }
+
+        [StringLength(250)]
+        public string TemplateName5 { get; set; }
+
+        [StringLength(100)]
+        public string TemplateType5 { get; set; }
 
         [StringLength(50)]
         public string AddedBy { get; set; }

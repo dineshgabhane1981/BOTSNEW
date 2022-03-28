@@ -52,6 +52,9 @@ namespace BOTS_BL.Models.OnBoarding
 
         public DateTime? AddedDate { get; set; }
         public DateTime? UpdatedDate { get; set; }
+        
+        [Column(TypeName = "numeric")]
+        public decimal? EarnPointSlabValue { get; set; }
 
     }
 }

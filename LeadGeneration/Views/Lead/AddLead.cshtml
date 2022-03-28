@@ -179,14 +179,17 @@
             var dt = $("#hdnLeadId").val();
             EnableDisableData();
         }
-        $('#ddlmeetingtype option').each(function (item) {
+        
+        $('#ddlmeetingtype option').each(function (item) {           
             if ($("#hdnLeadId").val() != 0) {
-                if (item == 0 || item == 1) {
-                    $("#ddlmeetingtype option[value*='" + item + "']").prop('disabled', true);
-                    $("#ddlmeetingtype option[value*='" + item + "']").addClass('optionClass');
+                if ($('#ddlmeetingtype').val() == '1stcall') {                                         
+                        $("#ddlmeetingtype option[value='1stcall']").prop("disabled", true); 
+                }
+                if ($('#ddlmeetingtype').val() == '1stMeeting') {
+                    $("#ddlmeetingtype option[value='1stcall']").prop("disabled", true);
+                    $("#ddlmeetingtype option[value='1stMeeting']").prop("disabled", true);
                 }
             }
-
         });
         RemoveRedBorder();
     });
