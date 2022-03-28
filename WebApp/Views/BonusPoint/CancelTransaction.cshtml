@@ -3,6 +3,371 @@
     ViewBag.Title = "CancelTransaction";
     Layout = "~/Views/Shared/_LayoutITOPS.cshtml";
 }
+<script src="~/Content/scriptSteps.js"></script>
+<script src="~/Scripts/jquery-ui-1.12.1.js"></script>
+<script src="~/Scripts/jquery-ui-1.12.1.min.js"></script>
+<link href="~/Content/themes/base/jquery-ui.min.css" rel="stylesheet" />
+<link href="~/Content/themes/base/jquery-ui.css" rel="stylesheet" />
 
-<h2>CancelTransaction</h2>
 
+
+<input type="hidden" id="hdnGroupId" />
+<!--Cancel Txn-->
+<div class="multisteps-form__panel shadow p-4 list-box bg-white" style="height:auto !important;" id="sec7" data-animation="scaleIn">
+    <h4 class="multisteps-form__title" style="color:blue;">Cancel Txn</h4><br />
+    <div class="multisteps-form__content">
+        <input type="hidden" id="hdnGroupId" />
+        <div>
+            <label style="padding-right:5px;padding-top:10px;">Enter Mobile Number </label>
+            <input type="number" id="txtMobileNoCancel" class="input50" />
+
+            <label style="padding-right:20px;padding-top:10px;padding-left:20px;"><b>(OR)</b> </label>
+
+            <label style="padding-right:5px;padding-top:10px;">Enter Invoice Number </label>
+            <input type="text" id="txtInvoiceNoCancel" class="input50" />
+            <button type="button" id="btnSearchMemberCancel" style="margin-left:15px;margin-top:10px;" class="btn btn-primary">Go</button>
+        </div>
+
+        <div style="display:flex; height:auto !important;margin-top:50px;">
+            <input type="hidden" id="hdnCustomerId4" />
+            <table border="2" cellpadding="5" cellspacing="5">
+                <tr>
+                    <th colspan="2" style="padding:10px;text-align:center;">Existing Member Details</th>
+                </tr>
+                <tr>
+                    <td style="padding:10px;">Member Name</td>
+                    <td style="padding:10px;width:200px;"><span style="color:red;" id="spnMemberNameCancel"></span></td>
+                </tr>
+                <tr>
+                    <td style="padding:10px;">Mobile No</td>
+                    <td style="padding:10px;"><span id="spnMobilenoCancel"></span></td>
+                </tr>
+                <tr>
+                    <td style="padding:10px;">Card No</td>
+                    <td style="padding:10px;"><span id="spnCardNoCancel"></span></td>
+                </tr>
+                <tr>
+                    <td style="padding:10px;">Points Balance</td>
+                    <td style="padding:10px;"><span id="spnPtBalanceCancel"></span></td>
+                </tr>
+
+            </table>
+
+            <table border="2" cellpadding="5" cellspacing="5" id="tblUpdateDataCancel" style="margin-left:50px;display:none;">
+                <tr>
+                    <th colspan="2" style="padding:10px;text-align:center;">Transaction Details</th>
+                </tr>
+                <tr>
+                    <td style="padding:10px;width:200px;">Transaction</td>
+                    <td style="padding:10px;width:200px;">
+                        <span id="spnTransactionCancel"></span>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="padding:10px;width:200px;">Invoice Number</td>
+                    <td style="padding:10px;width:200px;">
+                        <span id="spnInvoiceNoCancel"></span>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="padding:10px;width:200px;">Invoice Amount</td>
+                    <td style="padding:10px;width:200px;">
+                        <span id="spnInvoiceAmtCancel"></span>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="padding:10px;width:200px;">Points</td>
+                    <td style="padding:10px;width:200px;">
+                        <span id="spnPointsCancel"></span>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="padding:10px;">Transacting Outlet</td>
+                    <td style="padding:10px;">
+                        <span id="spnTransactionOutletCancel"></span>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="padding:10px;">Date / Time</td>
+                    <td style="padding:10px;">
+                        <span id="spnTransactionDateTimeCancel"></span>
+                        <span style="display:none;" id="spnTransactionDateTimeCancelOriginal"></span>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td style="padding:10px;">Requested by</td>
+                    <td style="padding:10px;">
+                        <input type="text" id="txtRequestedByNameCancel1" placeholder="Requested By" class="input50" />
+                    </td>
+                </tr>
+                <tr>
+                    <td style="padding:10px;">Requested on Forum</td>
+                    <td style="padding:10px;">
+                        <select name="ddlRequestedForumCancel1" id="ddlRequestedForumCancel1" class="input50">
+                            <option value="Whatsapp">Whatsapp</option>
+                            <option value="Email">Email</option>
+                            <option value="Phone">Phone</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="padding:10px;">Transaction Date</td>
+                    <td style="padding:10px;"><input type="text" id="txtRequestedDateCancel1" class="input50" /></td>
+                </tr>
+            </table>
+        </div>
+        <div class="button-row d-flex mt-5" style="display:none !important;" id="dvDeleteBtn">
+            <button class="btn btn-primary ml-auto" type="button" title="Delete" id="btnCancelTxn" tabindex="20">Delete</button>
+        </div>
+        <div class="row mt-3" id="dvActivityData" style="height:800px;">
+            <div class="table-responsive">
+                <table class="table" id="activityTable">
+                    <thead style="text-align:center;">
+                        <tr>
+                            <th scope="col">Date / Time</th>
+                            <th scope="col">Invoice No</th>
+                            <th scope="col">Invoice Amt</th>
+                            <th scope="col">Txn Type</th>
+                            <th scope="col">Points</th>
+                            <th scope="col">Txn Outlet</th>
+                            <th scope="col">Delete Transaction</th>
+                        </tr>
+                    </thead>
+                    <tbody style="text-align:center;">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script type="text/javascript">
+    $("#hdnGroupId").val(@Html.Raw(ViewBag.GroupId));
+
+    var tableData = [];
+    //<a href="~/Content/bootstrap.css.map">~/Content/bootstrap.css.map</a>
+    var tableLogData = [];
+    $(document).ready(function () {
+        var today = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
+        $('#btnSearchMemberCancel').on("click", function () {
+            GetTransactionCancelData();
+        });
+        $("#txtRequestedDateCancel1").datepicker({
+            
+            dateFormat: "yy-mm-dd",
+            maxDate: today,
+            // minDate: '-4'
+        });
+        $('#btnCancelTxn').on("click", function () {
+            DeleteTxnData();
+        });
+    });
+   
+    
+
+    function DrawTable() {
+        var table1 = $('#activityTable').DataTable();
+        table1.destroy();
+
+        var table = $('#activityTable').DataTable({
+            "data": tableData,
+            "paging": true,
+            "ordering": false,
+            "info": true,
+            "bFilter": true,
+            "pageLength": 10,
+            "pagingType": "simple_numbers",
+            "columns": [
+                { data: "Datetime" },
+                { data: "InvoiceNo" },
+                { data: "InvoiceAmt" },
+                { data: "TransactionName" },
+                { data: "Points" },
+                { data: "OutletName" },
+                {
+
+                    "mData": "InvoiceNo",
+                    "mRender": function (data, type, row) {
+                        return '<a href="#" onclick="GetTransactionCancelData(\'' + data + '\')" class="login" title="Edit"><img src ="../Content/assets/images/delete.png" /></a>';
+                        //return '<button href="#"' + 'id="' + data + '">Edit</button>';
+                    }
+                }
+            ],
+            aoColumnDefs: [
+                {
+                    bSortable: false,
+                    aTargets: []
+                }
+            ]
+        });
+        $('#activityTable_filter').hide();
+        $('#txtSearch').on('keyup', function () {
+
+            $.fn.dataTable.ext.search.push(function (settings, searchData) {
+                var term = $('#txtSearch').val().toLowerCase()
+                for (var i = 0; i < searchData.length; i++) {
+                    if (searchData[i].toLowerCase().indexOf(term) >= 0) {
+                        return true;
+                    }
+                }
+                return false;
+            });
+            var table = $('#activityTable').DataTable();
+            table.draw();
+        });
+    }
+
+    function GetTransactionCancelData(InvoiceNo) {
+        var InvNo = "";
+        if (InvoiceNo == null) {
+            if ($('#txtMobileNoCancel').val() == "" && $('#txtInvoiceNoCancel').val() == "") {
+                toastr.error('Please enter Mobile Number OR Invoice Number');
+                return false
+            }
+            if ($('#txtMobileNoCancel').val() != "" && $('#txtInvoiceNoCancel').val() != "") {
+                toastr.error('Please enter Mobile Number OR Invoice Number');
+                return false
+            }
+            if ($('#txtInvoiceNoCancel').val() != "") {
+                InvNo = $('#txtInvoiceNoCancel').val();
+            }
+        }
+        else {
+            InvNo = InvoiceNo;
+        }
+
+
+        $("#divLoader").show();
+
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("GetCancelTxnData", "BonusPoint")',//"/ITOperations/GetCancelTxnData",
+            data: '{GroupId: ' + JSON.stringify($('#hdnGroupId').val()) + ', MobileNo: ' + JSON.stringify($('#txtMobileNoCancel').val()) + ',InvoiceNo: ' + JSON.stringify(InvNo) + '}',
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (result) {
+                if (result.objCustomerDetail != null) {
+                    $("#spnMemberNameCancel").text(result.objCustomerDetail.CustomerName);
+                    $("#spnMobilenoCancel").text(result.objCustomerDetail.MobileNo);
+                    $("#spnCardNoCancel").text(result.objCustomerDetail.CardNumber);
+                    $("#spnPtBalanceCancel").text(result.objCustomerDetail.Points);
+                    
+                    if (result.objCancelTxnModel != null) {
+
+                        $("#spnTransactionCancel").text(result.objCancelTxnModel.TransactionName);
+                        $("#spnInvoiceNoCancel").text(result.objCancelTxnModel.InvoiceNo);
+                        var index = result.objCancelTxnModel.InvoiceAmt.toString().indexOf('.');
+                        if (index > -1) {
+                            $("#spnInvoiceAmtCancel").text(result.objCancelTxnModel.InvoiceAmt);
+                        }
+                        else {
+                            $("#spnInvoiceAmtCancel").text(result.objCancelTxnModel.InvoiceAmt+".00");
+                        }
+                        $("#spnPointsCancel").text(result.objCancelTxnModel.Points);
+                        $("#spnTransactionOutletCancel").text(result.objCancelTxnModel.OutletName);
+                        $("#spnTransactionDateTimeCancel").text(result.objCancelTxnModel.Datetime);
+                        $("#spnTransactionDateTimeCancelOriginal").text(result.objCancelTxnModel.DatetimeOriginal);
+
+                        $('#ddlRequestedForumCancel1').prop('selectedIndex', 0);
+                        $("#tblUpdateDataCancel").show();
+                        $("#dvDeleteBtn").show();
+                        tableData.length = 0;
+                        DrawTable();
+                        
+                    }
+                    
+                    
+                    if (result.lstCancelTxnModel != null) {
+                        tableData.length = 0;
+                        $.map(result.lstCancelTxnModel, function (item) {
+                            optionItem = {}
+                            optionItem["Datetime"] = item.Datetime;
+                            optionItem["InvoiceNo"] = item.InvoiceNo;
+                            optionItem["InvoiceAmt"] = item.InvoiceAmt;
+                            optionItem["TransactionName"] = item.TransactionName;
+                            optionItem["Points"] = item.Points;
+                            optionItem["OutletName"] = item.OutletName;
+                            tableData.push(optionItem);
+                        });
+                        
+                        DrawTable();
+                        $("#tblUpdateDataCancel").hide();
+                        $("#dvDeleteBtn").attr('style', 'display:none !important');
+                       
+                    }
+                    
+                }
+                else {
+                    toastr.error('Transaction not present. Please check entered Mobile Number OR Invoice Number');
+                    $("#tblUpdateDataCancel").hide();
+                    
+                }
+                $("#divLoader").hide();
+            },
+            error: function (result) {
+                console.log(result.responseText)
+                $("#divLoader").hide();
+            }
+        });
+    }
+
+     function DeleteTxnData(InvoiceNo) {
+        if ($('#txtRequestedByNameCancel1').val() == "") {
+            toastr.error('Please enter Requested Person name');
+            $('#txtRequestedByNameCancel1').focus();
+            return false;
+        }
+        if ($('#ddlRequestedForumCancel1').val() == "") {
+            toastr.error('Please select forum');
+            $('#ddlRequestedForumCancel1').focus();
+            return false;
+        }
+        if ($('#txtRequestedDateCancel1').val() == "") {
+            toastr.error('Please select transaction date');
+            $('#txtRequestedDateCancel1').focus();
+            return false;
+        }
+        var MobileNo = $("#spnMobilenoCancel").text();
+        var InvoiceAmt = $("#spnInvoiceAmtCancel").text();
+        var ip_Date = $("#spnTransactionDateTimeCancelOriginal").text();
+        if (confirm("Are you sure? You want to delete Transaction")) {
+            if (InvoiceNo == null) {
+                InvoiceNo = $('#spnInvoiceNoCancel').text();
+            }
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("DeleteTransaction", "BonusPoint")',//"/ITOperations/DeleteTransaction",
+                data: '{GroupId: ' + JSON.stringify($('#hdnGroupId').val()) + ', InvoiceNo: ' + JSON.stringify(InvoiceNo) + ', MobileNo: ' + JSON.stringify(MobileNo) + ', InvoiceAmt: ' + JSON.stringify(InvoiceAmt) + ', ip_Date: ' + JSON.stringify(ip_Date) + ', RequestedBy: ' + JSON.stringify($('#txtRequestedByNameCancel1').val()) + ', RequestedForum: ' + JSON.stringify($('#ddlRequestedForumCancel1').val()) + ', RequestedDate: ' + JSON.stringify($('#txtRequestedDateCancel1').val()) + '}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (result) {
+                    console.log(111)
+                    console.log(result.responseText)
+                    if (result.ResponseCode == "00") {
+                        toastr.success("Transaction Deleted Successfully");
+                        $("#divLoader").hide();
+
+                    }
+                    else {
+                        toastr.error(result.ResponseMessage);
+                        $("#divLoader").hide();
+                    }
+                },
+                error: function (result) {
+                    console.log(result.responseText)
+                    if (result.ResponseCode == "00") {
+                        toastr.success("Transaction Deleted Successfully");
+                        $("#divLoader").hide();
+
+                    }
+                    else {
+                        toastr.error(result.ResponseMessage);
+                        $("#divLoader").hide();
+                    }
+                }
+            });
+        }
+    }
+</script>
