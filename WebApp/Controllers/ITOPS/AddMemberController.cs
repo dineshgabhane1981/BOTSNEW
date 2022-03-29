@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity.Migrations;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Mail;
@@ -29,7 +30,7 @@ namespace WebApp.Controllers.ITOPS
         {
             return View();
         }
-       
+
 
 
         public ActionResult BulkImport()
@@ -37,8 +38,8 @@ namespace WebApp.Controllers.ITOPS
             var groupId = (string)Session["GroupId"];
             try
             {
-                
-                
+
+
                 string connStr = objCustRepo.GetCustomerConnString(groupId);
                 var lstOutlet = RR.GetOutletList(groupId, connStr);
                 //var lstBrand = RR.GetBrandList(groupId, connStr);
@@ -60,7 +61,7 @@ namespace WebApp.Controllers.ITOPS
         {
             SPResponse result = new SPResponse();
             string GroupId = "";
-            
+
             try
             {
                 var groupId = (string)Session["GroupId"];
@@ -73,7 +74,7 @@ namespace WebApp.Controllers.ITOPS
 
                 foreach (Dictionary<string, object> item in objData)
                 {
-                    
+
                     //GroupId = Convert.ToString(item["GroupID"]);
                     objCustomer.MobileNo = Convert.ToString(item["MobileNo"]);
                     objCustomer.CardNumber = Convert.ToString(item["CardNo"]);
@@ -90,7 +91,7 @@ namespace WebApp.Controllers.ITOPS
                     objCustomer.Status = "00";
 
                     objAudit.GroupId = groupId;
-                    
+
                     objAudit.RequestedFor = "User Added";
                     objAudit.RequestedEntity = "User Added - " + objCustomer.MobileNo;
                     objAudit.RequestedBy = Convert.ToString(item["RequestedBy"]);
@@ -122,54 +123,42 @@ namespace WebApp.Controllers.ITOPS
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult AddBulkMemberData(string GroupId, HttpPostedFileBase file)
+        public JsonResult AddBulkMemberData(HttpPostedFileBase file)
         {
             CustomerDetail objCustomer = new CustomerDetail();
             SPResponse result = new SPResponse();
+            string GroupId = "";
             try
             {
+                var groupId = (string)Session["GroupId"];
                 using (XLWorkbook workBook = new XLWorkbook(file.InputStream))
                 {
 
                     IXLWorksheet workSheet = workBook.Worksheet(1);
                     DataTable dt = new DataTable();
+                    dt.Columns.Add("CustomerName", typeof(string));
+                    dt.Columns.Add("MobileNo", typeof(string));
+                    dt.Columns.Add("Gender", typeof(string));
+                    dt.Columns.Add("DOB", typeof(DateTime));
                     bool firstRow = true;
                     foreach (IXLRow row in workSheet.Rows())
                     {
-
-                        if (firstRow)
+                        int i = 0;
+                        DataRow toInsert = dt.NewRow();
+                        foreach (IXLCell cell in row.Cells(1, dt.Columns.Count))
                         {
-                            foreach (IXLCell cell in row.Cells())
+                            try
                             {
-                                if (!string.IsNullOrEmpty(cell.Value.ToString()))
-                                {
-                                    dt.Columns.Add(cell.Value.ToString());
-                                }
-                                else
-                                {
-                                    break;
-                                }
+                                toInsert[i] = cell.Value.ToString();
                             }
-                            firstRow = false;
-                        }
-                        else
-                        {
-                            int i = 0;
-                            DataRow toInsert = dt.NewRow();
-                            foreach (IXLCell cell in row.Cells(1, dt.Columns.Count))
+                            catch (Exception ex)
                             {
-                                try
-                                {
-                                    toInsert[i] = cell.Value.ToString();
-                                }
-                                catch (Exception ex)
-                                {
 
-                                }
-                                i++;
                             }
-                            dt.Rows.Add(toInsert);
+                            i++;
                         }
+                        dt.Rows.Add(toInsert);
+
                     }
                     if (dt.Rows.Count > 0)
                     {
@@ -187,8 +176,9 @@ namespace WebApp.Controllers.ITOPS
                                 {
                                     objCustomer.CustomerName = Convert.ToString(dr["CustomerName"]);
                                     objCustomer.MobileNo = Convert.ToString(dr["MobileNo"]);
-
-                                    result = ITOPS.AddBulkCustomerData(GroupId, objCustomer);
+                                    objCustomer.Gender = Convert.ToString(dr["Gender"]);
+                                    objCustomer.DOB = Convert.ToDateTime(dr["DOB"]);
+                                    result = ITOPS.AddBulkCustomerData(groupId, objCustomer);
                                     if (result.ResponseCode == "00")
                                     {
                                         TotalRows++;
@@ -224,7 +214,73 @@ namespace WebApp.Controllers.ITOPS
             }
             return Json(result, JsonRequestBehavior.AllowGet);
         }
-    
+
+
+
+
+        //[HttpPost]
+        //public ActionResult AddBulkMemberData(string GroupId,HttpPostedFileBase file)
+        //{
+        //    //string GroupId = "";
+        //    var groupId = (string)Session["GroupId"];
+        //    DataTable dt = new DataTable();
+        //    //Checking file content length and Extension must be .xlsx  
+        //    if (file != null && file.ContentLength > 0 && System.IO.Path.GetExtension(file.FileName).ToLower() == ".xlsx")
+        //    {
+        //        string path = Path.Combine(Server.MapPath("~/Downloads"), Path.GetFileName(file.FileName));
+        //        //Saving the file  
+        //        file.SaveAs(path);
+        //        //Started reading the Excel file.  
+        //        using (XLWorkbook workbook = new XLWorkbook(path))
+        //        {
+        //            IXLWorksheet worksheet = workbook.Worksheet(1);
+        //            bool FirstRow = true;
+        //            //Range for reading the cells based on the last cell used.  
+        //            string readRange = "1:1";
+        //            foreach (IXLRow row in worksheet.RowsUsed())
+        //            {
+        //                //If Reading the First Row (used) then add them as column name  
+        //                if (FirstRow)
+        //                {
+        //                    //Checking the Last cellused for column generation in datatable  
+        //                    readRange = string.Format("{0}:{1}", 1, row.LastCellUsed().Address.ColumnNumber);
+        //                    foreach (IXLCell cell in row.Cells(readRange))
+        //                    {
+        //                        dt.Columns.Add(cell.Value.ToString());
+        //                    }
+        //                    FirstRow = false;
+        //                }
+        //                else
+        //                {
+        //                    //Adding a Row in datatable  
+        //                    dt.Rows.Add();
+        //                    int cellIndex = 0;
+        //                    //Updating the values of datatable  
+        //                    foreach (IXLCell cell in row.Cells(readRange))
+        //                    {
+        //                        dt.Rows[dt.Rows.Count - 1][cellIndex] = cell.Value.ToString();
+        //                        cellIndex++;
+        //                    }
+        //                }
+        //            }
+        //            //If no data in Excel file  
+        //            if (FirstRow)
+        //            {
+        //                ViewBag.Message = "Empty Excel File!";
+        //            }
+        //        }
+        //    }
+        //    else
+        //    {
+        //        //If file extension of the uploaded file is different then .xlsx  
+        //        ViewBag.Message = "Please select file with .xlsx extension!";
+        //    }
+        //    return View(dt);
+        //}
+
+
+
+
         public void SendEmail(string GroupId, string Subject, string EmailBody)
         {
             var senderEmail = System.Configuration.ConfigurationManager.AppSettings["Email"];

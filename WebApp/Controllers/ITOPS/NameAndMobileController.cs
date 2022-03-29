@@ -22,8 +22,11 @@ namespace WebApp.Controllers.ITOPS
         // GET: NameAndMobile
         public ActionResult Index(string groupId)
         {
-            CommonFunctions common = new CommonFunctions();
-            groupId = common.DecryptString(groupId);
+            if (!string.IsNullOrEmpty(groupId))
+            {
+                CommonFunctions common = new CommonFunctions();
+                groupId = common.DecryptString(groupId);
+            }
             Session["GroupId"] = groupId;
             return View();
         }

@@ -212,6 +212,10 @@ namespace BOTS_BL.Repository
                     {
                         lstGroups = context.BOTS_TblGroupMaster.Where(x => x.AssignedCS == userDetails.LoginId).ToList();
                     }
+                    if (userDetails.LoginType != "1" && userDetails.LoginType != "5" && userDetails.LoginType != "6" && userDetails.LoginType != "7")
+                    {
+                        lstGroups = context.BOTS_TblGroupMaster.ToList();
+                    }
 
                     foreach (var item in lstGroups)
                     {
@@ -584,7 +588,7 @@ namespace BOTS_BL.Repository
                     }
                     status = true;
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     newexception.AddException(ex, "SendCommunicationToDLT");
                 }
@@ -608,6 +612,96 @@ namespace BOTS_BL.Repository
             }
 
             return objData;
+        }
+
+        public List<BOTS_TblSMSConfig> GetCommunicationSMSConfigForDLT(string GroupId)
+        {
+            List<BOTS_TblSMSConfig> objData = new List<BOTS_TblSMSConfig>();
+            using (var context = new CommonDBContext())
+            {
+                objData = context.BOTS_TblSMSConfig.Where(x => x.GroupId == GroupId && x.DLTStatus != "" && x.DLTStatus != null).ToList();
+            }
+
+            return objData;
+        }
+
+        public BOTS_TblSMSConfig GetCommunicationSMSConfigById(int Id)
+        {
+            BOTS_TblSMSConfig objSMSConfig = new BOTS_TblSMSConfig();
+            using (var context = new CommonDBContext())
+            {
+                objSMSConfig = context.BOTS_TblSMSConfig.Where(x => x.Id == Id).FirstOrDefault();
+            }
+            return objSMSConfig;
+        }
+        public bool SaveIndividualSMSConfig(BOTS_TblSMSConfig objItem)
+        {
+            bool status = false;
+            using (var context = new CommonDBContext())
+            {
+                context.BOTS_TblSMSConfig.AddOrUpdate(objItem);
+                context.SaveChanges();
+                status = true;
+            }
+            return status;
+        }
+
+        public bool UpdateStatusSMSConfig(int ItemId, string DLTStatus, string LoginId, string rejectReason)
+        {
+            bool status = false;
+            using (var context = new CommonDBContext())
+            {
+                var objItem = context.BOTS_TblSMSConfig.Where(x => x.Id == ItemId).FirstOrDefault();
+                if (objItem != null)
+                {
+                    objItem.UpdatedBy = LoginId;
+                    objItem.UpdatedDate = DateTime.Now;
+                    objItem.DLTStatus = DLTStatus;
+                    if (DLTStatus == "Rejected")
+                    {
+                        if (!string.IsNullOrEmpty(objItem.RejectReason))
+                            objItem.RejectReason = objItem.RejectReason + " //// " + rejectReason;
+                        else
+                            objItem.RejectReason = rejectReason;
+                    }
+                    context.BOTS_TblSMSConfig.AddOrUpdate(objItem);
+                    context.SaveChanges();
+                    status = true;
+                }
+            }
+            return status;
+        }
+
+        public bool UpdateUniqueSMSValues(BOTS_TblSMSConfig objData, string LoginId)
+        {
+            bool status = false;
+            try
+            {
+                using (var context = new CommonDBContext())
+                {
+                    var lstOldData = context.BOTS_TblSMSConfig.Where(x => x.GroupId == objData.GroupId).ToList();
+                    foreach(var item in lstOldData)
+                    {
+                        item.PEID = objData.PEID;
+                        item.SMSProvider = objData.SMSProvider;
+                        item.SMSSenderID = objData.SMSSenderID;
+                        item.SMSUsername = objData.SMSUsername;
+                        item.SMSPassword = objData.SMSPassword;
+                        item.SMSlink = objData.SMSlink;
+                        item.UpdatedBy = LoginId;
+                        item.UpdatedDate = DateTime.Now;
+
+                        context.BOTS_TblSMSConfig.AddOrUpdate(item);
+                        context.SaveChanges();
+                    }
+                    status = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "UpdateUniqueSMSValues");
+            }
+            return status;
         }
 
         public List<BOTS_TblWAConfig> GetCommunicationWAConfig(string GroupId, string BrandId)

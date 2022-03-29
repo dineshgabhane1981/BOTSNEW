@@ -4,5 +4,282 @@
     Layout = "~/Views/Shared/_LayoutITOPS.cshtml";
 }
 
-<h2>Index</h2>
+<!--Load Bonus Point-->
+<div class="app-main__inner">
+    <div class="mb-3 card" style="padding-top:20px;">
+        <div class="content">
+
+            <div class="container overflow-hidden">
+                
+                    <div class="multisteps-form__panel shadow p-4 list-box bg-white" id="sec6" data-animation="scaleIn">
+                        <h4 class="multisteps-form__title" style="color:blue;">Load Bonus Points</h4><br />
+                        <div class="multisteps-form__content">
+                            <div>
+                                <label style="padding-right:5px;padding-top:10px;">Enter Mobile Number </label>
+                                <input type="number" id="txtMobileNo4" class="input50" />
+
+                                <label style="padding-right:30px;padding-top:10px;padding-left:30px;"><b>(OR)</b> </label>
+
+                                <label style="padding-right:5px;padding-top:10px;">Enter Card Number </label>
+                                <input type="number" id="txtCardNo4" class="input50" />
+                                <button type="button" id="btnSearchMember4" style="margin-left:15px;margin-top:10px;" class="btn btn-primary">Go</button>
+                            </div>
+                            <div>
+                                <div style="margin-left:30px;margin-bottom:30px;margin-top:30px;">
+                                    <input type="radio" name="first_item4" id="rbtnSMS4" /> Send SMS
+                                    <input type="radio" name="first_item4" style="margin-left:30px;" checked id="rbtnNOSMS4" /> Don't Send SMS
+                                </div>
+                                <div style="display:flex; height:550px;">
+                                    <input type="hidden" id="hdnCustomerId4" />
+                                    <table border="2" cellpadding="5" cellspacing="5">
+                                        <tr>
+                                            <th colspan="2" style="padding:10px;text-align:center;">Existing Member Details</th>
+                                        </tr>
+                                        <tr>
+                                            <td style="padding:10px;">Member Name</td>
+                                            <td style="padding:10px;width:200px;"><span style="color:red;" id="spnMemberName4"></span></td>
+                                        </tr>
+                                        <tr>
+                                            <td style="padding:10px;">Mobile No</td>
+                                            <td style="padding:10px;"><span id="spnMobileno4"></span></td>
+                                        </tr>
+                                        <tr>
+                                            <td style="padding:10px;">Card No</td>
+                                            <td style="padding:10px;"><span id="spnCardNo4"></span></td>
+                                        </tr>
+                                        <tr>
+                                            <td style="padding:10px;">Points Balance</td>
+                                            <td style="padding:10px;"><span id="spnPtBalance4"></span></td>
+                                        </tr>
+                                        <tr>
+                                            <td style="padding:10px;">Enrolled Outlet</td>
+                                            <td style="padding:10px;"><span id="spnEnrolledOutlet4"></span></td>
+                                        </tr>
+                                        <tr>
+                                            <td style="padding:10px;">Enrolled On</td>
+                                            <td style="padding:10px;"><span id="spnEnrolledOn4"></span></td>
+                                        </tr>
+
+                                    </table>
+
+                                    <table border="2" cellpadding="5" cellspacing="5" id="tblUpdateData4" style="margin-left:50px;display:none;">
+                                        <tr>
+                                            <th colspan="2" style="padding:10px;text-align:center;">Points Earning on a Purchase Txn</th>
+                                        </tr>
+                                        <tr>
+                                            <td style="padding:10px;width:200px;">Enter Bonus Points</td>
+                                            <td style="padding:10px;width:200px;">
+                                                <input type="number" id="txtBonusPoints" placeholder="Bonus Points" class="input50" />
+
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td style="padding:10px;width:200px;">Enter Bonus Remark</td>
+                                            <td style="padding:10px;width:200px;">
+                                                <input type="text" id="txtBonusRemark" placeholder="Bonus Remark" class="input50" />
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td style="padding:10px;width:200px;">Expiry Date</td>
+                                            <td style="padding:10px;width:200px;">
+                                                <input type="date" id="txtExpiryDate" class="input50" />
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td style="padding:10px;width:200px;">Select Outlet</td>
+                                            <td style="padding:10px;width:200px;">
+                                                @Html.DropDownList("Outlet", new SelectList(ViewBag.OutletList, "Value", "Text"), "Select Outlet", htmlAttributes: new { @class = "input50", @id = "ddlOutletList4" })
+
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td style="padding:10px;">Requested by</td>
+                                            <td style="padding:10px;">
+                                                <input type="text" id="txtRequestedByName4" placeholder="Requested By" class="input50" />
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td style="padding:10px;">Requested on Forum</td>
+                                            <td style="padding:10px;">
+                                                <select name="ddlRequestedForum4" id="ddlRequestedForum4" class="input50">
+                                                    <option value="Whatsapp">Whatsapp</option>
+                                                    <option value="Email">Email</option>
+                                                    <option value="Phone">Phone</option>
+                                                </select>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td style="padding:10px;">Transaction Date</td>
+                                            <td style="padding:10px;"><input type="text" id="txtRequestedDate4" class="input50" /></td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="button-row d-flex mt-5">
+                        <button class="btn btn-primary ml-auto" type="button" title="Next" id="btnLoadBonusPoints" tabindex="30">Save</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+            <script src="~/Content/scriptSteps.js"></script>
+            <script>
+
+    $('#btnSearchMember4').on("click", function () {
+        GetLoadBonusData();
+    });
+    $('#btnLoadBonusPoints').on("click", function () {
+        SaveLoadBonusData();
+    });
+
+      function GetLoadBonusData() {
+        if ($('#txtMobileNo4').val() == "" && $('#txtCardNo4').val() == "") {
+            toastr.error('Please enter Mobile Number OR Card Number');
+            return false
+        }
+        if ($('#txtMobileNo4').val() != "" && $('#txtCardNo4').val() != "") {
+            toastr.error('Please enter Mobile Number OR Card Number');
+            return false
+        }
+        $("#divLoader").show();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("GetChangeNameData", "BonusPoint")',//"/ITOperations/GetChangeNameData",
+            data: '{MobileNo:' + JSON.stringify($('#txtMobileNo4').val()) + ',CardNo: ' + JSON.stringify($('#txtCardNo4').val()) + '}',
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (result) {
+            if (result.MemberName != null) {
+            $("#spnMemberName4").text(result.MemberName);
+            $("#spnMobileno4").text(result.MobileNo);
+            $("#spnCardNo4").text(result.CardNo);
+            $("#spnPtBalance4").text(result.PointsBalance);
+            $("#spnEnrolledOutlet4").text(result.EnrolledOutletName);
+            $("#spnEnrolledOn4").text(result.EnrolledOn);
+            $("#hdnCustomerId4").val(result.CustomerId);
+
+            //$('#txtInvoiceNumber1').val("");
+            //$('#txtInvoiceAmount1').val("");
+            //$('#txtPointsToRedeem').val("");
+            //$('#txtRequestedByName3').val("");
+            $('#ddlRequestedForum4').prop('selectedIndex', 0);
+            $("#tblUpdateData4").show();
+            }
+            else {
+            toastr.error('Member not present. Please check entered Mobile Number OR Card Number');
+            $("#spnMemberName3").text("");
+            $("#spnMobileno3").text("");
+            $("#spnCardNo3").text("");
+            $("#spnPtBalance3").text("");
+            $("#spnEnrolledOutlet3").text("");
+            $("#spnEnrolledOn3").text("");
+            $("#hdnCustomerId3").val("");
+
+            $('#txtInvoiceNumber1').val("");
+            $('#txtInvoiceAmount1').val("");
+            $('#txtPointsToRedeem').val("");
+            $('#txtRequestedByName3').val("");
+            $('#ddlRequestedForum4').prop('selectedIndex', 0);
+            $('#ddlOutletList1').prop('selectedIndex', 0);
+            $("#tblUpdateData3").hide();
+            }
+            $("#divLoader").hide();
+            },
+            error: function (result) {
+            console.log(result.responseText)
+            $("#divLoader").hide();
+            }
+            });
+            }
+
+            function SaveLoadBonusData() {
+            if ($('#txtBonusPoints').val() == "") {
+            toastr.error('Please enter Bonus Points');
+            $('#txtBonusPoints').focus();
+            return false;
+            }
+            if ($('#txtBonusRemark').val() == "") {
+            toastr.error('Please enter Bonus Remark');
+            $('#txtBonusRemark').focus();
+            return false;
+            }
+            if ($('#txtExpiryDate').val() == "") {
+            toastr.error('Please enter Expiry Date');
+            $('#txtExpiryDate').focus();
+            return false;
+            }
+            if ($('#ddlOutletList4').val() == "") {
+            toastr.error('Please select Outlet');
+            $('#ddlOutletList4').focus();
+            return false;
+            }
+            if ($('#txtRequestedByName4').val() == "") {
+            toastr.error('Please enter Requested Person name');
+            $('#txtRequestedByName4').focus();
+            return false;
+            }
+            if ($('#txtRequestedDate4').val() == "") {
+            toastr.error('Please select transaction date');
+            $('#txtRequestedDate4').focus();
+            return false;
+            }
+
+            if (confirm("Are you sure? You want to Load Points")) {
+            var MemberData = [];
+            item = {}
+            item["GroupID"] = $("#hdnGroupId").val();
+            item["MobileNo"] = $("#txtMobileNo4").val();
+            item["OutletId"] = $("#ddlOutletList4").val();
+            item["BonusPoints"] = $("#txtBonusPoints").val();
+            item["BonusRemark"] = $("#txtBonusRemark").val();
+            item["ExpiryDate"] = $("#txtExpiryDate").val();
+            item["RequestedBy"] = $("#txtRequestedByName4").val();
+            item["RequestedDate"] = $("#txtRequestedDate4").val();
+            item["RequestedForum"] = $('#ddlRequestedForum4 :selected').text();
+            if ($('#rbtnSMS4').is(":checked")) {
+            item["IsSMS"] = 1;
+            }
+            if ($('#rbtnNOSMS4').is(":checked")) {
+            item["IsSMS"] = 0;
+            }
+            MemberData.push(item);
+            var data = JSON.stringify(MemberData);
+            console.log(data)
+            $("#divLoader").show();
+            $.ajax({
+            type: "POST",
+            url: '@Url.Action("LoadBonusData", "BonusPoint")',//"/ITOperations/LoadBonusData",
+            data: '{jsonData: ' + JSON.stringify(data) + '}',
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (result) {
+            if (result.ResponseCode == "00") {
+            toastr.success("Bonus points loaded Successfully");
+            $("#divLoader").hide();
+            $('#sec5').find(':input').val('');
+            }
+            else {
+            toastr.error(result.ResponseMessage);
+            $("#divLoader").hide();
+            }
+            },
+            error: function (result) {
+            console.log(result.responseText)
+            if (result.responseText == "True") {
+            toastr.success("Data Updated Successfully");
+            $("#divLoader").hide();
+            $('#sec5').find(':input').val('');
+            }
+            else {
+            toastr.error('error occured while saving data');
+            $("#divLoader").hide();
+            }
+            }
+            });
+            }
+            }
+
+            </script>
+
 

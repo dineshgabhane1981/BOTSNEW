@@ -9,9 +9,16 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Script.Serialization;
 using WebApp.App_Start;
+using System.Net.Mail;
+using System.Net;
+using WebApp.ViewModel;
+using System.Data;
+using System.Text.RegularExpressions;
+using ClosedXML.Excel;
 
 namespace WebApp.Controllers.ITOPS
 {
+
     public class EarnBurnController : Controller
     {
         ITOpsRepository ITOPS = new ITOpsRepository();
@@ -19,22 +26,12 @@ namespace WebApp.Controllers.ITOPS
         CustomerRepository objCustRepo = new CustomerRepository();
         Exceptions newexception = new Exceptions();
         // GET: EarnBurn
-        string groupId;
-        //var userDetails = (CustomerLoginDetail)Session["UserSession"];
-        //var GroupId = userDetails.GroupId;
-        //var roleId = userDetails.LoginType;
-        //var level = userDetails.LevelIndicator;
         
-
-        
-
         public ActionResult Index()
         {
+            string groupId = Convert.ToString(Session["GroupId"]);
             try
-            {
-                CommonFunctions common = new CommonFunctions();
-                //groupId = common.DecryptString(groupId);
-                groupId = Session["GroupId"].ToString();
+            {                               
                 string connStr = objCustRepo.GetCustomerConnString(groupId);
                 var lstOutlet = RR.GetOutletList(groupId, connStr);
                 var lstBrand = RR.GetBrandList(groupId, connStr);
@@ -49,11 +46,11 @@ namespace WebApp.Controllers.ITOPS
                 newexception.AddException(ex, groupId);
             }
             return View();
-            
+
         }
 
         [HttpPost]
-       public ActionResult GetData(string GroupId, string MobileNo, string CardNo)
+        public ActionResult GetData(string GroupId, string MobileNo, string CardNo)
         {
             MemberData objCustomerDetail = new MemberData();
             if (!string.IsNullOrEmpty(MobileNo))
@@ -70,7 +67,137 @@ namespace WebApp.Controllers.ITOPS
 
         public ActionResult Burn()
         {
+            var groupId = (string)Session["GroupId"];
+            try
+            {
+
+                string connStr = objCustRepo.GetCustomerConnString(groupId);
+                var lstOutlet = RR.GetOutletList(groupId, connStr);
+                var lstBrand = RR.GetBrandList(groupId, connStr);
+                var GroupDetails = objCustRepo.GetGroupDetails(Convert.ToInt32(groupId));
+                ViewBag.OutletList = lstOutlet;
+                ViewBag.BranchList = lstBrand;
+                ViewBag.GroupId = groupId;
+                ViewBag.GroupName = GroupDetails.RetailName;
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, groupId);
+            }
             return View();
+        }
+        public ActionResult GetChangeNameData(string MobileNo, string CardNo)
+        {
+            var GroupId = (string)Session["GroupId"];
+            MemberData objCustomerDetail = new MemberData();
+            if (!string.IsNullOrEmpty(MobileNo))
+            {
+                objCustomerDetail = ITOPS.GetChangeNameByMobileNo(GroupId, MobileNo);
+            }
+            if (!string.IsNullOrEmpty(CardNo))
+            {
+                objCustomerDetail = ITOPS.GetChangeNameByCardNo(GroupId, CardNo);
+            }
+
+            return Json(objCustomerDetail, JsonRequestBehavior.AllowGet);
+        }
+        [HttpPost]
+        public ActionResult RedeemPointsData(string jsonData)
+        {
+            SPResponse result = new SPResponse();
+            string GroupId = "";
+            try
+            {
+                JavaScriptSerializer json_serializer = new JavaScriptSerializer();
+                json_serializer.MaxJsonLength = int.MaxValue;
+                object[] objData = (object[])json_serializer.DeserializeObject(jsonData);
+                tblAudit objAudit = new tblAudit();
+                bool IsSMS = false;
+
+                string MobileNo = "";
+                string TransactionDate = "";
+                string InvoiceNumber = "";
+                string InvoiceAmount = "";
+                string OutletId = "";
+                string PointsToRedeem = "";
+                string TxnType = "";
+
+                foreach (Dictionary<string, object> item in objData)
+                {
+                    GroupId = Convert.ToString(item["GroupID"]);
+                    MobileNo = Convert.ToString(item["MobileNo"]);
+                    OutletId = Convert.ToString(item["OutletId"]);
+                    TransactionDate = Convert.ToString(item["TransactionDate"]);
+                    InvoiceNumber = Convert.ToString(item["InvoiceNumber"]);
+                    InvoiceAmount = Convert.ToString(item["InvoiceAmount"]);
+                    PointsToRedeem = Convert.ToString(item["RedeemPoints"]);
+                    TxnType = Convert.ToString(item["TxnType"]);
+
+                    objAudit.GroupId = GroupId;
+                    objAudit.RequestedFor = "Redeem Point";
+                    objAudit.RequestedEntity = "Mobile No - " + MobileNo;
+                    objAudit.RequestedBy = Convert.ToString(item["RequestedBy"]);
+                    objAudit.RequestedOnForum = Convert.ToString(item["RequestedForum"]);
+                    objAudit.RequestedOn = Convert.ToDateTime(item["RequestedOn"]);
+
+                    IsSMS = Convert.ToBoolean(item["IsSMS"]);
+                }
+
+                result = ITOPS.AddRedeemPointsData(GroupId, MobileNo, OutletId, Convert.ToDateTime(TransactionDate), DateTime.Now, InvoiceNumber, InvoiceAmount, Convert.ToDecimal(PointsToRedeem), Convert.ToString(IsSMS), TxnType, objAudit);
+                if (result.ResponseCode == "00")
+                {
+                    var subject = "Points Redeem for mobile no  - " + MobileNo;
+                    var body = "Points Redeem for mobile no - " + MobileNo;
+                    body += "<br/><br/> Regards <br/> Blue Ocktopus Team";
+
+                    SendEmail(GroupId, subject, body);
+                }
+
+                if (IsSMS)
+                {
+                    //Logic to send SMS to Customer whose Name is changed
+                }
+
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, GroupId);
+            }
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+        public void SendEmail(string GroupId, string Subject, string EmailBody)
+        {
+            var senderEmail = System.Configuration.ConfigurationManager.AppSettings["Email"];
+            var senderEmailPassword = System.Configuration.ConfigurationManager.AppSettings["EmailPassword"];
+
+            var email = new MailAddress(senderEmail, "Support Blue Ocktopus");
+            var toemail = ITOPS.GetCustomerAdminEmail(GroupId);
+            if (!string.IsNullOrEmpty(toemail))
+            {
+                var receiverEmail = new MailAddress(toemail);
+
+                var smtp = new SmtpClient
+                {
+                    Host = "smtp.gmail.com",
+                    Port = 587,
+                    EnableSsl = true,
+                    DeliveryMethod = SmtpDeliveryMethod.Network,
+                    UseDefaultCredentials = false,
+
+                    Credentials = new NetworkCredential(email.Address, senderEmailPassword)
+                };
+                using (var mess = new MailMessage(email, receiverEmail)
+                {
+                    Subject = Subject,
+                    Body = EmailBody,
+                    IsBodyHtml = true,
+                    Priority = MailPriority.High,
+                    BodyEncoding = System.Text.Encoding.UTF8
+                })
+                {
+                    smtp.Send(mess);
+                }
+            }
         }
 
         [HttpPost]
@@ -131,10 +258,10 @@ namespace WebApp.Controllers.ITOPS
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex, GroupId);
+
             }
 
             return Json(result, JsonRequestBehavior.AllowGet);
         }
-    }
+    }        
 }

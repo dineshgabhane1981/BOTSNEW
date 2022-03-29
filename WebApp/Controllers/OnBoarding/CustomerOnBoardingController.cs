@@ -15,6 +15,7 @@ using BOTS_BL.Models.SalesLead;
 using BOTS_BL.Models.OnBoarding;
 using System.Data.OleDb;
 using System.Data;
+using System.Linq;
 
 namespace WebApp.Controllers.OnBoarding
 {
@@ -27,11 +28,17 @@ namespace WebApp.Controllers.OnBoarding
         // GET: CustomerOnBoarding
         public ActionResult Index(string groupId, string LeadId)
         {
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            if (userDetails.LoginType == "11")
+            {
+                return RedirectToAction("DLTView", "CustomerOnBoarding", new { GroupId = groupId });
+            }
             CommonFunctions common = new CommonFunctions();
             if (!string.IsNullOrEmpty(groupId))
             {
                 groupId = common.DecryptString(groupId);
             }
+
             JavaScriptSerializer json_serializer = new JavaScriptSerializer();
             OnBoardingSalesViewModel objData = new OnBoardingSalesViewModel();
             try
@@ -122,6 +129,96 @@ namespace WebApp.Controllers.OnBoarding
             catch (Exception ex)
             {
                 newexception.AddException(ex, "");
+            }
+            return View(objData);
+        }
+
+        public ActionResult DLTView(string GroupId)
+        {
+            OnBoardingSalesViewModel objData = new OnBoardingSalesViewModel();
+            JavaScriptSerializer json_serializer = new JavaScriptSerializer();
+            CommonFunctions common = new CommonFunctions();
+            if (!string.IsNullOrEmpty(GroupId))
+            {
+                GroupId = common.DecryptString(GroupId);
+                if (!string.IsNullOrEmpty(GroupId))
+                {
+                    List<SelectListItem> refferedname = new List<SelectListItem>();
+                    SelectListItem item = new SelectListItem();
+                    item.Value = "0";
+                    item.Text = "Please Select";
+                    refferedname.Add(item);
+                    objData.lstAllGroups = refferedname;
+                    objData.lstBrands = refferedname;
+
+                    objData.lstCity = CR.GetCity();
+                    objData.lstRetailCategory = CR.GetRetailCategory();
+                    objData.lstBillingPartner = CR.GetBillingPartner();
+                    objData.lstSourcedBy = CR.GetSourcedBy();
+                    objData.lstRMAssigned = CR.GetRMAssigned();
+                    objData.lstRefferedCategory = CR.GetAllRefferedCategory();
+                    objData.lstStates = CR.GetStates();
+
+                    objData.bots_TblGroupMaster = OBR.GetGroupMasterDetails(GroupId);
+                    objData.bots_TblDealDetails = OBR.GetDealMasterDetails(GroupId);
+                    objData.bots_TblPaymentDetails = OBR.GetPaymentDetails(GroupId);
+                    objData.objRetailList = OBR.GetRetailDetails(GroupId);
+                    objData.objInstallmentList = OBR.GetInstallmentDetails(GroupId);
+                    objData.lstOutlets = OBR.GetOutletDetails(GroupId);
+
+                    foreach (var brand in objData.objRetailList)
+                    {
+                        objData.lstBrands.Add(new SelectListItem
+                        {
+                            Text = brand.BrandName,
+                            Value = Convert.ToString(brand.BrandId)
+                        });
+                    }
+                    if (objData.lstOutlets.Count == 0)
+                    {
+                        var brandId = 1;
+                        var outletId = 1;
+                        foreach (var item1 in objData.objRetailList)
+                        {
+                            for (int i = 1; i <= item1.NoOfEnrolled; i++)
+                            {
+                                BOTS_TblOutletMaster outlet = new BOTS_TblOutletMaster();
+                                outlet.Id = 0;
+                                outlet.BrandId = Convert.ToString(brandId);
+                                outlet.OutletId = Convert.ToString(outletId);
+                                outlet.BrandName = item1.BrandName;
+                                objData.lstOutlets.Add(outlet);
+                                outletId++;
+                            }
+                            brandId++;
+                        }
+                    }
+                    else
+                    {
+                        foreach (var item1 in objData.objRetailList)
+                        {
+                            foreach (var item2 in objData.lstOutlets)
+                            {
+                                if (item1.BrandId == item2.BrandId)
+                                    item2.BrandName = item1.BrandName;
+                            }
+                        }
+                    }
+                    objData.bots_TblGroupMaster.CategoryData = json_serializer.Serialize(objData.objRetailList);
+                    objData.bots_TblGroupMaster.PaymentScheduleData = json_serializer.Serialize(objData.objInstallmentList);
+
+                    objData.lstSMSConfig = OBR.GetCommunicationSMSConfigForDLT(GroupId);
+                    var BrandCount = objData.lstSMSConfig.Where(x => x.BrandId != "All").Count();
+                    if (BrandCount > 0)
+                    {
+                        objData.IsBrand = true;
+                    }
+                    else
+                    {
+                        objData.IsBrand = false;
+                    }
+
+                }
             }
             return View(objData);
         }
@@ -497,7 +594,7 @@ namespace WebApp.Controllers.OnBoarding
                     var isSMS = Convert.ToBoolean(item["IsSMS"]);
                     if (isSMS)
                     {
-                        objSMSConfig.IsSMS = true;                       
+                        objSMSConfig.IsSMS = true;
                         objSMSConfig.SMSProvider = Convert.ToString(item["SMSProvider"]);
                         objSMSConfig.GroupId = Convert.ToString(item["GroupId"]);
                         objSMSConfig.BrandId = Convert.ToString(item["BrandId"]);
@@ -568,7 +665,7 @@ namespace WebApp.Controllers.OnBoarding
                         if (!string.IsNullOrEmpty(Convert.ToString(item["SMSEnrollmentAndEarnId"])))
                             objSMSTemplate9.Id = Convert.ToInt32(item["SMSEnrollmentAndEarnId"]);
                         objSMSTemplate9.TemplateScript = Convert.ToString(item["SMSEnrollmentAndEarn"]);
-                        lstSMSTemplate.Add(objSMSTemplate9);                       
+                        lstSMSTemplate.Add(objSMSTemplate9);
                     }
                     else
                     {
@@ -577,7 +674,7 @@ namespace WebApp.Controllers.OnBoarding
                     var isWA = Convert.ToBoolean(item["IsWA"]);
                     if (isWA)
                     {
-                        objWAConfig.IsWA = true;                        
+                        objWAConfig.IsWA = true;
                         objWAConfig.WAProvider = Convert.ToString(item["WAProvider"]);
                         objWAConfig.GroupId = Convert.ToString(item["GroupId"]);
                         objWAConfig.BrandId = Convert.ToString(item["BrandId"]);
@@ -648,7 +745,7 @@ namespace WebApp.Controllers.OnBoarding
                         if (!string.IsNullOrEmpty(Convert.ToString(item["WAEnrollmentAndEarnId"])))
                             objWATemplate9.Id = Convert.ToInt32(item["WAEnrollmentAndEarnId"]);
                         objWATemplate9.TemplateScript = Convert.ToString(item["WAEnrollmentAndEarn"]);
-                        lstWATemplate.Add(objWATemplate9); 
+                        lstWATemplate.Add(objWATemplate9);
                     }
                     else
                     {
@@ -671,7 +768,7 @@ namespace WebApp.Controllers.OnBoarding
             try
             {
                 var userDetails = (CustomerLoginDetail)Session["UserSession"];
-                
+
                 status = OBR.SendCommunicationToDLT(GroupId, userDetails.LoginId);
 
             }
@@ -679,6 +776,56 @@ namespace WebApp.Controllers.OnBoarding
             {
                 newexception.AddException(ex, "SaveCommunicationConfigController");
             }
+            return new JsonResult() { Data = status, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
+        }
+
+        public ActionResult SaveCommunicationDLTConfig(string jsonData)
+        {
+            bool status = false;
+            try
+            {
+                var userDetails = (CustomerLoginDetail)Session["UserSession"];
+                BOTS_TblSMSConfig objSMSConfig = new BOTS_TblSMSConfig();
+                JavaScriptSerializer json_serializer = new JavaScriptSerializer();
+                json_serializer.MaxJsonLength = int.MaxValue;
+                object[] objCommConfigData = (object[])json_serializer.DeserializeObject(jsonData);
+                foreach (Dictionary<string, object> item in objCommConfigData)
+                {
+                    var id = Convert.ToInt32(item["Id"]);
+                    objSMSConfig = OBR.GetCommunicationSMSConfigById(id);
+                    if (objSMSConfig != null)
+                    {
+                        objSMSConfig.TemplateId = Convert.ToString(item["TemplateId"]);
+                        objSMSConfig.TemplateName = Convert.ToString(item["TemplateName"]);
+                        objSMSConfig.TemplateType = Convert.ToString(item["TemplateType"]);
+                        objSMSConfig.SMSScript = Convert.ToString(item["Script"]);
+                        objSMSConfig.SMSScriptDLT = Convert.ToString(item["ScriptDLT"]);
+                        objSMSConfig.UpdatedBy = userDetails.LoginId;
+                        objSMSConfig.UpdatedDate = DateTime.Now;
+                    }
+                }
+                status = OBR.SaveIndividualSMSConfig(objSMSConfig);
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "SaveCommunicationDLTConfig");
+            }
+            return new JsonResult() { Data = status, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
+        }
+
+        public ActionResult UpdateDLTStatusOfCommunicationConfig(string ConfigId, string DLTNewStatus,string RejectReason)
+        {
+            bool status = false;
+            try
+            {
+                var userDetails = (CustomerLoginDetail)Session["UserSession"];
+                status = OBR.UpdateStatusSMSConfig(Convert.ToInt32(ConfigId), DLTNewStatus, userDetails.LoginId, RejectReason);
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "UpdateDLTStatusOfCommunicationConfig");
+            }
+
             return new JsonResult() { Data = status, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
 
@@ -731,7 +878,7 @@ namespace WebApp.Controllers.OnBoarding
             }
             return new JsonResult() { Data = status, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
-        
+
         public JsonResult GetDLCLinkData(string groupId)
         {
             BOTS_TblDLCLinkConfig objData = new BOTS_TblDLCLinkConfig();
@@ -1254,7 +1401,7 @@ namespace WebApp.Controllers.OnBoarding
 
                 foreach (Dictionary<string, object> item in objBirthdayAndAnniversaryConfigData)
                 {
-                    if(!string.IsNullOrEmpty(Convert.ToString(item["Id"])))
+                    if (!string.IsNullOrEmpty(Convert.ToString(item["Id"])))
                     {
                         objData.Id = Convert.ToInt32(item["Id"]);
                     }
@@ -1263,7 +1410,7 @@ namespace WebApp.Controllers.OnBoarding
                     objData.SMSType = Convert.ToString(item["SMSType"]);
                     objData.BonusPoints = Convert.ToInt32(item["BonusPoints"]);
                     objData.Frequency = Convert.ToString(item["Frequency"]);
-                    
+
                     objData.IntroDays1 = Convert.ToInt32(item["IntroDays1"]);
                     objData.IntroScript1 = Convert.ToString(item["IntroScript1"]);
                     objData.IntroDays2 = Convert.ToInt32(item["IntroDays2"]);
@@ -1280,7 +1427,7 @@ namespace WebApp.Controllers.OnBoarding
                     if (objData.Id > 0)
                     {
                         objData.UpdatedBy = userDetails.LoginId;
-                        objData.UpdatedDate = DateTime.Now;                        
+                        objData.UpdatedDate = DateTime.Now;
                     }
                     else
                     {
@@ -1312,7 +1459,7 @@ namespace WebApp.Controllers.OnBoarding
             {
                 var userDetails = (CustomerLoginDetail)Session["UserSession"];
                 List<BOTS_TblCampaignInactive> lstNewData = new List<BOTS_TblCampaignInactive>();
-                
+
                 JavaScriptSerializer json_serializer = new JavaScriptSerializer();
                 json_serializer.MaxJsonLength = int.MaxValue;
                 object[] objInactiveConfigData = (object[])json_serializer.DeserializeObject(jsonData);
@@ -1323,10 +1470,10 @@ namespace WebApp.Controllers.OnBoarding
                     BOTS_TblCampaignInactive objData = new BOTS_TblCampaignInactive();
                     if (!string.IsNullOrEmpty(Convert.ToString(item["Id"])))
                     {
-                        objData.Id = Convert.ToInt32(item["Id"]);                        
+                        objData.Id = Convert.ToInt32(item["Id"]);
                     }
                     objData.GroupId = Convert.ToString(item["GroupId"]);
-                    objData.InactiveType= Convert.ToString(item["InactiveType"]);
+                    objData.InactiveType = Convert.ToString(item["InactiveType"]);
                     objData.SMSorWA = Convert.ToString(item["SMSorWA"]);
                     objData.Days = Convert.ToInt32(item["Days"]);
                     objData.LessThanDays = Convert.ToInt32(item["LessThanDays"]);
@@ -1346,7 +1493,7 @@ namespace WebApp.Controllers.OnBoarding
                     }
                     groupID = objData.GroupId;
                     type = objData.InactiveType;
-                    lstNewData.Add(objData);                   
+                    lstNewData.Add(objData);
                 }
                 status = OBR.SaveInactiveConfig(lstNewData, groupID, type);
 
@@ -1364,8 +1511,7 @@ namespace WebApp.Controllers.OnBoarding
             List<BOTS_TblCampaignInactive> lstExistingData = new List<BOTS_TblCampaignInactive>();
             lstExistingData = OBR.GetInactiveConfigData(GroupId, Type);
             return new JsonResult() { Data = lstExistingData, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
-        }     
-
+        }
 
         public JsonResult GetEarnBurnDataAndUploaddata(string Groupid)
         {
@@ -1377,5 +1523,38 @@ namespace WebApp.Controllers.OnBoarding
 
         }
 
+        public ActionResult SaveCommunicationUniqueValuesConfig(string jsonData)
+        {
+            bool status = false;
+            try
+            {
+                var userDetails = (CustomerLoginDetail)Session["UserSession"];
+                BOTS_TblSMSConfig objSMSConfig = new BOTS_TblSMSConfig();
+
+                JavaScriptSerializer json_serializer = new JavaScriptSerializer();
+                json_serializer.MaxJsonLength = int.MaxValue;
+                object[] objInactiveConfigData = (object[])json_serializer.DeserializeObject(jsonData);
+                string groupID = string.Empty;
+                string type = string.Empty;
+                foreach (Dictionary<string, object> item in objInactiveConfigData)
+                {
+                    objSMSConfig.GroupId = Convert.ToString(item["GroupID"]);
+                    objSMSConfig.PEID = Convert.ToString(item["PEID"]);
+                    objSMSConfig.SMSProvider = Convert.ToString(item["SMSProvider"]);
+                    objSMSConfig.SMSSenderID = Convert.ToString(item["SMSSenderId"]);
+                    objSMSConfig.SMSUsername = Convert.ToString(item["SMSUserName"]);
+                    objSMSConfig.SMSPassword = Convert.ToString(item["SMSPassword"]);
+                    objSMSConfig.SMSlink = Convert.ToString(item["SMSLink"]);
+                }
+                status = OBR.UpdateUniqueSMSValues(objSMSConfig, userDetails.LoginId);
+
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "SaveBirthdayAndAnniversaryConfig");
+            }
+
+            return new JsonResult() { Data = status, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
+        }
     }
 }
