@@ -263,7 +263,7 @@
             </div>
         </div>
     </div>
-    <div id="rdbredemption" >
+    <div id="rdbredemption">
         <div class="row">
             <div class="col-md-10 col-sm-10">
                 <b>Burn Point Level</b> &nbsp;
@@ -299,7 +299,7 @@
 
             </div>
         </div>
-        <div class="row" id="divpointexpiryvalue" style = "display: none;">
+        <div class="row" id="divpointexpiryvalue" style="display: none;">
             <div class="col-md-10 col-sm-10">
                 <b>No Of Months</b> &nbsp;
                 @Html.TextBoxFor(model => model.objpointsburnruleconfig.PointValidityValue, new { @class = "input50", @id = "txtpointvalidityvalue" })
@@ -322,7 +322,7 @@
             $(document).ready(function () {
                 var categoryData = $("#hdnCategoryData").val();
                 var CategoryObj = $.parseJSON(categoryData);
-                var counter = 2;             
+                var counter = 2;
                 $("input[type='radio'].radiolevel").change(function () {
                     console.log(111);
                     console.log(CategoryObj[0].CategoryId);
@@ -572,7 +572,7 @@
                         return false;
                     }
                     var newTextBoxDiv = $(document.createElement('div'))
-                        .attr("id", 'TextBoxDiv' + counter);                   
+                        .attr("id", 'TextBoxDiv' + counter);
                     newTextBoxDiv.after().html(
                         '<input type="text" name="textboxfrom' + counter +
                         '" id="textboxfrom' + counter + '" value="" class="input50" placeholder="From" >' + '&nbsp;&nbsp;' + '<input type="text" name="textboxto' + counter +
@@ -801,7 +801,7 @@
                     } else {
                         item["jwlLevel"] = "";
                     }
-                    
+
                     if ($("input[type='radio'].commonfixedorslab").is(":checked")) {
                         item["commonfixedorslab"] = $("input[type='radio'].commonfixedorslab:checked").val();
                         if ($("input[type='radio'].commonfixedorslab:checked").val() == "commonFixed") {
@@ -873,7 +873,7 @@
                     else {
                         item["commonfixedorslab"] = "";
                     }
-                    
+
                     if ($("input[type='radio'].Burnforearnlevel").is(":checked")) {
                         itemburn["Blockonearnrule"] = $("input[type='radio'].Burnforearnlevel:checked").val();
                         if ($("input[type='radio'].Burnforearnlevel:checked").val() == "InvoiceAmount") {
@@ -989,15 +989,15 @@
             type: "POST",
             url: '@Url.Action("GetEarnBurnDataAndUploaddata", "CustomerOnBoarding")',
             data: '{Groupid: ' + JSON.stringify(GroupId) + '}',
-            contentType: "application/json; charset=utf-8",            
+            contentType: "application/json; charset=utf-8",
             dataType: "json",
             success: function (data) {
                 if (data.objpointsearnruleconfig != null) {
                     console.log("Hi");
                     $("#txtpointvalue").val(data.objpointsearnruleconfig.OnePointValueInRs);
-                    console.log(data.objpointsearnruleconfig.EarnPointLevel);                
+                    console.log(data.objpointsearnruleconfig.EarnPointLevel);
                     $('input[class="radiolevel"][value="' + data.objpointsearnruleconfig.EarnPointLevel + '"]').attr('checked', true);
-                 
+
                     if (data.objpointsearnruleconfig.EarnPointLevelType != null) {
                         console.log(data.objpointsearnruleconfig.EarnPointLevelType);
 
@@ -1006,16 +1006,16 @@
                             $('input[class="commonfixedorslab"][value="' + data.objpointsearnruleconfig.EarnPointLevelType + '"]').attr('checked', true);
                             if (data.objpointsearnruleconfig.EarnPointLevelType == "commonFixed") {
                                 $('#ddlpercentage').val(data.objpointsearnruleconfig.commonfixedpercentageorwithperce);
-                                if (data.objpointsearnruleconfig.commonfixedpercentageorwithperce == "fixedpercentage") {    
+                                if (data.objpointsearnruleconfig.commonfixedpercentageorwithperce == "fixedpercentage") {
                                     $("#divfixed").show();
                                     $('#txtpercentage').val(data.objpointsearnruleconfig.FixedEarnPointPercentage);
-                                    
+
                                 }
                                 else if (data.objpointsearnruleconfig.commonfixedpercentageorwithperce == "percentwith") {
-                                    
+
                                     $("#divfixed").show();
                                     $('#txtpercentagewith').val(data.objpointsearnruleconfig.FixedEarnPointPecentageWith);
-                                   
+
                                     if (data.objpointsearnruleconfig.IncrementedValue != null) {
                                         $("#divincrement").show();
                                         $('input[class="commonsingleorcumulative"][value="' + data.objpointsearnruleconfig.IncrementedValue + '"]').attr('checked', true);
@@ -1032,11 +1032,11 @@
 
                                         }
                                     }
-                                    
+
                                 }
 
                             }
-                            if (data.objpointsearnruleconfig.EarnPointLevelType == "commonSlab") {                                
+                            if (data.objpointsearnruleconfig.EarnPointLevelType == "commonSlab") {
                                 console.log(data.lstearnpointslabconfig);
                                 if (data.lstearnpointslabconfig.length > 0) {
                                     if (data.lstearnpointslabconfig[0].EarnPointSlabFromPercentage != null || data.lstearnpointslabconfig[0].EarnPointSlabFromPercentage != "") {
@@ -1054,14 +1054,14 @@
                                                 '" id="textboxto' + i + '" value="' + data.lstearnpointslabconfig[i].EarnPointSlabToPercentage + '" class="input50" placeholder="To">' + '&nbsp;' + '<input type="textbox" name="textboxvalue' + i + '" id="textboxvalue' + i + '" value="' + data.lstearnpointslabconfig[i].EarnPointSlabValue +'"placeholder="value" style="width:50px;">');
 
                                             newTextBoxDiv.appendTo("#TextBoxesGroup");
-                                        
+
                                         }
                                     }
                                     if (data.lstearnpointslabconfig[0].EarnPointSlabFromRs != null || data.lstearnpointslabconfig[0].EarnPointSlabFromRs != "") {
-                                        
+
                                         $('input[id="rdbFrmToRs"]').attr('checked', true);
                                        // $("#divslab").show();
-                                        for (var i = 0; i < data.lstearnpointslabconfig.length; i++) {                                           
+                                        for (var i = 0; i < data.lstearnpointslabconfig.length; i++) {
                                             var newTextBoxDiv = $(document.createElement('div'))
                                                 .attr("id", 'TextBoxDiv' + i);
                                             newTextBoxDiv.after().html(
@@ -1070,7 +1070,7 @@
                                                 '" id="textboxto' + i + '" value="' + data.lstearnpointslabconfig[i].EarnPointSlabToRs+'" class="input50" placeholder="To">' + '&nbsp;' + '<input type="textbox" name="textboxvalue' + i + '" id="textboxvalue' + i + '" value="' + data.lstearnpointslabconfig[i].EarnPointSlabValue +'" placeholder="value" style="width:50px;">');
 
                                             newTextBoxDiv.appendTo("#TextBoxesGroup");
-                                            
+
                                         }
                                     }
                                 }
@@ -1080,7 +1080,7 @@
                         }
 
                         else if (data.objpointsearnruleconfig.EarnPointLevelType == "Making" || data.objpointsearnruleconfig.EarnPointLevelType == "FullAmount" ){
-                            $("#divjel").show();                         
+                            $("#divjel").show();
                             $('input[class="jwlLevel"][value="' + data.objpointsearnruleconfig.EarnPointLevelType + '"]').attr('checked', true);
                             if (data.objpointsearnruleconfig.lstearnpointslabconfig.length > 0) {
                                 if (data.objonboardingviewmodel.lstearnpointslabconfig[0].EarnPointSlabFromPercentage != null) {
@@ -1110,17 +1110,17 @@
                                             '" id="textboxfrom' + i + '" value="' + data.objpointsearnruleconfig.lstearnpointslabconfig[i].EarnPointSlabFromRs + '" class="input50" placeholder="From" >' + '&nbsp;&nbsp;' + '<input type="text" name="textboxto' + i +
                                             '" id="textboxto' + i + '" value="' + data.objpointsearnruleconfig.lstearnpointslabconfig[i].EarnPointSlabToRs + '" class="input50" placeholder="To">' + '&nbsp;' + '<input type="textbox" name="textboxvalue' + i + '" id="textboxvalue' + i + '" value="' + data.objpointsearnruleconfig.lstearnpointslabconfig[i].EarnPointSlabValue + '" placeholder="value" style="width:50px;">');
 
-                                        newTextBoxDiv.appendTo("#TextBoxesGroup");                                        
+                                        newTextBoxDiv.appendTo("#TextBoxesGroup");
 
                                     }
                                 }
                             }
                         }
                     }
-                    
+
                 }
                 else {
-                    
+
                 }
                 $("#divLoader").hide();
             },

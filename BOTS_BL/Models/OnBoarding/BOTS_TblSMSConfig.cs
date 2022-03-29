@@ -50,8 +50,12 @@ namespace BOTS_BL.Models
 
         public string SMSScript { get; set; }
 
+        public string SMSScriptDLT { get; set; }        
+
         [StringLength(50)]
         public string DLTStatus { get; set; }
+
+        public string RejectReason { get; set; }
 
         [StringLength(50)]
         public string AddedBy { get; set; }
