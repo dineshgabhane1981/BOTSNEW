@@ -19,11 +19,7 @@ namespace WebApp.Controllers.ITOPS
         ReportsRepository RR = new ReportsRepository();
         CustomerRepository objCustRepo = new CustomerRepository();
         Exceptions newexception = new Exceptions();
-        // GET: OTPAndLog
-        ITOpsRepository ITOPS = new ITOpsRepository();
-        ReportsRepository RR = new ReportsRepository();
-        CustomerRepository objCustRepo = new CustomerRepository();
-        Exceptions newexception = new Exceptions();
+        
         // GET: EarnBurn
         string groupId;
         public ActionResult Index()
