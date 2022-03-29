@@ -4,8 +4,6 @@
     Layout = "~/Views/Shared/_LayoutITOPS.cshtml";
 }
 
-<h2>Add / Earn</h2>
-
 
 <!--Add / Earn-->
 <div class="app-main__inner">
@@ -135,7 +133,7 @@
 <script src="~/Content/scriptSteps.js"></script>
 <script>
     $(document).ready(function () {
-        alert("1");
+        
         var today = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
 
         $("#dtTransaction").datepicker({
@@ -168,7 +166,7 @@
 
     function GetAddEarnData() {
 
-        alert("inside fucntion GetAddEarnData");
+        
 
         if ($('#txtMobileNo2').val() == "" && $('#txtCardNo2').val() == "") {
             toastr.error('Please enter Mobile Number OR Card Number');
@@ -180,9 +178,7 @@
         }
         $("#divLoader").show();
 
-        //alert(JSON.stringify($('#hdnGroupId').val()));
-        //alert(JSON.stringify($('#txtMobileNo2').val()));
-        //alert(JSON.stringify($('#txtCardNo2').val()));
+        
         $.ajax({
             type: "POST",
             url: '@Url.Action("GetData", "EarnBurn")',//"/EarnBurn/GetData",
@@ -208,19 +204,6 @@
                     $("#tblUpdateData2").show();
                 }
                 else {
-                    //toastr.error('Member not present. Please check entered Mobile Number OR Card Number');
-                    //$("#spnMemberName2").text("");
-                    //$("#spnMobileno2").text("");
-                    //$("#spnCardNo2").text("");
-                    //$("#spnPtBalance2").text("");
-                    //$("#spnEnrolledOutlet2").text("");
-                    //$("#spnEnrolledOn2").text("");
-                    //$("#hdnCustomerId2").val("");
-
-                    //$('#txtInvoiceNumber').val("");
-                    //$('#txtInvoiceAmount').val("");
-                    //$('#txtRequestedByName2').val("");
-                    //$('#ddlRequestedForum2').prop('selectedIndex', 0);
                     $("#tblUpdateData2").show();
                 }
                 $("#divLoader").hide();
