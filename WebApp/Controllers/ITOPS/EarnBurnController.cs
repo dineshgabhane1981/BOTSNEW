@@ -26,22 +26,12 @@ namespace WebApp.Controllers.ITOPS
         CustomerRepository objCustRepo = new CustomerRepository();
         Exceptions newexception = new Exceptions();
         // GET: EarnBurn
-        string groupId;
-        //var userDetails = (CustomerLoginDetail)Session["UserSession"];
-        //var GroupId = userDetails.GroupId;
-        //var roleId = userDetails.LoginType;
-        //var level = userDetails.LevelIndicator;
-
-
-
-
+        
         public ActionResult Index()
         {
+            string groupId = Convert.ToString(Session["GroupId"]);
             try
-            {
-                CommonFunctions common = new CommonFunctions();
-                //groupId = common.DecryptString(groupId);
-                groupId = Session["GroupId"].ToString();
+            {                               
                 string connStr = objCustRepo.GetCustomerConnString(groupId);
                 var lstOutlet = RR.GetOutletList(groupId, connStr);
                 var lstBrand = RR.GetBrandList(groupId, connStr);

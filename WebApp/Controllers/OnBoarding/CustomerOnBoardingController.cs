@@ -1523,5 +1523,38 @@ namespace WebApp.Controllers.OnBoarding
 
         }
 
+        public ActionResult SaveCommunicationUniqueValuesConfig(string jsonData)
+        {
+            bool status = false;
+            try
+            {
+                var userDetails = (CustomerLoginDetail)Session["UserSession"];
+                BOTS_TblSMSConfig objSMSConfig = new BOTS_TblSMSConfig();
+
+                JavaScriptSerializer json_serializer = new JavaScriptSerializer();
+                json_serializer.MaxJsonLength = int.MaxValue;
+                object[] objInactiveConfigData = (object[])json_serializer.DeserializeObject(jsonData);
+                string groupID = string.Empty;
+                string type = string.Empty;
+                foreach (Dictionary<string, object> item in objInactiveConfigData)
+                {
+                    objSMSConfig.GroupId = Convert.ToString(item["GroupID"]);
+                    objSMSConfig.PEID = Convert.ToString(item["PEID"]);
+                    objSMSConfig.SMSProvider = Convert.ToString(item["SMSProvider"]);
+                    objSMSConfig.SMSSenderID = Convert.ToString(item["SMSSenderId"]);
+                    objSMSConfig.SMSUsername = Convert.ToString(item["SMSUserName"]);
+                    objSMSConfig.SMSPassword = Convert.ToString(item["SMSPassword"]);
+                    objSMSConfig.SMSlink = Convert.ToString(item["SMSLink"]);
+                }
+                status = OBR.UpdateUniqueSMSValues(objSMSConfig, userDetails.LoginId);
+
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "SaveBirthdayAndAnniversaryConfig");
+            }
+
+            return new JsonResult() { Data = status, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
+        }
     }
 }

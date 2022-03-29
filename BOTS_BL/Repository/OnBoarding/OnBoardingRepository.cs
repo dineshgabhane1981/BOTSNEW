@@ -671,6 +671,39 @@ namespace BOTS_BL.Repository
             }
             return status;
         }
+
+        public bool UpdateUniqueSMSValues(BOTS_TblSMSConfig objData, string LoginId)
+        {
+            bool status = false;
+            try
+            {
+                using (var context = new CommonDBContext())
+                {
+                    var lstOldData = context.BOTS_TblSMSConfig.Where(x => x.GroupId == objData.GroupId).ToList();
+                    foreach(var item in lstOldData)
+                    {
+                        item.PEID = objData.PEID;
+                        item.SMSProvider = objData.SMSProvider;
+                        item.SMSSenderID = objData.SMSSenderID;
+                        item.SMSUsername = objData.SMSUsername;
+                        item.SMSPassword = objData.SMSPassword;
+                        item.SMSlink = objData.SMSlink;
+                        item.UpdatedBy = LoginId;
+                        item.UpdatedDate = DateTime.Now;
+
+                        context.BOTS_TblSMSConfig.AddOrUpdate(item);
+                        context.SaveChanges();
+                    }
+                    status = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "UpdateUniqueSMSValues");
+            }
+            return status;
+        }
+
         public List<BOTS_TblWAConfig> GetCommunicationWAConfig(string GroupId, string BrandId)
         {
             List<BOTS_TblWAConfig> objData = new List<BOTS_TblWAConfig>();
