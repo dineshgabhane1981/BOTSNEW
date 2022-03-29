@@ -4,118 +4,127 @@
     Layout = "~/Views/Shared/_LayoutITOPS.cshtml";
 }
 
+<!--Load Bonus Point-->
+<div class="app-main__inner">
+    <div class="mb-3 card" style="padding-top:20px;">
+        <div class="content">
 
-<div class="multisteps-form__panel shadow p-4 list-box bg-white" id="sec6" data-animation="scaleIn">
-    <h4 class="multisteps-form__title" style="color:blue;">Load Bonus Points</h4><br />
-    <div class="multisteps-form__content">
-        <div>
-            <label style="padding-right:5px;padding-top:10px;">Enter Mobile Number </label>
-            <input type="number" id="txtMobileNo4" class="input50" />
+            <div class="container overflow-hidden">
+                
+                    <div class="multisteps-form__panel shadow p-4 list-box bg-white" id="sec6" data-animation="scaleIn">
+                        <h4 class="multisteps-form__title" style="color:blue;">Load Bonus Points</h4><br />
+                        <div class="multisteps-form__content">
+                            <div>
+                                <label style="padding-right:5px;padding-top:10px;">Enter Mobile Number </label>
+                                <input type="number" id="txtMobileNo4" class="input50" />
 
-            <label style="padding-right:30px;padding-top:10px;padding-left:30px;"><b>(OR)</b> </label>
+                                <label style="padding-right:30px;padding-top:10px;padding-left:30px;"><b>(OR)</b> </label>
 
-            <label style="padding-right:5px;padding-top:10px;">Enter Card Number </label>
-            <input type="number" id="txtCardNo4" class="input50" />
-            <button type="button" id="btnSearchMember4" style="margin-left:15px;margin-top:10px;" class="btn btn-primary">Go</button>
-        </div>
-        <div>
-            <div style="margin-left:30px;margin-bottom:30px;margin-top:30px;">
-                <input type="radio" name="first_item4" id="rbtnSMS4" /> Send SMS
-                <input type="radio" name="first_item4" style="margin-left:30px;" checked id="rbtnNOSMS4" /> Don't Send SMS
+                                <label style="padding-right:5px;padding-top:10px;">Enter Card Number </label>
+                                <input type="number" id="txtCardNo4" class="input50" />
+                                <button type="button" id="btnSearchMember4" style="margin-left:15px;margin-top:10px;" class="btn btn-primary">Go</button>
+                            </div>
+                            <div>
+                                <div style="margin-left:30px;margin-bottom:30px;margin-top:30px;">
+                                    <input type="radio" name="first_item4" id="rbtnSMS4" /> Send SMS
+                                    <input type="radio" name="first_item4" style="margin-left:30px;" checked id="rbtnNOSMS4" /> Don't Send SMS
+                                </div>
+                                <div style="display:flex; height:550px;">
+                                    <input type="hidden" id="hdnCustomerId4" />
+                                    <table border="2" cellpadding="5" cellspacing="5">
+                                        <tr>
+                                            <th colspan="2" style="padding:10px;text-align:center;">Existing Member Details</th>
+                                        </tr>
+                                        <tr>
+                                            <td style="padding:10px;">Member Name</td>
+                                            <td style="padding:10px;width:200px;"><span style="color:red;" id="spnMemberName4"></span></td>
+                                        </tr>
+                                        <tr>
+                                            <td style="padding:10px;">Mobile No</td>
+                                            <td style="padding:10px;"><span id="spnMobileno4"></span></td>
+                                        </tr>
+                                        <tr>
+                                            <td style="padding:10px;">Card No</td>
+                                            <td style="padding:10px;"><span id="spnCardNo4"></span></td>
+                                        </tr>
+                                        <tr>
+                                            <td style="padding:10px;">Points Balance</td>
+                                            <td style="padding:10px;"><span id="spnPtBalance4"></span></td>
+                                        </tr>
+                                        <tr>
+                                            <td style="padding:10px;">Enrolled Outlet</td>
+                                            <td style="padding:10px;"><span id="spnEnrolledOutlet4"></span></td>
+                                        </tr>
+                                        <tr>
+                                            <td style="padding:10px;">Enrolled On</td>
+                                            <td style="padding:10px;"><span id="spnEnrolledOn4"></span></td>
+                                        </tr>
+
+                                    </table>
+
+                                    <table border="2" cellpadding="5" cellspacing="5" id="tblUpdateData4" style="margin-left:50px;display:none;">
+                                        <tr>
+                                            <th colspan="2" style="padding:10px;text-align:center;">Points Earning on a Purchase Txn</th>
+                                        </tr>
+                                        <tr>
+                                            <td style="padding:10px;width:200px;">Enter Bonus Points</td>
+                                            <td style="padding:10px;width:200px;">
+                                                <input type="number" id="txtBonusPoints" placeholder="Bonus Points" class="input50" />
+
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td style="padding:10px;width:200px;">Enter Bonus Remark</td>
+                                            <td style="padding:10px;width:200px;">
+                                                <input type="text" id="txtBonusRemark" placeholder="Bonus Remark" class="input50" />
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td style="padding:10px;width:200px;">Expiry Date</td>
+                                            <td style="padding:10px;width:200px;">
+                                                <input type="date" id="txtExpiryDate" class="input50" />
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td style="padding:10px;width:200px;">Select Outlet</td>
+                                            <td style="padding:10px;width:200px;">
+                                                @Html.DropDownList("Outlet", new SelectList(ViewBag.OutletList, "Value", "Text"), "Select Outlet", htmlAttributes: new { @class = "input50", @id = "ddlOutletList4" })
+
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td style="padding:10px;">Requested by</td>
+                                            <td style="padding:10px;">
+                                                <input type="text" id="txtRequestedByName4" placeholder="Requested By" class="input50" />
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td style="padding:10px;">Requested on Forum</td>
+                                            <td style="padding:10px;">
+                                                <select name="ddlRequestedForum4" id="ddlRequestedForum4" class="input50">
+                                                    <option value="Whatsapp">Whatsapp</option>
+                                                    <option value="Email">Email</option>
+                                                    <option value="Phone">Phone</option>
+                                                </select>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td style="padding:10px;">Transaction Date</td>
+                                            <td style="padding:10px;"><input type="text" id="txtRequestedDate4" class="input50" /></td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="button-row d-flex mt-5">
+                        <button class="btn btn-primary ml-auto" type="button" title="Next" id="btnLoadBonusPoints" tabindex="30">Save</button>
+                    </div>
+                </div>
             </div>
-            <div style="display:flex; height:550px;">
-                <input type="hidden" id="hdnCustomerId4" />
-                <table border="2" cellpadding="5" cellspacing="5">
-                    <tr>
-                        <th colspan="2" style="padding:10px;text-align:center;">Existing Member Details</th>
-                    </tr>
-                    <tr>
-                        <td style="padding:10px;">Member Name</td>
-                        <td style="padding:10px;width:200px;"><span style="color:red;" id="spnMemberName4"></span></td>
-                    </tr>
-                    <tr>
-                        <td style="padding:10px;">Mobile No</td>
-                        <td style="padding:10px;"><span id="spnMobileno4"></span></td>
-                    </tr>
-                    <tr>
-                        <td style="padding:10px;">Card No</td>
-                        <td style="padding:10px;"><span id="spnCardNo4"></span></td>
-                    </tr>
-                    <tr>
-                        <td style="padding:10px;">Points Balance</td>
-                        <td style="padding:10px;"><span id="spnPtBalance4"></span></td>
-                    </tr>
-                    <tr>
-                        <td style="padding:10px;">Enrolled Outlet</td>
-                        <td style="padding:10px;"><span id="spnEnrolledOutlet4"></span></td>
-                    </tr>
-                    <tr>
-                        <td style="padding:10px;">Enrolled On</td>
-                        <td style="padding:10px;"><span id="spnEnrolledOn4"></span></td>
-                    </tr>
-
-                </table>
-
-                <table border="2" cellpadding="5" cellspacing="5" id="tblUpdateData4" style="margin-left:50px;display:none;">
-                    <tr>
-                        <th colspan="2" style="padding:10px;text-align:center;">Points Earning on a Purchase Txn</th>
-                    </tr>
-                    <tr>
-                        <td style="padding:10px;width:200px;">Enter Bonus Points</td>
-                        <td style="padding:10px;width:200px;">
-                            <input type="number" id="txtBonusPoints" placeholder="Bonus Points" class="input50" />
-
-                        </td>
-                    </tr>
-                    <tr>
-                        <td style="padding:10px;width:200px;">Enter Bonus Remark</td>
-                        <td style="padding:10px;width:200px;">
-                            <input type="text" id="txtBonusRemark" placeholder="Bonus Remark" class="input50" />
-                        </td>
-                    </tr>
-                    <tr>
-                        <td style="padding:10px;width:200px;">Expiry Date</td>
-                        <td style="padding:10px;width:200px;">
-                            <input type="date" id="txtExpiryDate" class="input50" />
-                        </td>
-                    </tr>
-                    <tr>
-                        <td style="padding:10px;width:200px;">Select Outlet</td>
-                        <td style="padding:10px;width:200px;">
-                            @Html.DropDownList("Outlet", new SelectList(ViewBag.OutletList, "Value", "Text"), "Select Outlet", htmlAttributes: new { @class = "input50", @id = "ddlOutletList4" })
-
-                        </td>
-                    </tr>
-                    <tr>
-                        <td style="padding:10px;">Requested by</td>
-                        <td style="padding:10px;">
-                            <input type="text" id="txtRequestedByName4" placeholder="Requested By" class="input50" />
-                        </td>
-                    </tr>
-                    <tr>
-                        <td style="padding:10px;">Requested on Forum</td>
-                        <td style="padding:10px;">
-                            <select name="ddlRequestedForum4" id="ddlRequestedForum4" class="input50">
-                                <option value="Whatsapp">Whatsapp</option>
-                                <option value="Email">Email</option>
-                                <option value="Phone">Phone</option>
-                            </select>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td style="padding:10px;">Transaction Date</td>
-                        <td style="padding:10px;"><input type="text" id="txtRequestedDate4" class="input50" /></td>
-                    </tr>
-                </table>
-            </div>
         </div>
-    </div>
-</div>
-<div class="button-row d-flex mt-5">
-    <button class="btn btn-primary ml-auto" type="button" title="Next" id="btnLoadBonusPoints" tabindex="20">Save</button>
-</div>
-<script src="~/Content/scriptSteps.js"></script>
-<script>
+            <script src="~/Content/scriptSteps.js"></script>
+            <script>
 
     $('#btnSearchMember4').on("click", function () {
         GetLoadBonusData();
@@ -271,6 +280,6 @@
             }
             }
 
-</script>
+            </script>
 
 
