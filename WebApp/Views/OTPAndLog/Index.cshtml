@@ -4,36 +4,46 @@
     Layout = "~/Views/Shared/_LayoutITOPS.cshtml";
 }
 
-<h2>Index</h2>
-<!--OTP-->
-<div class="multisteps-form__panel shadow p-4 list-box bg-white" id="sec10" data-animation="scaleIn">
-    <h4 class="multisteps-form__title" style="color:blue;">OTP</h4><br />
-    <div class="multisteps-form__content">
-        <div>
-            <label style="padding-right:5px;padding-top:10px;">Enter Mobile Number </label>
-            <input type="number" id="txtMobileNoOTP" class="input50" />
-            <button type="button" id="btnGetOTP" style="margin-left:15px;margin-top:10px;" class="btn btn-primary">Go</button>
-        </div>
 
-        <div>
-            <br />
-            <table border="2" cellpadding="5" cellspacing="5" id="tblOTPDetails">
-                <tr>
-                    <th style="padding:10px;text-align:center;">Outlet Name</th>
-                    <th style="padding:10px;text-align:center;">Datetime</th>
-                    <th style="padding:10px;text-align:center;">OTP</th>
-                </tr>
-                <tr>
-                    <td style="padding:10px;"><span id="spnOutletNameOTP"></span></td>
-                    <td style="padding:10px;"><span id="spnDateTimeOTP"></span></td>
-                    <td style="padding:10px;"><b><span id="spnOTP"></span></b></td>
-                </tr>
-            </table>
+<!--OTP-->
+<div class="app-main__inner">
+    <div class="mb-3 card" style="padding-top:20px;">
+        <div class="content">
+            <!--content inner-->
+
+            <div class="container overflow-hidden">
+                <div class="multisteps-form__panel shadow p-4 list-box bg-white" id="sec10" data-animation="scaleIn">
+                    <h4 class="multisteps-form__title" style="color:blue;">OTP</h4><br />
+                    <div class="multisteps-form__content">
+                        <div>
+                            <label style="padding-right:5px;padding-top:10px;">Enter Mobile Number </label>
+                            <input type="number" id="txtMobileNoOTP" class="input50" />
+                            <button type="button" id="btnGetOTP" style="margin-left:15px;margin-top:10px;" class="btn btn-primary">Go</button>
+                        </div>
+
+                        <div>
+                            <br />
+                            <table border="2" cellpadding="5" cellspacing="5" id="tblOTPDetails">
+                                <tr>
+                                    <th style="padding:10px;text-align:center;">Outlet Name</th>
+                                    <th style="padding:10px;text-align:center;">Datetime</th>
+                                    <th style="padding:10px;text-align:center;">OTP</th>
+                                </tr>
+                                <tr>
+                                    <td style="padding:10px;"><span id="spnOutletNameOTP"></span></td>
+                                    <td style="padding:10px;"><span id="spnDateTimeOTP"></span></td>
+                                    <td style="padding:10px;"><b><span id="spnOTP"></span></b></td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
 
-<script>
+                <script>
 
     $('#btnotp').on("click", function () {
         GetClearAllTab();
@@ -78,4 +88,4 @@
 
     }
 
-</script>
+                </script>
