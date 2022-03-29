@@ -15,7 +15,6 @@ namespace WebApp.Controllers.ITOPS
 {
     public class SMSAndSecurityController : Controller
     {
-
         ITOpsRepository ITOPS = new ITOpsRepository();
         ReportsRepository RR = new ReportsRepository();
         CustomerRepository objCustRepo = new CustomerRepository();
@@ -164,5 +163,50 @@ namespace WebApp.Controllers.ITOPS
                 }
             }
         }
+
+        public ActionResult GetLoginIdByOutlets(int outletId)
+        {
+            var GroupId = (string)Session["GroupId"];
+            SPResponse result = new SPResponse();
+            ResetSecurityKey objreset = new ResetSecurityKey();
+            try
+            {
+                objreset.lstloginid = ITOPS.GetLoginIdByOutlet(GroupId, outletId);
+            }
+            catch (Exception ex)
+            {
+
+                newexception.AddException(ex, GroupId);
+            }
+
+            return Json(objreset, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public ActionResult GetOutletByBrandId(string BrandId)
+        {
+            var GroupId = (string)Session["GroupId"];
+            string connStr = objCustRepo.GetCustomerConnString(GroupId);
+            SPResponse result = new SPResponse();
+            var lstoutletlist = RR.GetOutletListByBrandId(BrandId, connStr);
+            ViewBag.OutletListByBrand = lstoutletlist;
+            return Json(lstoutletlist, JsonRequestBehavior.AllowGet);
+        }
+        public bool UpdateSecurityKey(string CounterId)
+        {
+            var GroupId = (string)Session["GroupId"];
+            bool result = false;
+            try
+            {
+                result = ITOPS.UpdateSecurityKey(GroupId, CounterId);
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, GroupId);
+            }
+            return result;
+        }
+
+
     }
 }

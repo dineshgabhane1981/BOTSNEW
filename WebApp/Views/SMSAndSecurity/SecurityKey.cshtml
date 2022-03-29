@@ -141,7 +141,7 @@
          $.ajax({
                 type: "POST",
                 url: '@Url.Action("UpdateSecurityKey", "SMSAndSecurity")',//"/ITOperations/DeleteTransaction",
-             data: '{GroupId: ' + JSON.stringify($('#hdnGroupId').val()) +', CounterId: ' + id + '}',
+             data: '{CounterId: ' + id + '}',
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
                 success: function (result) {

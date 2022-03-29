@@ -51,6 +51,58 @@ namespace WebApp.Controllers.ITOPS
         }
 
         [HttpPost]
+        public bool ChangeMemberName(string jsonData)
+        {
+            bool result = false;
+            string GroupId = "";
+            try
+            {
+                GroupId = (string)Session["GroupId"];
+                JavaScriptSerializer json_serializer = new JavaScriptSerializer();
+                json_serializer.MaxJsonLength = int.MaxValue;
+                object[] objData = (object[])json_serializer.DeserializeObject(jsonData);
+                tblAudit objAudit = new tblAudit();
+                bool IsSMS = false;
+
+                string CustomerId = "";
+                string Name = "";
+                foreach (Dictionary<string, object> item in objData)
+                {                    
+                    CustomerId = Convert.ToString(item["CustomerId"]);
+                    Name = Convert.ToString(item["Name"]);
+                    objAudit.GroupId = GroupId;
+                    objAudit.RequestedFor = "Name Change";
+                    objAudit.RequestedEntity = "CustomerId - " + CustomerId;
+                    objAudit.RequestedBy = Convert.ToString(item["RequestedBy"]);
+                    objAudit.RequestedOnForum = Convert.ToString(item["RequestedForum"]);
+                    objAudit.RequestedOn = Convert.ToDateTime(item["RequestedOn"]);
+                    IsSMS = Convert.ToBoolean(item["IsSMS"]);
+                }
+
+                result = ITOPS.UpdateNameOfMember(GroupId, CustomerId, Name, objAudit);
+                if (result)
+                {
+                    var subject = "Customer name changed for CustomerId - " + CustomerId;
+                    var body = "Customer name changed for CustomerId - " + CustomerId;
+                    body += "<br/><br/> Regards <br/> Blue Ocktopus Team";
+
+                    SendEmail(GroupId, subject, body);
+                }
+
+                if (IsSMS)
+                {
+                    //Logic to send SMS to Customer whose Name is changed
+                }
+
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, GroupId);
+            }
+            return result;
+        }
+
+        [HttpPost]
         public ActionResult ChangeMemberMobile(string jsonData)
         {
             SPResponse result = new SPResponse();
