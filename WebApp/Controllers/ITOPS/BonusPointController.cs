@@ -27,8 +27,104 @@ namespace WebApp.Controllers.ITOPS
         // GET: BonusPoint
         public ActionResult Index()
         {
+            var groupId = (string)Session["GroupId"];
+            try
+            {
+
+                string connStr = objCustRepo.GetCustomerConnString(groupId);
+                var lstOutlet = RR.GetOutletList(groupId, connStr);
+                var lstBrand = RR.GetBrandList(groupId, connStr);
+                var GroupDetails = objCustRepo.GetGroupDetails(Convert.ToInt32(groupId));
+                ViewBag.OutletList = lstOutlet;
+                ViewBag.BranchList = lstBrand;
+                ViewBag.GroupId = groupId;
+                ViewBag.GroupName = GroupDetails.RetailName;
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, groupId);
+            }
             return View();
         }
+
+        public ActionResult GetChangeNameData(string MobileNo, string CardNo)
+        {
+            var GroupId = (string)Session["GroupId"];
+            MemberData objCustomerDetail = new MemberData();
+            if (!string.IsNullOrEmpty(MobileNo))
+            {
+                objCustomerDetail = ITOPS.GetChangeNameByMobileNo(GroupId, MobileNo);
+            }
+            if (!string.IsNullOrEmpty(CardNo))
+            {
+                objCustomerDetail = ITOPS.GetChangeNameByCardNo(GroupId, CardNo);
+            }
+
+            return Json(objCustomerDetail, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public ActionResult LoadBonusData(string jsonData)
+        {
+            SPResponse result = new SPResponse();
+            var GroupId = (string)Session["GroupId"];
+            try
+            {
+                JavaScriptSerializer json_serializer = new JavaScriptSerializer();
+                json_serializer.MaxJsonLength = int.MaxValue;
+                object[] objData = (object[])json_serializer.DeserializeObject(jsonData);
+                tblAudit objAudit = new tblAudit();
+                bool IsSMS = false;
+
+                string MobileNo = "";
+                int BonusPoints = 0;
+                string BonusRemark = "";
+                string OutletId = "";
+                DateTime ExpiryDate = DateTime.Now;
+
+                foreach (Dictionary<string, object> item in objData)
+                {
+
+                    MobileNo = Convert.ToString(item["MobileNo"]);
+                    OutletId = Convert.ToString(item["OutletId"]);
+                    BonusPoints = Convert.ToInt32(item["BonusPoints"]);
+                    BonusRemark = Convert.ToString(item["BonusRemark"]);
+                    ExpiryDate = Convert.ToDateTime(item["ExpiryDate"]);
+
+                    objAudit.GroupId = GroupId;
+                    objAudit.RequestedFor = "Load Bonus";
+                    objAudit.RequestedEntity = "Load Bonus for - " + MobileNo;
+                    objAudit.RequestedBy = Convert.ToString(item["RequestedBy"]);
+                    objAudit.RequestedOnForum = Convert.ToString(item["RequestedForum"]);
+                    objAudit.RequestedOn = Convert.ToDateTime(item["RequestedDate"]);
+
+                    IsSMS = Convert.ToBoolean(item["IsSMS"]);
+                }
+
+                result = ITOPS.AddLoadBonusData(GroupId, MobileNo, OutletId, BonusPoints, BonusRemark, ExpiryDate, Convert.ToString(IsSMS), objAudit);
+                if (result.ResponseCode == "00")
+                {
+                    var subject = "Points Loaded for mobile no  - " + MobileNo;
+                    var body = "Points Loaded for mobile no - " + MobileNo;
+                    body += "<br/><br/> Regards <br/> Blue Ocktopus Team";
+
+                    SendEmail(GroupId, subject, body);
+                }
+
+                if (Convert.ToBoolean(IsSMS))
+                {
+                    //Logic to send SMS to Customer whose Name is changed
+                }
+
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, groupId);
+            }
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
+        
 
         public ActionResult CancelTransaction()
         {
