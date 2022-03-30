@@ -26,81 +26,86 @@
                             <button type="button" id="btnSearchMember" style="margin-left:15px;margin-top:10px;" class="btn btn-primary">Go</button>
                         </div>
                         <div>
-                            <div style="margin-left:30px;margin-bottom:30px;margin-top:30px;">
+                            <div style="margin-bottom:30px;margin-top:30px;">
                                 <input type="radio" name="first_item" id="rbtnSMS" /> Send SMS
                                 <input type="radio" name="first_item" checked style="margin-left:30px;" id="rbtnNOSMS" /> Don't Send SMS
                             </div>
-                            <div style="display:flex;">
+                            <div class="col-md-12 col-lg-12" style="padding-left: 0px !important; float: left;">
                                 <input type="hidden" id="hdnCustomerId" />
-                                <table border="2" cellpadding="5" cellspacing="5">
-                                    <tr>
-                                        <th colspan="2" style="padding:10px;text-align:center;">Existing Member Details</th>
-                                    </tr>
-                                    <tr>
-                                        <td style="padding:10px;">Member Name</td>
-                                        <td style="padding:10px;width:150px;"><span style="color:red;" id="spnMemberName"></span></td>
-                                    </tr>
-                                    <tr>
-                                        <td style="padding:10px;">Mobile No</td>
-                                        <td style="padding:10px;"><span id="spnMobileno"></span></td>
-                                    </tr>
-                                    <tr>
-                                        <td style="padding:10px;">Card No</td>
-                                        <td style="padding:10px;"><span id="spnCardNo"></span></td>
-                                    </tr>
-                                    <tr>
-                                        <td style="padding:10px;">Points Balance</td>
-                                        <td style="padding:10px;"><span id="spnPtBalance"></span></td>
-                                    </tr>
-                                    <tr>
-                                        <td style="padding:10px;">Enrolled Outlet</td>
-                                        <td style="padding:10px;"><span id="spnEnrolledOutlet"></span></td>
-                                    </tr>
-                                    <tr>
-                                        <td style="padding:10px;">Enrolled On</td>
-                                        <td style="padding:10px;">
-                                            <span id="spnEnrolledOn"></span>
-                                        </td>
-                                    </tr>
+                                <div class="col-md-4 col-lg-4" style="padding-left: 0px !important; margin-bottom: 10px; float: left; ">
+                                    <table border="1" cellpadding="5" cellspacing="5">
+                                        <tr>
+                                            <th colspan="2" style="padding:10px;text-align:center;">Existing Member Details</th>
+                                        </tr>
+                                        <tr>
+                                            <td style="padding:10px;">Member Name</td>
+                                            <td style="padding:10px;width:150px;"><span style="color:red;" id="spnMemberName"></span></td>
+                                        </tr>
+                                        <tr>
+                                            <td style="padding:10px;">Mobile No</td>
+                                            <td style="padding:10px;"><span id="spnMobileno"></span></td>
+                                        </tr>
+                                        <tr>
+                                            <td style="padding:10px;">Card No</td>
+                                            <td style="padding:10px;"><span id="spnCardNo"></span></td>
+                                        </tr>
+                                        <tr>
+                                            <td style="padding:10px;">Points Balance</td>
+                                            <td style="padding:10px;"><span id="spnPtBalance"></span></td>
+                                        </tr>
+                                        <tr>
+                                            <td style="padding:10px;">Enrolled Outlet</td>
+                                            <td style="padding:10px;"><span id="spnEnrolledOutlet"></span></td>
+                                        </tr>
+                                        <tr>
+                                            <td style="padding:10px;">Enrolled On</td>
+                                            <td style="padding:10px;">
+                                                <span id="spnEnrolledOn"></span>
+                                            </td>
+                                        </tr>
 
-                                </table>
-                                <table border="2" cellpadding="5" cellspacing="5" id="tblUpdateData" style="margin-left:50px;display:none;">
-                                    <tr>
-                                        <th colspan="2" style="padding:10px;text-align:center;">Add New Name</th>
-                                    </tr>
-                                    <tr>
-                                        <td style="padding:10px;width:100px;">Enter New Correct Name</td>
-                                        <td style="padding:10px;width:350px;">
-                                            <input type="text" id="txtFirstName" placeholder="First Name" class="input50" />
-                                            <input type="text" id="txtLastName" placeholder="Last Name" class="input50" />
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td style="padding:10px;">Requested by</td>
-                                        <td style="padding:10px;">
-                                            <input type="text" id="txtRequestedByName" placeholder="Requested By" class="input50" />
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td style="padding:10px;">Requested on Forum</td>
-                                        <td style="padding:10px;">
-                                            <select name="ddlRequestedForum" id="ddlRequestedForum" class="input50">
-                                                <option value="Whatsapp">Whatsapp</option>
-                                                <option value="Email">Email</option>
-                                                <option value="Phone">Phone</option>
-                                            </select>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td style="padding:10px;">Transaction Date</td>
-                                        <td style="padding:10px;"><input type="text" id="dtEnrolledOn1" class="input50" /></td>
-                                    </tr>
-                                </table>
+                                    </table>
+                                </div>
+                                <div class="col-md-5 col-lg-5" style="padding-left:0px !important;float:left;">
+                                    <table border="1" cellpadding="5" cellspacing="5" id="tblUpdateData" style="display:none;">
+                                        <tr>
+                                            <th colspan="2" style="padding:10px;text-align:center;">Add New Name</th>
+                                        </tr>
+                                        <tr>
+                                            <td style="padding:10px;">Enter New Correct Name</td>
+                                            <td style="padding:10px;width:200px;">
+                                                <input type="text" id="txtFirstName" placeholder="First Name" class="input50" />
+                                                <input type="text" id="txtLastName" placeholder="Last Name" class="input50" />
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td style="padding:10px;">Requested by</td>
+                                            <td style="padding:10px;">
+                                                <input type="text" id="txtRequestedByName" placeholder="Requested By" class="input50" />
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td style="padding:10px;">Requested on Forum</td>
+                                            <td style="padding:10px;">
+                                                <select name="ddlRequestedForum" id="ddlRequestedForum" class="input50">
+                                                    <option value="Whatsapp">Whatsapp</option>
+                                                    <option value="Email">Email</option>
+                                                    <option value="Phone">Phone</option>
+                                                </select>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td style="padding:10px;">Transaction Date</td>
+                                            <td style="padding:10px;"><input type="text" id="dtEnrolledOn1" class="input50" /></td>
+                                        </tr>
+                                    </table>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="button-row d-flex mt-4">
-                        <button class="btn btn-primary ml-auto" type="button" title="Next" id="btnSaveMemberName" tabindex="20">Save</button>
+
+                        <div class="button-row mt-5" style="text-align:end;">
+                            <button class="btn btn-primary ml-auto mt-3" type="button" title="Next" id="btnSaveMemberName" tabindex="20">Save</button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -108,7 +113,7 @@
         </div>
     </div>
 </div>
-    <script>
+<script>
 
     $(document).ready(function () {
 
@@ -258,9 +263,9 @@
         }
     }
 
-    </script>
+</script>
 
-    <script src="~/Scripts/jquery-ui-1.12.1.js"></script>
-    <script src="~/Scripts/jquery-ui-1.12.1.min.js"></script>
-    <link href="~/Content/themes/base/jquery-ui.min.css" rel="stylesheet" />
-    <link href="~/Content/themes/base/jquery-ui.css" rel="stylesheet" />
+<script src="~/Scripts/jquery-ui-1.12.1.js"></script>
+<script src="~/Scripts/jquery-ui-1.12.1.min.js"></script>
+<link href="~/Content/themes/base/jquery-ui.min.css" rel="stylesheet" />
+<link href="~/Content/themes/base/jquery-ui.css" rel="stylesheet" />
