@@ -46,7 +46,7 @@ namespace WebApp.Controllers.ITOPS
             }
             return View();
         }
-        public ActionResult GetCancelTxnData(string GroupId, string MobileNo, string InvoiceNo)
+        public ActionResult GetCancelTxnData(string MobileNo, string InvoiceNo)
         {
             var groupId = (string)Session["GroupId"];
             MemberData objCustomerDetail = new MemberData();
@@ -70,7 +70,7 @@ namespace WebApp.Controllers.ITOPS
             return Json(objData, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult GetModifyTxnData(string GroupId, string TransactionId)
+        public ActionResult GetModifyTxnData(string TransactionId)
         {
             //string GroupId = "";
             var groupId = (string)Session["GroupId"];
@@ -79,42 +79,44 @@ namespace WebApp.Controllers.ITOPS
             return Json(objData, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult DeleteTransaction(string GroupId, string InvoiceNo, string MobileNo, string InvoiceAmt, string ip_Date, string RequestedBy, string RequestedForum, string RequestedDate)
+        public bool ModifyTransaction(string jsonData)
         {
-            SPResponse result = new SPResponse();
-            //string GroupId = "";
+            bool result = false;
+            string GroupId = "";
             try
             {
                 var groupId = (string)Session["GroupId"];
+                JavaScriptSerializer json_serializer = new JavaScriptSerializer();
+                json_serializer.MaxJsonLength = int.MaxValue;
+                object[] objData = (object[])json_serializer.DeserializeObject(jsonData);
                 tblAudit objAudit = new tblAudit();
-                objAudit.GroupId = groupId;
-                objAudit.RequestedFor = "Delete Transaction";
-                objAudit.RequestedEntity = "Delete Transaction for Invoice - " + InvoiceNo;
-                objAudit.RequestedBy = RequestedBy;
-                objAudit.RequestedOnForum = RequestedForum;
-                objAudit.RequestedOn = Convert.ToDateTime(RequestedDate);
-                bool IsSMS = false;
-                var dateCancel = Convert.ToDateTime(ip_Date);
-                result = ITOPS.DeleteTransaction(groupId, InvoiceNo, MobileNo, InvoiceAmt, dateCancel, objAudit);
-                if (result.ResponseCode == "00")
-                {
-                    var subject = "Transaction Deleted for  - " + InvoiceNo;
-                    var body = "Transaction Deleted for - " + InvoiceNo;
-                    body += "<br/><br/> Regards <br/> Blue Ocktopus Team";
+                //string GroupId = "";
+                string TransactionId = "";
+                decimal points = 0;
 
-                    SendEmail(GroupId, subject, body);
-                }
-
-                if (Convert.ToBoolean(IsSMS))
+                foreach (Dictionary<string, object> item in objData)
                 {
-                    //Logic to send SMS to Customer whose Name is changed
+                    //GroupId = Convert.ToString(item["GroupID"]);
+                    TransactionId = Convert.ToString(item["TransactionId"]);
+                    if (!string.IsNullOrEmpty(Convert.ToString(item["Points"])))
+                    {
+                        points = Convert.ToDecimal(item["Points"]);
+                    }
+                    objAudit.GroupId = groupId;
+                    objAudit.RequestedFor = "Add / Earn";
+                    objAudit.RequestedEntity = "Transaction For  - " + TransactionId;
+                    objAudit.RequestedBy = Convert.ToString(item["RequestedBy"]);
+                    objAudit.RequestedOnForum = Convert.ToString(item["RequestedForum"]);
+                    objAudit.RequestedOn = Convert.ToDateTime(item["RequestedOn"]);
+
                 }
+                result = ITOPS.ModifyTransaction(groupId, Convert.ToInt64(TransactionId), points, objAudit);
             }
             catch (Exception ex)
             {
                 newexception.AddException(ex, GroupId);
             }
-            return Json(result, JsonRequestBehavior.AllowGet);
+            return result;
         }
 
         public void SendEmail(string GroupId, string Subject, string EmailBody)
@@ -150,49 +152,6 @@ namespace WebApp.Controllers.ITOPS
                     smtp.Send(mess);
                 }
             }
-        }
-        public bool ModifyTransaction(string jsonData)
-        {
-            bool result = false;
-            try
-            {
-                JavaScriptSerializer json_serializer = new JavaScriptSerializer();
-                json_serializer.MaxJsonLength = int.MaxValue;
-                object[] objData = (object[])json_serializer.DeserializeObject(jsonData);
-                tblAudit objAudit = new tblAudit();
-                string GroupId = "";
-                string TransactionId = "";
-                decimal points = 0;
-
-                foreach (Dictionary<string, object> item in objData)
-                {
-                    GroupId = Convert.ToString(item["GroupID"]);
-                    TransactionId = Convert.ToString(item["TransactionId"]);
-                    if (!string.IsNullOrEmpty(Convert.ToString(item["Points"])))
-                    {
-                        points = Convert.ToDecimal(item["Points"]);
-                    }
-                    objAudit.GroupId = GroupId;
-                    objAudit.RequestedFor = "Add / Earn";
-                    objAudit.RequestedEntity = "Transaction For  - " + TransactionId;
-                    objAudit.RequestedBy = Convert.ToString(item["RequestedBy"]);
-                    objAudit.RequestedOnForum = Convert.ToString(item["RequestedForum"]);
-                    objAudit.RequestedOn = Convert.ToDateTime(item["RequestedOn"]);
-
-                }
-                result = ITOPS.ModifyTransaction(GroupId, Convert.ToInt64(TransactionId), points, objAudit);
-            }
-            catch (Exception ex)
-            {
-                newexception.AddException(ex, "ModifyTransaction");
-            }
-            return result;
-        }
-        public ActionResult GetLogDetailData(string GroupId, string search)
-        {
-            List<LogDetailsRW> lstLogDetails = new List<LogDetailsRW>();
-            lstLogDetails = ITOPS.GetLogDetails(search, GroupId);
-            return Json(lstLogDetails, JsonRequestBehavior.AllowGet);
         }
 
 
