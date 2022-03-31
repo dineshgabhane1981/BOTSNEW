@@ -15,46 +15,52 @@
                     <h4 class="multisteps-form__title" style="color:blue;">Reset Security Key</h4><br />
                     <div class="multisteps-form__content" style="display:flex;">
                         <div class="multisteps-form__content">
-                            <div style="display:flex; height:auto !important;margin-top:50px;">
-                                <table border="2" cellpadding="5" cellspacing="5">
-                                    <tr>
-                                    </tr>
-                                    <tr>
-                                        <td style="padding:10px;">Select Brand</td>
-                                        <td style="padding:10px;width:200px;">
-                                            @Html.DropDownList("Brand", new SelectList(ViewBag.BranchList, "Value", "Text"), "Select Brand", htmlAttributes: new { onchange = "GetOutletList(this.value);", @class = "input50", @id = "ddlBranchList" })
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td style="padding:10px;">Select Outlet</td>
-                                        <td style="padding:10px;width:300px;">
-                                            <select id="ddlOutletListby" class="input50" onchange="OnChangeResetKey(this.value);">
-                                            </select>
-                                        </td>
-                                    </tr>
-                                </table>
-                            </div>
-                            <div class="row mt-3" id="dvActivityData1" style="height:800px;">
-                                <div class="table-responsive">
-                                    <table class="table" id="activityTable1">
-                                        <thead style="text-align:center;">
-                                            <tr>
-                                                <th scope="col">Login Id</th>
-                                                <th scope="col">Security Key</th>
-                                                <th scope="col">Reset</th>
+                            <div>
+                                <meta name="viewport" content="width=device-width, initial-scaled=1.0">
+                                <div class="col-md-12 col-lg-12" style="padding-left: 0px !important; float: left;">
+                                    <div class="col-md-4 col-lg-4" style="padding-left: 0px !important; margin-bottom: 10px; float: left;" display:flex; height:auto !important;margin-top:50px;">
+                                        <table border="1" cellpadding="5" cellspacing="5">
+                                            <tr position: absolute top: -9999px; left: -9998px;>
                                             </tr>
-                                        </thead>
-                                        <tr>
-                                            <td style="padding:10px;"><span id="spnLoginId"></span></td>
-                                        </tr>
-                                        <tbody style="text-align:center;">
-                                        </tbody>
-                                    </table>
+                                            <tr border: 1px solid #ccc;>
+                                                <td style="padding:10px;">Select Brand</td>
+                                                <td style="padding:10px;width:200px;">
+                                                    @Html.DropDownList("Brand", new SelectList(ViewBag.BranchList, "Value", "Text"), "Select Brand", htmlAttributes: new { onchange = "GetOutletList(this.value);", @class = "input50", @id = "ddlBranchList" })
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td style="padding:10px;">Select Outlet</td>
+                                                <td style="padding:10px;width:300px;">
+                                                    <select id="ddlOutletListby" class="input50" onchange="OnChangeResetKey(this.value);">
+                                                    </select>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                    <div class="col-md-12 col-lg-12" style="padding-left: 0px !important; float: left;" row mt-3" id="dvActivityData1" height:800px;">
+                                        <div class="table-responsive">
+                                            <table class="table" id="activityTable1">
+                                                <thead style="text-align:center;">
+                                                    <tr>
+                                                        <th scope="col">Login Id</th>
+                                                        <th scope="col">Security Key</th>
+                                                        <th scope="col">Reset</th>
+                                                    </tr>
+                                                </thead>
+                                                <tr>
+                                                    <td style="padding:10px;"><span id="spnLoginId"></span></td>
+                                                </tr>
+                                                <tbody style="text-align:center;">
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        </>
+                                    </div>
                                 </div>
+
                             </div>
                         </div>
                     </div>
-
                 </div>
             </div>
         </div>
