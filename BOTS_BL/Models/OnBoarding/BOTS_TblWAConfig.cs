@@ -16,7 +16,7 @@ namespace BOTS_BL.Models
 
         [StringLength(50)]
         public string BrandId { get; set; }
-
+        public int SetId { get; set; }
         public bool IsWA { get; set; }
 
         [StringLength(50)]

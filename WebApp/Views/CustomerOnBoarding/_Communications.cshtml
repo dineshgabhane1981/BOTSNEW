@@ -8,6 +8,8 @@
 </div>
 
 <div id="dvEditable" style="display:none;margin-top:20px;">
+    <input type="hidden" id="hdnSMSSetId" />
+    <input type="hidden" id="hdnWASetId" />
     <input type="hidden" id="hdnCommSMSConfigId1" />
     <input type="hidden" id="hdnCommSMSConfigId2" />
     <input type="hidden" id="hdnCommSMSConfigId3" />
@@ -173,7 +175,6 @@
             }
             else {
                 SMSEnableDisable(0);
-
             }
         });
         $('#chkIsWA').change(function () {
@@ -182,7 +183,6 @@
             }
             else {
                 WAEnableDisable(0);
-
             }
         });
 
@@ -407,6 +407,8 @@
             $("#txtSMSSenderId").val(newdata[0].SMSSenderID);
             $("#txtSMSUserName").val(newdata[0].SMSUsername);
             $("#txtSMSPassword").val(newdata[0].SMSPassword);
+            $("#hdnSMSSetId").val(newdata[0].SetId);
+
             $("#txtSMSLink").val(newdata[0].SMSlink);
             for (var i = 0; i < newdata.length; i++) {
                 if (newdata[i].MessageId == "100") {
@@ -504,6 +506,7 @@
             $("#txtWAPassword").val(newdata1[0].WAPassword);
             $("#txtWALink").val(newdata1[0].WAlink);
             $('#txtWATokenId').val(newdata1[0].TokenId)
+            $("#hdnWASetId").val(newdata[0].SetId);
             for (var i = 0; i < newdata1.length; i++) {
                 if (newdata1[i].MessageId == "100") {
                     $("#txtWAEnrollment").val(newdata1[i].WAScript);
@@ -558,6 +561,7 @@
             if ($('#chkIsSMS').is(":checked")) {
                 //item["SMSId"] = $("#hdnCommSMSConfigId").val();
                 item["IsSMS"] = 1;
+                item["SMSSetId"] = $('#hdnSMSSetId').val();
                 item["SMSProvider"] = $('#ddlSMSProvider').val();
                 item["SMSSenderId"] = $('#txtSMSSenderId').val();
                 item["SMSUserName"] = $('#txtSMSUserName').val();
@@ -588,6 +592,7 @@
 
             if ($('#chkIsWA').is(":checked")) {
                 item["IsWA"] = 1;
+                item["WASetId"] = $('#hdnWASetId').val();
                 item["WAProvider"] = $('#ddlWAProvider').val();
                 item["WANumber"] = $('#txtWANumber').val();
                 item["WAUserName"] = $('#txtWAUserName').val();
@@ -711,8 +716,6 @@
         })
         $("#divLoader").hide();
     }
-
-
 
 
 

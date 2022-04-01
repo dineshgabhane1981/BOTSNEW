@@ -602,7 +602,8 @@ namespace WebApp.Controllers.OnBoarding
                         objSMSConfig.SMSUsername = Convert.ToString(item["SMSUserName"]);
                         objSMSConfig.SMSPassword = Convert.ToString(item["SMSPassword"]);
                         objSMSConfig.SMSlink = Convert.ToString(item["SMSLink"]);
-                        //objSMSConfig.DLTStatus = "Submitted";
+                        if (!string.IsNullOrEmpty(Convert.ToString(item["SMSSetId"])))
+                            objSMSConfig.SetId = Convert.ToInt32(item["SMSSetId"]);                       
 
                         SMSTemplate objSMSTemplate1 = new SMSTemplate();
                         objSMSTemplate1.MessageId = 100;
@@ -683,6 +684,8 @@ namespace WebApp.Controllers.OnBoarding
                         objWAConfig.WAPassword = Convert.ToString(item["WAPassword"]);
                         objWAConfig.WAlink = Convert.ToString(item["WALink"]);
                         objWAConfig.TokenId = Convert.ToString(item["WATokenId"]);
+                        if (!string.IsNullOrEmpty(Convert.ToString(item["WASetId"])))
+                            objWAConfig.SetId = Convert.ToInt32(item["WASetId"]);
 
                         SMSTemplate objWATemplate1 = new SMSTemplate();
                         objWATemplate1.MessageId = 100;
