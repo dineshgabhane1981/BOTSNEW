@@ -26,8 +26,8 @@ namespace WebApp.Controllers.ITOPS
             {
                 CommonFunctions common = new CommonFunctions();
                 groupId = common.DecryptString(groupId);
-            }
-            Session["GroupId"] = groupId;
+                Session["GroupId"] = groupId;
+            }            
             return View();
         }
 

@@ -25,23 +25,12 @@ namespace WebApp.Controllers.ITOPS
         ReportsRepository RR = new ReportsRepository();
         CustomerRepository objCustRepo = new CustomerRepository();
         Exceptions newexception = new Exceptions();
-        // GET: EarnBurn
-        string groupId;
-        //var userDetails = (CustomerLoginDetail)Session["UserSession"];
-        //var GroupId = userDetails.GroupId;
-        //var roleId = userDetails.LoginType;
-        //var level = userDetails.LevelIndicator;
-
-
-
-
+       
         public ActionResult Index()
         {
+            var groupId = Convert.ToString(Session["GroupId"]);
             try
             {
-                CommonFunctions common = new CommonFunctions();
-                //groupId = common.DecryptString(groupId);
-                groupId = Session["GroupId"].ToString();
                 string connStr = objCustRepo.GetCustomerConnString(groupId);
                 var lstOutlet = RR.GetOutletList(groupId, connStr);
                 var lstBrand = RR.GetBrandList(groupId, connStr);
@@ -60,8 +49,9 @@ namespace WebApp.Controllers.ITOPS
         }
 
         [HttpPost]
-        public ActionResult GetData(string GroupId, string MobileNo, string CardNo)
+        public ActionResult GetData(string MobileNo, string CardNo)
         {
+            var GroupId = Convert.ToString(Session["GroupId"]);
             MemberData objCustomerDetail = new MemberData();
             if (!string.IsNullOrEmpty(MobileNo))
             {
@@ -77,10 +67,10 @@ namespace WebApp.Controllers.ITOPS
 
         public ActionResult Burn()
         {
-            var groupId = (string)Session["GroupId"];
+            var groupId = Convert.ToString(Session["GroupId"]);
+            
             try
             {
-
                 string connStr = objCustRepo.GetCustomerConnString(groupId);
                 var lstOutlet = RR.GetOutletList(groupId, connStr);
                 var lstBrand = RR.GetBrandList(groupId, connStr);
@@ -98,7 +88,7 @@ namespace WebApp.Controllers.ITOPS
         }
         public ActionResult GetChangeNameData(string MobileNo, string CardNo)
         {
-            var GroupId = (string)Session["GroupId"];
+            var GroupId = Convert.ToString(Session["GroupId"]);            
             MemberData objCustomerDetail = new MemberData();
             if (!string.IsNullOrEmpty(MobileNo))
             {
@@ -115,10 +105,9 @@ namespace WebApp.Controllers.ITOPS
         public ActionResult RedeemPointsData(string jsonData)
         {
             SPResponse result = new SPResponse();
-            //string GroupId = "";
+            var GroupId = Convert.ToString(Session["GroupId"]);
             try
-            {
-                var GroupId = (string)Session["GroupId"];
+            {               
                 JavaScriptSerializer json_serializer = new JavaScriptSerializer();
                 json_serializer.MaxJsonLength = int.MaxValue;
                 object[] objData = (object[])json_serializer.DeserializeObject(jsonData);
@@ -172,7 +161,7 @@ namespace WebApp.Controllers.ITOPS
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex, groupId);
+                newexception.AddException(ex, GroupId);
             }
             return Json(result, JsonRequestBehavior.AllowGet);
         }
@@ -233,7 +222,7 @@ namespace WebApp.Controllers.ITOPS
 
                 foreach (Dictionary<string, object> item in objData)
                 {
-                    GroupId = Convert.ToString(item["GroupID"]);
+                    GroupId = Convert.ToString(Session["GroupId"]);
                     MobileNo = Convert.ToString(item["MobileNo"]);
                     OutletId = Convert.ToString(item["OutletId"]);
                     TransactionDate = Convert.ToString(item["TransactionDate"]);
