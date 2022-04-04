@@ -35,6 +35,8 @@ namespace WebApp.ViewModel
         public BOTS_TblEarnPointsSlabConfig objearnpointslab { get; set; }
         public List<BOTS_TblEarnPointsSlabConfig> lstearnpointslabconfig { get; set; }
         public List<EarnPointLevel> lstearnpoint { get; set; }
+        public List<BOTS_TblCommunicationSet> lstCommunicationSet { get; set; }
+        public List<BOTS_TblCommunicationSetAssignment> lstCommunicationSetAssignment { get; set; }
 
         public string LeadId { get; set; }
         public SelectListItem[] BOProducts()

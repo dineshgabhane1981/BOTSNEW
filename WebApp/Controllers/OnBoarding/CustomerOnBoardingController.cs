@@ -77,6 +77,7 @@ namespace WebApp.Controllers.OnBoarding
                     objData.objRetailList = OBR.GetRetailDetails(groupId);
                     objData.objInstallmentList = OBR.GetInstallmentDetails(groupId);
                     objData.lstOutlets = OBR.GetOutletDetails(groupId);
+                    objData.lstCommunicationSet = OBR.GetCommunicationSetsByGroupId(groupId);
 
                     foreach (var brand in objData.objRetailList)
                     {
@@ -125,6 +126,8 @@ namespace WebApp.Controllers.OnBoarding
                 objData.objpointsearnruleconfig = objpointsearncofig;
                 objData.objearnpointslab = objpointsslabconfig;
                 objData.objpointsburnruleconfig = objpointsburncofig;
+
+                
             }
             catch (Exception ex)
             {
@@ -568,11 +571,11 @@ namespace WebApp.Controllers.OnBoarding
             return View(objData);
         }
 
-        public JsonResult GetSMSandWAData(string groupId, string brandId)
+        public JsonResult GetSMSandWAData(string groupId, string setId)
         {
             CommunicationConfigViewModel objData = new CommunicationConfigViewModel();
-            objData.SMSConfig = OBR.GetCommunicationSMSConfig(groupId, brandId);
-            objData.WAConfig = OBR.GetCommunicationWAConfig(groupId, brandId);
+            objData.SMSConfig = OBR.GetCommunicationSMSConfig(groupId, Convert.ToInt32(setId));
+            objData.WAConfig = OBR.GetCommunicationWAConfig(groupId, Convert.ToInt32(setId));
             return new JsonResult() { Data = objData, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
 
@@ -679,7 +682,7 @@ namespace WebApp.Controllers.OnBoarding
                         objWAConfig.WAProvider = Convert.ToString(item["WAProvider"]);
                         objWAConfig.GroupId = Convert.ToString(item["GroupId"]);
                         objWAConfig.BrandId = Convert.ToString(item["BrandId"]);
-                        objWAConfig.WANumber = Convert.ToString(item["WANumber"]);
+                        //objWAConfig.WANumber = Convert.ToString(item["WANumber"]);
                         objWAConfig.WAUsername = Convert.ToString(item["WAUserName"]);
                         objWAConfig.WAPassword = Convert.ToString(item["WAPassword"]);
                         objWAConfig.WAlink = Convert.ToString(item["WALink"]);

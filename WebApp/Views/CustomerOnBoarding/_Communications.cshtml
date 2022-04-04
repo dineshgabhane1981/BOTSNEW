@@ -1,722 +1,94 @@
 ﻿@model WebApp.ViewModel.OnBoardingSalesViewModel
 
+<style>
+    h2 {
+        color: #000;
+        text-align: center;
+        font-size: 2em;
+    }
+
+    .warpper {
+        display: grid;
+        flex-direction: column;
+        align-items: center;
+    }  
+
+    .modal {
+        display: none; /* Hidden by default */
+        position: fixed; /* Stay in place */
+        z-index: 5 !important; /* Sit on top */
+        padding-top: 65px; /* Location of the box */
+        left: 120px;
+        top: 0;
+        width: 100%; /* Full width */
+        height: 100%; /* Full height */
+        overflow: auto; /* Enable scroll if needed */
+        background-color: rgb(0,0,0); /* Fallback color */
+        background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+    }
+
+    /* Modal Content */
+    .modal-content {
+        background-color: #fefefe;
+        margin: auto;
+        padding: 20px;
+        border: 1px solid #888;
+        width: 75%;
+        border-radius: 25px;
+    }
+
+    .close {
+        color: #aaaaaa;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+    }
+
+        .close:hover,
+        .close:focus {
+            color: #000;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+    input:read-only {
+        background-color: lightgray;
+    }
+</style>
+
 <div class="row" style="margin-top:10px;">
     <div style="margin-left:20px;">
-        @Html.DropDownListFor(x => Model.lstBrands.Count, new SelectList(Model.lstBrands, "Value", "Text"), htmlAttributes: new { @class = "input50", @id = "ddlBrandsComm", style = "margin-top:20px;" })
+       <button type="button" id="btnCreateSets" class="btn btn-primary">Create Set</button>
     </div>
-    <div style="margin-left:25px;margin-top:35px;"><input type="checkbox" id="chkAllOutlets" /> Groupwise</div>
+    
 </div>
+<div id="CommunicationModal" class="modal">
+    <div class="modal-content">
+        <div class="row" style="margin: 0;" id="dvCommSetConfig">
+            @Html.Partial("~/Views/CustomerOnBoarding/_CommunicationsConfig.cshtml", Model)
+        </div>
 
-<div id="dvEditable" style="display:none;margin-top:20px;">
-    <input type="hidden" id="hdnSMSSetId" />
-    <input type="hidden" id="hdnWASetId" />
-    <input type="hidden" id="hdnCommSMSConfigId1" />
-    <input type="hidden" id="hdnCommSMSConfigId2" />
-    <input type="hidden" id="hdnCommSMSConfigId3" />
-    <input type="hidden" id="hdnCommSMSConfigId4" />
-    <input type="hidden" id="hdnCommSMSConfigId5" />
-    <input type="hidden" id="hdnCommSMSConfigId6" />
-    <input type="hidden" id="hdnCommSMSConfigId7" />
-    <input type="hidden" id="hdnCommSMSConfigId8" />
-    <input type="hidden" id="hdnCommSMSConfigId9" />
 
-    <input type="hidden" id="hdnCommWAConfigId1" />
-    <input type="hidden" id="hdnCommWAConfigId2" />
-    <input type="hidden" id="hdnCommWAConfigId3" />
-    <input type="hidden" id="hdnCommWAConfigId4" />
-    <input type="hidden" id="hdnCommWAConfigId5" />
-    <input type="hidden" id="hdnCommWAConfigId6" />
-    <input type="hidden" id="hdnCommWAConfigId7" />
-    <input type="hidden" id="hdnCommWAConfigId8" />
-    <input type="hidden" id="hdnCommWAConfigId9" />
-
-    <div style="float:left;" class="col-md-6 col-lg-6">
-        <div style="margin-left:20px;">
-            <input type="checkbox" id="chkIsSMS" /> Is SMS
+        <div class="row justify-content-end pr-4" style="margin-top:20px;margin-right:465px;">
+            <button type="button" id="btnCommPopupClose" class="btn btn-outline-primary cancel-btn"> Close</button>
         </div>
-        <div style="margin-left: 20px; margin-top: 20px;">
-            SMS Provider <br /> @Html.DropDownListFor(x => Model.lstBrands.Count, new SelectList(Model.SMSProvider(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input100", @id = "ddlSMSProvider", style = "margin-top:20px;" })
-        </div>
-        <div style="margin-left: 20px; margin-top: 20px;">
-            SMS Sender ID <br /> <input type="text" id="txtSMSSenderId" class="input100" />
-        </div>
-        <div style="margin-left: 20px; margin-top: 10px;">
-            SMS Username <br /> <input type="text" id="txtSMSUserName" class="input100" />
-        </div>
-        <div style="margin-left: 20px; margin-top: 10px;">
-            SMS Password <br /> <input type="text" id="txtSMSPassword" class="input100" />
-        </div>
-        <div style="margin-left: 20px; margin-top: 10px;">
-            SMS Link <br /> <input type="text" id="txtSMSLink" class="input100" />
-        </div>
-        <div style="margin-left: 20px; margin-top: 10px;">
-            Enrollment Script <br /> <textarea id="txtSMSEnrollment" rows="3" cols="50" class="input100"></textarea> <span style="font-weight:bold;" id="spnSMSEnrollment"></span>
-        </div>
-        <div style="margin-left: 20px; margin-top: 10px;">
-            Enrollment & Earn Script<br /> <textarea id="txtSMSEnrollmentAndEarn" rows="3" cols="50" class="input100"></textarea><span style="font-weight:bold;" id="spnSMSEnrollmentAndEarn"></span>
-        </div>
-        <div style="margin-left: 20px; margin-top: 10px;">
-            Earn Script<br /> <textarea id="txtSMSEarn" rows="3" cols="50" class="input100"></textarea><span style="font-weight:bold;" id="spnSMSEarn"></span>
-        </div>
-        <div style="margin-left: 20px; margin-top: 10px;">
-            OTP Script<br /> <textarea id="txtSMSOTP" rows="3" cols="50" class="input100"></textarea><span style="font-weight:bold;" id="spnSMSOTP"></span>
-        </div>
-        <div style="margin-left: 20px; margin-top: 10px;">
-            Burn Script<br /> <textarea id="txtSMSBurn" rows="3" cols="50" class="input100"></textarea><span style="font-weight:bold;" id="spnSMSBurn"></span>
-        </div>
-        <div style="margin-left: 20px; margin-top: 10px;">
-            Cancel Earn Script<br /> <textarea id="txtSMSCancelEarn" rows="3" cols="50" class="input100"></textarea><span style="font-weight:bold;" id="spnSMSCancelEarn"></span>
-        </div>
-        <div style="margin-left: 20px; margin-top: 10px;">
-            Cancel Burn Script<br /> <textarea id="txtSMSCancelBurn" rows="3" cols="50" class="input100"></textarea><span style="font-weight:bold;" id="spnSMSCancelBurn"></span>
-        </div>
-        <div style="margin-left: 20px; margin-top: 10px;">
-            Any Cancel Script<br /> <textarea id="txtSMSAnyCancel" rows="3" cols="50" class="input100"></textarea><span style="font-weight:bold;" id="spnSMSAnyCancel"></span>
-        </div>
-        <div style="margin-left: 20px; margin-top: 10px;">
-            Balance Inquiry Script<br /> <textarea id="txtSMSBalanceInquiry" rows="3" cols="50" class="input100"></textarea><span style="font-weight:bold;" id="spnSMSBalanceInquiry"></span>
-        </div>
-    </div>
-    <div style="float:left;" class="col-md-6 col-lg-6">
-        <div style="margin-left:20px;">
-            <input type="checkbox" id="chkIsWA" /> Is WhatsApp
-        </div>
-        <div style="margin-left: 20px; margin-top: 20px;">
-            WhatsApp Provider <br /> @Html.DropDownListFor(x => Model.lstBrands.Count, new SelectList(Model.WAProvider(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input100", @id = "ddlWAProvider", style = "margin-top:20px;" })
-        </div>
-        <div style="margin-left: 20px; margin-top: 20px;">
-            WhatsApp Number <br /> <input type="text" id="txtWANumber" class="input100" />
-        </div>
-        <div style="margin-left: 20px; margin-top: 10px;">
-            WhatsApp Username <br /> <input type="text" id="txtWAUserName" class="input100" />
-        </div>
-        <div style="margin-left: 20px; margin-top: 10px;">
-            WhatsApp Password <br /> <input type="text" id="txtWAPassword" class="input100" />
-        </div>
-        <div style="margin-left: 20px; margin-top: 10px;">
-            WhatsApp Link <br /> <input type="text" id="txtWALink" class="input100" />
-        </div>
-        <div style="margin-left: 20px; margin-top: 10px;">
-            Token Id <br /> <input type="text" id="txtWATokenId" class="input100" />
-        </div>
-        <div style="margin-left: 20px; margin-top: 10px;">
-            Enrollment Script <br /> <textarea id="txtWAEnrollment" rows="3" cols="50" class="input100"></textarea>
-        </div>
-        <div style="margin-left: 20px; margin-top: 10px;">
-            Enrollment & Earn Script <br /> <textarea id="txtWAEnrollmentAndEarn" rows="3" cols="50" class="input100"></textarea>
-        </div>
-        <div style="margin-left: 20px; margin-top: 10px;">
-            Earn Script <br /> <textarea id="txtWAEarn" rows="3" cols="50" class="input100"></textarea>
-        </div>
-        <div style="margin-left: 20px; margin-top: 10px;">
-            OTP Script <br /> <textarea id="txtWAOTP" rows="3" cols="50" class="input100"></textarea>
-        </div>
-        <div style="margin-left: 20px; margin-top: 10px;">
-            Burn Script <br /> <textarea id="txtWABurn" rows="3" cols="50" class="input100"></textarea>
-        </div>
-        <div style="margin-left: 20px; margin-top: 10px;">
-            Cancel Earn Script <br /> <textarea id="txtWACancelEarn" rows="3" cols="50" class="input100"></textarea>
-        </div>
-        <div style="margin-left: 20px; margin-top: 10px;">
-            Cancel Burn Script <br /> <textarea id="txtWACancelBurn" rows="3" cols="50" class="input100"></textarea>
-        </div>
-        <div style="margin-left: 20px; margin-top: 10px;">
-            Any Cancel Script <br /> <textarea id="txtWAAnyCancel" rows="3" cols="50" class="input100"></textarea>
-        </div>
-        <div style="margin-left: 20px; margin-top: 10px;">
-            Balance Inquiry Script <br /> <textarea id="txtWABalanceInquiry" rows="3" cols="50" class="input100"></textarea>
-        </div>
-    </div>
-
-    <div class="container-fluid pt-3 pl-3 pr-3 pb-3">
-        <button type="button" id="btnCommunicationToDLT" class="btn btn-primary pull-right" style="margin-right: 10px; margin-bottom: 20px;margin-top:10px;">Submit For DLT</button>
-        <button type="button" id="btnCommunicationSave" class="btn btn-primary pull-right" style="margin-right: 10px; margin-bottom: 20px; margin-top: 10px;">Save</button>
-
 
     </div>
 </div>
+
 
 
 <script>
     $(document).ready(function () {
-        LoadEditableCommunication();
-        $('#ddlBrandsComm').change(function () {
-            if ($('#ddlBrandsComm').val() > 0) {
-                LoadEditableCommunication();
-                $("#dvEditable").show(1000);
-            }
-            else {
-                $("#dvEditable").hide(1000);
-                SMSEnableDisable(1);
-                WAEnableDisable(1);
-            }
+        $("#btnCreateSets").on("click", function () {
+            $("#CommunicationModal").show(1000);
         });
-        $('#chkAllOutlets').change(function () {
-            if (this.checked) {
-                $('#ddlBrandsComm').prop('selectedIndex', 0);
-                $('#ddlBrandsComm').attr("disabled", true);
-                $("#chkIsSMS").prop('checked', false);
-                $("#chkIsWA").prop('checked', false);
-                $("#dvEditable").show(1000);
-                LoadEditableCommunication();
-                SMSEnableDisable(0);
-                WAEnableDisable(0);
-            }
-            else {
-                $('#ddlBrandsComm').attr("disabled", false);
-                $("#dvEditable").hide(1000);
-                SMSEnableDisable(1);
-                WAEnableDisable(1);
-            }
+        $("#btnCommPopupClose").on("click", function () {            
+            $("#CommunicationModal").hide(1000);
+            $("#dvCreateSet").hide(1000);
         });
-        $('#chkIsSMS').change(function () {
-            if (this.checked) {
-                SMSEnableDisable(1);
-            }
-            else {
-                SMSEnableDisable(0);
-            }
-        });
-        $('#chkIsWA').change(function () {
-            if (this.checked) {
-                WAEnableDisable(1);
-            }
-            else {
-                WAEnableDisable(0);
-            }
-        });
-
-        $("#btnCommunicationSave").on("click", function () {
-            SaveCommunicationConfig();
-        });
-        $("#btnCommunicationToDLT").on("click", function () {
-            SendCommunicationToDLT();
-        });        
 
     });
 
-    function SMSEnableDisable(flag) {
-        if (flag == 0) {
-            $('#txtSMSSenderId').attr("disabled", true);
-            $('#txtSMSUserName').attr("disabled", true);
-            $('#txtSMSPassword').attr("disabled", true);
-            $('#txtSMSLink').attr("disabled", true);
-            $('#txtSMSEnrollment').attr("disabled", true);
-            $('#txtSMSEnrollmentAndEarn').attr("disabled", true);
-            $('#txtSMSEarn').attr("disabled", true);
-            $('#txtSMSOTP').attr("disabled", true);
-            $('#txtSMSBurn').attr("disabled", true);
-            $('#txtSMSCancelEarn').attr("disabled", true);
-            $('#txtSMSCancelBurn').attr("disabled", true);
-            $('#txtSMSAnyCancel').attr("disabled", true);
-            $('#txtSMSBalanceInquiry').attr("disabled", true);
-            $('#ddlSMSProvider').attr("disabled", true);
-
-        }
-        else {
-            $('#txtSMSSenderId').attr("disabled", false);
-            $('#txtSMSUserName').attr("disabled", false);
-            $('#txtSMSPassword').attr("disabled", false);
-            $('#txtSMSLink').attr("disabled", false);
-            $('#txtSMSEnrollment').attr("disabled", false);
-            $('#txtSMSEnrollmentAndEarn').attr("disabled", false);
-            $('#txtSMSEarn').attr("disabled", false);
-            $('#txtSMSOTP').attr("disabled", false);
-            $('#txtSMSBurn').attr("disabled", false);
-            $('#txtSMSCancelEarn').attr("disabled", false);
-            $('#txtSMSCancelBurn').attr("disabled", false);
-            $('#txtSMSAnyCancel').attr("disabled", false);
-            $('#txtSMSBalanceInquiry').attr("disabled", false);
-            $('#ddlSMSProvider').attr("disabled", false);
-        }
-    }
-    function WAEnableDisable(flag) {
-        if (flag == 0) {
-            $('#txtWANumber').attr("disabled", true);
-            $('#txtWAUserName').attr("disabled", true);
-            $('#txtWAPassword').attr("disabled", true);
-            $('#txtWALink').attr("disabled", true);
-
-            $('#txtWAEnrollment').attr("disabled", true);
-            $('#txtWAEnrollmentAndEarn').attr("disabled", true);
-            $('#txtWAEarn').attr("disabled", true);
-            $('#txtWAOTP').attr("disabled", true);
-            $('#txtWABurn').attr("disabled", true);
-            $('#txtWACancelEarn').attr("disabled", true);
-            $('#txtWACancelBurn').attr("disabled", true);
-            $('#txtWAAnyCancel').attr("disabled", true);
-            $('#txtWABalanceInquiry').attr("disabled", true);
-            $('#ddlWAProvider').attr("disabled", true);
-        }
-        else {
-            $('#txtWANumber').attr("disabled", false);
-            $('#txtWAUserName').attr("disabled", false);
-            $('#txtWAPassword').attr("disabled", false);
-            $('#txtWALink').attr("disabled", false);
-
-            $('#txtWAEnrollment').attr("disabled", false);
-            $('#txtWAEnrollmentAndEarn').attr("disabled", false);
-            $('#txtWAEarn').attr("disabled", false);
-            $('#txtWAOTP').attr("disabled", false);
-            $('#txtWABurn').attr("disabled", false);
-            $('#txtWACancelEarn').attr("disabled", false);
-            $('#txtWACancelBurn').attr("disabled", false);
-            $('#txtWAAnyCancel').attr("disabled", false);
-            $('#txtWABalanceInquiry').attr("disabled", false);
-            $('#ddlWAProvider').attr("disabled", false);
-        }
-    }
-    function LoadEditableCommunication() {
-        var BrandId = 0;
-        if ($('#ddlBrandsComm').val() > 0) {
-            BrandId = $('#ddlBrandsComm').val();
-        }
-
-         $("#divLoader").show();
-            $.ajax({
-                type: "POST",
-                url: '@Url.Action("GetSMSandWAData", "CustomerOnBoarding")',
-                data: '{groupId: ' + JSON.stringify($('#hdnGroupID').val()) + ',brandId: ' + JSON.stringify(BrandId) + '}',
-                contentType: "application/json; charset=utf-8",
-                dataType: "json",
-                success: function (result) {                    
-                    LoadControls(result);                    
-                    if ($("#hdnCommSMSConfigId1").val() > 0) {
-                        $("#btnCommunicationToDLT").show();
-                    }
-                    else {
-                        $("#btnCommunicationToDLT").hide();
-                    }
-                    $("#divLoader").hide();
-                },
-                error: function (result) {
-                    $("#divLoader").hide();
-                }
-            });
-    }
-    function LoadControls(ObjData) {
-        console.log(ObjData);
-        var SMSConfig = ObjData["SMSConfig"];
-        var WAConfig = ObjData["WAConfig"];
-        //console.log(SMSConfig);
-        //console.log(WAConfig);
-        if (SMSConfig.length > 0) {
-            if (SMSConfig[0].BrandId == "All") {
-                $("#chkAllOutlets").prop('checked', true);
-                $('#ddlBrandsComm').prop('selectedIndex', 0);
-                $('#ddlBrandsComm').attr("disabled", true);
-                $("#dvEditable").show(1000);
-            }
-            else {
-                $('#ddlBrandsComm').prop('selectedIndex', SMSConfig.BrandId);
-                $('#ddlBrandsComm').attr("disabled", false);
-                $("#dvEditable").show(1000);
-            }
-            if (SMSConfig[0].IsSMS) {
-                $("#chkIsSMS").prop('checked', true);
-                SMSEnableDisable(1);
-                BindSMSValues(SMSConfig);
-            }
-            else {
-                $("#chkIsSMS").prop('checked', false);
-                SMSEnableDisable(0);
-            }
-        }
-        else {
-            $("#chkIsSMS").prop('checked', false);
-            SMSEnableDisable(0);
-            ClearAllSMSControls();
-        }
-        if (WAConfig.length > 0) {
-            if (WAConfig[0].BrandId == "All") {
-                $("#chkAllOutlets").prop('checked', true);
-                $('#ddlBrandsComm').prop('selectedIndex', 0);
-                $('#ddlBrandsComm').attr("disabled", true);
-                $("#dvEditable").show(1000);
-            }
-            else {
-                $('#ddlBrandsComm').prop('selectedIndex', WAConfig[0].BrandId);
-                $('#ddlBrandsComm').attr("disabled", false);
-                $("#dvEditable").show(1000);
-            }
-            if (WAConfig[0].IsWA) {
-                $("#chkIsWA").prop('checked', true);
-                WAEnableDisable(1);
-                BindWAValues(WAConfig);
-            }
-            else {
-                $("#chkIsWA").prop('checked', false);
-                WAEnableDisable(0);
-            }
-        }
-        else {
-
-            $("#chkIsWA").prop('checked', false);
-            WAEnableDisable(0);
-            ClearAllWAControls();
-        }
-    }
-
-    function ClearAllSMSControls() {
-        $("#hdnCommSMSConfigId").val("");
-        $("#txtSMSSenderId").val("");
-        $("#txtSMSUserName").val("");
-        $("#txtSMSPassword").val("");
-        $("#txtSMSLink").val("");
-        $("#txtSMSEnrollment").val("");
-        $("#txtSMSEnrollmentAndEarn").val("");
-        $("#txtSMSEarn").val("");
-        $("#txtSMSOTP").val("");
-        $("#txtSMSBurn").val("");
-        $("#txtSMSCancelEarn").val("");
-        $("#txtSMSCancelBurn").val("");
-        $("#txtSMSAnyCancel").val("");
-        $("#txtSMSBalanceInquiry").val("");
-    }
-    function ClearAllWAControls() {
-        $("#hdnCommWAConfigId").val("");
-        $("#txtWANumber").val("");
-        $("#txtWAUserName").val("");
-        $("#txtWAPassword").val("");
-        $("#txtWALink").val("");
-        $("#txtWAEnrollment").val("");
-        $("#txtWAEnrollmentAndEarn").val("");
-        $("#txtWAEarn").val("");
-        $("#txtWAOTP").val("");
-        $("#txtWABurn").val("");
-        $("#txtWACancelEarn").val("");
-        $("#txtWACancelBurn").val("");
-        $("#txtWAAnyCancel").val("");
-        $("#txtWABalanceInquiry").val("");
-    }
-    function BindSMSValues(newdata) {       
-        if (newdata != null) {
-            $("#hdnCommSMSConfigId").val(newdata[0].Id);
-            if (newdata[0].SMSProvider != "0" && newdata[0].SMSProvider != "") {
-                $('#ddlSMSProvider').val(newdata[0].SMSProvider);
-            }
-            if (newdata[0].BrandId == "All") {
-                $("#chkAllOutlets").prop("checked", true);
-                $('#ddlBrandsComm').prop('selectedIndex', 0);
-                $('#ddlBrandsComm').attr("disabled", true);
-            }
-            else {
-                $('#ddlBrandsComm').val(newdata[0].BrandId);
-                $('#ddlBrandsComm').attr("disabled", false);
-            }
-            $("#txtSMSSenderId").val(newdata[0].SMSSenderID);
-            $("#txtSMSUserName").val(newdata[0].SMSUsername);
-            $("#txtSMSPassword").val(newdata[0].SMSPassword);
-            $("#hdnSMSSetId").val(newdata[0].SetId);
-
-            $("#txtSMSLink").val(newdata[0].SMSlink);
-            for (var i = 0; i < newdata.length; i++) {
-                if (newdata[i].MessageId == "100") {
-                    $("#spnSMSEnrollment").text(newdata[i].DLTStatus);
-                    if (newdata[i].DLTStatus != null && newdata[i].DLTStatus != "Submitted") {
-                        $("#txtSMSEnrollment").prop("disabled", true);
-                    }
-                    $("#txtSMSEnrollment").val(newdata[i].SMSScript);
-                    $("#hdnCommSMSConfigId1").val(newdata[i].Id);
-                }
-                if (newdata[i].MessageId == "101") {
-                    $("#spnSMSEarn").text(newdata[i].DLTStatus);
-                    if (newdata[i].DLTStatus != null && newdata[i].DLTStatus != "Submitted") {
-                        $("#txtSMSEarn").prop("disabled", true);
-                    }
-                    $("#txtSMSEarn").val(newdata[i].SMSScript);
-                    $("#hdnCommSMSConfigId3").val(newdata[i].Id);
-                }
-                if (newdata[i].MessageId == "102") {
-                    $("#spnSMSBurn").text(newdata[i].DLTStatus);
-                    if (newdata[i].DLTStatus != null && newdata[i].DLTStatus != "Submitted") {
-                        $("#txtSMSBurn").prop("disabled", true);
-                    }
-                    $("#txtSMSBurn").val(newdata[i].SMSScript);
-                    $("#hdnCommSMSConfigId5").val(newdata[i].Id);
-                }
-                if (newdata[i].MessageId == "103") {
-                    $("#spnSMSCancelEarn").text(newdata[i].DLTStatus);
-                    if (newdata[i].DLTStatus != null && newdata[i].DLTStatus != "Submitted") {
-                        $("#txtSMSCancelEarn").prop("disabled", true);
-                    }
-                    $("#txtSMSCancelEarn").val(newdata[i].SMSScript);
-                    $("#hdnCommSMSConfigId6").val(newdata[i].Id);
-                }
-                if (newdata[i].MessageId == "104") {
-                    $("#spnSMSCancelBurn").text(newdata[i].DLTStatus);
-                    if (newdata[i].DLTStatus != null && newdata[i].DLTStatus != "Submitted") {
-                        $("#txtSMSCancelBurn").prop("disabled", true);
-                    }
-                    $("#txtSMSCancelBurn").val(newdata[i].SMSScript);
-                    $("#hdnCommSMSConfigId7").val(newdata[i].Id);
-                }
-                if (newdata[i].MessageId == "105") {
-                    $("#spnSMSOTP").text(newdata[i].DLTStatus);
-                    if (newdata[i].DLTStatus != null && newdata[i].DLTStatus != "Submitted") {
-                        $("#txtSMSOTP").prop("disabled", true);
-                    }
-                    $("#txtSMSOTP").val(newdata[i].SMSScript);
-                    $("#hdnCommSMSConfigId4").val(newdata[i].Id);
-                }
-                if (newdata[i].MessageId == "106") {
-                    $("#spnSMSBalanceInquiry").text(newdata[i].DLTStatus);
-                    if (newdata[i].DLTStatus != null && newdata[i].DLTStatus != "Submitted") {
-                        $("#txtSMSBalanceInquiry").prop("disabled", true);
-                    }
-                    $("#txtSMSBalanceInquiry").val(newdata[i].SMSScript);
-                    $("#hdnCommSMSConfigId9").val(newdata[i].Id);
-                }
-                if (newdata[i].MessageId == "107") {
-                    $("#spnSMSAnyCancel").text(newdata[i].DLTStatus);
-                    if (newdata[i].DLTStatus != null && newdata[i].DLTStatus != "Submitted") {
-                        $("#txtSMSAnyCancel").prop("disabled", true);
-                    }
-                    $("#txtSMSAnyCancel").val(newdata[i].SMSScript);
-                    $("#hdnCommSMSConfigId8").val(newdata[i].Id);
-                }
-                if (newdata[i].MessageId == "108") {
-                    $("#spnSMSEnrollmentAndEarn").text(newdata[i].DLTStatus);
-                    if (newdata[i].DLTStatus != null && newdata[i].DLTStatus != "Submitted") {
-                        $("#txtSMSEnrollmentAndEarn").prop("disabled", true);
-                    }
-                    $("#txtSMSEnrollmentAndEarn").val(newdata[i].SMSScript);
-                    $("#hdnCommSMSConfigId2").val(newdata[i].Id);
-                }
-            }
-        }
-    }
-    function BindWAValues(newdata1) {
-        if (newdata1 != null) {
-            console.log(newdata1)
-            if (newdata1[0].WAProvider != "0" && newdata1[0].WAProvider != "") {
-                $('#ddlWAProvider').val(newdata1[0].WAProvider);
-            }
-            if (newdata1[0].BrandId == "All") {
-                $("#chkAllOutlets").prop("checked", true);
-                $('#ddlBrandsComm').prop('selectedIndex', 0);
-                $('#ddlBrandsComm').attr("disabled", true);
-            }
-            else {
-                $('#ddlBrandsComm').val(newdata1[0].BrandId);
-                $('#ddlBrandsComm').attr("disabled", false);
-            }
-            $("#txtWANumber").val(newdata1[0].WANumber);
-            $("#txtWAUserName").val(newdata1[0].WAUsername);
-            $("#txtWAPassword").val(newdata1[0].WAPassword);
-            $("#txtWALink").val(newdata1[0].WAlink);
-            $('#txtWATokenId').val(newdata1[0].TokenId)
-            $("#hdnWASetId").val(newdata[0].SetId);
-            for (var i = 0; i < newdata1.length; i++) {
-                if (newdata1[i].MessageId == "100") {
-                    $("#txtWAEnrollment").val(newdata1[i].WAScript);
-                    $("#hdnCommWAConfigId1").val(newdata1[i].Id);
-                }
-                if (newdata1[i].MessageId == "101") {
-                    $("#txtWAEarn").val(newdata1[i].WAScript);
-                    $("#hdnCommWAConfigId3").val(newdata1[i].Id);
-                }
-                if (newdata1[i].MessageId == "102") {
-                    $("#txtWABurn").val(newdata1[i].WAScript);
-                    $("#hdnCommWAConfigId5").val(newdata1[i].Id);
-                }
-                if (newdata1[i].MessageId == "103") {
-                    $("#txtWACancelEarn").val(newdata1[i].WAScript);
-                    $("#hdnCommWAConfigId6").val(newdata1[i].Id);
-                }
-                if (newdata1[i].MessageId == "104") {
-                    $("#txtWACancelBurn").val(newdata1[i].WAScript);
-                    $("#hdnCommWAConfigId7").val(newdata1[i].Id);
-                }
-                if (newdata1[i].MessageId == "105") {
-                    $("#txtWAOTP").val(newdata1[i].WAScript);
-                    $("#hdnCommWAConfigId4").val(newdata1[i].Id);
-                }
-                if (newdata1[i].MessageId == "106") {
-                    $("#txtWABalanceInquiry").val(newdata1[i].WAScript);
-                    $("#hdnCommWAConfigId9").val(newdata1[i].Id);
-                }
-                if (newdata1[i].MessageId == "107") {
-                    $("#txtWAAnyCancel").val(newdata1[i].WAScript);
-                    $("#hdnCommWAConfigId8").val(newdata1[i].Id);
-                }
-                if (newdata1[i].MessageId == "108") {
-                    $("#txtWAEnrollmentAndEarn").val(newdata1[i].WAScript);
-                    $("#hdnCommWAConfigId2").val(newdata1[i].Id);
-                }
-            }
-        }
-    }
-    function SaveCommunicationConfig() {
-        if ($('#chkIsSMS').is(":checked") || $('#chkIsWA').is(":checked")) {
-            var CommConfig = [];
-            item = {}
-            item["GroupId"] = $('#hdnGroupID').val();
-            if ($('#chkAllOutlets').is(":checked")) {
-                item["BrandId"] = "All";
-            }
-            else {
-                item["BrandId"] = $('#ddlBrandsComm').val();
-            }
-            if ($('#chkIsSMS').is(":checked")) {
-                //item["SMSId"] = $("#hdnCommSMSConfigId").val();
-                item["IsSMS"] = 1;
-                item["SMSSetId"] = $('#hdnSMSSetId').val();
-                item["SMSProvider"] = $('#ddlSMSProvider').val();
-                item["SMSSenderId"] = $('#txtSMSSenderId').val();
-                item["SMSUserName"] = $('#txtSMSUserName').val();
-                item["SMSPassword"] = $('#txtSMSPassword').val();
-                item["SMSLink"] = $('#txtSMSLink').val();
-                item["SMSEnrollmentId"] = $('#hdnCommSMSConfigId1').val();
-                item["SMSEnrollment"] = $('#txtSMSEnrollment').val();
-                item["SMSEnrollmentAndEarnId"] = $('#hdnCommSMSConfigId2').val();
-                item["SMSEnrollmentAndEarn"] = $('#txtSMSEnrollmentAndEarn').val();
-                item["SMSEarnId"] = $('#hdnCommSMSConfigId3').val();
-                item["SMSEarn"] = $('#txtSMSEarn').val();
-                item["SMSOTPId"] = $('#hdnCommSMSConfigId4').val();
-                item["SMSOTP"] = $('#txtSMSOTP').val();
-                item["SMSBurnId"] = $('#hdnCommSMSConfigId5').val();
-                item["SMSBurn"] = $('#txtSMSBurn').val();
-                item["SMSCancelEarnId"] = $('#hdnCommSMSConfigId6').val();
-                item["SMSCancelEarn"] = $('#txtSMSCancelEarn').val();
-                item["SMSCancelBurnId"] = $('#hdnCommSMSConfigId7').val();
-                item["SMSCancelBurn"] = $('#txtSMSCancelBurn').val();
-                item["SMSAnyCancelId"] = $('#hdnCommSMSConfigId8').val();
-                item["SMSAnyCancel"] = $('#txtSMSAnyCancel').val();
-                item["SMSBalanceInquiryId"] = $('#hdnCommSMSConfigId9').val();
-                item["SMSBalanceInquiry"] = $('#txtSMSBalanceInquiry').val();
-            }
-            else {
-                item["IsSMS"] = 0;
-            }
-
-            if ($('#chkIsWA').is(":checked")) {
-                item["IsWA"] = 1;
-                item["WASetId"] = $('#hdnWASetId').val();
-                item["WAProvider"] = $('#ddlWAProvider').val();
-                item["WANumber"] = $('#txtWANumber').val();
-                item["WAUserName"] = $('#txtWAUserName').val();
-                item["WAPassword"] = $('#txtWAPassword').val();
-                item["WALink"] = $('#txtWALink').val();
-                item["WATokenId"] = $('#txtWATokenId').val();
-                item["WAEnrollmentId"] = $('#hdnCommWAConfigId1').val();
-                item["WAEnrollment"] = $('#txtWAEnrollment').val();
-                item["WAEnrollmentAndEarnId"] = $('#hdnCommWAConfigId2').val();
-                item["WAEnrollmentAndEarn"] = $('#txtWAEnrollmentAndEarn').val();
-                item["WAEarnId"] = $('#hdnCommWAConfigId3').val();
-                item["WAEarn"] = $('#txtWAEarn').val();
-                item["WAOTPId"] = $('#hdnCommWAConfigId4').val();
-                item["WAOTP"] = $('#txtWAOTP').val();
-                item["WABurnId"] = $('#hdnCommWAConfigId5').val();
-                item["WABurn"] = $('#txtWABurn').val();
-                item["WACancelEarnId"] = $('#hdnCommWAConfigId6').val();
-                item["WACancelEarn"] = $('#txtWACancelEarn').val();
-                item["WACancelBurnId"] = $('#hdnCommWAConfigId7').val();
-                item["WACancelBurn"] = $('#txtWACancelBurn').val();
-                item["WAAnyCancelId"] = $('#hdnCommWAConfigId8').val();
-                item["WAAnyCancel"] = $('#txtWAAnyCancel').val();
-                item["WABalanceInquiryId"] = $('#hdnCommWAConfigId9').val();
-                item["WABalanceInquiry"] = $('#txtWABalanceInquiry').val();
-            }
-            else {
-                item["IsWA"] = 0;
-            }
-
-            CommConfig.push(item);
-            var CommConfigData = JSON.stringify(CommConfig);
-
-             $("#divLoader").show();
-            $.ajax({
-                type: "POST",
-                url: '@Url.Action("SaveCommunicationConfig", "CustomerOnBoarding")',
-                data: '{jsonData: ' + JSON.stringify(CommConfigData) + '}',
-                contentType: "application/json; charset=utf-8",
-                dataType: "json",
-                success: function (result) {
-
-                    //console.log(result)
-                    if (result == true) {
-                        cuteAlert({
-                            type: "success",
-                            title: "Saved..",
-                            message: "Communication Data Saved Successfully!",
-                            buttonText: "Okay"
-                        })
-                    }
-                    else {
-                        cuteAlert({
-                            type: "error",
-                            title: "Oops..",
-                            message: "There is some problem while saving Communication Data",
-                            buttonText: "Okay"
-                        })
-                    }
-
-
-                    $("#divLoader").hide();
-
-                },
-                error: function (result) {
-                    //console.log(2222)
-                    //console.log(result.responseText)
-                    $("#divLoader").hide();
-                }
-            });
-        }
-        else {
-            cuteAlert({
-                type: "error",
-                title: "Oops..",
-                message: "Please Enter SMS OR WhatsApp Script",
-                buttonText: "Okay"
-            })
-        }
-    }
-
-    function SendCommunicationToDLT() {
-        $("#divLoader").show();
-        cuteAlert({
-            type: "question",
-            title: "Are you sure?",
-            message: "Once you submit, you will not be able to change data",
-            confirmText: "Okay",
-            cancelText: "Cancel"
-        }).then((e) => {
-            if (e == ("confirm")) {
-                 $.ajax({
-                type: "POST",
-                url: '@Url.Action("SendCommunicationToDLT", "CustomerOnBoarding")',
-                data: '{GroupId: ' + JSON.stringify($('#hdnGroupID').val()) + '}',
-                contentType: "application/json; charset=utf-8",
-                dataType: "json",
-                success: function (result) {
-                    if (result == true) {
-                        cuteAlert({
-                            type: "success",
-                            title: "Saved..",
-                            message: "Communication Script sent for DLT Successfully!",
-                            buttonText: "Okay"
-                        })
-                    }
-                    else {
-                        cuteAlert({
-                            type: "error",
-                            title: "Oops..",
-                            message: "There is some problem while sending Communication Data for DLT",
-                            buttonText: "Okay"
-                        })
-                    }
-                    $("#divLoader").hide();
-                },
-                error: function (result) {
-                    $("#divLoader").hide();
-                }
-            });
-            }
-        })
-        $("#divLoader").hide();
-    }
-
-
-
+        
 </script>

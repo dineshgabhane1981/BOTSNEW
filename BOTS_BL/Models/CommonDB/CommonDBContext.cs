@@ -16,6 +16,8 @@ namespace BOTS_BL.Models
             : base("name=CommonDBContext")
         {
         }
+        public virtual DbSet<BOTS_TblCommunicationSet> BOTS_TblCommunicationSet { get; set; }
+        public virtual DbSet<BOTS_TblCommunicationSetAssignment> BOTS_TblCommunicationSetAssignment { get; set; }
         public virtual DbSet<BOTS_TblProductUploadConfig> BOTS_TblProductUploadConfig { get; set; }
         public virtual DbSet<BOTS_TblCampaignInactive> BOTS_TblCampaignInactive { get; set; }
         public virtual DbSet<BOTS_TblCampaignOtherConfig> BOTS_TblCampaignOtherConfig { get; set; }
