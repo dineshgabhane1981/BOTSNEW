@@ -496,7 +496,7 @@ namespace BOTS_BL.Repository
                                 objItemNew.SMSUsername = objSMSData.SMSUsername;
                                 objItemNew.SMSPassword = objSMSData.SMSPassword;
                                 objItemNew.SMSlink = objSMSData.SMSlink;
-                                //objItemNew.DLTStatus = objSMSData.DLTStatus;
+                                objItemNew.SetId = objSMSData.SetId;
 
                                 objItemNew.AddedBy = loginId;
                                 objItemNew.AddedDate = DateTime.Now;
@@ -509,14 +509,23 @@ namespace BOTS_BL.Repository
                                     {
                                         objItemNew.AddedBy = oldData.AddedBy;
                                         objItemNew.AddedDate = oldData.AddedDate;
+                                        objItemNew.TemplateId = oldData.TemplateId;
+                                        objItemNew.TemplateName = oldData.TemplateName;
+                                        objItemNew.TemplateType = oldData.TemplateType;
+                                        objItemNew.DLTStatus = oldData.DLTStatus;
+                                        objItemNew.SMSScriptDLT = oldData.SMSScriptDLT;
+                                        objItemNew.PEID = oldData.PEID;
+                                        objItemNew.RejectReason = oldData.RejectReason;
                                     }
                                     objItemNew.UpdatedBy = loginId;
                                     objItemNew.UpdatedDate = DateTime.Now;
                                 }
                                 objItemNew.MessageId = itemSMS.MessageId;
                                 objItemNew.SMSScript = itemSMS.TemplateScript;
+
                                 context.BOTS_TblSMSConfig.AddOrUpdate(objItemNew);
                                 context.SaveChanges();
+
                             }
                             status = true;
                         }
@@ -535,6 +544,7 @@ namespace BOTS_BL.Repository
                                 objItemWA.WAPassword = objWAData.WAPassword;
                                 objItemWA.WAlink = objWAData.WAlink;
                                 objItemWA.TokenId = objWAData.TokenId;
+                                objItemWA.SetId = objWAData.SetId;
 
                                 objItemWA.AddedBy = loginId;
                                 objItemWA.AddedDate = DateTime.Now;
@@ -596,18 +606,18 @@ namespace BOTS_BL.Repository
             return status;
         }
 
-        public List<BOTS_TblSMSConfig> GetCommunicationSMSConfig(string GroupId, string BrandId)
+        public List<BOTS_TblSMSConfig> GetCommunicationSMSConfig(string GroupId, int SetId)
         {
             List<BOTS_TblSMSConfig> objData = new List<BOTS_TblSMSConfig>();
             using (var context = new CommonDBContext())
             {
-                if (BrandId != "0")
+                if (SetId > 0)
                 {
-                    objData = context.BOTS_TblSMSConfig.Where(x => x.GroupId == GroupId && x.BrandId == BrandId).ToList();
+                    objData = context.BOTS_TblSMSConfig.Where(x => x.GroupId == GroupId && x.SetId == SetId).ToList();
                 }
                 else
                 {
-                    objData = context.BOTS_TblSMSConfig.Where(x => x.GroupId == GroupId && x.BrandId == "All").ToList();
+                    objData = context.BOTS_TblSMSConfig.Where(x => x.GroupId == GroupId).ToList();
                 }
             }
 
@@ -680,7 +690,7 @@ namespace BOTS_BL.Repository
                 using (var context = new CommonDBContext())
                 {
                     var lstOldData = context.BOTS_TblSMSConfig.Where(x => x.GroupId == objData.GroupId).ToList();
-                    foreach(var item in lstOldData)
+                    foreach (var item in lstOldData)
                     {
                         item.PEID = objData.PEID;
                         item.SMSProvider = objData.SMSProvider;
@@ -704,22 +714,33 @@ namespace BOTS_BL.Repository
             return status;
         }
 
-        public List<BOTS_TblWAConfig> GetCommunicationWAConfig(string GroupId, string BrandId)
+        public List<BOTS_TblWAConfig> GetCommunicationWAConfig(string GroupId, int SetId)
         {
             List<BOTS_TblWAConfig> objData = new List<BOTS_TblWAConfig>();
             using (var context = new CommonDBContext())
             {
-                if (BrandId != "0")
+                if (SetId > 0)
                 {
-                    objData = context.BOTS_TblWAConfig.Where(x => x.GroupId == GroupId && x.BrandId == BrandId).ToList();
+                    objData = context.BOTS_TblWAConfig.Where(x => x.GroupId == GroupId && x.SetId == SetId).ToList();
                 }
                 else
                 {
-                    objData = context.BOTS_TblWAConfig.Where(x => x.GroupId == GroupId && x.BrandId == "All").ToList();
+                    objData = context.BOTS_TblWAConfig.Where(x => x.GroupId == GroupId).ToList();
                 }
             }
 
             return objData;
+        }
+
+        public BOTS_TblCommunicationSet GetSetDetails(int SetId)
+        {
+            BOTS_TblCommunicationSet objSetData = new BOTS_TblCommunicationSet();
+            using (var context = new CommonDBContext())
+            {
+                objSetData = context.BOTS_TblCommunicationSet.Where(x => x.SetId == SetId).FirstOrDefault();
+            }
+
+            return objSetData;
         }
 
         public bool SaveDLCLinkConfig(BOTS_TblDLCLinkConfig objData)
@@ -1211,6 +1232,15 @@ namespace BOTS_BL.Repository
             return lstslabdata;
         }
 
+        public List<BOTS_TblCommunicationSet> GetCommunicationSetsByGroupId(string GroupId)
+        {
+            List<BOTS_TblCommunicationSet> lstSets = new List<BOTS_TblCommunicationSet>();
+            using (var context = new CommonDBContext())
+            {
+                lstSets = context.BOTS_TblCommunicationSet.Where(x => x.GroupId == GroupId).ToList();
+            }
 
+            return lstSets;
+        }
     }
 }
