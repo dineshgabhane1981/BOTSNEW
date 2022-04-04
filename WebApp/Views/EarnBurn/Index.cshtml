@@ -129,7 +129,6 @@
     </div>
 </div>
 
-<script src="~/Content/scriptSteps.js"></script>
 <script>
     $(document).ready(function () {        
         var today = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
@@ -214,6 +213,7 @@
     }
 
     function SaveAddEarn() {
+        
         if ($('#txtInvoiceNumber').val() == "") {
             toastr.error('Please enter Invoice Number');
             $('#txtInvoiceNumber').focus();
@@ -224,11 +224,13 @@
             $('#txtInvoiceAmount').focus();
             return false;
         }
+        
         if ($('#ddlOutletList').val() == "") {
             toastr.error('Please select Outlet');
             $('#ddlOutletList').focus();
             return false;
         }
+
         if ($('#txtRequestedByName2').val() == "") {
             toastr.error('Please enter Requested Person name');
             $('#txtRequestedByName2').focus();
