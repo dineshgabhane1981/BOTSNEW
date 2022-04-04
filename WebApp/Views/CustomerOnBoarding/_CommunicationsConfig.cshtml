@@ -37,6 +37,7 @@
     </div>
 
     <div id="dvCreateSet" style="display:none;" class="col-md-12 col-lg-12">
+        <input type="hidden" id="hdnSetId" />
         <input type="hidden" id="hdnSMSSetId" />
         <input type="hidden" id="hdnWASetId" />
         <input type="hidden" id="hdnCommSMSConfigId1" />
@@ -58,13 +59,13 @@
         <input type="hidden" id="hdnCommWAConfigId7" />
         <input type="hidden" id="hdnCommWAConfigId8" />
         <input type="hidden" id="hdnCommWAConfigId9" />
-        
-        <div style="float:left;" class="col-md-12 col-lg-12">
+
+        <div style="float:left;" class="col-md-12 col-lg-12 mb-4">
             <div style="margin-left:20px;">
-                Set Name <input type="text" id="txtSetName" class="input100" /> 
+                Set Name <input type="text" id="txtSetName" class="input100" />
             </div>
         </div>
-       
+
         <div style="float:left;" class="col-md-6 col-lg-6">
             <div style="margin-left:20px;">
                 <input type="checkbox" id="chkIsSMS" /> Is SMS
@@ -307,6 +308,11 @@
     function LoadControls(ObjData) {
         var SMSConfig = ObjData["SMSConfig"];
         var WAConfig = ObjData["WAConfig"];
+        var SetDetails = ObjData["objSetDetails"];
+        $("#hdnSetId").val(SetDetails.SetId);
+        $("#txtSetName").val(SetDetails.SetName);
+
+
         if (SMSConfig.length > 0) {
             $("#dvCreateSet").show(1000);
 
@@ -531,12 +537,14 @@
         if ($('#chkIsSMS').is(":checked") || $('#chkIsWA').is(":checked")) {
             var CommConfig = [];
             item = {}
+            item["SetId"] = $("#hdnSetId").val();
+            item["SetName"] = $("#txtSetName").val();
             item["GroupId"] = $('#hdnGroupID').val();
                 item["BrandId"] = "All";
 
             if ($('#chkIsSMS').is(":checked")) {
                 item["IsSMS"] = 1;
-                item["SMSSetId"] = $('#hdnSMSSetId').val();
+                item["SMSSetId"] = $('#hdnSetId').val();
                 item["SMSProvider"] = $('#ddlSMSProvider').val();
                 item["SMSSenderId"] = $('#txtSMSSenderId').val();
                 item["SMSUserName"] = $('#txtSMSUserName').val();
@@ -567,7 +575,7 @@
 
             if ($('#chkIsWA').is(":checked")) {
                 item["IsWA"] = 1;
-                item["WASetId"] = $('#hdnWASetId').val();
+                item["WASetId"] = $('#hdnSetId').val();
                 item["WAProvider"] = $('#ddlWAProvider').val();
                 item["WAUserName"] = $('#txtWAUserName').val();
                 item["WAPassword"] = $('#txtWAPassword').val();

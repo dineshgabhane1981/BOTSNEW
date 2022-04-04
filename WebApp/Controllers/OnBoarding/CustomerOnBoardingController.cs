@@ -576,6 +576,7 @@ namespace WebApp.Controllers.OnBoarding
             CommunicationConfigViewModel objData = new CommunicationConfigViewModel();
             objData.SMSConfig = OBR.GetCommunicationSMSConfig(groupId, Convert.ToInt32(setId));
             objData.WAConfig = OBR.GetCommunicationWAConfig(groupId, Convert.ToInt32(setId));
+            objData.objSetDetails = OBR.GetSetDetails(Convert.ToInt32(setId));
             return new JsonResult() { Data = objData, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
 
@@ -589,11 +590,16 @@ namespace WebApp.Controllers.OnBoarding
                 BOTS_TblWAConfig objWAConfig = new BOTS_TblWAConfig();
                 List<SMSTemplate> lstSMSTemplate = new List<SMSTemplate>();
                 List<SMSTemplate> lstWATemplate = new List<SMSTemplate>();
+                BOTS_TblCommunicationSet objSetDetails = new BOTS_TblCommunicationSet();
                 JavaScriptSerializer json_serializer = new JavaScriptSerializer();
                 json_serializer.MaxJsonLength = int.MaxValue;
                 object[] objCommConfigData = (object[])json_serializer.DeserializeObject(jsonData);
                 foreach (Dictionary<string, object> item in objCommConfigData)
                 {
+                    if (!string.IsNullOrEmpty(Convert.ToString(item["SetId"])))
+                        objSetDetails.SetId = Convert.ToInt32(item["SetId"]);
+                    objSetDetails.SetName = Convert.ToString(item["SetName"]);
+                    objSetDetails.GroupId= Convert.ToString(item["GroupId"]);
                     var isSMS = Convert.ToBoolean(item["IsSMS"]);
                     if (isSMS)
                     {
@@ -758,7 +764,7 @@ namespace WebApp.Controllers.OnBoarding
                         objWAConfig.IsWA = false;
                     }
                 }
-                status = OBR.SaveCommunicationConfig(objSMSConfig, objWAConfig, lstSMSTemplate, lstWATemplate, userDetails.LoginId);
+                status = OBR.SaveCommunicationConfig(objSMSConfig, objWAConfig, objSetDetails, lstSMSTemplate, lstWATemplate, userDetails.LoginId);
 
             }
             catch (Exception ex)

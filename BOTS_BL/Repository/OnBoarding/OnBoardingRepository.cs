@@ -473,7 +473,7 @@ namespace BOTS_BL.Repository
             return objData;
         }
 
-        public bool SaveCommunicationConfig(BOTS_TblSMSConfig objSMSData, BOTS_TblWAConfig objWAData, List<SMSTemplate> lstSMS, List<SMSTemplate> lstWA, string loginId)
+        public bool SaveCommunicationConfig(BOTS_TblSMSConfig objSMSData, BOTS_TblWAConfig objWAData, BOTS_TblCommunicationSet objSet, List<SMSTemplate> lstSMS, List<SMSTemplate> lstWA, string loginId)
         {
             bool status = false;
 
@@ -483,6 +483,22 @@ namespace BOTS_BL.Repository
                 {
                     try
                     {
+                        var existingSet = context.BOTS_TblCommunicationSet.Where(x => x.SetId == objSet.SetId).FirstOrDefault();
+                        if(existingSet!=null)
+                        {
+                            objSet.CreatedBy = existingSet.CreatedBy;
+                            objSet.CreatedDate = existingSet.CreatedDate;
+                            objSet.UpdatedBy = loginId;
+                            objSet.UpdatedDate = DateTime.Now;
+                        }
+                        else
+                        {
+                            objSet.CreatedBy = loginId;
+                            objSet.CreatedDate = DateTime.Now;
+                        }
+                        context.BOTS_TblCommunicationSet.AddOrUpdate(objSet);
+                        context.SaveChanges();
+
                         if (objSMSData.IsSMS)
                         {
                             foreach (var itemSMS in lstSMS)
@@ -496,7 +512,7 @@ namespace BOTS_BL.Repository
                                 objItemNew.SMSUsername = objSMSData.SMSUsername;
                                 objItemNew.SMSPassword = objSMSData.SMSPassword;
                                 objItemNew.SMSlink = objSMSData.SMSlink;
-                                objItemNew.SetId = objSMSData.SetId;
+                                objItemNew.SetId = objSet.SetId;
 
                                 objItemNew.AddedBy = loginId;
                                 objItemNew.AddedDate = DateTime.Now;
@@ -544,7 +560,7 @@ namespace BOTS_BL.Repository
                                 objItemWA.WAPassword = objWAData.WAPassword;
                                 objItemWA.WAlink = objWAData.WAlink;
                                 objItemWA.TokenId = objWAData.TokenId;
-                                objItemWA.SetId = objWAData.SetId;
+                                objItemWA.SetId = objSet.SetId;
 
                                 objItemWA.AddedBy = loginId;
                                 objItemWA.AddedDate = DateTime.Now;

@@ -10,5 +10,6 @@ namespace WebApp.ViewModel
     {
         public List<BOTS_TblSMSConfig> SMSConfig { get; set; }
         public List<BOTS_TblWAConfig> WAConfig { get; set; }
+        public BOTS_TblCommunicationSet objSetDetails { get; set; }
     }
 }
