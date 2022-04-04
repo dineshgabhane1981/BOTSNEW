@@ -163,7 +163,7 @@
 
     function GetAddEarnData() {
 
-        
+        alert("InsideGetData");
 
         if ($('#txtMobileNo2').val() == "" && $('#txtCardNo2').val() == "") {
             toastr.error('Please enter Mobile Number OR Card Number');
@@ -175,7 +175,10 @@
         }
         $("#divLoader").show();
 
-        
+        alert(JSON.stringify($('#hdnGroupId').val()));
+        alert(JSON.stringify($('#txtMobileNo2').val()));
+        alert(JSON.stringify($('#txtCardNo2').val()));
+
         $.ajax({
             type: "POST",
             url: '@Url.Action("GetData", "EarnBurn")',//"/EarnBurn/GetData",
@@ -201,7 +204,23 @@
                     $("#tblUpdateData2").show();
                 }
                 else {
+                    alert("InsideElse");
+                    $("#spnMemberName2").text("");
+                    $("#spnMobileno2").text("");
+                    $("#spnCardNo2").text("");
+                    $("#spnPtBalance2").text("");
+                    $("#spnEnrolledOutlet2").text("");
+                    $("#spnEnrolledOn2").text("");
+                    $("#hdnCustomerId2").text("");
+
+                    $('#txtInvoiceNumber').val("");
+                    $('#txtInvoiceAmount').val("");
+                    $('#txtRequestedByName2').val("");
+                    $('#dtTransaction').val("");
+                    $('#ddlOutletList').prop('selectedIndex', 0);
+                    $('#ddlRequestedForum2').prop('selectedIndex', 0);
                     $("#tblUpdateData2").show();
+                    
                 }
                 $("#divLoader").hide();
             },
