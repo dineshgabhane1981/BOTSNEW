@@ -11,7 +11,7 @@
         display: grid;
         flex-direction: column;
         align-items: center;
-    }  
+    }
 
     .modal {
         display: none; /* Hidden by default */
@@ -54,25 +54,38 @@
     input:read-only {
         background-color: lightgray;
     }
+
+    .outletStyle {
+        width: 20px;
+        height: 20px;
+        margin-right: 10px;
+        margin-bottom: 10px;
+        vertical-align: text-top;
+        cursor: pointer;
+    }
 </style>
 
 <div class="row" style="margin-top:10px;">
-    <div style="margin-left:20px;">
-       <button type="button" id="btnCreateSets" class="btn btn-primary">Create Set</button>
+    <div>
+        <select id="ddlCommunicationSet" class="input50"></select>
     </div>
-    
+    <div style="margin-left:20px;">
+        <button type="button" id="btnCreateSets" class="btn btn-primary">Manage Sets</button>
+    </div>
+
+</div>
+<div style="margin-top:10px;" id="dvOutlets"></div>
+<div class="col-md-6 col-lg-6 row justify-content-end pr-5">
+    <button type="button" id="btnCommAssign" class="btn btn-primary"> Assign</button>
 </div>
 <div id="CommunicationModal" class="modal">
     <div class="modal-content">
         <div class="row" style="margin: 0;" id="dvCommSetConfig">
             @Html.Partial("~/Views/CustomerOnBoarding/_CommunicationsConfig.cshtml", Model)
         </div>
-
-
         <div class="row justify-content-end pr-4" style="margin-top:20px;margin-right:465px;">
             <button type="button" id="btnCommPopupClose" class="btn btn-outline-primary cancel-btn"> Close</button>
         </div>
-
     </div>
 </div>
 
@@ -80,15 +93,110 @@
 
 <script>
     $(document).ready(function () {
+        $("#btnCommAssign").hide();
         $("#btnCreateSets").on("click", function () {
             $("#CommunicationModal").show(1000);
         });
-        $("#btnCommPopupClose").on("click", function () {            
+        $("#btnCommPopupClose").on("click", function () {
             $("#CommunicationModal").hide(1000);
             $("#dvCreateSet").hide(1000);
         });
-
+        $('#ddlCommunicationSet').change(function () {
+            PopulateOutletCheckboxes();
+        });
+        $("#btnCommAssign").on("click", function () {
+            AssignSetToOutlets();
+        });
+        FillSetDropDown();
     });
 
+    function FillSetDropDown() {
+        $.ajax({
+            url: '@Url.Action("GetCommunicationSetList", "CustomerOnBoarding")',
+            data: "{'GroupId': '" + $('#hdnGroupID').val() + "'}",
+            type: "post",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (result) {
+                console.log(result);
+                $("#ddlCommunicationSet").html("");
+                var items;
+                $.each(result, function (i,item) {
+                   items += "<option value='" + item.Value + "'>" + item.Text + "</option>";
+                });
+                $("#ddlCommunicationSet").html(items);
+
+            }
+        });
+       }
+
+    function PopulateOutletCheckboxes() {
+        $.ajax({
+            url: '@Url.Action("GetOutletListWithAssignment", "CustomerOnBoarding")',
+            data: '{GroupId: ' + JSON.stringify($('#hdnGroupID').val()) + ',SetId: ' + JSON.stringify($("#ddlCommunicationSet").val()) + '}',
+            type: "post",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (result) {
+                $("#btnCommAssign").hide();
+                var items = "";
+                if ($("#ddlCommunicationSet").val() != "0") {
+                    $.each(result, function (i, item) {
+                        console.log(item);
+                        if (item.Selected) {
+                            items += "<br/><input class='outletStyle' type=checkbox id='chkOutlet" + item.Value + "' value='" + item.Value + "' checked />" + item.Text;
+                        }
+                        else if (item.Disabled) {
+                            items += "<br/><input class='outletStyle' type=checkbox id='chkOutlet" + item.Value + "' value='" + item.Value + "' checked disabled />" + item.Text;
+                        }
+                        else {
+                            items += "<br/><input class='outletStyle' type=checkbox id='chkOutlet" + item.Value + "' value='" + item.Value + "' />" + item.Text;
+                        }
+                     });
+                    $("#btnCommAssign").show();
+                }
+                $("#dvOutlets").html(items);
+            }
+        });
+
+    }
+
+    function AssignSetToOutlets() {
+        var OutletIds = [];
+        $(":checkbox:checked").each(function () {
+            console.log($("#"+this.id).is(':disabled'));
+            if (!$("#" + this.id).is(':disabled'))
+                OutletIds.push(this.value);
+        });
         
+        var OutletIdsData = JSON.stringify(OutletIds);
+
+        if (OutletIds.length > 0) {
+            $.ajax({
+                url: '@Url.Action("AssignCommunicationSetsToOutlets", "CustomerOnBoarding")',
+                data: '{GroupId: ' + JSON.stringify($('#hdnGroupID').val()) + ',SetId: ' + JSON.stringify($("#ddlCommunicationSet").val()) + ',OutletIds: ' + JSON.stringify(OutletIdsData) + '}',
+                type: "post",
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (result) {
+                    cuteAlert({
+                        type: "success",
+                        title: "Assigned",
+                        message: "Communication Sets asigned Successfully !!!",
+                        buttonText: "Okay"
+                    })
+                }
+            });
+        }
+        else {
+            cuteAlert({
+                type: "error",
+                title: "Oops..",
+                message: "Please Select Outlet to Assign",
+                buttonText: "Okay"
+            })
+        }
+
+    }
+
 </script>

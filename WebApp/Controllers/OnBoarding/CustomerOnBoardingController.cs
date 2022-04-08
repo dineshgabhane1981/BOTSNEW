@@ -1568,5 +1568,48 @@ namespace WebApp.Controllers.OnBoarding
 
             return new JsonResult() { Data = status, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
+
+        public JsonResult GetCommunicationSetList(string GroupId)
+        {            
+            var SetList = OBR.GetCommunicationSetList(GroupId);
+            return new JsonResult() { Data = SetList, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
+        }
+        public JsonResult GetOutletListWithAssignment(string GroupId,string SetId)
+        {
+            var SetList = OBR.GetOutletListWithAssignment(GroupId,SetId);
+            return new JsonResult() { Data = SetList, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
+        }
+
+        public ActionResult AssignCommunicationSetsToOutlets(string GroupId,string SetId, string OutletIds)
+        {
+            bool status = false;
+            try
+            {
+                var userDetails = (CustomerLoginDetail)Session["UserSession"];
+                List<BOTS_TblCommunicationSetAssignment> objData = new List<BOTS_TblCommunicationSetAssignment>();
+                JavaScriptSerializer json_serializer = new JavaScriptSerializer();
+                json_serializer.MaxJsonLength = int.MaxValue;
+                object[] objOutletData = (object[])json_serializer.DeserializeObject(OutletIds);
+                foreach (var item in objOutletData)
+                {
+                    BOTS_TblCommunicationSetAssignment objItem = new BOTS_TblCommunicationSetAssignment();
+                    objItem.SetId = Convert.ToInt32(SetId);
+                    objItem.GroupId = Convert.ToString(GroupId);
+                    objItem.OutletId = Convert.ToString(item);
+                    objItem.CreatedBy = userDetails.LoginId;
+                    objItem.CreatedDate = DateTime.Now;
+                    objData.Add(objItem);
+                }
+                status = OBR.AssignCommunicationSetsToOutlets(GroupId, Convert.ToInt32(SetId), objData);
+            }
+            catch(Exception ex)
+            {
+                newexception.AddException(ex, "AssignCommunicationSetsToOutlets");
+            }
+
+            return new JsonResult() { Data = status, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
+        }
+
+
     }
 }

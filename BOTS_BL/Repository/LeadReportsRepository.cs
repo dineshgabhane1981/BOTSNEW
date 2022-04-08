@@ -24,7 +24,7 @@ namespace BOTS_BL.Repository
     {
         Exceptions newexception = new Exceptions();
 
-        public List<MeetingMatrix> GetMeetingMatrixReport(string isMTD,string SalesManager, string FrmDate, string ToDate, string MeetingOrCall)
+        public List<MeetingMatrix> GetMeetingMatrixReport(string isMTD, string SalesManager, string FrmDate, string ToDate, string MeetingOrCall)
         {
             MeetingMatrix objMeetingMatrix = new MeetingMatrix();
             List<MeetingMatrix> lstMeetingMatrix = new List<MeetingMatrix>();
@@ -37,11 +37,11 @@ namespace BOTS_BL.Repository
                     if (!string.IsNullOrEmpty(FrmDate) && !string.IsNullOrEmpty(FrmDate))
                     {
                         FromDate = Convert.ToDateTime(FrmDate);
-                        ToDateNew = Convert.ToDateTime(ToDate);                        
-                            ToDateNew = ToDateNew.AddDays(1).Date.AddSeconds(-1);
-                       
+                        ToDateNew = Convert.ToDateTime(ToDate);
+                        ToDateNew = ToDateNew.AddDays(1).Date.AddSeconds(-1);
+
                     }
-                    if(isMTD=="1")
+                    if (isMTD == "1")
                     {
                         var date = DateTime.Now;
                         FromDate = new DateTime(date.Year, date.Month, 1);
@@ -213,26 +213,26 @@ namespace BOTS_BL.Repository
                     if (type == "3")
                     {
                         newdata = (from c in context.SALES_tblLeads
-                                       join cc in context.SALES_tblLeadTracking on c.LeadId equals cc.LeadId
-                                       where c.MeetingType == "Followup" && c.UpdatedDate == null
-                                       && (c.ContactType == "OnlineMeeting" || c.ContactType == "PersonalMeeting")
-                                       && c.AddedDate >= FromDate && c.AddedDate <= ToDateNew && c.FollowupDate<DateTime.Today
-                                       && c.AssignedLead == SalesManager
-                                       select new SalesLead
-                                       {
-                                           LeadId = c.LeadId,
-                                           BusinessName = c.BusinessName,
-                                           MobileNo = c.MobileNo,
-                                           City = c.City,
-                                           BillingPartner = c.BillingPartner,
-                                           NoOfOutlet = c.NoOfOutlet,
-                                           LeadStatus = c.LeadStatus,
-                                           FollowupDate = c.FollowupDate,
-                                           Comments = c.Comments,
-                                           AddedDate = cc.AddedDate
+                                   join cc in context.SALES_tblLeadTracking on c.LeadId equals cc.LeadId
+                                   where c.MeetingType == "Followup" && c.UpdatedDate == null
+                                   && (c.ContactType == "OnlineMeeting" || c.ContactType == "PersonalMeeting")
+                                   && c.AddedDate >= FromDate && c.AddedDate <= ToDateNew && c.FollowupDate < DateTime.Today
+                                   && c.AssignedLead == SalesManager
+                                   select new SalesLead
+                                   {
+                                       LeadId = c.LeadId,
+                                       BusinessName = c.BusinessName,
+                                       MobileNo = c.MobileNo,
+                                       City = c.City,
+                                       BillingPartner = c.BillingPartner,
+                                       NoOfOutlet = c.NoOfOutlet,
+                                       LeadStatus = c.LeadStatus,
+                                       FollowupDate = c.FollowupDate,
+                                       Comments = c.Comments,
+                                       AddedDate = cc.AddedDate
 
-                                       }).ToList();
-                        foreach(var item in newdata)
+                                   }).ToList();
+                        foreach (var item in newdata)
                         {
                             var cId = Convert.ToInt32(item.City);
                             item.CityName = context.tblCities.Where(x => x.CityId == cId).Select(y => y.CityName).FirstOrDefault();
@@ -299,23 +299,23 @@ namespace BOTS_BL.Repository
                     if (type == "3")
                     {
                         newdata = (from c in context.SALES_tblLeads
-                                       join cc in context.SALES_tblLeadTracking on c.LeadId equals cc.LeadId
-                                       where c.MeetingType == "Followup" && c.UpdatedDate == null
-                                       && c.ContactType == "Call" && c.AddedDate >= FromDate && c.AddedDate <= ToDateNew && c.FollowupDate < DateTime.Today
-                                       && c.AssignedLead == SalesManager
-                                       select new SalesLead
-                                       {
-                                           LeadId = c.LeadId,
-                                           BusinessName = c.BusinessName,
-                                           MobileNo = c.MobileNo,
-                                           City = c.City,
-                                           BillingPartner = c.BillingPartner,
-                                           NoOfOutlet = c.NoOfOutlet,
-                                           LeadStatus = c.LeadStatus,
-                                           FollowupDate = c.FollowupDate,
-                                           Comments = c.Comments,
-                                           AddedDate = cc.AddedDate
-                                       }).ToList();
+                                   join cc in context.SALES_tblLeadTracking on c.LeadId equals cc.LeadId
+                                   where c.MeetingType == "Followup" && c.UpdatedDate == null
+                                   && c.ContactType == "Call" && c.AddedDate >= FromDate && c.AddedDate <= ToDateNew && c.FollowupDate < DateTime.Today
+                                   && c.AssignedLead == SalesManager
+                                   select new SalesLead
+                                   {
+                                       LeadId = c.LeadId,
+                                       BusinessName = c.BusinessName,
+                                       MobileNo = c.MobileNo,
+                                       City = c.City,
+                                       BillingPartner = c.BillingPartner,
+                                       NoOfOutlet = c.NoOfOutlet,
+                                       LeadStatus = c.LeadStatus,
+                                       FollowupDate = c.FollowupDate,
+                                       Comments = c.Comments,
+                                       AddedDate = cc.AddedDate
+                                   }).ToList();
 
                     }
                     if (type == "4")
@@ -364,13 +364,13 @@ namespace BOTS_BL.Repository
         }
 
 
-        public List<PartnerReport> GetPartnerReportData(string FrmDate, string ToDate,string isMTD)
+        public List<PartnerReport> GetPartnerReportData(string FrmDate, string ToDate, string isMTD)
         {
             List<PartnerReport> lstData = new List<PartnerReport>();
             try
             {
                 using (var context = new CommonDBContext())
-                { 
+                {
                     var list = context.BOTS_TblRetailMaster.Select(x => x.BillingPartner).Distinct().ToList();
                     decimal? TotalAmountAll = 0;
                     List<string> groupids = new List<string>();
@@ -397,36 +397,36 @@ namespace BOTS_BL.Repository
                                 FromDate = new DateTime(date.Year, date.Month, 1);
                                 ToDateNew = DateTime.Today.AddDays(1).Date.AddSeconds(-1);
                             }
-                            
-                                objPartner.NoOfAccounts = (from c in context.BOTS_TblGroupMaster
-                                             join cc in context.BOTS_TblRetailMaster on c.GroupId equals cc.GroupId
-                                             where cc.BillingPartner == item && c.CreatedDate >= FromDate && c.CreatedDate <= ToDateNew                                             
-                                             select new SalesLead
-                                             {
-                                                 BusinessName = c.GroupId
-                                             }).ToList().Count();
 
-                                objPartner.NoOfOutlets = (from c in context.BOTS_TblGroupMaster
-                                                           join cc in context.BOTS_TblRetailMaster on c.GroupId equals cc.GroupId
-                                                           where cc.BillingPartner == item && c.CreatedDate >= FromDate && c.CreatedDate <= ToDateNew
-                                                           select new SalesLead
-                                                           {
-                                                               noOfOutlet = cc.NoOfOutlets
-                                                           }).Sum(x=>x.noOfOutlet);
+                            objPartner.NoOfAccounts = (from c in context.BOTS_TblGroupMaster
+                                                       join cc in context.BOTS_TblRetailMaster on c.GroupId equals cc.GroupId
+                                                       where cc.BillingPartner == item && c.CreatedDate >= FromDate && c.CreatedDate <= ToDateNew
+                                                       select new SalesLead
+                                                       {
+                                                           BusinessName = c.GroupId
+                                                       }).ToList().Count();
 
-                               groupids = (from c in context.BOTS_TblGroupMaster
-                                                          join cc in context.BOTS_TblRetailMaster on c.GroupId equals cc.GroupId
-                                                          where cc.BillingPartner == item && c.CreatedDate >= FromDate && c.CreatedDate <= ToDateNew
-                                                          select new SalesLead
-                                                          {
-                                                              GroupId = c.GroupId
-                                                          }).Select(x => x.GroupId).ToList();                                                        
-                            
+                            objPartner.NoOfOutlets = (from c in context.BOTS_TblGroupMaster
+                                                      join cc in context.BOTS_TblRetailMaster on c.GroupId equals cc.GroupId
+                                                      where cc.BillingPartner == item && c.CreatedDate >= FromDate && c.CreatedDate <= ToDateNew
+                                                      select new SalesLead
+                                                      {
+                                                          noOfOutlet = cc.NoOfOutlets
+                                                      }).Sum(x => x.noOfOutlet);
+
+                            groupids = (from c in context.BOTS_TblGroupMaster
+                                        join cc in context.BOTS_TblRetailMaster on c.GroupId equals cc.GroupId
+                                        where cc.BillingPartner == item && c.CreatedDate >= FromDate && c.CreatedDate <= ToDateNew
+                                        select new SalesLead
+                                        {
+                                            GroupId = c.GroupId
+                                        }).Select(x => x.GroupId).ToList();
+
                             decimal? TotalAmount = 0;
-                            foreach(var groupid in groupids)
+                            foreach (var groupid in groupids)
                             {
                                 var grouprecord = context.BOTS_TblDealDetails.Where(x => x.GroupId == groupid).FirstOrDefault();
-                                if(grouprecord.PaymentFrequency=="2")
+                                if (grouprecord.PaymentFrequency == "2")
                                 {
                                     TotalAmount = TotalAmount + grouprecord.AdvanceAmount;
                                 }
@@ -441,7 +441,7 @@ namespace BOTS_BL.Repository
                             lstData.Add(objPartner);
                         }
                     }
-                    foreach(var item in lstData)
+                    foreach (var item in lstData)
                     {
                         var revenue = (item.TotalAmount * 100) / TotalAmountAll;
                         item.ContributionInRevenue = Math.Round((Decimal)revenue, 2);
@@ -471,9 +471,9 @@ namespace BOTS_BL.Repository
         public List<SalesMatrix> GetSalesMatrix(string radiovalue, int month, int year, string sm)
         {
             List<SalesMatrix> lstsalesmatrix = new List<SalesMatrix>();
-           // List<SalesMatrixDetail> lstsalesmatrixdetails = new List<SalesMatrixDetail>();
-            
-           
+            // List<SalesMatrixDetail> lstsalesmatrixdetails = new List<SalesMatrixDetail>();
+
+
             using (var context = new CommonDBContext())
             {
                 DateTime first = new DateTime();
@@ -512,380 +512,383 @@ namespace BOTS_BL.Repository
 
                 foreach (var item in SMDetails)
                 {
-                    
-                    SalesMatrix objsalesmatrix = new SalesMatrix();
-                    objsalesmatrix.SMName = item.UserName;
-                    var grouprecord = (from d in context.BOTS_TblDealDetails
-                                       join g in context.BOTS_TblGroupMaster
-                                       on d.GroupId equals g.GroupId
-                                       join r in context.BOTS_TblRetailMaster on g.GroupId equals r.GroupId
-                                       join b in context.tblBillingPartners on r.BillingPartner equals b.BillingPartnerId.ToString()
-                                       where g.CreatedBy == item.LoginId && g.CreatedDate >= first && g.CreatedDate <= last && g.CustomerStatus != "Draft"
-                                       select new
-                                       {
-                                           GroupId = d.GroupId,
-                                           SMId = g.CreatedBy,
-                                           LoyaltyFees = d.LoyaltyFees,
-                                           WAPaidPackFees = d.WAPaidPackFees,
-                                           SMSPaidPackFees = d.SMSPaidPackFees,
-                                           EcommIntegration = d.EcommIntegration,
-                                           AnyOtherFees = d.AnyOtherFees,
-                                           TotalFeesA = d.TotalFeesA,
-                                           GST = d.GST,
-                                           TotalFeesB = d.TotalFeesB,
-                                           PaymentFrequency = d.PaymentFrequency,
-                                           AnyOtherFeesDesc = d.AnyOtherFeesDesc,
-                                           AmountReceived = d.AmountReceived,
-                                           TDSDeducted = d.TDSDeducted,
-                                           PaymentMode = d.PaymentMode,
-                                           PaymentStatus = d.PaymentStatus,
-                                           GSTRate = d.GSTRate,
-                                           AdvanceAmount = d.AdvanceAmount,
-                                           Boproduct = r.BOProduct,
-                                           Noofoutlets = r.NoOfEnrolled,
-                                           createddate = g.CreatedDate,
-                                           billingPartner = b.BillingPartnerName,
-                                           GroupName = g.GroupName
-
-                                       }).Distinct().ToList();
-                    
-                    decimal? TotalAmount = 0;
-                    decimal? Octaxstotalamt = 0;
-                    decimal? OctaPlustotalamt = 0;
-                    decimal? singleoutlettotalamt = 0;
-                    decimal? Multioutlettotalamt = 0;
-                    decimal? Lastmonthrevenue = 0;
-                    decimal? PreviousMonthRevenue = 0;
-                    foreach (var itemgrp in grouprecord)
+                    var isSaleDone = context.BOTS_TblGroupMaster.Where(x => x.CreatedBy == item.LoginId).FirstOrDefault();
+                    if (isSaleDone != null)
                     {
-                        if (itemgrp.PaymentFrequency == "2")
-                        {
-                            TotalAmount = TotalAmount + itemgrp.AdvanceAmount;
-                            Octaxstotalamt = TotalAmount;
-                        }
-                        else
-                        {
-                            TotalAmount = TotalAmount + itemgrp.AmountReceived;
-                            OctaPlustotalamt = TotalAmount;
-                        }
 
-                        if (itemgrp.Noofoutlets == 1)
+                        SalesMatrix objsalesmatrix = new SalesMatrix();
+                        objsalesmatrix.SMName = item.UserName;
+                        var grouprecord = (from d in context.BOTS_TblDealDetails
+                                           join g in context.BOTS_TblGroupMaster
+                                           on d.GroupId equals g.GroupId
+                                           join r in context.BOTS_TblRetailMaster on g.GroupId equals r.GroupId
+                                           join b in context.tblBillingPartners on r.BillingPartner equals b.BillingPartnerId.ToString()
+                                           where g.CreatedBy == item.LoginId && g.CreatedDate >= first && g.CreatedDate <= last && g.CustomerStatus != "Draft"
+                                           select new
+                                           {
+                                               GroupId = d.GroupId,
+                                               SMId = g.CreatedBy,
+                                               LoyaltyFees = d.LoyaltyFees,
+                                               WAPaidPackFees = d.WAPaidPackFees,
+                                               SMSPaidPackFees = d.SMSPaidPackFees,
+                                               EcommIntegration = d.EcommIntegration,
+                                               AnyOtherFees = d.AnyOtherFees,
+                                               TotalFeesA = d.TotalFeesA,
+                                               GST = d.GST,
+                                               TotalFeesB = d.TotalFeesB,
+                                               PaymentFrequency = d.PaymentFrequency,
+                                               AnyOtherFeesDesc = d.AnyOtherFeesDesc,
+                                               AmountReceived = d.AmountReceived,
+                                               TDSDeducted = d.TDSDeducted,
+                                               PaymentMode = d.PaymentMode,
+                                               PaymentStatus = d.PaymentStatus,
+                                               GSTRate = d.GSTRate,
+                                               AdvanceAmount = d.AdvanceAmount,
+                                               Boproduct = r.BOProduct,
+                                               Noofoutlets = r.NoOfEnrolled,
+                                               createddate = g.CreatedDate,
+                                               billingPartner = b.BillingPartnerName,
+                                               GroupName = g.GroupName
+
+                                           }).Distinct().ToList();
+
+                        decimal? TotalAmount = 0;
+                        decimal? Octaxstotalamt = 0;
+                        decimal? OctaPlustotalamt = 0;
+                        decimal? singleoutlettotalamt = 0;
+                        decimal? Multioutlettotalamt = 0;
+                        decimal? Lastmonthrevenue = 0;
+                        decimal? PreviousMonthRevenue = 0;
+                        foreach (var itemgrp in grouprecord)
                         {
                             if (itemgrp.PaymentFrequency == "2")
                             {
-                                singleoutlettotalamt = singleoutlettotalamt + itemgrp.AdvanceAmount;
+                                TotalAmount = TotalAmount + itemgrp.AdvanceAmount;
+                                Octaxstotalamt = TotalAmount;
+                            }
+                            else
+                            {
+                                TotalAmount = TotalAmount + itemgrp.AmountReceived;
+                                OctaPlustotalamt = TotalAmount;
+                            }
+
+                            if (itemgrp.Noofoutlets == 1)
+                            {
+                                if (itemgrp.PaymentFrequency == "2")
+                                {
+                                    singleoutlettotalamt = singleoutlettotalamt + itemgrp.AdvanceAmount;
+
+                                }
+                                else
+                                {
+                                    singleoutlettotalamt = singleoutlettotalamt + itemgrp.AmountReceived;
+
+                                }
+                            }
+
+                        }
+                        var octaxssalescount = grouprecord.Where(x => x.Boproduct == "2").Count();
+                        var octaplussalescount = grouprecord.Where(x => x.Boproduct == "1").Count();
+                        var singleoutletnoofsales = grouprecord.Where(x => x.Noofoutlets == 1).Count();
+                        var Multioutletnoofsales = grouprecord.Where(x => x.Noofoutlets > 1).Distinct().ToList();
+
+                        var count = Multioutletnoofsales.Count();
+
+                        foreach (var itemmulti in Multioutletnoofsales)
+                        {
+
+
+                            if (itemmulti.PaymentFrequency == "2")
+                            {
+                                Multioutlettotalamt = Multioutlettotalamt + itemmulti.AdvanceAmount;
 
                             }
                             else
                             {
-                                singleoutlettotalamt = singleoutlettotalamt + itemgrp.AmountReceived;
+                                Multioutlettotalamt = Multioutlettotalamt + itemmulti.AmountReceived;
 
                             }
+
                         }
-
-                    }
-                    var octaxssalescount = grouprecord.Where(x => x.Boproduct == "2").Count();
-                    var octaplussalescount = grouprecord.Where(x => x.Boproduct == "1").Count();
-                    var singleoutletnoofsales = grouprecord.Where(x => x.Noofoutlets == 1).Count();
-                    var Multioutletnoofsales = grouprecord.Where(x => x.Noofoutlets > 1).Distinct().ToList();
-
-                    var count = Multioutletnoofsales.Count();
-
-                    foreach (var itemmulti in Multioutletnoofsales)
-                    {
-
-
-                        if (itemmulti.PaymentFrequency == "2")
+                        objsalesmatrix.SMId = item.LoginId;
+                        objsalesmatrix.MultipleOutlet = count;
+                        objsalesmatrix.TotalRevenue = TotalAmount;
+                        objsalesmatrix.NoOfSales = grouprecord.Count();
+                        if (octaplussalescount > 0)
                         {
-                            Multioutlettotalamt = Multioutlettotalamt + itemmulti.AdvanceAmount;
-
+                            decimal? avgrevplus = OctaPlustotalamt / octaplussalescount;
+                            objsalesmatrix.AvgRevenueOctaPlus = Convert.ToDecimal(string.Format("{0:0.00}", avgrevplus));
                         }
                         else
                         {
-                            Multioutlettotalamt = Multioutlettotalamt + itemmulti.AmountReceived;
-
+                            objsalesmatrix.AvgRevenueOctaPlus = OctaPlustotalamt;
+                        }
+                        if (octaxssalescount > 0)
+                        {
+                            decimal? avgrevxs = Octaxstotalamt / octaxssalescount;
+                            objsalesmatrix.AvgRevenueOctaXs = Convert.ToDecimal(string.Format("{0:0.00}", avgrevxs));
+                        }
+                        else
+                        {
+                            objsalesmatrix.AvgRevenueOctaXs = Octaxstotalamt;
                         }
 
-                    }
-                    objsalesmatrix.SMId = item.LoginId;
-                    objsalesmatrix.MultipleOutlet = count;
-                    objsalesmatrix.TotalRevenue = TotalAmount;
-                    objsalesmatrix.NoOfSales = grouprecord.Count();
-                    if (octaplussalescount > 0)
-                    {
-                        decimal? avgrevplus = OctaPlustotalamt / octaplussalescount;
-                        objsalesmatrix.AvgRevenueOctaPlus = Convert.ToDecimal(string.Format("{0:0.00}", avgrevplus));
-                    }
-                    else
-                    {
-                        objsalesmatrix.AvgRevenueOctaPlus = OctaPlustotalamt;
-                    }
-                    if (octaxssalescount > 0)
-                    {
-                        decimal? avgrevxs = Octaxstotalamt / octaxssalescount;
-                        objsalesmatrix.AvgRevenueOctaXs = Convert.ToDecimal(string.Format("{0:0.00}", avgrevxs));
-                    }
-                    else
-                    {
-                        objsalesmatrix.AvgRevenueOctaXs = Octaxstotalamt;
-                    }
 
-
-                    if (singleoutletnoofsales > 0)
-                    {
-                        decimal? avg = singleoutlettotalamt / singleoutletnoofsales;
-                        objsalesmatrix.AvgRevenuesingleoutlet = Convert.ToDecimal(string.Format("{0:0.00}", avg));
-                    }
-                    else
-                    {
-                        objsalesmatrix.AvgRevenuesingleoutlet = singleoutlettotalamt;
-                    }
-                    if (count > 0)
-                    {
-                        decimal? avgmulti = Multioutlettotalamt / count;
-                        objsalesmatrix.AvgRevenueMultipleOutlet = Convert.ToDecimal(string.Format("{0:0.00}", avgmulti));
-                    }
-                    else
-                    {
-                        objsalesmatrix.AvgRevenueMultipleOutlet = Multioutlettotalamt;
-                    }
-
-                    var premonthcount = 0;
-                    if (radiovalue != "none")
-                    {
-                        DateTime prefirst = new DateTime();
-                        DateTime prelastdt = DateTime.MaxValue;
-                        DateTime twomonthback = DateTime.Today;
-                        if (radiovalue == "btd")
+                        if (singleoutletnoofsales > 0)
                         {
-                            twomonthback = new DateTime();
-                            prefirst = DateTime.MaxValue;
+                            decimal? avg = singleoutlettotalamt / singleoutletnoofsales;
+                            objsalesmatrix.AvgRevenuesingleoutlet = Convert.ToDecimal(string.Format("{0:0.00}", avg));
                         }
-                        else if (radiovalue == "mtd")
+                        else
                         {
-                            prelastdt = DateTime.Today;
-                            prefirst = prelastdt.AddMonths(-1).AddSeconds(-1);
-
-                            twomonthback = prefirst.AddMonths(-1).AddSeconds(-1);
-
+                            objsalesmatrix.AvgRevenuesingleoutlet = singleoutlettotalamt;
                         }
-                        else if (radiovalue == "qtd")
+                        if (count > 0)
                         {
-                            prelastdt = DateTime.Today;
-                            prefirst = prelastdt.AddMonths(-3).AddSeconds(-1);
-                            twomonthback = prefirst.AddMonths(-3).AddSeconds(-1);
+                            decimal? avgmulti = Multioutlettotalamt / count;
+                            objsalesmatrix.AvgRevenueMultipleOutlet = Convert.ToDecimal(string.Format("{0:0.00}", avgmulti));
+                        }
+                        else
+                        {
+                            objsalesmatrix.AvgRevenueMultipleOutlet = Multioutlettotalamt;
                         }
 
-                        var previousmonthrevenue = (from d in context.BOTS_TblDealDetails
-                                                    join g in context.BOTS_TblGroupMaster
-                                                    on d.GroupId equals g.GroupId
-                                                    join r in context.BOTS_TblRetailMaster on g.GroupId equals r.GroupId
-                                                    where g.CreatedBy == item.LoginId && g.CreatedDate >= prefirst && g.CreatedDate <= prelastdt && g.CustomerStatus != "Draft"
-                                                    select new
-                                                    {
-                                                        GroupId = d.GroupId,
-                                                        SMId = g.CreatedBy,
-                                                        PaymentFrequency = d.PaymentFrequency,
-                                                        AmountReceived = d.AmountReceived,
-                                                        AdvanceAmount = d.AdvanceAmount,
-                                                        Noofoutlets = r.NoOfEnrolled,
-                                                        createddate = g.CreatedDate,
-                                                       // billingPartner = r.BillingPartnerName
-
-                                                    }).ToList();
-                        foreach (var itemprerev in previousmonthrevenue)
+                        var premonthcount = 0;
+                        if (radiovalue != "none")
                         {
-                            if (itemprerev.PaymentFrequency == "2")
+                            DateTime prefirst = new DateTime();
+                            DateTime prelastdt = DateTime.MaxValue;
+                            DateTime twomonthback = DateTime.Today;
+                            if (radiovalue == "btd")
                             {
-                                PreviousMonthRevenue = PreviousMonthRevenue + itemprerev.AdvanceAmount;
+                                twomonthback = new DateTime();
+                                prefirst = DateTime.MaxValue;
+                            }
+                            else if (radiovalue == "mtd")
+                            {
+                                prelastdt = DateTime.Today;
+                                prefirst = prelastdt.AddMonths(-1).AddSeconds(-1);
+
+                                twomonthback = prefirst.AddMonths(-1).AddSeconds(-1);
+
+                            }
+                            else if (radiovalue == "qtd")
+                            {
+                                prelastdt = DateTime.Today;
+                                prefirst = prelastdt.AddMonths(-3).AddSeconds(-1);
+                                twomonthback = prefirst.AddMonths(-3).AddSeconds(-1);
+                            }
+
+                            var previousmonthrevenue = (from d in context.BOTS_TblDealDetails
+                                                        join g in context.BOTS_TblGroupMaster
+                                                        on d.GroupId equals g.GroupId
+                                                        join r in context.BOTS_TblRetailMaster on g.GroupId equals r.GroupId
+                                                        where g.CreatedBy == item.LoginId && g.CreatedDate >= prefirst && g.CreatedDate <= prelastdt && g.CustomerStatus != "Draft"
+                                                        select new
+                                                        {
+                                                            GroupId = d.GroupId,
+                                                            SMId = g.CreatedBy,
+                                                            PaymentFrequency = d.PaymentFrequency,
+                                                            AmountReceived = d.AmountReceived,
+                                                            AdvanceAmount = d.AdvanceAmount,
+                                                            Noofoutlets = r.NoOfEnrolled,
+                                                            createddate = g.CreatedDate,
+                                                            // billingPartner = r.BillingPartnerName
+
+                                                        }).ToList();
+                            foreach (var itemprerev in previousmonthrevenue)
+                            {
+                                if (itemprerev.PaymentFrequency == "2")
+                                {
+                                    PreviousMonthRevenue = PreviousMonthRevenue + itemprerev.AdvanceAmount;
+
+                                }
+                                else
+                                {
+                                    PreviousMonthRevenue = PreviousMonthRevenue + itemprerev.AmountReceived;
+
+                                }
+                            }
+
+                            var lastmonthrevenue = grouprecord.Where(x => x.createddate < prefirst && x.createddate > twomonthback).ToList();
+                            premonthcount = previousmonthrevenue.Count();
+                            foreach (var itemrev in lastmonthrevenue)
+                            {
+                                if (itemrev.PaymentFrequency == "2")
+                                {
+                                    Lastmonthrevenue = Lastmonthrevenue + itemrev.AdvanceAmount;
+
+                                }
+                                else
+                                {
+                                    Lastmonthrevenue = Lastmonthrevenue + itemrev.AmountReceived;
+
+                                }
+                            }
+                        }
+                        else
+                        {
+                            // DateTime previousmonthfrom = new DateTime(first.Year, first.Month, 1);
+                            DateTime previousmonthto = first.AddMonths(-1).AddSeconds(-1);
+                            var previousmonthrevenue = (from d in context.BOTS_TblDealDetails
+                                                        join g in context.BOTS_TblGroupMaster
+                                                        on d.GroupId equals g.GroupId
+                                                        where g.CreatedBy == item.LoginId && g.CreatedDate > previousmonthto && g.CreatedDate <= first && g.CustomerStatus != "Draft"
+                                                        select new
+                                                        {
+                                                            GroupId = d.GroupId,
+                                                            SMId = g.CreatedBy,
+                                                            PaymentFrequency = d.PaymentFrequency,
+                                                            AmountReceived = d.AmountReceived,
+                                                            AdvanceAmount = d.AdvanceAmount,
+                                                            createddate = g.CreatedDate
+
+                                                        }).ToList();
+                            foreach (var itemprerev in previousmonthrevenue)
+                            {
+                                if (itemprerev.PaymentFrequency == "2")
+                                {
+                                    PreviousMonthRevenue = PreviousMonthRevenue + itemprerev.AdvanceAmount;
+
+                                }
+                                else
+                                {
+                                    PreviousMonthRevenue = PreviousMonthRevenue + itemprerev.AmountReceived;
+
+                                }
+                            }
+
+                            var lastmonthrevenue = grouprecord.Where(x => x.createddate > previousmonthto && x.createddate < first).ToList();
+                            premonthcount = previousmonthrevenue.Count();
+
+
+                            foreach (var itemrev in lastmonthrevenue)
+                            {
+                                if (itemrev.PaymentFrequency == "2")
+                                {
+                                    Lastmonthrevenue = Lastmonthrevenue + itemrev.AdvanceAmount;
+
+                                }
+                                else
+                                {
+                                    Lastmonthrevenue = Lastmonthrevenue + itemrev.AmountReceived;
+
+                                }
+                            }
+                        }
+                        decimal? difference = (decimal?)0.00;
+                        if (TotalAmount > 0)
+                        {
+                            difference = Convert.ToDecimal(string.Format("{0:0.00}", (Lastmonthrevenue - PreviousMonthRevenue) / TotalAmount));
+                        }
+                        objsalesmatrix.PreviousMonthTotalRevenue = PreviousMonthRevenue;
+                        objsalesmatrix.PreviousMonthNoOfSales = premonthcount;
+                        objsalesmatrix.Revenuepercentage = difference;
+
+                        //Irrespective of month selected 
+                        var avgmonthrevenuemax = (from d in context.BOTS_TblDealDetails
+                                                  join g in context.BOTS_TblGroupMaster
+                                                  on d.GroupId equals g.GroupId
+                                                  where g.CreatedBy == item.LoginId && g.CustomerStatus != "Draft"
+                                                  select new
+                                                  {
+                                                      createddate = g.CreatedDate
+
+                                                  }).Max(x => x.createddate);
+                        var avgmonthrevenuemin = (from d in context.BOTS_TblDealDetails
+                                                  join g in context.BOTS_TblGroupMaster
+                                                  on d.GroupId equals g.GroupId
+                                                  where g.CreatedBy == item.LoginId && g.CustomerStatus != "Draft"
+                                                  select new
+                                                  {
+                                                      createddate = g.CreatedDate
+
+                                                  }).Min(x => x.createddate);
+                        int monTH = avgmonthrevenuemax.Month - avgmonthrevenuemin.Month;
+
+                        decimal? btdtotalamt = (decimal?)0.00;
+                        var BTDamt = (from d in context.BOTS_TblDealDetails
+                                      join g in context.BOTS_TblGroupMaster
+                                      on d.GroupId equals g.GroupId
+                                      where g.CreatedBy == item.LoginId && g.CustomerStatus != "Draft"
+                                      select new
+                                      {
+                                          GroupId = d.GroupId,
+                                          PaymentFrequency = d.PaymentFrequency,
+                                          AmountReceived = d.AmountReceived,
+                                          AdvanceAmount = d.AdvanceAmount,
+                                          createddate = g.CreatedDate
+
+                                      }).ToList();
+
+                        foreach (var itemamt in BTDamt)
+                        {
+                            if (itemamt.PaymentFrequency == "2")
+                            {
+                                btdtotalamt = btdtotalamt + itemamt.AdvanceAmount;
 
                             }
                             else
                             {
-                                PreviousMonthRevenue = PreviousMonthRevenue + itemprerev.AmountReceived;
+                                btdtotalamt = btdtotalamt + itemamt.AmountReceived;
 
                             }
                         }
+                        var BTDSalesCount = BTDamt.Count();
+                        if (monTH > 0)
+                        {
+                            //Irrespective of month selected
+                            objsalesmatrix.AvgRevenuepermonth = Convert.ToDecimal(string.Format("{0:0.00}", (btdtotalamt / monTH)));
+                            //Irrespective of month selected
+                            objsalesmatrix.BTDNoofSalesDone = Convert.ToDecimal(string.Format("{0:0.00}", (BTDSalesCount / monTH)));
+                        }
+                        //Irrespective of month selected or btd qtd mtd
+                        DateTime Today = DateTime.Today;
+                        DateTime lastrevtodate = Today.AddMonths(-1).AddSeconds(-1);
+                        DateTime lastrevfromdt = new DateTime(lastrevtodate.Year, lastrevtodate.Month, 1);
+                        decimal? LastMonthRevenue = 0;
+                        var lastmonthrev = (from d in context.BOTS_TblDealDetails
+                                            join g in context.BOTS_TblGroupMaster
+                                            on d.GroupId equals g.GroupId
+                                            where g.CreatedBy == item.LoginId && g.CreatedDate >= lastrevfromdt && g.CreatedDate <= lastrevtodate && g.CustomerStatus != "Draft"
+                                            select new
+                                            {
+                                                GroupId = d.GroupId,
+                                                SMId = g.CreatedBy,
+                                                PaymentFrequency = d.PaymentFrequency,
+                                                AmountReceived = d.AmountReceived,
+                                                AdvanceAmount = d.AdvanceAmount,
+                                                createddate = g.CreatedDate
 
-                        var lastmonthrevenue = grouprecord.Where(x => x.createddate < prefirst && x.createddate > twomonthback).ToList();
-                        premonthcount = previousmonthrevenue.Count();
-                        foreach (var itemrev in lastmonthrevenue)
+                                            }).ToList();
+                        foreach (var itemrev in lastmonthrev)
                         {
                             if (itemrev.PaymentFrequency == "2")
                             {
-                                Lastmonthrevenue = Lastmonthrevenue + itemrev.AdvanceAmount;
+                                LastMonthRevenue = LastMonthRevenue + itemrev.AdvanceAmount;
 
                             }
                             else
                             {
-                                Lastmonthrevenue = Lastmonthrevenue + itemrev.AmountReceived;
+                                LastMonthRevenue = LastMonthRevenue + itemrev.AmountReceived;
 
                             }
                         }
+                        objsalesmatrix.LastMonthRevenue = LastMonthRevenue;
+
+                        lstsalesmatrix.Add(objsalesmatrix);
                     }
-                    else
-                    {
-                        // DateTime previousmonthfrom = new DateTime(first.Year, first.Month, 1);
-                        DateTime previousmonthto = first.AddMonths(-1).AddSeconds(-1);
-                        var previousmonthrevenue = (from d in context.BOTS_TblDealDetails
-                                                    join g in context.BOTS_TblGroupMaster
-                                                    on d.GroupId equals g.GroupId
-                                                    where g.CreatedBy == item.LoginId && g.CreatedDate > previousmonthto && g.CreatedDate <= first && g.CustomerStatus != "Draft"
-                                                    select new
-                                                    {
-                                                        GroupId = d.GroupId,
-                                                        SMId = g.CreatedBy,
-                                                        PaymentFrequency = d.PaymentFrequency,
-                                                        AmountReceived = d.AmountReceived,
-                                                        AdvanceAmount = d.AdvanceAmount,
-                                                        createddate = g.CreatedDate
-
-                                                    }).ToList();
-                        foreach (var itemprerev in previousmonthrevenue)
-                        {
-                            if (itemprerev.PaymentFrequency == "2")
-                            {
-                                PreviousMonthRevenue = PreviousMonthRevenue + itemprerev.AdvanceAmount;
-
-                            }
-                            else
-                            {
-                                PreviousMonthRevenue = PreviousMonthRevenue + itemprerev.AmountReceived;
-
-                            }
-                        }
-
-                        var lastmonthrevenue = grouprecord.Where(x => x.createddate > previousmonthto && x.createddate < first).ToList();
-                        premonthcount = previousmonthrevenue.Count();
-
-
-                        foreach (var itemrev in lastmonthrevenue)
-                        {
-                            if (itemrev.PaymentFrequency == "2")
-                            {
-                                Lastmonthrevenue = Lastmonthrevenue + itemrev.AdvanceAmount;
-
-                            }
-                            else
-                            {
-                                Lastmonthrevenue = Lastmonthrevenue + itemrev.AmountReceived;
-
-                            }
-                        }
-                    }
-                    decimal? difference = (decimal?)0.00;
-                    if (TotalAmount > 0)
-                    {
-                        difference = Convert.ToDecimal(string.Format("{0:0.00}", (Lastmonthrevenue - PreviousMonthRevenue) / TotalAmount));
-                    }
-                    objsalesmatrix.PreviousMonthTotalRevenue = PreviousMonthRevenue;
-                    objsalesmatrix.PreviousMonthNoOfSales = premonthcount;
-                    objsalesmatrix.Revenuepercentage = difference;
-
-                    //Irrespective of month selected 
-                    var avgmonthrevenuemax = (from d in context.BOTS_TblDealDetails
-                                              join g in context.BOTS_TblGroupMaster
-                                              on d.GroupId equals g.GroupId
-                                              where g.CreatedBy == item.LoginId && g.CustomerStatus != "Draft"
-                                              select new
-                                              {
-                                                  createddate = g.CreatedDate
-
-                                              }).Max(x => x.createddate);
-                    var avgmonthrevenuemin = (from d in context.BOTS_TblDealDetails
-                                              join g in context.BOTS_TblGroupMaster
-                                              on d.GroupId equals g.GroupId
-                                              where g.CreatedBy == item.LoginId && g.CustomerStatus != "Draft"
-                                              select new
-                                              {
-                                                  createddate = g.CreatedDate
-
-                                              }).Min(x => x.createddate);
-                    int monTH = avgmonthrevenuemax.Month - avgmonthrevenuemin.Month;
-
-                    decimal? btdtotalamt = (decimal?)0.00;
-                    var BTDamt = (from d in context.BOTS_TblDealDetails
-                                  join g in context.BOTS_TblGroupMaster
-                                  on d.GroupId equals g.GroupId
-                                  where g.CreatedBy == item.LoginId && g.CustomerStatus != "Draft"
-                                  select new
-                                  {
-                                      GroupId = d.GroupId,
-                                      PaymentFrequency = d.PaymentFrequency,
-                                      AmountReceived = d.AmountReceived,
-                                      AdvanceAmount = d.AdvanceAmount,
-                                      createddate = g.CreatedDate
-
-                                  }).ToList();
-
-                    foreach (var itemamt in BTDamt)
-                    {
-                        if (itemamt.PaymentFrequency == "2")
-                        {
-                            btdtotalamt = btdtotalamt + itemamt.AdvanceAmount;
-
-                        }
-                        else
-                        {
-                            btdtotalamt = btdtotalamt + itemamt.AmountReceived;
-
-                        }
-                    }
-                    var BTDSalesCount = BTDamt.Count();
-                    if (monTH > 0)
-                    {
-                        //Irrespective of month selected
-                        objsalesmatrix.AvgRevenuepermonth = Convert.ToDecimal(string.Format("{0:0.00}", (btdtotalamt / monTH)));
-                        //Irrespective of month selected
-                        objsalesmatrix.BTDNoofSalesDone = Convert.ToDecimal(string.Format("{0:0.00}", (BTDSalesCount / monTH)));
-                    }
-                    //Irrespective of month selected or btd qtd mtd
-                    DateTime Today = DateTime.Today;
-                    DateTime lastrevtodate = Today.AddMonths(-1).AddSeconds(-1);
-                    DateTime lastrevfromdt = new DateTime(lastrevtodate.Year, lastrevtodate.Month, 1);
-                    decimal? LastMonthRevenue = 0;
-                    var lastmonthrev = (from d in context.BOTS_TblDealDetails
-                                        join g in context.BOTS_TblGroupMaster
-                                        on d.GroupId equals g.GroupId
-                                        where g.CreatedBy == item.LoginId && g.CreatedDate >= lastrevfromdt && g.CreatedDate <= lastrevtodate && g.CustomerStatus != "Draft"
-                                        select new
-                                        {
-                                            GroupId = d.GroupId,
-                                            SMId = g.CreatedBy,
-                                            PaymentFrequency = d.PaymentFrequency,
-                                            AmountReceived = d.AmountReceived,
-                                            AdvanceAmount = d.AdvanceAmount,
-                                            createddate = g.CreatedDate
-
-                                        }).ToList();
-                    foreach (var itemrev in lastmonthrev)
-                    {
-                        if (itemrev.PaymentFrequency == "2")
-                        {
-                            LastMonthRevenue = LastMonthRevenue + itemrev.AdvanceAmount;
-
-                        }
-                        else
-                        {
-                            LastMonthRevenue = LastMonthRevenue + itemrev.AmountReceived;
-
-                        }
-                    }
-                    objsalesmatrix.LastMonthRevenue = LastMonthRevenue;
-
-                    lstsalesmatrix.Add(objsalesmatrix);
                 }
 
-
             }
-            
+
             return lstsalesmatrix;
         }
 
-        public List<SalesMatrixDetail>GetSalesMatrixDetails(string radiovalue, int month, int year, string sm,string type)
+        public List<SalesMatrixDetail> GetSalesMatrixDetails(string radiovalue, int month, int year, string sm, string type)
         {
             List<SalesMatrixDetail> lstdetails = new List<SalesMatrixDetail>();
-           // List<SalesMatrix> lstsalesmatrix = new List<SalesMatrix>();
+            // List<SalesMatrix> lstsalesmatrix = new List<SalesMatrix>();
             List<SalesMatrixDetail> lstsalesmatrixdetails = new List<SalesMatrixDetail>();
 
 
@@ -1039,10 +1042,10 @@ namespace BOTS_BL.Repository
                                                             PaymentFrequency = d.PaymentFrequency,
                                                             AmountReceived = d.AmountReceived,
                                                             AdvanceAmount = d.AdvanceAmount,
-                                                            createddate = g.CreatedDate,                                         
+                                                            createddate = g.CreatedDate,
                                                             Boproduct = r.BOProduct,
                                                             Noofoutlets = r.NoOfEnrolled,
-                                                            
+
                                                             //billingPartner = b.BillingPartnerName,
                                                             GroupName = g.GroupName
 
@@ -1091,7 +1094,7 @@ namespace BOTS_BL.Repository
                                                         join g in context.BOTS_TblGroupMaster
                                                         on d.GroupId equals g.GroupId
                                                         join r in context.BOTS_TblRetailMaster on g.GroupId equals r.GroupId
-                                                       join b in context.tblBillingPartners on r.BillingPartner equals b.BillingPartnerId.ToString()
+                                                        join b in context.tblBillingPartners on r.BillingPartner equals b.BillingPartnerId.ToString()
                                                         where g.CreatedBy == item.LoginId && g.CreatedDate > previousmonthto && g.CreatedDate <= first && g.CustomerStatus != "Draft"
                                                         select new
                                                         {
@@ -1100,10 +1103,10 @@ namespace BOTS_BL.Repository
                                                             PaymentFrequency = d.PaymentFrequency,
                                                             AmountReceived = d.AmountReceived,
                                                             AdvanceAmount = d.AdvanceAmount,
-                                                            createddate = g.CreatedDate,                                                  
+                                                            createddate = g.CreatedDate,
                                                             Boproduct = r.BOProduct,
-                                                            Noofoutlets = r.NoOfEnrolled,                                                            
-                                                           // billingPartner = b.BillingPartnerName,
+                                                            Noofoutlets = r.NoOfEnrolled,
+                                                            // billingPartner = b.BillingPartnerName,
                                                             GroupName = g.GroupName
 
                                                         }).ToList();
@@ -1122,7 +1125,7 @@ namespace BOTS_BL.Repository
                                     objsalesmatrixdetails.Product = "Octa XS";
                                 }
 
-                               // objsalesmatrixdetails.BillingPartner = itemdetail.billingPartner;
+                                // objsalesmatrixdetails.BillingPartner = itemdetail.billingPartner;
                                 if (itemdetail.PaymentFrequency == "2")
                                 {
                                     objsalesmatrixdetails.Amount = itemdetail.AdvanceAmount;
@@ -1145,7 +1148,7 @@ namespace BOTS_BL.Repository
                     }
                 }
             }
-                
+
             return lstsalesmatrixdetails;
 
         }

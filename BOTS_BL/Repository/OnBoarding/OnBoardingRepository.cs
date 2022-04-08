@@ -484,7 +484,7 @@ namespace BOTS_BL.Repository
                     try
                     {
                         var existingSet = context.BOTS_TblCommunicationSet.Where(x => x.SetId == objSet.SetId).FirstOrDefault();
-                        if(existingSet!=null)
+                        if (existingSet != null)
                         {
                             objSet.CreatedBy = existingSet.CreatedBy;
                             objSet.CreatedDate = existingSet.CreatedDate;
@@ -1257,6 +1257,98 @@ namespace BOTS_BL.Repository
             }
 
             return lstSets;
+        }
+
+        public List<SelectListItem> GetCommunicationSetList(string GroupId)
+        {
+            List<SelectListItem> lstCommunicationSet = new List<SelectListItem>();
+            SelectListItem item = new SelectListItem();
+            item.Value = "0";
+            item.Text = "Please Select";
+            lstCommunicationSet.Add(item);
+            using (var context = new CommonDBContext())
+            {
+                var CommunicationSets = context.BOTS_TblCommunicationSet.Where(x => x.GroupId == GroupId).ToList();
+                foreach (var item1 in CommunicationSets)
+                {
+                    lstCommunicationSet.Add(new SelectListItem
+                    {
+                        Text = item1.SetName,
+                        Value = Convert.ToString(item1.SetId)
+                    });
+                }
+            }
+            return lstCommunicationSet;
+        }
+
+        public List<SelectListItem> GetOutletListWithAssignment(string GroupId, string SetId)
+        {
+            List<SelectListItem> lstOutlets = new List<SelectListItem>();
+            List<BOTS_TblOutletMaster> objData = new List<BOTS_TblOutletMaster>();
+            using (var context = new CommonDBContext())
+            {
+                objData = context.BOTS_TblOutletMaster.Where(x => x.GroupId == GroupId).ToList();
+                var SetIdInt = Convert.ToInt32(SetId);
+                var outletForSet = context.BOTS_TblCommunicationSetAssignment.Where(x => x.GroupId == GroupId && x.SetId == SetIdInt).ToList();
+
+                var outletForSetNew = context.BOTS_TblCommunicationSetAssignment.Where(x => x.GroupId == GroupId && x.SetId != SetIdInt).ToList();
+
+                foreach (var outlet in objData)
+                {
+                    var brandName = context.BOTS_TblRetailMaster.Where(x => x.BrandId == outlet.BrandId && x.GroupId == GroupId).Select(y => y.BrandName).FirstOrDefault();
+                    SelectListItem newItem = new SelectListItem();
+                    newItem.Value = Convert.ToString(outlet.Id);
+                    newItem.Text = brandName + " - " + outlet.OutletName;
+                    var exist = outletForSet.Where(x => x.OutletId == outlet.Id.ToString()).FirstOrDefault();
+                    if(exist!=null)
+                    {
+                        newItem.Selected = true;
+                        //newItem.Disabled = true;
+                    }
+                    var existNew = outletForSetNew.Where(x => x.OutletId == outlet.Id.ToString()).FirstOrDefault();
+                    if(existNew != null)
+                    {
+                        newItem.Disabled = true;
+                    }
+
+                    lstOutlets.Add(newItem);
+                }
+            }
+            return lstOutlets;
+        }
+
+        public bool AssignCommunicationSetsToOutlets(string GroupId, int SetId, List<BOTS_TblCommunicationSetAssignment> lstData)
+        {
+            bool status = false;
+            using (var context = new CommonDBContext())
+            {
+                using (DbContextTransaction transaction = context.Database.BeginTransaction())
+                {
+                    try
+                    {
+                        var oldData = context.BOTS_TblCommunicationSetAssignment.Where(x => x.GroupId == GroupId && x.SetId == SetId).ToList();
+                        foreach (var item in oldData)
+                        {
+                            context.BOTS_TblCommunicationSetAssignment.Remove(item);
+                            context.SaveChanges();
+                        }
+
+                        foreach (var newItem in lstData)
+                        {
+                            context.BOTS_TblCommunicationSetAssignment.AddOrUpdate(newItem);
+                            context.SaveChanges();
+                        }
+                        transaction.Commit();
+                        status = true;
+                    }
+                    catch(Exception ex)
+                    {
+                        transaction.Rollback();
+                        newexception.AddException(ex, "AssignCommunicationSetsToOutlets");
+                    }
+                }
+            }
+            return status;
         }
     }
 }

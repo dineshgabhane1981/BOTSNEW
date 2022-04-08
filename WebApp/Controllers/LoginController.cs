@@ -74,6 +74,12 @@ namespace WebApp.Controllers
                     if (userDetails.LoginId != null)
                     {
                         Session["UserSession"] = userDetails;
+                        tblLoginLog objLogData = new tblLoginLog();
+                        objLogData.LoginId = userDetails.LoginId;
+                        objLogData.UserName = userDetails.UserName;
+                        objLogData.LoggedInTime = DateTime.Now;
+                        LR.AddLoginLog(objLogData);
+
                         if(userDetails.LoginId== "8698877771")
                         {
                             return RedirectToAction("MemberPage", "KeyIndicators");
@@ -122,7 +128,7 @@ namespace WebApp.Controllers
                 var userDetail = LR.CheckUserType(LoginID);
                 if (userDetail != null)
                 {
-                    if (userDetail.LoginType == "2" && userDetail.LoginType == "3" && userDetail.LoginType == "4" && !string.IsNullOrEmpty(userDetail.OutletOrBrandId))
+                    if (userDetail.LoginType != "1" && userDetail.LoginType != "5" && userDetail.LoginType != "6" && userDetail.LoginType != "7" && userDetail.LoginType != "11" && string.IsNullOrEmpty(userDetail.OutletOrBrandId))
                     {
                         var result = new HomeController().SendOTP(LoginID);
                         if (result)

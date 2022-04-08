@@ -15,6 +15,7 @@ namespace BOTS_BL.Repository
 {
     public class LoginRepository
     {
+        Exceptions newexception = new Exceptions();
         public CustomerLoginDetail AuthenticateUser(LoginModel objLoginModel)
         {
             DatabaseDetail DBDetails = new DatabaseDetail();
@@ -31,7 +32,7 @@ namespace BOTS_BL.Repository
                         //CustomerConnString.ConnectionStringCustomer = DBDetails.DBName;
 
                         userDetail.connectionString = "Data Source = " + DBDetails.IPAddress + "; Initial Catalog = " + DBDetails.DBName + "; user id = " + DBDetails.DBId + "; password = " + DBDetails.DBPassword + "";
-                        
+
                     }
                 }
             }
@@ -74,14 +75,14 @@ namespace BOTS_BL.Repository
 
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
 
             }
         }
 
         public CustomerLoginDetail CheckUserType(string LoginId)
-        {             
+        {
             CustomerLoginDetail userDetail = new CustomerLoginDetail();
             using (var context = new CommonDBContext())
             {
@@ -113,9 +114,25 @@ namespace BOTS_BL.Repository
 
         }
 
+        public void AddLoginLog(tblLoginLog objLogData)
+        {
+            using (var context = new CommonDBContext())
+            {
+                try
+                {
+                    context.tblLoginLogs.AddOrUpdate(objLogData);
+                    context.SaveChanges();
+                }
+                catch(Exception ex)
+                {
+                    newexception.AddException(ex, "Login Error");
+                }
+            }
+        }
+
     }
 
-    
+
 
 }
 
