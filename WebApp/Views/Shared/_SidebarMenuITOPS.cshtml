@@ -166,7 +166,7 @@
                                 <i class="metismenu-icon pe-7s-rocket"></i>
                                 Redeem/Deduct
                             </a>
-                        </li>                        
+                        </li>
                         <li class="@Html.IsSelected(controller: "AddMember", action: "BulkImport")">
                             <a href="@Url.Action("BulkImport", "AddMember")" class="@Html.IsSelected(controller: "AddMember", action: "BulkImport")">
                                 <i class="metismenu-icon pe-7s-rocket"></i>
@@ -216,6 +216,12 @@
                             <a href="@Url.Action("Index", "Transaction")" class="@Html.IsSelected(controller: "Transaction", action: "Index")">
                                 <i class="metismenu-icon pe-7s-rocket"></i>
                                 Modify Transaction
+                            </a>
+                        </li>
+                        <li class="@Html.IsSelected(controller: "Transaction", action: "PointTransfer")">
+                            <a href="@Url.Action("PointTransfer", "Transaction")" class="@Html.IsSelected(controller: "Transaction", action: "PointTransfer")">
+                                <i class="metismenu-icon pe-7s-rocket"></i>
+                                Point Transfer
                             </a>
                         </li>
 

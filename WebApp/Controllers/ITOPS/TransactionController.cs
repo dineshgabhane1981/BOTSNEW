@@ -153,7 +153,76 @@ namespace WebApp.Controllers.ITOPS
                 }
             }
         }
+        public ActionResult PointTransfer()
+        {
+            var groupId = (string)Session["GroupId"];
+            return View();
+        }
+        public ActionResult TransferPoints(string jsonData)
+        {
+            SPResponse result = new SPResponse();
+            var groupId = (string)Session["GroupId"];
+            try
+            {
+                JavaScriptSerializer json_serializer = new JavaScriptSerializer();
+                json_serializer.MaxJsonLength = int.MaxValue;
+                object[] objData = (object[])json_serializer.DeserializeObject(jsonData);
+                tblAudit objAudit = new tblAudit();
+                bool IsSMS = false;
 
+                string CustomerId = "";
+                string MobileNo = "";
+                string NewMobileNo = "";
+                foreach (Dictionary<string, object> item in objData)
+                {
+                    CustomerId = Convert.ToString(item["CustomerId"]);
+                    MobileNo = Convert.ToString(item["MobileNo"]);
+                    NewMobileNo = Convert.ToString(item["NewMobileNo"]);
+                    objAudit.GroupId = groupId;
+                    objAudit.RequestedFor = "Mobile Number Change";
+                    objAudit.RequestedEntity = "CustomerId - " + CustomerId;
+                    objAudit.RequestedBy = Convert.ToString(item["RequestedBy"]);
+                    objAudit.RequestedOnForum = Convert.ToString(item["RequestedForum"]);
+                    objAudit.RequestedOn = Convert.ToDateTime(item["RequestedOn"]);
+                    IsSMS = Convert.ToBoolean(item["IsSMS"]);
+                }
 
+                result = ITOPS.TransferPoints(groupId, MobileNo, NewMobileNo, objAudit);
+                if (result.ResponseCode == "00")
+                {
+                    var subject = "Customer Mobile Number changed for CustomerId - " + CustomerId;
+                    var body = "Customer Mobile Number changed for CustomerId - " + CustomerId;
+                    body += "<br/><br/> Regards <br/> Blue Ocktopus Team";
+
+                    SendEmail(groupId, subject, body);
+                }
+
+                if (IsSMS)
+                {
+                    //Logic to send SMS to Customer whose Name is changed
+                }
+
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, groupId);
+            }
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+        public ActionResult GetChangeNameData(string MobileNo, string CardNo)
+        {
+            MemberData objCustomerDetail = new MemberData();
+            var groupId = (string)Session["GroupId"];
+            if (!string.IsNullOrEmpty(MobileNo))
+            {
+                objCustomerDetail = ITOPS.GetChangeNameByMobileNo(groupId, MobileNo);
+            }
+            if (!string.IsNullOrEmpty(CardNo))
+            {
+                objCustomerDetail = ITOPS.GetChangeNameByCardNo(groupId, CardNo);
+            }
+
+            return Json(objCustomerDetail, JsonRequestBehavior.AllowGet);
+        }
     }
 }

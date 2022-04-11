@@ -280,7 +280,6 @@
     <Compile Include="Models\ITOps\SPResponse.cs" />
     <Compile Include="Models\ITOps\TransactionMaster.cs" />
     <Compile Include="Models\ITOps\TransactionTypeMaster.cs" />
-    <Compile Include="Models\ITOps\TransferPointsDetail.cs" />
     <Compile Include="Models\KeyIndecators\MemberPage.cs" />
     <Compile Include="Models\KeyIndecators\MembersInformation.cs" />
     <Compile Include="Models\KeyIndecators\MemberWebPage.cs" />

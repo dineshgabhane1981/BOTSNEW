@@ -17,8 +17,7 @@ namespace BOTS_BL.Models
         public BOTSDBContext(string connectionStringName)
             : base(connectionStringName)
         {
-        }
-        public virtual DbSet<TransferPointsDetail> TransferPointsDetails { get; set; }
+        }        
         public virtual DbSet<TelecallerTracking> TelecallerTrackings { get; set; }
         public virtual DbSet<MWPSourceMaster> MWPSourceMasters { get; set; }
         public virtual DbSet<MWP_Details> MWP_Details { get; set; }

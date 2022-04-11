@@ -91,9 +91,9 @@
                             optionItem["LoginId"] = item.CounterId;
                             optionItem["SecurityKey"] = item.securitykey;
                             optionItem["Reset"] = "<input type='button' id='" + item.CounterId + "' onclick='UpdateSecurityKey(" + item.CounterId + ")' value='Reset'>";
-                            tableData.push(optionItem);
+                            tableData.push(); optionItem
                         });
-                        DrawTable1();
+                        DrawTable1(); optionItem
                     }
                     else {
                         toastr.error('Login Ids are not present');

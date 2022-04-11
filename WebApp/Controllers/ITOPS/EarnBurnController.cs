@@ -104,10 +104,12 @@ namespace WebApp.Controllers.ITOPS
         [HttpPost]
         public ActionResult RedeemPointsData(string jsonData)
         {
+            var GroupId = (string)Session["GroupId"];
             SPResponse result = new SPResponse();
-            var GroupId = Convert.ToString(Session["GroupId"]);
+            //string GroupId = "";
             try
-            {               
+            {
+                
                 JavaScriptSerializer json_serializer = new JavaScriptSerializer();
                 json_serializer.MaxJsonLength = int.MaxValue;
                 object[] objData = (object[])json_serializer.DeserializeObject(jsonData);
@@ -120,6 +122,7 @@ namespace WebApp.Controllers.ITOPS
                 string InvoiceAmount = "";
                 string OutletId = "";
                 string PointsToRedeem = "";
+                string PartialEarnPoints = "";
                 string TxnType = "";
 
                 foreach (Dictionary<string, object> item in objData)
@@ -131,6 +134,7 @@ namespace WebApp.Controllers.ITOPS
                     InvoiceNumber = Convert.ToString(item["InvoiceNumber"]);
                     InvoiceAmount = Convert.ToString(item["InvoiceAmount"]);
                     PointsToRedeem = Convert.ToString(item["RedeemPoints"]);
+                    PartialEarnPoints = Convert.ToString(item["PartialEarnPoints"]);
                     TxnType = Convert.ToString(item["TxnType"]);
 
                     objAudit.GroupId = GroupId;
@@ -143,7 +147,7 @@ namespace WebApp.Controllers.ITOPS
                     IsSMS = Convert.ToBoolean(item["IsSMS"]);
                 }
 
-                result = ITOPS.AddRedeemPointsData(GroupId, MobileNo, OutletId, Convert.ToDateTime(TransactionDate), DateTime.Now, InvoiceNumber, InvoiceAmount, Convert.ToDecimal(PointsToRedeem), Convert.ToString(IsSMS), TxnType, objAudit);
+                result = ITOPS.AddRedeemPointsData(GroupId, MobileNo, OutletId, Convert.ToDateTime(TransactionDate), DateTime.Now, InvoiceNumber, InvoiceAmount, Convert.ToDecimal(PointsToRedeem), Convert.ToString(IsSMS), TxnType, PartialEarnPoints, objAudit);
                 if (result.ResponseCode == "00")
                 {
                     var subject = "Points Redeem for mobile no  - " + MobileNo;

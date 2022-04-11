@@ -272,7 +272,7 @@ namespace WebApp.Controllers
                     IsSMS = Convert.ToBoolean(item["IsSMS"]);
                 }
 
-                result = ITOPS.AddRedeemPointsData(GroupId, MobileNo, OutletId, Convert.ToDateTime(TransactionDate), DateTime.Now, InvoiceNumber, InvoiceAmount, Convert.ToDecimal(PointsToRedeem), Convert.ToString(IsSMS), TxnType, objAudit);
+                result = ITOPS.AddRedeemPointsData(GroupId, MobileNo, OutletId, Convert.ToDateTime(TransactionDate), DateTime.Now, InvoiceNumber, InvoiceAmount, Convert.ToDecimal(PointsToRedeem), Convert.ToString(IsSMS), TxnType,"", objAudit);
                 if (result.ResponseCode == "00")
                 {
                     var subject = "Points Redeem for mobile no  - " + MobileNo;

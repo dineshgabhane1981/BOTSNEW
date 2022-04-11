@@ -90,6 +90,13 @@
                                         </td>
                                     </tr>
                                     <tr>
+                                        <td style="padding:10px;width:200px;">Enter Partial Earn Point</td>
+                                        <td style="padding:10px;width:200px;">
+                                            <input type="number" id="txtPartialEarnPoints" placeholder="Enter Points" class="input50" />
+
+                                        </td>
+                                    </tr>
+                                    <tr>
                                         <td style="padding:10px;width:200px;">Select Outlet</td>
                                         <td style="padding:10px;width:200px;">
                                             @Html.DropDownList("Outlet", new SelectList(ViewBag.OutletList, "Value", "Text"), "Select Outlet", htmlAttributes: new { @class = "input50", @id = "ddlOutletList1" })
@@ -189,6 +196,7 @@
             $('#txtInvoiceNumber1').val("");
             $('#txtInvoiceAmount1').val("");
             $('#txtPointsToRedeem').val("");
+            $('#txtPartialEarnPoints').val("");
             $('#txtRequestedByName3').val("");
             $('#dtTransaction1').val("");
 
@@ -209,6 +217,7 @@
             $('#txtInvoiceNumber1').val("");
             $('#txtInvoiceAmount1').val("");
             $('#txtPointsToRedeem').val("");
+            $('#txtPartialEarnPoints').val("");
             $('#txtRequestedByName3').val("");
             $('#dtTransaction1').val("");
             $('#ddlRequestedForum3').prop('selectedIndex', 0);
@@ -270,6 +279,7 @@
             item["MobileNo"] = $("#txtMobileNo3").val();
             item["OutletId"] = $("#ddlOutletList1").val();
             item["RedeemPoints"] = $("#txtPointsToRedeem").val();
+            item["PartialEarnPoints"] = $("#txtPartialEarnPoints").val();
             item["TransactionDate"] = $("#dtTransaction1").val();
             item["InvoiceNumber"] = $("#txtInvoiceNumber1").val();
             item["InvoiceAmount"] = $("#txtInvoiceAmount1").val();

@@ -1,8 +1,10 @@
 ﻿
 @{
-    ViewBag.Title = "ChangeMobile";
+    ViewBag.Title = "PointTransfer";
     Layout = "~/Views/Shared/_LayoutITOPS.cshtml";
 }
+
+
 <div class="app-main__inner">
     <div class="mb-3 card" style="padding-top:20px;">
         <div class="content">
@@ -11,10 +13,9 @@
             <div class="container overflow-hidden">
                 <input type="hidden" id="hdnCustomerId1" />
                 <div class="multisteps-form__panel shadow p-4 list-box bg-white" id="sec2" data-animation="scaleIn">
-                    <h4 class="multisteps-form__title" style="color:blue;">Change Mobile Number</h4><br />
+                    <h4 class="multisteps-form__title" style="color:blue;">Point Transfer</h4><br />
                     <div class="multisteps-form__content">
                         <div>
-                            
                             <label style="padding-right:5px;padding-top:10px;">Enter Mobile Number </label>
                             <input type="number" id="txtMobileNo1" class="input50" />
 
@@ -67,12 +68,12 @@
                                 <div class="col-md-5 col-lg-5" style="padding-left: 0px !important; float: left;">
                                     <table border="1" cellpadding="5" cellspacing="5" id="tblUpdateData1" style="display:none;">
                                         <tr>
-                                            <th colspan="2" style="padding:10px;text-align:center;">Modify Mobile Number</th>
+                                            <th colspan="2" style="padding:10px;text-align:center;">Points Transfer To Mobile Number</th>
                                         </tr>
                                         <tr>
-                                            <td style="padding:10px;">Enter New Mobile Number</td>
+                                            <td style="padding:10px;">Enter Mobile Number</td>
                                             <td style="padding:10px;width:200px;">
-                                                <input type="number" id="txtNewMobileNo" placeholder="Mobile No" class="input50" />
+                                                <input type="number" id="txtMobileNo" placeholder="Mobile No" class="input50" />
 
                                             </td>
                                         </tr>
@@ -94,16 +95,15 @@
                                         </tr>
                                         <tr>
                                             <td style="padding:10px;">Transaction Date</td>
-                                            <td style="padding:10px;"><input type="text" id="dtEnrolledOn2" class="input50" /></td>
+                                            <td style="padding:10px;"><input type="text" id="dtPointTransfer" class="input50" /></td>
                                         </tr>
                                     </table>
                                 </div>
                             </div>
                         </div>
                         <div class="button-row mt-5" style="text-align:end;">
-                            <button class="btn btn-primary ml-auto mt-3" type="button" title="Next" id="btnSaveMemberMobile" tabindex="20">Save</button>
+                            <button class="btn btn-primary ml-auto mt-3" type="button" title="Next" id="btnTransferPoints" tabindex="20">Save</button>
                         </div>
-
                     </div>
                 </div>
             </div>
@@ -112,26 +112,26 @@
 </div>
 
 <script>
+
     $(document).ready(function () {
 
         var today = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
         // alert(today);
-        $("#dtEnrolledOn2").datepicker({
+        $("#dtPointTransfer").datepicker({
 
             dateFormat: "yy-mm-dd",
             maxDate: today,
             //  minDate: '-4'
         });
     });
-
     $('#btnchgmob').on("click", function () {
         GetClearAllTab();
     });
     $('#btnSearchMember1').on("click", function () {
         GetChangeMobileData();
     });
-    $('#btnSaveMemberMobile').on("click", function () {
-        SaveMemberMobile();
+    $('#btnTransferPoints').on("click", function () {
+        TransferPoints();
     });
     function GetChangeMobileData() {
         if ($('#txtMobileNo1').val() == "" && $('#txtCardNo1').val() == "") {
@@ -145,7 +145,7 @@
         $("#divLoader").show();
         $.ajax({
             type: "POST",
-            url: '@Url.Action("GetChangeNameData", "NameAndMobile")',
+            url: '@Url.Action("GetChangeNameData", "Transaction")',
             data: '{MobileNo:' + JSON.stringify($('#txtMobileNo1').val()) + ',CardNo: ' + JSON.stringify($('#txtCardNo1').val()) + '}',
             contentType: "application/json; charset=utf-8",
             dataType: "json",
@@ -159,10 +159,11 @@
                     $("#spnEnrolledOn1").text(result.EnrolledOn);
                     $("#hdnCustomerId1").val(result.CustomerId);
 
-                    $('#txtNewMobileNo').val("");
+                    $('#txtMobileNo').val("");
+                    $('#txtPointsTransferCount').val("");
                     $('#txtRequestedByName1').val("");
                     $('#ddlRequestedForum1').prop('selectedIndex', 0);
-                    $('#dtEnrolledOn2').val("");
+                    $('#dtPointTransfer').val("");
                     $("#tblUpdateData1").show();
                 }
                 else {
@@ -175,7 +176,8 @@
                     $("#spnEnrolledOn1").text("");
                     $("#hdnCustomerId1").val("");
 
-                    $('#txtNewMobileNo').val("");
+                    $('#txtMobileNo').val("");
+                    $('#txtPointsTransferCount').val("");
                     $('#txtRequestedByName1').val("");
                     $('#ddlRequestedForum1').prop('selectedIndex', 0);
                     $("#tblUpdateData1").hide();
@@ -188,39 +190,36 @@
             }
         });
     }
-    function SaveMemberMobile() {
-        if ($('#txtNewMobileNo').val() == "") {
+    function TransferPoints() {
+        if ($('#txtMobileNo').val() == "") {
             toastr.error('Please enter Mobile No');
-            $('#txtNewMobileNo').focus();
+            $('#txtMobileNo').focus();
             return false;
         }
-        if ($('#txtNewMobileNo').val().length != 10) {
+        if ($('#txtMobileNo').val().length != 10) {
             toastr.error('Mobile No should be 10 digits');
-            $('#txtNewMobileNo').focus();
+            $('#txtMobileNo').focus();
             return false;
-        }
+        }        
         if ($('#txtRequestedByName1').val() == "") {
             toastr.error('Please enter Requested Person name');
             $('#txtRequestedByName1').focus();
             return false;
         }
-        if ($('#dtEnrolledOn2').val() == "") {
+        if ($('#dtPointTransfer').val() == "") {
             toastr.error('Please select transaction date');
-            $('#dtEnrolledOn2').focus();
+            $('#dtPointTransfer').focus();
             return false;
         }
         if (confirm("Are you sure? You want to change Mobile No")) {
-
-
             var MemberData = [];
-            item = {}
-            item["GroupID"] = $("#hdnGroupId").val();
+            item = {}            
             item["CustomerId"] = $("#hdnCustomerId1").val();
-            item["MobileNo"] = $("#txtNewMobileNo").val();
+            item["MobileNo"] = $("#spnMobileno1").text();
+            item["NewMobileNo"] = $("#txtMobileNo").val();            
             item["RequestedBy"] = $("#txtRequestedByName1").val();
             item["RequestedForum"] = $('#ddlRequestedForum1 :selected').text();
-            item["RequestedOn"] = $("#dtEnrolledOn2").val();
-            console.log($("#dtEnrolledOn2").val());
+            item["RequestedOn"] = $("#dtPointTransfer").val();            
 
             if ($('#rbtnSMS1').is(":checked")) {
                 item["IsSMS"] = 1;
@@ -234,7 +233,7 @@
             $("#divLoader").show();
             $.ajax({
                 type: "POST",
-                url: '@Url.Action("ChangeMemberMobile", "NameAndMobile")',//"/ITOperations/ChangeMemberMobile",
+                url: '@Url.Action("TransferPoints", "Transaction")',//"/ITOperations/ChangeMemberMobile",
                 data: '{jsonData: ' + JSON.stringify(data) + '}',
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
@@ -252,7 +251,7 @@
                 error: function (result) {
                     console.log(result.responseText)
                     if (result.responseText == "True") {
-                        toastr.success("Mobile No Updated Successfully");
+                        toastr.success("Points Transferred Successfully");
                         $("#divLoader").hide();
                         $('#sec2').find(':input').val('');
                     }
@@ -264,8 +263,8 @@
             });
         }
     }
- </script>
- <script src="~/Scripts/jquery-ui-1.12.1.js"></script>
- <script src="~/Scripts/jquery-ui-1.12.1.min.js"></script>
- <link href="~/Content/themes/base/jquery-ui.min.css" rel="stylesheet" />
- <link href="~/Content/themes/base/jquery-ui.css" rel="stylesheet" />
+</script>
+<script src="~/Scripts/jquery-ui-1.12.1.js"></script>
+<script src="~/Scripts/jquery-ui-1.12.1.min.js"></script>
+<link href="~/Content/themes/base/jquery-ui.min.css" rel="stylesheet" />
+<link href="~/Content/themes/base/jquery-ui.css" rel="stylesheet" />
