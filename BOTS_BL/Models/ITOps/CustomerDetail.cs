@@ -14,6 +14,9 @@ namespace BOTS_BL.Models
         [StringLength(10)]
         public string MobileNo { get; set; }
 
+        [StringLength(10)]
+        public string OldMobileNo { get; set; }
+
         [Key]
         [StringLength(12)]
         public string CustomerId { get; set; }
@@ -114,6 +117,7 @@ namespace BOTS_BL.Models
     {
         public string OutletName { get; set; }
         public string MobileNo { get; set; }
+        public string OldMobileNo { get; set; }
         public string CustomerName { get; set; }
         public DateTime? FirstTxnDate { get; set; }
         public DateTime? LastTxnDate { get; set; }

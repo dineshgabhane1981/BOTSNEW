@@ -45,6 +45,10 @@
                                             <td style="padding:10px;"><span id="spnMobileno1"></span></td>
                                         </tr>
                                         <tr>
+                                            <td style="padding:10px;">Old Mobile No</td>
+                                            <td style="padding:10px;"><span id="spnOldMobileNo"></span></td>
+                                        </tr>
+                                        <tr>
                                             <td style="padding:10px;">Card No</td>
                                             <td style="padding:10px;"><span id="spnCardNo1"></span></td>
                                         </tr>
@@ -153,6 +157,7 @@
                 if (result.MemberName != null) {
                     $("#spnMemberName1").text(result.MemberName);
                     $("#spnMobileno1").text(result.MobileNo);
+                    $("#spnOldMobileNo").text(result.OldMobileNo);
                     $("#spnCardNo1").text(result.CardNo);
                     $("#spnPtBalance1").text(result.PointsBalance);
                     $("#spnEnrolledOutlet1").text(result.EnrolledOutletName);
@@ -169,6 +174,7 @@
                     toastr.error('Member not present. Please check entered Mobile Number OR Card Number');
                     $("#spnMemberName1").text("");
                     $("#spnMobileno1").text("");
+                    $("#spnOldMobileNo").text("");
                     $("#spnCardNo1").text("");
                     $("#spnPtBalance1").text("");
                     $("#spnEnrolledOutlet1").text("");
@@ -217,6 +223,7 @@
             item["GroupID"] = $("#hdnGroupId").val();
             item["CustomerId"] = $("#hdnCustomerId1").val();
             item["MobileNo"] = $("#txtNewMobileNo").val();
+            item["OldMobileNo"] = $("#spnOldMobileNo").val();
             item["RequestedBy"] = $("#txtRequestedByName1").val();
             item["RequestedForum"] = $('#ddlRequestedForum1 :selected').text();
             item["RequestedOn"] = $("#dtEnrolledOn2").val();

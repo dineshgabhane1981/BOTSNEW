@@ -47,6 +47,7 @@ namespace BOTS_BL.Repository
                 {
                     objMemberData.MemberName = objCustomerDetail.CustomerName;
                     objMemberData.MobileNo = objCustomerDetail.MobileNo;
+                    objMemberData.OldMobileNo = objCustomerDetail.OldMobileNo;
                     objMemberData.CardNo = objCustomerDetail.CardNumber;
                     objMemberData.PointsBalance = objCustomerDetail.Points;
                     objMemberData.CustomerId = objCustomerDetail.CustomerId;
@@ -179,6 +180,7 @@ namespace BOTS_BL.Repository
                         objCustomerDetail = contextNew.CustomerDetails.Where(x => x.CustomerId == CustomerId).FirstOrDefault();
                         string oldno = objCustomerDetail.MobileNo;
                         objCustomerDetail.MobileNo = MobileNo;
+                        objCustomerDetail.OldMobileNo = oldno;
 
                         lstObjTxn = contextNew.TransactionMasters.Where(x => x.CustomerId == CustomerId).Take(10000).ToList();
                         if (lstObjTxn != null)

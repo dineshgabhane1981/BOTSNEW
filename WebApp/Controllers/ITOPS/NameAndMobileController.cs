@@ -120,11 +120,13 @@ namespace WebApp.Controllers.ITOPS
 
                 string CustomerId = "";
                 string MobileNo = "";
+                string OldMobileNo = "";
                 foreach (Dictionary<string, object> item in objData)
                 {
                     var GroupId = (string)Session["GroupId"];
                     CustomerId = Convert.ToString(item["CustomerId"]);
                     MobileNo = Convert.ToString(item["MobileNo"]);
+                    OldMobileNo = Convert.ToString(item["OldMobileNo"]);
 
                     objAudit.GroupId = groupId;
                     objAudit.RequestedFor = "Mobile Number Change";
