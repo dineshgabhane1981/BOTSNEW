@@ -640,12 +640,12 @@ namespace BOTS_BL.Repository
             return objData;
         }
 
-        public List<BOTS_TblSMSConfig> GetCommunicationSMSConfigForDLT(string GroupId)
+        public List<BOTS_TblSMSConfig> GetCommunicationSMSConfigForDLT(string GroupId, int SetId)
         {
             List<BOTS_TblSMSConfig> objData = new List<BOTS_TblSMSConfig>();
             using (var context = new CommonDBContext())
             {
-                objData = context.BOTS_TblSMSConfig.Where(x => x.GroupId == GroupId && x.DLTStatus != "" && x.DLTStatus != null).ToList();
+                objData = context.BOTS_TblSMSConfig.Where(x => x.GroupId == GroupId && x.SetId == SetId && x.DLTStatus != "" && x.DLTStatus != null).ToList();
             }
 
             return objData;
@@ -672,7 +672,7 @@ namespace BOTS_BL.Repository
             return status;
         }
 
-        public bool UpdateStatusSMSConfig(int ItemId, string DLTStatus, string LoginId, string rejectReason)
+        public bool UpdateStatusSMSConfig(int ItemId, string DLTStatus, string LoginId, string rejectReason, BOTS_TblSMSConfig objSMSConfig)
         {
             bool status = false;
             using (var context = new CommonDBContext())
@@ -689,6 +689,14 @@ namespace BOTS_BL.Repository
                             objItem.RejectReason = objItem.RejectReason + " //// " + rejectReason;
                         else
                             objItem.RejectReason = rejectReason;
+                    }
+                    if (DLTStatus == "Approved")
+                    {
+                        objItem.TemplateId = objSMSConfig.TemplateId;
+                        objItem.TemplateName = objSMSConfig.TemplateName;
+                        objItem.TemplateType = objSMSConfig.TemplateType;
+                        objItem.SMSScriptDLT = objSMSConfig.SMSScriptDLT;
+                        objItem.SMSScript = objSMSConfig.SMSScript;
                     }
                     context.BOTS_TblSMSConfig.AddOrUpdate(objItem);
                     context.SaveChanges();
@@ -1300,13 +1308,13 @@ namespace BOTS_BL.Repository
                     newItem.Value = Convert.ToString(outlet.Id);
                     newItem.Text = brandName + " - " + outlet.OutletName;
                     var exist = outletForSet.Where(x => x.OutletId == outlet.Id.ToString()).FirstOrDefault();
-                    if(exist!=null)
+                    if (exist != null)
                     {
                         newItem.Selected = true;
                         //newItem.Disabled = true;
                     }
                     var existNew = outletForSetNew.Where(x => x.OutletId == outlet.Id.ToString()).FirstOrDefault();
-                    if(existNew != null)
+                    if (existNew != null)
                     {
                         newItem.Disabled = true;
                     }
@@ -1341,7 +1349,7 @@ namespace BOTS_BL.Repository
                         transaction.Commit();
                         status = true;
                     }
-                    catch(Exception ex)
+                    catch (Exception ex)
                     {
                         transaction.Rollback();
                         newexception.AddException(ex, "AssignCommunicationSetsToOutlets");
@@ -1350,5 +1358,50 @@ namespace BOTS_BL.Repository
             }
             return status;
         }
+
+        public string GetConvertedScript(string CSScript)
+        {
+            string convertStr = string.Empty;
+            var arrStr = CSScript.Split(' ');
+            using (var context = new CommonDBContext())
+            {
+                foreach (var item in arrStr)
+                {
+                    if (item.Contains("#"))
+                    {
+                        convertStr = convertStr + "{#var#}";
+                        if (item.Contains(","))
+                        {
+                            convertStr = convertStr + ", ";
+                        }
+                        else if (item.Contains("."))
+                        {
+                            convertStr = convertStr + ". ";
+                        }
+                        else
+                        {
+                            convertStr = convertStr + " ";
+                        }
+                    }
+                    else
+                    {
+                        var isExist = context.BOTS_TblVariableWords.Where(x => x.VariableWords == item.ToLower()).FirstOrDefault();
+                        if (isExist != null)
+                        {
+                            convertStr = convertStr + "{#var#} ";
+                        }
+                        else
+                        {
+                            convertStr = convertStr + item + " ";
+                        }
+                    }
+                }
+            }
+
+            return  convertStr.Trim();
+        }
+
+
+
     }
 }

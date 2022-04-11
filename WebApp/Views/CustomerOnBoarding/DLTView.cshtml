@@ -85,247 +85,11 @@
 
                     <div class="panels2">
                         <div class="multisteps-form__panel m-3 list-box bg-white panel1" id="one-panel2">
-                            @if (Model.IsBrand)
-                            {
-                                <div class="row" style="margin-top:10px;">
-                                    <div style="margin-left:20px;">
-                                        @Html.DropDownListFor(x => Model.lstBrands.Count, new SelectList(Model.lstBrands, "Value", "Text"), htmlAttributes: new { @class = "input50", @id = "ddlBrandsComm", style = "margin-top:20px;" })
-                                    </div>
-                                </div>
-                            }
-
-                            <div id="dvUniqueValues" style="float:left; border:1px solid grey;border-radius:10px;margin-bottom:10px;">
-                                @if (Model.lstSMSConfig.Count > 0)
-                                {
-                                    <div style="float: left; margin-bottom: 10px; margin-top: 10px;" class="col-md-12 col-lg-12">
-                                        <div style="float: left;" class="col-md-3 col-lg-3">
-                                            PEID<br />
-                                            <input type="text" id="txtPEID" class="input50" value="@Model.lstSMSConfig[0].PEID" />
-                                        </div>
-                                        <div style="float: left;" class="col-md-3 col-lg-3">
-                                            SMS Provider <br /> @Html.DropDownListFor(x => Model.lstSMSConfig[0].SMSProvider, new SelectList(Model.SMSProvider(), "Value", "Text", Model.lstSMSConfig[0].SMSProvider), "Please Select", htmlAttributes: new { @class = "input50", @id = "ddlSMSProvider" })
-                                        </div>
-                                        <div style="float: left;" class="col-md-3 col-lg-3">
-                                            Sender Id<br />
-                                            <input type="text" id="txtSMSSenderId" class="input50" value="@Model.lstSMSConfig[0].SMSSenderID" />
-                                        </div>
-
-                                    </div>
-                                    <div style="float: left;margin-bottom:10px;margin-top:10px;" class="col-md-12 col-lg-12">
-                                        <div style="float: left;" class="col-md-3 col-lg-3">
-                                            User Name<br />
-                                            <input type="text" id="txtSMSUserName" class="input50" value="@Model.lstSMSConfig[0].SMSUsername" />
-                                        </div>
-                                        <div style="float: left;" class="col-md-3 col-lg-3">
-                                            Password<br />
-                                            <input type="text" id="txtSMSPassword" class="input50" value="@Model.lstSMSConfig[0].SMSPassword" />
-                                        </div>
-                                        <div style="float: left;" class="col-md-3 col-lg-3">
-                                            SMS Link<br />
-                                            <input type="text" id="txtSMSLink" class="input50" value="@Model.lstSMSConfig[0].SMSlink" />
-                                        </div>
-                                        <div style="float: left;margin-top:25px;" class="col-md-3 col-lg-3">
-                                            <button type="button" id="btnSaveUnique" onclick="SaveUniqueValues();" class="btn btn-primary">Save</button>
-                                        </div>
-                                    </div>
-                                }
-
+                            <div>
+                                <select id="ddlCommunicationSet" class="input50"></select>
                             </div>
-
-                            <div id="dvCommunicationScripts">
-                                @if (Model.lstSMSConfig.Count > 0)
-                                {
-                                    var count = 1;
-                                    foreach (var item in Model.lstSMSConfig)
-                                    {
-                                        @Html.HiddenFor(model => item.Id, new { @id = "hdnCommSMSConfigId" + count })
-                                        var templateId = "txtTemplateId" + count;
-                                        var templateName = "txtTemplateName" + count;
-                                        var templateType = "txtTemplateType" + count;
-
-                                        var btnCopy = "btnCopy" + count;
-                                        var btnApprove = "btnApprove" + count;
-                                        var btnReject = "btnReject" + count;
-                                        var btnSave = "btnSave" + count;
-                                        var btnRejectSubmit = "btnRejectSubmit" + count;
-                                        var btnRejectCancel = "btnRejectCancel" + count;
-
-                                        var RejectReason = "txtRejectReason" + count;
-                                        var RejectDiv = "divRejectReason" + count;
-                                        var DLTStatus = "";
-
-                                        if (item.DLTStatus == "Approved")
-                                        {
-                                            DLTStatus = "disabled";
-                                        }
-                                        count++;
-                                        <div style="float:left; border:1px solid grey;border-radius:10px;margin-bottom:10px;">
-
-                                            <div style="margin:20px;">
-                                                <b> Status -  @item.DLTStatus </b><br />
-                                                @if (item.DLTStatus == "Rejected")
-                                                {
-                                                    var reasonRejects = "<b>Reason</b> - " + item.RejectReason;
-                                                    @Html.Raw(reasonRejects)
-                                                }
-                                            </div>
-
-                                            @if (item.MessageId == 100)
-                                            {
-                                                <div style="float:left;" class="col-md-4 col-lg-4">
-                                                    <div style="margin-top: 10px;">
-                                                        Enrollment Script <br /> <textarea id="txtSMSEnrollment" rows="6" cols="40" class="input100" @DLTStatus>@item.SMSScript</textarea>
-                                                    </div>
-                                                </div>
-                                                <div style="float:left;" class="col-md-4 col-lg-4">
-                                                    <div style=" margin-top: 10px;">
-                                                        Enrollment DLT Script <br /> <textarea id="txtSMSEnrollmentDLT" rows="6" cols="40" class="input100" disabled>@item.SMSScriptDLT</textarea>
-                                                    </div>
-                                                </div>
-                                            }
-                                            @if (item.MessageId == 101)
-                                            {
-
-                                                <div style="float:left;" class="col-md-4 col-lg-4">
-                                                    <div style="margin-top: 10px;">
-                                                        Earn Script <br /> <textarea id="txtSMSEarn" rows="6" cols="40" class="input100" @DLTStatus>@item.SMSScript</textarea>
-                                                    </div>
-                                                </div>
-                                                <div style="float:left;" class="col-md-4 col-lg-4">
-                                                    <div style=" margin-top: 10px;">
-                                                        Earn DLT Script <br /> <textarea id="txtSMSEarnDLT" rows="6" cols="40" class="input100" disabled>@item.SMSScriptDLT</textarea>
-                                                    </div>
-                                                </div>
-                                            }
-                                            @if (item.MessageId == 102)
-                                            {
-                                                <div style="float:left;" class="col-md-4 col-lg-4">
-                                                    <div style="margin-top: 10px;">
-                                                        Burn Script <br /> <textarea id="txtSMSBurn" rows="6" cols="40" class="input100" @DLTStatus>@item.SMSScript</textarea>
-                                                    </div>
-                                                </div>
-                                                <div style="float:left;" class="col-md-4 col-lg-4">
-                                                    <div style=" margin-top: 10px;">
-                                                        Burn DLT Script <br /> <textarea id="txtSMSBurnDLT" rows="6" cols="40" class="input100" disabled>@item.SMSScriptDLT</textarea>
-                                                    </div>
-                                                </div>
-                                            }
-                                            @if (item.MessageId == 103)
-                                            {
-                                                <div style="float:left;" class="col-md-4 col-lg-4">
-                                                    <div style="margin-top: 10px;">
-                                                        Cancel Earn Script <br /> <textarea id="txtSMSCancelEarn" rows="6" cols="40" class="input100" @DLTStatus>@item.SMSScript</textarea>
-                                                    </div>
-                                                </div>
-                                                <div style="float:left;" class="col-md-4 col-lg-4">
-                                                    <div style=" margin-top: 10px;">
-                                                        Cancel Earn DLT Script <br /> <textarea id="txtSMSCancelEarnDLT" rows="6" cols="40" class="input100" disabled>@item.SMSScriptDLT</textarea>
-                                                    </div>
-                                                </div>
-                                            }
-                                            @if (item.MessageId == 104)
-                                            {
-                                                <div style="float:left;" class="col-md-4 col-lg-4">
-                                                    <div style="margin-top: 10px;">
-                                                        Cancel Burn Script <br /> <textarea id="txtSMSCancelBurn" rows="6" cols="40" class="input100" @DLTStatus>@item.SMSScript</textarea>
-                                                    </div>
-                                                </div>
-                                                <div style="float:left;" class="col-md-4 col-lg-4">
-                                                    <div style=" margin-top: 10px;">
-                                                        Cancel Burn DLT Script <br /> <textarea id="txtSMSCancelBurnDLT" rows="6" cols="40" class="input100" disabled>@item.SMSScriptDLT</textarea>
-                                                    </div>
-                                                </div>
-                                            }
-                                            @if (item.MessageId == 105)
-                                            {
-                                                <div style="float:left;" class="col-md-4 col-lg-4">
-                                                    <div style="margin-top: 10px;">
-                                                        OTP Script <br /> <textarea id="txtSMSOTP" rows="6" cols="40" class="input100" @DLTStatus>@item.SMSScript</textarea>
-                                                    </div>
-                                                </div>
-                                                <div style="float:left;" class="col-md-4 col-lg-4">
-                                                    <div style=" margin-top: 10px;">
-                                                        OTP DLT Script <br /> <textarea id="txtSMSOTPDLT" rows="6" cols="40" class="input100" disabled>@item.SMSScriptDLT</textarea>
-                                                    </div>
-                                                </div>
-                                            }
-                                            @if (item.MessageId == 106)
-                                            {
-                                                <div style="float:left;" class="col-md-4 col-lg-4">
-                                                    <div style="margin-top: 10px;">
-                                                        Balance Inquiry Script <br /> <textarea id="txtSMSBalanceInquiry" rows="6" cols="40" class="input100" @DLTStatus>@item.SMSScript</textarea>
-                                                    </div>
-                                                </div>
-                                                <div style="float:left;" class="col-md-4 col-lg-4">
-                                                    <div style=" margin-top: 10px;">
-                                                        Balance Inquiry DLT Script <br /> <textarea id="txtSMSBalanceInquiryDLT" rows="6" cols="40" class="input100" disabled>@item.SMSScriptDLT</textarea>
-                                                    </div>
-                                                </div>
-                                            }
-                                            @if (item.MessageId == 107)
-                                            {
-                                                <div style="float:left;" class="col-md-4 col-lg-4">
-                                                    <div style="margin-top: 10px;">
-                                                        Any Cancel Script <br /> <textarea id="txtSMSAnyCancel" rows="6" cols="40" class="input100" @DLTStatus>@item.SMSScript</textarea>
-                                                    </div>
-                                                </div>
-                                                <div style="float:left;" class="col-md-4 col-lg-4">
-                                                    <div style=" margin-top: 10px;">
-                                                        Any Cancel DLT Script <br /> <textarea id="txtSMSAnyCancelDLT" rows="6" cols="40" class="input100" disabled>@item.SMSScriptDLT</textarea>
-                                                    </div>
-                                                </div>
-                                            }
-                                            @if (item.MessageId == 108)
-                                            {
-
-                                                <div style="float:left;" class="col-md-4 col-lg-4">
-                                                    <div style="margin-top: 10px;">
-                                                        Enrollment And Earn Script <br /> <textarea id="txtSMSEnrollmentAndEarn" rows="6" cols="40" class="input100" @DLTStatus>@item.SMSScript</textarea>
-                                                    </div>
-                                                </div>
-                                                <div style="float:left;" class="col-md-4 col-lg-4">
-                                                    <div style=" margin-top: 10px;">
-                                                        Enrollment And Earn DLT Script <br /> <textarea id="txtSMSEnrollmentAndEarnDLT" rows="6" cols="40" class="input100" disabled>@item.SMSScriptDLT</textarea>
-                                                    </div>
-                                                </div>
-                                            }
-                                            <div style="float:left;margin-bottom:10px;" class="col-md-3 col-lg-3">
-                                                <div style="margin-top: 10px;">
-                                                    Template Id <br /> <input id="@templateId" type="text" class="input50" value="@item.TemplateId" @DLTStatus /><br />
-                                                    Template Name <br /> <input id="@templateName" type="text" class="input50" value="@item.TemplateName" @DLTStatus /><br />
-                                                    Template Type <br />
-                                                    @if (item.DLTStatus == "Approved")
-                                                    {
-                                                        @Html.DropDownListFor(x => item.TemplateType, new SelectList(Model.TempleteType(), "Value", "Text"), htmlAttributes: new { @class = "input50", @id = @templateType, @disabled = "disabled"})
-                                                    }
-                                                    else
-                                                    {
-                                                        @Html.DropDownListFor(x => item.TemplateType, new SelectList(Model.TempleteType(), "Value", "Text", item.TemplateType), htmlAttributes: new { @class = "input50", @id = @templateType })
-                                                    }
-                                                    @*<input id="@templateType" type="text" class="input50" value="@item.TemplateType" @DLTStatus />*@
-                                                </div>
-                                            </div>
-                                            <div style="float:left;margin:0px; padding:0px;" class="col-md-1 col-lg-1">
-                                                <div style="margin-top: 10px;">
-                                                    <div class="container-fluid pt-3 pb-3">
-                                                        <button type="button" id="@btnCopy" onclick="CopyTemplate(this);" class="btn btn-primary" style="margin-left: -20px; margin-top: 10px; " @DLTStatus>Copy</button><br />
-                                                        <button type="button" id="@btnApprove" onclick="ApproveTemplate(this);" class="btn btn-primary" style="margin-left: -20px; margin-top: 10px;" @DLTStatus>Approve</button><br />
-                                                        <button type="button" id="@btnReject" onclick="RejectTemplate(this);" class="btn btn-primary" style="margin-left: -20px; margin-top: 10px; " @DLTStatus>Reject</button><br />
-
-                                                        <button type="button" id="@btnSave" onclick="SaveTemplate(this);" class="btn btn-primary" style="margin-left: -20px; margin-top: 10px; " @DLTStatus>Save</button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-12 col-lg-12" style="text-align:center;display:none;" id="@RejectDiv">
-                                                <textarea id="@RejectReason" rows="6" cols="40" class="input100"></textarea>
-                                                <button type="button" id="@btnRejectSubmit" onclick="RejectSubmitTemplate(this);" class="btn btn-primary" style="margin-left: 20px; margin-bottom:25px;">Submit</button>
-                                                <button type="button" id="@btnRejectCancel" onclick="RejectCancelTemplate(this);" class="btn btn-primary" style="margin-left: 20px; margin-bottom:25px;">Cancel</button><br />
-                                            </div>
-                                        </div>
-
-                                    }
-                                }
-                            </div>
+                            <div id="dvSetDetailsForDLT" style="display:none;"></div>
+                           
                         </div>
                         <div class="multisteps-form__panel m-3 list-box bg-white panel1" id="two-panel2">
                             Perpetual Campaigns
@@ -342,255 +106,51 @@
 
 <script>
     $(document).ready(function () {
-        EventChangeOfOriginalToDLT();
-        EventChangeOfOriginalToDLTNew();
+        FillSetDropDown();
+        $('#ddlCommunicationSet').change(function () {
+            ShowSetDetails();
+        });
     });
 
-    function ConvertValuesToDLT(fromId, toId) {
-        var EnrollmentText = $("#" + fromId).val();
-        var count = 100;
-        for (var i = 1; i <= count; i++) {
-            if (i < 10) {
-                EnrollmentText = EnrollmentText.replace("#0" + i, "{var}");
+    function FillSetDropDown() {
+        $.ajax({
+            url: '@Url.Action("GetCommunicationSetList", "CustomerOnBoarding")',
+            data: "{'GroupId': '" + $('#hdnGroupID').val() + "'}",
+            type: "post",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (result) {
+                console.log(result);
+                $("#ddlCommunicationSet").html("");
+                var items;
+                $.each(result, function (i,item) {
+                   items += "<option value='" + item.Value + "'>" + item.Text + "</option>";
+                });
+                $("#ddlCommunicationSet").html(items);
+
             }
-            else {
-                EnrollmentText = EnrollmentText.replace("#" + i, "{var}");
+        });
+       }
+
+    function ShowSetDetails() {
+        $("#divLoader").show();
+        $.ajax({
+            url: '@Url.Action("GetDLTCommunicationSetData", "CustomerOnBoarding")',
+            data: '{GroupId: ' + JSON.stringify($('#hdnGroupID').val()) + ',SetId: ' + JSON.stringify($("#ddlCommunicationSet").val()) + '}',
+            type: "post",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (result) {                
+                $("#dvSetDetailsForDLT").html(result);
+                $("#dvSetDetailsForDLT").show(1000);
+                $("#divLoader").hide();
+            },
+            error: function (result) {
+                $("#dvSetDetailsForDLT").html(result.responseText);
+                $("#dvSetDetailsForDLT").show(1000);
+                $("#divLoader").hide();
             }
-        }
-        $("#" + toId).val(EnrollmentText);
-    }
-
-    function EventChangeOfOriginalToDLT() {
-        ConvertValuesToDLT("txtSMSEnrollment", "txtSMSEnrollmentDLT");
-        ConvertValuesToDLT("txtSMSEarn", "txtSMSEarnDLT");
-        ConvertValuesToDLT("txtSMSBurn", "txtSMSBurnDLT");
-        ConvertValuesToDLT("txtSMSCancelEarn", "txtSMSCancelEarnDLT");
-        ConvertValuesToDLT("txtSMSCancelBurn", "txtSMSCancelBurnDLT");
-        ConvertValuesToDLT("txtSMSOTP", "txtSMSOTPDLT");
-        ConvertValuesToDLT("txtSMSBalanceInquiry", "txtSMSBalanceInquiryDLT");
-        ConvertValuesToDLT("txtSMSAnyCancel", "txtSMSAnyCancelDLT");
-        ConvertValuesToDLT("txtSMSEnrollmentAndEarn", "txtSMSEnrollmentAndEarnDLT");
-    }
-
-    function EventChangeOfOriginalToDLTNew() {
-        $("#txtSMSEnrollment").focusout(function () {
-            ConvertValuesToDLT("txtSMSEnrollment", "txtSMSEnrollmentDLT");
         });
-        $("#txtSMSEarn").focusout(function () {
-            ConvertValuesToDLT("txtSMSEarn", "txtSMSEarnDLT");
-        });
-        $("#txtSMSBurn").focusout(function () {
-            ConvertValuesToDLT("txtSMSBurn", "txtSMSBurnDLT");
-        });
-        $("#txtSMSCancelEarn").focusout(function () {
-            ConvertValuesToDLT("txtSMSCancelEarn", "txtSMSCancelEarnDLT");
-        });
-        $("#txtSMSCancelBurn").focusout(function () {
-            ConvertValuesToDLT("txtSMSCancelBurn", "txtSMSCancelBurnDLT");
-        });
-        $("#txtSMSOTP").focusout(function () {
-            ConvertValuesToDLT("txtSMSOTP", "txtSMSOTPDLT");
-        });
-        $("#txtSMSBalanceInquiry").focusout(function () {
-            ConvertValuesToDLT("txtSMSBalanceInquiry", "txtSMSBalanceInquiryDLT");
-        });
-        $("#txtSMSAnyCancel").focusout(function () {
-            ConvertValuesToDLT("txtSMSAnyCancel", "txtSMSAnyCancelDLT");
-        });
-        $("#txtSMSEnrollmentAndEarn").focusout(function () {
-            ConvertValuesToDLT("txtSMSEnrollmentAndEarn", "txtSMSEnrollmentAndEarnDLT");
-        });
-    }
-
-    function SaveTemplate(control) {
-        var SaveData = [];
-        saveitem = {}
-        var id = control.id.substr(7, 1);
-        saveitem["Id"] = $("#hdnCommSMSConfigId" + id).val();
-        saveitem["TemplateId"] = $("#txtTemplateId" + id).val();
-        saveitem["TemplateName"] = $("#txtTemplateName" + id).val();
-        saveitem["TemplateType"] = $("#txtTemplateType" + id).val();
-
-        if (id == 1) {
-            saveitem["Script"] = $("#txtSMSEnrollment").val();
-            saveitem["ScriptDLT"] = $("#txtSMSEnrollmentDLT").val();
-        }
-        if (id == 2) {
-            saveitem["Script"] = $("#txtSMSEarn").val();
-            saveitem["ScriptDLT"] = $("#txtSMSEarnDLT").val();
-        }
-        if (id == 3) {
-            saveitem["Script"] = $("#txtSMSBurn").val();
-            saveitem["ScriptDLT"] = $("#txtSMSBurnDLT").val();
-        }
-        if (id == 4) {
-            saveitem["Script"] = $("#txtSMSCancelEarn").val();
-            saveitem["ScriptDLT"] = $("#txtSMSCancelEarnDLT").val();
-        }
-        if (id == 5) {
-            saveitem["Script"] = $("#txtSMSCancelBurn").val();
-            saveitem["ScriptDLT"] = $("#txtSMSCancelBurnDLT").val();
-        }
-        if (id == 6) {
-            saveitem["Script"] = $("#txtSMSOTP").val();
-            saveitem["ScriptDLT"] = $("#txtSMSOTPDLT").val();
-        }
-        if (id == 7) {
-            saveitem["Script"] = $("#txtSMSBalanceInquiry").val();
-            saveitem["ScriptDLT"] = $("#txtSMSBalanceInquiryDLT").val();
-        }
-        if (id == 8) {
-            saveitem["Script"] = $("#txtSMSAnyCancel").val();
-            saveitem["ScriptDLT"] = $("#txtSMSAnyCancelDLT").val();
-        }
-        if (id == 9) {
-            saveitem["Script"] = $("#txtSMSEnrollmentAndEarn").val();
-            saveitem["ScriptDLT"] = $("#txtSMSEnrollmentAndEarnDLT").val();
-        }
-
-        SaveData.push(saveitem);
-        var SaveDataStr = JSON.stringify(SaveData);
-        $("#divLoader").show();
-            $.ajax({
-                type: "POST",
-                url: '@Url.Action("SaveCommunicationDLTConfig", "CustomerOnBoarding")',
-                data: '{jsonData: ' + JSON.stringify(SaveDataStr) + '}',
-                contentType: "application/json; charset=utf-8",
-                dataType: "json",
-                success: function (result) {
-                    if (result == true) {
-                        cuteAlert({
-                            type: "success",
-                            title: "Saved..",
-                            message: "Communication DLT Data Saved Successfully!",
-                            buttonText: "Okay"
-                        })
-                    }
-                    else {
-                        cuteAlert({
-                            type: "error",
-                            title: "Oops..",
-                            message: "There is some problem while saving Communication Data",
-                            buttonText: "Okay"
-                        })
-                    }
-                    $("#divLoader").hide();
-                },
-                error: function (result) {
-                    $("#divLoader").hide();
-                }
-            });
-    }
-    function CopyTemplate(control) {
-        var id = control.id.substr(7, 1);
-        var status = "InProgress";
-        id = $("#hdnCommSMSConfigId" + id).val();
-        UpdateCommunicationStatus(id, status,"");
-
-    }
-    function ApproveTemplate(control) {
-        var id = control.id.substr(10, 1);
-        var status = "Approved";
-        id = $("#hdnCommSMSConfigId" + id).val();
-        UpdateCommunicationStatus(id, status, "");
-        location.reload();
-    }
-    function RejectTemplate(control) {
-        var id = control.id.substr(9, 1);
-        $("#divRejectReason" + id).show(1000);
-    }
-    function RejectSubmitTemplate(control) {
-        var id = control.id.substr(15, 1);
-        Cid = $("#hdnCommSMSConfigId" + id).val();
-        var RejectReason = $("#txtRejectReason" + id).val();
-        var status = "Rejected";
-        UpdateCommunicationStatus(Cid, status, RejectReason);
-        $("#divRejectReason" + id).hide(1000);
-        location.reload();
-    }
-
-    function RejectCancelTemplate(control) {
-        var id = control.id.substr(15, 1);
-        $("#divRejectReason" + id).hide(1000);
-    }
-
-    function UpdateCommunicationStatus(id, status,reason) {
-        $("#divLoader").show();
-            $.ajax({
-                type: "POST",
-                url: '@Url.Action("UpdateDLTStatusOfCommunicationConfig", "CustomerOnBoarding")',
-                data: '{ConfigId: ' + JSON.stringify(id) + ',DLTNewStatus: ' + JSON.stringify(status) + ',RejectReason: ' + JSON.stringify(reason) + '}',
-                contentType: "application/json; charset=utf-8",
-                dataType: "json",
-                success: function (result) {
-                    if (result == true) {
-                        cuteAlert({
-                            type: "success",
-                            title: "Saved..",
-                            message: "Communication DLT Data Saved Successfully!",
-                            buttonText: "Okay"
-                        })
-                    }
-                    else {
-                        cuteAlert({
-                            type: "error",
-                            title: "Oops..",
-                            message: "There is some problem while saving Communication Data",
-                            buttonText: "Okay"
-                        })
-                    }
-                    $("#divLoader").hide();
-                },
-                error: function (result) {
-                    $("#divLoader").hide();
-                }
-            });
-    }
-
-    function SaveUniqueValues() {
-        var UniqueValues = [];
-        item = {}
-        item["GroupID"] = $("#hdnGroupID").val();
-        item["PEID"] = $("#txtPEID").val();
-        item["SMSProvider"] = $("#ddlSMSProvider").val();
-        item["SMSSenderId"] = $("#txtSMSSenderId").val();
-        item["SMSUserName"] = $("#txtSMSUserName").val();
-        item["SMSPassword"] = $("#txtSMSPassword").val();
-        item["SMSLink"] = $("#txtSMSLink").val();
-        UniqueValues.push(item);
-
-        var UniqueValuesData = JSON.stringify(UniqueValues);
-
-         $("#divLoader").show();
-            $.ajax({
-                type: "POST",
-                url: '@Url.Action("SaveCommunicationUniqueValuesConfig", "CustomerOnBoarding")',
-                data: '{jsonData: ' + JSON.stringify(UniqueValuesData) + '}',
-                contentType: "application/json; charset=utf-8",
-                dataType: "json",
-                success: function (result) {
-                    if (result == true) {
-                        cuteAlert({
-                            type: "success",
-                            title: "Saved..",
-                            message: "Communication Data Saved Successfully!",
-                            buttonText: "Okay"
-                        })
-                    }
-                    else {
-                        cuteAlert({
-                            type: "error",
-                            title: "Oops..",
-                            message: "There is some problem while saving Communication Data",
-                            buttonText: "Okay"
-                        })
-                    }
-                    $("#divLoader").hide();
-                },
-                error: function (result) {                   
-                    $("#divLoader").hide();
-                }
-            });
     }
 
 </script>

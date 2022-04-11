@@ -45,8 +45,8 @@
         <input type="hidden" id="hdnCommSMSConfigId3" />
         <input type="hidden" id="hdnCommSMSConfigId4" />
         <input type="hidden" id="hdnCommSMSConfigId5" />
-        <input type="hidden" id="hdnCommSMSConfigId6" />
-        <input type="hidden" id="hdnCommSMSConfigId7" />
+        @*<input type="hidden" id="hdnCommSMSConfigId6" />
+        <input type="hidden" id="hdnCommSMSConfigId7" />*@
         <input type="hidden" id="hdnCommSMSConfigId8" />
         <input type="hidden" id="hdnCommSMSConfigId9" />
 
@@ -55,8 +55,8 @@
         <input type="hidden" id="hdnCommWAConfigId3" />
         <input type="hidden" id="hdnCommWAConfigId4" />
         <input type="hidden" id="hdnCommWAConfigId5" />
-        <input type="hidden" id="hdnCommWAConfigId6" />
-        <input type="hidden" id="hdnCommWAConfigId7" />
+        @*<input type="hidden" id="hdnCommWAConfigId6" />
+        <input type="hidden" id="hdnCommWAConfigId7" />*@
         <input type="hidden" id="hdnCommWAConfigId8" />
         <input type="hidden" id="hdnCommWAConfigId9" />
 
@@ -100,14 +100,14 @@
             <div style="margin-left: 20px; margin-top: 10px;">
                 Burn Script<br /> <textarea id="txtSMSBurn" rows="3" cols="50" class="input100"></textarea><span style="font-weight:bold;" id="spnSMSBurn"></span>
             </div>
-            <div style="margin-left: 20px; margin-top: 10px;">
+            @*<div style="margin-left: 20px; margin-top: 10px;">
                 Cancel Earn Script<br /> <textarea id="txtSMSCancelEarn" rows="3" cols="50" class="input100"></textarea><span style="font-weight:bold;" id="spnSMSCancelEarn"></span>
             </div>
             <div style="margin-left: 20px; margin-top: 10px;">
                 Cancel Burn Script<br /> <textarea id="txtSMSCancelBurn" rows="3" cols="50" class="input100"></textarea><span style="font-weight:bold;" id="spnSMSCancelBurn"></span>
-            </div>
+            </div>*@
             <div style="margin-left: 20px; margin-top: 10px;">
-                Any Cancel Script<br /> <textarea id="txtSMSAnyCancel" rows="3" cols="50" class="input100"></textarea><span style="font-weight:bold;" id="spnSMSAnyCancel"></span>
+                Cancel Script<br /> <textarea id="txtSMSAnyCancel" rows="3" cols="50" class="input100"></textarea><span style="font-weight:bold;" id="spnSMSAnyCancel"></span>
             </div>
             <div style="margin-left: 20px; margin-top: 10px;">
                 Balance Inquiry Script<br /> <textarea id="txtSMSBalanceInquiry" rows="3" cols="50" class="input100"></textarea><span style="font-weight:bold;" id="spnSMSBalanceInquiry"></span>
@@ -147,14 +147,14 @@
             <div style="margin-left: 20px; margin-top: 10px;">
                 Burn Script <br /> <textarea id="txtWABurn" rows="3" cols="50" class="input100"></textarea>
             </div>
-            <div style="margin-left: 20px; margin-top: 10px;">
+            @*<div style="margin-left: 20px; margin-top: 10px;">
                 Cancel Earn Script <br /> <textarea id="txtWACancelEarn" rows="3" cols="50" class="input100"></textarea>
             </div>
             <div style="margin-left: 20px; margin-top: 10px;">
                 Cancel Burn Script <br /> <textarea id="txtWACancelBurn" rows="3" cols="50" class="input100"></textarea>
-            </div>
+            </div>*@
             <div style="margin-left: 20px; margin-top: 10px;">
-                Any Cancel Script <br /> <textarea id="txtWAAnyCancel" rows="3" cols="50" class="input100"></textarea>
+                Cancel Script <br /> <textarea id="txtWAAnyCancel" rows="3" cols="50" class="input100"></textarea>
             </div>
             <div style="margin-left: 20px; margin-top: 10px;">
                 Balance Inquiry Script <br /> <textarea id="txtWABalanceInquiry" rows="3" cols="50" class="input100"></textarea>
@@ -204,6 +204,7 @@
     function OpenSectionToCreate() {
         ClearAllSMSControls();
         ClearAllWAControls()
+        $("#btnCommunicationToDLT").prop("disabled", false);
         $("#dvCreateSet").show(1000);
     }
     function CancelCreate() {
@@ -223,8 +224,6 @@
             $('#txtSMSEarn').attr("disabled", true);
             $('#txtSMSOTP').attr("disabled", true);
             $('#txtSMSBurn').attr("disabled", true);
-            $('#txtSMSCancelEarn').attr("disabled", true);
-            $('#txtSMSCancelBurn').attr("disabled", true);
             $('#txtSMSAnyCancel').attr("disabled", true);
             $('#txtSMSBalanceInquiry').attr("disabled", true);
             $('#ddlSMSProvider').attr("disabled", true);
@@ -240,8 +239,6 @@
             $('#txtSMSEarn').attr("disabled", false);
             $('#txtSMSOTP').attr("disabled", false);
             $('#txtSMSBurn').attr("disabled", false);
-            $('#txtSMSCancelEarn').attr("disabled", false);
-            $('#txtSMSCancelBurn').attr("disabled", false);
             $('#txtSMSAnyCancel').attr("disabled", false);
             $('#txtSMSBalanceInquiry').attr("disabled", false);
             $('#ddlSMSProvider').attr("disabled", false);
@@ -258,8 +255,6 @@
             $('#txtWAEarn').attr("disabled", true);
             $('#txtWAOTP').attr("disabled", true);
             $('#txtWABurn').attr("disabled", true);
-            $('#txtWACancelEarn').attr("disabled", true);
-            $('#txtWACancelBurn').attr("disabled", true);
             $('#txtWAAnyCancel').attr("disabled", true);
             $('#txtWABalanceInquiry').attr("disabled", true);
             $('#ddlWAProvider').attr("disabled", true);
@@ -274,8 +269,6 @@
             $('#txtWAEarn').attr("disabled", false);
             $('#txtWAOTP').attr("disabled", false);
             $('#txtWABurn').attr("disabled", false);
-            $('#txtWACancelEarn').attr("disabled", false);
-            $('#txtWACancelBurn').attr("disabled", false);
             $('#txtWAAnyCancel').attr("disabled", false);
             $('#txtWABalanceInquiry').attr("disabled", false);
             $('#ddlWAProvider').attr("disabled", false);
@@ -367,10 +360,29 @@
         $("#txtSMSEarn").val("");
         $("#txtSMSOTP").val("");
         $("#txtSMSBurn").val("");
-        $("#txtSMSCancelEarn").val("");
-        $("#txtSMSCancelBurn").val("");
         $("#txtSMSAnyCancel").val("");
         $("#txtSMSBalanceInquiry").val("");
+        $("#spnSMSEnrollment").text("");
+        $("#spnSMSEarn").text("");
+        $("#spnSMSBurn").text("");
+        $("#spnSMSOTP").text("");
+        $("#spnSMSBalanceInquiry").text("");
+        $("#spnSMSAnyCancel").text("");
+        $("#spnSMSEnrollmentAndEarn").text("");
+
+        $('#txtSMSSenderId').attr("disabled", false);
+        $('#txtSMSUserName').attr("disabled", false);
+        $('#txtSMSPassword').attr("disabled", false);
+        $('#txtSMSLink').attr("disabled", false);
+        $('#txtSMSEnrollment').attr("disabled", false);
+        $('#txtSMSEnrollmentAndEarn').attr("disabled", false);
+        $('#txtSMSEarn').attr("disabled", false);
+        $('#txtSMSOTP').attr("disabled", false);
+        $('#txtSMSBurn').attr("disabled", false);
+        $('#txtSMSAnyCancel').attr("disabled", false);
+        $('#txtSMSBalanceInquiry').attr("disabled", false);
+        $('#ddlSMSProvider').attr("disabled", false);
+
     }
     function ClearAllWAControls() {
         $("#hdnCommWAConfigId").val("");
@@ -384,9 +396,7 @@
         $("#txtWAEnrollmentAndEarn").val("");
         $("#txtWAEarn").val("");
         $("#txtWAOTP").val("");
-        $("#txtWABurn").val("");
-        $("#txtWACancelEarn").val("");
-        $("#txtWACancelBurn").val("");
+        $("#txtWABurn").val("");        
         $("#txtWAAnyCancel").val("");
         $("#txtWABalanceInquiry").val("");
     }
@@ -430,23 +440,7 @@
                     }
                     $("#txtSMSBurn").val(newdata[i].SMSScript);
                     $("#hdnCommSMSConfigId5").val(newdata[i].Id);
-                }
-                if (newdata[i].MessageId == "103") {
-                    $("#spnSMSCancelEarn").text(newdata[i].DLTStatus);
-                    if (newdata[i].DLTStatus != null && newdata[i].DLTStatus != "Submitted") {
-                        $("#txtSMSCancelEarn").prop("disabled", true);
-                    }
-                    $("#txtSMSCancelEarn").val(newdata[i].SMSScript);
-                    $("#hdnCommSMSConfigId6").val(newdata[i].Id);
-                }
-                if (newdata[i].MessageId == "104") {
-                    $("#spnSMSCancelBurn").text(newdata[i].DLTStatus);
-                    if (newdata[i].DLTStatus != null && newdata[i].DLTStatus != "Submitted") {
-                        $("#txtSMSCancelBurn").prop("disabled", true);
-                    }
-                    $("#txtSMSCancelBurn").val(newdata[i].SMSScript);
-                    $("#hdnCommSMSConfigId7").val(newdata[i].Id);
-                }
+                }                
                 if (newdata[i].MessageId == "105") {
                     $("#spnSMSOTP").text(newdata[i].DLTStatus);
                     if (newdata[i].DLTStatus != null && newdata[i].DLTStatus != "Submitted") {
@@ -505,15 +499,7 @@
                 if (newdata1[i].MessageId == "102") {
                     $("#txtWABurn").val(newdata1[i].WAScript);
                     $("#hdnCommWAConfigId5").val(newdata1[i].Id);
-                }
-                if (newdata1[i].MessageId == "103") {
-                    $("#txtWACancelEarn").val(newdata1[i].WAScript);
-                    $("#hdnCommWAConfigId6").val(newdata1[i].Id);
-                }
-                if (newdata1[i].MessageId == "104") {
-                    $("#txtWACancelBurn").val(newdata1[i].WAScript);
-                    $("#hdnCommWAConfigId7").val(newdata1[i].Id);
-                }
+                }                
                 if (newdata1[i].MessageId == "105") {
                     $("#txtWAOTP").val(newdata1[i].WAScript);
                     $("#hdnCommWAConfigId4").val(newdata1[i].Id);
@@ -560,10 +546,6 @@
                 item["SMSOTP"] = $('#txtSMSOTP').val();
                 item["SMSBurnId"] = $('#hdnCommSMSConfigId5').val();
                 item["SMSBurn"] = $('#txtSMSBurn').val();
-                item["SMSCancelEarnId"] = $('#hdnCommSMSConfigId6').val();
-                item["SMSCancelEarn"] = $('#txtSMSCancelEarn').val();
-                item["SMSCancelBurnId"] = $('#hdnCommSMSConfigId7').val();
-                item["SMSCancelBurn"] = $('#txtSMSCancelBurn').val();
                 item["SMSAnyCancelId"] = $('#hdnCommSMSConfigId8').val();
                 item["SMSAnyCancel"] = $('#txtSMSAnyCancel').val();
                 item["SMSBalanceInquiryId"] = $('#hdnCommSMSConfigId9').val();
@@ -591,10 +573,6 @@
                 item["WAOTP"] = $('#txtWAOTP').val();
                 item["WABurnId"] = $('#hdnCommWAConfigId5').val();
                 item["WABurn"] = $('#txtWABurn').val();
-                item["WACancelEarnId"] = $('#hdnCommWAConfigId6').val();
-                item["WACancelEarn"] = $('#txtWACancelEarn').val();
-                item["WACancelBurnId"] = $('#hdnCommWAConfigId7').val();
-                item["WACancelBurn"] = $('#txtWACancelBurn').val();
                 item["WAAnyCancelId"] = $('#hdnCommWAConfigId8').val();
                 item["WAAnyCancel"] = $('#txtWAAnyCancel').val();
                 item["WABalanceInquiryId"] = $('#hdnCommWAConfigId9').val();

@@ -26,8 +26,10 @@ namespace WebApp.Controllers
             try
             {
                 GroupWiseDetails objGrpWise = new GroupWiseDetails();
+                //var count = SPR.GetAllTransactionData();
                 singlevm.lstGroupWiseDetails = SPR.GetGroupWiseData();
-                foreach(var item in singlevm.lstGroupWiseDetails)
+                
+                foreach (var item in singlevm.lstGroupWiseDetails)
                 {
                     objGrpWise.CustCount = objGrpWise.CustCount + item.CustCount;
                     objGrpWise.BulkUploadCount = objGrpWise.BulkUploadCount + item.BulkUploadCount;

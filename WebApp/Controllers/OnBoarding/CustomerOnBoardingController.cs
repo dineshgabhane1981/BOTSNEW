@@ -210,20 +210,35 @@ namespace WebApp.Controllers.OnBoarding
                     objData.bots_TblGroupMaster.CategoryData = json_serializer.Serialize(objData.objRetailList);
                     objData.bots_TblGroupMaster.PaymentScheduleData = json_serializer.Serialize(objData.objInstallmentList);
 
-                    objData.lstSMSConfig = OBR.GetCommunicationSMSConfigForDLT(GroupId);
-                    var BrandCount = objData.lstSMSConfig.Where(x => x.BrandId != "All").Count();
-                    if (BrandCount > 0)
-                    {
-                        objData.IsBrand = true;
-                    }
-                    else
-                    {
-                        objData.IsBrand = false;
-                    }
+                    //objData.lstSMSConfig = OBR.GetCommunicationSMSConfigForDLT(GroupId);
+                    //var BrandCount = objData.lstSMSConfig.Where(x => x.BrandId != "All").Count();
+                    //if (BrandCount > 0)
+                    //{
+                    //    objData.IsBrand = true;
+                    //}
+                    //else
+                    //{
+                    //    objData.IsBrand = false;
+                    //}
 
                 }
             }
             return View(objData);
+        }
+
+        public ActionResult GetDLTCommunicationSetData(string GroupId,string SetId)
+        {
+            OnBoardingSalesViewModel objData = new OnBoardingSalesViewModel();
+            objData.lstSMSConfig = OBR.GetCommunicationSMSConfigForDLT(GroupId,Convert.ToInt32(SetId));
+            return PartialView("_DLTCommunicationView", objData);
+           
+        }
+
+        public ActionResult GetConvertedScript(string CSScript)
+        {
+            var convertedScript = OBR.GetConvertedScript(CSScript);
+            return new JsonResult() { Data = convertedScript, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
+
         }
 
         public BOTS_TblGroupMaster MeargeLeadData(SALES_tblLeads leadDetails)
@@ -635,19 +650,19 @@ namespace WebApp.Controllers.OnBoarding
                         objSMSTemplate3.TemplateScript = Convert.ToString(item["SMSBurn"]);
                         lstSMSTemplate.Add(objSMSTemplate3);
 
-                        SMSTemplate objSMSTemplate4 = new SMSTemplate();
-                        objSMSTemplate4.MessageId = 103;
-                        if (!string.IsNullOrEmpty(Convert.ToString(item["SMSCancelEarnId"])))
-                            objSMSTemplate4.Id = Convert.ToInt32(item["SMSCancelEarnId"]);
-                        objSMSTemplate4.TemplateScript = Convert.ToString(item["SMSCancelEarn"]);
-                        lstSMSTemplate.Add(objSMSTemplate4);
+                        //SMSTemplate objSMSTemplate4 = new SMSTemplate();
+                        //objSMSTemplate4.MessageId = 103;
+                        //if (!string.IsNullOrEmpty(Convert.ToString(item["SMSCancelEarnId"])))
+                        //    objSMSTemplate4.Id = Convert.ToInt32(item["SMSCancelEarnId"]);
+                        //objSMSTemplate4.TemplateScript = Convert.ToString(item["SMSCancelEarn"]);
+                        //lstSMSTemplate.Add(objSMSTemplate4);
 
-                        SMSTemplate objSMSTemplate5 = new SMSTemplate();
-                        objSMSTemplate5.MessageId = 104;
-                        if (!string.IsNullOrEmpty(Convert.ToString(item["SMSCancelBurnId"])))
-                            objSMSTemplate5.Id = Convert.ToInt32(item["SMSCancelBurnId"]);
-                        objSMSTemplate5.TemplateScript = Convert.ToString(item["SMSCancelBurn"]);
-                        lstSMSTemplate.Add(objSMSTemplate5);
+                        //SMSTemplate objSMSTemplate5 = new SMSTemplate();
+                        //objSMSTemplate5.MessageId = 104;
+                        //if (!string.IsNullOrEmpty(Convert.ToString(item["SMSCancelBurnId"])))
+                        //    objSMSTemplate5.Id = Convert.ToInt32(item["SMSCancelBurnId"]);
+                        //objSMSTemplate5.TemplateScript = Convert.ToString(item["SMSCancelBurn"]);
+                        //lstSMSTemplate.Add(objSMSTemplate5);
 
                         SMSTemplate objSMSTemplate6 = new SMSTemplate();
                         objSMSTemplate6.MessageId = 105;
@@ -717,19 +732,19 @@ namespace WebApp.Controllers.OnBoarding
                         objWATemplate3.TemplateScript = Convert.ToString(item["WABurn"]);
                         lstWATemplate.Add(objWATemplate3);
 
-                        SMSTemplate objWATemplate4 = new SMSTemplate();
-                        objWATemplate4.MessageId = 103;
-                        if (!string.IsNullOrEmpty(Convert.ToString(item["WACancelEarnId"])))
-                            objWATemplate4.Id = Convert.ToInt32(item["WACancelEarnId"]);
-                        objWATemplate4.TemplateScript = Convert.ToString(item["WACancelEarn"]);
-                        lstWATemplate.Add(objWATemplate4);
+                        //SMSTemplate objWATemplate4 = new SMSTemplate();
+                        //objWATemplate4.MessageId = 103;
+                        //if (!string.IsNullOrEmpty(Convert.ToString(item["WACancelEarnId"])))
+                        //    objWATemplate4.Id = Convert.ToInt32(item["WACancelEarnId"]);
+                        //objWATemplate4.TemplateScript = Convert.ToString(item["WACancelEarn"]);
+                        //lstWATemplate.Add(objWATemplate4);
 
-                        SMSTemplate objWATemplate5 = new SMSTemplate();
-                        objWATemplate5.MessageId = 104;
-                        if (!string.IsNullOrEmpty(Convert.ToString(item["WACancelBurnId"])))
-                            objWATemplate5.Id = Convert.ToInt32(item["WACancelBurnId"]);
-                        objWATemplate5.TemplateScript = Convert.ToString(item["WACancelBurn"]);
-                        lstWATemplate.Add(objWATemplate5);
+                        //SMSTemplate objWATemplate5 = new SMSTemplate();
+                        //objWATemplate5.MessageId = 104;
+                        //if (!string.IsNullOrEmpty(Convert.ToString(item["WACancelBurnId"])))
+                        //    objWATemplate5.Id = Convert.ToInt32(item["WACancelBurnId"]);
+                        //objWATemplate5.TemplateScript = Convert.ToString(item["WACancelBurn"]);
+                        //lstWATemplate.Add(objWATemplate5);
 
                         SMSTemplate objWATemplate6 = new SMSTemplate();
                         objWATemplate6.MessageId = 105;
@@ -825,13 +840,32 @@ namespace WebApp.Controllers.OnBoarding
             return new JsonResult() { Data = status, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
 
-        public ActionResult UpdateDLTStatusOfCommunicationConfig(string ConfigId, string DLTNewStatus,string RejectReason)
+        public ActionResult UpdateDLTStatusOfCommunicationConfig(string ConfigId, string DLTNewStatus,string RejectReason,string jsonData)
         {
             bool status = false;
             try
             {
                 var userDetails = (CustomerLoginDetail)Session["UserSession"];
-                status = OBR.UpdateStatusSMSConfig(Convert.ToInt32(ConfigId), DLTNewStatus, userDetails.LoginId, RejectReason);
+                BOTS_TblSMSConfig objSMSConfig = new BOTS_TblSMSConfig();
+                JavaScriptSerializer json_serializer = new JavaScriptSerializer();
+                json_serializer.MaxJsonLength = int.MaxValue;
+                object[] objCommConfigData = (object[])json_serializer.DeserializeObject(jsonData);
+                foreach (Dictionary<string, object> item in objCommConfigData)
+                {
+                    var id = Convert.ToInt32(item["Id"]);
+                    objSMSConfig = OBR.GetCommunicationSMSConfigById(id);
+                    if (objSMSConfig != null)
+                    {
+                        objSMSConfig.TemplateId = Convert.ToString(item["TemplateId"]);
+                        objSMSConfig.TemplateName = Convert.ToString(item["TemplateName"]);
+                        objSMSConfig.TemplateType = Convert.ToString(item["TemplateType"]);
+                        objSMSConfig.SMSScript = Convert.ToString(item["Script"]);
+                        objSMSConfig.SMSScriptDLT = Convert.ToString(item["ScriptDLT"]);
+                        objSMSConfig.UpdatedBy = userDetails.LoginId;
+                        objSMSConfig.UpdatedDate = DateTime.Now;
+                    }
+                }
+                status = OBR.UpdateStatusSMSConfig(Convert.ToInt32(ConfigId), DLTNewStatus, userDetails.LoginId, RejectReason, objSMSConfig);
             }
             catch (Exception ex)
             {
