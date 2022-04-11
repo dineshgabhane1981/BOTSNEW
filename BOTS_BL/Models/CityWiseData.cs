@@ -24,4 +24,14 @@ namespace BOTS_BL.Models
         public string CityName { get; set; }
         public long MemberBase { get; set; }
     }
+
+    public class TransactionWise
+    {
+        public string GroupId { get; set; }
+        public string GroupName { get; set; }
+        public long TotalTransactionBase { get; set; }
+        public decimal? TotalCustPoints { get; set; }
+        public decimal? TotalRedumptionInv { get; set; }
+        public decimal? TotalInv { get; set; }
+    }
 }

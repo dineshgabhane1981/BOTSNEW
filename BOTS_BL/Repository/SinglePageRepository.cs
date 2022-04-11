@@ -655,6 +655,76 @@ namespace BOTS_BL.Repository
             }
             return lstFinalData;
         }
+        public List<TransactionWise> GetAllTransactionData()
+        {
+            List<TransactionWise> objData = new List<TransactionWise>();
+            long count = 0;
+            decimal? TotalInv = 0;
+            decimal? TotalRedumptionInv = 0;
+            decimal? TotalCustPoints = 0;
+            List<tblGroupDetail> groups = new List<tblGroupDetail>();
+            try
+            {
+                using (var context = new CommonDBContext())
+                {
+                    groups = context.tblGroupDetails.Where(x => x.IsActive == true && x.IsLive == true && x.GroupId != 1051).ToList();
+                }
+                foreach (var item in groups)
+                {
+                    TransactionWise objItem = new TransactionWise();
+                    var groupId = Convert.ToInt32(item.GroupId);
+                    objItem.GroupId = Convert.ToString(item.GroupId);
+                    objItem.GroupName = item.GroupName;
+
+                    string connStr = CR.GetCustomerConnString(Convert.ToString(item.GroupId));
+                    using (var contextdb = new BOTSDBContext(connStr))
+                    {
+                        var fromDate = Convert.ToDateTime("2022-02-28");
+                        var tillDate = Convert.ToDateTime("2022-04-01");
+                        //objItem.TotalTransactionBase = contextdb.TransactionMasters.Where(x => x.Datetime > fromDate && x.Datetime < tillDate).Count();
+                        objItem.TotalInv = contextdb.TransactionMasters.Where(x => x.Datetime > fromDate && x.Datetime < tillDate).Select(y => y.InvoiceAmt).AsQueryable().Sum();
+                        //objItem.TotalRedumptionInv = contextdb.TransactionMasters.Where(x => x.Datetime > fromDate && x.Datetime < tillDate && x.TransType == "2").Select(y => y.InvoiceAmt).Sum();
+                        //objItem.TotalCustPoints = contextdb.CustomerDetails.Select(x => x.Points).Sum();
+                        //Invoice amount
+                        //Invoice of Redumption
+                        //Customer Points
+                    }
+
+                    objData.Add(objItem);
+                }
+
+                foreach (var item in objData)
+                {
+                    //count = count + item.TotalTransactionBase;
+                    if (item.TotalInv != null)
+                    {
+                        TotalInv = TotalInv + item.TotalInv;
+                    }
+                    else
+                    {
+                        TotalInv = TotalInv + 0;
+                    }
+                    //if (item.TotalRedumptionInv != null)
+                    //{
+                    //    TotalRedumptionInv = TotalRedumptionInv + item.TotalRedumptionInv;
+                    //}
+                    //else
+                    //{
+                    //    TotalRedumptionInv = TotalRedumptionInv + 0;
+                    //}
+                    //TotalRedumptionInv = TotalRedumptionInv + item.TotalRedumptionInv;
+                    //TotalCustPoints = TotalCustPoints + item.TotalCustPoints;
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
+
+
+            return objData;
+
+        }
 
         public List<GroupWiseDetails> GetGroupWiseData()
         {
@@ -673,7 +743,7 @@ namespace BOTS_BL.Repository
                         objItem.BusinessCategory = item.CustomerType;
                         var category = (from c in context.tblGroupDetails
                                         join ct in context.tblCategories on c.RetailCategory equals ct.CategoryId
-                                        where c.GroupId == groupId 
+                                        where c.GroupId == groupId
                                         select new
                                         {
                                             ct.CategoryName
@@ -682,7 +752,7 @@ namespace BOTS_BL.Repository
 
                         var city = (from c in context.tblGroupDetails
                                     join ct in context.tblCities on c.City equals ct.CityId
-                                    where c.GroupId == groupId 
+                                    where c.GroupId == groupId
                                     select new
                                     {
                                         ct.CityName
@@ -692,7 +762,7 @@ namespace BOTS_BL.Repository
 
                         var CSName = (from c in context.tblGroupDetails
                                       join ct in context.tblRMAssigneds on c.RMAssigned equals ct.RMAssignedId
-                                      where c.GroupId == groupId 
+                                      where c.GroupId == groupId
                                       select new
                                       {
                                           ct.RMAssignedName
