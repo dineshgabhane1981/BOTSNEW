@@ -3,9 +3,9 @@ using BOTS_BL.Models;
 using BOTS_BL.Repository;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Net.Mail;
+using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Script.Serialization;
@@ -13,13 +13,13 @@ using WebApp.App_Start;
 
 namespace WebApp.Controllers.ITOPS
 {
-    public class NameAndMobileController : Controller
+    public class TransferPointsController : Controller
     {
         ITOpsRepository ITOPS = new ITOpsRepository();
         ReportsRepository RR = new ReportsRepository();
         CustomerRepository objCustRepo = new CustomerRepository();
         Exceptions newexception = new Exceptions();
-        // GET: NameAndMobile
+        // GET: TransferPoints
         public ActionResult Index(string groupId)
         {
             if (!string.IsNullOrEmpty(groupId))
@@ -27,14 +27,9 @@ namespace WebApp.Controllers.ITOPS
                 CommonFunctions common = new CommonFunctions();
                 groupId = common.DecryptString(groupId);
                 Session["GroupId"] = groupId;
-            }            
+            }
             return View();
-        }
-
-        public ActionResult ChangeMobile()
-        {
-            var groupId = (string)Session["GroupId"];
-            return View();
+           
         }
 
         public ActionResult GetChangeNameData(string MobileNo, string CardNo)
@@ -54,62 +49,7 @@ namespace WebApp.Controllers.ITOPS
         }
 
         [HttpPost]
-        public bool ChangeMemberName(string jsonData)
-        {
-            bool result = false;
-            string GroupId = "";
-            try
-            {
-                GroupId = (string)Session["GroupId"];
-                JavaScriptSerializer json_serializer = new JavaScriptSerializer();
-                json_serializer.MaxJsonLength = int.MaxValue;
-                object[] objData = (object[])json_serializer.DeserializeObject(jsonData);
-                tblAudit objAudit = new tblAudit();
-                bool IsSMS = false;
-
-                string CustomerId = "";
-                string Name = "";
-                string OldMobileNo = "";
-               
-                foreach (Dictionary<string, object> item in objData)
-                {                    
-                    CustomerId = Convert.ToString(item["CustomerId"]);
-                    Name = Convert.ToString(item["Name"]);
-                    OldMobileNo = Convert.ToString(item["OldMobileNo"]);
-                    objAudit.GroupId = GroupId;
-                    objAudit.RequestedFor = "Name Change";
-                    objAudit.RequestedEntity = "CustomerId - " + CustomerId;
-                    objAudit.RequestedBy = Convert.ToString(item["RequestedBy"]);
-                    objAudit.RequestedOnForum = Convert.ToString(item["RequestedForum"]);
-                    objAudit.RequestedOn = Convert.ToDateTime(item["RequestedOn"]);
-                    IsSMS = Convert.ToBoolean(item["IsSMS"]);
-                }
-
-                result = ITOPS.UpdateNameOfMember(GroupId, CustomerId, Name, objAudit);
-                if (result)
-                {
-                    var subject = "Customer name changed for CustomerId - " + CustomerId;
-                    var body = "Customer name changed for CustomerId - " + CustomerId;
-                    body += "<br/><br/> Regards <br/> Blue Ocktopus Team";
-
-                    SendEmail(GroupId, subject, body);
-                }
-
-                if (IsSMS)
-                {
-                    //Logic to send SMS to Customer whose Name is changed
-                }
-
-            }
-            catch (Exception ex)
-            {
-                newexception.AddException(ex, GroupId);
-            }
-            return result;
-        }
-
-        [HttpPost]
-        public ActionResult ChangeMemberMobile(string jsonData)
+        public ActionResult ChangeExistingMemberMobile(string jsonData)
         {
             SPResponse result = new SPResponse();
             var groupId = (string)Session["GroupId"];
@@ -124,12 +64,14 @@ namespace WebApp.Controllers.ITOPS
                 string CustomerId = "";
                 string MobileNo = "";
                 string OldMobileNo = "";
+
                 foreach (Dictionary<string, object> item in objData)
                 {
                     var GroupId = (string)Session["GroupId"];
                     CustomerId = Convert.ToString(item["CustomerId"]);
                     MobileNo = Convert.ToString(item["MobileNo"]);
                     OldMobileNo = Convert.ToString(item["OldMobileNo"]);
+
 
                     objAudit.GroupId = groupId;
                     objAudit.RequestedFor = "Mobile Number Change";
@@ -138,9 +80,10 @@ namespace WebApp.Controllers.ITOPS
                     objAudit.RequestedOnForum = Convert.ToString(item["RequestedForum"]);
                     objAudit.RequestedOn = Convert.ToDateTime(item["RequestedOn"]);
                     IsSMS = Convert.ToBoolean(item["IsSMS"]);
+
                 }
 
-                result = ITOPS.UpdateMobileOfMember(groupId, CustomerId, MobileNo, objAudit);
+                result = ITOPS.UpdateMobileOfExistingMember(groupId, CustomerId, MobileNo, objAudit);
                 if (result.ResponseCode == "00")
                 {
                     var subject = "Customer Mobile Number changed for CustomerId - " + CustomerId;
@@ -197,7 +140,6 @@ namespace WebApp.Controllers.ITOPS
                 }
             }
         }
-
 
     }
 }

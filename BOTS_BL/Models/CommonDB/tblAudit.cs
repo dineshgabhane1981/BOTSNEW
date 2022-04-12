@@ -21,6 +21,9 @@ namespace BOTS_BL.Models
         [StringLength(5)]
         public string GroupId { get; set; }
 
+        [StringLength(10)]
+        public string OldMobileNo { get; set; }
+
         [StringLength(150)]
         public string RequestedBy { get; set; }
 

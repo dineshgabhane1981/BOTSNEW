@@ -52,6 +52,10 @@
                                         <td style="padding:10px;"><span id="spnMobileno4"></span></td>
                                     </tr>
                                     <tr>
+                                        <td style="padding:10px;">Old Mobile No</td>
+                                        <td style="padding:10px;"><span id="spnOldMobileno4"></span></td>
+                                    </tr>
+                                    <tr>
                                         <td style="padding:10px;">Card No</td>
                                         <td style="padding:10px;"><span id="spnCardNo4"></span></td>
                                     </tr>
@@ -180,6 +184,7 @@
             if (result.MemberName != null) {
             $("#spnMemberName4").text(result.MemberName);
             $("#spnMobileno4").text(result.MobileNo);
+            $("#spnOldMobileno4").text(result.OldMobileNo);
             $("#spnCardNo4").text(result.CardNo);
             $("#spnPtBalance4").text(result.PointsBalance);
             $("#spnEnrolledOutlet4").text(result.EnrolledOutletName);
@@ -197,6 +202,7 @@
             toastr.error('Member not present. Please check entered Mobile Number OR Card Number');
             $("#spnMemberName3").text("");
             $("#spnMobileno3").text("");
+            $("#spnOldMobileno3").text("");
             $("#spnCardNo3").text("");
             $("#spnPtBalance3").text("");
             $("#spnEnrolledOutlet3").text("");
@@ -257,6 +263,7 @@
             item = {}
             item["GroupID"] = $("#hdnGroupId").val();
             item["MobileNo"] = $("#txtMobileNo4").val();
+            item["OldMobileNo"] = $("#txtOldMobileNo4").val();
             item["OutletId"] = $("#ddlOutletList4").val();
             item["BonusPoints"] = $("#txtBonusPoints").val();
             item["BonusRemark"] = $("#txtBonusRemark").val();

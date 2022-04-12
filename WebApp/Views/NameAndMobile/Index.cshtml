@@ -46,6 +46,10 @@
                                             <td style="padding:10px;"><span id="spnMobileno"></span></td>
                                         </tr>
                                         <tr>
+                                            <td style="padding:10px;">Old Mobile No</td>
+                                            <td style="padding:10px;"><span id="spnOldMobileno"></span></td>
+                                        </tr>
+                                        <tr>
                                             <td style="padding:10px;">Card No</td>
                                             <td style="padding:10px;"><span id="spnCardNo"></span></td>
                                         </tr>
@@ -159,6 +163,7 @@
             if (result.MemberName != null) {
             $("#spnMemberName").text(result.MemberName);
             $("#spnMobileno").text(result.MobileNo);
+            $("#spnOldMobileno").text(result.OldMobileNo);
             $("#spnCardNo").text(result.CardNo);
             $("#spnPtBalance").text(result.PointsBalance);
             $("#spnEnrolledOutlet").text(result.EnrolledOutletName);
@@ -176,6 +181,7 @@
             toastr.error('Member not present. Please check entered Mobile Number OR Card Number');
             $("#spnMemberName").text("");
             $("#spnMobileno").text("");
+            $("#spnOldMobileno").text("");
             $("#spnCardNo").text("");
             $("#spnPtBalance").text("");
             $("#spnEnrolledOutlet").text("");

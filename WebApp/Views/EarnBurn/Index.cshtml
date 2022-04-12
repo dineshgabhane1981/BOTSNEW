@@ -46,6 +46,10 @@
                                         <td style="padding:10px;"><span id="spnMobileno2"></span></td>
                                     </tr>
                                     <tr>
+                                        <td style="padding:10px;">Old Mobile No</td>
+                                        <td style="padding:10px;"><span id="spnOldMobileno2"></span></td>
+                                    </tr>
+                                    <tr>
                                         <td style="padding:10px;">Card No</td>
                                         <td style="padding:10px;"><span id="spnCardNo2"></span></td>
                                     </tr>
@@ -189,6 +193,7 @@
                 if (result.MemberName != null) {
                     $("#spnMemberName2").text(result.MemberName);
                     $("#spnMobileno2").text(result.MobileNo);
+                    $("#spnOldMobileno2").text(result.OldMobileNo);
                     $("#spnCardNo2").text(result.CardNo);
                     $("#spnPtBalance2").text(result.PointsBalance);
                     $("#spnEnrolledOutlet2").text(result.EnrolledOutletName);
@@ -207,6 +212,7 @@
                     alert("InsideElse");
                     $("#spnMemberName2").text("");
                     $("#spnMobileno2").text("");
+                    $("#spnOldMobileno2").text("");
                     $("#spnCardNo2").text("");
                     $("#spnPtBalance2").text("");
                     $("#spnEnrolledOutlet2").text("");
@@ -265,6 +271,7 @@
             item = {}
             item["GroupID"] = $("#hdnGroupId").val();
             item["MobileNo"] = $("#txtMobileNo2").val();
+            item["OldMobileNo"] = $("#txtOldMobileNo2").val();
             item["OutletId"] = $("#ddlOutletList").val();
             item["TransactionDate"] = $("#dtTransaction").val();
             item["InvoiceNumber"] = $("#txtInvoiceNumber").val();

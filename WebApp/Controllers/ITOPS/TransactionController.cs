@@ -172,12 +172,16 @@ namespace WebApp.Controllers.ITOPS
 
                 string CustomerId = "";
                 string MobileNo = "";
+                string OldMobileNo = "";
                 string NewMobileNo = "";
+                
+
                 foreach (Dictionary<string, object> item in objData)
                 {
                     CustomerId = Convert.ToString(item["CustomerId"]);
                     MobileNo = Convert.ToString(item["MobileNo"]);
-                    NewMobileNo = Convert.ToString(item["NewMobileNo"]);
+                    OldMobileNo = Convert.ToString(item["OldMobileNo"]);
+                    NewMobileNo = Convert.ToString(item["NewMobileNo"]);                   
                     objAudit.GroupId = groupId;
                     objAudit.RequestedFor = "Mobile Number Change";
                     objAudit.RequestedEntity = "CustomerId - " + CustomerId;
