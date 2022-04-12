@@ -74,7 +74,9 @@
         </div>
     </div>
     <div class="container-fluid pt-3 pl-3 pr-3 pb-5">
+        <button type="button" id="btnBirthdayToDLT" class="btn btn-primary pull-right" style="margin-right: 10px; margin-bottom: 20px;">Submit For DLT</button>
         <button type="button" id="btnBirthdaySave" class="btn btn-primary pull-right" style="margin-right: 10px; margin-bottom: 20px;"> Save</button>
+
     </div>
 </div>
 
@@ -120,7 +122,7 @@
         </div>
     </div>
     <div style="margin-top:20px;border:1px solid grey;padding:10px;border-radius:10px;">
-        <b> On Birthday Message</b>
+        <b> On Anniversary Message</b>
         <div>
             @Html.DropDownListFor(x => Model.lstBrands.Count, new SelectList(Model.PointsUsedOrNot(), "Value", "Text"), htmlAttributes: new { @class = "input50", @id = "ddlPointsUsedOrNot1", style = "margin-top:20px;" })
             event
@@ -128,6 +130,7 @@
         </div>
     </div>
     <div class="container-fluid pt-3 pl-3 pr-3 pb-5">
+        <button type="button" id="btnAnniversaryToDLT" class="btn btn-primary pull-right" style="margin-right: 10px; margin-bottom: 20px;">Submit For DLT</button>
         <button type="button" id="btnAnniversarySave" class="btn btn-primary pull-right" style="margin-right: 10px; margin-bottom: 20px;"> Save</button>
     </div>
 </div>
@@ -212,7 +215,8 @@
         </div>
     </div>
 
-    <div class="container-fluid pt-3 pl-3 pr-3 pb-5">
+    <div class="container-fluid pt-3 pl-3 pr-3 pb-5">       
+        <button type="button" id="btnInactiveToDLT" class="btn btn-primary pull-right" style="margin-right: 10px; margin-bottom: 20px;">Submit For DLT</button>
         <button type="button" id="btnInactiveSave" class="btn btn-primary pull-right" style="margin-right: 10px; margin-bottom: 20px;">Save</button>
     </div>
 </div>
@@ -298,6 +302,7 @@
     </div>
 
     <div class="container-fluid pt-3 pl-3 pr-3 pb-5">
+        <button type="button" id="btnOOInactiveToDLT" class="btn btn-primary pull-right" style="margin-right: 10px; margin-bottom: 20px;">Submit For DLT</button>
         <button type="button" id="btnOOInactiveSave" class="btn btn-primary pull-right" style="margin-right: 10px; margin-bottom: 20px;">Save</button>
     </div>
 </div>
@@ -383,6 +388,7 @@
     </div>
 
     <div class="container-fluid pt-3 pl-3 pr-3 pb-5">
+        <button type="button" id="btnNRInactiveToDLT" class="btn btn-primary pull-right" style="margin-right: 10px; margin-bottom: 20px;">Submit For DLT</button>
         <button type="button" id="btnNRInactiveSave" class="btn btn-primary pull-right" style="margin-right: 10px; margin-bottom: 20px;">Save</button>
     </div>
 </div>
@@ -450,6 +456,7 @@
     </div>
 
     <div class="container-fluid pt-3 pl-3 pr-3 pb-5">
+        <button type="button" id="btnPEInactiveToDLT" class="btn btn-primary pull-right" style="margin-right: 10px; margin-bottom: 20px;">Submit For DLT</button>
         <button type="button" id="btnPEInactiveSave" class="btn btn-primary pull-right" style="margin-right: 10px; margin-bottom: 20px;">Save</button>
     </div>
 </div>
@@ -473,6 +480,7 @@
         </div>
     </div>
     <div class="container-fluid pt-3 pl-3 pr-3 pb-5">
+        <button type="button" id="btnDLCRRToDLT" class="btn btn-primary pull-right" style="margin-right: 10px; margin-bottom: 20px;">Submit For DLT</button>
         <button type="button" id="btnDLCRRSave" class="btn btn-primary pull-right" style="margin-right: 10px; margin-bottom: 20px;"> Save</button>
     </div>
 </div>
@@ -495,6 +503,7 @@
         </div>
     </div>
     <div class="container-fluid pt-3 pl-3 pr-3 pb-5">
+        <button type="button" id="btnDLCURToDLT" class="btn btn-primary pull-right" style="margin-right: 10px; margin-bottom: 20px;">Submit For DLT</button>
         <button type="button" id="btnDLCURSave" class="btn btn-primary pull-right" style="margin-right: 10px; margin-bottom: 20px;"> Save</button>
     </div>
 </div>
@@ -517,6 +526,7 @@
         </div>
     </div>
     <div class="container-fluid pt-3 pl-3 pr-3 pb-5">
+        <button type="button" id="btnBUToDLT" class="btn btn-primary pull-right" style="margin-right: 10px; margin-bottom: 20px;">Submit For DLT</button>
         <button type="button" id="btnBUSave" class="btn btn-primary pull-right" style="margin-right: 10px; margin-bottom: 20px;"> Save</button>
     </div>
 </div>
@@ -540,44 +550,87 @@
         </div>
     </div>
     <div class="container-fluid pt-3 pl-3 pr-3 pb-5">
+        <button type="button" id="btnUploadedUsersToDLT" class="btn btn-primary pull-right" style="margin-right: 10px; margin-bottom: 20px;">Submit For DLT</button>
         <button type="button" id="btnUploadedUsersSave" class="btn btn-primary pull-right" style="margin-right: 10px; margin-bottom: 20px;"> Save</button>
     </div>
 </div>
 
 <script>
     $(document).ready(function () {
+        
         ShowHideCampaignSection("dvBirthday");
-        LoadCampaignOtherConfig("Birthday");
+        LoadCampaignOtherConfig("Birthday");        
 
         $("#btnBirthdaySave").on("click", function () {
             SaveBirthdayConfig();
         });
+        $("#btnBirthdayToDLT").on("click", function () {           
+            var id = $("#hdnBirthId").val();
+            SendPerpetualCampaignToDLT(id, "Birthday");
+        });
         $("#btnAnniversarySave").on("click", function () {
             SaveAnniversaryConfig();
         });
+        $("#btnAnniversaryToDLT").on("click", function () {
+            var id = $("#hdnAnniversaryId").val();
+            SendPerpetualCampaignToDLT(id, "Anniversary");
+        });
+
         $("#btnInactiveSave").on("click", function () {
             SaveInactiveConfig("Inactive");
         });
+        $("#btnInactiveToDLT").on("click", function () {
+            SendPerpetualCampaignToDLT(0, "Inactive");
+        });
+                
         $("#btnOOInactiveSave").on("click", function () {
             SaveInactiveConfig("OOInactive");
         });
+        $("#btnOOInactiveToDLT").on("click", function () {
+            SendPerpetualCampaignToDLT(0, "Only Once Inactive");
+        });
+
         $("#btnNRInactiveSave").on("click", function () {
             SaveInactiveConfig("NRInactive");
         });
+        $("#btnNRInactiveToDLT").on("click", function () {
+            SendPerpetualCampaignToDLT(0, "Non Redemption Inactive");
+        });
+        
         $("#btnPEInactiveSave").on("click", function () {
             SaveInactiveConfig("PEInactive");
         });
+        $("#btnPEInactiveToDLT").on("click", function () {
+            SendPerpetualCampaignToDLT(0, "Point Expiry");
+        });
+        
         $("#btnDLCRRSave").on("click", function () {
             SaveDLCRRConfig();
+        });
+        $("#btnDLCRRToDLT").on("click", function () {
+            var id = $("#hdnDLCRRId").val();
+            SendPerpetualCampaignToDLT(id, "DLC Referral Reminder");
         });
         $("#btnDLCURSave").on("click", function () {
             SaveDLCURConfig();
         });
+        $("#btnDLCURToDLT").on("click", function () {
+            var id = $("#hdnDLCURId").val();
+            SendPerpetualCampaignToDLT(id, "DLC Update Reminder");
+        });
         $("#btnBUSave").on("click", function () {
             SaveBUConfig();
         });
+        $("#btnBUToDLT").on("click", function () {
+            var id = $("#hdnBUId").val();
+            SendPerpetualCampaignToDLT(id, "Balance Updates");
+        });
         $("#btnUploadedUsersSave").on("click", function () {
             SaveUploadedUsersConfig();
+        });
+        $("#btnUploadedUsersToDLT").on("click", function () {
+            var id = $("#hdnUploadedUsersId").val();
+            SendPerpetualCampaignToDLT(id, "Reminder Bulk Uploaded Users");
         });
 
         $('#rbtnBirthday').click(function () {
@@ -1343,9 +1396,11 @@
                 data: '{GroupId: ' + JSON.stringify($('#hdnGroupID').val()) + ',Type: ' + JSON.stringify(type) + '}',
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
-                success: function (result) {                    
-                    if (result != null)
+                success: function (result) {
+                   
+                    if (result != null) {
                         LoadCampaignControls(result, type);
+                    }
                     $("#divLoader").hide();
                 },
                 error: function (result) {
@@ -1388,6 +1443,12 @@
                 $('#ddlPointsUsedOrNot').val(edata.OnDayType);
                 $('#txtOnBirthdayScript').val(edata.OnDayScript);
                 $('#hdnBirthId').val(edata.Id);
+                if ($("#hdnBirthId").val() > 0) {
+                    $("#btnBirthdayToDLT").show();
+                }
+                else {
+                    $("#btnBirthdayToDLT").hide();
+                }
 
             }
 
@@ -1784,6 +1845,71 @@
                 }
             }
         }
+    }
+
+    function SendPerpetualCampaignToDLT(id, type) {       
+         $("#divLoader").show();
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("SendPerpetualCampaignToDLT", "CustomerOnBoarding")',
+                data: '{GroupId: ' + JSON.stringify($('#hdnGroupID').val()) + ',CampaignId: ' + JSON.stringify(id) + ',CampaignType: ' + JSON.stringify(type) + '}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (result) {
+                    var SuccessMessage = "Campaign sent for DLT Successfully !!!";
+                    if (type =="Birthday") {
+                        SuccessMessage = "Birthday Configuration sent for DLT Successfully !!!";
+                    }
+                    if (type == "Anniversary") {
+                        SuccessMessage = "Anniversary Campaign sent for DLT Successfully !!!";
+                    }
+                    if (type == "DLC Referral Reminder") {
+                        SuccessMessage = "DLC Referral Reminder Campaign sent for DLT Successfully !!!";
+                    }
+                    if (type == "DLC Update Reminder") {
+                        SuccessMessage = "DLC Update Reminder Campaign sent for DLT Successfully !!!";
+                    }
+                    if (type == "Balance Updates") {
+                        SuccessMessage = "Balance Updates Campaign sent for DLT Successfully !!!";
+                    }
+                    if (type == "Reminder Bulk Uploaded Users") {
+                        SuccessMessage = "Reminder Bulk Uploaded Users Campaign sent for DLT Successfully !!!";
+                    }
+                    if (type == "Inactive") {
+                        SuccessMessage = "Inactive Campaign sent for DLT Successfully !!!";
+                    }
+                    if (type == "Only Once Inactive") {
+                        SuccessMessage = "Only Once Inactive Campaign sent for DLT Successfully !!!";
+                    }
+                    if (type == "Non Redemption Inactive") {
+                        SuccessMessage = "Non Redemption Inactive Campaign sent for DLT Successfully !!!";
+                    }
+                    if (type == "Point Expiry") {
+                        SuccessMessage = "Point Expiry Campaign sent for DLT Successfully !!!";
+                    }
+                    
+                    if (result) {
+                        cuteAlert({
+                            type: "success",
+                            title: "Saved",
+                            message: SuccessMessage,
+                            buttonText: "Okay"
+                        })
+                    }
+                    else {
+                        cuteAlert({
+                            type: "error",
+                            title: "Oops..",
+                            message: "There is a problem while Sending for DLT",
+                            buttonText: "Okay"
+                        })
+                    }
+                    $("#divLoader").hide();
+                },
+                error: function (result) {                    
+                    $("#divLoader").hide();
+                }
+            });
     }
 
 </script>

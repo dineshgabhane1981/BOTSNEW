@@ -50,6 +50,12 @@ namespace BOTS_BL.Models
         public string TemplateType2 { get; set; }
 
         [StringLength(50)]
+        public string DLTStatus1 { get; set; }
+
+        [StringLength(50)]
+        public string DLTStatus2 { get; set; }
+
+        [StringLength(50)]
         public string AddedBy { get; set; }
 
         public DateTime? AddedDate { get; set; }

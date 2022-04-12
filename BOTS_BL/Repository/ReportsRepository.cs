@@ -227,13 +227,14 @@ namespace BOTS_BL.Repository
                         new SqlParameter("@pi_LoginId", loginId),
                         new SqlParameter("@pi_SearchData", searchData)).ToList<MemberSearchTxn>();
 
+                    //memberSearch.lstMemberSearchTxn = memberSearch.lstMemberSearchTxn.OrderByDescending(x => x.TxnDatetime).ToList();
                     foreach (var item in memberSearch.lstMemberSearchTxn)
                     {
                         if (!string.IsNullOrEmpty(item.TxnDatetime))
                         {
-                            var subDate = Convert.ToString(item.TxnDatetime).Substring(0, 10);
-                            var convertedDate = DateTime.ParseExact(subDate, "dd/MM/yyyy", CultureInfo.InvariantCulture)
-                            .ToString("MM/dd/yyyy", CultureInfo.InvariantCulture);
+                            var subDate = Convert.ToString(item.TxnDatetime);
+                            var convertedDate = DateTime.ParseExact(subDate, "dd/MM/yyyy HH:mm:ss", CultureInfo.InvariantCulture)
+                            .ToString("MM/dd/yyyy HH:mm:ss", CultureInfo.InvariantCulture);
                             item.TxnDatetime = convertedDate;
                         }
                         if (!string.IsNullOrEmpty(item.TxnUpdateDate))

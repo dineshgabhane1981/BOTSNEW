@@ -1644,6 +1644,12 @@ namespace WebApp.Controllers.OnBoarding
             return new JsonResult() { Data = status, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
 
-
+        public JsonResult SendPerpetualCampaignToDLT(string GroupId, string CampaignId,string CampaignType)
+        {
+            bool status = false;
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            status = OBR.SendPerpetualCampaignToDLT(GroupId, Convert.ToInt32(CampaignId), CampaignType, userDetails.LoginId);
+            return new JsonResult() { Data = status, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
+        }
     }
 }

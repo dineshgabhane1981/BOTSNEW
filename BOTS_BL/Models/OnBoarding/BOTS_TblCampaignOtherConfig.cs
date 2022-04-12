@@ -98,6 +98,21 @@ namespace BOTS_BL.Models
         public string TemplateType5 { get; set; }
 
         [StringLength(50)]
+        public string DLTStatus1 { get; set; }
+
+        [StringLength(50)]
+        public string DLTStatus2 { get; set; }
+
+        [StringLength(50)]
+        public string DLTStatus3 { get; set; }
+
+        [StringLength(50)]
+        public string DLTStatus4 { get; set; }
+
+        [StringLength(50)]
+        public string DLTStatus5 { get; set; }
+
+        [StringLength(50)]
         public string AddedBy { get; set; }
 
         public DateTime? AddedDate { get; set; }

@@ -783,6 +783,12 @@ namespace BOTS_BL.Repository
                             objData.AddedDate = oldData.AddedDate;
                         }
                     }
+                    else
+                    {
+                        objData.DLTStatus1 = "Submitted";
+                        objData.DLTStatus1 = "Submitted";
+                        objData.DLTStatus1 = "Submitted";
+                    }
                     context.BOTS_TblDLCLinkConfig.AddOrUpdate(objData);
                     context.SaveChanges();
                     status = true;
@@ -1398,9 +1404,56 @@ namespace BOTS_BL.Repository
                 }
             }
 
-            return  convertStr.Trim();
+            return convertStr.Trim();
         }
 
+        public bool SendPerpetualCampaignToDLT(string GroupId, int CampaignId, string CampaignType, string LoginId)
+        {
+            bool status = false;
+            try
+            {
+                using (var context = new CommonDBContext())
+                {
+                    if (CampaignType == "Birthday" || CampaignType == "Anniversary" || CampaignType == "DLC Update Reminder" || CampaignType == "Balance Updates" || CampaignType == "Reminder Bulk Uploaded Users" || CampaignType == "DLC Referral Reminder")
+                    {
+                        var objCampaign = context.BOTS_TblCampaignOtherConfig.Where(x => x.GroupId == GroupId && x.Id == CampaignId && x.CampaignType == CampaignType).FirstOrDefault();
+                        if (objCampaign != null)
+                        {
+                            objCampaign.DLTStatus1 = "Submitted";
+                            objCampaign.DLTStatus2 = "Submitted";
+                            objCampaign.DLTStatus3 = "Submitted";
+                            objCampaign.DLTStatus4 = "Submitted";
+                            objCampaign.DLTStatus5 = "Submitted";
+
+                            objCampaign.UpdatedBy = LoginId;
+                            objCampaign.UpdatedDate = DateTime.Now;
+                            context.BOTS_TblCampaignOtherConfig.AddOrUpdate(objCampaign);
+                            context.SaveChanges();
+                            status = true;
+                        }
+                    }
+                    if (CampaignType == "Inactive" || CampaignType == "Only Once Inactive" || CampaignType == "Non Redemption Inactive" || CampaignType == "Point Expiry")
+                    {
+                        var objCampaignLST = context.BOTS_TblCampaignInactive.Where(x => x.GroupId == GroupId && x.InactiveType == CampaignType).ToList();
+                        foreach(var item in objCampaignLST)
+                        {
+                            item.DLTStatus1= "Submitted";
+                            item.DLTStatus2 = "Submitted";
+                            item.UpdatedBy = LoginId;
+                            item.UpdatedDate = DateTime.Now;
+                            context.BOTS_TblCampaignInactive.AddOrUpdate(item);
+                            context.SaveChanges();
+                            status = true;
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, GroupId);
+            }
+            return status;
+        }
 
 
     }
