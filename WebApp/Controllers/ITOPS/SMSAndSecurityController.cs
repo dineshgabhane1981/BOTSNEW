@@ -79,6 +79,7 @@ namespace WebApp.Controllers.ITOPS
         {
             bool result = false;
             string GroupId = "";
+            
             try
             {
                 GroupId = (string)Session["GroupId"];
@@ -90,11 +91,14 @@ namespace WebApp.Controllers.ITOPS
 
                 string CustomerId = "";
                 bool DisableSMS = false;
+                
+
                 foreach (Dictionary<string, object> item in objData)
                 {
                     
                     CustomerId = Convert.ToString(item["CustomerId"]);
-                    string Disable = Convert.ToString(item["Disable"]);
+                    string OldMobileNo = Convert.ToString(item["OldMobileNo"]);
+                    string Disable = Convert.ToString(item["Disable"]);                   
                     if (Disable == "1")
                         DisableSMS = true;
                     

@@ -35,7 +35,7 @@
                                 <input type="hidden" id="hdnCustomerId3" />
                                 <table border="2" cellpadding="5" cellspacing="5">
                                     <tr position: absolute top: -9999px; left: -9998px;>
-                                        
+
                                         <th colspan="2" style="padding:10px;text-align:center;">Existing Member Details</th>
                                     </tr>
                                     <tr border: 1px solid #ccc;>
@@ -45,6 +45,10 @@
                                     <tr>
                                         <td style="padding:10px;">Mobile No</td>
                                         <td style="padding:10px;"><span id="spnMobileno3"></span></td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding:10px;">Old Mobile No</td>
+                                        <td style="padding:10px;"><span id="spnOldMobileno3"></span></td>
                                     </tr>
                                     <tr>
                                         <td style="padding:10px;">Card No</td>
@@ -187,6 +191,7 @@
             if (result.MemberName != null) {
             $("#spnMemberName3").text(result.MemberName);
             $("#spnMobileno3").text(result.MobileNo);
+            $("#spnOldMobileno3").text(result.OldMobileNo);
             $("#spnCardNo3").text(result.CardNo);
             $("#spnPtBalance3").text(result.PointsBalance);
             $("#spnEnrolledOutlet3").text(result.EnrolledOutletName);
@@ -208,6 +213,7 @@
             toastr.error('Member not present. Please check entered Mobile Number OR Card Number');
             $("#spnMemberName3").text("");
             $("#spnMobileno3").text("");
+            $("#spnOldMobileno3").text("");
             $("#spnCardNo3").text("");
             $("#spnPtBalance3").text("");
             $("#spnEnrolledOutlet3").text("");
@@ -277,6 +283,7 @@
             item = {}
             item["GroupID"] = $("#hdnGroupId").val();
             item["MobileNo"] = $("#txtMobileNo3").val();
+            item["OldMobileNo"] = $("#txtOldMobileNo3").val();
             item["OutletId"] = $("#ddlOutletList1").val();
             item["RedeemPoints"] = $("#txtPointsToRedeem").val();
             item["PartialEarnPoints"] = $("#txtPartialEarnPoints").val();

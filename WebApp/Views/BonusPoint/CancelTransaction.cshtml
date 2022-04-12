@@ -43,6 +43,10 @@
                     <td style="padding:10px;"><span id="spnMobilenoCancel"></span></td>
                 </tr>
                 <tr>
+                    <td style="padding:10px;">OldMobile No</td>
+                    <td style="padding:10px;"><span id="spnOldMobilenoCancel"></span></td>
+                </tr>
+                <tr>
                     <td style="padding:10px;">Card No</td>
                     <td style="padding:10px;"><span id="spnCardNoCancel"></span></td>
                 </tr>
@@ -251,6 +255,7 @@
                 if (result.objCustomerDetail != null) {
                     $("#spnMemberNameCancel").text(result.objCustomerDetail.CustomerName);
                     $("#spnMobilenoCancel").text(result.objCustomerDetail.MobileNo);
+                    $("#spnOldMobilenoCancel").text(result.objCustomerDetail.OldMobileNo);
                     $("#spnCardNoCancel").text(result.objCustomerDetail.CardNumber);
                     $("#spnPtBalanceCancel").text(result.objCustomerDetail.Points);
                     
@@ -329,7 +334,8 @@
             $('#txtRequestedDateCancel1').focus();
             return false;
         }
-        var MobileNo = $("#spnMobilenoCancel").text();
+         var MobileNo = $("#spnMobilenoCancel").text();
+         var OldMobileNo = $("#spnOldMobilenoCancel").text();
         var InvoiceAmt = $("#spnInvoiceAmtCancel").text();
         var ip_Date = $("#spnTransactionDateTimeCancelOriginal").text();
         if (confirm("Are you sure? You want to delete Transaction")) {

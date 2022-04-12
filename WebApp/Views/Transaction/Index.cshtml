@@ -42,6 +42,10 @@
                                     <td style="padding:10px;"><span id="spnMobilenoModify"></span></td>
                                 </tr>
                                 <tr>
+                                    <td style="padding:10px;">Old Mobile No</td>
+                                    <td style="padding:10px;"><span id="spnOldMobilenoModify"></span></td>
+                                </tr>
+                                <tr>
                                     <td style="padding:10px;">Card No</td>
                                     <td style="padding:10px;"><span id="spnCardNoModify"></span></td>
                                 </tr>
@@ -250,6 +254,7 @@
                 if (result.objCustomerDetail != null) {
                     $("#spnMemberNameModify").text(result.objCustomerDetail.CustomerName);
                     $("#spnMobilenoModify").text(result.objCustomerDetail.MobileNo);
+                    $("#spnOldMobilenoModify").text(result.objCustomerDetail.OldMobileNo);
                     $("#spnCardNoModify").text(result.objCustomerDetail.CardNumber);
                     $("#spnPtBalanceModify").text(result.objCustomerDetail.Points);
                     if (result.objCancelTxnModel != null) {

@@ -77,6 +77,7 @@ namespace WebApp.Controllers.ITOPS
                 bool IsSMS = false;
 
                 string MobileNo = "";
+                string OldMobileNo = "";
                 int BonusPoints = 0;
                 string BonusRemark = "";
                 string OutletId = "";
@@ -86,6 +87,7 @@ namespace WebApp.Controllers.ITOPS
                 {
 
                     MobileNo = Convert.ToString(item["MobileNo"]);
+                    OldMobileNo = Convert.ToString(item["OldMobileNo"]);
                     OutletId = Convert.ToString(item["OutletId"]);
                     BonusPoints = Convert.ToInt32(item["BonusPoints"]);
                     BonusRemark = Convert.ToString(item["BonusRemark"]);
@@ -153,6 +155,7 @@ namespace WebApp.Controllers.ITOPS
         {
             MemberData objCustomerDetail = new MemberData();
             CancelTxnViewModel objData = new CancelTxnViewModel();
+          
             if (!string.IsNullOrEmpty(InvoiceNo) && !string.IsNullOrEmpty(MobileNo))
             {
 
@@ -175,9 +178,11 @@ namespace WebApp.Controllers.ITOPS
         public ActionResult DeleteTransaction(string GroupId, string InvoiceNo, string MobileNo, string InvoiceAmt, string ip_Date, string RequestedBy, string RequestedForum, string RequestedDate)
         {
             SPResponse result = new SPResponse();
+            string OldMobileNo = "";
             try
             {
                 tblAudit objAudit = new tblAudit();
+                objAudit.OldMobileNo = OldMobileNo;
                 objAudit.GroupId = GroupId;
                 objAudit.RequestedFor = "Delete Transaction";
                 objAudit.RequestedEntity = "Delete Transaction for Invoice - " + InvoiceNo;
