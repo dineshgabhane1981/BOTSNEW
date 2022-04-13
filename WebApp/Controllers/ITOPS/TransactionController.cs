@@ -171,16 +171,14 @@ namespace WebApp.Controllers.ITOPS
                 bool IsSMS = false;
 
                 string CustomerId = "";
-                string MobileNo = "";
-                string OldMobileNo = "";
+                string MobileNo = "";             
                 string NewMobileNo = "";
                 
 
                 foreach (Dictionary<string, object> item in objData)
                 {
                     CustomerId = Convert.ToString(item["CustomerId"]);
-                    MobileNo = Convert.ToString(item["MobileNo"]);
-                    OldMobileNo = Convert.ToString(item["OldMobileNo"]);
+                    MobileNo = Convert.ToString(item["MobileNo"]);                   
                     NewMobileNo = Convert.ToString(item["NewMobileNo"]);                   
                     objAudit.GroupId = groupId;
                     objAudit.RequestedFor = "Mobile Number Change";

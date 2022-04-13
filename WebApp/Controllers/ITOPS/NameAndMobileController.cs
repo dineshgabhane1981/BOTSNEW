@@ -68,14 +68,12 @@ namespace WebApp.Controllers.ITOPS
                 bool IsSMS = false;
 
                 string CustomerId = "";
-                string Name = "";
-                string OldMobileNo = "";
+                string Name = "";               
                
                 foreach (Dictionary<string, object> item in objData)
                 {                    
                     CustomerId = Convert.ToString(item["CustomerId"]);
-                    Name = Convert.ToString(item["Name"]);
-                    OldMobileNo = Convert.ToString(item["OldMobileNo"]);
+                    Name = Convert.ToString(item["Name"]);                 
                     objAudit.GroupId = GroupId;
                     objAudit.RequestedFor = "Name Change";
                     objAudit.RequestedEntity = "CustomerId - " + CustomerId;

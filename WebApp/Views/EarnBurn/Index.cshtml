@@ -167,7 +167,7 @@
 
     function GetAddEarnData() {
 
-        alert("InsideGetData");
+        
 
         if ($('#txtMobileNo2').val() == "" && $('#txtCardNo2').val() == "") {
             toastr.error('Please enter Mobile Number OR Card Number');
@@ -179,9 +179,7 @@
         }
         $("#divLoader").show();
 
-        alert(JSON.stringify($('#hdnGroupId').val()));
-        alert(JSON.stringify($('#txtMobileNo2').val()));
-        alert(JSON.stringify($('#txtCardNo2').val()));
+        
 
         $.ajax({
             type: "POST",
@@ -211,8 +209,7 @@
                 else {
                     alert("InsideElse");
                     $("#spnMemberName2").text("");
-                    $("#spnMobileno2").text("");
-                    $("#spnOldMobileno2").text("");
+                    $("#spnMobileno2").text("");                   
                     $("#spnCardNo2").text("");
                     $("#spnPtBalance2").text("");
                     $("#spnEnrolledOutlet2").text("");
@@ -270,8 +267,7 @@
             var MemberData = [];
             item = {}
             item["GroupID"] = $("#hdnGroupId").val();
-            item["MobileNo"] = $("#txtMobileNo2").val();
-            item["OldMobileNo"] = $("#txtOldMobileNo2").val();
+            item["MobileNo"] = $("#txtMobileNo2").val();           
             item["OutletId"] = $("#ddlOutletList").val();
             item["TransactionDate"] = $("#dtTransaction").val();
             item["InvoiceNumber"] = $("#txtInvoiceNumber").val();

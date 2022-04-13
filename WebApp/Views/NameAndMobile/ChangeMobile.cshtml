@@ -173,8 +173,7 @@
                 else {
                     toastr.error('Member not present. Please check entered Mobile Number OR Card Number');
                     $("#spnMemberName1").text("");
-                    $("#spnMobileno1").text("");
-                    $("#spnOldMobileNo").text("");
+                    $("#spnMobileno1").text("");                   
                     $("#spnCardNo1").text("");
                     $("#spnPtBalance1").text("");
                     $("#spnEnrolledOutlet1").text("");
@@ -222,8 +221,7 @@
             item = {}
             item["GroupID"] = $("#hdnGroupId").val();
             item["CustomerId"] = $("#hdnCustomerId1").val();
-            item["MobileNo"] = $("#txtNewMobileNo").val();
-            item["OldMobileNo"] = $("#spnOldMobileNo").val();
+            item["MobileNo"] = $("#txtNewMobileNo").val();           
             item["RequestedBy"] = $("#txtRequestedByName1").val();
             item["RequestedForum"] = $('#ddlRequestedForum1 :selected').text();
             item["RequestedOn"] = $("#dtEnrolledOn2").val();

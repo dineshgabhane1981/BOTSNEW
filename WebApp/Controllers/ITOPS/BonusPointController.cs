@@ -76,8 +76,7 @@ namespace WebApp.Controllers.ITOPS
                 tblAudit objAudit = new tblAudit();
                 bool IsSMS = false;
 
-                string MobileNo = "";
-                string OldMobileNo = "";
+                string MobileNo = "";               
                 int BonusPoints = 0;
                 string BonusRemark = "";
                 string OutletId = "";
@@ -86,8 +85,7 @@ namespace WebApp.Controllers.ITOPS
                 foreach (Dictionary<string, object> item in objData)
                 {
 
-                    MobileNo = Convert.ToString(item["MobileNo"]);
-                    OldMobileNo = Convert.ToString(item["OldMobileNo"]);
+                    MobileNo = Convert.ToString(item["MobileNo"]);                  
                     OutletId = Convert.ToString(item["OutletId"]);
                     BonusPoints = Convert.ToInt32(item["BonusPoints"]);
                     BonusRemark = Convert.ToString(item["BonusRemark"]);
@@ -177,12 +175,10 @@ namespace WebApp.Controllers.ITOPS
 
         public ActionResult DeleteTransaction(string GroupId, string InvoiceNo, string MobileNo, string InvoiceAmt, string ip_Date, string RequestedBy, string RequestedForum, string RequestedDate)
         {
-            SPResponse result = new SPResponse();
-            string OldMobileNo = "";
+            SPResponse result = new SPResponse();           
             try
             {
-                tblAudit objAudit = new tblAudit();
-                objAudit.OldMobileNo = OldMobileNo;
+                tblAudit objAudit = new tblAudit();                
                 objAudit.GroupId = GroupId;
                 objAudit.RequestedFor = "Delete Transaction";
                 objAudit.RequestedEntity = "Delete Transaction for Invoice - " + InvoiceNo;

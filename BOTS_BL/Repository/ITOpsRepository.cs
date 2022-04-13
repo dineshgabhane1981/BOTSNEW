@@ -822,7 +822,7 @@ namespace BOTS_BL.Repository
                             contextNew.SaveChanges();
 
                             TransferPointsDetail transferPointsDetail = new TransferPointsDetail();
-                            transferPointsDetail.OldMobileNo = oldno;
+                            transferPointsDetail.OldMobileNo = MobileNo;
                             transferPointsDetail.NewMobileNo = NewMobileNo;
                             transferPointsDetail.Points = transferPoints;
                             transferPointsDetail.GroupId = GroupId;

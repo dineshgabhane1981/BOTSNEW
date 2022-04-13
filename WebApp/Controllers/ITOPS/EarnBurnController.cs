@@ -124,7 +124,7 @@ namespace WebApp.Controllers.ITOPS
                 string PointsToRedeem = "";
                 string PartialEarnPoints = "";
                 string TxnType = "";
-                string OldMobileNo = "";
+               
 
                 foreach (Dictionary<string, object> item in objData)
                 {
@@ -137,7 +137,7 @@ namespace WebApp.Controllers.ITOPS
                     PointsToRedeem = Convert.ToString(item["RedeemPoints"]);
                     PartialEarnPoints = Convert.ToString(item["PartialEarnPoints"]);
                     TxnType = Convert.ToString(item["TxnType"]);
-                    OldMobileNo = Convert.ToString(item["OldMobileNo"]);
+                    
 
                     objAudit.GroupId = GroupId;
                     objAudit.RequestedFor = "Redeem Point";
@@ -225,13 +225,12 @@ namespace WebApp.Controllers.ITOPS
                 string InvoiceAmount = "";
                 string OutletId = "";
                 decimal points = 0;
-                string OldMobileNo = "";
+               
 
                 foreach (Dictionary<string, object> item in objData)
                 {
                     GroupId = Convert.ToString(Session["GroupId"]);
-                    MobileNo = Convert.ToString(item["MobileNo"]);
-                    OldMobileNo = Convert.ToString(item["OldMobileNo"]);
+                    MobileNo = Convert.ToString(item["MobileNo"]);                  
                     OutletId = Convert.ToString(item["OutletId"]);
                     TransactionDate = Convert.ToString(item["TransactionDate"]);
                     InvoiceNumber = Convert.ToString(item["InvoiceNumber"]);

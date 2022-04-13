@@ -96,8 +96,7 @@ namespace WebApp.Controllers.ITOPS
                 foreach (Dictionary<string, object> item in objData)
                 {
                     
-                    CustomerId = Convert.ToString(item["CustomerId"]);
-                    string OldMobileNo = Convert.ToString(item["OldMobileNo"]);
+                    CustomerId = Convert.ToString(item["CustomerId"]);                   
                     string Disable = Convert.ToString(item["Disable"]);                   
                     if (Disable == "1")
                         DisableSMS = true;
