@@ -798,9 +798,7 @@ namespace BOTS_BL.Repository
         public SPResponse TransferPoints(string GroupId, string MobileNo,  string NewMobileNo, tblAudit objAudit)
         {
             SPResponse result = new SPResponse();
-
-            CustomerDetail objCustomerDetail = new CustomerDetail();
-
+            
             string connStr = objCustRepo.GetCustomerConnString(GroupId);
             using (var contextNew = new BOTSDBContext(connStr))
             {
@@ -812,8 +810,7 @@ namespace BOTS_BL.Repository
                         var objExistingNew = contextNew.CustomerDetails.Where(x => x.MobileNo == NewMobileNo).FirstOrDefault();
                         if (objExisting != null && objExistingNew != null)
                         {
-                            string oldno = objCustomerDetail.MobileNo;                         
-                            objCustomerDetail.OldMobileNo = oldno;
+                            string oldno = objExisting.MobileNo;
                             var transferPoints = objExisting.Points;
                             var AddPoints = objExisting.Points + objExistingNew.Points;
                             objExistingNew.Points = AddPoints;
