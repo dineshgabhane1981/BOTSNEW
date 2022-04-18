@@ -28,6 +28,8 @@ namespace BOTS_BL.Models
         public int? IntroDays1 { get; set; }
 
         public string IntroScript1 { get; set; }
+        public string IntroScript1DLT { get; set; }
+        
 
         [StringLength(100)]
         public string TemplateId1 { get; set; }
@@ -41,6 +43,7 @@ namespace BOTS_BL.Models
         public int? IntroDays2 { get; set; }
 
         public string IntroScript2 { get; set; }
+        public string IntroScript2DLT { get; set; }
 
         [StringLength(100)]
         public string TemplateId2 { get; set; }
@@ -57,6 +60,7 @@ namespace BOTS_BL.Models
         public string ReminderWhen1 { get; set; }
 
         public string ReminderScript1 { get; set; }
+        public string ReminderScript1DLT { get; set; }
 
         [StringLength(100)]
         public string TemplateId3 { get; set; }
@@ -73,6 +77,7 @@ namespace BOTS_BL.Models
         public string ReminderWhen2 { get; set; }
 
         public string ReminderScript2 { get; set; }
+        public string ReminderScript2DLT { get; set; }
 
         [StringLength(100)]
         public string TemplateId4 { get; set; }
@@ -87,6 +92,7 @@ namespace BOTS_BL.Models
         public string OnDayType { get; set; }
 
         public string OnDayScript { get; set; }
+        public string OnDayScriptDLT { get; set; }
 
         [StringLength(100)]
         public string TemplateId5 { get; set; }
@@ -111,6 +117,11 @@ namespace BOTS_BL.Models
 
         [StringLength(50)]
         public string DLTStatus5 { get; set; }
+        public string RejectReason1 { get; set; }
+        public string RejectReason2 { get; set; }
+        public string RejectReason3 { get; set; }
+        public string RejectReason4 { get; set; }
+        public string RejectReason5 { get; set; }
 
         [StringLength(50)]
         public string AddedBy { get; set; }

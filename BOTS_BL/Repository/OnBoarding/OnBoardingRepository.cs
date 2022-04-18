@@ -650,6 +650,15 @@ namespace BOTS_BL.Repository
 
             return objData;
         }
+        public List<BOTS_TblVariableWords> GetVariableWordsList()
+        {
+            List<BOTS_TblVariableWords> objData = new List<BOTS_TblVariableWords>();
+            using (var context = new CommonDBContext())
+            {
+                objData = context.BOTS_TblVariableWords.ToList();
+            }
+            return objData;
+        }
 
         public BOTS_TblSMSConfig GetCommunicationSMSConfigById(int Id)
         {
@@ -1435,9 +1444,9 @@ namespace BOTS_BL.Repository
                     if (CampaignType == "Inactive" || CampaignType == "Only Once Inactive" || CampaignType == "Non Redemption Inactive" || CampaignType == "Point Expiry")
                     {
                         var objCampaignLST = context.BOTS_TblCampaignInactive.Where(x => x.GroupId == GroupId && x.InactiveType == CampaignType).ToList();
-                        foreach(var item in objCampaignLST)
+                        foreach (var item in objCampaignLST)
                         {
-                            item.DLTStatus1= "Submitted";
+                            item.DLTStatus1 = "Submitted";
                             item.DLTStatus2 = "Submitted";
                             item.UpdatedBy = LoginId;
                             item.UpdatedDate = DateTime.Now;
@@ -1455,6 +1464,94 @@ namespace BOTS_BL.Repository
             return status;
         }
 
+        public bool AddVariableWord(string word)
+        {
+            bool status = false;
+            using (var context = new CommonDBContext())
+            {
+                var isexist = context.BOTS_TblVariableWords.Where(x => x.VariableWords == word).FirstOrDefault();
+                if (isexist == null)
+                {
+                    BOTS_TblVariableWords objData = new BOTS_TblVariableWords();
+                    objData.VariableWords = word;
+                    context.BOTS_TblVariableWords.AddOrUpdate(objData);
+                    context.SaveChanges();
+                    status = true;
+                }
+            }
+
+            return status;
+        }
+
+        public BOTS_TblCampaignOtherConfig GetCampaignOtherConfigForDLT(string groupId, string type)
+        {
+            BOTS_TblCampaignOtherConfig objData = new BOTS_TblCampaignOtherConfig();
+            using (var context = new CommonDBContext())
+            {
+                objData = context.BOTS_TblCampaignOtherConfig.Where(x => x.GroupId == groupId && x.CampaignType == type).FirstOrDefault();
+            }
+
+            return objData;
+        }
+        public bool UpdateBADLTStatus(int id, int statusid,string status,string loginid, string reason)
+        {
+            bool result = false;
+            using (var context = new CommonDBContext())
+            {
+                var objData = context.BOTS_TblCampaignOtherConfig.Where(x => x.Id == id).FirstOrDefault();
+                if(objData!=null)
+                {
+                    if (statusid == 1)
+                    {
+                        objData.DLTStatus1 = status;
+                        if (status == "Rejected")
+                        {
+                            objData.RejectReason1 = reason;
+                        }
+                    }
+                    if (statusid == 2)
+                    {
+                        objData.DLTStatus2 = status;
+                        if (status == "Rejected")
+                        {
+                            objData.RejectReason2 = reason;
+                        }
+                    }
+                    if (statusid == 3)
+                    {
+                        objData.DLTStatus3 = status;
+                        if (status == "Rejected")
+                        {
+                            objData.RejectReason3 = reason;
+                        }
+                    }
+                    if (statusid == 4)
+                    {
+                        objData.DLTStatus4 = status;
+                        if (status == "Rejected")
+                        {
+                            objData.RejectReason4 = reason;
+                        }
+                    }
+                    if (statusid == 5)
+                    {
+                        objData.DLTStatus5 = status;
+                        if (status == "Rejected")
+                        {
+                            objData.RejectReason5 = reason;
+                        }
+                    }
+                    
+                    objData.UpdatedBy = loginid;
+                    objData.UpdatedDate = DateTime.Now;
+                    context.BOTS_TblCampaignOtherConfig.AddOrUpdate(objData);
+                    context.SaveChanges();
+                    result = true;
+                }
+            }
+
+                return result;
+        }
 
     }
 }

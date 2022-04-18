@@ -61,6 +61,69 @@
         border-top-left-radius: 7px;
         border-top-right-radius: 7px;
     }
+
+    h2 {
+        color: #000;
+        text-align: center;
+        font-size: 2em;
+    }
+
+    .warpper {
+        display: grid;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .modal {
+        display: none; /* Hidden by default */
+        position: fixed; /* Stay in place */
+        z-index: 5 !important; /* Sit on top */
+        padding-top: 65px; /* Location of the box */
+        left: 120px;
+        top: 0;
+        width: 100%; /* Full width */
+        height: 100%; /* Full height */
+        overflow: auto; /* Enable scroll if needed */
+        background-color: rgb(0,0,0); /* Fallback color */
+        background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+    }
+
+    /* Modal Content */
+    .modal-content {
+        background-color: #fefefe;
+        margin: auto;
+        padding: 20px;
+        border: 1px solid #888;
+        width: 75%;
+        border-radius: 25px;
+    }
+
+    .close {
+        color: #aaaaaa;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+    }
+
+        .close:hover,
+        .close:focus {
+            color: #000;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+    input:read-only {
+        background-color: lightgray;
+    }
+
+    .outletStyle {
+        width: 20px;
+        height: 20px;
+        margin-right: 10px;
+        margin-bottom: 10px;
+        vertical-align: text-top;
+        cursor: pointer;
+    }
 </style>
 <div class="app-main__inner">
     <div class="row mb-3 card">
@@ -90,11 +153,11 @@
                                 <div style="float:right;"><button type="button" id="btnVariableWords" class="btn btn-primary">Variable Words</button></div>
                             </div>
                             
-                            <div id="dvSetDetailsForDLT" style="display:none;"></div>
-                           
+                            <div id="dvSetDetailsForDLT" style="display:none;"></div>                           
                         </div>
                         <div class="multisteps-form__panel m-3 list-box bg-white panel1" id="two-panel2">
                             Perpetual Campaigns
+                            @Html.Partial("~/Views/CustomerOnBoarding/_DLTPerpetualCampaign.cshtml")
                         </div>
                         <div class="multisteps-form__panel m-3 list-box bg-white panel1" id="three-panel2">
                             DLC Link
@@ -106,12 +169,30 @@
     </div>
 </div>
 
+<div id="VariableWordsModal" class="modal">
+    <div class="modal-content">
+        <div class="row" style="margin: 0;" id="dvVariableWordsConfig">
+            @Html.Partial("~/Views/CustomerOnBoarding/_VariableWordsConfig.cshtml")
+        </div>
+        <div class="row justify-content-end pr-4" style="margin-top:20px;margin-right:465px;">
+            <button type="button" id="btnVariableWordsPopupClose" class="btn btn-outline-primary cancel-btn"> Close</button>
+        </div>
+    </div>
+</div>
+
 <script>
     $(document).ready(function () {
         FillSetDropDown();
         $('#ddlCommunicationSet').change(function () {
             ShowSetDetails();
         });
+        $("#btnVariableWords").on("click", function () {            
+            $("#VariableWordsModal").show(1000);
+        });
+        $("#btnVariableWordsPopupClose").on("click", function () {
+            $("#VariableWordsModal").hide(1000);             
+        });
+        
     });
 
     function FillSetDropDown() {
@@ -142,7 +223,7 @@
             type: "post",
             contentType: "application/json; charset=utf-8",
             dataType: "json",
-            success: function (result) {                
+            success: function (result) {
                 $("#dvSetDetailsForDLT").html(result);
                 $("#dvSetDetailsForDLT").show(1000);
                 $("#divLoader").hide();
@@ -155,4 +236,5 @@
         });
     }
 
+    
 </script>

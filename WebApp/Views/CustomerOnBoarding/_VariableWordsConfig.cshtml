@@ -1,0 +1,68 @@
+﻿
+
+<div class="col-md-12 col-lg-12" style="margin-top:20px;">
+    <input id="txtNewWord" type="text" class="input100" />
+    <button type="button" id="btnAddNewWord" class="btn btn-primary">Add</button>
+</div>
+<div class="col-md-12 col-lg-12" id="dvVariableWordsList" style="margin-top:20px;">
+     
+</div>
+<script>
+    $(document).ready(function () {
+        LoadVariableWords();
+        $("#btnAddNewWord").on("click", function () {
+            AddNewWord();;
+        });
+    });
+    function LoadVariableWords() {
+        $.ajax({
+            url: '@Url.Action("GetVariableWordsList", "CustomerOnBoarding")',
+            //data: "{'GroupId': '" + $('#hdnGroupID').val() + "'}",
+            type: "post",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (result) {
+                $("#dvVariableWordsList").html("");
+                $("#dvVariableWordsList").html(result);
+            },
+            error: function (result) {
+                $("#dvVariableWordsList").html("");
+                $("#dvVariableWordsList").html(result.responseText);
+            }
+        });
+    }
+    function AddNewWord() {
+         $.ajax({
+            url: '@Url.Action("AddVariableWords", "CustomerOnBoarding")',
+             data: "{'NewWord': '" + $('#txtNewWord').val() + "'}",
+            type: "post",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+             success: function (result) {
+                 if (result) {
+                     cuteAlert({
+                         type: "success",
+                         title: "Added",
+                         message: "Variable Words added Successfully !!!",
+                         buttonText: "Okay"
+                     }).then(() => {
+                         LoadVariableWords();
+                         $('#txtNewWord').val("");
+                    })
+
+                 }
+                 else {
+                     cuteAlert({
+                         type: "error",
+                         title: "Oops..",
+                         message: "Variable Words already Exist",
+                         buttonText: "Okay"
+                     })
+                 }
+             },
+            error: function (result) {
+                ManageVariableWords();
+            }
+        });
+    }
+</script>
