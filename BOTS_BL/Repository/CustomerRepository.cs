@@ -14,13 +14,15 @@ using BOTS_BL;
 using System.Data.Entity.Validation;
 using System.Net;
 using System.Web.Script.Serialization;
+using DocumentFormat.OpenXml.InkML;
+using System.Runtime.Remoting.Contexts;
 
 namespace BOTS_BL.Repository
 {
     public class CustomerRepository
     {
         Exceptions newexception = new Exceptions();
-
+       
         public List<SelectListItem> GetRetailCategory()
         {
             List<SelectListItem> lstRetailCategory = new List<SelectListItem>();
@@ -276,6 +278,12 @@ namespace BOTS_BL.Repository
             using (var context = new CommonDBContext())
             {
                 objGroupDetail = context.tblGroupDetails.Where(x => x.GroupId == GroupId).FirstOrDefault();
+            }
+            var connStr = GetCustomerConnString(Convert.ToString(GroupId));
+            using (var contextNew = new BOTSDBContext(connStr))
+            {
+                var ticketSize = contextNew.TransactionMasters.Average(x => x.InvoiceAmt);
+                objGroupDetail.AverageTicket = Math.Round(Convert.ToDouble(ticketSize),2);
             }
             return objGroupDetail;
         }
@@ -570,7 +578,30 @@ namespace BOTS_BL.Repository
                 using (var contextNew = new BOTSDBContext(ConnectionString))
                 {
                     lstOutlets = contextNew.OutletDetails.Where(x => x.GroupId == GroupId).ToList();
+                    foreach(var item in lstOutlets)
+                    {
+                        item.ProgramStartDate = contextNew.TransactionMasters.Where(x => x.CounterId.Contains(item.OutletId)).OrderBy(y => y.Datetime).Select(z => z.Datetime).FirstOrDefault();
+                        item.ProgramRenewalDate = item.ProgramStartDate.Value.AddYears(1);
+                        var day = item.ProgramStartDate.Value.Day;
+                        var month = item.ProgramStartDate.Value.Month;
+                        var year = item.ProgramStartDate.Value.Year;
+                        var currentYear = DateTime.Today.Year;
+
+                        DateTime nextRenewal = new DateTime(currentYear, month, day);
+                        if(nextRenewal < DateTime.Today)
+                        {
+                            item.ProgramRenewalDate = nextRenewal.AddYears(1);
+                        }
+                        else
+                        {
+                            item.ProgramRenewalDate = nextRenewal;
+                        }
+
+                    }
+                    //var ProgramStartDate = contextNew.TransactionMasters.Where(x => x.CounterId.Contains(OutletId)).OrderBy(y=>y.Datetime).Select(z=>z.Datetime).FirstOrDefault();
+                    
                 }
+                
             }
             catch (Exception ex)
             {

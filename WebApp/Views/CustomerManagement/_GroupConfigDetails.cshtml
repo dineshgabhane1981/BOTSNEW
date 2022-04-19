@@ -69,7 +69,7 @@
 
 <div class="row col-md-12 col-lg-12 p-2">
     <div class="col-md-3 col-lg-3">
-        <b>   Group Name </b> <br /> @Model.objGroupDetails.GroupName
+        <b>   Group Name </b> <br /> @Model.objGroupDetails.GroupName <br /> <b>Average Ticket </b> @Model.objGroupDetails.AverageTicket
     </div>
     <div class="col-md-4 col-lg-4">
         <b>Brand Name </b><br />
@@ -234,21 +234,26 @@
                     <th>Pincode</th>
                     <th>Geo Lat Long</th>
                     <th>Mobile No (for Octa XS)</th>
+                    <th>Program Start Date</th>
+                    <th>Renewal Date</th>
                 </tr>
                 @foreach (var item in Model.lstOutlets)
                 {
-                    <tr>
-                        <td>@item.OutletName</td>
-                        <td style="text-align:center;">--</td>
-                        <td>@item.AuthorisedPerson</td>
-                        <td>@item.ContactNo</td>
-                        <td>@item.EmailId</td>
-                        <td>@item.Address</td>
-                        <td>@item.City</td>
-                        <td>@item.PinCode</td>
-                        <td>Latitude - @item.Latitude <br /> Longitude - @item.Longitude</td>
-                        <td style="text-align:center;">--</td>
-                    </tr>
+            <tr>
+                <td>@item.OutletName</td>
+                <td style="text-align:center;">--</td>
+                <td>@item.AuthorisedPerson</td>
+                <td>@item.ContactNo</td>
+                <td>@item.EmailId</td>
+                <td>@item.Address</td>
+                <td>@item.City</td>
+                <td>@item.PinCode</td>
+                <td>Latitude - @item.Latitude <br /> Longitude - @item.Longitude</td>
+                <td style="text-align:center;">--</td>
+                <td>@item.ProgramStartDate.Value.ToString("dd-MM-yyyy")</td>
+                <td>@item.ProgramRenewalDate.Value.ToString("dd-MM-yyyy")</td>
+                
+            </tr>
                 }
             </table>
         </div>
