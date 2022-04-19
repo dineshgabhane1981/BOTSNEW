@@ -95,6 +95,11 @@
             </div>
         </div>
     </div>
+    <div class="col-md-12 col-lg-12" style="text-align:center;display:none;" id="divRejectReason1">
+        <textarea id="txtRejectReason1" rows="6" cols="40" class="input100"></textarea>
+        <button type="button" id="btnRejectSubmit1" onclick="RejectBASubmit(this);" class="btn btn-primary" style="margin-left: 20px; margin-bottom:25px;">Submit</button>
+        <button type="button" id="btnRejectCancel1" onclick="RejectBACancel(this);" class="btn btn-primary" style="margin-left: 20px; margin-bottom:25px;">Cancel</button><br />
+    </div>
 </div>
 
 <div style="float:left; border:1px solid grey;border-radius:10px;margin-bottom:10px;" class="col-md-12 col-lg-12">
@@ -379,10 +384,28 @@
         var status = "InProgress";
         var id = $("#hdnOtherConfigId").val();
         UpdateBAStatus(id, statusid, status, "");
-
     }
 
-    function UpdateBAStatus(id, statusid,status, reason) {        
+    function RejectBATemplate(control) {        
+        var id = control.id.substr(11, 1);
+        $("#divRejectReason" + id).show(1000);
+    }
+    function RejectBACancel(control) {
+        var id = control.id.substr(15, 1);
+        $("#divRejectReason" + id).hide(1000);
+    }
+
+    function RejectBASubmit(control) {        
+        var statusid = control.id.substr(15, 1);
+        var id = $("#hdnOtherConfigId").val();
+        var RejectReason = $("#txtRejectReason" + statusid).val();
+        var status = "Rejected";
+        UpdateBAStatus(id, statusid, status, RejectReason);
+        $("#divRejectReason" + statusid).hide(1000);
+        $("#spnRejectStatus" + statusid).html("<b>Reason</b> - " + RejectReason);
+    }
+
+    function UpdateBAStatus(id, statusid, status, reason) {        
          $("#divLoader").show();
             $.ajax({
                 type: "POST",
@@ -421,4 +444,6 @@
             });
 
     }
+
+
 </script>

@@ -407,7 +407,9 @@
     }
 
     function RejectCancelTemplate(control) {
-        var id = control.id.substr(15, 1);
+        var idlength = control.id.length;
+        var len = parseFloat(idlength) - 15;
+        var id = control.id.substr(15, len.length);
         $("#divRejectReason" + id).hide(1000);
     }
 
