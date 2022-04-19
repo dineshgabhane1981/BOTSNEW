@@ -131,33 +131,7 @@
                                     Burn DLT Script <br /> <textarea id="txtSMSBurnDLT" rows="6" cols="40" class="input100" disabled>@item.SMSScriptDLT</textarea>
                                 </div>
                             </div>
-                        }
-                        @*@if (item.MessageId == 103)
-                            {
-                                <div style="float:left;" class="col-md-4 col-lg-4">
-                                    <div style="margin-top: 10px;">
-                                        Cancel Earn Script <br /> <textarea id="txtSMSCancelEarn" rows="6" cols="40" class="input100" @DLTStatus>@item.SMSScript</textarea>
-                                    </div>
-                                </div>
-                                <div style="float:left;" class="col-md-4 col-lg-4">
-                                    <div style=" margin-top: 10px;">
-                                        Cancel Earn DLT Script <br /> <textarea id="txtSMSCancelEarnDLT" rows="6" cols="40" class="input100" disabled>@item.SMSScriptDLT</textarea>
-                                    </div>
-                                </div>
-                            }
-                            @if (item.MessageId == 104)
-                            {
-                                <div style="float:left;" class="col-md-4 col-lg-4">
-                                    <div style="margin-top: 10px;">
-                                        Cancel Burn Script <br /> <textarea id="txtSMSCancelBurn" rows="6" cols="40" class="input100" @DLTStatus>@item.SMSScript</textarea>
-                                    </div>
-                                </div>
-                                <div style="float:left;" class="col-md-4 col-lg-4">
-                                    <div style=" margin-top: 10px;">
-                                        Cancel Burn DLT Script <br /> <textarea id="txtSMSCancelBurnDLT" rows="6" cols="40" class="input100" disabled>@item.SMSScriptDLT</textarea>
-                                    </div>
-                                </div>
-                            }*@
+                        }                        
                         @if (item.MessageId == 105)
                         {
                             <div style="float:left;" class="col-md-4 col-lg-4">
@@ -249,21 +223,17 @@
                             <button type="button" id="@btnRejectCancel" onclick="RejectCancelTemplate(this);" class="btn btn-primary" style="margin-left: 20px; margin-bottom:25px;">Cancel</button><br />
                         </div>
                     </div>
-
                 }
             }
         </div>
-
     }
 </div>
 
 <script>
     $(document).ready(function () {
-
         EventChangeOfOriginalToDLT();
         EventChangeOfOriginalToDLTNew();
     });
-
 
     function ConvertValuesToDLT(fromId, toId) {
         var EnrollmentText = $("#" + fromId).val();
@@ -283,25 +253,13 @@
                 error: function (result) {
                     $("#divLoader").hide();
                 }
-            });
-        //var count = 100;
-        //for (var i = 1; i <= count; i++) {
-        //    if (i < 10) {
-        //        EnrollmentText = EnrollmentText.replace("#0" + i, "{var}");
-        //    }
-        //    else {
-        //        EnrollmentText = EnrollmentText.replace("#" + i, "{var}");
-        //    }
-        //}
-        //$("#" + toId).val(EnrollmentText);
+            });        
     }
 
     function EventChangeOfOriginalToDLT() {
         ConvertValuesToDLT("txtSMSEnrollment", "txtSMSEnrollmentDLT");
         ConvertValuesToDLT("txtSMSEarn", "txtSMSEarnDLT");
         ConvertValuesToDLT("txtSMSBurn", "txtSMSBurnDLT");
-        //ConvertValuesToDLT("txtSMSCancelEarn", "txtSMSCancelEarnDLT");
-        //ConvertValuesToDLT("txtSMSCancelBurn", "txtSMSCancelBurnDLT");
         ConvertValuesToDLT("txtSMSOTP", "txtSMSOTPDLT");
         ConvertValuesToDLT("txtSMSBalanceInquiry", "txtSMSBalanceInquiryDLT");
         ConvertValuesToDLT("txtSMSAnyCancel", "txtSMSAnyCancelDLT");
@@ -318,12 +276,6 @@
         $("#txtSMSBurn").focusout(function () {
             ConvertValuesToDLT("txtSMSBurn", "txtSMSBurnDLT");
         });
-        //$("#txtSMSCancelEarn").focusout(function () {
-        //    ConvertValuesToDLT("txtSMSCancelEarn", "txtSMSCancelEarnDLT");
-        //});
-        //$("#txtSMSCancelBurn").focusout(function () {
-        //    ConvertValuesToDLT("txtSMSCancelBurn", "txtSMSCancelBurnDLT");
-        //});
         $("#txtSMSOTP").focusout(function () {
             ConvertValuesToDLT("txtSMSOTP", "txtSMSOTPDLT");
         });
@@ -338,8 +290,7 @@
         });
     }
 
-    function SaveTemplate(control) {
-        //var id = control.id.substr(7, 1);
+    function SaveTemplate(control) {       
         var idlength = control.id.length;
         var len = parseFloat(idlength) - 7;
         var id = control.id.substr(7, len.length);
@@ -363,15 +314,7 @@
         if (messageId == 102) {
             saveitem["Script"] = $("#txtSMSBurn").val();
             saveitem["ScriptDLT"] = $("#txtSMSBurnDLT").val();
-        }
-        if (messageId == 103) {
-            saveitem["Script"] = $("#txtSMSCancelEarn").val();
-            saveitem["ScriptDLT"] = $("#txtSMSCancelEarnDLT").val();
-        }
-        if (messageId == 104) {
-            saveitem["Script"] = $("#txtSMSCancelBurn").val();
-            saveitem["ScriptDLT"] = $("#txtSMSCancelBurnDLT").val();
-        }
+        }        
         if (messageId == 105) {
             saveitem["Script"] = $("#txtSMSOTP").val();
             saveitem["ScriptDLT"] = $("#txtSMSOTPDLT").val();
@@ -448,7 +391,6 @@
         var idlength = control.id.length;
         var len = parseFloat(idlength) - 9;
         var id = control.id.substr(9, len.length);
-        //var id = control.id.substr(9, 1);
         $("#divRejectReason" + id).show(1000);
     }
 
@@ -489,15 +431,7 @@
         if (messageId == 102) {
             saveitem["Script"] = $("#txtSMSBurn").val();
             saveitem["ScriptDLT"] = $("#txtSMSBurnDLT").val();
-        }
-        if (messageId == 103) {
-            saveitem["Script"] = $("#txtSMSCancelEarn").val();
-            saveitem["ScriptDLT"] = $("#txtSMSCancelEarnDLT").val();
-        }
-        if (messageId == 104) {
-            saveitem["Script"] = $("#txtSMSCancelBurn").val();
-            saveitem["ScriptDLT"] = $("#txtSMSCancelBurnDLT").val();
-        }
+        }        
         if (messageId == 105) {
             saveitem["Script"] = $("#txtSMSOTP").val();
             saveitem["ScriptDLT"] = $("#txtSMSOTPDLT").val();

@@ -1,0 +1,70 @@
+﻿
+<style>
+    .rbtnClass {
+        height: 20px;
+        width: 20px;
+        vertical-align: middle;
+        cursor: pointer;
+        margin-left: 10px;
+    }
+</style>
+
+<div style="margin-bottom:15px;margin-top:15px;">
+    <input id="rbtnBirthday" name="campaign" type="radio" checked class="rbtnClass"> Birthday
+    <input id="rbtnAnniversary" name="campaign" type="radio" class="rbtnClass"> Anniversary
+    <input id="rbtnInactive" name="campaign" type="radio" class="rbtnClass"> Inactive
+    <input id="rbtnOnlyOnceInactive" name="campaign" type="radio" class="rbtnClass"> Only Once Inactive
+    <input id="rbtnNonRedeemptionInactive" name="campaign" type="radio" class="rbtnClass"> Non Redeemption Inactive
+    <input id="rbtnPointsExpiry" name="campaign" type="radio" class="rbtnClass"> Points Expiry <br /><br />
+    <input id="rbtnDLCRR" name="campaign" type="radio" class="rbtnClass"> DLC Referral Reminder
+    <input id="rbtnDLCUR" name="campaign" type="radio" class="rbtnClass"> DLC Update Reminder
+    <input id="rbtnBalanceUpdate" name="campaign" type="radio" class="rbtnClass"> Points Balance
+    <input id="rbtnBUURNew" name="campaign" type="radio" class="rbtnClass"> Reminder to Bulk Uploaded Users
+
+</div>
+
+<div id="dvCampaignDLT">
+
+</div>
+
+<script>
+    $(document).ready(function () {
+        LoadCampaign("Birthday");
+        $('#rbtnBirthday').click(function () {
+            LoadCampaign("Birthday");
+        });
+        $('#rbtnAnniversary').click(function () {
+            LoadCampaign("Anniversary");
+        });
+        $('#rbtnInactive').click(function () {
+            LoadCampaign("Inactive");
+        });
+    });
+
+    function LoadCampaign(type) {
+        if (type == "Birthday" || type == "Anniversary") {
+            $("#divLoader").show();
+            $.ajax({
+                url: '@Url.Action("GetCampaignOtherConfigForDLT", "CustomerOnBoarding")',
+                data: '{GroupId: ' + JSON.stringify($('#hdnGroupID').val()) + ',Type: ' + JSON.stringify(type) + '}',
+                type: "post",
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (result) {
+                    $("#dvCampaignDLT").html(result);
+                    $("#dvCampaignDLT").show(100);
+                    $("#divLoader").hide();
+                },
+                error: function (result) {
+                    $("#dvCampaignDLT").html(result.responseText);
+                    $("#dvCampaignDLT").show(100);
+                    $("#divLoader").hide();
+                }
+            });
+        }
+        else {            
+            $("#dvCampaignDLT").html("");
+            $("#dvCampaignDLT").hide(1000);
+        }
+    }
+</script>
