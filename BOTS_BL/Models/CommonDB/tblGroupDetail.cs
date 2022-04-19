@@ -19,6 +19,7 @@ namespace BOTS_BL.Models
         [Required]
         [StringLength(250)]
         public string GroupName { get; set; }
+        public string LanguagePreference { get; set; }       
 
         public int ProductType { get; set; }
 
