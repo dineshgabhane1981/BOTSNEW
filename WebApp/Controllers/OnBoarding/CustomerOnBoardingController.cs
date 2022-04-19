@@ -230,7 +230,7 @@ namespace WebApp.Controllers.OnBoarding
         {
             OnBoardingSalesViewModel objData = new OnBoardingSalesViewModel();
             objData.lstSMSConfig = OBR.GetCommunicationSMSConfigForDLT(GroupId,Convert.ToInt32(SetId));
-            return PartialView("_DLTCommunicationView", objData);
+            return PartialView("_DLTCommunication", objData);
            
         }
 
@@ -1650,6 +1650,34 @@ namespace WebApp.Controllers.OnBoarding
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
             status = OBR.SendPerpetualCampaignToDLT(GroupId, Convert.ToInt32(CampaignId), CampaignType, userDetails.LoginId);
             return new JsonResult() { Data = status, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
+        }
+        public ActionResult GetVariableWordsList()
+        {            
+           var  objData = OBR.GetVariableWordsList();
+            return PartialView("_VariableWordsList", objData);
+        }
+        public JsonResult AddVariableWords(string NewWord)
+        {
+            bool status = false;
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            status = OBR.AddVariableWord(NewWord);
+            return new JsonResult() { Data = status, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
+        }
+
+        public ActionResult GetCampaignOtherConfigForDLT(string GroupId,string Type)
+        {
+            OnBoardingSalesViewModel objDataView = new OnBoardingSalesViewModel();
+            ViewBag.TempleteType = objDataView.TempleteType();
+            var objData = OBR.GetCampaignOtherConfigForDLT(GroupId, Type);
+            return PartialView("_DLTBirthdayAndAnniversary", objData);
+        }
+
+        public ActionResult UpdateBADLTStatus(string id, string statusid, string status,string reason)
+        {
+            bool result = false;
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            result = OBR.UpdateBADLTStatus(Convert.ToInt32(id), Convert.ToInt32(statusid), status, userDetails.LoginId, reason);
+            return new JsonResult() { Data = result, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
     }
 }

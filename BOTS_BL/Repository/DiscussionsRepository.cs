@@ -280,13 +280,13 @@ namespace BOTS_BL.Repository
             List<SelectListItem> lstRMAssigned = new List<SelectListItem>();
             using (var context = new CommonDBContext())
             {
-                var raised = context.CustomerLoginDetails.Where(x => x.LoginType == "7" && x.LoginType =="6").ToList();
+                var raised = context.tblRMAssigneds.Where(x => x.IsActive == true).ToList();
                 lstRMAssigned.Add(new SelectListItem() { Text = "--Select--", Value = "0" });
                 foreach (var item in raised)
                 {
                     lstRMAssigned.Add(new SelectListItem
                     {
-                        Text = item.UserName,
+                        Text = item.RMAssignedName,
                         Value = Convert.ToString(item.LoginId)
                     });
                 }

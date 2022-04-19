@@ -1,0 +1,19 @@
+﻿@model List<BOTS_BL.Models.BOTS_TblVariableWords>
+
+<table border="1" cellpadding="10" cellspacing="10">
+    <thead>
+        <tr>
+            <th>Variable Words</th>
+        </tr>
+    </thead>
+    <tbody>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.VariableWords</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
