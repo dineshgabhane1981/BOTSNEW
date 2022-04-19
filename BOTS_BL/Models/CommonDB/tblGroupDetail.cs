@@ -19,6 +19,7 @@ namespace BOTS_BL.Models
         [Required]
         [StringLength(250)]
         public string GroupName { get; set; }
+        public string LanguagePreference { get; set; }       
 
         public int ProductType { get; set; }
 
@@ -99,7 +100,10 @@ namespace BOTS_BL.Models
         public string CityName { get; set; }
 
         [NotMapped]
-        public string RMTeamName { get; set; }        
+        public string RMTeamName { get; set; }
+
+        [NotMapped]
+        public double AverageTicket { get; set; }
 
     }
 }

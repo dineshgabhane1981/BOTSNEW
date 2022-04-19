@@ -279,6 +279,12 @@ namespace BOTS_BL.Repository
             {
                 objGroupDetail = context.tblGroupDetails.Where(x => x.GroupId == GroupId).FirstOrDefault();
             }
+            var connStr = GetCustomerConnString(Convert.ToString(GroupId));
+            using (var contextNew = new BOTSDBContext(connStr))
+            {
+                var ticketSize = contextNew.TransactionMasters.Average(x => x.InvoiceAmt);
+                objGroupDetail.AverageTicket = Math.Round(Convert.ToDouble(ticketSize),2);
+            }
             return objGroupDetail;
         }
 
