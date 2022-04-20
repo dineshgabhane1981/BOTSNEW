@@ -71,7 +71,7 @@
     <div class="col-md-3 col-lg-3">
         <b>   Group Name </b> <br /> @Model.objGroupDetails.GroupName <br /> <b>Average Ticket </b> @Model.objGroupDetails.AverageTicket
     </div>
-    <div class="col-md-4 col-lg-4">
+    <div class="col-md-2 col-lg-2">
         <b>Brand Name </b><br />
         @{
             var count = 0;
@@ -96,15 +96,18 @@
             }
 
         }
+
+        <br /><b>Annual Revenue Target</b>
     </div>
     <div class="col-md-2 col-lg-2">
         <b>Member Base</b><br />
         @String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(Model.objGroupConfig.MemberBase))
-
     </div>
-    <div class="col-md-3 col-lg-3"><img src="@Model.objGroupDetails.Logo" style="width:200px;" alt="Logo"></div>
-</div>
-
+    <div class="col-md-2 col-lg-2">
+        <b>   Language Preference </b> <br /> @Model.objGroupDetails.LanguagePreference
+    </div>
+        <div class="col-md-3 col-lg-3"><img src="@Model.objGroupDetails.Logo" style="width:200px;" alt="Logo"></div>
+ </div>   
 <input class="radio1" id="one1" name="group" type="radio" checked>
 <input class="radio1" id="two1" name="group" type="radio">
 <input class="radio1" id="three1" name="group" type="radio">
