@@ -1493,13 +1493,13 @@ namespace BOTS_BL.Repository
 
             return objData;
         }
-        public bool UpdateBADLTStatus(int id, int statusid,string status,string loginid, string reason)
+        public bool UpdateBADLTStatus(int id, int statusid, string status, string loginid, string reason)
         {
             bool result = false;
             using (var context = new CommonDBContext())
             {
                 var objData = context.BOTS_TblCampaignOtherConfig.Where(x => x.Id == id).FirstOrDefault();
-                if(objData!=null)
+                if (objData != null)
                 {
                     if (statusid == 1)
                     {
@@ -1541,7 +1541,7 @@ namespace BOTS_BL.Repository
                             objData.RejectReason5 = reason;
                         }
                     }
-                    
+
                     objData.UpdatedBy = loginid;
                     objData.UpdatedDate = DateTime.Now;
                     context.BOTS_TblCampaignOtherConfig.AddOrUpdate(objData);
@@ -1550,6 +1550,96 @@ namespace BOTS_BL.Repository
                 }
             }
 
+            return result;
+        }
+
+        public bool SaveBADLTConfig(int id, int statusid, string status, string IntroDays,string IntroDaysDLT,string TemplateId,string TemplateName,string TemplateType, string loginid)
+        {
+            bool result = false;
+            try
+            {
+                using (var context = new CommonDBContext())
+                {
+                    var existingObj = context.BOTS_TblCampaignOtherConfig.Where(x => x.Id == id).FirstOrDefault();
+                    if (existingObj != null)
+                    {
+                        if (!string.IsNullOrEmpty(status))
+                        {
+                            if (statusid == 1)
+                            {
+                                existingObj.DLTStatus1 = status;
+                            }
+                            if (statusid == 2)
+                            {
+                                existingObj.DLTStatus2 = status;
+                            }
+                            if (statusid == 3)
+                            {
+                                existingObj.DLTStatus3 = status;
+                            }
+                            if (statusid == 4)
+                            {
+                                existingObj.DLTStatus4 = status;
+                            }
+                            if (statusid == 5)
+                            {
+                                existingObj.DLTStatus5 = status;
+                            }
+                        }
+                        if (statusid == 1)
+                        {
+                            existingObj.IntroScript1 = IntroDays;
+                            existingObj.IntroScript1DLT = IntroDaysDLT;
+                            existingObj.TemplateId1 = TemplateId;
+                            existingObj.TemplateName1 = TemplateName;
+                            existingObj.TemplateType1 = TemplateType;
+                        }
+                        if (statusid == 2)
+                        {
+                            existingObj.IntroScript2 = IntroDays;
+                            existingObj.IntroScript2DLT = IntroDaysDLT;
+                            existingObj.TemplateId2 = TemplateId;
+                            existingObj.TemplateName2 = TemplateName;
+                            existingObj.TemplateType2 = TemplateType;
+                        }
+                        if (statusid == 3)
+                        {
+                            existingObj.ReminderScript1 = IntroDays;
+                            existingObj.ReminderScript1DLT = IntroDaysDLT;
+                            existingObj.TemplateId3 = TemplateId;
+                            existingObj.TemplateName3 = TemplateName;
+                            existingObj.TemplateType3 = TemplateType;
+                        }
+                        if (statusid == 4)
+                        {
+                            existingObj.ReminderScript2 = IntroDays;
+                            existingObj.ReminderScript2DLT = IntroDaysDLT;
+                            existingObj.TemplateId4 = TemplateId;
+                            existingObj.TemplateName4 = TemplateName;
+                            existingObj.TemplateType4 = TemplateType;
+                        }
+                        if (statusid == 5)
+                        {
+                            existingObj.OnDayScript = IntroDays;
+                            existingObj.OnDayScriptDLT = IntroDaysDLT;
+                            existingObj.TemplateId5 = TemplateId;
+                            existingObj.TemplateName5 = TemplateName;
+                            existingObj.TemplateType5 = TemplateType;
+                        }
+
+                        existingObj.UpdatedBy = loginid;
+                        existingObj.UpdatedDate = DateTime.Now;
+                        context.BOTS_TblCampaignOtherConfig.AddOrUpdate(existingObj);
+                        context.SaveChanges();
+                        result = true;
+                    }
+                }
+            }
+            catch(Exception ex)
+            {
+                newexception.AddException(ex, "SaveBADLTConfig");
+            }
+                
                 return result;
         }
 

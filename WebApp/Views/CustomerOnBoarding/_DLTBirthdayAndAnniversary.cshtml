@@ -386,7 +386,7 @@
         UpdateBAStatus(id, statusid, status, "");
     }
 
-    function RejectBATemplate(control) {        
+    function RejectBATemplate(control) {
         var id = control.id.substr(11, 1);
         $("#divRejectReason" + id).show(1000);
     }
@@ -395,7 +395,7 @@
         $("#divRejectReason" + id).hide(1000);
     }
 
-    function RejectBASubmit(control) {        
+    function RejectBASubmit(control) {
         var statusid = control.id.substr(15, 1);
         var id = $("#hdnOtherConfigId").val();
         var RejectReason = $("#txtRejectReason" + statusid).val();
@@ -405,7 +405,7 @@
         $("#spnRejectStatus" + statusid).html("<b>Reason</b> - " + RejectReason);
     }
 
-    function UpdateBAStatus(id, statusid, status, reason) {        
+    function UpdateBAStatus(id, statusid, status, reason) {
          $("#divLoader").show();
             $.ajax({
                 type: "POST",
@@ -445,5 +445,62 @@
 
     }
 
+    function SaveBATemplate(control) {
+        var statusid = control.id.substr(9, 1);
+        var status = "";
+        var id = $("#hdnOtherConfigId").val();
+        SaveAndApproveBATemplate(id, statusid, status)
+    }
+    function ApproveBATemplate(control) {
+        var statusid = control.id.substr(12, 1);
+        var status = "Approved";
+        var id = $("#hdnOtherConfigId").val();
+        SaveAndApproveBATemplate(id, statusid, status)
+    }
+    function SaveAndApproveBATemplate(id, statusid, status) {
+        var SaveData = [];
+        saveitem = {}
+        saveitem["IntroDays"] = $("#txtIntroDays" + statusid).val();
+        saveitem["IntroDaysDLT"] = $("#txtIntroDays" + statusid + "DLT").val();
+        saveitem["TemplateId"] = $("#txtTemplateIdBA" + statusid).val();
+        saveitem["TemplateName"] = $("#txtTemplateNameBA" + statusid).val();
+        saveitem["TemplateType"] = $("#ddlTemplateTypeBA" + statusid).val();
 
+        SaveData.push(saveitem);
+        var SaveDataStr = JSON.stringify(SaveData);
+        $("#divLoader").show();
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("SaveBADLTConfig", "CustomerOnBoarding")',
+                data: '{id: ' + JSON.stringify(id) + ',statusid: ' + JSON.stringify(statusid) + ',status: ' + JSON.stringify(status) + ',jsonData: ' + JSON.stringify(SaveDataStr) + '}',                
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (result) {
+                    if (result == true) {
+                        cuteAlert({
+                            type: "success",
+                            title: "Saved..",
+                            message: "DLT Data Saved Successfully!",
+                            buttonText: "Okay"
+                        })
+                        if (status == "") {
+
+                        }
+                    }
+                    else {
+                        cuteAlert({
+                            type: "error",
+                            title: "Oops..",
+                            message: "There is some problem while saving DLT Data",
+                            buttonText: "Okay"
+                        })
+                    }
+                    $("#divLoader").hide();
+                },
+                error: function (result) {
+                    $("#divLoader").hide();
+                }
+            });
+
+    }
 </script>
