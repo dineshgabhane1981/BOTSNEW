@@ -443,7 +443,8 @@ namespace BOTS_BL.Repository
                 lstbalance = lstbalance.Where(x => x.SmsBalance1 < 1000).ToList();
                 lstSmsbalance.objSMSBalance = lstbalance.OrderBy(x => x.SmsBalance1).ToList();
 
-                baseAddress = "https://technocorelogic.com/api/checkbalance?user=9511836639&pass=9930005673&url=https://www.enotify.app";
+                //baseAddress = "https://technocorelogic.com/api/checkbalance?user=9511836639&pass=9930005673&url=https://www.enotify.app";
+                baseAddress = "https://technocorelogic.com/api/checkbalance?user=919511836639&pass=9930005673&url=https://bs.enotify.app";
                 using (var client = new HttpClient())
                 {
                     using (var response1 = client.GetAsync(baseAddress).Result)
