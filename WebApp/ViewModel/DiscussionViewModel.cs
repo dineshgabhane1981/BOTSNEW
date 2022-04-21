@@ -11,6 +11,7 @@ namespace WebApp.ViewModel
     public class DiscussionViewModel
     {
         public List<DiscussionDetails> lstDiscussions { get; set; }
+        public List<DiscussionDetails> lstFollowUpsDiscussions { get; set; }
         public BOTS_TblDiscussion objDiscussion { get; set; }
         
         public List<SelectListItem> lstCallTypes { get; set; }
