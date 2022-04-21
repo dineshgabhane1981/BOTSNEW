@@ -569,7 +569,7 @@ namespace BOTS_BL.Repository
             try
             {
                 string ConnectionString = string.Empty;
-
+              
                 using (var context = new CommonDBContext())
                 {
                     var DBDetails = context.DatabaseDetails.Where(x => x.GroupId == GroupId).FirstOrDefault();
@@ -596,12 +596,26 @@ namespace BOTS_BL.Repository
                         {
                             item.ProgramRenewalDate = nextRenewal;
                         }
+                        
+                        
+                        var totalTransaction = contextNew.TransactionMasters.Where(x => x.CounterId.Contains(item.OutletId)).Count();
+                        var FirstDate = contextNew.TransactionMasters.Where(x => x.CounterId.Contains(item.OutletId)).OrderBy(y => y.Datetime).Select(z => z.Datetime).FirstOrDefault();
+                        var LastDate = contextNew.TransactionMasters.Where(x => x.CounterId.Contains(item.OutletId)).OrderByDescending(y => y.Datetime).Select(z => z.Datetime).FirstOrDefault();
+                        
+
+                        var Days = (LastDate.Value - FirstDate.Value).TotalDays;
+                        var Average = totalTransaction / Days;
+                        var TransactionPerDay = Average;
+                        item.TransactionPerDay = Math.Round(Convert.ToDouble(Average),2);
+                        
 
                     }
-                    //var ProgramStartDate = contextNew.TransactionMasters.Where(x => x.CounterId.Contains(OutletId)).OrderBy(y=>y.Datetime).Select(z=>z.Datetime).FirstOrDefault();
+                    //var ProgramStartDate = contextNew.TransactionMasters.Where(x => x.CounterId.Contains(OutletId)).OrderBy(y => y.Datetime).Select(z => z.Datetime).FirstOrDefault();
+                    //var totalTransaction = contextNew.TransactionMasters.Where(x => x.CounterId.Contains(item.OutletId)).Count();
                     
+
                 }
-                
+
             }
             catch (Exception ex)
             {
