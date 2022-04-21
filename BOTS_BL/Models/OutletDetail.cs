@@ -63,7 +63,11 @@ namespace BOTS_BL.Models
 
         [NotMapped]
         public DateTime? ProgramStartDate { get; set; }
+
         [NotMapped]
         public DateTime? ProgramRenewalDate { get; set; }
+
+        [NotMapped]
+        public double TransactionPerDay { get; set; }        
     }
 }
