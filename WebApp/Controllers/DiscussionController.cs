@@ -26,6 +26,7 @@ namespace WebApp.Controllers
         DiscussionsRepository DR = new DiscussionsRepository();
         CustomerRepository CR = new CustomerRepository();
         Exceptions newexception = new Exceptions();
+        
         // GET: Discussion
         public ActionResult Index()
         {
@@ -40,6 +41,7 @@ namespace WebApp.Controllers
 
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
             userDetails.CustomerName = CR.GetCustomerName(groupId);
+            string LoginType = userDetails.LoginType; 
             Session["UserSession"] = userDetails;
 
             DiscussionViewModel objData = new DiscussionViewModel();
@@ -58,8 +60,8 @@ namespace WebApp.Controllers
             objDiscussion.GroupId = groupId;
             objDiscussion.GroupName = GroupName;
             objData.objDiscussion = objDiscussion;
-            objData.lstDiscussions = DR.GetDiscussions(groupId);
-            objData.lstCallTypes = DR.GetCallTypes();
+            objData.lstDiscussions = DR.GetDiscussions(groupId, LoginType);
+            objData.lstCallTypes = DR.GetCallTypes(LoginType);
             List<SelectListItem> callSubType = new List<SelectListItem>();
             SelectListItem item = new SelectListItem();
             item.Value = "0";
@@ -74,12 +76,13 @@ namespace WebApp.Controllers
         {
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
             userDetails.CustomerName = "";
+            string LoginType = userDetails.LoginType;
             List<DiscussionDetails> lstdashboard = new List<DiscussionDetails>();
             ViewBag.lstcommonstatus = DR.CommonStatus();
             ViewBag.lstgroupdetails = DR.GetGroupDetails();
-            ViewBag.lstCallTypes = DR.GetCallTypes();
+            ViewBag.lstCallTypes = DR.GetCallTypes(LoginType);
             ViewBag.lstRMAssigned = DR.GetRaisedby();
-            lstdashboard = DR.GetfilteredDiscussionData("", 0, "", "", "","");
+            lstdashboard = DR.GetfilteredDiscussionData("", 0, "", "", "","", LoginType);
             return View(lstdashboard);
         }
 
@@ -113,7 +116,9 @@ namespace WebApp.Controllers
 
         public ActionResult GetDiscussionList(string groupId)
         {
-            var lstDiscussions = DR.GetDiscussions(groupId);
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            string LoginType = userDetails.LoginType;
+            var lstDiscussions = DR.GetDiscussions(groupId, LoginType);
             return PartialView("_DiscussionList", lstDiscussions);
         }
 
@@ -130,6 +135,8 @@ namespace WebApp.Controllers
         public ActionResult GetCommonFilteredDiscussion(string jsonData)
         {
             //var lstdashboard ="";
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            string LoginType = userDetails.LoginType;
             List<DiscussionDetails> lstdashboard = new List<DiscussionDetails>();
             JavaScriptSerializer json_serializer = new JavaScriptSerializer();
             json_serializer.MaxJsonLength = int.MaxValue;
@@ -143,7 +150,7 @@ namespace WebApp.Controllers
                 string status = Convert.ToString(item["selectedstatus"]);
                 string raisedby = Convert.ToString(item["selectedRaisedBy"]);
 
-                lstdashboard = DR.GetfilteredDiscussionData(status, calltype, groupnm, fromDate, toDate, raisedby);
+                lstdashboard = DR.GetfilteredDiscussionData(status, calltype, groupnm, fromDate, toDate, raisedby, LoginType);
             }
             return PartialView("_CommonDiscussionList", lstdashboard);
         }
@@ -151,12 +158,13 @@ namespace WebApp.Controllers
         {
             System.Data.DataTable table = new System.Data.DataTable();
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            string LoginType = userDetails.LoginType;
             try
             {
                 List<DiscussionDetails> lstdashboard = new List<DiscussionDetails>();
                // List<OutletwiseTransaction> lstOutletWiseTransaction = new List<OutletwiseTransaction>();
                // lstOutletWiseTransaction = RR.GetOutletWiseTransactionList(userDetails.GroupId, DateRangeFlag, fromDate, toDate, outletId, EnrolmentDataFlag, userDetails.connectionString);
-                lstdashboard = DR.GetfilteredDiscussionData(status, calltype, Groupnm, fromdt, Todt, raised);
+                lstdashboard = DR.GetfilteredDiscussionData(status, calltype, Groupnm, fromdt, Todt, raised, LoginType);
                 PropertyDescriptorCollection properties = TypeDescriptor.GetProperties(typeof(DiscussionDetails));
                 foreach (PropertyDescriptor prop in properties)
                     table.Columns.Add(prop.Name, Nullable.GetUnderlyingType(prop.PropertyType) ?? prop.PropertyType);

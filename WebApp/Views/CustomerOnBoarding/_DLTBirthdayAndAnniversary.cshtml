@@ -95,6 +95,11 @@
             </div>
         </div>
     </div>
+    <div class="col-md-12 col-lg-12" style="text-align:center;display:none;" id="divRejectReason1">
+        <textarea id="txtRejectReason1" rows="6" cols="40" class="input100"></textarea>
+        <button type="button" id="btnRejectSubmit1" onclick="RejectBASubmit(this);" class="btn btn-primary" style="margin-left: 20px; margin-bottom:25px;">Submit</button>
+        <button type="button" id="btnRejectCancel1" onclick="RejectBACancel(this);" class="btn btn-primary" style="margin-left: 20px; margin-bottom:25px;">Cancel</button><br />
+    </div>
 </div>
 
 <div style="float:left; border:1px solid grey;border-radius:10px;margin-bottom:10px;" class="col-md-12 col-lg-12">
@@ -151,6 +156,11 @@
             </div>
         </div>
     </div>
+    <div class="col-md-12 col-lg-12" style="text-align:center;display:none;" id="divRejectReason2">
+        <textarea id="txtRejectReason2" rows="6" cols="40" class="input100"></textarea>
+        <button type="button" id="btnRejectSubmit2" onclick="RejectBASubmit(this);" class="btn btn-primary" style="margin-left: 20px; margin-bottom:25px;">Submit</button>
+        <button type="button" id="btnRejectCancel2" onclick="RejectBACancel(this);" class="btn btn-primary" style="margin-left: 20px; margin-bottom:25px;">Cancel</button><br />
+    </div>
 </div>
 
 <div style="float:left; border:1px solid grey;border-radius:10px;margin-bottom:10px;" class="col-md-12 col-lg-12">
@@ -166,12 +176,12 @@
     </div>
     <div style="float:left;" class="col-md-4 col-lg-4">
         <div style="margin-top: 10px;">
-            <b>Reminder Message1 Script </b><br /> <textarea id="txtRemScript1" rows="6" cols="40" class="input100" @DLTStatus3>@Model.ReminderScript1</textarea>
+            <b>Reminder Message1 Script </b><br /> <textarea id="txtIntroDays3" rows="6" cols="40" class="input100" @DLTStatus3>@Model.ReminderScript1</textarea>
         </div>
     </div>
     <div style="float:left;" class="col-md-4 col-lg-4">
         <div style=" margin-top: 10px;">
-            <b> Reminder Message1 DLT Script </b><br /> <textarea id="txtRemScript1DLT" rows="6" cols="40" class="input100" disabled>@Model.ReminderScript1DLT</textarea>
+            <b> Reminder Message1 DLT Script </b><br /> <textarea id="txtIntroDays3DLT" rows="6" cols="40" class="input100" disabled>@Model.ReminderScript1DLT</textarea>
         </div>
     </div>
     <div style="float:left;margin-bottom:10px;" class="col-md-3 col-lg-3">
@@ -207,6 +217,11 @@
             </div>
         </div>
     </div>
+    <div class="col-md-12 col-lg-12" style="text-align:center;display:none;" id="divRejectReason3">
+        <textarea id="txtRejectReason3" rows="6" cols="40" class="input100"></textarea>
+        <button type="button" id="btnRejectSubmit3" onclick="RejectBASubmit(this);" class="btn btn-primary" style="margin-left: 20px; margin-bottom:25px;">Submit</button>
+        <button type="button" id="btnRejectCancel3" onclick="RejectBACancel(this);" class="btn btn-primary" style="margin-left: 20px; margin-bottom:25px;">Cancel</button><br />
+    </div>
 </div>
 
 
@@ -223,12 +238,12 @@
     </div>
     <div style="float:left;" class="col-md-4 col-lg-4">
         <div style="margin-top: 10px;">
-            <b>Reminder Message2 Script </b><br /> <textarea id="txtRemScript2" rows="6" cols="40" class="input100" @DLTStatus4>@Model.ReminderScript2</textarea>
+            <b>Reminder Message2 Script </b><br /> <textarea id="txtIntroDays4" rows="6" cols="40" class="input100" @DLTStatus4>@Model.ReminderScript2</textarea>
         </div>
     </div>
     <div style="float:left;" class="col-md-4 col-lg-4">
         <div style=" margin-top: 10px;">
-            <b> Reminder Message2 DLT Script </b><br /> <textarea id="txtRemScript2DLT" rows="6" cols="40" class="input100" disabled>@Model.ReminderScript2DLT</textarea>
+            <b> Reminder Message2 DLT Script </b><br /> <textarea id="txtIntroDays4DLT" rows="6" cols="40" class="input100" disabled>@Model.ReminderScript2DLT</textarea>
         </div>
     </div>
     <div style="float:left;margin-bottom:10px;" class="col-md-3 col-lg-3">
@@ -264,6 +279,11 @@
             </div>
         </div>
     </div>
+    <div class="col-md-12 col-lg-12" style="text-align:center;display:none;" id="divRejectReason4">
+        <textarea id="txtRejectReason4" rows="6" cols="40" class="input100"></textarea>
+        <button type="button" id="btnRejectSubmit4" onclick="RejectBASubmit(this);" class="btn btn-primary" style="margin-left: 20px; margin-bottom:25px;">Submit</button>
+        <button type="button" id="btnRejectCancel4" onclick="RejectBACancel(this);" class="btn btn-primary" style="margin-left: 20px; margin-bottom:25px;">Cancel</button><br />
+    </div>
 </div>
 
 <div style="float:left; border:1px solid grey;border-radius:10px;margin-bottom:10px;" class="col-md-12 col-lg-12">
@@ -279,12 +299,12 @@
     </div>
     <div style="float:left;" class="col-md-4 col-lg-4">
         <div style="margin-top: 10px;">
-            <b>On Birthday Script </b><br /> <textarea id="txtOnBirthdayScript" rows="6" cols="40" class="input100" @DLTStatus5>@Model.OnDayScript</textarea>
+            <b>On Birthday Script </b><br /> <textarea id="txtIntroDays5" rows="6" cols="40" class="input100" @DLTStatus5>@Model.OnDayScript</textarea>
         </div>
     </div>
     <div style="float:left;" class="col-md-4 col-lg-4">
         <div style=" margin-top: 10px;">
-            <b>On Birthday DLT Script </b><br /> <textarea id="txtOnBirthdayScriptDLT" rows="6" cols="40" class="input100" disabled>@Model.OnDayScriptDLT</textarea>
+            <b>On Birthday DLT Script </b><br /> <textarea id="txtIntroDays5DLT" rows="6" cols="40" class="input100" disabled>@Model.OnDayScriptDLT</textarea>
         </div>
     </div>
     <div style="float:left;margin-bottom:10px;" class="col-md-3 col-lg-3">
@@ -320,6 +340,11 @@
             </div>
         </div>
     </div>
+    <div class="col-md-12 col-lg-12" style="text-align:center;display:none;" id="divRejectReason5">
+        <textarea id="txtRejectReason5" rows="6" cols="40" class="input100"></textarea>
+        <button type="button" id="btnRejectSubmit5" onclick="RejectBASubmit(this);" class="btn btn-primary" style="margin-left: 20px; margin-bottom:25px;">Submit</button>
+        <button type="button" id="btnRejectCancel5" onclick="RejectBACancel(this);" class="btn btn-primary" style="margin-left: 20px; margin-bottom:25px;">Cancel</button><br />
+    </div>
 </div>
 <script>
     $(document).ready(function () {
@@ -351,9 +376,9 @@
     function EventChangeOfOriginalToDLT() {
         ConvertValuesToDLT("txtIntroDays1", "txtIntroDays1DLT");
         ConvertValuesToDLT("txtIntroDays2", "txtIntroDays2DLT");
-        ConvertValuesToDLT("txtRemScript1", "txtRemScript1DLT");
-        ConvertValuesToDLT("txtRemScript2", "txtRemScript2DLT");
-        ConvertValuesToDLT("txtOnBirthdayScript", "txtOnBirthdayScriptDLT");
+        ConvertValuesToDLT("txtIntroDays3", "txtIntroDays3DLT");
+        ConvertValuesToDLT("txtIntroDays4", "txtIntroDays4DLT");
+        ConvertValuesToDLT("txtIntroDays5", "txtIntroDays5DLT");
     }
 
     function EventChangeOfOriginalToDLTNew() {
@@ -363,14 +388,14 @@
         $("#txtIntroDays2").focusout(function () {
             ConvertValuesToDLT("txtIntroDays2", "txtIntroDays2DLT");
         });
-        $("#txtRemScript1").focusout(function () {
-            ConvertValuesToDLT("txtRemScript1", "txtRemScript1DLT");
+        $("#txtIntroDays3").focusout(function () {
+            ConvertValuesToDLT("txtIntroDays3", "txtIntroDays3DLT");
         });
-        $("#txtRemScript2").focusout(function () {
-            ConvertValuesToDLT("txtRemScript2", "txtRemScript2DLT");
+        $("#txtIntroDays4").focusout(function () {
+            ConvertValuesToDLT("txtIntroDays4", "txtIntroDays4DLT");
         });
-        $("#txtOnBirthdayScript").focusout(function () {
-            ConvertValuesToDLT("txtOnBirthdayScript", "txtOnBirthdayScriptDLT");
+        $("#txtIntroDays5").focusout(function () {
+            ConvertValuesToDLT("txtIntroDays5", "txtIntroDays5DLT");
         });
     }
 
@@ -379,10 +404,28 @@
         var status = "InProgress";
         var id = $("#hdnOtherConfigId").val();
         UpdateBAStatus(id, statusid, status, "");
-
     }
 
-    function UpdateBAStatus(id, statusid,status, reason) {        
+    function RejectBATemplate(control) {
+        var id = control.id.substr(11, 1);
+        $("#divRejectReason" + id).show(1000);
+    }
+    function RejectBACancel(control) {
+        var id = control.id.substr(15, 1);
+        $("#divRejectReason" + id).hide(1000);
+    }
+
+    function RejectBASubmit(control) {
+        var statusid = control.id.substr(15, 1);
+        var id = $("#hdnOtherConfigId").val();
+        var RejectReason = $("#txtRejectReason" + statusid).val();
+        var status = "Rejected";
+        UpdateBAStatus(id, statusid, status, RejectReason);
+        $("#divRejectReason" + statusid).hide(1000);
+        $("#spnRejectStatus" + statusid).html("<b>Reason</b> - " + RejectReason);
+    }
+
+    function UpdateBAStatus(id, statusid, status, reason) {
          $("#divLoader").show();
             $.ajax({
                 type: "POST",
@@ -410,6 +453,66 @@
                             type: "error",
                             title: "Oops..",
                             message: "There is some problem while saving data",
+                            buttonText: "Okay"
+                        })
+                    }
+                    $("#divLoader").hide();
+                },
+                error: function (result) {
+                    $("#divLoader").hide();
+                }
+            });
+
+    }
+
+    function SaveBATemplate(control) {
+        var statusid = control.id.substr(9, 1);
+        var status = "";
+        var id = $("#hdnOtherConfigId").val();
+        SaveAndApproveBATemplate(id, statusid, status)
+    }
+    function ApproveBATemplate(control) {
+        var statusid = control.id.substr(12, 1);
+        var status = "Approved";
+        var id = $("#hdnOtherConfigId").val();
+        SaveAndApproveBATemplate(id, statusid, status)
+    }
+    function SaveAndApproveBATemplate(id, statusid, status) {
+        var SaveData = [];
+        saveitem = {}
+        saveitem["IntroDays"] = $("#txtIntroDays" + statusid).val();
+        saveitem["IntroDaysDLT"] = $("#txtIntroDays" + statusid + "DLT").val();
+        saveitem["TemplateId"] = $("#txtTemplateIdBA" + statusid).val();
+        saveitem["TemplateName"] = $("#txtTemplateNameBA" + statusid).val();
+        saveitem["TemplateType"] = $("#ddlTemplateTypeBA" + statusid).val();
+
+        SaveData.push(saveitem);
+        var SaveDataStr = JSON.stringify(SaveData);
+        $("#divLoader").show();
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("SaveBADLTConfig", "CustomerOnBoarding")',
+                data: '{id: ' + JSON.stringify(id) + ',statusid: ' + JSON.stringify(statusid) + ',status: ' + JSON.stringify(status) + ',jsonData: ' + JSON.stringify(SaveDataStr) + '}',                
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (result) {
+                    if (result == true) {
+                        cuteAlert({
+                            type: "success",
+                            title: "Saved..",
+                            message: "DLT Data Saved Successfully!",
+                            buttonText: "Okay"
+                        })
+                        if (status == "Approved") {
+                            $("#spnStatus" + statusid).text("Status - Approved");
+                            $("#spnRejectStatus" + statusid).hide();
+                        }
+                    }
+                    else {
+                        cuteAlert({
+                            type: "error",
+                            title: "Oops..",
+                            message: "There is some problem while saving DLT Data",
                             buttonText: "Okay"
                         })
                     }
