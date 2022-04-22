@@ -46,6 +46,9 @@ namespace BOTS_BL.Models
         public string AlternateMobileNo { get; set; }
 
         [StringLength(100)]
+        public string SalesModelType { get; set; }
+
+        [StringLength(100)]
         public string AlternateEmailId { get; set; }
 
         [StringLength(10)]

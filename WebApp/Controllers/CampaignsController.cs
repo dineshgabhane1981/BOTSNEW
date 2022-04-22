@@ -156,5 +156,40 @@ namespace WebApp.Controllers
             return new JsonResult() { Data = objCampaignData, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
 
+        public ActionResult CampaignGetData()
+        {
+            //CampaignTiles objCampaignTiles = new CampaignTiles();
+            //var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            //objCampaignTiles = CMPR.GetCampaignTilesData(userDetails.GroupId, userDetails.connectionString);
+            //List<SelectListItem> MonthList = new List<SelectListItem>();
+
+            //for (int i = 0; i < 12; i++)
+            //{
+            //    MonthList.Add(new SelectListItem
+            //    {
+            //        Text = Convert.ToString(DateTime.Now.AddMonths(i).ToString("MMM")),
+            //        Value = Convert.ToString(DateTime.Now.AddMonths(i).Month)
+            //    });
+            //}
+            //List<SelectListItem> YearList = new List<SelectListItem>();
+            //int year = DateTime.Now.Year;
+            //objCampaignTiles.year = DateTime.Now.Year;
+            //objCampaignTiles.month = DateTime.Now.Month;
+            //for (int i = -5; i <= 9; i++)
+            //{
+            //    YearList.Add(new SelectListItem
+            //    {
+            //        Text = Convert.ToString(DateTime.Now.AddYears(i).Year.ToString()),
+            //        Value = Convert.ToString(year + i)
+            //    });
+            //}
+
+
+            //objCampaignTiles.lstMonth = MonthList;
+            //objCampaignTiles.lstYear = YearList;
+
+            return View("CreateCampaign");
+        }
+
     }
 }

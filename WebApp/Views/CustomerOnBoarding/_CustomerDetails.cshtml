@@ -227,7 +227,7 @@
                     <td style="font-weight:bold;">No</td>
                 }
                 <td style="font-style: italic;">
-                    Whataspp Integration
+                    WhatsApp Integration
                 </td>
                 @if (Model.bots_TblGroupMaster.IsWhatsApp.Value)
                 {
@@ -284,9 +284,12 @@
                     Existing Loyalty
                 </td>
                 <td style="font-weight:bold;">@Model.bots_TblGroupMaster.IsExistingLoyalty</td>
-                
+                <td style="font-style: italic;">
+                    Sales Model Type
+                </td>
+                <td style="font-weight:bold;">@Model.bots_TblGroupMaster.SalesModelType</td>
 
-                
+
             </tr>
 
 
@@ -433,6 +436,10 @@
                 {
                     <td style="font-weight:bold;">No</td>
                 }
+                @if (Model.bots_TblDealDetails.GST == 0)
+                {
+                    <td style="font-weight:bold;">No</td>
+                }
                 <td style="font-style: italic;">
                     GST Rate
                 </td>
@@ -463,6 +470,16 @@
                     TDS Deducted
                 </td>
                 <td style="font-weight:bold;">@Model.bots_TblDealDetails.TDSDeducted</td>
+            </tr>
+            <tr>
+                <td style="font-style: italic;">
+                    ASF
+                </td>
+                <td style="font-weight:bold;">@Model.bots_TblDealDetails.ASF</td>
+                <td style="font-style: italic;">
+                    ASF Percentage
+                </td>
+                <td style="font-weight:bold;">@Model.bots_TblDealDetails.ASFPercentage</td>
             </tr>
 
             <tr style="background-color:lightgrey;"><td colspan="8" style="font-weight: bold; font-size: 18px;">Payment Details</td></tr>
