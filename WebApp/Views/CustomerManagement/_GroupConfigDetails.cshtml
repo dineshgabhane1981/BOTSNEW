@@ -254,9 +254,31 @@
                 <td>@item.PinCode</td>
                 <td>Latitude - @item.Latitude <br /> Longitude - @item.Longitude</td>
                 <td style="text-align:center;">--</td>
-                <td>@item.ProgramStartDate.Value.ToString("dd-MM-yyyy")</td>
-                <td>@item.ProgramRenewalDate.Value.ToString("dd-MM-yyyy")</td>
-                <td>@item.TransactionPerDay</td>
+                @if (!string.IsNullOrEmpty(Convert.ToString(item.ProgramStartDate)))
+                {
+                    <td>@item.ProgramStartDate.Value.ToString("dd-MM-yyyy")</td>
+                }
+                else
+                {
+                    <td>--</td>
+                }
+                @if (!string.IsNullOrEmpty(Convert.ToString(item.ProgramRenewalDate)))
+                {
+                    <td>@item.ProgramRenewalDate.Value.ToString("dd-MM-yyyy")</td>
+                }
+                else
+                {
+                    <td>--</td>
+                }
+                @if (!string.IsNullOrEmpty(Convert.ToString(item.TransactionPerDay)))
+                {
+                    <td>@item.TransactionPerDay</td>
+                }
+                else
+                {
+                    <td>--</td>
+                }
+               
             </tr>
                 }
             </table>
