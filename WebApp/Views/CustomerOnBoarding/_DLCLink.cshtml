@@ -14,12 +14,31 @@
         </div>
         <div style="margin-left: 20px; margin-top: 10px;">
             To the referral (SMS) <br /> <textarea id="txtSMSToTheReferral" rows="3" cols="50" class="input100"></textarea>
+            <span style="font-weight:bold;" id="spnSMSEnrollment"></span>
         </div>
         <div style="margin-left: 20px; margin-top: 10px;">
             Reminder for points usage (SMS) <br /> <textarea id="txtSMSReminderForPointsUsage" rows="3" cols="50" class="input100"></textarea>
+            <span style="font-weight:bold;" id="spnSMSReminderForPointsUsage"></span>
         </div>
         <div style="margin-left: 20px; margin-top: 10px;">
             Referred success on referral txn (SMS) <br /> <textarea id="txtSMSReferredSuccessOnReferralTxn" rows="3" cols="50" class="input100"></textarea>
+            <span style="font-weight:bold;" id="spnSMSReferredSuccessOnReferralTxn"></span>
+        </div>
+        <div style="margin-left: 20px; margin-top: 10px;">
+            DLC OTP (SMS) <br /> <textarea id="txtSMSDLCOtp" rows="3" cols="50" class="input100"></textarea>
+            <span style="font-weight:bold;" id="spnSMSDLCOtp"></span>
+        </div>
+        <div style="margin-left: 20px; margin-top: 10px;">
+            Gift Points OTP (SMS) <br /> <textarea id="txtSMSGiftPtOtp" rows="3" cols="50" class="input100"></textarea>
+            <span style="font-weight:bold;" id="spnSMSGiftPtOtp"></span>
+        </div>
+        <div style="margin-left: 20px; margin-top: 10px;">
+            Gift Debit  Points OTP (SMS) <br /> <textarea id="txtSMSGiftPtDebitOtp" rows="3" cols="50" class="input100"></textarea>
+            <span style="font-weight:bold;" id="spnSMSGiftPtDebitOtp"></span>
+        </div>
+        <div style="margin-left: 20px; margin-top: 10px;">
+            Gift  Credit Points OTP  (SMS) <br /> <textarea id="txtSMSGiftPtCreditOtp" rows="3" cols="50" class="input100"></textarea>
+            <span style="font-weight:bold;" id="spnSMSGiftPtCreditOtp"></span>
         </div>
     </div>
 
@@ -42,14 +61,31 @@
         <div style="margin-left: 20px; margin-top: 10px;">
             Referred success on referral txn (WA) <br /> <textarea id="txtWAReferredSuccessOnReferralTxn" rows="3" cols="50" class="input100"></textarea>
         </div>
+        <div style="margin-left: 20px; margin-top: 10px;">
+            DLC OTP (WA) <br /> <textarea id="txtWADlcOtp" rows="3" cols="50" class="input100"></textarea>
+        </div>
+        <div style="margin-left: 20px; margin-top: 10px;">
+            Gift Points OTP (WA) <br /> <textarea id="txtWAGiftPtOtp" rows="3" cols="50" class="input100"></textarea>
+        </div>
+        <div style="margin-left: 20px; margin-top: 10px;">
+            Gift  Debit Points OTP (WA) <br /> <textarea id="txtWAGiftPtDebitOtp" rows="3" cols="50" class="input100"></textarea>
+        </div>
+        <div style="margin-left: 20px; margin-top: 10px;">
+            Gift  Credit Points OTP (WA) <br /> <textarea id="txtWAGiftPtCreditOtp" rows="3" cols="50" class="input100"></textarea>
+        </div>
     </div>
 </div>
 <div class="container-fluid pt-3 pl-3 pr-3 pb-3">
-    <button type="button" id="btnDLCLinkSave" class="btn btn-primary pull-right" style="margin-right: 10px; margin-bottom: 20px;">Save</button>
+    <button type="button" id="btnsubmitToDLT" class="btn btn-primary pull-right" style="margin-right: 10px; margin-bottom: 20px;margin-top:10px;">Submit For DLT</button>
+    <button type="button" id="btnDLCLinkSave" class="btn btn-primary pull-right" style="margin-right: 10px; margin-bottom: 20px; margin-top: 10px;">Save</button>
 </div>
 
 <script>
     $(document).ready(function () {
+
+        $("#btnsubmitToDLT").on("click", function () {
+            SendDLCToDLT();
+        });
         $("#btnDLCLinkSave").on("click", function () {
             SaveDLCLinkConfig();
         });
@@ -87,9 +123,17 @@
         $('#txtSMSToTheReferral').val(data.ToTheReferralSMSScript);
         $('#txtSMSReminderForPointsUsage').val(data.ReminderForPointsUsageSMSScript);
         $('#txtSMSReferredSuccessOnReferralTxn').val(data.ReferredSuccessOnReferralTxnSMSScript);
+        $('#txtSMSDLCOtp').val(data.DLCOTPScriptSMS);
+        $('#txtSMSGiftPtOtp').val(data.GiftPointsOTPScriptSMS);
+        $('#txtSMSGiftPtDebitOtp').val(data.GiftPointsDebitOTPScriptSMS);
+        $('#txtSMSGiftPtCreditOtp').val(data.GiftPointsCreditOTPScriptSMS);
         $('#txtWAToTheReferral').val(data.ToTheReferralWAScript);
         $('#txtWAReminderForPointsUsage').val(data.ReminderForPointsUsageWAScript);
         $('#txtWAReferredSuccessOnReferralTxn').val(data.ReferredSuccessOnReferralTxnWAScript);
+        $('#txtWADlcOtp').val(data.DLCOTPScriptWA );
+        $('txtWAGiftPtOtp').val(data.GiftPointsOTPScriptWA);
+        $('txtWAGiftPtDebitOtp').val(data.GiftPointsDebitOTPScriptWA);
+        $('txtWAGiftPtCreditOtp').val(data.GiftPointsCreditOTPScriptWA);
     }
     function SaveDLCLinkConfig() {
         var DLCConfig = [];
@@ -105,9 +149,17 @@
         item["SMSToTheReferral"] = $('#txtSMSToTheReferral').val();
         item["SMSReminderForPointsUsage"] = $('#txtSMSReminderForPointsUsage').val();
         item["SMSReferredSuccessOnReferralTxn"] = $('#txtSMSReferredSuccessOnReferralTxn').val();
-        item["WAToTheReferral"] = $('#txtWAToTheReferral').val();
-        item["WAReminderForPointsUsage"] = $('#txtWAReminderForPointsUsage').val();
-        item["WAReferredSuccessOnReferralTxn"] = $('#txtWAReferredSuccessOnReferralTxn').val();
+        item["DLCOTPScriptSMS"] = $('#txtSMSDLCOtp').val();
+        item["GiftPointsOTPScriptSMS"] = $('#txtSMSGiftPtOtp').val();
+        item["GiftPointsDebitOTPScriptSMS"] = $('#txtSMSGiftPtDebitOtp').val();
+        item["GiftPointsCreditOTPScriptSMS"] = $('#txtSMSGiftPtCreditOtp').val();
+        item["ToTheReferralWAScript"] = $('#txtWAToTheReferral').val();
+        item["ReminderForPointsUsageWAScript"] = $('#txtWAReminderForPointsUsage').val();
+        item["ReferredSuccessOnReferralTxnWAScript"] = $('#txtWAReferredSuccessOnReferralTxn').val();
+        item["DLCOTPScriptWA"] = $('#txtWADlcOtp').val();
+        item["GiftPointsOTPScriptWA"] = $('#txtWAGiftPtOtp').val();
+        item["GiftPointsDebitOTPScriptWA"] = $('#txtWAGiftPtDebitOtp').val();
+        item["GiftPointsCreditOTPScriptWA"] = $('#txtWAGiftPtCreditOtp').val();
 
         DLCConfig.push(item);
         var DLCConfigData = JSON.stringify(DLCConfig);
@@ -145,6 +197,50 @@
                     $("#divLoader").hide();
                 }
             });
+    }
+
+     function SendDLCToDLT() {
+        $("#divLoader").show();
+        cuteAlert({
+            type: "question",
+            title: "Are you sure?",
+            message: "Once you submit, you will not be able to change data",
+            confirmText: "Okay",
+            cancelText: "Cancel"
+        }).then((e) => {
+            if (e == ("confirm")) {
+                 $.ajax({
+                type: "POST",
+                url: '@Url.Action("SendDLCToDLT", "CustomerOnBoarding")',
+                data: '{GroupId: ' + JSON.stringify($('#hdnGroupID').val()) + '}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (result) {
+                    if (result == true) {
+                        cuteAlert({
+                            type: "success",
+                            title: "Saved..",
+                            message: "DLC Script sent for DLT Successfully!",
+                            buttonText: "Okay"
+                        })
+                    }
+                    else {
+                        cuteAlert({
+                            type: "error",
+                            title: "Oops..",
+                            message: "There is some problem while sending Digital Loyalty Card Data for DLT",
+                            buttonText: "Okay"
+                        })
+                    }
+                    $("#divLoader").hide();
+                },
+                error: function (result) {
+                    $("#divLoader").hide();
+                }
+            });
+            }
+        })
+        $("#divLoader").hide();
     }
 
 </script>
