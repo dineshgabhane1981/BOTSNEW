@@ -69,46 +69,45 @@
 
 <div class="row col-md-12 col-lg-12 p-2">
     <div class="col-md-3 col-lg-3">
-        <b>   Group Name </b> <br /> @Model.objGroupDetails.GroupName <br /> <b> Average Ticket </b>
-        @String.Format(new CultureInfo("en-IN", false), "{0:n2}", Convert.ToDouble(Model.objGroupDetails.AverageTicket))
+        <b>   Group Name </b> <br /> @Model.objGroupDetails.GroupName <br /> <b>Average Ticket </b> @Model.objGroupDetails.AverageTicket
     </div>
-        <div class="col-md-2 col-lg-2">
-            <b>Brand Name </b><br />
-            @{
-                var count = 0;
-            }
-            @foreach (var item in Model.lstBrandDetails)
+    <div class="col-md-2 col-lg-2">
+        <b>Brand Name </b><br />
+        @{
+            var count = 0;
+        }
+        @foreach (var item in Model.lstBrandDetails)
+        {
+            count++;
+            if (Model.lstBrandDetails.Count > 1)
             {
-                count++;
-                if (Model.lstBrandDetails.Count > 1)
-                {
-                    if (Model.lstBrandDetails.Count == count)
-                    {
-                        <div> @item.BrandName</div>
-                    }
-                    else
-                    {
-                        <div> @item.BrandName,</div>
-                    }
-                }
-                else
+                if (Model.lstBrandDetails.Count == count)
                 {
                     <div> @item.BrandName</div>
                 }
-
+                else
+                {
+                    <div> @item.BrandName,</div>
+                }
+            }
+            else
+            {
+                <div> @item.BrandName</div>
             }
 
-            <br /><b>Annual Revenue Target</b>
-        </div>
-        <div class="col-md-2 col-lg-2">
-            <b>Member Base</b><br />
-            @String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(Model.objGroupConfig.MemberBase))
-        </div>
-        <div class="col-md-2 col-lg-2">
-            <b>   Language Preference </b> <br /> @Model.objGroupDetails.LanguagePreference
-        </div>
+        }
+
+        <br /><b>Annual Revenue Target</b>
+    </div>
+    <div class="col-md-2 col-lg-2">
+        <b>Member Base</b><br />
+        @String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(Model.objGroupConfig.MemberBase))
+    </div>
+    <div class="col-md-2 col-lg-2">
+        <b>   Language Preference </b> <br /> @Model.objGroupDetails.LanguagePreference
+    </div>
         <div class="col-md-3 col-lg-3"><img src="@Model.objGroupDetails.Logo" style="width:200px;" alt="Logo"></div>
-    </div>   
+ </div>   
 <input class="radio1" id="one1" name="group" type="radio" checked>
 <input class="radio1" id="two1" name="group" type="radio">
 <input class="radio1" id="three1" name="group" type="radio">
