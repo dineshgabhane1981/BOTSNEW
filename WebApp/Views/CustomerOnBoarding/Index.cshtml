@@ -653,11 +653,35 @@
                     <div class="col-md-12 section-heading" data-toggle="collapse" data-target="#dealdetails">Deal Details</div>
                     <div id="dealdetails" class="collapse">
                         <div class="row" style="margin: 0;">
+                            <div style="float: left; text-align: left; width: 100px; margin-top: 10px;">
+                                Sales Model Type
+                            </div>
+                            <div class="col-sm-10" style="float:left;margin-top:10px;" id="dvSalesModelType">
+                                @Html.RadioButtonFor(model => model.bots_TblGroupMaster.SalesModelType, "Old Model", new { @id = "OldModel", Checked = "checked" }) Old Model
+                                @Html.RadioButtonFor(model => model.bots_TblGroupMaster.SalesModelType, "New Model", new { @id = "NewModel" }) New Model
+                            </div>
+                        </div>
+                        <div class="row" style="margin: 0;">
                             <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
                                 Loyalty Fees
                             </div>
                             <div class="col-sm-4" style="float:left;margin-top:10px;">
                                 @Html.TextBoxFor(model => model.bots_TblDealDetails.LoyaltyFees, new { @class = "input100", @id = "txtLoyaltyFees" })
+                            </div>
+                            <div style="float: left; text-align: right; width: 115px; margin-top: 10px;">
+                                ASF
+                            </div>
+                            <div class="col-sm-4" style="float:left;margin-top:10px;">
+                                @Html.TextBoxFor(model => model.bots_TblDealDetails.ASF, new { @class = "input100", @id = "txtASF", @readonly = "readonly" })
+                            </div>
+
+                        </div>
+                        <div class="row" style="margin: 0;">
+                            <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
+                                ASF Percentage
+                            </div>
+                            <div class="col-sm-4" style="float:right;margin-top:10px;">
+                                @Html.TextBoxFor(model => model.bots_TblDealDetails.ASFPercentage, new { @class = "input100", @id = "txtASFPercentage", @readonly = "readonly" })
                             </div>
                             <div style="float: left; text-align: right; width: 115px; margin-top: 10px;">
                                 WA Paid Pack Fees
@@ -666,6 +690,8 @@
                                 @Html.TextBoxFor(model => model.bots_TblDealDetails.WAPaidPackFees, new { @class = "input100", @id = "txtWAPaidPackFees" })
                             </div>
                         </div>
+
+
                         <div class="row" style="margin: 0;">
                             <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
                                 SMS Paid Pack Fees
@@ -1549,6 +1575,28 @@
                 CalculateTDS();
             }
         });
+        $('#NewModel').on('change', function () {
+            if ($("#NewModel").is(":checked")) {
+                //$('#dvIsWhatsApp').css('border', '');
+                $("#txtASFPercentage").attr("readonly", false);
+                $("#txtASF").attr("readonly", false);
+            }
+            else {
+                $("#txtASFPercentage").attr("readonly", true);
+                $("#txtASF").attr("readonly", true);
+                $("#txtASFPercentage").val() = "";
+                $("#txtASF").val() = "";
+            }
+        });
+        $('#OldModel').on('change', function () {
+            if ($("#OldModel").is(":checked")) {
+                //$('#dvIsWhatsApp').css('border', '');
+                $("#txtASFPercentage").attr("readonly", true);
+                $("#txtASF").attr("readonly", true);
+                $("#txtASFPercentage").val() = "";
+                $("#txtASF").val() = "";
+            }
+        });
         $("#txtWAPaidPackFees").focusout(function () {
             if ($("#txtWAPaidPackFees").val() != "") {
                 CalculateTotalFees();
@@ -2416,6 +2464,30 @@
             ShowHideSection("dealdetails");
             $('#txtLoyaltyFees').css('border-color', 'red');
             returnStatus = false;
+        }
+        if ($("#NewModel").is(":checked")) {
+
+            if ($("#txtASF").val() != "" && $("#txtASF").val() != 0) {
+
+                $('#txtASF').css('border-color', '');
+            }
+            else {
+
+                $('#txtASF').css('border-color', 'red');
+                ShowHideSection("dealdetails");
+                returnStatus = false;
+            }
+            if ($("#txtASFPercentage").val() != "" && $("#txtASFPercentage").val() != 0) {
+
+                $('#txtASFPercentage').css('border-color', '');
+            }
+            else {
+
+                $('#txtASFPercentage').css('border-color', 'red');
+                ShowHideSection("dealdetails");
+                returnStatus = false;
+            }
+
         }
         if ($("#IsCGST").is(":checked") || $("#IsIGST").is(":checked") || $("#IsGSTNo").is(":checked")) {
 

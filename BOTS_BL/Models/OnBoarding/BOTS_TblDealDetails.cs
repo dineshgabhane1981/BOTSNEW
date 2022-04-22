@@ -19,6 +19,12 @@ namespace BOTS_BL.Models
         public decimal LoyaltyFees { get; set; }
 
         [Column(TypeName = "numeric")]
+        public decimal? ASF { get; set; }
+
+        [Column(TypeName = "numeric")]
+        public decimal? ASFPercentage { get; set; }
+
+        [Column(TypeName = "numeric")]
         public decimal? WAPaidPackFees { get; set; }
 
         [Column(TypeName = "numeric")]
