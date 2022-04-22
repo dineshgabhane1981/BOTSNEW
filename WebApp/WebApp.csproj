@@ -206,7 +206,6 @@
     <Compile Include="Controllers\ITOPS\OTPAndLogController.cs" />
     <Compile Include="Controllers\ITOPS\SMSAndSecurityController.cs" />
     <Compile Include="Controllers\ITOPS\TransactionController.cs" />
-    <Compile Include="Controllers\ITOPS\TransferPointsController.cs" />
     <Compile Include="Controllers\KeyIndicatorsController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Controllers\LoyaltyKPIsController.cs" />
