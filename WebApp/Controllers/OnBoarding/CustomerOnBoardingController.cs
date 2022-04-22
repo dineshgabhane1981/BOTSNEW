@@ -1715,5 +1715,15 @@ namespace WebApp.Controllers.OnBoarding
             var objData = OBR.GetCampaignAllInactiveForDLT(GroupId, Type);
             return PartialView("_DLTInactiveAll", objData);
         }
+
+        public ActionResult UpdateInactiveDLTStatus(string id, string statusid, string status, string reason)
+        {
+            bool result = false;
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            result = OBR.UpdateInactiveDLTStatus(Convert.ToInt32(id), Convert.ToInt32(statusid), status, userDetails.LoginId, reason);
+            return new JsonResult() { Data = result, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
+        }
+
+
     }
 }

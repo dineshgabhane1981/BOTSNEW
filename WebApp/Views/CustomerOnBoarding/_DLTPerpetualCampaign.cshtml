@@ -39,6 +39,15 @@
         $('#rbtnInactive').click(function () {
             LoadCampaign("Inactive");
         });
+        $('#rbtnOnlyOnceInactive').click(function () {
+            LoadCampaign("Only Once Inactive");
+        });
+        $('#rbtnNonRedeemptionInactive').click(function () {
+            LoadCampaign("Non Redemption Inactive");
+        });
+        $('#rbtnPointsExpiry').click(function () {
+            LoadCampaign("Point Expiry");
+        });
     });
 
     function LoadCampaign(type) {
