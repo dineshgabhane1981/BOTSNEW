@@ -258,5 +258,30 @@ namespace WebApp.Controllers
                 return null;
             }
         }
+
+        public ActionResult NonTransacting()
+        {
+            return View();
+        }
+        public ActionResult Communication()
+        {
+            return View();
+        }
+        public ActionResult KeyIndicator()
+        {
+            return View();
+        }
+        public ActionResult CityWise()
+        {
+            return View();
+        }
+        public ActionResult Discussion()
+        {
+            return View();
+        }
+        public ActionResult GrupWise()
+        {
+            return View();
+        }
     }
 }
