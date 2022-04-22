@@ -69,7 +69,8 @@
 
 <div class="row col-md-12 col-lg-12 p-2">
     <div class="col-md-3 col-lg-3">
-        <b>   Group Name </b> <br /> @Model.objGroupDetails.GroupName <br /> <b>Average Ticket (BTD) </b> <br /> @Model.objGroupDetails.AverageTicket
+        <b>   Group Name </b> <br /> @Model.objGroupDetails.GroupName <br /> <b>Average Ticket (BTD) </b> <br /> 
+        @String.Format(new CultureInfo("en-IN", false), "{0:n2}", Convert.ToDouble(Model.objGroupDetails.AverageTicket))
     </div>
     <div class="col-md-2 col-lg-2">
         <b>Brand Name </b><br />
