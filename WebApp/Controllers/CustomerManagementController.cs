@@ -222,7 +222,7 @@ namespace WebApp.Controllers
 
             return Json(objData, JsonRequestBehavior.AllowGet);
         }
-
+       
         public ActionResult GetCustomerConfigDetails(string groupId)
         {
             GroupConfigDetailsViewModel objData = new GroupConfigDetailsViewModel();

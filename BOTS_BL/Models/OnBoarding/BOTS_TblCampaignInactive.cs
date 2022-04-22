@@ -27,6 +27,8 @@ namespace BOTS_BL.Models
 
         public string LessThanDaysScript { get; set; }
 
+        public string LessThanDaysScriptDLT { get; set; }
+
         [StringLength(100)]
         public string TemplateId1 { get; set; }
 
@@ -39,6 +41,8 @@ namespace BOTS_BL.Models
         public int? GreaterThanDays { get; set; }
 
         public string GreaterThanDaysScript { get; set; }
+
+        public string GreaterThanDaysScriptDLT { get; set; }
 
         [StringLength(100)]
         public string TemplateId2 { get; set; }
@@ -54,6 +58,10 @@ namespace BOTS_BL.Models
 
         [StringLength(50)]
         public string DLTStatus2 { get; set; }
+
+        public string RejectReason1 { get; set; }
+
+        public string RejectReason2 { get; set; }
 
         [StringLength(50)]
         public string AddedBy { get; set; }

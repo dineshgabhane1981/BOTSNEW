@@ -77,13 +77,14 @@ namespace WebApp.Controllers
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
             userDetails.CustomerName = "";
             string LoginType = userDetails.LoginType;
-            List<DiscussionDetails> lstdashboard = new List<DiscussionDetails>();
+            DiscussionViewModel ObjData = new DiscussionViewModel();
             ViewBag.lstcommonstatus = DR.CommonStatus();
             ViewBag.lstgroupdetails = DR.GetGroupDetails();
             ViewBag.lstCallTypes = DR.GetCallTypes(LoginType);
             ViewBag.lstRMAssigned = DR.GetRaisedby();
-            lstdashboard = DR.GetfilteredDiscussionData("", 0, "", "", "","", LoginType);
-            return View(lstdashboard);
+            ObjData.lstDiscussions = DR.GetfilteredDiscussionData("", 0, "", "", "","", LoginType, userDetails.LoginId,false);
+            ObjData.lstFollowUpsDiscussions = DR.GetfilteredDiscussionData("", 0, "", "", "", "", LoginType, userDetails.LoginId, true);
+            return View(ObjData);
         }
 
         [HttpPost]
@@ -137,7 +138,7 @@ namespace WebApp.Controllers
             //var lstdashboard ="";
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
             string LoginType = userDetails.LoginType;
-            List<DiscussionDetails> lstdashboard = new List<DiscussionDetails>();
+            DiscussionViewModel ObjData = new DiscussionViewModel();
             JavaScriptSerializer json_serializer = new JavaScriptSerializer();
             json_serializer.MaxJsonLength = int.MaxValue;
             object[] objData = (object[])json_serializer.DeserializeObject(jsonData);
@@ -150,9 +151,12 @@ namespace WebApp.Controllers
                 string status = Convert.ToString(item["selectedstatus"]);
                 string raisedby = Convert.ToString(item["selectedRaisedBy"]);
 
-                lstdashboard = DR.GetfilteredDiscussionData(status, calltype, groupnm, fromDate, toDate, raisedby, LoginType);
+                ObjData.lstDiscussions = DR.GetfilteredDiscussionData(status, calltype, groupnm, fromDate, toDate, raisedby, userDetails.LoginType, userDetails.LoginId, false);
+                ObjData.lstFollowUpsDiscussions = DR.GetfilteredDiscussionData(status, calltype, groupnm, fromDate, toDate, raisedby, userDetails.LoginType, userDetails.LoginId, true);
+
+                //lstdashboard = DR.GetfilteredDiscussionData(status, calltype, groupnm, fromDate, toDate, raisedby, userDetails.LoginType, userDetails.LoginId,false);
             }
-            return PartialView("_CommonDiscussionList", lstdashboard);
+            return PartialView("_CommonDiscussionList", ObjData);
         }
         public ActionResult ExportToExcelCommonFilteredDiscussion(string fromdt, string Todt, string Groupnm, int calltype, string status, string raised,string ReportName)
         {
@@ -164,7 +168,7 @@ namespace WebApp.Controllers
                 List<DiscussionDetails> lstdashboard = new List<DiscussionDetails>();
                // List<OutletwiseTransaction> lstOutletWiseTransaction = new List<OutletwiseTransaction>();
                // lstOutletWiseTransaction = RR.GetOutletWiseTransactionList(userDetails.GroupId, DateRangeFlag, fromDate, toDate, outletId, EnrolmentDataFlag, userDetails.connectionString);
-                lstdashboard = DR.GetfilteredDiscussionData(status, calltype, Groupnm, fromdt, Todt, raised, LoginType);
+                lstdashboard = DR.GetfilteredDiscussionData(status, calltype, Groupnm, fromdt, Todt, raised, LoginType, userDetails.LoginId,false);
                 PropertyDescriptorCollection properties = TypeDescriptor.GetProperties(typeof(DiscussionDetails));
                 foreach (PropertyDescriptor prop in properties)
                     table.Columns.Add(prop.Name, Nullable.GetUnderlyingType(prop.PropertyType) ?? prop.PropertyType);

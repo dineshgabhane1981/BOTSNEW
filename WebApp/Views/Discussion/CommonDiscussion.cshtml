@@ -1,8 +1,11 @@
-﻿@model List<BOTS_BL.Models.CommonDB.DiscussionDetails>
+﻿@model WebApp.ViewModel.DiscussionViewModel
+@using BOTS_BL.Models;
 
 @{
     ViewBag.Title = "Common Discussion";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    var userDetails = (CustomerLoginDetail)Session["UserSession"];
+
 }
 
 <div class="app-main__inner">
@@ -26,8 +29,14 @@
             <div class="row mt-3 mb-4">
                 <div class="col-md-4 col-xl-6">
                     Select Raise by
-
-                    @Html.DropDownList("RaisedBy", new SelectList(ViewBag.lstRMAssigned, "Value", "Text"), htmlAttributes: new { @class = "input100", @id = "ddlRaisedBy" })
+                    @if (userDetails.LoginType == "6")
+                    {
+                        @Html.DropDownList("RaisedBy", new SelectList(ViewBag.lstRMAssigned, "Value", "Text"), htmlAttributes: new { @class = "input100", @disabled="disabled", @id = "ddlRaisedBy" })
+                    }
+                    else
+                    {
+                        @Html.DropDownList("RaisedBy", new SelectList(ViewBag.lstRMAssigned, "Value", "Text"), htmlAttributes: new { @class = "input100", @id = "ddlRaisedBy" })
+                    }
                 </div>
                 <div class="col-md-4 col-xl-6">
                     Select Call Type
@@ -35,26 +44,26 @@
                     @Html.DropDownList("calltype", new SelectList(ViewBag.lstCallTypes, "Value", "Text"), htmlAttributes: new { @class = "input100", @id = "ddlcalltype" })
                 </div>
             </div>
-                <div class="row mt-3 mb-4">
-                    
-                    <div class="col-md-4 col-xl-6">
-                        <input type="radio" id="rdnnorange" checked name="cust_type" /> No Range &nbsp;&nbsp;&nbsp;&nbsp;
-                        <input type="radio" id="rdndaterange" name="cust_type" /> Date Range <br /><br />
-                        <input id="txtFromDate" placeholder="From Date" class="input50" />&nbsp;&nbsp;&nbsp;&nbsp;
-                        <input id="txtToDate" placeholder="To Date" class="input50" />
-                        <button type="button" id="btnFilter" style="margin-left:17px;margin-top:5px;" class="btn btn-primary"><b>FILTER</b></button>
-                        <button type="button" id="btncancel" style="margin-left:17px;margin-top:5px;" class="btn btn-primary"><b>CANCEL</b></button>
-                        <button class="btn btn-primary login-btn" onclick='ExportDataExcel("0");' type="button" id="btnExport">
-                            <i class="fas fa-file-export"></i> Export
-                        </button>
-                    </div>
-                </div>
+            <div class="row mt-3 mb-4">
 
-                <div id="dvListing">
-                    @Html.Partial("~/Views/Discussion/_CommonDiscussionList.cshtml", Model)
+                <div class="col-md-4 col-xl-6">
+                    <input type="radio" id="rdnnorange" checked name="cust_type" /> No Range &nbsp;&nbsp;&nbsp;&nbsp;
+                    <input type="radio" id="rdndaterange" name="cust_type" /> Date Range <br /><br />
+                    <input id="txtFromDate" placeholder="From Date" class="input50" />&nbsp;&nbsp;&nbsp;&nbsp;
+                    <input id="txtToDate" placeholder="To Date" class="input50" />
+                    <button type="button" id="btnFilter" style="margin-left:17px;margin-top:5px;" class="btn btn-primary"><b>FILTER</b></button>
+                    <button type="button" id="btncancel" style="margin-left:17px;margin-top:5px;" class="btn btn-primary"><b>CANCEL</b></button>
+                    <button class="btn btn-primary login-btn" onclick='ExportDataExcel("0");' type="button" id="btnExport">
+                        <i class="fas fa-file-export"></i> Export
+                    </button>
                 </div>
             </div>
+
+            <div id="dvListing">
+                @Html.Partial("~/Views/Discussion/_CommonDiscussionList.cshtml", Model)
+            </div>
         </div>
+    </div>
 </div>
 <script src="~/Scripts/jquery-ui-1.12.1.js"></script>
 <script src="~/Scripts/jquery-ui-1.12.1.min.js"></script>
@@ -243,7 +252,7 @@
         urlLink = urlLink + "?fromdt=" + fromdt + "&Todt=" + Todt + "&Groupnm=" + groupnm + "&calltype=" + calltype + "&status=" + status + "&raised=" + raisedby +"&ReportName=DiscussionReport";
         console.log(urlLink);
         window.location.href = urlLink;
-        $("#divLoader").hide();       
+        $("#divLoader").hide();
 
     }
     function ShowActivities(id) {
