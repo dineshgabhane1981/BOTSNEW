@@ -57,6 +57,16 @@
         
     <div style="float:left; border:1px solid grey;border-radius:10px;margin-bottom:10px;">
         @Html.HiddenFor(model => item.Id, new { @id = "hdnInactiveConfigId" + count })
+        <div style="margin-top: 20px; margin-bottom: 20px; float: left; " class="col-md-12 col-lg-12">
+            <b><span id="@ShowStatus"> Status -  @item.DLTStatus1 </span></b><br />
+            <span id="@RejectStatus">
+                @if (item.DLTStatus1 == "Rejected")
+                {
+                    var reasonRejects = "<b>Reason</b> - " + item.RejectReason1;
+                    @Html.Raw(reasonRejects)
+                }
+            </span>
+        </div>
         <div style="float:left;" class="col-md-4 col-lg-4">
             <div style="margin-top: 10px;">
                 <b>Less Than Script </b><br /> <textarea id="@txtLessThanScript" onfocusout="ConvertValuesToDLT(this,@txtLessThanScriptDLT);" rows="6" cols="40" class="input100" @DLTStatus1>@item.LessThanDaysScript</textarea>
@@ -100,6 +110,17 @@
             <textarea id="@RejectReason" rows="6" cols="40" class="input100"></textarea>
             <button type="button" id="@btnRejectSubmit" onclick="RejectInactiveSubmit(this,1);" class="btn btn-primary" style="margin-left: 20px; margin-bottom:25px;">Submit</button>
             <button type="button" id="@btnRejectCancel" onclick="RejectInactiveCancel(this,1);" class="btn btn-primary" style="margin-left: 20px; margin-bottom:25px;">Cancel</button><br />
+        </div>
+        <br />
+        <div style="margin-top: 20px; margin-bottom: 20px; float: left; " class="col-md-12 col-lg-12">
+            <b><span id="@ShowStatus1"> Status -  @item.DLTStatus2 </span></b><br />
+            <span id="@RejectStatus1">
+                @if (item.DLTStatus2 == "Rejected")
+                {
+                    var reasonRejects = "<b>Reason</b> - " + item.RejectReason2;
+                    @Html.Raw(reasonRejects)
+                }
+            </span>
         </div>
 
         <div style="float:left;" class="col-md-4 col-lg-4">
@@ -211,16 +232,56 @@
     function RejectTemplate(item, num) {
         var idlength = item.id.length;
         var id = 0;
-
         if (num == 1) {
-            var len = parseFloat(idlength) - 7;
-            id = item.id.substr(7, len.length);
+            var len = parseFloat(idlength) - 9;
+            id = item.id.substr(9, len.length);
+            $("#divRejectReason" + id).show(1000);
         }
         if (num == 2) {
-            var len = parseFloat(idlength) - 8;
-            id = item.id.substr(8, len.length);
+            var len = parseFloat(idlength) - 10;
+            id = item.id.substr(10, len.length);
+            $("#divRejectReason1" + id).show(1000);
+        }        
+    }
+
+    function RejectInactiveCancel(item, num) {
+        var idlength = item.id.length;
+        var id = 0;
+        if (num == 1) {
+            var len = parseFloat(idlength) - 15;
+            id = item.id.substr(15, len.length);            
+            $("#divRejectReason" + id).hide(1000);
         }
-        $("#divRejectReason" + id).show(1000);
+        if (num == 2) {
+            var len = parseFloat(idlength) - 16;
+            id = item.id.substr(16, len.length);            
+            $("#divRejectReason1" + id).hide(1000);
+        }        
+    }
+
+    function RejectInactiveSubmit(item, num) {        
+        var idlength = item.id.length;
+        var reason = "";
+        var id = 0;
+        if (num == 1) {
+            var len = parseFloat(idlength) - 15;
+            id = item.id.substr(15, len.length);
+            reason = $("#txtRejectReason" + id).val();           
+        }
+        if (num == 2) {
+            var len = parseFloat(idlength) - 16;
+            id = item.id.substr(16, len.length);
+            reason = $("#txtRejectReason1" + id).val();
+        }
+        UpdateInactiveStatus(id, num, "Rejected", reason);
+        if (num == 1) {
+            $("#divRejectReason" + id).hide(1000);
+            $("#spnRejectStatus" + id).html("<b>Reason</b> - " + reason);
+        }
+        if (num == 2) {
+            $("#divRejectReason1" + id).hide(1000);
+            $("#spnRejectStatus1" + id).html("<b>Reason</b> - " + reason);
+        }
     }
 
 
@@ -241,10 +302,16 @@
                             buttonText: "Okay"
                         })
                         if (status == "InProgress") {
-                            $("#spnStatus" + statusid).text("Status - InProgress");
+                            if (statusid == 1)
+                                $("#spnStatus" + id).text("Status - InProgress");
+                            if (statusid == 2)
+                                $("#spnStatus1" + id).text("Status - InProgress");
                         }
                         if (status == "Rejected") {
-                            $("#spnStatus" + statusid).text("Status - Rejected");
+                            if (statusid == 1)
+                                $("#spnStatus" + id).text("Status - Rejected");
+                            if (statusid == 2)
+                                $("#spnStatus1" + id).text("Status - Rejected");
                         }
                     }
                     else {
