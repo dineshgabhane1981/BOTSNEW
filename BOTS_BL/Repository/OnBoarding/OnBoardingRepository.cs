@@ -1493,6 +1493,16 @@ namespace BOTS_BL.Repository
 
             return objData;
         }
+        public List<BOTS_TblCampaignInactive> GetCampaignAllInactiveForDLT(string groupId, string type)
+        {
+            List<BOTS_TblCampaignInactive> objData = new List<BOTS_TblCampaignInactive>();
+            using (var context = new CommonDBContext())
+            {
+                objData = context.BOTS_TblCampaignInactive.Where(x => x.GroupId == groupId && x.InactiveType == type).ToList();
+            }
+
+            return objData;
+        }
         public bool UpdateBADLTStatus(int id, int statusid, string status, string loginid, string reason)
         {
             bool result = false;
