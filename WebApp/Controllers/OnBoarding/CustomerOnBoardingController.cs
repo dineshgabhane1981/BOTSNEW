@@ -1699,5 +1699,13 @@ namespace WebApp.Controllers.OnBoarding
 
             return new JsonResult() { Data = result, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
+
+        public ActionResult GetCampaignAllInactiveDLT(string GroupId, string Type)
+        {
+            OnBoardingSalesViewModel objDataView = new OnBoardingSalesViewModel();
+            ViewBag.TempleteType = objDataView.TempleteType();
+            var objData = OBR.GetCampaignAllInactiveForDLT(GroupId, Type);
+            return PartialView("_DLTInactiveAll", objData);
+        }
     }
 }

@@ -62,9 +62,25 @@
                 }
             });
         }
-        else {            
-            $("#dvCampaignDLT").html("");
-            $("#dvCampaignDLT").hide(1000);
+        else {
+            $("#divLoader").show();
+            $.ajax({
+                url: '@Url.Action("GetCampaignAllInactiveDLT", "CustomerOnBoarding")',
+                data: '{GroupId: ' + JSON.stringify($('#hdnGroupID').val()) + ',Type: ' + JSON.stringify(type) + '}',
+                type: "post",
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (result) {
+                    $("#dvCampaignDLT").html(result);
+                    $("#dvCampaignDLT").show(100);
+                    $("#divLoader").hide();
+                },
+                error: function (result) {
+                    $("#dvCampaignDLT").html(result.responseText);
+                    $("#dvCampaignDLT").show(100);
+                    $("#divLoader").hide();
+                }
+            });
         }
     }
 </script>
