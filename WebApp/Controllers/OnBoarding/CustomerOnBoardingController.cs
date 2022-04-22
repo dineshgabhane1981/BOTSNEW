@@ -901,9 +901,17 @@ namespace WebApp.Controllers.OnBoarding
                     objDLCLink.ToTheReferralSMSScript = Convert.ToString(item["SMSToTheReferral"]);
                     objDLCLink.ReminderForPointsUsageSMSScript = Convert.ToString(item["SMSReminderForPointsUsage"]);
                     objDLCLink.ReferredSuccessOnReferralTxnSMSScript = Convert.ToString(item["SMSReferredSuccessOnReferralTxn"]);
-                    objDLCLink.ToTheReferralWAScript = Convert.ToString(item["WAToTheReferral"]);
-                    objDLCLink.ReminderForPointsUsageWAScript = Convert.ToString(item["WAReminderForPointsUsage"]);
-                    objDLCLink.ReferredSuccessOnReferralTxnWAScript = Convert.ToString(item["WAReferredSuccessOnReferralTxn"]);
+                    objDLCLink.DLCOTPScriptSMS = Convert.ToString(item["DLCOTPScriptSMS"]);
+                    objDLCLink.GiftPointsOTPScriptSMS = Convert.ToString(item["GiftPointsOTPScriptSMS"]);
+                    objDLCLink.GiftPointsDebitOTPScriptSMS = Convert.ToString(item["GiftPointsDebitOTPScriptSMS"]);
+                    objDLCLink.GiftPointsCreditOTPScriptSMS = Convert.ToString(item["GiftPointsCreditOTPScriptSMS"]);
+                    objDLCLink.ToTheReferralWAScript = Convert.ToString(item["ToTheReferralWAScript"]);
+                    objDLCLink.ReminderForPointsUsageWAScript = Convert.ToString(item["ReminderForPointsUsageWAScript"]);
+                    objDLCLink.ReferredSuccessOnReferralTxnWAScript = Convert.ToString(item["ReferredSuccessOnReferralTxnWAScript"]);
+                    objDLCLink.DLCOTPScriptWA = Convert.ToString(item["DLCOTPScriptWA"]);
+                    objDLCLink.GiftPointsOTPScriptWA = Convert.ToString(item["GiftPointsOTPScriptWA"]);
+                    objDLCLink.GiftPointsDebitOTPScriptWA = Convert.ToString(item["GiftPointsDebitOTPScriptWA"]);
+                    objDLCLink.GiftPointsCreditOTPScriptWA = Convert.ToString(item["GiftPointsCreditOTPScriptWA"]);
                     if (objDLCLink.Id > 0)
                     {
                         objDLCLink.UpdatedBy = userDetails.LoginId;

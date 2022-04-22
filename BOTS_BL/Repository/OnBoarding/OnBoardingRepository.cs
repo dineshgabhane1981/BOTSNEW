@@ -790,13 +790,42 @@ namespace BOTS_BL.Repository
                         {
                             objData.AddedBy = oldData.AddedBy;
                             objData.AddedDate = oldData.AddedDate;
+                            objData.DLTStatus1 = oldData.DLTStatus1;
+                            objData.DLTStatus2 = oldData.DLTStatus2;
+                            objData.DLTStatus3 = oldData.DLTStatus3;
+                            objData.DLTStatus4 = oldData.DLTStatus4;
+                            objData.DLTStatus5 = oldData.DLTStatus5;
+                            objData.DLTStatus6 = oldData.DLTStatus6;
+                            objData.DLTStatus7 = oldData.DLTStatus7;
+                            objData.TemplateId1 = oldData.TemplateId1;
+                            objData.TemplateId2 = oldData.TemplateId2;
+                            objData.TemplateId3 = oldData.TemplateId3;
+                            objData.TemplateId4 = oldData.TemplateId4;
+                            objData.TemplateId5 = oldData.TemplateId5;
+                            objData.TemplateId6 = oldData.TemplateId6;
+                            objData.TemplateId7 = oldData.TemplateId7;
+                            objData.TemplateName1 = oldData.TemplateName1;
+                            objData.TemplateName2 = oldData.TemplateName2;
+                            objData.TemplateName3 = oldData.TemplateName3;
+                            objData.TemplateName4 = oldData.TemplateName4;
+                            objData.TemplateName5 = oldData.TemplateName5;
+                            objData.TemplateName5 = oldData.TemplateName6;
+                            objData.TemplateName6 = oldData.TemplateName7;
+                            objData.TemplateType1 = oldData.TemplateType1;
+                            objData.TemplateType2 = oldData.TemplateType2;
+                            objData.TemplateType3 = oldData.TemplateType3;
+                            objData.TemplateType4 = oldData.TemplateType4;
+                            objData.TemplateType5 = oldData.TemplateType5;
+                            objData.TemplateType6 = oldData.TemplateType6;
+                            objData.TemplateType7 = oldData.TemplateType7;
+                            objData.RejectReason1 = oldData.RejectReason1;
+                            objData.RejectReason2 = oldData.RejectReason2;
+                            objData.RejectReason3 = oldData.RejectReason3;
+                            objData.RejectReason4 = oldData.RejectReason4;
+                            objData.RejectReason5 = oldData.RejectReason5;
+                            objData.RejectReason6 = oldData.RejectReason6;
+                            objData.RejectReason7 = oldData.RejectReason7;
                         }
-                    }
-                    else
-                    {
-                        objData.DLTStatus1 = "Submitted";
-                        objData.DLTStatus1 = "Submitted";
-                        objData.DLTStatus1 = "Submitted";
                     }
                     context.BOTS_TblDLCLinkConfig.AddOrUpdate(objData);
                     context.SaveChanges();
