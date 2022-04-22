@@ -1679,5 +1679,25 @@ namespace WebApp.Controllers.OnBoarding
             result = OBR.UpdateBADLTStatus(Convert.ToInt32(id), Convert.ToInt32(statusid), status, userDetails.LoginId, reason);
             return new JsonResult() { Data = result, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
+        public ActionResult SaveBADLTConfig(string id, string statusid, string status, string jsonData)
+        {
+            bool result = false;
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];            
+            
+            JavaScriptSerializer json_serializer = new JavaScriptSerializer();
+            json_serializer.MaxJsonLength = int.MaxValue;
+            object[] objBAConfigData = (object[])json_serializer.DeserializeObject(jsonData);
+            foreach (Dictionary<string, object> item in objBAConfigData)
+            {
+                var IntroDays= Convert.ToString(item["IntroDays"]);
+                var IntroDaysDLT = Convert.ToString(item["IntroDaysDLT"]);
+                var TemplateId = Convert.ToString(item["TemplateId"]);
+                var TemplateName = Convert.ToString(item["TemplateName"]);
+                var TemplateType = Convert.ToString(item["TemplateType"]);
+                result = OBR.SaveBADLTConfig(Convert.ToInt32(id), Convert.ToInt32(statusid), status, IntroDays, IntroDaysDLT, TemplateId, TemplateName, TemplateType, userDetails.LoginId);
+            }
+
+            return new JsonResult() { Data = result, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
+        }
     }
 }

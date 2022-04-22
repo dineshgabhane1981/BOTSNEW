@@ -239,6 +239,7 @@
                     <th>Mobile No (for Octa XS)</th>
                     <th>Program Start Date</th>
                     <th>Renewal Date</th>
+                    <th>Transaction Per Day</th>
                 </tr>
                 @foreach (var item in Model.lstOutlets)
                 {
@@ -255,7 +256,7 @@
                 <td style="text-align:center;">--</td>
                 <td>@item.ProgramStartDate.Value.ToString("dd-MM-yyyy")</td>
                 <td>@item.ProgramRenewalDate.Value.ToString("dd-MM-yyyy")</td>
-                
+                <td>@item.TransactionPerDay</td>
             </tr>
                 }
             </table>
@@ -467,6 +468,12 @@
     <div class="multisteps-form__panel  p-3 m-3 list-box bg-white panel1" id="three-panel1">
         @Html.HiddenFor(model => model.SMSDetailsCount, new { @id = "hdnSMSDetailsCount" })
         @Html.DropDownListFor(x => Model.lstOutletList.Count, new SelectList(Model.lstOutletList, "Value", "Text"), "Select Outlet", htmlAttributes: new { @class = "input50", @id = "ddlOutlets", style = "margin-top:20px;" })
+        <div style="margin-top:10px;">
+            <b>Communication Preference </b>
+
+
+
+        </div>
         <div class="row" style="margin-top:20px;">
             <div style="margin-right:20px;">
                 <table border="1" cellpadding="5" cellspacing="5">
