@@ -1462,6 +1462,7 @@ namespace BOTS_BL.Repository
                             objCampaign.DLTStatus3 = "Submitted";
                             objCampaign.DLTStatus4 = "Submitted";
                             objCampaign.DLTStatus5 = "Submitted";
+                            objCampaign.DLTStatus6 = "Submitted";
 
                             objCampaign.UpdatedBy = LoginId;
                             objCampaign.UpdatedDate = DateTime.Now;
@@ -1580,6 +1581,14 @@ namespace BOTS_BL.Repository
                             objData.RejectReason5 = reason;
                         }
                     }
+                    if (statusid == 6)
+                    {
+                        objData.DLTStatus6 = status;
+                        if (status == "Rejected")
+                        {
+                            objData.RejectReason6 = reason;
+                        }
+                    }
 
                     objData.UpdatedBy = loginid;
                     objData.UpdatedDate = DateTime.Now;
@@ -1624,6 +1633,10 @@ namespace BOTS_BL.Repository
                             {
                                 existingObj.DLTStatus5 = status;
                             }
+                            if (statusid == 6)
+                            {
+                                existingObj.DLTStatus6 = status;
+                            }
                         }
                         if (statusid == 1)
                         {
@@ -1659,11 +1672,19 @@ namespace BOTS_BL.Repository
                         }
                         if (statusid == 5)
                         {
-                            existingObj.OnDayScript = IntroDays;
-                            existingObj.OnDayScriptDLT = IntroDaysDLT;
+                            existingObj.OnDayScriptPT = IntroDays;
+                            existingObj.OnDayScriptPTDLT = IntroDaysDLT;
                             existingObj.TemplateId5 = TemplateId;
                             existingObj.TemplateName5 = TemplateName;
                             existingObj.TemplateType5 = TemplateType;
+                        }
+                        if (statusid == 6)
+                        {
+                            existingObj.OnDayScriptNPT = IntroDays;
+                            existingObj.OnDayScriptNPTDLT = IntroDaysDLT;
+                            existingObj.TemplateId6 = TemplateId;
+                            existingObj.TemplateName6 = TemplateName;
+                            existingObj.TemplateType6 = TemplateType;
                         }
 
                         existingObj.UpdatedBy = loginid;

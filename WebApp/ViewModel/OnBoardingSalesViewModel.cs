@@ -93,9 +93,13 @@ namespace WebApp.ViewModel
             return new SelectListItem[2] { new SelectListItem() { Text = "Before", Value = "Before" }, new SelectListItem() { Text = "After", Value = "After" } };
 
         }
-        public SelectListItem[] PointsUsedOrNot()
+        public SelectListItem[] PointsUsed()
         {
-            return new SelectListItem[3] { new SelectListItem() { Text = "Points Used", Value = "Points Used" }, new SelectListItem() { Text = "Points Not Used", Value = "Points Not Used" }, new SelectListItem() { Text = "N/A", Value = "N/A" } };
+            return new SelectListItem[1] { new SelectListItem() { Text = "Points Used", Value = "Points Used" } };
+        }
+        public SelectListItem[] PointsNotUsed()
+        {
+            return new SelectListItem[1] { new SelectListItem() { Text = "Points Not Used", Value = "Points Not Used" }};
         }
 
         public SelectListItem[] RedemptionType()

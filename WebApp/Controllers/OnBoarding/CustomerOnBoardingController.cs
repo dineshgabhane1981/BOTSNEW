@@ -1467,16 +1467,18 @@ namespace WebApp.Controllers.OnBoarding
 
                     objData.IntroDays1 = Convert.ToInt32(item["IntroDays1"]);
                     objData.IntroScript1 = Convert.ToString(item["IntroScript1"]);
-                    objData.IntroDays2 = Convert.ToInt32(item["IntroDays2"]);
-                    objData.IntroScript2 = Convert.ToString(item["IntroScript2"]);
+                    //objData.IntroDays2 = Convert.ToInt32(item["IntroDays2"]);
+                    //objData.IntroScript2 = Convert.ToString(item["IntroScript2"]);
                     objData.ReminderDays1 = Convert.ToInt32(item["ReminderDays1"]);
                     objData.ReminderWhen1 = Convert.ToString(item["ReminderWhen1"]);
                     objData.ReminderScript1 = Convert.ToString(item["ReminderScript1"]);
                     objData.ReminderDays2 = Convert.ToInt32(item["ReminderDays2"]);
                     objData.ReminderWhen2 = Convert.ToString(item["ReminderWhen2"]);
                     objData.ReminderScript2 = Convert.ToString(item["ReminderScript2"]);
-                    objData.OnDayType = Convert.ToString(item["OnDayType"]);
-                    objData.OnDayScript = Convert.ToString(item["OnDayScript"]);
+                    objData.OnDayTypePT = Convert.ToString(item["OnDayTypePT"]);
+                    objData.OnDayScriptPT = Convert.ToString(item["OnDayScriptPT"]);
+                    objData.OnDayTypeNPT = Convert.ToString(item["OnDayTypeNPT"]);
+                    objData.OnDayScriptNPT = Convert.ToString(item["OnDayScriptNPT"]);
 
                     if (objData.Id > 0)
                     {
