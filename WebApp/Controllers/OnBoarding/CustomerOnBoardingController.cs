@@ -1724,6 +1724,58 @@ namespace WebApp.Controllers.OnBoarding
             return new JsonResult() { Data = result, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
 
-
+        public ActionResult SaveInactiveDLTConfig(string jsonData)
+        {
+            bool status = false;
+            try
+            {
+                var userDetails = (CustomerLoginDetail)Session["UserSession"];
+                BOTS_TblCampaignInactive objInactiveConfig = new BOTS_TblCampaignInactive();
+                JavaScriptSerializer json_serializer = new JavaScriptSerializer();
+                json_serializer.MaxJsonLength = int.MaxValue;
+                object[] objInactiveConfigData = (object[])json_serializer.DeserializeObject(jsonData);
+                foreach (Dictionary<string, object> item in objInactiveConfigData)
+                {
+                    var id = Convert.ToInt32(item["Id"]);
+                    var num = Convert.ToInt32(item["statusId"]);
+                    objInactiveConfig = OBR.GetInactiveConfigById(id);
+                    if (objInactiveConfig != null)
+                    {
+                        if(num==1)
+                        {
+                            objInactiveConfig.LessThanDaysScript= Convert.ToString(item["Script"]);
+                            objInactiveConfig.LessThanDaysScriptDLT = Convert.ToString(item["ScriptDLT"]);
+                            objInactiveConfig.TemplateId1 = Convert.ToString(item["TemplateId"]);
+                            objInactiveConfig.TemplateName1 = Convert.ToString(item["TemplateName"]);
+                            objInactiveConfig.TemplateType1 = Convert.ToString(item["TemplateType"]);
+                            if(Convert.ToString(item["Status"])== "Approved")
+                            {
+                                objInactiveConfig.DLTStatus1 = "Approved";
+                            }
+                        }
+                        if (num == 2)
+                        {
+                            objInactiveConfig.GreaterThanDaysScript = Convert.ToString(item["Script"]);
+                            objInactiveConfig.GreaterThanDaysScriptDLT = Convert.ToString(item["ScriptDLT"]);
+                            objInactiveConfig.TemplateId2 = Convert.ToString(item["TemplateId"]);
+                            objInactiveConfig.TemplateName2 = Convert.ToString(item["TemplateName"]);
+                            objInactiveConfig.TemplateType2 = Convert.ToString(item["TemplateType"]);
+                            if (Convert.ToString(item["Status"]) == "Approved")
+                            {
+                                objInactiveConfig.DLTStatus2 = "Approved";
+                            }
+                        }
+                        objInactiveConfig.UpdatedBy = userDetails.LoginId;
+                        objInactiveConfig.UpdatedDate = DateTime.Now;
+                    }
+                }
+                status = OBR.SaveInactiveDLTConfig(objInactiveConfig);
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "SaveInactiveDLTConfig");
+            }
+            return new JsonResult() { Data = status, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
+        }
     }
 }

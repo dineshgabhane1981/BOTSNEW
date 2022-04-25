@@ -9,9 +9,9 @@
         var DLTStatus2 = "";
         var ShowStatus = "spnStatus" + count;
         var RejectStatus = "spnRejectStatus" + count;
-        var templateId = "txtTemplateId" + count;
-        var templateName = "txtTemplateName" + count;
-        var templateType = "txtTemplateType" + count;
+        var templateId = "txtTemplateId1" + count;
+        var templateName = "txtTemplateName1" + count;
+        var templateType = "txtTemplateType1" + count;
 
         var btnCopy = "btnCopy" + count;
         var btnApprove = "btnApprove" + count;
@@ -25,9 +25,9 @@
 
         var ShowStatus1 = "spnStatus1" + count;
         var RejectStatus1 = "spnRejectStatus1" + count;
-        var templateId1 = "txtTemplateId1" + count;
-        var templateName1 = "txtTemplateName1" + count;
-        var templateType1 = "txtTemplateType1" + count;
+        var templateId1 = "txtTemplateId2" + count;
+        var templateName1 = "txtTemplateName2" + count;
+        var templateType1 = "txtTemplateType2" + count;
 
         var btnCopy1 = "btnCopy1" + count;
         var btnApprove1 = "btnApprove1" + count;
@@ -86,7 +86,7 @@
                 Template Type <br />
                 @if (item.DLTStatus1 == "Approved")
                 {
-                    @Html.DropDownListFor(x => item.TemplateType1, new SelectList(ViewBag.TempleteType, "Value", "Text"), htmlAttributes: new { @class = "input50", @id = @templateType, @disabled = "disabled" })
+                    @Html.DropDownListFor(x => item.TemplateType1, new SelectList(ViewBag.TempleteType, "Value", "Text", item.TemplateType1), htmlAttributes: new { @class = "input50", @id = @templateType, @disabled = "disabled" })
                 }
                 else
                 {
@@ -100,9 +100,9 @@
             <div style="margin-top: 10px;">
                 <div class="container-fluid pt-3 pb-3">
                     <button type="button" id="@btnCopy" onclick="CopyTemplate(this,1);" class="btn btn-primary" style="margin-left: -20px; margin-top: 10px; " @DLTStatus1>Copy</button><br />
-                    <button type="button" id="@btnApprove" onclick="ApproveTemplate(this,1);" class="btn btn-primary" style="margin-left: -20px; margin-top: 10px;" @DLTStatus1>Approve</button><br />
+                    <button type="button" id="@btnApprove" onclick="SaveTemplate(this,1,'Approved');" class="btn btn-primary" style="margin-left: -20px; margin-top: 10px;" @DLTStatus1>Approve</button><br />
                     <button type="button" id="@btnReject" onclick="RejectTemplate(this,1);" class="btn btn-primary" style="margin-left: -20px; margin-top: 10px; " @DLTStatus1>Reject</button><br />
-                    <button type="button" id="@btnSave" onclick="SaveTemplate(this,1);" class="btn btn-primary" style="margin-left: -20px; margin-top: 10px; " @DLTStatus1>Save</button>
+                    <button type="button" id="@btnSave" onclick="SaveTemplate(this,1,'Save');" class="btn btn-primary" style="margin-left: -20px; margin-top: 10px; " @DLTStatus1>Save</button>
                 </div>
             </div>
         </div>
@@ -140,13 +140,13 @@
                 Template Id <br /> <input id="@templateId1" type="text" class="input50" value="@item.TemplateId2" @DLTStatus2 /><br />
                 Template Name <br /> <input id="@templateName1" type="text" class="input50" value="@item.TemplateName2" @DLTStatus2 /><br />
                 Template Type <br />
-                @if (item.DLTStatus1 == "Approved")
+                @if (item.DLTStatus2 == "Approved")
                 {
-                    @Html.DropDownListFor(x => item.TemplateType1, new SelectList(ViewBag.TempleteType, "Value", "Text"), htmlAttributes: new { @class = "input50", @id = @templateType1, @disabled = "disabled" })
+                    @Html.DropDownListFor(x => item.TemplateType2, new SelectList(ViewBag.TempleteType, "Value", "Text", item.TemplateType2), htmlAttributes: new { @class = "input50", @id = @templateType1, @disabled = "disabled" })
                 }
                 else
                 {
-                    @Html.DropDownListFor(x => item.TemplateType1, new SelectList(ViewBag.TempleteType, "Value", "Text", item.TemplateType1), htmlAttributes: new { @class = "input50", @id = @templateType1 })
+                    @Html.DropDownListFor(x => item.TemplateType2, new SelectList(ViewBag.TempleteType, "Value", "Text", item.TemplateType2), htmlAttributes: new { @class = "input50", @id = @templateType1 })
                 }
 
             </div>
@@ -155,11 +155,11 @@
         <div style="float:left;margin:0px; padding:0px;" class="col-md-1 col-lg-1">
             <div style="margin-top: 10px;">
                 <div class="container-fluid pt-3 pb-3">
-                    <button type="button" id="@btnCopy1" onclick="CopyTemplate(this,2);" class="btn btn-primary" style="margin-left: -20px; margin-top: 10px; " @DLTStatus1>Copy</button><br />
-                    <button type="button" id="@btnApprove1" onclick="ApproveTemplate(this,2);" class="btn btn-primary" style="margin-left: -20px; margin-top: 10px;" @DLTStatus1>Approve</button><br />
-                    <button type="button" id="@btnReject1" onclick="RejectTemplate(this,2);" class="btn btn-primary" style="margin-left: -20px; margin-top: 10px; " @DLTStatus1>Reject</button><br />
+                    <button type="button" id="@btnCopy1" onclick="CopyTemplate(this,2);" class="btn btn-primary" style="margin-left: -20px; margin-top: 10px; " @DLTStatus2>Copy</button><br />
+                    <button type="button" id="@btnApprove1" onclick="SaveTemplate(this,2,'Approved');" class="btn btn-primary" style="margin-left: -20px; margin-top: 10px;" @DLTStatus2>Approve</button><br />
+                    <button type="button" id="@btnReject1" onclick="RejectTemplate(this,2);" class="btn btn-primary" style="margin-left: -20px; margin-top: 10px; " @DLTStatus2>Reject</button><br />
 
-                    <button type="button" id="@btnSave1" onclick="SaveTemplate(this,2);" class="btn btn-primary" style="margin-left: -20px; margin-top: 10px; " @DLTStatus1>Save</button>
+                    <button type="button" id="@btnSave1" onclick="SaveTemplate(this,2,'Save');" class="btn btn-primary" style="margin-left: -20px; margin-top: 10px; " @DLTStatus2>Save</button>
                 </div>
             </div>
         </div>
@@ -229,6 +229,7 @@
 
         UpdateInactiveStatus(id, num, "InProgress", "");
     }
+
     function RejectTemplate(item, num) {
         var idlength = item.id.length;
         var id = 0;
@@ -241,7 +242,7 @@
             var len = parseFloat(idlength) - 10;
             id = item.id.substr(10, len.length);
             $("#divRejectReason1" + id).show(1000);
-        }        
+        }
     }
 
     function RejectInactiveCancel(item, num) {
@@ -249,24 +250,24 @@
         var id = 0;
         if (num == 1) {
             var len = parseFloat(idlength) - 15;
-            id = item.id.substr(15, len.length);            
+            id = item.id.substr(15, len.length);
             $("#divRejectReason" + id).hide(1000);
         }
         if (num == 2) {
             var len = parseFloat(idlength) - 16;
-            id = item.id.substr(16, len.length);            
+            id = item.id.substr(16, len.length);
             $("#divRejectReason1" + id).hide(1000);
-        }        
+        }
     }
 
-    function RejectInactiveSubmit(item, num) {        
+    function RejectInactiveSubmit(item, num) {
         var idlength = item.id.length;
         var reason = "";
         var id = 0;
         if (num == 1) {
             var len = parseFloat(idlength) - 15;
             id = item.id.substr(15, len.length);
-            reason = $("#txtRejectReason" + id).val();           
+            reason = $("#txtRejectReason" + id).val();
         }
         if (num == 2) {
             var len = parseFloat(idlength) - 16;
@@ -283,7 +284,6 @@
             $("#spnRejectStatus1" + id).html("<b>Reason</b> - " + reason);
         }
     }
-
 
     function UpdateInactiveStatus(id, statusid, status, reason) {
          $("#divLoader").show();
@@ -330,5 +330,113 @@
             });
     }
 
+    function SaveTemplate(item, num,status) {
+        var idlength = item.id.length;
+        var id = 0;
+        var Script = "";
+        var DLTScript = "";
+
+        if (status == "Save") {
+            if (num == 1) {
+                var len = parseFloat(idlength) - 7;
+                id = item.id.substr(7, len.length);
+                Script = $("#txtLessThanScript" + id).val();
+                DLTScript = $("#txtDLTLessThanScript" + id).val();
+            }
+            if (num == 2) {
+                var len = parseFloat(idlength) - 8;
+                id = item.id.substr(8, len.length);
+                Script = $("#txtGreaterThanScript" + id).val();
+                DLTScript = $("#txtDLTGreaterThanScript" + id).val();
+            }
+        }
+        if (status == "Approved") {
+            if (num == 1) {
+                var len = parseFloat(idlength) - 10;
+                id = item.id.substr(10, len.length);
+                Script = $("#txtLessThanScript" + id).val();
+                DLTScript = $("#txtDLTLessThanScript" + id).val();
+            }
+            if (num == 2) {
+                var len = parseFloat(idlength) - 11;
+                id = item.id.substr(11, len.length);
+                Script = $("#txtGreaterThanScript" + id).val();
+                DLTScript = $("#txtDLTGreaterThanScript" + id).val();
+            }
+        }
+        
+
+        var SaveData = [];
+        saveitem = {}
+
+        saveitem["Id"] = id;
+        saveitem["statusId"] = num;
+        saveitem["Script"] = Script;
+        saveitem["ScriptDLT"] = DLTScript;
+        saveitem["TemplateId"] = $("#txtTemplateId" + num + id).val();
+        saveitem["TemplateName"] = $("#txtTemplateName" + num + id).val();
+        saveitem["TemplateType"] = $("#txtTemplateType" + num + id).val();
+        saveitem["Status"] = status;
+        SaveData.push(saveitem);
+        var SaveDataStr = JSON.stringify(SaveData);
+
+         $("#divLoader").show();
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("SaveInactiveDLTConfig", "CustomerOnBoarding")',
+                data: '{jsonData: ' + JSON.stringify(SaveDataStr) + '}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (result) {
+                    if (result == true) {
+                        cuteAlert({
+                            type: "success",
+                            title: "Saved..",
+                            message: "DLT Data Saved Successfully!",
+                            buttonText: "Okay"
+                        })
+                        if (status == "Approved") {
+                            if (num == 1) {
+                                $("#spnStatus" + id).text("Status - Approved");
+                                $("#spnRejectStatus" + id).hide();
+                                $("#txtLessThanScript" + id).prop("disabled", true);
+                                $("#txtTemplateId" + num + id).prop("disabled", true);
+                                $("#txtTemplateName" + num + id).prop("disabled", true);
+                                $("#txtTemplateType" + num + id).prop("disabled", true);
+                                $("#btnCopy" + id).prop("disabled", true);
+                                $("#btnApprove" + id).prop("disabled", true);
+                                $("#btnReject" + id).prop("disabled", true);
+                                $("#btnSave" + id).prop("disabled", true);
+
+                            }
+                            if (num == 2) {
+                                $("#spnStatus1" + id).text("Status - Approved");
+                                $("#spnRejectStatus1" + id).hide();
+                                $("#txtGreaterThanScript" + id).prop("disabled", true);
+                                $("#txtTemplateId" + num + id).prop("disabled", true);
+                                $("#txtTemplateName" + num + id).prop("disabled", true);
+                                $("#txtTemplateType" + num + id).prop("disabled", true);
+                                $("#btnCopy1" + id).prop("disabled", true);
+                                $("#btnApprove1" + id).prop("disabled", true);
+                                $("#btnReject1" + id).prop("disabled", true);
+                                $("#btnSave1" + id).prop("disabled", true);
+                            }
+                        }
+                    }
+                    else {
+                        cuteAlert({
+                            type: "error",
+                            title: "Oops..",
+                            message: "There is some problem while saving Communication Data",
+                            buttonText: "Okay"
+                        })
+                    }
+                    $("#divLoader").hide();
+                },
+                error: function (result) {
+                    $("#divLoader").hide();
+                }
+            });
+    }
 
 </script>
