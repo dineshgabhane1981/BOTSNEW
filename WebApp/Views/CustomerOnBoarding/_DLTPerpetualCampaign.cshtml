@@ -48,6 +48,19 @@
         $('#rbtnPointsExpiry').click(function () {
             LoadCampaign("Point Expiry");
         });
+
+        $('#rbtnDLCRR').click(function () {
+            LoadCampaign("DLC Referral Reminder");
+        });
+        $('#rbtnDLCUR').click(function () {
+            LoadCampaign("DLC Update Reminder");
+        });
+        $('#rbtnBalanceUpdate').click(function () {
+            LoadCampaign("Balance Updates");
+        });
+        $('#rbtnBUURNew').click(function () {
+            LoadCampaign("Reminder Bulk Uploaded Users");
+        });
     });
 
     function LoadCampaign(type) {
@@ -71,7 +84,7 @@
                 }
             });
         }
-        else {
+        if (type == "Inactive" || type == "Only Once Inactive" || type == "Non Redemption Inactive" || type == "Point Expiry") {
             $("#divLoader").show();
             $.ajax({
                 url: '@Url.Action("GetCampaignAllInactiveDLT", "CustomerOnBoarding")',
@@ -91,5 +104,26 @@
                 }
             });
         }
+        if (type == "DLC Referral Reminder" || type == "DLC Update Reminder" || type == "Balance Updates" || type == "Reminder Bulk Uploaded Users") {
+            $("#divLoader").show();
+            $.ajax({
+                url: '@Url.Action("GetCampaignRemainingDLT", "CustomerOnBoarding")',
+                data: '{GroupId: ' + JSON.stringify($('#hdnGroupID').val()) + ',Type: ' + JSON.stringify(type) + '}',
+                type: "post",
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (result) {
+                    $("#dvCampaignDLT").html(result);
+                    $("#dvCampaignDLT").show(100);
+                    $("#divLoader").hide();
+                },
+                error: function (result) {
+                    $("#dvCampaignDLT").html(result.responseText);
+                    $("#dvCampaignDLT").show(100);
+                    $("#divLoader").hide();
+                }
+            });
+        }
+
     }
 </script>

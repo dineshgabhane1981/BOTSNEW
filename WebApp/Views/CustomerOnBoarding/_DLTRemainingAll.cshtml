@@ -1,0 +1,190 @@
+﻿@model BOTS_BL.Models.BOTS_TblCampaignOtherConfig
+
+@{
+    var DLTStatus1 = "";
+    var DLTStatus2 = "";
+
+    if (Model.DLTStatus1 == "Approved")
+    {
+        DLTStatus1 = "disabled";
+    }
+    if (Model.DLTStatus2 == "Approved")
+    {
+        DLTStatus2 = "disabled";
+    }
+
+    var count = Model.Id;
+    @Html.HiddenFor(model => Model.Id, new { @id = "hdnOtherConfigId" })
+
+    var btnRejectSubmit = "btnRejectSubmit" + count;
+    var btnRejectCancel = "btnRejectCancel" + count;
+
+    var RejectReason = "txtRejectReason" + count;
+    var RejectDiv = "divRejectReason" + count;
+
+    var ShowStatus = "spnStatus" + count;
+    var RejectStatus = "spnRejectStatus" + count;
+}
+
+<div style="float:left; border:1px solid grey;border-radius:10px;margin-bottom:10px;" class="col-md-12 col-lg-12">
+    <div style="margin:20px;">
+        <b><span id="spnStatus1"> Status -  @Model.DLTStatus1 </span></b><br />
+        <span id="spnRejectStatus1">
+            @if (Model.DLTStatus1 == "Rejected")
+            {
+                var reasonRejects = "<b>Reason</b> - " + Model.RejectReason1;
+                @Html.Raw(reasonRejects)
+            }
+        </span>
+    </div>
+    <div style="float:left;" class="col-md-4 col-lg-4">
+        <div style="margin-top: 10px;">
+            <b>Introduction Message1 Script </b><br /> <textarea id="txtIntroDays1" rows="6" cols="40" class="input100" @DLTStatus1>@Model.IntroScript1</textarea>
+        </div>
+    </div>
+    <div style="float:left;" class="col-md-4 col-lg-4">
+        <div style=" margin-top: 10px;">
+            <b> Introduction Message1 DLT Script </b><br /> <textarea id="txtIntroDays1DLT" rows="6" cols="40" class="input100" disabled>@Model.IntroScript1DLT</textarea>
+        </div>
+    </div>
+    <div style="float:left;margin-bottom:10px;" class="col-md-3 col-lg-3">
+        <div style="margin-top: 10px;">
+            Template Id <br /> <input id="txtTemplateIdBA1" type="text" class="input50" value="@Model.TemplateId1" @DLTStatus1 /><br />
+            Template Name <br /> <input id="txtTemplateNameBA1" type="text" class="input50" value="@Model.TemplateName1" @DLTStatus1 /><br />
+            Template Type <br />
+            @if (Model.TemplateType1 != null)
+            {
+                if (Model.DLTStatus1 == "Approved")
+                {
+                    @Html.DropDownListFor(x => Model.TemplateType1, new SelectList(ViewBag.TempleteType, "Value", "Text", Model.TemplateType1), htmlAttributes: new { @class = "input50", @id = "ddlTemplateTypeBA1", @disabled = "disabled" })
+                }
+                else
+                {
+                    @Html.DropDownListFor(x => Model.TemplateType1, new SelectList(ViewBag.TempleteType, "Value", "Text", Model.TemplateType1), htmlAttributes: new { @class = "input50", @id = "ddlTemplateTypeBA1" })
+                }
+            }
+            else
+            {
+                @Html.DropDownListFor(x => Model.TemplateType1, new SelectList(ViewBag.TempleteType, "Value", "Text"), htmlAttributes: new { @class = "input50", @id = "ddlTemplateTypeBA1" })
+            }
+        </div>
+    </div>
+    <div style="float:left;margin:0px; padding:0px;" class="col-md-1 col-lg-1">
+        <div style="margin-top: 10px;">
+            <div class="container-fluid pt-3 pb-3">
+                <button type="button" id="btnCopyAll1" onclick="CopyAllTemplate(this);" class="btn btn-primary" style="margin-left: -20px; margin-top: 10px; " @DLTStatus1>Copy</button><br />
+                <button type="button" id="btnApproveAll1" onclick="ApproveAllTemplate(this);" class="btn btn-primary" style="margin-left: -20px; margin-top: 10px;" @DLTStatus1>Approve</button><br />
+                <button type="button" id="btnRejectAll1" onclick="RejectAllTemplate(this);" class="btn btn-primary" style="margin-left: -20px; margin-top: 10px; " @DLTStatus1>Reject</button><br />
+                <button type="button" id="btnSaveAll1" onclick="SaveAllTemplate(this);" class="btn btn-primary" style="margin-left: -20px; margin-top: 10px; " @DLTStatus1>Save</button>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-12 col-lg-12" style="text-align:center;display:none;" id="divRejectReason1">
+        <textarea id="txtRejectReason1" rows="6" cols="40" class="input100"></textarea>
+        <button type="button" id="btnRejectSubmit1" onclick="RejectAllSubmit(this);" class="btn btn-primary" style="margin-left: 20px; margin-bottom:25px;">Submit</button>
+        <button type="button" id="btnRejectCancel1" onclick="RejectAllCancel(this);" class="btn btn-primary" style="margin-left: 20px; margin-bottom:25px;">Cancel</button><br />
+    </div>
+</div>
+
+
+<div style="float:left; border:1px solid grey;border-radius:10px;margin-bottom:10px;" class="col-md-12 col-lg-12">
+    <div style="margin:20px;">
+        <b><span id="spnStatus1"> Status -  @Model.DLTStatus2 </span></b><br />
+        <span id="spnRejectStatus1">
+            @if (Model.DLTStatus2 == "Rejected")
+            {
+                var reasonRejects = "<b>Reason</b> - " + Model.RejectReason2;
+                @Html.Raw(reasonRejects)
+            }
+        </span>
+    </div>
+    <div style="float:left;" class="col-md-4 col-lg-4">
+        <div style="margin-top: 10px;">
+            <b>Introduction Message1 Script </b><br /> <textarea id="txtIntroDays2" rows="6" cols="40" class="input100" @DLTStatus2>@Model.IntroScript2</textarea>
+        </div>
+    </div>
+    <div style="float:left;" class="col-md-4 col-lg-4">
+        <div style=" margin-top: 10px;">
+            <b> Introduction Message1 DLT Script </b><br /> <textarea id="txtIntroDays2DLT" rows="6" cols="40" class="input100" disabled>@Model.IntroScript2DLT</textarea>
+        </div>
+    </div>
+    <div style="float:left;margin-bottom:10px;" class="col-md-3 col-lg-3">
+        <div style="margin-top: 10px;">
+            Template Id <br /> <input id="txtTemplateIdBA2" type="text" class="input50" value="@Model.TemplateId2" @DLTStatus2 /><br />
+            Template Name <br /> <input id="txtTemplateNameBA2" type="text" class="input50" value="@Model.TemplateName2" @DLTStatus2 /><br />
+            Template Type <br />
+            @if (Model.TemplateType2 != null)
+            {
+                if (Model.DLTStatus2 == "Approved")
+                {
+                    @Html.DropDownListFor(x => Model.TemplateType2, new SelectList(ViewBag.TempleteType, "Value", "Text", Model.TemplateType2), htmlAttributes: new { @class = "input50", @id = "ddlTemplateTypeAll2", @disabled = "disabled" })
+                }
+                else
+                {
+                    @Html.DropDownListFor(x => Model.TemplateType2, new SelectList(ViewBag.TempleteType, "Value", "Text", Model.TemplateType2), htmlAttributes: new { @class = "input50", @id = "ddlTemplateTypeAll2" })
+                }
+            }
+            else
+            {
+                @Html.DropDownListFor(x => Model.TemplateType2, new SelectList(ViewBag.TempleteType, "Value", "Text"), htmlAttributes: new { @class = "input50", @id = "ddlTemplateTypeAll2" })
+            }
+        </div>
+    </div>
+    <div style="float:left;margin:0px; padding:0px;" class="col-md-1 col-lg-1">
+        <div style="margin-top: 10px;">
+            <div class="container-fluid pt-3 pb-3">
+                <button type="button" id="btnCopyAll2" onclick="CopyAllTemplate(this);" class="btn btn-primary" style="margin-left: -20px; margin-top: 10px; " @DLTStatus2>Copy</button><br />
+                <button type="button" id="btnApproveAll2" onclick="ApproveAllTemplate(this);" class="btn btn-primary" style="margin-left: -20px; margin-top: 10px;" @DLTStatus2>Approve</button><br />
+                <button type="button" id="btnRejectAll2" onclick="RejectAllTemplate(this);" class="btn btn-primary" style="margin-left: -20px; margin-top: 10px; " @DLTStatus2>Reject</button><br />
+                <button type="button" id="btnSaveAll2" onclick="SaveAllTemplate(this);" class="btn btn-primary" style="margin-left: -20px; margin-top: 10px; " @DLTStatus2>Save</button>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-12 col-lg-12" style="text-align:center;display:none;" id="divRejectReason2">
+        <textarea id="txtRejectReason2" rows="6" cols="40" class="input100"></textarea>
+        <button type="button" id="btnRejectSubmit2" onclick="RejectAllSubmit(this);" class="btn btn-primary" style="margin-left: 20px; margin-bottom:25px;">Submit</button>
+        <button type="button" id="btnRejectCancel2" onclick="RejectAllCancel(this);" class="btn btn-primary" style="margin-left: 20px; margin-bottom:25px;">Cancel</button><br />
+    </div>
+</div>
+
+
+<script>
+     $(document).ready(function () {
+         EventChangeOfOriginalToDLT();
+         EventChangeOfOriginalToDLTNew();
+    });
+    function EventChangeOfOriginalToDLT() {
+        ConvertValuesToDLT("txtIntroDays1", "txtIntroDays1DLT");
+        ConvertValuesToDLT("txtIntroDays2", "txtIntroDays2DLT");
+    }
+
+    function EventChangeOfOriginalToDLTNew() {
+        $("#txtIntroDays1").focusout(function () {
+            ConvertValuesToDLT("txtIntroDays1", "txtIntroDays1DLT");
+        });
+        $("#txtIntroDays2").focusout(function () {
+            ConvertValuesToDLT("txtIntroDays2", "txtIntroDays2DLT");
+        });
+    }
+
+    function ConvertValuesToDLT(fromId, toId, status) {
+        var EnrollmentText = $("#" + fromId).val();
+
+        $("#divLoader").show();
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("GetConvertedScript", "CustomerOnBoarding")',
+                data: '{CSScript: ' + JSON.stringify(EnrollmentText) + '}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (result) {
+                    $("#" + toId).val(result);
+                    $("#" + fromId).val($.trim(EnrollmentText));
+                    $("#divLoader").hide();
+                },
+                error: function (result) {
+                    $("#divLoader").hide();
+                }
+            });
+    }
+</script>

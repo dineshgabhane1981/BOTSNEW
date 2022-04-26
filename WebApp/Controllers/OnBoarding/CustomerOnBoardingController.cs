@@ -1779,5 +1779,15 @@ namespace WebApp.Controllers.OnBoarding
             }
             return new JsonResult() { Data = status, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
+
+        public ActionResult GetCampaignRemainingDLT(string GroupId, string Type)
+        {
+            OnBoardingSalesViewModel objDataView = new OnBoardingSalesViewModel();
+            ViewBag.TempleteType = objDataView.TempleteType();
+            var objData = OBR.GetCampaignRemainingForDLT(GroupId, Type);
+            return PartialView("_DLTRemainingAll", objData);
+        }
+
+
     }
 }

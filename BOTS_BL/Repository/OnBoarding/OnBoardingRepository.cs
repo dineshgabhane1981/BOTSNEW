@@ -1761,5 +1761,15 @@ namespace BOTS_BL.Repository
             return result;
         }
 
+        public BOTS_TblCampaignOtherConfig GetCampaignRemainingForDLT(string groupId, string type)
+        {
+            BOTS_TblCampaignOtherConfig objData = new BOTS_TblCampaignOtherConfig();
+            using (var context = new CommonDBContext())
+            {
+                objData = context.BOTS_TblCampaignOtherConfig.Where(x => x.GroupId == groupId && x.CampaignType == type).FirstOrDefault();
+            }
+
+            return objData;
+        }
     }
 }
