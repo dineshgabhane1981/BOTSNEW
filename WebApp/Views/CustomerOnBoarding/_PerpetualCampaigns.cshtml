@@ -45,10 +45,10 @@
             <input type="number" class="input20" id="txtIntroDays1" /> Days before event
             <textarea id="txtIntroScript1" class="input100" style="padding-top:20px;vertical-align:middle;"> </textarea>
         </div>
-        <div style="margin-top:20px;">
+        @*<div style="margin-top:20px;">
             <input type="number" class="input20" id="txtIntroDays2" /> Days before event
             <textarea id="txtIntroScript2" class="input100" style="padding-top: 20px; vertical-align: middle;"> </textarea>
-        </div>
+        </div>*@
     </div>
     <div style="margin-top:20px;border:1px solid grey;padding:10px;border-radius:10px;">
         <b> Reminder Message</b>
@@ -68,9 +68,14 @@
     <div style="margin-top:20px;border:1px solid grey;padding:10px;border-radius:10px;">
         <b> On Birthday Message</b>
         <div>
-            @Html.DropDownListFor(x => Model.lstBrands.Count, new SelectList(Model.PointsUsedOrNot(), "Value", "Text"), htmlAttributes: new { @class = "input50", @id = "ddlPointsUsedOrNot", style = "margin-top:20px;" })
+            @Html.DropDownListFor(x => Model.lstBrands.Count, new SelectList(Model.PointsUsed(), "Value", "Text"), htmlAttributes: new { @class = "input50", @disabled="disabled", @id = "ddlPointsUsed", style = "margin-top:20px;" })
             event
-            <textarea id="txtOnBirthdayScript" class="input100" style="padding-top:20px;vertical-align:middle;"> </textarea>
+            <textarea id="txtOnBirthdayScriptPT" class="input100" style="padding-top:20px;vertical-align:middle;"> </textarea>
+        </div>
+        <div>
+            @Html.DropDownListFor(x => Model.lstBrands.Count, new SelectList(Model.PointsNotUsed(), "Value", "Text"), htmlAttributes: new { @class = "input50", @disabled = "disabled", @id = "ddlPointsNotUsed", style = "margin-top:20px;" })
+            event
+            <textarea id="txtOnBirthdayScriptNPT" class="input100" style="padding-top:20px;vertical-align:middle;"> </textarea>
         </div>
     </div>
     <div class="container-fluid pt-3 pl-3 pr-3 pb-5">
@@ -122,11 +127,16 @@
         </div>
     </div>
     <div style="margin-top:20px;border:1px solid grey;padding:10px;border-radius:10px;">
-        <b> On Anniversary Message</b>
+        <b> On Birthday Message</b>
         <div>
-            @Html.DropDownListFor(x => Model.lstBrands.Count, new SelectList(Model.PointsUsedOrNot(), "Value", "Text"), htmlAttributes: new { @class = "input50", @id = "ddlPointsUsedOrNot1", style = "margin-top:20px;" })
+            @Html.DropDownListFor(x => Model.lstBrands.Count, new SelectList(Model.PointsUsed(), "Value", "Text"), htmlAttributes: new { @class = "input50", @disabled = "disabled", @id = "ddlPointsUsed1", style = "margin-top:20px;" })
             event
-            <textarea id="txtOnBirthdayScript1" class="input100" style="padding-top:20px;vertical-align:middle;"> </textarea>
+            <textarea id="txtOnBirthdayScriptPT1" class="input100" style="padding-top:20px;vertical-align:middle;"> </textarea>
+        </div>
+        <div>
+            @Html.DropDownListFor(x => Model.lstBrands.Count, new SelectList(Model.PointsNotUsed(), "Value", "Text"), htmlAttributes: new { @class = "input50", @disabled = "disabled", @id = "ddlPointsNotUsed1", style = "margin-top:20px;" })
+            event
+            <textarea id="txtOnBirthdayScriptNPT1" class="input100" style="padding-top:20px;vertical-align:middle;"> </textarea>
         </div>
     </div>
     <div class="container-fluid pt-3 pl-3 pr-3 pb-5">
@@ -150,12 +160,12 @@
         </div>
         <div style="margin-left:30px;">
             <div>
-                less than
+                points less than
                 <input type="number" id="txtLessThanDays1" class="input20" />
                 <textarea id="txtLessThanDaysScript1" class="input100" style="padding-top: 20px; vertical-align: middle;"> </textarea>
             </div>
             <div>
-                <br />greater or equal <input type="number" id="txtGreaterThanDays1" class="input20" />
+                <br />points greater or equal <input type="number" id="txtGreaterThanDays1" class="input20" />
                 <textarea id="txtGreaterThanDaysScript1" class="input100" style="padding-top: 20px; vertical-align: middle;"> </textarea>
             </div>
         </div>
@@ -168,12 +178,12 @@
         </div>
         <div style="margin-left:30px;">
             <div>
-                less than
+                points less than
                 <input type="number" id="txtLessThanDays2" class="input20" />
                 <textarea id="txtLessThanDaysScript2" class="input100" style="padding-top: 20px; vertical-align: middle;"> </textarea>
             </div>
             <div>
-                <br />greater or equal <input type="number" id="txtGreaterThanDays2" class="input20" />
+                <br />points greater or equal <input type="number" id="txtGreaterThanDays2" class="input20" />
                 <textarea id="txtGreaterThanDaysScript2" class="input100" style="padding-top: 20px; vertical-align: middle;"> </textarea>
             </div>
         </div>
@@ -186,12 +196,12 @@
         </div>
         <div style="margin-left:30px;">
             <div>
-                less than
+                points less than
                 <input type="number" id="txtLessThanDays3" class="input20" />
                 <textarea id="txtLessThanDaysScript3" class="input100" style="padding-top: 20px; vertical-align: middle;"> </textarea>
             </div>
             <div>
-                <br />greater or equal <input type="number" id="txtGreaterThanDays3" class="input20" />
+                <br />points greater or equal <input type="number" id="txtGreaterThanDays3" class="input20" />
                 <textarea id="txtGreaterThanDaysScript3" class="input100" style="padding-top: 20px; vertical-align: middle;"> </textarea>
             </div>
         </div>
@@ -204,12 +214,12 @@
         </div>
         <div style="margin-left:30px;">
             <div>
-                less than
+                points less than
                 <input type="number" id="txtLessThanDays4" class="input20" />
                 <textarea id="txtLessThanDaysScript4" class="input100" style="padding-top: 20px; vertical-align: middle;"> </textarea>
             </div>
             <div>
-                <br />greater or equal <input type="number" id="txtGreaterThanDays4" class="input20" />
+                <br />points greater or equal <input type="number" id="txtGreaterThanDays4" class="input20" />
                 <textarea id="txtGreaterThanDaysScript4" class="input100" style="padding-top: 20px; vertical-align: middle;"> </textarea>
             </div>
         </div>
@@ -236,12 +246,12 @@
         </div>
         <div style="margin-left:30px;">
             <div>
-                less than
+                points less than
                 <input type="number" id="txtOOLessThanDays1" class="input20" />
                 <textarea id="txtOOLessThanDaysScript1" class="input100" style="padding-top: 20px; vertical-align: middle;"> </textarea>
             </div>
             <div>
-                <br />greater or equal <input type="number" id="txtOOGreaterThanDays1" class="input20" />
+                <br />points greater or equal <input type="number" id="txtOOGreaterThanDays1" class="input20" />
                 <textarea id="txtOOGreaterThanDaysScript1" class="input100" style="padding-top: 20px; vertical-align: middle;"> </textarea>
             </div>
         </div>
@@ -254,12 +264,12 @@
         </div>
         <div style="margin-left:30px;">
             <div>
-                less than
+                points less than
                 <input type="number" id="txtOOLessThanDays2" class="input20" />
                 <textarea id="txtOOLessThanDaysScript2" class="input100" style="padding-top: 20px; vertical-align: middle;"> </textarea>
             </div>
             <div>
-                <br />greater or equal <input type="number" id="txtOOGreaterThanDays2" class="input20" />
+                <br />points greater or equal <input type="number" id="txtOOGreaterThanDays2" class="input20" />
                 <textarea id="txtOOGreaterThanDaysScript2" class="input100" style="padding-top: 20px; vertical-align: middle;"> </textarea>
             </div>
         </div>
@@ -272,12 +282,12 @@
         </div>
         <div style="margin-left:30px;">
             <div>
-                less than
+                points less than
                 <input type="number" id="txtOOLessThanDays3" class="input20" />
                 <textarea id="txtOOLessThanDaysScript3" class="input100" style="padding-top: 20px; vertical-align: middle;"> </textarea>
             </div>
             <div>
-                <br />greater or equal <input type="number" id="txtOOGreaterThanDays3" class="input20" />
+                <br />points greater or equal <input type="number" id="txtOOGreaterThanDays3" class="input20" />
                 <textarea id="txtOOGreaterThanDaysScript3" class="input100" style="padding-top: 20px; vertical-align: middle;"> </textarea>
             </div>
         </div>
@@ -290,12 +300,12 @@
         </div>
         <div style="margin-left:30px;">
             <div>
-                less than
+                points less than
                 <input type="number" id="txtOOLessThanDays4" class="input20" />
                 <textarea id="txtOOLessThanDaysScript4" class="input100" style="padding-top: 20px; vertical-align: middle;"> </textarea>
             </div>
             <div>
-                <br />greater or equal <input type="number" id="txtOOGreaterThanDays4" class="input20" />
+                <br />points greater or equal <input type="number" id="txtOOGreaterThanDays4" class="input20" />
                 <textarea id="txtOOGreaterThanDaysScript4" class="input100" style="padding-top: 20px; vertical-align: middle;"> </textarea>
             </div>
         </div>
@@ -322,12 +332,12 @@
         </div>
         <div style="margin-left:30px;">
             <div>
-                less than
+                points less than
                 <input type="number" id="txtNRLessThanDays1" class="input20" />
                 <textarea id="txtNRLessThanDaysScript1" class="input100" style="padding-top: 20px; vertical-align: middle;"> </textarea>
             </div>
             <div>
-                <br />greater or equal <input type="number" id="txtNRGreaterThanDays1" class="input20" />
+                <br />points greater or equal <input type="number" id="txtNRGreaterThanDays1" class="input20" />
                 <textarea id="txtNRGreaterThanDaysScript1" class="input100" style="padding-top: 20px; vertical-align: middle;"> </textarea>
             </div>
         </div>
@@ -340,12 +350,12 @@
         </div>
         <div style="margin-left:30px;">
             <div>
-                less than
+                points less than
                 <input type="number" id="txtNRLessThanDays2" class="input20" />
                 <textarea id="txtNRLessThanDaysScript2" class="input100" style="padding-top: 20px; vertical-align: middle;"> </textarea>
             </div>
             <div>
-                <br />greater or equal <input type="number" id="txtNRGreaterThanDays2" class="input20" />
+                <br />points greater or equal <input type="number" id="txtNRGreaterThanDays2" class="input20" />
                 <textarea id="txtNRGreaterThanDaysScript2" class="input100" style="padding-top: 20px; vertical-align: middle;"> </textarea>
             </div>
         </div>
@@ -358,12 +368,12 @@
         </div>
         <div style="margin-left:30px;">
             <div>
-                less than
+                points less than
                 <input type="number" id="txtNRLessThanDays3" class="input20" />
                 <textarea id="txtNRLessThanDaysScript3" class="input100" style="padding-top: 20px; vertical-align: middle;"> </textarea>
             </div>
             <div>
-                <br />greater or equal <input type="number" id="txtNRGreaterThanDays3" class="input20" />
+                <br />points greater or equal <input type="number" id="txtNRGreaterThanDays3" class="input20" />
                 <textarea id="txtNRGreaterThanDaysScript3" class="input100" style="padding-top: 20px; vertical-align: middle;"> </textarea>
             </div>
         </div>
@@ -376,12 +386,12 @@
         </div>
         <div style="margin-left:30px;">
             <div>
-                less than
+                points less than
                 <input type="number" id="txtNRLessThanDays4" class="input20" />
                 <textarea id="txtNRLessThanDaysScript4" class="input100" style="padding-top: 20px; vertical-align: middle;"> </textarea>
             </div>
             <div>
-                <br />greater or equal <input type="number" id="txtNRGreaterThanDays4" class="input20" />
+                <br />points greater or equal <input type="number" id="txtNRGreaterThanDays4" class="input20" />
                 <textarea id="txtNRGreaterThanDaysScript4" class="input100" style="padding-top: 20px; vertical-align: middle;"> </textarea>
             </div>
         </div>
@@ -408,12 +418,12 @@
         </div>
         <div style="margin-left:30px;">
             <div>
-                less than
+                points less than
                 <input type="number" id="txtPELessThanDays1" class="input20" />
                 <textarea id="txtPELessThanDaysScript1" class="input100" style="padding-top: 20px; vertical-align: middle;"> </textarea>
             </div>
             <div>
-                <br />greater or equal <input type="number" id="txtPEGreaterThanDays1" class="input20" />
+                <br />points greater or equal <input type="number" id="txtPEGreaterThanDays1" class="input20" />
                 <textarea id="txtPEGreaterThanDaysScript1" class="input100" style="padding-top: 20px; vertical-align: middle;"> </textarea>
             </div>
         </div>
@@ -426,12 +436,12 @@
         </div>
         <div style="margin-left:30px;">
             <div>
-                less than
+                points less than
                 <input type="number" id="txtPELessThanDays2" class="input20" />
                 <textarea id="txtPELessThanDaysScript2" class="input100" style="padding-top: 20px; vertical-align: middle;"> </textarea>
             </div>
             <div>
-                <br />greater or equal <input type="number" id="txtPEGreaterThanDays2" class="input20" />
+                <br />points greater or equal <input type="number" id="txtPEGreaterThanDays2" class="input20" />
                 <textarea id="txtPEGreaterThanDaysScript2" class="input100" style="padding-top: 20px; vertical-align: middle;"> </textarea>
             </div>
         </div>
@@ -444,12 +454,12 @@
         </div>
         <div style="margin-left:30px;">
             <div>
-                less than
+                points less than
                 <input type="number" id="txtPELessThanDays3" class="input20" />
                 <textarea id="txtPELessThanDaysScript3" class="input100" style="padding-top: 20px; vertical-align: middle;"> </textarea>
             </div>
             <div>
-                <br />greater or equal <input type="number" id="txtPEGreaterThanDays3" class="input20" />
+                <br />points greater or equal <input type="number" id="txtPEGreaterThanDays3" class="input20" />
                 <textarea id="txtPEGreaterThanDaysScript3" class="input100" style="padding-top: 20px; vertical-align: middle;"> </textarea>
             </div>
         </div>
@@ -928,16 +938,18 @@
 
         item["IntroDays1"] = $('#txtIntroDays1').val();
         item["IntroScript1"] = $('#txtIntroScript1').val();
-        item["IntroDays2"] = $('#txtIntroDays2').val();
-        item["IntroScript2"] = $('#txtIntroScript2').val();
+        //item["IntroDays2"] = $('#txtIntroDays2').val();
+        //item["IntroScript2"] = $('#txtIntroScript2').val();
         item["ReminderDays1"] = $('#txtRemDays1').val();
         item["ReminderWhen1"] = $('#ddlBeforeAfter1').val();
         item["ReminderScript1"] = $('#txtRemScript1').val();
         item["ReminderDays2"] = $('#txtRemDays2').val();
         item["ReminderWhen2"] = $('#ddlBeforeAfter2').val();
         item["ReminderScript2"] = $('#txtRemScript2').val();
-        item["OnDayType"] = $('#ddlPointsUsedOrNot').val();
-        item["OnDayScript"] = $('#txtOnBirthdayScript').val();
+        item["OnDayTypePT"] = $('#ddlPointsUsed').val();
+        item["OnDayScriptPT"] = $('#txtOnBirthdayScriptPT').val();
+        item["OnDayTypeNPT"] = $('#ddlPointsNotUsed').val();
+        item["OnDayScriptNPT"] = $('#txtOnBirthdayScriptNPT').val();
 
         BirthdayConfig.push(item);
         var BirthdayConfigData = JSON.stringify(BirthdayConfig);
@@ -1029,16 +1041,19 @@
 
         item["IntroDays1"] = $('#txtIntroDays11').val();
         item["IntroScript1"] = $('#txtIntroScript11').val();
-        item["IntroDays2"] = $('#txtIntroDays21').val();
-        item["IntroScript2"] = $('#txtIntroScript21').val();
+        //item["IntroDays2"] = $('#txtIntroDays21').val();
+        //item["IntroScript2"] = $('#txtIntroScript21').val();
         item["ReminderDays1"] = $('#txtRemDays11').val();
         item["ReminderWhen1"] = $('#ddlBeforeAfter11').val();
         item["ReminderScript1"] = $('#txtRemScript11').val();
         item["ReminderDays2"] = $('#txtRemDays21').val();
         item["ReminderWhen2"] = $('#ddlBeforeAfter21').val();
         item["ReminderScript2"] = $('#txtRemScript21').val();
-        item["OnDayType"] = $('#ddlPointsUsedOrNot1').val();
-        item["OnDayScript"] = $('#txtOnBirthdayScript1').val();
+        item["OnDayTypePT"] = $('#ddlPointsUsed1').val();
+        item["OnDayScriptPT"] = $('#txtOnBirthdayScriptPT1').val();
+        item["OnDayTypeNPT"] = $('#ddlPointsNotUsed1').val();
+        item["OnDayScriptNPT"] = $('#txtOnBirthdayScriptNPT1').val();
+        
 
         AnniversaryConfig.push(item);
         var AnniversaryConfigData = JSON.stringify(AnniversaryConfig);
@@ -1431,16 +1446,17 @@
                 }
                 $('#txtIntroDays1').val(edata.IntroDays1);
                 $('#txtIntroScript1').val(edata.IntroScript1);
-                $('#txtIntroDays2').val(edata.IntroDays2);
-                $('#txtIntroScript2').val(edata.IntroScript2);
+                //$('#txtIntroDays2').val(edata.IntroDays2);
+                //$('#txtIntroScript2').val(edata.IntroScript2);
                 $('#txtRemDays1').val(edata.ReminderDays1);
                 $('#ddlBeforeAfter1').val(edata.ReminderWhen1);
                 $('#txtRemScript1').val(edata.ReminderScript1);
                 $('#txtRemDays2').val(edata.ReminderDays2);
                 $('#ddlBeforeAfter2').val(edata.ReminderWhen2);
                 $('#txtRemScript2').val(edata.ReminderScript2);
-                $('#ddlPointsUsedOrNot').val(edata.OnDayType);
-                $('#txtOnBirthdayScript').val(edata.OnDayScript);
+                //alert(edata.OnDayScriptPT)
+                $('#ddlPointsUsed').val(edata.OnDayTypePT);
+                $('#txtOnBirthdayScriptPT').val(edata.OnDayScriptPT);
                 $('#hdnBirthId').val(edata.Id);
                 if ($("#hdnBirthId").val() > 0) {
                     $("#btnBirthdayToDLT").show();
@@ -1471,16 +1487,16 @@
                 }
                 $('#txtIntroDays11').val(edata.IntroDays1);
                 $('#txtIntroScript11').val(edata.IntroScript1);
-                $('#txtIntroDays21').val(edata.IntroDays2);
-                $('#txtIntroScript21').val(edata.IntroScript2);
+                //$('#txtIntroDays21').val(edata.IntroDays2);
+                //$('#txtIntroScript21').val(edata.IntroScript2);
                 $('#txtRemDays11').val(edata.ReminderDays1);
                 $('#ddlBeforeAfter11').val(edata.ReminderWhen1);
                 $('#txtRemScript11').val(edata.ReminderScript1);
                 $('#txtRemDays21').val(edata.ReminderDays2);
                 $('#ddlBeforeAfter21').val(edata.ReminderWhen2);
                 $('#txtRemScript21').val(edata.ReminderScript2);
-                $('#ddlPointsUsedOrNot1').val(edata.OnDayType);
-                $('#txtOnBirthdayScript1').val(edata.OnDayScript);
+                $('#ddlPointsUsed1').val(edata.OnDayTypePT);
+                $('#txtOnBirthdayScriptPT1').val(edata.OnDayScriptPT);
                 $('#hdnAnniversaryId').val(edata.Id);
             }
 
@@ -1760,6 +1776,9 @@
             if (dataCount > 0) {
                 $("#txtMessageCount").val(dataCount);
             }
+            else {
+                $("#txtMessageCount").val("3");
+            }
             ShowMessageSections();
             for (var i = 0; i < dataCount; i++) {
 
@@ -1781,6 +1800,9 @@
             var dataCount = data.length;
             if (dataCount > 0) {
                 $("#txtOOMessageCount").val(dataCount);
+            }
+            else {
+                $("#txtOOMessageCount").val("3");
             }
             ShowOOMessageSections();
             for (var i = 0; i < dataCount; i++) {
@@ -1804,6 +1826,9 @@
             if (dataCount > 0) {
                 $("#txtNRMessageCount").val(dataCount);
             }
+            else {
+                $("#txtNRMessageCount").val("3");
+            }
             ShowNRMessageSections();
             for (var i = 0; i < dataCount; i++) {
 
@@ -1826,6 +1851,9 @@
             var dataCount = data.length;
             if (dataCount > 0) {
                 $("#txtPEMessageCount").val(dataCount);
+            }
+            else {
+                $("#txtPEMessageCount").val("3");
             }
             ShowPEMessageSections();
             for (var i = 0; i < dataCount; i++) {

@@ -2,18 +2,19 @@
 
 @{
     var DLTStatus1 = "";
-    var DLTStatus2 = "";
+
     var DLTStatus3 = "";
     var DLTStatus4 = "";
     var DLTStatus5 = "";
+    var DLTStatus6 = "";
 
     if (Model.DLTStatus1 == "Approved")
     {
         DLTStatus1 = "disabled";
     }
-    if (Model.DLTStatus2 == "Approved")
+    if (Model.DLTStatus6 == "Approved")
     {
-        DLTStatus2 = "disabled";
+        DLTStatus6 = "disabled";
     }
     if (Model.DLTStatus3 == "Approved")
     {
@@ -101,66 +102,6 @@
     </div>
 </div>
 
-<div style="float:left; border:1px solid grey;border-radius:10px;margin-bottom:10px;" class="col-md-12 col-lg-12">
-    <div style="margin:20px;">
-        <b><span id="spnStatus2"> Status -  @Model.DLTStatus2 </span></b><br />
-        <span id="spnRejectStatus2">
-            @if (Model.DLTStatus2 == "Rejected")
-            {
-                var reasonRejects = "<b>Reason</b> - " + Model.RejectReason2;
-                @Html.Raw(reasonRejects)
-            }
-        </span>
-    </div>
-    <div style="float:left;" class="col-md-4 col-lg-4">
-        <div style="margin-top: 10px;">
-            <b>Introduction Message2 Script </b><br /> <textarea id="txtIntroDays2" rows="6" cols="40" class="input100" @DLTStatus2>@Model.IntroScript2</textarea>
-        </div>
-    </div>
-    <div style="float:left;" class="col-md-4 col-lg-4">
-        <div style=" margin-top: 10px;">
-            <b> Introduction Message2 DLT Script </b><br /> <textarea id="txtIntroDays2DLT" rows="6" cols="40" class="input100" disabled>@Model.IntroScript2DLT</textarea>
-        </div>
-    </div>
-    <div style="float:left;margin-bottom:10px;" class="col-md-3 col-lg-3">
-        <div style="margin-top: 10px;">
-            Template Id <br /> <input id="txtTemplateIdBA2" type="text" class="input50" value="@Model.TemplateId2" @DLTStatus2 /><br />
-            Template Name <br /> <input id="txtTemplateNameBA2" type="text" class="input50" value="@Model.TemplateName2" @DLTStatus2 /><br />
-            Template Type <br />
-            @if (Model.TemplateType2 != null)
-            {
-                if (Model.DLTStatus2 == "Approved")
-                {
-                    @Html.DropDownListFor(x => Model.TemplateType2, new SelectList(ViewBag.TempleteType, "Value", "Text", Model.TemplateType2), htmlAttributes: new { @class = "input50", @id = "ddlTemplateTypeBA2", @disabled = "disabled" })
-                }
-                else
-                {
-                    @Html.DropDownListFor(x => Model.TemplateType2, new SelectList(ViewBag.TempleteType, "Value", "Text", Model.TemplateType2), htmlAttributes: new { @class = "input50", @id = "ddlTemplateTypeBA2" })
-                }
-            }
-            else
-            {
-                @Html.DropDownListFor(x => Model.TemplateType2, new SelectList(ViewBag.TempleteType, "Value", "Text"), htmlAttributes: new { @class = "input50", @id = "ddlTemplateTypeBA2" })
-            }
-        </div>
-
-    </div>
-    <div style="float:left;margin:0px; padding:0px;" class="col-md-1 col-lg-1">
-        <div style="margin-top: 10px;">
-            <div class="container-fluid pt-3 pb-3">
-                <button type="button" id="btnCopyBA2" onclick="CopyBATemplate(this);" class="btn btn-primary" style="margin-left: -20px; margin-top: 10px; " @DLTStatus2>Copy</button><br />
-                <button type="button" id="btnApproveBA2" onclick="ApproveBATemplate(this);" class="btn btn-primary" style="margin-left: -20px; margin-top: 10px;" @DLTStatus2>Approve</button><br />
-                <button type="button" id="btnRejectBA2" onclick="RejectBATemplate(this);" class="btn btn-primary" style="margin-left: -20px; margin-top: 10px; " @DLTStatus2>Reject</button><br />
-                <button type="button" id="btnSaveBA2" onclick="SaveBATemplate(this);" class="btn btn-primary" style="margin-left: -20px; margin-top: 10px; " @DLTStatus2>Save</button>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-12 col-lg-12" style="text-align:center;display:none;" id="divRejectReason2">
-        <textarea id="txtRejectReason2" rows="6" cols="40" class="input100"></textarea>
-        <button type="button" id="btnRejectSubmit2" onclick="RejectBASubmit(this);" class="btn btn-primary" style="margin-left: 20px; margin-bottom:25px;">Submit</button>
-        <button type="button" id="btnRejectCancel2" onclick="RejectBACancel(this);" class="btn btn-primary" style="margin-left: 20px; margin-bottom:25px;">Cancel</button><br />
-    </div>
-</div>
 
 <div style="float:left; border:1px solid grey;border-radius:10px;margin-bottom:10px;" class="col-md-12 col-lg-12">
     <div style="margin:20px;">
@@ -298,12 +239,12 @@
     </div>
     <div style="float:left;" class="col-md-4 col-lg-4">
         <div style="margin-top: 10px;">
-            <b>On Birthday Script </b><br /> <textarea id="txtIntroDays5" rows="6" cols="40" class="input100" @DLTStatus5>@Model.OnDayScript</textarea>
+            <b>On Birthday Points Used Script </b><br /> <textarea id="txtIntroDays5" rows="6" cols="40" class="input100" @DLTStatus5>@Model.OnDayScriptPT</textarea>
         </div>
     </div>
     <div style="float:left;" class="col-md-4 col-lg-4">
         <div style=" margin-top: 10px;">
-            <b>On Birthday DLT Script </b><br /> <textarea id="txtIntroDays5DLT" rows="6" cols="40" class="input100" disabled>@Model.OnDayScriptDLT</textarea>
+            <b>On Birthday Points Used DLT Script </b><br /> <textarea id="txtIntroDays5DLT" rows="6" cols="40" class="input100" disabled>@Model.OnDayScriptPTDLT</textarea>
         </div>
     </div>
     <div style="float:left;margin-bottom:10px;" class="col-md-3 col-lg-3">
@@ -345,6 +286,68 @@
         <button type="button" id="btnRejectCancel5" onclick="RejectBACancel(this);" class="btn btn-primary" style="margin-left: 20px; margin-bottom:25px;">Cancel</button><br />
     </div>
 </div>
+
+<div style="float:left; border:1px solid grey;border-radius:10px;margin-bottom:10px;" class="col-md-12 col-lg-12">
+    <div style="margin:20px;">
+        <b><span id="spnStatus5"> Status -  @Model.DLTStatus5 </span></b><br />
+        <span id="spnRejectStatus5">
+            @if (Model.DLTStatus5 == "Rejected")
+            {
+                var reasonRejects = "<b>Reason</b> - " + Model.RejectReason5;
+                @Html.Raw(reasonRejects)
+            }
+        </span>
+    </div>
+    <div style="float:left;" class="col-md-4 col-lg-4">
+        <div style="margin-top: 10px;">
+            <b>On Birthday Points Not Used Script </b><br /> <textarea id="txtIntroDays6" rows="6" cols="40" class="input100" @DLTStatus6>@Model.OnDayScriptNPT</textarea>
+        </div>
+    </div>
+    <div style="float:left;" class="col-md-4 col-lg-4">
+        <div style=" margin-top: 10px;">
+            <b>On Birthday Points Not Used DLT Script </b><br /> <textarea id="txtIntroDays6DLT" rows="6" cols="40" class="input100" disabled>@Model.OnDayScriptNPTDLT</textarea>
+        </div>
+    </div>
+    <div style="float:left;margin-bottom:10px;" class="col-md-3 col-lg-3">
+        <div style="margin-top: 10px;">
+            Template Id <br /> <input id="txtTemplateIdBA6" type="text" class="input50" value="@Model.TemplateId6" @DLTStatus6 /><br />
+            Template Name <br /> <input id="txtTemplateNameBA6" type="text" class="input50" value="@Model.TemplateName6" @DLTStatus6 /><br />
+            Template Type <br />
+            @if (Model.TemplateType4 != null)
+            {
+                if (Model.DLTStatus5 == "Approved")
+                {
+                    @Html.DropDownListFor(x => Model.TemplateType6, new SelectList(ViewBag.TempleteType, "Value", "Text", Model.TemplateType6), htmlAttributes: new { @class = "input50", @id = "ddlTemplateTypeBA6", @disabled = "disabled" })
+                }
+                else
+                {
+                    @Html.DropDownListFor(x => Model.TemplateType6, new SelectList(ViewBag.TempleteType, "Value", "Text", Model.TemplateType6), htmlAttributes: new { @class = "input50", @id = "ddlTemplateTypeBA6" })
+                }
+            }
+            else
+            {
+                @Html.DropDownListFor(x => Model.TemplateType6, new SelectList(ViewBag.TempleteType, "Value", "Text"), htmlAttributes: new { @class = "input50", @id = "ddlTemplateTypeBA6" })
+            }
+        </div>
+
+    </div>
+    <div style="float:left;margin:0px; padding:0px;" class="col-md-1 col-lg-1">
+        <div style="margin-top: 10px;">
+            <div class="container-fluid pt-3 pb-3">
+                <button type="button" id="btnCopyBA6" onclick="CopyBATemplate(this);" class="btn btn-primary" style="margin-left: -20px; margin-top: 10px; " @DLTStatus6>Copy</button><br />
+                <button type="button" id="btnApproveBA6" onclick="ApproveBATemplate(this);" class="btn btn-primary" style="margin-left: -20px; margin-top: 10px;" @DLTStatus6>Approve</button><br />
+                <button type="button" id="btnRejectBA6" onclick="RejectBATemplate(this);" class="btn btn-primary" style="margin-left: -20px; margin-top: 10px; " @DLTStatus6>Reject</button><br />
+                <button type="button" id="btnSaveBA6" onclick="SaveBATemplate(this);" class="btn btn-primary" style="margin-left: -20px; margin-top: 10px; " @DLTStatus6>Save</button>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-12 col-lg-12" style="text-align:center;display:none;" id="divRejectReason6">
+        <textarea id="txtRejectReason6" rows="6" cols="40" class="input100"></textarea>
+        <button type="button" id="btnRejectSubmit6" onclick="RejectBASubmit(this);" class="btn btn-primary" style="margin-left: 20px; margin-bottom:25px;">Submit</button>
+        <button type="button" id="btnRejectCancel6" onclick="RejectBACancel(this);" class="btn btn-primary" style="margin-left: 20px; margin-bottom:25px;">Cancel</button><br />
+    </div>
+</div>
+
 <script>
     $(document).ready(function () {
         EventChangeOfOriginalToDLT();
@@ -373,20 +376,17 @@
     }
 
     function EventChangeOfOriginalToDLT() {
-        ConvertValuesToDLT("txtIntroDays1", "txtIntroDays1DLT");
-        ConvertValuesToDLT("txtIntroDays2", "txtIntroDays2DLT");
+        ConvertValuesToDLT("txtIntroDays1", "txtIntroDays1DLT");        
         ConvertValuesToDLT("txtIntroDays3", "txtIntroDays3DLT");
         ConvertValuesToDLT("txtIntroDays4", "txtIntroDays4DLT");
         ConvertValuesToDLT("txtIntroDays5", "txtIntroDays5DLT");
+        ConvertValuesToDLT("txtIntroDays6", "txtIntroDays6DLT");
     }
 
     function EventChangeOfOriginalToDLTNew() {
         $("#txtIntroDays1").focusout(function () {
             ConvertValuesToDLT("txtIntroDays1", "txtIntroDays1DLT");
-        });
-        $("#txtIntroDays2").focusout(function () {
-            ConvertValuesToDLT("txtIntroDays2", "txtIntroDays2DLT");
-        });
+        });        
         $("#txtIntroDays3").focusout(function () {
             ConvertValuesToDLT("txtIntroDays3", "txtIntroDays3DLT");
         });
@@ -395,6 +395,9 @@
         });
         $("#txtIntroDays5").focusout(function () {
             ConvertValuesToDLT("txtIntroDays5", "txtIntroDays5DLT");
+        });
+        $("#txtIntroDays6").focusout(function () {
+            ConvertValuesToDLT("txtIntroDays6", "txtIntroDays6DLT");
         });
     }
 
@@ -476,7 +479,7 @@
         var id = $("#hdnOtherConfigId").val();
         SaveAndApproveBATemplate(id, statusid, status)
     }
-    function SaveAndApproveBATemplate(id, statusid, status) {
+    function SaveAndApproveBATemplate(id, statusid, status) {        
         var SaveData = [];
         saveitem = {}
         saveitem["IntroDays"] = $("#txtIntroDays" + statusid).val();

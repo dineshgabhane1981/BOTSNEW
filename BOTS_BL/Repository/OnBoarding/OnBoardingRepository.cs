@@ -1462,6 +1462,7 @@ namespace BOTS_BL.Repository
                             objCampaign.DLTStatus3 = "Submitted";
                             objCampaign.DLTStatus4 = "Submitted";
                             objCampaign.DLTStatus5 = "Submitted";
+                            objCampaign.DLTStatus6 = "Submitted";
 
                             objCampaign.UpdatedBy = LoginId;
                             objCampaign.UpdatedDate = DateTime.Now;
@@ -1580,6 +1581,14 @@ namespace BOTS_BL.Repository
                             objData.RejectReason5 = reason;
                         }
                     }
+                    if (statusid == 6)
+                    {
+                        objData.DLTStatus6 = status;
+                        if (status == "Rejected")
+                        {
+                            objData.RejectReason6 = reason;
+                        }
+                    }
 
                     objData.UpdatedBy = loginid;
                     objData.UpdatedDate = DateTime.Now;
@@ -1592,7 +1601,7 @@ namespace BOTS_BL.Repository
             return result;
         }
 
-        public bool SaveBADLTConfig(int id, int statusid, string status, string IntroDays,string IntroDaysDLT,string TemplateId,string TemplateName,string TemplateType, string loginid)
+        public bool SaveBADLTConfig(int id, int statusid, string status, string IntroDays, string IntroDaysDLT, string TemplateId, string TemplateName, string TemplateType, string loginid)
         {
             bool result = false;
             try
@@ -1623,6 +1632,10 @@ namespace BOTS_BL.Repository
                             if (statusid == 5)
                             {
                                 existingObj.DLTStatus5 = status;
+                            }
+                            if (statusid == 6)
+                            {
+                                existingObj.DLTStatus6 = status;
                             }
                         }
                         if (statusid == 1)
@@ -1659,11 +1672,19 @@ namespace BOTS_BL.Repository
                         }
                         if (statusid == 5)
                         {
-                            existingObj.OnDayScript = IntroDays;
-                            existingObj.OnDayScriptDLT = IntroDaysDLT;
+                            existingObj.OnDayScriptPT = IntroDays;
+                            existingObj.OnDayScriptPTDLT = IntroDaysDLT;
                             existingObj.TemplateId5 = TemplateId;
                             existingObj.TemplateName5 = TemplateName;
                             existingObj.TemplateType5 = TemplateType;
+                        }
+                        if (statusid == 6)
+                        {
+                            existingObj.OnDayScriptNPT = IntroDays;
+                            existingObj.OnDayScriptNPTDLT = IntroDaysDLT;
+                            existingObj.TemplateId6 = TemplateId;
+                            existingObj.TemplateName6 = TemplateName;
+                            existingObj.TemplateType6 = TemplateType;
                         }
 
                         existingObj.UpdatedBy = loginid;
@@ -1674,12 +1695,12 @@ namespace BOTS_BL.Repository
                     }
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 newexception.AddException(ex, "SaveBADLTConfig");
             }
-                
-                return result;
+
+            return result;
         }
 
         public bool UpdateInactiveDLTStatus(int id, int statusid, string status, string loginid, string reason)
@@ -1705,7 +1726,7 @@ namespace BOTS_BL.Repository
                         {
                             objData.RejectReason2 = reason;
                         }
-                    }                   
+                    }
 
                     objData.UpdatedBy = loginid;
                     objData.UpdatedDate = DateTime.Now;
@@ -1717,5 +1738,28 @@ namespace BOTS_BL.Repository
 
             return result;
         }
+
+        public BOTS_TblCampaignInactive GetInactiveConfigById(int Id)
+        {
+            BOTS_TblCampaignInactive objInactiveConfig = new BOTS_TblCampaignInactive();
+            using (var context = new CommonDBContext())
+            {
+                objInactiveConfig = context.BOTS_TblCampaignInactive.Where(x => x.Id == Id).FirstOrDefault();
+            }
+            return objInactiveConfig;
+        }
+
+        public bool SaveInactiveDLTConfig(BOTS_TblCampaignInactive objData)
+        {
+            bool result = false;
+            using (var context = new CommonDBContext())
+            {
+                context.BOTS_TblCampaignInactive.AddOrUpdate(objData);
+                context.SaveChanges();
+                result = true;
+            }
+            return result;
+        }
+
     }
 }

@@ -28,8 +28,8 @@ namespace BOTS_BL.Models
         public int? IntroDays1 { get; set; }
 
         public string IntroScript1 { get; set; }
+
         public string IntroScript1DLT { get; set; }
-        
 
         [StringLength(100)]
         public string TemplateId1 { get; set; }
@@ -43,6 +43,7 @@ namespace BOTS_BL.Models
         public int? IntroDays2 { get; set; }
 
         public string IntroScript2 { get; set; }
+
         public string IntroScript2DLT { get; set; }
 
         [StringLength(100)]
@@ -60,6 +61,7 @@ namespace BOTS_BL.Models
         public string ReminderWhen1 { get; set; }
 
         public string ReminderScript1 { get; set; }
+
         public string ReminderScript1DLT { get; set; }
 
         [StringLength(100)]
@@ -77,6 +79,7 @@ namespace BOTS_BL.Models
         public string ReminderWhen2 { get; set; }
 
         public string ReminderScript2 { get; set; }
+
         public string ReminderScript2DLT { get; set; }
 
         [StringLength(100)]
@@ -89,10 +92,11 @@ namespace BOTS_BL.Models
         public string TemplateType4 { get; set; }
 
         [StringLength(50)]
-        public string OnDayType { get; set; }
+        public string OnDayTypePT { get; set; }
 
-        public string OnDayScript { get; set; }
-        public string OnDayScriptDLT { get; set; }
+        public string OnDayScriptPT { get; set; }
+
+        public string OnDayScriptPTDLT { get; set; }
 
         [StringLength(100)]
         public string TemplateId5 { get; set; }
@@ -102,6 +106,22 @@ namespace BOTS_BL.Models
 
         [StringLength(100)]
         public string TemplateType5 { get; set; }
+
+        [StringLength(50)]
+        public string OnDayTypeNPT { get; set; }
+
+        public string OnDayScriptNPT { get; set; }
+
+        public string OnDayScriptNPTDLT { get; set; }
+
+        [StringLength(100)]
+        public string TemplateId6 { get; set; }
+
+        [StringLength(250)]
+        public string TemplateName6 { get; set; }
+
+        [StringLength(100)]
+        public string TemplateType6 { get; set; }
 
         [StringLength(50)]
         public string DLTStatus1 { get; set; }
@@ -117,11 +137,21 @@ namespace BOTS_BL.Models
 
         [StringLength(50)]
         public string DLTStatus5 { get; set; }
+
+        [StringLength(50)]
+        public string DLTStatus6 { get; set; }
+
         public string RejectReason1 { get; set; }
+
         public string RejectReason2 { get; set; }
+
         public string RejectReason3 { get; set; }
+
         public string RejectReason4 { get; set; }
+
         public string RejectReason5 { get; set; }
+
+        public string RejectReason6 { get; set; }
 
         [StringLength(50)]
         public string AddedBy { get; set; }

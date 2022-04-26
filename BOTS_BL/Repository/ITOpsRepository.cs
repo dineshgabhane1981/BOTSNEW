@@ -283,12 +283,12 @@ namespace BOTS_BL.Repository
             return result;
         }
 
-        public SPResponse AddRedeemPointsData(string groupId, string mobileNo, string outletId, DateTime dateTime, DateTime now, string invoiceNumber, string invoiceAmount, decimal v1, string v2, string txnType, string v3, tblAudit objAudit)
-        {
-            throw new NotImplementedException();
-        }
+        //public SPResponse AddRedeemPointsData(string groupId, string mobileNo, string outletId, DateTime dateTime, DateTime now, string invoiceNumber, string invoiceAmount, decimal v1, string v2, string txnType, string v3, tblAudit objAudit)
+        //{
+        //    throw new NotImplementedException();
+        //}
 
-        public SPResponse AddRedeemPointsData(string GroupId, string MobileNo, string OutletId, DateTime TxnDate, DateTime RequestDate, string InvoiceNo, string InvoiceAmt, decimal Points, string IsSMS, string TxnType, tblAudit objAudit)
+        public SPResponse AddRedeemPointsData(string GroupId, string MobileNo, string OutletId, DateTime TxnDate, DateTime RequestDate, string InvoiceNo, string InvoiceAmt, decimal Points, string IsSMS, string TxnType,string PartialEarnPoints, tblAudit objAudit)
         {
             SPResponse result = new SPResponse();
             try
@@ -296,7 +296,7 @@ namespace BOTS_BL.Repository
                 string connStr = objCustRepo.GetCustomerConnString(GroupId);
                 using (var contextNew = new BOTSDBContext(connStr))
                 {
-                    result = contextNew.Database.SqlQuery<SPResponse>("sp_BurnRW_New_ITOPS @pi_MobileNo, @pi_OutletId, @pi_TxnDate, @pi_RequestDate, @pi_InvoiceNo, @pi_InvoiceAmt,@pi_RedeemPoints, @pi_LoginId, @pi_RequestBy, @pi_RequestedOnForum, @pi_SMSFlag, @pi_TxnType",
+                    result = contextNew.Database.SqlQuery<SPResponse>("sp_BurnRW_New_ITOPS @pi_MobileNo, @pi_OutletId, @pi_TxnDate, @pi_RequestDate, @pi_InvoiceNo, @pi_InvoiceAmt,@pi_RedeemPoints, @pi_LoginId,@pi_PartialEarnPoints, @pi_RequestBy, @pi_RequestedOnForum, @pi_SMSFlag, @pi_TxnType",
                               new SqlParameter("@pi_MobileNo", MobileNo),
                               new SqlParameter("@pi_OutletId", OutletId),
                               new SqlParameter("@pi_TxnDate", TxnDate.ToString("yyyy-MM-dd")),
@@ -305,6 +305,7 @@ namespace BOTS_BL.Repository
                               new SqlParameter("@pi_InvoiceAmt", InvoiceAmt),
                               new SqlParameter("@pi_RedeemPoints", Points),
                               new SqlParameter("@pi_LoginId", ""),
+                              new SqlParameter("@pi_PartialEarnPoints", PartialEarnPoints),                              
                               new SqlParameter("@pi_RequestBy", objAudit.RequestedBy),
                               new SqlParameter("@pi_RequestedOnForum", objAudit.RequestedOnForum),
                               new SqlParameter("@pi_SMSFlag", IsSMS),
