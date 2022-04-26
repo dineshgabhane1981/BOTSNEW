@@ -130,50 +130,11 @@
 
 
 
-                            <li>
-                                <a href="#">
-                                    <i class="metismenu-icon pe-7s-car"></i>
+                            <li class="@Html.IsSelected(controller: "SinglePage", action: "Index")">
+                                <a href="@Url.Action("Index", "SinglePage")" class="@Html.IsSelected(controller: "SinglePage", action: "Index")">
+                                    <i class="metismenu-icon pe-7s-rocket"></i>
                                     Single Page
-                                    <i class="metismenu-state-icon pe-7s-angle-down caret-left"></i>
                                 </a>
-                                <ul>
-                                    <li class="@Html.IsSelected(controller: "SinglePage", action: "NonTransacting")">
-                                        <a class="@Html.IsSelected(controller: "SinglePage", action: "NonTransacting")" href="@Url.Action("NonTransacting", "SinglePage")">
-                                            <i class="metismenu-icon"></i>
-                                            Non Transacting
-                                        </a>
-                                    </li>
-                                    <li class="@Html.IsSelected(controller: "SinglePage", action: "Communication")">
-                                        <a class="@Html.IsSelected(controller: "SinglePage", action: "Communication")" href="@Url.Action("Communication", "SinglePage")">
-                                            <i class="metismenu-icon"></i>
-                                            Communication
-                                        </a>
-                                    </li>
-                                    <li class="@Html.IsSelected(controller: "SinglePage", action: "KeyIndicator")">
-                                        <a class="@Html.IsSelected(controller: "SinglePage", action: "KeyIndicator")" href="@Url.Action("KeyIndicator", "SinglePage")">
-                                            <i class="metismenu-icon"></i>
-                                            Key Indicator
-                                        </a>
-                                    </li>
-                                    <li class="@Html.IsSelected(controller: "SinglePage", action: "CityWise")">
-                                        <a class="@Html.IsSelected(controller: "SinglePage", action: "CityWise")" href="@Url.Action("CityWise", "SinglePage")">
-                                            <i class="metismenu-icon"></i>
-                                            City Wise
-                                        </a>
-                                    </li>
-                                    <li class="@Html.IsSelected(controller: "SinglePage", action: "Discussion")">
-                                        <a class="@Html.IsSelected(controller: "SinglePage", action: "Discussion")" href="@Url.Action("Discussion", "SinglePage")">
-                                            <i class="metismenu-icon"></i>
-                                            Discussion
-                                        </a>
-                                    </li>
-                                    <li class="@Html.IsSelected(controller: "SinglePage", action: "GrupWise")">
-                                        <a class="@Html.IsSelected(controller: "SinglePage", action: "GrupWise")" href="@Url.Action("GrupWise", "SinglePage")">
-                                            <i class="metismenu-icon"></i>
-                                            Group Wise
-                                        </a>
-                                    </li>
-                                </ul>
                             </li>
 
 
