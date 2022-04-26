@@ -334,6 +334,7 @@
     <Compile Include="Models\SMSEmailMaster.cs" />
     <Compile Include="Models\StoreDetail.cs" />
     <Compile Include="Models\tblLoginLog.cs" />
+    <Compile Include="Models\tblUniquePoint.cs" />
     <Compile Include="Models\TelecallerReport.cs" />
     <Compile Include="Models\TelecallerTracking.cs" />
     <Compile Include="Models\TransferPointsDetail.cs" />

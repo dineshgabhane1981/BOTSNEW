@@ -4,7 +4,11 @@
     CommonFunctions common = new CommonFunctions();
 
     var userDetails = (CustomerLoginDetail)Session["UserSession"];
-    var GroupId = common.EncryptString(userDetails.GroupId);
+    string GroupId = string.Empty;
+    if (userDetails.GroupId != null)
+    {
+        GroupId = common.EncryptString(userDetails.GroupId);
+    }
     var roleId = userDetails.LoginType;
     var level = userDetails.LevelIndicator;
 }
@@ -462,11 +466,7 @@
                     </li>
                 }
             </ul>
-            <div style="margin-top:150px; margin-left:50px;">
-                <a href="@Url.Action("Index", "NameAndMobile", new { groupId = GroupId })" class="login" title="Go To IT Ops" target="_blank"><img src="~/Content/assets/images/itops.png" width="30" /></a>
-                <a href="@Url.Action("AllDiscussions", "Discussion", new { groupId = GroupId })" class="login" title="Go To Discussions" target="_blank"><img src="~/Content/assets/images/discussion.png" width="30" /></a>
-
-            </div>
+            
         </div>
     </div>
 </div>

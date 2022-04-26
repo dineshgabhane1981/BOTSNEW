@@ -1,6 +1,13 @@
 ﻿@using BOTS_BL.Models;
+@using WebApp.App_Start;
 @{
     var userDetails = (CustomerLoginDetail)Session["UserSession"];
+    CommonFunctions common = new CommonFunctions();
+    string GroupId = string.Empty;
+    if (userDetails.GroupId != null)
+    {
+        GroupId = common.EncryptString(userDetails.GroupId);
+    }
 }
 @{
 
@@ -51,23 +58,12 @@
                 <button id="btnCloseMemberSearch" class="close"></button>
             </div>
             <ul class="header-menu nav">
-                <li class="dropdown nav-item">
-                    <a href="javascript:void(0);" class="nav-link" style="color:white !important;">
-                        <i class="nav-link-icon fa fa-cog"></i>
-                        Operations
-                    </a>
-                </li>
-                <li class="btn-group nav-item">
-                    <a href="javascript:void(0);" class="nav-link" style="color:white !important;">
-                        <i class="nav-link-icon fa fa-edit"></i>
-                        Refer & Earn
-                    </a>
-                </li>
+
                 @if (!string.IsNullOrEmpty(userDetails.CustomerName))
                 {
-                <li class="btn-group nav-item">                    
-                    <span style="margin-top:10px; margin-left:50px; font-weight:bold;">  Welcome - @userDetails.CustomerName           </span>         
-                </li>
+                    <li class="btn-group nav-item">
+                        <span style="margin-top:10px; margin-left:50px; font-weight:bold;">  Welcome - @userDetails.CustomerName           </span>
+                    </li>
                 }
 
             </ul>
@@ -76,7 +72,14 @@
             <div class="header-btn-lg pr-0">
                 <div class="widget-content p-0">
                     <div class="widget-content-wrapper">
+                        @*@if (!string.IsNullOrEmpty(GroupId))
+                        {
+                            <div>
+                                <a href="@Url.Action("Index", "NameAndMobile", new { groupId = GroupId })" class="login" title="Go To IT Ops" target="_blank"><img src="~/Content/assets/images/itops.png" width="30" /></a>
+                                <a href="@Url.Action("AllDiscussions", "Discussion", new { groupId = GroupId })" class="login" title="Go To Discussions" target="_blank"><img src="~/Content/assets/images/discussion.png" width="30" /></a>
 
+                            </div>
+                        }*@
                         <div class="widget-content-left  ml-3 header-user-info">
                             <div class="widget-heading">
                                 @userDetails.UserName
@@ -84,7 +87,7 @@
                         </div>
                         <div class="widget-content-left">
                             <div class="btn-group">
-                                <a data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="p-0 btn">                                   
+                                <a data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="p-0 btn">
                                     <i class="fa fa-angle-down ml-2 opacity-8"></i>
                                 </a>
                                 <div tabindex="-1" role="menu" aria-hidden="true" class="dropdown-menu dropdown-menu-right" style="top:20px !important;left:42px !important;">
@@ -92,7 +95,7 @@
                                     <a href="@Url.Action("Logout", "Home")" class="dropdown-item">Logout</a>
                                 </div>
                             </div>
-                        </div>                        
+                        </div>
                     </div>
                 </div>
             </div>

@@ -22,6 +22,7 @@ namespace WebApp.ViewModel
         public WAConfig objWAConfig { get; set; }
         public List<MWP_Details> lstMWPDetails { get; set; }
         public List<MWPSourceMaster> objMWPSourceMaster { get; set; }
-        
+        public List<tblUniquePoint> lstUniquePoints { get; set; }
+
     }
 }

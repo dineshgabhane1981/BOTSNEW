@@ -254,6 +254,8 @@ namespace WebApp.Controllers
             }
             objData.lstMWPDetails = CR.GetDLCDetails(groupId);
             objData.objMWPSourceMaster = CR.GetMWPSourceMaster(groupId);
+            objData.lstUniquePoints = CR.GetUniquePoints(groupId);
+
             return PartialView("_GroupConfigDetails", objData);
         }
 

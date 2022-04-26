@@ -978,5 +978,19 @@ namespace BOTS_BL.Repository
             return objData;
         }
 
+        public List<tblUniquePoint> GetUniquePoints(string groupId)
+        {
+            List<tblUniquePoint> objData = new List<tblUniquePoint>();
+            string ConnectionString = string.Empty;
+
+            ConnectionString = GetCustomerConnString(groupId);
+            using (var contextNew = new BOTSDBContext(ConnectionString))
+            {
+                objData = contextNew.tblUniquePoints.ToList();
+            }
+
+            return objData;
+        }
+
     }
 }

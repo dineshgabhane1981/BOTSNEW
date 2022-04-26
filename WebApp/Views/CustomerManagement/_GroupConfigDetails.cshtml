@@ -130,7 +130,7 @@
 
     <div class="multisteps-form__panel p-3 m-3 list-box bg-white panel1" id="one-panel1">
         <div class="row">
-            <div style="margin-left:20px;">
+            <div style="margin-left:15px;">
                 <table border="1" cellpadding="5" cellspacing="5">
                     <tr>
                         <td>Authorized Person</td>
@@ -155,7 +155,7 @@
                 </table>
             </div>
 
-            <div style="margin-left:20px;">
+            <div style="margin-left:15px;">
                 <table border="1" cellpadding="5" cellspacing="5">
                     <tr>
                         <td>Start Date</td>
@@ -184,7 +184,7 @@
                 </table>
             </div>
 
-            <div style="margin-left:20px;">
+            <div style="margin-left:15px;">
                 <table border="1" cellpadding="5" cellspacing="5">
                     <tr>
                         <td>
@@ -221,6 +221,19 @@
                         <td>@Model.objGroupConfig.CSAssignedName</td>
                     </tr>
 
+                </table>
+            </div>
+            <div>
+                <table border="1" cellpadding="5" cellspacing="5" style="margin-left:15px;">
+                    <tr>
+                        <td>Unique Requirement</td>
+                    </tr>
+                    @foreach (var item in Model.lstUniquePoints)
+            {
+                <tr>
+                    <td>@item.Description</td>
+                </tr>
+            }
                 </table>
             </div>
 
