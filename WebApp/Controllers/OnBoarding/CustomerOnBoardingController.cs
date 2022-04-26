@@ -1788,6 +1788,12 @@ namespace WebApp.Controllers.OnBoarding
             return PartialView("_DLTRemainingAll", objData);
         }
 
-
+        public ActionResult UpdateRemainingDLTStatus(string id, string statusid, string status, string reason)
+        {
+            bool result = false;
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            result = OBR.UpdateRemainingDLTStatus(Convert.ToInt32(id), Convert.ToInt32(statusid), status, userDetails.LoginId, reason);
+            return new JsonResult() { Data = result, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
+        }
     }
 }

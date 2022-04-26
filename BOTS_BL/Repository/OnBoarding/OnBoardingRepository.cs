@@ -1771,5 +1771,43 @@ namespace BOTS_BL.Repository
 
             return objData;
         }
+
+        public bool UpdateRemainingDLTStatus(int id, int statusid, string status, string loginid, string reason)
+        {
+            bool result = false;
+            using (var context = new CommonDBContext())
+            {
+                var objData = context.BOTS_TblCampaignOtherConfig.Where(x => x.Id == id).FirstOrDefault();
+                if (objData != null)
+                {
+                    if (statusid == 1)
+                    {
+                        objData.DLTStatus1 = status;
+                        if (status == "Rejected")
+                        {
+                            objData.RejectReason1 = reason;
+                        }
+                    }
+                    if (statusid == 2)
+                    {
+                        objData.DLTStatus2 = status;
+                        if (status == "Rejected")
+                        {
+                            objData.RejectReason2 = reason;
+                        }
+                    }
+
+                    objData.UpdatedBy = loginid;
+                    objData.UpdatedDate = DateTime.Now;
+                    context.BOTS_TblCampaignOtherConfig.AddOrUpdate(objData);
+                    context.SaveChanges();
+                    result = true;
+                }
+            }
+
+            return result;
+        }
+
+
     }
 }
