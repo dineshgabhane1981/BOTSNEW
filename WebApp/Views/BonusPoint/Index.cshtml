@@ -21,6 +21,7 @@
                     <div class="multisteps-form__content">
                         <div>
                             <meta name="viewport" content="width=devicewidth, initial-scaled=1.0">
+                            <input type="hidden" id="hdnGroupId" />
                             <label style="padding-right:5px;padding-top:10px;">Enter Mobile Number </label>
                             <input type="number" id="txtMobileNo4" class="input50" />
 
@@ -136,9 +137,9 @@
         </div>
     </div>
 </div>
-<script src="~/Content/scriptSteps.js"></script>
+
 <script>
-    $("#hdnGroupId").val(@Html.Raw(ViewBag.GroupId));
+
 
     $(document).ready(function () {
         var today = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
@@ -162,6 +163,7 @@
         $('#btnldbopints').on("click", function () {
             GetClearAllTab();
         });
+        $("#hdnGroupId").val(@Html.Raw(ViewBag.GroupId));
     });
 
       function GetLoadBonusData() {
@@ -177,7 +179,7 @@
         $.ajax({
             type: "POST",
             url: '@Url.Action("GetChangeNameData", "BonusPoint")',//"/ITOperations/GetChangeNameData",
-            data: '{MobileNo:' + JSON.stringify($('#txtMobileNo4').val()) + ',CardNo: ' + JSON.stringify($('#txtCardNo4').val()) + '}',
+            data: '{GroupId: ' + JSON.stringify($('#hdnGroupId').val()) + ',MobileNo:' + JSON.stringify($('#txtMobileNo4').val()) + ',CardNo: ' + JSON.stringify($('#txtCardNo4').val()) + '}',
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             success: function (result) {
@@ -201,7 +203,7 @@
             else {
             toastr.error('Member not present. Please check entered Mobile Number OR Card Number');
             $("#spnMemberName3").text("");
-            $("#spnMobileno3").text("");           
+            $("#spnMobileno3").text("");
             $("#spnCardNo3").text("");
             $("#spnPtBalance3").text("");
             $("#spnEnrolledOutlet3").text("");
@@ -261,7 +263,7 @@
             var MemberData = [];
             item = {}
             item["GroupID"] = $("#hdnGroupId").val();
-            item["MobileNo"] = $("#txtMobileNo4").val();           
+            item["MobileNo"] = $("#txtMobileNo4").val();
             item["OutletId"] = $("#ddlOutletList4").val();
             item["BonusPoints"] = $("#txtBonusPoints").val();
             item["BonusRemark"] = $("#txtBonusRemark").val();

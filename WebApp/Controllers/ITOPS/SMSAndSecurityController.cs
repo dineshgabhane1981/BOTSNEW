@@ -20,12 +20,12 @@ namespace WebApp.Controllers.ITOPS
         CustomerRepository objCustRepo = new CustomerRepository();
         Exceptions newexception = new Exceptions();
         // GET: SMSAndSecurity
-        public ActionResult Index(string groupId)
+        public ActionResult Index()
         {
+            var groupId = Convert.ToString(Session["GroupId"]);
             try
             {
-                CommonFunctions common = new CommonFunctions();
-                groupId = common.DecryptString(groupId);
+                
                 string connStr = objCustRepo.GetCustomerConnString(groupId);
                 var lstOutlet = RR.GetOutletList(groupId, connStr);
                 var lstBrand = RR.GetBrandList(groupId, connStr);
@@ -45,8 +45,10 @@ namespace WebApp.Controllers.ITOPS
 
         public ActionResult SecurityKey()
         {
-
-            var groupId = (string)Session["GroupId"];
+            var groupId = Convert.ToString(Session["GroupId"]);
+            try
+            { 
+            
             string connStr = objCustRepo.GetCustomerConnString(groupId);
             var lstOutlet = RR.GetOutletList(groupId, connStr);
             var lstBrand = RR.GetBrandList(groupId, connStr);
@@ -55,6 +57,11 @@ namespace WebApp.Controllers.ITOPS
             ViewBag.BranchList = lstBrand;
             ViewBag.GroupId = groupId;
             ViewBag.GroupName = GroupDetails.RetailName;
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, groupId);
+            }
 
             return View();
         }

@@ -17,6 +17,7 @@
                     <div class="multisteps-form__content">
                         <div>
                             <meta name="viewport" content="width=devicewidth, initial-scaled=1.0">
+                            <input type="hidden" id="hdnGroupId" />
                             <label style="padding-right:5px;padding-top:10px;">Enter Mobile Number </label>
                             <input type="number" id="txtMobileNoModify" class="input50" />
 
@@ -170,6 +171,7 @@
          $('#btnModifyTxn').on("click", function () {
               ModifyTransaction();
          });
+         $("#hdnGroupId").val(@Html.Raw(ViewBag.GroupId));
       });
                 function DrawTableModify() {
                     var table1 = $('#activityTableModify').DataTable();
@@ -247,7 +249,7 @@
 
             type: "POST",
             url: '@Url.Action("GetCancelTxnData", "Transaction")',//"/ITOperations/GetCancelTxnData",
-            data: '{MobileNo: ' + JSON.stringify($('#txtMobileNoModify').val()) + ',InvoiceNo: ' + JSON.stringify(InvNo) + '}',
+            data: '{GroupId: ' + JSON.stringify($('#hdnGroupId').val()) + ',MobileNo: ' + JSON.stringify($('#txtMobileNoModify').val()) + ',InvoiceNo: ' + JSON.stringify(InvNo) + '}',
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             success: function (result) {

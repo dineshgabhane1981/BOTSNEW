@@ -16,6 +16,7 @@
                     <h4 class="multisteps-form__title" style="color:blue;">Point Transfer</h4><br />
                     <div class="multisteps-form__content">
                         <div>
+                            <input type="hidden" id="hdnGroupId" />
                             <label style="padding-right:5px;padding-top:10px;">Enter Mobile Number </label>
                             <input type="number" id="txtMobileNo1" class="input50" />
 
@@ -31,7 +32,7 @@
                                 <input type="radio" name="first_item1" style="margin-left:30px;" checked id="rbtnNOSMS1" /> Don't Send SMS
                             </div>
                             <div class="col-md-12 col-lg-12" style="padding-left: 0px !important; float: left;">
-                                <input type="hidden" id="hdnCustomerId" />
+                                
                                 <div class="col-md-4 col-lg-4" style="padding-left: 0px !important; margin-bottom: 10px; float: left;">
                                     <table border="1" cellpadding="5" cellspacing="5">
                                         <tr position: absolute top: -9999px; left: -9998px;>
@@ -127,6 +128,7 @@
             maxDate: today,
             //  minDate: '-4'
         });
+        $("#hdnGroupId").val(@Html.Raw(ViewBag.GroupId));
     });
     $('#btnchgmob').on("click", function () {
         GetClearAllTab();
@@ -137,6 +139,8 @@
     $('#btnTransferPoints').on("click", function () {
         TransferPoints();
     });
+
+
     function GetChangeMobileData() {
         if ($('#txtMobileNo1').val() == "" && $('#txtCardNo1').val() == "") {
             toastr.error('Please enter Mobile Number OR Card Number');
@@ -150,7 +154,7 @@
         $.ajax({
             type: "POST",
             url: '@Url.Action("GetChangeNameData", "Transaction")',
-            data: '{MobileNo:' + JSON.stringify($('#txtMobileNo1').val()) + ',CardNo: ' + JSON.stringify($('#txtCardNo1').val()) + '}',
+            data: '{GroupId: ' + JSON.stringify($('#hdnGroupId').val()) + ',MobileNo:' + JSON.stringify($('#txtMobileNo1').val()) + ',CardNo: ' + JSON.stringify($('#txtCardNo1').val()) + '}',
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             success: function (result) {
@@ -174,7 +178,7 @@
                 else {
                     toastr.error('Member not present. Please check entered Mobile Number OR Card Number');
                     $("#spnMemberName1").text("");
-                    $("#spnMobileno1").text("");                   
+                    $("#spnMobileno1").text("");
                     $("#spnCardNo1").text("");
                     $("#spnPtBalance1").text("");
                     $("#spnEnrolledOutlet1").text("");
@@ -205,7 +209,7 @@
             toastr.error('Mobile No should be 10 digits');
             $('#txtMobileNo').focus();
             return false;
-        }        
+        }
         if ($('#txtRequestedByName1').val() == "") {
             toastr.error('Please enter Requested Person name');
             $('#txtRequestedByName1').focus();
@@ -218,13 +222,14 @@
         }
         if (confirm("Are you sure? You want to change Mobile No")) {
             var MemberData = [];
-            item = {}            
+            item = {}
+            item["GroupID"] = $("#hdnGroupId").val();
             item["CustomerId"] = $("#hdnCustomerId1").val();
-            item["MobileNo"] = $("#spnMobileno1").text();           
-            item["NewMobileNo"] = $("#txtMobileNo").val();            
+            item["MobileNo"] = $("#spnMobileno1").text();
+            item["NewMobileNo"] = $("#txtMobileNo").val();
             item["RequestedBy"] = $("#txtRequestedByName1").val();
             item["RequestedForum"] = $('#ddlRequestedForum1 :selected').text();
-            item["RequestedOn"] = $("#dtPointTransfer").val();            
+            item["RequestedOn"] = $("#dtPointTransfer").val();
 
             if ($('#rbtnSMS1').is(":checked")) {
                 item["IsSMS"] = 1;

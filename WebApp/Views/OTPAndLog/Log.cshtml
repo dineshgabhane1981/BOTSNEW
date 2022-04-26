@@ -52,15 +52,12 @@
     var tableLogData = [];
     
     $(document).ready(function () {
-        
-       
 
         $('#btnGetLog').on("click", function () {
             GetLogData();
         });
         $("#hdnGroupId").val(@Html.Raw(ViewBag.GroupId));
-
-        
+  
     });
     function GetLogData() {
         var val = $("#txtMobileNo2").val()

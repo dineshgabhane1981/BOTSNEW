@@ -16,6 +16,8 @@ namespace WebApp.Controllers.ITOPS
         // GET: Bitly
         public ActionResult Index()
         {
+            var groupId = (string)Session["GroupId"];
+            ViewBag.GroupId = groupId;
             return View();
         }
         public ActionResult Upload()
