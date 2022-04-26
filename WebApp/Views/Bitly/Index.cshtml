@@ -15,18 +15,19 @@
                 <div class="multisteps-form__panel shadow p-4 list-box bg-white" id="sec3" data-animation="scaleIn">
                     @*<h4 class="multisteps-form__title" style="color:blue;"></h4><br />*@
                     <div class="multisteps-form__content" style="height: 600px !important">
+                        <input type="hidden" id="hdnGroupId" />
                         @using (Html.BeginForm("UploadData", "FileUpload", FormMethod.Post, new { enctype = "multipart/form-data" }))
                         {
-                        <div style="margin-top: 15px">
+                            <div style="margin-top: 15px">
 
-                            @Html.TextBox("Data", "", new { type = "file" }) <br />
-                            <input type="submit" value="Upload" />  <label style="padding-right:5px;padding-top:10px;">Do not use special characters in FileName</label>
-                            @*<div class="mb-3">
-                                <label for="formFile" class="form-label">Default file input example</label>
-                                <input class="form-control" type="file" id="formFile">
-                            </div>*@
-                            @ViewBag.Message
-                        </div>
+                                @Html.TextBox("Data", "", new { type = "file" }) <br />
+                                <input type="submit" value="Upload" />  <label style="padding-right:5px;padding-top:10px;">Do not use special characters in FileName</label>
+                                @*<div class="mb-3">
+                    <label for="formFile" class="form-label">Default file input example</label>
+                    <input class="form-control" type="file" id="formFile">
+                </div>*@
+                                @ViewBag.Message
+                            </div>
                         }
 
 
@@ -45,4 +46,9 @@
         </div>
     </div>
 </div>
+<script>
 
+    $(document).ready(function () {
+        $("#hdnGroupId").val(@Html.Raw(ViewBag.GroupId));
+    });
+ </script>

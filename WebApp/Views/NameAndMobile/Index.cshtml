@@ -16,6 +16,7 @@
                     <h4 class="multisteps-form__title" style="color:blue;">Change Name</h4><br />
                     <div class="multisteps-form__content">
                         <div>
+                            <input type="hidden" id="hdnGroupId" />
                             <label style="padding-right:5px;padding-top:10px;">Enter Mobile Number </label>
                             <input type="number" id="txtMobileNo" class="input50" />
 
@@ -129,7 +130,7 @@
             maxDate: today,
             //  minDate: '-4'
         });
-    });
+
     $('#btnchgnm').on("click", function () {
         GetClearAllTab();
     });
@@ -140,6 +141,8 @@
 
     $('#btnSaveMemberName').on("click", function () {
         SaveMemberName();
+    });
+        $("#hdnGroupId").val(@Html.Raw(ViewBag.GroupId));
     });
 
 
@@ -156,7 +159,7 @@
         $.ajax({
             type: "POST",
             url: '@Url.Action("GetChangeNameData", "NameAndMobile")',
-            data: '{MobileNo: ' + JSON.stringify($('#txtMobileNo').val()) + ',CardNo: ' + JSON.stringify($('#txtCardNo').val()) + '}',
+            data: '{GroupId: ' + JSON.stringify($('#hdnGroupId').val()) + ',MobileNo: ' + JSON.stringify($('#txtMobileNo').val()) + ',CardNo: ' + JSON.stringify($('#txtCardNo').val()) + '}',
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             success: function (result) {
@@ -180,7 +183,7 @@
             else {
             toastr.error('Member not present. Please check entered Mobile Number OR Card Number');
             $("#spnMemberName").text("");
-            $("#spnMobileno").text("");          
+            $("#spnMobileno").text("");
             $("#spnCardNo").text("");
             $("#spnPtBalance").text("");
             $("#spnEnrolledOutlet").text("");

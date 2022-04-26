@@ -156,6 +156,7 @@ namespace WebApp.Controllers.ITOPS
         public ActionResult PointTransfer()
         {
             var groupId = (string)Session["GroupId"];
+            ViewBag.GroupId = groupId;
             return View();
         }
         public ActionResult TransferPoints(string jsonData)

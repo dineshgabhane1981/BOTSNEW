@@ -18,6 +18,7 @@
         <h4 class="multisteps-form__title" style="color:blue;">Add New Member</h4><br />
         <div class="multisteps-form__content">
             <div>
+                <input type="hidden" id="hdnGroupId" />
                 <div style="margin-left:30px;margin-bottom:30px;margin-top:30px;">
                     <input type="radio" name="addmember" checked id="rbtnNewMember" /> Add Single Member
                     <input type="radio" name="addmember" style="margin-left:30px;" id="rbtnBulkUpload" /> Bulk Upload
@@ -125,7 +126,6 @@
                                     <a href="#" target="_blank" onclick="DownloadFile();" style="color: blue">DownLoad Sample File</a>
                                 </td>
                                 <td>
-                                    
                                 </td>
                             </tr>
                         </table>
@@ -144,17 +144,14 @@
 
 <script>
 
-
-
-
-        function DownloadFile() {
+ function DownloadFile() {
             var fileName = "../Downloads/Bulkupload.xlsx";
             window.location = fileName;
         }
         //var tableData = [];
         //var tableLogData = [];
 
-        $(document).ready(function () {
+  $(document).ready(function () {
 
             var today = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
             // alert(today);
@@ -165,7 +162,7 @@
                 // minDate: '-4'
             });
 
-        $('#rbtnNewMember').on("click", function () {
+   $('#rbtnNewMember').on("click", function () {
             $('#dvSingleMember').show();
             $('#dvBulkUpload').hide();
         });
@@ -181,6 +178,7 @@
                 BulkMemberData();
             }
         });
+            $("#hdnGroupId").val(@Html.Raw(ViewBag.GroupId));
     });
 
          function AddSingleMemberData() {
@@ -237,7 +235,7 @@
             $.ajax({
                 type: "POST",
                 url: '@Url.Action("AddSingleMember", "AddMember")',//"/ITOperations/AddSingleMember",
-                data: '{jsonData: ' + JSON.stringify(data) + '}',
+                data: '{GroupId: ' + JSON.stringify($('#hdnGroupId').val()) + ',jsonData: ' + JSON.stringify(data) + '}',
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
                 success: function (result) {

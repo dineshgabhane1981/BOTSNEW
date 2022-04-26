@@ -17,6 +17,7 @@
                         <div class="multisteps-form__content">
                             <div>
                                 <meta name="viewport" content="width=device-width, initial-scaled=1.0">
+                                <input type="hidden" id="hdnGroupId" />
                                 <div class="col-md-12 col-lg-12" style="padding-left: 0px !important; float: left;">
                                     <div class="col-md-4 col-lg-4" style="padding-left: 0px !important; margin-bottom: 10px; float: left;" display:flex; height:auto !important;margin-top:50px;">
                                         <table border="1" cellpadding="5" cellspacing="5">
@@ -66,10 +67,13 @@
         </div>
     </div>
 </div>
-                <script>
+<script>
     var tableData = [];
+    $(document).ready(function () {
     $('#btnresetseckey').on("click", function () {
         GetClearAllTab();
+    });
+        $("#hdnGroupId").val(@Html.Raw(ViewBag.GroupId));
     });
     function OnChangeResetKey(val) {
         //alert(val);
@@ -219,7 +223,7 @@
 
     }
 
-                </script>
+</script>
                 <script src="~/Scripts/jquery-ui-1.12.1.js"></script>
                 <script src="~/Scripts/jquery-ui-1.12.1.min.js"></script>
                 <link href="~/Content/themes/base/jquery-ui.min.css" rel="stylesheet" />

@@ -24,6 +24,8 @@ namespace WebApp.Controllers.ITOPS
         string groupId;
         public ActionResult Index()
         {
+            var groupId = (string)Session["GroupId"];
+            ViewBag.GroupId = groupId;
             return View();
         }
 

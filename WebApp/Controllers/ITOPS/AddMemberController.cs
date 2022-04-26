@@ -28,6 +28,8 @@ namespace WebApp.Controllers.ITOPS
         Exceptions newexception = new Exceptions();
         public ActionResult Index()
         {
+            var groupId = (string)Session["GroupId"];
+            ViewBag.GroupId = groupId;
             return View();
         }
 

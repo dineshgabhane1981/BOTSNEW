@@ -27,6 +27,7 @@ namespace WebApp.Controllers.ITOPS
                 CommonFunctions common = new CommonFunctions();
                 groupId = common.DecryptString(groupId);
                 Session["GroupId"] = groupId;
+                ViewBag.GroupId = groupId;
             }            
             return View();
         }
@@ -34,6 +35,7 @@ namespace WebApp.Controllers.ITOPS
         public ActionResult ChangeMobile()
         {
             var groupId = (string)Session["GroupId"];
+            ViewBag.GroupId = groupId;
             return View();
         }
 
