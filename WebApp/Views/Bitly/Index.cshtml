@@ -23,10 +23,21 @@
                                 @Html.TextBox("Data", "", new { type = "file" }) <br />
                                 <input type="submit" value="Upload" />  <label style="padding-right:5px;padding-top:10px;">Do not use special characters in FileName</label>
                                 @*<div class="mb-3">
-                    <label for="formFile" class="form-label">Default file input example</label>
-                    <input class="form-control" type="file" id="formFile">
-                </div>*@
-                                @ViewBag.Message
+                                        <label for="formFile" class="form-label">Default file input example</label>
+                                        <input class="form-control" type="file" id="formFile">
+                                    </div>*@
+                                @if (!string.IsNullOrEmpty(Convert.ToString(ViewBag.Message)))
+                                {
+                                    <script>
+                                        cuteAlert({
+                                            type: "success",
+                                            title: "Saved",
+                                            message: '@ViewBag.Message',
+                                            buttonText: "Okay"
+                                        })
+                                    </script>
+                                }
+
                             </div>
                         }
 
@@ -36,7 +47,7 @@
                         {
                             <div style="padding-top: 5px">
                                 <button class="btn btn-primary ml-auto" type="submit" id="btnBitly"> Create Bitly</button>
-                                <input type="text" id="txtBitly" value=" @((Session["Bitly"]))">
+                                <input type="text" id="txtBitly" value=" @((ViewData["Bitly"]))">
                             </div>
                         }
                     </div>
@@ -51,4 +62,4 @@
     $(document).ready(function () {
         $("#hdnGroupId").val(@Html.Raw(ViewBag.GroupId));
     });
- </script>
+</script>
