@@ -255,7 +255,7 @@
                             <input class="input100" type="text" id="txtSearch" placeholder="Search discussion..." />
                         </div>
                     </div>
-                    <div class="row mt-3" id="dvFollowupData">
+                    <div class="row mt-3" id="dvFollowupDataNew">
                         <div class="table-responsive">
                             <table class="table" id="followupTable">
                                 <thead>
@@ -284,11 +284,11 @@
                                             {
                                                 followupdate = item.FollowupDate.Value.ToString();//.ToString("yyyy-MM-dd");
                                             }
-                                            var imgId = "imgExpand" + item.Id;
+                                            var imgId = "imgExpandFollowup" + item.Id;
                                             <tr>
 
                                                 <td style="text-align:center;">
-                                                    <img id="@imgId" src="~/Content/assets/images/details_open.png" style="cursor:pointer;" onclick="ShowActivities(@item.Id);" />
+                                                    <img id="@imgId" src="~/Content/assets/images/details_open.png" style="cursor:pointer;" onclick="ShowFollowUpActivities(@item.Id);" />
 
                                                 </td>
                                                 <td>@item.GroupName</td>
@@ -346,7 +346,7 @@
 
                                             </tr>
 
-                                            var dynamicIdTr = "trActivities" + item.Id;
+                                            var dynamicIdTr = "trFollowUpActivities" + item.Id;
                                             var dynamicIdDiv = "dvFollowupData" + item.Id;
 
                                             <tr id="@dynamicIdTr" style="display:none;">
@@ -418,11 +418,6 @@
             table1.draw();
         });
 
-
-    });
-</script>
-<script>
-    $(document).ready(function () {
         $('#followupTable').DataTable({
             "aaSorting": [],
             "paging": true,
@@ -449,7 +444,5 @@
             var table2 = $('#followupTable').DataTable();
             table2.draw();
         });
-
-
     });
 </script>

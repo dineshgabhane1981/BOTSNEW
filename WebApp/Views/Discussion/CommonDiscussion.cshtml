@@ -261,7 +261,7 @@
             $("#dvDiscussionData" + id).hide(1000);
             $("#trActivities" + id).hide(1000);
 
-           // $("#imgExpand" + id).attr("src", "/Content/assets/images/details_open.png");
+            $("#imgExpand" + id).attr("src", "/Content/assets/images/details_open.png");
         }
         else {
             $("#divLoader").show();
@@ -328,5 +328,80 @@
         }
 
     }
+
+    function ShowFollowUpActivities(id) {      
+        if ($("#dvFollowupData" + id).is(":visible")) {
+            $("#dvFollowupData" + id).hide(1000);
+            $("#trFollowUpActivities" + id).hide(1000);
+
+            $("#imgExpandFollowup" + id).attr("src", "/Content/assets/images/details_open.png");
+        }
+        else {
+            $("#divLoader").show();
+            $.ajax({
+                type: "POST",
+                 url: '@Url.Action("GetSubDiscussionList")',
+                data: '{Id:' + JSON.stringify(id) + '}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (response) {
+                    console.log(response);
+                    BindFollowupActivities(id,response);
+                    $("#divLoader").hide();
+                },
+                failure: function (response) {
+
+                    $("#divLoader").hide();
+                }
+            });
+        }
+    }
+
+    function BindFollowupActivities(id,data) {
+        if (data != "") {
+            var htmlStr = "<table border=\"2\" style=\"background-color:gray;margin-left: 11px;width: 98%;\" class=\"table\">";
+            htmlStr += "<tr style=\"text-align: center;\">"
+            htmlStr += "<th scope=\"col\">Updated Date</th>";
+            htmlStr += "<th scope=\"col\">Updated By</th>";
+            htmlStr += "<th scope=\"col\">Description</th>";
+            htmlStr += "<th scope=\"col\">Status</th>";
+            htmlStr += "</tr>";
+
+            $.map(data, function (item) {
+                var d = new Date();
+                d = item.FollowupDate;
+                console.log(d);
+                htmlStr += "<tr style=\"text-align: center;\">"
+                htmlStr += "<td>" + item.UpdatedDate + "</td>";
+                htmlStr += "<td>" + item.UpdatedBy + "</td>";
+                htmlStr += "<td style=\"width: 600px;\">" + item.Description + "</td>";
+                htmlStr += "<td style=\"width: 100px;\">" + item.Status + "</td>";
+                htmlStr += "</tr>"
+            });
+
+            htmlStr += "</table>";
+            $("#dvFollowupData" + id).html(htmlStr);
+            
+            $('[id^="imgExpandFollowup"]').attr("src", "../Content/assets/images/details_open.png");
+            $("#trFollowUpActivities" + id).show(1000);
+
+            $("#dvFollowupData" + id).show(1000);
+            $("#imgExpandFollowup" + id).attr("src", "../Content/assets/images/details_close.png");
+        }
+        else {
+            cuteAlert({
+                type: "warning",
+                title: "Oops..",
+                message: "No tracking available",
+                buttonText: "Okay"
+            })
+        }
+
+    }
+
+
+
+
+
 </script>
 

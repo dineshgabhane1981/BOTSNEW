@@ -10,6 +10,7 @@
             <div class="container-fluid pt-3 pl-3 pr-3">
                 <div class="pb-3">
                     <h4><b>Discussion</b></h4>
+                    @*<a href="whatsapp://send?text=The text to share!" data-action="share/whatsapp/share" target="_blank">Share via Whatsapp</a>*@
                 </div>
 
                 <div class="container overflow-hidden">
@@ -64,6 +65,9 @@
         GetDiscussionGraphData();
         $('#ddlCSMember').change(function () {
             GetDiscussionGraphData();
+            NoCustomerConnect();
+            GetMostConnectedCustomers();
+            GetLeastConnectedCustomers();
         });
         NoCustomerConnect();
         GetMostConnectedCustomers();
@@ -283,11 +287,13 @@
     }
 
     function NoCustomerConnect() {
+
+
         $("#divLoader").show();
          $.ajax({
             type: "POST",
             url: '@Url.Action("GetNoCustomerConnect", "singlepage")',
-            data: '',
+             data: '{CSWise: ' + JSON.stringify($("#ddlCSMember").val()) + '}',
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             success: function (response) {
@@ -318,7 +324,7 @@
          $.ajax({
             type: "POST",
             url: '@Url.Action("GetMostConnectedCustomers", "singlepage")',
-            data: '',
+             data: '{CSWise: ' + JSON.stringify($("#ddlCSMember").val()) + '}',
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             success: function (response) {
@@ -347,7 +353,7 @@
          $.ajax({
             type: "POST",
             url: '@Url.Action("GetLeastConnectedCustomers", "singlepage")',
-            data: '',
+             data: '{CSWise: ' + JSON.stringify($("#ddlCSMember").val()) + '}',
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             success: function (response) {
