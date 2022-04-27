@@ -169,6 +169,9 @@ namespace WebApp.Controllers.OnBoarding
                     objData.objInstallmentList = OBR.GetInstallmentDetails(GroupId);
                     objData.lstOutlets = OBR.GetOutletDetails(GroupId);
 
+                    objData.objDLCLinkConfig = OBR.GetDLCLinkData(GroupId);
+                    ViewBag.TemplateType = objData.TempleteType();
+
                     foreach (var brand in objData.objRetailList)
                     {
                         objData.lstBrands.Add(new SelectListItem
