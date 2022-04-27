@@ -895,12 +895,7 @@ namespace WebApp.Controllers.OnBoarding
                         objDLCLink.Id = Convert.ToInt32(item["Id"]);
                     }
                     objDLCLink.GroupId = Convert.ToString(item["GroupId"]);
-                    objDLCLink.ProfileUpdatePoints = Convert.ToInt32(item["ProfileUpdatePoints"]);
-                    objDLCLink.ReferralPoints = Convert.ToInt32(item["ReferralPoints"]);
-                    objDLCLink.ReferredPoints = Convert.ToInt32(item["ReferredPoints"]);
-                    objDLCLink.MaxNoOfReferrals = Convert.ToInt32(item["MaxNoOfReferrals"]);
-                    objDLCLink.ValidityOfReferralPoints = Convert.ToInt32(item["ValidityOfReferralPoints"]);
-                    objDLCLink.ReferralReminder = Convert.ToInt32(item["ReferralReminder"]);
+                   
                     objDLCLink.ToTheReferralSMSScript = Convert.ToString(item["SMSToTheReferral"]);
                     objDLCLink.ReminderForPointsUsageSMSScript = Convert.ToString(item["SMSReminderForPointsUsage"]);
                     objDLCLink.ReferredSuccessOnReferralTxnSMSScript = Convert.ToString(item["SMSReferredSuccessOnReferralTxn"]);
@@ -936,12 +931,30 @@ namespace WebApp.Controllers.OnBoarding
             return new JsonResult() { Data = status, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
 
+        public ActionResult SendDLCToDLT(string GroupId)
+        {
+            bool status = false;
+            try
+            {
+                var userDetails = (CustomerLoginDetail)Session["UserSession"];
+
+                status = OBR.SendDLCToDLT(GroupId, userDetails.LoginId);
+
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "SaveDLCLinkConfigController");
+            }
+            return new JsonResult() { Data = status, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
+        }
+
+
         public JsonResult GetDLCLinkData(string groupId)
         {
-            BOTS_TblDLCLinkConfig objData = new BOTS_TblDLCLinkConfig();
-            objData = OBR.GetDLCLinkData(groupId);
+            BOTS_TblDLCLinkConfig objDLCLinkConfig = new BOTS_TblDLCLinkConfig();
+            objDLCLinkConfig = OBR.GetDLCLinkData(groupId);
 
-            return new JsonResult() { Data = objData, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
+            return new JsonResult() { Data = objDLCLinkConfig, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
 
         public List<EarnPointLevel> FillEarnPointLevel()
@@ -1798,5 +1811,131 @@ namespace WebApp.Controllers.OnBoarding
             result = OBR.UpdateRemainingDLTStatus(Convert.ToInt32(id), Convert.ToInt32(statusid), status, userDetails.LoginId, reason);
             return new JsonResult() { Data = result, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
+
+        public ActionResult UpdateDLCLinkDLTStatus(string id, string statusid, string status, string reason)
+        {
+            bool result = false;
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            result = OBR.UpdateDLCLinkDLTStatus(Convert.ToInt32(id), Convert.ToInt32(statusid), status, userDetails.LoginId, reason);
+            return new JsonResult() { Data = result, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
+        }
+       
+
+        public ActionResult SaveDLCLinkDLTConfig(string id, string statusid, string status,string jsonData)
+        {
+            bool result = false;
+            try
+            {
+                var userDetails = (CustomerLoginDetail)Session["UserSession"];
+                BOTS_TblDLCLinkConfig objDLCLinkConfig = new BOTS_TblDLCLinkConfig();
+                JavaScriptSerializer json_serializer = new JavaScriptSerializer();
+                json_serializer.MaxJsonLength = int.MaxValue;
+                object[] objData = (object[])json_serializer.DeserializeObject(jsonData);
+                foreach (Dictionary<string, object> item in objData)
+                {
+                    var Id = Convert.ToInt32(item["id"]);
+                    var num = Convert.ToInt32(item["statusId"]);
+                    objDLCLinkConfig = OBR.GetDLCLinkDLTConfigById(Id);
+                    if (objDLCLinkConfig != null)
+                    {
+                        if (num == 1)
+                        {
+                            objDLCLinkConfig.ToTheReferralSMSScript = Convert.ToString(item["Script"]);
+                            objDLCLinkConfig.ToTheReferralSMSScriptDLT = Convert.ToString(item["ScriptDLT"]);
+                            objDLCLinkConfig.TemplateId1 = Convert.ToString(item["TemplateId"]);
+                            objDLCLinkConfig.TemplateName1 = Convert.ToString(item["TemplateName"]);
+                            objDLCLinkConfig.TemplateType1 = Convert.ToString(item["TemplateType"]);
+                            if (Convert.ToString(item["Status"]) == "Approved")
+                            {
+                                objDLCLinkConfig.DLTStatus1 = "Approved";
+                            }
+                        }
+                        if (num == 2)
+                        {
+                            objDLCLinkConfig.ReminderForPointsUsageSMSScript = Convert.ToString(item["Script"]);
+                            objDLCLinkConfig.ReminderForPointsUsageSMSScriptDLT = Convert.ToString(item["ScriptDLT"]);
+                            objDLCLinkConfig.TemplateId2 = Convert.ToString(item["TemplateId"]);
+                            objDLCLinkConfig.TemplateName2 = Convert.ToString(item["TemplateName"]);
+                            objDLCLinkConfig.TemplateType2 = Convert.ToString(item["TemplateType"]);
+                            if (Convert.ToString(item["Status"]) == "Approved")
+                            {
+                                objDLCLinkConfig.DLTStatus2 = "Approved";
+                            }
+                        }
+                        if (num == 3)
+                        {
+                            objDLCLinkConfig.ReferredSuccessOnReferralTxnSMSScript = Convert.ToString(item["Script"]);
+                            objDLCLinkConfig.ReferredSuccessOnReferralTxnSMSScriptDLT = Convert.ToString(item["ScriptDLT"]);
+                            objDLCLinkConfig.TemplateId3 = Convert.ToString(item["TemplateId"]);
+                            objDLCLinkConfig.TemplateName3 = Convert.ToString(item["TemplateName"]);
+                            objDLCLinkConfig.TemplateType3 = Convert.ToString(item["TemplateType"]);
+                            if (Convert.ToString(item["Status"]) == "Approved")
+                            {
+                                objDLCLinkConfig.DLTStatus3 = "Approved";
+                            }
+                        }
+                        if (num == 4)
+                        {
+                            objDLCLinkConfig.DLCOTPScriptSMS = Convert.ToString(item["Script"]);
+                            objDLCLinkConfig.DLCOTPScriptSMSDLT = Convert.ToString(item["ScriptDLT"]);
+                            objDLCLinkConfig.TemplateId4 = Convert.ToString(item["TemplateId"]);
+                            objDLCLinkConfig.TemplateName4 = Convert.ToString(item["TemplateName"]);
+                            objDLCLinkConfig.TemplateType4 = Convert.ToString(item["TemplateType"]);
+                            if (Convert.ToString(item["Status"]) == "Approved")
+                            {
+                                objDLCLinkConfig.DLTStatus4 = "Approved";
+                            }
+                        }
+                        if (num == 5)
+                        {
+                            objDLCLinkConfig.GiftPointsOTPScriptSMS = Convert.ToString(item["Script"]);
+                            objDLCLinkConfig.GiftPointsOTPScriptSMSDLT = Convert.ToString(item["ScriptDLT"]);
+                            objDLCLinkConfig.TemplateId5 = Convert.ToString(item["TemplateId"]);
+                            objDLCLinkConfig.TemplateName5 = Convert.ToString(item["TemplateName"]);
+                            objDLCLinkConfig.TemplateType5 = Convert.ToString(item["TemplateType"]);
+                            if (Convert.ToString(item["Status"]) == "Approved")
+                            {
+                                objDLCLinkConfig.DLTStatus5 = "Approved";
+                            }
+                        }
+
+                        if (num == 6)
+                        {
+                            objDLCLinkConfig.GiftPointsDebitOTPScriptSMS = Convert.ToString(item["Script"]);
+                            objDLCLinkConfig.GiftPointsDebitOTPScriptSMSDLT = Convert.ToString(item["ScriptDLT"]);
+                            objDLCLinkConfig.TemplateId6 = Convert.ToString(item["TemplateId"]);
+                            objDLCLinkConfig.TemplateName6 = Convert.ToString(item["TemplateName"]);
+                            objDLCLinkConfig.TemplateType6 = Convert.ToString(item["TemplateType"]);
+                            if (Convert.ToString(item["Status"]) == "Approved")
+                            {
+                                objDLCLinkConfig.DLTStatus6 = "Approved";
+                            }
+                        }
+                        if (num == 7)
+                        {
+                            objDLCLinkConfig.GiftPointsDebitOTPScriptSMS = Convert.ToString(item["Script"]);
+                            objDLCLinkConfig.GiftPointsCreditOTPScriptSMSDLT = Convert.ToString(item["ScriptDLT"]);
+                            objDLCLinkConfig.TemplateId7 = Convert.ToString(item["TemplateId"]);
+                            objDLCLinkConfig.TemplateName7 = Convert.ToString(item["TemplateName"]);
+                            objDLCLinkConfig.TemplateType7 = Convert.ToString(item["TemplateType"]);
+                            if (Convert.ToString(item["Status"]) == "Approved")
+                            {
+                                objDLCLinkConfig.DLTStatus7 = "Approved";
+                            }
+                        }
+                                             
+                        objDLCLinkConfig.UpdatedBy = userDetails.LoginId;
+                        objDLCLinkConfig.UpdatedDate = DateTime.Now;
+                    }
+                }
+                result = OBR.SaveDLCLinkDLTConfig(objDLCLinkConfig);
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "SaveDLCLinkDLTConfig(");
+            }
+            return new JsonResult() { Data = result, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
+        }
     }
 }
+    

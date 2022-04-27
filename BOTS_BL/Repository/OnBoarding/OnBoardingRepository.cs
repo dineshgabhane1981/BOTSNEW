@@ -844,16 +844,17 @@ namespace BOTS_BL.Repository
 
         public BOTS_TblDLCLinkConfig GetDLCLinkData(string groupId)
         {
-            BOTS_TblDLCLinkConfig objData = new BOTS_TblDLCLinkConfig();
+            BOTS_TblDLCLinkConfig objDLCLinkConfig = new BOTS_TblDLCLinkConfig();
             using (var context = new CommonDBContext())
             {
 
-                objData = context.BOTS_TblDLCLinkConfig.Where(x => x.GroupId == groupId).FirstOrDefault();
+                objDLCLinkConfig = context.BOTS_TblDLCLinkConfig.Where(x => x.GroupId == groupId).FirstOrDefault();
             }
 
-            return objData;
+            return objDLCLinkConfig;
         }
 
+       
         public bool AddEarnAndBurnRule(BOTS_TblPointsEarnRuleConfig earnrule, object[] slab, string slabType, decimal slabdirectortelevalue, string SlabDirectOrTelescopic, string Addedby, DataSet ds, BOTS_TblPointsBurnRuleConfig objpointburn)
         {
             bool status = false;
@@ -1808,6 +1809,136 @@ namespace BOTS_BL.Repository
             return result;
         }
 
+        public bool SendDLCToDLT(string groupId, string loginId)
+        {
+            bool status = false;
+            using (var context = new CommonDBContext())
+            {
+                try
+                {
+                    var objDLCLinkConfig = context.BOTS_TblDLCLinkConfig.Where(x => x.GroupId == groupId).FirstOrDefault();
+                    if (objDLCLinkConfig != null)
+                    {
+                        objDLCLinkConfig.DLTStatus1 = "Submitted";
+                        objDLCLinkConfig.DLTStatus2 = "Submitted";
+                        objDLCLinkConfig.DLTStatus3 = "Submitted";
+                        objDLCLinkConfig.DLTStatus4 = "Submitted";
+                        objDLCLinkConfig.DLTStatus5 = "Submitted";
+                        objDLCLinkConfig.DLTStatus6 = "Submitted";
+                        objDLCLinkConfig.DLTStatus7 = "Submitted";
 
+
+                        objDLCLinkConfig.UpdatedBy = loginId;
+                        objDLCLinkConfig.UpdatedDate = DateTime.Now;
+                        context.BOTS_TblDLCLinkConfig.AddOrUpdate(objDLCLinkConfig);
+                        context.SaveChanges();
+                    }
+                    status = true;
+                }
+                catch (Exception ex)
+                {
+                    newexception.AddException(ex, "SendDLCToDLT");
+                }
+            }
+            return status;
+        }
+
+        public bool UpdateDLCLinkDLTStatus(int id, int statusid, string status, string loginid, string reason)
+        {
+            bool result = false;
+            using (var context = new CommonDBContext())
+            {
+                var objDLCLinkConfig = context.BOTS_TblDLCLinkConfig.Where(x => x.Id == id).FirstOrDefault();
+                if (objDLCLinkConfig != null)
+                {
+                    if (statusid == 1)
+                    {
+                        objDLCLinkConfig.DLTStatus1 = status;
+                        if (status == "Rejected")
+                        {
+                            objDLCLinkConfig.RejectReason1 = reason;
+                        }
+                    }
+                    if (statusid == 2)
+                    {
+                        objDLCLinkConfig.DLTStatus2 = status;
+                        if (status == "Rejected")
+                        {
+                            objDLCLinkConfig.RejectReason2 = reason;
+                        }
+                    }
+                    if (statusid == 3)
+                    {
+                        objDLCLinkConfig.DLTStatus3 = status;
+                        if (status == "Rejected")
+                        {
+                            objDLCLinkConfig.RejectReason3 = reason;
+                        }
+                    }
+                    if (statusid == 4)
+                    {
+                        objDLCLinkConfig.DLTStatus4 = status;
+                        if (status == "Rejected")
+                        {
+                            objDLCLinkConfig.RejectReason4 = reason;
+                        }
+                    }
+                    if (statusid == 5)
+                    {
+                        objDLCLinkConfig.DLTStatus5 = status;
+                        if (status == "Rejected")
+                        {
+                            objDLCLinkConfig.RejectReason5 = reason;
+                        }
+                    }
+                    if (statusid == 6)
+                    {
+                        objDLCLinkConfig.DLTStatus6 = status;
+                        if (status == "Rejected")
+                        {
+                            objDLCLinkConfig.RejectReason6 = reason;
+                        }
+                    }
+                    if (statusid == 7)
+                    {
+                        objDLCLinkConfig.DLTStatus7 = status;
+                        if (status == "Rejected")
+                        {
+                            objDLCLinkConfig.RejectReason7 = reason;
+                        }
+                    }
+
+                    objDLCLinkConfig.UpdatedBy = loginid;
+                    objDLCLinkConfig.UpdatedDate = DateTime.Now;
+                    context.BOTS_TblDLCLinkConfig.AddOrUpdate(objDLCLinkConfig);
+                    context.SaveChanges();
+                    result = true;
+                }
+            }
+
+            return result;
+        }
+
+        public BOTS_TblDLCLinkConfig GetDLCLinkDLTConfigById(int Id)
+        {
+            BOTS_TblDLCLinkConfig objDLCLinkConfig = new BOTS_TblDLCLinkConfig();
+            using (var context = new CommonDBContext())
+            {
+                objDLCLinkConfig = context.BOTS_TblDLCLinkConfig.Where(x => x.Id == Id).FirstOrDefault();
+            }
+            return objDLCLinkConfig;
+        }
+
+        public bool SaveDLCLinkDLTConfig(BOTS_TblDLCLinkConfig objDLCLinkConfig)
+        {
+            bool result = false;
+            using (var context = new CommonDBContext())
+            {
+                context.BOTS_TblDLCLinkConfig.AddOrUpdate(objDLCLinkConfig);
+                context.SaveChanges();
+                result = true;
+            }
+            return result;
+        }
     }
 }
