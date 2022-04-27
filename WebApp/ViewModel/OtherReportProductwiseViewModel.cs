@@ -13,5 +13,6 @@ namespace WebApp.ViewModel
         public List<SellingProductValue> lstBottom5Value { get; set; }
         public List<SellingProductValue> lstTop5Volume { get; set; }
         public List<SellingProductValue> lstBottom5Volume { get; set; }
+        public List<ReportForDownloadMaster> lstReportDwn { get; set; }
     }
 }

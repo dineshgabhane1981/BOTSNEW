@@ -38,5 +38,9 @@ namespace WebApp.Controllers
         {
             return View();
         }
+        public ActionResult ReportsDownload()
+        {
+            return View();
+        }
     }
 }

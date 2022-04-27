@@ -1,0 +1,50 @@
+﻿@model WebApp.ViewModel.OtherReportProductwiseViewModel
+@{
+    ViewBag.Title = "ReportsDownload";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@*div class="row mt-3" id="dvActivityData">*@
+<div class="table-responsive">
+    <table class="table" id="groupListTable">
+
+        <thead>
+            <tr>
+                <th scope="col" colspan="2" style="text-align: center;">Group Name</th>
+                <th scope="col" colspan="2" style="text-align: center;">Date</th>
+                <th scope="col" colspan="2" style="text-align: center;">Download Link</th>
+                <th scope="col" colspan="2" style="text-align: center;">Report Type</th>
+                <th scope="col" colspan="2" style="text-align: center;">Remarks</th>
+
+            </tr>
+        </thead>
+        <tbody>
+              @if (Model.lstReportDwn != null)
+              {
+                  if (Model.lstReportDwn.Count > 0)
+                  {
+
+                      foreach (var item in Model.lstReportDwn)
+                      {
+
+                            <tr>  
+                               <td style="text-align:left;">@item.GroupName</td>
+                               <td style="text-align:left;">@item.Date</td>
+                               <td style="text-align:left;">@item.DownloadLink</td>
+                               <td style="text-align:left;">@item.ReportType</td>
+                               <td style="text-align:left;">@item.Remarks
+                               <td style="text-align:left; width:100px;">
+               
+                               </td>
+                                   
+                            </tr>
+
+                      }
+                  }
+
+               }
+
+        </tbody>
+    </table>
+
+</div>
