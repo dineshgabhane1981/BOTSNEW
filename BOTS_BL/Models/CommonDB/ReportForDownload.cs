@@ -28,4 +28,15 @@ namespace BOTS_BL.Models
 
         public string Remarks { get; set; }
     }
+    public class ReportForDownloadMaster
+    {
+        public string GroupId { get; set; }
+        public String GroupName { get; set; }
+        public DateTime? Date { get; set; }
+        public string DownloadLink { get; set; }
+        public string ReportType { get; set; }
+        public string Remarks { get; set; }
+
+    }
+
 }
