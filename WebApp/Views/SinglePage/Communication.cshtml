@@ -1,8 +1,183 @@
-﻿
+﻿@model WebApp.ViewModel.SinglePageViewModel
+@using System.Globalization
+
 @{
     ViewBag.Title = "Communication";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+<div class="app-main__inner">
+    <div class="mb-3 card" style="padding-top:20px;">
+        <div class="content">
+            <div class="container-fluid pt-3 pl-3 pr-3">
+                <div class="pb-3">
+                    <h4><b>Communication</b></h4>
+                </div>
 
-<h2>Communication</h2>
+                <div class="container overflow-hidden">
+                    <div class="multisteps-form__panel shadow p-4 m-4 list-box bg-white panel">
+                        <div class="row mb-5 ml-2">
+                            <div class="mr-3">
+                                <table border="1" cellpadding="10" cellspacing="10">
+                                    <thead><h6><b>Whats App Expiry Date</b></h6></thead>
+                                    <tr>
+                                        <th scope="col" style="text-align:left;">Sr No</th>
+                                        <th scope="col" style="text-align:left;">Group Name</th>
+                                        <th scope="col" style="text-align:left;">Whats App Expiry</th>
+                                    </tr>
+                                    <tbody>
+                                        @{int indexcomm = 1;}
+                                        @if (Model.lstCommunication != null)
+                                        {
+                                            if (Model.lstCommunication.objWhatsAppExpiryDate != null)
+                                            {
+                                                if (Model.lstCommunication.objWhatsAppExpiryDate.Count > 0)
+                                                {
+                                                    foreach (var item in Model.lstCommunication.objWhatsAppExpiryDate)
+                                                    {
+
+                                                        <tr>
+                                                            <td>@indexcomm</td>
+
+                                                            <td style="text-align:left;">@item.BrandName</td>
+                                                            <td style="text-align:left;">@item.WAExpiryDate.ToString("dd-MMM-yyyy")</td>
+                                                        </tr>
+
+                                                        indexcomm++;
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="row mb-5 ml-2">
+                                <div class="mr-2">
+                                    <table border="1" cellpadding="10" cellspacing="10">
+                                        <thead><h6><b>Low Whats App Balance</b></h6></thead>
+                                        <tr>
+                                            <th scope="col" style="text-align:left;">Sr No</th>
+                                            <th scope="col" style="text-align:left;">Group Name</th>
+
+                                            <th scope="col" style="text-align:left;">WhatsApp Balance</th>
+                                            <th scope="col" style="text-align:left;">Instance Name</th>
+                                            <th scope="col" style="text-align:left;">Login Status</th>
+                                            <th scope="col" style="text-align:left;">Queue</th>
+                                        </tr>
+                                        <tbody>
+                                            @{int indexcomm1 = 1;}
+                                            @if (Model.lstCommunication != null)
+                                            {
+                                                if (Model.lstCommunication.objWhatsAppBalance != null)
+                                                {
+                                                    if (Model.lstCommunication.objWhatsAppBalance.Count > 0)
+                                                    {
+                                                        foreach (var item in Model.lstCommunication.objWhatsAppBalance)
+                                                        {
+
+                                                            <tr>
+                                                                <td>@indexcomm1</td>
+
+                                                                <td style="text-align:left;">@item.BrandName</td>
+                                                                <td style="text-align:left;">@item.WABalance</td>
+                                                                <td style="text-align:left;">@item.OutletName</td>
+                                                                <td style="text-align:left;">@item.Status</td>
+                                                                <td style="text-align:left;">@item.queue</td>
+                                                            </tr>
+
+                                                            indexcomm1++;
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="row mb-5 ml-2">
+                                <div class="mr-2">
+                                    <table border="1" cellpadding="10" cellspacing="10">
+                                        <thead><h6><b>Low SMS Balance</b></h6></thead>
+                                        <tr>
+                                            <th scope="col" style="text-align:left;">Sr No</th>
+                                            <th scope="col" style="text-align:left;">Group Name</th>
+                                            @*<th scope="col" style="text-align:left;">Outlet Name</th>*@
+                                            <th scope="col" style="text-align:left;">SMS Balance</th>
+                                            <th scope="col" style="text-align:left;">Provider</th>
+                                        </tr>
+                                        <tbody>
+                                            @{int indexcomm2 = 1;}
+                                            @if (Model.lstCommunication != null)
+                                            {
+                                                if (Model.lstCommunication.objSMSBalance != null)
+                                                {
+                                                    if (Model.lstCommunication.objSMSBalance.Count > 0)
+                                                    {
+                                                        foreach (var item in Model.lstCommunication.objSMSBalance)
+                                                        {
+
+                                                            <tr>
+                                                                <td>@indexcomm2</td>
+
+                                                                <td style="text-align:left;">@item.BrandName</td>
+                                                                @*<td style="text-align:left;">@item.OutletName</td>*@
+                                                                <td style="text-align:left;">@item.SmsBalance1</td>
+                                                                <td style="text-align:left;">@item.CompanyName</td>
+                                                            </tr>
+
+                                                            indexcomm2++;
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="mr-2">
+                                    <table border="1" cellpadding="10" cellspacing="10">
+                                        <thead><h6><b>Low Virtual SMS Balance</b></h6></thead>
+                                        <tr>
+                                            <th scope="col" style="text-align:left;">Sr No</th>
+                                            <th scope="col" style="text-align:left;">Group Name</th>
+                                            @*<th scope="col" style="text-align:left;">Outlet Name</th>*@
+                                            <th scope="col" style="text-align:left;">Virtual SMS Balance</th>
+                                        </tr>
+                                        <tbody>
+                                            @{int indexcomm3 = 1;}
+                                            @if (Model.lstCommunication != null)
+                                            {
+                                                if (Model.lstCommunication.objVirtualSMSBalance != null)
+                                                {
+                                                    if (Model.lstCommunication.objVirtualSMSBalance.Count > 0)
+                                                    {
+                                                        foreach (var item in Model.lstCommunication.objVirtualSMSBalance)
+                                                        {
+
+                                                            <tr>
+                                                                <td>@indexcomm3</td>
+                                                                <td style="text-align:left;">@item.BrandName</td>
+                                                                @*<td style="text-align:left;">@item.OutletName</td>*@
+                                                                <td style="text-align:left;">@item.VirtualsmsBalance</td>
+                                                            </tr>
+
+                                                            indexcomm3++;
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
 

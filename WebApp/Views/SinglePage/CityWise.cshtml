@@ -1,8 +1,136 @@
-﻿
+﻿@model WebApp.ViewModel.SinglePageViewModel
+@using System.Globalization
 @{
     ViewBag.Title = "CityWise";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+<div class="app-main__inner">
+    <div class="mb-3 card" style="padding-top:20px;">
+        <div class="content">
+            <div class="container-fluid pt-3 pl-3 pr-3">
+                <div class="pb-3">
+                    <h4><b>City Wise</b></h4>
+                </div>
 
-<h2>CityWise</h2>
+                <div class="container overflow-hidden">
+
+                    <div class="multisteps-form__panel shadow p-4 m-4 list-box bg-white panel">
+                        @if (Model.lstCitywiseData != null)
+                        {
+
+                            <table border="1" cellpadding="1" cellspacing="1" style="height:auto">
+
+                                <thead>
+                                    <tr style="background-color:lightgray;">
+                                        <th style="width:150px;">City</th>
+                                        <th style="background-color: palegreen;">City Total</th>
+                                        @foreach (var item in Model.lstCategories)
+                                        {
+                                            <th style="font-weight:bold; text-align:right;">@item.CategoryName</th>
+                                        }
+                                    </tr>
+                                    <tr style="background-color: palegreen;">
+                                        <td>Category Total</td>
+                                        <td style="font-weight: bold; text-align: right; background-color: gold;">@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(Model.GrandTotal))</td>
+                                        @foreach (var itemCategory in Model.lstCategoriesTotal)
+                                        {
+                                            <td style="font-weight:bold; text-align:right;">@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(itemCategory.MemberBase))</td>
+                                        }
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model.lstCities)
+                                    {
+                                        long total = 0;
+                                        <tr>
+                                            <td style="background-color:lightgray;font-weight:bold;">@item.CityName</td>
+
+                                            @foreach (var item1 in Model.lstCitywiseData)
+                                            {
+                                                if (item.CityName == item1.CityName)
+                                                {
+                                                    total = total + item1.MemberBase;
+                                                }
+                                            }
+                                            <td style="font-weight: bold; text-align: right; background-color: palegreen;">@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(total))</td>
+
+                                            @foreach (var item1 in Model.lstCitywiseData)
+                                            {
+                                                if (item.CityName == item1.CityName)
+                                                {
+                                                    <td style="text-align:right;">@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(item1.MemberBase))</td>
+
+                                                }
+                                            }
+
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+<script>
+function GetTypeWiseData(type, section) {
+        console.log(type);
+        console.log(section);
+        $("#divLoader").show();
+        var CsMember = $('#ddlCSMember').val();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("GetCSWiseReport", "SinglePage")',
+            data: '{type:' + JSON.stringify(section) + ',CSMember:' + JSON.stringify(CsMember) + ',CustomerType:' + JSON.stringify(type) + '}',
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                if (response != null) {
+                $("#dvCSViseData").html(response);
+                $("#dvCSViseData").show(1000);
+                $("#divLoader").hide();
+                }
+            },
+            failure: function (response) {
+                $("#divLoader").hide();
+            },
+            error: function (response) {
+                $("#dvCSViseData").html("");
+                $("#dvCSViseData").html(response.responseText);
+                $("#dvCSViseData").show(1000);
+                $("#divLoader").hide();
+            }
+
+            });
+            }
+
+</script>
+<script src="~/Scripts/jquery-ui-1.12.1.js"></script>
+<script src="~/Scripts/jquery-ui-1.12.1.min.js"></script>
+<link href="~/Content/themes/base/jquery-ui.min.css" rel="stylesheet" />
+<link href="~/Content/themes/base/jquery-ui.css" rel="stylesheet" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.2.2/Chart.bundle.min.js"></script>
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.23/css/jquery.dataTables.css">
+
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.23/js/jquery.dataTables.js"></script>
+
+
+<style>
+    table.dataTable thead .sorting_asc {
+        background: url("https://cdn.datatables.net/1.10.0/images/sort_asc.png") no-repeat center left;
+    }
+
+    table.dataTable thead .sorting_desc {
+        background: url("https://cdn.datatables.net/1.10.0/images/sort_desc.png") no-repeat center left;
+    }
+
+    table.dataTable thead .sorting {
+        background: url("https://cdn.datatables.net/1.10.0/images/sort_both.png") no-repeat center left;
+    }
+</style>
+
 

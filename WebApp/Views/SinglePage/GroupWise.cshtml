@@ -1,0 +1,169 @@
+﻿@model WebApp.ViewModel.SinglePageViewModel
+@using System.Globalization
+@{
+    ViewBag.Title = "Group Wise Count";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@if (Model.lstGroupWiseDetails != null)
+{
+    <div class="app-main__inner">
+        <div class="mb-3 card" style="padding-top:20px;">
+            <div class="content">
+                <div class="container-fluid pt-3 pl-3 pr-3">
+                    <div class="pb-3">
+                        <h4><b>Group wise</b></h4>
+                    </div>
+
+                    <div class="container overflow-hidden">
+
+                        <div class="container-fluid ">
+                            <div class="col-md-12 col-lg-12">
+                                <div class="col search-container">
+                                    <i class="fas fa-search"></i>
+                                    <input class="input100" type="text" id="txtSearch" placeholder="Search Group..." />
+                                </div>
+
+                                <div class="col text-right">
+                                    <div class="dropdown">
+                                        <button class="btn btn-primary login-btn" onclick='ExportDataExcel();' type="button" id="btnExport">
+                                            <i class="fas fa-file-export"></i> Export
+                                        </button>
+                                    </div>
+                                    <div class="row mt-3" id="dvActivityData">
+                                        <div class="table-responsive">
+                                            <meta name="viewport" content="width=devicewidth, initial-scaled=1.0">
+                                            <table class="table" id="groupListTable">
+                                                <thead>
+                                                    <tr position: absolute top: -9999px; left: -9998px;>
+                                                        <th scope="col" style="text-align:left;">Customer Name</th>
+                                                        <th scope="col" style="text-align:left;">Customer Category</th>
+                                                        <th scope="col" style="text-align:left;">Business Category</th>
+                                                        <th scope="col" style="text-align:left;">Location</th>
+                                                        <th scope="col" style="text-align:left;">CS Assigned</th>
+                                                        <th scope="col" style="text-align: right;">Customer Count</th>
+                                                        <th scope="col" style="text-align: right;">Bulk Upload Count</th>
+                                                        <th scope="col" style="text-align: right;">Total</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @if (Model != null)
+                                                    {
+                                                        if (Model.lstGroupWiseDetails != null)
+                                                        {
+                                                            var count = 0;
+                                                            foreach (var item in Model.lstGroupWiseDetails)
+                                                            {
+                                                                count++;
+                                                                if (count != Model.lstGroupWiseDetails.Count)
+                                                                {
+                                                                    <tr border: 1px solid #ccc;>
+                                                                        <td style="text-align:left;">@Html.Raw(item.CustName)</td>
+                                                                        <td style="text-align:left;">@item.CustCategory</td>
+                                                                        <td style="text-align:left;">@item.BusinessCategory</td>
+                                                                        <td style="text-align:left;">@item.Location</td>
+                                                                        <td style="text-align:left;">@item.CSName</td>
+                                                                        <td style="text-align: right;">@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(item.CustCount))</td>
+                                                                        <td style="text-align: right;">@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(item.BulkUploadCount))</td>
+                                                                        <td style="text-align:right;">@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(item.Total))</td>
+                                                                    </tr>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <tr>
+                                                                        <td style="text-align: left; font-weight: bold;">@Html.Raw(item.CustName)</td>
+                                                                        <td style="text-align:left;">@item.CustCategory</td>
+                                                                        <td style="text-align:left;">@item.BusinessCategory</td>
+                                                                        <td style="text-align:left;">@item.Location</td>
+                                                                        <td style="text-align:left;">@item.CSName</td>
+                                                                        <td style="text-align: right; font-weight: bold;">@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(item.CustCount))</td>
+                                                                        <td style="text-align: right; font-weight: bold; ">@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(item.BulkUploadCount))</td>
+                                                                        <td style="text-align: right; font-weight: bold;">@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(item.Total))</td>
+                                                                    </tr>
+                                                                }
+
+                                                            }
+                                                        }
+                                                    }
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+}
+<script>
+    $(document).ready(function () {
+        $("#btnExport").click(function () {
+            ExportData();
+        });
+
+
+        $('#groupListTable').DataTable({
+            "aaSorting": [],
+            "paging": true,
+            "ordering": false,
+            "info": true,
+            "bFilter": true,
+            "pageLength": 25,
+            "pagingType": "simple_numbers"
+
+        });
+
+        $('#groupListTable_filter').hide();
+
+        $('#txtSearch').on('keyup', function () {
+
+            $.fn.dataTable.ext.search.push(function (settings, searchData) {
+                var term = $('#txtSearch').val().toLowerCase()
+                for (var i = 0; i < searchData.length; i++) {
+                    if (searchData[i].toLowerCase().indexOf(term) >= 0) {
+                        return true;
+                    }
+                }
+                return false;
+            });
+            var table = $('#groupListTable').DataTable();
+            table.draw();
+        });
+    });
+
+    function ExportData() {
+        $("#divLoader").show();
+        var urlLink = "@Url.Action("ExportGroupWise", "SinglePage")";
+            // urlLink = urlLink + "?DateRangeFlag=" + DateRangeFlag + "&fromDate=" + fromDate + "&toDate=" + toDate + "&ReportName=Outletwise" + "&EmailId=" + emailid +"";
+            console.log(urlLink);
+            window.location.href = urlLink;
+         $("#divLoader").hide();
+    }
+</script>
+<script src="~/Scripts/jquery-ui-1.12.1.js"></script>
+<script src="~/Scripts/jquery-ui-1.12.1.min.js"></script>
+<link href="~/Content/themes/base/jquery-ui.min.css" rel="stylesheet" />
+<link href="~/Content/themes/base/jquery-ui.css" rel="stylesheet" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.2.2/Chart.bundle.min.js"></script>
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.23/css/jquery.dataTables.css">
+
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.23/js/jquery.dataTables.js"></script>
+
+
+<style>
+    table.dataTable thead .sorting_asc {
+        background: url("https://cdn.datatables.net/1.10.0/images/sort_asc.png") no-repeat center left;
+    }
+
+    table.dataTable thead .sorting_desc {
+        background: url("https://cdn.datatables.net/1.10.0/images/sort_desc.png") no-repeat center left;
+    }
+
+    table.dataTable thead .sorting {
+        background: url("https://cdn.datatables.net/1.10.0/images/sort_both.png") no-repeat center left;
+    }
+</style>

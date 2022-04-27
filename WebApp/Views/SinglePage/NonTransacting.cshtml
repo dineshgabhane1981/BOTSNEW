@@ -1,8 +1,242 @@
-﻿
+﻿@model WebApp.ViewModel.SinglePageViewModel
+@using System.Globalization
+
 @{
     ViewBag.Title = "NonTransacting";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>NonTransacting</h2>
 
+
+<div class="app-main__inner">
+    <div class="mb-3 card" style="padding-top:20px;">
+        <div class="container-fluid pt-3 pl-3 pr-3">
+            <div class="pb-3">
+                <h4><b>Non-Transacting</b></h4>
+            </div>
+            <div class="content">
+                <!--content inner-->
+
+                <div class="container overflow-hidden">
+                    <div class="multisteps-form__panel shadow p-4 m-4 list-box bg-white panel">
+                        <div class="row">
+                            <div class="col-md-6 col-xl-4">
+                                <div class="card mb-3 widget-content bg-midnight-bloom">
+                                    <div class="widget-content-wrapper text-white">
+                                        <div class="widget-content-left">
+                                            <div class="widget-heading">
+                                                Total Enrolled Base
+                                            </div>
+
+                                        </div>
+                                        <div class="widget-content-right">
+                                            <div class="widget-numbers text-white"><span>@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(Model.lstsummarytable.TotalEnrolledBase))</span></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-xl-4">
+                                <div class="card mb-3 widget-content bg-arielle-smile">
+                                    <div class="widget-content-wrapper text-white">
+                                        <div class="widget-content-left">
+                                            <div class="widget-heading">
+                                                Txn Count (Daily)
+                                            </div>
+
+                                        </div>
+                                        <div class="widget-content-right">
+                                            <div class="widget-numbers text-white"><span>@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(Model.lstsummarytable.TxnCountDaily))</span></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-xl-4">
+                                <div class="card mb-3 widget-content bg-grow-early">
+                                    <div class="widget-content-wrapper text-white">
+                                        <div class="widget-content-left">
+                                            <div class="widget-heading">
+                                                Txn Count (MTD)
+                                            </div>
+
+                                        </div>
+                                        <div class="widget-content-right">
+                                            <div class="widget-numbers text-white">
+                                                <span>
+                                                    @String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(Model.lstsummarytable.TxnCountMTD))
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="row">
+                            <div class="mb-5 col-md-4 col-xl-4">
+                                <table border="1" cellpadding="5" cellspacing="5" style="height:auto">
+                                    <thead><b>Non Transacting Group</b></thead>
+                                    <tr>
+                                        <th scope="col" style="text-align:left;">Group Name</th>
+                                        <th scope="col" style="text-align:left;">DSLT</th>
+                                    </tr>
+                                    <tbody>
+                                        @if (Model.lstnontransactingGrp != null)
+                                        {
+                                            if (Model.lstnontransactingGrp.Count > 0)
+                                            {
+                                                foreach (var item in Model.lstnontransactingGrp)
+                                                {
+                                                    <tr>
+                                                        <td style="text-align:left;">@item.GroupName</td>
+                                                        <td style="text-align:left;">@item.DaysSinceLastTxn</td>
+                                                    </tr>
+                                                }
+                                            }
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="mb-5 col-md-5 col-xl-5" style="margin-left:-20px !important;">
+
+                            <table border="1" cellpadding="5" cellspacing="5">
+                                <thead><b>Non Transacting Outlet</b>&nbsp;&nbsp;<a href="#" onclick="ShowAllNonTransactingOutlet();">Show All</a></thead>
+                                <tr>
+                                    <th scope="col" style="text-align:left;">Group Name</th>
+                                    <th scope="col" style="text-align:left;">Outlet Name</th>
+                                    @*<th scope="col" style="text-align:right;">Avg Group Txns</th>*@
+                                    <th scope="col" style="text-align:left;">LTD</th>
+                                    <th scope="col" style="text-align:left;">DSLT</th>
+                                </tr>
+                                <tbody>
+                                    @if (Model.lstnontransactingOutlet != null)
+                                    {
+                                        if (Model.lstnontransactingOutlet.Count > 0)
+                                        {
+                                            foreach (var item in Model.lstnontransactingOutlet)
+                                            {
+                                                <tr>
+                                                    <td style="text-align:left;">@item.GroupName</td>
+                                                    <td style="text-align:left;">@item.OutletName</td>
+                                                    @*<td style="text-align:left;">@item.AvgGroupTxn</td>*@
+                                                    <td style="text-align:left;">@item.LastTxnDate.Value.ToString("MM/dd/yyyy")</td>
+                                                    <td style="text-align:left;">@item.DaysSinceLastTxn</td>
+                                                </tr>
+                                            }
+                                        }
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="mb-5 col-md-5 col-xl-5" style="margin-left:20px !important;">
+                            <table border="1" cellpadding="5" cellspacing="5">
+                                <thead><b>Low Transacting Outlet</b>&nbsp;&nbsp; <a href="#" onclick="ShowAllLowTransactingOutlet();">Show All</a></thead>
+                                <tr>
+                                    <th scope="col" style="text-align:left;">Group Name</th>
+                                    <th scope="col" style="text-align:left;">Outlet Name</th>
+                                    <th scope="col" style="text-align:right;">Avg Txns</th>
+                                    <th scope="col" style="text-align:left;">Avg Group Txns/Avg 30 days</th>
+                                    <th scope="col" style="text-align:left;">Lower by %</th>
+
+                                </tr>
+                                <tbody>
+                                    @if (Model.lstlowtransactingOutlet != null)
+                                    {
+                                        if (Model.lstlowtransactingOutlet.Count > 0)
+                                        {
+                                            foreach (var item in Model.lstlowtransactingOutlet)
+                                            {
+
+                                                <tr>
+                                                    <td style="text-align:left;">@item.GroupName</td>
+                                                    <td style="text-align:left;">@item.OutletName</td>
+                                                    <td style="text-align:left;">@item.AvgTxn</td>
+                                                    <td style="text-align:left;">@item.AvgGroupTxnIn30Days</td>
+                                                    <td style="text-align:left;">@item.LowerByPercentage</td>
+                                                </tr>
+
+                                            }
+                                        }
+                                    }
+                                </tbody>
+                            </table>
+
+                        </div>
+                    </div>
+
+                    <div class="row mb-5 ml-2" id="dvAllData">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    function ShowAllNonTransactingOutlet() {
+        $("#divLoader").show();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("GetAllNonTransactingOutletData", "SinglePage")',
+            data: '',
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                $("#dvAllData").html(response);
+                $("#divLoader").hide();
+            },
+            failure: function (response) {
+                $("#divLoader").hide();
+            },
+            error: function (response) {
+                $("#dvAllData").html(response.responseText);
+                $("#divLoader").hide();
+            }
+    });
+    }
+    function ShowAllLowTransactingOutlet() {
+        $("#divLoader").show();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("GetAllLowTransactingOutletData", "SinglePage")',
+            data: '',
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                $("#dvAllData").html(response);
+                $("#divLoader").hide();
+            },
+            failure: function (response) {
+                $("#divLoader").hide();
+            },
+            error: function (response) {
+                $("#dvAllData").html(response.responseText);
+                $("#divLoader").hide();
+            }
+        });
+    }
+    </script>
+    <script src="~/Scripts/jquery-ui-1.12.1.js"></script>
+    <script src="~/Scripts/jquery-ui-1.12.1.min.js"></script>
+    <link href="~/Content/themes/base/jquery-ui.min.css" rel="stylesheet" />
+    <link href="~/Content/themes/base/jquery-ui.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.2.2/Chart.bundle.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.23/css/jquery.dataTables.css">
+
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.23/js/jquery.dataTables.js"></script>
+
+
+    <style>
+        table.dataTable thead .sorting_asc {
+            background: url("https://cdn.datatables.net/1.10.0/images/sort_asc.png") no-repeat center left;
+        }
+
+        table.dataTable thead .sorting_desc {
+            background: url("https://cdn.datatables.net/1.10.0/images/sort_desc.png") no-repeat center left;
+        }
+
+        table.dataTable thead .sorting {
+            background: url("https://cdn.datatables.net/1.10.0/images/sort_both.png") no-repeat center left;
+        }
+    </style>

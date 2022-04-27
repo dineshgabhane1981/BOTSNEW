@@ -261,27 +261,138 @@ namespace WebApp.Controllers
 
         public ActionResult NonTransacting()
         {
-            return View();
+            SinglePageViewModel singlevm = new SinglePageViewModel();
+            {
+                var userDetails = (CustomerLoginDetail)Session["UserSession"];
+                userDetails.CustomerName = CR.GetCustomerName(userDetails.GroupId);
+                Session["UserSession"] = userDetails;
+                singlevm.lstnontransactingGrp = SPR.GetSinglePageNonTransactingGroups();
+                singlevm.lstnontransactingOutlet = SPR.GetNonTransactingOutlet("");
+                singlevm.lstlowtransactingOutlet = SPR.GetLowTransactingOutlet("");
+                singlevm.lstsummarytable = SPR.GetSinglePageSummaryTable();
+                return View(singlevm);
+            }
+
         }
         public ActionResult Communication()
         {
-            return View();
+            SinglePageViewModel singlevm = new SinglePageViewModel();
+            {
+                singlevm.lstCommunication = SPR.GetCommunicationWhatsAppExpiryData();
+                var userDetails = (CustomerLoginDetail)Session["UserSession"];
+                userDetails.CustomerName = CR.GetCustomerName(userDetails.GroupId);
+                Session["UserSession"] = userDetails;
+
+                return View(singlevm);
+            }
         }
         public ActionResult KeyIndicator()
         {
-            return View();
+            SinglePageViewModel singlevm = new SinglePageViewModel();
+            {
+                var userDetails = (CustomerLoginDetail)Session["UserSession"];
+                userDetails.CustomerName = CR.GetCustomerName(userDetails.GroupId);
+                Session["UserSession"] = userDetails;
+                return View();
+            }
         }
         public ActionResult CityWise()
         {
-            return View();
+            SinglePageViewModel singlevm = new SinglePageViewModel();
+            {
+                try
+                {
+                    var userDetails = (CustomerLoginDetail)Session["UserSession"];
+                    userDetails.CustomerName = CR.GetCustomerName(userDetails.GroupId);
+                    Session["UserSession"] = userDetails;
+                    singlevm.lstCitywiseData = SPR.GetCityWiseData();
+                    if (singlevm.lstCitywiseData != null)
+                    {
+                        var categories = singlevm.lstCitywiseData.GroupBy(x => x.CategoryName).Select(y => y.First()).ToList();
+                        singlevm.lstCategories = categories;
+
+                        var cities = singlevm.lstCitywiseData.GroupBy(x => x.CityName).Select(y => y.First()).ToList();
+                        List<CitywiseReport> objData = new List<CitywiseReport>();
+                        foreach (var item in cities)
+                        {
+                            CitywiseReport objItem = new CitywiseReport();
+                            long cityCount = singlevm.lstCitywiseData.Where(x => x.CityName == item.CityName).Sum(y => y.MemberBase);
+                            objItem.CityName = item.CityName;
+                            objItem.CategoryName = item.CategoryName;
+                            objItem.MemberBase = cityCount;
+
+                            objData.Add(objItem);
+                        }
+
+                        objData = objData.OrderByDescending(x => x.MemberBase).ToList();
+                        cities = objData.GroupBy(x => x.CityName).Select(y => y.First()).ToList();
+
+                        List<CitywiseReport> objCategoryData = new List<CitywiseReport>();
+                        foreach (var category in categories)
+                        {
+                            CitywiseReport objItem = new CitywiseReport();
+                            long categoryCount = singlevm.lstCitywiseData.Where(x => x.CategoryName == category.CategoryName).Sum(y => y.MemberBase);
+                            objItem.CategoryName = category.CategoryName;
+                            objItem.MemberBase = categoryCount;
+
+                            objCategoryData.Add(objItem);
+                        }
+
+                        singlevm.lstCategoriesTotal = objCategoryData;
+                        singlevm.GrandTotal = objCategoryData.Sum(x => x.MemberBase);
+                        singlevm.lstCities = cities;
+                    }
+
+
+                }
+                catch (Exception ex)
+                {
+                    newexception.AddException(ex, "Single Page");
+                }
+
+
+                return View(singlevm);
+            }
         }
+
         public ActionResult Discussion()
         {
-            return View();
+            SinglePageViewModel singlevm = new SinglePageViewModel();
+            {
+                var userDetails = (CustomerLoginDetail)Session["UserSession"];
+                userDetails.CustomerName = CR.GetCustomerName(userDetails.GroupId);
+                Session["UserSession"] = userDetails;
+                singlevm.lstCSMembers = CR.GetRMAssigned();
+                return View(singlevm);
+            }
         }
-        public ActionResult GrupWise()
+        public ActionResult GroupWise()
         {
-            return View();
+            SinglePageViewModel singlevm = new SinglePageViewModel();
+            try
+            {
+                var userDetails = (CustomerLoginDetail)Session["UserSession"];
+                userDetails.CustomerName = CR.GetCustomerName(userDetails.GroupId);
+                Session["UserSession"] = userDetails;
+                GroupWiseDetails objGrpWise = new GroupWiseDetails();
+                //var count = SPR.GetAllTransactionData();
+                singlevm.lstGroupWiseDetails = SPR.GetGroupWiseData();
+
+                foreach (var item in singlevm.lstGroupWiseDetails)
+                {
+                    objGrpWise.CustCount = objGrpWise.CustCount + item.CustCount;
+                    objGrpWise.BulkUploadCount = objGrpWise.BulkUploadCount + item.BulkUploadCount;
+                    objGrpWise.Total = objGrpWise.Total + item.Total;
+                }
+                objGrpWise.CustName = "Total";
+                singlevm.lstGroupWiseDetails.Add(objGrpWise);
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "Single Page");
+            }
+
+            return View(singlevm);
         }
     }
 }

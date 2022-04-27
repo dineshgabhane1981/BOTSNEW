@@ -1,8 +1,396 @@
-﻿
+﻿@model WebApp.ViewModel.SinglePageViewModel
+@using System.Globalization
 @{
     ViewBag.Title = "Discussion";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+<div class="app-main__inner">
+    <div class="mb-3 card" style="padding-top:20px;">
+        <div class="content">
+            <div class="container-fluid pt-3 pl-3 pr-3">
+                <div class="pb-3">
+                    <h4><b>Discussion</b></h4>
+                </div>
 
-<h2>Discussion</h2>
+                <div class="container overflow-hidden">
 
+                    <div class="multisteps-form__panel shadow p-4 list-box bg-white panel">
+
+                        <div class="card-body">
+                            <div style="margin-bottom:20px;font-weight:bold;">
+                                Select CS
+                                @Html.DropDownListFor(model => model.CSMember, new SelectList(Model.lstCSMembers, "Value", "Text"), "All", htmlAttributes: new { @class = "input100", @id = "ddlCSMember" })
+                            </div>
+                            <div style="text-align:center;margin-bottom:20px;font-weight:bold;">Customer Categorywise Campaign / DB discussions – not touched</div>
+                            <div class="tab-content">
+                                <div class="tab-pane fade show active" id="tabs-eg-77">
+                                    <div class="card mb-3 widget-chart widget-chart2 text-left w-100">
+                                        <div class="widget-chat-wrapper-outer">
+                                            <div class="widget-chart-wrapper widget-chart-wrapper-lg opacity-10 m-0" id="canvasContainer">
+                                                <canvas id="barcanvas"></canvas>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body" id="dvCSViseData" style="display:none;">
+
+                        </div>
+                        <div class="card-body col-md-12 col-xl-12" id="dvGetNoCustomerConnect">
+
+                        </div>
+                        <div class="row col-md-12 col-xl-12" id="dvGetMostConnectedCustomers">
+
+                        </div>
+                        <div class="card-body col-md-12 col-xl-12" id="dvGetLeastConnectedCustomers">
+
+                        </div>
+                        <div class="multisteps-form__panel shadow p-4 list-box bg-white panel">
+                            @Html.Partial("~/Views/SinglePage/_GroupWiseData.cshtml", Model)
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    var tableData = [];
+    $(document).ready(function () {
+
+        GetDiscussionGraphData();
+        $('#ddlCSMember').change(function () {
+            GetDiscussionGraphData();
+        });
+        NoCustomerConnect();
+        GetMostConnectedCustomers();
+        GetLeastConnectedCustomers();
+    });
+    function RenderNoCustomerConnectTable() {
+
+        var table = $('#NoCustomerConnectTable').DataTable({
+            "paging": true,
+            "ordering": true,
+            "info": true,
+            "bFilter": true,
+            "bAutoWidth": false,
+            "pageLength": 10,
+            "pagingType": "simple_numbers"
+        });
+        $('#NoCustomerConnectTable_filter').hide();
+
+        $('#txtSearch').on('keyup', function () {
+
+            $.fn.dataTable.ext.search.push(function (settings, searchData) {
+                var term = $('#txtSearch').val().toLowerCase()
+                for (var i = 0; i < searchData.length; i++) {
+                    if (searchData[i].toLowerCase().indexOf(term) >= 0) {
+                        return true;
+                    }
+                }
+                return false;
+            });
+            var table = $('#NoCustomerConnectTable').DataTable();
+            table.draw();
+        });
+    }
+
+    function RenderMostConnectedCustomersTable() {
+
+        var table = $('#MostConnectedCustomersTable').DataTable({
+            "paging": true,
+            "ordering": true,
+            "info": true,
+            "bFilter": true,
+            "bAutoWidth": false,
+            "pageLength": 10,
+            "pagingType": "simple_numbers"
+        });
+        $('#MostConnectedCustomersTable_filter').hide();
+
+        $('#txtSearch').on('keyup', function () {
+
+            $.fn.dataTable.ext.search.push(function (settings, searchData) {
+                var term = $('#txtSearch').val().toLowerCase()
+                for (var i = 0; i < searchData.length; i++) {
+                    if (searchData[i].toLowerCase().indexOf(term) >= 0) {
+                        return true;
+                    }
+                }
+                return false;
+            });
+            var table = $('#MostConnectedCustomersTable').DataTable();
+            table.draw();
+        });
+    }
+
+    function RenderLeastConnectedCustomersTable() {
+
+        var table = $('#LeastConnectedCustomersTable').DataTable({
+            "paging": true,
+            "ordering": true,
+            "info": true,
+            "bFilter": true,
+            "bAutoWidth": false,
+            "pageLength": 10,
+            "pagingType": "simple_numbers"
+        });
+        $('#LeastConnectedCustomersTable_filter').hide();
+
+        $('#txtSearch').on('keyup', function () {
+
+            $.fn.dataTable.ext.search.push(function (settings, searchData) {
+                var term = $('#txtSearch').val().toLowerCase()
+                for (var i = 0; i < searchData.length; i++) {
+                    if (searchData[i].toLowerCase().indexOf(term) >= 0) {
+                        return true;
+                    }
+                }
+                return false;
+            });
+            var table = $('#LeastConnectedCustomersTable').DataTable();
+            table.draw();
+        });
+    }
+
+     function GetDiscussionGraphData() {
+        $("#divLoader").show();
+        var CsMember = $('#ddlCSMember').val();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("GetDiscussionGraphData", "singlepage")',
+            data: '{CsMember:' + JSON.stringify(CsMember) + '}',
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                if (response != null) {
+                    console.log(response);
+
+                    $('#barcanvas').remove();
+                    $('#canvasContainer').append('<canvas id="barcanvas"><canvas>');
+
+                    var barChartData =
+                    {
+                        labels: ['A', 'B', 'C'],
+                            datasets: [{
+                                label: '7 to 21 days',
+                                backgroundColor: "#4472C4",
+                                borderWidth: 2,
+                                data: [...response[0]]
+                            },
+                            {
+                                label: '22 to 35 days',
+                                backgroundColor: "#ED7D31",
+                                borderWidth: 2,
+                                data: [...response[1]]
+                            },
+                            {
+                                label: 'More than 36 days',
+                                backgroundColor: "#FF0101",
+                                borderWidth: 2,
+                                data: [...response[2]]
+                            }
+                        ]
+                    };
+
+
+                    var ctx10 = document.getElementById("barcanvas").getContext("2d");
+                    var myChart = new Chart(ctx10,
+                        {
+                            type: 'bar',
+                            data: barChartData,
+                            options:
+                            {
+                                plugins: {
+                                    datalabels: {
+                                        display: true
+                                    }
+                                },
+                                scales: {
+                                    xAxes: [{
+                                        ticks: {
+                                            beginAtZero: true
+                                        }
+                                    }]
+                                },
+
+                                title:
+                                {
+                                    display: true,
+                                    text: ""
+                                },
+                                legend: {
+                                    display: true,
+                                    position: 'bottom'
+                                },
+                                responsive: true,
+                                maintainAspectRatio: true,
+                                tooltips: { enabled: true },
+                                "hover": {
+                                    "animationDuration": 0,
+                                    onHover: function (e) {
+                                        $("#barcanvas").css("cursor", e[0] ? "pointer" : "default");
+                                    }
+                                },
+                                "animation": {
+                                    "duration": 1,
+                                    "onComplete": function () {
+                                        var chartInstance = this.chart,
+                                            ctx = chartInstance.ctx;
+
+                                        ctx.font = Chart.helpers.fontString(Chart.defaults.global.defaultFontSize, Chart.defaults.global.defaultFontStyle, Chart.defaults.global.defaultFontFamily);
+                                        ctx.textAlign = 'center';
+                                        ctx.textBaseline = 'bottom';
+
+                                        this.data.datasets.forEach(function (dataset, i) {
+                                            var meta = chartInstance.controller.getDatasetMeta(i);
+                                            meta.data.forEach(function (bar, index) {
+                                                var data = dataset.data[index];
+                                                ctx.fillStyle = 'rgba(0, 0, 0, 1)';
+
+                                                var res = addComma(data);
+                                                ctx.fillText(res, bar._model.x, bar._model.y - 5);
+                                            });
+                                        });
+                                    }
+                                }
+                            }
+                        });
+
+                    var canvas = document.getElementById('barcanvas');
+                    canvas.onclick = function (evt) {
+                        var activePointLabel = myChart.getElementsAtEvent(evt)[0]._model.label;
+                        var activePoint = myChart.getElementAtEvent(evt)[0];
+                        var data = activePoint._chart.config.data;
+                        var datasetIndex = activePoint._datasetIndex;
+                        var label = data.datasets[datasetIndex].label;
+                        GetTypeWiseData(activePointLabel, label);
+
+                    };
+                }
+                $("#divLoader").hide();
+            },
+            failure: function (response) {
+                $("#divLoader").hide();
+            },
+            error: function (response) {
+                $("#divLoader").hide();
+            }
+        });
+    }
+
+    function NoCustomerConnect() {
+        $("#divLoader").show();
+         $.ajax({
+            type: "POST",
+            url: '@Url.Action("GetNoCustomerConnect", "singlepage")',
+            data: '',
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                if (response != null) {
+                    console.log(111)
+                    $("#dvGetNoCustomerConnect").html(response);
+                    $("#divLoader").hide();
+                }
+            },
+            failure: function (response) {
+                $("#divLoader").hide();
+            },
+             error: function (response) {
+                 console.log(222)
+                $("#dvGetNoCustomerConnect").html("");
+                 $("#dvGetNoCustomerConnect").html(response.responseText);
+                 RenderNoCustomerConnectTable();
+                $("#divLoader").hide();
+             }
+
+
+         });
+
+    }
+
+ function GetMostConnectedCustomers() {
+        $("#divLoader").show();
+         $.ajax({
+            type: "POST",
+            url: '@Url.Action("GetMostConnectedCustomers", "singlepage")',
+            data: '',
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                if (response != null) {
+                    console.log(111)
+                    $("#dvGetMostConnectedCustomers").html(response);
+                    $("#divLoader").hide();
+                }
+            },
+            failure: function (response) {
+                $("#divLoader").hide();
+            },
+             error: function (response) {
+                 console.log(222)
+                 $("#dvGetMostConnectedCustomers").html("");
+                 $("#dvGetMostConnectedCustomers").html(response.responseText);
+                 RenderMostConnectedCustomersTable()
+                $("#divLoader").hide();
+            }
+
+        });
+    }
+
+    function GetLeastConnectedCustomers() {
+        $("#divLoader").show();
+         $.ajax({
+            type: "POST",
+            url: '@Url.Action("GetLeastConnectedCustomers", "singlepage")',
+            data: '',
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                if (response != null) {
+                    console.log(111)
+                    $("#dvGetLeastConnectedCustomers").html(response);
+                    $("#divLoader").hide();
+                }
+            },
+            failure: function (response) {
+                $("#divLoader").hide();
+         },
+             error: function (response) {
+                 console.log(222)
+                 $("#dvGetLeastConnectedCustomers").html("");
+                 $("#dvGetLeastConnectedCustomers").html(response.responseText);
+                 RenderLeastConnectedCustomersTable();
+                $("#divLoader").hide();
+         }
+
+    });
+}
+</script>
+<script src="~/Scripts/jquery-ui-1.12.1.js"></script>
+<script src="~/Scripts/jquery-ui-1.12.1.min.js"></script>
+<link href="~/Content/themes/base/jquery-ui.min.css" rel="stylesheet" />
+<link href="~/Content/themes/base/jquery-ui.css" rel="stylesheet" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.2.2/Chart.bundle.min.js"></script>
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.23/css/jquery.dataTables.css">
+
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.23/js/jquery.dataTables.js"></script>
+
+
+<style>
+    table.dataTable thead .sorting_asc {
+        background: url("https://cdn.datatables.net/1.10.0/images/sort_asc.png") no-repeat center left;
+    }
+
+    table.dataTable thead .sorting_desc {
+        background: url("https://cdn.datatables.net/1.10.0/images/sort_desc.png") no-repeat center left;
+    }
+
+    table.dataTable thead .sorting {
+        background: url("https://cdn.datatables.net/1.10.0/images/sort_both.png") no-repeat center left;
+    }
+</style>
