@@ -190,19 +190,19 @@ namespace WebApp.Controllers
             return PartialView("_CSWiseData", objData);
         }
 
-        public ActionResult GetNoCustomerConnect()
+        public ActionResult GetNoCustomerConnect(string CSWise)
         {
-            var objData = SPR.GetNoCustomerConnect();
+            var objData = SPR.GetNoCustomerConnect(CSWise);
             return PartialView("_NoCustomerConnect", objData);
         }
-        public ActionResult GetMostConnectedCustomers()
+        public ActionResult GetMostConnectedCustomers(string CSWise)
         {
-            var objData = SPR.GetMostConnectedCustomers();
+            var objData = SPR.GetMostConnectedCustomers(CSWise);
             return PartialView("_MostConnectedCustomers", objData);
         }
-        public ActionResult GetLeastConnectedCustomers()
+        public ActionResult GetLeastConnectedCustomers(string CSWise)
         {
-            var objData = SPR.GetLeastConnectedCustomers();
+            var objData = SPR.GetLeastConnectedCustomers(CSWise);
             return PartialView("_LeastConnectedCustomers", objData);
         }
 
