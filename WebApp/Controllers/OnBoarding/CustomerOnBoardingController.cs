@@ -170,7 +170,7 @@ namespace WebApp.Controllers.OnBoarding
                     objData.lstOutlets = OBR.GetOutletDetails(GroupId);
 
                     objData.objDLCLinkConfig = OBR.GetDLCLinkData(GroupId);
-                    ViewBag.TemplateType = objData.TempleteType();
+                    ViewBag.TempleteType = objData.TempleteType();
 
                     foreach (var brand in objData.objRetailList)
                     {
@@ -1833,8 +1833,8 @@ namespace WebApp.Controllers.OnBoarding
                 object[] objData = (object[])json_serializer.DeserializeObject(jsonData);
                 foreach (Dictionary<string, object> item in objData)
                 {
-                    var Id = Convert.ToInt32(item["id"]);
-                    var num = Convert.ToInt32(item["statusId"]);
+                    var Id = Convert.ToInt32(id);
+                    var num = Convert.ToInt32(statusid);
                     objDLCLinkConfig = OBR.GetDLCLinkDLTConfigById(Id);
                     if (objDLCLinkConfig != null)
                     {
@@ -1845,7 +1845,7 @@ namespace WebApp.Controllers.OnBoarding
                             objDLCLinkConfig.TemplateId1 = Convert.ToString(item["TemplateId"]);
                             objDLCLinkConfig.TemplateName1 = Convert.ToString(item["TemplateName"]);
                             objDLCLinkConfig.TemplateType1 = Convert.ToString(item["TemplateType"]);
-                            if (Convert.ToString(item["Status"]) == "Approved")
+                            if (Convert.ToString(status) == "Approved")
                             {
                                 objDLCLinkConfig.DLTStatus1 = "Approved";
                             }
@@ -1857,7 +1857,7 @@ namespace WebApp.Controllers.OnBoarding
                             objDLCLinkConfig.TemplateId2 = Convert.ToString(item["TemplateId"]);
                             objDLCLinkConfig.TemplateName2 = Convert.ToString(item["TemplateName"]);
                             objDLCLinkConfig.TemplateType2 = Convert.ToString(item["TemplateType"]);
-                            if (Convert.ToString(item["Status"]) == "Approved")
+                            if (Convert.ToString(status) == "Approved")
                             {
                                 objDLCLinkConfig.DLTStatus2 = "Approved";
                             }
@@ -1869,7 +1869,7 @@ namespace WebApp.Controllers.OnBoarding
                             objDLCLinkConfig.TemplateId3 = Convert.ToString(item["TemplateId"]);
                             objDLCLinkConfig.TemplateName3 = Convert.ToString(item["TemplateName"]);
                             objDLCLinkConfig.TemplateType3 = Convert.ToString(item["TemplateType"]);
-                            if (Convert.ToString(item["Status"]) == "Approved")
+                            if (Convert.ToString(status) == "Approved")
                             {
                                 objDLCLinkConfig.DLTStatus3 = "Approved";
                             }
@@ -1881,7 +1881,7 @@ namespace WebApp.Controllers.OnBoarding
                             objDLCLinkConfig.TemplateId4 = Convert.ToString(item["TemplateId"]);
                             objDLCLinkConfig.TemplateName4 = Convert.ToString(item["TemplateName"]);
                             objDLCLinkConfig.TemplateType4 = Convert.ToString(item["TemplateType"]);
-                            if (Convert.ToString(item["Status"]) == "Approved")
+                            if (Convert.ToString(status) == "Approved")
                             {
                                 objDLCLinkConfig.DLTStatus4 = "Approved";
                             }
@@ -1893,7 +1893,7 @@ namespace WebApp.Controllers.OnBoarding
                             objDLCLinkConfig.TemplateId5 = Convert.ToString(item["TemplateId"]);
                             objDLCLinkConfig.TemplateName5 = Convert.ToString(item["TemplateName"]);
                             objDLCLinkConfig.TemplateType5 = Convert.ToString(item["TemplateType"]);
-                            if (Convert.ToString(item["Status"]) == "Approved")
+                            if (Convert.ToString(status) == "Approved")
                             {
                                 objDLCLinkConfig.DLTStatus5 = "Approved";
                             }
@@ -1906,7 +1906,7 @@ namespace WebApp.Controllers.OnBoarding
                             objDLCLinkConfig.TemplateId6 = Convert.ToString(item["TemplateId"]);
                             objDLCLinkConfig.TemplateName6 = Convert.ToString(item["TemplateName"]);
                             objDLCLinkConfig.TemplateType6 = Convert.ToString(item["TemplateType"]);
-                            if (Convert.ToString(item["Status"]) == "Approved")
+                            if (Convert.ToString(status) == "Approved")
                             {
                                 objDLCLinkConfig.DLTStatus6 = "Approved";
                             }
@@ -1918,7 +1918,7 @@ namespace WebApp.Controllers.OnBoarding
                             objDLCLinkConfig.TemplateId7 = Convert.ToString(item["TemplateId"]);
                             objDLCLinkConfig.TemplateName7 = Convert.ToString(item["TemplateName"]);
                             objDLCLinkConfig.TemplateType7 = Convert.ToString(item["TemplateType"]);
-                            if (Convert.ToString(item["Status"]) == "Approved")
+                            if (Convert.ToString(status) == "Approved")
                             {
                                 objDLCLinkConfig.DLTStatus7 = "Approved";
                             }
