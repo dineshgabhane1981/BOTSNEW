@@ -119,7 +119,7 @@ namespace WebApp.Controllers.ITOPS
                                 if (item2.Key == "shortUrl")
                                 {
                                     string itemshortUrl = item2.Value;
-                                    Session["Bitly"] = itemshortUrl;
+                                    ViewData["Bitly"] = itemshortUrl;
                                 }
 
                             }

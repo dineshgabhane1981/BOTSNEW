@@ -16,27 +16,38 @@
                     @*<h4 class="multisteps-form__title" style="color:blue;"></h4><br />*@
                     <div class="multisteps-form__content" style="height: 600px !important">
                         <input type="hidden" id="hdnGroupId" />
-                        @using (Html.BeginForm("UploadData", "FileUpload", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                        @using (Html.BeginForm("UploadData", "Bitly", FormMethod.Post, new { enctype = "multipart/form-data" }))
                         {
                             <div style="margin-top: 15px">
 
                                 @Html.TextBox("Data", "", new { type = "file" }) <br />
                                 <input type="submit" value="Upload" />  <label style="padding-right:5px;padding-top:10px;">Do not use special characters in FileName</label>
                                 @*<div class="mb-3">
-                    <label for="formFile" class="form-label">Default file input example</label>
-                    <input class="form-control" type="file" id="formFile">
-                </div>*@
-                                @ViewBag.Message
+                                        <label for="formFile" class="form-label">Default file input example</label>
+                                        <input class="form-control" type="file" id="formFile">
+                                    </div>*@
+                                @if (!string.IsNullOrEmpty(Convert.ToString(ViewBag.Message)))
+                                {
+                                    <script>
+                                        cuteAlert({
+                                            type: "success",
+                                            title: "Saved",
+                                            message: '@ViewBag.Message',
+                                            buttonText: "Okay"
+                                        })
+                                    </script>
+                                }
+
                             </div>
                         }
 
 
 
-                        @using (Html.BeginForm("CreateBitly", "FileUpload", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                        @using (Html.BeginForm("CreateBitly", "Bitly", FormMethod.Post, new { enctype = "multipart/form-data" }))
                         {
                             <div style="padding-top: 5px">
                                 <button class="btn btn-primary ml-auto" type="submit" id="btnBitly"> Create Bitly</button>
-                                <input type="text" id="txtBitly" value=" @((Session["Bitly"]))">
+                                <input type="text" id="txtBitly" value=" @((ViewData["Bitly"]))">
                             </div>
                         }
                     </div>
@@ -51,4 +62,4 @@
     $(document).ready(function () {
         $("#hdnGroupId").val(@Html.Raw(ViewBag.GroupId));
     });
- </script>
+</script>
