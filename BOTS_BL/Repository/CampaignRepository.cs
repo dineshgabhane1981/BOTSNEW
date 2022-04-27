@@ -318,5 +318,121 @@ namespace BOTS_BL.Repository
             }
             return objCampaignData;
         }
+
+        public List<OutletData> OutletData(string GroupId, string connstr)
+        {
+
+            List<OutletData> OutletData = new List<OutletData>();
+            //List<CampaignOutet> CampaignOutet = new List<CampaignOutet>();
+            try
+            {
+                using (var context = new BOTSDBContext(connstr))
+                {
+
+                    //dataDashboard = context.Database.SqlQuery<ExecutiveSummary>("sp_Dashboard @pi_GroupId, @pi_Date", new SqlParameter("@pi_GroupId", GroupId), new SqlParameter("@pi_Date", DateTime.Now.ToShortDateString())).FirstOrDefault<ExecutiveSummary>();
+                    //dataDashboard = context.Database.SqlQuery<ExecutiveSummary>("sp_BOTS_LoyaltyPerfromance @pi_GroupId, @pi_Date,@pi_LoginId,@pi_Month,@pi_Year,@pi_OutletId", new SqlParameter("@pi_GroupId", GroupId), new SqlParameter("@pi_Date", DateTime.Now.ToShortDateString()), new SqlParameter("@pi_LoginId", LoginId), new SqlParameter("@pi_Month", ""), new SqlParameter("@pi_Year", ""), new SqlParameter("@pi_OutletId", "")).FirstOrDefault<ExecutiveSummary>();
+
+                    OutletData = context.Database.SqlQuery<OutletData>("sp_OutletDashboard @pi_GroupId, @pi_Date", new SqlParameter("@pi_GroupId", GroupId), new SqlParameter("@pi_Date", DateTime.Now.ToString("yyyy-MM-dd"))).ToList<OutletData>();
+                   // OutletData = context.Database.SqlQuery<OutletData>("sp_OutletDashboard @pi_GroupId, @pi_Date", new SqlParameter("@pi_GroupId", GroupId), new SqlParameter("@pi_Date","2022-04-23")).ToList<OutletData>();
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, GroupId);
+            }
+            return OutletData;
+        }
+
+        public CustCount GetFiltData(string BaseType,string PointsBase,string Points, string OutletId, string GroupId, string connstr)
+        {
+            CustomerIdListAndCount objcount = new CustomerIdListAndCount();
+            List < CustomerDetail> objcust = new List<CustomerDetail>();
+            CustCount objcustAll = new CustCount();
+            //var CustomerCount;
+            // List<customerIdDetails> lstcustomerId = new List<customerIdDetails>();
+            // var transcount = 0;
+            using (var context = new BOTSDBContext(connstr))
+            {
+               
+                var names = new string[] { "2", "4", "5", "7" };
+                objcust = (from c in context.CustomerDetails where (names.Contains(c.CustomerThrough) && c.Status == "00") select c).ToList();
+
+                objcustAll.CustCountALL = context.CustomerDetails.Where(x => x.Status == "00" && x.IsSMS == null).Count();
+                objcustAll.CustFiltered = context.CustomerDetails.Where(x => x.Status == "00" && x.IsSMS == null && x.EnrollingOutlet == OutletId).Count();
+                
+
+                try
+                {
+                    if (BaseType == "1" && PointsBase == "" && Points == "" && OutletId == "")
+                    {
+                        objcustAll.CustCountALL = context.CustomerDetails.Where(x => x.Status == "00" && x.IsSMS == null).Count();
+                        objcustAll.CustFiltered = context.CustomerDetails.Where(x => x.Status == "00" && x.IsSMS == null).Count();
+                    }
+                    else if (BaseType == "1" && PointsBase == "" && Points == "" && OutletId != "")
+                    {
+                        objcustAll.CustCountALL = context.CustomerDetails.Where(x => x.Status == "00" && x.IsSMS == null).Count();
+                        objcustAll.CustFiltered = context.CustomerDetails.Where(x => x.Status == "00" && x.IsSMS == null && x.EnrollingOutlet == OutletId).Count();
+                    }
+                    else if (BaseType == "2" && PointsBase == "" && Points == "" && OutletId == "")
+                    {
+                        objcustAll.CustCountALL = context.CustomerDetails.Where(x => x.Status == "00" && x.IsSMS == null && x.IsSMS == null && x.CustomerThrough == "2" || x.CustomerThrough == "4" || x.CustomerThrough == "5" || x.CustomerThrough == "7").Count();
+                        objcustAll.CustFiltered = context.CustomerDetails.Where(x => x.Status == "00" && x.IsSMS == null && x.IsSMS == null && x.CustomerThrough == "2" || x.CustomerThrough == "4" || x.CustomerThrough == "5" || x.CustomerThrough == "7").Count();
+                    }
+                    else if (BaseType == "2" && PointsBase == "" && Points == "" && OutletId != "")
+                    {
+                        objcustAll.CustCountALL = context.CustomerDetails.Where(x => x.Status == "00" && x.IsSMS == null && x.CustomerThrough == "2" || x.CustomerThrough == "4" || x.CustomerThrough == "5" || x.CustomerThrough == "7").Count();
+                        objcustAll.CustFiltered = context.CustomerDetails.Where(x => x.Status == "00" && x.IsSMS == null && x.CustomerThrough == "2" || x.CustomerThrough == "4" || x.CustomerThrough == "5" || x.CustomerThrough == "7" && x.EnrollingOutlet == OutletId).Count();
+                    }
+                    else if (BaseType == "3" && PointsBase == "" && Points == "" && OutletId == "")
+                    {
+                        objcustAll.CustCountALL = context.CustomerDetails.Where(x => x.Status == "00" && x.IsSMS == null && x.CustomerThrough == "1").Count();
+                        objcustAll.CustFiltered = context.CustomerDetails.Where(x => x.Status == "00" && x.IsSMS == null && x.CustomerThrough == "1").Count();
+                    }
+                    else if (BaseType == "3" && PointsBase == "" && Points == "" && OutletId != "")
+                    {
+                        objcustAll.CustCountALL = context.CustomerDetails.Where(x => x.Status == "00" && x.IsSMS == null && x.CustomerThrough == "1").Count();
+                        objcustAll.CustFiltered = context.CustomerDetails.Where(x => x.Status == "00" && x.IsSMS == null && x.CustomerThrough == "1" && x.EnrollingOutlet == OutletId).Count();
+                    }
+                    else if (BaseType == "4" && PointsBase == "1" && Points != "" && OutletId == "")
+                    {
+                        objcustAll.CustCountALL = context.CustomerDetails.Where(x => x.Status == "00" && x.IsSMS == null && x.CustomerThrough == "2" || x.CustomerThrough == "4" || x.CustomerThrough == "5" || x.CustomerThrough == "7" && x.Points < Convert.ToInt32(Points)).Count();
+                        objcustAll.CustFiltered = context.CustomerDetails.Where(x => x.Status == "00" && x.IsSMS == null && x.CustomerThrough == "2" || x.CustomerThrough == "4" || x.CustomerThrough == "5" || x.CustomerThrough == "7" && x.Points < Convert.ToInt32(Points)).Count();
+                    }
+                    else if (BaseType == "4" && PointsBase == "1" && Points != "" && OutletId != "")
+                    {
+                        objcustAll.CustCountALL = context.CustomerDetails.Where(x => x.Status == "00" && x.IsSMS == null && x.CustomerThrough == "2" || x.CustomerThrough == "4" || x.CustomerThrough == "5" || x.CustomerThrough == "7" && x.Points < Convert.ToInt32(Points)).Count();
+                        objcustAll.CustFiltered = context.CustomerDetails.Where(x => x.Status == "00" && x.IsSMS == null && x.CustomerThrough == "2" || x.CustomerThrough == "4" || x.CustomerThrough == "5" || x.CustomerThrough == "7" && x.EnrollingOutlet == OutletId && x.Points < Convert.ToInt32(Points)).Count();
+                    }
+                    else if (BaseType == "4" && PointsBase == "2" && Points != "" && OutletId == "")
+                    {
+                        objcustAll.CustCountALL = context.CustomerDetails.Where(x => x.Status == "00" && x.IsSMS == null && x.CustomerThrough == "2" || x.CustomerThrough == "4" || x.CustomerThrough == "5" || x.CustomerThrough == "7" && x.Points > Convert.ToInt32(Points)).Count();
+                        objcustAll.CustFiltered = context.CustomerDetails.Where(x => x.Status == "00" && x.IsSMS == null && x.CustomerThrough == "2" || x.CustomerThrough == "4" || x.CustomerThrough == "5" || x.CustomerThrough == "7" && x.Points > Convert.ToInt32(Points)).Count();
+                    }
+                    else if (BaseType == "4" && PointsBase == "2" && Points != "" && OutletId != "")
+                    {
+                        objcustAll.CustCountALL = context.CustomerDetails.Where(x => x.Status == "00" && x.IsSMS == null && x.CustomerThrough == "2" || x.CustomerThrough == "4" || x.CustomerThrough == "5" || x.CustomerThrough == "7" && x.Points > Convert.ToInt32(Points)).Count();
+                        objcustAll.CustFiltered = context.CustomerDetails.Where(x => x.Status == "00" && x.IsSMS == null && x.CustomerThrough == "2" || x.CustomerThrough == "4" || x.CustomerThrough == "5" || x.CustomerThrough == "7" && x.Points > Convert.ToInt32(Points) && x.EnrollingOutlet == OutletId).Count();
+                    }
+                    else if (BaseType == "4" && PointsBase == "3" && Points != "" && OutletId == "")
+                    {
+                        objcustAll.CustCountALL = context.CustomerDetails.Where(x => x.Status == "00" && x.IsSMS == null && x.CustomerThrough == "2" || x.CustomerThrough == "4" || x.CustomerThrough == "5" || x.CustomerThrough == "7" && x.Points == Convert.ToInt32(Points)).Count();
+                        objcustAll.CustFiltered = context.CustomerDetails.Where(x => x.Status == "00" && x.IsSMS == null && x.CustomerThrough == "2" || x.CustomerThrough == "4" || x.CustomerThrough == "5" || x.CustomerThrough == "7" && x.Points == Convert.ToInt32(Points)).Count();
+                    }
+                    else if (BaseType == "4" && PointsBase == "3" && Points != "" && OutletId != "")
+                    {
+                        objcustAll.CustCountALL = context.CustomerDetails.Where(x => x.Status == "00" && x.IsSMS == null && x.CustomerThrough == "2" || x.CustomerThrough == "4" || x.CustomerThrough == "5" || x.CustomerThrough == "7" && x.Points == Convert.ToInt32(Points)).Count();
+                        objcustAll.CustFiltered = context.CustomerDetails.Where(x => x.Status == "00" && x.IsSMS == null && x.CustomerThrough == "2" || x.CustomerThrough == "4" || x.CustomerThrough == "5" || x.CustomerThrough == "7" && x.Points == Convert.ToInt32(Points) && x.EnrollingOutlet == OutletId).Count();
+                    }
+                   
+                }
+                catch (Exception ex)
+                {
+                    newexception.AddException(ex, GroupId);
+                }
+                
+            }
+
+            return objcustAll;
+        }
     }
 }

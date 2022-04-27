@@ -22,7 +22,7 @@ namespace WebApp.Controllers.ITOPS
         }
         public ActionResult Upload()
         {
-            return View("Upload");
+            return View("Index");
         }
         public ActionResult UploadData(HttpPostedFileBase Data)
         {
@@ -41,7 +41,7 @@ namespace WebApp.Controllers.ITOPS
                         Data.SaveAs(Path2);
                         Session["Path2"] = Path2;
                         ViewBag.Message = "File Uploaded Successfully!!";
-                        return View("Upload");
+                        return View("Index");
                     }
                 }
                 else
@@ -53,19 +53,19 @@ namespace WebApp.Controllers.ITOPS
             catch (ArgumentException ex)
             {
                 responseString = string.Format("HTTP_ERROR :: The second HttpWebRequest object has raised an Argument Exception as 'Connection' Property is set to 'Close' :: {0}", ex.Message);
-                return View("Upload");
+                return View("Index");
             }
             catch (WebException ex)
             {
                 responseString = string.Format("HTTP_ERROR :: WebException raised! :: {0}", ex.Message);
-                return View("Upload");
+                return View("Index");
             }
             catch (Exception ex)
             {
                 responseString = string.Format("HTTP_ERROR :: Exception raised! :: {0}", ex.Message);
-                return View("Upload");
+                return View("Index");
             }
-            return View("Upload");
+            return View("Index");
         }
 
 
@@ -142,7 +142,7 @@ namespace WebApp.Controllers.ITOPS
             {
                 responseString = string.Format("HTTP_ERROR :: Exception raised! :: {0}", ex.Message);
             }
-            return View("Upload");
+            return View("Index");
         }
     }
 }

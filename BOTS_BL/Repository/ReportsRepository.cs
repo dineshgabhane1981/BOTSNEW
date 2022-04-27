@@ -45,14 +45,14 @@ namespace BOTS_BL.Repository
                     var lstOutlet = context.Database.SqlQuery<OutletList>("sp_GetOutletList @pi_GroupId", new SqlParameter("@pi_GroupId", GroupId)).ToList<OutletList>();
                     foreach (var item in lstOutlet)
                     {
-                        if (!item.OutletName.ToLower().Contains("admin"))
-                        {
+                        //if (!item.OutletName.ToLower().Contains("admin"))
+                        //{
                             countriesItem.Add(new SelectListItem
                             {
                                 Text = item.OutletName,
                                 Value = Convert.ToString(item.OutletId)
                             });
-                        }
+                        //}
                     }
                 }
             }
@@ -217,7 +217,7 @@ namespace BOTS_BL.Repository
                 {
                     memberSearch = context.Database.SqlQuery<MemberSearch>("sp_BOTS_MemberSearch @pi_GroupId, @pi_Date, @pi_LoginId, @pi_SearchData",
                         new SqlParameter("@pi_GroupId", GroupId),
-                        new SqlParameter("@pi_Date", DateTime.Now.ToShortDateString()),
+                        new SqlParameter("@pi_Date", DateTime.Now),
                         new SqlParameter("@pi_LoginId", loginId),
                         new SqlParameter("@pi_SearchData", searchData)).FirstOrDefault<MemberSearch>();
 
@@ -263,6 +263,7 @@ namespace BOTS_BL.Repository
                     celebrationsData = context.Database.SqlQuery<Celebrations>("sp_BOTS_Celebrate @pi_GroupId, @pi_Date, @pi_LoginId",
                         new SqlParameter("@pi_GroupId", GroupId),
                         new SqlParameter("@pi_Date", DateTime.Now.ToShortDateString()),
+                        
                         new SqlParameter("@pi_LoginId", "")).FirstOrDefault<Celebrations>();
                 }
             }

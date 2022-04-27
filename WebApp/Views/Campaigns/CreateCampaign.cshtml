@@ -1,8 +1,243 @@
-﻿
-@{
+﻿@{
     ViewBag.Title = "CreateCampaign";
     Layout = "~/Views/Shared/_LayoutITOPS.cshtml";
 }
 
 <h2>CreateCampaign</h2>
+
+<div class="app-main__inner" id="dvall">
+    <div class="container-fluid pt-3 pl-3 pr-3 pb-3">
+        @*<div class="row mb-3 pt-3 pl-3 pr-3 card">*@
+           
+            @*<div class="row">
+                    <div class="col-md-6 col-xl-3">
+                        <input class="radio" id="one" name="group" type="radio" checked><label>SMS</label>
+                    </div>
+                    <div class="col-md-6 col-xl-3">
+                        <input class="radio" id="two" name="group" type="radio"><label>WA</label>
+                    </div>
+                    <div class="col-md-6 col-xl-3">
+                        <input class="radio" id="three" name="group" type="radio"><label>VWA</label>
+                    </div>
+                </div>*@
+
+            <div class="mb-3 pr-3 pt-3 pl-3 card" style="padding-bottom:20px;">
+                @*<div class="col-sm-8" style="display:flex;padding-bottom: 10px;margin-top:5px;">*@
+                <div class="row mt-4">
+                    <div class="col-md-8 col-xl-8">
+                        <input type="radio" checked id="rdnSMS" name="btdornot" /><b>SMS </b> &nbsp;&nbsp;&nbsp;&nbsp;
+                        <input type="radio" id="rdnWA" name="btdornot" /><b> Whats app</b> &nbsp;&nbsp;&nbsp;&nbsp;
+                        <input type="radio" id="rdnVWA" name="btdornot" /><b> Verified Whats app</b> &nbsp;&nbsp;&nbsp;&nbsp;
+                    </div>
+                </div>
+
+                @*</div>*@
+            </div>
+            <div class="mb-3 pr-3 pt-3 pl-3 card" style="padding-bottom:20px;" id="SMSCamppanel">
+                <div class="row" style="margin-top : 20px;">
+                    <div class="col-sm-2">
+                        Base Type
+                    </div>
+                    <div class="col-sm-2 dropdown">
+                        <select id="#BaseType" name="BaseType" class="form-control" onchange="BaseCalc();">
+
+                            <option value="1">All</option>
+                            <option value="2">Member Base</option>
+                            <option value="3">Bulk Upload</option>
+                            <option value="4">Based On Points</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row " id="#divPoints" style="margin-top : 20px; display: none;">
+                    <div class="col-sm-2">
+                        Points 
+                        <select id="#Filter" name="Filter" class="form-control" onchange="pointsvalid();">
+                            <option value="0">Select</option>
+                            <option value="1">LessThan</option>
+                            <option value="2">GreaterThan</option>
+                            <option value="3">Equal To</option>
+                        </select>
+                         <input type="number" id="#points" name="points" />
+                    </div>
+                </div>
+
+                <div class="row" style="margin-top : 20px;">
+                    <div class="col-sm-2">
+                        OutletData
+                    </div>
+                    <div class="col-sm-2 dropdown">
+                        @Html.DropDownList("OutletData", new SelectList(ViewBag.OutletData, "Value", "Text"), "ALL", htmlAttributes: new { @class = "input50", @id = "ddlOutletList" })
+                    </div>
+                </div>
+
+                <div class="row" style="margin-top : 20px;">
+                    <div class="col-md-3 col-xl-3">
+                        <div class="button">
+                            <button type="button" id="btnFilter" style="margin-left:15px;" class="btn btn-primary" onclick="ShowCount();"><b>FILTER</b></button>
+
+                        </div>
+                    </div>
+                        <div class="col-md-4 col-xl-4">
+                            <table style="border:2px solid black;width:80%">
+                                <tr style="border:2px solid black; ">
+                                    <td style="border:2px solid black;text-align:left;">
+                                        <span id="AllCount"></span>All Count
+                                    </td>
+                                    <td style="border:2px solid black;">
+                                        <span id="AllCountnum"></span>
+                                    </td>
+                                </tr>
+                                <tr style="border:2px solid black; ">
+                                    <td style="border:2px solid black;text-align:left;">
+                                        <span id="FiltCount"></span>Filtered Count
+                                    </td>
+                                    <td style="border:2px solid black;">
+                                        <span id="FiltCountnum"></span>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="row" style="margin: 20px;">
+                        <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
+                            Script
+                        </div>
+                        <div class="col-sm-4" style="float:left;margin-top:10px;">
+                            <textarea class="form-control" id="exampleFormControlTextarea3" rows="7"></textarea>&nbsp;&nbsp;
+                        </div>
+                    </div>
+                    <div class="row mt-2" style="margin-top : 20px;">
+                        <div id="divdaterange" class="col-md-2 col-xl-3">
+                            <label>Campaign From</label>                          
+                        </div>
+                        <div>
+                            <input type="date" id="txtEnrollfromdt" class="input50" placeholder="Start" />
+                            
+                        </div>
+                        <div>
+                            <input type="date" id="txtEnrolltodt" class="input50" placeholder="End" />
+                        </div>
+
+                    </div>
+
+                    <div class="row mt-2">
+                        <div class="col-md-3 col-xl-3">
+                            Campaign Name
+                        </div>
+                        <div class="col-md-6 col-xl-4">
+                            <input type="text" id="CampName" class="input50" placeholder="Enter Campaign Name" />
+                        </div>
+                    </div>
+                <div class="row" style="margin-top : 20px;">
+                </div>
+                    <div class="col-md-3 col-xl-3">
+                        <div class="button">
+                            <button type="button" id="btnSave" style="margin-left:15px;" class="btn btn-primary" onclick="Save();"><b>SAVE</b></button>
+                            <button type="button" id="btnDownload" style="margin-left:15px;" class="btn btn-primary" onclick="DownLoad;"><b>DOWNLOAD</b></button>
+                        </div>
+                    </div>
+                    
+                            
+                        
+                </div>
+
+            @*</div>*@
+        </div>
+    </div>
+<script>
+        function BaseCalc() {
+
+            var val = document.getElementById("#BaseType").value;
+            var div = document.getElementById("#divPoints");
+            
+            if (val == 4) {
+
+                div.style.display = "block";
+
+            }
+            else if (val != 4) {
+
+                div.style.display = "none";
+            }
+        }
+    function pointsvalid() {
+
+            var Equality = document.getElementById("#Filter").value;
+            var Points = document.getElementById("#points").value;
+            if (Points == '') {
+
+                alert("Please Enter the Points ");
+
+            }
+
+        }
+        $(document).ready(function () {
+
+            $('#rdnSMS').change(function () {
+
+                $('#SMSCamppanel').show();
+            });
+            $('#rdnWA').change(function () {
+
+                $('#SMSCamppanel').hide();
+            });
+            $('#rdnVWA').change(function () {
+
+                $('#SMSCamppanel').hide();
+            });
+
+            $("#ddlOutletList").on("change", function () {
+
+                var OutletId = $("#ddlOutletList").val();
+
+
+            });
+        });
+
+    function ShowCount() {
+            var val = '';
+        var Equality = '';
+        var Points = '';
+        var OutletId = '';
+
+            val = document.getElementById("#BaseType").value;
+            Equality = document.getElementById("#Filter").value;
+            Points = document.getElementById("#points").value;
+        OutletId = $("#ddlOutletList").val();
+        if (Equality == '0') {
+            Equality = ''
+        }
+            var FilterData = [];
+            item = {};
+            item["BaseType"] = val;
+            item["PointsBase"] = Equality;
+            item["Points"] = Points;
+            item["OutletId"] = OutletId;
+            FilterData.push(item);
+            var data = JSON.stringify(FilterData);
+            
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("GetFilteredData", "Campaigns")',
+                data: '{jsonData: ' + JSON.stringify(data) + '}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+
+                success: function (response) {
+                    console.log(response);
+                    if (response != null) {
+                        $("#AllCountnum").text(response.CustCountALL);
+                        $("#FiltCountnum").text(response.CustFiltered);
+                        //$("#divLoader").hide();
+                    }
+                    else {
+
+                    }
+                },
+                error: function (response) {
+                    console.log(response.responseText);
+                }
+            });
+        }
+</script>
 

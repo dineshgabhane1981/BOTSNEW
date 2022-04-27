@@ -437,6 +437,7 @@
     <Content Include="Views\SinglePage\KeyIndicator.cshtml" />
     <Content Include="Views\SinglePage\NonTransacting.cshtml" />
     <Content Include="Views\OtherReports\ReportsDownload.cshtml" />
+    <Content Include="Views\Campaigns\CreateCampaign.cshtml" />
     <None Include="_bin_deployableAssemblies\x86\sqlcese40.dll" />
     <None Include="_bin_deployableAssemblies\x86\sqlceqp40.dll" />
     <None Include="_bin_deployableAssemblies\x86\sqlceme40.dll" />

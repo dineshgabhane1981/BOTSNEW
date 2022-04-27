@@ -5,12 +5,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Script.Serialization;
 
 namespace WebApp.Controllers
 {
     public class CampaignsController : Controller
     {
         CampaignRepository CMPR = new CampaignRepository();
+        ReportsRepository RR = new ReportsRepository();
         // GET: Campaigns
         public ActionResult Index()
         {
@@ -23,25 +25,25 @@ namespace WebApp.Controllers
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
             objCampaignTiles = CMPR.GetCampaignTilesData(userDetails.GroupId, userDetails.connectionString);
             List<SelectListItem> MonthList = new List<SelectListItem>();
-           
+
             for (int i = 0; i < 12; i++)
             {
                 MonthList.Add(new SelectListItem
                 {
                     Text = Convert.ToString(DateTime.Now.AddMonths(i).ToString("MMM")),
                     Value = Convert.ToString(DateTime.Now.AddMonths(i).Month)
-                });               
+                });
             }
             List<SelectListItem> YearList = new List<SelectListItem>();
             int year = DateTime.Now.Year;
-            objCampaignTiles.year= DateTime.Now.Year;
+            objCampaignTiles.year = DateTime.Now.Year;
             objCampaignTiles.month = DateTime.Now.Month;
             for (int i = -5; i <= 9; i++)
             {
                 YearList.Add(new SelectListItem
                 {
                     Text = Convert.ToString(DateTime.Now.AddYears(i).Year.ToString()),
-                    Value = Convert.ToString(year + i)              
+                    Value = Convert.ToString(year + i)
                 });
             }
 
@@ -65,7 +67,7 @@ namespace WebApp.Controllers
         {
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
             List<CampaignCelebrationsData> objCampaignCelebrationsData = new List<CampaignCelebrationsData>();
-            objCampaignCelebrationsData = CMPR.GetCampaignCelebrationsSecondData(userDetails.GroupId, userDetails.connectionString, month, year,type);
+            objCampaignCelebrationsData = CMPR.GetCampaignCelebrationsSecondData(userDetails.GroupId, userDetails.connectionString, month, year, type);
             return new JsonResult() { Data = objCampaignCelebrationsData, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
 
@@ -137,7 +139,7 @@ namespace WebApp.Controllers
             objCampaignSMSBlastFirstData = CMPR.GetCampaignSMSBlastFirstData(userDetails.GroupId, userDetails.connectionString, month, year);
             return new JsonResult() { Data = objCampaignSMSBlastFirstData, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
-        
+
         [HttpPost]
         public JsonResult GetSMSBlastsSecondData(string month, string year, string CampaignId)
         {
@@ -156,10 +158,14 @@ namespace WebApp.Controllers
             return new JsonResult() { Data = objCampaignData, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
 
-        public ActionResult CampaignGetData()
+        public ActionResult CreateCampaign()
         {
             //CampaignTiles objCampaignTiles = new CampaignTiles();
-            //var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            //string GroupId = userDetails.GroupId;
+            //ViewBag.OutletData = CMPR.OutletData(userDetails.GroupId, userDetails.connectionString);
+            var lstOutlet = RR.GetOutletList(userDetails.GroupId, userDetails.connectionString);
+            ViewBag.OutletData = lstOutlet;
             //objCampaignTiles = CMPR.GetCampaignTilesData(userDetails.GroupId, userDetails.connectionString);
             //List<SelectListItem> MonthList = new List<SelectListItem>();
 
@@ -191,5 +197,33 @@ namespace WebApp.Controllers
             return View("CreateCampaign");
         }
 
+        [HttpPost]
+        public JsonResult GetFilteredData(string jsonData)
+        {
+            CustomerIdListAndCount objcounts = new CustomerIdListAndCount();
+            CustCount objcustAll = new CustCount();
+            CampaignRepository CR = new CampaignRepository();
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            List<CustomerDetail> listCustD = new List<CustomerDetail>();
+            JavaScriptSerializer json_serializer = new JavaScriptSerializer();
+            json_serializer.MaxJsonLength = int.MaxValue;
+            object[] objData = (object[])json_serializer.DeserializeObject(jsonData);
+            foreach (Dictionary<string, object> item in objData)
+            {
+                
+                string BaseType = Convert.ToString(item["BaseType"]);
+                string PointsBase = Convert.ToString(item["PointsBase"]);
+                string Points = Convert.ToString(item["Points"]);
+                string OutletId = Convert.ToString(item["OutletId"]);
+
+
+
+                objcustAll = CR.GetFiltData(BaseType, PointsBase, Points, OutletId, userDetails.GroupId, userDetails.connectionString);
+
+               // Session["customerId"] = objcounts.lstcustomerDetails;
+            }
+
+            return new JsonResult() { Data = objcustAll, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
+        }
     }
 }

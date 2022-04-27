@@ -119,4 +119,15 @@ namespace BOTS_BL.Models
         public decimal? Conversion { get; set; }
 
     }
+
+    public class OutletData
+    {
+        public string OutletName { get; set; }
+        public int EnrollmentCount { get; set; }
+    }
+    public class CustCount
+    {
+        public int CustCountALL { get; set; }
+        public int CustFiltered { get; set; }
+    }
 }
