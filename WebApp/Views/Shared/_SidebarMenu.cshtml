@@ -401,6 +401,14 @@
                                     Telecaller Report
                                 </a>
                             </li>
+                            <li class="@Html.IsSelected(controller: "OtherReports", action: "ReportsDownload")">
+                                <a class="@Html.IsSelected(controller: "OtherReports", action: "ReportsDownload")" href="@Url.Action("ReportsDownload", "OtherReports")">
+                                    <i class="metismenu-icon"></i>
+                                    Reports Download
+                                </a>
+
+                            </li>
+
                         </ul>
                     </li>
 
