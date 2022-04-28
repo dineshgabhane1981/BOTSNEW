@@ -55,9 +55,9 @@
 
 <div style="float:left; border:1px solid grey;border-radius:10px;margin-bottom:10px;" class="col-md-12 col-lg-12">
     <div style="margin:20px;">
-        <b><span id="spnDlCStatus1"> Status -  @Model.DLTStatus1 </span></b><br />
+        <b><span id="spnDLCStatus1"> Status -  @Model.DLTStatus1 </span></b><br />
         <span id="spnRejectDLCStatus1">
-            @if (Model.DLTStatus1 == "Rejected")
+            @if (!string.IsNullOrEmpty(Model.RejectReason1))
             {
                 var reasonRejects = "<b>Reason</b> - " + Model.RejectReason1;
                 @Html.Raw(reasonRejects)
@@ -589,9 +589,9 @@
                             title: "Saved..",
                             message: "DLT Data Saved Successfully!",
                             buttonText: "Okay"
-                        })
+                        })                        
                         if (status == "InProgress") {
-                            $("#spnDLCStatus" + statusid).text("Status - InProgress");
+                            $("#spnDLCStatus" + statusid).text("Status - InProgress");                           
                         }
                         if (status == "Rejected") {
                             $("#spnDLCStatus" + statusid).text("Status - Rejected");
@@ -628,24 +628,7 @@
     }
     function SaveAndApproveDLCTemplate(id, statusid, status) {
         var SaveData = [];
-        saveitem = {}
-        //////saveitem["ToTheReferralSMSScript"] = $("#txtSMSToTheReferral" + statusid).val();
-        //////saveitem["ToTheReferralSMSScriptDLT"] = $("#txtSMSToTheReferralDLT" + statusid + "DLT").val();
-        //////saveitem["ReminderForPointsUsageSMSScript"] = $("#txtSMSReminderForPointsUsage" + statusid).val();
-        //////saveitem["ReminderForPointsUsageSMSScriptDLT"] = $("#txtSMSReminderForPointsUsageDLT" + statusid + "DLT").val();
-        //////saveitem["ReferredSuccessOnReferralTxnSMSScript"] = $("#txtSMSReferredSuccessOnReferralTxn" + statusid).val();
-        //////saveitem["ReferredSuccessOnReferralTxnSMSScriptDLT"] = $("#txtSMSReferredSuccessOnReferralTxnDLT" + statusid + "DLT").val();
-        //////saveitem["DLCOTPScriptSMS"] = $("#txtSMSDLCOtp" + statusid).val();
-        //////saveitem["DLCOTPScriptSMSDLT"] = $("#txtSMSDLCOtpDLT" + statusid + "DLT").val();
-        //////saveitem["GiftPointsOTPScriptSMS"] = $("#txtSMSGiftPtOtp" + statusid).val();
-        //////saveitem["GiftPointsOTPScriptSMSDLT"] = $("#txtSMSGiftPtOtpDLT" + statusid + "DLT").val();
-        //////saveitem["GiftPointsDebitOTPScriptSMS"] = $("#txtSMSGiftPtDebitOtp" + statusid).val();
-        //////saveitem["GiftPointsDebitOTPScriptSMSDLT"] = $("#txtSMSGiftPtDebitOtpDLT" + statusid + "DLT").val();
-        //////saveitem["GiftPointsCreditOTPScriptSMS"] = $("#txtSMSGiftPtCreditOtp" + statusid).val();
-        //////saveitem["GiftPointsCreditOTPScriptSMSDLT"] = $("#txtSMSGiftPtCreditOtpDLT" + statusid + "DLT").val();
-        //////saveitem["TemplateId"] = $("#txtTemplateIdDLC" + statusid).val();
-        //////saveitem["TemplateName"] = $("#txtTemplateNameDLC" + statusid).val();
-        //////saveitem["TemplateType"] = $("#ddlTemplateTypeDLC" + statusid).val();
+        saveitem = {}        
 
         if (statusid == 1) {
             saveitem["Script"] = $("#txtSMSToTheReferral").val();
@@ -698,54 +681,54 @@
                             buttonText: "Okay"
                         })
                         if (status == "Approved") {
-                            if (num == 1) {
+                            if (statusid == 1) {
                                 $("#spnDLCStatus" + statusid).text("Status - Approved");
                                 $("#spnRejectDLCStatus" + statusid).hide();
-                                $("#txtSMSToTheReferral" + id).prop("disabled", true);
+                                $("#txtSMSToTheReferral").prop("disabled", true);
 
                             }
-                            if (num == 2) {
+                            if (statusid == 2) {
                                 $("#spnDLCStatus" + statusid).text("Status - Approved");
                                 $("#spnRejectDLCStatus" + statusid).hide();
-                                $("#txtSMSReminderForPointsUsage" + id).prop("disabled", true);
+                                $("#txtSMSReminderForPointsUsage").prop("disabled", true);
 
                             }
-                            if (num == 3) {
+                            if (statusid == 3) {
                                 $("#spnDLCStatus" + statusid).text("Status - Approved");
                                 $("#spnRejectDLCStatus" + statusid).hide();
-                                $("#txtSMSReferredSuccessOnReferralTxn" + id).prop("disabled", true);
+                                $("#txtSMSReferredSuccessOnReferralTxn").prop("disabled", true);
 
                             }
-                            if (num == 4) {
+                            if (statusid == 4) {
                                 $("#spnDLCStatus" + statusid).text("Status - Approved");
                                 $("#spnRejectDLCStatus" + statusid).hide();
-                                $("#txtSMSDLCOtp" + id).prop("disabled", true);
+                                $("#txtSMSDLCOtp").prop("disabled", true);
 
                             }
-                            if (num == 5) {
+                            if (statusid == 5) {
                                 $("#spnDLCStatus" + statusid).text("Status - Approved");
                                 $("#spnRejectDLCStatus" + statusid).hide();
-                                $("#txtSMSGiftPtOtp" + id).prop("disabled", true);
+                                $("#txtSMSGiftPtOtp").prop("disabled", true);
 
                             }
-                            if (num == 6) {
+                            if (statusid == 6) {
                                 $("#spnDLCStatus" + statusid).text("Status - Approved");
                                 $("#spnRejectDLCStatus" + statusid).hide();
-                                $("#txtSMSGiftPtDebitOtp" + id).prop("disabled", true);
+                                $("#txtSMSGiftPtDebitOtp").prop("disabled", true);
 
                             }
-                            if (num == 7) {
+                            if (statusid == 7) {
                                 $("#spnDLCStatus" + statusid).text("Status - Approved");
                                 $("#spnRejectDLCStatus" + statusid).hide();
-                                $("#txtSMSGiftPtCreditOtp" + id).prop("disabled", true);
+                                $("#txtSMSGiftPtCreditOtp").prop("disabled", true);
                             }
-                            $("#txtTemplateIdDLC" + num + id).prop("disabled", true);
-                            $("#txtTemplateNameDLC" + num + id).prop("disabled", true);
-                            $("#ddlTemplateTypeDLC" + num + id).prop("disabled", true);
-                            $("#btnCopyDLC" + id).prop("disabled", true);
-                            $("#btnApproveDLC" + id).prop("disabled", true);
-                            $("#btnRejectDLC" + id).prop("disabled", true);
-                            $("#btnSaveDLC" + id).prop("disabled", true);
+                            $("#txtTemplateIdDLC" + statusid).prop("disabled", true);
+                            $("#txtTemplateNameDLC" + statusid).prop("disabled", true);
+                            $("#ddlTemplateTypeDLC" + statusid).prop("disabled", true);
+                            $("#btnCopyDLC" + statusid).prop("disabled", true);
+                            $("#btnApproveDLC" + statusid).prop("disabled", true);
+                            $("#btnRejectDLC" + statusid).prop("disabled", true);
+                            $("#btnSaveDLC" + statusid).prop("disabled", true);
                         }
                     }
                     else {

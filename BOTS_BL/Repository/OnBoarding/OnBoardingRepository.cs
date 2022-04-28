@@ -1856,7 +1856,10 @@ namespace BOTS_BL.Repository
                         objDLCLinkConfig.DLTStatus1 = status;
                         if (status == "Rejected")
                         {
-                            objDLCLinkConfig.RejectReason1 = reason;
+                            if (string.IsNullOrEmpty(objDLCLinkConfig.RejectReason1))
+                                objDLCLinkConfig.RejectReason1 = reason;
+                            else
+                                objDLCLinkConfig.RejectReason1 = objDLCLinkConfig.RejectReason1 + " // " + reason;
                         }
                     }
                     if (statusid == 2)
