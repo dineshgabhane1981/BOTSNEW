@@ -1,7 +1,7 @@
 ﻿@model List<BOTS_BL.Models.ReportForDownload>
 
 @{ ViewBag.Title = "ReportsDownload";
-                Layout = "~/Views/Shared/_Layout.cshtml"; }
+    Layout = "~/Views/Shared/_Layout.cshtml"; }
 
 <div class="app-main__inner">
     <div class="multisteps-form__panel shadow p-4 list-box bg-white" id="sec4" data-animation="scaleIn">
@@ -22,11 +22,11 @@
                                                 <thead>
                                                     <tr position: absolute top: -9999px; left: -9998px;>
                                                         <th scope="col" colspan="1" style="text-align: center; font-weight: bold;">Group Name</th>
-                                                        <th scope="col" colspan="1" style="text-align: center; font-weight: bold;">Date</th>
+                                                        <th scope="col" colspan="4" style="text-align: center; font-weight: bold;">Date</th>
                                                         <th scope="col" colspan="1" style="text-align: center; font-weight: bold;">Download Link</th>
                                                         <th scope="col" colspan="1" style="text-align: center; font-weight: bold;">Report Type</th>
-                                                        <th scope="col" colspan="2" style="text-align: center; font-weight: bold;">Remarks</th>
-
+                                                        <th scope="col" colspan="1" style="text-align: center; font-weight: bold;">Remarks</th>
+                                                        <th scope="col" colspan="1" style="text-align: center; font-weight: bold;">Action</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -39,16 +39,18 @@
                                                             {
 
                                         <tr border: 1px solid #ccc;>
-                                            <td style="text-align:left;">@item.GroupName</td>
-                                            <td style="text-align:left;">@item.Date</td>
-                                            <td style="text-align:left;">@item.DownloadLink</td>
-                                            <td style="text-align:left;">@item.ReportType</td>
-                                            <td style="text-align:left;">@item.Remarks</td>
-                                            <td style="text-align:left; width:100px;">
+                                            <td scope="col" colspan="1" style="text-align:left;">@item.GroupName</td>
+                                            <td scope="col" colspan="4" style="text-align:left;">@item.Date</td>
+                                            <td scope="col" colspan="1" style="text-align:left;">@item.DownloadLink</td>
+                                            <td scope="col" colspan="1" style="text-align:left;">@item.ReportType</td>
+                                            <td scope="col" colspan="1" style="text-align:left;">@item.Remarks</td>
+                                            <td class="dropdown" style="text-align:right; width:80px;">
+                                                <button class="btn-primary" target="_blank" onclick='DownloadFile();' type="button" id="btnDownload">
+                                                    <i class="fas fa-file-export"></i> DownLoad File
+                                                </button>
                                             </td>
                                         </tr>}
                                                         }
-
                                                     }
 
                                                 </tbody>
@@ -65,3 +67,8 @@
         </div>
     </div>
 </div>
+
+@*<script>function DownloadFile() {
+        var fileName = "../Downloads/Reports.xlsx";
+        window.location = fileName;
+    }</script>*@
