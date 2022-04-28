@@ -1,49 +1,65 @@
 ﻿@model List<BOTS_BL.Models.ReportForDownload>
-@{
-    ViewBag.Title = "ReportsDownload";
-    Layout = "~/Views/Shared/_Layout.cshtml";
-}
 
-@*div class="row mt-3" id="dvActivityData">*@
-<div class="table-responsive">
-    <table class="table" id="groupListTable">
+@{ ViewBag.Title = "ReportsDownload";
+                Layout = "~/Views/Shared/_Layout.cshtml"; }
 
-        <thead>
-            <tr>
-                <th scope="col" colspan="2" style="text-align: center;">Group Name</th>
-                <th scope="col" colspan="2" style="text-align: center;">Date</th>
-                <th scope="col" colspan="2" style="text-align: center;">Download Link</th>
-                <th scope="col" colspan="2" style="text-align: center;">Report Type</th>
-                <th scope="col" colspan="2" style="text-align: center;">Remarks</th>
+<div class="app-main__inner">
+    <div class="multisteps-form__panel shadow p-4 list-box bg-white" id="sec4" data-animation="scaleIn">
+        <h4 class="multisteps-form__title" style="color: blue; font-weight: bold;">Download Reports</h4><br />
+        <div class="multisteps-form__content">
+            <div class="mb-3 card" style="padding-top:20px;">
+                <div class="content">
+                    <div class="container-fluid pt-3 pl-3 pr-3">
 
-            </tr>
-        </thead>
-        <tbody>
-            @if (Model != null)
-            {
-                if (Model.Count > 0)
-                {
+                        <div class="container overflow-hidden">
+                            <div class="container-fluid ">
+                                <div class="col-md-12 col-lg-12">
+                                    <div class="row mt-3" id="dvActivityData">
+                                        <div class="table-responsive">
+                                            <meta name="viewport" content="width=devicewidth, initial-scaled=1.0">
+                                            <table class="table" id="groupListTable">
 
-                    foreach (var item in Model)
-                    {
+                                                <thead>
+                                                    <tr position: absolute top: -9999px; left: -9998px;>
+                                                        <th scope="col" colspan="1" style="text-align: center; font-weight: bold;">Group Name</th>
+                                                        <th scope="col" colspan="1" style="text-align: center; font-weight: bold;">Date</th>
+                                                        <th scope="col" colspan="1" style="text-align: center; font-weight: bold;">Download Link</th>
+                                                        <th scope="col" colspan="1" style="text-align: center; font-weight: bold;">Report Type</th>
+                                                        <th scope="col" colspan="2" style="text-align: center; font-weight: bold;">Remarks</th>
 
-                        <tr>
-                            <td style="text-align:left;">@item.GroupName</td>
-                            <td style="text-align:left;">@item.Date</td>
-                            <td style="text-align:left;">@item.DownloadLink</td>
-                            <td style="text-align:left;">@item.ReportType</td>
-                            <td style="text-align:left;">@item.Remarks
-                            <td style="text-align:left; width:100px;">
-                            </td>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @if (Model != null)
+                                                    {
+                                                        if (Model.Count > 0)
+                                                        {
 
-                        </tr>
+                                                            foreach (var item in Model)
+                                                            {
 
-                    }
-                }
+                                        <tr border: 1px solid #ccc;>
+                                            <td style="text-align:left;">@item.GroupName</td>
+                                            <td style="text-align:left;">@item.Date</td>
+                                            <td style="text-align:left;">@item.DownloadLink</td>
+                                            <td style="text-align:left;">@item.ReportType</td>
+                                            <td style="text-align:left;">@item.Remarks</td>
+                                            <td style="text-align:left; width:100px;">
+                                            </td>
+                                        </tr>}
+                                                        }
 
-            }
+                                                    }
 
-        </tbody>
-    </table>
+                                                </tbody>
+                                            </table>
 
-</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
