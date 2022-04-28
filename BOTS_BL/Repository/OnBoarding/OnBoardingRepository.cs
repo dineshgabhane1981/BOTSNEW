@@ -1867,7 +1867,10 @@ namespace BOTS_BL.Repository
                         objDLCLinkConfig.DLTStatus2 = status;
                         if (status == "Rejected")
                         {
-                            objDLCLinkConfig.RejectReason2 = reason;
+                            if (string.IsNullOrEmpty(objDLCLinkConfig.RejectReason1))
+                                objDLCLinkConfig.RejectReason2 = reason;
+                            else
+                                objDLCLinkConfig.RejectReason2 = objDLCLinkConfig.RejectReason2 + " // " + reason;
                         }
                     }
                     if (statusid == 3)
@@ -1875,7 +1878,10 @@ namespace BOTS_BL.Repository
                         objDLCLinkConfig.DLTStatus3 = status;
                         if (status == "Rejected")
                         {
-                            objDLCLinkConfig.RejectReason3 = reason;
+                            if (string.IsNullOrEmpty(objDLCLinkConfig.RejectReason1))
+                                objDLCLinkConfig.RejectReason3 = reason;
+                            else
+                                objDLCLinkConfig.RejectReason3 = objDLCLinkConfig.RejectReason3 + " // " + reason;
                         }
                     }
                     if (statusid == 4)
@@ -1883,7 +1889,10 @@ namespace BOTS_BL.Repository
                         objDLCLinkConfig.DLTStatus4 = status;
                         if (status == "Rejected")
                         {
-                            objDLCLinkConfig.RejectReason4 = reason;
+                            if (string.IsNullOrEmpty(objDLCLinkConfig.RejectReason1))
+                                objDLCLinkConfig.RejectReason4 = reason;
+                            else
+                                objDLCLinkConfig.RejectReason4 = objDLCLinkConfig.RejectReason4 + " // " + reason;
                         }
                     }
                     if (statusid == 5)
@@ -1891,7 +1900,10 @@ namespace BOTS_BL.Repository
                         objDLCLinkConfig.DLTStatus5 = status;
                         if (status == "Rejected")
                         {
-                            objDLCLinkConfig.RejectReason5 = reason;
+                            if (string.IsNullOrEmpty(objDLCLinkConfig.RejectReason1))
+                                objDLCLinkConfig.RejectReason5 = reason;
+                            else
+                                objDLCLinkConfig.RejectReason5 = objDLCLinkConfig.RejectReason5 + " // " + reason;
                         }
                     }
                     if (statusid == 6)
@@ -1899,7 +1911,10 @@ namespace BOTS_BL.Repository
                         objDLCLinkConfig.DLTStatus6 = status;
                         if (status == "Rejected")
                         {
-                            objDLCLinkConfig.RejectReason6 = reason;
+                            if (string.IsNullOrEmpty(objDLCLinkConfig.RejectReason1))
+                                objDLCLinkConfig.RejectReason6 = reason;
+                            else
+                                objDLCLinkConfig.RejectReason6 = objDLCLinkConfig.RejectReason6 + " // " + reason;
                         }
                     }
                     if (statusid == 7)
@@ -1907,7 +1922,10 @@ namespace BOTS_BL.Repository
                         objDLCLinkConfig.DLTStatus7 = status;
                         if (status == "Rejected")
                         {
-                            objDLCLinkConfig.RejectReason7 = reason;
+                            if (string.IsNullOrEmpty(objDLCLinkConfig.RejectReason1))
+                                objDLCLinkConfig.RejectReason7 = reason;
+                            else
+                                objDLCLinkConfig.RejectReason7 = objDLCLinkConfig.RejectReason7 + " // " + reason;
                         }
                     }
 
