@@ -47,5 +47,22 @@ namespace BOTS_BL.Repository
             }
             return lstBottom5SessingProductValue;
         }
+        public List<ReportForDownload> GetReportDownloadData()
+        {
+            List<ReportForDownload> lstReportDownload = new List<ReportForDownload>();
+            try
+            {
+                using (var context = new CommonDBContext())
+                {
+                    lstReportDownload = context.ReportForDownloads.ToList();
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetReportDownloadData");
+            }
+
+            return lstReportDownload;
+        }
     }
 }

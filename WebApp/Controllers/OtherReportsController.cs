@@ -40,7 +40,12 @@ namespace WebApp.Controllers
         }
         public ActionResult ReportsDownload()
         {
-            return View();
+            //OtherReportProductwiseViewModel objData = new OtherReportProductwiseViewModel();
+            //List<ReportForDownload> lstReportDownload = new List<ReportForDownload>();
+            var lstReportDownload = ORR.GetReportDownloadData();
+            //objData.lstReportDownload = ORR.GetReportDownloadData();
+            return View(lstReportDownload);
         }
+
     }
 }

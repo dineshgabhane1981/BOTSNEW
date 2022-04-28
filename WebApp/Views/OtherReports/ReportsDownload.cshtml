@@ -1,4 +1,4 @@
-﻿@model WebApp.ViewModel.OtherReportProductwiseViewModel
+﻿@model List<BOTS_BL.Models.ReportForDownload>
 @{
     ViewBag.Title = "ReportsDownload";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -19,30 +19,29 @@
             </tr>
         </thead>
         <tbody>
-              @if (Model.lstReportDwn != null)
-              {
-                  if (Model.lstReportDwn.Count > 0)
-                  {
+            @if (Model != null)
+            {
+                if (Model.Count > 0)
+                {
 
-                      foreach (var item in Model.lstReportDwn)
-                      {
+                    foreach (var item in Model)
+                    {
 
-                            <tr>  
-                               <td style="text-align:left;">@item.GroupName</td>
-                               <td style="text-align:left;">@item.Date</td>
-                               <td style="text-align:left;">@item.DownloadLink</td>
-                               <td style="text-align:left;">@item.ReportType</td>
-                               <td style="text-align:left;">@item.Remarks
-                               <td style="text-align:left; width:100px;">
-               
-                               </td>
-                                   
-                            </tr>
+                        <tr>
+                            <td style="text-align:left;">@item.GroupName</td>
+                            <td style="text-align:left;">@item.Date</td>
+                            <td style="text-align:left;">@item.DownloadLink</td>
+                            <td style="text-align:left;">@item.ReportType</td>
+                            <td style="text-align:left;">@item.Remarks
+                            <td style="text-align:left; width:100px;">
+                            </td>
 
-                      }
-                  }
+                        </tr>
 
-               }
+                    }
+                }
+
+            }
 
         </tbody>
     </table>
