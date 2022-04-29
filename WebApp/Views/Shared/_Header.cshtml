@@ -8,6 +8,7 @@
     {
         GroupId = common.EncryptString(userDetails.GroupId);
     }
+    string roleid = userDetails.LoginType;
 }
 @{
 
@@ -72,14 +73,34 @@
             <div class="header-btn-lg pr-0">
                 <div class="widget-content p-0">
                     <div class="widget-content-wrapper">
-                        @*@if (!string.IsNullOrEmpty(GroupId))
+                        @if (!string.IsNullOrEmpty(GroupId))
                         {
-                            <div>
-                                <a href="@Url.Action("Index", "NameAndMobile", new { groupId = GroupId })" class="login" title="Go To IT Ops" target="_blank"><img src="~/Content/assets/images/itops.png" width="30" /></a>
-                                <a href="@Url.Action("AllDiscussions", "Discussion", new { groupId = GroupId })" class="login" title="Go To Discussions" target="_blank"><img src="~/Content/assets/images/discussion.png" width="30" /></a>
+                            if (roleid != "2" && roleid != "3" && roleid != "4")
+                            {
+                                <div>
+                                    @if (Convert.ToString(Session["buttons"]) == "ITOPS")
+                                    {
+                                        <a href="@Url.Action("Index", "Home", new { groupId = GroupId })" class="login" title="Go To Dashboard" target="_blank"><img src="~/Content/assets/images/dashboard.jpg" style="margin-bottom:15px;" width="30" /></a>
+                                        <a href="@Url.Action("AllDiscussions", "Discussion", new { groupId = GroupId })" class="login" title="Go To Discussions" target="_blank"><img src="~/Content/assets/images/discussion.png" style="margin-bottom:15px;" width="30" /></a>
 
-                            </div>
-                        }*@
+
+                                    }
+                                    @if (Convert.ToString(Session["buttons"]) == "Dashboard")
+                                    {
+                                        <a href="@Url.Action("AllDiscussions", "Discussion", new { groupId = GroupId })" class="login" title="Go To Discussions" target="_blank"><img src="~/Content/assets/images/discussion.png" style="margin-bottom:15px;" width="30" /></a>
+                                        <a href="@Url.Action("Index", "NameAndMobile", new { groupId = GroupId })" class="login" title="Go To IT Ops" target="_blank"><img src="~/Content/assets/images/ops.jpg" style="margin-bottom:15px;" width="30" /></a>
+                                    }
+                                    @if (Convert.ToString(Session["buttons"]) == "Discussion")
+                                    {
+                                        <a href="@Url.Action("Index", "Home", new { groupId = GroupId })" class="login" title="Go To Dashboard" target="_blank"><img src="~/Content/assets/images/dashboard.jpg" style="margin-bottom:15px;" width="30" /></a>
+                                        <a href="@Url.Action("Index", "NameAndMobile", new { groupId = GroupId })" class="login" title="Go To IT Ops" target="_blank"><img src="~/Content/assets/images/ops.jpg" style="margin-bottom:15px;" width="30" /></a>
+                                    }
+
+                                    <a href="@Url.Action("ExitDashboard", "Home")" class="login" title="Exit"><i class="fa fa-window-close" aria-hidden="true" style="font-size:35px;color:white;"></i></a>
+
+                                </div>
+                            }
+                        }
                         <div class="widget-content-left  ml-3 header-user-info">
                             <div class="widget-heading">
                                 @userDetails.UserName

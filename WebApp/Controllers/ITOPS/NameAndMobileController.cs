@@ -27,6 +27,10 @@ namespace WebApp.Controllers.ITOPS
                 CommonFunctions common = new CommonFunctions();
                 groupId = common.DecryptString(groupId);
                 Session["GroupId"] = groupId;
+                var userDetails = (CustomerLoginDetail)Session["UserSession"];
+                userDetails.GroupId = groupId;
+                Session["UserSession"] = userDetails;
+                Session["buttons"] = "ITOPS";
                 ViewBag.GroupId = groupId;
             }            
             return View();

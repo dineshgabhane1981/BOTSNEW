@@ -266,12 +266,14 @@
     <Content Include="Content\assets\images\details_close.png" />
     <Content Include="Content\assets\images\details_open.png" />
     <Content Include="Content\assets\images\discussion.png" />
+    <Content Include="Content\assets\images\exit.png" />
     <Content Include="Content\assets\images\GoToDashboard.png" />
     <Content Include="Content\assets\images\itops.png" />
     <Content Include="Content\assets\images\logo-inverse.png" />
     <Content Include="Content\assets\images\logo.png" />
     <Content Include="Content\assets\images\Man.jpg" />
     <Content Include="Content\assets\images\NoProfile.jpg" />
+    <Content Include="Content\assets\images\ops.png" />
     <Content Include="Content\assets\images\shape_editUser.png" />
     <Content Include="Content\assets\images\task.png" />
     <Content Include="Content\assets\images\woman.jpg" />

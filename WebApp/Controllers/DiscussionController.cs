@@ -40,9 +40,11 @@ namespace WebApp.Controllers
             groupId = common.DecryptString(groupId);
 
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            userDetails.GroupId = groupId;
             userDetails.CustomerName = CR.GetCustomerName(groupId);
             string LoginType = userDetails.LoginType; 
             Session["UserSession"] = userDetails;
+            Session["buttons"] = "Discussion";
 
             DiscussionViewModel objData = new DiscussionViewModel();
             BOTS_TblDiscussion objDiscussion = new BOTS_TblDiscussion();

@@ -31,6 +31,7 @@ namespace WebApp.Controllers
                 dataDashboard = DR.GetDashboardData(userDetails.GroupId, userDetails.connectionString, userDetails.LoginId);
                 ViewBag.OutletList = lstOutlet;
                 ViewBag.OutletCount = lstOutlet.Count;
+                Session["buttons"] = "Dashboard";
 
             }
             catch (Exception ex)
@@ -306,7 +307,7 @@ namespace WebApp.Controllers
         {
             return View();
         }
-        
+
         [HttpPost]
         public bool SendOTP(string emailId)
         {
@@ -396,6 +397,15 @@ namespace WebApp.Controllers
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
             var status = DR.UpdatePassword(userDetails.LoginId, newPassword);
             return new JsonResult() { Data = status, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
+        }
+
+
+        public ActionResult ExitDashboard()
+        {
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            userDetails.GroupId = null;
+            Session["UserSession"] = userDetails;
+            return RedirectToAction("Index", "CustomerManagement");
         }
     }
 }

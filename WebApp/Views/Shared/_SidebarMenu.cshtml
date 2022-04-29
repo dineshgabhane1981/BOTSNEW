@@ -46,7 +46,7 @@
     <div class="scrollbar-sidebar">
         <div class="app-sidebar__inner">
             <ul class="vertical-nav-menu">
-                @if ((GroupId == null || roleId != null || roleId == "1") && GroupId != "1051")
+                @if ((string.IsNullOrEmpty(GroupId) && (roleId != null || roleId == "1")) && GroupId != "1051")
                 {
                     <li>
                         <a href="#">
@@ -61,7 +61,7 @@
                                     Customers
                                 </a>
                             </li>
-                            @if (roleId == "1" || roleId == "5" || roleId == "7")
+                            @if (roleId == "1" || roleId == "5" || roleId == "6" || roleId == "9")
                             {
                                 <li>
                                     <a href="#">
@@ -128,14 +128,6 @@
                                 </a>
                             </li>
 
-
-
-                            @*<li class="@Html.IsSelected(controller: "SinglePage", action: "Index")">
-                                    <a href="@Url.Action("Index", "SinglePage")" class="@Html.IsSelected(controller: "SinglePage", action: "Index")">
-                                        <i class="metismenu-icon pe-7s-rocket"></i>
-                                        Single Page
-                                    </a>
-                                </li>*@
                             <li>
                                 <a href="#">
                                     <i class="metismenu-icon pe-7s-car"></i>
@@ -143,48 +135,50 @@
                                     <i class="metismenu-state-icon pe-7s-angle-down caret-left"></i>
                                 </a>
                                 <ul>
-                                    <li class="@Html.IsSelected(controller: "SinglePage", action: "NonTransacting")">
-                                        <a class="@Html.IsSelected(controller: "SinglePage", action: "NonTransacting")" href="@Url.Action("NonTransacting", "SinglePage")">
-                                            <i class="metismenu-icon"></i>
-                                            Non Transacting
-                                        </a>
-                                    </li>
+                                    @if (roleId == "1" || roleId == "5" || roleId == "6" || roleId == "9")
+                                    {
+                                        <li class="@Html.IsSelected(controller: "SinglePage", action: "NonTransacting")">
+                                            <a class="@Html.IsSelected(controller: "SinglePage", action: "NonTransacting")" href="@Url.Action("NonTransacting", "SinglePage")">
+                                                <i class="metismenu-icon"></i>
+                                                Non Transacting
+                                            </a>
+                                        </li>
+                                    }
                                     <li class="@Html.IsSelected(controller: "SinglePage", action: "Communication")">
                                         <a class="@Html.IsSelected(controller: "SinglePage", action: "Communication")" href="@Url.Action("Communication", "SinglePage")">
                                             <i class="metismenu-icon"></i>
                                             Communication
                                         </a>
                                     </li>
-                                    <li class="@Html.IsSelected(controller: "SinglePage", action: "KeyIndicator")">
-                                        <a class="@Html.IsSelected(controller: "SinglePage", action: "KeyIndicator")" href="@Url.Action("KeyIndicator", "SinglePage")">
-                                            <i class="metismenu-icon"></i>
-                                            Key Indicator
-                                        </a>
-                                    </li>
-                                    <li class="@Html.IsSelected(controller: "SinglePage", action: "CityWise")">
-                                        <a class="@Html.IsSelected(controller: "SinglePage", action: "CityWise")" href="@Url.Action("CityWise", "SinglePage")">
-                                            <i class="metismenu-icon"></i>
-                                            City Wise
-                                        </a>
-                                    </li>
-                                    <li class="@Html.IsSelected(controller: "SinglePage", action: "Discussion")">
-                                        <a class="@Html.IsSelected(controller: "SinglePage", action: "Discussion")" href="@Url.Action("Discussion", "SinglePage")">
-                                            <i class="metismenu-icon"></i>
-                                            Discussion Report
-                                        </a>
-                                    </li>
-                                    <li class="@Html.IsSelected(controller: "SinglePage", action: "GroupWise")">
-                                        <a class="@Html.IsSelected(controller: "SinglePage", action: "GroupWise")" href="@Url.Action("GroupWise", "SinglePage")">
-                                            <i class="metismenu-icon"></i>
-                                            Group Wise
-                                        </a>
-                                    </li>
-                                </ul>
+                                    @if (roleId == "1" || roleId == "5" || roleId == "6" || roleId == "9")
+                                    {
+                                        <li class="@Html.IsSelected(controller: "SinglePage", action: "KeyIndicator")">
+                                            <a class="@Html.IsSelected(controller: "SinglePage", action: "KeyIndicator")" href="@Url.Action("KeyIndicator", "SinglePage")">
+                                                <i class="metismenu-icon"></i>
+                                                Key Indicator
+                                            </a>
+                                        </li>
+                                        <li class="@Html.IsSelected(controller: "SinglePage", action: "CityWise")">
+                                            <a class="@Html.IsSelected(controller: "SinglePage", action: "CityWise")" href="@Url.Action("CityWise", "SinglePage")">
+                                                <i class="metismenu-icon"></i>
+                                                City Wise
+                                            </a>
+                                        </li>
+                                        <li class="@Html.IsSelected(controller: "SinglePage", action: "Discussion")">
+                                            <a class="@Html.IsSelected(controller: "SinglePage", action: "Discussion")" href="@Url.Action("Discussion", "SinglePage")">
+                                                <i class="metismenu-icon"></i>
+                                                Discussion Report
+                                            </a>
+                                        </li>
+                                        <li class="@Html.IsSelected(controller: "SinglePage", action: "GroupWise")">
+                                            <a class="@Html.IsSelected(controller: "SinglePage", action: "GroupWise")" href="@Url.Action("GroupWise", "SinglePage")">
+                                                <i class="metismenu-icon"></i>
+                                                Group Wise
+                                            </a>
+                                        </li>
+                                    }
+                                    </ul>
                             </li>
-
-
-
-
 
                             @if (roleId == "1" || roleId == "6" || roleId == "7")
                             {
@@ -200,7 +194,7 @@
 
                 }
 
-                @if (GroupId != null && level == "02")
+                @if (!string.IsNullOrEmpty(GroupId) && level == "02")
                 {
                     <li>
                         <a href="@Url.Action("Index", "Home")" class="@Html.IsSelected(controller: "Home", action: "Index")">
@@ -440,7 +434,7 @@
                     }
                 }
 
-                @if (GroupId != null && level == "04")
+                @if (!string.IsNullOrEmpty(GroupId) && level == "04")
                 {
                     <li>
                         <a href="@Url.Action("Index", "Home")" class="@Html.IsSelected(controller: "Home", action: "Index")">
@@ -470,7 +464,7 @@
                         </a>
                     </li>
                 }
-                @if (GroupId != null && level == "09")
+                @if (!string.IsNullOrEmpty(GroupId) && level == "09")
                 {
                     <li class="@Html.IsSelected(controller: "KeyIndicators", action: "MemberPage")">
                         <a class="@Html.IsSelected(controller: "KeyIndicators", action: "MemberPage")" href="@Url.Action("MemberPage", "KeyIndicators")">
