@@ -38,18 +38,19 @@
                                                             foreach (var item in Model)
                                                             {
 
-                                        <tr border: 1px solid #ccc;>
-                                            <td scope="col" colspan="1" style="text-align:left;">@item.GroupName</td>
-                                            <td scope="col" colspan="4" style="text-align:left;">@item.Date</td>
-                                            <td scope="col" colspan="1" style="text-align:left;">@item.DownloadLink</td>
-                                            <td scope="col" colspan="1" style="text-align:left;">@item.ReportType</td>
-                                            <td scope="col" colspan="1" style="text-align:left;">@item.Remarks</td>
-                                            <td class="dropdown" style="text-align:right; width:80px;">
-                                                <button class="btn-primary" target="_blank" onclick='DownloadFile();' type="button" id="btnDownload">
-                                                    <i class="fas fa-file-export"></i> DownLoad File
-                                                </button>
-                                            </td>
-                                        </tr>}
+                                                    <tr border: 1px solid #ccc;>
+                                                        <td scope="col" colspan="1" style="text-align:left;">@item.GroupName</td>
+                                                        <td scope="col" colspan="4" style="text-align:left;">@item.Date</td>
+                                                        <td scope="col" colspan="1" style="text-align:left;">
+                                                            <a href="@item.DownloadLink" target="_blank">@item.DownloadLink</a>
+                                                        </td>
+
+                                                        <td scope="col" colspan="1" style="text-align:left;">@item.ReportType</td>
+                                                        <td scope="col" colspan="1" style="text-align:left;">@item.Remarks</td>
+
+
+
+                                                    </tr>}
                                                         }
                                                     }
 
@@ -68,7 +69,3 @@
     </div>
 </div>
 
-@*<script>function DownloadFile() {
-        var fileName = "../Downloads/Reports.xlsx";
-        window.location = fileName;
-    }</script>*@
