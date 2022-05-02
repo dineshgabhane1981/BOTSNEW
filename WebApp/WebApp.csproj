@@ -262,6 +262,7 @@
     <Content Include="Content\assets\images\avatars\8.jpg" />
     <Content Include="Content\assets\images\avatars\9.jpg" />
     <Content Include="Content\assets\images\Blue-Ocktopus-TLC_white.jpg" />
+    <Content Include="Content\assets\images\dashboard.jpg" />
     <Content Include="Content\assets\images\delete.png" />
     <Content Include="Content\assets\images\details_close.png" />
     <Content Include="Content\assets\images\details_open.png" />
@@ -273,6 +274,7 @@
     <Content Include="Content\assets\images\logo.png" />
     <Content Include="Content\assets\images\Man.jpg" />
     <Content Include="Content\assets\images\NoProfile.jpg" />
+    <Content Include="Content\assets\images\ops.jpg" />
     <Content Include="Content\assets\images\ops.png" />
     <Content Include="Content\assets\images\shape_editUser.png" />
     <Content Include="Content\assets\images\task.png" />
