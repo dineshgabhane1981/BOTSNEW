@@ -440,8 +440,8 @@ namespace BOTS_BL.Repository
                         }
                     }
                 }
-                lstbalance = lstbalance.Where(x => x.SmsBalance1 < 1000).ToList();
-                lstSmsbalance.objSMSBalance = lstbalance.OrderBy(x => x.SmsBalance1).ToList();
+                //lstbalance = lstbalance.Where(x => x.SmsBalance1 < 1000).ToList();
+                lstSmsbalance.objSMSBalance = lstbalance.OrderByDescending(x => x.SmsBalance1).ToList();
 
                 //baseAddress = "https://technocorelogic.com/api/checkbalance?user=9511836639&pass=9930005673&url=https://www.enotify.app";
                 baseAddress = "https://technocorelogic.com/api/checkbalance?user=919511836639&pass=9930005673&url=https://bs.enotify.app";
@@ -507,7 +507,7 @@ namespace BOTS_BL.Repository
                 //    item.queue = lstWAbalance1.Where(x => x.InstanceID == item.InstanceID).Select(y => y.queue).FirstOrDefault();
                 //}
 
-                lstSmsbalance.objWhatsAppBalance = lstWAbalance.Where(y => y.WABalance < 1000).OrderBy(x => x.WABalance).ToList();
+                lstSmsbalance.objWhatsAppBalance = lstWAbalance.Where(y => y.WABalance < 1000).OrderByDescending(x => x.WABalance).ToList();
                 DateTime checkDate = DateTime.Today.AddDays(10);
 
                 lstSmsbalance.objWhatsAppExpiryDate = lstWAbalance.Where(x => x.WAExpiryDate < checkDate && x.WAExpiryDate > DateTime.Today).OrderBy(y => y.WAExpiryDate).ToList();

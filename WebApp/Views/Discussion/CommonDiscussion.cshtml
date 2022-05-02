@@ -29,7 +29,7 @@
             <div class="row mt-3 mb-4">
                 <div class="col-md-4 col-xl-6">
                     Select Raise by
-                    @if (userDetails.LoginType == "6")
+                    @if (userDetails.LoginType == "7")
                     {
                         @Html.DropDownList("RaisedBy", new SelectList(ViewBag.lstRMAssigned, "Value", "Text"), htmlAttributes: new { @class = "input100", @disabled="disabled", @id = "ddlRaisedBy" })
                     }

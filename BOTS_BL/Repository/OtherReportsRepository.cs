@@ -47,14 +47,14 @@ namespace BOTS_BL.Repository
             }
             return lstBottom5SessingProductValue;
         }
-        public List<ReportForDownload> GetReportDownloadData()
+        public List<ReportForDownload> GetReportDownloadData(string groupId)
         {
             List<ReportForDownload> lstReportDownload = new List<ReportForDownload>();
             try
             {
                 using (var context = new CommonDBContext())
                 {
-                    lstReportDownload = context.ReportForDownloads.ToList();
+                    lstReportDownload = context.ReportForDownloads.Where(x=>x.GroupId== groupId).ToList();
                 }
             }
             catch (Exception ex)

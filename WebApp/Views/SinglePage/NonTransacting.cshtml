@@ -97,40 +97,39 @@
                                     </tbody>
                                 </table>
                             </div>
-                        </div>
-                        <div class="mb-5 col-md-5 col-xl-5" style="margin-left:-20px !important;">
 
-                            <table border="1" cellpadding="5" cellspacing="5">
-                                <thead><b>Non Transacting Outlet</b>&nbsp;&nbsp;<a href="#" onclick="ShowAllNonTransactingOutlet();">Show All</a></thead>
-                                <tr>
-                                    <th scope="col" style="text-align:left;">Group Name</th>
-                                    <th scope="col" style="text-align:left;">Outlet Name</th>
-                                    @*<th scope="col" style="text-align:right;">Avg Group Txns</th>*@
-                                    <th scope="col" style="text-align:left;">LTD</th>
-                                    <th scope="col" style="text-align:left;">DSLT</th>
-                                </tr>
-                                <tbody>
-                                    @if (Model.lstnontransactingOutlet != null)
-                                    {
-                                        if (Model.lstnontransactingOutlet.Count > 0)
+                            <div class="mb-5 col-md-8 col-xl-8" style="margin-left:-20px !important;">
+
+                                <table border="1" cellpadding="5" cellspacing="5">
+                                    <thead><b>Non Transacting Outlet</b>&nbsp;&nbsp;<a href="#" onclick="ShowAllNonTransactingOutlet();">Show All</a></thead>
+                                    <tr>
+                                        <th scope="col" style="text-align:left;">Group Name</th>
+                                        <th scope="col" style="text-align:left;">Outlet Name</th>                                       
+                                        <th scope="col" style="text-align:left;">LTD</th>
+                                        <th scope="col" style="text-align:left;">DSLT</th>
+                                    </tr>
+                                    <tbody>
+                                        @if (Model.lstnontransactingOutlet != null)
                                         {
-                                            foreach (var item in Model.lstnontransactingOutlet)
+                                            if (Model.lstnontransactingOutlet.Count > 0)
                                             {
-                                                <tr>
-                                                    <td style="text-align:left;">@item.GroupName</td>
-                                                    <td style="text-align:left;">@item.OutletName</td>
-                                                    @*<td style="text-align:left;">@item.AvgGroupTxn</td>*@
-                                                    <td style="text-align:left;">@item.LastTxnDate.Value.ToString("MM/dd/yyyy")</td>
-                                                    <td style="text-align:left;">@item.DaysSinceLastTxn</td>
-                                                </tr>
+                                                foreach (var item in Model.lstnontransactingOutlet)
+                                                {
+                                                    <tr>
+                                                        <td style="text-align:left;">@item.GroupName</td>
+                                                        <td style="text-align:left;">@item.OutletName</td>
+                                                        <td style="text-align:left;">@item.LastTxnDate.Value.ToString("MM/dd/yyyy")</td>
+                                                        <td style="text-align:left;">@item.DaysSinceLastTxn</td>
+                                                    </tr>
+                                                }
                                             }
                                         }
-                                    }
-                                </tbody>
-                            </table>
-                        </div>
+                                    </tbody>
+                                </table>
+                            </div>
 
-                        <div class="mb-5 col-md-5 col-xl-5" style="margin-left:20px !important;">
+                        </div>
+                        <div class="mb-5 col-md-10 col-xl-10" style="margin-left:20px !important;">
                             <table border="1" cellpadding="5" cellspacing="5">
                                 <thead><b>Low Transacting Outlet</b>&nbsp;&nbsp; <a href="#" onclick="ShowAllLowTransactingOutlet();">Show All</a></thead>
                                 <tr>

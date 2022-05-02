@@ -504,12 +504,12 @@
     <div class="multisteps-form__panel  p-3 m-3 list-box bg-white panel1" id="three-panel1">
         @Html.HiddenFor(model => model.SMSDetailsCount, new { @id = "hdnSMSDetailsCount" })
         @Html.DropDownListFor(x => Model.lstOutletList.Count, new SelectList(Model.lstOutletList, "Value", "Text"), "Select Outlet", htmlAttributes: new { @class = "input50", @id = "ddlOutlets", style = "margin-top:20px;" })
-        <div style="margin-top:10px;">
+        @*<div style="margin-top:10px;">
             <b>Communication Preference </b>
 
 
 
-        </div>
+        </div>*@
         <div class="row" style="margin-top:20px;">
             <div style="margin-right:20px;">
                 <table border="1" cellpadding="5" cellspacing="5">
