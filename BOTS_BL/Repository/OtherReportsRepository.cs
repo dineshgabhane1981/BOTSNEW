@@ -13,6 +13,7 @@ namespace BOTS_BL.Repository
 {
     public class OtherReportsRepository
     {
+        CustomerRepository CR = new CustomerRepository();
         Exceptions newexception = new Exceptions();
         public List<SellingProductValue> GetTop5SellingProductValue(string GroupId, string connstr)
         {
@@ -63,6 +64,18 @@ namespace BOTS_BL.Repository
             }
 
             return lstReportDownload;
+        }
+
+        public List<tblFranchiseeEnquiry> GetFranchiseeEnquiryList(string GroupId)
+        {
+            List<tblFranchiseeEnquiry> objData = new List<tblFranchiseeEnquiry>();
+            var connectionString = CR.GetCustomerConnString(GroupId);
+            using (var contextNew = new BOTSDBContext(connectionString))
+            {
+                objData = contextNew.tblFranchiseeEnquiries.OrderByDescending(x => x.AddedDate).ToList();
+            }
+
+            return objData;
         }
     }
 }

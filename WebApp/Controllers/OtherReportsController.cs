@@ -30,10 +30,6 @@ namespace WebApp.Controllers
             return View(objData);
         }
 
-
-
-
-
         public ActionResult Manufacturer()
         {
             return View();
@@ -45,5 +41,12 @@ namespace WebApp.Controllers
             return View(lstReportDownload);
         }
 
+        public ActionResult FranchiseeEnquiryReport()
+        {
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            List<tblFranchiseeEnquiry> objData = new List<tblFranchiseeEnquiry>();
+            objData = ORR.GetFranchiseeEnquiryList(userDetails.GroupId);
+            return View(objData);
+        }
     }
 }

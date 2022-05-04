@@ -122,12 +122,14 @@ namespace WebApp.Controllers.OnBoarding
                     objData.bots_TblGroupMaster.CategoryData = json_serializer.Serialize(objData.objRetailList);
                     objData.bots_TblGroupMaster.PaymentScheduleData = json_serializer.Serialize(objData.objInstallmentList);
                 }
-                objData.lstearnpoint = FillEarnPointLevel();
-                objData.objpointsearnruleconfig = objpointsearncofig;
-                objData.objearnpointslab = objpointsslabconfig;
-                objData.objpointsburnruleconfig = objpointsburncofig;
+                BOTS_TblEarnRuleConfig objEarnRule = new BOTS_TblEarnRuleConfig();
+                objData.objEarnRuleConfig = objEarnRule;
+                //objData.lstearnpoint = FillEarnPointLevel();
+                //objData.objpointsearnruleconfig = objpointsearncofig;
+                //objData.objearnpointslab = objpointsslabconfig;
+                //objData.objpointsburnruleconfig = objpointsburncofig;
 
-                
+
             }
             catch (Exception ex)
             {

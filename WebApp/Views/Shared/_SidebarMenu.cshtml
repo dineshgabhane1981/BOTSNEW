@@ -11,6 +11,7 @@
     }
     var roleId = userDetails.LoginType;
     var level = userDetails.LevelIndicator;
+    var gId = userDetails.GroupId;
 }
 <div class="app-sidebar sidebar-shadow">
     <div class="app-header__logo">
@@ -177,7 +178,7 @@
                                             </a>
                                         </li>
                                     }
-                                    </ul>
+                                </ul>
                             </li>
 
                             @if (roleId == "1" || roleId == "6" || roleId == "7")
@@ -402,6 +403,15 @@
                                 </a>
 
                             </li>
+                            @if (gId == "1172")
+                            {
+                                <li class="@Html.IsSelected(controller: "OtherReports", action: "FranchiseeEnquiryReport")">
+                                    <a class="@Html.IsSelected(controller: "OtherReports", action: "FranchiseeEnquiryReport")" href="@Url.Action("FranchiseeEnquiryReport", "OtherReports")">
+                                        <i class="metismenu-icon"></i>
+                                        Franchisee Enquiry Report
+                                    </a>
+                                </li>
+                            }
 
                         </ul>
                     </li>

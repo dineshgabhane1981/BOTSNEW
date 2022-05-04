@@ -743,8 +743,8 @@ namespace BOTS_BL.Repository
                     {
                         var objTransaction = contextNew.TransactionMasters.Where(x => x.SlNo == TransactionId).FirstOrDefault();
                         var customerDetails = contextNew.CustomerDetails.Where(x => x.MobileNo == objTransaction.MobileNo).FirstOrDefault();
-                        var PointExpiry = contextNew.PointsExpiries.Where(x => x.MobileNo == objTransaction.MobileNo && x.Status == "00").ToList();
-                        var NewPointExpiry = contextNew.PointsExpiries.Where(x => x.MobileNo == objTransaction.MobileNo && x.Status == "00").OrderByDescending(y => y.ExpiryDate).FirstOrDefault();
+                        //var PointExpiry = contextNew.PointsExpiries.Where(x => x.MobileNo == objTransaction.MobileNo && x.Status == "00").ToList();
+                        //var NewPointExpiry = contextNew.PointsExpiries.Where(x => x.MobileNo == objTransaction.MobileNo && x.Status == "00").OrderByDescending(y => y.ExpiryDate).FirstOrDefault();
 
                         var oldTransactionPoints = objTransaction.PointsEarned;
 
@@ -752,27 +752,27 @@ namespace BOTS_BL.Repository
                         contextNew.TransactionMasters.AddOrUpdate(objTransaction);
                         contextNew.SaveChanges();
 
-                        foreach (var item in PointExpiry)
-                        {
-                            item.Status = "01";
-                            contextNew.PointsExpiries.AddOrUpdate(item);
-                            contextNew.SaveChanges();
-                        }
+                        //foreach (var item in PointExpiry)
+                        //{
+                        //    item.Status = "01";
+                        //    contextNew.PointsExpiries.AddOrUpdate(item);
+                        //    contextNew.SaveChanges();
+                        //}
 
-                        PointsExpiry objPointExpiry = new PointsExpiry();
-                        objPointExpiry.Points = (customerDetails.Points - oldTransactionPoints) + points;
-                        objPointExpiry.CounterId = NewPointExpiry.CounterId;
-                        objPointExpiry.MobileNo = NewPointExpiry.MobileNo;
-                        objPointExpiry.Datetime = DateTime.Now;
-                        objPointExpiry.EarnDate = NewPointExpiry.EarnDate;
-                        objPointExpiry.ExpiryDate = NewPointExpiry.ExpiryDate;
-                        objPointExpiry.Status = "00";
-                        objPointExpiry.InvoiceNo = NewPointExpiry.InvoiceNo;
-                        objPointExpiry.GroupId = NewPointExpiry.GroupId;
-                        objPointExpiry.CustomerId = NewPointExpiry.CustomerId;
+                        //PointsExpiry objPointExpiry = new PointsExpiry();
+                        //objPointExpiry.Points = (customerDetails.Points - oldTransactionPoints) + points;
+                        //objPointExpiry.CounterId = NewPointExpiry.CounterId;
+                        //objPointExpiry.MobileNo = NewPointExpiry.MobileNo;
+                        //objPointExpiry.Datetime = DateTime.Now;
+                        //objPointExpiry.EarnDate = NewPointExpiry.EarnDate;
+                        //objPointExpiry.ExpiryDate = NewPointExpiry.ExpiryDate;
+                        //objPointExpiry.Status = "00";
+                        //objPointExpiry.InvoiceNo = NewPointExpiry.InvoiceNo;
+                        //objPointExpiry.GroupId = NewPointExpiry.GroupId;
+                        //objPointExpiry.CustomerId = NewPointExpiry.CustomerId;
 
-                        contextNew.PointsExpiries.AddOrUpdate(objPointExpiry);
-                        contextNew.SaveChanges();
+                        //contextNew.PointsExpiries.AddOrUpdate(objPointExpiry);
+                        //contextNew.SaveChanges();
 
                         customerDetails.Points = (customerDetails.Points - oldTransactionPoints) + points;
                         contextNew.CustomerDetails.AddOrUpdate(customerDetails);

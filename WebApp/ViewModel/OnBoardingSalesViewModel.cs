@@ -39,6 +39,9 @@ namespace WebApp.ViewModel
         public List<BOTS_TblCommunicationSetAssignment> lstCommunicationSetAssignment { get; set; }
         public BOTS_TblDLCLinkConfig objDLCLinkConfig { get; set; }
 
+        public BOTS_TblEarnRuleConfig objEarnRuleConfig { get; set; }
+        public List<BOTS_TblSlabConfig> lstSlabConfig { get; set; }
+
         public string LeadId { get; set; }
         public SelectListItem[] BOProducts()
         {

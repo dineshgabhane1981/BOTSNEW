@@ -299,6 +299,7 @@
     <Compile Include="Models\OnBoarding\BOTS_TblDealDetails.cs" />
     <Compile Include="Models\OnBoarding\BOTS_TblDLCLinkConfig.cs" />
     <Compile Include="Models\OnBoarding\BOTS_TblEarnPointsSlabConfig.cs" />
+    <Compile Include="Models\OnBoarding\BOTS_TblEarnRuleConfig.cs" />
     <Compile Include="Models\OnBoarding\BOTS_TblGroupMaster.cs" />
     <Compile Include="Models\OnBoarding\BOTS_TblInstallmentDetails.cs" />
     <Compile Include="Models\OnBoarding\BOTS_TblOutletMaster.cs" />
@@ -309,6 +310,7 @@
     <Compile Include="Models\OnBoarding\BOTS_TblRetailCategoryMaster.cs" />
     <Compile Include="Models\OnBoarding\BOTS_TblRetailMaster.cs" />
     <Compile Include="Models\CommonDB\tblCategory.cs" />
+    <Compile Include="Models\OnBoarding\BOTS_TblSlabConfig.cs" />
     <Compile Include="Models\OnBoarding\BOTS_TblSMSConfig.cs" />
     <Compile Include="Models\OnBoarding\BOTS_TblVariableWords.cs" />
     <Compile Include="Models\OnBoarding\BOTS_TblVelocityChecksConfig.cs" />
@@ -334,6 +336,7 @@
     <Compile Include="Models\SMSDetail.cs" />
     <Compile Include="Models\SMSEmailMaster.cs" />
     <Compile Include="Models\StoreDetail.cs" />
+    <Compile Include="Models\tblFranchiseeEnquiry.cs" />
     <Compile Include="Models\tblLoginLog.cs" />
     <Compile Include="Models\tblUniquePoint.cs" />
     <Compile Include="Models\TelecallerReport.cs" />

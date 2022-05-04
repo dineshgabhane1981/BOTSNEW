@@ -1,0 +1,28 @@
+﻿@model List<BOTS_BL.Models.tblFranchiseeEnquiry>
+@{
+    ViewBag.Title = "Franchisee Enquiry Report";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="app-main__inner">
+    <div class="row mb-3 pt-3 pl-3 pr-3 card" style="text-align:center;padding-bottom:20px;">
+        <h2>Franchisee Enquiry</h2>
+        <table border="1" cellpadding="5" cellspacing="5">
+            <tr>
+                <th>Mobile No</th>
+                <th>Customer Name</th>
+                <th>Area Of Franchisee</th>
+                <th>Enquiry Date</th>
+            </tr>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.MobileNo</td>
+                    <td>@item.CustomerName</td>
+                    <td>@item.AreaOfFranchisee</td>
+                    <td>@item.AddedDate</td>
+                </tr>
+            }
+        </table>
+    </div>
+</div>

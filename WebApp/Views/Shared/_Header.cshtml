@@ -75,7 +75,7 @@
                     <div class="widget-content-wrapper">
                         @if (!string.IsNullOrEmpty(GroupId))
                         {
-                            if (roleid != "2" && roleid != "3" && roleid != "4")
+                            if (!string.IsNullOrEmpty(roleid))
                             {
                                 <div>
                                     @if (Convert.ToString(Session["buttons"]) == "ITOPS")
