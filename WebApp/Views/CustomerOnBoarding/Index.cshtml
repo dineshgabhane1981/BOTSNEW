@@ -368,7 +368,7 @@
 
                 }
             }
-            @if (Model.bots_TblGroupMaster == null || (Model.bots_TblGroupMaster != null && Model.bots_TblGroupMaster.CustomerStatus != "CS" && Model.bots_TblGroupMaster.CustomerStatus != "CSUpdate"))
+            @if (Model.bots_TblGroupMaster == null || (Model.bots_TblGroupMaster != null && Model.bots_TblGroupMaster.CustomerStatus == "Draft"))
             {
                 <div class="container-fluid pt-3 pl-3 pr-3 pb-3">
                     <div class="col-md-12 section-heading" data-toggle="collapse" data-target="#custdetails">Customer Detail</div>
