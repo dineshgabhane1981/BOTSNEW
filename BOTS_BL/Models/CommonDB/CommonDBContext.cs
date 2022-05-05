@@ -16,6 +16,8 @@ namespace BOTS_BL.Models
             : base("name=CommonDBContext")
         {
         }
+        public virtual DbSet<BOTS_TblEarnRuleConfig> BOTS_TblEarnRuleConfig { get; set; }
+        public virtual DbSet<BOTS_TblSlabConfig> BOTS_TblSlabConfig { get; set; }
         public virtual DbSet<ReportForDownload> ReportForDownloads { get; set; }
         public virtual DbSet<BOTS_TblVariableWords> BOTS_TblVariableWords { get; set; }
         public virtual DbSet<tblLoginLog> tblLoginLogs { get; set; }

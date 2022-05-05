@@ -9,94 +9,60 @@
 @*<div class="app-main__inner">
     <div class="mb-3 card" style="padding-top:20px;">
         <div class="content">*@
-<div class="container-fluid pt-1 pl-3 pr-1">
-    <div class="pb-lg-5">
-        <h4><b>Key Indicator</b></h4>
-    </div>
 
-    @*<div class="container overflow-hidden">*@
+<div class="app-main__inner">
+    <div class="mb-3 card" style="padding-top:20px;">
+        <div class="content">
+            <div class="container-fluid pt-3 pl-3 pr-3">
 
-    <div class="multisteps-form__panel shadow p-4 m-4 list-box bg-white panel">
-        <div class="row mb-2">
-            <input type="radio" id="rdnlowerRedemRate" checked name="cust_type" />&nbsp; Lower Redemption Rate &nbsp;&nbsp;&nbsp;&nbsp;
-            <input type="radio" id="rdndHigherOnly" name="cust_type" />&nbsp; Higher Only Once &nbsp;&nbsp;&nbsp;&nbsp;
-            <input type="radio" id="rdnHigherInactive" name="cust_type" />&nbsp; Higher Inactive &nbsp;&nbsp;&nbsp;&nbsp;
-            <input type="radio" id="rdnLowProfile" name="cust_type" />&nbsp; Low Profile Updates &nbsp;&nbsp;&nbsp;&nbsp;
-            <input type="radio" id="rdnLowReferrals" name="cust_type" />&nbsp; Low Referrals &nbsp;&nbsp;&nbsp;&nbsp;
-            <input type="radio" id="rdnLowReferralconversion" name="cust_type" />&nbsp; Low Referrals Conversions<br /><br />
-            <button type="button" id="btnFilter" style="margin-left:17px;" class="btn btn-primary"><b>FILTER</b></button>
+                <h4 class="multisteps-form__title" style="color: blue; font-weight: bold;">Key Indicator</h4><br />
 
 
-            <div style="display:flex; height:auto;">
+                <div class="multisteps-form__panel p-4 list-box panel">
+                    <div class="row mb-2">
+                        <input type="radio" id="rdnlowerRedemRate" checked name="cust_type" style="margin-right:5px;margin-top:5px;" /> Lower Redemption Rate &nbsp;
+                        <input type="radio" id="rdndHigherOnly" name="cust_type" style="margin-right:5px;margin-top:5px;" />Higher Only Once &nbsp;
+                        <input type="radio" id="rdnHigherInactive" name="cust_type" style="margin-right:5px;margin-top:5px;" />Higher Inactive &nbsp;
+                        <input type="radio" id="rdnLowProfile" name="cust_type" style="margin-right:5px;margin-top:5px;" />Low Profile Updates &nbsp;
+                        <input type="radio" id="rdnLowReferrals" name="cust_type" style="margin-right:5px;margin-top:5px;" />Low Referrals &nbsp;
+                        <input type="radio" id="rdnLowReferralconversion" name="cust_type" style="margin-right:5px;margin-top:5px;" />Low Referrals Conversions
+                        <button type="button" id="btnFilter" style="margin-left:7px;" class="btn btn-primary"><b>FILTER</b></button>
+                    </div>
 
-                <table border="1" cellpadding="6" cellspacing="6" style="border:1px solid gray;" id="activityTable">
-                    <thead>
-                        <h6><b></b></h6>
-                        <tr>
+                    <div style="display:flex; height:auto;">
 
-                            <th scope="col" colspan="2" style="text-align: center;">Less than 6 months</th>
-                            <th scope="col" colspan="2" style="text-align: center;">6m to 1 years</th>
-                            <th scope="col" colspan="2" style="text-align: center;">1 to 2 years</th>
-                            <th scope="col" colspan="2" style="text-align: center;">2 to 3 years</th>
-                            <th scope="col" colspan="2" style="text-align:center;">More than 3 years</th>
-
-
-
-                        </tr>
-                        <tr>
-
-                            <th>Group Name</th>
-                            <th>Value %</th>
-                            <th>Group Name</th>
-                            <th>Value %</th>
-                            <th>Group Name</th>
-                            <th>Value %</th>
-                            <th>Group Name</th>
-                            <th>Value %</th>
-                            <th>Group Name</th>
-                            <th>Value %</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-
-                        @*@if (Model != null)
-                            {
-                                if (Model.Count > 0)
-                                {
-                                    foreach (var item in Model)
-                                    {
-
-                                        <tr>
-
-
-                                            <td style="text-align:left;">@item.GroupNamelessthan5</td>
-                                            <td style="text-align:left;">@item.Valuethanlessthan5</td>
-
-                                            <td style="text-align:left;">@item.GroupNamelessthan10</td>
-                                            <td style="text-align:left;">@item.Valuelessthan10</td>
-
-                                            <td style="text-align:left;">@item.GroupNamelessthan15</td>
-                                            <td style="text-align:left;">@item.Valuelessthan15</td>
-
-                                            <td style="text-align:left;">@item.GroupNamelessthan30</td>
-                                            <td style="text-align:left;">@item.Valuelessthan30</td>
-
-                                            <td style="text-align:left;">@item.GroupNamelessthan40</td>
-                                            <td style="text-align:left;">@item.Valuelessthan40</td>
-                                        </tr>
-
-
-                                    }
-                                }
-                            }*@
-                    </tbody>
-                </table>
+                        <table border="1" cellpadding="6" cellspacing="6" style="border:1px solid gray;" id="activityTable">
+                            <thead>                               
+                                <tr>
+                                    <th scope="col" colspan="2" style="text-align: center;">Less than 6 months</th>
+                                    <th scope="col" colspan="2" style="text-align: center;">6m to 1 years</th>
+                                    <th scope="col" colspan="2" style="text-align: center;">1 to 2 years</th>
+                                    <th scope="col" colspan="2" style="text-align: center;">2 to 3 years</th>
+                                    <th scope="col" colspan="2" style="text-align:center;">More than 3 years</th>
+                                </tr>
+                                <tr>
+                                    <th>Group Name</th>
+                                    <th>Value %</th>
+                                    <th>Group Name</th>
+                                    <th>Value %</th>
+                                    <th>Group Name</th>
+                                    <th>Value %</th>
+                                    <th>Group Name</th>
+                                    <th>Value %</th>
+                                    <th>Group Name</th>
+                                    <th>Value %</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
-
         </div>
     </div>
 </div>
-           
+
 <script>
     var tableData = [];
 

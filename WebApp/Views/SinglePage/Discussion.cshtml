@@ -6,57 +6,50 @@
 }
 <div class="app-main__inner">
     <div class="mb-3 card" style="padding-top:20px;">
-        <div class="content">
-            <div class="container-fluid pt-3 pl-3 pr-3">
-                <div class="pb-3">
-                    <h4><b>Discussion</b></h4>
+        <div class="pl-3">
+            <h4 class="multisteps-form__title" style="color: blue; font-weight: bold;">Group Wise</h4><br />
+        </div>
+
+        <div class="multisteps-form__panel list-box panel">
+
+            <div class="card-body">
+                <div style="margin-bottom:20px;font-weight:bold;">
+                    Select CS
+                    @Html.DropDownListFor(model => model.CSMember, new SelectList(Model.lstCSMembers, "Value", "Text"), "All", htmlAttributes: new { @class = "input100", @id = "ddlCSMember" })
                 </div>
-
-                <div class="container overflow-hidden">
-
-                    <div class="multisteps-form__panel shadow p-4 list-box bg-white panel">
-
-                        <div class="card-body">
-                            <div style="margin-bottom:20px;font-weight:bold;">
-                                Select CS
-                                @Html.DropDownListFor(model => model.CSMember, new SelectList(Model.lstCSMembers, "Value", "Text"), "All", htmlAttributes: new { @class = "input100", @id = "ddlCSMember" })
-                            </div>
-                            <div style="text-align:center;margin-bottom:20px;font-weight:bold;">Customer Categorywise Campaign / DB discussions – not touched</div>
-                            <div class="tab-content">
-                                <div class="tab-pane fade show active" id="tabs-eg-77">
-                                    <div class="card mb-3 widget-chart widget-chart2 text-left w-100">
-                                        <div class="widget-chat-wrapper-outer">
-                                            <div class="widget-chart-wrapper widget-chart-wrapper-lg opacity-10 m-0" id="canvasContainer">
-                                                <canvas id="barcanvas"></canvas>
-                                            </div>
-                                        </div>
-                                    </div>
-
+                <div style="text-align:center;margin-bottom:20px;font-weight:bold;">Customer Categorywise Campaign / DB discussions – not touched</div>
+                <div class="tab-content">
+                    <div class="tab-pane fade show active" id="tabs-eg-77">
+                        <div class="card mb-3 widget-chart widget-chart2 text-left w-100">
+                            <div class="widget-chat-wrapper-outer">
+                                <div class="widget-chart-wrapper widget-chart-wrapper-lg opacity-10 m-0" id="canvasContainer">
+                                    <canvas id="barcanvas"></canvas>
                                 </div>
                             </div>
-                        </div>
-                        <div class="card-body" id="dvCSViseData" style="display:none;">
-
-                        </div>
-                        <div class="card-body col-md-12 col-xl-12" id="dvGetNoCustomerConnect">
-
-                        </div>
-                        <div class="row col-md-12 col-xl-12" id="dvGetMostConnectedCustomers">
-
-                        </div>
-                        <div class="card-body col-md-12 col-xl-12" id="dvGetLeastConnectedCustomers">
-
-                        </div>
-                        <div class="multisteps-form__panel shadow p-4 list-box bg-white panel">
-                            @Html.Partial("~/Views/SinglePage/_GroupWiseData.cshtml", Model)
                         </div>
 
                     </div>
                 </div>
             </div>
+            <div class="card-body" id="dvCSViseData" style="display:none;">
+
+            </div>
+            <div class="card-body col-md-12 col-xl-12" id="dvGetNoCustomerConnect">
+
+            </div>
+            <div class="row col-md-12 col-xl-12" id="dvGetMostConnectedCustomers">
+
+            </div>
+            <div class="card-body col-md-12 col-xl-12" id="dvGetLeastConnectedCustomers">
+
+            </div>
+            <div class="multisteps-form__panel shadow p-4 list-box bg-white panel">
+                @Html.Partial("~/Views/SinglePage/_GroupWiseData.cshtml", Model)
+            </div>
+
         </div>
     </div>
-</div>
+</div>        
 <script>
     var tableData = [];
     $(document).ready(function () {
@@ -64,6 +57,9 @@
         GetDiscussionGraphData();
         $('#ddlCSMember').change(function () {
             GetDiscussionGraphData();
+            NoCustomerConnect();
+            GetMostConnectedCustomers();
+            GetLeastConnectedCustomers();
         });
         NoCustomerConnect();
         GetMostConnectedCustomers();
@@ -283,11 +279,13 @@
     }
 
     function NoCustomerConnect() {
+
+
         $("#divLoader").show();
          $.ajax({
             type: "POST",
             url: '@Url.Action("GetNoCustomerConnect", "singlepage")',
-            data: '',
+             data: '{CSWise: ' + JSON.stringify($("#ddlCSMember").val()) + '}',
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             success: function (response) {
@@ -318,7 +316,7 @@
          $.ajax({
             type: "POST",
             url: '@Url.Action("GetMostConnectedCustomers", "singlepage")',
-            data: '',
+             data: '{CSWise: ' + JSON.stringify($("#ddlCSMember").val()) + '}',
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             success: function (response) {
@@ -347,7 +345,7 @@
          $.ajax({
             type: "POST",
             url: '@Url.Action("GetLeastConnectedCustomers", "singlepage")',
-            data: '',
+             data: '{CSWise: ' + JSON.stringify($("#ddlCSMember").val()) + '}',
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             success: function (response) {

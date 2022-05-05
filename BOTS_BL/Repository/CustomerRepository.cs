@@ -22,7 +22,7 @@ namespace BOTS_BL.Repository
     public class CustomerRepository
     {
         Exceptions newexception = new Exceptions();
-       
+
         public List<SelectListItem> GetRetailCategory()
         {
             List<SelectListItem> lstRetailCategory = new List<SelectListItem>();
@@ -283,7 +283,7 @@ namespace BOTS_BL.Repository
             using (var contextNew = new BOTSDBContext(connStr))
             {
                 var ticketSize = contextNew.TransactionMasters.Average(x => x.InvoiceAmt);
-                objGroupDetail.AverageTicket = Math.Round(Convert.ToDouble(ticketSize),2);
+                objGroupDetail.AverageTicket = Math.Round(Convert.ToDouble(ticketSize), 2);
             }
             return objGroupDetail;
         }
@@ -569,7 +569,7 @@ namespace BOTS_BL.Repository
             try
             {
                 string ConnectionString = string.Empty;
-              
+
                 using (var context = new CommonDBContext())
                 {
                     var DBDetails = context.DatabaseDetails.Where(x => x.GroupId == GroupId).FirstOrDefault();
@@ -578,7 +578,7 @@ namespace BOTS_BL.Repository
                 using (var contextNew = new BOTSDBContext(ConnectionString))
                 {
                     lstOutlets = contextNew.OutletDetails.Where(x => x.GroupId == GroupId).ToList();
-                    foreach(var item in lstOutlets)
+                    foreach (var item in lstOutlets)
                     {
                         item.ProgramStartDate = contextNew.TransactionMasters.Where(x => x.CounterId.Contains(item.OutletId)).OrderBy(y => y.Datetime).Select(z => z.Datetime).FirstOrDefault();
                         item.ProgramRenewalDate = item.ProgramStartDate.Value.AddYears(1);
@@ -588,7 +588,7 @@ namespace BOTS_BL.Repository
                         var currentYear = DateTime.Today.Year;
 
                         DateTime nextRenewal = new DateTime(currentYear, month, day);
-                        if(nextRenewal < DateTime.Today)
+                        if (nextRenewal < DateTime.Today)
                         {
                             item.ProgramRenewalDate = nextRenewal.AddYears(1);
                         }
@@ -596,23 +596,23 @@ namespace BOTS_BL.Repository
                         {
                             item.ProgramRenewalDate = nextRenewal;
                         }
-                        
-                        
+
+
                         var totalTransaction = contextNew.TransactionMasters.Where(x => x.CounterId.Contains(item.OutletId)).Count();
                         var FirstDate = contextNew.TransactionMasters.Where(x => x.CounterId.Contains(item.OutletId)).OrderBy(y => y.Datetime).Select(z => z.Datetime).FirstOrDefault();
                         var LastDate = contextNew.TransactionMasters.Where(x => x.CounterId.Contains(item.OutletId)).OrderByDescending(y => y.Datetime).Select(z => z.Datetime).FirstOrDefault();
-                        
+
 
                         var Days = (LastDate.Value - FirstDate.Value).TotalDays;
                         var Average = totalTransaction / Days;
                         var TransactionPerDay = Average;
-                        item.TransactionPerDay = Math.Round(Convert.ToDouble(Average),2);
-                        
+                        item.TransactionPerDay = Math.Round(Convert.ToDouble(Average), 2);
+
 
                     }
                     //var ProgramStartDate = contextNew.TransactionMasters.Where(x => x.CounterId.Contains(OutletId)).OrderBy(y => y.Datetime).Select(z => z.Datetime).FirstOrDefault();
                     //var totalTransaction = contextNew.TransactionMasters.Where(x => x.CounterId.Contains(item.OutletId)).Count();
-                    
+
 
                 }
 
@@ -992,5 +992,31 @@ namespace BOTS_BL.Repository
             return objData;
         }
 
+        //This is specific to Caramella Franchisee Enquiry
+        public bool AddFranchiseeEnquiry(string MobileNo, string Name, string Area)
+        {
+            bool status = false;
+            try
+            {
+                tblFranchiseeEnquiry objData = new tblFranchiseeEnquiry();
+                objData.CustomerName = Name;
+                objData.MobileNo = MobileNo;
+                objData.AreaOfFranchisee = Area;
+                objData.AddedDate = DateTime.Now;
+                var connectionString = GetCustomerConnString("1172");
+                using (var contextNew = new BOTSDBContext(connectionString))
+                {
+                    contextNew.tblFranchiseeEnquiries.AddOrUpdate(objData);
+                    contextNew.SaveChanges();
+                    status = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "AddFranchiseeEnquiry");
+            }
+            return status;
+        }
+                
     }
 }

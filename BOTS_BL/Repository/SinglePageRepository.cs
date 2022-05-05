@@ -440,8 +440,8 @@ namespace BOTS_BL.Repository
                         }
                     }
                 }
-                lstbalance = lstbalance.Where(x => x.SmsBalance1 < 1000).ToList();
-                lstSmsbalance.objSMSBalance = lstbalance.OrderBy(x => x.SmsBalance1).ToList();
+                //lstbalance = lstbalance.Where(x => x.SmsBalance1 < 1000).ToList();
+                lstSmsbalance.objSMSBalance = lstbalance.OrderByDescending(x => x.SmsBalance1).ToList();
 
                 //baseAddress = "https://technocorelogic.com/api/checkbalance?user=9511836639&pass=9930005673&url=https://www.enotify.app";
                 baseAddress = "https://technocorelogic.com/api/checkbalance?user=919511836639&pass=9930005673&url=https://bs.enotify.app";
@@ -507,7 +507,7 @@ namespace BOTS_BL.Repository
                 //    item.queue = lstWAbalance1.Where(x => x.InstanceID == item.InstanceID).Select(y => y.queue).FirstOrDefault();
                 //}
 
-                lstSmsbalance.objWhatsAppBalance = lstWAbalance.Where(y => y.WABalance < 1000).OrderBy(x => x.WABalance).ToList();
+                lstSmsbalance.objWhatsAppBalance = lstWAbalance.Where(y => y.WABalance < 1000).OrderByDescending(x => x.WABalance).ToList();
                 DateTime checkDate = DateTime.Today.AddDays(10);
 
                 lstSmsbalance.objWhatsAppExpiryDate = lstWAbalance.Where(x => x.WAExpiryDate < checkDate && x.WAExpiryDate > DateTime.Today).OrderBy(y => y.WAExpiryDate).ToList();
@@ -893,13 +893,18 @@ namespace BOTS_BL.Repository
             return days;
         }
 
-        public List<NoCustomerConnect> GetNoCustomerConnect()
+        public List<NoCustomerConnect> GetNoCustomerConnect(string CSWise)
         {
             List<NoCustomerConnect> lstData = new List<NoCustomerConnect>();
 
             using (var context = new CommonDBContext())
             {
                 var groups = context.tblGroupDetails.Where(x => x.IsActive == true && x.IsLive == true).ToList();
+                if (!string.IsNullOrEmpty(CSWise))
+                {
+                    var csId = context.tblRMAssigneds.Where(x => x.LoginId == CSWise).Select(y => y.RMAssignedId).FirstOrDefault();
+                    groups = groups.Where(x => x.RMAssigned.Value == csId).ToList();
+                }              
                 foreach (var group in groups)
                 {
                     string grpId = Convert.ToString(group.GroupId);
@@ -924,12 +929,12 @@ namespace BOTS_BL.Repository
             return lstData;
         }
 
-        public List<MostConnectedCustomers> GetMostConnectedCustomers()
+        public List<MostConnectedCustomers> GetMostConnectedCustomers(string CSWise)
         {
             List<MostConnectedCustomers> lstData = new List<MostConnectedCustomers>();
             using (var context = new CommonDBContext())
             {
-                lstData = context.Database.SqlQuery<MostConnectedCustomers>("sp_GetMostConnectedCustomers @pi_Date", new SqlParameter("@pi_Date", DateTime.Today.AddDays(-30))).ToList<MostConnectedCustomers>();
+                lstData = context.Database.SqlQuery<MostConnectedCustomers>("sp_GetMostConnectedCustomers @pi_Date, @addedBy", new SqlParameter("@pi_Date", DateTime.Today.AddDays(-30)), new SqlParameter("@addedBy", CSWise)).ToList<MostConnectedCustomers>();
                 foreach (var item in lstData)
                 {
                     int grpid = Convert.ToInt32(item.GroupId);
@@ -941,12 +946,12 @@ namespace BOTS_BL.Repository
 
             return lstData;
         }
-        public List<MostConnectedCustomers> GetLeastConnectedCustomers()
+        public List<MostConnectedCustomers> GetLeastConnectedCustomers(string CSWise)
         {
             List<MostConnectedCustomers> lstData = new List<MostConnectedCustomers>();
             using (var context = new CommonDBContext())
             {
-                lstData = context.Database.SqlQuery<MostConnectedCustomers>("sp_GetLeastConnectedCustomers @pi_Date", new SqlParameter("@pi_Date", DateTime.Today.AddDays(-180))).ToList<MostConnectedCustomers>();
+                lstData = context.Database.SqlQuery<MostConnectedCustomers>("sp_GetLeastConnectedCustomers @pi_Date,@addedBy", new SqlParameter("@pi_Date", DateTime.Today.AddDays(-180)), new SqlParameter("@addedBy", CSWise)).ToList<MostConnectedCustomers>();
                 foreach (var item in lstData)
                 {
                     int grpid = Convert.ToInt32(item.GroupId);

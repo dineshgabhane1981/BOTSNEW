@@ -237,7 +237,10 @@ namespace BOTS_BL.Repository
         public List<SelectListItem> GetCallTypes(string LoginType)
         {
             List<SelectListItem> lstCallTypes = new List<SelectListItem>();
-
+            SelectListItem item1 = new SelectListItem();
+            item1.Value = "0";
+            item1.Text = "Please Select";
+            lstCallTypes.Add(item1);
             if (LoginType == "9" || LoginType == "10")
             {
                 using (var context = new CommonDBContext())

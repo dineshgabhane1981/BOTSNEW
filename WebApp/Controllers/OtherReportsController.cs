@@ -30,17 +30,23 @@ namespace WebApp.Controllers
             return View(objData);
         }
 
-
-
-
-
         public ActionResult Manufacturer()
         {
             return View();
         }
         public ActionResult ReportsDownload()
         {
-            return View();
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];            
+            var lstReportDownload = ORR.GetReportDownloadData(userDetails.GroupId);           
+            return View(lstReportDownload);
+        }
+
+        public ActionResult FranchiseeEnquiryReport()
+        {
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            List<tblFranchiseeEnquiry> objData = new List<tblFranchiseeEnquiry>();
+            objData = ORR.GetFranchiseeEnquiryList(userDetails.GroupId);
+            return View(objData);
         }
     }
 }
