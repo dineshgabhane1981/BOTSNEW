@@ -18,6 +18,7 @@ namespace BOTS_BL.Models
             : base(connectionStringName)
         {
         }
+        public virtual DbSet<CelebrationMemberDetail> CelebrationMemberDetails { get; set; }
         public virtual DbSet<tblFranchiseeEnquiry> tblFranchiseeEnquiries { get; set; }
         public virtual DbSet<tblUniquePoint> tblUniquePoints { get; set; }
         public virtual DbSet<TelecallerTracking> TelecallerTrackings { get; set; }
