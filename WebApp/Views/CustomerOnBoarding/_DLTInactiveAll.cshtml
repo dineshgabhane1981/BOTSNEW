@@ -171,11 +171,17 @@
     </div>
     }
 </div>
-
+<div class="container-fluid pt-3 pl-3 pr-3 pb-3">
+    <button type="button" id="btnCheckerView" class="btn btn-primary pull-right" style="margin-right: 10px; margin-bottom: 20px; margin-top: 10px;">Submit For Aprroval </button>
+</div>
 <script>
     $(document).ready(function () {
         EventChangeOfOriginalToDLT();
     });
+    $("#btnCheckerView").on("click", function () {
+        SendInactiveConfigForAprovl();
+    });
+
     function EventChangeOfOriginalToDLT() {
         $('[id^=txtLessThanScript]').each(function (i, item) {
             var idlength = item.id.length;
