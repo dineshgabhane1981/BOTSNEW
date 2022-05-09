@@ -2,10 +2,12 @@
     ViewBag.Title = "Home Page";
 }
 <meta name="viewport" content="initial-scale=1, maximum-scale=1">
+<script src="~/Scripts/cute-alert-master/cute-alert.js"></script>
+<link href="~/Scripts/cute-alert-master/style-alert.css" rel="stylesheet" />
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-<style>   
-       
+<style>
+
 
     input::-webkit-outer-spin-button,
     input::-webkit-inner-spin-button {
@@ -39,40 +41,28 @@
             left: 50%;
             width: 100%;
             height: 100%;
-            /* border-radius: 100%;
-                border: 10px solid transparent;
-                border-top-color: darkblue;*/
         }
 
         .loader-inner:before {
             z-index: 100;
-            /*background-image: url(~/Content/assets/BlueocktopusLoadingGIF.mp4);
-                animation: spinner-border 1s infinite;*/
-        }
-
-        .loader-inner:after {
-            /*border: 10px solid lightblue;*/
         }
 </style>
-@*background-image:url(../images/Toppicture.jpg);background-size: 100% auto;*@
 
 <div id="divLoader" runat="server" style="display:none">
     <div id="loader">
         <div class="loader-inner">
-            <img src="../Content/assets/images/BlueocktopusLoadingGIF.gif" style="width:100px; height:100px;" />
+            <img src="https://blueocktopus.in/CaramellaEnquiry/Content/BlueocktopusLoadingGIF.gif" style="width:100px; height:100px;" />
         </div>
     </div>
 </div>
 <div class="col-12">
     <div style="padding-top:5px; text-align:center;">
-        @*<img src="../covidpagetest/Content/images/XpressLogo.png" />*@
-        <img src="../Content/assets/images/logo.jpg" />
+        <img src="https://blueocktopus.in/Logo/CaramellasLogo.png" width="150" />
     </div>
     <div>
         <table style="text-align:center;">
             <tr>
                 <td style="padding-top:20px; font-family:Verdana; font-size:15px;letter-spacing:1px;">
-                   
                 </td>
                 <td style="padding-top:20px;">
                 </td>
@@ -84,151 +74,94 @@
             </tr>
         </table>
     </div>
-    @*<h4>Fill below details to start your business loyalty journey</h4>*@
-<div class="col-12">
-    <div class="row" style="margin-top:20px;">
-        <div class="col-1" style="padding-right:0px !important;"></div>
-        <div class="col-5">*Name/नाव</div><div class="col-3">
-    <input type="text" id="txtName" />
-</div>
-   
-</div>
-    
-    <div class="row" style="margin-top:10px;">
-        <div class="col-1" style="padding-right:0px !important;"></div>
-        <div class="col-5">*Mobile No./मोबाईल नंबर</div><div class="col-3">
-    <input type="number" id="txtMobileNo" />
-</div>
-    </div>
-   
-    <div class="row" style="margin-top:10px;">
-        <div class="col-4" ></div>
-        <input type="button" id="btnSubmit" class="btn btn-primary" value="SUBMIT" onclick="SendEmail();" />
-    </div>
-    <div class="row" style="margin-top:0px; color:red;">
-        <div class="col-1" style="padding-right:0px !important;"></div>
-        <span id="spncustnm" style="font:bold;"></span>
-    </div>
 
+    <div class="col-12">
+        <div class="row" style="margin-top:20px;">
+            <div class="col-1" style="padding-right:0px !important;"></div>
+            <div class="col-5">*Name</div><div class="col-3">
+                <input type="text" id="txtName" />
+            </div>
 
+        </div>
 
-    @*<table id="tblform" class="table-responsive col-12" style="font-family: Verdana; font-size: 15px;">
+        <div class="row" style="margin-top:10px;">
+            <div class="col-1" style="padding-right:0px !important;"></div>
+            <div class="col-5">*Mobile No.</div><div class="col-3">
+                <input type="number" id="txtMobileNo" />
+            </div>
+        </div>
 
-            <tr>
-                <td style="padding-top:20px;">
-                    Name/नाव
-                </td>
-                <td style="padding-top:20px;">
-                    <input type="text" id="txtName" />*
-                </td>
-            </tr>
-            <tr>
-                <td style="padding-top:20px;">
-                    Business Name/व्यवसायाचे नाव
-                </td>
-                <td style="padding-top:20px;">
+        <div class="row" style="margin-top:10px;">
+            <div class="col-1" style="padding-right:0px !important;"></div>
+            <div class="col-5">*Area of Franchisee.</div><div class="col-3">
+                <input type="text" id="txtArea" />
+            </div>
+        </div>
 
-                    <input type="text" id="txtBusinessNm" />*
-                </td>
+        <div class="row" style="margin-top:10px;">
+            <div class="col-4"></div>
+            <input type="button" id="btnSubmit" class="btn btn-primary" value="SUBMIT" onclick="SendEmail();" />
+        </div>
+        <div class="row" style="margin-top:0px; color:red;">
+            <div class="col-1" style="padding-right:0px !important;"></div>
+            <span id="spncustnm" style="font:bold;"></span>
+        </div>
 
-            </tr>
-            <tr>
-                <td style="padding-top:20px;">
-                    Mobile No./मोबाईल नंबर
-                </td>
-                <td style="padding-top:20px;">
-
-                    <input type="number" id="txtMobileNo" class="input50" />*
-                </td>
-
-            </tr>
-            <tr>
-                <td style="padding-top:20px;">
-                    Business location/व्यवसायाचे ठिकाण
-                </td>
-                <td style="padding-top:20px;">
-                    <input type="text" id="txtBusinessLoc" class="input50" />
-                </td>
-
-            </tr>
-            <tr>
-                <td colspan="2" align="center" style="padding-top: 20px;">
-                    <input type="button" id="btnSubmit" class="btn btn-primary" value="SUBMIT" onclick="SendEmail();" />
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2" align="left" style="color: red;">
-                    <span id="spncustnm" style="font:bold;"></span>
-                </td>
-
-            </tr>
-        </table>*@
-    <table id="tblsucessmsg" style="display: none; color: red; font: bold; font-family: Verdana; padding-top: 40px; text-align: center;">
-        <tr>
-            <td>
-                Thank you for showing interest.Our representative will connect with you in a day!!!
-
-            </td>
-        </tr>
-    </table>
-    <table id="tbllogo" style="text-align:center; font-family:Verdana; color:deepskyblue;">
-        <thead>
+        <table id="tblsucessmsg" style="display: none; color: red; font: bold; font-family: Verdana; padding-top: 40px; text-align: center;">
             <tr>
                 <td>
-                    <b> Successfully running our franchisee at more than 45 outlets across Pune,Satara,Shirur and Nagar!!!</b>
+                    Thank you for showing interest.Our representative will connect with you in a day!!!
+
                 </td>
             </tr>
-        </thead>
-       
-        
-    </table>
-
-</div>
-
+        </table>
+        <table id="tbllogo" style="text-align:center; font-family:Verdana; color:deepskyblue;">
+            <thead>
+                <tr>
+                    <td>
+                        <b> Successfully running our franchisee at more than 45 outlets across Pune,Satara,Shirur and Nagar!!!</b>
+                    </td>
+                </tr>
+            </thead>
+        </table>
+    </div>
 </div>
 
 
 <script type="text/javascript">
     $(document).ready(function () {
-       // $("#spncustnm").text(result.CustomerName);
 
     });
 
-        function validate() {
-            var MobileNo = $('#txtMobileNo').val();            
-            var Name = $('#txtName').val();
+    function validate() {
+        var MobileNo = $('#txtMobileNo').val();
+        var Name = $('#txtName').val();
+        var Area = $('#txtArea').val();
 
-            var errormsg = [];
-            if (/^[6789]\d{9,9}$/.test(MobileNo)) {
-
-            }
-            else {
-                errormsg.push("Invalide MobileNo Or Enter MobileNo");
-
-            }            
-            if (Name == "") {
-                errormsg.push("Enter Your Name");
-            }
-            else {
-
-            }
-            return errormsg;
+        var errormsg = [];
+        if (/^[6789]\d{9,9}$/.test(MobileNo)) {
 
         }
+        else {
+            errormsg.push("Invalide MobileNo Or Enter MobileNo");
 
-        function SendEmail() {
-            console.log("hi");
-        //var MobileNo = $('#txtMobileNo').val();
-        //var Businessname = $('#txtBusinessNm').val();
-        //    var Name = $('#txtName').val();
-         //var BusiLocation = $('#txtBusinessLoc').val();
-        //if (BusiLocation == null) {
-        //    BusiLocation = "Not Mentioned";
-        //}
+        }
+        if (Name == "") {
+            errormsg.push("Enter Your Name");
+        }
+        if (Area == "") {
+            errormsg.push("Enter Your Area");
+        }
+
+        return errormsg;
+    }
+
+    function SendEmail() {
             var MemberData = [];
             item = {}
-            item["MobileNo"] = $('#txtMobileNo').val();           
+            item["MobileNo"] = $('#txtMobileNo').val();
             item["Name"] = $('#txtName').val();
+            item["Area"] = $('#txtArea').val();
 
             MemberData.push(item);
             var data = JSON.stringify(MemberData);
@@ -239,22 +172,28 @@
 
         if (errorMessage.length <= 0)
         {
-           // console.log(MobileNo);
+
             $("#divLoader").show();
             $.ajax({
                  type: "POST",
                  url: '@Url.Action("SendEmailAndSMS", "Home")',
-                       // data: "{'mobileNo:' " + MobileNo + ",'BusinessNm:' " + Businessname + ",'CustomerName:' " + Name + ",'Location:'" + BusiLocation +"}",
                 data: '{jsonData: ' + JSON.stringify(data) + '}',
                 contentType: "application/json; charset=utf-8",
                         dataType: "json",
                         success: function (result) {
                             if (result != null) {
+                                cuteAlert({
+                                    type: "success",
+                                    title: "Sent",
+                                    message: "Thank you for showing interest.Our representative will connect with you in a day!!!",
+                                    buttonText: "Okay"
+                                })
                                 console.log("in");
                                 $("#tblform").hide();
-                                $('#tblsucessmsg').show();
+                                //$('#tblsucessmsg').show();
                                 $('#txtMobileNo').val('');
                                 $('#txtName').val('');
+                                $('#txtArea').val('');
                                 $("#divLoader").hide();
                                 $("#fillform").hide();
 
@@ -279,9 +218,6 @@
             errorMessage.forEach(function (error) {
                 $("#spncustnm").append('<li>' + error + '</li>');
             });
-                    //$("#spncustnm").text("Invalid Mobile number");
-                    //$('#txtMobileNo').focus();
-                    //$('#txtMobileNo').val('');
                     return false;
                     $("#divLoader").hide();
         }

@@ -47,7 +47,7 @@ namespace BOTS_BL.Repository
                         FromDate = new DateTime(date.Year, date.Month, 1);
                         ToDateNew = DateTime.Today.AddDays(1).Date.AddSeconds(-1);
                     }
-                    var SMDetails = context.CustomerLoginDetails.Where(x => x.LoginType == "8").ToList();
+                    var SMDetails = context.CustomerLoginDetails.Where(x => x.LoginType == "8" || x.LoginType == "5").ToList();
                     foreach (var item in SMDetails)
                     {
                         MeetingMatrix objMeetingMatrixItem = new MeetingMatrix();

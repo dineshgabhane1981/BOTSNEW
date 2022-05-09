@@ -231,12 +231,12 @@ namespace WebApp.Controllers.OnBoarding
             return View(objData);
         }
 
-        public ActionResult GetDLTCommunicationSetData(string GroupId,string SetId)
+        public ActionResult GetDLTCommunicationSetData(string GroupId, string SetId)
         {
             OnBoardingSalesViewModel objData = new OnBoardingSalesViewModel();
-            objData.lstSMSConfig = OBR.GetCommunicationSMSConfigForDLT(GroupId,Convert.ToInt32(SetId));
+            objData.lstSMSConfig = OBR.GetCommunicationSMSConfigForDLT(GroupId, Convert.ToInt32(SetId));
             return PartialView("_DLTCommunication", objData);
-           
+
         }
 
         public ActionResult GetConvertedScript(string CSScript)
@@ -619,7 +619,7 @@ namespace WebApp.Controllers.OnBoarding
                     if (!string.IsNullOrEmpty(Convert.ToString(item["SetId"])))
                         objSetDetails.SetId = Convert.ToInt32(item["SetId"]);
                     objSetDetails.SetName = Convert.ToString(item["SetName"]);
-                    objSetDetails.GroupId= Convert.ToString(item["GroupId"]);
+                    objSetDetails.GroupId = Convert.ToString(item["GroupId"]);
                     var isSMS = Convert.ToBoolean(item["IsSMS"]);
                     if (isSMS)
                     {
@@ -632,7 +632,7 @@ namespace WebApp.Controllers.OnBoarding
                         objSMSConfig.SMSPassword = Convert.ToString(item["SMSPassword"]);
                         objSMSConfig.SMSlink = Convert.ToString(item["SMSLink"]);
                         if (!string.IsNullOrEmpty(Convert.ToString(item["SMSSetId"])))
-                            objSMSConfig.SetId = Convert.ToInt32(item["SMSSetId"]);                       
+                            objSMSConfig.SetId = Convert.ToInt32(item["SMSSetId"]);
 
                         SMSTemplate objSMSTemplate1 = new SMSTemplate();
                         objSMSTemplate1.MessageId = 100;
@@ -845,7 +845,7 @@ namespace WebApp.Controllers.OnBoarding
             return new JsonResult() { Data = status, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
 
-        public ActionResult UpdateDLTStatusOfCommunicationConfig(string ConfigId, string DLTNewStatus,string RejectReason,string jsonData)
+        public ActionResult UpdateDLTStatusOfCommunicationConfig(string ConfigId, string DLTNewStatus, string RejectReason, string jsonData)
         {
             bool status = false;
             try
@@ -897,7 +897,7 @@ namespace WebApp.Controllers.OnBoarding
                         objDLCLink.Id = Convert.ToInt32(item["Id"]);
                     }
                     objDLCLink.GroupId = Convert.ToString(item["GroupId"]);
-                   
+
                     objDLCLink.ToTheReferralSMSScript = Convert.ToString(item["SMSToTheReferral"]);
                     objDLCLink.ReminderForPointsUsageSMSScript = Convert.ToString(item["SMSReminderForPointsUsage"]);
                     objDLCLink.ReferredSuccessOnReferralTxnSMSScript = Convert.ToString(item["SMSReferredSuccessOnReferralTxn"]);
@@ -1631,18 +1631,18 @@ namespace WebApp.Controllers.OnBoarding
         }
 
         public JsonResult GetCommunicationSetList(string GroupId)
-        {            
+        {
             var SetList = OBR.GetCommunicationSetList(GroupId);
             return new JsonResult() { Data = SetList, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
-        
-        public JsonResult GetOutletListWithAssignment(string GroupId,string SetId)
+
+        public JsonResult GetOutletListWithAssignment(string GroupId, string SetId)
         {
-            var SetList = OBR.GetOutletListWithAssignment(GroupId,SetId);
+            var SetList = OBR.GetOutletListWithAssignment(GroupId, SetId);
             return new JsonResult() { Data = SetList, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
 
-        public ActionResult AssignCommunicationSetsToOutlets(string GroupId,string SetId, string OutletIds)
+        public ActionResult AssignCommunicationSetsToOutlets(string GroupId, string SetId, string OutletIds)
         {
             bool status = false;
             try
@@ -1664,7 +1664,7 @@ namespace WebApp.Controllers.OnBoarding
                 }
                 status = OBR.AssignCommunicationSetsToOutlets(GroupId, Convert.ToInt32(SetId), objData);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 newexception.AddException(ex, "AssignCommunicationSetsToOutlets");
             }
@@ -1672,20 +1672,20 @@ namespace WebApp.Controllers.OnBoarding
             return new JsonResult() { Data = status, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
 
-        public JsonResult SendPerpetualCampaignToDLT(string GroupId, string CampaignId,string CampaignType)
+        public JsonResult SendPerpetualCampaignToDLT(string GroupId, string CampaignId, string CampaignType)
         {
             bool status = false;
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
             status = OBR.SendPerpetualCampaignToDLT(GroupId, Convert.ToInt32(CampaignId), CampaignType, userDetails.LoginId);
             return new JsonResult() { Data = status, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
-        
+
         public ActionResult GetVariableWordsList()
-        {            
-           var  objData = OBR.GetVariableWordsList();
+        {
+            var objData = OBR.GetVariableWordsList();
             return PartialView("_VariableWordsList", objData);
         }
-       
+
         public JsonResult AddVariableWords(string NewWord)
         {
             bool status = false;
@@ -1694,7 +1694,7 @@ namespace WebApp.Controllers.OnBoarding
             return new JsonResult() { Data = status, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
 
-        public ActionResult GetCampaignOtherConfigForDLT(string GroupId,string Type)
+        public ActionResult GetCampaignOtherConfigForDLT(string GroupId, string Type)
         {
             OnBoardingSalesViewModel objDataView = new OnBoardingSalesViewModel();
             ViewBag.TempleteType = objDataView.TempleteType();
@@ -1702,25 +1702,25 @@ namespace WebApp.Controllers.OnBoarding
             return PartialView("_DLTBirthdayAndAnniversary", objData);
         }
 
-        public ActionResult UpdateBADLTStatus(string id, string statusid, string status,string reason)
+        public ActionResult UpdateBADLTStatus(string id, string statusid, string status, string reason)
         {
             bool result = false;
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
             result = OBR.UpdateBADLTStatus(Convert.ToInt32(id), Convert.ToInt32(statusid), status, userDetails.LoginId, reason);
             return new JsonResult() { Data = result, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
-       
+
         public ActionResult SaveBADLTConfig(string id, string statusid, string status, string jsonData)
         {
             bool result = false;
-            var userDetails = (CustomerLoginDetail)Session["UserSession"];            
-            
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
+
             JavaScriptSerializer json_serializer = new JavaScriptSerializer();
             json_serializer.MaxJsonLength = int.MaxValue;
             object[] objBAConfigData = (object[])json_serializer.DeserializeObject(jsonData);
             foreach (Dictionary<string, object> item in objBAConfigData)
             {
-                var IntroDays= Convert.ToString(item["IntroDays"]);
+                var IntroDays = Convert.ToString(item["IntroDays"]);
                 var IntroDaysDLT = Convert.ToString(item["IntroDaysDLT"]);
                 var TemplateId = Convert.ToString(item["TemplateId"]);
                 var TemplateName = Convert.ToString(item["TemplateName"]);
@@ -1764,14 +1764,14 @@ namespace WebApp.Controllers.OnBoarding
                     objInactiveConfig = OBR.GetInactiveConfigById(id);
                     if (objInactiveConfig != null)
                     {
-                        if(num==1)
+                        if (num == 1)
                         {
-                            objInactiveConfig.LessThanDaysScript= Convert.ToString(item["Script"]);
+                            objInactiveConfig.LessThanDaysScript = Convert.ToString(item["Script"]);
                             objInactiveConfig.LessThanDaysScriptDLT = Convert.ToString(item["ScriptDLT"]);
                             objInactiveConfig.TemplateId1 = Convert.ToString(item["TemplateId"]);
                             objInactiveConfig.TemplateName1 = Convert.ToString(item["TemplateName"]);
                             objInactiveConfig.TemplateType1 = Convert.ToString(item["TemplateType"]);
-                            if(Convert.ToString(item["Status"])== "Approved")
+                            if (Convert.ToString(item["Status"]) == "Approved")
                             {
                                 objInactiveConfig.DLTStatus1 = "Approved";
                             }
@@ -1824,8 +1824,8 @@ namespace WebApp.Controllers.OnBoarding
             result = OBR.UpdateDLCLinkDLTStatus(Convert.ToInt32(id), Convert.ToInt32(statusid), status, userDetails.LoginId, reason);
             return new JsonResult() { Data = result, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
-       
-        public ActionResult SaveDLCLinkDLTConfig(string id, string statusid, string status,string jsonData)
+
+        public ActionResult SaveDLCLinkDLTConfig(string id, string statusid, string status, string jsonData)
         {
             bool result = false;
             try
@@ -1927,7 +1927,7 @@ namespace WebApp.Controllers.OnBoarding
                                 objDLCLinkConfig.DLTStatus7 = "Approved";
                             }
                         }
-                                             
+
                         objDLCLinkConfig.UpdatedBy = userDetails.LoginId;
                         objDLCLinkConfig.UpdatedDate = DateTime.Now;
                     }
@@ -1940,8 +1940,52 @@ namespace WebApp.Controllers.OnBoarding
             }
             return new JsonResult() { Data = result, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
-    
-        
+
+        public ActionResult SaveEarnRuleConfig(string jsonData)
+        {
+            bool result = false;
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            BOTS_TblEarnRuleConfig objEarnRule = new BOTS_TblEarnRuleConfig();
+
+            JavaScriptSerializer json_serializer = new JavaScriptSerializer();
+            json_serializer.MaxJsonLength = int.MaxValue;
+            object[] objData = (object[])json_serializer.DeserializeObject(jsonData);
+
+            foreach (Dictionary<string, object> item in objData)
+            {
+                objEarnRule.GroupId = Convert.ToString(item["GroupId"]);
+                objEarnRule.MinInvoiceAmt = Convert.ToInt32(item["MinInvoiceAmt"]);
+                objEarnRule.BasePercentage = Convert.ToDecimal(item["BasePercentage"]);
+                objEarnRule.PointsValidityInMonths = Convert.ToInt32(item["PointsValidityInMonths"]);
+                objEarnRule.RevolvingExpiry = Convert.ToBoolean(item["RevolvingExpiry"]);
+                objEarnRule.IsBase = Convert.ToBoolean(item["IsBase"]);
+                objEarnRule.IsSlab = Convert.ToBoolean(item["IsSlab"]);
+                objEarnRule.IsProductWise = Convert.ToBoolean(item["IsProductWise"]);
+                if (objEarnRule.IsBase.Value)
+                {
+                    objEarnRule.PointsValueInRS = Convert.ToDecimal(item["PointsValueInRS"]);
+                }
+                if (objEarnRule.IsProductWise.Value)
+                {
+                    objEarnRule.ProductWiseType = Convert.ToString(item["ProductWiseType"]);
+                }
+                if (objEarnRule.IsSlab.Value)
+                {
+                    var SlabData = (object[])item["SlabData"];
+                    foreach (Dictionary<string, object> item1 in SlabData)
+                    {
+
+                    }
+                }
+                if (!string.IsNullOrEmpty(Convert.ToString(item["BlockProductWiseType"])))
+                {
+                    objEarnRule.IsBlockForEarn = true;
+                    objEarnRule.BlockProductWiseType = Convert.ToString(item["BlockProductWiseType"]);
+                }
+            }
+
+            return new JsonResult() { Data = result, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
+        }
     }
 }
-    
+

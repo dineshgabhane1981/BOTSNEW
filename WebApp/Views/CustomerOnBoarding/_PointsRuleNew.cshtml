@@ -24,7 +24,7 @@
         </div>
         <div class="col-md-12 col-lg-12" style="margin-top:20px;padding-left:30px;">
             Revolving Expiry
-            @Html.RadioButtonFor(model => model.objEarnRuleConfig.RevolvingExpiry, "1", new { @id = "rbtnRevolvingExpiry1", @class = "rbtnClass" }) Yes
+            @Html.RadioButtonFor(model => model.objEarnRuleConfig.RevolvingExpiry, "1", new { @id = "rbtnRevolvingExpiry1", @class = "rbtnClass", @Checked = "checked" }) Yes
             @Html.RadioButtonFor(model => model.objEarnRuleConfig.RevolvingExpiry, "0", new { @id = "rbtnRevolvingExpiry0", @class = "rbtnClass" }) No
         </div>
         <div class="col-md-12 col-lg-12" style="margin-top: 20px; padding-left: 14px;">
@@ -189,6 +189,7 @@
     function SaveEarnRule() {
         var EarnData = [];
         item = {};
+        item["GroupId"] = $("#hdnGroupID").val();
         item["MinInvoiceAmt"] = $("#txtMinInvoiceAmt").val();
         item["BasePercentage"] = $("#txtBasePercentage").val();
         item["PointsValidityInMonths"] = $("#txtPointsValidityInMonths").val();
@@ -239,7 +240,7 @@
         item["IsBase"] = IsBase;
         item["IsSlab"] = IsSlab;
         item["IsProductWise"] = IsProductWise;
-
+        
         if ($("#rbtnProductB").is(":checked")) {
             item["BlockProductWiseType"] = "Product";
         }
