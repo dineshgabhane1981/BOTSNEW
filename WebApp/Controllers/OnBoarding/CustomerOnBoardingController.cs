@@ -122,14 +122,12 @@ namespace WebApp.Controllers.OnBoarding
                     objData.bots_TblGroupMaster.CategoryData = json_serializer.Serialize(objData.objRetailList);
                     objData.bots_TblGroupMaster.PaymentScheduleData = json_serializer.Serialize(objData.objInstallmentList);
                 }
-                BOTS_TblEarnRuleConfig objEarnRule = new BOTS_TblEarnRuleConfig();
-                objData.objEarnRuleConfig = objEarnRule;
-                //objData.lstearnpoint = FillEarnPointLevel();
-                //objData.objpointsearnruleconfig = objpointsearncofig;
-                //objData.objearnpointslab = objpointsslabconfig;
-                //objData.objpointsburnruleconfig = objpointsburncofig;
+                objData.lstearnpoint = FillEarnPointLevel();
+                objData.objpointsearnruleconfig = objpointsearncofig;
+                objData.objearnpointslab = objpointsslabconfig;
+                objData.objpointsburnruleconfig = objpointsburncofig;
 
-
+                
             }
             catch (Exception ex)
             {
@@ -950,6 +948,7 @@ namespace WebApp.Controllers.OnBoarding
             return new JsonResult() { Data = status, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
 
+
         public JsonResult GetDLCLinkData(string groupId)
         {
             BOTS_TblDLCLinkConfig objDLCLinkConfig = new BOTS_TblDLCLinkConfig();
@@ -1635,7 +1634,6 @@ namespace WebApp.Controllers.OnBoarding
             var SetList = OBR.GetCommunicationSetList(GroupId);
             return new JsonResult() { Data = SetList, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
-        
         public JsonResult GetOutletListWithAssignment(string GroupId,string SetId)
         {
             var SetList = OBR.GetOutletListWithAssignment(GroupId,SetId);
@@ -1679,13 +1677,11 @@ namespace WebApp.Controllers.OnBoarding
             status = OBR.SendPerpetualCampaignToDLT(GroupId, Convert.ToInt32(CampaignId), CampaignType, userDetails.LoginId);
             return new JsonResult() { Data = status, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
-        
         public ActionResult GetVariableWordsList()
         {            
            var  objData = OBR.GetVariableWordsList();
             return PartialView("_VariableWordsList", objData);
         }
-       
         public JsonResult AddVariableWords(string NewWord)
         {
             bool status = false;
@@ -1709,7 +1705,6 @@ namespace WebApp.Controllers.OnBoarding
             result = OBR.UpdateBADLTStatus(Convert.ToInt32(id), Convert.ToInt32(statusid), status, userDetails.LoginId, reason);
             return new JsonResult() { Data = result, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
-       
         public ActionResult SaveBADLTConfig(string id, string statusid, string status, string jsonData)
         {
             bool result = false;
@@ -1825,6 +1820,7 @@ namespace WebApp.Controllers.OnBoarding
             return new JsonResult() { Data = result, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
        
+
         public ActionResult SaveDLCLinkDLTConfig(string id, string statusid, string status,string jsonData)
         {
             bool result = false;
@@ -1940,8 +1936,12 @@ namespace WebApp.Controllers.OnBoarding
             }
             return new JsonResult() { Data = result, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
-    
-        
+
+        public ActionResult CheckerView(String GroupId)
+
+        {
+            return View();
+        }
     }
 }
     

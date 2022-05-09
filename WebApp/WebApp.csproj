@@ -234,6 +234,7 @@
     <Compile Include="ViewModel\FeedbackDashboardViewModel.cs" />
     <Compile Include="ViewModel\FeedbackGetFeedbackViewModel.cs" />
     <Compile Include="ViewModel\GroupConfigDetailsViewModel.cs" />
+    <Compile Include="ViewModel\OnBoardingCheckerViewModel.cs" />
     <Compile Include="ViewModel\OnBoardingSalesViewModel.cs" />
     <Compile Include="ViewModel\OtherReportProductwiseViewModel.cs" />
     <Compile Include="ViewModel\OutletDetailsViewModel.cs" />
