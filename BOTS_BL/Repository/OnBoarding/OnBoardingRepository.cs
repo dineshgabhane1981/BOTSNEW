@@ -854,7 +854,7 @@ namespace BOTS_BL.Repository
             return objDLCLinkConfig;
         }
 
-       
+
         public bool AddEarnAndBurnRule(BOTS_TblPointsEarnRuleConfig earnrule, object[] slab, string slabType, decimal slabdirectortelevalue, string SlabDirectOrTelescopic, string Addedby, DataSet ds, BOTS_TblPointsBurnRuleConfig objpointburn)
         {
             bool status = false;
@@ -1961,5 +1961,78 @@ namespace BOTS_BL.Repository
             }
             return result;
         }
+
+        public bool SaveEarnRule(BOTS_TblEarnRuleConfig objData, List<BOTS_TblSlabConfig> lstSlabs, List<BOTS_TblProductUpload> lstEarnProd, List<BOTS_TblProductUpload> lstBlockEatn)
+        {
+            bool result = false;
+            using (var context = new CommonDBContext())
+            {
+                using (DbContextTransaction transaction = context.Database.BeginTransaction())
+                {
+                    try
+                    {
+                        var oldEarnRule = context.BOTS_TblEarnRuleConfig.Where(x => x.GroupId == objData.GroupId).FirstOrDefault();
+                        if(oldEarnRule!=null)
+                        {
+                            objData.AddedBy = oldEarnRule.AddedBy;
+                            objData.AddedDate = oldEarnRule.AddedDate;
+                        }
+                        context.BOTS_TblEarnRuleConfig.AddOrUpdate(objData);
+                        context.SaveChanges();
+
+                        //Slab
+                        var oldSlabData = context.BOTS_TblSlabConfig.Where(x => x.GroupId == objData.GroupId).ToList();
+                        foreach(var item in oldSlabData)
+                        {
+                            context.BOTS_TblSlabConfig.Remove(item);
+                            context.SaveChanges();
+
+                        }
+                        foreach(var item in lstSlabs)
+                        {
+                            context.BOTS_TblSlabConfig.AddOrUpdate(item);
+                            context.SaveChanges();
+                        }
+
+                        //Product Upload
+                        var oldProductData = context.BOTS_TblProductUpload.Where(x => x.GroupId == objData.GroupId && x.Type == "Product Earn").ToList();
+                        foreach(var item in oldProductData)
+                        {
+                            context.BOTS_TblProductUpload.Remove(item);
+                            context.SaveChanges();
+                        }
+                        foreach(var item in lstEarnProd)
+                        {
+                            context.BOTS_TblProductUpload.AddOrUpdate(item);
+                            context.SaveChanges();
+                        }
+
+                        //Block For Earn
+                        var oldBlockData = context.BOTS_TblProductUpload.Where(x => x.GroupId == objData.GroupId && x.Type == "Block Earn").ToList();
+                        foreach (var item in oldProductData)
+                        {
+                            context.BOTS_TblProductUpload.Remove(item);
+                            context.SaveChanges();
+                        }
+                        foreach (var item in lstBlockEatn)
+                        {
+                            context.BOTS_TblProductUpload.AddOrUpdate(item);
+                            context.SaveChanges();
+                        }
+                        transaction.Commit();
+                        result = true;
+
+                    }
+                    catch (Exception ex)
+                    {
+                        newexception.AddException(ex, "SaveEarnRule");
+                        transaction.Rollback();
+                    }
+                }
+            }
+            return result;
+        }
+
+
     }
 }

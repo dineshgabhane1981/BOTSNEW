@@ -307,6 +307,7 @@
     <Compile Include="Models\OnBoarding\BOTS_TblPaymentDetails.cs" />
     <Compile Include="Models\OnBoarding\BOTS_TblPointsBurnRuleConfig.cs" />
     <Compile Include="Models\OnBoarding\BOTS_TblPointsEarnRuleConfig.cs" />
+    <Compile Include="Models\OnBoarding\BOTS_TblProductUpload.cs" />
     <Compile Include="Models\OnBoarding\BOTS_TblProductUploadConfig.cs" />
     <Compile Include="Models\OnBoarding\BOTS_TblRetailCategoryMaster.cs" />
     <Compile Include="Models\OnBoarding\BOTS_TblRetailMaster.cs" />

@@ -1946,7 +1946,9 @@ namespace WebApp.Controllers.OnBoarding
             bool result = false;
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
             BOTS_TblEarnRuleConfig objEarnRule = new BOTS_TblEarnRuleConfig();
-
+            List<BOTS_TblSlabConfig> lstSlab = new List<BOTS_TblSlabConfig>();
+            List<BOTS_TblProductUpload> lstProdUpload = new List<BOTS_TblProductUpload>();
+            List<BOTS_TblProductUpload> lstBlockEarnUpload = new List<BOTS_TblProductUpload>();
             JavaScriptSerializer json_serializer = new JavaScriptSerializer();
             json_serializer.MaxJsonLength = int.MaxValue;
             object[] objData = (object[])json_serializer.DeserializeObject(jsonData);
@@ -1967,22 +1969,132 @@ namespace WebApp.Controllers.OnBoarding
                 }
                 if (objEarnRule.IsProductWise.Value)
                 {
+
                     objEarnRule.ProductWiseType = Convert.ToString(item["ProductWiseType"]);
+
+                    if (!string.IsNullOrEmpty(Convert.ToString(item["ProductWiseFile"])))
+                    {
+                        var path = ConfigurationManager.AppSettings["CustomerDocuments"].ToString();
+                        string fileName = "ProductUploadForEarn_" + objEarnRule.GroupId + "_" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".xlsx";
+                        path = path + "\\" + fileName;
+                        DataTable dt = new DataTable();
+                        System.IO.File.WriteAllBytes(path, Convert.FromBase64String(Convert.ToString(item["ProductWiseFile"])));
+                        string conString = string.Empty;
+
+                        conString = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" + path + ";Extended Properties=\"Excel 12.0;HDR=Yes;IMEX=1\"";
+
+                        using (OleDbConnection connExcel = new OleDbConnection(conString))
+                        {
+                            using (OleDbCommand cmdExcel = new OleDbCommand())
+                            {
+                                using (OleDbDataAdapter odaExcel = new OleDbDataAdapter())
+                                {
+                                    cmdExcel.Connection = connExcel;
+                                    //Get the name of First Sheet.
+                                    connExcel.Open();
+                                    DataTable dtExcelSchema;
+                                    dtExcelSchema = connExcel.GetOleDbSchemaTable(OleDbSchemaGuid.Tables, null);
+                                    string sheetName = dtExcelSchema.Rows[0]["TABLE_NAME"].ToString();
+                                    connExcel.Close();
+
+                                    //Read Data from First Sheet.
+                                    connExcel.Open();
+                                    cmdExcel.CommandText = "SELECT * From [" + sheetName + "]";
+                                    odaExcel.SelectCommand = cmdExcel;
+                                    odaExcel.Fill(dt);
+                                    connExcel.Close();
+                                }
+                            }
+                        }
+                        foreach (DataRow dr in dt.Rows)
+                        {
+                            BOTS_TblProductUpload objItem = new BOTS_TblProductUpload();
+                            objItem.GroupId = objEarnRule.GroupId;
+                            objItem.ProductCode = Convert.ToString(dr["ProductCode"]);
+                            objItem.ProductName = Convert.ToString(dr["ProductName"]);
+                            objItem.Percentage = Convert.ToDecimal(dr["Percentage"]);
+                            objItem.Type = "Product Earn";
+                            lstProdUpload.Add(objItem);
+                        }
+                    }
+
                 }
                 if (objEarnRule.IsSlab.Value)
                 {
                     var SlabData = (object[])item["SlabData"];
                     foreach (Dictionary<string, object> item1 in SlabData)
                     {
+                        BOTS_TblSlabConfig objSlab = new BOTS_TblSlabConfig();
+                        objSlab.GroupId = Convert.ToString(item["GroupId"]);
+                        objSlab.SlabFrom = Convert.ToInt32(item1["SlabFrom"]);
+                        objSlab.SlabTo = Convert.ToInt32(item1["SlabTo"]);
+                        objSlab.SlabPercentage = Convert.ToDecimal(item1["SlabPercentage"]);
 
+                        lstSlab.Add(objSlab);
                     }
                 }
                 if (!string.IsNullOrEmpty(Convert.ToString(item["BlockProductWiseType"])))
                 {
                     objEarnRule.IsBlockForEarn = true;
                     objEarnRule.BlockProductWiseType = Convert.ToString(item["BlockProductWiseType"]);
+                    if (!string.IsNullOrEmpty(Convert.ToString(item["ProductBlockEarn"])))
+                    {
+                        var path = ConfigurationManager.AppSettings["CustomerDocuments"].ToString();
+                        string fileName = "ProductUploadForEarnBlock_" + objEarnRule.GroupId + "_" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".xlsx";
+                        path = path + "\\" + fileName;
+                        DataTable dt = new DataTable();
+                        System.IO.File.WriteAllBytes(path, Convert.FromBase64String(Convert.ToString(item["ProductBlockEarn"])));
+                        string conString = string.Empty;
+
+                        conString = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" + path + ";Extended Properties=\"Excel 12.0;HDR=Yes;IMEX=1\"";
+
+                        using (OleDbConnection connExcel = new OleDbConnection(conString))
+                        {
+                            using (OleDbCommand cmdExcel = new OleDbCommand())
+                            {
+                                using (OleDbDataAdapter odaExcel = new OleDbDataAdapter())
+                                {
+                                    cmdExcel.Connection = connExcel;
+                                    //Get the name of First Sheet.
+                                    connExcel.Open();
+                                    DataTable dtExcelSchema;
+                                    dtExcelSchema = connExcel.GetOleDbSchemaTable(OleDbSchemaGuid.Tables, null);
+                                    string sheetName = dtExcelSchema.Rows[0]["TABLE_NAME"].ToString();
+                                    connExcel.Close();
+
+                                    //Read Data from First Sheet.
+                                    connExcel.Open();
+                                    cmdExcel.CommandText = "SELECT * From [" + sheetName + "]";
+                                    odaExcel.SelectCommand = cmdExcel;
+                                    odaExcel.Fill(dt);
+                                    connExcel.Close();
+                                }
+                            }
+                        }
+                        foreach (DataRow dr in dt.Rows)
+                        {
+                            BOTS_TblProductUpload objItem = new BOTS_TblProductUpload();
+                            objItem.GroupId = objEarnRule.GroupId;
+                            objItem.ProductCode = Convert.ToString(dr["ProductCode"]);
+                            objItem.ProductName = Convert.ToString(dr["ProductName"]);
+                            objItem.Percentage = Convert.ToDecimal(dr["Percentage"]);
+                            objItem.Type = "Block Earn";
+                            lstBlockEarnUpload.Add(objItem);
+                        }
+                    }
                 }
             }
+            if(objEarnRule.RuleId>0)
+            {
+                objEarnRule.UpdatedBy = userDetails.LoginId;
+                objEarnRule.UpdatedDate = DateTime.Now;
+            }
+            else
+            {
+                objEarnRule.AddedBy = userDetails.LoginId;
+                objEarnRule.AddedDate = DateTime.Now;
+            }
+            result = OBR.SaveEarnRule(objEarnRule, lstSlab, lstProdUpload, lstBlockEarnUpload);
 
             return new JsonResult() { Data = result, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
