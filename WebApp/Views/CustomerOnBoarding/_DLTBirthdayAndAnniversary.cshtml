@@ -346,11 +346,18 @@
         <button type="button" id="btnRejectCancel6" onclick="RejectBACancel(this);" class="btn btn-primary" style="margin-left: 20px; margin-bottom:25px;">Cancel</button><br />
     </div>
 </div>
+<div class="container-fluid pt-3 pl-3 pr-3 pb-3">
+    <button type="button" id="btnCheckerView" class="btn btn-primary pull-right" style="margin-right: 10px; margin-bottom: 20px; margin-top: 10px;">Submit For Aprroval </button>
+</div>
 
 <script>
     $(document).ready(function () {
         EventChangeOfOriginalToDLT();
         EventChangeOfOriginalToDLTNew();
+    });
+
+    $("#btnCheckerView").on("click", function () {
+        SendBAConfigForAprovl();
     });
 
     function ConvertValuesToDLT(fromId, toId) {
