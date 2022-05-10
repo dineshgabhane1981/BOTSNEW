@@ -16,6 +16,7 @@ namespace BOTS_BL.Models
             : base("name=CommonDBContext")
         {
         }
+        public virtual DbSet<BOTS_TblBurnRuleConfig> BOTS_TblBurnRuleConfig { get; set; }
         public virtual DbSet<BOTS_TblProductUpload> BOTS_TblProductUpload { get; set; }
         public virtual DbSet<BOTS_TblEarnRuleConfig> BOTS_TblEarnRuleConfig { get; set; }
         public virtual DbSet<BOTS_TblSlabConfig> BOTS_TblSlabConfig { get; set; }
@@ -23,16 +24,12 @@ namespace BOTS_BL.Models
         public virtual DbSet<BOTS_TblVariableWords> BOTS_TblVariableWords { get; set; }
         public virtual DbSet<tblLoginLog> tblLoginLogs { get; set; }
         public virtual DbSet<BOTS_TblCommunicationSet> BOTS_TblCommunicationSet { get; set; }
-        public virtual DbSet<BOTS_TblCommunicationSetAssignment> BOTS_TblCommunicationSetAssignment { get; set; }
-        public virtual DbSet<BOTS_TblProductUploadConfig> BOTS_TblProductUploadConfig { get; set; }
+        public virtual DbSet<BOTS_TblCommunicationSetAssignment> BOTS_TblCommunicationSetAssignment { get; set; }        
         public virtual DbSet<BOTS_TblCampaignInactive> BOTS_TblCampaignInactive { get; set; }
         public virtual DbSet<BOTS_TblCampaignOtherConfig> BOTS_TblCampaignOtherConfig { get; set; }
         public virtual DbSet<BOTS_TblBulkUpload> BOTS_TblBulkUpload { get; set; }
         public virtual DbSet<BOTS_TblVelocityChecksConfig> BOTS_TblVelocityChecksConfig { get; set; }
-        public virtual DbSet<BOTS_TblDLCLinkConfig> BOTS_TblDLCLinkConfig { get; set; }
-        public virtual DbSet<BOTS_TblEarnPointsSlabConfig> BOTS_TblEarnPointsSlabConfig { get; set; }
-        public virtual DbSet<BOTS_TblPointsBurnRuleConfig> BOTS_TblPointsBurnRuleConfig { get; set; }
-        public virtual DbSet<BOTS_TblPointsEarnRuleConfig> BOTS_TblPointsEarnRuleConfig { get; set; }
+        public virtual DbSet<BOTS_TblDLCLinkConfig> BOTS_TblDLCLinkConfig { get; set; }        
         public virtual DbSet<Feedback_SMSNumbers> Feedback_SMSNumbers { get; set; }
         public virtual DbSet<Feedback_Content> Feedback_Content { get; set; }
         public virtual DbSet<Feedback_ContentMaster> Feedback_ContentMaster { get; set; }

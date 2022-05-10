@@ -398,7 +398,6 @@
     <Content Include="Views\Telecaller\Index.cshtml" />
     <Content Include="Views\Telecaller\Telecaller.cshtml" />
     <Content Include="Views\Telecaller\_TelecallerList.cshtml" />
-    <Content Include="Views\CustomerOnBoarding\_PointsRule.cshtml" />
     <Content Include="Views\CustomerOnBoarding\_Communications.cshtml" />
     <Content Include="Views\CustomerOnBoarding\_PerpetualCampaigns.cshtml" />
     <Content Include="Views\CustomerOnBoarding\_DLCLink.cshtml" />
