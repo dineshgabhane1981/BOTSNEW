@@ -25,7 +25,7 @@ namespace BOTS_BL.Models.OnBoarding
 
         public bool PartialEarn { get; set; }
 
-        public bool? IsProductCodeBlocking { get; set; }
+        public bool IsProductCodeBlocking { get; set; }
 
         [StringLength(50)]
         public string ProductCodeBlockingType { get; set; }

@@ -35,6 +35,7 @@ namespace WebApp.ViewModel
         public BOTS_TblDLCLinkConfig objDLCLinkConfig { get; set; }
 
         public BOTS_TblEarnRuleConfig objEarnRuleConfig { get; set; }
+        public BOTS_TblBurnRuleConfig objBurnRuleConfig { get; set; }
         public List<BOTS_TblSlabConfig> lstSlabConfig { get; set; }
 
         public string LeadId { get; set; }

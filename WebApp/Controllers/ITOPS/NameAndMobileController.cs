@@ -29,6 +29,7 @@ namespace WebApp.Controllers.ITOPS
                 Session["GroupId"] = groupId;
                 var userDetails = (CustomerLoginDetail)Session["UserSession"];
                 userDetails.GroupId = groupId;
+                userDetails.connectionString = objCustRepo.GetCustomerConnString(groupId);
                 Session["UserSession"] = userDetails;
                 Session["buttons"] = "ITOPS";
                 ViewBag.GroupId = groupId;

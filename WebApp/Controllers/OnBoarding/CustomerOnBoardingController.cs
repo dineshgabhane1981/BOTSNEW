@@ -70,9 +70,6 @@ namespace WebApp.Controllers.OnBoarding
                 objData.lstRefferedCategory = CR.GetAllRefferedCategory();
                 objData.lstStates = CR.GetStates();
 
-                BOTS_TblEarnRuleConfig objEarnRule = new BOTS_TblEarnRuleConfig();
-                objData.objEarnRuleConfig = objEarnRule;
-
                 if (!string.IsNullOrEmpty(LeadId))
                 {
                     var leadDetails = SLR.GetsalesLeadByLeadId(Convert.ToInt32(LeadId));
@@ -89,7 +86,21 @@ namespace WebApp.Controllers.OnBoarding
                     objData.objInstallmentList = OBR.GetInstallmentDetails(groupId);
                     objData.lstOutlets = OBR.GetOutletDetails(groupId);
                     objData.lstCommunicationSet = OBR.GetCommunicationSetsByGroupId(groupId);
+                    
                     objData.objEarnRuleConfig = OBR.GetEarnRuleConfig(groupId);
+                    if (objData.objEarnRuleConfig == null)
+                    {
+                        BOTS_TblEarnRuleConfig objEarnRule = new BOTS_TblEarnRuleConfig();
+                        objData.objEarnRuleConfig = objEarnRule;
+                    }
+
+                    //Burn Data Fetch
+                    if (objData.objBurnRuleConfig == null)
+                    {
+                        BOTS_TblBurnRuleConfig objBurnRule = new BOTS_TblBurnRuleConfig();
+                        objData.objBurnRuleConfig = objBurnRule;
+                    }
+
                     objData.lstSlabConfig = OBR.GetEarnRuleSlabConfig(groupId);
 
                     foreach (var brand in objData.objRetailList)
@@ -1609,6 +1620,7 @@ namespace WebApp.Controllers.OnBoarding
 
             foreach (Dictionary<string, object> item in objData)
             {
+                objEarnRule.RuleId= Convert.ToInt32(item["RuleId"]);
                 objEarnRule.GroupId = Convert.ToString(item["GroupId"]);
                 objEarnRule.MinInvoiceAmt = Convert.ToInt32(item["MinInvoiceAmt"]);
                 objEarnRule.BasePercentage = Convert.ToDecimal(item["BasePercentage"]);
@@ -1778,6 +1790,31 @@ namespace WebApp.Controllers.OnBoarding
             return View(objData);
 
         }
+
+        public ActionResult SaveBurnRuleConfig(string jsonData)
+        {
+            bool result = false;
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            List<BOTS_TblProductUpload> lstBlockBurnUpload = new List<BOTS_TblProductUpload>();
+            BOTS_TblBurnRuleConfig objBurnRule = new BOTS_TblBurnRuleConfig();
+            JavaScriptSerializer json_serializer = new JavaScriptSerializer();
+            json_serializer.MaxJsonLength = int.MaxValue;
+            object[] objData = (object[])json_serializer.DeserializeObject(jsonData);
+            foreach (Dictionary<string, object> item in objData)
+            {
+                objBurnRule.RuleId = Convert.ToInt32(item["RuleId"]);
+                objBurnRule.GroupId = Convert.ToString(item["GroupId"]);
+                objBurnRule.MinInvoiceAmt = Convert.ToInt32(item["MinInvoiceAmt"]);
+
+
+            }
+                return new JsonResult() { Data = result, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
+        }
+
+
+
+
+
     }
 }
 

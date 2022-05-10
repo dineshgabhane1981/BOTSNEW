@@ -42,6 +42,7 @@ namespace WebApp.Controllers
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
             userDetails.GroupId = groupId;
             userDetails.CustomerName = CR.GetCustomerName(groupId);
+            userDetails.connectionString = CR.GetCustomerConnString(groupId);
             string LoginType = userDetails.LoginType; 
             Session["UserSession"] = userDetails;
             Session["buttons"] = "Discussion";
