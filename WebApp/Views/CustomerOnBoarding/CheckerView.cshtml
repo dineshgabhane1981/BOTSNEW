@@ -1,11 +1,13 @@
-﻿
-@model WebApp.ViewModel.OnBoardingCheckerViewModel
+﻿@using BOTS_BL.Models;
+@model WebApp.ViewModel.OnBoardingSalesViewModel
 @{
     ViewBag.Title = "CheckerView";
     Layout = "~/Views/Shared/_OnBoardingLayout.cshtml";
+
+    var userDetails = (CustomerLoginDetail)Session["UserSession"];
+    var roleId = userDetails.LoginType;
+
 }
-
-
 
 <style>
     .tab2 {
@@ -132,14 +134,17 @@
 <div class="app-main__inner">
     <div class="row mb-3 card">
 
-        <div>
-            @Html.Partial("~/Views/CustomerOnBoarding/_CustomerDetails.cshtml", Model)
+        <div class="container-fluid pt-3 pl-3 pr-3 pb-3" id="dvCustomerDetailSection">
+            <div class="col-md-12 section-heading" data-toggle="collapse" data-target="#customerdetailsreadonly">Customer Details</div>
+            <div id="customerdetailsreadonly" class="collapse show">
+                @Html.Partial("~/Views/CustomerOnBoarding/_CustomerDetails.cshtml", Model)
+            </div>
         </div>
         <div>
             <div class="container-fluid pt-3 pl-3 pr-3 pb-3" id="dvCommunicationSection">
                 <div class="col-md-12 section-heading" data-toggle="collapse" data-target="#CommunicationConfigreadonly">Communication</div>
                 <div id="CommunicationConfigreadonly" class="collapse show">
-                    @Html.Partial("~/Views/CustomerOnBoarding/_DLTCommunication.cshtml", Model)
+                    @*@Html.Partial("~/Views/CustomerOnBoarding/_DLTCommunication.cshtml", Model)*@
 
                 </div>
             </div>
@@ -148,7 +153,7 @@
             <div class="container-fluid pt-3 pl-3 pr-3 pb-3" id="dvPerpetualCampaignSection">
                 <div class="col-md-12 section-heading" data-toggle="collapse" data-target="#PerpetualDetailsreadonly">Perpetual Campaigns</div>
                 <div id="PerpetualDetailsreadonly" class="collapse show">
-                    @Html.Partial("~/Views/CustomerOnBoarding/_DLTPerpetualCampaign.cshtml", Model)
+                    @*@Html.Partial("~/Views/CustomerOnBoarding/_DLTPerpetualCampaign.cshtml", Model)*@
                 </div>
             </div>
         </div>
@@ -156,11 +161,15 @@
             <div class="container-fluid pt-3 pl-3 pr-3 pb-3" id="dvDLCSection">
                 <div class="col-md-12 section-heading" data-toggle="collapse" data-target="#DLCreadonly">Digital Loyalty Card</div>
                 <div id="DLCreadonly" class="collapse show">
-                    @Html.Partial("~/Views/CustomerOnBoarding/_DLCToDLT.cshtml", Model)
+                    @*@Html.Partial("~/Views/CustomerOnBoarding/_DLCToDLT.cshtml", Model)*@
 
                 </div>
             </div>
         </div>
-
+        @if (roleId == "6")
+        {
+            //Buttons here
+            <div></div>
+        }
     </div>
 </div>

@@ -11,12 +11,15 @@ namespace WebApp.ViewModel
     public class OnBoardingCheckerViewModel
     {
         public BOTS_TblGroupMaster bots_TblGroupMaster { get; set; }
+        public BOTS_TblDealDetails bots_TblDealDetails { get; set; }
+        public BOTS_TblPaymentDetails bots_TblPaymentDetails { get; set; }
+        public List<BOTS_TblRetailMaster> objRetailList { get; set; }
+        public List<BOTS_TblInstallmentDetails> objInstallmentList { get; set; }
         public OnBoardingCustomerDetails onBoardingCustomerDetails { get; set; }
         public BOTS_TblCommunicationSet bOTS_TblCommunicationSet { get; set; }
         public BOTS_TblDLCLinkConfig objDLCLinkConfig { get; set; }
         public BOTS_TblCampaignOtherConfig bOTS_TblCampaignOtherConfig { get; set; }
-        public BOTS_TblDealDetails bOTS_TblDealDetails { get; set; }
-        public BOTS_TblPaymentDetails bOTS_TblPaymentDetails { get; set; }
+        
         public BOTS_TblSMSConfig bOTS_TblSMSConfig { get; set; }
         public BOTS_TblCampaignInactive bOTS_TblCampaignInactive { get; set; }
 

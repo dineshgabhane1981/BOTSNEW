@@ -29,17 +29,17 @@
             @Html.RadioButtonFor(model => model.objEarnRuleConfig.RevolvingExpiry, "1", new { @id = "rbtnRevolvingExpiry1", @class = "rbtnClass", @Checked = "checked" }) Yes
             @Html.RadioButtonFor(model => model.objEarnRuleConfig.RevolvingExpiry, "0", new { @id = "rbtnRevolvingExpiry0", @class = "rbtnClass" }) No
         </div>
-        <div class="col-md-12 col-lg-12" style="margin-top: 20px; padding-left: 14px;">
-            @Html.RadioButtonFor(model => model.objEarnRuleConfig.IsBase, "0", new { @id = "rbtnIsBase", @class = "rbtnClass", @Name = "dummy" })  Base
-            @Html.RadioButtonFor(model => model.objEarnRuleConfig.IsSlab, "0", new { @id = "rbtnIsSlab", @class = "rbtnClass", @Name = "dummy" })  Slab
-            @Html.RadioButtonFor(model => model.objEarnRuleConfig.IsProductWise, "0", new { @id = "rbtnIsProductWise", @class = "rbtnClass", @Name = "dummy" })  ProductWise
+        <div class="col-md-12 col-lg-12" style="margin-top: 20px; padding-left: 14px;margin-bottom:10px;">
+            @Html.RadioButtonFor(model => model.objEarnRuleConfig.IsBase, true, new { @id = "rbtnIsBase", @class = "rbtnClass", @Name = "dummy" })  Base
+            @Html.RadioButtonFor(model => model.objEarnRuleConfig.IsSlab, true, new { @id = "rbtnIsSlab", @class = "rbtnClass", @Name = "dummy" })  Slab
+            @Html.RadioButtonFor(model => model.objEarnRuleConfig.IsProductWise, true, new { @id = "rbtnIsProductWise", @class = "rbtnClass", @Name = "dummy" })  ProductWise
 
         </div>
-        <div id="dvBase" style="display: none; padding-left:30px; padding-top: 20px;" class="col-md-4 col-lg-4">
+        <div id="dvBase" style="display: none; padding-left: 30px; margin-left: 30px; padding-top: 20px; padding-bottom: 15px; border: 1px solid lightgrey; border-radius: 5px; " class="col-md-6 col-lg-6">
             Points Value (in RS)
             @Html.TextBoxFor(model => model.objEarnRuleConfig.PointsValueInRS, new { @class = "input50", @id = "txtPointsValueInRS" })
         </div>
-        <div id="dvSlab" class="col-md-12 col-lg-12" style="display: none; padding-top: 20px;">
+        <div id="dvSlab" class="col-md-6 col-lg-6" style="display: none; padding-top: 20px; margin-left: 30px; padding-bottom: 15px; border: 1px solid lightgrey; border-radius: 5px; ">
             <div id="dv1" class="col-md-6 col-lg-6" style="display:flex;">
                 <div style="padding-right:10px;">
                     From<br />
@@ -126,7 +126,7 @@
             </div>
         </div>
 
-        <div id="dvProductWise" class="col-md-12 col-lg-12" style="padding-left: 15px; padding-top: 20px; display: none;">
+        <div id="dvProductWise" class="col-md-6 col-lg-6" style="padding-left: 15px; margin-left: 30px; padding-bottom: 15px; padding-top: 20px; display: none; border: 1px solid lightgrey; border-radius: 5px; ">
             <div style="display:flex;">
                 <input id="rbtnProduct" name="ProductWise" type="radio" checked class="rbtnClass">&nbsp; Product
                 <input id="rbtnCategory" name="ProductWise" type="radio" class="rbtnClass"> &nbsp; Category
@@ -137,9 +137,10 @@
         <div id="dvBlockEarn" class="col-md-6 col-lg-6" style="margin-left: 30px; margin-top: 30px; border:1px solid lightgrey;border-radius:5px;">
             <b style="padding-left:10px;">Block for Earn</b>
             <div style="display:flex;padding-top:10px;">
-                <input id="rbtnProductB" name="ProductWiseB" type="radio" checked class="rbtnClass">&nbsp; Product
-                <input id="rbtnCategoryB" name="ProductWiseB" type="radio" class="rbtnClass"> &nbsp; Category
-                <input id="rbtnSubCategoryB" name="ProductWiseB" type="radio" class="rbtnClass"> &nbsp; SubCategory
+                @Html.RadioButtonFor(model => model.objEarnRuleConfig.IsBlockForEarn, true, new { @id = "rbtnProductB", @class = "rbtnClass", @Name = "ProductWiseB" })  &nbsp; Product
+                @Html.RadioButtonFor(model => model.objEarnRuleConfig.IsBlockForEarn, true, new { @id = "rbtnCategoryB", @class = "rbtnClass", @Name = "ProductWiseB" })  &nbsp; Category
+                @Html.RadioButtonFor(model => model.objEarnRuleConfig.IsBlockForEarn, true, new { @id = "rbtnSubCategoryB", @class = "rbtnClass", @Name = "ProductWiseB" })  &nbsp; SubCategory
+                
             </div>
             <div style="padding-left: 15px; padding-top: 20px;padding-bottom:10px;">
                 <input type="file" id="BlockEarnFile" />
@@ -176,18 +177,55 @@
         $("#rbtnIsSlab").on("click", function () {
             $("#dvBase").hide();
             $("#dvSlab").show();
-            $("#dvProductWise").hide();
-
-            $("#txtPointsValueInRS").val("");
+            $("#dvProductWise").hide();            
         });
         $("#rbtnIsProductWise").on("click", function () {
             $("#dvBase").hide();
             $("#dvSlab").hide();
-            $("#dvProductWise").show();
-
-            $("#txtPointsValueInRS").val("");
+            $("#dvProductWise").show();            
         });
+
+        ShowHideProductTypeSection();
+        var blockCategory = JSON.parse('@Html.Raw(Json.Encode(Model.objEarnRuleConfig.BlockProductWiseType))');
+        if (blockCategory == "Product") {            
+            $("#rbtnProductB").prop("checked", true);
+        }
+        if (blockCategory == "Category") {
+            $("#rbtnCategoryB").prop("checked", true);
+        }
+        if (blockCategory == "SubCategory") {
+            $("#rbtnSubCategoryB").prop("checked", true);
+        }
     });
+
+    function ShowHideProductTypeSection() {
+        if ($("#rbtnIsBase").is(":checked")) {
+            $("#dvBase").show();
+            $("#dvSlab").hide();
+            $("#dvProductWise").hide();
+        }
+        if ($("#rbtnIsSlab").is(":checked")) {
+            $("#dvBase").hide();
+            $("#dvSlab").show();
+            $("#dvProductWise").hide();
+            $("#txtPointsValueInRS").val("");
+
+            var objSlab = JSON.parse('@Html.Raw(Json.Encode(Model.lstSlabConfig))');
+            console.log(objSlab);
+            for (var i = 1; i <= objSlab.length; i++) {
+                $("#frm" + i).val(objSlab[i - 1].SlabFrom);
+                $("#to" + i).val(objSlab[i - 1].SlabTo);
+                $("#per" + i).val(objSlab[i - 1].SlabPercentage);
+            }
+
+        }
+        if ($("#rbtnIsProductWise").is(":checked")) {
+            $("#dvBase").hide();
+            $("#dvSlab").hide();
+            $("#dvProductWise").show();
+            $("#txtPointsValueInRS").val("");
+        }
+    }
 
     function handleFileSelectProductWise(evt) {
         var id = evt.currentTarget.id;
@@ -224,6 +262,7 @@
     function SaveEarnRule() {
         var EarnData = [];
         item = {};
+        item["RuleId"] = $("#hdnEarnRuleId").val();
         item["GroupId"] = $("#hdnGroupID").val();
         item["MinInvoiceAmt"] = $("#txtMinInvoiceAmt").val();
         item["BasePercentage"] = $("#txtBasePercentage").val();
@@ -300,21 +339,27 @@
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             success: function (result) {
-                console.log(111)
-            },
-            error: function (result) {
-                console.log(result.responseText)
-                if (result.responseText == "True") {
-                    toastr.success("Brand and Outlets Added");
-                    $('#btn4').addClass("js-active");
-                    $('#sec4').addClass("js-active");
-                    $('#sec3').removeClass("js-active");
-                    $("#divLoader").hide();
+                console.log(result)
+                if (result == true) {
+                    cuteAlert({
+                        type: "success",
+                        title: "Saved",
+                        message: "Earn config saved successfully",
+                        buttonText: "Okay"
+                    })
                 }
                 else {
-                    toastr.error('error occured while saving data');
-                    $("#divLoader").hide();
+                    cuteAlert({
+                        type: "error",
+                        title: "Oops..",
+                        message: "There is a problem in saving point rules",
+                        buttonText: "Okay"
+                    })
                 }
+            },
+            error: function (result) {
+                //console.log(result.responseText)
+
 
             }
         });

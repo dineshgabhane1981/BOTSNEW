@@ -1981,43 +1981,54 @@ namespace BOTS_BL.Repository
                         context.SaveChanges();
 
                         //Slab
-                        var oldSlabData = context.BOTS_TblSlabConfig.Where(x => x.GroupId == objData.GroupId).ToList();
-                        foreach(var item in oldSlabData)
+                        if (lstSlabs.Count > 0)
                         {
-                            context.BOTS_TblSlabConfig.Remove(item);
-                            context.SaveChanges();
+                            var oldSlabData = context.BOTS_TblSlabConfig.Where(x => x.GroupId == objData.GroupId).ToList();
+                            foreach (var item in oldSlabData)
+                            {
+                                context.BOTS_TblSlabConfig.Remove(item);
+                                context.SaveChanges();
+                            }
 
-                        }
-                        foreach(var item in lstSlabs)
-                        {
-                            context.BOTS_TblSlabConfig.AddOrUpdate(item);
-                            context.SaveChanges();
+                            foreach (var item in lstSlabs)
+                            {
+                                context.BOTS_TblSlabConfig.AddOrUpdate(item);
+                                context.SaveChanges();
+                            }
                         }
 
                         //Product Upload
-                        var oldProductData = context.BOTS_TblProductUpload.Where(x => x.GroupId == objData.GroupId && x.Type == "Product Earn").ToList();
-                        foreach(var item in oldProductData)
+                        if (lstEarnProd.Count > 0)
                         {
-                            context.BOTS_TblProductUpload.Remove(item);
-                            context.SaveChanges();
-                        }
-                        foreach(var item in lstEarnProd)
-                        {
-                            context.BOTS_TblProductUpload.AddOrUpdate(item);
-                            context.SaveChanges();
+                            var oldProductData = context.BOTS_TblProductUpload.Where(x => x.GroupId == objData.GroupId && x.Type == "Product Earn").ToList();
+                            foreach (var item in oldProductData)
+                            {
+                                context.BOTS_TblProductUpload.Remove(item);
+                                context.SaveChanges();
+                            }
+
+                            foreach (var item in lstEarnProd)
+                            {
+                                context.BOTS_TblProductUpload.AddOrUpdate(item);
+                                context.SaveChanges();
+                            }
                         }
 
                         //Block For Earn
-                        var oldBlockData = context.BOTS_TblProductUpload.Where(x => x.GroupId == objData.GroupId && x.Type == "Block Earn").ToList();
-                        foreach (var item in oldProductData)
+                        if (lstBlockEatn.Count > 0)
                         {
-                            context.BOTS_TblProductUpload.Remove(item);
-                            context.SaveChanges();
-                        }
-                        foreach (var item in lstBlockEatn)
-                        {
-                            context.BOTS_TblProductUpload.AddOrUpdate(item);
-                            context.SaveChanges();
+                            var oldBlockData = context.BOTS_TblProductUpload.Where(x => x.GroupId == objData.GroupId && x.Type == "Block Earn").ToList();
+                            foreach (var item in oldBlockData)
+                            {
+                                context.BOTS_TblProductUpload.Remove(item);
+                                context.SaveChanges();
+                            }
+
+                            foreach (var item in lstBlockEatn)
+                            {
+                                context.BOTS_TblProductUpload.AddOrUpdate(item);
+                                context.SaveChanges();
+                            }
                         }
                         transaction.Commit();
                         result = true;
@@ -2033,6 +2044,24 @@ namespace BOTS_BL.Repository
             return result;
         }
 
+        public BOTS_TblEarnRuleConfig GetEarnRuleConfig(string GroupId)
+        {
+            BOTS_TblEarnRuleConfig objData = new BOTS_TblEarnRuleConfig();
+            using (var context = new CommonDBContext())
+            {
+                objData = context.BOTS_TblEarnRuleConfig.Where(x => x.GroupId == GroupId).FirstOrDefault();
+            }
+            return objData;
+        }
+        public List<BOTS_TblSlabConfig> GetEarnRuleSlabConfig(string GroupId)
+        {
+            List<BOTS_TblSlabConfig> objData = new List<BOTS_TblSlabConfig>();
+            using (var context = new CommonDBContext())
+            {
+                objData = context.BOTS_TblSlabConfig.Where(x => x.GroupId == GroupId).ToList();
+            }
+            return objData;
+        }
 
     }
 }

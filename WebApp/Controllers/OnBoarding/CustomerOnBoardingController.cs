@@ -39,7 +39,17 @@ namespace WebApp.Controllers.OnBoarding
                 groupId = common.DecryptString(groupId);
             }
 
-            JavaScriptSerializer json_serializer = new JavaScriptSerializer();
+            if (!string.IsNullOrEmpty(groupId))
+            {
+                var GroupDetails = OBR.GetGroupMasterDetails(groupId);
+                if(GroupDetails.CustomerStatus=="Submit For Approval")
+                {
+                    var GroupIdOld= common.EncryptString(groupId);
+                    return RedirectToAction("CheckerView", "CustomerOnBoarding", new { GroupId = GroupIdOld }); 
+                }
+
+            }
+                JavaScriptSerializer json_serializer = new JavaScriptSerializer();
             OnBoardingSalesViewModel objData = new OnBoardingSalesViewModel();
             try
             {
@@ -62,6 +72,10 @@ namespace WebApp.Controllers.OnBoarding
                 objData.lstRMAssigned = CR.GetRMAssigned();
                 objData.lstRefferedCategory = CR.GetAllRefferedCategory();
                 objData.lstStates = CR.GetStates();
+
+                BOTS_TblEarnRuleConfig objEarnRule = new BOTS_TblEarnRuleConfig();
+                objData.objEarnRuleConfig = objEarnRule;
+
                 if (!string.IsNullOrEmpty(LeadId))
                 {
                     var leadDetails = SLR.GetsalesLeadByLeadId(Convert.ToInt32(LeadId));
@@ -78,6 +92,8 @@ namespace WebApp.Controllers.OnBoarding
                     objData.objInstallmentList = OBR.GetInstallmentDetails(groupId);
                     objData.lstOutlets = OBR.GetOutletDetails(groupId);
                     objData.lstCommunicationSet = OBR.GetCommunicationSetsByGroupId(groupId);
+                    objData.objEarnRuleConfig = OBR.GetEarnRuleConfig(groupId);
+                    objData.lstSlabConfig = OBR.GetEarnRuleSlabConfig(groupId);
 
                     foreach (var brand in objData.objRetailList)
                     {
@@ -122,14 +138,6 @@ namespace WebApp.Controllers.OnBoarding
                     objData.bots_TblGroupMaster.CategoryData = json_serializer.Serialize(objData.objRetailList);
                     objData.bots_TblGroupMaster.PaymentScheduleData = json_serializer.Serialize(objData.objInstallmentList);
                 }
-                BOTS_TblEarnRuleConfig objEarnRule = new BOTS_TblEarnRuleConfig();
-                objData.objEarnRuleConfig = objEarnRule;
-                //objData.lstearnpoint = FillEarnPointLevel();
-                //objData.objpointsearnruleconfig = objpointsearncofig;
-                //objData.objearnpointslab = objpointsslabconfig;
-                //objData.objpointsburnruleconfig = objpointsburncofig;
-
-
             }
             catch (Exception ex)
             {
@@ -2084,7 +2092,7 @@ namespace WebApp.Controllers.OnBoarding
                     }
                 }
             }
-            if(objEarnRule.RuleId>0)
+            if (objEarnRule.RuleId > 0)
             {
                 objEarnRule.UpdatedBy = userDetails.LoginId;
                 objEarnRule.UpdatedDate = DateTime.Now;
@@ -2099,24 +2107,31 @@ namespace WebApp.Controllers.OnBoarding
             return new JsonResult() { Data = result, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
 
-        public ActionResult CheckerView(string GroupId, string type, int SetId)
+        public ActionResult CheckerView(string GroupId)
         {
-            OnBoardingCheckerViewModel objData = new OnBoardingCheckerViewModel();
+            CommonFunctions common = new CommonFunctions();
+            GroupId = common.DecryptString(GroupId);
+            OnBoardingSalesViewModel objData = new OnBoardingSalesViewModel();
 
-            {
-                objData.bots_TblGroupMaster = OBR.GetGroupMasterDetails("");
-                objData.onBoardingCustomerDetails = OBR.GetOnBoardingCustomerDetails("");
-                objData.objDLCLinkConfig = OBR.GetDLCLinkDLTConfigById(SetId);
-                objData.bOTS_TblCampaignOtherConfig = OBR.GetCampaignOtherConfigForDLT(GroupId, type);
-                objData.bOTS_TblDealDetails = OBR.GetDealMasterDetails(GroupId);
-                objData.bOTS_TblPaymentDetails = OBR.GetPaymentDetails(GroupId);
-                objData.bOTS_TblSMSConfig = OBR.GetCommunicationSMSConfigById(SetId);
-                objData.bOTS_TblCommunicationSet = OBR.GetSetDetails(SetId);
-                objData.bOTS_TblCampaignInactive = OBR.GetInactiveConfigById(SetId);
-                return View(objData);
-            }
+            objData.bots_TblGroupMaster = OBR.GetGroupMasterDetails(GroupId);
+            objData.bots_TblDealDetails = OBR.GetDealMasterDetails(GroupId);
+            objData.bots_TblPaymentDetails = OBR.GetPaymentDetails(GroupId);
+            objData.objRetailList = OBR.GetRetailDetails(GroupId);
+            objData.objInstallmentList = OBR.GetInstallmentDetails(GroupId);
 
+
+            //objData.bots_TblGroupMaster = OBR.GetGroupMasterDetails(GroupId);
+            //objData.onBoardingCustomerDetails = OBR.GetOnBoardingCustomerDetails("");
+            //objData.objDLCLinkConfig = OBR.GetDLCLinkDLTConfigById(SetId);
+            //objData.bOTS_TblCampaignOtherConfig = OBR.GetCampaignOtherConfigForDLT(GroupId, type);
+            //objData.bOTS_TblDealDetails = OBR.GetDealMasterDetails(GroupId);
+            //objData.bOTS_TblPaymentDetails = OBR.GetPaymentDetails(GroupId);
+            //objData.bOTS_TblSMSConfig = OBR.GetCommunicationSMSConfigById(SetId);
+            //objData.bOTS_TblCommunicationSet = OBR.GetSetDetails(SetId);
+            //objData.bOTS_TblCampaignInactive = OBR.GetInactiveConfigById(SetId);
+            return View(objData);
 
         }
     }
+}
 
