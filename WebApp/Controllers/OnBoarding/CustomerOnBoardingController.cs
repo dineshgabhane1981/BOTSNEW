@@ -2098,6 +2098,25 @@ namespace WebApp.Controllers.OnBoarding
 
             return new JsonResult() { Data = result, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
+
+        public ActionResult CheckerView(string GroupId, string type, int SetId)
+        {
+            OnBoardingCheckerViewModel objData = new OnBoardingCheckerViewModel();
+
+            {
+                objData.bots_TblGroupMaster = OBR.GetGroupMasterDetails("");
+                objData.onBoardingCustomerDetails = OBR.GetOnBoardingCustomerDetails("");
+                objData.objDLCLinkConfig = OBR.GetDLCLinkDLTConfigById(SetId);
+                objData.bOTS_TblCampaignOtherConfig = OBR.GetCampaignOtherConfigForDLT(GroupId, type);
+                objData.bOTS_TblDealDetails = OBR.GetDealMasterDetails(GroupId);
+                objData.bOTS_TblPaymentDetails = OBR.GetPaymentDetails(GroupId);
+                objData.bOTS_TblSMSConfig = OBR.GetCommunicationSMSConfigById(SetId);
+                objData.bOTS_TblCommunicationSet = OBR.GetSetDetails(SetId);
+                objData.bOTS_TblCampaignInactive = OBR.GetInactiveConfigById(SetId);
+                return View(objData);
+            }
+
+
+        }
     }
-}
 
