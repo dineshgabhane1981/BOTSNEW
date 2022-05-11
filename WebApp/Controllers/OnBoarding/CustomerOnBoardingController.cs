@@ -42,17 +42,17 @@ namespace WebApp.Controllers.OnBoarding
             if (!string.IsNullOrEmpty(groupId))
             {
                 var GroupDetails = OBR.GetGroupMasterDetails(groupId);
-                if(GroupDetails.CustomerStatus=="Submit For Approval")
+                if (GroupDetails.CustomerStatus == "Submit For Approval")
                 {
-                    var GroupIdOld= common.EncryptString(groupId);
-                    return RedirectToAction("CheckerView", "CustomerOnBoarding", new { GroupId = GroupIdOld }); 
+                    var GroupIdOld = common.EncryptString(groupId);
+                    return RedirectToAction("CheckerView", "CustomerOnBoarding", new { GroupId = GroupIdOld });
                 }
 
             }
-                JavaScriptSerializer json_serializer = new JavaScriptSerializer();
+            JavaScriptSerializer json_serializer = new JavaScriptSerializer();
             OnBoardingSalesViewModel objData = new OnBoardingSalesViewModel();
             try
-            {                
+            {
                 List<SelectListItem> refferedname = new List<SelectListItem>();
 
                 SelectListItem item = new SelectListItem();
@@ -86,7 +86,7 @@ namespace WebApp.Controllers.OnBoarding
                     objData.objInstallmentList = OBR.GetInstallmentDetails(groupId);
                     objData.lstOutlets = OBR.GetOutletDetails(groupId);
                     objData.lstCommunicationSet = OBR.GetCommunicationSetsByGroupId(groupId);
-                    
+
                     objData.objEarnRuleConfig = OBR.GetEarnRuleConfig(groupId);
                     if (objData.objEarnRuleConfig == null)
                     {
@@ -972,7 +972,7 @@ namespace WebApp.Controllers.OnBoarding
 
             return new JsonResult() { Data = objDLCLinkConfig, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
-         
+
         public ActionResult SaveVelocityCheckConfig(string jsonData)
         {
             bool status = false;
@@ -1260,7 +1260,7 @@ namespace WebApp.Controllers.OnBoarding
             lstExistingData = OBR.GetInactiveConfigData(GroupId, Type);
             return new JsonResult() { Data = lstExistingData, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
-        
+
         public ActionResult SaveCommunicationUniqueValuesConfig(string jsonData)
         {
             bool status = false;
@@ -1620,7 +1620,7 @@ namespace WebApp.Controllers.OnBoarding
 
             foreach (Dictionary<string, object> item in objData)
             {
-                objEarnRule.RuleId= Convert.ToInt32(item["RuleId"]);
+                objEarnRule.RuleId = Convert.ToInt32(item["RuleId"]);
                 objEarnRule.GroupId = Convert.ToString(item["GroupId"]);
                 objEarnRule.MinInvoiceAmt = Convert.ToInt32(item["MinInvoiceAmt"]);
                 objEarnRule.BasePercentage = Convert.ToDecimal(item["BasePercentage"]);
@@ -1796,7 +1796,8 @@ namespace WebApp.Controllers.OnBoarding
             bool result = false;
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
             List<BOTS_TblProductUpload> lstBlockBurnUpload = new List<BOTS_TblProductUpload>();
-            BOTS_TblBurnRuleConfig objBurnRule = new BOTS_TblBurnRuleConfig();
+            BOTS_TblBurnRuleConfig objBurnRule = new BOTS_TblBurnRuleConfig();            
+
             JavaScriptSerializer json_serializer = new JavaScriptSerializer();
             json_serializer.MaxJsonLength = int.MaxValue;
             object[] objData = (object[])json_serializer.DeserializeObject(jsonData);
@@ -1805,10 +1806,68 @@ namespace WebApp.Controllers.OnBoarding
                 objBurnRule.RuleId = Convert.ToInt32(item["RuleId"]);
                 objBurnRule.GroupId = Convert.ToString(item["GroupId"]);
                 objBurnRule.MinInvoiceAmt = Convert.ToInt32(item["MinInvoiceAmt"]);
+                objBurnRule.MinThreshholdPtsFisttime = Convert.ToInt32(item["MinThreshholdPtsFisttime"]);
+                objBurnRule.MinThreshholdPtsSubsequent = Convert.ToInt32(item["MinThreshholdPtsSubsequent"]);
+                objBurnRule.PartialEarn = Convert.ToBoolean(item["PartialEarn"]);
+                objBurnRule.IsProductCodeBlocking = Convert.ToBoolean(item["IsProductCodeBlocking"]);
+                if (objBurnRule.IsProductCodeBlocking)
+                {
+                    objBurnRule.ProductCodeBlockingType = Convert.ToString(item["ProductBurnType"]);
 
+                    if (!string.IsNullOrEmpty(Convert.ToString(item["ProductBlockBurnFile"])))
+                    {
+                        var path = ConfigurationManager.AppSettings["CustomerDocuments"].ToString();
+                        string fileName = "ProductBlockForBurn_" + objBurnRule.GroupId + "_" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".xlsx";
+                        path = path + "\\" + fileName;
+                        DataTable dt = new DataTable();
+                        System.IO.File.WriteAllBytes(path, Convert.FromBase64String(Convert.ToString(item["ProductBlockBurnFile"])));
+                        string conString = string.Empty;
 
+                        conString = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" + path + ";Extended Properties=\"Excel 12.0;HDR=Yes;IMEX=1\"";
+
+                        using (OleDbConnection connExcel = new OleDbConnection(conString))
+                        {
+                            using (OleDbCommand cmdExcel = new OleDbCommand())
+                            {
+                                using (OleDbDataAdapter odaExcel = new OleDbDataAdapter())
+                                {
+                                    cmdExcel.Connection = connExcel;
+                                    //Get the name of First Sheet.
+                                    connExcel.Open();
+                                    DataTable dtExcelSchema;
+                                    dtExcelSchema = connExcel.GetOleDbSchemaTable(OleDbSchemaGuid.Tables, null);
+                                    string sheetName = dtExcelSchema.Rows[0]["TABLE_NAME"].ToString();
+                                    connExcel.Close();
+
+                                    //Read Data from First Sheet.
+                                    connExcel.Open();
+                                    cmdExcel.CommandText = "SELECT * From [" + sheetName + "]";
+                                    odaExcel.SelectCommand = cmdExcel;
+                                    odaExcel.Fill(dt);
+                                    connExcel.Close();
+                                }
+                            }
+                        }
+                        foreach (DataRow dr in dt.Rows)
+                        {
+                            BOTS_TblProductUpload objItem = new BOTS_TblProductUpload();
+                            objItem.GroupId = objBurnRule.GroupId;
+                            objItem.ProductCode = Convert.ToString(dr["ProductCode"]);
+                            objItem.ProductName = Convert.ToString(dr["ProductName"]);
+                            objItem.Percentage = Convert.ToDecimal(dr["Percentage"]);
+                            objItem.Type = "Product Block Burn";
+                            lstBlockBurnUpload.Add(objItem);
+                        }
+                    }
+
+                }
             }
-                return new JsonResult() { Data = result, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
+            
+            
+            
+            
+            
+            return new JsonResult() { Data = result, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
 
 

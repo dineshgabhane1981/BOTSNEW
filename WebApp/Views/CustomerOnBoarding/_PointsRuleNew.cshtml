@@ -6,6 +6,7 @@
         @Html.HiddenFor(model => model.objBurnRuleConfig.RuleId, new { @id = "hdnBurnRuleId" })
         <input type="hidden" id="hdnProductWiseBase64" />
         <input type="hidden" id="hdnBlockEarnBase64" />
+        <input type="hidden" id="hdnBlockBurnBase64" />
         <input id="rbtnERule" name="rules" type="radio" checked class="rbtnClass"> Earn Rule
         <input id="rbtnBRule" name="rules" type="radio" class="rbtnClass"> Burn Rule
     </div>
@@ -203,6 +204,7 @@
     $(document).ready(function () {
         document.getElementById("ProductWiseFile").addEventListener('change', handleFileSelectProductWise, false);
         document.getElementById("BlockEarnFile").addEventListener('change', handleFileSelectBlockEarn, false);
+        document.getElementById("BlockBurnFile").addEventListener('change', handleFileSelectBlockBurn, false);
         $("#rbtnERule").click(function () {
             $("#dvEarnRule").show();
             $("#dvBurnRule").hide();
@@ -319,6 +321,21 @@
         reader.readAsBinaryString(f);
     }
 
+    function handleFileSelectBlockBurn(evt) {
+        var id = evt.currentTarget.id;
+        var qId = id.substring(4, id.length);
+        var f = evt.target.files[0];
+        var reader = new FileReader();
+        reader.onload = (function (theFile) {
+            return function (e) {
+                var binaryData = e.target.result;
+                var base64String = window.btoa(binaryData);
+                $("#hdnBlockBurnBase64").val(base64String);
+                //$("#hdnLogo").val($("#FileUploadLogo")[0].files[0].name);
+            };
+        })(f);
+        reader.readAsBinaryString(f);
+    }
 
     function SaveEarnRule() {
         var EarnData = [];
@@ -434,7 +451,7 @@
         item["MinRedeemPts"] = $("#txtMinRedeemPts").val();
         item["MinThreshholdPtsFisttime"] = $("#txtMinThreshholdPtsFisttime").val();
         item["MinThreshholdPtsSubsequent"] = $("#txtMinThreshholdPtsSubsequent").val();
-        item["PartialEarn"] = $("#txtMinThreshholdPtsSubsequent").val();
+        item["PartialEarn"] = false;
         if ($("#rbtnPartialEarn1").is(":checked")) {
             item["PartialEarn"] = true;
         }
@@ -454,6 +471,7 @@
             item["IsProductCodeBlocking"] = true;
             item["ProductBurnType"] = "SubCategory";
         }
+        item["ProductBlockBurnFile"] = $("#hdnBlockBurnBase64").val();
         BurnData.push(item);
         var BurnDataStr = JSON.stringify(BurnData);
         $("#divLoader").show();
