@@ -117,6 +117,7 @@ namespace WebApp.Controllers.ITOPS
         [HttpPost]
         public ActionResult ChangeMemberMobile(string jsonData)
         {
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
             SPResponse result = new SPResponse();
             var groupId = (string)Session["GroupId"];
             try
@@ -142,6 +143,8 @@ namespace WebApp.Controllers.ITOPS
                     objAudit.RequestedBy = Convert.ToString(item["RequestedBy"]);
                     objAudit.RequestedOnForum = Convert.ToString(item["RequestedForum"]);
                     objAudit.RequestedOn = Convert.ToDateTime(item["RequestedOn"]);
+                    objAudit.AddedBy = userDetails.LoginId;
+                    objAudit.AddedDate = DateTime.Now;
                     IsSMS = Convert.ToBoolean(item["IsSMS"]);
                 }
 
