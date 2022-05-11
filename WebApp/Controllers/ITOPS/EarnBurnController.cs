@@ -104,6 +104,7 @@ namespace WebApp.Controllers.ITOPS
         [HttpPost]
         public ActionResult RedeemPointsData(string jsonData)
         {
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
             var GroupId = (string)Session["GroupId"];
             SPResponse result = new SPResponse();
             //string GroupId = "";
@@ -145,7 +146,8 @@ namespace WebApp.Controllers.ITOPS
                     objAudit.RequestedBy = Convert.ToString(item["RequestedBy"]);
                     objAudit.RequestedOnForum = Convert.ToString(item["RequestedForum"]);
                     objAudit.RequestedOn = Convert.ToDateTime(item["RequestedOn"]);
-
+                    objAudit.AddedBy = userDetails.LoginId;
+                    objAudit.AddedDate = DateTime.Now;
                     IsSMS = Convert.ToBoolean(item["IsSMS"]);
                 }
 
@@ -209,6 +211,7 @@ namespace WebApp.Controllers.ITOPS
         [HttpPost]
         public ActionResult AddEarnData(string jsonData)
         {
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
             SPResponse result = new SPResponse();
             string GroupId = "";
             try
@@ -245,6 +248,8 @@ namespace WebApp.Controllers.ITOPS
                     objAudit.RequestedBy = Convert.ToString(item["RequestedBy"]);
                     objAudit.RequestedOnForum = Convert.ToString(item["RequestedForum"]);
                     objAudit.RequestedOn = Convert.ToDateTime(item["RequestedOn"]);
+                    objAudit.AddedBy = userDetails.LoginId;
+                    objAudit.AddedDate = DateTime.Now;
                     IsSMS = Convert.ToBoolean(item["IsSMS"]);
                 }
 

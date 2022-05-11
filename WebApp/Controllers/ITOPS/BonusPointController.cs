@@ -66,6 +66,7 @@ namespace WebApp.Controllers.ITOPS
         [HttpPost]
         public ActionResult LoadBonusData(string jsonData)
         {
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
             SPResponse result = new SPResponse();
             var GroupId = (string)Session["GroupId"];
             try
@@ -97,7 +98,8 @@ namespace WebApp.Controllers.ITOPS
                     objAudit.RequestedBy = Convert.ToString(item["RequestedBy"]);
                     objAudit.RequestedOnForum = Convert.ToString(item["RequestedForum"]);
                     objAudit.RequestedOn = Convert.ToDateTime(item["RequestedDate"]);
-
+                    objAudit.AddedBy = userDetails.LoginId;
+                    objAudit.AddedDate = DateTime.Now;
                     IsSMS = Convert.ToBoolean(item["IsSMS"]);
                 }
 
@@ -175,6 +177,7 @@ namespace WebApp.Controllers.ITOPS
 
         public ActionResult DeleteTransaction(string GroupId, string InvoiceNo, string MobileNo, string InvoiceAmt, string ip_Date, string RequestedBy, string RequestedForum, string RequestedDate)
         {
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
             SPResponse result = new SPResponse();           
             try
             {
@@ -185,6 +188,8 @@ namespace WebApp.Controllers.ITOPS
                 objAudit.RequestedBy = RequestedBy;
                 objAudit.RequestedOnForum = RequestedForum;
                 objAudit.RequestedOn = Convert.ToDateTime(RequestedDate);
+                objAudit.AddedBy = userDetails.LoginId;
+                objAudit.AddedDate = DateTime.Now;
                 bool IsSMS = false;
                 var dateCancel = Convert.ToDateTime(ip_Date);
                 result = ITOPS.DeleteTransaction(GroupId, InvoiceNo, MobileNo, InvoiceAmt, dateCancel, objAudit);
