@@ -7,12 +7,60 @@
     var userDetails = (CustomerLoginDetail)Session["UserSession"];
 
 }
+<style>
 
+    /* The Modal (background) */
+    /* The Modal (background) */
+    .modal {
+        display: none; /* Hidden by default */
+        position: fixed; /* Stay in place */
+        z-index: 5 !important; /* Sit on top */
+        padding-top: 100px; /* Location of the box */
+        left: 120px;
+        top: 0;
+        width: 100%; /* Full width */
+        height: 100%; /* Full height */
+        overflow: auto; /* Enable scroll if needed */
+        background-color: rgb(0,0,0); /* Fallback color */
+        background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+    }
+
+    /* Modal Content */
+    .modal-content {
+        background-color: #fefefe;
+        margin: auto;
+        padding: 20px;
+        border: 1px solid #888;
+        width: 70%;
+        border-radius: 25px;
+    }
+
+    The Close Button
+    .close {
+        color: #aaaaaa;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+    }
+
+    .close:hover,
+    .close:focus {
+        color: #000;
+        text-decoration: none;
+        cursor: pointer;
+    }
+
+    input:read-only {
+        background-color: lightgray;
+    }
+</style>
 <div class="app-main__inner">
 
     <div class="row mb-3 card">
         <div class="container-fluid pt-3 pl-3 pr-3 pb-3">
+            <input type="hidden" id="hdnIdNew" name="hdnIdNew" />
             <b>Common Discussions</b>
+
             <div class="row mt-2">
                 <div class="col-md-4 col-xl-6">
                     Select Group
@@ -31,7 +79,7 @@
                     Select Raise by
                     @if (userDetails.LoginType == "7")
                     {
-                        @Html.DropDownList("RaisedBy", new SelectList(ViewBag.lstRMAssigned, "Value", "Text"), htmlAttributes: new { @class = "input100", @disabled="disabled", @id = "ddlRaisedBy" })
+                        @Html.DropDownList("RaisedBy", new SelectList(ViewBag.lstRMAssigned, "Value", "Text"), htmlAttributes: new { @class = "input100", @disabled = "disabled", @id = "ddlRaisedBy" })
                     }
                     else
                     {
@@ -59,10 +107,42 @@
                 </div>
             </div>
 
+
+
             <div id="dvListing">
                 @Html.Partial("~/Views/Discussion/_CommonDiscussionList.cshtml", Model)
             </div>
         </div>
+    </div>
+</div>
+<div id="myModal" class="modal">
+    <div class="modal-content">
+        <div class="row" style="margin: 0;">
+            <div style="float:left;text-align:right;width:100px;margin-top:10px;">
+                Description
+            </div>
+            <div class="col-sm-4" style="float:left;margin-top:10px;">
+                <textarea id="txtDesc" rows="5" cols="45" style="border-radius:10px;"></textarea>
+            </div>
+        </div>
+        <div class="row" style="margin: 0;">
+            <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
+                Status
+            </div>
+            <div class="col-sm-4" style="float:left;margin-top:10px;">
+                <select id="ddlPopupStatus" class="input100">
+                    <option value="WIP">WIP</option>
+                    <option value="Completed">Completed</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="row justify-content-end pr-4" style="margin-top:20px;margin-right:465px;">
+
+            <button type="button" id="btnUpdateStatusNew" class="btn btn-primary" style="margin-right:10px;"> Update</button>
+            <button type="button" id="btnPopupCloseNew" class="btn btn-outline-primary cancel-btn"> Close</button>
+        </div>
+
     </div>
 </div>
 <script src="~/Scripts/jquery-ui-1.12.1.js"></script>
@@ -95,6 +175,12 @@
         });
         $("#btncancel").click(function () {
             resetAll();
+        });
+        $('#btnPopupCloseNew').on("click", function () {            
+            $("#myModal").hide(1000);
+        });
+        $('#btnUpdateStatusNew').on("click", function () {
+            UpdateStatusNew();
         });
     });
 
@@ -329,7 +415,7 @@
 
     }
 
-    function ShowFollowUpActivities(id) {      
+    function ShowFollowUpActivities(id) {
         if ($("#dvFollowupData" + id).is(":visible")) {
             $("#dvFollowupData" + id).hide(1000);
             $("#trFollowUpActivities" + id).hide(1000);
@@ -381,7 +467,7 @@
 
             htmlStr += "</table>";
             $("#dvFollowupData" + id).html(htmlStr);
-            
+
             $('[id^="imgExpandFollowup"]').attr("src", "../Content/assets/images/details_open.png");
             $("#trFollowUpActivities" + id).show(1000);
 
@@ -399,8 +485,49 @@
 
     }
 
+    function OpenStatusPopupNew(id) {
+        $("#myModal").show(1000);
+        $("#hdnIdNew").val(id);
+    }
 
-
+    function UpdateStatusNew() {
+        var id = $("#hdnIdNew").val();
+        var Desc = $("#txtDesc").val();
+        var Status = $("#ddlPopupStatus").val();
+        if (Desc != "") {
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("UpdateStatusAndDiscussion", "Discussion")',
+                data: '{dId: ' + JSON.stringify(id) + ',Desc: ' + JSON.stringify(Desc) + ',Status: ' + JSON.stringify(Status) + '}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (result) {
+                    $("#myModal").hide(1000);
+                },
+                error: function (result) {
+                    if (result.responseText == "True") {
+                        cuteAlert({
+                            type: "success",
+                            title: "Saved",
+                            message: "Status updated Successfully !!!",
+                            buttonText: "Okay"
+                        })
+                        GetData();
+                        $("#myModal").hide(1000);
+                    }
+                }
+            });
+        }
+        else {
+            cuteAlert({
+                type: "error",
+                title: "Oops..",
+                message: "Please enter Required fields",
+                buttonText: "Okay"
+            })
+            $('#txtDesc').css('border-color', 'red');
+        }
+    }
 
 
 </script>
