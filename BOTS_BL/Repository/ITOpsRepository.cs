@@ -822,6 +822,12 @@ namespace BOTS_BL.Repository
                             contextNew.CustomerDetails.AddOrUpdate(objExisting);
                             contextNew.SaveChanges();
 
+                            using (var context = new CommonDBContext())
+                            {
+                                context.tblAudits.Add(objAudit);
+                                context.SaveChanges();
+                            }
+
                             TransferPointsDetail transferPointsDetail = new TransferPointsDetail();
                             transferPointsDetail.OldMobileNo = MobileNo;
                             transferPointsDetail.NewMobileNo = NewMobileNo;
@@ -841,6 +847,7 @@ namespace BOTS_BL.Repository
                             result.ResponseCode = "01";
                             result.ResponseMessage = "Mobile Number does not Exist";
                         }
+                        
 
                     }
                     catch (Exception ex)

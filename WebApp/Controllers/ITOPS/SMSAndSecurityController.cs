@@ -84,6 +84,7 @@ namespace WebApp.Controllers.ITOPS
 
         public bool ChangeSMSDetails(string jsonData)
         {
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
             bool result = false;
             string GroupId = "";
             
@@ -113,6 +114,8 @@ namespace WebApp.Controllers.ITOPS
                     objAudit.RequestedBy = Convert.ToString(item["RequestedBy"]);
                     objAudit.RequestedOnForum = Convert.ToString(item["RequestedForum"]);
                     objAudit.RequestedOn = Convert.ToDateTime(item["RequestedDate"]);
+                    objAudit.AddedBy = userDetails.LoginId;
+                    objAudit.AddedDate = DateTime.Now;
 
                     IsSMS = Convert.ToBoolean(item["IsSMS"]);
 
