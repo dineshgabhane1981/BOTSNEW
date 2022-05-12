@@ -87,6 +87,7 @@ namespace WebApp.Controllers.OnBoarding
                     objData.lstOutlets = OBR.GetOutletDetails(groupId);
                     objData.lstCommunicationSet = OBR.GetCommunicationSetsByGroupId(groupId);
 
+                    //Earn Data Fetch
                     objData.objEarnRuleConfig = OBR.GetEarnRuleConfig(groupId);
                     if (objData.objEarnRuleConfig == null)
                     {
@@ -95,6 +96,7 @@ namespace WebApp.Controllers.OnBoarding
                     }
 
                     //Burn Data Fetch
+                    objData.objBurnRuleConfig = OBR.GetBurnRuleConfig(groupId);                    
                     if (objData.objBurnRuleConfig == null)
                     {
                         BOTS_TblBurnRuleConfig objBurnRule = new BOTS_TblBurnRuleConfig();
@@ -1806,6 +1808,7 @@ namespace WebApp.Controllers.OnBoarding
                 objBurnRule.RuleId = Convert.ToInt32(item["RuleId"]);
                 objBurnRule.GroupId = Convert.ToString(item["GroupId"]);
                 objBurnRule.MinInvoiceAmt = Convert.ToInt32(item["MinInvoiceAmt"]);
+                objBurnRule.MinRedeemPts = Convert.ToInt32(item["MinRedeemPts"]);
                 objBurnRule.MinThreshholdPtsFisttime = Convert.ToInt32(item["MinThreshholdPtsFisttime"]);
                 objBurnRule.MinThreshholdPtsSubsequent = Convert.ToInt32(item["MinThreshholdPtsSubsequent"]);
                 objBurnRule.PartialEarn = Convert.ToBoolean(item["PartialEarn"]);
@@ -1862,16 +1865,20 @@ namespace WebApp.Controllers.OnBoarding
 
                 }
             }
-            
-            
-            
-            
-            
+            if (objBurnRule.RuleId > 0)
+            {
+                objBurnRule.UpdatedBy = userDetails.LoginId;
+                objBurnRule.UpdatedDate = DateTime.Now;
+            }
+            else
+            {
+                objBurnRule.AddedBy = userDetails.LoginId;
+                objBurnRule.AddedDate = DateTime.Now;
+            }
+
+            result = OBR.SaveBurnRule(objBurnRule, lstBlockBurnUpload);
             return new JsonResult() { Data = result, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
-
-
-
 
 
     }

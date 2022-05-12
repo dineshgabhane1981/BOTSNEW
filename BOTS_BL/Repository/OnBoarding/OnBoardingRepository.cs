@@ -853,7 +853,7 @@ namespace BOTS_BL.Repository
 
             return objDLCLinkConfig;
         }
-        
+
         public bool SaveVelocityCheckConfig(List<BOTS_TblVelocityChecksConfig> lstVelocityCheck, string groupId)
         {
             bool status = false;
@@ -1033,7 +1033,7 @@ namespace BOTS_BL.Repository
             }
             return lstData;
         }
-        
+
         public List<BOTS_TblCommunicationSet> GetCommunicationSetsByGroupId(string GroupId)
         {
             List<BOTS_TblCommunicationSet> lstSets = new List<BOTS_TblCommunicationSet>();
@@ -1705,7 +1705,7 @@ namespace BOTS_BL.Repository
                     try
                     {
                         var oldEarnRule = context.BOTS_TblEarnRuleConfig.Where(x => x.GroupId == objData.GroupId).FirstOrDefault();
-                        if(oldEarnRule!=null)
+                        if (oldEarnRule != null)
                         {
                             objData.AddedBy = oldEarnRule.AddedBy;
                             objData.AddedDate = oldEarnRule.AddedDate;
@@ -1796,11 +1796,66 @@ namespace BOTS_BL.Repository
             return objData;
         }
 
+        public BOTS_TblBurnRuleConfig GetBurnRuleConfig(string GroupId)
+        {
+            BOTS_TblBurnRuleConfig objData = new BOTS_TblBurnRuleConfig();
+            using (var context = new CommonDBContext())
+            {
+                objData = context.BOTS_TblBurnRuleConfig.Where(x => x.GroupId == GroupId).FirstOrDefault();
+            }
+            return objData;
+        }
         public bool SaveBurnRule(BOTS_TblBurnRuleConfig objData, List<BOTS_TblProductUpload> lstBurnBlock)
         {
             bool result = false;
+            using (var context = new CommonDBContext())
+            {
+                using (DbContextTransaction transaction = context.Database.BeginTransaction())
+                {
+                    try
+                    {
+                        var oldBurnRule = context.BOTS_TblBurnRuleConfig.Where(x => x.GroupId == objData.GroupId).FirstOrDefault();
+                        if(oldBurnRule!=null)
+                        {
+                            objData.AddedBy = oldBurnRule.AddedBy;
+                            objData.AddedDate = oldBurnRule.AddedDate;
+                            if (!objData.IsProductCodeBlocking)
+                            {
+                                objData.IsProductCodeBlocking = oldBurnRule.IsProductCodeBlocking;
+                                objData.ProductCodeBlockingType = oldBurnRule.ProductCodeBlockingType;
+                            }
+                        }
+                        context.BOTS_TblBurnRuleConfig.AddOrUpdate(objData);
+                        context.SaveChanges();
 
+                        if(lstBurnBlock.Count>0)
+                        {
+                            var oldData = context.BOTS_TblProductUpload.Where(x => x.GroupId == objData.GroupId && x.Type == "Product Block Burn").ToList();
+                            if(oldData!=null)
+                            {
+                                foreach(var item in oldData)
+                                {
+                                    context.BOTS_TblProductUpload.Remove(item);
+                                    context.SaveChanges();
+                                }
+                            }
+                            foreach(var item in lstBurnBlock)
+                            {
+                                context.BOTS_TblProductUpload.AddOrUpdate(item);
+                                context.SaveChanges();
+                            }
+                        }
 
+                        transaction.Commit();
+                        result = true;
+                    }
+                    catch (Exception ex)
+                    {
+                        newexception.AddException(ex, "SaveBurnRule");
+                        transaction.Rollback();
+                    }
+                }
+            }
             return result;
         }
 
