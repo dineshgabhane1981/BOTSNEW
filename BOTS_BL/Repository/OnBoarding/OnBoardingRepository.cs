@@ -1796,5 +1796,13 @@ namespace BOTS_BL.Repository
             return objData;
         }
 
+        public bool SaveBurnRule(BOTS_TblBurnRuleConfig objData, List<BOTS_TblProductUpload> lstBurnBlock)
+        {
+            bool result = false;
+
+
+            return result;
+        }
+
     }
 }

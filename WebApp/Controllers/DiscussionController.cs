@@ -42,9 +42,9 @@ namespace WebApp.Controllers
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
             userDetails.GroupId = groupId;
             userDetails.CustomerName = CR.GetCustomerName(groupId);
-            userDetails.connectionString = CR.GetCustomerConnString(groupId);
+            
             string LoginType = userDetails.LoginType; 
-            Session["UserSession"] = userDetails;
+            
             Session["buttons"] = "Discussion";
 
             DiscussionViewModel objData = new DiscussionViewModel();
@@ -54,12 +54,14 @@ namespace WebApp.Controllers
             {
                 var objGroup = CR.GetGroupDetails(Convert.ToInt32(groupId));
                 GroupName = objGroup.GroupName;
+                userDetails.connectionString = CR.GetCustomerConnString(groupId);
             }
             else
             {
                 var objGroup = CR.GetOnboardingGroupDetails(groupId);
                 GroupName = objGroup.GroupName;
             }
+            Session["UserSession"] = userDetails;
             objDiscussion.GroupId = groupId;
             objDiscussion.GroupName = GroupName;
             objData.objDiscussion = objDiscussion;

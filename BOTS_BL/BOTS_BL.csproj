@@ -223,6 +223,7 @@
     <Compile Include="Models\CommonDB\POItem.cs" />
     <Compile Include="Models\CommonDB\ReferAndEarn.cs" />
     <Compile Include="Models\CommonDB\ReferralBonusSM.cs" />
+    <Compile Include="Models\CommonDB\RenewalData.cs" />
     <Compile Include="Models\CommonDB\ReportForDownload.cs" />
     <Compile Include="Models\CommonDB\SMSGatewayMaster.cs" />
     <Compile Include="Models\CommonDB\SMSWABalanceData.cs" />
