@@ -418,7 +418,7 @@ namespace BOTS_BL.Repository
                                           join gd in context.tblGroupDetails on c.GroupId equals gd.GroupId.ToString()
                                           join ct in context.BOTS_TblCallTypes on c.CallType equals ct.Id
                                           join cld in context.CustomerLoginDetails on c.AddedBy equals cld.LoginId
-                                          where c.AddedBy == LoginId && c.Status == "WIP" && (c.CallType == 12 || c.CallType == 9 || c.CallType == 10)
+                                          where  c.Status == "WIP" && (c.CallType == 12 || c.CallType == 9 || c.CallType == 10)
 
                                           select new DiscussionDetails
                                           {

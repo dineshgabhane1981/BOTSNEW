@@ -1880,7 +1880,12 @@ namespace WebApp.Controllers.OnBoarding
             return new JsonResult() { Data = result, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
 
+        public ActionResult SendForApproval(string GroupId)
+        {
+            bool result = true;
 
+            return new JsonResult() { Data = result, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
+        }
     }
 }
 

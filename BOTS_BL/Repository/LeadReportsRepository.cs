@@ -194,8 +194,19 @@ namespace BOTS_BL.Repository
         {
             List<SalesLead> lstData = new List<SalesLead>();
             List<SalesLead> newdata = new List<SalesLead>();
-            DateTime FromDate = Convert.ToDateTime(FrmDate);
-            DateTime ToDateNew = Convert.ToDateTime(ToDate);
+            DateTime FromDate = new DateTime();
+            DateTime ToDateNew = new DateTime();
+            if (!string.IsNullOrEmpty(FrmDate))
+            {
+                FromDate = Convert.ToDateTime(FrmDate);
+                ToDateNew = Convert.ToDateTime(ToDate);
+            }
+            else
+            {
+                //FromDate=DateTime.Now.
+                FromDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
+                ToDateNew = DateTime.Today;
+            }
             if (MeetingOrCall == "Meeting")
             {
                 using (var context = new CommonDBContext())
