@@ -28,5 +28,7 @@ namespace BOTS_BL.Models
         public string RequestedOnForum { get; set; }
 
         public DateTime RequestedOn { get; set; }
+        public string AddedBy { get; set; }
+        public DateTime? AddedDate { get; set; }
     }
 }

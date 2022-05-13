@@ -210,8 +210,11 @@
             {
                 if (Model.bots_TblGroupMaster.CustomerStatus == "CS" || Model.bots_TblGroupMaster.CustomerStatus == "CSUpdate")
                 {
-                    <div>
-                        @Html.Partial("~/Views/CustomerOnBoarding/_CustomerDetails.cshtml", Model)
+                    <div class="container-fluid pt-3 pl-3 pr-3 pb-3" id="dvCustomerDetailSection">
+                        <div class="col-md-12 section-heading" data-toggle="collapse" data-target="#customerdetailsreadonly">Customer Details</div>
+                        <div id="customerdetailsreadonly" class="collapse">
+                            @Html.Partial("~/Views/CustomerOnBoarding/_CustomerDetails.cshtml", Model)
+                        </div>
                     </div>
                     var Id = 1;
                     <div class="container-fluid pt-3 pl-3 pr-3 pb-3" id="dvOutletSection">
@@ -910,8 +913,11 @@
                     }
                     else
                     {
-
                         <button type="submit" id="btnCustomerSave" class="btn btn-primary pull-right" onclick="return CheckOutletData('CSUpdate');" style="margin-right:10px;display:none;">Save</button>
+                        if (Model.bots_TblGroupMaster.CustomerStatus != "Submit For Approval")
+                        {
+                            <button type="button" id="btnSendForApproval" class="btn btn-primary pull-right" onclick="return SendForApproval();" style="margin-right:10px;font-weight:bold;">Send For Approval</button>
+                        }
                     }
                 }
             </div>
@@ -2980,6 +2986,54 @@
                 return false;
             }
         }
+    }
+
+    function SendForApproval() {
+        cuteAlert({
+            type: "question",
+            title: "Are you sure?",
+            message: "You want to submit all configuration for Approval",
+            confirmText: "Okay",
+            cancelText: "Cancel"
+        }).then((e) => {
+            if (e == ("confirm")) {
+                 $("#divLoader").show();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("SendForApproval", "CustomerOnBoarding")',
+            data: '{GroupId: ' + JSON.stringify($("#hdnGroupID").val()) + '}',
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (result) {
+                console.log(result)
+                if (result == true) {
+                    cuteAlert({
+                        type: "success",
+                        title: "Saved",
+                        message: "Configuration sent for approval",
+                        buttonText: "Okay"
+                    })
+                    location.reload();
+                    $("#divLoader").hide();
+                }
+                else {
+                    cuteAlert({
+                        type: "error",
+                        title: "Oops..",
+                        message: "There is a problem in sending for approval",
+                        buttonText: "Okay"
+                    })
+                    $("#divLoader").hide();
+                }
+            },
+            error: function (result) {
+                //console.log(result.responseText)
+            }
+        });
+            }
+        })
+
+
     }
 
 </script>

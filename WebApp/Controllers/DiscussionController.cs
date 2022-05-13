@@ -42,8 +42,9 @@ namespace WebApp.Controllers
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
             userDetails.GroupId = groupId;
             userDetails.CustomerName = CR.GetCustomerName(groupId);
+            
             string LoginType = userDetails.LoginType; 
-            Session["UserSession"] = userDetails;
+            
             Session["buttons"] = "Discussion";
 
             DiscussionViewModel objData = new DiscussionViewModel();
@@ -53,12 +54,14 @@ namespace WebApp.Controllers
             {
                 var objGroup = CR.GetGroupDetails(Convert.ToInt32(groupId));
                 GroupName = objGroup.GroupName;
+                userDetails.connectionString = CR.GetCustomerConnString(groupId);
             }
             else
             {
                 var objGroup = CR.GetOnboardingGroupDetails(groupId);
                 GroupName = objGroup.GroupName;
             }
+            Session["UserSession"] = userDetails;
             objDiscussion.GroupId = groupId;
             objDiscussion.GroupName = GroupName;
             objData.objDiscussion = objDiscussion;
@@ -126,11 +129,11 @@ namespace WebApp.Controllers
         }
 
         [HttpPost]
-        public bool UpdateStatusAndDiscussion(string dId, string Desc, string Status)
+        public bool UpdateStatusAndDiscussion(string dId, string Desc, string Status,string FollowupDate)
         {
             bool status = false;
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
-            status = DR.UpdateDiscussions(dId, Desc, Status, userDetails.LoginId);
+            status = DR.UpdateDiscussions(dId, Desc, Status, userDetails.LoginId, FollowupDate);
 
             return status;
         }

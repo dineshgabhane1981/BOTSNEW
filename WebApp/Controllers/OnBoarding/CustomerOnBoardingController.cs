@@ -39,13 +39,20 @@ namespace WebApp.Controllers.OnBoarding
                 groupId = common.DecryptString(groupId);
             }
 
+            if (!string.IsNullOrEmpty(groupId))
+            {
+                var GroupDetails = OBR.GetGroupMasterDetails(groupId);
+                if (GroupDetails.CustomerStatus == "Submit For Approval")
+                {
+                    var GroupIdOld = common.EncryptString(groupId);
+                    return RedirectToAction("CheckerView", "CustomerOnBoarding", new { GroupId = GroupIdOld });
+                }
+
+            }
             JavaScriptSerializer json_serializer = new JavaScriptSerializer();
             OnBoardingSalesViewModel objData = new OnBoardingSalesViewModel();
             try
             {
-                BOTS_TblPointsEarnRuleConfig objpointsearncofig = new BOTS_TblPointsEarnRuleConfig();
-                BOTS_TblEarnPointsSlabConfig objpointsslabconfig = new BOTS_TblEarnPointsSlabConfig();
-                BOTS_TblPointsBurnRuleConfig objpointsburncofig = new BOTS_TblPointsBurnRuleConfig();
                 List<SelectListItem> refferedname = new List<SelectListItem>();
 
                 SelectListItem item = new SelectListItem();
@@ -62,6 +69,7 @@ namespace WebApp.Controllers.OnBoarding
                 objData.lstRMAssigned = CR.GetRMAssigned();
                 objData.lstRefferedCategory = CR.GetAllRefferedCategory();
                 objData.lstStates = CR.GetStates();
+
                 if (!string.IsNullOrEmpty(LeadId))
                 {
                     var leadDetails = SLR.GetsalesLeadByLeadId(Convert.ToInt32(LeadId));
@@ -79,6 +87,24 @@ namespace WebApp.Controllers.OnBoarding
                     objData.lstOutlets = OBR.GetOutletDetails(groupId);
                     objData.lstCommunicationSet = OBR.GetCommunicationSetsByGroupId(groupId);
 
+                    //Earn Data Fetch
+                    objData.objEarnRuleConfig = OBR.GetEarnRuleConfig(groupId);
+                    if (objData.objEarnRuleConfig == null)
+                    {
+                        BOTS_TblEarnRuleConfig objEarnRule = new BOTS_TblEarnRuleConfig();
+                        objData.objEarnRuleConfig = objEarnRule;
+                    }
+
+                    //Burn Data Fetch
+                    objData.objBurnRuleConfig = OBR.GetBurnRuleConfig(groupId);                    
+                    if (objData.objBurnRuleConfig == null)
+                    {
+                        BOTS_TblBurnRuleConfig objBurnRule = new BOTS_TblBurnRuleConfig();
+                        objData.objBurnRuleConfig = objBurnRule;
+                    }
+
+                    objData.lstSlabConfig = OBR.GetEarnRuleSlabConfig(groupId);
+
                     foreach (var brand in objData.objRetailList)
                     {
                         objData.lstBrands.Add(new SelectListItem
@@ -87,7 +113,6 @@ namespace WebApp.Controllers.OnBoarding
                             Value = Convert.ToString(brand.BrandId)
                         });
                     }
-
 
                     if (objData.lstOutlets.Count == 0)
                     {
@@ -122,14 +147,6 @@ namespace WebApp.Controllers.OnBoarding
                     objData.bots_TblGroupMaster.CategoryData = json_serializer.Serialize(objData.objRetailList);
                     objData.bots_TblGroupMaster.PaymentScheduleData = json_serializer.Serialize(objData.objInstallmentList);
                 }
-                BOTS_TblEarnRuleConfig objEarnRule = new BOTS_TblEarnRuleConfig();
-                objData.objEarnRuleConfig = objEarnRule;
-                //objData.lstearnpoint = FillEarnPointLevel();
-                //objData.objpointsearnruleconfig = objpointsearncofig;
-                //objData.objearnpointslab = objpointsslabconfig;
-                //objData.objpointsburnruleconfig = objpointsburncofig;
-
-
             }
             catch (Exception ex)
             {
@@ -231,12 +248,12 @@ namespace WebApp.Controllers.OnBoarding
             return View(objData);
         }
 
-        public ActionResult GetDLTCommunicationSetData(string GroupId,string SetId)
+        public ActionResult GetDLTCommunicationSetData(string GroupId, string SetId)
         {
             OnBoardingSalesViewModel objData = new OnBoardingSalesViewModel();
-            objData.lstSMSConfig = OBR.GetCommunicationSMSConfigForDLT(GroupId,Convert.ToInt32(SetId));
+            objData.lstSMSConfig = OBR.GetCommunicationSMSConfigForDLT(GroupId, Convert.ToInt32(SetId));
             return PartialView("_DLTCommunication", objData);
-           
+
         }
 
         public ActionResult GetConvertedScript(string CSScript)
@@ -316,9 +333,16 @@ namespace WebApp.Controllers.OnBoarding
 
                     objLstInstallment.Add(objItem);
                 }
-
-                objData.bots_TblGroupMaster.CreatedBy = userDetails.LoginId;
-                objData.bots_TblGroupMaster.CreatedDate = DateTime.Now;
+                if (objData.bots_TblGroupMaster.SINo > 0)
+                {
+                    objData.bots_TblGroupMaster.CreatedBy = userDetails.LoginId;
+                    objData.bots_TblGroupMaster.CreatedDate = DateTime.Now;
+                }
+                else
+                {
+                    objData.bots_TblGroupMaster.UpdatedBy = userDetails.LoginId;
+                    objData.bots_TblGroupMaster.CreatedDate = DateTime.Now;
+                }
 
                 if (objData.bots_TblGroupMaster.CustomerStatus == "CSUpdate")
                 {
@@ -619,7 +643,7 @@ namespace WebApp.Controllers.OnBoarding
                     if (!string.IsNullOrEmpty(Convert.ToString(item["SetId"])))
                         objSetDetails.SetId = Convert.ToInt32(item["SetId"]);
                     objSetDetails.SetName = Convert.ToString(item["SetName"]);
-                    objSetDetails.GroupId= Convert.ToString(item["GroupId"]);
+                    objSetDetails.GroupId = Convert.ToString(item["GroupId"]);
                     var isSMS = Convert.ToBoolean(item["IsSMS"]);
                     if (isSMS)
                     {
@@ -632,7 +656,7 @@ namespace WebApp.Controllers.OnBoarding
                         objSMSConfig.SMSPassword = Convert.ToString(item["SMSPassword"]);
                         objSMSConfig.SMSlink = Convert.ToString(item["SMSLink"]);
                         if (!string.IsNullOrEmpty(Convert.ToString(item["SMSSetId"])))
-                            objSMSConfig.SetId = Convert.ToInt32(item["SMSSetId"]);                       
+                            objSMSConfig.SetId = Convert.ToInt32(item["SMSSetId"]);
 
                         SMSTemplate objSMSTemplate1 = new SMSTemplate();
                         objSMSTemplate1.MessageId = 100;
@@ -845,7 +869,7 @@ namespace WebApp.Controllers.OnBoarding
             return new JsonResult() { Data = status, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
 
-        public ActionResult UpdateDLTStatusOfCommunicationConfig(string ConfigId, string DLTNewStatus,string RejectReason,string jsonData)
+        public ActionResult UpdateDLTStatusOfCommunicationConfig(string ConfigId, string DLTNewStatus, string RejectReason, string jsonData)
         {
             bool status = false;
             try
@@ -897,7 +921,7 @@ namespace WebApp.Controllers.OnBoarding
                         objDLCLink.Id = Convert.ToInt32(item["Id"]);
                     }
                     objDLCLink.GroupId = Convert.ToString(item["GroupId"]);
-                   
+
                     objDLCLink.ToTheReferralSMSScript = Convert.ToString(item["SMSToTheReferral"]);
                     objDLCLink.ReminderForPointsUsageSMSScript = Convert.ToString(item["SMSReminderForPointsUsage"]);
                     objDLCLink.ReferredSuccessOnReferralTxnSMSScript = Convert.ToString(item["SMSReferredSuccessOnReferralTxn"]);
@@ -956,346 +980,6 @@ namespace WebApp.Controllers.OnBoarding
             objDLCLinkConfig = OBR.GetDLCLinkData(groupId);
 
             return new JsonResult() { Data = objDLCLinkConfig, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
-        }
-
-        public List<EarnPointLevel> FillEarnPointLevel()
-        {
-            List<EarnPointLevel> lstearn = new List<EarnPointLevel>();
-
-            lstearn.Add(new EarnPointLevel { EarnPointLevelId = "invoiceamt", EarnPointLevelName = "Invoice Amount" });
-            lstearn.Add(new EarnPointLevel { EarnPointLevelId = "department", EarnPointLevelName = "Department" });
-            lstearn.Add(new EarnPointLevel { EarnPointLevelId = "product", EarnPointLevelName = "Product" });
-            lstearn.Add(new EarnPointLevel { EarnPointLevelId = "Category", EarnPointLevelName = "Category" });
-            lstearn.Add(new EarnPointLevel { EarnPointLevelId = "subcategory", EarnPointLevelName = "Sub Category" });
-            lstearn.Add(new EarnPointLevel { EarnPointLevelId = "brand", EarnPointLevelName = "Brand" });
-            return lstearn;
-        }
-
-        public ActionResult AddEarnRule(string EarnRule, string BlockOnearnrule, string Redemptionrule)
-        {
-
-            OnBoardingSalesViewModel objdata = new OnBoardingSalesViewModel();
-            bool status = false;
-
-            try
-            {
-
-                var userDetails = (CustomerLoginDetail)Session["UserSession"];
-                BOTS_TblPointsEarnRuleConfig objpointearn = new BOTS_TblPointsEarnRuleConfig();
-                BOTS_TblPointsBurnRuleConfig objpointburn = new BOTS_TblPointsBurnRuleConfig();
-                JavaScriptSerializer json_serializer = new JavaScriptSerializer();
-                json_serializer.MaxJsonLength = int.MaxValue;
-                object[] objEarnrule = (object[])json_serializer.DeserializeObject(EarnRule);
-                object[] objBurnrule = (object[])json_serializer.DeserializeObject(BlockOnearnrule);
-                object[] objredemption = (object[])json_serializer.DeserializeObject(Redemptionrule);
-                object[] slab = new object[20];
-                string slabtype = "";
-                decimal makingslabdirectortelescopic = 0;
-                decimal fullamtslabdirectortelescopic = 0;
-                string makingSlabdirectortele = "";
-                string fullamtSlabdirectortele = "";
-                string CommonSlabdirectortele = "";
-                decimal commonlabdirectortelescopic = 0;
-                DataSet ds = new DataSet();
-                foreach (Dictionary<string, object> item in objEarnrule)
-                {
-                    objpointearn.CategoryId = Convert.ToString(item["CategoryId"]);
-                    objpointearn.GroupId = Convert.ToString(item["Groupid"]);
-                    objpointearn.BrandId = Convert.ToString(item["brandid"]);
-                    objpointearn.AddedBy = userDetails.LoginId;
-                    objpointearn.AddedDate = DateTime.Today;
-                    objpointearn.OnePointValueInRs = Convert.ToDecimal(item["pointvalue"]);
-                    objpointearn.EarnPointLevel = Convert.ToString(item["earnlevel"]);
-                    if (objpointearn.CategoryId == "8")
-                    {
-                        objpointearn.EarnPointLevelType = Convert.ToString(item["jwlLevel"]);
-                    }
-                    else
-                    {
-                        objpointearn.EarnPointLevelType = Convert.ToString(item["commonfixedorslab"]);
-                    }
-                    if (objpointearn.EarnPointLevelType == "commonFixed")
-                    {
-                        objpointearn.commonfixedpercentageorwithperce = Convert.ToString(item["common%withorFixed"]);
-                        if ((Convert.ToString(item["common%withorFixed"])) == "fixedpercentage")
-                            objpointearn.FixedEarnPointPercentage = Convert.ToDecimal(item["commonFixed%"]);
-                        if ((Convert.ToString(item["common%withorFixed"])) == "percentwith")
-                            objpointearn.FixedEarnPointPecentageWith = Convert.ToDecimal(item["common%with"]);
-
-                        if (!string.IsNullOrEmpty(Convert.ToString(item["commonsingleorcumulative"])))
-                        {
-                            objpointearn.IncrementedValue = Convert.ToString(item["commonsingleorcumulative"]);
-                            if ((Convert.ToString(item["commoncumulative%withorFixed"])) == "fixedpercentage")
-                                objpointearn.IncrementedFixedPercentage = Convert.ToDecimal(item["commonsingleFixed%"]);
-                            if ((Convert.ToString(item["commoncumulative%withorFixed"])) == "percentwith")
-                                objpointearn.IncrementedpercentageWith = Convert.ToDecimal(item["commoncumulative%with"]);
-                        }
-                    }
-                    if (objpointearn.EarnPointLevelType == "commonSlab")
-                    {
-                        slabtype = Convert.ToString(item["commonslabtype"]);
-                        slab = (object[])item["Commonslab"];
-                        CommonSlabdirectortele = Convert.ToString(item["commonslabdirectortelescopic"]);
-
-                        if ((Convert.ToString(item["commonslabdirectortelescopic"])) == "commonslabdirect")
-                        {
-                            commonlabdirectortelescopic = Convert.ToDecimal(item["commonslabdirectvalue"]);
-                        }
-                        else if ((Convert.ToString(item["commonslabdirectortelescopic"])) == "commonslabtelescoping")
-                        {
-                            commonlabdirectortelescopic = Convert.ToDecimal(item["commonslabtelescopicvalue"]);
-                        }
-                    }
-                    if (objpointearn.EarnPointLevelType == "Making")
-                    {
-                        objpointearn.EarnOnMaking = Convert.ToString(item["makingfixedorslab"]);
-                        if (objpointearn.EarnOnMaking == "makingFixed")
-                        {
-                            if (!string.IsNullOrEmpty(Convert.ToString(item["making%withorFixed"])))
-                            {
-                                if ((Convert.ToString(item["making%withorFixed"])) == "fixedpercentage")
-                                    objpointearn.FixedEarnPointPercentage = Convert.ToDecimal(item["makingFixed%"]);
-                                if ((Convert.ToString(item["making%withorFixed"])) == "percentwith")
-                                    objpointearn.FixedEarnPointPecentageWith = Convert.ToDecimal(item["making%with"]);
-                            }
-                        }
-                        else if (objpointearn.EarnOnMaking == "makingSlab")
-                        {
-                            slabtype = Convert.ToString(item["slabtype"]);
-                            slab = (object[])item["slab"];
-                            makingSlabdirectortele = Convert.ToString(item["makingslabdirectortelescopic"]);
-
-                            if ((Convert.ToString(item["makingslabdirectortelescopic"])) == "makingslabDirect")
-                            {
-                                makingslabdirectortelescopic = Convert.ToDecimal(item["makingslabdirectvalue"]);
-                            }
-                            else if ((Convert.ToString(item["makingslabdirectortelescopic"])) == "makingslabtescopic")
-                            {
-                                makingslabdirectortelescopic = Convert.ToDecimal(item["makingslabtelescopicvalue"]);
-
-                            }
-
-                        }
-                    }
-                    if (objpointearn.EarnPointLevelType == "FullAmount")
-                    {
-                        objpointearn.EarnFullAmtGstOrWithoutGst = Convert.ToString(item["fullamtwithgstornongst"]);
-                        objpointearn.EarnFullAmtFixedOrSlab = Convert.ToString(item["fullamtfixedorslab"]);
-
-                        if (objpointearn.EarnFullAmtFixedOrSlab == "FullamtFixed")
-                        {
-                            if (!string.IsNullOrEmpty(Convert.ToString(item["fullamt%withorfixed%"])))
-                            {
-                                if ((Convert.ToString(item["fullamt%withorfixed%"])) == "fixedpercentage")
-                                    objpointearn.EarnFullAmtFixedPercentage = Convert.ToDecimal(item["fullamtFixed%"]);
-                                if ((Convert.ToString(item["fullamt%withorfixed%"])) == "percentwith")
-                                    objpointearn.EarnFullAmtPercentageWith = Convert.ToDecimal(item["fullamt%with"]);
-                            }
-                            if (!string.IsNullOrEmpty(Convert.ToString(item["fullamtincrement"])))
-                            {
-                                objpointearn.EarnFullAmtIncremented = Convert.ToString(item["fullamtincrement"]);
-                                if ((Convert.ToString(item["fullamt%withorfixed%"])) == "fixedpercentage")
-                                    objpointearn.EarnFullAmtSingleOrCumulativeFixedPercentage = Convert.ToDecimal(item["fullamtincrementedfixed%"]);
-                                if ((Convert.ToString(item["fullamt%withorfixed%"])) == "percentwith")
-                                    objpointearn.EarnFullAmtSingleOrCumulativeWithPercentage = Convert.ToDecimal(item["fullamtincremented%with"]);
-                            }
-
-                        }
-                        else if (objpointearn.EarnFullAmtFixedOrSlab == "FullamtSlab")
-                        {
-                            slabtype = Convert.ToString(item["fullamtslabtype"]);
-                            slab = (object[])item["fullamtslab"];
-                            fullamtSlabdirectortele = Convert.ToString(item["fullamtslabdirectortele"]);
-
-                            if ((Convert.ToString(item["fullamtslabdirectortele"])) == "fullamtslabDirect")
-                            {
-                                fullamtslabdirectortelescopic = Convert.ToDecimal(item["fullamtslabdirect"]);
-                            }
-                            else if ((Convert.ToString(item["fullamtslabdirectortele"])) == "fullamtslabtescopic")
-                            {
-                                fullamtslabdirectortelescopic = Convert.ToDecimal(item["fullamtslabtele"]);
-                            }
-
-                        }
-
-
-
-                    }
-                }
-                foreach (Dictionary<string, object> item in objBurnrule)
-                {
-                    objpointearn.BlockOnEarnType = Convert.ToString(item["Blockonearnrule"]);
-                    if (objpointearn.BlockOnEarnType == "InvoiceAmount")
-                    {
-                        objpointearn.BlockOnInvoiceAmtMin = Convert.ToDecimal(item["Minvalofinvamt"]);
-                        objpointearn.BlockOnInvoiceAmtMax = Convert.ToDecimal(item["Maxvalofinvamt"]);
-                    }
-                }
-                foreach (Dictionary<string, object> item in objredemption)
-                {
-                    objpointburn.GroupId = objpointearn.GroupId;
-                    objpointburn.BrandId = objpointearn.BrandId;
-                    objpointburn.CategoryId = objpointburn.CategoryId;
-                    if (Convert.ToString(item["redemptionlevel"]) != "")
-                    {
-                        objpointburn.BurnType = Convert.ToString(item["redemptionlevel"]);
-
-                        objpointburn.PointBurnfirsttimeorsubsequent = Convert.ToString(item["burntimetype"]);
-                        if (objpointburn.PointBurnfirsttimeorsubsequent == "firsttime")
-                        {
-                            objpointburn.FirstTime = Convert.ToDecimal(item["burnfirsttime"]);
-
-                        }
-                        else if (objpointburn.PointBurnfirsttimeorsubsequent == "Subsequent")
-                        {
-                            objpointburn.SubsequentTime = Convert.ToDecimal(item["burnsubsequenttime"]);
-                        }
-                        objpointburn.EarnWhileBurn = Convert.ToString(item["Earnwhileburn"]);
-                        objpointburn.PointValidity = Convert.ToString(item["pointvalidity"]);
-                        if (Convert.ToDecimal(item["pointvalidityvalue"]) != 0)
-                        {
-                            objpointburn.PointValidityValue = Convert.ToDecimal(item["pointvalidityvalue"]);
-                        }
-                    }
-                }
-                if (Request.Files.Count > 0)
-                {
-
-                    HttpPostedFileBase fileburnonearn = Request.Files["Fileuploadburnonearn"];
-
-                    HttpPostedFileBase fileearn = Request.Files["FileuploadEarn"];
-                    if (fileearn != null)
-                    {
-                        string fileName = "ProductUpload_" + objpointearn.GroupId + "_" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".xlsx";
-                        var path = ConfigurationManager.AppSettings["CustomerDocuments"].ToString();
-                        var fullFilePath = path + "\\" + fileName;
-                        fileearn.SaveAs(path + "\\" + fileName);
-
-                        string conString = string.Empty;
-
-                        conString = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" + fullFilePath + ";Extended Properties=\"Excel 12.0;HDR=Yes;IMEX=1\"";
-
-                        using (OleDbConnection connExcel = new OleDbConnection(conString))
-                        {
-                            using (OleDbCommand cmdExcel = new OleDbCommand())
-                            {
-                                using (OleDbDataAdapter odaExcel = new OleDbDataAdapter())
-                                {
-                                    cmdExcel.Connection = connExcel;
-                                    //Get the name of First Sheet.
-                                    connExcel.Open();
-                                    DataTable dtExcelSchema;
-                                    dtExcelSchema = connExcel.GetOleDbSchemaTable(OleDbSchemaGuid.Tables, null);
-                                    string sheetName = dtExcelSchema.Rows[0]["TABLE_NAME"].ToString();
-                                    connExcel.Close();
-
-                                    //Read Data from First Sheet.
-                                    connExcel.Open();
-                                    cmdExcel.CommandText = "SELECT * From [" + sheetName + "]";
-                                    odaExcel.SelectCommand = cmdExcel;
-                                    odaExcel.Fill(ds);
-                                    connExcel.Close();
-                                }
-                            }
-                        }
-                        ds.Tables[0].Columns.Add("GroupId");
-                        ds.Tables[0].Columns.Add("BrandId");
-                        ds.Tables[0].Columns.Add("CategoryId");
-                        ds.Tables[0].Columns.Add("UploadType");
-                        ds.Tables[0].Columns.Add("AddedBy");
-                        ds.Tables[0].Columns.Add("AddedDate");
-                        ds.Tables[0].Columns.Add("UpdatedBy");
-                        ds.Tables[0].Columns.Add("UpdatedDate");
-                        foreach (DataRow dr in ds.Tables[0].Rows)
-                        {
-                            dr["GroupId"] = objpointearn.GroupId;
-                            dr["BrandId"] = objpointearn.BrandId;
-                            dr["CategoryId"] = objpointearn.CategoryId;
-                            dr["UploadType"] = "Earn";
-                            dr["AddedBy"] = userDetails.LoginId;
-                            dr["AddedDate"] = DateTime.Now;
-                            dr["UpdatedBy"] = "";
-                            dr["UpdatedDate"] = DateTime.Now;
-                        }
-
-                    }
-                    if (fileburnonearn != null)
-                    {
-                        DataTable dt = new DataTable();
-                        string fileName = "ProductUploadForBUrn_" + objpointearn.GroupId + "_" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".xlsx";
-                        var path = ConfigurationManager.AppSettings["CustomerDocuments"].ToString();
-                        var fullFilePath = path + "\\" + fileName;
-                        fileearn.SaveAs(path + "\\" + fileName);
-
-                        string conString = string.Empty;
-
-                        conString = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" + fullFilePath + ";Extended Properties=\"Excel 12.0;HDR=Yes;IMEX=1\"";
-
-                        using (OleDbConnection connExcel = new OleDbConnection(conString))
-                        {
-                            using (OleDbCommand cmdExcel = new OleDbCommand())
-                            {
-                                using (OleDbDataAdapter odaExcel = new OleDbDataAdapter())
-                                {
-                                    cmdExcel.Connection = connExcel;
-                                    //Get the name of First Sheet.
-                                    connExcel.Open();
-                                    DataTable dtExcelSchema;
-                                    dtExcelSchema = connExcel.GetOleDbSchemaTable(OleDbSchemaGuid.Tables, null);
-                                    string sheetName = dtExcelSchema.Rows[0]["TABLE_NAME"].ToString();
-                                    connExcel.Close();
-
-                                    //Read Data from First Sheet.
-                                    connExcel.Open();
-                                    cmdExcel.CommandText = "SELECT * From [" + sheetName + "]";
-                                    odaExcel.SelectCommand = cmdExcel;
-                                    odaExcel.Fill(dt);
-                                    connExcel.Close();
-                                }
-                            }
-                        }
-                        dt.Columns.Add("GroupId");
-                        dt.Columns.Add("BrandId");
-                        dt.Columns.Add("CategoryId");
-                        dt.Columns.Add("UploadType");
-                        dt.Columns.Add("AddedBy");
-                        dt.Columns.Add("AddedDate");
-                        dt.Columns.Add("UpdatedBy");
-                        dt.Columns.Add("UpdatedDate");
-                        foreach (DataRow dr in dt.Rows)
-                        {
-                            dr["GroupId"] = objpointearn.GroupId;
-                            dr["BrandId"] = objpointearn.BrandId;
-                            dr["CategoryId"] = objpointearn.CategoryId;
-                            dr["UploadType"] = "Burn";
-                            dr["AddedBy"] = userDetails.LoginId;
-                            dr["AddedDate"] = DateTime.Now;
-                            dr["UpdatedBy"] = "";
-                            dr["UpdatedDate"] = DateTime.Now;
-                        }
-                        ds.Tables.Add(dt);
-                    }
-
-                }
-                if (objpointearn.EarnPointLevelType == "Making")
-                {
-                    status = OBR.AddEarnAndBurnRule(objpointearn, slab, slabtype, makingslabdirectortelescopic, makingSlabdirectortele, userDetails.LoginId, ds, objpointburn);
-                }
-                if (objpointearn.EarnPointLevelType == "FullAmount")
-                {
-                    status = OBR.AddEarnAndBurnRule(objpointearn, slab, slabtype, fullamtslabdirectortelescopic, fullamtSlabdirectortele, userDetails.LoginId, ds, objpointburn);
-                }
-                if (objpointearn.EarnPointLevelType == "commonFixed" || objpointearn.EarnPointLevelType == "commonSlab")
-                {
-                    status = OBR.AddEarnAndBurnRule(objpointearn, slab, slabtype, commonlabdirectortelescopic, CommonSlabdirectortele, userDetails.LoginId, ds, objpointburn);
-                }
-            }
-            catch (Exception ex)
-            {
-
-            }
-
-            return new JsonResult() { Data = status, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
 
         public ActionResult SaveVelocityCheckConfig(string jsonData)
@@ -1586,16 +1270,6 @@ namespace WebApp.Controllers.OnBoarding
             return new JsonResult() { Data = lstExistingData, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
 
-        public JsonResult GetEarnBurnDataAndUploaddata(string Groupid)
-        {
-            OnBoardingSalesViewModel objonboardingviewmodel = new OnBoardingSalesViewModel();
-            objonboardingviewmodel.objpointsburnruleconfig = OBR.GetAllBurnRuleData(Groupid);
-            objonboardingviewmodel.objpointsearnruleconfig = OBR.GetAllEarnRuleData(Groupid);
-            objonboardingviewmodel.lstearnpointslabconfig = OBR.GetPointsSlabData(Groupid);
-            return new JsonResult() { Data = objonboardingviewmodel, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
-
-        }
-
         public ActionResult SaveCommunicationUniqueValuesConfig(string jsonData)
         {
             bool status = false;
@@ -1631,18 +1305,18 @@ namespace WebApp.Controllers.OnBoarding
         }
 
         public JsonResult GetCommunicationSetList(string GroupId)
-        {            
+        {
             var SetList = OBR.GetCommunicationSetList(GroupId);
             return new JsonResult() { Data = SetList, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
-        
-        public JsonResult GetOutletListWithAssignment(string GroupId,string SetId)
+
+        public JsonResult GetOutletListWithAssignment(string GroupId, string SetId)
         {
-            var SetList = OBR.GetOutletListWithAssignment(GroupId,SetId);
+            var SetList = OBR.GetOutletListWithAssignment(GroupId, SetId);
             return new JsonResult() { Data = SetList, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
 
-        public ActionResult AssignCommunicationSetsToOutlets(string GroupId,string SetId, string OutletIds)
+        public ActionResult AssignCommunicationSetsToOutlets(string GroupId, string SetId, string OutletIds)
         {
             bool status = false;
             try
@@ -1664,7 +1338,7 @@ namespace WebApp.Controllers.OnBoarding
                 }
                 status = OBR.AssignCommunicationSetsToOutlets(GroupId, Convert.ToInt32(SetId), objData);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 newexception.AddException(ex, "AssignCommunicationSetsToOutlets");
             }
@@ -1672,20 +1346,20 @@ namespace WebApp.Controllers.OnBoarding
             return new JsonResult() { Data = status, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
 
-        public JsonResult SendPerpetualCampaignToDLT(string GroupId, string CampaignId,string CampaignType)
+        public JsonResult SendPerpetualCampaignToDLT(string GroupId, string CampaignId, string CampaignType)
         {
             bool status = false;
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
             status = OBR.SendPerpetualCampaignToDLT(GroupId, Convert.ToInt32(CampaignId), CampaignType, userDetails.LoginId);
             return new JsonResult() { Data = status, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
-        
+
         public ActionResult GetVariableWordsList()
-        {            
-           var  objData = OBR.GetVariableWordsList();
+        {
+            var objData = OBR.GetVariableWordsList();
             return PartialView("_VariableWordsList", objData);
         }
-       
+
         public JsonResult AddVariableWords(string NewWord)
         {
             bool status = false;
@@ -1694,7 +1368,7 @@ namespace WebApp.Controllers.OnBoarding
             return new JsonResult() { Data = status, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
 
-        public ActionResult GetCampaignOtherConfigForDLT(string GroupId,string Type)
+        public ActionResult GetCampaignOtherConfigForDLT(string GroupId, string Type)
         {
             OnBoardingSalesViewModel objDataView = new OnBoardingSalesViewModel();
             ViewBag.TempleteType = objDataView.TempleteType();
@@ -1702,25 +1376,25 @@ namespace WebApp.Controllers.OnBoarding
             return PartialView("_DLTBirthdayAndAnniversary", objData);
         }
 
-        public ActionResult UpdateBADLTStatus(string id, string statusid, string status,string reason)
+        public ActionResult UpdateBADLTStatus(string id, string statusid, string status, string reason)
         {
             bool result = false;
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
             result = OBR.UpdateBADLTStatus(Convert.ToInt32(id), Convert.ToInt32(statusid), status, userDetails.LoginId, reason);
             return new JsonResult() { Data = result, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
-       
+
         public ActionResult SaveBADLTConfig(string id, string statusid, string status, string jsonData)
         {
             bool result = false;
-            var userDetails = (CustomerLoginDetail)Session["UserSession"];            
-            
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
+
             JavaScriptSerializer json_serializer = new JavaScriptSerializer();
             json_serializer.MaxJsonLength = int.MaxValue;
             object[] objBAConfigData = (object[])json_serializer.DeserializeObject(jsonData);
             foreach (Dictionary<string, object> item in objBAConfigData)
             {
-                var IntroDays= Convert.ToString(item["IntroDays"]);
+                var IntroDays = Convert.ToString(item["IntroDays"]);
                 var IntroDaysDLT = Convert.ToString(item["IntroDaysDLT"]);
                 var TemplateId = Convert.ToString(item["TemplateId"]);
                 var TemplateName = Convert.ToString(item["TemplateName"]);
@@ -1764,14 +1438,14 @@ namespace WebApp.Controllers.OnBoarding
                     objInactiveConfig = OBR.GetInactiveConfigById(id);
                     if (objInactiveConfig != null)
                     {
-                        if(num==1)
+                        if (num == 1)
                         {
-                            objInactiveConfig.LessThanDaysScript= Convert.ToString(item["Script"]);
+                            objInactiveConfig.LessThanDaysScript = Convert.ToString(item["Script"]);
                             objInactiveConfig.LessThanDaysScriptDLT = Convert.ToString(item["ScriptDLT"]);
                             objInactiveConfig.TemplateId1 = Convert.ToString(item["TemplateId"]);
                             objInactiveConfig.TemplateName1 = Convert.ToString(item["TemplateName"]);
                             objInactiveConfig.TemplateType1 = Convert.ToString(item["TemplateType"]);
-                            if(Convert.ToString(item["Status"])== "Approved")
+                            if (Convert.ToString(item["Status"]) == "Approved")
                             {
                                 objInactiveConfig.DLTStatus1 = "Approved";
                             }
@@ -1824,8 +1498,8 @@ namespace WebApp.Controllers.OnBoarding
             result = OBR.UpdateDLCLinkDLTStatus(Convert.ToInt32(id), Convert.ToInt32(statusid), status, userDetails.LoginId, reason);
             return new JsonResult() { Data = result, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
-       
-        public ActionResult SaveDLCLinkDLTConfig(string id, string statusid, string status,string jsonData)
+
+        public ActionResult SaveDLCLinkDLTConfig(string id, string statusid, string status, string jsonData)
         {
             bool result = false;
             try
@@ -1927,7 +1601,7 @@ namespace WebApp.Controllers.OnBoarding
                                 objDLCLinkConfig.DLTStatus7 = "Approved";
                             }
                         }
-                                             
+
                         objDLCLinkConfig.UpdatedBy = userDetails.LoginId;
                         objDLCLinkConfig.UpdatedDate = DateTime.Now;
                     }
@@ -1940,8 +1614,281 @@ namespace WebApp.Controllers.OnBoarding
             }
             return new JsonResult() { Data = result, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
-    
-        
+
+        public ActionResult SaveEarnRuleConfig(string jsonData)
+        {
+            bool result = false;
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            BOTS_TblEarnRuleConfig objEarnRule = new BOTS_TblEarnRuleConfig();
+            List<BOTS_TblSlabConfig> lstSlab = new List<BOTS_TblSlabConfig>();
+            List<BOTS_TblProductUpload> lstProdUpload = new List<BOTS_TblProductUpload>();
+            List<BOTS_TblProductUpload> lstBlockEarnUpload = new List<BOTS_TblProductUpload>();
+            JavaScriptSerializer json_serializer = new JavaScriptSerializer();
+            json_serializer.MaxJsonLength = int.MaxValue;
+            object[] objData = (object[])json_serializer.DeserializeObject(jsonData);
+
+            foreach (Dictionary<string, object> item in objData)
+            {
+                objEarnRule.RuleId = Convert.ToInt32(item["RuleId"]);
+                objEarnRule.GroupId = Convert.ToString(item["GroupId"]);
+                objEarnRule.MinInvoiceAmt = Convert.ToInt32(item["MinInvoiceAmt"]);
+                objEarnRule.BasePercentage = Convert.ToDecimal(item["BasePercentage"]);
+                objEarnRule.PointsValidityInMonths = Convert.ToInt32(item["PointsValidityInMonths"]);
+                objEarnRule.RevolvingExpiry = Convert.ToBoolean(item["RevolvingExpiry"]);
+                objEarnRule.IsBase = Convert.ToBoolean(item["IsBase"]);
+                objEarnRule.IsSlab = Convert.ToBoolean(item["IsSlab"]);
+                objEarnRule.IsProductWise = Convert.ToBoolean(item["IsProductWise"]);
+                if (objEarnRule.IsBase.Value)
+                {
+                    objEarnRule.PointsValueInRS = Convert.ToDecimal(item["PointsValueInRS"]);
+                }
+                if (objEarnRule.IsProductWise.Value)
+                {
+
+                    objEarnRule.ProductWiseType = Convert.ToString(item["ProductWiseType"]);
+
+                    if (!string.IsNullOrEmpty(Convert.ToString(item["ProductWiseFile"])))
+                    {
+                        var path = ConfigurationManager.AppSettings["CustomerDocuments"].ToString();
+                        string fileName = "ProductUploadForEarn_" + objEarnRule.GroupId + "_" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".xlsx";
+                        path = path + "\\" + fileName;
+                        DataTable dt = new DataTable();
+                        System.IO.File.WriteAllBytes(path, Convert.FromBase64String(Convert.ToString(item["ProductWiseFile"])));
+                        string conString = string.Empty;
+
+                        conString = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" + path + ";Extended Properties=\"Excel 12.0;HDR=Yes;IMEX=1\"";
+
+                        using (OleDbConnection connExcel = new OleDbConnection(conString))
+                        {
+                            using (OleDbCommand cmdExcel = new OleDbCommand())
+                            {
+                                using (OleDbDataAdapter odaExcel = new OleDbDataAdapter())
+                                {
+                                    cmdExcel.Connection = connExcel;
+                                    //Get the name of First Sheet.
+                                    connExcel.Open();
+                                    DataTable dtExcelSchema;
+                                    dtExcelSchema = connExcel.GetOleDbSchemaTable(OleDbSchemaGuid.Tables, null);
+                                    string sheetName = dtExcelSchema.Rows[0]["TABLE_NAME"].ToString();
+                                    connExcel.Close();
+
+                                    //Read Data from First Sheet.
+                                    connExcel.Open();
+                                    cmdExcel.CommandText = "SELECT * From [" + sheetName + "]";
+                                    odaExcel.SelectCommand = cmdExcel;
+                                    odaExcel.Fill(dt);
+                                    connExcel.Close();
+                                }
+                            }
+                        }
+                        foreach (DataRow dr in dt.Rows)
+                        {
+                            BOTS_TblProductUpload objItem = new BOTS_TblProductUpload();
+                            objItem.GroupId = objEarnRule.GroupId;
+                            objItem.ProductCode = Convert.ToString(dr["ProductCode"]);
+                            objItem.ProductName = Convert.ToString(dr["ProductName"]);
+                            objItem.Percentage = Convert.ToDecimal(dr["Percentage"]);
+                            objItem.Type = "Product Earn";
+                            lstProdUpload.Add(objItem);
+                        }
+                    }
+
+                }
+                if (objEarnRule.IsSlab.Value)
+                {
+                    var SlabData = (object[])item["SlabData"];
+                    foreach (Dictionary<string, object> item1 in SlabData)
+                    {
+                        BOTS_TblSlabConfig objSlab = new BOTS_TblSlabConfig();
+                        objSlab.GroupId = Convert.ToString(item["GroupId"]);
+                        objSlab.SlabFrom = Convert.ToInt32(item1["SlabFrom"]);
+                        objSlab.SlabTo = Convert.ToInt32(item1["SlabTo"]);
+                        objSlab.SlabPercentage = Convert.ToDecimal(item1["SlabPercentage"]);
+
+                        lstSlab.Add(objSlab);
+                    }
+                }
+                if (!string.IsNullOrEmpty(Convert.ToString(item["BlockProductWiseType"])))
+                {
+                    objEarnRule.IsBlockForEarn = true;
+                    objEarnRule.BlockProductWiseType = Convert.ToString(item["BlockProductWiseType"]);
+                    if (!string.IsNullOrEmpty(Convert.ToString(item["ProductBlockEarn"])))
+                    {
+                        var path = ConfigurationManager.AppSettings["CustomerDocuments"].ToString();
+                        string fileName = "ProductUploadForEarnBlock_" + objEarnRule.GroupId + "_" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".xlsx";
+                        path = path + "\\" + fileName;
+                        DataTable dt = new DataTable();
+                        System.IO.File.WriteAllBytes(path, Convert.FromBase64String(Convert.ToString(item["ProductBlockEarn"])));
+                        string conString = string.Empty;
+
+                        conString = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" + path + ";Extended Properties=\"Excel 12.0;HDR=Yes;IMEX=1\"";
+
+                        using (OleDbConnection connExcel = new OleDbConnection(conString))
+                        {
+                            using (OleDbCommand cmdExcel = new OleDbCommand())
+                            {
+                                using (OleDbDataAdapter odaExcel = new OleDbDataAdapter())
+                                {
+                                    cmdExcel.Connection = connExcel;
+                                    //Get the name of First Sheet.
+                                    connExcel.Open();
+                                    DataTable dtExcelSchema;
+                                    dtExcelSchema = connExcel.GetOleDbSchemaTable(OleDbSchemaGuid.Tables, null);
+                                    string sheetName = dtExcelSchema.Rows[0]["TABLE_NAME"].ToString();
+                                    connExcel.Close();
+
+                                    //Read Data from First Sheet.
+                                    connExcel.Open();
+                                    cmdExcel.CommandText = "SELECT * From [" + sheetName + "]";
+                                    odaExcel.SelectCommand = cmdExcel;
+                                    odaExcel.Fill(dt);
+                                    connExcel.Close();
+                                }
+                            }
+                        }
+                        foreach (DataRow dr in dt.Rows)
+                        {
+                            BOTS_TblProductUpload objItem = new BOTS_TblProductUpload();
+                            objItem.GroupId = objEarnRule.GroupId;
+                            objItem.ProductCode = Convert.ToString(dr["ProductCode"]);
+                            objItem.ProductName = Convert.ToString(dr["ProductName"]);
+                            objItem.Percentage = Convert.ToDecimal(dr["Percentage"]);
+                            objItem.Type = "Block Earn";
+                            lstBlockEarnUpload.Add(objItem);
+                        }
+                    }
+                }
+            }
+            if (objEarnRule.RuleId > 0)
+            {
+                objEarnRule.UpdatedBy = userDetails.LoginId;
+                objEarnRule.UpdatedDate = DateTime.Now;
+            }
+            else
+            {
+                objEarnRule.AddedBy = userDetails.LoginId;
+                objEarnRule.AddedDate = DateTime.Now;
+            }
+            result = OBR.SaveEarnRule(objEarnRule, lstSlab, lstProdUpload, lstBlockEarnUpload);
+
+            return new JsonResult() { Data = result, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
+        }
+
+        public ActionResult CheckerView(string GroupId)
+        {
+            CommonFunctions common = new CommonFunctions();
+            GroupId = common.DecryptString(GroupId);
+            OnBoardingSalesViewModel objData = new OnBoardingSalesViewModel();
+            //Customer Details
+            objData.bots_TblGroupMaster = OBR.GetGroupMasterDetails(GroupId);
+            objData.bots_TblDealDetails = OBR.GetDealMasterDetails(GroupId);
+            objData.bots_TblPaymentDetails = OBR.GetPaymentDetails(GroupId);
+            objData.objRetailList = OBR.GetRetailDetails(GroupId);
+            objData.objInstallmentList = OBR.GetInstallmentDetails(GroupId);
+
+            //Communication Details
+            objData.lstCommunicationSet = OBR.GetCommunicationSetsByGroupId(GroupId);
+            objData.lstSMSConfig = OBR.GetCommunicationSMSConfigByGroupId(GroupId);
+
+
+
+            return View(objData);
+
+        }
+
+        public ActionResult SaveBurnRuleConfig(string jsonData)
+        {
+            bool result = false;
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            List<BOTS_TblProductUpload> lstBlockBurnUpload = new List<BOTS_TblProductUpload>();
+            BOTS_TblBurnRuleConfig objBurnRule = new BOTS_TblBurnRuleConfig();            
+
+            JavaScriptSerializer json_serializer = new JavaScriptSerializer();
+            json_serializer.MaxJsonLength = int.MaxValue;
+            object[] objData = (object[])json_serializer.DeserializeObject(jsonData);
+            foreach (Dictionary<string, object> item in objData)
+            {
+                objBurnRule.RuleId = Convert.ToInt32(item["RuleId"]);
+                objBurnRule.GroupId = Convert.ToString(item["GroupId"]);
+                objBurnRule.MinInvoiceAmt = Convert.ToInt32(item["MinInvoiceAmt"]);
+                objBurnRule.MinRedeemPts = Convert.ToInt32(item["MinRedeemPts"]);
+                objBurnRule.MinThreshholdPtsFisttime = Convert.ToInt32(item["MinThreshholdPtsFisttime"]);
+                objBurnRule.MinThreshholdPtsSubsequent = Convert.ToInt32(item["MinThreshholdPtsSubsequent"]);
+                objBurnRule.PartialEarn = Convert.ToBoolean(item["PartialEarn"]);
+                objBurnRule.IsProductCodeBlocking = Convert.ToBoolean(item["IsProductCodeBlocking"]);
+                if (objBurnRule.IsProductCodeBlocking)
+                {
+                    objBurnRule.ProductCodeBlockingType = Convert.ToString(item["ProductBurnType"]);
+
+                    if (!string.IsNullOrEmpty(Convert.ToString(item["ProductBlockBurnFile"])))
+                    {
+                        var path = ConfigurationManager.AppSettings["CustomerDocuments"].ToString();
+                        string fileName = "ProductBlockForBurn_" + objBurnRule.GroupId + "_" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".xlsx";
+                        path = path + "\\" + fileName;
+                        DataTable dt = new DataTable();
+                        System.IO.File.WriteAllBytes(path, Convert.FromBase64String(Convert.ToString(item["ProductBlockBurnFile"])));
+                        string conString = string.Empty;
+
+                        conString = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" + path + ";Extended Properties=\"Excel 12.0;HDR=Yes;IMEX=1\"";
+
+                        using (OleDbConnection connExcel = new OleDbConnection(conString))
+                        {
+                            using (OleDbCommand cmdExcel = new OleDbCommand())
+                            {
+                                using (OleDbDataAdapter odaExcel = new OleDbDataAdapter())
+                                {
+                                    cmdExcel.Connection = connExcel;
+                                    //Get the name of First Sheet.
+                                    connExcel.Open();
+                                    DataTable dtExcelSchema;
+                                    dtExcelSchema = connExcel.GetOleDbSchemaTable(OleDbSchemaGuid.Tables, null);
+                                    string sheetName = dtExcelSchema.Rows[0]["TABLE_NAME"].ToString();
+                                    connExcel.Close();
+
+                                    //Read Data from First Sheet.
+                                    connExcel.Open();
+                                    cmdExcel.CommandText = "SELECT * From [" + sheetName + "]";
+                                    odaExcel.SelectCommand = cmdExcel;
+                                    odaExcel.Fill(dt);
+                                    connExcel.Close();
+                                }
+                            }
+                        }
+                        foreach (DataRow dr in dt.Rows)
+                        {
+                            BOTS_TblProductUpload objItem = new BOTS_TblProductUpload();
+                            objItem.GroupId = objBurnRule.GroupId;
+                            objItem.ProductCode = Convert.ToString(dr["ProductCode"]);
+                            objItem.ProductName = Convert.ToString(dr["ProductName"]);
+                            objItem.Percentage = Convert.ToDecimal(dr["Percentage"]);
+                            objItem.Type = "Product Block Burn";
+                            lstBlockBurnUpload.Add(objItem);
+                        }
+                    }
+                }
+            }
+            if (objBurnRule.RuleId > 0)
+            {
+                objBurnRule.UpdatedBy = userDetails.LoginId;
+                objBurnRule.UpdatedDate = DateTime.Now;
+            }
+            else
+            {
+                objBurnRule.AddedBy = userDetails.LoginId;
+                objBurnRule.AddedDate = DateTime.Now;
+            }
+
+            result = OBR.SaveBurnRule(objBurnRule, lstBlockBurnUpload);
+            return new JsonResult() { Data = result, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
+        }
+
+        public ActionResult SendForApproval(string GroupId)
+        {
+            bool result = true;
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            result = OBR.SendForApproval(GroupId, userDetails.LoginId);
+            return new JsonResult() { Data = result, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
+        }
     }
 }
-    
+

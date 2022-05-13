@@ -81,6 +81,7 @@ namespace WebApp.Controllers.ITOPS
 
         public bool ModifyTransaction(string jsonData)
         {
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
             bool result = false;
             string GroupId = "";
             try
@@ -108,6 +109,8 @@ namespace WebApp.Controllers.ITOPS
                     objAudit.RequestedBy = Convert.ToString(item["RequestedBy"]);
                     objAudit.RequestedOnForum = Convert.ToString(item["RequestedForum"]);
                     objAudit.RequestedOn = Convert.ToDateTime(item["RequestedOn"]);
+                    objAudit.AddedBy = userDetails.LoginId;
+                    objAudit.AddedDate = DateTime.Now;
 
                 }
                 result = ITOPS.ModifyTransaction(groupId, Convert.ToInt64(TransactionId), points, objAudit);
@@ -161,6 +164,7 @@ namespace WebApp.Controllers.ITOPS
         }
         public ActionResult TransferPoints(string jsonData)
         {
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
             SPResponse result = new SPResponse();
             var groupId = (string)Session["GroupId"];
             try
@@ -187,6 +191,8 @@ namespace WebApp.Controllers.ITOPS
                     objAudit.RequestedBy = Convert.ToString(item["RequestedBy"]);
                     objAudit.RequestedOnForum = Convert.ToString(item["RequestedForum"]);
                     objAudit.RequestedOn = Convert.ToDateTime(item["RequestedOn"]);
+                    objAudit.AddedBy = userDetails.LoginId;
+                    objAudit.AddedDate = DateTime.Now;
                     IsSMS = Convert.ToBoolean(item["IsSMS"]);
                 }
 

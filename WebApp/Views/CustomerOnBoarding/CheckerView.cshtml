@@ -1,0 +1,212 @@
+﻿@using BOTS_BL.Models;
+@model WebApp.ViewModel.OnBoardingSalesViewModel
+@{
+    ViewBag.Title = "CheckerView";
+    Layout = "~/Views/Shared/_OnBoardingLayout.cshtml";
+
+    var userDetails = (CustomerLoginDetail)Session["UserSession"];
+    var roleId = userDetails.LoginType;
+
+}
+
+<style>
+    .tab2 {
+        cursor: pointer;
+        padding: 10px 08px;
+        margin: 0px 2px;
+        background-color: #2f4353 !important;
+        display: inline-block;
+        color: #fff;
+        border-radius: 3px 3px 0px 0px;
+        box-shadow: 0 0.5rem 0.8rem #00000080;
+        background-color: #000000 !important;
+        background-image: linear-gradient(147deg, #000000 0%, #04619f 74%) !important;
+    }
+
+    .tabs2 {
+        padding-left: 00px;
+    }
+
+    .panels2 {
+        background: #ffffff;
+        box-shadow: 0 1rem 1rem #00000010;
+        width: 100%;
+        border-radius: 3px;
+        overflow: hidden;
+    }
+
+    .panel2 {
+        display: none;
+        animation: fadein .8s;
+    }
+
+    .panel-title2 {
+        font-size: 1.5em;
+        font-weight: bold
+    }
+
+    .radio2 {
+        display: none;
+    }
+
+    #one2:checked ~ .panels2 #one-panel2,
+    #two2:checked ~ .panels2 #two-panel2,
+    #three2:checked ~ .panels2 #three-panel2 {
+        display: block
+    }
+
+    #one2:checked ~ .tabs2 #one-tab2,
+    #two2:checked ~ .tabs2 #two-tab2,
+    #three2:checked ~ .tabs2 #three-tab2 {
+        background: #fff !important;
+        color: #000;
+        border-top: 3px solid #fff;
+        border-left: 3px solid #fff;
+        border-right: 3px solid #fff;
+        font-weight: bold;
+        border-top-left-radius: 7px;
+        border-top-right-radius: 7px;
+    }
+
+    h2 {
+        color: #000;
+        text-align: center;
+        font-size: 2em;
+    }
+
+    .warpper {
+        display: grid;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .modal {
+        display: none; /* Hidden by default */
+        position: fixed; /* Stay in place */
+        z-index: 5 !important; /* Sit on top */
+        padding-top: 65px; /* Location of the box */
+        left: 120px;
+        top: 0;
+        width: 100%; /* Full width */
+        height: 100%; /* Full height */
+        overflow: auto; /* Enable scroll if needed */
+        background-color: rgb(0,0,0); /* Fallback color */
+        background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+    }
+
+    /* Modal Content */
+    .modal-content {
+        background-color: #fefefe;
+        margin: auto;
+        padding: 20px;
+        border: 1px solid #888;
+        width: 75%;
+        border-radius: 25px;
+    }
+
+    .close {
+        color: #aaaaaa;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+    }
+
+        .close:hover,
+        .close:focus {
+            color: #000;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+    input:read-only {
+        background-color: lightgray;
+    }
+
+    .outletStyle {
+        width: 20px;
+        height: 20px;
+        margin-right: 10px;
+        margin-bottom: 10px;
+        vertical-align: text-top;
+        cursor: pointer;
+    }
+</style>
+<div class="app-main__inner">
+    <div class="row mb-3 card">
+
+        <div class="container-fluid pt-3 pl-3 pr-3 pb-3" id="dvCustomerDetailSection">
+            <div class="col-md-12 section-heading" data-toggle="collapse" data-target="#customerdetailsreadonly">Customer Details</div>
+            <div id="customerdetailsreadonly" class="collapse show">
+                @Html.Partial("~/Views/CustomerOnBoarding/_CustomerDetails.cshtml", Model)
+            </div>
+        </div>
+        <div>
+            <div class="container-fluid pt-3 pl-3 pr-3 pb-3" id="dvOutletDetailsSection">
+                <div class="col-md-12 section-heading" data-toggle="collapse" data-target="#OutletDetailsConfigreadonly">Outlet Details</div>
+                <div id="OutletDetailsConfigreadonly" class="collapse show">
+                    @*@Html.Partial("~/Views/CustomerOnBoarding/_DLTCommunication.cshtml", Model)*@
+
+                </div>
+            </div>
+        </div>
+        <div>
+            <div class="container-fluid pt-3 pl-3 pr-3 pb-3" id="dvPointRuleSection">
+                <div class="col-md-12 section-heading" data-toggle="collapse" data-target="#PointRuleConfigreadonly">Point Rule </div>
+                <div id="PointRuleConfigreadonly" class="collapse show">
+                    @*@Html.Partial("~/Views/CustomerOnBoarding/_DLTCommunication.cshtml", Model)*@
+
+                </div>
+            </div>
+        </div>
+        <div>
+            <div class="container-fluid pt-3 pl-3 pr-3 pb-3" id="dvCommunicationSection">
+                <div class="col-md-12 section-heading" data-toggle="collapse" data-target="#CommunicationConfigreadonly">Communication</div>
+                <div id="CommunicationConfigreadonly" class="collapse show">
+                    @Html.Partial("~/Views/CustomerOnBoarding/_CommunicationReadOnly.cshtml", Model)
+
+                </div>
+            </div>
+        </div>
+        <div>
+            <div class="container-fluid pt-3 pl-3 pr-3 pb-3" id="dvPerpetualCampaignSection">
+                <div class="col-md-12 section-heading" data-toggle="collapse" data-target="#PerpetualDetailsreadonly">Perpetual Campaigns</div>
+                <div id="PerpetualDetailsreadonly" class="collapse show">
+                    @*@Html.Partial("~/Views/CustomerOnBoarding/_DLTPerpetualCampaign.cshtml", Model)*@
+                </div>
+            </div>
+        </div>
+        <div>
+            <div class="container-fluid pt-3 pl-3 pr-3 pb-3" id="dvDLCSection">
+                <div class="col-md-12 section-heading" data-toggle="collapse" data-target="#DLCreadonly">Digital Loyalty Card</div>
+                <div id="DLCreadonly" class="collapse show">
+                    @*@Html.Partial("~/Views/CustomerOnBoarding/_DLCToDLT.cshtml", Model)*@
+
+                </div>
+            </div>
+        </div>
+        <div>
+            <div class="container-fluid pt-3 pl-3 pr-3 pb-3" id="dvVelocityChecksSection">
+                <div class="col-md-12 section-heading" data-toggle="collapse" data-target="#VelocityChecksConfigreadonly">Velocity Checks</div>
+                <div id="VelocityChecksConfigreadonly" class="collapse show">
+                    @*@Html.Partial("~/Views/CustomerOnBoarding/_DLTCommunication.cshtml", Model)*@
+
+                </div>
+            </div>
+        </div><div>
+    <div class="container-fluid pt-3 pl-3 pr-3 pb-3" id="dvBUSection">
+        <div class="col-md-12 section-heading" data-toggle="collapse" data-target="#BUConfigreadonly">Bulk Upload</div>
+        <div id="BUConfigreadonly" class="collapse show">
+            @*@Html.Partial("~/Views/CustomerOnBoarding/_DLTCommunication.cshtml", Model)*@
+
+        </div>
+    </div>
+</div>
+        @if (roleId == "6")
+        {
+            //Buttons here
+            <div class="container-fluid pt-3 pl-3 pr-3 pb-3">
+                <button type="button" id="btnCheckerView" class="btn btn-primary pull-right" style="margin-right: 10px; margin-bottom: 20px; margin-top: 10px;">Submit For Aprroval </button>
+            </div>
+        }
+    </div>
+</div>

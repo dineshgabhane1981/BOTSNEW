@@ -61,9 +61,10 @@ namespace WebApp.Controllers.ITOPS
         [HttpPost]
         public ActionResult AddSingleMember(string jsonData)
         {
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
             SPResponse result = new SPResponse();
             string GroupId = "";
-
+            
             try
             {
                 var groupId = (string)Session["GroupId"];
@@ -99,6 +100,8 @@ namespace WebApp.Controllers.ITOPS
                     objAudit.RequestedBy = Convert.ToString(item["RequestedBy"]);
                     objAudit.RequestedOnForum = Convert.ToString(item["RequestedForum"]);
                     objAudit.RequestedOn = Convert.ToDateTime(item["RequestedDate"]);
+                    objAudit.AddedBy = userDetails.LoginId;
+                    objAudit.AddedDate = DateTime.Now;
 
                 }
 

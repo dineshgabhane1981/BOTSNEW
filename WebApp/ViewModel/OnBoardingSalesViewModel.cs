@@ -29,18 +29,17 @@ namespace WebApp.ViewModel
         public List<SelectListItem> lstAllGroups { get; set; }
         public List<SelectListItem> lstRefferedCategory { get; set; }
         public List<SelectListItem> lstStates { get; set; }
-        public List<SelectListItem> lstBrands { get; set; }
-        public BOTS_TblPointsEarnRuleConfig objpointsearnruleconfig { get; set; }
-        public BOTS_TblPointsBurnRuleConfig objpointsburnruleconfig { get; set; }
-        public BOTS_TblEarnPointsSlabConfig objearnpointslab { get; set; }
-        public List<BOTS_TblEarnPointsSlabConfig> lstearnpointslabconfig { get; set; }
-        public List<EarnPointLevel> lstearnpoint { get; set; }
+        public List<SelectListItem> lstBrands { get; set; }        
         public List<BOTS_TblCommunicationSet> lstCommunicationSet { get; set; }
         public List<BOTS_TblCommunicationSetAssignment> lstCommunicationSetAssignment { get; set; }
         public BOTS_TblDLCLinkConfig objDLCLinkConfig { get; set; }
 
         public BOTS_TblEarnRuleConfig objEarnRuleConfig { get; set; }
+        public BOTS_TblBurnRuleConfig objBurnRuleConfig { get; set; }
         public List<BOTS_TblSlabConfig> lstSlabConfig { get; set; }
+
+        public List<BOTS_TblCommunicationSet> lstSet { get; set; }
+        
 
         public string LeadId { get; set; }
         public SelectListItem[] BOProducts()

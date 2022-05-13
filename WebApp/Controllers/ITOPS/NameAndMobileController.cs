@@ -29,6 +29,8 @@ namespace WebApp.Controllers.ITOPS
                 Session["GroupId"] = groupId;
                 var userDetails = (CustomerLoginDetail)Session["UserSession"];
                 userDetails.GroupId = groupId;
+                userDetails.connectionString = objCustRepo.GetCustomerConnString(groupId);
+                userDetails.CustomerName = objCustRepo.GetCustomerName(groupId);
                 Session["UserSession"] = userDetails;
                 Session["buttons"] = "ITOPS";
                 ViewBag.GroupId = groupId;
@@ -62,6 +64,7 @@ namespace WebApp.Controllers.ITOPS
         [HttpPost]
         public bool ChangeMemberName(string jsonData)
         {
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
             bool result = false;
             string GroupId = "";
             try
@@ -86,6 +89,8 @@ namespace WebApp.Controllers.ITOPS
                     objAudit.RequestedBy = Convert.ToString(item["RequestedBy"]);
                     objAudit.RequestedOnForum = Convert.ToString(item["RequestedForum"]);
                     objAudit.RequestedOn = Convert.ToDateTime(item["RequestedOn"]);
+                    objAudit.AddedBy = userDetails.LoginId;
+                    objAudit.AddedDate = DateTime.Now;
                     IsSMS = Convert.ToBoolean(item["IsSMS"]);
                 }
 
@@ -115,6 +120,7 @@ namespace WebApp.Controllers.ITOPS
         [HttpPost]
         public ActionResult ChangeMemberMobile(string jsonData)
         {
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
             SPResponse result = new SPResponse();
             var groupId = (string)Session["GroupId"];
             try
@@ -140,6 +146,8 @@ namespace WebApp.Controllers.ITOPS
                     objAudit.RequestedBy = Convert.ToString(item["RequestedBy"]);
                     objAudit.RequestedOnForum = Convert.ToString(item["RequestedForum"]);
                     objAudit.RequestedOn = Convert.ToDateTime(item["RequestedOn"]);
+                    objAudit.AddedBy = userDetails.LoginId;
+                    objAudit.AddedDate = DateTime.Now;
                     IsSMS = Convert.ToBoolean(item["IsSMS"]);
                 }
 

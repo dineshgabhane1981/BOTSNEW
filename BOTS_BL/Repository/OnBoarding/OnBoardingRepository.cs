@@ -95,6 +95,8 @@ namespace BOTS_BL.Repository
                         {
                             var groupDetails = context.BOTS_TblGroupMaster.Where(x => x.GroupId == objGroup.GroupId).FirstOrDefault();
                             groupDetails.CustomerStatus = "CSUpdate";
+                            groupDetails.UpdatedDate = DateTime.Now;
+                            groupDetails.UpdatedBy = objGroup.UpdatedBy;
                             context.BOTS_TblGroupMaster.AddOrUpdate(groupDetails);
                             context.SaveChanges();
 
@@ -854,242 +856,6 @@ namespace BOTS_BL.Repository
             return objDLCLinkConfig;
         }
 
-       
-        public bool AddEarnAndBurnRule(BOTS_TblPointsEarnRuleConfig earnrule, object[] slab, string slabType, decimal slabdirectortelevalue, string SlabDirectOrTelescopic, string Addedby, DataSet ds, BOTS_TblPointsBurnRuleConfig objpointburn)
-        {
-            bool status = false;
-            try
-            {
-                using (var context = new CommonDBContext())
-                {
-                    BOTS_TblPointsEarnRuleConfig objpointearnburn = new BOTS_TblPointsEarnRuleConfig();
-                    BOTS_TblPointsBurnRuleConfig objpointburnrule = new BOTS_TblPointsBurnRuleConfig();
-                    objpointearnburn = earnrule;
-                    if (earnrule.EarnPointLevelType == "Making")
-                    {
-                        if (slab.Length != 20)
-                        {
-                            foreach (var item in slab)
-                            {
-                                BOTS_TblEarnPointsSlabConfig objslabearn = new BOTS_TblEarnPointsSlabConfig();
-                                string str = String.Join(",", item.ToString());
-                                string[] val1 = str.Split('-', (char)2);
-                                objslabearn.AddedBy = Addedby;
-                                objslabearn.AddedDate = DateTime.Today;
-                                objslabearn.GroupId = earnrule.GroupId;
-                                objslabearn.BrandId = earnrule.BrandId;
-                                objslabearn.CategoryId = earnrule.CategoryId;
-                                objslabearn.SlabType = slabType;
-                                // objslabearn.EarnSlab
-                                if (slabType == "makingslabin%")
-                                {
-                                    objslabearn.EarnPointSlabFromPercentage = Convert.ToDecimal(Convert.ToString(val1[0]));
-                                    objslabearn.EarnPointSlabToPercentage = Convert.ToDecimal(Convert.ToString(val1[1]));
-                                    objslabearn.EarnPointSlabValue = Convert.ToDecimal(Convert.ToString(val1[2]));
-                                    if (SlabDirectOrTelescopic == "makingslabDirect")
-                                    {
-                                        objslabearn.EarnSlabDirectOrTelescoping = SlabDirectOrTelescopic;
-                                        objslabearn.SlabDirectOrTelescopingValue = slabdirectortelevalue;
-                                    }
-                                    else if (SlabDirectOrTelescopic == "makingslabtescopic")
-                                    {
-                                        objslabearn.EarnSlabDirectOrTelescoping = SlabDirectOrTelescopic;
-                                        objslabearn.SlabDirectOrTelescopingValue = slabdirectortelevalue;
-                                    }
-                                }
-                                if (slabType == "makingslabinRs")
-                                {
-                                    objslabearn.EarnPointSlabFromRs = Convert.ToDecimal(Convert.ToString(val1[0]));
-                                    objslabearn.EarnPointSlabToRs = Convert.ToDecimal(Convert.ToString(val1[1]));
-                                    objslabearn.EarnPointSlabValue = Convert.ToDecimal(Convert.ToString(val1[2]));
-                                    if (SlabDirectOrTelescopic == "makingslabDirect")
-                                    {
-                                        objslabearn.EarnSlabDirectOrTelescoping = SlabDirectOrTelescopic;
-                                        objslabearn.SlabDirectOrTelescopingValue = slabdirectortelevalue;
-                                    }
-                                    else if (SlabDirectOrTelescopic == "makingslabtescopic")
-                                    {
-                                        objslabearn.EarnSlabDirectOrTelescoping = SlabDirectOrTelescopic;
-                                        objslabearn.SlabDirectOrTelescopingValue = slabdirectortelevalue;
-                                    }
-                                }
-                                context.BOTS_TblEarnPointsSlabConfig.AddOrUpdate(objslabearn);
-                                context.SaveChanges();
-                            }
-                        }
-
-                        context.BOTS_TblPointsEarnRuleConfig.AddOrUpdate(objpointearnburn);
-                        context.SaveChanges();
-                        status = true;
-                    }
-                    if (earnrule.EarnPointLevelType == "FullAmount")
-                    {
-                        if (slab.Length != 20)
-                        {
-                            foreach (var item in slab)
-                            {
-                                BOTS_TblEarnPointsSlabConfig objslabearn = new BOTS_TblEarnPointsSlabConfig();
-                                string str = String.Join(",", item.ToString());
-                                string[] val1 = str.Split('-', (char)2);
-                                objslabearn.AddedBy = Addedby;
-                                objslabearn.AddedDate = DateTime.Today;
-                                objslabearn.GroupId = earnrule.GroupId;
-                                objslabearn.BrandId = earnrule.BrandId;
-                                objslabearn.CategoryId = earnrule.CategoryId;
-                                objslabearn.SlabType = slabType;
-                                // objslabearn.EarnSlab
-                                if (slabType == "FullamtSlabIn%")
-                                {
-                                    objslabearn.EarnPointSlabFromPercentage = Convert.ToDecimal(Convert.ToString(val1[0]));
-                                    objslabearn.EarnPointSlabToPercentage = Convert.ToDecimal(Convert.ToString(val1[1]));
-                                    objslabearn.EarnPointSlabValue = Convert.ToDecimal(Convert.ToString(val1[2]));
-                                    if (SlabDirectOrTelescopic == "fullamtslabDirect")
-                                    {
-                                        objslabearn.EarnSlabDirectOrTelescoping = SlabDirectOrTelescopic;
-                                        objslabearn.SlabDirectOrTelescopingValue = slabdirectortelevalue;
-                                    }
-                                    else if (SlabDirectOrTelescopic == "fullamtslabtescopic")
-                                    {
-                                        objslabearn.EarnSlabDirectOrTelescoping = SlabDirectOrTelescopic;
-                                        objslabearn.SlabDirectOrTelescopingValue = slabdirectortelevalue;
-                                    }
-                                }
-                                if (slabType == "FullamtSlabInRS")
-                                {
-                                    objslabearn.EarnPointSlabFromRs = Convert.ToDecimal(Convert.ToString(val1[0]));
-                                    objslabearn.EarnPointSlabToRs = Convert.ToDecimal(Convert.ToString(val1[1]));
-                                    objslabearn.EarnPointSlabValue = Convert.ToDecimal(Convert.ToString(val1[2]));
-                                    if (SlabDirectOrTelescopic == "fullamtslabDirect")
-                                    {
-                                        objslabearn.EarnSlabDirectOrTelescoping = SlabDirectOrTelescopic;
-                                        objslabearn.SlabDirectOrTelescopingValue = slabdirectortelevalue;
-                                    }
-                                    else if (SlabDirectOrTelescopic == "fullamtslabtescopic")
-                                    {
-                                        objslabearn.EarnSlabDirectOrTelescoping = SlabDirectOrTelescopic;
-                                        objslabearn.SlabDirectOrTelescopingValue = slabdirectortelevalue;
-                                    }
-                                }
-                                context.BOTS_TblEarnPointsSlabConfig.AddOrUpdate(objslabearn);
-                                context.SaveChanges();
-                            }
-                        }
-
-                        context.BOTS_TblPointsEarnRuleConfig.AddOrUpdate(objpointearnburn);
-                        context.SaveChanges();
-                        status = true;
-                    }
-                    if (earnrule.EarnPointLevelType == "commonFixed" || earnrule.EarnPointLevelType == "commonSlab")
-                    {
-                        if (slab.Length != 20)
-                        {
-                            foreach (var item in slab)
-                            {
-                                BOTS_TblEarnPointsSlabConfig objslabearn = new BOTS_TblEarnPointsSlabConfig();
-                                string str = String.Join(",", item.ToString());
-                                string[] val1 = str.Split('-', (char)2);
-                                objslabearn.AddedBy = Addedby;
-                                objslabearn.AddedDate = DateTime.Today;
-                                objslabearn.GroupId = earnrule.GroupId;
-                                objslabearn.BrandId = earnrule.BrandId;
-                                objslabearn.CategoryId = earnrule.CategoryId;
-                                objslabearn.SlabType = slabType;
-                                // objslabearn.EarnSlab
-                                if (slabType == "commonslabin%")
-                                {
-                                    objslabearn.EarnPointSlabFromPercentage = Convert.ToDecimal(Convert.ToString(val1[0]));
-                                    objslabearn.EarnPointSlabToPercentage = Convert.ToDecimal(Convert.ToString(val1[1]));
-                                    objslabearn.EarnPointSlabValue = Convert.ToDecimal(Convert.ToString(val1[2]));
-                                    if (SlabDirectOrTelescopic == "commonslabdirect")
-                                    {
-                                        objslabearn.EarnSlabDirectOrTelescoping = SlabDirectOrTelescopic;
-                                        objslabearn.SlabDirectOrTelescopingValue = slabdirectortelevalue;
-                                    }
-                                    else if (SlabDirectOrTelescopic == "commonslabtelescoping")
-                                    {
-                                        objslabearn.EarnSlabDirectOrTelescoping = SlabDirectOrTelescopic;
-                                        objslabearn.SlabDirectOrTelescopingValue = slabdirectortelevalue;
-                                    }
-                                }
-                                if (slabType == "commonSlabInRs")
-                                {
-                                    objslabearn.EarnPointSlabToRs = Convert.ToDecimal(Convert.ToString(val1[0]));
-                                    objslabearn.EarnPointSlabToRs = Convert.ToDecimal(Convert.ToString(val1[1]));
-                                    objslabearn.EarnPointSlabValue = Convert.ToDecimal(Convert.ToString(val1[2]));
-                                    if (SlabDirectOrTelescopic == "commonslabdirect")
-                                    {
-                                        objslabearn.EarnSlabDirectOrTelescoping = SlabDirectOrTelescopic;
-                                        objslabearn.SlabDirectOrTelescopingValue = slabdirectortelevalue;
-                                    }
-                                    else if (SlabDirectOrTelescopic == "commonslabtelescoping")
-                                    {
-                                        objslabearn.EarnSlabDirectOrTelescoping = SlabDirectOrTelescopic;
-                                        objslabearn.SlabDirectOrTelescopingValue = slabdirectortelevalue;
-                                    }
-                                }
-                                context.BOTS_TblEarnPointsSlabConfig.AddOrUpdate(objslabearn);
-                                context.SaveChanges();
-                            }
-                        }
-
-                        context.BOTS_TblPointsEarnRuleConfig.AddOrUpdate(objpointearnburn);
-                        context.SaveChanges();
-                        status = true;
-                    }
-                    if (ds.Tables.Count > 0)
-                    {
-
-                        for (int i = 0; i < ds.Tables.Count; i++)
-                        {
-                            var conStr = ConfigurationManager.ConnectionStrings["CommonDBContext"].ToString();
-
-                            SqlConnection con = new SqlConnection(conStr);
-                            SqlBulkCopy objbulk = new SqlBulkCopy(con);
-                            objbulk.DestinationTableName = "BOTS_TblProductUploadConfig";
-
-                            objbulk.ColumnMappings.Add("GroupId", "GroupId");
-                            objbulk.ColumnMappings.Add("BrandId", "BrandId");
-                            objbulk.ColumnMappings.Add("CategoryId", "CategoryId");
-                            objbulk.ColumnMappings.Add("DepartmentId", "DepartmentId");
-                            objbulk.ColumnMappings.Add("ProductBrandCode", "ProductBrandCode");
-                            objbulk.ColumnMappings.Add("ProductCode", "ProductCode");
-                            objbulk.ColumnMappings.Add("ProductSubCategoryCode", "ProductSubCategoryCode");
-                            objbulk.ColumnMappings.Add("ProductCategoryCode", "ProductCategoryCode");
-                            objbulk.ColumnMappings.Add("Carret", "Carret");
-                            objbulk.ColumnMappings.Add("ProductName", "ProductName");
-                            objbulk.ColumnMappings.Add("LoyaltyPercentage", "LoyaltyPercentage");
-                            objbulk.ColumnMappings.Add("UploadType", "UploadType");
-                            objbulk.ColumnMappings.Add("AddedBy", "AddedBy");
-                            objbulk.ColumnMappings.Add("AddedDate", "AddedDate");
-                            objbulk.ColumnMappings.Add("UpdatedBy", "UpdatedBy");
-                            objbulk.ColumnMappings.Add("UpdatedDate", "UpdatedDate");
-
-                            con.Open();
-                            objbulk.WriteToServer(ds.Tables[i]);
-                            con.Close();
-                        }
-
-
-                    }
-                    if (objpointburn != null)
-                    {
-                        objpointburnrule = objpointburn;
-                        context.BOTS_TblPointsBurnRuleConfig.Add(objpointburnrule);
-                        context.SaveChanges();
-                    }
-
-                }
-
-            }
-            catch (Exception ex)
-            {
-                newexception.AddException(ex, "AddEarnBurnRule");
-            }
-
-
-            return status;
-        }
-
         public bool SaveVelocityCheckConfig(List<BOTS_TblVelocityChecksConfig> lstVelocityCheck, string groupId)
         {
             bool status = false;
@@ -1268,37 +1034,6 @@ namespace BOTS_BL.Repository
                 newexception.AddException(ex, "GetInactiveConfigData");
             }
             return lstData;
-        }
-
-        public BOTS_TblPointsEarnRuleConfig GetAllEarnRuleData(string GroupId)
-        {
-            BOTS_TblPointsEarnRuleConfig objearnrule = new BOTS_TblPointsEarnRuleConfig();
-            using (var context = new CommonDBContext())
-            {
-                objearnrule = context.BOTS_TblPointsEarnRuleConfig.Where(x => x.GroupId == GroupId).FirstOrDefault();
-
-            }
-            return objearnrule;
-        }
-        public BOTS_TblPointsBurnRuleConfig GetAllBurnRuleData(string GroupId)
-        {
-            BOTS_TblPointsBurnRuleConfig objburnrule = new BOTS_TblPointsBurnRuleConfig();
-            using (var context = new CommonDBContext())
-            {
-                objburnrule = context.BOTS_TblPointsBurnRuleConfig.Where(x => x.GroupId == GroupId).FirstOrDefault();
-
-            }
-            return objburnrule;
-        }
-        public List<BOTS_TblEarnPointsSlabConfig> GetPointsSlabData(string GroupId)
-        {
-            List<BOTS_TblEarnPointsSlabConfig> lstslabdata = new List<BOTS_TblEarnPointsSlabConfig>();
-            using (var context = new CommonDBContext())
-            {
-                lstslabdata = context.BOTS_TblEarnPointsSlabConfig.Where(x => x.GroupId == GroupId).ToList();
-
-            }
-            return lstslabdata;
         }
 
         public List<BOTS_TblCommunicationSet> GetCommunicationSetsByGroupId(string GroupId)
@@ -1961,5 +1696,205 @@ namespace BOTS_BL.Repository
             }
             return result;
         }
+
+        public bool SaveEarnRule(BOTS_TblEarnRuleConfig objData, List<BOTS_TblSlabConfig> lstSlabs, List<BOTS_TblProductUpload> lstEarnProd, List<BOTS_TblProductUpload> lstBlockEatn)
+        {
+            bool result = false;
+            using (var context = new CommonDBContext())
+            {
+                using (DbContextTransaction transaction = context.Database.BeginTransaction())
+                {
+                    try
+                    {
+                        var oldEarnRule = context.BOTS_TblEarnRuleConfig.Where(x => x.GroupId == objData.GroupId).FirstOrDefault();
+                        if (oldEarnRule != null)
+                        {
+                            objData.AddedBy = oldEarnRule.AddedBy;
+                            objData.AddedDate = oldEarnRule.AddedDate;
+                        }
+                        context.BOTS_TblEarnRuleConfig.AddOrUpdate(objData);
+                        context.SaveChanges();
+
+                        //Slab
+                        if (lstSlabs.Count > 0)
+                        {
+                            var oldSlabData = context.BOTS_TblSlabConfig.Where(x => x.GroupId == objData.GroupId).ToList();
+                            foreach (var item in oldSlabData)
+                            {
+                                context.BOTS_TblSlabConfig.Remove(item);
+                                context.SaveChanges();
+                            }
+
+                            foreach (var item in lstSlabs)
+                            {
+                                context.BOTS_TblSlabConfig.AddOrUpdate(item);
+                                context.SaveChanges();
+                            }
+                        }
+
+                        //Product Upload
+                        if (lstEarnProd.Count > 0)
+                        {
+                            var oldProductData = context.BOTS_TblProductUpload.Where(x => x.GroupId == objData.GroupId && x.Type == "Product Earn").ToList();
+                            foreach (var item in oldProductData)
+                            {
+                                context.BOTS_TblProductUpload.Remove(item);
+                                context.SaveChanges();
+                            }
+
+                            foreach (var item in lstEarnProd)
+                            {
+                                context.BOTS_TblProductUpload.AddOrUpdate(item);
+                                context.SaveChanges();
+                            }
+                        }
+
+                        //Block For Earn
+                        if (lstBlockEatn.Count > 0)
+                        {
+                            var oldBlockData = context.BOTS_TblProductUpload.Where(x => x.GroupId == objData.GroupId && x.Type == "Block Earn").ToList();
+                            foreach (var item in oldBlockData)
+                            {
+                                context.BOTS_TblProductUpload.Remove(item);
+                                context.SaveChanges();
+                            }
+
+                            foreach (var item in lstBlockEatn)
+                            {
+                                context.BOTS_TblProductUpload.AddOrUpdate(item);
+                                context.SaveChanges();
+                            }
+                        }
+                        transaction.Commit();
+                        result = true;
+
+                    }
+                    catch (Exception ex)
+                    {
+                        newexception.AddException(ex, "SaveEarnRule");
+                        transaction.Rollback();
+                    }
+                }
+            }
+            return result;
+        }
+
+        public BOTS_TblEarnRuleConfig GetEarnRuleConfig(string GroupId)
+        {
+            BOTS_TblEarnRuleConfig objData = new BOTS_TblEarnRuleConfig();
+            using (var context = new CommonDBContext())
+            {
+                objData = context.BOTS_TblEarnRuleConfig.Where(x => x.GroupId == GroupId).FirstOrDefault();
+            }
+            return objData;
+        }
+        public List<BOTS_TblSlabConfig> GetEarnRuleSlabConfig(string GroupId)
+        {
+            List<BOTS_TblSlabConfig> objData = new List<BOTS_TblSlabConfig>();
+            using (var context = new CommonDBContext())
+            {
+                objData = context.BOTS_TblSlabConfig.Where(x => x.GroupId == GroupId).ToList();
+            }
+            return objData;
+        }
+
+        public BOTS_TblBurnRuleConfig GetBurnRuleConfig(string GroupId)
+        {
+            BOTS_TblBurnRuleConfig objData = new BOTS_TblBurnRuleConfig();
+            using (var context = new CommonDBContext())
+            {
+                objData = context.BOTS_TblBurnRuleConfig.Where(x => x.GroupId == GroupId).FirstOrDefault();
+            }
+            return objData;
+        }
+        public bool SaveBurnRule(BOTS_TblBurnRuleConfig objData, List<BOTS_TblProductUpload> lstBurnBlock)
+        {
+            bool result = false;
+            using (var context = new CommonDBContext())
+            {
+                using (DbContextTransaction transaction = context.Database.BeginTransaction())
+                {
+                    try
+                    {
+                        var oldBurnRule = context.BOTS_TblBurnRuleConfig.Where(x => x.GroupId == objData.GroupId).FirstOrDefault();
+                        if (oldBurnRule != null)
+                        {
+                            objData.AddedBy = oldBurnRule.AddedBy;
+                            objData.AddedDate = oldBurnRule.AddedDate;
+                            if (!objData.IsProductCodeBlocking)
+                            {
+                                objData.IsProductCodeBlocking = oldBurnRule.IsProductCodeBlocking;
+                                objData.ProductCodeBlockingType = oldBurnRule.ProductCodeBlockingType;
+                            }
+                        }
+                        context.BOTS_TblBurnRuleConfig.AddOrUpdate(objData);
+                        context.SaveChanges();
+
+                        if (lstBurnBlock.Count > 0)
+                        {
+                            var oldData = context.BOTS_TblProductUpload.Where(x => x.GroupId == objData.GroupId && x.Type == "Product Block Burn").ToList();
+                            if (oldData != null)
+                            {
+                                foreach (var item in oldData)
+                                {
+                                    context.BOTS_TblProductUpload.Remove(item);
+                                    context.SaveChanges();
+                                }
+                            }
+                            foreach (var item in lstBurnBlock)
+                            {
+                                context.BOTS_TblProductUpload.AddOrUpdate(item);
+                                context.SaveChanges();
+                            }
+                        }
+
+                        transaction.Commit();
+                        result = true;
+                    }
+                    catch (Exception ex)
+                    {
+                        newexception.AddException(ex, "SaveBurnRule");
+                        transaction.Rollback();
+                    }
+                }
+            }
+            return result;
+        }
+
+        public bool SendForApproval(string groupId, string LoginId)
+        {
+            bool status = false;
+            try
+            {
+                using (var context = new CommonDBContext())
+                {
+                    var oldData = context.BOTS_TblGroupMaster.Where(x => x.GroupId == groupId).FirstOrDefault();
+                    oldData.CustomerStatus = "Submit For Approval";
+                    oldData.UpdatedDate = DateTime.Now;
+                    oldData.UpdatedBy = LoginId;
+                    context.BOTS_TblGroupMaster.AddOrUpdate(oldData);
+                    context.SaveChanges();
+                    status = true;
+                }
+            }
+            catch(Exception ex)
+            {
+                newexception.AddException(ex, "SendForApproval");
+            }
+
+            return status;
+        }
+
+        public List<BOTS_TblSMSConfig> GetCommunicationSMSConfigByGroupId(string GroupId)
+        {
+            List<BOTS_TblSMSConfig> objData = new List<BOTS_TblSMSConfig>();
+            using (var context = new CommonDBContext())
+            {              
+                    objData = context.BOTS_TblSMSConfig.Where(x => x.GroupId == GroupId).ToList();               
+            }
+
+            return objData;
+        }
+
     }
 }

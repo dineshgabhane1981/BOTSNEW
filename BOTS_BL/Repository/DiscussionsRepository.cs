@@ -150,7 +150,7 @@ namespace BOTS_BL.Repository
             return status;
         }
 
-        public bool UpdateDiscussions(string id, string Desc, string Status, string LoginId)
+        public bool UpdateDiscussions(string id, string Desc, string Status, string LoginId,string FollowupDate)
         {
             BOTS_TblDiscussion objDiscussion = new BOTS_TblDiscussion();
             BOTS_TblSubDiscussionData objsubdiscussion = new BOTS_TblSubDiscussionData();
@@ -166,10 +166,13 @@ namespace BOTS_BL.Repository
 
                     context.BOTS_TblDiscussion.AddOrUpdate(objDiscussion);
                     context.SaveChanges();
-
+                    if(!string.IsNullOrEmpty(FollowupDate))
+                    {
+                        objsubdiscussion.FollowupDate = Convert.ToDateTime(FollowupDate);
+                    }
                     objsubdiscussion.DiscussionId = objDiscussion.Id;
                     objsubdiscussion.GroupId = objDiscussion.GroupId;
-                    objsubdiscussion.FollowupDate = objDiscussion.FollowupDate;
+                    //objsubdiscussion.FollowupDate = objDiscussion.FollowupDate;
                     objsubdiscussion.Description = Desc;
                     objsubdiscussion.Status = objDiscussion.Status;
                     objsubdiscussion.UpdatedBy = LoginId;
@@ -418,7 +421,7 @@ namespace BOTS_BL.Repository
                                           join gd in context.tblGroupDetails on c.GroupId equals gd.GroupId.ToString()
                                           join ct in context.BOTS_TblCallTypes on c.CallType equals ct.Id
                                           join cld in context.CustomerLoginDetails on c.AddedBy equals cld.LoginId
-                                          where c.AddedBy == LoginId && c.Status == "WIP" && (c.CallType == 12 || c.CallType == 9 || c.CallType == 10)
+                                          where  c.Status == "WIP" && (c.CallType == 12 || c.CallType == 9 || c.CallType == 10)
 
                                           select new DiscussionDetails
                                           {

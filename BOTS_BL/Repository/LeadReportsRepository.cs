@@ -47,7 +47,7 @@ namespace BOTS_BL.Repository
                         FromDate = new DateTime(date.Year, date.Month, 1);
                         ToDateNew = DateTime.Today.AddDays(1).Date.AddSeconds(-1);
                     }
-                    var SMDetails = context.CustomerLoginDetails.Where(x => x.LoginType == "8").ToList();
+                    var SMDetails = context.CustomerLoginDetails.Where(x => x.UserStatus.Value==true && (x.LoginType == "8" || x.LoginType == "5")).ToList();
                     foreach (var item in SMDetails)
                     {
                         MeetingMatrix objMeetingMatrixItem = new MeetingMatrix();
@@ -194,8 +194,19 @@ namespace BOTS_BL.Repository
         {
             List<SalesLead> lstData = new List<SalesLead>();
             List<SalesLead> newdata = new List<SalesLead>();
-            DateTime FromDate = Convert.ToDateTime(FrmDate);
-            DateTime ToDateNew = Convert.ToDateTime(ToDate);
+            DateTime FromDate = new DateTime();
+            DateTime ToDateNew = new DateTime();
+            if (!string.IsNullOrEmpty(FrmDate))
+            {
+                FromDate = Convert.ToDateTime(FrmDate);
+                ToDateNew = Convert.ToDateTime(ToDate);
+            }
+            else
+            {
+                //FromDate=DateTime.Now.
+                FromDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
+                ToDateNew = DateTime.Today;
+            }
             if (MeetingOrCall == "Meeting")
             {
                 using (var context = new CommonDBContext())
@@ -504,7 +515,7 @@ namespace BOTS_BL.Repository
 
                     }
                 }
-                var SMDetails = context.CustomerLoginDetails.Where(x => x.LoginType == "8").ToList();
+                var SMDetails = context.CustomerLoginDetails.Where(x => x.LoginType == "8" && x.UserStatus.Value == true).ToList();
                 if (sm != "")
                 {
                     SMDetails = context.CustomerLoginDetails.Where(x => x.LoginId == sm).ToList();

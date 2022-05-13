@@ -3,6 +3,10 @@
 <div style="margin-top:20px;">
     <div style="display:flex;" class="col-md-12 col-lg-12 mb-4">
         @Html.HiddenFor(model => model.objEarnRuleConfig.RuleId, new { @id = "hdnEarnRuleId" })
+        @Html.HiddenFor(model => model.objBurnRuleConfig.RuleId, new { @id = "hdnBurnRuleId" })
+        <input type="hidden" id="hdnProductWiseBase64" />
+        <input type="hidden" id="hdnBlockEarnBase64" />
+        <input type="hidden" id="hdnBlockBurnBase64" />
         <input id="rbtnERule" name="rules" type="radio" checked class="rbtnClass"> Earn Rule
         <input id="rbtnBRule" name="rules" type="radio" class="rbtnClass"> Burn Rule
     </div>
@@ -24,20 +28,20 @@
         </div>
         <div class="col-md-12 col-lg-12" style="margin-top:20px;padding-left:30px;">
             Revolving Expiry
-            @Html.RadioButtonFor(model => model.objEarnRuleConfig.RevolvingExpiry, "1", new { @id = "rbtnRevolvingExpiry1", @class = "rbtnClass" }) Yes
+            @Html.RadioButtonFor(model => model.objEarnRuleConfig.RevolvingExpiry, "1", new { @id = "rbtnRevolvingExpiry1", @class = "rbtnClass", @Checked = "checked" }) Yes
             @Html.RadioButtonFor(model => model.objEarnRuleConfig.RevolvingExpiry, "0", new { @id = "rbtnRevolvingExpiry0", @class = "rbtnClass" }) No
         </div>
-        <div class="col-md-12 col-lg-12" style="margin-top: 20px; padding-left: 14px;">
-            @Html.RadioButtonFor(model => model.objEarnRuleConfig.IsBase, "0", new { @id = "rbtnIsBase", @class = "rbtnClass", @Name = "dummy" })  Base
-            @Html.RadioButtonFor(model => model.objEarnRuleConfig.IsSlab, "0", new { @id = "rbtnIsSlab", @class = "rbtnClass", @Name = "dummy" })  Slab
-            @Html.RadioButtonFor(model => model.objEarnRuleConfig.IsProductWise, "0", new { @id = "rbtnIsProductWise", @class = "rbtnClass", @Name = "dummy" })  ProductWise
+        <div class="col-md-12 col-lg-12" style="margin-top: 20px; padding-left: 14px;margin-bottom:10px;">
+            @Html.RadioButtonFor(model => model.objEarnRuleConfig.IsBase, true, new { @id = "rbtnIsBase", @class = "rbtnClass", @Name = "dummy" })  Base
+            @Html.RadioButtonFor(model => model.objEarnRuleConfig.IsSlab, true, new { @id = "rbtnIsSlab", @class = "rbtnClass", @Name = "dummy" })  Slab
+            @Html.RadioButtonFor(model => model.objEarnRuleConfig.IsProductWise, true, new { @id = "rbtnIsProductWise", @class = "rbtnClass", @Name = "dummy" })  ProductWise
 
         </div>
-        <div id="dvBase" style="display: none; padding-left:30px; padding-top: 20px;" class="col-md-4 col-lg-4">
+        <div id="dvBase" style="display: none; padding-left: 30px; margin-left: 30px; padding-top: 20px; padding-bottom: 15px; border: 1px solid lightgrey; border-radius: 5px; " class="col-md-6 col-lg-6">
             Points Value (in RS)
             @Html.TextBoxFor(model => model.objEarnRuleConfig.PointsValueInRS, new { @class = "input50", @id = "txtPointsValueInRS" })
         </div>
-        <div id="dvSlab" class="col-md-12 col-lg-12" style="display: none; padding-top: 20px;">
+        <div id="dvSlab" class="col-md-6 col-lg-6" style="display: none; padding-top: 20px; margin-left: 30px; padding-bottom: 15px; border: 1px solid lightgrey; border-radius: 5px; ">
             <div id="dv1" class="col-md-6 col-lg-6" style="display:flex;">
                 <div style="padding-right:10px;">
                     From<br />
@@ -124,7 +128,7 @@
             </div>
         </div>
 
-        <div id="dvProductWise" class="col-md-12 col-lg-12" style="padding-left: 15px; padding-top: 20px; display: none;">
+        <div id="dvProductWise" class="col-md-6 col-lg-6" style="padding-left: 15px; margin-left: 30px; padding-bottom: 15px; padding-top: 20px; display: none; border: 1px solid lightgrey; border-radius: 5px; ">
             <div style="display:flex;">
                 <input id="rbtnProduct" name="ProductWise" type="radio" checked class="rbtnClass">&nbsp; Product
                 <input id="rbtnCategory" name="ProductWise" type="radio" class="rbtnClass"> &nbsp; Category
@@ -135,9 +139,10 @@
         <div id="dvBlockEarn" class="col-md-6 col-lg-6" style="margin-left: 30px; margin-top: 30px; border:1px solid lightgrey;border-radius:5px;">
             <b style="padding-left:10px;">Block for Earn</b>
             <div style="display:flex;padding-top:10px;">
-                <input id="rbtnProductB" name="ProductWiseB" type="radio" checked class="rbtnClass">&nbsp; Product
-                <input id="rbtnCategoryB" name="ProductWiseB" type="radio" class="rbtnClass"> &nbsp; Category
-                <input id="rbtnSubCategoryB" name="ProductWiseB" type="radio" class="rbtnClass"> &nbsp; SubCategory
+                @Html.RadioButtonFor(model => model.objEarnRuleConfig.IsBlockForEarn, true, new { @id = "rbtnProductB", @class = "rbtnClass", @Name = "ProductWiseB" })  &nbsp; Product
+                @Html.RadioButtonFor(model => model.objEarnRuleConfig.IsBlockForEarn, true, new { @id = "rbtnCategoryB", @class = "rbtnClass", @Name = "ProductWiseB" })  &nbsp; Category
+                @Html.RadioButtonFor(model => model.objEarnRuleConfig.IsBlockForEarn, true, new { @id = "rbtnSubCategoryB", @class = "rbtnClass", @Name = "ProductWiseB" })  &nbsp; SubCategory
+                
             </div>
             <div style="padding-left: 15px; padding-top: 20px;padding-bottom:10px;">
                 <input type="file" id="BlockEarnFile" />
@@ -149,14 +154,57 @@
         </div>
     </div>
 
-    <div id="dvBurnRule" style="float:left; border:1px solid grey;border-radius:10px;margin-bottom:10px;display:none; ">
-        Burn Rule
+    <div id="dvBurnRule" class="col-md-12 col-lg-12" style="float:left; border:1px solid grey;border-radius:10px;margin-bottom:10px;display:none; ">
+
+        <div class="col-md-6 col-lg-6" style="display: flex; margin-bottom:20px;margin-top:20px;">
+            <div class="col-md-6 col-lg-6">
+                Min Invoice Amount<br />
+                @Html.TextBoxFor(model => model.objBurnRuleConfig.MinInvoiceAmt, new { @class = "input50", @id = "txtMinBurnInvoiceAmt" })
+            </div>
+            <div class="col-md-6 col-lg-6">
+                Min Redeem Pts<br />
+                @Html.TextBoxFor(model => model.objBurnRuleConfig.MinRedeemPts, new { @class = "input50", @id = "txtMinRedeemPts" })
+            </div>
+        </div>
+        <div class="col-md-6 col-lg-6" style="display: flex;">
+            <div class="col-md-6 col-lg-6" style="margin-bottom: 20px;">
+                Min Threshhold Pts First Time<br />
+                @Html.TextBoxFor(model => model.objBurnRuleConfig.MinThreshholdPtsFisttime, new { @class = "input50", @id = "txtMinThreshholdPtsFisttime" })
+            </div>
+            <div class="col-md-6 col-lg-6" style="margin-bottom: 20px;">
+                Min Threshhold Pts Subsequent<br />
+                @Html.TextBoxFor(model => model.objBurnRuleConfig.MinThreshholdPtsSubsequent, new { @class = "input50", @id = "txtMinThreshholdPtsSubsequent" })
+            </div>
+        </div>
+        <div class="col-md-6 col-lg-6" style="margin-top:20px;padding-left:30px;">
+            Partial Earn
+            @Html.RadioButtonFor(model => model.objBurnRuleConfig.PartialEarn, "1", new { @id = "rbtnPartialEarn1", @class = "rbtnClass", @Checked = "checked" }) Yes
+            @Html.RadioButtonFor(model => model.objBurnRuleConfig.PartialEarn, "0", new { @id = "rbtnPartialEarn0", @class = "rbtnClass" }) No
+        </div>
+        <div id="dvBlockBurn" class="col-md-6 col-lg-6" style="margin-left: 30px; margin-top: 30px; border:1px solid lightgrey;border-radius:5px;">
+            <b style="padding-left:10px;">Product Code for Blocking</b>
+            <div style="display:flex;padding-top:10px;">
+                @Html.RadioButtonFor(model => model.objBurnRuleConfig.IsProductCodeBlocking, true, new { @id = "rbtnProductBlockingB", @class = "rbtnClass", @Name = "ProductWiseB" })  &nbsp; Product
+                @Html.RadioButtonFor(model => model.objBurnRuleConfig.IsProductCodeBlocking, true, new { @id = "rbtnCategoryBlockingB", @class = "rbtnClass", @Name = "ProductWiseB" })  &nbsp; Category
+                @Html.RadioButtonFor(model => model.objBurnRuleConfig.IsProductCodeBlocking, true, new { @id = "rbtnSubCategoryBlockingB", @class = "rbtnClass", @Name = "ProductWiseB" })  &nbsp; SubCategory
+
+            </div>
+            <div style="padding-left: 15px; padding-top: 20px;padding-bottom:10px;">
+                <input type="file" id="BlockBurnFile" />
+            </div>
+        </div>
+
+        <div>
+            <button type="button" id="btnBurnSave" class="btn btn-primary pull-right" onclick="return SaveBurnRule();" style="margin-right:10px;margin-bottom:20px;">Save</button>
+        </div>
     </div>
 
 </div>
 <script>
     $(document).ready(function () {
-
+        document.getElementById("ProductWiseFile").addEventListener('change', handleFileSelectProductWise, false);
+        document.getElementById("BlockEarnFile").addEventListener('change', handleFileSelectBlockEarn, false);
+        document.getElementById("BlockBurnFile").addEventListener('change', handleFileSelectBlockBurn, false);
         $("#rbtnERule").click(function () {
             $("#dvEarnRule").show();
             $("#dvBurnRule").hide();
@@ -174,25 +222,130 @@
             $("#dvBase").hide();
             $("#dvSlab").show();
             $("#dvProductWise").hide();
-
-            $("#txtPointsValueInRS").val("");
         });
         $("#rbtnIsProductWise").on("click", function () {
             $("#dvBase").hide();
             $("#dvSlab").hide();
             $("#dvProductWise").show();
-
-            $("#txtPointsValueInRS").val("");
         });
+
+        ShowHideProductTypeSection();
+        var earnExist = JSON.parse('@Html.Raw(Json.Encode(Model.objEarnRuleConfig))');
+
+        if (earnExist != null) {
+            var blockCategory = JSON.parse('@Html.Raw(Json.Encode(Model.objEarnRuleConfig.BlockProductWiseType))');
+            if (blockCategory == "Product") {
+                $("#rbtnProductB").prop("checked", true);
+            }
+            if (blockCategory == "Category") {
+                $("#rbtnCategoryB").prop("checked", true);
+            }
+            if (blockCategory == "SubCategory") {
+                $("#rbtnSubCategoryB").prop("checked", true);
+            }
+        }
+        var burnExist = JSON.parse('@Html.Raw(Json.Encode(Model.objBurnRuleConfig))');
+        if (burnExist != null) {
+            var burnBlockCategory = JSON.parse('@Html.Raw(Json.Encode(Model.objBurnRuleConfig.IsProductCodeBlocking))');
+            if (burnBlockCategory != undefined && burnBlockCategory != null) {
+                if (burnBlockCategory == "Product") {
+                    $("#rbtnProductBlockingB").prop("checked", true);
+                }
+                if (burnBlockCategory == "Category") {
+                    $("#rbtnCategoryBlockingB").prop("checked", true);
+                }
+                if (burnBlockCategory == "SubCategory") {
+                    $("#rbtnSubCategoryBlockingB").prop("checked", true);
+                }
+            }
+        }
     });
+
+    function ShowHideProductTypeSection() {
+        if ($("#rbtnIsBase").is(":checked")) {
+            $("#dvBase").show();
+            $("#dvSlab").hide();
+            $("#dvProductWise").hide();
+        }
+        if ($("#rbtnIsSlab").is(":checked")) {
+            $("#dvBase").hide();
+            $("#dvSlab").show();
+            $("#dvProductWise").hide();
+            $("#txtPointsValueInRS").val("");
+
+            var objSlab = JSON.parse('@Html.Raw(Json.Encode(Model.lstSlabConfig))');
+            console.log(objSlab);
+            for (var i = 1; i <= objSlab.length; i++) {
+                $("#frm" + i).val(objSlab[i - 1].SlabFrom);
+                $("#to" + i).val(objSlab[i - 1].SlabTo);
+                $("#per" + i).val(objSlab[i - 1].SlabPercentage);
+            }
+
+        }
+        if ($("#rbtnIsProductWise").is(":checked")) {
+            $("#dvBase").hide();
+            $("#dvSlab").hide();
+            $("#dvProductWise").show();
+            $("#txtPointsValueInRS").val("");
+        }
+    }
+
+    function handleFileSelectProductWise(evt) {
+        var id = evt.currentTarget.id;
+        var qId = id.substring(4, id.length);
+        var f = evt.target.files[0];
+        var reader = new FileReader();
+        reader.onload = (function (theFile) {
+            return function (e) {
+                var binaryData = e.target.result;
+                var base64String = window.btoa(binaryData);
+                $("#hdnProductWiseBase64").val(base64String);
+                //$("#hdnLogo").val($("#FileUploadLogo")[0].files[0].name);
+            };
+        })(f);
+        reader.readAsBinaryString(f);
+    }
+    function handleFileSelectBlockEarn(evt) {
+        var id = evt.currentTarget.id;
+        var qId = id.substring(4, id.length);
+        var f = evt.target.files[0];
+        var reader = new FileReader();
+        reader.onload = (function (theFile) {
+            return function (e) {
+                var binaryData = e.target.result;
+                var base64String = window.btoa(binaryData);
+                $("#hdnBlockEarnBase64").val(base64String);
+                //$("#hdnLogo").val($("#FileUploadLogo")[0].files[0].name);
+            };
+        })(f);
+        reader.readAsBinaryString(f);
+    }
+
+    function handleFileSelectBlockBurn(evt) {
+        var id = evt.currentTarget.id;
+        var qId = id.substring(4, id.length);
+        var f = evt.target.files[0];
+        var reader = new FileReader();
+        reader.onload = (function (theFile) {
+            return function (e) {
+                var binaryData = e.target.result;
+                var base64String = window.btoa(binaryData);
+                $("#hdnBlockBurnBase64").val(base64String);
+                //$("#hdnLogo").val($("#FileUploadLogo")[0].files[0].name);
+            };
+        })(f);
+        reader.readAsBinaryString(f);
+    }
 
     function SaveEarnRule() {
         var EarnData = [];
         item = {};
+        item["RuleId"] = $("#hdnEarnRuleId").val();
+        item["GroupId"] = $("#hdnGroupID").val();
         item["MinInvoiceAmt"] = $("#txtMinInvoiceAmt").val();
         item["BasePercentage"] = $("#txtBasePercentage").val();
         item["PointsValidityInMonths"] = $("#txtPointsValidityInMonths").val();
-        
+
         if ($("#rbtnRevolvingExpiry1").is(":checked")) {
             item["RevolvingExpiry"] = true;
         }
@@ -209,7 +362,7 @@
         if ($("#rbtnIsSlab").is(":checked")) {
             IsSlab = true;
             var SlabData = [];
-            
+
             //Slab
             for (var i = 1; i <= 6; i++) {
                 var item1 = {};
@@ -235,6 +388,7 @@
                 item["ProductWiseType"] = "SubCategory";
             }
             //File
+            item["ProductWiseFile"] = $("#hdnProductWiseBase64").val();
         }
         item["IsBase"] = IsBase;
         item["IsSlab"] = IsSlab;
@@ -249,9 +403,108 @@
         if ($("#rbtnSubCategoryB").is(":checked")) {
             item["BlockProductWiseType"] = "SubCategory";
         }
+        //File
+        item["ProductBlockEarn"] = $("#hdnBlockEarnBase64").val();
 
         EarnData.push(item);
-        console.log(EarnData);
+        var EarnDataStr = JSON.stringify(EarnData);
+        $("#divLoader").show();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("SaveEarnRuleConfig", "CustomerOnBoarding")',
+            data: '{jsonData: ' + JSON.stringify(EarnDataStr) + '}',
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (result) {
+                console.log(result)
+                if (result == true) {
+                    cuteAlert({
+                        type: "success",
+                        title: "Saved",
+                        message: "Earn config saved successfully",
+                        buttonText: "Okay"
+                    })
+                    $("#divLoader").hide();
+                }
+                else {
+                    cuteAlert({
+                        type: "error",
+                        title: "Oops..",
+                        message: "There is a problem in saving point rules",
+                        buttonText: "Okay"
+                    })
+                    $("#divLoader").hide();
+                }
+            },
+            error: function (result) {
+                //console.log(result.responseText)
+            }
+        });
     }
 
+    function SaveBurnRule() {
+        var BurnData = [];
+        item = {};
+        item["RuleId"] = $("#hdnBurnRuleId").val();
+        item["GroupId"] = $("#hdnGroupID").val();
+        item["MinInvoiceAmt"] = $("#txtMinBurnInvoiceAmt").val();
+        item["MinRedeemPts"] = $("#txtMinRedeemPts").val();
+        item["MinThreshholdPtsFisttime"] = $("#txtMinThreshholdPtsFisttime").val();
+        item["MinThreshholdPtsSubsequent"] = $("#txtMinThreshholdPtsSubsequent").val();
+        item["PartialEarn"] = false;
+        if ($("#rbtnPartialEarn1").is(":checked")) {
+            item["PartialEarn"] = true;
+        }
+        if ($("#rbtnPartialEarn0").is(":checked")) {
+            item["PartialEarn"] = false;
+        }
+        item["IsProductCodeBlocking"] = false;
+        if ($("#rbtnProductBlockingB").is(":checked")) {
+            item["IsProductCodeBlocking"] = true;
+            item["ProductBurnType"] = "Product";
+        }
+        if ($("#rbtnCategoryBlockingB").is(":checked")) {
+            item["IsProductCodeBlocking"] = true;
+            item["ProductBurnType"] = "Category";
+        }
+        if ($("#rbtnSubCategoryBlockingB").is(":checked")) {
+            item["IsProductCodeBlocking"] = true;
+            item["ProductBurnType"] = "SubCategory";
+        }
+        item["ProductBlockBurnFile"] = $("#hdnBlockBurnBase64").val();
+        BurnData.push(item);
+        var BurnDataStr = JSON.stringify(BurnData);
+        $("#divLoader").show();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("SaveBurnRuleConfig", "CustomerOnBoarding")',
+            data: '{jsonData: ' + JSON.stringify(BurnDataStr) + '}',
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (result) {
+                console.log(result)
+                if (result == true) {
+                    cuteAlert({
+                        type: "success",
+                        title: "Saved",
+                        message: "Burn config saved successfully",
+                        buttonText: "Okay"
+                    })
+                    $("#divLoader").hide();
+                }
+                else {
+                    cuteAlert({
+                        type: "error",
+                        title: "Oops..",
+                        message: "There is a problem in saving point rules",
+                        buttonText: "Okay"
+                    })
+                    $("#divLoader").hide();
+                }
+            },
+            error: function (result) {
+                //console.log(result.responseText)
+            }
+        });
+    }
 </script>
