@@ -95,6 +95,8 @@ namespace BOTS_BL.Repository
                         {
                             var groupDetails = context.BOTS_TblGroupMaster.Where(x => x.GroupId == objGroup.GroupId).FirstOrDefault();
                             groupDetails.CustomerStatus = "CSUpdate";
+                            groupDetails.UpdatedDate = DateTime.Now;
+                            groupDetails.UpdatedBy = objGroup.UpdatedBy;
                             context.BOTS_TblGroupMaster.AddOrUpdate(groupDetails);
                             context.SaveChanges();
 
@@ -1815,7 +1817,7 @@ namespace BOTS_BL.Repository
                     try
                     {
                         var oldBurnRule = context.BOTS_TblBurnRuleConfig.Where(x => x.GroupId == objData.GroupId).FirstOrDefault();
-                        if(oldBurnRule!=null)
+                        if (oldBurnRule != null)
                         {
                             objData.AddedBy = oldBurnRule.AddedBy;
                             objData.AddedDate = oldBurnRule.AddedDate;
@@ -1828,18 +1830,18 @@ namespace BOTS_BL.Repository
                         context.BOTS_TblBurnRuleConfig.AddOrUpdate(objData);
                         context.SaveChanges();
 
-                        if(lstBurnBlock.Count>0)
+                        if (lstBurnBlock.Count > 0)
                         {
                             var oldData = context.BOTS_TblProductUpload.Where(x => x.GroupId == objData.GroupId && x.Type == "Product Block Burn").ToList();
-                            if(oldData!=null)
+                            if (oldData != null)
                             {
-                                foreach(var item in oldData)
+                                foreach (var item in oldData)
                                 {
                                     context.BOTS_TblProductUpload.Remove(item);
                                     context.SaveChanges();
                                 }
                             }
-                            foreach(var item in lstBurnBlock)
+                            foreach (var item in lstBurnBlock)
                             {
                                 context.BOTS_TblProductUpload.AddOrUpdate(item);
                                 context.SaveChanges();
@@ -1859,5 +1861,28 @@ namespace BOTS_BL.Repository
             return result;
         }
 
+        public bool SendForApproval(string groupId, string LoginId)
+        {
+            bool status = false;
+            try
+            {
+                using (var context = new CommonDBContext())
+                {
+                    var oldData = context.BOTS_TblGroupMaster.Where(x => x.GroupId == groupId).FirstOrDefault();
+                    oldData.CustomerStatus = "Submit For Approval";
+                    oldData.UpdatedDate = DateTime.Now;
+                    oldData.UpdatedBy = LoginId;
+                    context.BOTS_TblGroupMaster.AddOrUpdate(oldData);
+                    context.SaveChanges();
+                    status = true;
+                }
+            }
+            catch(Exception ex)
+            {
+                newexception.AddException(ex, "SendForApproval");
+            }
+
+            return status;
+        }
     }
 }

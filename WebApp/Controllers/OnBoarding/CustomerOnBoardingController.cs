@@ -333,9 +333,16 @@ namespace WebApp.Controllers.OnBoarding
 
                     objLstInstallment.Add(objItem);
                 }
-
-                objData.bots_TblGroupMaster.CreatedBy = userDetails.LoginId;
-                objData.bots_TblGroupMaster.CreatedDate = DateTime.Now;
+                if (objData.bots_TblGroupMaster.SINo > 0)
+                {
+                    objData.bots_TblGroupMaster.CreatedBy = userDetails.LoginId;
+                    objData.bots_TblGroupMaster.CreatedDate = DateTime.Now;
+                }
+                else
+                {
+                    objData.bots_TblGroupMaster.UpdatedBy = userDetails.LoginId;
+                    objData.bots_TblGroupMaster.CreatedDate = DateTime.Now;
+                }
 
                 if (objData.bots_TblGroupMaster.CustomerStatus == "CSUpdate")
                 {
@@ -1862,7 +1869,6 @@ namespace WebApp.Controllers.OnBoarding
                             lstBlockBurnUpload.Add(objItem);
                         }
                     }
-
                 }
             }
             if (objBurnRule.RuleId > 0)
@@ -1883,7 +1889,8 @@ namespace WebApp.Controllers.OnBoarding
         public ActionResult SendForApproval(string GroupId)
         {
             bool result = true;
-
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            result = OBR.SendForApproval(GroupId, userDetails.LoginId);
             return new JsonResult() { Data = result, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
     }
