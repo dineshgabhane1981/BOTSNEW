@@ -88,9 +88,7 @@
         </div>
     </div>
 </div>
-<div class="container-fluid pt-3 pl-3 pr-3 pb-3">
-    <button type="button" id="btnCheckerView" class="btn btn-primary pull-right" style="margin-right: 10px; margin-bottom: 20px; margin-top: 10px;">Submit For Aprroval </button>
-</div>
+
 
 
 <script>
@@ -112,9 +110,7 @@
         FillSetDropDown();
     });
 
-    $("#btnCheckerView").on("click", function () {
-        SendCommunicationConfigForApproval();
-    });
+   
     function FillSetDropDown() {
         $.ajax({
             url: '@Url.Action("GetCommunicationSetList", "CustomerOnBoarding")',
