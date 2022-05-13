@@ -38,6 +38,9 @@ namespace WebApp.ViewModel
         public BOTS_TblBurnRuleConfig objBurnRuleConfig { get; set; }
         public List<BOTS_TblSlabConfig> lstSlabConfig { get; set; }
 
+        public List<BOTS_TblCommunicationSet> lstSet { get; set; }
+        
+
         public string LeadId { get; set; }
         public SelectListItem[] BOProducts()
         {

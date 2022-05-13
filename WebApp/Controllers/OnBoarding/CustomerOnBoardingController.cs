@@ -1779,23 +1779,19 @@ namespace WebApp.Controllers.OnBoarding
             CommonFunctions common = new CommonFunctions();
             GroupId = common.DecryptString(GroupId);
             OnBoardingSalesViewModel objData = new OnBoardingSalesViewModel();
-
+            //Customer Details
             objData.bots_TblGroupMaster = OBR.GetGroupMasterDetails(GroupId);
             objData.bots_TblDealDetails = OBR.GetDealMasterDetails(GroupId);
             objData.bots_TblPaymentDetails = OBR.GetPaymentDetails(GroupId);
             objData.objRetailList = OBR.GetRetailDetails(GroupId);
             objData.objInstallmentList = OBR.GetInstallmentDetails(GroupId);
 
+            //Communication Details
+            objData.lstCommunicationSet = OBR.GetCommunicationSetsByGroupId(GroupId);
+            objData.lstSMSConfig = OBR.GetCommunicationSMSConfigByGroupId(GroupId);
 
-            //objData.bots_TblGroupMaster = OBR.GetGroupMasterDetails(GroupId);
-            //objData.onBoardingCustomerDetails = OBR.GetOnBoardingCustomerDetails("");
-            //objData.objDLCLinkConfig = OBR.GetDLCLinkDLTConfigById(SetId);
-            //objData.bOTS_TblCampaignOtherConfig = OBR.GetCampaignOtherConfigForDLT(GroupId, type);
-            //objData.bOTS_TblDealDetails = OBR.GetDealMasterDetails(GroupId);
-            //objData.bOTS_TblPaymentDetails = OBR.GetPaymentDetails(GroupId);
-            //objData.bOTS_TblSMSConfig = OBR.GetCommunicationSMSConfigById(SetId);
-            //objData.bOTS_TblCommunicationSet = OBR.GetSetDetails(SetId);
-            //objData.bOTS_TblCampaignInactive = OBR.GetInactiveConfigById(SetId);
+
+
             return View(objData);
 
         }

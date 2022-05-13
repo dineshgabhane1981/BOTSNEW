@@ -1884,5 +1884,17 @@ namespace BOTS_BL.Repository
 
             return status;
         }
+
+        public List<BOTS_TblSMSConfig> GetCommunicationSMSConfigByGroupId(string GroupId)
+        {
+            List<BOTS_TblSMSConfig> objData = new List<BOTS_TblSMSConfig>();
+            using (var context = new CommonDBContext())
+            {              
+                    objData = context.BOTS_TblSMSConfig.Where(x => x.GroupId == GroupId).ToList();               
+            }
+
+            return objData;
+        }
+
     }
 }

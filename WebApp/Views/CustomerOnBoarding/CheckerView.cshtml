@@ -141,10 +141,28 @@
             </div>
         </div>
         <div>
+            <div class="container-fluid pt-3 pl-3 pr-3 pb-3" id="dvOutletDetailsSection">
+                <div class="col-md-12 section-heading" data-toggle="collapse" data-target="#OutletDetailsConfigreadonly">Outlet Details</div>
+                <div id="OutletDetailsConfigreadonly" class="collapse show">
+                    @*@Html.Partial("~/Views/CustomerOnBoarding/_DLTCommunication.cshtml", Model)*@
+
+                </div>
+            </div>
+        </div>
+        <div>
+            <div class="container-fluid pt-3 pl-3 pr-3 pb-3" id="dvPointRuleSection">
+                <div class="col-md-12 section-heading" data-toggle="collapse" data-target="#PointRuleConfigreadonly">Point Rule </div>
+                <div id="PointRuleConfigreadonly" class="collapse show">
+                    @*@Html.Partial("~/Views/CustomerOnBoarding/_DLTCommunication.cshtml", Model)*@
+
+                </div>
+            </div>
+        </div>
+        <div>
             <div class="container-fluid pt-3 pl-3 pr-3 pb-3" id="dvCommunicationSection">
                 <div class="col-md-12 section-heading" data-toggle="collapse" data-target="#CommunicationConfigreadonly">Communication</div>
                 <div id="CommunicationConfigreadonly" class="collapse show">
-                    @*@Html.Partial("~/Views/CustomerOnBoarding/_DLTCommunication.cshtml", Model)*@
+                    @Html.Partial("~/Views/CustomerOnBoarding/_CommunicationReadOnly.cshtml", Model)
 
                 </div>
             </div>
@@ -166,12 +184,29 @@
                 </div>
             </div>
         </div>
+        <div>
+            <div class="container-fluid pt-3 pl-3 pr-3 pb-3" id="dvVelocityChecksSection">
+                <div class="col-md-12 section-heading" data-toggle="collapse" data-target="#VelocityChecksConfigreadonly">Velocity Checks</div>
+                <div id="VelocityChecksConfigreadonly" class="collapse show">
+                    @*@Html.Partial("~/Views/CustomerOnBoarding/_DLTCommunication.cshtml", Model)*@
+
+                </div>
+            </div>
+        </div><div>
+    <div class="container-fluid pt-3 pl-3 pr-3 pb-3" id="dvBUSection">
+        <div class="col-md-12 section-heading" data-toggle="collapse" data-target="#BUConfigreadonly">Bulk Upload</div>
+        <div id="BUConfigreadonly" class="collapse show">
+            @*@Html.Partial("~/Views/CustomerOnBoarding/_DLTCommunication.cshtml", Model)*@
+
+        </div>
+    </div>
+</div>
         @if (roleId == "6")
         {
             //Buttons here
-           <div class="container-fluid pt-3 pl-3 pr-3 pb-3">
-              <button type="button" id="btnCheckerView" class="btn btn-primary pull-right" style="margin-right: 10px; margin-bottom: 20px; margin-top: 10px;">Submit For Aprroval </button>
-           </div>
+            <div class="container-fluid pt-3 pl-3 pr-3 pb-3">
+                <button type="button" id="btnCheckerView" class="btn btn-primary pull-right" style="margin-right: 10px; margin-bottom: 20px; margin-top: 10px;">Submit For Aprroval </button>
+            </div>
         }
     </div>
 </div>
