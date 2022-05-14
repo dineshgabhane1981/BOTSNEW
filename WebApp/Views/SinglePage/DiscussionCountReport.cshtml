@@ -1,0 +1,32 @@
+﻿@model List<BOTS_BL.Models.DiscussionCount>
+@{
+    ViewBag.Title = "DiscussionCountReport";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="app-main__inner">
+    <div class="mb-3 card pl-4 pr-4 pb-4 pt-4" style="padding-top:20px;">
+        <table cellpadding="5" cellspacing="5">
+            <tr>
+                <th>Name</th>
+                <th>Total Count(MTD)</th>
+                <th>Total Count(Yesterday)</th>
+                <th>WIP Count</th>
+                <th>WIP Last 3 Days</th>
+                <th>WIP Before 3 Days</th>
+            </tr>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.Name</td>
+                    <td>@item.TotalCount</td>
+                    <td>@item.TotalCountYesterday</td>
+                    <td>@item.TotalWIPCount</td>
+                    <td>@item.TotalWIPLast3Days</td>
+                    <td>@item.TotalWIPBefore3Days</td>
+                </tr>
+            }
+        </table>
+    </div>
+</div>

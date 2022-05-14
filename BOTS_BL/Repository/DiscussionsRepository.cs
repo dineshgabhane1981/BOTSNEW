@@ -150,7 +150,7 @@ namespace BOTS_BL.Repository
             return status;
         }
 
-        public bool UpdateDiscussions(string id, string Desc, string Status, string LoginId,string FollowupDate)
+        public bool UpdateDiscussions(string id, string Desc, string Status, string LoginId, string FollowupDate)
         {
             BOTS_TblDiscussion objDiscussion = new BOTS_TblDiscussion();
             BOTS_TblSubDiscussionData objsubdiscussion = new BOTS_TblSubDiscussionData();
@@ -166,7 +166,7 @@ namespace BOTS_BL.Repository
 
                     context.BOTS_TblDiscussion.AddOrUpdate(objDiscussion);
                     context.SaveChanges();
-                    if(!string.IsNullOrEmpty(FollowupDate))
+                    if (!string.IsNullOrEmpty(FollowupDate))
                     {
                         objsubdiscussion.FollowupDate = Convert.ToDateTime(FollowupDate);
                     }
@@ -176,7 +176,7 @@ namespace BOTS_BL.Repository
                     }
                     objsubdiscussion.DiscussionId = objDiscussion.Id;
                     objsubdiscussion.GroupId = objDiscussion.GroupId;
-                    
+
                     objsubdiscussion.Description = Desc;
                     objsubdiscussion.Status = objDiscussion.Status;
                     objsubdiscussion.UpdatedBy = LoginId;
@@ -342,7 +342,7 @@ namespace BOTS_BL.Repository
             {
 
                 //var raised = context.tblRMAssigneds.Where(x => x.IsActive == true).ToList();
-                var raised = context.CustomerLoginDetails.Where(x => x.UserStatus==true && (x.LoginType == "6" || x.LoginType == "7" || x.LoginType == "9" || x.LoginType == "10" || x.LoginType == "11")).ToList();
+                var raised = context.CustomerLoginDetails.Where(x => x.UserStatus == true && (x.LoginType == "6" || x.LoginType == "7" || x.LoginType == "9" || x.LoginType == "10")).ToList();
                 lstRMAssigned.Add(new SelectListItem() { Text = "--Select--", Value = "0" });
                 foreach (var item in raised)
                 {
@@ -451,7 +451,7 @@ namespace BOTS_BL.Repository
                             lstdiscuss = (from c in list
                                           join gd in context.tblGroupDetails on c.GroupId equals gd.GroupId.ToString()
                                           join ct in context.BOTS_TblCallTypes on c.CallType equals ct.Id
-                                          join cld in context.CustomerLoginDetails on c.AddedBy equals cld.LoginId                                         
+                                          join cld in context.CustomerLoginDetails on c.AddedBy equals cld.LoginId
 
                                           select new DiscussionDetails
                                           {
@@ -642,10 +642,52 @@ namespace BOTS_BL.Repository
 
                         }
                     }
-                }                
+                }
             }
 
             return lstdiscuss;
         }
+
+        public List<DiscussionCount> GetDiscussionCountReport()
+        {
+            List<DiscussionCount> lstData = new List<DiscussionCount>();
+            try
+            {
+                using (var context = new CommonDBContext())
+                {
+                    var raised = context.CustomerLoginDetails.Where(x => x.UserStatus == true && (x.LoginType == "6" || x.LoginType == "7" || x.LoginType == "9" || x.LoginType == "10")).ToList();
+                    foreach (var item in raised)
+                    {
+                        DiscussionCount objItem = new DiscussionCount();
+                        objItem.Name = item.UserName;
+
+                        var FirstDay = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);                        
+                        objItem.TotalCount = context.BOTS_TblDiscussion.Where(x => x.AddedBy == item.LoginId && x.AddedDate >= FirstDay).Count();
+
+                        var Yeasterday = DateTime.Today.AddDays(-2);
+                        objItem.TotalCountYesterday = context.BOTS_TblDiscussion.Where(x => x.AddedBy == item.LoginId && x.AddedDate > Yeasterday && x.AddedDate <DateTime.Today).Count();
+                        
+                        objItem.TotalWIPCount = context.BOTS_TblDiscussion.Where(x => x.AddedBy == item.LoginId && x.Status == "WIP").Count();
+                        
+                        var NewDate = DateTime.Today.AddDays(-3);
+                        objItem.TotalWIPLast3Days = context.BOTS_TblDiscussion.Where(x => x.AddedBy == item.LoginId && x.Status == "WIP" && x.UpdatedDate >= NewDate).Count();
+                        objItem.TotalWIPBefore3Days = context.BOTS_TblDiscussion.Where(x => x.AddedBy == item.LoginId && x.Status == "WIP" && x.UpdatedDate <= NewDate).Count();
+                        
+                        lstData.Add(objItem);
+                    }
+
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetDiscussionCountReport");
+            }
+
+            return lstData;
+        }
+
+
+
+
     }
 }
