@@ -1,7 +1,7 @@
 ﻿@using BOTS_BL.Models;
 @model WebApp.ViewModel.OnBoardingSalesViewModel
 @{
-    ViewBag.Title = "CheckerView";
+    ViewBag.Title = "Checker View";
     Layout = "~/Views/Shared/_OnBoardingLayout.cshtml";
 
     var userDetails = (CustomerLoginDetail)Session["UserSession"];
@@ -192,21 +192,58 @@
 
                 </div>
             </div>
-        </div><div>
-    <div class="container-fluid pt-3 pl-3 pr-3 pb-3" id="dvBUSection">
-        <div class="col-md-12 section-heading" data-toggle="collapse" data-target="#BUConfigreadonly">Bulk Upload</div>
-        <div id="BUConfigreadonly" class="collapse show">
-            @*@Html.Partial("~/Views/CustomerOnBoarding/_DLTCommunication.cshtml", Model)*@
-
         </div>
-    </div>
-</div>
-        @if (roleId == "6")
+        <div>
+            <div class="container-fluid pt-3 pl-3 pr-3 pb-3" id="dvBUSection">
+                <div class="col-md-12 section-heading" data-toggle="collapse" data-target="#BUConfigreadonly">Bulk Upload</div>
+                <div id="BUConfigreadonly" class="collapse show">
+                    @*@Html.Partial("~/Views/CustomerOnBoarding/_DLTCommunication.cshtml", Model)*@
+
+                </div>
+            </div>
+        </div>
+        @if (roleId == "6" || roleId == "1")
         {
             //Buttons here
             <div class="container-fluid pt-3 pl-3 pr-3 pb-3">
-                <button type="button" id="btnCheckerView" class="btn btn-primary pull-right" style="margin-right: 10px; margin-bottom: 20px; margin-top: 10px;">Submit For Aprroval </button>
+                <button type="button" id="btnRejectConfig" class="btn btn-primary pull-right" style="margin-right: 10px; margin-bottom: 20px; margin-top: 10px;">Reject </button>
+                <button type="button" id="btnApproveConfig" class="btn btn-primary pull-right" style="margin-right: 10px; margin-bottom: 20px; margin-top: 10px;">Approve </button>
             </div>
         }
+    <div class="container-fluid pl-3 pr-3 pb-3" id="dvRejectSection" style="display:none;">
+        Reject Reason <br />        
+            <textarea id="txtRejectConfig" rows="6" cols="60" class="input150"></textarea>
+            <button type="button" id="btnSubmitConfig" onclick="SubmitRejectConfig();" class="btn btn-primary" style="margin-left: 20px; margin-bottom:25px;">Submit</button>
+            <button type="button" id="btnCancelConfig" onclick="CancelRejectConfig();" class="btn btn-primary" style="margin-left: 20px; margin-bottom:25px;">Cancel</button><br />
+        </div>
     </div>
 </div>
+
+<script>
+    $(document).ready(function () {
+        $("#btnApproveConfig").on("click", function () {
+            ApproveConfiguration();
+        });
+        $("#btnRejectConfig").on("click", function () {
+            RejectConfiguration();
+        });
+    });
+    function ApproveConfiguration() {
+        cuteAlert({
+            type: "question",
+            title: "Are you sure?",
+            message: "You want to submit all configuration for Approval",
+            confirmText: "Yes",
+            cancelText: "No"
+        }).then((e) => {
+            if (e == ("confirm")) {
+                $("#divLoader").show();
+                alert("Approved");
+                $("#divLoader").hide();
+            }
+        })
+    }
+    function RejectConfiguration() {
+        $("#dvRejectSection").show(1000);
+    }
+</script>
