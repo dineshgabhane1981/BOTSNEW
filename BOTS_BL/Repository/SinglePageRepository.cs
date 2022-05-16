@@ -904,7 +904,7 @@ namespace BOTS_BL.Repository
                 {
                     var csId = context.tblRMAssigneds.Where(x => x.LoginId == CSWise).Select(y => y.RMAssignedId).FirstOrDefault();
                     groups = groups.Where(x => x.RMAssigned.Value == csId).ToList();
-                }
+                }              
                 foreach (var group in groups)
                 {
                     string grpId = Convert.ToString(group.GroupId);
@@ -962,100 +962,6 @@ namespace BOTS_BL.Repository
             }
 
             return lstData;
-        }
-
-        public List<RenewalData> GetRenewalData()
-        {
-            List<RenewalData> objData = new List<RenewalData>();
-           
-
-            try
-            {
-                using (var context = new CommonDBContext())
-                {
-                    var groups = context.tblGroupDetails.Where(x => x.IsActive == true && x.IsLive == true).ToList();
-                    foreach (var item in groups)
-                    {
-                        var groupId = Convert.ToString(item.GroupId);
-
-                        string connStr = CR.GetCustomerConnString(groupId);
-                        using (var contextNew = new BOTSDBContext(connStr))
-                        {
-                            try
-                            {
-                                 
-                                var OutletList = contextNew.OutletDetails.Where(x => x.GroupId == groupId && !x.OutletName.ToLower().Contains("admin")).ToList();
-                                //var outlets = OutletList.Where(x => x.OutletName.Contains("Admin"));
-                                //foreach (var outlet in outlets)
-                                //{
-                                //    OutletList.Remove(outlet);
-                                //}
-
-                                foreach (var outlet in OutletList)
-                                {
-                                    RenewalData objItem = new RenewalData();
-
-
-                                    objItem.GroupId = Convert.ToString(item.GroupId);
-                                    objItem.GroupName = item.GroupName;
-                                    objItem.OutletName = outlet.OutletName;
-                                    DateTime? ProgramStartDate = contextNew.TransactionMasters.Where(x => x.CounterId.Contains(outlet.OutletId)).OrderBy(y => y.Datetime).Select(z => z.Datetime).FirstOrDefault();
-
-                                    if (ProgramStartDate.HasValue)
-                                    {
-                                        var ProgramRenewalDate = ProgramStartDate.Value.AddYears(1);
-                                        var day = ProgramStartDate.Value.Day;
-                                        var month = ProgramStartDate.Value.Month;
-                                        var year = ProgramStartDate.Value.Year;
-                                        var currentYear = DateTime.Today.Year;
-                                        
-                                        
-
-                                        DateTime nextRenewal = new DateTime(currentYear, month, day);
-                                        if (nextRenewal < DateTime.Today)
-                                        {
-                                            ProgramRenewalDate = nextRenewal.AddYears(1);
-                                        }
-                                        else
-                                        {
-                                            ProgramRenewalDate = nextRenewal;
-                                        }
-                                        objItem.RenewalDate = ProgramRenewalDate;
-
-                                        
-                        
-                                    }
-                                    
-                                        objData.Add(objItem);
-                                    
-                                }
-                                
-                            }
-
-                            catch (Exception ex)
-                            {
-
-                            }
-                        }
-
-                    }
-                    var nullList = objData.Where(x => x.RenewalDate == null).ToList();
-                    objData = objData.Where(x => x.RenewalDate != null).ToList();
-
-                    objData = objData.OrderBy(x => x.RenewalDate).ToList();
-                    objData.AddRange(nullList);
-
-
-
-                }
-            }
-
-            catch (Exception ex)
-            {
-                newexception.AddException(ex, " GetRenewalData");
-            }
-
-            return (objData);
         }
 
 
