@@ -136,14 +136,14 @@
         @Html.HiddenFor(model => model.bots_TblGroupMaster.GroupId, new { @id = "hdnGroupID" })
         <div class="container-fluid pt-3 pl-3 pr-3 pb-3" id="dvCustomerDetailSection">
             <div class="col-md-12 section-heading" data-toggle="collapse" data-target="#customerdetailsreadonly">Customer Details</div>
-            <div id="customerdetailsreadonly" class="collapse show">
+            <div id="customerdetailsreadonly" class="collapse">
                 @Html.Partial("~/Views/CustomerOnBoarding/_CustomerDetails.cshtml", Model)
             </div>
         </div>
         <div>
             <div class="container-fluid pt-3 pl-3 pr-3 pb-3" id="dvOutletDetailsSection">
                 <div class="col-md-12 section-heading" data-toggle="collapse" data-target="#OutletDetailsConfigreadonly">Outlet Details</div>
-                <div id="OutletDetailsConfigreadonly" class="collapse show">
+                <div id="OutletDetailsConfigreadonly" class="collapse">
                     @Html.Partial("~/Views/CustomerOnBoarding/_OutletDetails.cshtml", Model)
 
                 </div>
@@ -179,7 +179,7 @@
             <div class="container-fluid pt-3 pl-3 pr-3 pb-3" id="dvDLCSection">
                 <div class="col-md-12 section-heading" data-toggle="collapse" data-target="#DLCreadonly">Digital Loyalty Card</div>
                 <div id="DLCreadonly" class="collapse show">
-                    @Html.Partial("~/Views/CustomerOnBoarding/_DLTCheckerView.cshtml", Model)
+                    @*@Html.Partial("~/Views/CustomerOnBoarding/_DLTCheckerView.cshtml", Model)*@
 
                 </div>
             </div>

@@ -1,5 +1,5 @@
 ﻿@model WebApp.ViewModel.OnBoardingSalesViewModel
-@{ 
+@{
     var count = 0;
 }
 
@@ -147,57 +147,60 @@
 
 
 <table border="1" cellpadding="3" cellspacing="3" style="margin-top:10px;" width="100%">
-    <tr style="background-color:lightgrey;"><td colspan="15" style="font-weight:bold;font-size:18px;">Communication Details</td></tr>
 
     @foreach (var set in Model.lstCommunicationSet)
     {
         count++;
-        <tr style="background-color:lightgrey;"><td colspan="15" style="font-weight: bold; font-size: 18px;">SET - @count</td></tr>
+        <tr style="background-color:lightgrey;"><td colspan="15" style="font-weight: bold;">SET - @count</td></tr>
         <tr>
-            <td style="font-style: italic; width:110px;">
+            <td>
                 Set Name
             </td>
             <td style="font-weight:bold;">@set.SetName</td>
-            <td style="font-style: italic; width:110px;">
+            <td>
                 Created By
             </td>
             <td style="font-weight:bold;">@set.CreatedBy</td>
-            <td style="font-style: italic; width:110px;">
+            <td>
                 Created Date
             </td>
-            <td style="font-weight:bold;">@set.CreatedDate</td>
-            <td colspan="5"></td>
+            <td style="font-weight:bold;">@set.CreatedDate</td>            
         </tr>
         if (Model.lstSMSConfig != null)
         {
-
             <tr>
-                <td style="font-style: italic; width:110px;">
-                    PEID
+                <td>
+                    PEID - <b> @Model.lstSMSConfig[0].PEID</b>
                 </td>
-                <td style="font-weight:bold;">@Model.lstSMSConfig[0].PEID</td>
-                <td style="font-style: italic; width: 110px;">
-                    SMS Provider
+                
+                <td>
+                    SMS Provider - <b>@Model.lstSMSConfig[0].SMSProvider</b>
                 </td>
-                <td style="font-weight:bold;">@Model.lstSMSConfig[0].SMSProvider</td>
-                <td style="font-style: italic; width: 110px;">
-                    Sender Id
+                 
+                <td>
+                    Sender Id - <b>@Model.lstSMSConfig[0].SMSSenderID</b>
                 </td>
-                <td style="font-weight:bold;">@Model.lstSMSConfig[0].SMSSenderID</td>
-                <td style="font-style: italic; width: 110px;">
-                    User Name
+                
+                <td>
+                    User Name - <b>@Model.lstSMSConfig[0].SMSUsername</b>
                 </td>
-                <td style="font-weight:bold;">@Model.lstSMSConfig[0].SMSUsername</td>
-                <td style="font-style: italic; width: 110px;">
-                    Password
+                
+                <td>
+                    Password - <b>@Model.lstSMSConfig[0].SMSPassword</b>
+                </td>                
+                <td>
+                    SMS Link - <b>@Model.lstSMSConfig[0].SMSlink</b>
                 </td>
-                <td style="font-weight:bold;">@Model.lstSMSConfig[0].SMSPassword</td>
-                <td style="font-style: italic; width: 110px;">
-                    SMS Link
-                </td>
-                <td style="font-weight:bold;">@Model.lstSMSConfig[0].SMSlink</td>
-
-                <td colspan="2"></td>
+            </tr>
+            <tr style="background-color:lightgreen; font-weight:bold;">
+                <td>Script Type</td>
+                <td>Template Id</td>
+                <td>Template Name</td>
+                <td>Template Type</td>
+                <td>SMS Script</td>
+                <td>SMS Script DLT</td>
+                <td>DLT Status</td>
+                <td>Reject Reason</td>
             </tr>
         }
 
@@ -206,62 +209,64 @@
             if (set.SetId == sms.SetId)
             {
                 <tr>
-                    <td style="font-style: italic;">
-                        Template Id
-                    </td>
-                    <td style="font-weight:bold;">@sms.TemplateId</td>
-                    <td style="font-style: italic;">
-                        Template Name
-                    </td>
-                    <td style="font-weight:bold;">@sms.TemplateName</td>
-                    <td style="font-style: italic;">
-                        Template Type
-                    </td>
-                    <td style="font-weight:bold;">@sms.TemplateType</td>
-                    <td style="font-style: italic;">
-                        SMS Script
-                    </td>
-                    <td style="font-weight:bold;">@sms.SMSScript</td>
-                    <td style="font-style: italic;">
-                        SMS Script DLT
-                    </td>
-                    <td style="font-weight:bold;">@sms.SMSScriptDLT</td>
-                    <td style="font-style: italic;">
-                        DLT Status
-                    </td>
-                    <td style="font-weight:bold;">@sms.DLTStatus</td>
-                    <td style="font-style: italic;">
-                        Reject Reason
-                    </td>
-                    <td style="font-weight:bold;">@sms.RejectReason</td>
-
-                    <td></td>
+                    @if (sms.MessageId == 100)
+                    {
+                        <td style="background-color:lightgreen;">
+                            <b> Enrollment</b>
+                        </td>
+                    }
+                    @if (sms.MessageId == 101)
+                    {
+                        <td style="background-color:lightgreen;">
+                            <b>Earn</b>
+                        </td>
+                    }
+                    @if (sms.MessageId == 102)
+                    {
+                        <td style="background-color:lightgreen;">
+                            <b>Burn</b>
+                        </td>
+                    }
+                    @if (sms.MessageId == 105)
+                    {
+                        <td style="background-color:lightgreen;">
+                            <b>OTP</b>
+                        </td>
+                    }
+                    @if (sms.MessageId == 106)
+                    {
+                        <td style="background-color:lightgreen;">
+                            <b>Balance Inquiry</b>
+                        </td>
+                    }
+                    @if (sms.MessageId == 107)
+                    {
+                        <td style="background-color:lightgreen;">
+                            <b>Cancel</b>
+                        </td>
+                    }
+                    @if (sms.MessageId == 108)
+                    {
+                        <td style="background-color:lightgreen;">
+                            <b>Enrollment & Earn</b>
+                        </td>
+                    }
+                    @if (sms.MessageId != 103 && sms.MessageId != 104)
+                    {
+                        
+                        <td>@sms.TemplateId</td>                        
+                        <td>@sms.TemplateName</td>                        
+                        <td>@sms.TemplateType</td>                        
+                        <td>@sms.SMSScript</td>                        
+                        <td>@sms.SMSScriptDLT</td>                        
+                        <td>@sms.DLTStatus</td>                        
+                        <td>@sms.RejectReason</td>                       
+                    }
                 </tr>
             }
         }
-    }
 
-
-    <tr style="background-color:lightgrey;"><td colspan="15" style="font-weight: bold; font-size: 18px;">Whatsapp Script Details</td></tr>
-    <tr style="background-color:lightgrey;"><td colspan="15" style="font-weight: bold; font-size: 18px;">SET</td></tr>
-    @foreach (var set in Model.lstCommunicationSet)
-    {
-        <tr>
-            <td style="font-style: italic;">
-                Set Name
-            </td>
-            <td style="font-weight:bold;">@set.SetName</td>
-            <td style="font-style: italic;">
-                Created By
-            </td>
-            <td style="font-weight:bold;">@set.CreatedBy</td>
-            <td style="font-style: italic;">
-                Created Date
-            </td>
-            <td style="font-weight:bold;">@set.CreatedDate</td>
-
-            <td colspan="5"></td>
-        </tr>
+        <tr style="background-color:lightgrey;"><td colspan="15" style="font-weight: bold; font-size: 18px;">Whatsapp Script Details</td></tr>
         if (Model.lstWAConfig != null)
         {
             <tr>
@@ -286,7 +291,10 @@
                 </td>
                 <td style="font-weight:bold;">@Model.lstWAConfig[0].WAlink</td>
 
-                <td colspan="2"></td>
+                <td style="font-style: italic;">
+                    Token Id
+                </td>
+                <td style="font-weight:bold;">@Model.lstWAConfig[0].TokenId</td>
             </tr>
         }
         @*<tr style="background-color:lightgrey;"><td colspan="8" style="font-weight: bold; font-size: 18px;">Whatsapp Script</td></tr>*@
@@ -296,9 +304,9 @@
             {
                 <tr>
                     <td style="font-style: italic;">
-                        Token ID
+                        Message For
                     </td>
-                    <td style="font-weight:bold;">@WA.TokenId</td>
+                    <td style="font-weight:bold;">@WA.MessageId</td>
                     <td style="font-style: italic;">
                         Whatsapp Script
                     </td>
