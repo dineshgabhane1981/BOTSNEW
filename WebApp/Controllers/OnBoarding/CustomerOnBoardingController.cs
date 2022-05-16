@@ -1790,7 +1790,7 @@ namespace WebApp.Controllers.OnBoarding
             objData.lstCommunicationSet = OBR.GetCommunicationSetsByGroupId(GroupId);
             objData.lstSMSConfig = OBR.GetCommunicationSMSConfigByGroupId(GroupId);
             objData.lstWAConfig = OBR.GetCommunicationWAConfigByGroupId(GroupId);
-
+            objData.objDLCLinkConfig = OBR.GetDLCLinkDLTConfigByGroupId(GroupId);
 
 
 

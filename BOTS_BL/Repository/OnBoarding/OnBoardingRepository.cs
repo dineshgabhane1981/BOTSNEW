@@ -1906,5 +1906,17 @@ namespace BOTS_BL.Repository
             return objData;
         }
 
+        public BOTS_TblDLCLinkConfig GetDLCLinkDLTConfigByGroupId(string GroupId)
+        {
+            BOTS_TblDLCLinkConfig objData = new BOTS_TblDLCLinkConfig();
+            using (var context = new CommonDBContext())
+            {
+                objData = context.BOTS_TblDLCLinkConfig.Where(x => x.GroupId == GroupId).FirstOrDefault();
+            }
+
+            return objData;
+        }
+
+        
     }
 }
