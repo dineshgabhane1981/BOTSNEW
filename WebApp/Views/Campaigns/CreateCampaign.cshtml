@@ -25,9 +25,9 @@
                 @*<div class="col-sm-8" style="display:flex;padding-bottom: 10px;margin-top:5px;">*@
                 <div class="row mt-4">
                     <div class="col-md-8 col-xl-8">
-                        <input type="radio" checked id="rdnSMS" name="btdornot" /><b>SMS </b> &nbsp;&nbsp;&nbsp;&nbsp;
-                        <input type="radio" id="rdnWA" name="btdornot" /><b> Whats app</b> &nbsp;&nbsp;&nbsp;&nbsp;
-                        <input type="radio" id="rdnVWA" name="btdornot" /><b> Verified Whats app</b> &nbsp;&nbsp;&nbsp;&nbsp;
+                        <input type="radio" checked id="rdnSMS" value="1" name="btdornot" /><b>SMS </b> &nbsp;&nbsp;&nbsp;&nbsp;
+                        <input type="radio" id="rdnWA" value="2" name="btdornot" /><b> Whats app</b> &nbsp;&nbsp;&nbsp;&nbsp;
+                        <input type="radio" id="rdnVWA" value="3" name="btdornot" /><b> Verified Whats app</b> &nbsp;&nbsp;&nbsp;&nbsp;
                     </div>
                 </div>
 
@@ -39,8 +39,7 @@
                         Base Type
                     </div>
                     <div class="col-sm-2 dropdown">
-                        <select id="#BaseType" name="BaseType" class="form-control" onchange="BaseCalc();">
-
+                        <select id="BaseType" name="BaseType" class="input50" onchange="BaseCalc();">
                             <option value="1">All</option>
                             <option value="2">Member Base</option>
                             <option value="3">Bulk Upload</option>
@@ -48,16 +47,19 @@
                         </select>
                     </div>
                 </div>
-                <div class="row " id="#divPoints" style="margin-top : 20px; display: none;">
+                <div class="row " id="divPoints" style="margin-top : 20px; display: none;">
                     <div class="col-sm-2">
-                        Points 
-                        <select id="#Filter" name="Filter" class="form-control" onchange="pointsvalid();">
-                            <option value="0">Select</option>
+                        Points
+                    </div>
+                    <div class="col-sm-2 dropdown">
+                        <select id="Filter" name="Filter" class="input50" onchange="pointsvalid();">
                             <option value="1">LessThan</option>
                             <option value="2">GreaterThan</option>
                             <option value="3">Equal To</option>
                         </select>
-                         <input type="number" id="#points" name="points" />
+                    </div>
+                    <div class="col-sm-2">
+                        <input type="number" id="points" name="points" class="input50"/>
                     </div>
                 </div>
 
@@ -69,12 +71,10 @@
                         @Html.DropDownList("OutletData", new SelectList(ViewBag.OutletData, "Value", "Text"), "ALL", htmlAttributes: new { @class = "input50", @id = "ddlOutletList" })
                     </div>
                 </div>
-
                 <div class="row" style="margin-top : 20px;">
                     <div class="col-md-3 col-xl-3">
                         <div class="button">
                             <button type="button" id="btnFilter" style="margin-left:15px;" class="btn btn-primary" onclick="ShowCount();"><b>FILTER</b></button>
-
                         </div>
                     </div>
                         <div class="col-md-4 col-xl-4">
@@ -103,7 +103,7 @@
                             Script
                         </div>
                         <div class="col-sm-4" style="float:left;margin-top:10px;">
-                            <textarea class="form-control" id="exampleFormControlTextarea3" rows="7"></textarea>&nbsp;&nbsp;
+                            <textarea class="form-control" id="SMSScript" rows="7"></textarea>&nbsp;&nbsp;
                         </div>
                     </div>
                     <div class="row mt-2" style="margin-top : 20px;">
@@ -111,13 +111,11 @@
                             <label>Campaign From</label>                          
                         </div>
                         <div>
-                            <input type="date" id="txtEnrollfromdt" class="input50" placeholder="Start" />
-                            
+                            <input type="date" id="txtEnrollfromdt" class="input50" placeholder="Start" onchange="ValidateDate();" /> &nbsp;&nbsp;&nbsp;
                         </div>
                         <div>
-                            <input type="date" id="txtEnrolltodt" class="input50" placeholder="End" />
+                            <input type="date" id="txtEnrolltodt" class="input50" placeholder="End" onchange="ValidateDate1();"/> 
                         </div>
-
                     </div>
 
                     <div class="row mt-2">
@@ -127,13 +125,16 @@
                         <div class="col-md-6 col-xl-4">
                             <input type="text" id="CampName" class="input50" placeholder="Enter Campaign Name" />
                         </div>
+                        <div class="col-md-6 col-xl-4">
+                            <input type="hidden" id="CampId" class="input50" />
+                        </div>
                     </div>
                 <div class="row" style="margin-top : 20px;">
                 </div>
                     <div class="col-md-3 col-xl-3">
                         <div class="button">
-                            <button type="button" id="btnSave" style="margin-left:15px;" class="btn btn-primary" onclick="Save();"><b>SAVE</b></button>
-                            <button type="button" id="btnDownload" style="margin-left:15px;" class="btn btn-primary" onclick="DownLoad;"><b>DOWNLOAD</b></button>
+                            <button type="button" id="btnSave" style="margin-left:15px;" class="btn btn-primary" onclick="SaveValidate();"><b>SAVE</b></button>
+                            <button type="button" id="btnDownload" style="margin-left:15px;" class="btn btn-primary" onclick="DownLoad();"><b>DOWNLOAD</b></button>
                         </div>
                     </div>
                     
@@ -146,66 +147,156 @@
     </div>
 <script>
         function BaseCalc() {
-
-            var val = document.getElementById("#BaseType").value;
-            var div = document.getElementById("#divPoints");
-            
+            var val = document.getElementById("BaseType").value;
+            var div = document.getElementById("divPoints");
             if (val == 4) {
 
-                div.style.display = "block";
+                $('#divPoints').show();
 
             }
             else if (val != 4) {
 
-                div.style.display = "none";
+                $('#divPoints').hide();
             }
+    }
+
+    function ValidateDate() {
+        var d = new Date();
+        month = ("0" + (d.getMonth() + 1)).slice(-2);
+        day = ("0" + d.getDate()).slice(-2);
+        year = d.getFullYear();
+        var Date1 = year + '-' + month + '-' + day;
+
+        var CampStartDate = $("#txtEnrollfromdt").val();
+        if (CampStartDate < Date1) {
+            cuteAlert({
+                type: "error",
+                title: "Error Title",
+                message: "StartDate Can't be Older",
+                buttonText: "Okay"
+
+            })
+            $("#txtEnrollfromdt").val("");
         }
-    function pointsvalid() {
+    }
+    function ValidateDate1() {
+        var d = new Date();
+        month = ("0" + (d.getMonth() + 1)).slice(-2);
+        day = ("0" + d.getDate()).slice(-2);
+        year = d.getFullYear();
+        var Date1 = year + '-' + month + '-' + day;
 
-            var Equality = document.getElementById("#Filter").value;
-            var Points = document.getElementById("#points").value;
-            if (Points == '') {
-
-                alert("Please Enter the Points ");
-
-            }
-
+        var CampEndDate = $("#txtEnrolltodt").val();
+        if (CampEndDate < Date1) {
+            cuteAlert({
+                type: "error",
+                title: "Error Title",
+                message: "EndDate Can't be Older",
+                buttonText: "Okay"
+            })
+            $("#txtEnrolltodt").val("");
         }
-        $(document).ready(function () {
+    }
 
-            $('#rdnSMS').change(function () {
+    function SaveValidate() {
+        var d = new Date();
+        month = ("0" + (d.getMonth() + 1)).slice(-2);
+        day = ("0" + d.getDate()).slice(-2);
+        year = d.getFullYear();
+        var Date1 = day + '-' + month + '-' + year;
 
-                $('#SMSCamppanel').show();
-            });
-            $('#rdnWA').change(function () {
+        var Script = $("#SMSScript").val();
+        var StartDate = $("#txtEnrollfromdt").val();
+        var EndDate = $("#txtEnrolltodt").val();
+        var CampName = $("#CampName").val();
+        var AllCount = $("#AllCountnum").text();
+        var FiltCountnum = $("#FiltCountnum").text();
 
-                $('#SMSCamppanel').hide();
-            });
-            $('#rdnVWA').change(function () {
 
-                $('#SMSCamppanel').hide();
-            });
+        if (AllCount == "") {
+            alert(AllCount);
+            cuteAlert({
+                type: "error",
+                title: "Error Title",
+                message: "No Data Selected",
+                buttonText: "Okay"
+            })
+        }
+        else if (FiltCountnum == "") {
+            cuteAlert({
+                type: "error",
+                title: "Error Title",
+                message: "No Data Selected",
+                buttonText: "Okay"
+            })
+        }
+        else if (Script == "") {
+            cuteAlert({
+                type: "error",
+                title: "Error Title",
+                message: "Script can't be Empty",
+                buttonText: "Okay"
+            })
+        }
+        else if (StartDate < Date1){
+            cuteAlert({
+                type: "error",
+                title: "Error Title",
+                message: "StartDate Can't be Older",
+                buttonText: "Okay"
+            })
+        }
+        else if (EndDate < Date1) {
+            cuteAlert({
+                type: "error",
+                title: "Error Title",
+                message: "EndDate Can't be Older",
+                buttonText: "Okay"
+            })
+        }
+        else if (CampName == "") {
+            cuteAlert({
+                type: "error",
+                title: "Error Title",
+                message: "Campaign Name Can't Empty",
+                buttonText: "Okay"
+            })
+        }
+        else {
+            Save();
+        }
+    }
 
+
+    $(document).ready(function () {
             $("#ddlOutletList").on("change", function () {
-
                 var OutletId = $("#ddlOutletList").val();
-
-
             });
         });
 
     function ShowCount() {
-            var val = '';
+        var val = '';
         var Equality = '';
         var Points = '';
         var OutletId = '';
 
-            val = document.getElementById("#BaseType").value;
-            Equality = document.getElementById("#Filter").value;
-            Points = document.getElementById("#points").value;
-        OutletId = $("#ddlOutletList").val();
-        if (Equality == '0') {
+            val = document.getElementById("BaseType").value;
+            Equality = document.getElementById("Filter").value;
+            Points = document.getElementById("points").value;
+            OutletId = $("#ddlOutletList").val();
+        if (val != '4') {
             Equality = ''
+            Points = ''
+        }
+        else if (val == '4') {
+            if (Points == '') {
+                cuteAlert({
+                    type: "error",
+                    title: "Error Title",
+                    message: "Enter Points",
+                    buttonText: "Okay"
+                })
+            }
         }
             var FilterData = [];
             item = {};
@@ -215,7 +306,7 @@
             item["OutletId"] = OutletId;
             FilterData.push(item);
             var data = JSON.stringify(FilterData);
-            
+
             $.ajax({
                 type: "POST",
                 url: '@Url.Action("GetFilteredData", "Campaigns")',
@@ -238,6 +329,105 @@
                     console.log(response.responseText);
                 }
             });
+    }
+
+    function Save() {
+        var d = new Date();
+        month = ("0" + (d.getMonth() + 1)).slice(-2);
+        day = ("0" + d.getDate()).slice(-2);
+        year = d.getFullYear();
+        var Date1 = day + '-' + month + '-' + year;
+
+        var val = '';
+        var Equality = '';
+        var Points = '';
+        var OutletId = '';
+        var Srcipt = '';
+        var StartDate = '';
+        var EndDate = '';
+        var CampaignName = '';
+        var SMSType = '';
+
+        val = $("#BaseType").val();
+        Equality = $("#Filter").val();
+        Points = $("#points").val();
+
+        if (val != '4') {
+            Equality = ''
+            Points = 0
         }
+
+        OutletId = $("#ddlOutletList").val();
+        Srcipt = $("#SMSScript").val();
+        StartDate = $("#txtEnrollfromdt").val();
+        EndDate = $("#txtEnrolltodt").val();
+        CampaignName = $("#CampName").val();
+
+        if (document.getElementById("rdnSMS").checked) {
+            SMSType = $("#rdnSMS").val();
+        }
+        else if (document.getElementById("rdnWA").checked) {
+            SMSType = $("#rdnWA").val();
+        }
+        else if (document.getElementById("rdnVWA").checked) {
+            SMSType = $("#rdnVWA").val();
+        }
+
+
+        var FilterData = [];
+        item = {};
+        item["BaseType"] = val;
+        item["Equality"] = Equality;
+        item["Points"] = Points;
+        item["OutletId"] = OutletId;
+        item["Srcipt"] = Srcipt;
+        item["StartDate"] = StartDate;
+        item["EndDate"] = EndDate;
+        item["CampaignName"] = CampaignName;
+        item["SMSType"] = SMSType;
+
+        FilterData.push(item);
+        var data = JSON.stringify(FilterData);
+        //alert(data);
+        $.ajax({
+                type: "POST",
+                url: '@Url.Action("SaveData", "Campaigns")',
+                data: '{jsonData: ' + JSON.stringify(data) + '}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+
+                success: function (response) {
+                    console.log(response);
+                    if (response != null) {
+
+                        $("#CampId").val(response[0].CampaignId);
+
+                        cuteAlert({
+                            type: "success",
+                            title: "Success Title",
+                            message: "Campaign Saved" + response[0].CampaignId,
+                            buttonText: "Okay"
+                        })
+
+                    }
+                    else {
+
+                    }
+                },
+                error: function (response) {
+                    console.log(response.responseText);
+                }
+            });
+
+    }
+    function DownLoad() {
+        var CampaignId;
+        CampaignId = $("#CampId").val();
+
+        var urlLink = "@Url.Action("ExportToExcelCampaignData", "Campaigns")";
+        urlLink = urlLink + "?CampaignId=" + CampaignId;
+        console.log(urlLink);
+        window.location.href = urlLink;
+    }
 </script>
 

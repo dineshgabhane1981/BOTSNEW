@@ -1,7 +1,12 @@
-﻿using BOTS_BL.Models;
+﻿using BOTS_BL;
+using BOTS_BL.Models;
 using BOTS_BL.Repository;
+using ClosedXML.Excel;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -13,6 +18,7 @@ namespace WebApp.Controllers
     {
         CampaignRepository CMPR = new CampaignRepository();
         ReportsRepository RR = new ReportsRepository();
+        Exceptions newexception = new Exceptions();
         // GET: Campaigns
         public ActionResult Index()
         {
@@ -209,14 +215,11 @@ namespace WebApp.Controllers
             json_serializer.MaxJsonLength = int.MaxValue;
             object[] objData = (object[])json_serializer.DeserializeObject(jsonData);
             foreach (Dictionary<string, object> item in objData)
-            {
-                
+            {               
                 string BaseType = Convert.ToString(item["BaseType"]);
                 string PointsBase = Convert.ToString(item["PointsBase"]);
                 string Points = Convert.ToString(item["Points"]);
                 string OutletId = Convert.ToString(item["OutletId"]);
-
-
 
                 objcustAll = CR.GetFiltData(BaseType, PointsBase, Points, OutletId, userDetails.GroupId, userDetails.connectionString);
 
@@ -224,6 +227,96 @@ namespace WebApp.Controllers
             }
 
             return new JsonResult() { Data = objcustAll, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
+        }
+
+        [HttpPost]
+        public JsonResult SaveData(string jsonData)
+        {
+            List<CampaignSaveDetails> SaveData = new List<CampaignSaveDetails>();
+            CampaignRepository CR = new CampaignRepository();
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            JavaScriptSerializer json_serializer = new JavaScriptSerializer();
+            json_serializer.MaxJsonLength = int.MaxValue;
+            object[] objData = (object[])json_serializer.DeserializeObject(jsonData);
+            foreach (Dictionary<string, object> item in objData)
+            {
+                string BaseType = Convert.ToString(item["BaseType"]);
+                string Equality = Convert.ToString(item["Equality"]);
+                string Points = Convert.ToString(item["Points"]);
+                string OutletId = Convert.ToString(item["OutletId"]);
+                string Srcipt = Convert.ToString(item["Srcipt"]);
+                string StartDate = Convert.ToString(item["StartDate"]);
+                string EndDate = Convert.ToString(item["EndDate"]);
+                string CampaignName = Convert.ToString(item["CampaignName"]);
+                string SMSType = Convert.ToString(item["SMSType"]);
+
+                SaveData = CR.SaveCampaignData(BaseType, Equality, Points, OutletId,Srcipt, StartDate, EndDate, CampaignName, SMSType, userDetails.GroupId, userDetails.connectionString);
+                //Session["CampaignId"] = SaveData.;
+            }
+
+                return new JsonResult() { Data = SaveData, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
+        }
+
+        public ActionResult ExportToExcelCampaignData(string CampaignId)
+        {
+            System.Data.DataTable table = new System.Data.DataTable();
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            string LoginType = userDetails.LoginType;
+           
+
+            try
+            {
+
+                // List<OutletwiseTransaction> lstOutletWiseTransaction = new List<OutletwiseTransaction>();
+                // lstOutletWiseTransaction = RR.GetOutletWiseTransactionList(userDetails.GroupId, DateRangeFlag, fromDate, toDate, outletId, EnrolmentDataFlag, userDetails.connectionString);
+                var CD = CMPR.CampDataDownload(CampaignId, userDetails.GroupId, userDetails.connectionString);
+                PropertyDescriptorCollection properties = TypeDescriptor.GetProperties(typeof(CampaignMemberDetail));
+                foreach (PropertyDescriptor prop in properties)
+                table.Columns.Add(prop.Name, Nullable.GetUnderlyingType(prop.PropertyType) ?? prop.PropertyType);
+
+                foreach (CampaignMemberDetail item in CD)
+                {
+                    DataRow row = table.NewRow();
+                    foreach (PropertyDescriptor prop in properties)
+                    
+                        row[prop.Name] = prop.GetValue(item) ?? DBNull.Value;
+                        // if(row[prop.Name] == "Mobileno")
+                        //{
+                            table.Rows.Add(row);
+                       // }
+                        
+                    
+                }
+                table.Columns.Remove("SlNo");
+                table.Columns.Remove("CampaignId");
+                table.Columns.Remove("CustomerBaseType");
+                table.Columns.Remove("MemberQualifiedStatus");
+
+                string fileName = "BOTS_" + CampaignId + ".xlsx";
+
+                using (XLWorkbook wb = new XLWorkbook())
+                {
+
+                    //excelSheet.Name
+                    table.TableName = CampaignId;
+                    IXLWorksheet worksheet = wb.AddWorksheet(sheetName: CampaignId);
+                   
+                    worksheet.Cell(1, 1).InsertTable(table);
+
+                    using (MemoryStream stream = new MemoryStream())
+                    {
+                        wb.SaveAs(stream);
+
+                        return File(stream.ToArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
+                    }
+                }
+               // return null;
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, userDetails.GroupId);
+                return null;
+            }
         }
     }
 }

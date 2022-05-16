@@ -130,4 +130,25 @@ namespace BOTS_BL.Models
         public int CustCountALL { get; set; }
         public int CustFiltered { get; set; }
     }
+    public class CampaignSaveDetails
+    {
+        public string ResponseCode { get; set; }
+        public string  ResponseMessage { get; set; }
+        public string CampaignId { get; set; }
+    }
+    public class CampaignData
+    {
+        public string MobileNo { get; set; }
+        public string Scripts { get; set; }
+    }
+
+    public class CampDownload
+    {
+       public string CampaignId { get; set; }
+       public string MobileNo { get; set; }
+       public string CustomerBaseType { get; set; }
+       public string MemberQualifiedStatus { get; set; }
+       public string Script { get; set; }
+
+    }
 }
