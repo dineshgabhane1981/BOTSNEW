@@ -87,6 +87,7 @@ namespace WebApp.Controllers.OnBoarding
                     objData.lstOutlets = OBR.GetOutletDetails(groupId);
                     objData.lstCommunicationSet = OBR.GetCommunicationSetsByGroupId(groupId);
 
+                    //Earn Data Fetch
                     objData.objEarnRuleConfig = OBR.GetEarnRuleConfig(groupId);
                     if (objData.objEarnRuleConfig == null)
                     {
@@ -95,6 +96,7 @@ namespace WebApp.Controllers.OnBoarding
                     }
 
                     //Burn Data Fetch
+                    objData.objBurnRuleConfig = OBR.GetBurnRuleConfig(groupId);                    
                     if (objData.objBurnRuleConfig == null)
                     {
                         BOTS_TblBurnRuleConfig objBurnRule = new BOTS_TblBurnRuleConfig();
@@ -331,9 +333,16 @@ namespace WebApp.Controllers.OnBoarding
 
                     objLstInstallment.Add(objItem);
                 }
-
-                objData.bots_TblGroupMaster.CreatedBy = userDetails.LoginId;
-                objData.bots_TblGroupMaster.CreatedDate = DateTime.Now;
+                if (objData.bots_TblGroupMaster.SINo > 0)
+                {
+                    objData.bots_TblGroupMaster.CreatedBy = userDetails.LoginId;
+                    objData.bots_TblGroupMaster.CreatedDate = DateTime.Now;
+                }
+                else
+                {
+                    objData.bots_TblGroupMaster.UpdatedBy = userDetails.LoginId;
+                    objData.bots_TblGroupMaster.CreatedDate = DateTime.Now;
+                }
 
                 if (objData.bots_TblGroupMaster.CustomerStatus == "CSUpdate")
                 {
@@ -1770,23 +1779,24 @@ namespace WebApp.Controllers.OnBoarding
             CommonFunctions common = new CommonFunctions();
             GroupId = common.DecryptString(GroupId);
             OnBoardingSalesViewModel objData = new OnBoardingSalesViewModel();
-
+            //Customer Details
             objData.bots_TblGroupMaster = OBR.GetGroupMasterDetails(GroupId);
             objData.bots_TblDealDetails = OBR.GetDealMasterDetails(GroupId);
             objData.bots_TblPaymentDetails = OBR.GetPaymentDetails(GroupId);
             objData.objRetailList = OBR.GetRetailDetails(GroupId);
             objData.objInstallmentList = OBR.GetInstallmentDetails(GroupId);
 
+            //Communication Details
+            objData.lstCommunicationSet = OBR.GetCommunicationSetsByGroupId(GroupId);
+            objData.lstSMSConfig = OBR.GetCommunicationSMSConfigByGroupId(GroupId);
+            objData.lstWAConfig = OBR.GetCommunicationWAConfigByGroupId(GroupId);
+            objData.objDLCLinkConfig = OBR.GetDLCLinkDLTConfigByGroupId(GroupId);
+            objData.bots_TblOutletMaster = OBR.GetOutletDetailsByGroupId(GroupId);
 
-            //objData.bots_TblGroupMaster = OBR.GetGroupMasterDetails(GroupId);
-            //objData.onBoardingCustomerDetails = OBR.GetOnBoardingCustomerDetails("");
-            //objData.objDLCLinkConfig = OBR.GetDLCLinkDLTConfigById(SetId);
-            //objData.bOTS_TblCampaignOtherConfig = OBR.GetCampaignOtherConfigForDLT(GroupId, type);
-            //objData.bOTS_TblDealDetails = OBR.GetDealMasterDetails(GroupId);
-            //objData.bOTS_TblPaymentDetails = OBR.GetPaymentDetails(GroupId);
-            //objData.bOTS_TblSMSConfig = OBR.GetCommunicationSMSConfigById(SetId);
-            //objData.bOTS_TblCommunicationSet = OBR.GetSetDetails(SetId);
-            //objData.bOTS_TblCampaignInactive = OBR.GetInactiveConfigById(SetId);
+
+
+
+
             return View(objData);
 
         }
@@ -1806,6 +1816,7 @@ namespace WebApp.Controllers.OnBoarding
                 objBurnRule.RuleId = Convert.ToInt32(item["RuleId"]);
                 objBurnRule.GroupId = Convert.ToString(item["GroupId"]);
                 objBurnRule.MinInvoiceAmt = Convert.ToInt32(item["MinInvoiceAmt"]);
+                objBurnRule.MinRedeemPts = Convert.ToInt32(item["MinRedeemPts"]);
                 objBurnRule.MinThreshholdPtsFisttime = Convert.ToInt32(item["MinThreshholdPtsFisttime"]);
                 objBurnRule.MinThreshholdPtsSubsequent = Convert.ToInt32(item["MinThreshholdPtsSubsequent"]);
                 objBurnRule.PartialEarn = Convert.ToBoolean(item["PartialEarn"]);
@@ -1859,21 +1870,30 @@ namespace WebApp.Controllers.OnBoarding
                             lstBlockBurnUpload.Add(objItem);
                         }
                     }
-
                 }
             }
-            
-            
-            
-            
-            
+            if (objBurnRule.RuleId > 0)
+            {
+                objBurnRule.UpdatedBy = userDetails.LoginId;
+                objBurnRule.UpdatedDate = DateTime.Now;
+            }
+            else
+            {
+                objBurnRule.AddedBy = userDetails.LoginId;
+                objBurnRule.AddedDate = DateTime.Now;
+            }
+
+            result = OBR.SaveBurnRule(objBurnRule, lstBlockBurnUpload);
             return new JsonResult() { Data = result, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
 
-
-
-
-
+        public ActionResult SendForApproval(string GroupId)
+        {
+            bool result = true;
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            result = OBR.SendForApproval(GroupId, userDetails.LoginId);
+            return new JsonResult() { Data = result, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
+        }
     }
 }
 

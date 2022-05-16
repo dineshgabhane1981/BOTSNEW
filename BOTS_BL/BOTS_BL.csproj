@@ -146,6 +146,7 @@
     <Compile Include="Models\BrandDetail.cs" />
     <Compile Include="Models\BulkUploadCustList.cs" />
     <Compile Include="Models\BurnRule.cs" />
+    <Compile Include="Models\CampaignMemberDetail.cs" />
     <Compile Include="Models\Campaign\CampaignTiles.cs" />
     <Compile Include="Models\Campaign\LoyaltyKPIs.cs" />
     <Compile Include="Models\CelebrationMemberDetail.cs" />
@@ -211,6 +212,7 @@
     <Compile Include="Models\CommonDB\DailyWhatsAppSM.cs" />
     <Compile Include="Models\CommonDB\DashboardReport.cs" />
     <Compile Include="Models\CommonDB\DatabaseDetail.cs" />
+    <Compile Include="Models\CommonDB\DiscussionCount.cs" />
     <Compile Include="Models\CommonDB\GroupConfig.cs" />
     <Compile Include="Models\CommonDB\ListOfGroup.cs" />
     <Compile Include="Models\CommonDB\MobileAppCommSecurityKey.cs" />

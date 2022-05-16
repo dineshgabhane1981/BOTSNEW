@@ -136,6 +136,14 @@
                 </select>
             </div>
         </div>
+        <div class="row" style="margin: 0;">
+            <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
+                Followup Date
+            </div>
+            <div class="col-sm-4" style="float:left;margin-top:10px;">
+                <input type="text" id="txtFollowupDateNew" class="input50" />
+            </div>
+        </div>
 
         <div class="row justify-content-end pr-4" style="margin-top:20px;margin-right:465px;">
 
@@ -160,6 +168,11 @@
         dateFormat: "yy-mm-dd",
         maxDate: today,
     });
+    $("#txtFollowupDateNew").datepicker({
+        dateFormat: "yy-mm-dd",
+        minDate: today,
+    });
+   
     $(document).ready(function () {
        // GetData();
         SetFilter();
@@ -377,6 +390,7 @@
             htmlStr += "<th scope=\"col\">Updated Date</th>";
             htmlStr += "<th scope=\"col\">Updated By</th>";
             htmlStr += "<th scope=\"col\">Description</th>";
+            htmlStr += "<th scope=\"col\">Followup Date</th>";
             htmlStr += "<th scope=\"col\">Status</th>";
             htmlStr += "</tr>";
 
@@ -388,6 +402,7 @@
                 htmlStr += "<td>" + item.UpdatedDate + "</td>";
                 htmlStr += "<td>" + item.UpdatedBy + "</td>";
                 htmlStr += "<td style=\"width: 600px;\">" + item.Description + "</td>";
+                htmlStr += "<td style=\"width: 100px;\">" + item.FollowupDate + "</td>";
                 htmlStr += "<td style=\"width: 100px;\">" + item.Status + "</td>";
                 htmlStr += "</tr>"
             });
@@ -450,6 +465,7 @@
             htmlStr += "<th scope=\"col\">Updated Date</th>";
             htmlStr += "<th scope=\"col\">Updated By</th>";
             htmlStr += "<th scope=\"col\">Description</th>";
+            htmlStr += "<th scope=\"col\">Followup Date</th>";
             htmlStr += "<th scope=\"col\">Status</th>";
             htmlStr += "</tr>";
 
@@ -461,6 +477,7 @@
                 htmlStr += "<td>" + item.UpdatedDate + "</td>";
                 htmlStr += "<td>" + item.UpdatedBy + "</td>";
                 htmlStr += "<td style=\"width: 600px;\">" + item.Description + "</td>";
+                htmlStr += "<td style=\"width: 100px;\">" + item.FollowupDate + "</td>";
                 htmlStr += "<td style=\"width: 100px;\">" + item.Status + "</td>";
                 htmlStr += "</tr>"
             });
@@ -494,11 +511,13 @@
         var id = $("#hdnIdNew").val();
         var Desc = $("#txtDesc").val();
         var Status = $("#ddlPopupStatus").val();
+        var FollowupDate = $("#txtFollowupDateNew").val();
+        
         if (Desc != "") {
             $.ajax({
                 type: "POST",
                 url: '@Url.Action("UpdateStatusAndDiscussion", "Discussion")',
-                data: '{dId: ' + JSON.stringify(id) + ',Desc: ' + JSON.stringify(Desc) + ',Status: ' + JSON.stringify(Status) + '}',
+                data: '{dId: ' + JSON.stringify(id) + ',Desc: ' + JSON.stringify(Desc) + ',Status: ' + JSON.stringify(Status) + ',FollowupDate: ' + JSON.stringify(FollowupDate) + '}',
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
                 success: function (result) {

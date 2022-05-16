@@ -20,6 +20,7 @@ namespace WebApp.Controllers
         SinglePageRepository SPR = new SinglePageRepository();
         CustomerRepository CR = new CustomerRepository();
         Exceptions newexception = new Exceptions();
+        DiscussionsRepository DR = new DiscussionsRepository();
         public ActionResult Index()
         {
             SinglePageViewModel singlevm = new SinglePageViewModel();
@@ -394,5 +395,12 @@ namespace WebApp.Controllers
 
             return View(singlevm);
         }
+        
+        public ActionResult DiscussionCountReport()
+        {
+            var result = DR.GetDiscussionCountReport();
+            return View(result);
+        }
+
     }
 }

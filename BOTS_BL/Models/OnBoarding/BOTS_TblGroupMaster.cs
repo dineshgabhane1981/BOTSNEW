@@ -122,6 +122,12 @@ namespace BOTS_BL.Models
 
         public bool IsExistingLoyalty { get; set; }
 
+        public DateTime? UpdatedDate { get; set; }
+
+        [Required]
+        [StringLength(50)]
+        public string UpdatedBy { get; set; }
+
         [NotMapped]
         public HttpPostedFileBase GSTDocumentFile { get; set; }
         [NotMapped]

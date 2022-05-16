@@ -147,9 +147,7 @@
         <button type="button" id="btnRejectCancel2" onclick="RejectAllCancel(this,2);" class="btn btn-primary" style="margin-left: 20px; margin-bottom:25px;">Cancel</button><br />
     </div>
 </div>
-<div class="container-fluid pt-3 pl-3 pr-3 pb-3">
-    <button type="button" id="btnCheckerView" class="btn btn-primary pull-right" style="margin-right: 10px; margin-bottom: 20px; margin-top: 10px;">Submit For Aprroval </button>
-</div>
+
 
 <script>
      $(document).ready(function () {
@@ -157,9 +155,7 @@
          EventChangeOfOriginalToDLTNew();
      });
 
-    $("#btnCheckerView").on("click", function () {
-        SendRemainingAllConfigForAprovl();
-    });
+  
 
     function EventChangeOfOriginalToDLT() {
         ConvertValuesToDLT("txtIntroDays1", "txtIntroDays1DLT");
