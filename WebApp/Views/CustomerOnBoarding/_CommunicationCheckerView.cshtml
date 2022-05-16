@@ -1,5 +1,7 @@
 ﻿@model WebApp.ViewModel.OnBoardingSalesViewModel
-
+@{ 
+    var count = 0;
+}
 
 <style>
     .row {
@@ -149,7 +151,8 @@
 
     @foreach (var set in Model.lstCommunicationSet)
     {
-        <tr style="background-color:lightgrey;"><td colspan="15" style="font-weight: bold; font-size: 18px;">SET</td></tr>
+        count++;
+        <tr style="background-color:lightgrey;"><td colspan="15" style="font-weight: bold; font-size: 18px;">SET - @count</td></tr>
         <tr>
             <td style="font-style: italic; width:110px;">
                 Set Name

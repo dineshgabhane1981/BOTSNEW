@@ -121,6 +121,7 @@ namespace BOTS_BL.Models
         public long? ExpectedTransaction { get; set; }
 
         public bool IsExistingLoyalty { get; set; }
+        public string RejectReason { get; set; }
 
         public DateTime? UpdatedDate { get; set; }
 

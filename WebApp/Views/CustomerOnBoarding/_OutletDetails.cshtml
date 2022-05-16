@@ -145,8 +145,11 @@
 
 
 
-    <table border="1" cellpadding="3" cellspacing="3" style="margin-top:10px;" width="100%">
+<table border="1" cellpadding="3" cellspacing="3" style="margin-top:10px;" width="100%">
+    @if (Model.bots_TblOutletMaster != null)
+    {
         <tr style="background-color:lightgrey;"><td colspan="8" style="font-weight:bold;font-size:18px;">Outlet Details</td></tr>
+
         <tr>
             <td style="font-style: italic; width:110px;">
                 Outlet Name
@@ -197,4 +200,7 @@
                 Brand Name
             </td>
             <td style="font-weight:bold;">@Model.bots_TblOutletMaster.BrandName</td>
+
+        </tr>
+    }
 </table>

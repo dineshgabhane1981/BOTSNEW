@@ -162,7 +162,7 @@
             <div class="container-fluid pt-3 pl-3 pr-3 pb-3" id="dvCommunicationSection">
                 <div class="col-md-12 section-heading" data-toggle="collapse" data-target="#CommunicationConfigreadonly">Communication</div>
                 <div id="CommunicationConfigreadonly" class="collapse show">
-                    @Html.Partial("~/Views/CustomerOnBoarding/_CommunicationReadOnly.cshtml", Model)
+                    @Html.Partial("~/Views/CustomerOnBoarding/_CommunicationCheckerView.cshtml", Model)
 
                 </div>
             </div>
@@ -179,7 +179,7 @@
             <div class="container-fluid pt-3 pl-3 pr-3 pb-3" id="dvDLCSection">
                 <div class="col-md-12 section-heading" data-toggle="collapse" data-target="#DLCreadonly">Digital Loyalty Card</div>
                 <div id="DLCreadonly" class="collapse show">
-                    @Html.Partial("~/Views/CustomerOnBoarding/_DLTReadOnly.cshtml", Model)
+                    @Html.Partial("~/Views/CustomerOnBoarding/_DLTCheckerView.cshtml", Model)
 
                 </div>
             </div>
@@ -276,10 +276,7 @@
         $("#dvRejectSection").hide(1000);
     }
 
-    function UpdateConfigurationStatus(groupId, status, reason) {
-        alert(groupId)
-        alert(status)
-        alert(reason)
+    function UpdateConfigurationStatus(groupId, status, reason) {        
          $("#divLoader").show();
             $.ajax({
                 type: "POST",
