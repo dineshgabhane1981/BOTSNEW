@@ -1916,7 +1916,18 @@ namespace BOTS_BL.Repository
 
             return objData;
         }
+        public BOTS_TblOutletMaster GetOutletDetailsByGroupId(string GroupId)
+        {
+            BOTS_TblOutletMaster objData = new BOTS_TblOutletMaster();
+            using (var context = new CommonDBContext())
+            {
+                objData = context.BOTS_TblOutletMaster.Where(x => x.GroupId == GroupId).ToList().FirstOrDefault();
+            }
 
-        
+            return objData;
+        }
+
+
+
     }
 }

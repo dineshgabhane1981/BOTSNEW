@@ -144,152 +144,53 @@
 </style>
 
 
-<table border="1" cellpadding="3" cellspacing="3" style="margin-top:10px;" width="100%">
-    <tr style="background-color:lightgrey;"><td colspan="8" style="font-weight:bold;font-size:18px;">Communication Details</td></tr>
-    <tr style="background-color:lightgrey;"><td colspan="8" style="font-weight: 500; font-size: 18px;">SMS Script Details</td></tr>
-    @foreach (var set in Model.lstCommunicationSet)
-    {
+
+    <table border="1" cellpadding="3" cellspacing="3" style="margin-top:10px;" width="100%">
+        <tr style="background-color:lightgrey;"><td colspan="8" style="font-weight:bold;font-size:18px;">Outlet Details</td></tr>
         <tr>
-            <td style="font-weight:bold;">>@set.SetName</td>
-            <td style="font-weight:bold;">@set.CreatedBy</td>
-            <td style="font-weight:bold;">@set.CreatedDate</td>
-            <td colspan="5"></td>
-        </tr>
-        if (Model.lstSMSConfig != null)
-        {
-            <tr>
-                <td style="font-weight:bold;">@Model.lstSMSConfig[0].PEID</td>
-                <td style="font-style: italic; width:110px;">
-                    PEID
-                </td>
-                <td style="font-weight:bold;">@Model.lstSMSConfig[0].SMSProvider</td>
-                <td style="font-style: italic;">
-                    SMS Provider
-                </td>
-                <td style="font-weight:bold;">@Model.lstSMSConfig[0].SMSSenderID</td>
-                <td style="font-style: italic;">
-                    Sender Id
-                </td>
-                <td style="font-weight:bold;">@Model.lstSMSConfig[0].SMSUsername</td>
-                <td style="font-style: italic; width: 110px;">
-                    User Name
-                </td>
-                <td style="font-weight:bold;">@Model.lstSMSConfig[0].SMSPassword</td>
-                <td style="font-style: italic;">
-                    Password
-                </td>
-                <td style="font-weight:bold;">@Model.lstSMSConfig[0].SMSlink</td>
-                <td style="font-style: italic;">
-                    SMS Link
-                </td>
-                <td colspan="2"></td>
-            </tr>
-        }
-        <tr style="background-color:lightgrey;"><td colspan="8" style="font-weight: bold; font-size: 18px;">SMS Script</td></tr>
-        foreach (var sms in Model.lstSMSConfig)
-        {
-            if (set.SetId == sms.SetId)
-            {
-                <tr>
-                    <td style="font-weight:bold;">@sms.TemplateId</td>
-                    <td style="font-style: italic;">
-                        Template Id
-                    </td>
-                    <td style="font-weight:bold;">@sms.TemplateName</td>
-                    <td style="font-style: italic;">
-                        Template Name
-                    </td>
-                    <td style="font-weight:bold;">@sms.TemplateType</td>
-                    <td style="font-style: italic;">
-                        Template Type
-                    </td>
-                    <td style="font-weight:bold;">@sms.SMSScript</td>
-                    <td style="font-style: italic;">
-                        SMS Script
-                    </td>
-                    <td style="font-weight:bold;">@sms.SMSScriptDLT</td>
-                    <td style="font-style: italic;">
-                        SMS Script DLT
-                    </td>
-                    <td style="font-weight:bold;">@sms.DLTStatus</td>
-                    <td style="font-style: italic;">
-                        DLT Status
-                    </td>
-                    <td style="font-weight:bold;">@sms.RejectReason</td>
-                    <td style="font-style: italic;">
-                        Reject Reason
-                    </td>
-                    <td></td>
-                </tr>
-            }
-        }
-    }
-
-
-    <tr style="background-color:lightgrey;"><td colspan="8" style="font-weight: bold; font-size: 18px;">Whatsapp Script Details</td></tr>
-    @foreach (var set in Model.lstCommunicationSet)
-    {
-        <tr>
-            <td style="font-weight:bold;">@set.SetName</td>
-            <td style="font-style: italic;">
-                Set Name
+            <td style="font-style: italic; width:110px;">
+                Outlet Name
             </td>
-            <td style="font-weight:bold;">@set.CreatedBy</td>
-            <td style="font-style: italic;">
-                Created By
+            <td style="font-weight:bold;">@Model.bots_TblOutletMaster.o</td>
+            <td style="font-style: italic; width: 110px;">
+                Area Name
             </td>
-            <td style="font-weight:bold;">@set.CreatedDate</td>
-            <td style="font-style: italic;">
-                Created Date
+            <td style="font-weight:bold;">@Model.bots_TblOutletMaster.AreaName</td>
+            <td style="font-style: italic; width: 110px;">
+                Authorised Person
             </td>
-            <td colspan="5"></td>
-        </tr>
-        if (Model.lstWAConfig != null)
-        {
-            <tr>
+            <td style="font-weight:bold;">@Model.bots_TblOutletMaster.AuthorisedPerson</td>
+            <td style="font-style: italic; width: 110px;">
+                Registered Mobile No
+            </td>
+            <td style="font-weight:bold;">@Model.bots_TblOutletMaster.RegisterMobileNo</td>
+            <td style="font-style: italic; width: 110px;">
+                Registered Email
+            </td>
+            <td style="font-weight:bold;">@Model.bots_TblOutletMaster.RegisterEmail</td>
+            <td style="font-style: italic; width: 110px;">
+                Address
+            </td>
+            <td style="font-weight:bold;">@Model.bots_TblOutletMaster.Address</td>
 
-                <td style="font-weight:bold;">@Model.lstWAConfig[0].WAProvider</td>
-                <td style="font-style: italic;">
-                    Whatsapp Provider
-                </td>
-                <td style="font-weight:bold;">@Model.lstWAConfig[0].WANumber</td>
-                <td style="font-style: italic;">
-                    Whatsapp Number
-                </td>
-                <td style="font-weight:bold;">@Model.lstWAConfig[0].WAUsername</td>
-                <td style="font-style: italic;">
-                    Whatsapp Username
-                </td>
-                <td style="font-weight:bold;">@Model.lstWAConfig[0].WAPassword</td>
-                <td style="font-style: italic;">
-                    Whatsapp Password
-                </td>
-                <td style="font-weight:bold;">@Model.lstWAConfig[0].WAlink</td>
-                <td style="font-style: italic;">
-                    Whatsapp Link
-                </td>
-                <td colspan="2"></td>
-            </tr>
-        }
-        @*<tr style="background-color:lightgrey;"><td colspan="8" style="font-weight: bold; font-size: 18px;">Whatsapp Script</td></tr>*@
-        foreach (var WA in Model.lstWAConfig)
-        {
-            if (set.SetId == WA.SetId)
-            {
-                <tr>
-                    <td style="font-weight:bold;">@WA.TokenId</td>
-                    <td style="font-style: italic;">
-                        Token ID
-                    </td>
-                    <td style="font-weight:bold;">@WA.WAScript</td>
-                    <td style="font-style: italic;">
-                        Whatsapp Script
-                    </td>
-
-                    <td></td>
-                </tr>
-            }
-        }
-    }
+            <td style="font-style: italic; width:110px;">
+                Geo Latitude
+            </td>
+            <td style="font-weight:bold;">@Model.bots_TblOutletMaster.Latitude</td>
+            <td style="font-style: italic; width: 110px;">
+                Geo Longitude
+            </td>
+            <td style="font-weight:bold;">@Model.bots_TblOutletMaster.Longitude</td>
+            <td style="font-style: italic; width: 110px;">
+                State
+            </td>
+            <td style="font-weight:bold;">@Model.bots_TblOutletMaster.State</td>
+            <td style="font-style: italic; width: 110px;">
+                City
+            </td>
+            <td style="font-weight:bold;">@Model.bots_TblOutletMaster.City</td>
+            <td style="font-style: italic; width: 110px;">
+                Pincode
+            </td>
+            <td style="font-weight:bold;">@Model.bots_TblOutletMaster.PinCode</td>
 </table>
-

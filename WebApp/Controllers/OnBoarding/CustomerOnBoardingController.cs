@@ -1791,6 +1791,9 @@ namespace WebApp.Controllers.OnBoarding
             objData.lstSMSConfig = OBR.GetCommunicationSMSConfigByGroupId(GroupId);
             objData.lstWAConfig = OBR.GetCommunicationWAConfigByGroupId(GroupId);
             objData.objDLCLinkConfig = OBR.GetDLCLinkDLTConfigByGroupId(GroupId);
+            objData.bots_TblOutletMaster = OBR.GetOutletDetailsByGroupId(GroupId);
+
+
 
 
 

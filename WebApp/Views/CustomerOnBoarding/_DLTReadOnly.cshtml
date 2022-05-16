@@ -1,1 +1,581 @@
-﻿
+﻿@model WebApp.ViewModel.OnBoardingSalesViewModel
+
+
+<style>
+    .row {
+        margin-top: 40px;
+        padding: 0 10px;
+    }
+
+    .clickable {
+        cursor: pointer;
+    }
+
+    .panel-heading span {
+        margin-top: -20px;
+        font-size: 15px;
+    }
+
+    .section-heading {
+        cursor: pointer;
+        text-align: left;
+        /background-color: #022C48;
+        / color: white;
+        font-weight: bold;
+        padding: 10px;
+        border-radius: 5px;
+        background-color: #000000 !important;
+        background-image: linear-gradient(147deg, #000000 0%, #04619f 74%) !important;
+        font-size: 16px;
+    }
+
+    .borderClass {
+        border: 1px solid red;
+    }
+    /* The Modal (background) */
+    .modal {
+        display: none; /* Hidden by default */
+        position: fixed; /* Stay in place */
+        z-index: 5000 !important; /* Sit on top */
+        padding-top: 100px; /* Location of the box */
+        left: 120px;
+        top: 0;
+        width: 100%; /* Full width */
+        height: 100%; /* Full height */
+        overflow: auto; /* Enable scroll if needed */
+        background-color: rgb(0,0,0); /* Fallback color */
+        background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+    }
+
+    /* Modal Content */
+    .modal-content {
+        background-color: #fefefe;
+        margin: auto;
+        padding: 20px;
+        border: 1px solid #888;
+        width: 70%;
+        border-radius: 25px;
+    }
+
+    /* The Close Button */
+    .close {
+        color: #aaaaaa;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+    }
+
+        .close:hover,
+        .close:focus {
+            color: #000;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+    input:read-only {
+        background-color: lightgray;
+    }
+
+    .tab1 {
+        cursor: pointer;
+        padding: 10px 08px;
+        margin: 0px 2px;
+        background-color: #2f4353 !important;
+        display: inline-block;
+        color: #fff;
+        border-radius: 3px 3px 0px 0px;
+        box-shadow: 0 0.5rem 0.8rem #00000080;
+        background-color: #000000 !important;
+        background-image: linear-gradient(147deg, #000000 0%, #04619f 74%) !important;
+    }
+
+    .tabs1 {
+        padding-left: 00px;
+    }
+
+    .panels1 {
+        background: #ffffff;
+        box-shadow: 0 1rem 1rem #00000010;
+        width: 100%;
+        border-radius: 3px;
+        overflow: hidden;
+    }
+
+    .panel1 {
+        display: none;
+        animation: fadein .8s;
+    }
+
+    .panel-title1 {
+        font-size: 1.5em;
+        font-weight: bold
+    }
+
+    .radio1 {
+        display: none;
+    }
+
+    #one1:checked ~ .panels1 #one-panel1,
+    #two1:checked ~ .panels1 #two-panel1,
+    #three1:checked ~ .panels1 #three-panel1,
+    #four1:checked ~ .panels1 #four-panel1,
+    #five1:checked ~ .panels1 #five-panel1,
+    #six1:checked ~ .panels1 #six-panel1,
+    #seven1:checked ~ .panels1 #seven-panel1 {
+        display: block
+    }
+
+    #one1:checked ~ .tabs1 #one-tab1,
+    #two1:checked ~ .tabs1 #two-tab1,
+    #three1:checked ~ .tabs1 #three-tab1,
+    #four1:checked ~ .tabs1 #four-tab1,
+    #five1:checked ~ .tabs1 #five-tab1,
+    #six1:checked ~ .tabs1 #six-tab1,
+    #seven1:checked ~ .tabs1 #seven-tab1 {
+        background: #fff !important;
+        color: #000;
+        border-top: 3px solid #fff;
+        border-left: 3px solid #fff;
+        border-right: 3px solid #fff;
+        font-weight: bold;
+        border-top-left-radius: 7px;
+        border-top-right-radius: 7px;
+    }
+</style>
+
+<table border="1" cellpadding="3" cellspacing="3" style="margin-top:10px;" width="100%">
+    <tr style="background-color:lightgrey;"><td colspan="15" style="font-weight:bold;font-size:18px;">Digial Loyalty Card Details</td></tr>
+    <tr>
+        <td style="font-style: italic; width:110px;">
+            Profile Update Points
+        </td>
+        <td style="font-weight:bold;">@Model.objDLCLinkConfig.ProfileUpdatePoints</td>
+        <td style="font-style: italic; width:110px;">
+            Referral Points
+        </td>
+        <td style="font-weight:bold;">@Model.objDLCLinkConfig.ReferralPoints</td>
+        <td style="font-style: italic; width:110px;">
+            Max no of referrals
+        </td>
+        <td style="font-weight:bold;">@Model.objDLCLinkConfig.MaxNoOfReferrals</td>
+        <td style="font-style: italic; width:110px;">
+            Validity of Referral points
+        </td>
+        <td style="font-weight:bold;">@Model.objDLCLinkConfig.ValidityOfReferralPoints</td>
+        <td style="font-style: italic; width:110px;">
+            Referral reminder (days before expiry)
+        </td>
+        <td style="font-weight:bold;">@Model.objDLCLinkConfig.ReferralReminder</td>
+        <td></td>
+
+
+    <tr style="background-color:lightgrey;"><td colspan="8" style="font-weight: bold; font-size: 18px;">SMS Script</td></tr>
+
+    <tr>
+        <td style="font-style: italic;">
+            Template Id
+        </td>
+        <td style="font-weight:bold;">@Model.objDLCLinkConfig.TemplateId1</td>
+        <td style="font-style: italic;">
+            Template Name
+        </td>
+        <td style="font-weight:bold;">@Model.objDLCLinkConfig.TemplateName1</td>
+        <td style="font-style: italic;">
+            Template Type
+        </td>
+        <td style="font-weight:bold;">@Model.objDLCLinkConfig.TemplateType1</td>
+        <td style="font-style: italic; width:110px;">
+            To the referral (SMS)
+        </td>
+        <td style="font-weight:bold;">@Model.objDLCLinkConfig.ToTheReferralSMSScript</td>
+        <td></td>
+    </tr>
+
+    <tr>
+        <td style="font-style: italic;">
+            Template Id
+        </td>
+        <td style="font-weight:bold;">@Model.objDLCLinkConfig.TemplateId2</td>
+        <td style="font-style: italic;">
+            Template Name
+        </td>
+        <td style="font-weight:bold;">@Model.objDLCLinkConfig.TemplateName2</td>
+        <td style="font-style: italic;">
+            Template Type
+        </td>
+        <td style="font-weight:bold;">@Model.objDLCLinkConfig.TemplateType2</td>
+        <td style="font-style: italic; width:110px;">
+            Reminder for points usage (SMS)
+        </td>
+        <td style="font-weight:bold;">@Model.objDLCLinkConfig.ReminderForPointsUsageSMSScript</td>
+        <td></td>
+    </tr>
+    <tr>
+        <td style="font-style: italic;">
+            Template Id
+        </td>
+        <td style="font-weight:bold;">@Model.objDLCLinkConfig.TemplateId3</td>
+        <td style="font-style: italic;">
+            Template Name
+        </td>
+        <td style="font-weight:bold;">@Model.objDLCLinkConfig.TemplateName3</td>
+        <td style="font-style: italic;">
+            Template Type
+        </td>
+        <td style="font-weight:bold;">@Model.objDLCLinkConfig.TemplateType3</td>
+        <td style="font-style: italic; width:110px;">
+            Referred success on referral txn (SMS)
+        </td>
+        <td style="font-weight:bold;">@Model.objDLCLinkConfig.ReferredSuccessOnReferralTxnSMSScript</td>
+        <td></td>
+    </tr>
+    <tr>
+        <td style="font-style: italic;">
+            Template Id
+        </td>
+        <td style="font-weight:bold;">@Model.objDLCLinkConfig.TemplateId4</td>
+        <td style="font-style: italic;">
+            Template Name
+        </td>
+        <td style="font-weight:bold;">@Model.objDLCLinkConfig.TemplateName4</td>
+        <td style="font-style: italic;">
+            Template Type
+        </td>
+        <td style="font-weight:bold;">@Model.objDLCLinkConfig.TemplateType4</td>
+        <td style="font-style: italic; width:110px;">
+            DLC OTP (SMS)
+        </td>
+        <td style="font-weight:bold;">@Model.objDLCLinkConfig.DLCOTPScriptSMS</td>
+        <td></td>
+    </tr>
+    <tr>
+        <td style="font-style: italic;">
+            Template Id
+        </td>
+        <td style="font-weight:bold;">@Model.objDLCLinkConfig.TemplateId5</td>
+        <td style="font-style: italic;">
+            Template Name
+        </td>
+        <td style="font-weight:bold;">@Model.objDLCLinkConfig.TemplateName5</td>
+        <td style="font-style: italic;">
+            Template Type
+        </td>
+        <td style="font-weight:bold;">@Model.objDLCLinkConfig.TemplateType5</td>
+        <td style="font-style: italic; width:110px;">
+            Gift Points OTP (SMS)
+        </td>
+        <td style="font-weight:bold;">@Model.objDLCLinkConfig.GiftPointsOTPScriptSMS</td>
+        <td></td>
+    </tr>
+    <tr>
+        <td style="font-style: italic;">
+            Template Id
+        </td>
+        <td style="font-weight:bold;">@Model.objDLCLinkConfig.TemplateId6</td>
+        <td style="font-style: italic;">
+            Template Name
+        </td>
+        <td style="font-weight:bold;">@Model.objDLCLinkConfig.TemplateName6</td>
+        <td style="font-style: italic;">
+            Template Type
+        </td>
+        <td style="font-weight:bold;">@Model.objDLCLinkConfig.TemplateType6</td>
+        <td style="font-style: italic; width:110px;">
+            Gift Debit  Points OTP (SMS)
+        </td>
+        <td style="font-weight:bold;">@Model.objDLCLinkConfig.GiftPointsDebitOTPScriptSMS</td>
+        <td></td>
+    </tr>
+    <tr>
+        <td style="font-style: italic;">
+            Template Id
+        </td>
+        <td style="font-weight:bold;">@Model.objDLCLinkConfig.TemplateId7</td>
+        <td style="font-style: italic;">
+            Template Name
+        </td>
+        <td style="font-weight:bold;">@Model.objDLCLinkConfig.TemplateName7</td>
+        <td style="font-style: italic;">
+            Template Type
+        </td>
+        <td style="font-weight:bold;">@Model.objDLCLinkConfig.TemplateType7</td>
+        <td style="font-style: italic; width:110px;">
+            Gift  Credit Points OTP  (SMS)
+        </td>
+        <td style="font-weight:bold;">@Model.objDLCLinkConfig.GiftPointsCreditOTPScriptSMS</td>
+        <td></td>
+    </tr>
+
+    <tr style="background-color:lightgrey;"><td colspan="8" style="font-weight: bold; font-size: 18px;">Whatsapp Script </td></tr>
+    <tr>
+        <td style="font-style: italic;">
+            Template Id
+        </td>
+        <td style="font-weight:bold;">@Model.objDLCLinkConfig.TemplateId1</td>
+        <td style="font-style: italic;">
+            Template Name
+        </td>
+        <td style="font-weight:bold;">@Model.objDLCLinkConfig.TemplateName1</td>
+        <td style="font-style: italic;">
+            Template Type
+        </td>
+        <td style="font-weight:bold;">@Model.objDLCLinkConfig.TemplateType1</td>
+        <td style="font-style: italic; width:110px;">
+            To the referral WA
+        </td>
+        <td style="font-weight:bold;">@Model.objDLCLinkConfig.ToTheReferralWAScript</td>
+        <td></td>
+    </tr>
+
+    <tr>
+        <td style="font-style: italic;">
+            Template Id
+        </td>
+        <td style="font-weight:bold;">@Model.objDLCLinkConfig.TemplateId2</td>
+        <td style="font-style: italic;">
+            Template Name
+        </td>
+        <td style="font-weight:bold;">@Model.objDLCLinkConfig.TemplateName2</td>
+        <td style="font-style: italic;">
+            Template Type
+        </td>
+        <td style="font-weight:bold;">@Model.objDLCLinkConfig.TemplateType2</td>
+        <td style="font-style: italic; width:110px;">
+            Reminder for points usage WA
+        </td>
+        <td style="font-weight:bold;">@Model.objDLCLinkConfig.ReminderForPointsUsageWAScript</td>
+        <td></td>
+    </tr>
+    <tr>
+        <td style="font-style: italic;">
+            Template Id
+        </td>
+        <td style="font-weight:bold;">@Model.objDLCLinkConfig.TemplateId3</td>
+        <td style="font-style: italic;">
+            Template Name
+        </td>
+        <td style="font-weight:bold;">@Model.objDLCLinkConfig.TemplateName3</td>
+        <td style="font-style: italic;">
+            Template Type
+        </td>
+        <td style="font-weight:bold;">@Model.objDLCLinkConfig.TemplateType3</td>
+        <td style="font-style: italic; width:110px;">
+            Referred success on referral txn WA
+        </td>
+        <td style="font-weight:bold;">@Model.objDLCLinkConfig.ReferredSuccessOnReferralTxnWAScript</td>
+        <td></td>
+    </tr>
+    <tr>
+        <td style="font-style: italic;">
+            Template Id
+        </td>
+        <td style="font-weight:bold;">@Model.objDLCLinkConfig.TemplateId4</td>
+        <td style="font-style: italic;">
+            Template Name
+        </td>
+        <td style="font-weight:bold;">@Model.objDLCLinkConfig.TemplateName4</td>
+        <td style="font-style: italic;">
+            Template Type
+        </td>
+        <td style="font-weight:bold;">@Model.objDLCLinkConfig.TemplateType4</td>
+        <td style="font-style: italic; width:110px;">
+            DLC OTP (DLT)
+        </td>
+        <td style="font-weight:bold;">@Model.objDLCLinkConfig.DLCOTPScriptWA</td>
+        <td></td>
+    </tr>
+    <tr>
+        <td style="font-style: italic;">
+            Template Id
+        </td>
+        <td style="font-weight:bold;">@Model.objDLCLinkConfig.TemplateId5</td>
+        <td style="font-style: italic;">
+            Template Name
+        </td>
+        <td style="font-weight:bold;">@Model.objDLCLinkConfig.TemplateName5</td>
+        <td style="font-style: italic;">
+            Template Type
+        </td>
+        <td style="font-weight:bold;">@Model.objDLCLinkConfig.TemplateType5</td>
+        <td style="font-style: italic; width:110px;">
+            Gift Points OTP (DLT)
+        </td>
+        <td style="font-weight:bold;">@Model.objDLCLinkConfig.GiftPointsOTPScriptWA</td>
+        <td></td>
+    </tr>
+    <tr>
+        <td style="font-style: italic;">
+            Template Id
+        </td>
+        <td style="font-weight:bold;">@Model.objDLCLinkConfig.TemplateId6</td>
+        <td style="font-style: italic;">
+            Template Name
+        </td>
+        <td style="font-weight:bold;">@Model.objDLCLinkConfig.TemplateName6</td>
+        <td style="font-style: italic;">
+            Template Type
+        </td>
+        <td style="font-weight:bold;">@Model.objDLCLinkConfig.TemplateType6</td>
+        <td style="font-style: italic; width:110px;">
+            Gift Debit  Points OTP (DLT)
+        </td>
+        <td style="font-weight:bold;">@Model.objDLCLinkConfig.GiftPointsDebitOTPScriptWA</td>
+        <td></td>
+    </tr>
+    <tr>
+        <td style="font-style: italic;">
+            Template Id
+        </td>
+        <td style="font-weight:bold;">@Model.objDLCLinkConfig.TemplateId7</td>
+        <td style="font-style: italic;">
+            Template Name
+        </td>
+        <td style="font-weight:bold;">@Model.objDLCLinkConfig.TemplateName7</td>
+        <td style="font-style: italic;">
+            Template Type
+        </td>
+        <td style="font-weight:bold;">@Model.objDLCLinkConfig.TemplateType7</td>
+        <td style="font-style: italic; width:110px;">
+            Gift  Credit Points OTP  (DLT)
+        </td>
+        <td style="font-weight:bold;">@Model.objDLCLinkConfig.GiftPointsCreditOTPScriptWA</td>
+        <td></td>
+    </tr>
+
+    <tr style="background-color:lightgrey;"><td colspan="8" style="font-weight: bold; font-size: 18px;">SMS Script DLT</td></tr>
+    <tr></tr>
+    <tr>
+        <td style="font-style: italic;">
+            Template Id
+        </td>
+        <td style="font-weight:bold;">@Model.objDLCLinkConfig.TemplateId1</td>
+        <td style="font-style: italic;">
+            Template Name
+        </td>
+        <td style="font-weight:bold;">@Model.objDLCLinkConfig.TemplateName1</td>
+        <td style="font-style: italic;">
+            Template Type
+        </td>
+        <td style="font-weight:bold;">@Model.objDLCLinkConfig.TemplateType1</td>
+        <td style="font-style: italic; width:110px;">
+            To the referral (DLT)
+        </td>
+        <td style="font-weight:bold;">@Model.objDLCLinkConfig.ToTheReferralSMSScriptDLT</td>
+        <td></td>
+    </tr>
+
+    <tr>
+        <td style="font-style: italic;">
+            Template Id
+        </td>
+        <td style="font-weight:bold;">@Model.objDLCLinkConfig.TemplateId2</td>
+        <td style="font-style: italic;">
+            Template Name
+        </td>
+        <td style="font-weight:bold;">@Model.objDLCLinkConfig.TemplateName2</td>
+        <td style="font-style: italic;">
+            Template Type
+        </td>
+        <td style="font-weight:bold;">@Model.objDLCLinkConfig.TemplateType2</td>
+        <td style="font-style: italic; width:110px;">
+            Reminder for points usage (DLT)
+        </td>
+        <td style="font-weight:bold;">@Model.objDLCLinkConfig.ReminderForPointsUsageSMSScriptDLT</td>
+        <td></td>
+    </tr>
+    <tr>
+        <td style="font-style: italic;">
+            Template Id
+        </td>
+        <td style="font-weight:bold;">@Model.objDLCLinkConfig.TemplateId3</td>
+        <td style="font-style: italic;">
+            Template Name
+        </td>
+        <td style="font-weight:bold;">@Model.objDLCLinkConfig.TemplateName3</td>
+        <td style="font-style: italic;">
+            Template Type
+        </td>
+        <td style="font-weight:bold;">@Model.objDLCLinkConfig.TemplateType3</td>
+        <td style="font-style: italic; width:110px;">
+            Referred success on referral txn (DLT)
+        </td>
+        <td style="font-weight:bold;">@Model.objDLCLinkConfig.ReferredSuccessOnReferralTxnSMSScriptDLT</td>
+        <td></td>
+    </tr>
+    <tr>
+        <td style="font-style: italic;">
+            Template Id
+        </td>
+        <td style="font-weight:bold;">@Model.objDLCLinkConfig.TemplateId4</td>
+        <td style="font-style: italic;">
+            Template Name
+        </td>
+        <td style="font-weight:bold;">@Model.objDLCLinkConfig.TemplateName4</td>
+        <td style="font-style: italic;">
+            Template Type
+        </td>
+        <td style="font-weight:bold;">@Model.objDLCLinkConfig.TemplateType4</td>
+        <td style="font-style: italic; width:110px;">
+            DLC OTP (DLT)
+        </td>
+        <td style="font-weight:bold;">@Model.objDLCLinkConfig.DLCOTPScriptSMSDLT</td>
+        <td></td>
+    </tr>
+    <tr>
+        <td style="font-style: italic;">
+            Template Id
+        </td>
+        <td style="font-weight:bold;">@Model.objDLCLinkConfig.TemplateId5</td>
+        <td style="font-style: italic;">
+            Template Name
+        </td>
+        <td style="font-weight:bold;">@Model.objDLCLinkConfig.TemplateName5</td>
+        <td style="font-style: italic;">
+            Template Type
+        </td>
+        <td style="font-weight:bold;">@Model.objDLCLinkConfig.TemplateType5</td>
+        <td style="font-style: italic; width:110px;">
+            Gift Points OTP (DLT)
+        </td>
+        <td style="font-weight:bold;">@Model.objDLCLinkConfig.GiftPointsOTPScriptSMSDLT</td>
+        <td></td>
+    </tr>
+    <tr>
+        <td style="font-style: italic;">
+            Template Id
+        </td>
+        <td style="font-weight:bold;">@Model.objDLCLinkConfig.TemplateId6</td>
+        <td style="font-style: italic;">
+            Template Name
+        </td>
+        <td style="font-weight:bold;">@Model.objDLCLinkConfig.TemplateName6</td>
+        <td style="font-style: italic;">
+            Template Type
+        </td>
+        <td style="font-weight:bold;">@Model.objDLCLinkConfig.TemplateType6</td>
+        <td style="font-style: italic; width:110px;">
+            Gift Debit  Points OTP (DLT)
+        </td>
+        <td style="font-weight:bold;">@Model.objDLCLinkConfig.GiftPointsDebitOTPScriptSMSDLT</td>
+        <td></td>
+    </tr>
+    <tr>
+        <td style="font-style: italic;">
+            Template Id
+        </td>
+        <td style="font-weight:bold;">@Model.objDLCLinkConfig.TemplateId7</td>
+        <td style="font-style: italic;">
+            Template Name
+        </td>
+        <td style="font-weight:bold;">@Model.objDLCLinkConfig.TemplateName7</td>
+        <td style="font-style: italic;">
+            Template Type
+        </td>
+        <td style="font-weight:bold;">@Model.objDLCLinkConfig.TemplateType7</td>
+        <td style="font-style: italic; width:110px;">
+            Gift  Credit Points OTP  (DLT)
+        </td>
+        <td style="font-weight:bold;">@Model.objDLCLinkConfig.GiftPointsCreditOTPScriptSMSDLT</td>
+        <td></td>
+    </tr>
+</table>
