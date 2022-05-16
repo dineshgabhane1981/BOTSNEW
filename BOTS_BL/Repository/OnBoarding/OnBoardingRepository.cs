@@ -1949,5 +1949,32 @@ namespace BOTS_BL.Repository
             return objData;
         }
 
+        public bool UpdateConfigurationStatus(string GroupId, string Status, string LoginId, string RejectReason)
+        {
+            bool result = false;
+            try
+            {
+                using (var context = new CommonDBContext())
+                {
+                    var oldData = context.BOTS_TblGroupMaster.Where(x => x.GroupId == GroupId).FirstOrDefault();
+                    oldData.CustomerStatus = Status;
+                    if (Status == "Rejected")
+                    {
+                        oldData.RejectReason = RejectReason;
+                    }
+                    oldData.UpdatedBy = LoginId;
+                    oldData.UpdatedDate = DateTime.Now;
+
+                    context.BOTS_TblGroupMaster.AddOrUpdate(oldData);
+                    context.SaveChanges();
+                    result = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "UpdateConfigurationStatus");
+            }
+            return result;
+        }
     }
 }

@@ -28,7 +28,7 @@
                         var colorClass = "";
                         if (item.RenewalDate.HasValue)
                         {
-                            if (item.RenewalDate.Value < DateTime.Now.AddMonths(2))
+                            if (item.RenewalDate.Value.Month < DateTime.Now.AddMonths(3).Month)
                             {
                                 colorClass = "higlightMonth";
                             }

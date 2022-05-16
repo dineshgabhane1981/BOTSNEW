@@ -133,7 +133,7 @@
 </style>
 <div class="app-main__inner">
     <div class="row mb-3 card">
-
+        @Html.HiddenFor(model => model.bots_TblGroupMaster.GroupId, new { @id = "hdnGroupID" })
         <div class="container-fluid pt-3 pl-3 pr-3 pb-3" id="dvCustomerDetailSection">
             <div class="col-md-12 section-heading" data-toggle="collapse" data-target="#customerdetailsreadonly">Customer Details</div>
             <div id="customerdetailsreadonly" class="collapse show">
@@ -210,8 +210,8 @@
                 <button type="button" id="btnApproveConfig" class="btn btn-primary pull-right" style="margin-right: 10px; margin-bottom: 20px; margin-top: 10px;">Approve </button>
             </div>
         }
-    <div class="container-fluid pl-3 pr-3 pb-3" id="dvRejectSection" style="display:none;">
-        Reject Reason <br />        
+        <div class="container-fluid pl-3 pr-3 pb-3" id="dvRejectSection" style="display:none;">
+            Reject Reason <br />
             <textarea id="txtRejectConfig" rows="6" cols="60" class="input150"></textarea>
             <button type="button" id="btnSubmitConfig" onclick="SubmitRejectConfig();" class="btn btn-primary" style="margin-left: 20px; margin-bottom:25px;">Submit</button>
             <button type="button" id="btnCancelConfig" onclick="CancelRejectConfig();" class="btn btn-primary" style="margin-left: 20px; margin-bottom:25px;">Cancel</button><br />
@@ -238,12 +238,78 @@
         }).then((e) => {
             if (e == ("confirm")) {
                 $("#divLoader").show();
-                alert("Approved");
+                UpdateConfigurationStatus($("#hdnGroupID").val(), "Approved", $("#txtRejectConfig").val());
                 $("#divLoader").hide();
             }
         })
     }
     function RejectConfiguration() {
         $("#dvRejectSection").show(1000);
+    }
+    function SubmitRejectConfig() {
+        if ($("#txtRejectConfig").val() == "") {
+            cuteAlert({
+                type: "error",
+                title: "Oops..",
+                message: "Please enter Rejection Reason",
+                buttonText: "Okay"
+            })
+            return false;
+        }
+        cuteAlert({
+            type: "question",
+            title: "Are you sure?",
+            message: "You want to submit all configuration for Approval",
+            confirmText: "Yes",
+            cancelText: "No"
+        }).then((e) => {
+            if (e == ("confirm")) {
+                $("#divLoader").show();
+                UpdateConfigurationStatus($("#hdnGroupID").val(), "Rejected", $("#txtRejectConfig").val());
+                $("#dvRejectSection").hide(1000);
+                $("#divLoader").hide();
+            }
+        })
+    }
+
+    function CancelRejectConfig() {
+        $("#dvRejectSection").hide(1000);
+    }
+
+    function UpdateConfigurationStatus(groupId, status, reason) {
+        alert(groupId)
+        alert(status)
+        alert(reason)
+         $("#divLoader").show();
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("UpdateConfigurationStatus", "CustomerOnBoarding")',
+                data: '{groupId: ' + JSON.stringify(groupId) + ',status: ' + JSON.stringify(status) + ',reason: ' + JSON.stringify(reason) + '}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (result) {
+                    if (result == true) {
+                        cuteAlert({
+                            type: "success",
+                            title: "Saved..",
+                            message: "Configuration Saved Successfully!",
+                            buttonText: "Okay"
+                        })
+                    }
+                    else {
+                        cuteAlert({
+                            type: "error",
+                            title: "Oops..",
+                            message: "There is some problem while saving data",
+                            buttonText: "Okay"
+                        })
+                    }
+                    $("#divLoader").hide();
+                },
+                error: function (result) {
+                    $("#divLoader").hide();
+                }
+            });
+
     }
 </script>

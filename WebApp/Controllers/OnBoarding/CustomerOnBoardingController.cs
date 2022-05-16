@@ -1896,6 +1896,14 @@ namespace WebApp.Controllers.OnBoarding
             result = OBR.SendForApproval(GroupId, userDetails.LoginId);
             return new JsonResult() { Data = result, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
+        public ActionResult UpdateConfigurationStatus(string groupId, string status, string reason)
+        {
+            bool result = false;
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            result = OBR.UpdateConfigurationStatus(groupId, status, userDetails.LoginId, reason);
+            return new JsonResult() { Data = result, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
+        }
+
     }
 }
 
