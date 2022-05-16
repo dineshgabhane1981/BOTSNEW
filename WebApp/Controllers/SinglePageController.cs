@@ -28,7 +28,7 @@ namespace WebApp.Controllers
                 GroupWiseDetails objGrpWise = new GroupWiseDetails();
                 //var count = SPR.GetAllTransactionData();
                 singlevm.lstGroupWiseDetails = SPR.GetGroupWiseData();
-                
+
                 foreach (var item in singlevm.lstGroupWiseDetails)
                 {
                     objGrpWise.CustCount = objGrpWise.CustCount + item.CustCount;
@@ -125,7 +125,7 @@ namespace WebApp.Controllers
             List<long> dataList2 = new List<long>();
             List<long> dataList3 = new List<long>();
             var allData = SPR.GetDiscussionData();
-            if(!string.IsNullOrEmpty(CsMember))
+            if (!string.IsNullOrEmpty(CsMember))
             {
                 allData = allData.Where(x => x.RMLoginId == CsMember).ToList();
             }
@@ -180,8 +180,8 @@ namespace WebApp.Controllers
                 typeData = allData.Where(x => x.days >= 36).ToList();
             }
 
-            objData.lstData = typeData.Where(x => x.CustomerType == CustomerType).OrderByDescending(y=>y.days).ToList();
-            if(!string.IsNullOrEmpty(CSMember))
+            objData.lstData = typeData.Where(x => x.CustomerType == CustomerType).OrderByDescending(y => y.days).ToList();
+            if (!string.IsNullOrEmpty(CSMember))
             {
                 objData.lstData = objData.lstData.Where(x => x.RMLoginId == CSMember).ToList();
             }
@@ -245,13 +245,13 @@ namespace WebApp.Controllers
                     wb.Worksheets.Add(table);
                     using (MemoryStream stream = new MemoryStream())
                     {
-                        wb.SaveAs(stream);                        
+                        wb.SaveAs(stream);
 
                         return File(stream.ToArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
 
                     }
                 }
-                    
+
             }
             catch (Exception ex)
             {
@@ -393,6 +393,22 @@ namespace WebApp.Controllers
             }
 
             return View(singlevm);
+        }
+
+        public ActionResult RenewalData()
+        {
+            List<RenewalData> lstRenewalData = new List<RenewalData>();
+            try
+            {               
+                lstRenewalData = SPR.GetRenewalData();
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "Single Page");
+            }
+
+            lstRenewalData.OrderByDescending(x => x.RenewalDate).ToList();
+            return View(lstRenewalData);
         }
     }
 }

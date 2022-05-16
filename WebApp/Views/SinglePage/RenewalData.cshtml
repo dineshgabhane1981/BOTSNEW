@@ -1,0 +1,60 @@
+﻿@model List<BOTS_BL.Models.RenewalData>
+@{
+    ViewBag.Title = "RenewalData";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style>
+    .higlightMonth {
+        background-color:salmon;
+    }
+</style>
+
+<div class="app-main__inner">
+    <div class="mb-3 card" style="padding-top:20px;">
+        <div class="content">
+            <!--content inner-->
+
+            <div class="container overflow-hidden">
+                <h4 class="multisteps-form__title" style="color:blue;">Renewal Data</h4><br />
+                <table border="1" cellpadding="5" cellspacing="5" style="margin-left:15px;">
+                    <tr style="background-color:lightgray;">
+                        <td><b>Group Id</b></td>
+                        <td><b>Group Name</b></td>
+                        <td><b>Outlet Name</b></td>
+                        <td><b>Renewal Date</b></td>
+                    </tr>
+                    @foreach (var item in Model)
+                    {
+                        var colorClass = "";
+                        if (item.RenewalDate.HasValue)
+                        {
+                            if (item.RenewalDate.Value < DateTime.Now.AddMonths(2))
+                            {
+                                colorClass = "higlightMonth";
+                            }
+                        }
+                        <tr class="@colorClass">
+                            <td>@item.GroupId</td>
+
+                            <td>@item.GroupName</td>
+
+                            <td>@item.OutletName</td>
+                            @if (!string.IsNullOrEmpty(Convert.ToString(item.RenewalDate)))
+                            {
+                                <td>@item.RenewalDate.Value.ToString("dd-MMM-yyyy")</td>
+                            }
+                            else
+                            {
+                                <td>--</td>
+                            }
+
+
+
+                        </tr>
+
+                    }
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
