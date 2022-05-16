@@ -1895,6 +1895,16 @@ namespace BOTS_BL.Repository
 
             return objData;
         }
+        public List<BOTS_TblWAConfig> GetCommunicationWAConfigByGroupId(string GroupId)
+        {
+            List<BOTS_TblWAConfig> objData = new List<BOTS_TblWAConfig>();
+            using (var context = new CommonDBContext())
+            {
+                objData = context.BOTS_TblWAConfig.Where(x => x.GroupId == GroupId).ToList();
+            }
+
+            return objData;
+        }
 
     }
 }

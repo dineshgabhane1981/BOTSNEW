@@ -1789,6 +1789,8 @@ namespace WebApp.Controllers.OnBoarding
             //Communication Details
             objData.lstCommunicationSet = OBR.GetCommunicationSetsByGroupId(GroupId);
             objData.lstSMSConfig = OBR.GetCommunicationSMSConfigByGroupId(GroupId);
+            objData.lstWAConfig = OBR.GetCommunicationWAConfigByGroupId(GroupId);
+
 
 
 

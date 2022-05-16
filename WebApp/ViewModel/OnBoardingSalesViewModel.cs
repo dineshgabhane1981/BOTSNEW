@@ -39,7 +39,9 @@ namespace WebApp.ViewModel
         public List<BOTS_TblSlabConfig> lstSlabConfig { get; set; }
 
         public List<BOTS_TblCommunicationSet> lstSet { get; set; }
-        
+        public List<BOTS_TblWAConfig> lstWAConfig { get; set; }
+
+
 
         public string LeadId { get; set; }
         public SelectListItem[] BOProducts()
