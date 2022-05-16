@@ -402,5 +402,21 @@ namespace WebApp.Controllers
             return View(result);
         }
 
+        public ActionResult RenewalData()
+        {
+            List<RenewalData> lstRenewalData = new List<RenewalData>();
+            try
+            {
+                lstRenewalData = SPR.GetRenewalData();
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "Single Page");
+            }
+
+            lstRenewalData.OrderByDescending(x => x.RenewalDate).ToList();
+            return View(lstRenewalData);
+        }
+
     }
 }
