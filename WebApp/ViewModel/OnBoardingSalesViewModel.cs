@@ -41,9 +41,14 @@ namespace WebApp.ViewModel
         public List<BOTS_TblCommunicationSet> lstSet { get; set; }
         public List<BOTS_TblWAConfig> lstWAConfig { get; set; }
 
+        public BOTS_TblCampaignOtherConfig objCampaignOtherConfig { get; set; }
+        public BOTS_TblCampaignInactive objCampaignInactive { get; set; }
+
+        public List<BOTS_TblBulkUpload> BOTS_TblBulkUpload { get; set; }
+        public List<BOTS_TblVelocityChecksConfig> BOTS_TblVelocityChecksConfig { get; set; }
 
 
-        public string LeadId { get; set; }
+    public string LeadId { get; set; }
         public SelectListItem[] BOProducts()
         {
             return new SelectListItem[2] { new SelectListItem() { Text = "Octa Plus", Value = "1" }, new SelectListItem() { Text = "Octa XS", Value = "2" } };

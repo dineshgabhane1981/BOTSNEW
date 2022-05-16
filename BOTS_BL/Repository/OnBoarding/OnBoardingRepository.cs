@@ -1921,13 +1921,33 @@ namespace BOTS_BL.Repository
             BOTS_TblOutletMaster objData = new BOTS_TblOutletMaster();
             using (var context = new CommonDBContext())
             {
-                objData = context.BOTS_TblOutletMaster.Where(x => x.GroupId == GroupId).ToList().FirstOrDefault();
+                objData = context.BOTS_TblOutletMaster.Where(x => x.GroupId == GroupId).FirstOrDefault();
             }
 
             return objData;
         }
 
+        public BOTS_TblCampaignOtherConfig GetCampaignOtherConfigByGroupId(string GroupId)
+        {
+            BOTS_TblCampaignOtherConfig objData = new BOTS_TblCampaignOtherConfig();
+            using (var context = new CommonDBContext())
+            {
+                objData = context.BOTS_TblCampaignOtherConfig.Where(x => x.GroupId == GroupId).FirstOrDefault();
+            }
 
+            return objData;
+        }
+
+        public BOTS_TblCampaignInactive GetCampaignInactiveByGroupId(string GroupId)
+        {
+            BOTS_TblCampaignInactive objData = new BOTS_TblCampaignInactive();
+            using (var context = new CommonDBContext())
+            {
+                objData = context.BOTS_TblCampaignInactive.Where(x => x.GroupId == GroupId).FirstOrDefault();
+            }
+
+            return objData;
+        }
 
     }
 }

@@ -1792,6 +1792,8 @@ namespace WebApp.Controllers.OnBoarding
             objData.lstWAConfig = OBR.GetCommunicationWAConfigByGroupId(GroupId);
             objData.objDLCLinkConfig = OBR.GetDLCLinkDLTConfigByGroupId(GroupId);
             objData.bots_TblOutletMaster = OBR.GetOutletDetailsByGroupId(GroupId);
+            objData.objCampaignOtherConfig = OBR.GetCampaignOtherConfigByGroupId(GroupId);
+            objData.objCampaignInactive = OBR.GetCampaignInactiveByGroupId(GroupId);
 
 
 
