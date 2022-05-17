@@ -124,8 +124,7 @@ namespace BOTS_BL.Models
         public string RejectReason { get; set; }
 
         public DateTime? UpdatedDate { get; set; }
-
-        [Required]
+                
         [StringLength(50)]
         public string UpdatedBy { get; set; }
 

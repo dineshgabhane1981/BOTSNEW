@@ -335,12 +335,13 @@ namespace WebApp.Controllers.OnBoarding
                 }
                 if (objData.bots_TblGroupMaster.SINo > 0)
                 {
-                    objData.bots_TblGroupMaster.CreatedBy = userDetails.LoginId;
+                    objData.bots_TblGroupMaster.UpdatedBy = userDetails.LoginId;
                     objData.bots_TblGroupMaster.CreatedDate = DateTime.Now;
+                    
                 }
                 else
                 {
-                    objData.bots_TblGroupMaster.UpdatedBy = userDetails.LoginId;
+                    objData.bots_TblGroupMaster.CreatedBy = userDetails.LoginId;
                     objData.bots_TblGroupMaster.CreatedDate = DateTime.Now;
                 }
 
