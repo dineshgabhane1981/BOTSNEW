@@ -1790,8 +1790,14 @@ namespace WebApp.Controllers.OnBoarding
             objData.lstCommunicationSet = OBR.GetCommunicationSetsByGroupId(GroupId);
             objData.lstSMSConfig = OBR.GetCommunicationSMSConfigByGroupId(GroupId);
             objData.lstWAConfig = OBR.GetCommunicationWAConfigByGroupId(GroupId);
+
+            //Digital Loyalty Card
             objData.objDLCLinkConfig = OBR.GetDLCLinkDLTConfigByGroupId(GroupId);
+
+            //Outlet Details
             objData.bots_TblOutletMaster = OBR.GetOutletDetailsByGroupId(GroupId);
+             
+            //Perpetual Campaigns
             objData.objCampaignOtherConfig = OBR.GetCampaignOtherConfigByGroupId(GroupId);
             objData.objCampaignInactive = OBR.GetCampaignInactiveByGroupId(GroupId);
 

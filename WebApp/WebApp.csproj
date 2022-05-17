@@ -448,10 +448,10 @@
     <Content Include="Views\CustomerOnBoarding\CheckerView.cshtml" />
     <Content Include="Views\CustomerOnBoarding\_CommunicationCheckerView.cshtml" />
     <Content Include="Views\SinglePage\DiscussionCountReport.cshtml" />
-    <Content Include="Views\CustomerOnBoarding\_OutletDetails.cshtml" />
+    <Content Include="Views\CustomerOnBoarding\_OutletDetailsCheckerView.cshtml" />
     <Content Include="Views\CustomerOnBoarding\_PointRuleCheckerView.cshtml" />
     <Content Include="Views\CustomerOnBoarding\_PerpetualCampaignCheckerView.cshtml" />
-    <Content Include="Views\CustomerOnBoarding\_DLTReadOnly.cshtml" />
+    <Content Include="Views\CustomerOnBoarding\_DLTCheckerView.cshtml" />
     <Content Include="Views\CustomerOnBoarding\_VelocityChecksCheckerView.cshtml" />
     <Content Include="Views\CustomerOnBoarding\_BulkUploadCheckerView.cshtml" />
     <Content Include="Views\SinglePage\RenewalData.cshtml" />
