@@ -28,5 +28,8 @@ namespace BOTS_BL.Models
         public string UpdatedBy { get; set; }
 
         public DateTime? UpdatedDate { get; set; }
+
+        [NotMapped]
+        public string OutletName { get; set; }
     }
 }

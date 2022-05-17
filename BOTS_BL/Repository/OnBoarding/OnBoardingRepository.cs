@@ -1976,5 +1976,26 @@ namespace BOTS_BL.Repository
             }
             return result;
         }
+    
+        public List<BOTS_TblCommunicationSetAssignment> GetOutletsByAssignmentSetId(string groupId)
+        {
+            List<BOTS_TblCommunicationSetAssignment> lstData = new List<BOTS_TblCommunicationSetAssignment>();
+            using (var context = new CommonDBContext())
+            {
+                lstData = context.BOTS_TblCommunicationSetAssignment.Where(x => x.GroupId == groupId).ToList();
+
+                foreach(var item in lstData)
+                {
+                    var outletId = Convert.ToInt32(item.OutletId);
+                    item.OutletName = context.BOTS_TblOutletMaster.Where(x => x.Id == outletId).Select(y=>y.OutletName).FirstOrDefault();
+                    //item.OutletName = outlet.OutletName;
+                }
+
+            }
+
+                return lstData;
+        }
+    
+    
     }
 }
