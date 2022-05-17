@@ -1797,8 +1797,9 @@ namespace WebApp.Controllers.OnBoarding
             objData.objDLCLinkConfig = OBR.GetDLCLinkDLTConfigByGroupId(GroupId);
 
             //Outlet Details
-            objData.bots_TblOutletMaster = OBR.GetOutletDetailsByGroupId(GroupId);
-             
+            objData.lstOutlets = OBR.GetOutletDetailsByGroupId(GroupId);
+            objData.objRetailList = OBR.GetOutletsBrandId(GroupId);
+
             //Perpetual Campaigns
             objData.objCampaignOtherConfig = OBR.GetCampaignOtherConfigByGroupId(GroupId);
             objData.objCampaignInactive = OBR.GetCampaignInactiveByGroupId(GroupId);

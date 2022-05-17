@@ -1,5 +1,7 @@
 ﻿@model WebApp.ViewModel.OnBoardingSalesViewModel
-
+@{ 
+    var count = 0;
+}
 
 <style>
     .row {
@@ -146,10 +148,21 @@
 
 
 <table border="1" cellpadding="3" cellspacing="3" style="margin-top:10px;" width="100%">
-    @if (Model.bots_TblOutletMaster != null)
-    {
-        <tr style="background-color:lightgrey;"><td colspan="8" style="font-weight:bold;font-size:18px;">Outlet Details</td></tr>
+  @foreach (var item in Model.lstOutlets)
+  {
+      count++;
+    <tr><td colspan="8"><b>Brand Name</b></td></tr>
+   foreach (var brand in Model.objRetailList)
+   {
+       if (item.BrandId == brand.BrandId)
+       {
+           <tr><td colspan="8">@brand.BrandName</td></tr>
+       }
+   }
 
+   if (Model.lstOutlets != null)
+   {
+        
         <tr>
             <td style="font-weight:bold;background-color:lightgreen;"> Outlet Name</td>
             <td style="font-weight:bold;background-color:lightgreen;"> Area Name</td>
@@ -166,20 +179,21 @@
         </tr>
 
         <tr>
-            <td style="font-weight:bold;">@Model.bots_TblOutletMaster.OutletName</td>
-            <td style="font-weight:bold;">@Model.bots_TblOutletMaster.AreaName</td>
-            <td style="font-weight:bold;">@Model.bots_TblOutletMaster.AuthorisedPerson</td>
-            <td style="font-weight:bold;">@Model.bots_TblOutletMaster.RegisterMobileNo</td>
-            <td style="font-weight:bold;">@Model.bots_TblOutletMaster.RegisterEmail</td>
-            <td style="font-weight:bold;">@Model.bots_TblOutletMaster.Address</td>
-            <td style="font-weight:bold;">@Model.bots_TblOutletMaster.Latitude</td>
-            <td style="font-weight:bold;">@Model.bots_TblOutletMaster.Longitude</td>
-            <td style="font-weight:bold;">@Model.bots_TblOutletMaster.State</td>
-            <td style="font-weight:bold;">@Model.bots_TblOutletMaster.City</td>
-            <td style="font-weight:bold;">@Model.bots_TblOutletMaster.PinCode</td>
-            <td style="font-weight:bold;">@Model.bots_TblOutletMaster.BrandName</td>
+            <td style="font-weight:bold;">@item.OutletName</td>
+            <td style="font-weight:bold;">@item.AreaName</td>
+            <td style="font-weight:bold;">@item.AuthorisedPerson</td>
+            <td style="font-weight:bold;">@item.RegisterMobileNo</td>
+            <td style="font-weight:bold;">@item.RegisterEmail</td>
+            <td style="font-weight:bold;">@item.Address</td>
+            <td style="font-weight:bold;">@item.Latitude</td>
+            <td style="font-weight:bold;">@item.Longitude</td>
+            <td style="font-weight:bold;">@item.State</td>
+            <td style="font-weight:bold;">@item.City</td>
+            <td style="font-weight:bold;">@item.PinCode</td>
+            <td style="font-weight:bold;">@item.BrandName</td>
         </tr>
-    }
-
+   }
+ }
 
 </table>
+ 

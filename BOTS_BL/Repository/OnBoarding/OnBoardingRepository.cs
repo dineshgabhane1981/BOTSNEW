@@ -1916,12 +1916,12 @@ namespace BOTS_BL.Repository
 
             return objData;
         }
-        public BOTS_TblOutletMaster GetOutletDetailsByGroupId(string GroupId)
+        public List<BOTS_TblOutletMaster> GetOutletDetailsByGroupId(string GroupId)
         {
-            BOTS_TblOutletMaster objData = new BOTS_TblOutletMaster();
+            List<BOTS_TblOutletMaster> objData = new List<BOTS_TblOutletMaster>();
             using (var context = new CommonDBContext())
             {
-                objData = context.BOTS_TblOutletMaster.Where(x => x.GroupId == GroupId).FirstOrDefault();
+                objData = context.BOTS_TblOutletMaster.Where(x => x.GroupId == GroupId).ToList();
             }
 
             return objData;
@@ -1995,7 +1995,18 @@ namespace BOTS_BL.Repository
 
                 return lstData;
         }
-    
-    
+
+        public List<BOTS_TblRetailMaster> GetOutletsBrandId(string groupId)
+        {
+            List<BOTS_TblRetailMaster> lstData = new List<BOTS_TblRetailMaster>();
+            using (var context = new CommonDBContext())
+            {
+                lstData = context.BOTS_TblRetailMaster.Where(x => x.BrandId == groupId).ToList();
+
+            }
+
+            return lstData;
+        }
+
     }
 }
