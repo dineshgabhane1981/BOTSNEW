@@ -43,6 +43,7 @@ namespace WebApp.ViewModel
 
         public BOTS_TblCampaignOtherConfig objCampaignOtherConfig { get; set; }
         public BOTS_TblCampaignInactive objCampaignInactive { get; set; }
+        public List<BOTS_TblCampaignInactive> lstCampaignInactive { get; set; }
         public List<BOTS_TblCampaignOtherConfig> lstCampaignOtherConfig { get; set; }
         public List<BOTS_TblBulkUpload> BOTS_TblBulkUpload { get; set; }
         public List<BOTS_TblVelocityChecksConfig> BOTS_TblVelocityChecksConfig { get; set; }

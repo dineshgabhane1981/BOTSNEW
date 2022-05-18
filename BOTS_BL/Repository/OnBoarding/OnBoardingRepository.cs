@@ -1938,12 +1938,12 @@ namespace BOTS_BL.Repository
             return objData;
         }
 
-        public BOTS_TblCampaignInactive GetCampaignInactiveByGroupId(string GroupId)
+        public List<BOTS_TblCampaignInactive> GetCampaignInactiveByGroupId(string GroupId)
         {
-            BOTS_TblCampaignInactive objData = new BOTS_TblCampaignInactive();
+            List<BOTS_TblCampaignInactive> objData = new List<BOTS_TblCampaignInactive>();
             using (var context = new CommonDBContext())
             {
-                objData = context.BOTS_TblCampaignInactive.Where(x => x.GroupId == GroupId).FirstOrDefault();
+                objData = context.BOTS_TblCampaignInactive.Where(x => x.GroupId == GroupId).ToList();
             }
 
             return objData;

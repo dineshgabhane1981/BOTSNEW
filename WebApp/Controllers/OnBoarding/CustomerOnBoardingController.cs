@@ -1802,7 +1802,7 @@ namespace WebApp.Controllers.OnBoarding
 
             //Perpetual Campaigns
             objData.lstCampaignOtherConfig = OBR.GetCampaignOtherConfigByGroupId(GroupId);
-            objData.objCampaignInactive = OBR.GetCampaignInactiveByGroupId(GroupId);
+            objData.lstCampaignInactive = OBR.GetCampaignInactiveByGroupId(GroupId);
 
             // Velocity Checks
             objData.BOTS_TblVelocityChecksConfig = OBR.GetVelocityChecksData(GroupId);
