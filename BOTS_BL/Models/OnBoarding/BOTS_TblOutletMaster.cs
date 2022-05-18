@@ -58,5 +58,10 @@ namespace BOTS_BL.Models
 
         [NotMapped]
         public string BrandName { get; set; }
+
+        [NotMapped]
+        public string CityName { get; set; }
+        [NotMapped]
+        public string StateName { get; set; }
     }
 }

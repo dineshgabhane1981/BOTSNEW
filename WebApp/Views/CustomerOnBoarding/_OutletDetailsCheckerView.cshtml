@@ -1,7 +1,4 @@
 ﻿@model WebApp.ViewModel.OnBoardingSalesViewModel
-@{ 
-    var count = 0;
-}
 
 <style>
     .row {
@@ -145,60 +142,49 @@
     }
 </style>
 
-
-
 <table border="1" cellpadding="3" cellspacing="3" style="margin-top:10px;" width="100%">
-  @foreach (var item in Model.lstOutlets)
-  {
-      count++;
-    <tr>
-        <td colspan="8"> Brand Name - <b>@item.BrandName</b></td>        
-    </tr>
-   foreach (var brand in Model.objRetailList)
-   {
-       if (item.BrandId == brand.BrandId)
-       {
-           <tr>
-            <td colspan="8"> Category - <b>@brand.CategoryName</b></td></tr>
-       }
-   }
-
-   if (Model.lstOutlets != null)
-   {
-        
+    @foreach (var brand in Model.objRetailList)
+    {
         <tr>
-            <td style="font-weight:bold;background-color:lightgreen;"> Brand Name</td>
-            <td style="font-weight:bold;background-color:lightgreen;"> Outlet Name</td>
-            <td style="font-weight:bold;background-color:lightgreen;"> Area Name</td>
-            <td style="font-weight:bold;background-color:lightgreen;">Authorised Person</td>
-            <td style="font-weight:bold;background-color:lightgreen;">Registered Mobile No</td>
-            <td style="font-weight:bold;background-color:lightgreen;"> Registered Email </td>
-            <td style="font-weight:bold;background-color:lightgreen;">Address</td>
-            <td style="font-weight:bold;background-color:lightgreen;"> Geo Latitude </td>
-            <td style="font-weight:bold;background-color:lightgreen;"> Geo Longitude </td>
-            <td style="font-weight:bold;background-color:lightgreen;">State</td>
-            <td style="font-weight:bold;background-color:lightgreen;"> Pincode</td>
-            <td style="font-weight:bold;background-color:lightgreen;">City </td>
-            
+            <td colspan="8"> Category - <b>@brand.CategoryName</b></td>
         </tr>
+        if (Model.lstOutlets != null)
+        {
 
-        <tr>
-            <td>@item.BrandName</td>
-            <td>@item.OutletName</td>
-            <td>@item.AreaName</td>
-            <td>@item.AuthorisedPerson</td>
-            <td>@item.RegisterMobileNo</td>
-            <td>@item.RegisterEmail</td>
-            <td>@item.Address</td>
-            <td>@item.Latitude</td>
-            <td>@item.Longitude</td>
-            <td>@item.State</td>
-            <td>@item.PinCode</td>
-            <td>@item.City</td>
-
-        </tr>
-   }
- }
-
+            <tr>
+                <td style="font-weight:bold;background-color:lightgreen;"> Brand Name</td>
+                <td style="font-weight:bold;background-color:lightgreen;"> Outlet Name</td>
+                <td style="font-weight:bold;background-color:lightgreen;"> Area Name</td>
+                <td style="font-weight:bold;background-color:lightgreen;">Authorised Person</td>
+                <td style="font-weight:bold;background-color:lightgreen;">Registered Mobile No</td>
+                <td style="font-weight:bold;background-color:lightgreen;"> Registered Email </td>
+                <td style="font-weight:bold;background-color:lightgreen;">Address</td>
+                <td style="font-weight:bold;background-color:lightgreen;"> Geo Latitude </td>
+                <td style="font-weight:bold;background-color:lightgreen;"> Geo Longitude </td>
+                <td style="font-weight:bold;background-color:lightgreen;">State</td>
+                <td style="font-weight:bold;background-color:lightgreen;">City </td>
+                <td style="font-weight:bold;background-color:lightgreen;"> Pincode</td>
+            </tr>
+        }
+        foreach (var item in Model.lstOutlets)
+        {
+            if (brand.BrandId == item.BrandId)
+            {
+                <tr>
+                    <td>@brand.BrandName</td>
+                    <td>@item.OutletName</td>
+                    <td>@item.AreaName</td>
+                    <td>@item.AuthorisedPerson</td>
+                    <td>@item.RegisterMobileNo</td>
+                    <td>@item.RegisterEmail</td>
+                    <td>@item.Address</td>
+                    <td>@item.Latitude</td>
+                    <td>@item.Longitude</td>
+                    <td>@item.StateName</td>
+                    <td>@item.CityName</td>
+                    <td>@item.PinCode</td>
+                </tr>
+            }
+        }
+    }
 </table>
- 

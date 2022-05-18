@@ -1922,6 +1922,13 @@ namespace BOTS_BL.Repository
             using (var context = new CommonDBContext())
             {
                 objData = context.BOTS_TblOutletMaster.Where(x => x.GroupId == GroupId).ToList();
+                foreach(var item in objData)
+                {
+                    var city = COBR.GetCityById(Convert.ToInt32(item.City));
+                    item.CityName = city.CityName;
+                    var state = Convert.ToInt32(item.State);
+                    item.StateName = context.tblStates.Where(x => x.StateId == state).Select(y => y.StateName).FirstOrDefault();
+                }
             }
 
             return objData;
@@ -2001,7 +2008,7 @@ namespace BOTS_BL.Repository
             List<BOTS_TblRetailMaster> lstData = new List<BOTS_TblRetailMaster>();
             using (var context = new CommonDBContext())
             {
-                lstData = context.BOTS_TblRetailMaster.Where(x => x.BrandId == groupId).ToList();
+                lstData = context.BOTS_TblRetailMaster.Where(x => x.GroupId == groupId).ToList();
 
             }
 
