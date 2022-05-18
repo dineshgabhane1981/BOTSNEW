@@ -151,12 +151,15 @@
   @foreach (var item in Model.lstOutlets)
   {
       count++;
-    <tr><td colspan="8"><b>Brand Name</b></td></tr>
+    <tr>
+        <td colspan="8"> Brand Name - <b>@item.BrandName</b></td>        
+    </tr>
    foreach (var brand in Model.objRetailList)
    {
        if (item.BrandId == brand.BrandId)
        {
-           <tr><td colspan="8">@brand.BrandName</td></tr>
+           <tr>
+            <td colspan="8"> Category - <b>@brand.CategoryName</b></td></tr>
        }
    }
 
@@ -164,6 +167,7 @@
    {
         
         <tr>
+            <td style="font-weight:bold;background-color:lightgreen;"> Brand Name</td>
             <td style="font-weight:bold;background-color:lightgreen;"> Outlet Name</td>
             <td style="font-weight:bold;background-color:lightgreen;"> Area Name</td>
             <td style="font-weight:bold;background-color:lightgreen;">Authorised Person</td>
@@ -175,22 +179,23 @@
             <td style="font-weight:bold;background-color:lightgreen;">State</td>
             <td style="font-weight:bold;background-color:lightgreen;"> Pincode</td>
             <td style="font-weight:bold;background-color:lightgreen;">City </td>
-            <td style="font-weight:bold;background-color:lightgreen;"> Brand Name</td>
+            
         </tr>
 
         <tr>
-            <td style="font-weight:bold;">@item.OutletName</td>
-            <td style="font-weight:bold;">@item.AreaName</td>
-            <td style="font-weight:bold;">@item.AuthorisedPerson</td>
-            <td style="font-weight:bold;">@item.RegisterMobileNo</td>
-            <td style="font-weight:bold;">@item.RegisterEmail</td>
-            <td style="font-weight:bold;">@item.Address</td>
-            <td style="font-weight:bold;">@item.Latitude</td>
-            <td style="font-weight:bold;">@item.Longitude</td>
-            <td style="font-weight:bold;">@item.State</td>
-            <td style="font-weight:bold;">@item.City</td>
-            <td style="font-weight:bold;">@item.PinCode</td>
-            <td style="font-weight:bold;">@item.BrandName</td>
+            <td>@item.BrandName</td>
+            <td>@item.OutletName</td>
+            <td>@item.AreaName</td>
+            <td>@item.AuthorisedPerson</td>
+            <td>@item.RegisterMobileNo</td>
+            <td>@item.RegisterEmail</td>
+            <td>@item.Address</td>
+            <td>@item.Latitude</td>
+            <td>@item.Longitude</td>
+            <td>@item.State</td>
+            <td>@item.PinCode</td>
+            <td>@item.City</td>
+
         </tr>
    }
  }
