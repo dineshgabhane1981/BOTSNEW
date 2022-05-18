@@ -1927,12 +1927,12 @@ namespace BOTS_BL.Repository
             return objData;
         }
 
-        public BOTS_TblCampaignOtherConfig GetCampaignOtherConfigByGroupId(string GroupId)
+        public List<BOTS_TblCampaignOtherConfig> GetCampaignOtherConfigByGroupId(string GroupId)
         {
-            BOTS_TblCampaignOtherConfig objData = new BOTS_TblCampaignOtherConfig();
+            List<BOTS_TblCampaignOtherConfig> objData = new List<BOTS_TblCampaignOtherConfig>();
             using (var context = new CommonDBContext())
             {
-                objData = context.BOTS_TblCampaignOtherConfig.Where(x => x.GroupId == GroupId).FirstOrDefault();
+                objData = context.BOTS_TblCampaignOtherConfig.Where(x => x.GroupId == GroupId).ToList();
             }
 
             return objData;

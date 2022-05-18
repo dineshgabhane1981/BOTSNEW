@@ -1801,7 +1801,7 @@ namespace WebApp.Controllers.OnBoarding
             objData.objRetailList = OBR.GetOutletsBrandId(GroupId);
 
             //Perpetual Campaigns
-            objData.objCampaignOtherConfig = OBR.GetCampaignOtherConfigByGroupId(GroupId);
+            objData.lstCampaignOtherConfig = OBR.GetCampaignOtherConfigByGroupId(GroupId);
             objData.objCampaignInactive = OBR.GetCampaignInactiveByGroupId(GroupId);
 
             // Velocity Checks

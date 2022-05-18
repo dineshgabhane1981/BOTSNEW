@@ -145,21 +145,23 @@
 
 @*//Birthday*@
 <table border="1" cellpadding="3" cellspacing="3" style="margin-top:10px;" width="100%">
-    @if (Model.objCampaignOtherConfig != null)
+    @if (Model.lstCampaignOtherConfig != null)
     {
-        if (Model.objCampaignOtherConfig.CampaignType == "Birthday")
+        foreach (var item in Model.lstCampaignOtherConfig)
         {
+            if (item.CampaignType == "Birthday")
+            {
             <tr style="background-color:lightgrey;"><td colspan="15" style="font-weight:bold;font-size:18px;">Birthday Campaign</tr>
 
             <tr>
-
-                <td>SMS Type -<b>@Model.objCampaignOtherConfig.SMSType</b></td>
-                <td>Bonus Point -<b>@Model.objCampaignOtherConfig.BonusPoints</b></td>
-                <td>Freuency - <b>@Model.objCampaignOtherConfig.Frequency</b></td>
+                <td colspan="2">SMS Type -<b>@item.SMSType</b></td>
+                <td colspan="2">Bonus Point -<b>@item.BonusPoints</b></td>
+                <td colspan="2">Freuency - <b>@item.Frequency</b></td>
             </tr>
             <tr style="background-color:lightgreen; font-weight:bold;">
-                <td>Script Name</td>
-                <td>SMS</td>
+                <td>Script Type</td>
+                <td>Days</td>
+                <td>When (Before/After)</td>
                 <td>Script </td>
                 <td>DLT Script</td>
                 <td>Template ID</td>
@@ -168,189 +170,160 @@
                 <td>DLT Status</td>
                 <td>Reject Reason</td>
             </tr>
-
-
-
             <tr>
-                <td style="font-weight:bold;background-color:lightgreen;">INTRO DAYS 1</td>
-                <td>@Model.objCampaignOtherConfig.IntroDays1</td>
-                <td>@Model.objCampaignOtherConfig.IntroScript1</td>
-                <td>@Model.objCampaignOtherConfig.IntroScript1DLT</td>
-                <td>@Model.objCampaignOtherConfig.TemplateId1</td>
-                <td>@Model.objCampaignOtherConfig.TemplateName1</td>
-                <td>@Model.objCampaignOtherConfig.TemplateType1</td>
-                <td>@Model.objCampaignOtherConfig.DLTStatus1</td>
-                <td>@Model.objCampaignOtherConfig.RejectReason1</td>
-
+                <td style="font-weight:bold;background-color:lightgreen;">Introduction Message</td>
+                <td>@item.IntroDays1</td>
+                <td></td>
+                <td>@item.IntroScript1</td>
+                <td>@item.IntroScript1DLT</td>
+                <td>@item.TemplateId1</td>
+                <td>@item.TemplateName1</td>
+                <td>@item.TemplateType1</td>
+                <td>@item.DLTStatus1</td>
+                <td>@item.RejectReason1</td>
             </tr>
             <tr>
-                <td style="font-weight:bold;background-color:lightgreen;">INTRO DAYS 2</td>
-                <td>@Model.objCampaignOtherConfig.IntroDays2</td>
-                <td>@Model.objCampaignOtherConfig.IntroScript2</td>
-                <td>@Model.objCampaignOtherConfig.IntroScript2DLT</td>
-                <td>@Model.objCampaignOtherConfig.TemplateId2</td>
-                <td>@Model.objCampaignOtherConfig.TemplateName2</td>
-                <td>@Model.objCampaignOtherConfig.TemplateType2</td>
-                <td>@Model.objCampaignOtherConfig.DLTStatus2</td>
-                <td>@Model.objCampaignOtherConfig.RejectReason2</td>
-
+                <td style="font-weight:bold;background-color:lightgreen;">REMINDER 1</td>
+                <td>@item.ReminderDays1</td>
+                <td>@item.ReminderWhen1</td>
+                <td>@item.ReminderScript1</td>
+                <td>@item.ReminderScript1DLT</td>
+                <td>@item.TemplateId3</td>
+                <td>@item.TemplateName3</td>
+                <td>@item.TemplateType3</td>
+                <td>@item.DLTStatus3</td>
+                <td>@item.RejectReason3</td>
             </tr>
             <tr>
-                <td style="font-weight:bold;background-color:lightgreen;">REMINDER DAYS 1</td>
-                <td>@Model.objCampaignOtherConfig.ReminderDays1</td>
-                <td>@Model.objCampaignOtherConfig.ReminderWhen1</td>
-                <td>@Model.objCampaignOtherConfig.ReminderScript1</td>
-                <td>@Model.objCampaignOtherConfig.ReminderScript1DLT</td>
-                <td>@Model.objCampaignOtherConfig.TemplateId3</td>
-                <td>@Model.objCampaignOtherConfig.TemplateName3</td>
-                <td>@Model.objCampaignOtherConfig.TemplateType3</td>
-                <td>@Model.objCampaignOtherConfig.DLTStatus3</td>
-                <td>@Model.objCampaignOtherConfig.RejectReason3</td>
-
-            </tr>
-            <tr>
-                <td style="font-weight:bold;background-color:lightgreen;">REMINDER DAYS 2</td>
-                <td>@Model.objCampaignOtherConfig.ReminderDays2</td>
-                <td>@Model.objCampaignOtherConfig.ReminderWhen2</td>
-                <td>@Model.objCampaignOtherConfig.ReminderScript2</td>
-                <td>@Model.objCampaignOtherConfig.ReminderScript2DLT</td>
-                <td>@Model.objCampaignOtherConfig.TemplateId4</td>
-                <td>@Model.objCampaignOtherConfig.TemplateName4</td>
-                <td>@Model.objCampaignOtherConfig.TemplateType4</td>
-                <td>@Model.objCampaignOtherConfig.DLTStatus4</td>
-                <td>@Model.objCampaignOtherConfig.RejectReason4</td>
-
+                <td style="font-weight:bold;background-color:lightgreen;">REMINDER 2</td>
+                <td>@item.ReminderDays2</td>
+                <td>@item.ReminderWhen2</td>
+                <td>@item.ReminderScript2</td>
+                <td>@item.ReminderScript2DLT</td>
+                <td>@item.TemplateId4</td>
+                <td>@item.TemplateName4</td>
+                <td>item.TemplateType4</td>
+                <td>@item.DLTStatus4</td>
+                <td>@item.RejectReason4</td>
             </tr>
             <tr>
                 <td style="font-weight:bold;background-color:lightgreen;">ON DAY POINT</td>
-                <td>@Model.objCampaignOtherConfig.OnDayTypePT</td>
-                <td>@Model.objCampaignOtherConfig.OnDayScriptPT</td>
-                <td>@Model.objCampaignOtherConfig.OnDayScriptPTDLT</td>
-                <td>@Model.objCampaignOtherConfig.TemplateId5</td>
-                <td>@Model.objCampaignOtherConfig.TemplateName5</td>
-                <td>@Model.objCampaignOtherConfig.TemplateType5</td>
-                <td>@Model.objCampaignOtherConfig.DLTStatus5</td>
-                <td>@Model.objCampaignOtherConfig.RejectReason5</td>
-
+                <td>--</td>
+                <td>@item.OnDayTypePT</td>
+                <td>@item.OnDayScriptPT</td>
+                <td>@item.OnDayScriptPTDLT</td>
+                <td>@item.TemplateId5</td>
+                <td>@item.TemplateName5</td>
+                <td>@item.TemplateType5</td>
+                <td>@item.DLTStatus5</td>
+                <td>@item.RejectReason5</td>
             </tr>
             <tr>
                 <td style="font-weight:bold;background-color:lightgreen;">ON DAY NOT POINT</td>
-                <td>@Model.objCampaignOtherConfig.OnDayTypeNPT</td>
-                <td>@Model.objCampaignOtherConfig.OnDayScriptNPT</td>
-                <td>@Model.objCampaignOtherConfig.OnDayScriptNPTDLT</td>
-                <td>@Model.objCampaignOtherConfig.TemplateId6</td>
-                <td>@Model.objCampaignOtherConfig.TemplateName6</td>
-                <td>@Model.objCampaignOtherConfig.TemplateType6</td>
-                <td>@Model.objCampaignOtherConfig.DLTStatus6</td>
-                <td>@Model.objCampaignOtherConfig.RejectReason6</td>
-
+                <td>--</td>
+                <td>@item.OnDayTypeNPT</td>
+                <td>@item.OnDayScriptNPT</td>
+                <td>@item.OnDayScriptNPTDLT</td>
+                <td>@item.TemplateId6</td>
+                <td>@item.TemplateName6</td>
+                <td>@item.TemplateType6</td>
+                <td>@item.DLTStatus6</td>
+                <td>@item.RejectReason6</td>
             </tr>
+            }
         }
     }
- </table>
+</table>
 
 @* //Annivarsary *@
 <table border="1" cellpadding="3" cellspacing="3" style="margin-top:10px;" width="100%">
-    @if (Model.objCampaignOtherConfig != null)
+    @if (Model.lstCampaignOtherConfig != null)
     {
-        if (Model.objCampaignOtherConfig.CampaignType == "Anniversary")
+        foreach (var item in Model.lstCampaignOtherConfig)
         {
-            <tr style="background-color:lightgrey;"><td colspan="15" style="font-weight:bold;font-size:18px;">Annivarsary Campaign</tr>
-            <tr>
-
-                <td>SMS Type -<b>@Model.objCampaignOtherConfig.SMSType</b></td>
-                <td>Bonus Point -<b>@Model.objCampaignOtherConfig.BonusPoints</b></td>
-                <td>Freuency - <b>@Model.objCampaignOtherConfig.Frequency</b></td>
-            </tr>
-            <tr style="background-color:lightgreen; font-weight:bold;">
-                <td>Script Name</td>
-                <td>SMS</td>
-                <td>Script </td>
-                <td>DLT Script</td>
-                <td>Template ID</td>
-                <td>Template Name</td>
-                <td>Template Type</td>
-                <td>DLT Status</td>
-                <td>Reject Reason</td>
-            </tr>
-
-
-            <tr>
-                <td style="font-weight:bold;background-color:lightgreen;">INTRO DAYS 1</td>
-                <td>@Model.objCampaignOtherConfig.IntroDays1</td>
-                <td>@Model.objCampaignOtherConfig.IntroScript1</td>
-                <td>@Model.objCampaignOtherConfig.IntroScript1DLT</td>
-                <td>@Model.objCampaignOtherConfig.TemplateId1</td>
-                <td>@Model.objCampaignOtherConfig.TemplateName1</td>
-                <td>@Model.objCampaignOtherConfig.TemplateType1</td>
-                <td>@Model.objCampaignOtherConfig.DLTStatus1</td>
-                <td>@Model.objCampaignOtherConfig.RejectReason1</td>
-
-            </tr>
-            <tr>
-                <td style="font-weight:bold;background-color:lightgreen;">INTRO DAYS 2</td>
-                <td>@Model.objCampaignOtherConfig.IntroDays2</td>
-                <td>@Model.objCampaignOtherConfig.IntroScript2</td>
-                <td>@Model.objCampaignOtherConfig.IntroScript2DLT</td>
-                <td>@Model.objCampaignOtherConfig.TemplateId2</td>
-                <td>@Model.objCampaignOtherConfig.TemplateName2</td>
-                <td>@Model.objCampaignOtherConfig.TemplateType2</td>
-                <td>@Model.objCampaignOtherConfig.DLTStatus2</td>
-                <td>@Model.objCampaignOtherConfig.RejectReason2</td>
-
-            </tr>
-            <tr>
-                <td style="font-weight:bold;background-color:lightgreen;">REMINDER DAYS 1</td>
-                <td>@Model.objCampaignOtherConfig.ReminderDays1</td>
-                <td>@Model.objCampaignOtherConfig.ReminderWhen1</td>
-                <td>@Model.objCampaignOtherConfig.ReminderScript1</td>
-                <td>@Model.objCampaignOtherConfig.ReminderScript1DLT</td>
-                <td>@Model.objCampaignOtherConfig.TemplateId3</td>
-                <td>@Model.objCampaignOtherConfig.TemplateName3</td>
-                <td>@Model.objCampaignOtherConfig.TemplateType3</td>
-                <td>@Model.objCampaignOtherConfig.DLTStatus3</td>
-                <td>@Model.objCampaignOtherConfig.RejectReason3</td>
-
-            </tr>
-            <tr>
-                <td style="font-weight:bold;background-color:lightgreen;">REMINDER DAYS 2</td>
-                <td>@Model.objCampaignOtherConfig.ReminderDays2</td>
-                <td>@Model.objCampaignOtherConfig.ReminderWhen2</td>
-                <td>@Model.objCampaignOtherConfig.ReminderScript2</td>
-                <td>@Model.objCampaignOtherConfig.ReminderScript2DLT</td>
-                <td>@Model.objCampaignOtherConfig.TemplateId4</td>
-                <td>@Model.objCampaignOtherConfig.TemplateName4</td>
-                <td>@Model.objCampaignOtherConfig.TemplateType4</td>
-                <td>@Model.objCampaignOtherConfig.DLTStatus4</td>
-                <td>@Model.objCampaignOtherConfig.RejectReason4</td>
-
-            </tr>
-            <tr>
-                <td style="font-weight:bold;background-color:lightgreen;">ON DAY POINT</td>
-                <td>@Model.objCampaignOtherConfig.OnDayTypePT</td>
-                <td>@Model.objCampaignOtherConfig.OnDayScriptPT</td>
-                <td>@Model.objCampaignOtherConfig.OnDayScriptPTDLT</td>
-                <td>@Model.objCampaignOtherConfig.TemplateId5</td>
-                <td>@Model.objCampaignOtherConfig.TemplateName5</td>
-                <td>@Model.objCampaignOtherConfig.TemplateType5</td>
-                <td>@Model.objCampaignOtherConfig.DLTStatus5</td>
-                <td>@Model.objCampaignOtherConfig.RejectReason5</td>
-
-            </tr>
-            <tr>
-                <td style="font-weight:bold;background-color:lightgreen;">ON DAY NOT POINT</td>
-                <td>@Model.objCampaignOtherConfig.OnDayTypeNPT</td>
-                <td>@Model.objCampaignOtherConfig.OnDayScriptNPT</td>
-                <td>@Model.objCampaignOtherConfig.OnDayScriptNPTDLT</td>
-                <td>@Model.objCampaignOtherConfig.TemplateId6</td>
-                <td>@Model.objCampaignOtherConfig.TemplateName6</td>
-                <td>@Model.objCampaignOtherConfig.TemplateType6</td>
-                <td>@Model.objCampaignOtherConfig.DLTStatus6</td>
-                <td>@Model.objCampaignOtherConfig.RejectReason6</td>
-
-            </tr>
+            if (item.CampaignType == "Anniversary")
+            {
+                <tr style="background-color:lightgrey;"><td colspan="15" style="font-weight:bold;font-size:18px;">Annivarsary Campaign</tr>
+                <tr>
+                    <td colspan="2">SMS Type -<b>@item.SMSType</b></td>
+                    <td colspan="2">Bonus Point -<b>@item.BonusPoints</b></td>
+                    <td colspan="2">Freuency - <b>@item.Frequency</b></td>
+                </tr>
+                <tr style="background-color:lightgreen; font-weight:bold;">
+                    <td>Script Type</td>
+                    <td>Days</td>
+                    <td>When (Before/After)</td>
+                    <td>Script </td>
+                    <td>DLT Script</td>
+                    <td>Template ID</td>
+                    <td>Template Name</td>
+                    <td>Template Type</td>
+                    <td>DLT Status</td>
+                    <td>Reject Reason</td>
+                </tr>
+                <tr>
+                    <td style="font-weight:bold;background-color:lightgreen;">Introduction Message</td>
+                    <td>@item.IntroDays1</td>
+                    <td></td>
+                    <td>@item.IntroScript1</td>
+                    <td>@item.IntroScript1DLT</td>
+                    <td>@item.TemplateId1</td>
+                    <td>@item.TemplateName1</td>
+                    <td>@item.TemplateType1</td>
+                    <td>@item.DLTStatus1</td>
+                    <td>@item.RejectReason1</td>
+                </tr>
+                <tr>
+                    <td style="font-weight:bold;background-color:lightgreen;">REMINDER 1</td>
+                    <td>@item.ReminderDays1</td>
+                    <td>@item.ReminderWhen1</td>
+                    <td>@item.ReminderScript1</td>
+                    <td>@item.ReminderScript1DLT</td>
+                    <td>@item.TemplateId3</td>
+                    <td>@item.TemplateName3</td>
+                    <td>@item.TemplateType3</td>
+                    <td>@item.DLTStatus3</td>
+                    <td>@item.RejectReason3</td>
+                </tr>
+                <tr>
+                    <td style="font-weight:bold;background-color:lightgreen;">REMINDER 2</td>
+                    <td>@item.ReminderDays2</td>
+                    <td>@item.ReminderWhen2</td>
+                    <td>@item.ReminderScript2</td>
+                    <td>@item.ReminderScript2DLT</td>
+                    <td>@item.TemplateId4</td>
+                    <td>@item.TemplateName4</td>
+                    <td>item.TemplateType4</td>
+                    <td>@item.DLTStatus4</td>
+                    <td>@item.RejectReason4</td>
+                </tr>
+                <tr>
+                    <td style="font-weight:bold;background-color:lightgreen;">ON DAY POINT</td>
+                    <td>--</td>
+                    <td>@item.OnDayTypePT</td>
+                    <td>@item.OnDayScriptPT</td>
+                    <td>@item.OnDayScriptPTDLT</td>
+                    <td>@item.TemplateId5</td>
+                    <td>@item.TemplateName5</td>
+                    <td>@item.TemplateType5</td>
+                    <td>@item.DLTStatus5</td>
+                    <td>@item.RejectReason5</td>
+                </tr>
+                <tr>
+                    <td style="font-weight:bold;background-color:lightgreen;">ON DAY NOT POINT</td>
+                    <td>--</td>
+                    <td>@item.OnDayTypeNPT</td>
+                    <td>@item.OnDayScriptNPT</td>
+                    <td>@item.OnDayScriptNPTDLT</td>
+                    <td>@item.TemplateId6</td>
+                    <td>@item.TemplateName6</td>
+                    <td>@item.TemplateType6</td>
+                    <td>@item.DLTStatus6</td>
+                    <td>@item.RejectReason6</td>
+                </tr>
+            }
         }
-     }
+    }
 </table>
 
 
