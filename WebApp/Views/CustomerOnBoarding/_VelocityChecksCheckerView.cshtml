@@ -1,1 +1,104 @@
-﻿
+﻿@model WebApp.ViewModel.OnBoardingSalesViewModel
+
+<div style="display:flex;">
+    <div>
+        <table border="1" cellpadding="5" cellspacing="5" style="margin-top:20px; margin-left:20px;">
+            <tr>
+                <td colspan="6" style="background-color:lightgray;"><b>Based on Transaction Count</b></td>
+
+            </tr>
+            <tr>
+                <td width="50px"><b>From</b></td>
+                <td width="50px"><b> To</b></td>
+                <td> <b>Last Days</b></td>
+                <td><b>Action</b></td>
+            </tr>
+            @foreach (var item in Model.BOTS_TblVelocityChecksConfig)
+            {
+                if (item.VelocityType == 1)
+                {
+                    <tr>
+
+                        <td>@item.CountFrom</td>
+
+                        <td>@item.CountTo</td>
+
+                        <td>@item.LastDays</td>
+
+                        <td>@item.Action</td>
+                    </tr>
+                }
+            }
+
+        </table>
+    </div>
+
+
+    <div>
+
+        <table border="1" cellpadding="5" cellspacing="5" style="margin-top: 20px; margin-left: 20px;">
+            <tr>
+                <td colspan="6" style="background-color:lightgray;"><b>Based on INVOICE AMOUNT (CUMM)</b></td>
+
+            </tr>
+            <tr>
+                <td width="50px"><b>From</b></td>
+                <td width="50px"><b> To</b></td>
+                <td><b>Last Days</b></td>
+                <td><b>Action</b></td>
+            </tr>
+            @foreach (var item in Model.BOTS_TblVelocityChecksConfig)
+            {
+                if (item.VelocityType == 2)
+                {
+                    <tr>
+
+                        <td>@item.CountFrom</td>
+
+                        <td>@item.CountTo</td>
+
+                        <td>@item.LastDays</td>
+
+                        <td>@item.Action</td>
+                    </tr>
+                }
+            }
+
+        </table>
+    </div>
+
+    <div>
+
+        <table border="1" cellpadding="5" cellspacing="5" style="margin-top: 20px; margin-left:20px;">
+            <tr>
+                <td colspan="6" style="background-color:lightgray;"><b>Based on INVOICE AMOUNT</b></td>
+
+            </tr>
+            <tr>
+                <td width="50px"><b>From</b></td>
+                <td width="50px"><b> To</b></td>
+                <td> <b>Last Days</b></td>
+                <td><b>Action</b></td>
+            </tr>
+            @foreach (var item in Model.BOTS_TblVelocityChecksConfig)
+            {
+                if (item.VelocityType == 3)
+                    {
+
+                    <tr>
+
+                        <td>@item.CountFrom</td>
+
+                        <td>@item.CountTo</td>
+
+                        <td>@item.LastDays</td>
+
+                        <td>@item.Action</td>
+                    </tr>
+                }
+            }
+
+        </table>
+    </div>
+</div>
+

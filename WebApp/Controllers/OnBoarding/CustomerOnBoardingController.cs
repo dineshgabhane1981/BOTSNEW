@@ -1804,8 +1804,8 @@ namespace WebApp.Controllers.OnBoarding
             objData.objCampaignOtherConfig = OBR.GetCampaignOtherConfigByGroupId(GroupId);
             objData.objCampaignInactive = OBR.GetCampaignInactiveByGroupId(GroupId);
 
-
-
+            // Velocity Checks
+            objData.BOTS_TblVelocityChecksConfig = OBR.GetVelocityChecksData(GroupId);
 
 
             return View(objData);
