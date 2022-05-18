@@ -1807,6 +1807,11 @@ namespace WebApp.Controllers.OnBoarding
             // Velocity Checks
             objData.BOTS_TblVelocityChecksConfig = OBR.GetVelocityChecksData(GroupId);
 
+            //PointRules
+            objData.objEarnRuleConfig = OBR.GetEarnRuleConfig(GroupId);
+            objData.objBurnRuleConfig = OBR.GetBurnRuleConfig(GroupId);
+            objData.lstSlabConfig = OBR.GetEarnRuleSlabConfig(GroupId);
+            objData.lstProductUpload = OBR.GetProductUpload(GroupId);
 
             return View(objData);
 

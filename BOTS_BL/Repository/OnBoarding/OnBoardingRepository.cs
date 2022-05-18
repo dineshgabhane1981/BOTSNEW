@@ -1798,6 +1798,16 @@ namespace BOTS_BL.Repository
             return objData;
         }
 
+        public List<BOTS_TblProductUpload> GetProductUpload(string GroupId)
+        {
+            List<BOTS_TblProductUpload> objData = new List<BOTS_TblProductUpload>();
+            using (var context = new CommonDBContext())
+            {
+                objData = context.BOTS_TblProductUpload.Where(x => x.GroupId == GroupId).ToList();
+            }
+            return objData;
+        }
+
         public BOTS_TblBurnRuleConfig GetBurnRuleConfig(string GroupId)
         {
             BOTS_TblBurnRuleConfig objData = new BOTS_TblBurnRuleConfig();

@@ -37,6 +37,7 @@ namespace WebApp.ViewModel
         public BOTS_TblEarnRuleConfig objEarnRuleConfig { get; set; }
         public BOTS_TblBurnRuleConfig objBurnRuleConfig { get; set; }
         public List<BOTS_TblSlabConfig> lstSlabConfig { get; set; }
+        public List<BOTS_TblProductUpload> lstProductUpload { get; set; }
 
         public List<BOTS_TblCommunicationSet> lstSet { get; set; }
         public List<BOTS_TblWAConfig> lstWAConfig { get; set; }
