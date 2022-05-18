@@ -336,16 +336,15 @@
 
 @* // Inactive Campaign*@
 
-<table border="1" cellpadding="3" cellspacing="3" style="margin-top:10px;" width="100%">
+<table border="1" cellpadding="3" cellspacing="3" style="margin-top:10px;border-bottom:1px solid white;" width="100%">
     <tr style="background-color:lightgrey;"><td colspan="15" style="font-weight:bold;font-size:18px;">Inactive Campaign</tr>
     @if (Model.lstCampaignInactive != null)
     {
         foreach (var item in Model.lstCampaignInactive)
         {
-            count++;
-
             if (item.InactiveType == "Inactive")
             {
+                count++;
                 <tr style="background-color:lightgrey;"><td colspan="15" style="font-weight: bold;">SET @count </td></tr>
                 <tr>
                     <td colspan="2">SMS Type -<b>@item.SMSorWA</b></td>
@@ -374,7 +373,7 @@
                     <td>@item.DLTStatus1</td>
                     <td>@item.RejectReason1</td>
                 </tr>
-                <tr>
+                <tr style="border-bottom:1px solid black;">
                     <td style="font-weight:bold;background-color:lightgreen;">Greater Than Script</td>
                     <td>@item.GreaterThanDaysScript</td>
                     <td>@item.GreaterThanDaysScriptDLT</td>
@@ -384,22 +383,24 @@
                     <td>@item.DLTStatus2</td>
                     <td>@item.RejectReason2</td>
                 </tr>
-
+                <tr style="border-left:1px solid white; border-right:1px solid white;"><td colspan="8"></td></tr>
             }
         }
     }
 </table>
 
 @* //  Only Once Inactive Campaign*@
-<table border="1" cellpadding="3" cellspacing="3" style="margin-top:10px;" width="100%">
+<table border="1" cellpadding="3" cellspacing="3" style="margin-top: 10px; border-bottom: 1px solid white;" width="100%">
     <tr style="background-color:lightgrey;"><td colspan="15" style="font-weight:bold;font-size:18px;">Only Once Inactive Campaign</tr>
     @if (Model.lstCampaignInactive != null)
     {
+        count = 0;
         foreach (var item in Model.lstCampaignInactive)
         {
-            count++;
+
             if (item.InactiveType == "Only Once Inactive")
             {
+                count++;
                 <tr style="background-color:lightgrey;"><td colspan="15" style="font-weight: bold;">SET @count </td></tr>
                 <tr>
                     <td colspan="2">SMS Type -<b>@item.SMSorWA</b></td>
@@ -418,7 +419,7 @@
                     <td>DLT Status</td>
                     <td>Reject Reason</td>
                 </tr>
-                <tr>
+                <tr style="border-bottom:1px solid black;">
                     <td style="font-weight:bold;background-color:lightgreen;">Less Than Script</td>
                     <td>@item.LessThanDaysScript</td>
                     <td>@item.LessThanDaysScriptDLT</td>
@@ -438,22 +439,24 @@
                     <td>@item.DLTStatus2</td>
                     <td>@item.RejectReason2</td>
                 </tr>
-
+                <tr style="border-left:1px solid white; border-right:1px solid white;"><td colspan="8"></td></tr>
             }
         }
     }
 </table>
 
 @* // Non Redemption Inactive Campaign*@
-<table border="1" cellpadding="3" cellspacing="3" style="margin-top:10px;" width="100%">
+<table border="1" cellpadding="3" cellspacing="3" style="margin-top: 10px; border-bottom: 1px solid white;" width="100%">
     <tr style="background-color:lightgrey;"><td colspan="15" style="font-weight:bold;font-size:18px;">Non Redemption Inactive Campaign</tr>
     @if (Model.lstCampaignInactive != null)
     {
+        count = 0;
         foreach (var item in Model.lstCampaignInactive)
         {
-            count++;
+
             if (item.InactiveType == "Non Redemption Inactive")
             {
+                count++;
                 <tr style="background-color:lightgrey;"><td colspan="15" style="font-weight: bold;">SET @count </td></tr>
                 <tr>
                     <td colspan="2">SMS Type -<b>@item.SMSorWA</b></td>
@@ -480,7 +483,7 @@
                     <td>@item.DLTStatus1</td>
                     <td>@item.RejectReason1</td>
                 </tr>
-                <tr>
+                <tr style="border-bottom:1px solid black;">
                     <td style="font-weight:bold;background-color:lightgreen;">Greater Than Script</td>
                     <td>@item.GreaterThanDaysScript</td>
                     <td>@item.GreaterThanDaysScriptDLT</td>
@@ -490,7 +493,7 @@
                     <td>@item.DLTStatus2</td>
                     <td>@item.RejectReason2</td>
                 </tr>
-
+                <tr style="border-left:1px solid white; border-right:1px solid white;"><td colspan="8"></td></tr>
             }
         }
     }
@@ -498,17 +501,19 @@
 
 
 @* // Point Expiry*@
-<table border="1" cellpadding="3" cellspacing="3" style="margin-top:10px;" width="100%">
+<table border="1" cellpadding="3" cellspacing="3" style="margin-top: 10px; border-bottom: 1px solid white;" width="100%">
     <tr style="background-color:lightgrey;"><td colspan="15" style="font-weight:bold;font-size:18px;">Point Expiry Campaign</tr>
     @if (Model.lstCampaignInactive != null)
     {
+        count = 0;
         foreach (var item in Model.lstCampaignInactive)
         {
-            count++;
+
             if (item.InactiveType == "Point Expiry")
             {
+                count++;
                 <tr style="background-color:lightgrey;"><td colspan="15" style="font-weight: bold;">SET @count </td></tr>
-                <tr>
+                <tr> 
                     <td colspan="2">SMS Type -<b>@item.SMSorWA</b></td>
                     <td colspan="2">Days -<b>@item.Days</b></td>
                     <td colspan="2">Less Than Dys - <b>@item.LessThanDays</b></td>
@@ -533,7 +538,7 @@
                     <td>@item.DLTStatus1</td>
                     <td>@item.RejectReason1</td>
                 </tr>
-                <tr>
+                <tr style="border-bottom:1px solid black;">
                     <td style="font-weight:bold;background-color:lightgreen;">Greater Than Script</td>
                     <td>@item.GreaterThanDaysScript</td>
                     <td>@item.GreaterThanDaysScriptDLT</td>
@@ -543,7 +548,7 @@
                     <td>@item.DLTStatus2</td>
                     <td>@item.RejectReason2</td>
                 </tr>
-
+                <tr style="border-left:1px solid white; border-right:1px solid white;"><td colspan="8"></td></tr>
             }
         }
     }
