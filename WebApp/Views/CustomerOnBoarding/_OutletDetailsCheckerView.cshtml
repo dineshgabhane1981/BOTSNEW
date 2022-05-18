@@ -145,8 +145,8 @@
 <table border="1" cellpadding="3" cellspacing="3" style="margin-top:10px;" width="100%">
     @foreach (var brand in Model.objRetailList)
     {
-        <tr>
-            <td colspan="8"> Category - <b>@brand.CategoryName</b></td>
+        <tr style="background-color:lightgrey;">
+            <td colspan="12" style="font-weight:bold;font-size:18px;"> Category - <b>@brand.CategoryName</b></td>
         </tr>
         if (Model.lstOutlets != null)
         {
