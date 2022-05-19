@@ -8,7 +8,7 @@ using BOTS_BL.Models.OnBoarding;
 
 namespace WebApp.ViewModel
 {
-    public class OnBoardingCheckerViewModel
+    public class TestingModuleViewModel
     {
         public BOTS_TblGroupMaster bots_TblGroupMaster { get; set; }
         public BOTS_TblDealDetails bots_TblDealDetails { get; set; }

@@ -146,7 +146,7 @@
     @foreach (var brand in Model.objRetailList)
     {
         <tr style="background-color:lightgrey;">
-            <td colspan="12" style="font-weight:bold;font-size:18px;"> Category - <b>@brand.CategoryName</b></td>
+            <td colspan="12" style="font-size:18px; font-style:italic;"> Category - <b>@brand.CategoryName</b></td>
         </tr>
         if (Model.lstOutlets != null)
         {
@@ -171,18 +171,18 @@
             if (brand.BrandId == item.BrandId)
             {
                 <tr>
-                    <td>@brand.BrandName</td>
-                    <td>@item.OutletName</td>
-                    <td>@item.AreaName</td>
-                    <td>@item.AuthorisedPerson</td>
-                    <td>@item.RegisterMobileNo</td>
-                    <td>@item.RegisterEmail</td>
-                    <td>@item.Address</td>
-                    <td>@item.Latitude</td>
-                    <td>@item.Longitude</td>
-                    <td>@item.StateName</td>
-                    <td>@item.CityName</td>
-                    <td>@item.PinCode</td>
+                    <td style="font-style: italic;">@brand.BrandName</td>
+                    <td style="font-style: italic;">@item.OutletName</td>
+                    <td style="font-style: italic;">@item.AreaName</td>
+                    <td style="font-style: italic;">@item.AuthorisedPerson</td>
+                    <td style="font-style: italic;">@item.RegisterMobileNo</td>
+                    <td style="font-style: italic;">@item.RegisterEmail</td>
+                    <td style="font-style: italic;">@item.Address</td>
+                    <td style="font-style: italic;">@item.Latitude</td>
+                    <td style="font-style: italic;">@item.Longitude</td>
+                    <td style="font-style: italic;">@item.StateName</td>
+                    <td style="font-style: italic;">@item.CityName</td>
+                    <td style="font-style: italic;">@item.PinCode</td>
                 </tr>
             }
         }
