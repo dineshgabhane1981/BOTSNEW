@@ -173,12 +173,12 @@
     </tr>
 
     <tr>
-        <td>PEID - <b> @Model.lstSMSConfig[0].PEID</b></td>
-        <td>SMS Provider - <b>@Model.lstSMSConfig[0].SMSProvider</b></td>
-        <td>Sender Id - <b>@Model.lstSMSConfig[0].SMSSenderID</b></td>
-        <td>User Name - <b>@Model.lstSMSConfig[0].SMSUsername</b></td>
-        <td>Password - <b>@Model.lstSMSConfig[0].SMSPassword</b></td>
-        <td>SMS Link - <b>@Model.lstSMSConfig[0].SMSlink</b></td>
+        <td style="font-style: italic;">PEID - <b> @Model.lstSMSConfig[0].PEID</b></td>
+        <td style="font-style: italic;">SMS Provider - <b>@Model.lstSMSConfig[0].SMSProvider</b></td>
+        <td style="font-style: italic;">Sender Id - <b>@Model.lstSMSConfig[0].SMSSenderID</b></td>
+        <td style="font-style: italic;">User Name - <b>@Model.lstSMSConfig[0].SMSUsername</b></td>
+        <td style="font-style: italic;">Password - <b>@Model.lstSMSConfig[0].SMSPassword</b></td>
+        <td style="font-style: italic;">SMS Link - <b>@Model.lstSMSConfig[0].SMSlink</b></td>
     </tr>
         if (Model.lstWAConfig != null)
         {
@@ -187,12 +187,12 @@
     </tr>
 
     <tr>
-        <td>Whatsapp Provider - <b>@Model.lstWAConfig[0].WAProvider</b></td>
-        <td>Whatsapp Number - <b>@Model.lstWAConfig[0].WANumber</b></td>
-        <td>Whatsapp Username - <b>@Model.lstWAConfig[0].WAUsername</b></td>
-        <td>Whatsapp Password - <b>@Model.lstWAConfig[0].WAPassword</b></td>
-        <td>Whatsapp Link - <b>@Model.lstWAConfig[0].WAlink</b></td>
-        <td>Token Id - <b>@Model.lstWAConfig[0].TokenId</b></td>
+        <td style="font-style: italic;">Whatsapp Provider - <b>@Model.lstWAConfig[0].WAProvider</b></td>
+        <td style="font-style: italic;">Whatsapp Number - <b>@Model.lstWAConfig[0].WANumber</b></td>
+        <td style="font-style: italic;">Whatsapp Username - <b>@Model.lstWAConfig[0].WAUsername</b></td>
+        <td style="font-style: italic;">Whatsapp Password - <b>@Model.lstWAConfig[0].WAPassword</b></td>
+        <td style="font-style: italic;">Whatsapp Link - <b>@Model.lstWAConfig[0].WAlink</b></td>
+        <td style="font-style: italic;">Token Id - <b>@Model.lstWAConfig[0].TokenId</b></td>
     </tr>
         foreach (var WA in Model.lstWAConfig)
         {
@@ -292,11 +292,11 @@
                         }
         @if (sms.MessageId != 103 && sms.MessageId != 104)
                         {
-        <td>@sms.TemplateId</td>
-        <td>@sms.TemplateName</td>
-        <td>@sms.TemplateType</td>
-        <td>@sms.SMSScript</td>
-        <td>@sms.SMSScriptDLT</td>
+        <td style="font-style: italic;">@sms.TemplateId</td>
+        <td style="font-style: italic;">@sms.TemplateName</td>
+        <td style="font-style: italic;">@sms.TemplateType</td>
+        <td style="font-style: italic;">@sms.SMSScript</td>
+        <td style="font-style: italic;">@sms.SMSScriptDLT</td>
 
                             if (sms.MessageId == 100)
                             {
@@ -326,8 +326,8 @@
                             {
         <td> @stript7</td>
                             }
-        <td>@sms.DLTStatus</td>
-        <td>@sms.RejectReason</td>
+        <td style="font-style: italic;">@sms.DLTStatus</td>
+        <td style="font-style: italic;">@sms.RejectReason</td>
                         }
     </tr>
         }
