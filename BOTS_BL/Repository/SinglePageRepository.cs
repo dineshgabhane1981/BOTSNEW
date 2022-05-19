@@ -814,7 +814,7 @@ namespace BOTS_BL.Repository
                     objItem.CustomerType = group.CustomerType;
                     objItem.GroupName = group.GroupName;
                     string grpId = Convert.ToString(group.GroupId);
-                    var discussedDate = context.BOTS_TblDiscussion.Where(y => y.GroupId == grpId && (y.CallType == 2 || y.CallType == 3)).OrderByDescending(x => x.UpdatedDate).Select(z => z.UpdatedDate).FirstOrDefault();
+                    var discussedDate = context.BOTS_TblDiscussion.Where(y => y.GroupId == grpId && (y.CallType == 3 || y.CallType == 16 || y.CallType == 17)).OrderByDescending(x => x.UpdatedDate).Select(z => z.UpdatedDate).FirstOrDefault();
                     if (discussedDate.HasValue)
                     {
                         var days = (DateTime.Today - discussedDate.Value).Days;

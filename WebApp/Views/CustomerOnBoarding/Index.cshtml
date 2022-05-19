@@ -202,13 +202,35 @@
                 })
             </script>
         }
+        @if (Model.bots_TblGroupMaster != null)
+        {
+            <div class="mb-1 card" style="padding:10px;">
+                <div style="float:left;">
+                    @if (Model.bots_TblGroupMaster.CustomerStatus == "CS" || Model.bots_TblGroupMaster.CustomerStatus == "CSUpdate")
+                    {
+                        <div> Current Status -<b> Configuration Inprogress </b></div>
+                    }
+                    else
+                    {
+                        <div> Current Status -<b> @Model.bots_TblGroupMaster.CustomerStatus </b></div>
+                    }
 
-        <div class="row mb-3 card">
+                    @if (Model.bots_TblGroupMaster.UpdatedDate.HasValue)
+                    {
+                        <div>Last Updated -<b> @Model.bots_TblGroupMaster.UpdatedDate </b></div>
+                    }
+                    else
+                    {
+                        <div>Last Updated -<b> @Model.bots_TblGroupMaster.CreatedDate </b></div>
+                    }
+                </div>
 
-
+            </div>
+        }
+        <div class="mb-3 card">
             @if (Model.bots_TblGroupMaster != null)
             {
-                if (Model.bots_TblGroupMaster.CustomerStatus == "CS" || Model.bots_TblGroupMaster.CustomerStatus == "CSUpdate")
+                if (Model.bots_TblGroupMaster.CustomerStatus == "CS" || Model.bots_TblGroupMaster.CustomerStatus == "CSUpdate" || Model.bots_TblGroupMaster.CustomerStatus == "Rejected" || Model.bots_TblGroupMaster.CustomerStatus == "Approved")
                 {
                     <div class="container-fluid pt-3 pl-3 pr-3 pb-3" id="dvCustomerDetailSection">
                         <div class="col-md-12 section-heading" data-toggle="collapse" data-target="#customerdetailsreadonly">Customer Details</div>
@@ -966,7 +988,7 @@
             LoadEditData();
         }
 
-        if ($("#hdnCustomerStatus").val() == "CS" || $("#hdnCustomerStatus").val() == "CSUpdate") {
+        if ($("#hdnCustomerStatus").val() == "CS" || $("#hdnCustomerStatus").val() == "CSUpdate" || $("#hdnCustomerStatus").val() == "Rejected" || $("#hdnCustomerStatus").val() == "Approved") {
             ShowHideSection("outletdetails");
         }
 
