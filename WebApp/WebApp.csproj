@@ -216,6 +216,7 @@
     <Compile Include="Controllers\SinglePageController.cs" />
     <Compile Include="Controllers\TelecallerController.cs" />
     <Compile Include="Controllers\TestController.cs" />
+    <Compile Include="Controllers\TestingModuleController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -234,7 +235,7 @@
     <Compile Include="ViewModel\FeedbackDashboardViewModel.cs" />
     <Compile Include="ViewModel\FeedbackGetFeedbackViewModel.cs" />
     <Compile Include="ViewModel\GroupConfigDetailsViewModel.cs" />
-    <Compile Include="ViewModel\OnBoardingCheckerViewModel.cs" />
+    <Compile Include="ViewModel\TestingModuleViewModel.cs" />
     <Compile Include="ViewModel\OnBoardingSalesViewModel.cs" />
     <Compile Include="ViewModel\OtherReportProductwiseViewModel.cs" />
     <Compile Include="ViewModel\OutletDetailsViewModel.cs" />
@@ -609,6 +610,7 @@
     <Folder Include="Content\assets\images\CustomerLogo\" />
     <Folder Include="CustomerDocuments\" />
     <Folder Include="Models\" />
+    <Folder Include="Views\TestingModule\" />
     <Folder Include="Views\testSinglepagews\" />
     <Folder Include="Views\Test\" />
   </ItemGroup>
