@@ -373,6 +373,7 @@
     <Compile Include="Repository\SalesLeadRepository.cs" />
     <Compile Include="Repository\SinglePageRepository.cs" />
     <Compile Include="Repository\TelecallerRepository.cs" />
+    <Compile Include="Repository\TestingModuleRepository.cs" />
     <Compile Include="Repository\TgtVsAchRepository.cs" />
   </ItemGroup>
   <ItemGroup>

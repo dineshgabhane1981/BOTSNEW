@@ -264,6 +264,7 @@
     <Content Include="Content\assets\images\avatars\8.jpg" />
     <Content Include="Content\assets\images\avatars\9.jpg" />
     <Content Include="Content\assets\images\Blue-Ocktopus-TLC_white.jpg" />
+    <Content Include="Content\assets\images\CustomerLogo\TEST.jpg" />
     <Content Include="Content\assets\images\dashboard.jpg" />
     <Content Include="Content\assets\images\delete.png" />
     <Content Include="Content\assets\images\details_close.png" />
@@ -456,6 +457,7 @@
     <Content Include="Views\CustomerOnBoarding\_VelocityChecksCheckerView.cshtml" />
     <Content Include="Views\CustomerOnBoarding\_BulkUploadCheckerView.cshtml" />
     <Content Include="Views\SinglePage\RenewalData.cshtml" />
+    <Content Include="Views\TestingModule\Index.cshtml" />
     <None Include="_bin_deployableAssemblies\x86\sqlcese40.dll" />
     <None Include="_bin_deployableAssemblies\x86\sqlceqp40.dll" />
     <None Include="_bin_deployableAssemblies\x86\sqlceme40.dll" />
@@ -607,10 +609,8 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Content\assets\images\CustomerLogo\" />
     <Folder Include="CustomerDocuments\" />
     <Folder Include="Models\" />
-    <Folder Include="Views\TestingModule\" />
     <Folder Include="Views\testSinglepagews\" />
     <Folder Include="Views\Test\" />
   </ItemGroup>
