@@ -1814,7 +1814,11 @@ namespace WebApp.Controllers.OnBoarding
             objData.lstSlabConfig = OBR.GetEarnRuleSlabConfig(GroupId);
             objData.lstProductUpload = OBR.GetProductUpload(GroupId);
 
+            //Bulk Upload
+            objData.BulkUploadCount = OBR.GetBulkUpload(GroupId);
+
             return View(objData);
+
 
         }
 
