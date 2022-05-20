@@ -466,7 +466,7 @@ namespace BOTS_BL.Repository
                         var objFeedback = context.Feedback_Content.Where(x => x.Id == Id && x.GroupId == GroupId).FirstOrDefault();
                         objFeedback.Text = Convert.ToString(item["Text"]);
                         objFeedback.IsDisplay = Convert.ToBoolean(item["IsDisplay"]);
-                        
+
                         objFeedback.UpdatedDate = DateTime.Now;
                         objFeedback.UpdatedBy = LoginId;
 
@@ -1207,7 +1207,7 @@ namespace BOTS_BL.Repository
                     Text = "All",
                     Value = "0"
                 });
-               
+
                 foreach (var item in salesList)
                 {
 
@@ -1456,7 +1456,7 @@ namespace BOTS_BL.Repository
                 var uniqueSource = data.GroupBy(x => x.HowToKnowAbout).Select(y => y.First()).ToList();
                 int total = 0;
                 foreach (var item in uniqueSource)
-                {                    
+                {
                     var numberOfCustomer = contextdb.feedback_FeedbackMaster.Where(x => x.HowToKnowAbout == item.HowToKnowAbout && x.AddedDate >= Frmdt && x.AddedDate < Tdt).Count();
 
                     total = total + numberOfCustomer;
@@ -1473,9 +1473,9 @@ namespace BOTS_BL.Repository
 
                     lstData.Add(objItem);
                 }
-                foreach(var item in lstData)
+                foreach (var item in lstData)
                 {
-                    item.AvgPoints = Math.Round((item.AvgPoints * 100 / total),2);
+                    item.AvgPoints = Math.Round((item.AvgPoints * 100 / total), 2);
                 }
 
             }
@@ -1499,7 +1499,7 @@ namespace BOTS_BL.Repository
                     Tdt = Convert.ToDateTime(ToDT).AddDays(1);
                 }
                 var data = contextdb.feedback_FeedbackMaster.Where(x => x.GroupId == GroupId && x.AddedDate >= Frmdt && x.AddedDate < Tdt).ToList();
-                if(!string.IsNullOrEmpty(OutletId))
+                if (!string.IsNullOrEmpty(OutletId))
                 {
                     data = data.Where(x => x.OutletId == OutletId).ToList();
                 }
@@ -1668,7 +1668,7 @@ namespace BOTS_BL.Repository
                                             outletid = result.Select(x => x.OutletId).FirstOrDefault(),
                                             howtoknow = result.Select(x => x.HowToKnowAbout).FirstOrDefault(),
                                             datetime = result.Select(x => x.AddedDate).FirstOrDefault(),
-                                            comments= result.Select(x => x.Comments).FirstOrDefault(),
+                                            comments = result.Select(x => x.Comments).FirstOrDefault(),
                                         }).FirstOrDefault();
 
                         var invoiceamt = context.TransactionMasters.Where(x => x.MobileNo == feedback.Mobilenumber && x.Datetime == today).GroupBy(x => x.MobileNo)
@@ -1711,5 +1711,20 @@ namespace BOTS_BL.Repository
             }
             return lstobjreport;
         }
+
+        public int GetFeedbackCountByGroupId(string GroupId)
+        {
+            var count = 0;
+            string connStr = CR.GetCustomerConnString(GroupId);
+            using (var contextdb = new BOTSDBContext(connStr))
+            {                 
+                count = contextdb.feedback_FeedbackMaster.Count();
+            }
+            return count;
+
+        }
+
+
+
     }
 }

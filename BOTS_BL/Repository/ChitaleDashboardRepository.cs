@@ -101,7 +101,7 @@ namespace BOTS_BL.Repository
             DashboardRank objRank = new DashboardRank();
             DataSet retVal = new DataSet();
             //SqlConnection sqlConn = new SqlConnection("Data Source=DESKTOP-JOLRHRS\\SQLEXPRESS;Initial Catalog=ChitaleLive;Integrated Security=True");
-            SqlConnection sqlConn = new SqlConnection("Data Source=3.110.77.122;Initial Catalog=ChitaleUAT;user id = sa; password=BO%Admin#LY!4@");
+            SqlConnection sqlConn = new SqlConnection("Data Source=65.0.4.176;Initial Catalog=B2BDemo;user id = Dinesh; password=Sneeti@0303");
             SqlCommand cmdReport = new SqlCommand("sp_Dashboard", sqlConn);
             SqlDataAdapter daReport = new SqlDataAdapter(cmdReport);
             using (cmdReport)

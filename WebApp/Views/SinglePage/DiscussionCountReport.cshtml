@@ -10,21 +10,21 @@
         <table cellpadding="5" cellspacing="5">
             <tr>
                 <th>Name</th>
-                <th>Total Count(MTD)</th>
-                <th>Total Count(Yesterday)</th>
-                <th>WIP Count</th>
-                <th>WIP Last 3 Days</th>
-                <th>WIP Before 3 Days</th>
+                <th style="text-align:center;">Total Count(MTD)</th>
+                <th style="text-align:center;">Total Count(Yesterday)</th>
+                <th style="text-align:center;">WIP Count</th>
+                <th style="text-align:center;">WIP Last 3 Days</th>
+                <th style="text-align:center;">WIP Before 3 Days</th>
             </tr>
             @foreach (var item in Model)
             {
                 <tr>
                     <td>@item.Name</td>
-                    <td>@item.TotalCount</td>
-                    <td>@item.TotalCountYesterday</td>
-                    <td>@item.TotalWIPCount</td>
-                    <td>@item.TotalWIPLast3Days</td>
-                    <td>@item.TotalWIPBefore3Days</td>
+                    <td style="text-align:center;" >@item.TotalCount</td>
+                    <td style="text-align:center;">@item.TotalCountYesterday</td>
+                    <td style="text-align:center;">@item.TotalWIPCount</td>
+                    <td style="text-align:center;">@item.TotalWIPLast3Days</td>
+                    <td style="text-align:center;">@item.TotalWIPBefore3Days</td>
                 </tr>
             }
         </table>

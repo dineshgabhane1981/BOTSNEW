@@ -1,11 +1,20 @@
 ﻿@using BOTS_BL.Models;
 @{
     var userDetails = (CustomerLoginDetail)Session["UserSession"];
-    var GroupId = userDetails.GroupId;
-    var roleId = userDetails.LoginType;
-    var level = userDetails.LevelIndicator;
+    string GroupId = string.Empty;
+    string roleId = string.Empty;
+    string level = string.Empty;
+    if (userDetails != null)
+    {
+        GroupId = userDetails.GroupId;
+        roleId = userDetails.LoginType;
+        level = userDetails.LevelIndicator;
+    }
 }
+@if (userDetails != null)
+{
 <div class="app-sidebar sidebar-shadow">
+    
     <div class="app-header__logo">
         <div class="logo-src"></div>
         <div class="header__pane ml-auto">
@@ -55,3 +64,4 @@
         </div>
     </div>
 </div>
+}

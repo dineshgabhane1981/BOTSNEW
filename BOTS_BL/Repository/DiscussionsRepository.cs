@@ -255,7 +255,7 @@ namespace BOTS_BL.Repository
                     var CallTypes = context.BOTS_TblCallTypes.ToList();
                     foreach (var item in CallTypes)
                     {
-                        if (Convert.ToString(item.Id) == "12" || Convert.ToString(item.Id) == "9" || Convert.ToString(item.Id) == "10")
+                        if (Convert.ToString(item.Id) == "12" || Convert.ToString(item.Id) == "9" || Convert.ToString(item.Id) == "10" || Convert.ToString(item.Id) == "18")
                         {
                             lstCallTypes.Add(new SelectListItem
                             {
@@ -663,14 +663,22 @@ namespace BOTS_BL.Repository
 
                         var FirstDay = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);                        
                         objItem.TotalCount = context.BOTS_TblDiscussion.Where(x => x.AddedBy == item.LoginId && x.AddedDate >= FirstDay).Count();
+                        var SubDiscussionCount = context.BOTS_TblSubDiscussionData.Where(x => x.UpdatedBy == item.LoginId && x.AddedDate >= FirstDay).GroupBy(y=>y.DiscussionId).Count();
+                        objItem.TotalCount = objItem.TotalCount + SubDiscussionCount;
 
                         var Yeasterday = DateTime.Today.AddDays(-2);
                         objItem.TotalCountYesterday = context.BOTS_TblDiscussion.Where(x => x.AddedBy == item.LoginId && x.AddedDate > Yeasterday && x.AddedDate <DateTime.Today).Count();
-                        
+                        var SubDiscussionYesterdayCount=context.BOTS_TblSubDiscussionData.Where(x => x.UpdatedBy == item.LoginId && x.AddedDate > Yeasterday && x.AddedDate < DateTime.Today).GroupBy(y => y.DiscussionId).Count();
+                        objItem.TotalCountYesterday = objItem.TotalCountYesterday + SubDiscussionYesterdayCount;
+
                         objItem.TotalWIPCount = context.BOTS_TblDiscussion.Where(x => x.AddedBy == item.LoginId && x.Status == "WIP").Count();
-                        
+                        //var TotalSubCount = context.BOTS_TblSubDiscussionData.Where(x => x.UpdatedBy == item.LoginId && x.Status == "WIP").GroupBy(y => y.DiscussionId).Count();
+                        //objItem.TotalWIPCount = objItem.TotalWIPCount + TotalSubCount;
+
                         var NewDate = DateTime.Today.AddDays(-3);
                         objItem.TotalWIPLast3Days = context.BOTS_TblDiscussion.Where(x => x.AddedBy == item.LoginId && x.Status == "WIP" && x.UpdatedDate >= NewDate).Count();
+
+
                         objItem.TotalWIPBefore3Days = context.BOTS_TblDiscussion.Where(x => x.AddedBy == item.LoginId && x.Status == "WIP" && x.UpdatedDate <= NewDate).Count();
                         
                         lstData.Add(objItem);

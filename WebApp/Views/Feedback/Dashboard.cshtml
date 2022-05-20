@@ -1,4 +1,5 @@
 ﻿@model  WebApp.ViewModel.FeedbackDashboardViewModel
+@using System.Globalization
 @{
     ViewBag.Title = "Dashboard";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -6,6 +7,15 @@
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@0.4.0/dist/chartjs-plugin-datalabels.min.js"></script>
 <div class="app-main__inner">
     <div class="container-fluid pt-3 pl-3 pr-3">
+        <div class="pt-3 pl-3 pr-3 pb-3 mb-3 col-md-12 col-lg-12 card">
+
+            <div style="display:flex;" class="col-md-12 col-lg-12">
+                <b>Total Count</b> -  @String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(Model.objConfig.Fees) / 2)
+                <b style="margin-left:80px;">Used Count</b> - @Model.NoOfFeedback
+                <b style="margin-left:80px;">Balance Count</b> - @String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(Model.objConfig.Fees) / 2 - (Model.NoOfFeedback))
+            </div>
+
+        </div>
         <div class="pt-3 pl-3 pr-3 pb-3 col-md-12 col-lg-12 card">
             <div style="text-align:right;">
                 <a href="@Url.Action("CreateFeedback", "Feedback")"><button type="button" class="btn btn-primary pull-right">Add/Modify Feedback</button></a>
@@ -30,7 +40,7 @@
                     * Default : Yesterday's Report
                 </div>
             </div>
-            </div>
+        </div>
 
         <div class="row" style="margin-top:10px;">
             @Html.HiddenFor(model => model.SRChart, new { @id = "hdnSRChart" })

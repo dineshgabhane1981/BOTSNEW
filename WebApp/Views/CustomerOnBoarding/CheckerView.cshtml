@@ -3,9 +3,17 @@
 @{
     ViewBag.Title = "Checker View";
     Layout = "~/Views/Shared/_OnBoardingLayout.cshtml";
-
+    //Layout = null;
     var userDetails = (CustomerLoginDetail)Session["UserSession"];
-    var roleId = userDetails.LoginType;
+    string roleId = string.Empty;
+    if (userDetails == null)
+    {
+        roleId = "Customer";
+    }
+    else
+    {
+        roleId = userDetails.LoginType;
+    }
 
 }
 
@@ -158,7 +166,7 @@
             <div>
                 <div class="container-fluid pt-3 pl-3 pr-3 pb-3" id="dvOutletDetailsSection">
                     <div class="col-md-12 section-heading" data-toggle="collapse" data-target="#OutletDetailsConfigreadonly">Outlet Details</div>
-                    <div id="OutletDetailsConfigreadonly" class="collapse show">
+                    <div id="OutletDetailsConfigreadonly" class="collapse">
                         @Html.Partial("~/Views/CustomerOnBoarding/_OutletDetailsCheckerView.cshtml", Model)
 
                     </div>
@@ -167,7 +175,7 @@
             <div>
                 <div class="container-fluid pt-3 pl-3 pr-3 pb-3" id="dvPointRuleSection">
                     <div class="col-md-12 section-heading" data-toggle="collapse" data-target="#PointRuleConfigreadonly">Point Rule </div>
-                    <div id="PointRuleConfigreadonly" class="collapse show">
+                    <div id="PointRuleConfigreadonly" class="collapse">
                         @Html.Partial("~/Views/CustomerOnBoarding/_PointRuleCheckerView.cshtml", Model)
 
                     </div>
@@ -176,7 +184,7 @@
             <div>
                 <div class="container-fluid pt-3 pl-3 pr-3 pb-3" id="dvCommunicationSection">
                     <div class="col-md-12 section-heading" data-toggle="collapse" data-target="#CommunicationConfigreadonly">Communication</div>
-                    <div id="CommunicationConfigreadonly" class="collapse show">
+                    <div id="CommunicationConfigreadonly" class="collapse">
                         @Html.Partial("~/Views/CustomerOnBoarding/_CommunicationCheckerView.cshtml", Model)
 
                     </div>
@@ -185,7 +193,7 @@
             <div>
                 <div class="container-fluid pt-3 pl-3 pr-3 pb-3" id="dvPerpetualCampaignSection">
                     <div class="col-md-12 section-heading" data-toggle="collapse" data-target="#PerpetualDetailsreadonly">Perpetual Campaigns</div>
-                    <div id="PerpetualDetailsreadonly" class="collapse show">
+                    <div id="PerpetualDetailsreadonly" class="collapse">
                         @Html.Partial("~/Views/CustomerOnBoarding/_PerpetualCampaignCheckerView.cshtml", Model)
                     </div>
                 </div>
@@ -193,7 +201,7 @@
             <div>
                 <div class="container-fluid pt-3 pl-3 pr-3 pb-3" id="dvDLCSection">
                     <div class="col-md-12 section-heading" data-toggle="collapse" data-target="#DLCreadonly">Digital Loyalty Card</div>
-                    <div id="DLCreadonly" class="collapse show">
+                    <div id="DLCreadonly" class="collapse">
                         @Html.Partial("~/Views/CustomerOnBoarding/_DLTCheckerView.cshtml", Model)
 
                     </div>
@@ -202,7 +210,7 @@
             <div>
                 <div class="container-fluid pt-3 pl-3 pr-3 pb-3" id="dvVelocityChecksSection">
                     <div class="col-md-12 section-heading" data-toggle="collapse" data-target="#VelocityChecksConfigreadonly">Velocity Checks</div>
-                    <div id="VelocityChecksConfigreadonly" class="collapse show">
+                    <div id="VelocityChecksConfigreadonly" class="collapse">
                         @Html.Partial("~/Views/CustomerOnBoarding/_VelocityChecksCheckerView.cshtml", Model)
 
                     </div>
@@ -211,7 +219,7 @@
             <div>
                 <div class="container-fluid pt-3 pl-3 pr-3 pb-3" id="dvBUSection">
                     <div class="col-md-12 section-heading" data-toggle="collapse" data-target="#BUConfigreadonly">Bulk Upload</div>
-                    <div id="BUConfigreadonly" class="collapse show">
+                    <div id="BUConfigreadonly" class="collapse">
 
 
                     </div>
@@ -220,9 +228,26 @@
             @if (roleId == "6" || roleId == "1")
             {
                 //Buttons here
+                if (Model.bots_TblGroupMaster.CustomerStatus == "Submit For Approval")
+                {
+                    <div class="container-fluid pt-3 pl-3 pr-3 pb-3">
+                        <button type="button" id="btnRejectConfig" class="btn btn-primary pull-right" style="margin-right: 10px; margin-bottom: 20px; margin-top: 10px;">Reject </button>
+                        <button type="button" id="btnApproveConfig" class="btn btn-primary pull-right" style="margin-right: 10px; margin-bottom: 20px; margin-top: 10px;">Approve </button>
+                    </div>
+                }
+                if (Model.bots_TblGroupMaster.CustomerStatus == "Approved")
+                {
+                    <div class="container-fluid pt-3 pl-3 pr-3 pb-3" style="text-align:end;">
+
+                        <span style="font-weight:bold;">Send Configuration to Customer for Approval</span> <button type="button" id="btnSentToCustomer" class="btn btn-primary pull-right" style="margin-right: 10px; margin-left: 10px; margin-top:-5px;">Send </button>
+                    </div>
+                }
+            }
+            @if (roleId == "Customer")
+            {
                 <div class="container-fluid pt-3 pl-3 pr-3 pb-3">
-                    <button type="button" id="btnRejectConfig" class="btn btn-primary pull-right" style="margin-right: 10px; margin-bottom: 20px; margin-top: 10px;">Reject </button>
-                    <button type="button" id="btnApproveConfig" class="btn btn-primary pull-right" style="margin-right: 10px; margin-bottom: 20px; margin-top: 10px;">Approve </button>
+                    <button type="button" id="btnCustomerRejectConfig" class="btn btn-primary pull-right" style="margin-right: 10px; margin-bottom: 20px; margin-top: 10px;">Reject </button>
+                    <button type="button" id="btnCustomerApproveConfig" class="btn btn-primary pull-right" style="margin-right: 10px; margin-bottom: 20px; margin-top: 10px;">Approve </button>
                 </div>
             }
             <div class="container-fluid pl-3 pr-3 pb-3" id="dvRejectSection" style="display:none;">
@@ -234,9 +259,9 @@
         </div>
     </div>
 </div>
-          
 
-        <script>
+
+<script>
     $(document).ready(function () {
         $("#btnApproveConfig").on("click", function () {
             ApproveConfiguration();
@@ -244,6 +269,10 @@
         $("#btnRejectConfig").on("click", function () {
             RejectConfiguration();
         });
+        $("#btnSentToCustomer").on("click", function () {
+            SendConfigurationToCustomer();
+        });
+
     });
     function ApproveConfiguration() {
         cuteAlert({
@@ -326,4 +355,41 @@
             });
 
     }
-        </script>
+
+    function SendConfigurationToCustomer() {
+        
+         $("#divLoader").show();
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("SendConfigurationToCustomer", "CustomerOnBoarding")',
+                data: '{groupId: ' + JSON.stringify($("#hdnGroupID").val()) + '}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (result) {
+                    if (result == true) {
+                        cuteAlert({
+                            type: "success",
+                            title: "Saved..",
+                            message: "Configuration Sent Successfully!",
+                            buttonText: "Okay"
+                        })
+                    }
+                    else {
+                        cuteAlert({
+                            type: "error",
+                            title: "Oops..",
+                            message: "There is some problem while saving data",
+                            buttonText: "Okay"
+                        })
+                    }
+                    $("#divLoader").hide();
+                },
+                error: function (result) {
+                    $("#divLoader").hide();
+                }
+            });
+    }
+
+
+
+</script>

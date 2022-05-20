@@ -274,6 +274,8 @@ namespace WebApp.Controllers
             else
                 objData.SRChart = false;
             objData.lstOutlet = RR.GetOutletList(userDetails.GroupId, userDetails.connectionString);
+            objData.NoOfFeedback = FMR.GetFeedbackCountByGroupId(userDetails.GroupId);
+            objData.objConfig= FMR.GetFeedbackByGroupId(userDetails.GroupId);
             return View(objData);
         }
 

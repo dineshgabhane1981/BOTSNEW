@@ -208,20 +208,24 @@
                 <div style="float:left;">
                     @if (Model.bots_TblGroupMaster.CustomerStatus == "CS" || Model.bots_TblGroupMaster.CustomerStatus == "CSUpdate")
                     {
-                        <div> Current Status -<b> Configuration Inprogress </b></div>
+                    <div> Current Status -<b> Configuration Inprogress </b></div>
+                    }
+                    else if(Model.bots_TblGroupMaster.CustomerStatus == "Rejected")
+                    {
+                        <div> Current Status -<b style="padding-right:50px;"> @Model.bots_TblGroupMaster.CustomerStatus  </b> Reason - <b>@Model.bots_TblGroupMaster.RejectReason</b></div>
                     }
                     else
                     {
-                        <div> Current Status -<b> @Model.bots_TblGroupMaster.CustomerStatus </b></div>
+                    <div> Current Status -<b> @Model.bots_TblGroupMaster.CustomerStatus </b></div>
                     }
 
                     @if (Model.bots_TblGroupMaster.UpdatedDate.HasValue)
                     {
-                        <div>Last Updated -<b> @Model.bots_TblGroupMaster.UpdatedDate </b></div>
+                    <div>Last Updated -<b> @Model.bots_TblGroupMaster.UpdatedDate </b></div>
                     }
                     else
                     {
-                        <div>Last Updated -<b> @Model.bots_TblGroupMaster.CreatedDate </b></div>
+                    <div>Last Updated -<b> @Model.bots_TblGroupMaster.CreatedDate </b></div>
                     }
                 </div>
 
@@ -928,7 +932,7 @@
                 }
                 @if (Model.bots_TblGroupMaster != null)
                 {
-                    if (Model.bots_TblGroupMaster.CustomerStatus != "CS" && Model.bots_TblGroupMaster.CustomerStatus != "CSUpdate")
+                    if (Model.bots_TblGroupMaster.CustomerStatus != "CS" && Model.bots_TblGroupMaster.CustomerStatus != "CSUpdate" && Model.bots_TblGroupMaster.CustomerStatus != "Rejected")
                     {
                         <button type="button" id="btnCustomerSubmit" class="btn btn-primary pull-right" onclick="return CheckValidationAndSubmit('CS');" style="margin-right:10px;">Submit</button>
                         <button type="submit" id="btnCustomerSave" class="btn btn-primary pull-right" onclick="return CheckValidationAndSubmit();" style="margin-right:10px;">Save</button>

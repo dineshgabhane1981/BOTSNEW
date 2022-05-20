@@ -12,5 +12,7 @@ namespace WebApp.ViewModel
         public Feedback_PointsAndMessages feedbackConfig {get;set;}
         public bool SRChart { get; set; }
         public List<SelectListItem> lstOutlet { get; set; }
+        public Feedback_FeedbackConfig objConfig { get; set; }
+        public int NoOfFeedback { get; set; }
     }
 }

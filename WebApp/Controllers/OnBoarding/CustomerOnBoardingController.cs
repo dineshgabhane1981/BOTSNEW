@@ -16,6 +16,7 @@ using BOTS_BL.Models.OnBoarding;
 using System.Data.OleDb;
 using System.Data;
 using System.Linq;
+using System.Net;
 
 namespace WebApp.Controllers.OnBoarding
 {
@@ -42,7 +43,7 @@ namespace WebApp.Controllers.OnBoarding
             if (!string.IsNullOrEmpty(groupId))
             {
                 var GroupDetails = OBR.GetGroupMasterDetails(groupId);
-                if (GroupDetails.CustomerStatus == "Submit For Approval")
+                if (GroupDetails.CustomerStatus == "Submit For Approval" || GroupDetails.CustomerStatus == "Approved")
                 {
                     var GroupIdOld = common.EncryptString(groupId);
                     return RedirectToAction("CheckerView", "CustomerOnBoarding", new { GroupId = GroupIdOld });
@@ -96,7 +97,7 @@ namespace WebApp.Controllers.OnBoarding
                     }
 
                     //Burn Data Fetch
-                    objData.objBurnRuleConfig = OBR.GetBurnRuleConfig(groupId);                    
+                    objData.objBurnRuleConfig = OBR.GetBurnRuleConfig(groupId);
                     if (objData.objBurnRuleConfig == null)
                     {
                         BOTS_TblBurnRuleConfig objBurnRule = new BOTS_TblBurnRuleConfig();
@@ -337,7 +338,7 @@ namespace WebApp.Controllers.OnBoarding
                 {
                     objData.bots_TblGroupMaster.UpdatedBy = userDetails.LoginId;
                     objData.bots_TblGroupMaster.CreatedDate = DateTime.Now;
-                    
+
                 }
                 else
                 {
@@ -1822,7 +1823,7 @@ namespace WebApp.Controllers.OnBoarding
             bool result = false;
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
             List<BOTS_TblProductUpload> lstBlockBurnUpload = new List<BOTS_TblProductUpload>();
-            BOTS_TblBurnRuleConfig objBurnRule = new BOTS_TblBurnRuleConfig();            
+            BOTS_TblBurnRuleConfig objBurnRule = new BOTS_TblBurnRuleConfig();
 
             JavaScriptSerializer json_serializer = new JavaScriptSerializer();
             json_serializer.MaxJsonLength = int.MaxValue;
@@ -1918,6 +1919,56 @@ namespace WebApp.Controllers.OnBoarding
             return new JsonResult() { Data = result, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
 
+        public ActionResult SendConfigurationToCustomer(string groupId)
+        {
+            bool result = false;
+            var groupDetails = OBR.GetGroupMasterDetails(groupId);
+            result = SendEmailForApproval(groupDetails);
+            return new JsonResult() { Data = result, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
+        }
+
+        public bool SendEmailForApproval(BOTS_TblGroupMaster groupDetails)
+        {
+            CommonFunctions comm = new CommonFunctions();
+            bool result = false;
+            var BaseUrl = ConfigurationManager.AppSettings["BaseUrl"].ToString();
+            var Url = BaseUrl + "CustomerOnBoarding/CheckerView?GroupId=" + comm.EncryptString(groupDetails.GroupId);
+            string from = "report@blueocktopus.in";
+            string To = groupDetails.OwnerEmailId;
+
+            //Url="<a href='"+ Url + "' target='_blank'>Click Here</a>";
+
+            using (MailMessage mail = new MailMessage(from, To))
+            {
+                StringBuilder str = new StringBuilder();
+                str.AppendLine("Dear "+ groupDetails.OwnerName + " Sir,");
+                str.AppendLine();
+                str.AppendLine("Please find below link of Loyalty Program Configuration");
+                str.AppendLine();                 
+                str.AppendLine("Please click on link to check and approve configuration : " + Url + "");
+                str.AppendLine();
+                str.AppendLine("Regards,");
+                str.AppendLine(" - BlueOcktopus Team");
+
+                mail.Subject = "Loyalty Program Configuration";
+                mail.Body = str.ToString();
+                mail.IsBodyHtml = false;
+                SmtpClient smtp = new SmtpClient();
+                smtp.Host = "smtp.zoho.com";
+                smtp.EnableSsl = true;
+                NetworkCredential networkCredential = new NetworkCredential(from, "Report@123");
+                smtp.UseDefaultCredentials = true;
+                smtp.Credentials = networkCredential;
+                smtp.Port = 587;
+                smtp.Send(mail);
+
+                result = true;
+            }
+
+
+            
+            return result;
+        }
     }
 }
 
