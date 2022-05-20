@@ -1,6 +1,6 @@
 ﻿@{
     ViewBag.Title = "CreateCampaign";
-    Layout = "~/Views/Shared/_LayoutITOPS.cshtml";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <h2>CreateCampaign</h2>
@@ -98,14 +98,18 @@
                             </table>
                         </div>
                     </div>
-                    <div class="row" style="margin: 20px;">
-                        <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
-                            Script
-                        </div>
-                        <div class="col-sm-4" style="float:left;margin-top:10px;">
-                            <textarea class="form-control" id="SMSScript" rows="7"></textarea>&nbsp;&nbsp;
-                        </div>
+                <div class="row" style="margin: 20px;">
+                    <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
+                        Script
                     </div>
+                    <div class="col-sm-4" style="float:left;margin-top:10px;">
+                        <textarea class="form-control" id="SMSScript" rows="7" maxlength="10000"></textarea>&nbsp;&nbsp;
+                    </div>
+                    <div class="col-sm-4" style="float:left;margin-top:10px;">
+                        <br><br><br><br><br><br><br><br>
+                        <span id="current">0</span>
+                    </div>
+                </div>
                     <div class="row mt-2" style="margin-top : 20px;">
                         <div id="divdaterange" class="col-md-2 col-xl-3">
                             <label>Campaign From</label>                          
@@ -429,5 +433,14 @@
         console.log(urlLink);
         window.location.href = urlLink;
     }
+    $("#SMSScript").keyup(function () {
+        //alert("Inside Keyup");
+        var characterCount = $(this).val().length,
+            current = $('#current'),
+            maximum = 0
+        theCount = maximum + characterCount;
+        //alert(theCount);
+        $("#current").text(theCount);
+    });
 </script>
 
