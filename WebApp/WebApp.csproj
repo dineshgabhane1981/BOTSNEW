@@ -264,7 +264,7 @@
     <Content Include="Content\assets\images\avatars\8.jpg" />
     <Content Include="Content\assets\images\avatars\9.jpg" />
     <Content Include="Content\assets\images\Blue-Ocktopus-TLC_white.jpg" />
-    <Content Include="Content\assets\images\CustomerLogo\TEST.jpg" />
+    <Content Include="Content\assets\images\CustomerLogo\images.png" />
     <Content Include="Content\assets\images\dashboard.jpg" />
     <Content Include="Content\assets\images\delete.png" />
     <Content Include="Content\assets\images\details_close.png" />
