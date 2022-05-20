@@ -913,20 +913,21 @@ namespace BOTS_BL.Repository
                 objbulk.DestinationTableName = "BOTS_TblBulkUpload";
 
                 objbulk.ColumnMappings.Add("GroupId", "GroupId");
-                objbulk.ColumnMappings.Add("CustId", "CustId");
+                //objbulk.ColumnMappings.Add("CustId", "CustId");
                 objbulk.ColumnMappings.Add("CustName", "CustName");
                 objbulk.ColumnMappings.Add("MobileNo", "MobileNo");
-                objbulk.ColumnMappings.Add("OutletId", "OutletId");
+                //objbulk.ColumnMappings.Add("OutletId", "OutletId");
                 objbulk.ColumnMappings.Add("Gender", "Gender");
-                objbulk.ColumnMappings.Add("Status", "Status");
+                //objbulk.ColumnMappings.Add("Status", "Status");
                 objbulk.ColumnMappings.Add("DOB", "DOB");
                 objbulk.ColumnMappings.Add("AOB", "AOB");
                 objbulk.ColumnMappings.Add("EmailId", "EmailId");
                 objbulk.ColumnMappings.Add("City", "City");
                 objbulk.ColumnMappings.Add("Area", "Area");
-                objbulk.ColumnMappings.Add("CustomerCategory", "CustomerCategory");
+                //objbulk.ColumnMappings.Add("CustomerCategory", "CustomerCategory");
                 objbulk.ColumnMappings.Add("CardNo", "CardNo");
                 objbulk.ColumnMappings.Add("Points", "Points");
+                objbulk.ColumnMappings.Add("OutletName", "OutletName");
 
                 con.Open();
                 objbulk.WriteToServer(dt);
@@ -2023,6 +2024,20 @@ namespace BOTS_BL.Repository
             }
 
             return lstData;
+        }
+
+       
+
+        public int GetBulkUpload(string GroupId)
+        {
+            int objData = 0;
+            using (var context = new CommonDBContext())
+            {
+               objData = context.BOTS_TblBulkUpload.Where(x => x.GroupId == GroupId).Count();
+                
+            }
+            
+            return objData;
         }
 
     }
