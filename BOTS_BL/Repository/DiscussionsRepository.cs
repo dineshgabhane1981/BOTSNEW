@@ -32,7 +32,7 @@ namespace BOTS_BL.Repository
                         objData = (from c in context.BOTS_TblDiscussion
                                    join ct in context.BOTS_TblCallTypes on c.CallType equals ct.Id
                                    join cld in context.CustomerLoginDetails on c.AddedBy equals cld.LoginId
-                                   where c.GroupId == GroupId && (c.CallType == 12 || c.CallType == 9 || c.CallType == 10)
+                                   where c.GroupId == GroupId && (c.CallType == 12 || c.CallType == 9 || c.CallType == 10 || c.CallType == 18)
                                    select new DiscussionDetails
                                    {
                                        Id = c.Id,
@@ -482,7 +482,7 @@ namespace BOTS_BL.Repository
                                               join gd in context.tblGroupDetails on c.GroupId equals gd.GroupId.ToString()
                                               join ct in context.BOTS_TblCallTypes on c.CallType equals ct.Id
                                               join cld in context.CustomerLoginDetails on c.AddedBy equals cld.LoginId
-                                              where c.Status == "WIP" && (c.CallType == 12 || c.CallType == 9 || c.CallType == 10)
+                                              where c.Status == "WIP" && (c.CallType == 12 || c.CallType == 9 || c.CallType == 10 || c.CallType == 18)
 
                                               select new DiscussionDetails
                                               {
@@ -508,7 +508,7 @@ namespace BOTS_BL.Repository
                                               join gd in context.tblGroupDetails on c.GroupId equals gd.GroupId.ToString()
                                               join ct in context.BOTS_TblCallTypes on c.CallType equals ct.Id
                                               join cld in context.CustomerLoginDetails on c.AddedBy equals cld.LoginId
-                                              where c.CallType == 12 || c.CallType == 9 || c.CallType == 10
+                                              where c.CallType == 12 || c.CallType == 9 || c.CallType == 10 || c.CallType == 18
 
                                               select new DiscussionDetails
                                               {
