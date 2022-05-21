@@ -1,0 +1,45 @@
+﻿
+@{
+    ViewBag.Title = "CampaignManagement";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>CampaignManagement</h2>
+<div class="app-main__inner" id="dvall">
+    <div class="container-fluid pt-3 pl-3 pr-3 pb-3">
+        <div class="mb-3 pr-3 pt-3 pl-3 card" style="padding-bottom:20px;">
+            <div>
+                <div class="row" style="margin-top : 20px;">
+                    <div class="col-sm-2">
+                        Active Campaign Details
+                    </div>
+                </div>
+                <div class="row" style="overflow-x:auto;padding-right:10px;margin-top:20px;">
+                    <table border="1" cellpadding="5" cellspacing="5">
+                        <tr>
+                            <th>Campaign ID</th>
+                            <th>Campaign Name</th>
+                            <th>Start Date</th>
+                            <th>End Date</th>
+                            <th>Status</th>
+                        </tr>
+                        @foreach (var item in Model.lstOutlets)
+                        {
+                            <tr>
+                                <td>@item.CampaignID</td>
+                                <td style="text-align:center;">--</td>
+                                <td>@item.CampaignName</td>
+                                <td>@item.StartDate</td>
+                                <td>@item.EndDate</td>
+                                <td>@item.Status</td>
+                                
+                             
+
+                            </tr>
+                        }
+                    </table>
+                </div>
+            </div>
+        </div>
+     </div>
+ </div>
