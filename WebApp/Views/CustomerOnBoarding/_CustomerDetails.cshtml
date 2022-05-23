@@ -1,7 +1,18 @@
 ﻿@model WebApp.ViewModel.OnBoardingSalesViewModel
+@using BOTS_BL.Models;
 @{
     var retailcount = Model.objRetailList.Count;
     var count = 0;
+    var userDetails = (CustomerLoginDetail)Session["UserSession"];
+    string roleId = string.Empty;
+    if (userDetails == null)
+    {
+        roleId = "Customer";
+    }
+    else
+    {
+        roleId = userDetails.LoginType;
+    }
 }
 <style>
     .row {
@@ -145,369 +156,372 @@
     }
 </style>
 
-        <table border="1" cellpadding="4" cellspacing="4" style="margin-top:10px;" width="100%">
-            <tr style="background-color:lightgrey;"><td colspan="8" style="font-weight:bold;font-size:18px;">Customer Basic Details</td></tr>
-            <tr>
-                <td style="font-style: italic; width:110px;">
-                    Legal Name
-                </td>
-                <td style="font-weight:bold;">@Model.bots_TblGroupMaster.GroupName</td>
-                <td style="font-style: italic;">
-                    Owner’s Name
-                </td>
-                <td style="font-weight:bold;">@Model.bots_TblGroupMaster.OwnerName</td>
-                <td style="font-style: italic; width: 110px;">
-                    Owner’s Mobile
-                </td>
-                <td style="font-weight:bold;">@Model.bots_TblGroupMaster.OwnerMobileNo</td>
-                <td style="font-style: italic;">
-                    Owner’s Email
-                </td>
-                <td style="font-weight:bold;">@Model.bots_TblGroupMaster.OwnerEmailId</td>
-            </tr>
-            <tr>
-                <td style="font-style: italic;">
-                    GST Document
-                </td>
-                <td style="font-weight:bold;">@Model.bots_TblGroupMaster.GroupName</td>
-                <td style="font-style: italic;">
-                    PAN Document
-                </td>
-                <td style="font-weight:bold;">@Model.bots_TblGroupMaster.OwnerName</td>
-                <td style="font-style: italic;">
-                    City
-                </td>
-                <td style="font-weight:bold;">@Model.bots_TblGroupMaster.CityName</td>
-                <td style="font-style: italic;">
-                    Other Person Name
-                </td>
-                <td style="font-weight:bold;">@Model.bots_TblGroupMaster.AnyOtherName</td>
-            </tr>
-            <tr>
-                <td style="font-style: italic;">
-                    Mobile No
-                </td>
-                <td style="font-weight:bold;">@Model.bots_TblGroupMaster.AlternateMobileNo</td>
-                <td style="font-style: italic;">
-                    Email
-                </td>
-                <td style="font-weight:bold;">@Model.bots_TblGroupMaster.AlternateEmailId</td>
-                <td style="font-style: italic;">
-                    No of Brands
-                </td>
-                <td style="font-weight:bold;">@Model.bots_TblGroupMaster.NoOfRetailCategory</td>
-                <td style="font-style: italic;">
-                    Key Account
-                </td>
-                @if (Model.bots_TblGroupMaster.IsKeyAccount == 1)
-                {
-                    <td style="font-weight:bold;">A</td>
-                }
-                @if (Model.bots_TblGroupMaster.IsKeyAccount == 2)
-                {
-                    <td style="font-weight:bold;">B</td>
-                }
-                @if (Model.bots_TblGroupMaster.IsKeyAccount == 3)
-                {
-                    <td style="font-weight:bold;">C</td>
-                }
-            </tr>
-            <tr>
-                <td style="font-style: italic;">
-                    DLC
-                </td>
-                @if (Model.bots_TblGroupMaster.IsMWP.Value)
-                {
-                    <td style="font-weight:bold;">Yes</td>
-                }
-                @if (!Model.bots_TblGroupMaster.IsMWP.Value)
-                {
-                    <td style="font-weight:bold;">No</td>
-                }
-                <td style="font-style: italic;">
-                    WhatsApp Integration
-                </td>
-                @if (Model.bots_TblGroupMaster.IsWhatsApp.Value)
-                {
-                    <td style="font-weight:bold;">Yes</td>
-                }
-                @if (!Model.bots_TblGroupMaster.IsWhatsApp.Value)
-                {
-                    <td style="font-weight:bold;">No</td>
-                }
-                <td style="font-style: italic;">
-                    WA Free Msgs
-                </td>
-                <td style="font-weight:bold;">@Model.bots_TblGroupMaster.NoOfFreeWhatsAppMsg</td>
-                <td style="font-style: italic;">
-                    WA Paid Msgs
-                </td>
-                <td style="font-weight:bold;">@Model.bots_TblGroupMaster.NoOfPaidWhatsAppMsg</td>
+<table border="1" cellpadding="4" cellspacing="4" style="margin-top:10px;" width="100%">
+    <tr style="background-color:lightgrey;"><td colspan="8" style="font-weight:bold;font-size:18px;">Customer Basic Details</td></tr>
+    <tr>
+        <td style="font-style: italic; width:110px;">
+            Legal Name
+        </td>
+        <td style="font-weight:bold;">@Model.bots_TblGroupMaster.GroupName</td>
+        <td style="font-style: italic;">
+            Owner’s Name
+        </td>
+        <td style="font-weight:bold;">@Model.bots_TblGroupMaster.OwnerName</td>
+        <td style="font-style: italic; width: 110px;">
+            Owner’s Mobile
+        </td>
+        <td style="font-weight:bold;">@Model.bots_TblGroupMaster.OwnerMobileNo</td>
+        <td style="font-style: italic;">
+            Owner’s Email
+        </td>
+        <td style="font-weight:bold;">@Model.bots_TblGroupMaster.OwnerEmailId</td>
+    </tr>
+    <tr>
+        <td style="font-style: italic;">
+            GST Document
+        </td>
+        <td style="font-weight:bold;">@Model.bots_TblGroupMaster.GroupName</td>
+        <td style="font-style: italic;">
+            PAN Document
+        </td>
+        <td style="font-weight:bold;">@Model.bots_TblGroupMaster.OwnerName</td>
+        <td style="font-style: italic;">
+            City
+        </td>
+        <td style="font-weight:bold;">@Model.bots_TblGroupMaster.CityName</td>
+        <td style="font-style: italic;">
+            Other Person Name
+        </td>
+        <td style="font-weight:bold;">@Model.bots_TblGroupMaster.AnyOtherName</td>
+    </tr>
+    <tr>
+        <td style="font-style: italic;">
+            Mobile No
+        </td>
+        <td style="font-weight:bold;">@Model.bots_TblGroupMaster.AlternateMobileNo</td>
+        <td style="font-style: italic;">
+            Email
+        </td>
+        <td style="font-weight:bold;">@Model.bots_TblGroupMaster.AlternateEmailId</td>
+        <td style="font-style: italic;">
+            No of Brands
+        </td>
+        <td style="font-weight:bold;">@Model.bots_TblGroupMaster.NoOfRetailCategory</td>
+        <td style="font-style: italic;">
+            Key Account
+        </td>
+        @if (Model.bots_TblGroupMaster.IsKeyAccount == 1)
+        {
+            <td style="font-weight:bold;">A</td>
+        }
+        @if (Model.bots_TblGroupMaster.IsKeyAccount == 2)
+        {
+            <td style="font-weight:bold;">B</td>
+        }
+        @if (Model.bots_TblGroupMaster.IsKeyAccount == 3)
+        {
+            <td style="font-weight:bold;">C</td>
+        }
+    </tr>
+    <tr>
+        <td style="font-style: italic;">
+            DLC
+        </td>
+        @if (Model.bots_TblGroupMaster.IsMWP.Value)
+        {
+            <td style="font-weight:bold;">Yes</td>
+        }
+        @if (!Model.bots_TblGroupMaster.IsMWP.Value)
+        {
+            <td style="font-weight:bold;">No</td>
+        }
+        <td style="font-style: italic;">
+            WhatsApp Integration
+        </td>
+        @if (Model.bots_TblGroupMaster.IsWhatsApp.Value)
+        {
+            <td style="font-weight:bold;">Yes</td>
+        }
+        @if (!Model.bots_TblGroupMaster.IsWhatsApp.Value)
+        {
+            <td style="font-weight:bold;">No</td>
+        }
+        <td style="font-style: italic;">
+            WA Free Msgs
+        </td>
+        <td style="font-weight:bold;">@Model.bots_TblGroupMaster.NoOfFreeWhatsAppMsg</td>
+        <td style="font-style: italic;">
+            WA Paid Msgs
+        </td>
+        <td style="font-weight:bold;">@Model.bots_TblGroupMaster.NoOfPaidWhatsAppMsg</td>
 
-            </tr>
-            <tr>
-                <td style="font-style: italic;">
-                    SMS Free Msgs
-                </td>
-                <td style="font-weight:bold;">@Model.bots_TblGroupMaster.NoOfFreeSMS</td>
-                <td style="font-style: italic;">
-                    SMS Paid Msgs
-                </td>
-                <td style="font-weight:bold;">@Model.bots_TblGroupMaster.NoOfPaidSMS</td>
-                <td style="font-style: italic;">
-                    Mobile App
-                </td>
-                @if (Model.bots_TblGroupMaster.IsMobileApp == "1")
-                {
-                    <td style="font-weight:bold;">Yes</td>
-                }
-                @if (Model.bots_TblGroupMaster.IsMobileApp == "0")
-                {
-                    <td style="font-weight:bold;">No</td>
-                }
-                @if (Model.bots_TblGroupMaster.IsMobileApp == null)
-                {
-                    <td style="font-weight:bold;">No</td>
-                }
+    </tr>
+    <tr>
+        <td style="font-style: italic;">
+            SMS Free Msgs
+        </td>
+        <td style="font-weight:bold;">@Model.bots_TblGroupMaster.NoOfFreeSMS</td>
+        <td style="font-style: italic;">
+            SMS Paid Msgs
+        </td>
+        <td style="font-weight:bold;">@Model.bots_TblGroupMaster.NoOfPaidSMS</td>
+        <td style="font-style: italic;">
+            Mobile App
+        </td>
+        @if (Model.bots_TblGroupMaster.IsMobileApp == "1")
+        {
+            <td style="font-weight:bold;">Yes</td>
+        }
+        @if (Model.bots_TblGroupMaster.IsMobileApp == "0")
+        {
+            <td style="font-weight:bold;">No</td>
+        }
+        @if (Model.bots_TblGroupMaster.IsMobileApp == null)
+        {
+            <td style="font-weight:bold;">No</td>
+        }
 
-                <td style="font-style: italic;">
-                    Mobile App Description
-                </td>
+        <td style="font-style: italic;">
+            Mobile App Description
+        </td>
 
-                <td style="font-weight:bold;">@Model.bots_TblGroupMaster.MobileAppDescription</td>
-            </tr>
+        <td style="font-weight:bold;">@Model.bots_TblGroupMaster.MobileAppDescription</td>
+    </tr>
 
-            <tr>
-                <td style="font-style: italic;">
-                    Existing Loyalty
-                </td>
-                <td style="font-weight:bold;">@Model.bots_TblGroupMaster.IsExistingLoyalty</td>
-                <td style="font-style: italic;">
-                    Sales Model Type
-                </td>
-                <td style="font-weight:bold;">@Model.bots_TblGroupMaster.SalesModelType</td>
-
-
-            </tr>
+    <tr>
+        <td style="font-style: italic;">
+            Existing Loyalty
+        </td>
+        <td style="font-weight:bold;">@Model.bots_TblGroupMaster.IsExistingLoyalty</td>
+        <td style="font-style: italic;">
+            Sales Model Type
+        </td>
+        <td style="font-weight:bold;">@Model.bots_TblGroupMaster.SalesModelType</td>
 
 
-            <tr style="background-color:lightgrey;"><td colspan="8" style="font-weight: bold; font-size: 18px;">Retail Category Details</td></tr>
+    </tr>
 
-            @foreach (var item in Model.objRetailList)
+
+    <tr style="background-color:lightgrey;"><td colspan="8" style="font-weight: bold; font-size: 18px;">Retail Category Details</td></tr>
+
+    @foreach (var item in Model.objRetailList)
+    {
+        count++;
+        <tr>
+            <td style="font-style: italic;">
+                Retail Category
+            </td>
+            <td style="font-weight:bold;">@item.CategoryName</td>
+            <td style="font-style: italic;">
+                Retail / Brand Name
+            </td>
+            <td style="font-weight:bold;">@item.BrandName</td>
+            <td style="font-style: italic;">
+                Total Outlets
+            </td>
+            <td style="font-weight:bold;">@item.NoOfOutlets</td>
+            <td style="font-style: italic;">
+                Enrolled Outlets
+            </td>
+            <td style="font-weight:bold;">@item.NoOfEnrolled</td>
+        </tr>
+        <tr>
+            <td style="font-style: italic;">
+                BO Product
+            </td>
+            @if (item.BOProduct == "1")
             {
-                count++;
-                <tr>
-                    <td style="font-style: italic;">
-                        Retail Category
-                    </td>
-                    <td style="font-weight:bold;">@item.CategoryName</td>
-                    <td style="font-style: italic;">
-                        Retail / Brand Name
-                    </td>
-                    <td style="font-weight:bold;">@item.BrandName</td>
-                    <td style="font-style: italic;">
-                        Total Outlets
-                    </td>
-                    <td style="font-weight:bold;">@item.NoOfOutlets</td>
-                    <td style="font-style: italic;">
-                        Enrolled Outlets
-                    </td>
-                    <td style="font-weight:bold;">@item.NoOfEnrolled</td>
-                </tr>
-                <tr>
-                    <td style="font-style: italic;">
-                        BO Product
-                    </td>
-                    @if (item.BOProduct == "1")
-                    {
-                        <td style="font-weight:bold;">Octa Plus</td>
-                    }
-                    @if (item.BOProduct == "2")
-                    {
-                        <td style="font-weight:bold;">Octa XS</td>
-                    }
-
-                    <td style="font-style: italic;">
-                        Billing Partner
-                    </td>
-                    <td style="font-weight:bold;">@item.BillingPartnerName</td>
-                    <td style="font-style: italic;">
-                        Billing Product
-                    </td>
-                    <td style="font-weight:bold;">@item.BillingProductName</td>
-
-                    <td colspan="2"></td>
-
-                </tr>
-                if (count != retailcount)
-                {
-                    <tr><td colspan="8" style="font-weight:bold;"></td></tr>
-                }
+                <td style="font-weight:bold;">Octa Plus</td>
+            }
+            @if (item.BOProduct == "2")
+            {
+                <td style="font-weight:bold;">Octa XS</td>
             }
 
-            <tr style="background-color:lightgrey;"><td colspan="8" style="font-weight: bold; font-size: 18px;">Assignment Details</td></tr>
-            <tr>
-                <td style="font-style: italic;">
-                    Sourced By
-                </td>
-                <td style="font-weight:bold;">@Model.bots_TblGroupMaster.SourceByName</td>
-                <td style="font-style: italic;">
-                    Assigned CS
-                </td>
-                <td style="font-weight:bold;">@Model.bots_TblGroupMaster.AssignedCSName</td>
-                <td style="font-style: italic;">
-                    Source Type
-                </td>
-                <td style="font-weight:bold;">@Model.bots_TblGroupMaster.SourceTypeName</td>
-                <td style="font-style: italic;">
-                    Referred Name
-                </td>
-                <td style="font-weight:bold;">@Model.bots_TblGroupMaster.ReferredName</td>
-            </tr>
-            <tr>
-                <td style="font-style: italic;">
-                    Comments
-                </td>
-                <td style="font-weight:bold;">@Model.bots_TblGroupMaster.Comments</td>
-                <td colspan="6"></td>
+            <td style="font-style: italic;">
+                Billing Partner
+            </td>
+            <td style="font-weight:bold;">@item.BillingPartnerName</td>
+            <td style="font-style: italic;">
+                Billing Product
+            </td>
+            <td style="font-weight:bold;">@item.BillingProductName</td>
 
-            </tr>
+            <td colspan="2"></td>
 
+        </tr>
+        if (count != retailcount)
+        {
+            <tr><td colspan="8" style="font-weight:bold;"></td></tr>
+        }
+    }
 
-            <tr style="background-color:lightgrey;"><td colspan="8" style="font-weight: bold; font-size: 18px;">Deal Details</td></tr>
-            <tr>
-                <td style="font-style: italic;">
-                    Loyalty Fees
-                </td>
-                <td style="font-weight:bold;">@Model.bots_TblDealDetails.LoyaltyFees</td>
-                <td style="font-style: italic;">
-                    WA Paid Pack Fees
-                </td>
-                <td style="font-weight:bold;">@Model.bots_TblDealDetails.WAPaidPackFees</td>
-                <td style="font-style: italic;">
-                    SMS Paid Pack Fees
-                </td>
-                <td style="font-weight:bold;">@Model.bots_TblDealDetails.SMSPaidPackFees</td>
-                <td style="font-style: italic;">
-                    Ecomm Integration
-                </td>
-                <td style="font-weight:bold;">@Model.bots_TblDealDetails.EcommIntegration</td>
-            </tr>
-            <tr>
-                <td style="font-style: italic;">
-                    Any Other Fees
-                </td>
-                <td style="font-weight:bold;">@Model.bots_TblDealDetails.AnyOtherFees</td>
-                <td style="font-style: italic;">
-                    Description
-                </td>
-                <td style="font-weight:bold;">@Model.bots_TblDealDetails.AnyOtherFeesDesc</td>
-                <td style="font-style: italic;">
-                    Total Fees (A)
-                </td>
-                <td style="font-weight:bold;">@Model.bots_TblDealDetails.TotalFeesA</td>
-                <td style="font-style: italic;">
-                    Payment Frequency
-                </td>
-                @if (Model.bots_TblDealDetails.PaymentFrequency == "1")
-                {
-                    <td style="font-weight:bold;">Single</td>
-                }
-                @if (Model.bots_TblDealDetails.PaymentFrequency == "2")
-                {
-                    <td style="font-weight:bold;">Installments</td>
-                }
-            </tr>
-            <tr>
-                <td style="font-style: italic;">
-                    GST
-                </td>
-                @if (Model.bots_TblDealDetails.GST == 1)
-                {
-                    <td style="font-weight:bold;">CGST/SGST</td>
-                }
-                @if (Model.bots_TblDealDetails.GST == 2)
-                {
-                    <td style="font-weight:bold;">IGST</td>
-                }
-                @if (Model.bots_TblDealDetails.GST == 3)
-                {
-                    <td style="font-weight:bold;">No</td>
-                }
-                @if (Model.bots_TblDealDetails.GST == 0)
-                {
-                    <td style="font-weight:bold;">No</td>
-                }
-                <td style="font-style: italic;">
-                    GST Rate
-                </td>
-                <td style="font-weight:bold;">@Model.bots_TblDealDetails.GSTRate</td>
-                <td style="font-style: italic;">
-                    Total Fees (B)
-                </td>
-                <td style="font-weight:bold;">@Model.bots_TblDealDetails.TotalFeesB</td>
-                <td style="font-style: italic;">
-                    Advance Amount
-                </td>
-                <td style="font-weight:bold;">@Model.bots_TblDealDetails.AdvanceAmount</td>
-            </tr>
-            <tr>
-                <td style="font-style: italic;">
-                    Payment Mode
-                </td>
-                <td style="font-weight:bold;">@Model.bots_TblDealDetails.PaymentMode</td>
-                <td style="font-style: italic;">
-                    Payment Status
-                </td>
-                <td style="font-weight:bold;">@Model.bots_TblDealDetails.PaymentStatus</td>
-                <td style="font-style: italic;">
-                    Amount Received
-                </td>
-                <td style="font-weight:bold;">@Model.bots_TblDealDetails.AmountReceived</td>
-                <td style="font-style: italic;">
-                    TDS Deducted
-                </td>
-                <td style="font-weight:bold;">@Model.bots_TblDealDetails.TDSDeducted</td>
-            </tr>
-            <tr>
-                <td style="font-style: italic;">
-                    ASF
-                </td>
-                <td style="font-weight:bold;">@Model.bots_TblDealDetails.ASF</td>
-                <td style="font-style: italic;">
-                    ASF Percentage
-                </td>
-                <td style="font-weight:bold;">@Model.bots_TblDealDetails.ASFPercentage</td>
-            </tr>
+    <tr style="background-color:lightgrey;"><td colspan="8" style="font-weight: bold; font-size: 18px;">Assignment Details</td></tr>
+    <tr>
+        <td style="font-style: italic;">
+            Sourced By
+        </td>
+        <td style="font-weight:bold;">@Model.bots_TblGroupMaster.SourceByName</td>
+        <td style="font-style: italic;">
+            Assigned CS
+        </td>
+        <td style="font-weight:bold;">@Model.bots_TblGroupMaster.AssignedCSName</td>
+        <td style="font-style: italic;">
+            Source Type
+        </td>
+        <td style="font-weight:bold;">@Model.bots_TblGroupMaster.SourceTypeName</td>
+        <td style="font-style: italic;">
+            Referred Name
+        </td>
+        <td style="font-weight:bold;">@Model.bots_TblGroupMaster.ReferredName</td>
+    </tr>
+    <tr>
+        <td style="font-style: italic;">
+            Comments
+        </td>
+        <td style="font-weight:bold;">@Model.bots_TblGroupMaster.Comments</td>
+        <td colspan="6"></td>
 
-            <tr style="background-color:lightgrey;"><td colspan="8" style="font-weight: bold; font-size: 18px;">Payment Details</td></tr>
-            <tr>
-                <td style="font-style: italic;">
-                    Amount Balance
-                </td>
-                <td style="font-weight:bold;">@Model.bots_TblPaymentDetails.AmountBalance</td>
-                <td>
-                </td>
+    </tr>
 
-                <td colspan="5">
-                </td>
-            </tr>
-
-            @if (Model.objInstallmentList != null)
+    @if (roleId != "Customer")
+    {
+        <tr style="background-color:lightgrey;"><td colspan="8" style="font-weight: bold; font-size: 18px;">Deal Details</td></tr>
+        <tr>
+            <td style="font-style: italic;">
+                Loyalty Fees
+            </td>
+            <td style="font-weight:bold;">@Model.bots_TblDealDetails.LoyaltyFees</td>
+            <td style="font-style: italic;">
+                WA Paid Pack Fees
+            </td>
+            <td style="font-weight:bold;">@Model.bots_TblDealDetails.WAPaidPackFees</td>
+            <td style="font-style: italic;">
+                SMS Paid Pack Fees
+            </td>
+            <td style="font-weight:bold;">@Model.bots_TblDealDetails.SMSPaidPackFees</td>
+            <td style="font-style: italic;">
+                Ecomm Integration
+            </td>
+            <td style="font-weight:bold;">@Model.bots_TblDealDetails.EcommIntegration</td>
+        </tr>
+        <tr>
+            <td style="font-style: italic;">
+                Any Other Fees
+            </td>
+            <td style="font-weight:bold;">@Model.bots_TblDealDetails.AnyOtherFees</td>
+            <td style="font-style: italic;">
+                Description
+            </td>
+            <td style="font-weight:bold;">@Model.bots_TblDealDetails.AnyOtherFeesDesc</td>
+            <td style="font-style: italic;">
+                Total Fees (A)
+            </td>
+            <td style="font-weight:bold;">@Model.bots_TblDealDetails.TotalFeesA</td>
+            <td style="font-style: italic;">
+                Payment Frequency
+            </td>
+            @if (Model.bots_TblDealDetails.PaymentFrequency == "1")
             {
-                foreach (var item in Model.objInstallmentList)
-                {
-                    <tr>
-                        <td style="font-style: italic;">
-                            Installment @item.Installment
-                        </td>
-                        <td style="font-weight:bold;">@item.PaymentAmount</td>
-                        <td style="font-weight:bold;">
-                            @item.PaymentDate.ToString("dd/MM/yyyy")
-                        </td>
-                        <td colspan="5"></td>
-                    </tr>
-                }
+                <td style="font-weight:bold;">Single</td>
             }
-        </table>
-  
+            @if (Model.bots_TblDealDetails.PaymentFrequency == "2")
+            {
+                <td style="font-weight:bold;">Installments</td>
+            }
+        </tr>
+        <tr>
+            <td style="font-style: italic;">
+                GST
+            </td>
+            @if (Model.bots_TblDealDetails.GST == 1)
+            {
+                <td style="font-weight:bold;">CGST/SGST</td>
+            }
+            @if (Model.bots_TblDealDetails.GST == 2)
+            {
+                <td style="font-weight:bold;">IGST</td>
+            }
+            @if (Model.bots_TblDealDetails.GST == 3)
+            {
+                <td style="font-weight:bold;">No</td>
+            }
+            @if (Model.bots_TblDealDetails.GST == 0)
+            {
+                <td style="font-weight:bold;">No</td>
+            }
+            <td style="font-style: italic;">
+                GST Rate
+            </td>
+            <td style="font-weight:bold;">@Model.bots_TblDealDetails.GSTRate</td>
+            <td style="font-style: italic;">
+                Total Fees (B)
+            </td>
+            <td style="font-weight:bold;">@Model.bots_TblDealDetails.TotalFeesB</td>
+            <td style="font-style: italic;">
+                Advance Amount
+            </td>
+            <td style="font-weight:bold;">@Model.bots_TblDealDetails.AdvanceAmount</td>
+        </tr>
+        <tr>
+            <td style="font-style: italic;">
+                Payment Mode
+            </td>
+            <td style="font-weight:bold;">@Model.bots_TblDealDetails.PaymentMode</td>
+            <td style="font-style: italic;">
+                Payment Status
+            </td>
+            <td style="font-weight:bold;">@Model.bots_TblDealDetails.PaymentStatus</td>
+            <td style="font-style: italic;">
+                Amount Received
+            </td>
+            <td style="font-weight:bold;">@Model.bots_TblDealDetails.AmountReceived</td>
+            <td style="font-style: italic;">
+                TDS Deducted
+            </td>
+            <td style="font-weight:bold;">@Model.bots_TblDealDetails.TDSDeducted</td>
+        </tr>
+        <tr>
+            <td style="font-style: italic;">
+                ASF
+            </td>
+            <td style="font-weight:bold;">@Model.bots_TblDealDetails.ASF</td>
+            <td style="font-style: italic;">
+                ASF Percentage
+            </td>
+            <td style="font-weight:bold;">@Model.bots_TblDealDetails.ASFPercentage</td>
+        </tr>
+
+        <tr style="background-color:lightgrey;"><td colspan="8" style="font-weight: bold; font-size: 18px;">Payment Details</td></tr>
+        <tr>
+            <td style="font-style: italic;">
+                Amount Balance
+            </td>
+            <td style="font-weight:bold;">@Model.bots_TblPaymentDetails.AmountBalance</td>
+            <td>
+            </td>
+
+            <td colspan="5">
+            </td>
+        </tr>
+
+        if (Model.objInstallmentList != null)
+        {
+            foreach (var item in Model.objInstallmentList)
+            {
+                <tr>
+                    <td style="font-style: italic;">
+                        Installment @item.Installment
+                    </td>
+                    <td style="font-weight:bold;">@item.PaymentAmount</td>
+                    <td style="font-weight:bold;">
+                        @item.PaymentDate.ToString("dd/MM/yyyy")
+                    </td>
+                    <td colspan="5"></td>
+                </tr>
+            }
+        }
+
+    }
+
+</table>

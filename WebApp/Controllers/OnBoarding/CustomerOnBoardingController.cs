@@ -30,9 +30,12 @@ namespace WebApp.Controllers.OnBoarding
         public ActionResult Index(string groupId, string LeadId)
         {
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
-            if (userDetails.LoginType == "11")
+            if (userDetails != null)
             {
-                return RedirectToAction("DLTView", "CustomerOnBoarding", new { GroupId = groupId });
+                if (userDetails.LoginType == "11")
+                {
+                    return RedirectToAction("DLTView", "CustomerOnBoarding", new { GroupId = groupId });
+                }
             }
             CommonFunctions common = new CommonFunctions();
             if (!string.IsNullOrEmpty(groupId))
@@ -43,12 +46,11 @@ namespace WebApp.Controllers.OnBoarding
             if (!string.IsNullOrEmpty(groupId))
             {
                 var GroupDetails = OBR.GetGroupMasterDetails(groupId);
-                if (GroupDetails.CustomerStatus == "Submit For Approval" || GroupDetails.CustomerStatus == "Approved")
+                if (GroupDetails.CustomerStatus == "Submit For Approval" || GroupDetails.CustomerStatus == "Approved" || GroupDetails.CustomerStatus == "Customer Approval")
                 {
                     var GroupIdOld = common.EncryptString(groupId);
                     return RedirectToAction("CheckerView", "CustomerOnBoarding", new { GroupId = GroupIdOld });
                 }
-
             }
             JavaScriptSerializer json_serializer = new JavaScriptSerializer();
             OnBoardingSalesViewModel objData = new OnBoardingSalesViewModel();
@@ -1915,11 +1917,16 @@ namespace WebApp.Controllers.OnBoarding
             result = OBR.SendForApproval(GroupId, userDetails.LoginId);
             return new JsonResult() { Data = result, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
-        public ActionResult UpdateConfigurationStatus(string groupId, string status, string reason)
+        public ActionResult UpdateConfigurationStatus(string groupId, string status, string reason, string ownermobileno)
         {
             bool result = false;
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
-            result = OBR.UpdateConfigurationStatus(groupId, status, userDetails.LoginId, reason);
+            var loginId = ownermobileno;
+            if(userDetails!=null)
+            {
+                loginId = userDetails.LoginId;
+            }
+            result = OBR.UpdateConfigurationStatus(groupId, status, loginId, reason);
             return new JsonResult() { Data = result, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
 
@@ -1957,8 +1964,10 @@ namespace WebApp.Controllers.OnBoarding
                 str.AppendLine(" - BlueOcktopus Team");
 
                 mail.Subject = "Loyalty Program Configuration";
+                mail.SubjectEncoding = System.Text.Encoding.Default;
                 mail.Body = str.ToString();
                 mail.IsBodyHtml = false;
+                mail.BodyEncoding = System.Text.Encoding.GetEncoding("utf-8");
                 SmtpClient smtp = new SmtpClient();
                 smtp.Host = "smtp.zoho.com";
                 smtp.EnableSsl = true;
@@ -1974,6 +1983,18 @@ namespace WebApp.Controllers.OnBoarding
 
             
             return result;
+        }
+        
+        public ActionResult CustomerApprovalConfiguration(string groupId,string custMobileNo)
+        {
+            bool result = false;
+            var added = OBR.UpdateConfigurationStatus(groupId, "Approved By Customer", custMobileNo, "");
+            if(added)
+            {
+                //Create Database
+                result = OBR.CreateCustomerDatabase(groupId);
+            }
+            return new JsonResult() { Data = result, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };            
         }
     }
 }

@@ -1976,7 +1976,7 @@ namespace BOTS_BL.Repository
                 {
                     var oldData = context.BOTS_TblGroupMaster.Where(x => x.GroupId == GroupId).FirstOrDefault();
                     oldData.CustomerStatus = Status;
-                    if (Status == "Rejected")
+                    if (Status == "Rejected" || Status == "Rejected By Customer")
                     {
                         oldData.RejectReason = RejectReason;
                     }
@@ -2025,9 +2025,7 @@ namespace BOTS_BL.Repository
 
             return lstData;
         }
-
-       
-
+        
         public int GetBulkUpload(string GroupId)
         {
             int objData = 0;
@@ -2040,5 +2038,37 @@ namespace BOTS_BL.Repository
             return objData;
         }
 
+        public bool CreateCustomerDatabase(string GroupId)
+        {
+            bool status = false;
+            
+            var connStr = ConfigurationManager.ConnectionStrings["CommonDBContext"].ToString();
+            using (var context = new CommonDBContext())
+            {
+                var groupDetails = context.BOTS_TblGroupMaster.Where(x => x.GroupId == GroupId).FirstOrDefault();
+                var DBName = groupDetails.GroupName.Replace(" ", "");
+                SqlConnection _Con = new SqlConnection(connStr);
+                string CreateDatabaseScript = "CREATE DATABASE " + DBName + " ; ";
+                SqlCommand command = new SqlCommand(CreateDatabaseScript, _Con);
+                try
+                {
+                    _Con.Open();
+                    command.ExecuteNonQuery();
+                    status = true;
+                }
+                catch (System.Exception ex)
+                {
+                    newexception.AddException(ex, "CreateCustomerDatabase");
+                }
+                finally
+                {
+                    if (_Con.State == ConnectionState.Open)
+                    {
+                        _Con.Close();
+                    }
+                }
+            }
+            return status;
+        }
     }
 }

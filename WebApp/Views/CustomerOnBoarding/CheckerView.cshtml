@@ -160,6 +160,7 @@
         </div>
         <div class="row mb-3 card" style="margin-left:5px;">
             @Html.HiddenFor(model => model.bots_TblGroupMaster.GroupId, new { @id = "hdnGroupID" })
+            @Html.HiddenFor(model => model.bots_TblGroupMaster.OwnerMobileNo, new { @id = "hdnOwnerMobileNo" })
             <div class="container-fluid pt-3 pl-3 pr-3 pb-3" id="dvCustomerDetailSection">
                 <div class="col-md-12 section-heading" data-toggle="collapse" data-target="#customerdetailsreadonly">Customer Details</div>
                 <div id="customerdetailsreadonly" class="collapse show">
@@ -258,7 +259,7 @@
                 }
 
             }
-            @if (roleId == "Customer")
+            @if (roleId == "Customer" && Model.bots_TblGroupMaster.CustomerStatus == "Customer Approval")
             {
                 <div class="container-fluid pt-3 pl-3 pr-3 pb-3">
                     <button type="button" id="btnCustomerRejectConfig" class="btn btn-primary pull-right" style="margin-right: 10px; margin-bottom: 20px; margin-top: 10px;">Reject </button>
@@ -270,6 +271,12 @@
                 <textarea id="txtRejectConfig" rows="6" cols="60" class="input150"></textarea>
                 <button type="button" id="btnSubmitConfig" onclick="SubmitRejectConfig();" class="btn btn-primary" style="margin-left: 20px; margin-bottom:25px;">Submit</button>
                 <button type="button" id="btnCancelConfig" onclick="CancelRejectConfig();" class="btn btn-primary" style="margin-left: 20px; margin-bottom:25px;">Cancel</button><br />
+            </div>
+            <div class="container-fluid pl-3 pr-3 pb-3" id="dvCustRejectSection" style="display:none;">
+                Reject Reason <br />
+                <textarea id="txtCustRejectConfig" rows="6" cols="60" class="input150"></textarea>
+                <button type="button" id="btnCustSubmitConfig" onclick="SubmitCustRejectConfig();" class="btn btn-primary" style="margin-left: 20px; margin-bottom:25px;">Submit</button>
+                <button type="button" id="btnCustCancelConfig" onclick="CancelCustRejectConfig();" class="btn btn-primary" style="margin-left: 20px; margin-bottom:25px;">Cancel</button><br />
             </div>
         </div>
     </div>
@@ -287,8 +294,15 @@
         $("#btnSentToCustomer").on("click", function () {
             SendConfigurationToCustomer();
         });
+        $("#btnCustomerRejectConfig").on("click", function () {
+            CustomerRejectConfiguration();
+        });
+        $("#btnCustomerApproveConfig").on("click", function () {
+            CustomerApproveConfiguration();
+        });
 
     });
+
     function ApproveConfiguration() {
         cuteAlert({
             type: "question",
@@ -299,14 +313,24 @@
         }).then((e) => {
             if (e == ("confirm")) {
                 $("#divLoader").show();
-                UpdateConfigurationStatus($("#hdnGroupID").val(), "Approved", $("#txtRejectConfig").val());
+                UpdateConfigurationStatus($("#hdnGroupID").val(), "Approved", $("#txtRejectConfig").val(),"");
                 $("#divLoader").hide();
             }
         })
     }
+
     function RejectConfiguration() {
         $("#dvRejectSection").show(1000);
     }
+
+    function CustomerRejectConfiguration() {
+        $("#dvCustRejectSection").show(1000);
+    }
+
+    function CancelCustRejectConfig() {
+        $("#dvCustRejectSection").hide(1000);
+    }
+
     function SubmitRejectConfig() {
         if ($("#txtRejectConfig").val() == "") {
             cuteAlert({
@@ -320,29 +344,90 @@
         cuteAlert({
             type: "question",
             title: "Are you sure?",
-            message: "Do you want to submit configuration for Approval?",
+            message: "Do you want to reject configuration?",
             confirmText: "Yes",
             cancelText: "No"
         }).then((e) => {
             if (e == ("confirm")) {
                 $("#divLoader").show();
-                UpdateConfigurationStatus($("#hdnGroupID").val(), "Rejected", $("#txtRejectConfig").val());
+                UpdateConfigurationStatus($("#hdnGroupID").val(), "Rejected", $("#txtRejectConfig").val(),"");
                 $("#dvRejectSection").hide(1000);
                 $("#divLoader").hide();
             }
         })
     }
 
+    function SubmitCustRejectConfig() {
+        if ($("#txtCustRejectConfig").val() == "") {
+            cuteAlert({
+                type: "error",
+                title: "Oops..",
+                message: "Please enter Rejection Reason",
+                buttonText: "Okay"
+            })
+            return false;
+        }
+        cuteAlert({
+            type: "question",
+            title: "Are you sure?",
+            message: "Do you want to reject configuration?",
+            confirmText: "Yes",
+            cancelText: "No"
+        }).then((e) => {
+            if (e == ("confirm")) {
+                $("#divLoader").show();
+                UpdateConfigurationStatus($("#hdnGroupID").val(), "Rejected By Customer", $("#txtCustRejectConfig").val(), $("#hdnOwnerMobileNo").val());
+                $("#dvRejectSection").hide(1000);
+                $("#divLoader").hide();
+            }
+        })
+    }
+
+    function CustomerApproveConfiguration() {
+        $("#divLoader").show();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("CustomerApprovalConfiguration", "CustomerOnBoarding")',
+            data: '{groupId: ' + JSON.stringify($("#hdnGroupID").val()) + ',custMobileNo: ' + JSON.stringify($("#hdnOwnerMobileNo").val()) + '}',
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (result) {
+                if (result == true) {
+                    cuteAlert({
+                        type: "success",
+                        title: "Saved..",
+                        message: "Thanks for Approving configuration",
+                        buttonText: "Okay"
+                    })
+                }
+                else {
+                    cuteAlert({
+                        type: "error",
+                        title: "Oops..",
+                        message: "There is some problem while Approving configuration",
+                        buttonText: "Okay"
+                    })
+                }
+                $("#divLoader").hide();
+            },
+            error: function (result) {
+                $("#divLoader").hide();
+            }
+        });
+    }
+
+
+
     function CancelRejectConfig() {
         $("#dvRejectSection").hide(1000);
     }
 
-    function UpdateConfigurationStatus(groupId, status, reason) {
+    function UpdateConfigurationStatus(groupId, status, reason, OwnerMobileNo) {
          $("#divLoader").show();
             $.ajax({
                 type: "POST",
                 url: '@Url.Action("UpdateConfigurationStatus", "CustomerOnBoarding")',
-                data: '{groupId: ' + JSON.stringify(groupId) + ',status: ' + JSON.stringify(status) + ',reason: ' + JSON.stringify(reason) + '}',
+                data: '{groupId: ' + JSON.stringify(groupId) + ',status: ' + JSON.stringify(status) + ',reason: ' + JSON.stringify(reason) + ',ownermobileno: ' + JSON.stringify(OwnerMobileNo) + '}',
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
                 success: function (result) {

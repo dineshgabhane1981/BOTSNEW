@@ -49,7 +49,6 @@ namespace WebApp.ViewModel
         public List<BOTS_TblBulkUpload> BOTS_TblBulkUpload { get; set; }
         public List<BOTS_TblVelocityChecksConfig> BOTS_TblVelocityChecksConfig { get; set; }
         public int BulkUploadCount { get; set; }
-
         public string LeadId { get; set; }
         public SelectListItem[] BOProducts()
         {
