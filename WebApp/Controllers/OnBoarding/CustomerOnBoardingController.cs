@@ -1926,7 +1926,9 @@ namespace WebApp.Controllers.OnBoarding
         public ActionResult SendConfigurationToCustomer(string groupId)
         {
             bool result = false;
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
             var groupDetails = OBR.GetGroupMasterDetails(groupId);
+            result = OBR.UpdateConfigurationStatus(groupId, "Customer Approval", userDetails.LoginId, "");
             result = SendEmailForApproval(groupDetails);
             return new JsonResult() { Data = result, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
