@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+
+<packets>
+	<Enrollnment>
+		
+	</Enrollnment>
+
+	<EnrolnmentWithEarn>
+	</EnrolnmentWithEarn>
+	
+	<Earn>
+	</Earn>
+
+	<BurnValidation>
+	</BurnValidation>
+
+	<Burn>
+	</Burn>
+
+	<Cancel>
+	</Cancel>
+
+	<SendOTP>
+	</SendOTP>
+</packets>
