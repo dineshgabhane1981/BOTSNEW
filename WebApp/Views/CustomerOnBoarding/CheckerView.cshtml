@@ -141,144 +141,154 @@
 </style>
 <div class="app-main__inner">
     <div class="row mb-3 card">
-        <div class="row col-md-12 col-lg-12 p-2">
-            <div class="col-md-2 col-lg-3">
-                Created By <br /> <b>@Model.bots_TblGroupMaster.CreatedBy</b>
+        @if (roleId == "Customer" && Model.bots_TblGroupMaster.CustomerStatus == "Approved By Customer")
+        {
+            <div style="padding:30px;font-size:20px;font-weight:bold;text-align:center;color:green;">
+                Configuration is approved on @Model.bots_TblGroupMaster.UpdatedDate
             </div>
-            <div class="col-md-2 col-lg-3">
-                Created Date  <br /> <b>@Model.bots_TblGroupMaster.CreatedDate</b>
-            </div>
-            @if (roleId != "Customer")
-            {
+        }
+        else
+        {
+            <div class="row col-md-12 col-lg-12 p-2">
                 <div class="col-md-2 col-lg-3">
-                    Status  <br /> <b>@Model.bots_TblGroupMaster.CustomerStatus</b>
+                    Created By <br /> <b>@Model.bots_TblGroupMaster.CreatedBy</b>
                 </div>
-            }
-            <div class="col-md-2 col-lg-3">
-                CS Assigned  <br /> <b>@Model.bots_TblGroupMaster.AssignedCSName</b>
-            </div>
-        </div>
-        <div class="row mb-3 card" style="margin-left:5px;">
-            @Html.HiddenFor(model => model.bots_TblGroupMaster.GroupId, new { @id = "hdnGroupID" })
-            @Html.HiddenFor(model => model.bots_TblGroupMaster.OwnerMobileNo, new { @id = "hdnOwnerMobileNo" })
-            <div class="container-fluid pt-3 pl-3 pr-3 pb-3" id="dvCustomerDetailSection">
-                <div class="col-md-12 section-heading" data-toggle="collapse" data-target="#customerdetailsreadonly">Customer Details</div>
-                <div id="customerdetailsreadonly" class="collapse show">
-                    @Html.Partial("~/Views/CustomerOnBoarding/_CustomerDetails.cshtml", Model)
+                <div class="col-md-2 col-lg-3">
+                    Created Date  <br /> <b>@Model.bots_TblGroupMaster.CreatedDate</b>
+                </div>
+                @if (roleId != "Customer")
+                {
+                    <div class="col-md-2 col-lg-3">
+                        Status  <br /> <b>@Model.bots_TblGroupMaster.CustomerStatus</b>
+                    </div>
+                }
+                <div class="col-md-2 col-lg-3">
+                    CS Assigned  <br /> <b>@Model.bots_TblGroupMaster.AssignedCSName</b>
                 </div>
             </div>
-            <div>
-                <div class="container-fluid pt-3 pl-3 pr-3 pb-3" id="dvOutletDetailsSection">
-                    <div class="col-md-12 section-heading" data-toggle="collapse" data-target="#OutletDetailsConfigreadonly">Outlet Details</div>
-                    <div id="OutletDetailsConfigreadonly" class="collapse">
-                        @Html.Partial("~/Views/CustomerOnBoarding/_OutletDetailsCheckerView.cshtml", Model)
-
+            <div class="row mb-3 card" style="margin-left:5px;">
+                @Html.HiddenFor(model => model.bots_TblGroupMaster.GroupId, new { @id = "hdnGroupID" })
+                @Html.HiddenFor(model => model.bots_TblGroupMaster.OwnerMobileNo, new { @id = "hdnOwnerMobileNo" })
+                <div class="container-fluid pt-3 pl-3 pr-3 pb-3" id="dvCustomerDetailSection">
+                    <div class="col-md-12 section-heading" data-toggle="collapse" data-target="#customerdetailsreadonly">Customer Details</div>
+                    <div id="customerdetailsreadonly" class="col-md-12 col-lg-12 collapse show">
+                        @Html.Partial("~/Views/CustomerOnBoarding/_CustomerDetails.cshtml", Model)
                     </div>
                 </div>
-            </div>
-            <div>
-                <div class="container-fluid pt-3 pl-3 pr-3 pb-3" id="dvPointRuleSection">
-                    <div class="col-md-12 section-heading" data-toggle="collapse" data-target="#PointRuleConfigreadonly">Point Rule </div>
-                    <div id="PointRuleConfigreadonly" class="collapse">
-                        @Html.Partial("~/Views/CustomerOnBoarding/_PointRuleCheckerView.cshtml", Model)
-
-                    </div>
-                </div>
-            </div>
-            @if (roleId != "Customer")
-            {
                 <div>
-                    <div class="container-fluid pt-3 pl-3 pr-3 pb-3" id="dvCommunicationSection">
-                        <div class="col-md-12 section-heading" data-toggle="collapse" data-target="#CommunicationConfigreadonly">Communication</div>
-                        <div id="CommunicationConfigreadonly" class="collapse">
-                            @Html.Partial("~/Views/CustomerOnBoarding/_CommunicationCheckerView.cshtml", Model)
+                    <div class="container-fluid pt-3 pl-3 pr-3 pb-3" id="dvOutletDetailsSection">
+                        <div class="col-md-12 section-heading" data-toggle="collapse" data-target="#OutletDetailsConfigreadonly">Outlet Details</div>
+                        <div id="OutletDetailsConfigreadonly" class="col-md-12 col-lg-12 collapse">
+                            @Html.Partial("~/Views/CustomerOnBoarding/_OutletDetailsCheckerView.cshtml", Model)
 
                         </div>
                     </div>
                 </div>
-
                 <div>
-                    <div class="container-fluid pt-3 pl-3 pr-3 pb-3" id="dvPerpetualCampaignSection">
-                        <div class="col-md-12 section-heading" data-toggle="collapse" data-target="#PerpetualDetailsreadonly">Perpetual Campaigns</div>
-                        <div id="PerpetualDetailsreadonly" class="collapse">
-                            @Html.Partial("~/Views/CustomerOnBoarding/_PerpetualCampaignCheckerView.cshtml", Model)
-                        </div>
-                    </div>
-                </div>
-                <div>
-                    <div class="container-fluid pt-3 pl-3 pr-3 pb-3" id="dvDLCSection">
-                        <div class="col-md-12 section-heading" data-toggle="collapse" data-target="#DLCreadonly">Digital Loyalty Card</div>
-                        <div id="DLCreadonly" class="collapse">
-                            @Html.Partial("~/Views/CustomerOnBoarding/_DLTCheckerView.cshtml", Model)
+                    <div class="container-fluid pt-3 pl-3 pr-3 pb-3" id="dvPointRuleSection">
+                        <div class="col-md-12 section-heading" data-toggle="collapse" data-target="#PointRuleConfigreadonly">Point Rule </div>
+                        <div id="PointRuleConfigreadonly" class="col-md-12 col-lg-12 collapse">
+                            @Html.Partial("~/Views/CustomerOnBoarding/_PointRuleCheckerView.cshtml", Model)
 
                         </div>
                     </div>
                 </div>
-            }
-            <div>
-                <div class="container-fluid pt-3 pl-3 pr-3 pb-3" id="dvVelocityChecksSection">
-                    <div class="col-md-12 section-heading" data-toggle="collapse" data-target="#VelocityChecksConfigreadonly">Velocity Checks</div>
-                    <div id="VelocityChecksConfigreadonly" class="collapse">
-                        @Html.Partial("~/Views/CustomerOnBoarding/_VelocityChecksCheckerView.cshtml", Model)
+                @if (roleId != "Customer")
+                {
+                    <div>
+                        <div class="container-fluid pt-3 pl-3 pr-3 pb-3" id="dvCommunicationSection">
+                            <div class="col-md-12 section-heading" data-toggle="collapse" data-target="#CommunicationConfigreadonly">Communication</div>
+                            <div id="CommunicationConfigreadonly" class="col-md-12 col-lg-12 collapse">
+                                @Html.Partial("~/Views/CustomerOnBoarding/_CommunicationCheckerView.cshtml", Model)
 
+                            </div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <div class="container-fluid pt-3 pl-3 pr-3 pb-3" id="dvPerpetualCampaignSection">
+                            <div class="col-md-12 section-heading" data-toggle="collapse" data-target="#PerpetualDetailsreadonly">Perpetual Campaigns</div>
+                            <div id="PerpetualDetailsreadonly" class="col-md-12 col-lg-12 collapse">
+                                @Html.Partial("~/Views/CustomerOnBoarding/_PerpetualCampaignCheckerView.cshtml", Model)
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="container-fluid pt-3 pl-3 pr-3 pb-3" id="dvDLCSection">
+                            <div class="col-md-12 section-heading" data-toggle="collapse" data-target="#DLCreadonly">Digital Loyalty Card</div>
+                            <div id="DLCreadonly" class="col-md-12 col-lg-12 collapse">
+                                @Html.Partial("~/Views/CustomerOnBoarding/_DLTCheckerView.cshtml", Model)
+
+                            </div>
+                        </div>
+                    </div>
+                }
+                <div>
+                    <div class="container-fluid pt-3 pl-3 pr-3 pb-3" id="dvVelocityChecksSection">
+                        <div class="col-md-12 section-heading" data-toggle="collapse" data-target="#VelocityChecksConfigreadonly">Velocity Checks</div>
+                        <div id="VelocityChecksConfigreadonly" class="col-md-12 col-lg-12 collapse">
+                            @Html.Partial("~/Views/CustomerOnBoarding/_VelocityChecksCheckerView.cshtml", Model)
+
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div>
-                <div class="container-fluid pt-3 pl-3 pr-3 pb-3" id="dvBUSection">
-                    <div class="col-md-12 section-heading" data-toggle="collapse" data-target="#BUConfigreadonly">Bulk Upload</div>
-                    <div id="BUConfigreadonly" class="collapse">
-                        @Html.Partial("~/Views/CustomerOnBoarding/_BulkUploadCheckerView.cshtml", Model)
+                <div>
+                    <div class="container-fluid pt-3 pl-3 pr-3 pb-3" id="dvBUSection">
+                        <div class="col-md-12 section-heading" data-toggle="collapse" data-target="#BUConfigreadonly">Bulk Upload</div>
+                        <div id="BUConfigreadonly" class="col-md-12 col-lg-12 collapse">
+                            @Html.Partial("~/Views/CustomerOnBoarding/_BulkUploadCheckerView.cshtml", Model)
 
+                        </div>
                     </div>
                 </div>
-            </div>
-            @if (roleId == "6" || roleId == "1")
-            {
-                //Buttons here
-                if (Model.bots_TblGroupMaster.CustomerStatus == "Submit For Approval")
+                @if (roleId == "6" || roleId == "1")
+                {
+                    //Buttons here
+                    if (Model.bots_TblGroupMaster.CustomerStatus == "Submit For Approval")
+                    {
+                        <div class="container-fluid pt-3 pl-3 pr-3 pb-3">
+                            <button type="button" id="btnRejectConfig" class="btn btn-primary pull-right" style="margin-right: 10px; margin-bottom: 20px; margin-top: 10px;">Reject </button>
+                            <button type="button" id="btnApproveConfig" class="btn btn-primary pull-right" style="margin-right: 10px; margin-bottom: 20px; margin-top: 10px;">Approve </button>
+                        </div>
+                    }
+                    if (Model.bots_TblGroupMaster.CustomerStatus == "Approved")
+                    {
+                        <div class="container-fluid pt-3 pl-3 pr-3 pb-3" style="text-align:end;">
+
+                            <span style="font-weight:bold;">Send Configuration to Customer for Approval</span> <button type="button" id="btnSentToCustomer" class="btn btn-primary pull-right" style="margin-right: 10px; margin-left: 10px; margin-top:-5px;">Send </button>
+                        </div>
+                    }
+                    if (Model.bots_TblGroupMaster.CustomerStatus == "Customer Approval")
+                    {
+                        <div class="container-fluid pt-3 pl-3 pr-3 pb-3">
+
+                            <span style="font-weight:bold;color:green;font-size:18px;">Configuration sent for Customer Approval</span>
+                        </div>
+                    }
+
+                }
+                @if (roleId == "Customer" && Model.bots_TblGroupMaster.CustomerStatus == "Customer Approval")
                 {
                     <div class="container-fluid pt-3 pl-3 pr-3 pb-3">
-                        <button type="button" id="btnRejectConfig" class="btn btn-primary pull-right" style="margin-right: 10px; margin-bottom: 20px; margin-top: 10px;">Reject </button>
-                        <button type="button" id="btnApproveConfig" class="btn btn-primary pull-right" style="margin-right: 10px; margin-bottom: 20px; margin-top: 10px;">Approve </button>
+                        <button type="button" id="btnCustomerRejectConfig" class="btn btn-primary pull-right" style="margin-right: 10px; margin-bottom: 20px; margin-top: 10px;">Reject </button>
+                        <button type="button" id="btnCustomerApproveConfig" class="btn btn-primary pull-right" style="margin-right: 10px; margin-bottom: 20px; margin-top: 10px;">Approve </button>
                     </div>
                 }
-                if (Model.bots_TblGroupMaster.CustomerStatus == "Approved")
-                {
-                    <div class="container-fluid pt-3 pl-3 pr-3 pb-3" style="text-align:end;">
-
-                        <span style="font-weight:bold;">Send Configuration to Customer for Approval</span> <button type="button" id="btnSentToCustomer" class="btn btn-primary pull-right" style="margin-right: 10px; margin-left: 10px; margin-top:-5px;">Send </button>
-                    </div>
-                }
-                if (Model.bots_TblGroupMaster.CustomerStatus == "Customer Approval")
-                {
-                    <div class="container-fluid pt-3 pl-3 pr-3 pb-3">
-
-                        <span style="font-weight:bold;color:green;font-size:18px;">Configuration sent for Customer Approval</span>
-                    </div>
-                }
-
-            }
-            @if (roleId == "Customer" && Model.bots_TblGroupMaster.CustomerStatus == "Customer Approval")
-            {
-                <div class="container-fluid pt-3 pl-3 pr-3 pb-3">
-                    <button type="button" id="btnCustomerRejectConfig" class="btn btn-primary pull-right" style="margin-right: 10px; margin-bottom: 20px; margin-top: 10px;">Reject </button>
-                    <button type="button" id="btnCustomerApproveConfig" class="btn btn-primary pull-right" style="margin-right: 10px; margin-bottom: 20px; margin-top: 10px;">Approve </button>
+                <div class="container-fluid pl-3 pr-3 pb-3" id="dvRejectSection" style="display:none;">
+                    Reject Reason <br />
+                    <textarea id="txtRejectConfig" rows="6" cols="60" class="input150"></textarea>
+                    <button type="button" id="btnSubmitConfig" onclick="SubmitRejectConfig();" class="btn btn-primary" style="margin-left: 20px; margin-bottom:25px;">Submit</button>
+                    <button type="button" id="btnCancelConfig" onclick="CancelRejectConfig();" class="btn btn-primary" style="margin-left: 20px; margin-bottom:25px;">Cancel</button><br />
                 </div>
-            }
-            <div class="container-fluid pl-3 pr-3 pb-3" id="dvRejectSection" style="display:none;">
-                Reject Reason <br />
-                <textarea id="txtRejectConfig" rows="6" cols="60" class="input150"></textarea>
-                <button type="button" id="btnSubmitConfig" onclick="SubmitRejectConfig();" class="btn btn-primary" style="margin-left: 20px; margin-bottom:25px;">Submit</button>
-                <button type="button" id="btnCancelConfig" onclick="CancelRejectConfig();" class="btn btn-primary" style="margin-left: 20px; margin-bottom:25px;">Cancel</button><br />
+                <div class="container-fluid pl-3 pr-3 pb-3" id="dvCustRejectSection" style="display:none;">
+                    Reject Reason <br />
+                    <textarea id="txtCustRejectConfig" rows="6" cols="60" class="input150"></textarea>
+                    <button type="button" id="btnCustSubmitConfig" onclick="SubmitCustRejectConfig();" class="btn btn-primary" style="margin-left: 20px; margin-bottom:25px;">Submit</button>
+                    <button type="button" id="btnCustCancelConfig" onclick="CancelCustRejectConfig();" class="btn btn-primary" style="margin-left: 20px; margin-bottom:25px;">Cancel</button><br />
+                </div>
             </div>
-            <div class="container-fluid pl-3 pr-3 pb-3" id="dvCustRejectSection" style="display:none;">
-                Reject Reason <br />
-                <textarea id="txtCustRejectConfig" rows="6" cols="60" class="input150"></textarea>
-                <button type="button" id="btnCustSubmitConfig" onclick="SubmitCustRejectConfig();" class="btn btn-primary" style="margin-left: 20px; margin-bottom:25px;">Submit</button>
-                <button type="button" id="btnCustCancelConfig" onclick="CancelCustRejectConfig();" class="btn btn-primary" style="margin-left: 20px; margin-bottom:25px;">Cancel</button><br />
-            </div>
-        </div>
+
+        }
     </div>
 </div>
 

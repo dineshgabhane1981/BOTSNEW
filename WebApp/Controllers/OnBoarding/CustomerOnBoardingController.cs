@@ -1988,8 +1988,8 @@ namespace WebApp.Controllers.OnBoarding
         public ActionResult CustomerApprovalConfiguration(string groupId,string custMobileNo)
         {
             bool result = false;
-            var added = OBR.UpdateConfigurationStatus(groupId, "Approved By Customer", custMobileNo, "");
-            if(added)
+            var updateStatus = OBR.UpdateConfigurationStatus(groupId, "Approved By Customer", custMobileNo, "");
+            if(updateStatus)
             {
                 //Create Database
                 result = OBR.CreateCustomerDatabase(groupId);

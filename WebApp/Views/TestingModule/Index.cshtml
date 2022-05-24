@@ -19,7 +19,11 @@
     <div class="mb-3 card" style="padding-top:20px;">
         <div class="content">
             <div>
-                <button type="button" id="btnCheckerView" onclick="" class="btn btn-primary" style="float: right; margin-left: 20px; margin-right: 20px; margin-bottom: 25px;">Configration sheet</button>
+                <a href="@Url.Action("CheckerView", "CustomerOnBoarding", new { groupId = ViewBag.GroupId })" class="login" title="Go To Configration sheet" target="_blank">
+                    <button type="button" id="btnCheckerView" onclick="" class="btn btn-primary" style="float: right; margin-left: 20px; margin-right: 20px; margin-bottom: 25px;">
+                        Configration sheet
+                    </button>
+                </a>
             </div>
             <div style="margin-bottom:20px;margin-top:20px;">
                 <input id="rbtnEnrlment" name="campaign" type="radio" checked class="rbtnClass"> Enrollnment
@@ -29,41 +33,41 @@
                 <input id="rbtnBurn" name="campaign" type="radio" class="rbtnClass"> Burn
                 <input id="rbtnCancel" name="campaign" type="radio" class="rbtnClass"> Cancel
                 <input id="rbtnSendOtp" name="campaign" type="radio" class="rbtnClass"> Send OTP
-            
-                @//Enrolnment@
-            <div class="col-lg-12" style="float: left; border: 1px solid grey; border-radius: 12px; margin-bottom: 10px; margin-top: 10px;" >
-                <div style="float: left; margin-top: 20px;" class="col-md-4 col-lg-4">                                    
-                        Billing Partner Name <input type="text" class="dropdown" id="txtBillingPartnerName"/>
-                </div>
-                <div style="float: left; margin-top: 20px; margin-bottom: 20px;" class="col-md-4 col-lg-4">
-                    Invoice No <input type="number" class="input20" id="txtInvoiceNo" /> <br />
-                    Invoice Amt<input type="text" class="input20" id="txtInvoiceAmt "  /> <br />
-                    Date Time <input type="datetime" class="input20" id=" txtDatetime" />
-                </div>
-                <div style="float: left; margin-top: 20px; margin-bottom: 20px;" class="col-md-4 col-lg-4">
-                    Mobile No <input type="number" class="input" id="txtMboileNo" />
-                </div>
-            </div>
-            <div class="col-lg-12" style="float: left; border: 1px solid grey; border-radius: 12px; margin-bottom: 10px; margin-top: 10px;" >
-                <div>
-                    <div style="float: left; margin-top: 20px;" class="col-md-3 col-lg-3">
-                        Request Packet <br /><input type="text" id="txtRequestPacket" class="input50">
-                    </div>
-                    <div style="float: left; margin-top: 20px;" class="col-md-3 col-lg-3">
-                        Request URL <br /><input type="text" id="txtRequestUrl" class="input50">
-                    </div>
-                    <div style="float: left; margin-top: 20px; margin-bottom: 20px;" class="col-md-3 col-lg-3">
-                        Reason Packet<br /><input type="text" id="txtReasonPacket" class="input50">
-                    </div>
-                    <div style="float: left; margin-top: 20px; margin-bottom: 20px;" class="col-md-3 col-lg-3">
-                        Action <br />
-                        <button type="button" id="btnCheckerView" onclick="" class="btn btn-primary" style="float: right; margin-left: 20px; margin-right: 20px; margin-bottom: 30px;">Send</button> 
-                        <button type="button" id="btnCheckerView" onclick="" class="btn btn-primary" style="float: right; margin-left: 20px; margin-right: 20px; margin-bottom: 25px;">Reset</button>
-                    </div>
 
+
+                <div class="col-lg-12" style="float: left; border: 1px solid grey; border-radius: 12px; margin-bottom: 10px; margin-top: 10px;">
+                    <div style="float: left; margin-top: 20px;" class="col-md-4 col-lg-4">
+                        Billing Partner Name <input type="text" class="dropdown" id="txtBillingPartnerName" />
+                    </div>
+                    <div style="float: left; margin-top: 20px; margin-bottom: 20px;" class="col-md-4 col-lg-4">
+                        Invoice No <input type="number" class="input20" id="txtInvoiceNo" /> <br />
+                        Invoice Amt<input type="text" class="input20" id="txtInvoiceAmt " /> <br />
+                        Date Time <input type="datetime" class="input20" id=" txtDatetime" />
+                    </div>
+                    <div style="float: left; margin-top: 20px; margin-bottom: 20px;" class="col-md-4 col-lg-4">
+                        Mobile No <input type="number" class="input" id="txtMboileNo" />
+                    </div>
+                </div>
+                <div class="col-lg-12" style="float: left; border: 1px solid grey; border-radius: 12px; margin-bottom: 10px; margin-top: 10px;">
+                    <div>
+                        <div style="float: left; margin-top: 20px;" class="col-md-3 col-lg-3">
+                            Request Packet <br /><input type="text" id="txtRequestPacket" class="input50">
+                        </div>
+                        <div style="float: left; margin-top: 20px;" class="col-md-3 col-lg-3">
+                            Request URL <br /><input type="text" id="txtRequestUrl" class="input50">
+                        </div>
+                        <div style="float: left; margin-top: 20px; margin-bottom: 20px;" class="col-md-3 col-lg-3">
+                            Reason Packet<br /><input type="text" id="txtReasonPacket" class="input50">
+                        </div>
+                        <div style="float: left; margin-top: 20px; margin-bottom: 20px;" class="col-md-3 col-lg-3">
+                            Action <br />
+                            <button type="button" id="btnCheckerView" onclick="" class="btn btn-primary" style="float: right; margin-left: 20px; margin-right: 20px; margin-bottom: 30px;">Send</button>
+                            <button type="button" id="btnCheckerView" onclick="" class="btn btn-primary" style="float: right; margin-left: 20px; margin-right: 20px; margin-bottom: 25px;">Reset</button>
+                        </div>
+
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 </div>

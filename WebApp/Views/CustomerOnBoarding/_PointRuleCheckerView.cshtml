@@ -1,56 +1,57 @@
 ﻿@model WebApp.ViewModel.OnBoardingSalesViewModel
-
+<style>
+    .row {
+        margin-top: 20px !important;
+        padding: 0 10px;
+    }
+</style>
 <div id="dvEarnRule" style="border: 1px solid grey; border-radius: 10px; margin-bottom: 10px; padding-bottom: 40px; padding-top: 20px;" class="col-md-12 col-lg-12 row">
     <div class="col-md-6 col-lg-6">
-        <h5><b>Earn Rule Configuration</b></h5>
+        <h5> <b> Earn Rule Configuration</b> </h5>
         <div>
-            Minimum Invoice Amount - <b>@Model.objEarnRuleConfig.MinInvoiceAmt.Value</b>
+            Minimum Invoice Amount - <b>@Model.objEarnRuleConfig.MinInvoiceAmt.Value </b>
 
         </div>
         <div>
-            Base Percentage(%) - <b>@Model.objEarnRuleConfig.BasePercentage</b>
+            Base Percentage(%) - <b>@Model.objEarnRuleConfig.BasePercentage </b>
         </div>
         <div>
-            Points Validity (in Months) - <b>@Model.objEarnRuleConfig.PointsValidityInMonths</b>
+            Points Validity (in Months) - <b>@Model.objEarnRuleConfig.PointsValidityInMonths </b>
 
         </div>
         <div>
-            Revolving Expiry - <b>@Model.objEarnRuleConfig.RevolvingExpiry</b>
+            Revolving Expiry - <b>@Model.objEarnRuleConfig.RevolvingExpiry </b>
 
         </div>
         @if (Model.objEarnRuleConfig.IsBase == true)
         {
-    <table border="1" cellpadding="5" cellspacing="5" style="margin-top:20px;">
-        <tr>
-            <td colspan="6" style="background-color: lightgray; text-align: center; font-size: 18px;"><b>Base</b></td>
-        </tr>
-        <tr>
-            <td><b>Points Value in Rs</b></td>
-            <td width="50px"><b>@Model.objEarnRuleConfig.PointsValueInRS</b></td>
-        </tr>
-        </table>
+            <table border="1" cellpadding="5" cellspacing="5" style="margin-top:20px;">
+                <tr>
+                    <td colspan="6" style="background-color: lightgray; text-align: center; font-size: 18px;"> <b> Base</b> </td>
+                </tr>
+                <tr>
+                    <td> <b> Points Value in Rs</b> </td>
+                    <td width="50px"> <b>@Model.objEarnRuleConfig.PointsValueInRS </b> </td>
+                </tr>
+            </table>
         }
-
-        
-
-
         @if (Model.objEarnRuleConfig.IsSlab == true)
         {
             <table border="1" cellpadding="5" cellspacing="5" style="margin-top:20px;">
                 <tr>
-                    <td colspan="6" style="background-color: lightgray; text-align: center; font-size: 18px;"><b>Slab</b></td>
+                    <td colspan="6" style="background-color: lightgray; text-align: center; font-size: 18px;"> <b> Slab</b> </td>
                 </tr>
                 <tr>
-                    <td width="60px"><b>From</b></td>
-                    <td width="60px"><b> To</b></td>
-                    <td><b>Percentage</b></td>
+                    <td width="60px"> <b> From</b> </td>
+                    <td width="60px"> <b> To</b> </td>
+                    <td> <b> Percentage</b> </td>
                 </tr>
                 @foreach (var item in Model.lstSlabConfig)
                 {
                     <tr>
-                        <td>@item.SlabFrom</td>
-                        <td>@item.SlabTo</td>
-                        <td>@item.SlabPercentage</td>
+                        <td>@item.SlabFrom </td>
+                        <td>@item.SlabTo </td>
+                        <td>@item.SlabPercentage </td>
                     </tr>
                 }
             </table>
@@ -59,43 +60,42 @@
         {
             <table border="1" cellpadding="5" cellspacing="5" style="margin-top:20px;">
                 <tr>
-                    <td colspan="3" style="background-color:lightgray;text-align:center;font-size:18px;"><b>Product Wise Earn</b></td>
+                    <td colspan="3" style="background-color:lightgray;text-align:center;font-size:18px;"> <b> Product Wise Earn</b> </td>
                 </tr>
                 <tr>
-                    <td colspan="3" style="background-color:lightgray;"><b>Type - @Model.objEarnRuleConfig.ProductWiseType</b></td>
+                    <td colspan="3" style="background-color:lightgray;"> <b> Type - @Model.objEarnRuleConfig.ProductWiseType </b> </td>
                 </tr>
                 <tr>
-                    <td><b>Product Code</b></td>
-                    <td><b>Product Name</b></td>
-                    <td><b>Percentage</b></td>
+                    <td> <b> Product Code</b> </td>
+                    <td> <b> Product Name</b> </td>
+                    <td> <b> Percentage</b> </td>
                 </tr>
                 @foreach (var item in Model.lstProductUpload)
                 {
                     if (item.Type == "Product Earn")
                     {
                         <tr>
-                            <td>@item.ProductCode</td>
-                            <td>@item.ProductName</td>
-                            <td>@item.Percentage</td>
+                            <td>@item.ProductCode </td>
+                            <td>@item.ProductName </td>
+                            <td>@item.Percentage </td>
                         </tr>
                     }
                 }
             </table>
         }
-
         @if (Model.objEarnRuleConfig.IsBlockForEarn == true)
         {
             <table border="1" cellpadding="5" cellspacing="5" style="margin-top:20px;">
                 <tr>
-                    <td colspan="3" style="background-color: lightgray; text-align: center; font-size: 18px;"><b>Block for Earn</b></td>
+                    <td colspan="3" style="background-color: lightgray; text-align: center; font-size: 18px;"> <b> Block for Earn</b> </td>
                 </tr>
                 <tr>
-                    <td colspan="3" style="background-color:lightgray;"><b>Type - @Model.objEarnRuleConfig.BlockProductWiseType</b></td>
+                    <td colspan="3" style="background-color:lightgray;"> <b> Type - @Model.objEarnRuleConfig.BlockProductWiseType </b> </td>
                 </tr>
                 <tr>
-                    <td><b>Product Code</b></td>
-                    <td><b>Product Name</b></td>
-                    <td><b>Percentage</b></td>
+                    <td> <b> Product Code</b> </td>
+                    <td> <b> Product Name</b> </td>
+                    <td> <b> Percentage</b> </td>
 
                 </tr>
                 @foreach (var item in Model.lstProductUpload)
@@ -103,74 +103,70 @@
                     if (item.Type == "Block Earn")
                     {
                         <tr>
-                            <td>@item.ProductCode</td>
-                            <td>@item.ProductName</td>
-                            <td>@item.Percentage</td>
+                            <td>@item.ProductCode </td>
+                            <td>@item.ProductName </td>
+                            <td>@item.Percentage </td>
                         </tr>
                     }
                 }
             </table>
         }
-
-
-
     </div>
 
     <div class="col-md-6 col-lg-6">
 
-        <h5><b>Burn Rule Configuration</b></h5>
+        <h5> <b> Burn Rule Configuration</b> </h5>
 
         <div>
-            Minimum Invoice Amount - <b>@Model.objBurnRuleConfig.MinInvoiceAmt.Value</b>
-
-        </div>
-        <div>
-            Minimum Redeem Points - <b>@Model.objBurnRuleConfig.MinRedeemPts</b>
-        </div>
-        <div>
-            Minimum Threshold Points First Time - <b>@Model.objBurnRuleConfig.MinThreshholdPtsFisttime</b>
+            Minimum Invoice Amount - <b>@Model.objBurnRuleConfig.MinInvoiceAmt.Value </b>
 
         </div>
         <div>
-            Minimum Threshold Points Subsequent - <b>@Model.objBurnRuleConfig.MinThreshholdPtsSubsequent</b>
+            Minimum Redeem Points - <b>@Model.objBurnRuleConfig.MinRedeemPts </b>
         </div>
         <div>
-            Partial Earn - <b>@Model.objBurnRuleConfig.PartialEarn</b>
+            Minimum Threshold Points First Time - <b>@Model.objBurnRuleConfig.MinThreshholdPtsFisttime </b>
+
+        </div>
+        <div>
+            Minimum Threshold Points Subsequent - <b>@Model.objBurnRuleConfig.MinThreshholdPtsSubsequent </b>
+        </div>
+        <div>
+            Partial Earn - <b>@Model.objBurnRuleConfig.PartialEarn </b>
         </div>
         @if (Model.objBurnRuleConfig.IsProductCodeBlocking == true)
-        { 
-    <table border="1" cellpadding="5" cellspacing="5" style="margin-top:20px;">
-        <tr>
-            <td colspan="6" style="background-color: lightgray; text-align: center; font-size: 18px;"><b>Block For Burn</b></td>
-        </tr>
-        <tr>
-            <td colspan="3" style="background-color:lightgray;"><b>Type - @Model.objBurnRuleConfig.ProductCodeBlockingType</b></td>
-        </tr>
-        <tr>
-            <td><b>Product Code</b></td>
-            <td><b>Product Name</b></td>
-            <td><b>Percentage</b></td>
-
-        </tr>
-        @foreach (var item in Model.lstProductUpload)
         {
-            if (item.Type == "Product Block Burn")
-            {
+            <table border="1" cellpadding="5" cellspacing="5" style="margin-top:20px;">
                 <tr>
-
-                    <td>@item.ProductCode</td>
-
-                    <td>@item.ProductName</td>
-
-                    <td>@item.Percentage</td>
-
+                    <td colspan="6" style="background-color: lightgray; text-align: center; font-size: 18px;"> <b> Block For Burn</b> </td>
+                </tr>
+                <tr>
+                    <td colspan="3" style="background-color:lightgray;"> <b> Type - @Model.objBurnRuleConfig.ProductCodeBlockingType </b> </td>
+                </tr>
+                <tr>
+                    <td> <b> Product Code</b> </td>
+                    <td> <b> Product Name</b> </td>
+                    <td> <b> Percentage</b> </td>
 
                 </tr>
-            }
+                @foreach (var item in Model.lstProductUpload)
+                {
+                    if (item.Type == "Product Block Burn")
+                    {
+                        <tr>
 
-        }
+                            <td>@item.ProductCode </td>
 
-    </table>
+                            <td>@item.ProductName </td>
+
+                            <td>@item.Percentage </td>
+
+
+                        </tr>
+                    }
+
+                }
+            </table>
         }
     </div>
 </div>

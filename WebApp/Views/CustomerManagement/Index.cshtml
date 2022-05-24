@@ -56,13 +56,13 @@
         display: none;
     }
 
-    
+
 
     #one:checked ~ .panels #one-panel,
     #two:checked ~ .panels #two-panel {
         display: block
     }
-    
+
 
     #one:checked ~ .tabs #one-tab,
     #two:checked ~ .tabs #two-tab {
@@ -75,7 +75,7 @@
         border-top-left-radius: 7px;
         border-top-right-radius: 7px;
     }
-    
+
     .modal {
         display: none; /* Hidden by default */
         position: fixed; /* Stay in place */
@@ -99,7 +99,7 @@
         width: 75%;
         border-radius: 25px;
     }
-    
+
     .close {
         color: #aaaaaa;
         float: right;
@@ -107,12 +107,12 @@
         font-weight: bold;
     }
 
-    .close:hover,
-    .close:focus {
-        color: #000;
-        text-decoration: none;
-        cursor: pointer;
-    }
+        .close:hover,
+        .close:focus {
+            color: #000;
+            text-decoration: none;
+            cursor: pointer;
+        }
 
     input:read-only {
         background-color: lightgray;
@@ -257,9 +257,11 @@
                                                 <td style="text-align:center;">
                                                     <a href="@Url.Action("Index", "CustomerOnBoarding", new { groupId = GroupId })" class="login" title="Edit"><img src="~/Content/assets/images/shape_editUser.png" /></a>
                                                     <a href="@Url.Action("AllDiscussions", "Discussion", new { groupId = GroupId, isOnboarding="1" })" class="login" title="Go To Discussions"><img src="~/Content/assets/images/discussion.png" width="30" /></a>
-                                                    <a href="@Url.Action("Index", "TestingModule", new { groupId = GroupId})" class="login" title="Go To Testing Module"><img src="~/Content/assets/images/CustomerLogo/images.png" width="30" /></a>
+                                                    @if (item.CustomerStatus == "Approved By Customer")
+                                                    {
+                                                        <a href="@Url.Action("Index", "TestingModule", new { groupId = GroupId })" class="login" title="Go To Testing Module"><img src="~/Content/assets/images/CustomerLogo/images.png" width="30" /></a>
+                                                    }
 
-                                                    
                                                 </td>
 
                                             </tr>
@@ -278,11 +280,11 @@
 <div id="configModal" class="modal">
     <div class="modal-content">
         <div class="row" style="margin: 0;" id="dvGroupConfigDetails">
-            
-        </div>
-       
 
-        <div class="row justify-content-end pr-4" style="margin-top:20px;margin-right:465px;">           
+        </div>
+
+
+        <div class="row justify-content-end pr-4" style="margin-top:20px;margin-right:465px;">
             <button type="button" id="btnPopupClose" class="btn btn-outline-primary cancel-btn"> Close</button>
         </div>
 
