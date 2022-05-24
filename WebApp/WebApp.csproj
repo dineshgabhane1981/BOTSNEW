@@ -242,6 +242,7 @@
     <Compile Include="ViewModel\SinglePageViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="APIPackets.xml" />
     <Content Include="Content\assets\BlueocktopusLoadingGIF.gif" />
     <Content Include="Content\assets\BlueocktopusLoadingGIF.mp4" />
     <Content Include="Content\assets\Blue_Ocktopus-TLC_blue.png" />

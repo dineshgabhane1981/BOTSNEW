@@ -25,7 +25,7 @@
                     </button>
                 </a>
             </div>
-            <div style="margin-bottom:20px;margin-top:20px;">
+            <div style="margin-bottom:30px;margin-top:30px;margin-left:20px;margin-right:20px;">
                 <input id="rbtnEnrlment" name="campaign" type="radio" checked class="rbtnClass"> Enrollnment
                 <input id="rbtnEnrlmntWithEarn" name="campaign" type="radio" class="rbtnClass"> Enrolnment With Earn
                 <input id="rbtnEarn" name="campaign" type="radio" class="rbtnClass"> Earn
@@ -34,39 +34,40 @@
                 <input id="rbtnCancel" name="campaign" type="radio" class="rbtnClass"> Cancel
                 <input id="rbtnSendOtp" name="campaign" type="radio" class="rbtnClass"> Send OTP
 
-
-                <div class="col-lg-12" style="float: left; border: 1px solid grey; border-radius: 12px; margin-bottom: 10px; margin-top: 10px;">
+                @*//Enrolment*@
+                <div class="col-lg-12" style="float: left; border: 1px solid grey; border-radius: 12px; margin-bottom: 10px; margin-top: 30px;  margin-right: 20px;">
+                    <input type="hidden" id="hdnEnrlmnt" />
                     <div style="float: left; margin-top: 20px;" class="col-md-4 col-lg-4">
-                        Billing Partner Name <input type="text" class="dropdown" id="txtBillingPartnerName" />
+                        Billing Partner Name <input type="text" id="txtBillingPartnerName" class="input50" />
                     </div>
                     <div style="float: left; margin-top: 20px; margin-bottom: 20px;" class="col-md-4 col-lg-4">
-                        Invoice No <input type="number" class="input20" id="txtInvoiceNo" /> <br />
-                        Invoice Amt<input type="text" class="input20" id="txtInvoiceAmt " /> <br />
-                        Date Time <input type="datetime" class="input20" id=" txtDatetime" />
+                        Invoice No <input type="text" id="txtInvoiceNo" class="input50" style="margin-bottom: 10px; margin-right: 20px;" /> <br />
+                        Invoice Amt<input type="text" id="txtInvoiceAmt" class=" input50" style="margin-bottom: 10px; margin-right: 20px;" /> <br />
+                        Date Time <input type="datetime" id=" txtDatetime" class="input50" / style="margin-bottom:10px; margin-right:20px;">
                     </div>
                     <div style="float: left; margin-top: 20px; margin-bottom: 20px;" class="col-md-4 col-lg-4">
-                        Mobile No <input type="number" class="input" id="txtMboileNo" />
+                        Mobile No <input type="text" id="txtMboileNo" class="input50" />
                     </div>
                 </div>
-                <div class="col-lg-12" style="float: left; border: 1px solid grey; border-radius: 12px; margin-bottom: 10px; margin-top: 10px;">
+                <div class="col-lg-12" style="float: left; border: 1px solid grey; border-radius: 12px; margin-bottom: 10px; margin-top: 20px; margin-right: 20px;">
                     <div>
-                        <div style="float: left; margin-top: 20px;" class="col-md-3 col-lg-3">
-                            Request Packet <br /><input type="text" id="txtRequestPacket" class="input50">
+                        <div style="float: left; margin-top: 20px;" class="col-md-4 col-lg-4">
+                            Request Packet <br /><textarea id="txtRequestPacket" rows="6" cols="40" class="input100"></textarea>
                         </div>
-                        <div style="float: left; margin-top: 20px;" class="col-md-3 col-lg-3">
-                            Request URL <br /><input type="text" id="txtRequestUrl" class="input50">
+                        <div style="float: left; margin-top: 20px;" class="col-md-4 col-lg-4">
+                            Request URL <br /><textarea id="txtRequestUrl" rows="6" cols="40" class="input100"></textarea>
                         </div>
-                        <div style="float: left; margin-top: 20px; margin-bottom: 20px;" class="col-md-3 col-lg-3">
-                            Reason Packet<br /><input type="text" id="txtReasonPacket" class="input50">
+                        <div style="float: left; margin-top: 20px; margin-bottom: 20px;" class="col-md-4 col-lg-4">
+                            Response Packet<br /><textarea id="txtResponsePacket" rows="6" cols="40" class="input100"></textarea>
                         </div>
-                        <div style="float: left; margin-top: 20px; margin-bottom: 20px;" class="col-md-3 col-lg-3">
-                            Action <br />
-                            <button type="button" id="btnCheckerView" onclick="" class="btn btn-primary" style="float: right; margin-left: 20px; margin-right: 20px; margin-bottom: 30px;">Send</button>
-                            <button type="button" id="btnCheckerView" onclick="" class="btn btn-primary" style="float: right; margin-left: 20px; margin-right: 20px; margin-bottom: 25px;">Reset</button>
-                        </div>
-
                     </div>
                 </div>
+                <div style="float: left; margin-top: 20px; margin-bottom: 20px;" class="col-md-3 col-lg-12">
+                    
+                    <button type="button" id="btnSend" onclick="" class="btn btn-primary" style="float: right; margin-left: 20px; margin-right: 20px; margin-bottom: 25px;">Send</button>
+                    <button type="button" id="btnReset" onclick="" class="btn btn-primary" style="float: right; margin-left: 20px; margin-right: 20px; margin-bottom: 25px;">Reset</button><br />
+                </div>
+
             </div>
         </div>
     </div>
