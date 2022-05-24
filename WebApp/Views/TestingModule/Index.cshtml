@@ -20,7 +20,7 @@
         <div class="content">
             <div>
                 <a href="@Url.Action("CheckerView", "CustomerOnBoarding", new { groupId = ViewBag.GroupId })" class="login" title="Go To Configration sheet" target="_blank">
-                    <button type="button" id="btnCheckerView" onclick="" class="btn btn-primary" style="float: right; margin-left: 20px; margin-right: 20px; margin-bottom: 25px;">
+                    <button type="button" id="btnCheckerView" onclick="" class="btn btn-primary" style="float: right; margin-left: 20px; margin-right: 20px; margin-bottom: 35px;">
                         Configration sheet
                     </button>
                 </a>
@@ -34,22 +34,21 @@
                 <input id="rbtnCancel" name="campaign" type="radio" class="rbtnClass"> Cancel
                 <input id="rbtnSendOtp" name="campaign" type="radio" class="rbtnClass"> Send OTP
 
-                @*//Enrolment*@
-                <div class="col-lg-12" style="float: left; border: 1px solid grey; border-radius: 12px; margin-bottom: 10px; margin-top: 30px;  margin-right: 20px;">
-                    <input type="hidden" id="hdnEnrlmnt" />
+
+                <div class="col-lg-12" style="float: left; border: 1px solid grey; border-radius: 12px; margin-bottom: 30px; margin-top: 10px;  margin-right: 20px;">
                     <div style="float: left; margin-top: 20px;" class="col-md-4 col-lg-4">
                         Billing Partner Name <input type="text" id="txtBillingPartnerName" class="input50" />
                     </div>
                     <div style="float: left; margin-top: 20px; margin-bottom: 20px;" class="col-md-4 col-lg-4">
                         Invoice No <input type="text" id="txtInvoiceNo" class="input50" style="margin-bottom: 10px; margin-right: 20px;" /> <br />
-                        Invoice Amt<input type="text" id="txtInvoiceAmt" class=" input50" style="margin-bottom: 10px; margin-right: 20px;" /> <br />
-                        Date Time <input type="datetime" id=" txtDatetime" class="input50" / style="margin-bottom:10px; margin-right:20px;">
+                        Invoice Amt<input type="text"  id="txtInvoiceAmt" class=" input50" style="margin-bottom: 10px; margin-right: 20px;"/> <br />
+                        Date Time <input type="datetime"  id=" txtDatetime" class="input50"/ style="margin-bottom:10px; margin-right:20px;">
                     </div>
                     <div style="float: left; margin-top: 20px; margin-bottom: 20px;" class="col-md-4 col-lg-4">
-                        Mobile No <input type="text" id="txtMboileNo" class="input50" />
+                        Mobile No <input type="text"  id="txtMboileNo" class="input50"/>
                     </div>
                 </div>
-                <div class="col-lg-12" style="float: left; border: 1px solid grey; border-radius: 12px; margin-bottom: 10px; margin-top: 20px; margin-right: 20px;">
+                <div class="col-lg-12" style="float: left; border: 1px solid grey; border-radius: 12px; margin-bottom: 10px; margin-top: 10px; margin-right: 20px;">
                     <div>
                         <div style="float: left; margin-top: 20px;" class="col-md-4 col-lg-4">
                             Request Packet <br /><textarea id="txtRequestPacket" rows="6" cols="40" class="input100"></textarea>
