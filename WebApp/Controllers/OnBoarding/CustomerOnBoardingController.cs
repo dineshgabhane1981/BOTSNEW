@@ -25,6 +25,7 @@ namespace WebApp.Controllers.OnBoarding
         CustomerRepository CR = new CustomerRepository();
         OnBoardingRepository OBR = new OnBoardingRepository();
         SalesLeadRepository SLR = new SalesLeadRepository();
+        DashboardRepository DR = new DashboardRepository();
         Exceptions newexception = new Exceptions();
         // GET: CustomerOnBoarding
         public ActionResult Index(string groupId, string LeadId)
@@ -46,7 +47,7 @@ namespace WebApp.Controllers.OnBoarding
             if (!string.IsNullOrEmpty(groupId))
             {
                 var GroupDetails = OBR.GetGroupMasterDetails(groupId);
-                if (GroupDetails.CustomerStatus == "Submit For Approval" || GroupDetails.CustomerStatus == "Approved" || GroupDetails.CustomerStatus == "Customer Approval")
+                if (GroupDetails.CustomerStatus == "Submit For Approval" || GroupDetails.CustomerStatus == "Approved" || GroupDetails.CustomerStatus == "Send For Customer Approval")
                 {
                     var GroupIdOld = common.EncryptString(groupId);
                     return RedirectToAction("CheckerView", "CustomerOnBoarding", new { GroupId = GroupIdOld });
@@ -1935,7 +1936,7 @@ namespace WebApp.Controllers.OnBoarding
             bool result = false;
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
             var groupDetails = OBR.GetGroupMasterDetails(groupId);
-            result = OBR.UpdateConfigurationStatus(groupId, "Customer Approval", userDetails.LoginId, "");
+            result = OBR.UpdateConfigurationStatus(groupId, "Send For Customer Approval", userDetails.LoginId, "");
             result = SendEmailForApproval(groupDetails);
             return new JsonResult() { Data = result, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
@@ -1985,17 +1986,29 @@ namespace WebApp.Controllers.OnBoarding
             return result;
         }
         
-        public ActionResult CustomerApprovalConfiguration(string groupId,string custMobileNo)
+        public ActionResult SendOTPForApproval(string groupId, string custMobileNo)
         {
             bool result = false;
-            var updateStatus = OBR.UpdateConfigurationStatus(groupId, "Approved By Customer", custMobileNo, "");
-            if(updateStatus)
+            result = new HomeController().SendOTP(custMobileNo);
+
+            return new JsonResult() { Data = result, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
+        }
+        public ActionResult CustomerApprovalConfiguration(string groupId,string custMobileNo,string otp)
+        {
+            bool result = false;
+            var status = DR.VerifyOTP(custMobileNo, Convert.ToInt32(otp));
+            if (status)
             {
-                //Create Database
-                result = OBR.CreateCustomerDatabase(groupId);
+                var updateStatus = OBR.UpdateConfigurationStatus(groupId, "Approved By Customer", custMobileNo, "");
+                if (updateStatus)
+                {
+                    //Create Database
+                    result = OBR.CreateCustomerDatabase(groupId);
+                }
             }
             return new JsonResult() { Data = result, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };            
         }
+
     }
 }
 

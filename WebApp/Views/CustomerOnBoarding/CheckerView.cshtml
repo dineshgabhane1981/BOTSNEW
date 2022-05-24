@@ -258,7 +258,7 @@
                             <span style="font-weight:bold;">Send Configuration to Customer for Approval</span> <button type="button" id="btnSentToCustomer" class="btn btn-primary pull-right" style="margin-right: 10px; margin-left: 10px; margin-top:-5px;">Send </button>
                         </div>
                     }
-                    if (Model.bots_TblGroupMaster.CustomerStatus == "Customer Approval")
+                    if (Model.bots_TblGroupMaster.CustomerStatus == "Send For Customer Approval")
                     {
                         <div class="container-fluid pt-3 pl-3 pr-3 pb-3">
 
@@ -267,7 +267,7 @@
                     }
 
                 }
-                @if (roleId == "Customer" && Model.bots_TblGroupMaster.CustomerStatus == "Customer Approval")
+                @if (roleId == "Customer" && Model.bots_TblGroupMaster.CustomerStatus == "Send For Customer Approval")
                 {
                     <div class="container-fluid pt-3 pl-3 pr-3 pb-3">
                         <button type="button" id="btnCustomerRejectConfig" class="btn btn-primary pull-right" style="margin-right: 10px; margin-bottom: 20px; margin-top: 10px;">Reject </button>
@@ -285,6 +285,12 @@
                     <textarea id="txtCustRejectConfig" rows="6" cols="60" class="input150"></textarea>
                     <button type="button" id="btnCustSubmitConfig" onclick="SubmitCustRejectConfig();" class="btn btn-primary" style="margin-left: 20px; margin-bottom:25px;">Submit</button>
                     <button type="button" id="btnCustCancelConfig" onclick="CancelCustRejectConfig();" class="btn btn-primary" style="margin-left: 20px; margin-bottom:25px;">Cancel</button><br />
+                </div>
+                <div class="container-fluid pl-3 pr-3 pb-3" id="dvCustOTPSection" style="display:none;">
+                    OTP <br />
+                    <input id="txtCustOTPConfig" class="input50" />
+                    <button type="button" id="btnCustOTPSubmitConfig" onclick="SubmitCustOTPConfig();" class="btn btn-primary" style="margin-left: 20px; margin-bottom:25px;">Submit</button>
+                    <button type="button" id="btnCustOTPCancelConfig" onclick="CancelCustOTPConfig();" class="btn btn-primary" style="margin-left: 20px; margin-bottom:25px;">Cancel</button><br />
                 </div>
             </div>
 
@@ -308,7 +314,8 @@
             CustomerRejectConfiguration();
         });
         $("#btnCustomerApproveConfig").on("click", function () {
-            CustomerApproveConfiguration();
+            //CustomerApproveConfiguration();
+            SendOTPToCustomer();
         });
 
     });
@@ -393,40 +400,53 @@
         })
     }
 
-    function CustomerApproveConfiguration() {
-        $("#divLoader").show();
-        $.ajax({
-            type: "POST",
-            url: '@Url.Action("CustomerApprovalConfiguration", "CustomerOnBoarding")',
-            data: '{groupId: ' + JSON.stringify($("#hdnGroupID").val()) + ',custMobileNo: ' + JSON.stringify($("#hdnOwnerMobileNo").val()) + '}',
-            contentType: "application/json; charset=utf-8",
-            dataType: "json",
-            success: function (result) {
-                if (result == true) {
-                    cuteAlert({
-                        type: "success",
-                        title: "Saved..",
-                        message: "Thanks for Approving configuration",
-                        buttonText: "Okay"
-                    })
+    function SubmitCustOTPConfig() {
+        if ($("#txtCustOTPConfig").val() == "") {
+            cuteAlert({
+                type: "error",
+                title: "Oops..",
+                message: "Please Enter OTP",
+                buttonText: "Okay"
+            })
+            return false;
+        }
+        else {
+            $("#divLoader").show();
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("CustomerApprovalConfiguration", "CustomerOnBoarding")',
+                data: '{groupId: ' + JSON.stringify($("#hdnGroupID").val()) + ',custMobileNo: ' + JSON.stringify($("#hdnOwnerMobileNo").val()) + ',otp: ' + JSON.stringify($("#txtCustOTPConfig").val()) + '}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (result) {
+                    if (result == true) {
+                        cuteAlert({
+                            type: "success",
+                            title: "Saved..",
+                            message: "Thanks for Approving configuration",
+                            buttonText: "Okay"
+                        }).then(() => {
+                            location.reload();
+                        })
+                        $("#txtCustOTPConfig").val("")
+                        $("#dvCustOTPSection").hide(1000);                        
+                    }
+                    else {
+                        cuteAlert({
+                            type: "error",
+                            title: "Oops..",
+                            message: "There is some problem while Approving configuration",
+                            buttonText: "Okay"
+                        })
+                    }
+                    $("#divLoader").hide();
+                },
+                error: function (result) {
+                    $("#divLoader").hide();
                 }
-                else {
-                    cuteAlert({
-                        type: "error",
-                        title: "Oops..",
-                        message: "There is some problem while Approving configuration",
-                        buttonText: "Okay"
-                    })
-                }
-                $("#divLoader").hide();
-            },
-            error: function (result) {
-                $("#divLoader").hide();
-            }
-        });
+            });
+        }
     }
-
-
 
     function CancelRejectConfig() {
         $("#dvRejectSection").hide(1000);
@@ -509,6 +529,42 @@
         })
     }
 
+    function SendOTPToCustomer() {
+        $("#divLoader").show();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("SendOTPForApproval", "CustomerOnBoarding")',
+            data: '{groupId: ' + JSON.stringify($("#hdnGroupID").val()) + ',custMobileNo: ' + JSON.stringify($("#hdnOwnerMobileNo").val()) + '}',
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (result) {
+                if (result == true) {
+                    cuteAlert({
+                        type: "success",
+                        title: "Sent..",
+                        message: "OTP Sent Successfully !!!",
+                        buttonText: "Okay"
+                    })
+                    $("#dvCustOTPSection").show(1000);
+                }
+                else {
+                    cuteAlert({
+                        type: "error",
+                        title: "Oops..",
+                        message: "There is some problem while Sending OTP",
+                        buttonText: "Okay"
+                    })
+                }
+                $("#divLoader").hide();
+            },
+            error: function (result) {
+                $("#divLoader").hide();
+            }
+        });
+    }
 
+    function CancelCustOTPConfig() {
+        $("#dvCustOTPSection").hide(1000);
+    }
 
 </script>
