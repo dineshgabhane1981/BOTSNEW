@@ -110,38 +110,40 @@
         <div>
             <input type="number" class="input20" id="txtIntroDays11" /> Days before event
             <textarea id="txtIntroScript11" class="input100" style="padding-top:20px;vertical-align:middle;"> </textarea>
+            <br /><br /> Seconday Script (This is SMS script only in case number do not have Whatsapp <b>(Optional)</b>) <textarea id="txtSMSScript11" class="input100" style="padding-top:20px;vertical-align:middle;"> </textarea>
         </div>
-        <div style="margin-top:20px;">
-            <input type="number" class="input20" id="txtIntroDays21" /> Days before event
-            <textarea id="txtIntroScript21" class="input100" style="padding-top: 20px; vertical-align: middle;"> </textarea>
-        </div>
+        
     </div>
     <div style="margin-top:20px;border:1px solid grey;padding:10px;border-radius:10px;">
         <b> Reminder Message</b>
-        <div>
+        <div style="border-bottom:1px solid lightgrey;padding-bottom:10px;">
             <input type="number" class="input20" id="txtRemDays11" /> Days
             @Html.DropDownListFor(x => Model.lstBrands.Count, new SelectList(Model.BeforeAfter(), "Value", "Text"), htmlAttributes: new { @class = "input50", @id = "ddlBeforeAfter11", style = "margin-top:20px;" })
             event
             <textarea id="txtRemScript11" class="input100" style="padding-top:20px;vertical-align:middle;"> </textarea>
+            <br /><br /> Seconday Script (This is SMS script only in case number do not have Whatsapp <b>(Optional)</b>) <textarea id="txtSMSScript31" class="input100" style="padding-top:20px;vertical-align:middle;"> </textarea>
         </div>
         <div style="margin-top:20px;">
             <input type="number" class="input20" id="txtRemDays21" /> Days
             @Html.DropDownListFor(x => Model.lstBrands.Count, new SelectList(Model.BeforeAfter(), "Value", "Text"), htmlAttributes: new { @class = "input50", @id = "ddlBeforeAfter21", style = "margin-top:20px;" })
             event
             <textarea id="txtRemScript21" class="input100" style="padding-top: 20px; vertical-align: middle;"> </textarea>
+            <br /><br /> Seconday Script (This is SMS script only in case number do not have Whatsapp <b>(Optional)</b>) <textarea id="txtSMSScript41" class="input100" style="padding-top:20px;vertical-align:middle;"> </textarea>
         </div>
     </div>
     <div style="margin-top:20px;border:1px solid grey;padding:10px;border-radius:10px;">
         <b> On Birthday Message</b>
-        <div>
+        <div style="border-bottom:1px solid lightgrey;padding-bottom:10px;">
             @Html.DropDownListFor(x => Model.lstBrands.Count, new SelectList(Model.PointsUsed(), "Value", "Text"), htmlAttributes: new { @class = "input50", @disabled = "disabled", @id = "ddlPointsUsed1", style = "margin-top:20px;" })
             event
             <textarea id="txtOnBirthdayScriptPT1" class="input100" style="padding-top:20px;vertical-align:middle;"> </textarea>
+            <br /><br /> Seconday Script (This is SMS script only in case number do not have Whatsapp <b>(Optional)</b>) <textarea id="txtSMSScript51" class="input100" style="padding-top:20px;vertical-align:middle;"> </textarea>
         </div>
         <div>
             @Html.DropDownListFor(x => Model.lstBrands.Count, new SelectList(Model.PointsNotUsed(), "Value", "Text"), htmlAttributes: new { @class = "input50", @disabled = "disabled", @id = "ddlPointsNotUsed1", style = "margin-top:20px;" })
             event
             <textarea id="txtOnBirthdayScriptNPT1" class="input100" style="padding-top:20px;vertical-align:middle;"> </textarea>
+            <br /><br /> Seconday Script (This is SMS script only in case number do not have Whatsapp <b>(Optional)</b>) <textarea id="txtSMSScript61" class="input100" style="padding-top:20px;vertical-align:middle;"> </textarea>
         </div>
     </div>
     <div class="container-fluid pt-3 pl-3 pr-3 pb-5">
@@ -1069,8 +1071,13 @@
         item["OnDayScriptPT"] = $('#txtOnBirthdayScriptPT1').val();
         item["OnDayTypeNPT"] = $('#ddlPointsNotUsed1').val();
         item["OnDayScriptNPT"] = $('#txtOnBirthdayScriptNPT1').val();
-        
 
+        item["SMSScript1"] = $('#txtSMSScript11').val();
+        item["SMSScript3"] = $('#txtSMSScript31').val();
+        item["SMSScript4"] = $('#txtSMSScript41').val();
+        item["SMSScript5"] = $('#txtSMSScript51').val();
+        item["SMSScript6"] = $('#txtSMSScript61').val();
+        
         AnniversaryConfig.push(item);
         var AnniversaryConfigData = JSON.stringify(AnniversaryConfig);
 
@@ -1533,7 +1540,14 @@
                 $('#txtRemScript21').val(edata.ReminderScript2);
                 $('#ddlPointsUsed1').val(edata.OnDayTypePT);
                 $('#txtOnBirthdayScriptPT1').val(edata.OnDayScriptPT);
+                $('#txtOnBirthdayScriptNPT1').val(edata.OnDayScriptNPT);
                 $('#hdnAnniversaryId').val(edata.Id);
+
+                $('#txtSMSScript11').val(edata.SMSScript1);
+                $('#txtSMSScript31').val(edata.SMSScript3);
+                $('#txtSMSScript41').val(edata.SMSScript4);
+                $('#txtSMSScript51').val(edata.SMSScript5);
+                $('#txtSMSScript61').val(edata.SMSScript6);
             }
 
             if (type == "DLC Referral Reminder") {
