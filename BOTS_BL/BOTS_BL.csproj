@@ -140,6 +140,7 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CampaignMaster.cs" />
     <Compile Include="ChitaleException.cs" />
     <Compile Include="Class1.cs" />
     <Compile Include="Exceptions.cs" />
