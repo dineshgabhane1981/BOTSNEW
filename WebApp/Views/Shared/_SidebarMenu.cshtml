@@ -357,10 +357,19 @@
                             <i class="metismenu-state-icon pe-7s-angle-down caret-left"></i>
                         </a>
                         <ul>
-                            <li class="@Html.IsSelected(controller: "Campaigns", action: "CreateCampaign")">
-                                <a class="@Html.IsSelected(controller: "Campaigns", action: "CreateCampaign")" href="@Url.Action("CreateCampaign", "Campaigns")">
+                            <li class="@Html.IsSelected(controller: "Campaigns", action: "CampaignManagement")">
+                                <a class="@Html.IsSelected(controller: "Campaigns", action: "CampaignManagement")" href="@Url.Action("CampaignManagement", "Campaigns")">
                                     <i class="metismenu-icon"></i>
-                                    Create Campaign
+                                    Campaign Management
+                                </a>
+                            </li>
+
+                        </ul>
+                        <ul>
+                            <li class="@Html.IsSelected(controller: "Campaigns", action: "CampDLTList")">
+                                <a class="@Html.IsSelected(controller: "Campaigns", action: "CampDLTList")" href="@Url.Action("CampDLTList", "Campaigns")">
+                                    <i class="metismenu-icon"></i>
+                                    Campaign DLT Management
                                 </a>
                             </li>
 

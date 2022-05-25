@@ -14,7 +14,7 @@
                         Active Campaign Details
                     </div>
                 </div>
-                <div class="row" style="overflow-x:auto;padding-right:10px;margin-top:20px;">
+                <div class="row" style="overflow-x:auto;padding-right:20px;margin-top:10px;margin-left:60px;">
                     <table border="1" cellpadding="5" cellspacing="5">
                         <tr>
                             <th>Campaign ID</th>
@@ -23,23 +23,35 @@
                             <th>End Date</th>
                             <th>Status</th>
                         </tr>
-                        @foreach (var item in Model.lstOutlets)
+                        @foreach (var item in ViewBag.ListCampDetails)
                         {
                             <tr>
-                                <td>@item.CampaignID</td>
-                                <td style="text-align:center;">--</td>
-                                <td>@item.CampaignName</td>
-                                <td>@item.StartDate</td>
-                                <td>@item.EndDate</td>
-                                <td>@item.Status</td>
-                                
-                             
+                                <td>@item.CampaignId</td>
+                                @*<td style="text-align:center;">--</td>*@
 
+                                <td>@item.CampaignName</td>
+
+                                <td>@item.StartDate</td>
+
+                                <td>@item.EndDate</td>
+
+                                <td>@item.Status</td>
                             </tr>
                         }
                     </table>
                 </div>
+
+                <div class="row" style="margin-top : 20px; margin-left:30px;">
+                    <div class="col-md-3 col-xl-3">
+                        @*<div class="button">
+            <button type="button" id="btnLinkCampaign" style="margin-left:15px;" class="btn btn-primary" onclick="LinkCreateCamp();"><b>CreateCampaign</b></button>
+        </div>*@
+                        <a href="@Url.Action("CreateCampaign", "Campaigns")" class="btn btn-primary" role="button" data-bs-toggle="button">CreateCampaign</a>
+                    </div>
+                </div>
+               
             </div>
-        </div>
      </div>
  </div>
+</div>
+

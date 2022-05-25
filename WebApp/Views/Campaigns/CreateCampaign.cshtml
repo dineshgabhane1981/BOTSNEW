@@ -25,9 +25,10 @@
                 @*<div class="col-sm-8" style="display:flex;padding-bottom: 10px;margin-top:5px;">*@
                 <div class="row mt-4">
                     <div class="col-md-8 col-xl-8">
-                        <input type="radio" checked id="rdnSMS" value="1" name="btdornot" /><b>SMS </b> &nbsp;&nbsp;&nbsp;&nbsp;
-                        <input type="radio" id="rdnWA" value="2" name="btdornot" /><b> Whats app</b> &nbsp;&nbsp;&nbsp;&nbsp;
-                        <input type="radio" id="rdnVWA" value="3" name="btdornot" /><b> Verified Whats app</b> &nbsp;&nbsp;&nbsp;&nbsp;
+                        <input type="radio" checked id="rdnSMS" value="1" name="btdornot" /><b>SMS </b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <input type="radio" id="rdnVSMS" value="2" name="btdornot" /><b> Virtual SMS </b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <input type="radio" id="rdnWA" value="3" name="btdornot" /><b> Whats app</b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <input type="radio" id="rdnVWA" value="4" name="btdornot" /><b> Verified Whats app</b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                     </div>
                 </div>
 
@@ -78,12 +79,12 @@
                         </div>
                     </div>
                         <div class="col-md-4 col-xl-4">
-                            <table style="border:2px solid black;width:80%">
+                            <table style="border:2px solid black;width:70%">
                                 <tr style="border:2px solid black; ">
                                     <td style="border:2px solid black;text-align:left;">
                                         <span id="AllCount"></span>All Count
                                     </td>
-                                    <td style="border:2px solid black;">
+                                    <td style="border:2px solid black;width:40%">
                                         <span id="AllCountnum"></span>
                                     </td>
                                 </tr>
@@ -91,7 +92,7 @@
                                     <td style="border:2px solid black;text-align:left;">
                                         <span id="FiltCount"></span>Filtered Count
                                     </td>
-                                    <td style="border:2px solid black;">
+                                    <td style="border:2px solid black;width:40%">
                                         <span id="FiltCountnum"></span>
                                     </td>
                                 </tr>
@@ -135,10 +136,11 @@
                     </div>
                 <div class="row" style="margin-top : 20px;">
                 </div>
-                    <div class="col-md-3 col-xl-3">
+                    <div class="col-md-3 col-xl-4">
                         <div class="button">
                             <button type="button" id="btnSave" style="margin-left:15px;" class="btn btn-primary" onclick="SaveValidate();"><b>SAVE</b></button>
-                            <button type="button" id="btnDownload" style="margin-left:15px;" class="btn btn-primary" onclick="DownLoad();"><b>DOWNLOAD</b></button>
+                            @*<button type="button" id="btnDownload" style="margin-left:15px;" class="btn btn-primary" onclick="DownLoad();"><b>DOWNLOAD</b></button>*@
+                            <button type="button" id="btnSendDLT" style="margin-left:15px;" class="btn btn-primary" onclick="SendDLT();"><b>Send To DLT</b></button>
                         </div>
                     </div>
                     
@@ -149,7 +151,7 @@
             @*</div>*@
         </div>
     </div>
-<script>
+    <script>
         function BaseCalc() {
             var val = document.getElementById("BaseType").value;
             var div = document.getElementById("divPoints");
@@ -207,7 +209,8 @@
         month = ("0" + (d.getMonth() + 1)).slice(-2);
         day = ("0" + d.getDate()).slice(-2);
         year = d.getFullYear();
-        var Date1 = day + '-' + month + '-' + year;
+        var Date1 = year + '-' + month + '-' + day;
+
 
         var Script = $("#SMSScript").val();
         var StartDate = $("#txtEnrollfromdt").val();
@@ -218,7 +221,7 @@
 
 
         if (AllCount == "") {
-            alert(AllCount);
+
             cuteAlert({
                 type: "error",
                 title: "Error Title",
@@ -242,7 +245,8 @@
                 buttonText: "Okay"
             })
         }
-        else if (StartDate < Date1){
+        else if (StartDate < Date1) {
+
             cuteAlert({
                 type: "error",
                 title: "Error Title",
@@ -442,5 +446,5 @@
         //alert(theCount);
         $("#current").text(theCount);
     });
-</script>
+    </script>
 

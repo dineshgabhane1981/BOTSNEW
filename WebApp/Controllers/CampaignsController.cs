@@ -166,39 +166,9 @@ namespace WebApp.Controllers
 
         public ActionResult CreateCampaign()
         {
-            //CampaignTiles objCampaignTiles = new CampaignTiles();
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
-            //string GroupId = userDetails.GroupId;
-            //ViewBag.OutletData = CMPR.OutletData(userDetails.GroupId, userDetails.connectionString);
             var lstOutlet = RR.GetOutletList(userDetails.GroupId, userDetails.connectionString);
             ViewBag.OutletData = lstOutlet;
-            //objCampaignTiles = CMPR.GetCampaignTilesData(userDetails.GroupId, userDetails.connectionString);
-            //List<SelectListItem> MonthList = new List<SelectListItem>();
-
-            //for (int i = 0; i < 12; i++)
-            //{
-            //    MonthList.Add(new SelectListItem
-            //    {
-            //        Text = Convert.ToString(DateTime.Now.AddMonths(i).ToString("MMM")),
-            //        Value = Convert.ToString(DateTime.Now.AddMonths(i).Month)
-            //    });
-            //}
-            //List<SelectListItem> YearList = new List<SelectListItem>();
-            //int year = DateTime.Now.Year;
-            //objCampaignTiles.year = DateTime.Now.Year;
-            //objCampaignTiles.month = DateTime.Now.Month;
-            //for (int i = -5; i <= 9; i++)
-            //{
-            //    YearList.Add(new SelectListItem
-            //    {
-            //        Text = Convert.ToString(DateTime.Now.AddYears(i).Year.ToString()),
-            //        Value = Convert.ToString(year + i)
-            //    });
-            //}
-
-
-            //objCampaignTiles.lstMonth = MonthList;
-            //objCampaignTiles.lstYear = YearList;
 
             return View("CreateCampaign");
         }
@@ -318,5 +288,23 @@ namespace WebApp.Controllers
                 return null;
             }
         }
+
+        public ActionResult CampaignManagement()
+        {
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            var ListCampDetails = CMPR.GetCampList(userDetails.GroupId, userDetails.connectionString);
+            ViewBag.ListCampDetails = ListCampDetails;
+
+            return View("CampaignManagement");
+        }
+        public ActionResult CampDLTList()
+        {
+            //var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            //var ListCampDetails = CMPR.GetCampList(userDetails.GroupId, userDetails.connectionString);
+            //ViewBag.ListCampDetails = ListCampDetails;
+
+            return View("CampaignDLTList");
+        }
+
     }
 }
