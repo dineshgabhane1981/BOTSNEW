@@ -151,4 +151,14 @@ namespace BOTS_BL.Models
        public string Script { get; set; }
 
     }
+
+    public class LisCampaign
+    {
+        public string CampaignId { get; set; }
+        public string CampaignName { get; set; }
+        public DateTime? StartDate { get; set; }
+        public DateTime? EndDate { get; set; }
+        public string Status { get; set; }
+
+    }
 }

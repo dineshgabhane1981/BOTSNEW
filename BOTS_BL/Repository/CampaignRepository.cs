@@ -487,5 +487,42 @@ namespace BOTS_BL.Repository
                 return CmpData;
         }
 
+        public List<LisCampaign> GetCampList(string GroupId, string connectionString)
+        {
+            List<LisCampaign> CM = new List<LisCampaign>();
+          
+            using (var context = new BOTSDBContext(connectionString))
+            {
+                try
+                {
+                    DateTime CDate = DateTime.Parse(DateTime.Now.ToShortDateString());
+                   var CM1 = context.CampaignMasters.Where(x => x.EndDate >= CDate).Select(x => new { x.CampaignId, x.CampaignName,x.StartDate,x.EndDate,x.Status }).ToList();
+                    foreach(var item in CM1)
+                    {
+                        LisCampaign itemData = new LisCampaign();
+                        itemData.CampaignId = item.CampaignId;
+                        itemData.CampaignName = item.CampaignName;
+                        itemData.StartDate = item.StartDate;
+                        itemData.EndDate = item.EndDate;
+                        itemData.Status = item.Status;
+
+                        CM.Add(itemData);
+
+                    }
+                    //var CMD = (from c in context.CampaignMasters select c.CampaignId,c.CampaignName,c.StartDate,c.EndDate).ToList();
+                    //CmpData1 = Data.ToList<CampDownload>;
+                    // CampData = CmpData.AsEnumerable().ToList<CampDownload>();
+                   
+                }
+                catch (Exception ex)
+                {
+                    newexception.AddException(ex, GroupId);
+                }
+                
+            }
+            return CM;
+        }
+
+
     }
 }
