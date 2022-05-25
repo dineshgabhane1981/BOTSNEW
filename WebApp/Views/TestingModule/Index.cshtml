@@ -47,8 +47,8 @@
 
                         <div style="float: left; margin-top: 20px; margin-bottom: 20px;" class="col-md-12 col-lg-12">
                             Invoice No <input type="text" id="txtInvoiceNo" class="input50" style="margin-bottom: 10px; margin-right: 50px;" />
-                            Invoice Amt<input type="text" id="txtInvoiceAmt" class=" input50" style="margin-bottom: 10px; margin-right: 50px;" />
-                            Date Time <input type="datetime" id=" txtDatetime" class="input50" / style="margin-bottom:10px; margin-right:20px;">
+                            Invoice Amt<input type="text" id="txtInvoiceAmt" class="input50" style="margin-bottom: 10px; margin-right: 50px;" />
+                            Date Time <input type="datetime" id="txtDatetime" class="input50" style="margin-bottom:10px; margin-right:20px;">
                         </div>
 
                     </div>
@@ -121,7 +121,6 @@
             RequestPacket = RequestPacket.replace(strInReplace, strToReplace);
         }
         else {
-            alert(222)
             var strInReplace = "<MobileNo></MobileNo>";
             var strToReplace = "<MobileNo>" + mobileNo + "</MobileNo>";
             RequestPacket = RequestPacket.replace(strInReplace, strToReplace);
