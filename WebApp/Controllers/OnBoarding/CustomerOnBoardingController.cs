@@ -1916,6 +1916,14 @@ namespace WebApp.Controllers.OnBoarding
             bool result = true;
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
             result = OBR.SendForApproval(GroupId, userDetails.LoginId);
+            if(result)
+            {
+                var GroupName = OBR.GetOnboardingGroupName(GroupId);
+                var CSHead = OBR.GetCSHeadEmailId();
+                var message = "Configuration submitted for approval for Group - " + GroupName;
+                var subject = "Configuration submitted for approval "+ GroupName;
+                var isEmail = SendEmailOnBoarding(CSHead, subject, message);
+            }
             return new JsonResult() { Data = result, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
         public ActionResult UpdateConfigurationStatus(string groupId, string status, string reason, string ownermobileno)
@@ -1928,6 +1936,32 @@ namespace WebApp.Controllers.OnBoarding
                 loginId = userDetails.LoginId;
             }
             result = OBR.UpdateConfigurationStatus(groupId, status, loginId, reason);
+            if(reason=="Rejected")
+            {
+                var GroupName = OBR.GetOnboardingGroupName(groupId);
+                var CSEmail = userDetails.EmailId;
+                var message = "Configuration Rejected by CS Head for Group - " + GroupName;
+                var subject = "Configuration Rejected - " + GroupName;
+                var isEmail = SendEmailOnBoarding(CSEmail, subject, message);
+            }
+            if (reason == "Approved")
+            {
+                var GroupName = OBR.GetOnboardingGroupName(groupId);
+                var CSEmail = userDetails.EmailId;
+                var message = "Configuration Approved by CS Head for Group - " + GroupName;
+                var subject = "Configuration Approved - " + GroupName;
+                var isEmail = SendEmailOnBoarding(CSEmail, subject, message);
+            }
+            if (reason == "Rejected By Customer")
+            {
+                var CSName = OBR.GetAssignedCSNameForOnboarding(groupId);
+                var CSHead = OBR.GetCSHeadEmailId();
+                var GroupName = OBR.GetOnboardingGroupName(groupId);
+                var CSEmail = CSHead + "," + CSName;
+                var message = "Configuration Rejected By Customer for Group - " + GroupName + ", Reason is - " + reason;
+                var subject = "Configuration Rejected By Customer - " + GroupName;
+                var isEmail = SendEmailOnBoarding(CSEmail, subject, message);
+            }
             return new JsonResult() { Data = result, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
 
@@ -1937,20 +1971,22 @@ namespace WebApp.Controllers.OnBoarding
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
             var groupDetails = OBR.GetGroupMasterDetails(groupId);
             result = OBR.UpdateConfigurationStatus(groupId, "Send For Customer Approval", userDetails.LoginId, "");
-            result = SendEmailForApproval(groupDetails);
+            if (result)
+                result = SendEmailForCustomerApproval(groupDetails);
             return new JsonResult() { Data = result, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
 
-        public bool SendEmailForApproval(BOTS_TblGroupMaster groupDetails)
+        public bool SendEmailForCustomerApproval(BOTS_TblGroupMaster groupDetails)
         {
             CommonFunctions comm = new CommonFunctions();
             bool result = false;
             var BaseUrl = ConfigurationManager.AppSettings["BaseUrl"].ToString();
+            string from = System.Configuration.ConfigurationManager.AppSettings["FrmEmailOnboarding"];
+            string PWD = System.Configuration.ConfigurationManager.AppSettings["FrmEmailOnboardingPwd"];
+            
             var Url = BaseUrl + "CustomerOnBoarding/CheckerView?GroupId=" + comm.EncryptString(groupDetails.GroupId);
-            string from = "report@blueocktopus.in";
+            
             string To = groupDetails.OwnerEmailId;
-
-            //Url="<a href='"+ Url + "' target='_blank'>Click Here</a>";
 
             using (MailMessage mail = new MailMessage(from, To))
             {
@@ -1972,17 +2008,14 @@ namespace WebApp.Controllers.OnBoarding
                 SmtpClient smtp = new SmtpClient();
                 smtp.Host = "smtp.zoho.com";
                 smtp.EnableSsl = true;
-                NetworkCredential networkCredential = new NetworkCredential(from, "Report@123");
+                NetworkCredential networkCredential = new NetworkCredential(from, PWD);
                 smtp.UseDefaultCredentials = true;
                 smtp.Credentials = networkCredential;
                 smtp.Port = 587;
                 smtp.Send(mail);
 
                 result = true;
-            }
-
-
-            
+            }            
             return result;
         }
         
@@ -2004,11 +2037,51 @@ namespace WebApp.Controllers.OnBoarding
                 {
                     //Create Database
                     result = OBR.CreateCustomerDatabase(groupId);
+                    var CSName = OBR.GetAssignedCSNameForOnboarding(groupId);
+                    var CSHead = OBR.GetCSHeadEmailId();
+                    var GroupName = OBR.GetOnboardingGroupName(groupId);
+                    var CSEmail = CSHead + "," + CSName;
+                    var message = "Configuration Approved By Customer for Group - " + GroupName;
+                    var subject = "Configuration Approved By Customer - " + GroupName;
+                    var isEmail = SendEmailOnBoarding(CSEmail, subject, message);
                 }
             }
             return new JsonResult() { Data = result, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };            
         }
 
+        public bool SendEmailOnBoarding(string to,string subject,string message)
+        {
+            bool status = false;
+            var from = ConfigurationManager.AppSettings["FrmEmailOnboarding"].ToString();
+            var PWD = ConfigurationManager.AppSettings["FrmEmailOnboardingPwd"].ToString();
+            using (MailMessage mail = new MailMessage(from, to))
+            {
+                StringBuilder str = new StringBuilder();
+                str.AppendLine("Dear Sir/Madam,");
+                str.AppendLine();
+                str.AppendLine(message);
+                str.AppendLine();                
+                str.AppendLine("Regards,");
+                str.AppendLine(" - BlueOcktopus Team");
+
+                mail.Subject = subject;
+                mail.SubjectEncoding = System.Text.Encoding.Default;
+                mail.Body = str.ToString();
+                mail.IsBodyHtml = false;
+                mail.BodyEncoding = System.Text.Encoding.GetEncoding("utf-8");
+                SmtpClient smtp = new SmtpClient();
+                smtp.Host = "smtp.zoho.com";
+                smtp.EnableSsl = true;
+                NetworkCredential networkCredential = new NetworkCredential(from, PWD);
+                smtp.UseDefaultCredentials = true;
+                smtp.Credentials = networkCredential;
+                smtp.Port = 587;
+                smtp.Send(mail);
+
+                status = true;
+            }
+            return status;
+        }
     }
 }
 

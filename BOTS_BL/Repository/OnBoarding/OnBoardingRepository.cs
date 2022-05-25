@@ -1888,7 +1888,7 @@ namespace BOTS_BL.Repository
                     status = true;
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 newexception.AddException(ex, "SendForApproval");
             }
@@ -1900,8 +1900,8 @@ namespace BOTS_BL.Repository
         {
             List<BOTS_TblSMSConfig> objData = new List<BOTS_TblSMSConfig>();
             using (var context = new CommonDBContext())
-            {              
-                    objData = context.BOTS_TblSMSConfig.Where(x => x.GroupId == GroupId).ToList();               
+            {
+                objData = context.BOTS_TblSMSConfig.Where(x => x.GroupId == GroupId).ToList();
             }
 
             return objData;
@@ -1933,7 +1933,7 @@ namespace BOTS_BL.Repository
             using (var context = new CommonDBContext())
             {
                 objData = context.BOTS_TblOutletMaster.Where(x => x.GroupId == GroupId).ToList();
-                foreach(var item in objData)
+                foreach (var item in objData)
                 {
                     var city = COBR.GetCityById(Convert.ToInt32(item.City));
                     item.CityName = city.CityName;
@@ -1994,7 +1994,7 @@ namespace BOTS_BL.Repository
             }
             return result;
         }
-    
+
         public List<BOTS_TblCommunicationSetAssignment> GetOutletsByAssignmentSetId(string groupId)
         {
             List<BOTS_TblCommunicationSetAssignment> lstData = new List<BOTS_TblCommunicationSetAssignment>();
@@ -2002,16 +2002,16 @@ namespace BOTS_BL.Repository
             {
                 lstData = context.BOTS_TblCommunicationSetAssignment.Where(x => x.GroupId == groupId).ToList();
 
-                foreach(var item in lstData)
+                foreach (var item in lstData)
                 {
                     var outletId = Convert.ToInt32(item.OutletId);
-                    item.OutletName = context.BOTS_TblOutletMaster.Where(x => x.Id == outletId).Select(y=>y.OutletName).FirstOrDefault();
+                    item.OutletName = context.BOTS_TblOutletMaster.Where(x => x.Id == outletId).Select(y => y.OutletName).FirstOrDefault();
                     //item.OutletName = outlet.OutletName;
                 }
 
             }
 
-                return lstData;
+            return lstData;
         }
 
         public List<BOTS_TblRetailMaster> GetOutletsBrandId(string groupId)
@@ -2025,23 +2025,23 @@ namespace BOTS_BL.Repository
 
             return lstData;
         }
-        
+
         public int GetBulkUpload(string GroupId)
         {
             int objData = 0;
             using (var context = new CommonDBContext())
             {
-               objData = context.BOTS_TblBulkUpload.Where(x => x.GroupId == GroupId).Count();
-                
+                objData = context.BOTS_TblBulkUpload.Where(x => x.GroupId == GroupId).Count();
+
             }
-            
+
             return objData;
         }
 
         public bool CreateCustomerDatabase(string GroupId)
         {
             bool status = false;
-            
+
             var connStr = ConfigurationManager.ConnectionStrings["CommonDBContext"].ToString();
             using (var context = new CommonDBContext())
             {
@@ -2070,5 +2070,37 @@ namespace BOTS_BL.Repository
             }
             return status;
         }
+
+        public string GetCSHeadEmailId()
+        {
+            string emailId = string.Empty;
+            using (var context = new CommonDBContext())
+            {
+                emailId = context.CustomerLoginDetails.Where(x => x.UserStatus.Value && x.LoginType == "6").Select(y => y.EmailId).FirstOrDefault();
+            }
+            return emailId;
+        }
+        public string GetOnboardingGroupName(string groupid)
+        {
+            string groupName = string.Empty;
+            using (var context = new CommonDBContext())
+            {
+                groupName = context.BOTS_TblGroupMaster.Where(x => x.GroupId == groupid).Select(y => y.GroupName).FirstOrDefault();
+            }
+            return groupName;
+        }
+
+        public string GetAssignedCSNameForOnboarding(string groupid)
+        {
+            string CSName = string.Empty;
+            using (var context = new CommonDBContext())
+            {
+                var RMAssignedId = context.BOTS_TblGroupMaster.Where(x => x.GroupId == groupid).Select(y => y.AssignedCS).FirstOrDefault();
+                var id = Convert.ToInt32(RMAssignedId);
+                CSName = context.tblRMAssigneds.Where(x => x.RMAssignedId == id).Select(y => y.RMAssignedName).FirstOrDefault();
+            }
+            return CSName;
+        }
+
     }
 }
