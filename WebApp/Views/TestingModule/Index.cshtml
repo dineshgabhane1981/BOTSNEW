@@ -34,27 +34,37 @@
                 <input id="rbtnCancel" name="campaign" type="radio" class="rbtnClass"> Cancel
                 <input id="rbtnSendOtp" name="campaign" type="radio" class="rbtnClass"> Send OTP
 
-
-                <div class="col-lg-12" style="float: left; border: 1px solid grey; border-radius: 12px; margin-bottom: 30px; margin-top: 10px;  margin-right: 20px;">
+                @*//Enrolment*@
+                <div class="col-lg-12" id="dvEnrlment" style="float: left; border: 1px solid grey; border-radius: 12px; margin-bottom: 30px; margin-top: 10px;  margin-right: 20px;">
                     <div style="float: left; margin-top: 20px;" class="col-md-4 col-lg-4">
-                        Billing Partner Name <input type="text" id="txtBillingPartnerName" class="input50" />
+                        Billing Partner Name
+                        @Html.DropDownListFor(model => model.billingPartnerId, new SelectList(ViewBag.BillingPartners, "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input40", @id = "ddlBillingPartner" })
                     </div>
                     <div style="float: left; margin-top: 20px; margin-bottom: 20px;" class="col-md-4 col-lg-4">
-                        Invoice No <input type="text" id="txtInvoiceNo" class="input50" style="margin-bottom: 10px; margin-right: 20px;" /> <br />
-                        Invoice Amt<input type="text"  id="txtInvoiceAmt" class=" input50" style="margin-bottom: 10px; margin-right: 20px;"/> <br />
-                        Date Time <input type="datetime"  id=" txtDatetime" class="input50"/ style="margin-bottom:10px; margin-right:20px;">
+                        Mobile No <input type="text" id="txtMboileNo" class="input50" />
                     </div>
-                    <div style="float: left; margin-top: 20px; margin-bottom: 20px;" class="col-md-4 col-lg-4">
-                        Mobile No <input type="text"  id="txtMboileNo" class="input50"/>
+                    <div class="col-lg-12" id="dvEnrlment" style="float: left; margin-bottom: 30px; margin-top: 10px;  margin-right: 20px;">
+
+                        <div style="float: left; margin-top: 20px; margin-bottom: 20px;" class="col-md-12 col-lg-12">
+                            Invoice No <input type="text" id="txtInvoiceNo" class="input50" style="margin-bottom: 10px; margin-right: 50px;" />
+                            Invoice Amt<input type="text" id="txtInvoiceAmt" class=" input50" style="margin-bottom: 10px; margin-right: 50px;" />
+                            Date Time <input type="datetime" id=" txtDatetime" class="input50" / style="margin-bottom:10px; margin-right:20px;">
+                        </div>
+
                     </div>
+
                 </div>
+
                 <div class="col-lg-12" style="float: left; border: 1px solid grey; border-radius: 12px; margin-bottom: 10px; margin-top: 10px; margin-right: 20px;">
                     <div>
                         <div style="float: left; margin-top: 20px;" class="col-md-4 col-lg-4">
-                            Request Packet <br /><textarea id="txtRequestPacket" rows="6" cols="40" class="input100"></textarea>
+                            Request Packet <br />
+                            @Html.TextAreaFor(model => model.RequestPacket, new { @class = "input100", @rows = 10, @id = "txtRequestPacket", tabindex = 4 })
                         </div>
                         <div style="float: left; margin-top: 20px;" class="col-md-4 col-lg-4">
                             Request URL <br /><textarea id="txtRequestUrl" rows="6" cols="40" class="input100"></textarea>
+                            @Html.TextAreaFor(model => model.RequestURL, new { @class = "input100", @rows = 10, @id = "txtRequestPacket", tabindex = 4 })
+
                         </div>
                         <div style="float: left; margin-top: 20px; margin-bottom: 20px;" class="col-md-4 col-lg-4">
                             Response Packet<br /><textarea id="txtResponsePacket" rows="6" cols="40" class="input100"></textarea>
@@ -62,12 +72,44 @@
                     </div>
                 </div>
                 <div style="float: left; margin-top: 20px; margin-bottom: 20px;" class="col-md-3 col-lg-12">
-                    
+
                     <button type="button" id="btnSend" onclick="" class="btn btn-primary" style="float: right; margin-left: 20px; margin-right: 20px; margin-bottom: 25px;">Send</button>
                     <button type="button" id="btnReset" onclick="" class="btn btn-primary" style="float: right; margin-left: 20px; margin-right: 20px; margin-bottom: 25px;">Reset</button><br />
                 </div>
+
+
+                @*//EnrolmentWithEarn*@
+                <div class="col-lg-12" id="dvEnrlmntWithEarn" style="float: left; border: 1px solid grey; border-radius: 12px; margin-bottom: 30px; margin-top: 10px;  margin-right: 20px;">
+
+                    <div style="float: left; margin-top: 20px; margin-bottom: 20px;" class="col-md-3 col-lg-12">
+
+                        <button type="button" id="btnSend" onclick="" class="btn btn-primary" style="float: right; margin-left: 20px; margin-right: 20px; margin-bottom: 25px;">Send</button>
+                        <button type="button" id="btnReset" onclick="" class="btn btn-primary" style="float: right; margin-left: 20px; margin-right: 20px; margin-bottom: 25px;">Reset</button><br />
+                    </div>
+
+                </div>
+
+
+
+
 
             </div>
         </div>
     </div>
 </div>
+
+
+<script>
+    $(document).ready(function () {
+
+        $('#rbtnEnrlment').click(function () {
+            ShowHideCampaignSection("dvEnrlment");
+            LoadCampaignOtherConfig("Enrollment");
+        });
+
+        $('#rbtnEnrlmntWithEarn').click(function () {
+            ShowHideCampaignSection("dvEnrlmntWithEarn");
+            LoadCampaignOtherConfig("EnrollmentWithEarn");
+        });
+    });
+</script>
