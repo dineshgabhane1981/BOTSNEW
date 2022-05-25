@@ -63,7 +63,7 @@
                         </div>
                         <div style="float: left; margin-top: 20px;" class="col-md-4 col-lg-4">
                             Request URL <br />
-                            @Html.TextAreaFor(model => model.RequestURL, new { @class = "input100", @rows = 10, @id = "txtRequestPacket", tabindex = 4 })
+                            @Html.TextAreaFor(model => model.RequestURL, new { @class = "input100", @rows = 10, @id = "txtRequestPacketURL", tabindex = 4 })
 
                         </div>
                         <div style="float: left; margin-top: 20px; margin-bottom: 20px;" class="col-md-4 col-lg-4">
@@ -83,6 +83,8 @@
 
 
 <script>
+    var oldMobileNo = "";
+    var flag = false;
     $(document).ready(function () {
 
         $('#rbtnEnrlment').click(function () {
@@ -94,5 +96,71 @@
             ShowHideCampaignSection("dvEnrlmntWithEarn");
             LoadCampaignOtherConfig("EnrollmentWithEarn");
         });
+
+        $('#btnSend').click(function () {
+            CheckAPI();
+        });
+        $("#txtMboileNo").focusout(function () {
+            UpdatePacket();
+        });
     });
+
+    function UpdatePacket() {        
+        var RequestPacket = $("#txtRequestPacket").val();
+        var mobileNo = $("#txtMboileNo").val();
+        if (oldMobileNo == "") {
+            flag = false;
+        }
+        else {
+            flag = true;
+        }
+        
+        if (flag) {
+            var strInReplace = "<MobileNo>" + oldMobileNo + "</MobileNo>";
+            var strToReplace = "<MobileNo>" + mobileNo + "</MobileNo>";            
+            RequestPacket = RequestPacket.replace(strInReplace, strToReplace);
+        }
+        else {
+            alert(222)
+            var strInReplace = "<MobileNo></MobileNo>";
+            var strToReplace = "<MobileNo>" + mobileNo + "</MobileNo>";
+            RequestPacket = RequestPacket.replace(strInReplace, strToReplace);
+        }        
+        $("#txtRequestPacket").val(RequestPacket);
+        oldMobileNo = mobileNo;
+    }
+
+    function CheckAPI() {
+        $("#divLoader").show();
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("GetResponse", "TestingModule")',
+                data: '{RequestPacket: ' + JSON.stringify($("#txtRequestPacket").val()) + ',RequestURL: ' + JSON.stringify($("#txtRequestPacketURL").val()) + '}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (result) {
+                    console.log(result);
+                    if (result == true) {
+                        cuteAlert({
+                            type: "success",
+                            title: "Saved..",
+                            message: "Configuration Saved Successfully!",
+                            buttonText: "Okay"
+                        })
+                    }
+                    else {
+                        cuteAlert({
+                            type: "error",
+                            title: "Oops..",
+                            message: "There is some problem while saving data",
+                            buttonText: "Okay"
+                        })
+                    }
+                    $("#divLoader").hide();
+                },
+                error: function (result) {
+                    $("#divLoader").hide();
+                }
+            });
+    }
 </script>

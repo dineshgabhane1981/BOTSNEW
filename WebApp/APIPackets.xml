@@ -50,8 +50,6 @@
 	</SendOTP>
 
 	<url>
-		<EnrollnmentURL>
-			https://blueocktopus.in/NewRetailwareWebService/Service.asmx/RW
-		</EnrollnmentURL>
+		<EnrollnmentURL>https://blueocktopus.in/NewRetailwareWebService/Service.asmx/RW</EnrollnmentURL>
 	</url>
 </packets>
