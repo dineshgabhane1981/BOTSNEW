@@ -2037,6 +2037,8 @@ namespace WebApp.Controllers.OnBoarding
                 {
                     //Create Database
                     result = OBR.CreateCustomerDatabase(groupId);
+                    
+                    //Send Email
                     var CSName = OBR.GetAssignedCSNameForOnboarding(groupId);
                     var CSHead = OBR.GetCSHeadEmailId();
                     var GroupName = OBR.GetOnboardingGroupName(groupId);
