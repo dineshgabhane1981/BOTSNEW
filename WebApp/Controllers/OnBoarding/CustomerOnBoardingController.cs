@@ -1172,9 +1172,7 @@ namespace WebApp.Controllers.OnBoarding
                     objData.Frequency = Convert.ToString(item["Frequency"]);
 
                     objData.IntroDays1 = Convert.ToInt32(item["IntroDays1"]);
-                    objData.IntroScript1 = Convert.ToString(item["IntroScript1"]);
-                    //objData.IntroDays2 = Convert.ToInt32(item["IntroDays2"]);
-                    //objData.IntroScript2 = Convert.ToString(item["IntroScript2"]);
+                    objData.IntroScript1 = Convert.ToString(item["IntroScript1"]);                    
                     objData.ReminderDays1 = Convert.ToInt32(item["ReminderDays1"]);
                     objData.ReminderWhen1 = Convert.ToString(item["ReminderWhen1"]);
                     objData.ReminderScript1 = Convert.ToString(item["ReminderScript1"]);
@@ -1185,6 +1183,16 @@ namespace WebApp.Controllers.OnBoarding
                     objData.OnDayScriptPT = Convert.ToString(item["OnDayScriptPT"]);
                     objData.OnDayTypeNPT = Convert.ToString(item["OnDayTypeNPT"]);
                     objData.OnDayScriptNPT = Convert.ToString(item["OnDayScriptNPT"]);
+
+                    if(objData.SMSType != "SMS")
+                    {
+                        objData.SMSScript1= Convert.ToString(item["SMSScript1"]);
+                        objData.SMSScript3 = Convert.ToString(item["SMSScript3"]);
+                        objData.SMSScript4 = Convert.ToString(item["SMSScript4"]);
+                        objData.SMSScript5 = Convert.ToString(item["SMSScript5"]);
+                        objData.SMSScript6 = Convert.ToString(item["SMSScript6"]);
+                    }
+
 
                     if (objData.Id > 0)
                     {
@@ -1926,6 +1934,7 @@ namespace WebApp.Controllers.OnBoarding
             }
             return new JsonResult() { Data = result, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
+        
         public ActionResult UpdateConfigurationStatus(string groupId, string status, string reason, string ownermobileno)
         {
             bool result = false;
@@ -2026,6 +2035,7 @@ namespace WebApp.Controllers.OnBoarding
 
             return new JsonResult() { Data = result, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
+        
         public ActionResult CustomerApprovalConfiguration(string groupId,string custMobileNo,string otp)
         {
             bool result = false;

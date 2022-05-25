@@ -951,8 +951,53 @@ namespace BOTS_BL.Repository
                     if (objData.Id > 0)
                     {
                         var oldRecord = context.BOTS_TblCampaignOtherConfig.Where(x => x.Id == objData.Id).FirstOrDefault();
+                        
                         objData.AddedBy = oldRecord.AddedBy;
                         objData.AddedDate = oldRecord.AddedDate;
+
+                        objData.IntroScript1DLT = oldRecord.IntroScript1DLT;
+                        objData.TemplateId1 = oldRecord.TemplateId1;
+                        objData.TemplateName1 = oldRecord.TemplateName1;
+                        objData.TemplateType1 = oldRecord.TemplateType1;
+                        objData.DLTStatus1 = oldRecord.DLTStatus1;
+                        objData.RejectReason1 = oldRecord.RejectReason1;
+
+                        objData.IntroScript2DLT = oldRecord.IntroScript2DLT;
+                        objData.TemplateId2 = oldRecord.TemplateId2;
+                        objData.TemplateName2 = oldRecord.TemplateName2;
+                        objData.TemplateType2 = oldRecord.TemplateType2;
+                        objData.DLTStatus2 = oldRecord.DLTStatus2;
+                        objData.RejectReason2 = oldRecord.RejectReason2;
+
+                        objData.ReminderScript1DLT = oldRecord.ReminderScript1DLT;
+                        objData.TemplateId3 = oldRecord.TemplateId3;
+                        objData.TemplateName3 = oldRecord.TemplateName3;
+                        objData.TemplateType3 = oldRecord.TemplateType3;
+                        objData.DLTStatus3 = oldRecord.DLTStatus3;
+                        objData.RejectReason3 = oldRecord.RejectReason3;
+
+                        objData.ReminderScript2DLT = oldRecord.ReminderScript2DLT;
+                        objData.TemplateId4 = oldRecord.TemplateId4;
+                        objData.TemplateName4 = oldRecord.TemplateName4;
+                        objData.TemplateType4 = oldRecord.TemplateType4;
+                        objData.DLTStatus4 = oldRecord.DLTStatus4;
+                        objData.RejectReason4 = oldRecord.RejectReason4;
+
+                        objData.OnDayScriptPTDLT = oldRecord.OnDayScriptPTDLT;
+                        objData.TemplateId5 = oldRecord.TemplateId5;
+                        objData.TemplateName5 = oldRecord.TemplateName5;
+                        objData.TemplateType5 = oldRecord.TemplateType5;
+                        objData.DLTStatus5 = oldRecord.DLTStatus5;
+                        objData.RejectReason5 = oldRecord.RejectReason5;
+
+                        objData.OnDayScriptNPTDLT = oldRecord.OnDayScriptNPTDLT;
+                        objData.TemplateId6 = oldRecord.TemplateId6;
+                        objData.TemplateName6 = oldRecord.TemplateName6;
+                        objData.TemplateType6 = oldRecord.TemplateType6;
+                        objData.DLTStatus6 = oldRecord.DLTStatus6;
+                        objData.RejectReason6 = oldRecord.RejectReason6;
+
+
                     }
                     context.BOTS_TblCampaignOtherConfig.AddOrUpdate(objData);
                     context.SaveChanges();

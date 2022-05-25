@@ -44,6 +44,7 @@
         <div>
             <input type="number" class="input20" id="txtIntroDays1" /> Days before event
             <textarea id="txtIntroScript1" class="input100" style="padding-top:20px;vertical-align:middle;"> </textarea>
+          <br /><br /> Seconday Script (This is SMS script only in case number do not have Whatsapp <b>(Optional)</b>) <textarea id="txtSMSScript1" class="input100" style="padding-top:20px;vertical-align:middle;"> </textarea>
         </div>
         @*<div style="margin-top:20px;">
             <input type="number" class="input20" id="txtIntroDays2" /> Days before event
@@ -52,30 +53,34 @@
     </div>
     <div style="margin-top:20px;border:1px solid grey;padding:10px;border-radius:10px;">
         <b> Reminder Message</b>
-        <div>
+        <div style="border-bottom:1px solid lightgrey;padding-bottom:10px;">
             <input type="number" class="input20" id="txtRemDays1" /> Days
             @Html.DropDownListFor(x => Model.lstBrands.Count, new SelectList(Model.BeforeAfter(), "Value", "Text"), htmlAttributes: new { @class = "input50", @id = "ddlBeforeAfter1", style = "margin-top:20px;" })
             event
             <textarea id="txtRemScript1" class="input100" style="padding-top:20px;vertical-align:middle;"> </textarea>
+            <br /><br /> Seconday Script (This is SMS script only in case number do not have Whatsapp <b>(Optional)</b>) <textarea id="txtSMSScript3" class="input100" style="padding-top:20px;vertical-align:middle;"> </textarea>
         </div>
         <div style="margin-top:20px;">
             <input type="number" class="input20" id="txtRemDays2" /> Days
             @Html.DropDownListFor(x => Model.lstBrands.Count, new SelectList(Model.BeforeAfter(), "Value", "Text"), htmlAttributes: new { @class = "input50", @id = "ddlBeforeAfter2", style = "margin-top:20px;" })
             event
             <textarea id="txtRemScript2" class="input100" style="padding-top: 20px; vertical-align: middle;"> </textarea>
+            <br /><br /> Seconday Script (This is SMS script only in case number do not have Whatsapp <b>(Optional)</b>) <textarea id="txtSMSScript4" class="input100" style="padding-top:20px;vertical-align:middle;"> </textarea>
         </div>
     </div>
     <div style="margin-top:20px;border:1px solid grey;padding:10px;border-radius:10px;">
         <b> On Birthday Message</b>
-        <div>
-            @Html.DropDownListFor(x => Model.lstBrands.Count, new SelectList(Model.PointsUsed(), "Value", "Text"), htmlAttributes: new { @class = "input50", @disabled="disabled", @id = "ddlPointsUsed", style = "margin-top:20px;" })
+        <div style="border-bottom:1px solid lightgrey;padding-bottom:10px;">
+            @Html.DropDownListFor(x => Model.lstBrands.Count, new SelectList(Model.PointsUsed(), "Value", "Text"), htmlAttributes: new { @class = "input50", @disabled = "disabled", @id = "ddlPointsUsed", style = "margin-top:20px;" })
             event
             <textarea id="txtOnBirthdayScriptPT" class="input100" style="padding-top:20px;vertical-align:middle;"> </textarea>
+            <br /><br /> Seconday Script (This is SMS script only in case number do not have Whatsapp <b>(Optional)</b>) <textarea id="txtSMSScript5" class="input100" style="padding-top:20px;vertical-align:middle;"> </textarea>
         </div>
         <div>
             @Html.DropDownListFor(x => Model.lstBrands.Count, new SelectList(Model.PointsNotUsed(), "Value", "Text"), htmlAttributes: new { @class = "input50", @disabled = "disabled", @id = "ddlPointsNotUsed", style = "margin-top:20px;" })
             event
             <textarea id="txtOnBirthdayScriptNPT" class="input100" style="padding-top:20px;vertical-align:middle;"> </textarea>
+            <br /><br /> Seconday Script (This is SMS script only in case number do not have Whatsapp <b>(Optional)</b>) <textarea id="txtSMSScript6" class="input100" style="padding-top:20px;vertical-align:middle;"> </textarea>
         </div>
     </div>
     <div class="container-fluid pt-3 pl-3 pr-3 pb-5">
@@ -494,6 +499,7 @@
         <button type="button" id="btnDLCRRSave" class="btn btn-primary pull-right" style="margin-right: 10px; margin-bottom: 20px;"> Save</button>
     </div>
 </div>
+
 <div id="dvDLCUR" style="border:1px solid grey;border-radius:10px;padding:5px;">
     <input type="hidden" id="hdnDLCURId" />
     <div style="margin-top:20px;">
@@ -517,6 +523,7 @@
         <button type="button" id="btnDLCURSave" class="btn btn-primary pull-right" style="margin-right: 10px; margin-bottom: 20px;"> Save</button>
     </div>
 </div>
+
 <div id="dvBalanceUpdate" style="border:1px solid grey;border-radius:10px;padding:5px;">    
     <input type="hidden" id="hdnBUId" />
     <div style="margin-top:20px;">
@@ -540,6 +547,7 @@
         <button type="button" id="btnBUSave" class="btn btn-primary pull-right" style="margin-right: 10px; margin-bottom: 20px;"> Save</button>
     </div>
 </div>
+
 <div id="dvUploadedUsers" style="border:1px solid grey;border-radius:10px;padding:5px;">
     <input type="hidden" id="hdnUploadedUsersId" />
     <div style="margin-top:20px;">
@@ -950,6 +958,14 @@
         item["OnDayScriptPT"] = $('#txtOnBirthdayScriptPT').val();
         item["OnDayTypeNPT"] = $('#ddlPointsNotUsed').val();
         item["OnDayScriptNPT"] = $('#txtOnBirthdayScriptNPT').val();
+
+        item["SMSScript1"] = $('#txtSMSScript1').val();
+        item["SMSScript3"] = $('#txtSMSScript3').val();
+        item["SMSScript4"] = $('#txtSMSScript4').val();
+        item["SMSScript5"] = $('#txtSMSScript5').val();
+        item["SMSScript6"] = $('#txtSMSScript6').val();
+        
+
 
         BirthdayConfig.push(item);
         var BirthdayConfigData = JSON.stringify(BirthdayConfig);
@@ -1468,6 +1484,15 @@
                 //alert(edata.OnDayScriptPT)
                 $('#ddlPointsUsed').val(edata.OnDayTypePT);
                 $('#txtOnBirthdayScriptPT').val(edata.OnDayScriptPT);
+                $('#txtOnBirthdayScriptNPT').val(edata.OnDayScriptNPT);
+
+                $('#txtSMSScript1').val(edata.SMSScript1);
+                $('#txtSMSScript3').val(edata.SMSScript3);
+                $('#txtSMSScript4').val(edata.SMSScript4);
+                $('#txtSMSScript5').val(edata.SMSScript5);
+                $('#txtSMSScript6').val(edata.SMSScript6);
+
+
                 $('#hdnBirthId').val(edata.Id);
                 if ($("#hdnBirthId").val() > 0) {
                     $("#btnBirthdayToDLT").show();

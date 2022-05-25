@@ -29,6 +29,8 @@ namespace BOTS_BL.Models
 
         public string IntroScript1 { get; set; }
 
+        public string SMSScript1 { get; set; }
+
         public string IntroScript1DLT { get; set; }
 
         [StringLength(100)]
@@ -43,6 +45,8 @@ namespace BOTS_BL.Models
         public int? IntroDays2 { get; set; }
 
         public string IntroScript2 { get; set; }
+
+        public string SMSScript2 { get; set; }
 
         public string IntroScript2DLT { get; set; }
 
@@ -62,6 +66,8 @@ namespace BOTS_BL.Models
 
         public string ReminderScript1 { get; set; }
 
+        public string SMSScript3 { get; set; }
+
         public string ReminderScript1DLT { get; set; }
 
         [StringLength(100)]
@@ -80,6 +86,8 @@ namespace BOTS_BL.Models
 
         public string ReminderScript2 { get; set; }
 
+        public string SMSScript4 { get; set; }
+
         public string ReminderScript2DLT { get; set; }
 
         [StringLength(100)]
@@ -96,6 +104,8 @@ namespace BOTS_BL.Models
 
         public string OnDayScriptPT { get; set; }
 
+        public string SMSScript5 { get; set; }
+
         public string OnDayScriptPTDLT { get; set; }
 
         [StringLength(100)]
@@ -111,6 +121,8 @@ namespace BOTS_BL.Models
         public string OnDayTypeNPT { get; set; }
 
         public string OnDayScriptNPT { get; set; }
+
+        public string SMSScript6 { get; set; }
 
         public string OnDayScriptNPTDLT { get; set; }
 
