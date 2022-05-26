@@ -193,6 +193,12 @@ namespace WebApp.Controllers.OnBoarding
                     objData.lstOutlets = OBR.GetOutletDetails(GroupId);
 
                     objData.objDLCLinkConfig = OBR.GetDLCLinkData(GroupId);
+                    
+                    if (objData.objDLCLinkConfig == null)
+                    {
+                        BOTS_TblDLCLinkConfig objDLCConfig = new BOTS_TblDLCLinkConfig();
+                        objData.objDLCLinkConfig = objDLCConfig;
+                    }
                     ViewBag.TempleteType = objData.TempleteType();
 
                     foreach (var brand in objData.objRetailList)
