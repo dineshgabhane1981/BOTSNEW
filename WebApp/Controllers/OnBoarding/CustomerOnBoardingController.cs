@@ -1172,7 +1172,7 @@ namespace WebApp.Controllers.OnBoarding
                     objData.Frequency = Convert.ToString(item["Frequency"]);
 
                     objData.IntroDays1 = Convert.ToInt32(item["IntroDays1"]);
-                    objData.IntroScript1 = Convert.ToString(item["IntroScript1"]);                    
+                    objData.IntroScript1 = Convert.ToString(item["IntroScript1"]);
                     objData.ReminderDays1 = Convert.ToInt32(item["ReminderDays1"]);
                     objData.ReminderWhen1 = Convert.ToString(item["ReminderWhen1"]);
                     objData.ReminderScript1 = Convert.ToString(item["ReminderScript1"]);
@@ -1183,16 +1183,28 @@ namespace WebApp.Controllers.OnBoarding
                     objData.OnDayScriptPT = Convert.ToString(item["OnDayScriptPT"]);
                     objData.OnDayTypeNPT = Convert.ToString(item["OnDayTypeNPT"]);
                     objData.OnDayScriptNPT = Convert.ToString(item["OnDayScriptNPT"]);
-
-                    if(objData.SMSType != "SMS")
+                    if (objData.CampaignType == "Reminder Bulk Uploaded Users" || objData.CampaignType == "Balance Updates" || objData.CampaignType == "DLC Update Reminder" || objData.CampaignType == "DLC Referral Reminder")
                     {
-                        objData.SMSScript1= Convert.ToString(item["SMSScript1"]);
-                        objData.SMSScript3 = Convert.ToString(item["SMSScript3"]);
-                        objData.SMSScript4 = Convert.ToString(item["SMSScript4"]);
-                        objData.SMSScript5 = Convert.ToString(item["SMSScript5"]);
-                        objData.SMSScript6 = Convert.ToString(item["SMSScript6"]);
+                        objData.IntroDays2 = Convert.ToInt32(item["IntroDays2"]);
+                        objData.IntroScript2 = Convert.ToString(item["IntroScript2"]);
                     }
 
+                    if (objData.SMSType != "SMS")
+                    {
+                        if (objData.CampaignType == "Birthday" || objData.CampaignType == "Anniversary")
+                        {
+                            objData.SMSScript1 = Convert.ToString(item["SMSScript1"]);
+                            objData.SMSScript3 = Convert.ToString(item["SMSScript3"]);
+                            objData.SMSScript4 = Convert.ToString(item["SMSScript4"]);
+                            objData.SMSScript5 = Convert.ToString(item["SMSScript5"]);
+                            objData.SMSScript6 = Convert.ToString(item["SMSScript6"]);
+                        }
+                        if (objData.CampaignType == "Reminder Bulk Uploaded Users" || objData.CampaignType == "Balance Updates" || objData.CampaignType == "DLC Update Reminder" || objData.CampaignType == "DLC Referral Reminder")
+                        {
+                            objData.SMSScript1 = Convert.ToString(item["SMSScript1"]);
+                            objData.SMSScript2 = Convert.ToString(item["SMSScript2"]);
+                        }
+                    }
 
                     if (objData.Id > 0)
                     {
@@ -1924,28 +1936,28 @@ namespace WebApp.Controllers.OnBoarding
             bool result = true;
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
             result = OBR.SendForApproval(GroupId, userDetails.LoginId);
-            if(result)
+            if (result)
             {
                 var GroupName = OBR.GetOnboardingGroupName(GroupId);
                 var CSHead = OBR.GetCSHeadEmailId();
                 var message = "Configuration submitted for approval for Group - " + GroupName;
-                var subject = "Configuration submitted for approval "+ GroupName;
+                var subject = "Configuration submitted for approval " + GroupName;
                 var isEmail = SendEmailOnBoarding(CSHead, subject, message);
             }
             return new JsonResult() { Data = result, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
-        
+
         public ActionResult UpdateConfigurationStatus(string groupId, string status, string reason, string ownermobileno)
         {
             bool result = false;
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
             var loginId = ownermobileno;
-            if(userDetails!=null)
+            if (userDetails != null)
             {
                 loginId = userDetails.LoginId;
             }
             result = OBR.UpdateConfigurationStatus(groupId, status, loginId, reason);
-            if(reason=="Rejected")
+            if (reason == "Rejected")
             {
                 var GroupName = OBR.GetOnboardingGroupName(groupId);
                 var CSEmail = userDetails.EmailId;
@@ -1992,18 +2004,18 @@ namespace WebApp.Controllers.OnBoarding
             var BaseUrl = ConfigurationManager.AppSettings["BaseUrl"].ToString();
             string from = System.Configuration.ConfigurationManager.AppSettings["FrmEmailOnboarding"];
             string PWD = System.Configuration.ConfigurationManager.AppSettings["FrmEmailOnboardingPwd"];
-            
+
             var Url = BaseUrl + "CustomerOnBoarding/CheckerView?GroupId=" + comm.EncryptString(groupDetails.GroupId);
-            
+
             string To = groupDetails.OwnerEmailId;
 
             using (MailMessage mail = new MailMessage(from, To))
             {
                 StringBuilder str = new StringBuilder();
-                str.AppendLine("Dear "+ groupDetails.OwnerName + " Sir,");
+                str.AppendLine("Dear " + groupDetails.OwnerName + " Sir,");
                 str.AppendLine();
                 str.AppendLine("Please find below link of Loyalty Program Configuration");
-                str.AppendLine();                 
+                str.AppendLine();
                 str.AppendLine("Please click on link to check and approve configuration : " + Url + "");
                 str.AppendLine();
                 str.AppendLine("Regards,");
@@ -2024,10 +2036,10 @@ namespace WebApp.Controllers.OnBoarding
                 smtp.Send(mail);
 
                 result = true;
-            }            
+            }
             return result;
         }
-        
+
         public ActionResult SendOTPForApproval(string groupId, string custMobileNo)
         {
             bool result = false;
@@ -2035,8 +2047,8 @@ namespace WebApp.Controllers.OnBoarding
 
             return new JsonResult() { Data = result, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
-        
-        public ActionResult CustomerApprovalConfiguration(string groupId,string custMobileNo,string otp)
+
+        public ActionResult CustomerApprovalConfiguration(string groupId, string custMobileNo, string otp)
         {
             bool result = false;
             var status = DR.VerifyOTP(custMobileNo, Convert.ToInt32(otp));
@@ -2047,7 +2059,7 @@ namespace WebApp.Controllers.OnBoarding
                 {
                     //Create Database
                     result = OBR.CreateCustomerDatabase(groupId);
-                    
+
                     //Send Email
                     var CSName = OBR.GetAssignedCSNameForOnboarding(groupId);
                     var CSHead = OBR.GetCSHeadEmailId();
@@ -2058,10 +2070,10 @@ namespace WebApp.Controllers.OnBoarding
                     var isEmail = SendEmailOnBoarding(CSEmail, subject, message);
                 }
             }
-            return new JsonResult() { Data = result, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };            
+            return new JsonResult() { Data = result, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
 
-        public bool SendEmailOnBoarding(string to,string subject,string message)
+        public bool SendEmailOnBoarding(string to, string subject, string message)
         {
             bool status = false;
             var from = ConfigurationManager.AppSettings["FrmEmailOnboarding"].ToString();
@@ -2072,7 +2084,7 @@ namespace WebApp.Controllers.OnBoarding
                 str.AppendLine("Dear Sir/Madam,");
                 str.AppendLine();
                 str.AppendLine(message);
-                str.AppendLine();                
+                str.AppendLine();
                 str.AppendLine("Regards,");
                 str.AppendLine(" - BlueOcktopus Team");
 

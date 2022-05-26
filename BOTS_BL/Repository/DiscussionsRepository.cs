@@ -372,7 +372,7 @@ namespace BOTS_BL.Repository
                     if (status != "")
                     {
                         DateTime FromDate;
-                        DateTime ToDate = DateTime.Now.Date;
+                        DateTime ToDate = DateTime.Now.Date.AddDays(1);
                         FromDate = ToDate.Date;
                         switch (status)
                         {
@@ -386,17 +386,17 @@ namespace BOTS_BL.Repository
 
                             case "WIP3":
                                 FromDate = ToDate.AddDays(-3);
-                                list = list.Where(x => x.AddedDate > FromDate && x.AddedDate < ToDate && x.Status == "WIP").ToList();
+                                list = list.Where(x => x.UpdatedDate >= FromDate && x.UpdatedDate <= ToDate && x.Status == "WIP").ToList();
                                 break;
                             case "WIP7":
                                 ToDate = ToDate.AddDays(-3);
                                 FromDate = ToDate.AddDays(-7);
-                                list = list.Where(x => x.AddedDate > FromDate && x.AddedDate < ToDate && x.Status == "WIP").ToList();
+                                list = list.Where(x => x.UpdatedDate >= FromDate && x.UpdatedDate <= ToDate && x.Status == "WIP").ToList();
                                 break;
                             case "WIP15":
                                 FromDate = ToDate.AddDays(-7);
                                 ToDate = ToDate.AddDays(-15);
-                                list = list.Where(x => x.AddedDate < FromDate && x.AddedDate > ToDate && x.Status == "WIP").ToList();
+                                list = list.Where(x => x.UpdatedDate >= FromDate && x.UpdatedDate <= ToDate && x.Status == "WIP").ToList();
                                 break;
                         }
 
@@ -411,6 +411,7 @@ namespace BOTS_BL.Repository
                     {
                         DateTime fmdt = Convert.ToDateTime(fromDate);
                         DateTime todt = Convert.ToDateTime(toDate);
+                        todt = todt.AddDays(1);
                         list = list.Where(x => x.AddedDate > fmdt && x.AddedDate < todt).ToList();
 
                     }
@@ -661,14 +662,14 @@ namespace BOTS_BL.Repository
                         DiscussionCount objItem = new DiscussionCount();
                         objItem.Name = item.UserName;
 
-                        var FirstDay = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);                        
+                        var FirstDay = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
                         objItem.TotalCount = context.BOTS_TblDiscussion.Where(x => x.AddedBy == item.LoginId && x.AddedDate >= FirstDay).Count();
-                        var SubDiscussionCount = context.BOTS_TblSubDiscussionData.Where(x => x.UpdatedBy == item.LoginId && x.AddedDate >= FirstDay).GroupBy(y=>y.DiscussionId).Count();
+                        var SubDiscussionCount = context.BOTS_TblSubDiscussionData.Where(x => x.UpdatedBy == item.LoginId && x.AddedDate >= FirstDay).GroupBy(y => y.DiscussionId).Count();
                         objItem.TotalCount = objItem.TotalCount + SubDiscussionCount;
 
                         var Yeasterday = DateTime.Today.AddDays(-2);
-                        objItem.TotalCountYesterday = context.BOTS_TblDiscussion.Where(x => x.AddedBy == item.LoginId && x.AddedDate > Yeasterday && x.AddedDate <DateTime.Today).Count();
-                        var SubDiscussionYesterdayCount=context.BOTS_TblSubDiscussionData.Where(x => x.UpdatedBy == item.LoginId && x.AddedDate > Yeasterday && x.AddedDate < DateTime.Today).GroupBy(y => y.DiscussionId).Count();
+                        objItem.TotalCountYesterday = context.BOTS_TblDiscussion.Where(x => x.AddedBy == item.LoginId && x.AddedDate > Yeasterday && x.AddedDate < DateTime.Today).Count();
+                        var SubDiscussionYesterdayCount = context.BOTS_TblSubDiscussionData.Where(x => x.UpdatedBy == item.LoginId && x.AddedDate > Yeasterday && x.AddedDate < DateTime.Today).GroupBy(y => y.DiscussionId).Count();
                         objItem.TotalCountYesterday = objItem.TotalCountYesterday + SubDiscussionYesterdayCount;
 
                         objItem.TotalWIPCount = context.BOTS_TblDiscussion.Where(x => x.AddedBy == item.LoginId && x.Status == "WIP").Count();
@@ -680,7 +681,7 @@ namespace BOTS_BL.Repository
 
 
                         objItem.TotalWIPBefore3Days = context.BOTS_TblDiscussion.Where(x => x.AddedBy == item.LoginId && x.Status == "WIP" && x.UpdatedDate <= NewDate).Count();
-                        
+
                         lstData.Add(objItem);
                     }
 
