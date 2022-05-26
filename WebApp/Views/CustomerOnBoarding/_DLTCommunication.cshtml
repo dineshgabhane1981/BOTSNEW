@@ -384,7 +384,7 @@
         var status = "Approved";
         id = $("#hdnCommSMSConfigId" + id).val();
         UpdateCommunicationStatus(id, status, "");
-        location.reload();
+        //location.reload();
     }
 
     function RejectTemplate(control) {
@@ -474,6 +474,46 @@
                         }
                         if (status == "Rejected") {
                             $("#spnStatus" + id).text("Status - Rejected");
+                        }
+                        if (status == "Approved") {
+                            $("#spnStatus" + id).text("Status - Approved");
+                            if (messageId == 100) {                               
+                                $("#txtSMSEnrollment").prop("disabled", true);
+                                $("#txtSMSEnrollmentDLT").prop("disabled", true);                                
+                            }
+                            if (messageId == 101) {
+                                $("#txtSMSEarn").prop("disabled", true);
+                                $("#txtSMSEarnDLT").prop("disabled", true);
+                            }
+                            if (messageId == 102) {
+                                $("#txtSMSBurn").prop("disabled", true);
+                                $("#txtSMSBurnDLT").prop("disabled", true);
+                            }
+                            if (messageId == 105) {
+                                $("#txtSMSOTP").prop("disabled", true);
+                                $("#txtSMSOTPDLT").prop("disabled", true);
+                            }
+                            if (messageId == 106) {
+                                $("#txtSMSBalanceInquiry").prop("disabled", true);
+                                $("#txtSMSBalanceInquiryDLT").prop("disabled", true);
+                            }
+                            if (messageId == 107) {
+                                $("#txtSMSAnyCancel").prop("disabled", true);
+                                $("#txtSMSAnyCancelDLT").prop("disabled", true);
+                            }
+                            if (messageId == 108) {
+                                $("#txtSMSEnrollmentAndEarn").prop("disabled", true);
+                                $("#txtSMSEnrollmentAndEarnDLT").prop("disabled", true);
+                            }                            
+
+                            $("#spnRejectStatus" + id).hide();
+                            $("#txtTemplateId" + id).prop("disabled", true);
+                            $("#txtTemplateName" + id).prop("disabled", true);
+                            $("#ddlTemplateType" + id).prop("disabled", true);
+                            $("#btnCopy" + id).prop("disabled", true);
+                            $("#btnApprove" + id).prop("disabled", true);
+                            $("#btnReject" + id).prop("disabled", true);
+                            $("#btnSave" + id).prop("disabled", true);
                         }
                     }
                     else {

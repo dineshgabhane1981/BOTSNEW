@@ -418,7 +418,13 @@
             $("#txtSMSLink").val(newdata[0].SMSlink);
             for (var i = 0; i < newdata.length; i++) {
                 if (newdata[i].MessageId == "100") {
-                    $("#spnSMSEnrollment").text(newdata[i].DLTStatus);
+                    if (newdata[i].DLTStatus == "Rejected") {
+                        $("#spnSMSEnrollment").text(newdata[i].DLTStatus + "  Reason - " + newdata[i].RejectReason);
+                    }
+                    else {
+                        $("#spnSMSEnrollment").text(newdata[i].DLTStatus);
+                    }
+                    
                     if (newdata[i].DLTStatus != null && newdata[i].DLTStatus != "Submitted") {
                         $("#txtSMSEnrollment").prop("disabled", true);
                     }
@@ -426,7 +432,15 @@
                     $("#hdnCommSMSConfigId1").val(newdata[i].Id);
                 }
                 if (newdata[i].MessageId == "101") {
-                    $("#spnSMSEarn").text(newdata[i].DLTStatus);
+                    
+                    if (newdata[i].DLTStatus == "Rejected") {
+                        
+                        $("#spnSMSEarn").text(newdata[i].DLTStatus + "  Reason - " + newdata[i].RejectReason);
+                    }
+                    else {
+                        $("#spnSMSEarn").text(newdata[i].DLTStatus);
+                    }
+                   
                     if (newdata[i].DLTStatus != null && newdata[i].DLTStatus != "Submitted") {
                         $("#txtSMSEarn").prop("disabled", true);
                     }
@@ -434,7 +448,15 @@
                     $("#hdnCommSMSConfigId3").val(newdata[i].Id);
                 }
                 if (newdata[i].MessageId == "102") {
-                    $("#spnSMSBurn").text(newdata[i].DLTStatus);
+
+                    if (newdata[i].DLTStatus == "Rejected") {
+                        
+                        $("#spnSMSBurn").text(newdata[i].DLTStatus + "  Reason - " + newdata[i].RejectReason);
+                    }
+                    else {
+                        $("#spnSMSBurn").text(newdata[i].DLTStatus);
+                    }
+                    
                     if (newdata[i].DLTStatus != null && newdata[i].DLTStatus != "Submitted") {
                         $("#txtSMSBurn").prop("disabled", true);
                     }
@@ -442,7 +464,14 @@
                     $("#hdnCommSMSConfigId5").val(newdata[i].Id);
                 }                
                 if (newdata[i].MessageId == "105") {
-                    $("#spnSMSOTP").text(newdata[i].DLTStatus);
+                    if (newdata[i].DLTStatus == "Rejected") {
+                        
+                        $("#spnSMSOTP").text(newdata[i].DLTStatus + "  Reason - " + newdata[i].RejectReason);
+                    }
+                    else {
+                        $("#spnSMSOTP").text(newdata[i].DLTStatus);
+                    }
+                    
                     if (newdata[i].DLTStatus != null && newdata[i].DLTStatus != "Submitted") {
                         $("#txtSMSOTP").prop("disabled", true);
                     }
@@ -450,7 +479,14 @@
                     $("#hdnCommSMSConfigId4").val(newdata[i].Id);
                 }
                 if (newdata[i].MessageId == "106") {
-                    $("#spnSMSBalanceInquiry").text(newdata[i].DLTStatus);
+                    if (newdata[i].DLTStatus == "Rejected") {
+                        
+                        $("#spnSMSBalanceInquiry").text(newdata[i].DLTStatus + "  Reason - " + newdata[i].RejectReason);
+                    }
+                    else {
+                        $("#spnSMSBalanceInquiry").text(newdata[i].DLTStatus);
+                    }
+                    
                     if (newdata[i].DLTStatus != null && newdata[i].DLTStatus != "Submitted") {
                         $("#txtSMSBalanceInquiry").prop("disabled", true);
                     }
@@ -458,7 +494,14 @@
                     $("#hdnCommSMSConfigId9").val(newdata[i].Id);
                 }
                 if (newdata[i].MessageId == "107") {
-                    $("#spnSMSAnyCancel").text(newdata[i].DLTStatus);
+                    if (newdata[i].DLTStatus == "Rejected") {
+                       
+                        $("#spnSMSAnyCancel").text(newdata[i].DLTStatus + "  Reason - " + newdata[i].RejectReason);
+                    }
+                    else {
+                        $("#spnSMSAnyCancel").text(newdata[i].DLTStatus);
+                    }
+                    
                     if (newdata[i].DLTStatus != null && newdata[i].DLTStatus != "Submitted") {
                         $("#txtSMSAnyCancel").prop("disabled", true);
                     }
@@ -466,7 +509,13 @@
                     $("#hdnCommSMSConfigId8").val(newdata[i].Id);
                 }
                 if (newdata[i].MessageId == "108") {
-                    $("#spnSMSEnrollmentAndEarn").text(newdata[i].DLTStatus);
+                    if (newdata[i].DLTStatus == "Rejected") {                       
+                        $("#spnSMSEnrollmentAndEarn").text(newdata[i].DLTStatus + "  Reason - " + newdata[i].RejectReason);                        
+                    }
+                    else {                        
+                        $("#spnSMSEnrollmentAndEarn").text(newdata[i].DLTStatus);
+                    }
+                    
                     if (newdata[i].DLTStatus != null && newdata[i].DLTStatus != "Submitted") {
                         $("#txtSMSEnrollmentAndEarn").prop("disabled", true);
                     }
