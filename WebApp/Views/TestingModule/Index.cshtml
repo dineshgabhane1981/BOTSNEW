@@ -30,18 +30,19 @@
         <input id="rbtnCancel" name="campaign" type="radio" class="rbtnClass"> Cancel
         <input id="rbtnSendOtp" name="campaign" type="radio" class="rbtnClass"> Send OTP
     </div>
+  
 </div>
 
 @*//Enrolment*@
 <div class="multisteps-form__content bg-white" id="dvEnrlment">
     <input type="hidden" id="hdnEnrlmentId" />
-    <div class="col-lg-10"  style="float: left; border: 1px solid grey; border-radius: 12px; margin-bottom: 30px; margin-top: 10px; margin-left: 50px; margin-right: 50px;">
+    <div class="col-lg-10" style="float: left; border: 1px solid grey; border-radius: 12px; margin-bottom: 30px; margin-top: 10px; margin-left: 50px; margin-right: 50px;">
         <div style="float: left; margin-top: 20px;" class="col-md-4 col-lg-4">
             Billing Partner Name
             @Html.DropDownListFor(model => model.billingPartnerId, new SelectList(ViewBag.BillingPartners, "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input40", @id = "ddlBillingPartner" })
         </div>
         <div style="float: left; margin-top: 20px; margin-bottom: 20px;" class="col-md-4 col-lg-4">
-            Mobile No <input type="text" id="txtMboileNo" class="input50" />
+            Mobile No <input type="text" id="txtMobileNo1" class="input50" />
         </div>
         <div style="float: left; margin-top: 20px; margin-bottom: 20px;" class="col-md-12 col-lg-12">
             Invoice No <input type="text" id="txtInvoiceNo" class="input50" style="margin-bottom: 10px; margin-right: 50px;" />
@@ -53,7 +54,7 @@
         <div>
             <div style="float: left; margin-top: 20px;" class="col-md-4 col-lg-4">
                 Request Packet <br />
-                @Html.TextAreaFor(model => model.RequestPacketEnrollnment, new { @class = "input100", @rows = 10, @id = "txtRequestPacket", tabindex = 4 })
+                @Html.TextAreaFor(model => model.RequestPacketEnrollnment, new { @class = "input100", @rows = 10, @id = "txtRequestPacket1", tabindex = 4 })
             </div>
             <div style="float: left; margin-top: 20px;" class="col-md-4 col-lg-4">
                 Request URL <br />
@@ -64,23 +65,19 @@
                 Response Packet<br /><textarea id="txtResponsePacket" rows="10" cols="40" class="input100"></textarea>
             </div>
         </div>
-    </div>
-    <div style="float: left; margin-top: 20px; margin-bottom: 20px;" class="col-md-3 col-lg-10">
-        <button type="button" id="btnSend" onclick="" class="btn btn-primary" style="float: right; margin-left:10px; margin-bottom: 25px;">Send</button>
-        <button type="button" id="btnReset" onclick="" class="btn btn-primary" style="float: right;  margin-bottom: 25px;">Reset</button><br />
     </div>
 </div>
 
 @*Enrolnment With Earn**@
 <div class="multisteps-form__content bg-white" id="dvEnrlmentWithEarn" style="display:none;">
     <input type="hidden" id="hdnEnrlmentWithEarnId" />
-    <div class="col-lg-10"  style="float: left; border: 1px solid grey; border-radius: 12px; margin-bottom: 30px; margin-top: 10px; margin-left: 50px; margin-right: 50px;">
+    <div class="col-lg-10" style="float: left; border: 1px solid grey; border-radius: 12px; margin-bottom: 30px; margin-top: 10px; margin-left: 50px; margin-right: 50px;">
         <div style="float: left; margin-top: 20px;" class="col-md-4 col-lg-4">
             Billing Partner Name
             @Html.DropDownListFor(model => model.billingPartnerId, new SelectList(ViewBag.BillingPartners, "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input40", @id = "ddlBillingPartner" })
         </div>
         <div style="float: left; margin-top: 20px; margin-bottom: 20px;" class="col-md-4 col-lg-4">
-            Mobile No <input type="text" id="txtMboileNo" class="input50" />
+            Mobile No <input type="text" id="txtMobileNo2" class="input50" />
         </div>
         <div style="float: left; margin-top: 20px; margin-bottom: 20px;" class="col-md-12 col-lg-12">
             Invoice No <input type="text" id="txtInvoiceNo" class="input50" style="margin-bottom: 10px; margin-right: 50px;" />
@@ -92,7 +89,7 @@
         <div>
             <div style="float: left; margin-top: 20px;" class="col-md-4 col-lg-4">
                 Request Packet <br />
-                @Html.TextAreaFor(model => model.RequestPacketEnrollnmentWithEarn, new { @class = "input100", @rows = 10, @id = "txtRequestPacket", tabindex = 4 })
+                @Html.TextAreaFor(model => model.RequestPacketEnrollnmentWithEarn, new { @class = "input100", @rows = 10, @id = "txtRequestPacket2", tabindex = 4 })
             </div>
             <div style="float: left; margin-top: 20px;" class="col-md-4 col-lg-4">
                 Request URL <br />
@@ -100,27 +97,23 @@
 
             </div>
             <div style="float: left; margin-top: 20px; margin-bottom: 20px;" class="col-md-4 col-lg-4">
-                Response Packet<br /><textarea id="txtResponsePacket" rows="10" cols="40" class="input100"></textarea>
+                Response Packet<br /><textarea id="txtResponsePacket2" rows="10" cols="40" class="input100"></textarea>
             </div>
         </div>
-    </div>
-    <div style="float: left; margin-top: 20px; margin-bottom: 20px;" class="col-md-3 col-lg-10">
-        <button type="button" id="btnSend" onclick="" class="btn btn-primary" style="float: right; margin-left:10px; margin-bottom: 25px;">Send</button>
-        <button type="button" id="btnReset" onclick="" class="btn btn-primary" style="float: right;  margin-bottom: 25px;">Reset</button><br />
-    </div>
+    </div>  
 </div>
 
 
 @*Earn*@
 <div class="multisteps-form__content bg-white" id="dvEarn" style="display:none;">
     <input type="hidden" id="hdnEarnId" />
-    <div class="col-lg-10"  style="float: left; border: 1px solid grey; border-radius: 12px; margin-bottom: 30px; margin-top: 10px; margin-left: 50px; margin-right: 50px;">
+    <div class="col-lg-10" style="float: left; border: 1px solid grey; border-radius: 12px; margin-bottom: 30px; margin-top: 10px; margin-left: 50px; margin-right: 50px;">
         <div style="float: left; margin-top: 20px;" class="col-md-4 col-lg-4">
             Billing Partner Name
             @Html.DropDownListFor(model => model.billingPartnerId, new SelectList(ViewBag.BillingPartners, "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input40", @id = "ddlBillingPartner" })
         </div>
         <div style="float: left; margin-top: 20px; margin-bottom: 20px;" class="col-md-4 col-lg-4">
-            Mobile No <input type="text" id="txtMboileNo" class="input50" />
+            Mobile No <input type="text" id="txtMobileNo3" class="input50" />
         </div>
         <div style="float: left; margin-top: 20px; margin-bottom: 20px;" class="col-md-12 col-lg-12">
             Invoice No <input type="text" id="txtInvoiceNo" class="input50" style="margin-bottom: 10px; margin-right: 50px;" />
@@ -132,7 +125,7 @@
         <div>
             <div style="float: left; margin-top: 20px;" class="col-md-4 col-lg-4">
                 Request Packet <br />
-                @Html.TextAreaFor(model => model.RequestPacketEarn, new { @class = "input100", @rows = 10, @id = "txtRequestPacket", tabindex = 4 })
+                @Html.TextAreaFor(model => model.RequestPacketEarn, new { @class = "input100", @rows = 10, @id = "txtRequestPacket3", tabindex = 4 })
             </div>
             <div style="float: left; margin-top: 20px;" class="col-md-4 col-lg-4">
                 Request URL <br />
@@ -140,26 +133,22 @@
 
             </div>
             <div style="float: left; margin-top: 20px; margin-bottom: 20px;" class="col-md-4 col-lg-4">
-                Response Packet<br /><textarea id="txtResponsePacket" rows="10" cols="40" class="input100"></textarea>
+                Response Packet<br /><textarea id="txtResponsePacket3" rows="10" cols="40" class="input100"></textarea>
             </div>
         </div>
-    </div>
-    <div style="float: left; margin-top: 20px; margin-bottom: 20px;" class="col-md-3 col-lg-10">
-        <button type="button" id="btnSend" onclick="" class="btn btn-primary" style="float: right; margin-left:10px; margin-bottom: 25px;">Send</button>
-        <button type="button" id="btnReset" onclick="" class="btn btn-primary" style="float: right;  margin-bottom: 25px;">Reset</button><br />
-    </div>
-</div> 
+    </div>  
+</div>
 
 @*Burn Validation*@
 <div class="multisteps-form__content bg-white" id="dvBurnValidation" style="display:none;">
     <input type="hidden" id="hdnBurnValidationId" />
-    <div class="col-lg-10"  style="float: left; border: 1px solid grey; border-radius: 12px; margin-bottom: 30px; margin-top: 10px; margin-left: 50px; margin-right: 50px;">
+    <div class="col-lg-10" style="float: left; border: 1px solid grey; border-radius: 12px; margin-bottom: 30px; margin-top: 10px; margin-left: 50px; margin-right: 50px;">
         <div style="float: left; margin-top: 20px;" class="col-md-4 col-lg-4">
             Billing Partner Name
             @Html.DropDownListFor(model => model.billingPartnerId, new SelectList(ViewBag.BillingPartners, "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input40", @id = "ddlBillingPartner" })
         </div>
         <div style="float: left; margin-top: 20px; margin-bottom: 20px;" class="col-md-4 col-lg-4">
-            Mobile No <input type="text" id="txtMboileNo" class="input50" />
+            Mobile No <input type="text" id="txtMobileNo4" class="input50" />
         </div>
         <div style="float: left; margin-top: 20px; margin-bottom: 20px;" class="col-md-12 col-lg-12">
             Invoice No <input type="text" id="txtInvoiceNo" class="input50" style="margin-bottom: 10px; margin-right: 50px;" />
@@ -167,11 +156,11 @@
             Date Time <input type="datetime" id="txtDatetime" class="input50" style="margin-bottom:10px; margin-right:20px;">
         </div>
     </div>
-    <div class="col-lg-10"    style="float: left; border: 1px solid grey; border-radius: 12px; margin-bottom: 10px; margin-top: 10px; margin-left: 50px; margin-right: 50px;">
+    <div class="col-lg-10" style="float: left; border: 1px solid grey; border-radius: 12px; margin-bottom: 10px; margin-top: 10px; margin-left: 50px; margin-right: 50px;">
         <div>
             <div style="float: left; margin-top: 20px;" class="col-md-4 col-lg-4">
                 Request Packet <br />
-                @Html.TextAreaFor(model => model.RequestPacketBurnValidation, new { @class = "input100", @rows = 10, @id = "txtRequestPacket", tabindex = 4 })
+                @Html.TextAreaFor(model => model.RequestPacketBurnValidation, new { @class = "input100", @rows = 10, @id = "txtRequestPacket4", tabindex = 4 })
             </div>
             <div style="float: left; margin-top: 20px;" class="col-md-4 col-lg-4">
                 Request URL <br />
@@ -179,14 +168,10 @@
 
             </div>
             <div style="float: left; margin-top: 20px; margin-bottom: 20px;" class="col-md-4 col-lg-4">
-                Response Packet<br /><textarea id="txtResponsePacket" rows="10" cols="40" class="input100"></textarea>
+                Response Packet<br /><textarea id="txtResponsePacket4" rows="10" cols="40" class="input100"></textarea>
             </div>
         </div>
-    </div>
-    <div style="float: left; margin-top: 20px; margin-bottom: 20px;" class="col-md-3 col-lg-10">
-        <button type="button" id="btnSend" onclick="" class="btn btn-primary" style="float: right; margin-left:10px; margin-bottom: 25px;">Send</button>
-        <button type="button" id="btnReset" onclick="" class="btn btn-primary" style="float: right;  margin-bottom: 25px;">Reset</button><br />
-    </div>
+    </div>  
 </div>
 
 
@@ -199,7 +184,7 @@
             @Html.DropDownListFor(model => model.billingPartnerId, new SelectList(ViewBag.BillingPartners, "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input40", @id = "ddlBillingPartner" })
         </div>
         <div style="float: left; margin-top: 20px; margin-bottom: 20px;" class="col-md-4 col-lg-4">
-            Mobile No <input type="text" id="txtMboileNo" class="input50" />
+            Mobile No <input type="text" id="txtMobileNo5" class="input50" />
         </div>
         <div style="float: left; margin-top: 20px; margin-bottom: 20px;" class="col-md-12 col-lg-12">
             Invoice No <input type="text" id="txtInvoiceNo" class="input50" style="margin-bottom: 10px; margin-right: 50px;" />
@@ -211,7 +196,7 @@
         <div>
             <div style="float: left; margin-top: 20px;" class="col-md-4 col-lg-4">
                 Request Packet <br />
-                @Html.TextAreaFor(model => model.RequestPacketBurn, new { @class = "input100", @rows = 10, @id = "txtRequestPacket", tabindex = 4 })
+                @Html.TextAreaFor(model => model.RequestPacketBurn, new { @class = "input100", @rows = 10, @id = "txtRequestPacket5", tabindex = 4 })
             </div>
             <div style="float: left; margin-top: 20px;" class="col-md-4 col-lg-4">
                 Request URL <br />
@@ -219,27 +204,23 @@
 
             </div>
             <div style="float: left; margin-top: 20px; margin-bottom: 20px;" class="col-md-4 col-lg-4">
-                Response Packet<br /><textarea id="txtResponsePacket" rows="10" cols="40" class="input100"></textarea>
+                Response Packet<br /><textarea id="txtResponsePacket5" rows="10" cols="40" class="input100"></textarea>
             </div>
         </div>
-    </div>
-    <div style="float: left; margin-top: 20px; margin-bottom: 20px;" class="col-md-3 col-lg-10">
-        <button type="button" id="btnSend" onclick="" class="btn btn-primary" style="float: right; margin-left:10px; margin-bottom: 25px;">Send</button>
-        <button type="button" id="btnReset" onclick="" class="btn btn-primary" style="float: right;  margin-bottom: 25px;">Reset</button><br />
-    </div>
+    </div>   
 </div>
 
 
 @*Cancel*@
 <div class="multisteps-form__content bg-white" id="dvCancel" style="display:none;">
     <input type="hidden" id="hdnCancelId" />
-    <div class="col-lg-10"  style="float: left; border: 1px solid grey; border-radius: 12px; margin-bottom: 30px; margin-top: 10px; margin-left: 50px; margin-right: 50px;">
+    <div class="col-lg-10" style="float: left; border: 1px solid grey; border-radius: 12px; margin-bottom: 30px; margin-top: 10px; margin-left: 50px; margin-right: 50px;">
         <div style="float: left; margin-top: 20px;" class="col-md-4 col-lg-4">
             Billing Partner Name
             @Html.DropDownListFor(model => model.billingPartnerId, new SelectList(ViewBag.BillingPartners, "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input40", @id = "ddlBillingPartner" })
         </div>
         <div style="float: left; margin-top: 20px; margin-bottom: 20px;" class="col-md-4 col-lg-4">
-            Mobile No <input type="text" id="txtMboileNo" class="input50" />
+            Mobile No <input type="text" id="txtMobileNo6" class="input50" />
         </div>
         <div style="float: left; margin-top: 20px; margin-bottom: 20px;" class="col-md-12 col-lg-12">
             Invoice No <input type="text" id="txtInvoiceNo" class="input50" style="margin-bottom: 10px; margin-right: 50px;" />
@@ -247,11 +228,11 @@
             Date Time <input type="datetime" id="txtDatetime" class="input50" style="margin-bottom:10px; margin-right:20px;">
         </div>
     </div>
-    <div class="col-lg-10"   style="float: left; border: 1px solid grey; border-radius: 12px; margin-bottom: 10px; margin-top: 10px; margin-left: 50px; margin-right: 50px;">
+    <div class="col-lg-10" style="float: left; border: 1px solid grey; border-radius: 12px; margin-bottom: 10px; margin-top: 10px; margin-left: 50px; margin-right: 50px;">
         <div>
             <div style="float: left; margin-top: 20px;" class="col-md-4 col-lg-4">
                 Request Packet <br />
-                @Html.TextAreaFor(model => model.RequestPacketCancel, new { @class = "input100", @rows = 10, @id = "txtRequestPacket", tabindex = 4 })
+                @Html.TextAreaFor(model => model.RequestPacketCancel, new { @class = "input100", @rows = 10, @id = "txtRequestPacket6", tabindex = 4 })
             </div>
             <div style="float: left; margin-top: 20px;" class="col-md-4 col-lg-4">
                 Request URL <br />
@@ -259,15 +240,11 @@
 
             </div>
             <div style="float: left; margin-top: 20px; margin-bottom: 20px;" class="col-md-4 col-lg-4">
-                Response Packet<br /><textarea id="txtResponsePacket" rows="10" cols="40" class="input100"></textarea>
+                Response Packet<br /><textarea id="txtResponsePacket6" rows="10" cols="40" class="input100"></textarea>
             </div>
         </div>
     </div>
-    <div style="float: left; margin-top: 20px; margin-bottom: 20px;" class="col-md-3 col-lg-10">
-        <button type="button" id="btnSend" onclick="" class="btn btn-primary" style="float: right; margin-left:10px; margin-bottom: 25px;">Send</button>
-        <button type="button" id="btnReset" onclick="" class="btn btn-primary" style="float: right;  margin-bottom: 25px;">Reset</button><br />
-    </div>
-</div>
+ </div> 
 
 
 @*Send Otp*@
@@ -279,7 +256,7 @@
             @Html.DropDownListFor(model => model.billingPartnerId, new SelectList(ViewBag.BillingPartners, "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input40", @id = "ddlBillingPartner" })
         </div>
         <div style="float: left; margin-top: 20px; margin-bottom: 20px;" class="col-md-4 col-lg-4">
-            Mobile No <input type="text" id="txtMboileNo" class="input50" />
+            Mobile No <input type="text" id="txtMobileNo7" class="input50" />
         </div>
         <div style="float: left; margin-top: 20px; margin-bottom: 20px;" class="col-md-12 col-lg-12">
             Invoice No <input type="text" id="txtInvoiceNo" class="input50" style="margin-bottom: 10px; margin-right: 50px;" />
@@ -287,11 +264,11 @@
             Date Time <input type="datetime" id="txtDatetime" class="input50" style="margin-bottom:10px; margin-right:20px;">
         </div>
     </div>
-    <div class="col-lg-10"  style="float: left; border: 1px solid grey; border-radius: 12px; margin-bottom: 10px; margin-top: 10px; margin-left: 50px; margin-right: 50px;">
+    <div class="col-lg-10" style="float: left; border: 1px solid grey; border-radius: 12px; margin-bottom: 10px; margin-top: 10px; margin-left: 50px; margin-right: 50px;">
         <div>
             <div style="float: left; margin-top: 20px;" class="col-md-4 col-lg-4">
                 Request Packet <br />
-                @Html.TextAreaFor(model => model.RequestPacketSendOTP, new { @class = "input100", @rows = 10, @id = "txtRequestPacket", tabindex = 4 })
+                @Html.TextAreaFor(model => model.RequestPacketSendOTP, new { @class = "input100", @rows = 10, @id = "txtRequestPacket7", tabindex = 4 })
             </div>
             <div style="float: left; margin-top: 20px;" class="col-md-4 col-lg-4">
                 Request URL <br />
@@ -299,16 +276,16 @@
 
             </div>
             <div style="float: left; margin-top: 20px; margin-bottom: 20px;" class="col-md-4 col-lg-4">
-                Response Packet<br /><textarea id="txtResponsePacket" rows="10" cols="40" class="input100"></textarea>
+                Response Packet<br /><textarea id="txtResponsePacket7" rows="10" cols="40" class="input100"></textarea>
             </div>
         </div>
-    </div>
-    <div style="float: left; margin-top: 20px; margin-bottom: 20px;" class="col-md-3 col-lg-10">
-        <button type="button" id="btnSend" onclick="" class="btn btn-primary" style="float: right; margin-left:10px; margin-bottom: 25px;">Send</button>
-        <button type="button" id="btnReset" onclick="" class="btn btn-primary" style="float: right;  margin-bottom: 25px;">Reset</button><br />
-    </div>
+    </div>  
 </div>
 
+<div style="float: left;" class="col-md-3 col-lg-12 bg-white">
+    <button type="button" id="btnSend" onclick="" class="btn btn-primary" style="float: right; margin-right: 50px; margin-left: 10px; margin-bottom: 25px; margin-top: 20px;">Send</button>
+    <button type="button" id="btnReset" onclick="" class="btn btn-primary" style="float: right; margin-bottom: 25px; margin-top: 20px;">Reset</button><br />
+</div>
 
 <script>
     var oldMobileNo = "";
@@ -346,8 +323,32 @@
         $('#btnSend').click(function () {
             CheckAPI();
         });
-        $("#txtMboileNo").focusout(function () {
-            UpdatePacket();
+        $("#txtMobileNo1").focusout(function () {
+            UpdatePacket1();
+        });
+
+        $("#txtMobileNo2").focusout(function () {
+            UpdatePacket2();
+        });
+
+        $("#txtMobileNo3").focusout(function () {
+            UpdatePacket3();
+        });
+
+        $("#txtMobileNo4").focusout(function () {
+            UpdatePacket4();
+        });
+
+        $("#txtMobileNo5").focusout(function () {
+            UpdatePacket5();
+        });
+
+        $("#txtMobileNo6").focusout(function () {
+            UpdatePacket6();
+        });
+
+        $("#txtMobileNo7").focusout(function () {
+            UpdatePacket7();
         });
     });
 
@@ -363,9 +364,9 @@
         $("#" + Id).show();
     }
 
-    function UpdatePacket() {
-        var RequestPacket = $("#txtRequestPacket").val();
-        var mobileNo = $("#txtMboileNo").val();
+    function UpdatePacket1() {
+        var RequestPacket = $("#txtRequestPacket1").val();
+        var mobileNo = $("#txtMobileNo1").val();
         if (oldMobileNo == "") {
             flag = false;
         }
@@ -383,16 +384,161 @@
             var strToReplace = "<MobileNo>" + mobileNo + "</MobileNo>";
             RequestPacket = RequestPacket.replace(strInReplace, strToReplace);
         }
-        $("#txtRequestPacket").val(RequestPacket);
+        $("#txtRequestPacket1").val(RequestPacket);
         oldMobileNo = mobileNo;
     }
+
+    function UpdatePacket2() {
+        var RequestPacket = $("#txtRequestPacket2").val();
+        var mobileNo = $("#txtMobileNo2").val();
+        if (oldMobileNo == "") {
+            flag = false;
+        }
+        else {
+            flag = true;
+        }
+
+        if (flag) {
+            var strInReplace = "<MobileNo>" + oldMobileNo + "</MobileNo>";
+            var strToReplace = "<MobileNo>" + mobileNo + "</MobileNo>";
+            RequestPacket = RequestPacket.replace(strInReplace, strToReplace);
+        }
+        else {
+            var strInReplace = "<MobileNo></MobileNo>";
+            var strToReplace = "<MobileNo>" + mobileNo + "</MobileNo>";
+            RequestPacket = RequestPacket.replace(strInReplace, strToReplace);
+        }
+        $("#txtRequestPacket2").val(RequestPacket);
+        oldMobileNo = mobileNo;
+    }
+
+    function UpdatePacket3() {
+        var RequestPacket = $("#txtRequestPacket3").val();
+        var mobileNo = $("#txtMobileNo3").val();
+        if (oldMobileNo == "") {
+            flag = false;
+        }
+        else {
+            flag = true;
+        }
+
+        if (flag) {
+            var strInReplace = "<MobileNo>" + oldMobileNo + "</MobileNo>";
+            var strToReplace = "<MobileNo>" + mobileNo + "</MobileNo>";
+            RequestPacket = RequestPacket.replace(strInReplace, strToReplace);
+        }
+        else {
+            var strInReplace = "<MobileNo></MobileNo>";
+            var strToReplace = "<MobileNo>" + mobileNo + "</MobileNo>";
+            RequestPacket = RequestPacket.replace(strInReplace, strToReplace);
+        }
+        $("#txtRequestPacket3").val(RequestPacket);
+        oldMobileNo = mobileNo;
+    }
+
+    function UpdatePacket4() {
+        var RequestPacket = $("#txtRequestPacket4").val();
+        var mobileNo = $("#txtMobileNo4").val();
+        if (oldMobileNo == "") {
+            flag = false;
+        }
+        else {
+            flag = true;
+        }
+
+        if (flag) {
+            var strInReplace = "<MobileNo>" + oldMobileNo + "</MobileNo>";
+            var strToReplace = "<MobileNo>" + mobileNo + "</MobileNo>";
+            RequestPacket = RequestPacket.replace(strInReplace, strToReplace);
+        }
+        else {
+            var strInReplace = "<MobileNo></MobileNo>";
+            var strToReplace = "<MobileNo>" + mobileNo + "</MobileNo>";
+            RequestPacket = RequestPacket.replace(strInReplace, strToReplace);
+        }
+        $("#txtRequestPacket4").val(RequestPacket);
+        oldMobileNo = mobileNo;
+    }
+
+    function UpdatePacket5() {
+        var RequestPacket = $("#txtRequestPacket5").val();
+        var mobileNo = $("#txtMobileNo5").val();
+        if (oldMobileNo == "") {
+            flag = false;
+        }
+        else {
+            flag = true;
+        }
+
+        if (flag) {
+            var strInReplace = "<MobileNo>" + oldMobileNo + "</MobileNo>";
+            var strToReplace = "<MobileNo>" + mobileNo + "</MobileNo>";
+            RequestPacket = RequestPacket.replace(strInReplace, strToReplace);
+        }
+        else {
+            var strInReplace = "<MobileNo></MobileNo>";
+            var strToReplace = "<MobileNo>" + mobileNo + "</MobileNo>";
+            RequestPacket = RequestPacket.replace(strInReplace, strToReplace);
+        }
+        $("#txtRequestPacket5").val(RequestPacket);
+        oldMobileNo = mobileNo;
+    }
+
+    function UpdatePacket6() {
+        var RequestPacket = $("#txtRequestPacket6").val();
+        var mobileNo = $("#txtMobileNo6").val();
+        if (oldMobileNo == "") {
+            flag = false;
+        }
+        else {
+            flag = true;
+        }
+
+        if (flag) {
+            var strInReplace = "<MobileNo>" + oldMobileNo + "</MobileNo>";
+            var strToReplace = "<MobileNo>" + mobileNo + "</MobileNo>";
+            RequestPacket = RequestPacket.replace(strInReplace, strToReplace);
+        }
+        else {
+            var strInReplace = "<MobileNo></MobileNo>";
+            var strToReplace = "<MobileNo>" + mobileNo + "</MobileNo>";
+            RequestPacket = RequestPacket.replace(strInReplace, strToReplace);
+        }
+        $("#txtRequestPacket6").val(RequestPacket);
+        oldMobileNo = mobileNo;
+    }
+
+    function UpdatePacket7() {
+        var RequestPacket = $("#txtRequestPacket7").val();
+        var mobileNo = $("#txtMobileNo7").val();
+        if (oldMobileNo == "") {
+            flag = false;
+        }
+        else {
+            flag = true;
+        }
+
+        if (flag) {
+            var strInReplace = "<MobileNo>" + oldMobileNo + "</MobileNo>";
+            var strToReplace = "<MobileNo>" + mobileNo + "</MobileNo>";
+            RequestPacket = RequestPacket.replace(strInReplace, strToReplace);
+        }
+        else {
+            var strInReplace = "<MobileNo></MobileNo>";
+            var strToReplace = "<MobileNo>" + mobileNo + "</MobileNo>";
+            RequestPacket = RequestPacket.replace(strInReplace, strToReplace);
+        }
+        $("#txtRequestPacket7").val(RequestPacket);
+        oldMobileNo = mobileNo;
+    }
+
 
     function CheckAPI() {
         $("#divLoader").show();
             $.ajax({
                 type: "POST",
                 url: '@Url.Action("GetResponse", "TestingModule")',
-                data: '{RequestPacket: ' + JSON.stringify($("#txtRequestPacket").val()) + ',RequestURL: ' + JSON.stringify($("#txtRequestPacketURL").val()) + '}',
+                data: '{RequestPacket: ' + JSON.stringify($("#txtRequestPacket1").val()) + ',RequestURL: ' + JSON.stringify($("#txtRequestPacketURL").val()) + '}',
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
                 success: function (result) {
@@ -401,7 +547,7 @@
                         cuteAlert({
                             type: "success",
                             title: "Saved..",
-                            message: "Configuration Saved Successfully!",
+                            message: "Request Send Successfully!",
                             buttonText: "Okay"
                         })
                     }

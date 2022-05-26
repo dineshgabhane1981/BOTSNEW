@@ -36,7 +36,7 @@ namespace WebApp.Controllers
             ViewBag.GroupId = groupId;
             ViewBag.BillingPartners = billingpartners;
             XmlDocument doc = new XmlDocument();
-            doc.Load("C:\\Users\\nisha\\source\\repos\\BOTSNEW\\WebApp\\APIPackets.xml");
+            doc.Load("C:\\Users\\91912\\source\\BOTS\\WebApp\\APIPackets.xml");
 
             //Enrollnment
             XmlNode node = doc.DocumentElement.SelectSingleNode("/packets/Enrollnment");
