@@ -207,7 +207,7 @@ namespace BOTS_BL.Repository
                     //CS Head
                     if (userDetails.LoginType == "6")
                     {
-                        lstGroups = context.BOTS_TblGroupMaster.Where(x => x.CustomerStatus == "CS" || x.CustomerStatus == "CSUpdate").ToList();
+                        lstGroups = context.BOTS_TblGroupMaster.ToList();
                     }
                     //CS Success
                     if (userDetails.LoginType == "7")
