@@ -932,7 +932,12 @@ namespace WebApp.Controllers.OnBoarding
                         objDLCLink.Id = Convert.ToInt32(item["Id"]);
                     }
                     objDLCLink.GroupId = Convert.ToString(item["GroupId"]);
-
+                    objDLCLink.ProfileUpdatePoints = Convert.ToInt32(item["ProfileUpdatePoints"]);
+                    objDLCLink.ReferralPoints = Convert.ToInt32(item["ReferralPoints"]);
+                    objDLCLink.ReferredPoints = Convert.ToInt32(item["ReferredPoints"]);
+                    objDLCLink.MaxNoOfReferrals = Convert.ToInt32(item["MaxNoOfReferrals"]);
+                    objDLCLink.ValidityOfReferralPoints = Convert.ToInt32(item["ValidityOfReferralPoints"]);
+                    objDLCLink.ReferralReminder= Convert.ToInt32(item["ReferralReminder"]);
                     objDLCLink.ToTheReferralSMSScript = Convert.ToString(item["SMSToTheReferral"]);
                     objDLCLink.ReminderForPointsUsageSMSScript = Convert.ToString(item["SMSReminderForPointsUsage"]);
                     objDLCLink.ReferredSuccessOnReferralTxnSMSScript = Convert.ToString(item["SMSReferredSuccessOnReferralTxn"]);
