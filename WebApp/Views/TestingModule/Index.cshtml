@@ -16,11 +16,11 @@
 </style>
 
 <div class="multisteps-form__panel shadow p-4 list-box bg-white" style="height:auto !important;" id="sec7" data-animation="scaleIn">
-        <a href="@Url.Action("CheckerView", "CustomerOnBoarding", new { groupId = ViewBag.GroupId })" class="login" title="Go To Configration sheet" target="_blank">
-            <button type="button" id="btnCheckerView" onclick="" class="btn btn-primary" style="float: right; margin-left: 150px; margin-right: 100px; margin-bottom: 35px;">
-                Configration sheet
-            </button>
-        </a>  
+    <a href="@Url.Action("CheckerView", "CustomerOnBoarding", new { groupId = ViewBag.GroupId })" class="login" title="Go To Configration sheet" target="_blank">
+        <button type="button" id="btnCheckerView" onclick="" class="btn btn-primary" style="float: right; margin-left: 150px; margin-right: 100px; margin-bottom: 35px;">
+            Configration sheet
+        </button>
+    </a>
     <div style="margin-bottom:30px;margin-top:30px;margin-left:20px;margin-right:20px;">
         <input id="rbtnEnrlment" name="campaign" type="radio" checked class="rbtnClass"> Enrollnment
         <input id="rbtnEnrlmntWithEarn" name="campaign" type="radio" class="rbtnClass"> Enrolnment With Earn
@@ -31,7 +31,7 @@
         <input id="rbtnSendOtp" name="campaign" type="radio" class="rbtnClass"> Send OTP
     </div>
 </div>
-        
+
 @*//Enrolment*@
 <div class="multisteps-form__content bg-white">
     <input type="hidden" id="hdnEnrlmentId" />
@@ -43,11 +43,11 @@
         <div style="float: left; margin-top: 20px; margin-bottom: 20px;" class="col-md-4 col-lg-4">
             Mobile No <input type="text" id="txtMboileNo" class="input50" />
         </div>
-            <div style="float: left; margin-top: 20px; margin-bottom: 20px;" class="col-md-12 col-lg-12">
-                Invoice No <input type="text" id="txtInvoiceNo" class="input50" style="margin-bottom: 10px; margin-right: 50px;" />
-                Invoice Amt<input type="text" id="txtInvoiceAmt" class="input50" style="margin-bottom: 10px; margin-right: 50px;" />
-                Date Time <input type="datetime" id="txtDatetime" class="input50" style="margin-bottom:10px; margin-right:20px;">
-            </div>       
+        <div style="float: left; margin-top: 20px; margin-bottom: 20px;" class="col-md-12 col-lg-12">
+            Invoice No <input type="text" id="txtInvoiceNo" class="input50" style="margin-bottom: 10px; margin-right: 50px;" />
+            Invoice Amt<input type="text" id="txtInvoiceAmt" class="input50" style="margin-bottom: 10px; margin-right: 50px;" />
+            Date Time <input type="datetime" id="txtDatetime" class="input50" style="margin-bottom:10px; margin-right:20px;">
+        </div>
     </div>
     <div class="col-lg-10" style="float: left; border: 1px solid grey; border-radius: 12px; margin-bottom: 10px; margin-top: 10px; margin-left: 50px; margin-right: 50px;">
         <div>
@@ -68,8 +68,247 @@
     <div style="float: left; margin-top: 20px; margin-bottom: 20px;" class="col-md-3 col-lg-10">
         <button type="button" id="btnSend" onclick="" class="btn btn-primary" style="float: right; margin-left:10px; margin-bottom: 25px;">Send</button>
         <button type="button" id="btnReset" onclick="" class="btn btn-primary" style="float: right;  margin-bottom: 25px;">Reset</button><br />
-    </div>        
+    </div>
 </div>
+
+@*Enrolnment With Earn**@
+<div class="multisteps-form__content bg-white">
+    <input type="hidden" id="hdnEnrlmentWithEarnId" />
+    <div class="col-lg-10" id="dvEnrlmentWithEarn" style="float: left; border: 1px solid grey; border-radius: 12px; margin-bottom: 30px; margin-top: 10px; margin-left: 50px; margin-right: 50px;">
+        <div style="float: left; margin-top: 20px;" class="col-md-4 col-lg-4">
+            Billing Partner Name
+            @Html.DropDownListFor(model => model.billingPartnerId, new SelectList(ViewBag.BillingPartners, "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input40", @id = "ddlBillingPartner" })
+        </div>
+        <div style="float: left; margin-top: 20px; margin-bottom: 20px;" class="col-md-4 col-lg-4">
+            Mobile No <input type="text" id="txtMboileNo" class="input50" />
+        </div>
+        <div style="float: left; margin-top: 20px; margin-bottom: 20px;" class="col-md-12 col-lg-12">
+            Invoice No <input type="text" id="txtInvoiceNo" class="input50" style="margin-bottom: 10px; margin-right: 50px;" />
+            Invoice Amt<input type="text" id="txtInvoiceAmt" class="input50" style="margin-bottom: 10px; margin-right: 50px;" />
+            Date Time <input type="datetime" id="txtDatetime" class="input50" style="margin-bottom:10px; margin-right:20px;">
+        </div>
+    </div>
+    <div class="col-lg-10" style="float: left; border: 1px solid grey; border-radius: 12px; margin-bottom: 10px; margin-top: 10px; margin-left: 50px; margin-right: 50px;">
+        <div>
+            <div style="float: left; margin-top: 20px;" class="col-md-4 col-lg-4">
+                Request Packet <br />
+                @Html.TextAreaFor(model => model.RequestPacket, new { @class = "input100", @rows = 10, @id = "txtRequestPacket", tabindex = 4 })
+            </div>
+            <div style="float: left; margin-top: 20px;" class="col-md-4 col-lg-4">
+                Request URL <br />
+                @Html.TextAreaFor(model => model.RequestURL, new { @class = "input100", @rows = 10, @id = "txtRequestPacketURL", tabindex = 4 })
+
+            </div>
+            <div style="float: left; margin-top: 20px; margin-bottom: 20px;" class="col-md-4 col-lg-4">
+                Response Packet<br /><textarea id="txtResponsePacket" rows="10" cols="40" class="input100"></textarea>
+            </div>
+        </div>
+    </div>
+    <div style="float: left; margin-top: 20px; margin-bottom: 20px;" class="col-md-3 col-lg-10">
+        <button type="button" id="btnSend" onclick="" class="btn btn-primary" style="float: right; margin-left:10px; margin-bottom: 25px;">Send</button>
+        <button type="button" id="btnReset" onclick="" class="btn btn-primary" style="float: right;  margin-bottom: 25px;">Reset</button><br />
+    </div>
+</div>
+
+
+@*Earn*@
+<div class="multisteps-form__content bg-white">
+    <input type="hidden" id="hdnEarnId" />
+    <div class="col-lg-10" id="dvEarn" style="float: left; border: 1px solid grey; border-radius: 12px; margin-bottom: 30px; margin-top: 10px; margin-left: 50px; margin-right: 50px;">
+        <div style="float: left; margin-top: 20px;" class="col-md-4 col-lg-4">
+            Billing Partner Name
+            @Html.DropDownListFor(model => model.billingPartnerId, new SelectList(ViewBag.BillingPartners, "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input40", @id = "ddlBillingPartner" })
+        </div>
+        <div style="float: left; margin-top: 20px; margin-bottom: 20px;" class="col-md-4 col-lg-4">
+            Mobile No <input type="text" id="txtMboileNo" class="input50" />
+        </div>
+        <div style="float: left; margin-top: 20px; margin-bottom: 20px;" class="col-md-12 col-lg-12">
+            Invoice No <input type="text" id="txtInvoiceNo" class="input50" style="margin-bottom: 10px; margin-right: 50px;" />
+            Invoice Amt<input type="text" id="txtInvoiceAmt" class="input50" style="margin-bottom: 10px; margin-right: 50px;" />
+            Date Time <input type="datetime" id="txtDatetime" class="input50" style="margin-bottom:10px; margin-right:20px;">
+        </div>
+    </div>
+    <div class="col-lg-10" style="float: left; border: 1px solid grey; border-radius: 12px; margin-bottom: 10px; margin-top: 10px; margin-left: 50px; margin-right: 50px;">
+        <div>
+            <div style="float: left; margin-top: 20px;" class="col-md-4 col-lg-4">
+                Request Packet <br />
+                @Html.TextAreaFor(model => model.RequestPacket, new { @class = "input100", @rows = 10, @id = "txtRequestPacket", tabindex = 4 })
+            </div>
+            <div style="float: left; margin-top: 20px;" class="col-md-4 col-lg-4">
+                Request URL <br />
+                @Html.TextAreaFor(model => model.RequestURL, new { @class = "input100", @rows = 10, @id = "txtRequestPacketURL", tabindex = 4 })
+
+            </div>
+            <div style="float: left; margin-top: 20px; margin-bottom: 20px;" class="col-md-4 col-lg-4">
+                Response Packet<br /><textarea id="txtResponsePacket" rows="10" cols="40" class="input100"></textarea>
+            </div>
+        </div>
+    </div>
+    <div style="float: left; margin-top: 20px; margin-bottom: 20px;" class="col-md-3 col-lg-10">
+        <button type="button" id="btnSend" onclick="" class="btn btn-primary" style="float: right; margin-left:10px; margin-bottom: 25px;">Send</button>
+        <button type="button" id="btnReset" onclick="" class="btn btn-primary" style="float: right;  margin-bottom: 25px;">Reset</button><br />
+    </div>
+</div> 
+
+@*Burn Validation*@
+<div class="multisteps-form__content bg-white">
+    <input type="hidden" id="hdnBurnValidationId" />
+    <div class="col-lg-10" id="dvBurnValidation" style="float: left; border: 1px solid grey; border-radius: 12px; margin-bottom: 30px; margin-top: 10px; margin-left: 50px; margin-right: 50px;">
+        <div style="float: left; margin-top: 20px;" class="col-md-4 col-lg-4">
+            Billing Partner Name
+            @Html.DropDownListFor(model => model.billingPartnerId, new SelectList(ViewBag.BillingPartners, "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input40", @id = "ddlBillingPartner" })
+        </div>
+        <div style="float: left; margin-top: 20px; margin-bottom: 20px;" class="col-md-4 col-lg-4">
+            Mobile No <input type="text" id="txtMboileNo" class="input50" />
+        </div>
+        <div style="float: left; margin-top: 20px; margin-bottom: 20px;" class="col-md-12 col-lg-12">
+            Invoice No <input type="text" id="txtInvoiceNo" class="input50" style="margin-bottom: 10px; margin-right: 50px;" />
+            Invoice Amt<input type="text" id="txtInvoiceAmt" class="input50" style="margin-bottom: 10px; margin-right: 50px;" />
+            Date Time <input type="datetime" id="txtDatetime" class="input50" style="margin-bottom:10px; margin-right:20px;">
+        </div>
+    </div>
+    <div class="col-lg-10" style="float: left; border: 1px solid grey; border-radius: 12px; margin-bottom: 10px; margin-top: 10px; margin-left: 50px; margin-right: 50px;">
+        <div>
+            <div style="float: left; margin-top: 20px;" class="col-md-4 col-lg-4">
+                Request Packet <br />
+                @Html.TextAreaFor(model => model.RequestPacket, new { @class = "input100", @rows = 10, @id = "txtRequestPacket", tabindex = 4 })
+            </div>
+            <div style="float: left; margin-top: 20px;" class="col-md-4 col-lg-4">
+                Request URL <br />
+                @Html.TextAreaFor(model => model.RequestURL, new { @class = "input100", @rows = 10, @id = "txtRequestPacketURL", tabindex = 4 })
+
+            </div>
+            <div style="float: left; margin-top: 20px; margin-bottom: 20px;" class="col-md-4 col-lg-4">
+                Response Packet<br /><textarea id="txtResponsePacket" rows="10" cols="40" class="input100"></textarea>
+            </div>
+        </div>
+    </div>
+    <div style="float: left; margin-top: 20px; margin-bottom: 20px;" class="col-md-3 col-lg-10">
+        <button type="button" id="btnSend" onclick="" class="btn btn-primary" style="float: right; margin-left:10px; margin-bottom: 25px;">Send</button>
+        <button type="button" id="btnReset" onclick="" class="btn btn-primary" style="float: right;  margin-bottom: 25px;">Reset</button><br />
+    </div>
+</div>
+
+
+@*Burn*@
+<div class="multisteps-form__content bg-white">
+    <input type="hidden" id="hdnBurnId" />
+    <div class="col-lg-10" id="dvBurn" style="float: left; border: 1px solid grey; border-radius: 12px; margin-bottom: 30px; margin-top: 10px; margin-left: 50px; margin-right: 50px;">
+        <div style="float: left; margin-top: 20px;" class="col-md-4 col-lg-4">
+            Billing Partner Name
+            @Html.DropDownListFor(model => model.billingPartnerId, new SelectList(ViewBag.BillingPartners, "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input40", @id = "ddlBillingPartner" })
+        </div>
+        <div style="float: left; margin-top: 20px; margin-bottom: 20px;" class="col-md-4 col-lg-4">
+            Mobile No <input type="text" id="txtMboileNo" class="input50" />
+        </div>
+        <div style="float: left; margin-top: 20px; margin-bottom: 20px;" class="col-md-12 col-lg-12">
+            Invoice No <input type="text" id="txtInvoiceNo" class="input50" style="margin-bottom: 10px; margin-right: 50px;" />
+            Invoice Amt<input type="text" id="txtInvoiceAmt" class="input50" style="margin-bottom: 10px; margin-right: 50px;" />
+            Date Time <input type="datetime" id="txtDatetime" class="input50" style="margin-bottom:10px; margin-right:20px;">
+        </div>
+    </div>
+    <div class="col-lg-10" style="float: left; border: 1px solid grey; border-radius: 12px; margin-bottom: 10px; margin-top: 10px; margin-left: 50px; margin-right: 50px;">
+        <div>
+            <div style="float: left; margin-top: 20px;" class="col-md-4 col-lg-4">
+                Request Packet <br />
+                @Html.TextAreaFor(model => model.RequestPacket, new { @class = "input100", @rows = 10, @id = "txtRequestPacket", tabindex = 4 })
+            </div>
+            <div style="float: left; margin-top: 20px;" class="col-md-4 col-lg-4">
+                Request URL <br />
+                @Html.TextAreaFor(model => model.RequestURL, new { @class = "input100", @rows = 10, @id = "txtRequestPacketURL", tabindex = 4 })
+
+            </div>
+            <div style="float: left; margin-top: 20px; margin-bottom: 20px;" class="col-md-4 col-lg-4">
+                Response Packet<br /><textarea id="txtResponsePacket" rows="10" cols="40" class="input100"></textarea>
+            </div>
+        </div>
+    </div>
+    <div style="float: left; margin-top: 20px; margin-bottom: 20px;" class="col-md-3 col-lg-10">
+        <button type="button" id="btnSend" onclick="" class="btn btn-primary" style="float: right; margin-left:10px; margin-bottom: 25px;">Send</button>
+        <button type="button" id="btnReset" onclick="" class="btn btn-primary" style="float: right;  margin-bottom: 25px;">Reset</button><br />
+    </div>
+</div>
+
+
+@*Cancel*@
+<div class="multisteps-form__content bg-white">
+    <input type="hidden" id="hdnCancelId" />
+    <div class="col-lg-10" id="dvCancel" style="float: left; border: 1px solid grey; border-radius: 12px; margin-bottom: 30px; margin-top: 10px; margin-left: 50px; margin-right: 50px;">
+        <div style="float: left; margin-top: 20px;" class="col-md-4 col-lg-4">
+            Billing Partner Name
+            @Html.DropDownListFor(model => model.billingPartnerId, new SelectList(ViewBag.BillingPartners, "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input40", @id = "ddlBillingPartner" })
+        </div>
+        <div style="float: left; margin-top: 20px; margin-bottom: 20px;" class="col-md-4 col-lg-4">
+            Mobile No <input type="text" id="txtMboileNo" class="input50" />
+        </div>
+        <div style="float: left; margin-top: 20px; margin-bottom: 20px;" class="col-md-12 col-lg-12">
+            Invoice No <input type="text" id="txtInvoiceNo" class="input50" style="margin-bottom: 10px; margin-right: 50px;" />
+            Invoice Amt<input type="text" id="txtInvoiceAmt" class="input50" style="margin-bottom: 10px; margin-right: 50px;" />
+            Date Time <input type="datetime" id="txtDatetime" class="input50" style="margin-bottom:10px; margin-right:20px;">
+        </div>
+    </div>
+    <div class="col-lg-10" style="float: left; border: 1px solid grey; border-radius: 12px; margin-bottom: 10px; margin-top: 10px; margin-left: 50px; margin-right: 50px;">
+        <div>
+            <div style="float: left; margin-top: 20px;" class="col-md-4 col-lg-4">
+                Request Packet <br />
+                @Html.TextAreaFor(model => model.RequestPacket, new { @class = "input100", @rows = 10, @id = "txtRequestPacket", tabindex = 4 })
+            </div>
+            <div style="float: left; margin-top: 20px;" class="col-md-4 col-lg-4">
+                Request URL <br />
+                @Html.TextAreaFor(model => model.RequestURL, new { @class = "input100", @rows = 10, @id = "txtRequestPacketURL", tabindex = 4 })
+
+            </div>
+            <div style="float: left; margin-top: 20px; margin-bottom: 20px;" class="col-md-4 col-lg-4">
+                Response Packet<br /><textarea id="txtResponsePacket" rows="10" cols="40" class="input100"></textarea>
+            </div>
+        </div>
+    </div>
+    <div style="float: left; margin-top: 20px; margin-bottom: 20px;" class="col-md-3 col-lg-10">
+        <button type="button" id="btnSend" onclick="" class="btn btn-primary" style="float: right; margin-left:10px; margin-bottom: 25px;">Send</button>
+        <button type="button" id="btnReset" onclick="" class="btn btn-primary" style="float: right;  margin-bottom: 25px;">Reset</button><br />
+    </div>
+</div>
+
+
+@*Send Otp*@
+<div class="multisteps-form__content bg-white">
+    <input type="hidden" id="hdnSendOtpId" />
+    <div class="col-lg-10" id="dvSendOtp" style="float: left; border: 1px solid grey; border-radius: 12px; margin-bottom: 30px; margin-top: 10px; margin-left: 50px; margin-right: 50px;">
+        <div style="float: left; margin-top: 20px;" class="col-md-4 col-lg-4">
+            Billing Partner Name
+            @Html.DropDownListFor(model => model.billingPartnerId, new SelectList(ViewBag.BillingPartners, "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input40", @id = "ddlBillingPartner" })
+        </div>
+        <div style="float: left; margin-top: 20px; margin-bottom: 20px;" class="col-md-4 col-lg-4">
+            Mobile No <input type="text" id="txtMboileNo" class="input50" />
+        </div>
+        <div style="float: left; margin-top: 20px; margin-bottom: 20px;" class="col-md-12 col-lg-12">
+            Invoice No <input type="text" id="txtInvoiceNo" class="input50" style="margin-bottom: 10px; margin-right: 50px;" />
+            Invoice Amt<input type="text" id="txtInvoiceAmt" class="input50" style="margin-bottom: 10px; margin-right: 50px;" />
+            Date Time <input type="datetime" id="txtDatetime" class="input50" style="margin-bottom:10px; margin-right:20px;">
+        </div>
+    </div>
+    <div class="col-lg-10" style="float: left; border: 1px solid grey; border-radius: 12px; margin-bottom: 10px; margin-top: 10px; margin-left: 50px; margin-right: 50px;">
+        <div>
+            <div style="float: left; margin-top: 20px;" class="col-md-4 col-lg-4">
+                Request Packet <br />
+                @Html.TextAreaFor(model => model.RequestPacket, new { @class = "input100", @rows = 10, @id = "txtRequestPacket", tabindex = 4 })
+            </div>
+            <div style="float: left; margin-top: 20px;" class="col-md-4 col-lg-4">
+                Request URL <br />
+                @Html.TextAreaFor(model => model.RequestURL, new { @class = "input100", @rows = 10, @id = "txtRequestPacketURL", tabindex = 4 })
+
+            </div>
+            <div style="float: left; margin-top: 20px; margin-bottom: 20px;" class="col-md-4 col-lg-4">
+                Response Packet<br /><textarea id="txtResponsePacket" rows="10" cols="40" class="input100"></textarea>
+            </div>
+        </div>
+    </div>
+    <div style="float: left; margin-top: 20px; margin-bottom: 20px;" class="col-md-3 col-lg-10">
+        <button type="button" id="btnSend" onclick="" class="btn btn-primary" style="float: right; margin-left:10px; margin-bottom: 25px;">Send</button>
+        <button type="button" id="btnReset" onclick="" class="btn btn-primary" style="float: right;  margin-bottom: 25px;">Reset</button><br />
+    </div>
+</div>
+
 
 <script>
     var oldMobileNo = "";
@@ -181,4 +420,4 @@
                 }
             });
     }
-    </script>
+</script>

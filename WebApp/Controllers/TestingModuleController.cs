@@ -36,13 +36,35 @@ namespace WebApp.Controllers
             ViewBag.GroupId = groupId;
             ViewBag.BillingPartners = billingpartners;
             XmlDocument doc = new XmlDocument();
-            doc.Load("C:\\Users\\91912\\source\\BOTS\\WebApp\\APIPackets.xml");
+            doc.Load("C:\\Users\\nisha\\source\\repos\\BOTSNEW\\WebApp\\APIPackets.xml");
+
+            //Enrollnment
             XmlNode node = doc.DocumentElement.SelectSingleNode("/packets/Enrollnment");
             TMV.RequestPacket = node.InnerXml;
 
+            //Enrollnment With Earn
+            XmlNode node2 = doc.DocumentElement.SelectSingleNode("/packets/EnrolnmentWithEarn");
+            TMV.RequestPacket = node2.InnerXml;
+
+            //Earn
+            XmlNode node3 = doc.DocumentElement.SelectSingleNode("/packets/Earn");
+            TMV.RequestPacket = node3.InnerXml;
+
+            //Burn Validation
+            XmlNode node4 = doc.DocumentElement.SelectSingleNode("/packets/BurnValidation");
+            TMV.RequestPacket = node4.InnerXml;
+
+            //Burn
+            XmlNode node5 = doc.DocumentElement.SelectSingleNode("/packets/Burn");
+            TMV.RequestPacket = node5.InnerXml;
+
+            //Cancel
+            XmlNode node6 = doc.DocumentElement.SelectSingleNode("/packets/Cancel");
+            TMV.RequestPacket = node6.InnerXml;
+
+
             XmlNode node1 = doc.DocumentElement.SelectSingleNode("/packets/url/EnrollnmentURL");
             TMV.RequestURL = node1.InnerXml;
-
             return View(TMV);
         }
 

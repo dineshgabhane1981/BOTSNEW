@@ -290,7 +290,6 @@
 	</Earn>
 
 	<BurnValidation>
-
 		<BOLOYALTY>
 			<TxnType>04</TxnType>
 			<TranSource>3</TranSource>
@@ -331,7 +330,6 @@
 	</BurnValidation>
 
 	<Burn>
-
 		<BOLOYALTY>
 			<TxnType>04</TxnType>
 			<TranSource>3</TranSource>
@@ -371,7 +369,6 @@
 				<SalesmanId>0</SalesmanId>
 			</ProductDetails>
 		</BOLOYALTY>
-
 	</Burn>
 
 	<Cancel>
@@ -389,8 +386,6 @@
 			<OTP></OTP>
 			<MAC>AB6FE3DEC15893C5DD8C425DBECB0BD1</MAC>
 		</BOLOYALTY>
-
-
 	</Cancel>
 
 	<SendOTP>
