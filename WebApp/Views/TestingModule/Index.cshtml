@@ -22,8 +22,8 @@
         </button>
     </a>
     <div style="margin-bottom:30px;margin-top:30px;margin-left:20px;margin-right:20px;">
-        <input id="rbtnEnrlment" name="campaign" type="radio" checked class="rbtnClass"> Enrollnment
-        <input id="rbtnEnrlmntWithEarn" name="campaign" type="radio" class="rbtnClass"> Enrolnment With Earn
+        <input id="rbtnEnrlment" name="campaign" type="radio" checked class="rbtnClass"> Enrollment
+        <input id="rbtnEnrlmntWithEarn" name="campaign" type="radio" class="rbtnClass"> Enrollment With Earn
         <input id="rbtnEarn" name="campaign" type="radio" class="rbtnClass"> Earn
         <input id="rbtnBurnValidation" name="campaign" type="radio" class="rbtnClass"> Burn Validation
         <input id="rbtnBurn" name="campaign" type="radio" class="rbtnClass"> Burn
@@ -33,9 +33,9 @@
 </div>
 
 @*//Enrolment*@
-<div class="multisteps-form__content bg-white">
+<div class="multisteps-form__content bg-white" id="dvEnrlment">
     <input type="hidden" id="hdnEnrlmentId" />
-    <div class="col-lg-10" id="dvEnrlment" style="float: left; border: 1px solid grey; border-radius: 12px; margin-bottom: 30px; margin-top: 10px; margin-left: 50px; margin-right: 50px;">
+    <div class="col-lg-10"  style="float: left; border: 1px solid grey; border-radius: 12px; margin-bottom: 30px; margin-top: 10px; margin-left: 50px; margin-right: 50px;">
         <div style="float: left; margin-top: 20px;" class="col-md-4 col-lg-4">
             Billing Partner Name
             @Html.DropDownListFor(model => model.billingPartnerId, new SelectList(ViewBag.BillingPartners, "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input40", @id = "ddlBillingPartner" })
@@ -53,7 +53,7 @@
         <div>
             <div style="float: left; margin-top: 20px;" class="col-md-4 col-lg-4">
                 Request Packet <br />
-                @Html.TextAreaFor(model => model.RequestPacket, new { @class = "input100", @rows = 10, @id = "txtRequestPacket", tabindex = 4 })
+                @Html.TextAreaFor(model => model.RequestPacketEnrollnment, new { @class = "input100", @rows = 10, @id = "txtRequestPacket", tabindex = 4 })
             </div>
             <div style="float: left; margin-top: 20px;" class="col-md-4 col-lg-4">
                 Request URL <br />
@@ -72,9 +72,9 @@
 </div>
 
 @*Enrolnment With Earn**@
-<div class="multisteps-form__content bg-white">
+<div class="multisteps-form__content bg-white" id="dvEnrlmentWithEarn" style="display:none;">
     <input type="hidden" id="hdnEnrlmentWithEarnId" />
-    <div class="col-lg-10" id="dvEnrlmentWithEarn" style="float: left; border: 1px solid grey; border-radius: 12px; margin-bottom: 30px; margin-top: 10px; margin-left: 50px; margin-right: 50px;">
+    <div class="col-lg-10"  style="float: left; border: 1px solid grey; border-radius: 12px; margin-bottom: 30px; margin-top: 10px; margin-left: 50px; margin-right: 50px;">
         <div style="float: left; margin-top: 20px;" class="col-md-4 col-lg-4">
             Billing Partner Name
             @Html.DropDownListFor(model => model.billingPartnerId, new SelectList(ViewBag.BillingPartners, "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input40", @id = "ddlBillingPartner" })
@@ -92,7 +92,7 @@
         <div>
             <div style="float: left; margin-top: 20px;" class="col-md-4 col-lg-4">
                 Request Packet <br />
-                @Html.TextAreaFor(model => model.RequestPacket, new { @class = "input100", @rows = 10, @id = "txtRequestPacket", tabindex = 4 })
+                @Html.TextAreaFor(model => model.RequestPacketEnrollnmentWithEarn, new { @class = "input100", @rows = 10, @id = "txtRequestPacket", tabindex = 4 })
             </div>
             <div style="float: left; margin-top: 20px;" class="col-md-4 col-lg-4">
                 Request URL <br />
@@ -112,9 +112,9 @@
 
 
 @*Earn*@
-<div class="multisteps-form__content bg-white">
+<div class="multisteps-form__content bg-white" id="dvEarn" style="display:none;">
     <input type="hidden" id="hdnEarnId" />
-    <div class="col-lg-10" id="dvEarn" style="float: left; border: 1px solid grey; border-radius: 12px; margin-bottom: 30px; margin-top: 10px; margin-left: 50px; margin-right: 50px;">
+    <div class="col-lg-10"  style="float: left; border: 1px solid grey; border-radius: 12px; margin-bottom: 30px; margin-top: 10px; margin-left: 50px; margin-right: 50px;">
         <div style="float: left; margin-top: 20px;" class="col-md-4 col-lg-4">
             Billing Partner Name
             @Html.DropDownListFor(model => model.billingPartnerId, new SelectList(ViewBag.BillingPartners, "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input40", @id = "ddlBillingPartner" })
@@ -132,7 +132,7 @@
         <div>
             <div style="float: left; margin-top: 20px;" class="col-md-4 col-lg-4">
                 Request Packet <br />
-                @Html.TextAreaFor(model => model.RequestPacket, new { @class = "input100", @rows = 10, @id = "txtRequestPacket", tabindex = 4 })
+                @Html.TextAreaFor(model => model.RequestPacketEarn, new { @class = "input100", @rows = 10, @id = "txtRequestPacket", tabindex = 4 })
             </div>
             <div style="float: left; margin-top: 20px;" class="col-md-4 col-lg-4">
                 Request URL <br />
@@ -151,9 +151,9 @@
 </div> 
 
 @*Burn Validation*@
-<div class="multisteps-form__content bg-white">
+<div class="multisteps-form__content bg-white" id="dvBurnValidation" style="display:none;">
     <input type="hidden" id="hdnBurnValidationId" />
-    <div class="col-lg-10" id="dvBurnValidation" style="float: left; border: 1px solid grey; border-radius: 12px; margin-bottom: 30px; margin-top: 10px; margin-left: 50px; margin-right: 50px;">
+    <div class="col-lg-10"  style="float: left; border: 1px solid grey; border-radius: 12px; margin-bottom: 30px; margin-top: 10px; margin-left: 50px; margin-right: 50px;">
         <div style="float: left; margin-top: 20px;" class="col-md-4 col-lg-4">
             Billing Partner Name
             @Html.DropDownListFor(model => model.billingPartnerId, new SelectList(ViewBag.BillingPartners, "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input40", @id = "ddlBillingPartner" })
@@ -167,11 +167,11 @@
             Date Time <input type="datetime" id="txtDatetime" class="input50" style="margin-bottom:10px; margin-right:20px;">
         </div>
     </div>
-    <div class="col-lg-10" style="float: left; border: 1px solid grey; border-radius: 12px; margin-bottom: 10px; margin-top: 10px; margin-left: 50px; margin-right: 50px;">
+    <div class="col-lg-10"    style="float: left; border: 1px solid grey; border-radius: 12px; margin-bottom: 10px; margin-top: 10px; margin-left: 50px; margin-right: 50px;">
         <div>
             <div style="float: left; margin-top: 20px;" class="col-md-4 col-lg-4">
                 Request Packet <br />
-                @Html.TextAreaFor(model => model.RequestPacket, new { @class = "input100", @rows = 10, @id = "txtRequestPacket", tabindex = 4 })
+                @Html.TextAreaFor(model => model.RequestPacketBurnValidation, new { @class = "input100", @rows = 10, @id = "txtRequestPacket", tabindex = 4 })
             </div>
             <div style="float: left; margin-top: 20px;" class="col-md-4 col-lg-4">
                 Request URL <br />
@@ -191,9 +191,9 @@
 
 
 @*Burn*@
-<div class="multisteps-form__content bg-white">
+<div class="multisteps-form__content bg-white" id="dvBurn" style="display:none;">
     <input type="hidden" id="hdnBurnId" />
-    <div class="col-lg-10" id="dvBurn" style="float: left; border: 1px solid grey; border-radius: 12px; margin-bottom: 30px; margin-top: 10px; margin-left: 50px; margin-right: 50px;">
+    <div class="col-lg-10" style="float: left; border: 1px solid grey; border-radius: 12px; margin-bottom: 30px; margin-top: 10px; margin-left: 50px; margin-right: 50px;">
         <div style="float: left; margin-top: 20px;" class="col-md-4 col-lg-4">
             Billing Partner Name
             @Html.DropDownListFor(model => model.billingPartnerId, new SelectList(ViewBag.BillingPartners, "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input40", @id = "ddlBillingPartner" })
@@ -211,7 +211,7 @@
         <div>
             <div style="float: left; margin-top: 20px;" class="col-md-4 col-lg-4">
                 Request Packet <br />
-                @Html.TextAreaFor(model => model.RequestPacket, new { @class = "input100", @rows = 10, @id = "txtRequestPacket", tabindex = 4 })
+                @Html.TextAreaFor(model => model.RequestPacketBurn, new { @class = "input100", @rows = 10, @id = "txtRequestPacket", tabindex = 4 })
             </div>
             <div style="float: left; margin-top: 20px;" class="col-md-4 col-lg-4">
                 Request URL <br />
@@ -231,9 +231,9 @@
 
 
 @*Cancel*@
-<div class="multisteps-form__content bg-white">
+<div class="multisteps-form__content bg-white" id="dvCancel" style="display:none;">
     <input type="hidden" id="hdnCancelId" />
-    <div class="col-lg-10" id="dvCancel" style="float: left; border: 1px solid grey; border-radius: 12px; margin-bottom: 30px; margin-top: 10px; margin-left: 50px; margin-right: 50px;">
+    <div class="col-lg-10"  style="float: left; border: 1px solid grey; border-radius: 12px; margin-bottom: 30px; margin-top: 10px; margin-left: 50px; margin-right: 50px;">
         <div style="float: left; margin-top: 20px;" class="col-md-4 col-lg-4">
             Billing Partner Name
             @Html.DropDownListFor(model => model.billingPartnerId, new SelectList(ViewBag.BillingPartners, "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input40", @id = "ddlBillingPartner" })
@@ -247,11 +247,11 @@
             Date Time <input type="datetime" id="txtDatetime" class="input50" style="margin-bottom:10px; margin-right:20px;">
         </div>
     </div>
-    <div class="col-lg-10" style="float: left; border: 1px solid grey; border-radius: 12px; margin-bottom: 10px; margin-top: 10px; margin-left: 50px; margin-right: 50px;">
+    <div class="col-lg-10"   style="float: left; border: 1px solid grey; border-radius: 12px; margin-bottom: 10px; margin-top: 10px; margin-left: 50px; margin-right: 50px;">
         <div>
             <div style="float: left; margin-top: 20px;" class="col-md-4 col-lg-4">
                 Request Packet <br />
-                @Html.TextAreaFor(model => model.RequestPacket, new { @class = "input100", @rows = 10, @id = "txtRequestPacket", tabindex = 4 })
+                @Html.TextAreaFor(model => model.RequestPacketCancel, new { @class = "input100", @rows = 10, @id = "txtRequestPacket", tabindex = 4 })
             </div>
             <div style="float: left; margin-top: 20px;" class="col-md-4 col-lg-4">
                 Request URL <br />
@@ -271,9 +271,9 @@
 
 
 @*Send Otp*@
-<div class="multisteps-form__content bg-white">
+<div class="multisteps-form__content bg-white" id="dvSendOtp" style="display:none;">
     <input type="hidden" id="hdnSendOtpId" />
-    <div class="col-lg-10" id="dvSendOtp" style="float: left; border: 1px solid grey; border-radius: 12px; margin-bottom: 30px; margin-top: 10px; margin-left: 50px; margin-right: 50px;">
+    <div class="col-lg-10" style="float: left; border: 1px solid grey; border-radius: 12px; margin-bottom: 30px; margin-top: 10px; margin-left: 50px; margin-right: 50px;">
         <div style="float: left; margin-top: 20px;" class="col-md-4 col-lg-4">
             Billing Partner Name
             @Html.DropDownListFor(model => model.billingPartnerId, new SelectList(ViewBag.BillingPartners, "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input40", @id = "ddlBillingPartner" })
@@ -287,11 +287,11 @@
             Date Time <input type="datetime" id="txtDatetime" class="input50" style="margin-bottom:10px; margin-right:20px;">
         </div>
     </div>
-    <div class="col-lg-10" style="float: left; border: 1px solid grey; border-radius: 12px; margin-bottom: 10px; margin-top: 10px; margin-left: 50px; margin-right: 50px;">
+    <div class="col-lg-10"  style="float: left; border: 1px solid grey; border-radius: 12px; margin-bottom: 10px; margin-top: 10px; margin-left: 50px; margin-right: 50px;">
         <div>
             <div style="float: left; margin-top: 20px;" class="col-md-4 col-lg-4">
                 Request Packet <br />
-                @Html.TextAreaFor(model => model.RequestPacket, new { @class = "input100", @rows = 10, @id = "txtRequestPacket", tabindex = 4 })
+                @Html.TextAreaFor(model => model.RequestPacketSendOTP, new { @class = "input100", @rows = 10, @id = "txtRequestPacket", tabindex = 4 })
             </div>
             <div style="float: left; margin-top: 20px;" class="col-md-4 col-lg-4">
                 Request URL <br />
@@ -320,7 +320,7 @@
         });
 
         $('#rbtnEnrlmntWithEarn').click(function () {
-            ShowHideTxnTypeSection("dvEnrlmntWithEarn");
+            ShowHideTxnTypeSection("dvEnrlmentWithEarn");
         });
 
         $('#rbtnEarn').click(function () {
@@ -353,7 +353,7 @@
 
     function ShowHideTxnTypeSection(Id) {
         $("#dvEnrlment").hide();
-        $("#dvEnrlmntWithEarn").hide();
+        $("#dvEnrlmentWithEarn").hide();
         $("#dvEarn").hide();
         $("#dvBurnValidation").hide();
         $("#dvBurn").hide();

@@ -40,27 +40,31 @@ namespace WebApp.Controllers
 
             //Enrollnment
             XmlNode node = doc.DocumentElement.SelectSingleNode("/packets/Enrollnment");
-            TMV.RequestPacket = node.InnerXml;
+            TMV.RequestPacketEnrollnment = node.InnerXml;
 
             //Enrollnment With Earn
             XmlNode node2 = doc.DocumentElement.SelectSingleNode("/packets/EnrolnmentWithEarn");
-            TMV.RequestPacket = node2.InnerXml;
+            TMV.RequestPacketEnrollnmentWithEarn = node2.InnerXml;
 
             //Earn
             XmlNode node3 = doc.DocumentElement.SelectSingleNode("/packets/Earn");
-            TMV.RequestPacket = node3.InnerXml;
+            TMV.RequestPacketEarn = node3.InnerXml;
 
             //Burn Validation
             XmlNode node4 = doc.DocumentElement.SelectSingleNode("/packets/BurnValidation");
-            TMV.RequestPacket = node4.InnerXml;
+            TMV.RequestPacketBurnValidation = node4.InnerXml;
 
             //Burn
             XmlNode node5 = doc.DocumentElement.SelectSingleNode("/packets/Burn");
-            TMV.RequestPacket = node5.InnerXml;
+            TMV.RequestPacketBurn = node5.InnerXml;
 
             //Cancel
             XmlNode node6 = doc.DocumentElement.SelectSingleNode("/packets/Cancel");
-            TMV.RequestPacket = node6.InnerXml;
+            TMV.RequestPacketCancel = node6.InnerXml;
+
+            //SendOtp
+            XmlNode node7 = doc.DocumentElement.SelectSingleNode("/packets/SendOTP");
+            TMV.RequestPacketSendOTP = node7.InnerXml;
 
 
             XmlNode node1 = doc.DocumentElement.SelectSingleNode("/packets/url/EnrollnmentURL");
