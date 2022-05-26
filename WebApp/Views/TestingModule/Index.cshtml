@@ -543,22 +543,7 @@
                 dataType: "json",
                 success: function (result) {
                     console.log(result);
-                    if (result == true) {
-                        cuteAlert({
-                            type: "success",
-                            title: "Saved..",
-                            message: "Request Send Successfully!",
-                            buttonText: "Okay"
-                        })
-                    }
-                    else {
-                        cuteAlert({
-                            type: "error",
-                            title: "Oops..",
-                            message: "There is some problem while saving data",
-                            buttonText: "Okay"
-                        })
-                    }
+                    $("#txtResponsePacket").text(result);
                     $("#divLoader").hide();
                 },
                 error: function (result) {

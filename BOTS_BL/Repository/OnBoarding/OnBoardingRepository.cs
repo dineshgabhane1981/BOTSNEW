@@ -2142,7 +2142,7 @@ namespace BOTS_BL.Repository
             {
                 var RMAssignedId = context.BOTS_TblGroupMaster.Where(x => x.GroupId == groupid).Select(y => y.AssignedCS).FirstOrDefault();
                 var id = Convert.ToInt32(RMAssignedId);
-                CSName = context.tblRMAssigneds.Where(x => x.RMAssignedId == id).Select(y => y.RMAssignedName).FirstOrDefault();
+                CSName = context.tblRMAssigneds.Where(x => x.LoginId == RMAssignedId).Select(y => y.RMAssignedName).FirstOrDefault();
             }
             return CSName;
         }
