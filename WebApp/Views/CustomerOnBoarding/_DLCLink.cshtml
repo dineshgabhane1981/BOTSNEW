@@ -113,6 +113,7 @@
     }
 
     function LoadDLCControls(data) {
+        console.log(data)
         $("#hdnDLCLinkConfigId").val(data.Id);
         $('#txtProfileUpdatePoints').val(data.ProfileUpdatePoints);
         $('#txtReferralPoints').val(data.ReferralPoints);
@@ -131,9 +132,9 @@
         $('#txtWAReminderForPointsUsage').val(data.ReminderForPointsUsageWAScript);
         $('#txtWAReferredSuccessOnReferralTxn').val(data.ReferredSuccessOnReferralTxnWAScript);
         $('#txtWADlcOtp').val(data.DLCOTPScriptWA );
-        $('txtWAGiftPtOtp').val(data.GiftPointsOTPScriptWA);
-        $('txtWAGiftPtDebitOtp').val(data.GiftPointsDebitOTPScriptWA);
-        $('txtWAGiftPtCreditOtp').val(data.GiftPointsCreditOTPScriptWA);
+        $('#txtWAGiftPtOtp').val(data.GiftPointsOTPScriptWA);
+        $('#txtWAGiftPtDebitOtp').val(data.GiftPointsDebitOTPScriptWA);
+        $('#txtWAGiftPtCreditOtp').val(data.GiftPointsCreditOTPScriptWA);
     }
     function SaveDLCLinkConfig() {
         var DLCConfig = [];
