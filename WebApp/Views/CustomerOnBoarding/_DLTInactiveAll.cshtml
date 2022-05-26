@@ -2,181 +2,204 @@
 
 
 <div class="multisteps-form__panel m-3 list-box bg-white">
-    @foreach (var item in Model)
+    @if (Model != null)
     {
-        var count = item.Id;
-        var DLTStatus1 = "";
-        var DLTStatus2 = "";
-        var ShowStatus = "spnStatus" + count;
-        var RejectStatus = "spnRejectStatus" + count;
-        var templateId = "txtTemplateId1" + count;
-        var templateName = "txtTemplateName1" + count;
-        var templateType = "txtTemplateType1" + count;
-
-        var btnCopy = "btnCopy" + count;
-        var btnApprove = "btnApprove" + count;
-        var btnReject = "btnReject" + count;
-        var btnSave = "btnSave" + count;
-        var btnRejectSubmit = "btnRejectSubmit" + count;
-        var btnRejectCancel = "btnRejectCancel" + count;
-
-        var RejectReason = "txtRejectReason" + count;
-        var RejectDiv = "divRejectReason" + count;
-
-        var ShowStatus1 = "spnStatus1" + count;
-        var RejectStatus1 = "spnRejectStatus1" + count;
-        var templateId1 = "txtTemplateId2" + count;
-        var templateName1 = "txtTemplateName2" + count;
-        var templateType1 = "txtTemplateType2" + count;
-
-        var btnCopy1 = "btnCopy1" + count;
-        var btnApprove1 = "btnApprove1" + count;
-        var btnReject1 = "btnReject1" + count;
-        var btnSave1 = "btnSave1" + count;
-        var btnRejectSubmit1 = "btnRejectSubmit1" + count;
-        var btnRejectCancel1 = "btnRejectCancel1" + count;
-
-        var RejectReason1 = "txtRejectReason1" + count;
-        var RejectDiv1 = "divRejectReason1" + count;
-
-        var txtLessThanScript = "txtLessThanScript" + count;
-        var txtLessThanScriptDLT = "txtDLTLessThanScript" + count;
-
-        var txtGreaterThanScript = "txtGreaterThanScript" + count;
-        var txtGreaterThanScriptDLT = "txtDLTGreaterThanScript" + count;
-
-
-        if (item.DLTStatus1 == "Approved")
+        if (Model.Count != 0)
         {
-            DLTStatus1 = "disabled";
+            if (!string.IsNullOrEmpty(Model[0].DLTStatus1))
+            {
+
+                foreach (var item in Model)
+                {
+                    var count = item.Id;
+                    var DLTStatus1 = "";
+                    var DLTStatus2 = "";
+                    var ShowStatus = "spnStatus" + count;
+                    var RejectStatus = "spnRejectStatus" + count;
+                    var templateId = "txtTemplateId1" + count;
+                    var templateName = "txtTemplateName1" + count;
+                    var templateType = "txtTemplateType1" + count;
+
+                    var btnCopy = "btnCopy" + count;
+                    var btnApprove = "btnApprove" + count;
+                    var btnReject = "btnReject" + count;
+                    var btnSave = "btnSave" + count;
+                    var btnRejectSubmit = "btnRejectSubmit" + count;
+                    var btnRejectCancel = "btnRejectCancel" + count;
+
+                    var RejectReason = "txtRejectReason" + count;
+                    var RejectDiv = "divRejectReason" + count;
+
+                    var ShowStatus1 = "spnStatus1" + count;
+                    var RejectStatus1 = "spnRejectStatus1" + count;
+                    var templateId1 = "txtTemplateId2" + count;
+                    var templateName1 = "txtTemplateName2" + count;
+                    var templateType1 = "txtTemplateType2" + count;
+
+                    var btnCopy1 = "btnCopy1" + count;
+                    var btnApprove1 = "btnApprove1" + count;
+                    var btnReject1 = "btnReject1" + count;
+                    var btnSave1 = "btnSave1" + count;
+                    var btnRejectSubmit1 = "btnRejectSubmit1" + count;
+                    var btnRejectCancel1 = "btnRejectCancel1" + count;
+
+                    var RejectReason1 = "txtRejectReason1" + count;
+                    var RejectDiv1 = "divRejectReason1" + count;
+
+                    var txtLessThanScript = "txtLessThanScript" + count;
+                    var txtLessThanScriptDLT = "txtDLTLessThanScript" + count;
+
+                    var txtGreaterThanScript = "txtGreaterThanScript" + count;
+                    var txtGreaterThanScriptDLT = "txtDLTGreaterThanScript" + count;
+
+
+                    if (item.DLTStatus1 == "Approved")
+                    {
+                        DLTStatus1 = "disabled";
+                    }
+                    if (item.DLTStatus2 == "Approved")
+                    {
+                        DLTStatus2 = "disabled";
+                    }
+
+                    <div style="float:left; border:1px solid grey;border-radius:10px;margin-bottom:10px;">
+                        @Html.HiddenFor(model => item.Id, new { @id = "hdnInactiveConfigId" + count })
+                        <div style="margin-top: 20px; margin-bottom: 20px; float: left; " class="col-md-12 col-lg-12">
+                            <b><span id="@ShowStatus"> Status -  @item.DLTStatus1 </span></b><br />
+                            <span id="@RejectStatus">
+                                @if (item.DLTStatus1 == "Rejected")
+                                {
+                                    var reasonRejects = "<b>Reason</b> - " + item.RejectReason1;
+                                    @Html.Raw(reasonRejects)
+                                }
+                            </span>
+                        </div>
+                        <div style="float:left;" class="col-md-4 col-lg-4">
+                            <div style="margin-top: 10px;">
+                                <b>Less Than Script </b><br /> <textarea id="@txtLessThanScript" onfocusout="ConvertValuesToDLT(this,@txtLessThanScriptDLT);" rows="6" cols="40" class="input100" @DLTStatus1>@item.LessThanDaysScript</textarea>
+                            </div>
+                        </div>
+                        <div style="float:left;" class="col-md-4 col-lg-4">
+                            <div style=" margin-top: 10px;">
+                                <b> Less Than DLT Script </b><br /> <textarea id="@txtLessThanScriptDLT" rows="6" cols="40" class="input100" disabled>@item.LessThanDaysScriptDLT</textarea>
+                            </div>
+                        </div>
+
+                        <div style="float:left;margin-bottom:10px;" class="col-md-3 col-lg-3">
+
+                            <div style="margin-top: 10px;">
+                                Template Id <br /> <input id="@templateId" type="text" class="input50" value="@item.TemplateId1" @DLTStatus1 /><br />
+                                Template Name <br /> <input id="@templateName" type="text" class="input50" value="@item.TemplateName1" @DLTStatus1 /><br />
+                                Template Type <br />
+                                @if (item.DLTStatus1 == "Approved")
+                                {
+                                    @Html.DropDownListFor(x => item.TemplateType1, new SelectList(ViewBag.TempleteType, "Value", "Text", item.TemplateType1), htmlAttributes: new { @class = "input50", @id = @templateType, @disabled = "disabled" })
+                                }
+                                else
+                                {
+                                    @Html.DropDownListFor(x => item.TemplateType1, new SelectList(ViewBag.TempleteType, "Value", "Text", item.TemplateType1), htmlAttributes: new { @class = "input50", @id = @templateType })
+                                }
+
+                            </div>
+
+                        </div>
+                        <div style="float:left;margin:0px; padding:0px;" class="col-md-1 col-lg-1">
+                            <div style="margin-top: 10px;">
+                                <div class="container-fluid pt-3 pb-3">
+                                    <button type="button" id="@btnCopy" onclick="CopyTemplate(this,1);" class="btn btn-primary" style="margin-left: -20px; margin-top: 10px; " @DLTStatus1>Copy</button><br />
+                                    <button type="button" id="@btnApprove" onclick="SaveTemplate(this,1,'Approved');" class="btn btn-primary" style="margin-left: -20px; margin-top: 10px;" @DLTStatus1>Approve</button><br />
+                                    <button type="button" id="@btnReject" onclick="RejectTemplate(this,1);" class="btn btn-primary" style="margin-left: -20px; margin-top: 10px; " @DLTStatus1>Reject</button><br />
+                                    <button type="button" id="@btnSave" onclick="SaveTemplate(this,1,'Save');" class="btn btn-primary" style="margin-left: -20px; margin-top: 10px; " @DLTStatus1>Save</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12 col-lg-12" style="text-align:center;display:none;" id="@RejectDiv">
+                            <textarea id="@RejectReason" rows="6" cols="40" class="input100"></textarea>
+                            <button type="button" id="@btnRejectSubmit" onclick="RejectInactiveSubmit(this,1);" class="btn btn-primary" style="margin-left: 20px; margin-bottom:25px;">Submit</button>
+                            <button type="button" id="@btnRejectCancel" onclick="RejectInactiveCancel(this,1);" class="btn btn-primary" style="margin-left: 20px; margin-bottom:25px;">Cancel</button><br />
+                        </div>
+                        <br />
+                        <div style="margin-top: 20px; margin-bottom: 20px; float: left; " class="col-md-12 col-lg-12">
+                            <b><span id="@ShowStatus1"> Status -  @item.DLTStatus2 </span></b><br />
+                            <span id="@RejectStatus1">
+                                @if (item.DLTStatus2 == "Rejected")
+                                {
+                                    var reasonRejects = "<b>Reason</b> - " + item.RejectReason2;
+                                    @Html.Raw(reasonRejects)
+                                }
+                            </span>
+                        </div>
+
+                        <div style="float:left;" class="col-md-4 col-lg-4">
+                            <div style="margin-top: 10px;">
+                                <b>Greater Than Script </b><br /> <textarea id="@txtGreaterThanScript" onfocusout="ConvertValuesToDLT(this,@txtGreaterThanScriptDLT);" rows="6" cols="40" class="input100" @DLTStatus2>@item.GreaterThanDaysScript</textarea>
+                            </div>
+                        </div>
+                        <div style="float:left;" class="col-md-4 col-lg-4">
+                            <div style=" margin-top: 10px;">
+                                <b> Greater Than DLT Script </b><br /> <textarea id="@txtGreaterThanScriptDLT" rows="6" cols="40" class="input100" disabled>@item.GreaterThanDaysScriptDLT</textarea>
+                            </div>
+                        </div>
+
+                        <div style="float:left;margin-bottom:10px;" class="col-md-3 col-lg-3">
+
+                            <div style="margin-top: 10px;">
+                                Template Id <br /> <input id="@templateId1" type="text" class="input50" value="@item.TemplateId2" @DLTStatus2 /><br />
+                                Template Name <br /> <input id="@templateName1" type="text" class="input50" value="@item.TemplateName2" @DLTStatus2 /><br />
+                                Template Type <br />
+                                @if (item.DLTStatus2 == "Approved")
+                                {
+                                    @Html.DropDownListFor(x => item.TemplateType2, new SelectList(ViewBag.TempleteType, "Value", "Text", item.TemplateType2), htmlAttributes: new { @class = "input50", @id = @templateType1, @disabled = "disabled" })
+                                }
+                                else
+                                {
+                                    @Html.DropDownListFor(x => item.TemplateType2, new SelectList(ViewBag.TempleteType, "Value", "Text", item.TemplateType2), htmlAttributes: new { @class = "input50", @id = @templateType1 })
+                                }
+
+                            </div>
+
+                        </div>
+                        <div style="float:left;margin:0px; padding:0px;" class="col-md-1 col-lg-1">
+                            <div style="margin-top: 10px;">
+                                <div class="container-fluid pt-3 pb-3">
+                                    <button type="button" id="@btnCopy1" onclick="CopyTemplate(this,2);" class="btn btn-primary" style="margin-left: -20px; margin-top: 10px; " @DLTStatus2>Copy</button><br />
+                                    <button type="button" id="@btnApprove1" onclick="SaveTemplate(this,2,'Approved');" class="btn btn-primary" style="margin-left: -20px; margin-top: 10px;" @DLTStatus2>Approve</button><br />
+                                    <button type="button" id="@btnReject1" onclick="RejectTemplate(this,2);" class="btn btn-primary" style="margin-left: -20px; margin-top: 10px; " @DLTStatus2>Reject</button><br />
+
+                                    <button type="button" id="@btnSave1" onclick="SaveTemplate(this,2,'Save');" class="btn btn-primary" style="margin-left: -20px; margin-top: 10px; " @DLTStatus2>Save</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12 col-lg-12" style="text-align:center;display:none;" id="@RejectDiv1">
+                            <textarea id="@RejectReason1" rows="6" cols="40" class="input100"></textarea>
+                            <button type="button" id="@btnRejectSubmit1" onclick="RejectInactiveSubmit(this,2);" class="btn btn-primary" style="margin-left: 20px; margin-bottom:25px;">Submit</button>
+                            <button type="button" id="@btnRejectCancel1" onclick="RejectInactiveCancel(this,2);" class="btn btn-primary" style="margin-left: 20px; margin-bottom:25px;">Cancel</button><br />
+                        </div>
+                    </div>
+                }
+            }
+            else
+            {
+                <div class="col-md-12 col-lg-12" style="font-weight: bold; text-align:center; font-size: 16px; padding-top: 50px; padding-bottom: 20px;">No Script Submitted for DLT</div>
+            }
         }
-        if (item.DLTStatus2 == "Approved")
+        else
         {
-            DLTStatus2 = "disabled";
+            <div class="col-md-12 col-lg-12" style="font-weight: bold; text-align:center; font-size: 16px; padding-top: 50px; padding-bottom: 20px;">No Script Submitted for DLT</div>
         }
-        
-    <div style="float:left; border:1px solid grey;border-radius:10px;margin-bottom:10px;">
-        @Html.HiddenFor(model => item.Id, new { @id = "hdnInactiveConfigId" + count })
-        <div style="margin-top: 20px; margin-bottom: 20px; float: left; " class="col-md-12 col-lg-12">
-            <b><span id="@ShowStatus"> Status -  @item.DLTStatus1 </span></b><br />
-            <span id="@RejectStatus">
-                @if (item.DLTStatus1 == "Rejected")
-                {
-                    var reasonRejects = "<b>Reason</b> - " + item.RejectReason1;
-                    @Html.Raw(reasonRejects)
-                }
-            </span>
-        </div>
-        <div style="float:left;" class="col-md-4 col-lg-4">
-            <div style="margin-top: 10px;">
-                <b>Less Than Script </b><br /> <textarea id="@txtLessThanScript" onfocusout="ConvertValuesToDLT(this,@txtLessThanScriptDLT);" rows="6" cols="40" class="input100" @DLTStatus1>@item.LessThanDaysScript</textarea>
-            </div>
-        </div>
-        <div style="float:left;" class="col-md-4 col-lg-4">
-            <div style=" margin-top: 10px;">
-                <b> Less Than DLT Script </b><br /> <textarea id="@txtLessThanScriptDLT" rows="6" cols="40" class="input100" disabled>@item.LessThanDaysScriptDLT</textarea>
-            </div>
-        </div>
-
-        <div style="float:left;margin-bottom:10px;" class="col-md-3 col-lg-3">
-
-            <div style="margin-top: 10px;">
-                Template Id <br /> <input id="@templateId" type="text" class="input50" value="@item.TemplateId1" @DLTStatus1 /><br />
-                Template Name <br /> <input id="@templateName" type="text" class="input50" value="@item.TemplateName1" @DLTStatus1 /><br />
-                Template Type <br />
-                @if (item.DLTStatus1 == "Approved")
-                {
-                    @Html.DropDownListFor(x => item.TemplateType1, new SelectList(ViewBag.TempleteType, "Value", "Text", item.TemplateType1), htmlAttributes: new { @class = "input50", @id = @templateType, @disabled = "disabled" })
-                }
-                else
-                {
-                    @Html.DropDownListFor(x => item.TemplateType1, new SelectList(ViewBag.TempleteType, "Value", "Text", item.TemplateType1), htmlAttributes: new { @class = "input50", @id = @templateType })
-                }
-
-            </div>
-
-        </div>
-        <div style="float:left;margin:0px; padding:0px;" class="col-md-1 col-lg-1">
-            <div style="margin-top: 10px;">
-                <div class="container-fluid pt-3 pb-3">
-                    <button type="button" id="@btnCopy" onclick="CopyTemplate(this,1);" class="btn btn-primary" style="margin-left: -20px; margin-top: 10px; " @DLTStatus1>Copy</button><br />
-                    <button type="button" id="@btnApprove" onclick="SaveTemplate(this,1,'Approved');" class="btn btn-primary" style="margin-left: -20px; margin-top: 10px;" @DLTStatus1>Approve</button><br />
-                    <button type="button" id="@btnReject" onclick="RejectTemplate(this,1);" class="btn btn-primary" style="margin-left: -20px; margin-top: 10px; " @DLTStatus1>Reject</button><br />
-                    <button type="button" id="@btnSave" onclick="SaveTemplate(this,1,'Save');" class="btn btn-primary" style="margin-left: -20px; margin-top: 10px; " @DLTStatus1>Save</button>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-12 col-lg-12" style="text-align:center;display:none;" id="@RejectDiv">
-            <textarea id="@RejectReason" rows="6" cols="40" class="input100"></textarea>
-            <button type="button" id="@btnRejectSubmit" onclick="RejectInactiveSubmit(this,1);" class="btn btn-primary" style="margin-left: 20px; margin-bottom:25px;">Submit</button>
-            <button type="button" id="@btnRejectCancel" onclick="RejectInactiveCancel(this,1);" class="btn btn-primary" style="margin-left: 20px; margin-bottom:25px;">Cancel</button><br />
-        </div>
-        <br />
-        <div style="margin-top: 20px; margin-bottom: 20px; float: left; " class="col-md-12 col-lg-12">
-            <b><span id="@ShowStatus1"> Status -  @item.DLTStatus2 </span></b><br />
-            <span id="@RejectStatus1">
-                @if (item.DLTStatus2 == "Rejected")
-                {
-                    var reasonRejects = "<b>Reason</b> - " + item.RejectReason2;
-                    @Html.Raw(reasonRejects)
-                }
-            </span>
-        </div>
-
-        <div style="float:left;" class="col-md-4 col-lg-4">
-            <div style="margin-top: 10px;">
-                <b>Greater Than Script </b><br /> <textarea id="@txtGreaterThanScript" onfocusout="ConvertValuesToDLT(this,@txtGreaterThanScriptDLT);" rows="6" cols="40" class="input100" @DLTStatus2>@item.GreaterThanDaysScript</textarea>
-            </div>
-        </div>
-        <div style="float:left;" class="col-md-4 col-lg-4">
-            <div style=" margin-top: 10px;">
-                <b> Greater Than DLT Script </b><br /> <textarea id="@txtGreaterThanScriptDLT" rows="6" cols="40" class="input100" disabled>@item.GreaterThanDaysScriptDLT</textarea>
-            </div>
-        </div>
-
-        <div style="float:left;margin-bottom:10px;" class="col-md-3 col-lg-3">
-
-            <div style="margin-top: 10px;">
-                Template Id <br /> <input id="@templateId1" type="text" class="input50" value="@item.TemplateId2" @DLTStatus2 /><br />
-                Template Name <br /> <input id="@templateName1" type="text" class="input50" value="@item.TemplateName2" @DLTStatus2 /><br />
-                Template Type <br />
-                @if (item.DLTStatus2 == "Approved")
-                {
-                    @Html.DropDownListFor(x => item.TemplateType2, new SelectList(ViewBag.TempleteType, "Value", "Text", item.TemplateType2), htmlAttributes: new { @class = "input50", @id = @templateType1, @disabled = "disabled" })
-                }
-                else
-                {
-                    @Html.DropDownListFor(x => item.TemplateType2, new SelectList(ViewBag.TempleteType, "Value", "Text", item.TemplateType2), htmlAttributes: new { @class = "input50", @id = @templateType1 })
-                }
-
-            </div>
-
-        </div>
-        <div style="float:left;margin:0px; padding:0px;" class="col-md-1 col-lg-1">
-            <div style="margin-top: 10px;">
-                <div class="container-fluid pt-3 pb-3">
-                    <button type="button" id="@btnCopy1" onclick="CopyTemplate(this,2);" class="btn btn-primary" style="margin-left: -20px; margin-top: 10px; " @DLTStatus2>Copy</button><br />
-                    <button type="button" id="@btnApprove1" onclick="SaveTemplate(this,2,'Approved');" class="btn btn-primary" style="margin-left: -20px; margin-top: 10px;" @DLTStatus2>Approve</button><br />
-                    <button type="button" id="@btnReject1" onclick="RejectTemplate(this,2);" class="btn btn-primary" style="margin-left: -20px; margin-top: 10px; " @DLTStatus2>Reject</button><br />
-
-                    <button type="button" id="@btnSave1" onclick="SaveTemplate(this,2,'Save');" class="btn btn-primary" style="margin-left: -20px; margin-top: 10px; " @DLTStatus2>Save</button>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-12 col-lg-12" style="text-align:center;display:none;" id="@RejectDiv1">
-            <textarea id="@RejectReason1" rows="6" cols="40" class="input100"></textarea>
-            <button type="button" id="@btnRejectSubmit1" onclick="RejectInactiveSubmit(this,2);" class="btn btn-primary" style="margin-left: 20px; margin-bottom:25px;">Submit</button>
-            <button type="button" id="@btnRejectCancel1" onclick="RejectInactiveCancel(this,2);" class="btn btn-primary" style="margin-left: 20px; margin-bottom:25px;">Cancel</button><br />
-        </div>
-    </div>
     }
+    else
+    {
+        <div class="col-md-12 col-lg-12" style="font-weight: bold; text-align:center; font-size: 16px; padding-top: 50px; padding-bottom: 20px;">No Script Submitted for DLT</div>
+    }
+
 </div>
 
 <script>
     $(document).ready(function () {
         EventChangeOfOriginalToDLT();
     });
-    
+
 
     function EventChangeOfOriginalToDLT() {
         $('[id^=txtLessThanScript]').each(function (i, item) {
@@ -366,7 +389,7 @@
                 DLTScript = $("#txtDLTGreaterThanScript" + id).val();
             }
         }
-        
+
 
         var SaveData = [];
         saveitem = {}
