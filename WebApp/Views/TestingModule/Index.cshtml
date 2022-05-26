@@ -15,72 +15,61 @@
     }
 </style>
 
-<div class="app-main__inner">
-    <div class="mb-3 card" style="padding-top:20px;">
-        <div class="content">
-            <div>
-                <a href="@Url.Action("CheckerView", "CustomerOnBoarding", new { groupId = ViewBag.GroupId })" class="login" title="Go To Configration sheet" target="_blank">
-                    <button type="button" id="btnCheckerView" onclick="" class="btn btn-primary" style="float: right; margin-left: 20px; margin-right: 20px; margin-bottom: 35px;">
-                        Configration sheet
-                    </button>
-                </a>
+<div class="multisteps-form__panel shadow p-4 list-box bg-white" style="height:auto !important;" id="sec7" data-animation="scaleIn">
+        <a href="@Url.Action("CheckerView", "CustomerOnBoarding", new { groupId = ViewBag.GroupId })" class="login" title="Go To Configration sheet" target="_blank">
+            <button type="button" id="btnCheckerView" onclick="" class="btn btn-primary" style="float: right; margin-left: 150px; margin-right: 100px; margin-bottom: 35px;">
+                Configration sheet
+            </button>
+        </a>  
+    <div style="margin-bottom:30px;margin-top:30px;margin-left:20px;margin-right:20px;">
+        <input id="rbtnEnrlment" name="campaign" type="radio" checked class="rbtnClass"> Enrollnment
+        <input id="rbtnEnrlmntWithEarn" name="campaign" type="radio" class="rbtnClass"> Enrolnment With Earn
+        <input id="rbtnEarn" name="campaign" type="radio" class="rbtnClass"> Earn
+        <input id="rbtnBurnValidation" name="campaign" type="radio" class="rbtnClass"> Burn Validation
+        <input id="rbtnBurn" name="campaign" type="radio" class="rbtnClass"> Burn
+        <input id="rbtnCancel" name="campaign" type="radio" class="rbtnClass"> Cancel
+        <input id="rbtnSendOtp" name="campaign" type="radio" class="rbtnClass"> Send OTP
+    </div>
+</div>
+        
+@*//Enrolment*@
+<div class="multisteps-form__content bg-white">
+    <input type="hidden" id="hdnEnrlmentId" />
+    <div class="col-lg-10" id="dvEnrlment" style="float: left; border: 1px solid grey; border-radius: 12px; margin-bottom: 30px; margin-top: 10px; margin-left: 50px; margin-right: 50px;">
+        <div style="float: left; margin-top: 20px;" class="col-md-4 col-lg-4">
+            Billing Partner Name
+            @Html.DropDownListFor(model => model.billingPartnerId, new SelectList(ViewBag.BillingPartners, "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input40", @id = "ddlBillingPartner" })
+        </div>
+        <div style="float: left; margin-top: 20px; margin-bottom: 20px;" class="col-md-4 col-lg-4">
+            Mobile No <input type="text" id="txtMboileNo" class="input50" />
+        </div>
+            <div style="float: left; margin-top: 20px; margin-bottom: 20px;" class="col-md-12 col-lg-12">
+                Invoice No <input type="text" id="txtInvoiceNo" class="input50" style="margin-bottom: 10px; margin-right: 50px;" />
+                Invoice Amt<input type="text" id="txtInvoiceAmt" class="input50" style="margin-bottom: 10px; margin-right: 50px;" />
+                Date Time <input type="datetime" id="txtDatetime" class="input50" style="margin-bottom:10px; margin-right:20px;">
+            </div>       
+    </div>
+    <div class="col-lg-10" style="float: left; border: 1px solid grey; border-radius: 12px; margin-bottom: 10px; margin-top: 10px; margin-left: 50px; margin-right: 50px;">
+        <div>
+            <div style="float: left; margin-top: 20px;" class="col-md-4 col-lg-4">
+                Request Packet <br />
+                @Html.TextAreaFor(model => model.RequestPacket, new { @class = "input100", @rows = 10, @id = "txtRequestPacket", tabindex = 4 })
             </div>
-            <div style="margin-bottom:30px;margin-top:30px;margin-left:20px;margin-right:20px;">
-                <input id="rbtnEnrlment" name="campaign" type="radio" checked class="rbtnClass"> Enrollnment
-                <input id="rbtnEnrlmntWithEarn" name="campaign" type="radio" class="rbtnClass"> Enrolnment With Earn
-                <input id="rbtnEarn" name="campaign" type="radio" class="rbtnClass"> Earn
-                <input id="rbtnBurnValidation" name="campaign" type="radio" class="rbtnClass"> Burn Validation
-                <input id="rbtnBurn" name="campaign" type="radio" class="rbtnClass"> Burn
-                <input id="rbtnCancel" name="campaign" type="radio" class="rbtnClass"> Cancel
-                <input id="rbtnSendOtp" name="campaign" type="radio" class="rbtnClass"> Send OTP
+            <div style="float: left; margin-top: 20px;" class="col-md-4 col-lg-4">
+                Request URL <br />
+                @Html.TextAreaFor(model => model.RequestURL, new { @class = "input100", @rows = 10, @id = "txtRequestPacketURL", tabindex = 4 })
 
-                @*//Enrolment*@
-                <div class="col-lg-12" id="dvEnrlment" style="float: left; border: 1px solid grey; border-radius: 12px; margin-bottom: 30px; margin-top: 10px;  margin-right: 20px;">
-                    <div style="float: left; margin-top: 20px;" class="col-md-4 col-lg-4">
-                        Billing Partner Name
-                        @Html.DropDownListFor(model => model.billingPartnerId, new SelectList(ViewBag.BillingPartners, "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input40", @id = "ddlBillingPartner" })
-                    </div>
-                    <div style="float: left; margin-top: 20px; margin-bottom: 20px;" class="col-md-4 col-lg-4">
-                        Mobile No <input type="text" id="txtMboileNo" class="input50" />
-                    </div>
-                    <div class="col-lg-12" id="dvEnrlment" style="float: left; margin-bottom: 30px; margin-top: 10px;  margin-right: 20px;">
-
-                        <div style="float: left; margin-top: 20px; margin-bottom: 20px;" class="col-md-12 col-lg-12">
-                            Invoice No <input type="text" id="txtInvoiceNo" class="input50" style="margin-bottom: 10px; margin-right: 50px;" />
-                            Invoice Amt<input type="text" id="txtInvoiceAmt" class="input50" style="margin-bottom: 10px; margin-right: 50px;" />
-                            Date Time <input type="datetime" id="txtDatetime" class="input50" style="margin-bottom:10px; margin-right:20px;">
-                        </div>
-
-                    </div>
-
-                </div>
-
-                <div class="col-lg-12" style="float: left; border: 1px solid grey; border-radius: 12px; margin-bottom: 10px; margin-top: 10px; margin-right: 20px;">
-                    <div>
-                        <div style="float: left; margin-top: 20px;" class="col-md-4 col-lg-4">
-                            Request Packet <br />
-                            @Html.TextAreaFor(model => model.RequestPacket, new { @class = "input100", @rows = 10, @id = "txtRequestPacket", tabindex = 4 })
-                        </div>
-                        <div style="float: left; margin-top: 20px;" class="col-md-4 col-lg-4">
-                            Request URL <br />
-                            @Html.TextAreaFor(model => model.RequestURL, new { @class = "input100", @rows = 10, @id = "txtRequestPacketURL", tabindex = 4 })
-
-                        </div>
-                        <div style="float: left; margin-top: 20px; margin-bottom: 20px;" class="col-md-4 col-lg-4">
-                            Response Packet<br /><textarea id="txtResponsePacket" rows="10" cols="40" class="input100"></textarea>
-                        </div>
-                    </div>
-                </div>
-                <div style="float: left; margin-top: 20px; margin-bottom: 20px;" class="col-md-3 col-lg-12">
-
-                    <button type="button" id="btnSend" onclick="" class="btn btn-primary" style="float: right; margin-left: 20px; margin-right: 20px; margin-bottom: 25px;">Send</button>
-                    <button type="button" id="btnReset" onclick="" class="btn btn-primary" style="float: right; margin-left: 20px; margin-right: 20px; margin-bottom: 25px;">Reset</button><br />
-                </div>
+            </div>
+            <div style="float: left; margin-top: 20px; margin-bottom: 20px;" class="col-md-4 col-lg-4">
+                Response Packet<br /><textarea id="txtResponsePacket" rows="10" cols="40" class="input100"></textarea>
             </div>
         </div>
     </div>
+    <div style="float: left; margin-top: 20px; margin-bottom: 20px;" class="col-md-3 col-lg-10">
+        <button type="button" id="btnSend" onclick="" class="btn btn-primary" style="float: right; margin-left:10px; margin-bottom: 25px;">Send</button>
+        <button type="button" id="btnReset" onclick="" class="btn btn-primary" style="float: right;  margin-bottom: 25px;">Reset</button><br />
+    </div>        
 </div>
-
 
 <script>
     var oldMobileNo = "";
@@ -88,13 +77,31 @@
     $(document).ready(function () {
 
         $('#rbtnEnrlment').click(function () {
-            ShowHideCampaignSection("dvEnrlment");
-            LoadCampaignOtherConfig("Enrollment");
+            ShowHideTxnTypeSection("dvEnrlment");
         });
 
         $('#rbtnEnrlmntWithEarn').click(function () {
-            ShowHideCampaignSection("dvEnrlmntWithEarn");
-            LoadCampaignOtherConfig("EnrollmentWithEarn");
+            ShowHideTxnTypeSection("dvEnrlmntWithEarn");
+        });
+
+        $('#rbtnEarn').click(function () {
+            ShowHideTxnTypeSection("dvEarn");
+        });
+
+        $('#rbtnBurnValidation').click(function () {
+            ShowHideTxnTypeSection("dvBurnValidation");
+        });
+
+        $('#rbtnBurn').click(function () {
+            ShowHideTxnTypeSection("dvBurn");
+        });
+
+        $('#rbtnCancel').click(function () {
+            ShowHideTxnTypeSection("dvCancel");
+        });
+
+        $('#rbtnSendOtp').click(function () {
+            ShowHideTxnTypeSection("dvSendOtp");
         });
 
         $('#btnSend').click(function () {
@@ -105,7 +112,19 @@
         });
     });
 
-    function UpdatePacket() {        
+    function ShowHideTxnTypeSection(Id) {
+        $("#dvEnrlment").hide();
+        $("#dvEnrlmntWithEarn").hide();
+        $("#dvEarn").hide();
+        $("#dvBurnValidation").hide();
+        $("#dvBurn").hide();
+        $("#dvCancel").hide();
+        $("#dvSendOtp").hide();
+
+        $("#" + Id).show();
+    }
+
+    function UpdatePacket() {
         var RequestPacket = $("#txtRequestPacket").val();
         var mobileNo = $("#txtMboileNo").val();
         if (oldMobileNo == "") {
@@ -114,17 +133,17 @@
         else {
             flag = true;
         }
-        
+
         if (flag) {
             var strInReplace = "<MobileNo>" + oldMobileNo + "</MobileNo>";
-            var strToReplace = "<MobileNo>" + mobileNo + "</MobileNo>";            
+            var strToReplace = "<MobileNo>" + mobileNo + "</MobileNo>";
             RequestPacket = RequestPacket.replace(strInReplace, strToReplace);
         }
         else {
             var strInReplace = "<MobileNo></MobileNo>";
             var strToReplace = "<MobileNo>" + mobileNo + "</MobileNo>";
             RequestPacket = RequestPacket.replace(strInReplace, strToReplace);
-        }        
+        }
         $("#txtRequestPacket").val(RequestPacket);
         oldMobileNo = mobileNo;
     }
@@ -162,4 +181,4 @@
                 }
             });
     }
-</script>
+    </script>
