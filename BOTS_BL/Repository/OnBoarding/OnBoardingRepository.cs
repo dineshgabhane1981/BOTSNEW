@@ -202,21 +202,21 @@ namespace BOTS_BL.Repository
                     //Sales Head
                     if (userDetails.LoginType == "5")
                     {
-                        lstGroups = context.BOTS_TblGroupMaster.Where(x => x.CustomerStatus == "Draft").ToList();
+                        lstGroups = context.BOTS_TblGroupMaster.ToList();
                     }
                     //CS Head
                     if (userDetails.LoginType == "6")
                     {
-                        lstGroups = context.BOTS_TblGroupMaster.ToList();
+                        lstGroups = context.BOTS_TblGroupMaster.Where(x => x.CustomerStatus != "Draft").ToList();
                     }
                     //CS Success
                     if (userDetails.LoginType == "7")
                     {
-                        lstGroups = context.BOTS_TblGroupMaster.Where(x => x.AssignedCS == userDetails.LoginId).ToList();
+                        lstGroups = context.BOTS_TblGroupMaster.Where(x => x.AssignedCS == userDetails.LoginId && x.CustomerStatus != "Draft").ToList();
                     }
                     if (userDetails.LoginType != "1" && userDetails.LoginType != "5" && userDetails.LoginType != "6" && userDetails.LoginType != "7")
                     {
-                        lstGroups = context.BOTS_TblGroupMaster.ToList();
+                        lstGroups = context.BOTS_TblGroupMaster.Where(x => x.CustomerStatus != "Draft").ToList();
                     }
 
                     foreach (var item in lstGroups)
