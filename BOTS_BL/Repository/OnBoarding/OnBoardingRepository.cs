@@ -2137,14 +2137,14 @@ namespace BOTS_BL.Repository
 
         public string GetAssignedCSNameForOnboarding(string groupid)
         {
-            string CSName = string.Empty;
+            string CSEmail = string.Empty;
             using (var context = new CommonDBContext())
             {
                 var RMAssignedId = context.BOTS_TblGroupMaster.Where(x => x.GroupId == groupid).Select(y => y.AssignedCS).FirstOrDefault();
-                var id = Convert.ToInt32(RMAssignedId);
-                CSName = context.tblRMAssigneds.Where(x => x.LoginId == RMAssignedId).Select(y => y.RMAssignedName).FirstOrDefault();
+
+                CSEmail = context.CustomerLoginDetails.Where(x => x.LoginId == RMAssignedId).Select(y => y.EmailId).FirstOrDefault();
             }
-            return CSName;
+            return CSEmail;
         }
 
     }

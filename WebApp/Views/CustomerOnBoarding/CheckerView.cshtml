@@ -1,20 +1,26 @@
 ﻿@using BOTS_BL.Models;
+@using BOTS_BL;
+
 @model WebApp.ViewModel.OnBoardingSalesViewModel
 @{
+    
     ViewBag.Title = "Checker View";
     Layout = "~/Views/Shared/_OnBoardingLayout.cshtml";
     //Layout = null;
     var userDetails = (CustomerLoginDetail)Session["UserSession"];
+    
     string roleId = string.Empty;
     if (userDetails == null)
     {
         roleId = "Customer";
+       
     }
     else
     {
         roleId = userDetails.LoginType;
+        
     }
-
+   
 }
 
 <style>
@@ -420,6 +426,7 @@
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
                 success: function (result) {
+                    console.log(result)
                     if (result == true) {
                         cuteAlert({
                             type: "success",
@@ -430,7 +437,7 @@
                             location.reload();
                         })
                         $("#txtCustOTPConfig").val("")
-                        $("#dvCustOTPSection").hide(1000);                        
+                        $("#dvCustOTPSection").hide(1000);
                     }
                     else {
                         cuteAlert({

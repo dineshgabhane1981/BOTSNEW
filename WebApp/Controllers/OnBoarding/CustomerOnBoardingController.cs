@@ -193,7 +193,7 @@ namespace WebApp.Controllers.OnBoarding
                     objData.lstOutlets = OBR.GetOutletDetails(GroupId);
 
                     objData.objDLCLinkConfig = OBR.GetDLCLinkData(GroupId);
-                    
+
                     if (objData.objDLCLinkConfig == null)
                     {
                         BOTS_TblDLCLinkConfig objDLCConfig = new BOTS_TblDLCLinkConfig();
@@ -937,7 +937,7 @@ namespace WebApp.Controllers.OnBoarding
                     objDLCLink.ReferredPoints = Convert.ToInt32(item["ReferredPoints"]);
                     objDLCLink.MaxNoOfReferrals = Convert.ToInt32(item["MaxNoOfReferrals"]);
                     objDLCLink.ValidityOfReferralPoints = Convert.ToInt32(item["ValidityOfReferralPoints"]);
-                    objDLCLink.ReferralReminder= Convert.ToInt32(item["ReferralReminder"]);
+                    objDLCLink.ReferralReminder = Convert.ToInt32(item["ReferralReminder"]);
                     objDLCLink.ToTheReferralSMSScript = Convert.ToString(item["SMSToTheReferral"]);
                     objDLCLink.ReminderForPointsUsageSMSScript = Convert.ToString(item["SMSReminderForPointsUsage"]);
                     objDLCLink.ReferredSuccessOnReferralTxnSMSScript = Convert.ToString(item["SMSReferredSuccessOnReferralTxn"]);
@@ -1812,47 +1812,55 @@ namespace WebApp.Controllers.OnBoarding
 
         public ActionResult CheckerView(string GroupId)
         {
-            CommonFunctions common = new CommonFunctions();
-            GroupId = common.DecryptString(GroupId);
+            
             OnBoardingSalesViewModel objData = new OnBoardingSalesViewModel();
-            //Customer Details
-            objData.bots_TblGroupMaster = OBR.GetGroupMasterDetails(GroupId);
-            objData.bots_TblDealDetails = OBR.GetDealMasterDetails(GroupId);
-            objData.bots_TblPaymentDetails = OBR.GetPaymentDetails(GroupId);
-            objData.objRetailList = OBR.GetRetailDetails(GroupId);
-            objData.objInstallmentList = OBR.GetInstallmentDetails(GroupId);
+            try
+            {
+                CommonFunctions common = new CommonFunctions();
+                GroupId = common.DecryptString(GroupId);
 
-            //Communication Details
-            objData.lstCommunicationSet = OBR.GetCommunicationSetsByGroupId(GroupId);
-            objData.lstSMSConfig = OBR.GetCommunicationSMSConfigByGroupId(GroupId);
-            objData.lstWAConfig = OBR.GetCommunicationWAConfigByGroupId(GroupId);
-            objData.lstCommunicationSetAssignment = OBR.GetOutletsByAssignmentSetId(GroupId);
+                //Customer Details
+                objData.bots_TblGroupMaster = OBR.GetGroupMasterDetails(GroupId);
+                objData.bots_TblDealDetails = OBR.GetDealMasterDetails(GroupId);
+                objData.bots_TblPaymentDetails = OBR.GetPaymentDetails(GroupId);
+                objData.objRetailList = OBR.GetRetailDetails(GroupId);
+                objData.objInstallmentList = OBR.GetInstallmentDetails(GroupId);
 
-            //Digital Loyalty Card
-            objData.objDLCLinkConfig = OBR.GetDLCLinkDLTConfigByGroupId(GroupId);
+                //Communication Details
+                objData.lstCommunicationSet = OBR.GetCommunicationSetsByGroupId(GroupId);
+                objData.lstSMSConfig = OBR.GetCommunicationSMSConfigByGroupId(GroupId);
+                objData.lstWAConfig = OBR.GetCommunicationWAConfigByGroupId(GroupId);
+                objData.lstCommunicationSetAssignment = OBR.GetOutletsByAssignmentSetId(GroupId);
 
-            //Outlet Details
-            objData.lstOutlets = OBR.GetOutletDetailsByGroupId(GroupId);
-            objData.objRetailList = OBR.GetOutletsBrandId(GroupId);
+                //Digital Loyalty Card
+                objData.objDLCLinkConfig = OBR.GetDLCLinkDLTConfigByGroupId(GroupId);
 
-            //Perpetual Campaigns
-            objData.lstCampaignOtherConfig = OBR.GetCampaignOtherConfigByGroupId(GroupId);
-            objData.lstCampaignInactive = OBR.GetCampaignInactiveByGroupId(GroupId);
+                //Outlet Details
+                objData.lstOutlets = OBR.GetOutletDetailsByGroupId(GroupId);
+                objData.objRetailList = OBR.GetOutletsBrandId(GroupId);
 
-            // Velocity Checks
-            objData.BOTS_TblVelocityChecksConfig = OBR.GetVelocityChecksData(GroupId);
+                //Perpetual Campaigns
+                objData.lstCampaignOtherConfig = OBR.GetCampaignOtherConfigByGroupId(GroupId);
+                objData.lstCampaignInactive = OBR.GetCampaignInactiveByGroupId(GroupId);
 
-            //PointRules
-            objData.objEarnRuleConfig = OBR.GetEarnRuleConfig(GroupId);
-            objData.objBurnRuleConfig = OBR.GetBurnRuleConfig(GroupId);
-            objData.lstSlabConfig = OBR.GetEarnRuleSlabConfig(GroupId);
-            objData.lstProductUpload = OBR.GetProductUpload(GroupId);
+                // Velocity Checks
+                objData.BOTS_TblVelocityChecksConfig = OBR.GetVelocityChecksData(GroupId);
 
-            //Bulk Upload
-            objData.BulkUploadCount = OBR.GetBulkUpload(GroupId);
+                //PointRules
+                objData.objEarnRuleConfig = OBR.GetEarnRuleConfig(GroupId);
+                objData.objBurnRuleConfig = OBR.GetBurnRuleConfig(GroupId);
+                objData.lstSlabConfig = OBR.GetEarnRuleSlabConfig(GroupId);
+                objData.lstProductUpload = OBR.GetProductUpload(GroupId);
 
+                //Bulk Upload
+                objData.BulkUploadCount = OBR.GetBulkUpload(GroupId);
+
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "CheckerView");
+            }
             return View(objData);
-
 
         }
 
@@ -2062,24 +2070,31 @@ namespace WebApp.Controllers.OnBoarding
         public ActionResult CustomerApprovalConfiguration(string groupId, string custMobileNo, string otp)
         {
             bool result = false;
-            var status = DR.VerifyOTP(custMobileNo, Convert.ToInt32(otp));
-            if (status)
+            try
             {
-                var updateStatus = OBR.UpdateConfigurationStatus(groupId, "Approved By Customer", custMobileNo, "");
-                if (updateStatus)
+                var status = DR.VerifyOTP(custMobileNo, Convert.ToInt32(otp));
+                if (status)
                 {
-                    //Create Database
-                    result = OBR.CreateCustomerDatabase(groupId);
+                    var updateStatus = OBR.UpdateConfigurationStatus(groupId, "Approved By Customer", custMobileNo, "");
+                    if (updateStatus)
+                    {
+                        //Create Database
+                        result = OBR.CreateCustomerDatabase(groupId);
 
-                    //Send Email
-                    var CSName = OBR.GetAssignedCSNameForOnboarding(groupId);
-                    var CSHead = OBR.GetCSHeadEmailId();
-                    var GroupName = OBR.GetOnboardingGroupName(groupId);
-                    var CSEmail = CSHead + "," + CSName;
-                    var message = "Configuration Approved By Customer for Group - " + GroupName;
-                    var subject = "Configuration Approved By Customer - " + GroupName;
-                    var isEmail = SendEmailOnBoarding(CSEmail, subject, message);
+                        //Send Email
+                        var CSName = OBR.GetAssignedCSNameForOnboarding(groupId);
+                        var CSHead = OBR.GetCSHeadEmailId();
+                        var GroupName = OBR.GetOnboardingGroupName(groupId);
+                        var CSEmail = CSHead + "," + CSName;                        
+                        var message = "Configuration Approved By Customer for Group - " + GroupName;
+                        var subject = "Configuration Approved By Customer - " + GroupName;
+                        var isEmail = SendEmailOnBoarding(CSEmail, subject, message);
+                    }
                 }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "CustomerApprovalConfiguration");
             }
             return new JsonResult() { Data = result, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
@@ -2087,33 +2102,40 @@ namespace WebApp.Controllers.OnBoarding
         public bool SendEmailOnBoarding(string to, string subject, string message)
         {
             bool status = false;
-            var from = ConfigurationManager.AppSettings["FrmEmailOnboarding"].ToString();
-            var PWD = ConfigurationManager.AppSettings["FrmEmailOnboardingPwd"].ToString();
-            using (MailMessage mail = new MailMessage(from, to))
+            try
             {
-                StringBuilder str = new StringBuilder();
-                str.AppendLine("Dear Sir/Madam,");
-                str.AppendLine();
-                str.AppendLine(message);
-                str.AppendLine();
-                str.AppendLine("Regards,");
-                str.AppendLine(" - BlueOcktopus Team");
+                var from = ConfigurationManager.AppSettings["FrmEmailOnboarding"].ToString();
+                var PWD = ConfigurationManager.AppSettings["FrmEmailOnboardingPwd"].ToString();
+                using (MailMessage mail = new MailMessage(from, to))
+                {
+                    StringBuilder str = new StringBuilder();
+                    str.AppendLine("Dear Sir/Madam,");
+                    str.AppendLine();
+                    str.AppendLine(message);
+                    str.AppendLine();
+                    str.AppendLine("Regards,");
+                    str.AppendLine(" - BlueOcktopus Team");
 
-                mail.Subject = subject;
-                mail.SubjectEncoding = System.Text.Encoding.Default;
-                mail.Body = str.ToString();
-                mail.IsBodyHtml = false;
-                mail.BodyEncoding = System.Text.Encoding.GetEncoding("utf-8");
-                SmtpClient smtp = new SmtpClient();
-                smtp.Host = "smtp.zoho.com";
-                smtp.EnableSsl = true;
-                NetworkCredential networkCredential = new NetworkCredential(from, PWD);
-                smtp.UseDefaultCredentials = true;
-                smtp.Credentials = networkCredential;
-                smtp.Port = 587;
-                smtp.Send(mail);
+                    mail.Subject = subject;
+                    mail.SubjectEncoding = System.Text.Encoding.Default;
+                    mail.Body = str.ToString();
+                    mail.IsBodyHtml = false;
+                    mail.BodyEncoding = System.Text.Encoding.GetEncoding("utf-8");
+                    SmtpClient smtp = new SmtpClient();
+                    smtp.Host = "smtp.zoho.com";
+                    smtp.EnableSsl = true;
+                    NetworkCredential networkCredential = new NetworkCredential(from, PWD);
+                    smtp.UseDefaultCredentials = true;
+                    smtp.Credentials = networkCredential;
+                    smtp.Port = 587;
+                    smtp.Send(mail);
 
-                status = true;
+                    status = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "CustomerApprovalConfiguration");
             }
             return status;
         }
