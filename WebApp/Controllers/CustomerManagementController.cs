@@ -216,12 +216,12 @@ namespace WebApp.Controllers
             return Json(objData, JsonRequestBehavior.AllowGet);
         }
     
-        public ActionResult GetCustomerDetails(string groupId)
-        {             
-            var objData = OBR.GetOnBoardingCustomerDetails(groupId);
+        //public ActionResult GetCustomerDetails(string groupId)
+        //{             
+        //    var objData = OBR.GetOnBoardingCustomerDetails(groupId);
 
-            return Json(objData, JsonRequestBehavior.AllowGet);
-        }
+        //    return Json(objData, JsonRequestBehavior.AllowGet);
+        //}
        
         public ActionResult GetCustomerConfigDetails(string groupId)
         {

@@ -318,6 +318,7 @@
     <Compile Include="Models\OnBoarding\BOTS_TblVariableWords.cs" />
     <Compile Include="Models\OnBoarding\BOTS_TblVelocityChecksConfig.cs" />
     <Compile Include="Models\OnBoarding\BOTS_TblWAConfig.cs" />
+    <Compile Include="Models\OnBoarding\GroupTestingLog.cs" />
     <Compile Include="Models\OnBoarding\OnBoardingCustomerDetails.cs" />
     <Compile Include="Models\OnBoarding\OnBoardingListing.cs" />
     <Compile Include="Models\OnBoarding\RetailDetails.cs" />

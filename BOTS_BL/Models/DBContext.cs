@@ -18,6 +18,7 @@ namespace BOTS_BL.Models
             : base(connectionStringName)
         {
         }
+        public virtual DbSet<GroupTestingLog> GroupTestingLogs { get; set; }
         public virtual DbSet<CampaignMaster> CampaignMasters { get; set; }
         public virtual DbSet<CampaignMemberDetail> CampaignMemberDetails { get; set; }
         public virtual DbSet<CelebrationMemberDetail> CelebrationMemberDetails { get; set; }

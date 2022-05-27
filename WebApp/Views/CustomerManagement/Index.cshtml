@@ -248,7 +248,7 @@
                                             string GroupId = common.EncryptString(Convert.ToString(item.GroupId));
                                             <tr>
                                                 <td>@item.GroupId</td>
-                                                <td><a href="#" onclick="ShowCustomerDetails(@item.GroupId);">@item.GroupName</a></td>
+                                                <td>@item.GroupName</td>
                                                 <td>@item.OwnerMobileNo</td>
                                                 <td>@item.City</td>
                                                 <td>@item.BillingPartnerName</td>
@@ -370,24 +370,7 @@
         $("#dvOnboarding").toggle(1000);
     }
 
-    function ShowCustomerDetails(groupId) {
-
-        $.ajax({
-            type: "POST",
-            url: '@Url.Action("GetCustomerDetails", "CustomerManagement")',
-            data: '{groupId: ' + JSON.stringify(groupId) + '}',
-            contentType: "application/json; charset=utf-8",
-            dataType: "json",
-            success: function (result) {
-                console.log(result)
-            },
-            error: function (result) {
-                //console.log(result.responseText);
-            }
-        });
-
-        $("#myModal").show(1000);
-    }
+    
 
     function OpenStatusPopup(id) {
         $("#divLoader").show();
