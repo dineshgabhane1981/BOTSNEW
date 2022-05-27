@@ -47,7 +47,7 @@ namespace WebApp.Controllers.OnBoarding
             if (!string.IsNullOrEmpty(groupId))
             {
                 var GroupDetails = OBR.GetGroupMasterDetails(groupId);
-                if (GroupDetails.CustomerStatus == "Submit For Approval" || GroupDetails.CustomerStatus == "Approved" || GroupDetails.CustomerStatus == "Send For Customer Approval")
+                if (GroupDetails.CustomerStatus == "Submit For Approval" || GroupDetails.CustomerStatus == "Approved" || GroupDetails.CustomerStatus == "Send For Customer Approval" || GroupDetails.CustomerStatus == "Approved By Customer")
                 {
                     var GroupIdOld = common.EncryptString(groupId);
                     return RedirectToAction("CheckerView", "CustomerOnBoarding", new { GroupId = GroupIdOld });
