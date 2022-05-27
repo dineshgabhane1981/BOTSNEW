@@ -40,7 +40,7 @@
 			<CustomerId>1504</CustomerId>
 			<BillingId>1</BillingId>
 			<CustomerStatus>2</CustomerStatus>
-			<MobileNo>9003552567</MobileNo>
+			<MobileNo></MobileNo>
 			<CardNo></CardNo>
 			<InvoiceNo>123</InvoiceNo>
 			<InvoiceAmt>572</InvoiceAmt>
@@ -169,7 +169,7 @@
 			<CustomerId>1504</CustomerId>
 			<BillingId>1</BillingId>
 			<CustomerStatus>2</CustomerStatus>
-			<MobileNo>9003552567</MobileNo>
+			<MobileNo></MobileNo>
 			<CardNo></CardNo>
 			<InvoiceNo>124</InvoiceNo>
 			<InvoiceAmt>572</InvoiceAmt>
@@ -297,7 +297,7 @@
 			<CounterId>1176100101</CounterId>
 			<BillingId>1</BillingId>
 			<BurnStatus>1</BurnStatus>
-			<MobileNo>9003552567</MobileNo>
+			<MobileNo></MobileNo>
 			<InvoiceNo>0</InvoiceNo>
 			<InvoiceAmt>2200</InvoiceAmt>
 			<VoucherType></VoucherType>
@@ -337,7 +337,7 @@
 			<CounterId>1176100101</CounterId>
 			<BillingId>1</BillingId>
 			<BurnStatus>2</BurnStatus>
-			<MobileNo>9003552567</MobileNo>
+			<MobileNo></MobileNo>
 			<InvoiceNo>230000982</InvoiceNo>
 			<InvoiceAmt>2200</InvoiceAmt>
 			<VoucherType></VoucherType>
@@ -378,7 +378,7 @@
 			<Datetime>24052022140229</Datetime>
 			<CounterId>1176100101</CounterId>
 			<BillingId>1</BillingId>
-			<MobileNo>9003552567</MobileNo>
+			<MobileNo></MobileNo>
 			<CardNo></CardNo>
 			<InvoiceNo>230000973</InvoiceNo>
 			<InvoiceAmt>427</InvoiceAmt>
@@ -389,41 +389,16 @@
 	</Cancel>
 
 	<SendOTP>
-		<BOLOYALTY>
-			<TxnType>05</TxnType>
-			<TranSource>3</TranSource>
-			<Datetime>24052022151650</Datetime>
-			<CounterId>1176100101</CounterId>
-			<BillingId>1</BillingId>
-			<MobileNo>9003552567</MobileNo>
-			<InvoiceAmt>2200</InvoiceAmt>
-			<VoucherType></VoucherType>
-			<MakingCharges>0</MakingCharges>
-			<CustomerId>9</CustomerId>
-			<Points>602</Points>
-			<CardNo></CardNo>
-			<ProductFlag>1</ProductFlag>
-			<ProductDetails>
-				<SlNo>1</SlNo>
-				<ProductCode>212</ProductCode>
-				<ProductName></ProductName>
-				<ProductGST>235.72</ProductGST>
-				<ProductRate>2200.00</ProductRate>
-				<ProductAmt>2200.00</ProductAmt>
-				<ProductQty>1</ProductQty>
-				<DepartId>0</DepartId>
-				<ProductCategoryName></ProductCategoryName>
-				<ProductCategoryCode>12</ProductCategoryCode>
-				<ProductSubCategoryName></ProductSubCategoryName>
-				<ProductSubCategoryCode>15</ProductSubCategoryCode>
-				<ProductBrandName></ProductBrandName>
-				<ProductBrandCode>1</ProductBrandCode>
-				<ProductDiscount>0.00</ProductDiscount>
-				<SalesmanId>0</SalesmanId>
-			</ProductDetails>
-			<OTP>8281</OTP>
-			<MAC>D9042EB47AD8232F5C85C3B0B7CD7D4D</MAC>
-		</BOLOYALTY>
+	<BOLOYALTY> 
+	<TxnType>05</TxnType>  
+	<TranSource>3</TranSource>  
+	<Datetime>11022022144928</Datetime> 
+	<CounterId>1051100101</CounterId>  
+	<BillingId>1</BillingId>  
+	<MobileNo></MobileNo>  
+	<CardNo></CardNo> 
+	<MAC>26A15CEDB79B46870D9EB9AE915FEFF0 </MAC>
+	</BOLOYALTY>
 	</SendOTP>
 
 	<url>
