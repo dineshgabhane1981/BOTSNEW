@@ -139,6 +139,7 @@
         cursor: pointer;
     }
 </style>
+
 <div class="app-main__inner">
     <div class="row mb-3 card">
         @if (roleId == "Customer" && Model.bots_TblGroupMaster.CustomerStatus == "Approved By Customer")
@@ -468,6 +469,9 @@
                             message: "Configuration Saved Successfully!",
                             buttonText: "Okay"
                         })
+                        if (status == "Approved") {
+                            location.reload();
+                        }
                     }
                     else {
                         cuteAlert({
@@ -509,7 +513,12 @@
                                 title: "Saved..",
                                 message: "Configuration Sent Successfully!",
                                 buttonText: "Okay"
+                            }).then(() => {
+                                location.reload();
                             })
+
+
+                            location.reload();
                         }
                         else {
                             cuteAlert({
