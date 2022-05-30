@@ -1559,6 +1559,22 @@
                     $('#spnBirthDay7').html(edata.DLTStatus5);
                     $('#spnBirthDay9').html(edata.DLTStatus6);
 
+                    if (edata.DLTStatus1 == "Rejected") {
+                        $("#spnBirthDay1").html(edata.DLTStatus1 + "<br/>  Reason - " + edata.RejectReason1);
+                    }
+                    if (edata.DLTStatus3 == "Rejected") {
+                        $("#spnBirthDay3").html(edata.DLTStatus3 + "<br/>  Reason - " + edata.RejectReason3);
+                    }
+                    if (edata.DLTStatus4 == "Rejected") {
+                        $("#spnBirthDay5").html(edata.DLTStatus4 + "<br/>  Reason - " + edata.RejectReason4);
+                    }
+                    if (edata.DLTStatus5 == "Rejected") {
+                        $("#spnBirthDay7").html(edata.DLTStatus5 + "<br/>  Reason - " + edata.RejectReason5);
+                    }
+                    if (edata.DLTStatus6 == "Rejected") {
+                        $("#spnBirthDay9").html(edata.DLTStatus6 + "<br/>  Reason - " + edata.RejectReason6);
+                    }
+
                     DisableControl(edata.DLTStatus1, "txtIntroScript1");
                     DisableControl(edata.DLTStatus3, "txtRemScript1");
                     DisableControl(edata.DLTStatus4, "txtRemScript2");
@@ -1571,6 +1587,22 @@
                     $('#spnBirthDay6').html(edata.DLTStatus4);
                     $('#spnBirthDay8').html(edata.DLTStatus5);
                     $('#spnBirthDay10').html(edata.DLTStatus6);
+
+                    if (edata.DLTStatus1 == "Rejected") {
+                        $("#spnBirthDay2").html(edata.DLTStatus1 + "<br/>  Reason - " + edata.RejectReason1);
+                    }
+                    if (edata.DLTStatus3 == "Rejected") {
+                        $("#spnBirthDay4").html(edata.DLTStatus3 + "<br/>  Reason - " + edata.RejectReason3);
+                    }
+                    if (edata.DLTStatus4 == "Rejected") {
+                        $("#spnBirthDay6").html(edata.DLTStatus4 + "<br/>  Reason - " + edata.RejectReason4);
+                    }
+                    if (edata.DLTStatus5 == "Rejected") {
+                        $("#spnBirthDay8").html(edata.DLTStatus5 + "<br/>  Reason - " + edata.RejectReason5);
+                    }
+                    if (edata.DLTStatus6 == "Rejected") {
+                        $("#spnBirthDay10").html(edata.DLTStatus6 + "<br/>  Reason - " + edata.RejectReason6);
+                    }
 
                     DisableControl(edata.DLTStatus1, "txtSMSScript1");
                     DisableControl(edata.DLTStatus3, "txtSMSScript3");
