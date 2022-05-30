@@ -14,7 +14,7 @@
         </div>
         <div style="margin-left: 20px; margin-top: 10px;">
             To the referral (SMS) <br /> <textarea id="txtSMSToTheReferral" rows="3" cols="50" class="input100"></textarea>
-            <span style="font-weight:bold;" id="spnSMSEnrollment"></span>
+            <span style="font-weight:bold;" id="spnSMSEnrollmentLink"></span>
         </div>
         <div style="margin-left: 20px; margin-top: 10px;">
             Reminder for points usage (SMS) <br /> <textarea id="txtSMSReminderForPointsUsage" rows="3" cols="50" class="input100"></textarea>
@@ -122,6 +122,93 @@
         $('#txtValidityOfReferralPoints').val(data.ValidityOfReferralPoints);
         $('#txtReferralReminder').val(data.ReferralReminder);
         $('#txtSMSToTheReferral').val(data.ToTheReferralSMSScript);
+
+        if (data.DLTStatus1 != null && data.DLTStatus1 != "Submitted") {
+            $("#btnsubmitToDLT").prop("disabled", true);
+        }
+        if (data.DLTStatus2 != null && data.DLTStatus2 != "Submitted") {
+            $("#btnsubmitToDLT").prop("disabled", true);
+        }
+        if (data.DLTStatus3 != null && data.DLTStatus3 != "Submitted") {
+            $("#btnsubmitToDLT").prop("disabled", true);
+        }
+        if (data.DLTStatus4 != null && data.DLTStatus4 != "Submitted") {
+            $("#btnsubmitToDLT").prop("disabled", true);
+        }
+        if (data.DLTStatus5 != null && data.DLTStatus5 != "Submitted") {
+            $("#btnsubmitToDLT").prop("disabled", true);
+        }
+        if (data.DLTStatus6 != null && data.DLTStatus6 != "Submitted") {
+            $("#btnsubmitToDLT").prop("disabled", true);
+        }
+        if (data.DLTStatus7 != null && data.DLTStatus7 != "Submitted") {
+            $("#btnsubmitToDLT").prop("disabled", true);
+        }
+
+        if (data.DLTStatus1 == "Rejected") {
+            $("#spnSMSEnrollmentLink").html(data.DLTStatus1 + "<br/>  Reason - " + data.RejectReason1);
+        }
+        else {
+            $('#spnSMSEnrollmentLink').html(data.DLTStatus1);
+        }
+        if (data.DLTStatus2 == "Rejected") {
+            $("#spnSMSReminderForPointsUsage").html(data.DLTStatus2 + "<br/>  Reason - " + data.RejectReason2);
+        }
+        else {
+            $('#spnSMSReminderForPointsUsage').html(data.DLTStatus2);
+        }
+        
+        if (data.DLTStatus3 == "Rejected") {
+            $("#spnSMSReferredSuccessOnReferralTxn").html(data.DLTStatus3 + "<br/>  Reason - " + data.RejectReason3);
+        }
+        else {
+            $('#spnSMSReferredSuccessOnReferralTxn').html(data.DLTStatus3);
+        }
+        if (data.DLTStatus4 == "Rejected") {
+            $("#spnSMSDLCOtp").html(data.DLTStatus4 + "<br/>  Reason - " + data.RejectReason4);
+        }
+        else {
+            $('#spnSMSDLCOtp').html(data.DLTStatus4);
+        }
+        if (data.DLTStatus5 == "Rejected") {
+            $("#spnSMSGiftPtOtp").html(data.DLTStatus5 + "<br/>  Reason - " + data.RejectReason5);
+        }
+        else {
+            $('#spnSMSGiftPtOtp').html(data.DLTStatus5);
+        }
+        if (data.DLTStatus6 == "Rejected") {
+            $("#spnSMSGiftPtDebitOtp").html(data.DLTStatus6 + "<br/>  Reason - " + data.RejectReason6);
+        }
+        else {
+            $('#spnSMSGiftPtDebitOtp').html(data.DLTStatus6);
+        }
+        if (data.DLTStatus7 == "Rejected") {
+            $("#spnSMSGiftPtCreditOtp").html(data.DLTStatus7 + "<br/>  Reason - " + data.RejectReason7);
+        }
+        else {
+            $('#spnSMSGiftPtCreditOtp').html(data.DLTStatus7);
+        }
+        if (data.DLTStatus1 != null && data.DLTStatus1 != "Submitted") {
+            $("#txtSMSToTheReferral").prop("disabled", true);
+        }
+        if (data.DLTStatus2 != null && data.DLTStatus2 != "Submitted") {
+            $("#txtSMSReminderForPointsUsage").prop("disabled", true);
+        }
+        if (data.DLTStatus3 != null && data.DLTStatus3 != "Submitted") {
+            $("#txtSMSReferredSuccessOnReferralTxn").prop("disabled", true);
+        }
+        if (data.DLTStatus4 != null && data.DLTStatus4 != "Submitted") {
+            $("#txtSMSDLCOtp").prop("disabled", true);
+        }
+        if (data.DLTStatus5 != null && data.DLTStatus5 != "Submitted") {
+            $("#txtSMSGiftPtOtp").prop("disabled", true);
+        }
+        if (data.DLTStatus6 != null && data.DLTStatus6 != "Submitted") {
+            $("#txtSMSGiftPtDebitOtp").prop("disabled", true);
+        }
+        if (data.DLTStatus7 != null && data.DLTStatus7 != "Submitted") {
+            $("#txtSMSGiftPtCreditOtp").prop("disabled", true);
+        }
         $('#txtSMSReminderForPointsUsage').val(data.ReminderForPointsUsageSMSScript);
         $('#txtSMSReferredSuccessOnReferralTxn').val(data.ReferredSuccessOnReferralTxnSMSScript);
         $('#txtSMSDLCOtp').val(data.DLCOTPScriptSMS);
@@ -136,6 +223,7 @@
         $('#txtWAGiftPtDebitOtp').val(data.GiftPointsDebitOTPScriptWA);
         $('#txtWAGiftPtCreditOtp').val(data.GiftPointsCreditOTPScriptWA);
     }
+                
     function SaveDLCLinkConfig() {
         var DLCConfig = [];
         item = {}
