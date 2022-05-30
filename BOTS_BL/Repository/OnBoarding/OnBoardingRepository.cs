@@ -1342,7 +1342,10 @@ namespace BOTS_BL.Repository
                         objData.DLTStatus1 = status;
                         if (status == "Rejected")
                         {
-                            objData.RejectReason1 = reason;
+                            if (string.IsNullOrEmpty(objData.RejectReason1))
+                                objData.RejectReason1 = reason;
+                            else
+                                objData.RejectReason1 = objData.RejectReason1 + " // " + reason;
                         }
                     }
                     if (statusid == 2)
@@ -1350,7 +1353,10 @@ namespace BOTS_BL.Repository
                         objData.DLTStatus2 = status;
                         if (status == "Rejected")
                         {
-                            objData.RejectReason2 = reason;
+                            if (string.IsNullOrEmpty(objData.RejectReason1))
+                                objData.RejectReason2 = reason;
+                            else
+                                objData.RejectReason2 = objData.RejectReason2 + " // " + reason;
                         }
                     }
                     if (statusid == 3)
@@ -1358,7 +1364,10 @@ namespace BOTS_BL.Repository
                         objData.DLTStatus3 = status;
                         if (status == "Rejected")
                         {
-                            objData.RejectReason3 = reason;
+                            if (string.IsNullOrEmpty(objData.RejectReason1))
+                                objData.RejectReason3 = reason;
+                            else
+                                objData.RejectReason3 = objData.RejectReason3 + " // " + reason;
                         }
                     }
                     if (statusid == 4)
@@ -1366,7 +1375,10 @@ namespace BOTS_BL.Repository
                         objData.DLTStatus4 = status;
                         if (status == "Rejected")
                         {
-                            objData.RejectReason4 = reason;
+                            if (string.IsNullOrEmpty(objData.RejectReason1))
+                                objData.RejectReason4 = reason;
+                            else
+                                objData.RejectReason4 = objData.RejectReason4 + " // " + reason;
                         }
                     }
                     if (statusid == 5)
@@ -1374,7 +1386,10 @@ namespace BOTS_BL.Repository
                         objData.DLTStatus5 = status;
                         if (status == "Rejected")
                         {
-                            objData.RejectReason5 = reason;
+                            if (string.IsNullOrEmpty(objData.RejectReason1))
+                                objData.RejectReason5 = reason;
+                            else
+                                objData.RejectReason5 = objData.RejectReason5 + " // " + reason;
                         }
                     }
                     if (statusid == 6)
@@ -1382,7 +1397,10 @@ namespace BOTS_BL.Repository
                         objData.DLTStatus6 = status;
                         if (status == "Rejected")
                         {
-                            objData.RejectReason6 = reason;
+                            if (string.IsNullOrEmpty(objData.RejectReason1))
+                                objData.RejectReason6 = reason;
+                            else
+                                objData.RejectReason6 = objData.RejectReason6 + " // " + reason;
                         }
                     }
 
@@ -1512,7 +1530,10 @@ namespace BOTS_BL.Repository
                         objData.DLTStatus1 = status;
                         if (status == "Rejected")
                         {
-                            objData.RejectReason1 = reason;
+                            if (string.IsNullOrEmpty(objData.RejectReason1))
+                                objData.RejectReason1 = reason;
+                            else
+                                objData.RejectReason1 = objData.RejectReason1 + " // " + reason;
                         }
                     }
                     if (statusid == 2)
@@ -1520,7 +1541,10 @@ namespace BOTS_BL.Repository
                         objData.DLTStatus2 = status;
                         if (status == "Rejected")
                         {
-                            objData.RejectReason2 = reason;
+                            if (string.IsNullOrEmpty(objData.RejectReason1))
+                                objData.RejectReason2 = reason;
+                            else
+                                objData.RejectReason2 = objData.RejectReason2 + " // " + reason;
                         }
                     }
 
@@ -1581,7 +1605,10 @@ namespace BOTS_BL.Repository
                         objData.DLTStatus1 = status;
                         if (status == "Rejected")
                         {
-                            objData.RejectReason1 = reason;
+                            if (string.IsNullOrEmpty(objData.RejectReason1))
+                                objData.RejectReason1 = reason;
+                            else
+                                objData.RejectReason1 = objData.RejectReason1 + " // " + reason;
                         }
                     }
                     if (statusid == 2)
@@ -1589,7 +1616,10 @@ namespace BOTS_BL.Repository
                         objData.DLTStatus2 = status;
                         if (status == "Rejected")
                         {
-                            objData.RejectReason2 = reason;
+                            if (string.IsNullOrEmpty(objData.RejectReason1))
+                                objData.RejectReason2 = reason;
+                            else
+                                objData.RejectReason2 = objData.RejectReason2 + " // " + reason;
                         }
                     }
 
