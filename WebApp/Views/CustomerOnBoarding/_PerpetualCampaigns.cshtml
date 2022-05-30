@@ -43,8 +43,9 @@
         <b> Introduction Message</b>
         <div>
             <input type="number" class="input20" id="txtIntroDays1" /> Days before event
-            <textarea id="txtIntroScript1" class="input100" style="padding-top:20px;vertical-align:middle;"> </textarea>
-            <br /><br /> Secondary Script (This is SMS script only in case number do not have Whatsapp <b>(Optional)</b>) <textarea id="txtSMSScript1" class="input100" style="padding-top:20px;vertical-align:middle;"> </textarea>
+            <textarea id="txtIntroScript1" class="input100" style="padding-top:20px;vertical-align:middle;"> </textarea><span style="font-weight:bold;" id="spnBirthDay1"></span>
+            <br /><br /> (This is SMS script only in case number do not have Whatsapp <b>(Optional)</b>) 
+            <textarea id="txtSMSScript1" class="input100" style="padding-top:20px;vertical-align:middle;"> </textarea><span style="font-weight:bold;" id="spnBirthDay2"></span>
         </div>
         @*<div style="margin-top:20px;">
                 <input type="number" class="input20" id="txtIntroDays2" /> Days before event
@@ -57,15 +58,17 @@
             <input type="number" class="input20" id="txtRemDays1" /> Days
             @Html.DropDownListFor(x => Model.lstBrands.Count, new SelectList(Model.BeforeAfter(), "Value", "Text"), htmlAttributes: new { @class = "input50", @id = "ddlBeforeAfter1", style = "margin-top:20px;" })
             event
-            <textarea id="txtRemScript1" class="input100" style="padding-top:20px;vertical-align:middle;"> </textarea>
-            <br /><br /> Secondary Script (This is SMS script only in case number do not have Whatsapp <b>(Optional)</b>) <textarea id="txtSMSScript3" class="input100" style="padding-top:20px;vertical-align:middle;"> </textarea>
+            <textarea id="txtRemScript1" class="input100" style="padding-top:20px;vertical-align:middle;"> </textarea><span style="font-weight:bold;" id="spnBirthDay3"></span>
+            <br /><br /> (This is SMS script only in case number do not have Whatsapp <b>(Optional)</b>) 
+            <textarea id="txtSMSScript3" class="input100" style="padding-top:20px;vertical-align:middle;"> </textarea><span style="font-weight:bold;" id="spnBirthDay4"></span>
         </div>
         <div style="margin-top:20px;">
             <input type="number" class="input20" id="txtRemDays2" /> Days
             @Html.DropDownListFor(x => Model.lstBrands.Count, new SelectList(Model.BeforeAfter(), "Value", "Text"), htmlAttributes: new { @class = "input50", @id = "ddlBeforeAfter2", style = "margin-top:20px;" })
             event
-            <textarea id="txtRemScript2" class="input100" style="padding-top: 20px; vertical-align: middle;"> </textarea>
-            <br /><br /> Secondary Script (This is SMS script only in case number do not have Whatsapp <b>(Optional)</b>) <textarea id="txtSMSScript4" class="input100" style="padding-top:20px;vertical-align:middle;"> </textarea>
+            <textarea id="txtRemScript2" class="input100" style="padding-top: 20px; vertical-align: middle;"> </textarea><span style="font-weight:bold;" id="spnBirthDay5"></span>
+            <br /><br /> (This is SMS script only in case number do not have Whatsapp <b>(Optional)</b>) 
+            <textarea id="txtSMSScript4" class="input100" style="padding-top:20px;vertical-align:middle;"> </textarea><span style="font-weight:bold;" id="spnBirthDay6"></span>
         </div>
     </div>
     <div style="margin-top:20px;border:1px solid grey;padding:10px;border-radius:10px;">
@@ -73,14 +76,16 @@
         <div style="border-bottom:1px solid lightgrey;padding-bottom:10px;">
             @Html.DropDownListFor(x => Model.lstBrands.Count, new SelectList(Model.PointsUsed(), "Value", "Text"), htmlAttributes: new { @class = "input50", @disabled = "disabled", @id = "ddlPointsUsed", style = "margin-top:20px;" })
             event
-            <textarea id="txtOnBirthdayScriptPT" class="input100" style="padding-top:20px;vertical-align:middle;"> </textarea>
-            <br /><br /> Secondary Script (This is SMS script only in case number do not have Whatsapp <b>(Optional)</b>) <textarea id="txtSMSScript5" class="input100" style="padding-top:20px;vertical-align:middle;"> </textarea>
+            <textarea id="txtOnBirthdayScriptPT" class="input100" style="padding-top:20px;vertical-align:middle;"> </textarea><span style="font-weight:bold;" id="spnBirthDay7"></span>
+            <br /><br /> (This is SMS script only in case number do not have Whatsapp <b>(Optional)</b>) 
+            <textarea id="txtSMSScript5" class="input100" style="padding-top:20px;vertical-align:middle;"> </textarea><span style="font-weight:bold;" id="spnBirthDay8"></span>
         </div>
         <div>
             @Html.DropDownListFor(x => Model.lstBrands.Count, new SelectList(Model.PointsNotUsed(), "Value", "Text"), htmlAttributes: new { @class = "input50", @disabled = "disabled", @id = "ddlPointsNotUsed", style = "margin-top:20px;" })
             event
-            <textarea id="txtOnBirthdayScriptNPT" class="input100" style="padding-top:20px;vertical-align:middle;"> </textarea>
-            <br /><br /> Secondary Script (This is SMS script only in case number do not have Whatsapp <b>(Optional)</b>) <textarea id="txtSMSScript6" class="input100" style="padding-top:20px;vertical-align:middle;"> </textarea>
+            <textarea id="txtOnBirthdayScriptNPT" class="input100" style="padding-top:20px;vertical-align:middle;"> </textarea><span style="font-weight:bold;" id="spnBirthDay9"></span>
+            <br /><br /> (This is SMS script only in case number do not have Whatsapp <b>(Optional)</b>) 
+            <textarea id="txtSMSScript6" class="input100" style="padding-top:20px;vertical-align:middle;"> </textarea><span style="font-weight:bold;" id="spnBirthDay10"></span>
         </div>
     </div>
     <div class="container-fluid pt-3 pl-3 pr-3 pb-5">
@@ -160,74 +165,83 @@
         <input type="radio" name="InactiveType" id="rbtnInactiveWA" /> WhatsApp
     </div>
 
-    <div style="margin-top: 20px; display: flex; border: 1px solid grey; padding: 10px; border-radius: 10px; display:none;" id="dvInactive1">
+    <div class="col-md-12 col-lg-12" style="margin-top: 20px; display: flex; border: 1px solid grey; padding: 10px; border-radius: 10px; display:none;" id="dvInactive1">
         <input type="hidden" id="hdnInactive1" />
-        <div style="padding-top:50px;">
+        <div style="padding-top:130px;" class="col-md-4 col-lg-4">
             <input type="number" id="txtDaysCount1" style="padding-top: 20px; vertical-align: middle;" class="input20" /> days after last transaction
         </div>
-        <div style="margin-left:30px;">
+        <div class="col-md-8 col-lg-8">
             <div>
-                points less than
+                less than
                 <input type="number" id="txtLessThanDays1" class="input20" />
-                <textarea id="txtLessThanDaysScript1" class="input100" style="padding-top: 20px; vertical-align: middle;"> </textarea>
+                <textarea id="txtLessThanDaysScript1" class="input50" rows="5" style="padding-top: 20px; vertical-align: middle;"> </textarea>
+                <textarea id="txtSMSScript21" class="input50" rows="5" style="padding-top:20px;vertical-align:middle;"> </textarea>
             </div>
+            
             <div>
-                <br />points greater or equal <input type="number" id="txtGreaterThanDays1" class="input20" />
-                <textarea id="txtGreaterThanDaysScript1" class="input100" style="padding-top: 20px; vertical-align: middle;"> </textarea>
+                <br />greater/equal <input type="number" id="txtGreaterThanDays1" class="input20" />
+                <textarea id="txtGreaterThanDaysScript1" class="input50" rows="5" style="padding-top: 20px; vertical-align: middle;"> </textarea> 
+                <textarea id="txtSMSScript22" class="input50" rows="5" style="padding-top:20px;vertical-align:middle;"> </textarea>
             </div>
         </div>
     </div>
 
     <div style="margin-top: 20px; display: flex; border: 1px solid grey; padding: 10px; border-radius: 10px; display: none;" id="dvInactive2">
         <input type="hidden" id="hdnInactive2" />
-        <div style="padding-top:50px;">
+        <div style="padding-top: 130px;">
             <input type="number" id="txtDaysCount2" style="padding-top: 20px; vertical-align: middle;" class="input20" /> days after last transaction
         </div>
         <div style="margin-left:30px;">
             <div>
-                points less than
+                less than
                 <input type="number" id="txtLessThanDays2" class="input20" />
-                <textarea id="txtLessThanDaysScript2" class="input100" style="padding-top: 20px; vertical-align: middle;"> </textarea>
+                <textarea id="txtLessThanDaysScript2" class="input50" rows="5" style="padding-top: 20px; vertical-align: middle;"> </textarea>
+                <textarea id="txtSMSScript23" class="input50" rows="5" style="padding-top:20px;vertical-align:middle;"> </textarea>
             </div>
             <div>
-                <br />points greater or equal <input type="number" id="txtGreaterThanDays2" class="input20" />
-                <textarea id="txtGreaterThanDaysScript2" class="input100" style="padding-top: 20px; vertical-align: middle;"> </textarea>
+                <br />greater/equal <input type="number" id="txtGreaterThanDays2" class="input20" />
+                <textarea id="txtGreaterThanDaysScript2" class="input50" rows="5" style="padding-top: 20px; vertical-align: middle;"> </textarea>
+                <textarea id="txtSMSScript24" class="input50" rows="5" style="padding-top:20px;vertical-align:middle;"> </textarea>
             </div>
         </div>
     </div>
 
     <div style="margin-top: 20px; display: flex; border: 1px solid grey; padding: 10px; border-radius: 10px; display: none;" id="dvInactive3">
         <input type="hidden" id="hdnInactive3" />
-        <div style="padding-top:50px;">
+        <div style="padding-top: 130px;">
             <input type="number" id="txtDaysCount3" style="padding-top: 20px; vertical-align: middle;" class="input20" /> days after last transaction
         </div>
         <div style="margin-left:30px;">
             <div>
-                points less than
+                less than
                 <input type="number" id="txtLessThanDays3" class="input20" />
-                <textarea id="txtLessThanDaysScript3" class="input100" style="padding-top: 20px; vertical-align: middle;"> </textarea>
+                <textarea id="txtLessThanDaysScript3" class="input50" rows="5" style="padding-top: 20px; vertical-align: middle;"> </textarea>
+                <textarea id="txtSMSScript25" class="input50" rows="5" style="padding-top:20px;vertical-align:middle;"> </textarea>
             </div>
             <div>
-                <br />points greater or equal <input type="number" id="txtGreaterThanDays3" class="input20" />
-                <textarea id="txtGreaterThanDaysScript3" class="input100" style="padding-top: 20px; vertical-align: middle;"> </textarea>
+                <br />greater/equal <input type="number" id="txtGreaterThanDays3" class="input20" />
+                <textarea id="txtGreaterThanDaysScript3" class="input50" rows="5" style="padding-top: 20px; vertical-align: middle;"> </textarea>
+                <textarea id="txtSMSScript26" class="input50" rows="5" style="padding-top:20px;vertical-align:middle;"> </textarea>
             </div>
         </div>
     </div>
 
     <div style="margin-top: 20px; display: flex; border: 1px solid grey; padding: 10px; border-radius: 10px; display: none;" id="dvInactive4">
         <input type="hidden" id="hdnInactive4" />
-        <div style="padding-top:50px;">
+        <div style="padding-top: 130px;">
             <input type="number" id="txtDaysCount4" style="padding-top: 20px; vertical-align: middle;" class="input20" /> days after last transaction
         </div>
         <div style="margin-left:30px;">
             <div>
                 points less than
                 <input type="number" id="txtLessThanDays4" class="input20" />
-                <textarea id="txtLessThanDaysScript4" class="input100" style="padding-top: 20px; vertical-align: middle;"> </textarea>
+                <textarea id="txtLessThanDaysScript4" class="input50" rows="5" style="padding-top: 20px; vertical-align: middle;"> </textarea>
+                <textarea id="txtSMSScript27" class="input50" rows="5" style="padding-top:20px;vertical-align:middle;"> </textarea>
             </div>
             <div>
                 <br />points greater or equal <input type="number" id="txtGreaterThanDays4" class="input20" />
-                <textarea id="txtGreaterThanDaysScript4" class="input100" style="padding-top: 20px; vertical-align: middle;"> </textarea>
+                <textarea id="txtGreaterThanDaysScript4" class="input50" rows="5" style="padding-top: 20px; vertical-align: middle;"> </textarea>
+                <textarea id="txtSMSScript28" class="input50" rows="5" style="padding-top:20px;vertical-align:middle;"> </textarea>
             </div>
         </div>
     </div>
@@ -246,74 +260,82 @@
         <input type="radio" name="InactiveTypeOO" id="rbtnOOInactiveWA" /> WhatsApp
     </div>
 
-    <div style="margin-top: 20px; display: flex; border: 1px solid grey; padding: 10px; border-radius: 10px; display:none;" id="dvOOInactive1">
+    <div class="col-md-12 col-lg-12" style="margin-top: 20px; display: flex; border: 1px solid grey; padding: 10px; border-radius: 10px; display:none;" id="dvOOInactive1">
         <input type="hidden" id="hdnOOInactive1" />
-        <div style="padding-top:50px;">
+        <div style="padding-top:130px;" class="col-md-4 col-lg-4">
             <input type="number" id="txtOODaysCount1" style="padding-top: 20px; vertical-align: middle;" class="input20" /> days after last transaction
         </div>
-        <div style="margin-left:30px;">
+        <div class="col-md-8 col-lg-8">
             <div>
-                points less than
+                less than
                 <input type="number" id="txtOOLessThanDays1" class="input20" />
-                <textarea id="txtOOLessThanDaysScript1" class="input100" style="padding-top: 20px; vertical-align: middle;"> </textarea>
+                <textarea id="txtOOLessThanDaysScript1" class="input50" rows="5" style="padding-top: 20px; vertical-align: middle;"> </textarea>
+                <textarea id="txtSMSScript32" class="input50" rows="5" style="padding-top:20px;vertical-align:middle;"> </textarea>
             </div>
             <div>
-                <br />points greater or equal <input type="number" id="txtOOGreaterThanDays1" class="input20" />
-                <textarea id="txtOOGreaterThanDaysScript1" class="input100" style="padding-top: 20px; vertical-align: middle;"> </textarea>
+                <br />greater/equal <input type="number" id="txtOOGreaterThanDays1" class="input20" />
+                <textarea id="txtOOGreaterThanDaysScript1" class="input50" rows="5" style="padding-top: 20px; vertical-align: middle;"> </textarea>
+                <textarea id="txtSMSScript33" class="input50" rows="5" style="padding-top:20px;vertical-align:middle;"> </textarea>
             </div>
         </div>
     </div>
 
-    <div style="margin-top: 20px; display: flex; border: 1px solid grey; padding: 10px; border-radius: 10px; display: none;" id="dvOOInactive2">
+    <div  style="margin-top: 20px; display: flex; border: 1px solid grey; padding: 10px; border-radius: 10px; display: none;" id="dvOOInactive2">
         <input type="hidden" id="hdnOOInactive2" />
-        <div style="padding-top:50px;">
+        <div style="padding-top:130px;" class="col-md-4 col-lg-4">
             <input type="number" id="txtOODaysCount2" style="padding-top: 20px; vertical-align: middle;" class="input20" /> days after last transaction
         </div>
-        <div style="margin-left:30px;">
+        <div style="margin-left:30px;" class="col-md-8 col-lg-8">
             <div>
-                points less than
+                less than
                 <input type="number" id="txtOOLessThanDays2" class="input20" />
-                <textarea id="txtOOLessThanDaysScript2" class="input100" style="padding-top: 20px; vertical-align: middle;"> </textarea>
+                <textarea id="txtOOLessThanDaysScript2" class="input50" rows="5" style="padding-top: 20px; vertical-align: middle;"> </textarea>
+                <textarea id="txtSMSScript34" class="input50" rows="5" style="padding-top:20px;vertical-align:middle;"> </textarea>
             </div>
             <div>
-                <br />points greater or equal <input type="number" id="txtOOGreaterThanDays2" class="input20" />
-                <textarea id="txtOOGreaterThanDaysScript2" class="input100" style="padding-top: 20px; vertical-align: middle;"> </textarea>
+                <br />greater/equal <input type="number" id="txtOOGreaterThanDays2" class="input20" />
+                <textarea id="txtOOGreaterThanDaysScript2" class="input50" rows="5" style="padding-top: 20px; vertical-align: middle;"> </textarea>
+                <textarea id="txtSMSScript35" class="input50" rows="5" style="padding-top:20px;vertical-align:middle;"> </textarea>
             </div>
         </div>
     </div>
 
     <div style="margin-top: 20px; display: flex; border: 1px solid grey; padding: 10px; border-radius: 10px; display: none;" id="dvOOInactive3">
         <input type="hidden" id="hdnOOInactive3" />
-        <div style="padding-top:50px;">
+        <div style="padding-top:50px;" class="col-md-4 col-lg-4">
             <input type="number" id="txtOODaysCount3" style="padding-top: 20px; vertical-align: middle;" class="input20" /> days after last transaction
         </div>
-        <div style="margin-left:30px;">
+        <div style="margin-left:30px;" class="col-md-8 col-lg-8">
             <div>
-                points less than
+                less than
                 <input type="number" id="txtOOLessThanDays3" class="input20" />
-                <textarea id="txtOOLessThanDaysScript3" class="input100" style="padding-top: 20px; vertical-align: middle;"> </textarea>
+                <textarea id="txtOOLessThanDaysScript3" class="input50" rows="5" style="padding-top: 20px; vertical-align: middle;"> </textarea>
+                <textarea id="txtSMSScript36" class="input50" rows="5" style="padding-top:20px;vertical-align:middle;"> </textarea>
             </div>
             <div>
-                <br />points greater or equal <input type="number" id="txtOOGreaterThanDays3" class="input20" />
-                <textarea id="txtOOGreaterThanDaysScript3" class="input100" style="padding-top: 20px; vertical-align: middle;"> </textarea>
+                <br />greater/equal <input type="number" id="txtOOGreaterThanDays3" class="input20" />
+                <textarea id="txtOOGreaterThanDaysScript3" class="input50" rows="5" style="padding-top: 20px; vertical-align: middle;"> </textarea>
+                <textarea id="txtSMSScript37" class="input50" rows="5" style="padding-top:20px;vertical-align:middle;"> </textarea>
             </div>
         </div>
     </div>
 
     <div style="margin-top: 20px; display: flex; border: 1px solid grey; padding: 10px; border-radius: 10px; display: none;" id="dvOOInactive4">
         <input type="hidden" id="hdnOOInactive4" />
-        <div style="padding-top:50px;">
+        <div style="padding-top:50px;" class="col-md-4 col-lg-4">
             <input type="number" id="txtOODaysCount4" style="padding-top: 20px; vertical-align: middle;" class="input20" /> days after last transaction
         </div>
-        <div style="margin-left:30px;">
+        <div style="margin-left:30px;" class="col-md-8 col-lg-8">
             <div>
-                points less than
+                less than
                 <input type="number" id="txtOOLessThanDays4" class="input20" />
-                <textarea id="txtOOLessThanDaysScript4" class="input100" style="padding-top: 20px; vertical-align: middle;"> </textarea>
+                <textarea id="txtOOLessThanDaysScript4" class="input50" rows="5" style="padding-top: 20px; vertical-align: middle;"> </textarea>
+                <textarea id="txtSMSScript38" class="input50" rows="5" style="padding-top:20px;vertical-align:middle;"> </textarea>
             </div>
             <div>
-                <br />points greater or equal <input type="number" id="txtOOGreaterThanDays4" class="input20" />
-                <textarea id="txtOOGreaterThanDaysScript4" class="input100" style="padding-top: 20px; vertical-align: middle;"> </textarea>
+                <br />greater/equal <input type="number" id="txtOOGreaterThanDays4" class="input20" />
+                <textarea id="txtOOGreaterThanDaysScript4" class="input50" rows="5" style="padding-top: 20px; vertical-align: middle;"> </textarea>
+                <textarea id="txtSMSScript39" class="input50" rows="5" style="padding-top:20px;vertical-align:middle;"> </textarea>
             </div>
         </div>
     </div>
@@ -332,74 +354,82 @@
         <input type="radio" name="InactiveTypeNR" id="rbtnNRInactiveWA" /> WhatsApp
     </div>
 
-    <div style="margin-top: 20px; display: flex; border: 1px solid grey; padding: 10px; border-radius: 10px; display:none;" id="dvNRInactive1">
+    <div class="col-md-12 col-lg-12" style="margin-top: 20px; display: flex; border: 1px solid grey; padding: 10px; border-radius: 10px; display:none;" id="dvNRInactive1">
         <input type="hidden" id="hdnNRInactive1" />
-        <div style="padding-top:50px;">
+        <div style="padding-top:130px;" class="col-md-4 col-lg-4">
             <input type="number" id="txtNRDaysCount1" style="padding-top: 20px; vertical-align: middle;" class="input20" /> days after last transaction
         </div>
-        <div style="margin-left:30px;">
+        <div class="col-md-8 col-lg-8">
             <div>
-                points less than
+                less than
                 <input type="number" id="txtNRLessThanDays1" class="input20" />
-                <textarea id="txtNRLessThanDaysScript1" class="input100" style="padding-top: 20px; vertical-align: middle;"> </textarea>
+                <textarea id="txtNRLessThanDaysScript1" class="input50" rows="5" style="padding-top: 20px; vertical-align: middle;"> </textarea>
+                <textarea id="txtSMSScript42" class="input50" rows="5" style="padding-top:20px;vertical-align:middle;"> </textarea>
             </div>
             <div>
-                <br />points greater or equal <input type="number" id="txtNRGreaterThanDays1" class="input20" />
-                <textarea id="txtNRGreaterThanDaysScript1" class="input100" style="padding-top: 20px; vertical-align: middle;"> </textarea>
+                <br />greater/equal <input type="number" id="txtNRGreaterThanDays1" class="input20" />
+                <textarea id="txtNRGreaterThanDaysScript1" class="input50" rows="5" style="padding-top: 20px; vertical-align: middle;"> </textarea>
+                <textarea id="txtSMSScript43" class="input50" rows="5" style="padding-top:20px;vertical-align:middle;"> </textarea>
             </div>
         </div>
     </div>
 
     <div style="margin-top: 20px; display: flex; border: 1px solid grey; padding: 10px; border-radius: 10px; display: none;" id="dvNRInactive2">
         <input type="hidden" id="hdnNRInactive2" />
-        <div style="padding-top:50px;">
+        <div style="padding-top:130px;" class="col-md-4 col-lg-4">
             <input type="number" id="txtNRDaysCount2" style="padding-top: 20px; vertical-align: middle;" class="input20" /> days after last transaction
         </div>
-        <div style="margin-left:30px;">
+        <div class="col-md-8 col-lg-8">
             <div>
-                points less than
+                less than
                 <input type="number" id="txtNRLessThanDays2" class="input20" />
-                <textarea id="txtNRLessThanDaysScript2" class="input100" style="padding-top: 20px; vertical-align: middle;"> </textarea>
+                <textarea id="txtNRLessThanDaysScript2" class="input50" rows="5" style="padding-top: 20px; vertical-align: middle;"> </textarea>
+                <textarea id="txtSMSScript44" class="input50" rows="5" style="padding-top:20px;vertical-align:middle;"> </textarea>
             </div>
             <div>
-                <br />points greater or equal <input type="number" id="txtNRGreaterThanDays2" class="input20" />
-                <textarea id="txtNRGreaterThanDaysScript2" class="input100" style="padding-top: 20px; vertical-align: middle;"> </textarea>
+                <br />greater/equal <input type="number" id="txtNRGreaterThanDays2" class="input20" />
+                <textarea id="txtNRGreaterThanDaysScript2" class="input50" rows="5" style="padding-top: 20px; vertical-align: middle;"> </textarea>
+                <textarea id="txtSMSScript45" class="input50" rows="5" style="padding-top:20px;vertical-align:middle;"> </textarea>
             </div>
         </div>
     </div>
 
     <div style="margin-top: 20px; display: flex; border: 1px solid grey; padding: 10px; border-radius: 10px; display: none;" id="dvNRInactive3">
         <input type="hidden" id="hdnNRInactive3" />
-        <div style="padding-top:50px;">
+        <div style="padding-top:130px;" class="col-md-4 col-lg-4">
             <input type="number" id="txtNRDaysCount3" style="padding-top: 20px; vertical-align: middle;" class="input20" /> days after last transaction
         </div>
-        <div style="margin-left:30px;">
+        <div class="col-md-8 col-lg-8">
             <div>
-                points less than
+                less than
                 <input type="number" id="txtNRLessThanDays3" class="input20" />
-                <textarea id="txtNRLessThanDaysScript3" class="input100" style="padding-top: 20px; vertical-align: middle;"> </textarea>
+                <textarea id="txtNRLessThanDaysScript3" class="input50" rows="5" style="padding-top: 20px; vertical-align: middle;"> </textarea>
+                <textarea id="txtSMSScript46" class="input50" rows="5" style="padding-top:20px;vertical-align:middle;"> </textarea>
             </div>
             <div>
-                <br />points greater or equal <input type="number" id="txtNRGreaterThanDays3" class="input20" />
-                <textarea id="txtNRGreaterThanDaysScript3" class="input100" style="padding-top: 20px; vertical-align: middle;"> </textarea>
+                <br />greater/equal <input type="number" id="txtNRGreaterThanDays3" class="input20" />
+                <textarea id="txtNRGreaterThanDaysScript3" class="input50" rows="5" style="padding-top: 20px; vertical-align: middle;"> </textarea>
+                <textarea id="txtSMSScript47" class="input50" rows="5" style="padding-top:20px;vertical-align:middle;"> </textarea>
             </div>
         </div>
     </div>
 
     <div style="margin-top: 20px; display: flex; border: 1px solid grey; padding: 10px; border-radius: 10px; display: none;" id="dvNRInactive4">
         <input type="hidden" id="hdnNRInactive4" />
-        <div style="padding-top:50px;">
+        <div style="padding-top:130px;" class="col-md-4 col-lg-4">
             <input type="number" id="txtNRDaysCount4" style="padding-top: 20px; vertical-align: middle;" class="input20" /> days after last transaction
         </div>
-        <div style="margin-left:30px;">
+        <div class="col-md-8 col-lg-8">
             <div>
-                points less than
+                less than
                 <input type="number" id="txtNRLessThanDays4" class="input20" />
-                <textarea id="txtNRLessThanDaysScript4" class="input100" style="padding-top: 20px; vertical-align: middle;"> </textarea>
+                <textarea id="txtNRLessThanDaysScript4" class="input50" rows="5" style="padding-top: 20px; vertical-align: middle;"> </textarea>
+                <textarea id="txtSMSScript48" class="input50" rows="5" style="padding-top:20px;vertical-align:middle;"> </textarea>
             </div>
             <div>
-                <br />points greater or equal <input type="number" id="txtNRGreaterThanDays4" class="input20" />
-                <textarea id="txtNRGreaterThanDaysScript4" class="input100" style="padding-top: 20px; vertical-align: middle;"> </textarea>
+                <br />greater/equal <input type="number" id="txtNRGreaterThanDays4" class="input20" />
+                <textarea id="txtNRGreaterThanDaysScript4" class="input50" rows="5" style="padding-top: 20px; vertical-align: middle;"> </textarea>
+                <textarea id="txtSMSScript49" class="input50" rows="5" style="padding-top:20px;vertical-align:middle;"> </textarea>
             </div>
         </div>
     </div>
@@ -418,56 +448,62 @@
         <input type="radio" name="InactiveTypePE" id="rbtnPEInactiveWA" /> WhatsApp
     </div>
 
-    <div style="margin-top: 20px; display: flex; border: 1px solid grey; padding: 10px; border-radius: 10px; display:none;" id="dvPEInactive1">
+    <div class="col-md-12 col-lg-12" style="margin-top: 20px; display: flex; border: 1px solid grey; padding: 10px; border-radius: 10px; display:none;" id="dvPEInactive1">
         <input type="hidden" id="hdnPEInactive1" />
-        <div style="padding-top:50px;">
+        <div style="padding-top:130px;" class="col-md-4 col-lg-4">
             <input type="number" id="txtPEDaysCount1" style="padding-top: 20px; vertical-align: middle;" class="input20" /> days after last transaction
         </div>
-        <div style="margin-left:30px;">
+        <div class="col-md-8 col-lg-8">
             <div>
-                points less than
+                less than
                 <input type="number" id="txtPELessThanDays1" class="input20" />
-                <textarea id="txtPELessThanDaysScript1" class="input100" style="padding-top: 20px; vertical-align: middle;"> </textarea>
+                <textarea id="txtPELessThanDaysScript1" class="input50" rows="5" style="padding-top: 20px; vertical-align: middle;"> </textarea>
+                <textarea id="txtSMSScript52" class="input50" rows="5" style="padding-top:20px;vertical-align:middle;"> </textarea>
             </div>
             <div>
-                <br />points greater or equal <input type="number" id="txtPEGreaterThanDays1" class="input20" />
-                <textarea id="txtPEGreaterThanDaysScript1" class="input100" style="padding-top: 20px; vertical-align: middle;"> </textarea>
+                <br />greater/equal <input type="number" id="txtPEGreaterThanDays1" class="input20" />
+                <textarea id="txtPEGreaterThanDaysScript1" class="input50" rows="5" style="padding-top: 20px; vertical-align: middle;"> </textarea>
+                <textarea id="txtSMSScript53" class="input50" rows="5" style="padding-top:20px;vertical-align:middle;"> </textarea>
             </div>
         </div>
     </div>
 
     <div style="margin-top: 20px; display: flex; border: 1px solid grey; padding: 10px; border-radius: 10px; display: none;" id="dvPEInactive2">
         <input type="hidden" id="hdnPEInactive2" />
-        <div style="padding-top:50px;">
+        <div style="padding-top:130px;" class="col-md-4 col-lg-4">
             <input type="number" id="txtPEDaysCount2" style="padding-top: 20px; vertical-align: middle;" class="input20" /> days after last transaction
         </div>
-        <div style="margin-left:30px;">
+        <div class="col-md-8 col-lg-8">
             <div>
-                points less than
+                less than
                 <input type="number" id="txtPELessThanDays2" class="input20" />
-                <textarea id="txtPELessThanDaysScript2" class="input100" style="padding-top: 20px; vertical-align: middle;"> </textarea>
+                <textarea id="txtPELessThanDaysScript2" class="input50" rows="5" style="padding-top: 20px; vertical-align: middle;"> </textarea>
+                <textarea id="txtSMSScript54" class="input50" rows="5" style="padding-top:20px;vertical-align:middle;"> </textarea>
             </div>
             <div>
-                <br />points greater or equal <input type="number" id="txtPEGreaterThanDays2" class="input20" />
-                <textarea id="txtPEGreaterThanDaysScript2" class="input100" style="padding-top: 20px; vertical-align: middle;"> </textarea>
+                <br />greater/equal <input type="number" id="txtPEGreaterThanDays2" class="input20" />
+                <textarea id="txtPEGreaterThanDaysScript2" class="input50" rows="5" style="padding-top: 20px; vertical-align: middle;"> </textarea>
+                <textarea id="txtSMSScript55" class="input50" rows="5" style="padding-top:20px;vertical-align:middle;"> </textarea>
             </div>
         </div>
     </div>
 
     <div style="margin-top: 20px; display: flex; border: 1px solid grey; padding: 10px; border-radius: 10px; display: none;" id="dvPEInactive3">
         <input type="hidden" id="hdnPEInactive3" />
-        <div style="padding-top:50px;">
+        <div style="padding-top:130px;" class="col-md-4 col-lg-4">
             <input type="number" id="txtPEDaysCount3" style="padding-top: 20px; vertical-align: middle;" class="input20" /> days after last transaction
         </div>
-        <div style="margin-left:30px;">
+        <div class="col-md-8 col-lg-8">
             <div>
-                points less than
+                less than
                 <input type="number" id="txtPELessThanDays3" class="input20" />
-                <textarea id="txtPELessThanDaysScript3" class="input100" style="padding-top: 20px; vertical-align: middle;"> </textarea>
+                <textarea id="txtPELessThanDaysScript3" class="input50" rows="5" style="padding-top: 20px; vertical-align: middle;"> </textarea>
+                <textarea id="txtSMSScript56" class="input50" rows="5" style="padding-top:20px;vertical-align:middle;"> </textarea>
             </div>
             <div>
-                <br />points greater or equal <input type="number" id="txtPEGreaterThanDays3" class="input20" />
-                <textarea id="txtPEGreaterThanDaysScript3" class="input100" style="padding-top: 20px; vertical-align: middle;"> </textarea>
+                <br />greater/equal <input type="number" id="txtPEGreaterThanDays3" class="input20" />
+                <textarea id="txtPEGreaterThanDaysScript3" class="input50" rows="5" style="padding-top: 20px; vertical-align: middle;"> </textarea>
+                <textarea id="txtSMSScript57" class="input50" rows="5" style="padding-top:20px;vertical-align:middle;"> </textarea>
             </div>
         </div>
     </div>
@@ -478,6 +514,7 @@
     </div>
 </div>
 
+@* DLC Referral Reminder *@
 <div id="dvDLCRR" style="border:1px solid grey;border-radius:10px;padding:5px;">
     <input type="hidden" id="hdnDLCRRId" />
     <div style="margin-top:20px;">
@@ -504,6 +541,7 @@
     </div>
 </div>
 
+@* DLC Update Reminder *@
 <div id="dvDLCUR" style="border:1px solid grey;border-radius:10px;padding:5px;">
     <input type="hidden" id="hdnDLCURId" />
     <div style="margin-top:20px;">
@@ -530,6 +568,7 @@
     </div>
 </div>
 
+@* Points Balance  *@
 <div id="dvBalanceUpdate" style="border:1px solid grey;border-radius:10px;padding:5px;">
     <input type="hidden" id="hdnBUId" />
     <div style="margin-top:20px;">
@@ -556,6 +595,7 @@
     </div>
 </div>
 
+@* Reminder to Bulk Uploaded Users *@
 <div id="dvUploadedUsers" style="border:1px solid grey;border-radius:10px;padding:5px;">
     <input type="hidden" id="hdnUploadedUsersId" />
     <div style="margin-top:20px;">
@@ -1496,15 +1536,12 @@
                 }
                 $('#txtIntroDays1').val(edata.IntroDays1);
                 $('#txtIntroScript1').val(edata.IntroScript1);
-                //$('#txtIntroDays2').val(edata.IntroDays2);
-                //$('#txtIntroScript2').val(edata.IntroScript2);
                 $('#txtRemDays1').val(edata.ReminderDays1);
                 $('#ddlBeforeAfter1').val(edata.ReminderWhen1);
                 $('#txtRemScript1').val(edata.ReminderScript1);
                 $('#txtRemDays2').val(edata.ReminderDays2);
                 $('#ddlBeforeAfter2').val(edata.ReminderWhen2);
                 $('#txtRemScript2').val(edata.ReminderScript2);
-                //alert(edata.OnDayScriptPT)
                 $('#ddlPointsUsed').val(edata.OnDayTypePT);
                 $('#txtOnBirthdayScriptPT').val(edata.OnDayScriptPT);
                 $('#txtOnBirthdayScriptNPT').val(edata.OnDayScriptNPT);
@@ -1515,6 +1552,32 @@
                 $('#txtSMSScript5').val(edata.SMSScript5);
                 $('#txtSMSScript6').val(edata.SMSScript6);
 
+                if (edata.SMSType == "SMS") {
+                    $('#spnBirthDay1').html(edata.DLTStatus1);
+                    $('#spnBirthDay3').html(edata.DLTStatus3);
+                    $('#spnBirthDay5').html(edata.DLTStatus4);
+                    $('#spnBirthDay7').html(edata.DLTStatus5);
+                    $('#spnBirthDay9').html(edata.DLTStatus6);
+
+                    DisableControl(edata.DLTStatus1, "txtIntroScript1");
+                    DisableControl(edata.DLTStatus3, "txtRemScript1");
+                    DisableControl(edata.DLTStatus4, "txtRemScript2");
+                    DisableControl(edata.DLTStatus5, "txtOnBirthdayScriptPT");
+                    DisableControl(edata.DLTStatus6, "txtOnBirthdayScriptNPT");
+                }
+                else {
+                    $('#spnBirthDay2').html(edata.DLTStatus1);
+                    $('#spnBirthDay4').html(edata.DLTStatus3);
+                    $('#spnBirthDay6').html(edata.DLTStatus4);
+                    $('#spnBirthDay8').html(edata.DLTStatus5);
+                    $('#spnBirthDay10').html(edata.DLTStatus6);
+
+                    DisableControl(edata.DLTStatus1, "txtSMSScript1");
+                    DisableControl(edata.DLTStatus3, "txtSMSScript3");
+                    DisableControl(edata.DLTStatus4, "txtSMSScript4");
+                    DisableControl(edata.DLTStatus5, "txtSMSScript5");
+                    DisableControl(edata.DLTStatus6, "txtSMSScript6");
+                }
 
                 $('#hdnBirthId').val(edata.Id);
                 if ($("#hdnBirthId").val() > 0) {
@@ -1673,7 +1736,7 @@
             }
             else {
                 var msgCount = $("#txtMessageCount").val();
-
+                var SMSScriptCount = 1;
                 for (var i = 1; i <= msgCount; i++) {
                     item = {}
                     item["Id"] = $('#hdnInactive' + i).val();
@@ -1688,6 +1751,10 @@
                     item["LessThanDaysScript"] = $('#txtLessThanDaysScript' + i).val();
                     item["GreaterThanDays"] = $('#txtGreaterThanDays' + i).val();
                     item["GreaterThanDaysScript"] = $('#txtGreaterThanDaysScript' + i).val();
+                    item["SMSScript1"] = $('#txtSMSScript2' + SMSScriptCount).val();
+                    SMSScriptCount++;
+                    item["SMSScript2"] = $('#txtSMSScript2' + SMSScriptCount).val();
+                    SMSScriptCount++;
                     InactiveConfig.push(item);
                 }
                 status = true;
@@ -1706,7 +1773,7 @@
             }
             else {
                 var msgCount = $("#txtOOMessageCount").val();
-
+                var SMSScriptCount = 2;
                 for (var i = 1; i <= msgCount; i++) {
                     item = {}
                     item["Id"] = $('#hdnOOInactive' + i).val();
@@ -1721,6 +1788,10 @@
                     item["LessThanDaysScript"] = $('#txtOOLessThanDaysScript' + i).val();
                     item["GreaterThanDays"] = $('#txtOOGreaterThanDays' + i).val();
                     item["GreaterThanDaysScript"] = $('#txtOOGreaterThanDaysScript' + i).val();
+                    item["SMSScript1"] = $('#txtSMSScript3' + SMSScriptCount).val();
+                    SMSScriptCount++;
+                    item["SMSScript2"] = $('#txtSMSScript3' + SMSScriptCount).val();
+                    SMSScriptCount++;
                     InactiveConfig.push(item);
                 }
                 status = true;
@@ -1739,7 +1810,7 @@
             }
             else {
                 var msgCount = $("#txtNRMessageCount").val();
-
+                var SMSScriptCount = 2;
                 for (var i = 1; i <= msgCount; i++) {
                     item = {}
                     item["Id"] = $('#hdnNRInactive' + i).val();
@@ -1754,6 +1825,10 @@
                     item["LessThanDaysScript"] = $('#txtNRLessThanDaysScript' + i).val();
                     item["GreaterThanDays"] = $('#txtNRGreaterThanDays' + i).val();
                     item["GreaterThanDaysScript"] = $('#txtNRGreaterThanDaysScript' + i).val();
+                    item["SMSScript1"] = $('#txtSMSScript4' + SMSScriptCount).val();
+                    SMSScriptCount++;
+                    item["SMSScript2"] = $('#txtSMSScript4' + SMSScriptCount).val();
+                    SMSScriptCount++;
                     InactiveConfig.push(item);
                 }
                 status = true;
@@ -1772,7 +1847,7 @@
             }
             else {
                 var msgCount = $("#txtPEMessageCount").val();
-
+                var SMSScriptCount = 2;
                 for (var i = 1; i <= msgCount; i++) {
                     item = {}
                     item["Id"] = $('#hdnPEInactive' + i).val();
@@ -1787,6 +1862,10 @@
                     item["LessThanDaysScript"] = $('#txtPELessThanDaysScript' + i).val();
                     item["GreaterThanDays"] = $('#txtPEGreaterThanDays' + i).val();
                     item["GreaterThanDaysScript"] = $('#txtPEGreaterThanDaysScript' + i).val();
+                    item["SMSScript1"] = $('#txtSMSScript5' + SMSScriptCount).val();
+                    SMSScriptCount++;
+                    item["SMSScript2"] = $('#txtSMSScript5' + SMSScriptCount).val();
+                    SMSScriptCount++;
                     InactiveConfig.push(item);
                 }
                 status = true;
@@ -1859,6 +1938,7 @@
                 $("#txtMessageCount").val("3");
             }
             ShowMessageSections();
+            var ExtraScriptCount = 1;
             for (var i = 0; i < dataCount; i++) {
 
                 $("#hdnInactive" + (i + 1)).val(data[i].Id);
@@ -1873,6 +1953,10 @@
                 if (data[i].SMSorWA == "SMS") {
                     $("#rbtnInactiveSMS").prop("checked", true);
                 }
+                $('#txtSMSScript2' + ExtraScriptCount).val(data[i].SMSScript1);
+                ExtraScriptCount++;
+                $('#txtSMSScript2' + ExtraScriptCount).val(data[i].SMSScript2);
+                ExtraScriptCount++;
             }
         }
         if (type == "Only Once Inactive") {
@@ -1884,6 +1968,7 @@
                 $("#txtOOMessageCount").val("3");
             }
             ShowOOMessageSections();
+            var ExtraScriptCount = 2;
             for (var i = 0; i < dataCount; i++) {
 
                 $("#hdnOOInactive" + (i + 1)).val(data[i].Id);
@@ -1892,6 +1977,10 @@
                 $("#txtOOLessThanDaysScript" + (i + 1)).val(data[i].LessThanDaysScript);
                 $("#txtOOGreaterThanDays" + (i + 1)).val(data[i].GreaterThanDays);
                 $("#txtOOGreaterThanDaysScript" + (i + 1)).val(data[i].GreaterThanDaysScript);
+                $('#txtSMSScript3' + ExtraScriptCount).val(data[i].SMSScript1);
+                ExtraScriptCount++;
+                $('#txtSMSScript3' + ExtraScriptCount).val(data[i].SMSScript2);
+                ExtraScriptCount++;
                 if (data[i].SMSorWA == "WA") {
                     $("#rbtnOOInactiveWA").prop("checked", true);
                 }
@@ -1909,6 +1998,7 @@
                 $("#txtNRMessageCount").val("3");
             }
             ShowNRMessageSections();
+            var ExtraScriptCount = 2;
             for (var i = 0; i < dataCount; i++) {
 
                 $("#hdnNRInactive" + (i + 1)).val(data[i].Id);
@@ -1917,6 +2007,10 @@
                 $("#txtNRLessThanDaysScript" + (i + 1)).val(data[i].LessThanDaysScript);
                 $("#txtNRGreaterThanDays" + (i + 1)).val(data[i].GreaterThanDays);
                 $("#txtNRGreaterThanDaysScript" + (i + 1)).val(data[i].GreaterThanDaysScript);
+                $('#txtSMSScript4' + ExtraScriptCount).val(data[i].SMSScript1);
+                ExtraScriptCount++;
+                $('#txtSMSScript4' + ExtraScriptCount).val(data[i].SMSScript2);
+                ExtraScriptCount++;
                 if (data[i].SMSorWA == "WA") {
                     $("#rbtnNRInactiveWA").prop("checked", true);
                 }
@@ -1935,6 +2029,7 @@
                 $("#txtPEMessageCount").val("3");
             }
             ShowPEMessageSections();
+            var ExtraScriptCount = 2;
             for (var i = 0; i < dataCount; i++) {
 
                 $("#hdnPEInactive" + (i + 1)).val(data[i].Id);
@@ -1943,6 +2038,10 @@
                 $("#txtPELessThanDaysScript" + (i + 1)).val(data[i].LessThanDaysScript);
                 $("#txtPEGreaterThanDays" + (i + 1)).val(data[i].GreaterThanDays);
                 $("#txtPEGreaterThanDaysScript" + (i + 1)).val(data[i].GreaterThanDaysScript);
+                $('#txtSMSScript5' + ExtraScriptCount).val(data[i].SMSScript1);
+                ExtraScriptCount++;
+                $('#txtSMSScript5' + ExtraScriptCount).val(data[i].SMSScript2);
+                ExtraScriptCount++;
                 if (data[i].SMSorWA == "WA") {
                     $("#rbtnPEInactiveWA").prop("checked", true);
                 }
@@ -2016,6 +2115,12 @@
                     $("#divLoader").hide();
                 }
             });
+    }
+
+    function DisableControl(status, control) {
+        if (status != null && status != "" && status != "Submitted") {
+            $("#" + control).prop("disabled", true);           
+        }
     }
 
 </script>

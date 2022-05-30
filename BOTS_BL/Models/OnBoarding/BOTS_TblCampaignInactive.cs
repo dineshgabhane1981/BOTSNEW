@@ -29,6 +29,8 @@ namespace BOTS_BL.Models
 
         public string LessThanDaysScriptDLT { get; set; }
 
+        public string SMSScript1 { get; set; }
+
         [StringLength(100)]
         public string TemplateId1 { get; set; }
 
@@ -43,6 +45,7 @@ namespace BOTS_BL.Models
         public string GreaterThanDaysScript { get; set; }
 
         public string GreaterThanDaysScriptDLT { get; set; }
+        public string SMSScript2 { get; set; }
 
         [StringLength(100)]
         public string TemplateId2 { get; set; }

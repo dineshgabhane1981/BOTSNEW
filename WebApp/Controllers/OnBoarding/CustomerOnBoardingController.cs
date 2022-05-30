@@ -1274,6 +1274,15 @@ namespace WebApp.Controllers.OnBoarding
                     objData.GreaterThanDays = Convert.ToInt32(item["GreaterThanDays"]);
                     objData.GreaterThanDaysScript = Convert.ToString(item["GreaterThanDaysScript"]);
 
+                    if (objData.SMSorWA != "SMS")
+                    {                        
+                        if (objData.InactiveType == "Inactive" || objData.InactiveType == "Only Once Inactive" || objData.InactiveType == "Non Redemption Inactive" || objData.InactiveType == "Point Expiry")
+                        {
+                            objData.SMSScript1 = Convert.ToString(item["SMSScript1"]);
+                            objData.SMSScript2 = Convert.ToString(item["SMSScript2"]);
+                        }
+                    }
+
                     if (objData.Id > 0)
                     {
                         objData.UpdatedBy = userDetails.LoginId;

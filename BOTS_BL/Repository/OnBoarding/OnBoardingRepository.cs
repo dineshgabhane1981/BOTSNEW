@@ -1048,6 +1048,20 @@ namespace BOTS_BL.Repository
                                 var oldRecord = context.BOTS_TblCampaignInactive.Where(x => x.Id == objItem.Id).FirstOrDefault();
                                 objItem.AddedBy = oldRecord.AddedBy;
                                 objItem.AddedDate = oldRecord.AddedDate;
+
+                                objItem.LessThanDaysScriptDLT = oldRecord.LessThanDaysScriptDLT;                                
+                                objItem.TemplateId1 = oldRecord.TemplateId1;
+                                objItem.TemplateName1 = oldRecord.TemplateName1;
+                                objItem.TemplateType1 = oldRecord.TemplateType1;
+                                objItem.DLTStatus1 = oldRecord.DLTStatus1;
+                                objItem.RejectReason1 = oldRecord.RejectReason1;
+
+                                objItem.GreaterThanDaysScriptDLT = oldRecord.GreaterThanDaysScriptDLT;
+                                objItem.TemplateId2 = oldRecord.TemplateId2;
+                                objItem.TemplateName2 = oldRecord.TemplateName2;
+                                objItem.TemplateType2 = oldRecord.TemplateType2;
+                                objItem.DLTStatus2 = oldRecord.DLTStatus2;
+                                objItem.RejectReason2 = oldRecord.RejectReason2;
                             }
                             context.BOTS_TblCampaignInactive.AddOrUpdate(objItem);
                             context.SaveChanges();
