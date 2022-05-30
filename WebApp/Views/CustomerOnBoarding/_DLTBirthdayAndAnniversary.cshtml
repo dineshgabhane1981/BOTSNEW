@@ -59,9 +59,18 @@
                 </span>
             </div>
             <div style="float:left;" class="col-md-4 col-lg-4">
-                <div style="margin-top: 10px;">
-                    <b>Introduction Message1 Script </b><br /> <textarea id="txtIntroDays1" rows="6" cols="40" class="input100" @DLTStatus1>@Model.IntroScript1</textarea>
-                </div>
+                @if (Model.SMSType == "SMS")
+                {
+                    <div style="margin-top: 10px;">
+                        <b>Introduction Message1 Script </b><br /> <textarea id="txtIntroDays1" rows="6" cols="40" class="input100" @DLTStatus1>@Model.IntroScript1</textarea>
+                    </div>
+                }
+                else
+                {
+                    <div style="margin-top: 10px;">
+                        <b>Introduction Message1 Script </b><br /> <textarea id="txtIntroDays1" rows="6" cols="40" class="input100" @DLTStatus1>@Model.SMSScript1</textarea>
+                    </div>
+                }
             </div>
             <div style="float:left;" class="col-md-4 col-lg-4">
                 <div style=" margin-top: 10px;">
@@ -120,9 +129,18 @@
                 </span>
             </div>
             <div style="float:left;" class="col-md-4 col-lg-4">
-                <div style="margin-top: 10px;">
-                    <b>Reminder Message1 Script </b><br /> <textarea id="txtIntroDays3" rows="6" cols="40" class="input100" @DLTStatus3>@Model.ReminderScript1</textarea>
-                </div>
+                @if (Model.SMSType == "SMS")
+                {
+                    <div style="margin-top: 10px;">
+                        <b>Reminder Message1 Script </b><br /> <textarea id="txtIntroDays3" rows="6" cols="40" class="input100" @DLTStatus3>@Model.ReminderScript1</textarea>
+                    </div>
+                }
+                else
+                {
+                    <div style="margin-top: 10px;">
+                        <b>Reminder Message1 Script </b><br /> <textarea id="txtIntroDays3" rows="6" cols="40" class="input100" @DLTStatus3>@Model.SMSScript3</textarea>
+                    </div>
+                }
             </div>
             <div style="float:left;" class="col-md-4 col-lg-4">
                 <div style=" margin-top: 10px;">
@@ -182,9 +200,18 @@
                 </span>
             </div>
             <div style="float:left;" class="col-md-4 col-lg-4">
-                <div style="margin-top: 10px;">
-                    <b>Reminder Message2 Script </b><br /> <textarea id="txtIntroDays4" rows="6" cols="40" class="input100" @DLTStatus4>@Model.ReminderScript2</textarea>
-                </div>
+                @if (Model.SMSType == "SMS")
+                {
+                    <div style="margin-top: 10px;">
+                        <b>Reminder Message2 Script </b><br /> <textarea id="txtIntroDays4" rows="6" cols="40" class="input100" @DLTStatus4>@Model.ReminderScript2</textarea>
+                    </div>
+                }
+                else
+                {
+                    <div style="margin-top: 10px;">
+                        <b>Reminder Message2 Script </b><br /> <textarea id="txtIntroDays4" rows="6" cols="40" class="input100" @DLTStatus4>@Model.SMSScript4</textarea>
+                    </div>
+                }
             </div>
             <div style="float:left;" class="col-md-4 col-lg-4">
                 <div style=" margin-top: 10px;">
@@ -243,9 +270,18 @@
                 </span>
             </div>
             <div style="float:left;" class="col-md-4 col-lg-4">
-                <div style="margin-top: 10px;">
-                    <b>On Birthday Points Used Script </b><br /> <textarea id="txtIntroDays5" rows="6" cols="40" class="input100" @DLTStatus5>@Model.OnDayScriptPT</textarea>
-                </div>
+                @if (Model.SMSType == "SMS")
+                {
+                    <div style="margin-top: 10px;">
+                        <b>On Birthday Points Used Script </b><br /> <textarea id="txtIntroDays5" rows="6" cols="40" class="input100" @DLTStatus5>@Model.OnDayScriptPT</textarea>
+                    </div>
+                }
+                else
+                {
+                    <div style="margin-top: 10px;">
+                        <b>On Birthday Points Used Script </b><br /> <textarea id="txtIntroDays5" rows="6" cols="40" class="input100" @DLTStatus5>@Model.SMSScript5</textarea>
+                    </div>
+                }
             </div>
             <div style="float:left;" class="col-md-4 col-lg-4">
                 <div style=" margin-top: 10px;">
@@ -304,9 +340,18 @@
                 </span>
             </div>
             <div style="float:left;" class="col-md-4 col-lg-4">
-                <div style="margin-top: 10px;">
-                    <b>On Birthday Points Not Used Script </b><br /> <textarea id="txtIntroDays6" rows="6" cols="40" class="input100" @DLTStatus6>@Model.OnDayScriptNPT</textarea>
-                </div>
+                @if (Model.SMSType == "SMS")
+                {
+                    <div style="margin-top: 10px;">
+                        <b>On Birthday Points Not Used Script </b><br /> <textarea id="txtIntroDays6" rows="6" cols="40" class="input100" @DLTStatus6>@Model.OnDayScriptNPT</textarea>
+                    </div>
+                }
+                else
+                {
+                    <div style="margin-top: 10px;">
+                        <b>On Birthday Points Not Used Script </b><br /> <textarea id="txtIntroDays6" rows="6" cols="40" class="input100" @DLTStatus6>@Model.SMSScript6</textarea>
+                    </div>
+                }
             </div>
             <div style="float:left;" class="col-md-4 col-lg-4">
                 <div style=" margin-top: 10px;">
@@ -351,10 +396,7 @@
                 <button type="button" id="btnRejectSubmit6" onclick="RejectBASubmit(this);" class="btn btn-primary" style="margin-left: 20px; margin-bottom:25px;">Submit</button>
                 <button type="button" id="btnRejectCancel6" onclick="RejectBACancel(this);" class="btn btn-primary" style="margin-left: 20px; margin-bottom:25px;">Cancel</button><br />
             </div>
-        </div>
-        <div class="container-fluid pt-3 pl-3 pr-3 pb-3">
-            <button type="button" id="btnCheckerView" class="btn btn-primary pull-right" style="margin-right: 10px; margin-bottom: 20px; margin-top: 10px;">Submit For Aprroval </button>
-        </div>
+        </div>       
     }
     else
     {
@@ -441,7 +483,8 @@
         var status = "Rejected";
         UpdateBAStatus(id, statusid, status, RejectReason);
         $("#divRejectReason" + statusid).hide(1000);
-        $("#spnRejectStatus" + statusid).html("<b>Reason</b> - " + RejectReason);
+        var oldReason = $("#spnRejectStatus" + statusid).text();
+        $("#spnRejectStatus" + statusid).html("<b>Reason</b> - " + oldReason +" // " + RejectReason);
     }
 
     function UpdateBAStatus(id, statusid, status, reason) {

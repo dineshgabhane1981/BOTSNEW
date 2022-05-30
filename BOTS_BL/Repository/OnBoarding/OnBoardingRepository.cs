@@ -1353,7 +1353,7 @@ namespace BOTS_BL.Repository
                         objData.DLTStatus2 = status;
                         if (status == "Rejected")
                         {
-                            if (string.IsNullOrEmpty(objData.RejectReason1))
+                            if (string.IsNullOrEmpty(objData.RejectReason2))
                                 objData.RejectReason2 = reason;
                             else
                                 objData.RejectReason2 = objData.RejectReason2 + " // " + reason;
@@ -1364,7 +1364,7 @@ namespace BOTS_BL.Repository
                         objData.DLTStatus3 = status;
                         if (status == "Rejected")
                         {
-                            if (string.IsNullOrEmpty(objData.RejectReason1))
+                            if (string.IsNullOrEmpty(objData.RejectReason3))
                                 objData.RejectReason3 = reason;
                             else
                                 objData.RejectReason3 = objData.RejectReason3 + " // " + reason;
@@ -1375,7 +1375,7 @@ namespace BOTS_BL.Repository
                         objData.DLTStatus4 = status;
                         if (status == "Rejected")
                         {
-                            if (string.IsNullOrEmpty(objData.RejectReason1))
+                            if (string.IsNullOrEmpty(objData.RejectReason4))
                                 objData.RejectReason4 = reason;
                             else
                                 objData.RejectReason4 = objData.RejectReason4 + " // " + reason;
@@ -1386,7 +1386,7 @@ namespace BOTS_BL.Repository
                         objData.DLTStatus5 = status;
                         if (status == "Rejected")
                         {
-                            if (string.IsNullOrEmpty(objData.RejectReason1))
+                            if (string.IsNullOrEmpty(objData.RejectReason5))
                                 objData.RejectReason5 = reason;
                             else
                                 objData.RejectReason5 = objData.RejectReason5 + " // " + reason;
@@ -1397,7 +1397,7 @@ namespace BOTS_BL.Repository
                         objData.DLTStatus6 = status;
                         if (status == "Rejected")
                         {
-                            if (string.IsNullOrEmpty(objData.RejectReason1))
+                            if (string.IsNullOrEmpty(objData.RejectReason6))
                                 objData.RejectReason6 = reason;
                             else
                                 objData.RejectReason6 = objData.RejectReason6 + " // " + reason;
@@ -1454,7 +1454,11 @@ namespace BOTS_BL.Repository
                         }
                         if (statusid == 1)
                         {
-                            existingObj.IntroScript1 = IntroDays;
+                            if (existingObj.SMSType == "SMS")
+                                existingObj.IntroScript1 = IntroDays;
+                            else
+                                existingObj.SMSScript1 = IntroDays;
+
                             existingObj.IntroScript1DLT = IntroDaysDLT;
                             existingObj.TemplateId1 = TemplateId;
                             existingObj.TemplateName1 = TemplateName;
@@ -1462,7 +1466,12 @@ namespace BOTS_BL.Repository
                         }
                         if (statusid == 2)
                         {
-                            existingObj.IntroScript2 = IntroDays;
+                            if (existingObj.SMSType == "SMS")
+                                existingObj.IntroScript2 = IntroDays;
+                            else
+                                existingObj.SMSScript2 = IntroDays;
+
+                            //existingObj.IntroScript2 = IntroDays;
                             existingObj.IntroScript2DLT = IntroDaysDLT;
                             existingObj.TemplateId2 = TemplateId;
                             existingObj.TemplateName2 = TemplateName;
@@ -1470,7 +1479,12 @@ namespace BOTS_BL.Repository
                         }
                         if (statusid == 3)
                         {
-                            existingObj.ReminderScript1 = IntroDays;
+                            if (existingObj.SMSType == "SMS")
+                                existingObj.ReminderScript1 = IntroDays;
+                            else
+                                existingObj.SMSScript3 = IntroDays;
+
+                            //existingObj.ReminderScript1 = IntroDays;
                             existingObj.ReminderScript1DLT = IntroDaysDLT;
                             existingObj.TemplateId3 = TemplateId;
                             existingObj.TemplateName3 = TemplateName;
@@ -1478,7 +1492,12 @@ namespace BOTS_BL.Repository
                         }
                         if (statusid == 4)
                         {
-                            existingObj.ReminderScript2 = IntroDays;
+                            if (existingObj.SMSType == "SMS")
+                                existingObj.ReminderScript2 = IntroDays;
+                            else
+                                existingObj.SMSScript4 = IntroDays;
+
+                            //existingObj.ReminderScript2 = IntroDays;
                             existingObj.ReminderScript2DLT = IntroDaysDLT;
                             existingObj.TemplateId4 = TemplateId;
                             existingObj.TemplateName4 = TemplateName;
@@ -1486,6 +1505,11 @@ namespace BOTS_BL.Repository
                         }
                         if (statusid == 5)
                         {
+                            if (existingObj.SMSType == "SMS")
+                                existingObj.OnDayScriptPT = IntroDays;
+                            else
+                                existingObj.SMSScript5 = IntroDays;
+
                             existingObj.OnDayScriptPT = IntroDays;
                             existingObj.OnDayScriptPTDLT = IntroDaysDLT;
                             existingObj.TemplateId5 = TemplateId;
@@ -1494,7 +1518,12 @@ namespace BOTS_BL.Repository
                         }
                         if (statusid == 6)
                         {
-                            existingObj.OnDayScriptNPT = IntroDays;
+                            if (existingObj.SMSType == "SMS")
+                                existingObj.OnDayScriptNPT = IntroDays;
+                            else
+                                existingObj.SMSScript6 = IntroDays;
+
+                            //existingObj.OnDayScriptNPT = IntroDays;
                             existingObj.OnDayScriptNPTDLT = IntroDaysDLT;
                             existingObj.TemplateId6 = TemplateId;
                             existingObj.TemplateName6 = TemplateName;

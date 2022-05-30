@@ -1,5 +1,7 @@
 ﻿@model WebApp.ViewModel.OnBoardingSalesViewModel
 @using System.Configuration;
+@using BOTS_BL.Models;
+@using BOTS_BL;
 @{
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_OnBoardingLayout.cshtml";
@@ -19,6 +21,8 @@
             PANURL = docURL + "/" + Model.bots_TblGroupMaster.GroupId + "/" + Model.bots_TblGroupMaster.PANDocument;
         }
     }
+    var userDetails = (CustomerLoginDetail)Session["UserSession"];
+    var roleId = userDetails.LoginType;
 }
 <style>
     .row {
@@ -943,7 +947,10 @@
                         <button type="submit" id="btnCustomerSave" class="btn btn-primary pull-right" onclick="return CheckOutletData('CSUpdate');" style="margin-right:10px;display:none;">Save</button>
                         if (Model.bots_TblGroupMaster.CustomerStatus != "Submit For Approval")
                         {
-                            <button type="button" id="btnSendForApproval" class="btn btn-primary pull-right" onclick="return SendForApproval();" style="margin-right:10px;font-weight:bold;">Send For Approval</button>
+                            if (roleId == "1" || roleId == "5" || roleId == "6")
+                            {
+                                <button type="button" id="btnSendForApproval" class="btn btn-primary pull-right" onclick="return SendForApproval();" style="margin-right:10px;font-weight:bold;">Send For Approval</button>
+                            }
                         }
                     }
                 }
