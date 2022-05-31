@@ -75,9 +75,18 @@
                             </span>
                         </div>
                         <div style="float:left;" class="col-md-4 col-lg-4">
-                            <div style="margin-top: 10px;">
-                                <b>Less Than Script </b><br /> <textarea id="@txtLessThanScript" onfocusout="ConvertValuesToDLT(this,@txtLessThanScriptDLT);" rows="6" cols="40" class="input100" @DLTStatus1>@item.LessThanDaysScript</textarea>
-                            </div>
+                            @if (item.SMSorWA == "SMS")
+                            {
+                                <div style="margin-top: 10px;">
+                                    <b>Less Than Script </b><br /> <textarea id="@txtLessThanScript" onfocusout="ConvertValuesToDLT(this,@txtLessThanScriptDLT);" rows="6" cols="40" class="input100" @DLTStatus1>@item.LessThanDaysScript</textarea>
+                                </div>
+                            }
+                            else
+                            {
+                                <div style="margin-top: 10px;">
+                                    <b>Less Than Script </b><br /> <textarea id="@txtLessThanScript" onfocusout="ConvertValuesToDLT(this,@txtLessThanScriptDLT);" rows="6" cols="40" class="input100" @DLTStatus1>@item.SMSScript1</textarea>
+                                </div>
+                            }
                         </div>
                         <div style="float:left;" class="col-md-4 col-lg-4">
                             <div style=" margin-top: 10px;">
@@ -131,9 +140,18 @@
                         </div>
 
                         <div style="float:left;" class="col-md-4 col-lg-4">
-                            <div style="margin-top: 10px;">
-                                <b>Greater Than Script </b><br /> <textarea id="@txtGreaterThanScript" onfocusout="ConvertValuesToDLT(this,@txtGreaterThanScriptDLT);" rows="6" cols="40" class="input100" @DLTStatus2>@item.GreaterThanDaysScript</textarea>
-                            </div>
+                            @if (item.SMSorWA == "SMS")
+                            {
+                                <div style="margin-top: 10px;">
+                                    <b>Greater Than Script </b><br /> <textarea id="@txtGreaterThanScript" onfocusout="ConvertValuesToDLT(this,@txtGreaterThanScriptDLT);" rows="6" cols="40" class="input100" @DLTStatus2>@item.GreaterThanDaysScript</textarea>
+                                </div>
+                            }
+                            else
+                            {
+                                <div style="margin-top: 10px;">
+                                    <b>Greater Than Script </b><br /> <textarea id="@txtGreaterThanScript" onfocusout="ConvertValuesToDLT(this,@txtGreaterThanScriptDLT);" rows="6" cols="40" class="input100" @DLTStatus2>@item.SMSScript2</textarea>
+                                </div>
+                            }
                         </div>
                         <div style="float:left;" class="col-md-4 col-lg-4">
                             <div style=" margin-top: 10px;">

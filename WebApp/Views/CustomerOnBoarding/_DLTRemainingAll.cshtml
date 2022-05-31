@@ -44,9 +44,18 @@
                 </span>
             </div>
             <div style="float:left;" class="col-md-4 col-lg-4">
-                <div style="margin-top: 10px;">
-                    <b>Configuration 1 Script </b><br /> <textarea id="txtIntroDays1" rows="6" cols="40" class="input100" @DLTStatus1>@Model.IntroScript1</textarea>
-                </div>
+                @if (Model.SMSType == "SMS")
+                {
+                    <div style="margin-top: 10px;">
+                        <b>Configuration 1 Script </b><br /> <textarea id="txtIntroDays1" rows="6" cols="40" class="input100" @DLTStatus1>@Model.IntroScript1</textarea>
+                    </div>
+                }
+                else
+                {
+                    <div style="margin-top: 10px;">
+                        <b>Configuration 1 Script </b><br /> <textarea id="txtIntroDays1" rows="6" cols="40" class="input100" @DLTStatus1>@Model.SMSScript1</textarea>
+                    </div>
+                }
             </div>
             <div style="float:left;" class="col-md-4 col-lg-4">
                 <div style=" margin-top: 10px;">
@@ -105,9 +114,18 @@
                 </span>
             </div>
             <div style="float:left;" class="col-md-4 col-lg-4">
-                <div style="margin-top: 10px;">
-                    <b>Configuration 2 Script </b><br /> <textarea id="txtIntroDays2" rows="6" cols="40" class="input100" @DLTStatus2>@Model.IntroScript2</textarea>
-                </div>
+                @if (Model.SMSType == "SMS")
+                {
+                    <div style="margin-top: 10px;">
+                        <b>Configuration 2 Script </b><br /> <textarea id="txtIntroDays2" rows="6" cols="40" class="input100" @DLTStatus2>@Model.IntroScript2</textarea>
+                    </div>
+                }
+                else
+                {
+                    <div style="margin-top: 10px;">
+                        <b>Configuration 2 Script </b><br /> <textarea id="txtIntroDays2" rows="6" cols="40" class="input100" @DLTStatus2>@Model.SMSScript2</textarea>
+                    </div>
+                }
             </div>
             <div style="float:left;" class="col-md-4 col-lg-4">
                 <div style=" margin-top: 10px;">

@@ -1485,7 +1485,15 @@ namespace WebApp.Controllers.OnBoarding
                     {
                         if (num == 1)
                         {
-                            objInactiveConfig.LessThanDaysScript = Convert.ToString(item["Script"]);
+                            if(objInactiveConfig.SMSorWA != "SMS")
+                            {
+                                objInactiveConfig.SMSScript1 = Convert.ToString(item["Script"]);
+                            }
+                            else
+                            {
+                                objInactiveConfig.LessThanDaysScript = Convert.ToString(item["Script"]);
+                            }
+                            
                             objInactiveConfig.LessThanDaysScriptDLT = Convert.ToString(item["ScriptDLT"]);
                             objInactiveConfig.TemplateId1 = Convert.ToString(item["TemplateId"]);
                             objInactiveConfig.TemplateName1 = Convert.ToString(item["TemplateName"]);
@@ -1497,7 +1505,14 @@ namespace WebApp.Controllers.OnBoarding
                         }
                         if (num == 2)
                         {
-                            objInactiveConfig.GreaterThanDaysScript = Convert.ToString(item["Script"]);
+                            if (objInactiveConfig.SMSorWA != "SMS")
+                            {
+                                objInactiveConfig.SMSScript2 = Convert.ToString(item["Script"]);
+                            }
+                            else
+                            {
+                                objInactiveConfig.GreaterThanDaysScript = Convert.ToString(item["Script"]);
+                            }
                             objInactiveConfig.GreaterThanDaysScriptDLT = Convert.ToString(item["ScriptDLT"]);
                             objInactiveConfig.TemplateId2 = Convert.ToString(item["TemplateId"]);
                             objInactiveConfig.TemplateName2 = Convert.ToString(item["TemplateName"]);
