@@ -697,7 +697,7 @@ namespace BOTS_BL.Repository
                     if (DLTStatus == "Rejected")
                     {
                         if (!string.IsNullOrEmpty(objItem.RejectReason))
-                            objItem.RejectReason = objItem.RejectReason + " //// " + rejectReason;
+                            objItem.RejectReason = objItem.RejectReason + " // " + rejectReason;
                         else
                             objItem.RejectReason = rejectReason;
                     }
@@ -1570,7 +1570,7 @@ namespace BOTS_BL.Repository
                         objData.DLTStatus2 = status;
                         if (status == "Rejected")
                         {
-                            if (string.IsNullOrEmpty(objData.RejectReason1))
+                            if (string.IsNullOrEmpty(objData.RejectReason2))
                                 objData.RejectReason2 = reason;
                             else
                                 objData.RejectReason2 = objData.RejectReason2 + " // " + reason;
@@ -1645,7 +1645,7 @@ namespace BOTS_BL.Repository
                         objData.DLTStatus2 = status;
                         if (status == "Rejected")
                         {
-                            if (string.IsNullOrEmpty(objData.RejectReason1))
+                            if (string.IsNullOrEmpty(objData.RejectReason2))
                                 objData.RejectReason2 = reason;
                             else
                                 objData.RejectReason2 = objData.RejectReason2 + " // " + reason;
@@ -1721,7 +1721,7 @@ namespace BOTS_BL.Repository
                         objDLCLinkConfig.DLTStatus2 = status;
                         if (status == "Rejected")
                         {
-                            if (string.IsNullOrEmpty(objDLCLinkConfig.RejectReason1))
+                            if (string.IsNullOrEmpty(objDLCLinkConfig.RejectReason2))
                                 objDLCLinkConfig.RejectReason2 = reason;
                             else
                                 objDLCLinkConfig.RejectReason2 = objDLCLinkConfig.RejectReason2 + " // " + reason;
@@ -1732,7 +1732,7 @@ namespace BOTS_BL.Repository
                         objDLCLinkConfig.DLTStatus3 = status;
                         if (status == "Rejected")
                         {
-                            if (string.IsNullOrEmpty(objDLCLinkConfig.RejectReason1))
+                            if (string.IsNullOrEmpty(objDLCLinkConfig.RejectReason3))
                                 objDLCLinkConfig.RejectReason3 = reason;
                             else
                                 objDLCLinkConfig.RejectReason3 = objDLCLinkConfig.RejectReason3 + " // " + reason;
@@ -1743,7 +1743,7 @@ namespace BOTS_BL.Repository
                         objDLCLinkConfig.DLTStatus4 = status;
                         if (status == "Rejected")
                         {
-                            if (string.IsNullOrEmpty(objDLCLinkConfig.RejectReason1))
+                            if (string.IsNullOrEmpty(objDLCLinkConfig.RejectReason4))
                                 objDLCLinkConfig.RejectReason4 = reason;
                             else
                                 objDLCLinkConfig.RejectReason4 = objDLCLinkConfig.RejectReason4 + " // " + reason;
@@ -1754,7 +1754,7 @@ namespace BOTS_BL.Repository
                         objDLCLinkConfig.DLTStatus5 = status;
                         if (status == "Rejected")
                         {
-                            if (string.IsNullOrEmpty(objDLCLinkConfig.RejectReason1))
+                            if (string.IsNullOrEmpty(objDLCLinkConfig.RejectReason5))
                                 objDLCLinkConfig.RejectReason5 = reason;
                             else
                                 objDLCLinkConfig.RejectReason5 = objDLCLinkConfig.RejectReason5 + " // " + reason;
@@ -1765,7 +1765,7 @@ namespace BOTS_BL.Repository
                         objDLCLinkConfig.DLTStatus6 = status;
                         if (status == "Rejected")
                         {
-                            if (string.IsNullOrEmpty(objDLCLinkConfig.RejectReason1))
+                            if (string.IsNullOrEmpty(objDLCLinkConfig.RejectReason6))
                                 objDLCLinkConfig.RejectReason6 = reason;
                             else
                                 objDLCLinkConfig.RejectReason6 = objDLCLinkConfig.RejectReason6 + " // " + reason;
@@ -1776,7 +1776,7 @@ namespace BOTS_BL.Repository
                         objDLCLinkConfig.DLTStatus7 = status;
                         if (status == "Rejected")
                         {
-                            if (string.IsNullOrEmpty(objDLCLinkConfig.RejectReason1))
+                            if (string.IsNullOrEmpty(objDLCLinkConfig.RejectReason7))
                                 objDLCLinkConfig.RejectReason7 = reason;
                             else
                                 objDLCLinkConfig.RejectReason7 = objDLCLinkConfig.RejectReason7 + " // " + reason;
