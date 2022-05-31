@@ -372,6 +372,8 @@
                                     }
 
                                     <button type="button" id="btnCustomerSubmit" class="btn btn-primary pull-right m-3" onclick="return CheckOutletData('CSUpdate');" style="margin-right:10px;">Save</button>
+
+                                    @Html.Partial("~/Views/CustomerOnBoarding/_OutletDetails.cshtml", Model)
                                 </div>
 
                                 <div class="multisteps-form__panel m-3 list-box bg-white panel1" id="two-panel1">
