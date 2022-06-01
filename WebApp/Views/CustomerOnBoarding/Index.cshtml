@@ -256,7 +256,13 @@
                             <input class="radio1" id="two1" name="group" type="radio">
                             <input class="radio1" id="three1" name="group" type="radio">
                             <input class="radio1" id="four1" name="group" type="radio">
-                            <input class="radio1" id="five1" name="group" type="radio">
+                            @if (Model.bots_TblGroupMaster.IsMWP.HasValue)
+                            {
+                                if (Model.bots_TblGroupMaster.IsMWP.Value)
+                                {
+                                    <input class="radio1" id="five1" name="group" type="radio">
+                                }
+                            }
                             <input class="radio1" id="six1" name="group" type="radio">
                             <input class="radio1" id="seven1" name="group" type="radio">
 
@@ -265,7 +271,13 @@
                                 <label class="tab1" id="two-tab1" for="two1"> Points Rule</label>
                                 <label class="tab1" id="three-tab1" for="three1"> Communication</label>
                                 <label class="tab1" id="four-tab1" for="four1"> Perpetual Campaigns</label>
-                                <label class="tab1" id="five-tab1" for="five1"> Digital Loyalty Card</label>
+                                @if (Model.bots_TblGroupMaster.IsMWP.HasValue)
+                                {
+                                    if (Model.bots_TblGroupMaster.IsMWP.Value)
+                                    {
+                                        <label class="tab1" id="five-tab1" for="five1"> Digital Loyalty Card</label>
+                                    }
+                                }
                                 <label class="tab1" id="six-tab1" for="six1"> Velocity Checks</label>
                                 <label class="tab1" id="seven-tab1" for="seven1"> Bullk Upload</label>
                             </div>
@@ -385,9 +397,15 @@
                                 <div class="multisteps-form__panel m-3 list-box bg-white panel1" id="four-panel1">
                                     @Html.Partial("~/Views/CustomerOnBoarding/_PerpetualCampaigns.cshtml", Model)
                                 </div>
-                                <div class="multisteps-form__panel m-3 list-box bg-white panel1" id="five-panel1">
-                                    @Html.Partial("~/Views/CustomerOnBoarding/_DLCLink.cshtml")
-                                </div>
+                                @if (Model.bots_TblGroupMaster.IsMWP.HasValue)
+                                {
+                                    if (Model.bots_TblGroupMaster.IsMWP.Value)
+                                    {
+                                        <div class="multisteps-form__panel m-3 list-box bg-white panel1" id="five-panel1">
+                                            @Html.Partial("~/Views/CustomerOnBoarding/_DLCLink.cshtml")
+                                        </div>
+                                    }
+                                }
                                 <div class="multisteps-form__panel m-3 list-box bg-white panel1" id="six-panel1">
                                     @Html.Partial("~/Views/CustomerOnBoarding/_VelocityChecks.cshtml")
                                 </div>

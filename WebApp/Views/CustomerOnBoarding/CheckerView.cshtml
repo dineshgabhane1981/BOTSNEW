@@ -3,24 +3,24 @@
 
 @model WebApp.ViewModel.OnBoardingSalesViewModel
 @{
-    
+
     ViewBag.Title = "Checker View";
     Layout = "~/Views/Shared/_OnBoardingLayout.cshtml";
     //Layout = null;
     var userDetails = (CustomerLoginDetail)Session["UserSession"];
-    
+
     string roleId = string.Empty;
     if (userDetails == null)
     {
         roleId = "Customer";
-       
+
     }
     else
     {
         roleId = userDetails.LoginType;
-        
+
     }
-   
+
 }
 
 <style>
@@ -182,72 +182,69 @@
                         @Html.Partial("~/Views/CustomerOnBoarding/_CustomerDetails.cshtml", Model)
                     </div>
                 </div>
-                <div>
-                    <div class="container-fluid pt-3 pl-3 pr-3 pb-3" id="dvOutletDetailsSection">
-                        <div class="col-md-12 section-heading" data-toggle="collapse" data-target="#OutletDetailsConfigreadonly">Outlet Details</div>
-                        <div id="OutletDetailsConfigreadonly" class="col-md-12 col-lg-12 collapse">
-                            @Html.Partial("~/Views/CustomerOnBoarding/_OutletDetailsCheckerView.cshtml", Model)
 
-                        </div>
+                <div class="container-fluid pt-3 pl-3 pr-3 pb-3" id="dvOutletDetailsSection">
+                    <div class="col-md-12 section-heading" data-toggle="collapse" data-target="#OutletDetailsConfigreadonly">Outlet Details</div>
+                    <div id="OutletDetailsConfigreadonly" class="col-md-12 col-lg-12 collapse">
+                        @Html.Partial("~/Views/CustomerOnBoarding/_OutletDetailsCheckerView.cshtml", Model)
+
                     </div>
                 </div>
-                <div>
-                    <div class="container-fluid pt-3 pl-3 pr-3 pb-3" id="dvPointRuleSection">
-                        <div class="col-md-12 section-heading" data-toggle="collapse" data-target="#PointRuleConfigreadonly">Point Rule </div>
-                        <div id="PointRuleConfigreadonly" class="col-md-12 col-lg-12 collapse">
-                            @Html.Partial("~/Views/CustomerOnBoarding/_PointRuleCheckerView.cshtml", Model)
 
-                        </div>
+                <div class="container-fluid pt-3 pl-3 pr-3 pb-3" id="dvPointRuleSection">
+                    <div class="col-md-12 section-heading" data-toggle="collapse" data-target="#PointRuleConfigreadonly">Point Rule </div>
+                    <div id="PointRuleConfigreadonly" class="col-md-12 col-lg-12 collapse">
+                        @Html.Partial("~/Views/CustomerOnBoarding/_PointRuleCheckerView.cshtml", Model)
+
                     </div>
                 </div>
+
                 @if (roleId != "Customer")
                 {
-                    <div>
-                        <div class="container-fluid pt-3 pl-3 pr-3 pb-3" id="dvCommunicationSection">
-                            <div class="col-md-12 section-heading" data-toggle="collapse" data-target="#CommunicationConfigreadonly">Communication</div>
-                            <div id="CommunicationConfigreadonly" class="col-md-12 col-lg-12 collapse">
-                                @Html.Partial("~/Views/CustomerOnBoarding/_CommunicationCheckerView.cshtml", Model)
 
-                            </div>
+                    <div class="container-fluid pt-3 pl-3 pr-3 pb-3" id="dvCommunicationSection">
+                        <div class="col-md-12 section-heading" data-toggle="collapse" data-target="#CommunicationConfigreadonly">Communication</div>
+                        <div id="CommunicationConfigreadonly" class="col-md-12 col-lg-12 collapse">
+                            @Html.Partial("~/Views/CustomerOnBoarding/_CommunicationCheckerView.cshtml", Model)
                         </div>
                     </div>
 
-                    <div>
-                        <div class="container-fluid pt-3 pl-3 pr-3 pb-3" id="dvPerpetualCampaignSection">
-                            <div class="col-md-12 section-heading" data-toggle="collapse" data-target="#PerpetualDetailsreadonly">Perpetual Campaigns</div>
-                            <div id="PerpetualDetailsreadonly" class="col-md-12 col-lg-12 collapse">
-                                @Html.Partial("~/Views/CustomerOnBoarding/_PerpetualCampaignCheckerView.cshtml", Model)
-                            </div>
+                    <div class="container-fluid pt-3 pl-3 pr-3 pb-3" id="dvPerpetualCampaignSection">
+                        <div class="col-md-12 section-heading" data-toggle="collapse" data-target="#PerpetualDetailsreadonly">Perpetual Campaigns</div>
+                        <div id="PerpetualDetailsreadonly" class="col-md-12 col-lg-12 collapse">
+                            @Html.Partial("~/Views/CustomerOnBoarding/_PerpetualCampaignCheckerView.cshtml", Model)
                         </div>
                     </div>
-                    <div>
-                        <div class="container-fluid pt-3 pl-3 pr-3 pb-3" id="dvDLCSection">
-                            <div class="col-md-12 section-heading" data-toggle="collapse" data-target="#DLCreadonly">Digital Loyalty Card</div>
-                            <div id="DLCreadonly" class="col-md-12 col-lg-12 collapse">
-                                @Html.Partial("~/Views/CustomerOnBoarding/_DLTCheckerView.cshtml", Model)
+                    if (Model.bots_TblGroupMaster.IsMWP.HasValue)
+                    {
+                        if (Model.bots_TblGroupMaster.IsMWP.Value)
+                        {
+                            <div class="container-fluid pt-3 pl-3 pr-3 pb-3" id="dvDLCSection">
+                                <div class="col-md-12 section-heading" data-toggle="collapse" data-target="#DLCreadonly">Digital Loyalty Card</div>
+                                <div id="DLCreadonly" class="col-md-12 col-lg-12 collapse">
+                                    @Html.Partial("~/Views/CustomerOnBoarding/_DLTCheckerView.cshtml", Model)
 
+                                </div>
                             </div>
-                        </div>
-                    </div>
+                        }
+                    }
                 }
-                <div>
-                    <div class="container-fluid pt-3 pl-3 pr-3 pb-3" id="dvVelocityChecksSection">
-                        <div class="col-md-12 section-heading" data-toggle="collapse" data-target="#VelocityChecksConfigreadonly">Velocity Checks</div>
-                        <div id="VelocityChecksConfigreadonly" class="col-md-12 col-lg-12 collapse">
-                            @Html.Partial("~/Views/CustomerOnBoarding/_VelocityChecksCheckerView.cshtml", Model)
 
-                        </div>
+                <div class="container-fluid pt-3 pl-3 pr-3 pb-3" id="dvVelocityChecksSection">
+                    <div class="col-md-12 section-heading" data-toggle="collapse" data-target="#VelocityChecksConfigreadonly">Velocity Checks</div>
+                    <div id="VelocityChecksConfigreadonly" class="col-md-12 col-lg-12 collapse">
+                        @Html.Partial("~/Views/CustomerOnBoarding/_VelocityChecksCheckerView.cshtml", Model)
+
                     </div>
                 </div>
-                <div>
-                    <div class="container-fluid pt-3 pl-3 pr-3 pb-3" id="dvBUSection">
-                        <div class="col-md-12 section-heading" data-toggle="collapse" data-target="#BUConfigreadonly">Bulk Upload</div>
-                        <div id="BUConfigreadonly" class="col-md-12 col-lg-12 collapse">
-                            @Html.Partial("~/Views/CustomerOnBoarding/_BulkUploadCheckerView.cshtml", Model)
+                <div class="container-fluid pt-3 pl-3 pr-3 pb-3" id="dvBUSection">
+                    <div class="col-md-12 section-heading" data-toggle="collapse" data-target="#BUConfigreadonly">Bulk Upload</div>
+                    <div id="BUConfigreadonly" class="col-md-12 col-lg-12 collapse">
+                        @Html.Partial("~/Views/CustomerOnBoarding/_BulkUploadCheckerView.cshtml", Model)
 
-                        </div>
                     </div>
                 </div>
+
                 @if (roleId == "6" || roleId == "1")
                 {
                     //Buttons here

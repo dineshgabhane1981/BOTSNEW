@@ -951,7 +951,7 @@ namespace BOTS_BL.Repository
                     if (objData.Id > 0)
                     {
                         var oldRecord = context.BOTS_TblCampaignOtherConfig.Where(x => x.Id == objData.Id).FirstOrDefault();
-                        
+
                         objData.AddedBy = oldRecord.AddedBy;
                         objData.AddedDate = oldRecord.AddedDate;
 
@@ -1049,7 +1049,7 @@ namespace BOTS_BL.Repository
                                 objItem.AddedBy = oldRecord.AddedBy;
                                 objItem.AddedDate = oldRecord.AddedDate;
 
-                                objItem.LessThanDaysScriptDLT = oldRecord.LessThanDaysScriptDLT;                                
+                                objItem.LessThanDaysScriptDLT = oldRecord.LessThanDaysScriptDLT;
                                 objItem.TemplateId1 = oldRecord.TemplateId1;
                                 objItem.TemplateName1 = oldRecord.TemplateName1;
                                 objItem.TemplateType1 = oldRecord.TemplateType1;
@@ -2168,11 +2168,20 @@ namespace BOTS_BL.Repository
                 SqlConnection _Con = new SqlConnection(connStr);
                 string CreateDatabaseScript = "CREATE DATABASE " + DBName + " ; ";
                 SqlCommand command = new SqlCommand(CreateDatabaseScript, _Con);
+
                 try
                 {
                     _Con.Open();
                     command.ExecuteNonQuery();
-                    status = true;
+                    var result = context.Database.SqlQuery<SPResponse>("BOTS_SpPushFromCommonToIndividualDB @pi_Date, @pi_LiveGroupName, @pi_LiveDBName, @pi_OnboardingGroupId",
+                                new SqlParameter("@pi_Date", DateTime.Today.ToShortDateString()),
+                                new SqlParameter("@pi_LiveGroupName", DBName),
+                                new SqlParameter("@pi_LiveDBName", DBName),
+                                new SqlParameter("@pi_OnboardingGroupId", GroupId)).FirstOrDefault<SPResponse>();
+
+
+                    if (result.ResponseCode == "0")
+                        status = true;
                 }
                 catch (System.Exception ex)
                 {
