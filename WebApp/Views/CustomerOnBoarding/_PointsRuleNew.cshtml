@@ -7,11 +7,10 @@
         <input type="hidden" id="hdnProductWiseBase64" />
         <input type="hidden" id="hdnBlockEarnBase64" />
         <input type="hidden" id="hdnBlockBurnBase64" />
-        <input id="rbtnERule" name="rules" type="radio" checked class="rbtnClass"> Earn Rule
-        <input id="rbtnBRule" name="rules" type="radio" class="rbtnClass"> Burn Rule
+        <h4>Earn Rule</h4>
+        
     </div>
 
-    <div id="dvEarnRule" style="border: 1px solid grey; border-radius: 10px; margin-bottom: 10px; padding-bottom: 40px; padding-top: 20px;" class="col-md-12 col-lg-12">
         <div class="col-md-12 col-lg-12" style="display: flex;">
             <div class="col-md-3 col-lg-3">
                 Minimum Invoice Amount<br />
@@ -153,8 +152,10 @@
             <button type="button" id="btnEarnSave" class="btn btn-primary pull-right" onclick="return SaveEarnRule();" style="margin-right:10px;margin-bottom:20px;">Save</button>
         </div>
     </div>
-
-    <div id="dvBurnRule" class="col-md-12 col-lg-12" style="float:left; border:1px solid grey;border-radius:10px;margin-bottom:10px;display:none; ">
+<div style="margin-top:50px;">
+    <hr />
+</div>
+      <h4>Burn Rule</h4>
 
         <div class="col-md-6 col-lg-6" style="display: flex; margin-bottom:20px;margin-top:20px;">
             <div class="col-md-6 col-lg-6">
@@ -197,9 +198,9 @@
         <div>
             <button type="button" id="btnBurnSave" class="btn btn-primary pull-right" onclick="return SaveBurnRule();" style="margin-right:10px;margin-bottom:20px;">Save</button>
         </div>
-    </div>
+    
 
-</div>
+
 <script>
     $(document).ready(function () {
         document.getElementById("ProductWiseFile").addEventListener('change', handleFileSelectProductWise, false);
