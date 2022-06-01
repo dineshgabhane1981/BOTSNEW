@@ -128,155 +128,19 @@
     </div>
     <div class="panels">
         <div class="multisteps-form__panel shadow  list-box bg-white panel" id="one-panel">
-
-            <div class="container-fluid pt-3 pl-3 pr-3">
-
-                <div class="row mb-5 ml-2">
-                    <div id="dvOutletWiseData">
-                        <div class="container-fluid pt-3 pl-3 pr-3">
-                            <div class="pt-3 pl-3 pr-3 col-md-12 col-lg-12">
-                                <div class="row">
-                                    <div class="col search-container">
-                                        <i class="fas fa-search"></i>
-                                        <input class="input100" type="text" id="txtSearch" placeholder="Search activity..." />
-                                    </div>
-                                </div>
-                                <div class="row mt-3" id="dvActivityData">
-                                    <div class="table-responsive">
-                                        <table class="table" id="groupListTable">
-                                            <thead>
-                                                <tr>
-                                                    <th scope="col" style="text-align:center;">Type</th>
-                                                    <th scope="col" style="text-align:left;">Group Name</th>
-                                                    <th scope="col" style="text-align:center;">Category</th>
-                                                    <th scope="col" style="text-align: left;">City</th>
-                                                    <th scope="col" style="text-align:center;">Outlets</th>
-                                                    <th scope="col" style="text-align:center;">CS Name</th>
-                                                    <th scope="col" style="text-align:center;">Billing Product</th>
-                                                    <th scope="col" style="text-align:center;">Sourced by</th>
-                                                    <th scope="col" style="text-align:center;">Started On</th>
-                                                    <th scope="col" style="text-align:center;">Action</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                @if (Model != null)
-                                                {
-                                                    foreach (var item in Model.customerListings)
-                                                    {
-
-                                                        WebApp.App_Start.CommonFunctions common = new WebApp.App_Start.CommonFunctions();
-                                                        string GroupId = common.EncryptString(Convert.ToString(item.GroupId));
-                                                        <tr>
-                                                            <td>@item.CustomerType</td>
-                                                            <td><a href="#" onclick="OpenStatusPopup(@item.GroupId);">@item.RetailName</a></td>
-                                                            <td style="text-align:center;">@item.RetailCategory</td>
-                                                            <td>@item.City</td>
-                                                            <td style="text-align:center;">@item.OutletCount</td>
-                                                            <td>@item.RMTeam</td>
-                                                            <td>@item.BillingProductName</td>
-                                                            <td>@item.SourcedBy</td>
-                                                            @if (item.StartedOn.HasValue)
-                                                            {
-                                                                <td>@item.StartedOn.Value.ToString("dd-MMM-yyyy")</td>
-                                                            }
-                                                            else
-                                                            {
-                                                                <td></td>
-                                                            }
-                                                            <td style="text-align:center; width:160px;">
-                                                                @*<a href="@Url.Action("AddNewCustomer", "CustomerManagement", new { groupId = GroupId })" class="login" title="Edit"><img src="~/Content/assets/images/shape_editUser.png" /></a>*@
-                                                                <a href="@Url.Action("GoToDashboard", "CustomerManagement", new { groupId = GroupId })" class="login" title="Go To Dashboard"><img src="~/Content/assets/images/GoToDashboard.png" width="30" /></a>
-                                                                <a href="@Url.Action("Index", "NameAndMobile", new { groupId = GroupId })" class="login" title="Go To IT Ops"><img src="~/Content/assets/images/itops.png" width="30" /></a>
-                                                                <a href="@Url.Action("AllDiscussions", "Discussion", new { groupId = GroupId })" class="login" title="Go To Discussions"><img src="~/Content/assets/images/discussion.png" width="30" /></a>
-                                                            </td>
-                                                        </tr>
-                                                    }
-                                                }
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+            <div id="dvLiveCustomer">
+                @Html.Partial("~/Views/CustomerManagement/_LiveCustomer.cshtml", Model)
             </div>
         </div>
 
         <div class="multisteps-form__panel  p-3 m-3 list-box bg-white panel" id="two-panel">
-
-            @if (roleId == "1" || roleId == "5")
-            {
-                <div class="row">
-                    <div class="col search-container">
-
-                    </div>
-                    <div style="text-align:right;">
-                        <a href="@Url.Action("Index", "CustomerOnBoarding")" title="Add New Customer">  <img src="~/Content/assets/images/AddCustomer.png" /></a>
-                    </div>
-                </div>
-            }
-            <div class="pt-3 pl-3 pr-3 col-md-12 col-lg-12">
-                <div class="row">
-                    <div class="col search-container">
-                        <i class="fas fa-search"></i>
-                        <input class="input100" type="text" id="txtSearchOnBoarding" placeholder="Search activity..." />
-                    </div>
-                </div>
-                <div class="row mt-3" id="dvOnBoardingData">
-                    <div class="table-responsive">
-                        <table class="table" id="OnBoardingTable">
-                            <thead>
-                                <tr>
-                                    <th scope="col">GroupId</th>
-                                    <th scope="col">Group Name</th>
-                                    <th scope="col">Contact No</th>
-                                    <th scope="col">City</th>
-                                    <th scope="col">Billing Partner</th>
-                                    <th scope="col">Payment Status</th>
-                                    <th scope="col" style="text-align:center;">Action</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @if (Model != null)
-                                {
-                                    if (Model.onBoardingListings != null)
-                                    {
-                                        foreach (var item in Model.onBoardingListings)
-                                        {
-                                            WebApp.App_Start.CommonFunctions common = new WebApp.App_Start.CommonFunctions();
-                                            string GroupId = common.EncryptString(Convert.ToString(item.GroupId));
-                                            <tr>
-                                                <td>@item.GroupId</td>
-                                                <td>@item.GroupName</td>
-                                                <td>@item.OwnerMobileNo</td>
-                                                <td>@item.City</td>
-                                                <td>@item.BillingPartnerName</td>
-                                                <td>@item.PaymentStatus</td>
-
-                                                <td style="text-align:center;">
-                                                    <a href="@Url.Action("Index", "CustomerOnBoarding", new { groupId = GroupId })" class="login" title="Edit"><img src="~/Content/assets/images/shape_editUser.png" /></a>
-                                                    <a href="@Url.Action("AllDiscussions", "Discussion", new { groupId = GroupId, isOnboarding="1" })" class="login" title="Go To Discussions"><img src="~/Content/assets/images/discussion.png" width="30" /></a>
-                                                    @if (item.CustomerStatus == "Approved By Customer")
-                                                    {
-                                                        <a href="@Url.Action("Index", "TestingModule", new { groupId = GroupId })" class="login" title="Go To Testing Module"><img src="~/Content/assets/images/CustomerLogo/images.png" width="30" /></a>
-                                                    }
-
-                                                </td>
-
-                                            </tr>
-                                        }
-                                    }
-                                }
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
+            <div id="dvOnboardingCust">
+                @Html.Partial("~/Views/CustomerManagement/_OnBoardingCustomer.cshtml", Model)
             </div>
         </div>
+
     </div>
 </div>
-
 <div id="configModal" class="modal">
     <div class="modal-content">
         <div class="row" style="margin: 0;" id="dvGroupConfigDetails">
@@ -292,207 +156,52 @@
 </div>
 
 <script>
-
     $(document).ready(function () {
-
+        BindLiveCustomerData();
+        BindOnBoardingCustomer();
         $('#btnPopupClose').on("click", function () {
             $("#configModal").hide(1000);
             $("#one").click();
         });
-
-        $('#groupListTable').DataTable({
-            "aaSorting": [[1, "asc"]],
-            "paging": true,
-            "ordering": true,
-            "info": true,
-            "bFilter": true,
-            "pageLength": 10,
-            "pagingType": "simple_numbers",
-            aoColumnDefs: [
-                {
-                    bSortable: false,
-                    aTargets: [-1, -2]
-                }
-            ]
-        });
-
-        $('#groupListTable_filter').hide();
-
-        $('#txtSearch').on('keyup', function () {
-
-            $.fn.dataTable.ext.search.push(function (settings, searchData) {
-                var term = $('#txtSearch').val().toLowerCase()
-                for (var i = 0; i < searchData.length; i++) {
-                    if (searchData[i].toLowerCase().indexOf(term) >= 0) {
-                        return true;
-                    }
-                }
-                return false;
-            });
-            var table = $('#groupListTable').DataTable();
-            table.draw();
-        });
-
-        $('#OnBoardingTable').DataTable({
-            "aaSorting": [[0, "asc"]],
-            "paging": true,
-            "ordering": true,
-            "info": true,
-            "bFilter": true,
-            "pageLength": 10,
-            "pagingType": "simple_numbers",
-            aoColumnDefs: [
-                {
-                    bSortable: false,
-                    aTargets: [-1, -2]
-                }
-            ]
-        });
-
-        $('#OnBoardingTable_filter').hide();
-
-        $('#txtSearchOnBoarding').on('keyup', function () {
-
-            $.fn.dataTable.ext.search.push(function (settings, searchData) {
-                var term = $('#txtSearchOnBoarding').val().toLowerCase()
-                for (var i = 0; i < searchData.length; i++) {
-                    if (searchData[i].toLowerCase().indexOf(term) >= 0) {
-                        return true;
-                    }
-                }
-                return false;
-            });
-            var table1 = $('#OnBoardingTable').DataTable();
-            table1.draw();
-        });
     });
-    function ShowHideOnboarding() {
-        $("#dvOnboarding").toggle(1000);
-    }
 
-    
-
-    function OpenStatusPopup(id) {
+    function BindLiveCustomerData() {
         $("#divLoader").show();
-
-        $.ajax({
-            type: "POST",
-            url: '@Url.Action("GetCustomerConfigDetails", "CustomerManagement")',
-            data: '{groupId:' + JSON.stringify(id) + '}',
-            contentType: "application/json; charset=utf-8",
-            dataType: "json",
-            success: function (response) {
-                if (response != null) {
-                    $("#dvGroupConfigDetails").html(response);
-                    $("#divLoader").hide();
-                }
-            },
-            failure: function (response) {
-                $("#divLoader").hide();
-            },
-            error: function (response) {
-                $("#dvGroupConfigDetails").html("");
-                $("#dvGroupConfigDetails").html(response.responseText);
-                $("#divLoader").hide();
-
-                BindListing(id);
-            }
-
-        });
-
-        $("#configModal").show(1000);
-    }
-
-    function BindListing(id) {
-
          $.ajax({
             type: "POST",
-            url: '@Url.Action("GetDiscussionList", "Discussion")',
-            data: '{groupId: ' + JSON.stringify(id) + '}',
+            url: '@Url.Action("GetLiveCustomer", "CustomerManagement")',
+            //data: '{groupId: ' + JSON.stringify(id) + '}',
             contentType: "application/json; charset=utf-8",
             dataType: "json",
-            success: function (responce) {
-                $("#dvDiscussionList").html(responce);
+             success: function (result) {
+                 $("#dvLiveCustomer").html(result);
                 $("#divLoader").hide();
             },
-            error: function (responce) {
-                $("#dvDiscussionList").html(responce.responseText);
+             error: function (result) {
+                $("#dvLiveCustomer").html(result.responseText);
                 $("#divLoader").hide();
 
             }
         });
     }
-    function ShowActivities(id) {
-      //  var pType = "Distributors";
-        if ($("#dvDiscussionData" + id).is(":visible")) {
-            $("#dvDiscussionData" + id).hide(1000);
-            $("#trActivities" + id).hide(1000);
 
-            $("#imgExpand" + id).attr("src", "https://blueocktopus.in/bots/Content/assets/images/details_open.png");
-        }
-        else {
-            $("#divLoader").show();
-            $.ajax({
-                type: "POST",
-                 url: '@Url.Action("GetSubDiscussionList", "Discussion")',
-                data: '{Id:' + JSON.stringify(id) + '}',
-                contentType: "application/json; charset=utf-8",
-                dataType: "json",
-                success: function (response) {
-                    console.log(response);
-                    BindActivities(id,response);
-                    $("#divLoader").hide();
-                },
-                failure: function (response) {
+    function BindOnBoardingCustomer() {
+        $("#divLoader").show();
+         $.ajax({
+            type: "POST",
+            url: '@Url.Action("GetOnboardingCustomer", "CustomerManagement")',
+            //data: '{groupId: ' + JSON.stringify(id) + '}',
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (result) {
+                $("#dvOnboardingCust").html(result);
+                $("#divLoader").hide();
+            },
+             error: function (result) {
+                 $("#dvOnboardingCust").html(result.responseText);
+                $("#divLoader").hide();
 
-                    $("#divLoader").hide();
-                }
-            });
-        }
-    }
-
-    function BindActivities(id,data) {
-        if (data != "") {
-            var htmlStr = "<table border=\"2\" style=\"background-color:gray;margin-left: 11px;width: 98%;\" class=\"table\">";
-            htmlStr += "<tr style=\"text-align: center;\">"
-            htmlStr += "<th scope=\"col\">Updated Date</th>";
-            htmlStr += "<th scope=\"col\">Updated By</th>";
-            htmlStr += "<th scope=\"col\">Description</th>";
-            htmlStr += "<th scope=\"col\">Status</th>";
-            htmlStr += "</tr>";
-
-            $.map(data, function (item) {
-                var d = new Date();
-                d = item.FollowupDate;
-                console.log(item.UpdatedDate);
-                htmlStr += "<tr style=\"text-align: center;\">"
-                htmlStr += "<td>" + item.UpdatedDate + "</td>";
-                htmlStr += "<td>" + item.UpdatedBy + "</td>";
-                htmlStr += "<td style=\"width: 600px;\">" + item.Description + "</td>";
-                htmlStr += "<td style=\"width: 100px;\">" + item.Status + "</td>";
-                htmlStr += "</tr>"
-            });
-
-            htmlStr += "</table>";
-            $("#dvDiscussionData" + id).html(htmlStr);
-            console.log(htmlStr);
-            //$('tr[id^="trActivities"]').hide(1000);
-            //$('div[id^="dvDiscussionData"]').hide(1000);
-            $('[id^="imgExpand"]').attr("src", "https://blueocktopus.in/bots/Content/assets/images/details_open.png");
-
-            $("#trActivities" + id).show(1000);
-
-            $("#dvDiscussionData" + id).show(1000);
-            $("#imgExpand" + id).attr("src", "https://blueocktopus.in/bots/Content/assets/images/details_close.png");
-
-        }
-        else {
-            cuteAlert({
-                type: "warning",
-                title: "Oops..",
-                message: "No tracking available",
-                buttonText: "Okay"
-            })
-        }
+            }
+        });
     }
 </script>

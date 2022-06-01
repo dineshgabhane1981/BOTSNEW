@@ -30,16 +30,31 @@ namespace WebApp.Controllers
             {
                 var userDetails = (CustomerLoginDetail)Session["UserSession"];
                 userDetails.CustomerName = "";
-                customerDashboardViewModel.onBoardingListings = OBR.GetOnBoardingListings(userDetails);
-                customerDashboardViewModel.customerListings = CR.GetAllCustomer();
-               
             }
             catch (Exception ex)
             {
                 newexception.AddException(ex,"");
             }
-            return View(customerDashboardViewModel);
+            return View();
         }
+
+        public ActionResult GetOnboardingCustomer()
+        {
+            CustomerDashboardViewModel customerDashboardViewModel = new CustomerDashboardViewModel();
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            userDetails.CustomerName = "";
+            customerDashboardViewModel.onBoardingListings = OBR.GetOnBoardingListings(userDetails);
+            return PartialView("_OnBoardingCustomer", customerDashboardViewModel);
+        }
+
+
+        public ActionResult GetLiveCustomer()
+        {
+            CustomerDashboardViewModel customerDashboardViewModel = new CustomerDashboardViewModel();
+            customerDashboardViewModel.customerListings = CR.GetAllCustomer();
+            return PartialView("_LiveCustomer", customerDashboardViewModel);
+        }
+
 
         public ActionResult SelectProduct()
         {
