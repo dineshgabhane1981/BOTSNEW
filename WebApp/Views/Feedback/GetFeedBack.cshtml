@@ -18,9 +18,50 @@
 <script src="~/Scripts/cute-alert-master/cute-alert.js"></script>
 <link href="~/Scripts/cute-alert-master/style-alert.css" rel="stylesheet" />
 <style>
-    body {
-        font-size: 16px !important;
+    #loader {
+        display: flex;
+        width: 100%;
+        height: 100%;
+        position: fixed;
+        opacity: 1;
+        z-index: 1021;
+        background: rgba(255, 255, 255, .7);
     }
+
+    .loader-inner {
+        width: 100px;
+        height: 100px;
+        border-radius: 100%;
+        position: relative;
+        margin: auto;
+    }
+
+        .loader-inner:before,
+        .loader-inner:after {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 100%;
+            height: 100%;
+            /* border-radius: 100%;
+                border: 10px solid transparent;
+                border-top-color: darkblue;*/
+        }
+
+        .loader-inner:before {
+            z-index: 100;
+            /*background-image: url(~/Content/assets/BlueocktopusLoadingGIF.mp4);
+                animation: spinner-border 1s infinite;*/
+        }
+
+        .loader-inner:after {
+            /*border: 10px solid lightblue;*/
+        }
+    
+        body {
+            font-size: 16px !important;
+        }
 
     .cc-selector input {
         margin: 0;
@@ -55,7 +96,7 @@
         -moz-filter: none;
         filter: none;
         border: 2px solid red;
-        border-radius: 25px;
+        border-radius: 40px;
     }
 
     .drinkcard-cc {
@@ -63,8 +104,8 @@
         background-size: contain;
         background-repeat: no-repeat;
         display: inline-block;
-        width: 45px;
-        height: 45px;
+        width: 75px;
+        height: 75px;
         -webkit-transition: all 100ms ease-in;
         -moz-transition: all 100ms ease-in;
         transition: all 100ms ease-in;
@@ -77,6 +118,13 @@
     }
 </style>
 <div class="app-main__inner">
+    <div id="divLoader" runat="server" style="display:none">
+        <div id="loader">
+            <div class="loader-inner">
+                <img src="~/Content/assets/BlueocktopusLoadingGIF.gif" width="100px" height="100px" />
+            </div>
+        </div>
+    </div>
     <div class="row card">
         @if (Model != null)
         {
@@ -92,7 +140,7 @@
                     @Html.Hidden("HiddenDOA", null, new { @id = "hdDOA" })
                     @Html.Hidden("HiddenHowToKnow", null, new { @id = "hdHowToKnow" })
 
-                    <div class="col-md-12 col-sm-12 pt-3 pl-3 pr-3" style="text-align:center;">
+                    <div class="col-md-12 col-sm-12 pt-3 pl-3 pr-3" style="text-align:center;" id="dvLogo">
                         <img src="@Model.LogoUrl" style="width:300px;" alt="Logo">
                     </div>
                     <div class="container-fluid pt-3 pl-3 pr-3 pb-3" id="divwelcome">
@@ -132,13 +180,22 @@
 
                                 </div>
                             }
-                            <div class="col-md-12 col-sm-12 pb-5" style="text-align:center;">
-                                <input type="number" class="input100" id="txtMobileNo" placeholder="Enter Mobile number" />
+                            @if (Model.GroupId != "1051")
+                            {
+                                <div class="col-md-12 col-sm-12 pb-5" style="text-align:center;">
+                                    <input type="number" class="input100" id="txtMobileNo" placeholder="Enter Mobile number" />
 
-                            </div>
-                            <div class="col-md-12 col-sm-12 pb-5" style="text-align:center;">
-                                <button type="button" class="btn btn-primary" style="width: 280px; background-color: #1C699F; color:white; font-weight:bold; font-size:18px; border-radius:5px;" id="btnProceed" onclick="return CheckCustomer();">ENTER</button>
-                            </div>
+                                </div>
+                                <div class="col-md-12 col-sm-12 pb-5" style="text-align:center;">
+                                    <button type="button" class="btn btn-primary" style="width: 280px; background-color: #1C699F; color:white; font-weight:bold; font-size:18px; border-radius:5px;" id="btnProceed" onclick="return CheckCustomer();">ENTER</button>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="col-md-12 col-sm-12 pb-5 mt-5" style="text-align:center;">
+                                    <button type="button" class="btn btn-primary" style="width: 280px; background-color: #1C699F; color:white; font-weight:bold; font-size:18px; border-radius:5px;" id="btnProceedNew" onclick="ProceedToQuestion();">Proceed</button>
+                                </div>
+                            }
                         </div>
                     </div>
 
@@ -176,7 +233,7 @@
                                             var rbtn4 = "rbtvariety" + item.Id + "4";
                                             var name = "variety" + item.Id;
                                             <h3 style="font-size:20px;">
-                                                @item.Text
+                                                @Html.Raw(@item.Text)
                                                 @if (item.IsMandatory == "Mandatory")
                                                 {
                                                     <span style="color:red;">*</span>
@@ -184,29 +241,41 @@
                                             </h3>
                                             <div class="cc-selector">
                                                 <input id="@rbtn1" type="radio" name="@name" />
-                                                <label class="drinkcard-cc rbtvariety1" for="@rbtn1"></label>
+                                                <label class="drinkcard-cc rbtvariety1" for="@rbtn1" style="margin-right:30px;"></label>
+                                                <label style="position: absolute; margin-top: 80px; margin-left: -110px; font-weight: bold;">Very High</label>
                                                 <input id="@rbtn2" type="radio" name="@name" />
-                                                <label class="drinkcard-cc rbtvariety2" for="@rbtn2"></label>
+                                                <label class="drinkcard-cc rbtvariety2" for="@rbtn2" style="margin-right:30px;"></label>
                                                 <input id="@rbtn3" type="radio" name="@name" />
-                                                <label class="drinkcard-cc rbtvariety3" for="@rbtn3"></label>
+                                                <label class="drinkcard-cc rbtvariety3" for="@rbtn3" style="margin-right:30px;"></label>
                                                 <input id="@rbtn4" type="radio" name="@name" />
                                                 <label class="drinkcard-cc rbtvariety4" for="@rbtn4"></label>
+                                                <label style="position: absolute; margin-top: 80px; margin-left: -70px;font-weight:bold;">Very Low</label>
                                             </div>
+
                                         }
                                         @if (item.Type == "Textbox")
                                         {
                                             @Html.HiddenFor(model => item.Id, new { @id = "hdnQuestionId" + item.Id })
                                             @Html.HiddenFor(model => item.IsMandatory, new { @id = "hdnQuestionType" + item.Id })
                                             <h3 style="font-size:20px;">
-                                                Comments
+
                                                 @if (item.IsMandatory == "Mandatory")
                                                 {
                                                     <span style="color:red;">*</span>
                                                 }
                                             </h3>
-                                            <div class="col-md-12 col-sm-12 pb-5" style="text-align:center;">
-                                                <textarea class="input100" id="txtComments" cols="50" rows="5" placeholder="Enter Comments"></textarea>
-                                            </div>
+                                            if (Model.GroupId != "1051")
+                                            {
+                                                <div class="col-md-12 col-sm-12 pb-5" style="text-align:center;">
+                                                    <textarea class="input100" id="txtComments" cols="50" rows="5" placeholder="Enter Comments"></textarea>
+                                                </div>
+                                            }
+                                            else
+                                            {
+                                                <div class="col-md-12 col-sm-12 pb-5" style="text-align:center;">
+                                                    <textarea class="input150" id="txtComments" cols="50" rows="5" placeholder="Enter Comments"></textarea>
+                                                </div>
+                                            }
                                         }
                                     </div>
                                 }
@@ -342,6 +411,7 @@
         });
 
     });
+
     function SubmitRating() {
         var returnStatus = false;
         var HomeData = [];
@@ -383,6 +453,9 @@
                         Comments = $("#txtComments").val();
                     }
                 }
+                else {
+                    Comments = $("#txtComments").val();
+                }
             });
         if (!returnStatus) {
             console.log("required");
@@ -415,11 +488,16 @@
                 }
             }
 
+            var mobileNo = "";
+            if (@Model.GroupId != "1051") {
+                mobileNo = $("#txtMobileNo").val();
+            }
+
             $("#divLoader").show();
             $.ajax({
                 type: "POST",
                 url: '@Url.Action("SubmitPoints", "Feedback")',
-                data: '{mobileNo: ' + JSON.stringify($("#txtMobileNo").val()) + ', ranking: ' + JSON.stringify(JSON.stringify(HomeData)) + ', GroupId: ' + JSON.stringify($("#hdGroupId").val()) + ', SalesRepresentative: ' + JSON.stringify(sales) + ',Comments: ' + JSON.stringify(Comments) + ', outletId: ' + JSON.stringify($("#hdoutletId").val()) + '}',
+                data: '{mobileNo: ' + JSON.stringify(mobileNo) + ', ranking: ' + JSON.stringify(JSON.stringify(HomeData)) + ', GroupId: ' + JSON.stringify($("#hdGroupId").val()) + ', SalesRepresentative: ' + JSON.stringify(sales) + ',Comments: ' + JSON.stringify(Comments) + ', outletId: ' + JSON.stringify($("#hdoutletId").val()) + '}',
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
                 success: function (response) {
@@ -433,6 +511,19 @@
                         $("#divquestions").hide();
                         $("#divwelcome").hide();
 
+                        if ($("#hdGroupId").val() == "1051") {
+                            $("#dvLogo").hide();
+                            cuteAlert({
+                                type: "success",
+                                title: "Save",
+                                message: "Feedback Sent Successfully!",
+                                buttonText: "Okay"
+                            }).then((e) => {
+                                if (e == ("confirm")) {
+                                    location.reload();
+                                }
+                            });                            
+                        }
                     }
                     if (response == "false") {
                         console.log("222");
@@ -702,6 +793,13 @@
             return false;
         }
     }
+
+    function ProceedToQuestion() {
+        $("#divquestions").show();
+        $("#divwelcome").hide();
+    }
+
+
 </script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.6/jquery.min.js" type="text/javascript"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js" type="text/javascript"></script>
