@@ -1275,7 +1275,7 @@ namespace WebApp.Controllers.OnBoarding
                     objData.GreaterThanDaysScript = Convert.ToString(item["GreaterThanDaysScript"]);
 
                     if (objData.SMSorWA != "SMS")
-                    {                        
+                    {
                         if (objData.InactiveType == "Inactive" || objData.InactiveType == "Only Once Inactive" || objData.InactiveType == "Non Redemption Inactive" || objData.InactiveType == "Point Expiry")
                         {
                             objData.SMSScript1 = Convert.ToString(item["SMSScript1"]);
@@ -1485,7 +1485,7 @@ namespace WebApp.Controllers.OnBoarding
                     {
                         if (num == 1)
                         {
-                            if(objInactiveConfig.SMSorWA != "SMS")
+                            if (objInactiveConfig.SMSorWA != "SMS")
                             {
                                 objInactiveConfig.SMSScript1 = Convert.ToString(item["Script"]);
                             }
@@ -1493,7 +1493,7 @@ namespace WebApp.Controllers.OnBoarding
                             {
                                 objInactiveConfig.LessThanDaysScript = Convert.ToString(item["Script"]);
                             }
-                            
+
                             objInactiveConfig.LessThanDaysScriptDLT = Convert.ToString(item["ScriptDLT"]);
                             objInactiveConfig.TemplateId1 = Convert.ToString(item["TemplateId"]);
                             objInactiveConfig.TemplateName1 = Convert.ToString(item["TemplateName"]);
@@ -1834,9 +1834,10 @@ namespace WebApp.Controllers.OnBoarding
             return new JsonResult() { Data = result, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
 
+
         public ActionResult CheckerView(string GroupId)
         {
-            
+
             OnBoardingSalesViewModel objData = new OnBoardingSalesViewModel();
             try
             {
@@ -2109,7 +2110,7 @@ namespace WebApp.Controllers.OnBoarding
                         var CSName = OBR.GetAssignedCSNameForOnboarding(groupId);
                         var CSHead = OBR.GetCSHeadEmailId();
                         var GroupName = OBR.GetOnboardingGroupName(groupId);
-                        var CSEmail = CSHead + "," + CSName;                        
+                        var CSEmail = CSHead + "," + CSName;
                         var message = "Configuration Approved By Customer for Group - " + GroupName;
                         var subject = "Configuration Approved By Customer - " + GroupName;
                         var isEmail = SendEmailOnBoarding(CSEmail, subject, message);
@@ -2162,6 +2163,45 @@ namespace WebApp.Controllers.OnBoarding
                 newexception.AddException(ex, "CustomerApprovalConfiguration");
             }
             return status;
+        }
+
+        public ActionResult SaveOutletDataConfig(string jsonData)
+        {
+            bool result = false;
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
+
+            List<BOTS_TblOutletMaster> lstOutlets = new List<BOTS_TblOutletMaster>();
+            JavaScriptSerializer json_serializer = new JavaScriptSerializer();
+            json_serializer.MaxJsonLength = int.MaxValue;
+            object[] objData = (object[])json_serializer.DeserializeObject(jsonData);
+
+            foreach (Dictionary<string, object> item in objData)
+            {
+                BOTS_TblOutletMaster objOutletData = new BOTS_TblOutletMaster();
+                objOutletData.Id = Convert.ToInt32(item["Id"]);
+                objOutletData.GroupId = Convert.ToString(item["GroupId"]);
+                objOutletData.BrandId = Convert.ToString(item["BrandId"]);
+                objOutletData.OutletId = Convert.ToString(item["OutletId"]);
+                objOutletData.OutletName = Convert.ToString(item["OutletName"]);
+                objOutletData.AreaName = Convert.ToString(item["AreaName"]);
+                objOutletData.AuthorisedPerson = Convert.ToString(item["AuthorisedPerson"]);
+                objOutletData.RegisterMobileNo = Convert.ToString(item["RegisterMobileNo"]);
+                objOutletData.RegisterEmail = Convert.ToString(item["RegisterEmail"]);
+                objOutletData.Address = Convert.ToString(item["Address"]);
+                objOutletData.State = Convert.ToString(item["State"]);
+                objOutletData.City = Convert.ToString(item["City"]);
+                objOutletData.PinCode = Convert.ToString(item["PinCode"]);
+
+                objOutletData.UpdatedBy = userDetails.LoginId;
+                objOutletData.UpdatedDate = DateTime.Now;
+
+                lstOutlets.Add(objOutletData);
+
+            }
+            result = OBR.SaveOutletData(lstOutlets);
+
+            return new JsonResult() { Data = result, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
+
         }
     }
 }

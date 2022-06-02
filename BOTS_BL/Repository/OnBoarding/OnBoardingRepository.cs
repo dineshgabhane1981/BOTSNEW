@@ -2229,5 +2229,29 @@ namespace BOTS_BL.Repository
             return CSEmail;
         }
 
+        public bool SaveOutletData(List<BOTS_TblOutletMaster> objOutletData)
+        {
+            bool result = false;
+            using (var context = new CommonDBContext())
+            {
+                try
+                {
+                    foreach (var item in objOutletData)
+                    {
+                        context.BOTS_TblOutletMaster.AddOrUpdate(item);
+                        context.SaveChanges();
+                        result = true;
+                    }
+
+                }
+                catch (Exception ex)
+                {
+                    newexception.AddException(ex, "SaveOutletData");
+
+                }
+            }
+            return result;
+        }
+
     }
 }

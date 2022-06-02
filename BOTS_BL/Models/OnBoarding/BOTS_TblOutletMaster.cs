@@ -56,6 +56,9 @@ namespace BOTS_BL.Models
         [StringLength(50)]
         public string State { get; set; }
 
+        public string UpdatedBy { get; set; }
+        public DateTime? UpdatedDate { get; set; }
+
         [NotMapped]
         public string BrandName { get; set; }
 

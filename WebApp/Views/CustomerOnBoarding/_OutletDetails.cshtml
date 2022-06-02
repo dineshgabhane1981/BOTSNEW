@@ -1,8 +1,190 @@
-﻿
-<div>This is new Outlet View</div>
-<div>This is new Outlet View</div>
-<div>This is new Outlet View</div>
-<div>This is new Outlet View</div>
-<div>This is new Outlet View</div>
-<div>This is new Outlet View</div>
-<div>This is new Outlet View</div>
+﻿@model WebApp.ViewModel.OnBoardingSalesViewModel
+@using System.Configuration;
+@using BOTS_BL.Models;
+@using BOTS_BL;
+
+@{
+    var count = 1;
+}
+<table border="1" cellpadding="10" cellspacing="10">
+    <tr>
+        <th><h6>Brand</h6></th>
+        <th><h6>Outlet Name</h6></th>
+        <th><h6>Area Name</h6></th>
+        <th><h6>Authorised Person</h6></th>
+        <th><h6>Registered Mobile No</h6></th>
+        <th><h6>Registered Email</h6></th>
+        <th><h6>Address</h6></th>
+        <th><h6>State</h6></th>
+        <th><h6>City</h6></th>
+        <th><h6>PinCode</h6></th>
+    </tr>
+    <tbody>
+
+        @foreach (var item in Model.lstOutlets)
+        {
+
+            Model.bots_TblOutletMaster = item;
+        <tr>
+            <td>@item.BrandName</td>
+            @Html.HiddenFor(model => item.Id, new { @id = "hdnIdNew" + count })
+            @Html.HiddenFor(model => model.bots_TblGroupMaster.GroupId, new { @id = "hdnGroupID" })
+            @Html.HiddenFor(model => item.BrandId, new { @id = "hdnBrandIdNew" + count })
+            @Html.HiddenFor(model => item.OutletId, new { @id = "hdnOutletIdNew" + count })
+            <td>@Html.TextBoxFor(model => item.OutletName, new { @class = "input50", @id = "txtOutletNameNew" + count })</td>
+            <td>
+                @Html.TextBoxFor(model => item.AreaName, new { @class = "input50", @id = "txtAreaNameNew" + count })
+            </td>
+            <td>
+                @Html.TextBoxFor(model => item.AuthorisedPerson, new { @class = "input50", @id = "txtAuthorisedPersonNew" + count })
+            </td>
+            <td>
+                @Html.TextBoxFor(model => item.RegisterMobileNo, new { @class = "input50", @id = "txtRegisterMobileNoNew" + count })
+            </td>
+            <td>
+                @Html.TextBoxFor(model => item.RegisterEmail, new { @class = "input50", @id = "txtRegisterEmailNew" + count })
+            </td>
+            <td>
+                @Html.TextBoxFor(model => item.Address, new { @class = "input50", @id = "txtAddressNew" + count })
+            </td>
+            <td>
+                @Html.DropDownListFor(model => model.bots_TblOutletMaster.State, new SelectList(Model.lstStates, "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input50", @id = "ddlStateNew" + count })
+            </td>
+            <td>
+                @Html.DropDownListFor(model => model.bots_TblOutletMaster.City, new SelectList(Model.lstCity, "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input50", @id = "ddlCityNew" + count })
+            </td>
+            <td>@Html.TextBoxFor(model => item.PinCode, new { @class = "input50", @id = "txtPinCodeNew" + count })</td>
+        </tr>
+            count++;
+        }
+    </tbody>
+</table>
+
+<button type="button" id="btnSaveOutlets" class="btn btn-primary pull-left m-3" onclick="return SaveOutletDetails();">Save</button>
+
+<script>
+    function SaveOutletDetails() {
+
+            var returnStatus = true;
+                var noOfOutlet = $("#hdnOutletCount").val();
+                //$("#hdnCustomerStatus").val("CSUpdate");
+                //alert(noOfOutlet)
+                for (var i = 1; i <= noOfOutlet; i++) {
+                    if ($("#txtOutletNameNew" + i).val() == "") {
+                        ShowHideSection("outletdetails");
+                        $('#txtOutletNameNew' + i).css('border-color', 'red');
+                        returnStatus = false;
+                    }
+                    if ($("#txtAreaNameNew" + i).val() == "") {
+                        ShowHideSection("outletdetails");
+                        $('#txtAreaNameNew' + i).css('border-color', 'red');
+                        returnStatus = false;
+                    }
+                    if ($("#txtAuthorisedPersonNew" + i).val() == "") {
+                        ShowHideSection("outletdetails");
+                        $('#txtAuthorisedPersonNew' + i).css('border-color', 'red');
+                        returnStatus = false;
+                    }
+                    if ($("#txtRegisterMobileNoNew" + i).val() == "") {
+                        ShowHideSection("outletdetails");
+                        $('#txtRegisterMobileNoNew' + i).css('border-color', 'red');
+                        returnStatus = false;
+                    }
+                    if ($("#txtRegisterEmailNew" + i).val() == "") {
+                        ShowHideSection("outletdetails");
+                        $('#txtRegisterEmailNew' + i).css('border-color', 'red');
+                        returnStatus = false;
+                    }
+                    if ($("#txtAddressNew" + i).val() == "") {
+                        ShowHideSection("outletdetails");
+                        $('#txtAddressNew' + i).css('border-color', 'red');
+                        returnStatus = false;
+                    }
+
+                    if ($("#ddlStateNew" + i + " option:selected").text() == "Please Select") {
+                        ShowHideSection("outletdetails");
+                        $("#ddlStateNew" + i).css('border-color', 'red');
+                        returnStatus = false;
+                    }
+                    if ($("#ddlCityNew" + i + " option:selected").text() == "Please Select") {
+                        ShowHideSection("outletdetails");
+                        $("#ddlCityNew" + i).css('border-color', 'red');
+                        returnStatus = false;
+                    }
+                    if ($("#txtPinCodeNew" + i).val() == "") {
+                        ShowHideSection("outletdetails");
+                        $('#txtPinCodeNew' + i).css('border-color', 'red');
+                        returnStatus = false;
+                    }
+                }
+
+
+                if (returnStatus) {
+                    var outletCount = $("#hdnOutletCount").val();
+                    var Outlets = [];
+                    for (let i = 1; i <= outletCount; i++) {
+                        item = {}
+                        item["Id"] = $("#hdnIdNew" + i).val();
+                        item["GroupId"] = $("#hdnGroupID").val();
+                        item["BrandId"] = $("#hdnBrandIdNew" + i).val();
+                        item["OutletId"] = $("#hdnOutletIdNew" + i).val();
+                        item["OutletName"] = $("#txtOutletNameNew" + i).val();
+                        item["AreaName"] = $("#txtAreaNameNew" + i).val();
+                        item["AuthorisedPerson"] = $("#txtAuthorisedPersonNew" + i).val();
+                        item["RegisterMobileNo"] = $("#txtRegisterMobileNoNew" + i).val();
+                        item["RegisterEmail"] = $("#txtRegisterEmailNew" + i).val();
+                        item["Address"] = $("#txtAddressNew" + i).val();
+                        item["City"] = $("#ddlCityNew" + i).val();
+                        item["PinCode"] = $("#txtPinCodeNew" + i).val();
+                        item["State"] = $("#ddlStateNew" + i).val();
+
+                        Outlets.push(item);
+                    }
+                    var OutletsData = JSON.stringify(Outlets);
+                     $("#divLoader").show();
+                       $.ajax({
+                        type: "POST",
+                        url: '@Url.Action("SaveOutletDataConfig", "CustomerOnBoarding")',
+                           data: '{jsonData: ' + JSON.stringify(OutletsData) + '}',
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                        success: function (result) {
+                            console.log(result)
+                            if (result == true) {
+                                cuteAlert({
+                                    type: "success",
+                                    title: "Saved",
+                                    message: "Outlet Data config saved successfully",
+                                    buttonText: "Okay"
+                                })
+                                $("#divLoader").hide();
+                            }
+                            else {
+                                cuteAlert({
+                                    type: "error",
+                                    title: "Oops..",
+                                    message: "There is a problem in saving Outlet Data",
+                                    buttonText: "Okay"
+                                })
+                                $("#divLoader").hide();
+                            }
+                        },
+                        error: function (result) {
+                            //console.log(result.responseText)
+                        }
+                    });
+
+                }
+                else {
+                    cuteAlert({
+                        type: "error",
+                        title: "Oops..",
+                        message: "Please enter Required fields",
+                        buttonText: "Okay"
+                    })
+                    return false;
+                }
+        }
+
+</script>
+
