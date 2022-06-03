@@ -2174,7 +2174,7 @@ namespace BOTS_BL.Repository
                     _Con.Open();
                     command.ExecuteNonQuery();
                     var result = context.Database.SqlQuery<SPResponse>("BOTS_SpPushFromCommonToIndividualDB @pi_Date, @pi_LiveGroupName, @pi_LiveDBName, @pi_OnboardingGroupId",
-                                new SqlParameter("@pi_Date", DateTime.Today.ToShortDateString()),
+                                new SqlParameter("@pi_Date", DateTime.Today.ToString("yyyy-MM-dd")),
                                 new SqlParameter("@pi_LiveGroupName", DBName),
                                 new SqlParameter("@pi_LiveDBName", DBName),
                                 new SqlParameter("@pi_OnboardingGroupId", GroupId)).FirstOrDefault<SPResponse>();
