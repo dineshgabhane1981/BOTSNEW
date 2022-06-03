@@ -1692,15 +1692,15 @@ namespace WebApp.Controllers.OnBoarding
                 objEarnRule.RuleId = Convert.ToInt32(item["RuleId"]);
                 objEarnRule.GroupId = Convert.ToString(item["GroupId"]);
                 objEarnRule.MinInvoiceAmt = Convert.ToInt32(item["MinInvoiceAmt"]);
-                objEarnRule.BasePercentage = Convert.ToDecimal(item["BasePercentage"]);
+                objEarnRule.PointsValueInRS = Convert.ToDecimal(item["PointsValueInRS"]);
                 objEarnRule.PointsValidityInMonths = Convert.ToInt32(item["PointsValidityInMonths"]);
                 objEarnRule.RevolvingExpiry = Convert.ToBoolean(item["RevolvingExpiry"]);
                 objEarnRule.IsBase = Convert.ToBoolean(item["IsBase"]);
                 objEarnRule.IsSlab = Convert.ToBoolean(item["IsSlab"]);
                 objEarnRule.IsProductWise = Convert.ToBoolean(item["IsProductWise"]);
                 if (objEarnRule.IsBase.Value)
-                {
-                    objEarnRule.PointsValueInRS = Convert.ToDecimal(item["PointsValueInRS"]);
+                {                    
+                    objEarnRule.BasePercentage = Convert.ToDecimal(item["BasePercentage"]);
                 }
                 if (objEarnRule.IsProductWise.Value)
                 {

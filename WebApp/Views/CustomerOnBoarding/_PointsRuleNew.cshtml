@@ -7,24 +7,24 @@
         <input type="hidden" id="hdnProductWiseBase64" />
         <input type="hidden" id="hdnBlockEarnBase64" />
         <input type="hidden" id="hdnBlockBurnBase64" />
-        <h4>Earn Rule</h4>
+        <h5>Earn Rule</h5>
         
     </div>
 
-        <div class="col-md-12 col-lg-12" style="display: flex;">
-            <div class="col-md-3 col-lg-3">
-                Minimum Invoice Amount<br />
-                @Html.TextBoxFor(model => model.objEarnRuleConfig.MinInvoiceAmt, new { @class = "input50", @id = "txtMinInvoiceAmt" })
-            </div>
-            <div class="col-md-3 col-lg-3" >
-                Base Percentage(%)<br />
-                @Html.TextBoxFor(model => model.objEarnRuleConfig.BasePercentage, new { @class = "input50", @id = "txtBasePercentage" })
-            </div>
-            <div class="col-md-3 col-lg-3" style="margin-bottom: 20px;">
-                Points Validity (in Months)<br />
-                @Html.TextBoxFor(model => model.objEarnRuleConfig.PointsValidityInMonths, new { @class = "input50", @id = "txtPointsValidityInMonths" })
-            </div>
+    <div class="col-md-12 col-lg-12" style="display: flex;">
+        <div class="col-md-3 col-lg-3">
+            Minimum Invoice Amount<br />
+            @Html.TextBoxFor(model => model.objEarnRuleConfig.MinInvoiceAmt, new { @class = "input50", @id = "txtMinInvoiceAmt" })
         </div>
+        <div class="col-md-3 col-lg-3">
+            Points Value (in RS)<br />
+            @Html.TextBoxFor(model => model.objEarnRuleConfig.PointsValueInRS, new { @class = "input50", @id = "txtPointsValueInRS" })
+        </div>
+        <div class="col-md-3 col-lg-3" style="margin-bottom: 20px;">
+            Points Validity (in Months)<br />
+            @Html.TextBoxFor(model => model.objEarnRuleConfig.PointsValidityInMonths, new { @class = "input50", @id = "txtPointsValidityInMonths" })
+        </div>
+    </div>
         <div class="col-md-12 col-lg-12" style="margin-top:20px;padding-left:30px;">
             Revolving Expiry
             @Html.RadioButtonFor(model => model.objEarnRuleConfig.RevolvingExpiry, "1", new { @id = "rbtnRevolvingExpiry1", @class = "rbtnClass", @Checked = "checked" }) Yes
@@ -37,8 +37,10 @@
 
         </div>
         <div id="dvBase" style="display: none; padding-left: 30px; margin-left: 30px; padding-top: 20px; padding-bottom: 15px; border: 1px solid lightgrey; border-radius: 5px; " class="col-md-6 col-lg-6">
-            Points Value (in RS)
-            @Html.TextBoxFor(model => model.objEarnRuleConfig.PointsValueInRS, new { @class = "input50", @id = "txtPointsValueInRS" })
+         
+            Base Percentage(%)
+            @Html.TextBoxFor(model => model.objEarnRuleConfig.BasePercentage, new { @class = "input50", @id = "txtBasePercentage" })
+            
         </div>
         <div id="dvSlab" class="col-md-6 col-lg-6" style="display: none; padding-top: 20px; margin-left: 30px; padding-bottom: 15px; border: 1px solid lightgrey; border-radius: 5px; ">
             <div id="dv1" class="col-md-6 col-lg-6" style="display:flex;">
@@ -129,19 +131,19 @@
 
         <div id="dvProductWise" class="col-md-6 col-lg-6" style="padding-left: 15px; margin-left: 30px; padding-bottom: 15px; padding-top: 20px; display: none; border: 1px solid lightgrey; border-radius: 5px; ">
             <div style="display:flex;">
-                <input id="rbtnProduct" name="ProductWise" type="radio" checked class="rbtnClass">&nbsp; Product
+
                 <input id="rbtnCategory" name="ProductWise" type="radio" class="rbtnClass"> &nbsp; Category
                 <input id="rbtnSubCategory" name="ProductWise" type="radio" class="rbtnClass"> &nbsp; SubCategory
+                <input id="rbtnProduct" name="ProductWise" type="radio" checked class="rbtnClass">&nbsp; Product
             </div>
             <div style="padding-left: 15px; padding-top: 20px;"><input type="file" id="ProductWiseFile" /></div>
         </div>
         <div id="dvBlockEarn" class="col-md-6 col-lg-6" style="margin-left: 30px; margin-top: 30px; border:1px solid lightgrey;border-radius:5px;">
             <b style="padding-left:10px;">Block for Earn</b>
             <div style="display:flex;padding-top:10px;">
-                @Html.RadioButtonFor(model => model.objEarnRuleConfig.IsBlockForEarn, true, new { @id = "rbtnProductB", @class = "rbtnClass", @Name = "ProductWiseB" })  &nbsp; Product
-                @Html.RadioButtonFor(model => model.objEarnRuleConfig.IsBlockForEarn, true, new { @id = "rbtnCategoryB", @class = "rbtnClass", @Name = "ProductWiseB" })  &nbsp; Category
-                @Html.RadioButtonFor(model => model.objEarnRuleConfig.IsBlockForEarn, true, new { @id = "rbtnSubCategoryB", @class = "rbtnClass", @Name = "ProductWiseB" })  &nbsp; SubCategory
-                
+                @Html.RadioButtonFor(model => model.objEarnRuleConfig.IsBlockForEarn, true, new { @id = "rbtnCategoryB", @class = "rbtnClass", @Name = "ProductWiseB", disabled = "disabled", })  &nbsp; Category
+                @Html.RadioButtonFor(model => model.objEarnRuleConfig.IsBlockForEarn, true, new { @id = "rbtnSubCategoryB", @class = "rbtnClass", @Name = "ProductWiseB", disabled = "disabled" })  &nbsp; SubCategory
+                @Html.RadioButtonFor(model => model.objEarnRuleConfig.IsBlockForEarn, true, new { @id = "rbtnProductB", @class = "rbtnClass", @Name = "ProductWiseB", disabled = "disabled" })  &nbsp; Product
             </div>
             <div style="padding-left: 15px; padding-top: 20px;padding-bottom:10px;">
                 <input type="file" id="BlockEarnFile" />
@@ -155,7 +157,7 @@
 <div style="margin-top:50px;">
     <hr />
 </div>
-      <h4>Burn Rule</h4>
+      <h5>Burn Rule</h5>
 
         <div class="col-md-6 col-lg-6" style="display: flex; margin-bottom:20px;margin-top:20px;">
             <div class="col-md-6 col-lg-6">
@@ -201,7 +203,7 @@
     
 
 
-<script>
+        <script>
     $(document).ready(function () {
         document.getElementById("ProductWiseFile").addEventListener('change', handleFileSelectProductWise, false);
         document.getElementById("BlockEarnFile").addEventListener('change', handleFileSelectBlockEarn, false);
@@ -230,10 +232,31 @@
             $("#dvProductWise").show();
         });
 
+        $("#rbtnCategory").on("click", function () {
+            $("#rbtnCategoryB").prop("checked", true);
+        });
+        $("#rbtnSubCategory").on("click", function () {
+            $("#rbtnSubCategoryB").prop("checked", true);
+        });
+        $("#rbtnProduct").on("click", function () {
+            $("#rbtnProductB").prop("checked", true);
+        });
+
         ShowHideProductTypeSection();
         var earnExist = JSON.parse('@Html.Raw(Json.Encode(Model.objEarnRuleConfig))');
 
         if (earnExist != null) {
+            var earnCategory = JSON.parse('@Html.Raw(Json.Encode(Model.objEarnRuleConfig.ProductWiseType))');
+            if (earnCategory == "Product") {
+                $("#rbtnProduct").prop("checked", true);
+            }
+            if (earnCategory == "Category") {
+                $("#rbtnCategory").prop("checked", true);
+            }
+            if (earnCategory == "SubCategory") {
+                $("#rbtnSubCategory").prop("checked", true);
+            }
+
             var blockCategory = JSON.parse('@Html.Raw(Json.Encode(Model.objEarnRuleConfig.BlockProductWiseType))');
             if (blockCategory == "Product") {
                 $("#rbtnProductB").prop("checked", true);
@@ -272,7 +295,7 @@
             $("#dvBase").hide();
             $("#dvSlab").show();
             $("#dvProductWise").hide();
-            $("#txtPointsValueInRS").val("");
+            $("#txtBasePercentage").val("");
 
             var objSlab = JSON.parse('@Html.Raw(Json.Encode(Model.lstSlabConfig))');
             console.log(objSlab);
@@ -287,7 +310,7 @@
             $("#dvBase").hide();
             $("#dvSlab").hide();
             $("#dvProductWise").show();
-            $("#txtPointsValueInRS").val("");
+            $("#txtBasePercentage").val("");
         }
     }
 
@@ -344,7 +367,7 @@
         item["RuleId"] = $("#hdnEarnRuleId").val();
         item["GroupId"] = $("#hdnGroupID").val();
         item["MinInvoiceAmt"] = $("#txtMinInvoiceAmt").val();
-        item["BasePercentage"] = $("#txtBasePercentage").val();
+        item["PointsValueInRS"] = $("#txtPointsValueInRS").val();
         item["PointsValidityInMonths"] = $("#txtPointsValidityInMonths").val();
 
         if ($("#rbtnRevolvingExpiry1").is(":checked")) {
@@ -358,7 +381,7 @@
         var IsProductWise = false;
         if ($("#rbtnIsBase").is(":checked")) {
             IsBase = true;
-            item["PointsValueInRS"] = $("#txtPointsValueInRS").val();
+            item["BasePercentage"] = $("#txtBasePercentage").val();
         }
         if ($("#rbtnIsSlab").is(":checked")) {
             IsSlab = true;
@@ -509,4 +532,4 @@
             }
         });
     }
-</script>
+        </script>
