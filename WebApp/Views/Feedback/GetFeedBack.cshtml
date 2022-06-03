@@ -282,9 +282,18 @@
                             }
                         </div>
                         <div class="row mt-3">
-                            <div class="col-md-12 col-sm-12 pb-5" style="text-align:center;">
-                                <button type="button" class="btn btn-primary" style="width: 280px; background-color: #1C699F; color:white; font-weight:bold; font-size:18px; border-radius:5px;" id="btnNextpg" onclick="SubmitRating();">Next Page</button>
-                            </div>
+                            @if (Model.GroupId != "1051")
+                            {
+                                <div class="col-md-12 col-sm-12 pb-5" style="text-align:center;">
+                                    <button type="button" class="btn btn-primary" style="width: 280px; background-color: #1C699F; color:white; font-weight:bold; font-size:18px; border-radius:5px;" id="btnNextpg" onclick="SubmitRating();">Next Page</button>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="col-md-12 col-sm-12 pb-5" style="text-align:center;">
+                                    <button type="button" class="btn btn-primary" style="width: 280px; background-color: #1C699F; color:white; font-weight:bold; font-size:18px; border-radius:5px;" id="btnNextpg" onclick="SubmitRating();">Submit</button>
+                                </div>
+                            }
                         </div>
                     </div>
                     if (Model.PointsAndMessages.IsOtherInfoShow)
