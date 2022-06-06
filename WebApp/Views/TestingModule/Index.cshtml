@@ -62,12 +62,9 @@
             <div style="float: left; margin-top: 20px; margin-bottom: 20px;" class="col-md-4 col-lg-4">
                 Mobile No <input type="text" id="txtMobileNo1" class="input50" />
             </div>
-            <div style="float: left; margin-top: 20px; margin-bottom: 20px;" class="col-md-4 col-lg-4">
-                CounterId <input type="text" id="txtCounterId1" class="input50" />
-            </div>
+           
             <div style="float: left; margin-top: 20px; margin-bottom: 20px;" class="col-md-12 col-lg-12">
-                Invoice No <input type="text" id="txtInvoiceNo1" class="input50" style="margin-bottom: 10px; margin-right: 50px;" />
-                Invoice Amt<input type="text" id="txtInvoiceAmt1" class="input50" style="margin-bottom: 10px; margin-right: 50px;" />
+                
                 Date Time <input type="date" id="txtDatetime1" class="input50" style="margin-bottom:10px; margin-right:20px;" />
             </div>
         </div>
@@ -93,19 +90,14 @@
     <div class="multisteps-form__content bg-white" id="dvEnrlmentWithEarn" style="display:none;">
         <input type="hidden" id="hdnEnrlmentWithEarnId" />
         <div class="col-lg-10" style="float: left; border: 1px solid grey; border-radius: 12px; margin-bottom: 30px; margin-top: 10px; margin-left: 50px; margin-right: 50px;">
-            <div style="float: left; margin-top: 20px;" class="col-md-4 col-lg-4">
-                Billing Partner Name
-                @Html.DropDownListFor(model => model.billingPartnerId, new SelectList(Model.billingpartners, "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input40", @id = "ddlBillingPartner" })
-            </div>
+            
             <div style="float: left; margin-top: 20px; margin-bottom: 20px;" class="col-md-4 col-lg-4">
                 Mobile No <input type="text" id="txtMobileNo2" class="input50" />
             </div>
-            <div style="float: left; margin-top: 20px; margin-bottom: 20px;" class="col-md-4 col-lg-4">
-                CounterId <input type="text" id="txtCounterId2" class="input50" />
-            </div>
+           
             <div style="float: left; margin-top: 20px; margin-bottom: 20px;" class="col-md-12 col-lg-12">
-                Invoice No <input type="text" id="txtInvoiceNo" class="input50" style="margin-bottom: 10px; margin-right: 50px;" />
-                Invoice Amt<input type="text" id="txtInvoiceAmt" class="input50" style="margin-bottom: 10px; margin-right: 50px;" />
+                Invoice No <input type="text" id="txtInvoiceNo2" class="input50" style="margin-bottom: 10px; margin-right: 50px;" />
+                Invoice Amt<input type="text" id="txtInvoiceAmt2" class="input50" style="margin-bottom: 10px; margin-right: 50px;" />
                 Date Time <input type="date" id="txtDatetime2" class="input50" style="margin-bottom:10px; margin-right:20px;">
             </div>
         </div>
@@ -132,19 +124,14 @@
     <div class="multisteps-form__content bg-white" id="dvEarn" style="display:none;">
         <input type="hidden" id="hdnEarnId" />
         <div class="col-lg-10" style="float: left; border: 1px solid grey; border-radius: 12px; margin-bottom: 30px; margin-top: 10px; margin-left: 50px; margin-right: 50px;">
-            <div style="float: left; margin-top: 20px;" class="col-md-4 col-lg-4">
-                Billing Partner Name
-                @Html.DropDownListFor(model => model.billingPartnerId, new SelectList(Model.billingpartners, "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input40", @id = "ddlBillingPartner" })
-            </div>
+            
             <div style="float: left; margin-top: 20px; margin-bottom: 20px;" class="col-md-4 col-lg-4">
                 Mobile No <input type="text" id="txtMobileNo3" class="input50" />
             </div>
-            <div style="float: left; margin-top: 20px; margin-bottom: 20px;" class="col-md-4 col-lg-4">
-                CounterId <input type="text" id="txtCounterId3" class="input50" />
-            </div>
+            
             <div style="float: left; margin-top: 20px; margin-bottom: 20px;" class="col-md-12 col-lg-12">
-                Invoice No <input type="text" id="txtInvoiceNo" class="input50" style="margin-bottom: 10px; margin-right: 50px;" />
-                Invoice Amt<input type="text" id="txtInvoiceAmt" class="input50" style="margin-bottom: 10px; margin-right: 50px;" />
+                Invoice No <input type="text" id="txtInvoiceNo3" class="input50" style="margin-bottom: 10px; margin-right: 50px;" />
+                Invoice Amt<input type="text" id="txtInvoiceAmt3" class="input50" style="margin-bottom: 10px; margin-right: 50px;" />
                 Date Time <input type="date" id="txtDatetime3" class="input50" style="margin-bottom:10px; margin-right:20px;">
             </div>
         </div>
@@ -170,19 +157,14 @@
     <div class="multisteps-form__content bg-white" id="dvBurnValidation" style="display:none;">
         <input type="hidden" id="hdnBurnValidationId" />
         <div class="col-lg-10" style="float: left; border: 1px solid grey; border-radius: 12px; margin-bottom: 30px; margin-top: 10px; margin-left: 50px; margin-right: 50px;">
-            <div style="float: left; margin-top: 20px;" class="col-md-4 col-lg-4">
-                Billing Partner Name
-                @Html.DropDownListFor(model => model.billingPartnerId, new SelectList(Model.billingpartners, "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input40", @id = "ddlBillingPartner" })
-            </div>
+           
             <div style="float: left; margin-top: 20px; margin-bottom: 20px;" class="col-md-4 col-lg-4">
                 Mobile No <input type="text" id="txtMobileNo4" class="input50" />
             </div>
-            <div style="float: left; margin-top: 20px; margin-bottom: 20px;" class="col-md-4 col-lg-4">
-                CounterId <input type="text" id="txtCounterId4" class="input50" />
-            </div>
+            
             <div style="float: left; margin-top: 20px; margin-bottom: 20px;" class="col-md-12 col-lg-12">
-                Invoice No <input type="text" id="txtInvoiceNo" class="input50" style="margin-bottom: 10px; margin-right: 50px;" />
-                Invoice Amt<input type="text" id="txtInvoiceAmt" class="input50" style="margin-bottom: 10px; margin-right: 50px;" />
+                Invoice No <input type="text" id="txtInvoiceNo4"class="input50" style="margin-bottom: 10px; margin-right: 50px;" />
+                Invoice Amt<input type="text" id="txtInvoiceAmt4" class="input50" style="margin-bottom: 10px; margin-right: 50px;" />
                 Date Time <input type="date" id="txtDatetime4" class="input50" style="margin-bottom:10px; margin-right:20px;">
             </div>
         </div>
@@ -209,19 +191,14 @@
     <div class="multisteps-form__content bg-white" id="dvBurn" style="display:none;">
         <input type="hidden" id="hdnBurnId" />
         <div class="col-lg-10" style="float: left; border: 1px solid grey; border-radius: 12px; margin-bottom: 30px; margin-top: 10px; margin-left: 50px; margin-right: 50px;">
-            <div style="float: left; margin-top: 20px;" class="col-md-4 col-lg-4">
-                Billing Partner Name
-                @Html.DropDownListFor(model => model.billingPartnerId, new SelectList(Model.billingpartners, "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input40", @id = "ddlBillingPartner" })
-            </div>
+            
             <div style="float: left; margin-top: 20px; margin-bottom: 20px;" class="col-md-4 col-lg-4">
                 Mobile No <input type="text" id="txtMobileNo5" class="input50" />
             </div>
-            <div style="float: left; margin-top: 20px; margin-bottom: 20px;" class="col-md-4 col-lg-4">
-                CounterId <input type="text" id="txtCounterId5" class="input50" />
-            </div>
+           
             <div style="float: left; margin-top: 20px; margin-bottom: 20px;" class="col-md-12 col-lg-12">
-                Invoice No <input type="text" id="txtInvoiceNo" class="input50" style="margin-bottom: 10px; margin-right: 50px;" />
-                Invoice Amt<input type="text" id="txtInvoiceAmt" class="input50" style="margin-bottom: 10px; margin-right: 50px;" />
+                Invoice No <input type="text" id="txtInvoiceNo5" class="input50" style="margin-bottom: 10px; margin-right: 50px;" />
+                Invoice Amt<input type="text" id="txtInvoiceAmt5" class="input50" style="margin-bottom: 10px; margin-right: 50px;" />
                 Date Time <input type="date" id="txtDatetime5" class="input50" style="margin-bottom:10px; margin-right:20px;">
             </div>
         </div>
@@ -248,19 +225,14 @@
     <div class="multisteps-form__content bg-white" id="dvCancel" style="display:none;">
         <input type="hidden" id="hdnCancelId" />
         <div class="col-lg-10" style="float: left; border: 1px solid grey; border-radius: 12px; margin-bottom: 30px; margin-top: 10px; margin-left: 50px; margin-right: 50px;">
-            <div style="float: left; margin-top: 20px;" class="col-md-4 col-lg-4">
-                Billing Partner Name
-                @Html.DropDownListFor(model => model.billingPartnerId, new SelectList(Model.billingpartners, "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input40", @id = "ddlBillingPartner" })
-            </div>
+            
             <div style="float: left; margin-top: 20px; margin-bottom: 20px;" class="col-md-4 col-lg-4">
                 Mobile No <input type="text" id="txtMobileNo6" class="input50" />
             </div>
-            <div style="float: left; margin-top: 20px; margin-bottom: 20px;" class="col-md-4 col-lg-4">
-                CounterId <input type="text" id="txtCounterId6" class="input50" />
-            </div>
+            
             <div style="float: left; margin-top: 20px; margin-bottom: 20px;" class="col-md-12 col-lg-12">
-                Invoice No <input type="text" id="txtInvoiceNo" class="input50" style="margin-bottom: 10px; margin-right: 50px;" />
-                Invoice Amt<input type="text" id="txtInvoiceAmt" class="input50" style="margin-bottom: 10px; margin-right: 50px;" />
+                Invoice No <input type="text" id="txtInvoiceNo6" class="input50" style="margin-bottom: 10px; margin-right: 50px;" />
+                Invoice Amt<input type="text" id="txtInvoiceAmt6" class="input50" style="margin-bottom: 10px; margin-right: 50px;" />
                 Date Time <input type="date" id="txtDatetime6" class="input50" style="margin-bottom:10px; margin-right:20px;">
             </div>
         </div>
@@ -287,19 +259,14 @@
     <div class="multisteps-form__content bg-white" id="dvSendOtp" style="display:none;">
         <input type="hidden" id="hdnSendOtpId" />
         <div class="col-lg-10" style="float: left; border: 1px solid grey; border-radius: 12px; margin-bottom: 30px; margin-top: 10px; margin-left: 50px; margin-right: 50px;">
-            <div style="float: left; margin-top: 20px;" class="col-md-4 col-lg-4">
-                Billing Partner Name
-                @Html.DropDownListFor(model => model.billingPartnerId, new SelectList(Model.billingpartners, "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input40", @id = "ddlBillingPartner" })
-            </div>
+            
             <div style="float: left; margin-top: 20px; margin-bottom: 20px;" class="col-md-4 col-lg-4">
                 Mobile No <input type="text" id="txtMobileNo7" class="input50" />
             </div>
-            <div style="float: left; margin-top: 20px; margin-bottom: 20px;" class="col-md-4 col-lg-4">
-                CounterId <input type="text" id="txtCounterId7" class="input50" />
-            </div>
+          
             <div style="float: left; margin-top: 20px; margin-bottom: 20px;" class="col-md-12 col-lg-12">
-                Invoice No <input type="text" id="txtInvoiceNo" class="input50" style="margin-bottom: 10px; margin-right: 50px;" />
-                Invoice Amt<input type="text" id="txtInvoiceAmt" class="input50" style="margin-bottom: 10px; margin-right: 50px;" />
+                Invoice No <input type="text" id="txtInvoiceNo7" class="input50" style="margin-bottom: 10px; margin-right: 50px;" />
+                Invoice Amt<input type="text" id="txtInvoiceAmt7" class="input50" style="margin-bottom: 10px; margin-right: 50px;" />
                 Date Time <input type="date" id="txtDatetime7" class="input50" style="margin-bottom:10px; margin-right:20px;">
             </div>
         </div>
@@ -505,6 +472,116 @@
             }
             $("#txtRequestPacket2").val(RequestPacket);
             oldCounterId2 = counterId;
+        }
+
+        if ($('#rbtnEarn').is(':checked')) {
+            var RequestPacket = $("#txtRequestPacket3").val();
+            if (oldCounterId3 == "") {
+                flag = false;
+            }
+            else {
+                flag = true;
+            }
+            if (flag) {
+                var strInReplace = "<CounterId>" + oldCounterId3 + "</CounterId>";
+                var strToReplace = "<CounterId>" + counterId + "</CounterId>";
+                RequestPacket = RequestPacket.replace(strInReplace, strToReplace);
+            }
+            else {
+                var strInReplace = "<CounterId></CounterId>";
+                var strToReplace = "<CounterId>" + counterId + "</CounterId>";
+                RequestPacket = RequestPacket.replace(strInReplace, strToReplace);
+            }
+            $("#txtRequestPacket3").val(RequestPacket);
+            oldCounterId3 = counterId;
+        }
+
+        if ($('#rbtnBurnValidation').is(':checked')) {
+            var RequestPacket = $("#txtRequestPacket4").val();
+            if (oldCounterId4 == "") {
+                flag = false;
+            }
+            else {
+                flag = true;
+            }
+            if (flag) {
+                var strInReplace = "<CounterId>" + oldCounterId4 + "</CounterId>";
+                var strToReplace = "<CounterId>" + counterId + "</CounterId>";
+                RequestPacket = RequestPacket.replace(strInReplace, strToReplace);
+            }
+            else {
+                var strInReplace = "<CounterId></CounterId>";
+                var strToReplace = "<CounterId>" + counterId + "</CounterId>";
+                RequestPacket = RequestPacket.replace(strInReplace, strToReplace);
+            }
+            $("#txtRequestPacket4").val(RequestPacket);
+            oldCounterId4 = counterId;
+        }
+
+        if ($('#rbtnBurn').is(':checked')) {
+            var RequestPacket = $("#txtRequestPacket5").val();
+            if (oldCounterId5 == "") {
+                flag = false;
+            }
+            else {
+                flag = true;
+            }
+            if (flag) {
+                var strInReplace = "<CounterId>" + oldCounterId5 + "</CounterId>";
+                var strToReplace = "<CounterId>" + counterId + "</CounterId>";
+                RequestPacket = RequestPacket.replace(strInReplace, strToReplace);
+            }
+            else {
+                var strInReplace = "<CounterId></CounterId>";
+                var strToReplace = "<CounterId>" + counterId + "</CounterId>";
+                RequestPacket = RequestPacket.replace(strInReplace, strToReplace);
+            }
+            $("#txtRequestPacket5").val(RequestPacket);
+            oldCounterId5 = counterId;
+        }
+
+        if ($('#rbtnCancel').is(':checked')) {
+            var RequestPacket = $("#txtRequestPacket6").val();
+            if (oldCounterId6 == "") {
+                flag = false;
+            }
+            else {
+                flag = true;
+            }
+            if (flag) {
+                var strInReplace = "<CounterId>" + oldCounterId6 + "</CounterId>";
+                var strToReplace = "<CounterId>" + counterId + "</CounterId>";
+                RequestPacket = RequestPacket.replace(strInReplace, strToReplace);
+            }
+            else {
+                var strInReplace = "<CounterId></CounterId>";
+                var strToReplace = "<CounterId>" + counterId + "</CounterId>";
+                RequestPacket = RequestPacket.replace(strInReplace, strToReplace);
+            }
+            $("#txtRequestPacket6").val(RequestPacket);
+            oldCounterId6 = counterId;
+        }
+
+        if ($('#rbtnSendOtp').is(':checked')) {
+            var RequestPacket = $("#txtRequestPacket7").val();
+            if (oldCounterId7 == "") {
+                flag = false;
+            }
+            else {
+                flag = true;
+            }
+            if (flag) {
+                var strInReplace = "<CounterId>" + oldCounterId7 + "</CounterId>";
+                var strToReplace = "<CounterId>" + counterId + "</CounterId>";
+                RequestPacket = RequestPacket.replace(strInReplace, strToReplace);
+            }
+            else {
+                var strInReplace = "<CounterId></CounterId>";
+                var strToReplace = "<CounterId>" + counterId + "</CounterId>";
+                RequestPacket = RequestPacket.replace(strInReplace, strToReplace);
+            }
+            $("#txtRequestPacket7").val(RequestPacket);
+            oldCounterId7 = counterId;
         }
 
     }
