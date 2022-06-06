@@ -21,8 +21,39 @@ using System.Data;
 
 namespace BOTS_BL.Repository
 {
-    class TestingModuleRepository
+    public class TestingModuleRepository
     {
         Exceptions newexception = new Exceptions();
+
+        public string GetLiveGroupId(string OBRGroupId)
+        {
+            string groupId = string.Empty;
+            using (var context = new CommonDBContext())
+            {
+                groupId = context.GroupIdMappings.Where(x => x.OnboardingGroupId == OBRGroupId).Select(y => y.LiveGroupId).FirstOrDefault();
+            }
+            return groupId;
+        }
+        public List<SelectListItem> GetBillingPartners(string GroupId)
+        {
+            List<SelectListItem> lstData = new List<SelectListItem>();
+            using (var context = new CommonDBContext())
+            {
+                var BPIds = context.BOTS_TblRetailMaster.Where(x => x.GroupId == GroupId).Select(y => y.BillingPartner).ToList();
+
+                foreach (var item in BPIds)
+                {
+                    var id = Convert.ToInt32(item);
+                    var BPName = context.tblBillingPartners.Where(x => x.BillingPartnerId == id).Select(y => y.BillingPartnerName).FirstOrDefault();
+                    lstData.Add(new SelectListItem
+                    {
+                        Text = BPName,
+                        Value = Convert.ToString(BPName)
+                    });
+                }
+            }
+
+            return lstData;
+        }
     }
 }

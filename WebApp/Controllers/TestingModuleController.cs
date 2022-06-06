@@ -27,14 +27,28 @@ namespace WebApp.Controllers
     public class TestingModuleController : Controller
     {
         CustomerRepository CR = new CustomerRepository();
+        ReportsRepository RR = new ReportsRepository();
+        TestingModuleRepository TMR = new TestingModuleRepository();
         Exceptions newexception = new Exceptions();
         // GET: TestingModule
         public ActionResult Index(string groupId)
         {
             TestingModuleViewModel TMV = new TestingModuleViewModel();
-            var billingpartners = CR.GetBillingPartner();
-            ViewBag.GroupId = groupId;
-            ViewBag.BillingPartners = billingpartners;
+            TMV = GetXMLData();
+            CommonFunctions comm = new CommonFunctions();
+            groupId = comm.DecryptString(groupId);
+            TMV.billingpartners = TMR.GetBillingPartners(groupId);
+
+            var liveGroupId = TMR.GetLiveGroupId(groupId);
+            var connectionString = CR.GetCustomerConnString(liveGroupId);
+            TMV.lstOutlets = RR.GetOutletList(liveGroupId, connectionString);
+
+            return View(TMV);
+        }
+
+        public TestingModuleViewModel GetXMLData()
+        {
+            TestingModuleViewModel objTMV = new TestingModuleViewModel();
             XmlDocument doc = new XmlDocument();
             //doc.Load("E:\\Projects\\NEWBOTS\\WebApp\\APIPackets.xml");
             var path = ConfigurationManager.AppSettings["PacketXMLPath"].ToString();
@@ -42,36 +56,37 @@ namespace WebApp.Controllers
 
             //Enrollnment
             XmlNode node = doc.DocumentElement.SelectSingleNode("/packets/Enrollnment");
-            TMV.RequestPacketEnrollnment = node.InnerXml;
+            objTMV.RequestPacketEnrollnment = node.InnerXml;
 
             //Enrollnment With Earn
             XmlNode node2 = doc.DocumentElement.SelectSingleNode("/packets/EnrolnmentWithEarn");
-            TMV.RequestPacketEnrollnmentWithEarn = node2.InnerXml;
+            objTMV.RequestPacketEnrollnmentWithEarn = node2.InnerXml;
 
             //Earn
             XmlNode node3 = doc.DocumentElement.SelectSingleNode("/packets/Earn");
-            TMV.RequestPacketEarn = node3.InnerXml;
+            objTMV.RequestPacketEarn = node3.InnerXml;
 
             //Burn Validation
             XmlNode node4 = doc.DocumentElement.SelectSingleNode("/packets/BurnValidation");
-            TMV.RequestPacketBurnValidation = node4.InnerXml;
+            objTMV.RequestPacketBurnValidation = node4.InnerXml;
 
             //Burn
             XmlNode node5 = doc.DocumentElement.SelectSingleNode("/packets/Burn");
-            TMV.RequestPacketBurn = node5.InnerXml;
+            objTMV.RequestPacketBurn = node5.InnerXml;
 
             //Cancel
             XmlNode node6 = doc.DocumentElement.SelectSingleNode("/packets/Cancel");
-            TMV.RequestPacketCancel = node6.InnerXml;
+            objTMV.RequestPacketCancel = node6.InnerXml;
 
             //SendOtp
             XmlNode node7 = doc.DocumentElement.SelectSingleNode("/packets/SendOTP");
-            TMV.RequestPacketSendOTP = node7.InnerXml;
+            objTMV.RequestPacketSendOTP = node7.InnerXml;
 
 
             XmlNode node1 = doc.DocumentElement.SelectSingleNode("/packets/url/EnrollnmentURL");
-            TMV.RequestURL = node1.InnerXml;
-            return View(TMV);
+            objTMV.RequestURL = node1.InnerXml;
+
+            return objTMV;
         }
 
         public ActionResult GetResponse(string RequestPacket, string RequestURL)
@@ -96,12 +111,29 @@ namespace WebApp.Controllers
             {
                 Stream responseStream = response.GetResponseStream();
                 responseStr = new StreamReader(responseStream).ReadToEnd();
-
             }
-
-
-
             return new JsonResult() { Data = responseStr, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
+
+        public ActionResult ResetSection(string Id)
+        {
+            TestingModuleViewModel TMV = new TestingModuleViewModel();
+            if (Convert.ToInt32(Id) == 1)
+            {
+                XmlDocument doc = new XmlDocument();
+                //doc.Load("E:\\Projects\\NEWBOTS\\WebApp\\APIPackets.xml");
+                var path = ConfigurationManager.AppSettings["PacketXMLPath"].ToString();
+                doc.Load(path);
+
+                //Enrollnment
+                XmlNode node = doc.DocumentElement.SelectSingleNode("/packets/Enrollnment");
+                TMV.RequestPacketEnrollnment = node.InnerXml;
+                XmlNode node1 = doc.DocumentElement.SelectSingleNode("/packets/url/EnrollnmentURL");
+                TMV.RequestURL = node1.InnerXml;
+            }
+            return Json(TMV, JsonRequestBehavior.AllowGet);
+        }
+
+
     }
 }

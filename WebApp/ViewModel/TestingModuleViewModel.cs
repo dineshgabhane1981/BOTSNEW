@@ -10,7 +10,8 @@ namespace WebApp.ViewModel
 {
     public class TestingModuleViewModel
     {
-        public int billingPartnerId { get; set; }
+        public String billingPartnerId { get; set; }
+        public String outletId { get; set; }
 
         public string RequestPacketEnrollnment { get; set; }        
         public string RequestPacketEnrollnmentWithEarn { get; set; } 
@@ -20,5 +21,9 @@ namespace WebApp.ViewModel
         public string RequestPacketCancel { get; set; }
         public string RequestPacketSendOTP { get; set; }
         public string RequestURL { get; set; }
+
+
+        public List<SelectListItem> billingpartners { get; set; }
+        public List<SelectListItem> lstOutlets { get; set; }
     }
 }
