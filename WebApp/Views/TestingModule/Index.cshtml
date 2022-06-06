@@ -62,9 +62,9 @@
     <div class="multisteps-form__content bg-white" id="dvEnrlment">
         <input type="hidden" id="hdnEnrlmentId" />
         <div class="col-lg-12" style="float: left; border: 1px solid grey; border-radius: 12px; margin-bottom: 10px; margin-top: 10px; ">
-
-            <div style="float: left; margin-top: 20px; margin-bottom: 20px;" class="col-md-12 col-lg-12">
-                Date Time <input type="date" id="txtDatetime1" class="input50" style="margin-bottom:10px; margin-right:20px;" />
+             
+            <div class=' col-md-4 col-lg-4' id='datetimepicker1' style="float: left; margin-top: 20px; margin-bottom: 20px;">
+                Date Time <input type="datetime-local" id="txtDatetime1" class="input80" style="margin-bottom:10px; margin-right:20px;" />          
             </div>
         </div>
         <div class="col-lg-12" style="float: left; border: 1px solid grey; border-radius: 12px; margin-bottom: 10px; margin-top: 10px;">
@@ -303,16 +303,6 @@
         ShowHideTxnTypeSection("dvEnrlmentWithEarn");
        });
 
-        var now = new Date(),
-           minDate = now.toISOString().substring(0, 10);
-       $('#txtDatetime1').prop('min', minDate);
-       $('#txtDatetime2').prop('min', minDate);
-       $('#txtDatetime3').prop('min', minDate);
-       $('#txtDatetime4').prop('min', minDate);
-       $('#txtDatetime5').prop('min', minDate);
-       $('#txtDatetime6').prop('min', minDate);
-       $('#txtDatetime7').prop('min', minDate);
-
        $('#rbtnEarn').click(function () {
            ShowHideTxnTypeSection("dvEarn");
        });
@@ -379,39 +369,57 @@
            CheckAPI(fromId, toId, url);
        });
 
+       //var now = new Date(),
+       //    minDate = now.toISOString().substring(0, 10);
+       //$('#txtDatetime1').prop('min', minDate);
+       //$('#txtDatetime2').prop('min', minDate);
+       //$('#txtDatetime3').prop('min', minDate);
+       //$('#txtDatetime4').prop('min', minDate);
+       //$('#txtDatetime5').prop('min', minDate);
+       //$('#txtDatetime6').prop('min', minDate);
+       //$('#txtDatetime7').prop('min', minDate);
+
+       var today = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
+       $('#txtDatetime1').datetimepicker({
+           dateFormat: "dd-mm-yyyy",
+           minDate: today,
+       });
+      
        $("#btnReset").click(function () {
            ResetAll();
        });
 
-       //$("#txtMobileNo1").focusout(function () {
-       //    UpdatePacket1();
-       //});
+       $("#txtDatetime1").focusout(function () {
+         UpdateDatetime1();
+       });
 
-       //$("#txtMobileNo2").focusout(function () {
-       //    UpdatePacket2();
-       //});
 
-       //$("#txtMobileNo3").focusout(function () {
-       //    UpdatePacket3();
-       //});
-
-       //$("#txtMobileNo4").focusout(function () {
-       //    UpdatePacket4();
-       //});
-
-       //$("#txtMobileNo5").focusout(function () {
-       //    UpdatePacket5();
-       //});
-
-       //$("#txtMobileNo6").focusout(function () {
-       //    UpdatePacket6();
-       //});
-
-       //$("#txtMobileNo7").focusout(function () {
-       //    UpdatePacket7();
-       //});
    });
 
+    function UpdateDatetime1() {
+        var RequestPacket = $("#txtRequestPacket1").val();
+        var Datetime = $("#txtDatetime1").val();
+        var oldDatetime1 = "";
+        if (oldDatetime1 == "") {
+            flag = false;
+        }
+        else {
+            flag = true; 
+        }
+
+        if (flag) {
+            var strInReplace = "<Datetime>" + oldDatetime1 + "</Datetime>";
+            var strToReplace = "<Datetime>" + Datetime + "</Datetime>";
+            RequestPacket = RequestPacket.replace(strInReplace, strToReplace);
+        }
+        else {
+            var strInReplace = "<Datetime></Datetime>";
+            var strToReplace = "<Datetime>" + Datetime + "</Datetime>";
+            RequestPacket = RequestPacket.replace(strInReplace, strToReplace);
+        }
+        $("#txtRequestPacket1").val(RequestPacket);
+        oldDatetime1 = Datetime;
+    }
 
 
     function ReplaceCounterId() {
@@ -625,7 +633,6 @@
 
         if ($('#rbtnEarn').is(':checked')) {
             var RequestPacket = $("#txtRequestPacket3").val();
-            //var mobileNo3 = $("#txtMobileNo3").val();
             if (oldMobileNo3 == "") {
                 flag = false;
             }
@@ -648,8 +655,7 @@
         }
 
         if ($('#rbtnBurnValidation').is(':checked')) {
-            var RequestPacket = $("#txtRequestPacket4").val();
-            //var mobileNo4 = $("#txtMobileNo4").val();
+            var RequestPacket = $("#txtRequestPacket4").val(); 
             if (oldMobileNo4 == "") {
                 flag = false;
             }
@@ -673,7 +679,6 @@
 
         if ($('#rbtnBurn').is(':checked')) {
             var RequestPacket = $("#txtRequestPacket5").val();
-            //var mobileNo5 = $("#txtMobileNo5").val();
             if (oldMobileNo5 == "") {
                 flag = false;
             }
@@ -697,7 +702,6 @@
 
         if ($('#rbtnCancel').is(':checked')) {
             var RequestPacket = $("#txtRequestPacket6").val();
-            var mobileNo6 = $("#txtMobileNo6").val();
             if (oldMobileNo6 == "") {
                 flag = false;
             }
@@ -721,7 +725,6 @@
 
         if ($('#rbtnSendOtp').is(':checked')) {
             var RequestPacket = $("#txtRequestPacket7").val();
-            //var mobileNo7 = $("#txtMobileNo7").val();
             if (oldMobileNo7 == "") {
                 flag = false;
             }
@@ -746,13 +749,46 @@
 
     function ResetAll() {
         if ($('#rbtnEnrlment').is(':checked')) {
-            $("#txtMobileNo1").val('');
-            $("#txtCounterId1").val('');
-            $("#txtInvoiceNo1").val('');
-            $("#txtInvoiceAmt1").val('');
             $("#txtDatetime1").val('');
             ResetSection("1");
         }
+        if ($('#rbtnEnrlmntWithEarn').is(':checked')) {
+            $("#txtInvoiceNo2").val('');
+            $("#txtInvoiceAmt2").val('');
+            $("#txtDatetime2").val('');
+            ResetSection("2");
+        }
+
+        if ($('#rbtnEarn').is(':checked')) {
+            $("#txtInvoiceNo3").val('');
+            $("#txtInvoiceAmt3").val('');
+            $("#txtDatetime3").val('');
+            ResetSection("3");
+        }
+        if ($('#rbtnBurnValidation').is(':checked')) {
+            $("#txtInvoiceNo4").val('');
+            $("#txtInvoiceAmt4").val('');
+            $("#txtDatetime4").val('');
+            ResetSection("4");
+        }
+        if ($('#rbtnBurn').is(':checked')) {
+            $("#txtInvoiceNo5").val('');
+            $("#txtInvoiceAmt5").val('');
+            $("#txtDatetime5").val('');
+            ResetSection("5");
+        }
+        if ($('#rbtnCancel').is(':checked')) {
+            $("#txtInvoiceNo6").val('');
+            $("#txtInvoiceAmt6").val('');
+            $("#txtDatetime6").val('');
+            ResetSection("6");
+        }
+        if ($('#rbtnSendOtp').is(':checked')) {
+            $("#txtInvoiceNo7").val('');
+            $("#txtInvoiceAmt7").val('');
+            $("#txtDatetime7").val('');
+            ResetSection("7");
+        }   
     }
 
     function ResetSection(id) {
@@ -781,7 +817,36 @@
             $("#txtRequestPacketURL1").val(data.RequestURL);
             $("#txtResponsePacket1").val('');
         }
-
+        if (id == "2") {
+            $("#txtRequestPacket2").val(data.RequestPacketEnrollnmentWithEarn);
+            $("#txtRequestPacketURL2").val(data.RequestURL);
+            $("#txtResponsePacket2").val('');
+        }
+        if (id == "3") {
+            $("#txtRequestPacket3").val(data.RequestPacketEarn);
+            $("#txtRequestPacketURL3").val(data.RequestURL);
+            $("#txtResponsePacket3").val('');
+        }
+        if (id == "4") {
+            $("#txtRequestPacket4").val(data.RequestPacketBurnValidation);
+            $("#txtRequestPacketURL4").val(data.RequestURL);
+            $("#txtResponsePacket4").val('');
+        }
+        if (id == "5") {
+            $("#txtRequestPacket5").val(data.RequestPacketBurn);
+            $("#txtRequestPacketURL5").val(data.RequestURL);
+            $("#txtResponsePacket5").val('');
+        }
+        if (id == "6") {
+            $("#txtRequestPacket6").val(data.RequestPacketCancel);
+            $("#txtRequestPacketURL6").val(data.RequestURL);
+            $("#txtResponsePacket6").val('');
+        }
+        if (id == "7") {
+            $("#txtRequestPacket7").val(data.RequestPacketSendOTP);
+            $("#txtRequestPacketURL7").val(data.RequestURL);
+            $("#txtResponsePacket7").val('');
+        }
     }
 
     function ShowHideTxnTypeSection(Id) {
@@ -796,175 +861,6 @@
         $("#" + Id).show();
         ReplaceCounterId();
     }
-
-    ////function UpdatePacket1() {
-    ////    var RequestPacket = $("#txtRequestPacket1").val();
-    ////    var mobileNo1 = $("#txtMobileNo1").val();
-    ////    if (oldMobileNo == "") {
-    ////        flag = false;
-    ////    }
-    ////    else {
-    ////        flag = true;
-    ////    }
-
-    ////    if (flag) {
-    ////        var strInReplace = "<MobileNo>" + oldMobileNo + "</MobileNo>";
-    ////        var strToReplace = "<MobileNo>" + mobileNo1 + "</MobileNo>";
-    ////        RequestPacket = RequestPacket.replace(strInReplace, strToReplace);
-    ////    }
-    ////    else {
-    ////        var strInReplace = "<MobileNo></MobileNo>";
-    ////        var strToReplace = "<MobileNo>" + mobileNo1 + "</MobileNo>";
-    ////        RequestPacket = RequestPacket.replace(strInReplace, strToReplace);
-    ////    }
-    ////    $("#txtRequestPacket1").val(RequestPacket);
-    ////    oldMobileNo = mobileNo1;
-    ////}
-
-    ////function UpdatePacket2() {
-    ////    var RequestPacket = $("#txtRequestPacket2").val();
-    ////    var mobileNo2 = $("#txtMobileNo2").val();
-    ////    if (oldMobileNo == "") {
-    ////        flag = false;
-    ////    }
-    ////    else {
-    ////        flag = true;
-    ////    }
-
-    ////    if (flag) {
-    ////        var strInReplace = "<MobileNo>" + oldMobileNo + "</MobileNo>";
-    ////        var strToReplace = "<MobileNo>" + mobileNo2 + "</MobileNo>";
-    ////        RequestPacket = RequestPacket.replace(strInReplace, strToReplace);
-    ////    }
-    ////    else {
-    ////        var strInReplace = "<MobileNo></MobileNo>";
-    ////        var strToReplace = "<MobileNo>" + mobileNo2 + "</MobileNo>";
-    ////        RequestPacket = RequestPacket.replace(strInReplace, strToReplace);
-    ////    }
-    ////    $("#txtRequestPacket2").val(RequestPacket);
-    ////    oldMobileNo = mobileNo2;
-    ////}
-
-    //function UpdatePacket3() {
-    //    var RequestPacket = $("#txtRequestPacket3").val();
-    //    var mobileNo3 = $("#txtMobileNo3").val();
-    //    if (oldMobileNo == "") {
-    //        flag = false;
-    //    }
-    //    else {
-    //        flag = true;
-    //    }
-
-    //    if (flag) {
-    //        var strInReplace = "<MobileNo>" + oldMobileNo + "</MobileNo>";
-    //        var strToReplace = "<MobileNo>" + mobileNo3 + "</MobileNo>";
-    //        RequestPacket = RequestPacket.replace(strInReplace, strToReplace);
-    //    }
-    //    else {
-    //        var strInReplace = "<MobileNo></MobileNo>";
-    //        var strToReplace = "<MobileNo>" + mobileNo3 + "</MobileNo>";
-    //        RequestPacket = RequestPacket.replace(strInReplace, strToReplace);
-    //    }
-    //    $("#txtRequestPacket3").val(RequestPacket);
-    //    oldMobileNo = mobileNo3;
-    //}
-
-    //function UpdatePacket4() {
-    //    var RequestPacket = $("#txtRequestPacket4").val();
-    //    var mobileNo4 = $("#txtMobileNo4").val();
-    //    if (oldMobileNo == "") {
-    //        flag = false;
-    //    }
-    //    else {
-    //        flag = true;
-    //    }
-
-    //    if (flag) {
-    //        var strInReplace = "<MobileNo>" + oldMobileNo + "</MobileNo>";
-    //        var strToReplace = "<MobileNo>" + mobileNo4 + "</MobileNo>";
-    //        RequestPacket = RequestPacket.replace(strInReplace, strToReplace);
-    //    }
-    //    else {
-    //        var strInReplace = "<MobileNo></MobileNo>";
-    //        var strToReplace = "<MobileNo>" + mobileNo4 + "</MobileNo>";
-    //        RequestPacket = RequestPacket.replace(strInReplace, strToReplace);
-    //    }
-    //    $("#txtRequestPacket4").val(RequestPacket);
-    //    oldMobileNo = mobileNo4;
-    //}
-
-    //function UpdatePacket5() {
-    //    var RequestPacket = $("#txtRequestPacket5").val();
-    //    var mobileNo5 = $("#txtMobileNo5").val();
-    //    if (oldMobileNo == "") {
-    //        flag = false;
-    //    }
-    //    else {
-    //        flag = true;
-    //    }
-
-    //    if (flag) {
-    //        var strInReplace = "<MobileNo>" + oldMobileNo + "</MobileNo>";
-    //        var strToReplace = "<MobileNo>" + mobileNo5 + "</MobileNo>";
-    //        RequestPacket = RequestPacket.replace(strInReplace, strToReplace);
-    //    }
-    //    else {
-    //        var strInReplace = "<MobileNo></MobileNo>";
-    //        var strToReplace = "<MobileNo>" + mobileNo5 + "</MobileNo>";
-    //        RequestPacket = RequestPacket.replace(strInReplace, strToReplace);
-    //    }
-    //    $("#txtRequestPacket5").val(RequestPacket);
-    //    oldMobileNo = mobileNo5;
-    //}
-
-    //function UpdatePacket6() {
-    //    var RequestPacket = $("#txtRequestPacket6").val();
-    //    var mobileNo6 = $("#txtMobileNo6").val();
-    //    if (oldMobileNo == "") {
-    //        flag = false;
-    //    }
-    //    else {
-    //        flag = true;
-    //    }
-
-    //    if (flag) {
-    //        var strInReplace = "<MobileNo>" + oldMobileNo + "</MobileNo>";
-    //        var strToReplace = "<MobileNo>" + mobileNo6 + "</MobileNo>";
-    //        RequestPacket = RequestPacket.replace(strInReplace, strToReplace);
-    //    }
-    //    else {
-    //        var strInReplace = "<MobileNo></MobileNo>";
-    //        var strToReplace = "<MobileNo>" + mobileNo6 + "</MobileNo>";
-    //        RequestPacket = RequestPacket.replace(strInReplace, strToReplace);
-    //    }
-    //    $("#txtRequestPacket6").val(RequestPacket);
-    //    oldMobileNo = mobileNo6;
-    //}
-
-    //function UpdatePacket7() {
-    //    var RequestPacket = $("#txtRequestPacket7").val();
-    //    var mobileNo7 = $("#txtMobileNo7").val();
-    //    if (oldMobileNo == "") {
-    //        flag = false;
-    //    }
-    //    else {
-    //        flag = true;
-    //    }
-
-    //    if (flag) {
-    //        var strInReplace = "<MobileNo>" + oldMobileNo + "</MobileNo>";
-    //        var strToReplace = "<MobileNo>" + mobileNo7 + "</MobileNo>";
-    //        RequestPacket = RequestPacket.replace(strInReplace, strToReplace);
-    //    }
-    //    else {
-    //        var strInReplace = "<MobileNo></MobileNo>";
-    //        var strToReplace = "<MobileNo>" + mobileNo7 + "</MobileNo>";
-    //        RequestPacket = RequestPacket.replace(strInReplace, strToReplace);
-    //    }
-    //    $("#txtRequestPacket7").val(RequestPacket);
-    //    oldMobileNo = mobileNo7;
-    //}
-
 
     function CheckAPI(requestId, responseId, apiurl1) {
         var RequestPacket = $("#" + requestId).val();
