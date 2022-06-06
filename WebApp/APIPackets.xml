@@ -5,7 +5,7 @@
 		<BOLOYALTY>
 			<TxnType>07</TxnType>
 			<TranSource>3</TranSource>
-			<Datetime>23052022213707</Datetime>
+			<Datetime></Datetime>
 			<CounterId></CounterId>
 			<BillingId>1</BillingId>
 			<MobileNo></MobileNo>
@@ -35,7 +35,7 @@
 		<BOLOYALTY>
 			<TxnType>03</TxnType>
 			<TranSource>3</TranSource>
-			<Datetime>24052022143903</Datetime>
+			<Datetime></Datetime>
 			<CounterId></CounterId>
 			<CustomerId>1504</CustomerId>
 			<BillingId>1</BillingId>
@@ -164,8 +164,8 @@
 		<BOLOYALTY>
 			<TxnType>03</TxnType>
 			<TranSource>3</TranSource>
-			<Datetime>24052022143903</Datetime>
-			<CounterId>1176100101</CounterId>
+			<Datetime></Datetime>
+			<CounterId></CounterId>
 			<CustomerId>1504</CustomerId>
 			<BillingId>1</BillingId>
 			<CustomerStatus>2</CustomerStatus>
@@ -294,7 +294,7 @@
 			<TxnType>04</TxnType>
 			<TranSource>3</TranSource>
 			<Datetime>24052022151650</Datetime>
-			<CounterId>1176100101</CounterId>
+			<CounterId></CounterId>
 			<BillingId>1</BillingId>
 			<BurnStatus>1</BurnStatus>
 			<MobileNo></MobileNo>
@@ -333,8 +333,8 @@
 		<BOLOYALTY>
 			<TxnType>04</TxnType>
 			<TranSource>3</TranSource>
-			<Datetime>24052022151751</Datetime>
-			<CounterId>1176100101</CounterId>
+			<Datetime></Datetime>
+			<CounterId></CounterId>
 			<BillingId>1</BillingId>
 			<BurnStatus>2</BurnStatus>
 			<MobileNo></MobileNo>
@@ -375,8 +375,8 @@
 		<BOLOYALTY>
 			<TxnType>06</TxnType>
 			<TranSource>3</TranSource>
-			<Datetime>24052022140229</Datetime>
-			<CounterId>1176100101</CounterId>
+			<Datetime></Datetime>
+			<CounterId></CounterId>
 			<BillingId>1</BillingId>
 			<MobileNo></MobileNo>
 			<CardNo></CardNo>
@@ -392,8 +392,8 @@
 	<BOLOYALTY> 
 	<TxnType>05</TxnType>  
 	<TranSource>3</TranSource>  
-	<Datetime>11022022144928</Datetime> 
-	<CounterId>1051100101</CounterId>  
+	<Datetime></Datetime> 
+	<CounterId></CounterId>  
 	<BillingId>1</BillingId>  
 	<MobileNo></MobileNo>  
 	<CardNo></CardNo> 
