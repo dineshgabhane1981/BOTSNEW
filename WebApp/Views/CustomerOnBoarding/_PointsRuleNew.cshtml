@@ -159,30 +159,33 @@
 </div>
       <h5>Burn Rule</h5>
 
-        <div class="col-md-6 col-lg-6" style="display: flex; margin-bottom:20px;margin-top:20px;">
-            <div class="col-md-6 col-lg-6">
-                Min Invoice Amount<br />
-                @Html.TextBoxFor(model => model.objBurnRuleConfig.MinInvoiceAmt, new { @class = "input50", @id = "txtMinBurnInvoiceAmt" })
-            </div>
-            <div class="col-md-6 col-lg-6">
-                Min Redeem Pts<br />
-                @Html.TextBoxFor(model => model.objBurnRuleConfig.MinRedeemPts, new { @class = "input50", @id = "txtMinRedeemPts" })
-            </div>
+      <div class="col-md-12 col-lg-12" style="display: flex; margin-bottom:20px;margin-top:20px;">
+          <div class="col-md-3 col-lg-3">
+              Min Invoice Amount<br />
+              @Html.TextBoxFor(model => model.objBurnRuleConfig.MinInvoiceAmt, new { @class = "input50", @id = "txtMinBurnInvoiceAmt" })
+          </div>
+
+          <div class="col-md-3 col-lg-3" style="margin-bottom: 20px;">
+              Min Threshhold Pts First Time<br />
+              @Html.TextBoxFor(model => model.objBurnRuleConfig.MinThreshholdPtsFisttime, new { @class = "input50", @id = "txtMinThreshholdPtsFisttime" })
+          </div>
+          <div class="col-md-3 col-lg-3" style="margin-bottom: 20px;">
+              Min Threshhold Pts Subsequent<br />
+              @Html.TextBoxFor(model => model.objBurnRuleConfig.MinThreshholdPtsSubsequent, new { @class = "input50", @id = "txtMinThreshholdPtsSubsequent" })
+          </div>
+          <div class="col-md-3 col-lg-3">
+              Min Redeem Pts<br />
+              @Html.TextBoxFor(model => model.objBurnRuleConfig.PercentageToRedeemPts, new { @class = "input50", @id = "txtPercentageToRedeemPts" })
+          </div>
+      </div>
+        <div class="col-md-12 col-lg-12" style="display: flex;">
+            
         </div>
-        <div class="col-md-6 col-lg-6" style="display: flex;">
-            <div class="col-md-6 col-lg-6" style="margin-bottom: 20px;">
-                Min Threshhold Pts First Time<br />
-                @Html.TextBoxFor(model => model.objBurnRuleConfig.MinThreshholdPtsFisttime, new { @class = "input50", @id = "txtMinThreshholdPtsFisttime" })
-            </div>
-            <div class="col-md-6 col-lg-6" style="margin-bottom: 20px;">
-                Min Threshhold Pts Subsequent<br />
-                @Html.TextBoxFor(model => model.objBurnRuleConfig.MinThreshholdPtsSubsequent, new { @class = "input50", @id = "txtMinThreshholdPtsSubsequent" })
-            </div>
-        </div>
-        <div class="col-md-6 col-lg-6" style="margin-top:20px;padding-left:30px;">
+        <div class="col-md-9 col-lg-9" style="margin-top:20px;padding-left:30px;">
             Partial Earn
-            @Html.RadioButtonFor(model => model.objBurnRuleConfig.PartialEarn, "1", new { @id = "rbtnPartialEarn1", @class = "rbtnClass", @Checked = "checked" }) Yes
-            @Html.RadioButtonFor(model => model.objBurnRuleConfig.PartialEarn, "0", new { @id = "rbtnPartialEarn0", @class = "rbtnClass" }) No
+            @Html.RadioButtonFor(model => model.objBurnRuleConfig.PartialEarn, "FullEarn", new { @id = "rbtnPartialEarn1", @class = "rbtnClass", @Checked = "checked" }) Full earn while burn
+            @Html.RadioButtonFor(model => model.objBurnRuleConfig.PartialEarn, "PartialEarn", new { @id = "rbtnPartialEarn2", @class = "rbtnClass" }) Partial Earn while burn
+            @Html.RadioButtonFor(model => model.objBurnRuleConfig.PartialEarn, "NoPoints", new { @id = "rbtnPartialEarn3", @class = "rbtnClass" }) No Points
         </div>
         <div id="dvBlockBurn" class="col-md-6 col-lg-6" style="margin-left: 30px; margin-top: 30px; border:1px solid lightgrey;border-radius:5px;">
             <b style="padding-left:10px;">Product Code for Blocking</b>
@@ -473,15 +476,18 @@
         item["RuleId"] = $("#hdnBurnRuleId").val();
         item["GroupId"] = $("#hdnGroupID").val();
         item["MinInvoiceAmt"] = $("#txtMinBurnInvoiceAmt").val();
-        item["MinRedeemPts"] = $("#txtMinRedeemPts").val();
+        item["PercentageToRedeemPts"] = $("#txtPercentageToRedeemPts").val();
         item["MinThreshholdPtsFisttime"] = $("#txtMinThreshholdPtsFisttime").val();
         item["MinThreshholdPtsSubsequent"] = $("#txtMinThreshholdPtsSubsequent").val();
         item["PartialEarn"] = false;
         if ($("#rbtnPartialEarn1").is(":checked")) {
-            item["PartialEarn"] = true;
+            item["PartialEarn"] = "FullEarn";
         }
-        if ($("#rbtnPartialEarn0").is(":checked")) {
-            item["PartialEarn"] = false;
+        if ($("#rbtnPartialEarn2").is(":checked")) {
+            item["PartialEarn"] = "PartialEarn";
+        }
+        if ($("#rbtnPartialEarn3").is(":checked")) {
+            item["PartialEarn"] = "NoPoints";
         }
         item["IsProductCodeBlocking"] = false;
         if ($("#rbtnProductBlockingB").is(":checked")) {

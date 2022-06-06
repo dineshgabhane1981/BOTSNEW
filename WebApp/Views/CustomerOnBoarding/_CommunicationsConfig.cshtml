@@ -74,7 +74,7 @@
                 SMS Provider <br /> @Html.DropDownListFor(x => Model.lstBrands.Count, new SelectList(Model.SMSProvider(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input100", @id = "ddlSMSProvider", style = "margin-top:20px;" })
             </div>
             <div style="margin-left: 20px; margin-top: 20px;">
-                SMS Sender ID <br /> <input type="text" id="txtSMSSenderId" class="input100" />
+                SMS Sender ID <br /> <input type="text" id="txtSMSSenderId" class="input100" disabled />
             </div>
             <div style="margin-left: 20px; margin-top: 10px;">
                 SMS Username <br /> <input type="text" id="txtSMSUserName" class="input100" />
@@ -230,7 +230,7 @@
 
         }
         else {
-            $('#txtSMSSenderId').attr("disabled", false);
+            //$('#txtSMSSenderId').attr("disabled", false);
             $('#txtSMSUserName').attr("disabled", false);
             $('#txtSMSPassword').attr("disabled", false);
             $('#txtSMSLink').attr("disabled", false);
@@ -370,7 +370,7 @@
         $("#spnSMSAnyCancel").text("");
         $("#spnSMSEnrollmentAndEarn").text("");
 
-        $('#txtSMSSenderId').attr("disabled", false);
+        //$('#txtSMSSenderId').attr("disabled", false);
         $('#txtSMSUserName').attr("disabled", false);
         $('#txtSMSPassword').attr("disabled", false);
         $('#txtSMSLink').attr("disabled", false);

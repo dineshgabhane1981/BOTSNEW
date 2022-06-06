@@ -17,13 +17,13 @@ namespace BOTS_BL.Models.OnBoarding
 
         public int? MinInvoiceAmt { get; set; }
 
-        public int? MinRedeemPts { get; set; }
+        public int? PercentageToRedeemPts { get; set; }
 
         public int? MinThreshholdPtsFisttime { get; set; }
 
         public int? MinThreshholdPtsSubsequent { get; set; }
 
-        public bool PartialEarn { get; set; }
+        public string PartialEarn { get; set; }
 
         public bool IsProductCodeBlocking { get; set; }
 

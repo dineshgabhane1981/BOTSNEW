@@ -1904,10 +1904,10 @@ namespace WebApp.Controllers.OnBoarding
                 objBurnRule.RuleId = Convert.ToInt32(item["RuleId"]);
                 objBurnRule.GroupId = Convert.ToString(item["GroupId"]);
                 objBurnRule.MinInvoiceAmt = Convert.ToInt32(item["MinInvoiceAmt"]);
-                objBurnRule.MinRedeemPts = Convert.ToInt32(item["MinRedeemPts"]);
+                objBurnRule.PercentageToRedeemPts = Convert.ToInt32(item["PercentageToRedeemPts"]);
                 objBurnRule.MinThreshholdPtsFisttime = Convert.ToInt32(item["MinThreshholdPtsFisttime"]);
                 objBurnRule.MinThreshholdPtsSubsequent = Convert.ToInt32(item["MinThreshholdPtsSubsequent"]);
-                objBurnRule.PartialEarn = Convert.ToBoolean(item["PartialEarn"]);
+                objBurnRule.PartialEarn = Convert.ToString(item["PartialEarn"]);
                 objBurnRule.IsProductCodeBlocking = Convert.ToBoolean(item["IsProductCodeBlocking"]);
                 if (objBurnRule.IsProductCodeBlocking)
                 {
