@@ -1635,8 +1635,9 @@
                 CalculateTDS();
             }
         });
-        $('#NewModel').on('change', function () {
-            if ($("#NewModel").is(":checked")) {
+        $("#NewModel").on('change', function () { 
+            if ($("#NewModel").is(":checked")) {                 
+                CalculateTotalFees();
                 //$('#dvIsWhatsApp').css('border', '');
                 $("#txtASFPercentage").attr("readonly", false);
                 $("#txtASF").attr("readonly", false);
@@ -1644,17 +1645,19 @@
             else {
                 $("#txtASFPercentage").attr("readonly", true);
                 $("#txtASF").attr("readonly", true);
-                $("#txtASFPercentage").val() = "";
-                $("#txtASF").val() = "";
+                $("#txtASFPercentage").val("");
+                $("#txtASF").val("");
             }
         });
-        $('#OldModel').on('change', function () {
-            if ($("#OldModel").is(":checked")) {
+        $("#OldModel").on('change', function () {             
+            if ($("#OldModel").is(":checked")) {                
                 //$('#dvIsWhatsApp').css('border', '');
                 $("#txtASFPercentage").attr("readonly", true);
                 $("#txtASF").attr("readonly", true);
-                $("#txtASFPercentage").val() = "";
-                $("#txtASF").val() = "";
+                $("#txtASFPercentage").val("");
+                $("#txtASF").val("");
+                CalculateTotalFees();
+                CalculateTDS();
             }
         });
         $("#txtWAPaidPackFees").focusout(function () {
@@ -1662,6 +1665,11 @@
                 CalculateTotalFees();
                 CalculateTDS();
             }
+        });
+
+        $("#txtASF").focusout(function () {             
+                CalculateTotalFees();
+                CalculateTDS();            
         });
         $("#txtSMSPaidPackFees").focusout(function () {
             if ($("#txtSMSPaidPackFees").val() != "") {
@@ -1912,8 +1920,12 @@
         if (EComFees == "") {
             EComFees = 0;
         }
+        var ASF = $("#txtASF").val();
+        if (ASF == "") {
+            ASF = 0;
+        }
 
-        var totalFeesA = parseFloat(LoyaltyFees) + parseFloat(WAPaidFees) + parseFloat(SMSPaidFees) + parseFloat(EComFees) + parseFloat(OtherFees);
+        var totalFeesA = parseFloat(LoyaltyFees) + parseFloat(WAPaidFees) + parseFloat(SMSPaidFees) + parseFloat(EComFees) + parseFloat(OtherFees) + parseFloat(ASF);
         $("#txtTotalFeesA").val(totalFeesA);
 
         if ($("#IsCGST").is(":checked") || $("#IsIGST").is(":checked")) {
