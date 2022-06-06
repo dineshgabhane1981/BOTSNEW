@@ -6,7 +6,7 @@
 			<TxnType>07</TxnType>
 			<TranSource>3</TranSource>
 			<Datetime>23052022213707</Datetime>
-			<CounterId>1051100101</CounterId>
+			<CounterId></CounterId>
 			<BillingId>1</BillingId>
 			<MobileNo></MobileNo>
 			<CustomerId>2277</CustomerId>
@@ -36,7 +36,7 @@
 			<TxnType>03</TxnType>
 			<TranSource>3</TranSource>
 			<Datetime>24052022143903</Datetime>
-			<CounterId>1176100101</CounterId>
+			<CounterId></CounterId>
 			<CustomerId>1504</CustomerId>
 			<BillingId>1</BillingId>
 			<CustomerStatus>2</CustomerStatus>
