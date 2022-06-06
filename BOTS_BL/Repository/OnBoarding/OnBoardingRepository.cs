@@ -1782,6 +1782,17 @@ namespace BOTS_BL.Repository
                                 objDLCLinkConfig.RejectReason7 = objDLCLinkConfig.RejectReason7 + " // " + reason;
                         }
                     }
+                    if (statusid == 8)
+                    {
+                        objDLCLinkConfig.DLTStatus8 = status;
+                        if (status == "Rejected")
+                        {
+                            if (string.IsNullOrEmpty(objDLCLinkConfig.RejectReason8))
+                                objDLCLinkConfig.RejectReason8 = reason;
+                            else
+                                objDLCLinkConfig.RejectReason8 = objDLCLinkConfig.RejectReason8 + " // " + reason;
+                        }
+                    }
 
                     objDLCLinkConfig.UpdatedBy = loginid;
                     objDLCLinkConfig.UpdatedDate = DateTime.Now;

@@ -10,6 +10,7 @@
     var DLTStatus5 = "";
     var DLTStatus6 = "";
     var DLTStatus7 = "";
+    var DLTStatus8 = "";
 
     if (Model.DLTStatus1 == "Approved")
     {
@@ -38,6 +39,10 @@
     if (Model.DLTStatus7 == "Approved")
     {
         DLTStatus7 = "disabled";
+    }
+    if (Model.DLTStatus8 == "Approved")
+    {
+        DLTStatus8 = "disabled";
     }
 
     var count = Model.Id;
@@ -136,12 +141,12 @@ else
         </div>
         <div style="float:left;" class="col-md-4 col-lg-4">
             <div style="margin-top: 10px;">
-                <b>Reminder For Points Usage Script </b><br /> <textarea id="txtSMSReminderForPointsUsage" rows="6" cols="40" class="input100" @DLTStatus2>@Model.ReminderForPointsUsageSMSScript</textarea>
+                <b>Reminder1 For Points Usage Script </b><br /> <textarea id="txtSMSReminderForPointsUsage" rows="6" cols="40" class="input100" @DLTStatus2>@Model.ReminderForPointsUsageSMSScript</textarea>
             </div>
         </div>
         <div style="float:left;" class="col-md-4 col-lg-4">
             <div style=" margin-top: 10px;">
-                <b> Reminder For Points Usage SMS Script DLT </b><br /> <textarea id="txtSMSReminderForPointsUsageDLT" rows="6" cols="40" class="input100" disabled>@Model.ReminderForPointsUsageSMSScriptDLT</textarea>
+                <b> Reminder1 For Points Usage Script DLT </b><br /> <textarea id="txtSMSReminderForPointsUsageDLT" rows="6" cols="40" class="input100" disabled>@Model.ReminderForPointsUsageSMSScriptDLT</textarea>
             </div>
         </div>
         <div style="float:left;margin-bottom:10px;" class="col-md-3 col-lg-3">
@@ -184,6 +189,71 @@ else
         </div>
     </div>
 }
+
+@if (Model.DLTStatus8 != null)
+{
+    <div style="float:left; border:1px solid grey;border-radius:10px;margin-bottom:10px;" class="col-md-12 col-lg-12">
+        <div style="margin:20px;">
+            <b><span id="spnDLCStatus8"> Status -  @Model.DLTStatus8 </span></b><br />
+            <span id="spnRejectDLCStatus8">
+                @if (!string.IsNullOrEmpty(Model.RejectReason8))
+                {
+                    var reasonRejects = "<b>Reason</b> - " + Model.RejectReason8;
+                    @Html.Raw(reasonRejects)
+                }
+            </span>
+        </div>
+        <div style="float:left;" class="col-md-4 col-lg-4">
+            <div style="margin-top: 10px;">
+                <b>Reminder2 For Points Usage Script </b><br /> <textarea id="txtSMSReminderForPointsUsage2" rows="6" cols="40" class="input100" @DLTStatus8>@Model.ReminderForPointsUsageSMSScript8</textarea>
+            </div>
+        </div>
+        <div style="float:left;" class="col-md-4 col-lg-4">
+            <div style=" margin-top: 10px;">
+                <b> Reminder2 For Points Usage Script DLT </b><br /> <textarea id="txtSMSReminderForPointsUsage2DLT" rows="6" cols="40" class="input100" disabled>@Model.ReminderForPointsUsageSMSScriptDLT8</textarea>
+            </div>
+        </div>
+        <div style="float:left;margin-bottom:10px;" class="col-md-3 col-lg-3">
+            <div style="margin-top: 10px;">
+                Template Id <br /> <input id="txtTemplateIdDLC8" type="text" class="input50" value="@Model.TemplateId8" @DLTStatus8 /><br />
+                Template Name <br /> <input id="txtTemplateNameDLC8" type="text" class="input50" value="@Model.TemplateName8" @DLTStatus8 /><br />
+                Template Type <br />
+                @if (Model.TemplateType8 != null)
+                {
+                    if (Model.DLTStatus8 == "Approved")
+                    {
+                        @Html.DropDownListFor(x => Model.TemplateType8, new SelectList(ViewBag.TempleteType, "Value", "Text", Model.TemplateType8), htmlAttributes: new { @class = "input50", @id = "ddlTemplateTypeDLC8", @disabled = "disabled" })
+                    }
+                    else
+                    {
+                        @Html.DropDownListFor(x => Model.TemplateType8, new SelectList(ViewBag.TempleteType, "Value", "Text", Model.TemplateType8), htmlAttributes: new { @class = "input50", @id = "ddlTemplateTypeDLC8" })
+                    }
+                }
+                else
+                {
+                    @Html.DropDownListFor(x => Model.TemplateType8, new SelectList(ViewBag.TempleteType, "Value", "Text"), htmlAttributes: new { @class = "input50", @id = "ddlTemplateTypeDLC8" })
+                }
+            </div>
+
+        </div>
+        <div style="float:left;margin:0px; padding:0px;" class="col-md-1 col-lg-1">
+            <div style="margin-top: 10px;">
+                <div class="container-fluid pt-3 pb-3">
+                    <button type="button" id="btnCopyDLC8" onclick="CopyDLCTemplate(this);" class="btn btn-primary" style="margin-left: -20px; margin-top: 10px; " @DLTStatus8>Copy</button><br />
+                    <button type="button" id="btnApproveDLC8" onclick="ApproveDLCTemplate(this);" class="btn btn-primary" style="margin-left: -20px; margin-top: 10px;" @DLTStatus8>Approve</button><br />
+                    <button type="button" id="btnRejectDLC8" onclick="RejectDLCTemplate(this);" class="btn btn-primary" style="margin-left: -20px; margin-top: 10px; " @DLTStatus8>Reject</button><br />
+                    <button type="button" id="btnSaveDLC8" onclick="SaveDLCTemplate(this);" class="btn btn-primary" style="margin-left: -20px; margin-top: 10px; " @DLTStatus8>Save</button>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-12 col-lg-12" style="text-align:center;display:none;" id="divRejectDLCReason2">
+            <textarea id="txtRejectDLCReason2" rows="6" cols="40" class="input100"></textarea>
+            <button type="button" id="btnRejectDLCSubmit8" onclick="RejectDLCSubmit(this);" class="btn btn-primary" style="margin-left: 20px; margin-bottom:25px;">Submit</button>
+            <button type="button" id="btnRejectDLCCancel8" onclick="RejectDLCCancel(this);" class="btn btn-primary" style="margin-left: 20px; margin-bottom:25px;">Cancel</button><br />
+        </div>
+    </div>
+}
+
 @if (Model.DLTStatus3 != null)
 {
     <div style="float:left; border:1px solid grey;border-radius:10px;margin-bottom:10px;" class="col-md-12 col-lg-12">
@@ -546,6 +616,7 @@ else
         ConvertValuesToDLT("txtSMSGiftPtOtp", "txtSMSGiftPtOtpDLT");
         ConvertValuesToDLT("txtSMSGiftPtDebitOtp", "txtSMSGiftPtDebitOtpDLT");
         ConvertValuesToDLT("txtSMSGiftPtCreditOtp", "txtSMSGiftPtCreditOtpDLT");
+        ConvertValuesToDLT("txtSMSReminderForPointsUsage2", "txtSMSReminderForPointsUsage2DLT");        
     }
 
     function EventChangeOfOriginalToDLTNew() {
@@ -569,6 +640,9 @@ else
         });
         $("#txtSMSGiftPtCreditOtp").focusout(function () {
             ConvertValuesToDLT("txtSMSGiftPtCreditOtp", "txtSMSGiftPtCreditOtpDLT");
+        });
+        $("#txtSMSReminderForPointsUsage2").focusout(function () {
+            ConvertValuesToDLT("txtSMSReminderForPointsUsage2", "txtSMSReminderForPointsUsage2DLT");
         });
     }
 
@@ -682,6 +756,10 @@ else
             saveitem["Script"] = $("#txtSMSGiftPtCreditOtp").val();
             saveitem["ScriptDLT"] = $("#txtSMSGiftPtCreditOtpDLT").val();
         }
+        if (statusid == 8) {
+            saveitem["Script"] = $("#txtSMSReminderForPointsUsage2").val();
+            saveitem["ScriptDLT"] = $("#txtSMSReminderForPointsUsage2DLT").val();
+        }
 
         saveitem["TemplateId"] = $("#txtTemplateIdDLC" + statusid).val();
         saveitem["TemplateName"] = $("#txtTemplateNameDLC" + statusid).val();
@@ -745,6 +823,11 @@ else
                                 $("#spnDLCStatus" + statusid).text("Status - Approved");
                                 $("#spnRejectDLCStatus" + statusid).hide();
                                 $("#txtSMSGiftPtCreditOtp").prop("disabled", true);
+                            }
+                            if (statusid == 8) {
+                                $("#spnDLCStatus" + statusid).text("Status - Approved");
+                                $("#spnRejectDLCStatus" + statusid).hide();
+                                $("#txtSMSReminderForPointsUsage2").prop("disabled", true);
                             }
                             $("#txtTemplateIdDLC" + statusid).prop("disabled", true);
                             $("#txtTemplateNameDLC" + statusid).prop("disabled", true);

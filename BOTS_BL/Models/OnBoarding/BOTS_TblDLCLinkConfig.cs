@@ -152,6 +152,32 @@ namespace BOTS_BL.Models
         [StringLength(100)]
         public string TemplateType7 { get; set; }
 
+        [StringLength(500)]
+        public string ReminderForPointsUsageSMSScript8 { get; set; }
+
+        [StringLength(500)]
+        public string ReminderForPointsUsageSMSScriptDLT8 { get; set; }
+
+        [StringLength(100)]
+        public string TemplateId8 { get; set; }
+
+        [StringLength(250)]
+        public string TemplateName8 { get; set; }
+
+        [StringLength(100)]
+        public string TemplateType8 { get; set; }
+
+        [StringLength(500)]
+        public string ReminderForPointsUsageWAScript8 { get; set; }
+
+        public int? ReminderForPointsUsageSMSScript1Days { get; set; }
+
+        public int? ReminderForPointsUsageSMSScript2Days { get; set; }
+
+        public int? ReminderForPointsUsageWAScript1Days { get; set; }
+
+        public int? ReminderForPointsUsageWAScript2Days { get; set; }
+
         [StringLength(50)]
         public string DLTStatus1 { get; set; }
 
@@ -173,6 +199,9 @@ namespace BOTS_BL.Models
         [StringLength(50)]
         public string DLTStatus7 { get; set; }
 
+        [StringLength(50)]
+        public string DLTStatus8 { get; set; }
+
         public string RejectReason1 { get; set; }
 
         public string RejectReason2 { get; set; }
@@ -186,6 +215,8 @@ namespace BOTS_BL.Models
         public string RejectReason6 { get; set; }
 
         public string RejectReason7 { get; set; }
+
+        public string RejectReason8 { get; set; }
 
         [StringLength(50)]
         public string AddedBy { get; set; }

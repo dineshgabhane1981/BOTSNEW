@@ -17,8 +17,12 @@
             <span style="font-weight:bold;" id="spnSMSEnrollmentLink"></span>
         </div>
         <div style="margin-left: 20px; margin-top: 10px;">
-            Reminder for points usage (SMS) <br /> <textarea id="txtSMSReminderForPointsUsage" rows="3" cols="50" class="input100"></textarea>
-            <span style="font-weight:bold;" id="spnSMSReminderForPointsUsage"></span>
+            Reminder 1 for points usage (SMS) <input type="number" id="txtSMSRem1Days" class="input10" /> days <br /> <textarea id="txtSMSReminderForPointsUsage1" rows="3" cols="50" class="input100"></textarea>
+            <span style="font-weight:bold;" id="spnSMSReminderForPointsUsage1"></span>
+        </div>
+        <div style="margin-left: 20px; margin-top: 10px;">
+            Reminder 2 for points usage (SMS) <input type="number" id="txtSMSRem2Days" class="input10" /> days <br /> <textarea id="txtSMSReminderForPointsUsage2" rows="3" cols="50" class="input100"></textarea>
+            <span style="font-weight:bold;" id="spnSMSReminderForPointsUsage2"></span>
         </div>
         <div style="margin-left: 20px; margin-top: 10px;">
             Referred success on referral txn (SMS) <br /> <textarea id="txtSMSReferredSuccessOnReferralTxn" rows="3" cols="50" class="input100"></textarea>
@@ -56,7 +60,10 @@
             To the referral (WA) <br /> <textarea id="txtWAToTheReferral" rows="3" cols="50" class="input100"></textarea>
         </div>
         <div style="margin-left: 20px; margin-top: 10px;">
-            Reminder for points usage (WA) <br /> <textarea id="txtWAReminderForPointsUsage" rows="3" cols="50" class="input100"></textarea>
+            Reminder 1 for points usage (WA) <input type="number" id="txtWARem1Days" class="input10" /> days <br /> <textarea id="txtWAReminderForPointsUsage1" rows="3" cols="50" class="input100"></textarea>
+        </div>
+        <div style="margin-left: 20px; margin-top: 10px;">
+            Reminder 2 for points usage (WA) <input type="number" id="txtWARem2Days" class="input10" /> days <br /> <textarea id="txtWAReminderForPointsUsage2" rows="3" cols="50" class="input100"></textarea>
         </div>
         <div style="margin-left: 20px; margin-top: 10px;">
             Referred success on referral txn (WA) <br /> <textarea id="txtWAReferredSuccessOnReferralTxn" rows="3" cols="50" class="input100"></textarea>
@@ -144,6 +151,9 @@
         if (data.DLTStatus7 != null && data.DLTStatus7 != "Submitted") {
             $("#btnsubmitToDLT").prop("disabled", true);
         }
+        if (data.DLTStatus8 != null && data.DLTStatus8 != "Submitted") {
+            $("#btnsubmitToDLT").prop("disabled", true);
+        }
 
         if (data.DLTStatus1 == "Rejected") {
             $("#spnSMSEnrollmentLink").html(data.DLTStatus1 + "<br/>  Reason - " + data.RejectReason1);
@@ -152,10 +162,16 @@
             $('#spnSMSEnrollmentLink').html(data.DLTStatus1);
         }
         if (data.DLTStatus2 == "Rejected") {
-            $("#spnSMSReminderForPointsUsage").html(data.DLTStatus2 + "<br/>  Reason - " + data.RejectReason2);
+            $("#spnSMSReminderForPointsUsage1").html(data.DLTStatus2 + "<br/>  Reason - " + data.RejectReason2);
         }
         else {
-            $('#spnSMSReminderForPointsUsage').html(data.DLTStatus2);
+            $('#spnSMSReminderForPointsUsage1').html(data.DLTStatus2);
+        }
+        if (data.DLTStatus8 == "Rejected") {
+            $("#spnSMSReminderForPointsUsage2").html(data.DLTStatus8 + "<br/>  Reason - " + data.RejectReason8);
+        }
+        else {
+            $('#spnSMSReminderForPointsUsage2').html(data.DLTStatus8);
         }
         
         if (data.DLTStatus3 == "Rejected") {
@@ -192,7 +208,7 @@
             $("#txtSMSToTheReferral").prop("disabled", true);
         }
         if (data.DLTStatus2 != null && data.DLTStatus2 != "Submitted") {
-            $("#txtSMSReminderForPointsUsage").prop("disabled", true);
+            $("#txtSMSReminderForPointsUsage1").prop("disabled", true);
         }
         if (data.DLTStatus3 != null && data.DLTStatus3 != "Submitted") {
             $("#txtSMSReferredSuccessOnReferralTxn").prop("disabled", true);
@@ -209,14 +225,27 @@
         if (data.DLTStatus7 != null && data.DLTStatus7 != "Submitted") {
             $("#txtSMSGiftPtCreditOtp").prop("disabled", true);
         }
-        $('#txtSMSReminderForPointsUsage').val(data.ReminderForPointsUsageSMSScript);
+        if (data.DLTStatus8 != null && data.DLTStatus8 != "Submitted") {
+            $("#txtSMSReminderForPointsUsage2").prop("disabled", true);
+        }
+
+        
+        $('#txtSMSReminderForPointsUsage1').val(data.ReminderForPointsUsageSMSScript);
+        $('#txtSMSReminderForPointsUsage2').val(data.ReminderForPointsUsageSMSScript8);
+        $('#txtSMSRem1Days').val(data.ReminderForPointsUsageSMSScript1Days);
+        $('#txtSMSRem2Days').val(data.ReminderForPointsUsageSMSScript2Days);
+
         $('#txtSMSReferredSuccessOnReferralTxn').val(data.ReferredSuccessOnReferralTxnSMSScript);
         $('#txtSMSDLCOtp').val(data.DLCOTPScriptSMS);
         $('#txtSMSGiftPtOtp').val(data.GiftPointsOTPScriptSMS);
         $('#txtSMSGiftPtDebitOtp').val(data.GiftPointsDebitOTPScriptSMS);
         $('#txtSMSGiftPtCreditOtp').val(data.GiftPointsCreditOTPScriptSMS);
         $('#txtWAToTheReferral').val(data.ToTheReferralWAScript);
-        $('#txtWAReminderForPointsUsage').val(data.ReminderForPointsUsageWAScript);
+        $('#txtWAReminderForPointsUsage1').val(data.ReminderForPointsUsageWAScript);
+        $('#txtWAReminderForPointsUsage2').val(data.ReminderForPointsUsageWAScript8);
+        $('#txtWARem1Days').val(data.ReminderForPointsUsageWAScript1Days);
+        $('#txtWARem2Days').val(data.ReminderForPointsUsageWAScript2Days);
+
         $('#txtWAReferredSuccessOnReferralTxn').val(data.ReferredSuccessOnReferralTxnWAScript);
         $('#txtWADlcOtp').val(data.DLCOTPScriptWA );
         $('#txtWAGiftPtOtp').val(data.GiftPointsOTPScriptWA);
@@ -237,14 +266,22 @@
         item["ReferralReminder"] = $('#txtReferralReminder').val();
 
         item["SMSToTheReferral"] = $('#txtSMSToTheReferral').val();
-        item["SMSReminderForPointsUsage"] = $('#txtSMSReminderForPointsUsage').val();
+        item["SMSReminderForPointsUsage1"] = $('#txtSMSReminderForPointsUsage1').val();
+        item["SMSReminderForPointsUsage2"] = $('#txtSMSReminderForPointsUsage2').val();
+        item["SMSReminderForPointsUsageDays1"] = $('#txtSMSRem1Days').val();
+        item["SMSReminderForPointsUsageDays2"] = $('#txtSMSRem2Days').val();
+
         item["SMSReferredSuccessOnReferralTxn"] = $('#txtSMSReferredSuccessOnReferralTxn').val();
         item["DLCOTPScriptSMS"] = $('#txtSMSDLCOtp').val();
         item["GiftPointsOTPScriptSMS"] = $('#txtSMSGiftPtOtp').val();
         item["GiftPointsDebitOTPScriptSMS"] = $('#txtSMSGiftPtDebitOtp').val();
         item["GiftPointsCreditOTPScriptSMS"] = $('#txtSMSGiftPtCreditOtp').val();
         item["ToTheReferralWAScript"] = $('#txtWAToTheReferral').val();
-        item["ReminderForPointsUsageWAScript"] = $('#txtWAReminderForPointsUsage').val();
+        item["ReminderForPointsUsageWAScript1"] = $('#txtWAReminderForPointsUsage1').val();
+        item["ReminderForPointsUsageWAScript2"] = $('#txtWAReminderForPointsUsage2').val();
+        item["ReminderForPointsUsageWAScriptDays1"] = $('#txtWARem1Days').val();
+        item["ReminderForPointsUsageWAScriptDays2"] = $('#txtWARem2Days').val();
+
         item["ReferredSuccessOnReferralTxnWAScript"] = $('#txtWAReferredSuccessOnReferralTxn').val();
         item["DLCOTPScriptWA"] = $('#txtWADlcOtp').val();
         item["GiftPointsOTPScriptWA"] = $('#txtWAGiftPtOtp').val();

@@ -939,14 +939,30 @@ namespace WebApp.Controllers.OnBoarding
                     objDLCLink.ValidityOfReferralPoints = Convert.ToInt32(item["ValidityOfReferralPoints"]);
                     objDLCLink.ReferralReminder = Convert.ToInt32(item["ReferralReminder"]);
                     objDLCLink.ToTheReferralSMSScript = Convert.ToString(item["SMSToTheReferral"]);
-                    objDLCLink.ReminderForPointsUsageSMSScript = Convert.ToString(item["SMSReminderForPointsUsage"]);
+                    objDLCLink.ReminderForPointsUsageSMSScript = Convert.ToString(item["SMSReminderForPointsUsage1"]);
+                    objDLCLink.ReminderForPointsUsageSMSScript8 = Convert.ToString(item["SMSReminderForPointsUsage2"]);
+                    if (!string.IsNullOrEmpty(Convert.ToString(item["SMSReminderForPointsUsageDays1"])))
+                        objDLCLink.ReminderForPointsUsageSMSScript1Days = Convert.ToInt32(item["SMSReminderForPointsUsageDays1"]);
+
+                    if (!string.IsNullOrEmpty(Convert.ToString(item["SMSReminderForPointsUsageDays2"])))
+                        objDLCLink.ReminderForPointsUsageSMSScript2Days = Convert.ToInt32(item["SMSReminderForPointsUsageDays2"]);
+
                     objDLCLink.ReferredSuccessOnReferralTxnSMSScript = Convert.ToString(item["SMSReferredSuccessOnReferralTxn"]);
                     objDLCLink.DLCOTPScriptSMS = Convert.ToString(item["DLCOTPScriptSMS"]);
                     objDLCLink.GiftPointsOTPScriptSMS = Convert.ToString(item["GiftPointsOTPScriptSMS"]);
                     objDLCLink.GiftPointsDebitOTPScriptSMS = Convert.ToString(item["GiftPointsDebitOTPScriptSMS"]);
                     objDLCLink.GiftPointsCreditOTPScriptSMS = Convert.ToString(item["GiftPointsCreditOTPScriptSMS"]);
                     objDLCLink.ToTheReferralWAScript = Convert.ToString(item["ToTheReferralWAScript"]);
-                    objDLCLink.ReminderForPointsUsageWAScript = Convert.ToString(item["ReminderForPointsUsageWAScript"]);
+                    objDLCLink.ReminderForPointsUsageWAScript = Convert.ToString(item["ReminderForPointsUsageWAScript1"]);
+                    objDLCLink.ReminderForPointsUsageWAScript8 = Convert.ToString(item["ReminderForPointsUsageWAScript2"]);
+
+                    if (!string.IsNullOrEmpty(Convert.ToString(item["ReminderForPointsUsageWAScriptDays1"])))
+                        objDLCLink.ReminderForPointsUsageWAScript1Days = Convert.ToInt32(item["ReminderForPointsUsageWAScriptDays1"]);
+
+                    if (!string.IsNullOrEmpty(Convert.ToString(item["ReminderForPointsUsageWAScriptDays2"])))
+                        objDLCLink.ReminderForPointsUsageWAScript2Days = Convert.ToInt32(item["ReminderForPointsUsageWAScriptDays2"]);
+
+
                     objDLCLink.ReferredSuccessOnReferralTxnWAScript = Convert.ToString(item["ReferredSuccessOnReferralTxnWAScript"]);
                     objDLCLink.DLCOTPScriptWA = Convert.ToString(item["DLCOTPScriptWA"]);
                     objDLCLink.GiftPointsOTPScriptWA = Convert.ToString(item["GiftPointsOTPScriptWA"]);
@@ -1659,6 +1675,18 @@ namespace WebApp.Controllers.OnBoarding
                             if (Convert.ToString(status) == "Approved")
                             {
                                 objDLCLinkConfig.DLTStatus7 = "Approved";
+                            }
+                        }
+                        if (num == 8)
+                        {
+                            objDLCLinkConfig.ReminderForPointsUsageSMSScript8 = Convert.ToString(item["Script"]);
+                            objDLCLinkConfig.ReminderForPointsUsageSMSScriptDLT8 = Convert.ToString(item["ScriptDLT"]);
+                            objDLCLinkConfig.TemplateId8 = Convert.ToString(item["TemplateId"]);
+                            objDLCLinkConfig.TemplateName8 = Convert.ToString(item["TemplateName"]);
+                            objDLCLinkConfig.TemplateType8 = Convert.ToString(item["TemplateType"]);
+                            if (Convert.ToString(status) == "Approved")
+                            {
+                                objDLCLinkConfig.DLTStatus8 = "Approved";
                             }
                         }
 
