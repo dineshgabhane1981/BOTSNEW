@@ -295,31 +295,38 @@
        });
 
        $('#rbtnEnrlment').click(function () {
-        ShowHideTxnTypeSection("dvEnrlment");
+           ShowHideTxnTypeSection("dvEnrlment");
+           ReplaceMobileNo();
        });
 
        $('#rbtnEnrlmntWithEarn').click(function () {
-        ShowHideTxnTypeSection("dvEnrlmentWithEarn");
+           ShowHideTxnTypeSection("dvEnrlmentWithEarn");
+           ReplaceMobileNo();
        });
 
        $('#rbtnEarn').click(function () {
            ShowHideTxnTypeSection("dvEarn");
+           ReplaceMobileNo();
        });
 
        $('#rbtnBurnValidation').click(function () {
            ShowHideTxnTypeSection("dvBurnValidation");
+           ReplaceMobileNo();
        });
-
+       
        $('#rbtnBurn').click(function () {
            ShowHideTxnTypeSection("dvBurn");
+           ReplaceMobileNo();
        });
-
+       
        $('#rbtnCancel').click(function () {
            ShowHideTxnTypeSection("dvCancel");
+           ReplaceMobileNo();
        });
 
        $('#rbtnSendOtp').click(function () {
            ShowHideTxnTypeSection("dvSendOtp");
+           ReplaceMobileNo();
        });
 
        $('#btnSend').click(function () {
@@ -1189,6 +1196,9 @@
             ResetSection("1");
         }
         if ($('#rbtnEnrlmntWithEarn').is(':checked')) {
+            $("#ddlBillingPartner").val('');
+            $("#ddlOutlet").val('');
+            $("#txtMobileNo").val('');
             $("#txtInvoiceNo2").val('');
             $("#txtInvoiceAmt2").val('');
             $("#txtDatetime2").val('');
@@ -1196,30 +1206,45 @@
         }
 
         if ($('#rbtnEarn').is(':checked')) {
+            $("#ddlBillingPartner").val('');
+            $("#ddlOutlet").val('');
+            $("#txtMobileNo").val('');
             $("#txtInvoiceNo3").val('');
             $("#txtInvoiceAmt3").val('');
             $("#txtDatetime3").val('');
             ResetSection("3");
         }
         if ($('#rbtnBurnValidation').is(':checked')) {
+            $("#ddlBillingPartner").val('');
+            $("#ddlOutlet").val('');
+            $("#txtMobileNo").val('');
             $("#txtInvoiceNo4").val('');
             $("#txtInvoiceAmt4").val('');
             $("#txtDatetime4").val('');
             ResetSection("4");
         }
         if ($('#rbtnBurn').is(':checked')) {
+            $("#ddlBillingPartner").val('');
+            $("#ddlOutlet").val('');
+            $("#txtMobileNo").val('');
             $("#txtInvoiceNo5").val('');
             $("#txtInvoiceAmt5").val('');
             $("#txtDatetime5").val('');
             ResetSection("5");
         }
         if ($('#rbtnCancel').is(':checked')) {
+            $("#ddlBillingPartner").val('');
+            $("#ddlOutlet").val('');
+            $("#txtMobileNo").val('');
             $("#txtInvoiceNo6").val('');
             $("#txtInvoiceAmt6").val('');
             $("#txtDatetime6").val('');
             ResetSection("6");
         }
         if ($('#rbtnSendOtp').is(':checked')) {
+            $("#ddlBillingPartner").val('');
+            $("#ddlOutlet").val('');
+            $("#txtMobileNo").val('');
             $("#txtInvoiceNo7").val('');
             $("#txtInvoiceAmt7").val('');
             $("#txtDatetime7").val('');
