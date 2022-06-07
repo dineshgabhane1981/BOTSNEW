@@ -144,7 +144,8 @@
     #four1:checked ~ .panels1 #four-panel1,
     #five1:checked ~ .panels1 #five-panel1,
     #six1:checked ~ .panels1 #six-panel1,
-    #seven1:checked ~ .panels1 #seven-panel1 {
+    #seven1:checked ~ .panels1 #seven-panel1,
+    #eight1:checked ~ .panels1 #eight-panel1 {
         display: block
     }
 
@@ -154,7 +155,8 @@
     #four1:checked ~ .tabs1 #four-tab1,
     #five1:checked ~ .tabs1 #five-tab1,
     #six1:checked ~ .tabs1 #six-tab1,
-    #seven1:checked ~ .tabs1 #seven-tab1 {
+    #seven1:checked ~ .tabs1 #seven-tab1,
+    #eight1:checked ~ .tabs1 #eight-tab1 {
         background: #fff !important;
         color: #000;
         border-top: 3px solid #fff;
@@ -265,7 +267,8 @@
                             }
                             <input class="radio1" id="six1" name="group" type="radio">
                             <input class="radio1" id="seven1" name="group" type="radio">
-
+                            <input class="radio1" id="eight1" name="group" type="radio">
+                            
                             <div class="tabs1">
                                 <label class="tab1" id="one-tab1" for="one1"> Outlet Details</label>
                                 <label class="tab1" id="two-tab1" for="two1"> Points Rule</label>
@@ -280,110 +283,11 @@
                                 }
                                 <label class="tab1" id="six-tab1" for="six1"> Velocity Checks</label>
                                 <label class="tab1" id="seven-tab1" for="seven1"> Bullk Upload</label>
+                                <label class="tab1" id="eight-tab1" for="eight1"> Logo Upload</label>
                             </div>
 
                             <div class="panels1">
                                 <div class="multisteps-form__panel m-3 list-box bg-white panel1" id="one-panel1">
-                                    @foreach (var item in Model.lstOutlets)
-                                    {
-
-                                        Model.bots_TblOutletMaster = item;
-                                        <div>
-                                            <b>Brand -  @item.BrandName </b>
-                                        </div>
-
-                                        @Html.HiddenFor(model => item.Id, new { @id = "hdnID" + Id })
-                                        @Html.HiddenFor(model => item.BrandId, new { @id = "hdnBrandID" + Id })
-                                        @Html.HiddenFor(model => item.OutletId, new { @id = "hdnOutletID" + Id })
-                                        <div class="row" style="margin: 0;">
-                                            <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
-                                                Outlet Name
-                                            </div>
-                                            <div class="col-sm-4" style="float:left;margin-top:10px;">
-                                                @Html.TextBoxFor(model => item.OutletName, new { @class = "input100", @id = "txtOutletName" + Id })
-                                            </div>
-                                            <div style="float: left; text-align: right; width: 130px; margin-top: 10px;">
-                                                Area Name
-                                            </div>
-                                            <div class="col-sm-4" style="float:left;margin-top:10px;">
-                                                @Html.TextBoxFor(model => item.AreaName, new { @class = "input100", @id = "txtAreaName" + Id })
-                                            </div>
-                                        </div>
-
-                                        <div class="row" style="margin: 0;">
-                                            <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
-                                                Authorised Person
-                                            </div>
-                                            <div class="col-sm-4" style="float:left;margin-top:10px;">
-                                                @Html.TextBoxFor(model => item.AuthorisedPerson, new { @class = "input100", @id = "txtAuthorisedPerson" + Id })
-                                            </div>
-                                            <div style="float: left; text-align: right; width: 130px; margin-top: 10px;">
-                                                Registered Mobile No
-                                            </div>
-                                            <div class="col-sm-4" style="float:left;margin-top:10px;">
-                                                @Html.TextBoxFor(model => item.RegisterMobileNo, new { @class = "input100", @id = "txtRegisterMobileNo" + Id })
-                                            </div>
-                                        </div>
-
-                                        <div class="row" style="margin: 0;">
-                                            <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
-                                                Registered Email
-                                            </div>
-                                            <div class="col-sm-4" style="float:left;margin-top:10px;">
-                                                @Html.TextBoxFor(model => item.RegisterEmail, new { @class = "input100", @id = "txtRegisterEmail" + Id })
-                                            </div>
-                                            <div style="float: left; text-align: right; width: 130px; margin-top: 10px;">
-                                                Address
-                                            </div>
-                                            <div class="col-sm-4" style="float:left;margin-top:10px;">
-                                                @Html.TextBoxFor(model => item.Address, new { @class = "input100", @id = "txtAddress" + Id })
-                                            </div>
-                                        </div>
-
-                                        <div class="row" style="margin: 0;">
-                                            <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
-                                                Geo Latitude
-                                            </div>
-                                            <div class="col-sm-4" style="float:left;margin-top:10px;">
-                                                @Html.TextBoxFor(model => item.Latitude, new { @class = "input100", @id = "txtLatitude" + Id })
-                                            </div>
-                                            <div style="float: left; text-align: right; width: 130px; margin-top: 10px;">
-                                                Geo Longitude
-                                            </div>
-                                            <div class="col-sm-4" style="float:left;margin-top:10px;">
-                                                @Html.TextBoxFor(model => item.Longitude, new { @class = "input100", @id = "txtLongitude" + Id })
-                                            </div>
-                                        </div>
-                                        <div class="row" style="margin: 0;">
-                                            <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
-                                                State
-                                            </div>
-                                            <div class="col-sm-4" style="float:left;margin-top:10px;">
-                                                @Html.DropDownListFor(model => model.bots_TblOutletMaster.State, new SelectList(Model.lstStates, "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input100", @id = "ddlState" + Id })
-                                            </div>
-                                            <div style="float: left; text-align: right; width: 130px; margin-top: 10px;">
-                                                City
-                                            </div>
-                                            <div class="col-sm-4" style="float:left;margin-top:10px;">
-                                                @Html.DropDownListFor(model => model.bots_TblOutletMaster.City, new SelectList(Model.lstCity, "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input100", @id = "ddlCity" + Id })
-
-                                            </div>
-                                        </div>
-                                        <div class="row" style="margin: 0;">
-                                            <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
-                                                Pincode
-                                            </div>
-                                            <div class="col-sm-4" style="float:left;margin-top:10px;">
-                                                @Html.TextBoxFor(model => item.PinCode, new { @class = "input100", @id = "txtPinCode" + Id })
-                                            </div>
-                                        </div>
-
-                                        <hr />
-
-                                        Id++;
-                                    }
-
-                                    <button type="button" id="btnCustomerSubmit" class="btn btn-primary pull-right m-3" onclick="return CheckOutletData('CSUpdate');" style="margin-right:10px;">Save</button>
 
                                     @Html.Partial("~/Views/CustomerOnBoarding/_OutletDetails.cshtml", Model)
                                 </div>
@@ -411,6 +315,9 @@
                                 </div>
                                 <div class="multisteps-form__panel m-3 list-box bg-white panel1" id="seven-panel1">
                                     @Html.Partial("~/Views/CustomerOnBoarding/_BulkUpload.cshtml")
+                                </div>
+                                <div class="multisteps-form__panel m-3 list-box bg-white panel1" id="eight-panel1">
+                                    @Html.Partial("~/Views/CustomerOnBoarding/_LogoUpload.cshtml")
                                 </div>
 
                             </div>

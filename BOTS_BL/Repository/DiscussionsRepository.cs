@@ -358,6 +358,7 @@ namespace BOTS_BL.Repository
         public List<DiscussionDetails> GetfilteredDiscussionData(string status, int calltype, string groupnm, string fromDate, string toDate, string raisedby, string LoginType, string LoginId, bool IsFollowUp)
         {
             List<DiscussionDetails> lstdiscuss = new List<DiscussionDetails>();
+            List<DiscussionDetails> lstdiscussOnBoarding = new List<DiscussionDetails>();
             List<BOTS_TblDiscussion> lsttbldiscuss = new List<BOTS_TblDiscussion>();
             using (var context = new CommonDBContext())
             {
@@ -446,6 +447,31 @@ namespace BOTS_BL.Repository
                                               Status = c.Status,
 
                                           }).OrderByDescending(x => x.AddedDate).ToList();
+
+
+                            lstdiscussOnBoarding = (from c in list
+                                                    join gd in context.BOTS_TblGroupMaster on c.GroupId equals gd.GroupId.ToString()
+                                                    join ct in context.BOTS_TblCallTypes on c.CallType equals ct.Id
+                                                    join cld in context.CustomerLoginDetails on c.AddedBy equals cld.LoginId
+                                                    where c.Status == "WIP"
+
+                                                    select new DiscussionDetails
+                                                    {
+                                                        GroupName = gd.GroupName,
+                                                        Id = c.Id,
+                                                        AddedDate = c.AddedDate,
+                                                        SpokenTo = c.SpokenTo,
+                                                        ContactNo = c.ContactNo,
+                                                        CallType = ct.CallType,
+                                                        CustomerType = c.CustomerType,
+                                                        FollowupDate = c.FollowupDate,
+                                                        CallMode = c.CallMode,
+                                                        Description = c.Description,
+                                                        ActionItems = c.ActionItems,
+                                                        AddedBy = cld.UserName,
+                                                        Status = c.Status,
+
+                                                    }).OrderByDescending(x => x.AddedDate).ToList();
                         }
                         else
                         {
@@ -471,6 +497,29 @@ namespace BOTS_BL.Repository
                                               Status = c.Status,
 
                                           }).OrderByDescending(x => x.AddedDate).ToList();
+
+                            lstdiscussOnBoarding = (from c in list
+                                                    join gd in context.BOTS_TblGroupMaster on c.GroupId equals gd.GroupId.ToString()
+                                                    join ct in context.BOTS_TblCallTypes on c.CallType equals ct.Id
+                                                    join cld in context.CustomerLoginDetails on c.AddedBy equals cld.LoginId
+
+                                                    select new DiscussionDetails
+                                                    {
+                                                        GroupName = gd.GroupName,
+                                                        Id = c.Id,
+                                                        AddedDate = c.AddedDate,
+                                                        SpokenTo = c.SpokenTo,
+                                                        ContactNo = c.ContactNo,
+                                                        CallType = ct.CallType,
+                                                        CustomerType = c.CustomerType,
+                                                        FollowupDate = c.FollowupDate,
+                                                        CallMode = c.CallMode,
+                                                        Description = c.Description,
+                                                        ActionItems = c.ActionItems,
+                                                        AddedBy = cld.UserName,
+                                                        Status = c.Status,
+
+                                                    }).OrderByDescending(x => x.AddedDate).ToList();
                         }
                     }
                     else
@@ -502,6 +551,30 @@ namespace BOTS_BL.Repository
                                                   Status = c.Status,
 
                                               }).OrderByDescending(x => x.AddedDate).ToList();
+
+                                lstdiscussOnBoarding = (from c in list
+                                                        join gd in context.BOTS_TblGroupMaster on c.GroupId equals gd.GroupId.ToString()
+                                                        join ct in context.BOTS_TblCallTypes on c.CallType equals ct.Id
+                                                        join cld in context.CustomerLoginDetails on c.AddedBy equals cld.LoginId
+                                                        where c.Status == "WIP" && (c.CallType == 12 || c.CallType == 9 || c.CallType == 10 || c.CallType == 18)
+
+                                                        select new DiscussionDetails
+                                                        {
+                                                            GroupName = gd.GroupName,
+                                                            Id = c.Id,
+                                                            AddedDate = c.AddedDate,
+                                                            SpokenTo = c.SpokenTo,
+                                                            ContactNo = c.ContactNo,
+                                                            CallType = ct.CallType,
+                                                            CustomerType = c.CustomerType,
+                                                            FollowupDate = c.FollowupDate,
+                                                            CallMode = c.CallMode,
+                                                            Description = c.Description,
+                                                            ActionItems = c.ActionItems,
+                                                            AddedBy = cld.UserName,
+                                                            Status = c.Status,
+
+                                                        }).OrderByDescending(x => x.AddedDate).ToList();
                             }
                             else
                             {
@@ -528,6 +601,30 @@ namespace BOTS_BL.Repository
                                                   Status = c.Status,
 
                                               }).OrderByDescending(x => x.AddedDate).ToList();
+
+                                lstdiscussOnBoarding = (from c in list
+                                                        join gd in context.BOTS_TblGroupMaster on c.GroupId equals gd.GroupId.ToString()
+                                                        join ct in context.BOTS_TblCallTypes on c.CallType equals ct.Id
+                                                        join cld in context.CustomerLoginDetails on c.AddedBy equals cld.LoginId
+                                                        where c.CallType == 12 || c.CallType == 9 || c.CallType == 10 || c.CallType == 18
+
+                                                        select new DiscussionDetails
+                                                        {
+                                                            GroupName = gd.GroupName,
+                                                            Id = c.Id,
+                                                            AddedDate = c.AddedDate,
+                                                            SpokenTo = c.SpokenTo,
+                                                            ContactNo = c.ContactNo,
+                                                            CallType = ct.CallType,
+                                                            CustomerType = c.CustomerType,
+                                                            FollowupDate = c.FollowupDate,
+                                                            CallMode = c.CallMode,
+                                                            Description = c.Description,
+                                                            ActionItems = c.ActionItems,
+                                                            AddedBy = cld.UserName,
+                                                            Status = c.Status,
+
+                                                        }).OrderByDescending(x => x.AddedDate).ToList();
                             }
                         }
                         else
@@ -559,6 +656,30 @@ namespace BOTS_BL.Repository
                                                       Status = c.Status,
 
                                                   }).OrderByDescending(x => x.AddedDate).ToList();
+
+                                    lstdiscussOnBoarding = (from c in list
+                                                            join gd in context.BOTS_TblGroupMaster on c.GroupId equals gd.GroupId.ToString()
+                                                            join ct in context.BOTS_TblCallTypes on c.CallType equals ct.Id
+                                                            join cld in context.CustomerLoginDetails on c.AddedBy equals cld.LoginId
+                                                            where c.AddedBy == LoginId && c.Status == "WIP"
+
+                                                            select new DiscussionDetails
+                                                            {
+                                                                GroupName = gd.GroupName,
+                                                                Id = c.Id,
+                                                                AddedDate = c.AddedDate,
+                                                                SpokenTo = c.SpokenTo,
+                                                                ContactNo = c.ContactNo,
+                                                                CallType = ct.CallType,
+                                                                CustomerType = c.CustomerType,
+                                                                FollowupDate = c.FollowupDate,
+                                                                CallMode = c.CallMode,
+                                                                Description = c.Description,
+                                                                ActionItems = c.ActionItems,
+                                                                AddedBy = cld.UserName,
+                                                                Status = c.Status,
+
+                                                            }).OrderByDescending(x => x.AddedDate).ToList();
                                 }
                                 else
                                 {
@@ -585,6 +706,30 @@ namespace BOTS_BL.Repository
                                                       Status = c.Status,
 
                                                   }).OrderByDescending(x => x.AddedDate).ToList();
+
+                                    lstdiscussOnBoarding = (from c in list
+                                                            join gd in context.BOTS_TblGroupMaster on c.GroupId equals gd.GroupId.ToString()
+                                                            join ct in context.BOTS_TblCallTypes on c.CallType equals ct.Id
+                                                            join cld in context.CustomerLoginDetails on c.AddedBy equals cld.LoginId
+                                                            where c.AddedBy == LoginId
+
+                                                            select new DiscussionDetails
+                                                            {
+                                                                GroupName = gd.GroupName,
+                                                                Id = c.Id,
+                                                                AddedDate = c.AddedDate,
+                                                                SpokenTo = c.SpokenTo,
+                                                                ContactNo = c.ContactNo,
+                                                                CallType = ct.CallType,
+                                                                CustomerType = c.CustomerType,
+                                                                FollowupDate = c.FollowupDate,
+                                                                CallMode = c.CallMode,
+                                                                Description = c.Description,
+                                                                ActionItems = c.ActionItems,
+                                                                AddedBy = cld.UserName,
+                                                                Status = c.Status,
+
+                                                            }).OrderByDescending(x => x.AddedDate).ToList();
                                 }
                             }
                             else
@@ -613,6 +758,29 @@ namespace BOTS_BL.Repository
                                                       Status = c.Status,
 
                                                   }).OrderByDescending(x => x.AddedDate).ToList();
+
+                                    lstdiscussOnBoarding = (from c in list
+                                                            join gd in context.BOTS_TblGroupMaster on c.GroupId equals gd.GroupId.ToString()
+                                                            join ct in context.BOTS_TblCallTypes on c.CallType equals ct.Id
+                                                            join cld in context.CustomerLoginDetails on c.AddedBy equals cld.LoginId
+                                                            where c.Status == "WIP"
+                                                            select new DiscussionDetails
+                                                            {
+                                                                GroupName = gd.GroupName,
+                                                                Id = c.Id,
+                                                                AddedDate = c.AddedDate,
+                                                                SpokenTo = c.SpokenTo,
+                                                                ContactNo = c.ContactNo,
+                                                                CallType = ct.CallType,
+                                                                CustomerType = c.CustomerType,
+                                                                FollowupDate = c.FollowupDate,
+                                                                CallMode = c.CallMode,
+                                                                Description = c.Description,
+                                                                ActionItems = c.ActionItems,
+                                                                AddedBy = cld.UserName,
+                                                                Status = c.Status,
+
+                                                            }).OrderByDescending(x => x.AddedDate).ToList();
                                 }
                                 else
                                 {
@@ -638,6 +806,29 @@ namespace BOTS_BL.Repository
                                                       Status = c.Status,
 
                                                   }).OrderByDescending(x => x.AddedDate).ToList();
+
+                                    lstdiscussOnBoarding = (from c in list
+                                                            join gd in context.BOTS_TblGroupMaster on c.GroupId equals gd.GroupId.ToString()
+                                                            join ct in context.BOTS_TblCallTypes on c.CallType equals ct.Id
+                                                            join cld in context.CustomerLoginDetails on c.AddedBy equals cld.LoginId
+
+                                                            select new DiscussionDetails
+                                                            {
+                                                                GroupName = gd.GroupName,
+                                                                Id = c.Id,
+                                                                AddedDate = c.AddedDate,
+                                                                SpokenTo = c.SpokenTo,
+                                                                ContactNo = c.ContactNo,
+                                                                CallType = ct.CallType,
+                                                                CustomerType = c.CustomerType,
+                                                                FollowupDate = c.FollowupDate,
+                                                                CallMode = c.CallMode,
+                                                                Description = c.Description,
+                                                                ActionItems = c.ActionItems,
+                                                                AddedBy = cld.UserName,
+                                                                Status = c.Status,
+
+                                                            }).OrderByDescending(x => x.AddedDate).ToList();
                                 }
                             }
 
@@ -645,7 +836,7 @@ namespace BOTS_BL.Repository
                     }
                 }
             }
-
+            lstdiscuss.AddRange(lstdiscussOnBoarding);
             return lstdiscuss;
         }
 

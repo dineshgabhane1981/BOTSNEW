@@ -1,0 +1,74 @@
+﻿@model WebApp.ViewModel.OnBoardingSalesViewModel
+
+@{
+
+}
+@foreach (var item in Model.objRetailList)
+{
+    var fileId = "FileUploadLogo" + item.BrandId;
+    var btnUpload = "btnUploadLogo" + item.BrandId;
+    <div style="margin-top:20px;">
+        <input type="file" id="@fileId" />
+        <input type="button" id="@btnUpload" class="btn btn-primary" onclick="UploadLogo(@item.BrandId);" style="margin-left: 10px; background-color: #2651be;" value="Upload Data" />
+        @if (!string.IsNullOrEmpty(item.LogoPath))
+        {            
+            <img src="@item.LogoPath" width="200" style="margin-left:50px;" />
+        }
+    </div>
+
+
+}
+
+<script>
+    function UploadLogo(id) {       
+         if (window.FormData !== undefined) {
+             var fileUpload = $("#FileUploadLogo" + id).get(0);
+
+                var files = fileUpload.files;
+                if (files.length > 0) {
+                    var fileData = new FormData();
+                    for (var i = 0; i < files.length; i++) {
+                        fileData.append(files[i].name, files[i]);
+                    }
+                    fileData.append("groupId", $('#hdnGroupID').val());
+                    fileData.append("brandId", id);
+
+                        $("#divLoader").show();
+                        $.ajax({
+                            url: '@Url.Action("UploadLogo", "CustomerOnBoarding")',
+                            type: "POST",
+                            contentType: false, // Not to set any content header
+                            processData: false, // Not to process data
+                            data: fileData,
+                            success: function (result) {
+                                cuteAlert({
+                                    type: "success",
+                                    title: "Saved",
+                                    message: "Logo Uploaded Successfully!",
+                                    buttonText: "Okay"
+                                })
+                                $("#divLoader").hide();
+                            },
+                            error: function (err) {
+                                cuteAlert({
+                                    type: "error",
+                                    title: "Oops..",
+                                    message: "There is some problem in uploading data",
+                                    buttonText: "Okay"
+                                })
+                                $("#divLoader").hide();
+                            }
+                        });
+                }
+                else {
+                    cuteAlert({
+                        type: "error",
+                        title: "Oops..",
+                        message: "Please select file to upload",
+                        buttonText: "Okay"
+                    })
+                }
+            }
+    }
+
+</script>

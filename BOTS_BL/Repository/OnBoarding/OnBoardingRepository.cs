@@ -2228,6 +2228,16 @@ namespace BOTS_BL.Repository
             return groupName;
         }
 
+        public string GetOnboardingBrandName(string groupid,string brandId)
+        {
+            string groupName = string.Empty;
+            using (var context = new CommonDBContext())
+            {
+                groupName = context.BOTS_TblRetailMaster.Where(x => x.GroupId == groupid && x.BrandId== brandId).Select(y => y.BrandName).FirstOrDefault();
+            }
+            return groupName;
+        }
+
         public string GetAssignedCSNameForOnboarding(string groupid)
         {
             string CSEmail = string.Empty;
@@ -2264,5 +2274,19 @@ namespace BOTS_BL.Repository
             return result;
         }
 
+        public bool UploadBrandLogo(string groupid, string brandId, string LogoURL)
+        {
+            bool result = false;
+            using (var context = new CommonDBContext())
+            {
+                var brandDetails = context.BOTS_TblRetailMaster.Where(x => x.GroupId == groupid && x.BrandId == brandId).FirstOrDefault();
+                brandDetails.LogoPath = LogoURL;
+                context.BOTS_TblRetailMaster.AddOrUpdate(brandDetails);
+                context.SaveChanges();
+
+                result = true;
+            }
+            return result;
+        }
     }
 }

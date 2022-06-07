@@ -1175,6 +1175,38 @@ namespace WebApp.Controllers.OnBoarding
 
         }
 
+        [HttpPost]
+        public ActionResult UploadLogo(string groupId, string brandId)
+        {
+            if (Request.Files.Count > 0)
+            {
+                try
+                {
+                    var groupName = OBR.GetOnboardingGroupName(groupId);
+                    var brandName = OBR.GetOnboardingBrandName(groupId, brandId);
+                    string fileName = groupName + brandName + "Logo.png";
+                    DataSet ds = new DataSet();
+                    HttpPostedFileBase files = Request.Files[0];
+                   
+                    var path = ConfigurationManager.AppSettings["LogoPhysicalURL"].ToString();
+                    
+                    files.SaveAs(path + "\\" + fileName);
+
+                    var URL = "https://blueocktopus.in/Logo/" + fileName;
+                    var status = OBR.UploadBrandLogo(groupId, brandId, URL);
+
+                    return Json("File Uploaded Successfully!");
+                }
+                catch (Exception ex)
+                {
+                    newexception.AddException(ex, "UploadCustomers");
+                }
+
+            }
+            return Json("File Not Uploaded Successfully!");
+
+        }
+
         public ActionResult SaveCampaignOtherConfig(string jsonData)
         {
             bool status = false;

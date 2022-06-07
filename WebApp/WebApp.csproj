@@ -464,6 +464,7 @@
     <Content Include="Views\CustomerOnBoarding\_OutletDetails.cshtml" />
     <Content Include="Views\CustomerManagement\_LiveCustomer.cshtml" />
     <Content Include="Views\CustomerManagement\_OnBoardingCustomer.cshtml" />
+    <Content Include="Views\CustomerOnBoarding\_LogoUpload.cshtml" />
     <None Include="_bin_deployableAssemblies\x86\sqlcese40.dll" />
     <None Include="_bin_deployableAssemblies\x86\sqlceqp40.dll" />
     <None Include="_bin_deployableAssemblies\x86\sqlceme40.dll" />
