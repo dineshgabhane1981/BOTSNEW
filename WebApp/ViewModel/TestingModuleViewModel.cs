@@ -23,6 +23,8 @@ namespace WebApp.ViewModel
         public string RequestURL { get; set; }
 
 
+        
+
         public List<SelectListItem> billingpartners { get; set; }
         public List<SelectListItem> lstOutlets { get; set; }
     }

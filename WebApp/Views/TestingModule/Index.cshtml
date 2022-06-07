@@ -93,7 +93,7 @@
             <div style="float: left; margin-top: 20px; margin-bottom: 20px;" class="col-md-12 col-lg-12">
                 Invoice No <input type="text" id="txtInvoiceNo2" class="input50" style="margin-bottom: 10px; margin-right: 50px;" />
                 Invoice Amt<input type="text" id="txtInvoiceAmt2" class="input50" style="margin-bottom: 10px; margin-right: 50px;" />
-                Date Time <input type="date" id="txtDatetime2" class="input50" style="margin-bottom:10px; margin-right:20px;">
+                Date Time <input type="datetime-local" id="txtDatetime2" class="input50" style="margin-bottom:10px; margin-right:20px;">
             </div>
         </div>
         <div class="col-lg-12" style="float: left; border: 1px solid grey; border-radius: 12px; margin-bottom: 10px; margin-top: 10px; ">
@@ -123,7 +123,7 @@
             <div style="float: left; margin-top: 20px; margin-bottom: 20px;" class="col-md-12 col-lg-12">
                 Invoice No <input type="text" id="txtInvoiceNo3" class="input50" style="margin-bottom: 10px; margin-right: 50px;" />
                 Invoice Amt<input type="text" id="txtInvoiceAmt3" class="input50" style="margin-bottom: 10px; margin-right: 50px;" />
-                Date Time <input type="date" id="txtDatetime3" class="input50" style="margin-bottom:10px; margin-right:20px;">
+                Date Time <input type="datetime-local" id="txtDatetime3" class="input50" style="margin-bottom:10px; margin-right:20px;">
             </div>
         </div>
         <div class="col-lg-12" style="float: left; border: 1px solid grey; border-radius: 12px; margin-bottom: 10px; margin-top: 10px; ">
@@ -152,7 +152,7 @@
             <div style="float: left; margin-top: 20px; margin-bottom: 20px;" class="col-md-12 col-lg-12">
                 Invoice No <input type="text" id="txtInvoiceNo4"class="input50" style="margin-bottom: 10px; margin-right: 50px;" />
                 Invoice Amt<input type="text" id="txtInvoiceAmt4" class="input50" style="margin-bottom: 10px; margin-right: 50px;" />
-                Date Time <input type="date" id="txtDatetime4" class="input50" style="margin-bottom:10px; margin-right:20px;">
+                Date Time <input type="datetime-local" id="txtDatetime4" class="input50" style="margin-bottom:10px; margin-right:20px;">
             </div>
         </div>
         <div class="col-lg-12" style="float: left; border: 1px solid grey; border-radius: 12px; margin-bottom: 10px; margin-top: 10px; ">
@@ -182,7 +182,7 @@
             <div style="float: left; margin-top: 20px; margin-bottom: 20px;" class="col-md-12 col-lg-12">
                 Invoice No <input type="text" id="txtInvoiceNo5" class="input50" style="margin-bottom: 10px; margin-right: 50px;" />
                 Invoice Amt<input type="text" id="txtInvoiceAmt5" class="input50" style="margin-bottom: 10px; margin-right: 50px;" />
-                Date Time <input type="date" id="txtDatetime5" class="input50" style="margin-bottom:10px; margin-right:20px;">
+                Date Time <input type="datetime-local" id="txtDatetime5" class="input50" style="margin-bottom:10px; margin-right:20px;">
             </div>
         </div>
         <div class="col-lg-12" style="float: left; border: 1px solid grey; border-radius: 12px; margin-bottom: 10px; margin-top: 10px; ">
@@ -212,7 +212,7 @@
             <div style="float: left; margin-top: 20px; margin-bottom: 20px;" class="col-md-12 col-lg-12">
                 Invoice No <input type="text" id="txtInvoiceNo6" class="input50" style="margin-bottom: 10px; margin-right: 50px;" />
                 Invoice Amt<input type="text" id="txtInvoiceAmt6" class="input50" style="margin-bottom: 10px; margin-right: 50px;" />
-                Date Time <input type="date" id="txtDatetime6" class="input50" style="margin-bottom:10px; margin-right:20px;">
+                Date Time <input type="datetime-local" id="txtDatetime6" class="input50" style="margin-bottom:10px; margin-right:20px;">
             </div>
         </div>
         <div class="col-lg-12" style="float: left; border: 1px solid grey; border-radius: 12px; margin-bottom: 10px; margin-top: 10px;">
@@ -240,9 +240,8 @@
         <div class="col-lg-12" style="float: left; border: 1px solid grey; border-radius: 12px; margin-bottom: 30px; margin-top: 10px; ">
             
             <div style="float: left; margin-top: 20px; margin-bottom: 20px;" class="col-md-12 col-lg-12">
-                Invoice No <input type="text" id="txtInvoiceNo7" class="input50" style="margin-bottom: 10px; margin-right: 50px;" />
-                Invoice Amt<input type="text" id="txtInvoiceAmt7" class="input50" style="margin-bottom: 10px; margin-right: 50px;" />
-                Date Time <input type="date" id="txtDatetime7" class="input50" style="margin-bottom:10px; margin-right:20px;">
+                
+                Date Time <input type="datetime-local" id="txtDatetime7" class="input50" style="margin-bottom:10px; margin-right:20px;">
             </div>
         </div>
         <div class="col-lg-12" style="float: left; border: 1px solid grey; border-radius: 12px; margin-bottom: 10px; margin-top: 10px; ">
@@ -326,65 +325,54 @@
        $('#btnSend').click(function () {
            var fromId = "";
            var toId = "";
-           var url = "";
-           var APIType = "";
+           var url = "";        
            if ($("#rbtnEnrlment").is(":checked")) {
                fromId = "txtRequestPacket1";
                toId = "txtResponsePacket1";
                url = "txtRequestPacketURL1";
-               APIType = "";
+               
            }
            if ($("#rbtnEnrlmntWithEarn").is(":checked")) {
                fromId = "txtRequestPacket2";
                toId = "txtResponsePacket2";
                url = "txtRequestPacketURL2";
+               
            }
            if ($("#rbtnEarn").is(":checked")) {
                fromId = "txtRequestPacket3";
                toId = "txtResponsePacket3";
                url = "txtRequestPacketURL3";
+               
            }
            if ($("#rbtnBurnValidation").is(":checked")) {
                fromId = "txtRequestPacket4";
                toId = "txtResponsePacket4";
                url = "txtRequestPacketURL4";
+               
            }
            if ($("#rbtnBurn").is(":checked")) {
                fromId = "txtRequestPacket5";
                toId = "txtResponsePacket5";
                url = "txtRequestPacketURL5";
+               
            }
            if ($("#rbtnCancel").is(":checked")) {
                fromId = "txtRequestPacket6";
                toId = "txtResponsePacket6";
                url = "txtRequestPacketURL6";
+               
            }
            if ($("#rbtnSendOtp").is(":checked")) {
                fromId = "txtRequestPacket7";
                toId = "txtResponsePacket7";
                url = "txtRequestPacketURL7";
+              
            }
-
 
            CheckAPI(fromId, toId, url);
        });
 
-       //var now = new Date(),
-       //    minDate = now.toISOString().substring(0, 10);
-       //$('#txtDatetime1').prop('min', minDate);
-       //$('#txtDatetime2').prop('min', minDate);
-       //$('#txtDatetime3').prop('min', minDate);
-       //$('#txtDatetime4').prop('min', minDate);
-       //$('#txtDatetime5').prop('min', minDate);
-       //$('#txtDatetime6').prop('min', minDate);
-       //$('#txtDatetime7').prop('min', minDate);
 
-       var today = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
-       $('#txtDatetime1').datetimepicker({
-           dateFormat: "dd-mm-yyyy",
-           minDate: today,
-       });
-      
        $("#btnReset").click(function () {
            ResetAll();
        });
@@ -392,8 +380,59 @@
        $("#txtDatetime1").focusout(function () {
          UpdateDatetime1();
        });
+       $("#txtDatetime2").focusout(function () {
+           UpdateDatetime2();
+       });
+       $("#txtDatetime3").focusout(function () {
+           UpdateDatetime3();
+       });
+       $("#txtDatetime4").focusout(function () {
+         UpdateDatetime4();
+       });
+       $("#txtDatetime5").focusout(function () {
+           UpdateDatetime5();
+       });
+       $("#txtDatetime6").focusout(function () {
+           UpdateDatetime6();
+       });
+       $("#txtDatetime7").focusout(function () {
+           UpdateDatetime7();
+       });
 
+       
+       $("#txtInvoiceNo2").focusout(function () {
+           UpdateInvoiceNo2();
+       });
+       $("#txtInvoiceNo3").focusout(function () {
+           UpdateInvoiceNo3();
+       });
+       $("#txtInvoiceNo4").focusout(function () {
+           UpdateInvoiceNo4();
+       });
+       $("#txtInvoiceNo5").focusout(function () {
+           UpdateInvoiceNo5();
+       });
+       $("#txtInvoiceNo6").focusout(function () {
+           UpdateInvoiceNo6();
+       });
+       
 
+       $("#txtInvoiceAmt2").focusout(function () {
+           UpdateInvoiceAmt2();
+       });
+       $("#txtInvoiceAmt3").focusout(function () {
+           UpdateInvoiceAmt3();
+       });
+       $("#txtInvoiceAmt4").focusout(function () {
+           UpdateInvoiceAmt4();
+       });
+       $("#txtInvoiceAmt5").focusout(function () {
+           UpdateInvoiceAmt5();
+       });
+       $("#txtInvoiceAmt6").focusout(function () {
+           UpdateInvoiceAmt6();
+       });
+       
    });
 
     function UpdateDatetime1() {
@@ -404,7 +443,7 @@
             flag = false;
         }
         else {
-            flag = true; 
+            flag = true;
         }
 
         if (flag) {
@@ -420,7 +459,396 @@
         $("#txtRequestPacket1").val(RequestPacket);
         oldDatetime1 = Datetime;
     }
+    function UpdateDatetime2() {
+        var RequestPacket = $("#txtRequestPacket2").val();
+        var Datetime = $("#txtDatetime2").val();
+        var oldDatetime2 = "";
+        if (oldDatetime2 == "") {
+            flag = false;
+        }
+        else {
+            flag = true;
+        }
 
+        if (flag) {
+            var strInReplace = "<Datetime>" + oldDatetime2 + "</Datetime>";
+            var strToReplace = "<Datetime>" + Datetime + "</Datetime>";
+            RequestPacket = RequestPacket.replace(strInReplace, strToReplace);
+        }
+        else {
+            var strInReplace = "<Datetime></Datetime>";
+            var strToReplace = "<Datetime>" + Datetime + "</Datetime>";
+            RequestPacket = RequestPacket.replace(strInReplace, strToReplace);
+        }
+        $("#txtRequestPacket2").val(RequestPacket);
+        oldDatetime2 = Datetime;
+    }
+    function UpdateDatetime3() {
+        var RequestPacket = $("#txtRequestPacket3").val();
+        var Datetime = $("#txtDatetime3").val();
+        var oldDatetime3 = "";
+        if (oldDatetime3 == "") {
+            flag = false;
+        }
+        else {
+            flag = true;
+        }
+
+        if (flag) {
+            var strInReplace = "<Datetime>" + oldDatetime3 + "</Datetime>";
+            var strToReplace = "<Datetime>" + Datetime + "</Datetime>";
+            RequestPacket = RequestPacket.replace(strInReplace, strToReplace);
+        }
+        else {
+            var strInReplace = "<Datetime></Datetime>";
+            var strToReplace = "<Datetime>" + Datetime + "</Datetime>";
+            RequestPacket = RequestPacket.replace(strInReplace, strToReplace);
+        }
+        $("#txtRequestPacket3").val(RequestPacket);
+        oldDatetime3 = Datetime;
+    }
+    function UpdateDatetime4() {
+        var RequestPacket = $("#txtRequestPacket4").val();
+        var Datetime = $("#txtDatetime4").val();
+        var oldDatetime4 = "";
+        if (oldDatetime4 == "") {
+            flag = false;
+        }
+        else {
+            flag = true;
+        }
+
+        if (flag) {
+            var strInReplace = "<Datetime>" + oldDatetime4 + "</Datetime>";
+            var strToReplace = "<Datetime>" + Datetime + "</Datetime>";
+            RequestPacket = RequestPacket.replace(strInReplace, strToReplace);
+        }
+        else {
+            var strInReplace = "<Datetime></Datetime>";
+            var strToReplace = "<Datetime>" + Datetime + "</Datetime>";
+            RequestPacket = RequestPacket.replace(strInReplace, strToReplace);
+        }
+        $("#txtRequestPacket4").val(RequestPacket);
+        oldDatetime4 = Datetime;
+    }
+    function UpdateDatetime5() {
+        var RequestPacket = $("#txtRequestPacket5").val();
+        var Datetime = $("#txtDatetime5").val();
+        var oldDatetime5 = "";
+        if (oldDatetime5 == "") {
+            flag = false;
+        }
+        else {
+            flag = true;
+        }
+
+        if (flag) {
+            var strInReplace = "<Datetime>" + oldDatetime5 + "</Datetime>";
+            var strToReplace = "<Datetime>" + Datetime + "</Datetime>";
+            RequestPacket = RequestPacket.replace(strInReplace, strToReplace);
+        }
+        else {
+            var strInReplace = "<Datetime></Datetime>";
+            var strToReplace = "<Datetime>" + Datetime + "</Datetime>";
+            RequestPacket = RequestPacket.replace(strInReplace, strToReplace);
+        }
+        $("#txtRequestPacket5").val(RequestPacket);
+        oldDatetime5 = Datetime;
+    }
+    function UpdateDatetime6() {
+        var RequestPacket = $("#txtRequestPacket6").val();
+        var Datetime = $("#txtDatetime6").val();
+        var oldDatetime6 = "";
+        if (oldDatetime6 == "") {
+            flag = false;
+        }
+        else {
+            flag = true;
+        }
+
+        if (flag) {
+            var strInReplace = "<Datetime>" + oldDatetime6 + "</Datetime>";
+            var strToReplace = "<Datetime>" + Datetime + "</Datetime>";
+            RequestPacket = RequestPacket.replace(strInReplace, strToReplace);
+        }
+        else {
+            var strInReplace = "<Datetime></Datetime>";
+            var strToReplace = "<Datetime>" + Datetime + "</Datetime>";
+            RequestPacket = RequestPacket.replace(strInReplace, strToReplace);
+        }
+        $("#txtRequestPacket6").val(RequestPacket);
+        oldDatetime6 = Datetime;
+    }
+    function UpdateDatetime7() {
+        var RequestPacket = $("#txtRequestPacket7").val();
+        var Datetime = $("#txtDatetime7").val();
+        var oldDatetime7 = "";
+        if (oldDatetime7 == "") {
+            flag = false;
+        }
+        else {
+            flag = true;
+        }
+
+        if (flag) {
+            var strInReplace = "<Datetime>" + oldDatetime7 + "</Datetime>";
+            var strToReplace = "<Datetime>" + Datetime + "</Datetime>";
+            RequestPacket = RequestPacket.replace(strInReplace, strToReplace);
+        }
+        else {
+            var strInReplace = "<Datetime></Datetime>";
+            var strToReplace = "<Datetime>" + Datetime + "</Datetime>";
+            RequestPacket = RequestPacket.replace(strInReplace, strToReplace);
+        }
+        $("#txtRequestPacket7").val(RequestPacket);
+        oldDatetime7 = Datetime;
+    }
+
+
+    function UpdateInvoiceNo2() {
+        var RequestPacket = $("#txtRequestPacket2").val();
+        var InvoiceNo = $("#txtInvoiceNo2").val();
+        var oldInvoiceNo2 = "";
+        if (oldInvoiceNo2 == "") {
+            flag = false;
+        }
+        else {
+            flag = true;
+        }
+
+        if (flag) {
+            var strInReplace = "<InvoiceNo>" + oldInvoiceNo2 + "</InvoiceNo>";
+            var strToReplace = "<InvoiceNo>" + InvoiceNo + "</InvoiceNo>";
+            RequestPacket = RequestPacket.replace(strInReplace, strToReplace);
+        }
+        else {
+            var strInReplace = "<InvoiceNo></InvoiceNo>";
+            var strToReplace = "<InvoiceNo>" + InvoiceNo + "</InvoiceNo>";
+            RequestPacket = RequestPacket.replace(strInReplace, strToReplace);
+        }
+        $("#txtRequestPacket2").val(RequestPacket);
+        oldInvoiceNo2 = InvoiceNo;
+    }
+    function UpdateInvoiceNo3() {
+        var RequestPacket = $("#txtRequestPacket3").val();
+        var InvoiceNo = $("#txtInvoiceNo3").val();
+        var oldInvoiceNo3 = "";
+        if (oldInvoiceNo3 == "") {
+            flag = false;
+        }
+        else {
+            flag = true;
+        }
+
+        if (flag) {
+            var strInReplace = "<InvoiceNo>" + oldInvoiceNo3 + "</InvoiceNo>";
+            var strToReplace = "<InvoiceNo>" + InvoiceNo + "</InvoiceNo>";
+            RequestPacket = RequestPacket.replace(strInReplace, strToReplace);
+        }
+        else {
+            var strInReplace = "<InvoiceNo></InvoiceNo>";
+            var strToReplace = "<InvoiceNo>" + InvoiceNo + "</InvoiceNo>";
+            RequestPacket = RequestPacket.replace(strInReplace, strToReplace);
+        }
+        $("#txtRequestPacket3").val(RequestPacket);
+        oldInvoiceNo3 = InvoiceNo;
+    }
+    function UpdateInvoiceNo4() {
+        var RequestPacket = $("#txtRequestPacket4").val();
+        var InvoiceNo = $("#txtInvoiceNo4").val();
+        var oldInvoiceNo4 = "";
+        if (oldInvoiceNo4 == "") {
+            flag = false;
+        }
+        else {
+            flag = true;
+        }
+
+        if (flag) {
+            var strInReplace = "<InvoiceNo>" + oldInvoiceNo4 + "</InvoiceNo>";
+            var strToReplace = "<InvoiceNo>" + InvoiceNo + "</InvoiceNo>";
+            RequestPacket = RequestPacket.replace(strInReplace, strToReplace);
+        }
+        else {
+            var strInReplace = "<InvoiceNo></InvoiceNo>";
+            var strToReplace = "<InvoiceNo>" + InvoiceNo + "</InvoiceNo>";
+            RequestPacket = RequestPacket.replace(strInReplace, strToReplace);
+        }
+        $("#txtRequestPacket4").val(RequestPacket);
+        oldInvoiceNo4 = InvoiceNo;
+    }
+    function UpdateInvoiceNo5() {
+        var RequestPacket = $("#txtRequestPacket5").val();
+        var InvoiceNo = $("#txtInvoiceNo5").val();
+        var oldInvoiceNo5 = "";
+        if (oldInvoiceNo5 == "") {
+            flag = false;
+        }
+        else {
+            flag = true;
+        }
+
+        if (flag) {
+            var strInReplace = "<InvoiceNo>" + oldInvoiceNo5 + "</InvoiceNo>";
+            var strToReplace = "<InvoiceNo>" + InvoiceNo + "</InvoiceNo>";
+            RequestPacket = RequestPacket.replace(strInReplace, strToReplace);
+        }
+        else {
+            var strInReplace = "<InvoiceNo></InvoiceNo>";
+            var strToReplace = "<InvoiceNo>" + InvoiceNo + "</InvoiceNo>";
+            RequestPacket = RequestPacket.replace(strInReplace, strToReplace);
+        }
+        $("#txtRequestPacket5").val(RequestPacket);
+        oldInvoiceNo5 = InvoiceNo;
+    }
+    function UpdateInvoiceNo6() {
+        var RequestPacket = $("#txtRequestPacket6").val();
+        var InvoiceNo = $("#txtInvoiceNo6").val();
+        var oldInvoiceNo6 = "";
+        if (oldInvoiceNo6 == "") {
+            flag = false;
+        }
+        else {
+            flag = true;
+        }
+
+        if (flag) {
+            var strInReplace = "<InvoiceNo>" + oldInvoiceNo6 + "</InvoiceNo>";
+            var strToReplace = "<InvoiceNo>" + InvoiceNo + "</InvoiceNo>";
+            RequestPacket = RequestPacket.replace(strInReplace, strToReplace);
+        }
+        else {
+            var strInReplace = "<InvoiceNo></InvoiceNo>";
+            var strToReplace = "<InvoiceNo>" + InvoiceNo + "</InvoiceNo>";
+            RequestPacket = RequestPacket.replace(strInReplace, strToReplace);
+        }
+        $("#txtRequestPacket6").val(RequestPacket);
+        oldInvoiceNo6 = InvoiceNo;
+    }
+   
+
+    
+    function UpdateInvoiceAmt2() {
+        var RequestPacket = $("#txtRequestPacket2").val();
+        var InvoiceAmt = $("#txtInvoiceAmt2").val();
+        var oldInvoiceAmt2 = "";
+        if (oldInvoiceAmt2 == "") {
+            flag = false;
+        }
+        else {
+            flag = true;
+        }
+
+        if (flag) {
+            var strInReplace = "<InvoiceAmt>" + oldInvoiceAmt2 + "</InvoiceAmt>";
+            var strToReplace = "<InvoiceAmt>" + InvoiceAmt + "</InvoiceAmt>";
+            RequestPacket = RequestPacket.replace(strInReplace, strToReplace);
+        }
+        else {
+            var strInReplace = "<InvoiceAmt></InvoiceAmt>";
+            var strToReplace = "<InvoiceAmt>" + InvoiceAmt + "</InvoiceAmt>";
+            RequestPacket = RequestPacket.replace(strInReplace, strToReplace);
+        }
+        $("#txtRequestPacket2").val(RequestPacket);
+        oldInvoiceAmt2 = InvoiceAmt;
+    }
+    function UpdateInvoiceAmt3() {
+        var RequestPacket = $("#txtRequestPacket3").val();
+        var InvoiceAmt = $("#txtInvoiceAmt3").val();
+        var oldInvoiceAmt3 = "";
+        if (oldInvoiceAmt3 == "") {
+            flag = false;
+        }
+        else {
+            flag = true;
+        }
+
+        if (flag) {
+            var strInReplace = "<InvoiceAmt>" + oldInvoiceAmt3 + "</InvoiceAmt>";
+            var strToReplace = "<InvoiceAmt>" + InvoiceAmt + "</InvoiceAmt>";
+            RequestPacket = RequestPacket.replace(strInReplace, strToReplace);
+        }
+        else {
+            var strInReplace = "<InvoiceAmt></InvoiceAmt>";
+            var strToReplace = "<InvoiceAmt>" + InvoiceAmt + "</InvoiceAmt>";
+            RequestPacket = RequestPacket.replace(strInReplace, strToReplace);
+        }
+        $("#txtRequestPacket3").val(RequestPacket);
+        oldInvoiceAmt3 = InvoiceAmt;
+    }
+    function UpdateInvoiceAmt4() {
+        var RequestPacket = $("#txtRequestPacket4").val();
+        var InvoiceAmt = $("#txtInvoiceAmt4").val();
+        var oldInvoiceAmt4 = "";
+        if (oldInvoiceAmt4 == "") {
+            flag = false;
+        }
+        else {
+            flag = true;
+        }
+
+        if (flag) {
+            var strInReplace = "<InvoiceAmt>" + oldInvoiceAmt4 + "</InvoiceAmt>";
+            var strToReplace = "<InvoiceAmt>" + InvoiceAmt + "</InvoiceAmt>";
+            RequestPacket = RequestPacket.replace(strInReplace, strToReplace);
+        }
+        else {
+            var strInReplace = "<InvoiceAmt></InvoiceAmt>";
+            var strToReplace = "<InvoiceAmt>" + InvoiceAmt + "</InvoiceAmt>";
+            RequestPacket = RequestPacket.replace(strInReplace, strToReplace);
+        }
+        $("#txtRequestPacket4").val(RequestPacket);
+        oldInvoiceAmt4 = InvoiceAmt;
+    }
+    function UpdateInvoiceAmt5() {
+        var RequestPacket = $("#txtRequestPacket5").val();
+        var InvoiceAmt = $("#txtInvoiceAmt5").val();
+        var oldInvoiceAmt5 = "";
+        if (oldInvoiceAmt5 == "") {
+            flag = false;
+        }
+        else {
+            flag = true;
+        }
+
+        if (flag) {
+            var strInReplace = "<InvoiceAmt>" + oldInvoiceAmt5 + "</InvoiceAmt>";
+            var strToReplace = "<InvoiceAmt>" + InvoiceAmt + "</InvoiceAmt>";
+            RequestPacket = RequestPacket.replace(strInReplace, strToReplace);
+        }
+        else {
+            var strInReplace = "<InvoiceAmt></InvoiceAmt>";
+            var strToReplace = "<InvoiceAmt>" + InvoiceAmt + "</InvoiceAmt>";
+            RequestPacket = RequestPacket.replace(strInReplace, strToReplace);
+        }
+        $("#txtRequestPacket5").val(RequestPacket);
+        oldInvoiceAmt5 = InvoiceAmt;
+    }
+    function UpdateInvoiceAmt6() {
+        var RequestPacket = $("#txtRequestPacket6").val();
+        var InvoiceAmt = $("#txtInvoiceAmt6").val();
+        var oldInvoiceAmt6 = "";
+        if (oldInvoiceAmt6 == "") {
+            flag = false;
+        }
+        else {
+            flag = true;
+        }
+
+        if (flag) {
+            var strInReplace = "<InvoiceAmt>" + oldInvoiceAmt6 + "</InvoiceAmt>";
+            var strToReplace = "<InvoiceAmt>" + InvoiceAmt + "</InvoiceAmt>";
+            RequestPacket = RequestPacket.replace(strInReplace, strToReplace);
+        }
+        else {
+            var strInReplace = "<InvoiceAmt></InvoiceAmt>";
+            var strToReplace = "<InvoiceAmt>" + InvoiceAmt + "</InvoiceAmt>";
+            RequestPacket = RequestPacket.replace(strInReplace, strToReplace);
+        }
+        $("#txtRequestPacket6").val(RequestPacket);
+        oldInvoiceAmt6 = InvoiceAmt;
+    }
+   
 
     function ReplaceCounterId() {
         var outletId = $("#ddlOutlet").val();
@@ -581,10 +1009,10 @@
     }
 
     function ReplaceMobileNo() {
-        var MobileNo = $("#txtMobileNo").val();
+        //var MobileNo = $("#txtMobileNo").val();
         if ($('#rbtnEnrlment').is(':checked')) {
             var RequestPacket = $("#txtRequestPacket1").val();
-            //var mobileNo1 = $("#txtMobileNo1").val();
+            var MobileNo1 = $("#txtMobileNo").val();
             if (oldMobileNo1 == "") {
                 flag = false;
             }
@@ -594,22 +1022,22 @@
 
             if (flag) {
                 var strInReplace = "<MobileNo>" + oldMobileNo1 + "</MobileNo>";
-                var strToReplace = "<MobileNo>" + MobileNo + "</MobileNo>";
+                var strToReplace = "<MobileNo>" + MobileNo1 + "</MobileNo>";
                 RequestPacket = RequestPacket.replace(strInReplace, strToReplace);
             }
             else {
                 var strInReplace = "<MobileNo></MobileNo>";
-                var strToReplace = "<MobileNo>" + MobileNo + "</MobileNo>";
+                var strToReplace = "<MobileNo>" + MobileNo1 + "</MobileNo>";
                 RequestPacket = RequestPacket.replace(strInReplace, strToReplace);
             }
             $("#txtRequestPacket1").val(RequestPacket);
-            oldMobileNo1 = MobileNo;
+            oldMobileNo1 = MobileNo1;
 
         }
 
         if ($('#rbtnEnrlmntWithEarn').is(':checked')) {
             var RequestPacket = $("#txtRequestPacket2").val();
-            //var MobileNo = $("#txtMobileNo").val();
+            var MobileNo2 = $("#txtMobileNo").val();
             if (oldMobileNo2 == "") {
                 flag = false;
             }
@@ -619,20 +1047,21 @@
 
             if (flag) {
                 var strInReplace = "<MobileNo>" + oldMobileNo2 + "</MobileNo>";
-                var strToReplace = "<MobileNo>" + MobileNo + "</MobileNo>";
+                var strToReplace = "<MobileNo>" + MobileNo2 + "</MobileNo>";
                 RequestPacket = RequestPacket.replace(strInReplace, strToReplace);
             }
             else {
                 var strInReplace = "<MobileNo></MobileNo>";
-                var strToReplace = "<MobileNo>" + MobileNo + "</MobileNo>";
+                var strToReplace = "<MobileNo>" + MobileNo2 + "</MobileNo>";
                 RequestPacket = RequestPacket.replace(strInReplace, strToReplace);
             }
             $("#txtRequestPacket2").val(RequestPacket);
-            oldMobileNo2 = MobileNo;
+            oldMobileNo2 = MobileNo2;
         }
 
         if ($('#rbtnEarn').is(':checked')) {
             var RequestPacket = $("#txtRequestPacket3").val();
+            var MobileNo3 = $("#txtMobileNo").val();
             if (oldMobileNo3 == "") {
                 flag = false;
             }
@@ -642,20 +1071,21 @@
 
             if (flag) {
                 var strInReplace = "<MobileNo>" + oldMobileNo3 + "</MobileNo>";
-                var strToReplace = "<MobileNo>" + MobileNo + "</MobileNo>";
+                var strToReplace = "<MobileNo>" + MobileNo3 + "</MobileNo>";
                 RequestPacket = RequestPacket.replace(strInReplace, strToReplace);
             }
             else {
                 var strInReplace = "<MobileNo></MobileNo>";
-                var strToReplace = "<MobileNo>" + MobileNo + "</MobileNo>";
+                var strToReplace = "<MobileNo>" + MobileNo3 + "</MobileNo>";
                 RequestPacket = RequestPacket.replace(strInReplace, strToReplace);
             }
             $("#txtRequestPacket3").val(RequestPacket);
-            oldMobileNo3 = MobileNo;
+            oldMobileNo3 = MobileNo3;
         }
 
         if ($('#rbtnBurnValidation').is(':checked')) {
-            var RequestPacket = $("#txtRequestPacket4").val(); 
+            var RequestPacket = $("#txtRequestPacket4").val();
+            var MobileNo4 = $("#txtMobileNo").val();
             if (oldMobileNo4 == "") {
                 flag = false;
             }
@@ -665,20 +1095,21 @@
 
             if (flag) {
                 var strInReplace = "<MobileNo>" + oldMobileNo4 + "</MobileNo>";
-                var strToReplace = "<MobileNo>" + MobileNo + "</MobileNo>";
+                var strToReplace = "<MobileNo>" + MobileNo4 + "</MobileNo>";
                 RequestPacket = RequestPacket.replace(strInReplace, strToReplace);
             }
             else {
                 var strInReplace = "<MobileNo></MobileNo>";
-                var strToReplace = "<MobileNo>" + MobileNo + "</MobileNo>";
+                var strToReplace = "<MobileNo>" + MobileNo4 + "</MobileNo>";
                 RequestPacket = RequestPacket.replace(strInReplace, strToReplace);
             }
             $("#txtRequestPacket4").val(RequestPacket);
-            oldMobileNo4 = MobileNo;
+            oldMobileNo4 = MobileNo4;
         }
 
         if ($('#rbtnBurn').is(':checked')) {
             var RequestPacket = $("#txtRequestPacket5").val();
+            var MobileNo5 = $("#txtMobileNo").val();
             if (oldMobileNo5 == "") {
                 flag = false;
             }
@@ -688,20 +1119,21 @@
 
             if (flag) {
                 var strInReplace = "<MobileNo>" + oldMobileNo5 + "</MobileNo>";
-                var strToReplace = "<MobileNo>" + MobileNo + "</MobileNo>";
+                var strToReplace = "<MobileNo>" + MobileNo5 + "</MobileNo>";
                 RequestPacket = RequestPacket.replace(strInReplace, strToReplace);
             }
             else {
                 var strInReplace = "<MobileNo></MobileNo>";
-                var strToReplace = "<MobileNo>" + MobileNo + "</MobileNo>";
+                var strToReplace = "<MobileNo>" + MobileNo5 + "</MobileNo>";
                 RequestPacket = RequestPacket.replace(strInReplace, strToReplace);
             }
             $("#txtRequestPacket5").val(RequestPacket);
-            oldMobileNo5 = MobileNo;
+            oldMobileNo5 = MobileNo5;
         }
 
         if ($('#rbtnCancel').is(':checked')) {
             var RequestPacket = $("#txtRequestPacket6").val();
+            var MobileNo6 = $("#txtMobileNo").val();
             if (oldMobileNo6 == "") {
                 flag = false;
             }
@@ -711,20 +1143,21 @@
 
             if (flag) {
                 var strInReplace = "<MobileNo>" + oldMobileNo6 + "</MobileNo>";
-                var strToReplace = "<MobileNo>" + mobileNo6 + "</MobileNo>";
+                var strToReplace = "<MobileNo>" + MobileNo6 + "</MobileNo>";
                 RequestPacket = RequestPacket.replace(strInReplace, strToReplace);
             }
             else {
                 var strInReplace = "<MobileNo></MobileNo>";
-                var strToReplace = "<MobileNo>" + mobileNo6 + "</MobileNo>";
+                var strToReplace = "<MobileNo>" + MobileNo6 + "</MobileNo>";
                 RequestPacket = RequestPacket.replace(strInReplace, strToReplace);
             }
             $("#txtRequestPacket6").val(RequestPacket);
-            oldMobileNo6 = mobileNo6;
+            oldMobileNo6 = MobileNo6;
         }
 
         if ($('#rbtnSendOtp').is(':checked')) {
             var RequestPacket = $("#txtRequestPacket7").val();
+            var MobileNo7 = $("#txtMobileNo").val();
             if (oldMobileNo7 == "") {
                 flag = false;
             }
@@ -734,21 +1167,24 @@
 
             if (flag) {
                 var strInReplace = "<MobileNo>" + oldMobileNo7 + "</MobileNo>";
-                var strToReplace = "<MobileNo>" + MobileNo + "</MobileNo>";
+                var strToReplace = "<MobileNo>" + MobileNo7 + "</MobileNo>";
                 RequestPacket = RequestPacket.replace(strInReplace, strToReplace);
             }
             else {
                 var strInReplace = "<MobileNo></MobileNo>";
-                var strToReplace = "<MobileNo>" + MobileNo + "</MobileNo>";
+                var strToReplace = "<MobileNo>" + MobileNo7 + "</MobileNo>";
                 RequestPacket = RequestPacket.replace(strInReplace, strToReplace);
             }
             $("#txtRequestPacket7").val(RequestPacket);
-            oldMobileNo7 = MobileNo;
+            oldMobileNo7 = MobileNo7;
         }
     }
 
     function ResetAll() {
         if ($('#rbtnEnrlment').is(':checked')) {
+            $("#ddlBillingPartner").val('');
+            $("#ddlOutlet").val('');
+            $("#txtMobileNo").val('');
             $("#txtDatetime1").val('');
             ResetSection("1");
         }
@@ -788,7 +1224,7 @@
             $("#txtInvoiceAmt7").val('');
             $("#txtDatetime7").val('');
             ResetSection("7");
-        }   
+        }
     }
 
     function ResetSection(id) {
@@ -862,11 +1298,11 @@
         ReplaceCounterId();
     }
 
-    function CheckAPI(requestId, responseId, apiurl1) {
+    function CheckAPI(requestId, responseId, apiurl1, APITypeId) {
         var RequestPacket = $("#" + requestId).val();
         var ResponsePacket = $("#" + responseId).val();
         var ApiURL = $("#" + apiurl1).val();
-
+       
         $("#divLoader").show();
             $.ajax({
                 type: "POST",
@@ -885,4 +1321,6 @@
                 }
             });
     }
+
+    
 </script>

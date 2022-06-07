@@ -89,7 +89,7 @@ namespace WebApp.Controllers
             return objTMV;
         }
 
-        public ActionResult GetResponse(string RequestPacket, string RequestURL)
+        public ActionResult GetResponse(string RequestPacket, string RequestURL, string APIType)
         {
             //HttpWebRequest request = (HttpWebRequest)WebRequest.Create("https://blueocktopus.in/NewRetailwareWebService/Service.asmx/RW");
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(RequestURL);
@@ -131,9 +131,89 @@ namespace WebApp.Controllers
                 XmlNode node1 = doc.DocumentElement.SelectSingleNode("/packets/url/EnrollnmentURL");
                 TMV.RequestURL = node1.InnerXml;
             }
+            if (Convert.ToInt32(Id) == 2)
+            {
+                XmlDocument doc = new XmlDocument();
+                //doc.Load("E:\\Projects\\NEWBOTS\\WebApp\\APIPackets.xml");
+                var path = ConfigurationManager.AppSettings["PacketXMLPath"].ToString();
+                doc.Load(path);
+
+
+                //Enrollnment With Earn
+                XmlNode node2 = doc.DocumentElement.SelectSingleNode("/packets/EnrolnmentWithEarn");
+                TMV.RequestPacketEnrollnmentWithEarn = node2.InnerXml;
+                XmlNode node1 = doc.DocumentElement.SelectSingleNode("/packets/url/EnrollnmentURL");
+                TMV.RequestURL = node1.InnerXml;
+            }
+            if (Convert.ToInt32(Id) == 3)
+            {
+                XmlDocument doc = new XmlDocument();
+                //doc.Load("E:\\Projects\\NEWBOTS\\WebApp\\APIPackets.xml");
+                var path = ConfigurationManager.AppSettings["PacketXMLPath"].ToString();
+                doc.Load(path);
+
+                //Earn
+                XmlNode node3 = doc.DocumentElement.SelectSingleNode("/packets/Earn");
+                TMV.RequestPacketEarn = node3.InnerXml;
+                XmlNode node1 = doc.DocumentElement.SelectSingleNode("/packets/url/EnrollnmentURL");
+                TMV.RequestURL = node1.InnerXml;
+            }
+            if (Convert.ToInt32(Id) == 4)
+            {
+                XmlDocument doc = new XmlDocument();
+                //doc.Load("E:\\Projects\\NEWBOTS\\WebApp\\APIPackets.xml");
+                var path = ConfigurationManager.AppSettings["PacketXMLPath"].ToString();
+                doc.Load(path);
+
+                //Burn Validation
+                XmlNode node4 = doc.DocumentElement.SelectSingleNode("/packets/BurnValidation");
+                TMV.RequestPacketBurnValidation = node4.InnerXml;
+                XmlNode node1 = doc.DocumentElement.SelectSingleNode("/packets/url/EnrollnmentURL");
+                TMV.RequestURL = node1.InnerXml;
+            }
+            if (Convert.ToInt32(Id) == 5)
+            {
+                XmlDocument doc = new XmlDocument();
+                //doc.Load("E:\\Projects\\NEWBOTS\\WebApp\\APIPackets.xml");
+                var path = ConfigurationManager.AppSettings["PacketXMLPath"].ToString();
+                doc.Load(path);
+
+                //Burn
+                XmlNode node5 = doc.DocumentElement.SelectSingleNode("/packets/Burn");
+                TMV.RequestPacketBurn = node5.InnerXml;
+                XmlNode node1 = doc.DocumentElement.SelectSingleNode("/packets/url/EnrollnmentURL");
+                TMV.RequestURL = node1.InnerXml;
+            }
+            if (Convert.ToInt32(Id) == 6)
+            {
+                XmlDocument doc = new XmlDocument();
+                //doc.Load("E:\\Projects\\NEWBOTS\\WebApp\\APIPackets.xml");
+                var path = ConfigurationManager.AppSettings["PacketXMLPath"].ToString();
+                doc.Load(path);
+
+                //Cancel
+                XmlNode node6 = doc.DocumentElement.SelectSingleNode("/packets/Cancel");
+                TMV.RequestPacketCancel = node6.InnerXml;
+                XmlNode node1 = doc.DocumentElement.SelectSingleNode("/packets/url/EnrollnmentURL");
+                TMV.RequestURL = node1.InnerXml;
+            }
+            if (Convert.ToInt32(Id) == 7)
+            {
+                XmlDocument doc = new XmlDocument();
+                //doc.Load("E:\\Projects\\NEWBOTS\\WebApp\\APIPackets.xml");
+                var path = ConfigurationManager.AppSettings["PacketXMLPath"].ToString();
+                doc.Load(path);
+
+                //Send Otp
+                XmlNode node7 = doc.DocumentElement.SelectSingleNode("/packets/SendOTP");
+                TMV.RequestPacketSendOTP = node7.InnerXml;
+                XmlNode node1 = doc.DocumentElement.SelectSingleNode("/packets/url/EnrollnmentURL");
+                TMV.RequestURL = node1.InnerXml;
+            }
+
             return Json(TMV, JsonRequestBehavior.AllowGet);
         }
 
-
+       
     }
 }
