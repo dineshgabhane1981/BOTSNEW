@@ -296,6 +296,7 @@
     <Compile Include="Models\LoginModel.cs" />
     <Compile Include="Models\MWPSourceMaster.cs" />
     <Compile Include="Models\MWP_Details.cs" />
+    <Compile Include="Models\OnBoarding\BOTS_TblActionTracking.cs" />
     <Compile Include="Models\OnBoarding\BOTS_TblBulkUpload.cs" />
     <Compile Include="Models\OnBoarding\BOTS_TblBurnRuleConfig.cs" />
     <Compile Include="Models\OnBoarding\BOTS_TblCampaignOtherConfig.cs" />

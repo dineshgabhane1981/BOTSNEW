@@ -12,11 +12,12 @@
         /*}*/
     </style>
 }
-@if (userDetails != null)
-{
-    <div class="app-header header-shadow">
-        <div class="app-header__logo">
-            <div class="logo-src"></div>
+
+<div class="app-header header-shadow">
+    <div class="app-header__logo">
+        <div class="logo-src"></div>
+        @if (userDetails != null)
+        {
             <div class="header__pane ml-auto">
                 <div>
                     <button type="button" class="hamburger close-sidebar-btn hamburger--elastic" data-class="closed-sidebar">
@@ -26,25 +27,28 @@
                     </button>
                 </div>
             </div>
+        }
         </div>
-        <div class="app-header__mobile-menu">
-            <div>
-                <button type="button" class="hamburger hamburger--elastic mobile-toggle-nav">
-                    <span class="hamburger-box">
-                        <span class="hamburger-inner"></span>
-                    </span>
-                </button>
-            </div>
+    <div class="app-header__mobile-menu">
+        <div>
+            <button type="button" class="hamburger hamburger--elastic mobile-toggle-nav">
+                <span class="hamburger-box">
+                    <span class="hamburger-inner"></span>
+                </span>
+            </button>
         </div>
-        <div class="app-header__menu">
-            <span>
-                <button type="button" class="btn-icon btn-icon-only btn btn-primary btn-sm mobile-toggle-header-nav">
-                    <span class="btn-icon-wrapper">
-                        <i class="fa fa-ellipsis-v fa-w-6"></i>
-                    </span>
-                </button>
-            </span>
-        </div>
+    </div>
+    <div class="app-header__menu">
+        <span>
+            <button type="button" class="btn-icon btn-icon-only btn btn-primary btn-sm mobile-toggle-header-nav">
+                <span class="btn-icon-wrapper">
+                    <i class="fa fa-ellipsis-v fa-w-6"></i>
+                </span>
+            </button>
+        </span>
+    </div>
+    @if (userDetails != null)
+    {
         <div class="app-header__content">
             <div class="app-header-left">
                 <div class="search-wrapper">
@@ -55,7 +59,7 @@
                     <button id="btnCloseMemberSearch" class="close"></button>
                 </div>
                 <ul class="header-menu nav">
-                    
+
                     @if (!string.IsNullOrEmpty(userDetails.CustomerName))
                     {
                         <li class="btn-group nav-item">
@@ -91,6 +95,7 @@
                 </div>
             </div>
         </div>
-    </div>
 
-}
+    }
+  </div>
+

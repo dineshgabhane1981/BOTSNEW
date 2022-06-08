@@ -194,7 +194,7 @@
                         message: "Data Saved Successfully!",
                         buttonText: "Okay"
                     }).then(() => {
-                        @*window.location.href = '@Url.Action("Index", "CustomerManagement")'*@
+                        window.location.href = '@Url.Action("Index", "CustomerManagement")'
                     })
             </script>
         }
@@ -2743,7 +2743,19 @@
             $("#dvPaymentSection").show();
             $("#dvAdvanceAmount").show();
         }
-
+        //txtASF
+        if ($("#NewModel").is(":checked")) {
+            CalculateTotalFees();
+            //$('#dvIsWhatsApp').css('border', '');
+            $("#txtASFPercentage").attr("readonly", false);
+            $("#txtASF").attr("readonly", false);
+        }
+        else {
+            $("#txtASFPercentage").attr("readonly", true);
+            $("#txtASF").attr("readonly", true);
+            $("#txtASFPercentage").val("");
+            $("#txtASF").val("");
+        }
         var InstallmentString = $("#hdnPaymentScheduleData").val();
         var InstallmentObj = $.parseJSON(InstallmentString);
         ShowInstallments();

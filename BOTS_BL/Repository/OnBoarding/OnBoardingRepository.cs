@@ -431,7 +431,7 @@ namespace BOTS_BL.Repository
             using (var context = new CommonDBContext())
             {
                 var loginTypeList = new List<string> { "2", "3", "4" };
-                lstEmails = context.CustomerLoginDetails.Where(x => x.EmailId != null && x.LoginType != null && !loginTypeList.Contains(x.LoginType)).Select(y => y.EmailId).ToList();
+                lstEmails = context.CustomerLoginDetails.Where(x => x.EmailId != null && x.LoginType != null && !loginTypeList.Contains(x.LoginType) && x.UserStatus == true).Select(y => y.EmailId).ToList();
             }
 
             return lstEmails;
@@ -2228,12 +2228,12 @@ namespace BOTS_BL.Repository
             return groupName;
         }
 
-        public string GetOnboardingBrandName(string groupid,string brandId)
+        public string GetOnboardingBrandName(string groupid, string brandId)
         {
             string groupName = string.Empty;
             using (var context = new CommonDBContext())
             {
-                groupName = context.BOTS_TblRetailMaster.Where(x => x.GroupId == groupid && x.BrandId== brandId).Select(y => y.BrandName).FirstOrDefault();
+                groupName = context.BOTS_TblRetailMaster.Where(x => x.GroupId == groupid && x.BrandId == brandId).Select(y => y.BrandName).FirstOrDefault();
             }
             return groupName;
         }
@@ -2287,6 +2287,26 @@ namespace BOTS_BL.Repository
                 result = true;
             }
             return result;
+        }
+
+        public void AddTracking(string groupId, string ActionTaken, string AddedBy)
+        {
+            using (var context = new CommonDBContext())
+            {
+                try
+                {
+                    BOTS_TblActionTracking objData = new BOTS_TblActionTracking();
+                    objData.GroupId = groupId;
+                    objData.ActionTaken = ActionTaken;
+                    objData.AddedBy = AddedBy;
+                    objData.AddedDate = DateTime.Now;
+                    context.BOTS_TblActionTracking.AddOrUpdate(objData);
+                }
+                catch(Exception ex)
+                {
+                    newexception.AddException(ex, "AddTracking" + groupId);
+                }
+            }
         }
     }
 }

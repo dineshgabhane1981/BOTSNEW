@@ -547,42 +547,71 @@ namespace WebApp.Controllers.OnBoarding
                 sb.Append("</tr>");
 
                 sb.Append("<tr>");
+                sb.Append("<td>Sales Person:</td><td>" + Convert.ToString(GroupDetails.SourceByName) + "</td>");
+                sb.Append("</tr>");
+
+                sb.Append("<tr>");
                 sb.Append("<td>Comments:</td><td>" + GroupDetails.Comments + "</td>");
                 sb.Append("</tr>");
 
                 sb.Append("</table>");
 
 
-                var userName = ConfigurationManager.AppSettings["Email"].ToString();
-                var password = ConfigurationManager.AppSettings["EmailPassword"].ToString();
-                SmtpClient smtp = new SmtpClient();
-                smtp.UseDefaultCredentials = true;
-                smtp.Credentials = new System.Net.NetworkCredential(userName, password);
-                smtp.Host = "smtp.gmail.com";
-                smtp.Port = 587;
-                smtp.EnableSsl = true;
-                var userDetails = (CustomerLoginDetail)Session["UserSession"];
+                //var userName = ConfigurationManager.AppSettings["FrmEmailOnboarding"].ToString();
+                //var password = ConfigurationManager.AppSettings["FrmEmailOnboardingPwd"].ToString();
+                //SmtpClient smtp = new SmtpClient();
+                //smtp.UseDefaultCredentials = true;
+                //smtp.Credentials = new System.Net.NetworkCredential(userName, password);
+                //smtp.Host = "smtp.zoho.com";
+                //smtp.Port = 587;
+                //smtp.EnableSsl = true;
+                //var userDetails = (CustomerLoginDetail)Session["UserSession"];
 
-                MailMessage email = new MailMessage();
-                MailAddress from = new MailAddress(userName);
-                email.From = from;
+                //MailMessage email = new MailMessage();
+                //MailAddress from = new MailAddress(userName);
+                //email.From = from;
+                //foreach (var item in emailIds)
+                //{
+                //    email.To.Add(item);
+                //}
+
+                //email.Subject = "New Customer Onboarded - " + GroupDetails.GroupName;
+                //email.SubjectEncoding = System.Text.Encoding.Default;
+
+                //email.BodyEncoding = System.Text.Encoding.GetEncoding("utf-8");
+                //email.Body = sb.ToString();
+                //email.IsBodyHtml = true;
+                //email.Priority = MailPriority.High;
+                //smtp.Send(email);
+
+                var from = ConfigurationManager.AppSettings["FrmEmailOnboarding"].ToString();
+                var PWD = ConfigurationManager.AppSettings["FrmEmailOnboardingPwd"].ToString();
+                MailMessage mail = new MailMessage();
+                MailAddress fromMail = new MailAddress(from);
+                mail.From = fromMail;
                 foreach (var item in emailIds)
                 {
-                    email.To.Add(item);
+                    mail.To.Add(item);
                 }
-
-                email.Subject = "New Customer Onboarded - " + GroupDetails.GroupName;
-                email.Body = sb.ToString();
-                email.IsBodyHtml = true;
-                email.Priority = MailPriority.High;
-                smtp.Send(email);
-
+                //mail.From = from;
+                mail.Subject = "New Customer Onboarded - " + GroupDetails.GroupName;
+                mail.SubjectEncoding = System.Text.Encoding.Default;
+                mail.Body = sb.ToString();
+                mail.IsBodyHtml = true;
+                mail.BodyEncoding = System.Text.Encoding.GetEncoding("utf-8");
+                SmtpClient smtp = new SmtpClient();
+                smtp.Host = "smtp.zoho.com";
+                smtp.EnableSsl = true;
+                NetworkCredential networkCredential = new NetworkCredential(from, PWD);
+                smtp.UseDefaultCredentials = true;
+                smtp.Credentials = networkCredential;
+                smtp.Port = 587;
+                smtp.Send(mail);
             }
             catch (Exception ex)
             {
                 newexception.AddException(ex, "Onboarding Email Error");
             }
-
         }
 
         public ActionResult CSEditing(string groupId)
@@ -1187,9 +1216,9 @@ namespace WebApp.Controllers.OnBoarding
                     string fileName = groupName + brandName + "Logo.png";
                     DataSet ds = new DataSet();
                     HttpPostedFileBase files = Request.Files[0];
-                   
+
                     var path = ConfigurationManager.AppSettings["LogoPhysicalURL"].ToString();
-                    
+
                     files.SaveAs(path + "\\" + fileName);
 
                     var URL = "https://blueocktopus.in/Logo/" + fileName;
@@ -1759,7 +1788,7 @@ namespace WebApp.Controllers.OnBoarding
                 objEarnRule.IsSlab = Convert.ToBoolean(item["IsSlab"]);
                 objEarnRule.IsProductWise = Convert.ToBoolean(item["IsProductWise"]);
                 if (objEarnRule.IsBase.Value)
-                {                    
+                {
                     objEarnRule.BasePercentage = Convert.ToDecimal(item["BasePercentage"]);
                 }
                 if (objEarnRule.IsProductWise.Value)

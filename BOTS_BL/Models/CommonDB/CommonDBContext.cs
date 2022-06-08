@@ -16,6 +16,7 @@ namespace BOTS_BL.Models
             : base("name=CommonDBContext")
         {
         }
+        public virtual DbSet<BOTS_TblActionTracking> BOTS_TblActionTracking { get; set; }
         public virtual DbSet<GroupIdMapping> GroupIdMappings { get; set; }
         public virtual DbSet<BOTS_TblBurnRuleConfig> BOTS_TblBurnRuleConfig { get; set; }
         public virtual DbSet<BOTS_TblProductUpload> BOTS_TblProductUpload { get; set; }
