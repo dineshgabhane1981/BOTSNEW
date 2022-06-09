@@ -44,22 +44,28 @@
         <div>
             <input type="number" class="input10" id="txtIntroDays1" /> Days before event
             <textarea id="txtIntroScript1" class="input100" style="padding-top:20px;vertical-align:middle;"> </textarea><span style="font-weight:bold;" id="spnBirthDay1"></span>
-            <br /><br /> (This is SMS script only in case number do not have Whatsapp <b>(Optional)</b>)
+                                                                                                                        <br />
+        </div>
+        <div id="dvBirthDaySMS1">
+            <br /> (This is SMS script only in case number do not have Whatsapp <b>(Optional)</b>)
             <textarea id="txtSMSScript1" class="input100" style="padding-top:20px;vertical-align:middle;"> </textarea><span style="font-weight:bold;" id="spnBirthDay2"></span>
         </div>
         @*<div style="margin-top:20px;">
-                <input type="number" class="input10" id="txtIntroDays2" /> Days before event
-                <textarea id="txtIntroScript2" class="input100" style="padding-top: 20px; vertical-align: middle;"> </textarea>
-            </div>*@
+            <input type="number" class="input10" id="txtIntroDays2" /> Days before event
+            <textarea id="txtIntroScript2" class="input100" style="padding-top: 20px; vertical-align: middle;"> </textarea>
+        </div>*@
     </div>
     <div style="margin-top:20px;border:1px solid grey;padding:10px;border-radius:10px;">
         <b> Reminder Message</b>
-        <div style="border-bottom:1px solid lightgrey;padding-bottom:10px;">
+        <div style="padding-bottom:10px;">
             <input type="number" class="input10" id="txtRemDays1" /> Days
             @Html.DropDownListFor(x => Model.lstBrands.Count, new SelectList(Model.BeforeAfter(), "Value", "Text"), htmlAttributes: new { @class = "input50", @id = "ddlBeforeAfter1", style = "margin-top:20px;" })
             event
             <textarea id="txtRemScript1" class="input100" style="padding-top:20px;vertical-align:middle;"> </textarea><span style="font-weight:bold;" id="spnBirthDay3"></span>
-            <br /><br /> (This is SMS script only in case number do not have Whatsapp <b>(Optional)</b>)
+            <br />
+        </div>
+        <div id="dvBirthDaySMS2" style="border-bottom:1px solid lightgrey;padding-bottom:10px;">
+            <br /> (This is SMS script only in case number do not have Whatsapp <b>(Optional)</b>)
             <textarea id="txtSMSScript3" class="input100" style="padding-top:20px;vertical-align:middle;"> </textarea><span style="font-weight:bold;" id="spnBirthDay4"></span>
         </div>
         <div style="margin-top:20px;">
@@ -67,33 +73,43 @@
             @Html.DropDownListFor(x => Model.lstBrands.Count, new SelectList(Model.BeforeAfter(), "Value", "Text"), htmlAttributes: new { @class = "input50", @id = "ddlBeforeAfter2", style = "margin-top:20px;" })
             event
             <textarea id="txtRemScript2" class="input100" style="padding-top: 20px; vertical-align: middle;"> </textarea><span style="font-weight:bold;" id="spnBirthDay5"></span>
-            <br /><br /> (This is SMS script only in case number do not have Whatsapp <b>(Optional)</b>)
+            <br />
+        </div>
+        <div id="dvBirthDaySMS3">
+            <br /> (This is SMS script only in case number do not have Whatsapp <b>(Optional)</b>)
             <textarea id="txtSMSScript4" class="input100" style="padding-top:20px;vertical-align:middle;"> </textarea><span style="font-weight:bold;" id="spnBirthDay6"></span>
         </div>
     </div>
     <div style="margin-top:20px;border:1px solid grey;padding:10px;border-radius:10px;">
         <b> On Birthday Message</b>
-        <div style="border-bottom:1px solid lightgrey;padding-bottom:10px;">
+        <div>
             @Html.DropDownListFor(x => Model.lstBrands.Count, new SelectList(Model.PointsUsed(), "Value", "Text"), htmlAttributes: new { @class = "input50", @disabled = "disabled", @id = "ddlPointsUsed", style = "margin-top:20px;" })
             event
             <textarea id="txtOnBirthdayScriptPT" class="input100" style="padding-top:20px;vertical-align:middle;"> </textarea><span style="font-weight:bold;" id="spnBirthDay7"></span>
-            <br /><br /> (This is SMS script only in case number do not have Whatsapp <b>(Optional)</b>)
+            <br />
+        </div>
+        <div id="dvBirthDaySMS4" style="border-bottom:1px solid lightgrey;padding-bottom:10px;">
+            <br /> (This is SMS script only in case number do not have Whatsapp <b>(Optional)</b>)
             <textarea id="txtSMSScript5" class="input100" style="padding-top:20px;vertical-align:middle;"> </textarea><span style="font-weight:bold;" id="spnBirthDay8"></span>
         </div>
         <div>
             @Html.DropDownListFor(x => Model.lstBrands.Count, new SelectList(Model.PointsNotUsed(), "Value", "Text"), htmlAttributes: new { @class = "input50", @disabled = "disabled", @id = "ddlPointsNotUsed", style = "margin-top:20px;" })
             event
             <textarea id="txtOnBirthdayScriptNPT" class="input100" style="padding-top:20px;vertical-align:middle;"> </textarea><span style="font-weight:bold;" id="spnBirthDay9"></span>
-            <br /><br /> (This is SMS script only in case number do not have Whatsapp <b>(Optional)</b>)
+
+        </div>
+        <br />
+        <div id="dvBirthDaySMS5">
+            <br /> (This is SMS script only in case number do not have Whatsapp <b>(Optional)</b>)
             <textarea id="txtSMSScript6" class="input100" style="padding-top:20px;vertical-align:middle;"> </textarea><span style="font-weight:bold;" id="spnBirthDay10"></span>
         </div>
     </div>
-    <div class="container-fluid pt-3 pl-3 pr-3 pb-5">
-        <button type="button" id="btnBirthdayToDLT" class="btn btn-primary pull-right" style="margin-right: 10px; margin-bottom: 20px;">Submit For DLT</button>
-        <button type="button" id="btnBirthdaySave" class="btn btn-primary pull-right" style="margin-right: 10px; margin-bottom: 20px;"> Save</button>
+        <div class="container-fluid pt-3 pl-3 pr-3 pb-5">
+            <button type="button" id="btnBirthdayToDLT" class="btn btn-primary pull-right" style="margin-right: 10px; margin-bottom: 20px;">Submit For DLT</button>
+            <button type="button" id="btnBirthdaySave" class="btn btn-primary pull-right" style="margin-right: 10px; margin-bottom: 20px;"> Save</button>
 
+        </div>
     </div>
-</div>
 
 @* Anniversary *@
 <div id="dvAnniversary" style="border:1px solid grey;border-radius:10px;padding:5px;">
@@ -116,7 +132,9 @@
             <input type="number" class="input10" id="txtIntroDays11" /> Days before event
             <textarea id="txtIntroScript11" class="input100" style="padding-top:20px;vertical-align:middle;"> </textarea>
             <span style="font-weight:bold;" id="spnAnniversaryDay1"></span>
-            <br /><br /> (This is SMS script only in case number do not have Whatsapp <b>(Optional)</b>) 
+        </div>
+        <div id="dvAnniversarySMS1">
+            <br /><br /> (This is SMS script only in case number do not have Whatsapp <b>(Optional)</b>)
             <textarea id="txtSMSScript11" class="input100" style="padding-top:20px;vertical-align:middle;"> </textarea>
             <span style="font-weight:bold;" id="spnAnniversaryDay2"></span>
         </div>
@@ -124,12 +142,14 @@
     </div>
     <div style="margin-top:20px;border:1px solid grey;padding:10px;border-radius:10px;">
         <b> Reminder Message</b>
-        <div style="border-bottom:1px solid lightgrey;padding-bottom:10px;">
+        <div style="padding-bottom:10px;">
             <input type="number" class="input10" id="txtRemDays11" /> Days
             @Html.DropDownListFor(x => Model.lstBrands.Count, new SelectList(Model.BeforeAfter(), "Value", "Text"), htmlAttributes: new { @class = "input50", @id = "ddlBeforeAfter11", style = "margin-top:20px;" })
             event
             <textarea id="txtRemScript11" class="input100" style="padding-top:20px;vertical-align:middle;"> </textarea>
             <span style="font-weight:bold;" id="spnAnniversaryDay3"></span>
+        </div>
+        <div id="dvAnniversarySMS2" style="border-bottom:1px solid lightgrey;padding-bottom:10px;">
             <br /><br /> (This is SMS script only in case number do not have Whatsapp <b>(Optional)</b>)
             <textarea id="txtSMSScript31" class="input100" style="padding-top:20px;vertical-align:middle;"> </textarea>
             <span style="font-weight:bold;" id="spnAnniversaryDay4"></span>
@@ -140,6 +160,8 @@
             event
             <textarea id="txtRemScript21" class="input100" style="padding-top: 20px; vertical-align: middle;"> </textarea>
             <span style="font-weight:bold;" id="spnAnniversaryDay5"></span>
+        </div>
+        <div id="dvAnniversarySMS3">
             <br /><br /> (This is SMS script only in case number do not have Whatsapp <b>(Optional)</b>)
             <textarea id="txtSMSScript41" class="input100" style="padding-top:20px;vertical-align:middle;"> </textarea>
             <span style="font-weight:bold;" id="spnAnniversaryDay6"></span>
@@ -147,11 +169,13 @@
     </div>
     <div style="margin-top:20px;border:1px solid grey;padding:10px;border-radius:10px;">
         <b> On Birthday Message</b>
-        <div style="border-bottom:1px solid lightgrey;padding-bottom:10px;">
+        <div style="padding-bottom:10px;">
             @Html.DropDownListFor(x => Model.lstBrands.Count, new SelectList(Model.PointsUsed(), "Value", "Text"), htmlAttributes: new { @class = "input50", @disabled = "disabled", @id = "ddlPointsUsed1", style = "margin-top:20px;" })
             event
             <textarea id="txtOnBirthdayScriptPT1" class="input100" style="padding-top:20px;vertical-align:middle;"> </textarea>
             <span style="font-weight:bold;" id="spnAnniversaryDay7"></span>
+        </div>
+        <div id="dvAnniversarySMS4" style="border-bottom:1px solid lightgrey;padding-bottom:10px;">
             <br /><br /> (This is SMS script only in case number do not have Whatsapp <b>(Optional)</b>)
             <textarea id="txtSMSScript51" class="input100" style="padding-top:20px;vertical-align:middle;"> </textarea>
             <span style="font-weight:bold;" id="spnAnniversaryDay8"></span>
@@ -161,6 +185,8 @@
             event
             <textarea id="txtOnBirthdayScriptNPT1" class="input100" style="padding-top:20px;vertical-align:middle;"> </textarea>
             <span style="font-weight:bold;" id="spnAnniversaryDay9"></span>
+        </div>
+        <div id="dvAnniversarySMS5" style="padding-bottom:10px;">
             <br /><br />(This is SMS script only in case number do not have Whatsapp <b>(Optional)</b>)
             <textarea id="txtSMSScript61" class="input100" style="padding-top:20px;vertical-align:middle;"> </textarea>
             <span style="font-weight:bold;" id="spnAnniversaryDay10"></span>
@@ -573,6 +599,8 @@
             <input type="number" class="input10" id="txtDLCRRDays1" /> Frequency in Days
             <textarea id="txtDLCRRScript1" class="input100" style="padding-top:20px;vertical-align:middle;"> </textarea>
             <span style="font-weight:bold;" id="spnDLCRRScript1"></span>
+        </div>
+        <div id="dvDLCConnectSMS1" style="padding-bottom:10px;">
             <br /><br />(This is SMS script only in case number do not have Whatsapp <b>(Optional)</b>)
             <textarea id="txtSMSScript71" class="input100" style="padding-top:20px;vertical-align:middle;"> </textarea>
             <span style="font-weight:bold;" id="spnDLCRRScript2"></span>
@@ -581,6 +609,8 @@
             <input type="number" class="input10" id="txtDLCRRDays2" /> Frequency in Days
             <textarea id="txtDLCRRScript2" class="input100" style="padding-top: 20px; vertical-align: middle;"> </textarea>
             <span style="font-weight:bold;" id="spnDLCRRScript3"></span>
+        </div>
+        <div id="dvDLCConnectSMS2" style="padding-bottom:10px;">
             <br /><br />(This is SMS script only in case number do not have Whatsapp <b>(Optional)</b>)
             <textarea id="txtSMSScript72" class="input100" style="padding-top:20px;vertical-align:middle;"> </textarea>
             <span style="font-weight:bold;" id="spnDLCRRScript4"></span>
@@ -606,6 +636,8 @@
             <input type="number" class="input10" id="txtDLCURDays1" /> Frequency in Days
             <textarea id="txtDLCURScript1" class="input100" style="padding-top:20px;vertical-align:middle;"> </textarea>
             <span style="font-weight:bold;" id="spnDLCURScript1"></span>
+        </div>
+        <div id="dvDLCUpdateSMS1" style="padding-bottom:10px;">
             <br /><br /> (This is SMS script only in case number do not have Whatsapp <b>(Optional)</b>)
             <textarea id="txtSMSScript81" class="input100" style="padding-top:20px;vertical-align:middle;"> </textarea>
             <span style="font-weight:bold;" id="spnDLCURScript2"></span>
@@ -614,6 +646,8 @@
             <input type="number" class="input10" id="txtDLCURDays2" /> Frequency in Days
             <textarea id="txtDLCURScript2" class="input100" style="padding-top: 20px; vertical-align: middle;"> </textarea>
             <span style="font-weight:bold;" id="spnDLCURScript3"></span>
+        </div>
+        <div id="dvDLCUpdateSMS2" style="padding-bottom:10px;">
             <br /><br /> (This is SMS script only in case number do not have Whatsapp <b>(Optional)</b>)
             <textarea id="txtSMSScript82" class="input100" style="padding-top:20px;vertical-align:middle;"> </textarea>
             <span style="font-weight:bold;" id="spnDLCURScript4"></span>
@@ -639,6 +673,8 @@
             <input type="number" class="input10" id="txtBUDays1" /> Frequency in Days
             <textarea id="txtBUScript1" class="input100" style="padding-top:20px;vertical-align:middle;"> </textarea>
             <span style="font-weight:bold;" id="spnBUScript1"></span>
+        </div>
+        <div id="dvPointBalanceSMS1" style="padding-bottom:10px;">
             <br /><br />(This is SMS script only in case number do not have Whatsapp <b>(Optional)</b>)
             <textarea id="txtSMSScript91" class="input100" style="padding-top:20px;vertical-align:middle;"> </textarea>
             <span style="font-weight:bold;" id="spnBUScript2"></span>
@@ -647,6 +683,8 @@
             <input type="number" class="input10" id="txtBUDays2" /> Frequency in Days
             <textarea id="txtBUScript2" class="input100" style="padding-top: 20px; vertical-align: middle;"> </textarea>
             <span style="font-weight:bold;" id="spnBUScript3"></span>
+        </div>
+        <div id="dvPointBalanceSMS2" style="padding-bottom:10px;">
             <br /><br /> (This is SMS script only in case number do not have Whatsapp <b>(Optional)</b>)
             <textarea id="txtSMSScript92" class="input100" style="padding-top:20px;vertical-align:middle;"> </textarea>
             <span style="font-weight:bold;" id="spnBUScript4"></span>
@@ -672,6 +710,8 @@
             <input type="number" class="input10" id="txtUploadedUsersDays1" /> Frequency in Days
             <textarea id="txtUploadedUsersScript1" class="input100" style="padding-top:20px;vertical-align:middle;"> </textarea>
             <span style="font-weight:bold;" id="spnUploadedUsersScript1"></span>
+        </div>
+        <div id="dvBulkUploadSMS1" style="padding-bottom:10px;">
             <br /><br /> (This is SMS script only in case number do not have Whatsapp <b>(Optional)</b>)
             <textarea id="txtSMSScript101" class="input100" style="padding-top:20px;vertical-align:middle;"> </textarea>
             <span style="font-weight:bold;" id="spnUploadedUsersScript2"></span>
@@ -680,6 +720,8 @@
             <input type="number" class="input10" id="txtUploadedUsersDays2" /> Frequency in Days
             <textarea id="txtUploadedUsersScript2" class="input100" style="padding-top: 20px; vertical-align: middle;"> </textarea>
             <span style="font-weight:bold;" id="spnUploadedUsersScript3"></span>
+        </div>
+        <div id="dvBulkUploadSMS2" style="padding-bottom:10px;">
             <br /><br /> (This is SMS script only in case number do not have Whatsapp <b>(Optional)</b>)
             <textarea id="txtSMSScript102" class="input100" style="padding-top:20px;vertical-align:middle;"> </textarea>
             <span style="font-weight:bold;" id="spnUploadedUsersScript4"></span>
@@ -693,6 +735,65 @@
 
 <script>
     $(document).ready(function () {
+        $("#rbtnVWA").click(function () {
+            dvBirthDaySMSShowHide(true);            
+        });
+        $("#rbtnWA").click(function () {
+            dvBirthDaySMSShowHide(true);            
+        });
+        $("#rbtnSMS").click(function () {
+            dvBirthDaySMSShowHide(false);            
+        });
+
+        $("#rbtnVWA1").click(function () {
+            dvAnniversarySMSShowHide(true);           
+        });
+        $("#rbtnWA1").click(function () {
+            dvAnniversarySMSShowHide(true);           
+        });
+        $("#rbtnSMS1").click(function () {
+            dvAnniversarySMSShowHide(false);           
+        });
+
+        $("#rbtnDLCRRVWA").click(function () {
+            dvDLCConnectSMSShowHide(true);                
+        });
+        $("#rbtnDLCRRWA").click(function () {
+            dvDLCConnectSMSShowHide(true);                 
+        });
+        $("#rbtnDLCRRSMS").click(function () {
+            dvDLCConnectSMSShowHide(false);                      
+        });
+
+        $("#rbtnDLCURVWA").click(function () {
+            dvDLCUpdateSMSShowHide(true);           
+        });
+        $("#rbtnDLCURWA").click(function () {
+            dvDLCUpdateSMSShowHide(true);            
+        });
+        $("#rbtnDLCURSMS").click(function () {
+            dvDLCUpdateSMSShowHide(false);            
+        });
+
+        $("#rbtnBUVWA").click(function () {
+            dvPointBalanceSMSShowHide(true);            
+        });
+        $("#rbtnBUWA").click(function () {
+            dvPointBalanceSMSShowHide(true);            
+        });
+        $("#rbtnBUSMS").click(function () {
+           dvPointBalanceSMSShowHide(false);            
+        });
+
+        $("#rbtnUploadedUsersVWA").click(function () {
+            dvBulkUploadSMSShowHide(true);            
+        });
+        $("#rbtnUploadedUsersWA").click(function () {
+            dvBulkUploadSMSShowHide(true);            
+        });
+        $("#rbtnUploadedUsersSMS").click(function () {
+            dvBulkUploadSMSShowHide(false);            
+        });
 
         ShowHideCampaignSection("dvBirthday");
         LoadCampaignOtherConfig("Birthday");
@@ -824,6 +925,83 @@
         });
     });
 
+    function dvBirthDaySMSShowHide(status) {
+        if (status) {
+            $("#dvBirthDaySMS1").show();
+            $("#dvBirthDaySMS2").show();
+            $("#dvBirthDaySMS3").show();
+            $("#dvBirthDaySMS4").show();
+            $("#dvBirthDaySMS5").show();
+        }
+        else {
+            $("#dvBirthDaySMS1").hide();
+            $("#dvBirthDaySMS2").hide();
+            $("#dvBirthDaySMS3").hide();
+            $("#dvBirthDaySMS4").hide();
+            $("#dvBirthDaySMS5").hide();
+        }
+    }
+
+    function dvAnniversarySMSShowHide(status) {
+        if (status) {
+            $("#dvAnniversarySMS1").show();
+            $("#dvAnniversarySMS2").show();
+            $("#dvAnniversarySMS3").show();
+            $("#dvAnniversarySMS4").show();
+            $("#dvAnniversarySMS5").show();
+        }
+        else {
+            $("#dvAnniversarySMS1").hide();
+            $("#dvAnniversarySMS2").hide();
+            $("#dvAnniversarySMS3").hide();
+            $("#dvAnniversarySMS4").hide();
+            $("#dvAnniversarySMS5").hide();
+        }
+    }
+
+    function dvDLCConnectSMSShowHide(status) {
+        if (status) {
+            $("#dvDLCConnectSMS1").show();
+            $("#dvDLCConnectSMS2").show();
+        }
+        else {
+            $("#dvDLCConnectSMS1").hide();
+            $("#dvDLCConnectSMS2").hide();
+        }
+    }
+
+    function dvDLCUpdateSMSShowHide(status) {
+        if (status) {
+            $("#dvDLCUpdateSMS1").show();
+            $("#dvDLCUpdateSMS2").show();
+        }
+        else {
+            $("#dvDLCUpdateSMS1").hide();
+            $("#dvDLCUpdateSMS2").hide();
+        }
+    }
+
+    function dvPointBalanceSMSShowHide(status) {
+        if (status) {
+            $("#dvPointBalanceSMS1").show();
+            $("#dvPointBalanceSMS2").show();
+        }
+        else {
+            $("#dvPointBalanceSMS1").hide();
+            $("#dvPointBalanceSMS2").hide();
+        }
+    }
+
+    function dvBulkUploadSMSShowHide(status) {
+        if (status) {
+            $("#dvBulkUploadSMS1").show();
+            $("#dvBulkUploadSMS2").show();
+        }
+        else {
+            $("#dvBulkUploadSMS1").hide();
+            $("#dvBulkUploadSMS2").hide();
+        }
+    }
     function ShowMessageSections() {
 
         if ($("#txtMessageCount").val() < 2 || $("#txtMessageCount").val() > 4) {
@@ -1009,7 +1187,7 @@
 
         $("#" + Id).show();
     }
-
+   
     function SaveBirthdayConfig() {
         if ($("#rbtnVWA").prop("checked") || $("#rbtnWA").prop("checked") || $("#rbtnSMS").prop("checked")) {
         }
@@ -1083,9 +1261,9 @@
         item["SMSScript4"] = $('#txtSMSScript4').val();
         item["SMSScript5"] = $('#txtSMSScript5').val();
         item["SMSScript6"] = $('#txtSMSScript6').val();
-
-
-
+           
+        
+            
         BirthdayConfig.push(item);
         var BirthdayConfigData = JSON.stringify(BirthdayConfig);
 
@@ -1589,12 +1767,15 @@
                 //console.log(data)
                 if (edata.SMSType == "VWA") {
                     $("#rbtnVWA").prop("checked", true);
+                    dvBirthDaySMSShowHide(true);
                 }
                 if (edata.SMSType == "WA") {
                     $("#rbtnWA").prop("checked", true);
+                    dvBirthDaySMSShowHide(true);
                 }
                 if (edata.SMSType == "SMS") {
                     $("#rbtnSMS").prop("checked", true);
+                    dvBirthDaySMSShowHide(false);
                 }
                 $('#txtBonusPoints').val(edata.BonusPoints);
                 if (edata.Frequency == "Days") {
@@ -1717,12 +1898,15 @@
                 //console.log(data)
                 if (edata.SMSType == "VWA") {
                     $("#rbtnVWA1").prop("checked", true);
+                    dvAnniversarySMSShowHide(true);
                 }
-                if (edata.SMSType == "WA") {
+                if (edata.SMSType == "WA") {                    
                     $("#rbtnWA1").prop("checked", true);
+                    dvAnniversarySMSShowHide(true);
                 }
-                if (edata.SMSType == "SMS") {
+                if (edata.SMSType == "SMS") {                    
                     $("#rbtnSMS1").prop("checked", true);
+                    dvAnniversarySMSShowHide(false);
                 }
                 $('#txtBonusPoints1').val(edata.BonusPoints);
                 if (edata.Frequency == "Days") {
@@ -1835,12 +2019,15 @@
             if (type == "DLC Referral Reminder") {
                 if (edata.SMSType == "VWA") {
                     $("#rbtnDLCRRVWA").prop("checked", true);
+                    dvDLCConnectSMSShowHide(true);
                 }
                 if (edata.SMSType == "WA") {
                     $("#rbtnDLCRRWA").prop("checked", true);
+                    dvDLCConnectSMSShowHide(true);
                 }
                 if (edata.SMSType == "SMS") {
                     $("#rbtnDLCRRSMS").prop("checked", true);
+                    dvDLCConnectSMSShowHide(false);
                 }
 
                 $('#txtDLCRRDays1').val(edata.IntroDays1);
@@ -1893,12 +2080,15 @@
             if (type == "DLC Update Reminder") {
                 if (edata.SMSType == "VWA") {
                     $("#rbtnDLCURVWA").prop("checked", true);
+                    dvDLCUpdateSMSShowHide(true);
                 }
                 if (edata.SMSType == "WA") {
                     $("#rbtnDLCURWA").prop("checked", true);
+                    dvDLCUpdateSMSShowHide(true);
                 }
                 if (edata.SMSType == "SMS") {
                     $("#rbtnDLCURSMS").prop("checked", true);
+                    dvDLCUpdateSMSShowHide(false);
                 }
 
                 $('#txtDLCURDays1').val(edata.IntroDays1);
@@ -1952,12 +2142,15 @@
             if (type == "Balance Updates") {
                 if (edata.SMSType == "VWA") {
                     $("#rbtnBUVWA").prop("checked", true);
+                    dvPointBalanceSMSShowHide(true);
                 }
                 if (edata.SMSType == "WA") {
                     $("#rbtnBUWA").prop("checked", true);
+                    dvPointBalanceSMSShowHide(true);
                 }
                 if (edata.SMSType == "SMS") {
                     $("#rbtnBUSMS").prop("checked", true);
+                    dvPointBalanceSMSShowHide(false);
                 }
 
                 $('#txtBUDays1').val(edata.IntroDays1);
@@ -2012,12 +2205,15 @@
             if (type == "Reminder Bulk Uploaded Users") {
                 if (edata.SMSType == "VWA") {
                     $("#rbtnUploadedUsersVWA").prop("checked", true);
+                    dvBulkUploadSMSShowHide(true);
                 }
                 if (edata.SMSType == "WA") {
                     $("#rbtnUploadedUsersWA").prop("checked", true);
+                    dvBulkUploadSMSShowHide(true);
                 }
                 if (edata.SMSType == "SMS") {
                     $("#rbtnUploadedUsersSMS").prop("checked", true);
+                    dvBulkUploadSMSShowHide(false);
                 }
 
                 $('#txtUploadedUsersDays1').val(edata.IntroDays1);
