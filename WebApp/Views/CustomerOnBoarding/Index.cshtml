@@ -211,32 +211,35 @@
         }
         @if (Model.bots_TblGroupMaster != null)
         {
-            <div class="mb-1 card" style="padding:10px;">
-                <div style="float:left;">
-                    @if (Model.bots_TblGroupMaster.CustomerStatus == "CS" || Model.bots_TblGroupMaster.CustomerStatus == "CSUpdate")
-                    {
-                        <div> Current Status -<b> Configuration Inprogress </b></div>
-                    }
-                    else if (Model.bots_TblGroupMaster.CustomerStatus == "Rejected")
-                    {
-                        <div> Current Status -<b style="padding-right:50px;"> @Model.bots_TblGroupMaster.CustomerStatus  </b> Reason - <b>@Model.bots_TblGroupMaster.RejectReason</b></div>
-                    }
-                    else
-                    {
-                        <div> Current Status -<b> @Model.bots_TblGroupMaster.CustomerStatus </b></div>
-                    }
+            if (!string.IsNullOrEmpty(Model.bots_TblGroupMaster.IsFromLead))
+            {
+                <div class="mb-1 card" style="padding:10px;">
+                    <div style="float:left;">
+                        @if (Model.bots_TblGroupMaster.CustomerStatus == "CS" || Model.bots_TblGroupMaster.CustomerStatus == "CSUpdate")
+                        {
+                            <div> Current Status -<b> Configuration Inprogress </b></div>
+                        }
+                        else if (Model.bots_TblGroupMaster.CustomerStatus == "Rejected")
+                        {
+                            <div> Current Status -<b style="padding-right:50px;"> @Model.bots_TblGroupMaster.CustomerStatus  </b> Reason - <b>@Model.bots_TblGroupMaster.RejectReason</b></div>
+                        }
+                        else
+                        {
+                            <div> Current Status -<b> @Model.bots_TblGroupMaster.CustomerStatus </b></div>
+                        }
 
-                    @if (Model.bots_TblGroupMaster.UpdatedDate.HasValue)
-                    {
-                        <div>Last Updated -<b> @Model.bots_TblGroupMaster.UpdatedDate </b></div>
-                    }
-                    else
-                    {
-                        <div>Last Updated -<b> @Model.bots_TblGroupMaster.CreatedDate </b></div>
-                    }
+                        @if (Model.bots_TblGroupMaster.UpdatedDate.HasValue)
+                        {
+                            <div>Last Updated -<b> @Model.bots_TblGroupMaster.UpdatedDate </b></div>
+                        }
+                        else
+                        {
+                            <div>Last Updated -<b> @Model.bots_TblGroupMaster.CreatedDate </b></div>
+                        }
+                    </div>
+
                 </div>
-
-            </div>
+            }
         }
         <div class="mb-3 card">
             @if (Model.bots_TblGroupMaster != null)
@@ -268,7 +271,7 @@
                             <input class="radio1" id="six1" name="group" type="radio">
                             <input class="radio1" id="seven1" name="group" type="radio">
                             <input class="radio1" id="eight1" name="group" type="radio">
-                            
+
                             <div class="tabs1">
                                 <label class="tab1" id="one-tab1" for="one1"> Outlet Details</label>
                                 <label class="tab1" id="two-tab1" for="two1"> Points Rule</label>
@@ -329,7 +332,7 @@
 
                 }
             }
-            @if (Model.bots_TblGroupMaster == null || (Model.bots_TblGroupMaster != null && Model.bots_TblGroupMaster.CustomerStatus == "Draft"))
+            @if (Model.bots_TblGroupMaster == null || Model.bots_TblGroupMaster.IsFromLead == "Yes" || (Model.bots_TblGroupMaster != null && Model.bots_TblGroupMaster.CustomerStatus == "Draft"))
             {
                 <div class="container-fluid pt-3 pl-3 pr-3 pb-3">
                     <div class="col-md-12 section-heading" data-toggle="collapse" data-target="#custdetails">Customer Detail</div>
@@ -1542,8 +1545,8 @@
                 CalculateTDS();
             }
         });
-        $("#NewModel").on('change', function () { 
-            if ($("#NewModel").is(":checked")) {                 
+        $("#NewModel").on('change', function () {
+            if ($("#NewModel").is(":checked")) {
                 CalculateTotalFees();
                 //$('#dvIsWhatsApp').css('border', '');
                 $("#txtASFPercentage").attr("readonly", false);
@@ -1556,8 +1559,8 @@
                 $("#txtASF").val("");
             }
         });
-        $("#OldModel").on('change', function () {             
-            if ($("#OldModel").is(":checked")) {                
+        $("#OldModel").on('change', function () {
+            if ($("#OldModel").is(":checked")) {
                 //$('#dvIsWhatsApp').css('border', '');
                 $("#txtASFPercentage").attr("readonly", true);
                 $("#txtASF").attr("readonly", true);
@@ -1574,9 +1577,9 @@
             }
         });
 
-        $("#txtASF").focusout(function () {             
+        $("#txtASF").focusout(function () {
                 CalculateTotalFees();
-                CalculateTDS();            
+                CalculateTDS();
         });
         $("#txtSMSPaidPackFees").focusout(function () {
             if ($("#txtSMSPaidPackFees").val() != "") {

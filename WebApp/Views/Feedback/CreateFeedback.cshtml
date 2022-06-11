@@ -337,7 +337,7 @@
                                 </div>
                                 <div class="row">
                                     <div class="col-md-12 col-xl-12  mb-1" style="margin-top:20px;text-align:center;">
-                                        <span id="@Id">@item.Text</span>
+                                        <span id="@Id">@Html.Raw(@item.Text)</span>
                                     </div>
                                 </div>
                             }
@@ -347,15 +347,15 @@
                                     <div class="col-md-12 col-xl-12 mb-2" style="margin-top:20px;text-align:center;">
                                         @if (item.TypeId == 1)
                                         {
-                                            <h1 style="font-size:22px;"><span id="@Id">@item.Text</span></h1>
+                                            <h1 style="font-size:22px;"><span id="@Id">@Html.Raw(@item.Text)</span></h1>
                                         }
                                         @if (item.TypeId == 2)
                                         {
-                                            <h1 style="font-size:19px;"><span id="@Id">@item.Text</span></h1>
+                                            <h1 style="font-size:19px;"><span id="@Id">@Html.Raw(@item.Text)</span></h1>
                                         }
                                         @if (item.TypeId == 3)
                                         {
-                                            <h1 style="font-size:16px;"><span id="@Id">@item.Text</span></h1>
+                                            <h1 style="font-size:16px;"><span id="@Id">@Html.Raw(@item.Text)</span></h1>
                                         }
                                     </div>
                                 </div>
@@ -387,7 +387,7 @@
 
                                 <div class="row">
                                     <div class="col-md-12 col-xl-12" style="margin-top:20px;text-align:center;" id="@dvId">
-                                        <span id="@Id">@item.Text</span>
+                                        <span id="@Id">@Html.Raw(@item.Text)</span>
                                         @if (item.IsMandatory == "Mandatory")
                                         {
                                             <span style="color:red;" id="@spnMandatory">*</span>
@@ -442,12 +442,12 @@
                                         <div class="col-md-12 col-xl-12 mb-2" style="margin-top:20px;text-align:center;">
                                             @if (item.TypeId == 1)
                                             {
-                                                <h1 style="font-size: 22px; color: red;"> <span id="@Id">@item.Text</span></h1>
+                                                <h1 style="font-size: 22px; color: red;"> <span id="@Id">@Html.Raw(@item.Text)</span></h1>
 
                                             }
                                             @if (item.TypeId == 2)
                                             {
-                                                <h1 style="font-size: 22px; "> <span id="@Id">@item.Text</span></h1>
+                                                <h1 style="font-size: 22px; "> <span id="@Id">@Html.Raw(@item.Text)</span></h1>
                                             }
                                         </div>
                                     </div>
@@ -473,7 +473,7 @@
 
                                 <div class="row">
                                     <div class="col-md-12 col-xl-12" style="margin-top:20px;text-align:center;" id="@dvId">
-                                        <span id="@Id">@item.Text</span>
+                                        <span id="@Id">@Html.Raw(@item.Text)</span>
                                         @if (item.IsMandatory == "Mandatory")
                                         {
                                             <span style="color:red;" id="@spnMandatory">*</span>
@@ -700,22 +700,22 @@
                 var id = item.id.substr(20);
                 if ($("#hdnQuestionType" + id).val() == "Question") {
 
-                    $("#spnFeedbackQuestions" + id).text($("#txtQuestionHeadingText" + id).val());
+                    $("#spnFeedbackQuestions" + id).html($("#txtQuestionHeadingText" + id).val());
                     $("#dvFeedbackQuestions" + id).show();
                 }
                 else {
-                    $("#spnFeedbackQuestions" + id).text($("#txtQuestionHeadingText" + id).val());
+                    $("#spnFeedbackQuestions" + id).html($("#txtQuestionHeadingText" + id).val());
                 }
             }
             else {
                 var id = item.id.substr(20);
                 if ($("#hdnQuestionType" + id).val() == "Question") {
 
-                    $("#spnFeedbackQuestions" + id).text("");
+                    $("#spnFeedbackQuestions" + id).html("");
                     $("#dvFeedbackQuestions" + id).hide();
                 }
                 else {
-                    $("#spnFeedbackQuestions" + id).text("");
+                    $("#spnFeedbackQuestions" + id).html("");
                 }
             }
         });
@@ -726,22 +726,22 @@
                 var id = item.id.substr(17);
                 if ($("#hdnOtherInfoType" + id).val() == "Question") {
 
-                    $("#spnOtherInformation" + id).text($("#txtQuestionHeadingText" + id).val());
+                    $("#spnOtherInformation" + id).html($("#txtQuestionHeadingText" + id).val());
                     $("#dvOtherInformation" + id).show();
                 }
                 else {
-                    $("#spnOtherInformation" + id).text($("#txtQuestionHeadingText" + id).val());
+                    $("#spnOtherInformation" + id).html($("#txtQuestionHeadingText" + id).val());
                 }
             }
             else {
 
                 var id = item.id.substr(17);
                 if ($("#hdnOtherInfoType" + id).val() == "Question") {
-                    $("#spnOtherInformation" + id).text("");
+                    $("#spnOtherInformation" + id).html("");
                     $("#dvOtherInformation" + id).hide();
                 }
                 else {
-                    $("#spnOtherInformation" + id).text("");
+                    $("#spnOtherInformation" + id).html("");
                 }
             }
         });
@@ -778,11 +778,11 @@
             $("#" + item.id).change(function () {
                 if (this.checked) {
                     var id = item.id.substr(16);
-                    $("#spnHome" + id).text($("#txtHomeHeadingText" + id).val());
+                    $("#spnHome" + id).html($("#txtHomeHeadingText" + id).val());
                 }
                 else {
                     var id = item.id.substr(16);
-                    $("#spnHome" + id).text("");
+                    $("#spnHome" + id).html("");
                 }
             });
         });
@@ -790,7 +790,7 @@
         $('[id^=txtHomeHeadingText]').each(function (i, item) {
             $("#" + item.id).focusout(function () {
                 var id = item.id.substr(18);
-                $("#spnHome" + id).text($("#" + item.id).val());
+                $("#spnHome" + id).html($("#" + item.id).val());
             });
         });
 
@@ -800,27 +800,27 @@
                     var id = item.id.substr(20);
                     if ($("#hdnQuestionType" + id).val() == "Question") {
 
-                        $("#spnFeedbackQuestions" + id).text($("#txtQuestionHeadingText" + id).val());
+                        $("#spnFeedbackQuestions" + id).html($("#txtQuestionHeadingText" + id).val());
                         $("#dvFeedbackQuestions" + id).show();
                     }
                     else if ($("#hdnQuestionType" + id).val() == "Textbox") {
                         $("#dvFeedbackQuestions" + id).show();
                     }
                     else {
-                        $("#spnFeedbackQuestions" + id).text($("#txtQuestionHeadingText" + id).val());
+                        $("#spnFeedbackQuestions" + id).html($("#txtQuestionHeadingText" + id).val());
                     }
                 }
                 else {
                     var id = item.id.substr(20);
                     if ($("#hdnQuestionType" + id).val() == "Question") {
-                        $("#spnFeedbackQuestions" + id).text("");
+                        $("#spnFeedbackQuestions" + id).html("");
                         $("#dvFeedbackQuestions" + id).hide();
                     }
                     else if ($("#hdnQuestionType" + id).val() == "Textbox") {
                         $("#dvFeedbackQuestions" + id).hide();
                     }
                     else {
-                        $("#spnFeedbackQuestions" + id).text("");
+                        $("#spnFeedbackQuestions" + id).html("");
                     }
                 }
             });
@@ -829,7 +829,7 @@
         $('[id^=txtQuestionHeadingText]').each(function (i, item) {
             $("#" + item.id).focusout(function () {
                 var id = item.id.substr(22);
-                $("#spnFeedbackQuestions" + id).text($("#" + item.id).val());
+                $("#spnFeedbackQuestions" + id).html($("#" + item.id).val());
             });
         });
 
@@ -840,11 +840,11 @@
 
                     var id = item.id.substr(17);
                 if ($("#hdnOtherInfoType" + id).val() == "Question") {
-                    $("#spnOtherInformation" + id).text($("#txtOtherHeadingText" + id).val());
+                    $("#spnOtherInformation" + id).html($("#txtOtherHeadingText" + id).val());
                     $("#dvOtherInformation" + id).show();
                 }
                 else {
-                    $("#spnOtherInformation" + id).text($("#txtOtherHeadingText" + id).val());
+                    $("#spnOtherInformation" + id).html($("#txtOtherHeadingText" + id).val());
                 }
             }
                 else {
@@ -864,7 +864,7 @@
         $('[id^=txtOtherHeadingText]').each(function (i, item) {
             $("#" + item.id).focusout(function () {
                 var id = item.id.substr(19);
-                $("#spnOtherInformation" + id).text($("#" + item.id).val());
+                $("#spnOtherInformation" + id).html($("#" + item.id).val());
             });
         });
 

@@ -149,5 +149,7 @@ namespace BOTS_BL.Models
         public string SourceTypeName { get; set; }
         [NotMapped]
         public string ReferredNameNew { get; set; }
+        [NotMapped]
+        public string IsFromLead { get; set; }
     }
 }

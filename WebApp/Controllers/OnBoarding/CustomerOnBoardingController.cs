@@ -281,6 +281,7 @@ namespace WebApp.Controllers.OnBoarding
             objGroupDetails.OwnerMobileNo = leadDetails.MobileNo;
             objGroupDetails.City = leadDetails.City;
             objGroupDetails.OwnerEmailId = leadDetails.EmailId;
+            objGroupDetails.IsFromLead = "Yes";
 
             return objGroupDetails;
         }

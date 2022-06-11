@@ -58,10 +58,10 @@
         .loader-inner:after {
             /*border: 10px solid lightblue;*/
         }
-    
-        body {
-            font-size: 16px !important;
-        }
+
+    body {
+        font-size: 16px !important;
+    }
 
     .cc-selector input {
         margin: 0;
@@ -139,90 +139,125 @@
                     @Html.Hidden("HiddenDOB", null, new { @id = "hdDOB" })
                     @Html.Hidden("HiddenDOA", null, new { @id = "hdDOA" })
                     @Html.Hidden("HiddenHowToKnow", null, new { @id = "hdHowToKnow" })
+                    if (Model.GroupId != "1051")
+                    {
+                        <div class="col-md-12 col-sm-12 pt-3 pl-3 pr-3" style="text-align:center;" id="dvLogo">
+                            <img src="@Model.LogoUrl" style="width:300px;" alt="Logo">
+                        </div>
 
-                    <div class="col-md-12 col-sm-12 pt-3 pl-3 pr-3" style="text-align:center;" id="dvLogo">
-                        <img src="@Model.LogoUrl" style="width:300px;" alt="Logo">
-                    </div>
-                    <div class="container-fluid pt-3 pl-3 pr-3 pb-3" id="divwelcome">
-                        @foreach (var item in Model.lstFeedbackData)
-                        {
-                            if (item.Section == "Home")
+                        <div class="container-fluid pt-3 pl-3 pr-3 pb-3" id="divwelcome">
+                            @foreach (var item in Model.lstFeedbackData)
                             {
-                                <div class="row">
-                                    <div class="col-md-12 col-xl-12  mb-1" style="margin-top:20px;text-align:center;">
-                                        @if (item.Type == "Heading")
-                                        {
-                                            if (item.TypeId == 1)
+                                if (item.Section == "Home")
+                                {
+                                    <div class="row">
+                                        <div class="col-md-12 col-xl-12  mb-1" style="margin-top:20px;text-align:center;">
+                                            @if (item.Type == "Heading")
                                             {
-                                                <h1 style="font-size:34px;">@item.Text @Model.GroupName!!!</h1>
+                                                if (item.TypeId == 1)
+                                                {
+                                                    if (Model.GroupId != "1051")
+                                                    {
+                                                        <h1 style="font-size:34px;">@item.Text @Model.GroupName!!!</h1>
+                                                    }
+                                                    else
+                                                    {
+                                                        <h1 style="font-size:34px;">@item.Text!!!</h1>
+                                                    }
+                                                }
+                                                if (item.TypeId == 2)
+                                                {
+                                                    <h2 style="font-size:26px;"> @Html.Raw(@item.Text)</h2>
+                                                }
+                                                if (item.TypeId == 3)
+                                                {
+                                                    <h3 style="font-size:20px;"> @Html.Raw(@item.Text)</h3>
+                                                }
                                             }
-                                            if (item.TypeId == 2)
-                                            {
-                                                <h2 style="font-size:26px;"> @item.Text</h2>
-                                            }
-                                            if (item.TypeId == 3)
-                                            {
-                                                <h3 style="font-size:20px;"> @item.Text</h3>
-                                            }
-                                        }
+
+                                        </div>
+                                    </div>
+                                }
+                            }
+                            <div class="row">
+
+                                @if (Model.PointsAndMessages.IsAddRepresentative)
+                                {
+                                    <span id="hdshowrepresentative" style="display:none;">@Model.PointsAndMessages.IsAddRepresentative</span>
+                                    <div class="col-md-12 col-sm-12 pt-3 pl-5 pr-5 pb-5" style="text-align:center;">
+                                        <h6>Sales Representive</h6> @Html.DropDownList("abc", new SelectList(Model.lstsalesRepresentive, "Value", "Text"), htmlAttributes: new { @class = "input50", @id = "ddlsaleslist" })
 
                                     </div>
-                                </div>
-                            }
-                        }
-                        <div class="row">
+                                }
+                                @if (Model.GroupId != "1051")
+                                {
+                                    <div class="col-md-12 col-sm-12 pb-5" style="text-align:center;">
+                                        <input type="number" class="input100" id="txtMobileNo" placeholder="Enter Mobile number" />
 
-                            @if (Model.PointsAndMessages.IsAddRepresentative)
-                            {
-                                <span id="hdshowrepresentative" style="display:none;">@Model.PointsAndMessages.IsAddRepresentative</span>
-                                <div class="col-md-12 col-sm-12 pt-3 pl-5 pr-5 pb-5" style="text-align:center;">
-                                    <h6>Sales Representive</h6> @Html.DropDownList("abc", new SelectList(Model.lstsalesRepresentive, "Value", "Text"), htmlAttributes: new { @class = "input50", @id = "ddlsaleslist" })
-
-                                </div>
-                            }
-                            @if (Model.GroupId != "1051")
-                            {
-                                <div class="col-md-12 col-sm-12 pb-5" style="text-align:center;">
-                                    <input type="number" class="input100" id="txtMobileNo" placeholder="Enter Mobile number" />
-
-                                </div>
-                                <div class="col-md-12 col-sm-12 pb-5" style="text-align:center;">
-                                    <button type="button" class="btn btn-primary" style="width: 280px; background-color: #1C699F; color:white; font-weight:bold; font-size:18px; border-radius:5px;" id="btnProceed" onclick="return CheckCustomer();">ENTER</button>
-                                </div>
-                            }
-                            else
-                            {
-                                <div class="col-md-12 col-sm-12 pb-5 mt-5" style="text-align:center;">
-                                    <button type="button" class="btn btn-primary" style="width: 280px; background-color: #1C699F; color:white; font-weight:bold; font-size:18px; border-radius:5px;" id="btnProceedNew" onclick="ProceedToQuestion();">Proceed</button>
-                                </div>
-                            }
+                                    </div>
+                                    <div class="col-md-12 col-sm-12 pb-5" style="text-align:center;">
+                                        <button type="button" class="btn btn-primary" style="width: 280px; background-color: #1C699F; color:white; font-weight:bold; font-size:18px; border-radius:5px;" id="btnProceed" onclick="return CheckCustomer();">ENTER</button>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="col-md-12 col-sm-12 pb-5 mt-5" style="text-align:center;">
+                                        <button type="button" class="btn btn-primary" style="width: 280px; background-color: #1C699F; color:white; font-weight:bold; font-size:18px; border-radius:5px;" id="btnProceedNew" onclick="ProceedToQuestion();">Proceed</button>
+                                    </div>
+                                }
+                            </div>
                         </div>
-                    </div>
+                    }
 
                     <div class="container-fluid pt-3 pl-3 pr-3 pb-3" style="display:none;" id="divquestions">
                         <div class="row">
+                            @if (Model.GroupId == "1051")
+                            {
+                                <div class="col-md-12 col-sm-12 pt-3 pl-3 pr-3 pb-3" style="text-align:center;" id="dvLogo">
+                                    <img src="@Model.LogoUrl" style="width:300px;" alt="Logo">
+                                </div>
+                                <div class="col-md-12 col-sm-12 pt-1 pl-3 pr-3" style="text-align: center; font-size: 34px; font-weight: bold; color: red;">                                    
+                                         RATE BLUE OCKTOPUS & OUR SERVICES  <br />                                  
+                                       ब्लू ऑकटॉपस आणि आमच्या सेवांना रेट करा
+                                    </div>
+                                 
+                            }
                             @foreach (var item in Model.lstFeedbackData)
                             {
                                 if (item.Section == "FeedbackQuestions")
                                 {
-                                    <div class="col-md-12 col-sm-12 pt-3 pl-3 pr-3" style="text-align:center;">
-                                        @if (item.Type == "Heading")
+                                    <div class="col-md-12 col-sm-12 pt-1 pl-3 pr-3" style="text-align:center;">
+                                        @if (Model.GroupId != "1051")
                                         {
-                                            if (item.TypeId == 1)
+                                            if (item.Type == "Heading")
                                             {
-                                                <h1 style="font-size: 34px; color: red;">Welcome <span id="spnCustomerName"></span></h1>
-                                            }
-                                            if (item.TypeId == 2)
-                                            {
-                                                <h2 style="font-size: 34px;"> @item.Text</h2>
+                                                if (item.TypeId == 1)
+                                                {
+                                                    if (Model.GroupId != "1051")
+                                                    {
+                                                        <h1 style="font-size: 34px; color: red;">Welcome <span id="spnCustomerName"></span></h1>
+                                                    }
+                                                }
+                                                if (item.TypeId == 2)
+                                                {
+                                                    if (Model.GroupId != "1051")
+                                                    {
+                                                        <h2 style="font-size: 34px;"> @Html.Raw(@item.Text)</h2>
+                                                    }
+                                                    else
+                                                    {
+                                                        <h2 style="font-size: 34px; color: red;"> @Html.Raw(@item.Text)</h2>
+                                                    }
+                                                }
                                             }
                                         }
+
                                     </div>
                                 }
 
                                 if (item.Section == "FeedbackQuestions")
                                 {
-                                    <div class="col-md-12 col-sm-12 pt-3 pl-3 pr-3" style="text-align:center;">
+                                    <div class="col-md-12 col-sm-12 pt-3 pl-3 pr-3 " style="text-align:center;">
                                         @if (item.Type == "Question")
                                         {
                                             @Html.HiddenFor(model => item.Id, new { @id = "hdnQuestionId" + item.Id })
@@ -232,24 +267,26 @@
                                             var rbtn3 = "rbtvariety" + item.Id + "3";
                                             var rbtn4 = "rbtvariety" + item.Id + "4";
                                             var name = "variety" + item.Id;
-                                            <h3 style="font-size:20px;">
+                                            <h3 style="font-size:40px;">
                                                 @Html.Raw(@item.Text)
                                                 @if (item.IsMandatory == "Mandatory")
                                                 {
                                                     <span style="color:red;">*</span>
                                                 }
                                             </h3>
-                                            <div class="cc-selector">
+                                            <div class="cc-selector mb-5 pb-5">
                                                 <input id="@rbtn1" type="radio" name="@name" />
-                                                <label class="drinkcard-cc rbtvariety1" for="@rbtn1" style="margin-right:30px;"></label>
-                                                <label style="position: absolute; margin-top: 80px; margin-left: -110px; font-weight: bold;">Very High</label>
+                                                <label class="drinkcard-cc rbtvariety1" for="@rbtn1" style="margin-right:120px;"></label>
+                                                <label style="position: absolute; margin-top: 80px; margin-left: -200px; font-weight: bold; font-size: 24px;">Very much</label>
+                                                <label style="position: absolute; margin-top: 105px; margin-left: -200px; font-weight: bold; font-size: 24px; ">खूप</label>
                                                 <input id="@rbtn2" type="radio" name="@name" />
-                                                <label class="drinkcard-cc rbtvariety2" for="@rbtn2" style="margin-right:30px;"></label>
+                                                <label class="drinkcard-cc rbtvariety2" for="@rbtn2" style="margin-right:120px;"></label>
                                                 <input id="@rbtn3" type="radio" name="@name" />
-                                                <label class="drinkcard-cc rbtvariety3" for="@rbtn3" style="margin-right:30px;"></label>
+                                                <label class="drinkcard-cc rbtvariety3" for="@rbtn3" style="margin-right:120px;"></label>
                                                 <input id="@rbtn4" type="radio" name="@name" />
                                                 <label class="drinkcard-cc rbtvariety4" for="@rbtn4"></label>
-                                                <label style="position: absolute; margin-top: 80px; margin-left: -70px;font-weight:bold;">Very Low</label>
+                                                <label style="position: absolute; margin-top: 80px; margin-left: -70px; font-weight: bold; font-size: 24px;">Not much</label>
+                                                <label style="position: absolute; margin-top: 105px; margin-left: -70px; font-weight: bold; font-size: 24px;">जास्त नाही</label>
                                             </div>
 
                                         }
@@ -277,6 +314,7 @@
                                                 </div>
                                             }
                                         }
+
                                     </div>
                                 }
                             }
@@ -375,6 +413,9 @@
 </div>
 <script>
     $(document).ready(function () {
+        if (@Model.GroupId== "1051") {
+            $("#divquestions").show();
+        }
         var today = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
 
         var dtToday = new Date();
@@ -531,7 +572,7 @@
                                 if (e == ("confirm")) {
                                     location.reload();
                                 }
-                            });                            
+                            });
                         }
                     }
                     if (response == "false") {

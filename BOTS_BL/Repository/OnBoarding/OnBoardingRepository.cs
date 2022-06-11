@@ -169,10 +169,12 @@ namespace BOTS_BL.Repository
                                 context.SaveChanges();
                             }
                         }
-
-
-
                         transaction.Commit();
+                        if (objGroup.UpdatedBy == null || objGroup.UpdatedBy == "")
+                            AddTracking(Convert.ToString(GroupId), "Customer Add/Update Done", objGroup.CreatedBy);
+                        else
+                            AddTracking(Convert.ToString(GroupId), "Customer Add/Update Done", objGroup.UpdatedBy);
+
                     }
                     catch (Exception ex)
                     {
@@ -587,6 +589,13 @@ namespace BOTS_BL.Repository
                             status = true;
                         }
                         transaction.Commit();
+                        var GroupId = "";
+                        if (objSMSData != null)
+                            GroupId = objSMSData.GroupId;
+                        if (objWAData != null)
+                            GroupId = objWAData.GroupId;
+
+                        AddTracking(Convert.ToString(GroupId), "Communication Data Added/Updated", loginId);
                     }
                     catch (Exception ex)
                     {
@@ -615,6 +624,7 @@ namespace BOTS_BL.Repository
                         context.SaveChanges();
                     }
                     status = true;
+                    AddTracking(Convert.ToString(groupId), "Communication Scripts (SMS) Sent for DLT", loginId);
                 }
                 catch (Exception ex)
                 {
@@ -679,6 +689,10 @@ namespace BOTS_BL.Repository
                 context.BOTS_TblSMSConfig.AddOrUpdate(objItem);
                 context.SaveChanges();
                 status = true;
+                if (objItem.UpdatedBy == null || objItem.UpdatedBy == "")
+                    AddTracking(Convert.ToString(objItem.GroupId), "SMS Script saved", objItem.AddedBy);
+                else
+                    AddTracking(Convert.ToString(objItem.GroupId), "SMS Script saved", objItem.UpdatedBy);
             }
             return status;
         }
@@ -712,6 +726,8 @@ namespace BOTS_BL.Repository
                     context.BOTS_TblSMSConfig.AddOrUpdate(objItem);
                     context.SaveChanges();
                     status = true;
+
+                    AddTracking(Convert.ToString(objItem.GroupId), "DLT Status Changed - "+ DLTStatus, LoginId);
                 }
             }
             return status;
@@ -2301,6 +2317,7 @@ namespace BOTS_BL.Repository
                     objData.AddedBy = AddedBy;
                     objData.AddedDate = DateTime.Now;
                     context.BOTS_TblActionTracking.AddOrUpdate(objData);
+                    context.SaveChanges();
                 }
                 catch(Exception ex)
                 {

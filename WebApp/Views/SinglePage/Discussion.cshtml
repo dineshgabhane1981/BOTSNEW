@@ -17,7 +17,7 @@
                     Select CS
                     @Html.DropDownListFor(model => model.CSMember, new SelectList(Model.lstCSMembers, "Value", "Text"), "All", htmlAttributes: new { @class = "input100", @id = "ddlCSMember" })
                 </div>
-                <div style="text-align:center;margin-bottom:20px;font-weight:bold;">Customer Categorywise Campaign set / DB & Ideas discussions / Campaign & Idea discussions – not touched</div>
+                <div style="text-align:center;margin-bottom:20px;font-weight:bold;">Customer Categorywise Campaign set / DB & Campaign discussions / Campaign & Idea discussions – not touched</div>
                 <div class="tab-content">
                     <div class="tab-pane fade show active" id="tabs-eg-77">
                         <div class="card mb-3 widget-chart widget-chart2 text-left w-100">
@@ -275,6 +275,37 @@
             error: function (response) {
                 $("#divLoader").hide();
             }
+        });
+    }
+
+     function GetTypeWiseData(type, section) {
+        console.log(type);
+        console.log(section);
+        $("#divLoader").show();
+        var CsMember = $('#ddlCSMember').val();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("GetCSWiseReport", "SinglePage")',
+            data: '{type:' + JSON.stringify(section) + ',CSMember:' + JSON.stringify(CsMember) + ',CustomerType:' + JSON.stringify(type) + '}',
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                if (response != null) {
+                    $("#dvCSViseData").html(response);
+                    $("#dvCSViseData").show(1000);
+                    $("#divLoader").hide();
+                }
+            },
+            failure: function (response) {
+                $("#divLoader").hide();
+            },
+            error: function (response) {
+                $("#dvCSViseData").html("");
+                $("#dvCSViseData").html(response.responseText);
+                $("#dvCSViseData").show(1000);
+                $("#divLoader").hide();
+            }
+
         });
     }
 
