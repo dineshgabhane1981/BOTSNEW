@@ -64,9 +64,6 @@
         <input type="hidden" id="hdnEnrlmentId" />
         <div class="col-lg-12" style="float: left; border: 1px solid grey; border-radius: 12px; margin-bottom: 10px; margin-top: 10px; ">
 
-            <div class=' col-md-4 col-lg-4' id='datetimepicker1' style="float: left; margin-top: 20px; margin-bottom: 20px;">
-                Date Time <input type="text" id="txtDatetime1" class="input100" style="margin-bottom:10px; margin-right:20px;" />
-            </div>
         </div>
         <div class="col-lg-12" style="float: left; border: 1px solid grey; border-radius: 12px; margin-bottom: 10px; margin-top: 10px;">
             <div>
@@ -94,7 +91,7 @@
             <div style="float: left; margin-top: 20px; margin-bottom: 20px;" class="col-md-12 col-lg-12">
                 Invoice No <input type="text" id="txtInvoiceNo2" class="input50" style="margin-bottom: 10px; margin-right: 50px;" />
                 Invoice Amt<input type="text" id="txtInvoiceAmt2" class="input50" style="margin-bottom: 10px; margin-right: 50px;" />
-                Date Time <input type="text" id="txtDatetime2" class="input50" style="margin-bottom:10px; margin-right:20px;">
+               
             </div>
         </div>
         <div class="col-lg-12" style="float: left; border: 1px solid grey; border-radius: 12px; margin-bottom: 10px; margin-top: 10px; ">
@@ -124,7 +121,7 @@
             <div style="float: left; margin-top: 20px; margin-bottom: 20px;" class="col-md-12 col-lg-12">
                 Invoice No <input type="text" id="txtInvoiceNo3" class="input50" style="margin-bottom: 10px; margin-right: 50px;" />
                 Invoice Amt<input type="text" id="txtInvoiceAmt3" class="input50" style="margin-bottom: 10px; margin-right: 50px;" />
-                Date Time <input type="text" id="txtDatetime3" class="input50" style="margin-bottom:10px; margin-right:20px;">
+                
             </div>
         </div>
         <div class="col-lg-12" style="float: left; border: 1px solid grey; border-radius: 12px; margin-bottom: 10px; margin-top: 10px; ">
@@ -153,7 +150,7 @@
             <div style="float: left; margin-top: 20px; margin-bottom: 20px;" class="col-md-12 col-lg-12">
                 Invoice No <input type="text" id="txtInvoiceNo4" class="input50" style="margin-bottom: 10px; margin-right: 50px;" />
                 Invoice Amt<input type="text" id="txtInvoiceAmt4" class="input50" style="margin-bottom: 10px; margin-right: 50px;" />
-                Date Time <input type="text" id="txtDatetime4" class="input50" style="margin-bottom:10px; margin-right:20px;">
+               
             </div>
         </div>
         <div class="col-lg-12" style="float: left; border: 1px solid grey; border-radius: 12px; margin-bottom: 10px; margin-top: 10px; ">
@@ -183,7 +180,7 @@
             <div style="float: left; margin-top: 20px; margin-bottom: 20px;" class="col-md-12 col-lg-12">
                 Invoice No <input type="text" id="txtInvoiceNo5" class="input50" style="margin-bottom: 10px; margin-right: 50px;" />
                 Invoice Amt<input type="text" id="txtInvoiceAmt5" class="input50" style="margin-bottom: 10px; margin-right: 50px;" />
-                Date Time <input type="text" id="txtDatetime5" class="input50" style="margin-bottom:10px; margin-right:20px;">
+                
             </div>
         </div>
         <div class="col-lg-12" style="float: left; border: 1px solid grey; border-radius: 12px; margin-bottom: 10px; margin-top: 10px; ">
@@ -213,7 +210,7 @@
             <div style="float: left; margin-top: 20px; margin-bottom: 20px;" class="col-md-12 col-lg-12">
                 Invoice No <input type="text" id="txtInvoiceNo6" class="input50" style="margin-bottom: 10px; margin-right: 50px;" />
                 Invoice Amt<input type="text" id="txtInvoiceAmt6" class="input50" style="margin-bottom: 10px; margin-right: 50px;" />
-                Date Time <input type="text" id="txtDatetime6" class="input50" style="margin-bottom:10px; margin-right:20px;">
+                
             </div>
         </div>
         <div class="col-lg-12" style="float: left; border: 1px solid grey; border-radius: 12px; margin-bottom: 10px; margin-top: 10px;">
@@ -240,10 +237,6 @@
         <input type="hidden" id="hdnSendOtpId" />
         <div class="col-lg-12" style="float: left; border: 1px solid grey; border-radius: 12px; margin-bottom: 30px; margin-top: 10px; ">
 
-            <div style="float: left; margin-top: 20px; margin-bottom: 20px;" class="col-md-12 col-lg-12">
-
-                Date Time <input type="text" id="txtDatetime7" class="input50" style="margin-bottom:10px; margin-right:20px;">
-            </div>
         </div>
         <div class="col-lg-12" style="float: left; border: 1px solid grey; border-radius: 12px; margin-bottom: 10px; margin-top: 10px; ">
             <div>
@@ -294,37 +287,7 @@
     var flag = false;
 
     $(document).ready(function () {
-        var today = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
-        $("#txtDatetime1").datetimepicker({
-            format: "YYYY-MM-DD  hh:mm:ss",
-            minDate: today,
-        });
-
-        $("#txtDatetime2").datetimepicker({
-            format: "YYYY-MM-DD  hh:mm:ss",
-            minDate: today,
-        });
-        $("#txtDatetime3").datetimepicker({
-            format: "YYYY-MM-DD  hh:mm:ss",
-            minDate: today,
-        });
-        $("#txtDatetime4").datetimepicker({
-            format: "YYYY-MM-DD  hh:mm:ss",
-            minDate: today,
-        });
-        $("#txtDatetime5").datetimepicker({
-            format: "YYYY-MM-DD  hh:mm:ss",
-            minDate: today,
-        });
-        $("#txtDatetime6").datetimepicker({
-            format: "YYYY-MM-DD  hh:mm:ss",
-            minDate: today,
-        });
-        $("#txtDatetime7").datetimepicker({
-            format: "YYYY-MM-DD  hh:mm:ss",
-            minDate: today,
-        });
-
+        
         $("#ddlOutlet").on("change", function () {
             ReplaceCounterId();
         });
@@ -425,28 +388,6 @@
            ResetAll();
        });
 
-       $("#txtDatetime1").focusout(function () {
-         UpdateDatetime1();
-       });
-       $("#txtDatetime2").focusout(function () {
-           UpdateDatetime2();
-       });
-       $("#txtDatetime3").focusout(function () {
-           UpdateDatetime3();
-       });
-       $("#txtDatetime4").focusout(function () {
-         UpdateDatetime4();
-       });
-       $("#txtDatetime5").focusout(function () {
-           UpdateDatetime5();
-       });
-       $("#txtDatetime6").focusout(function () {
-           UpdateDatetime6();
-       });
-       $("#txtDatetime7").focusout(function () {
-           UpdateDatetime7();
-       });
-
 
        $("#txtInvoiceNo2").focusout(function () {
            UpdateInvoiceNo2();
@@ -480,178 +421,42 @@
        $("#txtInvoiceAmt6").focusout(function () {
            UpdateInvoiceAmt6();
        });
-
+        ReplaceCurrentDateTime();
    });
-  
-    function UpdateDatetime1() {
-        var RequestPacket = $("#txtRequestPacket1").val();
-        var Datetime = $("#txtDatetime1").val();
-        var oldDatetime1 = "";
-        if (oldDatetime1 == "") {
-            flag = false;
-        }
-        else {
-            flag = true;
-        }
 
-        if (flag) {
-            var strInReplace = "<Datetime>" + oldDatetime1 + "</Datetime>";
-            var strToReplace = "<Datetime>" + Datetime + "</Datetime>";
-            RequestPacket = RequestPacket.replace(strInReplace, strToReplace);
-        }
-        else {
-            var strInReplace = "<Datetime></Datetime>";
-            var strToReplace = "<Datetime>" + Datetime + "</Datetime>";
-            RequestPacket = RequestPacket.replace(strInReplace, strToReplace);
-        }
-        $("#txtRequestPacket1").val(RequestPacket);
-        oldDatetime1 = Datetime;
+    function ReplaceCurrentDateTime() {
+        
+        var fullDateTime = new Date().getFullYear() + '' + (new Date().getMonth() + 1) + '' + new Date().getDate() + '' + new Date().getHours() + '' + new Date().getMinutes() + '' + new Date().getSeconds();
+
+        var rPacket1 = $("#txtRequestPacket1").val();
+        rPacket1 = rPacket1.replace("<Datetime></Datetime>", "<Datetime>" + fullDateTime +"</Datetime>");
+        $("#txtRequestPacket1").val(rPacket1);
+
+        var rPacket2 = $("#txtRequestPacket2").val();
+        rPacket2 = rPacket2.replace("<Datetime></Datetime>", "<Datetime>" + fullDateTime + "</Datetime>");
+        $("#txtRequestPacket2").val(rPacket2);
+
+        var rPacket3 = $("#txtRequestPacket3").val();
+        rPacket3 = rPacket3.replace("<Datetime></Datetime>", "<Datetime>" + fullDateTime + "</Datetime>");
+        $("#txtRequestPacket3").val(rPacket3);
+
+        var rPacket4 = $("#txtRequestPacket4").val();
+        rPacket4 = rPacket4.replace("<Datetime></Datetime>", "<Datetime>" + fullDateTime + "</Datetime>");
+        $("#txtRequestPacket4").val(rPacket4);
+
+        var rPacket5 = $("#txtRequestPacket5").val();
+        rPacket5 = rPacket5.replace("<Datetime></Datetime>", "<Datetime>" + fullDateTime + "</Datetime>");
+        $("#txtRequestPacket5").val(rPacket5);
+
+        var rPacket6 = $("#txtRequestPacket6").val();
+        rPacket6 = rPacket6.replace("<Datetime></Datetime>", "<Datetime>" + fullDateTime + "</Datetime>");
+        $("#txtRequestPacket6").val(rPacket6);
+
+        var rPacket7 = $("#txtRequestPacket7").val();
+        rPacket7 = rPacket7.replace("<Datetime></Datetime>", "<Datetime>" + fullDateTime + "</Datetime>");
+        $("#txtRequestPacket7").val(rPacket7);
+
     }
-    function UpdateDatetime2() {
-        var RequestPacket = $("#txtRequestPacket2").val();
-        var Datetime = $("#txtDatetime2").val();
-        var oldDatetime2 = "";
-        if (oldDatetime2 == "") {
-            flag = false;
-        }
-        else {
-            flag = true;
-        }
-
-        if (flag) {
-            var strInReplace = "<Datetime>" + oldDatetime2 + "</Datetime>";
-            var strToReplace = "<Datetime>" + Datetime + "</Datetime>";
-            RequestPacket = RequestPacket.replace(strInReplace, strToReplace);
-        }
-        else {
-            var strInReplace = "<Datetime></Datetime>";
-            var strToReplace = "<Datetime>" + Datetime + "</Datetime>";
-            RequestPacket = RequestPacket.replace(strInReplace, strToReplace);
-        }
-        $("#txtRequestPacket2").val(RequestPacket);
-        oldDatetime2 = Datetime;
-    }
-    function UpdateDatetime3() {
-        var RequestPacket = $("#txtRequestPacket3").val();
-        var Datetime = $("#txtDatetime3").val();
-        var oldDatetime3 = "";
-        if (oldDatetime3 == "") {
-            flag = false;
-        }
-        else {
-            flag = true;
-        }
-
-        if (flag) {
-            var strInReplace = "<Datetime>" + oldDatetime3 + "</Datetime>";
-            var strToReplace = "<Datetime>" + Datetime + "</Datetime>";
-            RequestPacket = RequestPacket.replace(strInReplace, strToReplace);
-        }
-        else {
-            var strInReplace = "<Datetime></Datetime>";
-            var strToReplace = "<Datetime>" + Datetime + "</Datetime>";
-            RequestPacket = RequestPacket.replace(strInReplace, strToReplace);
-        }
-        $("#txtRequestPacket3").val(RequestPacket);
-        oldDatetime3 = Datetime;
-    }
-    function UpdateDatetime4() {
-        var RequestPacket = $("#txtRequestPacket4").val();
-        var Datetime = $("#txtDatetime4").val();
-        var oldDatetime4 = "";
-        if (oldDatetime4 == "") {
-            flag = false;
-        }
-        else {
-            flag = true;
-        }
-
-        if (flag) {
-            var strInReplace = "<Datetime>" + oldDatetime4 + "</Datetime>";
-            var strToReplace = "<Datetime>" + Datetime + "</Datetime>";
-            RequestPacket = RequestPacket.replace(strInReplace, strToReplace);
-        }
-        else {
-            var strInReplace = "<Datetime></Datetime>";
-            var strToReplace = "<Datetime>" + Datetime + "</Datetime>";
-            RequestPacket = RequestPacket.replace(strInReplace, strToReplace);
-        }
-        $("#txtRequestPacket4").val(RequestPacket);
-        oldDatetime4 = Datetime;
-    }
-    function UpdateDatetime5() {
-        var RequestPacket = $("#txtRequestPacket5").val();
-        var Datetime = $("#txtDatetime5").val();
-        var oldDatetime5 = "";
-        if (oldDatetime5 == "") {
-            flag = false;
-        }
-        else {
-            flag = true;
-        }
-
-        if (flag) {
-            var strInReplace = "<Datetime>" + oldDatetime5 + "</Datetime>";
-            var strToReplace = "<Datetime>" + Datetime + "</Datetime>";
-            RequestPacket = RequestPacket.replace(strInReplace, strToReplace);
-        }
-        else {
-            var strInReplace = "<Datetime></Datetime>";
-            var strToReplace = "<Datetime>" + Datetime + "</Datetime>";
-            RequestPacket = RequestPacket.replace(strInReplace, strToReplace);
-        }
-        $("#txtRequestPacket5").val(RequestPacket);
-        oldDatetime5 = Datetime;
-    }
-    function UpdateDatetime6() {
-        var RequestPacket = $("#txtRequestPacket6").val();
-        var Datetime = $("#txtDatetime6").val();
-        var oldDatetime6 = "";
-        if (oldDatetime6 == "") {
-            flag = false;
-        }
-        else {
-            flag = true;
-        }
-
-        if (flag) {
-            var strInReplace = "<Datetime>" + oldDatetime6 + "</Datetime>";
-            var strToReplace = "<Datetime>" + Datetime + "</Datetime>";
-            RequestPacket = RequestPacket.replace(strInReplace, strToReplace);
-        }
-        else {
-            var strInReplace = "<Datetime></Datetime>";
-            var strToReplace = "<Datetime>" + Datetime + "</Datetime>";
-            RequestPacket = RequestPacket.replace(strInReplace, strToReplace);
-        }
-        $("#txtRequestPacket6").val(RequestPacket);
-        oldDatetime6 = Datetime;
-    }
-    function UpdateDatetime7() {
-        var RequestPacket = $("#txtRequestPacket7").val();
-        var Datetime = $("#txtDatetime7").val();
-        var oldDatetime7 = "";
-        if (oldDatetime7 == "") {
-            flag = false;
-        }
-        else {
-            flag = true;
-        }
-
-        if (flag) {
-            var strInReplace = "<Datetime>" + oldDatetime7 + "</Datetime>";
-            var strToReplace = "<Datetime>" + Datetime + "</Datetime>";
-            RequestPacket = RequestPacket.replace(strInReplace, strToReplace);
-        }
-        else {
-            var strInReplace = "<Datetime></Datetime>";
-            var strToReplace = "<Datetime>" + Datetime + "</Datetime>";
-            RequestPacket = RequestPacket.replace(strInReplace, strToReplace);
-        }
-        $("#txtRequestPacket7").val(RequestPacket);
-        oldDatetime7 = Datetime;
-    }
-
 
     function UpdateInvoiceNo2() {
         var RequestPacket = $("#txtRequestPacket2").val();
@@ -774,8 +579,6 @@
         oldInvoiceNo6 = InvoiceNo;
     }
 
-
-
     function UpdateInvoiceAmt2() {
         var RequestPacket = $("#txtRequestPacket2").val();
         var InvoiceAmt = $("#txtInvoiceAmt2").val();
@@ -896,7 +699,6 @@
         $("#txtRequestPacket6").val(RequestPacket);
         oldInvoiceAmt6 = InvoiceAmt;
     }
-
 
     function ReplaceCounterId() {
         var outletId = $("#ddlOutlet").val();
@@ -1379,7 +1181,6 @@
                 success: function (result) {
                     console.log(result);
                     $("#" + responseId).val(result);
-                    //$("#" + fromId).val(RequestPacket);
                     $("#divLoader").hide();
                 },
                 error: function (result) {
@@ -1387,6 +1188,4 @@
                 }
             });
     }
-
-
 </script>
