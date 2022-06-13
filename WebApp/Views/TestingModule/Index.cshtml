@@ -1,12 +1,13 @@
 ﻿@model WebApp.ViewModel.TestingModuleViewModel
-@{ 
-    
+@{
+
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_OnBoardingLayout.cshtml";
- }
+}
 
 
 <style>
+
     .rbtnClass {
         height: 20px;
         width: 20px;
@@ -62,9 +63,9 @@
     <div class="multisteps-form__content bg-white" id="dvEnrlment">
         <input type="hidden" id="hdnEnrlmentId" />
         <div class="col-lg-12" style="float: left; border: 1px solid grey; border-radius: 12px; margin-bottom: 10px; margin-top: 10px; ">
-             
+
             <div class=' col-md-4 col-lg-4' id='datetimepicker1' style="float: left; margin-top: 20px; margin-bottom: 20px;">
-                Date Time <input type="datetime-local" id="txtDatetime1" class="input80" style="margin-bottom:10px; margin-right:20px;" />          
+                Date Time <input type="text" id="txtDatetime1" class="input100" style="margin-bottom:10px; margin-right:20px;" />
             </div>
         </div>
         <div class="col-lg-12" style="float: left; border: 1px solid grey; border-radius: 12px; margin-bottom: 10px; margin-top: 10px;">
@@ -85,15 +86,15 @@
         </div>
     </div>
 
-   @*Enrolnment With Earn*@
+    @*Enrolnment With Earn*@
     <div class="multisteps-form__content bg-white" id="dvEnrlmentWithEarn" style="display:none;">
         <input type="hidden" id="hdnEnrlmentWithEarnId" />
         <div class="col-lg-12" style="float: left; border: 1px solid grey; border-radius: 12px; margin-bottom: 30px; margin-top: 10px; ">
-            
+
             <div style="float: left; margin-top: 20px; margin-bottom: 20px;" class="col-md-12 col-lg-12">
                 Invoice No <input type="text" id="txtInvoiceNo2" class="input50" style="margin-bottom: 10px; margin-right: 50px;" />
                 Invoice Amt<input type="text" id="txtInvoiceAmt2" class="input50" style="margin-bottom: 10px; margin-right: 50px;" />
-                Date Time <input type="datetime-local" id="txtDatetime2" class="input50" style="margin-bottom:10px; margin-right:20px;">
+                Date Time <input type="text" id="txtDatetime2" class="input50" style="margin-bottom:10px; margin-right:20px;">
             </div>
         </div>
         <div class="col-lg-12" style="float: left; border: 1px solid grey; border-radius: 12px; margin-bottom: 10px; margin-top: 10px; ">
@@ -119,11 +120,11 @@
     <div class="multisteps-form__content bg-white" id="dvEarn" style="display:none;">
         <input type="hidden" id="hdnEarnId" />
         <div class="col-lg-12" style="float: left; border: 1px solid grey; border-radius: 12px; margin-bottom: 30px; margin-top: 10px; ">
-            
+
             <div style="float: left; margin-top: 20px; margin-bottom: 20px;" class="col-md-12 col-lg-12">
                 Invoice No <input type="text" id="txtInvoiceNo3" class="input50" style="margin-bottom: 10px; margin-right: 50px;" />
                 Invoice Amt<input type="text" id="txtInvoiceAmt3" class="input50" style="margin-bottom: 10px; margin-right: 50px;" />
-                Date Time <input type="datetime-local" id="txtDatetime3" class="input50" style="margin-bottom:10px; margin-right:20px;">
+                Date Time <input type="text" id="txtDatetime3" class="input50" style="margin-bottom:10px; margin-right:20px;">
             </div>
         </div>
         <div class="col-lg-12" style="float: left; border: 1px solid grey; border-radius: 12px; margin-bottom: 10px; margin-top: 10px; ">
@@ -148,11 +149,11 @@
     <div class="multisteps-form__content bg-white" id="dvBurnValidation" style="display:none;">
         <input type="hidden" id="hdnBurnValidationId" />
         <div class="col-lg-12" style="float: left; border: 1px solid grey; border-radius: 12px; margin-bottom: 30px; margin-top: 10px; ">
-           
+
             <div style="float: left; margin-top: 20px; margin-bottom: 20px;" class="col-md-12 col-lg-12">
-                Invoice No <input type="text" id="txtInvoiceNo4"class="input50" style="margin-bottom: 10px; margin-right: 50px;" />
+                Invoice No <input type="text" id="txtInvoiceNo4" class="input50" style="margin-bottom: 10px; margin-right: 50px;" />
                 Invoice Amt<input type="text" id="txtInvoiceAmt4" class="input50" style="margin-bottom: 10px; margin-right: 50px;" />
-                Date Time <input type="datetime-local" id="txtDatetime4" class="input50" style="margin-bottom:10px; margin-right:20px;">
+                Date Time <input type="text" id="txtDatetime4" class="input50" style="margin-bottom:10px; margin-right:20px;">
             </div>
         </div>
         <div class="col-lg-12" style="float: left; border: 1px solid grey; border-radius: 12px; margin-bottom: 10px; margin-top: 10px; ">
@@ -178,11 +179,11 @@
     <div class="multisteps-form__content bg-white" id="dvBurn" style="display:none;">
         <input type="hidden" id="hdnBurnId" />
         <div class="col-lg-12" style="float: left; border: 1px solid grey; border-radius: 12px; margin-bottom: 30px; margin-top: 10px; ">
-            
+
             <div style="float: left; margin-top: 20px; margin-bottom: 20px;" class="col-md-12 col-lg-12">
                 Invoice No <input type="text" id="txtInvoiceNo5" class="input50" style="margin-bottom: 10px; margin-right: 50px;" />
                 Invoice Amt<input type="text" id="txtInvoiceAmt5" class="input50" style="margin-bottom: 10px; margin-right: 50px;" />
-                Date Time <input type="datetime-local" id="txtDatetime5" class="input50" style="margin-bottom:10px; margin-right:20px;">
+                Date Time <input type="text" id="txtDatetime5" class="input50" style="margin-bottom:10px; margin-right:20px;">
             </div>
         </div>
         <div class="col-lg-12" style="float: left; border: 1px solid grey; border-radius: 12px; margin-bottom: 10px; margin-top: 10px; ">
@@ -204,15 +205,15 @@
     </div>
 
 
-   @*Cancel*@
+    @*Cancel*@
     <div class="multisteps-form__content bg-white" id="dvCancel" style="display:none;">
         <input type="hidden" id="hdnCancelId" />
         <div class="col-lg-12" style="float: left; border: 1px solid grey; border-radius: 12px; margin-bottom: 30px; margin-top: 10px;">
-            
+
             <div style="float: left; margin-top: 20px; margin-bottom: 20px;" class="col-md-12 col-lg-12">
                 Invoice No <input type="text" id="txtInvoiceNo6" class="input50" style="margin-bottom: 10px; margin-right: 50px;" />
                 Invoice Amt<input type="text" id="txtInvoiceAmt6" class="input50" style="margin-bottom: 10px; margin-right: 50px;" />
-                Date Time <input type="datetime-local" id="txtDatetime6" class="input50" style="margin-bottom:10px; margin-right:20px;">
+                Date Time <input type="text" id="txtDatetime6" class="input50" style="margin-bottom:10px; margin-right:20px;">
             </div>
         </div>
         <div class="col-lg-12" style="float: left; border: 1px solid grey; border-radius: 12px; margin-bottom: 10px; margin-top: 10px;">
@@ -238,10 +239,10 @@
     <div class="multisteps-form__content bg-white" id="dvSendOtp" style="display:none;">
         <input type="hidden" id="hdnSendOtpId" />
         <div class="col-lg-12" style="float: left; border: 1px solid grey; border-radius: 12px; margin-bottom: 30px; margin-top: 10px; ">
-            
+
             <div style="float: left; margin-top: 20px; margin-bottom: 20px;" class="col-md-12 col-lg-12">
-                
-                Date Time <input type="datetime-local" id="txtDatetime7" class="input50" style="margin-bottom:10px; margin-right:20px;">
+
+                Date Time <input type="text" id="txtDatetime7" class="input50" style="margin-bottom:10px; margin-right:20px;">
             </div>
         </div>
         <div class="col-lg-12" style="float: left; border: 1px solid grey; border-radius: 12px; margin-bottom: 10px; margin-top: 10px; ">
@@ -266,6 +267,13 @@
     <button type="button" id="btnSend" class="btn btn-primary" style="float: right; margin-right: 50px; margin-left: 10px; margin-bottom: 25px; margin-top: 20px;">Send</button>
     <button type="button" id="btnReset" class="btn btn-primary" style="float: right; margin-bottom: 25px; margin-top: 20px;">Reset</button><br />
 </div>
+<script src="~/Scripts/jquery-ui-1.12.1.js"></script>
+<script src="~/Scripts/jquery-ui-1.12.1.min.js"></script>
+<link href="~/Content/themes/base/jquery-ui.min.css" rel="stylesheet" />
+<link href="~/Content/themes/base/jquery-ui.css" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/3.1.4/css/bootstrap-datetimepicker.min.css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.13.0/moment.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/3.1.4/js/bootstrap-datetimepicker.min.js"></script>
 
 <script>
     var oldMobileNo1 = "";
@@ -285,7 +293,38 @@
     var oldCounterId7 = "";
     var flag = false;
 
-   $(document).ready(function () {
+    $(document).ready(function () {
+        var today = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
+        $("#txtDatetime1").datetimepicker({
+            format: "YYYY-MM-DD  hh:mm:ss",
+            minDate: today,
+        });
+
+        $("#txtDatetime2").datetimepicker({
+            format: "YYYY-MM-DD  hh:mm:ss",
+            minDate: today,
+        });
+        $("#txtDatetime3").datetimepicker({
+            format: "YYYY-MM-DD  hh:mm:ss",
+            minDate: today,
+        });
+        $("#txtDatetime4").datetimepicker({
+            format: "YYYY-MM-DD  hh:mm:ss",
+            minDate: today,
+        });
+        $("#txtDatetime5").datetimepicker({
+            format: "YYYY-MM-DD  hh:mm:ss",
+            minDate: today,
+        });
+        $("#txtDatetime6").datetimepicker({
+            format: "YYYY-MM-DD  hh:mm:ss",
+            minDate: today,
+        });
+        $("#txtDatetime7").datetimepicker({
+            format: "YYYY-MM-DD  hh:mm:ss",
+            minDate: today,
+        });
+
         $("#ddlOutlet").on("change", function () {
             ReplaceCounterId();
         });
@@ -313,12 +352,12 @@
            ShowHideTxnTypeSection("dvBurnValidation");
            ReplaceMobileNo();
        });
-       
+
        $('#rbtnBurn').click(function () {
            ShowHideTxnTypeSection("dvBurn");
            ReplaceMobileNo();
        });
-       
+
        $('#rbtnCancel').click(function () {
            ShowHideTxnTypeSection("dvCancel");
            ReplaceMobileNo();
@@ -332,51 +371,53 @@
        $('#btnSend').click(function () {
            var fromId = "";
            var toId = "";
-           var url = "";        
+           var url = "";
+           var apiType = "";
            if ($("#rbtnEnrlment").is(":checked")) {
                fromId = "txtRequestPacket1";
                toId = "txtResponsePacket1";
                url = "txtRequestPacketURL1";
-               
+               apiType = "Enrollment";
+
            }
            if ($("#rbtnEnrlmntWithEarn").is(":checked")) {
                fromId = "txtRequestPacket2";
                toId = "txtResponsePacket2";
                url = "txtRequestPacketURL2";
-               
+
            }
            if ($("#rbtnEarn").is(":checked")) {
                fromId = "txtRequestPacket3";
                toId = "txtResponsePacket3";
                url = "txtRequestPacketURL3";
-               
+
            }
            if ($("#rbtnBurnValidation").is(":checked")) {
                fromId = "txtRequestPacket4";
                toId = "txtResponsePacket4";
                url = "txtRequestPacketURL4";
-               
+
            }
            if ($("#rbtnBurn").is(":checked")) {
                fromId = "txtRequestPacket5";
                toId = "txtResponsePacket5";
                url = "txtRequestPacketURL5";
-               
+
            }
            if ($("#rbtnCancel").is(":checked")) {
                fromId = "txtRequestPacket6";
                toId = "txtResponsePacket6";
                url = "txtRequestPacketURL6";
-               
+
            }
            if ($("#rbtnSendOtp").is(":checked")) {
                fromId = "txtRequestPacket7";
                toId = "txtResponsePacket7";
                url = "txtRequestPacketURL7";
-              
+
            }
 
-           CheckAPI(fromId, toId, url);
+           CheckAPI(fromId, toId, url, apiType);
        });
 
 
@@ -406,7 +447,7 @@
            UpdateDatetime7();
        });
 
-       
+
        $("#txtInvoiceNo2").focusout(function () {
            UpdateInvoiceNo2();
        });
@@ -422,7 +463,7 @@
        $("#txtInvoiceNo6").focusout(function () {
            UpdateInvoiceNo6();
        });
-       
+
 
        $("#txtInvoiceAmt2").focusout(function () {
            UpdateInvoiceAmt2();
@@ -439,9 +480,9 @@
        $("#txtInvoiceAmt6").focusout(function () {
            UpdateInvoiceAmt6();
        });
-       
-   });
 
+   });
+  
     function UpdateDatetime1() {
         var RequestPacket = $("#txtRequestPacket1").val();
         var Datetime = $("#txtDatetime1").val();
@@ -732,9 +773,9 @@
         $("#txtRequestPacket6").val(RequestPacket);
         oldInvoiceNo6 = InvoiceNo;
     }
-   
 
-    
+
+
     function UpdateInvoiceAmt2() {
         var RequestPacket = $("#txtRequestPacket2").val();
         var InvoiceAmt = $("#txtInvoiceAmt2").val();
@@ -855,7 +896,7 @@
         $("#txtRequestPacket6").val(RequestPacket);
         oldInvoiceAmt6 = InvoiceAmt;
     }
-   
+
 
     function ReplaceCounterId() {
         var outletId = $("#ddlOutlet").val();
@@ -1323,16 +1364,16 @@
         ReplaceCounterId();
     }
 
-    function CheckAPI(requestId, responseId, apiurl1, APITypeId) {
+    function CheckAPI(requestId, responseId, apiurl1, APIType) {
         var RequestPacket = $("#" + requestId).val();
         var ResponsePacket = $("#" + responseId).val();
         var ApiURL = $("#" + apiurl1).val();
-       
+
         $("#divLoader").show();
             $.ajax({
                 type: "POST",
                 url: '@Url.Action("GetResponse", "TestingModule")',
-                data: '{RequestPacket: ' + JSON.stringify(RequestPacket) + ',RequestURL: ' + JSON.stringify(ApiURL) + '}',
+                data: '{RequestPacket: ' + JSON.stringify(RequestPacket) + ',APIType: ' + JSON.stringify(APIType) + ',RequestURL: ' + JSON.stringify(ApiURL) + '}',
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
                 success: function (result) {
@@ -1347,5 +1388,5 @@
             });
     }
 
-    
+
 </script>

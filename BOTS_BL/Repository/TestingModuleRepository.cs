@@ -24,6 +24,7 @@ namespace BOTS_BL.Repository
     public class TestingModuleRepository
     {
         Exceptions newexception = new Exceptions();
+        CustomerRepository CR = new CustomerRepository();
 
         public string GetLiveGroupId(string OBRGroupId)
         {
@@ -55,5 +56,20 @@ namespace BOTS_BL.Repository
 
             return lstData;
         }
+
+      
+       public bool SaveAPIData(GroupTestingLog objgroupTesting)
+        {
+            bool result = false;
+            string connStr = CR.GetCustomerConnString(objgroupTesting.GroupId);
+            using (var context = new BOTSDBContext(connStr))
+            {
+                context.GroupTestingLogs.AddOrUpdate(objgroupTesting);
+                context.SaveChanges();
+                result = true;
+            }
+            return result;
+        }
+
     }
 }

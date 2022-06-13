@@ -35,6 +35,7 @@ namespace WebApp.Controllers
         {
             TestingModuleViewModel TMV = new TestingModuleViewModel();
             TMV = GetXMLData();
+            ViewBag.GroupId = groupId;
             CommonFunctions comm = new CommonFunctions();
             groupId = comm.DecryptString(groupId);
             TMV.billingpartners = TMR.GetBillingPartners(groupId);
@@ -42,7 +43,7 @@ namespace WebApp.Controllers
             var liveGroupId = TMR.GetLiveGroupId(groupId);
             var connectionString = CR.GetCustomerConnString(liveGroupId);
             TMV.lstOutlets = RR.GetOutletList(liveGroupId, connectionString);
-
+            Session["groupId"] = liveGroupId;
             return View(TMV);
         }
 
@@ -89,7 +90,7 @@ namespace WebApp.Controllers
             return objTMV;
         }
 
-        public ActionResult GetResponse(string RequestPacket, string RequestURL, string APIType)
+        public ActionResult GetResponse(string RequestPacket, string APIType, string RequestURL)
         {
             //HttpWebRequest request = (HttpWebRequest)WebRequest.Create("https://blueocktopus.in/NewRetailwareWebService/Service.asmx/RW");
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(RequestURL);
@@ -112,6 +113,7 @@ namespace WebApp.Controllers
                 Stream responseStream = response.GetResponseStream();
                 responseStr = new StreamReader(responseStream).ReadToEnd();
             }
+            SaveAPIData(Convert.ToString(Session["groupId"]), APIType, RequestPacket, RequestURL, responseStr);
             return new JsonResult() { Data = responseStr, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
 
@@ -214,6 +216,24 @@ namespace WebApp.Controllers
             return Json(TMV, JsonRequestBehavior.AllowGet);
         }
 
-       
+        public void SaveAPIData(string GroupId, string APIType, string RequestPacket, string RequestURL, string ResponsePacket)
+        {
+
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
+
+            GroupTestingLog objgroupTesting = new GroupTestingLog();
+
+            objgroupTesting.GroupId = GroupId;
+            objgroupTesting.APIType = APIType;
+            objgroupTesting.RequestPacket = RequestPacket;
+            objgroupTesting.RequestURL = RequestURL;
+            objgroupTesting.ResponsePacket = ResponsePacket;
+
+            objgroupTesting.AddedBy = userDetails.LoginId;
+            objgroupTesting.AddedDate = DateTime.Now;
+
+            var result = TMR.SaveAPIData(objgroupTesting);
+
+        }
     }
 }
