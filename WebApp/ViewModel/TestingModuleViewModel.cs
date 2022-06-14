@@ -22,9 +22,6 @@ namespace WebApp.ViewModel
         public string RequestPacketSendOTP { get; set; }
         public string RequestURL { get; set; }
 
-
-        
-
         public List<SelectListItem> billingpartners { get; set; }
         public List<SelectListItem> lstOutlets { get; set; }
     }

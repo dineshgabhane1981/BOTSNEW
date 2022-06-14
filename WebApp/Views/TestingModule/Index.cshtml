@@ -287,9 +287,13 @@
     var flag = false;
 
     $(document).ready(function () {
-        
+
         $("#ddlOutlet").on("change", function () {
             ReplaceCounterId();
+        });
+
+        $("#ddlBillingPartner").on("change", function () {
+            ReplaceBillingUrl();
         });
 
        $("#txtMobileNo").on("change", function () {
@@ -425,7 +429,7 @@
    });
 
     function ReplaceCurrentDateTime() {
-        
+
         var fullDateTime = new Date().getFullYear() + '' + (new Date().getMonth() + 1) + '' + new Date().getDate() + '' + new Date().getHours() + '' + new Date().getMinutes() + '' + new Date().getSeconds();
 
         var rPacket1 = $("#txtRequestPacket1").val();
@@ -699,6 +703,30 @@
         $("#txtRequestPacket6").val(RequestPacket);
         oldInvoiceAmt6 = InvoiceAmt;
     }
+
+    function ReplaceBillingUrl() {
+        var billingpartner = $("#ddlBillingPartner").val();
+         $("#divLoader").show();
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("GetURLData", "TestingModule")',
+                data: '{billingpartner: ' + JSON.stringify(billingpartner) + '}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (result) {
+                    console.log(result);
+                    $("#txtRequestPacketURL1").html(result);
+                    $("#divLoader").hide();
+                },
+                error: function (result) {
+                    console.log(result);
+                    $("#txtRequestPacketURL1").html(result.responseText);
+                    $("#divLoader").hide();
+                }
+            });
+
+    }
+
 
     function ReplaceCounterId() {
         var outletId = $("#ddlOutlet").val();
