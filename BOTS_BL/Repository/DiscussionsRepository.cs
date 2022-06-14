@@ -418,7 +418,12 @@ namespace BOTS_BL.Repository
                     }
                     if (raisedby != "")
                     {
-                        list = list.Where(x => x.AddedBy == raisedby).ToList();
+                        var sublist = context.BOTS_TblSubDiscussionData.Where(x => x.UpdatedBy == raisedby).Select(y => y.DiscussionId).ToList();
+                        var newlist = list.Where(x => x.AddedBy != raisedby && sublist.Contains(x.Id)).ToList();
+                        
+                        list = list.Where(x => x.AddedBy == raisedby).ToList();                        
+                        list.AddRange(newlist);
+
                     }
                     if (LoginType == "1")
                     {

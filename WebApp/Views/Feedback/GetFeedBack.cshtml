@@ -216,11 +216,11 @@
                                 <div class="col-md-12 col-sm-12 pt-3 pl-3 pr-3 pb-3" style="text-align:center;" id="dvLogo">
                                     <img src="@Model.LogoUrl" style="width:300px;" alt="Logo">
                                 </div>
-                                <div class="col-md-12 col-sm-12 pt-1 pl-3 pr-3" style="text-align: center; font-size: 34px; font-weight: bold; color: red;">                                    
-                                         RATE BLUE OCKTOPUS & OUR SERVICES  <br />                                  
-                                       ब्लू ऑकटॉपस आणि आमच्या सेवांना रेट करा
-                                    </div>
-                                 
+                                <div class="col-md-12 col-sm-12 pt-1 pl-3 pr-3" style="text-align: center; font-size: 34px; font-weight: bold; color: royalblue;">
+                                    YOUR FEEDBACK IS IMPORTANT TO US.  <br />
+                                    तुमचा अभिप्राय आमच्यासाठी महत्त्वाचा आहे
+                                </div>
+
                             }
                             @foreach (var item in Model.lstFeedbackData)
                             {
@@ -278,7 +278,7 @@
                                                 <input id="@rbtn1" type="radio" name="@name" />
                                                 <label class="drinkcard-cc rbtvariety1" for="@rbtn1" style="margin-right:120px;"></label>
                                                 <label style="position: absolute; margin-top: 80px; margin-left: -200px; font-weight: bold; font-size: 24px;">Very much</label>
-                                                <label style="position: absolute; margin-top: 105px; margin-left: -200px; font-weight: bold; font-size: 24px; ">खूप</label>
+                                                <label style="position: absolute; margin-top: 105px; margin-left: -200px; font-weight: bold; font-size: 24px; ">खूप छान</label>
                                                 <input id="@rbtn2" type="radio" name="@name" />
                                                 <label class="drinkcard-cc rbtvariety2" for="@rbtn2" style="margin-right:120px;"></label>
                                                 <input id="@rbtn3" type="radio" name="@name" />
@@ -441,14 +441,14 @@
                 $('#txtMobileNo').css('border-color', 'red');
             }
         });
-        $("#txtBirthDate").focusout(function () {
-            if ($("#txtBirthDate").val() != "") {
-                $('#txtBirthDate').css('border-color', '');
-            }
-            else {
-                $('#txtBirthDate').css('border-color', 'red');
-            }
-        });
+        //$("#txtBirthDate").focusout(function () {
+        //    if ($("#txtBirthDate").val() != "") {
+        //        $('#txtBirthDate').css('border-color', '');
+        //    }
+        //    else {
+        //        $('#txtBirthDate').css('border-color', 'red');
+        //    }
+        //});
 
 
         $('#ddlKnowAboutUs').change(function () {
@@ -475,7 +475,7 @@
                             $('[id^=rbtvariety' + id11 + ']').each(function (i, itemradio) {
 
                                 if ($("#" + itemradio.id).is(":checked")) {
-                                    console.log(itemradio.id + "  - Checked");
+                                    //console.log(itemradio.id + "  - Checked");
                                     count = 1;
                                 }
                             });
@@ -552,8 +552,7 @@
                 dataType: "json",
                 success: function (response) {
                      console.log(response);
-                    if (response == "true") {
-                        console.log("111");
+                    if (response == "true") {                        
                         var nm = $('#spnCustName').text();
                         $('#spnCustName1').text(nm);
                         $("#divLoader").hide();
@@ -569,21 +568,17 @@
                                 message: "Feedback Sent Successfully!",
                                 buttonText: "Okay"
                             }).then((e) => {
-                                if (e == ("confirm")) {
-                                    location.reload();
-                                }
+                                    window.location.replace("https://www.blueocktopus.com/");
                             });
                         }
+
                     }
                     if (response == "false") {
-                        console.log("222");
-                        // $('#spnCustName').text("Esteemed Patron,");
                         $("#divLoader").hide();
                         $("#divquestions").hide();
                         $("#divwelcome").hide();
                     }
-                    if (response == "pointsGiven") {
-                        console.log("333");
+                    if (response == "pointsGiven") {                        
                         $("#divLoader").hide();
                         setTimeout(cuteAlert({
                             type: "success",
@@ -795,29 +790,30 @@
                 dataType: "json",
                  success: function (response) {
                      if (response) {
+                         //alert(response)
                          $("#divLoader").hide();
                          $("#txtbirthdt").val("");
                          $("#txtanniversary").val("");
 
-                         setTimeout(cuteAlert({
+                         cuteAlert({
                              type: "success",
                              title: "Save",
-                             message: "FeedBack Save Successfully!",
+                             message: "Feedback Save Successfully!",
                              buttonText: "Okay"
-                         }), 10000);
-                         //feedbackURL
-                         console.log(urlnew);
-                         window.location.replace(urlnew + $("#hdoutletId").val());
+                         }).then((e) => {
+                             window.location.replace($("#url").text() + $("#hdoutletId").val());
+                         });
                      }
                      else {
-                         setTimeout(cuteAlert({
+
+                         cuteAlert({
                              type: "success",
                              title: "Save",
-                             message: "FeedBack Save Successfully!",
+                             message: "Feedback Save Successfully!",
                              buttonText: "Okay"
-                         }), 10000);
-
-                         window.location.replace(urlnew + $("#hdoutletId").val());
+                         }).then((e) => {
+                             window.location.replace($("#url").text() + $("#hdoutletId").val());
+                         });
                      }
                  },
                  failure: function (response) {
@@ -825,16 +821,16 @@
                      $("#divLoader").hide();
                  },
                  error: function (response) {
-
+                     alert("error")
                      $("#divLoader").hide();
-                     setTimeout(cuteAlert({
+                     cuteAlert({
                          type: "success",
                          title: "Save",
-                         message: "FeedBack Save Successfully!",
+                         message: "Feedback Save Successfully!",
                          buttonText: "Okay"
-                     }), 10000);
-
-                     window.location.replace(urlnew + $("#hdoutletId").val());
+                     }).then((e) => {
+                         window.location.replace($("#url").text() + $("#hdoutletId").val());
+                     });
                  }
              });
         }

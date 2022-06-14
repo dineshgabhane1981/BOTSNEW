@@ -18,6 +18,7 @@ namespace WebApp.Controllers
 {
     public class HomeController : Controller
     {
+        CustomerRepository CR = new CustomerRepository();
         DashboardRepository DR = new DashboardRepository();
         ReportsRepository RR = new ReportsRepository();
         Exceptions newexception = new Exceptions();
@@ -29,6 +30,8 @@ namespace WebApp.Controllers
                 var userDetails = (CustomerLoginDetail)Session["UserSession"];
                 var lstOutlet = RR.GetOutletList(userDetails.GroupId, userDetails.connectionString);
                 dataDashboard = DR.GetDashboardData(userDetails.GroupId, userDetails.connectionString, userDetails.LoginId);
+                userDetails.IsFeedback = CR.GetIsFeedback(userDetails.GroupId);
+                Session["UserSession"] = userDetails;
                 ViewBag.OutletList = lstOutlet;
                 ViewBag.OutletCount = lstOutlet.Count;
                 Session["buttons"] = "Dashboard";
