@@ -402,6 +402,13 @@
 	</SendOTP>
 
 	<url>
-		<EnrollnmentURL>https://blueocktopus.in/NewRetailwareWebService/Service.asmx/RW</EnrollnmentURL>
+		<RetailWareURL> https://blueocktopus.in/NewRetailwareWebService/Service.asmx/RW </RetailWareURL>
+		<LNBURL> https://blueocktopus.in/LNBWebService/Service.asmx/LNB </LNBURL>
+		<AccurateURL> https://blueocktopus.in/AccurateWebService/Service.asmx/Accurate </AccurateURL>
+		<TallyURL> https://blueocktopus.in/TallyWebService/Service.asmx/Tally </TallyURL>
+		<AcmeInfinityURL> https://blueocktopus.in/AcmeWebService/Service.asmx/ACME </AcmeInfinityURL>
+		<AcmeInsightURL> https://blueocktopus.in/AcmeInsightWebService/Service.asmx/ACME </AcmeInsightURL>
+		<AcmePadmaURL> https://blueocktopus.in/AcmePadmWebService/Service.asmx/PADM </AcmePadmaURL>
+		<RetailProURL> https://blueocktopus.in/RetailProWebService/Service.asmx/RW </RetailProURL>
 	</url>
 </packets>
