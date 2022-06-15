@@ -66,5 +66,7 @@ namespace BOTS_BL.Models
         public string CityName { get; set; }
         [NotMapped]
         public string StateName { get; set; }
+       
+        public string PreferredLanguage { get; set; }
     }
 }

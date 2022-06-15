@@ -377,6 +377,7 @@ namespace WebApp.Controllers.OnBoarding
                         objItem.City = Convert.ToString(item["City"]);
                         objItem.PinCode = Convert.ToString(item["PinCode"]);
                         objItem.State = Convert.ToString(item["State"]);
+                        
 
                         objLstOutlet.Add(objItem);
                     }
@@ -2336,8 +2337,10 @@ namespace WebApp.Controllers.OnBoarding
                 objOutletData.RegisterEmail = Convert.ToString(item["RegisterEmail"]);
                 objOutletData.Address = Convert.ToString(item["Address"]);
                 objOutletData.State = Convert.ToString(item["State"]);
+                objOutletData.PreferredLanguage = Convert.ToString(item["PreferredLanguage"]);
                 objOutletData.City = Convert.ToString(item["City"]);
                 objOutletData.PinCode = Convert.ToString(item["PinCode"]);
+                
 
                 objOutletData.UpdatedBy = userDetails.LoginId;
                 objOutletData.UpdatedDate = DateTime.Now;
