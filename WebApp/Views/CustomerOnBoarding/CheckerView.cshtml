@@ -173,6 +173,7 @@
                     CS Assigned  <br /> <b>@Model.bots_TblGroupMaster.AssignedCSName</b>
                 </div>
             </div>
+            @Html.Partial("~/Views/CustomerOnBoarding/_SummaryView.cshtml", Model)
             <div class="row mb-3 card" style="margin-left:5px;">
                 @Html.HiddenFor(model => model.bots_TblGroupMaster.GroupId, new { @id = "hdnGroupID" })
                 @Html.HiddenFor(model => model.bots_TblGroupMaster.OwnerMobileNo, new { @id = "hdnOwnerMobileNo" })

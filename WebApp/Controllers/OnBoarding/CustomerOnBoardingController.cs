@@ -1958,6 +1958,63 @@ namespace WebApp.Controllers.OnBoarding
                 objData.lstCampaignOtherConfig = OBR.GetCampaignOtherConfigByGroupId(GroupId);
                 objData.lstCampaignInactive = OBR.GetCampaignInactiveByGroupId(GroupId);
 
+                int count = 0;
+                foreach(var item in objData.lstCampaignOtherConfig)
+                {
+                    if(item.CampaignType == "Birthday" || item.CampaignType == "Anniversary")
+                    {
+                        if(!string.IsNullOrEmpty(item.IntroScript1))
+                        {
+                            count++;
+                        }
+                        if (!string.IsNullOrEmpty(item.ReminderScript1))
+                        {
+                            count++;
+                        }
+                        if (!string.IsNullOrEmpty(item.ReminderScript2))
+                        {
+                            count++;
+                        }
+                        if (!string.IsNullOrEmpty(item.OnDayScriptPT))
+                        {
+                            count++;
+                        }
+                        if (!string.IsNullOrEmpty(item.OnDayScriptNPT))
+                        {
+                            count++;
+                        }
+                    }
+                    if (item.CampaignType == "DLC Update Reminder" || item.CampaignType == "Balance Updates" || item.CampaignType == "Reminder Bulk Uploaded Users" || item.CampaignType == "DLC Referral Reminder")
+                    {
+                        if (!string.IsNullOrEmpty(item.IntroScript1))
+                        {
+                            count++;
+                        }
+                        if (!string.IsNullOrEmpty(item.IntroScript2))
+                        {
+                            count++;
+                        }
+                    }
+                }
+                
+                 foreach (var item in objData.lstCampaignInactive)
+                 { 
+                     if (item.InactiveType == "Inactive" || item.InactiveType == "Only Once Inactive" || item.InactiveType == "Non Redemption Inactive" || item.InactiveType == "Point Expiry")
+                     {
+                       if (!string.IsNullOrEmpty(item.LessThanDaysScript))
+                       {
+                          count++;
+                       }
+                       if (!string.IsNullOrEmpty(item.GreaterThanDaysScript))
+                       {
+                          count++;
+                       }
+
+                     }
+
+                 }
+                objData.PerpetualCampaignCount = count;
+
                 // Velocity Checks
                 objData.BOTS_TblVelocityChecksConfig = OBR.GetVelocityChecksData(GroupId);
 

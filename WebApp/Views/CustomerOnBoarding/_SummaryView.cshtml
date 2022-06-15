@@ -1,0 +1,225 @@
+﻿@model WebApp.ViewModel.OnBoardingSalesViewModel
+@{
+    var count = 0;
+}
+
+
+<div style="border:1px solid grey; border-radius:5px;padding:5px;">
+
+    <h5 style="margin-left:350px;"><b>Customer Summary</b></h5>
+
+    <div class="col-lg-12 col-sm-12 row">
+        <div class="col-lg-4 col-sm-4">
+            Group Name - <b> @Model.bots_TblGroupMaster.GroupName </b>
+        </div>
+        <div class="col-lg-4 col-sm-4">
+            Owner’s Name - <b> @Model.bots_TblGroupMaster.OwnerName </b>
+        </div>
+        <div class="col-lg-4 col-sm-4">
+            Owner’s Mobile - <b> @Model.bots_TblGroupMaster.OwnerMobileNo </b>
+        </div>
+    </div>
+    <div class="col-lg-12 col-sm-12 row">
+        <div class="col-lg-4 col-sm-4">
+            Owner’s Email - <b> @Model.bots_TblGroupMaster.OwnerEmailId </b>
+        </div>
+        <div class="col-lg-4 col-sm-4">
+            Place - <b> @Model.bots_TblGroupMaster.CityName </b>
+        </div>
+        <div class="col-lg-4 col-sm-4">
+            @if (@Model.bots_TblGroupMaster.IsWhatsApp.HasValue)
+            {
+                if (@Model.bots_TblGroupMaster.IsWhatsApp.Value)
+                {
+                    <div>
+                        WhatsApp - <b> Yes </b>
+                    </div>
+                }
+                else
+                {
+                    <div>
+                        WhatsApp - <b> No </b>
+                    </div>
+                }
+            }
+        </div>
+    </div>
+    <div class="col-lg-12 col-sm-12 row">
+        <div class="col-lg-4 col-sm-4">
+            SMS Free Msgs - <b> @Model.bots_TblGroupMaster.NoOfFreeSMS </b>
+        </div>
+        <div class="col-lg-4 col-sm-4">
+            SMS Paid Msgs - <b> @Model.bots_TblGroupMaster.NoOfPaidSMS </b>
+        </div>
+        <div class="col-lg-4 col-sm-4">
+            Preferred Language - 
+        </div>
+    </div>
+    @foreach (var item in Model.objRetailList)
+    {
+        count++;
+        <div class="col-lg-12 col-sm-12 row">
+            <div class="col-lg-4 col-sm-4">
+                Category - <b> @item.CategoryName </b>
+            </div>
+            <div class="col-lg-4 col-sm-4">
+                Total Outlets - <b> @item.NoOfOutlets </b>
+            </div>
+            <div class="col-lg-4 col-sm-4">
+                Billing Partner - <b>@item.BillingPartnerName</b>
+            </div>
+        </div>
+    }
+    <hr />
+    <div class="col-lg-12 col-sm-12" style="margin-top:10px;"><h6><b>Earn Rules</b></h6></div>
+    <div class="col-lg-12 col-sm-12 row">
+        <div class="col-lg-4 col-sm-4">
+            Minimum Invoice Amount - <b> @Model.objEarnRuleConfig.MinInvoiceAmt.Value </b>
+        </div>
+        <div class="col-lg-4 col-sm-4">
+            Revolving Expiry - <b> @Model.objEarnRuleConfig.RevolvingExpiry </b>
+        </div>
+        <div class="col-lg-4 col-sm-4">
+            Points Validity (in Months) - <b>@Model.objEarnRuleConfig.PointsValidityInMonths</b>
+        </div>
+
+    </div>
+    <div class="col-lg-12 col-sm-12 row">
+
+        <div class="col-lg-4 col-sm-4">
+            @if (Model.objEarnRuleConfig.IsBase == true)
+            {
+                <div>BaseWise - <b>Yes</b></div>
+            }
+            @if (Model.objEarnRuleConfig.IsSlab == true)
+            {
+                <div>SlabWise - <b>Yes</b></div>
+            }
+            @if (Model.objEarnRuleConfig.IsProductWise == true)
+            {
+                <div>ProductWise - <b>Yes</b></div>
+            }
+        </div>
+        <div class="col-lg-4 col-sm-4">
+            @if (Model.objEarnRuleConfig.IsProductWise == true)
+            {
+                <div>ProductWiseType - <b>@Model.objEarnRuleConfig.ProductWiseType</b></div>
+            }
+        </div>
+        <div class="col-lg-4 col-sm-4"></div>
+    </div>
+    <hr />
+    <div class="col-lg-12 col-sm-12" style="margin-top:10px;"><h6><b>Burn Rules</b></h6></div>
+    <div class="col-lg-12 col-sm-12 row">
+        <div class="col-lg-4 col-sm-4">
+            Minimum Invoice Amount - <b> @Model.objBurnRuleConfig.MinInvoiceAmt.Value </b>
+        </div>
+        <div class="col-lg-4 col-sm-4">
+            Percentage to Redeem Points - <b> @Model.objBurnRuleConfig.PercentageToRedeemPts% </b>
+        </div>
+        <div class="col-lg-4 col-sm-4">
+            Minimum Threshold Points First Time - <b>@Model.objBurnRuleConfig.MinThreshholdPtsFisttime</b>
+        </div>
+    </div>
+    <div class="col-lg-12 col-sm-12 row">
+        <div class="col-lg-4 col-sm-4">
+            Minimum Threshold Points Subsequent - <b> @Model.objBurnRuleConfig.MinThreshholdPtsSubsequent </b>
+        </div>
+        <div class="col-lg-4 col-sm-4">
+            Partial Earn - <b> @Model.objBurnRuleConfig.PartialEarn </b>
+        </div>
+    </div>
+    <hr />
+    <div class="col-lg-12 col-sm-12" style="margin-top:10px;"><h6><b>Block Rules</b></h6></div>
+    <div class="col-lg-12 col-sm-12 row">
+        <div class="col-lg-4 col-sm-4">
+            @if (Model.objEarnRuleConfig.IsBlockForEarn == true)
+            {
+                <div>BlockForEarn - <b>Yes</b></div>
+                <div style="margin-top:10px;">BlockProductWiseType - <b>@Model.objEarnRuleConfig.BlockProductWiseType</b></div>
+            }
+        </div>
+        <div class="col-lg-4 col-sm-4">
+            @if (Model.objBurnRuleConfig.IsProductCodeBlocking == true)
+            {
+                <div>BlockForBurn - <b>Yes</b></div>
+                <div style="margin-top:10px;">ProductCodeBlockingType - <b>@Model.objBurnRuleConfig.ProductCodeBlockingType</b></div>
+            }
+        </div>
+
+    </div>
+    <hr />
+    <div class="col-lg-12 col-sm-12 " style="margin-top:10px;"><h6><b>Celebration Point Rules</b></h6></div>
+    <div class="col-lg-12 col-sm-12 row ">
+        @if (Model.lstCampaignOtherConfig != null)
+        {
+            foreach (var item in Model.lstCampaignOtherConfig)
+            {
+                if (item.CampaignType == "Birthday")
+                {
+                    <div class="col-lg-4 col-sm-4">
+                        Birthday Message Count - <b>@item.SMSType</b><br />
+                    </div>
+                    <div class="col-lg-4 col-sm-4">
+                        Birthday Bonus Point - <b>@item.BonusPoints</b>
+                    </div>
+                }
+
+                if (item.CampaignType == "Anniversary")
+                {
+                    <div class="col-lg-4 col-sm-4">
+                        Anniversary Message Count - <b>@item.SMSType</b><br />
+                    </div>
+                    <div class="col-lg-4 col-sm-4" style="margin-top:10px;">
+                        Anniversary Bonus Point - <b>@item.BonusPoints</b>
+                    </div>
+                }
+
+            }
+        }
+
+    </div>
+    <hr />
+    <div class="col-lg-12 col-sm-12" style="margin-top:10px;"><h6><b>DLC Rules</b></h6></div>
+    <div class="col-lg-12 col-sm-12 row">
+        <div class="col-lg-4 col-sm-4">
+            Profile Update Points - <b>@Model.objDLCLinkConfig.ProfileUpdatePoints</b>
+        </div>
+        <div class="col-lg-4 col-sm-4">
+            Referee Member Points - <b>@Model.objDLCLinkConfig.ReferralPoints </b>
+        </div>
+        <div class="col-lg-4 col-sm-4">
+            Referred Member Points - <b>@Model.objDLCLinkConfig.ReferredPoints </b>
+        </div>
+    </div>
+    <div class="col-lg-12 col-sm-12 row">
+        <div class="col-lg-4 col-sm-4">
+            Validity of Referred Member points- <b>@Model.objDLCLinkConfig.ValidityOfReferralPoints</b>
+        </div>
+    </div>
+    <hr />
+    <div class="col-lg-12 col-sm-12" style="margin-top:10px;">
+        <b style="font-size:16px;"> Perpetual Campaign Count</b> - @Model.PerpetualCampaignCount
+    </div>
+    <hr />
+
+    <div class="col-lg-12 col-sm-12 " style="margin-top:10px;"><h6><b> Upload Logo</b></h6></div>
+    <div class="col-lg-12 col-sm-12 row ">
+        @foreach (var item in Model.objRetailList)
+        {
+
+            if (!string.IsNullOrEmpty(item.LogoPath))
+            {
+
+                <div class="col-lg-6 col-sm-6">
+                    <b>@item.BrandName</b>
+                    <img src="@item.LogoPath" width="200" style="margin-left:50px;" />
+                </div>
+
+            }
+
+        }
+    </div>
+</div>
+
+
