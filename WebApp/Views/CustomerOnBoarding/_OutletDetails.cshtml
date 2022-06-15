@@ -51,7 +51,7 @@
             <td>
                 @Html.DropDownListFor(model => model.bots_TblOutletMaster.State, new SelectList(Model.lstStates, "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input50", @id = "ddlStateNew" + count })
             </td>
-            <td>@Html.TextBoxFor(model => item.PreferredLanguage, new { @class = "input50", @id = "txtPreferredLanguageNew" + count })</td>
+            
             <td>
                 @Html.DropDownListFor(model => model.bots_TblOutletMaster.City, new SelectList(Model.lstCity, "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input50", @id = "ddlCityNew" + count })
             </td>
@@ -108,11 +108,7 @@
                         $("#ddlStateNew" + i).css('border-color', 'red');
                         returnStatus = false;
                     }
-                    if ($("#txtPreferredLanguageNew" + i).val() == "") {
-                        ShowHideSection("outletdetails");
-                        $('#txtPreferredLanguage' + i).css('border-color', 'red');
-                        returnStatus = false;
-                    }
+                    
                     if ($("#ddlCityNew" + i + " option:selected").text() == "Please Select") {
                         ShowHideSection("outletdetails");
                         $("#ddlCityNew" + i).css('border-color', 'red');
@@ -144,7 +140,7 @@
                         item["City"] = $("#ddlCityNew" + i).val();
                         item["PinCode"] = $("#txtPinCodeNew" + i).val();
                         item["State"] = $("#ddlStateNew" + i).val();
-                        item["PreferredLanguage"] = $("#txtPreferredLanguageNew" + i).val();
+                        
 
                         Outlets.push(item);
                     }
