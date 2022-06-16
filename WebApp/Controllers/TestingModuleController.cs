@@ -95,36 +95,52 @@ namespace WebApp.Controllers
             var path = ConfigurationManager.AppSettings["PacketXMLPath"].ToString();
             doc.Load(path);
 
-            if(billingpartner=="RetailWare")
+            if (billingpartner == "RetailWare")
             {
                 XmlNode url = doc.DocumentElement.SelectSingleNode("/packets/url/RetailWareURL");
                 ReturnURL = url.InnerXml;
             }
-            //URL
-            //XmlNode url1 = doc.DocumentElement.SelectSingleNode("/packets/url/RetailWareURL");
-            //objurldata.RequestRetailWareURL = url1.InnerXml;
+            if (billingpartner == "LnB")
+            {
+                XmlNode url = doc.DocumentElement.SelectSingleNode("/packets/url/LNBURL");
+                ReturnURL = url.InnerXml;
+            }
 
-            //XmlNode url2 = doc.DocumentElement.SelectSingleNode("/packets/url/LNBURL");
-            //objurldata.RequestLNBURL = url2.InnerXml;
+            if (billingpartner == "Accurate")
+            {
+                XmlNode url = doc.DocumentElement.SelectSingleNode("/packets/url/AccurateURL");
+                ReturnURL = url.InnerXml;
+            }
 
-            //XmlNode url3 = doc.DocumentElement.SelectSingleNode("/packets/url/AccurateURL");
-            //objurldata.RequestAccurateURL = url3.InnerXml;
+            if (billingpartner == "Tally")
+            {
+                XmlNode url = doc.DocumentElement.SelectSingleNode("/packets/url/TallyURL");
+                ReturnURL = url.InnerXml;
+            }
 
-            //XmlNode url4 = doc.DocumentElement.SelectSingleNode("/packets/url/TallyURL");
-            //objurldata.RequestTallyURL = url4.InnerXml;
+            if (billingpartner == "AcmeInfinity")
+            {
+                XmlNode url = doc.DocumentElement.SelectSingleNode("/packets/url/AcmeInfinityURL");
+                ReturnURL = url.InnerXml;
+            }
 
-            //XmlNode url5 = doc.DocumentElement.SelectSingleNode("/packets/url/AcmeInfinityURL");
-            //objurldata.RequestAcmeInfinityURL = url5.InnerXml;
+            if (billingpartner == "AcmeInsight")
+            {
+                XmlNode url = doc.DocumentElement.SelectSingleNode("/packets/url/AcmeInsightURL");
+                ReturnURL = url.InnerXml;
+            }
 
-            //XmlNode url6 = doc.DocumentElement.SelectSingleNode("/packets/url/AcmeInsightURL");
-            //objurldata.RequestAcmeInsightURL = url6.InnerXml;
+            if (billingpartner == "AcmePadma")
+            {
+                XmlNode url = doc.DocumentElement.SelectSingleNode("/packets/url/AcmePadmaURL");
+                ReturnURL = url.InnerXml;
+            }
 
-            //XmlNode url7 = doc.DocumentElement.SelectSingleNode("/packets/url/AcmePadmaURL");
-            //objurldata.RequestAcmePadmaURL = url7.InnerXml;
-
-            //XmlNode url8 = doc.DocumentElement.SelectSingleNode("/packets/url/RetailProURL");
-            //objurldata.RequestRetailProURL = url8.InnerXml;
-
+            if (billingpartner == "RetailPro")
+            {
+                XmlNode url = doc.DocumentElement.SelectSingleNode("/packets/url/RetailProURL");
+                ReturnURL = url.InnerXml;
+            }
             return ReturnURL;
 
         }

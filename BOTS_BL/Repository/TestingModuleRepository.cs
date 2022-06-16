@@ -35,6 +35,8 @@ namespace BOTS_BL.Repository
             }
             return groupId;
         }
+
+
         public List<SelectListItem> GetBillingPartners(string GroupId)
         {
             List<SelectListItem> lstData = new List<SelectListItem>();
@@ -56,8 +58,7 @@ namespace BOTS_BL.Repository
 
             return lstData;
         }
-
-      
+    
        public bool SaveAPIData(GroupTestingLog objgroupTesting)
         {
             bool result = false;
