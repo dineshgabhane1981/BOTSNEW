@@ -17,6 +17,7 @@ using System.Data.OleDb;
 using System.Data;
 using System.Linq;
 using System.Net;
+using System.Net.Mime;
 
 namespace WebApp.Controllers.OnBoarding
 {
@@ -2210,7 +2211,7 @@ namespace WebApp.Controllers.OnBoarding
                 str.AppendLine();
                 str.AppendLine("As per your discussion with" + groupDetails.AssignedCSName + "we have configured the Loyalty Programme Rules");
                 str.AppendLine();
-                str.AppendLine("We request you to kindly click on this link" + Url + "to validate and approve the programme rules for us to start with the set-up process.");
+                str.AppendLine("We request you to kindly click on this link " + Url + " to validate and approve the programme rules for us to start with the set-up process.");
                 str.AppendLine();
                 str.AppendLine("Timelines for the programme set-up post your approval will be as :");
                 str.AppendLine();
@@ -2221,6 +2222,33 @@ namespace WebApp.Controllers.OnBoarding
 
                 mail.Subject = "Loyalty Program Configuration";
                 mail.SubjectEncoding = System.Text.Encoding.Default;
+
+
+                //string htmlBody = "<html><body><h1>Picture</h1><br><img src=\"cid:filename\"></body></html>";
+                //AlternateView avHtml = AlternateView.CreateAlternateViewFromString
+                //   (htmlBody, null, MediaTypeNames.Text.Html);
+                
+                //string filePath = Server.MapPath("~/Content/assets/BotsLoginBackground.jpeg");
+                //LinkedResource inline = new LinkedResource(filePath, MediaTypeNames.Image.Jpeg);
+                //inline.ContentId = Guid.NewGuid().ToString();
+                //avHtml.LinkedResources.Add(inline);
+
+                ////MailMessage mail = new MailMessage();
+                //mail.AlternateViews.Add(avHtml);
+                
+                //Attachment att = new Attachment(filePath);
+                //att.ContentDisposition.Inline = true;
+                
+                //mail.Subject = "Client:  Has Sent You A Screenshot";
+                //mail.Body = String.Format(
+                //           "<h3>Client: Has Sent You A Screenshot</h3>" +
+                //           @"<img src=""cid:{0}"" />", att.ContentId);
+
+                //mail.IsBodyHtml = true;
+                //mail.Attachments.Add(att);
+
+
+
                 mail.Body = str.ToString();
                 mail.IsBodyHtml = false;
                 mail.BodyEncoding = System.Text.Encoding.GetEncoding("utf-8");

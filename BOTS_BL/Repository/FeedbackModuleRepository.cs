@@ -813,22 +813,22 @@ namespace BOTS_BL.Repository
                                 var NewId = Convert.ToInt64(CustomerId) + 1;
                                 objnewcust.CustomerId = Convert.ToString(NewId);
                                 objnewcust.Points = feedbackpointsmsg.AwardFeedbackPoints;
-                                 
-                                    objnewcust.CustomerName = "Member";
-                                
+
+                                objnewcust.CustomerName = "Member";
+
                                 objnewcust.CustomerCategory = null;
                                 objnewcust.CardNumber = "";
                                 objnewcust.CustomerThrough = "2";
-                                 
+
                                 objnewcust.MaritalStatus = "";
                                 objnewcust.MemberGroupId = "1000";
                                 objnewcust.MobileNo = mobileNo;
                                 objnewcust.Status = "00";
-                                 
+
                                 objnewcust.DOJ = date;
                                 objnewcust.EmailId = "";
                                 objnewcust.EnrollingOutlet = outletId;
-                                 
+
                                 objnewcust.IsSMS = null;
                                 objnewcust.BillingCustomerId = null;
 
@@ -1018,7 +1018,7 @@ namespace BOTS_BL.Repository
                         {
                             objnewcust.DOB = Convert.ToDateTime(BirthDt);
                         }
-                        
+
                         objnewcust.MaritalStatus = "";
                         objnewcust.MemberGroupId = "1000";
                         objnewcust.MobileNo = mobileNo;
@@ -1102,9 +1102,19 @@ namespace BOTS_BL.Repository
                     context.SaveChanges();
 
                 }
+                var isNegative = false;
                 foreach (var feedback in lstfeedback)
                 {
+                    if (GroupId == "1181")
+                    {
+                        if (feedback.QuestionPoints <= 2)
+                        {
+                            isNegative = true;
+                        }
+                    }
+
                     negativePoints = negativePoints + feedback.QuestionPoints;
+
                     // feedback.Location = LiveIn;
                     feedback.HowToKnowAbout = Knowabt;
                     if (!string.IsNullOrEmpty(BirthDt))
@@ -1145,8 +1155,19 @@ namespace BOTS_BL.Repository
                 SuccessMSG = SuccessMSG.Replace("#01", mobileNo);
 
                 SendMessage(mobileNos, SuccessMSG, objsmsdetails.WhatsAppTokenId);
+                if (GroupId == "1181")
+                {
+                    if (isNegative)
+                    {
+                        var negativeMSG = "Negative Feedback by : #01 | On date time #08| Negative Score: #31";
+                        negativeMSG = negativeMSG.Replace("#01", mobileNo);
+                        negativeMSG = negativeMSG.Replace("#08", Convert.ToString(date));
+                        negativeMSG = negativeMSG.Replace("#31", Convert.ToString(negativePoints));
 
-                if (negativePoints <= 6)
+                        SendMessage(feedbackpointsmsg.MsgNegativeFeedback, negativeMSG, objsmsdetails.WhatsAppTokenId);
+                    }
+                }
+                else if (negativePoints <= 6)
                 {
                     var negativeMSG = "Negative Feedback by : #01 | On date time #08| Negative Score: #31";
                     negativeMSG = negativeMSG.Replace("#01", mobileNo);
