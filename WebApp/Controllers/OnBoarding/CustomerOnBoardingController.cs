@@ -2204,14 +2204,20 @@ namespace WebApp.Controllers.OnBoarding
             using (MailMessage mail = new MailMessage(from, To))
             {
                 StringBuilder str = new StringBuilder();
-                str.AppendLine("Dear " + groupDetails.OwnerName + " Sir,");
+                str.AppendLine("Dear " + groupDetails.OwnerName);
                 str.AppendLine();
-                str.AppendLine("Please find below link of Loyalty Program Configuration");
+                str.AppendLine("We thank you for your decision to join hands with Blue Ocktopus and are confident that you will be really happy to see how this helps your current business grow.");
                 str.AppendLine();
-                str.AppendLine("Please click on link to check and approve configuration : " + Url + "");
+                str.AppendLine("As per your discussion with" + groupDetails.AssignedCSName + "we have configured the Loyalty Programme Rules");
                 str.AppendLine();
-                str.AppendLine("Regards,");
-                str.AppendLine(" - BlueOcktopus Team");
+                str.AppendLine("We request you to kindly click on this link" + Url + "to validate and approve the programme rules for us to start with the set-up process.");
+                str.AppendLine();
+                str.AppendLine("Timelines for the programme set-up post your approval will be as :");
+                str.AppendLine();
+                str.AppendLine("We value your association with us and look forward for your continued support");
+                str.AppendLine();
+                str.AppendLine(" Warm Regards,");
+                str.AppendLine(" - BlueOcktopus");
 
                 mail.Subject = "Loyalty Program Configuration";
                 mail.SubjectEncoding = System.Text.Encoding.Default;
