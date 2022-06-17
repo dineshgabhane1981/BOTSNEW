@@ -8,7 +8,7 @@
         <input type="hidden" id="hdnBlockEarnBase64" />
         <input type="hidden" id="hdnBlockBurnBase64" />
         <h5>Earn Rule</h5>
-        
+
     </div>
 
     <div class="col-md-12 col-lg-12" style="display: flex;">
@@ -25,188 +25,188 @@
             @Html.TextBoxFor(model => model.objEarnRuleConfig.PointsValidityInMonths, new { @class = "input50", @id = "txtPointsValidityInMonths" })
         </div>
     </div>
-        <div class="col-md-12 col-lg-12" style="margin-top:20px;padding-left:30px;">
-            Revolving Expiry
-            @Html.RadioButtonFor(model => model.objEarnRuleConfig.RevolvingExpiry, "1", new { @id = "rbtnRevolvingExpiry1", @class = "rbtnClass", @Checked = "checked" }) Yes
-            @Html.RadioButtonFor(model => model.objEarnRuleConfig.RevolvingExpiry, "0", new { @id = "rbtnRevolvingExpiry0", @class = "rbtnClass" }) No
-        </div>
-        <div class="col-md-12 col-lg-12" style="margin-top: 20px; padding-left: 14px;margin-bottom:10px;">
-            @Html.RadioButtonFor(model => model.objEarnRuleConfig.IsBase, true, new { @id = "rbtnIsBase", @class = "rbtnClass", @Name = "dummy" })  Base
-            @Html.RadioButtonFor(model => model.objEarnRuleConfig.IsSlab, true, new { @id = "rbtnIsSlab", @class = "rbtnClass", @Name = "dummy" })  Slab
-            @Html.RadioButtonFor(model => model.objEarnRuleConfig.IsProductWise, true, new { @id = "rbtnIsProductWise", @class = "rbtnClass", @Name = "dummy" })  ProductWise
+    <div class="col-md-12 col-lg-12" style="margin-top:20px;padding-left:30px;">
+        Revolving Expiry
+        @Html.RadioButtonFor(model => model.objEarnRuleConfig.RevolvingExpiry, "1", new { @id = "rbtnRevolvingExpiry1", @class = "rbtnClass", @Checked = "checked" }) Yes
+        @Html.RadioButtonFor(model => model.objEarnRuleConfig.RevolvingExpiry, "0", new { @id = "rbtnRevolvingExpiry0", @class = "rbtnClass" }) No
+    </div>
+    <div class="col-md-12 col-lg-12" style="margin-top: 20px; padding-left: 14px;margin-bottom:10px;">
+        @Html.RadioButtonFor(model => model.objEarnRuleConfig.IsBase, true, new { @id = "rbtnIsBase", @class = "rbtnClass", @Name = "dummy" })  Base
+        @Html.RadioButtonFor(model => model.objEarnRuleConfig.IsSlab, true, new { @id = "rbtnIsSlab", @class = "rbtnClass", @Name = "dummy" })  Slab
+        @Html.RadioButtonFor(model => model.objEarnRuleConfig.IsProductWise, true, new { @id = "rbtnIsProductWise", @class = "rbtnClass", @Name = "dummy" })  ProductWise
 
-        </div>
-        <div id="dvBase" style="display: none; padding-left: 30px; margin-left: 30px; padding-top: 20px; padding-bottom: 15px; border: 1px solid lightgrey; border-radius: 5px; " class="col-md-6 col-lg-6">
-         
-            Base Percentage(%)
-            @Html.TextBoxFor(model => model.objEarnRuleConfig.BasePercentage, new { @class = "input50", @id = "txtBasePercentage" })
-            
-        </div>
-        <div id="dvSlab" class="col-md-6 col-lg-6" style="display: none; padding-top: 20px; margin-left: 30px; padding-bottom: 15px; border: 1px solid lightgrey; border-radius: 5px; ">
-            <div id="dv1" class="col-md-6 col-lg-6" style="display:flex;">
-                <div style="padding-right:10px;">
-                    From<br />
-                    <input type="number" id="frm1" class="input20" />
-                </div>
-                <div style="padding-right:10px;">
-                    To<br />
-                    <input type="number" id="to1" class="input20" />
-                </div>
-                <div>
-                    %<br />
-                    <input type="number" id="per1" class="input20" />
-                </div>
-            </div>
-            <div id="dv2" class="col-md-6 col-lg-6" style="display:flex;">
-                <div style="padding-right:10px;">
-                    From<br />
-                    <input type="number" id="frm2" class="input20" />
-                </div>
-                <div style="padding-right:10px;">
-                    To<br />
-                    <input type="number" id="to2" class="input20" />
-                </div>
-                <div>
-                    %<br />
-                    <input type="number" id="per2" class="input20" />
-                </div>
-            </div>
-            <div id="dv3" class="col-md-6 col-lg-6" style="display:flex;">
-                <div style="padding-right:10px;">
-                    From<br />
-                    <input type="number" id="frm3" class="input20" />
-                </div>
-                <div style="padding-right:10px;">
-                    To<br />
-                    <input type="number" id="to3" class="input20" />
-                </div>
-                <div>
-                    %<br />
-                    <input type="number" id="per3" class="input20" />
-                </div>
-            </div>
-            <div id="dv4" class="col-md-6 col-lg-6" style="display:flex;">
-                <div style="padding-right:10px;">
-                    From<br />
-                    <input type="number" id="frm4" class="input20" />
-                </div>
-                <div style="padding-right:10px;">
-                    To<br />
-                    <input type="number" id="to4" class="input20" />
-                </div>
-                <div>
-                    %<br />
-                    <input type="number" id="per4" class="input20" />
-                </div>
-            </div>
-            <div id="dv5" class="col-md-6 col-lg-6" style="display:flex;">
-                <div style="padding-right:10px;">
-                    From<br />
-                    <input type="number" id="frm5" class="input20" />
-                </div>
-                <div style="padding-right:10px;">
-                    To<br />
-                    <input type="number" id="to5" class="input20" />
-                </div>
-                <div>
-                    %<br />
-                    <input type="number" id="per5" class="input20" />
-                </div>
-            </div>
-            <div id="dv6" class="col-md-6 col-lg-6" style="display:flex;">
-                <div style="padding-right:10px;">
-                    From<br />
-                    <input type="number" id="frm6" class="input20" />
-                </div>
-                <div style="padding-right:10px;">
-                    To<br />
-                    <input type="number" id="to6" class="input20" />
-                </div>
-                <div>
-                    %<br />
-                    <input type="number" id="per6" class="input20" />
-                </div>
-            </div>
-        </div>
+    </div>
+    <div id="dvBase" style="display: none; padding-left: 30px; margin-left: 30px; padding-top: 20px; padding-bottom: 15px; border: 1px solid lightgrey; border-radius: 5px; " class="col-md-6 col-lg-6">
 
-        <div id="dvProductWise" class="col-md-6 col-lg-6" style="padding-left: 15px; margin-left: 30px; padding-bottom: 15px; padding-top: 20px; display: none; border: 1px solid lightgrey; border-radius: 5px; ">
-            <div style="display:flex;">
+        Base Percentage(%)
+        @Html.TextBoxFor(model => model.objEarnRuleConfig.BasePercentage, new { @class = "input50", @id = "txtBasePercentage" })
 
-                <input id="rbtnCategory" name="ProductWise" type="radio" class="rbtnClass"> &nbsp; Category
-                <input id="rbtnSubCategory" name="ProductWise" type="radio" class="rbtnClass"> &nbsp; SubCategory
-                <input id="rbtnProduct" name="ProductWise" type="radio" checked class="rbtnClass">&nbsp; Product
+    </div>
+    <div id="dvSlab" class="col-md-6 col-lg-6" style="display: none; padding-top: 20px; margin-left: 30px; padding-bottom: 15px; border: 1px solid lightgrey; border-radius: 5px; ">
+        <div id="dv1" class="col-md-6 col-lg-6" style="display:flex;">
+            <div style="padding-right:10px;">
+                From<br />
+                <input type="number" id="frm1" class="input20" />
             </div>
-            <div style="padding-left: 15px; padding-top: 20px;"><input type="file" id="ProductWiseFile" /></div>
+            <div style="padding-right:10px;">
+                To<br />
+                <input type="number" id="to1" class="input20" />
+            </div>
+            <div>
+                %<br />
+                <input type="number" id="per1" class="input20" />
+            </div>
         </div>
-        <div id="dvBlockEarn" class="col-md-6 col-lg-6" style="margin-left: 30px; margin-top: 30px; border:1px solid lightgrey;border-radius:5px;">
-            <b style="padding-left:10px;">Block for Earn</b>
-            <div style="display:flex;padding-top:10px;">
-                @Html.RadioButtonFor(model => model.objEarnRuleConfig.IsBlockForEarn, true, new { @id = "rbtnCategoryB", @class = "rbtnClass", @Name = "ProductWiseB", disabled = "disabled", })  &nbsp; Category
-                @Html.RadioButtonFor(model => model.objEarnRuleConfig.IsBlockForEarn, true, new { @id = "rbtnSubCategoryB", @class = "rbtnClass", @Name = "ProductWiseB", disabled = "disabled" })  &nbsp; SubCategory
-                @Html.RadioButtonFor(model => model.objEarnRuleConfig.IsBlockForEarn, true, new { @id = "rbtnProductB", @class = "rbtnClass", @Name = "ProductWiseB", disabled = "disabled" })  &nbsp; Product
+        <div id="dv2" class="col-md-6 col-lg-6" style="display:flex;">
+            <div style="padding-right:10px;">
+                From<br />
+                <input type="number" id="frm2" class="input20" />
             </div>
-            <div style="padding-left: 15px; padding-top: 20px;padding-bottom:10px;">
-                <input type="file" id="BlockEarnFile" />
+            <div style="padding-right:10px;">
+                To<br />
+                <input type="number" id="to2" class="input20" />
+            </div>
+            <div>
+                %<br />
+                <input type="number" id="per2" class="input20" />
             </div>
         </div>
-
-        <div> 
-            <button type="button" id="btnEarnSave" class="btn btn-primary pull-right" onclick="return SaveEarnRule();" style="margin-right:10px;margin-bottom:20px;">Save</button>
+        <div id="dv3" class="col-md-6 col-lg-6" style="display:flex;">
+            <div style="padding-right:10px;">
+                From<br />
+                <input type="number" id="frm3" class="input20" />
+            </div>
+            <div style="padding-right:10px;">
+                To<br />
+                <input type="number" id="to3" class="input20" />
+            </div>
+            <div>
+                %<br />
+                <input type="number" id="per3" class="input20" />
+            </div>
+        </div>
+        <div id="dv4" class="col-md-6 col-lg-6" style="display:flex;">
+            <div style="padding-right:10px;">
+                From<br />
+                <input type="number" id="frm4" class="input20" />
+            </div>
+            <div style="padding-right:10px;">
+                To<br />
+                <input type="number" id="to4" class="input20" />
+            </div>
+            <div>
+                %<br />
+                <input type="number" id="per4" class="input20" />
+            </div>
+        </div>
+        <div id="dv5" class="col-md-6 col-lg-6" style="display:flex;">
+            <div style="padding-right:10px;">
+                From<br />
+                <input type="number" id="frm5" class="input20" />
+            </div>
+            <div style="padding-right:10px;">
+                To<br />
+                <input type="number" id="to5" class="input20" />
+            </div>
+            <div>
+                %<br />
+                <input type="number" id="per5" class="input20" />
+            </div>
+        </div>
+        <div id="dv6" class="col-md-6 col-lg-6" style="display:flex;">
+            <div style="padding-right:10px;">
+                From<br />
+                <input type="number" id="frm6" class="input20" />
+            </div>
+            <div style="padding-right:10px;">
+                To<br />
+                <input type="number" id="to6" class="input20" />
+            </div>
+            <div>
+                %<br />
+                <input type="number" id="per6" class="input20" />
+            </div>
         </div>
     </div>
+
+    <div id="dvProductWise" class="col-md-6 col-lg-6" style="padding-left: 15px; margin-left: 30px; padding-bottom: 15px; padding-top: 20px; display: none; border: 1px solid lightgrey; border-radius: 5px; ">
+        <div style="display:flex;">
+
+            <input id="rbtnCategory" name="ProductWise" type="radio" class="rbtnClass"> &nbsp; Category
+            <input id="rbtnSubCategory" name="ProductWise" type="radio" class="rbtnClass"> &nbsp; SubCategory
+            <input id="rbtnProduct" name="ProductWise" type="radio" checked class="rbtnClass">&nbsp; Product
+        </div>
+        <div style="padding-left: 15px; padding-top: 20px;"><input type="file" id="ProductWiseFile" /></div>
+    </div>
+    <div id="dvBlockEarn" class="col-md-6 col-lg-6" style="margin-left: 30px; margin-top: 30px; border:1px solid lightgrey;border-radius:5px;">
+        <b style="padding-left:10px;">Block for Earn</b>
+        <div style="display:flex;padding-top:10px;">
+            @Html.RadioButtonFor(model => model.objEarnRuleConfig.IsBlockForEarn, true, new { @id = "rbtnCategoryB", @class = "rbtnClass", @Name = "ProductWiseB", disabled = "disabled", })  &nbsp; Category
+            @Html.RadioButtonFor(model => model.objEarnRuleConfig.IsBlockForEarn, true, new { @id = "rbtnSubCategoryB", @class = "rbtnClass", @Name = "ProductWiseB", disabled = "disabled" })  &nbsp; SubCategory
+            @Html.RadioButtonFor(model => model.objEarnRuleConfig.IsBlockForEarn, true, new { @id = "rbtnProductB", @class = "rbtnClass", @Name = "ProductWiseB", disabled = "disabled" })  &nbsp; Product
+        </div>
+        <div style="padding-left: 15px; padding-top: 20px;padding-bottom:10px;">
+            <input type="file" id="BlockEarnFile" />
+        </div>
+    </div>
+
+    <div>
+        <button type="button" id="btnEarnSave" class="btn btn-primary pull-right" onclick="return SaveEarnRule();" style="margin-right:10px;margin-bottom:20px;">Save</button>
+    </div>
+</div>
 <div style="margin-top:50px;">
     <hr />
 </div>
-      <h5>Burn Rule</h5>
+<h5>Burn Rule</h5>
 
-      <div class="col-md-12 col-lg-12" style="display: flex; margin-bottom:20px;margin-top:20px;">
-          <div class="col-md-3 col-lg-3">
-              Min Invoice Amount<br />
-              @Html.TextBoxFor(model => model.objBurnRuleConfig.MinInvoiceAmt, new { @class = "input50", @id = "txtMinBurnInvoiceAmt" })
-          </div>
+<div class="col-md-12 col-lg-12" style="display: flex; margin-bottom:20px;margin-top:20px;">
+    <div class="col-md-3 col-lg-3">
+        Min Invoice Amount<br />
+        @Html.TextBoxFor(model => model.objBurnRuleConfig.MinInvoiceAmt, new { @class = "input50", @id = "txtMinBurnInvoiceAmt" })
+    </div>
 
-          <div class="col-md-3 col-lg-3" style="margin-bottom: 20px;">
-              Min Threshhold Pts First Time<br />
-              @Html.TextBoxFor(model => model.objBurnRuleConfig.MinThreshholdPtsFisttime, new { @class = "input50", @id = "txtMinThreshholdPtsFisttime" })
-          </div>
-          <div class="col-md-3 col-lg-3" style="margin-bottom: 20px;">
-              Min Threshhold Pts Subsequent<br />
-              @Html.TextBoxFor(model => model.objBurnRuleConfig.MinThreshholdPtsSubsequent, new { @class = "input50", @id = "txtMinThreshholdPtsSubsequent" })
-          </div>
-          <div class="col-md-3 col-lg-3">
-              Min Redeem Pts<br />
-              @Html.TextBoxFor(model => model.objBurnRuleConfig.PercentageToRedeemPts, new { @class = "input50", @id = "txtPercentageToRedeemPts" })
-          </div>
-      </div>
-        <div class="col-md-12 col-lg-12" style="display: flex;">
-            
-        </div>
-        <div class="col-md-9 col-lg-9" style="margin-top:20px;padding-left:30px;">
-            Partial Earn
-            @Html.RadioButtonFor(model => model.objBurnRuleConfig.PartialEarn, "FullEarn", new { @id = "rbtnPartialEarn1", @class = "rbtnClass", @Checked = "checked" }) Full earn while burn
-            @Html.RadioButtonFor(model => model.objBurnRuleConfig.PartialEarn, "PartialEarn", new { @id = "rbtnPartialEarn2", @class = "rbtnClass" }) Partial Earn while burn
-            @Html.RadioButtonFor(model => model.objBurnRuleConfig.PartialEarn, "NoPoints", new { @id = "rbtnPartialEarn3", @class = "rbtnClass" }) No Points
-        </div>
-        <div id="dvBlockBurn" class="col-md-6 col-lg-6" style="margin-left: 30px; margin-top: 30px; border:1px solid lightgrey;border-radius:5px;">
-            <b style="padding-left:10px;">Product Code for Blocking</b>
-            <div style="display:flex;padding-top:10px;">
-                @Html.RadioButtonFor(model => model.objBurnRuleConfig.IsProductCodeBlocking, true, new { @id = "rbtnProductBlockingB", @class = "rbtnClass", @Name = "ProductWiseB" })  &nbsp; Product
-                @Html.RadioButtonFor(model => model.objBurnRuleConfig.IsProductCodeBlocking, true, new { @id = "rbtnCategoryBlockingB", @class = "rbtnClass", @Name = "ProductWiseB" })  &nbsp; Category
-                @Html.RadioButtonFor(model => model.objBurnRuleConfig.IsProductCodeBlocking, true, new { @id = "rbtnSubCategoryBlockingB", @class = "rbtnClass", @Name = "ProductWiseB" })  &nbsp; SubCategory
+    <div class="col-md-3 col-lg-3" style="margin-bottom: 20px;">
+        Min Threshhold Pts First Time<br />
+        @Html.TextBoxFor(model => model.objBurnRuleConfig.MinThreshholdPtsFisttime, new { @class = "input50", @id = "txtMinThreshholdPtsFisttime" })
+    </div>
+    <div class="col-md-3 col-lg-3" style="margin-bottom: 20px;">
+        Min Threshhold Pts Subsequent<br />
+        @Html.TextBoxFor(model => model.objBurnRuleConfig.MinThreshholdPtsSubsequent, new { @class = "input50", @id = "txtMinThreshholdPtsSubsequent" })
+    </div>
+    <div class="col-md-3 col-lg-3">
+        Min Redeem Pts<br />
+        @Html.TextBoxFor(model => model.objBurnRuleConfig.PercentageToRedeemPts, new { @class = "input50", @id = "txtPercentageToRedeemPts" })
+    </div>
+</div>
+<div class="col-md-12 col-lg-12" style="display: flex;">
 
-            </div>
-            <div style="padding-left: 15px; padding-top: 20px;padding-bottom:10px;">
-                <input type="file" id="BlockBurnFile" />
-            </div>
-        </div>
+</div>
+<div class="col-md-9 col-lg-9" style="margin-top:20px;padding-left:30px;">
+    Partial Earn
+    @Html.RadioButtonFor(model => model.objBurnRuleConfig.PartialEarn, "FullEarn", new { @id = "rbtnPartialEarn1", @class = "rbtnClass", @Checked = "checked" }) Full earn while burn
+    @Html.RadioButtonFor(model => model.objBurnRuleConfig.PartialEarn, "PartialEarn", new { @id = "rbtnPartialEarn2", @class = "rbtnClass" }) Partial Earn while burn
+    @Html.RadioButtonFor(model => model.objBurnRuleConfig.PartialEarn, "NoPoints", new { @id = "rbtnPartialEarn3", @class = "rbtnClass" }) No Points
+</div>
+<div id="dvBlockBurn" class="col-md-6 col-lg-6" style="margin-left: 30px; margin-top: 30px; border:1px solid lightgrey;border-radius:5px;">
+    <b style="padding-left:10px;">Product Code for Blocking</b>
+    <div style="display:flex;padding-top:10px;">
+        @Html.RadioButtonFor(model => model.objBurnRuleConfig.IsProductCodeBlocking, true, new { @id = "rbtnProductBlockingB", @class = "rbtnClass", @Name = "ProductWiseB" })  &nbsp; Product
+        @Html.RadioButtonFor(model => model.objBurnRuleConfig.IsProductCodeBlocking, true, new { @id = "rbtnCategoryBlockingB", @class = "rbtnClass", @Name = "ProductWiseB" })  &nbsp; Category
+        @Html.RadioButtonFor(model => model.objBurnRuleConfig.IsProductCodeBlocking, true, new { @id = "rbtnSubCategoryBlockingB", @class = "rbtnClass", @Name = "ProductWiseB" })  &nbsp; SubCategory
 
-        <div>
-            <button type="button" id="btnBurnSave" class="btn btn-primary pull-right" onclick="return SaveBurnRule();" style="margin-right:10px;margin-bottom:20px;">Save</button>
-        </div>
-    
+    </div>
+    <div style="padding-left: 15px; padding-top: 20px;padding-bottom:10px;">
+        <input type="file" id="BlockBurnFile" />
+    </div>
+</div>
+
+<div>
+    <button type="button" id="btnBurnSave" class="btn btn-primary pull-right" onclick="return SaveBurnRule();" style="margin-right:10px;margin-bottom:20px;">Save</button>
+</div>
 
 
-        <script>
+
+<script>
     $(document).ready(function () {
         document.getElementById("ProductWiseFile").addEventListener('change', handleFileSelectProductWise, false);
         document.getElementById("BlockEarnFile").addEventListener('change', handleFileSelectBlockEarn, false);
@@ -223,27 +223,39 @@
             $("#dvBase").show();
             $("#dvSlab").hide();
             $("#dvProductWise").hide();
+            $("#rbtnCategoryB").prop("disabled", false);
+            $("#rbtnSubCategoryB").prop("disabled", false);
+            $("#rbtnProductB").prop("disabled", false);
         });
         $("#rbtnIsSlab").on("click", function () {
             $("#dvBase").hide();
             $("#dvSlab").show();
             $("#dvProductWise").hide();
+            $("#rbtnCategoryB").prop("disabled", false);
+            $("#rbtnSubCategoryB").prop("disabled", false);
+            $("#rbtnProductB").prop("disabled", false);
         });
         $("#rbtnIsProductWise").on("click", function () {
             $("#dvBase").hide();
             $("#dvSlab").hide();
             $("#dvProductWise").show();
-        });
-
-        $("#rbtnCategory").on("click", function () {
+            $("#rbtnCategoryB").prop("disabled", true);
+            $("#rbtnSubCategoryB").prop("disabled", true);
+            $("#rbtnProductB").prop("disabled", true);
+            $("#rbtnCategory").prop("checked", true);
             $("#rbtnCategoryB").prop("checked", true);
         });
-        $("#rbtnSubCategory").on("click", function () {
-            $("#rbtnSubCategoryB").prop("checked", true);
-        });
-        $("#rbtnProduct").on("click", function () {
-            $("#rbtnProductB").prop("checked", true);
-        });
+
+            $("#rbtnCategory").on("click", function () {
+                $("#rbtnCategoryB").prop("checked", true);
+            });
+            $("#rbtnSubCategory").on("click", function () {
+                $("#rbtnSubCategoryB").prop("checked", true);
+            });
+            $("#rbtnProduct").on("click", function () {
+                $("#rbtnProductB").prop("checked", true);
+            });
+
 
         ShowHideProductTypeSection();
         var earnExist = JSON.parse('@Html.Raw(Json.Encode(Model.objEarnRuleConfig))');
@@ -288,17 +300,25 @@
         }
     });
 
+
+
     function ShowHideProductTypeSection() {
         if ($("#rbtnIsBase").is(":checked")) {
             $("#dvBase").show();
             $("#dvSlab").hide();
             $("#dvProductWise").hide();
+            $("#rbtnCategoryB").prop("disabled", false);
+            $("#rbtnSubCategoryB").prop("disabled", false);
+            $("#rbtnProductB").prop("disabled", false);
         }
         if ($("#rbtnIsSlab").is(":checked")) {
             $("#dvBase").hide();
             $("#dvSlab").show();
             $("#dvProductWise").hide();
             $("#txtBasePercentage").val("");
+            $("#rbtnCategoryB").prop("disabled", false);
+            $("#rbtnSubCategoryB").prop("disabled", false);
+            $("#rbtnProductB").prop("disabled", false);
 
             var objSlab = JSON.parse('@Html.Raw(Json.Encode(Model.lstSlabConfig))');
             console.log(objSlab);
@@ -314,6 +334,9 @@
             $("#dvSlab").hide();
             $("#dvProductWise").show();
             $("#txtBasePercentage").val("");
+            $("#rbtnCategoryB").prop("disabled", true);
+            $("#rbtnSubCategoryB").prop("disabled", true);
+            $("#rbtnProductB").prop("disabled", true);            
         }
     }
 
@@ -538,4 +561,4 @@
             }
         });
     }
-        </script>
+</script>

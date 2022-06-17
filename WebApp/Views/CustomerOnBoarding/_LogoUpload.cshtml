@@ -1,18 +1,48 @@
 ﻿@model WebApp.ViewModel.OnBoardingSalesViewModel
+@using System.Configuration;
+@using BOTS_BL.Models;
 
 @{
+    var docURL = ConfigurationManager.AppSettings["CustomerDocumentsURL"].ToString();
+    var GSTURL = "#";
+    var PANURL = "#";
+    if (Model.bots_TblGroupMaster != null)
+    {
+        if (!string.IsNullOrEmpty(Model.bots_TblGroupMaster.GSTDocument))
+        {
+            GSTURL = docURL + "/" + Model.bots_TblGroupMaster.GroupId + "/" + Model.bots_TblGroupMaster.GSTDocument;
+        }
 
+        if (!string.IsNullOrEmpty(Model.bots_TblGroupMaster.PANDocument))
+        {
+            PANURL = docURL + "/" + Model.bots_TblGroupMaster.GroupId + "/" + Model.bots_TblGroupMaster.PANDocument;
+        }
+    }
 }
 @foreach (var item in Model.objRetailList)
 {
     var fileId = "FileUploadLogo" + item.BrandId;
     var btnUpload = "btnUploadLogo" + item.BrandId;
+    <span style="font-weight:bold;">Logo</span>
     <div style="margin-top:20px;">
         <input type="file" id="@fileId" />
         <input type="button" id="@btnUpload" class="btn btn-primary" onclick="UploadLogo(@item.BrandId);" style="margin-left: 10px; background-color: #2651be;" value="Upload Data" />
         @if (!string.IsNullOrEmpty(item.LogoPath))
-        {            
+        {
             <img src="@item.LogoPath" width="200" style="margin-left:50px;" />
+        }
+    </div>
+    <div style="padding-top:20px;">
+        
+        @if (GSTURL != "#")
+        {
+            <a href="@GSTURL" target="_blank">GST Document</a>
+        }
+    </div>
+    <div style="padding-top:20px;">
+        @if (PANURL != "#")
+        {
+            <a href="@PANURL" target="_blank">PAN Document</a>
         }
     </div>
 
@@ -20,7 +50,7 @@
 }
 
 <script>
-    function UploadLogo(id) {       
+    function UploadLogo(id) {
          if (window.FormData !== undefined) {
              var fileUpload = $("#FileUploadLogo" + id).get(0);
 
