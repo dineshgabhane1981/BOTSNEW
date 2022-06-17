@@ -6,7 +6,7 @@
 
 <div style="border:1px solid grey; border-radius:5px;padding:5px;">
 
-    <h5 style="margin-left:350px;"><b>Customer Summary</b></h5>
+    @*<h5 style="margin-left:350px;"><b>Customer Summary</b></h5>*@
 
     <div class="col-lg-12 col-sm-12 row">
         <div class="col-lg-4 col-sm-4">
@@ -52,7 +52,7 @@
             SMS Paid Msgs - <b> @Model.bots_TblGroupMaster.NoOfPaidSMS </b>
         </div>
         <div class="col-lg-4 col-sm-4">
-            Preferred Language - 
+            Preferred Language - <b> @Model.bots_TblGroupMaster.PreferredLanguage </b>
         </div>
     </div>
     @foreach (var item in Model.objRetailList)
@@ -76,9 +76,18 @@
         <div class="col-lg-4 col-sm-4">
             Minimum Invoice Amount - <b> @Model.objEarnRuleConfig.MinInvoiceAmt.Value </b>
         </div>
-        <div class="col-lg-4 col-sm-4">
-            Revolving Expiry - <b> @Model.objEarnRuleConfig.RevolvingExpiry </b>
-        </div>
+        @if (Model.objEarnRuleConfig.RevolvingExpiry.Value)
+        {
+            <div class="col-lg-4 col-sm-4">
+                Revolving Expiry - <b> Yes </b>
+            </div>
+        }
+        else
+        {
+            <div class="col-lg-4 col-sm-4">
+                Revolving Expiry - <b> No </b>
+            </div>
+        }
         <div class="col-lg-4 col-sm-4">
             Points Validity (in Months) - <b>@Model.objEarnRuleConfig.PointsValidityInMonths</b>
         </div>
@@ -89,21 +98,21 @@
         <div class="col-lg-4 col-sm-4">
             @if (Model.objEarnRuleConfig.IsBase == true)
             {
-                <div>BaseWise - <b>Yes</b></div>
+                <div>Base Wise - <b>Yes</b></div>
             }
             @if (Model.objEarnRuleConfig.IsSlab == true)
             {
-                <div>SlabWise - <b>Yes</b></div>
+                <div>Slab Wise - <b>Yes</b></div>
             }
             @if (Model.objEarnRuleConfig.IsProductWise == true)
             {
-                <div>ProductWise - <b>Yes</b></div>
+                <div>Product Wise - <b>Yes</b></div>
             }
         </div>
         <div class="col-lg-4 col-sm-4">
             @if (Model.objEarnRuleConfig.IsProductWise == true)
             {
-                <div>ProductWiseType - <b>@Model.objEarnRuleConfig.ProductWiseType</b></div>
+                <div>Productwise Type - <b>@Model.objEarnRuleConfig.ProductWiseType</b></div>
             }
         </div>
         <div class="col-lg-4 col-sm-4"></div>
@@ -135,15 +144,15 @@
         <div class="col-lg-4 col-sm-4">
             @if (Model.objEarnRuleConfig.IsBlockForEarn == true)
             {
-                <div>BlockForEarn - <b>Yes</b></div>
-                <div style="margin-top:10px;">BlockProductWiseType - <b>@Model.objEarnRuleConfig.BlockProductWiseType</b></div>
+                <div>Block For Earn - <b>Yes</b></div>
+                <div style="margin-top:10px;">Block Productwise Type - <b>@Model.objEarnRuleConfig.BlockProductWiseType</b></div>
             }
         </div>
         <div class="col-lg-4 col-sm-4">
             @if (Model.objBurnRuleConfig.IsProductCodeBlocking == true)
             {
-                <div>BlockForBurn - <b>Yes</b></div>
-                <div style="margin-top:10px;">ProductCodeBlockingType - <b>@Model.objBurnRuleConfig.ProductCodeBlockingType</b></div>
+                <div>Block For Burn - <b>Yes</b></div>
+                <div style="margin-top:10px;">Productcode Blocking Type - <b>@Model.objBurnRuleConfig.ProductCodeBlockingType</b></div>
             }
         </div>
 
@@ -199,27 +208,9 @@
     </div>
     <hr />
     <div class="col-lg-12 col-sm-12" style="margin-top:10px;">
-        <b style="font-size:16px;"> Perpetual Campaign Count</b> - @Model.PerpetualCampaignCount
+        <b style="font-size:16px;"> Perpetual Campaign Count - @Model.PerpetualCampaignCount </b>
     </div>
-    <hr />
-
-    <div class="col-lg-12 col-sm-12 " style="margin-top:10px;"><h6><b> Upload Logo</b></h6></div>
-    <div class="col-lg-12 col-sm-12 row ">
-        @foreach (var item in Model.objRetailList)
-        {
-
-            if (!string.IsNullOrEmpty(item.LogoPath))
-            {
-
-                <div class="col-lg-6 col-sm-6">
-                    <b>@item.BrandName</b>
-                    <img src="@item.LogoPath" width="200" style="margin-left:50px;" />
-                </div>
-
-            }
-
-        }
-    </div>
+   
 </div>
 
 
