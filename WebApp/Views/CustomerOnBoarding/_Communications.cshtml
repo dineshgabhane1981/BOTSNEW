@@ -69,8 +69,15 @@
     <div>
         <select id="ddlCommunicationSet" class="input50"></select>
     </div>
-    <div style="margin-left:20px;">
+    <div style="margin-left:20px;padding-top:10px;">
         <button type="button" id="btnCreateSets" class="btn btn-primary">Manage Sets</button>
+    </div>
+    <div style="margin-left:20px;">
+        Preferred Language
+        @Html.DropDownListFor(model => model.bots_TblGroupMaster.PreferredLanguage, new SelectList(Model.PreferredLanguage(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input50", @id = "ddlPreferredLanguage" })
+    </div>
+    <div style="margin-left: 20px; padding-top: 10px;">
+        <button type="button" id="btnSaveLanguage" class="btn btn-primary">Save</button>
     </div>
 
 </div>
@@ -107,10 +114,13 @@
         $("#btnCommAssign").on("click", function () {
             AssignSetToOutlets();
         });
+        $("#btnSaveLanguage").on("click", function () {
+            SavePreferredLanguage();
+        });
         FillSetDropDown();
     });
 
-   
+
     function FillSetDropDown() {
         $.ajax({
             url: '@Url.Action("GetCommunicationSetList", "CustomerOnBoarding")',
@@ -169,7 +179,7 @@
             if (!$("#" + this.id).is(':disabled'))
                 OutletIds.push(this.value);
         });
-        
+
         var OutletIdsData = JSON.stringify(OutletIds);
 
         if (OutletIds.length > 0) {
@@ -200,4 +210,29 @@
 
     }
 
+    function SavePreferredLanguage() {
+        $.ajax({
+                url: '@Url.Action("SavePreferredLanguage", "CustomerOnBoarding")',
+                data: '{GroupId: ' + JSON.stringify($('#hdnGroupID').val()) + ',PreferredLanguage: ' + JSON.stringify($("#ddlPreferredLanguage").val()) + '}',
+                type: "post",
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (result) {
+                    cuteAlert({
+                        type: "success",
+                        title: "Saved",
+                        message: "Preferred Language saved Successfully !!!",
+                        buttonText: "Okay"
+                    })
+            },
+            error: function (result) {
+                cuteAlert({
+                    type: "error",
+                    title: "OOPS...",
+                    message: "There is problem in saving Preferred Language !!!",
+                    buttonText: "Okay"
+                })
+            }
+            });
+    }
 </script>

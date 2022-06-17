@@ -1954,7 +1954,7 @@ namespace WebApp.Controllers.OnBoarding
 
                 //Outlet Details
                 objData.lstOutlets = OBR.GetOutletDetailsByGroupId(GroupId);
-                objData.objRetailList = OBR.GetOutletsBrandId(GroupId);
+                //objData.objRetailList = OBR.GetOutletsBrandId(GroupId);
 
                 //Perpetual Campaigns
                 objData.lstCampaignOtherConfig = OBR.GetCampaignOtherConfigByGroupId(GroupId);
@@ -2386,6 +2386,15 @@ namespace WebApp.Controllers.OnBoarding
             return new JsonResult() { Data = result, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
 
         }
+        public ActionResult SavePreferredLanguage(string groupId, string PreferredLanguage)
+        {
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            bool result = OBR.SavePreferredLanguage(groupId, PreferredLanguage, userDetails.LoginId);
+
+            return new JsonResult() { Data = result, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
+        }
+
+
     }
 }
 

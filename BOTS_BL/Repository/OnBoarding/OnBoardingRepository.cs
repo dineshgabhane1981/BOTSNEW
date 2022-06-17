@@ -2305,6 +2305,32 @@ namespace BOTS_BL.Repository
             return result;
         }
 
+        public bool SavePreferredLanguage(string groupId, string PreferredLanguage, string AddedBy)
+        {
+            bool result = false;
+            using (var context = new CommonDBContext())
+            {
+                try
+                {
+                    var objData = context.BOTS_TblGroupMaster.Where(x => x.GroupId == groupId).FirstOrDefault();
+                    if(objData!=null)
+                    {
+                        objData.PreferredLanguage = PreferredLanguage;
+                        objData.UpdatedBy = AddedBy;
+                        objData.UpdatedDate = DateTime.Now;
+                        context.BOTS_TblGroupMaster.AddOrUpdate(objData);
+                        context.SaveChanges();
+                        result = true;
+                        AddTracking(groupId, "Preferred Language Add/Update Done", AddedBy);
+                    }                     
+                }
+                catch (Exception ex)
+                {
+                    newexception.AddException(ex, "SavePreferredLanguage" + groupId);
+                }
+            }
+            return result;
+        }
         public void AddTracking(string groupId, string ActionTaken, string AddedBy)
         {
             using (var context = new CommonDBContext())

@@ -122,6 +122,7 @@ namespace BOTS_BL.Models
 
         public bool IsExistingLoyalty { get; set; }
         public string RejectReason { get; set; }
+        public string PreferredLanguage { get; set; }
 
         public DateTime? UpdatedDate { get; set; }
                 
