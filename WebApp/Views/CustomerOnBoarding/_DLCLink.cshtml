@@ -1,6 +1,6 @@
 ﻿
-
 <div style="margin-top:20px;">
+    
     <input type="hidden" id="hdnDLCLinkConfigId" />
     <div style="float:left;" class="col-md-6 col-lg-6">
         <div style="margin-left: 20px; margin-top: 20px;">
@@ -48,9 +48,6 @@
 
     <div style="float:left;" class="col-md-6 col-lg-6">
         <div style="margin-left: 20px; margin-top: 20px;">
-            Max no of referrals <br /> <input type="text" id="txtMaxNoOfReferrals" class="input100" />
-        </div>
-        <div style="margin-left: 20px; margin-top: 10px;">
             Validity of Referral points <br /> <input type="text" id="txtValidityOfReferralPoints" class="input100" />
         </div>
         <div style="margin-left: 20px; margin-top: 10px;">
@@ -83,13 +80,12 @@
     </div>
 </div>
 <div class="container-fluid pt-3 pl-3 pr-3 pb-3">
-    <button type="button" id="btnsubmitToDLT" class="btn btn-primary pull-right" style="margin-right: 10px; margin-bottom: 20px;margin-top:10px;">Submit For DLT</button>
-    <button type="button" id="btnDLCLinkSave" class="btn btn-primary pull-right" style="margin-right: 10px; margin-bottom: 20px; margin-top: 10px;">Save</button>
+    <button type="button" id="btnsubmitToDLT" class="btn btn-primary pull-right" style="margin-right: 10px; margin-bottom: 20px;margin-top:140px;">Submit For DLT</button>
+    <button type="button" id="btnDLCLinkSave" class="btn btn-primary pull-right" style="margin-right: 10px; margin-bottom: 20px; margin-top: 140px;">Save</button>
 </div>
 
 <script>
     $(document).ready(function () {
-
         $("#btnsubmitToDLT").on("click", function () {
             SendDLCToDLT();
         });
@@ -124,8 +120,7 @@
         $("#hdnDLCLinkConfigId").val(data.Id);
         $('#txtProfileUpdatePoints').val(data.ProfileUpdatePoints);
         $('#txtReferralPoints').val(data.ReferralPoints);
-        $('#txtReferredPoints').val(data.ReferredPoints);
-        $('#txtMaxNoOfReferrals').val(data.MaxNoOfReferrals);
+        $('#txtReferredPoints').val(data.ReferredPoints);       
         $('#txtValidityOfReferralPoints').val(data.ValidityOfReferralPoints);
         $('#txtReferralReminder').val(data.ReferralReminder);
         $('#txtSMSToTheReferral').val(data.ToTheReferralSMSScript);
@@ -173,7 +168,7 @@
         else {
             $('#spnSMSReminderForPointsUsage2').html(data.DLTStatus8);
         }
-        
+
         if (data.DLTStatus3 == "Rejected") {
             $("#spnSMSReferredSuccessOnReferralTxn").html(data.DLTStatus3 + "<br/>  Reason - " + data.RejectReason3);
         }
@@ -229,7 +224,7 @@
             $("#txtSMSReminderForPointsUsage2").prop("disabled", true);
         }
 
-        
+
         $('#txtSMSReminderForPointsUsage1').val(data.ReminderForPointsUsageSMSScript);
         $('#txtSMSReminderForPointsUsage2').val(data.ReminderForPointsUsageSMSScript8);
         $('#txtSMSRem1Days').val(data.ReminderForPointsUsageSMSScript1Days);
@@ -252,7 +247,7 @@
         $('#txtWAGiftPtDebitOtp').val(data.GiftPointsDebitOTPScriptWA);
         $('#txtWAGiftPtCreditOtp').val(data.GiftPointsCreditOTPScriptWA);
     }
-                
+
     function SaveDLCLinkConfig() {
         var DLCConfig = [];
         item = {}
@@ -260,8 +255,7 @@
         item["GroupId"] = $('#hdnGroupID').val();
         item["ProfileUpdatePoints"] = $('#txtProfileUpdatePoints').val();
         item["ReferralPoints"] = $('#txtReferralPoints').val();
-        item["ReferredPoints"] = $('#txtReferredPoints').val();
-        item["MaxNoOfReferrals"] = $('#txtMaxNoOfReferrals').val();
+        item["ReferredPoints"] = $('#txtReferredPoints').val();       
         item["ValidityOfReferralPoints"] = $('#txtValidityOfReferralPoints').val();
         item["ReferralReminder"] = $('#txtReferralReminder').val();
 
