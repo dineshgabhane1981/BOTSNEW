@@ -2331,6 +2331,32 @@ namespace BOTS_BL.Repository
             }
             return result;
         }
+        public bool SaveProgramLanguage(string groupId, string ProgramLanguage, string AddedBy)
+        {
+            bool result = false;
+            using (var context = new CommonDBContext())
+            {
+                try
+                {
+                    var objData = context.BOTS_TblOutletMaster.Where(x => x.GroupId == groupId).FirstOrDefault();
+                    if (objData != null)
+                    {
+                        objData.ProgramLanguage = ProgramLanguage;
+                        objData.UpdatedBy = AddedBy;
+                        objData.UpdatedDate = DateTime.Now;
+                        context.BOTS_TblOutletMaster.AddOrUpdate(objData);
+                        context.SaveChanges();
+                        result = true;
+                        AddTracking(groupId, "Program Language Add/Update Done", AddedBy);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    newexception.AddException(ex, "SaveProgramLanguage" + groupId);
+                }
+            }
+            return result;
+        }
         public void AddTracking(string groupId, string ActionTaken, string AddedBy)
         {
             using (var context = new CommonDBContext())

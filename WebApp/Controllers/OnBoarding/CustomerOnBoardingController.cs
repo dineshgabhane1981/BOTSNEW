@@ -2376,6 +2376,7 @@ namespace WebApp.Controllers.OnBoarding
                 objOutletData.RegisterMobileNo = Convert.ToString(item["RegisterMobileNo"]);
                 objOutletData.RegisterEmail = Convert.ToString(item["RegisterEmail"]);
                 objOutletData.Address = Convert.ToString(item["Address"]);
+                objOutletData.ProgramLanguage = Convert.ToString(item["ProgramLanguage"]);
                 objOutletData.State = Convert.ToString(item["State"]);
                 objOutletData.City = Convert.ToString(item["City"]);
                 objOutletData.PinCode = Convert.ToString(item["PinCode"]);
@@ -2396,6 +2397,13 @@ namespace WebApp.Controllers.OnBoarding
         {
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
             bool result = OBR.SavePreferredLanguage(groupId, PreferredLanguage, userDetails.LoginId);
+
+            return new JsonResult() { Data = result, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
+        }
+        public ActionResult SavePogramLanguage(string groupId, string ProgramLanguage)
+        {
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            bool result = OBR.SaveProgramLanguage(groupId, ProgramLanguage, userDetails.LoginId);
 
             return new JsonResult() { Data = result, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }

@@ -128,5 +128,9 @@ namespace WebApp.ViewModel
         {
             return new SelectListItem[3] { new SelectListItem() { Text = "English", Value = "English" }, new SelectListItem() { Text = "Marathi", Value = "Marathi" }, new SelectListItem() { Text = "Hindi", Value = "Hindi" } };
         }
+        public SelectListItem[] ProgramLanguage()
+        {
+            return new SelectListItem[3] { new SelectListItem() { Text = "English", Value = "English" }, new SelectListItem() { Text = "Marathi", Value = "Marathi" }, new SelectListItem() { Text = "Hindi", Value = "Hindi" } };
+        }
     }
 }

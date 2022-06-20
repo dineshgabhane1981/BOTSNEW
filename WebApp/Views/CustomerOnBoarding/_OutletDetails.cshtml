@@ -15,8 +15,8 @@
         <th><h6>Registered Mobile No</h6></th>
         <th><h6>Registered Email</h6></th>
         <th><h6>Address</h6></th>
+        <th><h6>ProgramLanguage</h6></th>
         <th><h6>State</h6></th>
-        <th><h6>Preferred Language</h6></th>
         <th><h6>City</h6></th>
         <th><h6>PinCode</h6></th>
     </tr>
@@ -49,9 +49,12 @@
                 @Html.TextBoxFor(model => item.Address, new { @class = "input50", @id = "txtAddressNew" + count })
             </td>
             <td>
+                @Html.DropDownListFor(model => model.bots_TblOutletMaster.ProgramLanguage, new SelectList(Model.ProgramLanguage(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input50", @id = "ddlProgramLanguageNew" + count })
+            </td>
+            <td>
                 @Html.DropDownListFor(model => model.bots_TblOutletMaster.State, new SelectList(Model.lstStates, "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input50", @id = "ddlStateNew" + count })
             </td>
-            
+
             <td>
                 @Html.DropDownListFor(model => model.bots_TblOutletMaster.City, new SelectList(Model.lstCity, "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input50", @id = "ddlCityNew" + count })
             </td>
@@ -102,6 +105,11 @@
                         $('#txtAddressNew' + i).css('border-color', 'red');
                         returnStatus = false;
                     }
+                    if ($("#ddlProgramLanguageNew" + i + " option:selected").text() == "Please Select") {
+                        ShowHideSection("outletdetails");
+                        $("#ddlProgramLanguageNew" + i).css('border-color', 'red');
+                        returnStatus = false;
+                    }
 
                     if ($("#ddlStateNew" + i + " option:selected").text() == "Please Select") {
                         ShowHideSection("outletdetails");
@@ -135,8 +143,9 @@
                         item["AreaName"] = $("#txtAreaNameNew" + i).val();
                         item["AuthorisedPerson"] = $("#txtAuthorisedPersonNew" + i).val();
                         item["RegisterMobileNo"] = $("#txtRegisterMobileNoNew" + i).val();
-                        item["RegisterEmail"] = $("#txtRegisterEmailNew" + i).val();
+                        item["RegisterEmail"] = $("#txtRegisterEmailNew" + i).val();                        
                         item["Address"] = $("#txtAddressNew" + i).val();
+                        item["ProgramLanguage"] = $("#ddlProgramLanguageNew" + i).val();
                         item["City"] = $("#ddlCityNew" + i).val();
                         item["PinCode"] = $("#txtPinCodeNew" + i).val();
                         item["State"] = $("#ddlStateNew" + i).val();

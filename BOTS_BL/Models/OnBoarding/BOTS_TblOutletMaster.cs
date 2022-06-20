@@ -48,6 +48,9 @@ namespace BOTS_BL.Models
         public string Longitude { get; set; }
 
         [StringLength(50)]
+        public string ProgramLanguage { get; set; }
+
+        [StringLength(50)]
         public string City { get; set; }
 
         [StringLength(6)]
