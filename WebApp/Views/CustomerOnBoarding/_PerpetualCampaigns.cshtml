@@ -34,11 +34,11 @@
     </div>
     <div style="margin-top:20px;">
         Bonus Points <input type="number" class="input10" id="txtBonusPoints" />
+        &nbsp; &nbsp; &nbsp; Valid Before <input type="number" class="input10" id="txtPointsValidBefore" /> Days  -
+        Valid After <input type="number" class="input10" id="txtPointsValidAfter" /> Days
     </div>
-    <div style="margin-top:20px;">
-        <input type="radio" name="frequency" id="rbtnDays" /> Days
-        <input type="radio" name="frequency" id="rbtnMonth" /> Month
-    </div>
+    
+
     <div style="margin-top:20px;border:1px solid grey;padding:10px;border-radius:10px;">
         <b> Introduction Message</b>
         <div>
@@ -121,11 +121,10 @@
     </div>
     <div style="margin-top:20px;">
         Bonus Points <input type="number" class="input10" id="txtBonusPoints1" />
+        &nbsp; &nbsp; &nbsp; Valid Before <input type="number" class="input10" id="txtPointsValidBefore1" /> Days  -
+        Valid After <input type="number" class="input10" id="txtPointsValidAfter1" /> Days
     </div>
-    <div style="margin-top:20px;">
-        <input type="radio" name="frequency" id="rbtnDays1" /> Days
-        <input type="radio" name="frequency" id="rbtnMonth1" /> Month
-    </div>
+    
     <div style="margin-top:20px;border:1px solid grey;padding:10px;border-radius:10px;">
         <b> Introduction Message</b>
         <div>
@@ -1515,17 +1514,7 @@
             })
             return false;
         }
-        if ($("#rbtnDays").prop("checked") || $("#rbtnMonth").prop("checked")) {
-        }
-        else {
-            cuteAlert({
-                type: "error",
-                title: "Oops..",
-                message: "Please select Frequency Days/Month",
-                buttonText: "Okay"
-            })
-            return false;
-        }
+        
 
         var BirthdayConfig = [];
         item = {}
@@ -1542,10 +1531,12 @@
             item["SMSType"] = "SMS";
 
         item["BonusPoints"] = $('#txtBonusPoints').val();
-        if ($("#rbtnDays").prop("checked"))
-            item["Frequency"] = "Days";
-        if ($("#rbtnMonth").prop("checked"))
-            item["Frequency"] = "Month";
+        item["PointsValidBefore"] = $('#txtPointsValidBefore').val();
+        item["PointsValidAfter"] = $('#txtPointsValidAfter').val();
+                  
+        item["Frequency"] = "Days";
+        //if ($("#rbtnMonth").prop("checked"))
+            //item["Frequency"] = "Month";
 
         item["IntroDays1"] = $('#txtIntroDays1').val();
         item["IntroScript1"] = $('#txtIntroScript1').val();
@@ -1626,17 +1617,7 @@
             })
             return false;
         }
-        if ($("#rbtnDays1").prop("checked") || $("#rbtnMonth1").prop("checked")) {
-        }
-        else {
-            cuteAlert({
-                type: "error",
-                title: "Oops..",
-                message: "Please select Frequency Days/Month",
-                buttonText: "Okay"
-            })
-            return false;
-        }
+        
 
         var AnniversaryConfig = [];
         item = {}
@@ -1653,10 +1634,11 @@
             item["SMSType"] = "SMS";
 
         item["BonusPoints"] = $('#txtBonusPoints1').val();
-        if ($("#rbtnDays1").prop("checked"))
-            item["Frequency"] = "Days";
-        if ($("#rbtnMonth1").prop("checked"))
-            item["Frequency"] = "Month";
+        item["PointsValidBefore"] = $('#txtPointsValidBefore1').val();
+        item["PointsValidAfter"] = $('#txtPointsValidAfter1').val();
+        item["Frequency"] = "Days";
+        //if ($("#rbtnMonth1").prop("checked"))
+            //item["Frequency"] = "Month";
 
         item["IntroDays1"] = $('#txtIntroDays11').val();
         item["IntroScript1"] = $('#txtIntroScript11').val();
@@ -2084,12 +2066,14 @@
                     dvBirthDaySMSShowHide(false);
                 }
                 $('#txtBonusPoints').val(edata.BonusPoints);
+                $('#txtPointsValidBefore').val(edata.PointsValidBefore);
+                $('#txtPointsValidAfter').val(edata.PointsValidAfter);
                 if (edata.Frequency == "Days") {
                     $("#rbtnDays").prop("checked", true);
                 }
-                if (edata.Frequency == "Month") {
-                    $("#rbtnMonth").prop("checked", true);
-                }
+                //if (edata.Frequency == "Month") {
+                    //$("#rbtnMonth").prop("checked", true);
+                //}
                 $('#txtIntroDays1').val(edata.IntroDays1);
                 $('#txtIntroScript1').val(edata.IntroScript1);
                 $('#txtRemDays1').val(edata.ReminderDays1);
@@ -2215,6 +2199,8 @@
                     dvAnniversarySMSShowHide(false);
                 }
                 $('#txtBonusPoints1').val(edata.BonusPoints);
+                $('#txtPointsValidBefore1').val(edata.PointsValidBefore);
+                $('#txtPointsValidAfter1').val(edata.PointsValidAfter);
                 if (edata.Frequency == "Days") {
                     $("#rbtnDays1").prop("checked", true);
                 }

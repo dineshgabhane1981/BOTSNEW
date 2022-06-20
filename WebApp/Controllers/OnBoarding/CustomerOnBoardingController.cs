@@ -1260,6 +1260,8 @@ namespace WebApp.Controllers.OnBoarding
                     objData.CampaignType = Convert.ToString(item["CampaignType"]);
                     objData.SMSType = Convert.ToString(item["SMSType"]);
                     objData.BonusPoints = Convert.ToInt32(item["BonusPoints"]);
+                    objData.PointsValidBefore = Convert.ToInt32(item["PointsValidBefore"]);
+                    objData.PointsValidAfter = Convert.ToInt32(item["PointsValidAfter"]);
                     objData.Frequency = Convert.ToString(item["Frequency"]);
 
                     objData.IntroDays1 = Convert.ToInt32(item["IntroDays1"]);
