@@ -22,7 +22,7 @@ namespace BOTS_BL.Models.OnBoarding
 
         public int? PointsValidityInMonths { get; set; }
 
-        public bool RevolvingExpiry { get; set; }
+        public bool? RevolvingExpiry { get; set; }
 
         public bool? IsBase { get; set; }
 
@@ -30,6 +30,12 @@ namespace BOTS_BL.Models.OnBoarding
         public decimal? PointsValueInRS { get; set; }
 
         public bool? IsSlab { get; set; }
+
+        [Column(TypeName = "numeric")]
+        public decimal? FixedPointPerRS { get; set; }
+
+        [Column(TypeName = "numeric")]
+        public decimal? FixedPointPerTXN { get; set; }
 
         public bool? IsProductWise { get; set; }
 

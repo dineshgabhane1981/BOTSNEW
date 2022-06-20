@@ -1795,6 +1795,8 @@ namespace WebApp.Controllers.OnBoarding
                 if (objEarnRule.IsBase.Value)
                 {
                     objEarnRule.BasePercentage = Convert.ToDecimal(item["BasePercentage"]);
+                    objEarnRule.FixedPointPerRS = Convert.ToDecimal(item["FixedPointPerRS"]);
+                    objEarnRule.FixedPointPerTXN = Convert.ToDecimal(item["FixedPointPerTXN"]);
                 }
                 if (objEarnRule.IsProductWise.Value)
                 {
@@ -2056,6 +2058,7 @@ namespace WebApp.Controllers.OnBoarding
                 objBurnRule.GroupId = Convert.ToString(item["GroupId"]);
                 objBurnRule.MinInvoiceAmt = Convert.ToInt32(item["MinInvoiceAmt"]);
                 objBurnRule.PercentageToRedeemPts = Convert.ToInt32(item["PercentageToRedeemPts"]);
+                objBurnRule.PercentageToRedeemExtPts = Convert.ToInt32(item["PercentageToRedeemExtPts"]);
                 objBurnRule.MinThreshholdPtsFisttime = Convert.ToInt32(item["MinThreshholdPtsFisttime"]);
                 objBurnRule.MinThreshholdPtsSubsequent = Convert.ToInt32(item["MinThreshholdPtsSubsequent"]);
                 objBurnRule.PartialEarn = Convert.ToString(item["PartialEarn"]);

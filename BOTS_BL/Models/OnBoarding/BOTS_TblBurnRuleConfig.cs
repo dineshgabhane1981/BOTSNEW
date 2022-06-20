@@ -22,6 +22,7 @@ namespace BOTS_BL.Models.OnBoarding
         public int? MinThreshholdPtsFisttime { get; set; }
 
         public int? MinThreshholdPtsSubsequent { get; set; }
+        public int? PercentageToRedeemExtPts { get; set; }
 
         public string PartialEarn { get; set; }
 

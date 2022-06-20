@@ -24,6 +24,9 @@
             Points Validity (in Months)<br />
             @Html.TextBoxFor(model => model.objEarnRuleConfig.PointsValidityInMonths, new { @class = "input50", @id = "txtPointsValidityInMonths" })
         </div>
+        <div class="col-md-3 col-lg-3" style="margin-bottom: 20px;">
+            *Points will expire on the last day of Month
+        </div>
     </div>
     <div class="col-md-12 col-lg-12" style="margin-top:20px;padding-left:30px;">
         Revolving Expiry
@@ -37,9 +40,19 @@
 
     </div>
     <div id="dvBase" style="display: none; padding-left: 30px; margin-left: 30px; padding-top: 20px; padding-bottom: 15px; border: 1px solid lightgrey; border-radius: 5px; " class="col-md-6 col-lg-6">
+        <div>
+            Base Percentage(%)
+            @Html.TextBoxFor(model => model.objEarnRuleConfig.BasePercentage, new { @class = "input50", @id = "txtBasePercentage" })
+        </div>
+        <div style="margin-top:20px;">
+            Fixed Points (Per RS)
+            @Html.TextBoxFor(model => model.objEarnRuleConfig.FixedPointPerRS, new { @class = "input50", @id = "txtFixedPointPerRS" })
+        </div>
+        <div style="margin-top:20px;">
+            Fixed Points (Per Txn)
+            @Html.TextBoxFor(model => model.objEarnRuleConfig.FixedPointPerTXN, new { @class = "input50", @id = "txtFixedPointPerTXN" })
+        </div>
 
-        Base Percentage(%)
-        @Html.TextBoxFor(model => model.objEarnRuleConfig.BasePercentage, new { @class = "input50", @id = "txtBasePercentage" })
 
     </div>
     <div id="dvSlab" class="col-md-6 col-lg-6" style="display: none; padding-top: 20px; margin-left: 30px; padding-bottom: 15px; border: 1px solid lightgrey; border-radius: 5px; ">
@@ -174,8 +187,14 @@
         @Html.TextBoxFor(model => model.objBurnRuleConfig.MinThreshholdPtsSubsequent, new { @class = "input50", @id = "txtMinThreshholdPtsSubsequent" })
     </div>
     <div class="col-md-3 col-lg-3">
-        Min Redeem Pts<br />
+        Redeemption % of Invoice Amt <br />
         @Html.TextBoxFor(model => model.objBurnRuleConfig.PercentageToRedeemPts, new { @class = "input50", @id = "txtPercentageToRedeemPts" })
+    </div>
+</div>
+    <div>
+    <div class="col-md-3 col-lg-3">
+        Redeemption % of Existing Pts <br />
+        @Html.TextBoxFor(model => model.objBurnRuleConfig.PercentageToRedeemExtPts, new { @class = "input50", @id = "txtPercentageToRedeemExtPts" })
     </div>
 </div>
 <div class="col-md-12 col-lg-12" style="display: flex;">
@@ -315,7 +334,7 @@
             $("#dvBase").hide();
             $("#dvSlab").show();
             $("#dvProductWise").hide();
-            $("#txtBasePercentage").val("");
+            $("#txtBasePercentage").val("");           
             $("#rbtnCategoryB").prop("disabled", false);
             $("#rbtnSubCategoryB").prop("disabled", false);
             $("#rbtnProductB").prop("disabled", false);
@@ -408,6 +427,8 @@
         if ($("#rbtnIsBase").is(":checked")) {
             IsBase = true;
             item["BasePercentage"] = $("#txtBasePercentage").val();
+            item["FixedPointPerRS"] = $("#txtFixedPointPerRS").val();
+            item["FixedPointPerTXN"] = $("#txtFixedPointPerTXN").val();
         }
         if ($("#rbtnIsSlab").is(":checked")) {
             IsSlab = true;
@@ -500,6 +521,7 @@
         item["GroupId"] = $("#hdnGroupID").val();
         item["MinInvoiceAmt"] = $("#txtMinBurnInvoiceAmt").val();
         item["PercentageToRedeemPts"] = $("#txtPercentageToRedeemPts").val();
+        item["PercentageToRedeemExtPts"] = $("#txtPercentageToRedeemExtPts").val();
         item["MinThreshholdPtsFisttime"] = $("#txtMinThreshholdPtsFisttime").val();
         item["MinThreshholdPtsSubsequent"] = $("#txtMinThreshholdPtsSubsequent").val();
         item["PartialEarn"] = false;
