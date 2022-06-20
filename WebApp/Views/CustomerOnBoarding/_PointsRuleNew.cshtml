@@ -155,6 +155,12 @@
         </div>
         <div style="padding-left: 15px; padding-top: 20px;"><input type="file" id="ProductWiseFile" /></div>
     </div>
+
+    <div style="margin-top:20px;">
+        <b style="padding-left:10px;">Block for Earn</b>
+        <input type="radio" name="EarnBlock" id="rbtnEarnBlockYes" /> Yes
+        <input type="radio" name="EarnBlock" id="rbtnEarnBlockNo" /> No
+    </div>
     <div id="dvBlockEarn" class="col-md-6 col-lg-6" style="margin-left: 30px; margin-top: 30px; border:1px solid lightgrey;border-radius:5px;">
         <b style="padding-left:10px;">Block for Earn</b>
         <div style="display:flex;padding-top:10px;">
@@ -231,6 +237,14 @@
 
 <script>
     $(document).ready(function () {
+        $("#rbtnEarnBlockYes").click(function () {
+            $("#dvBlockEarn").show();
+        });
+        $("#rbtnEarnBlockNo").click(function () {
+            $("#dvBlockEarn").hide();
+            $("#rbtnCategoryB").disableSelection();
+        });
+
         document.getElementById("ProductWiseFile").addEventListener('change', handleFileSelectProductWise, false);
         document.getElementById("BlockEarnFile").addEventListener('change', handleFileSelectBlockEarn, false);
         document.getElementById("BlockBurnFile").addEventListener('change', handleFileSelectBlockBurn, false);
@@ -278,7 +292,7 @@
             $("#rbtnProduct").on("click", function () {
                 $("#rbtnProductB").prop("checked", true);
             });
-
+     
 
         ShowHideProductTypeSection();
         var earnExist = JSON.parse('@Html.Raw(Json.Encode(Model.objEarnRuleConfig))');
@@ -439,9 +453,11 @@
             var SlabData = [];
             if ($("#rbtnIndividual").is(":checked")) {
                 item["SlabType"] = "Individual";
+                
             }
             if ($("#rbtnCummulative").is(":checked")) {
                 item["SlabType"] = "Cummulative";
+                
             }
             
             //Slab
@@ -474,16 +490,19 @@
         item["IsBase"] = IsBase;
         item["IsSlab"] = IsSlab;
         item["IsProductWise"] = IsProductWise;
+            
 
         item["BlockProductWiseType"] = "";
-        if ($("#rbtnProductB").is(":checked")) {
-            item["BlockProductWiseType"] = "Product";
-        }
-        if ($("#rbtnCategoryB").is(":checked")) {
-            item["BlockProductWiseType"] = "Category";
-        }
-        if ($("#rbtnSubCategoryB").is(":checked")) {
-            item["BlockProductWiseType"] = "SubCategory";
+        if ($("#rbtnEarnBlockYes").is(":checked")) {
+            if ($("#rbtnProductB").is(":checked")) {
+                item["BlockProductWiseType"] = "Product";
+            }
+            if ($("#rbtnCategoryB").is(":checked")) {
+                item["BlockProductWiseType"] = "Category";
+            }
+            if ($("#rbtnSubCategoryB").is(":checked")) {
+                item["BlockProductWiseType"] = "SubCategory";
+            }
         }
         //File
         item["ProductBlockEarn"] = $("#hdnBlockEarnBase64").val();
