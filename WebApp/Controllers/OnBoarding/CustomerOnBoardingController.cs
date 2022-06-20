@@ -1857,6 +1857,7 @@ namespace WebApp.Controllers.OnBoarding
                     {
                         BOTS_TblSlabConfig objSlab = new BOTS_TblSlabConfig();
                         objSlab.GroupId = Convert.ToString(item["GroupId"]);
+                        objSlab.SlabType = Convert.ToString(item["SlabType"]);
                         objSlab.SlabFrom = Convert.ToInt32(item1["SlabFrom"]);
                         objSlab.SlabTo = Convert.ToInt32(item1["SlabTo"]);
                         objSlab.SlabPercentage = Convert.ToDecimal(item1["SlabPercentage"]);

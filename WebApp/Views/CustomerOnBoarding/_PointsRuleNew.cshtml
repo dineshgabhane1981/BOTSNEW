@@ -56,7 +56,11 @@
 
     </div>
     <div id="dvSlab" class="col-md-6 col-lg-6" style="display: none; padding-top: 20px; margin-left: 30px; padding-bottom: 15px; border: 1px solid lightgrey; border-radius: 5px; ">
-        <div id="dv1" class="col-md-6 col-lg-6" style="display:flex;">
+        <div style="display:flex;">
+            <input id="rbtnIndividual" name="SlabType" type="radio" class="rbtnClass"> &nbsp; Individual
+            <input id="rbtnCummulative" name="SlabType" type="radio" class="rbtnClass"> &nbsp; Cummulative
+        </div>
+        <div id="dv1" class="col-md-6 col-lg-6" style="display:flex;margin-top:20px;">
             <div style="padding-right:10px;">
                 From<br />
                 <input type="number" id="frm1" class="input20" />
@@ -334,7 +338,7 @@
             $("#dvBase").hide();
             $("#dvSlab").show();
             $("#dvProductWise").hide();
-            $("#txtBasePercentage").val("");           
+            $("#txtBasePercentage").val("");
             $("#rbtnCategoryB").prop("disabled", false);
             $("#rbtnSubCategoryB").prop("disabled", false);
             $("#rbtnProductB").prop("disabled", false);
@@ -355,7 +359,7 @@
             $("#txtBasePercentage").val("");
             $("#rbtnCategoryB").prop("disabled", true);
             $("#rbtnSubCategoryB").prop("disabled", true);
-            $("#rbtnProductB").prop("disabled", true);            
+            $("#rbtnProductB").prop("disabled", true);
         }
     }
 
@@ -433,7 +437,13 @@
         if ($("#rbtnIsSlab").is(":checked")) {
             IsSlab = true;
             var SlabData = [];
-
+            if ($("#rbtnIndividual").is(":checked")) {
+                item["SlabType"] = "Individual";
+            }
+            if ($("#rbtnCummulative").is(":checked")) {
+                item["SlabType"] = "Cummulative";
+            }
+            
             //Slab
             for (var i = 1; i <= 6; i++) {
                 var item1 = {};

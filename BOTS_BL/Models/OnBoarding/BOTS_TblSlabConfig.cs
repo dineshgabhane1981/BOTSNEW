@@ -19,5 +19,6 @@ namespace BOTS_BL.Models.OnBoarding
 
         [Column(TypeName = "numeric")]
         public decimal? SlabPercentage { get; set; }
+        public string SlabType { get; set; }
     }
 }
