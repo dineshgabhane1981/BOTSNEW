@@ -21,6 +21,8 @@ namespace BOTS_BL.Models
         public string SMSType { get; set; }
 
         public int? BonusPoints { get; set; }
+        public int? PointsValidBefore { get; set; }
+        public int? PointsValidAfter { get; set; }
 
         [StringLength(50)]
         public string Frequency { get; set; }
