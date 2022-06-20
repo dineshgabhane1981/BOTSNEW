@@ -22,49 +22,57 @@
 </style>
 
 <div class="multisteps-form__panel p-4 list-box bg-white" data-animation="scaleIn">
-
+    
     <div class="col-lg-12" style="border: 1px solid grey; border-radius: 12px;">
+        <div style="margin-top: 10px;" class="col-md-4 col-lg-12">
+            <a href="@Url.Action("CheckerView", "CustomerOnBoarding", new { groupId = ViewBag.GroupId })" class="login" title="Go To Configration sheet" target="_blank">
+                <button type="button" id="btnCheckerView" onclick="" class="btn btn-primary" style="margin-left: 150px; float:right; margin-right: 10px; margin-bottom: 5px;">
+                    Configration sheet
+                </button>
+            </a>
+        </div>
+        <div class="col-lg-12" style="margin-bottom:30px;margin-top:20px;margin-left:100px;margin-right:50px;">
+            <input id="rbtnEnrlment" name="APIType" type="radio" checked class="rbtnClass"> Enrollment
+            <input id="rbtnEnrlmntWithEarn" name="APIType" type="radio" class="rbtnClass"> Enrollment With Earn
+            <input id="rbtnEarn" name="APIType" type="radio" class="rbtnClass"> Earn
+            <input id="rbtnBurnValidation" name="APIType" type="radio" class="rbtnClass"> Burn Validation
+            <input id="rbtnBurn" name="APIType" type="radio" class="rbtnClass"> Burn
+            <input id="rbtnCancel" name="APIType" type="radio" class="rbtnClass"> Cancel
+            <input id="rbtnSendOtp" name="APIType" type="radio" class="rbtnClass"> Send OTP
+        </div>
         <div class="col-lg-12 row">
-            <div style="margin-top: 20px;" class="col-md-4 col-lg-12">
-                <a href="@Url.Action("CheckerView", "CustomerOnBoarding", new { groupId = ViewBag.GroupId })" class="login" title="Go To Configration sheet" target="_blank">
-                    <button type="button" id="btnCheckerView" onclick="" class="btn btn-primary" style="margin-left: 150px; float:right; margin-right: 10px; margin-bottom: 5px;">
-                        Configration sheet
-                    </button>
-                </a>
-            </div> <br />
-
+            <br />
             <div style="margin-top: 20px;" class="col-md-4 col-lg-4">
                 Billing Partner
-                @Html.DropDownListFor(model => model.billingPartnerId, new SelectList(Model.billingpartners, "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input40", @id = "ddlBillingPartner" })
+                @Html.DropDownListFor(model => model.billingPartnerId, new SelectList(Model.billingpartners, "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input50", @id = "ddlBillingPartner" })
             </div>
             <div style="margin-top: 20px;" class="col-md-4 col-lg-4">
                 Outlets
-                @Html.DropDownListFor(model => model.outletId, new SelectList(Model.lstOutlets, "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input40", @id = "ddlOutlet" })
+                @Html.DropDownListFor(model => model.outletId, new SelectList(Model.lstOutlets, "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input50", @id = "ddlOutlet" })
 
             </div>
-            <div style="float: left; margin-top: 20px; margin-bottom: 20px;" class="col-md-4 col-lg-4">
+            <div style=" margin-top: 20px; margin-bottom: 20px;" class="col-md-4 col-lg-4">
                 Mobile No <input type="text" id="txtMobileNo" class="input50" />
             </div>
+            <div style="margin-top: 20px; margin-bottom: 20px;" class="col-md-4 col-lg-4">
+                Billing Product
+                @Html.DropDownListFor(model => model.billingPartnerId, new SelectList(Model.billingpartners, "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input50", @id = "ddlBillingPartner" })
+            </div>
+            <div style=" margin-top: 20px; margin-bottom: 20px;" class="col-md-4 col-lg-4">
+                Invoice No <input type="text" id="txtInvoiceNo" class="input50" style="margin-bottom: 10px; margin-right: 10px;" />
+            </div>
+            <div style=" margin-top: 20px; margin-bottom: 20px;" class="col-md-4 col-lg-4">
+                Invoice Amt<input type="text" id="txtInvoiceAmt" class="input50" style="margin-bottom: 10px; margin-right: 10px;" />
+            </div>
         </div>
-        <div class="col-lg-12" style="margin-bottom:20px;margin-top:20px;margin-left:50px;margin-right:200px;">
-            <input id="rbtnEnrlment" name="campaign" type="radio" checked class="rbtnClass"> Enrollment
-            <input id="rbtnEnrlmntWithEarn" name="campaign" type="radio" class="rbtnClass"> Enrollment With Earn
-            <input id="rbtnEarn" name="campaign" type="radio" class="rbtnClass"> Earn
-            <input id="rbtnBurnValidation" name="campaign" type="radio" class="rbtnClass"> Burn Validation
-            <input id="rbtnBurn" name="campaign" type="radio" class="rbtnClass"> Burn
-            <input id="rbtnCancel" name="campaign" type="radio" class="rbtnClass"> Cancel
-            <input id="rbtnSendOtp" name="campaign" type="radio" class="rbtnClass"> Send OTP
-        </div>
+
     </div>
 </div>
-<div class="multisteps-form__panel p-4 list-box bg-white" style="border: 1px solid grey; border-radius: 12px;margin:20px;" id="sec7" data-animation="scaleIn">
+<div class="multisteps-form__panel p-4 list-box bg-white"  id="sec7" data-animation="scaleIn">
 
     @*Enrolment*@
     <div class="multisteps-form__content bg-white" id="dvEnrlment">
-        <input type="hidden" id="hdnEnrlmentId" />
-        <div class="col-lg-12" style="float: left; border: 1px solid grey; border-radius: 12px; margin-bottom: 10px; margin-top: 10px; ">
-
-        </div>
+        <input type="hidden" id="hdnEnrlmentId" />      
         <div class="col-lg-12" style="float: left; border: 1px solid grey; border-radius: 12px; margin-bottom: 10px; margin-top: 10px;">
             <div>
                 <div style="float: left; margin-top: 20px;" class="col-md-4 col-lg-4">
@@ -86,14 +94,7 @@
     @*Enrolnment With Earn*@
     <div class="multisteps-form__content bg-white" id="dvEnrlmentWithEarn" style="display:none;">
         <input type="hidden" id="hdnEnrlmentWithEarnId" />
-        <div class="col-lg-12" style="float: left; border: 1px solid grey; border-radius: 12px; margin-bottom: 30px; margin-top: 10px; ">
-
-            <div style="float: left; margin-top: 20px; margin-bottom: 20px;" class="col-md-12 col-lg-12">
-                Invoice No <input type="text" id="txtInvoiceNo2" class="input50" style="margin-bottom: 10px; margin-right: 50px;" />
-                Invoice Amt<input type="text" id="txtInvoiceAmt2" class="input50" style="margin-bottom: 10px; margin-right: 50px;" />
-               
-            </div>
-        </div>
+        
         <div class="col-lg-12" style="float: left; border: 1px solid grey; border-radius: 12px; margin-bottom: 10px; margin-top: 10px; ">
             <div>
                 <div style="float: left; margin-top: 20px;" class="col-md-4 col-lg-4">
@@ -116,14 +117,7 @@
     @*Earn*@
     <div class="multisteps-form__content bg-white" id="dvEarn" style="display:none;">
         <input type="hidden" id="hdnEarnId" />
-        <div class="col-lg-12" style="float: left; border: 1px solid grey; border-radius: 12px; margin-bottom: 30px; margin-top: 10px; ">
-
-            <div style="float: left; margin-top: 20px; margin-bottom: 20px;" class="col-md-12 col-lg-12">
-                Invoice No <input type="text" id="txtInvoiceNo3" class="input50" style="margin-bottom: 10px; margin-right: 50px;" />
-                Invoice Amt<input type="text" id="txtInvoiceAmt3" class="input50" style="margin-bottom: 10px; margin-right: 50px;" />
-                
-            </div>
-        </div>
+        
         <div class="col-lg-12" style="float: left; border: 1px solid grey; border-radius: 12px; margin-bottom: 10px; margin-top: 10px; ">
             <div>
                 <div style="float: left; margin-top: 20px;" class="col-md-4 col-lg-4">
@@ -144,15 +138,7 @@
 
     @*Burn Validation*@
     <div class="multisteps-form__content bg-white" id="dvBurnValidation" style="display:none;">
-        <input type="hidden" id="hdnBurnValidationId" />
-        <div class="col-lg-12" style="float: left; border: 1px solid grey; border-radius: 12px; margin-bottom: 30px; margin-top: 10px; ">
-
-            <div style="float: left; margin-top: 20px; margin-bottom: 20px;" class="col-md-12 col-lg-12">
-                Invoice No <input type="text" id="txtInvoiceNo4" class="input50" style="margin-bottom: 10px; margin-right: 50px;" />
-                Invoice Amt<input type="text" id="txtInvoiceAmt4" class="input50" style="margin-bottom: 10px; margin-right: 50px;" />
-               
-            </div>
-        </div>
+        <input type="hidden" id="hdnBurnValidationId" />      
         <div class="col-lg-12" style="float: left; border: 1px solid grey; border-radius: 12px; margin-bottom: 10px; margin-top: 10px; ">
             <div>
                 <div style="float: left; margin-top: 20px;" class="col-md-4 col-lg-4">
@@ -175,14 +161,7 @@
     @*Burn*@
     <div class="multisteps-form__content bg-white" id="dvBurn" style="display:none;">
         <input type="hidden" id="hdnBurnId" />
-        <div class="col-lg-12" style="float: left; border: 1px solid grey; border-radius: 12px; margin-bottom: 30px; margin-top: 10px; ">
-
-            <div style="float: left; margin-top: 20px; margin-bottom: 20px;" class="col-md-12 col-lg-12">
-                Invoice No <input type="text" id="txtInvoiceNo5" class="input50" style="margin-bottom: 10px; margin-right: 50px;" />
-                Invoice Amt<input type="text" id="txtInvoiceAmt5" class="input50" style="margin-bottom: 10px; margin-right: 50px;" />
-                
-            </div>
-        </div>
+        
         <div class="col-lg-12" style="float: left; border: 1px solid grey; border-radius: 12px; margin-bottom: 10px; margin-top: 10px; ">
             <div>
                 <div style="float: left; margin-top: 20px;" class="col-md-4 col-lg-4">
@@ -205,14 +184,7 @@
     @*Cancel*@
     <div class="multisteps-form__content bg-white" id="dvCancel" style="display:none;">
         <input type="hidden" id="hdnCancelId" />
-        <div class="col-lg-12" style="float: left; border: 1px solid grey; border-radius: 12px; margin-bottom: 30px; margin-top: 10px;">
-
-            <div style="float: left; margin-top: 20px; margin-bottom: 20px;" class="col-md-12 col-lg-12">
-                Invoice No <input type="text" id="txtInvoiceNo6" class="input50" style="margin-bottom: 10px; margin-right: 50px;" />
-                Invoice Amt<input type="text" id="txtInvoiceAmt6" class="input50" style="margin-bottom: 10px; margin-right: 50px;" />
-                
-            </div>
-        </div>
+        
         <div class="col-lg-12" style="float: left; border: 1px solid grey; border-radius: 12px; margin-bottom: 10px; margin-top: 10px;">
             <div>
                 <div style="float: left; margin-top: 20px;" class="col-md-4 col-lg-4">
@@ -235,9 +207,7 @@
     @*Send Otp*@
     <div class="multisteps-form__content bg-white" id="dvSendOtp" style="display:none;">
         <input type="hidden" id="hdnSendOtpId" />
-        <div class="col-lg-12" style="float: left; border: 1px solid grey; border-radius: 12px; margin-bottom: 30px; margin-top: 10px; ">
-
-        </div>
+        
         <div class="col-lg-12" style="float: left; border: 1px solid grey; border-radius: 12px; margin-bottom: 10px; margin-top: 10px; ">
             <div>
                 <div style="float: left; margin-top: 20px;" class="col-md-4 col-lg-4">
@@ -284,6 +254,18 @@
     var oldCounterId5 = "";
     var oldCounterId6 = "";
     var oldCounterId7 = "";
+
+    var oldInvoiceNo2 = "";
+    var oldInvoiceNo3 = "";
+    var oldInvoiceNo4 = "";
+    var oldInvoiceNo5 = "";
+    var oldInvoiceNo6 = "";
+
+    var oldInvoiceAmt2 = "";
+    var oldInvoiceAmt3 = "";
+    var oldInvoiceAmt4 = "";
+    var oldInvoiceAmt5 = "";
+    var oldInvoiceAmt6 = "";
     var flag = false;
 
     $(document).ready(function () {
@@ -299,6 +281,14 @@
        $("#txtMobileNo").on("change", function () {
            ReplaceMobileNo();
        });
+
+        $("#txtInvoiceNo").on("change", function () {
+            ReplaceInvoiceNo();
+        });
+
+        $("#txtInvoiceAmt").on("change", function () {
+            ReplaceInvoiceAmt();
+        });
 
        $('#rbtnEnrlment').click(function () {
            ShowHideTxnTypeSection("dvEnrlment");
@@ -392,39 +382,6 @@
            ResetAll();
        });
 
-
-       $("#txtInvoiceNo2").focusout(function () {
-           UpdateInvoiceNo2();
-       });
-       $("#txtInvoiceNo3").focusout(function () {
-           UpdateInvoiceNo3();
-       });
-       $("#txtInvoiceNo4").focusout(function () {
-           UpdateInvoiceNo4();
-       });
-       $("#txtInvoiceNo5").focusout(function () {
-           UpdateInvoiceNo5();
-       });
-       $("#txtInvoiceNo6").focusout(function () {
-           UpdateInvoiceNo6();
-       });
-
-
-       $("#txtInvoiceAmt2").focusout(function () {
-           UpdateInvoiceAmt2();
-       });
-       $("#txtInvoiceAmt3").focusout(function () {
-           UpdateInvoiceAmt3();
-       });
-       $("#txtInvoiceAmt4").focusout(function () {
-           UpdateInvoiceAmt4();
-       });
-       $("#txtInvoiceAmt5").focusout(function () {
-           UpdateInvoiceAmt5();
-       });
-       $("#txtInvoiceAmt6").focusout(function () {
-           UpdateInvoiceAmt6();
-       });
         ReplaceCurrentDateTime();
    });
 
@@ -462,248 +419,6 @@
 
     }
 
-    function UpdateInvoiceNo2() {
-        var RequestPacket = $("#txtRequestPacket2").val();
-        var InvoiceNo = $("#txtInvoiceNo2").val();
-        var oldInvoiceNo2 = "";
-        if (oldInvoiceNo2 == "") {
-            flag = false;
-        }
-        else {
-            flag = true;
-        }
-
-        if (flag) {
-            var strInReplace = "<InvoiceNo>" + oldInvoiceNo2 + "</InvoiceNo>";
-            var strToReplace = "<InvoiceNo>" + InvoiceNo + "</InvoiceNo>";
-            RequestPacket = RequestPacket.replace(strInReplace, strToReplace);
-        }
-        else {
-            var strInReplace = "<InvoiceNo></InvoiceNo>";
-            var strToReplace = "<InvoiceNo>" + InvoiceNo + "</InvoiceNo>";
-            RequestPacket = RequestPacket.replace(strInReplace, strToReplace);
-        }
-        $("#txtRequestPacket2").val(RequestPacket);
-        oldInvoiceNo2 = InvoiceNo;
-    }
-    function UpdateInvoiceNo3() {
-        var RequestPacket = $("#txtRequestPacket3").val();
-        var InvoiceNo = $("#txtInvoiceNo3").val();
-        var oldInvoiceNo3 = "";
-        if (oldInvoiceNo3 == "") {
-            flag = false;
-        }
-        else {
-            flag = true;
-        }
-
-        if (flag) {
-            var strInReplace = "<InvoiceNo>" + oldInvoiceNo3 + "</InvoiceNo>";
-            var strToReplace = "<InvoiceNo>" + InvoiceNo + "</InvoiceNo>";
-            RequestPacket = RequestPacket.replace(strInReplace, strToReplace);
-        }
-        else {
-            var strInReplace = "<InvoiceNo></InvoiceNo>";
-            var strToReplace = "<InvoiceNo>" + InvoiceNo + "</InvoiceNo>";
-            RequestPacket = RequestPacket.replace(strInReplace, strToReplace);
-        }
-        $("#txtRequestPacket3").val(RequestPacket);
-        oldInvoiceNo3 = InvoiceNo;
-    }
-    function UpdateInvoiceNo4() {
-        var RequestPacket = $("#txtRequestPacket4").val();
-        var InvoiceNo = $("#txtInvoiceNo4").val();
-        var oldInvoiceNo4 = "";
-        if (oldInvoiceNo4 == "") {
-            flag = false;
-        }
-        else {
-            flag = true;
-        }
-
-        if (flag) {
-            var strInReplace = "<InvoiceNo>" + oldInvoiceNo4 + "</InvoiceNo>";
-            var strToReplace = "<InvoiceNo>" + InvoiceNo + "</InvoiceNo>";
-            RequestPacket = RequestPacket.replace(strInReplace, strToReplace);
-        }
-        else {
-            var strInReplace = "<InvoiceNo></InvoiceNo>";
-            var strToReplace = "<InvoiceNo>" + InvoiceNo + "</InvoiceNo>";
-            RequestPacket = RequestPacket.replace(strInReplace, strToReplace);
-        }
-        $("#txtRequestPacket4").val(RequestPacket);
-        oldInvoiceNo4 = InvoiceNo;
-    }
-    function UpdateInvoiceNo5() {
-        var RequestPacket = $("#txtRequestPacket5").val();
-        var InvoiceNo = $("#txtInvoiceNo5").val();
-        var oldInvoiceNo5 = "";
-        if (oldInvoiceNo5 == "") {
-            flag = false;
-        }
-        else {
-            flag = true;
-        }
-
-        if (flag) {
-            var strInReplace = "<InvoiceNo>" + oldInvoiceNo5 + "</InvoiceNo>";
-            var strToReplace = "<InvoiceNo>" + InvoiceNo + "</InvoiceNo>";
-            RequestPacket = RequestPacket.replace(strInReplace, strToReplace);
-        }
-        else {
-            var strInReplace = "<InvoiceNo></InvoiceNo>";
-            var strToReplace = "<InvoiceNo>" + InvoiceNo + "</InvoiceNo>";
-            RequestPacket = RequestPacket.replace(strInReplace, strToReplace);
-        }
-        $("#txtRequestPacket5").val(RequestPacket);
-        oldInvoiceNo5 = InvoiceNo;
-    }
-    function UpdateInvoiceNo6() {
-        var RequestPacket = $("#txtRequestPacket6").val();
-        var InvoiceNo = $("#txtInvoiceNo6").val();
-        var oldInvoiceNo6 = "";
-        if (oldInvoiceNo6 == "") {
-            flag = false;
-        }
-        else {
-            flag = true;
-        }
-
-        if (flag) {
-            var strInReplace = "<InvoiceNo>" + oldInvoiceNo6 + "</InvoiceNo>";
-            var strToReplace = "<InvoiceNo>" + InvoiceNo + "</InvoiceNo>";
-            RequestPacket = RequestPacket.replace(strInReplace, strToReplace);
-        }
-        else {
-            var strInReplace = "<InvoiceNo></InvoiceNo>";
-            var strToReplace = "<InvoiceNo>" + InvoiceNo + "</InvoiceNo>";
-            RequestPacket = RequestPacket.replace(strInReplace, strToReplace);
-        }
-        $("#txtRequestPacket6").val(RequestPacket);
-        oldInvoiceNo6 = InvoiceNo;
-    }
-
-    function UpdateInvoiceAmt2() {
-        var RequestPacket = $("#txtRequestPacket2").val();
-        var InvoiceAmt = $("#txtInvoiceAmt2").val();
-        var oldInvoiceAmt2 = "";
-        if (oldInvoiceAmt2 == "") {
-            flag = false;
-        }
-        else {
-            flag = true;
-        }
-
-        if (flag) {
-            var strInReplace = "<InvoiceAmt>" + oldInvoiceAmt2 + "</InvoiceAmt>";
-            var strToReplace = "<InvoiceAmt>" + InvoiceAmt + "</InvoiceAmt>";
-            RequestPacket = RequestPacket.replace(strInReplace, strToReplace);
-        }
-        else {
-            var strInReplace = "<InvoiceAmt></InvoiceAmt>";
-            var strToReplace = "<InvoiceAmt>" + InvoiceAmt + "</InvoiceAmt>";
-            RequestPacket = RequestPacket.replace(strInReplace, strToReplace);
-        }
-        $("#txtRequestPacket2").val(RequestPacket);
-        oldInvoiceAmt2 = InvoiceAmt;
-    }
-    function UpdateInvoiceAmt3() {
-        var RequestPacket = $("#txtRequestPacket3").val();
-        var InvoiceAmt = $("#txtInvoiceAmt3").val();
-        var oldInvoiceAmt3 = "";
-        if (oldInvoiceAmt3 == "") {
-            flag = false;
-        }
-        else {
-            flag = true;
-        }
-
-        if (flag) {
-            var strInReplace = "<InvoiceAmt>" + oldInvoiceAmt3 + "</InvoiceAmt>";
-            var strToReplace = "<InvoiceAmt>" + InvoiceAmt + "</InvoiceAmt>";
-            RequestPacket = RequestPacket.replace(strInReplace, strToReplace);
-        }
-        else {
-            var strInReplace = "<InvoiceAmt></InvoiceAmt>";
-            var strToReplace = "<InvoiceAmt>" + InvoiceAmt + "</InvoiceAmt>";
-            RequestPacket = RequestPacket.replace(strInReplace, strToReplace);
-        }
-        $("#txtRequestPacket3").val(RequestPacket);
-        oldInvoiceAmt3 = InvoiceAmt;
-    }
-    function UpdateInvoiceAmt4() {
-        var RequestPacket = $("#txtRequestPacket4").val();
-        var InvoiceAmt = $("#txtInvoiceAmt4").val();
-        var oldInvoiceAmt4 = "";
-        if (oldInvoiceAmt4 == "") {
-            flag = false;
-        }
-        else {
-            flag = true;
-        }
-
-        if (flag) {
-            var strInReplace = "<InvoiceAmt>" + oldInvoiceAmt4 + "</InvoiceAmt>";
-            var strToReplace = "<InvoiceAmt>" + InvoiceAmt + "</InvoiceAmt>";
-            RequestPacket = RequestPacket.replace(strInReplace, strToReplace);
-        }
-        else {
-            var strInReplace = "<InvoiceAmt></InvoiceAmt>";
-            var strToReplace = "<InvoiceAmt>" + InvoiceAmt + "</InvoiceAmt>";
-            RequestPacket = RequestPacket.replace(strInReplace, strToReplace);
-        }
-        $("#txtRequestPacket4").val(RequestPacket);
-        oldInvoiceAmt4 = InvoiceAmt;
-    }
-    function UpdateInvoiceAmt5() {
-        var RequestPacket = $("#txtRequestPacket5").val();
-        var InvoiceAmt = $("#txtInvoiceAmt5").val();
-        var oldInvoiceAmt5 = "";
-        if (oldInvoiceAmt5 == "") {
-            flag = false;
-        }
-        else {
-            flag = true;
-        }
-
-        if (flag) {
-            var strInReplace = "<InvoiceAmt>" + oldInvoiceAmt5 + "</InvoiceAmt>";
-            var strToReplace = "<InvoiceAmt>" + InvoiceAmt + "</InvoiceAmt>";
-            RequestPacket = RequestPacket.replace(strInReplace, strToReplace);
-        }
-        else {
-            var strInReplace = "<InvoiceAmt></InvoiceAmt>";
-            var strToReplace = "<InvoiceAmt>" + InvoiceAmt + "</InvoiceAmt>";
-            RequestPacket = RequestPacket.replace(strInReplace, strToReplace);
-        }
-        $("#txtRequestPacket5").val(RequestPacket);
-        oldInvoiceAmt5 = InvoiceAmt;
-    }
-    function UpdateInvoiceAmt6() {
-        var RequestPacket = $("#txtRequestPacket6").val();
-        var InvoiceAmt = $("#txtInvoiceAmt6").val();
-        var oldInvoiceAmt6 = "";
-        if (oldInvoiceAmt6 == "") {
-            flag = false;
-        }
-        else {
-            flag = true;
-        }
-
-        if (flag) {
-            var strInReplace = "<InvoiceAmt>" + oldInvoiceAmt6 + "</InvoiceAmt>";
-            var strToReplace = "<InvoiceAmt>" + InvoiceAmt + "</InvoiceAmt>";
-            RequestPacket = RequestPacket.replace(strInReplace, strToReplace);
-        }
-        else {
-            var strInReplace = "<InvoiceAmt></InvoiceAmt>";
-            var strToReplace = "<InvoiceAmt>" + InvoiceAmt + "</InvoiceAmt>";
-            RequestPacket = RequestPacket.replace(strInReplace, strToReplace);
-        }
-        $("#txtRequestPacket6").val(RequestPacket);
-        oldInvoiceAmt6 = InvoiceAmt;
-    }
-
     function ReplaceBillingUrl() {
         var billingpartner = $("#ddlBillingPartner").val();
          $("#divLoader").show();
@@ -716,17 +431,28 @@
                 success: function (result) {
                     console.log(result);
                     $("#txtRequestPacketURL1").html(result);
+                    $("#txtRequestPacketURL2").html(result);
+                    $("#txtRequestPacketURL3").html(result);
+                    $("#txtRequestPacketURL4").html(result);
+                    $("#txtRequestPacketURL5").html(result);
+                    $("#txtRequestPacketURL6").html(result);
+                    $("#txtRequestPacketURL7").html(result);
                     $("#divLoader").hide();
                 },
                 error: function (result) {
                     console.log(result);
                     $("#txtRequestPacketURL1").html(result.responseText);
+                    $("#txtRequestPacketURL2").html(result.responseText);
+                    $("#txtRequestPacketURL3").html(result.responseText);
+                    $("#txtRequestPacketURL4").html(result.responseText);
+                    $("#txtRequestPacketURL5").html(result.responseText);
+                    $("#txtRequestPacketURL6").html(result.responseText);
+                    $("#txtRequestPacketURL7").html(result.responseText);
                     $("#divLoader").hide();
                 }
             });
 
     }
-
 
     function ReplaceCounterId() {
         var outletId = $("#ddlOutlet").val();
@@ -1056,6 +782,243 @@
             $("#txtRequestPacket7").val(RequestPacket);
             oldMobileNo7 = MobileNo7;
         }
+    }
+
+    function ReplaceInvoiceNo() {
+        if ($('#rbtnEnrlmntWithEarn').is(':checked')) {
+            var RequestPacket = $("#txtRequestPacket2").val();
+            var InvoiceNo2 = $("#txtInvoiceNo").val();
+            if (oldInvoiceNo2 == "") {
+                flag = false;
+            }
+            else {
+                flag = true;
+            }
+
+            if (flag) {
+                var strInReplace = "<InvoiceNo>" + oldInvoiceNo2 + "</InvoiceNo>";
+                var strToReplace = "<InvoiceNo>" + InvoiceNo2 + "</InvoiceNo>";
+                RequestPacket = RequestPacket.replace(strInReplace, strToReplace);
+            }
+            else {
+                var strInReplace = "<InvoiceNo></InvoiceNo>";
+                var strToReplace = "<InvoiceNo>" + InvoiceNo2 + "</InvoiceNo>";
+                RequestPacket = RequestPacket.replace(strInReplace, strToReplace);
+            }
+            $("#txtRequestPacket2").val(RequestPacket);
+            oldInvoiceNo2 = InvoiceNo2;
+        }
+        if ($('#rbtnEarn').is(':checked')) {
+            var RequestPacket = $("#txtRequestPacket3").val();
+            var InvoiceNo3 = $("#txtInvoiceNo").val();
+            if (oldInvoiceNo3 == "") {
+                flag = false;
+            }
+            else {
+                flag = true;
+            }
+
+            if (flag) {
+                var strInReplace = "<InvoiceNo>" + oldInvoiceNo3 + "</InvoiceNo>";
+                var strToReplace = "<InvoiceNo>" + InvoiceNo3 + "</InvoiceNo>";
+                RequestPacket = RequestPacket.replace(strInReplace, strToReplace);
+            }
+            else {
+                var strInReplace = "<InvoiceNo></InvoiceNo>";
+                var strToReplace = "<InvoiceNo>" + InvoiceNo3 + "</InvoiceNo>";
+                RequestPacket = RequestPacket.replace(strInReplace, strToReplace);
+            }
+            $("#txtRequestPacket3").val(RequestPacket);
+            oldInvoiceNo3 = InvoiceNo3;
+        }
+        if ($('#rbtnBurnValidation').is(':checked')) {
+            var RequestPacket = $("#txtRequestPacket4").val();
+            var InvoiceNo4 = $("#txtInvoiceNo").val();
+            if (oldInvoiceNo4 == "") {
+                flag = false;
+            }
+            else {
+                flag = true;
+            }
+
+            if (flag) {
+                var strInReplace = "<InvoiceNo>" + oldInvoiceNo4 + "</InvoiceNo>";
+                var strToReplace = "<InvoiceNo>" + InvoiceNo4 + "</InvoiceNo>";
+                RequestPacket = RequestPacket.replace(strInReplace, strToReplace);
+            }
+            else {
+                var strInReplace = "<InvoiceNo></InvoiceNo>";
+                var strToReplace = "<InvoiceNo>" + InvoiceNo4 + "</InvoiceNo>";
+                RequestPacket = RequestPacket.replace(strInReplace, strToReplace);
+            }
+            $("#txtRequestPacket4").val(RequestPacket);
+            oldInvoiceNo4 = InvoiceNo4;
+        }
+        if ($('#rbtnBurn').is(':checked')) {
+            var RequestPacket = $("#txtRequestPacket5").val();
+            var InvoiceNo5 = $("#txtInvoiceNo").val();
+            if (oldInvoiceNo5 == "") {
+                flag = false;
+            }
+            else {
+                flag = true;
+            }
+
+            if (flag) {
+                var strInReplace = "<InvoiceNo>" + oldInvoiceNo5 + "</InvoiceNo>";
+                var strToReplace = "<InvoiceNo>" + InvoiceNo5 + "</InvoiceNo>";
+                RequestPacket = RequestPacket.replace(strInReplace, strToReplace);
+            }
+            else {
+                var strInReplace = "<InvoiceNo></InvoiceNo>";
+                var strToReplace = "<InvoiceNo>" + InvoiceNo5 + "</InvoiceNo>";
+                RequestPacket = RequestPacket.replace(strInReplace, strToReplace);
+            }
+            $("#txtRequestPacket5").val(RequestPacket);
+            oldInvoiceNo5 = InvoiceNo5;
+        }
+        if ($('#rbtnCancel').is(':checked')) {
+            var RequestPacket = $("#txtRequestPacket6").val();
+            var InvoiceNo6 = $("#txtInvoiceNo").val();
+            if (oldInvoiceNo6 == "") {
+                flag = false;
+            }
+            else {
+                flag = true;
+            }
+
+            if (flag) {
+                var strInReplace = "<InvoiceNo>" + oldInvoiceNo6 + "</InvoiceNo>";
+                var strToReplace = "<InvoiceNo>" + InvoiceNo6 + "</InvoiceNo>";
+                RequestPacket = RequestPacket.replace(strInReplace, strToReplace);
+            }
+            else {
+                var strInReplace = "<InvoiceNo></InvoiceNo>";
+                var strToReplace = "<InvoiceNo>" + InvoiceNo6 + "</InvoiceNo>";
+                RequestPacket = RequestPacket.replace(strInReplace, strToReplace);
+            }
+            $("#txtRequestPacket6").val(RequestPacket);
+            oldInvoiceNo6 = InvoiceNo6;
+        }
+    }
+
+    function ReplaceInvoiceAmt() {
+        if ($('#rbtnEnrlmntWithEarn').is(':checked')) {
+            var RequestPacket = $("#txtRequestPacket2").val();
+            var InvoiceAmt2 = $("#txtInvoiceAmt").val();
+            if (oldInvoiceAmt2 == "") {
+                flag = false;
+            }
+            else {
+                flag = true;
+            }
+
+            if (flag) {
+                var strInReplace = "<InvoiceAmt>" + oldInvoiceAmt2 + "</InvoiceAmt>";
+                var strToReplace = "<InvoiceAmt>" + InvoiceAmt2 + "</InvoiceAmt>";
+                RequestPacket = RequestPacket.replace(strInReplace, strToReplace);
+            }
+            else {
+                var strInReplace = "<InvoiceAmt></InvoiceAmt>";
+                var strToReplace = "<InvoiceAmt>" + InvoiceAmt2 + "</InvoiceAmt>";
+                RequestPacket = RequestPacket.replace(strInReplace, strToReplace);
+            }
+            $("#txtRequestPacket2").val(RequestPacket);
+            oldInvoiceAmt2 = InvoiceAmt2;
+        }
+        if ($('#rbtnEarn').is(':checked')) {
+            var RequestPacket = $("#txtRequestPacket3").val();
+            var InvoiceAmt3 = $("#txtInvoiceAmt").val();
+            if (oldInvoiceAmt3 == "") {
+                flag = false;
+            }
+            else {
+                flag = true;
+            }
+
+            if (flag) {
+                var strInReplace = "<InvoiceAmt>" + oldInvoiceAmt3 + "</InvoiceAmt>";
+                var strToReplace = "<InvoiceAmt>" + InvoiceAmt3 + "</InvoiceAmt>";
+                RequestPacket = RequestPacket.replace(strInReplace, strToReplace);
+            }
+            else {
+                var strInReplace = "<InvoiceAmt></InvoiceAmt>";
+                var strToReplace = "<InvoiceAmt>" + InvoiceAmt3 + "</InvoiceAmt>";
+                RequestPacket = RequestPacket.replace(strInReplace, strToReplace);
+            }
+            $("#txtRequestPacket3").val(RequestPacket);
+            oldInvoiceAmt3 = InvoiceAmt3;
+        }
+        if ($('#rbtnBurnValidation').is(':checked')) {
+            var RequestPacket = $("#txtRequestPacket4").val();
+            var InvoiceAmt4 = $("#txtInvoiceAmt").val();
+            if (oldInvoiceAmt4 == "") {
+                flag = false;
+            }
+            else {
+                flag = true;
+            }
+
+            if (flag) {
+                var strInReplace = "<InvoiceAmt>" + oldInvoiceAmt4 + "</InvoiceAmt>";
+                var strToReplace = "<InvoiceAmt>" + InvoiceAmt4 + "</InvoiceAmt>";
+                RequestPacket = RequestPacket.replace(strInReplace, strToReplace);
+            }
+            else {
+                var strInReplace = "<InvoiceAmt></InvoiceAmt>";
+                var strToReplace = "<InvoiceAmt>" + oldInvoiceAmt4 + "</InvoiceAmt>";
+                RequestPacket = RequestPacket.replace(strInReplace, strToReplace);
+            }
+            $("#txtRequestPacket4").val(RequestPacket);
+            oldInvoiceAmt4 = InvoiceAmt4;
+        }
+        if ($('#rbtnBurn').is(':checked')) {
+            var RequestPacket = $("#txtRequestPacket5").val();
+            var InvoiceAmt5 = $("#txtInvoiceAmt").val();
+            if (oldInvoiceAmt5 == "") {
+                flag = false;
+            }
+            else {
+                flag = true;
+            }
+
+            if (flag) {
+                var strInReplace = "<InvoiceAmt>" + oldInvoiceAmt5 + "</InvoiceAmt>";
+                var strToReplace = "<InvoiceAmt>" + InvoiceAmt5 + "</InvoiceAmt>";
+                RequestPacket = RequestPacket.replace(strInReplace, strToReplace);
+            }
+            else {
+                var strInReplace = "<InvoiceAmt></InvoiceAmt>";
+                var strToReplace = "<InvoiceAmt>" + InvoiceAmt5 + "</InvoiceAmt>";
+                RequestPacket = RequestPacket.replace(strInReplace, strToReplace);
+            }
+            $("#txtRequestPacket5").val(RequestPacket);
+            oldInvoiceAmt5 = InvoiceAmt5;
+        }
+        if ($('#rbtnCancel').is(':checked')) {
+            var RequestPacket = $("#txtRequestPacket6").val();
+            var InvoiceAmt6 = $("#txtInvoiceAmt").val();
+            if (oldInvoiceAmt6 == "") {
+                flag = false;
+            }
+            else {
+                flag = true;
+            }
+
+            if (flag) {
+                var strInReplace = "<InvoiceAmt>" + oldInvoiceAmt6 + "</InvoiceAmt>";
+                var strToReplace = "<InvoiceAmt>" + InvoiceAmt6 + "</InvoiceAmt>";
+                RequestPacket = RequestPacket.replace(strInReplace, strToReplace);
+            }
+            else {
+                var strInReplace = "<InvoiceAmt></InvoiceAmt>";
+                var strToReplace = "<InvoiceAmt>" + InvoiceAmt6 + "</InvoiceAmt>";
+                RequestPacket = RequestPacket.replace(strInReplace, strToReplace);
+            }
+            $("#txtRequestPacket6").val(RequestPacket);
+            oldInvoiceAmt6 = InvoiceAmt6;
+        }
+
     }
 
     function ResetAll() {
