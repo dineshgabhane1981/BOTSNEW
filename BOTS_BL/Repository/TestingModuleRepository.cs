@@ -51,7 +51,7 @@ namespace BOTS_BL.Repository
                     lstData.Add(new SelectListItem
                     {
                         Text = BPName,
-                        Value = Convert.ToString(BPName)
+                        Value = Convert.ToString(id)
                     });
                 }
             }

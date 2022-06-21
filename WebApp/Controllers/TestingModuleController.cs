@@ -40,6 +40,9 @@ namespace WebApp.Controllers
             groupId = comm.DecryptString(groupId);
             TMV.billingpartners = TMR.GetBillingPartners(groupId);
 
+            List<SelectListItem> lstData = new List<SelectListItem>();
+            TMV.BPProduct = lstData;
+
             var liveGroupId = TMR.GetLiveGroupId(groupId);
             var connectionString = CR.GetCustomerConnString(liveGroupId);
             TMV.lstOutlets = RR.GetOutletList(liveGroupId, connectionString);

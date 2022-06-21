@@ -56,7 +56,7 @@
             </div>
             <div style="margin-top: 20px; margin-bottom: 20px;" class="col-md-4 col-lg-4">
                 Billing Product
-                @Html.DropDownListFor(model => model.billingPartnerId, new SelectList(Model.billingpartners, "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input50", @id = "ddlBillingPartner" })
+                @Html.DropDownListFor(model => model.billingPartnerId, new SelectList(Model.BPProduct, "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input50", @id = "ddlBPProduct" })
             </div>
             <div style=" margin-top: 20px; margin-bottom: 20px;" class="col-md-4 col-lg-4">
                 Invoice No <input type="text" id="txtInvoiceNo" class="input50" style="margin-bottom: 10px; margin-right: 10px;" />
@@ -275,7 +275,8 @@
         });
 
         $("#ddlBillingPartner").on("change", function () {
-            ReplaceBillingUrl();
+            FillBillingPartnerProducts();
+            //ReplaceBillingUrl();
         });
 
        $("#txtMobileNo").on("change", function () {
@@ -1178,5 +1179,28 @@
                     $("#divLoader").hide();
                 }
             });
+    }
+
+    function FillBillingPartnerProducts()
+    {
+        if ($("#ddlBillingPartner option:selected").text() != "Please Select") {
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("GetBillingPartnerProduct", "CustomerOnBoarding")',
+                    data: '{BPId: ' + JSON.stringify($("#ddlBillingPartner").val()) + '}',
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (result) {
+                        $("#ddlBPProduct").empty();
+                        
+                        $.each(result, function () {
+                            $("#ddlBPProduct").append($("<option />").val(this.Value).text(this.Text));
+                        });                        
+                    },
+                    error: function (result) {
+                        //console.log(result.responseText);
+                    }
+                });
+            }            
     }
 </script>

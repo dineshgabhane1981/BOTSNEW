@@ -24,5 +24,7 @@ namespace WebApp.ViewModel
 
         public List<SelectListItem> billingpartners { get; set; }
         public List<SelectListItem> lstOutlets { get; set; }
+        public List<SelectListItem> BPProduct { get; set; }
+        
     }
 }
