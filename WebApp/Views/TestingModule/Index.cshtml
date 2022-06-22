@@ -19,10 +19,22 @@
     .app-main__outer {
         background-color: white;
     }
+    .section-heading {
+        cursor: pointer;
+        text-align: left;
+        background-color: #022C48;
+        color: white;
+        font-weight: bold;
+        padding: 10px;
+        border-radius: 5px;
+        background-color: #000000 !important;
+        background-image: linear-gradient(147deg, #000000 0%, #04619f 74%) !important;
+        font-size: 16px;
+    }
 </style>
 
 <div class="multisteps-form__panel p-4 list-box bg-white" data-animation="scaleIn">
-    
+
     <div class="col-lg-12" style="border: 1px solid grey; border-radius: 12px;">
         <div style="margin-top: 10px;" class="col-md-4 col-lg-12">
             <a href="@Url.Action("CheckerView", "CustomerOnBoarding", new { groupId = ViewBag.GroupId })" class="login" title="Go To Configration sheet" target="_blank">
@@ -68,11 +80,19 @@
 
     </div>
 </div>
-<div class="multisteps-form__panel p-4 list-box bg-white"  id="sec7" data-animation="scaleIn">
+
+<div class="container-fluid pt-3 pl-3 pr-3 pb-3" id="dvPointRuleSection">
+    <div class="col-md-12 section-heading" data-toggle="collapse" data-target="#PointRuleConfigreadonly">Point Rule </div>
+    <div id="PointRuleConfigreadonly" class="col-md-12 col-lg-12 collapse">
+        @Html.Partial("~/Views/TestingModule/_PointRuleDetails.cshtml", Model)
+
+    </div>
+</div>
+<div class="multisteps-form__panel p-4 list-box bg-white" id="sec7" data-animation="scaleIn">
 
     @*Enrolment*@
     <div class="multisteps-form__content bg-white" id="dvEnrlment">
-        <input type="hidden" id="hdnEnrlmentId" />      
+        <input type="hidden" id="hdnEnrlmentId" />
         <div class="col-lg-12" style="float: left; border: 1px solid grey; border-radius: 12px; margin-bottom: 10px; margin-top: 10px;">
             <div>
                 <div style="float: left; margin-top: 20px;" class="col-md-4 col-lg-4">
@@ -94,7 +114,7 @@
     @*Enrolnment With Earn*@
     <div class="multisteps-form__content bg-white" id="dvEnrlmentWithEarn" style="display:none;">
         <input type="hidden" id="hdnEnrlmentWithEarnId" />
-        
+
         <div class="col-lg-12" style="float: left; border: 1px solid grey; border-radius: 12px; margin-bottom: 10px; margin-top: 10px; ">
             <div>
                 <div style="float: left; margin-top: 20px;" class="col-md-4 col-lg-4">
@@ -117,7 +137,7 @@
     @*Earn*@
     <div class="multisteps-form__content bg-white" id="dvEarn" style="display:none;">
         <input type="hidden" id="hdnEarnId" />
-        
+
         <div class="col-lg-12" style="float: left; border: 1px solid grey; border-radius: 12px; margin-bottom: 10px; margin-top: 10px; ">
             <div>
                 <div style="float: left; margin-top: 20px;" class="col-md-4 col-lg-4">
@@ -138,7 +158,7 @@
 
     @*Burn Validation*@
     <div class="multisteps-form__content bg-white" id="dvBurnValidation" style="display:none;">
-        <input type="hidden" id="hdnBurnValidationId" />      
+        <input type="hidden" id="hdnBurnValidationId" />
         <div class="col-lg-12" style="float: left; border: 1px solid grey; border-radius: 12px; margin-bottom: 10px; margin-top: 10px; ">
             <div>
                 <div style="float: left; margin-top: 20px;" class="col-md-4 col-lg-4">
@@ -161,7 +181,7 @@
     @*Burn*@
     <div class="multisteps-form__content bg-white" id="dvBurn" style="display:none;">
         <input type="hidden" id="hdnBurnId" />
-        
+
         <div class="col-lg-12" style="float: left; border: 1px solid grey; border-radius: 12px; margin-bottom: 10px; margin-top: 10px; ">
             <div>
                 <div style="float: left; margin-top: 20px;" class="col-md-4 col-lg-4">
@@ -184,7 +204,7 @@
     @*Cancel*@
     <div class="multisteps-form__content bg-white" id="dvCancel" style="display:none;">
         <input type="hidden" id="hdnCancelId" />
-        
+
         <div class="col-lg-12" style="float: left; border: 1px solid grey; border-radius: 12px; margin-bottom: 10px; margin-top: 10px;">
             <div>
                 <div style="float: left; margin-top: 20px;" class="col-md-4 col-lg-4">
@@ -207,7 +227,7 @@
     @*Send Otp*@
     <div class="multisteps-form__content bg-white" id="dvSendOtp" style="display:none;">
         <input type="hidden" id="hdnSendOtpId" />
-        
+
         <div class="col-lg-12" style="float: left; border: 1px solid grey; border-radius: 12px; margin-bottom: 10px; margin-top: 10px; ">
             <div>
                 <div style="float: left; margin-top: 20px;" class="col-md-4 col-lg-4">
@@ -1192,15 +1212,15 @@
                     dataType: "json",
                     success: function (result) {
                         $("#ddlBPProduct").empty();
-                        
+
                         $.each(result, function () {
                             $("#ddlBPProduct").append($("<option />").val(this.Value).text(this.Text));
-                        });                        
+                        });
                     },
                     error: function (result) {
                         //console.log(result.responseText);
                     }
                 });
-            }            
+            }
     }
 </script>

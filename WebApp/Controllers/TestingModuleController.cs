@@ -26,6 +26,7 @@ namespace WebApp.Controllers
 {
     public class TestingModuleController : Controller
     {
+        OnBoardingRepository OBR = new OnBoardingRepository();
         CustomerRepository CR = new CustomerRepository();
         ReportsRepository RR = new ReportsRepository();
         TestingModuleRepository TMR = new TestingModuleRepository();
@@ -47,6 +48,12 @@ namespace WebApp.Controllers
             var connectionString = CR.GetCustomerConnString(liveGroupId);
             TMV.lstOutlets = RR.GetOutletList(liveGroupId, connectionString);
             Session["groupId"] = liveGroupId;
+
+            //PointRules
+            TMV.objEarnRuleConfig = OBR.GetEarnRuleConfig(groupId);
+            TMV.objBurnRuleConfig = OBR.GetBurnRuleConfig(groupId);
+            TMV.lstSlabConfig = OBR.GetEarnRuleSlabConfig(groupId);
+            TMV.lstProductUpload = OBR.GetProductUpload(groupId);
             return View(TMV);
         }
 

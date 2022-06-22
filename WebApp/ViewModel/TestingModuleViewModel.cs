@@ -22,6 +22,11 @@ namespace WebApp.ViewModel
         public string RequestPacketSendOTP { get; set; }
         public string RequestURL { get; set; }
 
+        public BOTS_TblEarnRuleConfig objEarnRuleConfig { get; set; }
+        public BOTS_TblBurnRuleConfig objBurnRuleConfig { get; set; }
+        public List<BOTS_TblSlabConfig> lstSlabConfig { get; set; }
+        public List<BOTS_TblProductUpload> lstProductUpload { get; set; }
+
         public List<SelectListItem> billingpartners { get; set; }
         public List<SelectListItem> lstOutlets { get; set; }
         public List<SelectListItem> BPProduct { get; set; }
