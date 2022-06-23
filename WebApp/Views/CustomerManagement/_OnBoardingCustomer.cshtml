@@ -9,14 +9,14 @@
 
 @if (roleId == "1" || roleId == "5")
 {
-    <div class="row">
-        <div class="col search-container">
+<div class="row">
+    <div class="col search-container">
 
-        </div>
-        <div style="text-align:right;">
-            <a href="@Url.Action("Index", "CustomerOnBoarding")" title="Add New Customer">  <img src="~/Content/assets/images/AddCustomer.png" /></a>
-        </div>
     </div>
+    <div style="text-align:right;">
+        <a href="@Url.Action("Index", "CustomerOnBoarding")" title="Add New Customer">  <img src="~/Content/assets/images/AddCustomer.png" /></a>
+    </div>
+</div>
 }
 <div class="pt-3 pl-3 pr-3 col-md-12 col-lg-12">
     <div class="row">
@@ -48,27 +48,33 @@
                             {
                                 WebApp.App_Start.CommonFunctions common = new WebApp.App_Start.CommonFunctions();
                                 string GroupId = common.EncryptString(Convert.ToString(item.GroupId));
-                                <tr>
-                                    <td>@item.GroupId</td>
-                                    <td>@item.GroupName</td>
-                                    <td>@item.OwnerMobileNo</td>
-                                    <td>@item.City</td>
-                                    <td>@item.BillingPartnerName</td>
-                                    <td>@item.PaymentStatus</td>
+                    string lnkId="lnkIntro"+item.GroupId;
+                    <tr>
+                        <td>@item.GroupId</td>
+                        <td>@item.GroupName</td>
+                        <td>@item.OwnerMobileNo</td>
+                        <td>@item.City</td>
+                        <td>@item.BillingPartnerName</td>
+                        <td>@item.PaymentStatus</td>
 
-                                    <td style="text-align:center;">
-                                        <a href="@Url.Action("Index", "CustomerOnBoarding", new { groupId = GroupId })" class="login" title="Edit"><img src="~/Content/assets/images/shape_editUser.png" /></a>
-                                        <a href="@Url.Action("AllDiscussions", "Discussion", new { groupId = GroupId, isOnboarding="1" })" class="login" title="Go To Discussions"><img src="~/Content/assets/images/discussion.png" width="30" /></a>
-                                        @if (item.CustomerStatus == "Approved By Customer")
+                        <td style="text-align:center;">
+                            <a href="@Url.Action("Index", "CustomerOnBoarding", new { groupId = GroupId })" class="login" title="Edit"><img src="~/Content/assets/images/shape_editUser.png" /></a>
+                            <a href="@Url.Action("AllDiscussions", "Discussion", new { groupId = GroupId, isOnboarding="1" })" class="login" title="Go To Discussions"><img src="~/Content/assets/images/discussion.png" width="30" /></a>
+                            @if (item.CustomerStatus == "Approved By Customer")
                                         {
-                                            <a href="@Url.Action("Index", "TestingModule", new { groupId = GroupId })" class="login" title="Go To Testing Module"><img src="~/Content/assets/images/CustomerLogo/images.png" width="30" /></a>
+                            <a href="@Url.Action("Index", "TestingModule", new { groupId = GroupId })" class="login" title="Go To Testing Module"><img src="~/Content/assets/images/CustomerLogo/images.png" width="30" /></a>
                                         }
-                                        @*<a href="#" class="login" title="Intro Call">
-                                            <i class="fa fa-phone" aria-hidden="true"></i>
-                                        </a>*@
-                                    </td>
+                            @if(!item.IsIntroCall)
+                                        {
 
-                                </tr>
+                            <a href="#" class="login" title="Intro Call" id="@lnkId" onclick="RecordIntroCall('@item.GroupId');">
+                                <i class="fa fa-phone" aria-hidden="true"></i>
+                            </a>
+
+                                        }
+                        </td>
+
+                    </tr>
                             }
                         }
                     }
@@ -210,4 +216,44 @@
             })
         }
     }
+
+    function RecordIntroCall(groupId) {
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("RecordIntroCall", "CustomerManagement")',
+            data: '{groupId: ' + JSON.stringify(groupId) + '}',
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (responce) {
+                if (responce == true) {
+                    cuteAlert({
+                        type: "success",
+                        title: "Saved",
+                        message: "Introduction call recorded successfully",
+                        buttonText: "Okay"
+                    })
+                    $("#lnkIntro" + groupId).hide();
+                    $("#divLoader").hide();
+                }
+                else {
+                    cuteAlert({
+                        type: "error",
+                        title: "Oops..",
+                        message: "There is a problem in recording Introduction call",
+                        buttonText: "Okay"
+                    })
+                    $("#divLoader").hide();
+                }
+            },
+            error: function (responce) {
+
+                $("#divLoader").hide();
+
+            }
+        });
+    }
+
+
+
+
 </script>

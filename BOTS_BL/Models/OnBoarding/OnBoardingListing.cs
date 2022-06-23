@@ -15,5 +15,6 @@ namespace BOTS_BL.Models
         public string PaymentStatus { get; set; }
         public string BillingPartnerName { get; set; }
         public string CustomerStatus { get; set; }
+        public bool IsIntroCall { get; set; }
     }
 }

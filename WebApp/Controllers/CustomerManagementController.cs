@@ -274,6 +274,15 @@ namespace WebApp.Controllers
             return PartialView("_GroupConfigDetails", objData);
         }
 
+        public ActionResult RecordIntroCall(string groupId)
+        {
+            bool result = false;
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            //CommonFunctions common = new CommonFunctions();
+            //groupId = common.DecryptString(groupId);
 
+            result = OBR.RecordIntroCall(groupId, userDetails.LoginId);
+            return Json(result, JsonRequestBehavior.AllowGet);            
+        }
     }
 }
