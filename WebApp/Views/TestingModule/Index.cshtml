@@ -19,6 +19,7 @@
     .app-main__outer {
         background-color: white;
     }
+
     .section-heading {
         cursor: pointer;
         text-align: left;
@@ -296,7 +297,11 @@
 
         $("#ddlBillingPartner").on("change", function () {
             FillBillingPartnerProducts();
-            //ReplaceBillingUrl();
+           /* ReplaceBillingUrl();*/
+        });
+        $("#ddlBPProduct").on("change", function () {
+
+             ReplaceBillingUrl();
         });
 
        $("#txtMobileNo").on("change", function () {
@@ -309,9 +314,10 @@
 
         $("#txtInvoiceAmt").on("change", function () {
             ReplaceInvoiceAmt();
-        });
 
-       $('#rbtnEnrlment').click(function () {
+        });
+        ShowHideTxnTypeSection("dvEnrlment");
+        $('#rbtnEnrlment').click(function () {
            ShowHideTxnTypeSection("dvEnrlment");
            ReplaceMobileNo();
        });
@@ -441,12 +447,12 @@
     }
 
     function ReplaceBillingUrl() {
-        var billingpartner = $("#ddlBillingPartner").val();
+        var BPProduct = $("#ddlBPProduct").val();
          $("#divLoader").show();
             $.ajax({
                 type: "POST",
                 url: '@Url.Action("GetURLData", "TestingModule")',
-                data: '{billingpartner: ' + JSON.stringify(billingpartner) + '}',
+                data: '{BPProduct: ' + JSON.stringify(BPProduct)  + '}' ,
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
                 success: function (result) {
@@ -1045,6 +1051,8 @@
     function ResetAll() {
         if ($('#rbtnEnrlment').is(':checked')) {
             $("#ddlBillingPartner").val('');
+            $("#ddlBPProduct").val('');
+            $("#txtRequestPacketURL1").val('');
             $("#ddlOutlet").val('');
             $("#txtMobileNo").val('');
             $("#txtDatetime1").val('');
@@ -1052,6 +1060,8 @@
         }
         if ($('#rbtnEnrlmntWithEarn').is(':checked')) {
             $("#ddlBillingPartner").val('');
+            $("#ddlBPProduct").val('');
+            $("#txtRequestPacketURL2").val('');
             $("#ddlOutlet").val('');
             $("#txtMobileNo").val('');
             $("#txtInvoiceNo2").val('');
@@ -1062,6 +1072,8 @@
 
         if ($('#rbtnEarn').is(':checked')) {
             $("#ddlBillingPartner").val('');
+            $("#ddlBPProduct").val('');
+            $("#txtRequestPacketURL3").val('');
             $("#ddlOutlet").val('');
             $("#txtMobileNo").val('');
             $("#txtInvoiceNo3").val('');
@@ -1071,6 +1083,8 @@
         }
         if ($('#rbtnBurnValidation').is(':checked')) {
             $("#ddlBillingPartner").val('');
+            $("#ddlBPProduct").val('');
+            $("#txtRequestPacketURL4").val('');
             $("#ddlOutlet").val('');
             $("#txtMobileNo").val('');
             $("#txtInvoiceNo4").val('');
@@ -1080,6 +1094,8 @@
         }
         if ($('#rbtnBurn').is(':checked')) {
             $("#ddlBillingPartner").val('');
+            $("#ddlBPProduct").val('');
+            $("#txtRequestPacketURL5").val('');
             $("#ddlOutlet").val('');
             $("#txtMobileNo").val('');
             $("#txtInvoiceNo5").val('');
@@ -1089,6 +1105,8 @@
         }
         if ($('#rbtnCancel').is(':checked')) {
             $("#ddlBillingPartner").val('');
+            $("#ddlBPProduct").val('');
+            $("#txtRequestPacketURL6").val('');
             $("#ddlOutlet").val('');
             $("#txtMobileNo").val('');
             $("#txtInvoiceNo6").val('');
@@ -1098,6 +1116,8 @@
         }
         if ($('#rbtnSendOtp').is(':checked')) {
             $("#ddlBillingPartner").val('');
+            $("#ddlBPProduct").val('');
+            $("#txtRequestPacketURL7").val('');
             $("#ddlOutlet").val('');
             $("#txtMobileNo").val('');
             $("#txtInvoiceNo7").val('');
@@ -1166,6 +1186,7 @@
     }
 
     function ShowHideTxnTypeSection(Id) {
+
         $("#dvEnrlment").hide();
         $("#dvEnrlmentWithEarn").hide();
         $("#dvEarn").hide();
@@ -1176,6 +1197,14 @@
 
         $("#" + Id).show();
         ReplaceCounterId();
+        if (Id == "dvEnrlment") {
+            $("#txtInvoiceNo").prop("disabled", true);
+            $("#txtInvoiceAmt").prop("disabled", true);
+        }
+        else {
+            $("#txtInvoiceNo").prop("disabled", false);
+            $("#txtInvoiceAmt").prop("disabled", false);
+        }
     }
 
     function CheckAPI(requestId, responseId, apiurl1, APIType) {

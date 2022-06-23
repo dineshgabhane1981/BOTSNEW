@@ -410,5 +410,16 @@
 		<AcmeInsightURL>https://blueocktopus.in/AcmeInsightWebService/Service.asmx/ACME</AcmeInsightURL>
 		<AcmePadmaURL>https://blueocktopus.in/AcmePadmWebService/Service.asmx/PADM</AcmePadmaURL>
 		<RetailProURL>https://blueocktopus.in/RetailProWebService/Service.asmx/RW</RetailProURL>
+	    <RWProURL>https://blueocktopus.in/RetailProWebService/Service.asmx/RW</RWProURL>  
+	    <RWJewelSoftURL>https://blueocktopus.in/RetailwareJewellSoftWebService/Service.asmx/RW</RWJewelSoftURL>
+	    <RPJewelPlusURL>https://blueocktopus.in/JewellPlusWebService/Service.asmx/RP</RPJewelPlusURL>
+		<RetailwareBasicURL>https://blueocktopus.in/NewRetailwareWebService/Service.asmx/RW</RetailwareBasicURL>
+		<OctaXSURL>https://blueocktopus.in/NewMAV3WebServiceWA/Service.asmx/MAV3</OctaXSURL> 
+	    <RWBasicURL>https://blueocktopus.in/NewRetailwareWebService/Service.asmx/RW</RWBasicURL>
+	    <RWBillkWikURL></RWBillkWikURL>
+		<RPURLOffline></RPURLOffline>
+	    <RadiosoftURLbasic></RadiosoftURLbasic>
+	    <In-houseIntegrationURL></In-houseIntegrationURL>
+	    <SutradharURL></SutradharURL> 
 	</url>
 </packets>

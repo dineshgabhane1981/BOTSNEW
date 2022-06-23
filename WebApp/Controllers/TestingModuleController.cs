@@ -92,11 +92,11 @@ namespace WebApp.Controllers
             //SendOtp
             XmlNode node7 = doc.DocumentElement.SelectSingleNode("/packets/SendOTP");
             objTMV.RequestPacketSendOTP = node7.InnerXml;
-           
+
             return objTMV;
         }
 
-        public string GetURLData(string billingpartner)
+        public string GetURLData(string BPProduct)
         {
             string ReturnURL = string.Empty;
             TestingModuleViewModel objurldata = new TestingModuleViewModel();
@@ -105,50 +105,86 @@ namespace WebApp.Controllers
             var path = ConfigurationManager.AppSettings["PacketXMLPath"].ToString();
             doc.Load(path);
 
-            if (billingpartner == "RetailWare")
+            if (BPProduct == "RetailWare")
             {
                 XmlNode url = doc.DocumentElement.SelectSingleNode("/packets/url/RetailWareURL");
                 ReturnURL = url.InnerXml;
             }
-            if (billingpartner == "LnB")
+            if (BPProduct == "11")
             {
                 XmlNode url = doc.DocumentElement.SelectSingleNode("/packets/url/LNBURL");
                 ReturnURL = url.InnerXml;
             }
 
-            if (billingpartner == "Accurate")
+            if (BPProduct == "10")
             {
                 XmlNode url = doc.DocumentElement.SelectSingleNode("/packets/url/AccurateURL");
                 ReturnURL = url.InnerXml;
             }
 
-            if (billingpartner == "Tally")
+            if (BPProduct == "1")
             {
                 XmlNode url = doc.DocumentElement.SelectSingleNode("/packets/url/TallyURL");
                 ReturnURL = url.InnerXml;
             }
 
-            if (billingpartner == "AcmeInfinity")
+            if (BPProduct == "7")
             {
                 XmlNode url = doc.DocumentElement.SelectSingleNode("/packets/url/AcmeInfinityURL");
                 ReturnURL = url.InnerXml;
             }
 
-            if (billingpartner == "AcmeInsight")
+            if (BPProduct == "9")
             {
                 XmlNode url = doc.DocumentElement.SelectSingleNode("/packets/url/AcmeInsightURL");
                 ReturnURL = url.InnerXml;
             }
 
-            if (billingpartner == "AcmePadma")
+            if (BPProduct == "8")
             {
                 XmlNode url = doc.DocumentElement.SelectSingleNode("/packets/url/AcmePadmaURL");
                 ReturnURL = url.InnerXml;
             }
 
-            if (billingpartner == "RetailPro")
+            if (BPProduct == "RetailPro")
             {
                 XmlNode url = doc.DocumentElement.SelectSingleNode("/packets/url/RetailProURL");
+                ReturnURL = url.InnerXml;
+            }
+
+            if (BPProduct == "2")
+            {
+                XmlNode url = doc.DocumentElement.SelectSingleNode("/packets/url/RWProURL");
+                ReturnURL = url.InnerXml;
+            }
+
+            if (BPProduct == "4")
+            {
+                XmlNode url = doc.DocumentElement.SelectSingleNode("/packets/url/RWJewelSoftURL");
+                ReturnURL = url.InnerXml;
+            }
+
+            if (BPProduct == "5")
+            {
+                XmlNode url = doc.DocumentElement.SelectSingleNode("/packets/url/RPJewelPlusURL");
+                ReturnURL = url.InnerXml;
+            }
+
+            if (BPProduct == "13")
+            {
+                XmlNode url = doc.DocumentElement.SelectSingleNode("/packets/url/RetailwareBasicURL");
+                ReturnURL = url.InnerXml;
+            }
+
+            if (BPProduct == "18")
+            {
+                XmlNode url = doc.DocumentElement.SelectSingleNode("/packets/url/OctaXSURL");
+                ReturnURL = url.InnerXml;
+            }
+
+            if (BPProduct == "19")
+            {
+                XmlNode url = doc.DocumentElement.SelectSingleNode("/packets/url/RWBasicURL");
                 ReturnURL = url.InnerXml;
             }
             return ReturnURL;
@@ -195,7 +231,7 @@ namespace WebApp.Controllers
                 //Enrollnment
                 XmlNode node = doc.DocumentElement.SelectSingleNode("/packets/Enrollnment");
                 TMV.RequestPacketEnrollnment = node.InnerXml;
-              
+
             }
             if (Convert.ToInt32(Id) == 2)
             {
@@ -208,7 +244,7 @@ namespace WebApp.Controllers
                 //Enrollnment With Earn
                 XmlNode node2 = doc.DocumentElement.SelectSingleNode("/packets/EnrolnmentWithEarn");
                 TMV.RequestPacketEnrollnmentWithEarn = node2.InnerXml;
-                
+
             }
             if (Convert.ToInt32(Id) == 3)
             {
@@ -220,7 +256,7 @@ namespace WebApp.Controllers
                 //Earn
                 XmlNode node3 = doc.DocumentElement.SelectSingleNode("/packets/Earn");
                 TMV.RequestPacketEarn = node3.InnerXml;
-                
+
             }
             if (Convert.ToInt32(Id) == 4)
             {
@@ -232,7 +268,7 @@ namespace WebApp.Controllers
                 //Burn Validation
                 XmlNode node4 = doc.DocumentElement.SelectSingleNode("/packets/BurnValidation");
                 TMV.RequestPacketBurnValidation = node4.InnerXml;
-              
+
             }
             if (Convert.ToInt32(Id) == 5)
             {
@@ -244,7 +280,7 @@ namespace WebApp.Controllers
                 //Burn
                 XmlNode node5 = doc.DocumentElement.SelectSingleNode("/packets/Burn");
                 TMV.RequestPacketBurn = node5.InnerXml;
-                
+
             }
             if (Convert.ToInt32(Id) == 6)
             {
@@ -256,7 +292,7 @@ namespace WebApp.Controllers
                 //Cancel
                 XmlNode node6 = doc.DocumentElement.SelectSingleNode("/packets/Cancel");
                 TMV.RequestPacketCancel = node6.InnerXml;
-                
+
             }
             if (Convert.ToInt32(Id) == 7)
             {
@@ -268,7 +304,7 @@ namespace WebApp.Controllers
                 //Send Otp
                 XmlNode node7 = doc.DocumentElement.SelectSingleNode("/packets/SendOTP");
                 TMV.RequestPacketSendOTP = node7.InnerXml;
-              
+
             }
 
             return Json(TMV, JsonRequestBehavior.AllowGet);
