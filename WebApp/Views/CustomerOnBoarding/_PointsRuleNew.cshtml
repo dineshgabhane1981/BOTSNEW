@@ -35,8 +35,8 @@
     </div>
     <div class="col-md-12 col-lg-12" style="margin-top:20px;padding-left:30px;">
         Points with Discount
-        @Html.RadioButtonFor(model => model.objEarnRuleConfig.IsDiscountPoints, "1", new { @id = "rbtnIsDiscountPoints1", @class = "rbtnClass" }) Yes
-        @Html.RadioButtonFor(model => model.objEarnRuleConfig.IsDiscountPoints, "0", new { @id = "rbtnIsDiscountPoints0", @class = "rbtnClass" }) No
+        @Html.RadioButtonFor(model => model.objEarnRuleConfig.IsDiscountPoints, true, new { @id = "rbtnIsDiscountPoints1", @class = "rbtnClass" }) Yes
+        @Html.RadioButtonFor(model => model.objEarnRuleConfig.IsDiscountPoints, false, new { @id = "rbtnIsDiscountPoints0", @class = "rbtnClass" }) No
     </div>
     <div class="col-md-12 col-lg-12" style="margin-top: 20px; padding-left: 14px;margin-bottom:10px;">
         @Html.RadioButtonFor(model => model.objEarnRuleConfig.IsBase, true, new { @id = "rbtnIsBase", @class = "rbtnClass", @Name = "dummy" })  Base
@@ -62,8 +62,8 @@
     </div>
     <div id="dvSlab" class="col-md-6 col-lg-6" style="display: none; padding-top: 20px; margin-left: 30px; padding-bottom: 15px; border: 1px solid lightgrey; border-radius: 5px; ">
         <div style="display:flex;">
-            @Html.RadioButtonFor(model => model.objEarnRuleConfig, "Individual", new { @id = "rbtnIndividual", @class = "rbtnClass", @Name = "SlabType" }) &nbsp;  Individual
-            @Html.RadioButtonFor(model => model.objEarnRuleConfig, "Cummulative", new { @id = "rbtnCummulative", @class = "rbtnClass", @Name = "SlabType" }) &nbsp;  Cummulative
+            @Html.RadioButtonFor(model => model.objEarnRuleConfig.SlabType, "Individual", new { @id = "rbtnIndividual", @class = "rbtnClass", @Name = "SlabType" }) &nbsp;  Individual
+            @Html.RadioButtonFor(model => model.objEarnRuleConfig.SlabType, "Cummulative", new { @id = "rbtnCummulative", @class = "rbtnClass", @Name = "SlabType" }) &nbsp;  Cummulative
         </div>
         <div id="dv1" class="col-md-6 col-lg-6" style="display:flex;margin-top:20px;">
             <div style="padding-right:10px;">
@@ -163,8 +163,9 @@
 
     <div style="margin-top:20px;">
         <b style="padding-left:10px;">Block for Earn</b>
-        <input type="radio" name="EarnBlock" id="rbtnEarnBlockYes" /> Yes
-        <input type="radio" name="EarnBlock" id="rbtnEarnBlockNo" /> No
+        @Html.RadioButtonFor(model => model.objEarnRuleConfig.IsBlockForEarn, true, new { @id = "rbtnEarnBlockYes", @class = "rbtnClass", @Name = "EarnBlock" }) Yes
+        @Html.RadioButtonFor(model => model.objEarnRuleConfig.IsBlockForEarn, false, new { @id = "rbtnEarnBlockNo", @class = "rbtnClass", @Name = "EarnBlock" }) No
+
     </div>
     <div id="dvBlockEarn" class="col-md-6 col-lg-6" style="margin-left: 30px; margin-top: 30px; border:1px solid lightgrey;border-radius:5px;">
         <b style="padding-left:10px;">Block for Earn</b>
@@ -247,7 +248,7 @@
         });
         $("#rbtnEarnBlockNo").click(function () {
             $("#dvBlockEarn").hide();
-            $("#rbtnCategoryB").disableSelection();
+            
         });
 
         document.getElementById("ProductWiseFile").addEventListener('change', handleFileSelectProductWise, false);
@@ -503,7 +504,7 @@
         item["IsSlab"] = IsSlab;
         item["IsProductWise"] = IsProductWise;
             
-
+        
         item["BlockProductWiseType"] = "";
         if ($("#rbtnEarnBlockYes").is(":checked")) {
             if ($("#rbtnProductB").is(":checked")) {
@@ -516,6 +517,8 @@
                 item["BlockProductWiseType"] = "SubCategory";
             }
         }
+            
+       
         //File
         item["ProductBlockEarn"] = $("#hdnBlockEarnBase64").val();
 
