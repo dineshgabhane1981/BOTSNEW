@@ -46,7 +46,7 @@
         <input type="hidden" id="hdnCommSMSConfigId4" />
         <input type="hidden" id="hdnCommSMSConfigId5" />
         @*<input type="hidden" id="hdnCommSMSConfigId6" />
-        <input type="hidden" id="hdnCommSMSConfigId7" />*@
+            <input type="hidden" id="hdnCommSMSConfigId7" />*@
         <input type="hidden" id="hdnCommSMSConfigId8" />
         <input type="hidden" id="hdnCommSMSConfigId9" />
 
@@ -56,7 +56,7 @@
         <input type="hidden" id="hdnCommWAConfigId4" />
         <input type="hidden" id="hdnCommWAConfigId5" />
         @*<input type="hidden" id="hdnCommWAConfigId6" />
-        <input type="hidden" id="hdnCommWAConfigId7" />*@
+            <input type="hidden" id="hdnCommWAConfigId7" />*@
         <input type="hidden" id="hdnCommWAConfigId8" />
         <input type="hidden" id="hdnCommWAConfigId9" />
 
@@ -101,11 +101,11 @@
                 Burn Script<br /> <textarea id="txtSMSBurn" rows="3" cols="50" class="input100"></textarea><span style="font-weight:bold;" id="spnSMSBurn"></span>
             </div>
             @*<div style="margin-left: 20px; margin-top: 10px;">
-                Cancel Earn Script<br /> <textarea id="txtSMSCancelEarn" rows="3" cols="50" class="input100"></textarea><span style="font-weight:bold;" id="spnSMSCancelEarn"></span>
-            </div>
-            <div style="margin-left: 20px; margin-top: 10px;">
-                Cancel Burn Script<br /> <textarea id="txtSMSCancelBurn" rows="3" cols="50" class="input100"></textarea><span style="font-weight:bold;" id="spnSMSCancelBurn"></span>
-            </div>*@
+                    Cancel Earn Script<br /> <textarea id="txtSMSCancelEarn" rows="3" cols="50" class="input100"></textarea><span style="font-weight:bold;" id="spnSMSCancelEarn"></span>
+                </div>
+                <div style="margin-left: 20px; margin-top: 10px;">
+                    Cancel Burn Script<br /> <textarea id="txtSMSCancelBurn" rows="3" cols="50" class="input100"></textarea><span style="font-weight:bold;" id="spnSMSCancelBurn"></span>
+                </div>*@
             <div style="margin-left: 20px; margin-top: 10px;">
                 Cancel Script<br /> <textarea id="txtSMSAnyCancel" rows="3" cols="50" class="input100"></textarea><span style="font-weight:bold;" id="spnSMSAnyCancel"></span>
             </div>
@@ -148,11 +148,11 @@
                 Burn Script <br /> <textarea id="txtWABurn" rows="3" cols="50" class="input100"></textarea>
             </div>
             @*<div style="margin-left: 20px; margin-top: 10px;">
-                Cancel Earn Script <br /> <textarea id="txtWACancelEarn" rows="3" cols="50" class="input100"></textarea>
-            </div>
-            <div style="margin-left: 20px; margin-top: 10px;">
-                Cancel Burn Script <br /> <textarea id="txtWACancelBurn" rows="3" cols="50" class="input100"></textarea>
-            </div>*@
+                    Cancel Earn Script <br /> <textarea id="txtWACancelEarn" rows="3" cols="50" class="input100"></textarea>
+                </div>
+                <div style="margin-left: 20px; margin-top: 10px;">
+                    Cancel Burn Script <br /> <textarea id="txtWACancelBurn" rows="3" cols="50" class="input100"></textarea>
+                </div>*@
             <div style="margin-left: 20px; margin-top: 10px;">
                 Cancel Script <br /> <textarea id="txtWAAnyCancel" rows="3" cols="50" class="input100"></textarea>
             </div>
@@ -199,6 +199,8 @@
         $("#btnCommCancel").on("click", function () {
             CancelCreate();
         });
+
+        RemoveRequiredBorderCommunicationSet();
 
     });
     function OpenSectionToCreate() {
@@ -396,7 +398,7 @@
         $("#txtWAEnrollmentAndEarn").val("");
         $("#txtWAEarn").val("");
         $("#txtWAOTP").val("");
-        $("#txtWABurn").val("");        
+        $("#txtWABurn").val("");
         $("#txtWAAnyCancel").val("");
         $("#txtWABalanceInquiry").val("");
     }
@@ -424,7 +426,7 @@
                     else {
                         $("#spnSMSEnrollment").text(newdata[i].DLTStatus);
                     }
-                    
+
                     if (newdata[i].DLTStatus != null && newdata[i].DLTStatus != "Submitted") {
                         $("#txtSMSEnrollment").prop("disabled", true);
                     }
@@ -432,15 +434,15 @@
                     $("#hdnCommSMSConfigId1").val(newdata[i].Id);
                 }
                 if (newdata[i].MessageId == "101") {
-                    
+
                     if (newdata[i].DLTStatus == "Rejected") {
-                        
+
                         $("#spnSMSEarn").text(newdata[i].DLTStatus + "  Reason - " + newdata[i].RejectReason);
                     }
                     else {
                         $("#spnSMSEarn").text(newdata[i].DLTStatus);
                     }
-                   
+
                     if (newdata[i].DLTStatus != null && newdata[i].DLTStatus != "Submitted") {
                         $("#txtSMSEarn").prop("disabled", true);
                     }
@@ -450,28 +452,28 @@
                 if (newdata[i].MessageId == "102") {
 
                     if (newdata[i].DLTStatus == "Rejected") {
-                        
+
                         $("#spnSMSBurn").text(newdata[i].DLTStatus + "  Reason - " + newdata[i].RejectReason);
                     }
                     else {
                         $("#spnSMSBurn").text(newdata[i].DLTStatus);
                     }
-                    
+
                     if (newdata[i].DLTStatus != null && newdata[i].DLTStatus != "Submitted") {
                         $("#txtSMSBurn").prop("disabled", true);
                     }
                     $("#txtSMSBurn").val(newdata[i].SMSScript);
                     $("#hdnCommSMSConfigId5").val(newdata[i].Id);
-                }                
+                }
                 if (newdata[i].MessageId == "105") {
                     if (newdata[i].DLTStatus == "Rejected") {
-                        
+
                         $("#spnSMSOTP").text(newdata[i].DLTStatus + "  Reason - " + newdata[i].RejectReason);
                     }
                     else {
                         $("#spnSMSOTP").text(newdata[i].DLTStatus);
                     }
-                    
+
                     if (newdata[i].DLTStatus != null && newdata[i].DLTStatus != "Submitted") {
                         $("#txtSMSOTP").prop("disabled", true);
                     }
@@ -480,13 +482,13 @@
                 }
                 if (newdata[i].MessageId == "106") {
                     if (newdata[i].DLTStatus == "Rejected") {
-                        
+
                         $("#spnSMSBalanceInquiry").text(newdata[i].DLTStatus + "  Reason - " + newdata[i].RejectReason);
                     }
                     else {
                         $("#spnSMSBalanceInquiry").text(newdata[i].DLTStatus);
                     }
-                    
+
                     if (newdata[i].DLTStatus != null && newdata[i].DLTStatus != "Submitted") {
                         $("#txtSMSBalanceInquiry").prop("disabled", true);
                     }
@@ -495,13 +497,13 @@
                 }
                 if (newdata[i].MessageId == "107") {
                     if (newdata[i].DLTStatus == "Rejected") {
-                       
+
                         $("#spnSMSAnyCancel").text(newdata[i].DLTStatus + "  Reason - " + newdata[i].RejectReason);
                     }
                     else {
                         $("#spnSMSAnyCancel").text(newdata[i].DLTStatus);
                     }
-                    
+
                     if (newdata[i].DLTStatus != null && newdata[i].DLTStatus != "Submitted") {
                         $("#txtSMSAnyCancel").prop("disabled", true);
                     }
@@ -509,13 +511,13 @@
                     $("#hdnCommSMSConfigId8").val(newdata[i].Id);
                 }
                 if (newdata[i].MessageId == "108") {
-                    if (newdata[i].DLTStatus == "Rejected") {                       
-                        $("#spnSMSEnrollmentAndEarn").text(newdata[i].DLTStatus + "  Reason - " + newdata[i].RejectReason);                        
+                    if (newdata[i].DLTStatus == "Rejected") {
+                        $("#spnSMSEnrollmentAndEarn").text(newdata[i].DLTStatus + "  Reason - " + newdata[i].RejectReason);
                     }
-                    else {                        
+                    else {
                         $("#spnSMSEnrollmentAndEarn").text(newdata[i].DLTStatus);
                     }
-                    
+
                     if (newdata[i].DLTStatus != null && newdata[i].DLTStatus != "Submitted") {
                         $("#txtSMSEnrollmentAndEarn").prop("disabled", true);
                     }
@@ -548,7 +550,7 @@
                 if (newdata1[i].MessageId == "102") {
                     $("#txtWABurn").val(newdata1[i].WAScript);
                     $("#hdnCommWAConfigId5").val(newdata1[i].Id);
-                }                
+                }
                 if (newdata1[i].MessageId == "105") {
                     $("#txtWAOTP").val(newdata1[i].WAScript);
                     $("#hdnCommWAConfigId4").val(newdata1[i].Id);
@@ -569,112 +571,320 @@
         }
     }
     function SaveCommunicationConfig() {
-        if ($('#chkIsSMS').is(":checked") || $('#chkIsWA').is(":checked")) {
-            var CommConfig = [];
-            item = {}
-            item["SetId"] = $("#hdnSetId").val();
-            item["SetName"] = $("#txtSetName").val();
-            item["GroupId"] = $('#hdnGroupID').val();
+        var validationStatus = ValidateSet();
+        if (validationStatus) {
+            if ($('#chkIsSMS').is(":checked") || $('#chkIsWA').is(":checked")) {
+                var CommConfig = [];
+                item = {}
+                item["SetId"] = $("#hdnSetId").val();
+                item["SetName"] = $("#txtSetName").val();
+                item["GroupId"] = $('#hdnGroupID').val();
                 item["BrandId"] = "All";
 
-            if ($('#chkIsSMS').is(":checked")) {
-                item["IsSMS"] = 1;
-                item["SMSSetId"] = $('#hdnSetId').val();
-                item["SMSProvider"] = $('#ddlSMSProvider').val();
-                item["SMSSenderId"] = $('#txtSMSSenderId').val();
-                item["SMSUserName"] = $('#txtSMSUserName').val();
-                item["SMSPassword"] = $('#txtSMSPassword').val();
-                item["SMSLink"] = $('#txtSMSLink').val();
-                item["SMSEnrollmentId"] = $('#hdnCommSMSConfigId1').val();
-                item["SMSEnrollment"] = $('#txtSMSEnrollment').val();
-                item["SMSEnrollmentAndEarnId"] = $('#hdnCommSMSConfigId2').val();
-                item["SMSEnrollmentAndEarn"] = $('#txtSMSEnrollmentAndEarn').val();
-                item["SMSEarnId"] = $('#hdnCommSMSConfigId3').val();
-                item["SMSEarn"] = $('#txtSMSEarn').val();
-                item["SMSOTPId"] = $('#hdnCommSMSConfigId4').val();
-                item["SMSOTP"] = $('#txtSMSOTP').val();
-                item["SMSBurnId"] = $('#hdnCommSMSConfigId5').val();
-                item["SMSBurn"] = $('#txtSMSBurn').val();
-                item["SMSAnyCancelId"] = $('#hdnCommSMSConfigId8').val();
-                item["SMSAnyCancel"] = $('#txtSMSAnyCancel').val();
-                item["SMSBalanceInquiryId"] = $('#hdnCommSMSConfigId9').val();
-                item["SMSBalanceInquiry"] = $('#txtSMSBalanceInquiry').val();
-            }
-            else {
-                item["IsSMS"] = 0;
-            }
-
-            if ($('#chkIsWA').is(":checked")) {
-                item["IsWA"] = 1;
-                item["WASetId"] = $('#hdnSetId').val();
-                item["WAProvider"] = $('#ddlWAProvider').val();
-                item["WAUserName"] = $('#txtWAUserName').val();
-                item["WAPassword"] = $('#txtWAPassword').val();
-                item["WALink"] = $('#txtWALink').val();
-                item["WATokenId"] = $('#txtWATokenId').val();
-                item["WAEnrollmentId"] = $('#hdnCommWAConfigId1').val();
-                item["WAEnrollment"] = $('#txtWAEnrollment').val();
-                item["WAEnrollmentAndEarnId"] = $('#hdnCommWAConfigId2').val();
-                item["WAEnrollmentAndEarn"] = $('#txtWAEnrollmentAndEarn').val();
-                item["WAEarnId"] = $('#hdnCommWAConfigId3').val();
-                item["WAEarn"] = $('#txtWAEarn').val();
-                item["WAOTPId"] = $('#hdnCommWAConfigId4').val();
-                item["WAOTP"] = $('#txtWAOTP').val();
-                item["WABurnId"] = $('#hdnCommWAConfigId5').val();
-                item["WABurn"] = $('#txtWABurn').val();
-                item["WAAnyCancelId"] = $('#hdnCommWAConfigId8').val();
-                item["WAAnyCancel"] = $('#txtWAAnyCancel').val();
-                item["WABalanceInquiryId"] = $('#hdnCommWAConfigId9').val();
-                item["WABalanceInquiry"] = $('#txtWABalanceInquiry').val();
-            }
-            else {
-                item["IsWA"] = 0;
-            }
-
-            CommConfig.push(item);
-            var CommConfigData = JSON.stringify(CommConfig);
-
-            $("#divLoader").show();
-            $.ajax({
-                type: "POST",
-                url: '@Url.Action("SaveCommunicationConfig", "CustomerOnBoarding")',
-                data: '{jsonData: ' + JSON.stringify(CommConfigData) + '}',
-                contentType: "application/json; charset=utf-8",
-                dataType: "json",
-                success: function (result) {
-                    if (result == true) {
-                        cuteAlert({
-                            type: "success",
-                            title: "Saved..",
-                            message: "Communication Data Saved Successfully!",
-                            buttonText: "Okay"
-                        })
-                        $("#dvCreateSet").hide(1000);
-                    }
-                    else {
-                        cuteAlert({
-                            type: "error",
-                            title: "Oops..",
-                            message: "There is some problem while saving Communication Data",
-                            buttonText: "Okay"
-                        })
-                    }
-                    $("#divLoader").hide();
-                },
-                error: function (result) {
-                    $("#divLoader").hide();
+                if ($('#chkIsSMS').is(":checked")) {
+                    item["IsSMS"] = 1;
+                    item["SMSSetId"] = $('#hdnSetId').val();
+                    item["SMSProvider"] = $('#ddlSMSProvider').val();
+                    item["SMSSenderId"] = $('#txtSMSSenderId').val();
+                    item["SMSUserName"] = $('#txtSMSUserName').val();
+                    item["SMSPassword"] = $('#txtSMSPassword').val();
+                    item["SMSLink"] = $('#txtSMSLink').val();
+                    item["SMSEnrollmentId"] = $('#hdnCommSMSConfigId1').val();
+                    item["SMSEnrollment"] = $('#txtSMSEnrollment').val();
+                    item["SMSEnrollmentAndEarnId"] = $('#hdnCommSMSConfigId2').val();
+                    item["SMSEnrollmentAndEarn"] = $('#txtSMSEnrollmentAndEarn').val();
+                    item["SMSEarnId"] = $('#hdnCommSMSConfigId3').val();
+                    item["SMSEarn"] = $('#txtSMSEarn').val();
+                    item["SMSOTPId"] = $('#hdnCommSMSConfigId4').val();
+                    item["SMSOTP"] = $('#txtSMSOTP').val();
+                    item["SMSBurnId"] = $('#hdnCommSMSConfigId5').val();
+                    item["SMSBurn"] = $('#txtSMSBurn').val();
+                    item["SMSAnyCancelId"] = $('#hdnCommSMSConfigId8').val();
+                    item["SMSAnyCancel"] = $('#txtSMSAnyCancel').val();
+                    item["SMSBalanceInquiryId"] = $('#hdnCommSMSConfigId9').val();
+                    item["SMSBalanceInquiry"] = $('#txtSMSBalanceInquiry').val();
                 }
-            });
-        }
-        else {
-            cuteAlert({
-                type: "error",
-                title: "Oops..",
-                message: "Please Enter SMS OR WhatsApp Script",
-                buttonText: "Okay"
-            })
+                else {
+                    item["IsSMS"] = 0;
+                }
+
+                if ($('#chkIsWA').is(":checked")) {
+                    item["IsWA"] = 1;
+                    item["WASetId"] = $('#hdnSetId').val();
+                    item["WAProvider"] = $('#ddlWAProvider').val();
+                    item["WAUserName"] = $('#txtWAUserName').val();
+                    item["WAPassword"] = $('#txtWAPassword').val();
+                    item["WALink"] = $('#txtWALink').val();
+                    item["WATokenId"] = $('#txtWATokenId').val();
+                    item["WAEnrollmentId"] = $('#hdnCommWAConfigId1').val();
+                    item["WAEnrollment"] = $('#txtWAEnrollment').val();
+                    item["WAEnrollmentAndEarnId"] = $('#hdnCommWAConfigId2').val();
+                    item["WAEnrollmentAndEarn"] = $('#txtWAEnrollmentAndEarn').val();
+                    item["WAEarnId"] = $('#hdnCommWAConfigId3').val();
+                    item["WAEarn"] = $('#txtWAEarn').val();
+                    item["WAOTPId"] = $('#hdnCommWAConfigId4').val();
+                    item["WAOTP"] = $('#txtWAOTP').val();
+                    item["WABurnId"] = $('#hdnCommWAConfigId5').val();
+                    item["WABurn"] = $('#txtWABurn').val();
+                    item["WAAnyCancelId"] = $('#hdnCommWAConfigId8').val();
+                    item["WAAnyCancel"] = $('#txtWAAnyCancel').val();
+                    item["WABalanceInquiryId"] = $('#hdnCommWAConfigId9').val();
+                    item["WABalanceInquiry"] = $('#txtWABalanceInquiry').val();
+                }
+                else {
+                    item["IsWA"] = 0;
+                }
+
+                CommConfig.push(item);
+                var CommConfigData = JSON.stringify(CommConfig);
+
+                $("#divLoader").show();
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("SaveCommunicationConfig", "CustomerOnBoarding")',
+                    data: '{jsonData: ' + JSON.stringify(CommConfigData) + '}',
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (result) {
+                        if (result == true) {
+                            cuteAlert({
+                                type: "success",
+                                title: "Saved..",
+                                message: "Communication Data Saved Successfully!",
+                                buttonText: "Okay"
+                            })
+                            $("#dvCreateSet").hide(1000);
+                        }
+                        else {
+                            cuteAlert({
+                                type: "error",
+                                title: "Oops..",
+                                message: "There is some problem while saving Communication Data",
+                                buttonText: "Okay"
+                            })
+                        }
+                        $("#divLoader").hide();
+                    },
+                    error: function (result) {
+                        $("#divLoader").hide();
+                    }
+                });
+            }
+            else {
+                cuteAlert({
+                    type: "error",
+                    title: "Oops..",
+                    message: "Please Enter SMS OR WhatsApp Script",
+                    buttonText: "Okay"
+                })
+            }
         }
     }
+
+    function ValidateSet() {
+        var status = true;
+        if ($("#txtSetName").val() == "") {
+            $('#txtSetName').css('border-color', 'red');
+            status = false;
+        }
+        if ($('#chkIsSMS').is(":checked")) {
+            if ($("#txtSMSEnrollment").val() == "") {
+                $('#txtSMSEnrollment').css('border-color', 'red');
+                status = false;
+            }
+            if ($("#txtSMSEnrollmentAndEarn").val() == "") {
+                $('#txtSMSEnrollmentAndEarn').css('border-color', 'red');
+                status = false;
+            }
+            if ($("#txtSMSEarn").val() == "") {
+                $('#txtSMSEarn').css('border-color', 'red');
+                status = false;
+            }
+            if ($("#txtSMSBurn").val() == "") {
+                $('#txtSMSBurn').css('border-color', 'red');
+                status = false;
+            }
+            if ($("#txtSMSOTP").val() == "") {
+                $('#txtSMSOTP').css('border-color', 'red');
+                status = false;
+            }
+            if ($("#txtSMSAnyCancel").val() == "") {
+                $('#txtSMSAnyCancel').css('border-color', 'red');
+                status = false;
+            }
+            if ($("#txtSMSBalanceInquiry").val() == "") {
+                $('#txtSMSBalanceInquiry').css('border-color', 'red');
+                status = false;
+            }
+        }
+        if ($('#chkIsWA').is(":checked")) {
+            if ($("#txtWAEnrollment").val() == "") {
+                $('#txtWAEnrollment').css('border-color', 'red');
+                status = false;
+            }
+            if ($("#txtWAEnrollmentAndEarn").val() == "") {
+                $('#txtWAEnrollmentAndEarn').css('border-color', 'red');
+                status = false;
+            }
+            if ($("#txtWAEarn").val() == "") {
+                $('#txtWAEarn').css('border-color', 'red');
+                status = false;
+            }
+            if ($("#txtWABurn").val() == "") {
+                $('#txtWABurn').css('border-color', 'red');
+                status = false;
+            }
+            if ($("#txtWAOTP").val() == "") {
+                $('#txtWAOTP').css('border-color', 'red');
+                status = false;
+            }
+            if ($("#txtWAAnyCancel").val() == "") {
+                $('#txtWAAnyCancel').css('border-color', 'red');
+                status = false;
+            }
+            if ($("#txtWABalanceInquiry").val() == "") {
+                $('#txtWABalanceInquiry').css('border-color', 'red');
+                status = false;
+            }
+        }
+        cuteAlert({
+            type: "error",
+            title: "Oops..",
+            message: "Please Enter required fields",
+            buttonText: "Okay"
+        })
+
+
+        return status;
+    }
+
+    function RemoveRequiredBorderCommunicationSet() {
+        $("#txtSetName").focusout(function () {
+            if ($("#txtSetName").val() != "") {
+                $('#txtSetName').css('border-color', '');
+            }
+            else {
+                $('#txtSetName').css('border-color', 'red');
+            }
+        });
+
+        $("#txtSMSEnrollment").focusout(function () {
+            if ($("#txtSMSEnrollment").val() != "") {
+                $('#txtSMSEnrollment').css('border-color', '');
+            }
+            else {
+                $('#txtSMSEnrollment').css('border-color', 'red');
+            }
+        });
+        $("#txtSMSEnrollmentAndEarn").focusout(function () {
+            if ($("#txtSMSEnrollmentAndEarn").val() != "") {
+                $('#txtSMSEnrollmentAndEarn').css('border-color', '');
+            }
+            else {
+                $('#txtSMSEnrollmentAndEarn').css('border-color', 'red');
+            }
+        });
+        $("#txtSMSEarn").focusout(function () {
+            if ($("#txtSMSEarn").val() != "") {
+                $('#txtSMSEarn').css('border-color', '');
+            }
+            else {
+                $('#txtSMSEarn').css('border-color', 'red');
+            }
+        });
+        $("#txtSMSBurn").focusout(function () {
+            if ($("#txtSMSBurn").val() != "") {
+                $('#txtSMSBurn').css('border-color', '');
+            }
+            else {
+                $('#txtSMSBurn').css('border-color', 'red');
+            }
+        });
+        $("#txtSMSOTP").focusout(function () {
+            if ($("#txtSMSOTP").val() != "") {
+                $('#txtSMSOTP').css('border-color', '');
+            }
+            else {
+                $('#txtSMSOTP').css('border-color', 'red');
+            }
+        });
+        $("#txtSMSAnyCancel").focusout(function () {
+            if ($("#txtSMSAnyCancel").val() != "") {
+                $('#txtSMSAnyCancel').css('border-color', '');
+            }
+            else {
+                $('#txtSMSAnyCancel').css('border-color', 'red');
+            }
+        });
+        $("#txtSMSBalanceInquiry").focusout(function () {
+            if ($("#txtSMSBalanceInquiry").val() != "") {
+                $('#txtSMSBalanceInquiry').css('border-color', '');
+            }
+            else {
+                $('#txtSMSBalanceInquiry').css('border-color', 'red');
+            }
+        });
+
+        $("#txtWAEnrollment").focusout(function () {
+            if ($("#txtWAEnrollment").val() != "") {
+                $('#txtWAEnrollment').css('border-color', '');
+            }
+            else {
+                $('#txtWAEnrollment').css('border-color', 'red');
+            }
+        });
+        $("#txtWAEnrollmentAndEarn").focusout(function () {
+            if ($("#txtWAEnrollmentAndEarn").val() != "") {
+                $('#txtWAEnrollmentAndEarn').css('border-color', '');
+            }
+            else {
+                $('#txtWAEnrollmentAndEarn').css('border-color', 'red');
+            }
+        });
+        $("#txtWAEarn").focusout(function () {
+            if ($("#txtWAEarn").val() != "") {
+                $('#txtWAEarn').css('border-color', '');
+            }
+            else {
+                $('#txtWAEarn').css('border-color', 'red');
+            }
+        });
+        $("#txtWABurn").focusout(function () {
+            if ($("#txtWABurn").val() != "") {
+                $('#txtWABurn').css('border-color', '');
+            }
+            else {
+                $('#txtWABurn').css('border-color', 'red');
+            }
+        });
+        $("#txtWAOTP").focusout(function () {
+            if ($("#txtWAOTP").val() != "") {
+                $('#txtWAOTP').css('border-color', '');
+            }
+            else {
+                $('#txtWAOTP').css('border-color', 'red');
+            }
+        });
+        $("#txtWAAnyCancel").focusout(function () {
+            if ($("#txtWAAnyCancel").val() != "") {
+                $('#txtWAAnyCancel').css('border-color', '');
+            }
+            else {
+                $('#txtWAAnyCancel').css('border-color', 'red');
+            }
+        });
+        $("#txtWABalanceInquiry").focusout(function () {
+            if ($("#txtWABalanceInquiry").val() != "") {
+                $('#txtWABalanceInquiry').css('border-color', '');
+            }
+            else {
+                $('#txtWABalanceInquiry').css('border-color', 'red');
+            }
+        });
+
+    }
+
+
 
     function SendCommunicationToDLT() {
         $("#divLoader").show();
@@ -686,35 +896,38 @@
             cancelText: "Cancel"
         }).then((e) => {
             if (e == ("confirm")) {
-                 $.ajax({
-                type: "POST",
-                url: '@Url.Action("SendCommunicationToDLT", "CustomerOnBoarding")',
-                data: '{GroupId: ' + JSON.stringify($('#hdnGroupID').val()) + '}',
-                contentType: "application/json; charset=utf-8",
-                dataType: "json",
-                success: function (result) {
-                    if (result == true) {
-                        cuteAlert({
-                            type: "success",
-                            title: "Saved..",
-                            message: "Communication Script sent for DLT Successfully!",
-                            buttonText: "Okay"
-                        })
-                    }
-                    else {
-                        cuteAlert({
-                            type: "error",
-                            title: "Oops..",
-                            message: "There is some problem while sending Communication Data for DLT",
-                            buttonText: "Okay"
-                        })
-                    }
-                    $("#divLoader").hide();
-                },
-                error: function (result) {
-                    $("#divLoader").hide();
+                var validationStatus = ValidateSet();
+                if (validationStatus) {
+                    $.ajax({
+                        type: "POST",
+                        url: '@Url.Action("SendCommunicationToDLT", "CustomerOnBoarding")',
+                        data: '{GroupId: ' + JSON.stringify($('#hdnGroupID').val()) + '}',
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                        success: function (result) {
+                            if (result == true) {
+                                cuteAlert({
+                                    type: "success",
+                                    title: "Saved..",
+                                    message: "Communication Script sent for DLT Successfully!",
+                                    buttonText: "Okay"
+                                })
+                            }
+                            else {
+                                cuteAlert({
+                                    type: "error",
+                                    title: "Oops..",
+                                    message: "There is some problem while sending Communication Data for DLT",
+                                    buttonText: "Okay"
+                                })
+                            }
+                            $("#divLoader").hide();
+                        },
+                        error: function (result) {
+                            $("#divLoader").hide();
+                        }
+                    });
                 }
-            });
             }
         })
         $("#divLoader").hide();
