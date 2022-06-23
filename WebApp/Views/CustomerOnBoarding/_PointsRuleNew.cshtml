@@ -315,6 +315,12 @@
                 $("#rbtnSubCategory").prop("checked", true);
             }
 
+            if (earnExist.IsBlockForEarn) {
+                $("#dvBlockEarn").show();
+            }
+            else {
+                $("#dvBlockEarn").hide();
+            }
             var blockCategory = JSON.parse('@Html.Raw(Json.Encode(Model.objEarnRuleConfig.BlockProductWiseType))');
             if (blockCategory == "Product") {
                 $("#rbtnProductB").prop("checked", true);
@@ -507,6 +513,8 @@
         
         item["BlockProductWiseType"] = "";
         if ($("#rbtnEarnBlockYes").is(":checked")) {
+            item["IsBlockForEarn"] = true;
+
             if ($("#rbtnProductB").is(":checked")) {
                 item["BlockProductWiseType"] = "Product";
             }
@@ -516,6 +524,9 @@
             if ($("#rbtnSubCategoryB").is(":checked")) {
                 item["BlockProductWiseType"] = "SubCategory";
             }
+        }
+        else {
+            item["IsBlockForEarn"] = false;
         }
             
        

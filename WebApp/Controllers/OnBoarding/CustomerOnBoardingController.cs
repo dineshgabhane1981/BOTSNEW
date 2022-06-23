@@ -1875,9 +1875,9 @@ namespace WebApp.Controllers.OnBoarding
                         lstSlab.Add(objSlab);
                     }
                 }
-                if (!string.IsNullOrEmpty(Convert.ToString(item["BlockProductWiseType"])))
-                {
-                    objEarnRule.IsBlockForEarn = true;
+                objEarnRule.IsBlockForEarn = Convert.ToBoolean(item["IsBlockForEarn"]);
+                if (objEarnRule.IsBlockForEarn.Value)
+                {                    
                     objEarnRule.BlockProductWiseType = Convert.ToString(item["BlockProductWiseType"]);
                     if (!string.IsNullOrEmpty(Convert.ToString(item["ProductBlockEarn"])))
                     {
