@@ -33,6 +33,11 @@
         @Html.RadioButtonFor(model => model.objEarnRuleConfig.RevolvingExpiry, "1", new { @id = "rbtnRevolvingExpiry1", @class = "rbtnClass", @Checked = "checked" }) Yes
         @Html.RadioButtonFor(model => model.objEarnRuleConfig.RevolvingExpiry, "0", new { @id = "rbtnRevolvingExpiry0", @class = "rbtnClass" }) No
     </div>
+    <div class="col-md-12 col-lg-12" style="margin-top:20px;padding-left:30px;">
+        Points with Discount
+        @Html.RadioButtonFor(model => model.objEarnRuleConfig.IsDiscountPoints, "1", new { @id = "rbtnIsDiscountPoints1", @class = "rbtnClass" }) Yes
+        @Html.RadioButtonFor(model => model.objEarnRuleConfig.IsDiscountPoints, "0", new { @id = "rbtnIsDiscountPoints0", @class = "rbtnClass" }) No
+    </div>
     <div class="col-md-12 col-lg-12" style="margin-top: 20px; padding-left: 14px;margin-bottom:10px;">
         @Html.RadioButtonFor(model => model.objEarnRuleConfig.IsBase, true, new { @id = "rbtnIsBase", @class = "rbtnClass", @Name = "dummy" })  Base
         @Html.RadioButtonFor(model => model.objEarnRuleConfig.IsSlab, true, new { @id = "rbtnIsSlab", @class = "rbtnClass", @Name = "dummy" })  Slab
@@ -56,9 +61,9 @@
 
     </div>
     <div id="dvSlab" class="col-md-6 col-lg-6" style="display: none; padding-top: 20px; margin-left: 30px; padding-bottom: 15px; border: 1px solid lightgrey; border-radius: 5px; ">
-        <div style="display:flex;">            
-            @Html.RadioButtonFor(model => model.lstSlabConfig, true, new { @id = "rbtnIndividual", @class = "rbtnClass", @Name = "SlabType1" }) &nbsp;  Individual
-            @Html.RadioButtonFor(model => model.lstSlabConfig, true, new { @id = "rbtnCummulative", @class = "rbtnClass", @Name = "SlabType1" }) &nbsp;  Cummulative
+        <div style="display:flex;">
+            @Html.RadioButtonFor(model => model.objEarnRuleConfig, "Individual", new { @id = "rbtnIndividual", @class = "rbtnClass", @Name = "SlabType" }) &nbsp;  Individual
+            @Html.RadioButtonFor(model => model.objEarnRuleConfig, "Cummulative", new { @id = "rbtnCummulative", @class = "rbtnClass", @Name = "SlabType" }) &nbsp;  Cummulative
         </div>
         <div id="dv1" class="col-md-6 col-lg-6" style="display:flex;margin-top:20px;">
             <div style="padding-right:10px;">
@@ -438,6 +443,13 @@
         }
         if ($("#rbtnRevolvingExpiry0").is(":checked")) {
             item["RevolvingExpiry"] = false;
+        }
+
+        if ($("#rbtnIsDiscountPoints1").is(":checked")) {
+            item["IsDiscountPoints"] = true;
+        }
+        if ($("#rbtnIsDiscountPoints0").is(":checked")) {
+            item["IsDiscountPoints"] = false;
         }
         var IsBase = false;
         var IsSlab = false;

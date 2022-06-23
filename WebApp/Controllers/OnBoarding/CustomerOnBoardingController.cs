@@ -1789,6 +1789,7 @@ namespace WebApp.Controllers.OnBoarding
                 objEarnRule.PointsValueInRS = Convert.ToDecimal(item["PointsValueInRS"]);
                 objEarnRule.PointsValidityInMonths = Convert.ToInt32(item["PointsValidityInMonths"]);
                 objEarnRule.RevolvingExpiry = Convert.ToBoolean(item["RevolvingExpiry"]);
+                objEarnRule.IsDiscountPoints = Convert.ToBoolean(item["IsDiscountPoints"]);
                 objEarnRule.IsBase = Convert.ToBoolean(item["IsBase"]);
                 objEarnRule.IsSlab = Convert.ToBoolean(item["IsSlab"]);
                 objEarnRule.IsProductWise = Convert.ToBoolean(item["IsProductWise"]);
@@ -1857,7 +1858,7 @@ namespace WebApp.Controllers.OnBoarding
                     {
                         BOTS_TblSlabConfig objSlab = new BOTS_TblSlabConfig();
                         objSlab.GroupId = Convert.ToString(item["GroupId"]);
-                        objSlab.SlabType = Convert.ToString(item["SlabType"]);
+                        objEarnRule.SlabType = Convert.ToString(item["SlabType"]);
                         objSlab.SlabFrom = Convert.ToInt32(item1["SlabFrom"]);
                         objSlab.SlabTo = Convert.ToInt32(item1["SlabTo"]);
                         objSlab.SlabPercentage = Convert.ToDecimal(item1["SlabPercentage"]);

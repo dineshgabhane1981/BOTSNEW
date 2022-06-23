@@ -24,12 +24,16 @@ namespace BOTS_BL.Models.OnBoarding
 
         public bool? RevolvingExpiry { get; set; }
 
+        public bool? IsDiscountPoints { get; set; }
+
         public bool? IsBase { get; set; }
 
         [Column(TypeName = "numeric")]
         public decimal? PointsValueInRS { get; set; }
 
         public bool? IsSlab { get; set; }
+
+        public string SlabType { get; set; }
 
         [Column(TypeName = "numeric")]
         public decimal? FixedPointPerRS { get; set; }
