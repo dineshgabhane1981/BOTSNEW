@@ -238,6 +238,11 @@ namespace BOTS_BL.Repository
                             objItem.BillingPartnerName = context.tblBillingPartners.Where(x => x.BillingPartnerId == bId).Select(y => y.BillingPartnerName).FirstOrDefault();
                         }
                         objItem.CustomerStatus = item.CustomerStatus;
+                        if (item.IntroductionCall.HasValue)
+                            objItem.IsIntroCall = item.IntroductionCall.Value;
+                        else
+                            objItem.IsIntroCall = false;
+
                         onBoardingListings.Add(objItem);
                     }
                 }
@@ -727,7 +732,7 @@ namespace BOTS_BL.Repository
                     context.SaveChanges();
                     status = true;
 
-                    AddTracking(Convert.ToString(objItem.GroupId), "DLT Status Changed - "+ DLTStatus, LoginId);
+                    AddTracking(Convert.ToString(objItem.GroupId), "DLT Status Changed - " + DLTStatus, LoginId);
                 }
             }
             return status;
@@ -2313,7 +2318,7 @@ namespace BOTS_BL.Repository
                 try
                 {
                     var objData = context.BOTS_TblGroupMaster.Where(x => x.GroupId == groupId).FirstOrDefault();
-                    if(objData!=null)
+                    if (objData != null)
                     {
                         objData.PreferredLanguage = PreferredLanguage;
                         objData.UpdatedBy = AddedBy;
@@ -2322,7 +2327,7 @@ namespace BOTS_BL.Repository
                         context.SaveChanges();
                         result = true;
                         AddTracking(groupId, "Preferred Language Add/Update Done", AddedBy);
-                    }                     
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -2371,11 +2376,28 @@ namespace BOTS_BL.Repository
                     context.BOTS_TblActionTracking.AddOrUpdate(objData);
                     context.SaveChanges();
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     newexception.AddException(ex, "AddTracking" + groupId);
                 }
             }
+        }
+
+        public bool RecordIntroCall(string groupId, string AddedBy)
+        {
+            bool status = false;
+            using (var context = new CommonDBContext())
+            {
+                var existingData = context.BOTS_TblGroupMaster.Where(x => x.GroupId == groupId).FirstOrDefault();
+                existingData.IntroductionCall = true;
+                existingData.IntroductionCallDate = DateTime.Now;
+                existingData.UpdatedBy = AddedBy;
+                existingData.UpdatedDate= DateTime.Now;
+                context.BOTS_TblGroupMaster.AddOrUpdate(existingData);
+                context.SaveChanges();
+                status = true;
+            }
+            return status;
         }
     }
 }

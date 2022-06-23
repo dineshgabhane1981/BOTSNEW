@@ -91,6 +91,15 @@ namespace WebApp.Controllers.OnBoarding
                     objData.objInstallmentList = OBR.GetInstallmentDetails(groupId);
                     objData.lstOutlets = OBR.GetOutletDetails(groupId);
                     objData.lstCommunicationSet = OBR.GetCommunicationSetsByGroupId(groupId);
+                    objData.IsWA = false;
+                    var dataWA = OBR.GetCommunicationWAConfigByGroupId(groupId);
+                    if(dataWA!=null)
+                    {
+                        if(dataWA.Count>0)
+                        {
+                            objData.IsWA = true;
+                        }
+                    }
 
                     //Earn Data Fetch
                     objData.objEarnRuleConfig = OBR.GetEarnRuleConfig(groupId);

@@ -51,6 +51,7 @@ namespace WebApp.ViewModel
         public int BulkUploadCount { get; set; }
         public int PerpetualCampaignCount { get; set; }
         public string LeadId { get; set; }
+        public bool IsWA { get; set; }
         public SelectListItem[] BOProducts()
         {
             return new SelectListItem[2] { new SelectListItem() { Text = "Octa Plus", Value = "1" }, new SelectListItem() { Text = "Octa XS", Value = "2" } };
