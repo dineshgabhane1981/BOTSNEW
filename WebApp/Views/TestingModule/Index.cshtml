@@ -346,7 +346,7 @@
            ShowHideTxnTypeSection("dvCancel");
            ReplaceMobileNo();
        });
-        ShowHideTxnTypeSection("dvSendOtp");
+      
        $('#rbtnSendOtp').click(function () {
            ShowHideTxnTypeSection("dvSendOtp");
            ReplaceMobileNo();
@@ -1219,6 +1219,7 @@
             $("#txtInvoiceNo").prop("disabled", false);
             $("#txtInvoiceAmt").prop("disabled", false);
 
+            ReplaceCounterId();
             if (Id == "dvSendOtp") {
                 $("#txtInvoiceNo").prop("disabled", true);
                 $("#txtInvoiceAmt").prop("disabled", true);
