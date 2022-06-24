@@ -9,6 +9,10 @@
     <div class="col-md-6 col-lg-6">
         <h5> <b> Earn Rule Configuration</b> </h5>
         <div>
+            Base Points Value in Rs - <b>@Model.objEarnRuleConfig.PointsValueInRS </b>
+
+        </div>
+        <div>
             Minimum Invoice Amount - <b>@Model.objEarnRuleConfig.MinInvoiceAmt.Value </b>
 
         </div>
@@ -23,18 +27,7 @@
             Revolving Expiry - <b>@Model.objEarnRuleConfig.RevolvingExpiry </b>
 
         </div>
-        @if (Model.objEarnRuleConfig.IsBase == true)
-        {
-            <table border="1" cellpadding="5" cellspacing="5" style="margin-top:20px;">
-                <tr>
-                    <td colspan="6" style="background-color: lightgray; text-align: center; font-size: 18px;"> <b> Base</b> </td>
-                </tr>
-                <tr>
-                    <td> <b> Points Value in Rs</b> </td>
-                    <td width="50px"> <b>@Model.objEarnRuleConfig.PointsValueInRS </b> </td>
-                </tr>
-            </table>
-        }
+        
         @if (Model.objEarnRuleConfig.IsSlab == true)
         {
             <table border="1" cellpadding="5" cellspacing="5" style="margin-top:20px;">
