@@ -23,31 +23,48 @@
 {
     var fileId = "FileUploadLogo" + item.BrandId;
     var btnUpload = "btnUploadLogo" + item.BrandId;
-    <span style="font-weight:bold;">Logo</span>
-    <div style="margin-top:20px;">
+    <span style="font-weight:bold;">@item.BrandName</span>
+    <div style="margin-bottom:20px;">
         <input type="file" id="@fileId" />
-        <input type="button" id="@btnUpload" class="btn btn-primary" onclick="UploadLogo(@item.BrandId);" style="margin-left: 10px; background-color: #2651be;" value="Upload Data" />
+        <input type="button" id="@btnUpload" class="btn btn-primary" onclick="UploadLogo(@item.BrandId);" style="margin-left: 10px; background-color: #2651be;" value="Upload Logo" />
         @if (!string.IsNullOrEmpty(item.LogoPath))
         {
             <img src="@item.LogoPath" width="200" style="margin-left:50px;" />
         }
     </div>
-    <div style="padding-top:20px;">
-        
-        @if (GSTURL != "#")
-        {
-            <a href="@GSTURL" target="_blank">GST Document</a>
-        }
-    </div>
-    <div style="padding-top:20px;">
-        @if (PANURL != "#")
-        {
-            <a href="@PANURL" target="_blank">PAN Document</a>
-        }
-    </div>
-
-
 }
+
+<span style="font-weight:bold;">Other Document Name</span>
+<br />
+<input type="text" class="input100" id="txtDocName" style="margin-bottom:10px;" />
+<div style="margin-bottom:20px;">
+    <input type="file" id="txtOtherDocs" />
+    <input type="button" id="btnOtherDocs" class="btn btn-primary" onclick="UploadOtherDocs();" style="margin-left: 10px; background-color: #2651be;" value="Upload Docs" />
+</div>
+
+<div id="dvOtherDocuments">
+    @foreach (var item in Model.lstOtherDocs)
+    {
+        var otherDocURL = docURL + "/" + item.DocumentPath;
+        <div style="padding-top:20px;">            
+            <a href="@otherDocURL" target="_blank">@item.DocumentName</a>
+
+        </div>
+    }
+</div>
+
+<div style="padding-top:20px;">
+    @if (GSTURL != "#")
+    {
+        <a href="@GSTURL" target="_blank">GST Document</a>
+    }
+</div>
+<div style="padding-top:20px;">
+    @if (PANURL != "#")
+    {
+        <a href="@PANURL" target="_blank">PAN Document</a>
+    }
+</div>
 
 <script>
     function UploadLogo(id) {
@@ -101,4 +118,54 @@
             }
     }
 
+    function UploadOtherDocs() {
+         if (window.FormData !== undefined) {
+             var fileUpload = $("#txtOtherDocs").get(0);
+
+                var files = fileUpload.files;
+                if (files.length > 0) {
+                    var fileData = new FormData();
+                    for (var i = 0; i < files.length; i++) {
+                        fileData.append(files[i].name, files[i]);
+                    }
+                    fileData.append("groupId", $('#hdnGroupID').val());
+                    fileData.append("docName", $('#txtDocName').val());
+
+                        $("#divLoader").show();
+                        $.ajax({
+                            url: '@Url.Action("UploadOtherDocs", "CustomerOnBoarding")',
+                            type: "POST",
+                            contentType: false, // Not to set any content header
+                            processData: false, // Not to process data
+                            data: fileData,
+                            success: function (result) {
+                                cuteAlert({
+                                    type: "success",
+                                    title: "Saved",
+                                    message: "Other Document Uploaded Successfully!",
+                                    buttonText: "Okay"
+                                })
+                                $("#divLoader").hide();
+                            },
+                            error: function (err) {
+                                cuteAlert({
+                                    type: "error",
+                                    title: "Oops..",
+                                    message: "There is some problem in uploading data",
+                                    buttonText: "Okay"
+                                })
+                                $("#divLoader").hide();
+                            }
+                        });
+                }
+                else {
+                    cuteAlert({
+                        type: "error",
+                        title: "Oops..",
+                        message: "Please select file to upload",
+                        buttonText: "Okay"
+                    })
+                }
+            }
+    }
 </script>

@@ -2310,6 +2310,36 @@ namespace BOTS_BL.Repository
             return result;
         }
 
+        public bool UploadOtherDocs(string groupid, string docName, string LogoURL, string addedBy)
+        {
+            bool result = false;
+            using (var context = new CommonDBContext())
+            {
+                BOTS_TblDocuments objData = new BOTS_TblDocuments();
+                objData.GroupId = groupid;
+                objData.DocumentName = docName;
+                objData.DocumentPath = LogoURL;
+                objData.AddedDate = DateTime.Now;
+                objData.AddedBy = addedBy;
+                context.BOTS_TblDocuments.AddOrUpdate(objData);
+                context.SaveChanges();
+
+                result = true;
+            }
+            return result;
+        }
+
+        public List<BOTS_TblDocuments> GetOtherDocuments(string groupId)
+        {
+            List<BOTS_TblDocuments> lstData = new List<BOTS_TblDocuments>();
+            using (var context = new CommonDBContext())
+            {
+                lstData = context.BOTS_TblDocuments.Where(x => x.GroupId == groupId).ToList();
+            }
+
+            return lstData;
+        }
+
         public bool SavePreferredLanguage(string groupId, string PreferredLanguage, string AddedBy)
         {
             bool result = false;
@@ -2392,7 +2422,7 @@ namespace BOTS_BL.Repository
                 existingData.IntroductionCall = true;
                 existingData.IntroductionCallDate = DateTime.Now;
                 existingData.UpdatedBy = AddedBy;
-                existingData.UpdatedDate= DateTime.Now;
+                existingData.UpdatedDate = DateTime.Now;
                 context.BOTS_TblGroupMaster.AddOrUpdate(existingData);
                 context.SaveChanges();
                 status = true;

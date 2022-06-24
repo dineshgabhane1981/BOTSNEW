@@ -272,19 +272,21 @@ namespace WebApp.Controllers
 
                 DashboardRedemption objDashboardRedemption = new DashboardRedemption();
                 objDashboardRedemption = DR.GetDashboardRedemption(userDetails.GroupId, type, userDetails.connectionString);
-
-                dataList.Add(objDashboardRedemption.RedeemedMembers);
-                dataList.Add(objDashboardRedemption.RedemptionTxnCount);
-                dataList.Add(objDashboardRedemption.RedeemedPoints);
-                dataList.Add(objDashboardRedemption.PointsValueRs);
-                dataList.Add(objDashboardRedemption.BusinessGenerated);
-                dataList.Add(objDashboardRedemption.RedeemToInvoice);
-                var remaining = 100 - objDashboardRedemption.PieChartGreenRedemptionRate;
-                dataList.Add(remaining);
-                dataList.Add(objDashboardRedemption.PieChartGreenRedemptionRate);
-                var remaining1 = 100 - objDashboardRedemption.PieChartGreenUniqueMember;
-                dataList.Add(remaining1);
-                dataList.Add(objDashboardRedemption.PieChartGreenUniqueMember);
+                if (objDashboardRedemption != null)
+                {
+                    dataList.Add(objDashboardRedemption.RedeemedMembers);
+                    dataList.Add(objDashboardRedemption.RedemptionTxnCount);
+                    dataList.Add(objDashboardRedemption.RedeemedPoints);
+                    dataList.Add(objDashboardRedemption.PointsValueRs);
+                    dataList.Add(objDashboardRedemption.BusinessGenerated);
+                    dataList.Add(objDashboardRedemption.RedeemToInvoice);
+                    var remaining = 100 - objDashboardRedemption.PieChartGreenRedemptionRate;
+                    dataList.Add(remaining);
+                    dataList.Add(objDashboardRedemption.PieChartGreenRedemptionRate);
+                    var remaining1 = 100 - objDashboardRedemption.PieChartGreenUniqueMember;
+                    dataList.Add(remaining1);
+                    dataList.Add(objDashboardRedemption.PieChartGreenUniqueMember);
+                }
             }
             catch (Exception ex)
             {

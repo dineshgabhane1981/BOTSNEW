@@ -160,6 +160,8 @@ namespace WebApp.Controllers.OnBoarding
                     }
                     objData.bots_TblGroupMaster.CategoryData = json_serializer.Serialize(objData.objRetailList);
                     objData.bots_TblGroupMaster.PaymentScheduleData = json_serializer.Serialize(objData.objInstallmentList);
+                    //Documents
+                    objData.lstOtherDocs = OBR.GetOtherDocuments(groupId);
                 }
             }
             catch (Exception ex)
@@ -1235,6 +1237,40 @@ namespace WebApp.Controllers.OnBoarding
 
                     var URL = "https://blueocktopus.in/Logo/" + fileName;
                     var status = OBR.UploadBrandLogo(groupId, brandId, URL);
+
+                    return Json("File Uploaded Successfully!");
+                }
+                catch (Exception ex)
+                {
+                    newexception.AddException(ex, "UploadCustomers");
+                }
+
+            }
+            return Json("File Not Uploaded Successfully!");
+
+        }
+
+        [HttpPost]
+        public ActionResult UploadOtherDocs(string groupId, string docName)
+        {
+            if (Request.Files.Count > 0)
+            {
+                try
+                {
+                    var userDetails = (CustomerLoginDetail)Session["UserSession"];
+                    var groupName = OBR.GetOnboardingGroupName(groupId);
+
+                    HttpPostedFileBase files = Request.Files[0];
+                    var fileExt = System.IO.Path.GetExtension(files.FileName).Substring(1);
+
+                    string fileName = docName + "_" + groupName + "." + fileExt;
+                    DataSet ds = new DataSet();
+                   
+
+                    var path = ConfigurationManager.AppSettings["CustomerDocuments"].ToString();
+                    files.SaveAs(path + "\\" + fileName);    
+                    
+                    var status = OBR.UploadOtherDocs(groupId, docName, fileName, userDetails.LoginId);
 
                     return Json("File Uploaded Successfully!");
                 }

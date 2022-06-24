@@ -305,6 +305,7 @@
     <Compile Include="Models\OnBoarding\BOTS_TblCommunicationSetAssignment.cs" />
     <Compile Include="Models\OnBoarding\BOTS_TblDealDetails.cs" />
     <Compile Include="Models\OnBoarding\BOTS_TblDLCLinkConfig.cs" />
+    <Compile Include="Models\OnBoarding\BOTS_TblDocuments.cs" />
     <Compile Include="Models\OnBoarding\BOTS_TblEarnRuleConfig.cs" />
     <Compile Include="Models\OnBoarding\BOTS_TblGroupMaster.cs" />
     <Compile Include="Models\OnBoarding\BOTS_TblInstallmentDetails.cs" />
