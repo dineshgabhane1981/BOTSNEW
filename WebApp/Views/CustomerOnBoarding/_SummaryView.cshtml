@@ -189,6 +189,9 @@
 
     </div>
     <hr />
+    @if (Model.objDLCLinkConfig != null) 
+    
+    {     
     <div class="col-lg-12 col-sm-12" style="margin-top:10px;"><h6><b>DLC Rules</b></h6></div>
     <div class="col-lg-12 col-sm-12 row">
         <div class="col-lg-4 col-sm-4">
@@ -206,6 +209,7 @@
             Validity of Referred Member points- <b>@Model.objDLCLinkConfig.ValidityOfReferralPoints</b>
         </div>
     </div>
+    }
     <hr />
     <div class="col-lg-12 col-sm-12" style="margin-top:10px;">
         <b style="font-size:16px;"> Perpetual Campaign Count - @Model.PerpetualCampaignCount </b>

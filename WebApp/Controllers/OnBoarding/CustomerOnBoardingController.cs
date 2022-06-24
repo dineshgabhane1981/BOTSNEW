@@ -1305,8 +1305,11 @@ namespace WebApp.Controllers.OnBoarding
                     objData.CampaignType = Convert.ToString(item["CampaignType"]);
                     objData.SMSType = Convert.ToString(item["SMSType"]);
                     objData.BonusPoints = Convert.ToInt32(item["BonusPoints"]);
-                    objData.PointsValidBefore = Convert.ToInt32(item["PointsValidBefore"]);
-                    objData.PointsValidAfter = Convert.ToInt32(item["PointsValidAfter"]);
+                    if (objData.CampaignType == "Birthday" || objData.CampaignType == "Anniversary")
+                    {
+                        objData.PointsValidBefore = Convert.ToInt32(item["PointsValidBefore"]);
+                        objData.PointsValidAfter = Convert.ToInt32(item["PointsValidAfter"]);
+                    }
                     objData.Frequency = Convert.ToString(item["Frequency"]);
 
                     objData.IntroDays1 = Convert.ToInt32(item["IntroDays1"]);
@@ -1840,9 +1843,14 @@ namespace WebApp.Controllers.OnBoarding
                 objEarnRule.IsProductWise = Convert.ToBoolean(item["IsProductWise"]);
                 if (objEarnRule.IsBase.Value)
                 {
-                    objEarnRule.BasePercentage = Convert.ToDecimal(item["BasePercentage"]);
-                    objEarnRule.FixedPointPerRS = Convert.ToDecimal(item["FixedPointPerRS"]);
-                    objEarnRule.FixedPointPerTXN = Convert.ToDecimal(item["FixedPointPerTXN"]);
+                    if (!string.IsNullOrEmpty(Convert.ToString(item["BasePercentage"])))
+                        objEarnRule.BasePercentage = Convert.ToDecimal(item["BasePercentage"]);
+
+                    if (!string.IsNullOrEmpty(Convert.ToString(item["FixedPointPerRS"])))
+                        objEarnRule.FixedPointPerRS = Convert.ToDecimal(item["FixedPointPerRS"]);
+
+                    if (!string.IsNullOrEmpty(Convert.ToString(item["FixedPointPerTXN"])))
+                        objEarnRule.FixedPointPerTXN = Convert.ToDecimal(item["FixedPointPerTXN"]);
                 }
                 if (objEarnRule.IsProductWise.Value)
                 {

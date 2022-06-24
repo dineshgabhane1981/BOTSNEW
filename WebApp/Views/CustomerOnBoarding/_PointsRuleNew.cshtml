@@ -347,6 +347,8 @@
                 }
             }
         }
+        RemoveRequiredBorderEarnRule();
+        RemoveRequiredBorderBurnRule()
     });
 
 
@@ -437,204 +439,379 @@
     }
 
     function SaveEarnRule() {
-        var EarnData = [];
-        item = {};
-        item["RuleId"] = $("#hdnEarnRuleId").val();
-        item["GroupId"] = $("#hdnGroupID").val();
-        item["MinInvoiceAmt"] = $("#txtMinInvoiceAmt").val();
-        item["PointsValueInRS"] = $("#txtPointsValueInRS").val();
-        item["PointsValidityInMonths"] = $("#txtPointsValidityInMonths").val();
+        var validationStatus1 = ValidateEarnRule();
+        if (validationStatus1) {
+            var EarnData = [];
+            item = {};
+            item["RuleId"] = $("#hdnEarnRuleId").val();
+            item["GroupId"] = $("#hdnGroupID").val();
+            item["MinInvoiceAmt"] = $("#txtMinInvoiceAmt").val();
+            item["PointsValueInRS"] = $("#txtPointsValueInRS").val();
+            item["PointsValidityInMonths"] = $("#txtPointsValidityInMonths").val();
 
-        if ($("#rbtnRevolvingExpiry1").is(":checked")) {
-            item["RevolvingExpiry"] = true;
-        }
-        if ($("#rbtnRevolvingExpiry0").is(":checked")) {
-            item["RevolvingExpiry"] = false;
-        }
-
-        if ($("#rbtnIsDiscountPoints1").is(":checked")) {
-            item["IsDiscountPoints"] = true;
-        }
-        if ($("#rbtnIsDiscountPoints0").is(":checked")) {
-            item["IsDiscountPoints"] = false;
-        }
-        var IsBase = false;
-        var IsSlab = false;
-        var IsProductWise = false;
-        if ($("#rbtnIsBase").is(":checked")) {
-            IsBase = true;
-            item["BasePercentage"] = $("#txtBasePercentage").val();
-            item["FixedPointPerRS"] = $("#txtFixedPointPerRS").val();
-            item["FixedPointPerTXN"] = $("#txtFixedPointPerTXN").val();
-        }
-        if ($("#rbtnIsSlab").is(":checked")) {
-            IsSlab = true;
-            var SlabData = [];
-            if ($("#rbtnIndividual").is(":checked")) {
-                item["SlabType"] = "Individual";
-                
+            if ($("#rbtnRevolvingExpiry1").is(":checked")) {
+                item["RevolvingExpiry"] = true;
             }
-            if ($("#rbtnCummulative").is(":checked")) {
-                item["SlabType"] = "Cummulative";
-                
+            if ($("#rbtnRevolvingExpiry0").is(":checked")) {
+                item["RevolvingExpiry"] = false;
             }
-            
-            //Slab
-            for (var i = 1; i <= 6; i++) {
-                var item1 = {};
-                if ($("#frm" + i).val() != "") {
-                    item1["SlabFrom"] = $("#frm" + i).val();
-                    item1["SlabTo"] = $("#to" + i).val();
-                    item1["SlabPercentage"] = $("#per" + i).val();
 
-                    SlabData.push(item1);
+            if ($("#rbtnIsDiscountPoints1").is(":checked")) {
+                item["IsDiscountPoints"] = true;
+            }
+            if ($("#rbtnIsDiscountPoints0").is(":checked")) {
+                item["IsDiscountPoints"] = false;
+            }
+            var IsBase = false;
+            var IsSlab = false;
+            var IsProductWise = false;
+
+            if ($("#rbtnIsBase").is(":checked")) {
+                IsBase = true;
+                item["BasePercentage"] = $("#txtBasePercentage").val();
+                item["FixedPointPerRS"] = $("#txtFixedPointPerRS").val();
+                item["FixedPointPerTXN"] = $("#txtFixedPointPerTXN").val();
+            }
+            if ($("#rbtnIsSlab").is(":checked")) {
+                IsSlab = true;
+                var SlabData = [];
+                if ($("#rbtnIndividual").is(":checked")) {
+                    item["SlabType"] = "Individual";
+
+                }
+                if ($("#rbtnCummulative").is(":checked")) {
+                    item["SlabType"] = "Cummulative";
+
+                }
+
+                //Slab
+                for (var i = 1; i <= 6; i++) {
+                    var item1 = {};
+                    if ($("#frm" + i).val() != "") {
+                        item1["SlabFrom"] = $("#frm" + i).val();
+                        item1["SlabTo"] = $("#to" + i).val();
+                        item1["SlabPercentage"] = $("#per" + i).val();
+
+                        SlabData.push(item1);
+                    }
+                }
+                item["SlabData"] = SlabData;
+            }
+            if ($("#rbtnIsProductWise").is(":checked")) {
+                IsProductWise = true;
+                if ($("#rbtnProduct").is(":checked")) {
+                    item["ProductWiseType"] = "Product";
+                }
+                if ($("#rbtnCategory").is(":checked")) {
+                    item["ProductWiseType"] = "Category";
+                }
+                if ($("#rbtnSubCategory").is(":checked")) {
+                    item["ProductWiseType"] = "SubCategory";
+                }
+                //File
+                item["ProductWiseFile"] = $("#hdnProductWiseBase64").val();
+            }
+            item["IsBase"] = IsBase;
+            item["IsSlab"] = IsSlab;
+            item["IsProductWise"] = IsProductWise;
+
+
+            item["BlockProductWiseType"] = "";
+            if ($("#rbtnEarnBlockYes").is(":checked")) {
+                item["IsBlockForEarn"] = true;
+
+                if ($("#rbtnProductB").is(":checked")) {
+                    item["BlockProductWiseType"] = "Product";
+                }
+                if ($("#rbtnCategoryB").is(":checked")) {
+                    item["BlockProductWiseType"] = "Category";
+                }
+                if ($("#rbtnSubCategoryB").is(":checked")) {
+                    item["BlockProductWiseType"] = "SubCategory";
                 }
             }
-            item["SlabData"] = SlabData;
-        }
-        if ($("#rbtnIsProductWise").is(":checked")) {
-            IsProductWise = true;
-            if ($("#rbtnProduct").is(":checked")) {
-                item["ProductWiseType"] = "Product";
+            else {
+                item["IsBlockForEarn"] = false;
             }
-            if ($("#rbtnCategory").is(":checked")) {
-                item["ProductWiseType"] = "Category";
-            }
-            if ($("#rbtnSubCategory").is(":checked")) {
-                item["ProductWiseType"] = "SubCategory";
-            }
+
+
             //File
-            item["ProductWiseFile"] = $("#hdnProductWiseBase64").val();
-        }
-        item["IsBase"] = IsBase;
-        item["IsSlab"] = IsSlab;
-        item["IsProductWise"] = IsProductWise;
-            
-        
-        item["BlockProductWiseType"] = "";
-        if ($("#rbtnEarnBlockYes").is(":checked")) {
-            item["IsBlockForEarn"] = true;
+            item["ProductBlockEarn"] = $("#hdnBlockEarnBase64").val();
 
-            if ($("#rbtnProductB").is(":checked")) {
-                item["BlockProductWiseType"] = "Product";
-            }
-            if ($("#rbtnCategoryB").is(":checked")) {
-                item["BlockProductWiseType"] = "Category";
-            }
-            if ($("#rbtnSubCategoryB").is(":checked")) {
-                item["BlockProductWiseType"] = "SubCategory";
-            }
-        }
-        else {
-            item["IsBlockForEarn"] = false;
-        }
-            
-       
-        //File
-        item["ProductBlockEarn"] = $("#hdnBlockEarnBase64").val();
-
-        EarnData.push(item);
-        var EarnDataStr = JSON.stringify(EarnData);
-        $("#divLoader").show();
-        $.ajax({
-            type: "POST",
-            url: '@Url.Action("SaveEarnRuleConfig", "CustomerOnBoarding")',
-            data: '{jsonData: ' + JSON.stringify(EarnDataStr) + '}',
-            contentType: "application/json; charset=utf-8",
-            dataType: "json",
-            success: function (result) {
-                console.log(result)
-                if (result == true) {
-                    cuteAlert({
-                        type: "success",
-                        title: "Saved",
-                        message: "Earn config saved successfully",
-                        buttonText: "Okay"
-                    })
-                    $("#divLoader").hide();
+            EarnData.push(item);
+            var EarnDataStr = JSON.stringify(EarnData);
+            $("#divLoader").show();
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("SaveEarnRuleConfig", "CustomerOnBoarding")',
+                data: '{jsonData: ' + JSON.stringify(EarnDataStr) + '}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (result) {
+                    console.log(result)
+                    if (result == true) {
+                        cuteAlert({
+                            type: "success",
+                            title: "Saved",
+                            message: "Earn config saved successfully",
+                            buttonText: "Okay"
+                        })
+                        $("#divLoader").hide();
+                    }
+                    else {
+                        cuteAlert({
+                            type: "error",
+                            title: "Oops..",
+                            message: "There is a problem in saving point rules",
+                            buttonText: "Okay"
+                        })
+                        $("#divLoader").hide();
+                    }
+                },
+                error: function (result) {
+                    //console.log(result.responseText)
                 }
-                else {
-                    cuteAlert({
-                        type: "error",
-                        title: "Oops..",
-                        message: "There is a problem in saving point rules",
-                        buttonText: "Okay"
-                    })
-                    $("#divLoader").hide();
-                }
-            },
-            error: function (result) {
-                //console.log(result.responseText)
-            }
-        });
+            });
+        }
     }
 
+    function ValidateEarnRule() {
+        var status = true;
+        if ($("#txtMinInvoiceAmt").val() == "") {
+            $('#txtMinInvoiceAmt').css('border-color', 'red');
+            status = false;
+        }
+        if ($("#txtPointsValueInRS").val() == "") {
+            $('#txtPointsValueInRS').css('border-color', 'red');
+            status = false;
+        }
+        if ($("#txtPointsValidityInMonths").val() == "") {
+            $('#txtPointsValidityInMonths').css('border-color', 'red');
+            status = false;
+        }
+        if ($("#txtBasePercentage").val() == "" && $("#txtFixedPointPerRS").val() == "" && $("#txtFixedPointPerTXN").val() == "") {
+            $('#dvBase').css('border-color', 'red');            
+            status = false;
+        }
+        var count = 0;
+        if ($("#txtBasePercentage").val() != "")
+            count++;
+        if ($("#txtFixedPointPerRS").val() != "")
+            count++;
+        if ($("#txtFixedPointPerTXN").val() != "")
+            count++;
+
+        
+
+        if (!status) {
+        cuteAlert({
+            type: "error",
+            title: "Oops..",
+            message: "Please Enter required fields",
+            buttonText: "Okay"
+        })
+
+     }
+        if (count > 1) {
+            status = false;
+            cuteAlert({
+                type: "error",
+                title: "Oops..",
+                message: "Only one value should be inserted in Base",
+                buttonText: "Okay"
+            })
+        }
+        return status;
+    }
+
+    function RemoveRequiredBorderEarnRule() {
+        $("#txtMinInvoiceAmt").focusout(function () {
+            if ($("#txtMinInvoiceAmt").val() != "") {
+                $('#txtMinInvoiceAmt').css('border-color', '');
+            }
+            else {
+                $('#txtMinInvoiceAmt').css('border-color', 'red');
+            }
+        });
+
+        $("#txtPointsValueInRS").focusout(function () {
+            if ($("#txtPointsValueInRS").val() != "") {
+                $('#txtPointsValueInRS').css('border-color', '');
+            }
+            else {
+                $('#txtPointsValueInRS').css('border-color', 'red');
+            }
+        });
+        $("#txtPointsValidityInMonths").focusout(function () {
+            if ($("#txtPointsValidityInMonths").val() != "") {
+                $('#txtPointsValidityInMonths').css('border-color', '');
+            }
+            else {
+                $('#txtPointsValidityInMonths').css('border-color', 'red');
+            }
+        });
+        $("#dvBase").focusout(function () {
+            if ($("#txtBasePercentage").val() != "" || $("#txtFixedPointPerRS").val() || "" && $("#txtFixedPointPerTXN").val() != "") {
+                $('#dvBase').css('border-color', '');
+            }
+            else {
+                $('#dvBase').css('border-color', 'red');
+            }
+        });
+        
+    }
+    
+  
+    
+
     function SaveBurnRule() {
-        var BurnData = [];
-        item = {};
-        item["RuleId"] = $("#hdnBurnRuleId").val();
-        item["GroupId"] = $("#hdnGroupID").val();
-        item["MinInvoiceAmt"] = $("#txtMinBurnInvoiceAmt").val();
-        item["PercentageToRedeemPts"] = $("#txtPercentageToRedeemPts").val();
-        item["PercentageToRedeemExtPts"] = $("#txtPercentageToRedeemExtPts").val();
-        item["MinThreshholdPtsFisttime"] = $("#txtMinThreshholdPtsFisttime").val();
-        item["MinThreshholdPtsSubsequent"] = $("#txtMinThreshholdPtsSubsequent").val();
-        item["PartialEarn"] = false;
-        if ($("#rbtnPartialEarn1").is(":checked")) {
-            item["PartialEarn"] = "FullEarn";
-        }
-        if ($("#rbtnPartialEarn2").is(":checked")) {
-            item["PartialEarn"] = "PartialEarn";
-        }
-        if ($("#rbtnPartialEarn3").is(":checked")) {
-            item["PartialEarn"] = "NoPoints";
-        }
-        item["IsProductCodeBlocking"] = false;
-        if ($("#rbtnProductBlockingB").is(":checked")) {
-            item["IsProductCodeBlocking"] = true;
-            item["ProductBurnType"] = "Product";
-        }
-        if ($("#rbtnCategoryBlockingB").is(":checked")) {
-            item["IsProductCodeBlocking"] = true;
-            item["ProductBurnType"] = "Category";
-        }
-        if ($("#rbtnSubCategoryBlockingB").is(":checked")) {
-            item["IsProductCodeBlocking"] = true;
-            item["ProductBurnType"] = "SubCategory";
-        }
-        item["ProductBlockBurnFile"] = $("#hdnBlockBurnBase64").val();
-        BurnData.push(item);
-        var BurnDataStr = JSON.stringify(BurnData);
-        $("#divLoader").show();
-        $.ajax({
-            type: "POST",
-            url: '@Url.Action("SaveBurnRuleConfig", "CustomerOnBoarding")',
-            data: '{jsonData: ' + JSON.stringify(BurnDataStr) + '}',
-            contentType: "application/json; charset=utf-8",
-            dataType: "json",
-            success: function (result) {
-                console.log(result)
-                if (result == true) {
-                    cuteAlert({
-                        type: "success",
-                        title: "Saved",
-                        message: "Burn config saved successfully",
-                        buttonText: "Okay"
-                    })
-                    $("#divLoader").hide();
+        var validationStatus2 = ValidateBurnRule();
+        if (validationStatus2) {
+            var BurnData = [];
+            item = {};
+            item["RuleId"] = $("#hdnBurnRuleId").val();
+            item["GroupId"] = $("#hdnGroupID").val();
+            item["MinInvoiceAmt"] = $("#txtMinBurnInvoiceAmt").val();
+            item["PercentageToRedeemPts"] = $("#txtPercentageToRedeemPts").val();
+            item["PercentageToRedeemExtPts"] = $("#txtPercentageToRedeemExtPts").val();
+            item["MinThreshholdPtsFisttime"] = $("#txtMinThreshholdPtsFisttime").val();
+            item["MinThreshholdPtsSubsequent"] = $("#txtMinThreshholdPtsSubsequent").val();
+            item["PartialEarn"] = false;
+            if ($("#rbtnPartialEarn1").is(":checked")) {
+                item["PartialEarn"] = "FullEarn";
+            }
+            if ($("#rbtnPartialEarn2").is(":checked")) {
+                item["PartialEarn"] = "PartialEarn";
+            }
+            if ($("#rbtnPartialEarn3").is(":checked")) {
+                item["PartialEarn"] = "NoPoints";
+            }
+            item["IsProductCodeBlocking"] = false;
+            if ($("#rbtnProductBlockingB").is(":checked")) {
+                item["IsProductCodeBlocking"] = true;
+                item["ProductBurnType"] = "Product";
+            }
+            if ($("#rbtnCategoryBlockingB").is(":checked")) {
+                item["IsProductCodeBlocking"] = true;
+                item["ProductBurnType"] = "Category";
+            }
+            if ($("#rbtnSubCategoryBlockingB").is(":checked")) {
+                item["IsProductCodeBlocking"] = true;
+                item["ProductBurnType"] = "SubCategory";
+            }
+            item["ProductBlockBurnFile"] = $("#hdnBlockBurnBase64").val();
+            BurnData.push(item);
+            var BurnDataStr = JSON.stringify(BurnData);
+            $("#divLoader").show();
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("SaveBurnRuleConfig", "CustomerOnBoarding")',
+                data: '{jsonData: ' + JSON.stringify(BurnDataStr) + '}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (result) {
+                    console.log(result)
+                    if (result == true) {
+                        cuteAlert({
+                            type: "success",
+                            title: "Saved",
+                            message: "Burn config saved successfully",
+                            buttonText: "Okay"
+                        })
+                        $("#divLoader").hide();
+                    }
+                    else {
+                        cuteAlert({
+                            type: "error",
+                            title: "Oops..",
+                            message: "There is a problem in saving point rules",
+                            buttonText: "Okay"
+                        })
+                        $("#divLoader").hide();
+                    }
+                },
+                error: function (result) {
+                    //console.log(result.responseText)
                 }
-                else {
-                    cuteAlert({
-                        type: "error",
-                        title: "Oops..",
-                        message: "There is a problem in saving point rules",
-                        buttonText: "Okay"
-                    })
-                    $("#divLoader").hide();
-                }
-            },
-            error: function (result) {
-                //console.log(result.responseText)
+            });
+        }
+    }
+
+    function ValidateBurnRule() {
+        var status = true;
+        if ($("#txtMinBurnInvoiceAmt").val() == "") {
+            $('#txtMinBurnInvoiceAmt').css('border-color', 'red');
+            status = false;
+        }
+        if ($("#txtMinThreshholdPtsFisttime").val() == "") {
+            $('#txtMinThreshholdPtsFisttime').css('border-color', 'red');
+            status = false;
+        }
+        if ($("#txtMinThreshholdPtsSubsequent").val() == "") {
+            $('#txtMinThreshholdPtsSubsequent').css('border-color', 'red');
+            status = false;
+        }
+        if ($("#txtPercentageToRedeemPts").val() == "") {
+            $('#txtPercentageToRedeemPts').css('border-color', 'red');
+                status = false;
+        }
+        if ($("#txtPercentageToRedeemExtPts").val() == "") {
+            $('#txtPercentageToRedeemExtPts').css('border-color', 'red');
+                status = false;
+        }
+    
+        if (!status) {
+            cuteAlert({
+                type: "error",
+                title: "Oops..",
+                message: "Please Enter required fields",
+                buttonText: "Okay"
+            })
+        }
+
+        return status;
+    }
+
+    function RemoveRequiredBorderBurnRule() {
+        $("#txtMinBurnInvoiceAmt").focusout(function () {
+            if ($("#txtMinBurnInvoiceAmt").val() != "") {
+                $('#txtMinBurnInvoiceAmt').css('border-color', '');
+            }
+            else {
+                $('#txtMinBurnInvoiceAmt').css('border-color', 'red');
+            }
+        });
+
+        $("#txtMinThreshholdPtsFisttime").focusout(function () {
+            if ($("#txtMinThreshholdPtsFisttime").val() != "") {
+                $('#txtMinThreshholdPtsFisttime').css('border-color', '');
+            }
+            else {
+                $('#txtMinThreshholdPtsFisttime').css('border-color', 'red');
+            }
+        });
+        $("#txtMinThreshholdPtsSubsequent").focusout(function () {
+            if ($("#txtMinThreshholdPtsSubsequent").val() != "") {
+                $('#txtMinThreshholdPtsSubsequent').css('border-color', '');
+            }
+            else {
+                $('#txtMinThreshholdPtsSubsequent').css('border-color', 'red');
+            }
+        });
+        $("#txtPercentageToRedeemPts").focusout(function () {
+            if ($("#txtPercentageToRedeemPts").val() != "") {
+                $('#txtPercentageToRedeemPts').css('border-color', '');
+            }
+            else {
+                $('#txtPercentageToRedeemPts').css('border-color', 'red');
+            }
+        });
+        $("#txtPercentageToRedeemExtPts").focusout(function () {
+            if ($("#txtPercentageToRedeemExtPts").val() != "") {
+                $('#txtPercentageToRedeemExtPts').css('border-color', '');
+            }
+            else {
+                $('#txtPercentageToRedeemExtPts').css('border-color', 'red');
             }
         });
     }
