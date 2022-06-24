@@ -314,6 +314,7 @@ namespace WebApp.Controllers
         {
             string loginId = string.Empty;
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            loginId = userDetails.LoginId;
             if (userDetails.LevelIndicator == "03" || userDetails.LevelIndicator == "04")
             {
                 loginId = userDetails.OutletOrBrandId;
