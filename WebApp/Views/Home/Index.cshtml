@@ -60,12 +60,13 @@
 
                                 @if (Convert.ToDouble(Model.TotalBiz) > 0)
                                 {
-                                    <span>
-                                        String.Format(new CultureInfo("en-IN", false), "{0:n2}", Convert.ToDouble(Convert.ToDouble(Model.LoyaltyBiz * 100) / Convert.ToDouble(Model.TotalBiz)));
-                                    </span>
+                                    var num= String.Format(new CultureInfo("en-IN", false), "{0:n2}", Convert.ToDouble(Convert.ToDouble(Model.LoyaltyBiz * 100) / Convert.ToDouble(Model.TotalBiz)));
+                                <span>
+                                    @num%
+                                </span>
                                 }
                                 else
-                                {   
+                                {
                                     <span>
                                         0
                                     </span>
