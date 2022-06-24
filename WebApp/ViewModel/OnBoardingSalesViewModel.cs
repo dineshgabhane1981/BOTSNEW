@@ -53,7 +53,7 @@ namespace WebApp.ViewModel
         public string LeadId { get; set; }
         public bool IsWA { get; set; }
 
-        public List<BOTS_TblDocuments> lstOtherDocs { get; set; }
+        public List<BOTS_TblDocuments> lstOtherDocs { get; set; } 
         public SelectListItem[] BOProducts()
         {
             return new SelectListItem[2] { new SelectListItem() { Text = "Octa Plus", Value = "1" }, new SelectListItem() { Text = "Octa XS", Value = "2" } };
