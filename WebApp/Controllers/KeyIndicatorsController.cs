@@ -44,7 +44,7 @@ namespace WebApp.Controllers
         {
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
             NonRedemptionCls objNonRedemptionCls = new NonRedemptionCls();
-            objNonRedemptionCls = KR.GetNonRedemptionData(userDetails.GroupId, userDetails.connectionString);
+            objNonRedemptionCls = KR.GetNonRedemptionData(userDetails.GroupId, userDetails.connectionString, userDetails.LoginId);
             return View(objNonRedemptionCls);
         }
 
@@ -124,7 +124,7 @@ namespace WebApp.Controllers
                 outletId = "";
             }
             OnlyOnce objOnlyOnce = new OnlyOnce();
-            objOnlyOnce = KR.GetOnlyOnceData(userDetails.GroupId, outletId, userDetails.connectionString);
+            objOnlyOnce = KR.GetOnlyOnceData(userDetails.GroupId, outletId, userDetails.connectionString, userDetails.LoginId);
 
             objOnlyOnce.TotalMemberStr = String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(objOnlyOnce.TotalMember));
             objOnlyOnce.OnlyOnceMemberStr = String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(objOnlyOnce.OnlyOnceMember));
@@ -145,7 +145,7 @@ namespace WebApp.Controllers
                 outletId = "";
             }
             List<OnlyOnceTxn> objOnlyOnceTxn = new List<OnlyOnceTxn>();
-            objOnlyOnceTxn = KR.GetOnlyOnceTxnData(userDetails.GroupId, outletId, type, userDetails.connectionString);
+            objOnlyOnceTxn = KR.GetOnlyOnceTxnData(userDetails.GroupId, outletId, type, userDetails.connectionString, userDetails.LoginId);
 
             var GroupDetails = CR.GetGroupDetails(Convert.ToInt32(userDetails.GroupId));
             if (!GroupDetails.IsMasked)
@@ -165,7 +165,7 @@ namespace WebApp.Controllers
             {
                 var userDetails = (CustomerLoginDetail)Session["UserSession"];
                 List<OnlyOnceTxn> objOnlyOnceTxn = new List<OnlyOnceTxn>();
-                objOnlyOnceTxn = KR.GetOnlyOnceTxnData(userDetails.GroupId, outletId, type, userDetails.connectionString);
+                objOnlyOnceTxn = KR.GetOnlyOnceTxnData(userDetails.GroupId, outletId, type, userDetails.connectionString, userDetails.LoginId);
 
                 PropertyDescriptorCollection properties = TypeDescriptor.GetProperties(typeof(OnlyOnceTxn));
                 foreach (PropertyDescriptor prop in properties)
@@ -266,7 +266,7 @@ namespace WebApp.Controllers
                 outletId = "";
             }
             NonTransactingCls objNonTransactingCls = new NonTransactingCls();
-            objNonTransactingCls = KR.GetNonTransactingData(userDetails.GroupId, outletId, userDetails.connectionString);
+            objNonTransactingCls = KR.GetNonTransactingData(userDetails.GroupId, outletId, userDetails.connectionString, userDetails.LoginId);
             return new JsonResult() { Data = objNonTransactingCls, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
         [HttpPost]
@@ -292,7 +292,7 @@ namespace WebApp.Controllers
                 outletId = "";
             }
             List<NonTransactingTxn> objNonTransactingTxn = new List<NonTransactingTxn>();
-            objNonTransactingTxn = KR.GetNonTransactingTxnData(userDetails.GroupId, outletId, barType, userDetails.connectionString);
+            objNonTransactingTxn = KR.GetNonTransactingTxnData(userDetails.GroupId, outletId, barType, userDetails.connectionString, userDetails.LoginId);
             var GroupDetails = CR.GetGroupDetails(Convert.ToInt32(userDetails.GroupId));
             if (!GroupDetails.IsMasked)
             {
@@ -309,7 +309,7 @@ namespace WebApp.Controllers
         {
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
             List<NonRedemptionTxn> objNonRedemptionTxn = new List<NonRedemptionTxn>();
-            objNonRedemptionTxn = KR.GetNonRedemptionTxnData(userDetails.GroupId, type, daysType, userDetails.connectionString);
+            objNonRedemptionTxn = KR.GetNonRedemptionTxnData(userDetails.GroupId, type, daysType, userDetails.connectionString, userDetails.LoginId);
             var GroupDetails = CR.GetGroupDetails(Convert.ToInt32(userDetails.GroupId));
             if (!GroupDetails.IsMasked)
             {
@@ -334,7 +334,7 @@ namespace WebApp.Controllers
         {
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
             MembersInformation objMembersInformation = new MembersInformation();
-            objMembersInformation = KR.GetMemberMisinformationData(userDetails.GroupId, userDetails.connectionString);
+            objMembersInformation = KR.GetMemberMisinformationData(userDetails.GroupId, userDetails.connectionString, userDetails.LoginId);
             return new JsonResult() { Data = objMembersInformation, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
 
@@ -358,7 +358,7 @@ namespace WebApp.Controllers
                 if (type.Equals("More than a year"))
                     barType = "6";
                 List<NonTransactingTxn> objNonTransactingTxn = new List<NonTransactingTxn>();
-                objNonTransactingTxn = KR.GetNonTransactingTxnData(userDetails.GroupId, outletId, barType, userDetails.connectionString);
+                objNonTransactingTxn = KR.GetNonTransactingTxnData(userDetails.GroupId, outletId, barType, userDetails.connectionString, userDetails.LoginId);
 
                 PropertyDescriptorCollection properties = TypeDescriptor.GetProperties(typeof(NonTransactingTxn));
                 foreach (PropertyDescriptor prop in properties)
@@ -437,7 +437,7 @@ namespace WebApp.Controllers
             {
                 var userDetails = (CustomerLoginDetail)Session["UserSession"];
                 List<NonRedemptionTxn> objNonRedemptionTxn = new List<NonRedemptionTxn>();
-                objNonRedemptionTxn = KR.GetNonRedemptionTxnData(userDetails.GroupId, type, daysType, userDetails.connectionString);
+                objNonRedemptionTxn = KR.GetNonRedemptionTxnData(userDetails.GroupId, type, daysType, userDetails.connectionString, userDetails.LoginId);
 
                 PropertyDescriptorCollection properties = TypeDescriptor.GetProperties(typeof(NonRedemptionTxn));
                 foreach (PropertyDescriptor prop in properties)

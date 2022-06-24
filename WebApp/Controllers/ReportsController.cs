@@ -66,7 +66,7 @@ namespace WebApp.Controllers
         {
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
             PointExpiryTmp objPointExpiry = new PointExpiryTmp();
-            objPointExpiry = RR.GetPointExpiryData(userDetails.GroupId, DateTime.Now.Month, DateTime.Now.Year, userDetails.connectionString);
+            objPointExpiry = RR.GetPointExpiryData(userDetails.GroupId, DateTime.Now.Month, DateTime.Now.Year, userDetails.connectionString, userDetails.LoginId);
 
             List<SelectListItem> MonthList = new List<SelectListItem>();
             int month = DateTime.Now.Month;
@@ -276,7 +276,7 @@ namespace WebApp.Controllers
         {
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
             PointExpiryTmp objPointExpiry = new PointExpiryTmp();
-            objPointExpiry = RR.GetPointExpiryData(userDetails.GroupId, month, year, userDetails.connectionString);
+            objPointExpiry = RR.GetPointExpiryData(userDetails.GroupId, month, year, userDetails.connectionString, userDetails.LoginId);
             return new JsonResult() { Data = objPointExpiry, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
 
@@ -285,7 +285,7 @@ namespace WebApp.Controllers
         {
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
             List<PointExpiryTxn> objPointExpiryTxn = new List<PointExpiryTxn>();
-            objPointExpiryTxn = RR.GetPointExpiryTxnData(userDetails.GroupId, Convert.ToInt32(month), Convert.ToInt32(year), userDetails.connectionString);
+            objPointExpiryTxn = RR.GetPointExpiryTxnData(userDetails.GroupId, Convert.ToInt32(month), Convert.ToInt32(year), userDetails.connectionString, userDetails.LoginId);
             var GroupDetails = CR.GetGroupDetails(Convert.ToInt32(userDetails.GroupId));
             if (!GroupDetails.IsMasked)
             {
@@ -306,7 +306,7 @@ namespace WebApp.Controllers
                 SearchText = "";
             }
             List<MemberList> lstMember = new List<MemberList>();
-            lstMember = RR.GetMemberList(userDetails.GroupId, SearchText, userDetails.connectionString);
+            lstMember = RR.GetMemberList(userDetails.GroupId, SearchText, userDetails.connectionString, userDetails.LoginId);
             return new JsonResult() { Data = lstMember, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
 
@@ -441,7 +441,7 @@ namespace WebApp.Controllers
                 outletId = "";
             }
             List<OutletwiseTransaction> lstOutletWiseTransaction = new List<OutletwiseTransaction>();
-            lstOutletWiseTransaction = RR.GetOutletWiseTransactionList(userDetails.GroupId, DateRangeFlag, fromDate, toDate, outletId, EnrolmentDataFlag, userDetails.connectionString);
+            lstOutletWiseTransaction = RR.GetOutletWiseTransactionList(userDetails.GroupId, DateRangeFlag, fromDate, toDate, outletId, EnrolmentDataFlag, userDetails.connectionString, userDetails.LoginId);
             var GroupDetails = CR.GetGroupDetails(Convert.ToInt32(userDetails.GroupId));
             if (!GroupDetails.IsMasked)
             {
@@ -495,7 +495,7 @@ namespace WebApp.Controllers
                     outletId = "";
                 }
                 List<OutletwiseTransaction> lstOutletWiseTransaction = new List<OutletwiseTransaction>();
-                lstOutletWiseTransaction = RR.GetOutletWiseTransactionList(userDetails.GroupId, DateRangeFlag, fromDate, toDate, outletId, EnrolmentDataFlag, userDetails.connectionString);
+                lstOutletWiseTransaction = RR.GetOutletWiseTransactionList(userDetails.GroupId, DateRangeFlag, fromDate, toDate, outletId, EnrolmentDataFlag, userDetails.connectionString, userDetails.LoginId);
 
                 PropertyDescriptorCollection properties = TypeDescriptor.GetProperties(typeof(OutletwiseTransaction));
                 foreach (PropertyDescriptor prop in properties)
@@ -802,7 +802,7 @@ namespace WebApp.Controllers
             {
                 var userDetails = (CustomerLoginDetail)Session["UserSession"];
                 List<PointExpiryTxn> objPointExpiryTxn = new List<PointExpiryTxn>();
-                objPointExpiryTxn = RR.GetPointExpiryTxnData(userDetails.GroupId, month, year, userDetails.connectionString);
+                objPointExpiryTxn = RR.GetPointExpiryTxnData(userDetails.GroupId, month, year, userDetails.connectionString, userDetails.LoginId);
 
                 PropertyDescriptorCollection properties = TypeDescriptor.GetProperties(typeof(PointExpiryTxn));
                 foreach (PropertyDescriptor prop in properties)
@@ -1065,7 +1065,7 @@ namespace WebApp.Controllers
         {
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
             List<MemberList> lstMember = new List<MemberList>();
-            lstMember = RR.GetMemberList(userDetails.GroupId, "", userDetails.connectionString);
+            lstMember = RR.GetMemberList(userDetails.GroupId, "", userDetails.connectionString, userDetails.LoginId);
             int CountNumber = Convert.ToInt32(Count);
             if (CountOrBusiness == "Count")
             {
@@ -1094,7 +1094,7 @@ namespace WebApp.Controllers
                 var userDetails = (CustomerLoginDetail)Session["UserSession"];
 
                 List<MemberList> lstMember = new List<MemberList>();
-                lstMember = RR.GetMemberList(userDetails.GroupId, "", userDetails.connectionString);
+                lstMember = RR.GetMemberList(userDetails.GroupId, "", userDetails.connectionString, userDetails.LoginId);
                 int CountNumber = Convert.ToInt32(Count);
                 if (CountOrBusiness == "Count")
                 {

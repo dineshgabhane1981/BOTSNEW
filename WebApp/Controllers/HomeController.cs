@@ -69,7 +69,7 @@ namespace WebApp.Controllers
                 List<string> lstDates = new List<string>();
 
                 DashboardMemberSegment dataMemberSegment = new DashboardMemberSegment();
-                dataMemberSegment = DR.GetDashboardMemberSegmentData(userDetails.GroupId, OutletId, userDetails.connectionString);
+                dataMemberSegment = DR.GetDashboardMemberSegmentData(userDetails.GroupId, OutletId, userDetails.connectionString, userDetails.LoginId);
 
                 dataList.Add(dataMemberSegment.NoofMember_Total);
                 dataList.Add(dataMemberSegment.NoofMember_Repeat);
@@ -102,7 +102,7 @@ namespace WebApp.Controllers
             try
             {
                 List<DashboardBizShared> lstBizShared = new List<DashboardBizShared>();
-                lstBizShared = DR.GetDashboardBizShared(userDetails.GroupId, OutletId, userDetails.connectionString);
+                lstBizShared = DR.GetDashboardBizShared(userDetails.GroupId, OutletId, userDetails.connectionString, userDetails.LoginId);
                 lstBizShared.Reverse();
                 foreach (var item in lstBizShared)
                 {
@@ -132,7 +132,7 @@ namespace WebApp.Controllers
             try
             {
 
-                dataMemberSegmentTxn = DR.GetDashboardMemberSegmentTxnData(userDetails.GroupId, OutletId, userDetails.connectionString);
+                dataMemberSegmentTxn = DR.GetDashboardMemberSegmentTxnData(userDetails.GroupId, OutletId, userDetails.connectionString, userDetails.LoginId);
             }
             catch (Exception ex)
             {
@@ -150,7 +150,7 @@ namespace WebApp.Controllers
             {
 
                 List<DashboardOutletEnrolment> dataOutletEnrolment = new List<DashboardOutletEnrolment>();
-                dataOutletEnrolment = DR.GetDashboardOutletEnrolmentData(userDetails.GroupId, monthFlag, userDetails.connectionString);
+                dataOutletEnrolment = DR.GetDashboardOutletEnrolmentData(userDetails.GroupId, monthFlag, userDetails.connectionString, userDetails.LoginId);
                 List<string> nameList = new List<string>();
                 List<long> dataList = new List<long>();
                 foreach (var item in dataOutletEnrolment)
@@ -208,7 +208,7 @@ namespace WebApp.Controllers
             {
 
                 DashboardMemberWebPage dataMemberWebPage = new DashboardMemberWebPage();
-                dataMemberWebPage = DR.GetDashboardMemberWebPageData(userDetails.GroupId, profileFlag, userDetails.connectionString);
+                dataMemberWebPage = DR.GetDashboardMemberWebPageData(userDetails.GroupId, profileFlag, userDetails.connectionString, userDetails.LoginId);
 
                 dataList.Add(dataMemberWebPage.MemberBase);
                 dataList.Add(dataMemberWebPage.ReferringBase);
@@ -245,7 +245,7 @@ namespace WebApp.Controllers
             {
 
                 DashboardBulkUpload objDashboardBulkUpload = new DashboardBulkUpload();
-                objDashboardBulkUpload = DR.GetDashboardBulkUpload(userDetails.GroupId, userDetails.connectionString);
+                objDashboardBulkUpload = DR.GetDashboardBulkUpload(userDetails.GroupId, userDetails.connectionString, userDetails.LoginId);
                 if (objDashboardBulkUpload != null)
                 {
 
@@ -271,7 +271,7 @@ namespace WebApp.Controllers
             {
 
                 DashboardRedemption objDashboardRedemption = new DashboardRedemption();
-                objDashboardRedemption = DR.GetDashboardRedemption(userDetails.GroupId, type, userDetails.connectionString);
+                objDashboardRedemption = DR.GetDashboardRedemption(userDetails.GroupId, type, userDetails.connectionString, userDetails.LoginId);
                 if (objDashboardRedemption != null)
                 {
                     dataList.Add(objDashboardRedemption.RedeemedMembers);

@@ -16,15 +16,21 @@ namespace BOTS_BL.Repository
         Exceptions newexception = new Exceptions();
         CustomerRepository CR = new CustomerRepository();
         //string connstr = CustomerConnString.ConnectionStringCustomer;
-        public OnlyOnce GetOnlyOnceData(string GroupId, string outletId, string connstr)
+        public OnlyOnce GetOnlyOnceData(string GroupId, string outletId, string connstr,string loginId)
         {
             OnlyOnce objOnlyOnce = new OnlyOnce();
             try
             {
                 using (var context = new BOTSDBContext(connstr))
                 {
-                    objOnlyOnce = context.Database.SqlQuery<OnlyOnce>("sp_BOTS_OnlyOnce @pi_GroupId, @pi_Date, @pi_LoginId, @pi_OutletId", new SqlParameter("@pi_GroupId", GroupId), new SqlParameter("@pi_Date", DateTime.Now.ToShortDateString()), new SqlParameter("@pi_LoginId", ""), new SqlParameter("@pi_OutletId", outletId)).FirstOrDefault<OnlyOnce>();
-                    //objOnlyOnce.lstOnlyOnceTxn = context.Database.SqlQuery<OnlyOnceTxn>("sp_BOTS_OnlyOnce1 @pi_GroupId, @pi_Date, @pi_LoginId, @pi_OutletId", new SqlParameter("@pi_GroupId", GroupId), new SqlParameter("@pi_Date", DateTime.Now.ToShortDateString()), new SqlParameter("@pi_LoginId", ""), new SqlParameter("@pi_OutletId", outletId)).ToList<OnlyOnceTxn>();
+                    if (GroupId == "1086")
+                    {
+                        objOnlyOnce = context.Database.SqlQuery<OnlyOnce>("sp_BOTS_OnlyOnce @pi_GroupId, @pi_Date, @pi_LoginId, @pi_OutletId", new SqlParameter("@pi_GroupId", GroupId), new SqlParameter("@pi_Date", DateTime.Now.ToShortDateString()), new SqlParameter("@pi_LoginId", loginId), new SqlParameter("@pi_OutletId", outletId)).FirstOrDefault<OnlyOnce>();
+                    }
+                    else
+                    {
+                        objOnlyOnce = context.Database.SqlQuery<OnlyOnce>("sp_BOTS_OnlyOnce @pi_GroupId, @pi_Date, @pi_LoginId, @pi_OutletId", new SqlParameter("@pi_GroupId", GroupId), new SqlParameter("@pi_Date", DateTime.Now.ToShortDateString()), new SqlParameter("@pi_LoginId", ""), new SqlParameter("@pi_OutletId", outletId)).FirstOrDefault<OnlyOnce>();
+                    }
                 }
             }
             catch (Exception ex)
@@ -34,20 +40,32 @@ namespace BOTS_BL.Repository
 
             return objOnlyOnce;
         }
-        public List<OnlyOnceTxn> GetOnlyOnceTxnData(string GroupId, string outletId, string type, string connstr)
+        public List<OnlyOnceTxn> GetOnlyOnceTxnData(string GroupId, string outletId, string type, string connstr,string loginId)
         {
             List<OnlyOnceTxn> objOnlyOnceTxn = new List<OnlyOnceTxn>();
             try
             {
                 using (var context = new BOTSDBContext(connstr))
                 {
-
-                    objOnlyOnceTxn = context.Database.SqlQuery<OnlyOnceTxn>("sp_BOTS_OnlyOnce1 @pi_GroupId, @pi_Date, @pi_LoginId, @pi_OutletId, @pi_Type",
-                        new SqlParameter("@pi_GroupId", GroupId),
-                        new SqlParameter("@pi_Date", DateTime.Now.ToShortDateString()),
-                        new SqlParameter("@pi_LoginId", ""),
-                        new SqlParameter("@pi_OutletId", outletId),
-                        new SqlParameter("@pi_Type", type)).ToList<OnlyOnceTxn>();
+                    if (GroupId == "1086")
+                    {
+                        objOnlyOnceTxn = context.Database.SqlQuery<OnlyOnceTxn>("sp_BOTS_OnlyOnce1 @pi_GroupId, @pi_Date, @pi_LoginId, @pi_OutletId, @pi_Type",
+                       new SqlParameter("@pi_GroupId", GroupId),
+                       new SqlParameter("@pi_Date", DateTime.Now.ToShortDateString()),
+                       new SqlParameter("@pi_LoginId", loginId),
+                       new SqlParameter("@pi_OutletId", outletId),
+                       new SqlParameter("@pi_Type", type)).ToList<OnlyOnceTxn>();
+                    }
+                    else
+                    {
+                        objOnlyOnceTxn = context.Database.SqlQuery<OnlyOnceTxn>("sp_BOTS_OnlyOnce1 @pi_GroupId, @pi_Date, @pi_LoginId, @pi_OutletId, @pi_Type",
+                       new SqlParameter("@pi_GroupId", GroupId),
+                       new SqlParameter("@pi_Date", DateTime.Now.ToShortDateString()),
+                       new SqlParameter("@pi_LoginId", ""),
+                       new SqlParameter("@pi_OutletId", outletId),
+                       new SqlParameter("@pi_Type", type)).ToList<OnlyOnceTxn>();
+                    }
+                   
                 }
             }
             catch (Exception ex)
@@ -58,14 +76,22 @@ namespace BOTS_BL.Repository
             return objOnlyOnceTxn;
         }
 
-        public NonTransactingCls GetNonTransactingData(string GroupId, string outletId, string connstr)
+        public NonTransactingCls GetNonTransactingData(string GroupId, string outletId, string connstr,string loginId)
         {
             NonTransactingCls objNonTransacting = new NonTransactingCls();
             try
             {
                 using (var context = new BOTSDBContext(connstr))
                 {
-                    objNonTransacting = context.Database.SqlQuery<NonTransactingCls>("sp_BOTS_NonTransacting @pi_GroupId, @pi_Date, @pi_LoginId, @pi_OutletId", new SqlParameter("@pi_GroupId", GroupId), new SqlParameter("@pi_Date", DateTime.Now.ToShortDateString()), new SqlParameter("@pi_LoginId", ""), new SqlParameter("@pi_OutletId", outletId)).FirstOrDefault<NonTransactingCls>();
+                    if (GroupId == "1086")
+                    {
+                        objNonTransacting = context.Database.SqlQuery<NonTransactingCls>("sp_BOTS_NonTransacting @pi_GroupId, @pi_Date, @pi_LoginId, @pi_OutletId", new SqlParameter("@pi_GroupId", GroupId), new SqlParameter("@pi_Date", DateTime.Now.ToShortDateString()), new SqlParameter("@pi_LoginId", loginId), new SqlParameter("@pi_OutletId", outletId)).FirstOrDefault<NonTransactingCls>();
+                    }
+                    else
+                    {
+                        objNonTransacting = context.Database.SqlQuery<NonTransactingCls>("sp_BOTS_NonTransacting @pi_GroupId, @pi_Date, @pi_LoginId, @pi_OutletId", new SqlParameter("@pi_GroupId", GroupId), new SqlParameter("@pi_Date", DateTime.Now.ToShortDateString()), new SqlParameter("@pi_LoginId", ""), new SqlParameter("@pi_OutletId", outletId)).FirstOrDefault<NonTransactingCls>();
+                    }
+                    
 
                 }
             }
@@ -77,20 +103,32 @@ namespace BOTS_BL.Repository
             return objNonTransacting;
         }
 
-        public List<NonTransactingTxn> GetNonTransactingTxnData(string GroupId, string outletId, string type, string connstr)
+        public List<NonTransactingTxn> GetNonTransactingTxnData(string GroupId, string outletId, string type, string connstr,string loginId)
         {
             List<NonTransactingTxn> objNonTransactingTxn = new List<NonTransactingTxn>();
             try
             {
                 using (var context = new BOTSDBContext(connstr))
                 {
-
-                    objNonTransactingTxn = context.Database.SqlQuery<NonTransactingTxn>("sp_BOTS_NonTransacting1 @pi_GroupId, @pi_Date, @pi_LoginId, @pi_OutletId, @pi_Type",
+                    if (GroupId == "1086")
+                    {
+                        objNonTransactingTxn = context.Database.SqlQuery<NonTransactingTxn>("sp_BOTS_NonTransacting1 @pi_GroupId, @pi_Date, @pi_LoginId, @pi_OutletId, @pi_Type",
+                        new SqlParameter("@pi_GroupId", GroupId),
+                        new SqlParameter("@pi_Date", DateTime.Now.ToShortDateString()),
+                        new SqlParameter("@pi_LoginId", loginId),
+                        new SqlParameter("@pi_OutletId", outletId),
+                        new SqlParameter("@pi_Type", type)).ToList<NonTransactingTxn>();
+                    }
+                    else
+                    {
+                        objNonTransactingTxn = context.Database.SqlQuery<NonTransactingTxn>("sp_BOTS_NonTransacting1 @pi_GroupId, @pi_Date, @pi_LoginId, @pi_OutletId, @pi_Type",
                         new SqlParameter("@pi_GroupId", GroupId),
                         new SqlParameter("@pi_Date", DateTime.Now.ToShortDateString()),
                         new SqlParameter("@pi_LoginId", ""),
                         new SqlParameter("@pi_OutletId", outletId),
                         new SqlParameter("@pi_Type", type)).ToList<NonTransactingTxn>();
+                    }
+                    
                 }
             }
             catch (Exception ex)
@@ -101,14 +139,22 @@ namespace BOTS_BL.Repository
             return objNonTransactingTxn;
         }
 
-        public NonRedemptionCls GetNonRedemptionData(string GroupId, string connstr)
+        public NonRedemptionCls GetNonRedemptionData(string GroupId, string connstr,string loginId)
         {
             NonRedemptionCls objNonRedemption = new NonRedemptionCls();
             try
             {
                 using (var context = new BOTSDBContext(connstr))
                 {
-                    objNonRedemption = context.Database.SqlQuery<NonRedemptionCls>("sp_BOTS_NonRedeeming @pi_GroupId, @pi_Date, @pi_LoginId", new SqlParameter("@pi_GroupId", GroupId), new SqlParameter("@pi_Date", DateTime.Now.ToShortDateString()), new SqlParameter("@pi_LoginId", "")).FirstOrDefault<NonRedemptionCls>();
+                    if (GroupId == "1086")
+                    {
+                        objNonRedemption = context.Database.SqlQuery<NonRedemptionCls>("sp_BOTS_NonRedeeming @pi_GroupId, @pi_Date, @pi_LoginId", new SqlParameter("@pi_GroupId", GroupId), new SqlParameter("@pi_Date", DateTime.Now.ToShortDateString()), new SqlParameter("@pi_LoginId", loginId)).FirstOrDefault<NonRedemptionCls>();
+                    }
+                    else
+                    {
+                        objNonRedemption = context.Database.SqlQuery<NonRedemptionCls>("sp_BOTS_NonRedeeming @pi_GroupId, @pi_Date, @pi_LoginId", new SqlParameter("@pi_GroupId", GroupId), new SqlParameter("@pi_Date", DateTime.Now.ToShortDateString()), new SqlParameter("@pi_LoginId", "")).FirstOrDefault<NonRedemptionCls>();
+                    }
+                   
 
                 }
             }
@@ -120,19 +166,32 @@ namespace BOTS_BL.Repository
             return objNonRedemption;
         }
 
-        public List<NonRedemptionTxn> GetNonRedemptionTxnData(string GroupId, int type, int daysType, string connstr)
+        public List<NonRedemptionTxn> GetNonRedemptionTxnData(string GroupId, int type, int daysType, string connstr, string loginId)
         {
             List<NonRedemptionTxn> objNonRedemptionTxn = new List<NonRedemptionTxn>();
             try
             {
                 using (var context = new BOTSDBContext(connstr))
                 {
-                    objNonRedemptionTxn = context.Database.SqlQuery<NonRedemptionTxn>("sp_BOTS_NonRedeeming1 @pi_GroupId, @pi_Date, @pi_LoginId,@pi_Type,@pi_DaysType",
+                    if (GroupId == "1086")
+                    {
+                        objNonRedemptionTxn = context.Database.SqlQuery<NonRedemptionTxn>("sp_BOTS_NonRedeeming1 @pi_GroupId, @pi_Date, @pi_LoginId,@pi_Type,@pi_DaysType",
+                        new SqlParameter("@pi_GroupId", GroupId),
+                        new SqlParameter("@pi_Date", DateTime.Now.ToShortDateString()),
+                        new SqlParameter("@pi_LoginId", loginId),
+                        new SqlParameter("@pi_Type", type),
+                        new SqlParameter("@pi_DaysType", daysType)).ToList<NonRedemptionTxn>();
+                    }
+                    else
+                    {
+                        objNonRedemptionTxn = context.Database.SqlQuery<NonRedemptionTxn>("sp_BOTS_NonRedeeming1 @pi_GroupId, @pi_Date, @pi_LoginId,@pi_Type,@pi_DaysType",
                         new SqlParameter("@pi_GroupId", GroupId),
                         new SqlParameter("@pi_Date", DateTime.Now.ToShortDateString()),
                         new SqlParameter("@pi_LoginId", ""),
                         new SqlParameter("@pi_Type", type),
                         new SqlParameter("@pi_DaysType", daysType)).ToList<NonRedemptionTxn>();
+                    }
+                    
                 }
             }
             catch (Exception ex)
@@ -222,17 +281,28 @@ namespace BOTS_BL.Repository
             return objMemberPageRefData;
         }
 
-        public MembersInformation GetMemberMisinformationData(string GroupId, string connstr)
+        public MembersInformation GetMemberMisinformationData(string GroupId, string connstr,string loginId)
         {
             MembersInformation objMembersInformation = new MembersInformation();
             try
             {
                 using (var context = new BOTSDBContext(connstr))
                 {
-                    objMembersInformation = context.Database.SqlQuery<MembersInformation>("sp_BOTS_MemberInformation @pi_GroupId, @pi_Date, @pi_LoginId",
-                        new SqlParameter("@pi_GroupId", GroupId),
-                        new SqlParameter("@pi_Date", DateTime.Now.ToShortDateString()),
-                        new SqlParameter("@pi_LoginId", "")).FirstOrDefault<MembersInformation>();
+                    if (GroupId == "1086")
+                    {
+                        objMembersInformation = context.Database.SqlQuery<MembersInformation>("sp_BOTS_MemberInformation @pi_GroupId, @pi_Date, @pi_LoginId",
+                       new SqlParameter("@pi_GroupId", GroupId),
+                       new SqlParameter("@pi_Date", DateTime.Now.ToShortDateString()),
+                       new SqlParameter("@pi_LoginId", loginId)).FirstOrDefault<MembersInformation>();
+                    }
+                    else
+                    {
+                        objMembersInformation = context.Database.SqlQuery<MembersInformation>("sp_BOTS_MemberInformation @pi_GroupId, @pi_Date, @pi_LoginId",
+                       new SqlParameter("@pi_GroupId", GroupId),
+                       new SqlParameter("@pi_Date", DateTime.Now.ToShortDateString()),
+                       new SqlParameter("@pi_LoginId", "")).FirstOrDefault<MembersInformation>();
+                    }
+                   
                 }
             }
             catch (Exception ex)

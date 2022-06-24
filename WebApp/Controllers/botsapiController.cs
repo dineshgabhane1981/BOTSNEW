@@ -50,7 +50,7 @@ namespace WebApp.Controllers
                 List<string> lstDates = new List<string>();
                 string connectionString = CR.GetCustomerConnString(GroupId);
                 
-                dataMemberSegment = DR.GetDashboardMemberSegmentData(GroupId, OutletId, connectionString);
+                dataMemberSegment = DR.GetDashboardMemberSegmentData(GroupId, OutletId, connectionString, "");
             }
             catch (Exception ex)
             {
@@ -88,7 +88,7 @@ namespace WebApp.Controllers
             string connectionString = CR.GetCustomerConnString(GroupId);
             try
             {                
-                objDashboardBulkUpload = DR.GetDashboardBulkUpload(GroupId, connectionString);                
+                objDashboardBulkUpload = DR.GetDashboardBulkUpload(GroupId, connectionString,"");                
             }
             catch (Exception ex)
             {

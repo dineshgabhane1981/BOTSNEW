@@ -23,13 +23,22 @@ namespace BOTS_BL.Repository
     {
         Exceptions newexception = new Exceptions();
         //string connstr = CustomerConnString.ConnectionStringCustomer;
-        public List<MemberList> GetMemberList(string GroupId, string SearchText, string connstr)
+        public List<MemberList> GetMemberList(string GroupId, string SearchText, string connstr,string loginId)
         {
             List<MemberList> lstMember = new List<MemberList>();
             using (var context = new BOTSDBContext(connstr))
             {
-                lstMember = context.Database.SqlQuery<MemberList>("sp_BOTS_MemberList @pi_GroupId, @pi_Date, @pi_LoginId, @pi_OutletId",
+                if (GroupId == "1086")
+                {
+                    lstMember = context.Database.SqlQuery<MemberList>("sp_BOTS_MemberList @pi_GroupId, @pi_Date, @pi_LoginId, @pi_OutletId",
+                    new SqlParameter("@pi_GroupId", GroupId), new SqlParameter("@pi_Date", DateTime.Now.ToShortDateString()), new SqlParameter("@pi_LoginId", loginId), new SqlParameter("@pi_OutletId", SearchText)).ToList<MemberList>();
+                }
+                else
+                {
+                    lstMember = context.Database.SqlQuery<MemberList>("sp_BOTS_MemberList @pi_GroupId, @pi_Date, @pi_LoginId, @pi_OutletId",
                     new SqlParameter("@pi_GroupId", GroupId), new SqlParameter("@pi_Date", DateTime.Now.ToShortDateString()), new SqlParameter("@pi_LoginId", ""), new SqlParameter("@pi_OutletId", SearchText)).ToList<MemberList>();
+                }
+                
             }
 
             return lstMember;
@@ -139,14 +148,28 @@ namespace BOTS_BL.Repository
             return lstOutletWise;
         }
 
-        public List<OutletwiseTransaction> GetOutletWiseTransactionList(string GroupId, string DateRangeFlag, string FromDate, string ToDate, string OutletId, string EnrolmentDataFlag, string connstr)
+        public List<OutletwiseTransaction> GetOutletWiseTransactionList(string GroupId, string DateRangeFlag, string FromDate, string ToDate, string OutletId, string EnrolmentDataFlag, string connstr, string loginId)
         {
             List<OutletwiseTransaction> lstOutletWiseTransaction = new List<OutletwiseTransaction>();
             try
             {
                 using (var context = new BOTSDBContext(connstr))
                 {
-                    lstOutletWiseTransaction = context.Database.SqlQuery<OutletwiseTransaction>("sp_BOTS_DetailedTransaction @pi_GroupId, @pi_Date, @pi_LoginId, @pi_DateRangeFlag, @pi_FromDate, @pi_ToDate, @pi_OutletId, @pi_EnrolmentDataFlag",
+                    if (GroupId == "1086")
+                    {
+                        lstOutletWiseTransaction = context.Database.SqlQuery<OutletwiseTransaction>("sp_BOTS_DetailedTransaction @pi_GroupId, @pi_Date, @pi_LoginId, @pi_DateRangeFlag, @pi_FromDate, @pi_ToDate, @pi_OutletId, @pi_EnrolmentDataFlag",
+                        new SqlParameter("@pi_GroupId", GroupId),
+                        new SqlParameter("@pi_Date", DateTime.Now.ToString("yyyy-MM-dd")),
+                        new SqlParameter("@pi_LoginId", loginId),
+                        new SqlParameter("@pi_DateRangeFlag", DateRangeFlag),
+                        new SqlParameter("@pi_FromDate", FromDate),
+                        new SqlParameter("@pi_ToDate", ToDate),
+                        new SqlParameter("@pi_OutletId", OutletId),
+                        new SqlParameter("@pi_EnrolmentDataFlag", EnrolmentDataFlag)).ToList<OutletwiseTransaction>();
+                    }
+                    else
+                    {
+                        lstOutletWiseTransaction = context.Database.SqlQuery<OutletwiseTransaction>("sp_BOTS_DetailedTransaction @pi_GroupId, @pi_Date, @pi_LoginId, @pi_DateRangeFlag, @pi_FromDate, @pi_ToDate, @pi_OutletId, @pi_EnrolmentDataFlag",
                         new SqlParameter("@pi_GroupId", GroupId),
                         new SqlParameter("@pi_Date", DateTime.Now.ToString("yyyy-MM-dd")),
                         new SqlParameter("@pi_LoginId", ""),
@@ -155,6 +178,8 @@ namespace BOTS_BL.Repository
                         new SqlParameter("@pi_ToDate", ToDate),
                         new SqlParameter("@pi_OutletId", OutletId),
                         new SqlParameter("@pi_EnrolmentDataFlag", EnrolmentDataFlag)).ToList<OutletwiseTransaction>();
+                    }
+                    
                 }
             }
             catch (Exception ex)
@@ -164,19 +189,32 @@ namespace BOTS_BL.Repository
             return lstOutletWiseTransaction;
         }
 
-        public PointExpiryTmp GetPointExpiryData(string GroupId, int month, int year, string connstr)
+        public PointExpiryTmp GetPointExpiryData(string GroupId, int month, int year, string connstr,string loginId)
         {
             PointExpiryTmp pointExpiry = new PointExpiryTmp();
             try
             {
                 using (var context = new BOTSDBContext(connstr))
                 {
-                    pointExpiry = context.Database.SqlQuery<PointExpiryTmp>("sp_BOTS_PointsExpiry @pi_GroupId, @pi_Date, @pi_LoginId, @pi_Month, @pi_Year",
+                    if (GroupId == "1086")
+                    {
+                        pointExpiry = context.Database.SqlQuery<PointExpiryTmp>("sp_BOTS_PointsExpiry @pi_GroupId, @pi_Date, @pi_LoginId, @pi_Month, @pi_Year",
+                        new SqlParameter("@pi_GroupId", GroupId),
+                        new SqlParameter("@pi_Date", DateTime.Now.ToShortDateString()),
+                        new SqlParameter("@pi_LoginId", loginId),
+                        new SqlParameter("@pi_Month", month),
+                        new SqlParameter("@pi_Year", year)).FirstOrDefault<PointExpiryTmp>();
+                    }
+                    else
+                    {
+                        pointExpiry = context.Database.SqlQuery<PointExpiryTmp>("sp_BOTS_PointsExpiry @pi_GroupId, @pi_Date, @pi_LoginId, @pi_Month, @pi_Year",
                         new SqlParameter("@pi_GroupId", GroupId),
                         new SqlParameter("@pi_Date", DateTime.Now.ToShortDateString()),
                         new SqlParameter("@pi_LoginId", ""),
                         new SqlParameter("@pi_Month", month),
                         new SqlParameter("@pi_Year", year)).FirstOrDefault<PointExpiryTmp>();
+                    }
+                    
                 }
             }
             catch (Exception ex)
@@ -186,19 +224,32 @@ namespace BOTS_BL.Repository
             return pointExpiry;
         }
 
-        public List<PointExpiryTxn> GetPointExpiryTxnData(string GroupId, int month, int year, string connstr)
+        public List<PointExpiryTxn> GetPointExpiryTxnData(string GroupId, int month, int year, string connstr,string loginId)
         {
             List<PointExpiryTxn> pointExpiryTxn = new List<PointExpiryTxn>();
             try
             {
                 using (var context = new BOTSDBContext(connstr))
                 {
-                    pointExpiryTxn = context.Database.SqlQuery<PointExpiryTxn>("sp_BOTS_PointsExpiry1 @pi_GroupId, @pi_Date, @pi_LoginId, @pi_Month, @pi_Year",
+                    if (GroupId == "1086")
+                    {
+                        pointExpiryTxn = context.Database.SqlQuery<PointExpiryTxn>("sp_BOTS_PointsExpiry1 @pi_GroupId, @pi_Date, @pi_LoginId, @pi_Month, @pi_Year",
+                        new SqlParameter("@pi_GroupId", GroupId),
+                        new SqlParameter("@pi_Date", DateTime.Now.ToShortDateString()),
+                        new SqlParameter("@pi_LoginId", loginId),
+                        new SqlParameter("@pi_Month", month),
+                        new SqlParameter("@pi_Year", year)).ToList<PointExpiryTxn>();
+                    }
+                    else
+                    {
+                        pointExpiryTxn = context.Database.SqlQuery<PointExpiryTxn>("sp_BOTS_PointsExpiry1 @pi_GroupId, @pi_Date, @pi_LoginId, @pi_Month, @pi_Year",
                         new SqlParameter("@pi_GroupId", GroupId),
                         new SqlParameter("@pi_Date", DateTime.Now.ToShortDateString()),
                         new SqlParameter("@pi_LoginId", ""),
                         new SqlParameter("@pi_Month", month),
                         new SqlParameter("@pi_Year", year)).ToList<PointExpiryTxn>();
+                    }
+                    
                 }
             }
             catch (Exception ex)

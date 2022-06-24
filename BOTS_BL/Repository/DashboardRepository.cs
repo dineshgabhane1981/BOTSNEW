@@ -15,9 +15,9 @@ namespace BOTS_BL.Repository
 {
 
     public class DashboardRepository
-    {        
+    {
         Exceptions newexception = new Exceptions();
-        public ExecutiveSummary GetDashboardData(string GroupId, string connstr,string LoginId)
+        public ExecutiveSummary GetDashboardData(string GroupId, string connstr, string LoginId)
         {
 
             ExecutiveSummary dataDashboard = new ExecutiveSummary();
@@ -30,7 +30,7 @@ namespace BOTS_BL.Repository
                     dataDashboard = context.Database.SqlQuery<ExecutiveSummary>("sp_BOTS_LoyaltyPerfromance @pi_GroupId, @pi_Date,@pi_LoginId,@pi_Month,@pi_Year,@pi_OutletId", new SqlParameter("@pi_GroupId", GroupId), new SqlParameter("@pi_Date", DateTime.Now.ToShortDateString()), new SqlParameter("@pi_LoginId", LoginId), new SqlParameter("@pi_Month", ""), new SqlParameter("@pi_Year", ""), new SqlParameter("@pi_OutletId", "")).FirstOrDefault<ExecutiveSummary>();
 
                     dataDashboard.lstOutletDetails = context.Database.SqlQuery<OutletDetails>("sp_OutletDashboard @pi_GroupId, @pi_Date", new SqlParameter("@pi_GroupId", GroupId), new SqlParameter("@pi_Date", DateTime.Now.ToString("yyyy-MM-dd"))).ToList<OutletDetails>();
-                    
+
                 }
             }
             catch (Exception ex)
@@ -40,14 +40,21 @@ namespace BOTS_BL.Repository
             return dataDashboard;
         }
 
-        public DashboardMemberSegment GetDashboardMemberSegmentData(string GroupId, string OutletId, string connstr)
+        public DashboardMemberSegment GetDashboardMemberSegmentData(string GroupId, string OutletId, string connstr,string loginId)
         {
 
             DashboardMemberSegment dashboardMemberSegment = new DashboardMemberSegment();
             using (var context = new BOTSDBContext(connstr))
             {
-
-                dashboardMemberSegment = context.Database.SqlQuery<DashboardMemberSegment>("sp_BOTS_DashboardMemberSegment @pi_GroupId, @pi_Date, @pi_OutletId", new SqlParameter("@pi_GroupId", GroupId), new SqlParameter("@pi_Date", DateTime.Now.ToString("yyyy-MM-dd")), new SqlParameter("@pi_OutletId", OutletId)).FirstOrDefault<DashboardMemberSegment>();
+                if (GroupId == "1086")
+                {
+                    dashboardMemberSegment = context.Database.SqlQuery<DashboardMemberSegment>("sp_BOTS_DashboardMemberSegment @pi_GroupId, @pi_Date, @pi_OutletId,@pi_LoginId", new SqlParameter("@pi_GroupId", GroupId), new SqlParameter("@pi_Date", DateTime.Now.ToString("yyyy-MM-dd")), new SqlParameter("@pi_OutletId", OutletId), new SqlParameter("@pi_LoginId", loginId)).FirstOrDefault<DashboardMemberSegment>();
+                }
+                else
+                {
+                    dashboardMemberSegment = context.Database.SqlQuery<DashboardMemberSegment>("sp_BOTS_DashboardMemberSegment @pi_GroupId, @pi_Date, @pi_OutletId,@pi_LoginId", new SqlParameter("@pi_GroupId", GroupId), new SqlParameter("@pi_Date", DateTime.Now.ToString("yyyy-MM-dd")), new SqlParameter("@pi_OutletId", OutletId), new SqlParameter("@pi_LoginId", "")).FirstOrDefault<DashboardMemberSegment>();
+                }
+               
 
                 DateTime? FromDate;
                 if (!string.IsNullOrEmpty(OutletId))
@@ -69,15 +76,22 @@ namespace BOTS_BL.Repository
 
             return dashboardMemberSegment;
         }
-        public List<DashboardMemberSegmentTxn> GetDashboardMemberSegmentTxnData(string GroupId, string OutletId, string connstr)
+        public List<DashboardMemberSegmentTxn> GetDashboardMemberSegmentTxnData(string GroupId, string OutletId, string connstr, string loginId)
         {
 
             List<DashboardMemberSegmentTxn> dashboardMemberSegmentTxn = new List<DashboardMemberSegmentTxn>();
             List<DashboardMemberSegmentTxnDB> dashboardMemberSegmentTxnDB = new List<DashboardMemberSegmentTxnDB>();
             using (var context = new BOTSDBContext(connstr))
             {
-
-                dashboardMemberSegmentTxnDB = context.Database.SqlQuery<DashboardMemberSegmentTxnDB>("sp_BOTS_DashboardMemberSegment1 @pi_GroupId, @pi_Date, @pi_OutletId", new SqlParameter("@pi_GroupId", GroupId), new SqlParameter("@pi_Date", DateTime.Now.ToString("yyyy-MM-dd")), new SqlParameter("@pi_OutletId", OutletId)).ToList<DashboardMemberSegmentTxnDB>();
+                if (GroupId == "1086")
+                {
+                    dashboardMemberSegmentTxnDB = context.Database.SqlQuery<DashboardMemberSegmentTxnDB>("sp_BOTS_DashboardMemberSegment1 @pi_GroupId, @pi_Date, @pi_OutletId,@pi_LoginId", new SqlParameter("@pi_GroupId", GroupId), new SqlParameter("@pi_Date", DateTime.Now.ToString("yyyy-MM-dd")), new SqlParameter("@pi_OutletId", OutletId), new SqlParameter("@pi_LoginId", loginId)).ToList<DashboardMemberSegmentTxnDB>();
+                }
+                else
+                {
+                    dashboardMemberSegmentTxnDB = context.Database.SqlQuery<DashboardMemberSegmentTxnDB>("sp_BOTS_DashboardMemberSegment1 @pi_GroupId, @pi_Date, @pi_OutletId,@pi_LoginId", new SqlParameter("@pi_GroupId", GroupId), new SqlParameter("@pi_Date", DateTime.Now.ToString("yyyy-MM-dd")), new SqlParameter("@pi_OutletId", OutletId), new SqlParameter("@pi_LoginId", "")).ToList<DashboardMemberSegmentTxnDB>();
+                }
+                
                 int count = 1;
                 foreach (var item in dashboardMemberSegmentTxnDB)
                 {
@@ -136,15 +150,20 @@ namespace BOTS_BL.Repository
             return dashboardMemberSegmentTxn;
         }
 
-        public List<DashboardOutletEnrolment> GetDashboardOutletEnrolmentData(string GroupId, string monthFlag, string connstr)
+        public List<DashboardOutletEnrolment> GetDashboardOutletEnrolmentData(string GroupId, string monthFlag, string connstr,string loginId)
         {
 
             List<DashboardOutletEnrolment> dashboardOutletEnrolment = new List<DashboardOutletEnrolment>();
             using (var context = new BOTSDBContext(connstr))
             {
-
-                dashboardOutletEnrolment = context.Database.SqlQuery<DashboardOutletEnrolment>("sp_BOTS_DashboardOutletEnrolment @pi_GroupId, @pi_Date, @pi_Flag", new SqlParameter("@pi_GroupId", GroupId), new SqlParameter("@pi_Date", DateTime.Now.ToShortDateString()), new SqlParameter("@pi_Flag", monthFlag)).OrderByDescending(s => s.EnrollmentCount).ToList<DashboardOutletEnrolment>();
-
+                if (GroupId == "1086")
+                {
+                    dashboardOutletEnrolment = context.Database.SqlQuery<DashboardOutletEnrolment>("sp_BOTS_DashboardOutletEnrolment @pi_GroupId, @pi_Date, @pi_Flag, @pi_LoginId", new SqlParameter("@pi_GroupId", GroupId), new SqlParameter("@pi_Date", DateTime.Now.ToShortDateString()), new SqlParameter("@pi_Flag", monthFlag), new SqlParameter("@pi_LoginId", loginId)).OrderByDescending(s => s.EnrollmentCount).ToList<DashboardOutletEnrolment>();
+                }
+                else
+                {
+                    dashboardOutletEnrolment = context.Database.SqlQuery<DashboardOutletEnrolment>("sp_BOTS_DashboardOutletEnrolment @pi_GroupId, @pi_Date, @pi_Flag, @pi_LoginId", new SqlParameter("@pi_GroupId", GroupId), new SqlParameter("@pi_Date", DateTime.Now.ToShortDateString()), new SqlParameter("@pi_Flag", monthFlag), new SqlParameter("@pi_LoginId", "")).OrderByDescending(s => s.EnrollmentCount).ToList<DashboardOutletEnrolment>();
+                }
             }
             return dashboardOutletEnrolment;
         }
@@ -159,54 +178,93 @@ namespace BOTS_BL.Repository
             }
             return dashboardPointsSummary;
         }
-        public DashboardMemberWebPage GetDashboardMemberWebPageData(string GroupId, string profileFlag, string connstr)
+        public DashboardMemberWebPage GetDashboardMemberWebPageData(string GroupId, string profileFlag, string connstr,string loginId)
         {
 
             DashboardMemberWebPage dashboardMemberWebPage = new DashboardMemberWebPage();
             using (var context = new BOTSDBContext(connstr))
             {
-
-                dashboardMemberWebPage = context.Database.SqlQuery<DashboardMemberWebPage>("sp_BOTS_DashboardMemberWebPage @pi_GroupId, @pi_Date, @pi_Flag", new SqlParameter("@pi_GroupId", GroupId), new SqlParameter("@pi_Date", DateTime.Now.ToShortDateString()), new SqlParameter("@pi_Flag", profileFlag)).FirstOrDefault<DashboardMemberWebPage>();
+                if (GroupId == "1086")
+                {
+                    dashboardMemberWebPage = context.Database.SqlQuery<DashboardMemberWebPage>("sp_BOTS_DashboardMemberWebPage @pi_GroupId, @pi_Date, @pi_Flag, @pi_LoginId", new SqlParameter("@pi_GroupId", GroupId), new SqlParameter("@pi_Date", DateTime.Now.ToShortDateString()), new SqlParameter("@pi_Flag", profileFlag), new SqlParameter("@pi_LoginId", loginId)).FirstOrDefault<DashboardMemberWebPage>();
+                }
+                else
+                {
+                    dashboardMemberWebPage = context.Database.SqlQuery<DashboardMemberWebPage>("sp_BOTS_DashboardMemberWebPage @pi_GroupId, @pi_Date, @pi_Flag, @pi_LoginId", new SqlParameter("@pi_GroupId", GroupId), new SqlParameter("@pi_Date", DateTime.Now.ToShortDateString()), new SqlParameter("@pi_Flag", profileFlag), new SqlParameter("@pi_LoginId", "")).FirstOrDefault<DashboardMemberWebPage>();
+                }
+               
 
             }
             return dashboardMemberWebPage;
         }
 
-        public DashboardBulkUpload GetDashboardBulkUpload(string GroupId, string connstr)
+        public DashboardBulkUpload GetDashboardBulkUpload(string GroupId, string connstr, string loginId)
         {
             DashboardBulkUpload objDashboardBulkUpload = new DashboardBulkUpload();
             using (var context = new BOTSDBContext(connstr))
             {
-                objDashboardBulkUpload = context.Database.SqlQuery<DashboardBulkUpload>("sp_BOTS_DashboardBulkUpload @pi_GroupId, @pi_Date, @pi_LoginId", new SqlParameter("@pi_GroupId", GroupId),
-                    new SqlParameter("@pi_Date", DateTime.Now.ToShortDateString()),
-                    new SqlParameter("@pi_LoginId", "")).FirstOrDefault<DashboardBulkUpload>();
+                if (GroupId == "1086")
+                {
+                    objDashboardBulkUpload = context.Database.SqlQuery<DashboardBulkUpload>("sp_BOTS_DashboardBulkUpload @pi_GroupId, @pi_Date, @pi_LoginId", new SqlParameter("@pi_GroupId", GroupId),
+                        new SqlParameter("@pi_Date", DateTime.Now.ToShortDateString()),
+                        new SqlParameter("@pi_LoginId", loginId)).FirstOrDefault<DashboardBulkUpload>();
+                }
+                else
+                {
+
+                    objDashboardBulkUpload = context.Database.SqlQuery<DashboardBulkUpload>("sp_BOTS_DashboardBulkUpload @pi_GroupId, @pi_Date, @pi_LoginId", new SqlParameter("@pi_GroupId", GroupId),
+                        new SqlParameter("@pi_Date", DateTime.Now.ToShortDateString()),
+                        new SqlParameter("@pi_LoginId", "")).FirstOrDefault<DashboardBulkUpload>();
+                }
             }
             return objDashboardBulkUpload;
         }
 
-        public DashboardRedemption GetDashboardRedemption(string GroupId, string Type, string connstr)
+        public DashboardRedemption GetDashboardRedemption(string GroupId, string Type, string connstr, string loginId)
         {
             DashboardRedemption objDashboardRedemption = new DashboardRedemption();
             using (var context = new BOTSDBContext(connstr))
             {
-                objDashboardRedemption = context.Database.SqlQuery<DashboardRedemption>("sp_BOTS_DashboardRedemption @pi_GroupId, @pi_Date, @pi_LoginId, @pi_Type", new SqlParameter("@pi_GroupId", GroupId),
+                if (GroupId == "1086")
+                {
+                    objDashboardRedemption = context.Database.SqlQuery<DashboardRedemption>("sp_BOTS_DashboardRedemption @pi_GroupId, @pi_Date, @pi_LoginId, @pi_Type", new SqlParameter("@pi_GroupId", GroupId),
+                    new SqlParameter("@pi_Date", DateTime.Now.ToShortDateString()),
+                    new SqlParameter("@pi_LoginId", loginId),
+                    new SqlParameter("@pi_Type", Type)).FirstOrDefault<DashboardRedemption>();
+                }
+                else
+                {
+                    objDashboardRedemption = context.Database.SqlQuery<DashboardRedemption>("sp_BOTS_DashboardRedemption @pi_GroupId, @pi_Date, @pi_LoginId, @pi_Type", new SqlParameter("@pi_GroupId", GroupId),
                     new SqlParameter("@pi_Date", DateTime.Now.ToShortDateString()),
                     new SqlParameter("@pi_LoginId", ""),
                     new SqlParameter("@pi_Type", Type)).FirstOrDefault<DashboardRedemption>();
+                }
+                
             }
             return objDashboardRedemption;
         }
 
-        public List<DashboardBizShared> GetDashboardBizShared(string GroupId, string OutletId, string connstr)
+        public List<DashboardBizShared> GetDashboardBizShared(string GroupId, string OutletId, string connstr, string loginId)
         {
             List<DashboardBizShared> lstBizShared = new List<DashboardBizShared>();
             using (var context = new BOTSDBContext(connstr))
             {
-                lstBizShared = context.Database.SqlQuery<DashboardBizShared>("sp_BOTS_DashboardBizShared @pi_GroupId, @pi_Date, @pi_LoginId, @pi_OutletId", 
-                    new SqlParameter("@pi_GroupId", GroupId),
-                    new SqlParameter("@pi_Date", DateTime.Now.ToShortDateString()),
-                    new SqlParameter("@pi_LoginId", ""),
-                    new SqlParameter("@pi_OutletId", OutletId)).ToList<DashboardBizShared>();
+                if (GroupId == "1086")
+                {
+                    lstBizShared = context.Database.SqlQuery<DashboardBizShared>("sp_BOTS_DashboardBizShared @pi_GroupId, @pi_Date, @pi_LoginId, @pi_OutletId",
+                       new SqlParameter("@pi_GroupId", GroupId),
+                       new SqlParameter("@pi_Date", DateTime.Now.ToShortDateString()),
+                       new SqlParameter("@pi_LoginId", loginId),
+                       new SqlParameter("@pi_OutletId", OutletId)).ToList<DashboardBizShared>();
+                }
+                else
+                {
+                    lstBizShared = context.Database.SqlQuery<DashboardBizShared>("sp_BOTS_DashboardBizShared @pi_GroupId, @pi_Date, @pi_LoginId, @pi_OutletId",
+                        new SqlParameter("@pi_GroupId", GroupId),
+                        new SqlParameter("@pi_Date", DateTime.Now.ToShortDateString()),
+                        new SqlParameter("@pi_LoginId", ""),
+                        new SqlParameter("@pi_OutletId", OutletId)).ToList<DashboardBizShared>();
+                }
             }
             return lstBizShared;
         }

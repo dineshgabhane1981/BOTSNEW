@@ -26,7 +26,7 @@ namespace WebApp.Controllers
         {
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
             LoyaltyKPIs objLoyaltyKPIs = new LoyaltyKPIs();
-            objLoyaltyKPIs = LKR.GetobjLoyaltyKPIsData(userDetails.GroupId, userDetails.connectionString);
+            objLoyaltyKPIs = LKR.GetobjLoyaltyKPIsData(userDetails.GroupId, userDetails.connectionString, userDetails.LoginId);
             var Sum = objLoyaltyKPIs.Redemption + objLoyaltyKPIs.Referrals + objLoyaltyKPIs.Campaigns + objLoyaltyKPIs.SMSBlastWA + objLoyaltyKPIs.NewMWPRegistration;
             if (Sum != 0)
             {
