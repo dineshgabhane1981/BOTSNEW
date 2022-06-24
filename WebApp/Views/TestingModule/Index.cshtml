@@ -346,7 +346,7 @@
            ShowHideTxnTypeSection("dvCancel");
            ReplaceMobileNo();
        });
-
+        ShowHideTxnTypeSection("dvSendOtp");
        $('#rbtnSendOtp').click(function () {
            ShowHideTxnTypeSection("dvSendOtp");
            ReplaceMobileNo();
@@ -1053,6 +1053,8 @@
             $("#ddlBillingPartner").val('');
             $("#ddlBPProduct").val('');
             $("#txtRequestPacketURL1").val('');
+            $("#txtInvoiceNo").val('');
+            $("#txtInvoiceAmt").val('');
             $("#ddlOutlet").val('');
             $("#txtMobileNo").val('');
             $("#txtDatetime1").val('');
@@ -1062,6 +1064,8 @@
             $("#ddlBillingPartner").val('');
             $("#ddlBPProduct").val('');
             $("#txtRequestPacketURL2").val('');
+            $("#txtInvoiceNo").val('');
+            $("#txtInvoiceAmt").val('');
             $("#ddlOutlet").val('');
             $("#txtMobileNo").val('');
             $("#txtInvoiceNo2").val('');
@@ -1074,6 +1078,8 @@
             $("#ddlBillingPartner").val('');
             $("#ddlBPProduct").val('');
             $("#txtRequestPacketURL3").val('');
+            $("#txtInvoiceNo").val('');
+            $("#txtInvoiceAmt").val('');
             $("#ddlOutlet").val('');
             $("#txtMobileNo").val('');
             $("#txtInvoiceNo3").val('');
@@ -1085,6 +1091,8 @@
             $("#ddlBillingPartner").val('');
             $("#ddlBPProduct").val('');
             $("#txtRequestPacketURL4").val('');
+            $("#txtInvoiceNo").val('');
+            $("#txtInvoiceAmt").val('');
             $("#ddlOutlet").val('');
             $("#txtMobileNo").val('');
             $("#txtInvoiceNo4").val('');
@@ -1096,6 +1104,8 @@
             $("#ddlBillingPartner").val('');
             $("#ddlBPProduct").val('');
             $("#txtRequestPacketURL5").val('');
+            $("#txtInvoiceNo").val('');
+            $("#txtInvoiceAmt").val('');
             $("#ddlOutlet").val('');
             $("#txtMobileNo").val('');
             $("#txtInvoiceNo5").val('');
@@ -1107,6 +1117,8 @@
             $("#ddlBillingPartner").val('');
             $("#ddlBPProduct").val('');
             $("#txtRequestPacketURL6").val('');
+            $("#txtInvoiceNo").val('');
+            $("#txtInvoiceAmt").val('');
             $("#ddlOutlet").val('');
             $("#txtMobileNo").val('');
             $("#txtInvoiceNo6").val('');
@@ -1118,6 +1130,8 @@
             $("#ddlBillingPartner").val('');
             $("#ddlBPProduct").val('');
             $("#txtRequestPacketURL7").val('');
+            $("#txtInvoiceNo").val('');
+            $("#txtInvoiceAmt").val('');
             $("#ddlOutlet").val('');
             $("#txtMobileNo").val('');
             $("#txtInvoiceNo7").val('');
@@ -1204,6 +1218,17 @@
         else {
             $("#txtInvoiceNo").prop("disabled", false);
             $("#txtInvoiceAmt").prop("disabled", false);
+
+            if (Id == "dvSendOtp") {
+                $("#txtInvoiceNo").prop("disabled", true);
+                $("#txtInvoiceAmt").prop("disabled", true);
+            }
+            else {
+                $("#txtInvoiceNo").prop("disabled", false);
+                $("#txtInvoiceAmt").prop("disabled", false);
+
+            }
+
         }
     }
 
