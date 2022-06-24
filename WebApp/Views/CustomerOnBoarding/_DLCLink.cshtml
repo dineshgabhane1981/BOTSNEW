@@ -96,6 +96,7 @@
             SaveDLCLinkConfig();
         });
         LoadExistingDLCLinkData();
+        RemoveRequiredBorderDLCLink();
     });
 
     function LoadExistingDLCLinkData() {
@@ -252,43 +253,45 @@
     }
 
     function SaveDLCLinkConfig() {
-        var DLCConfig = [];
-        item = {}
-        item["Id"] = $('#hdnDLCLinkConfigId').val();
-        item["GroupId"] = $('#hdnGroupID').val();
-        item["ProfileUpdatePoints"] = $('#txtProfileUpdatePoints').val();
-        item["ReferralPoints"] = $('#txtReferralPoints').val();
-        item["ReferredPoints"] = $('#txtReferredPoints').val();
-        item["ValidityOfReferralPoints"] = $('#txtValidityOfReferralPoints').val();
-        item["ReferralReminder"] = $('#txtReferralReminder').val();
+        var validationStatus = ValidateDLCLink();
+        if (validationStatus) {
+            var DLCConfig = [];
+            item = {}
+            item["Id"] = $('#hdnDLCLinkConfigId').val();
+            item["GroupId"] = $('#hdnGroupID').val();
+            item["ProfileUpdatePoints"] = $('#txtProfileUpdatePoints').val();
+            item["ReferralPoints"] = $('#txtReferralPoints').val();
+            item["ReferredPoints"] = $('#txtReferredPoints').val();
+            item["ValidityOfReferralPoints"] = $('#txtValidityOfReferralPoints').val();
+            item["ReferralReminder"] = $('#txtReferralReminder').val();
 
-        item["SMSToTheReferral"] = $('#txtSMSToTheReferral').val();
-        item["SMSReminderForPointsUsage1"] = $('#txtSMSReminderForPointsUsage1').val();
-        item["SMSReminderForPointsUsage2"] = $('#txtSMSReminderForPointsUsage2').val();
-        item["SMSReminderForPointsUsageDays1"] = $('#txtSMSRem1Days').val();
-        item["SMSReminderForPointsUsageDays2"] = $('#txtSMSRem2Days').val();
+            item["SMSToTheReferral"] = $('#txtSMSToTheReferral').val();
+            item["SMSReminderForPointsUsage1"] = $('#txtSMSReminderForPointsUsage1').val();
+            item["SMSReminderForPointsUsage2"] = $('#txtSMSReminderForPointsUsage2').val();
+            item["SMSReminderForPointsUsageDays1"] = $('#txtSMSRem1Days').val();
+            item["SMSReminderForPointsUsageDays2"] = $('#txtSMSRem2Days').val();
 
-        item["SMSReferredSuccessOnReferralTxn"] = $('#txtSMSReferredSuccessOnReferralTxn').val();
-        item["DLCOTPScriptSMS"] = $('#txtSMSDLCOtp').val();
-        item["GiftPointsOTPScriptSMS"] = $('#txtSMSGiftPtOtp').val();
-        item["GiftPointsDebitOTPScriptSMS"] = $('#txtSMSGiftPtDebitOtp').val();
-        item["GiftPointsCreditOTPScriptSMS"] = $('#txtSMSGiftPtCreditOtp').val();
-        item["ToTheReferralWAScript"] = $('#txtWAToTheReferral').val();
-        item["ReminderForPointsUsageWAScript1"] = $('#txtWAReminderForPointsUsage1').val();
-        item["ReminderForPointsUsageWAScript2"] = $('#txtWAReminderForPointsUsage2').val();
-        item["ReminderForPointsUsageWAScriptDays1"] = $('#txtWARem1Days').val();
-        item["ReminderForPointsUsageWAScriptDays2"] = $('#txtWARem2Days').val();
+            item["SMSReferredSuccessOnReferralTxn"] = $('#txtSMSReferredSuccessOnReferralTxn').val();
+            item["DLCOTPScriptSMS"] = $('#txtSMSDLCOtp').val();
+            item["GiftPointsOTPScriptSMS"] = $('#txtSMSGiftPtOtp').val();
+            item["GiftPointsDebitOTPScriptSMS"] = $('#txtSMSGiftPtDebitOtp').val();
+            item["GiftPointsCreditOTPScriptSMS"] = $('#txtSMSGiftPtCreditOtp').val();
+            item["ToTheReferralWAScript"] = $('#txtWAToTheReferral').val();
+            item["ReminderForPointsUsageWAScript1"] = $('#txtWAReminderForPointsUsage1').val();
+            item["ReminderForPointsUsageWAScript2"] = $('#txtWAReminderForPointsUsage2').val();
+            item["ReminderForPointsUsageWAScriptDays1"] = $('#txtWARem1Days').val();
+            item["ReminderForPointsUsageWAScriptDays2"] = $('#txtWARem2Days').val();
 
-        item["ReferredSuccessOnReferralTxnWAScript"] = $('#txtWAReferredSuccessOnReferralTxn').val();
-        item["DLCOTPScriptWA"] = $('#txtWADlcOtp').val();
-        item["GiftPointsOTPScriptWA"] = $('#txtWAGiftPtOtp').val();
-        item["GiftPointsDebitOTPScriptWA"] = $('#txtWAGiftPtDebitOtp').val();
-        item["GiftPointsCreditOTPScriptWA"] = $('#txtWAGiftPtCreditOtp').val();
+            item["ReferredSuccessOnReferralTxnWAScript"] = $('#txtWAReferredSuccessOnReferralTxn').val();
+            item["DLCOTPScriptWA"] = $('#txtWADlcOtp').val();
+            item["GiftPointsOTPScriptWA"] = $('#txtWAGiftPtOtp').val();
+            item["GiftPointsDebitOTPScriptWA"] = $('#txtWAGiftPtDebitOtp').val();
+            item["GiftPointsCreditOTPScriptWA"] = $('#txtWAGiftPtCreditOtp').val();
 
-        DLCConfig.push(item);
-        var DLCConfigData = JSON.stringify(DLCConfig);
+            DLCConfig.push(item);
+            var DLCConfigData = JSON.stringify(DLCConfig);
 
-         $("#divLoader").show();
+            $("#divLoader").show();
             $.ajax({
                 type: "POST",
                 url: '@Url.Action("SaveDLCLinkConfig", "CustomerOnBoarding")',
@@ -321,6 +324,341 @@
                     $("#divLoader").hide();
                 }
             });
+        }
+    }
+
+    function ValidateDLCLink() {
+        var status = true;
+        
+        if ($("#txtProfileUpdatePoints").val() == "") {
+            $('#txtProfileUpdatePoints').css('border-color', 'red');
+            status = false;
+        }
+        if ($("#txtReferralPoints").val() == "") {
+            $('#txtReferralPoints').css('border-color', 'red');
+            status = false;
+        }
+        if ($("#txtReferredPoints").val() == "") {
+            $('#txtReferredPoints').css('border-color', 'red');
+            status = false;
+        }
+        if ($("#txtSMSToTheReferral").val() == "") {
+            $('#txtSMSToTheReferral').css('border-color', 'red');
+            status = false;
+        }
+        if ($("#txtSMSRem1Days").val() == "") {
+            $('#txtSMSRem1Days').css('border-color', 'red');
+            status = false;
+        }
+        if ($("#txtSMSReminderForPointsUsage1").val() == "") {
+            $('#txtSMSReminderForPointsUsage1').css('border-color', 'red');
+            status = false;
+        }
+        if ($("#txtSMSRem2Days").val() == "") {
+            $('#txtSMSRem2Days').css('border-color', 'red');
+            status = false;
+        }
+        if ($("#txtSMSReminderForPointsUsage2").val() == "") {
+            $('#txtSMSReminderForPointsUsage2').css('border-color', 'red');
+            status = false;
+        }
+        if ($("#txtSMSReferredSuccessOnReferralTxn").val() == "") {
+            $('#txtSMSReferredSuccessOnReferralTxn').css('border-color', 'red');
+            status = false;
+        }
+        if ($("#txtSMSDLCOtp").val() == "") {
+            $('#txtSMSDLCOtp').css('border-color', 'red');
+            status = false;
+        }
+        if ($("#txtSMSGiftPtOtp").val() == "") {
+            $('#txtSMSGiftPtOtp').css('border-color', 'red');
+            status = false;
+        }
+        if ($("#txtSMSGiftPtDebitOtp").val() == "") {
+            $('#txtSMSGiftPtDebitOtp').css('border-color', 'red');
+            status = false;
+        }
+        if ($("#txtSMSGiftPtCreditOtp").val() == "") {
+            $('#txtSMSGiftPtCreditOtp').css('border-color', 'red');
+            status = false;
+        }
+        if ($("#txtValidityOfReferralPoints").val() == "") {
+                $('#txtValidityOfReferralPoints').css('border-color', 'red');
+                status = false;
+        }
+        if ($("#txtReferralReminder").val() == "") {
+                $('#txtReferralReminder').css('border-color', 'red');
+                status = false;
+        }
+        if ($("#txtReferredPoints").val() == "") {
+                $('#txtReferredPoints').css('border-color', 'red');
+                status = false;
+        }
+        if ($("#txtWAToTheReferral").val() == "") {
+                $('#txtWAToTheReferral').css('border-color', 'red');
+                status = false;
+        }
+        if ($("#txtWARem1Days").val() == "") {
+                $('#txtWARem1Days').css('border-color', 'red');
+                status = false;
+        }
+        if ($("#txtWAReminderForPointsUsage1").val() == "") {
+                $('#txtWAReminderForPointsUsage1').css('border-color', 'red');
+                status = false;
+        }
+        if ($("#txtWARem2Days").val() == "") {
+                $('#txtWARem2Days').css('border-color', 'red');
+                status = false;
+        }
+        if ($("#txtWAReminderForPointsUsage2").val() == "") {
+                $('#txtWAReminderForPointsUsage2').css('border-color', 'red');
+                status = false;
+        }
+        if ($("#txtWAReferredSuccessOnReferralTxn").val() == "") {
+                $('#txtWAReferredSuccessOnReferralTxn').css('border-color', 'red');
+                status = false;
+        }
+        if ($("#txtWADlcOtp").val() == "") {
+                $('#txtWADlcOtp').css('border-color', 'red');
+                status = false;
+        }
+        if ($("#txtWAGiftPtOtp").val() == "") {
+                $('#txtWAGiftPtOtp').css('border-color', 'red');
+                status = false;
+        }
+        if ($("#txtWAGiftPtDebitOtp").val() == "") {
+                $('#txtWAGiftPtDebitOtp').css('border-color', 'red');
+                status = false;
+        }
+        if ($("#txtWAGiftPtCreditOtp").val() == "") {
+                $('#txtWAGiftPtCreditOtp').css('border-color', 'red');
+                status = false;
+        }
+        
+        if (!status) {
+            cuteAlert({
+                type: "error",
+                title: "Oops..",
+                message: "Please Enter required fields",
+                buttonText: "Okay"
+            })
+        }
+
+
+        return status;
+    }
+    function RemoveRequiredBorderDLCLink() {
+        $("#txtProfileUpdatePoints").focusout(function () {
+            if ($("#txtProfileUpdatePoints").val() != "") {
+                $('#txtProfileUpdatePoints').css('border-color', '');
+            }
+            else {
+                $('#txtProfileUpdatePoints').css('border-color', 'red');
+            }
+        });
+
+        $("#txtReferralPoints").focusout(function () {
+            if ($("#txtReferralPoints").val() != "") {
+                $('#txtReferralPoints').css('border-color', '');
+            }
+            else {
+                $('#txtReferralPoints').css('border-color', 'red');
+            }
+        });
+        $("#txtReferredPoints").focusout(function () {
+            if ($("#txtReferredPoints").val() != "") {
+                $('#txtReferredPoints').css('border-color', '');
+            }
+            else {
+                $('#txtReferredPoints').css('border-color', 'red');
+            }
+        });
+        $("#txtSMSToTheReferral").focusout(function () {
+            if ($("#txtSMSToTheReferral").val() != "") {
+                $('#txtSMSToTheReferral').css('border-color', '');
+            }
+            else {
+                $('#txtSMSToTheReferral').css('border-color', 'red');
+            }
+        });
+        $("#txtSMSRem1Days").focusout(function () {
+            if ($("#txtSMSRem1Days").val() != "") {
+                $('#txtSMSRem1Days').css('border-color', '');
+            }
+            else {
+                $('#txtSMSRem1Days').css('border-color', 'red');
+            }
+        });
+        $("#txtSMSReminderForPointsUsage1").focusout(function () {
+            if ($("#txtSMSReminderForPointsUsage1").val() != "") {
+                $('#txtSMSReminderForPointsUsage1').css('border-color', '');
+            }
+            else {
+                $('#txtSMSReminderForPointsUsage1').css('border-color', 'red');
+            }
+        });
+        $("#txtSMSRem2Days").focusout(function () {
+            if ($("#txtSMSRem2Days").val() != "") {
+                $('#txtSMSRem2Days').css('border-color', '');
+            }
+            else {
+                $('#txtSMSRem2Days').css('border-color', 'red');
+            }
+        });
+        $("#txtSMSReminderForPointsUsage2").focusout(function () {
+            if ($("#txtSMSReminderForPointsUsage2").val() != "") {
+                $('#txtSMSReminderForPointsUsage2').css('border-color', '');
+            }
+            else {
+                $('#txtSMSReminderForPointsUsage2').css('border-color', 'red');
+            }
+        });
+        $("#txtSMSReferredSuccessOnReferralTxn").focusout(function () {
+            if ($("#txtSMSReferredSuccessOnReferralTxn").val() != "") {
+                $('#txtSMSReferredSuccessOnReferralTxn').css('border-color', '');
+            }
+            else {
+                $('#txtSMSReferredSuccessOnReferralTxn').css('border-color', 'red');
+            }
+        });
+        $("#txtSMSDLCOtp").focusout(function () {
+            if ($("#txtSMSDLCOtp").val() != "") {
+                $('#txtSMSDLCOtp').css('border-color', '');
+            }
+            else {
+                $('#txtSMSDLCOtp').css('border-color', 'red');
+            }
+        });
+
+        $("#txtSMSGiftPtOtp").focusout(function () {
+            if ($("#txtSMSGiftPtOtp").val() != "") {
+                $('#txtSMSGiftPtOtp').css('border-color', '');
+            }
+            else {
+                $('#txtSMSGiftPtOtp').css('border-color', 'red');
+            }
+        });
+        $("#txtSMSGiftPtDebitOtp").focusout(function () {
+            if ($("#txtSMSGiftPtDebitOtp").val() != "") {
+                $('#txtSMSGiftPtDebitOtp').css('border-color', '');
+            }
+            else {
+                $('#txtSMSGiftPtDebitOtp').css('border-color', 'red');
+            }
+        });
+        $("#txtSMSGiftPtCreditOtp").focusout(function () {
+            if ($("#txtSMSGiftPtCreditOtp").val() != "") {
+                $('#txtSMSGiftPtCreditOtp').css('border-color', '');
+            }
+            else {
+                $('#txtSMSGiftPtCreditOtp').css('border-color', 'red');
+            }
+        });
+        $("#txtValidityOfReferralPoints").focusout(function () {
+            if ($("#txtValidityOfReferralPoints").val() != "") {
+                $('#txtValidityOfReferralPoints').css('border-color', '');
+            }
+            else {
+                $('#txtValidityOfReferralPoints').css('border-color', 'red');
+            }
+        });
+        $("#txtReferralReminder").focusout(function () {
+            if ($("#txtReferralReminder").val() != "") {
+                $('#txtReferralReminder').css('border-color', '');
+            }
+            else {
+                $('#txtReferralReminder').css('border-color', 'red');
+            }
+        });
+        $("#txtReferredPoints").focusout(function () {
+            if ($("#txtReferredPoints").val() != "") {
+                $('#txtReferredPoints').css('border-color', '');
+            }
+            else {
+                $('#txtReferredPoints').css('border-color', 'red');
+            }
+        });
+        $("#txtWAToTheReferral").focusout(function () {
+            if ($("#txtWAToTheReferral").val() != "") {
+                $('#txtWAToTheReferral').css('border-color', '');
+            }
+            else {
+                $('#txtWAToTheReferral').css('border-color', 'red');
+            }
+        });
+        $("#txtWARem1Days").focusout(function () {
+            if ($("#txtWARem1Days").val() != "") {
+                $('#txtWARem1Days').css('border-color', '');
+            }
+            else {
+                $('#txtWARem1Days').css('border-color', 'red');
+            }
+        });
+        $("#txtWAReminderForPointsUsage1").focusout(function () {
+            if ($("#txtWAReminderForPointsUsage1").val() != "") {
+                $('#txtWAReminderForPointsUsage1').css('border-color', '');
+            }
+            else {
+                $('#txtWAReminderForPointsUsage1').css('border-color', 'red');
+            }
+        });
+        $("#txtWARem2Days").focusout(function () {
+            if ($("#txtWARem2Days").val() != "") {
+                $('#txtWARem2Days').css('border-color', '');
+            }
+            else {
+                $('#txtWARem2Days').css('border-color', 'red');
+            }
+        });
+        $("#txtWAReminderForPointsUsage2").focusout(function () {
+            if ($("#txtWAReminderForPointsUsage2").val() != "") {
+                $('#txtWAReminderForPointsUsage2').css('border-color', '');
+            }
+            else {
+                $('#txtWAReminderForPointsUsage2').css('border-color', 'red');
+            }
+        });
+        $("#txtWAReferredSuccessOnReferralTxn").focusout(function () {
+            if ($("#txtWAReferredSuccessOnReferralTxn").val() != "") {
+                $('#txtWAReferredSuccessOnReferralTxn').css('border-color', '');
+            }
+            else {
+                $('#txtWAReferredSuccessOnReferralTxn').css('border-color', 'red');
+            }
+        });
+        $("#txtWADlcOtp").focusout(function () {
+            if ($("#txtWADlcOtp").val() != "") {
+                $('#txtWADlcOtp').css('border-color', '');
+            }
+            else {
+                $('#txtWADlcOtp').css('border-color', 'red');
+            }
+        });
+        $("#txtWAGiftPtOtp").focusout(function () {
+            if ($("#txtWAGiftPtOtp").val() != "") {
+                $('#txtWAGiftPtOtp').css('border-color', '');
+            }
+            else {
+                $('#txtWAGiftPtOtp').css('border-color', 'red');
+            }
+        });
+        $("#txtWAGiftPtDebitOtp").focusout(function () {
+            if ($("#txtWAGiftPtDebitOtp").val() != "") {
+                $('#txtWAGiftPtDebitOtp').css('border-color', '');
+            }
+            else {
+                $('#txtWAGiftPtDebitOtp').css('border-color', 'red');
+            }
+        });
+        $("#txtWAGiftPtCreditOtp").focusout(function () {
+            if ($("#txtWAGiftPtCreditOtp").val() != "") {
+                $('#txtWAGiftPtCreditOtp').css('border-color', '');
+            }
+            else {
+                $('#txtWAGiftPtCreditOtp').css('border-color', 'red');
+            }
+        });
+
     }
 
     function SendDLCToDLT() {
@@ -333,35 +671,38 @@
             cancelText: "Cancel"
         }).then((e) => {
             if (e == ("confirm")) {
-                 $.ajax({
-                type: "POST",
-                url: '@Url.Action("SendDLCToDLT", "CustomerOnBoarding")',
-                data: '{GroupId: ' + JSON.stringify($('#hdnGroupID').val()) + '}',
-                contentType: "application/json; charset=utf-8",
-                dataType: "json",
-                success: function (result) {
-                    if (result == true) {
-                        cuteAlert({
-                            type: "success",
-                            title: "Saved..",
-                            message: "DLC Script sent for DLT Successfully!",
-                            buttonText: "Okay"
-                        })
-                    }
-                    else {
-                        cuteAlert({
-                            type: "error",
-                            title: "Oops..",
-                            message: "There is some problem while sending Digital Loyalty Card Data for DLT",
-                            buttonText: "Okay"
-                        })
-                    }
-                    $("#divLoader").hide();
-                },
-                error: function (result) {
-                    $("#divLoader").hide();
+                var validationStatus = ValidateDLCLink();
+                if (validationStatus) {
+                    $.ajax({
+                        type: "POST",
+                        url: '@Url.Action("SendDLCToDLT", "CustomerOnBoarding")',
+                        data: '{GroupId: ' + JSON.stringify($('#hdnGroupID').val()) + '}',
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                        success: function (result) {
+                            if (result == true) {
+                                cuteAlert({
+                                    type: "success",
+                                    title: "Saved..",
+                                    message: "DLC Script sent for DLT Successfully!",
+                                    buttonText: "Okay"
+                                })
+                            }
+                            else {
+                                cuteAlert({
+                                    type: "error",
+                                    title: "Oops..",
+                                    message: "There is some problem while sending Digital Loyalty Card Data for DLT",
+                                    buttonText: "Okay"
+                                })
+                            }
+                            $("#divLoader").hide();
+                        },
+                        error: function (result) {
+                            $("#divLoader").hide();
+                        }
+                    });
                 }
-            });
             }
         })
         $("#divLoader").hide();

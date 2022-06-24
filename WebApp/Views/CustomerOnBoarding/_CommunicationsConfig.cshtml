@@ -747,12 +747,14 @@
                 status = false;
             }
         }
-        cuteAlert({
-            type: "error",
-            title: "Oops..",
-            message: "Please Enter required fields",
-            buttonText: "Okay"
-        })
+        if (!status) {
+            cuteAlert({
+                type: "error",
+                title: "Oops..",
+                message: "Please Enter required fields",
+                buttonText: "Okay"
+            })
+        }
 
 
         return status;
