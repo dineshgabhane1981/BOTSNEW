@@ -1134,10 +1134,12 @@
         });
         RemoveRequiredBorderBirthdayConfig();
         RemoveRequiredBorderAnniversaryConfig();
+        RemoveRequiredBorderInactiveConfig();
         RemoveRequiredBorderDLCRRConfig();
         RemoveRequiredBorderDLCURConfig();
         RemoveRequiredBorderBUConfig();
         RemoveRequiredBorderUploadUsersConfig();
+        
     });
 
     function dvBirthDaySMSShowHide(status) {
@@ -3447,6 +3449,8 @@
     }
 
     function SaveInactiveConfig(type) {
+        var validationStatus3 = ValidateInactiveConfig();
+        if (validationStatus3) {
         var InactiveConfig = [];
         var status = false;
         if (type == "Inactive") {
@@ -3598,40 +3602,385 @@
             }
         }
 
-        if (status) {
-            var InactiveConfigData = JSON.stringify(InactiveConfig);
+            if (status) {
+                var InactiveConfigData = JSON.stringify(InactiveConfig);
 
-            $("#divLoader").show();
-            $.ajax({
-                type: "POST",
-                url: '@Url.Action("SaveInactiveConfig", "CustomerOnBoarding")',
-                data: '{jsonData: ' + JSON.stringify(InactiveConfigData) + '}',
-                contentType: "application/json; charset=utf-8",
-                dataType: "json",
-                success: function (result) {
-                    if (result) {
-                        cuteAlert({
-                            type: "success",
-                            title: "Saved",
-                            message: "Configuration Saved Successfully !!!",
-                            buttonText: "Okay"
-                        })
+                $("#divLoader").show();
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("SaveInactiveConfig", "CustomerOnBoarding")',
+                    data: '{jsonData: ' + JSON.stringify(InactiveConfigData) + '}',
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (result) {
+                        if (result) {
+                            cuteAlert({
+                                type: "success",
+                                title: "Saved",
+                                message: "Configuration Saved Successfully !!!",
+                                buttonText: "Okay"
+                            })
+                        }
+                        else {
+                            cuteAlert({
+                                type: "error",
+                                title: "Oops..",
+                                message: "There is a problem while saving Configuration",
+                                buttonText: "Okay"
+                            })
+                        }
+                        $("#divLoader").hide();
+                    },
+                    error: function (result) {
+                        $("#divLoader").hide();
                     }
-                    else {
-                        cuteAlert({
-                            type: "error",
-                            title: "Oops..",
-                            message: "There is a problem while saving Configuration",
-                            buttonText: "Okay"
-                        })
-                    }
-                    $("#divLoader").hide();
-                },
-                error: function (result) {
-                    $("#divLoader").hide();
-                }
-            });
+                });
+            }
         }
+
+    }
+    function ValidateInactiveConfig() {
+        var status = true;
+        if ($("#txtMessageCount").val() == "") {
+            $('#txtMessageCount').css('border-color', 'red');
+            status = false;
+        }
+        if ($("#rbtnInactiveSMS").is(":checked")) {
+            if ($("#txtDaysCount1").val() == "") {
+                $('#txtDaysCount1').css('border-color', 'red');
+                status = false;
+            }
+            if ($("#txtLessThanDays1").val() == "") {
+                $('#txtLessThanDays1').css('border-color', 'red');
+                status = false;
+            }
+            if ($("#txtLessThanDaysScript1").val().trim() == "" || $("#txtLessThanDaysScript1").val().trim() == null) {
+                $("#txtLessThanDaysScript1").css('border-color', 'red');
+                status = false;
+            }
+            if ($("#txtGreaterThanDays1").val() == "") {
+                $('#txtGreaterThanDays1').css('border-color', 'red');
+                status = false;
+            }
+            if ($("#txtGreaterThanDaysScript1").val().trim() == "" || $("#txtGreaterThanDaysScript1").val().trim() == null) {
+                $("#txtGreaterThanDaysScript1").css('border-color', 'red');
+                status = false;
+            }
+            if ($("#txtDaysCount2").val() == "") {
+                $('#txtDaysCount2').css('border-color', 'red');
+                status = false;
+            }
+            if ($("#txtLessThanDays2").val() == "") {
+                $('#txtLessThanDays2').css('border-color', 'red');
+                status = false;
+            }
+            if ($("#txtLessThanDaysScript2").val().trim() == "" || $("#txtLessThanDaysScript2").val().trim() == null) {
+                $("#txtLessThanDaysScript2").css('border-color', 'red');
+                status = false;
+            }
+            if ($("#txtGreaterThanDays2").val() == "") {
+                $('#txtGreaterThanDays2').css('border-color', 'red');
+                status = false;
+            }
+            if ($("#txtGreaterThanDaysScript2").val().trim() == "" || $("#txtGreaterThanDaysScript2").val().trim() == null) {
+                $("#txtGreaterThanDaysScript2").css('border-color', 'red');
+                status = false;
+            }
+            if ($("#txtDaysCount3").val() == "") {
+                $('#txtDaysCount3').css('border-color', 'red');
+                status = false;
+            }
+            if ($("#txtLessThanDays3").val() == "") {
+                $('#txtLessThanDays3').css('border-color', 'red');
+                status = false;
+            }
+            if ($("#txtLessThanDaysScript3").val().trim() == "" || $("#txtLessThanDaysScript3").val().trim() == null) {
+                $("#txtLessThanDaysScript3").css('border-color', 'red');
+                status = false;
+            }
+            if ($("#txtGreaterThanDays3").val() == "") {
+                $('#txtGreaterThanDays3').css('border-color', 'red');
+                status = false;
+            }
+            if ($("#txtGreaterThanDaysScript3").val().trim() == "" || $("#txtGreaterThanDaysScript3").val().trim() == null) {
+                $("#txtGreaterThanDaysScript3").css('border-color', 'red');
+                status = false;
+            }
+        }
+        if ($("#rbtnInactiveWA").is(":checked")) {
+            if ($("#txtDaysCount1").val() == "") {
+                $('#txtDaysCount1').css('border-color', 'red');
+                status = false;
+            }
+            if ($("#txtLessThanDays1").val() == "") {
+                $('#txtLessThanDays1').css('border-color', 'red');
+                status = false;
+            }
+            if ($("#txtLessThanDaysScript1").val().trim() == "" || $("#txtLessThanDaysScript1").val().trim() == null) {
+                $("#txtLessThanDaysScript1").css('border-color', 'red');
+                status = false;
+            }
+            if ($("#txtSMSScript21").val().trim() == "" || $("#txtSMSScript21").val().trim() == null) {
+                $("#txtSMSScript21").css('border-color', 'red');
+                status = false;
+            }
+            if ($("#txtGreaterThanDays1").val() == "") {
+                $('#txtGreaterThanDays1').css('border-color', 'red');
+                status = false;
+            }
+            if ($("#txtGreaterThanDaysScript1").val().trim() == "" || $("#txtGreaterThanDaysScript1").val().trim() == null) {
+                $("#txtGreaterThanDaysScript1").css('border-color', 'red');
+                status = false;
+            }
+            if ($("#txtSMSScript22").val().trim() == "" || $("#txtSMSScript21").val().trim() == null) {
+                $("#txtSMSScript22").css('border-color', 'red');
+                status = false;
+            }
+            if ($("#txtDaysCount2").val() == "") {
+                $('#txtDaysCount2').css('border-color', 'red');
+                status = false;
+            }
+            if ($("#txtLessThanDays2").val() == "") {
+                $('#txtLessThanDays2').css('border-color', 'red');
+                status = false;
+            }
+            if ($("#txtLessThanDaysScript2").val().trim() == "" || $("#txtLessThanDaysScript2").val().trim() == null) {
+                $("#txtLessThanDaysScript2").css('border-color', 'red');
+                status = false;
+            }
+            if ($("#txtSMSScript23").val().trim() == "" || $("#txtSMSScript21").val().trim() == null) {
+                $("#txtSMSScript23").css('border-color', 'red');
+                status = false;
+            }
+            if ($("#txtGreaterThanDays2").val() == "") {
+                $('#txtGreaterThanDays2').css('border-color', 'red');
+                status = false;
+            }
+            if ($("#txtGreaterThanDaysScript2").val().trim() == "" || $("#txtGreaterThanDaysScript2").val().trim() == null) {
+                $("#txtGreaterThanDaysScript2").css('border-color', 'red');
+                status = false;
+            }
+            if ($("#txtSMSScript24").val().trim() == "" || $("#txtSMSScript21").val().trim() == null) {
+                $("#txtSMSScript24").css('border-color', 'red');
+                status = false;
+            }
+            if ($("#txtDaysCount3").val() == "") {
+                $('#txtDaysCount3').css('border-color', 'red');
+                status = false;
+            }
+            if ($("#txtLessThanDays3").val() == "") {
+                $('#txtLessThanDays3').css('border-color', 'red');
+                status = false;
+            }
+            if ($("#txtLessThanDaysScript3").val().trim() == "" || $("#txtLessThanDaysScript3").val().trim() == null) {
+                $("#txtLessThanDaysScript3").css('border-color', 'red');
+                status = false;
+            }
+            if ($("#txtSMSScript25").val().trim() == "" || $("#txtSMSScript21").val().trim() == null) {
+                $("#txtSMSScript25").css('border-color', 'red');
+                status = false;
+            }
+            if ($("#txtGreaterThanDays3").val() == "") {
+                $('#txtGreaterThanDays3').css('border-color', 'red');
+                status = false;
+            }
+            if ($("#txtGreaterThanDaysScript3").val().trim() == "" || $("#txtGreaterThanDaysScript3").val().trim() == null) {
+                $("#txtGreaterThanDaysScript3").css('border-color', 'red');
+                status = false;
+            }
+            if ($("#txtSMSScript26").val().trim() == "" || $("#txtSMSScript21").val().trim() == null) {
+                $("#txtSMSScript26").css('border-color', 'red');
+                status = false;
+            }
+        }
+        if (!status) {
+            cuteAlert({
+                type: "error",
+                title: "Oops..",
+                message: "Please Enter required fields",
+                buttonText: "Okay"
+            })
+        }
+        return status;
+
+    }
+    function RemoveRequiredBorderInactiveConfig() {
+        $("#txtMessageCount").focusout(function () {
+            if ($("#txtMessageCount").val() != "") {
+                $('#txtMessageCount').css('border-color', '');
+            }
+            else {
+                $('#txtMessageCount').css('border-color', 'red');
+            }
+        });
+        $("#txtDaysCount1").focusout(function () {
+            if ($("#txtDaysCount1").val() != "") {
+                $('#txtDaysCount1').css('border-color', '');
+            }
+            else {
+                $('#txtDaysCount1').css('border-color', 'red');
+            }
+        });
+        $("#txtLessThanDays1").focusout(function () {
+            if ($("#txtLessThanDays1").val() != "") {
+                $('#txtLessThanDays1').css('border-color', '');
+            }
+            else {
+                $('#txtLessThanDays1').css('border-color', 'red');
+            }
+        });
+        $("#txtLessThanDaysScript1").focusout(function () {
+            if ($("#txtLessThanDaysScript1").val() != "") {
+                $('#txtLessThanDaysScript1').css('border-color', '');
+            }
+            else {
+                $('#txtLessThanDaysScript1').css('border-color', 'red');
+            }
+        });
+        $("#txtSMSScript21").focusout(function () {
+            if ($("#txtSMSScript21").val() != "") {
+                $('#txtSMSScript21').css('border-color', '');
+            }
+            else {
+                $('#txtSMSScript21').css('border-color', 'red');
+            }
+        });
+        $("#txtGreaterThanDays1").focusout(function () {
+            if ($("#txtGreaterThanDays1").val() != "") {
+                $('#txtGreaterThanDays1').css('border-color', '');
+            }
+            else {
+                $('#txtGreaterThanDays1').css('border-color', 'red');
+            }
+        });
+        $("#txtGreaterThanDaysScript1").focusout(function () {
+            if ($("#txtGreaterThanDaysScript1").val() != "") {
+                $('#txtGreaterThanDaysScript1').css('border-color', '');
+            }
+            else {
+                $('#txtGreaterThanDaysScript1').css('border-color', 'red');
+            }
+        });
+        $("#txtSMSScript22").focusout(function () {
+            if ($("#txtSMSScript22").val() != "") {
+                $('#txtSMSScript22').css('border-color', '');
+            }
+            else {
+                $('#txtSMSScript22').css('border-color', 'red');
+            }
+        });
+        $("#txtDaysCount2").focusout(function () {
+            if ($("#txtDaysCount2").val() != "") {
+                $('#txtDaysCount2').css('border-color', '');
+            }
+            else {
+                $('#txtDaysCount2').css('border-color', 'red');
+            }
+        });
+        $("#txtLessThanDays2").focusout(function () {
+            if ($("#txtLessThanDays2").val() != "") {
+                $('#txtLessThanDays2').css('border-color', '');
+            }
+            else {
+                $('#txtLessThanDays2').css('border-color', 'red');
+            }
+        });
+        $("#txtLessThanDaysScript2").focusout(function () {
+            if ($("#txtLessThanDaysScript2").val() != "") {
+                $('#txtLessThanDaysScript2').css('border-color', '');
+            }
+            else {
+                $('#txtLessThanDaysScript2').css('border-color', 'red');
+            }
+        });
+        $("#txtSMSScript23").focusout(function () {
+            if ($("#txtSMSScript23").val() != "") {
+                $('#txtSMSScript23').css('border-color', '');
+            }
+            else {
+                $('#txtSMSScript23').css('border-color', 'red');
+            }
+        });
+        $("#txtGreaterThanDays2").focusout(function () {
+            if ($("#txtGreaterThanDays2").val() != "") {
+                $('#txtGreaterThanDays2').css('border-color', '');
+            }
+            else {
+                $('#txtGreaterThanDays2').css('border-color', 'red');
+            }
+        });
+        $("#txtGreaterThanDaysScript2").focusout(function () {
+            if ($("#txtGreaterThanDaysScript2").val() != "") {
+                $('#txtGreaterThanDaysScript2').css('border-color', '');
+            }
+            else {
+                $('#txtGreaterThanDaysScript2').css('border-color', 'red');
+            }
+        });
+        $("#txtSMSScript24").focusout(function () {
+            if ($("#txtSMSScript24").val() != "") {
+                $('#txtSMSScript24').css('border-color', '');
+            }
+            else {
+                $('#txtSMSScript24').css('border-color', 'red');
+            }
+        });
+        $("#txtDaysCount3").focusout(function () {
+            if ($("#txtDaysCount3").val() != "") {
+                $('#txtDaysCount3').css('border-color', '');
+            }
+            else {
+                $('#txtDaysCount3').css('border-color', 'red');
+            }
+        });
+        $("#txtLessThanDays3").focusout(function () {
+            if ($("#txtLessThanDays3").val() != "") {
+                $('#txtLessThanDays3').css('border-color', '');
+            }
+            else {
+                $('#txtLessThanDays3').css('border-color', 'red');
+            }
+        });
+        $("#txtLessThanDaysScript3").focusout(function () {
+            if ($("#txtLessThanDaysScript3").val() != "") {
+                $('#txtLessThanDaysScript3').css('border-color', '');
+            }
+            else {
+                $('#txtLessThanDaysScript3').css('border-color', 'red');
+            }
+        });
+        $("#txtSMSScript25").focusout(function () {
+            if ($("#txtSMSScript25").val() != "") {
+                $('#txtSMSScript25').css('border-color', '');
+            }
+            else {
+                $('#txtSMSScript25').css('border-color', 'red');
+            }
+        });
+        $("#txtGreaterThanDays3").focusout(function () {
+            if ($("#txtGreaterThanDays3").val() != "") {
+                $('#txtGreaterThanDays3').css('border-color', '');
+            }
+            else {
+                $('#txtGreaterThanDays3').css('border-color', 'red');
+            }
+        });
+        $("#txtGreaterThanDaysScript3").focusout(function () {
+            if ($("#txtGreaterThanDaysScript3").val() != "") {
+                $('#txtGreaterThanDaysScript3').css('border-color', '');
+            }
+            else {
+                $('#txtGreaterThanDaysScript3').css('border-color', 'red');
+            }
+        });
+        $("#txtSMSScript26").focusout(function () {
+            if ($("#txtSMSScript26").val() != "") {
+                $('#txtSMSScript26').css('border-color', '');
+            }
+            else {
+                $('#txtSMSScript26').css('border-color', 'red');
+            }
+        });
 
     }
 
