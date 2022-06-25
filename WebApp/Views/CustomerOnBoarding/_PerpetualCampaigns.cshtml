@@ -1133,7 +1133,11 @@
             ShowPEMessageSections();
         });
         RemoveRequiredBorderBirthdayConfig();
-        RemoveRequiredBorderAnniversaryConfig()
+        RemoveRequiredBorderAnniversaryConfig();
+        RemoveRequiredBorderDLCRRConfig();
+        RemoveRequiredBorderDLCURConfig();
+        RemoveRequiredBorderBUConfig();
+        RemoveRequiredBorderUploadUsersConfig();
     });
 
     function dvBirthDaySMSShowHide(status) {
@@ -2138,60 +2142,62 @@
     }
 
     function SaveDLCRRConfig() {
-        if ($("#rbtnDLCRRVWA").prop("checked") || $("#rbtnDLCRRWA").prop("checked") || $("#rbtnDLCRRSMS").prop("checked")) {
-        }
-        else {
-            cuteAlert({
-                type: "error",
-                title: "Oops..",
-                message: "Please select SMS Type",
-                buttonText: "Okay"
-            })
-            return false;
-        }
+        var validationStatus7 = ValidateDLCRRConfig();
+        if (validationStatus7) {
+            if ($("#rbtnDLCRRVWA").prop("checked") || $("#rbtnDLCRRWA").prop("checked") || $("#rbtnDLCRRSMS").prop("checked")) {
+            }
+            else {
+                cuteAlert({
+                    type: "error",
+                    title: "Oops..",
+                    message: "Please select SMS Type",
+                    buttonText: "Okay"
+                })
+                return false;
+            }
 
-        var DLCRRConfig = [];
-        item = {}
+            var DLCRRConfig = [];
+            item = {}
 
-        item["Id"] = $('#hdnDLCRRId').val();
-        item["GroupId"] = $('#hdnGroupID').val();
-        item["CampaignType"] = "DLC Referral Reminder";
+            item["Id"] = $('#hdnDLCRRId').val();
+            item["GroupId"] = $('#hdnGroupID').val();
+            item["CampaignType"] = "DLC Referral Reminder";
 
-        if ($("#rbtnDLCRRVWA").prop("checked"))
-            item["SMSType"] = "VWA";
-        if ($("#rbtnDLCRRWA").prop("checked"))
-            item["SMSType"] = "WA";
-        if ($("#rbtnDLCRRSMS").prop("checked"))
-            item["SMSType"] = "SMS";
+            if ($("#rbtnDLCRRVWA").prop("checked"))
+                item["SMSType"] = "VWA";
+            if ($("#rbtnDLCRRWA").prop("checked"))
+                item["SMSType"] = "WA";
+            if ($("#rbtnDLCRRSMS").prop("checked"))
+                item["SMSType"] = "SMS";
 
-        item["BonusPoints"] = 0;
-        item["Frequency"] = "";
+            item["BonusPoints"] = 0;
+            item["Frequency"] = "";
 
-        item["IntroDays1"] = $('#txtDLCRRDays1').val();
-        item["IntroScript1"] = $('#txtDLCRRScript1').val();
-        item["IntroDays2"] = $('#txtDLCRRDays2').val();
-        item["IntroScript2"] = $('#txtDLCRRScript2').val();
-        item["ReminderDays1"] = 0;
-        item["ReminderWhen1"] = "";
-        item["ReminderScript1"] = "";
-        item["ReminderDays2"] = 0;
-        item["ReminderWhen2"] = "";
-        item["ReminderScript2"] = "";
-        item["OnDayTypePT"] = "";
-        item["OnDayScriptPT"] = "";
-        item["OnDayTypeNPT"] = "";
-        item["OnDayScriptNPT"] = "";
-        item["SMSScript1"] = $('#txtSMSScript71').val();
-        item["SMSScript2"] = $('#txtSMSScript72').val();
+            item["IntroDays1"] = $('#txtDLCRRDays1').val();
+            item["IntroScript1"] = $('#txtDLCRRScript1').val();
+            item["IntroDays2"] = $('#txtDLCRRDays2').val();
+            item["IntroScript2"] = $('#txtDLCRRScript2').val();
+            item["ReminderDays1"] = 0;
+            item["ReminderWhen1"] = "";
+            item["ReminderScript1"] = "";
+            item["ReminderDays2"] = 0;
+            item["ReminderWhen2"] = "";
+            item["ReminderScript2"] = "";
+            item["OnDayTypePT"] = "";
+            item["OnDayScriptPT"] = "";
+            item["OnDayTypeNPT"] = "";
+            item["OnDayScriptNPT"] = "";
+            item["SMSScript1"] = $('#txtSMSScript71').val();
+            item["SMSScript2"] = $('#txtSMSScript72').val();
 
-        DLCRRConfig.push(item);
-        var DLCRRConfigData = JSON.stringify(DLCRRConfig);
+            DLCRRConfig.push(item);
+            var DLCRRConfigData = JSON.stringify(DLCRRConfig);
 
-        $("#divLoader").show();
-        $.ajax({
+            $("#divLoader").show();
+            $.ajax({
                 type: "POST",
                 url: '@Url.Action("SaveCampaignOtherConfig", "CustomerOnBoarding")',
-            data: '{jsonData: ' + JSON.stringify(DLCRRConfigData) + '}',
+                data: '{jsonData: ' + JSON.stringify(DLCRRConfigData) + '}',
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
                 success: function (result) {
@@ -2217,64 +2223,174 @@
                     $("#divLoader").hide();
                 }
             });
+        }
+    }
+    function ValidateDLCRRConfig() {
+        var status = true;
+        if ($("#rbtnDLCRRSMS").is(":checked")) {
+
+            if ($("#txtDLCRRDays1").val() == "") {
+                $('#txtDLCRRDays1').css('border-color', 'red');
+                status = false;
+            }
+            if ($("#txtDLCRRScript1").val() == "") {
+                $('#txtDLCRRScript1').css('border-color', 'red');
+                status = false;
+            }
+            if ($("#txtDLCRRDays2").val() == "") {
+                $('#txtDLCRRDays2').css('border-color', 'red');
+                status = false;
+            }
+            if ($("#txtDLCRRScript2").val() == "") {
+                $('#txtDLCRRScript2').css('border-color', 'red');
+                status = false;
+            }
+        }
+        if ($("#rbtnDLCRRVWA").is(":checked") || $("#rbtnDLCRRWA").is(":checked")) {
+            if ($("#txtDLCRRDays1").val() == "") {
+                $('#txtDLCRRDays1').css('border-color', 'red');
+                status = false;
+            }
+            if ($("#txtDLCRRScript1").val() == "") {
+                $('#txtDLCRRScript1').css('border-color', 'red');
+                status = false;
+            }
+            if ($("#txtDLCRRDays2").val() == "") {
+                $('#txtDLCRRDays2').css('border-color', 'red');
+                status = false;
+            }
+            if ($("#txtDLCRRScript2").val() == "") {
+                $('#txtDLCRRScript2').css('border-color', 'red');
+                status = false;
+            }
+            if ($("#txtSMSScript71").val() == "") {
+                $('#txtSMSScript71').css('border-color', 'red');
+                status = false;
+            }
+            if ($("#txtSMSScript72").val() == "") {
+                $('#txtSMSScript72').css('border-color', 'red');
+                status = false;
+            }
+        }
+        if (!status) {
+            cuteAlert({
+                type: "error",
+                title: "Oops..",
+                message: "Please Enter required fields",
+                buttonText: "Okay"
+            })
+        }
+        return status;
+    }
+    function RemoveRequiredBorderDLCRRConfig() {
+        $("#txtDLCRRDays1").focusout(function () {
+            if ($("#txtDLCRRDays1").val() != "") {
+                $('#txtDLCRRDays1').css('border-color', '');
+            }
+            else {
+                $('#txtDLCRRDays1').css('border-color', 'red');
+            }
+        });
+        $("#txtDLCRRScript1").focusout(function () {
+            if ($("#txtDLCRRScript1").val() != "") {
+                $('#txtDLCRRScript1').css('border-color', '');
+            }
+            else {
+                $('#txtDLCRRScript1').css('border-color', 'red');
+            }
+        });
+        $("#txtDLCRRDays2").focusout(function () {
+            if ($("#txtDLCRRDays2").val() != "") {
+                $('#txtDLCRRDays2').css('border-color', '');
+            }
+            else {
+                $('#txtDLCRRDays2').css('border-color', 'red');
+            }
+        });
+        $("#txtDLCRRScript2").focusout(function () {
+            if ($("#txtDLCRRScript2").val() != "") {
+                $('#txtDLCRRScript2').css('border-color', '');
+            }
+            else {
+                $('#txtDLCRRScript2').css('border-color', 'red');
+            }
+        });
+        $("#txtSMSScript71").focusout(function () {
+            if ($("#txtSMSScript71").val() != "") {
+                $('#txtSMSScript71').css('border-color', '');
+            }
+            else {
+                $('#txtSMSScript71').css('border-color', 'red');
+            }
+        });
+        $("#txtSMSScript72").focusout(function () {
+            if ($("#txtSMSScript72").val() != "") {
+                $('#txtSMSScript72').css('border-color', '');
+            }
+            else {
+                $('#txtSMSScript72').css('border-color', 'red');
+            }
+        });
     }
 
     function SaveDLCURConfig() {
-        if ($("#rbtnDLCURVWA").prop("checked") || $("#rbtnDLCURWA").prop("checked") || $("#rbtnDLCURSMS").prop("checked")) {
-        }
-        else {
-            cuteAlert({
-                type: "error",
-                title: "Oops..",
-                message: "Please select SMS Type",
-                buttonText: "Okay"
-            })
-            return false;
-        }
+        var validationStatus8 = ValidateDLCURConfig();
+        if (validationStatus8) {
+            if ($("#rbtnDLCURVWA").prop("checked") || $("#rbtnDLCURWA").prop("checked") || $("#rbtnDLCURSMS").prop("checked")) {
+            }
+            else {
+                cuteAlert({
+                    type: "error",
+                    title: "Oops..",
+                    message: "Please select SMS Type",
+                    buttonText: "Okay"
+                })
+                return false;
+            }
 
-        var DLCURConfig = [];
-        item = {}
+            var DLCURConfig = [];
+            item = {}
 
-        item["Id"] = $('#hdnDLCURId').val();
-        item["GroupId"] = $('#hdnGroupID').val();
-        item["CampaignType"] = "DLC Update Reminder";
+            item["Id"] = $('#hdnDLCURId').val();
+            item["GroupId"] = $('#hdnGroupID').val();
+            item["CampaignType"] = "DLC Update Reminder";
 
-        if ($("#rbtnDLCURVWA").prop("checked"))
-            item["SMSType"] = "VWA";
-        if ($("#rbtnDLCURWA").prop("checked"))
-            item["SMSType"] = "WA";
-        if ($("#rbtnDLCURSMS").prop("checked"))
-            item["SMSType"] = "SMS";
+            if ($("#rbtnDLCURVWA").prop("checked"))
+                item["SMSType"] = "VWA";
+            if ($("#rbtnDLCURWA").prop("checked"))
+                item["SMSType"] = "WA";
+            if ($("#rbtnDLCURSMS").prop("checked"))
+                item["SMSType"] = "SMS";
 
-        item["BonusPoints"] = 0;
-        item["Frequency"] = "";
+            item["BonusPoints"] = 0;
+            item["Frequency"] = "";
 
-        item["IntroDays1"] = $('#txtDLCURDays1').val();
-        item["IntroScript1"] = $('#txtDLCURScript1').val();
-        item["IntroDays2"] = $('#txtDLCURDays2').val();
-        item["IntroScript2"] = $('#txtDLCURScript2').val();
-        item["ReminderDays1"] = 0;
-        item["ReminderWhen1"] = "";
-        item["ReminderScript1"] = "";
-        item["ReminderDays2"] = 0;
-        item["ReminderWhen2"] = "";
-        item["ReminderScript2"] = "";
-        item["OnDayTypePT"] = "";
-        item["OnDayScriptPT"] = "";
-        item["OnDayTypeNPT"] = "";
-        item["OnDayScriptNPT"] = "";
+            item["IntroDays1"] = $('#txtDLCURDays1').val();
+            item["IntroScript1"] = $('#txtDLCURScript1').val();
+            item["IntroDays2"] = $('#txtDLCURDays2').val();
+            item["IntroScript2"] = $('#txtDLCURScript2').val();
+            item["ReminderDays1"] = 0;
+            item["ReminderWhen1"] = "";
+            item["ReminderScript1"] = "";
+            item["ReminderDays2"] = 0;
+            item["ReminderWhen2"] = "";
+            item["ReminderScript2"] = "";
+            item["OnDayTypePT"] = "";
+            item["OnDayScriptPT"] = "";
+            item["OnDayTypeNPT"] = "";
+            item["OnDayScriptNPT"] = "";
 
-        item["SMSScript1"] = $('#txtSMSScript81').val();
-        item["SMSScript2"] = $('#txtSMSScript82').val();
+            item["SMSScript1"] = $('#txtSMSScript81').val();
+            item["SMSScript2"] = $('#txtSMSScript82').val();
 
-        DLCURConfig.push(item);
-        var DLCURConfigData = JSON.stringify(DLCURConfig);
+            DLCURConfig.push(item);
+            var DLCURConfigData = JSON.stringify(DLCURConfig);
 
-        $("#divLoader").show();
-        $.ajax({
+            $("#divLoader").show();
+            $.ajax({
                 type: "POST",
                 url: '@Url.Action("SaveCampaignOtherConfig", "CustomerOnBoarding")',
-            data: '{jsonData: ' + JSON.stringify(DLCURConfigData) + '}',
+                data: '{jsonData: ' + JSON.stringify(DLCURConfigData) + '}',
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
                 success: function (result) {
@@ -2300,64 +2416,175 @@
                     $("#divLoader").hide();
                 }
             });
+        }
     }
+    function ValidateDLCURConfig() {
+        var status = true;
+        if ($("#rbtnDLCURSMS").is(":checked")) {
+
+            if ($("#txtDLCURDays1").val() == "") {
+                $('#txtDLCURDays1').css('border-color', 'red');
+                status = false;
+            }
+            if ($("#txtDLCURScript1").val() == "") {
+                $('#txtDLCURScript1').css('border-color', 'red');
+                status = false;
+            }
+            if ($("#txtDLCURDays2").val() == "") {
+                $('#txtDLCURDays2').css('border-color', 'red');
+                status = false;
+            }
+            if ($("#txtDLCURScript2").val() == "") {
+                $('#txtDLCURScript2').css('border-color', 'red');
+                status = false;
+            }
+        }
+        if ($("#rbtnDLCURVWA").is(":checked") || $("#rbtnDLCURWA").is(":checked")) {
+            if ($("#txtDLCURDays1").val() == "") {
+                $('#txtDLCURDays1').css('border-color', 'red');
+                status = false;
+            }
+            if ($("#txtDLCURScript1").val() == "") {
+                $('#txtDLCURScript1').css('border-color', 'red');
+                status = false;
+            }
+            if ($("#txtDLCURDays2").val() == "") {
+                $('#txtDLCURDays2').css('border-color', 'red');
+                status = false;
+            }
+            if ($("#txtDLCURScript2").val() == "") {
+                $('#txtDLCURScript2').css('border-color', 'red');
+                status = false;
+            }
+            if ($("#txtSMSScript81").val() == "") {
+                $('#txtSMSScript81').css('border-color', 'red');
+                status = false;
+            }
+            if ($("#txtSMSScript82").val() == "") {
+                $('#txtSMSScript82').css('border-color', 'red');
+                status = false;
+            }
+        }
+        if (!status) {
+            cuteAlert({
+                type: "error",
+                title: "Oops..",
+                message: "Please Enter required fields",
+                buttonText: "Okay"
+            })
+        }
+        return status;
+    }
+    function RemoveRequiredBorderDLCURConfig() {
+            $("#txtDLCURDays1").focusout(function () {
+                if ($("#txtDLCURDays1").val() != "") {
+                    $('#txtDLCURDays1').css('border-color', '');
+                }
+                else {
+                    $('#txtDLCURDays1').css('border-color', 'red');
+                }
+            });
+            $("#txtDLCURScript1").focusout(function () {
+                if ($("#txtDLCURScript1").val() != "") {
+                    $('#txtDLCURScript1').css('border-color', '');
+                }
+                else {
+                    $('#txtDLCURScript1').css('border-color', 'red');
+                }
+            });
+            $("#txtDLCURDays2").focusout(function () {
+                if ($("#txtDLCURDays2").val() != "") {
+                    $('#txtDLCURDays2').css('border-color', '');
+                }
+                else {
+                    $('#txtDLCURDays2').css('border-color', 'red');
+                }
+            });
+            $("#txtDLCURScript2").focusout(function () {
+                if ($("#txtDLCURScript2").val() != "") {
+                    $('#txtDLCURScript2').css('border-color', '');
+                }
+                else {
+                    $('#txtDLCURScript2').css('border-color', 'red');
+                }
+            });
+            $("#txtSMSScript81").focusout(function () {
+                if ($("#txtSMSScript81").val() != "") {
+                    $('#txtSMSScript81').css('border-color', '');
+                }
+                else {
+                    $('#txtSMSScript81').css('border-color', 'red');
+                }
+            });
+            $("#txtSMSScript82").focusout(function () {
+                if ($("#txtSMSScript82").val() != "") {
+                    $('#txtSMSScript82').css('border-color', '');
+                }
+                else {
+                    $('#txtSMSScript82').css('border-color', 'red');
+                }
+            });
+        }
+
 
     function SaveBUConfig() {
-        if ($("#rbtnBUVWA").prop("checked") || $("#rbtnBUWA").prop("checked") || $("#rbtnBUSMS").prop("checked")) {
-        }
-        else {
-            cuteAlert({
-                type: "error",
-                title: "Oops..",
-                message: "Please select SMS Type",
-                buttonText: "Okay"
-            })
-            return false;
-        }
+        var validationStatus9 = ValidateBUConfig();
+        if (validationStatus9) {
+            if ($("#rbtnBUVWA").prop("checked") || $("#rbtnBUWA").prop("checked") || $("#rbtnBUSMS").prop("checked")) {
+            }
+            else {
+                cuteAlert({
+                    type: "error",
+                    title: "Oops..",
+                    message: "Please select SMS Type",
+                    buttonText: "Okay"
+                })
+                return false;
+            }
 
-        var BUConfig = [];
-        item = {}
+            var BUConfig = [];
+            item = {}
 
-        item["Id"] = $('#hdnBUId').val();
-        item["GroupId"] = $('#hdnGroupID').val();
-        item["CampaignType"] = "Balance Updates";
+            item["Id"] = $('#hdnBUId').val();
+            item["GroupId"] = $('#hdnGroupID').val();
+            item["CampaignType"] = "Balance Updates";
 
-        if ($("#rbtnBUVWA").prop("checked"))
-            item["SMSType"] = "VWA";
-        if ($("#rbtnBUWA").prop("checked"))
-            item["SMSType"] = "WA";
-        if ($("#rbtnBUSMS").prop("checked"))
-            item["SMSType"] = "SMS";
+            if ($("#rbtnBUVWA").prop("checked"))
+                item["SMSType"] = "VWA";
+            if ($("#rbtnBUWA").prop("checked"))
+                item["SMSType"] = "WA";
+            if ($("#rbtnBUSMS").prop("checked"))
+                item["SMSType"] = "SMS";
 
-        item["BonusPoints"] = 0;
-        item["Frequency"] = "";
+            item["BonusPoints"] = 0;
+            item["Frequency"] = "";
 
-        item["IntroDays1"] = $('#txtBUDays1').val();
-        item["IntroScript1"] = $('#txtBUScript1').val();
-        item["IntroDays2"] = $('#txtBUDays2').val();
-        item["IntroScript2"] = $('#txtBUScript2').val();
-        item["ReminderDays1"] = 0;
-        item["ReminderWhen1"] = "";
-        item["ReminderScript1"] = "";
-        item["ReminderDays2"] = 0;
-        item["ReminderWhen2"] = "";
-        item["ReminderScript2"] = "";
-        item["OnDayTypePT"] = "";
-        item["OnDayScriptPT"] = "";
-        item["OnDayTypeNPT"] = "";
-        item["OnDayScriptNPT"] = "";
+            item["IntroDays1"] = $('#txtBUDays1').val();
+            item["IntroScript1"] = $('#txtBUScript1').val();
+            item["IntroDays2"] = $('#txtBUDays2').val();
+            item["IntroScript2"] = $('#txtBUScript2').val();
+            item["ReminderDays1"] = 0;
+            item["ReminderWhen1"] = "";
+            item["ReminderScript1"] = "";
+            item["ReminderDays2"] = 0;
+            item["ReminderWhen2"] = "";
+            item["ReminderScript2"] = "";
+            item["OnDayTypePT"] = "";
+            item["OnDayScriptPT"] = "";
+            item["OnDayTypeNPT"] = "";
+            item["OnDayScriptNPT"] = "";
 
-        item["SMSScript1"] = $('#txtSMSScript91').val();
-        item["SMSScript2"] = $('#txtSMSScript92').val();
+            item["SMSScript1"] = $('#txtSMSScript91').val();
+            item["SMSScript2"] = $('#txtSMSScript92').val();
 
-        BUConfig.push(item);
-        var BUConfigData = JSON.stringify(BUConfig);
+            BUConfig.push(item);
+            var BUConfigData = JSON.stringify(BUConfig);
 
-        $("#divLoader").show();
-        $.ajax({
+            $("#divLoader").show();
+            $.ajax({
                 type: "POST",
                 url: '@Url.Action("SaveCampaignOtherConfig", "CustomerOnBoarding")',
-            data: '{jsonData: ' + JSON.stringify(BUConfigData) + '}',
+                data: '{jsonData: ' + JSON.stringify(BUConfigData) + '}',
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
                 success: function (result) {
@@ -2383,65 +2610,175 @@
                     $("#divLoader").hide();
                 }
             });
+        }
+    }
+    function ValidateBUConfig() {
+        var status = true;
+        if ($("#rbtnBUSMS").is(":checked")) {
+
+            if ($("#txtBUDays1").val() == "") {
+                $('#txtBUDays1').css('border-color', 'red');
+                status = false;
+            }
+            if ($("#txtBUScript1").val() == "") {
+                $('#txtBUScript1').css('border-color', 'red');
+                status = false;
+            }
+            if ($("#txtBUDays2").val() == "") {
+                $('#txtBUDays2').css('border-color', 'red');
+                status = false;
+            }
+            if ($("#txtBUScript2").val() == "") {
+                $('#txtBUScript2').css('border-color', 'red');
+                status = false;
+            }
+        }
+        if ($("#rbtnBUVWA").is(":checked") || $("#rbtnBUWA").is(":checked")) {
+            if ($("#txtBUDays1").val() == "") {
+                $('#txtBUDays1').css('border-color', 'red');
+                status = false;
+            }
+            if ($("#txtBUScript1").val() == "") {
+                $('#txtBUScript1').css('border-color', 'red');
+                status = false;
+            }
+            if ($("#txtBUDays2").val() == "") {
+                $('#txtBUDays2').css('border-color', 'red');
+                status = false;
+            }
+            if ($("#txtBUScript2").val() == "") {
+                $('#txtBUScript2').css('border-color', 'red');
+                status = false;
+            }
+            if ($("#txtSMSScript91").val() == "") {
+                $('#txtSMSScript91').css('border-color', 'red');
+                status = false;
+            }
+            if ($("#txtSMSScript92").val() == "") {
+                $('#txtSMSScript92').css('border-color', 'red');
+                status = false;
+            }
+        }
+        if (!status) {
+            cuteAlert({
+                type: "error",
+                title: "Oops..",
+                message: "Please Enter required fields",
+                buttonText: "Okay"
+            })
+        }
+        return status;
+    }
+    function RemoveRequiredBorderBUConfig() {
+        $("#txtBUDays1").focusout(function () {
+            if ($("#txtBUDays1").val() != "") {
+                $('#txtBUDays1').css('border-color', '');
+            }
+            else {
+                $('#txtBUDays1').css('border-color', 'red');
+            }
+        });
+        $("#txtBUScript1").focusout(function () {
+            if ($("#txtBUScript1").val() != "") {
+                $('#txtBUScript1').css('border-color', '');
+            }
+            else {
+                $('#txtBUScript1').css('border-color', 'red');
+            }
+        });
+        $("#txtBUDays2").focusout(function () {
+            if ($("#txtBUDays2").val() != "") {
+                $('#txtBUDays2').css('border-color', '');
+            }
+            else {
+                $('#txtBUDays2').css('border-color', 'red');
+            }
+        });
+        $("#txtBUScript2").focusout(function () {
+            if ($("#txtBUScript2").val() != "") {
+                $('#txtBUScript2').css('border-color', '');
+            }
+            else {
+                $('#txtBUScript2').css('border-color', 'red');
+            }
+        });
+        $("#txtSMSScript91").focusout(function () {
+            if ($("#txtSMSScript91").val() != "") {
+                $('#txtSMSScript91').css('border-color', '');
+            }
+            else {
+                $('#txtSMSScript91').css('border-color', 'red');
+            }
+        });
+        $("#txtSMSScript92").focusout(function () {
+            if ($("#txtSMSScript92").val() != "") {
+                $('#txtSMSScript92').css('border-color', '');
+            }
+            else {
+                $('#txtSMSScript92').css('border-color', 'red');
+            }
+        });
     }
 
     function SaveUploadedUsersConfig() {
-        if ($("#rbtnUploadedUsersVWA").prop("checked") || $("#rbtnUploadedUsersWA").prop("checked") || $("#rbtnUploadedUsersSMS").prop("checked")) {
-        }
-        else {
-            cuteAlert({
-                type: "error",
-                title: "Oops..",
-                message: "Please select SMS Type",
-                buttonText: "Okay"
-            })
-            return false;
-        }
+        var validationStatus10 = ValidateUploadUsersConfig();
+        if (validationStatus10) {
+            if ($("#rbtnUploadedUsersVWA").prop("checked") || $("#rbtnUploadedUsersWA").prop("checked") || $("#rbtnUploadedUsersSMS").prop("checked")) {
+            }
+            else {
+                cuteAlert({
+                    type: "error",
+                    title: "Oops..",
+                    message: "Please select SMS Type",
+                    buttonText: "Okay"
+                })
+                return false;
+            }
 
-        var UploadedUsersConfig = [];
-        item = {}
+            var UploadedUsersConfig = [];
+            item = {}
 
-        item["Id"] = $('#hdnUploadedUsersId').val();
-        item["GroupId"] = $('#hdnGroupID').val();
-        item["CampaignType"] = "Reminder Bulk Uploaded Users";
+            item["Id"] = $('#hdnUploadedUsersId').val();
+            item["GroupId"] = $('#hdnGroupID').val();
+            item["CampaignType"] = "Reminder Bulk Uploaded Users";
 
-        if ($("#rbtnUploadedUsersVWA").prop("checked"))
-            item["SMSType"] = "VWA";
-        if ($("#rbtnUploadedUsersWA").prop("checked"))
-            item["SMSType"] = "WA";
-        if ($("#rbtnUploadedUsersSMS").prop("checked"))
-            item["SMSType"] = "SMS";
+            if ($("#rbtnUploadedUsersVWA").prop("checked"))
+                item["SMSType"] = "VWA";
+            if ($("#rbtnUploadedUsersWA").prop("checked"))
+                item["SMSType"] = "WA";
+            if ($("#rbtnUploadedUsersSMS").prop("checked"))
+                item["SMSType"] = "SMS";
 
-        item["BonusPoints"] = 0;
-        item["Frequency"] = "";
+            item["BonusPoints"] = 0;
+            item["Frequency"] = "";
 
-        item["IntroDays1"] = $('#txtUploadedUsersDays1').val();
-        item["IntroScript1"] = $('#txtUploadedUsersScript1').val();
-        item["IntroDays2"] = $('#txtUploadedUsersDays2').val();
-        item["IntroScript2"] = $('#txtUploadedUsersScript2').val();
-        item["ReminderDays1"] = 0;
-        item["ReminderWhen1"] = "";
-        item["ReminderScript1"] = "";
-        item["ReminderDays2"] = 0;
-        item["ReminderWhen2"] = "";
-        item["ReminderScript2"] = "";
-        item["OnDayTypePT"] = "";
-        item["OnDayScriptPT"] = "";
-        item["OnDayTypeNPT"] = "";
-        item["OnDayScriptNPT"] = "";
+            item["IntroDays1"] = $('#txtUploadedUsersDays1').val();
+            item["IntroScript1"] = $('#txtUploadedUsersScript1').val();
+            item["IntroDays2"] = $('#txtUploadedUsersDays2').val();
+            item["IntroScript2"] = $('#txtUploadedUsersScript2').val();
+            item["ReminderDays1"] = 0;
+            item["ReminderWhen1"] = "";
+            item["ReminderScript1"] = "";
+            item["ReminderDays2"] = 0;
+            item["ReminderWhen2"] = "";
+            item["ReminderScript2"] = "";
+            item["OnDayTypePT"] = "";
+            item["OnDayScriptPT"] = "";
+            item["OnDayTypeNPT"] = "";
+            item["OnDayScriptNPT"] = "";
 
-        item["SMSScript1"] = $('#txtSMSScript101').val();
-        item["SMSScript2"] = $('#txtSMSScript102').val();
+            item["SMSScript1"] = $('#txtSMSScript101').val();
+            item["SMSScript2"] = $('#txtSMSScript102').val();
 
 
-        UploadedUsersConfig.push(item);
-        var UploadedUsersConfigData = JSON.stringify(UploadedUsersConfig);
+            UploadedUsersConfig.push(item);
+            var UploadedUsersConfigData = JSON.stringify(UploadedUsersConfig);
 
-        $("#divLoader").show();
-        $.ajax({
+            $("#divLoader").show();
+            $.ajax({
                 type: "POST",
                 url: '@Url.Action("SaveCampaignOtherConfig", "CustomerOnBoarding")',
-            data: '{jsonData: ' + JSON.stringify(UploadedUsersConfigData) + '}',
+                data: '{jsonData: ' + JSON.stringify(UploadedUsersConfigData) + '}',
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
                 success: function (result) {
@@ -2467,6 +2804,114 @@
                     $("#divLoader").hide();
                 }
             });
+        }
+    }
+    function ValidateUploadUsersConfig() {
+        var status = true;
+        if ($("#rbtnUploadedUsersSMS").is(":checked")) {
+
+            if ($("#txtUploadedUsersDays1").val() == "") {
+                $('#txtUploadedUsersDays1').css('border-color', 'red');
+                status = false;
+            }
+            if ($("#txtUploadedUsersScript1").val() == "") {
+                $('#txtUploadedUsersScript1').css('border-color', 'red');
+                status = false;
+            }
+            if ($("#txtUploadedUsersDays2").val() == "") {
+                $('#txtUploadedUsersDays2').css('border-color', 'red');
+                status = false;
+            }
+            if ($("#txtUploadedUsersScript2").val() == "") {
+                $('#txtUploadedUsersScript2').css('border-color', 'red');
+                status = false;
+            }
+        }
+        if ($("#rbtnUploadedUsersVWA").is(":checked") || $("#rbtnUploadedUsersWA").is(":checked")) {
+            if ($("#txtUploadedUsersDays1").val() == "") {
+                $('#txtUploadedUsersDays1').css('border-color', 'red');
+                status = false;
+            }
+            if ($("#txtUploadedUsersScript1").val() == "") {
+                $('#txtUploadedUsersScript1').css('border-color', 'red');
+                status = false;
+            }
+            if ($("#txtUploadedUsersDays2").val() == "") {
+                $('#txtUploadedUsersDays2').css('border-color', 'red');
+                status = false;
+            }
+            if ($("#txtUploadedUsersScript2").val() == "") {
+                $('#txtUploadedUsersScript2').css('border-color', 'red');
+                status = false;
+            }
+            if ($("#txtSMSScript101").val() == "") {
+                $('#txtSMSScript101').css('border-color', 'red');
+                status = false;
+            }
+            if ($("#txtSMSScript102").val() == "") {
+                $('#txtSMSScript102').css('border-color', 'red');
+                status = false;
+            }
+        }
+            if (!status) {
+                cuteAlert({
+                    type: "error",
+                    title: "Oops..",
+                    message: "Please Enter required fields",
+                    buttonText: "Okay"
+                })
+            }
+            return status;
+    }
+    function RemoveRequiredBorderUploadUsersConfig() {
+        $("#txtUploadedUsersDays1").focusout(function () {
+            if ($("#txtUploadedUsersDays1").val() != "") {
+                $('#txtUploadedUsersDays1').css('border-color', '');
+            }
+            else {
+                $('#txtUploadedUsersDays1').css('border-color', 'red');
+            }
+        });
+        $("#txtUploadedUsersScript1").focusout(function () {
+            if ($("#txtUploadedUsersScript1").val() != "") {
+                $('#txtUploadedUsersScript1').css('border-color', '');
+            }
+            else {
+                $('#txtUploadedUsersScript1').css('border-color', 'red');
+            }
+        });
+        $("#txtUploadedUsersDays2").focusout(function () {
+            if ($("#txtUploadedUsersDays2").val() != "") {
+                $('#txtUploadedUsersDays2').css('border-color', '');
+            }
+            else {
+                $('#txtUploadedUsersDays2').css('border-color', 'red');
+            }
+        });
+        $("#txtUploadedUsersScript2").focusout(function () {
+            if ($("#txtUploadedUsersScript2").val() != "") {
+                $('#txtUploadedUsersScript2').css('border-color', '');
+            }
+            else {
+                $('#txtUploadedUsersScript2').css('border-color', 'red');
+            }
+        });
+        $("#txtSMSScript101").focusout(function () {
+            if ($("#txtSMSScript101").val() != "") {
+                $('#txtSMSScript101').css('border-color', '');
+            }
+            else {
+                $('#txtSMSScript101').css('border-color', 'red');
+            }
+        });
+        $("#txtSMSScript102").focusout(function () {
+            if ($("#txtSMSScript102").val() != "") {
+                $('#txtSMSScript102').css('border-color', '');
+            }
+            else {
+                $('#txtSMSScript102').css('border-color', 'red');
+            }
+        });        
     }
 
     function LoadCampaignOtherConfig(type) {
