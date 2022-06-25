@@ -1132,6 +1132,8 @@
         $("#txtPEMessageCount").focusout(function () {
             ShowPEMessageSections();
         });
+        RemoveRequiredBorderBirthdayConfig();
+        RemoveRequiredBorderAnniversaryConfig()
     });
 
     function dvBirthDaySMSShowHide(status) {
@@ -1494,78 +1496,80 @@
     }
 
     function SaveBirthdayConfig() {
-        if ($("#rbtnVWA").prop("checked") || $("#rbtnWA").prop("checked") || $("#rbtnSMS").prop("checked")) {
-        }
-        else {
-            cuteAlert({
-                type: "error",
-                title: "Oops..",
-                message: "Please select SMS Type",
-                buttonText: "Okay"
-            })
-            return false;
-        }
-        if ($("#txtBonusPoints").val() == "") {
-            cuteAlert({
-                type: "error",
-                title: "Oops..",
-                message: "Please enter Bonus Points",
-                buttonText: "Okay"
-            })
-            return false;
-        }
-        
+        var validationStatus = ValidateBirthdayConfig();
+        if (validationStatus) {
+            if ($("#rbtnVWA").prop("checked") || $("#rbtnWA").prop("checked") || $("#rbtnSMS").prop("checked")) {
+            }
+            else {
+                cuteAlert({
+                    type: "error",
+                    title: "Oops..",
+                    message: "Please select SMS Type",
+                    buttonText: "Okay"
+                })
+                return false;
+            }
+            if ($("#txtBonusPoints").val() == "") {
+                cuteAlert({
+                    type: "error",
+                    title: "Oops..",
+                    message: "Please enter Bonus Points",
+                    buttonText: "Okay"
+                })
+                return false;
+            }
 
-        var BirthdayConfig = [];
-        item = {}
 
-        item["Id"] = $('#hdnBirthId').val();
-        item["GroupId"] = $('#hdnGroupID').val();
-        item["CampaignType"] = "Birthday";
+            var BirthdayConfig = [];
+            item = {}
 
-        if ($("#rbtnVWA").prop("checked"))
-            item["SMSType"] = "VWA";
-        if ($("#rbtnWA").prop("checked"))
-            item["SMSType"] = "WA";
-        if ($("#rbtnSMS").prop("checked"))
-            item["SMSType"] = "SMS";
+            item["Id"] = $('#hdnBirthId').val();
+            item["GroupId"] = $('#hdnGroupID').val();
+            item["CampaignType"] = "Birthday";
 
-        item["BonusPoints"] = $('#txtBonusPoints').val();
-        item["PointsValidBefore"] = $('#txtPointsValidBefore').val();
-        item["PointsValidAfter"] = $('#txtPointsValidAfter').val();
-                  
-        item["Frequency"] = "Days";
-        //if ($("#rbtnMonth").prop("checked"))
+            if ($("#rbtnVWA").prop("checked"))
+                item["SMSType"] = "VWA";
+            if ($("#rbtnWA").prop("checked"))
+                item["SMSType"] = "WA";
+            if ($("#rbtnSMS").prop("checked"))
+                item["SMSType"] = "SMS";
+
+            item["BonusPoints"] = $('#txtBonusPoints').val();
+            item["PointsValidBefore"] = $('#txtPointsValidBefore').val();
+            item["PointsValidAfter"] = $('#txtPointsValidAfter').val();
+
+            item["Frequency"] = "Days";
+            //if ($("#rbtnMonth").prop("checked"))
             //item["Frequency"] = "Month";
 
-        item["IntroDays1"] = $('#txtIntroDays1').val();
-        item["IntroScript1"] = $('#txtIntroScript1').val();
-        //item["IntroDays2"] = $('#txtIntroDays2').val();
-        //item["IntroScript2"] = $('#txtIntroScript2').val();
-        item["ReminderDays1"] = $('#txtRemDays1').val();
-        item["ReminderWhen1"] = $('#ddlBeforeAfter1').val();
-        item["ReminderScript1"] = $('#txtRemScript1').val();
-        item["ReminderDays2"] = $('#txtRemDays2').val();
-        item["ReminderWhen2"] = $('#ddlBeforeAfter2').val();
-        item["ReminderScript2"] = $('#txtRemScript2').val();
-        item["OnDayTypePT"] = $('#ddlPointsUsed').val();
-        item["OnDayScriptPT"] = $('#txtOnBirthdayScriptPT').val();
-        item["OnDayTypeNPT"] = $('#ddlPointsNotUsed').val();
-        item["OnDayScriptNPT"] = $('#txtOnBirthdayScriptNPT').val();
+            item["IntroDays1"] = $('#txtIntroDays1').val();
+            item["IntroScript1"] = $('#txtIntroScript1').val();
+            //item["IntroDays2"] = $('#txtIntroDays2').val();
+            //item["IntroScript2"] = $('#txtIntroScript2').val();
+            item["ReminderDays1"] = $('#txtRemDays1').val();
+            item["ReminderWhen1"] = $('#ddlBeforeAfter1').val();
+            item["ReminderScript1"] = $('#txtRemScript1').val();
+            item["ReminderDays2"] = $('#txtRemDays2').val();
+            item["ReminderWhen2"] = $('#ddlBeforeAfter2').val();
+            item["ReminderScript2"] = $('#txtRemScript2').val();
+            item["OnDayTypePT"] = $('#ddlPointsUsed').val();
+            item["OnDayScriptPT"] = $('#txtOnBirthdayScriptPT').val();
+            item["OnDayTypeNPT"] = $('#ddlPointsNotUsed').val();
+            item["OnDayScriptNPT"] = $('#txtOnBirthdayScriptNPT').val();
 
-        item["SMSScript1"] = $('#txtSMSScript1').val();
-        item["SMSScript3"] = $('#txtSMSScript3').val();
-        item["SMSScript4"] = $('#txtSMSScript4').val();
-        item["SMSScript5"] = $('#txtSMSScript5').val();
-        item["SMSScript6"] = $('#txtSMSScript6').val();
+            item["SMSScript1"] = $('#txtSMSScript1').val();
+            item["SMSScript3"] = $('#txtSMSScript3').val();
+            item["SMSScript4"] = $('#txtSMSScript4').val();
+            item["SMSScript5"] = $('#txtSMSScript5').val();
+            item["SMSScript6"] = $('#txtSMSScript6').val();
 
 
 
-        BirthdayConfig.push(item);
-        var BirthdayConfigData = JSON.stringify(BirthdayConfig);
+            BirthdayConfig.push(item);
+            var BirthdayConfigData = JSON.stringify(BirthdayConfig);
 
-        $("#divLoader").show();
-        $.ajax({
+            $("#divLoader").show();
+            $.ajax({
                 type: "POST",
                 url: '@Url.Action("SaveCampaignOtherConfig", "CustomerOnBoarding")',
                 data: '{jsonData: ' + JSON.stringify(BirthdayConfigData) + '}',
@@ -1594,81 +1598,301 @@
                     $("#divLoader").hide();
                 }
             });
+        }
+    }
+    function ValidateBirthdayConfig() {
+
+        var status = true;
+        if ($("#rbtnSMS").is(":checked")) {
+
+            if ($("#txtBonusPoints").val() == "") {
+                $('#txtBonusPoints').css('border-color', 'red');
+                status = false;
+            }
+            if ($("#txtPointsValidBefore").val() == "") {
+                $('#txtPointsValidBefore').css('border-color', 'red');
+                status = false;
+            }
+            if ($("#txtPointsValidAfter").val() == "") {
+                $('#txtPointsValidAfter').css('border-color', 'red');
+                status = false;
+            }
+            if ($("#txtIntroDays1").val() == "") {
+                $('#txtIntroDays1').css('border-color', 'red');
+                status = false;
+            }
+            if ($("#txtIntroScript1").val().trim() == "" || $("#txtIntroScript1").val().trim() == null) {
+                $("#txtIntroScript1").css('border-color', 'red');
+                status = false;
+            }
+            if ($("#txtRemDays1").val() == "") {
+                $('#txtRemDays1').css('border-color', 'red');
+                status = false;
+            }
+
+            if ($("#txtRemScript1").val().trim() == "" || $("#txtRemScript1").val().trim() == null) {
+                $('#txtRemScript1').css('border-color', 'red');
+                status = false;
+            }
+
+            if ($("#txtOnBirthdayScriptPT").val().trim() == "" || $("#txtOnBirthdayScriptPT").val().trim() == null) {
+                $('#txtOnBirthdayScriptPT').css('border-color', 'red');
+                status = false;
+            }
+            if ($("#txtOnBirthdayScriptNPT").val().trim() == "" || $("#txtOnBirthdayScriptNPT").val().trim() == null) {
+                $('#txtOnBirthdayScriptNPT').css('border-color', 'red');
+                status = false;
+            }
+        }
+        if ($("#rbtnVWA").is(":checked") || $("#rbtnWA").is(":checked")) {
+            if ($("#txtBonusPoints").val() == "") {
+                $('#txtBonusPoints').css('border-color', 'red');
+                status = false;
+            }
+            if ($("#txtPointsValidBefore").val() == "") {
+                $('#txtPointsValidBefore').css('border-color', 'red');
+                status = false;
+            }
+            if ($("#txtPointsValidAfter").val() == "") {
+                $('#txtPointsValidAfter').css('border-color', 'red');
+                status = false;
+            }
+            if ($("#txtIntroDays1").val() == "") {
+                $('#txtIntroDays1').css('border-color', 'red');
+                status = false;
+            }
+            if ($("#txtIntroScript1").val().trim() == "" || $("#txtIntroScript1").val().trim() == null) {
+                $("#txtIntroScript1").css('border-color', 'red');
+                status = false;
+            }
+            if ($("#txtSMSScript1").val().trim() == "" || $("#txtSMSScript1").val().trim() == null) {
+                $("#txtSMSScript1").css('border-color', 'red');
+                status = false;
+            }
+            if ($("#txtRemDays1").val() == "") {
+                $('#txtRemDays1').css('border-color', 'red');
+                status = false;
+            }
+            if ($("#txtRemScript1").val().trim() == "" || $("#txtRemScript1").val().trim() == null) {
+                $('#txtRemScript1').css('border-color', 'red');
+                status = false;
+            }
+            if ($("#txtSMSScript3").val().trim() == "" || $("#txtSMSScript3").val().trim() == null) {
+                $('#txtSMSScript3').css('border-color', 'red');
+                status = false;
+            }
+            if ($("#txtOnBirthdayScriptPT").val().trim() == "" || $("#txtOnBirthdayScriptPT").val().trim() == null) {
+                $('#txtOnBirthdayScriptPT').css('border-color', 'red');
+                status = false;
+            }
+            if ($("#txtSMSScript5").val().trim() == "" || $("#txtSMSScript5").val().trim() == null) {
+                $('#txtSMSScript5').css('border-color', 'red');
+                status = false;
+            }
+            if ($("#txtOnBirthdayScriptNPT").val().trim() == "" || $("#txtOnBirthdayScriptNPT").val().trim() == null) {
+                $('#txtOnBirthdayScriptNPT').css('border-color', 'red');
+                status = false;
+            }
+            if ($("#txtSMSScript6").val().trim() == "" || $("#txtSMSScript6").val().trim() == null) {
+                $('#txtSMSScript6').css('border-color', 'red');
+                status = false;
+            }
+
+        }
+
+        if (!status) {
+            cuteAlert({
+                type: "error",
+                title: "Oops..",
+                message: "Please Enter required fields",
+                buttonText: "Okay"
+            })
+        }
+        return status;
+    }
+    function RemoveRequiredBorderBirthdayConfig() {
+        $("#txtBonusPoints").focusout(function () {
+            if ($("#txtBonusPoints").val() != "") {
+                $('#txtBonusPoints').css('border-color', '');
+            }
+            else {
+                $('#txtBonusPoints').css('border-color', 'red');
+            }
+        });
+        $("#txtPointsValidBefore").focusout(function () {
+            if ($("#txtPointsValidBefore").val() != "") {
+                $('#txtPointsValidBefore').css('border-color', '');
+            }
+            else {
+                $('#txtPointsValidBefore').css('border-color', 'red');
+            }
+        });
+        $("#txtPointsValidAfter").focusout(function () {
+            if ($("#txtPointsValidAfter").val() != "") {
+                $('#txtPointsValidAfter').css('border-color', '');
+            }
+            else {
+                $('#txtPointsValidAfter').css('border-color', 'red');
+            }
+        });
+        $("#txtIntroDays1").focusout(function () {
+            if ($("#txtIntroDays1").val() != "") {
+                $('#txtIntroDays1').css('border-color', '');
+            }
+            else {
+                $('#txtIntroDays1').css('border-color', 'red');
+            }
+        });
+        $("#txtIntroScript1").focusout(function () {
+            if ($("#txtIntroScript1").val() != "") {
+                $('#txtIntroScript1').css('border-color', '');
+            }
+            else {
+                $('#txtIntroScript1').css('border-color', 'red');
+            }
+        });
+        $("#txtRemDays1").focusout(function () {
+            if ($("#txtRemDays1").val() != "") {
+                $('#txtRemDays1').css('border-color', '');
+            }
+            else {
+                $('#txtRemDays1').css('border-color', 'red');
+            }
+        });
+        $("#txtRemScript1").focusout(function () {
+            if ($("#txtRemScript1").val() != "") {
+                $('#txtRemScript1').css('border-color', '');
+            }
+            else {
+                $('#txtRemScript1').css('border-color', 'red');
+            }
+        });
+        $("#txtOnBirthdayScriptPT").focusout(function () {
+            if ($("#txtOnBirthdayScriptPT").val() != "") {
+                $('#txtOnBirthdayScriptPT').css('border-color', '');
+            }
+            else {
+                $('#txtOnBirthdayScriptPT').css('border-color', 'red');
+            }
+        });
+        $("#txtOnBirthdayScriptNPT").focusout(function () {
+            if ($("#txtOnBirthdayScriptNPT").val() != "") {
+                $('#txtOnBirthdayScriptNPT').css('border-color', '');
+            }
+            else {
+                $('#txtOnBirthdayScriptNPT').css('border-color', 'red');
+            }
+        });
+        $("#txtSMSScript1").focusout(function () {
+            if ($("#txtSMSScript1").val() != "") {
+                $('#txtSMSScript1').css('border-color', '');
+            }
+            else {
+                $('#txtSMSScript1').css('border-color', 'red');
+            }
+        });
+        $("#txtSMSScript3").focusout(function () {
+            if ($("#txtSMSScript3").val() != "") {
+                $('#txtSMSScript3').css('border-color', '');
+            }
+            else {
+                $('#txtSMSScript3').css('border-color', 'red');
+            }
+        });
+        $("#txtSMSScript5").focusout(function () {
+            if ($("#txtSMSScript5").val() != "") {
+                $('#txtSMSScript5').css('border-color', '');
+            }
+            else {
+                $('#txtSMSScript5').css('border-color', 'red');
+            }
+        });
+        $("#txtSMSScript6").focusout(function () {
+            if ($("#txtSMSScript6").val() != "") {
+                $('#txtSMSScript6').css('border-color', '');
+            }
+            else {
+                $('#txtSMSScript6').css('border-color', 'red');
+            }
+        });
+
     }
 
     function SaveAnniversaryConfig() {
-        if ($("#rbtnVWA1").prop("checked") || $("#rbtnWA1").prop("checked") || $("#rbtnSMS1").prop("checked")) {
-        }
-        else {
-            cuteAlert({
-                type: "error",
-                title: "Oops..",
-                message: "Please select SMS Type",
-                buttonText: "Okay"
-            })
-            return false;
-        }
-        if ($("#txtBonusPoints1").val() == "") {
-            cuteAlert({
-                type: "error",
-                title: "Oops..",
-                message: "Please enter Bonus Points",
-                buttonText: "Okay"
-            })
-            return false;
-        }
-        
+        var validationStatus1 = ValidateAnniversaryConfig();
+        if (validationStatus1) {
+            if ($("#rbtnVWA1").prop("checked") || $("#rbtnWA1").prop("checked") || $("#rbtnSMS1").prop("checked")) {
+            }
+            else {
+                cuteAlert({
+                    type: "error",
+                    title: "Oops..",
+                    message: "Please select SMS Type",
+                    buttonText: "Okay"
+                })
+                return false;
+            }
+            if ($("#txtBonusPoints1").val() == "") {
+                cuteAlert({
+                    type: "error",
+                    title: "Oops..",
+                    message: "Please enter Bonus Points",
+                    buttonText: "Okay"
+                })
+                return false;
+            }
 
-        var AnniversaryConfig = [];
-        item = {}
 
-        item["Id"] = $('#hdnAnniversaryId').val();
-        item["GroupId"] = $('#hdnGroupID').val();
-        item["CampaignType"] = "Anniversary";
+            var AnniversaryConfig = [];
+            item = {}
 
-        if ($("#rbtnVWA1").prop("checked"))
-            item["SMSType"] = "VWA";
-        if ($("#rbtnWA1").prop("checked"))
-            item["SMSType"] = "WA";
-        if ($("#rbtnSMS1").prop("checked"))
-            item["SMSType"] = "SMS";
+            item["Id"] = $('#hdnAnniversaryId').val();
+            item["GroupId"] = $('#hdnGroupID').val();
+            item["CampaignType"] = "Anniversary";
 
-        item["BonusPoints"] = $('#txtBonusPoints1').val();
-        item["PointsValidBefore"] = $('#txtPointsValidBefore1').val();
-        item["PointsValidAfter"] = $('#txtPointsValidAfter1').val();
-        item["Frequency"] = "Days";
-        //if ($("#rbtnMonth1").prop("checked"))
+            if ($("#rbtnVWA1").prop("checked"))
+                item["SMSType"] = "VWA";
+            if ($("#rbtnWA1").prop("checked"))
+                item["SMSType"] = "WA";
+            if ($("#rbtnSMS1").prop("checked"))
+                item["SMSType"] = "SMS";
+
+            item["BonusPoints"] = $('#txtBonusPoints1').val();
+            item["PointsValidBefore"] = $('#txtPointsValidBefore1').val();
+            item["PointsValidAfter"] = $('#txtPointsValidAfter1').val();
+            item["Frequency"] = "Days";
+            //if ($("#rbtnMonth1").prop("checked"))
             //item["Frequency"] = "Month";
 
-        item["IntroDays1"] = $('#txtIntroDays11').val();
-        item["IntroScript1"] = $('#txtIntroScript11').val();
-        //item["IntroDays2"] = $('#txtIntroDays21').val();
-        //item["IntroScript2"] = $('#txtIntroScript21').val();
-        item["ReminderDays1"] = $('#txtRemDays11').val();
-        item["ReminderWhen1"] = $('#ddlBeforeAfter11').val();
-        item["ReminderScript1"] = $('#txtRemScript11').val();
-        item["ReminderDays2"] = $('#txtRemDays21').val();
-        item["ReminderWhen2"] = $('#ddlBeforeAfter21').val();
-        item["ReminderScript2"] = $('#txtRemScript21').val();
-        item["OnDayTypePT"] = $('#ddlPointsUsed1').val();
-        item["OnDayScriptPT"] = $('#txtOnBirthdayScriptPT1').val();
-        item["OnDayTypeNPT"] = $('#ddlPointsNotUsed1').val();
-        item["OnDayScriptNPT"] = $('#txtOnBirthdayScriptNPT1').val();
+            item["IntroDays1"] = $('#txtIntroDays11').val();
+            item["IntroScript1"] = $('#txtIntroScript11').val();
+            //item["IntroDays2"] = $('#txtIntroDays21').val();
+            //item["IntroScript2"] = $('#txtIntroScript21').val();
+            item["ReminderDays1"] = $('#txtRemDays11').val();
+            item["ReminderWhen1"] = $('#ddlBeforeAfter11').val();
+            item["ReminderScript1"] = $('#txtRemScript11').val();
+            item["ReminderDays2"] = $('#txtRemDays21').val();
+            item["ReminderWhen2"] = $('#ddlBeforeAfter21').val();
+            item["ReminderScript2"] = $('#txtRemScript21').val();
+            item["OnDayTypePT"] = $('#ddlPointsUsed1').val();
+            item["OnDayScriptPT"] = $('#txtOnBirthdayScriptPT1').val();
+            item["OnDayTypeNPT"] = $('#ddlPointsNotUsed1').val();
+            item["OnDayScriptNPT"] = $('#txtOnBirthdayScriptNPT1').val();
 
-        item["SMSScript1"] = $('#txtSMSScript11').val();
-        item["SMSScript3"] = $('#txtSMSScript31').val();
-        item["SMSScript4"] = $('#txtSMSScript41').val();
-        item["SMSScript5"] = $('#txtSMSScript51').val();
-        item["SMSScript6"] = $('#txtSMSScript61').val();
+            item["SMSScript1"] = $('#txtSMSScript11').val();
+            item["SMSScript3"] = $('#txtSMSScript31').val();
+            item["SMSScript4"] = $('#txtSMSScript41').val();
+            item["SMSScript5"] = $('#txtSMSScript51').val();
+            item["SMSScript6"] = $('#txtSMSScript61').val();
 
-        AnniversaryConfig.push(item);
-        var AnniversaryConfigData = JSON.stringify(AnniversaryConfig);
+            AnniversaryConfig.push(item);
+            var AnniversaryConfigData = JSON.stringify(AnniversaryConfig);
 
-        $("#divLoader").show();
-        $.ajax({
+            $("#divLoader").show();
+            $.ajax({
                 type: "POST",
                 url: '@Url.Action("SaveCampaignOtherConfig", "CustomerOnBoarding")',
-            data: '{jsonData: ' + JSON.stringify(AnniversaryConfigData) + '}',
+                data: '{jsonData: ' + JSON.stringify(AnniversaryConfigData) + '}',
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
                 success: function (result) {
@@ -1694,6 +1918,223 @@
                     $("#divLoader").hide();
                 }
             });
+        }
+    }
+    function ValidateAnniversaryConfig() {
+        var status = true;
+        if ($("#rbtnSMS1").is(":checked")) {
+
+            if ($("#txtBonusPoints1").val() == "") {
+                $('#txtBonusPoints1').css('border-color', 'red');
+                status = false;
+            }
+            if ($("#txtPointsValidBefore1").val() == "") {
+                $('#txtPointsValidBefore1').css('border-color', 'red');
+                status = false;
+            }
+            if ($("#txtPointsValidAfter1").val() == "") {
+                $('#txtPointsValidAfter1').css('border-color', 'red');
+                status = false;
+            }
+            if ($("#txtIntroDays11").val() == "") {
+                $('#txtIntroDays11').css('border-color', 'red');
+                status = false;
+            }
+            if ($("#txtIntroScript11").val().trim() == "" || $("#txtIntroScript11").val().trim() == null) {
+                $("#txtIntroScript11").css('border-color', 'red');
+                status = false;
+            }
+            if ($("#txtRemDays11").val() == "") {
+                $('#txtRemDays11').css('border-color', 'red');
+                status = false;
+            }
+
+            if ($("#txtRemScript11").val().trim() == "" || $("#txtRemScript11").val().trim() == null) {
+                $('#txtRemScript11').css('border-color', 'red');
+                status = false;
+            }
+
+            if ($("#txtOnBirthdayScriptPT1").val().trim() == "" || $("#txtOnBirthdayScriptPT1").val().trim() == null) {
+                $('#txtOnBirthdayScriptPT1').css('border-color', 'red');
+                status = false;
+            }
+            if ($("#txtOnBirthdayScriptNPT1").val().trim() == "" || $("#txtOnBirthdayScriptNPT1").val().trim() == null) {
+                $('#txtOnBirthdayScriptNPT1').css('border-color', 'red');
+                status = false;
+            }
+        }
+        if ($("#rbtnVWA1").is(":checked") || $("#rbtnWA1").is(":checked")) {
+            if ($("#txtBonusPoints1").val() == "") {
+                $('#txtBonusPoints1').css('border-color', 'red');
+                status = false;
+            }
+            if ($("#txtPointsValidBefore1").val() == "") {
+                $('#txtPointsValidBefore1').css('border-color', 'red');
+                status = false;
+            }
+            if ($("#txtPointsValidAfter1").val() == "") {
+                $('#txtPointsValidAfter1').css('border-color', 'red');
+                status = false;
+            }
+            if ($("#txtIntroDays11").val() == "") {
+                $('#txtIntroDays11').css('border-color', 'red');
+                status = false;
+            }
+            if ($("#txtIntroScript11").val().trim() == "" || $("#txtIntroScript11").val().trim() == null) {
+                $("#txtIntroScript11").css('border-color', 'red');
+                status = false;
+            }
+            if ($("#txtSMSScript11").val().trim() == "" || $("#txtSMSScript11").val().trim() == null) {
+                $("#txtSMSScript11").css('border-color', 'red');
+                status = false;
+            }
+            if ($("#txtRemDays11").val() == "") {
+                $('#txtRemDays11').css('border-color', 'red');
+                status = false;
+            }
+            if ($("#txtRemScript11").val().trim() == "" || $("#txtRemScript11").val().trim() == null) {
+                $('#txtRemScript11').css('border-color', 'red');
+                status = false;
+            }
+            if ($("#txtSMSScript31").val().trim() == "" || $("#txtSMSScript31").val().trim() == null) {
+                $('#txtSMSScript31').css('border-color', 'red');
+                status = false;
+            }
+            if ($("#txtOnBirthdayScriptPT1").val().trim() == "" || $("#txtOnBirthdayScriptPT1").val().trim() == null) {
+                $('#txtOnBirthdayScriptPT1').css('border-color', 'red');
+                status = false;
+            }
+            if ($("#txtSMSScript51").val().trim() == "" || $("#txtSMSScript51").val().trim() == null) {
+                $('#txtSMSScript51').css('border-color', 'red');
+                status = false;
+            }
+            if ($("#txtOnBirthdayScriptNPT1").val().trim() == "" || $("#txtOnBirthdayScriptNPT1").val().trim() == null) {
+                $('#txtOnBirthdayScriptNPT1').css('border-color', 'red');
+                status = false;
+            }
+            if ($("#txtSMSScript61").val().trim() == "" || $("#txtSMSScript6").val().trim() == null) {
+                $('#txtSMSScript61').css('border-color', 'red');
+                status = false;
+            }
+
+        }
+
+        if (!status) {
+            cuteAlert({
+                type: "error",
+                title: "Oops..",
+                message: "Please Enter required fields",
+                buttonText: "Okay"
+            })
+        }
+        return status;
+    }
+    function RemoveRequiredBorderAnniversaryConfig() {
+        $("#txtBonusPoints1").focusout(function () {
+            if ($("#txtBonusPoints1").val() != "") {
+                $('#txtBonusPoints1').css('border-color', '');
+            }
+            else {
+                $('#txtBonusPoints1').css('border-color', 'red');
+            }
+        });
+        $("#txtPointsValidBefore1").focusout(function () {
+            if ($("#txtPointsValidBefore1").val() != "") {
+                $('#txtPointsValidBefore1').css('border-color', '');
+            }
+            else {
+                $('#txtPointsValidBefore1').css('border-color', 'red');
+            }
+        });
+        $("#txtPointsValidAfter1").focusout(function () {
+            if ($("#txtPointsValidAfter1").val() != "") {
+                $('#txtPointsValidAfter1').css('border-color', '');
+            }
+            else {
+                $('#txtPointsValidAfter1').css('border-color', 'red');
+            }
+        });
+        $("#txtIntroDays11").focusout(function () {
+            if ($("#txtIntroDays11").val() != "") {
+                $('#txtIntroDays11').css('border-color', '');
+            }
+            else {
+                $('#txtIntroDays11').css('border-color', 'red');
+            }
+        });
+        $("#txtIntroScript11").focusout(function () {
+            if ($("#txtIntroScript11").val() != "") {
+                $('#txtIntroScript11').css('border-color', '');
+            }
+            else {
+                $('#txtIntroScript11').css('border-color', 'red');
+            }
+        });
+        $("#txtRemDays11").focusout(function () {
+            if ($("#txtRemDays11").val() != "") {
+                $('#txtRemDays11').css('border-color', '');
+            }
+            else {
+                $('#txtRemDays11').css('border-color', 'red');
+            }
+        });
+        $("#txtRemScript11").focusout(function () {
+            if ($("#txtRemScript11").val() != "") {
+                $('#txtRemScript11').css('border-color', '');
+            }
+            else {
+                $('#txtRemScript11').css('border-color', 'red');
+            }
+        });
+        $("#txtOnBirthdayScriptPT1").focusout(function () {
+            if ($("#txtOnBirthdayScriptPT1").val() != "") {
+                $('#txtOnBirthdayScriptPT1').css('border-color', '');
+            }
+            else {
+                $('#txtOnBirthdayScriptPT1').css('border-color', 'red');
+            }
+        });
+        $("#txtOnBirthdayScriptNPT1").focusout(function () {
+            if ($("#txtOnBirthdayScriptNPT1").val() != "") {
+                $('#txtOnBirthdayScriptNPT1').css('border-color', '');
+            }
+            else {
+                $('#txtOnBirthdayScriptNPT1').css('border-color', 'red');
+            }
+        });
+        $("#txtSMSScript11").focusout(function () {
+            if ($("#txtSMSScript11").val() != "") {
+                $('#txtSMSScript11').css('border-color', '');
+            }
+            else {
+                $('#txtSMSScript11').css('border-color', 'red');
+            }
+        });
+        $("#txtSMSScript31").focusout(function () {
+            if ($("#txtSMSScript31").val() != "") {
+                $('#txtSMSScript31').css('border-color', '');
+            }
+            else {
+                $('#txtSMSScript31').css('border-color', 'red');
+            }
+        });
+        $("#txtSMSScript51").focusout(function () {
+            if ($("#txtSMSScript51").val() != "") {
+                $('#txtSMSScript51').css('border-color', '');
+            }
+            else {
+                $('#txtSMSScript51').css('border-color', 'red');
+            }
+        });
+        $("#txtSMSScript61").focusout(function () {
+            if ($("#txtSMSScript61").val() != "") {
+                $('#txtSMSScript61').css('border-color', '');
+            }
+            else {
+                $('#txtSMSScript61').css('border-color', 'red');
+            }
+        });
+
     }
 
     function SaveDLCRRConfig() {
