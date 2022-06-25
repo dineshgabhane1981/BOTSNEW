@@ -589,9 +589,11 @@
             $('#txtPointsValidityInMonths').css('border-color', 'red');
             status = false;
         }
-        if ($("#txtBasePercentage").val() == "" && $("#txtFixedPointPerRS").val() == "" && $("#txtFixedPointPerTXN").val() == "") {
-            $('#dvBase').css('border-color', 'red');            
-            status = false;
+        if ($('#rbtnIsBase').is(":checked")) {
+            if ($("#txtBasePercentage").val() == "" && $("#txtFixedPointPerRS").val() == "" && $("#txtFixedPointPerTXN").val() == "") {
+                $('#dvBase').css('border-color', 'red');
+                status = false;
+            }
         }
         var count = 0;
         if ($("#txtBasePercentage").val() != "")
