@@ -2000,6 +2000,7 @@ namespace WebApp.Controllers.OnBoarding
                 objData.bots_TblDealDetails = OBR.GetDealMasterDetails(GroupId);
                 objData.bots_TblPaymentDetails = OBR.GetPaymentDetails(GroupId);
                 objData.objRetailList = OBR.GetRetailDetails(GroupId);
+                
                 objData.objInstallmentList = OBR.GetInstallmentDetails(GroupId);
 
                 //Communication Details
@@ -2087,7 +2088,14 @@ namespace WebApp.Controllers.OnBoarding
 
                 //Bulk Upload
                 objData.BulkUploadCount = OBR.GetBulkUpload(GroupId);
-
+                List<tblStandardRulesSetting> objStandardRulesList = new List<tblStandardRulesSetting>();
+                foreach (var item in objData.objRetailList)
+                {
+                    tblStandardRulesSetting objItem = new tblStandardRulesSetting();
+                    objItem= OBR.GetStandardConfigurationRules(Convert.ToInt32(item.CategoryId));
+                    objStandardRulesList.Add(objItem);
+                }
+                objData.objStandardRulesList = objStandardRulesList;
             }
             catch (Exception ex)
             {

@@ -91,7 +91,6 @@
         <div class="col-lg-4 col-sm-4">
             Points Validity (in Months) - <b>@Model.objEarnRuleConfig.PointsValidityInMonths</b>
         </div>
-
     </div>
     <div class="col-lg-12 col-sm-12 row">
 
@@ -155,7 +154,6 @@
                 <div style="margin-top:10px;">Productcode Blocking Type - <b>@Model.objBurnRuleConfig.ProductCodeBlockingType</b></div>
             }
         </div>
-
     </div>
     <hr />
     <div class="col-lg-12 col-sm-12 " style="margin-top:10px;"><h6><b>Celebration Point Rules</b></h6></div>
@@ -167,7 +165,7 @@
                 if (item.CampaignType == "Birthday")
                 {
                     <div class="col-lg-4 col-sm-4">
-                        Birthday Message Count - <b>@item.SMSType</b><br />
+                        Birthday Message - <b>@item.SMSType</b><br />
                     </div>
                     <div class="col-lg-4 col-sm-4">
                         Birthday Bonus Point - <b>@item.BonusPoints</b>
@@ -177,7 +175,7 @@
                 if (item.CampaignType == "Anniversary")
                 {
                     <div class="col-lg-4 col-sm-4">
-                        Anniversary Message Count - <b>@item.SMSType</b><br />
+                        Anniversary Message - <b>@item.SMSType</b><br />
                     </div>
                     <div class="col-lg-4 col-sm-4" style="margin-top:10px;">
                         Anniversary Bonus Point - <b>@item.BonusPoints</b>
@@ -189,32 +187,96 @@
 
     </div>
     <hr />
-    @if (Model.objDLCLinkConfig != null) 
-    
-    {     
-    <div class="col-lg-12 col-sm-12" style="margin-top:10px;"><h6><b>DLC Rules</b></h6></div>
-    <div class="col-lg-12 col-sm-12 row">
-        <div class="col-lg-4 col-sm-4">
-            Profile Update Points - <b>@Model.objDLCLinkConfig.ProfileUpdatePoints</b>
+    @if (Model.objDLCLinkConfig != null)
+    {
+        <div class="col-lg-12 col-sm-12" style="margin-top:10px;"><h6><b>DLC Rules</b></h6></div>
+        <div class="col-lg-12 col-sm-12 row">
+            <div class="col-lg-4 col-sm-4">
+                Profile Update Points - <b>@Model.objDLCLinkConfig.ProfileUpdatePoints</b>
+            </div>
+            <div class="col-lg-4 col-sm-4">
+                Referee Member Points - <b>@Model.objDLCLinkConfig.ReferralPoints </b>
+            </div>
+            <div class="col-lg-4 col-sm-4">
+                Referred Member Points - <b>@Model.objDLCLinkConfig.ReferredPoints </b>
+            </div>
         </div>
-        <div class="col-lg-4 col-sm-4">
-            Referee Member Points - <b>@Model.objDLCLinkConfig.ReferralPoints </b>
+        <div class="col-lg-12 col-sm-12 row">
+            <div class="col-lg-4 col-sm-4">
+                Validity of Referred Member points- <b>@Model.objDLCLinkConfig.ValidityOfReferralPoints</b>
+            </div>
         </div>
-        <div class="col-lg-4 col-sm-4">
-            Referred Member Points - <b>@Model.objDLCLinkConfig.ReferredPoints </b>
-        </div>
-    </div>
-    <div class="col-lg-12 col-sm-12 row">
-        <div class="col-lg-4 col-sm-4">
-            Validity of Referred Member points- <b>@Model.objDLCLinkConfig.ValidityOfReferralPoints</b>
-        </div>
-    </div>
     }
     <hr />
     <div class="col-lg-12 col-sm-12" style="margin-top:10px;">
         <b style="font-size:16px;"> Perpetual Campaign Count - @Model.PerpetualCampaignCount </b>
     </div>
-   
+    <hr />
+    @foreach (var item in Model.objStandardRulesList)
+    {
+        <div class="col-lg-12 col-sm-12" style="margin-top:10px;"><h6><b>Standard Configuration Rules</b></h6></div>
+        <div class="col-lg-12 col-sm-12 row">
+            <div class="col-lg-4 col-sm-4">
+                Category - <b> @item.CategoryName </b>
+            </div>
+            <div class="col-lg-4 col-sm-4">
+                OverLapping Categories - <b> @Html.Raw(@item.OverlappingCategories) </b>
+            </div>            
+                <table border="1" cellpadding="10" cellspacing="10">
+                    <tr>
+                        <th>Sub Elements</th>
+                        <th>Optimum Earn % Range</th>
+                        <th>Typical Exclusions</th>
+                        <th>Optimum Points Validity (in Months)</th>
+                    </tr>
+                    <tbody>
+                            <tr>
+                                <td>@Html.Raw(@item.SubElements)</td>
+                                <td>@Html.Raw(@item.OptimumEarnPercentRange)</td>
+                                <td>@Html.Raw(@item.TypicalExclusions)</td>
+                                <td>@Html.Raw(@item.OptimumPtsValidityInMonths)</td>
+                            </tr>                     
+                    </tbody>
+                </table>            
+            <div class="col-lg-4 col-sm-4">
+                Sub Elements - <b>@item.SubElements</b>
+            </div>
+        </div>
+        <div class="col-lg-12 col-sm-12 row">
+            <div class="col-lg-4 col-sm-4">
+                Optimum
+                Earn % Range - <b>@item.OptimumEarnPercentRange</b>
+            </div>
+            <div class="col-lg-4 col-sm-4">
+                Typical Exclusions - <b>@item.TypicalExclusions</b>
+            </div>
+            <div class="col-lg-4 col-sm-4">
+                Optimum Points Validity (in Months)- <b>@item.OptimumPtsValidityInMonths</b>
+            </div>
+        </div>
+        <div class="col-lg-12 col-sm-12 row">
+            <div class="col-lg-4 col-sm-4">
+                Redemption Guidleines - <b>@item.RedemptionGuidelines</b>
+            </div>
+            <div class="col-lg-4 col-sm-4">
+                Referral Points - <b>@item.ReferralPoints</b>
+            </div>
+            <div class="col-lg-4 col-sm-4">
+                Referee Points - <b>@item.RefereePoints</b>
+            </div>
+        </div>
+        <div class="col-lg-12 col-sm-12 row">
+            <div class="col-lg-4 col-sm-4">
+                Birthday Anniversary Points - <b>@item.BirthdayAnniversaryPts</b>
+            </div>
+            <div class="col-lg-4 col-sm-4">
+                Inactive Campaign Period (in Days) - <b> @Html.Raw(@item.InactiveCampaignPeriodInDays)</b>
+            </div>
+            <div class="col-lg-4 col-sm-4">
+                Points Expiry alert (Days Before) - <b> @Html.Raw(@item.PointsExpiryAlertInDaysBefore)</b>
+            </div>
+        </div>
+     }
 </div>
 
 

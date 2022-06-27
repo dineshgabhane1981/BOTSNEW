@@ -2429,5 +2429,16 @@ namespace BOTS_BL.Repository
             }
             return status;
         }
+
+        public tblStandardRulesSetting GetStandardConfigurationRules(int CategoryId)
+        {
+            tblStandardRulesSetting objData = new tblStandardRulesSetting();
+            using (var context = new CommonDBContext())
+            {
+                objData = context.tblStandardRulesSettings.Where(x => x.CategoryId == CategoryId).FirstOrDefault();
+            }
+            return objData;
+        }
+        
     }
 }

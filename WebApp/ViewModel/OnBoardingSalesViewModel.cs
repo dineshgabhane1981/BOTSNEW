@@ -19,6 +19,7 @@ namespace WebApp.ViewModel
         public List<BOTS_TblRetailMaster> objRetailList { get; set; }
         public List<BOTS_TblInstallmentDetails> objInstallmentList { get; set; }
         public List<BOTS_TblOutletMaster> lstOutlets { get; set; }
+        public List<tblStandardRulesSetting> objStandardRulesList { get; set; }
         public List<BOTS_TblSMSConfig> lstSMSConfig { get; set; }
         public bool IsBrand { get; set; }
         public List<SelectListItem> lstCity { get; set; }
