@@ -293,8 +293,7 @@
     <Compile Include="Models\KeyIndecators\NonTransacting.cs" />
     <Compile Include="Models\KeyIndecators\OnlyOnce.cs" />
     <Compile Include="Models\LoginDetail.cs" />
-    <Compile Include="Models\LoginModel.cs" />
-    <Compile Include="Models\Model11.cs" />
+    <Compile Include="Models\LoginModel.cs" />   
     <Compile Include="Models\MWPSourceMaster.cs" />
     <Compile Include="Models\MWP_Details.cs" />
     <Compile Include="Models\OnBoarding\BOTS_TblActionTracking.cs" />
