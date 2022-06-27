@@ -297,8 +297,8 @@
 
         $("#ddlBillingPartner").on("change", function () {
             FillBillingPartnerProducts();
-           /* ReplaceBillingUrl();*/
         });
+
         $("#ddlBPProduct").on("change", function () {
 
              ReplaceBillingUrl();
@@ -346,7 +346,7 @@
            ShowHideTxnTypeSection("dvCancel");
            ReplaceMobileNo();
        });
-      
+
        $('#rbtnSendOtp').click(function () {
            ShowHideTxnTypeSection("dvSendOtp");
            ReplaceMobileNo();
@@ -405,8 +405,10 @@
        });
 
 
-       $("#btnReset").click(function () {
-           ResetAll();
+        $("#btnReset").click(function () {
+       location.reload();
+         /*   ResetAll();*/
+
        });
 
         ReplaceCurrentDateTime();
@@ -1053,8 +1055,6 @@
             $("#ddlBillingPartner").val('');
             $("#ddlBPProduct").val('');
             $("#txtRequestPacketURL1").val('');
-            $("#txtInvoiceNo").val('');
-            $("#txtInvoiceAmt").val('');
             $("#ddlOutlet").val('');
             $("#txtMobileNo").val('');
             $("#txtDatetime1").val('');
@@ -1068,8 +1068,6 @@
             $("#txtInvoiceAmt").val('');
             $("#ddlOutlet").val('');
             $("#txtMobileNo").val('');
-            $("#txtInvoiceNo2").val('');
-            $("#txtInvoiceAmt2").val('');
             $("#txtDatetime2").val('');
             ResetSection("2");
         }
@@ -1082,8 +1080,6 @@
             $("#txtInvoiceAmt").val('');
             $("#ddlOutlet").val('');
             $("#txtMobileNo").val('');
-            $("#txtInvoiceNo3").val('');
-            $("#txtInvoiceAmt3").val('');
             $("#txtDatetime3").val('');
             ResetSection("3");
         }
@@ -1095,8 +1091,6 @@
             $("#txtInvoiceAmt").val('');
             $("#ddlOutlet").val('');
             $("#txtMobileNo").val('');
-            $("#txtInvoiceNo4").val('');
-            $("#txtInvoiceAmt4").val('');
             $("#txtDatetime4").val('');
             ResetSection("4");
         }
@@ -1108,8 +1102,6 @@
             $("#txtInvoiceAmt").val('');
             $("#ddlOutlet").val('');
             $("#txtMobileNo").val('');
-            $("#txtInvoiceNo5").val('');
-            $("#txtInvoiceAmt5").val('');
             $("#txtDatetime5").val('');
             ResetSection("5");
         }
@@ -1121,8 +1113,6 @@
             $("#txtInvoiceAmt").val('');
             $("#ddlOutlet").val('');
             $("#txtMobileNo").val('');
-            $("#txtInvoiceNo6").val('');
-            $("#txtInvoiceAmt6").val('');
             $("#txtDatetime6").val('');
             ResetSection("6");
         }
@@ -1130,14 +1120,11 @@
             $("#ddlBillingPartner").val('');
             $("#ddlBPProduct").val('');
             $("#txtRequestPacketURL7").val('');
-            $("#txtInvoiceNo").val('');
-            $("#txtInvoiceAmt").val('');
             $("#ddlOutlet").val('');
             $("#txtMobileNo").val('');
-            $("#txtInvoiceNo7").val('');
-            $("#txtInvoiceAmt7").val('');
             $("#txtDatetime7").val('');
             ResetSection("7");
+
         }
     }
 
@@ -1155,6 +1142,7 @@
                     $("#divLoader").hide();
                 },
                 error: function (result) {
+                    location.reload();
                     $("#divLoader").hide();
                 }
             });
@@ -1214,15 +1202,18 @@
         if (Id == "dvEnrlment") {
             $("#txtInvoiceNo").prop("disabled", true);
             $("#txtInvoiceAmt").prop("disabled", true);
+            $("#txtInvoiceNo").val("");
+            $("#txtInvoiceAmt").val("");
         }
         else {
             $("#txtInvoiceNo").prop("disabled", false);
             $("#txtInvoiceAmt").prop("disabled", false);
 
-            ReplaceCounterId();
             if (Id == "dvSendOtp") {
                 $("#txtInvoiceNo").prop("disabled", true);
                 $("#txtInvoiceAmt").prop("disabled", true);
+                $("#txtInvoiceNo").val("");
+                $("#txtInvoiceAmt").val("");
             }
             else {
                 $("#txtInvoiceNo").prop("disabled", false);
