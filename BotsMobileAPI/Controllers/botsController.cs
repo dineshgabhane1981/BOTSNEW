@@ -104,7 +104,7 @@ namespace BotsMobileAPI.Controllers
                     List<string> lstDates = new List<string>();
                     string connectionString = CR.GetCustomerConnString(GroupId);
 
-                    dataMemberSegment = DR.GetDashboardMemberSegmentData(GroupId, OutletId, connectionString);
+                    dataMemberSegment = DR.GetDashboardMemberSegmentData(GroupId, OutletId, connectionString, "");
                 }
                 catch (Exception ex)
                 {
@@ -149,7 +149,7 @@ namespace BotsMobileAPI.Controllers
                 string connectionString = CR.GetCustomerConnString(GroupId);
                 try
                 {
-                    objDashboardBulkUpload = DR.GetDashboardBulkUpload(GroupId, connectionString);
+                    objDashboardBulkUpload = DR.GetDashboardBulkUpload(GroupId, connectionString, "");
                 }
                 catch (Exception ex)
                 {
@@ -171,7 +171,7 @@ namespace BotsMobileAPI.Controllers
                 List<object> dataList = new List<object>();
                 try
                 {
-                    objDashboardRedemption = DR.GetDashboardRedemption(GroupId, "1", connectionString);
+                    objDashboardRedemption = DR.GetDashboardRedemption(GroupId, "1", connectionString, "");
 
                 }
                 catch (Exception ex)
@@ -192,7 +192,7 @@ namespace BotsMobileAPI.Controllers
                 try
                 {
                     string connectionString = CR.GetCustomerConnString(GroupId);
-                    objLoyaltyKPIs = LKR.GetobjLoyaltyKPIsData(GroupId, connectionString);
+                    objLoyaltyKPIs = LKR.GetobjLoyaltyKPIsData(GroupId, connectionString, "");
                     var Sum = objLoyaltyKPIs.Redemption + objLoyaltyKPIs.Referrals + objLoyaltyKPIs.Campaigns + objLoyaltyKPIs.SMSBlastWA + objLoyaltyKPIs.NewMWPRegistration;
 
                     objLoyaltyKPIs.RedemptionPer = Math.Round(((Convert.ToDecimal(objLoyaltyKPIs.Redemption) / Convert.ToDecimal(Sum)) * 100), 2);
@@ -224,14 +224,14 @@ namespace BotsMobileAPI.Controllers
 
                 try
                 {
-                    OutletId= OutletId.ToUpper();
+                    OutletId = OutletId.ToUpper();
                     if (OutletId.Equals("ALL"))
                     {
                         OutletId = "";
                     }
                     string connectionString = CR.GetCustomerConnString(GroupId);
                     List<DashboardBizShared> lstBizShared = new List<DashboardBizShared>();
-                    lstBizShared = DR.GetDashboardBizShared(GroupId, OutletId, connectionString);
+                    lstBizShared = DR.GetDashboardBizShared(GroupId, OutletId, connectionString, "");
                     lstBizShared.Reverse();
                     foreach (var item in lstBizShared)
                     {
@@ -261,9 +261,9 @@ namespace BotsMobileAPI.Controllers
             if (User.Identity.IsAuthenticated)
             {
                 string connectionString = CR.GetCustomerConnString(GroupId);
-               
+
                 var CelebrationsData = RR.GetCelebrationsData(GroupId, connectionString);
-               
+
                 return new { Data = CelebrationsData, MaxJsonLength = Int32.MaxValue };
             }
             return "Invalid Token or Expired";
@@ -275,9 +275,9 @@ namespace BotsMobileAPI.Controllers
             if (User.Identity.IsAuthenticated)
             {
                 string connectionString = CR.GetCustomerConnString(GroupId);
-              
+
                 PointExpiryTmp objPointExpiry = new PointExpiryTmp();
-                objPointExpiry = RR.GetPointExpiryData(GroupId, DateTime.Now.Month, DateTime.Now.Year, connectionString);
+                objPointExpiry = RR.GetPointExpiryData(GroupId, DateTime.Now.Month, DateTime.Now.Year, connectionString, "");
                 return new { Data = objPointExpiry, MaxJsonLength = Int32.MaxValue };
             }
             return "Invalid Token or Expired";
@@ -297,7 +297,7 @@ namespace BotsMobileAPI.Controllers
                 {
 
                     DashboardMemberWebPage dataMemberWebPage = new DashboardMemberWebPage();
-                    dataMemberWebPage = DR.GetDashboardMemberWebPageData(GroupId, profileFlag, connectionString);
+                    dataMemberWebPage = DR.GetDashboardMemberWebPageData(GroupId, profileFlag, connectionString, "");
 
                     dataList.Add(dataMemberWebPage.MemberBase);
                     dataList.Add(dataMemberWebPage.ReferringBase);
@@ -383,7 +383,7 @@ namespace BotsMobileAPI.Controllers
         }
         //point expiry 2nd click data
         [HttpGet]
-        public object GetCampaignPointsExpirySecondData(string GroupId, string month, string year,string type)
+        public object GetCampaignPointsExpirySecondData(string GroupId, string month, string year, string type)
         {
             if (User.Identity.IsAuthenticated)
             {
@@ -508,7 +508,7 @@ namespace BotsMobileAPI.Controllers
             {
                 string connectionString = CR.GetCustomerConnString(GroupId);
                 MembersInformation objMembersInformation = new MembersInformation();
-                objMembersInformation = KR.GetMemberMisinformationData(GroupId, connectionString);
+                objMembersInformation = KR.GetMemberMisinformationData(GroupId, connectionString, "");
                 return new { Data = objMembersInformation, MaxJsonLength = Int32.MaxValue };
             }
             return "Invalid Token or Expired";
@@ -526,7 +526,7 @@ namespace BotsMobileAPI.Controllers
                     outletId = "";
                 }
                 OnlyOnce objOnlyOnce = new OnlyOnce();
-                objOnlyOnce = KR.GetOnlyOnceData(GroupId, outletId, connectionString);
+                objOnlyOnce = KR.GetOnlyOnceData(GroupId, outletId, connectionString, "");
 
                 objOnlyOnce.TotalMemberStr = String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(objOnlyOnce.TotalMember));
                 objOnlyOnce.OnlyOnceMemberStr = String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(objOnlyOnce.OnlyOnceMember));
@@ -539,7 +539,7 @@ namespace BotsMobileAPI.Controllers
             }
             return "Invalid Token or Expired";
         }
-        
+
         //pointno 4-sub point 2
         [HttpGet]
         public object NonRedeeming(string GroupId)
@@ -548,7 +548,7 @@ namespace BotsMobileAPI.Controllers
             {
                 string connectionString = CR.GetCustomerConnString(GroupId);
                 NonRedemptionCls objNonRedemptionCls = new NonRedemptionCls();
-                objNonRedemptionCls = KR.GetNonRedemptionData(GroupId, connectionString);
+                objNonRedemptionCls = KR.GetNonRedemptionData(GroupId, connectionString, "");
                 return new { Data = objNonRedemptionCls, MaxJsonLength = Int32.MaxValue };
             }
             return "Invalid Token or Expired";
@@ -566,7 +566,7 @@ namespace BotsMobileAPI.Controllers
                     outletId = "";
                 }
                 NonTransactingCls objNonTransactingCls = new NonTransactingCls();
-                objNonTransactingCls = KR.GetNonTransactingData(GroupId, outletId, connectionString);
+                objNonTransactingCls = KR.GetNonTransactingData(GroupId, outletId, connectionString, "");
                 return new { Data = objNonTransactingCls, MaxJsonLength = Int32.MaxValue };
             }
             return "Invalid Token or Expired";
@@ -604,36 +604,36 @@ namespace BotsMobileAPI.Controllers
             {
                 string connectionString = CR.GetCustomerConnString(GroupId);
                 CustomerRepository objCustRepo = new CustomerRepository();
-                MemberSearch objMemberSearch = new MemberSearch();            
-                 
-                    string loginId = string.Empty;
-                   
-                    if (!string.IsNullOrEmpty(GroupId) && GroupId != "undefined")
-                    {
-                      
-                        objMemberSearch = RR.GetMeamberSearchData(GroupId, SearchData, connectionString, loginId);
-                    }
-                    else
-                    {
-                        objMemberSearch = RR.GetMeamberSearchData(GroupId, SearchData,connectionString, loginId);
-                    }
-               
+                MemberSearch objMemberSearch = new MemberSearch();
+
+                string loginId = string.Empty;
+
+                if (!string.IsNullOrEmpty(GroupId) && GroupId != "undefined")
+                {
+
+                    objMemberSearch = RR.GetMeamberSearchData(GroupId, SearchData, connectionString, loginId);
+                }
+                else
+                {
+                    objMemberSearch = RR.GetMeamberSearchData(GroupId, SearchData, connectionString, loginId);
+                }
+
                 return new { Data = objMemberSearch, MaxJsonLength = Int32.MaxValue };
             }
             return "Invalid Token or Expired";
-        }             
+        }
 
         [HttpGet]
         public object AuthenticateUser(string LoginId, string Password)
         {
             if (User.Identity.IsAuthenticated)
             {
-               // string connectionString = CR.GetCustomerConnString(GroupId);
+                // string connectionString = CR.GetCustomerConnString(GroupId);
                 DatabaseDetail DBDetails = new DatabaseDetail();
                 CustomerLoginDetail userDetail = new CustomerLoginDetail();
 
                 var userDetails = LR.AuthenticateUserAPI(LoginId, Password);
-               
+
 
                 return new { Data = userDetails, MaxJsonLength = Int32.MaxValue };
             }
@@ -642,14 +642,14 @@ namespace BotsMobileAPI.Controllers
 
         //this API for sending email from contact us form in blueocktopus website
         [HttpPost]
-        public HttpResponseMessage ContactUsFromWebsite(string firstname,string lastname,string emailid,string subject,string emailmessage )
-        {            
-             try
-             { 
-               
-                   // var result = "";                   
-                   // string To = emailto;
-                    using (MailMessage mail = new MailMessage())
+        public HttpResponseMessage ContactUsFromWebsite(string firstname, string lastname, string emailid, string subject, string emailmessage)
+        {
+            try
+            {
+
+                // var result = "";                   
+                // string To = emailto;
+                using (MailMessage mail = new MailMessage())
                 {
 
                     StringBuilder str = new StringBuilder();
@@ -704,20 +704,20 @@ namespace BotsMobileAPI.Controllers
                     smtp.Credentials = new System.Net.NetworkCredential("blueocktopus2015@gmail.com", "blueocktopus$");
                     smtp.Send(Msg);
                     Msg.Dispose();
-               
-                }         
 
-                     var message = Request.CreateResponse(HttpStatusCode.Created, "Email send Sucessfully");
+                }
 
-                     return message;
-                    
-              }
-              catch (Exception ex)
-              {
-                    return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ex);
-              }
-            
-           
+                var message = Request.CreateResponse(HttpStatusCode.Created, "Email send Sucessfully");
+
+                return message;
+
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ex);
+            }
+
+
         }
 
         [HttpPost]
@@ -726,97 +726,97 @@ namespace BotsMobileAPI.Controllers
             bool status = false;
             //if (User.Identity.IsAuthenticated)
             //{
-                CustomerLoginDetail objcustlogin = new CustomerLoginDetail();
-                using (var context = new CommonDBContext())
+            CustomerLoginDetail objcustlogin = new CustomerLoginDetail();
+            using (var context = new CommonDBContext())
+            {
+
+                objcustlogin = context.CustomerLoginDetails.Where(x => x.LoginId == mobileNo).FirstOrDefault();
+
+                if (objcustlogin != null)
                 {
-
-                    objcustlogin = context.CustomerLoginDetails.Where(x => x.LoginId == mobileNo).FirstOrDefault();
-
-                    if (objcustlogin != null)
+                    var sender = "BLUEOC";
+                    var Url = " https://http2.myvfirst.com/smpp/sendsms?";
+                    Random random = new Random();
+                    int randNum = random.Next(1000000);
+                    string sixDigitNumber = randNum.ToString("D6");
+                    // string sixDigitNumber = "123456";
+                    status = DR.InsertOTP(mobileNo, Convert.ToInt32(sixDigitNumber));
+                    string MobileMessage = "Dear Member," + sixDigitNumber + " is your OTP. Sample SMS for OTP - Blue Ocktopus";
+                    bool result = DR.SendOTPMessage(mobileNo, sender, MobileMessage, Url);
+                    // bool result = true;
+                    if (result)
                     {
-                        var sender = "BLUEOC";
-                        var Url = " https://http2.myvfirst.com/smpp/sendsms?";
-                        Random random = new Random();
-                         int randNum = random.Next(1000000);
-                          string sixDigitNumber = randNum.ToString("D6");
-                       // string sixDigitNumber = "123456";
-                        status = DR.InsertOTP(mobileNo, Convert.ToInt32(sixDigitNumber));
-                        string MobileMessage = "Dear Member," + sixDigitNumber + " is your OTP. Sample SMS for OTP - Blue Ocktopus";
-                         bool result = DR.SendOTPMessage(mobileNo, sender, MobileMessage, Url);
-                       // bool result = true;
-                        if (result)
-                        {
-                            var message = Request.CreateResponse(HttpStatusCode.OK);
-                            return message;
-                        }
-                        else
-                        {
-                            return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "OTP Not Send");
-                        }
+                        var message = Request.CreateResponse(HttpStatusCode.OK);
+                        return message;
                     }
                     else
                     {
-                        return Request.CreateErrorResponse(HttpStatusCode.Unauthorized, "Number is Not Registered");
-
-                    }
-                }
-            //}
-           // return Request.CreateErrorResponse(HttpStatusCode.Unauthorized, "Invalid Token or Expired");
-        }
-
-        [HttpGet]
-        public object VerifyOTP(string mobileNo, int OTP)
-        {           
-            
-                bool status = DR.VerifyOTP(mobileNo, OTP);
-                if (status)
-                {
-                    CustomerLoginDetail objcustlogin = new CustomerLoginDetail();
-                    using (var context = new CommonDBContext())
-                    {
-                        objcustlogin = context.CustomerLoginDetails.Where(x => x.LoginId == mobileNo).FirstOrDefault();
-
-                        string key = "my_secret_key_98765"; //Secret key which will be used later during validation    
-                                                            //var issuer = "http://mysite.com";  //normally this will be your site URL
-                                                            //
-                                                            //string value = System.Configuration.ConfigurationManager.AppSettings[key];
-                        var issuer = System.Configuration.ConfigurationManager.AppSettings["BaseURL"];// "https://localhost:44330/";
-
-                        var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key));
-                        var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
-
-                        //Create a List of Claims, Keep claims name short    
-                        var permClaims = new List<Claim>();
-                        permClaims.Add(new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()));
-                        permClaims.Add(new Claim("valid", "1"));
-                        permClaims.Add(new Claim("userid", "1"));
-                        permClaims.Add(new Claim("name", "mobileBots"));
-
-                        //Create Security Token object by giving required parameters    
-                        var token = new JwtSecurityToken(issuer, //Issure    
-                                        issuer,  //Audience    
-                                        permClaims,
-                                        expires: DateTime.Now.AddDays(1),
-                                        signingCredentials: credentials);
-                        var jwt_token = new JwtSecurityTokenHandler().WriteToken(token);
-                        List<string> responseData = new List<string>();
-                        responseData.Add(jwt_token);
-                        responseData.Add(objcustlogin.GroupId);
-                        responseData.Add(objcustlogin.UserName);
-                        return new { data = responseData };
+                        return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "OTP Not Send");
                     }
                 }
                 else
                 {
-                    return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Incorrect OTP");
+                    return Request.CreateErrorResponse(HttpStatusCode.Unauthorized, "Number is Not Registered");
+
                 }
-               
+            }
+            //}
+            // return Request.CreateErrorResponse(HttpStatusCode.Unauthorized, "Invalid Token or Expired");
+        }
+
+        [HttpGet]
+        public object VerifyOTP(string mobileNo, int OTP)
+        {
+
+            bool status = DR.VerifyOTP(mobileNo, OTP);
+            if (status)
+            {
+                CustomerLoginDetail objcustlogin = new CustomerLoginDetail();
+                using (var context = new CommonDBContext())
+                {
+                    objcustlogin = context.CustomerLoginDetails.Where(x => x.LoginId == mobileNo).FirstOrDefault();
+
+                    string key = "my_secret_key_98765"; //Secret key which will be used later during validation    
+                                                        //var issuer = "http://mysite.com";  //normally this will be your site URL
+                                                        //
+                                                        //string value = System.Configuration.ConfigurationManager.AppSettings[key];
+                    var issuer = System.Configuration.ConfigurationManager.AppSettings["BaseURL"];// "https://localhost:44330/";
+
+                    var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key));
+                    var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
+
+                    //Create a List of Claims, Keep claims name short    
+                    var permClaims = new List<Claim>();
+                    permClaims.Add(new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()));
+                    permClaims.Add(new Claim("valid", "1"));
+                    permClaims.Add(new Claim("userid", "1"));
+                    permClaims.Add(new Claim("name", "mobileBots"));
+
+                    //Create Security Token object by giving required parameters    
+                    var token = new JwtSecurityToken(issuer, //Issure    
+                                    issuer,  //Audience    
+                                    permClaims,
+                                    expires: DateTime.Now.AddDays(1),
+                                    signingCredentials: credentials);
+                    var jwt_token = new JwtSecurityTokenHandler().WriteToken(token);
+                    List<string> responseData = new List<string>();
+                    responseData.Add(jwt_token);
+                    responseData.Add(objcustlogin.GroupId);
+                    responseData.Add(objcustlogin.UserName);
+                    return new { data = responseData };
+                }
+            }
+            else
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Incorrect OTP");
+            }
+
         }
         //slide no 8
         //datarangeflage =0,fromdate and todate blanck
         //datarangeflag =1,fromdate and todate values
         [HttpGet]
-        public object GetEnrollBase(string DateRangeFlag, string fromDate, string toDate,string GroupId)
+        public object GetEnrollBase(string DateRangeFlag, string fromDate, string toDate, string GroupId)
         {
             if (User.Identity.IsAuthenticated)
             {
@@ -950,7 +950,7 @@ namespace BotsMobileAPI.Controllers
             {
                 string connectionString = CR.GetCustomerConnString(GroupId);
                 CampaignTiles objCampaignTiles = new CampaignTiles();
-               // var userDetails = (CustomerLoginDetail)Session["UserSession"];
+                // var userDetails = (CustomerLoginDetail)Session["UserSession"];
                 objCampaignTiles = CMPR.GetCampaignTilesData(GroupId, connectionString);
                 List<System.Web.Mvc.SelectListItem> MonthList = new List<System.Web.Mvc.SelectListItem>();
 
@@ -975,7 +975,7 @@ namespace BotsMobileAPI.Controllers
 
                 objCampaignTiles.lstMonth = MonthList;
                 objCampaignTiles.lstYear = YearList;
-               
+
 
                 return new { Data = objCampaignTiles, MaxJsonLength = Int32.MaxValue };
             }
@@ -1023,100 +1023,94 @@ namespace BotsMobileAPI.Controllers
         }
 
         [HttpPost]
-        public HttpResponseMessage MobileAppEmail(string PageName,string mobileNo)
+        public HttpResponseMessage MobileAppEmail(string PageName, string mobileNo)
         {
-            
-                try
+            try
+            {
+                CustomerLoginDetail objcustlogin = new CustomerLoginDetail();
+                using (var context = new CommonDBContext())
                 {
-                    CustomerLoginDetail objcustlogin = new CustomerLoginDetail();
-                    using (var context = new CommonDBContext())
+                    objcustlogin = context.CustomerLoginDetails.Where(x => x.LoginId == mobileNo).FirstOrDefault();
+
+                    // var result = "";                   
+                    // string To = emailto;
+                    using (MailMessage mail = new MailMessage())
                     {
-                        objcustlogin = context.CustomerLoginDetails.Where(x => x.LoginId == mobileNo).FirstOrDefault();
 
-                        // var result = "";                   
-                        // string To = emailto;
-                        using (MailMessage mail = new MailMessage())
-                        {
+                        StringBuilder str = new StringBuilder();
+                        str.Append("<table>");
+                        str.Append("<tr>");
+                        str.AppendLine("<td>Dear Sir,</td>");
+                        str.AppendLine("</br>");
+                        str.Append("</tr>");
+                        str.Append("<tr>");
+                        str.AppendLine("<td>Following customer is contacted us through Mobile App</td>");
+                        str.Append("<tr>");
+                        str.Append("<td>");
+                        str.Append("Name:" + objcustlogin.UserName);
+                        str.Append("</td>");
+                        str.Append("</tr>");
+                        str.Append("<tr>");
+                        str.Append("<td>");
+                        str.Append("Email Id:</br>" + objcustlogin.EmailId);
+                        str.Append("</td>");
+                        str.Append("</tr>");
+                        str.Append("<tr>");
+                        str.Append("<td>");
+                        str.Append("Mobile No:</br>" + mobileNo);
+                        str.Append("</td>");
+                        str.Append("</tr>");
+                        str.Append("<tr>");
+                        str.Append("<td>");
+                        str.Append("Subject:" + PageName);
+                        str.Append("</td>");
+                        str.Append("</tr>");
+                        str.Append("<tr>");
+                        str.Append("<td>");
+                        str.Append("Message:" + "Please contact the customer");
+                        str.Append("</td>");
+                        str.Append("</tr>");
+                        str.Append("<tr>");
+                        str.Append("<td>");
+                        str.Append("Regards,");
+                        str.Append("</td>");
+                        str.Append("</tr>");
+                        str.Append("<tr>");
+                        str.Append("<td>");
+                        str.Append("- Blue Ocktopus Team");
+                        str.Append("</td>");
+                        str.Append("</tr>");
+                        str.Append("</table>");
 
-                            StringBuilder str = new StringBuilder();
-                            str.Append("<table>");
-                            str.Append("<tr>");
-                            str.AppendLine("<td>Dear Sir,</td>");
-                            str.AppendLine("</br>");
-                            str.Append("</tr>");
-                            str.Append("<tr>");
-                            str.AppendLine("<td>Following customer is contacted us through Mobile App</td>");
-                            str.Append("<tr>");
-                            str.Append("<td>");
-                            str.Append("Name:" + objcustlogin.UserName);
-                            str.Append("</td>");
-                            str.Append("</tr>");
-                            str.Append("<tr>");
-                            str.Append("<td>");
-                            str.Append("Email Id:</br>" + objcustlogin.EmailId);
-                            str.Append("</td>");
-                            str.Append("</tr>");
-                            str.Append("<tr>");
-                            str.Append("<td>");
-                            str.Append("Mobile No:</br>" + mobileNo);
-                            str.Append("</td>");
-                            str.Append("</tr>");
-                            str.Append("<tr>");
-                            str.Append("<td>");
-                            str.Append("Subject:" + PageName);
-                            str.Append("</td>");
-                            str.Append("</tr>");
-                            str.Append("<tr>");
-                            str.Append("<td>");
-                            str.Append("Message:" + "Please contact the customer");
-                            str.Append("</td>");
-                            str.Append("</tr>");
-                            str.Append("<tr>");
-                            str.Append("<td>");
-                            str.Append("Regards,");
-                            str.Append("</td>");
-                            str.Append("</tr>");
-                            str.Append("<tr>");
-                            str.Append("<td>");
-                            str.Append("- Blue Ocktopus Team");
-                            str.Append("</td>");
-                            str.Append("</tr>");
-                            str.Append("</table>");
+                        MailMessage Msg = new MailMessage();
+                        Msg.From = new MailAddress("sblueocktopus@gmail.com");
+                        Msg.To.Add("ashlesha@blueocktopus.in");
+                        Msg.Subject = "Customer Enquiry-" + PageName;
+                        Msg.Body = str.ToString();
+                        Msg.IsBodyHtml = true;
+                        SmtpClient smtp = new SmtpClient("smtp.gmail.com");
+                        smtp.EnableSsl = true;
+                        smtp.Port = 587;
+                        smtp.Credentials = new System.Net.NetworkCredential("sblueocktopus@gmail.com", "Ocktopus@2016");
+                        smtp.Send(Msg);
+                        Msg.Dispose();
 
-                            MailMessage Msg = new MailMessage();
-                            Msg.From = new MailAddress("sblueocktopus@gmail.com");
-                            Msg.To.Add("ashlesha@blueocktopus.in");
-                            Msg.Subject = "Customer Enquiry-"+ PageName;
-                            Msg.Body = str.ToString();
-                            Msg.IsBodyHtml = true;
-                            SmtpClient smtp = new SmtpClient("smtp.gmail.com");
-                            smtp.EnableSsl = true;
-                            smtp.Port = 587;
-                            smtp.Credentials = new System.Net.NetworkCredential("sblueocktopus@gmail.com", "Ocktopus@2016");
-                            smtp.Send(Msg);
-                            Msg.Dispose();
-
-                        }
-
-                        var message = Request.CreateResponse(HttpStatusCode.Created, "Email send Sucessfully");
-
-                        return message;
                     }
 
-                }
-                catch (Exception ex)
-                {
-                    return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ex);
-                }
+                    var message = Request.CreateResponse(HttpStatusCode.Created, "Email send Sucessfully");
 
-            
+                    return message;
+                }
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ex);
+            }
         }
-
-
     }
 }
 
 
 
-    
+
 
