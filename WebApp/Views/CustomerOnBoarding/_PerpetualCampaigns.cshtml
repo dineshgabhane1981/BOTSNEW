@@ -1505,10 +1505,18 @@
     }
 
     function SaveBirthdayConfig() {
-        
-        if ($("#rbtnVWA").prop("checked") || $("#rbtnWA").prop("checked") || $("#rbtnSMS").prop("checked")) {
-            var validationStatus = ValidateBirthdayConfig();
-            if (validationStatus) {
+        var validationStatus = ValidateBirthdayConfig();
+        if (validationStatus) {
+            if ($("#rbtnVWA").prop("checked") || $("#rbtnWA").prop("checked") || $("#rbtnSMS").prop("checked")) {
+            }
+            else {
+                cuteAlert({
+                    type: "error",
+                    title: "Oops..",
+                    message: "Please select SMS Type",
+                    buttonText: "Okay"
+                })
+                return false;
             }
            
             if ($("#txtBonusPoints").val() == "") {
