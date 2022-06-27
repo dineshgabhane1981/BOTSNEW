@@ -1135,6 +1135,9 @@
         RemoveRequiredBorderBirthdayConfig();
         RemoveRequiredBorderAnniversaryConfig();
         RemoveRequiredBorderInactiveConfig();
+        RemoveRequiredBorderOnlyOnceInactiveConfig();
+        RemoveRequiredBorderNonRedeemptionInactiveConfig();
+        RemoveRequiredBorderPointExpiryInactiveConfig();
         RemoveRequiredBorderDLCRRConfig();
         RemoveRequiredBorderDLCURConfig();
         RemoveRequiredBorderBUConfig();
@@ -3449,196 +3452,210 @@
     }
 
     function SaveInactiveConfig(type) {
-        var validationStatus3 = ValidateInactiveConfig();
-        if (validationStatus3) {
-        var InactiveConfig = [];
         var status = false;
+       
+            var InactiveConfig = [];
+            
         if (type == "Inactive") {
-            if ($("#txtMessageCount").val() == "" || $("#txtMessageCount").val() < 2 || $("#txtMessageCount").val() > 4) {
-                cuteAlert({
-                    type: "error",
-                    title: "Oops..",
-                    message: "Message count should be between 2 to 4",
-                    buttonText: "Okay"
-                })
-                $("#txtMessageCount").val("");
-                return false;
-            }
-            else {
-                var msgCount = $("#txtMessageCount").val();
-                var SMSScriptCount = 1;
-                for (var i = 1; i <= msgCount; i++) {
-                    item = {}
-                    item["Id"] = $('#hdnInactive' + i).val();
-                    item["InactiveType"] = "Inactive";
-                    item["GroupId"] = $('#hdnGroupID').val();
-                    if ($("#rbtnInactiveSMS").prop("checked"))
-                        item["SMSorWA"] = "SMS";
-                    if ($("#rbtnInactiveWA").prop("checked"))
-                        item["SMSorWA"] = "WA";
-                    item["Days"] = $('#txtDaysCount' + i).val();
-                    item["LessThanDays"] = $('#txtLessThanDays' + i).val();
-                    item["LessThanDaysScript"] = $('#txtLessThanDaysScript' + i).val();
-                    item["GreaterThanDays"] = $('#txtGreaterThanDays' + i).val();
-                    item["GreaterThanDaysScript"] = $('#txtGreaterThanDaysScript' + i).val();
-                    item["SMSScript1"] = $('#txtSMSScript2' + SMSScriptCount).val();
-                    SMSScriptCount++;
-                    item["SMSScript2"] = $('#txtSMSScript2' + SMSScriptCount).val();
-                    SMSScriptCount++;
-                    InactiveConfig.push(item);
+            var validationStatus3 = ValidateInactiveConfig();
+            if (validationStatus3) {
+                if ($("#txtMessageCount").val() == "" || $("#txtMessageCount").val() < 2 || $("#txtMessageCount").val() > 4) {
+                    cuteAlert({
+                        type: "error",
+                        title: "Oops..",
+                        message: "Message count should be between 2 to 4",
+                        buttonText: "Okay"
+                    })
+                    $("#txtMessageCount").val("");
+                    return false;
                 }
-                status = true;
+                else {
+                    var msgCount = $("#txtMessageCount").val();
+                    var SMSScriptCount = 1;
+                    for (var i = 1; i <= msgCount; i++) {
+                        item = {}
+                        item["Id"] = $('#hdnInactive' + i).val();
+                        item["InactiveType"] = "Inactive";
+                        item["GroupId"] = $('#hdnGroupID').val();
+                        if ($("#rbtnInactiveSMS").prop("checked"))
+                            item["SMSorWA"] = "SMS";
+                        if ($("#rbtnInactiveWA").prop("checked"))
+                            item["SMSorWA"] = "WA";
+                        item["Days"] = $('#txtDaysCount' + i).val();
+                        item["LessThanDays"] = $('#txtLessThanDays' + i).val();
+                        item["LessThanDaysScript"] = $('#txtLessThanDaysScript' + i).val();
+                        item["GreaterThanDays"] = $('#txtGreaterThanDays' + i).val();
+                        item["GreaterThanDaysScript"] = $('#txtGreaterThanDaysScript' + i).val();
+                        item["SMSScript1"] = $('#txtSMSScript2' + SMSScriptCount).val();
+                        SMSScriptCount++;
+                        item["SMSScript2"] = $('#txtSMSScript2' + SMSScriptCount).val();
+                        SMSScriptCount++;
+                        InactiveConfig.push(item);
+                    }
+                    status = true;
+                }
             }
         }
         if (type == "OOInactive") {
-            if ($("#txtOOMessageCount").val() == "" || $("#txtOOMessageCount").val() < 2 || $("#txtOOMessageCount").val() > 4) {
-                cuteAlert({
-                    type: "error",
-                    title: "Oops..",
-                    message: "Message count should be between 2 to 4",
-                    buttonText: "Okay"
-                })
-                $("#txtOOMessageCount").val("");
-                return false;
-            }
-            else {
-                var msgCount = $("#txtOOMessageCount").val();
-                var SMSScriptCount = 2;
-                for (var i = 1; i <= msgCount; i++) {
-                    item = {}
-                    item["Id"] = $('#hdnOOInactive' + i).val();
-                    item["InactiveType"] = "Only Once Inactive";
-                    item["GroupId"] = $('#hdnGroupID').val();
-                    if ($("#rbtnOOInactiveSMS").prop("checked"))
-                        item["SMSorWA"] = "SMS";
-                    if ($("#rbtnOOInactiveWA").prop("checked"))
-                        item["SMSorWA"] = "WA";
-                    item["Days"] = $('#txtOODaysCount' + i).val();
-                    item["LessThanDays"] = $('#txtOOLessThanDays' + i).val();
-                    item["LessThanDaysScript"] = $('#txtOOLessThanDaysScript' + i).val();
-                    item["GreaterThanDays"] = $('#txtOOGreaterThanDays' + i).val();
-                    item["GreaterThanDaysScript"] = $('#txtOOGreaterThanDaysScript' + i).val();
-                    item["SMSScript1"] = $('#txtSMSScript3' + SMSScriptCount).val();
-                    SMSScriptCount++;
-                    item["SMSScript2"] = $('#txtSMSScript3' + SMSScriptCount).val();
-                    SMSScriptCount++;
-                    InactiveConfig.push(item);
+            var validationStatus4 = ValidateOnlyOnceInactiveConfig();
+            if (validationStatus4) {
+                if ($("#txtOOMessageCount").val() == "" || $("#txtOOMessageCount").val() < 2 || $("#txtOOMessageCount").val() > 4) {
+                    cuteAlert({
+                        type: "error",
+                        title: "Oops..",
+                        message: "Message count should be between 2 to 4",
+                        buttonText: "Okay"
+                    })
+                        $("#txtOOMessageCount").val("");
+                        return false;
+                    }
+                else {
+                    var msgCount = $("#txtOOMessageCount").val();
+                    var SMSScriptCount = 2;
+                    for (var i = 1; i <= msgCount; i++) {
+                        item = {}
+                        item["Id"] = $('#hdnOOInactive' + i).val();
+                        item["InactiveType"] = "Only Once Inactive";
+                        item["GroupId"] = $('#hdnGroupID').val();
+                        if ($("#rbtnOOInactiveSMS").prop("checked"))
+                            item["SMSorWA"] = "SMS";
+                        if ($("#rbtnOOInactiveWA").prop("checked"))
+                            item["SMSorWA"] = "WA";
+                        item["Days"] = $('#txtOODaysCount' + i).val();
+                        item["LessThanDays"] = $('#txtOOLessThanDays' + i).val();
+                        item["LessThanDaysScript"] = $('#txtOOLessThanDaysScript' + i).val();
+                        item["GreaterThanDays"] = $('#txtOOGreaterThanDays' + i).val();
+                        item["GreaterThanDaysScript"] = $('#txtOOGreaterThanDaysScript' + i).val();
+                        item["SMSScript1"] = $('#txtSMSScript3' + SMSScriptCount).val();
+                        SMSScriptCount++;
+                        item["SMSScript2"] = $('#txtSMSScript3' + SMSScriptCount).val();
+                        SMSScriptCount++;
+                        InactiveConfig.push(item);
+                    }
+                        status = true;
                 }
-                status = true;
             }
         }
+
         if (type == "NRInactive") {
-            if ($("#txtNRMessageCount").val() == "" || $("#txtNRMessageCount").val() < 2 || $("#txtNRMessageCount").val() > 4) {
-                cuteAlert({
-                    type: "error",
-                    title: "Oops..",
-                    message: "Message count should be between 2 to 4",
-                    buttonText: "Okay"
-                })
-                $("#txtNRMessageCount").val("");
-                return false;
-            }
-            else {
-                var msgCount = $("#txtNRMessageCount").val();
-                var SMSScriptCount = 2;
-                for (var i = 1; i <= msgCount; i++) {
-                    item = {}
-                    item["Id"] = $('#hdnNRInactive' + i).val();
-                    item["InactiveType"] = "Non Redemption Inactive";
-                    item["GroupId"] = $('#hdnGroupID').val();
-                    if ($("#rbtnNRInactiveSMS").prop("checked"))
-                        item["SMSorWA"] = "SMS";
-                    if ($("#rbtnNRInactiveWA").prop("checked"))
-                        item["SMSorWA"] = "WA";
-                    item["Days"] = $('#txtNRDaysCount' + i).val();
-                    item["LessThanDays"] = $('#txtNRLessThanDays' + i).val();
-                    item["LessThanDaysScript"] = $('#txtNRLessThanDaysScript' + i).val();
-                    item["GreaterThanDays"] = $('#txtNRGreaterThanDays' + i).val();
-                    item["GreaterThanDaysScript"] = $('#txtNRGreaterThanDaysScript' + i).val();
-                    item["SMSScript1"] = $('#txtSMSScript4' + SMSScriptCount).val();
-                    SMSScriptCount++;
-                    item["SMSScript2"] = $('#txtSMSScript4' + SMSScriptCount).val();
-                    SMSScriptCount++;
-                    InactiveConfig.push(item);
+            var validationStatus5 = ValidateNonRedeemptionInactiveConfig();
+            if (validationStatus5) {
+                if ($("#txtNRMessageCount").val() == "" || $("#txtNRMessageCount").val() < 2 || $("#txtNRMessageCount").val() > 4) {
+                    cuteAlert({
+                        type: "error",
+                        title: "Oops..",
+                        message: "Message count should be between 2 to 4",
+                        buttonText: "Okay"
+                    })
+                    $("#txtNRMessageCount").val("");
+                    return false;
                 }
-                status = true;
+                else {
+                    var msgCount = $("#txtNRMessageCount").val();
+                    var SMSScriptCount = 2;
+                    for (var i = 1; i <= msgCount; i++) {
+                        item = {}
+                        item["Id"] = $('#hdnNRInactive' + i).val();
+                        item["InactiveType"] = "Non Redemption Inactive";
+                        item["GroupId"] = $('#hdnGroupID').val();
+                        if ($("#rbtnNRInactiveSMS").prop("checked"))
+                            item["SMSorWA"] = "SMS";
+                        if ($("#rbtnNRInactiveWA").prop("checked"))
+                            item["SMSorWA"] = "WA";
+                        item["Days"] = $('#txtNRDaysCount' + i).val();
+                        item["LessThanDays"] = $('#txtNRLessThanDays' + i).val();
+                        item["LessThanDaysScript"] = $('#txtNRLessThanDaysScript' + i).val();
+                        item["GreaterThanDays"] = $('#txtNRGreaterThanDays' + i).val();
+                        item["GreaterThanDaysScript"] = $('#txtNRGreaterThanDaysScript' + i).val();
+                        item["SMSScript1"] = $('#txtSMSScript4' + SMSScriptCount).val();
+                        SMSScriptCount++;
+                        item["SMSScript2"] = $('#txtSMSScript4' + SMSScriptCount).val();
+                        SMSScriptCount++;
+                        InactiveConfig.push(item);
+                    }
+                    status = true;
+                }
             }
         }
         if (type == "PEInactive") {
-            if ($("#txtPEMessageCount").val() == "" || $("#txtPEMessageCount").val() < 1 || $("#txtNRMessageCount").val() > 3) {
-                cuteAlert({
-                    type: "error",
-                    title: "Oops..",
-                    message: "Message count should be between 2 to 4",
-                    buttonText: "Okay"
-                })
-                $("#txtPEMessageCount").val("");
-                return false;
-            }
-            else {
-                var msgCount = $("#txtPEMessageCount").val();
-                var SMSScriptCount = 2;
-                for (var i = 1; i <= msgCount; i++) {
-                    item = {}
-                    item["Id"] = $('#hdnPEInactive' + i).val();
-                    item["InactiveType"] = "Point Expiry";
-                    item["GroupId"] = $('#hdnGroupID').val();
-                    if ($("#rbtnPEInactiveSMS").prop("checked"))
-                        item["SMSorWA"] = "SMS";
-                    if ($("#rbtnPEInactiveWA").prop("checked"))
-                        item["SMSorWA"] = "WA";
-                    item["Days"] = $('#txtPEDaysCount' + i).val();
-                    item["LessThanDays"] = $('#txtPELessThanDays' + i).val();
-                    item["LessThanDaysScript"] = $('#txtPELessThanDaysScript' + i).val();
-                    item["GreaterThanDays"] = $('#txtPEGreaterThanDays' + i).val();
-                    item["GreaterThanDaysScript"] = $('#txtPEGreaterThanDaysScript' + i).val();
-                    item["SMSScript1"] = $('#txtSMSScript5' + SMSScriptCount).val();
-                    SMSScriptCount++;
-                    item["SMSScript2"] = $('#txtSMSScript5' + SMSScriptCount).val();
-                    SMSScriptCount++;
-                    InactiveConfig.push(item);
+            var validationStatus6 = ValidatePointExpiryInactiveConfig();
+            if (validationStatus6) {
+                if ($("#txtPEMessageCount").val() == "" || $("#txtPEMessageCount").val() < 1 || $("#txtNRMessageCount").val() > 3) {
+                    cuteAlert({
+                        type: "error",
+                        title: "Oops..",
+                        message: "Message count should be between 2 to 4",
+                        buttonText: "Okay"
+                    })
+                    $("#txtPEMessageCount").val("");
+                    return false;
                 }
-                status = true;
+                else {
+                    var msgCount = $("#txtPEMessageCount").val();
+                    var SMSScriptCount = 2;
+                    for (var i = 1; i <= msgCount; i++) {
+                        item = {}
+                        item["Id"] = $('#hdnPEInactive' + i).val();
+                        item["InactiveType"] = "Point Expiry";
+                        item["GroupId"] = $('#hdnGroupID').val();
+                        if ($("#rbtnPEInactiveSMS").prop("checked"))
+                            item["SMSorWA"] = "SMS";
+                        if ($("#rbtnPEInactiveWA").prop("checked"))
+                            item["SMSorWA"] = "WA";
+                        item["Days"] = $('#txtPEDaysCount' + i).val();
+                        item["LessThanDays"] = $('#txtPELessThanDays' + i).val();
+                        item["LessThanDaysScript"] = $('#txtPELessThanDaysScript' + i).val();
+                        item["GreaterThanDays"] = $('#txtPEGreaterThanDays' + i).val();
+                        item["GreaterThanDaysScript"] = $('#txtPEGreaterThanDaysScript' + i).val();
+                        item["SMSScript1"] = $('#txtSMSScript5' + SMSScriptCount).val();
+                        SMSScriptCount++;
+                        item["SMSScript2"] = $('#txtSMSScript5' + SMSScriptCount).val();
+                        SMSScriptCount++;
+                        InactiveConfig.push(item);
+                    }
+                    status = true;
+                }
             }
         }
 
-            if (status) {
-                var InactiveConfigData = JSON.stringify(InactiveConfig);
+        if (status) {
+            var InactiveConfigData = JSON.stringify(InactiveConfig);
 
-                $("#divLoader").show();
-                $.ajax({
-                    type: "POST",
-                    url: '@Url.Action("SaveInactiveConfig", "CustomerOnBoarding")',
-                    data: '{jsonData: ' + JSON.stringify(InactiveConfigData) + '}',
-                    contentType: "application/json; charset=utf-8",
-                    dataType: "json",
-                    success: function (result) {
-                        if (result) {
-                            cuteAlert({
+            $("#divLoader").show();
+            $.ajax({
+                 type: "POST",
+                 url: '@Url.Action("SaveInactiveConfig", "CustomerOnBoarding")',
+                 data: '{jsonData: ' + JSON.stringify(InactiveConfigData) + '}',
+                 contentType: "application/json; charset=utf-8",
+                 dataType: "json",
+                 success: function (result) {
+                      if (result) {
+                           cuteAlert({
                                 type: "success",
                                 title: "Saved",
                                 message: "Configuration Saved Successfully !!!",
                                 buttonText: "Okay"
-                            })
-                        }
-                        else {
-                            cuteAlert({
+                           })
+                      }
+                      else {
+                           cuteAlert({
                                 type: "error",
                                 title: "Oops..",
                                 message: "There is a problem while saving Configuration",
                                 buttonText: "Okay"
-                            })
-                        }
-                        $("#divLoader").hide();
-                    },
-                    error: function (result) {
-                        $("#divLoader").hide();
-                    }
-                });
-            }
+                           })
+                      }
+                      $("#divLoader").hide();
+                 },
+                 error: function (result) {
+                      $("#divLoader").hide();
+                 }
+            });
         }
-
     }
+        
+
+    
     function ValidateInactiveConfig() {
         var status = true;
         if ($("#txtMessageCount").val() == "") {
@@ -3983,7 +4000,1040 @@
         });
 
     }
+    function ValidateOnlyOnceInactiveConfig() {
+        var status = true;
+        if ($("#txtOOMessageCount").val() == "") {
+            $('#txtOOMessageCount').css('border-color', 'red');
+            status = false;
+        }
+        if ($("#rbtnOOInactiveSMS").is(":checked")) {
+            if ($("#txtOODaysCount1").val() == "") {
+                $('#txtOODaysCount1').css('border-color', 'red');
+                status = false;
+            }
+            if ($("#txtOOLessThanDays1").val() == "") {
+                $('#txtOOLessThanDays1').css('border-color', 'red');
+                status = false;
+            }
+            if ($("#txtOOLessThanDaysScript1").val().trim() == "" || $("#txtOOLessThanDaysScript1").val().trim() == null) {
+                $("#txtOOLessThanDaysScript1").css('border-color', 'red');
+                status = false;
+            }
+            if ($("#txtOOGreaterThanDays1").val() == "") {
+                $('#txtOOGreaterThanDays1').css('border-color', 'red');
+                status = false;
+            }
+            if ($("#txtOOGreaterThanDaysScript1").val().trim() == "" || $("#txtOOGreaterThanDaysScript1").val().trim() == null) {
+                $("#txtOOGreaterThanDaysScript1").css('border-color', 'red');
+                status = false;
+            }
+            if ($("#txtOODaysCount2").val() == "") {
+                $('#txtOODaysCount2').css('border-color', 'red');
+                status = false;
+            }
+            if ($("#txtOOLessThanDays2").val() == "") {
+                $('#txtOOLessThanDays2').css('border-color', 'red');
+                status = false;
+            }
+            if ($("#txtOOLessThanDaysScript2").val().trim() == "" || $("#txtOOLessThanDaysScript2").val().trim() == null) {
+                $("#txtOOLessThanDaysScript2").css('border-color', 'red');
+                status = false;
+            }
+            if ($("#txtOOGreaterThanDays2").val() == "") {
+                $('#txtOOGreaterThanDays2').css('border-color', 'red');
+                status = false;
+            }
+            if ($("#txtOOGreaterThanDaysScript2").val().trim() == "" || $("#txtOOGreaterThanDaysScript2").val().trim() == null) {
+                $("#txtOOGreaterThanDaysScript2").css('border-color', 'red');
+                status = false;
+            }
+            if ($("#txtOODaysCount3").val() == "") {
+                $('#txtOODaysCount3').css('border-color', 'red');
+                status = false;
+            }
+            if ($("#txtOOLessThanDays3").val() == "") {
+                $('#txtOOLessThanDays3').css('border-color', 'red');
+                status = false;
+            }
+            if ($("#txtOOLessThanDaysScript3").val().trim() == "" || $("#txtOOLessThanDaysScript3").val().trim() == null) {
+                $("#txtOOLessThanDaysScript3").css('border-color', 'red');
+                status = false;
+            }
+            if ($("#txtOOGreaterThanDays3").val() == "") {
+                $('#txtOOGreaterThanDays3').css('border-color', 'red');
+                status = false;
+            }
+            if ($("#txtOOGreaterThanDaysScript3").val().trim() == "" || $("#txtOOGreaterThanDaysScript2").val().trim() == null) {
+                $("#txtOOGreaterThanDaysScript3").css('border-color', 'red');
+                status = false;
+            }
+        }
+        if ($("#rbtnOOInactiveWA").is(":checked")) {
+            if ($("#txtOODaysCount1").val() == "") {
+                $('#txtOODaysCount1').css('border-color', 'red');
+                status = false;
+            }
+            if ($("#txtOOLessThanDays1").val() == "") {
+                $('#txtOOLessThanDays1').css('border-color', 'red');
+                status = false;
+            }
+            if ($("#txtOOLessThanDaysScript1").val().trim() == "" || $("#txtOOLessThanDaysScript1").val().trim() == null) {
+                $("#txtOOLessThanDaysScript1").css('border-color', 'red');
+                status = false;
+            }
+            if ($("#txtSMSScript32").val().trim() == "" || $("#txtSMSScript32").val().trim() == null) {
+                $("#txtSMSScript32").css('border-color', 'red');
+                status = false;
+            }
+            if ($("#txtOOGreaterThanDays1").val() == "") {
+                $('#txtOOGreaterThanDays1').css('border-color', 'red');
+                status = false;
+            }            
+            if ($("#txtOOGreaterThanDaysScript1").val().trim() == "" || $("#txtOOGreaterThanDaysScript1").val().trim() == null) {
+                $("#txtOOGreaterThanDaysScript1").css('border-color', 'red');
+                status = false;
+            }
+            if ($("#txtSMSScript33").val().trim() == "" || $("#txtSMSScript33").val().trim() == null) {
+                $("#txtSMSScript33").css('border-color', 'red');
+                status = false;
+            }
+            if ($("#txtOODaysCount2").val() == "") {
+                $('#txtOODaysCount2').css('border-color', 'red');
+                status = false;
+            }
+            if ($("#txtOOLessThanDays2").val() == "") {
+                $('#txtOOLessThanDays2').css('border-color', 'red');
+                status = false;
+            }
+            if ($("#txtOOLessThanDaysScript2").val().trim() == "" || $("#txtOOLessThanDaysScript2").val().trim() == null) {
+                $("#txtOOLessThanDaysScript2").css('border-color', 'red');
+                status = false;
+            }
+            if ($("#txtSMSScript34").val().trim() == "" || $("#txtSMSScript34").val().trim() == null) {
+                $("#txtSMSScript34").css('border-color', 'red');
+                status = false;
+            }
+            if ($("#txtOOGreaterThanDays2").val() == "") {
+                $('#txtOOGreaterThanDays2').css('border-color', 'red');
+                status = false;
+            }
+            if ($("#txtOOGreaterThanDaysScript2").val().trim() == "" || $("#txtOOGreaterThanDaysScript2").val().trim() == null) {
+                $("#txtOOGreaterThanDaysScript2").css('border-color', 'red');
+                status = false;
+            }
+            if ($("#txtSMSScript35").val().trim() == "" || $("#txtSMSScript35").val().trim() == null) {
+                $("#txtSMSScript35").css('border-color', 'red');
+                status = false;
+            }
+            if ($("#txtOODaysCount3").val() == "") {
+                $('#txtOODaysCount3').css('border-color', 'red');
+                status = false;
+            }
+            if ($("#txtOOLessThanDays3").val() == "") {
+                $('#txtOOLessThanDays3').css('border-color', 'red');
+                status = false;
+            }
+            if ($("#txtOOLessThanDaysScript3").val().trim() == "" || $("#txtOOLessThanDaysScript3").val().trim() == null) {
+                $("#txtOOLessThanDaysScript3").css('border-color', 'red');
+                status = false;
+            }
+            if ($("#txtSMSScript36").val().trim() == "" || $("#txtSMSScript36").val().trim() == null) {
+                $("#txtSMSScript36").css('border-color', 'red');
+                status = false;
+            }
+            if ($("#txtOOGreaterThanDays3").val() == "") {
+                $('#txtOOGreaterThanDays3').css('border-color', 'red');
+                status = false;
+            }
+            if ($("#txtOOGreaterThanDaysScript3").val().trim() == "" || $("#txtOOGreaterThanDaysScript2").val().trim() == null) {
+                $("#txtOOGreaterThanDaysScript3").css('border-color', 'red');
+                status = false;
+            }
+            if ($("#txtSMSScript37").val().trim() == "" || $("#txtSMSScript37").val().trim() == null) {
+                $("#txtSMSScript37").css('border-color', 'red');
+                status = false;
+            }
+        }
 
+        if (!status) {
+            cuteAlert({
+                type: "error",
+                title: "Oops..",
+                message: "Please Enter required fields",
+                buttonText: "Okay"
+            })
+        }
+        return status;
+    }
+    function RemoveRequiredBorderOnlyOnceInactiveConfig() {
+        $("#txtOOMessageCount").focusout(function () {
+            if ($("#txtOOMessageCount").val() != "") {
+                $('#txtOOMessageCount').css('border-color', '');
+            }
+            else {
+                $('#txtOOMessageCount').css('border-color', 'red');
+            }
+        });
+        $("#txtOODaysCount1").focusout(function () {
+            if ($("#txtOODaysCount1").val() != "") {
+                $('#txtOODaysCount1').css('border-color', '');
+            }
+            else {
+                $('#txtOODaysCount1').css('border-color', 'red');
+            }
+        });        
+        $("#txtOOLessThanDays1").focusout(function () {
+            if ($("#txtOOLessThanDays1").val() != "") {
+                $('#txtOOLessThanDays1').css('border-color', '');
+            }
+            else {
+                $('#txtOOLessThanDays1').css('border-color', 'red');
+            }
+        });
+        $("#txtOOLessThanDaysScript1").focusout(function () {
+            if ($("#txtOOLessThanDaysScript1").val() != "") {
+                $('#txtOOLessThanDaysScript1').css('border-color', '');
+            }
+            else {
+                $('#txtOOLessThanDaysScript1').css('border-color', 'red');
+            }
+        });
+        $("#txtSMSScript32").focusout(function () {
+            if ($("#txtSMSScript32").val() != "") {
+                $('#txtSMSScript32').css('border-color', '');
+            }
+            else {
+                $('#txtSMSScript32').css('border-color', 'red');
+            }
+        });
+        $("#txtOOGreaterThanDays1").focusout(function () {
+            if ($("#txtOOGreaterThanDays1").val() != "") {
+                $('#txtOOGreaterThanDays1').css('border-color', '');
+            }
+            else {
+                $('#txtOOGreaterThanDays1').css('border-color', 'red');
+            }
+        });
+        $("#txtOOGreaterThanDaysScript1").focusout(function () {
+            if ($("#txtOOGreaterThanDaysScript1").val() != "") {
+                $('#txtOOGreaterThanDaysScript1').css('border-color', '');
+            }
+            else {
+                $('#txtOOGreaterThanDaysScript1').css('border-color', 'red');
+            }
+        });
+        $("#txtSMSScript33").focusout(function () {
+            if ($("#txtSMSScript33").val() != "") {
+                $('#txtSMSScript33').css('border-color', '');
+            }
+            else {
+                $('#txtSMSScript33').css('border-color', 'red');
+            }
+        });
+        $("#txtOODaysCount2").focusout(function () {
+            if ($("#txtOODaysCount2").val() != "") {
+                $('#txtOODaysCount2').css('border-color', '');
+            }
+            else {
+                $('#txtOODaysCount2').css('border-color', 'red');
+            }
+        });
+        $("#txtOOLessThanDays2").focusout(function () {
+            if ($("#txtOOLessThanDays2").val() != "") {
+                $('#txtOOLessThanDays2').css('border-color', '');
+            }
+            else {
+                $('#txtOOLessThanDays2').css('border-color', 'red');
+            }
+        });
+        $("#txtOOLessThanDaysScript2").focusout(function () {
+            if ($("#txtOOLessThanDaysScript2").val() != "") {
+                $('#txtOOLessThanDaysScript2').css('border-color', '');
+            }
+            else {
+                $('#txtOOLessThanDaysScript2').css('border-color', 'red');
+            }
+        });
+        $("#txtSMSScript34").focusout(function () {
+            if ($("#txtSMSScript34").val() != "") {
+                $('#txtSMSScript34').css('border-color', '');
+            }
+            else {
+                $('#txtSMSScript34').css('border-color', 'red');
+            }
+        });
+        $("#txtOOGreaterThanDays2").focusout(function () {
+            if ($("#txtOOGreaterThanDays2").val() != "") {
+                $('#txtOOGreaterThanDays2').css('border-color', '');
+            }
+            else {
+                $('#txtOOGreaterThanDays2').css('border-color', 'red');
+            }
+        });
+        $("#txtOOGreaterThanDaysScript2").focusout(function () {
+            if ($("#txtOOGreaterThanDaysScript2").val() != "") {
+                $('#txtOOGreaterThanDaysScript2').css('border-color', '');
+            }
+            else {
+                $('#txtOOGreaterThanDaysScript2').css('border-color', 'red');
+            }
+        });
+        $("#txtSMSScript35").focusout(function () {
+            if ($("#txtSMSScript35").val() != "") {
+                $('#txtSMSScript35').css('border-color', '');
+            }
+            else {
+                $('#txtSMSScript35').css('border-color', 'red');
+            }
+        });
+        $("#txtOODaysCount3").focusout(function () {
+            if ($("#txtOODaysCount3").val() != "") {
+                $('#txtOODaysCount3').css('border-color', '');
+            }
+            else {
+                $('#txtOODaysCount3').css('border-color', 'red');
+            }
+        });
+        $("#txtOOLessThanDays3").focusout(function () {
+            if ($("#txtOOLessThanDays3").val() != "") {
+                $('#txtOOLessThanDays3').css('border-color', '');
+            }
+            else {
+                $('#txtOOLessThanDays3').css('border-color', 'red');
+            }
+        });
+        $("#txtOOLessThanDaysScript3").focusout(function () {
+            if ($("#txtOOLessThanDaysScript3").val() != "") {
+                $('#txtOOLessThanDaysScript3').css('border-color', '');
+            }
+            else {
+                $('#txtOOLessThanDaysScript3').css('border-color', 'red');
+            }
+        });
+        $("#txtSMSScript36").focusout(function () {
+            if ($("#txtSMSScript36").val() != "") {
+                $('#txtSMSScript36').css('border-color', '');
+            }
+            else {
+                $('#txtSMSScript36').css('border-color', 'red');
+            }
+        });
+        $("#txtOOGreaterThanDays3").focusout(function () {
+            if ($("#txtOOGreaterThanDays3").val() != "") {
+                $('#txtOOGreaterThanDays3').css('border-color', '');
+            }
+            else {
+                $('#txtOOGreaterThanDays3').css('border-color', 'red');
+            }
+        });
+        $("#txtOOGreaterThanDaysScript3").focusout(function () {
+            if ($("#txtOOGreaterThanDaysScript3").val() != "") {
+                $('#txtOOGreaterThanDaysScript3').css('border-color', '');
+            }
+            else {
+                $('#txtOOGreaterThanDaysScript3').css('border-color', 'red');
+            }
+        });
+        $("#txtSMSScript37").focusout(function () {
+            if ($("#txtSMSScript37").val() != "") {
+                $('#txtSMSScript37').css('border-color', '');
+            }
+            else {
+                $('#txtSMSScript37').css('border-color', 'red');
+            }
+        });
+
+    }
+    function ValidateNonRedeemptionInactiveConfig() {
+        var status = true;
+        if ($("#txtNRMessageCount").val() == "") {
+            $('#txtNRMessageCount').css('border-color', 'red');
+            status = false;
+        }
+        if ($("#rbtnNRInactiveSMS").is(":checked")) {
+            if ($("#txtNRDaysCount1").val() == "") {
+                $('#txtNRDaysCount1').css('border-color', 'red');
+                status = false;
+            }
+            if ($("#txtNRLessThanDays1").val() == "") {
+                $('#txtNRLessThanDays1').css('border-color', 'red');
+                status = false;
+            }
+            if ($("#txtNRLessThanDaysScript1").val().trim() == "" || $("#txtNRLessThanDaysScript1").val().trim() == null) {
+                $("#txtNRLessThanDaysScript1").css('border-color', 'red');
+                status = false;
+            }
+            if ($("#txtNRGreaterThanDays1").val() == "") {
+                $('#txtNRGreaterThanDays1').css('border-color', 'red');
+                status = false;
+            }
+            if ($("#txtNRGreaterThanDaysScript1").val().trim() == "" || $("#txtNRGreaterThanDaysScript1").val().trim() == null) {
+                $("#txtNRGreaterThanDaysScript1").css('border-color', 'red');
+                status = false;
+            }
+            if ($("#txtNRDaysCount2").val() == "") {
+                $('#txtNRDaysCount2').css('border-color', 'red');
+                status = false;
+            }
+            if ($("#txtNRLessThanDays2").val() == "") {
+                $('#txtNRLessThanDays2').css('border-color', 'red');
+                status = false;
+            }
+            if ($("#txtNRLessThanDaysScript2").val().trim() == "" || $("#txtNRLessThanDaysScript2").val().trim() == null) {
+                $("#txtNRLessThanDaysScript2").css('border-color', 'red');
+                status = false;
+            }
+            if ($("#txtNRGreaterThanDays2").val() == "") {
+                $('#txtNRGreaterThanDays2').css('border-color', 'red');
+                status = false;
+            }
+            if ($("#txtNRGreaterThanDaysScript2").val().trim() == "" || $("#txtNRGreaterThanDaysScript2").val().trim() == null) {
+                $("#txtNRGreaterThanDaysScript2").css('border-color', 'red');
+                status = false;
+            }
+            if ($("#txtNRDaysCount3").val() == "") {
+                $('#txtNRDaysCount3').css('border-color', 'red');
+                status = false;
+            }
+            if ($("#txtNRLessThanDays3").val() == "") {
+                $('#txtNRLessThanDays3').css('border-color', 'red');
+                status = false;
+            }
+            if ($("#txtNRLessThanDaysScript3").val().trim() == "" || $("#txtNRLessThanDaysScript3").val().trim() == null) {
+                $("#txtNRLessThanDaysScript3").css('border-color', 'red');
+                status = false;
+            }
+            if ($("#txtNRGreaterThanDays3").val() == "") {
+                $('#txtNRGreaterThanDays3').css('border-color', 'red');
+                status = false;
+            }
+            if ($("#txtNRGreaterThanDaysScript3").val().trim() == "" || $("#txtNRGreaterThanDaysScript3").val().trim() == null) {
+                $("#txtNRGreaterThanDaysScript3").css('border-color', 'red');
+                status = false;
+            }
+        }
+        if ($("#rbtnNRInactiveWA").is(":checked")) {
+            if ($("#txtNRDaysCount1").val() == "") {
+                $('#txtNRDaysCount1').css('border-color', 'red');
+                status = false;
+            }
+            if ($("#txtNRLessThanDays1").val() == "") {
+                $('#txtNRLessThanDays1').css('border-color', 'red');
+                status = false;
+            }
+            if ($("#txtNRLessThanDaysScript1").val().trim() == "" || $("#txtOOLessThanDaysScript1").val().trim() == null) {
+                $("#txtNRLessThanDaysScript1").css('border-color', 'red');
+                status = false;
+            }
+            if ($("#txtSMSScript42").val().trim() == "" || $("#txtSMSScript42").val().trim() == null) {
+                $("#txtSMSScript42").css('border-color', 'red');
+                status = false;
+            }
+            if ($("#txtNRGreaterThanDays1").val() == "") {
+                $('#txtNRGreaterThanDays1').css('border-color', 'red');
+                status = false;
+            }
+            if ($("#txtNRGreaterThanDaysScript1").val().trim() == "" || $("#txtNRGreaterThanDaysScript1").val().trim() == null) {
+                $("#txtNRGreaterThanDaysScript1").css('border-color', 'red');
+                status = false;
+            }
+            if ($("#txtSMSScript43").val().trim() == "" || $("#txtSMSScript43").val().trim() == null) {
+                $("#txtSMSScript43").css('border-color', 'red');
+                status = false;
+            }
+            if ($("#txtNRDaysCount2").val() == "") {
+                $('#txtNRDaysCount2').css('border-color', 'red');
+                status = false;
+            }
+            if ($("#txtNRLessThanDays2").val() == "") {
+                $('#txtNRLessThanDays2').css('border-color', 'red');
+                status = false;
+            }
+            if ($("#txtNRLessThanDaysScript2").val().trim() == "" || $("#txtOOLessThanDaysScript2").val().trim() == null) {
+                $("#txtNRLessThanDaysScript2").css('border-color', 'red');
+                status = false;
+            }
+            if ($("#txtSMSScript44").val().trim() == "" || $("#txtSMSScript44").val().trim() == null) {
+                $("#txtSMSScript44").css('border-color', 'red');
+                status = false;
+            }
+            if ($("#txtNRGreaterThanDays2").val() == "") {
+                $('#txtNRGreaterThanDays2').css('border-color', 'red');
+                status = false;
+            }
+            if ($("#txtNRGreaterThanDaysScript2").val().trim() == "" || $("#txtOOGreaterThanDaysScript2").val().trim() == null) {
+                $("#txtNRGreaterThanDaysScript2").css('border-color', 'red');
+                status = false;
+            }
+            if ($("#txtSMSScript45").val().trim() == "" || $("#txtSMSScript45").val().trim() == null) {
+                $("#txtSMSScript45").css('border-color', 'red');
+                status = false;
+            }
+            if ($("#txtNRDaysCount3").val() == "") {
+                $('#txtNRDaysCount3').css('border-color', 'red');
+                status = false;
+            }
+            if ($("#txtNRLessThanDays3").val() == "") {
+                $('#txtNRLessThanDays3').css('border-color', 'red');
+                status = false;
+            }
+            if ($("#txtNRLessThanDaysScript3").val().trim() == "" || $("#txtOOLessThanDaysScript3").val().trim() == null) {
+                $("#txtNRLessThanDaysScript3").css('border-color', 'red');
+                status = false;
+            }
+            if ($("#txtSMSScript46").val().trim() == "" || $("#txtSMSScript46").val().trim() == null) {
+                $("#txtSMSScript46").css('border-color', 'red');
+                status = false;
+            }
+            if ($("#txtNRGreaterThanDays3").val() == "") {
+                $('#txtNRGreaterThanDays3').css('border-color', 'red');
+                status = false;
+            }
+            if ($("#txtNRGreaterThanDaysScript3").val().trim() == "" || $("#txtOOGreaterThanDaysScript2").val().trim() == null) {
+                $("#txtNRGreaterThanDaysScript3").css('border-color', 'red');
+                status = false;
+            }
+            if ($("#txtSMSScript47").val().trim() == "" || $("#txtSMSScript47").val().trim() == null) {
+                $("#txtSMSScript47").css('border-color', 'red');
+                status = false;
+            }
+        }
+
+        if (!status) {
+            cuteAlert({
+                type: "error",
+                title: "Oops..",
+                message: "Please Enter required fields",
+                buttonText: "Okay"
+            })
+        }
+        return status;
+    }
+    function RemoveRequiredBorderNonRedeemptionInactiveConfig() {
+        $("#txtNRMessageCount").focusout(function () {
+            if ($("#txtNRMessageCount").val() != "") {
+                $('#txtNRMessageCount').css('border-color', '');
+            }
+            else {
+                $('#txtNRMessageCount').css('border-color', 'red');
+            }
+        });
+        $("#txtNRDaysCount1").focusout(function () {
+            if ($("#txtNRDaysCount1").val() != "") {
+                $('#txtNRDaysCount1').css('border-color', '');
+            }
+            else {
+                $('#txtNRDaysCount1').css('border-color', 'red');
+            }
+        });
+        $("#txtNRLessThanDays1").focusout(function () {
+            if ($("#txtNRLessThanDays1").val() != "") {
+                $('#txtNRLessThanDays1').css('border-color', '');
+            }
+            else {
+                $('#txtNRLessThanDays1').css('border-color', 'red');
+            }
+        });
+        $("#txtNRLessThanDaysScript1").focusout(function () {
+            if ($("#txtNRLessThanDaysScript1").val() != "") {
+                $('#txtNRLessThanDaysScript1').css('border-color', '');
+            }
+            else {
+                $('#txtNRLessThanDaysScript1').css('border-color', 'red');
+            }
+        });
+        $("#txtSMSScript42").focusout(function () {
+            if ($("#txtSMSScript42").val() != "") {
+                $('#txtSMSScript42').css('border-color', '');
+            }
+            else {
+                $('#txtSMSScript42').css('border-color', 'red');
+            }
+        });
+        $("#txtNRGreaterThanDays1").focusout(function () {
+            if ($("#txtNRGreaterThanDays1").val() != "") {
+                $('#txtNRGreaterThanDays1').css('border-color', '');
+            }
+            else {
+                $('#txtNRGreaterThanDays1').css('border-color', 'red');
+            }
+        });
+        $("#txtNRGreaterThanDaysScript1").focusout(function () {
+            if ($("#txtNRGreaterThanDaysScript1").val() != "") {
+                $('#txtNRGreaterThanDaysScript1').css('border-color', '');
+            }
+            else {
+                $('#txtNRGreaterThanDaysScript1').css('border-color', 'red');
+            }
+        });
+        $("#txtSMSScript43").focusout(function () {
+            if ($("#txtSMSScript43").val() != "") {
+                $('#txtSMSScript43').css('border-color', '');
+            }
+            else {
+                $('#txtSMSScript43').css('border-color', 'red');
+            }
+        });
+        $("#txtNRDaysCount2").focusout(function () {
+            if ($("#txtNRDaysCount2").val() != "") {
+                $('#txtNRDaysCount2').css('border-color', '');
+            }
+            else {
+                $('#txtNRDaysCount2').css('border-color', 'red');
+            }
+        });
+        $("#txtNRLessThanDays2").focusout(function () {
+            if ($("#txtNRLessThanDays2").val() != "") {
+                $('#txtNRLessThanDays2').css('border-color', '');
+            }
+            else {
+                $('#txtNRLessThanDays2').css('border-color', 'red');
+            }
+        });
+        $("#txtNRLessThanDaysScript2").focusout(function () {
+            if ($("#txtNRLessThanDaysScript2").val() != "") {
+                $('#txtNRLessThanDaysScript2').css('border-color', '');
+            }
+            else {
+                $('#txtNRLessThanDaysScript2').css('border-color', 'red');
+            }
+        });
+        $("#txtSMSScript44").focusout(function () {
+            if ($("#txtSMSScript44").val() != "") {
+                $('#txtSMSScript44').css('border-color', '');
+            }
+            else {
+                $('#txtSMSScript44').css('border-color', 'red');
+            }
+        });
+        $("#txtNRGreaterThanDays2").focusout(function () {
+            if ($("#txtNRGreaterThanDays2").val() != "") {
+                $('#txtNRGreaterThanDays2').css('border-color', '');
+            }
+            else {
+                $('#txtNRGreaterThanDays2').css('border-color', 'red');
+            }
+        });
+        $("#txtNRGreaterThanDaysScript2").focusout(function () {
+            if ($("#txtNRGreaterThanDaysScript2").val() != "") {
+                $('#txtNRGreaterThanDaysScript2').css('border-color', '');
+            }
+            else {
+                $('#txtNRGreaterThanDaysScript2').css('border-color', 'red');
+            }
+        });
+        $("#txtSMSScript45").focusout(function () {
+            if ($("#txtSMSScript45").val() != "") {
+                $('#txtSMSScript45').css('border-color', '');
+            }
+            else {
+                $('#txtSMSScript45').css('border-color', 'red');
+            }
+        });
+        $("#txtNRDaysCount3").focusout(function () {
+            if ($("#txtNRDaysCount3").val() != "") {
+                $('#txtNRDaysCount3').css('border-color', '');
+            }
+            else {
+                $('#txtNRDaysCount3').css('border-color', 'red');
+            }
+        });
+        $("#txtNRLessThanDays3").focusout(function () {
+            if ($("#txtNRLessThanDays3").val() != "") {
+                $('#txtNRLessThanDays3').css('border-color', '');
+            }
+            else {
+                $('#txtNRLessThanDays3').css('border-color', 'red');
+            }
+        });
+        $("#txtNRLessThanDaysScript3").focusout(function () {
+            if ($("#txtNRLessThanDaysScript3").val() != "") {
+                $('#txtNRLessThanDaysScript3').css('border-color', '');
+            }
+            else {
+                $('#txtNRLessThanDaysScript3').css('border-color', 'red');
+            }
+        });
+        $("#txtSMSScript46").focusout(function () {
+            if ($("#txtSMSScript46").val() != "") {
+                $('#txtSMSScript46').css('border-color', '');
+            }
+            else {
+                $('#txtSMSScript46').css('border-color', 'red');
+            }
+        });
+        $("#txtNRGreaterThanDays3").focusout(function () {
+            if ($("#txtNRGreaterThanDays3").val() != "") {
+                $('#txtNRGreaterThanDays3').css('border-color', '');
+            }
+            else {
+                $('#txtNRGreaterThanDays3').css('border-color', 'red');
+            }
+        });
+        $("#txtNRGreaterThanDaysScript3").focusout(function () {
+            if ($("#txtNRGreaterThanDaysScript3").val() != "") {
+                $('#txtNRGreaterThanDaysScript3').css('border-color', '');
+            }
+            else {
+                $('#txtNRGreaterThanDaysScript3').css('border-color', 'red');
+            }
+        });
+        $("#txtSMSScript47").focusout(function () {
+            if ($("#txtSMSScript47").val() != "") {
+                $('#txtSMSScript47').css('border-color', '');
+            }
+            else {
+                $('#txtSMSScript47').css('border-color', 'red');
+            }
+        });
+
+    }
+    function ValidatePointExpiryInactiveConfig() {
+        var status = true;
+        if ($("#txtPEMessageCount").val() == "") {
+            $('#txtPEMessageCount').css('border-color', 'red');
+            status = false;
+        }
+        if ($("#rbtnPEInactiveSMS").is(":checked")) {
+            if ($("#txtPEDaysCount1").val() == "") {
+                $('#txtPEDaysCount1').css('border-color', 'red');
+                status = false;
+            }
+            if ($("#txtPELessThanDays1").val() == "") {
+                $('#txtPELessThanDays1').css('border-color', 'red');
+                status = false;
+            }
+            if ($("#txtPELessThanDaysScript1").val().trim() == "" || $("#txtPELessThanDaysScript1").val().trim() == null) {
+                $("#txtPELessThanDaysScript1").css('border-color', 'red');
+                status = false;
+            }
+            if ($("#txtPEGreaterThanDays1").val() == "") {
+                $('#txtPEGreaterThanDays1').css('border-color', 'red');
+                status = false;
+            }
+            if ($("#txtPEGreaterThanDaysScript1").val().trim() == "" || $("#txtPEGreaterThanDaysScript1").val().trim() == null) {
+                $("#txtPEGreaterThanDaysScript1").css('border-color', 'red');
+                status = false;
+            }
+            if ($("#txtPEDaysCount2").val() == "") {
+                $('#txtPEDaysCount2').css('border-color', 'red');
+                status = false;
+            }
+            if ($("#txtPELessThanDays2").val() == "") {
+                $('#txtPELessThanDays2').css('border-color', 'red');
+                status = false;
+            }
+            if ($("#txtPELessThanDaysScript2").val().trim() == "" || $("#txtPELessThanDaysScript2").val().trim() == null) {
+                $("#txtPELessThanDaysScript2").css('border-color', 'red');
+                status = false;
+            }
+            if ($("#txtPEGreaterThanDays2").val() == "") {
+                $('#txtPEGreaterThanDays2').css('border-color', 'red');
+                status = false;
+            }
+            if ($("#txtPEGreaterThanDaysScript2").val().trim() == "" || $("#txtPEGreaterThanDaysScript2").val().trim() == null) {
+                $("#txtPEGreaterThanDaysScript2").css('border-color', 'red');
+                status = false;
+            }
+            if ($("#txtPEDaysCount3").val() == "") {
+                $('#txtPEDaysCount3').css('border-color', 'red');
+                status = false;
+            }
+            if ($("#txtPELessThanDays3").val() == "") {
+                $('#txtPELessThanDays3').css('border-color', 'red');
+                status = false;
+            }
+            if ($("#txtPELessThanDaysScript3").val().trim() == "" || $("#txtPELessThanDaysScript3").val().trim() == null) {
+                $("#txtPELessThanDaysScript3").css('border-color', 'red');
+                status = false;
+            }
+            if ($("#txtPEGreaterThanDays3").val() == "") {
+                $('#txtPEGreaterThanDays3').css('border-color', 'red');
+                status = false;
+            }
+            if ($("#txtPEGreaterThanDaysScript3").val().trim() == "" || $("#txtPEGreaterThanDaysScript3").val().trim() == null) {
+                $("#txtPEGreaterThanDaysScript3").css('border-color', 'red');
+                status = false;
+            }
+        }
+        if ($("#rbtnPEInactiveWA").is(":checked")) {
+            if ($("#txtPEDaysCount1").val() == "") {
+                $('#txtPEDaysCount1').css('border-color', 'red');
+                status = false;
+            }
+            if ($("#txtPELessThanDays1").val() == "") {
+                $('#txtPELessThanDays1').css('border-color', 'red');
+                status = false;
+            }
+            if ($("#txtPELessThanDaysScript1").val().trim() == "" || $("#txtOOLessThanDaysScript1").val().trim() == null) {
+                $("#txtPELessThanDaysScript1").css('border-color', 'red');
+                status = false;
+            }
+            if ($("#txtSMSScript52").val().trim() == "" || $("#txtSMSScript52").val().trim() == null) {
+                $("#txtSMSScript52").css('border-color', 'red');
+                status = false;
+            }
+            if ($("#txtPEGreaterThanDays1").val() == "") {
+                $('#txtPEGreaterThanDays1').css('border-color', 'red');
+                status = false;
+            }
+            if ($("#txtPEGreaterThanDaysScript1").val().trim() == "" || $("#txtPEGreaterThanDaysScript1").val().trim() == null) {
+                $("#txtPEGreaterThanDaysScript1").css('border-color', 'red');
+                status = false;
+            }
+            if ($("#txtSMSScript53").val().trim() == "" || $("#txtSMSScript53").val().trim() == null) {
+                $("#txtSMSScript53").css('border-color', 'red');
+                status = false;
+            }
+            if ($("#txtPEDaysCount2").val() == "") {
+                $('#txtPEDaysCount2').css('border-color', 'red');
+                status = false;
+            }
+            if ($("#txtPELessThanDays2").val() == "") {
+                $('#txtPELessThanDays2').css('border-color', 'red');
+                status = false;
+            }
+            if ($("#txtPELessThanDaysScript2").val().trim() == "" || $("#txtPELessThanDaysScript2").val().trim() == null) {
+                $("#txtPELessThanDaysScript2").css('border-color', 'red');
+                status = false;
+            }
+            if ($("#txtSMSScript54").val().trim() == "" || $("#txtSMSScript54").val().trim() == null) {
+                $("#txtSMSScript54").css('border-color', 'red');
+                status = false;
+            }
+            if ($("#txtPEGreaterThanDays2").val() == "") {
+                $('#txtPEGreaterThanDays2').css('border-color', 'red');
+                status = false;
+            }
+            if ($("#txtPEGreaterThanDaysScript2").val().trim() == "" || $("#txtPEGreaterThanDaysScript2").val().trim() == null) {
+                $("#txtPEGreaterThanDaysScript2").css('border-color', 'red');
+                status = false;
+            }
+            if ($("#txtSMSScript55").val().trim() == "" || $("#txtSMSScript55").val().trim() == null) {
+                $("#txtSMSScript55").css('border-color', 'red');
+                status = false;
+            }
+            if ($("#txtPEDaysCount3").val() == "") {
+                $('#txtPEDaysCount3').css('border-color', 'red');
+                status = false;
+            }
+            if ($("#txtPELessThanDays3").val() == "") {
+                $('#txtPELessThanDays3').css('border-color', 'red');
+                status = false;
+            }
+            if ($("#txtPELessThanDaysScript3").val().trim() == "" || $("#txtPELessThanDaysScript3").val().trim() == null) {
+                $("#txtPELessThanDaysScript3").css('border-color', 'red');
+                status = false;
+            }
+            if ($("#txtSMSScript56").val().trim() == "" || $("#txtSMSScript56").val().trim() == null) {
+                $("#txtSMSScript56").css('border-color', 'red');
+                status = false;
+            }
+            if ($("#txtPEGreaterThanDays3").val() == "") {
+                $('#txtPEGreaterThanDays3').css('border-color', 'red');
+                status = false;
+            }
+            if ($("#txtPEGreaterThanDaysScript3").val().trim() == "" || $("#txtPEGreaterThanDaysScript3").val().trim() == null) {
+                $("#txtPEGreaterThanDaysScript3").css('border-color', 'red');
+                status = false;
+            }
+            if ($("#txtSMSScript57").val().trim() == "" || $("#txtSMSScript57").val().trim() == null) {
+                $("#txtSMSScript57").css('border-color', 'red');
+                status = false;
+            }
+        }
+
+        if (!status) {
+            cuteAlert({
+                type: "error",
+                title: "Oops..",
+                message: "Please Enter required fields",
+                buttonText: "Okay"
+            })
+        }
+        return status;
+    }
+    function RemoveRequiredBorderPointExpiryInactiveConfig() {
+        $("#txtPEMessageCount").focusout(function () {
+            if ($("#txtPEMessageCount").val() != "") {
+                $('#txtPEMessageCount').css('border-color', '');
+            }
+            else {
+                $('#txtPEMessageCount').css('border-color', 'red');
+            }
+        });
+        $("#txtPEDaysCount1").focusout(function () {
+            if ($("#txtPEDaysCount1").val() != "") {
+                $('#txtPEDaysCount1').css('border-color', '');
+            }
+            else {
+                $('#txtPEDaysCount1').css('border-color', 'red');
+            }
+        });
+        $("#txtPELessThanDays1").focusout(function () {
+            if ($("#txtPELessThanDays1").val() != "") {
+                $('#txtPELessThanDays1').css('border-color', '');
+            }
+            else {
+                $('#txtPELessThanDays1').css('border-color', 'red');
+            }
+        });
+        $("#txtPELessThanDaysScript1").focusout(function () {
+            if ($("#txtPELessThanDaysScript1").val() != "") {
+                $('#txtPELessThanDaysScript1').css('border-color', '');
+            }
+            else {
+                $('#txtPELessThanDaysScript1').css('border-color', 'red');
+            }
+        });
+        $("#txtSMSScript52").focusout(function () {
+            if ($("#txtSMSScript52").val() != "") {
+                $('#txtSMSScript52').css('border-color', '');
+            }
+            else {
+                $('#txtSMSScript52').css('border-color', 'red');
+            }
+        });
+        $("#txtPEGreaterThanDays1").focusout(function () {
+            if ($("#txtPEGreaterThanDays1").val() != "") {
+                $('#txtPEGreaterThanDays1').css('border-color', '');
+            }
+            else {
+                $('#txtPEGreaterThanDays1').css('border-color', 'red');
+            }
+        });
+        $("#txtPEGreaterThanDaysScript1").focusout(function () {
+            if ($("#txtPEGreaterThanDaysScript1").val() != "") {
+                $('#txtPEGreaterThanDaysScript1').css('border-color', '');
+            }
+            else {
+                $('#txtPEGreaterThanDaysScript1').css('border-color', 'red');
+            }
+        });
+        $("#txtSMSScript53").focusout(function () {
+            if ($("#txtSMSScript53").val() != "") {
+                $('#txtSMSScript53').css('border-color', '');
+            }
+            else {
+                $('#txtSMSScript53').css('border-color', 'red');
+            }
+        });
+        $("#txtPEDaysCount2").focusout(function () {
+            if ($("#txtPEDaysCount2").val() != "") {
+                $('#txtPEDaysCount2').css('border-color', '');
+            }
+            else {
+                $('#txtPEDaysCount2').css('border-color', 'red');
+            }
+        });
+        $("#txtPELessThanDays2").focusout(function () {
+            if ($("#txtPELessThanDays2").val() != "") {
+                $('#txtPELessThanDays2').css('border-color', '');
+            }
+            else {
+                $('#txtPELessThanDays2').css('border-color', 'red');
+            }
+        });
+        $("#txtPELessThanDaysScript2").focusout(function () {
+            if ($("#txtPELessThanDaysScript2").val() != "") {
+                $('#txtPELessThanDaysScript2').css('border-color', '');
+            }
+            else {
+                $('#txtPELessThanDaysScript2').css('border-color', 'red');
+            }
+        });
+        $("#txtSMSScript54").focusout(function () {
+            if ($("#txtSMSScript54").val() != "") {
+                $('#txtSMSScript54').css('border-color', '');
+            }
+            else {
+                $('#txtSMSScript54').css('border-color', 'red');
+            }
+        });
+        $("#txtPEGreaterThanDays2").focusout(function () {
+            if ($("#txtPEGreaterThanDays2").val() != "") {
+                $('#txtPEGreaterThanDays2').css('border-color', '');
+            }
+            else {
+                $('#txtPEGreaterThanDays2').css('border-color', 'red');
+            }
+        });
+        $("#txtPEGreaterThanDaysScript2").focusout(function () {
+            if ($("#txtPEGreaterThanDaysScript2").val() != "") {
+                $('#txtPEGreaterThanDaysScript2').css('border-color', '');
+            }
+            else {
+                $('#txtPEGreaterThanDaysScript2').css('border-color', 'red');
+            }
+        });
+        $("#txtSMSScript55").focusout(function () {
+            if ($("#txtSMSScript55").val() != "") {
+                $('#txtSMSScript55').css('border-color', '');
+            }
+            else {
+                $('#txtSMSScript55').css('border-color', 'red');
+            }
+        });
+        $("#txtPEDaysCount3").focusout(function () {
+            if ($("#txtPEDaysCount3").val() != "") {
+                $('#txtPEDaysCount3').css('border-color', '');
+            }
+            else {
+                $('#txtPEDaysCount3').css('border-color', 'red');
+            }
+        });
+        $("#txtPELessThanDays3").focusout(function () {
+            if ($("#txtPELessThanDays3").val() != "") {
+                $('#txtPELessThanDays3').css('border-color', '');
+            }
+            else {
+                $('#txtPELessThanDays3').css('border-color', 'red');
+            }
+        });
+        $("#txtPELessThanDaysScript3").focusout(function () {
+            if ($("#txtPELessThanDaysScript3").val() != "") {
+                $('#txtPELessThanDaysScript3').css('border-color', '');
+            }
+            else {
+                $('#txtPELessThanDaysScript3').css('border-color', 'red');
+            }
+        });
+        $("#txtSMSScript56").focusout(function () {
+            if ($("#txtSMSScript56").val() != "") {
+                $('#txtSMSScript56').css('border-color', '');
+            }
+            else {
+                $('#txtSMSScript56').css('border-color', 'red');
+            }
+        });
+        $("#txtPEGreaterThanDays3").focusout(function () {
+            if ($("#txtPEGreaterThanDays3").val() != "") {
+                $('#txtPEGreaterThanDays3').css('border-color', '');
+            }
+            else {
+                $('#txtPEGreaterThanDays3').css('border-color', 'red');
+            }
+        });
+        $("#txtPEGreaterThanDaysScript3").focusout(function () {
+            if ($("#txtPEGreaterThanDaysScript3").val() != "") {
+                $('#txtPEGreaterThanDaysScript3').css('border-color', '');
+            }
+            else {
+                $('#txtPEGreaterThanDaysScript3').css('border-color', 'red');
+            }
+        });
+        $("#txtSMSScript57").focusout(function () {
+            if ($("#txtSMSScript57").val() != "") {
+                $('#txtSMSScript57').css('border-color', '');
+            }
+            else {
+                $('#txtSMSScript57').css('border-color', 'red');
+            }
+        });
+
+    }
+    
+    
     function LoadInactiveData(type) {
         $("#divLoader").show();
             $.ajax({
