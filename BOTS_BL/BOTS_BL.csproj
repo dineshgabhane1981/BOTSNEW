@@ -294,6 +294,7 @@
     <Compile Include="Models\KeyIndecators\OnlyOnce.cs" />
     <Compile Include="Models\LoginDetail.cs" />
     <Compile Include="Models\LoginModel.cs" />
+    <Compile Include="Models\Model11.cs" />
     <Compile Include="Models\MWPSourceMaster.cs" />
     <Compile Include="Models\MWP_Details.cs" />
     <Compile Include="Models\OnBoarding\BOTS_TblActionTracking.cs" />
@@ -345,6 +346,7 @@
     <Compile Include="Models\StoreDetail.cs" />
     <Compile Include="Models\tblFranchiseeEnquiry.cs" />
     <Compile Include="Models\tblLoginLog.cs" />
+    <Compile Include="Models\tblStandardRulesSetting.cs" />
     <Compile Include="Models\tblUniquePoint.cs" />
     <Compile Include="Models\TelecallerReport.cs" />
     <Compile Include="Models\TelecallerTracking.cs" />
