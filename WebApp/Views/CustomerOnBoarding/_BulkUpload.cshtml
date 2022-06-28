@@ -1,9 +1,6 @@
 ﻿
 
-<div style="margin-top:20px;">
-    <input type="radio" name="bulkupload" id="rbtnCustUpload" /> Customer Upload
-    <input type="radio" name="bulkupload" id="rbtnProductUpload" /> Product Upload
-</div>
+
 <div style="margin-top:20px;">
     <input type="file" id="FileUpload1" />
     <input type="button" id="btnUpload" class="btn btn-primary" style="margin-left: 10px; background-color: #2651be;" value="Upload Data" />
@@ -17,7 +14,7 @@
     });
 
     function UploadData() {
-        if ($("#rbtnCustUpload").prop("checked") || $("#rbtnProductUpload").prop("checked")) {
+        
             if (window.FormData !== undefined) {
                 var fileUpload = $("#FileUpload1").get(0);
 
@@ -28,7 +25,7 @@
                         fileData.append(files[i].name, files[i]);
                     }
                     fileData.append("groupId", $('#hdnGroupID').val());
-                    if ($("#rbtnCustUpload").prop("checked")) {
+                    
                         $("#divLoader").show();
                         $.ajax({
                             url: '@Url.Action("UploadCustomers", "CustomerOnBoarding")',
@@ -38,8 +35,8 @@
                             data: fileData,
                             success: function (result) {
                                 cuteAlert({
-                                    type: "error",
-                                    title: "Oops..",
+                                    type: "success",
+                                    title: "Uploaded",
                                     message: "Data Uploaded Successfully!",
                                     buttonText: "Okay"
                                 })
@@ -59,7 +56,7 @@
                         });
                     }
 
-                }
+                
                 else {
                     cuteAlert({
                         type: "error",
@@ -68,15 +65,9 @@
                         buttonText: "Okay"
                     })
                 }
-            }
-        }
-        else {
-            cuteAlert({
-                type: "error",
-                title: "Oops..",
-                message: "Please select Upload Type",
-                buttonText: "Okay"
-            })
         }
     }
+        
+        
+    
 </script>
