@@ -210,6 +210,27 @@
     <hr />
     <div class="col-lg-12 col-sm-12" style="margin-top:10px;">
         <b style="font-size:16px;"> Perpetual Campaign Count - @Model.PerpetualCampaignCount </b>
+        @if (Model.lstCampaignOtherConfig != null)
+        {
+            foreach (var item in Model.lstCampaignOtherConfig)
+            {
+                if (item.CampaignType == "Birthday" || item.CampaignType == "Anniversary")
+                {
+                    <div style="border:1px solid grey;border-radius:10px; padding:10px;margin-bottom:10px;">
+                        <b> @item.CampaignType</b>
+                        <div class="col-lg-12 col-sm-12 row" >
+                            <div class="col-lg-4 col-sm-4">Bonus Point - <b> @item.BonusPoints </b></div>
+                            <div class="col-lg-4 col-sm-4">Introduction Message <b> @item.IntroDays1 </b> days before event</div>
+                            <div class="col-lg-4 col-sm-4">Reminder Message <b> @item.ReminderDays1 </b> days <b> @item.ReminderWhen1 </b> event </div>
+
+                        </div>
+                        <div class="col-lg-12 col-sm-12 row">
+                            <div class="col-lg-4 col-sm-4">Reminder Message <b> @item.ReminderDays2 </b> days <b> @item.ReminderWhen2 </b> event</div>                            
+                        </div>
+                    </div>
+                }
+            }
+        }
     </div>
     <hr />
     <div class="col-lg-12 col-sm-12" style="margin-top:10px;"><h6><b>Standard Configuration Rules</b></h6></div>
