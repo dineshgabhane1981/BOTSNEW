@@ -2277,16 +2277,16 @@ namespace WebApp.Controllers.OnBoarding
                 str.AppendLine();
                 str.AppendLine("We thank you for your decision to join hands with Blue Ocktopus and are confident that you will be really happy to see how this helps your current business grow.");
                 str.AppendLine();
-                str.AppendLine("As per your discussion with" + groupDetails.AssignedCSName + "we have configured the Loyalty Programme Rules");
+                str.AppendLine("As per your discussion with"  +  groupDetails.AssignedCSName  + ","  + "we have configured the Loyalty Programme Rules");
                 str.AppendLine();
-                str.AppendLine("We request you to kindly click on this link " + Url + " to validate and approve the programme rules for us to start with the set-up process.");
+                str.AppendLine("We request you to kindly click on this link " + Url + " to approve the programme rules for us to start with the set-up process.");
                 str.AppendLine();
                 str.AppendLine("Timelines for the programme set-up post your approval will be as :");
                 str.AppendLine();
                 str.AppendLine("We value your association with us and look forward for your continued support");
                 str.AppendLine();
                 str.AppendLine(" Warm Regards,");
-                str.AppendLine(" - BlueOcktopus");
+                str.AppendLine("  BlueOcktopus Team");
 
                 mail.Subject = "Loyalty Program Configuration";
                 mail.SubjectEncoding = System.Text.Encoding.Default;
