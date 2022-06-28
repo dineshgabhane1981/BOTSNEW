@@ -93,9 +93,9 @@ namespace WebApp.Controllers.OnBoarding
                     objData.lstCommunicationSet = OBR.GetCommunicationSetsByGroupId(groupId);
                     objData.IsWA = false;
                     var dataWA = OBR.GetCommunicationWAConfigByGroupId(groupId);
-                    if(dataWA!=null)
+                    if (dataWA != null)
                     {
-                        if(dataWA.Count>0)
+                        if (dataWA.Count > 0)
                         {
                             objData.IsWA = true;
                         }
@@ -389,7 +389,7 @@ namespace WebApp.Controllers.OnBoarding
                         objItem.City = Convert.ToString(item["City"]);
                         objItem.PinCode = Convert.ToString(item["PinCode"]);
                         objItem.State = Convert.ToString(item["State"]);
-                        
+
 
                         objLstOutlet.Add(objItem);
                     }
@@ -1265,11 +1265,11 @@ namespace WebApp.Controllers.OnBoarding
 
                     string fileName = docName + "_" + groupName + "." + fileExt;
                     DataSet ds = new DataSet();
-                   
+
 
                     var path = ConfigurationManager.AppSettings["CustomerDocuments"].ToString();
-                    files.SaveAs(path + "\\" + fileName);    
-                    
+                    files.SaveAs(path + "\\" + fileName);
+
                     var status = OBR.UploadOtherDocs(groupId, docName, fileName, userDetails.LoginId);
 
                     return Json("File Uploaded Successfully!");
@@ -1921,7 +1921,7 @@ namespace WebApp.Controllers.OnBoarding
                 }
                 objEarnRule.IsBlockForEarn = Convert.ToBoolean(item["IsBlockForEarn"]);
                 if (objEarnRule.IsBlockForEarn.Value)
-                {                    
+                {
                     objEarnRule.BlockProductWiseType = Convert.ToString(item["BlockProductWiseType"]);
                     if (!string.IsNullOrEmpty(Convert.ToString(item["ProductBlockEarn"])))
                     {
@@ -2000,7 +2000,7 @@ namespace WebApp.Controllers.OnBoarding
                 objData.bots_TblDealDetails = OBR.GetDealMasterDetails(GroupId);
                 objData.bots_TblPaymentDetails = OBR.GetPaymentDetails(GroupId);
                 objData.objRetailList = OBR.GetRetailDetails(GroupId);
-                
+
                 objData.objInstallmentList = OBR.GetInstallmentDetails(GroupId);
 
                 //Communication Details
@@ -2020,12 +2020,13 @@ namespace WebApp.Controllers.OnBoarding
                 objData.lstCampaignOtherConfig = OBR.GetCampaignOtherConfigByGroupId(GroupId);
                 objData.lstCampaignInactive = OBR.GetCampaignInactiveByGroupId(GroupId);
 
-                int count = 0;
-                foreach(var item in objData.lstCampaignOtherConfig)
+
+                foreach (var item in objData.lstCampaignOtherConfig)
                 {
-                    if(item.CampaignType == "Birthday" || item.CampaignType == "Anniversary")
+                    int count = 0;
+                    if (item.CampaignType == "Birthday" || item.CampaignType == "Anniversary")
                     {
-                        if(!string.IsNullOrEmpty(item.IntroScript1))
+                        if (!string.IsNullOrEmpty(item.IntroScript1))
                         {
                             count++;
                         }
@@ -2045,6 +2046,10 @@ namespace WebApp.Controllers.OnBoarding
                         {
                             count++;
                         }
+                        if (item.CampaignType == "Birthday")
+                            objData.BirthdayScriptCount = count;
+                        if (item.CampaignType == "Anniversary")
+                            objData.AnniversaryScriptCount = count;
                     }
                     if (item.CampaignType == "DLC Update Reminder" || item.CampaignType == "Balance Updates" || item.CampaignType == "Reminder Bulk Uploaded Users" || item.CampaignType == "DLC Referral Reminder")
                     {
@@ -2056,26 +2061,72 @@ namespace WebApp.Controllers.OnBoarding
                         {
                             count++;
                         }
+                        if (item.CampaignType == "DLC Update Reminder")
+                            objData.DLCUpdateReminderScriptCount = count;
+                        if (item.CampaignType == "Balance Updates")
+                            objData.BalanceUpdatesScriptCount = count;
+                        if (item.CampaignType == "Reminder Bulk Uploaded Users")
+                            objData.DLCReferralReminderScriptCount = count;
+                        if (item.CampaignType == "DLC Referral Reminder")
+                            objData.DLCReferralReminderScriptCount = count;
                     }
                 }
-                
-                 foreach (var item in objData.lstCampaignInactive)
-                 { 
-                     if (item.InactiveType == "Inactive" || item.InactiveType == "Only Once Inactive" || item.InactiveType == "Non Redemption Inactive" || item.InactiveType == "Point Expiry")
-                     {
-                       if (!string.IsNullOrEmpty(item.LessThanDaysScript))
-                       {
-                          count++;
-                       }
-                       if (!string.IsNullOrEmpty(item.GreaterThanDaysScript))
-                       {
-                          count++;
-                       }
 
-                     }
-
-                 }
-                objData.PerpetualCampaignCount = count;
+                var ICount = 0;
+                var OOCount = 0;
+                var NRCount = 0;
+                var PECount = 0;
+                foreach (var item in objData.lstCampaignInactive)
+                {
+                    if (item.InactiveType == "Inactive")
+                    {
+                        if (!string.IsNullOrEmpty(item.LessThanDaysScript))
+                        {
+                            ICount++;
+                        }
+                        if (!string.IsNullOrEmpty(item.GreaterThanDaysScript))
+                        {
+                            ICount++;
+                        }
+                    }
+                    if (item.InactiveType == "Only Once Inactive")
+                    {
+                        if (!string.IsNullOrEmpty(item.LessThanDaysScript))
+                        {
+                            OOCount++;
+                        }
+                        if (!string.IsNullOrEmpty(item.GreaterThanDaysScript))
+                        {
+                            OOCount++;
+                        }
+                    }
+                    if (item.InactiveType == "Non Redemption Inactive")
+                    {
+                        if (!string.IsNullOrEmpty(item.LessThanDaysScript))
+                        {
+                            NRCount++;
+                        }
+                        if (!string.IsNullOrEmpty(item.GreaterThanDaysScript))
+                        {
+                            NRCount++;
+                        }
+                    }
+                    if (item.InactiveType == "Point Expiry")
+                    {
+                        if (!string.IsNullOrEmpty(item.LessThanDaysScript))
+                        {
+                            PECount++;
+                        }
+                        if (!string.IsNullOrEmpty(item.GreaterThanDaysScript))
+                        {
+                            PECount++;
+                        }
+                    }
+                }
+                objData.InactiveScriptCount = ICount;
+                objData.OnlyOnceInactiveScriptCount = OOCount;
+                objData.NonRedemptionInactiveScriptCount = NRCount;
+                objData.PointExpiryScriptCount = PECount;               
 
                 // Velocity Checks
                 objData.BOTS_TblVelocityChecksConfig = OBR.GetVelocityChecksData(GroupId);
@@ -2092,7 +2143,7 @@ namespace WebApp.Controllers.OnBoarding
                 foreach (var item in objData.objRetailList)
                 {
                     tblStandardRulesSetting objItem = new tblStandardRulesSetting();
-                    objItem= OBR.GetStandardConfigurationRules(Convert.ToInt32(item.CategoryId));
+                    objItem = OBR.GetStandardConfigurationRules(Convert.ToInt32(item.CategoryId));
                     objStandardRulesList.Add(objItem);
                 }
                 objData.objStandardRulesList = objStandardRulesList;
@@ -2277,7 +2328,7 @@ namespace WebApp.Controllers.OnBoarding
                 str.AppendLine();
                 str.AppendLine("We thank you for your decision to join hands with Blue Ocktopus and are confident that you will be really happy to see how this helps your current business grow.");
                 str.AppendLine();
-                str.AppendLine("As per your discussion with"  +  groupDetails.AssignedCSName  + ","  + "we have configured the Loyalty Programme Rules");
+                str.AppendLine("As per your discussion with" + groupDetails.AssignedCSName + "," + "we have configured the Loyalty Programme Rules");
                 str.AppendLine();
                 str.AppendLine("We request you to kindly click on this link " + Url + " to approve the programme rules for us to start with the set-up process.");
                 str.AppendLine();
@@ -2295,7 +2346,7 @@ namespace WebApp.Controllers.OnBoarding
                 //string htmlBody = "<html><body><h1>Picture</h1><br><img src=\"cid:filename\"></body></html>";
                 //AlternateView avHtml = AlternateView.CreateAlternateViewFromString
                 //   (htmlBody, null, MediaTypeNames.Text.Html);
-                
+
                 //string filePath = Server.MapPath("~/Content/assets/BotsLoginBackground.jpeg");
                 //LinkedResource inline = new LinkedResource(filePath, MediaTypeNames.Image.Jpeg);
                 //inline.ContentId = Guid.NewGuid().ToString();
@@ -2303,10 +2354,10 @@ namespace WebApp.Controllers.OnBoarding
 
                 ////MailMessage mail = new MailMessage();
                 //mail.AlternateViews.Add(avHtml);
-                
+
                 //Attachment att = new Attachment(filePath);
                 //att.ContentDisposition.Inline = true;
-                
+
                 //mail.Subject = "Client:  Has Sent You A Screenshot";
                 //mail.Body = String.Format(
                 //           "<h3>Client: Has Sent You A Screenshot</h3>" +
@@ -2442,7 +2493,7 @@ namespace WebApp.Controllers.OnBoarding
                 objOutletData.State = Convert.ToString(item["State"]);
                 objOutletData.City = Convert.ToString(item["City"]);
                 objOutletData.PinCode = Convert.ToString(item["PinCode"]);
-                
+
 
                 objOutletData.UpdatedBy = userDetails.LoginId;
                 objOutletData.UpdatedDate = DateTime.Now;

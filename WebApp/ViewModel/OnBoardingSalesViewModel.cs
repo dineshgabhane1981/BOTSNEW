@@ -55,6 +55,16 @@ namespace WebApp.ViewModel
         public bool IsWA { get; set; }
 
         public List<BOTS_TblDocuments> lstOtherDocs { get; set; } 
+        public int BirthdayScriptCount { get; set; }
+        public int AnniversaryScriptCount { get; set; }
+        public int InactiveScriptCount { get; set; }
+        public int OnlyOnceInactiveScriptCount { get; set; }
+        public int NonRedemptionInactiveScriptCount { get; set; }
+        public int PointExpiryScriptCount { get; set; }
+        public int DLCUpdateReminderScriptCount { get; set; }
+        public int DLCReferralReminderScriptCount { get; set; }
+        public int BalanceUpdatesScriptCount { get; set; }
+        public int ReminderBulkUploadedUsersScriptCount { get; set; }
         public SelectListItem[] BOProducts()
         {
             return new SelectListItem[2] { new SelectListItem() { Text = "Octa Plus", Value = "1" }, new SelectListItem() { Text = "Octa XS", Value = "2" } };

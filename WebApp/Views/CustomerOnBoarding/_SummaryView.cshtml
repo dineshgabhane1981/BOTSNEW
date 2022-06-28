@@ -156,6 +156,49 @@
         </div>
     </div>
     <hr />
+    <div class="col-lg-12 col-sm-12" style="margin-top:10px;"><h6><b>Standard Configuration Rules</b></h6></div>
+    @foreach (var item in Model.objStandardRulesList)
+    {
+        <table border="1" cellpadding="10" cellspacing="10">
+            <tr>
+                <th>Category</th>
+                <th>OverLapping Categories</th>
+                <th>Sub Elements</th>
+                <th>Optimum Earn % Range</th>
+                <th>Typical Exclusions</th>
+                <th>Optimum Points Validity (in Months)</th>
+            </tr>
+            <tbody>
+                <tr>
+                    <td>@item.CategoryName</td>
+                    <td>@Html.Raw(@item.OverlappingCategories)</td>
+                    <td>@Html.Raw(@item.SubElements)</td>
+                    <td>@Html.Raw(@item.OptimumEarnPercentRange)</td>
+                    <td>@Html.Raw(@item.TypicalExclusions)</td>
+                    <td>@Html.Raw(@item.OptimumPtsValidityInMonths)</td>
+                </tr>
+            </tbody>
+            <tr>
+                <th>Redemption Guidelines</th>
+                <th>Referral Points</th>
+                <th>Referee Points</th>
+                <th>Birthday Anniversary Points</th>
+                <th>Inactive Campaign Period (in Days)</th>
+                <th>Points Expiry alert (Days Before)</th>
+            </tr>
+            <tbody>
+                <tr>
+                    <td>@item.RedemptionGuidelines</td>
+                    <td>@item.ReferralPoints</td>
+                    <td>@item.RefereePoints</td>
+                    <td>@item.BirthdayAnniversaryPts</td>
+                    <td>@Html.Raw(@item.InactiveCampaignPeriodInDays)</td>
+                    <td>@Html.Raw(@item.PointsExpiryAlertInDaysBefore)</td>
+                </tr>
+            </tbody>
+        </table>
+    }
+    <hr />
     <div class="col-lg-12 col-sm-12 " style="margin-top:10px;"><h6><b>Celebration Point Rules</b></h6></div>
     <div class="col-lg-12 col-sm-12 row ">
         @if (Model.lstCampaignOtherConfig != null)
@@ -209,7 +252,7 @@
     }
     <hr />
     <div class="col-lg-12 col-sm-12" style="margin-top:10px;">
-        <b style="font-size:16px;"> Perpetual Campaign Count - @Model.PerpetualCampaignCount </b>
+        <b style="font-size:16px;"> Perpetual Campaign Setting </b><br />
         @if (Model.lstCampaignOtherConfig != null)
         {
             foreach (var item in Model.lstCampaignOtherConfig)
@@ -217,64 +260,167 @@
                 if (item.CampaignType == "Birthday" || item.CampaignType == "Anniversary")
                 {
                     <div style="border:1px solid grey;border-radius:10px; padding:10px;margin-bottom:10px;">
-                        <b> @item.CampaignType</b>
-                        <div class="col-lg-12 col-sm-12 row" >
-                            <div class="col-lg-4 col-sm-4">Bonus Point - <b> @item.BonusPoints </b></div>
-                            <div class="col-lg-4 col-sm-4">Introduction Message <b> @item.IntroDays1 </b> days before event</div>
-                            <div class="col-lg-4 col-sm-4">Reminder Message <b> @item.ReminderDays1 </b> days <b> @item.ReminderWhen1 </b> event </div>
+                        @if (item.CampaignType == "Birthday")
+                        {
+                            <b> @item.CampaignType - Script Count - @Model.BirthdayScriptCount</b>
+                        }
+                        @if (item.CampaignType == "Anniversary")
+                        {
+                            <b> @item.CampaignType - Script Count - @Model.AnniversaryScriptCount</b>
+                        }
+
+                        <div class="col-lg-12 col-sm-12 row">
+                            <div class="col-lg-4 col-sm-4">Bonus Points - <b> @item.BonusPoints </b></div>
+                            <div class="col-lg-4 col-sm-4">Points valid before - <b> @item.PointsValidBefore  days</b> </div>
+                            <div class="col-lg-4 col-sm-4">Points valid after - <b> @item.PointsValidAfter  days </b> </div>
+
 
                         </div>
                         <div class="col-lg-12 col-sm-12 row">
-                            <div class="col-lg-4 col-sm-4">Reminder Message <b> @item.ReminderDays2 </b> days <b> @item.ReminderWhen2 </b> event</div>                            
+                            <div class="col-lg-4 col-sm-4">Introduction Message <b> @item.IntroDays1 days </b>  before event</div>
+                            <div class="col-lg-4 col-sm-4">Reminder1 Message <b> @item.ReminderDays1 days  @item.ReminderWhen1 </b> event </div>
+                            <div class="col-lg-4 col-sm-4">Reminder2 Message <b> @item.ReminderDays2 days  @item.ReminderWhen2 </b> event</div>
+                        </div>
+                    </div>
+                }
+                if (item.CampaignType == "DLC Referral Reminder")
+                {
+                    <div style="border:1px solid grey;border-radius:10px; padding:10px;margin-bottom:10px;">
+                        @if (item.CampaignType == "DLC Referral Reminder")
+                        {
+                            <b> DLC Referral Connect - Script Count - @Model.DLCReferralReminderScriptCount</b>
+                        }
+
+                        <div class="col-lg-12 col-sm-12 row">
+                            <div class="col-lg-4 col-sm-4">Frequency - <b> @item.IntroDays1 days </b></div>
+                            <div class="col-lg-4 col-sm-4">Frequency - <b> @item.IntroDays2 days </b></div>
+                        </div>
+                    </div>
+                }
+                if (item.CampaignType == "DLC Update Reminder")
+                {
+                    <div style="border:1px solid grey;border-radius:10px; padding:10px;margin-bottom:10px;">
+                        @if (item.CampaignType == "DLC Update Reminder")
+                        {
+                            <b> @item.CampaignType - Script Count - @Model.DLCUpdateReminderScriptCount</b>
+                        }
+
+                        <div class="col-lg-12 col-sm-12 row">
+                            <div class="col-lg-4 col-sm-4">Frequency - <b> @item.IntroDays1 days </b></div>
+                            <div class="col-lg-4 col-sm-4">Frequency - <b> @item.IntroDays2 days </b></div>
+                        </div>
+                    </div>
+                }
+                if (item.CampaignType == "Balance Updates")
+                {
+                    <div style="border:1px solid grey;border-radius:10px; padding:10px;margin-bottom:10px;">
+                        @if (item.CampaignType == "Balance Updates")
+                        {
+                            <b> Points Balance - Script Count - @Model.BalanceUpdatesScriptCount</b>
+                        }
+
+                        <div class="col-lg-12 col-sm-12 row">
+                            <div class="col-lg-4 col-sm-4">Frequency - <b> @item.IntroDays1 days </b></div>
+                            <div class="col-lg-4 col-sm-4">Frequency - <b> @item.IntroDays2 days </b></div>
+                        </div>
+                    </div>
+                }
+                if (item.CampaignType == "Reminder Bulk Uploaded Users")
+                {
+                    <div style="border:1px solid grey;border-radius:10px; padding:10px;margin-bottom:10px;">
+                        @if (item.CampaignType == "Reminder Bulk Uploaded Users")
+                        {
+                            <b> Reminder to Bulk Uploaded Users - Script Count - @Model.BalanceUpdatesScriptCount</b>
+                        }
+
+                        <div class="col-lg-12 col-sm-12 row">
+                            <div class="col-lg-4 col-sm-4">Frequency - <b> @item.IntroDays1 days </b></div>
+                            <div class="col-lg-4 col-sm-4">Frequency - <b> @item.IntroDays2 days </b></div>
                         </div>
                     </div>
                 }
             }
         }
+
+        @if (Model.lstCampaignInactive != null)
+        {
+            <div style="border:1px solid grey;border-radius:10px; padding:10px;margin-bottom:10px;">
+                <b> Inactive - Script Count - @Model.InactiveScriptCount</b>
+
+                @foreach (var item in Model.lstCampaignInactive)
+                {
+                    if (item.InactiveType == "Inactive")
+                    {
+                        <div class="col-lg-12 col-sm-12 row">
+                            <div class="col-lg-4 col-sm-4"><b> @item.Days days</b>  after last transaction</div>
+                            <div class="col-lg-4 col-sm-4"> less than  <b> @item.LessThanDays </b>points </div>
+                            <div class="col-lg-4 col-sm-4">greater/equal <b> @item.GreaterThanDays </b>points </div>
+                        </div>
+                    }
+                }
+            </div>
+        }
+        @if (Model.lstCampaignInactive != null)
+        {
+            <div style="border:1px solid grey;border-radius:10px; padding:10px;margin-bottom:10px;">
+                <b> Only Once Inactive - Script Count - @Model.OnlyOnceInactiveScriptCount</b>
+
+                @foreach (var item in Model.lstCampaignInactive)
+                {
+                    if (item.InactiveType == "Only Once Inactive")
+                    {
+                        <div class="col-lg-12 col-sm-12 row">
+                            <div class="col-lg-4 col-sm-4"><b> @item.Days days</b>  after last transaction</div>
+                            <div class="col-lg-4 col-sm-4"> less than  <b> @item.LessThanDays </b>points </div>
+                            <div class="col-lg-4 col-sm-4">greater/equal <b> @item.GreaterThanDays </b>points </div>
+                        </div>
+                    }
+                }
+            </div>
+        }
+        @if (Model.lstCampaignInactive != null)
+        {
+            <div style="border:1px solid grey;border-radius:10px; padding:10px;margin-bottom:10px;">
+                <b> Non Redemption Inactive - Script Count - @Model.NonRedemptionInactiveScriptCount</b>
+
+                @foreach (var item in Model.lstCampaignInactive)
+                {
+                    if (item.InactiveType == "Non Redemption Inactive")
+                    {
+                        <div class="col-lg-12 col-sm-12 row">
+                            <div class="col-lg-4 col-sm-4"><b> @item.Days days</b>  after last transaction</div>
+                            <div class="col-lg-4 col-sm-4"> less than  <b> @item.LessThanDays </b>points </div>
+                            <div class="col-lg-4 col-sm-4">greater/equal <b> @item.GreaterThanDays </b>points </div>
+                        </div>
+                    }
+                }
+            </div>
+        }
+        @if (Model.lstCampaignInactive != null)
+        {
+            <div style="border:1px solid grey;border-radius:10px; padding:10px;margin-bottom:10px;">
+                <b> Point Expiry - Script Count - @Model.PointExpiryScriptCount</b>
+
+                @foreach (var item in Model.lstCampaignInactive)
+                {
+                    if (item.InactiveType == "Point Expiry")
+                    {
+                        <div class="col-lg-12 col-sm-12 row">
+                            <div class="col-lg-4 col-sm-4"><b> @item.Days days</b>  after last transaction</div>
+                            <div class="col-lg-4 col-sm-4"> less than  <b> @item.LessThanDays </b>points </div>
+                            <div class="col-lg-4 col-sm-4">greater/equal <b> @item.GreaterThanDays </b>points </div>
+                        </div>
+                    }
+                }
+            </div>
+        }
+
+
+
+
+
     </div>
-    <hr />
-    <div class="col-lg-12 col-sm-12" style="margin-top:10px;"><h6><b>Standard Configuration Rules</b></h6></div>
-    @foreach (var item in Model.objStandardRulesList)
-    {
-        <table border="1" cellpadding="10" cellspacing="10">
-            <tr>
-                <th>Category</th>
-                <th>OverLapping Categories</th>
-                <th>Sub Elements</th>
-                <th>Optimum Earn % Range</th>
-                <th>Typical Exclusions</th>
-                <th>Optimum Points Validity (in Months)</th>
-            </tr>
-            <tbody>
-                <tr>
-                    <td>@item.CategoryName</td>
-                    <td>@Html.Raw(@item.OverlappingCategories)</td>
-                    <td>@Html.Raw(@item.SubElements)</td>
-                    <td>@Html.Raw(@item.OptimumEarnPercentRange)</td>
-                    <td>@Html.Raw(@item.TypicalExclusions)</td>
-                    <td>@Html.Raw(@item.OptimumPtsValidityInMonths)</td>
-                </tr>
-            </tbody>
-            <tr>
-                <th>Redemption Guidelines</th>
-                <th>Referral Points</th>
-                <th>Referee Points</th>
-                <th>Birthday Anniversary Points</th>
-                <th>Inactive Campaign Period (in Days)</th>
-                <th>Points Expiry alert (Days Before)</th>
-            </tr>
-            <tbody>
-                <tr>
-                    <td>@item.RedemptionGuidelines</td>
-                    <td>@item.ReferralPoints</td>
-                    <td>@item.RefereePoints</td>
-                    <td>@item.BirthdayAnniversaryPts</td>
-                    <td>@Html.Raw(@item.InactiveCampaignPeriodInDays)</td>
-                    <td>@Html.Raw(@item.PointsExpiryAlertInDaysBefore)</td>
-                </tr>
-            </tbody>
-        </table>
-    }
+
 
 
 
