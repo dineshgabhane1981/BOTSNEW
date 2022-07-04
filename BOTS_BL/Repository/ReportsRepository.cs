@@ -132,13 +132,26 @@ namespace BOTS_BL.Repository
             {
                 using (var context = new BOTSDBContext(connstr))
                 {
-                    lstOutletWise = context.Database.SqlQuery<OutletWise>("sp_BOTS_OutletwiseSummary @pi_GroupId, @pi_Date, @pi_LoginId, @pi_DateRangeFlag, @pi_FromDate, @pi_ToDate",
+                    if (GroupId == "1086")
+                    {
+                        lstOutletWise = context.Database.SqlQuery<OutletWise>("sp_BOTS_OutletwiseSummary @pi_GroupId, @pi_Date, @pi_LoginId, @pi_DateRangeFlag, @pi_FromDate, @pi_ToDate",
                         new SqlParameter("@pi_GroupId", GroupId),
                         new SqlParameter("@pi_Date", DateTime.Now.ToShortDateString()),
                         new SqlParameter("@pi_LoginId", loginId),
                         new SqlParameter("@pi_DateRangeFlag", DateRangeFlag),
                         new SqlParameter("@pi_FromDate", FromDate),
                         new SqlParameter("@pi_ToDate", ToDate)).ToList<OutletWise>();
+                    }
+                    else
+                    {
+                        lstOutletWise = context.Database.SqlQuery<OutletWise>("sp_BOTS_OutletwiseSummary @pi_GroupId, @pi_Date, @pi_LoginId, @pi_DateRangeFlag, @pi_FromDate, @pi_ToDate",
+                        new SqlParameter("@pi_GroupId", GroupId),
+                        new SqlParameter("@pi_Date", DateTime.Now.ToShortDateString()),
+                        new SqlParameter("@pi_LoginId", ""),
+                        new SqlParameter("@pi_DateRangeFlag", DateRangeFlag),
+                        new SqlParameter("@pi_FromDate", FromDate),
+                        new SqlParameter("@pi_ToDate", ToDate)).ToList<OutletWise>();
+                    }
                 }
             }
             catch (Exception ex)
