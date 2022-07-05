@@ -1728,6 +1728,7 @@ namespace BOTS_BL.Repository
                                 d = "0";
                             }
                         }
+                        //var newf = context.feedback_FeedbackMaster.Where(x => x.MobileNo == item.MobileNo && x.AddedDate == item.Datetime).ToList();
                         var feedback = (from f in context.feedback_FeedbackMaster
                                         where f.MobileNo == item.MobileNo && f.AddedDate == item.Datetime
                                         group f by f.MobileNo into result
@@ -1744,37 +1745,39 @@ namespace BOTS_BL.Repository
                                             datetime = result.Select(x => x.AddedDate).FirstOrDefault(),
                                             comments = result.Select(x => x.Comments).FirstOrDefault(),
                                         }).FirstOrDefault();
-
-                        var invoiceamt = context.TransactionMasters.Where(x => x.MobileNo == feedback.Mobilenumber && x.Datetime == today).GroupBy(x => x.MobileNo)
-                            .Select(g => new
-                            {
-                                g.Key,
-                                totalamt = g.Sum(s => s.InvoiceAmt > 0 ? s.InvoiceAmt : 0),
-                                txnstatus = g.Sum(s => s.InvoiceAmt).ToString()
-                            }).ToList();
-                        var custinfo = context.CustomerDetails.Where(x => x.MobileNo == feedback.Mobilenumber).Select(g => new
+                        if (feedback != null)
                         {
-                            cust = g.DOJ == today ? "1st time" : "Existing",
-                            custname = g.CustomerName
-                        }).ToList();
+                            var invoiceamt = context.TransactionMasters.Where(x => x.MobileNo == feedback.Mobilenumber && x.Datetime == today).GroupBy(x => x.MobileNo)
+                                .Select(g => new
+                                {
+                                    g.Key,
+                                    totalamt = g.Sum(s => s.InvoiceAmt > 0 ? s.InvoiceAmt : 0),
+                                    txnstatus = g.Sum(s => s.InvoiceAmt).ToString()
+                                }).ToList();
+                            var custinfo = context.CustomerDetails.Where(x => x.MobileNo == feedback.Mobilenumber).Select(g => new
+                            {
+                                cust = g.DOJ == today ? "1st time" : "Existing",
+                                custname = g.CustomerName
+                            }).ToList();
 
-                        var outlet = context.OutletDetails.Where(x => x.OutletId == feedback.outletid).FirstOrDefault();
-                        objreport.GroupId = groupId;
-                        objreport.MemberName = custinfo.Select(x => x.custname).FirstOrDefault();
-                        objreport.MobileNo = feedback.Mobilenumber;
-                        objreport.Q1 = feedback.q1;
-                        objreport.Q2 = feedback.q2;
-                        objreport.Q3 = feedback.q3;
-                        objreport.Q4 = feedback.q4;
-                        objreport.Source = feedback.howtoknow;
-                        objreport.Datetime = feedback.datetime.ToString();
-                        objreport.OutletName = outlet.OutletName;
-                        objreport.SalesRName = feedback.salesR;
-                        objreport.Comments = feedback.comments;
-                        objreport.Type = custinfo.Select(x => x.cust).FirstOrDefault();
-                        objreport.TxnAmount = invoiceamt.Select(x => x.totalamt).FirstOrDefault();
-                        objreport.Txn = invoiceamt.Select(x => x.txnstatus).FirstOrDefault();
-                        lstobjreport.Add(objreport);
+                            var outlet = context.OutletDetails.Where(x => x.OutletId == feedback.outletid).FirstOrDefault();
+                            objreport.GroupId = groupId;
+                            objreport.MemberName = custinfo.Select(x => x.custname).FirstOrDefault();
+                            objreport.MobileNo = feedback.Mobilenumber;
+                            objreport.Q1 = feedback.q1;
+                            objreport.Q2 = feedback.q2;
+                            objreport.Q3 = feedback.q3;
+                            objreport.Q4 = feedback.q4;
+                            objreport.Source = feedback.howtoknow;
+                            objreport.Datetime = feedback.datetime.ToString();
+                            objreport.OutletName = outlet.OutletName;
+                            objreport.SalesRName = feedback.salesR;
+                            objreport.Comments = feedback.comments;
+                            objreport.Type = custinfo.Select(x => x.cust).FirstOrDefault();
+                            objreport.TxnAmount = invoiceamt.Select(x => x.totalamt).FirstOrDefault();
+                            objreport.Txn = invoiceamt.Select(x => x.txnstatus).FirstOrDefault();
+                            lstobjreport.Add(objreport);
+                        }
                     }
 
                 }

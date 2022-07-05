@@ -128,7 +128,8 @@ namespace BOTS_BL.Models
         public DateTime? UpdatedDate { get; set; }
 
         public DateTime? IntroductionCallDate { get; set; }
-                
+        public bool? IsLive { get; set; }
+
         [StringLength(50)]
         public string UpdatedBy { get; set; }
 

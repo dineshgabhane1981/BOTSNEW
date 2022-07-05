@@ -366,6 +366,7 @@ namespace WebApp.Controllers.OnBoarding
                 {
                     objData.bots_TblGroupMaster.CreatedBy = userDetails.LoginId;
                     objData.bots_TblGroupMaster.CreatedDate = DateTime.Now;
+                    objData.bots_TblGroupMaster.IsLive = false;
                 }
 
                 if (objData.bots_TblGroupMaster.CustomerStatus == "CSUpdate")

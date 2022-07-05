@@ -35,7 +35,7 @@
                         <th scope="col">Contact No</th>
                         <th scope="col">City</th>
                         <th scope="col">Billing Partner</th>
-                        <th scope="col">Payment Status</th>
+                        <th scope="col">CS Assigned</th>
                         <th scope="col" style="text-align:center;">Action</th>
                     </tr>
                 </thead>
@@ -55,7 +55,7 @@
                         <td>@item.OwnerMobileNo</td>
                         <td>@item.City</td>
                         <td>@item.BillingPartnerName</td>
-                        <td>@item.PaymentStatus</td>
+                        <td>@item.CSAssigned</td>
 
                         <td style="text-align:center;">
                             <a href="@Url.Action("Index", "CustomerOnBoarding", new { groupId = GroupId })" class="login" title="Edit"><img src="~/Content/assets/images/shape_editUser.png" /></a>

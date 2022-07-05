@@ -199,26 +199,26 @@ namespace BOTS_BL.Repository
                     //SuperAdmin
                     if (userDetails.LoginType == "1")
                     {
-                        lstGroups = context.BOTS_TblGroupMaster.ToList();
+                        lstGroups = context.BOTS_TblGroupMaster.Where(x => x.IsLive.Value == false).ToList();
                     }
                     //Sales Head
                     if (userDetails.LoginType == "5")
                     {
-                        lstGroups = context.BOTS_TblGroupMaster.ToList();
+                        lstGroups = context.BOTS_TblGroupMaster.Where(x => x.IsLive.Value == false).ToList();
                     }
                     //CS Head
                     if (userDetails.LoginType == "6")
                     {
-                        lstGroups = context.BOTS_TblGroupMaster.Where(x => x.CustomerStatus != "Draft").ToList();
+                        lstGroups = context.BOTS_TblGroupMaster.Where(x => x.CustomerStatus != "Draft" && x.IsLive.Value == false).ToList();
                     }
                     //CS Success
                     if (userDetails.LoginType == "7")
                     {
-                        lstGroups = context.BOTS_TblGroupMaster.Where(x => x.AssignedCS == userDetails.LoginId && x.CustomerStatus != "Draft").ToList();
+                        lstGroups = context.BOTS_TblGroupMaster.Where(x => x.AssignedCS == userDetails.LoginId && x.CustomerStatus != "Draft" && x.IsLive.Value == false).ToList();
                     }
                     if (userDetails.LoginType != "1" && userDetails.LoginType != "5" && userDetails.LoginType != "6" && userDetails.LoginType != "7")
                     {
-                        lstGroups = context.BOTS_TblGroupMaster.Where(x => x.CustomerStatus != "Draft").ToList();
+                        lstGroups = context.BOTS_TblGroupMaster.Where(x => x.CustomerStatus != "Draft" && x.IsLive.Value == false).ToList();
                     }
 
                     foreach (var item in lstGroups)
@@ -242,6 +242,11 @@ namespace BOTS_BL.Repository
                             objItem.IsIntroCall = item.IntroductionCall.Value;
                         else
                             objItem.IsIntroCall = false;
+
+                        if(!string.IsNullOrEmpty(item.AssignedCS))
+                        {
+                            objItem.CSAssigned = context.CustomerLoginDetails.Where(x => x.LoginId == item.AssignedCS).Select(y => y.UserName).FirstOrDefault();
+                        }
 
                         onBoardingListings.Add(objItem);
                     }
