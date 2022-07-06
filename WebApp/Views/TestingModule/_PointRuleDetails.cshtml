@@ -9,30 +9,69 @@
     <div class="col-md-6 col-lg-6">
         <h5> <b> Earn Rule Configuration</b> </h5>
         <div>
-            Base Points Value in Rs - <b>@Model.objEarnRuleConfig.PointsValueInRS </b>
-
-        </div>
-        <div>
             Minimum Invoice Amount - <b>@Model.objEarnRuleConfig.MinInvoiceAmt.Value </b>
 
         </div>
         <div>
-            Base Percentage(%) - <b>@Model.objEarnRuleConfig.BasePercentage </b>
+            Points Value in Rs - <b>@Model.objEarnRuleConfig.PointsValueInRS</b>
         </div>
         <div>
             Points Validity (in Months) - <b>@Model.objEarnRuleConfig.PointsValidityInMonths </b>
-
         </div>
-        <div>
-            Revolving Expiry - <b>@Model.objEarnRuleConfig.RevolvingExpiry </b>
+        @if (Model.objEarnRuleConfig.RevolvingExpiry.Value)
+        {
+            <div>
+                Revolving Expiry - <b> Yes </b>
+            </div>
+        }
+        else
+        {
+            <div>
+                Revolving Expiry - <b> No </b>
+            </div>
+        }
 
-        </div>
-        
+        @if (Model.objEarnRuleConfig.IsDiscountPoints.Value)
+        {
+            <div>
+                Points with Discount - <b> Yes </b>
+            </div>
+        }
+        else
+        {
+            <div>
+                Points with Discount - <b> No </b>
+            </div>
+        }
+        @if (Model.objEarnRuleConfig.IsBase == true)
+        {
+            <table border="1" cellpadding="5" cellspacing="5" style="margin-top:20px;">
+                <tr>
+                    <td colspan="6" style="background-color: lightgray; text-align: center; font-size: 18px;"> <b> Base</b> </td>
+                </tr>
+                <tr>
+                    <td> <b> Base Percentage(%)</b> </td>
+                    <td width="50px"> <b>@Model.objEarnRuleConfig.BasePercentage </b> </td>
+                </tr>
+                <tr>
+                    <td> <b> Fixed Points (Per RS)</b> </td>
+                    <td width="50px"> <b>@Model.objEarnRuleConfig.FixedPointPerRS </b> </td>
+                </tr>
+                <tr>
+                    <td> <b> Fixed Points (Per Txn)</b> </td>
+                    <td width="50px"> <b>@Model.objEarnRuleConfig.FixedPointPerTXN </b> </td>
+                </tr>
+            </table>
+        }
         @if (Model.objEarnRuleConfig.IsSlab == true)
         {
             <table border="1" cellpadding="5" cellspacing="5" style="margin-top:20px;">
                 <tr>
                     <td colspan="6" style="background-color: lightgray; text-align: center; font-size: 18px;"> <b> Slab</b> </td>
+                </tr>
+                <tr>
+                    <td> <b> Slab Type</b> </td>
+                    <td width="50px"> <b>@Model.objEarnRuleConfig.SlabType </b> </td>
                 </tr>
                 <tr>
                     <td width="60px"> <b> From</b> </td>
@@ -115,7 +154,7 @@
 
         </div>
         <div>
-            Percentage to Redeem Points - <b>@Model.objBurnRuleConfig.PercentageToRedeemPts% </b>
+            Redeemption % of Invoice Amt - <b>@Model.objBurnRuleConfig.PercentageToRedeemPts% </b>
         </div>
         <div>
             Minimum Threshold Points First Time - <b>@Model.objBurnRuleConfig.MinThreshholdPtsFisttime </b>
@@ -123,6 +162,9 @@
         </div>
         <div>
             Minimum Threshold Points Subsequent - <b>@Model.objBurnRuleConfig.MinThreshholdPtsSubsequent </b>
+        </div>
+        <div>
+            Redeemption % of Existing Pts - <b>@Model.objBurnRuleConfig.PercentageToRedeemExtPts </b>
         </div>
         <div>
             Partial Earn - <b>@Model.objBurnRuleConfig.PartialEarn </b>
