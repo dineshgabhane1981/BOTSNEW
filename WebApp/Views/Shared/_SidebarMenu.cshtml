@@ -177,7 +177,7 @@
                                                 Group Wise
                                             </a>
                                         </li>
-                                        if (roleId == "1" || roleId=="6")
+                                        if (roleId == "1" || roleId == "6")
                                         {
                                             <li class="@Html.IsSelected(controller: "SinglePage", action: "DiscussionCountReport")">
                                                 <a class="@Html.IsSelected(controller: "SinglePage", action: "DiscussionCountReport")" href="@Url.Action("DiscussionCountReport", "SinglePage")">
@@ -451,12 +451,15 @@
                             </a>
 
                             <ul>
-                                <li class="@Html.IsSelected(controller: "Feedback", action: "Dashboard")">
-                                    <a href="@Url.Action("Dashboard", "Feedback")" class="@Html.IsSelected(controller: "Feedback", action: "Dashboard")">
-                                        <i class="metismenu-icon pe-7s-rocket"></i>
-                                        Dashboard
-                                    </a>
-                                </li>
+                                @if (userDetails.GroupId != "1013")
+                                {
+                                    <li class="@Html.IsSelected(controller: "Feedback", action: "Dashboard")">
+                                        <a href="@Url.Action("Dashboard", "Feedback")" class="@Html.IsSelected(controller: "Feedback", action: "Dashboard")">
+                                            <i class="metismenu-icon pe-7s-rocket"></i>
+                                            Dashboard
+                                        </a>
+                                    </li>
+                                }
                                 <li class="@Html.IsSelected(controller: "Feedback", action: "Report")">
                                     <a href="@Url.Action("Report", "Feedback")" class="@Html.IsSelected(controller: "Feedback", action: "Report")">
                                         <i class="metismenu-icon pe-7s-rocket"></i>
