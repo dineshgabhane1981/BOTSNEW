@@ -20,6 +20,7 @@ using BOTS_BL.Models.FeedBack;
 using System.Web;
 using System.Globalization;
 using BOTS_BL.Models.FeedbackModule;
+using System.Data.Entity.Core.Objects;
 
 namespace BOTS_BL.Repository
 {
@@ -1610,29 +1611,41 @@ namespace BOTS_BL.Repository
 
                 using (var context = new CommonDBContext())
                 {
-                    queid = context.Feedback_Content.Where(x => x.GroupId == groupId && x.Section == "FeedbackQuestions" && x.Type == "Question" && x.IsDisplay == true).Select(x => x.Id).ToList();
+                    if (groupId != "1013")
+                        queid = context.Feedback_Content.Where(x => x.GroupId == groupId && x.Section == "FeedbackQuestions" && x.Type == "Question" && x.IsDisplay == true).Select(x => x.Id).ToList();
+                    else
+                    {
+                        queid.Add(1);
+                        queid.Add(2);
+                    }
                 }
                 using (var context = new BOTSDBContext(connStr))
                 {
                     List<Feedback_MobileNo> objmobile = new List<Feedback_MobileNo>();
-                    //List<feedback_FeedbackMaster> lstfeedbackmaster = new List<feedback_FeedbackMaster>();
+                    if (groupId != "1013")
+                    {
+                        objmobile = (from f in context.feedback_FeedbackMaster
+                                         // where f.SalesRepresentative == salesr && f.OutletId == outletid && f.AddedDate >= fromdt && f.AddedDate <= todt
+                                     select new Feedback_MobileNo
+                                     {
+                                         MobileNo = f.MobileNo,
+                                         Datetime = f.AddedDate,
+                                         OutletName = f.OutletId,
+                                         SalesRName = f.SalesRepresentative
+                                     }).Distinct().ToList();
+                    }
+                    else
+                    {
+                        objmobile = (from f in context.FeedBackMasters
+                                     select new Feedback_MobileNo
+                                     {
+                                         MobileNo = f.MobileNo,
+                                         Datetime = f.DOJ,
+                                         OutletName = f.OutletId,
+                                         SalesRName = ""
+                                     }).Distinct().ToList();
+                    }
 
-                    //if (groupId != "" && fromdt == fmdt && todt == fmdt && salesr=="" && outletid=="")
-                    //{
-                    objmobile = (from f in context.feedback_FeedbackMaster
-                                     // where f.SalesRepresentative == salesr && f.OutletId == outletid && f.AddedDate >= fromdt && f.AddedDate <= todt
-                                 select new Feedback_MobileNo
-                                 {
-                                     MobileNo = f.MobileNo,
-                                     Datetime = f.AddedDate,
-                                     OutletName = f.OutletId,
-                                     SalesRName = f.SalesRepresentative
-                                 }).Distinct().ToList();
-
-                    // lstfeedbackmaster = context.feedback_FeedbackMaster.Distinct().ToList();
-                    //}
-                    //else 
-                    //{                        
                     if (salesr != "")
                     {
                         objmobile = (from f in objmobile
@@ -1677,74 +1690,106 @@ namespace BOTS_BL.Repository
                     foreach (var item in objmobile)
                     {
                         Feedback_Report objreport = new Feedback_Report();
+
                         string a = "";
                         string b = "";
                         string c = "";
                         string d = "";
                         int i = 0;
-
-                        if (Convert.ToString(queid[i]) != null)
+                        if (groupId != "1013")
                         {
-                            a = queid[i].ToString();
-                            i++;
+                            if (Convert.ToString(queid[i]) != null)
+                            {
+                                a = queid[i].ToString();
+                                i++;
+                            }
+                            else
+                            {
+                                a = "0";
+                            }
+                            if (queid.Count > i)
+                            {
+                                if (Convert.ToString(queid[i]) != null)
+                                {
+                                    b = queid[i].ToString();
+                                    i++;
+                                }
+                                else
+                                {
+                                    b = "0";
+                                }
+                            }
+                            if (queid.Count > i)
+                            {
+                                if (Convert.ToString(queid[i]) != null)
+                                {
+                                    c = queid[i].ToString();
+                                    i++;
+                                }
+                                else
+                                {
+                                    c = "0";
+                                }
+                            }
+                            if (queid.Count > i)
+                            {
+                                if (Convert.ToString(queid[i]) != null)
+                                {
+                                    d = queid[i].ToString();
+                                    i++;
+                                }
+                                else
+                                {
+                                    d = "0";
+                                }
+                            }
                         }
                         else
                         {
-                            a = "0";
+                            a = "1";
+                            b = "2";
                         }
-                        if (queid.Count > i)
+                        FeedbackData feedback = new FeedbackData();
+                        
+                        if (groupId != "1013")
                         {
-                            if (Convert.ToString(queid[i]) != null)
-                            {
-                                b = queid[i].ToString();
-                                i++;
-                            }
-                            else
-                            {
-                                b = "0";
-                            }
-                        }
-                        if (queid.Count > i)
-                        {
-                            if (Convert.ToString(queid[i]) != null)
-                            {
-                                c = queid[i].ToString();
-                                i++;
-                            }
-                            else
-                            {
-                                c = "0";
-                            }
-                        }
-                        if (queid.Count > i)
-                        {
-                            if (Convert.ToString(queid[i]) != null)
-                            {
-                                d = queid[i].ToString();
-                                i++;
-                            }
-                            else
-                            {
-                                d = "0";
-                            }
-                        }
-                        //var newf = context.feedback_FeedbackMaster.Where(x => x.MobileNo == item.MobileNo && x.AddedDate == item.Datetime).ToList();
-                        var feedback = (from f in context.feedback_FeedbackMaster
-                                        where f.MobileNo == item.MobileNo && f.AddedDate == item.Datetime
+                            feedback = (from f in context.feedback_FeedbackMaster
+                                            where f.MobileNo == item.MobileNo && DbFunctions.TruncateTime(f.AddedDate) == DbFunctions.TruncateTime(item.Datetime)
                                         group f by f.MobileNo into result
-                                        select new
+                                            select new FeedbackData
+                                            { 
+                                                Mobilenumber = result.Key,
+                                                q1 = result.Where(x => x.QuestionId == a).Select(x => x.QuestionPoints).FirstOrDefault(),
+                                                q2 = result.Where(x => x.QuestionId == b).Select(x => x.QuestionPoints).FirstOrDefault(),
+                                                q3 = result.Where(x => x.QuestionId == c).Select(x => x.QuestionPoints).FirstOrDefault(),
+                                                q4 = result.Where(x => x.QuestionId == d).Select(x => x.QuestionPoints).FirstOrDefault(),
+                                                salesR = result.Select(x => x.SalesRepresentative).FirstOrDefault(),
+                                                outletid = result.Select(x => x.OutletId).FirstOrDefault(),
+                                                howtoknow = result.Select(x => x.HowToKnowAbout).FirstOrDefault(),
+                                                datetime = result.Select(x => x.AddedDate).FirstOrDefault(),
+                                                comments = result.Select(x => x.Comments).FirstOrDefault(),
+                                            }).FirstOrDefault();
+                        }
+                        else
+                        {
+                            feedback = (from f in context.FeedBackMasters
+                                        where f.MobileNo == item.MobileNo && DbFunctions.TruncateTime(f.DOJ) == DbFunctions.TruncateTime(item.Datetime)
+                                        group f by f.MobileNo into result
+                                        select new FeedbackData
                                         {
                                             Mobilenumber = result.Key,
-                                            q1 = result.Where(x => x.QuestionId == a).Select(x => x.QuestionPoints).FirstOrDefault(),
-                                            q2 = result.Where(x => x.QuestionId == b).Select(x => x.QuestionPoints).FirstOrDefault(),
-                                            q3 = result.Where(x => x.QuestionId == c).Select(x => x.QuestionPoints).FirstOrDefault(),
-                                            q4 = result.Where(x => x.QuestionId == d).Select(x => x.QuestionPoints).FirstOrDefault(),
-                                            salesR = result.Select(x => x.SalesRepresentative).FirstOrDefault(),
+                                            qq1 = result.Where(x => x.QuestionId == "1").Select(x => x.QuestionPoints).FirstOrDefault(),
+                                            qq2 = result.Where(x => x.QuestionId == b).Select(x => x.QuestionPoints).FirstOrDefault(),
+                                            qq3 = result.Where(x => x.QuestionId == c).Select(x => x.QuestionPoints).FirstOrDefault(),
+                                            qq4 = result.Where(x => x.QuestionId == d).Select(x => x.QuestionPoints).FirstOrDefault(),
+                                            salesR = "",
                                             outletid = result.Select(x => x.OutletId).FirstOrDefault(),
-                                            howtoknow = result.Select(x => x.HowToKnowAbout).FirstOrDefault(),
-                                            datetime = result.Select(x => x.AddedDate).FirstOrDefault(),
-                                            comments = result.Select(x => x.Comments).FirstOrDefault(),
+                                            howtoknow = result.Select(x => x.HowToKonwAbout).FirstOrDefault(),
+                                            datetime = result.Select(x => x.DOJ).FirstOrDefault(),
+                                            comments = "",
                                         }).FirstOrDefault();
+                        }
+                    
                         if (feedback != null)
                         {
                             var invoiceamt = context.TransactionMasters.Where(x => x.MobileNo == feedback.Mobilenumber && x.Datetime == today).GroupBy(x => x.MobileNo)
@@ -1764,8 +1809,16 @@ namespace BOTS_BL.Repository
                             objreport.GroupId = groupId;
                             objreport.MemberName = custinfo.Select(x => x.custname).FirstOrDefault();
                             objreport.MobileNo = feedback.Mobilenumber;
-                            objreport.Q1 = feedback.q1;
-                            objreport.Q2 = feedback.q2;
+                            if (groupId != "1013")
+                            {
+                                objreport.Q1 = feedback.q1;
+                                objreport.Q2 = feedback.q2;
+                            }
+                            else
+                            {                               
+                                objreport.Q1 = Convert.ToInt32(feedback.qq1);
+                                objreport.Q2 = Convert.ToInt32(feedback.qq2);
+                            }
                             objreport.Q3 = feedback.q3;
                             objreport.Q4 = feedback.q4;
                             objreport.Source = feedback.howtoknow;
