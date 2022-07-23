@@ -60,7 +60,7 @@
                         </select>
                     </div>
                     <div class="col-sm-2">
-                        <input type="number" id="points" name="points" class="input50"/>
+                        <input type="number" id="points" name="points" class="input50" />
                     </div>
                 </div>
 
@@ -78,27 +78,27 @@
                             <button type="button" id="btnFilter" style="margin-left:15px;" class="btn btn-primary" onclick="ShowCount();"><b>FILTER</b></button>
                         </div>
                     </div>
-                        <div class="col-md-4 col-xl-4">
-                            <table style="border:2px solid black;width:70%">
-                                <tr style="border:2px solid black; ">
-                                    <td style="border:2px solid black;text-align:left;">
-                                        <span id="AllCount"></span>All Count
-                                    </td>
-                                    <td style="border:2px solid black;width:40%">
-                                        <span id="AllCountnum"></span>
-                                    </td>
-                                </tr>
-                                <tr style="border:2px solid black; ">
-                                    <td style="border:2px solid black;text-align:left;">
-                                        <span id="FiltCount"></span>Filtered Count
-                                    </td>
-                                    <td style="border:2px solid black;width:40%">
-                                        <span id="FiltCountnum"></span>
-                                    </td>
-                                </tr>
-                            </table>
-                        </div>
+                    <div class="col-md-4 col-xl-4">
+                        <table style="border:2px solid black;width:70%">
+                            <tr style="border:2px solid black; ">
+                                <td style="border:2px solid black;text-align:left;">
+                                    <span id="AllCount"></span>All Count
+                                </td>
+                                <td style="border:2px solid black;width:40%">
+                                    <span id="AllCountnum"></span>
+                                </td>
+                            </tr>
+                            <tr style="border:2px solid black; ">
+                                <td style="border:2px solid black;text-align:left;">
+                                    <span id="FiltCount"></span>Filtered Count
+                                </td>
+                                <td style="border:2px solid black;width:40%">
+                                    <span id="FiltCountnum"></span>
+                                </td>
+                            </tr>
+                        </table>
                     </div>
+                </div>
                 <div class="row" style="margin: 20px;">
                     <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
                         Script
@@ -111,37 +111,40 @@
                         <span id="current">0</span>
                     </div>
                 </div>
-                    <div class="row mt-2" style="margin-top : 20px;">
-                        <div id="divdaterange" class="col-md-2 col-xl-3">
-                            <label>Campaign From</label>                          
-                        </div>
-                        <div>
-                            <input type="date" id="txtEnrollfromdt" class="input50" placeholder="Start" onchange="ValidateDate();" /> &nbsp;&nbsp;&nbsp;
-                        </div>
-                        <div>
-                            <input type="date" id="txtEnrolltodt" class="input50" placeholder="End" onchange="ValidateDate1();"/> 
-                        </div>
+                <div class="row mt-2" style="margin-top : 20px;">
+                    <div id="divdaterange" class="col-md-2 col-xl-3">
+                        <label>Campaign From</label>
                     </div>
-
-                    <div class="row mt-2">
-                        <div class="col-md-3 col-xl-3">
-                            Campaign Name
-                        </div>
-                        <div class="col-md-6 col-xl-4">
-                            <input type="text" id="CampName" class="input50" placeholder="Enter Campaign Name" />
-                        </div>
-                        <div class="col-md-6 col-xl-4">
-                            <input type="hidden" id="CampId" class="input50" />
-                        </div>
+                    <div>
+                        <input type="date" id="txtEnrollfromdt" class="input50" placeholder="Start" onchange="ValidateDate();" /> &nbsp;&nbsp;&nbsp;
                     </div>
-                <div class="row" style="margin-top : 20px;">
+                    <div>
+                        <input type="date" id="txtEnrolltodt" class="input50" placeholder="End" onchange="ValidateDate1();" />
+                    </div>
                 </div>
-                    <div class="col-md-3 col-xl-4">
-                        <div class="button">
-                            <button type="button" id="btnSave" style="margin-left:15px;" class="btn btn-primary" onclick="SaveValidate();"><b>SAVE</b></button>
-                            @*<button type="button" id="btnDownload" style="margin-left:15px;" class="btn btn-primary" onclick="DownLoad();"><b>DOWNLOAD</b></button>*@
-                            <button type="button" id="btnSendDLT" style="margin-left:15px;" class="btn btn-primary" onclick="SendDLT();"><b>Send To DLT</b></button>
-                        </div>
+
+                <div class="row mt-2">
+                    <div class="col-md-3 col-xl-3">
+                        Campaign Name
+                    </div>
+                    
+                    <div>
+                        <input type="text" id="CampName" class="input50" placeholder="Enter Campaign Name" />
+                    </div>
+                   
+                    <div>
+                        <input type="hidden" id="CampId" class="input50" />
+                    </div>
+                </div>
+        <div class="row" style="margin-top : 20px;">
+        </div>
+            <div class="col-md-6 col-xl-6">
+                <div class="button">
+                    <button type="button" id="btnSave" style="margin-left:15px;" class="btn btn-primary" onclick="SaveValidate();"><b>SAVE</b></button>
+                    @*<button type="button" id="btnDownload" style="margin-left:15px;" class="btn btn-primary" onclick="DownLoad();"><b>DOWNLOAD</b></button>*@
+                <button type="button" id="btnSendTestSMS" style="margin-left:15px;" class="btn btn-primary" onclick="SendTestValidate();" disabled><b>TEST SMS</b></button>
+                <button type="button" id="btnSendDLT" style="margin-left:15px;" class="btn btn-primary" onclick="SendDLTValidate();" disabled><b>SEND SMS</b></button>
+            </div>
                     </div>
                     
                             
@@ -151,7 +154,8 @@
             @*</div>*@
         </div>
     </div>
-    <script>
+<script>
+
         function BaseCalc() {
             var val = document.getElementById("BaseType").value;
             var div = document.getElementById("divPoints");
@@ -275,6 +279,20 @@
         }
     }
 
+        function SendDLTValidate() {
+            var CampId = $("#CampId").val();
+            if (CampId == '') {
+                cuteAlert({
+                    type: "error",
+                    title: "Error Title",
+                    message: "Campaign Id Not Found",
+                    buttonText: "Okay"
+                })
+            }
+            else {
+                SendDLT();
+            }
+        }
 
     $(document).ready(function () {
             $("#ddlOutletList").on("change", function () {
@@ -374,12 +392,16 @@
         if (document.getElementById("rdnSMS").checked) {
             SMSType = $("#rdnSMS").val();
         }
+        else if (document.getElementById("rdnVSMS").checked) {
+            SMSType = $("#rdnVSMS").val();
+        }
         else if (document.getElementById("rdnWA").checked) {
             SMSType = $("#rdnWA").val();
         }
         else if (document.getElementById("rdnVWA").checked) {
             SMSType = $("#rdnVWA").val();
         }
+
 
 
         var FilterData = [];
@@ -415,7 +437,14 @@
                             title: "Success Title",
                             message: "Campaign Saved" + response[0].CampaignId,
                             buttonText: "Okay"
+
                         })
+
+                        if (SMSType == 1) {
+                            $("#btnSave").prop('disabled', true);
+                            $("#btnSendTestSMS").prop('disabled', false);
+                            $("#btnSendDLT").prop('disabled', false);
+                        }
 
                     }
                     else {
@@ -446,5 +475,109 @@
         //alert(theCount);
         $("#current").text(theCount);
     });
-    </script>
+
+    function SendDLT(){
+            var CampaignId = $("#CampId").val();
+
+            var FilterData = [];
+            item = {};
+            item["CampaignId"] = CampaignId;
+
+            FilterData.push(item);
+            var data = JSON.stringify(FilterData);
+
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("SendToDLT", "Campaigns")',
+                data: '{jsonData: ' + JSON.stringify(data) + '}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+
+                success: function (response) {
+                    console.log(response);
+                    if (response != null) {
+
+                        cuteAlert({
+                            type: "success",
+                            title: "Success Title",
+                            message: "Successfully Send To DLT",
+                            buttonText: "Okay"
+
+                        })
+                    }
+                    else {
+                        cuteAlert({
+                            type: "error",
+                            title: "Error Title",
+                            message: "DLT Not Send",
+                            buttonText: "Okay"
+                        })
+                    }
+                },
+                error: function (response) {
+                    console.log(response.responseText);
+                }
+            });
+    }
+
+    function SendTestValidate() {
+        var CampId = $("#CampId").val();
+        if (CampId == '') {
+            cuteAlert({
+                type: "error",
+                title: "Error Title",
+                message: "Campaign Id Not Found",
+                buttonText: "Okay"
+            })
+        }
+        else {
+            SendTestSMS();
+        }
+    }
+
+    function SendTestSMS(){
+            var CampaignId = $("#CampId").val();
+
+            var FilterData = [];
+            item = {};
+            item["CampaignId"] = CampaignId;
+
+            FilterData.push(item);
+            var data = JSON.stringify(FilterData);
+
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("SendTestSMS", "Campaigns")',
+                data: '{jsonData: ' + JSON.stringify(data) + '}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+
+                success: function (response) {
+                    console.log(response);
+                    if (response != null) {
+
+                        cuteAlert({
+                            type: "success",
+                            title: "Success Title",
+                            message: "Message Will be send after 15 min",
+                            buttonText: "Okay"
+
+                        })
+                    }
+                    else {
+                        cuteAlert({
+                            type: "error",
+                            title: "Error Title",
+                            message: "Message Not Send",
+                            buttonText: "Okay"
+                        })
+                    }
+                },
+                error: function (response) {
+                    console.log(response.responseText);
+                }
+            });
+    }
+
+</script>
 
