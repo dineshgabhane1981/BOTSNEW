@@ -161,4 +161,17 @@ namespace BOTS_BL.Models
         public string Status { get; set; }
 
     }
+    public class DLTDetailsLst
+    {
+        public string CampaignId { get; set; }
+        public string CampaignName { get; set; }
+        public string Script { get; set; }
+        public string DLTScript { get; set; }
+        public string DLTStatus { get; set; }
+        public string DLTRejectedReson { get; set; }
+        public string TemplateID { get; set; }
+        public string TemplateName { get; set; }
+        public string TemplateType { get; set; }
+        public bool Status { get; set; }
+    }
 }

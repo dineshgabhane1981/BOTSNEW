@@ -9,6 +9,7 @@ using System.Data.Entity.Migrations;
 using System.Data.SqlClient;
 
 
+
 namespace BOTS_BL.Repository
 {
 
@@ -523,6 +524,207 @@ namespace BOTS_BL.Repository
             return CM;
         }
 
+        public bool SendDLTData (string CampaignId,string GroupId, string connectionString)
+        {
+            SPResponse SR = new SPResponse();
+            bool status = new bool();
+            using (var context = new BOTSDBContext(connectionString))
+            {
+                try
+                {
+                   // var CM1 = context.CampaignMasters.Where(x => x.EndDate >= CDate);
+                    var CM1 = context.CampaignMasters.Where(x => x.CampaignId == CampaignId).FirstOrDefault();
+                    
+                    if(CM1.DLTStatus == null)
+                    {
+                        CM1.DLTStatus = "Process";
+                        context.CampaignMasters.AddOrUpdate(CM1);
+                        context.SaveChanges();
+                    }
 
+                    
+                    status = true;
+                }
+                catch (Exception ex)
+                {
+                    newexception.AddException(ex, GroupId);
+                }
+
+            }
+            return status;
+        }
+
+        public List<DLTDetailsLst> CampDLTDetailsLst(string GroupId, string connectionString)
+        {
+            List<DLTDetailsLst> DLTLst = new List<DLTDetailsLst>();
+
+            using (var context = new BOTSDBContext(connectionString))
+            {
+                try
+                {
+                    
+                    var CM1 = context.CampaignMasters.Where(x => x.DLTStatus != null).Select(x => new { x.CampaignId, x.CampaignName, x.Script, x.DLTScript, x.DLTStatus, x.DLTRejectReson, x.TemplateID, x.TemplateName, x.TemplateType }).ToList();
+                    foreach (var item in CM1)
+                    {
+                        DLTDetailsLst itemData = new DLTDetailsLst();
+                        itemData.CampaignId = item.CampaignId;
+                        itemData.CampaignName = item.CampaignName;
+                        itemData.Script = item.Script;
+                        itemData.DLTScript = item.DLTScript;
+                        itemData.DLTStatus = item.DLTStatus;
+                        itemData.DLTRejectedReson = item.DLTRejectReson;
+                        itemData.TemplateID = item.TemplateID;
+                        itemData.TemplateName = item.TemplateName;
+                        itemData.TemplateType = item.TemplateType;
+                        DLTLst.Add(itemData);
+
+                    }
+
+
+                }
+                catch (Exception ex)
+                {
+                    newexception.AddException(ex, GroupId);
+                }
+
+            }
+            return DLTLst;
+
+        }
+
+        public List<DLTDetailsLst> UpdateCampDLCLinkDLTStatus(string Campid, string status, string reason,string Groupid,string connectionString)
+        {
+            List<DLTDetailsLst> CM = new List<DLTDetailsLst>();
+            bool sts = new bool();
+            sts = false;
+            using (var context = new BOTSDBContext(connectionString))
+            {
+                try
+                {                 
+                    var CM2 = context.CampaignMasters.Where(x => x.CampaignId == Campid).FirstOrDefault();
+                    if (CM2.DLTStatus == "Process")
+                    {
+                        CM2.DLTStatus = status;
+                    }
+                    CM2.DLTStatus = status;
+                    CM2.DLTRejectReson = reason;
+                    context.CampaignMasters.AddOrUpdate(CM2);
+                    context.SaveChanges();
+                    sts = true;
+                    var CM1 = context.CampaignMasters.Where(x => x.CampaignId == Campid).ToList();
+                    foreach (var item in CM1)
+                    {
+                        DLTDetailsLst itemData = new DLTDetailsLst();
+                        itemData.CampaignId = Campid;
+                        itemData.Status = sts;
+                        itemData.DLTStatus = status;
+                        CM.Add(itemData);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    newexception.AddException(ex, Groupid);
+                }
+                return CM;
+            }
+            
+        }
+
+        public List<DLTDetailsLst> UpdateCampDLTRejectStat(string Campid, string status, string reason, string Groupid, string connectionString)
+        {
+            List<DLTDetailsLst> CM = new List<DLTDetailsLst>();
+            bool sts = new bool();
+            sts = false;
+            using (var context = new BOTSDBContext(connectionString))
+            {
+                try
+                {
+                    var CM2 = context.CampaignMasters.Where(x => x.CampaignId == Campid).FirstOrDefault();
+                    
+                    CM2.DLTStatus = status;
+                    CM2.DLTRejectReson = reason;
+                    context.CampaignMasters.AddOrUpdate(CM2);
+                    context.SaveChanges();
+                    sts = true;
+                    var CM1 = context.CampaignMasters.Where(x => x.CampaignId == Campid).ToList();
+                    foreach (var item in CM1)
+                    {
+                        DLTDetailsLst itemData = new DLTDetailsLst();
+                        itemData.CampaignId = Campid;
+                        itemData.Status = sts;
+                        //itemData.DLTStatus = status;
+                        CM.Add(itemData);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    newexception.AddException(ex, Groupid);
+                }
+                return CM;
+            }
+
+        }
+
+        public bool SaveDLCCampaignDetails(string Campid, List<DLTDetailsLst> CampDetails, string GroupId, string connectionString)
+        {
+            bool status;
+            status = false;
+            using (var context = new BOTSDBContext(connectionString))
+            {
+                try
+                {
+                    var CM2 = context.CampaignMasters.Where(x => x.CampaignId == Campid).FirstOrDefault();
+
+                    foreach (var item in CampDetails)
+                    {
+                        //DLTDetailsLst itemData = new DLTDetailsLst();
+                        
+                        //CM2.CampaignName = item.CampaignName;
+                        CM2.DLTStatus = item.DLTStatus;
+                        CM2.TemplateID = item.TemplateID;
+                        CM2.TemplateName = item.TemplateName;
+                        CM2.TemplateType = item.TemplateType;
+                        CM2.DLTScript = item.DLTScript;
+                        //CM2.DLTRejectReson = item.DLTRejectedReson;
+                        //itemData.DLTStatus = status;
+                       // CM.Add(itemData);
+                    }
+
+                    //CM2.DLTStatus = status;
+                    //CM2.DLTRejectReson = reason;
+                    context.CampaignMasters.AddOrUpdate(CM2);
+                    context.SaveChanges();
+                    status = true;
+                    //var CM1 = context.CampaignMasters.Where(x => x.CampaignId == Campid).ToList();
+                    
+                }
+                catch (Exception ex)
+                {
+                    newexception.AddException(ex, GroupId);
+                }
+                return status;
+            }
+        }
+
+        public List<CampaignSaveDetails> SendTestSMSData(string CampaignId, string GroupId, string connstr)
+        {
+            List<CampaignSaveDetails> Data = new List<CampaignSaveDetails>();
+
+            //int Points1 = Int32.Parse(Points);
+
+            try
+            {
+                using (var context = new BOTSDBContext(connstr))
+                {
+                    Data = context.Database.SqlQuery<CampaignSaveDetails>("sp_BOTS_SendCampTestSMS @pi_CampaignId", new SqlParameter("@pi_CampaignId", CampaignId)).ToList<CampaignSaveDetails>();
+
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, GroupId);
+            }
+            return Data;
+        }
     }
 }
