@@ -92,6 +92,9 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="PresentationCore" />
+    <Reference Include="Rotativa, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Rotativa.1.7.3\lib\net461\Rotativa.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.AppContext, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\System.AppContext.4.3.0\lib\net46\System.AppContext.dll</HintPath>
@@ -276,6 +279,7 @@
     <Content Include="Content\assets\images\itops.png" />
     <Content Include="Content\assets\images\logo-inverse.png" />
     <Content Include="Content\assets\images\logo.png" />
+    <Content Include="Content\assets\images\LoyaltyProgress.png" />
     <Content Include="Content\assets\images\Man.jpg" />
     <Content Include="Content\assets\images\NoProfile.jpg" />
     <Content Include="Content\assets\images\ops.jpg" />
@@ -348,6 +352,10 @@
     <Content Include="Content\assets\fonts\Pe-icon-7-stroke.woff" />
     <Content Include="Downloads\Bulkupload.xlsx" />
     <Content Include="Downloads\BulkUpload.xls" />
+    <Content Include="Rotativa\help-wkhtmltoimage.txt" />
+    <Content Include="Rotativa\help-wkhtmltopdf.txt" />
+    <Content Include="Rotativa\wkhtmltoimage.exe" />
+    <Content Include="Rotativa\wkhtmltopdf.exe" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Scripts\cute-alert-master\LICENSE" />
@@ -360,6 +368,7 @@
     <Content Include="Content\bootstrap.css.map" />
     <Content Include="Content\bootstrap-theme.min.css.map" />
     <Content Include="Content\bootstrap-theme.css.map" />
+    <Content Include="App_Browsers\qt.browser" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />
@@ -468,6 +477,7 @@
     <Content Include="Views\CustomerOnBoarding\_LogoUpload.cshtml" />
     <Content Include="Views\CustomerOnBoarding\_SummaryView.cshtml" />
     <Content Include="Views\TestingModule\_PointRuleDetails.cshtml" />
+    <Content Include="Views\CustomerOnBoarding\CustomerTerms.cshtml" />
     <None Include="_bin_deployableAssemblies\x86\sqlcese40.dll" />
     <None Include="_bin_deployableAssemblies\x86\sqlceqp40.dll" />
     <None Include="_bin_deployableAssemblies\x86\sqlceme40.dll" />
@@ -621,6 +631,7 @@
     <Folder Include="App_Data\" />
     <Folder Include="CustomerDocuments\" />
     <Folder Include="Models\" />
+    <Folder Include="Temp\" />
     <Folder Include="Views\testSinglepagews\" />
     <Folder Include="Views\Test\" />
   </ItemGroup>

@@ -18,6 +18,8 @@ using System.Data;
 using System.Linq;
 using System.Net;
 using System.Net.Mime;
+using Rotativa;
+using System.IO;
 
 namespace WebApp.Controllers.OnBoarding
 {
@@ -360,15 +362,13 @@ namespace WebApp.Controllers.OnBoarding
                 {
                     objData.bots_TblGroupMaster.UpdatedBy = userDetails.LoginId;
                     objData.bots_TblGroupMaster.CreatedDate = DateTime.Now;
-
                 }
                 else
                 {
                     objData.bots_TblGroupMaster.CreatedBy = userDetails.LoginId;
                     objData.bots_TblGroupMaster.CreatedDate = DateTime.Now;
-                    objData.bots_TblGroupMaster.IsLive = false;
                 }
-
+                objData.bots_TblGroupMaster.IsLive = false;
                 if (objData.bots_TblGroupMaster.CustomerStatus == "CSUpdate")
                 {
                     object[] objOutletData = (object[])json_serializer.DeserializeObject(objData.bots_TblGroupMaster.OutletData);
@@ -390,7 +390,6 @@ namespace WebApp.Controllers.OnBoarding
                         objItem.City = Convert.ToString(item["City"]);
                         objItem.PinCode = Convert.ToString(item["PinCode"]);
                         objItem.State = Convert.ToString(item["State"]);
-
 
                         objLstOutlet.Add(objItem);
                     }
@@ -429,12 +428,13 @@ namespace WebApp.Controllers.OnBoarding
                         }
                         brandId++;
                     }
-
                 }
                 if (GroupdId > 0 && objData.bots_TblGroupMaster.CustomerStatus == "CS")
                 {
                     SendEmail(GroupdId);
+                    SendSalesEmailToCustomer(Convert.ToInt32(GroupdId));
                 }
+                //SendSalesEmailToCustomer(Convert.ToInt32(GroupdId));
                 TempData["status"] = true;
             }
             catch (Exception ex)
@@ -445,8 +445,6 @@ namespace WebApp.Controllers.OnBoarding
             }
             CommonFunctions common = new CommonFunctions();
             var groupId = common.EncryptString(Convert.ToString(GroupdId));
-            //return View("Index", objData);
-            //return RedirectToAction("Index", "CustomerOnBoarding", groupId);
             return RedirectToAction("Index", "CustomerOnBoarding", new { @groupId = groupId });
         }
 
@@ -627,6 +625,95 @@ namespace WebApp.Controllers.OnBoarding
             {
                 newexception.AddException(ex, "Onboarding Email Error");
             }
+        }
+
+        public void SendSalesEmailToCustomer(int groupId)
+        {
+            OnBoardingSalesViewModel objData = new OnBoardingSalesViewModel();
+            CommonFunctions common = new CommonFunctions();
+            var NewgroupId = Convert.ToString(groupId);
+            objData.bots_TblGroupMaster = OBR.GetGroupMasterDetails(NewgroupId);
+            objData.bots_TblDealDetails = OBR.GetDealMasterDetails(NewgroupId);
+            objData.bots_TblPaymentDetails = OBR.GetPaymentDetails(NewgroupId);
+            objData.objRetailList = OBR.GetRetailDetails(NewgroupId);
+            var a = new ViewAsPdf();
+            a.ViewName = "CustomerTerms";
+            a.Model = objData;
+
+            var pdfBytes = a.BuildFile(this.ControllerContext);
+
+            // Optionally save the PDF to server in a proper IIS location.
+            var fileName = objData.bots_TblGroupMaster.GroupName + ".pdf";
+            var path = Server.MapPath("~/Temp/" + fileName);
+            System.IO.File.WriteAllBytes(path, pdfBytes);
+
+            StringBuilder sb = new StringBuilder();
+            sb.Append("Dear <b>" + objData.bots_TblGroupMaster.OwnerName + "</b>,");
+            sb.Append("<br/>");
+            sb.Append("<br/>");
+            sb.Append("Retail Name : <b>" + objData.bots_TblGroupMaster.GroupName + "</b>");
+            sb.Append("<br/>");
+            sb.Append("<br/>");
+            sb.Append("Legal Name : <b>" + objData.bots_TblGroupMaster.GroupName + "</b>");
+            sb.Append("<br/>");
+            sb.Append("<br/>");
+            sb.Append("City : <b>" + objData.bots_TblGroupMaster.CityName + "</b>");
+            sb.Append("<br/>");
+            sb.Append("<br/>");
+            sb.Append("Outlet Count : <b>" + objData.objRetailList.Count + "</b> Outlets");
+            sb.Append("<br/>");
+            sb.Append("<br/>");
+            sb.Append("We appreciate your decision to join hands with <b>Blue Ocktopus</b>, which has helped 200+ retail friends to take advantage of our sophisticated Loyalty & Data driven tool. We are confident that we can replicate the same for you, as well!!");
+            sb.Append("<br/>");
+            sb.Append("<br/>");
+            sb.Append("Attached for your reference are the Programme commercials, timelines and key things for your ready perusal.");
+            sb.Append("<br/>");
+            sb.Append("<br/>");
+            sb.Append("We value you as our esteemed partner & look forward for a fruitful business association.");
+            sb.Append("<br/>");
+            sb.Append("<br/>");
+            sb.Append("For any assistance required, please feel free to connect with us.");
+            sb.Append("<br/>");
+            sb.Append("<br/>");
+            sb.Append("Thanks & Regards,");
+            sb.Append("<br/>");
+            sb.Append("<br/>");
+            sb.Append("BLUE OCKTOPUS.");
+            sb.Append("<br/>");
+            sb.Append("<br/>");
+            sb.Append("<br/>");
+            sb.Append("<br/>");
+
+            sb.Append("** This is an Auto generated email. Do not reply to this email id.");
+
+            var from = ConfigurationManager.AppSettings["FrmEmailOnboarding"].ToString();
+            var PWD = ConfigurationManager.AppSettings["FrmEmailOnboardingPwd"].ToString();
+            MailMessage mail = new MailMessage();
+            MailAddress fromMail = new MailAddress(from);
+            mail.From = fromMail;
+
+            mail.To.Add(objData.bots_TblGroupMaster.OwnerEmailId);
+
+            System.Net.Mail.Attachment attachment;
+            attachment = new System.Net.Mail.Attachment(path);
+            mail.Attachments.Add(attachment);
+
+            //mail.From = from;
+            mail.Subject = "Welcome to Blue Ocktopus | Programme Terms & Key Details";// + GroupDetails.GroupName;
+            mail.SubjectEncoding = System.Text.Encoding.Default;
+            mail.Body = sb.ToString();
+            mail.IsBodyHtml = true;
+            mail.BodyEncoding = System.Text.Encoding.GetEncoding("utf-8");
+            SmtpClient smtp = new SmtpClient();
+            smtp.Host = "smtp.zoho.com";
+            smtp.EnableSsl = true;
+            NetworkCredential networkCredential = new NetworkCredential(from, PWD);
+            smtp.UseDefaultCredentials = true;
+            smtp.Credentials = networkCredential;
+            smtp.Port = 587;
+            smtp.Send(mail);
+
+
         }
 
         public ActionResult CSEditing(string groupId)
@@ -1993,6 +2080,7 @@ namespace WebApp.Controllers.OnBoarding
             OnBoardingSalesViewModel objData = new OnBoardingSalesViewModel();
             try
             {
+                //return RedirectToAction("CustomerTerms", new { groupId = GroupId });
                 CommonFunctions common = new CommonFunctions();
                 GroupId = common.DecryptString(GroupId);
 
@@ -2127,7 +2215,7 @@ namespace WebApp.Controllers.OnBoarding
                 objData.InactiveScriptCount = ICount;
                 objData.OnlyOnceInactiveScriptCount = OOCount;
                 objData.NonRedemptionInactiveScriptCount = NRCount;
-                objData.PointExpiryScriptCount = PECount;               
+                objData.PointExpiryScriptCount = PECount;
 
                 // Velocity Checks
                 objData.BOTS_TblVelocityChecksConfig = OBR.GetVelocityChecksData(GroupId);
@@ -2148,6 +2236,10 @@ namespace WebApp.Controllers.OnBoarding
                     objStandardRulesList.Add(objItem);
                 }
                 objData.objStandardRulesList = objStandardRulesList;
+
+
+
+
             }
             catch (Exception ex)
             {
@@ -2522,7 +2614,18 @@ namespace WebApp.Controllers.OnBoarding
             return new JsonResult() { Data = result, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
 
+        public ActionResult CustomerTerms(string groupId)
+        {
+            OnBoardingSalesViewModel objData = new OnBoardingSalesViewModel();
+            CommonFunctions common = new CommonFunctions();
+            groupId = common.DecryptString(groupId);
+            objData.bots_TblGroupMaster = OBR.GetGroupMasterDetails(groupId);
+            objData.bots_TblDealDetails = OBR.GetDealMasterDetails(groupId);
+            objData.bots_TblPaymentDetails = OBR.GetPaymentDetails(groupId);
+            objData.objRetailList = OBR.GetRetailDetails(groupId);
 
+            return View(objData);
+        }
     }
 }
 

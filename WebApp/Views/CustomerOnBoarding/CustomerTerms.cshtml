@@ -1,0 +1,117 @@
+﻿@model WebApp.ViewModel.OnBoardingSalesViewModel
+@using System.Globalization
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title></title>
+    <link href="~/Content/main.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css" />
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script type="text/javascript" src="~/Content/assets/scripts/main.js"></script>
+    <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+    <link href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" rel="stylesheet" />
+    <script src="~/Scripts/cute-alert-master/cute-alert.js"></script>
+    <link href="~/Scripts/cute-alert-master/style-alert.css" rel="stylesheet" />
+</head>
+<body>    
+    <div class="col-lg-10 col-md-10" style="border: 1px solid grey; border-radius: 10px; padding: 10px;">
+        <table border="1" style="width:100%; ">
+            <tr>
+                <th style="text-align: center; font-size: 20px; background-color: #C6D9F1; ">Assignment Details</th>
+            </tr>
+            <tr>
+                <td>Sales Manager:<b><i> @Model.bots_TblGroupMaster.SourceByName </i></b></td>
+            </tr>
+            <tr>
+                <td>Customer Success Manager:  <b><i> @Model.bots_TblGroupMaster.AssignedCSName </i></b></td>
+            </tr>
+            <tr>
+                <th style="text-align: center; font-size: 20px; background-color: #C6D9F1; ">Commercials Details</th>
+            </tr>
+            <tr>
+                <td>Annual Program Management:<b><i> Rs. @String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(Model.bots_TblDealDetails.LoyaltyFees)) </i></b></td>
+            </tr>
+            <tr>
+                @if (Model.bots_TblDealDetails.PaymentStatus == "Pending")
+                {
+                    var balance = Model.bots_TblDealDetails.TotalFeesB - @Model.bots_TblDealDetails.AmountReceived;
+                    <td>Balance payment amount:  <b><i>@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(balance)) </i></b></td>
+                }
+                else
+                {
+                    <td>Balance payment amount:  <b><i>Rs. 00 </i></b></td>
+                }
+            </tr>
+            <tr>
+                <td>Incremental outlet charges:<b><i> Rs. 30,000 </i></b></td>
+            </tr>
+            <tr>
+                <td>
+                    <b><i>SMS/WA unit fees structure:</i></b> <br />
+                    &nbsp;&nbsp; &nbsp;- SMS <code>@@</code>.16ps <br />
+                    &nbsp;&nbsp;&nbsp; - Whatsapp <code>@@</code>.24ps
+                </td>
+            </tr>
+            <tr>
+                <th style="text-align: center; font-size: 20px; background-color: #C6D9F1; ">INCLUSIONS</th>
+            </tr>
+            <tr>
+                <td>
+                    <ul>
+                        <li>Loyalty platform</li>
+                        <li>Program Dashboard (<a href="https://blueocktopus.in/bots">https://blueocktopus.in/bots</a>)</li>
+                        <li>Digital Loyalty Card weblink (which can go as a link in all transaction / promotional messages) </li>
+                        <li>Campaign Management (Data-led, Festival, Alerts etc campaigns along with DLT*, in case of SMS)</li>
+                        <li>SMS & WhatsApp integration at No extra cost</li>
+                        <li>Free : <b><i> @Model.bots_TblGroupMaster.NoOfFreeSMS</i></b> SMS /  <b><i> @Model.bots_TblGroupMaster.NoOfFreeWhatsAppMsg </i></b> Whatsapp</li>
+                        <li>DLT for SMS script will be done, provided SMS pack is purchased from BO</li>
+                    </ul>
+                </td>
+            </tr>
+            <tr>
+                <th style="text-align: center; font-size: 20px; background-color: #C6D9F1; ">TIMELINES</th>
+            </tr>
+            <tr>
+                <td>
+                    Go Live period is <b><i>15 working</i></b> days from the date of receipt of advance or filled configuration sheet,
+                    whichever is later, <b><i>subject to all the approvals & support received in time.</i></b>
+                    <img src="~/Content/assets/images/LoyaltyProgress.png" />
+                </td>
+
+            </tr>
+            <tr>
+                <th style="text-align: center; font-size: 20px; background-color: #C6D9F1; ">General Terms & Conditions</th>
+            </tr>
+            <tr>
+                <td>
+                    <ul>
+                        <li>The validity of the  program will be for 12 months from the Training & Testing completion date</li>
+                        <li>Prices quoted are exclusive of taxes, GST @@ 18% is applicable at the time of billing & shall be charged</li>
+                        <li>Order once placed cannot be cancelled & no refund will be done</li>
+                        <li>The proposal does not include any Hardware, database licenses, system software or third-party tools</li>
+                        <li>For any reason if the programme start date is above 30 days from the Training & Testing completion date then a nominal fee of Rs. 1100 per month will be charged till the program is LIVE</li>
+                        <li>The Programme Training & Testing will be done via Anydesk only. Physical Training at outlets will be charged at Rs. 10/km from our corporate office, minimum fee will be Rs. 500 per visit</i></b> Whatsapp</li>
+                        <li>Unit cost of SMS/Whatsapp is a function of third-party service provider. Any increase or decrease in the same will be communicated and billed accordingly</li>
+                        <li>In case, you opt to use your own SMS/Whatsapp service provider, then Blue Ocktopus will not be responsible for any backend support service or recharge of the SMS/Whatsapp packs/ Integration/ Delivery Responsibility/ DLT</li>
+                        <li>Any additional or new development will be charged separately on man hour basis</li>
+                        <li>New physical store (outlet) or e-commerce/Mobile App will be charged on agreed per outlet basis</li>
+                        <li>Any integration with website / mobile app / ecomm / ERP / any other system will be one-time fees of Rs. 25,000 per integration</li>
+                        <li>In case, you opt to use your SMS or Whatsapp service provider, we will charge a one-time integration fees of Rs. 5,000 per integration</li>
+                        <li><b>Payment terms:</b> All invoices raised related to the Program will have to be paid <b>within 7 days</b> of the invoice date. <b>If not paid within 7 days from the invoice date, Late Fee of 2% per month on the invoice amount will be applicable.</b></li>
+                        <li>Tax Invoice will be shared only when the entire payment including statutory taxes are made & SMS/WA/Verified WA recharge as per the available recharge packs</li>
+                        
+                    </ul>
+                </td>
+            </tr>
+        </table>
+    </div>
+</body>
+</html>
