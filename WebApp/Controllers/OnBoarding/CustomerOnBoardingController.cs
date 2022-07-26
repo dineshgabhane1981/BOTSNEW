@@ -2488,7 +2488,7 @@ namespace WebApp.Controllers.OnBoarding
 
         public ActionResult CustomerApprovalConfiguration(string groupId, string custMobileNo, string otp)
         {
-            bool result = false;
+            NewCustDetails result = new NewCustDetails();
             try
             {
                 var status = DR.VerifyOTP(custMobileNo, Convert.ToInt32(otp));
@@ -2501,13 +2501,21 @@ namespace WebApp.Controllers.OnBoarding
                         result = OBR.CreateCustomerDatabase(groupId);
 
                         //Send Email
-                        var CSName = OBR.GetAssignedCSNameForOnboarding(groupId);
-                        var CSHead = OBR.GetCSHeadEmailId();
-                        var GroupName = OBR.GetOnboardingGroupName(groupId);
-                        var CSEmail = CSHead + "," + CSName;
-                        var message = "Configuration Approved By Customer for Group - " + GroupName;
-                        var subject = "Configuration Approved By Customer - " + GroupName;
-                        var isEmail = SendEmailOnBoarding(CSEmail, subject, message);
+                        if (result.result)
+                        {
+                            var CSName = OBR.GetAssignedCSNameForOnboarding(groupId);
+                            var CSHead = OBR.GetCSHeadEmailId();
+                            var GroupName = OBR.GetOnboardingGroupName(groupId);
+                            var CSEmail = CSHead + "," + CSName;
+                            var message = "Configuration Approved By Customer for Group - " + GroupName;
+                            var subject = "Configuration Approved By Customer - " + GroupName;
+                            var isEmail = SendEmailOnBoarding(CSEmail, subject, message);
+                            var opssubject = "Integration Details - " + GroupName;
+
+                            //Send email to OPS
+                            var isOPSEmail = SendEmailToOPS("operations@blueocktopus.in", opssubject, result);
+
+                        }
                     }
                 }
             }
@@ -2515,7 +2523,7 @@ namespace WebApp.Controllers.OnBoarding
             {
                 newexception.AddException(ex, "CustomerApprovalConfiguration");
             }
-            return new JsonResult() { Data = result, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
+            return new JsonResult() { Data = result.result, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
 
         public bool SendEmailOnBoarding(string to, string subject, string message)
@@ -2559,6 +2567,61 @@ namespace WebApp.Controllers.OnBoarding
             return status;
         }
 
+        public bool SendEmailToOPS(string to, string subject,NewCustDetails objData)
+        {
+            bool status = false;
+            try
+            {
+                var from = ConfigurationManager.AppSettings["FrmEmailOnboarding"].ToString();
+                var PWD = ConfigurationManager.AppSettings["FrmEmailOnboardingPwd"].ToString();
+                using (MailMessage mail = new MailMessage(from, to))
+                {
+                    StringBuilder str = new StringBuilder();
+                    str.AppendLine("Dear Sir/Madam,");
+                    str.AppendLine();
+                    str.AppendLine("Please find below Integration details");
+                    str.AppendLine();
+                    str.AppendLine("Billing Partner Url - "+objData.BillingPartnerUrl);
+                    str.AppendLine();
+                    str.AppendLine("DLC Link - " + objData.DLCLink);
+                    str.AppendLine();
+                    foreach(var item in objData.lstCounterIdDetails)
+                    {
+                        str.AppendLine("Outlet Name - " + item.OutletName);
+                        str.AppendLine();
+                        str.AppendLine("CounterId - " + item.CounterId);
+                        str.AppendLine();
+                        str.AppendLine("Securitykey - " + item.Securitykey);
+                        str.AppendLine();
+                        str.AppendLine();
+                    }
+                    str.AppendLine();
+                    str.AppendLine("Regards,");
+                    str.AppendLine(" - BlueOcktopus Team");
+
+                    mail.Subject = subject;
+                    mail.SubjectEncoding = System.Text.Encoding.Default;
+                    mail.Body = str.ToString();
+                    mail.IsBodyHtml = false;
+                    mail.BodyEncoding = System.Text.Encoding.GetEncoding("utf-8");
+                    SmtpClient smtp = new SmtpClient();
+                    smtp.Host = "smtp.zoho.com";
+                    smtp.EnableSsl = true;
+                    NetworkCredential networkCredential = new NetworkCredential(from, PWD);
+                    smtp.UseDefaultCredentials = true;
+                    smtp.Credentials = networkCredential;
+                    smtp.Port = 587;
+                    smtp.Send(mail);
+
+                    status = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "CustomerApprovalConfiguration");
+            }
+            return status;
+        }
         public ActionResult SaveOutletDataConfig(string jsonData)
         {
             bool result = false;

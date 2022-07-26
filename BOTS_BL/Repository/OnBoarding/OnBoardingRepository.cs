@@ -2193,8 +2193,9 @@ namespace BOTS_BL.Repository
             return objData;
         }
 
-        public bool CreateCustomerDatabase(string GroupId)
+        public NewCustDetails CreateCustomerDatabase(string GroupId)
         {
+            NewCustDetails objData = new NewCustDetails();
             bool status = false;
 
             var connStr = ConfigurationManager.ConnectionStrings["CommonDBContext"].ToString();
@@ -2210,15 +2211,78 @@ namespace BOTS_BL.Repository
                 {
                     _Con.Open();
                     command.ExecuteNonQuery();
-                    var result = context.Database.SqlQuery<SPResponse>("BOTS_SpPushFromCommonToIndividualDB @pi_Date, @pi_LiveGroupName, @pi_LiveDBName, @pi_OnboardingGroupId",
-                                new SqlParameter("@pi_Date", DateTime.Today.ToString("yyyy-MM-dd")),
-                                new SqlParameter("@pi_LiveGroupName", DBName),
-                                new SqlParameter("@pi_LiveDBName", DBName),
-                                new SqlParameter("@pi_OnboardingGroupId", GroupId)).FirstOrDefault<SPResponse>();
+
+                    DataSet retVal = new DataSet();
+                    SqlCommand cmdReport = new SqlCommand("BOTS_SpPushFromCommonToIndividualDB", _Con);
+                    SqlDataAdapter daReport = new SqlDataAdapter(cmdReport);
+                    using (cmdReport)
+                    {
+                        
+                        SqlParameter param1 = new SqlParameter("pi_Date", DateTime.Today.ToString("yyyy-MM-dd"));
+                        SqlParameter param2 = new SqlParameter("pi_LiveGroupName", DBName);
+                        SqlParameter param3 = new SqlParameter("pi_LiveDBName", DBName);
+                        SqlParameter param4 = new SqlParameter("pi_OnboardingGroupId", GroupId);
+                        cmdReport.CommandType = CommandType.StoredProcedure;
+                        cmdReport.Parameters.Add(param1);
+                        cmdReport.Parameters.Add(param2);
+                        cmdReport.Parameters.Add(param3);
+                        cmdReport.Parameters.Add(param4);
+                        daReport.Fill(retVal);
+                        DataTable dt = retVal.Tables[1];
+
+                        var response = retVal.Tables[0];
+                        var BillingPartnerUrl = retVal.Tables[1];
+                        var CounterDetail = retVal.Tables[2];
+
+                        if (Convert.ToString(response.Rows[0]["ResponseCode"]) == "0")
+                            objData.result = true;
+
+                        if (objData.result)
+                        {
+                            objData.BillingPartnerUrl = Convert.ToString(BillingPartnerUrl.Rows[0][0]);
+                            objData.DLCLink = Convert.ToString(BillingPartnerUrl.Rows[0][1]);
+                            List<CounterIdDetails> lstCounterIdDetails = new List<CounterIdDetails>();
+                            foreach (DataRow dr in CounterDetail.Rows)
+                            {
+                                CounterIdDetails objItem = new CounterIdDetails();
+                                objItem.OutletName = Convert.ToString(dr["OutletName"]);
+                                objItem.CounterId = Convert.ToString(dr["CounterId"]);
+                                objItem.Securitykey = Convert.ToString(dr["Securitykey"]);
+                                lstCounterIdDetails.Add(objItem);
+                            }
+                            objData.lstCounterIdDetails = lstCounterIdDetails;
+                        }
+
+                    }
 
 
-                    if (result.ResponseCode == "0")
-                        status = true;
+                    //var result = context.Database.SqlQuery<DataSet>("BOTS_SpPushFromCommonToIndividualDB @pi_Date, @pi_LiveGroupName, @pi_LiveDBName, @pi_OnboardingGroupId",
+                    //            new SqlParameter("@pi_Date", DateTime.Today.ToString("yyyy-MM-dd")),
+                    //            new SqlParameter("@pi_LiveGroupName", DBName),
+                    //            new SqlParameter("@pi_LiveDBName", DBName),
+                    //            new SqlParameter("@pi_OnboardingGroupId", GroupId)).FirstOrDefault<DataSet>();
+                    //var response = result.Tables[0];
+                    //var BillingPartnerUrl= result.Tables[1];
+                    //var CounterDetail = result.Tables[2];
+
+                    //if (Convert.ToString(response.Rows[0]["ResponseCode"]) == "0")
+                    //    objData.result = true;
+
+                    //if(status)
+                    //{
+                    //    objData.BillingPartnerUrl = Convert.ToString(BillingPartnerUrl.Rows[0][0]);
+                    //    objData.DLCLink = Convert.ToString(BillingPartnerUrl.Rows[0][1]);
+                    //    List<CounterIdDetails> lstCounterIdDetails = new List<CounterIdDetails>();
+                    //    foreach (DataRow dr in CounterDetail.Rows)
+                    //    {
+                    //        CounterIdDetails objItem = new CounterIdDetails();
+                    //        objItem.OutletName = Convert.ToString(dr["OutletName"]);
+                    //        objItem.CounterId = Convert.ToString(dr["CounterId"]);
+                    //        objItem.Securitykey = Convert.ToString(dr["Securitykey"]);
+                    //        lstCounterIdDetails.Add(objItem);                            
+                    //    }
+                    //    objData.lstCounterIdDetails = lstCounterIdDetails;
+                    //}
                 }
                 catch (System.Exception ex)
                 {
@@ -2232,7 +2296,7 @@ namespace BOTS_BL.Repository
                     }
                 }
             }
-            return status;
+            return objData;
         }
 
         public string GetCSHeadEmailId()

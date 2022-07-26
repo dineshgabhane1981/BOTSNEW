@@ -14,4 +14,19 @@ namespace BOTS_BL.Models
         public string ResponseFailCount { get; set; }
         public string ResponseInValidFormatCount { get; set; }
     }
+
+    public class NewCustDetails
+    {
+        public string BillingPartnerUrl { get; set; }
+        public string DLCLink { get; set; }
+        public List<CounterIdDetails> lstCounterIdDetails { get; set; }
+        public bool result { get; set; }
+    }
+
+    public class CounterIdDetails
+    {
+        public string OutletName { get; set; }
+        public string CounterId { get; set; }
+        public string Securitykey { get; set; }
+    }
 }
