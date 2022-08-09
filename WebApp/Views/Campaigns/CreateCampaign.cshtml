@@ -4,157 +4,190 @@
 }
 
 <h2>CreateCampaign</h2>
+@*<link rel="stylesheet" href="jquery.datetimepicker.css" />
+    <input type="text" id="demo" />
+    <script src="/path/to/cdn/jquery.min.js"></script>
+    <script src="jquery.datetimepicker.js"></script>*@
 
 <div class="app-main__inner" id="dvall">
     <div class="container-fluid pt-3 pl-3 pr-3 pb-3">
         @*<div class="row mb-3 pt-3 pl-3 pr-3 card">*@
-           
-            @*<div class="row">
-                    <div class="col-md-6 col-xl-3">
-                        <input class="radio" id="one" name="group" type="radio" checked><label>SMS</label>
-                    </div>
-                    <div class="col-md-6 col-xl-3">
-                        <input class="radio" id="two" name="group" type="radio"><label>WA</label>
-                    </div>
-                    <div class="col-md-6 col-xl-3">
-                        <input class="radio" id="three" name="group" type="radio"><label>VWA</label>
-                    </div>
-                </div>*@
 
-            <div class="mb-3 pr-3 pt-3 pl-3 card" style="padding-bottom:20px;">
-                @*<div class="col-sm-8" style="display:flex;padding-bottom: 10px;margin-top:5px;">*@
-                <div class="row mt-4">
-                    <div class="col-md-8 col-xl-8">
-                        <input type="radio" checked id="rdnSMS" value="1" name="btdornot" /><b>SMS </b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        <input type="radio" id="rdnVSMS" value="2" name="btdornot" /><b> Virtual SMS </b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        <input type="radio" id="rdnWA" value="3" name="btdornot" /><b> Whats app</b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        <input type="radio" id="rdnVWA" value="4" name="btdornot" /><b> Verified Whats app</b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    </div>
+        @*<div class="row">
+                <div class="col-md-6 col-xl-3">
+                    <input class="radio" id="one" name="group" type="radio" checked><label>SMS</label>
                 </div>
+                <div class="col-md-6 col-xl-3">
+                    <input class="radio" id="two" name="group" type="radio"><label>WA</label>
+                </div>
+                <div class="col-md-6 col-xl-3">
+                    <input class="radio" id="three" name="group" type="radio"><label>VWA</label>
+                </div>
+            </div>*@
 
-                @*</div>*@
+        <div class="mb-3 pr-3 pt-3 pl-3 card" style="padding-bottom:20px;">
+            @*<div class="col-sm-8" style="display:flex;padding-bottom: 10px;margin-top:5px;">*@
+            <div class="row mt-4">
+                <div class="col-md-8 col-xl-8">
+                    <input type="radio" checked id="rdnSMS" value="1" name="btdornot" /><b>SMS </b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <input type="radio" id="rdnVSMS" value="2" name="btdornot" /><b> Virtual SMS </b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <input type="radio" id="rdnWA" value="3" name="btdornot" /><b> Whats app</b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <input type="radio" id="rdnVWA" value="4" name="btdornot" /><b> Verified Whats app</b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                </div>
             </div>
-            <div class="mb-3 pr-3 pt-3 pl-3 card" style="padding-bottom:20px;" id="SMSCamppanel">
-                <div class="row" style="margin-top : 20px;">
-                    <div class="col-sm-2">
-                        Base Type
-                    </div>
-                    <div class="col-sm-2 dropdown">
-                        <select id="BaseType" name="BaseType" class="input50" onchange="BaseCalc();">
-                            <option value="1">All</option>
-                            <option value="2">Member Base</option>
-                            <option value="3">Bulk Upload</option>
-                            <option value="4">Based On Points</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="row " id="divPoints" style="margin-top : 20px; display: none;">
-                    <div class="col-sm-2">
-                        Points
-                    </div>
-                    <div class="col-sm-2 dropdown">
-                        <select id="Filter" name="Filter" class="input50" onchange="pointsvalid();">
-                            <option value="1">LessThan</option>
-                            <option value="2">GreaterThan</option>
-                            <option value="3">Equal To</option>
-                        </select>
-                    </div>
-                    <div class="col-sm-2">
-                        <input type="number" id="points" name="points" class="input50" />
-                    </div>
-                </div>
 
-                <div class="row" style="margin-top : 20px;">
-                    <div class="col-sm-2">
-                        OutletData
-                    </div>
-                    <div class="col-sm-2 dropdown">
-                        @Html.DropDownList("OutletData", new SelectList(ViewBag.OutletData, "Value", "Text"), "ALL", htmlAttributes: new { @class = "input50", @id = "ddlOutletList" })
-                    </div>
-                </div>
-                <div class="row" style="margin-top : 20px;">
-                    <div class="col-md-3 col-xl-3">
-                        <div class="button">
-                            <button type="button" id="btnFilter" style="margin-left:15px;" class="btn btn-primary" onclick="ShowCount();"><b>FILTER</b></button>
-                        </div>
-                    </div>
-                    <div class="col-md-4 col-xl-4">
-                        <table style="border:2px solid black;width:70%">
-                            <tr style="border:2px solid black; ">
-                                <td style="border:2px solid black;text-align:left;">
-                                    <span id="AllCount"></span>All Count
-                                </td>
-                                <td style="border:2px solid black;width:40%">
-                                    <span id="AllCountnum"></span>
-                                </td>
-                            </tr>
-                            <tr style="border:2px solid black; ">
-                                <td style="border:2px solid black;text-align:left;">
-                                    <span id="FiltCount"></span>Filtered Count
-                                </td>
-                                <td style="border:2px solid black;width:40%">
-                                    <span id="FiltCountnum"></span>
-                                </td>
-                            </tr>
-                        </table>
-                    </div>
-                </div>
-                <div class="row" style="margin: 20px;">
-                    <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
-                        Script
-                    </div>
-                    <div class="col-sm-4" style="float:left;margin-top:10px;">
-                        <textarea class="form-control" id="SMSScript" rows="7" maxlength="10000"></textarea>&nbsp;&nbsp;
-                    </div>
-                    <div class="col-sm-4" style="float:left;margin-top:10px;">
-                        <br><br><br><br><br><br><br><br>
-                        <span id="current">0</span>
-                    </div>
-                </div>
-                <div class="row mt-2" style="margin-top : 20px;">
-                    <div id="divdaterange" class="col-md-2 col-xl-3">
-                        <label>Campaign From</label>
-                    </div>
-                    <div>
-                        <input type="date" id="txtEnrollfromdt" class="input50" placeholder="Start" onchange="ValidateDate();" /> &nbsp;&nbsp;&nbsp;
-                    </div>
-                    <div>
-                        <input type="date" id="txtEnrolltodt" class="input50" placeholder="End" onchange="ValidateDate1();" />
-                    </div>
-                </div>
-
-                <div class="row mt-2">
-                    <div class="col-md-3 col-xl-3">
-                        Campaign Name
-                    </div>
-                    
-                    <div>
-                        <input type="text" id="CampName" class="input50" placeholder="Enter Campaign Name" />
-                    </div>
-                   
-                    <div>
-                        <input type="hidden" id="CampId" class="input50" />
-                    </div>
-                </div>
-        <div class="row" style="margin-top : 20px;">
+            @*</div>*@
         </div>
+        <div class="mb-3 pr-3 pt-3 pl-3 card" style="padding-bottom:20px;" id="SMSCamppanel">
+            <div class="row" style="margin-top : 20px;">
+                <div class="col-sm-2">
+                    Base Type
+                </div>
+                <div class="col-sm-2 dropdown">
+                    <select id="BaseType" name="BaseType" class="input50" onchange="BaseCalc();">
+                        <option value="1">All</option>
+                        <option value="2">Member Base</option>
+                        <option value="3">Bulk Upload</option>
+                        <option value="4">Based On Points</option>
+                    </select>
+                </div>
+            </div>
+            <div class="row " id="divPoints" style="margin-top : 20px; display: none;">
+                <div class="col-sm-2">
+                    Points
+                </div>
+                <div class="col-sm-2 dropdown">
+                    <select id="Filter" name="Filter" class="input50" onchange="pointsvalid();">
+                        <option value="1">LessThan</option>
+                        <option value="2">GreaterThan</option>
+                        <option value="3">Equal To</option>
+                    </select>
+                </div>
+                <div class="col-sm-2">
+                    <input type="number" id="points" name="points" class="input50" />
+                </div>
+            </div>
+
+            <div class="row" style="margin-top : 20px;">
+                <div class="col-sm-2">
+                    OutletData
+                </div>
+                <div class="col-sm-2 dropdown">
+                    @Html.DropDownList("OutletData", new SelectList(ViewBag.OutletData, "Value", "Text"), "ALL", htmlAttributes: new { @class = "input50", @id = "ddlOutletList" })
+                </div>
+            </div>
+            <div class="row" style="margin-top : 20px;">
+                <div class="col-md-3 col-xl-3">
+                    <div class="button">
+                        <button type="button" id="btnFilter" style="margin-left:15px;" class="btn btn-primary" onclick="ShowCount();"><b>FILTER</b></button>
+                    </div>
+                </div>
+                <div class="col-md-4 col-xl-4">
+                    <table style="border:2px solid black;width:70%">
+                        <tr style="border:2px solid black; ">
+                            <td style="border:2px solid black;text-align:left;">
+                                <span id="AllCount"></span>All Count
+                            </td>
+                            <td style="border:2px solid black;width:40%">
+                                <span id="AllCountnum"></span>
+                            </td>
+                        </tr>
+                        <tr style="border:2px solid black; ">
+                            <td style="border:2px solid black;text-align:left;">
+                                <span id="FiltCount"></span>Filtered Count
+                            </td>
+                            <td style="border:2px solid black;width:40%">
+                                <span id="FiltCountnum"></span>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            <div class="row" style="margin: 20px;">
+                <div class="col-md-8 col-xl-8">
+                    <input type="radio" checked id="rdnText" value="1" name="ScriptType" /><b>Text </b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <input type="radio" id="rdnUnicode" value="2" name="ScriptType" /><b> Unicode </b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                </div>
+            </div>
+            <div class="row" style="margin: 20px;">
+                <div class="col-md-8 col-xl-8">
+                    <div class="custom-control custom-switch">
+                        <input type="checkbox" class="custom-control-input" id="ScheduleSwitch" value="0" onchange="ShowScheduledate();">
+                        <label class="custom-control-label" for="ScheduleSwitch">Schedule SMS</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row" style="margin: 20px; display : none" id="SchedPick">
+                <div class="col-md-8 col-xl-8">
+                    <input id="datetimepicker" type="text" onclick="Showdatetime();">
+                </div>
+            </div>
+
+            <div class="row" style="margin: 20px;">
+                <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
+                    Script
+                </div>
+                <div class="col-sm-4" style="float:left;margin-top:10px;">
+                    <textarea class="form-control" id="SMSScript" rows="7" maxlength="10000"></textarea>&nbsp;&nbsp;
+                </div>
+                <div class="col-sm-4" style="float:left;margin-top:10px;">
+                    <br><br><br><br><br><br><br><br>
+                    <span id="current">0</span>
+                </div>
+            </div>
+
+            <div class="row mt-2" style="margin-top : 20px;">
+                <div id="divdaterange" class="col-md-2 col-xl-3">
+                    <label>Campaign From</label>
+                </div>
+                <div>
+                    <input type="date" id="txtEnrollfromdt" class="input50" placeholder="Start" onchange="ValidateDate();" /> &nbsp;&nbsp;&nbsp;
+                </div>
+                <div>
+                    <input type="date" id="txtEnrolltodt" class="input50" placeholder="End" onchange="ValidateDate1();" />
+                </div>
+            </div>
+
+            <div class="row mt-2">
+                <div class="col-md-3 col-xl-3">
+                    Campaign Name
+                </div>
+
+                <div>
+                    <input type="text" id="CampName" class="input50" placeholder="Enter Campaign Name" />
+                </div>
+
+                <div>
+                    <input type="hidden" id="CampId" class="input50" />
+                </div>
+            </div>
+            <div class="row" style="margin-top : 20px;">
+            </div>
             <div class="col-md-6 col-xl-6">
                 <div class="button">
                     <button type="button" id="btnSave" style="margin-left:15px;" class="btn btn-primary" onclick="SaveValidate();"><b>SAVE</b></button>
                     @*<button type="button" id="btnDownload" style="margin-left:15px;" class="btn btn-primary" onclick="DownLoad();"><b>DOWNLOAD</b></button>*@
-                <button type="button" id="btnSendTestSMS" style="margin-left:15px;" class="btn btn-primary" onclick="SendTestValidate();" disabled><b>TEST SMS</b></button>
-                <button type="button" id="btnSendDLT" style="margin-left:15px;" class="btn btn-primary" onclick="SendDLTValidate();" disabled><b>SEND SMS</b></button>
-            </div>
-                    </div>
-                    
-                            
-                        
+                    <button type="button" id="btnSendTestSMS" style="margin-left:15px;" class="btn btn-primary" onclick="SendTestValidate();" disabled><b>TEST SMS</b></button>
+                    <button type="button" id="btnSendDLT" style="margin-left:15px;" class="btn btn-primary" onclick="SendDLTValidate();" disabled><b>SEND SMS</b></button>
                 </div>
+            </div>
 
-            @*</div>*@
+
+
         </div>
+
+        @*</div>*@
     </div>
+</div>
+@*<link rel="stylesheet" type="text/css" href="Scripts\datetimepicker-master\jquery.datetimepicker.css" />
+    <script src="Scripts\datetimepicker-master\jquery.datetimepicker.js"></script>
+    <script src="Scripts\build\jquery.min.js"></script>*@
+<link rel="stylesheet" href="~/Scripts/datetimepicker-master/build/jquery.datetimepicker.min.css">
+<script src="~/Scripts/datetimepicker-master/jquery.js"></script>
+<script src="~/Scripts/datetimepicker-master/build/jquery.datetimepicker.full.min.js"></script>
 <script>
+
 
         function BaseCalc() {
             var val = document.getElementById("BaseType").value;
@@ -332,7 +365,7 @@
             item["OutletId"] = OutletId;
             FilterData.push(item);
             var data = JSON.stringify(FilterData);
-
+        $("#divLoader").show();
             $.ajax({
                 type: "POST",
                 url: '@Url.Action("GetFilteredData", "Campaigns")',
@@ -345,7 +378,7 @@
                     if (response != null) {
                         $("#AllCountnum").text(response.CustCountALL);
                         $("#FiltCountnum").text(response.CustFiltered);
-                        //$("#divLoader").hide();
+                        $("#divLoader").hide();
                     }
                     else {
 
@@ -373,6 +406,8 @@
         var EndDate = '';
         var CampaignName = '';
         var SMSType = '';
+        var Scheduledatetime = '';
+        var ScriptType = '';
 
         val = $("#BaseType").val();
         Equality = $("#Filter").val();
@@ -388,6 +423,8 @@
         StartDate = $("#txtEnrollfromdt").val();
         EndDate = $("#txtEnrolltodt").val();
         CampaignName = $("#CampName").val();
+        Scheduledatetime = $("#datetimepicker").val();
+        
 
         if (document.getElementById("rdnSMS").checked) {
             SMSType = $("#rdnSMS").val();
@@ -400,6 +437,13 @@
         }
         else if (document.getElementById("rdnVWA").checked) {
             SMSType = $("#rdnVWA").val();
+        }
+
+        if (document.getElementById("rdnText").checked) {
+            ScriptType = $("#rdnText").val();
+        }
+        else {
+            ScriptType = $("#rdnText").val();
         }
 
 
@@ -415,10 +459,13 @@
         item["EndDate"] = EndDate;
         item["CampaignName"] = CampaignName;
         item["SMSType"] = SMSType;
+        //item["ScriptType"] = ScriptType;
+        //item["Scheduledatetime"] = Scheduledatetime;
 
         FilterData.push(item);
         var data = JSON.stringify(FilterData);
         //alert(data);
+        $("#divLoader").show();
         $.ajax({
                 type: "POST",
                 url: '@Url.Action("SaveData", "Campaigns")',
@@ -435,11 +482,12 @@
                         cuteAlert({
                             type: "success",
                             title: "Success Title",
-                            message: "Campaign Saved" + response[0].CampaignId,
+                            /*message: "Campaign Saved" + response[0].CampaignId,*/
+                            message: "Campaign Saved",
                             buttonText: "Okay"
 
                         })
-
+                        $("#divLoader").hide();
                         if (SMSType == 1) {
                             $("#btnSave").prop('disabled', true);
                             $("#btnSendTestSMS").prop('disabled', false);
@@ -453,6 +501,7 @@
                 },
                 error: function (response) {
                     console.log(response.responseText);
+                    $("#divLoader").hide();
                 }
             });
 
@@ -544,7 +593,7 @@
 
             FilterData.push(item);
             var data = JSON.stringify(FilterData);
-
+        $("#divLoader").show();
             $.ajax({
                 type: "POST",
                 url: '@Url.Action("SendTestSMS", "Campaigns")',
@@ -559,10 +608,11 @@
                         cuteAlert({
                             type: "success",
                             title: "Success Title",
-                            message: "Message Will be send after 15 min",
+                            message: "Message Send",
                             buttonText: "Okay"
 
                         })
+                        $("#divLoader").hide();
                     }
                     else {
                         cuteAlert({
@@ -571,13 +621,21 @@
                             message: "Message Not Send",
                             buttonText: "Okay"
                         })
+                        $("#divLoader").hide();
                     }
                 },
                 error: function (response) {
                     console.log(response.responseText);
+                    $("#divLoader").hide();
                 }
             });
     }
 
+    function ShowScheduledate() {
+        $('#SchedPick').toggle();
+    }
+    function Showdatetime() {
+         $('#datetimepicker').datetimepicker();     
+    }
 </script>
 

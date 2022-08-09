@@ -220,6 +220,8 @@ namespace WebApp.Controllers
                 string EndDate = Convert.ToString(item["EndDate"]);
                 string CampaignName = Convert.ToString(item["CampaignName"]);
                 string SMSType = Convert.ToString(item["SMSType"]);
+                //string ScriptType = Convert.ToString(item["ScriptType"]);
+                //string Scheduledatetime = Convert.ToString(item["Scheduledatetime"]);
 
                 SaveData = CR.SaveCampaignData(BaseType, Equality, Points, OutletId,Srcipt, StartDate, EndDate, CampaignName, SMSType, userDetails.GroupId, userDetails.connectionString);
                 //Session["CampaignId"] = SaveData.;
