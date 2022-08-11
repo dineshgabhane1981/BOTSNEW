@@ -12,7 +12,21 @@
 
 <div class="app-main__inner">
     <input type="hidden" id="hdnNames" />
-
+    @if (!string.IsNullOrEmpty(Model.RenewalDate))
+    {
+        if (Model.RemainingDaysForRenewal < 45)
+        {
+            <div class="col-md-12 col-xl-12" style="background-color:white;font-size:18px;font-weight:bold;margin-bottom:10px;">
+                <marquee direction="left"> Renewal Date - <b style="color:red;"> @Model.RenewalDate </b> & Days remaining for renewal - <b style="color:red;"> @Model.RemainingDaysForRenewal </b></marquee>
+            </div>
+        }
+        else
+        {
+            <div class="col-md-12 col-xl-12" style="background-color:white;font-size:18px;font-weight:bold;margin-bottom:10px;">
+                <marquee direction="left"> Renewal Date - <b style="color:green;"> @Model.RenewalDate </b> & Days remaining for renewal - <b style="color: green;"> @Model.RemainingDaysForRenewal </b></marquee>
+            </div>
+        }
+    }
     @if (level == "02")
     {
         <div class="row">
@@ -60,10 +74,10 @@
 
                                 @if (Convert.ToDouble(Model.TotalBiz) > 0)
                                 {
-                                    var num= String.Format(new CultureInfo("en-IN", false), "{0:n2}", Convert.ToDouble(Convert.ToDouble(Model.LoyaltyBiz * 100) / Convert.ToDouble(Model.TotalBiz)));
-                                <span>
-                                    @num%
-                                </span>
+                                    var num = String.Format(new CultureInfo("en-IN", false), "{0:n2}", Convert.ToDouble(Convert.ToDouble(Model.LoyaltyBiz * 100) / Convert.ToDouble(Model.TotalBiz)));
+                                    <span>
+                                        @num%
+                                    </span>
                                 }
                                 else
                                 {

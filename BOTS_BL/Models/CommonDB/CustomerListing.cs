@@ -20,5 +20,6 @@ namespace BOTS_BL.Models
         public string RMTeam { get; set; }
         public string CustomerType { get; set; }
         public string BillingProductName { get; set; }
+        public string RenewalDate { get; set; }
     }
 }

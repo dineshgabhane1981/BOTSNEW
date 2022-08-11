@@ -31,9 +31,10 @@
                                         <th scope="col" style="text-align: left;">City</th>
                                         <th scope="col" style="text-align:center;">Outlets</th>
                                         <th scope="col" style="text-align:center;">CS Name</th>
-                                        @*<th scope="col" style="text-align:center;">Billing Product</th>*@
-                                        <th scope="col" style="text-align:center;">Sourced by</th>
+                                        @*<th scope="col" style="text-align:center;">Billing Product</th>
+                                            <th scope="col" style="text-align:center;">Sourced by</th>*@
                                         <th scope="col" style="text-align:center;">Started On</th>
+                                        <th scope="col" style="text-align:center;">Renewal On</th>
                                         <th scope="col" style="text-align:center;">Action</th>
                                     </tr>
                                 </thead>
@@ -53,10 +54,18 @@
                                                 <td style="text-align:center;">@item.OutletCount</td>
                                                 <td>@item.RMTeam</td>
                                                 @*<td>@item.BillingProductName</td>*@
-                                                <td>@item.SourcedBy</td>
+                                                @*<td>@item.SourcedBy</td>*@
                                                 @if (item.StartedOn.HasValue)
                                                 {
                                                     <td>@item.StartedOn.Value.ToString("dd-MMM-yyyy")</td>
+                                                }
+                                                else
+                                                {
+                                                    <td></td>
+                                                }
+                                                @if (!string.IsNullOrEmpty(item.RenewalDate))
+                                                {
+                                                    <td>@item.RenewalDate</td>
                                                 }
                                                 else
                                                 {

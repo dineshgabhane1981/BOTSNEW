@@ -221,6 +221,29 @@ namespace BOTS_BL.Repository
                             objGroup.RMTeam = RMTeamName;
                             objGroup.BillingProductName = context.BOTS_TblBillingPartnerProduct.Where(x => x.BillingPartnerProductId == item.BillingProduct).Select(y => y.BillingPartnerProductName).FirstOrDefault();
 
+                            if (item.WentLiveDate.HasValue)
+                            {
+                                var day = item.WentLiveDate.Value.Day;
+                                var month = item.WentLiveDate.Value.Month;
+                                var year = item.WentLiveDate.Value.Year;
+                                var currentYear = DateTime.Today.Year;
+
+                                DateTime nextRenewal = new DateTime(currentYear, month, day);
+                                DateTime ProgramRenewalDate = new DateTime();
+                                if (nextRenewal < DateTime.Today)
+                                {
+                                    ProgramRenewalDate = nextRenewal.AddYears(1);
+                                }
+                                else
+                                {
+                                    ProgramRenewalDate = nextRenewal;
+                                }
+                                objGroup.RenewalDate = ProgramRenewalDate.ToString("dd-MMM-yyyy");                                 
+                            }
+
+
+
+
                             objGroupList.Add(objGroup);
                         }
                     }

@@ -25,12 +25,37 @@ namespace BOTS_BL.Repository
             {
                 using (var context = new BOTSDBContext(connstr))
                 {
-
                     //dataDashboard = context.Database.SqlQuery<ExecutiveSummary>("sp_Dashboard @pi_GroupId, @pi_Date", new SqlParameter("@pi_GroupId", GroupId), new SqlParameter("@pi_Date", DateTime.Now.ToShortDateString())).FirstOrDefault<ExecutiveSummary>();
                     dataDashboard = context.Database.SqlQuery<ExecutiveSummary>("sp_BOTS_LoyaltyPerfromance @pi_GroupId, @pi_Date,@pi_LoginId,@pi_Month,@pi_Year,@pi_OutletId", new SqlParameter("@pi_GroupId", GroupId), new SqlParameter("@pi_Date", DateTime.Now.ToShortDateString()), new SqlParameter("@pi_LoginId", LoginId), new SqlParameter("@pi_Month", ""), new SqlParameter("@pi_Year", ""), new SqlParameter("@pi_OutletId", "")).FirstOrDefault<ExecutiveSummary>();
 
                     dataDashboard.lstOutletDetails = context.Database.SqlQuery<OutletDetails>("sp_OutletDashboard @pi_GroupId, @pi_Date", new SqlParameter("@pi_GroupId", GroupId), new SqlParameter("@pi_Date", DateTime.Now.ToString("yyyy-MM-dd"))).ToList<OutletDetails>();
 
+                }
+                using (var context = new CommonDBContext())
+                {
+                    var gId = Convert.ToInt32(GroupId);
+                    var livedate = context.tblGroupDetails.Where(x => x.GroupId == gId).Select(y => y.WentLiveDate).FirstOrDefault();
+                    if (livedate.HasValue)
+                    {
+                        var day = livedate.Value.Day;
+                        var month = livedate.Value.Month;
+                        var year = livedate.Value.Year;
+                        var currentYear = DateTime.Today.Year;
+
+                        DateTime nextRenewal = new DateTime(currentYear, month, day);
+                        DateTime ProgramRenewalDate = new DateTime();
+                        if (nextRenewal < DateTime.Today)
+                        {
+                            ProgramRenewalDate = nextRenewal.AddYears(1);
+                        }
+                        else
+                        {
+                            ProgramRenewalDate = nextRenewal;
+                        }
+                        dataDashboard.RenewalDate = ProgramRenewalDate.ToString("dd-MMM-yyyy");
+
+                        dataDashboard.RemainingDaysForRenewal = (ProgramRenewalDate - DateTime.Today).Days;
+                    }
                 }
             }
             catch (Exception ex)
@@ -40,7 +65,9 @@ namespace BOTS_BL.Repository
             return dataDashboard;
         }
 
-        public DashboardMemberSegment GetDashboardMemberSegmentData(string GroupId, string OutletId, string connstr,string loginId)
+
+
+        public DashboardMemberSegment GetDashboardMemberSegmentData(string GroupId, string OutletId, string connstr, string loginId)
         {
 
             DashboardMemberSegment dashboardMemberSegment = new DashboardMemberSegment();
@@ -54,7 +81,7 @@ namespace BOTS_BL.Repository
                 {
                     dashboardMemberSegment = context.Database.SqlQuery<DashboardMemberSegment>("sp_BOTS_DashboardMemberSegment @pi_GroupId, @pi_Date, @pi_OutletId,@pi_LoginId", new SqlParameter("@pi_GroupId", GroupId), new SqlParameter("@pi_Date", DateTime.Now.ToString("yyyy-MM-dd")), new SqlParameter("@pi_OutletId", OutletId), new SqlParameter("@pi_LoginId", "")).FirstOrDefault<DashboardMemberSegment>();
                 }
-               
+
 
                 DateTime? FromDate;
                 if (!string.IsNullOrEmpty(OutletId))
@@ -91,7 +118,7 @@ namespace BOTS_BL.Repository
                 {
                     dashboardMemberSegmentTxnDB = context.Database.SqlQuery<DashboardMemberSegmentTxnDB>("sp_BOTS_DashboardMemberSegment1 @pi_GroupId, @pi_Date, @pi_OutletId,@pi_LoginId", new SqlParameter("@pi_GroupId", GroupId), new SqlParameter("@pi_Date", DateTime.Now.ToString("yyyy-MM-dd")), new SqlParameter("@pi_OutletId", OutletId), new SqlParameter("@pi_LoginId", "")).ToList<DashboardMemberSegmentTxnDB>();
                 }
-                
+
                 int count = 1;
                 foreach (var item in dashboardMemberSegmentTxnDB)
                 {
@@ -150,7 +177,7 @@ namespace BOTS_BL.Repository
             return dashboardMemberSegmentTxn;
         }
 
-        public List<DashboardOutletEnrolment> GetDashboardOutletEnrolmentData(string GroupId, string monthFlag, string connstr,string loginId)
+        public List<DashboardOutletEnrolment> GetDashboardOutletEnrolmentData(string GroupId, string monthFlag, string connstr, string loginId)
         {
 
             List<DashboardOutletEnrolment> dashboardOutletEnrolment = new List<DashboardOutletEnrolment>();
@@ -178,7 +205,7 @@ namespace BOTS_BL.Repository
             }
             return dashboardPointsSummary;
         }
-        public DashboardMemberWebPage GetDashboardMemberWebPageData(string GroupId, string profileFlag, string connstr,string loginId)
+        public DashboardMemberWebPage GetDashboardMemberWebPageData(string GroupId, string profileFlag, string connstr, string loginId)
         {
 
             DashboardMemberWebPage dashboardMemberWebPage = new DashboardMemberWebPage();
@@ -192,7 +219,7 @@ namespace BOTS_BL.Repository
                 {
                     dashboardMemberWebPage = context.Database.SqlQuery<DashboardMemberWebPage>("sp_BOTS_DashboardMemberWebPage @pi_GroupId, @pi_Date, @pi_Flag, @pi_LoginId", new SqlParameter("@pi_GroupId", GroupId), new SqlParameter("@pi_Date", DateTime.Now.ToShortDateString()), new SqlParameter("@pi_Flag", profileFlag), new SqlParameter("@pi_LoginId", "")).FirstOrDefault<DashboardMemberWebPage>();
                 }
-               
+
 
             }
             return dashboardMemberWebPage;
@@ -239,7 +266,7 @@ namespace BOTS_BL.Repository
                     new SqlParameter("@pi_LoginId", ""),
                     new SqlParameter("@pi_Type", Type)).FirstOrDefault<DashboardRedemption>();
                 }
-                
+
             }
             return objDashboardRedemption;
         }
