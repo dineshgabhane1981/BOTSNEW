@@ -363,6 +363,7 @@
                url = "txtRequestPacketURL1";
                apiType = "Enrollment";
 
+
            }
            if ($("#rbtnEnrlmntWithEarn").is(":checked")) {
                fromId = "txtRequestPacket2";
@@ -402,6 +403,7 @@
            }
 
            CheckAPI(fromId, toId, url, apiType);
+           CheckMobileNo()
        });
 
 
@@ -1269,4 +1271,65 @@
                 });
             }
     }
+
+    function CheckMobileNo() {
+        if ($('#rbtnEnrlment').is(':checked')) {
+            ($('#txtMobileNo').val() == "")
+            {
+                toastr.error('Please enter Mobile Number');
+                return false
+            }
+        }
+        if ($('#rbtnEnrlmntWithEarn').is(':checked')) {
+            ($('#txtMobileNo').val() == "")
+            {
+                toastr.error('Please enter Mobile Number');
+                return false
+            }
+            
+        }
+
+        if ($('#rbtnEarn').is(':checked')) {
+            ($('#txtMobileNo').val() == "")
+            {
+                toastr.error('Please enter Mobile Number');
+                return false
+            }
+          
+        }
+        if ($('#rbtnBurnValidation').is(':checked')) {
+            ($('#txtMobileNo').val() == "")
+            {
+                toastr.error('Please enter Mobile Number');
+                return false
+            }
+           
+        }
+        if ($('#rbtnBurn').is(':checked')) {
+            ($('#txtMobileNo').val() == "")
+            {
+                toastr.error('Please enter Mobile Number');
+                return false
+            }
+           
+        }
+        if ($('#rbtnCancel').is(':checked')) {
+            ($('#txtMobileNo').val() == "")
+            {
+                toastr.error('Please enter Mobile Number');
+                return false
+            }
+           
+        }
+        if ($('#rbtnSendOtp').is(':checked')) {
+            ($('#txtMobileNo').val() == "")
+            {
+                toastr.error('Please enter Mobile Number');
+                return false
+            }
+        }
+
+
+    }
+
 </script>
