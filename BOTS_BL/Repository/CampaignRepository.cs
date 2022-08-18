@@ -748,9 +748,9 @@ namespace BOTS_BL.Repository
                     
                     DataTable SMSData = Data.Tables["Table1"];
 
-                    //Thread _job = new Thread(() => SendSMS(SMSData));
-                    //_job.Start();
-                   
+                    Thread _job = new Thread(() => SendSMS(SMSData));
+                    _job.Start();
+
                 }
             }
             catch (Exception ex)
