@@ -220,10 +220,10 @@ namespace WebApp.Controllers
                 string EndDate = Convert.ToString(item["EndDate"]);
                 string CampaignName = Convert.ToString(item["CampaignName"]);
                 string SMSType = Convert.ToString(item["SMSType"]);
-                //string ScriptType = Convert.ToString(item["ScriptType"]);
-                //string Scheduledatetime = Convert.ToString(item["Scheduledatetime"]);
+                string ScriptType = Convert.ToString(item["ScriptType"]);
+                string Scheduledatetime = Convert.ToString(item["Scheduledatetime"]);
 
-                SaveData = CR.SaveCampaignData(BaseType, Equality, Points, OutletId,Srcipt, StartDate, EndDate, CampaignName, SMSType, userDetails.GroupId, userDetails.connectionString);
+                SaveData = CR.SaveCampaignData(BaseType, Equality, Points, OutletId,Srcipt, StartDate, EndDate, CampaignName, SMSType, ScriptType, Scheduledatetime, userDetails.GroupId, userDetails.connectionString);
                 //Session["CampaignId"] = SaveData.;
             }
 
@@ -402,6 +402,8 @@ namespace WebApp.Controllers
             //Status = false;
             CampaignRepository CR = new CampaignRepository();
             List<CampaignSaveDetails> responsedata = new List<CampaignSaveDetails>();
+            DataSet response = new DataSet();
+             
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
             JavaScriptSerializer json_serializer = new JavaScriptSerializer();
             json_serializer.MaxJsonLength = int.MaxValue;
@@ -410,7 +412,42 @@ namespace WebApp.Controllers
             {
                 string CampaignId = Convert.ToString(item["CampaignId"]);
 
-                responsedata = CR.SendTestSMSData(CampaignId, userDetails.GroupId, userDetails.connectionString);
+                response = CR.SendTestSMSData(CampaignId, userDetails.GroupId, userDetails.connectionString);
+                //Session["CampaignId"] = SaveData.;
+                //responsedata = response;
+                DataTable DT = response.Tables["Table"];
+
+                for (int i = 0; i < DT.Rows.Count; i++)
+                {
+                    CampaignSaveDetails SaveData = new CampaignSaveDetails();
+                    SaveData.ResponseCode = DT.Rows[i]["ResponseCode"].ToString();
+                    SaveData.ResponseMessage = DT.Rows[i]["ResponseMessage"].ToString();
+                    SaveData.CampaignId = DT.Rows[i]["CampaignId"].ToString();
+                    responsedata.Add(SaveData);
+                }
+
+            }
+
+            return new JsonResult() { Data = responsedata, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
+        }
+
+        [HttpPost]
+        public JsonResult SendSMS(string jsonData)
+        {
+            //SPResponse response = new SPResponse();
+            //bool Status;
+            //Status = false;
+            CampaignRepository CR = new CampaignRepository();
+            List<CampaignSaveDetails> responsedata = new List<CampaignSaveDetails>();
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            JavaScriptSerializer json_serializer = new JavaScriptSerializer();
+            json_serializer.MaxJsonLength = int.MaxValue;
+            object[] objData = (object[])json_serializer.DeserializeObject(jsonData);
+            foreach (Dictionary<string, object> item in objData)
+            {
+                string CampaignId = Convert.ToString(item["CampaignId"]);
+
+                responsedata = CR.SendSMSData(CampaignId, userDetails.GroupId, userDetails.connectionString);
                 //Session["CampaignId"] = SaveData.;
                 //responsedata = response;
             }

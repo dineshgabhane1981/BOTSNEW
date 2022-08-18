@@ -134,7 +134,7 @@ namespace BOTS_BL.Models
     {
         public string ResponseCode { get; set; }
         public string  ResponseMessage { get; set; }
-        public string CampaignId { get; set; }
+        public string CampaignId { get; set; } 
     }
     public class CampaignData
     {
