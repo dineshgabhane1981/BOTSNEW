@@ -255,15 +255,17 @@
             "ordering": true,
             "info": true,
             "bFilter": true,
-            "pageLength": 25,
+            "pageLength": 50,
             "pagingType": "simple_numbers",
             "columns": [
                 { data: "OutletName" },
                 {
                     "mData": "MaskedMobileNo",
                     "mRender": function (data, type, row) {
-                        var MobileNo = row.MobileNo;
-                        return '<span class="login" title=' + MobileNo + '>' + data + '</span>';
+                        if (data != "" && data != null) {
+                            var MobileNo = row.MobileNo;
+                            return '<span class="login" title=' + MobileNo + '>' + data + '</span>';
+                        }                        
                     }
                 },
                 { data: "MemberName" },
@@ -272,21 +274,42 @@
                 {
                     "mData": "InvoiceAmt",
                     "mRender": function (data, type, row) {
-                        return '<span>' + addComma(data) + '</span>';
+                        if (row.OutletName != "<b>Total</b>") {
+                            return '<span>' + addComma(data) + '</span>';
+                        }
+                        else {
+                            return '<span><b>' + addComma(data) + '</b></span>';
+                        }
                     }
                 },
                 { data: "TxnType" },
-                { data: "PointsEarned" },
+                {
+                    "mData": "PointsEarned",
+                    "mRender": function (data, type, row) {
+                        if (row.OutletName != "<b>Total</b>") {
+                            return '<span>' + addComma(data) + '</span>';
+                        }
+                        else {
+                            return '<span><b>' + addComma(data) + '</b></span>';
+                        }
+                    }
+                },
+                
                 {
                     "mData": "PointsBurned",
                     "mRender": function (data, type, row) {
-                        return '<span>' + addComma(data) + '</span>';
+                        if (row.OutletName != "<b>Total</b>") {
+                            return '<span>' + addComma(data) + '</span>';
+                        }
+                        else {
+                            return '<span><b>' + addComma(data) + '</b></span>';
+                        }
                     }
                 },
                 /*{ data: "TxnDatetime" },*/
                 {
                     "data": "TxnDatetime", "title": "Txn Datetime", "render": function (data, type) {
-                        if (data != "" && data != null) {
+                        if (data != "" && data != null && data !="-") {
                             var day = data.split('/')[0]
                             var month = data.split('/')[1]
                             var year = data.split('/')[2]
@@ -300,7 +323,7 @@
                 },
                 {
                     "data": "TxnUpdateDate", "title": "Txn UpdateDate", "render": function (data, type) {
-                        if (data != "" && data != null) {
+                        if (data != "" && data != null && data != "-") {
                             var day = data.split('/')[0]
                             var month = data.split('/')[1]
                             var year = data.split('/')[2]
