@@ -372,6 +372,7 @@
     <Compile Include="Repository\LoyaltyKPIsRepository.cs" />
     <Compile Include="Repository\ManagementDashboardRepository.cs" />
     <Compile Include="Repository\NoActionRepository.cs" />
+    <Compile Include="Repository\NPCRepository.cs" />
     <Compile Include="Repository\OnBoarding\CustomerOnBoardingRepository.cs" />
     <Compile Include="Repository\OnBoarding\OnBoardingRepository.cs" />
     <Compile Include="Repository\OtherReportsRepository.cs" />
