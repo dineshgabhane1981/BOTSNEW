@@ -660,7 +660,7 @@ namespace WebApp.Controllers.OnBoarding
             sb.Append("City : <b>" + objData.bots_TblGroupMaster.CityName + "</b>");
             sb.Append("<br/>");
             sb.Append("<br/>");
-            sb.Append("Outlet Count : <b>" + objData.objRetailList.Count + "</b> Outlets");
+            sb.Append("Outlet Count : <b>" + objData.objRetailList[0].NoOfEnrolled + "</b> Outlets");
             sb.Append("<br/>");
             sb.Append("<br/>");
             sb.Append("We appreciate your decision to join hands with <b>Blue Ocktopus</b>, which has helped 200+ retail friends to take advantage of our sophisticated Loyalty & Data driven tool. We are confident that we can replicate the same for you, as well!!");
@@ -693,6 +693,9 @@ namespace WebApp.Controllers.OnBoarding
             mail.From = fromMail;
 
             mail.To.Add(objData.bots_TblGroupMaster.OwnerEmailId);
+            mail.CC.Add("dinesh@blueocktopus.in");
+            mail.CC.Add("jacqueline@blueocktopus.in");
+            mail.CC.Add("punamchandra@blueocktopus.in");
 
             System.Net.Mail.Attachment attachment;
             attachment = new System.Net.Mail.Attachment(path);

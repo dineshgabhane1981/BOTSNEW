@@ -442,7 +442,7 @@ namespace BOTS_BL.Repository
             List<string> lstEmails = new List<string>();
             using (var context = new CommonDBContext())
             {
-                var loginTypeList = new List<string> { "2", "3", "4" };
+                var loginTypeList = new List<string> { "2", "3", "4", "5", "6", "7", "8", "9", "10" };
                 lstEmails = context.CustomerLoginDetails.Where(x => x.EmailId != null && x.LoginType != null && !loginTypeList.Contains(x.LoginType) && x.UserStatus == true).Select(y => y.EmailId).ToList();
             }
 

@@ -1,4 +1,5 @@
 ﻿@model WebApp.ViewModel.OtherReportProductwiseViewModel
+@using System.Globalization
 @{
     ViewBag.Title = "Productwise";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -24,9 +25,15 @@
                         <tr>
                             <td>@item.ProductCode</td>
                             <td>@item.ProductName</td>
-                            <td>@item.UniqueMember</td>
-                            <td>@item.UniqueTxn</td>
-                            <td>@item.TotalAmt</td>
+                            <td>
+                                @String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(item.UniqueMember))
+                            </td>
+                            <td>
+                                @String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(item.UniqueTxn))                                
+                            </td>
+                            <td>
+                                @String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(item.TotalAmt))                                
+                            </td>
                         </tr>
                     }
                 </table>
@@ -45,13 +52,19 @@
                     </tr>
                     @foreach (var item in Model.lstBottom5Value)
                     {
-                        <tr>
-                            <td>@item.ProductCode</td>
-                            <td>@item.ProductName</td>
-                            <td>@item.UniqueMember</td>
-                            <td>@item.UniqueTxn</td>
-                            <td>@item.TotalAmt</td>
-                        </tr>
+                <tr>
+                    <td>@item.ProductCode</td>
+                    <td>@item.ProductName</td>
+                    <td>
+                        @String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(item.UniqueMember))
+                    </td>
+                    <td>
+                        @String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(item.UniqueTxn))
+                    </td>
+                    <td>
+                        @String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(item.TotalAmt))
+                    </td>
+                </tr>
                     }
                 </table>
             </div>
