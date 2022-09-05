@@ -696,6 +696,7 @@ namespace WebApp.Controllers.OnBoarding
             mail.CC.Add("dinesh@blueocktopus.in");
             mail.CC.Add("jacqueline@blueocktopus.in");
             mail.CC.Add("punamchandra@blueocktopus.in");
+            mail.CC.Add("mahavir@blueocktopus.in");
 
             System.Net.Mail.Attachment attachment;
             attachment = new System.Net.Mail.Attachment(path);

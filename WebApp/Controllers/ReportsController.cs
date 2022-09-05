@@ -553,8 +553,14 @@ namespace WebApp.Controllers
                     }
                 }
 
+                decimal? amt = 0;
+                decimal? epts = 0;
+                decimal? bpts = 0;
                 foreach (DataRow dr in table.Rows)
                 {
+                    amt += Convert.ToDecimal(dr["InvoiceAmt"]);
+                    epts += Convert.ToDecimal(dr["PointsEarned"]); 
+                    bpts += Convert.ToDecimal(dr["PointsBurned"]); 
                     if (!string.IsNullOrEmpty(Convert.ToString(dr["InvoiceAmt"])))
                     {
                         dr["InvoiceAmtStr"] = String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(dr["InvoiceAmt"]));
