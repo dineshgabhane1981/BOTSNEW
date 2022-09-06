@@ -10,9 +10,8 @@ namespace BOTS_BL.Models
     {
         [Key]
         public int Slno { get; set; }
-
-        [Column(TypeName = "numeric")]
-        public decimal? GroupId { get; set; }
+         
+        public string GroupId { get; set; }
 
         public string GroupName { get; set; }
 

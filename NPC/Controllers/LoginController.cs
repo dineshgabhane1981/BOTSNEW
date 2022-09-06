@@ -9,14 +9,34 @@ using System.Web.Script.Serialization;
 
 namespace NPC.Controllers
 {
-    public class Login1Controller : Controller
+    public class LoginController : Controller
     {
         NPCRepository NPCR = new NPCRepository();
         // GET: Login
         public ActionResult Index()
         {
+            NPCLoginDetail objData = new NPCLoginDetail();
+            return View(objData);
+        }
+
+        public ActionResult Authenticate(NPCLoginDetail objData)
+        {
+
+            var groupId = NPCR.CheckLogin(objData);
+            if (!string.IsNullOrEmpty(groupId))
+            {
+                Session["GroupId"] = groupId;
+                return RedirectToAction("NPCPage");
+            }
+            else
+                return RedirectToAction("Index");
+        }
+
+        public ActionResult NPCPage()
+        {
             return View();
         }
+
 
         public ActionResult SaveNPC(string jsonData)
         {
@@ -29,7 +49,7 @@ namespace NPC.Controllers
             tblNPCDetail objOutletData = new tblNPCDetail();
             foreach (Dictionary<string, object> item in objData)
             {
-                
+
                 objOutletData.CustomerMobileNo = Convert.ToString(item["CustomerMobileNo"]);
                 objOutletData.CustomerName = Convert.ToString(item["CustomerName"]);
                 objOutletData.EmployeeName = Convert.ToString(item["EmployeeName"]);
@@ -37,7 +57,7 @@ namespace NPC.Controllers
                 objOutletData.SubCategoryName = Convert.ToString(item["SubCategoryName"]);
                 objOutletData.NextVisitDay = Convert.ToDecimal(item["NextVisitDay"]);
                 objOutletData.Remarks = Convert.ToString(item["Remarks"]);
-                
+
             }
             result = NPCR.SaveNPCData(objOutletData);
 

@@ -183,8 +183,8 @@
     <Content Include="Views\Home\About.cshtml" />
     <Content Include="Views\Home\Contact.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
-    <Content Include="Views\Login1\Index.cshtml" />
-    <Content Include="Views\Login1\SaveNPC.cshtml" />
+    <Content Include="Views\Login\Index.cshtml" />
+    <Content Include="Views\Login\NPCPage.cshtml" />
     <Content Include="Views\References\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
