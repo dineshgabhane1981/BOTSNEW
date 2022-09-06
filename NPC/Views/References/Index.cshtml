@@ -1,0 +1,57 @@
+﻿@model BOTS_BL.Models.tblReference
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<script src="~/Scripts/cute-alert-master/cute-alert.js"></script>
+<link href="~/Scripts/cute-alert-master/style-alert.css" rel="stylesheet" />
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+      integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+<link rel="stylesheet" href="~/Content/style.css" />
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+</head>
+<body>
+    <div style="border-radius:5px;padding:5px;">
+        
+
+        @if (Convert.ToString(TempData["Message"]) == "Success")
+        {
+            <script>
+                cuteAlert({
+                    type: "success",
+                    title: "Saved",
+                    message: "Thanks for Reference, We will get in touch with Customer",
+                    buttonText: "Okay"
+                })
+            </script>
+        }
+
+        @using (Html.BeginForm("SaveReferee", "References", FormMethod.Post))
+        {
+            @Html.HiddenFor(model => model.RefereeMobileNo)
+    <div class="container-fluid p-3 m-5 col-lg-6 col-md-6" style="background-position: center; border:1px solid grey; border-radius:10px;">
+        <div class="row" style="padding-left:100px;">
+            <img src="https://blueocktopus.in/bots/Content/assets/images/Blue-Ocktopus-TLC_white.jpg"  width="70%" />
+        </div>  @*<h4>Welcome To BlueOcktopus</h4>*@
+            <div class="row pl-5">
+                <div class="col-lg-3 col-md-3">Mobile No</div>
+                <div class="col-lg-3 col-md-3">@Html.TextBoxFor(model => model.ReferredMobileNo, new { @class = "input100" }) </div>
+            </div>
+
+            <div class="row pl-5">
+                <div class="col-lg-3 col-md-3">Customer Name </div>
+                <div class="col-lg-3 col-md-3">@Html.TextBoxFor(model => model.ReferredName, new { @class = "input100" }) </div>
+            </div>
+            <div style="margin-top:10px;margin-left:5px;text-align:center;"><button type="submit" class="btn btn-primary">Save</button></div>
+
+        </div>
+        }
+        </div>
+
+</body>
+</html>

@@ -239,6 +239,7 @@
     <Compile Include="Models\CommonDB\tblErrorLog.cs" />
     <Compile Include="Models\CommonDB\tblGroupDetail.cs" />
     <Compile Include="Models\CommonDB\tblModulesPayment.cs" />
+    <Compile Include="Models\CommonDB\tblReference.cs" />
     <Compile Include="Models\CommonDB\tblRMAssigned.cs" />
     <Compile Include="Models\CommonDB\tblSourcedBy.cs" />
     <Compile Include="Models\CommonDB\tblSourceType.cs" />
@@ -380,6 +381,7 @@
     <Compile Include="Repository\ParticipantRepository.cs" />
     <Compile Include="Repository\PointsLedgerRepository.cs" />
     <Compile Include="Repository\RedemptionRepository.cs" />
+    <Compile Include="Repository\ReferencesRepository.cs" />
     <Compile Include="Repository\ReportsRepository.cs" />
     <Compile Include="Repository\SalesLeadRepository.cs" />
     <Compile Include="Repository\SinglePageRepository.cs" />
