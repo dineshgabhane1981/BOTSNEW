@@ -1,21 +1,34 @@
 ﻿@{
-    ViewBag.Title = "CreateCampaign";
+    ViewBag.Title = "Create Campaign";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-
-<h2>Create Campaign</h2>
-
-
+<style>
+    .rbtnClass {
+        height: 20px;
+        width: 20px;
+        vertical-align: middle;
+        cursor: pointer;
+       /* margin-left: 10px;*/
+    }
+</style>
 <div class="app-main__inner" id="dvall">
     <div class="container-fluid pt-3 pl-3 pr-3 pb-3">
 
-        <div class="mb-3 pr-3 pt-3 pl-3 card" style="padding-bottom:20px;">
-            <div class="row mt-4">
-                <div class="col-md-8 col-xl-8">
-                    <input type="radio" checked id="rdnSMS" value="1" name="btdornot" @*onclick="SMStypeValidate();"*@ />&nbsp;&nbsp;&nbsp;<b>SMS </b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    <input type="radio" id="rdnVSMS" value="2" name="btdornot" @*onclick="SMStypeValidate();"*@ />&nbsp;&nbsp;&nbsp;<b> Virtual SMS </b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    <input type="radio" id="rdnWA" value="3" name="btdornot" @*onclick="SMStypeValidate();"*@ />&nbsp;&nbsp;&nbsp;<b> Whats app</b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    <input type="radio" id="rdnVWA" value="4" name="btdornot" @*onclick="SMStypeValidate();"*@ />&nbsp;&nbsp;&nbsp;<b> Verified Whats app</b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <div class="mb-2 pr-3 pt-3 pl-3 card" style="padding-bottom:20px;">
+            <div class="row mt-2">
+                <div class="row col-md-12 col-xl-12" style="margin-left:25px;">
+                    <div class="col-md-3 col-xl-3">
+                        <input type="radio" checked id="rdnSMS" class="rbtnClass" value="1" name="btdornot" @*onclick="SMStypeValidate();"*@ />&nbsp;&nbsp;<b>SMS </b>
+                    </div>
+                    <div class="col-md-3 col-xl-3">
+                        <input type="radio" id="rdnVSMS" class="rbtnClass" value="2" name="btdornot" @*onclick="SMStypeValidate();"*@ />&nbsp;&nbsp;<b> Virtual SMS </b>
+                    </div>
+                    <div class="col-md-3 col-xl-3">
+                        <input type="radio" id="rdnWA" class="rbtnClass" value="3" name="btdornot" @*onclick="SMStypeValidate();"*@ />&nbsp;&nbsp;<b> Whats app</b>
+                    </div>
+                    <div class="col-md-3 col-xl-3">
+                        <input type="radio" id="rdnVWA" class="rbtnClass" value="4" name="btdornot" @*onclick="SMStypeValidate();"*@ />&nbsp;&nbsp;<b> Verified Whats app</b>
+                    </div>
                 </div>
             </div>
         </div>
@@ -246,7 +259,7 @@
                 <div class="col-sm-2" style="margin-left: 18px;">
                     Base Type
                 </div>
-                <div class="col-sm-2 dropdown" style="margin-left : 70px;">
+                <div class="col-sm-2 dropdown" style="margin-left : 65px;">
                     <select id="BaseType" name="BaseType" class="input50" onchange="BaseCalc();">
                         <option value="1">All</option>
                         <option value="2">Member Base</option>
@@ -260,18 +273,18 @@
                 <div class="col-sm-2" style="margin-left: 18px;">
                     Points
                 </div>
-                <div class="col-sm-2 dropdown" style="margin-left : 70px;">
+                <div class="col-sm-3 dropdown" style="margin-left : 65px;">
                     <select id="Filter" name="Filter" class="input50" onchange="pointsvalid();">
                         <option value="1">Less Than</option>
                         <option value="2">Greater Than</option>
                         <option value="3">Equal To</option>
                         <option value="4">Points Range</option>
                     </select>
-                </div>&nbsp;&nbsp;&nbsp;
-                <div class="col-sm-2">
+                </div>
+                <div class="col-md-2 col-xl-2" style="margin-left:-55px;">
                     <input type="number" id="points" name="points" class="input50" />
-                </div>&nbsp;&nbsp;&nbsp;
-                <div class="col-sm-2" style="display:none" id="divPointsRange">
+                </div>
+                <div class="col-md-2 col-xl-2" style="display:none;margin-left:25px;" id="divPointsRange">
                     <input type="number" id="points2" name="points2" class="input50" />
                 </div>
             </div>
@@ -280,136 +293,139 @@
                 <div class="col-sm-2" style="margin-left: 18px;">
                     OutletData
                 </div>
-                <div class="col-sm-2 dropdown" style="margin-left: 70px;">
+                <div class="col-sm-2 dropdown" style="margin-left: 65px;">
                     @Html.DropDownList("OutletData", new SelectList(ViewBag.OutletData, "Value", "Text"), "ALL", htmlAttributes: new { @class = "input50", @id = "ddlOutletList" })
                 </div>
             </div>
 
             <div class="row" style="margin-top : 20px;">
                 <div class="col-md-3 col-xl-3">
+                </div>
+                <div class="col-md-3 col-xl-3 ">
                     <div class="button">
                         <button type="button" id="btnFilter" style="margin-left:15px;" class="btn btn-primary" onclick="ShowCount();"><b>FILTER</b></button>
                     </div>
                 </div>
+
                 <div class="col-md-4 col-xl-4">
-                    <table style="border:2px solid black;width:70%">
+                    <table cellpadding="10" cellspacing="10" style="margin-left:100px; border:2px solid black;width:70%;">
                         <tr style="border:2px solid black; ">
                             <td style="border:2px solid black;text-align:left;">
-                                <span id="AllCount"></span>All Count
+                                <span id="AllCount"></span><b>All Count</b>
                             </td>
                             <td style="border:2px solid black;width:40%">
-                                <span id="AllCountnum"></span>
+                                <span id="AllCountnum" style="font-weight:bold;font-size:20px;"></span>
                             </td>
                         </tr>
                         <tr style="border:2px solid black; ">
                             <td style="border:2px solid black;text-align:left;">
-                                <span id="FiltCount"></span>Filtered Count
+                                <span id="FiltCount"></span><b>Filtered Count</b>
                             </td>
                             <td style="border:2px solid black;width:40%">
-                                <span id="FiltCountnum"></span>
+                                <span id="FiltCountnum" style="font-weight:bold;color:green;font-size:20px;"></span>
                             </td>
                         </tr>
                     </table>
                 </div>
             </div>
 
-            <div class="row" style="margin: 20px;" id="SMSSType">
-                <div class="col-md-8 col-xl-8">
-                    <input type="radio" checked id="rdnText" value="1" name="ScriptType" Onchange ="HandleChange();" />&nbsp;&nbsp;&nbsp;<b>English</b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    <input type="radio" id="rdnUnicode" value="2" name="ScriptType" Onchange ="HandleChange();"/>&nbsp;&nbsp;&nbsp;<b>Vernacular (Marathi, Hindi, Kannada, etc)</b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                </div>
-            </div>
-
-            <div class="row" style="margin: 20px;">
-                <div class="col-md-8 col-xl-8">
-                    <div class="custom-control custom-switch">
-                        <input type="checkbox" class="custom-control-input" id="ScheduleSwitch" value="0" onchange="ShowScheduledate();">
-                        <label class="custom-control-label" for="ScheduleSwitch"><b>Schedule Date & Time</b></label>
+                <div class="row" style="margin: 20px;" id="SMSSType">
+                    <div class="col-md-8 col-xl-8">
+                        <input type="radio" class="rbtnClass" checked id="rdnText" value="1" name="ScriptType" Onchange="HandleChange();" />&nbsp;&nbsp;&nbsp;<b>English</b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <input type="radio" class="rbtnClass" id="rdnUnicode" value="2" name="ScriptType" Onchange="HandleChange();" />&nbsp;&nbsp;&nbsp;<b>Vernacular (Marathi, Hindi, Kannada, etc)</b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                     </div>
                 </div>
-            </div>
 
-            <div class="row" style="margin: 20px; display : none" id="SchedPick">
-                <div class="col-md-8 col-xl-8">
-                    <input id="datetimepicker" type="text" onclick="Showdatetime();">&nbsp;&nbsp;<label> Double click to add Datetime</label>
-                </div>
-            </div>
-
-            <div class="row mt-2" style="margin-top: 20px; margin-left: 10px;">
-                <div class="col-md-3 col-xl-3" style="margin-left: 18px; margin-top: 20px;">
-                    Approved Template ID<b>*</b>
-                </div>
-                <div>
-                    <input type="text" id="TempId" class="input50" style="margin-top : 20px;" />
-                </div>
-            </div>
-
-            <div class="row" style="margin: 20px;" id="ScriptText">
-
-                <div class="col-md-4" style="margin-top:10px;">
-                    <textarea class="form-control" id="SMSScript" rows="7" maxlength="10000" placeholder="Enter SMS Script"></textarea>&nbsp;&nbsp;
-                </div>
-                <div class="col-md-3" style="margin-top:10px;">
-                    <br><br><br><br><br><br>
-                    <table style="border:2px solid black;width:70%">
-                        <tr style="border:2px solid black; ">
-                            <td style="border:2px solid black;text-align:left;">
-                                <span id="CharCount"></span>Char Count
-                            </td>
-                            <td style="border:2px solid black;width:40%">
-                                <span id="current">0</span>
-                            </td>
-                        </tr>
-                        <tr style="border:2px solid black; ">
-                            <td style="border:2px solid black;text-align:left;">
-                                <span id="SMSCount"></span>SMS Count
-                            </td>
-                            <td style="border:2px solid black;width:40%">
-                                <span id="Count">0</span>
-                            </td>
-                        </tr>
-                    </table>
+                <div class="row" style="margin: 20px;">
+                    <div class="col-md-8 col-xl-8">
+                        <div class="custom-control custom-switch">
+                            <input type="checkbox" class="custom-control-input" id="ScheduleSwitch" value="0" onchange="ShowScheduledate();">
+                            <label class="custom-control-label"  style="cursor:pointer !important;" for="ScheduleSwitch"><b>Schedule Date & Time</b></label>
+                        </div>
+                    </div>
                 </div>
 
-                <div class="col-md-4" style="margin-top:10px;">
-                    <textarea class="form-control" id="txtScript" rows="7" maxlength="10000"></textarea>&nbsp;&nbsp;
+                <div class="row" style="margin: 20px; display : none" id="SchedPick">
+                    <div class="col-md-8 col-xl-8">
+                        <input id="datetimepicker" type="text" class="input50"  onclick="Showdatetime();">&nbsp;&nbsp;<label> Double click to add Datetime</label>
+                    </div>
                 </div>
-            </div>
-            <div class="tw-ets tw-ess tw-src-ltr" id="tw-ob">
-            </div>
-            <div id="GoogleElement" style="margin-left:130px;">
-            </div>
 
-            @*<div class="row" style="margin-top : 20px;" >
-                <div class="button">
-                    <button type="button" style="margin-left:25px;" id="translControl" class="btn btn-primary" onclick="auto_transliterate_all();" value="Auto Transliterate"><b>Click</b></button>
+                <div class="row mt-2" style="margin-top: 20px; margin-left: 10px;">
+                    <div class="col-md-3 col-xl-3" style="margin-left: 18px; margin-top: 20px;">
+                        Approved Template ID<b>*</b>
+                    </div>
+                    <div>
+                        <input type="text" id="TempId" class="input50" style="margin-top : 20px;" />
+                    </div>
                 </div>
-            </div>*@
-            <div class="col-md-6 col-xl-6">
-                <div class="button">
-                    <button type="button" id="btnSave" style="margin-left:25px;" class="btn btn-primary" onclick="SaveValidate();"><b>SAVE</b></button>
-                    <button type="button" id="btnDownload" style="margin-left:15px; display:none" class="btn btn-primary" onclick="DownLoad();"><b>DOWNLOAD</b></button>
-                    @*<button type="button" id="btnSendTestSMS" style="margin-left:15px; display:normal" class="btn btn-primary" onclick="SendTestValidate();" disabled><b>TEST SMS</b></button>*@
-                    @*<button type="button" id="btnSendDLT" style="margin-left: 15px; display: normal" class="btn btn-primary" onclick="SendSMSValidate();" disabled><b>SEND SMS</b></button>*@
-                </div>
-            </div>
 
-            <div class="row" style="margin: 20px;">
-                <div class="col-md-4" style="margin-top: 10px;">
-                    <textarea class="form-control" id="TestNumbers" rows="2" maxlength="10000" style="display: none" placeholder="Enter Test Numbers"></textarea>&nbsp;&nbsp;
-                </div>
-                <div class="button col-md-4" style="margin-top: 37px;">
-                    <button type="button" id="btnSendTestSMS" style="margin-left: 25px; display: none" class="btn btn-primary" onclick="SendTestValidate();"><b>TEST SMS</b></button>
-                </div>
-            </div>
+                <div class="row" style="margin: 20px;" id="ScriptText">
 
-            <div class="col-md-6 col-xl-6" style="margin-top: 10px;">
-                <div class="button">
-                    <button type="button" id="btnSendDLT" style="margin-left:25px; display : none" class="btn btn-primary" onclick="SendSMSValidate();"><b>SEND SMS</b></button>
-                </div>
-            </div>
+                    <div class="col-md-4" style="margin-top:10px;">
+                        <textarea class="form-control" id="SMSScript" rows="7" maxlength="10000" placeholder="Enter SMS Script"></textarea>&nbsp;&nbsp;
+                    </div>
+                    <div class="col-md-3" style="margin-top:10px;">
+                        <br><br><br><br><br><br>
+                        <table style="border:2px solid black;width:70%">
+                            <tr style="border:2px solid black; ">
+                                <td style="border:2px solid black;text-align:left;">
+                                    <span id="CharCount"></span>Char Count
+                                </td>
+                                <td style="border:2px solid black;width:40%">
+                                    <span id="current">0</span>
+                                </td>
+                            </tr>
+                            <tr style="border:2px solid black; ">
+                                <td style="border:2px solid black;text-align:left;">
+                                    <span id="SMSCount"></span>SMS Count
+                                </td>
+                                <td style="border:2px solid black;width:40%">
+                                    <span id="Count">0</span>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
 
-        </div>
+                    <div class="col-md-4" style="margin-top:10px;">
+                        <textarea class="form-control" id="txtScript" rows="7" maxlength="10000"></textarea>&nbsp;&nbsp;
+                    </div>
+                </div>
+                <div class="tw-ets tw-ess tw-src-ltr" id="tw-ob">
+                </div>
+                <div id="GoogleElement" style="margin-left:130px;">
+                </div>
+
+                @*<div class="row" style="margin-top : 20px;" >
+            <div class="button">
+                <button type="button" style="margin-left:25px;" id="translControl" class="btn btn-primary" onclick="auto_transliterate_all();" value="Auto Transliterate"><b>Click</b></button>
+            </div>
+        </div>*@
+                <div class="col-md-6 col-xl-6">
+                    <div class="button">
+                        <button type="button" id="btnSave" style="margin-left:25px;" class="btn btn-primary" onclick="SaveValidate();"><b>SAVE</b></button>
+                        <button type="button" id="btnDownload" style="margin-left:15px; display:none" class="btn btn-primary" onclick="DownLoad();"><b>DOWNLOAD</b></button>
+                        @*<button type="button" id="btnSendTestSMS" style="margin-left:15px; display:normal" class="btn btn-primary" onclick="SendTestValidate();" disabled><b>TEST SMS</b></button>*@
+                        @*<button type="button" id="btnSendDLT" style="margin-left: 15px; display: normal" class="btn btn-primary" onclick="SendSMSValidate();" disabled><b>SEND SMS</b></button>*@
+                    </div>
+                </div>
+
+                <div class="row" style="margin: 20px;">
+                    <div class="col-md-4" style="margin-top: 10px;">
+                        <textarea class="form-control" id="TestNumbers" rows="2" maxlength="10000" style="display: none" placeholder="Enter Test Numbers"></textarea>&nbsp;&nbsp;
+                    </div>
+                    <div class="button col-md-4" style="margin-top: 37px;">
+                        <button type="button" id="btnSendTestSMS" style="margin-left: 25px; display: none" class="btn btn-primary" onclick="SendTestValidate();"><b>TEST SMS</b></button>
+                    </div>
+                </div>
+
+                <div class="col-md-6 col-xl-6" style="margin-top: 10px;">
+                    <div class="button">
+                        <button type="button" id="btnSendDLT" style="margin-left:25px; display : none" class="btn btn-primary" onclick="SendSMSValidate();"><b>SEND SMS</b></button>
+                    </div>
+                </div>
+
+            </div>
 
     </div>
 </div>
@@ -894,8 +910,8 @@
                 success: function (response) {
                     console.log(response);
                     if (response != null) {
-                        $("#AllCountnum").text(response.CustCountALL);
-                        $("#FiltCountnum").text(response.CustFiltered);
+                        $("#AllCountnum").text(addComma(response.CustCountALL));
+                        $("#FiltCountnum").text(addComma(response.CustFiltered));
                         $("#divLoader").hide();
                     }
                     else {
