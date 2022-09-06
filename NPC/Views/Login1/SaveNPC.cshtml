@@ -1,0 +1,93 @@
+﻿
+@{
+    ViewBag.Title = "SaveNPC";
+}
+
+<h2>SaveNPC</h2>
+
+<div style="border:1px solid grey; border-radius:5px;padding:5px;">
+    <div style="padding-right:10px;">
+        Customer Mobile No
+        <input type="text" id="frm1" class="input20" />
+    </div>
+    <div style="padding-right:10px; margin-top:20px;">
+        Customer Name
+        <input type="text" id="to1" class="input20" />
+    </div>
+    <div style="padding-right: 10px; margin-top: 20px;">
+        Employee Name
+        <input type="text" id="frm2" class="input20" />
+    </div>
+    <div style="padding-right:10px; margin-top:20px;">
+        Category Name
+        <input type="text" id="to2" class="input20" />
+    </div>
+    <div style="padding-right: 10px; margin-top: 20px;">
+        Sub-Category Name
+        <input type="text" id="frm3" class="input20" />
+    </div>
+    <div style="padding-right:10px; margin-top:20px;">
+        Next Visit day
+        <input type="number" id="per3" class="input20" />
+    </div>
+    <div style="padding-right:10px; margin-top:20px;">
+        Remarks
+        <input type="text" id="to4" class="input20" />
+    </div>
+
+    <div>
+        <button type="button" id="btnEarnSave" onclick="return SaveNPC();" style="margin-right:10px;margin-bottom:20px;">Submit</button>
+    </div>
+
+</div>
+
+<script>
+    function SaveNPC() {
+        var NPCData = [];
+        item = {};
+        item["CustomerMobileNo"] = $("#txtCustomerMobileNo").val();
+        item["CustomerName"] = $("#txtCustomerName").val();
+        item["EmployeeName"] = $("#txtEmployeeName").val();
+        item["CategoryName"] = $("#txtCategoryName").val();
+        item["SubCategoryName"] = $("#txtSubCategoryName").val();
+        item["NextVisitDay"] = $("#txtNextVisitDay").val();
+        item["Remarks"] = $("#txtRemarks").val();
+
+
+        NPCData.push(item);
+        var NPCDataStr = JSON.stringify(NPCData);
+            $("#divLoader").show();
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("SaveNPC", "Login")',
+                data: '{jsonData: ' + JSON.stringify(NPCDataStr) + '}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (result) {
+                    console.log(result)
+                    if (result == true) {
+                        cuteAlert({
+                            type: "success",
+                            title: "Saved",
+                            message: "NPC Data saved successfully",
+                            buttonText: "Okay"
+                        })
+                        $("#divLoader").hide();
+                    }
+                    else {
+                        cuteAlert({
+                            type: "error",
+                            title: "Oops..",
+                            message: "There is a problem in saving NPC Data",
+                            buttonText: "Okay"
+                        })
+                        $("#divLoader").hide();
+                    }
+                },
+                error: function (result) {
+                    //console.log(result.responseText)
+                }
+            });
+        }
+    }
+</script>
