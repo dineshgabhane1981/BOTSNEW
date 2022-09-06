@@ -13,6 +13,10 @@ using System.Threading;
 using System.Web;
 using System.Net;
 using System.IO;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using Newtonsoft.Json.Linq;
+using System.Web.Script.Serialization;
 
 namespace BOTS_BL.Repository
 {
@@ -348,7 +352,144 @@ namespace BOTS_BL.Repository
             return OutletData;
         }
 
-        public CustCount GetFiltData(string BaseType,string PointsBase,string Points, string OutletId, string GroupId, string connstr)
+        public List<CommonSMSGateWayMaster> GatewayDetails(string GroupId, string connstr)
+        {
+            List<CommonSMSGateWayMaster> SMSGatewayDetails = new List<CommonSMSGateWayMaster>();
+            SMSDetailsTemp SDT = new SMSDetailsTemp();
+            string UserName, Password, SMSVendor;
+            try
+            {
+                using (var context = new CommonDBContext())
+                {
+
+                    SMSGatewayDetails = (from c in context.CommonSMSGateWayMasters where (c.GroupId == GroupId && c.Status == "00") select c).ToList();
+
+                    foreach (var item in SMSGatewayDetails)
+                    {
+                        
+
+                        SDT.UserName = Convert.ToString(item.UserName);
+                        SDT.Password = Convert.ToString(item.Password);
+                        SDT.SMSVendor = Convert.ToString(item.SMSVendor);
+                    }
+                    SMSVendor = Convert.ToString(SDT.SMSVendor);
+                    UserName = Convert.ToString(SDT.UserName);
+                    Password = Convert.ToString(SDT.Password);
+                    switch (SMSVendor)
+                    {
+                        case "TechnoCore":
+                            
+                            var baseAddress = "https://smsnotify.one/SMSApi/account/readstatus?userid="+ UserName + "&password="+ Password + "&output=json";
+                            using (var client = new HttpClient())
+                            {
+                                using (var response1 = client.GetAsync(baseAddress).Result)
+                                {
+                                    if (response1.IsSuccessStatusCode)
+                                    {
+                                        client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                                        var response2 = client.GetStringAsync(new Uri(baseAddress)).Result;
+                                        JObject jsonObj = JObject.Parse(response2);
+                                        IEnumerable<JToken> pricyProducts = jsonObj.SelectTokens("$..account");
+                                        foreach (JToken item in pricyProducts)
+                                        {
+                                            CommonSMSGateWayMaster objbalance = new CommonSMSGateWayMaster();
+                                            objbalance.smsBalance = Convert.ToString(item["smsBalance"]);
+                                            SMSGatewayDetails.Add(objbalance);
+                                        }
+                                    }
+                                    else
+                                    {
+                                        Console.WriteLine("{0} ({1})", (int)response1.StatusCode, response1.ReasonPhrase);
+                                    }
+                                }
+                            }
+                            break;
+                        case "VisionHLT":
+                            
+                            var baseAddress3 = "http://sms.visionhlt.com:8080/api/mt/GetBalance?User=" + UserName + "&Password=" + Password;
+                            using (var client = new HttpClient())
+                            {
+                                using (var response1 = client.GetAsync(baseAddress3).Result)
+                                {
+                                    if (response1.IsSuccessStatusCode)
+                                    {
+                                        client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                                        var response2 = client.GetStringAsync(new Uri(baseAddress3)).Result;
+                                        JObject jsonObj = JObject.Parse(response2);
+                                        var Balance = JObject.Parse(response2)["Balance"];
+                                        CommonSMSGateWayMaster objbalance = new CommonSMSGateWayMaster();
+                                        
+                                        string Temp = Convert.ToString(Balance);
+                                        Temp = Temp.Substring(Temp.IndexOf("|") + 7);
+                                        objbalance.smsBalance = Temp;
+                                        SMSGatewayDetails.Add(objbalance);
+                                    }
+                                    else
+                                    {
+                                        Console.WriteLine("{0} ({1})", (int)response1.StatusCode, response1.ReasonPhrase);
+                                    }
+                                }
+                            }
+                            break;
+                        case "Pinnacle":
+
+                            ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls | (SecurityProtocolType)3072;
+                            ServicePointManager.ServerCertificateValidationCallback += (sender, cert, chain, sslPolicyErrors) => true;
+                            var httpWebRequest_11671 = (HttpWebRequest)WebRequest.Create("https://api.pinnacle.in/index.php/checkbalance");
+                            httpWebRequest_11671.ContentType = "application/json";
+                            httpWebRequest_11671.Headers.Add("Apikey", Password);
+                            httpWebRequest_11671.Method = "POST";
+                            var httpResponse_11671 = (HttpWebResponse)httpWebRequest_11671.GetResponse();
+                            using (var streamReader_11671 = new StreamReader(httpResponse_11671.GetResponseStream()))
+                            {
+                                var Balance = streamReader_11671.ReadToEnd();
+                                JObject jsonObj = JObject.Parse(Balance);
+                                IEnumerable<JToken> pricyProducts = jsonObj.SelectTokens("$..data");
+                                foreach (JToken item in pricyProducts)
+                                {
+                                    CommonSMSGateWayMaster objbalance = new CommonSMSGateWayMaster();
+                                    string Bal = Convert.ToString(item["balance"]);
+                                    SMSGatewayDetails.Add(objbalance);
+                                }
+                            }
+                            break;
+                        default:
+                            var baseAddress1 = "https://smsnotify.one/SMSApi/reseller/readuser?userid=0&password=0&output=json";
+                            using (var client = new HttpClient())
+                            {
+                                using (var response1 = client.GetAsync(baseAddress1).Result)
+                                {
+                                    if (response1.IsSuccessStatusCode)
+                                    {
+                                        client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                                        var response2 = client.GetStringAsync(new Uri(baseAddress1)).Result;
+                                        JObject jsonObj = JObject.Parse(response2);
+                                        
+                                        CommonSMSGateWayMaster objbalance = new CommonSMSGateWayMaster();
+
+                                        SMSGatewayDetails.Add(objbalance);
+                                    }
+                                    else
+                                    {
+                                        Console.WriteLine("{0} ({1})", (int)response1.StatusCode, response1.ReasonPhrase);
+                                    }
+                                }
+                            }
+                            break;
+
+                    }
+
+
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, GroupId);
+            }
+            return SMSGatewayDetails;
+        }
+
+        public CustCount GetFiltData(string BaseType,string PointsBase,string Points,string PointsRange1, string OutletId, string GroupId, string connstr)
         {
             CustomerIdListAndCount objcount = new CustomerIdListAndCount();
             List < CustomerDetail> objcust = new List<CustomerDetail>();
@@ -439,7 +580,22 @@ namespace BOTS_BL.Repository
                         objcustAll.CustCountALL = context.CustomerDetails.Where(x => x.Status == "00" && x.IsSMS == null && (x.CustomerThrough == "2" || x.CustomerThrough == "4" || x.CustomerThrough == "5" || x.CustomerThrough == "7") && x.Points == DummyPoints).Count();
                         objcustAll.CustFiltered = context.CustomerDetails.Where(x => x.Status == "00" && x.IsSMS == null && (x.CustomerThrough == "2" || x.CustomerThrough == "4" || x.CustomerThrough == "5" || x.CustomerThrough == "7") && x.Points == DummyPoints && x.EnrollingOutlet == OutletId).Count();
                     }
-                   
+
+                    else if (BaseType == "4" && PointsBase == "4" && Points != "" && PointsRange1!="" && OutletId == "")
+                    {
+                        int DummyPoints = Convert.ToInt32(Points);
+                        int DummyPoints2 = Convert.ToInt32(PointsRange1);
+                        objcustAll.CustCountALL = context.CustomerDetails.Where(x => x.Status == "00" && x.IsSMS == null && (x.CustomerThrough == "2" || x.CustomerThrough == "4" || x.CustomerThrough == "5" || x.CustomerThrough == "7") && (x.Points >= DummyPoints && x.Points <= DummyPoints2)).Count();
+                        objcustAll.CustFiltered = context.CustomerDetails.Where(x => x.Status == "00" && x.IsSMS == null && (x.CustomerThrough == "2" || x.CustomerThrough == "4" || x.CustomerThrough == "5" || x.CustomerThrough == "7") && (x.Points >= DummyPoints && x.Points <= DummyPoints2)).Count();
+                    }
+                    else if (BaseType == "4" && PointsBase == "3" && Points != "" && PointsRange1 != "" && OutletId != "")
+                    {
+                        int DummyPoints = Convert.ToInt32(Points);
+                        int DummyPoints2 = Convert.ToInt32(PointsRange1);
+                        objcustAll.CustCountALL = context.CustomerDetails.Where(x => x.Status == "00" && x.IsSMS == null && (x.CustomerThrough == "2" || x.CustomerThrough == "4" || x.CustomerThrough == "5" || x.CustomerThrough == "7") && (x.Points >= DummyPoints && x.Points <= DummyPoints2)).Count();
+                        objcustAll.CustFiltered = context.CustomerDetails.Where(x => x.Status == "00" && x.IsSMS == null && (x.CustomerThrough == "2" || x.CustomerThrough == "4" || x.CustomerThrough == "5" || x.CustomerThrough == "7") && (x.Points >= DummyPoints && x.Points <= DummyPoints2) && x.EnrollingOutlet == OutletId).Count();
+                    }
+
                 }
                 catch (Exception ex)
                 {
@@ -451,7 +607,7 @@ namespace BOTS_BL.Repository
             return objcustAll;
         }
 
-        public List<CampaignSaveDetails> SaveCampaignData(string BaseType, string Equality, string Points, string OutletId,string Srcipt,string StartDate,string EndDate,string CampaignName,string SMSType, string ScriptType, string Scheduledatetime, string GroupId, string connstr)
+        public List<CampaignSaveDetails> SaveCampaignData(string BaseType, string Equality, string Points, string OutletId,string Srcipt,string StartDate,string EndDate,string CampaignName,string SMSType, string ScriptType, string Scheduledatetime,string TempId,string PointsRange1, string GroupId, string connstr)
         {
             List<CampaignSaveDetails> Data = new List<CampaignSaveDetails>();
 
@@ -471,7 +627,7 @@ namespace BOTS_BL.Repository
             {
                 using (var context = new BOTSDBContext(connstr))
                 {
-                     Data = context.Database.SqlQuery<CampaignSaveDetails>("sp_BOTS_CreateCampaign @pi_GroupId, @pi_Date,@pi_BaseType,@pi_Equality,@pi_Points,@pi_OutletId,@pi_Script,@pi_CampStartDate,@pi_CampEndDate,@pi_CampName,@pi_SMSType,@pi_ScriptType,@pi_Scheduledatetime", new SqlParameter("@pi_GroupId", GroupId), new SqlParameter("@pi_Date", DateTime.Now.ToString("yyyy-MM-dd")),new SqlParameter("@pi_BaseType", BaseType),new SqlParameter("@pi_Equality", Equality),new SqlParameter("@pi_Points", Points),new SqlParameter("@pi_OutletId", OutletId),new SqlParameter("@pi_Script", Srcipt),new SqlParameter("@pi_CampStartDate", StartDate),new SqlParameter("@pi_CampEndDate", EndDate),new SqlParameter("@pi_CampName", CampaignName),new SqlParameter("@pi_SMSType", SMSType), new SqlParameter("@pi_ScriptType", ScriptType), new SqlParameter("@pi_Scheduledatetime", Scheduledatetime)).ToList<CampaignSaveDetails>();                     
+                     Data = context.Database.SqlQuery<CampaignSaveDetails>("sp_BOTS_CreateCampaign @pi_GroupId, @pi_Date,@pi_BaseType,@pi_Equality,@pi_Points,@pi_OutletId,@pi_Script,@pi_CampStartDate,@pi_CampEndDate,@pi_CampName,@pi_SMSType,@pi_ScriptType,@pi_Scheduledatetime,@pi_TempId,@pi_PointsRange1", new SqlParameter("@pi_GroupId", GroupId), new SqlParameter("@pi_Date", DateTime.Now.ToString("yyyy-MM-dd")),new SqlParameter("@pi_BaseType", BaseType),new SqlParameter("@pi_Equality", Equality),new SqlParameter("@pi_Points", Points),new SqlParameter("@pi_OutletId", OutletId),new SqlParameter("@pi_Script", Srcipt),new SqlParameter("@pi_CampStartDate", StartDate),new SqlParameter("@pi_CampEndDate", EndDate),new SqlParameter("@pi_CampName", CampaignName),new SqlParameter("@pi_SMSType", SMSType), new SqlParameter("@pi_ScriptType", ScriptType), new SqlParameter("@pi_Scheduledatetime", Scheduledatetime), new SqlParameter("@pi_TempId", TempId), new SqlParameter("@pi_PointsRange1", PointsRange1)).ToList<CampaignSaveDetails>();                     
                 }
             }
             catch(Exception ex)
@@ -504,14 +660,39 @@ namespace BOTS_BL.Repository
         public List<LisCampaign> GetCampList(string GroupId, string connectionString)
         {
             List<LisCampaign> CM = new List<LisCampaign>();
-          
+            List<LisCampaign> CM3 = new List<LisCampaign>();
+
             using (var context = new BOTSDBContext(connectionString))
             {
                 try
                 {
                     DateTime CDate = DateTime.Parse(DateTime.Now.ToShortDateString());
-                   var CM1 = context.CampaignMasters.Where(x => x.EndDate >= CDate).Select(x => new { x.CampaignId, x.CampaignName,x.StartDate,x.EndDate,x.Status }).ToList();
-                    foreach(var item in CM1)
+                    var CM1 = context.CampaignMasters.OrderByDescending(x => x.CampaignId).Select(x => new { x.CampaignId, x.CampaignName, x.StartDate, x.EndDate, x.Status, x.ControlBase, x.CampaignBase }).ToList();
+                    
+                    //var CM1 = ((from c in context.CampaignMasters orderby c.CampaignId descending  select c).Take(5)).ToList();
+
+                    
+                        foreach (var item in CM1)
+                        {
+                            LisCampaign itemData = new LisCampaign();
+                            string D, D1;
+                            //DateTime D1 = new DateTime();   
+                            itemData.CampaignId = item.CampaignId;
+                            itemData.CampaignName = item.CampaignName;
+                            //D1 = item.StartDate;
+                            //itemData.StartDate = D.ToString("yyyy-MM-dd");
+                            itemData.StartDate = (item.StartDate); //DateTime.ToString()
+                            itemData.EndDate = item.EndDate;
+                            //D1 = Convert.ToDateTime(item.EndDate);
+                            itemData.Status = item.Status;
+                            itemData.ControlBase = Convert.ToString(item.ControlBase);
+                            itemData.CampaignBase = Convert.ToString(item.CampaignBase);
+
+                            CM.Add(itemData);
+                        }
+                        var CMD = ((from c in CM orderby c.CampaignId descending select c).Take(5)).ToList();
+
+                    foreach (var item in CMD)
                     {
                         LisCampaign itemData = new LisCampaign();
                         itemData.CampaignId = item.CampaignId;
@@ -519,14 +700,16 @@ namespace BOTS_BL.Repository
                         itemData.StartDate = item.StartDate;
                         itemData.EndDate = item.EndDate;
                         itemData.Status = item.Status;
+                        itemData.ControlBase = Convert.ToString(item.ControlBase);
+                        itemData.CampaignBase = Convert.ToString(item.CampaignBase);
 
-                        CM.Add(itemData);
-
+                        CM3.Add(itemData);
                     }
+
                     //var CMD = (from c in context.CampaignMasters select c.CampaignId,c.CampaignName,c.StartDate,c.EndDate).ToList();
                     //CmpData1 = Data.ToList<CampDownload>;
                     // CampData = CmpData.AsEnumerable().ToList<CampDownload>();
-                   
+
                 }
                 catch (Exception ex)
                 {
@@ -534,7 +717,7 @@ namespace BOTS_BL.Repository
                 }
                 
             }
-            return CM;
+            return CM3;
         }
 
         public bool SendDLTData (string CampaignId,string GroupId, string connectionString)
@@ -719,19 +902,24 @@ namespace BOTS_BL.Repository
             }
         }
 
-        public DataSet SendTestSMSData(string CampaignId, string GroupId, string connstr)
+        public DataSet SendTestSMSData(string CampaignId,string TestNumber, string GroupId, string connstr)
         {
-            //List<CampaignSaveDetails> Data = new List<CampaignSaveDetails>();
+            string Url, UserName, Password, Sender;
             DataSet Data = new DataSet();
-
-            //int Points1 = Int32.Parse(Points);
+            DataTable Data1 = new DataTable();
+            Data1.Columns.Add("Mobileno");
+            Data1.Columns.Add("SMSScript");
+            Data1.Columns.Add("SMSBrandId");
+            Data1.Columns.Add("Url");
+            Data1.Columns.Add("UserName");
+            Data1.Columns.Add("Password");
+            Data1.Columns.Add("SenderId");
+            string[] TestSplit = TestNumber.Split(',');
 
             try
             {
                 using (var context = new BOTSDBContext(connstr))
-                {
-                    //Data = context.Database.SqlQuery<CampaignSaveDetails>("sp_BOTS_SendCampTestSMS @pi_CampaignId", new SqlParameter("@pi_CampaignId", CampaignId)).ToList<CampaignSaveDetails>();
-                    //Data = context.Database.SqlQuery("sp_BOTS_SendCampTestSMS @pi_CampaignId", new SqlParameter("@pi_CampaignId", CampaignId));
+                {             
                     SqlConnection _Con11 = new SqlConnection(Convert.ToString(connstr));
                     SqlCommand _Cmd11 = new SqlCommand();
                     _Cmd11.Connection = _Con11;
@@ -745,10 +933,28 @@ namespace BOTS_BL.Repository
                     _daCounterId11.Fill(Data);
                     _Con11.Close();
 
-                    
-                    DataTable SMSData = Data.Tables["Table1"];
+                    DataTable SMSTemp = Data.Tables["Table1"];
 
-                    Thread _job = new Thread(() => SendSMS(SMSData));
+                    DataRow DR = null;
+                    foreach (string info in TestSplit)
+                    {
+
+                        DR = Data1.NewRow();
+                        DR["Mobileno"] = info;
+                        for (int i = 0; i < 1; i++)
+                        {
+                            DR["SMSScript"] = (Convert.ToString(SMSTemp.Rows[i]["SMSScript"]));
+                            DR["SMSBrandId"] = (Convert.ToString(SMSTemp.Rows[i]["SMSBrandId"]));
+                            DR["Url"] = (Url = Convert.ToString(SMSTemp.Rows[i]["Url"]));
+                            DR["UserName"] = (UserName = Convert.ToString(SMSTemp.Rows[i]["UserName"]));
+                            DR["Password"] = (Password = Convert.ToString(SMSTemp.Rows[i]["Password"]));
+                            DR["SenderId"] = (Sender = Convert.ToString(SMSTemp.Rows[i]["SenderId"]));
+
+                            Data1.Rows.Add(DR);
+                        }
+                    }
+                    
+                     Thread _job = new Thread(() => SendSMS(Data1));
                     _job.Start();
 
                 }
@@ -759,19 +965,20 @@ namespace BOTS_BL.Repository
             }
             return Data;
         }
-        public void SendSMS(DataTable SMSData)
+
+        public void SendSMS(DataTable Data1)
         {
-            if (SMSData.Rows.Count > 0)
+            if (Data1.Rows.Count > 0)
             {
-                for (int j = 0; j < SMSData.Rows.Count; j++)
+                for (int j = 0; j < Data1.Rows.Count; j++)
                 {
-                    string _MobileMessage = SMSData.Rows[j]["SMSScript"].ToString();
-                    string _SMSBrandId = SMSData.Rows[j]["SMSBrandId"].ToString();
-                    string _Url = SMSData.Rows[j]["Url"].ToString();
-                    string _UserName = SMSData.Rows[j]["UserName"].ToString();
-                    string _Password = SMSData.Rows[j]["Password"].ToString();
-                    string _MobileNo = SMSData.Rows[j]["MobileNo"].ToString();
-                    string _Sender = SMSData.Rows[j]["SenderId"].ToString();
+                    string _MobileMessage = Data1.Rows[j]["SMSScript"].ToString();
+                    string _SMSBrandId = Data1.Rows[j]["SMSBrandId"].ToString();
+                    string _Url = Data1.Rows[j]["Url"].ToString();
+                    string _UserName = Data1.Rows[j]["UserName"].ToString();
+                    string _Password = Data1.Rows[j]["Password"].ToString();
+                    string _MobileNo = Data1.Rows[j]["MobileNo"].ToString();
+                    string _Sender = Data1.Rows[j]["SenderId"].ToString();
 
                     switch (_SMSBrandId)
                     {
@@ -996,9 +1203,7 @@ namespace BOTS_BL.Repository
                 newexception.AddException(ex, GroupId);
             }
             return Data;
-        }
-
-        
+        }      
     }
     
 }

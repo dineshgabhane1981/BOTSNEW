@@ -205,6 +205,7 @@
     <Compile Include="Models\CommonDB\BOTS_TblSubDiscussionData.cs" />
     <Compile Include="Models\CommonDB\CommonDBContext.cs" />
     <Compile Include="Models\CommonDB\CommonReferralURL.cs" />
+    <Compile Include="Models\CommonDB\CommonSMSGateWayMaster.cs" />
     <Compile Include="Models\CommonDB\CustomerConnString.cs" />
     <Compile Include="Models\CommonDB\CustomerListing.cs" />
     <Compile Include="Models\CommonDB\CustomerLoginDetail.cs" />

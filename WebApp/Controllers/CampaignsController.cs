@@ -5,9 +5,11 @@ using ClosedXML.Excel;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Configuration;
 using System.Data;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Script.Serialization;
@@ -167,8 +169,25 @@ namespace WebApp.Controllers
 
         public ActionResult CreateCampaign()
         {
+            SMSDetailsTemp SDT = new SMSDetailsTemp();
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
             var lstOutlet = RR.GetOutletList(userDetails.GroupId, userDetails.connectionString);
+            var SMSGatewayDetails = CMPR.GatewayDetails(userDetails.GroupId, userDetails.connectionString);
+
+            for (int i = 0; i <= SMSGatewayDetails.Count(); i++)
+            {
+                if(i==0)
+                {
+                    SDT.BOCode = SMSGatewayDetails[i].BOCode;                    
+                }
+                if (i == 1)
+                {
+                    SDT.SMSVendor = SMSGatewayDetails[i].smsBalance;
+                }
+            }
+
+            ViewBag.SMSVendor = SDT.BOCode;
+            ViewBag.SMSBalance = SDT.SMSVendor;
             ViewBag.OutletData = lstOutlet;
 
             return View("CreateCampaign");
@@ -190,9 +209,10 @@ namespace WebApp.Controllers
                 string BaseType = Convert.ToString(item["BaseType"]);
                 string PointsBase = Convert.ToString(item["PointsBase"]);
                 string Points = Convert.ToString(item["Points"]);
+                string PointsRange1 = Convert.ToString(item["PointsRange1"]);
                 string OutletId = Convert.ToString(item["OutletId"]);
 
-                objcustAll = CR.GetFiltData(BaseType, PointsBase, Points, OutletId, userDetails.GroupId, userDetails.connectionString);
+                objcustAll = CR.GetFiltData(BaseType, PointsBase, Points, PointsRange1, OutletId, userDetails.GroupId, userDetails.connectionString);
 
                // Session["customerId"] = objcounts.lstcustomerDetails;
             }
@@ -222,8 +242,10 @@ namespace WebApp.Controllers
                 string SMSType = Convert.ToString(item["SMSType"]);
                 string ScriptType = Convert.ToString(item["ScriptType"]);
                 string Scheduledatetime = Convert.ToString(item["Scheduledatetime"]);
+                string TempId = Convert.ToString(item["TempId"]); //PointsRange1
+                string PointsRange1 = Convert.ToString(item["PointsRange1"]);
 
-                SaveData = CR.SaveCampaignData(BaseType, Equality, Points, OutletId,Srcipt, StartDate, EndDate, CampaignName, SMSType, ScriptType, Scheduledatetime, userDetails.GroupId, userDetails.connectionString);
+                SaveData = CR.SaveCampaignData(BaseType, Equality, Points, OutletId,Srcipt, StartDate, EndDate, CampaignName, SMSType, ScriptType, Scheduledatetime, TempId, PointsRange1, userDetails.GroupId, userDetails.connectionString);
                 //Session["CampaignId"] = SaveData.;
             }
 
@@ -381,8 +403,6 @@ namespace WebApp.Controllers
                             CP.DLTStatus = "Approved";
                         }
                         CampDetails.Add(CP);
-                        //objDLCLinkConfig.UpdatedBy = userDetails.LoginId;
-                        //objDLCLinkConfig.UpdatedDate = DateTime.Now;
                     }
                 }
                 result = CR.SaveDLCCampaignDetails(Campid, CampDetails, userDetails.GroupId, userDetails.connectionString);
@@ -411,8 +431,8 @@ namespace WebApp.Controllers
             foreach (Dictionary<string, object> item in objData)
             {
                 string CampaignId = Convert.ToString(item["CampaignId"]);
-
-                response = CR.SendTestSMSData(CampaignId, userDetails.GroupId, userDetails.connectionString);
+                string TestNumber = Convert.ToString(item["TestNumber"]);
+                response = CR.SendTestSMSData(CampaignId, TestNumber, userDetails.GroupId, userDetails.connectionString);
                 //Session["CampaignId"] = SaveData.;
                 //responsedata = response;
                 DataTable DT = response.Tables["Table"];
@@ -453,6 +473,50 @@ namespace WebApp.Controllers
             }
 
             return new JsonResult() { Data = responsedata, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
+        }
+
+        public ActionResult UploadData(HttpPostedFileBase Data)
+        {
+            string Path = ConfigurationManager.AppSettings["Path"].ToString();
+            string responseString;
+            try
+            {
+                string _FileName = Data.FileName;
+                Session["FileName"] = _FileName;
+                string Path2 = Path + _FileName;
+                System.IO.FileInfo file = new System.IO.FileInfo(Path2);
+                if (!file.Exists)
+                {
+                    if (Data.ContentLength > 0)
+                    {
+                        Data.SaveAs(Path2);
+                        Session["Path2"] = Path2;
+                        ViewBag.Message = "File Uploaded Successfully!!";
+                        return View("Index");
+                    }
+                }
+                else
+                {
+                    ViewBag.Message = "File Already Exists";
+                }
+
+            }
+            catch (ArgumentException ex)
+            {
+                responseString = string.Format("HTTP_ERROR :: The second HttpWebRequest object has raised an Argument Exception as 'Connection' Property is set to 'Close' :: {0}", ex.Message);
+                return View("Index");
+            }
+            catch (WebException ex)
+            {
+                responseString = string.Format("HTTP_ERROR :: WebException raised! :: {0}", ex.Message);
+                return View("Index");
+            }
+            catch (Exception ex)
+            {
+                responseString = string.Format("HTTP_ERROR :: Exception raised! :: {0}", ex.Message);
+                return View("Index");
+            }
+            return View("Index");
         }
     }
 }

@@ -16,6 +16,8 @@ namespace BOTS_BL.Models
             : base("name=CommonDBContext")
         {
         }
+
+        public virtual DbSet<CommonSMSGateWayMaster> CommonSMSGateWayMasters { get; set; }
         public virtual DbSet<NPCLoginDetail> NPCLoginDetails { get; set; }
         public virtual DbSet<BOTS_TblDocuments> BOTS_TblDocuments { get; set; }
         public virtual DbSet<BOTS_TblActionTracking> BOTS_TblActionTracking { get; set; }

@@ -3,47 +3,250 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>CreateCampaign</h2>
-@*<link rel="stylesheet" href="jquery.datetimepicker.css" />
-    <input type="text" id="demo" />
-    <script src="/path/to/cdn/jquery.min.js"></script>
-    <script src="jquery.datetimepicker.js"></script>*@
+<h2>Create Campaign</h2>
+
 
 <div class="app-main__inner" id="dvall">
     <div class="container-fluid pt-3 pl-3 pr-3 pb-3">
-        @*<div class="row mb-3 pt-3 pl-3 pr-3 card">*@
-
-        @*<div class="row">
-                <div class="col-md-6 col-xl-3">
-                    <input class="radio" id="one" name="group" type="radio" checked><label>SMS</label>
-                </div>
-                <div class="col-md-6 col-xl-3">
-                    <input class="radio" id="two" name="group" type="radio"><label>WA</label>
-                </div>
-                <div class="col-md-6 col-xl-3">
-                    <input class="radio" id="three" name="group" type="radio"><label>VWA</label>
-                </div>
-            </div>*@
 
         <div class="mb-3 pr-3 pt-3 pl-3 card" style="padding-bottom:20px;">
-            @*<div class="col-sm-8" style="display:flex;padding-bottom: 10px;margin-top:5px;">*@
             <div class="row mt-4">
                 <div class="col-md-8 col-xl-8">
-                    <input type="radio" checked id="rdnSMS" value="1" name="btdornot" /><b>SMS </b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    <input type="radio" id="rdnVSMS" value="2" name="btdornot" /><b> Virtual SMS </b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    <input type="radio" id="rdnWA" value="3" name="btdornot" /><b> Whats app</b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    <input type="radio" id="rdnVWA" value="4" name="btdornot" /><b> Verified Whats app</b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <input type="radio" checked id="rdnSMS" value="1" name="btdornot" @*onclick="SMStypeValidate();"*@ />&nbsp;&nbsp;&nbsp;<b>SMS </b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <input type="radio" id="rdnVSMS" value="2" name="btdornot" @*onclick="SMStypeValidate();"*@ />&nbsp;&nbsp;&nbsp;<b> Virtual SMS </b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <input type="radio" id="rdnWA" value="3" name="btdornot" @*onclick="SMStypeValidate();"*@ />&nbsp;&nbsp;&nbsp;<b> Whats app</b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <input type="radio" id="rdnVWA" value="4" name="btdornot" @*onclick="SMStypeValidate();"*@ />&nbsp;&nbsp;&nbsp;<b> Verified Whats app</b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                </div>
+            </div>
+        </div>
+
+        <!--<div class="mb-3 pr-3 pt-3 pl-3 card" style="padding-bottom:20px;" id="WACamppanel">
+
+        <div class="row mt-2" style="margin-top : 20px;">
+            <div class="col-md-3 col-xl-3" style="margin-left: 18px;">
+                Campaign Name
+            </div>
+
+            <div>
+                <input type="text" id="WACampName" class="input50" placeholder="Enter Campaign Name" />
+            </div>
+
+            <div>
+                <input type="hidden" id="WACampId" class="input50" />
+            </div>
+        </div>
+
+        <div class="row mt-2" style="margin-top : 20px;">
+            <div id="WAdivdaterange" class="col-md-2 col-xl-3" style="margin-left: 18px; margin-top: 20px;">
+                <label>Campaign From</label>
+            </div>
+            <div style="margin-top: 20px;">
+                <input type="date" id="WAtxtEnrollfromdt" class="input50" placeholder="Start" onchange="WAValidateDate();" /> &nbsp;&nbsp;&nbsp;
+            </div>
+            <div style="margin-top: 20px;">
+                <input type="date" id="WAtxtEnrolltodt" class="input50" placeholder="End" onchange="WAValidateDate1();" />
+            </div>
+        </div>
+
+        <div class="row" style="margin-top : 20px;">
+            <div class="col-sm-2" style="margin-left: 18px;">
+                Base Type
+            </div>
+            <div class="col-sm-2 dropdown" style="margin-left : 70px;">
+                <select id="WABaseType" name="WABaseType" class="input50" onchange="WABaseCalc();">
+                    <option value="1">All</option>
+                    <option value="2">Member Base</option>
+                    <option value="3">Bulk Upload</option>
+                    <option value="4">Based On Points</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="row " id="WAdivPoints" style="margin-top : 20px; display: none;">
+            <div class="col-sm-2">
+                Points
+            </div>
+            <div class="col-sm-2 dropdown" style="margin-left : 70px;">
+                <select id="WAFilter" name="Filter" class="input50" onchange="WApointsvalid();">
+                    <option value="1">LessThan</option>
+                    <option value="2">GreaterThan</option>
+                    <option value="3">Equal To</option>
+                </select>
+            </div>
+            <div class="col-sm-2">
+                <input type="number" id="WApoints" name="points" class="input50" />
+            </div>
+        </div>
+
+        <div class="row" style="margin-top: 20px;">
+            <div class="col-sm-2" style="margin-left: 18px;">
+                OutletData
+            </div>
+            <div class="col-sm-2 dropdown" style="margin-left: 70px;">
+                @Html.DropDownList("OutletData", new SelectList(ViewBag.OutletData, "Value", "Text"), "ALL", htmlAttributes: new { @class = "input50", @id = "ddlOutletList" })
+            </div>
+        </div>
+        <div class="row" style="margin-top : 20px;">
+            <div class="col-md-3 col-xl-3">
+                <div class="button">
+                    <button type="button" id="WAbtnFilter" style="margin-left:15px;" class="btn btn-primary" onclick="WAShowCount();"><b>FILTER</b></button>
+                </div>
+            </div>
+            <div class="col-md-4 col-xl-4">
+                <table style="border:2px solid black;width:70%">
+                    <tr style="border:2px solid black; ">
+                        <td style="border:2px solid black;text-align:left;">
+                            <span id="WAAllCount"></span>All Count
+                        </td>
+                        <td style="border:2px solid black;width:40%">
+                            <span id="WAAllCountnum"></span>
+                        </td>
+                    </tr>
+                    <tr style="border:2px solid black; ">
+                        <td style="border:2px solid black;text-align:left;">
+                            <span id="WAFiltCount"></span>Filtered Count
+                        </td>
+                        <td style="border:2px solid black;width:40%">
+                            <span id="WAFiltCountnum"></span>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+
+        <div class="row" style="margin-top: 20px; margin-left: 20px; " id="WAMsgType">
+            <div class="col-md-8 col-xl-8">
+                <input type="radio" checked id="rdnText" value="1" name="WAType" onclick="WAtypeValidate();" />&nbsp;&nbsp;&nbsp;<b>Text</b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <input type="radio" id="rdnImage" value="2" name="WAType" onclick="WAtypeValidate();" />&nbsp;&nbsp;&nbsp;<b>File</b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <input type="radio" id="rdnImageCaption" value="3" name="WAType" onclick="WAtypeValidate();" />&nbsp;&nbsp;&nbsp;<b>File With Caption</b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            </div>
+        </div>
+
+        <div class="row" style="margin: 20px;">
+            <div class="col-md-8 col-xl-8">
+                <div class="custom-control custom-switch">
+                    <input type="checkbox" class="custom-control-input" id="ScheduleSwitch" value="0" onchange="ShowScheduledate();">
+                    <label class="custom-control-label" for="ScheduleSwitch"><b>Schedule Date & Time</b></label>
+                </div>
+            </div>
+        </div>
+
+        <div class="row" style="margin: 20px; display : none" id="SchedPick">
+            <div class="col-md-8 col-xl-8">
+                <input id="datetimepicker" type="text" onclick="Showdatetime();">&nbsp;&nbsp;<label> Double click to add Datetime</label>
+            </div>
+        </div>
+
+        <div class="row" style="margin: 20px; display:none" id="Upload">
+
+            @using (Html.BeginForm("UploadData", "Campaigns", FormMethod.Post, new { enctype = "multipart/form-data" }))
+            {
+                <div style="margin-top: 15px; margin-left: 115px;">
+
+                    @Html.TextBox("Data", "", new { type = "file" }) <br />
+                    <input type="submit" value="Upload" />  <label style="padding-right:5px;padding-top:10px;">Do not use special characters in FileName</label>
+
+                    @if (!string.IsNullOrEmpty(Convert.ToString(ViewBag.Message)))
+                    {
+                        <script>
+                    cuteAlert({
+                        type: "success",
+                        title: "Saved",
+                        message: '@ViewBag.Message',
+                        buttonText: "Okay"
+                    })
+                        </script>
+                    }
+
+                </div>
+            }
+        </div>
+
+            <div class="row" style="margin: 20px;" id="ScriptText">
+                <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
+                    <b>Script</b>
+                </div>
+                <div class="col-md-4" style="margin-top:10px;">
+                    <textarea class="form-control" id="SMSScript" rows="7" maxlength="10000"></textarea>&nbsp;&nbsp;
+                </div>
+                <div class="col-md-1" style="margin-top:10px;">
+                    <br><br><br><br><br><br><br><br>
+                    <span id="current">0</span>
+                </div>
+                <div class="col-md-4" style="margin-top:10px;">
+                    <textarea class="form-control" id="SMSScript" rows="7" maxlength="10000"></textarea>&nbsp;&nbsp;
                 </div>
             </div>
 
-            @*</div>*@
-        </div>
-        <div class="mb-3 pr-3 pt-3 pl-3 card" style="padding-bottom:20px;" id="SMSCamppanel">
+
+
+
             <div class="row" style="margin-top : 20px;">
-                <div class="col-sm-2">
+                <div class="col-md-6 col-xl-6">
+                    <div class="button">
+                        <button type="button" id="btnSave" style="margin-left:15px;" class="btn btn-primary" onclick="SaveValidate();"><b>SAVE</b></button>-->
+        <!--<button type="button" id="btnDownload" style="margin-left:15px;" class="btn btn-primary" onclick="DownLoad();"><b>DOWNLOAD</b></button>-->
+        <!--<button type="button" id="btnSendTestSMS" style="margin-left:15px;" class="btn btn-primary" onclick="SendTestValidate();" disabled><b>TEST SMS</b></button>
+                        <button type="button" id="btnSendDLT" style="margin-left:15px;" class="btn btn-primary" onclick="SendSMSValidate();" disabled><b>SEND SMS</b></button>
+                    </div>
+                </div>
+            </div>
+        </div>-->
+
+        <div class="mb-3 pr-3 pt-3 pl-3 card" style="padding-bottom:20px;" id="SMSCamppanel">
+
+            <div class="row mt-2" style="margin-top : 20px;">
+                <div class="col-md-3 col-xl-3" style="margin-left: 18px;">
+                    SMS Balance/Service Provider
+                </div>
+                <div>
+                    @*<input type="text" id="SMSBalance" class="input50" value="@((ViewBag.SMSBalance))" />*@
+                    <span id="SMSBalance">@((ViewBag.SMSBalance)) / @((ViewBag.SMSVendor))</span>
+                </div>
+            </div>
+
+            @*<div class="row mt-2" style="margin-top : 20px;">
+                <div class="col-md-3 col-xl-3" style="margin-left: 18px; margin-top: 20px;">
+                    Service Provider
+                </div>
+                <div>
+                    <input type="text" id="SMSVendor" class="input50" style="margin-top : 20px;" value="@((ViewBag.SMSVendor))" />
+                </div>
+            </div>*@
+
+
+            <div class="row mt-2" style="margin-top : 20px;">
+                <div class="col-md-3 col-xl-3" style="margin-left: 18px; margin-top: 20px; ">
+                    Campaign Name<b>*</b>
+                </div>
+
+                <div>
+                    <input type="text" id="CampName" class="input50" placeholder="Enter Campaign Name" style="margin-top: 20px;" />
+                </div>
+
+                <div>
+                    <input type="hidden" id="CampId" class="input50" />
+                </div>
+            </div>
+
+            <div class="row mt-2" style="margin-top : 20px;">
+                <div id="divdaterange" class="col-md-2 col-xl-3" style="margin-left: 18px; margin-top: 20px;">
+                    <label>Campaign From<b>*</b></label>
+                </div>
+                <div style="margin-top: 20px;">
+                    <input type="date" id="txtEnrollfromdt" class="input50" placeholder="Start" onchange="ValidateDate();" /> &nbsp;&nbsp;&nbsp;
+                </div>
+                <div style="margin-top: 20px;">
+                    <input type="date" id="txtEnrolltodt" class="input50" placeholder="End" onchange="ValidateDate1();" />
+                </div>
+            </div>
+
+            <div class="row" style="margin-top : 20px;">
+                <div class="col-sm-2" style="margin-left: 18px;">
                     Base Type
                 </div>
-                <div class="col-sm-2 dropdown">
+                <div class="col-sm-2 dropdown" style="margin-left : 70px;">
                     <select id="BaseType" name="BaseType" class="input50" onchange="BaseCalc();">
                         <option value="1">All</option>
                         <option value="2">Member Base</option>
@@ -52,30 +255,36 @@
                     </select>
                 </div>
             </div>
+
             <div class="row " id="divPoints" style="margin-top : 20px; display: none;">
-                <div class="col-sm-2">
+                <div class="col-sm-2" style="margin-left: 18px;">
                     Points
                 </div>
-                <div class="col-sm-2 dropdown">
+                <div class="col-sm-2 dropdown" style="margin-left : 70px;">
                     <select id="Filter" name="Filter" class="input50" onchange="pointsvalid();">
-                        <option value="1">LessThan</option>
-                        <option value="2">GreaterThan</option>
+                        <option value="1">Less Than</option>
+                        <option value="2">Greater Than</option>
                         <option value="3">Equal To</option>
+                        <option value="4">Points Range</option>
                     </select>
-                </div>
+                </div>&nbsp;&nbsp;&nbsp;
                 <div class="col-sm-2">
                     <input type="number" id="points" name="points" class="input50" />
+                </div>&nbsp;&nbsp;&nbsp;
+                <div class="col-sm-2" style="display:none" id="divPointsRange">
+                    <input type="number" id="points2" name="points2" class="input50" />
                 </div>
             </div>
 
-            <div class="row" style="margin-top : 20px;">
-                <div class="col-sm-2">
+            <div class="row" style="margin-top: 20px;">
+                <div class="col-sm-2" style="margin-left: 18px;">
                     OutletData
                 </div>
-                <div class="col-sm-2 dropdown">
+                <div class="col-sm-2 dropdown" style="margin-left: 70px;">
                     @Html.DropDownList("OutletData", new SelectList(ViewBag.OutletData, "Value", "Text"), "ALL", htmlAttributes: new { @class = "input50", @id = "ddlOutletList" })
                 </div>
             </div>
+
             <div class="row" style="margin-top : 20px;">
                 <div class="col-md-3 col-xl-3">
                     <div class="button">
@@ -103,104 +312,306 @@
                     </table>
                 </div>
             </div>
-            <div class="row" style="margin: 20px;">
+
+            <div class="row" style="margin: 20px;" id="SMSSType">
                 <div class="col-md-8 col-xl-8">
-                    <input type="radio" checked id="rdnText" value="1" name="ScriptType" /><b>Text </b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    <input type="radio" id="rdnUnicode" value="2" name="ScriptType" /><b> Unicode </b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <input type="radio" checked id="rdnText" value="1" name="ScriptType" Onchange ="HandleChange();" />&nbsp;&nbsp;&nbsp;<b>English</b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <input type="radio" id="rdnUnicode" value="2" name="ScriptType" Onchange ="HandleChange();"/>&nbsp;&nbsp;&nbsp;<b>Vernacular (Marathi, Hindi, Kannada, etc)</b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                 </div>
             </div>
+
             <div class="row" style="margin: 20px;">
                 <div class="col-md-8 col-xl-8">
                     <div class="custom-control custom-switch">
                         <input type="checkbox" class="custom-control-input" id="ScheduleSwitch" value="0" onchange="ShowScheduledate();">
-                        <label class="custom-control-label" for="ScheduleSwitch">Schedule SMS</label>
+                        <label class="custom-control-label" for="ScheduleSwitch"><b>Schedule Date & Time</b></label>
                     </div>
                 </div>
             </div>
 
             <div class="row" style="margin: 20px; display : none" id="SchedPick">
                 <div class="col-md-8 col-xl-8">
-                    <input id="datetimepicker" type="text" onclick="Showdatetime();">
+                    <input id="datetimepicker" type="text" onclick="Showdatetime();">&nbsp;&nbsp;<label> Double click to add Datetime</label>
+                </div>
+            </div>
+
+            <div class="row mt-2" style="margin-top: 20px; margin-left: 10px;">
+                <div class="col-md-3 col-xl-3" style="margin-left: 18px; margin-top: 20px;">
+                    Approved Template ID<b>*</b>
+                </div>
+                <div>
+                    <input type="text" id="TempId" class="input50" style="margin-top : 20px;" />
+                </div>
+            </div>
+
+            <div class="row" style="margin: 20px;" id="ScriptText">
+
+                <div class="col-md-4" style="margin-top:10px;">
+                    <textarea class="form-control" id="SMSScript" rows="7" maxlength="10000" placeholder="Enter SMS Script"></textarea>&nbsp;&nbsp;
+                </div>
+                <div class="col-md-3" style="margin-top:10px;">
+                    <br><br><br><br><br><br>
+                    <table style="border:2px solid black;width:70%">
+                        <tr style="border:2px solid black; ">
+                            <td style="border:2px solid black;text-align:left;">
+                                <span id="CharCount"></span>Char Count
+                            </td>
+                            <td style="border:2px solid black;width:40%">
+                                <span id="current">0</span>
+                            </td>
+                        </tr>
+                        <tr style="border:2px solid black; ">
+                            <td style="border:2px solid black;text-align:left;">
+                                <span id="SMSCount"></span>SMS Count
+                            </td>
+                            <td style="border:2px solid black;width:40%">
+                                <span id="Count">0</span>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="col-md-4" style="margin-top:10px;">
+                    <textarea class="form-control" id="txtScript" rows="7" maxlength="10000"></textarea>&nbsp;&nbsp;
+                </div>
+            </div>
+            <div class="tw-ets tw-ess tw-src-ltr" id="tw-ob">
+            </div>
+            <div id="GoogleElement" style="margin-left:130px;">
+            </div>
+
+            @*<div class="row" style="margin-top : 20px;" >
+                <div class="button">
+                    <button type="button" style="margin-left:25px;" id="translControl" class="btn btn-primary" onclick="auto_transliterate_all();" value="Auto Transliterate"><b>Click</b></button>
+                </div>
+            </div>*@
+            <div class="col-md-6 col-xl-6">
+                <div class="button">
+                    <button type="button" id="btnSave" style="margin-left:25px;" class="btn btn-primary" onclick="SaveValidate();"><b>SAVE</b></button>
+                    <button type="button" id="btnDownload" style="margin-left:15px; display:none" class="btn btn-primary" onclick="DownLoad();"><b>DOWNLOAD</b></button>
+                    @*<button type="button" id="btnSendTestSMS" style="margin-left:15px; display:normal" class="btn btn-primary" onclick="SendTestValidate();" disabled><b>TEST SMS</b></button>*@
+                    @*<button type="button" id="btnSendDLT" style="margin-left: 15px; display: normal" class="btn btn-primary" onclick="SendSMSValidate();" disabled><b>SEND SMS</b></button>*@
                 </div>
             </div>
 
             <div class="row" style="margin: 20px;">
-                <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
-                    Script
+                <div class="col-md-4" style="margin-top: 10px;">
+                    <textarea class="form-control" id="TestNumbers" rows="2" maxlength="10000" style="display: none" placeholder="Enter Test Numbers"></textarea>&nbsp;&nbsp;
                 </div>
-                <div class="col-sm-4" style="float:left;margin-top:10px;">
-                    <textarea class="form-control" id="SMSScript" rows="7" maxlength="10000"></textarea>&nbsp;&nbsp;
-                </div>
-                <div class="col-sm-4" style="float:left;margin-top:10px;">
-                    <br><br><br><br><br><br><br><br>
-                    <span id="current">0</span>
+                <div class="button col-md-4" style="margin-top: 37px;">
+                    <button type="button" id="btnSendTestSMS" style="margin-left: 25px; display: none" class="btn btn-primary" onclick="SendTestValidate();"><b>TEST SMS</b></button>
                 </div>
             </div>
 
-            <div class="row mt-2" style="margin-top : 20px;">
-                <div id="divdaterange" class="col-md-2 col-xl-3">
-                    <label>Campaign From</label>
-                </div>
-                <div>
-                    <input type="date" id="txtEnrollfromdt" class="input50" placeholder="Start" onchange="ValidateDate();" /> &nbsp;&nbsp;&nbsp;
-                </div>
-                <div>
-                    <input type="date" id="txtEnrolltodt" class="input50" placeholder="End" onchange="ValidateDate1();" />
-                </div>
-            </div>
-
-            <div class="row mt-2">
-                <div class="col-md-3 col-xl-3">
-                    Campaign Name
-                </div>
-
-                <div>
-                    <input type="text" id="CampName" class="input50" placeholder="Enter Campaign Name" />
-                </div>
-
-                <div>
-                    <input type="hidden" id="CampId" class="input50" />
-                </div>
-            </div>
-            <div class="row" style="margin-top : 20px;">
-            </div>
-            <div class="col-md-6 col-xl-6">
+            <div class="col-md-6 col-xl-6" style="margin-top: 10px;">
                 <div class="button">
-                    <button type="button" id="btnSave" style="margin-left:15px;" class="btn btn-primary" onclick="SaveValidate();"><b>SAVE</b></button>
-                    @*<button type="button" id="btnDownload" style="margin-left:15px;" class="btn btn-primary" onclick="DownLoad();"><b>DOWNLOAD</b></button>*@
-                    <button type="button" id="btnSendTestSMS" style="margin-left:15px;" class="btn btn-primary" onclick="SendTestValidate();" disabled><b>TEST SMS</b></button>
-                    <button type="button" id="btnSendDLT" style="margin-left:15px;" class="btn btn-primary" onclick="SendDLTValidate();" disabled><b>SEND SMS</b></button>
+                    <button type="button" id="btnSendDLT" style="margin-left:25px; display : none" class="btn btn-primary" onclick="SendSMSValidate();"><b>SEND SMS</b></button>
                 </div>
             </div>
-
-
 
         </div>
 
-        @*</div>*@
     </div>
 </div>
-@*<link rel="stylesheet" type="text/css" href="Scripts\datetimepicker-master\jquery.datetimepicker.css" />
-    <script src="Scripts\datetimepicker-master\jquery.datetimepicker.js"></script>
-    <script src="Scripts\build\jquery.min.js"></script>*@
+
 <link rel="stylesheet" href="~/Scripts/datetimepicker-master/build/jquery.datetimepicker.min.css">
 <script src="~/Scripts/datetimepicker-master/jquery.js"></script>
 <script src="~/Scripts/datetimepicker-master/build/jquery.datetimepicker.full.min.js"></script>
+@*<script src="http://translate.google.com/translate_a/element.js?cb=loadGoogleTranslate"></script>*@
+@*<script type="text/javascript" src="~/Scripts/google_jsapi.js"></script>*@
+@*<script type="text/javascript" src="https://www.google.com/jsapi"></script>*@
+<script type="text/javascript"></script>
+@*<script type="text/javascript" src="http://vaani.neechalkaran.com/Scripts/google_jsapi.js"></script>;*@
+
+@*<script type='text/javascript' src='https://secure.trust-provider.com/trustlogo/javascript/trustlogo.js'></script>*@
+
+@*<script type='text/javascript'>
+        google("https://www.google.com/uds/?file=language&v=1", "SECEV", "none");
+    </script>*@
+
+
+<script type="text/javascript" src="https://www.google.com/jsapi"></script>
 <script>
 
+    //function loadGoogleTranslate(){
+    //    new google.translate.TranslateElement({ pageLanguage: 'ta', includedLanguages: 'en,ta,hi', layout: google.translate.TranslateElement.InlineLayout.SIMPLE },
+    //        'GoogleElement');
+    //}
 
-        function BaseCalc() {
+    //Load the google elements
+    //google.load("language", "1");
+    //google.load("elements", "1", { packages: "transliteration" });
+    //new google.elements.transliteration.TransliterationControl(options);
+
+    //function onLoad() {
+    //    var options = {
+    //        sourceLanguage:
+    //            google.elements.transliteration.LanguageCode.ENGLISH,
+    //        destinationLanguage:
+    //            [google.elements.transliteration.LanguageCode.HINDI],
+    //        transliterationEnabled: true
+    //    }
+    //}
+    //    //Create a Instance on TransliterationControl
+    //    var control = new google.elements.transliteration.TransliterationControl(options);
+
+    //    control.makeTransliteratable(['txtScript']);
+    //}
+    //google.setLoadCallback(onLoad);
+
+
+    //function intialize_transliteration() {
+    //    var options = {
+    //        sourceLanguage: 'en',
+    //        destinationLanguage: ['kn'],
+    //        shortcutKey: 'ctrl+g',
+    //        transliterationEnabled: true
+    //    };
+    //    var control =
+    //        new google.elements.transliteration.TransliterationControl(options);
+
+    //    //add as many as required
+    //    var ids = ["txtScript"];
+
+    //    control.makeTransliteratable(ids);
+    //    control.showControl('translControl');
+    //}
+    //google.setOnLoadCallback(intialize_transliteration);
+
+    //function auto_transliterate(from, to) {
+    //    if (from.value) {
+    //        google.language.transliterate(from.value.split(" "), "en", "kn", function (result) {
+    //            if (!result.error) {
+    //                if (result.transliterations && result.transliterations.length > 0) {
+
+    //                    if (result.transliterations[0].transliteratedWords.length > 0) {
+    //                        to.value = result.transliterations[0].transliteratedWords[0];
+    //                    }
+    //                    if (result.transliterations[1].transliteratedWords.length > 0) {
+    //                        to.value = to.value + " " + result.transliterations[1].transliteratedWords[0];
+    //                    }
+    //                    if (result.transliterations[2].transliteratedWords.length > 0) {
+    //                        to.value = to.value + " " + result.transliterations[2].transliteratedWords[0];
+    //                    }
+    //                    if (result.transliterations[3].transliteratedWords.length > 0) {
+    //                        to.value = to.value + " " + result.transliterations[3].transliteratedWords[0];
+    //                    }
+    //                    if (result.transliterations[4].transliteratedWords.length > 0) {
+    //                        to.value = to.value + " " + result.transliterations[4].transliteratedWords[0];
+    //                    }
+
+
+    //                }
+    //            }
+    //        });
+    //    }
+    //}
+
+    //function auto_transliterate_all() {
+    //    auto_transliterate(document.getElementById("SMSScript"), document.getElementById("txtScript"));
+    //    //auto_transliterate(document.getElementById("ln"), document.getElementById("lnk"));
+    //    //Add more if required!
+    //}
+
+
+    // Load the google elements
+    google.load("elements", "1", {
+        packages: "transliteration"
+    });
+    //function onLoad() {
+    //    var options = {
+    //        sourceLanguage:
+    //            google.elements.transliteration.LanguageCode.ENGLISH,
+    //        destinationLanguage:
+    //            [google.elements.transliteration.LanguageCode.HINDI],
+    //        transliterationEnabled: true
+    //    }
+    //    var options2 = {
+    //        sourceLanguage:
+    //            google.elements.transliteration.LanguageCode.ENGLISH,
+    //        destinationLanguage:
+    //            [google.elements.transliteration.LanguageCode.TAMIL],
+    //        transliterationEnabled: true
+    //    }
+    //    // Create a Instance on TransliterationControl
+    //    var control = new google.elements.transliteration.TransliterationControl(options);
+    //    var control2 = new google.elements.transliteration.TransliterationControl(options2);
+    //    control.makeTransliteratable(['SMSScript']);
+    //    control2.makeTransliteratable(['txtScript']);
+    //}
+    //function auto_transliterate(from, to) {
+    //    if (from.value) {
+    //        google.language.transliterate(from.value.split(" "), "en", "kn", function (result) {
+    //            if (!result.error) {
+    //                if (result.transliterations && result.transliterations.length > 0) {
+
+    //                    if (result.transliterations[0].transliteratedWords.length > 0) {
+    //                        to.value = result.transliterations[0].transliteratedWords[0];
+    //                    }
+    //                    if (result.transliterations[1].transliteratedWords.length > 0) {
+    //                        to.value = to.value + " " + result.transliterations[1].transliteratedWords[0];
+    //                    }
+    //                    if (result.transliterations[2].transliteratedWords.length > 0) {
+    //                        to.value = to.value + " " + result.transliterations[2].transliteratedWords[0];
+    //                    }
+    //                    if (result.transliterations[3].transliteratedWords.length > 0) {
+    //                        to.value = to.value + " " + result.transliterations[3].transliteratedWords[0];
+    //                    }
+    //                    if (result.transliterations[4].transliteratedWords.length > 0) {
+    //                        to.value = to.value + " " + result.transliterations[4].transliteratedWords[0];
+    //                    }
+
+
+    //                }
+    //            }
+    //        });
+    //    }
+    //}
+    //function auto_transliterate_all() {
+    //    auto_transliterate(document.getElementById("SMSScript"), document.getElementById("txtScript"));
+    //    //auto_transliterate(document.getElementById("ln"), document.getElementById("lnk"));
+    //    //Add more if required!
+    //}
+    //google.setOnLoadCallback(onLoad);
+
+
+
+    function SMStypeValidate() {
+        if (document.getElementById("rdnWA").checked) {
+            $("#WACamppanel").show();
+            $("#SMSCamppanel").hide();
+        }
+        else {
+            $("#WACamppanel").hide();
+            $("#SMSCamppanel").show();
+        }
+
+    }
+
+    function HandleChange() {
+        if (document.getElementById("SMSScript")!= '') {
+            $("#SMSScript").val('');
+        }
+    }
+
+    function BaseCalc() {
             var val = document.getElementById("BaseType").value;
-            var div = document.getElementById("divPoints");
             if (val == 4) {
-
                 $('#divPoints').show();
-
             }
             else if (val != 4) {
-
                 $('#divPoints').hide();
             }
+    }
+
+    function pointsvalid() {
+        var val = $('#Filter').val();
+        if (val == 4) {
+            $('#divPointsRange').show();
+        }
+        else if (val != 4) {
+            $('#divPointsRange').hide();
+        }
     }
 
     function ValidateDate() {
@@ -222,6 +633,7 @@
             $("#txtEnrollfromdt").val("");
         }
     }
+
     function ValidateDate1() {
         var d = new Date();
         month = ("0" + (d.getMonth() + 1)).slice(-2);
@@ -255,6 +667,37 @@
         var CampName = $("#CampName").val();
         var AllCount = $("#AllCountnum").text();
         var FiltCountnum = $("#FiltCountnum").text();
+        var TempId = $("#TempId").val();
+        var ScriptType = '';
+        var TempCalc = '';
+        var a = '';
+        var TotalCredits;
+        var SMSBal = $("#SMSBalance").val();
+
+        if (document.getElementById("rdnText").checked) {
+            ScriptType = $("#rdnText").val();
+        }
+        else {
+            ScriptType = $("#rdnUnicode").val();
+        }
+
+        if (ScriptType == '1') {
+            TempCalc = 159;
+        }
+        else if (ScriptType == '2'){
+            TempCalc = 69;
+        }
+
+        var SMSBalance = parseInt($("#SMSBalance").val());
+        var CharCount = parseInt($("#current").text());
+        a = Math.ceil(CharCount / TempCalc);
+        TotalCredits = a * parseInt(FiltCountnum);
+
+
+        //alert(CharCount);
+        //alert(TempCalc);
+        //alert(a);
+
 
 
         if (AllCount == "") {
@@ -307,12 +750,51 @@
                 buttonText: "Okay"
             })
         }
+        else if (TempId == "") {
+            cuteAlert({
+                type: "error",
+                title: "Error Title",
+                message: "Template ID is Empty",
+                buttonText: "Okay"
+            })
+        }
+        else if (TempId == "") {
+            cuteAlert({
+                type: "error",
+                title: "Error Title",
+                message: "Template ID is Empty",
+                buttonText: "Okay"
+            })
+        }
         else {
-            Save();
+            if (SMSBalance < TotalCredits) {
+                cuteAlert({
+                    type: "error",
+                    title: "Error Title",
+                    message: "Balance is Less for sending Message, Total Credits required  " + TotalCredits,
+                    buttonText: "Okay"
+                })
+            }
+            else {
+                cuteAlert({
+                    type: "question",
+                    title: "Confirm Title",
+                    message: "One SMS cost " + a + " Total Cost " + TotalCredits+ "  Continue",
+                    confirmText: "Yes",
+                    cancelText: "No"
+                }).then((e) => {
+                    if (e == ("confirm")) {
+                        Save();
+                    } else {
+
+                    }
+                })
+            }
+
         }
     }
 
-        function SendDLTValidate() {
+    function SendDLTValidate() {
             var CampId = $("#CampId").val();
             if (CampId == '') {
                 cuteAlert({
@@ -338,10 +820,16 @@
         var Equality = '';
         var Points = '';
         var OutletId = '';
+        var PointsRange1 = '';
 
             val = document.getElementById("BaseType").value;
             Equality = document.getElementById("Filter").value;
             Points = document.getElementById("points").value;
+            PointsRange1 = $("#points2").val();
+        var NPoints = parseInt(Points);
+        var NPointsRange1 = parseInt(PointsRange1);
+        var Flag = 0;
+
             OutletId = $("#ddlOutletList").val();
         if (val != '4') {
             Equality = ''
@@ -355,17 +843,47 @@
                     message: "Enter Points",
                     buttonText: "Okay"
                 })
+                Flag = 1;
             }
         }
+
+        if (val == '4') {
+            if (Equality != '4') {
+                PointsRange1 = ''
+            }
+            else {
+                if (PointsRange1 == '') {
+
+                    cuteAlert({
+                        type: "error",
+                        title: "Error Title",
+                        message: "Enter Points",
+                        buttonText: "Okay"
+                    })
+                    Flag = 1;
+                }
+                if (NPointsRange1 < NPoints) {
+                     cuteAlert({
+                         type: "error",
+                         title: "Error Title",
+                         message: "To point can't be small than from point",
+                         buttonText: "Okay"
+                     })
+                    Flag = 1;
+                 }
+            }
+        }
+        if (Flag == 0) {
             var FilterData = [];
             item = {};
             item["BaseType"] = val;
             item["PointsBase"] = Equality;
-            item["Points"] = Points;
+            item["Points"] = Points; //PointsRange1
+            item["PointsRange1"] = PointsRange1;
             item["OutletId"] = OutletId;
             FilterData.push(item);
             var data = JSON.stringify(FilterData);
-        $("#divLoader").show();
+            $("#divLoader").show();
             $.ajax({
                 type: "POST",
                 url: '@Url.Action("GetFilteredData", "Campaigns")',
@@ -388,6 +906,7 @@
                     console.log(response.responseText);
                 }
             });
+        }
     }
 
     function Save() {
@@ -408,14 +927,22 @@
         var SMSType = '';
         var Scheduledatetime = '';
         var ScriptType = '';
+        var TempId = '';
 
         val = $("#BaseType").val();
         Equality = $("#Filter").val();
         Points = $("#points").val();
+        PointsRange1 = $("#points2").val();
 
         if (val != '4') {
             Equality = ''
             Points = 0
+            PointsRange1 = 0
+        }
+        if (val == '4') {
+            if (Equality != '4') {
+                PointsRange1 = 0
+            }
         }
 
         OutletId = $("#ddlOutletList").val();
@@ -424,7 +951,8 @@
         EndDate = $("#txtEnrolltodt").val();
         CampaignName = $("#CampName").val();
         Scheduledatetime = $("#datetimepicker").val();
-        
+        TempId = $("#TempId").val();
+
 
         if (document.getElementById("rdnSMS").checked) {
             SMSType = $("#rdnSMS").val();
@@ -443,10 +971,8 @@
             ScriptType = $("#rdnText").val();
         }
         else {
-            ScriptType = $("#rdnText").val();
+            ScriptType = $("#rdnUnicode").val();
         }
-
-
 
         var FilterData = [];
         item = {};
@@ -459,8 +985,10 @@
         item["EndDate"] = EndDate;
         item["CampaignName"] = CampaignName;
         item["SMSType"] = SMSType;
-        //item["ScriptType"] = ScriptType;
-        //item["Scheduledatetime"] = Scheduledatetime;
+        item["ScriptType"] = ScriptType;
+        item["Scheduledatetime"] = Scheduledatetime;
+        item["TempId"] = TempId;
+        item["PointsRange1"] = PointsRange1;
 
         FilterData.push(item);
         var data = JSON.stringify(FilterData);
@@ -482,18 +1010,19 @@
                         cuteAlert({
                             type: "success",
                             title: "Success Title",
-                            /*message: "Campaign Saved" + response[0].CampaignId,*/
-                            message: "Campaign Saved",
-                            buttonText: "Okay"
-
+                            message: "Message Send",
+                            buttonText: "Campaign Saved"
+                        }).then(() => {
+                            $("#btnSendTestSMS").show();
+                            $("#TestNumbers").show();
+                            $("#btnSave").prop('disabled', true);
                         })
                         $("#divLoader").hide();
-                        if (SMSType == 1) {
-                            $("#btnSave").prop('disabled', true);
-                            $("#btnSendTestSMS").prop('disabled', false);
-                            $("#btnSendDLT").prop('disabled', false);
-                        }
-
+                        //if (SMSType == 1) {
+                        //    $("#btnSave").prop('disabled', true);
+                        //    $("#btnSendTestSMS").prop('disabled', false);
+                        //    $("#btnSendDLT").prop('disabled', false);
+                        //}
                     }
                     else {
 
@@ -506,6 +1035,7 @@
             });
 
     }
+
     function DownLoad() {
         var CampaignId;
         CampaignId = $("#CampId").val();
@@ -515,15 +1045,55 @@
         console.log(urlLink);
         window.location.href = urlLink;
     }
+
     $("#SMSScript").keyup(function () {
         //alert("Inside Keyup");
+        var ScriptType = '';
+        var TempCalc = '';
+        var a = '';
         var characterCount = $(this).val().length,
             current = $('#current'),
             maximum = 0
         theCount = maximum + characterCount;
         //alert(theCount);
         $("#current").text(theCount);
+
+        if (document.getElementById("rdnText").checked) {
+            ScriptType = $("#rdnText").val();
+        }
+        else {
+            ScriptType = $("#rdnUnicode").val();
+        }
+        if (ScriptType == '1') {
+            TempCalc = 159;
+        }
+        else if (ScriptType == '2') {
+            TempCalc = 69;
+        }
+        var Credits = $(this).val().length,
+            CreditsNeed = $('#Count'),
+            maximum = 0
+        var theCount1 = maximum + Credits;
+        a = Math.ceil(theCount / TempCalc);
+        $("#Count").text(a);
     });
+
+    //$("#SMSScript").focusout(function () {
+    //    //Call the Google API
+    //    $.ajax({
+    //        type: "GET",
+    //        url: "https://ajax.googleapis.com/ajax/services/language/translate",
+    //        dataType: 'jsonp',
+    //        cache: false,
+    //        contentType: "application/x-www-form-urlencoded; charset=UTF-8",
+    //        data: "v=1.0&q=" + $('#SMSScript').val() + "&langpair=en|es",
+    //        success: function (iData) {
+    //            //update the value
+    //            $('#txtScript').val(iData["responseData"]["translatedText"]);
+    //        },
+    //        error: function (xhr, ajaxOptions, thrownError) { }
+    //    });
+    //});
 
     function SendDLT(){
             var CampaignId = $("#CampId").val();
@@ -585,11 +1155,13 @@
     }
 
     function SendTestSMS(){
-            var CampaignId = $("#CampId").val();
+        var CampaignId = $("#CampId").val();
+        var TestNumber = $("#TestNumbers").val();
 
             var FilterData = [];
             item = {};
-            item["CampaignId"] = CampaignId;
+        item["CampaignId"] = CampaignId;
+        item["TestNumber"] = TestNumber;
 
             FilterData.push(item);
             var data = JSON.stringify(FilterData);
@@ -604,15 +1176,99 @@
                 success: function (response) {
                     console.log(response);
                     if (response != null) {
+                        cuteAlert({
+                            type: "question",
+                            title: "Confirm Title",
+                            message: "Has SMS Received",
+                            confirmText: "Yes",
+                            cancelText: "No"
+                        }).then((e) => {
+                            if (e == ("confirm")) {
+                                $("#btnSendTestSMS").prop('disabled', true);
+                                $("#btnSendDLT").show();
+                            } else {
+                                alert(":-(");
+                            }
+                        })
+                        $("#divLoader").hide();
+                    }
+                    else {
+                        cuteAlert({
+                            type: "error",
+                            title: "Error Title",
+                            message: "Message Not Send",
+                            buttonText: "Okay"
+                        })
+                        $("#divLoader").hide();
+                    }
+                },
+                error: function (response) {
+                    //console.log(response.responseText);
+                    alert("InsideError");
+                    $("#divLoader").hide();
+                }
+            });
+    }
 
+    function ShowScheduledate() {
+        $('#SchedPick').toggle();
+    }
+    function Showdatetime() {
+         $('#datetimepicker').datetimepicker();
+    }
+
+    function SendSMSValidate() {
+        var CampaignId = $("#CampId").val();
+
+        if (CampaignId != null) {
+
+            SendSMS();
+            $("#divLoader").hide();
+        }
+        else {
+            cuteAlert({
+                type: "error",
+                title: "Error Title",
+                message: "Message Not Send",
+                buttonText: "Okay"
+            })
+            $("#divLoader").hide();
+        }
+
+    }
+
+    function SendSMS()
+    {
+            var CampaignId = $("#CampId").val();
+
+            var FilterData = [];
+            item = {};
+            item["CampaignId"] = CampaignId;
+
+            FilterData.push(item);
+            var data = JSON.stringify(FilterData);
+        $("#divLoader").show();
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("SendSMS", "Campaigns")',
+                data: '{jsonData: ' + JSON.stringify(data) + '}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+
+                success: function (response) {
+                    console.log(response);
+                    if (response != null) {
                         cuteAlert({
                             type: "success",
                             title: "Success Title",
                             message: "Message Send",
                             buttonText: "Okay"
-
+                        }).then(() => {
+                            var urlLink = "@Url.Action("CampaignManagement", "Campaigns")";
+                            window.location.href = urlLink;
                         })
                         $("#divLoader").hide();
+
                     }
                     else {
                         cuteAlert({
@@ -631,11 +1287,62 @@
             });
     }
 
-    function ShowScheduledate() {
-        $('#SchedPick').toggle();
+    function WAtypeValidate() {
+
+         if (document.getElementById("rdnText").checked) {
+            $("#ScriptText").show();
+             $("#Upload").hide();
+        }
+         else if (document.getElementById("rdnImage").checked) {
+             $("#Upload").show();
+            $("#ScriptText").hide();
+            //$("#SMSCamppanel").hide();
+            /*$("WAMsgType").show();*/
+        }
+        else if (document.getElementById("rdnImageCaption").checked){
+            $("#ScriptText").show();
+            $("#Upload").show();
+        }
     }
-    function Showdatetime() {
-         $('#datetimepicker').datetimepicker();     
+
+    function WAValidateDate() {
+        var d = new Date();
+        month = ("0" + (d.getMonth() + 1)).slice(-2);
+        day = ("0" + d.getDate()).slice(-2);
+        year = d.getFullYear();
+        var Date1 = year + '-' + month + '-' + day;
+
+        var CampStartDate = $("#WAtxtEnrollfromdt").val();
+        if (CampStartDate < Date1) {
+            cuteAlert({
+                type: "error",
+                title: "Error Title",
+                message: "StartDate Can't be Older",
+                buttonText: "Okay"
+
+            })
+            $("#WAtxtEnrollfromdt").val("");
+        }
     }
+
+    function WAValidateDate1() {
+        var d = new Date();
+        month = ("0" + (d.getMonth() + 1)).slice(-2);
+        day = ("0" + d.getDate()).slice(-2);
+        year = d.getFullYear();
+        var Date1 = year + '-' + month + '-' + day;
+
+        var CampEndDate = $("#WAtxtEnrolltodt").val();
+        if (CampEndDate < Date1) {
+            cuteAlert({
+                type: "error",
+                title: "Error Title",
+                message: "EndDate Can't be Older",
+                buttonText: "Okay"
+            })
+            $("#WAtxtEnrolltodt").val("");
+        }
+    }
+
 </script>
 

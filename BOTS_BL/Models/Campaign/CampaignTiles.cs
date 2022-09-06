@@ -159,6 +159,8 @@ namespace BOTS_BL.Models
         public DateTime? StartDate { get; set; }
         public DateTime? EndDate { get; set; }
         public string Status { get; set; }
+        public string ControlBase { get; set; }
+        public string CampaignBase { get; set; }
 
     }
     public class DLTDetailsLst
@@ -173,5 +175,22 @@ namespace BOTS_BL.Models
         public string TemplateName { get; set; }
         public string TemplateType { get; set; }
         public bool Status { get; set; }
+    }
+
+    public class SMSDetailsTemp
+    {
+        public string Slno { get; set; }
+        public string SMSVendor { get; set; }
+        public string UserName { get; set; }
+        public string Password { get; set; }
+        public string GroupId { get; set; }
+        public string Status { get; set; }
+        public string GroupName { get; set; }
+        public string BOCode { get; set; }
+    }
+
+    public class TempSMSBalance
+    {
+        public string SmsBalance { get; set; }
     }
 }
