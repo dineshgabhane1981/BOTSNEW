@@ -23,6 +23,10 @@ namespace BOTS_BL.Models
         [StringLength(150)]
         public string ReferredName { get; set; }
 
+        [Required]
+        [StringLength(150)]
+        public string RetailName { get; set; }
+
         public DateTime Datetime { get; set; }
     }
 }

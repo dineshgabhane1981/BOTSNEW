@@ -73,6 +73,7 @@ namespace NPC.Controllers
                 TempData["Message"] = "Failed";
             objRefer.ReferredMobileNo = "";
             objRefer.ReferredName = "";
+            objRefer.RetailName = "";
 
             return RedirectToAction("Index", new { mobileno = objRefer.RefereeMobileNo });
         }
