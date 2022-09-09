@@ -349,7 +349,9 @@
     <Compile Include="Models\StoreDetail.cs" />
     <Compile Include="Models\tblFranchiseeEnquiry.cs" />
     <Compile Include="Models\tblLoginLog.cs" />
+    <Compile Include="Models\tblNPCCategory.cs" />
     <Compile Include="Models\tblNPCDetail.cs" />
+    <Compile Include="Models\tblNPCSubCategory.cs" />
     <Compile Include="Models\tblStandardRulesSetting.cs" />
     <Compile Include="Models\tblUniquePoint.cs" />
     <Compile Include="Models\TelecallerReport.cs" />
