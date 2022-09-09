@@ -18,7 +18,8 @@ namespace BOTS_BL.Models
             : base(connectionStringName)
         {
         }
-
+        public virtual DbSet<tblNPCCategory> tblNPCCategories { get; set; }
+        public virtual DbSet<tblNPCSubCategory> tblNPCSubCategories { get; set; }
         public virtual DbSet<tblNPCDetail> tblNPCDetails { get; set; }
         public virtual DbSet<GroupTestingLog> GroupTestingLogs { get; set; }
         public virtual DbSet<CampaignMaster> CampaignMasters { get; set; }
@@ -56,6 +57,8 @@ namespace BOTS_BL.Models
         public virtual DbSet<LogDetailsRW> LogDetailsRWs { get; set; }
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
+            
+
             modelBuilder.Entity<LoginDetail>()
                  .Property(e => e.UserId)
                  .IsUnicode(false);

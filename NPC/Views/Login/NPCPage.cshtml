@@ -1,57 +1,116 @@
-﻿
+﻿@model NPC.ViewModels.NPCViewModel
 @{
     Layout = null;
     ViewBag.Title = "NPC Page";
 }
 
 <h2>SaveNPC</h2>
+<style>
+    .input50 {
+        width: 200px;
+        margin-bottom: 20px;
+        padding: 12px 10px 12px 25px !important;
+        border-radius: 25px !important;
+        border: solid 1px #e1e1e1;
+    }
 
-<div style="border:1px solid grey; border-radius:5px;padding:5px;">
-    <div style="padding-right:10px;">
-        Customer Mobile No
-        <input type="text" id="frm1" class="input20" />
-    </div>
-    <div style="padding-right:10px; margin-top:20px;">
-        Customer Name
-        <input type="text" id="to1" class="input20" />
-    </div>
-    <div style="padding-right: 10px; margin-top: 20px;">
-        Employee Name
-        <input type="text" id="frm2" class="input20" />
-    </div>
-    <div style="padding-right:10px; margin-top:20px;">
-        Category Name
-        <input type="text" id="to2" class="input20" />
-    </div>
-    <div style="padding-right: 10px; margin-top: 20px;">
-        Sub-Category Name
-        <input type="text" id="frm3" class="input20" />
-    </div>
-    <div style="padding-right:10px; margin-top:20px;">
-        Next Visit day
-        <input type="number" id="per3" class="input20" />
-    </div>
-    <div style="padding-right:10px; margin-top:20px;">
-        Remarks
-        <input type="text" id="to4" class="input20" />
-    </div>
+    .fp-text {
+        color: #8e8e8e;
+        font-size: 20px;
+    }
+</style>
+@*<div style="border-radius:10px;padding:5px;">*@
+<div class="container-fluid p-3 m-5 col-lg-12 col-md-12" style=" border: 1px solid grey; border-radius: 10px; margin-left: 250px; margin-right:250px">
+    <div class="row" style="padding-left:280px;">
 
-    <div>
-        <button type="button" id="btnEarnSave" onclick="return SaveNPC();" style="margin-right:10px;margin-bottom:20px;">Submit</button>
-    </div>
 
+
+        <div class="col-md-3 col-lg-3"><img src="https://blueocktopus.in/bots/Content/assets/images/Blue-Ocktopus-TLC_white.jpg" style="width:200px;" alt="Logo"></div>
+        <div style="padding-right:10px;" class="row mt-2" >
+            Customer Mobile No
+            @*@Html.TextBoxFor(model => model.tblNPCDetail.CustomerMobileNo, new { @class = "input50", @id = "txtCustomerMobileNo" })*@
+            <input type="Text" id="CustomerMobileNo" style="margin-left:30px;" class="fp-text" />
+
+        </div>
+        
+            <div style="padding-right:10px; margin-top:10px; " class="col-md-3 col-xl-3 row mt-2">
+                Customer Name
+                <input type="Text" id="txtCustomerName" class="fp-text" style="margin-left: 65px;" />
+
+            </div>        
+            <div style="padding-right: 10px; margin-top: 10px; " class="row mt-2">
+                    Employee Name
+                   <input type="Text" id="txtEmployeeName" style="margin-left: 60px;" class="fp-text" />
+            </div>
+        <div style="padding-right:10px; margin-top:20px;" class="row mt-2">
+            Category Name
+        
+            @Html.DropDownListFor(model => model.tblNPCDetail.CategoryName, new SelectList(Model.lstNPCCategory, "Value", "Text"), "Please Select", htmlAttributes: new { @style = "margin-left:70px;", @class = "fp-text", @id = "ddlCategoryList" })
+            @*@Html.DropDownListFor(model => model.tblNPCDetail.CategoryName, new SelectList(Model.lstNPCCategory, "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input50", @id = "ddlCityNew" })*@
+
+            @*@Html.DropDownList("NPCCategory", new SelectList(ViewBag.NPCCategory, "CategoryId", "CategoryName"), "Please Select", htmlAttributes: new { @class = "input50", @id = "ddlCategoryList" })*@
+
+        </div>
+        <div style="padding-right: 10px; margin-top: 20px;" class="row mt-2">
+            Sub-Category Name
+            @Html.DropDownListFor(model => model.tblNPCDetail.SubCategoryName, new SelectList(Model.lstNPCSubCategory, "Value", "Text"), "Please Select", htmlAttributes: new { @style = "margin-left:45px;", @class = "fp-text", @id = "ddlSubCategoryName" })
+
+            @*<select id="ddlSubCategoryName" name="SubcategoryName" class="input50">
+                <option value="0">Select</option>
+                <option value="1">Chain</option>
+                <option value="2">Ring</option>
+                <option value="3">Bangles</option>
+
+            </select>*@
+            @*@Html.DropDownListFor(model => model.tblNPCDetail.SubCategoryName, new SelectList(Model.SubCategoryName(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input50", @id = "ddlSubCategoryName" })*@
+
+        </div>
+        <div style="padding-right:10px; margin-top:20px;" class="row mt-2">
+            Next Visit day
+            <select id="ddlNextVisitDay" name="NextVisitday" class="fp-text" style="margin-left:80px;">
+                <option value="1">Select</option>
+                <option value="2">5</option>
+                <option value="3">10</option>
+                <option value="4">15</option>
+            </select>
+            @*@Html.DropDownListFor(model => model.tblNPCDetail.NextVisitDay, new SelectList(Model.NextVisitDay(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input50", @id = "ddlNextVisitDay" })*@
+
+        </div>
+        <div style="padding-right:10px; margin-top:20px;" class="row mt-2">
+            Remarks
+            <input type="Text" id="txtRemarks" class="fp-text" style="margin-left:100px;" />
+        </div>
+
+        <div>
+            <button type="button" id="btnNPCSave" onclick="return SaveNPC();" style="margin-right:10px;margin-bottom:20px; margin-top:20px; margin-left:30px;">Submit</button>
+
+            <button type="button" id="btnClear" onclick="return NPCPage();" style="margin-right: 10px; margin-bottom: 20px; margin-top: 20px; margin-left: 30px;">Clear</button>
+
+        </div>
+
+    </div>
 </div>
+@* </div>*@
 
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<link rel="stylesheet" href="~/Scripts/cute-alert-master/style-alert.css">
+<script src="~/Scripts/cute-alert-master/cute-alert.js"></script>
 <script>
     function SaveNPC() {
+        //var N = document.getElementById("CustomerMobileNo").value;
+        //alert(N);
+        //var N = $('#CustomerMobileNo').val();
+        //alert("Hi");
         var NPCData = [];
         item = {};
-        item["CustomerMobileNo"] = $("#txtCustomerMobileNo").val();
+        item["CustomerMobileNo"] = /*document.getElementById("SMSScript");*/$("#CustomerMobileNo").val();
         item["CustomerName"] = $("#txtCustomerName").val();
         item["EmployeeName"] = $("#txtEmployeeName").val();
-        item["CategoryName"] = $("#txtCategoryName").val();
-        item["SubCategoryName"] = $("#txtSubCategoryName").val();
-        item["NextVisitDay"] = $("#txtNextVisitDay").val();
+        item["CategoryName"] = $("#ddlCategoryList").val();
+        item["SubCategoryName"] = $("#ddlSubCategoryName").val();
+        item["NextVisitDay"] = $("#ddlNextVisitDay").val();
         item["Remarks"] = $("#txtRemarks").val();
 
 
@@ -65,30 +124,46 @@
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
                 success: function (result) {
-                    console.log(result)
-                    if (result == true) {
-                        cuteAlert({
-                            type: "success",
-                            title: "Saved",
-                            message: "NPC Data saved successfully",
-                            buttonText: "Okay"
-                        })
-                        $("#divLoader").hide();
-                    }
-                    else {
-                        cuteAlert({
-                            type: "error",
-                            title: "Oops..",
-                            message: "There is a problem in saving NPC Data",
-                            buttonText: "Okay"
-                        })
-                        $("#divLoader").hide();
-                    }
+                console.log(result)
+                if (result == true) {
+                cuteAlert({
+                type: "success",
+                title: "Saved",
+                message: "NPC Data saved successfully",
+                buttonText: "Okay"
+                }).then(() => {
+                            var urlLink = "@Url.Action("NPCPage", "Login")";
+                            window.location.href = urlLink;
+                       })
+
+                $("#divLoader").hide();
+                }
+                else {
+                    cuteAlert({
+                        type: "error",
+                        title: "Oops..",
+                        message: "There is a problem in saving NPC Data",
+                        buttonText: "Okay"
+                    })
+                    $("#divLoader").hide();
+                }
                 },
                 error: function (result) {
-                    //console.log(result.responseText)
+                //console.log(result.responseText)
                 }
-            });
-        }
+                });
     }
+    function NPCPage() {
+        //cuteAlert({
+        //                    type: "success",
+        //                    title: "Success Title",
+        //                    message: "Message Send",
+        //                    buttonText: "Okay"
+        //                }).then(() => {
+                            var urlLink = "@Url.Action("NPCPage", "Login")";
+                            window.location.href = urlLink;
+                        //})
+
+    }
+
 </script>

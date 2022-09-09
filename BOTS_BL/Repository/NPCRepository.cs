@@ -5,11 +5,16 @@ using System.Text;
 using System.Threading.Tasks;
 using BOTS_BL.Models;
 using System.Data.Entity.Migrations;
+using System.Data.SqlClient;
+using System.Data;
+using System.Web.Mvc;
 
 namespace BOTS_BL.Repository
 {
     public class NPCRepository
     {
+        Exceptions newexception = new Exceptions();
+        CustomerRepository CR = new CustomerRepository();
         public bool SaveNPCData(tblNPCDetail objOutletData)
         {
             bool result = false;
@@ -17,6 +22,7 @@ namespace BOTS_BL.Repository
             {
                 try
                 {
+                    
                     context.tblNPCDetails.AddOrUpdate(objOutletData);
                     context.SaveChanges();
                     result = true;
@@ -37,6 +43,66 @@ namespace BOTS_BL.Repository
                 GroupId = context.NPCLoginDetails.Where(x => x.LoginId == objData.LoginId && x.Password == objData.Password).Select(y => y.GroupId).FirstOrDefault();
             }
             return GroupId;
+        }
+
+        public List<SelectListItem> GetNPCCategory(string groupId)
+        {
+            List<SelectListItem> lstNPCCategory = new List<SelectListItem>();
+            List<tblNPCCategory> objData = new List<tblNPCCategory>();
+            //string ConnectionString = string.Empty;
+            string connectionString = CR.GetCustomerConnString(groupId);
+            
+            using (var context = new BOTSDBContext(connectionString))
+            {
+                try
+                {
+                    objData = context.tblNPCCategories.ToList();
+
+                    foreach(var item in objData)
+                    {
+                        SelectListItem lstItem = new SelectListItem();
+                        lstItem.Value = Convert.ToString(item.CategoryId);
+                        lstItem.Text = item.CategoryName;
+                        lstNPCCategory.Add(lstItem);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    newexception.AddException(ex,"Hello");
+                }
+            }
+
+            return lstNPCCategory;
+        }
+
+        public List<SelectListItem> GetNPCSubCategory(string groupId)
+        {
+            List<SelectListItem> lstNPCSubCategory = new List<SelectListItem>();
+            List<tblNPCSubCategory> objData = new List<tblNPCSubCategory>();
+            //string ConnectionString = string.Empty;
+            string connectionString = CR.GetCustomerConnString(groupId);
+
+            using (var context = new BOTSDBContext(connectionString))
+            {
+                try
+                {
+                    objData = context.tblNPCSubCategories.ToList();
+
+                    foreach (var item in objData)
+                    {
+                        SelectListItem lstItem = new SelectListItem();
+                        lstItem.Value = Convert.ToString(item.SubCategoryId);
+                        lstItem.Text = item.SubCategoryname;
+                        lstNPCSubCategory.Add(lstItem);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    newexception.AddException(ex, "Hello");
+                }
+            }
+
+            return lstNPCSubCategory;
         }
     }
 

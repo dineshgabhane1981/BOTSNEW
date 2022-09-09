@@ -7,6 +7,7 @@ using System.Linq;
 using BOTS_BL.Models.SalesLead;
 using BOTS_BL.Models.FeedbackModule;
 using BOTS_BL.Models.OnBoarding;
+using System.Web.Mvc;
 
 namespace BOTS_BL.Models
 {
@@ -104,6 +105,7 @@ namespace BOTS_BL.Models
         public virtual DbSet<BOTS_TblSMSConfig> BOTS_TblSMSConfig { get; set; }
         public virtual DbSet<BOTS_TblWAConfig> BOTS_TblWAConfig { get; set; }
         public virtual DbSet<tblStandardRulesSetting> tblStandardRulesSettings { get; set; }
+
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {

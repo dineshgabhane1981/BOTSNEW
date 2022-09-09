@@ -6,6 +6,7 @@ using System.Web.Mvc;
 using BOTS_BL.Repository;
 using BOTS_BL.Models;
 using System.Web.Script.Serialization;
+using NPC.ViewModels;
 
 namespace NPC.Controllers
 {
@@ -16,6 +17,7 @@ namespace NPC.Controllers
         public ActionResult Index()
         {
             NPCLoginDetail objData = new NPCLoginDetail();
+
             return View(objData);
         }
 
@@ -34,7 +36,18 @@ namespace NPC.Controllers
 
         public ActionResult NPCPage()
         {
-            return View();
+            var groupId = Convert.ToString(Session["GroupId"]);
+            NPCViewModel objdata = new NPCViewModel();
+            //var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            //var NPCCategory = NPCR.GetNPCCategory(groupId);
+
+            objdata.lstNPCCategory = NPCR.GetNPCCategory(groupId);
+            objdata.lstNPCSubCategory = NPCR.GetNPCSubCategory(groupId);
+
+            //ViewBag.NPCCategory = NPCCategory;
+
+            return View(objdata);
+            //return View("NPCPage");
         }
 
 
