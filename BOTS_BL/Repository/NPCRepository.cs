@@ -60,6 +60,30 @@ namespace BOTS_BL.Repository
             return GroupId;
         }
 
+        public List<SelectListItem> GetOutlets(string groupId)
+        {
+            List<SelectListItem> lstOutlets = new List<SelectListItem>();
+            string connectionString = CR.GetCustomerConnString(groupId);
+            using (var context = new BOTSDBContext(connectionString))
+            {
+                try
+                {
+                    var objData = context.OutletDetails.ToList();
+                    foreach (var item in objData)
+                    {
+                        SelectListItem lstItem = new SelectListItem();
+                        lstItem.Value = Convert.ToString(item.OutletName);
+                        lstItem.Text = item.OutletName;
+                        lstOutlets.Add(lstItem);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    newexception.AddException(ex, "Hello");
+                }
+            }
+            return lstOutlets;
+        }
         public List<SelectListItem> GetNPCCategory(string groupId)
         {
             List<SelectListItem> lstNPCCategory = new List<SelectListItem>();
@@ -144,6 +168,21 @@ namespace BOTS_BL.Repository
 
             return lstNPCSubCategory;
         }
+
+        public string GetLogo(string groupId)
+        {
+            string logoUrl = string.Empty;
+
+            string connectionString = CR.GetCustomerConnString(groupId);
+            using (var context = new BOTSDBContext(connectionString))
+            {
+                var objbrandDetail = context.BrandDetails.Where(x => x.GroupId == groupId).FirstOrDefault();
+                logoUrl = objbrandDetail.BrandLogoUrl;
+            }
+            return logoUrl;
+
+        }
+
     }
 
 }

@@ -54,7 +54,8 @@ namespace NPC.Controllers
             objdata.lstNPCCategory = NPCR.GetNPCCategory(groupId);
             objdata.lstNPCSubCategory = NPCR.GetNPCSubCategory(groupId);
             objdata.lstNPCEmployees = NPCR.GetNPCEmployees(groupId);
-
+            objdata.lstOutlets = NPCR.GetOutlets(groupId);
+            objdata.Logo = NPCR.GetLogo(groupId);
             return View(objdata);           
         }
 
@@ -71,6 +72,7 @@ namespace NPC.Controllers
             foreach (Dictionary<string, object> item in objData)
             {
 
+                objOutletData.Outlet = Convert.ToString(item["OutletName"]);
                 objOutletData.CustomerMobileNo = Convert.ToString(item["CustomerMobileNo"]);
                 objOutletData.CustomerName = Convert.ToString(item["CustomerName"]);
                 objOutletData.EmployeeName = Convert.ToString(item["EmployeeName"]);

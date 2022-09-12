@@ -26,5 +26,6 @@ namespace BOTS_BL.Models
         public decimal? NextVisitDay { get; set; }
 
         public string Remarks { get; set; }
+        public string Outlet { get; set; }
     }
 }

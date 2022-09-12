@@ -10,7 +10,11 @@ namespace NPC.ViewModels
     public class NPCViewModel
     {
         public tblNPCDetail tblNPCDetail { get; set; }
-        public tblGroupDetail objGroupDetails { get; set; }
+        public string Logo { get; set; }
+        public BrandDetail objbrandDetail { get; set; }
+
+        public OutletDetails objOutletDetail { get; set; }
+        public List<SelectListItem> lstOutlets { get; set; }
 
         public tblNPCCategory objNPCCategory { get; set; }
         public tblNPCSubCategory objNPCSubCategory { get; set; }

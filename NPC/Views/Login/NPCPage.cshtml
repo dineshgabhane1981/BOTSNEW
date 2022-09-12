@@ -22,7 +22,18 @@
 
 <div class="p-3 m-5 col-lg-10 col-md-10" style=" border: 1px solid grey; border-radius: 10px;">
     <div class="row col-lg-10 col-md-10">
-        <div style="margin-bottom:30px;text-align:center;"><img src="https://blueocktopus.in/Logo/BlueocktopusLogo08092022.jpeg" alt="Logo" width="40%"></div>
+        <div class="col-lg-10 col-md-10" style="margin-bottom:30px;text-align:center;"><img src="@Model.Logo" alt="Logo" width="40%"></div>
+    </div>
+
+    @*<div class="col-md-3 col-lg-3"><img src="@Model.Logo" style="width:200px;" alt="Logo"></div>*@
+
+    <div style="padding-right:10px; margin-top:20px;" class="row">
+        <div class="col-lg-3 col-md-3" style="padding-left:30px;">
+            Outlet Name
+        </div>
+        <div class="col-lg-3 col-md-3">
+            @Html.DropDownListFor(model => model.tblNPCDetail.Outlet, new SelectList(Model.lstOutlets, "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input50", @id = "ddlOutlet" })
+        </div>
     </div>
     <div style="padding-right:10px;" class="row">
         <div class="col-lg-3 col-md-3" style="padding-left:30px;">
@@ -93,8 +104,8 @@
         <button type="button" id="btnNPCSave" onclick="return SaveNPC();" class="btn btn-primary" style="margin-right:10px;margin-bottom:20px; margin-top:20px; margin-left:30px;">Submit</button>
         <button type="button" id="btnClear" onclick="return NPCPage();" class="btn btn-primary" style="margin-right: 10px; margin-bottom: 20px; margin-top: 20px; margin-left: 30px;">Clear</button>
     </div>
-
 </div>
+
 
 
 
@@ -104,22 +115,31 @@
 <link rel="stylesheet" href="~/Scripts/cute-alert-master/style-alert.css">
 <script src="~/Scripts/cute-alert-master/cute-alert.js"></script>
 <script>
+    $(document).ready(function () {
 
+        RemoveRequiredBorderNPC();
+
+    })
     function SaveNPC() {
+        var validationStatus1 = ValidateNPC();
+        if (validationStatus1) {
         if (/^[6789]\d{9,9}$/.test($("#CustomerMobileNo").val())) {
-            var NPCData = [];
-            item = {};
-            item["CustomerMobileNo"] = /*document.getElementById("SMSScript");*/$("#CustomerMobileNo").val();
-            item["CustomerName"] = $("#txtCustomerName").val();
-            item["EmployeeName"] = $("#txtEmployeeName").val();
-            item["CategoryName"] = $("#ddlCategoryList").val();
-            item["SubCategoryName"] = $("#ddlSubCategoryName").val();
-            item["NextVisitDay"] = $("#ddlNextVisitDay").val();
-            item["Remarks"] = $("#txtRemarks").val();
+            
+            
+                var NPCData = [];
+                item = {};
+                item["OutletName"] = $("#ddlOutlet").val();
+                item["CustomerMobileNo"] = /*document.getElementById("SMSScript");*/$("#CustomerMobileNo").val();
+                item["CustomerName"] = $("#txtCustomerName").val();
+                item["EmployeeName"] = $("#txtEmployeeName").val();
+                item["CategoryName"] = $("#ddlCategoryList").val();
+                item["SubCategoryName"] = $("#ddlSubCategoryName").val();
+                item["NextVisitDay"] = $("#ddlNextVisitDay").val();
+                item["Remarks"] = $("#txtRemarks").val();
 
 
-            NPCData.push(item);
-            var NPCDataStr = JSON.stringify(NPCData);
+                NPCData.push(item);
+                var NPCDataStr = JSON.stringify(NPCData);
                 $("#divLoader").show();
                 $.ajax({
                     type: "POST",
@@ -128,48 +148,104 @@
                     contentType: "application/json; charset=utf-8",
                     dataType: "json",
                     success: function (result) {
-                    console.log(result)
-                    if (result == true) {
-                    cuteAlert({
-                    type: "success",
-                    title: "Saved",
-                    message: "NPC Data saved successfully",
-                    buttonText: "Okay"
-                    }).then(() => {
+                        console.log(result)
+                        if (result == true) {
+                            cuteAlert({
+                                type: "success",
+                                title: "Saved",
+                                message: "NPC Data saved successfully",
+                                buttonText: "Okay"
+                            }).then(() => {
                                 var urlLink = "@Url.Action("NPCPage", "Login")";
                                 window.location.href = urlLink;
-                           })
+                            })
 
-                    $("#divLoader").hide();
-                    }
-                    else {
-                        cuteAlert({
-                            type: "error",
-                            title: "Oops..",
-                            message: "There is a problem in saving NPC Data",
-                            buttonText: "Okay"
-                        })
-                        $("#divLoader").hide();
-                    }
+                            $("#divLoader").hide();
+                        }
+                        else {
+                            cuteAlert({
+                                type: "error",
+                                title: "Oops..",
+                                message: "There is a problem in saving NPC Data",
+                                buttonText: "Okay"
+                            })
+                            $("#divLoader").hide();
+                        }
                     },
                     error: function (result) {
-                    //console.log(result.responseText)
+                        //console.log(result.responseText)
                     }
                 });
-        }
-        else {
+            }
+            else {
 
+                cuteAlert({
+                    type: "error",
+                    title: "Oops..",
+                    message: "Invalide MobileNo Or Enter MobileNo",
+                    buttonText: "Okay"
+                })
+                $("#CustomerMobileNo").focus();
+                return false;
+
+            }
+        }
+
+    }
+    function ValidateNPC() {
+        var status = true;
+        if ($("#CustomerMobileNo").val() == "") {
+            $('#CustomerMobileNo').css('border-color', 'red');
+            status = false;
+        }
+        if ($("#txtCustomerName").val() == "") {
+            $('#txtCustomerName').css('border-color', 'red');
+            status = false;
+        }
+        if ($("#txtEmployeeName").val() == "") {
+            $('#txtEmployeeName').css('border-color', 'red');
+            status = false;
+        }
+
+        if (!status) {
             cuteAlert({
                 type: "error",
                 title: "Oops..",
-                message: "Invalide MobileNo Or Enter MobileNo",
+                message: "Please Enter required fields",
                 buttonText: "Okay"
             })
-            $("#CustomerMobileNo").focus();
-            return false;
 
         }
 
+        return status;
+    }
+
+    function RemoveRequiredBorderNPC() {
+        $("#CustomerMobileNo").focusout(function () {
+            if ($("#CustomerMobileNo").val() != "") {
+                $('#CustomerMobileNo').css('border-color', '');
+            }
+            else {
+                $('#CustomerMobileNo').css('border-color', 'red');
+            }
+        });
+
+        $("#txtCustomerName").focusout(function () {
+            if ($("#txtCustomerName").val() != "") {
+                $('#txtCustomerName').css('border-color', '');
+            }
+            else {
+                $('#txtCustomerName').css('border-color', 'red');
+            }
+        });
+        $("#txtEmployeeName").focusout(function () {
+            if ($("#txtEmployeeName").val() != "") {
+                $('#txtEmployeeName').css('border-color', '');
+            }
+            else {
+                $('#txtEmployeeName').css('border-color', 'red');
+            }
+        });
     }
     function NPCPage()
     {
