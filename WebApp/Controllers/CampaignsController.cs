@@ -478,6 +478,7 @@ namespace WebApp.Controllers
         public ActionResult UploadData(HttpPostedFileBase Data)
         {
             string Path = ConfigurationManager.AppSettings["Path"].ToString();
+            string Path3 = ConfigurationManager.AppSettings["Path3"].ToString();
             string responseString;
             try
             {
@@ -491,7 +492,9 @@ namespace WebApp.Controllers
                     {
                         Data.SaveAs(Path2);
                         Session["Path2"] = Path2;
+                        string _Url = Path3 + _FileName;
                         ViewBag.Message = "File Uploaded Successfully!!";
+                        ViewData["Url"] = _Url;
                         return View("Index");
                     }
                 }
