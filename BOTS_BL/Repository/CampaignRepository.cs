@@ -503,8 +503,8 @@ namespace BOTS_BL.Repository
                 var names = new string[] { "2", "4", "5", "7" };
                 objcust = (from c in context.CustomerDetails where (names.Contains(c.CustomerThrough) && c.Status == "00") select c).ToList();
 
-                objcustAll.CustCountALL = context.CustomerDetails.Where(x => x.Status == "00" && x.IsSMS == null).Count();
-                objcustAll.CustFiltered = context.CustomerDetails.Where(x => x.Status == "00" && x.IsSMS == null && x.EnrollingOutlet == OutletId).Count();
+                //objcustAll.CustCountALL = context.CustomerDetails.Where(x => x.Status == "00" && x.IsSMS == null).Count();
+                //objcustAll.CustFiltered = context.CustomerDetails.Where(x => x.Status == "00" && x.IsSMS == null && x.EnrollingOutlet == OutletId).Count();
                 
                 
 
@@ -585,14 +585,14 @@ namespace BOTS_BL.Repository
                     {
                         int DummyPoints = Convert.ToInt32(Points);
                         int DummyPoints2 = Convert.ToInt32(PointsRange1);
-                        objcustAll.CustCountALL = context.CustomerDetails.Where(x => x.Status == "00" && x.IsSMS == null && (x.CustomerThrough == "2" || x.CustomerThrough == "4" || x.CustomerThrough == "5" || x.CustomerThrough == "7") && (x.Points >= DummyPoints && x.Points <= DummyPoints2)).Count();
+                        objcustAll.CustCountALL = context.CustomerDetails.Where(x => x.Status == "00" && x.IsSMS == null && (x.CustomerThrough == "2" || x.CustomerThrough == "4" || x.CustomerThrough == "5" || x.CustomerThrough == "7")).Count();
                         objcustAll.CustFiltered = context.CustomerDetails.Where(x => x.Status == "00" && x.IsSMS == null && (x.CustomerThrough == "2" || x.CustomerThrough == "4" || x.CustomerThrough == "5" || x.CustomerThrough == "7") && (x.Points >= DummyPoints && x.Points <= DummyPoints2)).Count();
                     }
-                    else if (BaseType == "4" && PointsBase == "3" && Points != "" && PointsRange1 != "" && OutletId != "")
+                    else if (BaseType == "4" && PointsBase == "4" && Points != "" && PointsRange1 != "" && OutletId != "")
                     {
                         int DummyPoints = Convert.ToInt32(Points);
                         int DummyPoints2 = Convert.ToInt32(PointsRange1);
-                        objcustAll.CustCountALL = context.CustomerDetails.Where(x => x.Status == "00" && x.IsSMS == null && (x.CustomerThrough == "2" || x.CustomerThrough == "4" || x.CustomerThrough == "5" || x.CustomerThrough == "7") && (x.Points >= DummyPoints && x.Points <= DummyPoints2)).Count();
+                        objcustAll.CustCountALL = context.CustomerDetails.Where(x => x.Status == "00" && x.IsSMS == null && (x.CustomerThrough == "2" || x.CustomerThrough == "4" || x.CustomerThrough == "5" || x.CustomerThrough == "7") && x.EnrollingOutlet == OutletId).Count();
                         objcustAll.CustFiltered = context.CustomerDetails.Where(x => x.Status == "00" && x.IsSMS == null && (x.CustomerThrough == "2" || x.CustomerThrough == "4" || x.CustomerThrough == "5" || x.CustomerThrough == "7") && (x.Points >= DummyPoints && x.Points <= DummyPoints2) && x.EnrollingOutlet == OutletId).Count();
                     }
 
@@ -1203,7 +1203,31 @@ namespace BOTS_BL.Repository
                 newexception.AddException(ex, GroupId);
             }
             return Data;
-        }      
+        }
+
+        public List<CampaignSaveDetails> SaveCampaignDataWA(string BaseType, string Equality, string Points, string OutletId, string Srcipt, string StartDate, string EndDate, string CampaignName, string SMSType, string MessageType, string Scheduledatetime, string PointsRange1, string GroupId, string connstr)
+        {
+            List<CampaignSaveDetails> Data = new List<CampaignSaveDetails>();
+
+            DateTime Sched = new DateTime();
+            if (string.IsNullOrEmpty(Scheduledatetime) == true)
+            {
+                Scheduledatetime = "1900-01-01 00:00:00";
+            }
+            try
+            {
+                using (var context = new BOTSDBContext(connstr))
+                {
+                    Data = context.Database.SqlQuery<CampaignSaveDetails>("sp_BOTS_CreateCampaign @pi_GroupId, @pi_Date,@pi_BaseType,@pi_Equality,@pi_Points,@pi_OutletId,@pi_Script,@pi_CampStartDate,@pi_CampEndDate,@pi_CampName,@pi_SMSType,@pi_MessageType,@pi_Scheduledatetime,@pi_TempId,@pi_PointsRange1", new SqlParameter("@pi_GroupId", GroupId), new SqlParameter("@pi_Date", DateTime.Now.ToString("yyyy-MM-dd")), new SqlParameter("@pi_BaseType", BaseType), new SqlParameter("@pi_Equality", Equality), new SqlParameter("@pi_Points", Points), new SqlParameter("@pi_OutletId", OutletId), new SqlParameter("@pi_Script", Srcipt), new SqlParameter("@pi_CampStartDate", StartDate), new SqlParameter("@pi_CampEndDate", EndDate), new SqlParameter("@pi_CampName", CampaignName), new SqlParameter("@pi_SMSType", SMSType), new SqlParameter("@pi_MessageType", MessageType), new SqlParameter("@pi_Scheduledatetime", Scheduledatetime), new SqlParameter("@pi_PointsRange1", PointsRange1)).ToList<CampaignSaveDetails>();
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, GroupId);
+            }
+            return Data;
+        }
+
     }
-    
+
 }

@@ -1,0 +1,651 @@
+﻿@*@{
+    ViewBag.Title = "_CampaignWA";
+    Layout = null;
+}*@
+
+<style>
+    .rbtnClass {
+        height: 20px;
+        width: 20px;
+        vertical-align: middle;
+        cursor: pointer;
+        /* margin-left: 10px;*/
+    }
+</style>
+
+<div class="mb-3 pr-3 pt-3 pl-3 card" style="padding-bottom:20px;" id="WACamppanel">
+
+    <div class="row mt-2" style="margin-top : 20px;">
+        <div class="col-md-3 col-xl-3" style="margin-left: 18px;">
+            Campaign Name*
+        </div>
+        <div>
+            <input type="text" id="WACampName" class="input50" placeholder="Enter Campaign Name" />
+        </div>
+        <div>
+            <input type="hidden" id="WACampId" class="input50" />
+        </div>
+    </div>
+
+    <div class="row mt-2" style="margin-top : 20px;">
+        <div id="WAdivdaterange" class="col-md-2 col-xl-3" style="margin-left: 18px; margin-top: 20px;">
+            <label>Campaign Period*</label>
+        </div>
+        <div style="margin-top: 20px;">
+            <input type="date" id="WAtxtEnrollfromdt" class="input50" placeholder="Start" onchange="WAValidateDate();" /> &nbsp;&nbsp;&nbsp;
+        </div>
+        <div style="margin-top: 20px;">
+            <input type="date" id="WAtxtEnrolltodt" class="input50" placeholder="End" onchange="WAValidateDate1();" />
+        </div>
+    </div>
+
+    <div class="row" style="margin-top : 20px;">
+        <div class="col-sm-2" style="margin-left: 18px;">
+            Base Type
+        </div>
+        <div class="col-sm-2 dropdown" style="margin-left : 70px;">
+            <select id="WABaseType" name="BaseType" class="input50" onchange="WABaseCalc();">
+                <option value="1">All</option>
+                <option value="2">Member Base</option>
+                <option value="3">Bulk Upload</option>
+                <option value="4">Based On Points</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="row " id="WAdivPoints" style="margin-top : 20px; display: none;">
+        <div class="col-sm-2" style="margin-left: 22px;">
+            Points
+        </div>
+        <div class="col-sm-3 dropdown" style="margin-left : 65px;">
+            <select id="WAFilter" name="Filter" class="input50" onchange="WApointsvalid();">
+                <option value="1">Less Than</option>
+                <option value="2">Greater Than</option>
+                <option value="3">Equal To</option>
+                <option value="4">Points Range</option>
+            </select>
+        </div>
+        <div class="col-md-2 col-xl-2" style="margin-left:-55px;">
+            <input type="number" id="WApoints" name="points" class="input50" />
+        </div>
+        <div class="col-md-2 col-xl-2" style="display:none;margin-left:25px;" id="WAdivPointsRange">
+            <input type="number" id="WApoints2" name="points2" class="input50" />
+        </div>
+    </div>
+
+    <div class="row" style="margin-top: 20px;">
+        <div class="col-sm-2" style="margin-left: 18px;">
+            OutletData
+        </div>
+        <div class="col-sm-2 dropdown" style="margin-left: 70px;">
+            @Html.DropDownList("OutletData", new SelectList(ViewBag.OutletData, "Value", "Text"), "ALL", htmlAttributes: new { @class = "input50", @id = "WAddlOutletList" })
+        </div>
+    </div>
+
+    <div class="row" style="margin-top : 20px;">
+        <div class="col-md-3 col-xl-3">
+            <div class="button">
+                <button type="button" id="WAbtnFilter" style="margin-left:15px;" class="btn btn-primary" onclick="WAShowCount();"><b>FILTER</b></button>
+            </div>
+        </div>
+        <div class="col-md-4 col-xl-4">
+            <table style="border:2px solid black;width:70%">
+                <tr style="border:2px solid black; ">
+                    <td style="border:2px solid black;text-align:left;">
+                        <span id="WAAllCount"></span>All Count
+                    </td>
+                    <td style="border:2px solid black;width:40%">
+                        <span id="WAAllCountnum"></span>
+                    </td>
+                </tr>
+                <tr style="border:2px solid black; ">
+                    <td style="border:2px solid black;text-align:left;">
+                        <span id="WAFiltCount"></span>Filtered Count
+                    </td>
+                    <td style="border:2px solid black;width:40%">
+                        <span id="WAFiltCountnum"></span>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <div class="row" style="margin-top: 20px; margin-left: 20px; " id="WAMsgType">
+        <div class="col-md-8 col-xl-8">
+            <input type="radio" checked id="rdnTextWA" value="1" name="WAType" onclick="WAtypeValidate();" />&nbsp;&nbsp;&nbsp;<b>Text</b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <input type="radio" id="rdnImageWA" value="2" name="WAType" onclick="WAtypeValidate();" />&nbsp;&nbsp;&nbsp;<b>File</b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <input type="radio" id="rdnImageCaptionWA" value="3" name="WAType" onclick="WAtypeValidate();" />&nbsp;&nbsp;&nbsp;<b>File With Caption</b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        </div>
+    </div>
+
+    <div class="row" style="margin: 20px;">
+        <div class="col-md-8 col-xl-8">
+            <div class="custom-control custom-switch">
+                <input type="checkbox" class="custom-control-input" id="WAScheduleSwitch" value="0" onchange="WAShowScheduledate();">
+                <label class="custom-control-label" for="WAScheduleSwitch"><b>Schedule Date & Time</b></label>
+            </div>
+        </div>
+    </div>
+
+    <div class="row" style="margin: 20px; display : none" id="WASchedPick">
+        <div class="col-md-8 col-xl-8">
+            <input id="WAdatetimepicker" type="text" onclick="WAShowdatetime();">&nbsp;&nbsp;<label> Double click to add Datetime</label>
+        </div>
+    </div>
+
+    <div class="row" style="margin: 20px; display:none" id="WAUpload">
+
+        @using (Html.BeginForm("UploadData", "Campaigns", FormMethod.Post, new { enctype = "multipart/form-data" }))
+        {
+            <div style="margin-top: 15px; margin-left: 115px;">
+
+                @Html.TextBox("Data", "", new { type = "file" }) <br />
+                <input type="submit" value="Upload" />  <label style="padding-right:5px;padding-top:10px;">Do not use special characters in FileName</label>
+
+                @if (!string.IsNullOrEmpty(Convert.ToString(ViewBag.Message)))
+                {
+            <script>
+                    cuteAlert({
+                        type: "success",
+                        title: "Saved",
+                        message: '@ViewBag.Message',
+                        buttonText: "Okay"
+                    }).then(() => {
+
+                        $("#UploadImglink").show();
+                        $("#WAUploadImg").text('@ViewBag.Message');
+                    })
+            </script>
+                }
+
+            </div>
+        }
+    </div>
+    <div class="col-md-4" style="margin:20px; display:none" id="UploadImglink">   
+        <span id="WAUploadImg">Upload Img Link</span>
+    </div>
+
+    <div class="row" style="margin: 20px;" id="WAScriptText">
+        <div class="col-md-4" style="margin-top:10px;">
+            <textarea class="form-control" id="WASMSScript" rows="7" maxlength="10000" placeholder="Enter SMS Script"></textarea>&nbsp;&nbsp;
+        </div>
+        <div class="col-md-3" style="margin-top:10px;">
+            <br><br><br><br><br><br><br>
+            <table style="border:2px solid black;width:70%">
+                <tr style="border:2px solid black; ">
+                    <td style="border:2px solid black;text-align:left;">
+                        <span id="CharCount"></span>Char Count
+                    </td>
+                    <td style="border:2px solid black;width:40%">
+                        <span id="WAcurrent">0</span>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="col-md-4" style="margin-top:10px;">
+            <textarea class="form-control" id="WASMSScript1" rows="7" maxlength="10000"></textarea>&nbsp;&nbsp;
+        </div>
+    </div>
+
+    <div class="row" style="margin-top : 20px;">
+        <div class="col-md-6 col-xl-6">
+            <div class="button">
+                <button type="button" id="btnSave" style="margin-left:15px;" class="btn btn-primary" onclick="WASaveValidate();"><b>SAVE</b></button>
+                <!--<button type="button" id="btnDownload" style="margin-left:15px;" class="btn btn-primary" onclick="DownLoad();"><b>DOWNLOAD</b></button>-->
+                <button type="button" id="btnSendTestSMS" style="margin-left:15px;" class="btn btn-primary" onclick="SendTestValidate();" disabled><b>TEST SMS</b></button>
+                <button type="button" id="btnSendDLT" style="margin-left:15px;" class="btn btn-primary" onclick="SendSMSValidate();" disabled><b>SEND SMS</b></button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function WABaseCalc() {
+        var val = document.getElementById("WABaseType").value;
+        if (val == 4) {
+            $('#WAdivPoints').show();
+        }
+        else if (val != 4) {
+            $('#WAdivPoints').hide();
+        }
+    }
+
+    function WAtypeValidate() {
+        if (document.getElementById("rdnTextWA").checked) {
+             $("#WAScriptText").show();
+             $("#WAUpload").hide();
+        }
+        else if (document.getElementById("rdnImageWA").checked) {
+             $("#WAUpload").show();
+             $("#WAScriptText").hide();
+        }
+        else if (document.getElementById("rdnImageCaptionWA").checked) {
+             $("#WAScriptText").show();
+             $("#WAUpload").show();
+        }
+    }
+
+    function WApointsvalid() {
+        var val = $('#WAFilter').val();
+        if (val == 4) {
+            $('#WAdivPointsRange').show();
+        }
+        else if (val != 4) {
+            $('#WAdivPointsRange').hide();
+        }
+    }
+
+    function WAValidateDate() {
+        var d = new Date();
+        month = ("0" + (d.getMonth() + 1)).slice(-2);
+        day = ("0" + d.getDate()).slice(-2);
+        year = d.getFullYear();
+        var Date1 = year + '-' + month + '-' + day;
+
+        var CampStartDate = $("#WAtxtEnrollfromdt").val();
+        if (CampStartDate < Date1) {
+            cuteAlert({
+                type: "error",
+                title: "Error Title",
+                message: "StartDate Can't be Older",
+                buttonText: "Okay"
+
+            })
+            $("#WAtxtEnrollfromdt").val("");
+        }
+    }
+
+    function WAValidateDate1() {
+        var d = new Date();
+        month = ("0" + (d.getMonth() + 1)).slice(-2);
+        day = ("0" + d.getDate()).slice(-2);
+        year = d.getFullYear();
+        var Date1 = year + '-' + month + '-' + day;
+        var CampEndDate = $("#WAtxtEnrolltodt").val();
+        var CampStartDate = $("#WAtxtEnrollfromdt").val();
+        
+        if (CampEndDate < Date1) {
+            cuteAlert({
+                type: "error",
+                title: "Error Title",
+                message: "EndDate Can't be Older",
+                buttonText: "Okay"
+            })
+            $("#WAtxtEnrolltodt").val("");
+        }
+        else if (CampEndDate < CampStartDate) {
+            cuteAlert({
+                type: "error",
+                title: "Error Title",
+                message: "EndDate Can't be Older than start Date",
+                buttonText: "Okay"
+            })
+        }
+    }
+
+    function WAShowScheduledate() {
+        $('#WASchedPick').toggle();
+    }
+
+    function WAShowdatetime() {
+        $('#WAdatetimepicker').datetimepicker();
+    }
+
+    function WASaveValidate() {
+        var d = new Date();
+        month = ("0" + (d.getMonth() + 1)).slice(-2);
+        day = ("0" + d.getDate()).slice(-2);
+        year = d.getFullYear();
+        var Date1 = year + '-' + month + '-' + day;
+
+
+        var Script = $("#WASMSScript").val();
+        var StartDate = $("#WAtxtEnrollfromdt").val();
+        var EndDate = $("#WAtxtEnrolltodt").val();
+        var CampName = $("#WACampName").val();
+        var AllCount = $("#WAAllCountnum").text();
+        var FiltCountnum = $("#WAFiltCountnum").text();
+        //var TempId = $("#TempId").val();
+        var ScriptType = '';
+        var TempCalc = '';
+        var a = '';
+        var TotalCredits;
+
+        //alert(AllCount);
+        alert(Date1);
+        alert(StartDate);
+        alert(EndDate);
+       
+        if (AllCount == "") {
+
+            cuteAlert({
+                type: "error",
+                title: "Error Title",
+                message: "No Data Selected",
+                buttonText: "Okay"
+            })
+        }
+        else if (FiltCountnum == "") {
+            cuteAlert({
+                type: "error",
+                title: "Error Title",
+                message: "No Data Selected",
+                buttonText: "Okay"
+            })
+        }
+        else if (Script == "") {
+            cuteAlert({
+                type: "error",
+                title: "Error Title",
+                message: "Script can't be Empty",
+                buttonText: "Okay"
+            })
+        }
+        else if (StartDate < Date1) {
+
+            cuteAlert({
+                type: "error",
+                title: "Error Title",
+                message: "StartDate Can't be Older",
+                buttonText: "Okay"
+            })
+        }
+        else if (EndDate < StartDate) {
+            cuteAlert({
+                type: "error",
+                title: "Error Title",
+                message: "EndDate Can't be Older than Start Date",
+                buttonText: "Okay"
+            })
+        }
+        else if (EndDate < Date1) {
+            cuteAlert({
+                type: "error",
+                title: "Error Title",
+                message: "EndDate Can't be Older",
+                buttonText: "Okay"
+            })
+        }
+        else if (CampName == "") {
+            cuteAlert({
+                type: "error",
+                title: "Error Title",
+                message: "Campaign Name Can't Empty",
+                buttonText: "Okay"
+            })
+        }
+        else if (TempId == "") {
+            cuteAlert({
+                type: "error",
+                title: "Error Title",
+                message: "Template ID is Empty",
+                buttonText: "Okay"
+            })
+        }
+        else if (TempId == "") {
+            cuteAlert({
+                type: "error",
+                title: "Error Title",
+                message: "Template ID is Empty",
+                buttonText: "Okay"
+            })
+        }
+        else {
+            WASave();
+        }
+    }
+
+    $(document).ready(function () {
+        $("#ddlOutletList").on("change", function () {
+            var OutletId = $("#ddlOutletList").val();
+        });
+    });
+
+    function WAShowCount() {
+        var val = '';
+        var Equality = '';
+        var Points = '';
+        var OutletId = '';
+        var PointsRange1 = '';
+
+            val = document.getElementById("WABaseType").value;
+            Equality = document.getElementById("WAFilter").value;
+            Points = document.getElementById("WApoints").value;
+            PointsRange1 = $("#WApoints2").val();
+        var NPoints = parseInt(Points);
+        var NPointsRange1 = parseInt(PointsRange1);
+        var Flag = 0;
+
+        OutletId = $("#WAddlOutletList").val();
+        if (val != '4') {
+            Equality = ''
+            Points = ''
+        }
+        else if (val == '4') {
+            if (Points == '') {
+                cuteAlert({
+                    type: "error",
+                    title: "Error Title",
+                    message: "Enter Points",
+                    buttonText: "Okay"
+                })
+                Flag = 1;
+            }
+        }
+
+        if (val == '4') {
+            if (Equality != '4') {
+                PointsRange1 = ''
+            }
+            else {
+                if (PointsRange1 == '') {
+
+                    cuteAlert({
+                        type: "error",
+                        title: "Error Title",
+                        message: "Enter Points",
+                        buttonText: "Okay"
+                    })
+                    Flag = 1;
+                }
+                if (NPointsRange1 < NPoints) {
+                     cuteAlert({
+                         type: "error",
+                         title: "Error Title",
+                         message: "To point can't be small than from point",
+                         buttonText: "Okay"
+                     })
+                    Flag = 1;
+                 }
+            }
+        }
+        if (Flag == 0) {
+            var FilterData = [];
+            item = {};
+            item["BaseType"] = val;
+            item["PointsBase"] = Equality;
+            item["Points"] = Points; //PointsRange1
+            item["PointsRange1"] = PointsRange1;
+            item["OutletId"] = OutletId;
+            FilterData.push(item);
+            var data = JSON.stringify(FilterData);
+            $("#divLoader").show();
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("GetFilteredData", "Campaigns")',
+                data: '{jsonData: ' + JSON.stringify(data) + '}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+
+                success: function (response) {
+                    console.log(response);
+                    if (response != null) {
+                        $("#WAAllCountnum").text(addComma(response.CustCountALL));
+                        $("#WAFiltCountnum").text(addComma(response.CustFiltered));
+                        $("#divLoader").hide();
+                    }
+                    else {
+
+                    }
+                },
+                error: function (response) {
+                    console.log(response.responseText);
+                }
+            });
+        }
+    }
+
+    function WASave() {
+        var d = new Date();
+        month = ("0" + (d.getMonth() + 1)).slice(-2);
+        day = ("0" + d.getDate()).slice(-2);
+        year = d.getFullYear();
+        var Date1 = day + '-' + month + '-' + year;
+
+        var val = '';
+        var Equality = '';
+        var Points = '';
+        var OutletId = '';
+        var Srcipt = '';
+        var StartDate = '';
+        var EndDate = '';
+        var CampaignName = '';
+        var SMSType = 3;
+        var MessageType = '';
+        var Scheduledatetime = '';
+        var ScriptType = '';
+        var TempId = '';
+
+        val = $("#WABaseType").val();
+        Equality = $("#WAFilter").val();
+        Points = $("#WApoints").val();
+        PointsRange1 = $("#WApoints2").val();
+
+        if (val != '4') {
+            Equality = ''
+            Points = 0
+            PointsRange1 = 0
+        }
+        if (val == '4') {
+            if (Equality != '4') {
+                PointsRange1 = 0
+            }
+        }
+
+        OutletId = $("#WAddlOutletList").val();
+        Srcipt = $("#WASMSScript").val();
+        StartDate = $("#WAtxtEnrollfromdt").val();
+        EndDate = $("#WAtxtEnrolltodt").val();
+        CampaignName = $("#WACampName").val();
+        Scheduledatetime = $("#WAdatetimepicker").val();
+        TempId = $("#WATempId").val();
+
+
+        if (document.getElementById("rdnTextWA").checked) {
+            MessageType = $("#rdnTextWA").val();
+        }
+        else if (document.getElementById("rdnImageWA").checked) {
+            MessageType = $("#rdnImageWA").val();
+        }
+        else if (document.getElementById("rdnImageCaptionWA").checked) {
+            MessageType = $("#rdnImageCaptionWA").val();
+        }
+
+        var FilterData = [];
+        item = {};
+        item["BaseType"] = val;
+        item["Equality"] = Equality;
+        item["Points"] = Points;
+        item["OutletId"] = OutletId;
+        item["Srcipt"] = Srcipt;
+        item["StartDate"] = StartDate;
+        item["EndDate"] = EndDate;
+        item["CampaignName"] = CampaignName;
+        item["SMSType"] = SMSType;
+        item["MessageType"] = MessageType;
+        item["Scheduledatetime"] = Scheduledatetime;
+        item["TempId"] = TempId;
+        item["PointsRange1"] = PointsRange1;
+
+        FilterData.push(item);
+        var data = JSON.stringify(FilterData);
+        //alert(data);
+        $("#divLoader").show();
+        $.ajax({
+                type: "POST",
+                url: '@Url.Action("SaveDataWA", "Campaigns")',
+                data: '{jsonData: ' + JSON.stringify(data) + '}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+
+                success: function (response) {
+                    console.log(response);
+                    if (response != null) {
+
+                        $("#CampId").val(response[0].CampaignId);
+
+                        cuteAlert({
+                            type: "success",
+                            title: "Success Title",
+                            message: "Message Send",
+                            buttonText: "Campaign Saved"
+                        }).then(() => {
+                            $("#btnSendTestSMS").show();
+                            $("#TestNumbers").show();
+                            $("#btnSave").prop('disabled', true);
+                        })
+                        $("#divLoader").hide();
+                        //if (SMSType == 1) {
+                        //    $("#btnSave").prop('disabled', true);
+                        //    $("#btnSendTestSMS").prop('disabled', false);
+                        //    $("#btnSendDLT").prop('disabled', false);
+                        //}
+                    }
+                    else {
+
+                    }
+                },
+                error: function (response) {
+                    console.log(response.responseText);
+                    $("#divLoader").hide();
+                }
+            });
+
+    }
+
+    $("#WASMSScript").keyup(function () {
+        //alert("Inside Keyup");
+        var WAScriptType = '';
+        var WATempCalc = '';
+        var a = '';
+        var characterCount = $(this).val().length,
+            current = $('#WAcurrent'),
+            maximum = 0
+        theCount = maximum + characterCount;
+        //alert(theCount);
+        $("#WAcurrent").text(theCount);
+
+        //if (document.getElementById("rdnText").checked) {
+        //    ScriptType = $("#rdnText").val();
+        //}
+        //else {
+        //    ScriptType = $("#rdnUnicode").val();
+        //}
+        //if (ScriptType == '1') {
+        //    TempCalc = 159;
+        //}
+        //else if (ScriptType == '2') {
+        //    TempCalc = 69;
+        //}
+
+        //var Credits = $(this).val().length,
+        //    CreditsNeed = $('#Count'),
+        //    maximum = 0
+        //var theCount1 = maximum + Credits;
+        //a = Math.ceil(theCount / TempCalc);
+        //$("#Count").text(a);
+    });
+
+
+
+</script>

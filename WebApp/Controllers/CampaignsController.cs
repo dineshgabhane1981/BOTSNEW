@@ -518,5 +518,37 @@ namespace WebApp.Controllers
             }
             return View("Index");
         }
+
+        [HttpPost]
+        public JsonResult SaveDataWA(string jsonData)
+        {
+            List<CampaignSaveDetails> SaveData = new List<CampaignSaveDetails>();
+            CampaignRepository CR = new CampaignRepository();
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            JavaScriptSerializer json_serializer = new JavaScriptSerializer();
+            json_serializer.MaxJsonLength = int.MaxValue;
+            object[] objData = (object[])json_serializer.DeserializeObject(jsonData);
+            foreach (Dictionary<string, object> item in objData)
+            {
+                string BaseType = Convert.ToString(item["BaseType"]);
+                string Equality = Convert.ToString(item["Equality"]);
+                string Points = Convert.ToString(item["Points"]);
+                string OutletId = Convert.ToString(item["OutletId"]);
+                string Srcipt = Convert.ToString(item["Srcipt"]);
+                string StartDate = Convert.ToString(item["StartDate"]);
+                string EndDate = Convert.ToString(item["EndDate"]);
+                string CampaignName = Convert.ToString(item["CampaignName"]);
+                string SMSType = Convert.ToString(item["SMSType"]);
+                string MessageType = Convert.ToString(item["MessageType"]);
+                string Scheduledatetime = Convert.ToString(item["Scheduledatetime"]);
+                //string TempId = Convert.ToString(item["TempId"]); //PointsRange1
+                string PointsRange1 = Convert.ToString(item["PointsRange1"]);
+
+                SaveData = CR.SaveCampaignDataWA(BaseType, Equality, Points, OutletId, Srcipt, StartDate, EndDate, CampaignName, SMSType, MessageType, Scheduledatetime, PointsRange1, userDetails.GroupId, userDetails.connectionString);
+                //Session["CampaignId"] = SaveData.;
+            }
+
+            return new JsonResult() { Data = SaveData, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
+        }
     }
 }
