@@ -111,6 +111,25 @@ namespace WebApp.Controllers
             List<CelebrationsMoreDetails> objCelebrationsMoreDetails = new List<CelebrationsMoreDetails>();
             objCelebrationsMoreDetails = RR.GetCelebrationsTxnData(userDetails.GroupId, month, type, userDetails.connectionString);
             var GroupDetails = CR.GetGroupDetails(Convert.ToInt32(userDetails.GroupId));
+
+            long? amt = 0;             
+            long? apts = 0;
+            long? txnCount = 0;
+            foreach (var item in objCelebrationsMoreDetails)
+            {
+                amt += item.TotalSpend;                 
+                apts += item.AvlPoints;
+                txnCount += item.TxnCount;
+            }
+            CelebrationsMoreDetails objTotal = new CelebrationsMoreDetails();
+            objTotal.EnrolledOutlet = "<b>Total</b>";
+            objTotal.MobileNo = "";
+            objTotal.TotalSpend = amt;
+            objTotal.AvlPoints = apts;
+            objTotal.TxnCount = txnCount;
+            objTotal.MemberName = "";
+            objCelebrationsMoreDetails.Add(objTotal);
+
             if (!GroupDetails.IsMasked)
             {
                 foreach (var item in objCelebrationsMoreDetails)
@@ -287,6 +306,29 @@ namespace WebApp.Controllers
             List<PointExpiryTxn> objPointExpiryTxn = new List<PointExpiryTxn>();
             objPointExpiryTxn = RR.GetPointExpiryTxnData(userDetails.GroupId, Convert.ToInt32(month), Convert.ToInt32(year), userDetails.connectionString, userDetails.LoginId);
             var GroupDetails = CR.GetGroupDetails(Convert.ToInt32(userDetails.GroupId));
+            long amt = 0;
+            long epts = 0;
+            long apts = 0;
+            long txnCount = 0;
+            foreach (var item in objPointExpiryTxn)
+            {
+                amt += item.TotalSpend;
+                epts += item.PointsExpiry;
+                apts += item.AvlPoints;
+                txnCount += item.TxnCount;
+            }
+
+            PointExpiryTxn objTotal = new PointExpiryTxn();
+            objTotal.EnrolledOutlet = "<b>Total</>";
+            objTotal.MobileNo = "";
+            objTotal.MemberName = "";
+            objTotal.TxnCount = txnCount;
+            objTotal.TotalSpend = amt;
+            objTotal.AvlPoints = apts;
+            objTotal.PointsExpiry = epts;
+
+            objPointExpiryTxn.Add(objTotal);
+
             if (!GroupDetails.IsMasked)
             {
                 foreach (var item in objPointExpiryTxn)
@@ -307,6 +349,32 @@ namespace WebApp.Controllers
             }
             List<MemberList> lstMember = new List<MemberList>();
             lstMember = RR.GetMemberList(userDetails.GroupId, SearchText, userDetails.connectionString, userDetails.LoginId);
+            long? apts = 0;
+            long btxn = 0;
+            long txnCount = 0;
+            long bpts = 0;
+            long totalSpend = 0;
+            foreach (var item in lstMember)
+            {
+                txnCount += item.TxnCount;
+                totalSpend += item.TotalSpend;
+                btxn += item.TotalBurnTxn;
+                bpts += item.TotalBurnPoints;
+                apts += item.AvlBalPoints;
+            }
+            MemberList objTotal = new MemberList();
+            objTotal.EnrooledOutlet = "<b>Total</b>";
+            objTotal.MobileNo = "";
+            objTotal.MemberName = "";
+            objTotal.TxnCount = txnCount;
+            objTotal.TotalSpend = totalSpend;
+            objTotal.TotalBurnTxn = btxn;
+            objTotal.TotalBurnPoints = bpts;
+            objTotal.AvlBalPoints = apts;
+            objTotal.MobileNo = "";
+            objTotal.MaskedMobileNo = "";
+            lstMember.Add(objTotal);
+
             return new JsonResult() { Data = lstMember, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
 
@@ -1115,6 +1183,33 @@ namespace WebApp.Controllers
                     item.MaskedMobileNo = item.MobileNo;
                 }
             }
+
+            long? apts = 0;
+            long btxn = 0;
+            long txnCount = 0;
+            long bpts = 0;
+            long totalSpend = 0;
+            foreach (var item in lstMember)
+            {
+                txnCount += item.TxnCount;
+                totalSpend += item.TotalSpend;
+                btxn += item.TotalBurnTxn;
+                bpts += item.TotalBurnPoints;
+                apts += item.AvlBalPoints;
+            }
+            MemberList objTotal = new MemberList();
+            objTotal.EnrooledOutlet = "<b>Total</b>";
+            objTotal.MobileNo = "";
+            objTotal.MemberName = "";
+            objTotal.TxnCount = txnCount;
+            objTotal.TotalSpend = totalSpend;
+            objTotal.TotalBurnTxn = btxn;
+            objTotal.TotalBurnPoints = bpts;
+            objTotal.AvlBalPoints = apts;
+            objTotal.MobileNo = "";
+            objTotal.MaskedMobileNo = "";
+            lstMember.Add(objTotal);
+
             return new JsonResult() { Data = lstMember, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
 

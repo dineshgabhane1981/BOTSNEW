@@ -407,7 +407,6 @@
     <Content Include="Scripts\datetimepicker-master\tests\tests\init.js" />
     <Content Include="Scripts\datetimepicker-master\tests\tests\methods.js" />
     <Content Include="Scripts\datetimepicker-master\tests\tests\options.js" />
-    <Content Include="Scripts\google_jsapi.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />
     <Content Include="Scripts\jquery-3.4.1.slim.js" />

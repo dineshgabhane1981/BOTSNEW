@@ -506,17 +506,21 @@ namespace WebApp.Controllers
             }
             catch (ArgumentException ex)
             {
-                responseString = string.Format("HTTP_ERROR :: The second HttpWebRequest object has raised an Argument Exception as 'Connection' Property is set to 'Close' :: {0}", ex.Message);
+                
+                responseString = string.Format("HTTP_ERROR :: The second HttpWebRequest object has raised an Argument Exception as 'Connection' Property is set to 'Close' :: ", ex.Message);
+                newexception.AddDummyException(responseString);
                 return View("Index");
             }
             catch (WebException ex)
             {
                 responseString = string.Format("HTTP_ERROR :: WebException raised! :: {0}", ex.Message);
+                newexception.AddDummyException(responseString);
                 return View("Index");
             }
             catch (Exception ex)
             {
                 responseString = string.Format("HTTP_ERROR :: Exception raised! :: {0}", ex.Message);
+                newexception.AddDummyException(responseString);
                 return View("Index");
             }
             return View("Index");
