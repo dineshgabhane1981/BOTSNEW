@@ -7,11 +7,13 @@ using BOTS_BL.Repository;
 using BOTS_BL.Models;
 using System.Web.Script.Serialization;
 using NPC.ViewModels;
+using BOTS_BL;
 
 namespace NPC.Controllers
 {
     public class LoginController : Controller
     {
+        Exceptions newexception = new Exceptions();
         NPCRepository NPCR = new NPCRepository();
         // GET: Login
         public ActionResult Index()
@@ -23,31 +25,37 @@ namespace NPC.Controllers
 
         public ActionResult Authenticate(NPCLoginDetail objData)
         {
-
-            var groupId = NPCR.CheckLogin(objData);
-            if (!string.IsNullOrEmpty(groupId))
-            {
-                Session["GroupId"] = groupId;
-                return RedirectToAction("NPCPage");
+            try
+            {                
+                var groupId = NPCR.CheckLogin(objData);               
+                if (!string.IsNullOrEmpty(groupId))
+                {                    
+                    Session["GroupId"] = groupId;
+                    return RedirectToAction("NPCPage");
+                }
+                else
+                {
+                    return RedirectToAction("Index");
+                }
+               
             }
-            else
-                return RedirectToAction("Index");
+            catch(Exception ex)
+            {
+                newexception.AddException(ex, "NPC Login");
+            }
+            return RedirectToAction("Index");
         }
 
         public ActionResult NPCPage()
         {
+            newexception.AddDummyException("Inside NPC");
             var groupId = Convert.ToString(Session["GroupId"]);
             NPCViewModel objdata = new NPCViewModel();
-            //var userDetails = (CustomerLoginDetail)Session["UserSession"];
-            //var NPCCategory = NPCR.GetNPCCategory(groupId);
-
             objdata.lstNPCCategory = NPCR.GetNPCCategory(groupId);
             objdata.lstNPCSubCategory = NPCR.GetNPCSubCategory(groupId);
+            objdata.lstNPCEmployees = NPCR.GetNPCEmployees(groupId);
 
-            //ViewBag.NPCCategory = NPCCategory;
-
-            return View(objdata);
-            //return View("NPCPage");
+            return View(objdata);           
         }
 
 

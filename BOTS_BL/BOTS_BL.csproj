@@ -347,6 +347,7 @@
     <Compile Include="Models\SMSDetail.cs" />
     <Compile Include="Models\SMSEmailMaster.cs" />
     <Compile Include="Models\StoreDetail.cs" />
+    <Compile Include="Models\tblEmployee.cs" />
     <Compile Include="Models\tblFranchiseeEnquiry.cs" />
     <Compile Include="Models\tblLoginLog.cs" />
     <Compile Include="Models\tblNPCCategory.cs" />

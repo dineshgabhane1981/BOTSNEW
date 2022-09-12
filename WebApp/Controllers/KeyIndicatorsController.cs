@@ -146,6 +146,23 @@ namespace WebApp.Controllers
             }
             List<OnlyOnceTxn> objOnlyOnceTxn = new List<OnlyOnceTxn>();
             objOnlyOnceTxn = KR.GetOnlyOnceTxnData(userDetails.GroupId, outletId, type, userDetails.connectionString, userDetails.LoginId);
+            long? totalspent = 0;
+            long? totalvisit = 0;
+            long? availbal = 0;
+            foreach (var item in objOnlyOnceTxn)
+            {
+                totalspent += item.TotalSpend;
+                totalvisit += item.TotalVisit;
+                availbal += item.AvlBalPoints;
+            }
+            OnlyOnceTxn totalItem = new OnlyOnceTxn();
+            totalItem.EnrolledOutlet = "<b>Total</b>";
+            totalItem.TotalSpend = totalspent;
+            totalItem.TotalVisit = totalvisit;
+            totalItem.AvlBalPoints = availbal;
+            totalItem.MobileNo = "";
+            totalItem.MaskedMobileNo = "";
+            objOnlyOnceTxn.Add(totalItem);
 
             var GroupDetails = CR.GetGroupDetails(Convert.ToInt32(userDetails.GroupId));
             if (!GroupDetails.IsMasked)
@@ -293,6 +310,24 @@ namespace WebApp.Controllers
             }
             List<NonTransactingTxn> objNonTransactingTxn = new List<NonTransactingTxn>();
             objNonTransactingTxn = KR.GetNonTransactingTxnData(userDetails.GroupId, outletId, barType, userDetails.connectionString, userDetails.LoginId);
+            long? totalspent = 0;
+            long? totalvisit = 0;
+            long? availbal = 0;
+            foreach(var item in objNonTransactingTxn)
+            {
+                totalspent += item.TotalSpend;
+                totalvisit += item.TotalVisit;
+                availbal += item.AvlBalPoints;
+            }
+            NonTransactingTxn totalItem = new NonTransactingTxn();
+            totalItem.EnrolledOutlet = "<b>Total</b>";
+            totalItem.TotalSpend = totalspent;
+            totalItem.TotalVisit = totalvisit;
+            totalItem.AvlBalPoints = availbal;
+            totalItem.MobileNo = "";
+            totalItem.MaskedMobileNo = "";
+            objNonTransactingTxn.Add(totalItem);
+
             var GroupDetails = CR.GetGroupDetails(Convert.ToInt32(userDetails.GroupId));
             if (!GroupDetails.IsMasked)
             {
@@ -311,6 +346,25 @@ namespace WebApp.Controllers
             List<NonRedemptionTxn> objNonRedemptionTxn = new List<NonRedemptionTxn>();
             objNonRedemptionTxn = KR.GetNonRedemptionTxnData(userDetails.GroupId, type, daysType, userDetails.connectionString, userDetails.LoginId);
             var GroupDetails = CR.GetGroupDetails(Convert.ToInt32(userDetails.GroupId));
+            long totalspent = 0;
+            long? totalvisit = 0;
+            long availbal = 0;
+            foreach (var item in objNonRedemptionTxn)
+            {
+                totalspent += item.TotalSpend;
+                totalvisit += item.TotalVisit;
+                availbal += item.AvlBalPoints;
+            }
+            NonRedemptionTxn totalItem = new NonRedemptionTxn();
+            totalItem.EnrolledOutlet = "<b>Total</b>";
+            totalItem.TotalSpend = totalspent;
+            totalItem.TotalVisit = totalvisit;
+            totalItem.AvlBalPoints = availbal;
+            totalItem.MobileNo = "";
+            totalItem.MaskedMobileNo = "";
+            objNonRedemptionTxn.Add(totalItem);
+
+
             if (!GroupDetails.IsMasked)
             {
                 foreach (var item in objNonRedemptionTxn)

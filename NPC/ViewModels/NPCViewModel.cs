@@ -17,6 +17,7 @@ namespace NPC.ViewModels
 
         public List<SelectListItem> lstNPCCategory { get; set; }
         public List<SelectListItem> lstNPCSubCategory { get; set; }
+        public List<SelectListItem> lstNPCEmployees { get; set; }
 
         //public SelectListItem[] CategoryName()
         //{

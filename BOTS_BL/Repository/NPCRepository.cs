@@ -22,7 +22,7 @@ namespace BOTS_BL.Repository
             {
                 try
                 {
-                    
+
                     context.tblNPCDetails.AddOrUpdate(objOutletData);
                     context.SaveChanges();
                     result = true;
@@ -36,11 +36,26 @@ namespace BOTS_BL.Repository
         }
 
         public string CheckLogin(NPCLoginDetail objData)
-        {
+        {           
             string GroupId = "";
-            using(var context =new CommonDBContext())
+            try
             {
-                GroupId = context.NPCLoginDetails.Where(x => x.LoginId == objData.LoginId && x.Password == objData.Password).Select(y => y.GroupId).FirstOrDefault();
+                using (var context = new CommonDBContext())
+                {
+                    //GroupId
+                    var objNew = context.NPCLoginDetails.Where(x => x.LoginId == objData.LoginId && x.Password == objData.Password).FirstOrDefault();
+                    if (objNew != null)
+                        GroupId = objNew.GroupId;
+                    else
+                    {
+                        newexception.AddDummyException("Object is Null");
+                    }
+                    
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "Hello");
             }
             return GroupId;
         }
@@ -51,28 +66,53 @@ namespace BOTS_BL.Repository
             List<tblNPCCategory> objData = new List<tblNPCCategory>();
             //string ConnectionString = string.Empty;
             string connectionString = CR.GetCustomerConnString(groupId);
-            
+
             using (var context = new BOTSDBContext(connectionString))
             {
                 try
                 {
                     objData = context.tblNPCCategories.ToList();
 
-                    foreach(var item in objData)
+                    foreach (var item in objData)
                     {
                         SelectListItem lstItem = new SelectListItem();
-                        lstItem.Value = Convert.ToString(item.CategoryId);
+                        lstItem.Value = Convert.ToString(item.CategoryName);
                         lstItem.Text = item.CategoryName;
                         lstNPCCategory.Add(lstItem);
                     }
                 }
                 catch (Exception ex)
                 {
-                    newexception.AddException(ex,"Hello");
+                    newexception.AddException(ex, "Hello");
                 }
             }
 
             return lstNPCCategory;
+        }
+
+        public List<SelectListItem> GetNPCEmployees(string groupId)
+        {
+            List<SelectListItem> lstNPCEmployees = new List<SelectListItem>();
+            string connectionString = CR.GetCustomerConnString(groupId);
+            using (var context = new BOTSDBContext(connectionString))
+            {
+                try
+                {
+                    var objData = context.tblEmployees.ToList();
+                    foreach (var item in objData)
+                    {
+                        SelectListItem lstItem = new SelectListItem();
+                        lstItem.Value = Convert.ToString(item.EmpName);
+                        lstItem.Text = item.EmpName;
+                        lstNPCEmployees.Add(lstItem);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    newexception.AddException(ex, "Hello");
+                }
+            }
+            return lstNPCEmployees;
         }
 
         public List<SelectListItem> GetNPCSubCategory(string groupId)
@@ -91,7 +131,7 @@ namespace BOTS_BL.Repository
                     foreach (var item in objData)
                     {
                         SelectListItem lstItem = new SelectListItem();
-                        lstItem.Value = Convert.ToString(item.SubCategoryId);
+                        lstItem.Value = Convert.ToString(item.SubCategoryname);
                         lstItem.Text = item.SubCategoryname;
                         lstNPCSubCategory.Add(lstItem);
                     }

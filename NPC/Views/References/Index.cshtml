@@ -36,33 +36,34 @@
             @Html.HiddenFor(model => model.RefereeMobileNo)
     <div class="container-fluid p-3 m-5 col-lg-6 col-md-6" style="background-position: center; border: 1px solid grey; border-radius: 10px;display:inline-block">
         <meta name="viewport" content="width=device-width, initial-scaled=1.0">
-        <div class="row" style="padding-left:100px;">
+        <div  style="text-align:center;">
             <img src="https://blueocktopus.in/Logo/BlueocktopusLogo08092022.jpeg" width="40%" />
+        </div>
+            <div class="row" style="padding-left:30px;">
+                <div style="margin-top:10px;margin-right:100px;">
+                    <h5 style="color:cadetblue;">Refer us with confidence to unlock your Surprise Reward!!!</h5>
+                </div>
+                <div>
+                    <h5 style="color:cadetblue">अपने सरप्राइज़ रिवॉर्ड को अनलॉक करने के लिए हमें आत्मविश्वास से रेफर करे!!!</h5>
+                </div>
 
-            <div style="margin-top:10px;margin-right:100px;">
-                <h5 style="color:cadetblue;">Refer us with confidence to unlock your Surprise Reward!!!</h5>
             </div>
-            <div >
-                <h5 style="color:cadetblue">अपने सरप्राइज़ रिवॉर्ड को अनलॉक करने के लिए हमें आत्मविश्वास से रेफर करे!!!</h5>
+            <div class="row pl-3" style="margin-top:30px;">
+                <div class="col-lg-3 col-md-3">Mobile No / मोबाइल नंबर</div>
+                <div class="col-lg-3 col-md-3">@Html.TextBoxFor(model => model.ReferredMobileNo, new { @class = "input100" }) </div>
             </div>
 
-        </div>
-        <div class="row pl-3" style="margin-top:30px;">
-            <div class="col-lg-3 col-md-3">Mobile No / मोबाइल नंबर</div>
-            <div class="col-lg-3 col-md-3">@Html.TextBoxFor(model => model.ReferredMobileNo, new { @class = "input100" }) </div>
-        </div>
+            <div class="row pl-3">
+                <div class="col-lg-3 col-md-3">Customer Name/ग्राहक का नाम </div>
+                <div class="col-lg-3 col-md-3">@Html.TextBoxFor(model => model.ReferredName, new { @class = "input100" }) </div>
+            </div>
+            <div class="row pl-3">
+                <div class="col-lg-3 col-md-3">Retail Name / रिटेल नेम  </div>
+                <div class="col-lg-3 col-md-3">@Html.TextBoxFor(model => model.RetailName, new { @class = "input100" }) </div>
+            </div>
+            <div style="margin-top:10px;margin-left:5px;text-align:center;"><button type="submit" class="btn btn-primary">Save</button></div>
 
-        <div class="row pl-3">
-            <div class="col-lg-3 col-md-3">Customer Name/ग्राहक का नाम </div>
-            <div class="col-lg-3 col-md-3">@Html.TextBoxFor(model => model.ReferredName, new { @class = "input100" }) </div>
         </div>
-        <div class="row pl-3">
-            <div class="col-lg-3 col-md-3">Retail Name / रिटेल नेम  </div>
-            <div class="col-lg-3 col-md-3">@Html.TextBoxFor(model => model.RetailName, new { @class = "input100" }) </div>
-        </div>
-        <div style="margin-top:10px;margin-left:5px;text-align:center;"><button type="submit" class="btn btn-primary">Save</button></div>
-
-    </div>
         }
         </div>
 

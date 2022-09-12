@@ -278,7 +278,19 @@
                         }
                     }
                 },
-                { data: "TotalVisit" },
+                {
+                    "mData": "TotalVisit",
+                    "mRender": function (data, type, row) {
+
+                        if (data != null) {
+                            return '<span>' + addComma(data) + '</span>';
+                        }
+                        else {
+                            return '<span></span>';
+                        }
+                    }
+                },
+                 
                 {
                     "mData": "AvlBalPoints",
                     "mRender": function (data, type, row) {
