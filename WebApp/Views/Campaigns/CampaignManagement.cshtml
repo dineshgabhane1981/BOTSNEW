@@ -53,23 +53,24 @@
                         * Last 5 Campaigns
                     </div>
                 }
-                else {
-                     <div class="row" style="margin-top : 20px; margin-left:50px;">
+                else
+                {
+                    <div class="row" style="margin-top : 20px; margin-left:50px;">
                         <h6 style="font:xx-large"><b>No Campaigns</b></h6>
-                     </div>
-                    }
-                    
-                    <div class="row" style="margin-top : 20px; margin-left:30px;">
-                        <div class="col-md-3 col-xl-3">
-                            @*<div class="button">
-                        <button type="button" id="btnLinkCampaign" style="margin-left:15px;" class="btn btn-primary" onclick="LinkCreateCamp();"><b>CreateCampaign</b></button>
-                    </div>*@
-                            <a href="@Url.Action("CreateCampaign", "Campaigns")" class="btn btn-primary" role="button" data-bs-toggle="button">Create Campaign</a>
-                        </div>
                     </div>
+                }
 
+                <div class="row" style="margin-top : 20px; margin-left:30px;">
+                    <div class="col-md-3 col-xl-3">
+                        @*<div class="button">
+                                <button type="button" id="btnLinkCampaign" style="margin-left:15px;" class="btn btn-primary" onclick="LinkCreateCamp();"><b>CreateCampaign</b></button>
+                            </div>*@
+                        <a href="@Url.Action("CreateCampaign", "Campaigns")" class="btn btn-primary" role="button" data-bs-toggle="button">Create Campaign</a>
+                    </div>
                 </div>
-     </div>
- </div>
+
+            </div>
+        </div>
+    </div>
 </div>
 
