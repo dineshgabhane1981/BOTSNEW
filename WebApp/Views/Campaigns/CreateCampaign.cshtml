@@ -8,7 +8,7 @@
         width: 20px;
         vertical-align: middle;
         cursor: pointer;
-       /* margin-left: 10px;*/
+        /* margin-left: 10px;*/
     }
 </style>
 <div class="app-main__inner" id="dvall">
@@ -18,316 +18,144 @@
             <div class="row mt-2">
                 <div class="row col-md-12 col-xl-12" style="margin-left:25px;">
                     <div class="col-md-3 col-xl-3">
-                        <input type="radio" checked id="rdnSMS" class="rbtnClass" value="1" name="btdornot" @*onclick="SMStypeValidate();"*@ />&nbsp;&nbsp;<b>SMS </b>
+                        <input type="radio" checked id="rdnSMS" class="rbtnClass" value="1" name="btdornot" onclick="SMStypeValidate();" />&nbsp;&nbsp;<b>SMS </b>
                     </div>
                     <div class="col-md-3 col-xl-3">
-                        <input type="radio" id="rdnVSMS" class="rbtnClass" value="2" name="btdornot" @*onclick="SMStypeValidate();"*@ />&nbsp;&nbsp;<b> Virtual SMS </b>
+                        <input type="radio" id="rdnVSMS" class="rbtnClass" value="2" name="btdornot" onclick="SMStypeValidate();" />&nbsp;&nbsp;<b> Virtual SMS </b>
                     </div>
                     <div class="col-md-3 col-xl-3">
-                        <input type="radio" id="rdnWA" class="rbtnClass" value="3" name="btdornot" @*onclick="SMStypeValidate();"*@ />&nbsp;&nbsp;<b> Whats app</b>
+                        <input type="radio" id="rdnWA" class="rbtnClass" value="3" name="btdornot" onclick="SMStypeValidate();" />&nbsp;&nbsp;<b> Whats app</b>
                     </div>
                     <div class="col-md-3 col-xl-3">
-                        <input type="radio" id="rdnVWA" class="rbtnClass" value="4" name="btdornot" @*onclick="SMStypeValidate();"*@ />&nbsp;&nbsp;<b> Verified Whats app</b>
+                        <input type="radio" id="rdnVWA" class="rbtnClass" value="4" name="btdornot" onclick="SMStypeValidate();" />&nbsp;&nbsp;<b> Verified Whats app</b>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!--<div class="mb-3 pr-3 pt-3 pl-3 card" style="padding-bottom:20px;" id="WACamppanel">
 
-        <div class="row mt-2" style="margin-top : 20px;">
-            <div class="col-md-3 col-xl-3" style="margin-left: 18px;">
-                Campaign Name
-            </div>
+        <div id="SMSPanel">
+            <div class="mb-3 pr-3 pt-3 pl-3 card" style="padding-bottom:20px;" id="SMSCamppanel">
 
-            <div>
-                <input type="text" id="WACampName" class="input50" placeholder="Enter Campaign Name" />
-            </div>
-
-            <div>
-                <input type="hidden" id="WACampId" class="input50" />
-            </div>
-        </div>
-
-        <div class="row mt-2" style="margin-top : 20px;">
-            <div id="WAdivdaterange" class="col-md-2 col-xl-3" style="margin-left: 18px; margin-top: 20px;">
-                <label>Campaign From</label>
-            </div>
-            <div style="margin-top: 20px;">
-                <input type="date" id="WAtxtEnrollfromdt" class="input50" placeholder="Start" onchange="WAValidateDate();" /> &nbsp;&nbsp;&nbsp;
-            </div>
-            <div style="margin-top: 20px;">
-                <input type="date" id="WAtxtEnrolltodt" class="input50" placeholder="End" onchange="WAValidateDate1();" />
-            </div>
-        </div>
-
-        <div class="row" style="margin-top : 20px;">
-            <div class="col-sm-2" style="margin-left: 18px;">
-                Base Type
-            </div>
-            <div class="col-sm-2 dropdown" style="margin-left : 70px;">
-                <select id="WABaseType" name="WABaseType" class="input50" onchange="WABaseCalc();">
-                    <option value="1">All</option>
-                    <option value="2">Member Base</option>
-                    <option value="3">Bulk Upload</option>
-                    <option value="4">Based On Points</option>
-                </select>
-            </div>
-        </div>
-
-        <div class="row " id="WAdivPoints" style="margin-top : 20px; display: none;">
-            <div class="col-sm-2">
-                Points
-            </div>
-            <div class="col-sm-2 dropdown" style="margin-left : 70px;">
-                <select id="WAFilter" name="Filter" class="input50" onchange="WApointsvalid();">
-                    <option value="1">LessThan</option>
-                    <option value="2">GreaterThan</option>
-                    <option value="3">Equal To</option>
-                </select>
-            </div>
-            <div class="col-sm-2">
-                <input type="number" id="WApoints" name="points" class="input50" />
-            </div>
-        </div>
-
-        <div class="row" style="margin-top: 20px;">
-            <div class="col-sm-2" style="margin-left: 18px;">
-                OutletData
-            </div>
-            <div class="col-sm-2 dropdown" style="margin-left: 70px;">
-                @Html.DropDownList("OutletData", new SelectList(ViewBag.OutletData, "Value", "Text"), "ALL", htmlAttributes: new { @class = "input50", @id = "ddlOutletList" })
-            </div>
-        </div>
-        <div class="row" style="margin-top : 20px;">
-            <div class="col-md-3 col-xl-3">
-                <div class="button">
-                    <button type="button" id="WAbtnFilter" style="margin-left:15px;" class="btn btn-primary" onclick="WAShowCount();"><b>FILTER</b></button>
-                </div>
-            </div>
-            <div class="col-md-4 col-xl-4">
-                <table style="border:2px solid black;width:70%">
-                    <tr style="border:2px solid black; ">
-                        <td style="border:2px solid black;text-align:left;">
-                            <span id="WAAllCount"></span>All Count
-                        </td>
-                        <td style="border:2px solid black;width:40%">
-                            <span id="WAAllCountnum"></span>
-                        </td>
-                    </tr>
-                    <tr style="border:2px solid black; ">
-                        <td style="border:2px solid black;text-align:left;">
-                            <span id="WAFiltCount"></span>Filtered Count
-                        </td>
-                        <td style="border:2px solid black;width:40%">
-                            <span id="WAFiltCountnum"></span>
-                        </td>
-                    </tr>
-                </table>
-            </div>
-        </div>
-
-
-        <div class="row" style="margin-top: 20px; margin-left: 20px; " id="WAMsgType">
-            <div class="col-md-8 col-xl-8">
-                <input type="radio" checked id="rdnText" value="1" name="WAType" onclick="WAtypeValidate();" />&nbsp;&nbsp;&nbsp;<b>Text</b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                <input type="radio" id="rdnImage" value="2" name="WAType" onclick="WAtypeValidate();" />&nbsp;&nbsp;&nbsp;<b>File</b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                <input type="radio" id="rdnImageCaption" value="3" name="WAType" onclick="WAtypeValidate();" />&nbsp;&nbsp;&nbsp;<b>File With Caption</b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            </div>
-        </div>
-
-        <div class="row" style="margin: 20px;">
-            <div class="col-md-8 col-xl-8">
-                <div class="custom-control custom-switch">
-                    <input type="checkbox" class="custom-control-input" id="ScheduleSwitch" value="0" onchange="ShowScheduledate();">
-                    <label class="custom-control-label" for="ScheduleSwitch"><b>Schedule Date & Time</b></label>
-                </div>
-            </div>
-        </div>
-
-        <div class="row" style="margin: 20px; display : none" id="SchedPick">
-            <div class="col-md-8 col-xl-8">
-                <input id="datetimepicker" type="text" onclick="Showdatetime();">&nbsp;&nbsp;<label> Double click to add Datetime</label>
-            </div>
-        </div>
-
-        <div class="row" style="margin: 20px; display:none" id="Upload">
-
-            @using (Html.BeginForm("UploadData", "Campaigns", FormMethod.Post, new { enctype = "multipart/form-data" }))
-            {
-                <div style="margin-top: 15px; margin-left: 115px;">
-
-                    @Html.TextBox("Data", "", new { type = "file" }) <br />
-                    <input type="submit" value="Upload" />  <label style="padding-right:5px;padding-top:10px;">Do not use special characters in FileName</label>
-
-                    @if (!string.IsNullOrEmpty(Convert.ToString(ViewBag.Message)))
-                    {
-                        <script>
-                    cuteAlert({
-                        type: "success",
-                        title: "Saved",
-                        message: '@ViewBag.Message',
-                        buttonText: "Okay"
-                    })
-                        </script>
-                    }
-
-                </div>
-            }
-        </div>
-
-            <div class="row" style="margin: 20px;" id="ScriptText">
-                <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
-                    <b>Script</b>
-                </div>
-                <div class="col-md-4" style="margin-top:10px;">
-                    <textarea class="form-control" id="SMSScript" rows="7" maxlength="10000"></textarea>&nbsp;&nbsp;
-                </div>
-                <div class="col-md-1" style="margin-top:10px;">
-                    <br><br><br><br><br><br><br><br>
-                    <span id="current">0</span>
-                </div>
-                <div class="col-md-4" style="margin-top:10px;">
-                    <textarea class="form-control" id="SMSScript" rows="7" maxlength="10000"></textarea>&nbsp;&nbsp;
-                </div>
-            </div>
-
-
-
-
-            <div class="row" style="margin-top : 20px;">
-                <div class="col-md-6 col-xl-6">
-                    <div class="button">
-                        <button type="button" id="btnSave" style="margin-left:15px;" class="btn btn-primary" onclick="SaveValidate();"><b>SAVE</b></button>-->
-        <!--<button type="button" id="btnDownload" style="margin-left:15px;" class="btn btn-primary" onclick="DownLoad();"><b>DOWNLOAD</b></button>-->
-        <!--<button type="button" id="btnSendTestSMS" style="margin-left:15px;" class="btn btn-primary" onclick="SendTestValidate();" disabled><b>TEST SMS</b></button>
-                        <button type="button" id="btnSendDLT" style="margin-left:15px;" class="btn btn-primary" onclick="SendSMSValidate();" disabled><b>SEND SMS</b></button>
+                <div class="row mt-2" style="margin-top : 20px;">
+                    <div class="col-md-3 col-xl-3" style="margin-left: 18px;">
+                        SMS Balance/Service Provider
                     </div>
-                </div>
-            </div>
-        </div>-->
-
-        <div class="mb-3 pr-3 pt-3 pl-3 card" style="padding-bottom:20px;" id="SMSCamppanel">
-
-            <div class="row mt-2" style="margin-top : 20px;">
-                <div class="col-md-3 col-xl-3" style="margin-left: 18px;">
-                    SMS Balance/Service Provider
-                </div>
-                <div>
-                    @*<input type="text" id="SMSBalance" class="input50" value="@((ViewBag.SMSBalance))" />*@
-                    <span id="SMSBalance">@((ViewBag.SMSBalance)) / @((ViewBag.SMSVendor))</span>
-                </div>
-            </div>
-
-            @*<div class="row mt-2" style="margin-top : 20px;">
-                <div class="col-md-3 col-xl-3" style="margin-left: 18px; margin-top: 20px;">
-                    Service Provider
-                </div>
-                <div>
-                    <input type="text" id="SMSVendor" class="input50" style="margin-top : 20px;" value="@((ViewBag.SMSVendor))" />
-                </div>
-            </div>*@
-
-
-            <div class="row mt-2" style="margin-top : 20px;">
-                <div class="col-md-3 col-xl-3" style="margin-left: 18px; margin-top: 20px; ">
-                    Campaign Name<b>*</b>
-                </div>
-
-                <div>
-                    <input type="text" id="CampName" class="input50" placeholder="Enter Campaign Name" style="margin-top: 20px;" />
-                </div>
-
-                <div>
-                    <input type="hidden" id="CampId" class="input50" />
-                </div>
-            </div>
-
-            <div class="row mt-2" style="margin-top : 20px;">
-                <div id="divdaterange" class="col-md-2 col-xl-3" style="margin-left: 18px; margin-top: 20px;">
-                    <label>Campaign From<b>*</b></label>
-                </div>
-                <div style="margin-top: 20px;">
-                    <input type="date" id="txtEnrollfromdt" class="input50" placeholder="Start" onchange="ValidateDate();" /> &nbsp;&nbsp;&nbsp;
-                </div>
-                <div style="margin-top: 20px;">
-                    <input type="date" id="txtEnrolltodt" class="input50" placeholder="End" onchange="ValidateDate1();" />
-                </div>
-            </div>
-
-            <div class="row" style="margin-top : 20px;">
-                <div class="col-sm-2" style="margin-left: 18px;">
-                    Base Type
-                </div>
-                <div class="col-sm-2 dropdown" style="margin-left : 65px;">
-                    <select id="BaseType" name="BaseType" class="input50" onchange="BaseCalc();">
-                        <option value="1">All</option>
-                        <option value="2">Member Base</option>
-                        <option value="3">Bulk Upload</option>
-                        <option value="4">Based On Points</option>
-                    </select>
-                </div>
-            </div>
-
-            <div class="row " id="divPoints" style="margin-top : 20px; display: none;">
-                <div class="col-sm-2" style="margin-left: 18px;">
-                    Points
-                </div>
-                <div class="col-sm-3 dropdown" style="margin-left : 65px;">
-                    <select id="Filter" name="Filter" class="input50" onchange="pointsvalid();">
-                        <option value="1">Less Than</option>
-                        <option value="2">Greater Than</option>
-                        <option value="3">Equal To</option>
-                        <option value="4">Points Range</option>
-                    </select>
-                </div>
-                <div class="col-md-2 col-xl-2" style="margin-left:-55px;">
-                    <input type="number" id="points" name="points" class="input50" />
-                </div>
-                <div class="col-md-2 col-xl-2" style="display:none;margin-left:25px;" id="divPointsRange">
-                    <input type="number" id="points2" name="points2" class="input50" />
-                </div>
-            </div>
-
-            <div class="row" style="margin-top: 20px;">
-                <div class="col-sm-2" style="margin-left: 18px;">
-                    OutletData
-                </div>
-                <div class="col-sm-2 dropdown" style="margin-left: 65px;">
-                    @Html.DropDownList("OutletData", new SelectList(ViewBag.OutletData, "Value", "Text"), "ALL", htmlAttributes: new { @class = "input50", @id = "ddlOutletList" })
-                </div>
-            </div>
-
-            <div class="row" style="margin-top : 20px;">
-                <div class="col-md-3 col-xl-3">
-                </div>
-                <div class="col-md-3 col-xl-3 ">
-                    <div class="button">
-                        <button type="button" id="btnFilter" style="margin-left:15px;" class="btn btn-primary" onclick="ShowCount();"><b>FILTER</b></button>
+                    <div>
+                        @*<input type="text" id="SMSBalance" class="input50" value="@((ViewBag.SMSBalance))" />*@
+                        <span id="SMSBalance">@((ViewBag.SMSBalance)) / @((ViewBag.SMSVendor))</span>
                     </div>
                 </div>
 
-                <div class="col-md-4 col-xl-4">
-                    <table cellpadding="10" cellspacing="10" style="margin-left:100px; border:2px solid black;width:70%;">
-                        <tr style="border:2px solid black; ">
-                            <td style="border:2px solid black;text-align:left;">
-                                <span id="AllCount"></span><b>All Count</b>
-                            </td>
-                            <td style="border:2px solid black;width:40%">
-                                <span id="AllCountnum" style="font-weight:bold;font-size:20px;"></span>
-                            </td>
-                        </tr>
-                        <tr style="border:2px solid black; ">
-                            <td style="border:2px solid black;text-align:left;">
-                                <span id="FiltCount"></span><b>Filtered Count</b>
-                            </td>
-                            <td style="border:2px solid black;width:40%">
-                                <span id="FiltCountnum" style="font-weight:bold;color:green;font-size:20px;"></span>
-                            </td>
-                        </tr>
-                    </table>
+                @*<div class="row mt-2" style="margin-top : 20px;">
+                        <div class="col-md-3 col-xl-3" style="margin-left: 18px; margin-top: 20px;">
+                            Service Provider
+                        </div>
+                        <div>
+                            <input type="text" id="SMSVendor" class="input50" style="margin-top : 20px;" value="@((ViewBag.SMSVendor))" />
+                        </div>
+                    </div>*@
+
+
+                <div class="row mt-2" style="margin-top : 20px;">
+                    <div class="col-md-3 col-xl-3" style="margin-left: 18px; margin-top: 20px; ">
+                        Campaign Name<b>*</b>
+                    </div>
+
+                    <div>
+                        <input type="text" id="CampName" class="input50" placeholder="Enter Campaign Name" style="margin-top: 20px;" />
+                    </div>
+
+                    <div>
+                        <input type="hidden" id="CampId" class="input50" />
+                    </div>
                 </div>
-            </div>
+
+                <div class="row mt-2" style="margin-top : 20px;">
+                    <div id="divdaterange" class="col-md-2 col-xl-3" style="margin-left: 18px; margin-top: 20px;">
+                        <label>Campaign Period<b>*</b></label>
+                    </div>
+                    <div style="margin-top: 20px;">
+                        <input type="date" id="txtEnrollfromdt" class="input50" placeholder="Start" onchange="ValidateDate();" /> &nbsp;&nbsp;&nbsp;
+                    </div>
+                    <div style="margin-top: 20px;">
+                        <input type="date" id="txtEnrolltodt" class="input50" placeholder="End" onchange="ValidateDate1();" />
+                    </div>
+                </div>
+
+                <div class="row" style="margin-top : 20px;">
+                    <div class="col-sm-2" style="margin-left: 18px;">
+                        Base Type
+                    </div>
+                    <div class="col-sm-2 dropdown" style="margin-left : 65px;">
+                        <select id="BaseType" name="BaseType" class="input50" onchange="BaseCalc();">
+                            <option value="1">All</option>
+                            <option value="2">Member Base</option>
+                            <option value="3">Bulk Upload</option>
+                            <option value="4">Based On Points</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="row " id="divPoints" style="margin-top : 20px; display: none;">
+                    <div class="col-sm-2" style="margin-left: 18px;">
+                        Points
+                    </div>
+                    <div class="col-sm-3 dropdown" style="margin-left : 65px;">
+                        <select id="Filter" name="Filter" class="input50" onchange="pointsvalid();">
+                            <option value="1">Less Than</option>
+                            <option value="2">Greater Than</option>
+                            <option value="3">Equal To</option>
+                            <option value="4">Points Range</option>
+                        </select>
+                    </div>
+                    <div class="col-md-2 col-xl-2" style="margin-left:-55px;">
+                        <input type="number" id="points" name="points" class="input50" />
+                    </div>
+                    <div class="col-md-2 col-xl-2" style="display:none;margin-left:25px;" id="divPointsRange">
+                        <input type="number" id="points2" name="points2" class="input50" />
+                    </div>
+                </div>
+
+                <div class="row" style="margin-top: 20px;">
+                    <div class="col-sm-2" style="margin-left: 18px;">
+                        OutletData
+                    </div>
+                    <div class="col-sm-2 dropdown" style="margin-left: 65px;">
+                        @Html.DropDownList("OutletData", new SelectList(ViewBag.OutletData, "Value", "Text"), "ALL", htmlAttributes: new { @class = "input50", @id = "ddlOutletList" })
+                    </div>
+                </div>
+
+                <div class="row" style="margin-top : 20px;">
+                    <div class="col-md-3 col-xl-3">
+                    </div>
+                    <div class="col-md-3 col-xl-3 ">
+                        <div class="button">
+                            <button type="button" id="btnFilter" style="margin-left:15px;" class="btn btn-primary" onclick="ShowCount();"><b>FILTER</b></button>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4 col-xl-4">
+                        <table cellpadding="10" cellspacing="10" style="margin-left:100px; border:2px solid black;width:70%;">
+                            <tr style="border:2px solid black; ">
+                                <td style="border:2px solid black;text-align:left;">
+                                    <span id="AllCount"></span><b>All Count</b>
+                                </td>
+                                <td style="border:2px solid black;width:40%">
+                                    <span id="AllCountnum" style="font-weight:bold;font-size:20px;"></span>
+                                </td>
+                            </tr>
+                            <tr style="border:2px solid black; ">
+                                <td style="border:2px solid black;text-align:left;">
+                                    <span id="FiltCount"></span><b>Filtered Count</b>
+                                </td>
+                                <td style="border:2px solid black;width:40%">
+                                    <span id="FiltCountnum" style="font-weight:bold;color:green;font-size:20px;"></span>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
 
                 <div class="row" style="margin: 20px;" id="SMSSType">
                     <div class="col-md-8 col-xl-8">
@@ -340,14 +168,14 @@
                     <div class="col-md-8 col-xl-8">
                         <div class="custom-control custom-switch">
                             <input type="checkbox" class="custom-control-input" id="ScheduleSwitch" value="0" onchange="ShowScheduledate();">
-                            <label class="custom-control-label"  style="cursor:pointer !important;" for="ScheduleSwitch"><b>Schedule Date & Time</b></label>
+                            <label class="custom-control-label" style="cursor:pointer !important;" for="ScheduleSwitch"><b>Schedule Date & Time</b></label>
                         </div>
                     </div>
                 </div>
 
                 <div class="row" style="margin: 20px; display : none" id="SchedPick">
                     <div class="col-md-8 col-xl-8">
-                        <input id="datetimepicker" type="text" class="input50"  onclick="Showdatetime();">&nbsp;&nbsp;<label> Double click to add Datetime</label>
+                        <input id="datetimepicker" type="text" class="input50" onclick="Showdatetime();">&nbsp;&nbsp;<label> Double click to add Datetime</label>
                     </div>
                 </div>
 
@@ -391,16 +219,17 @@
                         <textarea class="form-control" id="txtScript" rows="7" maxlength="10000"></textarea>&nbsp;&nbsp;
                     </div>
                 </div>
+
                 <div class="tw-ets tw-ess tw-src-ltr" id="tw-ob">
                 </div>
                 <div id="GoogleElement" style="margin-left:130px;">
                 </div>
 
                 @*<div class="row" style="margin-top : 20px;" >
-            <div class="button">
-                <button type="button" style="margin-left:25px;" id="translControl" class="btn btn-primary" onclick="auto_transliterate_all();" value="Auto Transliterate"><b>Click</b></button>
-            </div>
-        </div>*@
+                        <div class="button">
+                            <button type="button" style="margin-left:25px;" id="translControl" class="btn btn-primary" onclick="auto_transliterate_all();" value="Auto Transliterate"><b>Click</b></button>
+                        </div>
+                    </div>*@
                 <div class="col-md-6 col-xl-6">
                     <div class="button">
                         <button type="button" id="btnSave" style="margin-left:25px;" class="btn btn-primary" onclick="SaveValidate();"><b>SAVE</b></button>
@@ -427,6 +256,11 @@
 
             </div>
 
+        </div>
+
+        <div id="WAPanel" style="display:none">
+            @Html.Partial("_CampaignWA");
+        </div>
     </div>
 </div>
 
@@ -594,14 +428,17 @@
 
     function SMStypeValidate() {
         if (document.getElementById("rdnWA").checked) {
-            $("#WACamppanel").show();
-            $("#SMSCamppanel").hide();
+            $("#WAPanel").show();
+            $("#SMSPanel").hide();
+        }
+        else if (document.getElementById("rdnSMS").checked) {
+            $("#WAPanel").hide();
+            $("#SMSPanel").show();
         }
         else {
-            $("#WACamppanel").hide();
-            $("#SMSCamppanel").show();
+            $("#WAPanel").hide();
+            $("#SMSPanel").hide();
         }
-
     }
 
     function HandleChange() {
@@ -755,6 +592,14 @@
                 type: "error",
                 title: "Error Title",
                 message: "EndDate Can't be Older",
+                buttonText: "Okay"
+            })
+        }
+        else if (EndDate < Date1) {
+            cuteAlert({
+                type: "error",
+                title: "Error Title",
+                message: "EndDate Can't be Older than Start Date",
                 buttonText: "Okay"
             })
         }
@@ -1094,23 +939,6 @@
         $("#Count").text(a);
     });
 
-    //$("#SMSScript").focusout(function () {
-    //    //Call the Google API
-    //    $.ajax({
-    //        type: "GET",
-    //        url: "https://ajax.googleapis.com/ajax/services/language/translate",
-    //        dataType: 'jsonp',
-    //        cache: false,
-    //        contentType: "application/x-www-form-urlencoded; charset=UTF-8",
-    //        data: "v=1.0&q=" + $('#SMSScript').val() + "&langpair=en|es",
-    //        success: function (iData) {
-    //            //update the value
-    //            $('#txtScript').val(iData["responseData"]["translatedText"]);
-    //        },
-    //        error: function (xhr, ajaxOptions, thrownError) { }
-    //    });
-    //});
-
     function SendDLT(){
             var CampaignId = $("#CampId").val();
 
@@ -1202,9 +1030,10 @@
                             if (e == ("confirm")) {
                                 $("#btnSendTestSMS").prop('disabled', true);
                                 $("#btnSendDLT").show();
-                            } else {
-                                alert(":-(");
                             }
+                            //else {
+                            //    alert(":-(");
+                            //}
                         })
                         $("#divLoader").hide();
                     }
@@ -1301,63 +1130,6 @@
                     $("#divLoader").hide();
                 }
             });
-    }
-
-    function WAtypeValidate() {
-
-         if (document.getElementById("rdnText").checked) {
-            $("#ScriptText").show();
-             $("#Upload").hide();
-        }
-         else if (document.getElementById("rdnImage").checked) {
-             $("#Upload").show();
-            $("#ScriptText").hide();
-            //$("#SMSCamppanel").hide();
-            /*$("WAMsgType").show();*/
-        }
-        else if (document.getElementById("rdnImageCaption").checked){
-            $("#ScriptText").show();
-            $("#Upload").show();
-        }
-    }
-
-    function WAValidateDate() {
-        var d = new Date();
-        month = ("0" + (d.getMonth() + 1)).slice(-2);
-        day = ("0" + d.getDate()).slice(-2);
-        year = d.getFullYear();
-        var Date1 = year + '-' + month + '-' + day;
-
-        var CampStartDate = $("#WAtxtEnrollfromdt").val();
-        if (CampStartDate < Date1) {
-            cuteAlert({
-                type: "error",
-                title: "Error Title",
-                message: "StartDate Can't be Older",
-                buttonText: "Okay"
-
-            })
-            $("#WAtxtEnrollfromdt").val("");
-        }
-    }
-
-    function WAValidateDate1() {
-        var d = new Date();
-        month = ("0" + (d.getMonth() + 1)).slice(-2);
-        day = ("0" + d.getDate()).slice(-2);
-        year = d.getFullYear();
-        var Date1 = year + '-' + month + '-' + day;
-
-        var CampEndDate = $("#WAtxtEnrolltodt").val();
-        if (CampEndDate < Date1) {
-            cuteAlert({
-                type: "error",
-                title: "Error Title",
-                message: "EndDate Can't be Older",
-                buttonText: "Okay"
-            })
-            $("#WAtxtEnrolltodt").val("");
-        }
     }
 
 </script>
