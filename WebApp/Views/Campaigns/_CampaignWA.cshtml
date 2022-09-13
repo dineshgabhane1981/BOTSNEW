@@ -1,7 +1,7 @@
 ﻿@*@{
-    ViewBag.Title = "_CampaignWA";
-    Layout = null;
-}*@
+        ViewBag.Title = "_CampaignWA";
+        Layout = null;
+    }*@
 
 <style>
     .rbtnClass {
@@ -134,35 +134,12 @@
     </div>
 
     <div class="row" style="margin: 20px; display:none" id="WAUpload">
-
-        @using (Html.BeginForm("UploadData", "Campaigns", FormMethod.Post, new { enctype = "multipart/form-data" }))
-        {
-            <div style="margin-top: 15px; margin-left: 115px;">
-
-                @Html.TextBox("Data", "", new { type = "file" }) <br />
-                <input type="submit" value="Upload" />  <label style="padding-right:5px;padding-top:10px;">Do not use special characters in FileName</label>
-
-                @if (!string.IsNullOrEmpty(Convert.ToString(ViewBag.Message)))
-                {
-            <script>
-                    cuteAlert({
-                        type: "success",
-                        title: "Saved",
-                        message: '@ViewBag.Message',
-                        buttonText: "Okay"
-                    }).then(() => {
-
-                        $("#UploadImglink").show();
-                        $("#WAUploadImg").text('@ViewData["Url"]');
-                    })
-            </script>
-                }
-
-            </div>
-        }
+        <input type="file" id="FileUpload1" style="margin-left: 30px;" />
+        <input type="button" id="btnUpload" class="btn btn-primary" style="margin-left: 10px; background-color: #2651be;" value="Upload" />
     </div>
-    <div class="col-md-4" style="margin:20px; display:none" id="UploadImglink">   
-        <span id="WAUploadImg">Upload Img Link</span>
+    <div class="col-md-4" style="margin:20px; display:none" id="UploadImglink">
+        <span id="WAText">Upload Img Link:</span>
+        <span id="WAUploadImg"></span>
     </div>
 
     <div class="row" style="margin: 20px;" id="WAScriptText">
@@ -187,16 +164,31 @@
         </div>
     </div>
 
-    <div class="row" style="margin-top : 20px;">
-        <div class="col-md-6 col-xl-6">
-            <div class="button">
-                <button type="button" id="btnSave" style="margin-left:15px;" class="btn btn-primary" onclick="WASaveValidate();"><b>SAVE</b></button>
-                <!--<button type="button" id="btnDownload" style="margin-left:15px;" class="btn btn-primary" onclick="DownLoad();"><b>DOWNLOAD</b></button>-->
-                <button type="button" id="btnSendTestSMS" style="margin-left:15px;" class="btn btn-primary" onclick="SendTestValidate();" disabled><b>TEST SMS</b></button>
-                <button type="button" id="btnSendDLT" style="margin-left:15px;" class="btn btn-primary" onclick="SendSMSValidate();" disabled><b>SEND SMS</b></button>
-            </div>
+    @*<div class="row" style="margin-top : 20px;">*@
+    <div class="col-md-6 col-xl-6">
+        <div class="button">
+            <button type="button" id="WAbtnSave" style="margin-left:15px;" class="btn btn-primary" onclick="WASaveValidate();"><b>SAVE</b></button>
+            <!--<button type="button" id="btnDownload" style="margin-left:15px;" class="btn btn-primary" onclick="DownLoad();"><b>DOWNLOAD</b></button>-->
+            @*<button type="button" id="WAbtnSendTestSMS" style="margin-left:15px;" class="btn btn-primary" onclick="WASendTestValidate();" disabled><b>TEST SMS</b></button>*@
+            @*<button type="button" id="WAbtnSendMsg" style="margin-left:15px;" class="btn btn-primary" onclick="WASendSMSValidate();" disabled><b>SEND SMS</b></button>*@
         </div>
     </div>
+
+    <div class="row" style="margin: 20px;">
+        <div class="col-md-4" style="margin-top: 10px;">
+            <textarea class="form-control" id="WATestNumbers" rows="2" maxlength="10000" style="display: none" placeholder="Enter Test Numbers"></textarea>&nbsp;&nbsp;
+        </div>
+        <div class="button col-md-4" style="margin-top: 37px;">
+            <button type="button" id="WAbtnSendTestSMS" style="margin-left: 25px; display: none" class="btn btn-primary" onclick="WASendTestValidate();"><b>TEST SMS</b></button>
+        </div>
+    </div>
+
+    <div class="col-md-6 col-xl-6" style="margin-top: 10px;">
+        <div class="button">
+            <button type="button" id="WAbtnSendMsg" style="margin-left:25px; display : none" class="btn btn-primary" onclick="WASendSMSValidate();"><b>SEND SMS</b></button>
+        </div>
+    </div>
+    @*</div>*@
 </div>
 
 <script>
@@ -263,7 +255,7 @@
         var Date1 = year + '-' + month + '-' + day;
         var CampEndDate = $("#WAtxtEnrolltodt").val();
         var CampStartDate = $("#WAtxtEnrollfromdt").val();
-        
+
         if (CampEndDate < Date1) {
             cuteAlert({
                 type: "error",
@@ -310,12 +302,27 @@
         var TempCalc = '';
         var a = '';
         var TotalCredits;
+        var MessageType, Url;
+
+        Url = $("#WAUploadImg").text();
+
+        if (document.getElementById("rdnTextWA").checked) {
+            MessageType = $("#rdnTextWA").val();
+        }
+        else if (document.getElementById("rdnImageWA").checked) {
+            MessageType = $("#rdnImageWA").val();
+        }
+        else if (document.getElementById("rdnImageCaptionWA").checked) {
+            MessageType = $("#rdnImageCaptionWA").val();
+        }
+
+
 
         //alert(AllCount);
-        alert(Date1);
-        alert(StartDate);
-        alert(EndDate);
-       
+        //alert(Date1);
+        //alert(StartDate);
+        //alert(EndDate);
+
         if (AllCount == "") {
 
             cuteAlert({
@@ -333,11 +340,27 @@
                 buttonText: "Okay"
             })
         }
-        else if (Script == "") {
+        else if (Script == "" && MessageType =='1') {
             cuteAlert({
                 type: "error",
                 title: "Error Title",
                 message: "Script can't be Empty",
+                buttonText: "Okay"
+            })
+        }
+        else if ((Script == "" && MessageType == '3') || (Url == "" && MessageType == '3')) {
+            cuteAlert({
+                type: "error",
+                title: "Error Title",
+                message: "Script  or File can't be Empty",
+                buttonText: "Okay"
+            })
+        }
+        else if (Url == "" && MessageType == '2') {
+            cuteAlert({
+                type: "error",
+                title: "Error Title",
+                message: "File Url is Empty",
                 buttonText: "Okay"
             })
         }
@@ -515,6 +538,7 @@
         var Scheduledatetime = '';
         var ScriptType = '';
         var TempId = '';
+        var FileUrlink = '';
 
         val = $("#WABaseType").val();
         Equality = $("#WAFilter").val();
@@ -539,6 +563,7 @@
         CampaignName = $("#WACampName").val();
         Scheduledatetime = $("#WAdatetimepicker").val();
         TempId = $("#WATempId").val();
+        FileUrlink = $("#WAUploadImg").text();
 
 
         if (document.getElementById("rdnTextWA").checked) {
@@ -566,6 +591,7 @@
         item["Scheduledatetime"] = Scheduledatetime;
         item["TempId"] = TempId;
         item["PointsRange1"] = PointsRange1;
+        item["FileUrlink"] = FileUrlink;
 
         FilterData.push(item);
         var data = JSON.stringify(FilterData);
@@ -582,7 +608,7 @@
                     console.log(response);
                     if (response != null) {
 
-                        $("#CampId").val(response[0].CampaignId);
+                        $("#WACampId").val(response[0].CampaignId);
 
                         cuteAlert({
                             type: "success",
@@ -590,9 +616,9 @@
                             message: "Message Send",
                             buttonText: "Campaign Saved"
                         }).then(() => {
-                            $("#btnSendTestSMS").show();
-                            $("#TestNumbers").show();
-                            $("#btnSave").prop('disabled', true);
+                            $("#WAbtnSendTestSMS").show();
+                            $("#WATestNumbers").show();
+                            $("#WAbtnSave").prop('disabled', true);
                         })
                         $("#divLoader").hide();
                         //if (SMSType == 1) {
@@ -646,6 +672,154 @@
         //$("#Count").text(a);
     });
 
+    $(document).ready(function () {
+        $("#btnUpload").on("click", function () {
+            UploadData();
+        });
+    });
 
+    function UploadData() {
+
+            if (window.FormData !== undefined) {
+                var fileUpload = $("#FileUpload1").get(0);
+
+                var files = fileUpload.files;
+                if (files.length > 0) {
+                    var fileData = new FormData();
+                    for (var i = 0; i < files.length; i++) {
+                        fileData.append(files[i].name, files[i]);
+                    }
+                    fileData.append("groupId", $('#hdnGroupID').val());
+
+                        $("#divLoader").show();
+                        $.ajax({
+                            url: '@Url.Action("UploadData", "Campaigns")',
+                            type: "POST",
+                            contentType: false, // Not to set any content header
+                            processData: false, // Not to process data
+                            data: fileData,
+                            success: function (result) {
+                                var res = result[0].ResponseCode;
+
+
+                                if (res == "00") {
+                                    var code = result[0].Url;
+                                    cuteAlert({
+                                        type: "success",
+                                        title: "Uploaded",
+                                        message: "Data Uploaded Successfully!",
+                                        buttonText: "Okay"
+                                    })
+                                    $("#divLoader").hide();
+                                    $("#WAUploadImg").text(code);
+                                    $("#UploadImglink").show();
+                                }
+                                else {
+                                    cuteAlert({
+                                        type: "error",
+                                        title: "Oops..",
+                                        message: "There is some problem in uploading data",
+                                        buttonText: "Okay"
+                                    })
+                                    $("#divLoader").hide();
+                                }
+                                //alert(result);
+                            },
+                            error: function (err) {
+                                cuteAlert({
+                                    type: "error",
+                                    title: "Oops..",
+                                    message: "There is some problem in uploading data",
+                                    buttonText: "Okay"
+                                })
+                                $("#divLoader").hide();
+                                //alert(err.statusText);
+                            }
+                        });
+                    }
+
+
+                else {
+                    cuteAlert({
+                        type: "error",
+                        title: "Oops..",
+                        message: "Please select file to upload",
+                        buttonText: "Okay"
+                    })
+                }
+        }
+    }
+
+    function WASendTestValidate() {
+        var CampId = $("#WACampId").val();
+        if (CampId == '') {
+            cuteAlert({
+                type: "error",
+                title: "Error Title",
+                message: "Campaign Id Not Found",
+                buttonText: "Okay"
+            })
+        }
+        else {
+            WASendTestSMS();
+        }
+    }
+
+    function WASendTestSMS(){
+        var CampaignId = $("#WACampId").val();
+        var TestNumber = $("#WATestNumbers").val();
+
+            var FilterData = [];
+            item = {};
+        item["WACampId"] = CampaignId;
+        item["WATestNumbers"] = TestNumber;
+
+            FilterData.push(item);
+            var data = JSON.stringify(FilterData);
+        $("#divLoader").show();
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("WASendTestSMS", "Campaigns")',
+                data: '{jsonData: ' + JSON.stringify(data) + '}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+
+                success: function (response) {
+                    console.log(response);
+                    if (response != null) {
+                        cuteAlert({
+                            type: "question",
+                            title: "Confirm Title",
+                            message: "Has SMS Received",
+                            confirmText: "Yes",
+                            cancelText: "No"
+                        }).then((e) => {
+                            if (e == ("confirm")) {
+                                $("#WAbtnSendTestSMS").prop('disabled', true);
+                                $("#WAbtnSendMsg").show();
+                            }
+                            //else {
+                            //    alert(":-(");
+                            //}
+                        })
+                        $("#divLoader").hide();
+                    }
+                    else {
+                        cuteAlert({
+                            type: "error",
+                            title: "Error Title",
+                            message: "Message Not Send",
+                            buttonText: "Okay"
+                        })
+                        $("#divLoader").hide();
+                    }
+                },
+                error: function (response) {
+                    //console.log(response.responseText);
+                    alert("InsideError");
+                    $("#divLoader").hide();
+                }
+            });
+    }
 
 </script>

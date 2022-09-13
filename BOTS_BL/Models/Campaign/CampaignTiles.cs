@@ -157,12 +157,15 @@ namespace BOTS_BL.Models
         public string CampaignId { get; set; }
         public string CampaignName { get; set; }
         public DateTime? StartDate { get; set; }
+        public string StartDateStr { get; set; }
         public DateTime? EndDate { get; set; }
+        public string EndDateStr { get; set; }
         public string Status { get; set; }
         public string ControlBase { get; set; }
         public string CampaignBase { get; set; }
 
     }
+    
     public class DLTDetailsLst
     {
         public string CampaignId { get; set; }
@@ -192,5 +195,12 @@ namespace BOTS_BL.Models
     public class TempSMSBalance
     {
         public string SmsBalance { get; set; }
+    }
+    public class JsonData
+    {
+        public string ResponseCode { get; set; }
+        public string ResponseMessage { get; set; }
+        public string Url { get; set; }
+
     }
 }

@@ -176,9 +176,9 @@ namespace WebApp.Controllers
 
             for (int i = 0; i <= SMSGatewayDetails.Count(); i++)
             {
-                if(i==0)
+                if (i == 0)
                 {
-                    SDT.BOCode = SMSGatewayDetails[i].BOCode;                    
+                    SDT.BOCode = SMSGatewayDetails[i].BOCode;
                 }
                 if (i == 1)
                 {
@@ -205,7 +205,7 @@ namespace WebApp.Controllers
             json_serializer.MaxJsonLength = int.MaxValue;
             object[] objData = (object[])json_serializer.DeserializeObject(jsonData);
             foreach (Dictionary<string, object> item in objData)
-            {               
+            {
                 string BaseType = Convert.ToString(item["BaseType"]);
                 string PointsBase = Convert.ToString(item["PointsBase"]);
                 string Points = Convert.ToString(item["Points"]);
@@ -214,7 +214,7 @@ namespace WebApp.Controllers
 
                 objcustAll = CR.GetFiltData(BaseType, PointsBase, Points, PointsRange1, OutletId, userDetails.GroupId, userDetails.connectionString);
 
-               // Session["customerId"] = objcounts.lstcustomerDetails;
+                // Session["customerId"] = objcounts.lstcustomerDetails;
             }
 
             return new JsonResult() { Data = objcustAll, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
@@ -245,11 +245,11 @@ namespace WebApp.Controllers
                 string TempId = Convert.ToString(item["TempId"]); //PointsRange1
                 string PointsRange1 = Convert.ToString(item["PointsRange1"]);
 
-                SaveData = CR.SaveCampaignData(BaseType, Equality, Points, OutletId,Srcipt, StartDate, EndDate, CampaignName, SMSType, ScriptType, Scheduledatetime, TempId, PointsRange1, userDetails.GroupId, userDetails.connectionString);
+                SaveData = CR.SaveCampaignData(BaseType, Equality, Points, OutletId, Srcipt, StartDate, EndDate, CampaignName, SMSType, ScriptType, Scheduledatetime, TempId, PointsRange1, userDetails.GroupId, userDetails.connectionString);
                 //Session["CampaignId"] = SaveData.;
             }
 
-                return new JsonResult() { Data = SaveData, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
+            return new JsonResult() { Data = SaveData, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
 
         public ActionResult ExportToExcelCampaignData(string CampaignId)
@@ -257,7 +257,7 @@ namespace WebApp.Controllers
             System.Data.DataTable table = new System.Data.DataTable();
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
             string LoginType = userDetails.LoginType;
-           
+
 
             try
             {
@@ -267,20 +267,20 @@ namespace WebApp.Controllers
                 var CD = CMPR.CampDataDownload(CampaignId, userDetails.GroupId, userDetails.connectionString);
                 PropertyDescriptorCollection properties = TypeDescriptor.GetProperties(typeof(CampaignMemberDetail));
                 foreach (PropertyDescriptor prop in properties)
-                table.Columns.Add(prop.Name, Nullable.GetUnderlyingType(prop.PropertyType) ?? prop.PropertyType);
+                    table.Columns.Add(prop.Name, Nullable.GetUnderlyingType(prop.PropertyType) ?? prop.PropertyType);
 
                 foreach (CampaignMemberDetail item in CD)
                 {
                     DataRow row = table.NewRow();
                     foreach (PropertyDescriptor prop in properties)
-                    
+
                         row[prop.Name] = prop.GetValue(item) ?? DBNull.Value;
-                        // if(row[prop.Name] == "Mobileno")
-                        //{
-                            table.Rows.Add(row);
-                       // }
-                        
-                    
+                    // if(row[prop.Name] == "Mobileno")
+                    //{
+                    table.Rows.Add(row);
+                    // }
+
+
                 }
                 table.Columns.Remove("SlNo");
                 table.Columns.Remove("CampaignId");
@@ -295,7 +295,7 @@ namespace WebApp.Controllers
                     //excelSheet.Name
                     table.TableName = CampaignId;
                     IXLWorksheet worksheet = wb.AddWorksheet(sheetName: CampaignId);
-                   
+
                     worksheet.Cell(1, 1).InsertTable(table);
 
                     using (MemoryStream stream = new MemoryStream())
@@ -305,7 +305,7 @@ namespace WebApp.Controllers
                         return File(stream.ToArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
                     }
                 }
-               // return null;
+                // return null;
             }
             catch (Exception ex)
             {
@@ -338,11 +338,11 @@ namespace WebApp.Controllers
             {
                 string CampaignId = Convert.ToString(item["CampaignId"]);
 
-               var response = CR.SendDLTData(CampaignId, userDetails.GroupId, userDetails.connectionString);
+                var response = CR.SendDLTData(CampaignId, userDetails.GroupId, userDetails.connectionString);
                 //Session["CampaignId"] = SaveData.;
                 Status = response;
             }
-           
+
             return new JsonResult() { Data = Status, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
 
@@ -423,7 +423,7 @@ namespace WebApp.Controllers
             CampaignRepository CR = new CampaignRepository();
             List<CampaignSaveDetails> responsedata = new List<CampaignSaveDetails>();
             DataSet response = new DataSet();
-             
+
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
             JavaScriptSerializer json_serializer = new JavaScriptSerializer();
             json_serializer.MaxJsonLength = int.MaxValue;
@@ -475,55 +475,72 @@ namespace WebApp.Controllers
             return new JsonResult() { Data = responsedata, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
 
-        public ActionResult UploadData(HttpPostedFileBase Data)
+        public ActionResult UploadData()
         {
-            string Path = ConfigurationManager.AppSettings["Path"].ToString();
-            string Path3 = ConfigurationManager.AppSettings["Path3"].ToString();
-            string responseString;
-            try
+            List<JsonData> JSData = new List<JsonData>();
+            if (Request.Files.Count > 0)
             {
-                string _FileName = Data.FileName;
-                Session["FileName"] = _FileName;
-                string Path2 = Path + _FileName;
-                System.IO.FileInfo file = new System.IO.FileInfo(Path2);
-                if (!file.Exists)
+                try
                 {
-                    if (Data.ContentLength > 0)
+                    DataSet ds = new DataSet();
+
+                    HttpPostedFileBase files = Request.Files[0];
+                    string fileName = Request.Files[0].FileName;
+                    var path = ConfigurationManager.AppSettings["Path"].ToString();
+                    string Path3 = ConfigurationManager.AppSettings["Path3"].ToString();
+                    var fullFilePath = path + fileName;
+
+                    System.IO.FileInfo file = new System.IO.FileInfo(path);
+                    if (!file.Exists)
                     {
-                        Data.SaveAs(Path2);
-                        Session["Path2"] = Path2;
-                        string _Url = Path3 + _FileName;
-                        ViewBag.Message = "File Uploaded Successfully!!";
-                        ViewData["Url"] = _Url;
-                        return View("Index");
+                        files.SaveAs(path + fileName);
+                        //string _Url = Path3 + fileName;
+                        //var jsonData1 = "{\"ResposeCode\":\"00\","+"\"Message\":\"File Uploaded Successfully!\","+"\"Url\":\""+ fullFilePath + "\"}";
+
+                        //return Json(jsonData1);
+                        for (int i = 1; i <= 1; i++)
+                        {
+                            JsonData Temp = new JsonData();
+                            Temp.ResponseCode = "00";
+                            Temp.ResponseMessage = "Success";
+                            Temp.Url = fullFilePath;
+
+                            JSData.Add(Temp);
+                        }
+                        return Json(JSData);
+                    }
+                    else
+                    {
+                        //ViewBag.Message = "File Already Exists";
+                        //var jsonData2 = @"{'ResposeCode':'01','Message':'File Already Exists'}";
+                        //return Json(jsonData2);
+                        for (int i = 1; i <= 1; i++)
+                        {
+                            JsonData Temp = new JsonData();
+                            Temp.ResponseCode = "01";
+                            Temp.ResponseMessage = "File Already Exists";
+
+                            JSData.Add(Temp);
+                        }
+                        return Json(JSData);
                     }
                 }
-                else
+                catch (Exception ex)
                 {
-                    ViewBag.Message = "File Already Exists";
+                    newexception.AddException(ex, "UploadCustomers");
                 }
+            }
+            //var jsonData = @"{'ResponseCode':'01','Message':'File Not Uploaded Successfully!'}";
+            //return Json(jsonData);
+            for (int i = 1; i <= 1; i++)
+            {
+                JsonData Temp = new JsonData();
+                Temp.ResponseCode = "01";
+                Temp.ResponseMessage = "File Not Uploaded Successfully!";
 
+                JSData.Add(Temp);
             }
-            catch (ArgumentException ex)
-            {
-                
-                responseString = string.Format("HTTP_ERROR :: The second HttpWebRequest object has raised an Argument Exception as 'Connection' Property is set to 'Close' :: ", ex.Message);
-                newexception.AddDummyException(responseString);
-                return View("Index");
-            }
-            catch (WebException ex)
-            {
-                responseString = string.Format("HTTP_ERROR :: WebException raised! :: {0}", ex.Message);
-                newexception.AddDummyException(responseString);
-                return View("Index");
-            }
-            catch (Exception ex)
-            {
-                responseString = string.Format("HTTP_ERROR :: Exception raised! :: {0}", ex.Message);
-                newexception.AddDummyException(responseString);
-                return View("Index");
-            }
-            return View("Index");
+            return Json(JSData);
         }
 
         [HttpPost]
@@ -550,12 +567,50 @@ namespace WebApp.Controllers
                 string Scheduledatetime = Convert.ToString(item["Scheduledatetime"]);
                 //string TempId = Convert.ToString(item["TempId"]); //PointsRange1
                 string PointsRange1 = Convert.ToString(item["PointsRange1"]);
+                string FileUrlLink = Convert.ToString(item["FileUrlink"]);
 
-                SaveData = CR.SaveCampaignDataWA(BaseType, Equality, Points, OutletId, Srcipt, StartDate, EndDate, CampaignName, SMSType, MessageType, Scheduledatetime, PointsRange1, userDetails.GroupId, userDetails.connectionString);
+                SaveData = CR.SaveCampaignDataWA(BaseType, Equality, Points, OutletId, Srcipt, StartDate, EndDate, CampaignName, SMSType, MessageType, Scheduledatetime, PointsRange1, FileUrlLink, userDetails.GroupId, userDetails.connectionString);
                 //Session["CampaignId"] = SaveData.;
             }
 
             return new JsonResult() { Data = SaveData, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
+
+        public JsonResult WASendTestSMS(string jsonData)
+        {
+            //SPResponse response = new SPResponse();
+            //bool Status;
+            //Status = false;
+            CampaignRepository CR = new CampaignRepository();
+            List<CampaignSaveDetails> responsedata = new List<CampaignSaveDetails>();
+            DataSet response = new DataSet();
+
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            JavaScriptSerializer json_serializer = new JavaScriptSerializer();
+            json_serializer.MaxJsonLength = int.MaxValue;
+            object[] objData = (object[])json_serializer.DeserializeObject(jsonData);
+            foreach (Dictionary<string, object> item in objData)
+            {
+                string CampaignId = Convert.ToString(item["WACampId"]);
+                string TestNumber = Convert.ToString(item["WATestNumbers"]);
+                response = CR.WASendTestMsgData(CampaignId, TestNumber, userDetails.GroupId, userDetails.connectionString);
+                //Session["CampaignId"] = SaveData.;
+                //responsedata = response;
+                DataTable DT = response.Tables["Table"];
+
+                for (int i = 0; i < DT.Rows.Count; i++)
+                {
+                    CampaignSaveDetails SaveData = new CampaignSaveDetails();
+                    SaveData.ResponseCode = DT.Rows[i]["ResponseCode"].ToString();
+                    SaveData.ResponseMessage = DT.Rows[i]["ResponseMessage"].ToString();
+                    SaveData.CampaignId = DT.Rows[i]["CampaignId"].ToString();
+                    responsedata.Add(SaveData);
+                }
+
+            }
+
+            return new JsonResult() { Data = responsedata, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
+        }
+
     }
 }

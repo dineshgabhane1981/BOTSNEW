@@ -675,18 +675,17 @@ namespace BOTS_BL.Repository
                         foreach (var item in CM1)
                         {
                             LisCampaign itemData = new LisCampaign();
-                            string D, D1;
-                            //DateTime D1 = new DateTime();   
+                            
                             itemData.CampaignId = item.CampaignId;
                             itemData.CampaignName = item.CampaignName;
-                            //D1 = item.StartDate;
-                            //itemData.StartDate = D.ToString("yyyy-MM-dd");
-                            itemData.StartDate = (item.StartDate); //DateTime.ToString()
-                            itemData.EndDate = item.EndDate;
-                            //D1 = Convert.ToDateTime(item.EndDate);
-                            itemData.Status = item.Status;
-                            itemData.ControlBase = Convert.ToString(item.ControlBase);
-                            itemData.CampaignBase = Convert.ToString(item.CampaignBase);
+                        
+                        itemData.StartDate = item.StartDate;
+                        itemData.StartDateStr = item.StartDate.Value.ToString("yyyy-MM-dd");
+                        itemData.EndDate = item.EndDate;
+                        itemData.EndDateStr = item.EndDate.Value.ToString("yyyy-MM-dd");
+                        itemData.Status = item.Status;
+                        itemData.ControlBase = Convert.ToString(item.ControlBase);
+                        itemData.CampaignBase = Convert.ToString(item.CampaignBase);
 
                             CM.Add(itemData);
                         }
@@ -697,8 +696,11 @@ namespace BOTS_BL.Repository
                         LisCampaign itemData = new LisCampaign();
                         itemData.CampaignId = item.CampaignId;
                         itemData.CampaignName = item.CampaignName;
+                        //string str = item.StartDate.Value.ToString("yyyy-MM-dd");
                         itemData.StartDate = item.StartDate;
+                        itemData.StartDateStr = item.StartDateStr;
                         itemData.EndDate = item.EndDate;
+                        itemData.EndDateStr = item.EndDateStr;
                         itemData.Status = item.Status;
                         itemData.ControlBase = Convert.ToString(item.ControlBase);
                         itemData.CampaignBase = Convert.ToString(item.CampaignBase);
@@ -1205,7 +1207,7 @@ namespace BOTS_BL.Repository
             return Data;
         }
 
-        public List<CampaignSaveDetails> SaveCampaignDataWA(string BaseType, string Equality, string Points, string OutletId, string Srcipt, string StartDate, string EndDate, string CampaignName, string SMSType, string MessageType, string Scheduledatetime, string PointsRange1, string GroupId, string connstr)
+        public List<CampaignSaveDetails> SaveCampaignDataWA(string BaseType, string Equality, string Points, string OutletId, string Srcipt, string StartDate, string EndDate, string CampaignName, string SMSType, string MessageType, string Scheduledatetime, string PointsRange1, string FileUrlLink, string GroupId, string connstr)
         {
             List<CampaignSaveDetails> Data = new List<CampaignSaveDetails>();
 
@@ -1218,7 +1220,8 @@ namespace BOTS_BL.Repository
             {
                 using (var context = new BOTSDBContext(connstr))
                 {
-                    Data = context.Database.SqlQuery<CampaignSaveDetails>("sp_BOTS_CreateCampaign @pi_GroupId, @pi_Date,@pi_BaseType,@pi_Equality,@pi_Points,@pi_OutletId,@pi_Script,@pi_CampStartDate,@pi_CampEndDate,@pi_CampName,@pi_SMSType,@pi_MessageType,@pi_Scheduledatetime,@pi_TempId,@pi_PointsRange1", new SqlParameter("@pi_GroupId", GroupId), new SqlParameter("@pi_Date", DateTime.Now.ToString("yyyy-MM-dd")), new SqlParameter("@pi_BaseType", BaseType), new SqlParameter("@pi_Equality", Equality), new SqlParameter("@pi_Points", Points), new SqlParameter("@pi_OutletId", OutletId), new SqlParameter("@pi_Script", Srcipt), new SqlParameter("@pi_CampStartDate", StartDate), new SqlParameter("@pi_CampEndDate", EndDate), new SqlParameter("@pi_CampName", CampaignName), new SqlParameter("@pi_SMSType", SMSType), new SqlParameter("@pi_MessageType", MessageType), new SqlParameter("@pi_Scheduledatetime", Scheduledatetime), new SqlParameter("@pi_PointsRange1", PointsRange1)).ToList<CampaignSaveDetails>();
+                    Data = context.Database.SqlQuery<CampaignSaveDetails>("sp_BOTS_CreateCampaignWA @pi_GroupId, @pi_Date,@pi_BaseType,@pi_Equality,@pi_Points,@pi_OutletId,@pi_Script,@pi_CampStartDate,@pi_CampEndDate,@pi_CampName,@pi_SMSType,@pi_MessageType,@pi_Scheduledatetime,@pi_PointsRange1,@FileUrlLink", 
+                        new SqlParameter("@pi_GroupId", GroupId), new SqlParameter("@pi_Date", DateTime.Now.ToString("yyyy-MM-dd")), new SqlParameter("@pi_BaseType", BaseType), new SqlParameter("@pi_Equality", Equality), new SqlParameter("@pi_Points", Points), new SqlParameter("@pi_OutletId", OutletId), new SqlParameter("@pi_Script", Srcipt), new SqlParameter("@pi_CampStartDate", StartDate), new SqlParameter("@pi_CampEndDate", EndDate), new SqlParameter("@pi_CampName", CampaignName), new SqlParameter("@pi_SMSType", SMSType), new SqlParameter("@pi_MessageType", MessageType), new SqlParameter("@pi_Scheduledatetime", Scheduledatetime), new SqlParameter("@pi_PointsRange1", PointsRange1), new SqlParameter("@FileUrlLink", FileUrlLink)).ToList<CampaignSaveDetails>();
                 }
             }
             catch (Exception ex)
@@ -1227,6 +1230,264 @@ namespace BOTS_BL.Repository
             }
             return Data;
         }
+
+        public DataSet WASendTestMsgData(string CampaignId, string TestNumber, string GroupId, string connstr)
+        {
+            string Url, UserName, Password, Sender;
+            DataSet Data = new DataSet();
+            DataTable Data1 = new DataTable();
+            Data1.Columns.Add("Mobileno");
+            Data1.Columns.Add("Script");
+            Data1.Columns.Add("BrandId");
+            Data1.Columns.Add("Url");
+            Data1.Columns.Add("TokenId");
+            Data1.Columns.Add("MessageType");
+            Data1.Columns.Add("FileUrl");
+
+
+            string[] TestSplit = TestNumber.Split(',');
+
+            try
+            {
+                using (var context = new BOTSDBContext(connstr))
+                {
+                    SqlConnection _Con11 = new SqlConnection(Convert.ToString(connstr));
+                    SqlCommand _Cmd11 = new SqlCommand();
+                    _Cmd11.Connection = _Con11;
+                    if (_Con11.State == ConnectionState.Closed)
+                        _Con11.Open();
+                    _Cmd11.CommandType = CommandType.StoredProcedure;
+                    _Cmd11.CommandTimeout = 380000;
+                    _Cmd11.CommandText = "sp_BOTS_SendCampTestSMSWA";
+                    _Cmd11.Parameters.AddWithValue("@pi_CampaignId", CampaignId);
+                    SqlDataAdapter _daCounterId11 = new SqlDataAdapter(_Cmd11);
+                    _daCounterId11.Fill(Data);
+                    _Con11.Close();
+
+                    DataTable SMSTemp = Data.Tables["Table1"];
+
+                    DataRow DR = null;
+                    foreach (string info in TestSplit)
+                    {
+
+                        DR = Data1.NewRow();
+                        DR["Mobileno"] = info;
+                        for (int i = 0; i < 1; i++)
+                        {
+                            DR["BrandId"] = (Convert.ToString(SMSTemp.Rows[i]["BrandId"]));
+                            DR["Script"] = (Convert.ToString(SMSTemp.Rows[i]["Script"]));
+                            DR["Url"] = (Url = Convert.ToString(SMSTemp.Rows[i]["Url"]));
+                            DR["TokenId"] = (UserName = Convert.ToString(SMSTemp.Rows[i]["TokenId"]));
+                            //DR["Mobileno"] = (Password = Convert.ToString(SMSTemp.Rows[i]["Mobileno"]));
+                            DR["MessageType"] = (Sender = Convert.ToString(SMSTemp.Rows[i]["MessageType"]));
+                            DR["FileUrl"] = (Sender = Convert.ToString(SMSTemp.Rows[i]["FileUrl"]));
+                            Data1.Rows.Add(DR);
+                        }
+                    }
+
+                    Thread _job = new Thread(() => WASendMsg(Data1));
+                    _job.Start();
+
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, GroupId);
+            }
+            return Data;
+        }
+
+        public void WASendMsg(DataTable Data1)
+        {
+            if (Data1.Rows.Count > 0)
+            {
+                for (int j = 0; j < Data1.Rows.Count; j++)
+                {
+                    string _MobileNo = Data1.Rows[j]["Mobileno"].ToString();
+                    string _Script = Data1.Rows[j]["Script"].ToString();
+                    string _Url = Data1.Rows[j]["Url"].ToString();
+                    string _BrandId = Data1.Rows[j]["BrandId"].ToString();
+                    string _TokenId = Data1.Rows[j]["TokenId"].ToString();
+                    string _MessageType = Data1.Rows[j]["MessageType"].ToString();
+                    string _FileUrl = Data1.Rows[j]["FileUrl"].ToString();
+
+
+                    if (_MessageType == "1")
+                      {
+                        Thread _job = new Thread(() => WAText(_MobileNo, _Script, _BrandId, _Url, _TokenId));
+                        _job.Start();
+                    } 
+                      else if (_MessageType == "2")
+                      {
+                        Thread _job = new Thread(() => WAImage(_MobileNo, _BrandId, _Url, _TokenId, _FileUrl));
+                        _job.Start();
+                      }
+                    else if (_MessageType == "3")
+                      {
+                        Thread _job = new Thread(() => WAImageCaption(_MobileNo, _BrandId, _Url, _TokenId, _FileUrl, _MessageType));
+                        _job.Start();
+                    }
+                }
+            }
+        }
+
+        public void WAImage(string _MobileNo, string _BrandId1, string _Url, string _TokenId, string _ImageUrl1)
+        {
+            string responseString;
+            try
+            {
+
+                //_MobileMessage = _MobileMessage.Replace("#99", "&");
+                //_MobileMessage = HttpUtility.UrlEncode(_MobileMessage);
+                //string type = "TEXT";
+                StringBuilder sbposdata = new StringBuilder();
+                sbposdata.AppendFormat(_Url);
+                sbposdata.AppendFormat("token={0}", _TokenId);
+                sbposdata.AppendFormat("&phone=91{0}", _MobileNo);
+                //sbposdata.AppendFormat("&message={0}", _MobileMessage);
+                sbposdata.AppendFormat("&link={0}", _ImageUrl1);
+                string Url = sbposdata.ToString();
+                ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls | (SecurityProtocolType)3072;
+                ServicePointManager.ServerCertificateValidationCallback += (sender, cert, chain, sslPolicyErrors) => true;
+                HttpWebRequest httpWReq = (HttpWebRequest)WebRequest.Create(Url);
+                UTF8Encoding encoding = new UTF8Encoding();
+                byte[] data = encoding.GetBytes(sbposdata.ToString());
+                httpWReq.Method = "POST";
+
+                httpWReq.ContentType = "application/x-www-form-urlencoded";
+                httpWReq.ContentLength = data.Length;
+                using (Stream stream = httpWReq.GetRequestStream())
+                {
+                    stream.Write(data, 0, data.Length);
+                }
+                HttpWebResponse response = (HttpWebResponse)httpWReq.GetResponse();
+                StreamReader reader = new StreamReader(response.GetResponseStream());
+                responseString = reader.ReadToEnd();
+                reader.Close();
+                response.Close();
+            }
+            catch (ArgumentException ex)
+            {
+
+                responseString = string.Format("HTTP_ERROR :: The second HttpWebRequest object has raised an Argument Exception as 'Connection' Property is set to 'Close' :: {0}", ex.Message);
+            }
+            catch (WebException ex)
+            {
+
+                responseString = string.Format("HTTP_ERROR :: WebException raised! :: {0}", ex.Message);
+            }
+            catch (Exception ex)
+            {
+
+                responseString = string.Format("HTTP_ERROR :: Exception raised! :: {0}", ex.Message);
+            }
+        }
+
+        public void WAText(string _MobileNo, string _MobileMessage, string _BrandId1, string _Url, string _TokenId)
+        {
+            string responseString;
+            try
+            {
+
+                _MobileMessage = _MobileMessage.Replace("#99", "&");
+                _MobileMessage = HttpUtility.UrlEncode(_MobileMessage);
+                //string type = "TEXT";
+                StringBuilder sbposdata = new StringBuilder();
+                sbposdata.AppendFormat(_Url);
+                sbposdata.AppendFormat("token={0}", _TokenId);
+                sbposdata.AppendFormat("&phone=91{0}", _MobileNo);
+                sbposdata.AppendFormat("&message={0}", _MobileMessage);
+
+                string Url = sbposdata.ToString();
+                ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls | (SecurityProtocolType)3072;
+                ServicePointManager.ServerCertificateValidationCallback += (sender, cert, chain, sslPolicyErrors) => true;
+                HttpWebRequest httpWReq = (HttpWebRequest)WebRequest.Create(Url);
+                UTF8Encoding encoding = new UTF8Encoding();
+                byte[] data = encoding.GetBytes(sbposdata.ToString());
+                httpWReq.Method = "POST";
+
+                httpWReq.ContentType = "application/x-www-form-urlencoded";
+                httpWReq.ContentLength = data.Length;
+                using (Stream stream = httpWReq.GetRequestStream())
+                {
+                    stream.Write(data, 0, data.Length);
+                }
+                HttpWebResponse response = (HttpWebResponse)httpWReq.GetResponse();
+                StreamReader reader = new StreamReader(response.GetResponseStream());
+                responseString = reader.ReadToEnd();
+                reader.Close();
+                response.Close();
+            }
+            catch (ArgumentException ex)
+            {
+
+                responseString = string.Format("HTTP_ERROR :: The second HttpWebRequest object has raised an Argument Exception as 'Connection' Property is set to 'Close' :: {0}", ex.Message);
+            }
+            catch (WebException ex)
+            {
+
+                responseString = string.Format("HTTP_ERROR :: WebException raised! :: {0}", ex.Message);
+            }
+            catch (Exception ex)
+            {
+
+                responseString = string.Format("HTTP_ERROR :: Exception raised! :: {0}", ex.Message);
+            }
+        }
+
+        public void WAImageCaption(string _MobileNo, string _BrandId1, string _Url, string _TokenId, string _ImageUrl1, string _Message)
+        {
+            string responseString;
+            try
+            {
+
+                //_MobileMessage = _MobileMessage.Replace("#99", "&");
+                // _Message = HttpUtility.UrlEncode(_Message);
+                //string type = "TEXT";
+                StringBuilder sbposdata = new StringBuilder();
+                sbposdata.AppendFormat(_Url);
+                sbposdata.AppendFormat("token={0}", _TokenId);
+                sbposdata.AppendFormat("&phone={0}", _MobileNo);
+                sbposdata.AppendFormat("&message={0}", _Message);
+                sbposdata.AppendFormat("&link={0}", _ImageUrl1);
+                string Url = sbposdata.ToString();
+                ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls | (SecurityProtocolType)3072;
+                ServicePointManager.ServerCertificateValidationCallback += (sender, cert, chain, sslPolicyErrors) => true;
+                HttpWebRequest httpWReq = (HttpWebRequest)WebRequest.Create(Url);
+                UTF8Encoding encoding = new UTF8Encoding();
+                byte[] data = encoding.GetBytes(sbposdata.ToString());
+                httpWReq.Method = "POST";
+
+                httpWReq.ContentType = "application/x-www-form-urlencoded";
+                httpWReq.ContentLength = data.Length;
+                using (Stream stream = httpWReq.GetRequestStream())
+                {
+                    stream.Write(data, 0, data.Length);
+                }
+                HttpWebResponse response = (HttpWebResponse)httpWReq.GetResponse();
+                StreamReader reader = new StreamReader(response.GetResponseStream());
+                responseString = reader.ReadToEnd();
+                reader.Close();
+                response.Close();
+            }
+            catch (ArgumentException ex)
+            {
+
+                responseString = string.Format("HTTP_ERROR :: The second HttpWebRequest object has raised an Argument Exception as 'Connection' Property is set to 'Close' :: {0}", ex.Message);
+            }
+            catch (WebException ex)
+            {
+
+                responseString = string.Format("HTTP_ERROR :: WebException raised! :: {0}", ex.Message);
+            }
+            catch (Exception ex)
+            {
+
+                responseString = string.Format("HTTP_ERROR :: Exception raised! :: {0}", ex.Message);
+            }
+        }
+
+
 
     }
 
