@@ -494,7 +494,7 @@ namespace WebApp.Controllers
                     if (!file.Exists)
                     {
                         files.SaveAs(path + fileName);
-                        //string _Url = Path3 + fileName;
+                        string _Url = Path3 + fileName;
                         //var jsonData1 = "{\"ResposeCode\":\"00\","+"\"Message\":\"File Uploaded Successfully!\","+"\"Url\":\""+ fullFilePath + "\"}";
 
                         //return Json(jsonData1);
@@ -503,7 +503,7 @@ namespace WebApp.Controllers
                             JsonData Temp = new JsonData();
                             Temp.ResponseCode = "00";
                             Temp.ResponseMessage = "Success";
-                            Temp.Url = fullFilePath;
+                            Temp.Url = _Url;
 
                             JSData.Add(Temp);
                         }

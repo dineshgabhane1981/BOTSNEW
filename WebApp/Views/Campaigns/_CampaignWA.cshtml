@@ -137,9 +137,10 @@
         <input type="file" id="FileUpload1" style="margin-left: 30px;" />
         <input type="button" id="btnUpload" class="btn btn-primary" style="margin-left: 10px; background-color: #2651be;" value="Upload" />
     </div>
-    <div class="col-md-4" style="margin:20px; display:none" id="UploadImglink">
+    <div class="col-md-12" style="margin:20px;" id="UploadImglink">
+        @*display:none*@
         <span id="WAText">Upload Img Link:</span>
-        <span id="WAUploadImg"></span>
+        <a id="a" href="#"><span id="WAUploadImg"></span></a>
     </div>
 
     <div class="row" style="margin: 20px;" id="WAScriptText">
@@ -700,7 +701,7 @@
                             data: fileData,
                             success: function (result) {
                                 var res = result[0].ResponseCode;
-
+                                var Uri = result[0].Url;
 
                                 if (res == "00") {
                                     var code = result[0].Url;
@@ -712,7 +713,9 @@
                                     })
                                     $("#divLoader").hide();
                                     $("#WAUploadImg").text(code);
+                                    $("a").attr("href", Uri);
                                     $("#UploadImglink").show();
+
                                 }
                                 else {
                                     cuteAlert({
