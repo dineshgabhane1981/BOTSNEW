@@ -50,13 +50,23 @@ namespace NPC.Controllers
         {
             newexception.AddDummyException("Inside NPC");
             var groupId = Convert.ToString(Session["GroupId"]);
+            //var CategoryId = Convert.ToInt32(Session["CategoryId"]);
             NPCViewModel objdata = new NPCViewModel();
             objdata.lstNPCCategory = NPCR.GetNPCCategory(groupId);
-            objdata.lstNPCSubCategory = NPCR.GetNPCSubCategory(groupId);
+
+            List<SelectListItem> lstSubCategories = new List<SelectListItem>();
+            objdata.lstNPCSubCategory = lstSubCategories;
             objdata.lstNPCEmployees = NPCR.GetNPCEmployees(groupId);
             objdata.lstOutlets = NPCR.GetOutlets(groupId);
             objdata.Logo = NPCR.GetLogo(groupId);
             return View(objdata);           
+        }
+
+        public ActionResult LoadNPCSubCategory(string CategoryId)
+        {
+            var groupId = Convert.ToString(Session["GroupId"]);
+            var lstSubCategories = NPCR.GetNPCSubCategory(groupId, Convert.ToInt32(CategoryId));
+            return new JsonResult() { Data = lstSubCategories, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
 
 

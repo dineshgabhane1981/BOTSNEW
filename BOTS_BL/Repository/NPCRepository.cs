@@ -84,35 +84,6 @@ namespace BOTS_BL.Repository
             }
             return lstOutlets;
         }
-        public List<SelectListItem> GetNPCCategory(string groupId)
-        {
-            List<SelectListItem> lstNPCCategory = new List<SelectListItem>();
-            List<tblNPCCategory> objData = new List<tblNPCCategory>();
-            //string ConnectionString = string.Empty;
-            string connectionString = CR.GetCustomerConnString(groupId);
-
-            using (var context = new BOTSDBContext(connectionString))
-            {
-                try
-                {
-                    objData = context.tblNPCCategories.ToList();
-
-                    foreach (var item in objData)
-                    {
-                        SelectListItem lstItem = new SelectListItem();
-                        lstItem.Value = Convert.ToString(item.CategoryName);
-                        lstItem.Text = item.CategoryName;
-                        lstNPCCategory.Add(lstItem);
-                    }
-                }
-                catch (Exception ex)
-                {
-                    newexception.AddException(ex, "Hello");
-                }
-            }
-
-            return lstNPCCategory;
-        }
 
         public List<SelectListItem> GetNPCEmployees(string groupId)
         {
@@ -138,8 +109,58 @@ namespace BOTS_BL.Repository
             }
             return lstNPCEmployees;
         }
+        public List<SelectListItem> GetNPCCategory(string groupId)
+        {
+            List<SelectListItem> lstNPCCategory = new List<SelectListItem>();
+            List<tblNPCCategory> objData = new List<tblNPCCategory>();
+            //string ConnectionString = string.Empty;
+            string connectionString = CR.GetCustomerConnString(groupId);
 
-        public List<SelectListItem> GetNPCSubCategory(string groupId)
+            using (var context = new BOTSDBContext(connectionString))
+            {
+                try
+                {
+                    objData = context.tblNPCCategories.ToList();
+
+                    foreach (var item in objData)
+                    {
+                        SelectListItem lstItem = new SelectListItem();
+                        lstItem.Value = Convert.ToString(item.CategoryId);
+                        lstItem.Text = item.CategoryName;
+                        lstNPCCategory.Add(lstItem);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    newexception.AddException(ex, "Hello");
+                }
+            }
+
+            return lstNPCCategory;
+        }
+
+        //public List<SelectListItem> GetNPCSubCategory(string groupId, int CategoryId)
+        //{
+        //    List<SelectListItem> lstNPCCategory = new List<SelectListItem>();
+        //    List<SelectListItem> lstNPCSubCategory = new List<SelectListItem>();
+        //    string connectionString = CR.GetCustomerConnString(groupId);
+        //    using (var context = new BOTSDBContext(connectionString))
+        //    {
+        //        var NPCSubCategory = context.tblNPCSubCategories.Where(x => x.CategoryId == CategoryId ).ToList();
+
+        //        foreach (var item in NPCSubCategory)
+        //        {
+        //            lstNPCSubCategory.Add(new SelectListItem
+        //            {
+        //                Text = item.SubCategoryname,
+        //                Value = Convert.ToString(item.SubCategoryname)
+        //            });
+        //        }
+        //    }
+        //    return lstNPCSubCategory;
+        //}
+
+        public List<SelectListItem> GetNPCSubCategory(string groupId,int cId)
         {
             List<SelectListItem> lstNPCSubCategory = new List<SelectListItem>();
             List<tblNPCSubCategory> objData = new List<tblNPCSubCategory>();
@@ -150,7 +171,7 @@ namespace BOTS_BL.Repository
             {
                 try
                 {
-                    objData = context.tblNPCSubCategories.ToList();
+                    objData = context.tblNPCSubCategories.Where(x => x.CategoryId == cId).ToList();
 
                     foreach (var item in objData)
                     {

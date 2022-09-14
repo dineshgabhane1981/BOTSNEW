@@ -58,7 +58,7 @@
         </div>
         <div class="col-lg-3 col-md-3">
             @*<input type="Text" id="txtEmployeeName" class="input50" />*@
-            @Html.DropDownListFor(model => model.tblNPCDetail.EmployeeName, new SelectList(Model.lstNPCEmployees, "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input50", @id = "txtEmployeeName" })
+            @Html.DropDownListFor(model => model.tblNPCDetail.EmployeeName, new SelectList(Model.lstNPCEmployees, "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input50", @id = "txtEmployeeName"})
         </div>
     </div>
     <div style="padding-right:10px; margin-top:20px;" class="row">
@@ -117,15 +117,39 @@
 <script>
     $(document).ready(function () {
 
+        $("#ddlCategoryList").on("change", function () {
+            alert("inside Change");           
+            LoadSubcategory($("#ddlCategoryList").val());
+        });
+
         RemoveRequiredBorderNPC();
 
     })
+    function LoadSubcategory(CategoryId) {
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("LoadNPCSubCategory", "Login")',
+            data: '{CategoryId: ' + JSON.stringify(CategoryId) + '}',
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (responce) {
+                if (responce != null) {                     
+                        $.each(responce, function () {
+                            $("#ddlSubCategoryName").append($("<option />").val(this.Value).text(this.Text));
+                        });
+                }
+                $("#divLoader").hide();
+
+            },
+        })
+    }
+
     function SaveNPC() {
         var validationStatus1 = ValidateNPC();
         if (validationStatus1) {
         if (/^[6789]\d{9,9}$/.test($("#CustomerMobileNo").val())) {
-            
-            
+
+
                 var NPCData = [];
                 item = {};
                 item["OutletName"] = $("#ddlOutlet").val();
