@@ -1,0 +1,27 @@
+﻿@model OTPPage.ViewModel.OTPViewModel
+@{
+    ViewBag.Title = "OTPPage";
+}
+
+<h2>OTPPage</h2>
+<div class="p-3 m-5 col-lg-6 col-md-6" style=" border: 1px solid grey; border-radius: 10px;margin-top:60px;">
+    <div style="padding-right:10px; margin-top:20px;" class="row">
+        <div class="col-lg-3 col-md-3" style="padding-left:30px;">
+            <b>Group Name</b>
+        </div>
+        <div class="col-lg-3 col-md-3">
+            @Html.DropDownListFor(model => model.tblGroupDetails.GroupName, new SelectList(Model.lstGroupDetails, "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input50", @id = "ddlGroupDetails" })
+        </div>
+    </div>
+    <div style="padding-right:10px;margin-top:20px;" class="row">
+        <div class="col-lg-3 col-md-3" style="padding-left:30px;">
+            <b>Mobile No</b>
+        </div>
+        <div class="col-lg-3 col-md-3">
+            <input type="Text" id="MobileNo" class="input50" />
+        </div>
+    </div>
+    <div style="margin-top:15px;margin-left:5px;text-align:center;"><button type="submit" class="btn btn-primary">Submit</button></div>
+
+</div>
+

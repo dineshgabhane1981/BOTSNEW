@@ -17,7 +17,8 @@ namespace BOTS_BL.Models
             : base("name=CommonDBContext")
         {
         }
-        
+
+        public virtual DbSet<tblGroupDetail> tblGroupDetails { get; set; }
         public virtual DbSet<tblReference> tblReferences { get; set; }
         public virtual DbSet<CommonSMSGateWayMaster> CommonSMSGateWayMasters { get; set; }
         public virtual DbSet<NPCLoginDetail> NPCLoginDetails { get; set; }
@@ -84,7 +85,7 @@ namespace BOTS_BL.Models
         public virtual DbSet<tblErrorLog> tblErrorLogs { get; set; }
         public virtual DbSet<CustomerLoginDetail> CustomerLoginDetails { get; set; }
         public virtual DbSet<OTPDetail> OTPDetails { get; set; }
-        public virtual DbSet<tblGroupDetail> tblGroupDetails { get; set; }
+        
         public virtual DbSet<tblBillingPartner> tblBillingPartners { get; set; }
         public virtual DbSet<tblCategory> tblCategories { get; set; }
         public virtual DbSet<tblCity> tblCities { get; set; }
