@@ -42,19 +42,19 @@
                         SMS Balance/Service Provider
                     </div>
                     <div>
-                        @*<input type="text" id="SMSBalance" class="input50" value="@((ViewBag.SMSBalance))" />*@
+                        <input type="text" id="SMSBalance" class="input50" value="@((ViewBag.SMSBalance))" hidden />
                         <span id="SMSBalance">@((ViewBag.SMSBalance)) / @((ViewBag.SMSVendor))</span>
                     </div>
                 </div>
 
                 @*<div class="row mt-2" style="margin-top : 20px;">
-                        <div class="col-md-3 col-xl-3" style="margin-left: 18px; margin-top: 20px;">
-                            Service Provider
-                        </div>
-                        <div>
-                            <input type="text" id="SMSVendor" class="input50" style="margin-top : 20px;" value="@((ViewBag.SMSVendor))" />
-                        </div>
-                    </div>*@
+            <div class="col-md-3 col-xl-3" style="margin-left: 18px; margin-top: 20px;">
+                Service Provider
+            </div>
+            <div>
+                <input type="text" id="SMSVendor" class="input50" style="margin-top : 20px;" value="@((ViewBag.SMSVendor))" />
+            </div>
+        </div>*@
 
 
                 <div class="row mt-2" style="margin-top : 20px;">
@@ -167,6 +167,12 @@
                 <div class="row" style="margin: 20px;">
                     <div class="col-md-8 col-xl-8">
                         <div class="custom-control custom-switch">
+                            <input type="checkbox" class="custom-control-input" id="ScheduleNow" value="1" checked>
+                            <label class="custom-control-label" style="cursor:pointer !important;" for="ScheduleNow"><b>Schedule Now</b></label>
+                        </div>
+                    </div>
+                    <div class="col-md-8 col-xl-8">
+                        <div class="custom-control custom-switch">
                             <input type="checkbox" class="custom-control-input" id="ScheduleSwitch" value="0" onchange="ShowScheduledate();">
                             <label class="custom-control-label" style="cursor:pointer !important;" for="ScheduleSwitch"><b>Schedule Date & Time</b></label>
                         </div>
@@ -220,17 +226,19 @@
                     </div>
                 </div>
 
-                <div class="tw-ets tw-ess tw-src-ltr" id="tw-ob">
-                </div>
-                <div id="GoogleElement" style="margin-left:130px;">
+                @*<div id="GoogleElement" style="margin-left:130px;">
+                </div>*@
+
+                <div id="GooleLink"  style="margin-left:40px; margin-top:20px; display:none">
+                    <a href="https://translate.google.co.in/" target="_blank">Google Translator</a>
                 </div>
 
                 @*<div class="row" style="margin-top : 20px;" >
-                        <div class="button">
-                            <button type="button" style="margin-left:25px;" id="translControl" class="btn btn-primary" onclick="auto_transliterate_all();" value="Auto Transliterate"><b>Click</b></button>
-                        </div>
-                    </div>*@
-                <div class="col-md-6 col-xl-6">
+            <div class="button">
+                <button type="button" style="margin-left:25px;" id="translControl" class="btn btn-primary" onclick="auto_transliterate_all();" value="Auto Transliterate"><b>Click</b></button>
+            </div>
+        </div>*@
+                <div class="col-md-6 col-xl-6" style="margin-top:20px;">
                     <div class="button">
                         <button type="button" id="btnSave" style="margin-left:25px;" class="btn btn-primary" onclick="SaveValidate();"><b>SAVE</b></button>
                         <button type="button" id="btnDownload" style="margin-left:15px; display:none" class="btn btn-primary" onclick="DownLoad();"><b>DOWNLOAD</b></button>
@@ -426,6 +434,18 @@
 
 
 
+    //var objsts = $("#WASMSScript");
+    //var english = /^[A-Za-z0-9]*$/;
+
+    //$.each(objsts, function () {
+    //    var $this = $(this);
+    //    if (!english.test($this.html()))
+    //        /* $this.addClass('active');*/
+    //        alert("Hello");
+    //});
+
+
+
     function SMStypeValidate() {
         if (document.getElementById("rdnWA").checked) {
             $("#WAPanel").show();
@@ -442,10 +462,43 @@
     }
 
     function HandleChange() {
-        if (document.getElementById("SMSScript")!= '') {
-            $("#SMSScript").val('');
+        var val = $("#SMSScript").val();
+        var english = /^[A-Za-z][A-Za-z0-9!$%&*()_+\-=\[\]{};':"\\|,.<>\/?\#\ \n]*$/; //   /^[A-Za-z][A-Za-z0-9]*$/   /^[a-zA-Z0-9!$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]*$/
+
+        if (document.getElementById("rdnText").checked) {
+            $("#GooleLink").hide();
+            if (val != '') {
+                if (english.test(val) == false) {
+                    cuteAlert({
+                        type: "error",
+                        title: "Error Title",
+                        message: "Please Text characters",
+                        buttonText: "Okay"
+                    })
+                }
+            }
+        }
+        else {
+            $("#GooleLink").show();
+            if (val != '') {
+                if (english.test(val) == true) {
+                    cuteAlert({
+                        type: "error",
+                        title: "Error Title",
+                        message: "Please type Vernacular Lang",
+                        buttonText: "Okay"
+                    })
+                }
+            }
         }
     }
+
+    $("#SMSScript").focusout(function () {
+        var val = $("#SMSScript").val();
+        if (val != '') {
+            var english = /^[A-Za-z][A-Za-z0-9!$%&*()_+\-=\[\]{};':"\\|,.<>\/?\#\ \n]*$/ ; //   /^[A-Za-z][A-Za-z0-9]*$/   /^[a-zA-Z0-9!$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]*$/
+        }
+    });
 
     function BaseCalc() {
             var val = document.getElementById("BaseType").value;
@@ -513,6 +566,10 @@
         year = d.getFullYear();
         var Date1 = year + '-' + month + '-' + day;
 
+        var val = $("#SMSScript").val();
+        if (val != '') {
+            var english = /^[A-Za-z][A-Za-z0-9!$%&*()_+\-=\[\]{};':"\\|,.<>\/?\#\ \n]*$/;//'^[\w?£!1$"¥#è?¤é%ù&ì\\ò(Ç)*:Ø+;ÄäøÆ,<LÖlöæ\-=ÑñÅß.>ÜüåÉ/§à¡¿\']+$';// //   /^[A-Za-z][A-Za-z0-9]*$/   /^[a-zA-Z0-9!$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]*$/
+        }
 
         var Script = $("#SMSScript").val();
         var StartDate = $("#txtEnrollfromdt").val();
@@ -534,24 +591,17 @@
             ScriptType = $("#rdnUnicode").val();
         }
 
-        if (ScriptType == '1') {
+        if ((ScriptType == '1') && (english.test(val) == true)) {
             TempCalc = 159;
         }
-        else if (ScriptType == '2'){
+        else if ((ScriptType == '2')&& (english.test(val) == false)){
             TempCalc = 69;
         }
 
         var SMSBalance = parseInt($("#SMSBalance").val());
         var CharCount = parseInt($("#current").text());
         a = Math.ceil(CharCount / TempCalc);
-        TotalCredits = a * parseInt(FiltCountnum);
-
-
-        //alert(CharCount);
-        //alert(TempCalc);
-        //alert(a);
-
-
+        TotalCredits = a * parseFloat(FiltCountnum.replace(/,/g, ''));
 
         if (AllCount == "") {
 
@@ -624,6 +674,22 @@
                 type: "error",
                 title: "Error Title",
                 message: "Template ID is Empty",
+                buttonText: "Okay"
+            })
+        }
+        else if ((english.test(val) == false) && (ScriptType == '1')) {
+            cuteAlert({
+                type: "error",
+                title: "Error Title",
+                message: "Script is Unicode and SMS Type is Text",
+                buttonText: "Okay"
+            })
+        }
+        else if ((english.test(val) == true) && (ScriptType == '2')) {
+            cuteAlert({
+                type: "error",
+                title: "Error Title",
+                message: "Script is Text and SMS Type is Unicode",
                 buttonText: "Okay"
             })
         }
@@ -1055,8 +1121,46 @@
             });
     }
 
+    $("#ScheduleNow").change(function () {
+        if ($("#ScheduleNow").is(':checked') == true) {
+            alert("S1" + $("#ScheduleNow").is(':checked'));
+            alert("S2" + $("#ScheduleSwitch").is(':checked'));
+            if ($("#ScheduleSwitch").is(':checked') == true) {
+                $("#ScheduleSwitch").attr('Checked', false);
+                alert("S2" + $("#ScheduleSwitch").is(':checked'));
+            }
+
+        }
+        else {
+            alert("S1"+$("#ScheduleNow").is(':checked'));
+            alert("S2"+$("#ScheduleSwitch").is(':checked'));
+            if ($("#ScheduleSwitch").is(':checked') == false) {
+                $("#ScheduleSwitch").attr('Checked', true);
+                alert("S2" + $("#ScheduleSwitch").is(':checked'));
+                /*$('#SchedPick').toggle();*/
+            }
+        }
+    });
+
     function ShowScheduledate() {
-        $('#SchedPick').toggle();
+        alert("Inside Show");
+        if ($("#ScheduleSwitch").is(':checked') == true) {
+            alert("S2"+$("#ScheduleSwitch").is(':checked'));
+            alert("S1" + $("#ScheduleNow").is(':checked'));
+            if ($("#ScheduleNow").is(':checked') == true) {
+                $("#ScheduleNow").attr('Checked', false);
+                alert("S1" + $("#ScheduleNow").is(':checked'));
+                /*$('#SchedPick').toggle();*/
+            }
+        }
+        else {
+            alert("S2" + ("#ScheduleSwitch").is(':checked'));
+            alert("S1" + $("#ScheduleNow").is(':checked'));
+            if ($("#ScheduleNow").is(':checked') == false) {
+                $("#ScheduleNow").attr('Checked', true);
+                alert("S1" + $("#ScheduleNow").is(':checked'));
+            }
+        }
     }
     function Showdatetime() {
          $('#datetimepicker').datetimepicker();

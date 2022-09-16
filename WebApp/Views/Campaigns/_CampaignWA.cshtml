@@ -137,10 +137,10 @@
         <input type="file" id="FileUpload1" style="margin-left: 30px;" />
         <input type="button" id="btnUpload" class="btn btn-primary" style="margin-left: 10px; background-color: #2651be;" value="Upload" />
     </div>
-    <div class="col-md-12" style="margin:20px;" id="UploadImglink">
+    <div class="col-md-12" style="margin: 20px; display: none" id="UploadImglink">
         @*display:none*@
         <span id="WAText">Upload Img Link:</span>
-        <a id="a" href="#"><span id="WAUploadImg"></span></a>
+        <a id="a" href="#" target="_blank"><span id="WAUploadImg"></span></a>
     </div>
 
     <div class="row" style="margin: 20px;" id="WAScriptText">
@@ -192,7 +192,8 @@
     @*</div>*@
 </div>
 
-<script>
+<script>  
+
     function WABaseCalc() {
         var val = document.getElementById("WABaseType").value;
         if (val == 4) {
@@ -620,6 +621,10 @@
                             $("#WAbtnSendTestSMS").show();
                             $("#WATestNumbers").show();
                             $("#WAbtnSave").prop('disabled', true);
+                            
+                            $("#rdnTextWA").prop('disabled', true);
+                            $("#rdnImageWA").prop('disabled', true);
+                            $("#rdnImageCaptionWA").prop('disabled', true);
                         })
                         $("#divLoader").hide();
                         //if (SMSType == 1) {
@@ -711,11 +716,11 @@
                                         message: "Data Uploaded Successfully!",
                                         buttonText: "Okay"
                                     })
+                                   
                                     $("#divLoader").hide();
                                     $("#WAUploadImg").text(code);
                                     $("a").attr("href", Uri);
                                     $("#UploadImglink").show();
-
                                 }
                                 else {
                                     cuteAlert({
