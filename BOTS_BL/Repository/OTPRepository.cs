@@ -12,47 +12,94 @@ namespace BOTS_BL.Repository
     {
         Exceptions newexception = new Exceptions();
         CustomerRepository CR = new CustomerRepository();
+        CustomerRepository objCustRepo = new CustomerRepository();
 
 
-        //public string CheckLogin(tblOTPDetail objData)
+
+        public List<SelectListItem> GetGroupDetails()
+        {
+            List<SelectListItem> lstGroups= new List<SelectListItem>();
+            using (var context = new CommonDBContext())
+            {
+                var GroupDetails = context.GroupDetail.Where(x => x.ActiveStatus == "yes").ToList();
+
+                foreach (var item in GroupDetails)
+                {
+                    lstGroups.Add(new SelectListItem
+                    {
+                        Text = item.GroupName,
+                        Value = Convert.ToString(item.GroupId)
+                       
+                    });
+                }
+            }
+            return lstGroups;
+
+
+        }
+
+        //public MemberData GetOTPData(string GroupId, string MobileNo)
         //{
-        //    string GroupId = "";
-        //    using (var context = new DBTest())
+        //    MemberData objMemberData = new MemberData();
+        //    try
         //    {
-        //        GroupId = context.tblOTPDetails.Where(x => x.LoginId == objData.LoginId && x.Password == objData.Password).Select(y => y.GroupId).FirstOrDefault();
+        //        GroupDetails objgroupDetails = new GroupDetails();
+        //        //CustomerDetail objCustomerDetail = new CustomerDetail();
+        //        OTPMaintenance objOTP = new OTPMaintenance();
+        //        //string connStr = objCustRepo.GetCustomerConnString(GroupId);
+        //        using (var context = new CommonDBContext())
+        //        {
+        //            objOTP = context.OTPMaintenances.Where(x => x.MobileNo == MobileNo).OrderByDescending(y => y.Datetime).FirstOrDefault();
+        //        }
+        //        if (objOTP != null)
+        //        {
+
+        //            objMemberData.MobileNo = objOTP.OTP;
+        //            objMemberData.EnrolledOn = Convert.ToString(objOTP.Datetime);
+        //            var OutletId = objOTP.CounterId.Substring(0, objOTP.CounterId.Length - 2);
+        //            using (var context = new CommonDBContext())
+        //            {
+        //                objMemberData.EnrolledOutletName = context.OutletDetails.Where(x => x.OutletId == OutletId).Select(y => y.OutletName).FirstOrDefault();
+        //            }
+        //        }
         //    }
-        //    return GroupId;
+        //    catch (Exception ex)
+        //    {
+        //        newexception.AddException(ex, GroupId);
+        //    }
+        //    return objMemberData;
         //}
 
 
-        public List<SelectListItem> GetGroupDetails(string groupId)
+        public MemberData GetOTPData(string GroupId, string MobileNo)
         {
-            List<SelectListItem> lstGroupDetails = new List<SelectListItem>();
-            List<tblGroupDetail> objData = new List<tblGroupDetail>();
-            //string ConnectionString = string.Empty;
-            string connectionString = CR.GetCustomerConnString(groupId);
-
-            using (var context = new BOTSDBContext(connectionString))
+            MemberData objMemberData = new MemberData();
+            try
             {
-                try
+                CustomerDetail objCustomerDetail = new CustomerDetail();
+                OTPMaintenance objOTP = new OTPMaintenance();
+                string connStr = objCustRepo.GetCustomerConnString(GroupId);
+                using (var contextNew = new BOTSDBContext(connStr))
                 {
-                    objData = context.tblGroupDetails.ToList();
+                    objOTP = contextNew.OTPMaintenances.Where(x => x.MobileNo == MobileNo).OrderByDescending(y => y.Datetime).FirstOrDefault();
+                }
+                if (objOTP != null)
+                {
 
-                    foreach (var item in objData)
+                    objMemberData.MobileNo = objOTP.OTP;
+                    objMemberData.EnrolledOn = Convert.ToString(objOTP.Datetime);
+                    var OutletId = objOTP.CounterId.Substring(0, objOTP.CounterId.Length - 2);
+                    using (var contextNew = new BOTSDBContext(connStr))
                     {
-                        SelectListItem lstItem = new SelectListItem();
-                        lstItem.Value = Convert.ToString(item.GroupId);
-                        lstItem.Text = item.GroupName;
-                        lstGroupDetails.Add(lstItem);
+                        objMemberData.EnrolledOutletName = contextNew.OutletDetails.Where(x => x.OutletId == OutletId).Select(y => y.OutletName).FirstOrDefault();
                     }
                 }
-                catch (Exception ex)
-                {
-
-                }
             }
-
-            return lstGroupDetails;
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, GroupId);
+            }
+            return objMemberData;
         }
     }
 }
