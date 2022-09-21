@@ -144,6 +144,8 @@
     <Compile Include="ChitaleException.cs" />
     <Compile Include="Class1.cs" />
     <Compile Include="Exceptions.cs" />
+    <Compile Include="GroupDetail.cs" />
+    <Compile Include="Model12.cs" />
     <Compile Include="Models\BrandDetail.cs" />
     <Compile Include="Models\BulkUploadCustList.cs" />
     <Compile Include="Models\BurnRule.cs" />
@@ -216,6 +218,7 @@
     <Compile Include="Models\CommonDB\DatabaseDetail.cs" />
     <Compile Include="Models\CommonDB\DiscussionCount.cs" />
     <Compile Include="Models\CommonDB\GroupConfig.cs" />
+    <Compile Include="Models\CommonDB\GroupDetail.cs" />
     <Compile Include="Models\CommonDB\ListOfGroup.cs" />
     <Compile Include="Models\CommonDB\MobileAppCommSecurityKey.cs" />
     <Compile Include="Models\CommonDB\MobileAppOnceInMonthData.cs" />
@@ -278,6 +281,7 @@
     <Compile Include="Models\FeedBack\KonwAboutYouMaster.cs" />
     <Compile Include="Models\FeedBack\LocationMaster.cs" />
     <Compile Include="Models\GroupDetail.cs" />
+    <Compile Include="Models\GroupDetails1.cs" />
     <Compile Include="Models\GroupWiseDetails.cs" />
     <Compile Include="Models\HeatMaps\DaywiseHourwise.cs" />
     <Compile Include="Models\ITOps\CancelTxnModel.cs" />
@@ -381,8 +385,10 @@
     <Compile Include="Repository\OnBoarding\CustomerOnBoardingRepository.cs" />
     <Compile Include="Repository\OnBoarding\OnBoardingRepository.cs" />
     <Compile Include="Repository\OtherReportsRepository.cs" />
+    <Compile Include="Repository\OTPRepository.cs" />
     <Compile Include="Repository\ParticipantRepository.cs" />
     <Compile Include="Repository\PointsLedgerRepository.cs" />
+    <Compile Include="Repository\PromoCampaignRepository.cs" />
     <Compile Include="Repository\RedemptionRepository.cs" />
     <Compile Include="Repository\ReferencesRepository.cs" />
     <Compile Include="Repository\ReportsRepository.cs" />
