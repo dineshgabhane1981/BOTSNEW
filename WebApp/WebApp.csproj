@@ -192,6 +192,7 @@
     <Compile Include="App_Start\MenuHelper.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\SessionTimeOut.cs" />
+    <Compile Include="Controllers\BOPromoCampaignController.cs" />
     <Compile Include="Controllers\botsapiController.cs" />
     <Compile Include="Controllers\CampaignsController.cs" />
     <Compile Include="Controllers\CustomerManagementController.cs" />
@@ -238,6 +239,7 @@
     <Compile Include="ViewModel\FeedbackDashboardViewModel.cs" />
     <Compile Include="ViewModel\FeedbackGetFeedbackViewModel.cs" />
     <Compile Include="ViewModel\GroupConfigDetailsViewModel.cs" />
+    <Compile Include="ViewModel\PromoCampaignViewModel.cs" />
     <Compile Include="ViewModel\TestingModuleViewModel.cs" />
     <Compile Include="ViewModel\OnBoardingSalesViewModel.cs" />
     <Compile Include="ViewModel\OtherReportProductwiseViewModel.cs" />
@@ -515,6 +517,7 @@
     <Content Include="Views\TestingModule\_PointRuleDetails.cshtml" />
     <Content Include="Views\CustomerOnBoarding\CustomerTerms.cshtml" />
     <Content Include="Views\Campaigns\_CampaignWA.cshtml" />
+    <Content Include="Views\BOPromoCampaign\GroupList.cshtml" />
     <None Include="_bin_deployableAssemblies\x86\sqlcese40.dll" />
     <None Include="_bin_deployableAssemblies\x86\sqlceqp40.dll" />
     <None Include="_bin_deployableAssemblies\x86\sqlceme40.dll" />

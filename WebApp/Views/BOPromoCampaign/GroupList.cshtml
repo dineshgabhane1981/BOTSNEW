@@ -1,0 +1,79 @@
+﻿@model WebApp.ViewModel.PromoCampaignViewModel
+@{
+    ViewBag.Title = "GroupList";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="app-main__inner" id="dvall">
+    <div class="container-fluid pt-3 pl-3 pr-3 pb-3">
+        <div class="mb-3 pr-3 pt-3 pl-3 card" style="padding-bottom:20px;">
+            <div class="row mt-2">
+                <div class="col-md-2 col-xl-2">
+                    GroupName
+                </div>
+                <div style="margin-right:10px;">
+                    <select id="ChooseLeft" multiple="multiple" style="height: 300px; width: 200px;" @Html.ListBox("SelectGroupName", new MultiSelectList(Model.lstGroupList, "Value", "Text"), new { @class = "input50", @style = "width:100%", Multiple = "multiple", @id = "ddlGroupName" }) </select>
+
+                </div>
+                <div style="margin-top:140px;margin-right:130px;">
+                    <input id="ShiftRight" type="button" value="ShiftRight(>>)" onclick="MoveRight" style="margin-left:30px;" />
+                    <input id="ShiftLeft" type="button" value="ShiftLeft(<<) " onclick="MoveLeft"/>
+                </div>
+                <div>
+                    <select id="ChooseRight" multiple="multiple" style="height:300px;width:200px;">
+                    </select>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+</div>
+
+<script src="~/Scripts/jquery-ui-1.12.1.js"></script>
+<script src="~/Scripts/jquery-ui-1.12.1.min.js"></script>
+<link href="~/Content/themes/base/jquery-ui.min.css" rel="stylesheet" />
+<link href="~/Content/themes/base/jquery-ui.css" rel="stylesheet" />
+
+<script>
+    $(function () {
+        $("#ShiftRight,#ShiftLeft").click(function (event) {
+            var ID = $(event.target).attr("ID");
+            var ChooseFrom = ID == "ShiftRight" ? "#ChooseLeft" : "#ChooseRight";
+            var moveTo = ID == "ShiftRight" ? "#ChooseRight" : "#ChooseLeft";
+            var SelectData = $(ChooseFrom + " :selected").toArray();
+            $(moveTo).append(SelectData);
+            SelectData.remove;
+        });
+    });
+
+    $(document).ready(function () {
+        $('#txtGroupName').change(function () {
+            $("#ChooseLeft").empty();
+            $("#ChooseRight").empty();
+            let myOptions = [
+
+                { "ColumnId": 1, "ColumnName": "Group Name" }
+            ];
+            myOptions.forEach(function (e, i) {
+                $('#ChooseLeft').append($('<option></option>').val(e.ColumnId).text(e.ColumnName));
+            });
+            $('#divcolumnlist').show();
+
+
+        }
+
+    function GetOutletList() {
+                var returnStatus = true;
+
+                var Array = [];
+                var ArrayColumnName = [];
+                $('#ChooseRight :selected').each(function (i, selected) {
+                    Array.push($(selected).val());
+                    ArrayColumnName.push($(selected).text());
+                });
+            }
+    
+</script>
+
