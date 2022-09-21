@@ -368,7 +368,6 @@
     <Content Include="Content\bootstrap.css.map" />
     <Content Include="Content\bootstrap-theme.min.css.map" />
     <Content Include="Content\bootstrap-theme.css.map" />
-    <Content Include="App_Browsers\qt.browser" />
     <Content Include="Scripts\datetimepicker-master\.gitignore" />
     <Content Include="Scripts\datetimepicker-master\.travis.yml" />
     <Content Include="Scripts\datetimepicker-master\bower.json" />
@@ -666,6 +665,7 @@
     <None Include="_bin_deployableAssemblies\x86\Microsoft.VC90.CRT\Microsoft.VC90.CRT.manifest" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="App_Browsers\" />
     <Folder Include="App_Data\" />
     <Folder Include="CustomerDocuments\" />
     <Folder Include="Models\" />

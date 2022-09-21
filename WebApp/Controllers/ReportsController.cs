@@ -527,6 +527,7 @@ namespace WebApp.Controllers
             totalObj.PointsBurned = bpts;
             totalObj.OutletName = "<b>Total</b>";
             totalObj.MobileNo = "-";
+            totalObj.MaskedMobileNo = "-";
             totalObj.MemberName = "-";
             totalObj.Type = "-";
             totalObj.InvoiceNo = "-";

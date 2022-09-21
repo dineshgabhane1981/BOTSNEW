@@ -144,8 +144,6 @@
     <Compile Include="ChitaleException.cs" />
     <Compile Include="Class1.cs" />
     <Compile Include="Exceptions.cs" />
-    <Compile Include="GroupDetail.cs" />
-    <Compile Include="Model12.cs" />
     <Compile Include="Models\BrandDetail.cs" />
     <Compile Include="Models\BulkUploadCustList.cs" />
     <Compile Include="Models\BurnRule.cs" />
@@ -281,7 +279,6 @@
     <Compile Include="Models\FeedBack\KonwAboutYouMaster.cs" />
     <Compile Include="Models\FeedBack\LocationMaster.cs" />
     <Compile Include="Models\GroupDetail.cs" />
-    <Compile Include="Models\GroupDetails1.cs" />
     <Compile Include="Models\GroupWiseDetails.cs" />
     <Compile Include="Models\HeatMaps\DaywiseHourwise.cs" />
     <Compile Include="Models\ITOps\CancelTxnModel.cs" />

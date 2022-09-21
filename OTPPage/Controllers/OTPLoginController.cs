@@ -43,7 +43,7 @@ namespace OTPPage.Controllers
         {
             var groupId = "1051";
             OTPViewModel objdata = new OTPViewModel();
-            objdata.lstGroupDetails = OPR.GetGroupDetails(groupId);
+            objdata.lstGroupDetails = OPR.GetGroupDetails();
             return View(objdata);
         }
     }

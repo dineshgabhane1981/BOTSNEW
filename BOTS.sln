@@ -21,6 +21,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Feedback", "Feedback\Feedba
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NPC", "NPC\NPC.csproj", "{F7816416-C24E-4107-98A4-C9AABB306491}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OTPPage", "OTPPage\OTPPage.csproj", "{58CD83B2-B49C-4ACC-8D6D-FE0523CBBF2C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -59,6 +61,10 @@ Global
 		{F7816416-C24E-4107-98A4-C9AABB306491}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F7816416-C24E-4107-98A4-C9AABB306491}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F7816416-C24E-4107-98A4-C9AABB306491}.Release|Any CPU.Build.0 = Release|Any CPU
+		{58CD83B2-B49C-4ACC-8D6D-FE0523CBBF2C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{58CD83B2-B49C-4ACC-8D6D-FE0523CBBF2C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{58CD83B2-B49C-4ACC-8D6D-FE0523CBBF2C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{58CD83B2-B49C-4ACC-8D6D-FE0523CBBF2C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
