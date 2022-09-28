@@ -44,6 +44,10 @@ namespace LeadGeneration.ViewModel
         {
             return new SelectListItem[4] { new SelectListItem() { Text = "Manger/Cashier", Value = "Manger/Cashier" }, new SelectListItem() { Text = "Owner/Partner", Value = "Owner/Partner" }, new SelectListItem() { Text = "Decision Maker", Value = "DecisionMaker" }, new SelectListItem() { Text = "Others", Value = "Others" } };
         }
+        public SelectListItem[] LeadType()
+        {
+            return new SelectListItem[3] { new SelectListItem() { Text = "Hot", Value = "Hot" }, new SelectListItem() { Text = "Warm", Value = "Warm" }, new SelectListItem() { Text = "Cold", Value = "Cold" } };
+        }
         public List<SelectListItem> lstMonthlist { get; set; }
         public List<SelectListItem> lstYearlist { get; set; }
 

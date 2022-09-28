@@ -171,6 +171,25 @@ namespace BOTS_BL.Repository
             return lstAllFroup;
         }
 
+        public List<SelectListItem> GetAllActiveGroups()
+        {
+            List<SelectListItem> lstAllFroup = new List<SelectListItem>();
+            using (var context = new CommonDBContext())
+            {
+                var GroupDetails = context.tblGroupDetails.Where(x=>x.IsActive==true && x.IsLive==true).OrderBy(y=>y.GroupName).ToList();
+
+                foreach (var item in GroupDetails)
+                {
+                    lstAllFroup.Add(new SelectListItem
+                    {
+                        Text = item.GroupName,
+                        Value = Convert.ToString(item.GroupId)
+                    });
+                }
+            }
+            return lstAllFroup;
+        }
+
         public List<SelectListItem> GetAllRefferedCategory()
         {
             List<SelectListItem> lstAllRefferedCategory = new List<SelectListItem>();

@@ -17,6 +17,7 @@ namespace BOTS_BL.Models
             : base("name=CommonDBContext")
         {
         }
+        public virtual DbSet<tblRenewalData> tblRenewalDatas { get; set; }
         public virtual DbSet<OutletDetail> OutletDetails { get; set; }
         public virtual DbSet<OTPMaintenance> OTPMaintenances { get; set; }
         public virtual DbSet<GroupDetails> GroupDetail { get; set; }

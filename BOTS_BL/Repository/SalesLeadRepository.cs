@@ -176,14 +176,14 @@ namespace BOTS_BL.Repository
 
                                 }).ToList();
 
-                var lstsalesleadold = (from c in context.SALES_tblLeads                                       
+                var lstsalesleadold = (from c in context.SALES_tblLeads
                                        join ct in context.tblCities on c.City equals ct.CityId.ToString()
                                        join cd in context.CustomerLoginDetails on c.AssignedLead equals cd.LoginId
                                        join bp in context.tblBillingPartners on c.BillingPartner equals bp.BillingPartnerId.ToString()
                                        into ps
                                        from bp in ps.DefaultIfEmpty()
                                        where c.FollowupDate < today && c.UpdatedDate < today
-                                       && c.LeadStatus != "NotInterested" && c.MeetingType!= "salesdone" && c.MeetingType != "Closure"
+                                       && c.LeadStatus != "NotInterested" && c.MeetingType != "salesdone" && c.MeetingType != "Closure"
                                        select new SalesLead
                                        {
                                            LeadId = c.LeadId,
@@ -306,7 +306,7 @@ namespace BOTS_BL.Repository
         }
 
         public List<SalesLead> GetSearchedLeads(string MobileNo, string BusinessName, string FrmDate, string ToDate, string LeadStatus,
-            string ContactType, string MeetingType, string City, string BillingPartner, string SalesManager)
+            string ContactType, string MeetingType, string City, string BillingPartner, string SalesManager,string LeadType)
         {
             List<SalesLead> lstLeads = new List<SalesLead>();
             List<SalesLead> lstsaleslead = new List<SalesLead>();
@@ -352,7 +352,8 @@ namespace BOTS_BL.Repository
                                 UpdatedDate = c.UpdatedDate,
                                 CityName = ct.CityName,
                                 AssignedLead = c.AssignedLead,
-                                SalesManagerName = cd.UserName
+                                SalesManagerName = cd.UserName,
+                                LeadType = c.LeadType
                             }).ToList();
 
                 if (!string.IsNullOrEmpty(MobileNo))
@@ -393,6 +394,10 @@ namespace BOTS_BL.Repository
                     DateTime frmdt = Convert.ToDateTime(FrmDate).Date;
                     DateTime todt = Convert.ToDateTime(ToDate).Date;
                     lstLeads = lstLeads.Where(x => x.AddedDate >= frmdt && x.AddedDate <= todt).ToList();
+                }
+                if(!string.IsNullOrEmpty(LeadType))
+                {
+                    lstLeads = lstLeads.Where(x => x.LeadType == LeadType).ToList();
                 }
             }
 
@@ -526,13 +531,14 @@ namespace BOTS_BL.Repository
             List<SalesCount> lstsalescount = new List<SalesCount>();
             List<SALES_tblLeadTracking> lstleadtracking = new List<SALES_tblLeadTracking>();
             List<SALES_tblLeads> lstleads = new List<SALES_tblLeads>();
-            try {
+            try
+            {
                 using (var context = new CommonDBContext())
                 {
                     if (!string.IsNullOrEmpty(salesmanager))
                     {
                         objsalescount.NoOfMeeting = context.SALES_tblLeadTracking.Where(x => x.MeetingType == "1stMeeting" && x.AddedDate >= Fromdt && x.AddedDate <= Todt && x.AssignedLead == salesmanager).Count();
-                        
+
                         decimal? totalamt = (decimal?)0.00;
                         var grouprecord = (from d in context.BOTS_TblDealDetails
                                            join g in context.BOTS_TblGroupMaster
@@ -601,7 +607,7 @@ namespace BOTS_BL.Repository
                                                              r.GroupId equals d.GroupId
                                                              join b in context.tblBillingPartners on
                                                              s.BillingPartner equals b.BillingPartnerId.ToString()
-                                                             where (g.CreatedBy == salesmanager && g.CreatedDate >= Fromdt && g.CreatedDate <= Todt && g.CustomerStatus != "Draft" )
+                                                             where (g.CreatedBy == salesmanager && g.CreatedDate >= Fromdt && g.CreatedDate <= Todt && g.CustomerStatus != "Draft")
                                                              select new salesCountDetails
                                                              {
                                                                  LeadId = s.LeadId,
@@ -609,20 +615,20 @@ namespace BOTS_BL.Repository
                                                                  BusinessName = r.BrandName,
                                                                  PaymentFrequency = d.PaymentFrequency,
                                                                  Product = r.BOProduct,
-                                                                 BillingPartner = r.BillingProduct,                                               
+                                                                 BillingPartner = r.BillingProduct,
                                                                  OutletName = r.NoOfEnrolled,
                                                                  AdvanceAmount = d.AdvanceAmount,
                                                                  AmountReceived = d.AmountReceived
 
-                                                             }).ToList();                      
+                                                             }).ToList();
 
-                        
 
-                        }
+
+                    }
                     else
                     {
                         objsalescount.NoOfMeeting = context.SALES_tblLeadTracking.Where(x => x.MeetingType == "1stMeeting" && x.AddedDate >= Fromdt && x.AddedDate <= Todt).Count();
-                       
+
                         decimal? totalamt = (decimal?)0.00;
                         var grouprecord = (from d in context.BOTS_TblDealDetails
                                            join g in context.BOTS_TblGroupMaster
@@ -699,7 +705,7 @@ namespace BOTS_BL.Repository
                                                                  BusinessName = r.BrandName,
                                                                  PaymentFrequency = d.PaymentFrequency,
                                                                  Product = r.BOProduct,
-                                                                 BillingPartner = r.BillingProduct,                                                                
+                                                                 BillingPartner = r.BillingProduct,
                                                                  OutletName = r.NoOfEnrolled,
                                                                  AdvanceAmount = d.AdvanceAmount,
                                                                  AmountReceived = d.AmountReceived
@@ -708,7 +714,7 @@ namespace BOTS_BL.Repository
                 }
                 lstsalescount.Add(objsalescount);
 
-                
+
             }
             catch (Exception ex)
             {

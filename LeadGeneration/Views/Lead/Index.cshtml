@@ -61,7 +61,10 @@
                         </div>
                     </div>
                     <div class="row">
+                        <div class="col-md-6 col-sm-6">
+                            Lead Type <br />@Html.DropDownListFor(model => model.sALES_TblLeads.LeadType, new SelectList(Model.LeadType(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input100", @id = "ddlLeadType" })
 
+                        </div>
                         @if (userDetails != null)
                         {
                             if (userDetails.LoginType == "1" || userDetails.LoginType == "5")
@@ -250,6 +253,8 @@
         item["MeetingType"] = $("#ddlmeetingtype").val();
         item["City"] = $("#ddlCity").val();
         item["SalesManager"] = $("#ddlSalesManager").val();
+        item["LeadType"] = $("#ddlLeadType").val();
+        
 
         SeardhData.push(item);
         var data = JSON.stringify(SeardhData);

@@ -404,19 +404,29 @@ namespace WebApp.Controllers
 
         public ActionResult RenewalData()
         {
-            List<RenewalData> lstRenewalData = new List<RenewalData>();
+            
+            List<SelectListItem> lstGroups = new List<SelectListItem>();
             try
             {
-                lstRenewalData = SPR.GetRenewalData();
+                //lstRenewalData = SPR.GetRenewalData();
+                lstGroups = CR.GetAllActiveGroups();
+                
+                ViewBag.Groups = lstGroups;
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex, "Single Page");
+                newexception.AddException(ex, "Customer Renewal");
             }
 
-            lstRenewalData.OrderByDescending(x => x.RenewalDate).ToList();
-            return View(lstRenewalData);
+            
+            return View("CustomerRenewal");
         }
 
+        public ActionResult GetGroupRenewalData(string GroupId)
+        {
+            List<tblRenewalData> lstRenewalData = new List<tblRenewalData>();
+            lstRenewalData = SPR.GetRenewalByGroup(GroupId);
+            return PartialView("_CustomerRenewalData", lstRenewalData);
+        }
     }
 }

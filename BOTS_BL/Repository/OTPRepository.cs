@@ -13,7 +13,8 @@ namespace BOTS_BL.Repository
         Exceptions newexception = new Exceptions();
         CustomerRepository CR = new CustomerRepository();
         CustomerRepository objCustRepo = new CustomerRepository();
-        private object contextNew;
+
+
 
         public List<SelectListItem> GetGroupDetails()
         {
@@ -81,7 +82,6 @@ namespace BOTS_BL.Repository
                 using (var contextNew = new BOTSDBContext(connStr))
                 {
                     objOTP = contextNew.OTPMaintenances.Where(x => x.MobileNo == MobileNo).OrderByDescending(y => y.Datetime).FirstOrDefault();
-                    //objOTP = contextNew.OTPMaintenances.Where(x => x.MobileNo == MobileNo).FirstOrDefault();
                 }
                 if (objOTP != null)
                 {
@@ -89,15 +89,11 @@ namespace BOTS_BL.Repository
                     objMemberData.MobileNo = objOTP.OTP;
                     objMemberData.EnrolledOn = Convert.ToString(objOTP.Datetime);
                     var OutletId = objOTP.CounterId.Substring(0, objOTP.CounterId.Length - 2);
-                    //var OutletId1 = objOTP.CounterId.Substring(0, objOTP.CounterId.Length - 5);
                     using (var contextNew = new BOTSDBContext(connStr))
                     {
                         objMemberData.EnrolledOutletName = contextNew.OutletDetails.Where(x => x.OutletId == OutletId).Select(y => y.OutletName).FirstOrDefault();
-                        
                     }
-                    
                 }
-                
             }
             catch (Exception ex)
             {

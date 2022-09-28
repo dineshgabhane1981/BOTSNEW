@@ -1057,5 +1057,39 @@ namespace BOTS_BL.Repository
 
             return (objData);
         }
+
+        public List<tblRenewalData> GetRenewalByGroup(string groupId)
+        {
+            List<tblRenewalData> lstData = new List<tblRenewalData>();
+            try
+            {
+                using (var context = new CommonDBContext())
+                {
+                    lstData = context.tblRenewalDatas.Where(x => x.GroupId == groupId).ToList();
+
+                    foreach (var item in lstData)
+                    {
+                        item.PaymentDateStr = item.PaymentDate.ToString("dd-MMM-yyyy");
+                        item.RenewalDateStr = item.RenewalDate.ToString("dd-MMM-yyyy");
+                        if (item.IsPartPayment)
+                        {
+                            item.PartialPayment = "Yes";
+                            item.PartialPaymentDateStr = item.NextPaymentDate.Value.ToString("dd-MMM-yyyy");
+                        }
+                        else
+                        {
+                            item.PartialPayment = "No";
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
+            return lstData;
+        }
+
     }
+    
 }

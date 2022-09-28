@@ -241,6 +241,7 @@
     <Compile Include="Models\CommonDB\tblGroupDetail.cs" />
     <Compile Include="Models\CommonDB\tblModulesPayment.cs" />
     <Compile Include="Models\CommonDB\tblReference.cs" />
+    <Compile Include="Models\CommonDB\tblRenewalData.cs" />
     <Compile Include="Models\CommonDB\tblRMAssigned.cs" />
     <Compile Include="Models\CommonDB\tblSourcedBy.cs" />
     <Compile Include="Models\CommonDB\tblSourceType.cs" />

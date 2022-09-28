@@ -135,7 +135,7 @@ namespace LeadGeneration.Controllers
                     objviewmodel.lstsALES_TblLeads = SLR.GetSearchedLeads(Convert.ToString(item["MobileNo"]), Convert.ToString(item["BusinessName"]), 
                     Convert.ToString(item["DtFrom"]), Convert.ToString(item["DtTo"]), Convert.ToString(item["LeadStatus"]), 
                     Convert.ToString(item["ContactType"]), Convert.ToString(item["MeetingType"]), Convert.ToString(item["City"]),
-                    Convert.ToString(item["BillingPartner"]), salesManager);
+                    Convert.ToString(item["BillingPartner"]), salesManager, Convert.ToString(item["LeadType"]));
             }
             
             return PartialView("_SearchLeadListing", objviewmodel);
@@ -154,7 +154,7 @@ namespace LeadGeneration.Controllers
                     objviewmodel.lstsALES_TblLeads = SLR.GetSearchedLeads(Convert.ToString(item["MobileNo"]), Convert.ToString(item["BusinessName"]),
                         Convert.ToString(item["DtFrom"]), Convert.ToString(item["DtTo"]), Convert.ToString(item["LeadStatus"]),
                         Convert.ToString(item["ContactType"]), Convert.ToString(item["MeetingType"]), Convert.ToString(item["City"]),
-                        Convert.ToString(item["BillingPartner"]), Convert.ToString(item["SalesManager"]));
+                        Convert.ToString(item["BillingPartner"]), Convert.ToString(item["SalesManager"]),"");
                 }
             }
             catch(Exception ex)

@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity.Migrations;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -64,7 +65,7 @@ namespace WebApp.Controllers.ITOPS
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
             SPResponse result = new SPResponse();
             string GroupId = "";
-            
+
             try
             {
                 var groupId = (string)Session["GroupId"];
@@ -145,7 +146,7 @@ namespace WebApp.Controllers.ITOPS
                     dt.Columns.Add("MobileNo", typeof(string));
                     dt.Columns.Add("Gender", typeof(string));
                     dt.Columns.Add("DOB", typeof(DateTime));
-                    bool firstRow = true;
+                     
                     foreach (IXLRow row in workSheet.Rows())
                     {
                         int i = 0;
@@ -181,13 +182,19 @@ namespace WebApp.Controllers.ITOPS
                                 {
                                     objCustomer.CustomerName = Convert.ToString(dr["CustomerName"]);
                                     objCustomer.MobileNo = Convert.ToString(dr["MobileNo"]);
-                                    objCustomer.Gender = Convert.ToString(dr["Gender"]);
-                                    objCustomer.DOB = Convert.ToDateTime(dr["DOB"]);
+                                    if (dr.Table.Columns.Contains("Gender"))
+                                    {
+                                        objCustomer.Gender = Convert.ToString(dr["Gender"]);
+                                    }
+                                    
+                                    if (CheckDate(Convert.ToString(dr["DOB"])))
+                                    {
+                                        objCustomer.DOB = Convert.ToDateTime(dr["DOB"]);
+                                    }
                                     result = ITOPS.AddBulkCustomerData(groupId, objCustomer);
                                     if (result.ResponseCode == "00")
                                     {
                                         TotalRows++;
-
                                     }
 
                                     if (result.ResponseCode == "01")
@@ -220,7 +227,31 @@ namespace WebApp.Controllers.ITOPS
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
+        public bool CheckDate(string dateString)
+        {
+            bool isCorrect = false;
+            string[] formats = {"M/d/yyyy h:mm:ss tt", "M/d/yyyy h:mm tt",
+                   "MM/dd/yyyy hh:mm:ss", "M/d/yyyy h:mm:ss",
+                   "M/d/yyyy hh:mm tt", "M/d/yyyy hh tt",
+                   "M/d/yyyy h:mm", "M/d/yyyy h:mm",
+                   "MM/dd/yyyy hh:mm", "M/dd/yyyy hh:mm"};
+            string[] dateStrings = {"5/1/2009 6:32 PM", "05/01/2009 6:32:05 PM",
+                        "5/1/2009 6:32:00", "05/01/2009 06:32",
+                        "05/01/2009 06:32:00 PM", "05/01/2009 06:32:00"};
+            DateTime dateValue;
 
+
+            if (DateTime.TryParseExact(dateString, formats, new CultureInfo("en-US"), DateTimeStyles.None, out dateValue))
+            {
+                isCorrect = true;
+            }
+            else
+            {
+
+            }
+
+            return isCorrect;
+        }
 
 
         //[HttpPost]

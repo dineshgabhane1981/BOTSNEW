@@ -94,6 +94,10 @@ namespace BOTS_BL.Models.SalesLead
 
         [StringLength(50)]
         public string CustomerType { get; set; }
+
+        [StringLength(50)]
+        public string LeadType { get; set; }
+        
     }
     public class SalesLead
     {
@@ -150,6 +154,7 @@ namespace BOTS_BL.Models.SalesLead
         public string CustomerType { get; set; }
         public string SalesManagerName { get; set; }
         public long? noOfOutlet { get; set; }
+        public string LeadType { get; set; }
     }
 
     public class SalesCount

@@ -1,0 +1,81 @@
+﻿
+@{
+    ViewBag.Title = "Customer Renewal";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+
+<div class="app-main__inner">
+    <div class="mb-3 card" style="padding-top:20px;padding-bottom:20px;">
+        <div class="content">
+            <!--content inner-->
+
+            <div class="container overflow-hidden">
+                @Html.DropDownList("Group", new SelectList(ViewBag.Groups, "Value", "Text"), "Select Group", htmlAttributes: new { @class = "input50", @id = "ddlGroup" })
+            </div>
+            <div style="text-align:right;margin-top:-50px;padding-right:100px;">
+                <a href="#" title="Add Renewal" id="btnAddRenewal">  <img src="~/Content/assets/images/AddCustomer.png" /></a>
+            </div>
+        </div>
+    </div>
+    <div class="mb-3 card" style="padding-top:20px;padding-bottom:20px;display:none;" id="dvRenewalAdd">
+        <div class="content" style="text-align:center;">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-6 col-sm-6">
+                        Renewal Amount <input id="txtRenewalAmount" type="number" class="input50" />
+                    </div>
+                    <div class="col-md-6 col-sm-6">
+                        Discount Amount <input id="txtDiscountAmount" type="number" class="input50" />
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="mb-3 card" style="padding-top:20px;padding-bottom:20px;" id="dvRenewalData">
+        <div class="content" style="text-align:center;">
+            No data available
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $('#ddlGroup').change(function () {
+            var GroupId = $("#ddlGroup").val();
+            GetRenewalData(GroupId);           
+        });
+        $('#btnAddRenewal').on("click", function () {
+            AddRenewal();
+        });
+    });
+
+    function GetRenewalData(Id) {
+        $("#divLoader").show();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("GetGroupRenewalData", "SinglePage")',
+            data: '{GroupId: ' + JSON.stringify(Id) + '}',
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                $("#dvRenewalData").html(response);
+                $("#divLoader").hide();
+            },
+            failure: function (response) {
+                $("#divLoader").hide();
+            },
+            error: function (response) {
+                $("#dvRenewalData").html(response.responseText);
+                $("#divLoader").hide();
+            }
+        });
+    }
+
+    function AddRenewal() {
+        $("#dvRenewalAdd").show(1000);
+    }
+
+</script>
