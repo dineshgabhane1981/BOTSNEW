@@ -191,6 +191,7 @@ namespace BOTS_BL.Repository
 
             return objCampaignInactiveData;
         }
+        
         public List<Campaign> GetCampaignFirstData(string GroupId, string connstr, string month, string year)
         {
             List<Campaign> objCampaignData = new List<Campaign>();
@@ -258,7 +259,6 @@ namespace BOTS_BL.Repository
             }
             return objCampaignData;
         }
-
 
         public List<CampaignSMSBlastFirst> GetCampaignSMSBlastFirstData(string GroupId, string connstr, string month, string year)
         {
@@ -361,13 +361,10 @@ namespace BOTS_BL.Repository
             {
                 using (var context = new CommonDBContext())
                 {
-
                     SMSGatewayDetails = (from c in context.CommonSMSGateWayMasters where (c.GroupId == GroupId && c.Status == "00") select c).ToList();
 
                     foreach (var item in SMSGatewayDetails)
                     {
-                        
-
                         SDT.UserName = Convert.ToString(item.UserName);
                         SDT.Password = Convert.ToString(item.Password);
                         SDT.SMSVendor = Convert.ToString(item.SMSVendor);
@@ -375,111 +372,113 @@ namespace BOTS_BL.Repository
                     SMSVendor = Convert.ToString(SDT.SMSVendor);
                     UserName = Convert.ToString(SDT.UserName);
                     Password = Convert.ToString(SDT.Password);
-                    switch (SMSVendor)
+                    if(String.IsNullOrEmpty(SMSVendor)==false)
                     {
-                        case "TechnoCore":
-                            
-                            var baseAddress = "https://smsnotify.one/SMSApi/account/readstatus?userid="+ UserName + "&password="+ Password + "&output=json";
-                            using (var client = new HttpClient())
-                            {
-                                using (var response1 = client.GetAsync(baseAddress).Result)
+                        switch (SMSVendor)
+                        {
+                            case "TechnoCore":
+
+                                var baseAddress = "https://smsnotify.one/SMSApi/account/readstatus?userid=" + UserName + "&password=" + Password + "&output=json";
+                                using (var client = new HttpClient())
                                 {
-                                    if (response1.IsSuccessStatusCode)
+                                    using (var response1 = client.GetAsync(baseAddress).Result)
                                     {
-                                        client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                                        var response2 = client.GetStringAsync(new Uri(baseAddress)).Result;
-                                        JObject jsonObj = JObject.Parse(response2);
-                                        IEnumerable<JToken> pricyProducts = jsonObj.SelectTokens("$..account");
-                                        foreach (JToken item in pricyProducts)
+                                        if (response1.IsSuccessStatusCode)
                                         {
-                                            CommonSMSGateWayMaster objbalance = new CommonSMSGateWayMaster();
-                                            objbalance.smsBalance = Convert.ToString(item["smsBalance"]);
-                                            SMSGatewayDetails.Add(objbalance);
+                                            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                                            var response2 = client.GetStringAsync(new Uri(baseAddress)).Result;
+                                            JObject jsonObj = JObject.Parse(response2);
+                                            IEnumerable<JToken> pricyProducts = jsonObj.SelectTokens("$..account");
+                                            foreach (JToken item in pricyProducts)
+                                            {
+                                                CommonSMSGateWayMaster objbalance = new CommonSMSGateWayMaster();
+                                                objbalance.smsBalance = Convert.ToString(item["smsBalance"]);
+                                                SMSGatewayDetails.Add(objbalance);
+                                            }
+                                        }
+                                        else
+                                        {
+                                            Console.WriteLine("{0} ({1})", (int)response1.StatusCode, response1.ReasonPhrase);
                                         }
                                     }
-                                    else
+                                }
+                                break;
+                            case "VisionHLT":
+
+                                var baseAddress3 = "http://sms.visionhlt.com:8080/api/mt/GetBalance?User=" + UserName + "&Password=" + Password;
+                                using (var client = new HttpClient())
+                                {
+                                    using (var response1 = client.GetAsync(baseAddress3).Result)
                                     {
-                                        Console.WriteLine("{0} ({1})", (int)response1.StatusCode, response1.ReasonPhrase);
+                                        if (response1.IsSuccessStatusCode)
+                                        {
+                                            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                                            var response2 = client.GetStringAsync(new Uri(baseAddress3)).Result;
+                                            JObject jsonObj = JObject.Parse(response2);
+                                            var Balance = JObject.Parse(response2)["Balance"];
+                                            CommonSMSGateWayMaster objbalance = new CommonSMSGateWayMaster();
+
+                                            string Temp = Convert.ToString(Balance);
+                                            Temp = Temp.Substring(Temp.IndexOf("|") + 7);
+                                            objbalance.smsBalance = Temp;
+                                            SMSGatewayDetails.Add(objbalance);
+                                        }
+                                        else
+                                        {
+                                            Console.WriteLine("{0} ({1})", (int)response1.StatusCode, response1.ReasonPhrase);
+                                        }
                                     }
                                 }
-                            }
-                            break;
-                        case "VisionHLT":
-                            
-                            var baseAddress3 = "http://sms.visionhlt.com:8080/api/mt/GetBalance?User=" + UserName + "&Password=" + Password;
-                            using (var client = new HttpClient())
-                            {
-                                using (var response1 = client.GetAsync(baseAddress3).Result)
+                                break;
+                            case "Pinnacle":
+
+                                ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls | (SecurityProtocolType)3072;
+                                ServicePointManager.ServerCertificateValidationCallback += (sender, cert, chain, sslPolicyErrors) => true;
+                                var httpWebRequest_11671 = (HttpWebRequest)WebRequest.Create("https://api.pinnacle.in/index.php/checkbalance");
+                                httpWebRequest_11671.ContentType = "application/json";
+                                httpWebRequest_11671.Headers.Add("Apikey", Password);
+                                httpWebRequest_11671.Method = "POST";
+                                var httpResponse_11671 = (HttpWebResponse)httpWebRequest_11671.GetResponse();
+                                using (var streamReader_11671 = new StreamReader(httpResponse_11671.GetResponseStream()))
                                 {
-                                    if (response1.IsSuccessStatusCode)
+                                    var Balance = streamReader_11671.ReadToEnd();
+                                    JObject jsonObj = JObject.Parse(Balance);
+                                    IEnumerable<JToken> pricyProducts = jsonObj.SelectTokens("$..data");
+                                    foreach (JToken item in pricyProducts)
                                     {
-                                        client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                                        var response2 = client.GetStringAsync(new Uri(baseAddress3)).Result;
-                                        JObject jsonObj = JObject.Parse(response2);
-                                        var Balance = JObject.Parse(response2)["Balance"];
                                         CommonSMSGateWayMaster objbalance = new CommonSMSGateWayMaster();
-                                        
-                                        string Temp = Convert.ToString(Balance);
-                                        Temp = Temp.Substring(Temp.IndexOf("|") + 7);
-                                        objbalance.smsBalance = Temp;
+                                        string Bal = Convert.ToString(item["balance"]);
+                                        objbalance.smsBalance = Bal;
                                         SMSGatewayDetails.Add(objbalance);
                                     }
-                                    else
-                                    {
-                                        Console.WriteLine("{0} ({1})", (int)response1.StatusCode, response1.ReasonPhrase);
-                                    }
                                 }
-                            }
-                            break;
-                        case "Pinnacle":
-
-                            ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls | (SecurityProtocolType)3072;
-                            ServicePointManager.ServerCertificateValidationCallback += (sender, cert, chain, sslPolicyErrors) => true;
-                            var httpWebRequest_11671 = (HttpWebRequest)WebRequest.Create("https://api.pinnacle.in/index.php/checkbalance");
-                            httpWebRequest_11671.ContentType = "application/json";
-                            httpWebRequest_11671.Headers.Add("Apikey", Password);
-                            httpWebRequest_11671.Method = "POST";
-                            var httpResponse_11671 = (HttpWebResponse)httpWebRequest_11671.GetResponse();
-                            using (var streamReader_11671 = new StreamReader(httpResponse_11671.GetResponseStream()))
-                            {
-                                var Balance = streamReader_11671.ReadToEnd();
-                                JObject jsonObj = JObject.Parse(Balance);
-                                IEnumerable<JToken> pricyProducts = jsonObj.SelectTokens("$..data");
-                                foreach (JToken item in pricyProducts)
+                                break;
+                            default:
+                                var baseAddress1 = "https://smsnotify.one/SMSApi/reseller/readuser?userid=0&password=0&output=json";
+                                using (var client = new HttpClient())
                                 {
-                                    CommonSMSGateWayMaster objbalance = new CommonSMSGateWayMaster();
-                                    string Bal = Convert.ToString(item["balance"]);
-                                    SMSGatewayDetails.Add(objbalance);
-                                }
-                            }
-                            break;
-                        default:
-                            var baseAddress1 = "https://smsnotify.one/SMSApi/reseller/readuser?userid=0&password=0&output=json";
-                            using (var client = new HttpClient())
-                            {
-                                using (var response1 = client.GetAsync(baseAddress1).Result)
-                                {
-                                    if (response1.IsSuccessStatusCode)
+                                    using (var response1 = client.GetAsync(baseAddress1).Result)
                                     {
-                                        client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                                        var response2 = client.GetStringAsync(new Uri(baseAddress1)).Result;
-                                        JObject jsonObj = JObject.Parse(response2);
-                                        
-                                        CommonSMSGateWayMaster objbalance = new CommonSMSGateWayMaster();
+                                        if (response1.IsSuccessStatusCode)
+                                        {
+                                            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                                            var response2 = client.GetStringAsync(new Uri(baseAddress1)).Result;
+                                            JObject jsonObj = JObject.Parse(response2);
 
-                                        SMSGatewayDetails.Add(objbalance);
-                                    }
-                                    else
-                                    {
-                                        Console.WriteLine("{0} ({1})", (int)response1.StatusCode, response1.ReasonPhrase);
+                                            CommonSMSGateWayMaster objbalance = new CommonSMSGateWayMaster();
+
+                                            SMSGatewayDetails.Add(objbalance);
+                                        }
+                                        else
+                                        {
+                                            Console.WriteLine("{0} ({1})", (int)response1.StatusCode, response1.ReasonPhrase);
+                                        }
                                     }
                                 }
-                            }
-                            break;
-
+                                break;
+                        }
                     }
-
-
+                    
                 }
             }
             catch (Exception ex)
@@ -1487,8 +1486,64 @@ namespace BOTS_BL.Repository
             }
         }
 
+        public List<WAInsData> GetWAInsData(string Groupid,string connectionString)
+        {
+            List<WAInsData> WAInsDetails = new List<WAInsData>();
+            List<CommonWAInstanceMaster> InsMaster = new List<CommonWAInstanceMaster>();
+            CommonWAInstanceMaster SDT = new CommonWAInstanceMaster();
+            string UserName, Password, SMSVendor;
+            try
+            {
+                using (var context = new CommonDBContext())
+                {
+                     InsMaster = (from c in context.CommonWAInstanceMasters where (c.GroupId == Groupid && c.Status == "00") select c).ToList();
 
+                    foreach (var item in InsMaster)
+                    {
+                        SDT.InstanceName = Convert.ToString(item.InstanceName);
+                        SDT.TokenId = Convert.ToString(item.TokenId);
 
+                        string Tokenid = Convert.ToString(SDT.TokenId);
+
+                        if (String.IsNullOrEmpty(SDT.TokenId) == false)
+                        {
+                            var baseAddress = "https://bo.enotify.app/api/chackBal?token=" + Tokenid;
+                            using (var client = new HttpClient())
+                            {
+                                using (var response1 = client.GetAsync(baseAddress).Result)
+                                {
+                                    if (response1.IsSuccessStatusCode)
+                                    {
+                                        client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                                        var response2 = client.GetStringAsync(new Uri(baseAddress)).Result;
+                                        JObject jsonObj = JObject.Parse(response2);
+                                        IEnumerable<JToken> pricyProducts = jsonObj.SelectTokens("$..data");
+                                        foreach (JToken T in pricyProducts)
+                                        {
+                                            WAInsData Temp = new WAInsData();
+                                            Temp.InstanceName = Convert.ToString(item.InstanceName);
+                                            Temp.TokenId = Convert.ToString(item.TokenId);
+                                            Temp.quota = Convert.ToString(T["quota"]);
+                                            Temp.Status1 = Convert.ToString(T["status"]);
+                                            WAInsDetails.Add(Temp);
+                                        }
+                                    }
+                                    else
+                                    {
+                                        Console.WriteLine("{0} ({1})", (int)response1.StatusCode, response1.ReasonPhrase);
+                                    }
+                                }
+                            }
+                        }
+                    }                   
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, Groupid);
+            }
+            return WAInsDetails;
+        }
     }
 
 }
