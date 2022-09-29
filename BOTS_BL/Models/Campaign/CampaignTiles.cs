@@ -203,4 +203,13 @@ namespace BOTS_BL.Models
         public string Url { get; set; }
 
     }
+    public class WAInsData
+    {
+        public string InstanceName { get; set; }
+        public string TokenId { get; set; }
+        public string Status { get; set; }
+        public string Status1 { get; set; }
+        public string quota { get; set; }
+
+    }
 }
