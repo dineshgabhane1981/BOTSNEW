@@ -173,23 +173,33 @@ namespace WebApp.Controllers
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
             var lstOutlet = RR.GetOutletList(userDetails.GroupId, userDetails.connectionString);
             var SMSGatewayDetails = CMPR.GatewayDetails(userDetails.GroupId, userDetails.connectionString);
+            //var DataTemp = CMPR.GetWAInsData(userDetails.GroupId, userDetails.connectionString);
 
-            for (int i = 0; i <= SMSGatewayDetails.Count(); i++)
+            if (SMSGatewayDetails.Count() > 0)
             {
-                if (i == 0)
+                for (int i = 0; i <= SMSGatewayDetails.Count(); i++)
                 {
-                    SDT.BOCode = SMSGatewayDetails[i].BOCode;
+                    if (i == 0)
+                    {
+                        SDT.BOCode = SMSGatewayDetails[i].BOCode;
+                    }
+                    if (i == 1)
+                    {
+                        SDT.SMSVendor = SMSGatewayDetails[i].smsBalance;
+                    }
                 }
-                if (i == 1)
-                {
-                    SDT.SMSVendor = SMSGatewayDetails[i].smsBalance;
-                }
+
+                ViewBag.SMSVendor = SDT.BOCode;
+                ViewBag.SMSBalance = SDT.SMSVendor;
+                ViewBag.OutletData = lstOutlet;
             }
-
-            ViewBag.SMSVendor = SDT.BOCode;
-            ViewBag.SMSBalance = SDT.SMSVendor;
-            ViewBag.OutletData = lstOutlet;
-
+            else
+            {
+                ViewBag.SMSVendor = "NA";
+                ViewBag.SMSBalance = "NA";
+                ViewBag.OutletData = lstOutlet;
+            }
+        
             return View("CreateCampaign");
         }
 
@@ -608,6 +618,16 @@ namespace WebApp.Controllers
                 }
 
             }
+
+            return new JsonResult() { Data = responsedata, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
+        }
+
+        public ActionResult WAInstanceData(string jsonData)
+        {
+            List<WAInsData> responsedata = new List<WAInsData>();
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            responsedata = CMPR.GetWAInsData(userDetails.GroupId, userDetails.connectionString);
+            //ViewBag.ListCampDetails = WAInsDetails;
 
             return new JsonResult() { Data = responsedata, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }

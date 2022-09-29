@@ -15,6 +15,42 @@
 
 <div class="mb-3 pr-3 pt-3 pl-3 card" style="padding-bottom:20px;" id="WACamppanel">
 
+    @*<div class="mb-3 pr-3 pt-3 pl-3 card" style="padding-bottom:20px;">*@
+    <div class="row" style="margin-top : 20px; margin-left: 8px;">
+        <div class="col-sm-2">
+            WA Instance Details
+        </div>
+    </div>
+
+    @*@if (ViewBag.ListCampDetails.Count > 0)
+        {*@
+    <div class="row" style="overflow-x:auto;padding-right:20px;margin-top:10px;margin-left:60px;">
+
+
+        <table class="table" id="InstanceTable" border="1" cellpadding="5" cellspacing="5">
+            <thead>
+                <tr>
+                    <th>Instance Name</th>
+                    <th>Token Id</th>
+                    <th>Balance</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+
+        </table>
+
+    </div>
+
+    @*else
+        {
+            <div class="row" style="margin-top : 20px; margin-left:50px;">
+                <h6 style="font:xx-large"><b>No Instance Found</b></h6>
+            </div>
+        }*@
+    @*</div>*@
+
     <div class="row mt-2" style="margin-top : 20px;">
         <div class="col-md-3 col-xl-3" style="margin-left: 18px;">
             Campaign Name*
@@ -110,6 +146,15 @@
         </div>
     </div>
 
+    <div class="row" style="margin-top : 50px;">
+        <div class="col-md-3 col-xl-3" style="margin-left: 18px;">
+            Max No Of Msg Per Day*
+        </div>
+        <div>
+            <input type="number" min="1" maxlength="3" id="NoOfMsg" class="input50" placeholder="No of Msg per Day" />
+        </div>
+    </div>
+
     <div class="row" style="margin-top: 20px; margin-left: 20px; " id="WAMsgType">
         <div class="col-md-8 col-xl-8">
             <input type="radio" checked id="rdnTextWA" value="1" name="WAType" onclick="WAtypeValidate();" />&nbsp;&nbsp;&nbsp;<b>Text</b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -165,8 +210,12 @@
         </div>
     </div>
 
+    <div id="GooleLink1" style="margin-left:40px; margin-top:20px;">
+        <a href="https://translate.google.co.in/" target="_blank">Google Translator</a>
+    </div>
+
     @*<div class="row" style="margin-top : 20px;">*@
-    <div class="col-md-6 col-xl-6">
+    <div class="col-md-6 col-xl-6" style="margin-top:20px;">
         <div class="button">
             <button type="button" id="WAbtnSave" style="margin-left:15px;" class="btn btn-primary" onclick="WASaveValidate();"><b>SAVE</b></button>
             <!--<button type="button" id="btnDownload" style="margin-left:15px;" class="btn btn-primary" onclick="DownLoad();"><b>DOWNLOAD</b></button>-->
@@ -192,7 +241,40 @@
     @*</div>*@
 </div>
 
-<script>  
+@*<script src="~/Scripts/jquery-ui-1.12.1.js"></script>
+    <script src="~/Scripts/jquery-ui-1.12.1.min.js"></script>
+    <link href="~/Content/themes/base/jquery-ui.min.css" rel="stylesheet" />
+    <link href="~/Content/themes/base/jquery-ui.css" rel="stylesheet" />*@
+
+@*<link rel="stylesheet" type="text/css" href="~/Scripts/datatable/datatables.min.css" />
+<script type="text/javascript" src="~/Scripts/datatable/datatables.min.js"></script>*@
+
+
+<script>
+    var tableData = [];
+    $("#NoOfMsg").focusout(function () {
+        alert("Hi");
+        var V = $("#NoOfMsg").val();
+        if (V != '') {
+            if (V == '0') {
+
+                alert(V);
+            }
+            else if (V>700) {
+                alert("Value can not be greater than 700");
+            }
+        }
+    });
+
+    $(document).ready(function () {
+        $("#ddlOutletList").on("change", function () {
+            var OutletId = $("#ddlOutletList").val();
+        });
+        $("#btnUpload").on("click", function () {
+            UploadData();
+        });
+        //WAInstanceDetails();
+    });
 
     function WABaseCalc() {
         var val = document.getElementById("WABaseType").value;
@@ -207,15 +289,18 @@
     function WAtypeValidate() {
         if (document.getElementById("rdnTextWA").checked) {
              $("#WAScriptText").show();
-             $("#WAUpload").hide();
+            $("#WAUpload").hide();
+            $("#GooleLink1").show();
         }
         else if (document.getElementById("rdnImageWA").checked) {
              $("#WAUpload").show();
-             $("#WAScriptText").hide();
+            $("#WAScriptText").hide();
+            $("#GooleLink1").hide();
         }
         else if (document.getElementById("rdnImageCaptionWA").checked) {
              $("#WAScriptText").show();
-             $("#WAUpload").show();
+            $("#WAUpload").show();
+            $("#GooleLink1").show();
         }
     }
 
@@ -420,11 +505,7 @@
         }
     }
 
-    $(document).ready(function () {
-        $("#ddlOutletList").on("change", function () {
-            var OutletId = $("#ddlOutletList").val();
-        });
-    });
+     
 
     function WAShowCount() {
         var val = '';
@@ -621,7 +702,7 @@
                             $("#WAbtnSendTestSMS").show();
                             $("#WATestNumbers").show();
                             $("#WAbtnSave").prop('disabled', true);
-                            
+
                             $("#rdnTextWA").prop('disabled', true);
                             $("#rdnImageWA").prop('disabled', true);
                             $("#rdnImageCaptionWA").prop('disabled', true);
@@ -678,11 +759,7 @@
         //$("#Count").text(a);
     });
 
-    $(document).ready(function () {
-        $("#btnUpload").on("click", function () {
-            UploadData();
-        });
-    });
+   
 
     function UploadData() {
 
@@ -716,7 +793,7 @@
                                         message: "Data Uploaded Successfully!",
                                         buttonText: "Okay"
                                     })
-                                   
+
                                     $("#divLoader").hide();
                                     $("#WAUploadImg").text(code);
                                     $("a").attr("href", Uri);
@@ -785,6 +862,7 @@
             FilterData.push(item);
             var data = JSON.stringify(FilterData);
         $("#divLoader").show();
+
             $.ajax({
                 type: "POST",
                 url: '@Url.Action("WASendTestSMS", "Campaigns")',
@@ -828,6 +906,97 @@
                     $("#divLoader").hide();
                 }
             });
+    }
+
+    function WAInstanceDetails() {
+        var Dummy = '1';
+        var FilterData = [];
+        item = {};
+        item["Dummy"] = Dummy;
+        FilterData.push(item);
+        var data = JSON.stringify(FilterData);
+        $("#divLoader").show();
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("WAInstanceData", "Campaigns")',
+                data: '{jsonData: ' + JSON.stringify(data) + '}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+
+                success: function (response) {
+                    console.log(response);
+                    if (response != null) {
+                        tableData = [];
+                        $.map(response, function (item) {
+                            optionItem = {}
+                            optionItem["InstanceName"] = item.InstanceName;
+                            optionItem["TokenId"] = item.TokenId;
+                            optionItem["Status"] = item.Status;
+                            optionItem["quota"] = item.quota;
+
+                            tableData.push(optionItem);
+                        });
+
+                        DrawTable();
+                        $("#divLoader").hide();
+                    }
+                    else {
+                        alert("No Instance Found");
+                        $("#divLoader").hide();
+                    }
+                },
+                error: function (response) {
+                    //console.log(response.responseText);
+                    alert("InsideError");
+                    $("#divLoader").hide();
+                }
+            });
+    }
+
+    function DrawTable() {
+
+        //var table1 = $('#InstanceTable').DataTable();
+        //table1.destroy();
+
+        var table = $('#InstanceTable').DataTable({
+            "aaSorting": [[0, "asc"]],
+            "data": tableData,
+            "paging": true,
+            "ordering": true,
+            "info": true,
+            "bFilter": true,
+            "pageLength": 25,
+            "pagingType": "simple_numbers",
+            "columns": [
+                { data: "InstanceName" },
+                { data: "TokenId" },                
+                { data: "Status" },
+                { data: "quota" }
+
+                //{ data: "LastTxnDate" },
+                //{ data: "EnrolledDate" }
+            ],
+
+            //"aoColumnDefs": [{ "sClass": "hide_me", "aTargets": [3] }]
+            //"rowReorder": {
+            //    dataSrc: "index"
+            //}
+        });
+       // $('#activityTable_filter').hide();
+
+        //$('#txtSearch').on('keyup', function () {
+        //    $.fn.dataTable.ext.search.push(function (settings, searchData) {
+        //        var term = $('#txtSearch').val().toLowerCase()
+        //        for (var i = 0; i < searchData.length; i++) {
+        //            if (searchData[i].toLowerCase().indexOf(term) >= 0) {
+        //                return true;
+        //            }
+        //        }
+        //        return false;
+        //    });
+        var table = $('#InstanceTable').DataTable();
+            table.draw();
+        //});
     }
 
 </script>

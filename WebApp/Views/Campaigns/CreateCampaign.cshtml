@@ -167,7 +167,7 @@
                 <div class="row" style="margin: 20px;">
                     <div class="col-md-8 col-xl-8">
                         <div class="custom-control custom-switch">
-                            <input type="checkbox" class="custom-control-input" id="ScheduleNow" value="1" checked>
+                            <input type="checkbox" class="custom-control-input" id="ScheduleNow" value="1">
                             <label class="custom-control-label" style="cursor:pointer !important;" for="ScheduleNow"><b>Schedule Now</b></label>
                         </div>
                     </div>
@@ -450,6 +450,7 @@
         if (document.getElementById("rdnWA").checked) {
             $("#WAPanel").show();
             $("#SMSPanel").hide();
+            WAInstanceDetails();
         }
         else if (document.getElementById("rdnSMS").checked) {
             $("#WAPanel").hide();
@@ -471,8 +472,8 @@
                 if (english.test(val) == false) {
                     cuteAlert({
                         type: "error",
-                        title: "Error Title",
-                        message: "Please Text characters",
+                        title: "Message Script Error",
+                        message: "The selected Script is in English language and the Script is mentioned in Vernacular. Please change the message script in English or select script as Unicode",
                         buttonText: "Okay"
                     })
                 }
@@ -484,8 +485,8 @@
                 if (english.test(val) == true) {
                     cuteAlert({
                         type: "error",
-                        title: "Error Title",
-                        message: "Please type Vernacular Lang",
+                        title: "Message Script Error",
+                        message: "The selected Script is in Vernacular language and the Script is mentioned in English. Please change the message script in Vernacular language or select script as English",
                         buttonText: "Okay"
                     })
                 }
@@ -531,8 +532,8 @@
         if (CampStartDate < Date1) {
             cuteAlert({
                 type: "error",
-                title: "Error Title",
-                message: "StartDate Can't be Older",
+                title: "Date Error",
+                message: "Start Date of the Campaign cannot be before the Current Date",
                 buttonText: "Okay"
 
             })
@@ -551,8 +552,8 @@
         if (CampEndDate < Date1) {
             cuteAlert({
                 type: "error",
-                title: "Error Title",
-                message: "EndDate Can't be Older",
+                title: "Date Error",
+                message: "End Date of the Campaign cannot be before the Current Date",
                 buttonText: "Okay"
             })
             $("#txtEnrolltodt").val("");
@@ -591,11 +592,13 @@
             ScriptType = $("#rdnUnicode").val();
         }
 
-        if ((ScriptType == '1') && (english.test(val) == true)) {
-            TempCalc = 159;
-        }
-        else if ((ScriptType == '2')&& (english.test(val) == false)){
-            TempCalc = 69;
+        if (val != '') {
+            if ((ScriptType == '1') && (english.test(val) == true)) {
+                TempCalc = 159;
+            }
+            else if ((ScriptType == '2') && (english.test(val) == false)) {
+                TempCalc = 69;
+            }
         }
 
         var SMSBalance = parseInt($("#SMSBalance").val());
@@ -607,24 +610,24 @@
 
             cuteAlert({
                 type: "error",
-                title: "Error Title",
-                message: "No Data Selected",
+                title: "Member Data Error",
+                message: "No Member Data is Selected for this Campaign",
                 buttonText: "Okay"
             })
         }
         else if (FiltCountnum == "") {
             cuteAlert({
                 type: "error",
-                title: "Error Title",
-                message: "No Data Selected",
+                title: "Member Data Error",
+                message: "No Member Data is Selected for this Campaign",
                 buttonText: "Okay"
             })
         }
         else if (Script == "") {
             cuteAlert({
                 type: "error",
-                title: "Error Title",
-                message: "Script can't be Empty",
+                title: "Message Script Error",
+                message: "The Script field cannot be Empty",
                 buttonText: "Okay"
             })
         }
@@ -632,64 +635,56 @@
 
             cuteAlert({
                 type: "error",
-                title: "Error Title",
-                message: "StartDate Can't be Older",
+                title: "Date Error",
+                message: "Start Date of the Campaign cannot be before the Current Date",
                 buttonText: "Okay"
             })
         }
         else if (EndDate < Date1) {
             cuteAlert({
                 type: "error",
-                title: "Error Title",
-                message: "EndDate Can't be Older",
+                title: "Date Error",
+                message: "End Date of the Campaign cannot be before the Current Date",
                 buttonText: "Okay"
             })
         }
         else if (EndDate < Date1) {
             cuteAlert({
                 type: "error",
-                title: "Error Title",
-                message: "EndDate Can't be Older than Start Date",
+                title: "Date Error",
+                message: "End Date of the Campaign cannot be before the Current Date",
                 buttonText: "Okay"
             })
         }
         else if (CampName == "") {
             cuteAlert({
                 type: "error",
-                title: "Error Title",
-                message: "Campaign Name Can't Empty",
+                title: "Error",
+                message: "Campaign Name is Empty. Please keep a unique Campaign Name to identify the Campaign in future",
                 buttonText: "Okay"
             })
         }
         else if (TempId == "") {
             cuteAlert({
                 type: "error",
-                title: "Error Title",
-                message: "Template ID is Empty",
-                buttonText: "Okay"
-            })
-        }
-        else if (TempId == "") {
-            cuteAlert({
-                type: "error",
-                title: "Error Title",
-                message: "Template ID is Empty",
+                title: "Error",
+                message: "SMS Template ID is Empty. Please put the valid Template ID",
                 buttonText: "Okay"
             })
         }
         else if ((english.test(val) == false) && (ScriptType == '1')) {
             cuteAlert({
                 type: "error",
-                title: "Error Title",
-                message: "Script is Unicode and SMS Type is Text",
+                title: "Message Script Error",
+                message: "The selected Script is in English language and the Script is mentioned in Vernacular. Please change the message script in English or select script as Unicode",
                 buttonText: "Okay"
             })
         }
         else if ((english.test(val) == true) && (ScriptType == '2')) {
             cuteAlert({
                 type: "error",
-                title: "Error Title",
-                message: "Script is Text and SMS Type is Unicode",
+                title: "Message Script Error",
+                message: "The selected Script is in Vernacular language and the Script is mentioned in English. Please change the message script in Vernacular language or select script as English",
                 buttonText: "Okay"
             })
         }
@@ -697,16 +692,16 @@
             if (SMSBalance < TotalCredits) {
                 cuteAlert({
                     type: "error",
-                    title: "Error Title",
-                    message: "Balance is Less for sending Message, Total Credits required  " + TotalCredits,
+                    title: "Balance Error",
+                    message: "SMS Balance Insufficient! Total Bal: " + XXX + "| Total Credits Required:" + TotalCredits +"Add a minimum of "+ YYYY +" Balance and set the Campaign",
                     buttonText: "Okay"
                 })
             }
             else {
                 cuteAlert({
                     type: "question",
-                    title: "Confirm Title",
-                    message: "One SMS cost " + a + " Total Cost " + TotalCredits+ "  Continue",
+                    title: "Campaign Confirmation",
+                    message: "Total Credits Required: " + a + "| Per Customer Count: " + TotalCredits + "Total Balance left after campaign:"+YYYY,
                     confirmText: "Yes",
                     cancelText: "No"
                 }).then((e) => {
@@ -766,8 +761,8 @@
             if (Points == '') {
                 cuteAlert({
                     type: "error",
-                    title: "Error Title",
-                    message: "Enter Points",
+                    title: "Data Error",
+                    message: "The Base Selected = Points Base and there are no Points mentioned. Please mention Points or select any other Base",
                     buttonText: "Okay"
                 })
                 Flag = 1;
@@ -783,8 +778,8 @@
 
                     cuteAlert({
                         type: "error",
-                        title: "Error Title",
-                        message: "Enter Points",
+                        title: "Data Error",
+                        message: "The Base Selected = Points Range and there are no values entered. Please mention Points range or select any other Base",
                         buttonText: "Okay"
                     })
                     Flag = 1;
@@ -792,8 +787,8 @@
                 if (NPointsRange1 < NPoints) {
                      cuteAlert({
                          type: "error",
-                         title: "Error Title",
-                         message: "To point can't be small than from point",
+                         title: "Data Error",
+                         message: "The Points mentioned in To is less than From. Please correct this and Save",
                          buttonText: "Okay"
                      })
                     Flag = 1;
@@ -936,8 +931,8 @@
 
                         cuteAlert({
                             type: "success",
-                            title: "Success Title",
-                            message: "Message Send",
+                            title: "Campaign Confirmation: Successful",
+                            message: "Campaign is Saved Successfully",
                             buttonText: "Campaign Saved"
                         }).then(() => {
                             $("#btnSendTestSMS").show();
@@ -1054,7 +1049,7 @@
         if (CampId == '') {
             cuteAlert({
                 type: "error",
-                title: "Error Title",
+                title: "Campaign ID Error:",
                 message: "Campaign Id Not Found",
                 buttonText: "Okay"
             })
@@ -1088,8 +1083,8 @@
                     if (response != null) {
                         cuteAlert({
                             type: "question",
-                            title: "Confirm Title",
-                            message: "Has SMS Received",
+                            title: "Campaign Confirmation: Part 1",
+                            message: "Have you Received the Configured SMS?",
                             confirmText: "Yes",
                             cancelText: "No"
                         }).then((e) => {
@@ -1106,8 +1101,8 @@
                     else {
                         cuteAlert({
                             type: "error",
-                            title: "Error Title",
-                            message: "Message Not Send",
+                            title: "Campaign Confirmation: Error",
+                            message: "The Message has not been sent. The campaign will not be active",
                             buttonText: "Okay"
                         })
                         $("#divLoader").hide();
@@ -1122,45 +1117,52 @@
     }
 
     $("#ScheduleNow").change(function () {
+        alert($("#ScheduleNow").is(':checked'));
         if ($("#ScheduleNow").is(':checked') == true) {
-            alert("S1" + $("#ScheduleNow").is(':checked'));
-            alert("S2" + $("#ScheduleSwitch").is(':checked'));
+            
             if ($("#ScheduleSwitch").is(':checked') == true) {
                 $("#ScheduleSwitch").attr('Checked', false);
-                alert("S2" + $("#ScheduleSwitch").is(':checked'));
-            }
-
-        }
-        else {
-            alert("S1"+$("#ScheduleNow").is(':checked'));
-            alert("S2"+$("#ScheduleSwitch").is(':checked'));
-            if ($("#ScheduleSwitch").is(':checked') == false) {
-                $("#ScheduleSwitch").attr('Checked', true);
-                alert("S2" + $("#ScheduleSwitch").is(':checked'));
                 /*$('#SchedPick').toggle();*/
+                //if ($('#SchedPick').is(":visible")) {
+                //    $('#SchedPick').hide();
+                //}  
+                /*$('#SchedPick').show();*/
             }
         }
+        //else {
+        //    if ($("#ScheduleSwitch").is(':checked') == false) {
+        //        $("#ScheduleSwitch").attr('Checked', true);
+        //        /* $('#SchedPick').toggle();*/
+        //        if ($('#SchedPick').is(":hidden")) {
+        //            $('#SchedPick').show();
+        //        }
+        //    }
+        //}
     });
 
     function ShowScheduledate() {
-        alert("Inside Show");
+        alert($("#ScheduleSwitch").is(':checked'));
+        alert($('#SchedPick').is(":visible"));
         if ($("#ScheduleSwitch").is(':checked') == true) {
-            alert("S2"+$("#ScheduleSwitch").is(':checked'));
-            alert("S1" + $("#ScheduleNow").is(':checked'));
             if ($("#ScheduleNow").is(':checked') == true) {
                 $("#ScheduleNow").attr('Checked', false);
-                alert("S1" + $("#ScheduleNow").is(':checked'));
-                /*$('#SchedPick').toggle();*/
+                if ($('#SchedPick').is(":visible")) {
+                    $('#SchedPick').hide();
+                }
+                else {
+                    $('#SchedPick').show();
+                }
             }
         }
-        else {
-            alert("S2" + ("#ScheduleSwitch").is(':checked'));
-            alert("S1" + $("#ScheduleNow").is(':checked'));
-            if ($("#ScheduleNow").is(':checked') == false) {
-                $("#ScheduleNow").attr('Checked', true);
-                alert("S1" + $("#ScheduleNow").is(':checked'));
-            }
-        }
+        //else {
+        //    if ($("#ScheduleNow").is(':checked') == false) {
+        //        $("#ScheduleNow").attr('Checked', true);
+        //        /*$('#SchedPick').toggle();*/
+        //        if ($('#SchedPick').is(":visible")) {
+        //            $('#SchedPick').hide();
+        //        }
+        //    }
+        //}
     }
     function Showdatetime() {
          $('#datetimepicker').datetimepicker();
@@ -1209,8 +1211,8 @@
                     if (response != null) {
                         cuteAlert({
                             type: "success",
-                            title: "Success Title",
-                            message: "Message Send",
+                            title: "Campaign Sent: Successful",
+                            message: "Campaign Message will be delivered as per the schedule",
                             buttonText: "Okay"
                         }).then(() => {
                             var urlLink = "@Url.Action("CampaignManagement", "Campaigns")";
@@ -1222,8 +1224,8 @@
                     else {
                         cuteAlert({
                             type: "error",
-                            title: "Error Title",
-                            message: "Message Not Send",
+                            title: "Campaign Confirmation: Error",
+                            message: "The Message has not been sent. The campaign will not be active",
                             buttonText: "Okay"
                         })
                         $("#divLoader").hide();
