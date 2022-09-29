@@ -143,6 +143,7 @@
     <Compile Include="CampaignMaster.cs" />
     <Compile Include="ChitaleException.cs" />
     <Compile Include="Class1.cs" />
+    <Compile Include="CommonWAInstanceMaster.cs" />
     <Compile Include="Exceptions.cs" />
     <Compile Include="Models\BrandDetail.cs" />
     <Compile Include="Models\BulkUploadCustList.cs" />
