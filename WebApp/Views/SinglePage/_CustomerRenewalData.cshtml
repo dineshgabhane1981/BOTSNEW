@@ -1,34 +1,54 @@
 ﻿@model List<BOTS_BL.Models.CommonDB.tblRenewalData>
-
+@using System.Globalization
 <div class="row mb-3 pt-3 pl-3 pr-3">
+    <input type="hidden" id="hdnGroupId" />
+    <input type="hidden" id="hdnRenewalDate" />
     @if (Model != null)
     {
         <div>
-            <table border="1" cellpadding="10" cellspacing="10" class="m-2">
-                <tr style="background-color:lightgray;">
+            <table border="1" cellpadding="5" cellspacing="5" style="margin-left:5px;margin-right:-10px;">
+                <tr style="background-color: lightgray;">
                     <th>Customer Name</th>
                     <th>Renewal Date</th>
+                    <th>Payment Type</th>
+                    <th>Frequency</th>
                     <th>Renewal Amount</th>
                     <th>Discount Amount</th>
                     <th>Payment Date</th>
-                    <th>Is Partial Payment</th>
+                    <th>Is Payment Partial</th>
                     <th>Next Partial Payment Date</th>
                     <th>CS Name</th>
+                    <th>Freebies</th>
+                    <th>Comments</th>
+                    <th>Action</th>
                 </tr>
                 @foreach (var item in Model)
                 {
                     <tr>
                         <td>@item.CustomerName</td>
                         <td>@item.RenewalDateStr</td>
-                        <td>@item.RenewalAmount</td>
-                        <td>@item.DiscountAmount</td>
+                        <td>@item.PaymentType</td>
+                        <td>@item.Frequency</td>
+                        <td>@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(item.RenewalAmount))</td>
+                        <td>@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(item.DiscountAmount))</td>
                         <td>@item.PaymentDateStr</td>
                         <td>@item.PartialPayment</td>
-                        <td>@item.NextPaymentDate</td>
+                        <td>@item.PartialPaymentDateStr</td>
                         <td>@item.CSName</td>
+                        <td>@Html.Raw(item.Freebies)</td>
+                        <td>@Html.Raw(item.Comments)</td>
+                        <td><a onclick="AddPayment(@item.GroupId, '@item.CustomerName','@item.RenewalDate');" style="cursor:pointer;color:blue;"><u>Add Payment</u></a></td>
                     </tr>
                 }
             </table>
         </div>
     }
 </div>
+<script>
+    function AddPayment(id, CustomerName, RenewalAmount) {
+        $("#hdnGroupId").val(id);
+        $("#hdnRenewalDate").val(RenewalAmount);
+        $("#spnCustName").text(CustomerName);        
+        $("#dvRenewalAdd").show(1000);
+    }
+</script>

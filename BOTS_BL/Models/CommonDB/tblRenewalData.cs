@@ -31,8 +31,19 @@ namespace BOTS_BL.Models.CommonDB
         [Column(TypeName = "date")]
         public DateTime? NextPaymentDate { get; set; }
 
+        [StringLength(50)]
+        public string PaymentType { get; set; }
+
+        [StringLength(50)]
+        public string Frequency { get; set; }
+
         [Column(TypeName = "date")]
         public DateTime PaymentDate { get; set; }
+        [StringLength(250)]
+        public string Freebies { get; set; }
+        [StringLength(500)]
+        public string Comments { get; set; }
+
         [StringLength(150)]
         public string CSName { get; set; }
         [Required]

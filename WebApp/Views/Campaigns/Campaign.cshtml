@@ -1073,10 +1073,34 @@
                         }
                     }
                 },
-                { data: "CampaignMemberCount" },
+                /*{ data: "CampaignMemberCount" },*/
+                {
+                    "mData": "CampaignMemberCount",
+                    "mRender": function (data, type, row) {
+
+                        if (data != null) {
+                            return '<span>' + addComma(data) + '</span>';
+                        }
+                        else {
+                            return '<span></span>';
+                        }
+                    }
+                },
                 { data: "UniqueMemberTransacted" },
                 { data: "Transactions" },
-                { data: "BizGenerated" },
+                {
+                    "mData": "BizGenerated",
+                    "mRender": function (data, type, row) {
+
+                        if (data != null) {
+                            return '<span>' + addComma(data) + '</span>';
+                        }
+                        else {
+                            return '<span></span>';
+                        }
+                    }
+                },
+               /* { data: "BizGenerated" },*/
                 { data: "Conversion" }
             ]
         });
@@ -1185,7 +1209,7 @@
             "ordering": false,
             "info": false,
             "bFilter": false,
-            "pageLength": 25,
+            "pageLength": 200,
             "lengthChange": false,
             "pagingType": "simple_numbers",
             "columns": [

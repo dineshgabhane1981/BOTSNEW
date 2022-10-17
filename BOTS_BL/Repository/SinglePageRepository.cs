@@ -13,6 +13,7 @@ using BOTS_BL.Models;
 using BOTS_BL.Models.CommonDB;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using System.Data.Entity.Migrations;
 
 namespace BOTS_BL.Repository
 {
@@ -559,52 +560,59 @@ namespace BOTS_BL.Repository
                     var groups = context.tblGroupDetails.Where(x => x.IsActive == true && x.IsLive == true).ToList();
                     foreach (var item in groups)
                     {
-                        var groupId = Convert.ToInt32(item.GroupId);
-                        CityWiseData objItem = new CityWiseData();
+                        try
+                        {
+                            var groupId = Convert.ToInt32(item.GroupId);
+                            CityWiseData objItem = new CityWiseData();
 
-                        objItem.GroupId = Convert.ToString(item.GroupId);
-                        objItem.GroupName = item.GroupName;
-                        var category = (from c in context.tblGroupDetails
-                                        join ct in context.tblCategories on c.RetailCategory equals ct.CategoryId
+                            objItem.GroupId = Convert.ToString(item.GroupId);
+                            objItem.GroupName = item.GroupName;
+                            var category = (from c in context.tblGroupDetails
+                                            join ct in context.tblCategories on c.RetailCategory equals ct.CategoryId
+                                            where c.GroupId == groupId
+                                            select new
+                                            {
+                                                ct.CategoryName
+                                            }).FirstOrDefault();
+                            objItem.CategoryName = category.CategoryName;
+
+                            var city = (from c in context.tblGroupDetails
+                                        join ct in context.tblCities on c.City equals ct.CityId
                                         where c.GroupId == groupId
                                         select new
                                         {
-                                            ct.CategoryName
+                                            ct.CityName
                                         }).FirstOrDefault();
-                        objItem.CategoryName = category.CategoryName;
 
-                        var city = (from c in context.tblGroupDetails
-                                    join ct in context.tblCities on c.City equals ct.CityId
-                                    where c.GroupId == groupId
-                                    select new
-                                    {
-                                        ct.CityName
-                                    }).FirstOrDefault();
+                            objItem.CityName = city.CityName;
 
-                        objItem.CityName = city.CityName;
-
-                        string connStr = CR.GetCustomerConnString(Convert.ToString(item.GroupId));
-                        using (var contextdb = new BOTSDBContext(connStr))
-                        {
-
-                            //objItem.MemberBase = contextdb.CustomerDetails.Count();
-                            objItem.MemberBase = contextdb.CustomerDetails.Count();
-
-                            var sqlQ = $"SELECT COUNT(*) as Count FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = 'BulkUploadCustList'";
-                            var exist = contextdb.Database.SqlQuery<int>(sqlQ).FirstOrDefault();
-                            if (exist > 0)
+                            string connStr = CR.GetCustomerConnString(Convert.ToString(item.GroupId));
+                            using (var contextdb = new BOTSDBContext(connStr))
                             {
-                                objItem.MemberBulkUpload = contextdb.BulkUploadCustLists.Count();
-                                objItem.TotalMemberBase = objItem.MemberBase + contextdb.BulkUploadCustLists.Count();
-                            }
-                            else
-                            {
-                                objItem.MemberBulkUpload = 0;
-                                objItem.TotalMemberBase = objItem.MemberBase;
-                            }
 
+                                //objItem.MemberBase = contextdb.CustomerDetails.Count();
+                                objItem.MemberBase = contextdb.CustomerDetails.Count();
+
+                                var sqlQ = $"SELECT COUNT(*) as Count FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = 'BulkUploadCustList'";
+                                var exist = contextdb.Database.SqlQuery<int>(sqlQ).FirstOrDefault();
+                                if (exist > 0)
+                                {
+                                    objItem.MemberBulkUpload = contextdb.BulkUploadCustLists.Count();
+                                    objItem.TotalMemberBase = objItem.MemberBase + contextdb.BulkUploadCustLists.Count();
+                                }
+                                else
+                                {
+                                    objItem.MemberBulkUpload = 0;
+                                    objItem.TotalMemberBase = objItem.MemberBase;
+                                }
+
+                            }
+                            objData.Add(objItem);
                         }
-                        objData.Add(objItem);
+                        catch (Exception ex)
+                        {
+                            newexception.AddException(ex, "Inside For Loop GetCityWiseData");
+                        }
                     }
 
                     var uniqueCities = objData.GroupBy(x => x.CityName).Select(y => y.First()).ToList();
@@ -1058,14 +1066,18 @@ namespace BOTS_BL.Repository
             return (objData);
         }
 
-        public List<tblRenewalData> GetRenewalByGroup(string groupId)
+        public List<tblRenewalData> GetRenewalByGroup()
         {
             List<tblRenewalData> lstData = new List<tblRenewalData>();
             try
             {
                 using (var context = new CommonDBContext())
                 {
-                    lstData = context.tblRenewalDatas.Where(x => x.GroupId == groupId).ToList();
+                   
+                    var FromDate = new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1);
+                    var ToDate = new DateTime(DateTime.Today.AddMonths(3).Year, DateTime.Today.AddMonths(3).Month, 30);
+
+                    lstData = context.tblRenewalDatas.Where(x=>(x.RenewalDate> FromDate && x.RenewalDate<ToDate) || (x.NextPaymentDate > FromDate && x.NextPaymentDate < ToDate)).OrderByDescending(y=>y.RenewalDate).ToList();
 
                     foreach (var item in lstData)
                     {
@@ -1079,6 +1091,7 @@ namespace BOTS_BL.Repository
                         else
                         {
                             item.PartialPayment = "No";
+                            item.PartialPaymentDateStr = "--";
                         }
                     }
                 }
@@ -1090,6 +1103,24 @@ namespace BOTS_BL.Repository
             return lstData;
         }
 
+        public bool AddPayment(tblRenewalData objPaymentData)
+        {
+            bool status = false;
+            try
+            {
+                using (var context = new CommonDBContext())
+                {
+                    context.tblRenewalDatas.AddOrUpdate(objPaymentData);
+                    context.SaveChanges();
+                    status = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "AddPayment");
+            }
+            return status;
+        }
     }
     
 }

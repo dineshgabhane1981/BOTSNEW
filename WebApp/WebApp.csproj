@@ -231,6 +231,7 @@
     <Compile Include="ViewModel\CreateOwnReportViewModel.cs" />
     <Compile Include="ViewModel\CSWiseDataViewModel.cs" />
     <Compile Include="ViewModel\CustomerDashboardViewModel.cs" />
+    <Compile Include="ViewModel\CustomerPaymentsViewModel.cs" />
     <Compile Include="ViewModel\CustomerViewModel.cs" />
     <Compile Include="ViewModel\DataPoint.cs" />
     <Compile Include="ViewModel\DiscussionViewModel.cs" />
@@ -518,6 +519,8 @@
     <Content Include="Views\CustomerOnBoarding\CustomerTerms.cshtml" />
     <Content Include="Views\Campaigns\_CampaignWA.cshtml" />
     <Content Include="Views\BOPromoCampaign\GroupList.cshtml" />
+    <Content Include="Views\SinglePage\CustomerRenewal.cshtml" />
+    <Content Include="Views\SinglePage\_CustomerRenewalData.cshtml" />
     <None Include="_bin_deployableAssemblies\x86\sqlcese40.dll" />
     <None Include="_bin_deployableAssemblies\x86\sqlceqp40.dll" />
     <None Include="_bin_deployableAssemblies\x86\sqlceme40.dll" />

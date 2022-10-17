@@ -12,6 +12,7 @@ using System.ComponentModel;
 using System.Data;
 using ClosedXML.Excel;
 using System.IO;
+using System.Web.Script.Serialization;
 
 namespace WebApp.Controllers
 {
@@ -29,7 +30,7 @@ namespace WebApp.Controllers
                 GroupWiseDetails objGrpWise = new GroupWiseDetails();
                 //var count = SPR.GetAllTransactionData();
                 singlevm.lstGroupWiseDetails = SPR.GetGroupWiseData();
-                
+
                 foreach (var item in singlevm.lstGroupWiseDetails)
                 {
                     objGrpWise.CustCount = objGrpWise.CustCount + item.CustCount;
@@ -126,7 +127,7 @@ namespace WebApp.Controllers
             List<long> dataList2 = new List<long>();
             List<long> dataList3 = new List<long>();
             var allData = SPR.GetDiscussionData();
-            if(!string.IsNullOrEmpty(CsMember))
+            if (!string.IsNullOrEmpty(CsMember))
             {
                 allData = allData.Where(x => x.RMLoginId == CsMember).ToList();
             }
@@ -181,8 +182,8 @@ namespace WebApp.Controllers
                 typeData = allData.Where(x => x.days >= 36).ToList();
             }
 
-            objData.lstData = typeData.Where(x => x.CustomerType == CustomerType).OrderByDescending(y=>y.days).ToList();
-            if(!string.IsNullOrEmpty(CSMember))
+            objData.lstData = typeData.Where(x => x.CustomerType == CustomerType).OrderByDescending(y => y.days).ToList();
+            if (!string.IsNullOrEmpty(CSMember))
             {
                 objData.lstData = objData.lstData.Where(x => x.RMLoginId == CSMember).ToList();
             }
@@ -246,13 +247,13 @@ namespace WebApp.Controllers
                     wb.Worksheets.Add(table);
                     using (MemoryStream stream = new MemoryStream())
                     {
-                        wb.SaveAs(stream);                        
+                        wb.SaveAs(stream);
 
                         return File(stream.ToArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
 
                     }
                 }
-                    
+
             }
             catch (Exception ex)
             {
@@ -395,7 +396,7 @@ namespace WebApp.Controllers
 
             return View(singlevm);
         }
-        
+
         public ActionResult DiscussionCountReport()
         {
             var result = DR.GetDiscussionCountReport();
@@ -404,29 +405,68 @@ namespace WebApp.Controllers
 
         public ActionResult RenewalData()
         {
-            
+            CustomerPaymentsViewModel objData = new CustomerPaymentsViewModel();
             List<SelectListItem> lstGroups = new List<SelectListItem>();
             try
             {
                 //lstRenewalData = SPR.GetRenewalData();
-                lstGroups = CR.GetAllActiveGroups();
-                
-                ViewBag.Groups = lstGroups;
+                //lstGroups = CR.GetAllActiveGroups();
+
+                //ViewBag.Groups = lstGroups;
             }
             catch (Exception ex)
             {
                 newexception.AddException(ex, "Customer Renewal");
             }
 
-            
-            return View("CustomerRenewal");
+
+            return View("CustomerRenewal", objData);
         }
 
-        public ActionResult GetGroupRenewalData(string GroupId)
+        public ActionResult GetGroupRenewalData()
         {
             List<tblRenewalData> lstRenewalData = new List<tblRenewalData>();
-            lstRenewalData = SPR.GetRenewalByGroup(GroupId);
+            lstRenewalData = SPR.GetRenewalByGroup();
             return PartialView("_CustomerRenewalData", lstRenewalData);
+        }
+
+        [HttpPost]
+        public JsonResult AddPayment(string jsonData)
+        {
+            bool result = false;
+            tblRenewalData objData = new tblRenewalData();
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            JavaScriptSerializer json_serializer = new JavaScriptSerializer();
+            json_serializer.MaxJsonLength = int.MaxValue;
+            object[] objCommConfigData = (object[])json_serializer.DeserializeObject(jsonData);
+            foreach (Dictionary<string, object> item in objCommConfigData)
+            {
+                objData.GroupId = Convert.ToString(item["GroupId"]);
+                objData.CustomerName = Convert.ToString(item["GroupName"]);
+                objData.PaymentType = Convert.ToString(item["PaymentType"]);
+                objData.Frequency = Convert.ToString(item["Frequency"]);
+                objData.RenewalAmount = Convert.ToDecimal(item["RenewalAmount"]);
+                if (!string.IsNullOrEmpty(Convert.ToString(item["DiscountAmount"])))
+                    objData.DiscountAmount = Convert.ToDecimal(item["DiscountAmount"]);
+
+                objData.IsPartPayment = Convert.ToBoolean(item["IsPartPayment"]);
+                if (!string.IsNullOrEmpty(Convert.ToString(item["PartialPaymentDate"])))
+                    objData.NextPaymentDate = Convert.ToDateTime(item["PartialPaymentDate"]);
+
+                objData.PaidAmount = Convert.ToDecimal(item["PaymentAmount"]);
+                if (!string.IsNullOrEmpty(Convert.ToString(item["NextPaymentAmount"])))
+                    objData.PartPaymentAmount = Convert.ToDecimal(item["NextPaymentAmount"]);
+
+                objData.Freebies = Convert.ToString(item["Freebies"]);
+                objData.Comments = Convert.ToString(item["Comments"]);
+                if (!string.IsNullOrEmpty(Convert.ToString(item["RenewalDate"])))
+                    objData.RenewalDate = Convert.ToDateTime(item["RenewalDate"]);
+
+                objData.AddedBy = userDetails.UserName;
+                objData.PaymentDate = DateTime.Now;
+            }
+            result = SPR.AddPayment(objData);
+            return new JsonResult() { Data = result, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
     }
 }

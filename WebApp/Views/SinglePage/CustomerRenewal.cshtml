@@ -1,4 +1,4 @@
-﻿
+﻿@model WebApp.ViewModel.CustomerPaymentsViewModel
 @{
     ViewBag.Title = "Customer Renewal";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -6,30 +6,113 @@
 
 
 
-<div class="app-main__inner">
+<div class="app-main__inner" style="padding-left:15px !important;">
     <div class="mb-3 card" style="padding-top:20px;padding-bottom:20px;">
-        <div class="content">
+        <div class="content row">
             <!--content inner-->
 
-            <div class="container overflow-hidden">
-                @Html.DropDownList("Group", new SelectList(ViewBag.Groups, "Value", "Text"), "Select Group", htmlAttributes: new { @class = "input50", @id = "ddlGroup" })
+            <div class="container overflow-hidden col-lg-4">
+                <input type="radio" id="rdnRenewal" name="rbtnType" /> Renewal &nbsp;&nbsp;&nbsp;&nbsp;
+                <input type="radio" id="rdnVWA" name="rbtnType" /> Verified Whatsapp
             </div>
-            <div style="text-align:right;margin-top:-50px;padding-right:100px;">
-                <a href="#" title="Add Renewal" id="btnAddRenewal">  <img src="~/Content/assets/images/AddCustomer.png" /></a>
+            <div class="container overflow-hidden col-lg-4">
+                <input type="radio" id="rdnQuarter" name="rbtnDuration" /> Quarter &nbsp;&nbsp;&nbsp;&nbsp;
+                <input type="radio" id="rdnHalfYear" name="rbtnDuration" /> Half Year &nbsp;&nbsp;&nbsp;&nbsp;
+                <input type="radio" id="rdnYear" name="rbtnDuration" /> Year
             </div>
         </div>
     </div>
     <div class="mb-3 card" style="padding-top:20px;padding-bottom:20px;display:none;" id="dvRenewalAdd">
-        <div class="content" style="text-align:center;">
-            <div class="container-fluid">
-                <div class="row">
-                    <div class="col-md-6 col-sm-6">
-                        Renewal Amount <input id="txtRenewalAmount" type="number" class="input50" />
+        <div class="content col-md-12 col-sm-12" style="text-align: left; ">
+            <div class="container-fluid p-3" style="border: 1px solid grey;border-radius:10px;">
+                <div class="row mb-3">
+                    <div class="col-md-2 col-sm-2">
+                        Customer Name
                     </div>
-                    <div class="col-md-6 col-sm-6">
-                        Discount Amount <input id="txtDiscountAmount" type="number" class="input50" />
+                    <div class="col-md-4 col-sm-4">
+                        <span id="spnCustName" style="font-weight:bold;"></span>
+                    </div>
+                    <div class="col-md-2 col-sm-2">
 
                     </div>
+                    <div class="col-md-4 col-sm-4">
+
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-md-2 col-sm-2">
+                        Payment Type
+                    </div>
+                    <div class="col-md-4 col-sm-4">
+                        @Html.DropDownListFor(model => model.objRenewalData.PaymentType, new SelectList(Model.PaymentType(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input50", @id = "ddlPaymentType" })
+                    </div>
+                    <div class="col-md-2 col-sm-2">
+                        Frequency
+                    </div>
+                    <div class="col-md-4 col-sm-4">
+                        @Html.DropDownListFor(model => model.objRenewalData.Frequency, new SelectList(Model.Frequency(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input50", @id = "ddlFrequency" })
+                    </div>
+
+                </div>
+                <div class="row mb-3">
+                    <div class="col-md-2 col-sm-2">
+                        Renewal Amount
+                    </div>
+                    <div class="col-md-4 col-sm-4">
+                        <input id="txtRenewalAmount" type="number" class="input50" />
+                    </div>
+                    <div class="col-md-2 col-sm-2">
+                        Discount Amount
+                    </div>
+                    <div class="col-md-4 col-sm-4">
+                        <input id="txtDiscountAmount" type="number" class="input50" />
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-md-2 col-sm-2">
+                        Is Partial Payment
+                    </div>
+                    <div class="col-md-4 col-sm-4">
+                        @Html.CheckBoxFor(model => model.objRenewalData.IsPartPayment, htmlAttributes: new { @style = "width:20px; height:20px;cursor:pointer;", @id = "IsPartPayment" })
+                    </div>
+                    <div class="col-md-2 col-sm-2">
+                        Partial Payment Date
+                    </div>
+                    <div class="col-md-4 col-sm-4">
+                        <input id="txtPartialPaymentDate" type="text" class="input50" />
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-md-2 col-sm-2">
+                        Payment Amount
+                    </div>
+                    <div class="col-md-4 col-sm-4">
+                        <input id="txtPaymentAmount" type="number" class="input50" />
+                    </div>
+                    <div class="col-md-2 col-sm-2">
+                        Next Payment Amount
+                    </div>
+                    <div class="col-md-4 col-sm-4">
+                        <input id="txtNextPaymentAmount" type="number" class="input50" />
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-md-2 col-sm-2">
+                        Freebies
+                    </div>
+                    <div class="col-md-4 col-sm-4">
+                        @Html.TextAreaFor(model => model.objRenewalData.Freebies, htmlAttributes: new { @class = "input100", @id = "txtFreebies" })
+                    </div>
+                    <div class="col-md-2 col-sm-2">
+                        Comments
+                    </div>
+                    <div class="col-md-4 col-sm-4">
+                        @Html.TextAreaFor(model => model.objRenewalData.Comments, htmlAttributes: new { @class = "input100", @id = "txtComments" })
+                    </div>
+                </div>
+                <div class="container-fluid pt-3 pl-3 pr-3" style="margin-bottom:25px;">
+                    <button type="button" id="btnPaymentAdd" class="btn btn-primary pull-right" onclick="CheckValidationAndSubmit();" style="margin-right:10px;">Add Payment</button>
+                    <button type="button" id="btnClose" class="btn btn-outline-primary cancel-btn pull-right mr-3" onclick="ClosePopup();"> Cancel</button>
                 </div>
             </div>
         </div>
@@ -43,21 +126,41 @@
 
 <script>
     $(document).ready(function () {
-        $('#ddlGroup').change(function () {
-            var GroupId = $("#ddlGroup").val();
-            GetRenewalData(GroupId);           
-        });
+        GetRenewalData();
+
+        $("#txtPartialPaymentDate").attr("disabled", true);
+        $("#txtNextPaymentAmount").attr("disabled", true);
+
         $('#btnAddRenewal').on("click", function () {
             AddRenewal();
         });
+        var today = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
+        $("#txtPartialPaymentDate").datepicker({
+            dateFormat: "yy-mm-dd",
+            minDate: today,
+        });
+        $('#IsPartPayment').change(function () {
+            if (this.checked) {
+                $("#txtPartialPaymentDate").attr("disabled", false);
+                $("#txtNextPaymentAmount").attr("disabled", false);
+            }
+            else {
+                $("#txtPartialPaymentDate").val("");
+                $("#txtNextPaymentAmount").val("");
+                $("#txtPartialPaymentDate").attr("disabled", true);
+                $("#txtNextPaymentAmount").attr("disabled", true);
+
+            }
+            $('#textbox1').val(this.checked);
+        });
     });
 
-    function GetRenewalData(Id) {
+    function GetRenewalData() {
         $("#divLoader").show();
         $.ajax({
             type: "POST",
             url: '@Url.Action("GetGroupRenewalData", "SinglePage")',
-            data: '{GroupId: ' + JSON.stringify(Id) + '}',
+            //data: '{GroupId: ' + JSON.stringify(Id) + '}',
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             success: function (response) {
@@ -78,4 +181,157 @@
         $("#dvRenewalAdd").show(1000);
     }
 
+    function ClosePopup() {
+        ClearAll();
+        $("#dvRenewalAdd").hide(1000);
+    }
+
+    function ClearAll() {        
+        $('#ddlPaymentType').prop('selectedIndex', 0);
+        $('#ddlFrequency').prop('selectedIndex', 0);
+        $("#txtRenewalAmount").val("");
+        $("#txtDiscountAmount").val("");
+        $('#IsPartPayment').prop('checked', false);         
+        $("#txtPartialPaymentDate").val("");
+        $("#txtPaymentAmount").val("");
+        $("#txtNextPaymentAmount").val("");
+        $("#txtFreebies").val("");
+        $("#txtComments").val("");
+        $("#txtPaymentAmount").val("");
+    }
+
+    function CheckValidationAndSubmit() {
+        var SaveData = [];
+        if (CheckValidations()) {
+            saveitem = {}
+            saveitem["GroupId"] = $("#hdnGroupId").val();
+            saveitem["GroupName"] = $("#spnCustName").text();
+            saveitem["PaymentType"] = $("#ddlPaymentType").val();
+            saveitem["Frequency"] = $("#ddlFrequency").val();
+            saveitem["RenewalAmount"] = $("#txtRenewalAmount").val();
+            saveitem["DiscountAmount"] = $("#txtDiscountAmount").val();
+            saveitem["IsPartPayment"] = $("#IsPartPayment").val();
+            saveitem["PartialPaymentDate"] = $("#txtPartialPaymentDate").val();
+            saveitem["PaymentAmount"] = $("#txtPaymentAmount").val();
+            saveitem["NextPaymentAmount"] = $("#txtNextPaymentAmount").val();
+            saveitem["Freebies"] = $("#txtFreebies").val();
+            saveitem["Comments"] = $("#txtComments").val();
+            saveitem["RenewalDate"] = $("#hdnRenewalDate").val();
+
+            SaveData.push(saveitem);
+            console.log(SaveData);
+            var SaveDataStr = JSON.stringify(SaveData);
+
+            $("#divLoader").show();
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("AddPayment", "SinglePage")',
+                data: '{jsonData: ' + JSON.stringify(SaveDataStr) + '}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (response) {
+                    cuteAlert({
+                        type: "success",
+                        title: "Saved",
+                        message: "Payment added Successfully",
+                        buttonText: "Okay"
+                    })
+                    GetRenewalData();
+                    //alert(response);
+                    $("#divLoader").hide();
+                },
+                failure: function (response) {
+                    cuteAlert({
+                        type: "error",
+                        title: "OOPS...",
+                        message: "Issue occured while adding payment",
+                        buttonText: "Okay"
+                    })
+                    $("#divLoader").hide();
+                },
+                error: function (response) {
+                    //$("#dvRenewalData").html(response.responseText);
+                    $("#divLoader").hide();
+                }
+            });
+        }
+    }
+
+    function CheckValidations() {
+        if ($("#ddlPaymentType").val() == "") {
+            cuteAlert({
+                type: "error",
+                title: "Ops..",
+                message: "Please select payment type",
+                buttonText: "Okay"
+            }).then(() => {
+                $("#ddlPaymentType").focus();
+            })
+            return false;
+        }
+        if ($("#ddlFrequency").val() == "") {
+            cuteAlert({
+                type: "error",
+                title: "Ops..",
+                message: "Please select frequency",
+                buttonText: "Okay"
+            }).then(() => {
+                $("#ddlFrequency").focus();
+            })
+            return false;
+        }
+        if ($("#txtRenewalAmount").val() == "") {
+            cuteAlert({
+                type: "error",
+                title: "Ops..",
+                message: "Please enter renewal amount",
+                buttonText: "Okay"
+            }).then(() => {
+                $("#txtRenewalAmount").focus();
+            })
+            return false;
+        }
+        if ($("#IsPartPayment").is(":checked")) {
+            if ($("#txtPartialPaymentDate").val() == "") {
+                cuteAlert({
+                    type: "error",
+                    title: "Ops..",
+                    message: "Please enter partial payment date",
+                    buttonText: "Okay"
+                }).then(() => {
+                    $("#txtPartialPaymentDate").focus();
+                })
+                return false;
+            }
+            if ($("#txtNextPaymentAmount").val() == "") {
+                cuteAlert({
+                    type: "error",
+                    title: "Ops..",
+                    message: "Please enter next payment amount",
+                    buttonText: "Okay"
+                }).then(() => {
+                    $("#txtNextPaymentAmount").focus();
+                })
+                return false;
+            }            
+        }
+        if ($("#txtPaymentAmount").val() == "") {
+            cuteAlert({
+                type: "error",
+                title: "Ops..",
+                message: "Please enter payment amount",
+                buttonText: "Okay"
+            }).then(() => {
+                $("#txtPaymentAmount").focus();
+            })
+            return false;
+        }
+        return true;
+    }
+
 </script>
+
+<script src="~/Scripts/jquery-ui-1.12.1.js"></script>
+<script src="~/Scripts/jquery-ui-1.12.1.min.js"></script>
+<link href="~/Content/themes/base/jquery-ui.min.css" rel="stylesheet" />
+<link href="~/Content/themes/base/jquery-ui.css" rel="stylesheet" />
