@@ -660,13 +660,18 @@ namespace BOTS_BL.Repository
         {
             List<LisCampaign> CM = new List<LisCampaign>();
             List<LisCampaign> CM3 = new List<LisCampaign>();
+            string Todate;
+            TimeZoneInfo IND_ZONE = TimeZoneInfo.FindSystemTimeZoneById("India Standard Time");
+            DateTime Sched = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, IND_ZONE);
+            
+            Todate = Sched.ToString("yyyy-MM-dd");
 
             using (var context = new BOTSDBContext(connectionString))
             {
                 try
                 {
                     DateTime CDate = DateTime.Parse(DateTime.Now.ToShortDateString());
-                    var CM1 = context.CampaignMasters.OrderByDescending(x => x.CampaignId).Select(x => new { x.CampaignId, x.CampaignName, x.StartDate, x.EndDate, x.Status, x.ControlBase, x.CampaignBase }).ToList();
+                    var CM1 = context.CampaignMasters.OrderByDescending(x => x.CampaignId).Select(x => new { x.CampaignId, x.CampaignName, x.StartDate, x.EndDate, x.Status, x.ControlBase, x.CampaignBase, x.CommunicationMode }).ToList();
                     
                     //var CM1 = ((from c in context.CampaignMasters orderby c.CampaignId descending  select c).Take(5)).ToList();
 
@@ -685,8 +690,40 @@ namespace BOTS_BL.Repository
                         itemData.Status = item.Status;
                         itemData.ControlBase = Convert.ToString(item.ControlBase);
                         itemData.CampaignBase = Convert.ToString(item.CampaignBase);
+                        string V = Convert.ToString(item.CommunicationMode);
 
-                            CM.Add(itemData);
+                        if (item.StartDate > Sched)
+                        {
+                            itemData.Status = "Scheduled";
+                        }
+                        else if(item.EndDate < Sched)
+                        {
+                            itemData.Status = "Completed";
+                        }
+                        else if (item.EndDate > Sched)
+                        {
+                            itemData.Status = "On-Going";
+                        }
+
+                        if (V == "1")
+                        {
+                            itemData.CommunicationMode = "SMS";
+                        }
+                         else if(V == "2")
+                        {
+                            itemData.CommunicationMode = "Virtual SMS";
+                        }
+                        else if (V == "3")
+                        {
+                            itemData.CommunicationMode = "Whats App";
+                        }
+                        else if (V == "4")
+                        {
+                            itemData.CommunicationMode = " Virtual Whats App";
+                        }
+
+
+                        CM.Add(itemData);
                         }
                         var CMD = ((from c in CM orderby c.CampaignId descending select c).Take(5)).ToList();
 
@@ -703,6 +740,7 @@ namespace BOTS_BL.Repository
                         itemData.Status = item.Status;
                         itemData.ControlBase = Convert.ToString(item.ControlBase);
                         itemData.CampaignBase = Convert.ToString(item.CampaignBase);
+                        itemData.CommunicationMode = item.CommunicationMode;
 
                         CM3.Add(itemData);
                     }

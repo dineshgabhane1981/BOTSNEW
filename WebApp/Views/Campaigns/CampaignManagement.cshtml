@@ -24,6 +24,7 @@
                                 <th>Campaign ID</th>
                                 <th>Campaign Name</th>
                                 <th>Member Count</th>
+                                <th>Campaign Type</th>
                                 <th>Start Date</th>
                                 <th>End Date</th>
                                 <th>Status</th>
@@ -31,20 +32,22 @@
                             @foreach (var item in ViewBag.ListCampDetails)
                             {
                                 var total = Convert.ToInt64(item.ControlBase) + Convert.ToInt64(item.CampaignBase);
-                                <tr>
-                                    <td>@item.CampaignId</td>
-                                    @*<td style="text-align:center;">--</td>*@
+                        <tr>
+                            <td>@item.CampaignId</td>
+                            @*<td style="text-align:center;">--</td>*@
 
-                                    <td>@item.CampaignName</td>
+                            <td>@item.CampaignName</td>
 
-                                    <td>@total</td>
+                            <td>@total</td>
 
-                                    <td>@item.StartDateStr</td>
+                            <td>@item.CommunicationMode</td>
 
-                                    <td>@item.EndDateStr</td>
+                            <td>@item.StartDateStr</td>
 
-                                    <td>@item.Status</td>
-                                </tr>
+                            <td>@item.EndDateStr</td>
+
+                            <td>@item.Status</td>
+                        </tr>
                             }
                         </table>
 

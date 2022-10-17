@@ -173,7 +173,7 @@
                     </div>
                     <div class="col-md-8 col-xl-8">
                         <div class="custom-control custom-switch">
-                            <input type="checkbox" class="custom-control-input" id="ScheduleSwitch" value="0" onchange="ShowScheduledate();">
+                            <input type="checkbox" class="custom-control-input" id="ScheduleSwitch" value="0">
                             <label class="custom-control-label" style="cursor:pointer !important;" for="ScheduleSwitch"><b>Schedule Date & Time</b></label>
                         </div>
                     </div>
@@ -221,9 +221,9 @@
                         </table>
                     </div>
 
-                    <div class="col-md-4" style="margin-top:10px;">
+                    @*<div class="col-md-4" style="margin-top:10px;">
                         <textarea class="form-control" id="txtScript" rows="7" maxlength="10000"></textarea>&nbsp;&nbsp;
-                    </div>
+                    </div>*@
                 </div>
 
                 @*<div id="GoogleElement" style="margin-left:130px;">
@@ -273,178 +273,11 @@
 </div>
 
 <link rel="stylesheet" href="~/Scripts/datetimepicker-master/build/jquery.datetimepicker.min.css">
-<script src="~/Scripts/datetimepicker-master/jquery.js"></script>
+@*<script src="~/Scripts/datetimepicker-master/jquery.js"></script>*@
 <script src="~/Scripts/datetimepicker-master/build/jquery.datetimepicker.full.min.js"></script>
-@*<script src="http://translate.google.com/translate_a/element.js?cb=loadGoogleTranslate"></script>*@
-@*<script type="text/javascript" src="~/Scripts/google_jsapi.js"></script>*@
-@*<script type="text/javascript" src="https://www.google.com/jsapi"></script>*@
 <script type="text/javascript"></script>
-@*<script type="text/javascript" src="http://vaani.neechalkaran.com/Scripts/google_jsapi.js"></script>;*@
-
-@*<script type='text/javascript' src='https://secure.trust-provider.com/trustlogo/javascript/trustlogo.js'></script>*@
-
-@*<script type='text/javascript'>
-        google("https://www.google.com/uds/?file=language&v=1", "SECEV", "none");
-    </script>*@
-
-
-<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+@*<script type="text/javascript" src="https://www.google.com/jsapi"></script>*@
 <script>
-
-    //function loadGoogleTranslate(){
-    //    new google.translate.TranslateElement({ pageLanguage: 'ta', includedLanguages: 'en,ta,hi', layout: google.translate.TranslateElement.InlineLayout.SIMPLE },
-    //        'GoogleElement');
-    //}
-
-    //Load the google elements
-    //google.load("language", "1");
-    //google.load("elements", "1", { packages: "transliteration" });
-    //new google.elements.transliteration.TransliterationControl(options);
-
-    //function onLoad() {
-    //    var options = {
-    //        sourceLanguage:
-    //            google.elements.transliteration.LanguageCode.ENGLISH,
-    //        destinationLanguage:
-    //            [google.elements.transliteration.LanguageCode.HINDI],
-    //        transliterationEnabled: true
-    //    }
-    //}
-    //    //Create a Instance on TransliterationControl
-    //    var control = new google.elements.transliteration.TransliterationControl(options);
-
-    //    control.makeTransliteratable(['txtScript']);
-    //}
-    //google.setLoadCallback(onLoad);
-
-
-    //function intialize_transliteration() {
-    //    var options = {
-    //        sourceLanguage: 'en',
-    //        destinationLanguage: ['kn'],
-    //        shortcutKey: 'ctrl+g',
-    //        transliterationEnabled: true
-    //    };
-    //    var control =
-    //        new google.elements.transliteration.TransliterationControl(options);
-
-    //    //add as many as required
-    //    var ids = ["txtScript"];
-
-    //    control.makeTransliteratable(ids);
-    //    control.showControl('translControl');
-    //}
-    //google.setOnLoadCallback(intialize_transliteration);
-
-    //function auto_transliterate(from, to) {
-    //    if (from.value) {
-    //        google.language.transliterate(from.value.split(" "), "en", "kn", function (result) {
-    //            if (!result.error) {
-    //                if (result.transliterations && result.transliterations.length > 0) {
-
-    //                    if (result.transliterations[0].transliteratedWords.length > 0) {
-    //                        to.value = result.transliterations[0].transliteratedWords[0];
-    //                    }
-    //                    if (result.transliterations[1].transliteratedWords.length > 0) {
-    //                        to.value = to.value + " " + result.transliterations[1].transliteratedWords[0];
-    //                    }
-    //                    if (result.transliterations[2].transliteratedWords.length > 0) {
-    //                        to.value = to.value + " " + result.transliterations[2].transliteratedWords[0];
-    //                    }
-    //                    if (result.transliterations[3].transliteratedWords.length > 0) {
-    //                        to.value = to.value + " " + result.transliterations[3].transliteratedWords[0];
-    //                    }
-    //                    if (result.transliterations[4].transliteratedWords.length > 0) {
-    //                        to.value = to.value + " " + result.transliterations[4].transliteratedWords[0];
-    //                    }
-
-
-    //                }
-    //            }
-    //        });
-    //    }
-    //}
-
-    //function auto_transliterate_all() {
-    //    auto_transliterate(document.getElementById("SMSScript"), document.getElementById("txtScript"));
-    //    //auto_transliterate(document.getElementById("ln"), document.getElementById("lnk"));
-    //    //Add more if required!
-    //}
-
-
-    // Load the google elements
-    google.load("elements", "1", {
-        packages: "transliteration"
-    });
-    //function onLoad() {
-    //    var options = {
-    //        sourceLanguage:
-    //            google.elements.transliteration.LanguageCode.ENGLISH,
-    //        destinationLanguage:
-    //            [google.elements.transliteration.LanguageCode.HINDI],
-    //        transliterationEnabled: true
-    //    }
-    //    var options2 = {
-    //        sourceLanguage:
-    //            google.elements.transliteration.LanguageCode.ENGLISH,
-    //        destinationLanguage:
-    //            [google.elements.transliteration.LanguageCode.TAMIL],
-    //        transliterationEnabled: true
-    //    }
-    //    // Create a Instance on TransliterationControl
-    //    var control = new google.elements.transliteration.TransliterationControl(options);
-    //    var control2 = new google.elements.transliteration.TransliterationControl(options2);
-    //    control.makeTransliteratable(['SMSScript']);
-    //    control2.makeTransliteratable(['txtScript']);
-    //}
-    //function auto_transliterate(from, to) {
-    //    if (from.value) {
-    //        google.language.transliterate(from.value.split(" "), "en", "kn", function (result) {
-    //            if (!result.error) {
-    //                if (result.transliterations && result.transliterations.length > 0) {
-
-    //                    if (result.transliterations[0].transliteratedWords.length > 0) {
-    //                        to.value = result.transliterations[0].transliteratedWords[0];
-    //                    }
-    //                    if (result.transliterations[1].transliteratedWords.length > 0) {
-    //                        to.value = to.value + " " + result.transliterations[1].transliteratedWords[0];
-    //                    }
-    //                    if (result.transliterations[2].transliteratedWords.length > 0) {
-    //                        to.value = to.value + " " + result.transliterations[2].transliteratedWords[0];
-    //                    }
-    //                    if (result.transliterations[3].transliteratedWords.length > 0) {
-    //                        to.value = to.value + " " + result.transliterations[3].transliteratedWords[0];
-    //                    }
-    //                    if (result.transliterations[4].transliteratedWords.length > 0) {
-    //                        to.value = to.value + " " + result.transliterations[4].transliteratedWords[0];
-    //                    }
-
-
-    //                }
-    //            }
-    //        });
-    //    }
-    //}
-    //function auto_transliterate_all() {
-    //    auto_transliterate(document.getElementById("SMSScript"), document.getElementById("txtScript"));
-    //    //auto_transliterate(document.getElementById("ln"), document.getElementById("lnk"));
-    //    //Add more if required!
-    //}
-    //google.setOnLoadCallback(onLoad);
-
-
-
-    //var objsts = $("#WASMSScript");
-    //var english = /^[A-Za-z0-9]*$/;
-
-    //$.each(objsts, function () {
-    //    var $this = $(this);
-    //    if (!english.test($this.html()))
-    //        /* $this.addClass('active');*/
-    //        alert("Hello");
-    //});
-
-
 
     function SMStypeValidate() {
         if (document.getElementById("rdnWA").checked) {
@@ -605,6 +438,8 @@
         var CharCount = parseInt($("#current").text());
         a = Math.ceil(CharCount / TempCalc);
         TotalCredits = a * parseFloat(FiltCountnum.replace(/,/g, ''));
+        var BalanceCredit = SMSBalance - TotalCredits;
+        var ReqBal = TotalCredits - SMSBalance;
 
         if (AllCount == "") {
 
@@ -693,7 +528,7 @@
                 cuteAlert({
                     type: "error",
                     title: "Balance Error",
-                    message: "SMS Balance Insufficient! Total Bal: " + XXX + "| Total Credits Required:" + TotalCredits +"Add a minimum of "+ YYYY +" Balance and set the Campaign",
+                    message: "SMS Balance Insufficient! Total Bal: " + SMSBalance + "| Total Credits Required:" + TotalCredits + "Add a minimum of " + ReqBal +" Balance and set the Campaign",
                     buttonText: "Okay"
                 })
             }
@@ -701,7 +536,7 @@
                 cuteAlert({
                     type: "question",
                     title: "Campaign Confirmation",
-                    message: "Total Credits Required: " + a + "| Per Customer Count: " + TotalCredits + "Total Balance left after campaign:"+YYYY,
+                    message: "Total Credits Required: " + a + "| Per Customer Count: " + TotalCredits + "Total Balance left after campaign:" + BalanceCredit,
                     confirmText: "Yes",
                     cancelText: "No"
                 }).then((e) => {
@@ -1117,35 +952,10 @@
     }
 
     $("#ScheduleNow").change(function () {
-        alert($("#ScheduleNow").is(':checked'));
         if ($("#ScheduleNow").is(':checked') == true) {
-            
             if ($("#ScheduleSwitch").is(':checked') == true) {
-                $("#ScheduleSwitch").attr('Checked', false);
-                /*$('#SchedPick').toggle();*/
-                //if ($('#SchedPick').is(":visible")) {
-                //    $('#SchedPick').hide();
-                //}  
-                /*$('#SchedPick').show();*/
-            }
-        }
-        //else {
-        //    if ($("#ScheduleSwitch").is(':checked') == false) {
-        //        $("#ScheduleSwitch").attr('Checked', true);
-        //        /* $('#SchedPick').toggle();*/
-        //        if ($('#SchedPick').is(":hidden")) {
-        //            $('#SchedPick').show();
-        //        }
-        //    }
-        //}
-    });
+                $("#ScheduleSwitch").prop('checked', false);
 
-    function ShowScheduledate() {
-        alert($("#ScheduleSwitch").is(':checked'));
-        alert($('#SchedPick').is(":visible"));
-        if ($("#ScheduleSwitch").is(':checked') == true) {
-            if ($("#ScheduleNow").is(':checked') == true) {
-                $("#ScheduleNow").attr('Checked', false);
                 if ($('#SchedPick').is(":visible")) {
                     $('#SchedPick').hide();
                 }
@@ -1154,16 +964,20 @@
                 }
             }
         }
-        //else {
-        //    if ($("#ScheduleNow").is(':checked') == false) {
-        //        $("#ScheduleNow").attr('Checked', true);
-        //        /*$('#SchedPick').toggle();*/
-        //        if ($('#SchedPick').is(":visible")) {
-        //            $('#SchedPick').hide();
-        //        }
-        //    }
-        //}
-    }
+    });
+
+    $("#ScheduleSwitch").change(function() {
+        if ($("#ScheduleNow").is(':checked') == true) {    
+                $("#ScheduleNow").prop('checked', false);     
+        }
+        if ($('#SchedPick').is(":visible")) {
+            $('#SchedPick').hide();
+        }
+        else {
+            $('#SchedPick').show();
+        }
+    });
+
     function Showdatetime() {
          $('#datetimepicker').datetimepicker();
     }

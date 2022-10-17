@@ -163,6 +163,7 @@ namespace BOTS_BL.Models
         public string Status { get; set; }
         public string ControlBase { get; set; }
         public string CampaignBase { get; set; }
+        public string CommunicationMode { get; set; }
 
     }
     
@@ -210,6 +211,7 @@ namespace BOTS_BL.Models
         public string Status { get; set; }
         public string Status1 { get; set; }
         public string quota { get; set; }
+        
 
     }
 }

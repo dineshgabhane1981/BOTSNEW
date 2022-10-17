@@ -18,7 +18,7 @@ namespace BOTS_BL.Models
             : base(connectionStringName)
         {
         }
-        public virtual DbSet<tblEmployee> tblEmployees { get; set; }
+        public virtual DbSet<tblEmployee> tblEmployees {    get; set; }
         public virtual DbSet<tblNPCCategory> tblNPCCategories { get; set; }
         public virtual DbSet<tblNPCSubCategory> tblNPCSubCategories { get; set; }
         public virtual DbSet<tblNPCDetail> tblNPCDetails { get; set; }
