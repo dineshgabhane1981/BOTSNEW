@@ -1067,6 +1067,8 @@ namespace WebApp.Controllers
                 }
                 table.Columns.Remove("TotalSpend");
                 table.Columns.Remove("AvlPoints");
+                table.Columns.Remove("PointsExpiry");
+                table.Columns.Remove("ExpiryDate");
 
                 table.Columns["TotalSpendStr"].ColumnName = "TotalSpend";
                 table.Columns["AvlPointsStr"].ColumnName = "AvlPoints";

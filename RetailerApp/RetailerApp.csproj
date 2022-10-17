@@ -126,6 +126,7 @@
   <ItemGroup>
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
+    <Compile Include="App_Start\MenuHelper.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
@@ -133,6 +134,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ViewModels\CustomerDetailsViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\assets\BlueocktopusLoadingGIF.gif" />
@@ -241,7 +243,16 @@
     <Content Include="Content\assets\fonts\Pe-icon-7-stroke.eot" />
     <Content Include="Content\assets\fonts\Pe-icon-7-stroke.ttf" />
     <Content Include="Content\assets\fonts\Pe-icon-7-stroke.woff" />
+    <Content Include="Scripts\cute-alert-master\LICENSE" />
+    <Content Include="Scripts\cute-alert-master\README.md" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
+    <Content Include="Scripts\cute-alert-master\cute-alert.js" />
+    <Content Include="Scripts\cute-alert-master\img\error.svg" />
+    <Content Include="Scripts\cute-alert-master\img\info.svg" />
+    <Content Include="Scripts\cute-alert-master\img\question.svg" />
+    <Content Include="Scripts\cute-alert-master\img\success.svg" />
+    <Content Include="Scripts\cute-alert-master\img\warning.svg" />
+    <Content Include="Scripts\cute-alert-master\style-alert.css" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />
     <Content Include="Scripts\jquery-3.4.1.slim.js" />

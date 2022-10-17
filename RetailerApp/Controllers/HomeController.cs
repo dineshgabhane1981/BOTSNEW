@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using RetailerApp.ViewModels;
 
 namespace RetailerApp.Controllers
 {
@@ -25,6 +26,15 @@ namespace RetailerApp.Controllers
             ViewBag.Message = "Your contact page.";
 
             return View();
+        }
+
+        [HttpPost]
+        public ActionResult JsonResult(string MobileNo)
+        {            
+            CustomerDetailsViewModel objData = new CustomerDetailsViewModel();
+
+
+            return new JsonResult() { Data = objData, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
     }
 }

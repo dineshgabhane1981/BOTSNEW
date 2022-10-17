@@ -2,30 +2,53 @@
     ViewBag.Title = "Home Page";
 }
 
-<div class="jumbotron">
-    <h1>ASP.NET</h1>
-    <p class="lead">ASP.NET is a free web framework for building great Web sites and Web applications using HTML, CSS and JavaScript.</p>
-    <p><a href="https://asp.net" class="btn btn-primary btn-lg">Learn more &raquo;</a></p>
-</div>
-
-<div class="row">
-    <div class="col-md-4">
-        <h2>Getting started</h2>
-        <p>
-            ASP.NET MVC gives you a powerful, patterns-based way to build dynamic websites that
-            enables a clean separation of concerns and gives you full control over markup
-            for enjoyable, agile development.
-        </p>
-        <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301865">Learn more &raquo;</a></p>
-    </div>
-    <div class="col-md-4">
-        <h2>Get more libraries</h2>
-        <p>NuGet is a free Visual Studio extension that makes it easy to add, remove, and update libraries and tools in Visual Studio projects.</p>
-        <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301866">Learn more &raquo;</a></p>
-    </div>
-    <div class="col-md-4">
-        <h2>Web Hosting</h2>
-        <p>You can easily find a web hosting company that offers the right mix of features and price for your applications.</p>
-        <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301867">Learn more &raquo;</a></p>
+<div class="app-main__inner">
+    <div class="mb-3 card" style="padding-top:20px;">
+        <div class="content col-md-12 col-sm-12 row mb-3">
+            <div class="col-md-2 col-sm-2" style="margin-top:10px;">
+                Enter Mobile No
+            </div>
+            <div class="col-md-4 col-sm-4">
+                <input id="txtMobileNo" type="number" class="input100" />
+            </div>
+            <div class="col-md-2 col-sm-2">
+                <button type="button" id="btnSearchCustomer" class="btn btn-primary" onclick="SearchCustomer();" style="margin-top:10px;">Search</button>
+            </div>
+        </div>
     </div>
 </div>
+<script>
+    function SearchCustomer() {
+        if ($("#txtMobileNo").val() == "") {
+            cuteAlert({
+                type: "error",
+                title: "OOPS...",
+                message: "Please enter Mobile number to search",
+                buttonText: "Okay"
+            }).then(() => {
+                $("#txtMobileNo").focus();
+            })
+        }
+        else {
+            $("#divLoader").show();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("GetCustomerDetails", "Home")',
+            data: '{MobileNo: ' + JSON.stringify($("#txtMobileNo").val()) + '}',
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                $("#dvRenewalData").html(response);
+                $("#divLoader").hide();
+            },
+            failure: function (response) {
+                $("#divLoader").hide();
+            },
+            error: function (response) {
+                $("#dvRenewalData").html(response.responseText);
+                $("#divLoader").hide();
+            }
+        });
+        }
+    }
+</script>
