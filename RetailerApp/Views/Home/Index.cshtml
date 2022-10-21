@@ -8,16 +8,74 @@
             <div class="col-md-2 col-sm-2" style="margin-top:10px;">
                 Enter Mobile No
             </div>
-            <div class="col-md-4 col-sm-4">
-                <input id="txtMobileNo" type="number" class="input100" />
+            <div class="col-md-3 col-sm-3">
+                <input id="txtMobileNo" type="number" class="input50" />
             </div>
             <div class="col-md-2 col-sm-2">
                 <button type="button" id="btnSearchCustomer" class="btn btn-primary" onclick="SearchCustomer();" style="margin-top:10px;">Search</button>
             </div>
         </div>
     </div>
+    <div class="mb-3 card col-md-12 col-sm-12" style="padding-top:20px; display:none;" id="dvCustomerDetails">
+        <div class="col-md-12 col-sm-12 row">
+            <div class="col-md-4 col-sm-4" style="margin-top:10px;">Mobile No : <span id="spnMobileNo" style="font-weight:bold;"></span></div>
+            <div class="col-md-4 col-sm-4" style="margin-top:10px;">Customer Name : <span id="spnCustName" style="font-weight:bold;"></span></div>
+        </div>
+        <div class="col-md-12 col-sm-12 row">
+            <div class="col-md-4 col-sm-4" style="margin-top:10px;">Loyalty Card No : <span id="spnCardNo" style="font-weight:bold;"></span></div>
+            <div class="col-md-4 col-sm-4" style="margin-top:10px;">Available Points : <span id="spnPointsBalance" style="font-weight:bold;"></span></div>
+        </div>
+        <div class="col-md-12 col-sm-12 row">
+            <div class="col-md-4 col-sm-4" style="margin-top:10px;">Total Spend : <span id="spnTotalSpend" style="font-weight:bold;"></span></div>
+            <div class="col-md-4 col-sm-4" style="margin-top:10px;">Last Txn Date : <span id="spnLastTxnDate" style="font-weight:bold;"></span></div>
+        </div>
+    </div>
+    <div class="mb-3 card col-md-12 col-sm-12" style="padding-top:20px; display:none;" id="dvEnrollment">
+        <div class="col-md-12 col-sm-12 row">
+            <div class="col-md-2 col-sm-2" style="margin-top:10px;">
+                Mobile No
+            </div>
+            <div class="col-md-4 col-sm-4" style="margin-top:10px;">
+                <input id="txtMobileNoNew" type="number" class="input50" />
+            </div>
+        </div>
+        <div class="col-md-12 col-sm-12 row">
+            <div class="col-md-2 col-sm-2" style="margin-top:10px;">
+                Card No
+            </div>
+            <div class="col-md-4 col-sm-4" style="margin-top:10px;">
+                <input id="txtCardNoNew" type="number" class="input50" />
+            </div>
+        </div>
+        <div class="col-md-12 col-sm-12 row">
+            <div class="col-md-2 col-sm-2" style="margin-top:10px;">
+                Member Name
+            </div>
+            <div class="col-md-4 col-sm-4" style="margin-top:10px;">
+                <input id="txtMemberName" type="text" class="input100" />
+            </div>
+        </div>
+        <div class="col-md-12 col-sm-12 row">
+            <div class="col-md-2 col-sm-2" style="margin-top:10px;">
+                DOB
+            </div>
+            <div class="col-md-4 col-sm-4" style="margin-top:10px;">
+                <input id="txtDOB" type="text" class="input50" />
+            </div>
+        </div>
+    </div>
+    <div class="mb-3 card col-md-12 col-sm-12" style="padding-top:20px; display:none;" id="dvInvoice">
+        Invoice Fields
+    </div>
 </div>
 <script>
+    $(document).ready(function () {
+        var today = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
+        $("#txtDOB").datepicker({
+            dateFormat: "yy-mm-dd",
+            minDate: today,
+        });
+    });
     function SearchCustomer() {
         if ($("#txtMobileNo").val() == "") {
             cuteAlert({
@@ -38,7 +96,30 @@
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             success: function (response) {
-                $("#dvRenewalData").html(response);
+                console.log(response);
+                if (response.ResponseCode == "00") {
+                    $("#spnMobileNo").text(response.MobileNo);
+                    $("#spnCustName").text(response.CustomerName);
+                    $("#spnCardNo").text(response.CardNo);
+                    $("#spnPointsBalance").text(response.PointBalance);
+                    $("#spnTotalSpend").text(response.TotalSpend);
+                    $("#spnLastTxnDate").text(response.LastTxnDate);
+                    $("#dvCustomerDetails").show();
+                }
+                if (response.ResponseCode == "06") {
+                    cuteAlert({
+                        type: "question",
+                        title: "Are you sure?",
+                        message: "This number is not available, Do you want to enroll this customer",
+                        confirmText: "Okay",
+                        cancelText: "Cancel"
+                    }).then((e) => {
+                        if (e == ("confirm")) {
+                            $("#dvEnrollment").show();
+                            $("#dvInvoice").show();
+                        }
+                    })
+                }
                 $("#divLoader").hide();
             },
             failure: function (response) {
@@ -52,3 +133,7 @@
         }
     }
 </script>
+<script src="~/Scripts/jquery-ui-1.12.1.js"></script>
+<script src="~/Scripts/jquery-ui-1.12.1.min.js"></script>
+<link href="~/Content/themes/base/jquery-ui.min.css" rel="stylesheet" />
+<link href="~/Content/themes/base/jquery-ui.css" rel="stylesheet" />

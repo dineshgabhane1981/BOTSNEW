@@ -3,12 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using RetailerApp.ViewModels;
+using BOTS_BL.Repository;
+using BOTS_BL.Models.RetailerWeb;
+using BOTS_BL.Models;
 
 namespace RetailerApp.Controllers
 {
     public class HomeController : Controller
     {
+        RetailerWebRepository RWR = new RetailerWebRepository();
         public ActionResult Index()
         {
             return View();
@@ -29,11 +32,11 @@ namespace RetailerApp.Controllers
         }
 
         [HttpPost]
-        public ActionResult JsonResult(string MobileNo)
-        {            
-            CustomerDetailsViewModel objData = new CustomerDetailsViewModel();
-
-
+        public ActionResult GetCustomerDetails(string MobileNo)
+        {
+            CustomerDetails objData = new CustomerDetails();
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            objData = RWR.GetCustomerDetails(userDetails.OutletOrBrandId, MobileNo);
             return new JsonResult() { Data = objData, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
     }

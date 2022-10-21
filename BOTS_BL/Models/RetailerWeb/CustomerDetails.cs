@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace RetailerApp.ViewModels
+namespace BOTS_BL.Models.RetailerWeb
 {
-    public class CustomerDetailsViewModel
+    public class CustomerDetails
     {
         public string MobileNo { get; set; }
         public string CustomerName { get; set; }
@@ -13,5 +14,6 @@ namespace RetailerApp.ViewModels
         public string PointBalance { get; set; }
         public string TotalSpend { get; set; }
         public string LastTxnDate { get; set; }
+        public string ResponseCode { get; set; }
     }
 }
