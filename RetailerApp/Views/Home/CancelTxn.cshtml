@@ -1,0 +1,177 @@
+﻿
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="app-main__inner">
+    <div class="mb-3 card" style="padding-top:20px;">
+        <div class="content col-md-12 col-sm-12 row mb-3">
+            <div class="col-md-2 col-sm-2" style="margin-top:10px;">
+                Enter Mobile No
+            </div>
+            <div class="col-md-3 col-sm-3">
+                <input id="txtMobileNo" type="number" class="input50" />
+            </div>
+            <div class="col-md-2 col-sm-2">
+                <button type="button" id="btnSearchCustomer" class="btn btn-primary" onclick="SearchCustomer();" style="margin-top:10px;">Search</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="mb-3 card col-md-12 col-sm-12" style="padding-top:20px; display:none;" id="dvCustomerDetails">
+        <div class="col-md-12 col-sm-12 row">
+            <div class="col-md-4 col-sm-4" style="margin-top:10px;">Mobile No : <span id="spnMobileNo" style="font-weight:bold;"></span></div>
+            <div class="col-md-4 col-sm-4" style="margin-top:10px;">Customer Name : <span id="spnCustName" style="font-weight:bold;"></span></div>
+        </div>
+        <div class="col-md-12 col-sm-12 row">
+            <div class="col-md-4 col-sm-4" style="margin-top:10px;">Loyalty Card No : <span id="spnCardNo" style="font-weight:bold;"></span></div>
+            <div class="col-md-4 col-sm-4" style="margin-top:10px;">Txn Count : <span id="spnTxnCount" style="font-weight:bold;"></span></div>
+        </div>
+        @*<div class="col-md-12 col-sm-12 row">
+                <div class="col-md-4 col-sm-4" style="margin-top:10px;">Enrolled Outlet : <span id="spnEnrollOutlet" style="font-weight:bold;"></span></div>
+                <div class="col-md-4 col-sm-4" style="margin-top:10px;">Enrolled On : <span id="spnEnrollOn" style="font-weight:bold;"></span></div>
+            </div>*@
+    </div>
+
+    <div class="row" style="overflow-x: auto; padding-right: 20px; margin-top: 10px; margin-left: 60px; display: none;" id="Tabl">
+        <table class="table" id="InstanceTable" border="1" cellpadding="5" cellspacing="5">
+            <thead>
+                <tr>
+                    <th>InvoiceNo</th>
+                    <th>Date</th>
+                    <th>Type</th>
+                    <th>InvoiceAmt</th>
+                    <th>Points</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+
+</div>
+<script>
+    function SearchCustomer() {
+        if ($("#txtMobileNo").val() == "") {
+            cuteAlert({
+                type: "error",
+                title: "OOPS...",
+                message: "Please enter Mobile number to search",
+                buttonText: "Okay"
+            }).then(() => {
+                $("#txtMobileNo").focus();
+            })
+        }
+        else {
+            //alert($("#txtMobileNo").val());
+
+            $("#divLoader").show();
+            var FilterData = [];
+            item = {};
+            item["MobileNo"] = $("#txtMobileNo").val();
+            FilterData.push(item);
+            var data = JSON.stringify(FilterData);
+
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("GetTxnDetails", "Home")',
+                data: '{jsonData: ' + JSON.stringify(data) + '}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (response) {
+                    console.log(response);
+                    if (response != null) {
+                        if (response.GTDResponse.ResponseCode == "00") {
+                            $("#spnMobileNo").text(response.GTDDataobj.Mobileno);
+                            $("#spnCustName").text(response.GTDDataobj.CustomerName);
+                            $("#spnCardNo").text(response.GTDDataobj.CardNo);
+                            $("#spnTxnCount").text(response.GTDDataobj.TxnCount);
+                            //$("#spnEnrollOutlet").text(response.MDRData.EnrolledOutlet);
+                            //$("#spnEnrollOn").text(response.MDRData.EnrolledOn);
+
+                            $("#dvCustomerDetails").show();
+
+                            $("#Tabl").show();
+                            tableData = [];
+
+                            $.map(response.LstGTDTxnData, function (item) {
+                                optionItem = {}
+
+                                optionItem["InvoiceNo"] = item.Invoiceno;
+                                optionItem["Date"] = item.Date;
+                                optionItem["Type"] = item.Type;
+                                optionItem["InvoiceAmt"] = item.InvoiceAmt;
+                                optionItem["Points"] = item.Points;
+                                
+
+                                tableData.push(optionItem);
+                            });
+
+                            DrawTable();
+                            $("#divLoader").hide();
+                        }
+                        else {
+                            cuteAlert({
+                                type: "question",
+                                title: "Are you sure?",
+                                message: "This number is not available, Do you want to enroll this customer in Search Customer Panel",
+                                confirmText: "Okay",
+                                cancelText: "Cancel"
+                            }).then((e) => {
+                                if (e == ("confirm")) {
+                                    var urlLink = "@Url.Action("Index", "Home")";
+                                    window.location.href = urlLink;
+                                }
+                            })
+                        }
+                    }
+
+                    $("#divLoader").hide();
+                },
+                failure: function (response) {
+                    $("#divLoader").hide();
+                },
+                error: function (response) {
+                    $("#dvRenewalData").html(response.responseText);
+                    $("#divLoader").hide();
+                }
+            });
+        }
+    }
+
+    function DrawTable() {
+
+        //var table1 = $('#InstanceTable').DataTable();
+        //table1.destroy();
+
+        var table = $('#InstanceTable').DataTable({
+            "aaSorting": [[0, "asc"]],
+            "data": tableData,
+            "paging": false,
+            "ordering": false,
+            "info": false,
+            "bFilter": false,
+            "pageLength": 25,
+            "pagingType": "simple_numbers",
+            "columns": [
+
+                { data: "InvoiceNo" },
+                { data: "Date" },
+                { data: "Type" },
+                { data: "InvoiceAmt" },
+                { data: "Points" }
+                
+
+            ],
+
+        });
+
+        var table = $('#InstanceTable').DataTable();
+        table.draw();
+
+    }
+</script>
+<script src="~/Scripts/jquery-ui-1.12.1.js"></script>
+<script src="~/Scripts/jquery-ui-1.12.1.min.js"></script>
+<link href="~/Content/themes/base/jquery-ui.min.css" rel="stylesheet" />
+<link href="~/Content/themes/base/jquery-ui.css" rel="stylesheet" />

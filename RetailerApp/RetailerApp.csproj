@@ -282,6 +282,9 @@
     <Content Include="Views\Shared\_Header.cshtml" />
     <Content Include="Views\Shared\_Footer.cshtml" />
     <Content Include="Views\Shared\_SidebarMenu.cshtml" />
+    <Content Include="Views\Home\DailySummaryReport.cshtml" />
+    <Content Include="Views\Home\MemberDetailedReport.cshtml" />
+    <Content Include="Views\Home\CancelTxn.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

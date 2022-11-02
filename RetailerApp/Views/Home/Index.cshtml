@@ -31,51 +31,169 @@
         </div>
     </div>
     <div class="mb-3 card col-md-12 col-sm-12" style="padding-top:20px; display:none;" id="dvEnrollment">
-        <div class="col-md-12 col-sm-12 row">
-            <div class="col-md-2 col-sm-2" style="margin-top:10px;">
-                Mobile No
+        <div class="content col-md-12 col-sm-12 row mb-3">
+            <div class="col-md-12 col-sm-12 row">
+                <div class="col-md-2 col-sm-2" style="margin-top:10px;">
+                    Mobile No
+                </div>
+                <div class="col-md-4 col-sm-4" style="margin-top:10px;">
+                    <input id="txtMobileNoNew" type="number" class="input50" />
+                </div>
             </div>
-            <div class="col-md-4 col-sm-4" style="margin-top:10px;">
-                <input id="txtMobileNoNew" type="number" class="input50" />
+            <div class="col-md-12 col-sm-12 row">
+                <div class="col-md-2 col-sm-2" style="margin-top:10px;">
+                    Card No
+                </div>
+                <div class="col-md-4 col-sm-4" style="margin-top:10px;">
+                    <input id="txtCardNoNew" type="number" class="input50" />
+                </div>
             </div>
-        </div>
-        <div class="col-md-12 col-sm-12 row">
-            <div class="col-md-2 col-sm-2" style="margin-top:10px;">
-                Card No
+            <div class="col-md-12 col-sm-12 row">
+                <div class="col-md-2 col-sm-2" style="margin-top:10px;">
+                    Member Name
+                </div>
+                <div class="col-md-4 col-sm-4" style="margin-top:10px;">
+                    <input id="txtMemberName" type="text" class="input100" />
+                </div>
             </div>
-            <div class="col-md-4 col-sm-4" style="margin-top:10px;">
-                <input id="txtCardNoNew" type="number" class="input50" />
+            <div class="col-md-12 col-sm-12 row">
+                <div class="col-md-2 col-sm-2" style="margin-top:10px;">
+                    DOB
+                </div>
+                <div class="col-md-4 col-sm-4" style="margin-top:10px;">
+                    <input id="txtDOB" type="text" class="input50" />
+                </div>
             </div>
-        </div>
-        <div class="col-md-12 col-sm-12 row">
-            <div class="col-md-2 col-sm-2" style="margin-top:10px;">
-                Member Name
+            <div class="col-md-12 col-sm-12 row">
+                <div class="col-md-2 col-sm-2" style="margin-top:10px;">
+                    Email Id
+                </div>
+                <div class="col-md-4 col-sm-4" style="margin-top:10px;">
+                    <input id="txtEmail" type="text" class="input50" />
+                </div>
             </div>
-            <div class="col-md-4 col-sm-4" style="margin-top:10px;">
-                <input id="txtMemberName" type="text" class="input100" />
+            <div class="col-md-12 col-sm-12 row">
+                <div class="col-md-2 col-sm-2" style="margin-top:10px;">
+                    Gender
+                </div>
+                <div class="col-md-4 col-sm-4" style="margin-top:10px;">
+                    <input id="txtGender" type="text" class="input50" />
+                </div>
             </div>
-        </div>
-        <div class="col-md-12 col-sm-12 row">
-            <div class="col-md-2 col-sm-2" style="margin-top:10px;">
-                DOB
-            </div>
-            <div class="col-md-4 col-sm-4" style="margin-top:10px;">
-                <input id="txtDOB" type="text" class="input50" />
+            <div class="col-md-12 col-sm-12 row">
+                <div class="col-md-2 col-sm-2" style="margin-top:10px;">
+                    Anniversary date
+                </div>
+                <div class="col-md-4 col-sm-4" style="margin-top:10px;">
+                    <input id="txtADate" type="text" class="input50" />
+                </div>
             </div>
         </div>
     </div>
     <div class="mb-3 card col-md-12 col-sm-12" style="padding-top:20px; display:none;" id="dvInvoice">
-        Invoice Fields
+        <div class="content col-md-12 col-sm-12 row mb-3">
+            <div class="col-md-12 col-sm-12 row">
+                <div class="col-md-2 col-sm-2" style="margin-top:10px;">
+                    Invoice No
+                </div>
+                <div class="col-md-4 col-sm-4" style="margin-top:10px;">
+                    <input id="txtInvoiceNo" type="text" class="input50" />
+                </div>
+            </div>
+            <div class="col-md-12 col-sm-12 row">
+                <div class="col-md-2 col-sm-2" style="margin-top:10px;">
+                    Invoice Amt
+                </div>
+                <div class="col-md-4 col-sm-4" style="margin-top:10px;">
+                    <input id="txtInvoiceAmt" type="number" min="1" class="input50" />
+                </div>
+            </div>
+            <input id="txtOTPval" type="number" min="1" class="input50" hidden />
+            <input id="txtBurnAmt" type="number" min="1" class="input50" hidden />
+            <div class="col-md-12 col-sm-12 row" style="margin-top: 10px;">
+                <div class="col-md-2 col-sm-2" style="margin-left: 165px;">
+                    <button type="button" id="btnSubmit" class="btn btn-primary" style="margin-top:10px;">Submit</button>
+                </div>
+                <div class="col-md-2 col-sm-2" style="margin-left: 10px;">
+                    <button type="button" id="btnReset" class="btn btn-primary" style="margin-top:10px;">Reset</button>
+                </div>
+            </div>
+        </div>
     </div>
+
+    <div id="OTPModal" class="modal" tabindex="-1" role="dialog" style="display:none;">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header" style="margin-left:230px">
+                    <h5 class="modal-title">OTP</h5>
+                </div>
+                <div class="modal-body" style="margin-left:160px">
+                    @*<p>Enter OTP</p>*@
+                    <input id="txtOTP" type="text" class="input50" placeholder="Enter OTP" />
+                    <span id="poptext" style="font-weight:bold;"></span>
+                </div>
+                <div class="modal-footer" style="margin-left:120px; margin-top:20px">
+                    <button type="button" class="btn btn-primary" id="BurnCompletion">Redeem</button>
+                    <button type="button" class="btn btn-primary" id="resendOTP">Resend OTP</button>
+                    <button type="button" class="btn btn-secondary" id ="ModelClose" @*data-dismiss="modal"*@>Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="mb-3 card col-md-12 col-sm-12" style="padding-top:20px; display:none;" id="dvInvoiceCustExist">
+        <div class="content col-md-12 col-sm-12 row mb-3">
+            <div class="col-md-12 col-sm-12 row">
+                <div class="col-md-2 col-sm-2" style="margin-top:10px;">
+                    Invoice No
+                </div>
+                <div class="col-md-4 col-sm-4" style="margin-top:10px;">
+                    <input id="txtInvoiceNoOld" type="text" class="input50" />
+                </div>
+            </div>
+            <div class="col-md-12 col-sm-12 row">
+                <div class="col-md-2 col-sm-2" style="margin-top:10px;">
+                    Invoice Amt
+                </div>
+                <div class="col-md-4 col-sm-4" style="margin-top:10px;">
+                    <input id="txtInvoiceAmOldt" type="number" min="1" class="input50" />
+                </div>
+            </div>
+            <div class="col-md-12 col-sm-12 row" id="BurnPoints" style="display: none;">
+                <div class="col-md-2 col-sm-2" style="margin-top:10px;">
+                    Amt To Redeem
+                </div>
+                <div class="col-md-4 col-sm-4" style="margin-top:10px;">
+                    <input id="txtBurnpoints" type="number" min="1" class="input50" />
+                </div>
+            </div>
+            <div class="col-md-12 col-sm-12 row" style="margin-top: 10px;">
+                <div class="col-md-2 col-sm-2" style="margin-left: 165px;">
+                    <button type="button" id="btnPaybyCash" class="btn btn-primary" style="margin-top:10px;">PaybyCash</button>
+                </div>
+                <div class="col-md-2 col-sm-2" style="margin-left: 10px;">
+                    <button type="button" id="btnPaybyPoints" class="btn btn-success" style="margin-top:10px;">Points(Redeem)</button>
+                </div>
+                <div class="col-md-2 col-sm-2" style="margin-left: 10px;">
+                    <button type="button" id="btnResetOld" class="btn btn-primary" style="margin-top:10px;">Reset</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </div>
 <script>
     $(document).ready(function () {
         var today = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
         $("#txtDOB").datepicker({
             dateFormat: "yy-mm-dd",
-            minDate: today,
+            //yearRange: '1999:' + today+'',
+            changeYear: true,
+            minDate: new Date(1900, 1 - 1, 1),
+            maxDate: '1Y',
         });
     });
+
     function SearchCustomer() {
         if ($("#txtMobileNo").val() == "") {
             cuteAlert({
@@ -89,51 +207,415 @@
         }
         else {
             $("#divLoader").show();
-        $.ajax({
-            type: "POST",
-            url: '@Url.Action("GetCustomerDetails", "Home")',
-            data: '{MobileNo: ' + JSON.stringify($("#txtMobileNo").val()) + '}',
-            contentType: "application/json; charset=utf-8",
-            dataType: "json",
-            success: function (response) {
-                console.log(response);
-                if (response.ResponseCode == "00") {
-                    $("#spnMobileNo").text(response.MobileNo);
-                    $("#spnCustName").text(response.CustomerName);
-                    $("#spnCardNo").text(response.CardNo);
-                    $("#spnPointsBalance").text(response.PointBalance);
-                    $("#spnTotalSpend").text(response.TotalSpend);
-                    $("#spnLastTxnDate").text(response.LastTxnDate);
-                    $("#dvCustomerDetails").show();
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("GetCustomerDetails", "Home")',
+                data: '{MobileNo: ' + JSON.stringify($("#txtMobileNo").val()) + '}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (response) {
+                    console.log(response);
+                    if (response.ResponseCode == "00") {
+                        $("#spnMobileNo").text(response.MobileNo);
+                        $("#spnCustName").text(response.CustomerName);
+                        $("#spnCardNo").text(response.CardNo);
+                        $("#spnPointsBalance").text(response.PointBalance);
+                        $("#spnTotalSpend").text(response.TotalSpend);
+                        $("#spnLastTxnDate").text(response.LastTxnDate);
+                        $("#dvCustomerDetails").show();
+
+                        $("#dvInvoiceCustExist").show();
+                        $("#dvEnrollment").hide();
+                        $("#dvInvoice").hide();
+                    }
+                    if (response.ResponseCode == "06") {
+                        cuteAlert({
+                            type: "question",
+                            title: "Are you sure?",
+                            message: "This number is not available, Do you want to enroll this customer",
+                            confirmText: "Okay",
+                            cancelText: "Cancel"
+                        }).then((e) => {
+                            if (e == ("confirm")) {
+                                $("#dvCustomerDetails").hide();
+                                $("#dvEnrollment").show();
+                                $("#dvInvoice").show();
+                                $("#dvInvoiceCustExist").hide();
+                            }
+                        })
+                    }
+                    $("#divLoader").hide();
+                },
+                failure: function (response) {
+                    $("#divLoader").hide();
+                },
+                error: function (response) {
+                    $("#dvRenewalData").html(response.responseText);
+                    $("#divLoader").hide();
                 }
-                if (response.ResponseCode == "06") {
-                    cuteAlert({
-                        type: "question",
-                        title: "Are you sure?",
-                        message: "This number is not available, Do you want to enroll this customer",
-                        confirmText: "Okay",
-                        cancelText: "Cancel"
-                    }).then((e) => {
-                        if (e == ("confirm")) {
-                            $("#dvEnrollment").show();
-                            $("#dvInvoice").show();
-                        }
-                    })
-                }
-                $("#divLoader").hide();
-            },
-            failure: function (response) {
-                $("#divLoader").hide();
-            },
-            error: function (response) {
-                $("#dvRenewalData").html(response.responseText);
-                $("#divLoader").hide();
-            }
-        });
+            });
         }
     }
+
+    $("#btnSubmit").click(function () {
+            if ($("#txtInvoiceNo").val() == "") {
+                cuteAlert({
+                    type: "error",
+                    title: "OOPS...",
+                    message: "Please enter Invoice number",
+                    buttonText: "Okay"
+                })
+            }
+            else if ($("#txtInvoiceAmt").val() == "") {
+                cuteAlert({
+                    type: "error",
+                    title: "OOPS...",
+                    message: "Please enter Invoice Amount",
+                    buttonText: "Okay"
+                })
+            }
+            else if ($("#txtMobileNo").val() == "") {
+                cuteAlert({
+                    type: "error",
+                    title: "OOPS...",
+                    message: "Please enter Mobile Number",
+                    buttonText: "Okay"
+                })
+            }
+            else {
+               SaveEarn();
+            }
+        });
+
+    $("#btnReset").click(function () {
+            $("#txtMemberName").val("");
+            $("#txtCardNoNew").val("");
+            $("#txtDOB").val("");
+            $("#txtInvoiceNo").val("");
+            $("#txtInvoiceAmt").val("");
+    });
+
+    $("#btnResetOld").click(function () {
+
+        $("#txtInvoiceNoOld").val("");
+        $("#txtInvoiceAmOldt").val("");
+        $("#txtBurnpoints").val("");
+        $("#BurnPoints").hide();
+    });
+
+    function SaveEarn() {
+
+            var today = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
+            var FilterData = [];
+            item = {};
+            item["MobileNo"] = $("#txtMobileNo").val();
+            item["CustomerName"] = $("#txtMemberName").val();
+            item["InvoiceNo"] = $("#txtInvoiceNo").val();
+            item["InvoiceAmt"] = $("#txtInvoiceAmt").val();
+            item["DOB"] = $("#txtDOB").val();
+            item["EmailId"] = $("#txtEmail").val();
+            item["Gender"] = $("#txtGender").val();
+            item["ADate"] = $("#txtADate").val();
+            item["CardNo"] = $("#txtCardNoNew").val();
+
+            FilterData.push(item);
+            var data = JSON.stringify(FilterData);
+            $.ajax({
+                 type: "POST",
+                 url: '@Url.Action("EarntxnDetails", "Home")',
+                 data: '{jsonData: ' + JSON.stringify(data) + '}',
+                 contentType: "application/json; charset=utf-8",
+                 dataType: "json",
+                success: function (response) {
+                    console.log(response);
+                    if (response.ResponseCode == "00") {
+                        cuteAlert({
+                            type: "success",
+                            title: "Invoice Saved Successfully",
+                            message: " Poits Earned" + response.PointsEarned + " Avail Points" + response.AvailablePoints,
+                            buttonText: "Okay"
+                        }).then(() => {
+                            SearchCustomer();
+                        })
+                     }
+                     else {
+                         cuteAlert({
+                             type: "error",
+                             title: "Response Code" + response.ResponseCode,
+                             message: response.ResponseMessage,
+                             buttonText: "Okay"
+                         })
+                     }
+                     $("#divLoader").hide();
+                },
+                failure: function (response) {
+                      $("#divLoader").hide();
+                },
+                error: function (response) {
+                    $("#dvRenewalData").html(response.ResponseMessage);
+                    $("#divLoader").hide();
+                }
+            });
+    }
+
+    $("#btnPaybyCash").click(function () {
+        if ($("#txtInvoiceNoOld").val() == "") {
+            cuteAlert({
+                type: "error",
+                title: "OOPS...",
+                message: "Please enter Invoice number",
+                buttonText: "Okay"
+            })
+        }
+        else if ($("#txtInvoiceAmOldt").val() == "") {
+            cuteAlert({
+                type: "error",
+                title: "OOPS...",
+                message: "Please enter Invoice Amount",
+                buttonText: "Okay"
+            })
+        }
+        else if ($("#txtMobileNo").val() == "") {
+            cuteAlert({
+                type: "error",
+                title: "OOPS...",
+                message: "Please enter Mobile Number",
+                buttonText: "Okay"
+            })
+        }
+        else {
+            SaveEarnOld();
+        }
+    });
+
+    function SaveEarnOld() {
+        var today = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
+            var FilterData = [];
+            item = {};
+            item["MobileNo"] = $("#txtMobileNo").val();
+            item["InvoiceNo"] = $("#txtInvoiceNoOld").val();
+            item["InvoiceAmt"] = $("#txtInvoiceAmOldt").val();
+
+            FilterData.push(item);
+            var data = JSON.stringify(FilterData);
+            $.ajax({
+                 type: "POST",
+                 url: '@Url.Action("EarntxnDetailsOld", "Home")',
+                 data: '{jsonData: ' + JSON.stringify(data) + '}',
+                 contentType: "application/json; charset=utf-8",
+                 dataType: "json",
+                success: function (response) {
+                    console.log(response);
+                    if (response.ResponseCode == "00") {
+                        cuteAlert({
+                            type: "success",
+                            title: "Invoice Saved Successfully",
+                            message: " Poits Earned" + response.PointsEarned + " Avail Points" + response.AvailablePoints,
+                            buttonText: "Okay"
+                        }).then(() => {
+                            SearchCustomer();
+                        })
+                     }
+                     else {
+                         cuteAlert({
+                             type: "error",
+                             title: "Response Code" + response.ResponseCode,
+                             message: response.ResponseMessage,
+                             buttonText: "Okay"
+                         })
+                     }
+                     $("#divLoader").hide();
+                },
+                failure: function (response) {
+                      $("#divLoader").hide();
+                },
+                error: function (response) {
+                    $("#dvRenewalData").html(response.ResponseMessage);
+                    $("#divLoader").hide();
+                }
+            });
+    }
+
+    $("#btnPaybyPoints").click(function () {
+
+        if ($('#BurnPoints').is(":visible")) {
+            if ($("#txtInvoiceNoOld").val() == "") {
+                cuteAlert({
+                    type: "error",
+                    title: "OOPS...",
+                    message: "Please enter Invoice number",
+                    buttonText: "Okay"
+                })
+            }
+            else if ($("#txtInvoiceAmOldt").val() == "") {
+                cuteAlert({
+                    type: "error",
+                    title: "OOPS...",
+                    message: "Please enter Invoice Amount",
+                    buttonText: "Okay"
+                })
+            }
+            else if ($("#txtBurnpoints").val() == "") {
+                cuteAlert({
+                    type: "error",
+                    title: "OOPS...",
+                    message: "Please enter Points as amount to redeem",
+                    buttonText: "Okay"
+                })
+            }
+            else {
+                SendBurnValidation();
+            }
+        }
+        else {
+            $("#BurnPoints").show();
+        }
+    });
+
+    function SaveBurnOld() {
+         
+        var today = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
+            var FilterData = [];
+            item = {};
+            item["MobileNo"] = $("#txtMobileNo").val();
+            item["InvoiceNo"] = $("#txtInvoiceNoOld").val();
+            item["InvoiceAmt"] = $("#txtInvoiceAmOldt").val();   
+            item["PointsBurn"] = $("#txtBurnpoints").val();
+
+            FilterData.push(item);
+            var data = JSON.stringify(FilterData);
+            $.ajax({
+                 type: "POST",
+                 url: '@Url.Action("SaveBurnOld", "Home")',
+                 data: '{jsonData: ' + JSON.stringify(data) + '}',
+                 contentType: "application/json; charset=utf-8",
+                 dataType: "json",
+                success: function (response) {
+                    console.log(response);
+                    if (response.ResponseCode == "00") {
+                        cuteAlert({
+                            type: "success",
+                            title: "Invoice Saved Successfully",
+                            message: " Poits Earned" + response.PointsEarned + " Avail Points" + response.AvailablePoints + " Points Redeemed"+response.PointsRedeemed,
+                            buttonText: "Okay"
+                        }).then(() => {
+                            SearchCustomer();
+                            $("#txtOTP").val("");
+                            $("#OTPModal").hide();
+                            $("#txtInvoiceNoOld").val("");
+                            $("#txtInvoiceAmOldt").val("");
+                            $("#txtBurnpoints").val("");
+                            $("#BurnPoints").hide();
+                        })
+                     }
+                     else {
+                         cuteAlert({
+                             type: "error",
+                             title: "Response Code" + response.ResponseCode,
+                             message: response.ResponseMessage,
+                             buttonText: "Okay"
+                         })
+                        $("#txtOTP").val("");
+                        $("#OTPModal").hide();
+                     }
+                     $("#divLoader").hide();
+                },
+                failure: function (response) {
+                      $("#divLoader").hide();
+                },
+                error: function (response) {
+                    $("#dvRenewalData").html(response.ResponseMessage);
+                    $("#divLoader").hide();
+                }
+            });
+    }
+
+    function SendBurnValidation() {
+        var today = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
+
+        var FilterData = [];
+        item = {};
+        item["MobileNo"] = $("#txtMobileNo").val();
+        item["InvoiceNo"] = $("#txtInvoiceNoOld").val();
+        item["InvoiceAmt"] = $("#txtInvoiceAmOldt").val();
+        item["PointsBurn"] = $("#txtBurnpoints").val();
+
+        FilterData.push(item);
+        var data = JSON.stringify(FilterData);
+
+        $.ajax({
+                 type: "POST",
+                 url: '@Url.Action("SendBurnValidation", "Home")',
+                 data: '{jsonData: ' + JSON.stringify(data) + '}',
+                 contentType: "application/json; charset=utf-8",
+                 dataType: "json",
+                success: function (response) {
+                    console.log(response);
+                    if (response.ResponseCode == "00") {
+                   
+                        var T = response.OTPValue;
+                       
+                        $("#txtOTPval").val(T);
+                        $("#OTPModal").show();
+                       
+                     }
+                     else {
+                         cuteAlert({
+                             type: "error",
+                             title: "Response Code" + response.ResponseCode,
+                             message: response.ResponseMessage,
+                             buttonText: "Okay"
+                         })
+                     }
+                     $("#divLoader").hide();
+                },
+                failure: function (response) {
+                      $("#divLoader").hide();
+                },
+                error: function (response) {
+                    $("#dvRenewalData").html(response.ResponseMessage);
+                    $("#divLoader").hide();
+                }
+            });
+    }
+
+    $("#ModelClose").click(function () {
+        $("#OTPModal").hide();
+    });
+
+    $("#resendOTP").click(function () {
+        alert("Inside Resend OTP");
+    });
+
+    $("#BurnCompletion").click(function () {
+        var OTPval = $("#txtOTP").val();
+        //alert(OTPval);
+        var OTP = $("txtOTPval").val();
+        //alert(OTP);
+        if ($("#txtOTP").val() == "") {
+            cuteAlert({
+                type: "error",
+                title: "OOPS...",
+                message: "Please enter OTP value",
+                buttonText: "Okay"
+            })
+        }
+        else if ($("#txtOTPval").val() != OTPval) {
+            cuteAlert({
+                type: "error",
+                title: "OOPS...",
+                message: "Invalid OTP",
+                buttonText: "Okay"
+            })
+        }
+        else {
+             
+             SaveBurnOld();
+        }
+    });
+
 </script>
-<script src="~/Scripts/jquery-ui-1.12.1.js"></script>
-<script src="~/Scripts/jquery-ui-1.12.1.min.js"></script>
-<link href="~/Content/themes/base/jquery-ui.min.css" rel="stylesheet" />
-<link href="~/Content/themes/base/jquery-ui.css" rel="stylesheet" />
+    <script src="~/Scripts/jquery-ui-1.12.1.js"></script>
+    <script src="~/Scripts/jquery-ui-1.12.1.min.js"></script>
+    <link href="~/Content/themes/base/jquery-ui.min.css" rel="stylesheet" />
+    <link href="~/Content/themes/base/jquery-ui.css" rel="stylesheet" />

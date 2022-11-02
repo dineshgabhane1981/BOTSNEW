@@ -1,0 +1,89 @@
+﻿
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="app-main__inner" id="dvDailySummary">
+    <div class="container-fluid pt-3 pl-3 pr-3 pb-3">
+        <div class="mb-3 pr-3 pt-3 pl-3 card" style="padding-bottom:20px;">
+            <div>
+                <div class="row" style="margin-top : 20px;">
+                    <div class="col-sm-4">
+                        <b>DailySummaryReport</b>
+                    </div>
+                </div>
+                @if (ViewBag.DailyReport.Count > 0)
+                {
+                    <div class="row" style="overflow-x:auto;padding-right:20px;margin-top:10px;margin-left:60px;">
+
+
+                        <table border="1" cellpadding="5" cellspacing="5">
+                            <tr>
+                                <th>Total Enrol</th>
+                                <th>Earn Txns</th>
+                                <th>Total Earn Txn Amt</th>
+                                <th>Points Issued</th>
+                                <th>Redeem Txn</th>
+                                <th>Total Redeem</th>
+
+                            </tr>
+                            @foreach (var item in ViewBag.DailyReport)
+                            {
+                                <tr>
+                                    <td>@item.TotalEnrolment</td>
+                                   
+                                    <td>@item.EarnTxnCount</td>
+
+                                    <td>@item.EarnTxnAmt</td>
+
+                                    <td>@item.EarnPoints</td>
+
+                                    <td>@item.BurnTxnCount</td>
+
+                                    <td>@item.BurnTxnAmt</td>
+                                </tr>
+                            }
+                        </table>
+                    </div>
+                }
+                else
+                {
+                    <div class="row" style="margin-top : 20px; margin-left:50px;">
+                        <h6 style="font:xx-large"><b>No Reports</b></h6>
+                    </div>
+                }
+
+                @*<div class="row" style="margin-top : 20px; margin-left:30px;">
+                    <div class="col-md-2 col-sm-2">
+                        <div class="button">
+                            <button type="button" id="btnCurDay" style="margin-left:15px;" class="btn btn-primary"><b>Current Day</b></button>
+                        </div>
+                    </div>
+                    <div class="col-md-2 col-sm-2">
+                        <div class="button">
+                            <button type="button" id="btnPriDay" style="margin-left:15px;" class="btn btn-primary"><b>Privious Day</b></button>
+                        </div>
+                    </div>
+                    <div class="col-md-2 col-sm-2">
+                        <div class="button">
+                            <button type="button" id="btnCurMonth" style="margin-left:15px;" class="btn btn-primary"><b>Current Month</b></button>
+                        </div>
+                    </div>
+                    <div class="col-md-2 col-sm-2">
+                        <div class="button">
+                            <button type="button" id="btnPriMonth" style="margin-left:15px;" class="btn btn-primary"><b>Privious Month</b></button>
+                        </div>
+                    </div>
+                </div>*@
+
+            </div>
+        </div>
+    </div>
+</div>
+@*<script>
+
+</script>*@
+@*<script src="~/Scripts/jquery-ui-1.12.1.js"></script>
+<script src="~/Scripts/jquery-ui-1.12.1.min.js"></script>
+<link href="~/Content/themes/base/jquery-ui.min.css" rel="stylesheet" />
+<link href="~/Content/themes/base/jquery-ui.css" rel="stylesheet" />*@
