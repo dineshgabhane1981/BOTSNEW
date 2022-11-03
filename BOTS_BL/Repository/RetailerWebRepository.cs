@@ -481,8 +481,6 @@ namespace BOTS_BL.Repository
                         dt2 = retVal.Tables[2];
                     }
 
-
-
                     for (int i = 0; i < dt2.Rows.Count; i++)
                     {
                         GTDTxnData obj = new GTDTxnData();
@@ -529,6 +527,119 @@ namespace BOTS_BL.Repository
                 }
             }
             return ObjGTDDetails;
+        }
+
+        public CancelData CancelTxn(string CounterId, string Mobileno, string InvoiceNo)
+        {
+            CancelTxnDetails ObjCancel = new CancelTxnDetails();
+            Response objResponse = new Response();
+            CancelData ObjCanData= new CancelData();
+
+            using (var context = new CommonDBContext())
+            {
+                string groupId = CounterId.Substring(0, 4);
+                string outletId = CounterId.Substring(0, 8);
+                var conStr = CR.GetCustomerConnString(groupId);
+
+                SqlConnection _Con = new SqlConnection(conStr);
+                DataSet retVal = new DataSet();
+                SqlCommand cmdReport = new SqlCommand("sp_Web_Cancel", _Con);
+                SqlDataAdapter daReport = new SqlDataAdapter(cmdReport);
+                DataTable dt1 = new DataTable();
+                DataTable dt2 = new DataTable();
+
+                using (cmdReport)
+                {
+                    SqlParameter param1 = new SqlParameter("pi_CounterId", CounterId);
+                    //SqlParameter param2 = new SqlParameter("pi_LoginType", "1");
+                    SqlParameter param3 = new SqlParameter("pi_MobileNo", Mobileno);
+                    SqlParameter param4 = new SqlParameter("pi_InvoiceNo", InvoiceNo);
+                    SqlParameter param5 = new SqlParameter("pi_Datetime", DateTime.Today.ToString("yyyy-MM-dd"));
+                    cmdReport.CommandType = CommandType.StoredProcedure;
+                    cmdReport.Parameters.Add(param1);
+                    //cmdReport.Parameters.Add(param2);
+                    cmdReport.Parameters.Add(param3);
+                    cmdReport.Parameters.Add(param4);
+                    cmdReport.Parameters.Add(param5);
+                    daReport.Fill(retVal);
+
+                    DataTable dt = retVal.Tables[0];
+                    //if (retVal.Tables.Count > 1)
+                    //{
+                    //    dt1 = retVal.Tables[1];
+                    //    dt2 = retVal.Tables[2];
+                    //}
+
+                    if (Convert.ToString(dt.Rows[0]["ResponseCode"]) == "00")
+                    {
+                        objResponse.ResponseCode = "00";
+                        objResponse.ResponseMessage = "Success";
+                         dt1 = retVal.Tables[1];
+                        //DataTable dt2 = retVal.Tables[2];
+                        ObjCancel.MobileNo = Convert.ToString(dt1.Rows[0]["MobileNo"]);
+                        ObjCancel.CustomerName = Convert.ToString(dt1.Rows[0]["CustomerName"]);
+                        ObjCancel.AvailablePoints = Convert.ToString(dt1.Rows[0]["AvailablePoints"]);
+                        ObjCancel.InvoiceNo = Convert.ToString(dt1.Rows[0]["InvoiceNo"]);
+                        ObjCancel.PointsCredited = Convert.ToString(dt1.Rows[0]["PointsCredited"]);
+
+                        ObjCanData.Cancelresponse = objResponse;
+                        ObjCanData.CancelTxn = ObjCancel;
+                    }
+                    else
+                    {
+                        objResponse.ResponseCode = Convert.ToString(dt.Rows[0]["ResponseCode"]);
+                        objResponse.ResponseMessage = Convert.ToString(dt.Rows[0]["ResponseMessage"]);
+
+                        ObjCanData.Cancelresponse = objResponse;
+                    }
+                }
+            }
+            return ObjCanData;
+        }
+
+        public BurnValidationResponse OTPResend(string CounterId, string Mobileno)
+        {
+            BurnValidationResponse R = new BurnValidationResponse();
+            using (var context = new CommonDBContext())
+            {
+                string groupId = CounterId.Substring(0, 4);
+                var conStr = CR.GetCustomerConnString(groupId);
+
+                SqlConnection _Con = new SqlConnection(conStr);
+                DataSet retVal = new DataSet();
+                SqlCommand cmdReport = new SqlCommand("sp_Web_OTP", _Con);
+                SqlDataAdapter daReport = new SqlDataAdapter(cmdReport);
+                using (cmdReport)
+                {
+                    SqlParameter param1 = new SqlParameter("pi_CounterId", CounterId);
+                    SqlParameter param2 = new SqlParameter("pi_MobileNo", Mobileno);
+                    SqlParameter param3 = new SqlParameter("pi_Datetime", DateTime.Today.ToString("yyyy-MM-dd"));
+
+                    cmdReport.CommandType = CommandType.StoredProcedure;
+                    cmdReport.Parameters.Add(param1);
+                    cmdReport.Parameters.Add(param2);
+                    cmdReport.Parameters.Add(param3);
+                    
+                    daReport.Fill(retVal);
+
+                    DataTable dt = retVal.Tables[0];
+                    if (Convert.ToString(dt.Rows[0]["ResponseCode"]) == "00")
+                    {
+                        R.ResponseCode = "00";
+                        R.ResponseMessage = Convert.ToString(dt.Rows[0]["ResponseMessage"]);
+                        DataTable dt1 = retVal.Tables[1];
+                        //DataTable dt2 = retVal.Tables[2];
+                        R.OTPValue = Convert.ToString(dt1.Rows[0]["OTPValue"]);
+                    
+                    }
+                    else
+                    {
+                        R.ResponseCode = Convert.ToString(dt.Rows[0]["ResponseCode"]);
+                        R.ResponseMessage = Convert.ToString(dt.Rows[0]["ResponseMessage"]);
+                    }
+                }
+            }
+            return R;
         }
     }
 }

@@ -119,7 +119,6 @@ namespace BOTS_BL.Models.RetailerWeb
         public string InvoiceAmt { get; set; }
         public string Points { get; set; }
     }
-
     public class GTDTxnDetails
     {
         public Response GTDResponse { get; set; }
@@ -127,4 +126,22 @@ namespace BOTS_BL.Models.RetailerWeb
         public List<GTDTxnData> LstGTDTxnData { get; set; }
 
     }
+
+    public class CancelTxnDetails
+    {
+        public string MobileNo { get; set; }
+        public string AvailablePoints { get; set; }
+        public string PointsDebited { get; set; }
+        public string InvoiceNo { get; set; }
+        public string CustomerName { get; set; }
+        public string PointsCredited { get; set; }
+    }
+
+    public class CancelData
+    {
+        public Response Cancelresponse { get; set; }
+        public CancelTxnDetails CancelTxn { get; set; }
+
+    }
+
 }

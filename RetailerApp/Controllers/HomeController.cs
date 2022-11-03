@@ -181,5 +181,41 @@ namespace RetailerApp.Controllers
             }
             return new JsonResult() { Data = GTD, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
+
+        [HttpPost]
+        public ActionResult CancelTxnDetails(string jsonData)
+        {
+            CancelData CTD = new CancelData();
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            JavaScriptSerializer json_serializer = new JavaScriptSerializer();
+            json_serializer.MaxJsonLength = int.MaxValue;
+            object[] obj = (object[])json_serializer.DeserializeObject(jsonData);
+            foreach (Dictionary<string, object> item in obj)
+            {
+                string MobileNo = Convert.ToString(item["MobileNo"]);
+                string InvoiceNo = Convert.ToString(item["InvoiceNo"]);
+
+                CTD = RWR.CancelTxn(userDetails.OutletOrBrandId, MobileNo, InvoiceNo);
+            }
+            return new JsonResult() { Data = CTD, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
+        }
+
+        [HttpPost]
+        public ActionResult ResendOTP(string jsonData)
+        {
+            BurnValidationResponse BResponse = new BurnValidationResponse();
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            JavaScriptSerializer json_serializer = new JavaScriptSerializer();
+            json_serializer.MaxJsonLength = int.MaxValue;
+            object[] obj = (object[])json_serializer.DeserializeObject(jsonData);
+            foreach (Dictionary<string, object> item in obj)
+            {
+                string MobileNo = Convert.ToString(item["MobileNo"]);
+
+                BResponse = RWR.OTPResend(userDetails.OutletOrBrandId, MobileNo);
+            }
+            return new JsonResult() { Data = BResponse, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
+        }
+
     }
 }

@@ -27,11 +27,9 @@
             <div class="col-md-4 col-sm-4" style="margin-top:10px;">Loyalty Card No : <span id="spnCardNo" style="font-weight:bold;"></span></div>
             <div class="col-md-4 col-sm-4" style="margin-top:10px;">Txn Count : <span id="spnTxnCount" style="font-weight:bold;"></span></div>
         </div>
-        @*<div class="col-md-12 col-sm-12 row">
-                <div class="col-md-4 col-sm-4" style="margin-top:10px;">Enrolled Outlet : <span id="spnEnrollOutlet" style="font-weight:bold;"></span></div>
-                <div class="col-md-4 col-sm-4" style="margin-top:10px;">Enrolled On : <span id="spnEnrollOn" style="font-weight:bold;"></span></div>
-            </div>*@
     </div>
+
+
 
     <div class="row" style="overflow-x: auto; padding-right: 20px; margin-top: 10px; margin-left: 60px; display: none;" id="Tabl">
         <table class="table" id="InstanceTable" border="1" cellpadding="5" cellspacing="5">
@@ -42,6 +40,7 @@
                     <th>Type</th>
                     <th>InvoiceAmt</th>
                     <th>Points</th>
+                    <th>Delete Transaction</th>
                 </tr>
             </thead>
             <tbody>
@@ -72,6 +71,7 @@
             FilterData.push(item);
             var data = JSON.stringify(FilterData);
 
+
             $.ajax({
                 type: "POST",
                 url: '@Url.Action("GetTxnDetails", "Home")',
@@ -80,7 +80,7 @@
                 dataType: "json",
                 success: function (response) {
                     console.log(response);
-                    if (response != null) {
+                    if (response.GTDResponse != null) {
                         if (response.GTDResponse.ResponseCode == "00") {
                             $("#spnMobileNo").text(response.GTDDataobj.Mobileno);
                             $("#spnCustName").text(response.GTDDataobj.CustomerName);
@@ -102,7 +102,7 @@
                                 optionItem["Type"] = item.Type;
                                 optionItem["InvoiceAmt"] = item.InvoiceAmt;
                                 optionItem["Points"] = item.Points;
-                                
+
 
                                 tableData.push(optionItem);
                             });
@@ -125,6 +125,14 @@
                             })
                         }
                     }
+                    else {
+                        cuteAlert({
+                            type: "error",
+                            title: "OOPS...",
+                            message: "No Invoice for Cancel",
+                            buttonText: "Okay"
+                        })
+                    }
 
                     $("#divLoader").hide();
                 },
@@ -141,8 +149,8 @@
 
     function DrawTable() {
 
-        //var table1 = $('#InstanceTable').DataTable();
-        //table1.destroy();
+        var table1 = $('#InstanceTable').DataTable();
+        table1.destroy();
 
         var table = $('#InstanceTable').DataTable({
             "aaSorting": [[0, "asc"]],
@@ -159,10 +167,24 @@
                 { data: "Date" },
                 { data: "Type" },
                 { data: "InvoiceAmt" },
-                { data: "Points" }
-                
+                { data: "Points" },
+                {
+
+                    "mData": "InvoiceNo",
+                    "mRender": function (data, type, row) {
+                        return '<a href="#" onclick="CancelTxn(\'' + data + '\')" class="login" title="Edit"><img src ="../Content/assets/images/delete.png" /></a>';
+                        //return '<button href="#"' + 'id="' + data + '">Edit</button>';
+                    }
+                }
+
 
             ],
+            aoColumnDefs: [
+                {
+                    bSortable: false,
+                    aTargets: []
+                }
+            ]
 
         });
 
@@ -170,6 +192,66 @@
         table.draw();
 
     }
+
+    function CancelTxn(InvoiceNo) {
+        /*var Invno = InvoiceNo.val();*/
+        if (InvoiceNo == null) {
+            alert("Invoice no is Empty")
+        }
+        else {
+            $("#divLoader").show();
+
+            var FilterData = [];
+            item = {};
+            item["InvoiceNo"] = InvoiceNo;
+            item["MobileNo"] = $("#txtMobileNo").val();
+            FilterData.push(item);
+            var data = JSON.stringify(FilterData);
+
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("CancelTxnDetails", "Home")',
+                data: '{jsonData: ' + JSON.stringify(data) + '}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (response) {
+                    console.log(response);
+                    if (response != null) {
+
+                        if (response.Cancelresponse.ResponseCode == "00") {
+
+                            cuteAlert({
+                                type: "success",
+                                title: "Invoice Saved Successfully",
+                                message: " Poits Removed" + response.CancelTxn.PointsDebited + " Avail Points" + response.CancelTxn.AvailablePoints + " Points Earned" + response.CancelTxn.PointsCredited,
+                                buttonText: "Okay"
+                            }).then(() => {
+                                SearchCustomer();
+                            })
+                        }
+                    }
+                    else {
+                        cuteAlert({
+                            type: "error",
+                            title: "OOPS...",
+                            message: "Please enter Mobile number to search",
+                            buttonText: "Okay"
+                        })
+                    }
+
+                    $("#divLoader").hide();
+                },
+                failure: function (response) {
+                    $("#divLoader").hide();
+                },
+                error: function (response) {
+                    $("#dvRenewalData").html(response.responseText);
+                    $("#divLoader").hide();
+                }
+            });
+        }
+    }
+
 </script>
 <script src="~/Scripts/jquery-ui-1.12.1.js"></script>
 <script src="~/Scripts/jquery-ui-1.12.1.min.js"></script>

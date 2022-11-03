@@ -473,13 +473,13 @@
     });
 
     function SaveBurnOld() {
-         
+
         var today = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
             var FilterData = [];
             item = {};
             item["MobileNo"] = $("#txtMobileNo").val();
             item["InvoiceNo"] = $("#txtInvoiceNoOld").val();
-            item["InvoiceAmt"] = $("#txtInvoiceAmOldt").val();   
+            item["InvoiceAmt"] = $("#txtInvoiceAmOldt").val();
             item["PointsBurn"] = $("#txtBurnpoints").val();
 
             FilterData.push(item);
@@ -552,12 +552,12 @@
                 success: function (response) {
                     console.log(response);
                     if (response.ResponseCode == "00") {
-                   
+
                         var T = response.OTPValue;
-                       
+
                         $("#txtOTPval").val(T);
                         $("#OTPModal").show();
-                       
+
                      }
                      else {
                          cuteAlert({
@@ -584,7 +584,47 @@
     });
 
     $("#resendOTP").click(function () {
-        alert("Inside Resend OTP");
+        var FilterData = [];
+        item = {};
+        item["MobileNo"] = $("#txtMobileNo").val();
+
+        FilterData.push(item);
+        var data = JSON.stringify(FilterData);
+
+        $.ajax({
+                 type: "POST",
+                 url: '@Url.Action("ResendOTP", "Home")',
+                 data: '{jsonData: ' + JSON.stringify(data) + '}',
+                 contentType: "application/json; charset=utf-8",
+                 dataType: "json",
+                success: function (response) {
+                    console.log(response);
+                    if (response.ResponseCode == "00") {
+
+                        var T = response.OTPValue;
+
+                        $("#txtOTPval").val(T);
+                        //$("#OTPModal").show();
+
+                     }
+                     else {
+                         cuteAlert({
+                             type: "error",
+                             title: "Response Code" + response.ResponseCode,
+                             message: response.ResponseMessage,
+                             buttonText: "Okay"
+                         })
+                     }
+                     $("#divLoader").hide();
+                },
+                failure: function (response) {
+                      $("#divLoader").hide();
+                },
+                error: function (response) {
+                    $("#dvRenewalData").html(response.ResponseMessage);
+                    $("#divLoader").hide();
+                }
+            });
     });
 
     $("#BurnCompletion").click(function () {
@@ -609,7 +649,7 @@
             })
         }
         else {
-             
+
              SaveBurnOld();
         }
     });
