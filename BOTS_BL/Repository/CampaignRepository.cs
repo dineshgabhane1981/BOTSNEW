@@ -24,6 +24,7 @@ namespace BOTS_BL.Repository
     public class CampaignRepository
     {
         Exceptions newexception = new Exceptions();
+        CustomerRepository CR = new CustomerRepository();
         public CampaignTiles GetCampaignTilesData(string GroupId, string connstr)
         {
             CampaignTiles objCampaignTiles = new CampaignTiles();
@@ -1581,6 +1582,55 @@ namespace BOTS_BL.Repository
                 newexception.AddException(ex, Groupid);
             }
             return WAInsDetails;
+        }
+
+        public List<CelebrationSummary> GetCampaignCelebrationSummery(string GroupId,string flag)
+        {
+            List<CelebrationSummary> objData = new List<CelebrationSummary>();
+            var connstr = CR.GetCustomerConnString(GroupId);
+            try
+            {
+                using (var context = new BOTSDBContext(connstr))
+                {
+                    objData = context.Database.SqlQuery<CelebrationSummary>("sp_BOTS_CelebrationSummary @pi_GroupId,@pi_Month,@pi_Year,@pi_INDDatetime,@pi_SelectedCriteria", 
+                        new SqlParameter("@pi_GroupId", GroupId), 
+                        new SqlParameter("@pi_Month", DateTime.Today.Month), 
+                        new SqlParameter("@pi_Year", DateTime.Today.Year), 
+                        new SqlParameter("@pi_INDDatetime", DateTime.Now), 
+                        new SqlParameter("@pi_SelectedCriteria", flag)).ToList<CelebrationSummary>();
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, GroupId);
+            }
+             
+            return objData;
+        }
+
+        public List<CelebrationDetail> GetCampaignCelebrationDetail(string GroupId, string flag,string type)
+        {
+            List<CelebrationDetail> objData = new List<CelebrationDetail>();
+            var connstr = CR.GetCustomerConnString(GroupId);
+            try
+            {
+                using (var context = new BOTSDBContext(connstr))
+                {
+                    objData = context.Database.SqlQuery<CelebrationDetail>("sp_BOTS_CelebrationDetailed @pi_GroupId,@pi_Month,@pi_Year,@pi_INDDatetime, @pi_CelebrationType,@pi_SelectedCriteria",
+                        new SqlParameter("@pi_GroupId", GroupId),
+                        new SqlParameter("@pi_Month", DateTime.Today.Month),
+                        new SqlParameter("@pi_Year", DateTime.Today.Year),
+                        new SqlParameter("@pi_INDDatetime", DateTime.Now),
+                        new SqlParameter("@pi_CelebrationType", type),
+                        new SqlParameter("@pi_SelectedCriteria", flag)).ToList<CelebrationDetail>();
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, GroupId);
+            }
+
+            return objData;
         }
     }
 

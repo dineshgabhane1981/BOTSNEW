@@ -1,0 +1,184 @@
+﻿
+@{
+    ViewBag.Title = "Campaign Report";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2></h2>
+
+<div class="row card" id="dvMembersInformation">
+    <div class="row" style="margin-left:20px;margin-top:20px;">
+
+        <div class="col-md-6 col-xl-1">
+
+        </div>
+
+        <div class="col-md-6 col-xl-2">
+            <div class="card mb-3 widget-content" style="background-color: #C5DAEF;cursor:pointer;" onclick="GetCelebration(1);">
+                <div class="widget-content-wrapper" style="display:block !important;">
+                    <div class="align-content-center" style="text-align:center;">
+                        <div style="text-align: center; font-weight: bold; font-size: 14px !important;">
+                            Celebrations
+                            <hr style="border-top: 2px solid black;margin:0px;" />
+                        </div>
+                    </div>
+                    <div>
+                        <div>
+                            <span style="font-size: 12px !important; font-weight: bold;"><br />Birthday/<br /> Anniversaries</span>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6 col-xl-2">
+            <div class="card mb-3 widget-content" style="background-color: #FDEADC;">
+                <div class="widget-content-wrapper" style="display:block !important;">
+                    <div class="align-content-center" style="text-align:center;">
+                        <div style="text-align:center;font-weight:bold;font-size: 14px !important;" ">
+                            Points Expiry
+                            <hr style="border-top: 2px solid black;margin:0px;" />
+                        </div>
+                    </div>
+                    <div>
+                        <div>
+                            <span style="font-size: 12px !important; font-weight: bold;">
+                                <br /> Notification for transaction
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6 col-xl-2">
+            <div class="card mb-3 widget-content" style="background-color: #F4DCDC;">
+                <div class="widget-content-wrapper" style="display:block !important;">
+                    <div class="align-content-center" style="text-align:center;">
+                        <div style="text-align:center;font-weight:bold;font-size: 14px !important;" ">
+                            Inactive Members
+                            <hr style="border-top: 2px solid black;margin:0px;" />
+                        </div>
+                    </div>
+                    <div>
+                        <div>
+                            <span style="font-size: 12px !important; font-weight: bold;">
+                                <br />Let’s get them to transact
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6 col-xl-2">
+            <div class="card mb-3 widget-content" style="background-color: #DBEEF4;">
+                <div class="widget-content-wrapper" style="display:block !important;">
+                    <div class="align-content-center" style="text-align:center;">
+                        <div style="text-align:center; font-weight:bold;font-size: 14px !important;" ">
+                            Campaigns
+                            <hr style="border-top: 2px solid black;margin:0px;" />
+                        </div>
+                    </div>
+                    <div>
+                        <div>
+                            <span style="font-size: 12px !important; font-weight: bold;">
+                                <br />Data-led / <br />Points-led
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6 col-xl-2" style="padding-right:10px;">
+            <div class="card mb-3 widget-content" style="background-color: #EAF1E1;">
+                <div class="widget-content-wrapper" style="display:block !important;">
+                    <div class="align-content-center" style="text-align:center;">
+                        <div style="text-align:center;font-weight:bold;font-size: 14px !important;" ">
+                            Promo Blasts
+                            <hr style="border-top: 2px solid black;margin:0px;" />
+                        </div>
+                    </div>
+                    <div>
+                        <div>
+                            <span style="font-size: 12px !important; font-weight: bold;">
+                                <br />Genereic SMS / <br /> Whatsapp
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6 col-xl-1">
+
+        </div>
+    </div>
+
+    
+    <div class="row card p-3 m-3" style="margin-left:20px;display:none;" id="dvFirstDiv">
+        
+    </div>
+    <div class="row card p-3 m-3" style="margin-left:20px;display:none;" id="dvSecondDiv">
+
+    </div>
+
+
+</div>
+
+<script>
+    function GetCelebration(flag)
+    {
+        $("#divLoader").show();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("GetCampaignCelebrations", "Campaigns")',
+            data: "{'flag': " + flag + "}",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+
+                $("#dvFirstDiv").html(response);
+                $("#dvFirstDiv").show(1000);
+                $("#divLoader").hide();
+            },
+            failure: function (response) {
+                $("#divLoader").hide();
+            },
+            error: function (response) {
+                $("#dvFirstDiv").html(response.responseText);
+                $("#dvFirstDiv").show(1000);
+                $("#divLoader").hide();
+            }
+        });
+
+    }
+    function ShowCelebrationDetail(type) {
+        console.log(type)
+        var flag = 1;
+        $("#divLoader").show();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("GetCampaignCelebrationDetails", "Campaigns")',
+            data: "{'flag': " + flag + ",'type': '" + type + "'}",            
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+
+                $("#dvSecondDiv").html(response);
+                $("#dvSecondDiv").show(1000);
+                $("#divLoader").hide();
+            },
+            failure: function (response) {
+                $("#divLoader").hide();
+            },
+            error: function (response) {
+                $("#dvSecondDiv").html(response.responseText);
+                $("#dvSecondDiv").show(1000);
+                $("#divLoader").hide();
+            }
+        });
+    }
+</script>

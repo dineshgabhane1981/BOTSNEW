@@ -632,5 +632,24 @@ namespace WebApp.Controllers
             return new JsonResult() { Data = responsedata, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
 
+        public ActionResult CampaignReport()
+        {
+            return View();
+        }
+        public ActionResult GetCampaignCelebrations(string flag)
+        {
+            List<CelebrationSummary> objData = new List<CelebrationSummary>();
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            objData = CMPR.GetCampaignCelebrationSummery(userDetails.GroupId, flag);
+            return PartialView("_CelebrationSummary", objData);
+        }
+        public ActionResult GetCampaignCelebrationDetails(string flag,string type)
+        {
+            List<CelebrationDetail> objData = new List<CelebrationDetail>();
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            objData = CMPR.GetCampaignCelebrationDetail(userDetails.GroupId, flag, type);
+            return PartialView("_CelebrationDetail", objData);
+        }
+
     }
 }

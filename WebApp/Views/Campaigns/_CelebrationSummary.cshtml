@@ -1,0 +1,73 @@
+﻿@model List<BOTS_BL.Models.CelebrationSummary>
+@using System.Globalization
+<div class="table-responsive">
+    <div style="font-size:18px;color:blue;font-weight:bold;">Summary</div>
+    <table class="table" id="tblCelebrationSummary">
+        <thead>
+            <tr>
+                <th>Celebration</th>
+                <th>Total Mem Count</th>
+                <th>Unique Mem Transacted</th>
+                <th>Conv %</th>
+                <th>Total Txns in Cpn Period</th>
+                <th>Business Generated</th>
+                <th>Bonus Points Issued</th>
+                <th>Bonus Points Redeemed</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    @if (item.CelebrationType == "Birthday")
+                    {
+                        <td><a href="#" onclick="ShowCelebrationDetail('Birthday');" style="color:blue;cursor:pointer;"> @item.CelebrationType</a></td>
+                    }
+                    @if (item.CelebrationType == "Anniversary")
+                    {
+                        <td><a href="#" onclick="ShowCelebrationDetail('Anniversary');" style="color:blue;cursor:pointer;"> @item.CelebrationType</a></td>
+                    }
+
+                    <td>@item.TotalMemberCount</td>
+                    <td>@item.UniqueMemberTxnCount</td>
+                    <td>@item.ConversionPercentage%</td>
+                    <td>@item.TotalTxnCount</td>
+                    <td>@String.Format(new CultureInfo("en-IN", false), "{0:n2}", Convert.ToDouble(item.BusinessGenerated))</td>
+                    <td>@item.BonusPointsIssued</td>
+                    <td>@item.BonusPointsRedeemed</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<script>
+    $(document).ready(function () {
+        var table1 = $('#tblCelebrationSummary').DataTable();
+        table1.destroy();
+        var table = $('#tblCelebrationSummary').DataTable({             
+            "bAutoWidth": false,
+            "paging": false,
+            "ordering": false,
+            "info": false,
+            "bFilter": false,
+            "pageLength": 25,
+            "pagingType": "simple_numbers",
+            "columns": [
+                { data: "CelebrationType" },
+                { data: "TotalMemberCount" },
+                { data: "UniqueMemberTxnCount" },
+                { data: "ConversionPercentage" },
+                { data: "TotalTxnCount" },
+                { data: "BusinessGenerated" },
+                { data: "BonusPointsIssued" },
+                { data: "BonusPointsRedeemed" }
+
+            ]
+        });
+        $('#tblCelebrationSummary_filter').hide();
+
+        var table = $('#tblCelebrationSummary').DataTable();
+        table.draw();
+    });
+</script>

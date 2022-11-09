@@ -521,6 +521,9 @@
     <Content Include="Views\BOPromoCampaign\GroupList.cshtml" />
     <Content Include="Views\SinglePage\CustomerRenewal.cshtml" />
     <Content Include="Views\SinglePage\_CustomerRenewalData.cshtml" />
+    <Content Include="Views\Campaigns\CampaignReport.cshtml" />
+    <Content Include="Views\Campaigns\_CelebrationSummary.cshtml" />
+    <Content Include="Views\Campaigns\_CelebrationDetail.cshtml" />
     <None Include="_bin_deployableAssemblies\x86\sqlcese40.dll" />
     <None Include="_bin_deployableAssemblies\x86\sqlceqp40.dll" />
     <None Include="_bin_deployableAssemblies\x86\sqlceme40.dll" />
