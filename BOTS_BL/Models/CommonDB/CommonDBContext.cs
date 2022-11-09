@@ -17,6 +17,7 @@ namespace BOTS_BL.Models
             : base("name=CommonDBContext")
         {
         }
+        public virtual DbSet<WAReport> WAReports { get; set; }
         public virtual DbSet<CommonWAInstanceMaster> CommonWAInstanceMasters { get; set; }
         public virtual DbSet<tblRenewalData> tblRenewalDatas { get; set; }
         public virtual DbSet<OutletDetail> OutletDetails { get; set; }

@@ -1,8 +1,108 @@
 ﻿@{
     ViewBag.Title = "Home Page";
 }
+<style>
+    h2 {
+        color: #000;
+        text-align: center;
+        font-size: 2em;
+    }
 
+    .warpper {
+        display: grid;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .tab {
+        cursor: pointer;
+        padding: 10px 20px;
+        margin: 0px 2px;
+        background-color: #2f4353 !important;
+        display: inline-block;
+        color: #fff;
+        border-radius: 3px 3px 0px 0px;
+        box-shadow: 0 0.5rem 0.8rem #00000080;
+    }
+
+    .tabs {
+        padding-left: 25px;
+    }
+
+    .panels {
+        background: #ffffff;
+        box-shadow: 0 2rem 2rem #00000080;
+        width: 100%;
+        border-radius: 3px;
+        overflow: hidden;
+    }
+
+    .panel {
+        display: none;
+        animation: fadein .8s;
+    }
+
+    .panel-title {
+        font-size: 1.5em;
+        font-weight: bold
+    }
+
+    .radio {
+        display: none;
+    }
+
+
+
+   
+
+    .modal {
+        display: none; /* Hidden by default */
+        position: fixed; /* Stay in place */
+        z-index: 5 !important; /* Sit on top */
+        padding-top: 200px; /* Location of the box */
+        left: 0;
+        top: 0;
+        width: 100%; /* Full width */
+        height: 100%; /* Full height */
+        overflow: auto; /* Enable scroll if needed */
+        background-color: rgb(0,0,0); /* Fallback color */
+        background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+    }
+
+    /* Modal Content */
+    .modal-content {
+        background-color: #fefefe;
+        margin: auto;
+        padding: 20px;
+        border: 1px solid #888;
+        width: 50%;
+        border-radius: 25px;
+    }
+
+    .close {
+        color: #aaaaaa;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+    }
+
+        .close:hover,
+        .close:focus {
+            color: #000;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+    input:read-only {
+        background-color: lightgray;
+    }
+</style>
 <div class="app-main__inner">
+    <div class="row" style="margin-top : 20px; padding-bottom : 20px">
+        <div class="col-sm-4">
+            <b>Search Customer</b>
+        </div>
+    </div>
     <div class="mb-3 card" style="padding-top:20px;">
         <div class="content col-md-12 col-sm-12 row mb-3">
             <div class="col-md-2 col-sm-2" style="margin-top:10px;">
@@ -16,24 +116,24 @@
             </div>
         </div>
     </div>
-    <div class="mb-3 card col-md-12 col-sm-12" style="padding-top:20px; display:none;" id="dvCustomerDetails">
+    <div class="mb-3 card col-md-12 col-sm-12" style="padding-top:20px;padding-bottom:20px; display:none;" id="dvCustomerDetails">
         <div class="col-md-12 col-sm-12 row">
             <div class="col-md-4 col-sm-4" style="margin-top:10px;">Mobile No : <span id="spnMobileNo" style="font-weight:bold;"></span></div>
-            <div class="col-md-4 col-sm-4" style="margin-top:10px;">Customer Name : <span id="spnCustName" style="font-weight:bold;"></span></div>
+            <div class="col-md-4 col-sm-4" style="margin-top: 10px;">Customer Name : <span id="spnCustName" style="font-weight:bold;"></span></div>
         </div>
         <div class="col-md-12 col-sm-12 row">
             <div class="col-md-4 col-sm-4" style="margin-top:10px;">Loyalty Card No : <span id="spnCardNo" style="font-weight:bold;"></span></div>
-            <div class="col-md-4 col-sm-4" style="margin-top:10px;">Available Points : <span id="spnPointsBalance" style="font-weight:bold;"></span></div>
+            <div class="col-md-4 col-sm-4" style="margin-top: 10px;">Available Points : <span id="spnPointsBalance" style="font-weight:bold;"></span></div>
         </div>
         <div class="col-md-12 col-sm-12 row">
             <div class="col-md-4 col-sm-4" style="margin-top:10px;">Total Spend : <span id="spnTotalSpend" style="font-weight:bold;"></span></div>
-            <div class="col-md-4 col-sm-4" style="margin-top:10px;">Last Txn Date : <span id="spnLastTxnDate" style="font-weight:bold;"></span></div>
+            <div class="col-md-4 col-sm-4" style="margin-top: 10px;">Last Txn Date : <span id="spnLastTxnDate" style="font-weight:bold;"></span></div>
         </div>
     </div>
     <div class="mb-3 card col-md-12 col-sm-12" style="padding-top:20px; display:none;" id="dvEnrollment">
         <div class="content col-md-12 col-sm-12 row mb-3">
             <div class="col-md-12 col-sm-12 row">
-                <div class="col-md-2 col-sm-2" style="margin-top:10px;">
+                <div class="col-md-2 col-sm-2" style="margin-top:10px;" >
                     Mobile No
                 </div>
                 <div class="col-md-4 col-sm-4" style="margin-top:10px;">
@@ -122,23 +222,23 @@
     </div>
 
     <div id="OTPModal" class="modal" tabindex="-1" role="dialog" style="display:none;">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header" style="margin-left:230px">
+
+        <div class="modal-content">
+            @*<div class="modal-header" style="margin-left:230px">
                     <h5 class="modal-title">OTP</h5>
-                </div>
-                <div class="modal-body" style="margin-left:160px">
-                    @*<p>Enter OTP</p>*@
-                    <input id="txtOTP" type="text" class="input50" placeholder="Enter OTP" />
-                    <span id="poptext" style="font-weight:bold;"></span>
-                </div>
-                <div class="modal-footer" style="margin-left:120px; margin-top:20px">
-                    <button type="button" class="btn btn-primary" id="BurnCompletion">Redeem</button>
-                    <button type="button" class="btn btn-primary" id="resendOTP">Resend OTP</button>
-                    <button type="button" class="btn btn-secondary" id ="ModelClose" @*data-dismiss="modal"*@>Close</button>
-                </div>
+                </div>*@
+            <div class="modal-body" style="text-align:center;">
+                @*<p>Enter OTP</p>*@
+                <input id="txtOTP" type="text" class="input50" placeholder="Enter OTP" />
+                <span id="poptext" style="font-weight:bold;"></span>
+            </div>
+            <div class="modal-footer" style="text-align: center; margin-top: 20px">
+                <button type="button" class="btn btn-primary" id="BurnCompletion">Redeem</button>
+                <button type="button" class="btn btn-primary" id="resendOTP">Resend OTP</button>
+                <button type="button" class="btn btn-secondary" id="ModelClose" @*data-dismiss="modal"*@>Close</button>
             </div>
         </div>
+
     </div>
 
     <div class="mb-3 card col-md-12 col-sm-12" style="padding-top:20px; display:none;" id="dvInvoiceCustExist">
@@ -168,7 +268,7 @@
                 </div>
             </div>
             <div class="col-md-12 col-sm-12 row" style="margin-top: 10px;">
-                <div class="col-md-2 col-sm-2" style="margin-left: 165px;">
+                <div class="col-md-2 col-sm-2" style="margin-left: 10px;">
                     <button type="button" id="btnPaybyCash" class="btn btn-primary" style="margin-top:10px;">PaybyCash</button>
                 </div>
                 <div class="col-md-2 col-sm-2" style="margin-left: 10px;">
@@ -187,9 +287,17 @@
         var today = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
         $("#txtDOB").datepicker({
             dateFormat: "yy-mm-dd",
-            //yearRange: '1999:' + today+'',
+            yearRange: '1950:' + today+'',
             changeYear: true,
-            minDate: new Date(1900, 1 - 1, 1),
+            //minDate: new Date(1900, 1 - 1, 1),
+            maxDate: '1Y',
+        });
+
+        $("#txtADate").datepicker({
+            dateFormat: "yy-mm-dd",
+            yearRange: '1950:' + today + '',
+            changeYear: true,
+            //minDate: new Date(1900, 1 - 1, 1),
             maxDate: '1Y',
         });
     });
@@ -237,6 +345,8 @@
                             cancelText: "Cancel"
                         }).then((e) => {
                             if (e == ("confirm")) {
+                                $("#txtMobileNoNew").val($("#txtMobileNo").val());
+                                $("#txtMobileNoNew").attr("disabled", "disabled");
                                 $("#dvCustomerDetails").hide();
                                 $("#dvEnrollment").show();
                                 $("#dvInvoice").show();
@@ -244,6 +354,14 @@
                             }
                         })
                     }
+                    //else {
+                    //    cuteAlert({
+                    //        type: "error",
+                    //        title: "Response Code" + response.ResponseCode,
+                    //        message: response.ResponseMessage,
+                    //        buttonText: "Okay"
+                    //    })
+                    //}
                     $("#divLoader").hide();
                 },
                 failure: function (response) {
@@ -414,6 +532,8 @@
                             buttonText: "Okay"
                         }).then(() => {
                             SearchCustomer();
+                            $("#txtInvoiceNoOld").val("");
+                            $("#txtInvoiceAmOldt").val("");
                         })
                      }
                      else {
@@ -498,8 +618,8 @@
                             title: "Invoice Saved Successfully",
                             message: " Poits Earned" + response.PointsEarned + " Avail Points" + response.AvailablePoints + " Points Redeemed"+response.PointsRedeemed,
                             buttonText: "Okay"
-                        }).then(() => {
-                            SearchCustomer();
+                        }).then(() => {                        
+                            SearchCustomer();                           
                             $("#txtOTP").val("");
                             $("#OTPModal").hide();
                             $("#txtInvoiceNoOld").val("");

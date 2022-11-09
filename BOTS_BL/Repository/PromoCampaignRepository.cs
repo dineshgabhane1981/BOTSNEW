@@ -15,7 +15,9 @@ namespace BOTS_BL.Repository
             List<SelectListItem> lstGroupDetails = new List<SelectListItem>();
             using (var context = new CommonDBContext())
             {
-                var GroupDetails = context.tblGroupDetails.Where(x => x.IsActive == true).ToList();
+                string status = "0";
+                //var GroupDetails = context.tblGroupDetails.Where(x => x.IsActive == true).ToList();
+                var GroupDetails = context.WAReports.Where(x => x.SMSStatus == status).ToList();
 
                 foreach (var item in GroupDetails)
                 {

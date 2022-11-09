@@ -15,6 +15,8 @@ namespace BOTS_BL.Models.RetailerWeb
         public string TotalSpend { get; set; }
         public string LastTxnDate { get; set; }
         public string ResponseCode { get; set; }
+        public string ResponseMessage { get; set; }
+
     }
 
     public class EarnResponse

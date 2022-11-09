@@ -7,6 +7,10 @@ using BOTS_BL.Models.RetailerWeb;
 using BOTS_BL.Models;
 using System.Data.SqlClient;
 using System.Data;
+using System.Threading;
+using System.Web;
+using System.Net;
+using System.IO;
 
 namespace BOTS_BL.Repository
 {
@@ -31,7 +35,7 @@ namespace BOTS_BL.Repository
                     SqlParameter param2 = new SqlParameter("pi_CounterId", CounterId);
                     SqlParameter param3 = new SqlParameter("pi_SearchData", MobileNo);
                     SqlParameter param4 = new SqlParameter("pi_SearchType", "1");
-                    SqlParameter param1 = new SqlParameter("pi_Datetime", DateTime.Today.ToString("yyyy-MM-dd"));
+                    SqlParameter param1 = new SqlParameter("pi_Datetime", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
                     cmdReport.CommandType = CommandType.StoredProcedure;
                     cmdReport.Parameters.Add(param1);
                     cmdReport.Parameters.Add(param2);
@@ -46,6 +50,7 @@ namespace BOTS_BL.Repository
                         objData.ResponseCode = "00";
                         DataTable dt1 = retVal.Tables[1];
                         DataTable dt2 = retVal.Tables[2];
+                        //DataTable dt3 = retVal.Tables[3];
                         objData.MobileNo = Convert.ToString(dt2.Rows[0]["MobileNo"]);
                         objData.CustomerName = Convert.ToString(dt2.Rows[0]["CustomerName"]);
                         objData.PointBalance = Convert.ToString(dt2.Rows[0]["AvailablePoints"]);
@@ -54,16 +59,18 @@ namespace BOTS_BL.Repository
                         objData.TotalSpend = Convert.ToString(dt1.Rows[0]["TotalSpendText"]);
                         objData.LastTxnDate = Convert.ToString(dt1.Rows[0]["LastTxnText"]);
                     }
-                    if (Convert.ToString(dt.Rows[0]["ResponseCode"]) == "06")
+                    
+                    else
                     {
-                        objData.ResponseCode = "06";
+                        objData.ResponseCode = Convert.ToString(dt.Rows[0]["ResponseCode"]);
+                        objData.ResponseMessage = Convert.ToString(dt.Rows[0]["ResponseMessage"]);
                     }
                 }
             }
             return objData;
         }
 
-        public EarnResponse InsertEarnData(string CounterId, string Mobileno,string CustomerName,string InvoiceNo,string InvoiceAmt,string DOB, string EmailId, string Gender, string ADate, string CardNo )
+        public EarnResponse InsertEarnData(string CounterId, string Mobileno, string CustomerName, string InvoiceNo, string InvoiceAmt, string DOB, string EmailId, string Gender, string ADate, string CardNo)
         {
             EarnResponse R = new EarnResponse();
             using (var context = new CommonDBContext())
@@ -87,8 +94,8 @@ namespace BOTS_BL.Repository
                     SqlParameter param8 = new SqlParameter("pi_CardNo", CardNo);
                     SqlParameter param9 = new SqlParameter("pi_Gender", Gender);
                     SqlParameter param10 = new SqlParameter("pi_Anniversary", ADate);
-                    SqlParameter param11 = new SqlParameter("pi_Datetime", DateTime.Today.ToString("yyyy-MM-dd"));
-                    
+                    SqlParameter param11 = new SqlParameter("pi_Datetime", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
+
                     cmdReport.CommandType = CommandType.StoredProcedure;
                     cmdReport.Parameters.Add(param1);
                     cmdReport.Parameters.Add(param2);
@@ -108,11 +115,26 @@ namespace BOTS_BL.Repository
                     {
                         R.ResponseCode = "00";
                         DataTable dt1 = retVal.Tables[1];
-                        //DataTable dt2 = retVal.Tables[2];
+                        DataTable dt2 = retVal.Tables[2];
                         R.MobileNo = Convert.ToString(dt1.Rows[0]["MobileNo"]);
                         R.CustomerName = Convert.ToString(dt1.Rows[0]["CustomerName"]);
                         R.AvailablePoints = Convert.ToString(dt1.Rows[0]["AvailablePoints"]);
                         R.PointsEarned = Convert.ToString(dt1.Rows[0]["PointsEarned"]);
+
+                        if(dt2.Rows.Count > 0)
+                        {
+                            string SMSStatus = Convert.ToString(dt2.Rows[0]["SMSStatusTxn"]);
+                            string WAStatus = Convert.ToString(dt2.Rows[0]["WAStatusTxn"]);
+                            //if (SMSStatus == "1" && WAStatus == "1")
+                            //{
+
+                            //}
+                            DataTable dt3 = retVal.Tables[3];
+                            Thread _job = new Thread(() => SendMessage(dt3));
+                            _job.Start();
+                        }
+
+
                     }
                 }
             }
@@ -143,7 +165,8 @@ namespace BOTS_BL.Repository
                     SqlParameter param8 = new SqlParameter("pi_CardNo", "");
                     SqlParameter param9 = new SqlParameter("pi_Gender", "");
                     SqlParameter param10 = new SqlParameter("pi_Anniversary", "");
-                    SqlParameter param11 = new SqlParameter("pi_Datetime", DateTime.Today.ToString("yyyy-MM-dd"));
+                    //SqlParameter param11 = new SqlParameter("pi_Datetime", DateTime.Today.ToString("yyyy-MM-dd hh:mm:ss"));
+                    SqlParameter param11 = new SqlParameter("pi_Datetime", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
 
                     cmdReport.CommandType = CommandType.StoredProcedure;
                     cmdReport.Parameters.Add(param1);
@@ -164,11 +187,24 @@ namespace BOTS_BL.Repository
                     {
                         R.ResponseCode = "00";
                         DataTable dt1 = retVal.Tables[1];
-                        //DataTable dt2 = retVal.Tables[2];
+                        DataTable dt2 = retVal.Tables[2];
                         R.MobileNo = Convert.ToString(dt1.Rows[0]["MobileNo"]);
                         R.CustomerName = Convert.ToString(dt1.Rows[0]["CustomerName"]);
                         R.AvailablePoints = Convert.ToString(dt1.Rows[0]["AvailablePoints"]);
                         R.PointsEarned = Convert.ToString(dt1.Rows[0]["PointsEarned"]);
+
+                        if (dt2.Rows.Count > 0)
+                        {
+                            string SMSStatus = Convert.ToString(dt2.Rows[0]["SMSStatusTxn"]);
+                            string WAStatus = Convert.ToString(dt2.Rows[0]["WAStatusTxn"]);
+                            //if (SMSStatus == "1" && WAStatus == "1")
+                            //{
+
+                            //}
+                            DataTable dt3 = retVal.Tables[3];
+                            Thread _job = new Thread(() => SendMessage(dt3));
+                            _job.Start();
+                        }
                     }
                     else
                     {
@@ -180,7 +216,7 @@ namespace BOTS_BL.Repository
             return R;
         }
 
-        public BurnValidationResponse BurnValidation(string CounterId, string Mobileno, string InvoiceNo, string InvoiceAmt,string PointsBurn)
+        public BurnValidationResponse BurnValidation(string CounterId, string Mobileno, string InvoiceNo, string InvoiceAmt, string PointsBurn)
         {
             BurnValidationResponse R = new BurnValidationResponse();
             using (var context = new CommonDBContext())
@@ -190,16 +226,16 @@ namespace BOTS_BL.Repository
 
                 SqlConnection _Con = new SqlConnection(conStr);
                 DataSet retVal = new DataSet();
-                SqlCommand cmdReport = new SqlCommand("sp_WAb_BurnValidation", _Con);
+                SqlCommand cmdReport = new SqlCommand("sp_Web_BurnValidation", _Con);
                 SqlDataAdapter daReport = new SqlDataAdapter(cmdReport);
                 using (cmdReport)
                 {
-                    SqlParameter param1  = new SqlParameter("pi_CounterId", CounterId);
-                    SqlParameter param2  = new SqlParameter("pi_MobileNo", Mobileno);
-                    SqlParameter param3  = new SqlParameter("pi_InvoiceNo", InvoiceNo);
-                    SqlParameter param4  = new SqlParameter("pi_InvoiceAmt", InvoiceAmt);
-                    SqlParameter param5  = new SqlParameter("pi_BurnPoints", PointsBurn);
-                    SqlParameter param11 = new SqlParameter("pi_Datetime", DateTime.Today.ToString("yyyy-MM-dd"));
+                    SqlParameter param1 = new SqlParameter("pi_CounterId", CounterId);
+                    SqlParameter param2 = new SqlParameter("pi_MobileNo", Mobileno);
+                    SqlParameter param3 = new SqlParameter("pi_InvoiceNo", InvoiceNo);
+                    SqlParameter param4 = new SqlParameter("pi_InvoiceAmt", InvoiceAmt);
+                    SqlParameter param5 = new SqlParameter("pi_BurnPoints", PointsBurn);
+                    SqlParameter param11 = new SqlParameter("pi_Datetime", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
 
                     cmdReport.CommandType = CommandType.StoredProcedure;
                     cmdReport.Parameters.Add(param1);
@@ -216,10 +252,23 @@ namespace BOTS_BL.Repository
                         R.ResponseCode = "00";
                         R.ResponseMessage = Convert.ToString(dt.Rows[0]["ResponseMessage"]);
                         DataTable dt1 = retVal.Tables[1];
-                        //DataTable dt2 = retVal.Tables[2];
+                        DataTable dt2 = retVal.Tables[2];
                         R.OTPValue = Convert.ToString(dt1.Rows[0]["OTPValue"]);
                         R.BurnPointsAsAmount = Convert.ToString(dt1.Rows[0]["BurnPointsAsAmount"]);
                         R.PointsValue = Convert.ToString(dt1.Rows[0]["PointsValue"]);
+
+                        if (dt2.Rows.Count > 0)
+                        {
+                            string SMSStatus = Convert.ToString(dt2.Rows[0]["SMSStatusOTP"]);
+                            string WAStatus = Convert.ToString(dt2.Rows[0]["WAStatusOTP"]);
+                            //if (SMSStatus == "1" && WAStatus == "1")
+                            //{
+
+                            //}
+                            DataTable dt3 = retVal.Tables[3];
+                            Thread _job = new Thread(() => SendMessageOTP(dt3));
+                            _job.Start();
+                        }
                     }
                     else
                     {
@@ -250,7 +299,7 @@ namespace BOTS_BL.Repository
                     SqlParameter param3 = new SqlParameter("pi_InvoiceNo", InvoiceNo);
                     SqlParameter param4 = new SqlParameter("pi_InvoiceAmt", InvoiceAmt);
                     SqlParameter param5 = new SqlParameter("pi_BurnPoints", PointsBurn);
-                    SqlParameter param11 = new SqlParameter("pi_Datetime", DateTime.Today.ToString("yyyy-MM-dd"));
+                    SqlParameter param11 = new SqlParameter("pi_Datetime", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
 
                     cmdReport.CommandType = CommandType.StoredProcedure;
                     cmdReport.Parameters.Add(param1);
@@ -267,10 +316,23 @@ namespace BOTS_BL.Repository
                         R.ResponseCode = "00";
                         R.ResponseMessage = Convert.ToString(dt.Rows[0]["ResponseMessage"]);
                         DataTable dt1 = retVal.Tables[1];
-                        //DataTable dt2 = retVal.Tables[2];
+                        DataTable dt2 = retVal.Tables[2];
                         R.PointsEarned = Convert.ToString(dt1.Rows[0]["PointsEarned"]);
                         R.PointsRedeemed = Convert.ToString(dt1.Rows[0]["PointsRedeemed"]);
                         R.AvailablePoints = Convert.ToString(dt1.Rows[0]["AvailablePoints"]);
+
+                        if (dt2.Rows.Count > 0)
+                        {
+                            string SMSStatus = Convert.ToString(dt2.Rows[0]["SMSStatusTxn"]);
+                            string WAStatus = Convert.ToString(dt2.Rows[0]["WAStatusTxn"]);
+                            //if (SMSStatus == "1" && WAStatus == "1")
+                            //{
+
+                            //}
+                            DataTable dt3 = retVal.Tables[3];
+                            Thread _job = new Thread(() => SendMessage(dt3));
+                            _job.Start();
+                        }
                     }
                     else
                     {
@@ -284,7 +346,7 @@ namespace BOTS_BL.Repository
 
         public List<DailyReport> DailyReport(string CounterId)
         {
-            List<DailyReport> LtObj= new List<DailyReport>();
+            List<DailyReport> LtObj = new List<DailyReport>();
             DailyReport obj = new DailyReport();
 
             using (var context = new CommonDBContext())
@@ -304,7 +366,7 @@ namespace BOTS_BL.Repository
                     //SqlParameter param2 = new SqlParameter("pi_LoginType", "1");
                     SqlParameter param3 = new SqlParameter("pi_OutletId", outletId);
                     SqlParameter param4 = new SqlParameter("pi_ReportType", "1");
-                    SqlParameter param5 = new SqlParameter("pi_Datetime", DateTime.Today.ToString("yyyy-MM-dd"));
+                    SqlParameter param5 = new SqlParameter("pi_Datetime", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
                     cmdReport.CommandType = CommandType.StoredProcedure;
                     cmdReport.Parameters.Add(param1);
                     //cmdReport.Parameters.Add(param2);
@@ -314,7 +376,7 @@ namespace BOTS_BL.Repository
                     daReport.Fill(retVal);
 
                     DataTable dt = retVal.Tables[0];
-                    for (int i = 0; i< 1;i++)
+                    for (int i = 0; i < 1; i++)
                     {
                         if (Convert.ToString(dt.Rows[0]["ResponseCode"]) == "00")
                         {
@@ -347,7 +409,7 @@ namespace BOTS_BL.Repository
             return LtObj;
         }
 
-        public MDRDetails MembDetailReprt(string CounterId,string Mobileno)
+        public MDRDetails MembDetailReprt(string CounterId, string Mobileno)
         {
             MDRDetails ObjMDRDetails = new MDRDetails();
             MDRResponse objMDRResponse = new MDRResponse();
@@ -373,7 +435,7 @@ namespace BOTS_BL.Repository
                     //SqlParameter param2 = new SqlParameter("pi_LoginType", "1");
                     SqlParameter param3 = new SqlParameter("pi_SearchData", Mobileno);
                     SqlParameter param4 = new SqlParameter("pi_SearchType", "1");
-                    SqlParameter param5 = new SqlParameter("pi_Datetime", DateTime.Today.ToString("yyyy-MM-dd"));
+                    SqlParameter param5 = new SqlParameter("pi_Datetime", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
                     cmdReport.CommandType = CommandType.StoredProcedure;
                     cmdReport.Parameters.Add(param1);
                     //cmdReport.Parameters.Add(param2);
@@ -385,8 +447,8 @@ namespace BOTS_BL.Repository
                     DataTable dt = retVal.Tables[0];
                     if (retVal.Tables.Count > 1)
                     {
-                         dt1 = retVal.Tables[1];
-                         dt2 = retVal.Tables[2];
+                        dt1 = retVal.Tables[1];
+                        dt2 = retVal.Tables[2];
                     }
 
 
@@ -396,10 +458,10 @@ namespace BOTS_BL.Repository
                         MDRTxnDetails obj = new MDRTxnDetails();
                         if (Convert.ToString(dt.Rows[0]["ResponseCode"]) == "00")
                         {
-                            if(i == 0)
+                            if (i == 0)
                             {
                                 //ObjMDRDetails.ObjMDRResponse.ResponseCode = Convert.ToString(dt.Rows[i]["ResponseCode"]);
-                                objMDRResponse.ResponseCode =  "00";
+                                objMDRResponse.ResponseCode = "00";
                                 objMDRResponse.ResponseMessage = "Success";
                                 ObjMDRDetails.ObjMDRResponse = objMDRResponse;
 
@@ -411,7 +473,7 @@ namespace BOTS_BL.Repository
                                 objMDRData.EnrolledOn = Convert.ToString(dt1.Rows[i]["EnrolledOn"]);
                                 ObjMDRDetails.MDRData = objMDRData;
                             }
-                            
+
                             obj.Date = Convert.ToString(dt2.Rows[i]["Date"]);
                             obj.InvoiceNo = Convert.ToString(dt2.Rows[i]["InvoiceNo"]);
                             obj.InvoiceAmt = Convert.ToString(dt2.Rows[i]["InvoiceAmt"]);
@@ -420,7 +482,7 @@ namespace BOTS_BL.Repository
 
                             LstMDRData.Add(obj);
                             //ObjMDRDetails.ListMDRTxnDetails.Add(obj);
-                        }                                          
+                        }
                     }
                     ObjMDRDetails.ListMDRTxnDetails = LstMDRData;
 
@@ -465,7 +527,7 @@ namespace BOTS_BL.Repository
                     //SqlParameter param2 = new SqlParameter("pi_LoginType", "1");
                     SqlParameter param3 = new SqlParameter("pi_SearchData", Mobileno);
                     SqlParameter param4 = new SqlParameter("pi_SearchType", "1");
-                    SqlParameter param5 = new SqlParameter("pi_Datetime", DateTime.Today.ToString("yyyy-MM-dd"));
+                    SqlParameter param5 = new SqlParameter("pi_Datetime", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
                     cmdReport.CommandType = CommandType.StoredProcedure;
                     cmdReport.Parameters.Add(param1);
                     //cmdReport.Parameters.Add(param2);
@@ -495,7 +557,7 @@ namespace BOTS_BL.Repository
 
                                 objGTDData.Mobileno = Convert.ToString(dt1.Rows[i]["MobileNo"]);
                                 objGTDData.CustomerName = Convert.ToString(dt1.Rows[i]["CustomerName"]);
-                               // objGTDData.TxnCount = Convert.ToString(dt1.Rows[i]["EnrolledOutlet"]);
+                                // objGTDData.TxnCount = Convert.ToString(dt1.Rows[i]["EnrolledOutlet"]);
                                 objGTDData.CardNo = Convert.ToString(dt1.Rows[i]["CardNo"]);
                                 objGTDData.TxnCount = Convert.ToString(dt1.Rows[i]["TxnCount"]);
 
@@ -533,7 +595,7 @@ namespace BOTS_BL.Repository
         {
             CancelTxnDetails ObjCancel = new CancelTxnDetails();
             Response objResponse = new Response();
-            CancelData ObjCanData= new CancelData();
+            CancelData ObjCanData = new CancelData();
 
             using (var context = new CommonDBContext())
             {
@@ -554,7 +616,7 @@ namespace BOTS_BL.Repository
                     //SqlParameter param2 = new SqlParameter("pi_LoginType", "1");
                     SqlParameter param3 = new SqlParameter("pi_MobileNo", Mobileno);
                     SqlParameter param4 = new SqlParameter("pi_InvoiceNo", InvoiceNo);
-                    SqlParameter param5 = new SqlParameter("pi_Datetime", DateTime.Today.ToString("yyyy-MM-dd"));
+                    SqlParameter param5 = new SqlParameter("pi_Datetime", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
                     cmdReport.CommandType = CommandType.StoredProcedure;
                     cmdReport.Parameters.Add(param1);
                     //cmdReport.Parameters.Add(param2);
@@ -574,16 +636,30 @@ namespace BOTS_BL.Repository
                     {
                         objResponse.ResponseCode = "00";
                         objResponse.ResponseMessage = "Success";
-                         dt1 = retVal.Tables[1];
-                        //DataTable dt2 = retVal.Tables[2];
+                        dt1 = retVal.Tables[1];
+                        dt2 = retVal.Tables[2];
                         ObjCancel.MobileNo = Convert.ToString(dt1.Rows[0]["MobileNo"]);
                         ObjCancel.CustomerName = Convert.ToString(dt1.Rows[0]["CustomerName"]);
                         ObjCancel.AvailablePoints = Convert.ToString(dt1.Rows[0]["AvailablePoints"]);
                         ObjCancel.InvoiceNo = Convert.ToString(dt1.Rows[0]["InvoiceNo"]);
                         ObjCancel.PointsCredited = Convert.ToString(dt1.Rows[0]["PointsCredited"]);
+                        ObjCancel.PointsDebited = Convert.ToString(dt1.Rows[0]["PointsDebited"]);
 
                         ObjCanData.Cancelresponse = objResponse;
                         ObjCanData.CancelTxn = ObjCancel;
+
+                        if (dt2.Rows.Count > 0)
+                        {
+                            string SMSStatus = Convert.ToString(dt2.Rows[0]["SMSStatusTxn"]);
+                            string WAStatus = Convert.ToString(dt2.Rows[0]["WAStatusTxn"]);
+                            //if (SMSStatus == "1" && WAStatus == "1")
+                            //{
+
+                            //}
+                            DataTable dt3 = retVal.Tables[3];
+                            Thread _job = new Thread(() => SendMessage(dt3));
+                            _job.Start();
+                        }
                     }
                     else
                     {
@@ -596,7 +672,6 @@ namespace BOTS_BL.Repository
             }
             return ObjCanData;
         }
-
         public BurnValidationResponse OTPResend(string CounterId, string Mobileno)
         {
             BurnValidationResponse R = new BurnValidationResponse();
@@ -613,13 +688,13 @@ namespace BOTS_BL.Repository
                 {
                     SqlParameter param1 = new SqlParameter("pi_CounterId", CounterId);
                     SqlParameter param2 = new SqlParameter("pi_MobileNo", Mobileno);
-                    SqlParameter param3 = new SqlParameter("pi_Datetime", DateTime.Today.ToString("yyyy-MM-dd"));
+                    SqlParameter param3 = new SqlParameter("pi_Datetime", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
 
                     cmdReport.CommandType = CommandType.StoredProcedure;
                     cmdReport.Parameters.Add(param1);
                     cmdReport.Parameters.Add(param2);
                     cmdReport.Parameters.Add(param3);
-                    
+
                     daReport.Fill(retVal);
 
                     DataTable dt = retVal.Tables[0];
@@ -628,9 +703,22 @@ namespace BOTS_BL.Repository
                         R.ResponseCode = "00";
                         R.ResponseMessage = Convert.ToString(dt.Rows[0]["ResponseMessage"]);
                         DataTable dt1 = retVal.Tables[1];
-                        //DataTable dt2 = retVal.Tables[2];
+                        DataTable dt2 = retVal.Tables[2];
                         R.OTPValue = Convert.ToString(dt1.Rows[0]["OTPValue"]);
-                    
+
+                        if (dt2.Rows.Count > 0)
+                        {
+                            string SMSStatus = Convert.ToString(dt2.Rows[0]["SMSStatusOTP"]);
+                            string WAStatus = Convert.ToString(dt2.Rows[0]["WAStatusOTP"]);
+                            //if (SMSStatus == "1" && WAStatus == "1")
+                            //{
+
+                            //}
+                            DataTable dt3 = retVal.Tables[3];
+                            Thread _job = new Thread(() => SendMessageOTP(dt3));
+                            _job.Start();
+                        }
+
                     }
                     else
                     {
@@ -641,5 +729,77 @@ namespace BOTS_BL.Repository
             }
             return R;
         }
+        public void SendMessage(DataTable dt3)
+        {
+            string _MobileNo = dt3.Rows[0]["CommMobileNoTxn"].ToString();
+            string _WATokenId = dt3.Rows[0]["WATokenId"].ToString();
+            string _WAMessage = dt3.Rows[0]["WhatsAppMessage"].ToString();
+
+                Thread _job = new Thread(() => WAText(_MobileNo, _WATokenId, _WAMessage));
+                _job.Start();
+            
+        }
+        public void SendMessageOTP(DataTable dt3)
+        {
+            string _MobileNo = dt3.Rows[0]["CommMobileNoOTP"].ToString();
+            string _WATokenId = dt3.Rows[0]["WATokenId"].ToString();
+            string _WAMessage = dt3.Rows[0]["MessageOTP"].ToString();
+
+            Thread _job = new Thread(() => WAText(_MobileNo, _WATokenId, _WAMessage));
+            _job.Start();
+
+        }
+        public void WAText(string MobileNo,string WATokenId,string WAMessage)
+        {
+            string responseString;
+            try
+            {
+
+                WAMessage = WAMessage.Replace("#99", "&");
+                WAMessage = HttpUtility.UrlEncode(WAMessage);
+                //string type = "TEXT";
+                StringBuilder sbposdata = new StringBuilder();
+                sbposdata.AppendFormat("https://bo.enotify.app/api/sendText?");
+                sbposdata.AppendFormat("token={0}", WATokenId);
+                sbposdata.AppendFormat("&phone=91{0}", MobileNo);
+                sbposdata.AppendFormat("&message={0}", WAMessage);
+
+                string Url = sbposdata.ToString();
+                ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls | (SecurityProtocolType)3072;
+                ServicePointManager.ServerCertificateValidationCallback += (sender, cert, chain, sslPolicyErrors) => true;
+                HttpWebRequest httpWReq = (HttpWebRequest)WebRequest.Create(Url);
+                UTF8Encoding encoding = new UTF8Encoding();
+                byte[] data = encoding.GetBytes(sbposdata.ToString());
+                httpWReq.Method = "POST";
+
+                httpWReq.ContentType = "application/x-www-form-urlencoded";
+                httpWReq.ContentLength = data.Length;
+                using (Stream stream = httpWReq.GetRequestStream())
+                {
+                    stream.Write(data, 0, data.Length);
+                }
+                HttpWebResponse response = (HttpWebResponse)httpWReq.GetResponse();
+                StreamReader reader = new StreamReader(response.GetResponseStream());
+                responseString = reader.ReadToEnd();
+                reader.Close();
+                response.Close();
+            }
+            catch (ArgumentException ex)
+            {
+
+                responseString = string.Format("HTTP_ERROR :: The second HttpWebRequest object has raised an Argument Exception as 'Connection' Property is set to 'Close' :: {0}", ex.Message);
+            }
+            catch (WebException ex)
+            {
+
+                responseString = string.Format("HTTP_ERROR :: WebException raised! :: {0}", ex.Message);
+            }
+            catch (Exception ex)
+            {
+
+                responseString = string.Format("HTTP_ERROR :: Exception raised! :: {0}", ex.Message);
+            }
+        }
     }
+    
 }
