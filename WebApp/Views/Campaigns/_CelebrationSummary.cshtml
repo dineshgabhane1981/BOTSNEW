@@ -1,5 +1,20 @@
 ﻿@model List<BOTS_BL.Models.CelebrationSummary>
 @using System.Globalization
+
+
+
+<div>
+    <div class="col-md-12 col-xl-12">
+        <input type="radio" checked id="rdnCurrentMonth" name="Celebrationfilter" /> Current Month &nbsp;&nbsp;&nbsp;&nbsp;
+        <input type="radio" id="rdnLast3Months" name="Celebrationfilter" /> Last 3 Months &nbsp;&nbsp;&nbsp;&nbsp;
+        <input type="radio" id="rdnLast6Months" name="Celebrationfilter" /> Last 6 Months &nbsp;&nbsp;&nbsp;&nbsp;
+        <input type="radio" id="rdnLast12Months" name="Celebrationfilter" /> Last 12 Months &nbsp;&nbsp;&nbsp;&nbsp;
+        <input type="radio" id="rdnSpecificMonth" name="Celebrationfilter" /> For Month &nbsp;&nbsp;&nbsp;&nbsp;
+        @Html.DropDownList("Month", new SelectList(ViewBag.MonthList, "Value", "Text"), "Month", htmlAttributes: new { @class = "smallDDL", @id = "ddlMonthList" })
+        @Html.DropDownList("Year", new SelectList(ViewBag.YearList, "Value", "Text"), htmlAttributes: new { @class = "smallDDL", @id = "ddlYearList" })
+        <button class="btn btn-primary login-btn" id="btnCelebrationFilter">Filter</button>
+    </div>
+</div>
 <div class="table-responsive">
     <div style="font-size:18px;color:blue;font-weight:bold;">Summary</div>
     <table class="table" id="tblCelebrationSummary">
@@ -21,11 +36,11 @@
                 <tr>
                     @if (item.CelebrationType == "Birthday")
                     {
-                        <td><a href="#" onclick="ShowCelebrationDetail('Birthday');" style="color:blue;cursor:pointer;"> @item.CelebrationType</a></td>
+                        <td><a href="#" onclick="ShowCelebrationDetailPre('Birthday');" style="color:blue;cursor:pointer;"> @item.CelebrationType</a></td>
                     }
                     @if (item.CelebrationType == "Anniversary")
                     {
-                        <td><a href="#" onclick="ShowCelebrationDetail('Anniversary');" style="color:blue;cursor:pointer;"> @item.CelebrationType</a></td>
+                        <td><a href="#" onclick="ShowCelebrationDetailPre('Anniversary');" style="color:blue;cursor:pointer;"> @item.CelebrationType</a></td>
                     }
 
                     <td>@item.TotalMemberCount</td>
@@ -69,5 +84,54 @@
 
         var table = $('#tblCelebrationSummary').DataTable();
         table.draw();
+
+        $('#btnCelebrationFilter').click(function () {
+            var flag = 0;
+            var year = 0;
+            var month = 0;
+            if ($("#rdnCurrentMonth").is(":checked")) {
+                flag = 0;
+            }
+            if ($("#rdnLast3Months").is(":checked")) {
+                flag = 1;
+            }
+            if ($("#rdnLast6Months").is(":checked")) {
+                flag = 2;
+            }
+            if ($("#rdnLast12Months").is(":checked")) {
+                flag = 3;
+            }
+            if ($("#rdnSpecificMonth").is(":checked")) {
+                flag = 4;                
+                year = $("#ddlYearList").val();
+                month = $("#ddlMonthList").val();
+            }            
+            GetCelebration(flag, year, month);
+        });
+
     });
+
+    function ShowCelebrationDetailPre(CelebrationType) {
+        var flag = 0;
+        var year = 0;
+        var month = 0;
+        if ($("#rdnCurrentMonth").is(":checked")) {
+            flag = 0;
+        }
+        if ($("#rdnLast3Months").is(":checked")) {
+            flag = 1;
+        }
+        if ($("#rdnLast6Months").is(":checked")) {
+            flag = 2;
+        }
+        if ($("#rdnLast12Months").is(":checked")) {            
+            flag = 3;
+        }
+        if ($("#rdnSpecificMonth").is(":checked")) {
+            flag = 4;
+            year = $("#ddlYearList").val();
+            month = $("#ddlMonthList").val();
+        }
+        ShowCelebrationDetail(CelebrationType, flag, year, month);
+    }
 </script>

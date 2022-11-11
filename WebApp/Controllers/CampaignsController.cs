@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Configuration;
 using System.Data;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -636,18 +637,44 @@ namespace WebApp.Controllers
         {
             return View();
         }
-        public ActionResult GetCampaignCelebrations(string flag)
+        public ActionResult GetCampaignCelebrations(string flag, string stryear, string strmonth)
         {
             List<CelebrationSummary> objData = new List<CelebrationSummary>();
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
-            objData = CMPR.GetCampaignCelebrationSummery(userDetails.GroupId, flag);
+            objData = CMPR.GetCampaignCelebrationSummery(userDetails.GroupId, flag, stryear, strmonth);
+            List<SelectListItem> MonthList = new List<SelectListItem>();
+            int month = DateTime.Now.Month;
+
+            int count = 1;
+            for (int i = 0; i <= 11; i++)
+            {
+                MonthList.Add(new SelectListItem
+                {
+                    Text = Convert.ToString(CultureInfo.CurrentUICulture.DateTimeFormat.MonthNames[i]),
+                    Value = Convert.ToString(i)
+                });
+                count++;
+            }
+            List<SelectListItem> YearList = new List<SelectListItem>();
+            int year = DateTime.Now.Year;
+            for (int i = 0; i <= 9; i++)
+            {
+                YearList.Add(new SelectListItem
+                {
+                    Text = Convert.ToString(DateTime.Now.AddYears(-i).Year.ToString()),
+                    Value = Convert.ToString(year - i)
+                });
+            }
+
+            ViewBag.MonthList = MonthList;
+            ViewBag.YearList = YearList;
             return PartialView("_CelebrationSummary", objData);
         }
-        public ActionResult GetCampaignCelebrationDetails(string flag,string type)
+        public ActionResult GetCampaignCelebrationDetails(string flag,string type, string year, string month)
         {
             List<CelebrationDetail> objData = new List<CelebrationDetail>();
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
-            objData = CMPR.GetCampaignCelebrationDetail(userDetails.GroupId, flag, type);
+            objData = CMPR.GetCampaignCelebrationDetail(userDetails.GroupId, flag, type, year,month);
             return PartialView("_CelebrationDetail", objData);
         }
 

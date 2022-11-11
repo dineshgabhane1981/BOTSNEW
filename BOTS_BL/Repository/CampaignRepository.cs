@@ -1584,7 +1584,7 @@ namespace BOTS_BL.Repository
             return WAInsDetails;
         }
 
-        public List<CelebrationSummary> GetCampaignCelebrationSummery(string GroupId,string flag)
+        public List<CelebrationSummary> GetCampaignCelebrationSummery(string GroupId, string flag, string year, string month)
         {
             List<CelebrationSummary> objData = new List<CelebrationSummary>();
             var connstr = CR.GetCustomerConnString(GroupId);
@@ -1592,23 +1592,35 @@ namespace BOTS_BL.Repository
             {
                 using (var context = new BOTSDBContext(connstr))
                 {
-                    objData = context.Database.SqlQuery<CelebrationSummary>("sp_BOTS_CelebrationSummary @pi_GroupId,@pi_Month,@pi_Year,@pi_INDDatetime,@pi_SelectedCriteria", 
-                        new SqlParameter("@pi_GroupId", GroupId), 
-                        new SqlParameter("@pi_Month", DateTime.Today.Month), 
-                        new SqlParameter("@pi_Year", DateTime.Today.Year), 
-                        new SqlParameter("@pi_INDDatetime", DateTime.Now), 
-                        new SqlParameter("@pi_SelectedCriteria", flag)).ToList<CelebrationSummary>();
+                    if (flag != "4")
+                    {
+                        objData = context.Database.SqlQuery<CelebrationSummary>("sp_BOTS_CelebrationSummary @pi_GroupId,@pi_Month,@pi_Year,@pi_INDDatetime,@pi_SelectedCriteria",
+                            new SqlParameter("@pi_GroupId", GroupId),
+                            new SqlParameter("@pi_Month", DateTime.Today.Month),
+                            new SqlParameter("@pi_Year", DateTime.Today.Year),
+                            new SqlParameter("@pi_INDDatetime", DateTime.Now),
+                            new SqlParameter("@pi_SelectedCriteria", flag)).ToList<CelebrationSummary>();
+                    }
+                    else
+                    {
+                        objData = context.Database.SqlQuery<CelebrationSummary>("sp_BOTS_CelebrationSummary @pi_GroupId,@pi_Month,@pi_Year,@pi_INDDatetime,@pi_SelectedCriteria",
+                            new SqlParameter("@pi_GroupId", GroupId),
+                            new SqlParameter("@pi_Month", Convert.ToInt32(month) + 1),
+                            new SqlParameter("@pi_Year", Convert.ToInt32(year)),
+                            new SqlParameter("@pi_INDDatetime", DateTime.Now),
+                            new SqlParameter("@pi_SelectedCriteria", "0")).ToList<CelebrationSummary>();
+                    }
                 }
             }
             catch (Exception ex)
             {
                 newexception.AddException(ex, GroupId);
             }
-             
+
             return objData;
         }
 
-        public List<CelebrationDetail> GetCampaignCelebrationDetail(string GroupId, string flag,string type)
+        public List<CelebrationDetail> GetCampaignCelebrationDetail(string GroupId, string flag, string type, string year, string month)
         {
             List<CelebrationDetail> objData = new List<CelebrationDetail>();
             var connstr = CR.GetCustomerConnString(GroupId);
@@ -1616,13 +1628,26 @@ namespace BOTS_BL.Repository
             {
                 using (var context = new BOTSDBContext(connstr))
                 {
-                    objData = context.Database.SqlQuery<CelebrationDetail>("sp_BOTS_CelebrationDetailed @pi_GroupId,@pi_Month,@pi_Year,@pi_INDDatetime, @pi_CelebrationType,@pi_SelectedCriteria",
+                    if (flag == "4")
+                    {
+                        objData = context.Database.SqlQuery<CelebrationDetail>("sp_BOTS_CelebrationDetailed @pi_GroupId,@pi_Month,@pi_Year,@pi_INDDatetime, @pi_CelebrationType,@pi_SelectedCriteria",
+                        new SqlParameter("@pi_GroupId", GroupId),
+                        new SqlParameter("@pi_Month", Convert.ToInt32(month) + 1),
+                        new SqlParameter("@pi_Year", Convert.ToInt32(year)),
+                        new SqlParameter("@pi_INDDatetime", DateTime.Now),
+                        new SqlParameter("@pi_CelebrationType", type),
+                        new SqlParameter("@pi_SelectedCriteria", "0")).ToList<CelebrationDetail>();
+                    }
+                    else
+                    {
+                        objData = context.Database.SqlQuery<CelebrationDetail>("sp_BOTS_CelebrationDetailed @pi_GroupId,@pi_Month,@pi_Year,@pi_INDDatetime, @pi_CelebrationType,@pi_SelectedCriteria",
                         new SqlParameter("@pi_GroupId", GroupId),
                         new SqlParameter("@pi_Month", DateTime.Today.Month),
                         new SqlParameter("@pi_Year", DateTime.Today.Year),
                         new SqlParameter("@pi_INDDatetime", DateTime.Now),
                         new SqlParameter("@pi_CelebrationType", type),
                         new SqlParameter("@pi_SelectedCriteria", flag)).ToList<CelebrationDetail>();
+                    }
                 }
             }
             catch (Exception ex)

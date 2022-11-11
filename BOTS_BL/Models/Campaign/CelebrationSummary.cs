@@ -16,6 +16,7 @@ namespace BOTS_BL.Models
         public decimal BusinessGenerated { get; set; }
         public decimal BonusPointsIssued { get; set; }
         public decimal BonusPointsRedeemed { get; set; }
+        public string dummyProp { get; set; }
     }
     public class CelebrationDetail
     {

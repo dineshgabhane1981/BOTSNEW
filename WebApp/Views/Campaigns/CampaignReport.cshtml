@@ -14,17 +14,17 @@
         </div>
 
         <div class="col-md-6 col-xl-2">
-            <div class="card mb-3 widget-content" style="background-color: #C5DAEF;cursor:pointer;" onclick="GetCelebration(1);">
+            <div class="card mb-3 widget-content" style="background-color: #C5DAEF;cursor:pointer;" onclick="GetCelebration(0);">
                 <div class="widget-content-wrapper" style="display:block !important;">
                     <div class="align-content-center" style="text-align:center;">
-                        <div style="text-align: center; font-weight: bold; font-size: 14px !important;">
+                        <div style="text-align: center; font-weight: bold; font-size: 18px !important;">
                             Celebrations
                             <hr style="border-top: 2px solid black;margin:0px;" />
                         </div>
                     </div>
                     <div>
                         <div>
-                            <span style="font-size: 12px !important; font-weight: bold;"><br />Birthday/<br /> Anniversaries</span>
+                            <span style="font-size: 12px !important; font-weight: bold;"><i><br />Birthday/<br /> Anniversaries</i></span>
 
                         </div>
                     </div>
@@ -36,7 +36,7 @@
             <div class="card mb-3 widget-content" style="background-color: #FDEADC;">
                 <div class="widget-content-wrapper" style="display:block !important;">
                     <div class="align-content-center" style="text-align:center;">
-                        <div style="text-align:center;font-weight:bold;font-size: 14px !important;" ">
+                        <div style="text-align:center;font-weight:bold;font-size: 18px !important;" ">
                             Points Expiry
                             <hr style="border-top: 2px solid black;margin:0px;" />
                         </div>
@@ -44,7 +44,7 @@
                     <div>
                         <div>
                             <span style="font-size: 12px !important; font-weight: bold;">
-                                <br /> Notification for transaction
+                                <br /> <i>Notification for transaction</i>
                             </span>
                         </div>
                     </div>
@@ -56,15 +56,15 @@
             <div class="card mb-3 widget-content" style="background-color: #F4DCDC;">
                 <div class="widget-content-wrapper" style="display:block !important;">
                     <div class="align-content-center" style="text-align:center;">
-                        <div style="text-align:center;font-weight:bold;font-size: 14px !important;" ">
-                            Inactive Members
+                        <div style="text-align:center;font-weight:bold;font-size: 18px !important;" ">
+                            Inactive
                             <hr style="border-top: 2px solid black;margin:0px;" />
                         </div>
                     </div>
                     <div>
                         <div>
                             <span style="font-size: 12px !important; font-weight: bold;">
-                                <br />Let’s get them to transact
+                                <br /><i>Let’s get them to transact</i>
                             </span>
                         </div>
                     </div>
@@ -76,7 +76,7 @@
             <div class="card mb-3 widget-content" style="background-color: #DBEEF4;">
                 <div class="widget-content-wrapper" style="display:block !important;">
                     <div class="align-content-center" style="text-align:center;">
-                        <div style="text-align:center; font-weight:bold;font-size: 14px !important;" ">
+                        <div style="text-align:center; font-weight:bold;font-size: 18px !important;" ">
                             Campaigns
                             <hr style="border-top: 2px solid black;margin:0px;" />
                         </div>
@@ -84,7 +84,7 @@
                     <div>
                         <div>
                             <span style="font-size: 12px !important; font-weight: bold;">
-                                <br />Data-led / <br />Points-led
+                                <br /><i>Data-led / <br />Points-led</i>
                             </span>
                         </div>
                     </div>
@@ -96,7 +96,7 @@
             <div class="card mb-3 widget-content" style="background-color: #EAF1E1;">
                 <div class="widget-content-wrapper" style="display:block !important;">
                     <div class="align-content-center" style="text-align:center;">
-                        <div style="text-align:center;font-weight:bold;font-size: 14px !important;" ">
+                        <div style="text-align:center;font-weight:bold;font-size: 18px !important;" ">
                             Promo Blasts
                             <hr style="border-top: 2px solid black;margin:0px;" />
                         </div>
@@ -104,7 +104,7 @@
                     <div>
                         <div>
                             <span style="font-size: 12px !important; font-weight: bold;">
-                                <br />Genereic SMS / <br /> Whatsapp
+                                <br /><i>Genereic SMS / <br /> Whatsapp</i>
                             </span>
                         </div>
                     </div>
@@ -117,9 +117,9 @@
         </div>
     </div>
 
-    
+
     <div class="row card p-3 m-3" style="margin-left:20px;display:none;" id="dvFirstDiv">
-        
+
     </div>
     <div class="row card p-3 m-3" style="margin-left:20px;display:none;" id="dvSecondDiv">
 
@@ -129,13 +129,13 @@
 </div>
 
 <script>
-    function GetCelebration(flag)
+    function GetCelebration(flag, year, month)
     {
         $("#divLoader").show();
         $.ajax({
             type: "POST",
             url: '@Url.Action("GetCampaignCelebrations", "Campaigns")',
-            data: "{'flag': " + flag + "}",
+            data: "{'flag': " + flag + ",'stryear': '" + year + "','strmonth': '" + month + "'}",
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             success: function (response) {
@@ -149,24 +149,43 @@
             },
             error: function (response) {
                 $("#dvFirstDiv").html(response.responseText);
+                if (flag == 0)
+                    $("#rdnCurrentMonth").prop("checked", true);
+
+                if (flag == 1)
+                    $("#rdnLast3Months").prop("checked", true);
+
+                if (flag == 2)
+                    $("#rdnLast6Months").prop("checked", true);
+
+                if (flag == 3)
+                    $("#rdnLast12Months").prop("checked", true);
+
+                if (flag == 4) {
+                    $("#rdnSpecificMonth").prop("checked", true);
+                    $("#ddlYearList").val(year);
+                    $("#ddlMonthList").val(month);
+                }
+
+               
+
                 $("#dvFirstDiv").show(1000);
                 $("#divLoader").hide();
             }
         });
 
     }
-    function ShowCelebrationDetail(type) {
+    function ShowCelebrationDetail(type, flag, year, month) {
         console.log(type)
-        var flag = 1;
+        //var flag = 1;
         $("#divLoader").show();
         $.ajax({
             type: "POST",
             url: '@Url.Action("GetCampaignCelebrationDetails", "Campaigns")',
-            data: "{'flag': " + flag + ",'type': '" + type + "'}",            
+            data: "{'flag': " + flag + ",'type': '" + type + "','year': '" + year + "','month': '" + month + "'}",
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             success: function (response) {
-
                 $("#dvSecondDiv").html(response);
                 $("#dvSecondDiv").show(1000);
                 $("#divLoader").hide();
