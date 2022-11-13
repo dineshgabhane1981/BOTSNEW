@@ -74,7 +74,7 @@
     </div>
 <script>
     function SearchCustomer() {
-        
+
         if ($("#txtMobileNo").val() == "") {
             cuteAlert({
                 type: "error",
@@ -127,7 +127,6 @@
                                 optionItem["InvoiceAmt"] = item.InvoiceAmt;
                                 optionItem["Points"] = item.Points;
 
-
                                 tableData.push(optionItem);
                             });
 
@@ -135,25 +134,39 @@
                             $("#divLoader").hide();
                         }
                         else {
-                            cuteAlert({
-                                type: "question",
-                                title: "Are you sure?",
-                                message: "This number is not available, Do you want to enroll this customer in Search Customer Panel",
-                                confirmText: "Okay",
-                                cancelText: "Cancel"
-                            }).then((e) => {
-                                if (e == ("confirm")) {
-                                    var urlLink = "@Url.Action("Index", "Home")";
-                                    window.location.href = urlLink;
-                                }
-                            })
+                            if (response.GTDResponse.ResponseCode == "06") {
+                                cuteAlert({
+                                    type: "question",
+                                    title: "Are you sure?",
+                                    message: "This number is not available, Do you want to enroll this customer in Search Customer Panel",
+                                    confirmText: "Okay",
+                                    cancelText: "Cancel"
+                                }).then((e) => {
+                                    if (e == ("confirm")) {
+                                        var urlLink = "@Url.Action("Index", "Home")";
+                                        window.location.href = urlLink;
+                                    }
+                                })
+                            }
+                            else {
+                                $("#dvCustomerDetails").hide();
+                                $("#Tabl").hide();
+                                cuteAlert({
+                                    type: "error",
+                                    title: "ResponseCode" + response.GTDResponse.ResponseCode,
+                                    message: "Response Message" + response.GTDResponse.ResponseMessage,
+                                    buttonText: "Okay"
+                                })
+                            }
+
                         }
                     }
                     else {
+                        
                         cuteAlert({
                             type: "error",
-                            title: "OOPS...",
-                            message: "No Invoice for Cancel",
+                            title: "Oops",
+                            message: "Bots Return NULL value",
                             buttonText: "Okay"
                         })
                     }
@@ -233,7 +246,7 @@
                            if (e == ("confirm")) {
                                CancelConfirm(InvoiceNo);
                            }
-                           @*else { 
+                           @*else {
                                var urlLink = "@Url.Action("Index", "Home")";
                                window.location.href = urlLink;
                            }*@
