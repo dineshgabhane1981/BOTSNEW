@@ -74,6 +74,7 @@
     </div>
 <script>
     function SearchCustomer() {
+        
         if ($("#txtMobileNo").val() == "") {
             cuteAlert({
                 type: "error",
@@ -263,7 +264,7 @@
 
                             cuteAlert({
                                 type: "success",
-                                title: "Invoice Saved Successfully",
+                                title: "Invoice Cancelled Successfully",
                                 message: " Poits Removed" + response.CancelTxn.PointsDebited + " Avail Points" + response.CancelTxn.AvailablePoints + " Points Earned" + response.CancelTxn.PointsCredited,
                                 buttonText: "Okay"
                             }).then(() => {

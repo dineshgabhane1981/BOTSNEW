@@ -217,7 +217,5 @@ namespace RetailerApp.Controllers
             return new JsonResult() { Data = BResponse, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
 
-
-
     }
 }
