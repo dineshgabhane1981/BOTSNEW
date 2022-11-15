@@ -330,7 +330,7 @@
     $("#SMSScript").focusout(function () {
         var val = $("#SMSScript").val();
         if (val != '') {
-            var english = /^[A-Za-z][A-Za-z0-9!$%&*()_+\-=\[\]{};':"\\|,.<>\/?\#\ \n]*$/ ; //   /^[A-Za-z][A-Za-z0-9]*$/   /^[a-zA-Z0-9!$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]*$/
+            var english = /^[A-Za-z][A-Za-z0-9!$%&*#()_+\-=\[\]{};':"\\|,.<>\/?\#\ \n]*$/; //   /^[A-Za-z][A-Za-z0-9]*$/   /^[a-zA-Z0-9!$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]*$/
         }
     });
 
@@ -402,7 +402,9 @@
 
         var val = $("#SMSScript").val();
         if (val != '') {
-            var english = /^[A-Za-z][A-Za-z0-9!$%&*()_+\-=\[\]{};':"\\|,.<>\/?\#\ \n]*$/;//'^[\w?£!1$"¥#è?¤é%ù&ì\\ò(Ç)*:Ø+;ÄäøÆ,<LÖlöæ\-=ÑñÅß.>ÜüåÉ/§à¡¿\']+$';// //   /^[A-Za-z][A-Za-z0-9]*$/   /^[a-zA-Z0-9!$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]*$/
+            //var english = /^[A-Za-z][A-Za-z0-9!$%&*()_+\-=\[\]{};':"\\|,.<>\/?\#\ \n]*$/;//'^[\w?£!1$"¥#è?¤é%ù&ì\\ò(Ç)*:Ø+;ÄäøÆ,<LÖlöæ\-=ÑñÅß.>ÜüåÉ/§à¡¿\']+$';// //   /^[A-Za-z][A-Za-z0-9]*$/   /^[a-zA-Z0-9!$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]*$/
+            var english = @Html.Raw("/^[A-Za-z][A-Za-z0-9!$%&*()_+\\-=\\[\\]{};':\"\\|,.<>\\/?\\#\\ \n]*$@/");
+            //var english = @Html.Raw(ViewBag.Regex);
         }
 
         var Script = $("#SMSScript").val();
@@ -967,8 +969,8 @@
     });
 
     $("#ScheduleSwitch").change(function() {
-        if ($("#ScheduleNow").is(':checked') == true) {    
-                $("#ScheduleNow").prop('checked', false);     
+        if ($("#ScheduleNow").is(':checked') == true) {
+                $("#ScheduleNow").prop('checked', false);
         }
         if ($('#SchedPick').is(":visible")) {
             $('#SchedPick').hide();
