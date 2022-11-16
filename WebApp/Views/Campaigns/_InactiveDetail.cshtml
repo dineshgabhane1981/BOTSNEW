@@ -1,0 +1,63 @@
+﻿@model List<BOTS_BL.Models.InactiveDetailed>
+@using System.Globalization
+
+
+<div class="table-responsive">
+    <div style="font-size:18px;color:blue;font-weight:bold;">Detailed</div>
+    <table class="table" id="tblInactiveDetails">
+        <thead>
+            <tr>
+                <th>MobileNo</th>
+                <th>MemberName</th>
+                <th>EnrolledOutlet</th>
+                <th>LastTxnDate</th>
+                <th>TxnDate</th>
+                <th>TxnAfterDays</th>
+                <th>Business Generated</th>                
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.MobileNo</td>
+                    <td>@item.CustomerName</td>
+                    <td>@item.EnrolledOutlet</td>
+                    <td>@item.LastTxnDate</td>
+                    <td>@item.FirstTxnDate</td>
+                    <td>@item.TxnAfterDays</td>
+                    <td>@String.Format(new CultureInfo("en-IN", false), "{0:n2}", Convert.ToDouble(item.BusinessGenerated))</td>                    
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<script>
+    $(document).ready(function () {
+        var table1 = $('#tblInactiveDetails').DataTable();
+        table1.destroy();
+        var table = $('#tblInactiveDetails').DataTable({
+            "bAutoWidth": false,
+            "paging": false,
+            "ordering": false,
+            "info": false,
+            "bFilter": false,
+            "pageLength": 25,
+            "pagingType": "simple_numbers",
+            "columns": [
+                { data: "MobileNo" },
+                { data: "CustomerName" },
+                { data: "EnrolledOutlet" },
+                { data: "LastTxnDate" },
+                { data: "FirstTxnDate" },
+                { data: "TxnAfterDays" },
+                { data: "BusinessGenerated" }
+            ]
+        });
+        $('#tblInactiveDetails_filter').hide();
+
+        var table = $('#tblInactiveDetails').DataTable();
+        table.draw();
+    });
+</script>

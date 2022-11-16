@@ -33,10 +33,10 @@
         </div>
 
         <div class="col-md-6 col-xl-2">
-            <div class="card mb-3 widget-content" style="background-color: #FDEADC;">
+            <div class="card mb-3 widget-content" style="background-color: #FDEADC; cursor: pointer;" onclick="GetPointsExpiry(0);">
                 <div class="widget-content-wrapper" style="display:block !important;">
                     <div class="align-content-center" style="text-align:center;">
-                        <div style="text-align:center;font-weight:bold;font-size: 18px !important;" ">
+                        <div style="text-align:center;font-weight:bold;font-size: 18px !important;">
                             Points Expiry
                             <hr style="border-top: 2px solid black;margin:0px;" />
                         </div>
@@ -53,10 +53,10 @@
         </div>
 
         <div class="col-md-6 col-xl-2">
-            <div class="card mb-3 widget-content" style="background-color: #F4DCDC;">
+            <div class="card mb-3 widget-content" style="background-color: #F4DCDC; cursor: pointer;" onclick="GetInactive(0);">
                 <div class="widget-content-wrapper" style="display:block !important;">
                     <div class="align-content-center" style="text-align:center;">
-                        <div style="text-align:center;font-weight:bold;font-size: 18px !important;" ">
+                        <div style="text-align:center;font-weight:bold;font-size: 18px !important;">
                             Inactive
                             <hr style="border-top: 2px solid black;margin:0px;" />
                         </div>
@@ -76,7 +76,7 @@
             <div class="card mb-3 widget-content" style="background-color: #DBEEF4;">
                 <div class="widget-content-wrapper" style="display:block !important;">
                     <div class="align-content-center" style="text-align:center;">
-                        <div style="text-align:center; font-weight:bold;font-size: 18px !important;" ">
+                        <div style="text-align:center; font-weight:bold;font-size: 18px !important;">
                             Campaigns
                             <hr style="border-top: 2px solid black;margin:0px;" />
                         </div>
@@ -96,7 +96,7 @@
             <div class="card mb-3 widget-content" style="background-color: #EAF1E1;">
                 <div class="widget-content-wrapper" style="display:block !important;">
                     <div class="align-content-center" style="text-align:center;">
-                        <div style="text-align:center;font-weight:bold;font-size: 18px !important;" ">
+                        <div style="text-align:center;font-weight:bold;font-size: 18px !important;">
                             Promo Blasts
                             <hr style="border-top: 2px solid black;margin:0px;" />
                         </div>
@@ -167,22 +167,160 @@
                     $("#ddlMonthList").val(month);
                 }
 
-               
-
                 $("#dvFirstDiv").show(1000);
+                $("#dvSecondDiv").empty();
+                $("#dvSecondDiv").hide();
                 $("#divLoader").hide();
             }
         });
 
     }
+
     function ShowCelebrationDetail(type, flag, year, month) {
-        console.log(type)
-        //var flag = 1;
         $("#divLoader").show();
         $.ajax({
             type: "POST",
             url: '@Url.Action("GetCampaignCelebrationDetails", "Campaigns")',
             data: "{'flag': " + flag + ",'type': '" + type + "','year': '" + year + "','month': '" + month + "'}",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                $("#dvSecondDiv").html(response);
+                $("#dvSecondDiv").show(1000);
+                $("#divLoader").hide();
+            },
+            failure: function (response) {
+                $("#divLoader").hide();
+            },
+            error: function (response) {
+                $("#dvSecondDiv").html(response.responseText);
+                $("#dvSecondDiv").show(1000);
+                $("#divLoader").hide();
+            }
+        });
+    }
+
+    function GetPointsExpiry(flag, year, month) {
+
+         $("#divLoader").show();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("GetCampaignPointExpirySummary", "Campaigns")',
+            data: "{'flag': " + flag + ",'stryear': '" + year + "','strmonth': '" + month + "'}",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                $("#dvFirstDiv").html(response);
+                $("#dvFirstDiv").show(1000);
+                $("#divLoader").hide();
+            },
+            failure: function (response) {
+                $("#divLoader").hide();
+            },
+            error: function (response) {
+                $("#dvFirstDiv").html(response.responseText);
+
+                if (flag == 0)
+                    $("#rdnCurrentMonth").prop("checked", true);
+
+                if (flag == 1)
+                    $("#rdnLast3Months").prop("checked", true);
+
+                if (flag == 2)
+                    $("#rdnLast6Months").prop("checked", true);
+
+                if (flag == 3)
+                    $("#rdnLast12Months").prop("checked", true);
+
+                if (flag == 4) {
+                    $("#rdnSpecificMonth").prop("checked", true);
+                    $("#ddlYearList").val(year);
+                    $("#ddlMonthList").val(month);
+                }
+
+                $("#dvFirstDiv").show(1000);
+                $("#dvSecondDiv").empty();
+                $("#dvSecondDiv").hide();
+                $("#divLoader").hide();
+            }
+        });
+    }
+
+    function GetPointsExpiryDetails(flag, year, month) {
+        $("#divLoader").show();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("GetCampaignPointExpiryDetails", "Campaigns")',
+            data: "{'flag': " + flag + ",'year': '" + year + "','month': '" + month + "'}",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                $("#dvSecondDiv").html(response);
+                $("#dvSecondDiv").show(1000);
+                $("#divLoader").hide();
+            },
+            failure: function (response) {
+                $("#divLoader").hide();
+            },
+            error: function (response) {
+                $("#dvSecondDiv").html(response.responseText);
+                $("#dvSecondDiv").show(1000);
+                $("#divLoader").hide();
+            }
+        });
+    }
+
+    function GetInactive(flag, year, month) {
+         $("#divLoader").show();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("GetCampaignInactiveSummary", "Campaigns")',
+            data: "{'flag': " + flag + ",'stryear': '" + year + "','strmonth': '" + month + "'}",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                $("#dvFirstDiv").html(response);
+                $("#dvFirstDiv").show(1000);
+                $("#divLoader").hide();
+            },
+            failure: function (response) {
+                $("#divLoader").hide();
+            },
+            error: function (response) {
+                $("#dvFirstDiv").html(response.responseText);
+
+                if (flag == 0)
+                    $("#rdnCurrentMonth").prop("checked", true);
+
+                if (flag == 1)
+                    $("#rdnLast3Months").prop("checked", true);
+
+                if (flag == 2)
+                    $("#rdnLast6Months").prop("checked", true);
+
+                if (flag == 3)
+                    $("#rdnLast12Months").prop("checked", true);
+
+                if (flag == 4) {
+                    $("#rdnSpecificMonth").prop("checked", true);
+                    $("#ddlYearList").val(year);
+                    $("#ddlMonthList").val(month);
+                }
+
+                $("#dvFirstDiv").show(1000);
+                $("#dvSecondDiv").empty();
+                $("#dvSecondDiv").hide();
+                $("#divLoader").hide();
+            }
+        });
+    }
+
+    function ShowInactiveDetail(flag, year, month) {
+        $("#divLoader").show();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("GetCampaignInactiveDetails", "Campaigns")',
+            data: "{'flag': " + flag + ",'year': '" + year + "','month': '" + month + "'}",
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             success: function (response) {

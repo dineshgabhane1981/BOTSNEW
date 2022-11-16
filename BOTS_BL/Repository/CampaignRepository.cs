@@ -1657,6 +1657,150 @@ namespace BOTS_BL.Repository
 
             return objData;
         }
+    
+        public List<PointExpirySummary> GetCampaignPointExpirySummary(string GroupId, string flag, string year, string month)
+        {
+            List<PointExpirySummary> objData = new List<PointExpirySummary>();
+            var connstr = CR.GetCustomerConnString(GroupId);
+            try
+            {
+                using (var context = new BOTSDBContext(connstr))
+                {
+                    if (flag != "4")
+                    {
+                        objData = context.Database.SqlQuery<PointExpirySummary>("sp_BOTS_PointsExpirySummary @pi_GroupId,@pi_Month,@pi_Year,@pi_INDDatetime,@pi_SelectedCriteria",
+                            new SqlParameter("@pi_GroupId", GroupId),
+                            new SqlParameter("@pi_Month", DateTime.Today.Month),
+                            new SqlParameter("@pi_Year", DateTime.Today.Year),
+                            new SqlParameter("@pi_INDDatetime", DateTime.Now),
+                            new SqlParameter("@pi_SelectedCriteria", flag)).ToList<PointExpirySummary>();
+                    }
+                    else
+                    {
+                        objData = context.Database.SqlQuery<PointExpirySummary>("sp_BOTS_PointsExpirySummary @pi_GroupId,@pi_Month,@pi_Year,@pi_INDDatetime,@pi_SelectedCriteria",
+                            new SqlParameter("@pi_GroupId", GroupId),
+                            new SqlParameter("@pi_Month", Convert.ToInt32(month) + 1),
+                            new SqlParameter("@pi_Year", Convert.ToInt32(year)),
+                            new SqlParameter("@pi_INDDatetime", DateTime.Now),
+                            new SqlParameter("@pi_SelectedCriteria", "0")).ToList<PointExpirySummary>();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, GroupId);
+            }
+
+            return objData;
+        }
+
+        public List<PointExpiryDetailed> GetCampaignPointExpiryDetailed(string GroupId, string flag, string year, string month)
+        {
+            List<PointExpiryDetailed> objData = new List<PointExpiryDetailed>();
+            var connstr = CR.GetCustomerConnString(GroupId);
+            try
+            {
+                using (var context = new BOTSDBContext(connstr))
+                {
+                    if (flag != "4")
+                    {
+                        objData = context.Database.SqlQuery<PointExpiryDetailed>("sp_BOTS_PointsExpiryDetailed @pi_GroupId,@pi_Month,@pi_Year,@pi_INDDatetime,@pi_SelectedCriteria",
+                            new SqlParameter("@pi_GroupId", GroupId),
+                            new SqlParameter("@pi_Month", DateTime.Today.Month),
+                            new SqlParameter("@pi_Year", DateTime.Today.Year),
+                            new SqlParameter("@pi_INDDatetime", DateTime.Now),
+                            new SqlParameter("@pi_SelectedCriteria", flag)).ToList<PointExpiryDetailed>();
+                    }
+                    else
+                    {
+                        objData = context.Database.SqlQuery<PointExpiryDetailed>("sp_BOTS_PointsExpiryDetailed @pi_GroupId,@pi_Month,@pi_Year,@pi_INDDatetime,@pi_SelectedCriteria",
+                            new SqlParameter("@pi_GroupId", GroupId),
+                            new SqlParameter("@pi_Month", Convert.ToInt32(month) + 1),
+                            new SqlParameter("@pi_Year", Convert.ToInt32(year)),
+                            new SqlParameter("@pi_INDDatetime", DateTime.Now),
+                            new SqlParameter("@pi_SelectedCriteria", "0")).ToList<PointExpiryDetailed>();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, GroupId);
+            }
+
+            return objData;
+        }
+
+        public List<InactiveSummary> GetCampaignInactiveSummary(string GroupId, string flag, string year, string month)
+        {
+            List<InactiveSummary> objData = new List<InactiveSummary>();
+            var connstr = CR.GetCustomerConnString(GroupId);
+            try
+            {
+                using (var context = new BOTSDBContext(connstr))
+                {
+                    if (flag != "4")
+                    {
+                        objData = context.Database.SqlQuery<InactiveSummary>("sp_BOTS_InActiveSummary @pi_GroupId,@pi_Month,@pi_Year,@pi_INDDatetime,@pi_SelectedCriteria",
+                            new SqlParameter("@pi_GroupId", GroupId),
+                            new SqlParameter("@pi_Month", DateTime.Today.Month),
+                            new SqlParameter("@pi_Year", DateTime.Today.Year),
+                            new SqlParameter("@pi_INDDatetime", DateTime.Now),
+                            new SqlParameter("@pi_SelectedCriteria", flag)).ToList<InactiveSummary>();
+                    }
+                    else
+                    {
+                        objData = context.Database.SqlQuery<InactiveSummary>("sp_BOTS_InActiveSummary @pi_GroupId,@pi_Month,@pi_Year,@pi_INDDatetime,@pi_SelectedCriteria",
+                            new SqlParameter("@pi_GroupId", GroupId),
+                            new SqlParameter("@pi_Month", Convert.ToInt32(month) + 1),
+                            new SqlParameter("@pi_Year", Convert.ToInt32(year)),
+                            new SqlParameter("@pi_INDDatetime", DateTime.Now),
+                            new SqlParameter("@pi_SelectedCriteria", "0")).ToList<InactiveSummary>();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, GroupId);
+            }
+
+            return objData;
+        }
+
+        public List<InactiveDetailed> GetCampaignInactiveDetailed(string GroupId, string flag, string year, string month)
+        {
+            List<InactiveDetailed> objData = new List<InactiveDetailed>();
+            var connstr = CR.GetCustomerConnString(GroupId);
+            try
+            {
+                using (var context = new BOTSDBContext(connstr))
+                {
+                    if (flag != "4")
+                    {
+                        objData = context.Database.SqlQuery<InactiveDetailed>("sp_BOTS_InActiveDetailed @pi_GroupId,@pi_Month,@pi_Year,@pi_INDDatetime,@pi_SelectedCriteria",
+                            new SqlParameter("@pi_GroupId", GroupId),
+                            new SqlParameter("@pi_Month", DateTime.Today.Month),
+                            new SqlParameter("@pi_Year", DateTime.Today.Year),
+                            new SqlParameter("@pi_INDDatetime", DateTime.Now),
+                            new SqlParameter("@pi_SelectedCriteria", flag)).ToList<InactiveDetailed>();
+                    }
+                    else
+                    {
+                        objData = context.Database.SqlQuery<InactiveDetailed>("sp_BOTS_InActiveDetailed @pi_GroupId,@pi_Month,@pi_Year,@pi_INDDatetime,@pi_SelectedCriteria",
+                            new SqlParameter("@pi_GroupId", GroupId),
+                            new SqlParameter("@pi_Month", Convert.ToInt32(month) + 1),
+                            new SqlParameter("@pi_Year", Convert.ToInt32(year)),
+                            new SqlParameter("@pi_INDDatetime", DateTime.Now),
+                            new SqlParameter("@pi_SelectedCriteria", "0")).ToList<InactiveDetailed>();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, GroupId);
+            }
+
+            return objData;
+        }
     }
 
 }

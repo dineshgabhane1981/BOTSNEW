@@ -678,5 +678,88 @@ namespace WebApp.Controllers
             return PartialView("_CelebrationDetail", objData);
         }
 
+        public ActionResult GetCampaignPointExpirySummary(string flag, string stryear, string strmonth)
+        {
+            List<PointExpirySummary> objData = new List<PointExpirySummary>();
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            objData = CMPR.GetCampaignPointExpirySummary(userDetails.GroupId, flag, stryear, strmonth);
+            List<SelectListItem> MonthList = new List<SelectListItem>();
+            int month = DateTime.Now.Month;
+
+            int count = 1;
+            for (int i = 0; i <= 11; i++)
+            {
+                MonthList.Add(new SelectListItem
+                {
+                    Text = Convert.ToString(CultureInfo.CurrentUICulture.DateTimeFormat.MonthNames[i]),
+                    Value = Convert.ToString(i)
+                });
+                count++;
+            }
+            List<SelectListItem> YearList = new List<SelectListItem>();
+            int year = DateTime.Now.Year;
+            for (int i = 0; i <= 9; i++)
+            {
+                YearList.Add(new SelectListItem
+                {
+                    Text = Convert.ToString(DateTime.Now.AddYears(-i).Year.ToString()),
+                    Value = Convert.ToString(year - i)
+                });
+            }
+
+            ViewBag.MonthList = MonthList;
+            ViewBag.YearList = YearList;
+            return PartialView("_PointsExpirySummary", objData);
+        }
+
+        public ActionResult GetCampaignPointExpiryDetails(string flag, string year, string month)
+        {
+            List<PointExpiryDetailed> objData = new List<PointExpiryDetailed>();
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            objData = CMPR.GetCampaignPointExpiryDetailed(userDetails.GroupId, flag, year, month);
+            return PartialView("_PointsExpiryDetail", objData);
+        }
+
+        public ActionResult GetCampaignInactiveSummary(string flag, string stryear, string strmonth)
+        {
+            List<InactiveSummary> objData = new List<InactiveSummary>();
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            objData = CMPR.GetCampaignInactiveSummary(userDetails.GroupId, flag, stryear, strmonth);
+            List<SelectListItem> MonthList = new List<SelectListItem>();
+            int month = DateTime.Now.Month;
+
+            int count = 1;
+            for (int i = 0; i <= 11; i++)
+            {
+                MonthList.Add(new SelectListItem
+                {
+                    Text = Convert.ToString(CultureInfo.CurrentUICulture.DateTimeFormat.MonthNames[i]),
+                    Value = Convert.ToString(i)
+                });
+                count++;
+            }
+            List<SelectListItem> YearList = new List<SelectListItem>();
+            int year = DateTime.Now.Year;
+            for (int i = 0; i <= 9; i++)
+            {
+                YearList.Add(new SelectListItem
+                {
+                    Text = Convert.ToString(DateTime.Now.AddYears(-i).Year.ToString()),
+                    Value = Convert.ToString(year - i)
+                });
+            }
+
+            ViewBag.MonthList = MonthList;
+            ViewBag.YearList = YearList;
+            return PartialView("_InactiveSummary", objData);
+        }
+
+        public ActionResult GetCampaignInactiveDetails(string flag, string year, string month)
+        {
+            List<InactiveDetailed> objData = new List<InactiveDetailed>();
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            objData = CMPR.GetCampaignInactiveDetailed(userDetails.GroupId, flag, year, month);
+            return PartialView("_InactiveDetail", objData);
+        }
     }
 }

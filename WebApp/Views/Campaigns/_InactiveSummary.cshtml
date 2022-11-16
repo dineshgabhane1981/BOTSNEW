@@ -1,0 +1,117 @@
+﻿@model List<BOTS_BL.Models.InactiveSummary>
+@using System.Globalization
+
+
+
+<div>
+    <div class="col-md-12 col-xl-12">
+        <input type="radio" checked id="rdnCurrentMonth" name="Inactivefilter" /> Current Month &nbsp;&nbsp;&nbsp;&nbsp;
+        <input type="radio" id="rdnLast3Months" name="Inactivefilter" /> Last 3 Months &nbsp;&nbsp;&nbsp;&nbsp;
+        <input type="radio" id="rdnLast6Months" name="Inactivefilter" /> Last 6 Months &nbsp;&nbsp;&nbsp;&nbsp;
+        <input type="radio" id="rdnLast12Months" name="Inactivefilter" /> Last 12 Months &nbsp;&nbsp;&nbsp;&nbsp;
+        <input type="radio" id="rdnSpecificMonth" name="Inactivefilter" /> For Month &nbsp;&nbsp;&nbsp;&nbsp;
+        @Html.DropDownList("Month", new SelectList(ViewBag.MonthList, "Value", "Text"), "Month", htmlAttributes: new { @class = "smallDDL", @id = "ddlMonthList" })
+        @Html.DropDownList("Year", new SelectList(ViewBag.YearList, "Value", "Text"), htmlAttributes: new { @class = "smallDDL", @id = "ddlYearList" })
+        <button class="btn btn-primary login-btn" id="btnInactiveFilter">Filter</button>
+    </div>
+</div>
+<div class="table-responsive">
+    <div style="font-size:18px;color:blue;font-weight:bold;">Summary</div>
+    <table class="table" id="tblInactiveSummary">
+        <thead>
+            <tr>
+                <th>Element</th>
+                <th>Total Mem Count</th>
+                <th>Unique Mem Transacted</th>
+                <th>Business Generated</th>
+
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td><a href="#" onclick="ShowInactiveDetailPre();" style="color:blue;cursor:pointer;"> @item.CelebrationType</a></td>
+                    <td>@item.TotalMemberCount</td>
+                    <td>@item.UniqueMemberTxnCount</td>
+                    <td>@String.Format(new CultureInfo("en-IN", false), "{0:n2}", Convert.ToDouble(item.BusinessGenerated))</td>
+
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<script>
+    $(document).ready(function () {
+        var table1 = $('#tblInactiveSummary').DataTable();
+        table1.destroy();
+        var table = $('#tblInactiveSummary').DataTable({
+            "bAutoWidth": false,
+            "paging": false,
+            "ordering": false,
+            "info": false,
+            "bFilter": false,
+            "pageLength": 25,
+            "pagingType": "simple_numbers",
+            "columns": [
+                { data: "CelebrationType" },
+                { data: "TotalMemberCount" },
+                { data: "UniqueMemberTxnCount" },                
+                { data: "BusinessGenerated" }
+            ]
+        });
+        $('#tblInactiveSummary_filter').hide();
+
+        var table = $('#tblInactiveSummary').DataTable();
+        table.draw();
+
+        $('#btnInactiveFilter').click(function () {
+            var flag = 0;
+            var year = 0;
+            var month = 0;
+            if ($("#rdnCurrentMonth").is(":checked")) {
+                flag = 0;
+            }
+            if ($("#rdnLast3Months").is(":checked")) {
+                flag = 1;
+            }
+            if ($("#rdnLast6Months").is(":checked")) {
+                flag = 2;
+            }
+            if ($("#rdnLast12Months").is(":checked")) {
+                flag = 3;
+            }
+            if ($("#rdnSpecificMonth").is(":checked")) {
+                flag = 4;
+                year = $("#ddlYearList").val();
+                month = $("#ddlMonthList").val();
+            }
+            GetInactive(flag, year, month);
+        });
+    });
+
+    function ShowInactiveDetailPre() {        
+        var flag = 0;
+        var year = 0;
+        var month = 0;
+        if ($("#rdnCurrentMonth").is(":checked")) {
+            flag = 0;
+        }
+        if ($("#rdnLast3Months").is(":checked")) {
+            flag = 1;
+        }
+        if ($("#rdnLast6Months").is(":checked")) {
+            flag = 2;
+        }
+        if ($("#rdnLast12Months").is(":checked")) {
+            flag = 3;
+        }
+        if ($("#rdnSpecificMonth").is(":checked")) {
+            flag = 4;
+            year = $("#ddlYearList").val();
+            month = $("#ddlMonthList").val();
+        }       
+        ShowInactiveDetail(flag, year, month);
+    }
+</script>

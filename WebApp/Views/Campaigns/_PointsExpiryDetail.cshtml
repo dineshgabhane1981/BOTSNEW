@@ -1,0 +1,69 @@
+﻿@model List<BOTS_BL.Models.PointExpiryDetailed>
+@using System.Globalization
+
+
+<div class="table-responsive">
+    <div style="font-size:18px;color:blue;font-weight:bold;">Detailed</div>
+    <table class="table" id="tblPointExpiryDetails">
+        <thead>
+            <tr>
+                <th>MobileNo</th>
+                <th>MemberName</th>
+                <th>EnrolledOutlet</th>
+                <th>ExpiryDate</th>
+                <th>TxnDate</th>
+                <th>Total Txns in Expiry Period</th>
+                <th>Business Generated</th>                
+                <th>Bonus Points Redeemed</th>
+                <th>Bonus Points Expired</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.MobileNo</td>
+                    <td>@item.CustomerName</td>
+                    <td>@item.EnrolledOutlet</td>
+                    <td>@item.ExpiryDate</td>
+                    <td>@item.FirstTxnDate</td>
+                    <td>@item.TotalTxnCount</td>
+                    <td>@String.Format(new CultureInfo("en-IN", false), "{0:n2}", Convert.ToDouble(item.BusinessGenerated))</td>                    
+                    <td>@item.BasePointsRedeem</td>
+                    <td>@item.ExpiredPoints</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<script>
+    $(document).ready(function () {
+        var table1 = $('#tblPointExpiryDetails').DataTable();
+        table1.destroy();
+        var table = $('#tblPointExpiryDetails').DataTable({
+            "bAutoWidth": false,
+            "paging": false,
+            "ordering": false,
+            "info": false,
+            "bFilter": false,
+            "pageLength": 25,
+            "pagingType": "simple_numbers",
+            "columns": [
+                { data: "MobileNo" },
+                { data: "CustomerName" },
+                { data: "EnrolledOutlet" },
+                { data: "ExpiryDate" },
+                { data: "FirstTxnDate" },
+                { data: "TotalTxnCount" },
+                { data: "BusinessGenerated" },
+                { data: "BasePointsRedeem" },                
+                { data: "ExpiredPoints" }
+            ]
+        });
+        $('#tblPointExpiryDetails_filter').hide();
+
+        var table = $('#tblPointExpiryDetails').DataTable();
+        table.draw();
+    });
+</script>
