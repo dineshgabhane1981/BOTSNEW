@@ -611,17 +611,11 @@ namespace BOTS_BL.Repository
         {
             List<CampaignSaveDetails> Data = new List<CampaignSaveDetails>();
 
-            DateTime Sched = new DateTime();
             if (string.IsNullOrEmpty(Scheduledatetime) == true)
             {
-                 Scheduledatetime = "1900-01-01 00:00:00";
 
-                 //Sched = Convert.ToDateTime(DateTime.ParseExact(Scheduledatetime, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture));
+                Scheduledatetime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
             }
-            //else
-            //{
-            //    Sched = Convert.ToDateTime(DateTime.ParseExact(Scheduledatetime, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture));
-            //}
 
             try
             {
