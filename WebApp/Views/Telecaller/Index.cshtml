@@ -3,7 +3,18 @@
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+<style>
 
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+
+    input[type="number"] {
+        -moz-appearance: textfield;
+    }
+</style>
 <div class="app-main__inner">
     <div class="row mb-3 card">
         <div class="container-fluid pt-3 pl-3 pr-3" style="text-align:center;">
@@ -77,10 +88,99 @@
                 </div>
             </div>
         </div>
+
+        <div class="container-fluid pt-3 pl-3 pr-3" id="divEnrolldata" style="display:none;padding-left:300px !important;">
+            <div class="row mb-3">
+                @*<div class="col-md-2 col-xl-2">
+            <b>Mobile No: </b>
+        </div>
+        <div class="col-md-2 col-xl-2">
+            <input type="text" id="NewMobileNo" class="input100" />
+        </div>*@
+                <div class="col-md-12 col-sm-12 row">
+                    <div class="col-md-2 col-sm-2" style="margin-top:10px;">
+                        Mobile No:
+                    </div>
+                    <div class="col-md-4 col-sm-4" style="margin-top:10px;">
+                        <input id="NewMobileNo" type="text" class="input50" />
+                    </div>
+                </div>
+                <div class="col-md-12 col-sm-12 row">
+                    <div class="col-md-2 col-sm-2" style="margin-top:10px;">
+                        Card No:
+                    </div>
+                    <div class="col-md-4 col-sm-4" style="margin-top:10px;">
+                        <input id="NewCrdNo" type="text" class="input50" />
+                    </div>
+                </div>
+                <div class="col-md-12 col-sm-12 row">
+                    <div class="col-md-2 col-sm-2" style="margin-top:10px;">
+                        Name:
+                    </div>
+                    <div class="col-md-4 col-sm-4" style="margin-top:10px;">
+                        <input id="NewCustName" type="text" class="input50" />
+                    </div>
+                </div>
+                <div class="col-md-12 col-sm-12 row">
+                    <div class="col-md-2 col-sm-2" style="margin-top:10px;">
+                        BirthDay:
+                    </div>
+                    <div class="col-md-4 col-sm-4" style="margin-top:10px;">
+                        <input id="NewDOB" type="date" class="input50" />
+                    </div>
+                </div>
+                <div class="col-md-12 col-sm-12 row">
+                    <div class="col-md-2 col-sm-2" style="margin-top:10px;">
+                        Anniversary:
+                    </div>
+                    <div class="col-md-4 col-sm-4" style="margin-top:10px;">
+                        <input id="NewDOA" type="date" class="input50" />
+                    </div>
+                </div>
+
+                <div class="col-md-12 col-sm-12 row">
+                    <div class="col-md-2 col-sm-2" style="margin-top:10px;">
+                        Gender:
+                    </div>
+                    <div class="col-md-4 col-xl-4" style="margin-top:10px;">
+                        @Html.DropDownList("Gender", new SelectList(ViewBag.lstGenderList, "Value", "Text"), htmlAttributes: new { @class = "input50", @id = "ddlenrolgender" })
+                    </div>
+                </div>
+
+                <div class="col-md-12 col-sm-12 row" style="margin-top: 10px;">
+                    <div class="col-md-2 col-sm-2" style="margin-left: 8px;">
+                        <button type="button" id="btnSubmit" class="btn btn-primary" style="margin-top:10px;">Submit</button>
+                    </div>
+                    <div class="col-md-2 col-sm-2" style="margin-left: 10px;">
+                        <button type="button" id="btnReset" class="btn btn-primary" onclick="Reset();" style="margin-top:10px;">Reset</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
     </div>
 </div>
+@*<script src="~/Scripts/datetimepicker-master/jquery.datetimepicker.js"></script>*@
 <script>
     $(document).ready(function () {
+        var today = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
+
+        $("#NewDOB").datepicker({
+            dateFormat: "yy-mm-dd",
+            yearRange: '1950:' + today + '',
+            changeYear: true,
+            //minDate: new Date(1900, 1 - 1, 1),
+            maxDate: '1Y',
+        });
+
+        $("#NewDOA").datepicker({
+            dateFormat: "yy-mm-dd",
+            yearRange: '1950:' + today + '',
+            changeYear: true,
+            //minDate: new Date(1900, 1 - 1, 1),
+            maxDate: '1Y',
+        });
+
         $("#txtmobileNo").focusout(function () {
             if ($("#txtmobileNo").val() != "") {
                 $('#txtmobileNo').css('border-color', '');
@@ -144,16 +244,26 @@
 
 
                         $("#divdata").show();
+                        $("#divEnrolldata").hide();
                     }
                     $("#divLoader").hide();
 
                 },
                 error: function (result) {
                     cuteAlert({
-                        type: "error",
-                        title: "Oops..",
-                        message: "Mobile No does not exist, please check again",
-                        buttonText: "Okay"
+                        type: "question",
+                        title: "Are you sure?",
+                        message: "This number is not available, Do you want to enroll this customer",
+                        confirmText: "Okay",
+                        cancelText: "Cancel"
+                    }).then((e) => {
+                        if (e == ("confirm")) {
+                            $("#divEnrolldata").show();
+                            $("#divdata").hide();
+
+                            $("#NewMobileNo").val($("#txtmobileNo").val());
+                            $("#NewMobileNo").attr("disabled", "disabled");
+                        }
                     })
                     console.log(result.responseText);
                     $("#divLoader").hide();
@@ -161,8 +271,65 @@
             });
         }
     }
+
+    $("#btnSubmit").click(function () {
+        $("#divLoader").show();
+        var FilterData = [];
+        item = {};
+        item["MobileNo"] = $("#NewMobileNo").val();
+        item["CrdNo"] = $("#NewCrdNo").val();
+        item["CustNm"] = $("#NewCustName").val();
+        item["Gender"] = $('#ddlenrolgender :selected').val();
+        item["DOB"] = $("#NewDOB").val();
+        item["DOA"] = $("#NewDOA").val();
+        FilterData.push(item);
+        var data = JSON.stringify(FilterData);
+         $.ajax({
+                type: "POST",
+                url: '@Url.Action("EnrollData", "Telecaller")',
+                data: '{jsonData: ' + JSON.stringify(data) + '}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (response) {
+                    if (response) {
+                        $("#divLoader").hide();
+                        $("#divdata").hide();
+                        $("#txtmobileNo").val("");
+
+                        cuteAlert({
+                            type: "success",
+                            title: "Save",
+                            message: "Data Save Successfully!",
+                            buttonText: "Okay"
+                        }).then(() => {
+                        window.location.reload();
+                    });
+                    }
+                    $("#divLoader").hide();
+                },
+                error: function (result) {
+
+                    console.log(result.responseText);
+                    $("#divLoader").hide();
+                }
+            });
+
+    });
+
+    function Reset() {
+        $("#divLoader").show();
+        $("#NewCrdNo").val("")
+        $("#NewCustName").val("");
+        $('#ddlenrolgender').prop('selectedIndex', 0);
+        $("#NewDOB").val("mm/dd/yyyy");
+        $("#NewDOA").val("mm/dd/yyyy");
+        /*$("#ddlgender").val(0);*/
+
+        $("#divLoader").hide();
+    }
+
     function SaveData() {
-       
+
         $("#divLoader").show();
         var FilterData = [];
         item = {};
@@ -182,7 +349,7 @@
                 data: '{jsonData: ' + JSON.stringify(data) + '}',
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
-                success: function (response) {                    
+                success: function (response) {
                     if (response) {
                         $("#divLoader").hide();
                         $("#divdata").hide();
@@ -195,29 +362,22 @@
                             buttonText: "Okay"
                         }).then(() => {
                         window.location.reload();
-                    });                         
+                    });
                     }
                     $("#divLoader").hide();
                 },
                 error: function (result) {
-                    
+                    cuteAlert({
+                        type: "error",
+                        title: "Oops..",
+                        message: "Data not inserted",
+                        buttonText: "Okay"
+                    })
                     console.log(result.responseText);
                     $("#divLoader").hide();
                 }
             });
-        
+
     }
 </script>
 
-<style>
-
-    input::-webkit-outer-spin-button,
-    input::-webkit-inner-spin-button {
-        -webkit-appearance: none;
-        margin: 0;
-    }
-
-    input[type="number"] {
-        -moz-appearance: textfield;
-    }
-</style>

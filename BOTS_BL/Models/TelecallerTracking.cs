@@ -55,4 +55,5 @@ namespace BOTS_BL.Models
         public string EnrollmentDate { get; set; }
         public string LastTxnDate { get; set; }
     }
+
 }
