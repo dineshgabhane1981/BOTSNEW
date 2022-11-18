@@ -147,6 +147,15 @@
                     </div>
                 </div>
 
+                <div class="col-md-12 col-sm-12 row">
+                    <div class="col-md-2 col-sm-2" style="margin-top:10px;">
+                        Comments:
+                    </div>
+                    <div class="col-md-4 col-sm-4" style="margin-top:10px;">
+                        <textarea class="input100" id="Newcomment" cols="80" rows="5" placeholder="Enter Comments"></textarea>
+                    </div>
+                </div>
+
                 <div class="col-md-12 col-sm-12 row" style="margin-top: 10px;">
                     <div class="col-md-2 col-sm-2" style="margin-left: 8px;">
                         <button type="button" id="btnSubmit" class="btn btn-primary" style="margin-top:10px;">Submit</button>
@@ -282,6 +291,7 @@
         item["Gender"] = $('#ddlenrolgender :selected').val();
         item["DOB"] = $("#NewDOB").val();
         item["DOA"] = $("#NewDOA").val();
+        item["Comment"] = $("#Newcomment").val();
         FilterData.push(item);
         var data = JSON.stringify(FilterData);
          $.ajax({

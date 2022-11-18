@@ -120,6 +120,7 @@ namespace WebApp.Controllers
                 string Gender = Convert.ToString(item["Gender"]);
                 string DOB = Convert.ToString(item["DOB"]);
                 string DOA = Convert.ToString(item["DOA"]);
+                string Comment = Convert.ToString(item["Comment"]);
                 //if (!string.IsNullOrEmpty(Convert.ToString(item["DOB"])))
                 //{
                 //    DateofBirth = Convert.ToDateTime(item["DOB"]);
@@ -132,7 +133,7 @@ namespace WebApp.Controllers
                 //string OutletId = Convert.ToString(item["outletId"]);
                 //string Comments = Convert.ToString(item["Comments"]);
 
-                Obj = TR.SaveEnroll(userDetails.connectionString, userDetails.LoginId, userDetails.OutletOrBrandId, mobileNo, CustomerNm, CrdNo, Gender, DOB, DOA);
+                Obj = TR.SaveEnroll(userDetails.connectionString, userDetails.LoginId, userDetails.OutletOrBrandId, mobileNo, CustomerNm, CrdNo, Gender, DOB, DOA, Comment);
             }
 
             return new JsonResult() { Data = Obj, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
