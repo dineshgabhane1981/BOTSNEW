@@ -73,7 +73,7 @@
         </div>
 
         <div class="col-md-6 col-xl-2">
-            <div class="card mb-3 widget-content" style="background-color: #DBEEF4;">
+            <div class="card mb-3 widget-content" style="background-color: #DBEEF4; cursor: pointer;" onclick="GetCampaignSummary(0);">
                 <div class="widget-content-wrapper" style="display:block !important;">
                     <div class="align-content-center" style="text-align:center;">
                         <div style="text-align:center; font-weight:bold;font-size: 18px !important;">
@@ -338,4 +338,51 @@
             }
         });
     }
+
+    function GetCampaignSummary(flag, year, month) {
+        $("#divLoader").show();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("GetCampaignSummary", "Campaigns")',
+            data: "{'flag': " + flag + ",'stryear': '" + year + "','strmonth': '" + month + "'}",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                $("#dvFirstDiv").html(response);
+                $("#dvFirstDiv").show(1000);
+                $("#divLoader").hide();
+            },
+            failure: function (response) {
+                $("#divLoader").hide();
+            },
+            error: function (response) {
+                $("#dvFirstDiv").html(response.responseText);
+
+                if (flag == 0)
+                    $("#rdnCurrentMonth").prop("checked", true);
+
+                if (flag == 1)
+                    $("#rdnLast3Months").prop("checked", true);
+
+                if (flag == 2)
+                    $("#rdnLast6Months").prop("checked", true);
+
+                if (flag == 3)
+                    $("#rdnLast12Months").prop("checked", true);
+
+                if (flag == 4) {
+                    $("#rdnSpecificMonth").prop("checked", true);
+                    $("#ddlYearList").val(year);
+                    $("#ddlMonthList").val(month);
+                }
+
+                $("#dvFirstDiv").show(1000);
+                $("#dvSecondDiv").empty();
+                $("#dvSecondDiv").hide();
+                $("#divLoader").hide();
+            }
+        });
+    }
+
+
 </script>

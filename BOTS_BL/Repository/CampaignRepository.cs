@@ -1795,6 +1795,45 @@ namespace BOTS_BL.Repository
 
             return objData;
         }
+
+        public List<CampaignSummary> GetCampaignSummary(string GroupId, string flag, string year, string month)
+        {
+            List<CampaignSummary> objData = new List<CampaignSummary>();
+            var connstr = CR.GetCustomerConnString(GroupId);
+            try
+            {
+                using (var context = new BOTSDBContext(connstr))
+                {
+                    if (flag != "4")
+                    {
+                        objData = context.Database.SqlQuery<CampaignSummary>("sp_BOTS_CampaignSummary @pi_GroupId,@pi_Month,@pi_Year,@pi_INDDatetime,@pi_SelectedCriteria",
+                            new SqlParameter("@pi_GroupId", GroupId),
+                            new SqlParameter("@pi_Month", DateTime.Today.Month),
+                            new SqlParameter("@pi_Year", DateTime.Today.Year),
+                            new SqlParameter("@pi_INDDatetime", DateTime.Now),
+                            new SqlParameter("@pi_SelectedCriteria", flag)).ToList<CampaignSummary>();
+                    }
+                    else
+                    {
+                        objData = context.Database.SqlQuery<CampaignSummary>("sp_BOTS_CampaignSummary @pi_GroupId,@pi_Month,@pi_Year,@pi_INDDatetime,@pi_SelectedCriteria",
+                            new SqlParameter("@pi_GroupId", GroupId),
+                            new SqlParameter("@pi_Month", Convert.ToInt32(month) + 1),
+                            new SqlParameter("@pi_Year", Convert.ToInt32(year)),
+                            new SqlParameter("@pi_INDDatetime", DateTime.Now),
+                            new SqlParameter("@pi_SelectedCriteria", "0")).ToList<CampaignSummary>();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, GroupId);
+            }
+
+            return objData;
+        }
+
+
+
     }
 
 }

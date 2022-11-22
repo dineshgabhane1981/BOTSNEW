@@ -149,6 +149,7 @@
     <Compile Include="Models\BulkUploadCustList.cs" />
     <Compile Include="Models\BurnRule.cs" />
     <Compile Include="Models\CampaignMemberDetail.cs" />
+    <Compile Include="Models\Campaign\CampaignSummary.cs" />
     <Compile Include="Models\Campaign\CampaignTiles.cs" />
     <Compile Include="Models\Campaign\CelebrationSummary.cs" />
     <Compile Include="Models\Campaign\InactiveSummary.cs" />
