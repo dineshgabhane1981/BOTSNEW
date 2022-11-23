@@ -1,0 +1,381 @@
+﻿
+@{
+    ViewBag.Title = "TransactionUpload";
+}
+
+<h2>Audio Palace</h2>
+
+<style>
+
+    h2 {
+        color: #000;
+        text-align: center;
+        font-size: 2em;
+    }
+
+    .warpper {
+        display: grid;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .tab {
+        cursor: pointer;
+        padding: 10px 20px;
+        margin: 0px 2px;
+        background-color: #2f4353 !important;
+        display: inline-block;
+        color: #fff;
+        border-radius: 3px 3px 0px 0px;
+        box-shadow: 0 0.5rem 0.8rem #00000080;
+    }
+
+    .tabs {
+        padding-left: 25px;
+    }
+
+    .panels {
+        background: #ffffff;
+        box-shadow: 0 2rem 2rem #00000080;
+        width: 100%;
+        border-radius: 3px;
+        overflow: hidden;
+    }
+
+    .panel {
+        display: none;
+        animation: fadein .8s;
+    }
+
+    .panel-title {
+        font-size: 1.5em;
+        font-weight: bold
+    }
+
+    .radio {
+        display: none;
+    }
+
+
+
+    #one:checked ~ .panels #one-panel,
+    #two:checked ~ .panels #two-panel {
+        display: block
+    }
+
+
+    #one:checked ~ .tabs #one-tab,
+    #two:checked ~ .tabs #two-tab {
+        background: #fff !important;
+        color: #000;
+        border-top: 3px solid #fff;
+        border-left: 3px solid #fff;
+        border-right: 3px solid #fff;
+        font-weight: bold;
+        border-top-left-radius: 7px;
+        border-top-right-radius: 7px;
+    }
+
+    .modal {
+        display: none; /* Hidden by default */
+        position: fixed; /* Stay in place */
+        z-index: 5 !important; /* Sit on top */
+        padding-top: 65px; /* Location of the box */
+        left: 120px;
+        top: 0;
+        width: 100%; /* Full width */
+        height: 100%; /* Full height */
+        overflow: auto; /* Enable scroll if needed */
+        background-color: rgb(0,0,0); /* Fallback color */
+        background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+    }
+
+    /* Modal Content */
+    .modal-content {
+        background-color: #fefefe;
+        margin: auto;
+        padding: 20px;
+        border: 1px solid #888;
+        width: 75%;
+        border-radius: 25px;
+    }
+
+    .close {
+        color: #aaaaaa;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+    }
+
+        .close:hover,
+        .close:focus {
+            color: #000;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+    input:read-only {
+        background-color: lightgray;
+    }
+</style>
+@*<link rel="stylesheet" href="~/Content/style.css" />*@
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+<script src="~/Scripts/cute-alert-master/cute-alert.js"></script>
+<link href="~/Scripts/cute-alert-master/style-alert.css" rel="stylesheet" />
+@*<div class="row" style="padding-left: 100px; margin-top: 10px; margin-right: 100px; ">
+    <img src="https://blueocktopus.in/Logo/BlueocktopusLogo08092022.jpeg" width="20%" />
+
+</div>*@
+<div style="background-color:darkgray;padding:50px;">
+
+
+    <div class="app-main__inner">
+        <input class="radio" id="one" name="group" type="radio" checked>
+        <input class="radio" id="two" name="group" type="radio">
+        <div class="tabs">
+            <label class="tab" id="one-tab" for="one">Transaction Upload</label>
+            <label class="tab" id="two-tab" for="two">Product Upload</label>
+        </div>
+        <div class="panels">
+            <div class="multisteps-form__panel shadow  list-box bg-white panel" id="one-panel">
+                <div id="dvTransactionUpload">
+                    <table border="2" cellpadding="5" cellspacing="5" style="margin-top:50px; margin-left:30px;">
+                        <tr>
+                            <th colspan="2" style="padding:10px;text-align:center;">Transaction Upload</th>
+                        </tr>
+                        <tr>
+                            <td style="padding:10px;">Transaction Upload data</td>
+                            <td style="padding:10px;">
+                                <input type="file" id="file2" class="input50" style="width:80%" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="padding:10px">
+                                <a href="#" onclick="FileDownload();" style="color: blue">DownLoad Sample File</a>
+                            </td>
+                        </tr>
+                    </table>
+                    <div style="margin-top:20px;">
+                        @*<input type="file" id="FileUpload" />*@
+                        <input type="button" id="btnUpload1" class="btn btn-primary" style="margin-left: 10px; background-color: #2651be;" value="UploadData" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="multisteps-form__panel  p-3 m-3 list-box bg-white panel" id="two-panel">
+                <div id="dvProductUpload">
+                    <table border="2" cellpadding="5" cellspacing="5" style="margin-top:50px; margin-left:30px;">
+                        <tr>
+                            <th colspan="2" style="padding:10px;text-align:center;">Product Upload</th>
+                        </tr>
+                        <tr>
+                            <td style="padding:10px;">Product Upload data</td>
+                            <td style="padding:10px;">
+                                <input type="file" id="file1" class="input50" style="width:80%" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="padding:10px">
+                                <a href="#" onclick="DownloadFile();" style="color: blue">DownLoad Sample File</a>
+                            </td>
+                        </tr>
+                    </table>
+                    <div style="margin-top:20px;">
+                        @*<input type="file" id="FileUpload" />*@
+                        <input type="button" id="btnUpload" class="btn btn-primary" style="margin-left: 10px; background-color: #2651be;" value="Upload" />
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script>
+    
+    $("#btnUpload").on("click", function () {
+            Upload();
+    });
+
+    $("#btnUpload1").on("click", function () {
+        UploadData();
+    });
+
+    function FileDownload() {
+        //alert("hello");
+        //var fileName = "C:\\AudioPalace\Content\Sheet\TransactionUpload.xlsx";
+        var fileName = "../../Content/Sheet/File.xlsx";
+        //var fileName = "~/AudioPalace/Content/Sheet/";
+
+        //var fileName = "~/Content/Sheet/";
+
+        console.log(fileName);
+        //alert(fileName);
+        //window.location = fileName;
+        window.location.href = fileName;
+    }
+
+    function DownloadFile() {
+        //alert("hello");
+        //var fileName = "C:\\AudioPalace\Content\Sheet\TransactionUpload.xlsx";
+        var fileName = "../../Content/Sheet/ProductUpload.xlsx";
+        //var fileName = "~/AudioPalace/Content/Sheet/";
+
+        //var fileName = "~/Content/Sheet/";
+
+        console.log(fileName);
+        //alert(fileName);
+        //window.location = fileName;
+        window.location.href = fileName;
+    }
+
+    function UploadData() {
+
+        if (window.FormData !== undefined) {
+            var fileUpload = $("#file2").get(0);
+
+            var files = fileUpload.files;
+            if (files.length > 0) {
+                var fileData = new FormData();
+                for (var i = 0; i < files.length; i++) {
+                    fileData.append(files[i].name, files[i]);
+                }
+                /*fileData.append("groupId", $('#hdnGroupID').val());*/
+
+                $("#divLoader").show();
+                $.ajax({
+                    url: '@Url.Action("UploadTransaction", "Login")',
+                    type: "POST",
+                    contentType: false, // Not to set any content header
+                    processData: false, // Not to process data
+                    data: fileData,
+                    success: function (result) {
+                        console.log(result);
+                        if (result.Status == 1) {
+                            cuteAlert({
+                                type: "success",
+                                title: "Uploaded",
+                                message: "Data Uploaded, Total Rows in Excel  " + result.TbleRWCount + "  Total Inserted Rows  " + result.DBInsertCount,
+                                buttonText: "Okay"
+                            })
+                        }
+                        else {
+                            cuteAlert({
+                                type: "error",
+                                title: "Oops..",
+                                message: "There is some problem in uploading data",
+                                buttonText: "Okay"
+                            })
+                            $("#divLoader").hide();
+                        }
+                    },
+                    
+                    error: function (err) {
+                        cuteAlert({
+                            type: "error",
+                            title: "Oops..",
+                            message: "There is some problem in uploading data",
+                            buttonText: "Okay"
+                        })
+                        $("#divLoader").hide();
+                        //alert(err.statusText);
+                    }
+                });
+            }
+
+
+            else {
+                /*alert("No File");*/
+                cuteAlert({
+                    type: "error",
+                    title: "Oops..",
+                    message: "Please select file to upload",
+                    buttonText: "Okay"
+                });
+            }
+        }
+
+    }
+
+    function Upload() {
+
+        if (window.FormData !== undefined) {
+            var fileUpload = $("#file1").get(0);
+
+            var files = fileUpload.files;
+            if (files.length > 0) {
+                var fileData = new FormData();
+                for (var i = 0; i < files.length; i++) {
+                    fileData.append(files[i].name, files[i]);
+                }
+                /*fileData.append("groupId", $('#hdnGroupID').val());*/
+
+                $("#divLoader").show();
+                $.ajax({
+                    url: '@Url.Action("UploadProduct", "Login")',
+                    type: "POST",
+                    contentType: false, // Not to set any content header
+                    processData: false, // Not to process data
+                    data: fileData,
+                    success: function (result) {
+                        console.log(result);
+                        if (result.Status ==1) {
+                            cuteAlert({
+                                type: "success",
+                                title: "Uploaded",
+                                message: "Data Uploaded, Total Rows in Excel  " + result.TbleRWCount + "  Total Inserted Rows  " + result.DBInsertCount ,
+                                buttonText: "Okay"
+                            })
+                        }
+                        else {
+                            cuteAlert({
+                                type: "error",
+                                title: "Oops..",
+                                message: "There is some problem in uploading data",
+                                buttonText: "Okay"
+                            })
+                        }
+
+                        $("#divLoader").hide();
+                        //alert(result);
+                    },
+                    error: function (err) {
+                        cuteAlert({
+                            type: "error",
+                            title: "Oops..",
+                            message: "There is some problem in uploading data",
+                            buttonText: "Okay"
+                        })
+                        $("#divLoader").hide();
+                        //alert(err.statusText);
+                    }
+                });
+            }
+
+
+            else {
+                /*alert("No File");*/
+                cuteAlert({
+                    type: "error",
+                    title: "Oops..",
+                    message: "Please select file to upload",
+                    buttonText: "Okay"
+                });
+            }
+        }
+
+    }
+
+
+
+</script>
+@*<script src="~/Scripts/cute-alert-master/cute-alert.js"></script>
+    <link href="~/Scripts/cute-alert-master/style-alert.css" rel="stylesheet" />*@
+
+
+
+
+
+
+
+
