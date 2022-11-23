@@ -361,6 +361,7 @@
     <Content Include="Rotativa\wkhtmltopdf.exe" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
+    <Content Include="Scripts\checktext.js" />
     <Content Include="Scripts\cute-alert-master\LICENSE" />
     <Content Include="Scripts\cute-alert-master\README.md" />
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
