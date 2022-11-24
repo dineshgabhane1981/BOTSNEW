@@ -368,9 +368,6 @@
     <Compile Include="Models\TelecallerTracking.cs" />
     <Compile Include="Models\TransferPointsDetail.cs" />
     <Compile Include="Models\WhatsAppSMSMaster.cs" />
-    <Compile Include="obj\Debug\.NETFramework,Version=v4.6.1.AssemblyAttributes.cs" />
-    <Compile Include="obj\Release\.NETFramework,Version=v4.6.1.AssemblyAttributes.cs" />
-    <Compile Include="obj\Release\.NETFramework,Version=v4.7.2.AssemblyAttributes.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repository\AudioPalace.cs" />
     <Compile Include="Repository\AudioPalaceRepository.cs" />
@@ -413,10 +410,6 @@
     <None Include="App.config" />
     <None Include="bin\Debug\BOTS_BL.dll.config" />
     <None Include="bin\Release\BOTS_BL.dll.config" />
-    <None Include="obj\Release\BOTS_BL.csproj.AssemblyReference.cache" />
-    <None Include="obj\Release\BOTS_BL.csproj.CopyComplete" />
-    <None Include="obj\Release\BOTS_BL.csproj.CoreCompileInputs.cache" />
-    <None Include="obj\Release\BOTS_BL.csprojAssemblyReference.cache" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
@@ -538,13 +531,8 @@
     <Content Include="bin\Release\System.Web.WebPages.Razor.dll" />
     <Content Include="bin\Release\System.Web.WebPages.Razor.xml" />
     <Content Include="bin\Release\System.Web.WebPages.xml" />
-    <Content Include="obj\Release\BOTS_BL.csproj.FileListAbsolute.txt" />
-    <Content Include="obj\Release\BOTS_BL.dll" />
-    <Content Include="obj\Release\BOTS_BL.pdb" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="obj\Release\TempPE\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
