@@ -25,6 +25,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OTPPage", "OTPPage\OTPPage.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RetailerApp", "RetailerApp\RetailerApp.csproj", "{F289415C-D830-46BF-B57F-BD21E1E24CE1}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AudioPalace", "AudioPalace\AudioPalace.csproj", "{3C9FB435-E2E0-4646-837C-E8B740EE15FD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -71,6 +73,10 @@ Global
 		{F289415C-D830-46BF-B57F-BD21E1E24CE1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F289415C-D830-46BF-B57F-BD21E1E24CE1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F289415C-D830-46BF-B57F-BD21E1E24CE1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3C9FB435-E2E0-4646-837C-E8B740EE15FD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3C9FB435-E2E0-4646-837C-E8B740EE15FD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3C9FB435-E2E0-4646-837C-E8B740EE15FD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3C9FB435-E2E0-4646-837C-E8B740EE15FD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
