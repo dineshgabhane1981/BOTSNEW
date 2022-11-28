@@ -3,7 +3,7 @@
 
 
 
-<div>
+@*<div>
     <div class="col-md-12 col-xl-12">
         <input type="radio" checked id="rdnCurrentMonth" name="Campaignfilter" /> Current Month &nbsp;&nbsp;&nbsp;&nbsp;
         <input type="radio" id="rdnLast3Months" name="Campaignfilter" /> Last 3 Months &nbsp;&nbsp;&nbsp;&nbsp;
@@ -14,7 +14,7 @@
         @Html.DropDownList("Year", new SelectList(ViewBag.YearList, "Value", "Text"), htmlAttributes: new { @class = "smallDDL", @id = "ddlYearList" })
         <button class="btn btn-primary login-btn" id="btnCampaignfilter">Filter</button>
     </div>
-</div>
+</div>*@
 <div class="table-responsive">
     <div style="font-size:18px;color:blue;font-weight:bold;">Summary</div>
     <table class="table" id="tblCampaignSummary">
@@ -35,7 +35,7 @@
             @foreach (var item in Model)
             {
             <tr>
-                <td><a href="#" onclick="ShowCampaignDetailPre(@item.CampaignId);" style="color:blue;cursor:pointer;"> @item.CampaignName</a></td>
+                <td><a href="#" onclick="ShowCampaignDetail(@item.CampaignId);" style="color:blue;cursor:pointer;"> @item.CampaignName</a></td>
                 <td>@item.CampaignStatus</td>
                 <td>@item.StartDateStr</td>
                 <td>@item.EndDateStr</td>
@@ -102,30 +102,6 @@
             }
             GetCampaignSummary(flag, year, month);
         });
-    });
-
-    function ShowCampaignDetailPre() {
-        var flag = 0;
-        var year = 0;
-        var month = 0;
-        if ($("#rdnCurrentMonth").is(":checked")) {
-            flag = 0;
-        }
-        if ($("#rdnLast3Months").is(":checked")) {
-            flag = 1;
-        }
-        if ($("#rdnLast6Months").is(":checked")) {
-            flag = 2;
-        }
-        if ($("#rdnLast12Months").is(":checked")) {
-            flag = 3;
-        }
-        if ($("#rdnSpecificMonth").is(":checked")) {
-            flag = 4;
-            year = $("#ddlYearList").val();
-            month = $("#ddlMonthList").val();
-        }
-        ShowCampaignDetail(flag, year, month);
-    }
+    });   
 </script>
 

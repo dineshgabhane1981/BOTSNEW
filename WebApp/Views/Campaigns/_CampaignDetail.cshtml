@@ -1,0 +1,63 @@
+﻿@model List<BOTS_BL.Models.CampaignDetailed>
+@using System.Globalization
+
+<div class="table-responsive">
+    <div style="font-size:18px;color:blue;font-weight:bold;">Detailed</div>
+    <table class="table" id="tblCampaignDetails">
+        <thead>
+            <tr>
+                <th>MobileNo</th>
+                <th>MemberName</th>
+                <th>EnrolledOutlet</th>
+                <th>TxnCount</th>                
+                <th>Business Generated</th>
+                <th>Bonus Points Issued</th>
+                <th>Bonus Points Redeemed</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.MobileNo</td>
+                    <td>@item.Name</td>
+                    <td>@item.EnrolledOutlet</td>
+                    <td>@item.TotalTxnCount</td>
+                    <td>@String.Format(new CultureInfo("en-IN", false), "{0:n2}", Convert.ToDouble(item.BusinessGenerated))</td> 
+                    <td>@item.BonusPointsIssued</td>
+                    <td>@item.BonusPointsRedeemed</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<script>
+    $(document).ready(function () {
+        var table1 = $('#tblCampaignDetails').DataTable();
+        table1.destroy();
+        var table = $('#tblCampaignDetails').DataTable({
+            "bAutoWidth": false,
+            "paging": false,
+            "ordering": false,
+            "info": false,
+            "bFilter": false,
+            "pageLength": 25,
+            "pagingType": "simple_numbers",
+            "columns": [
+                { data: "MobileNo" },
+                { data: "Name" },
+                { data: "EnrolledOutlet" },
+                { data: "TotalTxnCount" },
+                { data: "BusinessGenerated" },
+                { data: "BonusPointsIssued" },               
+                { data: "BonusPointsRedeemed" }
+            ]
+        });
+        $('#tblCampaignDetails_filter').hide();
+
+        var table = $('#tblCampaignDetails').DataTable();
+        table.draw();
+    });
+</script>
+

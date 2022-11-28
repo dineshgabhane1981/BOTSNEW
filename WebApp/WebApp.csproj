@@ -530,6 +530,9 @@
     <Content Include="Views\Campaigns\_InactiveSummary.cshtml" />
     <Content Include="Views\Campaigns\_InactiveDetail.cshtml" />
     <Content Include="Views\Campaigns\_CampaignSummary.cshtml" />
+    <Content Include="Views\Campaigns\_CampaignDetail.cshtml" />
+    <Content Include="Views\Campaigns\_CampaignPromoBlastSummary.cshtml" />
+    <Content Include="Views\Campaigns\_CampaignPromoBlastDetails.cshtml" />
     <None Include="_bin_deployableAssemblies\x86\sqlcese40.dll" />
     <None Include="_bin_deployableAssemblies\x86\sqlceqp40.dll" />
     <None Include="_bin_deployableAssemblies\x86\sqlceme40.dll" />

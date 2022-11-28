@@ -1,0 +1,63 @@
+﻿@model List<BOTS_BL.Models.PromoBlastSummary>
+@using System.Globalization
+
+
+<div class="table-responsive">
+    <div style="font-size:18px;color:blue;font-weight:bold;">Summary</div>
+    <table class="table" id="tblCampaignPromoBlastSummary">
+        <thead>
+            <tr>
+                <th>Campaign Name</th>
+                <th>Status</th>
+                <th>Start Date</th>
+                <th>End Date</th>
+                <th>Cpg Mem Count</th>
+                <th>Total Txns in Cpn Period</th>
+                <th>Business Generated</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td><a href="#" onclick="ShowPromoBlastDetail(@item.CampaignId);" style="color:blue;cursor:pointer;"> @item.CampaignName</a></td>
+                    <td>@item.CampaignStatus</td>
+                    <td>@item.StartDateStr</td>
+                    <td>@item.EndDateStr</td>
+                    <td>@item.CampaignMemberCount</td>
+                    <td>@item.TotalTxnCount</td>
+                    <td>@String.Format(new CultureInfo("en-IN", false), "{0:n2}", Convert.ToDouble(item.BusinessGenerated))</td>                    
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<script>
+    $(document).ready(function () {
+        var table1 = $('#tblCampaignPromoBlastSummary').DataTable();
+        table1.destroy();
+        var table = $('#tblCampaignPromoBlastSummary').DataTable({
+            "bAutoWidth": false,
+            "paging": false,
+            "ordering": false,
+            "info": false,
+            "bFilter": false,
+            "pageLength": 25,
+            "pagingType": "simple_numbers",
+            "columns": [
+                { data: "CampaignName" },
+                { data: "CampaignStatus" },
+                { data: "StartDateStr" },
+                { data: "EndDateStr" },
+                { data: "CampaignMemberCount" },
+                { data: "TotalTxnCount" },
+                { data: "BusinessGenerated" }
+            ]
+        });
+        $('#tblCampaignPromoBlastSummary_filter').hide();
+
+        var table = $('#tblCampaignPromoBlastSummary').DataTable();
+        table.draw();        
+    });
+</script>

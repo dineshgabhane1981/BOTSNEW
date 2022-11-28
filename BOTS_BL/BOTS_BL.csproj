@@ -155,6 +155,7 @@
     <Compile Include="Models\Campaign\InactiveSummary.cs" />
     <Compile Include="Models\Campaign\LoyaltyKPIs.cs" />
     <Compile Include="Models\Campaign\PointExpirySummary.cs" />
+    <Compile Include="Models\Campaign\PromoBlastSummary.cs" />
     <Compile Include="Models\CelebrationMemberDetail.cs" />
     <Compile Include="Models\ChitaleModel\CancelOrderDetail.cs" />
     <Compile Include="Models\ChitaleModel\ChequeBounceConfig.cs" />

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace BOTS_BL.Models
 {
-    public class CampaignSummary
+    public class PromoBlastSummary
     {
         public Int64 CampaignId { get; set; }
         public string CampaignName { get; set; }
@@ -18,18 +18,14 @@ namespace BOTS_BL.Models
         public Int64 CampaignMemberCount { get; set; }
         public Int64 TotalTxnCount { get; set; }
         public Int64 BusinessGenerated { get; set; }
-        public decimal TotalBonusPointsIssued { get; set; }
-        public decimal TotalBonusPointsRedeemed { get; set; }
     }
 
-    public class CampaignDetailed
-    {
+    public class PromoBlastDetails
+    {       
         public string MobileNo { get; set; }
-        public string Name { get; set; }
-        public string EnrolledOutlet { get; set; }
+        public string Name { get; set; }        
+        public string EnrolledOutlet { get; set; }       
         public Int64 TotalTxnCount { get; set; }
         public decimal BusinessGenerated { get; set; }
-        public decimal BonusPointsIssued { get; set; }
-        public decimal BonusPointsRedeemed { get; set; }        
     }
 }

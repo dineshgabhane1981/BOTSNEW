@@ -32,8 +32,8 @@ namespace BOTS_BL.Repository
             {
                 using (var context = new BOTSDBContext(connstr))
                 {
-                    objCampaignTiles = context.Database.SqlQuery<CampaignTiles>("sp_BOTS_CampaignMeasurement @pi_GroupId, @pi_Date, @pi_LoginId ", 
-                        new SqlParameter("@pi_GroupId", GroupId), 
+                    objCampaignTiles = context.Database.SqlQuery<CampaignTiles>("sp_BOTS_CampaignMeasurement @pi_GroupId, @pi_Date, @pi_LoginId ",
+                        new SqlParameter("@pi_GroupId", GroupId),
                         new SqlParameter("@pi_Date", DateTime.Now.ToShortDateString()),
                         new SqlParameter("@pi_LoginId", "")).FirstOrDefault<CampaignTiles>();
                 }
@@ -46,7 +46,7 @@ namespace BOTS_BL.Repository
             return objCampaignTiles;
 
         }
-        public List<CampaignCelebrations> GetCampaignCelebrationsData(string GroupId, string connstr,string month, string year)
+        public List<CampaignCelebrations> GetCampaignCelebrationsData(string GroupId, string connstr, string month, string year)
         {
             List<CampaignCelebrations> objCampaignCelebrations = new List<CampaignCelebrations>();
             try
@@ -69,7 +69,7 @@ namespace BOTS_BL.Repository
             return objCampaignCelebrations;
         }
 
-        public List<CampaignCelebrationsData> GetCampaignCelebrationsSecondData(string GroupId, string connstr, string month, string year,string type)
+        public List<CampaignCelebrationsData> GetCampaignCelebrationsSecondData(string GroupId, string connstr, string month, string year, string type)
         {
             List<CampaignCelebrationsData> objCampaignCelebrationsData = new List<CampaignCelebrationsData>();
             try
@@ -175,9 +175,9 @@ namespace BOTS_BL.Repository
                         new SqlParameter("@pi_Month", month),
                         new SqlParameter("@pi_Year", year)).ToList<CampaignInactiveData>();
 
-                    if(objCampaignInactiveData !=null)
+                    if (objCampaignInactiveData != null)
                     {
-                        foreach(var item in objCampaignInactiveData)
+                        foreach (var item in objCampaignInactiveData)
                         {
                             item.InActiveDateStr = item.InActiveDate.Value.ToString("yyyy-MM-dd");
                             item.TxnDateStr = item.TxnDate.Value.ToString("yyyy-MM-dd");
@@ -192,7 +192,7 @@ namespace BOTS_BL.Repository
 
             return objCampaignInactiveData;
         }
-        
+
         public List<Campaign> GetCampaignFirstData(string GroupId, string connstr, string month, string year)
         {
             List<Campaign> objCampaignData = new List<Campaign>();
@@ -343,7 +343,7 @@ namespace BOTS_BL.Repository
                     //dataDashboard = context.Database.SqlQuery<ExecutiveSummary>("sp_BOTS_LoyaltyPerfromance @pi_GroupId, @pi_Date,@pi_LoginId,@pi_Month,@pi_Year,@pi_OutletId", new SqlParameter("@pi_GroupId", GroupId), new SqlParameter("@pi_Date", DateTime.Now.ToShortDateString()), new SqlParameter("@pi_LoginId", LoginId), new SqlParameter("@pi_Month", ""), new SqlParameter("@pi_Year", ""), new SqlParameter("@pi_OutletId", "")).FirstOrDefault<ExecutiveSummary>();
 
                     OutletData = context.Database.SqlQuery<OutletData>("sp_OutletDashboard @pi_GroupId, @pi_Date", new SqlParameter("@pi_GroupId", GroupId), new SqlParameter("@pi_Date", DateTime.Now.ToString("yyyy-MM-dd"))).ToList<OutletData>();
-                   // OutletData = context.Database.SqlQuery<OutletData>("sp_OutletDashboard @pi_GroupId, @pi_Date", new SqlParameter("@pi_GroupId", GroupId), new SqlParameter("@pi_Date","2022-04-23")).ToList<OutletData>();
+                    // OutletData = context.Database.SqlQuery<OutletData>("sp_OutletDashboard @pi_GroupId, @pi_Date", new SqlParameter("@pi_GroupId", GroupId), new SqlParameter("@pi_Date","2022-04-23")).ToList<OutletData>();
                 }
             }
             catch (Exception ex)
@@ -373,7 +373,7 @@ namespace BOTS_BL.Repository
                     SMSVendor = Convert.ToString(SDT.SMSVendor);
                     UserName = Convert.ToString(SDT.UserName);
                     Password = Convert.ToString(SDT.Password);
-                    if(String.IsNullOrEmpty(SMSVendor)==false)
+                    if (String.IsNullOrEmpty(SMSVendor) == false)
                     {
                         switch (SMSVendor)
                         {
@@ -479,7 +479,7 @@ namespace BOTS_BL.Repository
                                 break;
                         }
                     }
-                    
+
                 }
             }
             catch (Exception ex)
@@ -489,24 +489,24 @@ namespace BOTS_BL.Repository
             return SMSGatewayDetails;
         }
 
-        public CustCount GetFiltData(string BaseType,string PointsBase,string Points,string PointsRange1, string OutletId, string GroupId, string connstr)
+        public CustCount GetFiltData(string BaseType, string PointsBase, string Points, string PointsRange1, string OutletId, string GroupId, string connstr)
         {
             CustomerIdListAndCount objcount = new CustomerIdListAndCount();
-            List < CustomerDetail> objcust = new List<CustomerDetail>();
+            List<CustomerDetail> objcust = new List<CustomerDetail>();
             CustCount objcustAll = new CustCount();
             //var CustomerCount;
             // List<customerIdDetails> lstcustomerId = new List<customerIdDetails>();
             // var transcount = 0;
             using (var context = new BOTSDBContext(connstr))
             {
-               
+
                 var names = new string[] { "2", "4", "5", "7" };
                 objcust = (from c in context.CustomerDetails where (names.Contains(c.CustomerThrough) && c.Status == "00") select c).ToList();
 
                 //objcustAll.CustCountALL = context.CustomerDetails.Where(x => x.Status == "00" && x.IsSMS == null).Count();
                 //objcustAll.CustFiltered = context.CustomerDetails.Where(x => x.Status == "00" && x.IsSMS == null && x.EnrollingOutlet == OutletId).Count();
-                
-                
+
+
 
                 try
                 {
@@ -559,8 +559,8 @@ namespace BOTS_BL.Repository
                     else if (BaseType == "4" && PointsBase == "2" && Points != "" && OutletId == "")
                     {
                         int DummyPoints = Convert.ToInt32(Points);
-                        objcustAll.CustCountALL = context.CustomerDetails.Where(x => x.Status == "00" && x.IsSMS == null &&(x.CustomerThrough == "2" || x.CustomerThrough == "4" || x.CustomerThrough == "5" || x.CustomerThrough == "7") && x.Points > DummyPoints).Count();
-                        objcustAll.CustFiltered = context.CustomerDetails.Where(x => x.Status == "00" && x.IsSMS == null &&(x.CustomerThrough == "2" || x.CustomerThrough == "4" || x.CustomerThrough == "5" || x.CustomerThrough == "7") && x.Points > DummyPoints).Count();
+                        objcustAll.CustCountALL = context.CustomerDetails.Where(x => x.Status == "00" && x.IsSMS == null && (x.CustomerThrough == "2" || x.CustomerThrough == "4" || x.CustomerThrough == "5" || x.CustomerThrough == "7") && x.Points > DummyPoints).Count();
+                        objcustAll.CustFiltered = context.CustomerDetails.Where(x => x.Status == "00" && x.IsSMS == null && (x.CustomerThrough == "2" || x.CustomerThrough == "4" || x.CustomerThrough == "5" || x.CustomerThrough == "7") && x.Points > DummyPoints).Count();
                     }
                     else if (BaseType == "4" && PointsBase == "2" && Points != "" && OutletId != "")
                     {
@@ -581,7 +581,7 @@ namespace BOTS_BL.Repository
                         objcustAll.CustFiltered = context.CustomerDetails.Where(x => x.Status == "00" && x.IsSMS == null && (x.CustomerThrough == "2" || x.CustomerThrough == "4" || x.CustomerThrough == "5" || x.CustomerThrough == "7") && x.Points == DummyPoints && x.EnrollingOutlet == OutletId).Count();
                     }
 
-                    else if (BaseType == "4" && PointsBase == "4" && Points != "" && PointsRange1!="" && OutletId == "")
+                    else if (BaseType == "4" && PointsBase == "4" && Points != "" && PointsRange1 != "" && OutletId == "")
                     {
                         int DummyPoints = Convert.ToInt32(Points);
                         int DummyPoints2 = Convert.ToInt32(PointsRange1);
@@ -601,13 +601,13 @@ namespace BOTS_BL.Repository
                 {
                     newexception.AddException(ex, GroupId);
                 }
-                
+
             }
 
             return objcustAll;
         }
 
-        public List<CampaignSaveDetails> SaveCampaignData(string BaseType, string Equality, string Points, string OutletId,string Srcipt,string StartDate,string EndDate,string CampaignName,string SMSType, string ScriptType, string Scheduledatetime,string TempId,string PointsRange1, string GroupId, string connstr)
+        public List<CampaignSaveDetails> SaveCampaignData(string BaseType, string Equality, string Points, string OutletId, string Srcipt, string StartDate, string EndDate, string CampaignName, string SMSType, string ScriptType, string Scheduledatetime, string TempId, string PointsRange1, string GroupId, string connstr)
         {
             List<CampaignSaveDetails> Data = new List<CampaignSaveDetails>();
 
@@ -621,17 +621,17 @@ namespace BOTS_BL.Repository
             {
                 using (var context = new BOTSDBContext(connstr))
                 {
-                     Data = context.Database.SqlQuery<CampaignSaveDetails>("sp_BOTS_CreateCampaign @pi_GroupId, @pi_Date,@pi_BaseType,@pi_Equality,@pi_Points,@pi_OutletId,@pi_Script,@pi_CampStartDate,@pi_CampEndDate,@pi_CampName,@pi_SMSType,@pi_ScriptType,@pi_Scheduledatetime,@pi_TempId,@pi_PointsRange1", new SqlParameter("@pi_GroupId", GroupId), new SqlParameter("@pi_Date", DateTime.Now.ToString("yyyy-MM-dd")),new SqlParameter("@pi_BaseType", BaseType),new SqlParameter("@pi_Equality", Equality),new SqlParameter("@pi_Points", Points),new SqlParameter("@pi_OutletId", OutletId),new SqlParameter("@pi_Script", Srcipt),new SqlParameter("@pi_CampStartDate", StartDate),new SqlParameter("@pi_CampEndDate", EndDate),new SqlParameter("@pi_CampName", CampaignName),new SqlParameter("@pi_SMSType", SMSType), new SqlParameter("@pi_ScriptType", ScriptType), new SqlParameter("@pi_Scheduledatetime", Scheduledatetime), new SqlParameter("@pi_TempId", TempId), new SqlParameter("@pi_PointsRange1", PointsRange1)).ToList<CampaignSaveDetails>();                     
+                    Data = context.Database.SqlQuery<CampaignSaveDetails>("sp_BOTS_CreateCampaign @pi_GroupId, @pi_Date,@pi_BaseType,@pi_Equality,@pi_Points,@pi_OutletId,@pi_Script,@pi_CampStartDate,@pi_CampEndDate,@pi_CampName,@pi_SMSType,@pi_ScriptType,@pi_Scheduledatetime,@pi_TempId,@pi_PointsRange1", new SqlParameter("@pi_GroupId", GroupId), new SqlParameter("@pi_Date", DateTime.Now.ToString("yyyy-MM-dd")), new SqlParameter("@pi_BaseType", BaseType), new SqlParameter("@pi_Equality", Equality), new SqlParameter("@pi_Points", Points), new SqlParameter("@pi_OutletId", OutletId), new SqlParameter("@pi_Script", Srcipt), new SqlParameter("@pi_CampStartDate", StartDate), new SqlParameter("@pi_CampEndDate", EndDate), new SqlParameter("@pi_CampName", CampaignName), new SqlParameter("@pi_SMSType", SMSType), new SqlParameter("@pi_ScriptType", ScriptType), new SqlParameter("@pi_Scheduledatetime", Scheduledatetime), new SqlParameter("@pi_TempId", TempId), new SqlParameter("@pi_PointsRange1", PointsRange1)).ToList<CampaignSaveDetails>();
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 newexception.AddException(ex, GroupId);
             }
             return Data;
         }
-    
-        public List<CampaignMemberDetail> CampDataDownload(string CampaignId,string GroupId,string connectionString)
+
+        public List<CampaignMemberDetail> CampDataDownload(string CampaignId, string GroupId, string connectionString)
         {
             List<CampaignMemberDetail> CmpData = new List<CampaignMemberDetail>();
             using (var context = new BOTSDBContext(connectionString))
@@ -639,16 +639,16 @@ namespace BOTS_BL.Repository
                 try
                 {
                     CmpData = context.CampaignMemberDetails.Where(x => x.CampaignId == CampaignId).ToList();
-                     //CmpData1 = Data.ToList<CampDownload>;
+                    //CmpData1 = Data.ToList<CampDownload>;
                     // CampData = CmpData.AsEnumerable().ToList<CampDownload>();
 
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     newexception.AddException(ex, GroupId);
                 }
             }
-                return CmpData;
+            return CmpData;
         }
 
         public List<LisCampaign> GetCampList(string GroupId, string connectionString)
@@ -658,7 +658,7 @@ namespace BOTS_BL.Repository
             string Todate;
             TimeZoneInfo IND_ZONE = TimeZoneInfo.FindSystemTimeZoneById("India Standard Time");
             DateTime Sched = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, IND_ZONE);
-            
+
             Todate = Sched.ToString("yyyy-MM-dd");
 
             using (var context = new BOTSDBContext(connectionString))
@@ -667,17 +667,17 @@ namespace BOTS_BL.Repository
                 {
                     DateTime CDate = DateTime.Parse(DateTime.Now.ToShortDateString());
                     var CM1 = context.CampaignMasters.OrderByDescending(x => x.CampaignId).Select(x => new { x.CampaignId, x.CampaignName, x.StartDate, x.EndDate, x.Status, x.ControlBase, x.CampaignBase, x.CommunicationMode }).ToList();
-                    
+
                     //var CM1 = ((from c in context.CampaignMasters orderby c.CampaignId descending  select c).Take(5)).ToList();
 
-                    
-                        foreach (var item in CM1)
-                        {
-                            LisCampaign itemData = new LisCampaign();
-                            
-                            itemData.CampaignId = item.CampaignId;
-                            itemData.CampaignName = item.CampaignName;
-                        
+
+                    foreach (var item in CM1)
+                    {
+                        LisCampaign itemData = new LisCampaign();
+
+                        itemData.CampaignId = item.CampaignId;
+                        itemData.CampaignName = item.CampaignName;
+
                         itemData.StartDate = item.StartDate;
                         itemData.StartDateStr = item.StartDate.Value.ToString("yyyy-MM-dd");
                         itemData.EndDate = item.EndDate;
@@ -691,7 +691,7 @@ namespace BOTS_BL.Repository
                         {
                             itemData.Status = "Scheduled";
                         }
-                        else if(item.EndDate < Sched)
+                        else if (item.EndDate < Sched)
                         {
                             itemData.Status = "Completed";
                         }
@@ -704,7 +704,7 @@ namespace BOTS_BL.Repository
                         {
                             itemData.CommunicationMode = "SMS";
                         }
-                         else if(V == "2")
+                        else if (V == "2")
                         {
                             itemData.CommunicationMode = "Virtual SMS";
                         }
@@ -719,8 +719,8 @@ namespace BOTS_BL.Repository
 
 
                         CM.Add(itemData);
-                        }
-                        var CMD = ((from c in CM orderby c.CampaignId descending select c).Take(5)).ToList();
+                    }
+                    var CMD = ((from c in CM orderby c.CampaignId descending select c).Take(5)).ToList();
 
                     foreach (var item in CMD)
                     {
@@ -749,12 +749,12 @@ namespace BOTS_BL.Repository
                 {
                     newexception.AddException(ex, GroupId);
                 }
-                
+
             }
             return CM3;
         }
 
-        public bool SendDLTData (string CampaignId,string GroupId, string connectionString)
+        public bool SendDLTData(string CampaignId, string GroupId, string connectionString)
         {
             SPResponse SR = new SPResponse();
             bool status = new bool();
@@ -762,17 +762,17 @@ namespace BOTS_BL.Repository
             {
                 try
                 {
-                   // var CM1 = context.CampaignMasters.Where(x => x.EndDate >= CDate);
+                    // var CM1 = context.CampaignMasters.Where(x => x.EndDate >= CDate);
                     var CM1 = context.CampaignMasters.Where(x => x.CampaignId == CampaignId).FirstOrDefault();
-                    
-                    if(CM1.DLTStatus == null)
+
+                    if (CM1.DLTStatus == null)
                     {
                         CM1.DLTStatus = "Process";
                         context.CampaignMasters.AddOrUpdate(CM1);
                         context.SaveChanges();
                     }
 
-                    
+
                     status = true;
                 }
                 catch (Exception ex)
@@ -792,7 +792,7 @@ namespace BOTS_BL.Repository
             {
                 try
                 {
-                    
+
                     var CM1 = context.CampaignMasters.Where(x => x.DLTStatus != null).Select(x => new { x.CampaignId, x.CampaignName, x.Script, x.DLTScript, x.DLTStatus, x.DLTRejectReson, x.TemplateID, x.TemplateName, x.TemplateType }).ToList();
                     foreach (var item in CM1)
                     {
@@ -822,7 +822,7 @@ namespace BOTS_BL.Repository
 
         }
 
-        public List<DLTDetailsLst> UpdateCampDLCLinkDLTStatus(string Campid, string status, string reason,string Groupid,string connectionString)
+        public List<DLTDetailsLst> UpdateCampDLCLinkDLTStatus(string Campid, string status, string reason, string Groupid, string connectionString)
         {
             List<DLTDetailsLst> CM = new List<DLTDetailsLst>();
             bool sts = new bool();
@@ -830,7 +830,7 @@ namespace BOTS_BL.Repository
             using (var context = new BOTSDBContext(connectionString))
             {
                 try
-                {                 
+                {
                     var CM2 = context.CampaignMasters.Where(x => x.CampaignId == Campid).FirstOrDefault();
                     if (CM2.DLTStatus == "Process")
                     {
@@ -857,7 +857,7 @@ namespace BOTS_BL.Repository
                 }
                 return CM;
             }
-            
+
         }
 
         public List<DLTDetailsLst> UpdateCampDLTRejectStat(string Campid, string status, string reason, string Groupid, string connectionString)
@@ -870,7 +870,7 @@ namespace BOTS_BL.Repository
                 try
                 {
                     var CM2 = context.CampaignMasters.Where(x => x.CampaignId == Campid).FirstOrDefault();
-                    
+
                     CM2.DLTStatus = status;
                     CM2.DLTRejectReson = reason;
                     context.CampaignMasters.AddOrUpdate(CM2);
@@ -908,7 +908,7 @@ namespace BOTS_BL.Repository
                     foreach (var item in CampDetails)
                     {
                         //DLTDetailsLst itemData = new DLTDetailsLst();
-                        
+
                         //CM2.CampaignName = item.CampaignName;
                         CM2.DLTStatus = item.DLTStatus;
                         CM2.TemplateID = item.TemplateID;
@@ -917,7 +917,7 @@ namespace BOTS_BL.Repository
                         CM2.DLTScript = item.DLTScript;
                         //CM2.DLTRejectReson = item.DLTRejectedReson;
                         //itemData.DLTStatus = status;
-                       // CM.Add(itemData);
+                        // CM.Add(itemData);
                     }
 
                     //CM2.DLTStatus = status;
@@ -926,7 +926,7 @@ namespace BOTS_BL.Repository
                     context.SaveChanges();
                     status = true;
                     //var CM1 = context.CampaignMasters.Where(x => x.CampaignId == Campid).ToList();
-                    
+
                 }
                 catch (Exception ex)
                 {
@@ -936,7 +936,7 @@ namespace BOTS_BL.Repository
             }
         }
 
-        public DataSet SendTestSMSData(string CampaignId,string TestNumber, string GroupId, string connstr)
+        public DataSet SendTestSMSData(string CampaignId, string TestNumber, string GroupId, string connstr)
         {
             string Url, UserName, Password, Sender;
             DataSet Data = new DataSet();
@@ -953,7 +953,7 @@ namespace BOTS_BL.Repository
             try
             {
                 using (var context = new BOTSDBContext(connstr))
-                {             
+                {
                     SqlConnection _Con11 = new SqlConnection(Convert.ToString(connstr));
                     SqlCommand _Cmd11 = new SqlCommand();
                     _Cmd11.Connection = _Con11;
@@ -987,8 +987,8 @@ namespace BOTS_BL.Repository
                             Data1.Rows.Add(DR);
                         }
                     }
-                    
-                     Thread _job = new Thread(() => SendSMS(Data1));
+
+                    Thread _job = new Thread(() => SendSMS(Data1));
                     _job.Start();
 
                 }
@@ -1106,7 +1106,7 @@ namespace BOTS_BL.Repository
                             {
                                 var result_00003 = streamReader_00003.ReadToEnd();
                             }
-                            break; 
+                            break;
                         case "00004": //Vision HLT Unicode
                             var httpWebRequest_00004 = (HttpWebRequest)WebRequest.Create(_Url);
                             httpWebRequest_00004.ContentType = "application/json";
@@ -1252,7 +1252,7 @@ namespace BOTS_BL.Repository
             {
                 using (var context = new BOTSDBContext(connstr))
                 {
-                    Data = context.Database.SqlQuery<CampaignSaveDetails>("sp_BOTS_CreateCampaignWA @pi_GroupId, @pi_Date,@pi_BaseType,@pi_Equality,@pi_Points,@pi_OutletId,@pi_Script,@pi_CampStartDate,@pi_CampEndDate,@pi_CampName,@pi_SMSType,@pi_MessageType,@pi_Scheduledatetime,@pi_PointsRange1,@FileUrlLink", 
+                    Data = context.Database.SqlQuery<CampaignSaveDetails>("sp_BOTS_CreateCampaignWA @pi_GroupId, @pi_Date,@pi_BaseType,@pi_Equality,@pi_Points,@pi_OutletId,@pi_Script,@pi_CampStartDate,@pi_CampEndDate,@pi_CampName,@pi_SMSType,@pi_MessageType,@pi_Scheduledatetime,@pi_PointsRange1,@FileUrlLink",
                         new SqlParameter("@pi_GroupId", GroupId), new SqlParameter("@pi_Date", DateTime.Now.ToString("yyyy-MM-dd")), new SqlParameter("@pi_BaseType", BaseType), new SqlParameter("@pi_Equality", Equality), new SqlParameter("@pi_Points", Points), new SqlParameter("@pi_OutletId", OutletId), new SqlParameter("@pi_Script", Srcipt), new SqlParameter("@pi_CampStartDate", StartDate), new SqlParameter("@pi_CampEndDate", EndDate), new SqlParameter("@pi_CampName", CampaignName), new SqlParameter("@pi_SMSType", SMSType), new SqlParameter("@pi_MessageType", MessageType), new SqlParameter("@pi_Scheduledatetime", Scheduledatetime), new SqlParameter("@pi_PointsRange1", PointsRange1), new SqlParameter("@FileUrlLink", FileUrlLink)).ToList<CampaignSaveDetails>();
                 }
             }
@@ -1345,17 +1345,17 @@ namespace BOTS_BL.Repository
 
 
                     if (_MessageType == "1")
-                      {
+                    {
                         Thread _job = new Thread(() => WAText(_MobileNo, _Script, _BrandId, _Url, _TokenId));
                         _job.Start();
-                    } 
-                      else if (_MessageType == "2")
-                      {
+                    }
+                    else if (_MessageType == "2")
+                    {
                         Thread _job = new Thread(() => WAImage(_MobileNo, _BrandId, _Url, _TokenId, _FileUrl));
                         _job.Start();
-                      }
+                    }
                     else if (_MessageType == "3")
-                      {
+                    {
                         Thread _job = new Thread(() => WAImageCaption(_MobileNo, _BrandId, _Url, _TokenId, _FileUrl, _MessageType));
                         _job.Start();
                     }
@@ -1519,7 +1519,7 @@ namespace BOTS_BL.Repository
             }
         }
 
-        public List<WAInsData> GetWAInsData(string Groupid,string connectionString)
+        public List<WAInsData> GetWAInsData(string Groupid, string connectionString)
         {
             List<WAInsData> WAInsDetails = new List<WAInsData>();
             List<CommonWAInstanceMaster> InsMaster = new List<CommonWAInstanceMaster>();
@@ -1529,7 +1529,7 @@ namespace BOTS_BL.Repository
             {
                 using (var context = new CommonDBContext())
                 {
-                     InsMaster = (from c in context.CommonWAInstanceMasters where (c.GroupId == Groupid && c.Status == "00") select c).ToList();
+                    InsMaster = (from c in context.CommonWAInstanceMasters where (c.GroupId == Groupid && c.Status == "00") select c).ToList();
 
                     foreach (var item in InsMaster)
                     {
@@ -1568,7 +1568,7 @@ namespace BOTS_BL.Repository
                                 }
                             }
                         }
-                    }                   
+                    }
                 }
             }
             catch (Exception ex)
@@ -1651,7 +1651,7 @@ namespace BOTS_BL.Repository
 
             return objData;
         }
-    
+
         public List<PointExpirySummary> GetCampaignPointExpirySummary(string GroupId, string flag, string year, string month)
         {
             List<PointExpirySummary> objData = new List<PointExpirySummary>();
@@ -1822,6 +1822,15 @@ namespace BOTS_BL.Repository
                             new SqlParameter("@pi_INDDatetime", DateTime.Now),
                             new SqlParameter("@pi_SelectedCriteria", "0")).ToList<CampaignSummary>();
                     }
+
+                    foreach(var item in objData)
+                    {
+                        if (item.StartDate.HasValue)
+                            item.StartDateStr = item.StartDate.Value.ToString("dd-MMM-yyyy");
+
+                        if (item.EndDate.HasValue)
+                            item.EndDateStr = item.EndDate.Value.ToString("dd-MMM-yyyy");
+                    }
                 }
             }
             catch (Exception ex)
@@ -1832,7 +1841,82 @@ namespace BOTS_BL.Repository
             return objData;
         }
 
+        public List<CampaignDetailed> GetCampaignDetailed(string GroupId, string CampaignId)
+        {
+            List<CampaignDetailed> objData = new List<CampaignDetailed>();
+            var connstr = CR.GetCustomerConnString(GroupId);
+            try
+            {
+                using (var context = new BOTSDBContext(connstr))
+                {
 
+                    objData = context.Database.SqlQuery<CampaignDetailed>("sp_BOTS_CampaignDetailed @pi_GroupId,@pi_INDDatetime,@pi_CampaignId",
+                        new SqlParameter("@pi_GroupId", GroupId),
+                        new SqlParameter("@pi_INDDatetime", DateTime.Now),
+                        new SqlParameter("@pi_CampaignId", CampaignId)).ToList<CampaignDetailed>();
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, GroupId);
+            }
+            return objData;
+        }
+
+        public List<PromoBlastSummary> GetCampaignPromoBlastSummary(string GroupId, string flag, string year, string month)
+        {
+            List<PromoBlastSummary> objData = new List<PromoBlastSummary>();
+            var connstr = CR.GetCustomerConnString(GroupId);
+            try
+            {
+                using (var context = new BOTSDBContext(connstr))
+                {
+                    objData = context.Database.SqlQuery<PromoBlastSummary>("sp_BOTS_PromoBlastSummary @pi_GroupId,@pi_Month,@pi_Year,@pi_INDDatetime,@pi_SelectedCriteria",
+                        new SqlParameter("@pi_GroupId", GroupId),
+                        new SqlParameter("@pi_Month", DateTime.Today.Month),
+                        new SqlParameter("@pi_Year", DateTime.Today.Year),
+                        new SqlParameter("@pi_INDDatetime", DateTime.Now),
+                        new SqlParameter("@pi_SelectedCriteria", flag)).ToList<PromoBlastSummary>();
+
+                }
+                foreach (var item in objData)
+                {
+                    if (item.StartDate.HasValue)
+                        item.StartDateStr = item.StartDate.Value.ToString("dd-MMM-yyyy");
+
+                    if (item.EndDate.HasValue)
+                        item.EndDateStr = item.EndDate.Value.ToString("dd-MMM-yyyy");
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, GroupId);
+            }
+
+            return objData;
+        }
+
+        public List<PromoBlastDetails> GetCampaignPromoBlastDetailed(string GroupId, string CampaignId)
+        {
+            List<PromoBlastDetails> objData = new List<PromoBlastDetails>();
+            var connstr = CR.GetCustomerConnString(GroupId);
+            try
+            {
+                using (var context = new BOTSDBContext(connstr))
+                {
+
+                    objData = context.Database.SqlQuery<PromoBlastDetails>("sp_BOTS_CampaignDetailed @pi_GroupId,@pi_INDDatetime,@pi_CampaignId",
+                        new SqlParameter("@pi_GroupId", GroupId),
+                        new SqlParameter("@pi_INDDatetime", DateTime.Now),
+                        new SqlParameter("@pi_CampaignId", CampaignId)).ToList<PromoBlastDetails>();
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, GroupId);
+            }
+            return objData;
+        }
 
     }
 
