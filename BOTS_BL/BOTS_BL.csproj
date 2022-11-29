@@ -262,6 +262,7 @@
     <Compile Include="Models\CommonDB\Tbl_SinglePageNonTransactingOutlet.cs" />
     <Compile Include="Models\CommonDB\Tbl_SinglePageSummaryTable.cs" />
     <Compile Include="Models\CommonDB\WAReport.cs" />
+    <Compile Include="Models\CompetitionDetail.cs" />
     <Compile Include="Models\Dashboard\DashboardMemberSegment.cs" />
     <Compile Include="Models\DBContext.cs" />
     <Compile Include="Models\DiscussionReport.cs" />
@@ -406,6 +407,7 @@
     <Compile Include="Repository\TelecallerRepository.cs" />
     <Compile Include="Repository\TestingModuleRepository.cs" />
     <Compile Include="Repository\TgtVsAchRepository.cs" />
+    <Compile Include="Repository\VenusRepository.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
