@@ -1,0 +1,146 @@
+﻿@{
+    ViewBag.Title = "Index";
+}
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+      integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+<link rel="stylesheet" href="~/Content/style.css" />
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+<script src="~/Content/cute-alert-master/cute-alert.js"></script>
+<link href="~/Content/cute-alert-master/style-alert.css" rel="stylesheet" />
+
+<div style="background-color:ghostwhite;padding:50px;">
+    <div class="multisteps-form__panel shadow  list-box bg-white panel">
+        <meta name="viewport" content="width=devicewidth, initial-scaled=1.0">
+        <table border="2" cellpadding="5" cellspacing="5" id="tblUpdateData2" style="margin-left:50px;">
+            <tr>
+                <th colspan="2" style="padding: 10px; text-align: center;font-size: medium;">Student Details</th>
+            </tr>
+            <tr>
+                <td style="padding:10px;width:200px;font-size:medium;">Student Full Name</td>
+                <td style="padding:10px;width:200px;">
+                    <input type="text" id="txtFullName" class="input50" style="font-size:medium;" />
+                </td>
+            </tr>
+            <tr>
+                <td style="padding: 10px; width: 200px;font-size: medium;">Date Of Birth</td>
+                <td style="padding:10px;width:200px;">
+                    <input type="date" id="txtDOB" class="input50" style="font-size:medium;" />
+                </td>
+            </tr>
+            <tr>
+                <td style="padding: 10px; width: 200px;font-size: medium;">School Name</td>
+                <td style="padding:10px;width:200px;">
+                    <input type="text" id="txtSchoolName" class="input50" style="font-size:medium;" />
+                </td>
+            </tr>
+            <tr>
+                <td style="padding: 10px; width: 200px;font-size: medium;">Class</td>
+                <td style="padding:10px;width:200px;">
+                    <input type="text" id="txtClass" class="input50" style="font-size:medium;" />
+                </td>
+            </tr>
+            <tr>
+                <td style="padding: 10px;font-size: medium;">Parents Name</td>
+                <td style="padding:10px;">
+                    <input type="text" id="txtParentsName" class="input50" style="font-size:medium;" />
+                </td>
+            </tr>
+            <tr>
+                <td style="padding: 10px;font-size: medium;">WhatsApp No Of Parent</td>
+                <td style="padding:10px;">
+                    <input type="text" id="txtWhatsAppNo" class="input50" style="font-size:medium;" />
+                </td>
+            </tr>
+            <tr>
+                <td style="padding: 10px;font-size: medium;">EmailId Of Parent</td>
+                <td style="padding:10px;">
+                    <input type="text" id="txtEmail" class="input50" style="font-size:medium;" />
+                </td>
+            </tr>
+            <tr>
+                <td style="padding: 10px;font-size: medium;">Home Address</td>
+                <td style="padding:10px;">
+                    <input type="text" id="txtAddress" class="input50" style="font-size:medium;" />
+                </td>
+            </tr>
+        </table>
+        <div>
+            <input type="button" id="btnSubmit" class="btn btn-primary" style="margin-left: 225px; background-color: #2651be; margin-top:20px;font-size:medium" value="Submit" />
+        </div>
+
+    </div>
+</div>
+
+<script>
+    $("#btnSubmit").on("click", function () {
+        /*alert("hello");*/
+        Submit();
+    });
+
+    $(document).ready(function () {
+        var today = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
+        $("#txtDOB").datepicker({
+            dateFormat: "yy-mm-dd",
+            maxDate: today,
+        });
+    })
+
+        function Submit() {
+
+            var Data = [];
+                item = {};
+
+
+            item["StudentFullName"] = $("#txtFullName").val();
+            item["DateOfBirth"] = $("#txtDOB").val();
+            item["SchoolName"] = $("#txtSchoolName").val();
+            item["Class"] = $("#txtClass").val();
+            item["ParentsName"] = $("#txtParentsName").val();
+            item["WhatsAppNoOfParent"] = $("#txtWhatsAppNo").val();
+            item["EmailIdOfParent"] = $("#txtEmail").val();
+            item["HomeAddress"] = $("#txtAddress").val();
+
+                Data.push(item);
+                var DataStr = JSON.stringify(Data);
+                $("#divLoader").show();
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("SaveDetails", "Home")',
+                    data: '{jsonData: ' + JSON.stringify(DataStr) + '}',
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (result) {
+                        console.log(result);
+                        /*alert(result);*/
+                        if (result == true) {
+                            //alert("hello");
+                            cuteAlert({
+                                type: "success",
+                                title: "Saved",
+                                message: " Data saved successfully",
+                                buttonText: "Okay"
+                            }).then(() => {
+                                var urlLink = "@Url.Action("Index", "Home")";
+                                window.location.href = urlLink;
+                            })
+
+                            $("#divLoader").hide();
+                        }
+                        else {
+                            cuteAlert({
+                                type: "error",
+                                title: "Oops..",
+                                message: "There is a problem in saving Data",
+                                buttonText: "Okay"
+                            })
+                            $("#divLoader").hide();
+                        }
+                    },
+                    error: function (result) {
+                        //console.log(result.responseText)
+                    }
+                });
+        }
+
+</script>

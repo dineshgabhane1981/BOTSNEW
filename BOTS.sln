@@ -27,6 +27,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RetailerApp", "RetailerApp\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AudioPalace", "AudioPalace\AudioPalace.csproj", "{3C9FB435-E2E0-4646-837C-E8B740EE15FD}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VenusCompetitionLink", "VenusCompetitionLink\VenusCompetitionLink.csproj", "{368E2919-F748-4103-9FED-209CE0B0C302}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -77,6 +79,10 @@ Global
 		{3C9FB435-E2E0-4646-837C-E8B740EE15FD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3C9FB435-E2E0-4646-837C-E8B740EE15FD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3C9FB435-E2E0-4646-837C-E8B740EE15FD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{368E2919-F748-4103-9FED-209CE0B0C302}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{368E2919-F748-4103-9FED-209CE0B0C302}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{368E2919-F748-4103-9FED-209CE0B0C302}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{368E2919-F748-4103-9FED-209CE0B0C302}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
