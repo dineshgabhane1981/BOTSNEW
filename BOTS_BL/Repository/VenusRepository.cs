@@ -68,7 +68,7 @@ namespace BOTS_BL.Repository
                     //_MobileNo = "91" + WhatsAppNo;
                     string _Message;
 
-                    _Message = "Dear #01, Your registration for the Handwriting Competition is done successfully. See you soon! Thanks & Regards,";
+                    _Message = "Dear #01, Your registration for the Handwriting Competition is done successfully. See you soon! Thanks & Regards, Venus";
 
                     Thread _job = new Thread(() => SendWhatsText(StudentName, WhatsAppNo, _Message));
                     _job.Start();
