@@ -25,6 +25,7 @@ namespace VenusCompetitionLink.Controllers
         {
             string StudentName = string.Empty;
             string  DOB = string.Empty;
+            string Gender = string.Empty;
             string SchoolName = string.Empty;  
             string ClassStandard = string.Empty;
             string ParentName = string.Empty;
@@ -43,6 +44,7 @@ namespace VenusCompetitionLink.Controllers
             {
                 StudentName = Convert.ToString(item["StudentFullName"]);
                 DOB = Convert.ToString(item["DateOfBirth"]);
+                Gender = Convert.ToString(item["Gender"]);
                 SchoolName = Convert.ToString(item["SchoolName"]);
                 ClassStandard = Convert.ToString(item["Class"]);
                 ParentName = Convert.ToString(item["ParentsName"]);
@@ -54,7 +56,7 @@ namespace VenusCompetitionLink.Controllers
                 
                
             }
-            var data = VR.SaveCompetitionData(StudentName, DOB, SchoolName, ClassStandard, ParentName, WhatsAppNo, EmailId, HomeAddress);
+            var data = VR.SaveCompetitionData(StudentName, DOB,Gender, SchoolName, ClassStandard, ParentName, WhatsAppNo, EmailId, HomeAddress);
             return new JsonResult() { Data = data, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
     }

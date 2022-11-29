@@ -23,7 +23,7 @@ namespace BOTS_BL.Repository
        
 
 
-        public bool SaveCompetitionData(string StudentName, string DOB, string SchoolName, string ClassStandard, string ParentName, string WhatsAppNo, string EmailId, string HomeAddress)
+        public bool SaveCompetitionData(string StudentName, string DOB, string Gender,string SchoolName, string ClassStandard, string ParentName, string WhatsAppNo, string EmailId, string HomeAddress)
         {
             CompetitionDetail data = new CompetitionDetail();
             List<CompetitionDetail> Data = new List<CompetitionDetail>();
@@ -40,12 +40,13 @@ namespace BOTS_BL.Repository
             {
                 SqlParameter param1 = new SqlParameter("pi_StudentName", StudentName);
                 SqlParameter param2 = new SqlParameter("pi_DOB", DOB);
-                SqlParameter param3 = new SqlParameter("pi_SchoolName", SchoolName);
-                SqlParameter param4 = new SqlParameter("pi_ClassStandard", ClassStandard);
-                SqlParameter param5 = new SqlParameter("pi_ParentName", ParentName);
-                SqlParameter param6 = new SqlParameter("pi_WhatsAppNo", WhatsAppNo);
-                SqlParameter param7 = new SqlParameter("pi_EmailId", EmailId);
-                SqlParameter param8 = new SqlParameter("pi_HomeAddress", HomeAddress);
+                SqlParameter param3 = new SqlParameter("pi_Gender", Gender);
+                SqlParameter param4 = new SqlParameter("pi_SchoolName", SchoolName);
+                SqlParameter param5 = new SqlParameter("pi_ClassStandard", ClassStandard);
+                SqlParameter param6 = new SqlParameter("pi_ParentName", ParentName);
+                SqlParameter param7 = new SqlParameter("pi_WhatsAppNo", WhatsAppNo);
+                SqlParameter param8 = new SqlParameter("pi_EmailId", EmailId);
+                SqlParameter param9 = new SqlParameter("pi_HomeAddress", HomeAddress);
                 cmdReport.CommandType = CommandType.StoredProcedure;
                 cmdReport.Parameters.Add(param1);
                 cmdReport.Parameters.Add(param2);
@@ -55,6 +56,7 @@ namespace BOTS_BL.Repository
                 cmdReport.Parameters.Add(param6);
                 cmdReport.Parameters.Add(param7);
                 cmdReport.Parameters.Add(param8);
+                cmdReport.Parameters.Add(param9);
 
                 daReport.Fill(retVal);
 
@@ -68,7 +70,7 @@ namespace BOTS_BL.Repository
                     //_MobileNo = "91" + WhatsAppNo;
                     string _Message;
 
-                    _Message = "Dear #01, Your registration for the Handwriting Competition is done successfully. See you soon! Thanks & Regards, Venus";
+                    _Message = "Dear #01, Your registration for the Handwriting Competition is done successfully. See you soon! Thanks & Regards, Venus Traders";
 
                     Thread _job = new Thread(() => SendWhatsText(StudentName, WhatsAppNo, _Message));
                     _job.Start();

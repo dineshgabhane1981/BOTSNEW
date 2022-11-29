@@ -9,12 +9,12 @@
 <script src="~/Content/cute-alert-master/cute-alert.js"></script>
 <link href="~/Content/cute-alert-master/style-alert.css" rel="stylesheet" />
 
-<div style="background-color:ghostwhite;padding:50px;">
-    <div class="multisteps-form__panel shadow  list-box bg-white panel">
-        <meta name="viewport" content="width=devicewidth, initial-scaled=1.0">
-        <table border="2" cellpadding="5" cellspacing="5" id="tblUpdateData2" style="margin-left:50px;">
+<div >
+    <div >
+        <meta name="viewport" content="width=devicewidth">
+        <table border="2" cellpadding="5" cellspacing="5" id="tblUpdateData2" style="margin-left:50px;margin-top:20px; width:80%;height:100%;">
             <tr>
-                <th colspan="2" style="padding: 10px; text-align: center;font-size: medium;">Student Details</th>
+                <th colspan="2" style="padding: 10px; text-align: center;font-size: medium;">Student Details (Reg.No)</th>
             </tr>
             <tr>
                 <td style="padding:10px;width:200px;font-size:medium;">Student Full Name</td>
@@ -29,6 +29,17 @@
                 </td>
             </tr>
             <tr>
+                <td style="padding: 10px; width: 200px;font-size: medium;">Gender</td>
+                <td style="padding:10px;width:200px;">
+                    <select id="ddlGender" name="Gender" class="input50" style="font-size:medium;">
+                        <option>Select</option>
+                        <option>Male</option>
+                        <option>Female</option>
+                    </select>
+
+                </td>
+            </tr>
+            <tr>
                 <td style="padding: 10px; width: 200px;font-size: medium;">School Name</td>
                 <td style="padding:10px;width:200px;">
                     <input type="text" id="txtSchoolName" class="input50" style="font-size:medium;" />
@@ -37,7 +48,19 @@
             <tr>
                 <td style="padding: 10px; width: 200px;font-size: medium;">Class</td>
                 <td style="padding:10px;width:200px;">
-                    <input type="text" id="txtClass" class="input50" style="font-size:medium;" />
+                    <select id="ddlClass" name="Class" class="input50" style="font-size:medium;">
+                        <option>Select</option>
+                        <option>1st</option>
+                        <option>2nd</option>
+                        <option>3rd</option>
+                        <option>4th</option>
+                        <option>5th</option>
+                        <option>6th</option>
+                        <option>7th</option>
+                        <option>8th</option>
+                        <option>9th</option>
+                        <option>10th</option>
+                    </select>
                 </td>
             </tr>
             <tr>
@@ -53,7 +76,7 @@
                 </td>
             </tr>
             <tr>
-                <td style="padding: 10px;font-size: medium;">EmailId Of Parent</td>
+                <td style="padding: 10px;font-size: medium;">EmailId Of Parent (Optional)</td>
                 <td style="padding:10px;">
                     <input type="text" id="txtEmail" class="input50" style="font-size:medium;" />
                 </td>
@@ -84,63 +107,147 @@
             dateFormat: "yy-mm-dd",
             maxDate: today,
         });
+
+        RemoveRequiredBorderData();
     })
 
         function Submit() {
+            var validationStatus = ValidateData();
+            if (validationStatus) {
+                if (/^[6789]\d{9,9}$/.test($("#txtWhatsAppNo").val())) {
 
-            var Data = [];
-                item = {};
+                    var Data = [];
+                    item = {};
 
 
-            item["StudentFullName"] = $("#txtFullName").val();
-            item["DateOfBirth"] = $("#txtDOB").val();
-            item["SchoolName"] = $("#txtSchoolName").val();
-            item["Class"] = $("#txtClass").val();
-            item["ParentsName"] = $("#txtParentsName").val();
-            item["WhatsAppNoOfParent"] = $("#txtWhatsAppNo").val();
-            item["EmailIdOfParent"] = $("#txtEmail").val();
-            item["HomeAddress"] = $("#txtAddress").val();
+                    item["StudentFullName"] = $("#txtFullName").val();
+                    item["DateOfBirth"] = $("#txtDOB").val();
+                    item["Gender"] = $("#ddlGender").val();
+                    item["SchoolName"] = $("#txtSchoolName").val();
+                    item["Class"] = $("#ddlClass").val();
+                    item["ParentsName"] = $("#txtParentsName").val();
+                    item["WhatsAppNoOfParent"] = $("#txtWhatsAppNo").val();
+                    item["EmailIdOfParent"] = $("#txtEmail").val();
+                    item["HomeAddress"] = $("#txtAddress").val();
 
-                Data.push(item);
-                var DataStr = JSON.stringify(Data);
-                $("#divLoader").show();
-                $.ajax({
-                    type: "POST",
-                    url: '@Url.Action("SaveDetails", "Home")',
-                    data: '{jsonData: ' + JSON.stringify(DataStr) + '}',
-                    contentType: "application/json; charset=utf-8",
-                    dataType: "json",
-                    success: function (result) {
-                        console.log(result);
-                        /*alert(result);*/
-                        if (result == true) {
-                            //alert("hello");
-                            cuteAlert({
-                                type: "success",
-                                title: "Saved",
-                                message: " Data saved successfully",
-                                buttonText: "Okay"
-                            }).then(() => {
-                                var urlLink = "@Url.Action("Index", "Home")";
-                                window.location.href = urlLink;
-                            })
+                    Data.push(item);
+                    var DataStr = JSON.stringify(Data);
+                    $("#divLoader").show();
+                    $.ajax({
+                        type: "POST",
+                        url: '@Url.Action("SaveDetails", "Home")',
+                        data: '{jsonData: ' + JSON.stringify(DataStr) + '}',
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                        success: function (result) {
+                            console.log(result);
+                            /*alert(result);*/
+                            if (result == true) {
+                                //alert("hello");
+                                cuteAlert({
+                                    type: "success",
+                                    title: "Saved",
+                                    message: " Data saved successfully",
+                                    buttonText: "Okay"
+                                }).then(() => {
+                                    var urlLink = "@Url.Action("Index", "Home")";
+                                    window.location.href = urlLink;
+                                })
 
-                            $("#divLoader").hide();
+                                $("#divLoader").hide();
+                            }
+                            else {
+                                cuteAlert({
+                                    type: "error",
+                                    title: "Oops..",
+                                    message: "There is a problem in saving Data",
+                                    buttonText: "Okay"
+                                })
+                                $("#divLoader").hide();
+                            }
+                        },
+                        error: function (result) {
+                            //console.log(result.responseText)
                         }
-                        else {
-                            cuteAlert({
-                                type: "error",
-                                title: "Oops..",
-                                message: "There is a problem in saving Data",
-                                buttonText: "Okay"
-                            })
-                            $("#divLoader").hide();
-                        }
-                    },
-                    error: function (result) {
-                        //console.log(result.responseText)
-                    }
-                });
+                    });
+                }
+                else {
+
+                    cuteAlert({
+                        type: "error",
+                        title: "Oops..",
+                        message: "Invalid MobileNo",
+                        buttonText: "Okay"
+                    })
+                    $("#txtWhatsAppNo").focus();
+                    return false;
+
+                }
+            }
         }
 
+    function ValidateData() {
+        var status = true;
+        if ($("#txtFullName").val() == "") {
+            $('#txtFullName').css('border-color', 'red');
+            status = false;
+        }
+        if ($("#txtDOB").val() == "") {
+            $('#txtDOB').css('border-color', 'red');
+            status = false;
+        }
+        if ($("#ddlGender").val() == "") {
+            $('#ddlGender').css('border-color', 'red');
+            status = false;
+        }
+        if ($("#txtSchoolName").val() == "") {
+            $('#txtSchoolName').css('border-color', 'red');
+            status = false;
+        }
+        if ($("#ddlClass").val() == "") {
+            $('#ddlClass').css('border-color', 'red');
+            status = false;
+        }
+        if ($("#txtParentsName").val() == "") {
+            $('#txtParentsName').css('border-color', 'red');
+            status = false;
+        }
+        if ($("#txtWhatsAppNo").val() == "") {
+            $('#txtWhatsAppNo').css('border-color', 'red');
+            status = false;
+        }
+        //if ($("#txtEmail").val() == "") {
+        //    $('#txtEmail').css('border-color', 'red');
+        //    status = false;
+        //}
+        if ($("#txtAddress").val() == "") {
+            $('#txtAddress').css('border-color', 'red');
+            status = false;
+        }
+
+        if (!status) {
+            cuteAlert({
+                type: "error",
+                title: "Oops..",
+                message: "Please Enter required fields",
+                buttonText: "Okay"
+            })
+
+        }
+
+        return status;
+    }
+
+    function RemoveRequiredBorderData() {
+        $("#txtFullName").focusout(function () {
+            if ($("#txtFullName").val() != "") {
+                $('#txtFullName').css('border-color', '');
+            }
+            else {
+                $('#txtFullName').css('border-color', 'red');
+            }
+        });
+    }
+
+  
 </script>
