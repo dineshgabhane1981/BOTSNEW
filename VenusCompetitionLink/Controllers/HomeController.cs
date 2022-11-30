@@ -34,6 +34,7 @@ namespace VenusCompetitionLink.Controllers
             string WhatsAppNo = string.Empty;
             string EmailId = string.Empty;
             string HomeAddress = string.Empty;
+            string RegNo = string.Empty;
 
             //List<CampaignSaveDetails> SaveData = new List<CampaignSaveDetails>();
             CompetitionDetail objdata = new CompetitionDetail();
@@ -52,9 +53,10 @@ namespace VenusCompetitionLink.Controllers
                 ParentName = Convert.ToString(item["ParentsName"]);
                 WhatsAppNo = Convert.ToString(item["WhatsAppNoOfParent"]);
                 EmailId = Convert.ToString(item["EmailIdOfParent"]);
-                HomeAddress = Convert.ToString(item["HomeAddress"]);            
+                HomeAddress = Convert.ToString(item["HomeAddress"]);
+                RegNo = Convert.ToString(item["RegNo"]);
             }
-            var data = VR.SaveCompetitionData(StudentName, DOB,Gender, SchoolName, ClassStandard, ParentName, WhatsAppNo, EmailId, HomeAddress);
+            var data = VR.SaveCompetitionData(StudentName, DOB,Gender, SchoolName, ClassStandard, ParentName, WhatsAppNo, EmailId, HomeAddress, RegNo);
             return new JsonResult() { Data = data, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
     }

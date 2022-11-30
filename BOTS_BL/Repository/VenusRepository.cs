@@ -40,7 +40,7 @@ namespace BOTS_BL.Repository
 
                 return SLno;
         }
-        public bool SaveCompetitionData(string StudentName, string DOB, string Gender,string SchoolName, string ClassStandard, string ParentName, string WhatsAppNo, string EmailId, string HomeAddress)
+        public bool SaveCompetitionData(string StudentName, string DOB, string Gender,string SchoolName, string ClassStandard, string ParentName, string WhatsAppNo, string EmailId, string HomeAddress, string RegNo)
         {
             CompetitionDetail data = new CompetitionDetail();
             List<CompetitionDetail> Data = new List<CompetitionDetail>();
@@ -83,11 +83,9 @@ namespace BOTS_BL.Repository
                 if (Tbl.Rows[0]["ResponseCode"].ToString() == "0")
                 {
                     status = true;
-                    //string _MobileNo;
-                    //_MobileNo = "91" + WhatsAppNo;
                     string _Message;
 
-                    _Message = "Dear #01, Your registration for the Handwriting Competition is done successfully. See you soon! Thanks & Regards, Venus Traders";
+                    _Message = "Dear #01, Your registration No "+ RegNo + " for the Handwriting Competition is done successfully. See you soon! Thanks & Regards, Venus Traders";
 
                     Thread _job = new Thread(() => SendWhatsText(StudentName, WhatsAppNo, _Message));
                     _job.Start();

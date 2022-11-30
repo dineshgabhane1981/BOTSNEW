@@ -15,7 +15,7 @@
         <table border="2" cellpadding="5" cellspacing="5" id="tblUpdateData2" style="margin-left:50px;margin-top:20px; width:80%;height:100%;">
             <tr>
                 <th colspan="2" style="padding: 10px; text-align: center;font-size: medium;">Student Details (Reg.No) @((ViewBag.RegNo))</th>
-                <input id="hdntemp" hidden />
+                <input  id="hdntemp" hidden value="@(ViewBag.RegNo)"/>
             </tr>
             <tr>
                 <td style="padding:10px;width:200px;font-size:medium;">Student Full Name</td>
@@ -166,7 +166,10 @@
         RemoveRequiredBorderData();
     })
 
-        function Submit() {
+    function Submit() {
+
+        var RegNo = $("#hdntemp").val();
+        
             var validationStatus = ValidateData();
             if (validationStatus) {
                 if (/^[6789]\d{9,9}$/.test($("#txtWhatsAppNo").val())) {
@@ -184,6 +187,7 @@
                     item["WhatsAppNoOfParent"] = $("#txtWhatsAppNo").val();
                     item["EmailIdOfParent"] = $("#txtEmail").val();
                     item["HomeAddress"] = $("#txtAddress").val();
+                    item["RegNo"] = RegNo;
 
                     Data.push(item);
                     var DataStr = JSON.stringify(Data);
