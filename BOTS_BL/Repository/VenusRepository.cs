@@ -85,7 +85,15 @@ namespace BOTS_BL.Repository
                     status = true;
                     string _Message;
 
-                    _Message = "Dear #01, Your registration No "+ RegNo + " for the Handwriting Competition is done successfully. See you soon! Thanks & Regards, Venus Traders";
+                    _Message = "Dear *#01*, *Your registration no.* " + RegNo + " *for the Handwriting Competition is done successfully. See you soon! Thanks & Regards, Venus Traders.*";
+
+
+                    //"Dear *TestBO*,"
+
+                    //"*Your registration no. 5 for the Handwriting Competition is done successfully. See you soon! *"
+
+                    //Thanks & Regards,
+                    //Venus Traders.
 
                     Thread _job = new Thread(() => SendWhatsText(StudentName, WhatsAppNo, _Message));
                     _job.Start();
