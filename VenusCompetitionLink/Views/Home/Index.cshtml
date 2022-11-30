@@ -144,7 +144,7 @@
             </tr>
         </table>
         <div>
-            <input type="button" id="btnSubmit" class="btn btn-primary" style="margin-left: 225px; background-color: #2651be; margin-top:20px;font-size:medium" value="Submit" />
+            <input type="button" id="btnSubmit" class="btn btn-primary" style="margin-left: 440px; background-color: #2651be; margin-top:20px;font-size:medium" value="Submit" />
         </div>
 
     </div>
@@ -157,13 +157,14 @@
     });
 
     $(document).ready(function () {
+        RemoveRequiredBorderData();
         var today = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
         $("#txtDOB").datepicker({
             dateFormat: "yy-mm-dd",
             maxDate: today,
         });
 
-        RemoveRequiredBorderData();
+       
     })
 
     function Submit() {
@@ -255,15 +256,15 @@
             $('#txtDOB').css('border-color', 'red');
             status = false;
         }
-        if ($("#ddlGender").val() == "") {
+        if ($("#ddlGender").val() == "Select") {
             $('#ddlGender').css('border-color', 'red');
             status = false;
         }
-        if ($("#ddlSchoolName").val() == "") {
+        if ($("#ddlSchoolName").val() == "Select") {
             $('#ddlSchoolName').css('border-color', 'red');
             status = false;
         }
-        if ($("#ddlClass").val() == "") {
+        if ($("#ddlClass").val() == "Select") {
             $('#ddlClass').css('border-color', 'red');
             status = false;
         }
@@ -304,6 +305,62 @@
             }
             else {
                 $('#txtFullName').css('border-color', 'red');
+            }
+        });
+        $("#txtDOB").focusout(function () {
+            if ($("#txtDOB").val() != "") {
+                $('#txtDOB').css('border-color', '');
+            }
+            else {
+                $('#txtDOB').css('border-color', 'red');
+            }
+        });
+        $("#ddlGender").focusout(function () {
+            if ($("#ddlGender").val() != "") {
+                $('#ddlGender').css('border-color', '');
+            }
+            else {
+                $('#ddlGender').css('border-color', 'red');
+            }
+        });
+        $("#ddlSchoolName").focusout(function () {
+            if ($("#ddlSchoolName").val() != "") {
+                $('#ddlSchoolName').css('border-color', '');
+            }
+            else {
+                $('#ddlSchoolName').css('border-color', 'red');
+            }
+        });
+        $("#ddlClass").focusout(function () {
+            if ($("#ddlClass").val() != "") {
+                $('#ddlClass').css('border-color', '');
+            }
+            else {
+                $('#ddlClass').css('border-color', 'red');
+            }
+        });
+        $("#txtParentsName").focusout(function () {
+            if ($("#txtParentsName").val() != "") {
+                $('#txtParentsName').css('border-color', '');
+            }
+            else {
+                $('#txtParentsName').css('border-color', 'red');
+            }
+        });
+        $("#txtWhatsAppNo").focusout(function () {
+            if ($("#txtWhatsAppNo").val() != "") {
+                $('#txtWhatsAppNo').css('border-color', '');
+            }
+            else {
+                $('#txtWhatsAppNo').css('border-color', 'red');
+            }
+        });
+        $("#txtAddress").focusout(function () {
+            if ($("#txtAddress").val() != "") {
+                $('#txtAddress').css('border-color', '');
+            }
+            else {
+                $('#txtAddress').css('border-color', 'red');
             }
         });
     }
