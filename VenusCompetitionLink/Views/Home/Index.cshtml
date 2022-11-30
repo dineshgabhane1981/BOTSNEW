@@ -15,6 +15,7 @@
         <table border="2" cellpadding="5" cellspacing="5" id="tblUpdateData2" style="margin-left:50px;margin-top:20px; width:80%;height:100%;">
             <tr>
                 <th colspan="2" style="padding: 10px; text-align: center;font-size: medium;">Student Details (Reg.No) @((ViewBag.RegNo))</th>
+                <input id="hdntemp" hidden />
             </tr>
             <tr>
                 <td style="padding:10px;width:200px;font-size:medium;">Student Full Name</td>
@@ -42,7 +43,61 @@
             <tr>
                 <td style="padding: 10px; width: 200px;font-size: medium;">School Name</td>
                 <td style="padding:10px;width:200px;">
-                    <input type="text" id="txtSchoolName" class="input50" style="font-size:medium;" />
+                    <select id="ddlSchoolName" class="input50" style="font-size:medium;" />
+                    <option>Select</option>
+                    <option>Aagarkar School</option>
+                    <option>Aahilayadevi School </option>
+                    <option>Abhinav English</option>
+                    <option>Abhinav Marathi</option>
+                    <option>AksharNandan</option>
+                    <option>Arya Vidya Mandir Pimpri</option>
+                    <option>Balshikshan </option>
+                    <option>D.S.K School</option>
+                    <option>DES Primary</option>
+                    <option>DES Secondary</option>
+                    <option>Dhyan Ganga School</option>
+                    <option>Dhyanaprabodhini School</option>
+                    <option>Dyanada School</option>
+                    <option>G.R.Palkar </option>
+                    <option>Hujurpaga English Medium </option>
+                    <option>Hujurpaga Katraj</option>
+                    <option>Hujurpaga Primary</option>
+                    <option>Hujurpaga Secondary</option>
+                    <option>Jog School</option>
+                    <option>Kalmadi School</option>
+                    <option>Maharashtra Mandal</option>
+                    <option>Millennium School</option>
+                    <option>MSGGV Primary</option>
+                    <option>MSGGV Secondary</option>
+                    <option>Muktangan</option>
+                    <option>MVEM</option>
+                    <option>MVSEM</option>
+                    <option>N.M.shala</option>
+                    <option>N.M.V Boys</option>
+                    <option>N.M.V Girls</option>
+                    <option>N.M.V Primary</option>
+                    <option>Nanded City School</option>
+                    <option>NEMS</option>
+                    <option>New English School Tilak Road</option>
+                    <option>New India School</option>
+                    <option>Paranjape School</option>
+                    <option>Pawar Public School</option>
+                    <option>Phule Shala Parvati</option>
+                    <option>Ramanbag</option>
+                    <option>Renuka Swarup</option>
+                    <option>S.P.M</option>
+                    <option>S.P.M Public School</option>
+                    <option>Sevasadan</option>
+                    <option>Springdel School</option>
+                    <option>Surya datta School</option>
+                    <option>Symbiosis School</option>
+                    <option>V.D.Vaidya Shala</option>
+                    <option>Vikhe Patil School</option>
+                    <option>Vimalabai Garavare</option>
+                    <option>Walnut School</option>
+
+
+                    </select>
                 </td>
             </tr>
             <tr>
@@ -123,7 +178,7 @@
                     item["StudentFullName"] = $("#txtFullName").val();
                     item["DateOfBirth"] = $("#txtDOB").val();
                     item["Gender"] = $("#ddlGender").val();
-                    item["SchoolName"] = $("#txtSchoolName").val();
+                    item["SchoolName"] = $("#ddlSchoolName").val();
                     item["Class"] = $("#ddlClass").val();
                     item["ParentsName"] = $("#txtParentsName").val();
                     item["WhatsAppNoOfParent"] = $("#txtWhatsAppNo").val();
@@ -200,8 +255,8 @@
             $('#ddlGender').css('border-color', 'red');
             status = false;
         }
-        if ($("#txtSchoolName").val() == "") {
-            $('#txtSchoolName').css('border-color', 'red');
+        if ($("#ddlSchoolName").val() == "") {
+            $('#ddlSchoolName').css('border-color', 'red');
             status = false;
         }
         if ($("#ddlClass").val() == "") {
