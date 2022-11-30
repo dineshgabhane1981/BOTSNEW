@@ -22,7 +22,24 @@ namespace BOTS_BL.Repository
         Exceptions newexception = new Exceptions();
        
 
+        public string GetSLno()
+        {
+            CompetitionDetail data = new CompetitionDetail();
+            List<CompetitionDetail> Data = new List<CompetitionDetail>();
+            string SLno = string.Empty;
 
+            string _Con = Convert.ToString(ConfigurationManager.ConnectionStrings["BOTSDBContext"]);
+            using (var context = new BOTSDBContext(_Con))
+            {
+                // var objcust = (from c in context.CustomerDetails where (names.Contains(c.CustomerThrough) && c.Status == "00") select c).ToList();
+                //var objcust = (from c in context.CompetitionDetails where (c.WhatsAppNo != null) select c.SlNo).Take(1);//orderby c.SlNo descending
+               int count = context.CompetitionDetails.Where(x => x.WhatsAppNo != null).Count();
+                count ++;
+                SLno = count.ToString();
+            }
+
+                return SLno;
+        }
         public bool SaveCompetitionData(string StudentName, string DOB, string Gender,string SchoolName, string ClassStandard, string ParentName, string WhatsAppNo, string EmailId, string HomeAddress)
         {
             CompetitionDetail data = new CompetitionDetail();

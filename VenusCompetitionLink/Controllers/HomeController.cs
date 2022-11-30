@@ -16,6 +16,8 @@ namespace VenusCompetitionLink.Controllers
         VenusRepository VR = new VenusRepository();
         public ActionResult Index()
         {
+            var Slno = VR.GetSLno();
+            ViewBag.RegNo = Slno;
             return View();
         }
 
@@ -50,11 +52,7 @@ namespace VenusCompetitionLink.Controllers
                 ParentName = Convert.ToString(item["ParentsName"]);
                 WhatsAppNo = Convert.ToString(item["WhatsAppNoOfParent"]);
                 EmailId = Convert.ToString(item["EmailIdOfParent"]);
-                HomeAddress = Convert.ToString(item["HomeAddress"]);
-
-
-                
-               
+                HomeAddress = Convert.ToString(item["HomeAddress"]);            
             }
             var data = VR.SaveCompetitionData(StudentName, DOB,Gender, SchoolName, ClassStandard, ParentName, WhatsAppNo, EmailId, HomeAddress);
             return new JsonResult() { Data = data, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
