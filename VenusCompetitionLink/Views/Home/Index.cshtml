@@ -20,9 +20,9 @@
 </style>
 <div class="col-lg-12 col-md-12" style=" border: 1px solid grey; border-radius: 10px;">
 
-    <div class="col-lg-12 col-md-12" style="margin-bottom:30px;text-align:right;margin-top:10px;"><img src="https://blueocktopus.in/BitlyImages/VenusTradersLogo.png" alt="Logo" width="20%"></div>
+    <div class="col-lg-12 col-md-12" style="margin-bottom:10px;text-align:center;margin-top:20px;"><img src="https://blueocktopus.in/BitlyImages/VenusTradersLogo.png" alt="Logo" width="70%"></div>
 
-    <div colspan="2" style="padding: 10px; text-align: center;font-size: medium;"><h1>Handwriting Competition Form </h1></div>
+    <div colspan="2" style="padding: 1px; text-align: center;font-size: medium;"><h1>Handwriting Competition Form </h1></div>
     <div style="margin-top:5px;margin-left:0px;" class="row">
         <div class="col-lg-2 col-md-2" style=" font-size: medium;">
             Full Name
@@ -180,6 +180,17 @@
         /*alert("hello");*/
         Submit();
     });
+
+    $("#txtWhatsAppNo").on("focusout", function () {
+        cuteAlert({
+            type: "question",
+            title: "Confirmation",
+            message: "Please make sure your WhatsApp number is correct as we will be sending you all the competition-related details on your registered WhatsApp number.",
+            confirmText: "Yes"
+        })
+        $("#divLoader").hide();
+    });
+
 
     $(document).ready(function () {
         RemoveRequiredBorderData();
