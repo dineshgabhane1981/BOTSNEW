@@ -9,147 +9,171 @@
 <script src="~/Content/cute-alert-master/cute-alert.js"></script>
 <link href="~/Content/cute-alert-master/style-alert.css" rel="stylesheet" />
 
-<div >
-    <div >
-        <meta name="viewport" content="width=devicewidth">
-        <table border="2" cellpadding="5" cellspacing="5" id="tblUpdateData2" style="margin-left:50px;margin-top:20px; width:80%;height:100%;">
-            <tr>
-                <th colspan="2" style="padding: 10px; text-align: center;font-size: medium;">Handwriting Competition Form @*(Reg.No) @((ViewBag.RegNo))*@</th>
-                @*<input  id="hdntemp" hidden value="@(ViewBag.RegNo)"/>*@
-            </tr>
-            <tr>
-                <td style="padding:10px;width:200px;font-size:medium;">Student Full Name</td>
-                <td style="padding:10px;width:200px;">
-                    <input type="text" id="txtFullName" class="input50" style="font-size:medium;" />
-                </td>
-            </tr>
-            <tr>
-                <td style="padding: 10px; width: 200px;font-size: medium;">Date Of Birth</td>
-                <td style="padding:10px;width:200px;">
-                    <input type="date" id="txtDOB" class="input50" style="font-size:medium;" />
-                </td>
-            </tr>
-            <tr>
-                <td style="padding: 10px; width: 200px;font-size: medium;">Gender</td>
-                <td style="padding:10px;width:200px;">
-                    <select id="ddlGender" name="Gender" class="input50" style="font-size:medium;">
-                        <option>Select</option>
-                        <option>Male</option>
-                        <option>Female</option>
-                    </select>
+<style>
+    .input50 {
+        width: 200px;
+        margin-bottom: 20px;
+        padding: 12px 10px 12px 25px !important;
+        border-radius: 25px !important;
+        border: solid 1px #e1e1e1;
+    }
+</style>
+<div class="col-lg-12 col-md-12" style=" border: 1px solid grey; border-radius: 10px;">
 
-                </td>
-            </tr>
-            <tr>
-                <td style="padding: 10px; width: 200px;font-size: medium;">School Name</td>
-                <td style="padding:10px;width:200px;">
-                    <select id="ddlSchoolName" class="input50" style="font-size:medium;" />
-                    <option>Select</option>
-                    <option>Aagarkar School</option>
-                    <option>Aahilayadevi School </option>
-                    <option>Abhinav English</option>
-                    <option>Abhinav Marathi</option>
-                    <option>AksharNandan</option>
-                    <option>Arya Vidya Mandir Pimpri</option>
-                    <option>Balshikshan </option>
-                    <option>D.S.K School</option>
-                    <option>DES Primary</option>
-                    <option>DES Secondary</option>
-                    <option>Dhyan Ganga School</option>
-                    <option>Dhyanaprabodhini School</option>
-                    <option>Dyanada School</option>
-                    <option>G.R.Palkar </option>
-                    <option>Hujurpaga English Medium </option>
-                    <option>Hujurpaga Katraj</option>
-                    <option>Hujurpaga Primary</option>
-                    <option>Hujurpaga Secondary</option>
-                    <option>Jog School</option>
-                    <option>Kalmadi School</option>
-                    <option>Maharashtra Mandal</option>
-                    <option>Millennium School</option>
-                    <option>MSGGV Primary</option>
-                    <option>MSGGV Secondary</option>
-                    <option>Muktangan</option>
-                    <option>MVEM</option>
-                    <option>MVSEM</option>
-                    <option>N.M.shala</option>
-                    <option>N.M.V Boys</option>
-                    <option>N.M.V Girls</option>
-                    <option>N.M.V Primary</option>
-                    <option>Nanded City School</option>
-                    <option>NEMS</option>
-                    <option>New English School Tilak Road</option>
-                    <option>New India School</option>
-                    <option>Paranjape School</option>
-                    <option>Pawar Public School</option>
-                    <option>Phule Shala Parvati</option>
-                    <option>Ramanbag</option>
-                    <option>Renuka Swarup</option>
-                    <option>S.P.M</option>
-                    <option>S.P.M Public School</option>
-                    <option>Sevasadan</option>
-                    <option>Springdel School</option>
-                    <option>Surya datta School</option>
-                    <option>Symbiosis School</option>
-                    <option>V.D.Vaidya Shala</option>
-                    <option>Vikhe Patil School</option>
-                    <option>Vimalabai Garavare</option>
-                    <option>Walnut School</option>
-                    <option>Others</option>
+    <div class="col-lg-12 col-md-12" style="margin-bottom:30px;text-align:right;margin-top:10px;"><img src="https://blueocktopus.in/BitlyImages/VenusTradersLogo.png" alt="Logo" width="20%"></div>
 
-
-                    </select>
-                </td>
-            </tr>
-            <tr>
-                <td style="padding: 10px; width: 200px;font-size: medium;">Class</td>
-                <td style="padding:10px;width:200px;">
-                    <select id="ddlClass" name="Class" class="input50" style="font-size:medium;">
-                        <option>Select</option>
-                        <option>1st</option>
-                        <option>2nd</option>
-                        <option>3rd</option>
-                        <option>4th</option>
-                        <option>5th</option>
-                        <option>6th</option>
-                        <option>7th</option>
-                        <option>8th</option>
-                        <option>9th</option>
-                        <option>10th</option>
-                    </select>
-                </td>
-            </tr>
-            <tr>
-                <td style="padding: 10px;font-size: medium;">Parents Name</td>
-                <td style="padding:10px;">
-                    <input type="text" id="txtParentsName" class="input50" style="font-size:medium;" />
-                </td>
-            </tr>
-            <tr>
-                <td style="padding: 10px;font-size: medium;">WhatsApp No Of Parent</td>
-                <td style="padding:10px;">
-                    <input type="text" id="txtWhatsAppNo" class="input50" style="font-size:medium;" />
-                </td>
-            </tr>
-            <tr>
-                <td style="padding: 10px;font-size: medium;">EmailId Of Parent (Optional)</td>
-                <td style="padding:10px;">
-                    <input type="text" id="txtEmail" class="input50" style="font-size:medium;" />
-                </td>
-            </tr>
-            <tr>
-                <td style="padding: 10px;font-size: medium;">Home Address</td>
-                <td style="padding:10px;">
-                    <input type="text" id="txtAddress" class="input50" style="font-size:medium;" />
-                </td>
-            </tr>
-        </table>
-        <div>
-            <input type="button" id="btnSubmit" class="btn btn-primary" style="margin-left: 440px; background-color: #2651be; margin-top:20px;font-size:medium" value="Submit" />
+    <div colspan="2" style="padding: 10px; text-align: center;font-size: medium;"><h1>Handwriting Competition Form </h1></div>
+    <div style="margin-top:5px;margin-left:0px;" class="row">
+        <div class="col-lg-2 col-md-2" style=" font-size: medium;">
+            Full Name
         </div>
+        <div class="col-lg-9 col-md-9">
+            <input type="text" id="txtFullName" class="input50" style="font-size:medium;" />
+        </div>
+    </div>
+    <div style="margin-top:5px;margin-left:0px;" class="row">
+        <div class="col-lg-2 col-md-2" style=" font-size: medium;">
+            Date Of Birth
+        </div>
+        <div class="col-lg-9 col-md-9">
+            <input type="date" id="txtDOB" class="input50" style="font-size:medium;" />
+        </div>
+    </div>
+    <div style="margin-top:5px;margin-left:0px;" class="row">
+        <div class="col-lg-2 col-md-2" style=" font-size: medium;">
+            Gender
+        </div>
+        <div class="col-lg-9 col-md-9">
+            <select id="ddlGender" name="Gender" class="input50" style="font-size:medium;">
+                <option>Select</option>
+                <option>Male</option>
+                <option>Female</option>
+            </select>
+        </div>
+    </div>
+    <div style="margin-top:5px;margin-left:0px;" class="row">
+        <div class="col-lg-2 col-md-2" style=" font-size: medium;">
+            School Name
+        </div>
+        <div class="col-lg-9 col-md-9">
+            <select id="ddlSchoolName" class="input50" style="font-size:medium;" />
+            <option>Select</option>
+            <option>Aagarkar School</option>
+            <option>Aahilayadevi School </option>
+            <option>Abhinav English</option>
+            <option>Abhinav Marathi</option>
+            <option>AksharNandan</option>
+            <option>Arya Vidya Mandir Pimpri</option>
+            <option>Balshikshan </option>
+            <option>D.S.K School</option>
+            <option>DES Primary</option>
+            <option>DES Secondary</option>
+            <option>Dhyan Ganga School</option>
+            <option>Dhyanaprabodhini School</option>
+            <option>Dyanada School</option>
+            <option>G.R.Palkar </option>
+            <option>Hujurpaga English Medium </option>
+            <option>Hujurpaga Katraj</option>
+            <option>Hujurpaga Primary</option>
+            <option>Hujurpaga Secondary</option>
+            <option>Jog School</option>
+            <option>Kalmadi School</option>
+            <option>Maharashtra Mandal</option>
+            <option>Millennium School</option>
+            <option>MSGGV Primary</option>
+            <option>MSGGV Secondary</option>
+            <option>Muktangan</option>
+            <option>MVEM</option>
+            <option>MVSEM</option>
+            <option>N.M.shala</option>
+            <option>N.M.V Boys</option>
+            <option>N.M.V Girls</option>
+            <option>N.M.V Primary</option>
+            <option>Nanded City School</option>
+            <option>NEMS</option>
+            <option>New English School Tilak Road</option>
+            <option>New India School</option>
+            <option>Paranjape School</option>
+            <option>Pawar Public School</option>
+            <option>Phule Shala Parvati</option>
+            <option>Ramanbag</option>
+            <option>Renuka Swarup</option>
+            <option>S.P.M</option>
+            <option>S.P.M Public School</option>
+            <option>Sevasadan</option>
+            <option>Springdel School</option>
+            <option>Surya datta School</option>
+            <option>Symbiosis School</option>
+            <option>V.D.Vaidya Shala</option>
+            <option>Vikhe Patil School</option>
+            <option>Vimalabai Garavare</option>
+            <option>Walnut School</option>
+            <option>Others</option>
 
+
+            </select>
+        </div>
+    </div>
+    <div style="margin-top:5px;margin-left:0px;" class="row">
+        <div class="col-lg-2 col-md-2" style=" font-size: medium;">
+            Class
+        </div>
+        <div  class="col-lg-9 col-md-9">
+            <select id="ddlClass" name="Class" class="input50" style="font-size:medium;">
+                <option>Select</option>
+                <option>1st</option>
+                <option>2nd</option>
+                <option>3rd</option>
+                <option>4th</option>
+                <option>5th</option>
+                <option>6th</option>
+                <option>7th</option>
+                <option>8th</option>
+                <option>9th</option>
+                <option>10th</option>
+            </select>
+        </div>
+    </div>
+    <div style="margin-top:5px;margin-left:0px;" class="row">
+        <div class="col-lg-2 col-md-2" style=" font-size: medium;">
+            Parents Name
+        </div>
+        <div class="col-lg-9 col-md-9">
+            <input type="text" id="txtParentsName" class="input50" style="font-size:medium;" />
+        </div>
+    </div>
+    <div style="margin-top:5px;margin-left:0px;" class="row">
+        <div class="col-lg-2 col-md-2" style=" font-size: medium;">
+            WhatsApp No Of Parent
+        </div>
+        <div class="col-lg-9 col-md-9">
+            <input type="text" id="txtWhatsAppNo" class="input50" style="font-size:medium;" />
+        </div>
+    </div>
+    <div style="margin-top:5px;margin-left:0px;" class="row">
+        <div class="col-lg-2 col-md-2" style=" font-size: medium;">
+            EmailId Of Parent (Optional)
+        </div>
+        <div class="col-lg-9 col-md-9">
+            <input type="text" id="txtEmail" class="input50" style="font-size:medium;" />
+        </div>
+    </div>
+    <div style="margin-top:5px;margin-left:0px;" class="row">
+        <div class="col-lg-2 col-md-2" style=" font-size: medium;">
+            Home Address
+        </div>
+        <div class="col-lg-9 col-md-9">
+            <input type="text" id="txtAddress" class="input50" style="font-size:medium;" />
+        </div>
+    </div>
+    <div>
+        <input type="button" id="btnSubmit" class="btn btn-primary" style="background-color: #2651be; margin-top: 20px; font-size: medium"  value="Submit" />
     </div>
 </div>
+
+
+
+
 
 <script>
     $("#btnSubmit").on("click", function () {
@@ -165,13 +189,13 @@
             maxDate: today,
         });
 
-       
+
     })
 
     function Submit() {
 
         var RegNo = $("#hdntemp").val();
-        
+
             var validationStatus = ValidateData();
             if (validationStatus) {
                 if (/^[6789]\d{9,9}$/.test($("#txtWhatsAppNo").val())) {
@@ -221,7 +245,7 @@
                                 cuteAlert({
                                     type: "error",
                                     title: "Oops..",
-                                    message: "Already Registered",
+                                    message: "This number is already registered. Please use another mobile number for registration",
                                     buttonText: "Okay"
                                 })
                                 $("#divLoader").hide();
@@ -376,5 +400,5 @@
         });
     }
 
-  
+
 </script>
