@@ -16,8 +16,8 @@ namespace VenusCompetitionLink.Controllers
         VenusRepository VR = new VenusRepository();
         public ActionResult Index()
         {
-            var Slno = VR.GetSLno();
-            ViewBag.RegNo = Slno;
+            //var Slno = VR.GetSLno();
+            //ViewBag.RegNo = Slno;
             return View();
         }
 
@@ -34,12 +34,11 @@ namespace VenusCompetitionLink.Controllers
             string WhatsAppNo = string.Empty;
             string EmailId = string.Empty;
             string HomeAddress = string.Empty;
-            string RegNo = string.Empty;
+            //string RegNo = string.Empty;
 
-            //List<CampaignSaveDetails> SaveData = new List<CampaignSaveDetails>();
+           
             CompetitionDetail objdata = new CompetitionDetail();
-            //VenusRepository VR = new VenusRepository();
-            //var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            
             JavaScriptSerializer json_serializer = new JavaScriptSerializer();
             json_serializer.MaxJsonLength = int.MaxValue;
             object[] objData = (object[])json_serializer.DeserializeObject(jsonData);
@@ -54,9 +53,9 @@ namespace VenusCompetitionLink.Controllers
                 WhatsAppNo = Convert.ToString(item["WhatsAppNoOfParent"]);
                 EmailId = Convert.ToString(item["EmailIdOfParent"]);
                 HomeAddress = Convert.ToString(item["HomeAddress"]);
-                RegNo = Convert.ToString(item["RegNo"]);
+                //RegNo = Convert.ToString(item["RegNo"]);
             }
-            var data = VR.SaveCompetitionData(StudentName, DOB,Gender, SchoolName, ClassStandard, ParentName, WhatsAppNo, EmailId, HomeAddress, RegNo);
+            var data = VR.SaveCompetitionData(StudentName, DOB,Gender, SchoolName, ClassStandard, ParentName, WhatsAppNo, EmailId, HomeAddress);
             return new JsonResult() { Data = data, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
     }

@@ -14,8 +14,8 @@
         <meta name="viewport" content="width=devicewidth">
         <table border="2" cellpadding="5" cellspacing="5" id="tblUpdateData2" style="margin-left:50px;margin-top:20px; width:80%;height:100%;">
             <tr>
-                <th colspan="2" style="padding: 10px; text-align: center;font-size: medium;">Handwriting Competition (Reg.No) @((ViewBag.RegNo))</th>
-                <input  id="hdntemp" hidden value="@(ViewBag.RegNo)"/>
+                <th colspan="2" style="padding: 10px; text-align: center;font-size: medium;">Handwriting Competition Form @*(Reg.No) @((ViewBag.RegNo))*@</th>
+                @*<input  id="hdntemp" hidden value="@(ViewBag.RegNo)"/>*@
             </tr>
             <tr>
                 <td style="padding:10px;width:200px;font-size:medium;">Student Full Name</td>
@@ -203,7 +203,7 @@
                         success: function (result) {
                             console.log(result);
                             /*alert(result);*/
-                            if (result == true) {
+                            if (result.ResponseCode == "0") {
                                 //alert("hello");
                                 cuteAlert({
                                     type: "success",
@@ -216,6 +216,16 @@
                                 })
 
                                 $("#divLoader").hide();
+                            }
+                            else if (result.ResponseCode == "1") {
+                                cuteAlert({
+                                    type: "error",
+                                    title: "Oops..",
+                                    message: "Already Registered",
+                                    buttonText: "Okay"
+                                })
+                                $("#divLoader").hide();
+
                             }
                             else {
                                 cuteAlert({

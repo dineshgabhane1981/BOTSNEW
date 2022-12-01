@@ -22,31 +22,28 @@ namespace BOTS_BL.Repository
         Exceptions newexception = new Exceptions();
        
 
-        public string GetSLno()
+        //public string GetSLno()
+        //{
+        //    CompetitionDetail data = new CompetitionDetail();
+        //    List<CompetitionDetail> Data = new List<CompetitionDetail>();
+        //    string SLno = string.Empty;
+
+        //    string _Con = Convert.ToString(ConfigurationManager.ConnectionStrings["BOTSDBContext"]);
+        //    using (var context = new BOTSDBContext(_Con))
+        //    {
+        //       int count = context.CompetitionDetails.Where(x => x.WhatsAppNo != null).Count();
+        //        count ++;
+        //        SLno = count.ToString();
+        //    }
+        //        return SLno;
+        //}
+        public VinusResponse SaveCompetitionData(string StudentName, string DOB, string Gender,string SchoolName, string ClassStandard, string ParentName, string WhatsAppNo, string EmailId, string HomeAddress)
         {
             CompetitionDetail data = new CompetitionDetail();
             List<CompetitionDetail> Data = new List<CompetitionDetail>();
-            string SLno = string.Empty;
 
-            string _Con = Convert.ToString(ConfigurationManager.ConnectionStrings["BOTSDBContext"]);
-            using (var context = new BOTSDBContext(_Con))
-            {
-                // var objcust = (from c in context.CustomerDetails where (names.Contains(c.CustomerThrough) && c.Status == "00") select c).ToList();
-                //var objcust = (from c in context.CompetitionDetails where (c.WhatsAppNo != null) select c.SlNo).Take(1);//orderby c.SlNo descending
-               int count = context.CompetitionDetails.Where(x => x.WhatsAppNo != null).Count();
-                count ++;
-                SLno = count.ToString();
-            }
+            VinusResponse ObjRes = new VinusResponse();
 
-                return SLno;
-        }
-        public bool SaveCompetitionData(string StudentName, string DOB, string Gender,string SchoolName, string ClassStandard, string ParentName, string WhatsAppNo, string EmailId, string HomeAddress, string RegNo)
-        {
-            CompetitionDetail data = new CompetitionDetail();
-            List<CompetitionDetail> Data = new List<CompetitionDetail>();
-            bool status;
-            status = false;
-            
             SqlConnection _Con = new SqlConnection(Convert.ToString(ConfigurationManager.ConnectionStrings["BOTSDBContext"]));
             DataSet retVal = new DataSet();
             DataTable Tbl = new DataTable();
@@ -79,13 +76,24 @@ namespace BOTS_BL.Repository
 
                 Tbl = retVal.Tables[0];
 
+                for(int i =0;i< Tbl.Rows.Count;i++)
+                {
+                    
+
+                    ObjRes.ResponseCode = Convert.ToString(Tbl.Rows[0]["ResponseCode"]);
+                    ObjRes.ResponseMessage = Convert.ToString(Tbl.Rows[0]["ResponseMessage"]);
+
+                   
+                }
+                
+
                 daReport.Fill(Tbl);
                 if (Tbl.Rows[0]["ResponseCode"].ToString() == "0")
                 {
-                    status = true;
+                  
                     string _Message;
 
-                    _Message = "Dear *#01*, *Your registration no.* " + RegNo + " *for the Handwriting Competition is done successfully. See you soon! Thanks & Regards, Venus Traders.*";
+                    _Message = "*Dear #01, Your Registration No. " + WhatsAppNo + " for the Handwriting Competition is done successfully. See you soon! Thanks & Regards, Venus Traders.*";
 
 
                     //"Dear *TestBO*,"
@@ -105,7 +113,7 @@ namespace BOTS_BL.Repository
             }
 
 
-            return status;
+            return ObjRes;
 
             
         }

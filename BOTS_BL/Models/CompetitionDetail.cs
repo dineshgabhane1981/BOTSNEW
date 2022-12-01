@@ -35,4 +35,11 @@ namespace BOTS_BL.Models
         [StringLength(1000)]
         public string HomeAddress { get; set; }
     }
+
+    public class VinusResponse
+    {
+        public string ResponseCode { get; set; }
+
+        public string ResponseMessage { get; set; }
+    }
 }
