@@ -112,8 +112,12 @@ namespace BOTS_BL.Repository
                         cmd.Parameters.AddWithValue("@pi_MobileNo", Convert.ToString(dt.Rows[i]["MobileNo"]));
                         cmd.Parameters.AddWithValue("@pi_TxnDateText", dt.Rows[i]["TxnDate"]);      
                         cmd.Parameters.AddWithValue("@pi_CategoryCode", Convert.ToString(dt.Rows[i]["CategoryCode"]));
+                        cmd.Parameters.AddWithValue("@pi_CategoryName", Convert.ToString(dt.Rows[i]["CategoryName"]));
                         cmd.Parameters.AddWithValue("@pi_SubCategoryCode", Convert.ToString(dt.Rows[i]["SubCategoryCode"]));
+                        cmd.Parameters.AddWithValue("@pi_SubCategoryName", Convert.ToString(dt.Rows[i]["SubCategoryName"]));
                         cmd.Parameters.AddWithValue("@pi_ProductCode", Convert.ToString(dt.Rows[i]["ProductCode"]));
+                        cmd.Parameters.AddWithValue("@pi_ProductName", Convert.ToString(dt.Rows[i]["ProductName"]));
+                        cmd.Parameters.AddWithValue("@pi_ProductCount", Convert.ToString(dt.Rows[i]["ProductCount"]));
                         cmd.Parameters.AddWithValue("@pi_InvoiceAmt", dt.Rows[i]["InvoiceAmount"]);
                         Con.Open();
                         cmd.CommandText = "sp_RetailAppTxnUpload";
