@@ -219,6 +219,7 @@
     <Content Include="Content\cute-alert-master\LICENSE" />
     <Content Include="Content\cute-alert-master\README.md" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
+    <Content Include="Scripts\checkemail.JS" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />
     <Content Include="Scripts\jquery-3.4.1.slim.js" />

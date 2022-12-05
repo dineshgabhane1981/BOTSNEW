@@ -8,6 +8,7 @@
 <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
 <script src="~/Content/cute-alert-master/cute-alert.js"></script>
 <link href="~/Content/cute-alert-master/style-alert.css" rel="stylesheet" />
+<script src="~/Scripts/checkemail.js"></script>
 
 <style>
     .input50 {
@@ -36,7 +37,7 @@
             Date Of Birth
         </div>
         <div class="col-lg-9 col-md-9">
-            <input type="date" id="txtDOB" class="input50" style="font-size:medium;" />
+            <input type="date" id="txtDOB" min="2000-01-01" max="2020-12-31" class="input50" style="font-size:medium;" />
         </div>
     </div>
     <div style="margin-top:5px;margin-left:0px;" class="row">
@@ -56,7 +57,7 @@
             School Name
         </div>
         <div class="col-lg-9 col-md-9">
-            <select id="ddlSchoolName" class="input50" style="font-size:medium;" />
+            <select id="ddlSchoolName" class="input50" style="font-size:medium;">
             <option>Select</option>
             <option>Aagarkar School</option>
             <option>Aahilayadevi School </option>
@@ -156,7 +157,7 @@
             EmailId Of Parent (Optional)
         </div>
         <div class="col-lg-9 col-md-9">
-            <input type="text" id="txtEmail" class="input50" style="font-size:medium;" />
+            <input type="email" id="txtEmail" class="input50" style="font-size:medium;" />
         </div>
     </div>
     <div style="margin-top:5px;margin-left:0px;" class="row">
@@ -192,14 +193,33 @@
         $("#divLoader").hide();
     });
 
+    $("#txtEmail").on("focusout", function () {
+
+        var val = $("#txtEmail").val();
+        var status = ValidateEmail(val);
+
+        if (status == 1) {
+            cuteAlert({
+                type: "error",
+                title: "Invalid Email Id",
+                message: "Please check email id",
+                buttonText: "Okay"
+            })
+        }
+        
+        $("#divLoader").hide();
+    });
+
 
     $(document).ready(function () {
         RemoveRequiredBorderData();
         var today = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
-        $("#txtDOB").datepicker({
-            dateFormat: "yy-mm-dd",
-            maxDate: today,
-        });
+        //$("#txtDOB").datepicker({
+        //    dateFormat: "yy-mm-dd",
+        //    yearRange: '2000:' + today + '',
+        //    changeYear: true,
+        //    //maxDate: '1Y',
+        //});
 
 
     })
@@ -207,14 +227,15 @@
     function Submit() {
 
         var RegNo = $("#hdntemp").val();
+        
 
             var validationStatus = ValidateData();
-            if (validationStatus) {
+        if (validationStatus) {
+            
                 if (/^[6789]\d{9,9}$/.test($("#txtWhatsAppNo").val())) {
 
                     var Data = [];
                     item = {};
-
 
                     item["StudentFullName"] = $("#txtFullName").val();
                     item["DateOfBirth"] = $("#txtDOB").val();
@@ -290,6 +311,7 @@
                     return false;
 
                 }
+              
             }
         }
 
