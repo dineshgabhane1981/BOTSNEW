@@ -93,7 +93,7 @@ namespace BOTS_BL.Repository
                   
                     string _Message;
 
-                    _Message = "*Dear #01, Your Registration No. " + WhatsAppNo + " for the Handwriting Competition is done successfully. See you soon! Thanks & Regards, Venus Traders.*";
+                    _Message = "*Dear #01, Your Registration No. " + WhatsAppNo + " for the Handwriting Competition is submitted successfully. See you soon! Thanks & Regards, Venus Traders.*";
 
 
                     //"Dear *TestBO*,"
