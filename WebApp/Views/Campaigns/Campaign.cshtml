@@ -622,7 +622,7 @@
 
         var table = $('#activityCelebrationSecond').DataTable({
             "data": tblCelebrationSecond,
-            "paging": false,
+            "paging": true,
             "ordering": false,
             "info": false,
             "bFilter": false,
@@ -662,7 +662,19 @@
                     }
                 },
                 { data: "NoOfTxn" },
-                { data: "PointsRedeemed" }
+                /*{ data: "TotalSpend" },*/
+                {
+                    "mData": "TotalSpend",
+                    "mRender": function (data, type, row) {
+
+                        if (data != null) {
+                            return '<span>' + addComma(data) + '</span>';
+                        }
+                        else {
+                            return '<span></span>';
+                        }
+                    }
+                },
             ]
         });
         $('#activityCelebrationSecond_filter').hide();

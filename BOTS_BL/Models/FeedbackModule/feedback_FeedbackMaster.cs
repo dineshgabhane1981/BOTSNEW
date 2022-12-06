@@ -34,7 +34,7 @@ namespace BOTS_BL.Models
         [Column(TypeName = "date")]
         public DateTime? DOA { get; set; }
 
-        [StringLength(10)]
+        [StringLength(100)]
         public string HowToKnowAbout { get; set; }
 
         public DateTime? AddedDate { get; set; }

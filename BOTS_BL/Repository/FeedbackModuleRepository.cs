@@ -184,7 +184,7 @@ namespace BOTS_BL.Repository
                         using (var contextdb = new BOTSDBContext(connStr))
                         {
                             string tableScript = "CREATE TABLE [dbo].[feedback_FeedbackMaster]([FeedbackId][int] IDENTITY(1, 1) NOT NULL,[GroupId] [varchar](4) NULL,[OutletId] [varchar](10) NULL," +
-                                                "[MobileNo] [varchar](10) NULL,	[CustomerName] [varchar](100) NULL,	[QuestionId] [varchar](5) NULL,	[QuestionPoints] [varchar](5) NULL,	[DOB] [date] NULL," +
+                                                "[MobileNo] [varchar](10) NULL,	[CustomerName] [varchar](100) NULL,	[QuestionId] [varchar](5) NULL,	[QuestionPoints] [int] NULL,	[DOB] [date] NULL," +
                                                 "[DOA] [date] NULL,	[HowToKnowAbout] [varchar](10) NULL,[AddedDate] [datetime] NULL,[SalesRepresentative] [varchar](10) NULL, [Comments] [nvarchar](max) NULL," +
                                                 "CONSTRAINT[PK_FeedBackModuleMaster] PRIMARY KEY CLUSTERED([FeedbackId] ASC)WITH(PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON[PRIMARY]) ON[PRIMARY]";
                             contextdb.Database.CreateIfNotExists();
@@ -813,7 +813,7 @@ namespace BOTS_BL.Repository
                                 DateTime datet = new DateTime(1900, 01, 01);
                                 var NewId = Convert.ToInt64(CustomerId) + 1;
                                 objnewcust.CustomerId = Convert.ToString(NewId);
-                                objnewcust.Points = feedbackpointsmsg.AwardFeedbackPoints;
+                                //objnewcust.Points = feedbackpointsmsg.AwardFeedbackPoints;
 
                                 objnewcust.CustomerName = "Member";
 
@@ -835,9 +835,14 @@ namespace BOTS_BL.Repository
 
                                 context.CustomerDetails.Add(objnewcust);
                                 context.SaveChanges();
+
+                                objcustdetails = context.CustomerDetails.Where(x => x.MobileNo == mobileNo).FirstOrDefault();
                             }
                             var custpoint = objcustdetails.Points;
-                            objcustdetails.Points = custpoint + feedbackpointsmsg.AwardFeedbackPoints;
+                            if (custpoint == null)
+                                objcustdetails.Points = feedbackpointsmsg.AwardFeedbackPoints;
+                            else
+                                objcustdetails.Points = custpoint + feedbackpointsmsg.AwardFeedbackPoints;
                             context.CustomerDetails.AddOrUpdate(objcustdetails);
                             context.SaveChanges();
                             objtransactionMaster.CustomerId = objcustdetails.CustomerId;
@@ -1225,7 +1230,7 @@ namespace BOTS_BL.Repository
                 MobileMessage = HttpUtility.UrlEncode(MobileMessage);
                 //string type = "TEXT";
                 StringBuilder sbposdata = new StringBuilder();
-                sbposdata.AppendFormat("https://bs.enotify.app/api/sendText?");
+                sbposdata.AppendFormat("https://bo.enotify.app/api/sendText?");
                 sbposdata.AppendFormat("token={0}", _TokenNo);
                 sbposdata.AppendFormat("&phone=91{0}", MobileNo);
                 sbposdata.AppendFormat("&message={0}", MobileMessage);
@@ -1750,25 +1755,25 @@ namespace BOTS_BL.Repository
                             b = "2";
                         }
                         FeedbackData feedback = new FeedbackData();
-                        
+
                         if (groupId != "1013")
                         {
                             feedback = (from f in context.feedback_FeedbackMaster
-                                            where f.MobileNo == item.MobileNo && DbFunctions.TruncateTime(f.AddedDate) == DbFunctions.TruncateTime(item.Datetime)
+                                        where f.MobileNo == item.MobileNo && DbFunctions.TruncateTime(f.AddedDate) == DbFunctions.TruncateTime(item.Datetime)
                                         group f by f.MobileNo into result
-                                            select new FeedbackData
-                                            { 
-                                                Mobilenumber = result.Key,
-                                                q1 = result.Where(x => x.QuestionId == a).Select(x => x.QuestionPoints).FirstOrDefault(),
-                                                q2 = result.Where(x => x.QuestionId == b).Select(x => x.QuestionPoints).FirstOrDefault(),
-                                                q3 = result.Where(x => x.QuestionId == c).Select(x => x.QuestionPoints).FirstOrDefault(),
-                                                q4 = result.Where(x => x.QuestionId == d).Select(x => x.QuestionPoints).FirstOrDefault(),
-                                                salesR = result.Select(x => x.SalesRepresentative).FirstOrDefault(),
-                                                outletid = result.Select(x => x.OutletId).FirstOrDefault(),
-                                                howtoknow = result.Select(x => x.HowToKnowAbout).FirstOrDefault(),
-                                                datetime = result.Select(x => x.AddedDate).FirstOrDefault(),
-                                                comments = result.Select(x => x.Comments).FirstOrDefault(),
-                                            }).FirstOrDefault();
+                                        select new FeedbackData
+                                        {
+                                            Mobilenumber = result.Key,
+                                            q1 = result.Where(x => x.QuestionId == a).Select(x => x.QuestionPoints).FirstOrDefault(),
+                                            q2 = result.Where(x => x.QuestionId == b).Select(x => x.QuestionPoints).FirstOrDefault(),
+                                            q3 = result.Where(x => x.QuestionId == c).Select(x => x.QuestionPoints).FirstOrDefault(),
+                                            q4 = result.Where(x => x.QuestionId == d).Select(x => x.QuestionPoints).FirstOrDefault(),
+                                            salesR = result.Select(x => x.SalesRepresentative).FirstOrDefault(),
+                                            outletid = result.Select(x => x.OutletId).FirstOrDefault(),
+                                            howtoknow = result.Select(x => x.HowToKnowAbout).FirstOrDefault(),
+                                            datetime = result.Select(x => x.AddedDate).FirstOrDefault(),
+                                            comments = result.Select(x => x.Comments).FirstOrDefault(),
+                                        }).FirstOrDefault();
                         }
                         else
                         {
@@ -1789,7 +1794,7 @@ namespace BOTS_BL.Repository
                                             comments = "",
                                         }).FirstOrDefault();
                         }
-                    
+
                         if (feedback != null)
                         {
                             var invoiceamt = context.TransactionMasters.Where(x => x.MobileNo == feedback.Mobilenumber && x.Datetime == today).GroupBy(x => x.MobileNo)
@@ -1815,7 +1820,7 @@ namespace BOTS_BL.Repository
                                 objreport.Q2 = feedback.q2;
                             }
                             else
-                            {                               
+                            {
                                 objreport.Q1 = Convert.ToInt32(feedback.qq1);
                                 objreport.Q2 = Convert.ToInt32(feedback.qq2);
                             }
@@ -1848,7 +1853,11 @@ namespace BOTS_BL.Repository
             string connStr = CR.GetCustomerConnString(GroupId);
             using (var contextdb = new BOTSDBContext(connStr))
             {
-                count = contextdb.feedback_FeedbackMaster.Count();
+                count = contextdb.feedback_FeedbackMaster.GroupBy(c => new
+                {
+                    c.AddedDate,
+                    c.MobileNo,                    
+                }).Count();
             }
             return count;
 

@@ -32,7 +32,7 @@ namespace BOTS_BL.Repository
                         objData = (from c in context.BOTS_TblDiscussion
                                    join ct in context.BOTS_TblCallTypes on c.CallType equals ct.Id
                                    join cld in context.CustomerLoginDetails on c.AddedBy equals cld.LoginId
-                                   where c.GroupId == GroupId && (c.CallType == 12 || c.CallType == 9 || c.CallType == 10 || c.CallType == 18)
+                                   where c.GroupId == GroupId && (c.CallType == 12 || c.CallType == 9 || c.CallType == 10 || c.CallType == 18 || c.CallType == 1)
                                    select new DiscussionDetails
                                    {
                                        Id = c.Id,
@@ -244,10 +244,10 @@ namespace BOTS_BL.Repository
         public List<SelectListItem> GetCallTypes(string LoginType)
         {
             List<SelectListItem> lstCallTypes = new List<SelectListItem>();
-            SelectListItem item1 = new SelectListItem();
-            item1.Value = "0";
-            item1.Text = "Please Select";
-            lstCallTypes.Add(item1);
+            //SelectListItem item1 = new SelectListItem();
+            //item1.Value = "0";
+            //item1.Text = "Please Select";
+            //lstCallTypes.Add(item1);
             if (LoginType == "9" || LoginType == "10")
             {
                 using (var context = new CommonDBContext())
@@ -255,7 +255,7 @@ namespace BOTS_BL.Repository
                     var CallTypes = context.BOTS_TblCallTypes.ToList();
                     foreach (var item in CallTypes)
                     {
-                        if (Convert.ToString(item.Id) == "12" || Convert.ToString(item.Id) == "9" || Convert.ToString(item.Id) == "10" || Convert.ToString(item.Id) == "18")
+                        if (Convert.ToString(item.Id) == "12" || Convert.ToString(item.Id) == "9" || Convert.ToString(item.Id) == "10" || Convert.ToString(item.Id) == "18" || Convert.ToString(item.Id) == "1")
                         {
                             lstCallTypes.Add(new SelectListItem
                             {

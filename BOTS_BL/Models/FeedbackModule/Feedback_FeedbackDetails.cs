@@ -35,6 +35,7 @@ namespace BOTS_BL.Models
 
         public DateTime? AddedDate { get; set; }
         public string Status { get; set; }
+        public int? PerFeedbackCharge { get; set; }
     }
 
     public class FeedbackActiveGroup

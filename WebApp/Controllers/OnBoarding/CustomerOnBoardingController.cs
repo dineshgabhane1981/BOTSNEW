@@ -630,93 +630,98 @@ namespace WebApp.Controllers.OnBoarding
         public void SendSalesEmailToCustomer(int groupId)
         {
             OnBoardingSalesViewModel objData = new OnBoardingSalesViewModel();
-            CommonFunctions common = new CommonFunctions();
-            var NewgroupId = Convert.ToString(groupId);
-            objData.bots_TblGroupMaster = OBR.GetGroupMasterDetails(NewgroupId);
-            objData.bots_TblDealDetails = OBR.GetDealMasterDetails(NewgroupId);
-            objData.bots_TblPaymentDetails = OBR.GetPaymentDetails(NewgroupId);
-            objData.objRetailList = OBR.GetRetailDetails(NewgroupId);
-            var a = new ViewAsPdf();
-            a.ViewName = "CustomerTerms";
-            a.Model = objData;
+            try
+            {
+                CommonFunctions common = new CommonFunctions();
+                var NewgroupId = Convert.ToString(groupId);
+                objData.bots_TblGroupMaster = OBR.GetGroupMasterDetails(NewgroupId);
+                objData.bots_TblDealDetails = OBR.GetDealMasterDetails(NewgroupId);
+                objData.bots_TblPaymentDetails = OBR.GetPaymentDetails(NewgroupId);
+                objData.objRetailList = OBR.GetRetailDetails(NewgroupId);
+                var a = new ViewAsPdf();
+                a.ViewName = "CustomerTerms";
+                a.Model = objData;
 
-            var pdfBytes = a.BuildFile(this.ControllerContext);
+                var pdfBytes = a.BuildFile(this.ControllerContext);
 
-            // Optionally save the PDF to server in a proper IIS location.
-            var fileName = objData.bots_TblGroupMaster.GroupName + ".pdf";
-            var path = Server.MapPath("~/Temp/" + fileName);
-            System.IO.File.WriteAllBytes(path, pdfBytes);
+                // Optionally save the PDF to server in a proper IIS location.
+                var fileName = objData.bots_TblGroupMaster.GroupName + ".pdf";
+                var path = Server.MapPath("~/Temp/" + fileName);
+                System.IO.File.WriteAllBytes(path, pdfBytes);
 
-            StringBuilder sb = new StringBuilder();
-            sb.Append("Dear <b>" + objData.bots_TblGroupMaster.OwnerName + "</b>,");
-            sb.Append("<br/>");
-            sb.Append("<br/>");
-            sb.Append("Retail Name : <b>" + objData.bots_TblGroupMaster.GroupName + "</b>");
-            sb.Append("<br/>");
-            sb.Append("<br/>");
-            sb.Append("Legal Name : <b>" + objData.bots_TblGroupMaster.GroupName + "</b>");
-            sb.Append("<br/>");
-            sb.Append("<br/>");
-            sb.Append("City : <b>" + objData.bots_TblGroupMaster.CityName + "</b>");
-            sb.Append("<br/>");
-            sb.Append("<br/>");
-            sb.Append("Outlet Count : <b>" + objData.objRetailList[0].NoOfEnrolled + "</b> Outlets");
-            sb.Append("<br/>");
-            sb.Append("<br/>");
-            sb.Append("We appreciate your decision to join hands with <b>Blue Ocktopus</b>, which has helped 200+ retail friends to take advantage of our sophisticated Loyalty & Data driven tool. We are confident that we can replicate the same for you, as well!!");
-            sb.Append("<br/>");
-            sb.Append("<br/>");
-            sb.Append("Attached for your reference are the Programme commercials, timelines and key things for your ready perusal.");
-            sb.Append("<br/>");
-            sb.Append("<br/>");
-            sb.Append("We value you as our esteemed partner & look forward for a fruitful business association.");
-            sb.Append("<br/>");
-            sb.Append("<br/>");
-            sb.Append("For any assistance required, please feel free to connect with us.");
-            sb.Append("<br/>");
-            sb.Append("<br/>");
-            sb.Append("Thanks & Regards,");
-            sb.Append("<br/>");
-            sb.Append("<br/>");
-            sb.Append("BLUE OCKTOPUS.");
-            sb.Append("<br/>");
-            sb.Append("<br/>");
-            sb.Append("<br/>");
-            sb.Append("<br/>");
+                StringBuilder sb = new StringBuilder();
+                sb.Append("Dear <b>" + objData.bots_TblGroupMaster.OwnerName + "</b>,");
+                sb.Append("<br/>");
+                sb.Append("<br/>");
+                sb.Append("Retail Name : <b>" + objData.bots_TblGroupMaster.GroupName + "</b>");
+                sb.Append("<br/>");
+                sb.Append("<br/>");
+                sb.Append("Legal Name : <b>" + objData.bots_TblGroupMaster.GroupName + "</b>");
+                sb.Append("<br/>");
+                sb.Append("<br/>");
+                sb.Append("City : <b>" + objData.bots_TblGroupMaster.CityName + "</b>");
+                sb.Append("<br/>");
+                sb.Append("<br/>");
+                sb.Append("Outlet Count : <b>" + objData.objRetailList[0].NoOfEnrolled + "</b> Outlets");
+                sb.Append("<br/>");
+                sb.Append("<br/>");
+                sb.Append("We appreciate your decision to join hands with <b>Blue Ocktopus</b>, which has helped 200+ retail friends to take advantage of our sophisticated Loyalty & Data driven tool. We are confident that we can replicate the same for you, as well!!");
+                sb.Append("<br/>");
+                sb.Append("<br/>");
+                sb.Append("Attached for your reference are the Programme commercials, timelines and key things for your ready perusal.");
+                sb.Append("<br/>");
+                sb.Append("<br/>");
+                sb.Append("We value you as our esteemed partner & look forward for a fruitful business association.");
+                sb.Append("<br/>");
+                sb.Append("<br/>");
+                sb.Append("For any assistance required, please feel free to connect with us.");
+                sb.Append("<br/>");
+                sb.Append("<br/>");
+                sb.Append("Thanks & Regards,");
+                sb.Append("<br/>");
+                sb.Append("<br/>");
+                sb.Append("BLUE OCKTOPUS.");
+                sb.Append("<br/>");
+                sb.Append("<br/>");
+                sb.Append("<br/>");
+                sb.Append("<br/>");
 
-            sb.Append("** This is an Auto generated email. Do not reply to this email id.");
+                sb.Append("** This is an Auto generated email. Do not reply to this email id.");
 
-            var from = ConfigurationManager.AppSettings["FrmEmailOnboarding"].ToString();
-            var PWD = ConfigurationManager.AppSettings["FrmEmailOnboardingPwd"].ToString();
-            MailMessage mail = new MailMessage();
-            MailAddress fromMail = new MailAddress(from);
-            mail.From = fromMail;
+                var from = ConfigurationManager.AppSettings["FrmEmailOnboarding"].ToString();
+                var PWD = ConfigurationManager.AppSettings["FrmEmailOnboardingPwd"].ToString();
+                MailMessage mail = new MailMessage();
+                MailAddress fromMail = new MailAddress(from);
+                mail.From = fromMail;
 
-            mail.To.Add(objData.bots_TblGroupMaster.OwnerEmailId);
-            mail.CC.Add("dinesh@blueocktopus.in");
-            mail.CC.Add("jacqueline@blueocktopus.in");            
-            mail.CC.Add("mahavir@blueocktopus.in");
+                mail.To.Add(objData.bots_TblGroupMaster.OwnerEmailId);
+                mail.CC.Add("dinesh@blueocktopus.in");
+                mail.CC.Add("jacqueline@blueocktopus.in");
+                mail.CC.Add("mahavir@blueocktopus.in");
 
-            System.Net.Mail.Attachment attachment;
-            attachment = new System.Net.Mail.Attachment(path);
-            mail.Attachments.Add(attachment);
+                System.Net.Mail.Attachment attachment;
+                attachment = new System.Net.Mail.Attachment(path);
+                mail.Attachments.Add(attachment);
 
-            //mail.From = from;
-            mail.Subject = "Welcome to Blue Ocktopus | Programme Terms & Key Details";// + GroupDetails.GroupName;
-            mail.SubjectEncoding = System.Text.Encoding.Default;
-            mail.Body = sb.ToString();
-            mail.IsBodyHtml = true;
-            mail.BodyEncoding = System.Text.Encoding.GetEncoding("utf-8");
-            SmtpClient smtp = new SmtpClient();
-            smtp.Host = "smtp.zoho.com";
-            smtp.EnableSsl = true;
-            NetworkCredential networkCredential = new NetworkCredential(from, PWD);
-            smtp.UseDefaultCredentials = true;
-            smtp.Credentials = networkCredential;
-            smtp.Port = 587;
-            smtp.Send(mail);
-
-
+                //mail.From = from;
+                mail.Subject = "Welcome to Blue Ocktopus | Programme Terms & Key Details";// + GroupDetails.GroupName;
+                mail.SubjectEncoding = System.Text.Encoding.Default;
+                mail.Body = sb.ToString();
+                mail.IsBodyHtml = true;
+                mail.BodyEncoding = System.Text.Encoding.GetEncoding("utf-8");
+                SmtpClient smtp = new SmtpClient();
+                smtp.Host = "smtp.zoho.com";
+                smtp.EnableSsl = true;
+                NetworkCredential networkCredential = new NetworkCredential(from, PWD);
+                smtp.UseDefaultCredentials = true;
+                smtp.Credentials = networkCredential;
+                smtp.Port = 587;
+                smtp.Send(mail);
+            }
+            catch(Exception ex)
+            {
+                newexception.AddException(ex, Convert.ToString(groupId));
+            }
         }
 
         public ActionResult CSEditing(string groupId)

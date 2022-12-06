@@ -10,9 +10,9 @@
         <div class="pt-3 pl-3 pr-3 pb-3 mb-3 col-md-12 col-lg-12 card">
 
             <div style="display:flex;" class="col-md-12 col-lg-12">
-                <b>Total Count</b> -  @String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(Model.objConfig.Fees) / 2)
+                <b>Total Count</b> -  @String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(Model.objConfig.Fees) / Model.objConfig.PerFeedbackCharge.Value)
                 <b style="margin-left:80px;">Used Count</b> - @Model.NoOfFeedback
-                <b style="margin-left:80px;">Balance Count</b> - @String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(Model.objConfig.Fees) / 2 - (Model.NoOfFeedback))
+                <b style="margin-left:80px;">Balance Count</b> - @String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(Model.objConfig.Fees) / Model.objConfig.PerFeedbackCharge.Value - (Model.NoOfFeedback))
             </div>
 
         </div>

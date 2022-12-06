@@ -235,7 +235,7 @@
                                                 {
                                                     if (Model.GroupId != "1051")
                                                     {
-                                                        <h1 style="font-size: 34px; color: red;">Welcome <span id="spnCustomerName"></span></h1>
+                                                        <h1 style="font-size: 34px; color: green; font-weight:bold;">Welcome <span id="spnCustomerName"></span></h1>
                                                     }
                                                 }
                                                 if (item.TypeId == 2)
@@ -246,7 +246,7 @@
                                                     }
                                                     else
                                                     {
-                                                        <h2 style="font-size: 34px; color: red;"> @Html.Raw(@item.Text)</h2>
+                                                        <h2 style="font-size: 34px; color: green; font-weight: bold; "> @Html.Raw(@item.Text)</h2>
                                                     }
                                                 }
                                             }
@@ -277,16 +277,20 @@
                                             <div class="cc-selector mb-5 pb-5">
                                                 <input id="@rbtn1" type="radio" name="@name" />
                                                 <label class="drinkcard-cc rbtvariety1" for="@rbtn1" style="margin-right:120px;"></label>
-                                                <label style="position: absolute; margin-top: 80px; margin-left: -200px; font-weight: bold; font-size: 24px;">Very much</label>
-                                                <label style="position: absolute; margin-top: 105px; margin-left: -200px; font-weight: bold; font-size: 24px; ">खूप छान</label>
+                                                <label style="position: absolute; margin-top: 80px; margin-left: -200px; font-weight: bold; font-size: 24px;">Very Good</label>
+                                                <label style="position: absolute; margin-top: 115px; margin-left: -200px; font-weight: bold; font-size: 24px; ">खूप छान</label>
                                                 <input id="@rbtn2" type="radio" name="@name" />
                                                 <label class="drinkcard-cc rbtvariety2" for="@rbtn2" style="margin-right:120px;"></label>
+                                                <label style="position: absolute; margin-top: 80px; margin-left: -200px; font-weight: bold; font-size: 24px;">Good</label>
+                                                <label style="position: absolute; margin-top: 115px; margin-left: -200px; font-weight: bold; font-size: 24px; ">छान</label>
                                                 <input id="@rbtn3" type="radio" name="@name" />
                                                 <label class="drinkcard-cc rbtvariety3" for="@rbtn3" style="margin-right:120px;"></label>
                                                 <input id="@rbtn4" type="radio" name="@name" />
+                                                <label style="position: absolute; margin-top: 80px; margin-left: -200px; font-weight: bold; font-size: 24px;">Average</label>
+                                                <label style="position: absolute; margin-top: 115px; margin-left: -200px; font-weight: bold; font-size: 24px; ">सरासरी</label>
                                                 <label class="drinkcard-cc rbtvariety4" for="@rbtn4"></label>
-                                                <label style="position: absolute; margin-top: 80px; margin-left: -70px; font-weight: bold; font-size: 24px;">Not much</label>
-                                                <label style="position: absolute; margin-top: 105px; margin-left: -70px; font-weight: bold; font-size: 24px;">जास्त नाही</label>
+                                                <label style="position: absolute; margin-top: 80px; margin-left: -70px; font-weight: bold; font-size: 24px;">Bad</label>
+                                                <label style="position: absolute; margin-top: 115px; margin-left: -70px; font-weight: bold; font-size: 24px;">वाईट</label>
                                             </div>
 
                                         }
@@ -347,7 +351,7 @@
                                             {
                                                 if (item.TypeId == 1)
                                                 {
-                                                    <h1 style="color:red; font-size:34px;">
+                                                    <h1 style="color:green; font-weight:bold; font-size:34px;">
                                                         @item.Text
                                                     </h1>
                                                 }

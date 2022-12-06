@@ -1,0 +1,116 @@
+﻿@model List<BOTS_BL.Models.DLCReporting>
+@using System.Globalization
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="app-main__inner">
+    <div class="mb-2 pr-3 pt-3 pl-3 card" style="padding-bottom:20px;">
+        <div>
+            <div class="col-md-12 col-xl-12">
+                <input type="radio" checked id="rdnCurrentMonth" name="DLCfilter" /> Current Month &nbsp;&nbsp;&nbsp;&nbsp;
+                <input type="radio" id="rdnLast3Months" name="DLCfilter" /> Last 3 Months &nbsp;&nbsp;&nbsp;&nbsp;
+                <input type="radio" id="rdnLast6Months" name="DLCfilter" /> Last 6 Months &nbsp;&nbsp;&nbsp;&nbsp;
+                <input type="radio" id="rdnLast12Months" name="DLCfilter" /> Last 12 Months &nbsp;&nbsp;&nbsp;&nbsp;
+                <input type="radio" id="rdnSpecificMonth" name="DLCfilter" /> All &nbsp;&nbsp;&nbsp;&nbsp;
+
+                <button class="btn btn-primary login-btn" id="btnDLCfilter">Filter</button>
+            </div>
+        </div>
+        <div class="table-responsive">
+            <div style="font-size:18px;color:blue;font-weight:bold;">Summary</div>
+            <table class="table" id="tblCampaignSummary">
+                <thead>
+                    <tr>
+                        <th>(Ref by) Member’s Mobile No</th>
+                        <th>(Ref by) Member’s Name</th>
+                        <th>Total Referrals Given</th>
+                        <th>Referral Date</th>
+                        <th>(Ref of) Mobile No</th>
+                        <th>(Ref of) Name</th>
+                        <th>(Ref of) Points Issued</th>
+                        <th>Total Txn Count</th>
+                        <th>Business Generated</th>
+                        <th>Points Redeemed</th>
+                        <th>Points Expired</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>@item.ReferredByMobileNo</td>
+                            <td>@item.ReferredByName</td>
+                            <td>@item.ReferredDate</td>
+                            <td>@item.ReferralMobileNo</td>
+                            <td>@item.ReferralName</td>
+                            <td>@item.ReferralBonusPoints</td>
+                            <td>@item.ReferralTotalTxnCount</td>
+                            <td>@item.ReferralTotalSpend</td>
+                            <td>@item.BonusPointsRedeemed</td>
+                            <td>@item.BonusPointsExpired</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        var table1 = $('#tblCampaignSummary').DataTable();
+        table1.destroy();
+        var table = $('#tblCampaignSummary').DataTable({
+            "bAutoWidth": false,
+            "paging": false,
+            "ordering": false,
+            "info": false,
+            "bFilter": false,
+            "pageLength": 25,
+            "pagingType": "simple_numbers",
+            "columns": [
+                { data: "ReferredByMobileNo" },
+                { data: "ReferredByName" },
+                { data: "ReferredDate" },
+                { data: "ReferralMobileNo" },
+                { data: "ReferralName" },
+                { data: "ReferralBonusPoints" },
+                { data: "ReferralTotalTxnCount" },
+                { data: "ReferralTotalSpend" },
+                { data: "BonusPointsRedeemed" },
+                { data: "BonusPointsExpired" }
+            ]
+        });
+        $('#tblCampaignSummary_filter').hide();
+
+        var table = $('#tblCampaignSummary').DataTable();
+        table.draw();
+
+        $('#btnCampaignfilter').click(function () {
+            var flag = 0;
+            var year = 0;
+            var month = 0;
+            if ($("#rdnCurrentMonth").is(":checked")) {
+                flag = 0;
+            }
+            if ($("#rdnLast3Months").is(":checked")) {
+                flag = 1;
+            }
+            if ($("#rdnLast6Months").is(":checked")) {
+                flag = 2;
+            }
+            if ($("#rdnLast12Months").is(":checked")) {
+                flag = 3;
+            }
+            if ($("#rdnSpecificMonth").is(":checked")) {
+                flag = 4;
+                year = $("#ddlYearList").val();
+                month = $("#ddlMonthList").val();
+            }
+            GetCampaignSummary(flag, year, month);
+        });
+    });
+</script>
+
+
