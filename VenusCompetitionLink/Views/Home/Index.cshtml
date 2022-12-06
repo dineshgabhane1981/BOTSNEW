@@ -19,14 +19,14 @@
         border: solid 1px #e1e1e1;
     }
 </style>
-<div id="dvClass" class="col-lg-12 col-md-12" style=" border: 1px solid grey; border-radius: 10px;">
+<div class="col-lg-12 col-md-12" style=" border: 1px solid grey; border-radius: 10px;">
 
     <div class="col-lg-12 col-md-12" style="margin-bottom:10px;text-align:center;margin-top:20px;"><img src="https://blueocktopus.in/BitlyImages/VenusTradersLogo.png" alt="Logo" width="70%"></div>
 
     <div colspan="2" style="padding: 1px; text-align: center;font-size: medium;"><h1>Handwriting Competition Form </h1></div>
     <div style="margin-top:5px;margin-left:0px;" class="row">
         <div class="col-lg-2 col-md-2" style=" font-size: medium;">
-            Full Name
+            Student's Full Name
         </div>
         <div class="col-lg-9 col-md-9">
             <input type="text" id="txtFullName" class="input50" style="font-size:medium;" />
@@ -34,7 +34,7 @@
     </div>
     <div style="margin-top:5px;margin-left:0px;" class="row">
         <div class="col-lg-2 col-md-2" style=" font-size: medium;">
-            Date Of Birth
+            Student's Date Of Birth
         </div>
         <div class="col-lg-9 col-md-9">
             <input type="date" id="txtDOB" min="2000-01-01" max="2017-12-31" class="input50" style="font-size:medium;" />
@@ -54,7 +54,7 @@
     </div>
     <div style="margin-top:5px;margin-left:0px;" class="row">
         <div class="col-lg-2 col-md-2" style=" font-size: medium;">
-            School Name
+            School Name(Mentioned in alphabetical order)
         </div>
         <div class="col-lg-9 col-md-9">
             <select id="ddlSchoolName" class="input50" style="font-size:medium;">
@@ -138,7 +138,7 @@
     </div>
     <div style="margin-top:5px;margin-left:0px;" class="row">
         <div class="col-lg-2 col-md-2" style=" font-size: medium;">
-            Parents Name
+            Parent's Name
         </div>
         <div class="col-lg-9 col-md-9">
             <input type="text" id="txtParentsName" class="input50" style="font-size:medium;" />
@@ -146,7 +146,7 @@
     </div>
     <div style="margin-top:5px;margin-left:0px;" class="row">
         <div class="col-lg-2 col-md-2" style=" font-size: medium;">
-            WhatsApp No Of Parent
+            Parent's WhatsApp No 
         </div>
         <div class="col-lg-9 col-md-9">
             <input type="text" id="txtWhatsAppNo" class="input50" style="font-size:medium;" />
@@ -154,7 +154,7 @@
     </div>
     <div style="margin-top:5px;margin-left:0px;" class="row">
         <div class="col-lg-2 col-md-2" style=" font-size: medium;">
-            EmailId Of Parent (Optional)
+            Parent's EmailId (Optional)
         </div>
         <div class="col-lg-9 col-md-9">
             <input type="email" id="txtEmail" class="input50" style="font-size:medium;" />
@@ -162,22 +162,22 @@
     </div>
     <div style="margin-top:5px;margin-left:0px;" class="row">
         <div class="col-lg-2 col-md-2" style=" font-size: medium;">
-            Home Address
+            Address
         </div>
         <div class="col-lg-9 col-md-9">
             <input type="text" id="txtAddress" class="input50" style="font-size:medium;" />
         </div>
     </div>
     <div>
-        <input type="button" id="btnSubmit" class="btn btn-primary" style="background-color: #2651be; margin-top: 20px; font-size: medium" value="Submit" />
+        <input type="button" id="btnSubmit"  class="btn btn-primary" style="background-color: #2651be; margin-top: 20px; font-size: medium" value="Submit" />
     </div>
 </div>
-<div id="dvthankyou" class="col-lg-9 col-md-9" style=" border: 1px solid grey;font-size:medium;display:none;margin-top:200px;">
+@*<div id="dvthankyou" class="col-lg-9 col-md-9" style=" border: 1px solid grey;font-size:medium;display:none;margin-top:200px;">
       Your registration has been successfully submitted. <br />Thank You for registering your child for Handwriting Competition <br /> "Venus Traders" 
        <div >
          <button type="button" id="btnClear" onclick="return Index();" class="btn btn-primary" style="margin-right: 10px; background-color:black;font-size:medium;margin-top:20px;">Okay</button>
        </div>
-</div>
+</div>*@
 
 
 
@@ -193,7 +193,7 @@
     $("#txtWhatsAppNo").on("focusout", function () {
        /* alert((/^[6789]\d{9,9}$/.test($("#txtWhatsAppNo").val())));*/
         if ((/^[6789]\d{9,9}$/.test($("#txtWhatsAppNo").val()) == false))
-           
+
         {
             cuteAlert({
                 type: "error",
@@ -202,10 +202,10 @@
                 confirmText: "Okay"
             })
         }
-       
+
         $("#divLoader").hide();
     });
-   
+
 
 
     $("#txtEmail").on("focusout", function () {
@@ -225,7 +225,7 @@
         $("#divLoader").hide();
     });
 
-   
+
 
     $(document).ready(function () {
         RemoveRequiredBorderData();
@@ -275,15 +275,16 @@
                                 //alert("hello");
                                 cuteAlert({
                                     type: "success",
-                                    title: "Saved",
-                                    message: " Data saved successfully",
+                                    title: "Success",
+                                    message: "<b>Venus Traders<b> <br/> Thankyou! <br/> Your registration has been successfully submitted.<br/> Thank You for registering your child for Handwriting Competition",
                                     buttonText: "Okay"
+
                                 }).then(() => {
-                                    $("#dvClass").hide();
-                                    $("#dvthankyou").show();
-                                    @*var urlLink = "@Url.Action("Index", "Home")";
-                                    window.location.href = urlLink;*@
-                                })
+                                    //$("#dvClass").hide();
+                                    //$("#dvthankyou").show();
+                                    var urlLink = "@Url.Action("Index", "Home")";
+                                    window.location.href = urlLink;
+                                });
 
                                 $("#divLoader").hide();
                             }
@@ -453,6 +454,6 @@
         window.location.href = urlLink;
     }
 
-   
+
 
 </script>
