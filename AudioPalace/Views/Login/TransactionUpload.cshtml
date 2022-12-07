@@ -138,7 +138,7 @@
             
 
             <label class="tab" id="one-tab" for="one">Transaction Upload</label>
-            <label class="tab" id="two-tab" for="two">Product Upload</label>
+            @*<label class="tab" id="two-tab" for="two">Product Upload</label>*@
         </div>
         <div class="panels">
             <div class="multisteps-form__panel shadow  list-box bg-white panel" id="one-panel">
@@ -166,7 +166,7 @@
                 </div>
             </div>
 
-            <div class="multisteps-form__panel  p-3 m-3 list-box bg-white panel" id="two-panel">
+            <!--<div class="multisteps-form__panel  p-3 m-3 list-box bg-white panel" id="two-panel">
                 <div id="dvProductUpload">
                     <table border="2" cellpadding="5" cellspacing="5" style="margin-top:50px; margin-left:30px;">
                         <tr>
@@ -184,12 +184,12 @@
                             </td>
                         </tr>
                     </table>
-                    <div style="margin-top:20px;">
+                    <div style="margin-top:20px;">-->
                         @*<input type="file" id="FileUpload" />*@
-                        <input type="button" id="btnUpload"  class="btn btn-primary" style="margin-left: 10px; background-color: #2651be;" value="Upload" />
+                        <!--<input type="button" id="btnUpload"  class="btn btn-primary" style="margin-left: 10px; background-color: #2651be;" value="Upload" />
                     </div>
                 </div>
-            </div>
+            </div>-->
 
         </div>
     </div>
@@ -197,9 +197,9 @@
 
 <script>
 
-    $("#btnUpload").on("click", function () {
-            Upload();
-    });
+    //$("#btnUpload").on("click", function () {
+    //        Upload();
+    //});
 
     $("#btnUpload1").on("click", function () {
         UploadData();
@@ -219,19 +219,19 @@
         window.location.href = fileName;
     }
 
-    function DownloadFile() {
-        //alert("hello");
-        //var fileName = "C:\\AudioPalace\Content\Sheet\TransactionUpload.xlsx";
-        var fileName = "../../Content/Sheet/ProductUpload.xlsx";
-        //var fileName = "~/AudioPalace/Content/Sheet/";
+    //function DownloadFile() {
+    //    //alert("hello");
+    //    //var fileName = "C:\\AudioPalace\Content\Sheet\TransactionUpload.xlsx";
+    //    var fileName = "../../Content/Sheet/ProductUpload.xlsx";
+    //    //var fileName = "~/AudioPalace/Content/Sheet/";
 
-        //var fileName = "~/Content/Sheet/";
+    //    //var fileName = "~/Content/Sheet/";
 
-        console.log(fileName);
-        //alert(fileName);
-        //window.location = fileName;
-        window.location.href = fileName;
-    }
+    //    console.log(fileName);
+    //    //alert(fileName);
+    //    //window.location = fileName;
+    //    window.location.href = fileName;
+    //}
 
     function UploadData() {
 
@@ -305,7 +305,7 @@
 
     }
 
-    function Upload() {
+    @*function Upload() {
 
         if (window.FormData !== undefined) {
             var fileUpload = $("#file1").get(0);
@@ -376,7 +376,7 @@
             }
         }
 
-    }
+    }*@
 
     function Authenticate()
     {

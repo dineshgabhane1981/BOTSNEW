@@ -31,67 +31,67 @@ namespace BOTS_BL.Repository
 
         }
 
-        public AudioPalace BulkInsert(DataTable dt)
-        {
-            AudioPalace Obj = new AudioPalace();
-            int c = 0;
-            Obj.Status = false;
-            try
-            {
-                Obj.TbleRWCount = Convert.ToString(dt.Rows.Count);
+        //public AudioPalace BulkInsert(DataTable dt)
+        //{
+        //    AudioPalace Obj = new AudioPalace();
+        //    int c = 0;
+        //    Obj.Status = false;
+        //    try
+        //    {
+        //        Obj.TbleRWCount = Convert.ToString(dt.Rows.Count);
 
-                for (int i = 0; i < dt.Rows.Count; i++)
-                {
-                    var conStr = ConfigurationManager.ConnectionStrings["BOTSDBContext"].ToString();
-
-
-                    //string dd = "*";
-                    SqlCommand cmd = new SqlCommand();
-                    SqlConnection con_del = new SqlConnection(conStr);
-                    cmd.Connection = con_del;
-                    cmd.CommandText = "DELETE FROM ProductMaster";
-                    cmd.CommandTimeout = 80000;
-                    con_del.Open();
-                    cmd.ExecuteNonQuery();
-                    con_del.Close();
+        //        for (int i = 0; i < dt.Rows.Count; i++)
+        //        {
+        //            var conStr = ConfigurationManager.ConnectionStrings["BOTSDBContext"].ToString();
 
 
-                    SqlConnection con = new SqlConnection(conStr);
-                    SqlBulkCopy objbulk = new SqlBulkCopy(con);
-                    objbulk.DestinationTableName = "ProductMaster";
-
-                    objbulk.ColumnMappings.Add("ProductCode", "ProductCode");
-                    //objbulk.ColumnMappings.Add("CustId", "CustId");
-                    objbulk.ColumnMappings.Add("ProductName", "ProductName");
-                    objbulk.ColumnMappings.Add("CategoryCode", "CategoryCode");
-                    //objbulk.ColumnMappings.Add("OutletId", "OutletId");
-                    objbulk.ColumnMappings.Add("CategoryName", "CategoryName");
-                    //objbulk.ColumnMappings.Add("Status", "Status");
-                    objbulk.ColumnMappings.Add("SubCategoryCode", "SubCategoryCode");
-                    objbulk.ColumnMappings.Add("SubCategoryName", "SubCategoryName");
+        //            //string dd = "*";
+        //            SqlCommand cmd = new SqlCommand();
+        //            SqlConnection con_del = new SqlConnection(conStr);
+        //            cmd.Connection = con_del;
+        //            cmd.CommandText = "DELETE FROM ProductMaster";
+        //            cmd.CommandTimeout = 80000;
+        //            con_del.Open();
+        //            cmd.ExecuteNonQuery();
+        //            con_del.Close();
 
 
-                    con.Open();
-                    objbulk.WriteToServer(dt);
+        //            SqlConnection con = new SqlConnection(conStr);
+        //            SqlBulkCopy objbulk = new SqlBulkCopy(con);
+        //            objbulk.DestinationTableName = "ProductMaster";
 
-                    con.Close();
-                    Obj.Status = true;
+        //            objbulk.ColumnMappings.Add("ProductCode", "ProductCode");
+        //            //objbulk.ColumnMappings.Add("CustId", "CustId");
+        //            objbulk.ColumnMappings.Add("ProductName", "ProductName");
+        //            objbulk.ColumnMappings.Add("CategoryCode", "CategoryCode");
+        //            //objbulk.ColumnMappings.Add("OutletId", "OutletId");
+        //            objbulk.ColumnMappings.Add("CategoryName", "CategoryName");
+        //            //objbulk.ColumnMappings.Add("Status", "Status");
+        //            objbulk.ColumnMappings.Add("SubCategoryCode", "SubCategoryCode");
+        //            objbulk.ColumnMappings.Add("SubCategoryName", "SubCategoryName");
 
-                    {
-                        c++;
-                    }
-                }
+
+        //            con.Open();
+        //            objbulk.WriteToServer(dt);
+
+        //            con.Close();
+        //            Obj.Status = true;
+
+        //            {
+        //                c++;
+        //            }
+        //        }
                 
-            }
+        //    }
             
-            catch (Exception ex)
-            {
-                newexception.AddException(ex, "BulkInsert");
-            }
+        //    catch (Exception ex)
+        //    {
+        //        newexception.AddException(ex, "BulkInsert");
+        //    }
             
-            Obj.DBInsertCount = Convert.ToString(c);
-            return Obj;
-        }
+        //    Obj.DBInsertCount = Convert.ToString(c);
+        //    return Obj;
+        //}
 
 
         public AudioPalace BulkTransaction(DataTable dt)

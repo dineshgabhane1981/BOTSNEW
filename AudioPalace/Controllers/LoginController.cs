@@ -78,62 +78,62 @@ namespace AudioPalace.Controllers
         }
 
 
-        public ActionResult UploadProduct()
-        {
-            if (Request.Files.Count > 0)
-            {
-                try
-                {
-                    DataSet ds = new DataSet();
-                    HttpPostedFileBase files = Request.Files[0];
-                    string fileName = "ProductUpload_" + "_" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".xlsx";
-                    var path = ConfigurationManager.AppSettings["ProductFiles"].ToString();
-                    var fullFilePath = path + "\\" + fileName;
-                    files.SaveAs(path + "\\" + fileName);
+        //public ActionResult UploadProduct()
+        //{
+        //    if (Request.Files.Count > 0)
+        //    {
+        //        try
+        //        {
+        //            DataSet ds = new DataSet();
+        //            HttpPostedFileBase files = Request.Files[0];
+        //            string fileName = "ProductUpload_" + "_" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".xlsx";
+        //            var path = ConfigurationManager.AppSettings["ProductFiles"].ToString();
+        //            var fullFilePath = path + "\\" + fileName;
+        //            files.SaveAs(path + "\\" + fileName);
 
-                    string conString = string.Empty;
+        //            string conString = string.Empty;
 
-                    conString = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" + fullFilePath + ";Extended Properties=\"Excel 12.0;HDR=Yes;IMEX=1\"";
+        //            conString = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" + fullFilePath + ";Extended Properties=\"Excel 12.0;HDR=Yes;IMEX=1\"";
 
-                    using (OleDbConnection connExcel = new OleDbConnection(conString))
-                    {
-                        using (OleDbCommand cmdExcel = new OleDbCommand())
-                        {
-                            using (OleDbDataAdapter odaExcel = new OleDbDataAdapter())
-                            {
-                                cmdExcel.Connection = connExcel;
-                                //Get the name of First Sheet.
-                                connExcel.Open();
-                                DataTable dtExcelSchema;
-                                dtExcelSchema = connExcel.GetOleDbSchemaTable(OleDbSchemaGuid.Tables, null);
-                                string sheetName = dtExcelSchema.Rows[0]["TABLE_NAME"].ToString();
-                                connExcel.Close();
+        //            using (OleDbConnection connExcel = new OleDbConnection(conString))
+        //            {
+        //                using (OleDbCommand cmdExcel = new OleDbCommand())
+        //                {
+        //                    using (OleDbDataAdapter odaExcel = new OleDbDataAdapter())
+        //                    {
+        //                        cmdExcel.Connection = connExcel;
+        //                        //Get the name of First Sheet.
+        //                        connExcel.Open();
+        //                        DataTable dtExcelSchema;
+        //                        dtExcelSchema = connExcel.GetOleDbSchemaTable(OleDbSchemaGuid.Tables, null);
+        //                        string sheetName = dtExcelSchema.Rows[0]["TABLE_NAME"].ToString();
+        //                        connExcel.Close();
 
-                                //Read Data from First Sheet.
-                                connExcel.Open();
-                                cmdExcel.CommandText = "SELECT * From [" + sheetName + "]";
-                                odaExcel.SelectCommand = cmdExcel;
-                                odaExcel.Fill(ds);
-                                connExcel.Close();
+        //                        //Read Data from First Sheet.
+        //                        connExcel.Open();
+        //                        cmdExcel.CommandText = "SELECT * From [" + sheetName + "]";
+        //                        odaExcel.SelectCommand = cmdExcel;
+        //                        odaExcel.Fill(ds);
+        //                        connExcel.Close();
 
                                 
-                            }
+        //                    }
                             
-                        }
-                    }                                
-                    var ObjA = APR.BulkInsert(ds.Tables[0]);
+        //                }
+        //            }                                
+        //            var ObjA = APR.BulkInsert(ds.Tables[0]);
 
-                    return new JsonResult() { Data = ObjA, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
-                }
-                catch (Exception ex)
-                {
-                    newexception.AddException(ex, "UploadProduct");
-                }
+        //            return new JsonResult() { Data = ObjA, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
+        //        }
+        //        catch (Exception ex)
+        //        {
+        //            newexception.AddException(ex, "UploadProduct");
+        //        }
 
-            }
-            return Json("File Not Uploaded Successfully!");
+        //    }
+        //    return Json("File Not Uploaded Successfully!");
 
-        }
+        //}
 
         public ActionResult UploadTransaction()
         {
