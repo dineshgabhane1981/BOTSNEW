@@ -127,12 +127,16 @@
 
 </div>*@
 <div style="background-color:darkgray;padding:50px;">
-    <h4 style="color:black;margin-left:40px;">Date should be in yyyy/mm/dd format</h4>
-
+    <div>
+        <button type="button" id="btnClear" onclick="return Authenticate();" class="btn btn-primary" style="margin-right: 10px; margin-left: 950px;background-color:black;font-size:medium;">LogOut</button>
+        <h4 style="color:black;margin-left:40px;">Date should be in yyyy/mm/dd format</h4>
+    </div>
     <div class="app-main__inner">
         <input class="radio" id="one" name="group" type="radio" checked>
         <input class="radio" id="two" name="group" type="radio">
         <div class="tabs">
+            
+
             <label class="tab" id="one-tab" for="one">Transaction Upload</label>
             <label class="tab" id="two-tab" for="two">Product Upload</label>
         </div>
@@ -157,7 +161,7 @@
                     </table>
                     <div style="margin-top:20px;">
                         @*<input type="file" id="FileUpload" />*@
-                        <input type="button" id="btnUpload1" class="btn btn-primary" style="margin-left: 10px; background-color: #2651be;" value="UploadData" />
+                        <input type="button" id="btnUpload1"  class="btn btn-primary" style="margin-left: 10px; background-color: #2651be;" value="UploadData" />
                     </div>
                 </div>
             </div>
@@ -182,7 +186,7 @@
                     </table>
                     <div style="margin-top:20px;">
                         @*<input type="file" id="FileUpload" />*@
-                        <input type="button" id="btnUpload" class="btn btn-primary" style="margin-left: 10px; background-color: #2651be;" value="Upload" />
+                        <input type="button" id="btnUpload"  class="btn btn-primary" style="margin-left: 10px; background-color: #2651be;" value="Upload" />
                     </div>
                 </div>
             </div>
@@ -192,7 +196,7 @@
 </div>
 
 <script>
-    
+
     $("#btnUpload").on("click", function () {
             Upload();
     });
@@ -255,9 +259,13 @@
                             cuteAlert({
                                 type: "success",
                                 title: "Uploaded",
-                                message: "Data Uploaded, Total Rows in Excel  " + result.TbleRWCount + "  Total Inserted Rows  " + result.DBInsertCount,
+                                message: "Data Uploaded <br/> Total Rows in Excel  " + result.TbleRWCount + " <br/>  Total Inserted Rows  " + result.DBInsertCount,
                                 buttonText: "Okay"
-                            })
+                            }).then(() => {
+
+                                var urlLink = "@Url.Action("TransactionUpload", "Login")";
+                                window.location.href = urlLink;
+                                })
                         }
                         else {
                             cuteAlert({
@@ -269,7 +277,7 @@
                             $("#divLoader").hide();
                         }
                     },
-                    
+
                     error: function (err) {
                         cuteAlert({
                             type: "error",
@@ -323,9 +331,13 @@
                             cuteAlert({
                                 type: "success",
                                 title: "Uploaded",
-                                message: "Data Uploaded, Total Rows in Excel  " + result.TbleRWCount + "  Total Inserted Rows  " + result.DBInsertCount ,
+                                message: "Data Uploaded <br/> Total Rows in Excel  " + result.TbleRWCount + " <br/> Total Inserted Rows  " + result.DBInsertCount ,
                                 buttonText: "Okay"
-                            })
+                            }).then(() => {
+
+                                var urlLink = "@Url.Action("TransactionUpload", "Login")";
+                                window.location.href = urlLink;
+                                })
                         }
                         else {
                             cuteAlert({
@@ -365,6 +377,19 @@
         }
 
     }
+
+    function Authenticate()
+    {
+        var urlLink = "@Url.Action("Authenticate", "Login")";
+        window.location.href = urlLink;
+    }
+    @*function TransactionUpload()
+    {
+        var urlLink = "@Url.Action("TransactionUpload", "Login")";
+        window.location.href = urlLink;
+    }*@
+
+
 
 
 

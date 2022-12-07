@@ -40,41 +40,47 @@ namespace BOTS_BL.Repository
             {
                 Obj.TbleRWCount = Convert.ToString(dt.Rows.Count);
 
-                var conStr = ConfigurationManager.ConnectionStrings["BOTSDBContext"].ToString();
-
-                
-                //string dd = "*";
-                SqlCommand cmd = new SqlCommand();
-                SqlConnection con_del = new SqlConnection(conStr);
-                cmd.Connection = con_del;
-                cmd.CommandText = "DELETE FROM ProductMaster";
-                cmd.CommandTimeout = 80000;
-                con_del.Open();
-                cmd.ExecuteNonQuery();
-                con_del.Close();
+                for (int i = 0; i < dt.Rows.Count; i++)
+                {
+                    var conStr = ConfigurationManager.ConnectionStrings["BOTSDBContext"].ToString();
 
 
-                SqlConnection con = new SqlConnection(conStr);
-                SqlBulkCopy objbulk = new SqlBulkCopy(con);
-                objbulk.DestinationTableName = "ProductMaster";
+                    //string dd = "*";
+                    SqlCommand cmd = new SqlCommand();
+                    SqlConnection con_del = new SqlConnection(conStr);
+                    cmd.Connection = con_del;
+                    cmd.CommandText = "DELETE FROM ProductMaster";
+                    cmd.CommandTimeout = 80000;
+                    con_del.Open();
+                    cmd.ExecuteNonQuery();
+                    con_del.Close();
 
-                objbulk.ColumnMappings.Add("ProductCode", "ProductCode");
-                //objbulk.ColumnMappings.Add("CustId", "CustId");
-                objbulk.ColumnMappings.Add("ProductName", "ProductName");
-                objbulk.ColumnMappings.Add("CategoryCode", "CategoryCode");
-                //objbulk.ColumnMappings.Add("OutletId", "OutletId");
-                objbulk.ColumnMappings.Add("CategoryName", "CategoryName");
-                //objbulk.ColumnMappings.Add("Status", "Status");
-                objbulk.ColumnMappings.Add("SubCategoryCode", "SubCategoryCode");
-                objbulk.ColumnMappings.Add("SubCategoryName", "SubCategoryName");
-                
 
-                con.Open();
-                objbulk.WriteToServer(dt);
-                
-                con.Close();
-                Obj.Status = true;
+                    SqlConnection con = new SqlConnection(conStr);
+                    SqlBulkCopy objbulk = new SqlBulkCopy(con);
+                    objbulk.DestinationTableName = "ProductMaster";
 
+                    objbulk.ColumnMappings.Add("ProductCode", "ProductCode");
+                    //objbulk.ColumnMappings.Add("CustId", "CustId");
+                    objbulk.ColumnMappings.Add("ProductName", "ProductName");
+                    objbulk.ColumnMappings.Add("CategoryCode", "CategoryCode");
+                    //objbulk.ColumnMappings.Add("OutletId", "OutletId");
+                    objbulk.ColumnMappings.Add("CategoryName", "CategoryName");
+                    //objbulk.ColumnMappings.Add("Status", "Status");
+                    objbulk.ColumnMappings.Add("SubCategoryCode", "SubCategoryCode");
+                    objbulk.ColumnMappings.Add("SubCategoryName", "SubCategoryName");
+
+
+                    con.Open();
+                    objbulk.WriteToServer(dt);
+
+                    con.Close();
+                    Obj.Status = true;
+
+                    {
+                        c++;
+                    }
+                }
                 
             }
             
@@ -82,7 +88,7 @@ namespace BOTS_BL.Repository
             {
                 newexception.AddException(ex, "BulkInsert");
             }
-            c++;
+            
             Obj.DBInsertCount = Convert.ToString(c);
             return Obj;
         }
@@ -118,7 +124,7 @@ namespace BOTS_BL.Repository
                         cmd.Parameters.AddWithValue("@pi_ProductCode", Convert.ToString(dt.Rows[i]["ProductCode"]));
                         cmd.Parameters.AddWithValue("@pi_ProductName", Convert.ToString(dt.Rows[i]["ProductName"]));
                         cmd.Parameters.AddWithValue("@pi_ProductCount", Convert.ToString(dt.Rows[i]["ProductCount"]));
-                        cmd.Parameters.AddWithValue("@pi_InvoiceAmt", dt.Rows[i]["InvoiceAmount"]);
+                        cmd.Parameters.AddWithValue("@pi_InvoiceAmt", dt.Rows[i]["InvoiceAmt"]);
                         Con.Open();
                         cmd.CommandText = "sp_RetailAppTxnUpload";
                         cmd.CommandType = CommandType.StoredProcedure;
