@@ -6,7 +6,7 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using BOTS_BL.Models;
+//using BOTS_BL.Models;
 using System.Data;
 using System.Configuration;
 using System.Threading;
@@ -20,7 +20,7 @@ namespace BOTS_BL.Repository
     {
         
         Exceptions newexception = new Exceptions();
-       
+
 
         //public string GetSLno()
         //{
@@ -37,6 +37,8 @@ namespace BOTS_BL.Repository
         //    }
         //        return SLno;
         //}
+
+       
         public VinusResponse SaveCompetitionData(string StudentName, string DOB, string Gender,string SchoolName, string ClassStandard, string ParentName, string WhatsAppNo, string EmailId, string HomeAddress)
         {
             CompetitionDetail data = new CompetitionDetail();
@@ -130,7 +132,7 @@ namespace BOTS_BL.Repository
                 StringBuilder sbposdata = new StringBuilder();
                 string _Url = "https://bo.enotify.app/api/sendText?";
                 sbposdata.AppendFormat(_Url);
-                sbposdata.AppendFormat("token={0}", "5fc8ed623629423c01ce4221");
+                sbposdata.AppendFormat("token={0}", "63917ceb9504293bbcc53cd1");
                 sbposdata.AppendFormat("&phone=91{0}", _MobileNo);
                 //sbposdata.AppendFormat("&link={0}", _ImageUrl);
                 sbposdata.AppendFormat("&message={0}", _Message);
