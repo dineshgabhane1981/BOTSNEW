@@ -133,7 +133,7 @@
     <div class="mb-3 card col-md-12 col-sm-12" style="padding-top:20px; display:none;" id="dvEnrollment">
         <div class="content col-md-12 col-sm-12 row mb-3">
             <div class="col-md-12 col-sm-12 row">
-                <div class="col-md-2 col-sm-2" style="margin-top:10px;" >
+                <div class="col-md-2 col-sm-2" style="margin-top:10px;">
                     Mobile No
                 </div>
                 <div class="col-md-4 col-sm-4" style="margin-top:10px;">
@@ -188,6 +188,9 @@
                     <input id="txtADate" type="text" class="input50" />
                 </div>
             </div>
+            
+
+
         </div>
     </div>
     <div class="mb-3 card col-md-12 col-sm-12" style="padding-top:20px; display:none;" id="dvInvoice">
@@ -200,6 +203,22 @@
                     <input id="txtInvoiceNo" type="text" class="input50" />
                 </div>
             </div>
+            <div class="col-md-12 col-sm-12 row" style="display:none" id="dyndivEnrol1">
+                <div class="col-md-2 col-sm-2" style="margin-top:10px;">
+                    Dynamic Field
+                </div>
+                <div class="col-md-4 col-sm-4" style="margin-top:10px;" id="dyndivEnrol2">
+
+                </div>
+            </div>
+            <div class="col-md-12 col-sm-12 row" style="display:none" id="dyndivEnrol3">
+                <div class="col-md-2 col-sm-2" style="margin-top:10px;">
+                    Dynamic Field
+                </div>
+                <div class="col-md-4 col-sm-4" style="margin-top:10px;" id="dyndivEnrol4">
+
+                </div>
+            </div>
             <div class="col-md-12 col-sm-12 row">
                 <div class="col-md-2 col-sm-2" style="margin-top:10px;">
                     Invoice Amt
@@ -208,6 +227,7 @@
                     <input id="txtInvoiceAmt" type="number" min="1" class="input50" />
                 </div>
             </div>
+
             <input id="txtOTPval" type="number" min="1" class="input50" hidden />
             <input id="txtBurnAmt" type="number" min="1" class="input50" hidden />
             <div class="col-md-12 col-sm-12 row" style="margin-top: 10px;">
@@ -242,7 +262,7 @@
     </div>
 
     <div class="mb-3 card col-md-12 col-sm-12" style="padding-top:20px; display:none;" id="dvInvoiceCustExist">
-        <div class="content col-md-12 col-sm-12 row mb-3">
+        <div class="content col-md-12 col-sm-12 row mb-3" >
             <div class="col-md-12 col-sm-12 row">
                 <div class="col-md-2 col-sm-2" style="margin-top:10px;">
                     Invoice No
@@ -259,6 +279,17 @@
                     <input id="txtInvoiceAmOldt" type="number" min="1" class="input50" />
                 </div>
             </div>
+            <div class="col-md-12 col-sm-12 row" id="CusExistContain">
+                
+            </div>
+            @*<div class="col-md-12 col-sm-12 row" style="display:none" id="dynCustExistdiv3">
+                <div class="col-md-2 col-sm-2" style="margin-top:10px;">
+                    Dynamic Field
+                </div>
+                <div class="col-md-4 col-sm-4" style="margin-top:10px;" id="dynCustExistdiv4">
+                
+                </div>
+            </div>*@
             <div class="col-md-12 col-sm-12 row" id="BurnPoints" style="display: none;">
                 <div class="col-md-2 col-sm-2" style="margin-top:10px;">
                     Amt To Redeem
@@ -323,20 +354,94 @@
                 dataType: "json",
                 success: function (response) {
                     console.log(response);
-                    if (response.ResponseCode == "00") {
-                        $("#spnMobileNo").text(response.MobileNo);
-                        $("#spnCustName").text(response.CustomerName);
-                        $("#spnCardNo").text(response.CardNo);
-                        $("#spnPointsBalance").text(response.PointBalance);
-                        $("#spnTotalSpend").text(response.TotalSpend);
-                        $("#spnLastTxnDate").text(response.LastTxnDate);
-                        $("#dvCustomerDetails").show();
+                    alert(response.objCDetails.ResponseCode);
+                    
+                    if (response.objCDetails.ResponseCode == "00") {
+                        $("#spnMobileNo").text(response.objCDetails.MobileNo);
+                        $("#spnCustName").text(response.objCDetails.CustomerName);
+                        $("#spnCardNo").text(response.objCDetails.CardNo);
+                        $("#spnPointsBalance").text(response.objCDetails.PointBalance);
+                        $("#spnTotalSpend").text(response.objCDetails.TotalSpend);
+                        $("#spnLastTxnDate").text(response.objCDetails.LastTxnDate);
 
+                        var c = Object.keys(response.objJsonData.JsonList1).length;// count of values in JsonList1
+                        alert(c);                     
+                        var count, D1, items;
+                        D1 = '';
+                        var myselect = [];
+                        var dynCustExistdiv1 = [];
+                        var dynCustExistdiv2 = [];
+                        var dynCustExistName = [];
+                        for (j = 0; j <= c; j++) {
+                            count = 1
+                            
+                            $.each(response.objJsonData.JsonList1[j], function (i, item) {
+
+
+                                 Type = item.FieldOptionId
+                                
+                                if (Type == 3) {
+                                    alert("Type3");
+                                    D1 += "<option value='" + count + "'>" + item.FieldValue + "</option>";
+                                }
+                                else if (Type == 1) {
+                                    alert("Type1");
+                                }
+                                count++;
+                            });
+
+                            $("#CusExistContain").html('<div class="col-md-12 col-sm-12 row" id="' + dynCustExistdiv1[j] + '" ></div>');
+                            //$("#" +dynCustExistdiv1[j]).html('<label>Reached the limit'+j+'</label>');
+                            $("#" + dynCustExistdiv1[j]).append('<div id="' + dynCustExistName[j] + '">Dynamic Field</div>');
+                            //$("#" + dynCustExistdiv1[j]).addClass("class= col-md-12 col-sm-12 row");
+                            $("#" + dynCustExistName[j]).attr("class", "col-md-2 col-sm-2", "style", "margin-top:10px;");
+                            //$("#" + dynCustExistName[j]).attr("style", "margin-top:10px;");
+
+                            $("#" + dynCustExistdiv1[j]).append('<div id="' + dynCustExistdiv2[j] + '"></div>');
+                            $("#" + dynCustExistdiv2[j]).attr("class", "col-md-4 col-sm-4", "style", "margin-top:10px;");
+                            //$("#" + dynCustExistdiv2[j]).append('<input id="Test" type ="text" />');
+                            //$("#Test").attr("class", "input50");
+                            //$("#" + dynCustExistdiv1[j]).html('<div class="col-md-4 col-sm-4" style="margin-top:10px;" id="' + dynCustExistdiv2[j] + '"></div>');
+                            /*$("#" + dynCustExistdiv1[j]).html('<div id="' + dynCustExistdiv2[j] + '"></div>');*/
+
+                            if (Type == 3) {
+                                //alert("Inside if");
+                                //myselect[j] = j;
+                                items = '<select id="' + myselect[j] + '">' + D1 + '</select>';
+
+                                /*alert(items);*/
+                                $("#" + dynCustExistdiv2[j]).append(items);
+                                $("#" + myselect[j]).attr("input50");
+
+                                alert($("#" + myselect[j]).val());
+                                
+                                
+                            }
+                            @* <div class="col-md-12 col-sm-12 row" style="display:none" id="dynCustExistdiv1">
+                                <div class="col-md-2 col-sm-2" style="margin-top:10px;">
+                                    Dynamic Field
+                                </div>
+                                <div class="col-md-4 col-sm-4" style="margin-top:10px;" id="dynCustExistdiv2">
+
+                                </div>
+                            </div> *@
+                        }                        
+                        
+                        //var items = '<select id="myselect">' + D1 + '</select>';
+                        //alert(items);
+                                           
+                        //$("#dynCustExistdiv2").html(items);
+                        //$("#myselect").addClass("input50");
+                        //alert($("#myselect").val());
+
+                        $("#dvCustomerDetails").show();
+                        
                         $("#dvInvoiceCustExist").show();
+                        $("#dynCustExistdiv1").show();
                         $("#dvEnrollment").hide();
                         $("#dvInvoice").hide();
                     }
-                    if (response.ResponseCode == "06") {
+                    if (response.objCDetails.ResponseCode == "06") {
                         cuteAlert({
                             type: "question",
                             title: "Are you sure?",
@@ -513,6 +618,8 @@
             item["MobileNo"] = $("#txtMobileNo").val();
             item["InvoiceNo"] = $("#txtInvoiceNoOld").val();
             item["InvoiceAmt"] = $("#txtInvoiceAmOldt").val();
+        alert($("#myselect").val());
+            
 
             FilterData.push(item);
             var data = JSON.stringify(FilterData);

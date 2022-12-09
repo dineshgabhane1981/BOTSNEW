@@ -11,12 +11,140 @@ using System.Threading;
 using System.Web;
 using System.Net;
 using System.IO;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using System.Web.Script.Serialization;
 
 namespace BOTS_BL.Repository
 {
     public class RetailerWebRepository
     {
         CustomerRepository CR = new CustomerRepository();
+        Exceptions newexception = new Exceptions();
+
+        public List<DynamicFieldInfo>[] DynamicData(string connectionString)
+        {
+            DynamicFieldInfo Obj = new DynamicFieldInfo();
+            
+
+            //List<DynamicFieldInfo> objListDymanic = new List<DynamicFieldInfo>();
+
+
+            List<DynamicFieldInfo> objList2 = new List<DynamicFieldInfo>();
+            List<DynamicFieldInfo>[] Obj1 = new List<DynamicFieldInfo>[1000];
+            //List<JSONDATA> DynJson = new List<JSONDATA>();
+
+            JSONDATA J = new JSONDATA();
+
+
+
+
+            SqlConnection _Con = new SqlConnection(connectionString);
+            DataSet retVal = new DataSet();
+            DataTable Tbl = new DataTable();
+            SqlCommand cmdReport = new SqlCommand("sp_DynamicDataJSON", _Con);
+            SqlDataAdapter daReport = new SqlDataAdapter(cmdReport);
+
+            using (cmdReport)
+            {
+                SqlParameter param1 = new SqlParameter("pi_Date", DateTime.Now.ToString("yyyy-MM-dd"));
+                cmdReport.CommandType = CommandType.StoredProcedure;
+                cmdReport.Parameters.Add(param1);
+                
+                daReport.Fill(retVal);
+
+                Tbl = retVal.Tables[0];
+                var JsonData = Tbl.Rows[0]["JSONData"];
+
+                //Obj = JsonConvert.DeserializeObject<DynamicFieldInfo>((string)JsonData);
+                //var ObjJSON = JsonConvert.DeserializeObject<JSONDATA>((string)JsonData);
+                //JObject jsonObj = JObject.Parse((string)JsonData);
+                //IEnumerable<JToken> pricyProducts = JsonData.SelectTokens("$..user");
+                JavaScriptSerializer json_serializer = new JavaScriptSerializer();
+                json_serializer.MaxJsonLength = int.MaxValue;
+                object[] objOutletData = (object[])json_serializer.DeserializeObject((string)JsonData);
+
+                List<DynamicFieldInfo> objListDymanic  = new List<DynamicFieldInfo>();
+
+                //List<DynamicFieldInfo>  a[10] = new List<DynamicFieldInfo>();
+                int i = 1;
+                foreach (Dictionary<string, object> item in objOutletData)
+                {  
+                    
+                    
+                        DynamicFieldInfo DymFld = new DynamicFieldInfo();
+                        DymFld.Fieldid = Convert.ToString(item["Fieldid"]);
+                        DymFld.FieldOptionId = Convert.ToString(item["FieldOptionId"]);
+                        DymFld.FieldTypeId = Convert.ToString(item["FieldTypeId"]);
+                        DymFld.FieldValue = Convert.ToString(item["FieldValue"]);
+
+                        objListDymanic.Add(DymFld);                       
+                }
+
+
+                int C = objListDymanic.GroupBy(data => data.Fieldid).Count();
+
+                 var query = new DynamicFieldInfo[C];
+               
+                List<DynamicFieldInfo> objList1 = new List<DynamicFieldInfo>();
+                //List<DynamicFieldInfo> objList1 = new List<DynamicFieldInfo>[C];
+                //J.JsonList1 = new List<DynamicFieldInfo>[]();
+                //for ( i = 1;i<=C;i++)
+                //{
+                //    string s = Convert.ToString(i);
+
+                //     objList1 = objListDymanic.Where(data => data.Fieldid == s).ToList();
+
+                //    J.JsonList1 = objList1;
+                //}
+                //var query1 = objListDymanic.Where(data => data.Fieldid == "1");
+
+
+
+                var distinctFieldId = objListDymanic?.Select(o => o.Fieldid).Distinct();
+                List<DynamicFieldInfo>[] dynamicFieldInfos = new List<DynamicFieldInfo>[distinctFieldId.Count()];
+                if (distinctFieldId != null && distinctFieldId.Any())
+                {
+                    
+                    foreach (var fieldid in distinctFieldId)
+                    {
+                        dynamicFieldInfos[Convert.ToInt16(fieldid) - 1] = objListDymanic?.Where(data => data.Fieldid == fieldid).ToList();
+                    }
+                }
+
+                Obj1 = dynamicFieldInfos;
+                //foreach (var item in query1)
+                //{
+                //    DynamicFieldInfo Temp = new DynamicFieldInfo();
+
+                //    Temp.Fieldid = Convert.ToString(item.Fieldid);
+                //    Temp.FieldOptionId = Convert.ToString(item.FieldOptionId);
+                //    Temp.FieldTypeId = Convert.ToString(item.FieldTypeId);
+                //    Temp.FieldValue = Convert.ToString(item.FieldValue);
+
+                //    objList1.Add(Temp);
+
+                //}
+                //foreach (var item in query2)
+                //{
+                //    DynamicFieldInfo Temp2 = new DynamicFieldInfo();
+
+                //    Temp2.Fieldid = Convert.ToString(item.Fieldid);
+                //    Temp2.FieldOptionId = Convert.ToString(item.FieldOptionId);
+                //    Temp2.FieldTypeId = Convert.ToString(item.FieldTypeId);
+                //    Temp2.FieldValue = Convert.ToString(item.FieldValue);
+
+                //    objList2.Add(Temp2);
+
+                //}
+                //J.JsonList1 = dynamicFieldInfos;
+                //J.JsonList2 = objList2;
+                //DynJson = objListDymanic.Where(data => data.Fieldid == "1");
+
+            }
+
+             return Obj1;
+        }
         public CustomerDetails GetCustomerDetails(string CounterId, string MobileNo)
         {
             CustomerDetails objData = new CustomerDetails();

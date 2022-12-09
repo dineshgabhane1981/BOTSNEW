@@ -146,4 +146,27 @@ namespace BOTS_BL.Models.RetailerWeb
 
     }
 
+    public class DynamicFieldInfo
+    {
+        public string Fieldid { get; set; }
+
+        public string FieldTypeId { get; set; }
+
+        public string FieldOptionId { get; set; }
+
+        public string FieldValue { get; set; }
+    }   
+
+    public class JSONDATA
+    {
+        public List<DynamicFieldInfo>[] JsonList1 { get; set; }
+    }
+
+    public class CustDetails
+    {
+        public CustomerDetails objCDetails { get; set; }
+        public JSONDATA objJsonData { get; set; }
+    }
+    
+
 }
