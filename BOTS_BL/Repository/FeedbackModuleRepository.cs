@@ -185,7 +185,7 @@ namespace BOTS_BL.Repository
                         {
                             string tableScript = "CREATE TABLE [dbo].[feedback_FeedbackMaster]([FeedbackId][int] IDENTITY(1, 1) NOT NULL,[GroupId] [varchar](4) NULL,[OutletId] [varchar](10) NULL," +
                                                 "[MobileNo] [varchar](10) NULL,	[CustomerName] [varchar](100) NULL,	[QuestionId] [varchar](5) NULL,	[QuestionPoints] [int] NULL,	[DOB] [date] NULL," +
-                                                "[DOA] [date] NULL,	[HowToKnowAbout] [varchar](10) NULL,[AddedDate] [datetime] NULL,[SalesRepresentative] [varchar](10) NULL, [Comments] [nvarchar](max) NULL," +
+                                                "[DOA] [date] NULL,	[HowToKnowAbout] [varchar](10) NULL,[AddedDate] [datetime] NULL,[SalesRepresentative] [varchar](10) NULL, [Comments] [nvarchar](max) NULL, [AudioStream] [nvarchar](max) NULL," +
                                                 "CONSTRAINT[PK_FeedBackModuleMaster] PRIMARY KEY CLUSTERED([FeedbackId] ASC)WITH(PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON[PRIMARY]) ON[PRIMARY]";
                             contextdb.Database.CreateIfNotExists();
                             contextdb.Database.ExecuteSqlCommand(tableScript);
@@ -550,6 +550,10 @@ namespace BOTS_BL.Repository
                             objPointsAndMessages.MsgMissedFeedback = "";
 
                         objPointsAndMessages.IsOtherInfoShow = Convert.ToBoolean(item["IsOtherInfoShow"]);
+                        objPointsAndMessages.IsPositiveMessage = Convert.ToBoolean(item["IsPositiveMessage"]);
+                        objPointsAndMessages.IsAudio = Convert.ToBoolean(item["IsAudio"]);
+                        objPointsAndMessages.AudioMessageText = Convert.ToString(item["AudioMessageText"]);
+                        
                     }
                     if (objPointsAndMessages.AddedBy == null)
                     {
@@ -693,7 +697,7 @@ namespace BOTS_BL.Repository
             return obj;
         }
 
-        public string SubmitRating(string mobileNo, string ranking, string GroupId, string salesid, string Comments, string outletId)
+        public string SubmitRating(string mobileNo, string ranking, string GroupId, string salesid, string Comments, string outletId, string media)
         {
             string status = "false";
             // string smsresponce = "";
@@ -767,11 +771,19 @@ namespace BOTS_BL.Repository
                     objfeedback.OutletId = outletId;
                     objfeedback.SalesRepresentative = salesid;
                     objfeedback.Comments = Comments;
+                    objfeedback.AudioStream = media;
                     objfeedback.AddedDate = date;
                     Combinedpoint += point;
                     objfeedback = context.feedback_FeedbackMaster.Add(objfeedback);
                     context.SaveChanges();
-                    status = "true";
+                    if (feedbackpointsmsg.IsOtherInfoShow)
+                    {
+                        status = "true";
+                    }
+                    else
+                    {
+                        status = "pointsGiven";
+                    }                    
                 }
 
                 if (GroupId != "1051")
@@ -1156,11 +1168,12 @@ namespace BOTS_BL.Repository
                 WAMsg = WAMsg.Replace("#04", customerName);
 
                 SendMessage(mobileNo, WAMsg, objsmsdetails.WhatsAppTokenId);
-
-                var SuccessMSG = "Successful Feedback registered by : #01";
-                SuccessMSG = SuccessMSG.Replace("#01", mobileNo);
-
-                SendMessage(mobileNos, SuccessMSG, objsmsdetails.WhatsAppTokenId);
+                if (feedbackpointsmsg.IsPositiveMessage)
+                {
+                    var SuccessMSG = "Successful Feedback registered by : #01";
+                    SuccessMSG = SuccessMSG.Replace("#01", mobileNo);
+                    SendMessage(mobileNos, SuccessMSG, objsmsdetails.WhatsAppTokenId);
+                }
                 if (GroupId == "1181")
                 {
                     if (isNegative)
@@ -1773,6 +1786,7 @@ namespace BOTS_BL.Repository
                                             howtoknow = result.Select(x => x.HowToKnowAbout).FirstOrDefault(),
                                             datetime = result.Select(x => x.AddedDate).FirstOrDefault(),
                                             comments = result.Select(x => x.Comments).FirstOrDefault(),
+                                            AudioStream = result.Select(x => x.AudioStream).FirstOrDefault(),                                            
                                         }).FirstOrDefault();
                         }
                         else
@@ -1831,6 +1845,7 @@ namespace BOTS_BL.Repository
                             objreport.OutletName = outlet.OutletName;
                             objreport.SalesRName = feedback.salesR;
                             objreport.Comments = feedback.comments;
+                            objreport.AudioStream = feedback.AudioStream;
                             objreport.Type = custinfo.Select(x => x.cust).FirstOrDefault();
                             objreport.TxnAmount = invoiceamt.Select(x => x.totalamt).FirstOrDefault();
                             objreport.Txn = invoiceamt.Select(x => x.txnstatus).FirstOrDefault();
@@ -1856,7 +1871,7 @@ namespace BOTS_BL.Repository
                 count = contextdb.feedback_FeedbackMaster.GroupBy(c => new
                 {
                     c.AddedDate,
-                    c.MobileNo,                    
+                    c.MobileNo,
                 }).Count();
             }
             return count;

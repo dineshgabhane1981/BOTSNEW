@@ -34,6 +34,7 @@
                                 <th scope="col">Comments</th>
                                 <th scope="col">Txn</th>
                                 <th scope="col">Txn Amount</th>
+                                <th scope="col">Audio</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -110,6 +111,18 @@
                                         @if ((item.TxnAmount != 0))
                                         {
                                             <td>@item.TxnAmount</td>
+                                        }
+                                        else
+                                        {
+                                            <td style="text-align:center;">--</td>
+                                        }
+                                        @if (item.AudioStream != "" && item.AudioStream != null && item.AudioStream != "data:")
+                                        {
+                                            <td>
+                                                <audio controls="controls" autobuffer="autobuffer">
+                                                    <source src="@item.AudioStream" />
+                                                </audio>
+                                            </td>
                                         }
                                         else
                                         {

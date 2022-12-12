@@ -318,6 +318,33 @@ html, body {
     box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.12);
 }
 
+.input40 {
+    width: 140px;
+    padding: 8px 8px 8px 8px !important;
+    border-radius: 10px !important;
+    border: solid 1px #e1e1e1;
+    margin-top: 2px !important;
+    margin-bottom: 2px !important;
+}
+
+.input20 {
+    width: 100px;
+    padding: 5px 5px 5px 5px !important;
+    border-radius: 10px !important;
+    border: solid 1px #e1e1e1;
+    margin-top: 2px !important;
+    margin-bottom: 2px !important;
+}
+
+.input10 {
+    width: 50px;
+    padding: 5px 5px 5px 5px !important;
+    border-radius: 10px !important;
+    border: solid 1px #e1e1e1;
+    margin-top: 2px !important;
+    margin-bottom: 2px !important;
+}
+
 .input50 {
     width: 200px;
     margin-bottom: 20px;

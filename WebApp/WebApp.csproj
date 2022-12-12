@@ -299,6 +299,7 @@
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\FeedbackMasterData.xml" />
     <Content Include="Content\main.css" />
+    <Content Include="Content\main.js" />
     <Content Include="Content\scriptSteps.js" />
     <Content Include="Content\style.css" />
     <Content Include="Content\styleSteps.css" />

@@ -5,33 +5,34 @@
         <div class="col search-container" style="border:2px solid grey; padding:20px; border-radius:10px;">
             <input type="hidden" id="hdnGroupId" />
             <div class="row" style="margin: 0; padding-top:10px;">
-                <div style="float:left;text-align:right;width:50px;">
-                    Fees
-                </div>
+
                 <div class="col-sm-3" style="float:left;">
+                    Fees
                     <input id="txtFees" type="number" class="input50" />
                 </div>
-                <div style="float:left;text-align:right;width:50px;">
-                    Start Date
-                </div>
+
                 <div class="col-sm-3" style="float:left;">
+                    Start Date
                     <input id="txtStartDate" type="date" class="input50" />
                 </div>
-                <div style="float:left;text-align:right;width:50px;">
-                    Payment Mode
+                <div class="col-sm-3" style="float:left;width:50px;">
+                    RS per Feedback
+                    <input id="txtPerFeedback" type="number" class="input50" />
                 </div>
                 <div class="col-sm-3" style="float:left;">
+                    Payment Mode
                     <select id="ddlPaymentMode" class="input50">
                         <option value="0">Please Select</option>
                         <option value="Online">Online</option>
                         <option value="Cheque">Cheque</option>
                     </select>
                 </div>
-                <div class="col-sm-1" style="float:left;margin-top:10px;">
-                    <button  class="btn btn-primary" onclick="EnableFeedback();">Save</button>
+                <div class="col-sm-1" style="margin-top:10px;">
+                    <button class="btn btn-primary" onclick="EnableFeedback();">Save</button>
                 </div>
             </div>
             
+
         </div>
     </div>
     <div class="row">
@@ -107,13 +108,21 @@
             else {
                 $('#txtFees').css('border-color', 'red');
             }
-        });
+        }); 
         $("#txtStartDate").focusout(function () {
             if ($("#txtStartDate").val() != "") {
                 $('#txtStartDate').css('border-color', '');
             }
             else {
                 $('#txtStartDate').css('border-color', 'red');
+            }
+        });
+        $("#txtPerFeedback").focusout(function () {
+            if ($("#txtPerFeedback").val() != "") {
+                $('#txtPerFeedback').css('border-color', '');
+            }
+            else {
+                $('#txtPerFeedback').css('border-color', 'red');
             }
         });
 
@@ -151,6 +160,16 @@
             $('#txtStartDate').css('border-color', 'red');
             returnStatus = false;
         }
+        if ($("#txtPerFeedback").val() == "") {
+            cuteAlert({
+                type: "error",
+                title: "Oops..",
+                message: "Please enter per Feedback rate",
+                buttonText: "Okay"
+            })
+            $('#txtPerFeedback').css('border-color', 'red');
+            returnStatus = false;
+        }
 
         if ($("#ddlPaymentMode option:selected").text() == "Please Select") {
             cuteAlert({
@@ -168,6 +187,7 @@
             item["GroupId"] = $("#hdnGroupId").val();
             item["Fees"] = $("#txtFees").val();
             item["StartDate"] = $("#txtStartDate").val();
+            item["PerFeedback"] = $("#txtPerFeedback").val();
             item["PaymentMode"] = $("#ddlPaymentMode").val();
 
             SeardhData.push(item);

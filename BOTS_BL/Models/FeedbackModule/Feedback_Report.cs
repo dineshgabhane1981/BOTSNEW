@@ -23,6 +23,7 @@ namespace BOTS_BL.Models.FeedbackModule
         public string Txn { get; set; }
         public decimal? TxnAmount { get; set; }
         public string Comments { get; set; }
+        public string AudioStream { get; set; }
     }
 
     public class Feedback_MobileNo

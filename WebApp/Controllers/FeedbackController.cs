@@ -47,12 +47,14 @@ namespace WebApp.Controllers
                 string GroupId = Convert.ToString(item["GroupId"]);
                 string Fees = Convert.ToString(item["Fees"]);
                 string StartDate = Convert.ToString(item["StartDate"]);
+                string PerFeedback = Convert.ToString(item["PerFeedback"]);
                 string PaymentMode = Convert.ToString(item["PaymentMode"]);
 
                 Feedback_FeedbackConfig objFeedback = new Feedback_FeedbackConfig();
                 objFeedback.GroupId = Convert.ToInt32(GroupId);
                 objFeedback.Fees = Fees;
                 objFeedback.PaymentMode = PaymentMode;
+                objFeedback.PerFeedbackCharge = Convert.ToInt32(PerFeedback);
                 objFeedback.StartDate = Convert.ToDateTime(StartDate).Date;
                 objFeedback.EndDate = Convert.ToDateTime(StartDate).AddDays(364).Date;
                 objFeedback.AddedBy = userDetails.LoginId;
@@ -494,13 +496,13 @@ namespace WebApp.Controllers
             return new JsonResult() { Data = obj, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
 
         }
-        public ActionResult SubmitPoints(string mobileNo, string ranking, string GroupId, string SalesRepresentative, string Comments, string outletId)
+        public ActionResult SubmitPoints(string mobileNo, string ranking, string GroupId, string SalesRepresentative, string Comments, string outletId,string media)
         {
             string status = "false";
             CustomerDetail objcustomerdetails = new CustomerDetail();
             try
             {
-                status = FMR.SubmitRating(mobileNo, ranking, GroupId, SalesRepresentative, Comments, outletId);
+                status = FMR.SubmitRating(mobileNo, ranking, GroupId, SalesRepresentative, Comments, outletId,media);
             }
             catch (Exception ex)
             {

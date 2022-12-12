@@ -195,6 +195,24 @@
             <div class="col-md-12 col-xl-12   pl-3 pr-3 pb-3 mt-2" style="border:2px solid grey; border-radius:10px;">
                 <div class="row">
                     <div class="col-md-6 col-xl-6" style="margin-left:20px; margin-top:20px;">
+                        <h4> Audio and Video </h4>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12 col-xl-12" style="margin-left:20px; margin-top:20px;">
+                        @Html.CheckBoxFor(model => model.PointsAndMessages.IsAudio, new { @id = "chkIsAudio" }) Do you want to include <b>Audio message</b>?
+                    </div>
+                </div>
+                <div class="row" id="dvAudioText" style="display:none;">
+                    <div class="col-md-12 col-xl-12" style="margin-left:20px; margin-top:20px;">
+                        @Html.TextBoxFor(model => model.PointsAndMessages.AudioMessageText, new { @class = "input150", @id = "txtAudioMessageText" })
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-12 col-xl-12   pl-3 pr-3 pb-3 mt-2" style="border:2px solid grey; border-radius:10px;">
+                <div class="row">
+                    <div class="col-md-6 col-xl-6" style="margin-left:20px; margin-top:20px;">
                         <h4> Bonus Points </h4>
                     </div>
                     <div class="row col-md-12 col-xl-12">
@@ -221,6 +239,11 @@
                 <div class="row">
                     <div class="col-md-6 col-xl-6" style="margin-left:20px; margin-top:20px;">
                         <h4> Message Scripts </h4>
+                    </div>
+                    <div class="row col-md-12 col-xl-12">
+                        <div class="col-md-12 col-xl-12" style="margin-left:20px; margin-top:20px;">
+                            @Html.CheckBoxFor(model => model.PointsAndMessages.IsPositiveMessage, new { @id = "chkIsPositiveMessage" }) Do you want to send Positive feedback message to Admin?
+                        </div>
                     </div>
                     <div class="row col-md-12 col-xl-12">
                         <div class="col-md-12 col-xl-12" style="margin-left:20px; margin-top:20px;">
@@ -538,7 +561,6 @@
             }
             else {
                 $("#dvSalesRep").hide();
-
             }
         });
 
@@ -553,7 +575,7 @@
                 $("#dvAwardPointsWhen").hide();
 
             }
-        });
+        });        
 
         $('#chkMissedMessage').click(function () {
             if ($(this).is(':checked')) {
@@ -564,6 +586,16 @@
 
             }
         });
+        $('#chkIsAudio').click(function () {
+            if ($(this).is(':checked')) {
+                $("#dvAudioText").show();
+            }
+            else {
+                $("#dvAudioText").hide();
+
+            }
+        });
+        
 
         if ($("#chkSalesRep").is(":checked")) {
             $("#dvSalesRep").show();
@@ -574,6 +606,9 @@
         }
         if ($("#chkMissedMessage").is(":checked")) {
             $("#dvMsgMissedFeedback").show();
+        }
+        if ($("#chkIsAudio").is(":checked")) {
+            $("#dvAudioText").show();
         }
 
         LoadPreview();
@@ -635,6 +670,13 @@
         itemOtherConfig["IsMsgMissedFeedback"] = $("#chkMissedMessage").is(":checked");
         itemOtherConfig["MsgMissedFeedback"] = $("#txtMsgMissedFeedback").val();
         itemOtherConfig["IsOtherInfoShow"] = $("#chkIsOtherInfoShow").is(":checked");
+        itemOtherConfig["IsPositiveMessage"] = $("#chkIsPositiveMessage").is(":checked");
+        itemOtherConfig["IsAudio"] = $("#chkIsAudio").is(":checked");
+        itemOtherConfig["AudioMessageText"] = $("#txtAudioMessageText").val();
+
+        
+        
+        
         OtherConfigData.push(itemOtherConfig);
 
         var OutletMobileNos = [];

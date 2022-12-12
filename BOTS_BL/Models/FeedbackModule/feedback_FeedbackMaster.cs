@@ -43,6 +43,7 @@ namespace BOTS_BL.Models
         public string SalesRepresentative { get; set; }
 
         public string Comments { get; set; }
-        
+        public string AudioStream { get; set; }
+
     }
 }

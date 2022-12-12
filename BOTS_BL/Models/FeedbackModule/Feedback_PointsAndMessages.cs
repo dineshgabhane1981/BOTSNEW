@@ -20,8 +20,8 @@ namespace BOTS_BL.Models
         public bool IsFeedbackPoints { get; set; }
 
         public int AwardFeedbackPoints { get; set; }
-        public bool IsOtherInfoShow { get; set; }        
-
+        public bool IsOtherInfoShow { get; set; }
+        public bool IsPositiveMessage { get; set; }
         public string MsgToCustomer { get; set; }
 
         public string MsgNegativeFeedback { get; set; }
@@ -30,6 +30,8 @@ namespace BOTS_BL.Models
 
         public string MsgMissedFeedback { get; set; }
         public string PointsConfig { get; set; }
+        public bool IsAudio { get; set; }
+        public string AudioMessageText { get; set; }        
 
         [StringLength(50)]
         public string AddedBy { get; set; }
