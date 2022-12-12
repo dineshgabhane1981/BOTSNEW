@@ -8,6 +8,7 @@ using BOTS_BL.Models.RetailerWeb;
 using BOTS_BL.Models;
 using System.Web.Script.Serialization;
 using System.Data;
+using Newtonsoft.Json.Linq;
 
 namespace RetailerApp.Controllers
 {
@@ -142,13 +143,16 @@ namespace RetailerApp.Controllers
             JavaScriptSerializer json_serializer = new JavaScriptSerializer();
             json_serializer.MaxJsonLength = int.MaxValue;
             object[] obj = (object[])json_serializer.DeserializeObject(jsonData);
+            //var result = JsonConvert.DeserializeObject<RateInfo>(rateInfo.ToString());
+
             foreach (Dictionary<string, object> item in obj)
             {
                 string MobileNo = Convert.ToString(item["MobileNo"]);
                 string InvoiceNo = Convert.ToString(item["InvoiceNo"]);
                 string InvoiceAmt = Convert.ToString(item["InvoiceAmt"]);
+                string DynamicData = Convert.ToString(item["DynamicData"]);
 
-                EResponse = RWR.InsertEarnDataOld(userDetails.OutletOrBrandId, MobileNo,InvoiceNo, InvoiceAmt);
+                EResponse = RWR.InsertEarnDataOld(userDetails.OutletOrBrandId, MobileNo,InvoiceNo, InvoiceAmt, jsonData);
             }
             return new JsonResult() { Data = EResponse, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }

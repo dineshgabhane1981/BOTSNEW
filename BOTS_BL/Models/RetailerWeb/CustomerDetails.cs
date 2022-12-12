@@ -155,6 +155,8 @@ namespace BOTS_BL.Models.RetailerWeb
         public string FieldOptionId { get; set; }
 
         public string FieldValue { get; set; }
+
+        public string FieldName { get; set; }
     }   
 
     public class JSONDATA

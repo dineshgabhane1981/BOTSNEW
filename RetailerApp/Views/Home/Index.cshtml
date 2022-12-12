@@ -230,6 +230,7 @@
 
             <input id="txtOTPval" type="number" min="1" class="input50" hidden />
             <input id="txtBurnAmt" type="number" min="1" class="input50" hidden />
+            @*<object id="hiddResponse" hidden />*@
             <div class="col-md-12 col-sm-12 row" style="margin-top: 10px;">
                 <div class="col-md-2 col-sm-2" style="margin-left: 8px;">
                     <button type="button" id="btnSubmit" class="btn btn-primary" style="margin-top:10px;">Submit</button>
@@ -262,7 +263,7 @@
     </div>
 
     <div class="mb-3 card col-md-12 col-sm-12" style="padding-top:20px; display:none;" id="dvInvoiceCustExist">
-        <div class="content col-md-12 col-sm-12 row mb-3" >
+        <div class="content col-md-12 col-sm-12 row mb-3">
             <div class="col-md-12 col-sm-12 row">
                 <div class="col-md-2 col-sm-2" style="margin-top:10px;">
                     Invoice No
@@ -279,41 +280,42 @@
                     <input id="txtInvoiceAmOldt" type="number" min="1" class="input50" />
                 </div>
             </div>
-            <div class="col-md-12 col-sm-12 row" id="CusExistContain">
-                
-            </div>
-            @*<div class="col-md-12 col-sm-12 row" style="display:none" id="dynCustExistdiv3">
+            <div class="col-md-12 col-sm-12 row">
                 <div class="col-md-2 col-sm-2" style="margin-top:10px;">
-                    Dynamic Field
+                    Test Field
                 </div>
                 <div class="col-md-4 col-sm-4" style="margin-top:10px;" id="dynCustExistdiv4">
-                
-                </div>
-            </div>*@
-            <div class="col-md-12 col-sm-12 row" id="BurnPoints" style="display: none;">
-                <div class="col-md-2 col-sm-2" style="margin-top:10px;">
-                    Amt To Redeem
-                </div>
-                <div class="col-md-4 col-sm-4" style="margin-top:10px;">
-                    <input id="txtBurnpoints" type="number" min="1" class="input50" />
+                    <input type="text" class="input50"/>
                 </div>
             </div>
-            <div class="col-md-12 col-sm-12 row" style="margin-top: 10px;">
-                <div class="col-md-2 col-sm-2" style="margin-left: 10px;">
-                    <button type="button" id="btnPaybyCash" class="btn btn-primary" style="margin-top:10px;">PaybyCash</button>
+            <div class="col-md-12 col-sm-12 row" id="CusExistContain">
+               
+            </div>
+                <div class="col-md-12 col-sm-12 row" id="BurnPoints" style="display: none;">
+                    <div class="col-md-2 col-sm-2" style="margin-top:10px;">
+                        Amt To Redeem
+                    </div>
+                    <div class="col-md-4 col-sm-4" style="margin-top:10px;">
+                        <input id="txtBurnpoints" type="number" min="1" class="input50" />
+                    </div>
                 </div>
-                <div class="col-md-2 col-sm-2" style="margin-left: 10px;">
-                    <button type="button" id="btnPaybyPoints" class="btn btn-success" style="margin-top:10px;">Points(Redeem)</button>
-                </div>
-                <div class="col-md-2 col-sm-2" style="margin-left: 10px;">
-                    <button type="button" id="btnResetOld" class="btn btn-primary" style="margin-top:10px;">Reset</button>
+                <div class="col-md-12 col-sm-12 row" style="margin-top: 10px;">
+                    <div class="col-md-2 col-sm-2" style="margin-left: 10px;">
+                        <button type="button" id="btnPaybyCash" class="btn btn-primary" style="margin-top:10px;">PaybyCash</button>
+                    </div>
+                    <div class="col-md-2 col-sm-2" style="margin-left: 10px;">
+                        <button type="button" id="btnPaybyPoints" class="btn btn-success" style="margin-top:10px;">Points(Redeem)</button>
+                    </div>
+                    <div class="col-md-2 col-sm-2" style="margin-left: 10px;">
+                        <button type="button" id="btnResetOld" class="btn btn-primary" style="margin-top:10px;">Reset</button>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
 
 </div>
 <script>
+    var object;
     $(document).ready(function () {
         var today = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
         $("#txtDOB").datepicker({
@@ -354,6 +356,8 @@
                 dataType: "json",
                 success: function (response) {
                     console.log(response);
+                    
+                    
                     if (response.objCDetails.ResponseCode == "00") {
                         $("#spnMobileNo").text(response.objCDetails.MobileNo);
                         $("#spnCustName").text(response.objCDetails.CustomerName);
@@ -361,9 +365,10 @@
                         $("#spnPointsBalance").text(response.objCDetails.PointBalance);
                         $("#spnTotalSpend").text(response.objCDetails.TotalSpend);
                         $("#spnLastTxnDate").text(response.objCDetails.LastTxnDate);
-
+                        //$("#hiddResponse").val(response.objJsonData.JsonList1);
+                        object = response;
                         var c = Object.keys(response.objJsonData.JsonList1).length;// count of values in JsonList1
-                        //alert(c);                     
+                        alert(response);
                         var count, D1, items;
                         D1 = '';
                         var myselect = [];
@@ -371,30 +376,75 @@
                         var dynCustExistdiv2 = [];
                         var dynCustExistName = [];
                         for (j = 0; j < c; j++) {
-                            count = 1
+                            count = j + 1;
                             
                             var innerCount = Object.keys(response.objJsonData.JsonList1[j]).length;
                             if (innerCount > 1) {
                                 //Dropdown
+                                var Dynamicname;
                                 var ctrlId = "ddlCustom" + j;
                                 var items="";
                                 var newCtrl = '<select id="' + ctrlId + '"></select>';
                                 $.each(response.objJsonData.JsonList1[j], function (i, item) {
+                                    Dynamicname = item.FieldName
                                     items += "<option value='" + item.FieldValue + "'>" + item.FieldValue + "</option>";                                    
                                 });
-                                $("#CusExistContain").append("Dynamic Field" + count);
-                                $("#CusExistContain").append(newCtrl);
-                                $("#" + ctrlId).html(items); 
+
+                                ////$("#CusExistContain").html("<div id=div1></div>")
+                                //$("#CusExistContain").append("Dynamic Field" + count);                              
+                                //$("#CusExistContain").append(newCtrl);
+                                //$("#" + ctrlId).html(items);
+
+                                $("#CusExistContain").append('<div class = "col-md-12 col-sm-12 row" id="' + dynCustExistdiv1[j] + '" ></div>');
+                                $("#" + dynCustExistdiv1[j]).append('<div id="' + dynCustExistName[j] + '">' + Dynamicname+'</div>');
+                                $("#" + dynCustExistName[j]).attr("class", "col-md-2 col-sm-2");
+                                $("#" + dynCustExistName[j]).css("style", "margin-top:10px");
+                                $("#CusExistContain").append('<div id="' + dynCustExistdiv2[j] + '"></div>');
+                                $("#" + dynCustExistdiv2[j]).attr("class", "col-md-4 col-sm-4");
+                                $("#" + dynCustExistdiv2[j]).css("style", "margin-top:10px");
+                                $("#" + dynCustExistdiv2[j]).append(newCtrl);
+                                $("#" + ctrlId).attr("class", "input50");
+                                $("#" + ctrlId).attr("style", "margin-top:10px");
+                                $("#" + ctrlId).html(items);
                             }
                             else {
                                 //Textbox or date
                                 $.each(response.objJsonData.JsonList1[j], function (i, item) {
+                                    var Dynamicname;
+                                    Dynamicname = item.FieldName
                                     if (item.FieldOptionId == "1") {
-                                        $("#CusExistContain").append("<br/>");
-                                        $("#CusExistContain").append("Dynamic Field" + count);
+                                        //$("#CusExistContain").append("<br/>");
+                                        //$("#CusExistContain").append("Dynamic Field" + count);
+                                        //var ctrlId1 = "txtCustome" + j;
+                                        //var txtCtrl = "<input id=" + ctrlId1 + " type=\"number\"  class=\"input50\" />";
+                                        //$("#CusExistContain").append(txtCtrl);
+
+                                        //$("#CusExistContain").append("<div id =div1></div>");
+                                        //$("#div1").append("Dynamic Field" + count);
                                         var ctrlId1 = "txtCustome" + j;
-                                        var txtCtrl = "<input id=" + ctrlId1 + " type=\"number\"  class=\"input50\" />";
-                                        $("#CusExistContain").append(txtCtrl);
+                                        var txtCtrl = "<input id=" + ctrlId1 + " type=\"text\"  class=\"input50\" />";
+
+
+                                        $("#CusExistContain").append('<div class = "col-md-12 col-sm-12 row" id="' + dynCustExistdiv1[j] + '" ></div>');
+                                        //$("#" + dynCustExistdiv1[j]).append("Dynamic Field" + count);
+                                        //$("#CusExistContain").append('<div id="' + dynCustExistName[j] + '">Dynamic Field</div>');
+                                        $("#" + dynCustExistdiv1[j]).append('<div id="' + dynCustExistName[j] + '">' + Dynamicname + '</div>');
+                                        $("#" + dynCustExistName[j]).attr("class", "col-md-2 col-sm-2", "style", "margin-top:10px;");
+                                        $("#" + dynCustExistdiv1[j]).append('<div id="' + dynCustExistdiv2[j] + '"></div>');
+                                        $("#" + dynCustExistdiv2[j]).attr("class", "col-md-4 col-sm-4", "style", "margin-top:10px;");
+                                        $("#" + dynCustExistdiv2[j]).append(txtCtrl);
+
+                                    }
+                                    else if (item.FieldOptionId == "2") {
+                                        var ctrlId2 = "txtDate" + j;
+                                        var txtDate = "<input id=" + ctrlId2 + " type=\"Date\"  class=\"input50\" />";
+
+                                        $("#CusExistContain").append('<div class = "col-md-12 col-sm-12 row" id="' + dynCustExistdiv1[j] + '" ></div>');
+                                        $("#" + dynCustExistdiv1[j]).append('<div id="' + dynCustExistName[j] + '">' + Dynamicname + '</div>');
+                                        $("#" + dynCustExistName[j]).attr("class", "col-md-2 col-sm-2", "style", "margin-top:10px;");
+                                        $("#" + dynCustExistdiv1[j]).append('<div id="' + dynCustExistdiv2[j] + '"></div>');
+                                        $("#" + dynCustExistdiv2[j]).attr("class", "col-md-4 col-sm-4", "style", "margin-top:10px;");
+                                        $("#" + dynCustExistdiv2[j]).append(txtDate);
                                     }
                                 });
                             }
@@ -637,14 +687,59 @@
 
     function SaveEarnOld() {
         var today = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
-            var FilterData = [];
+        var FilterData = [];
+        var Dynamicname = [];
+        var DynamicResult = [];
+        var DynamicData = [];
             item = {};
             item["MobileNo"] = $("#txtMobileNo").val();
             item["InvoiceNo"] = $("#txtInvoiceNoOld").val();
             item["InvoiceAmt"] = $("#txtInvoiceAmOldt").val();
-        alert($("#myselect").val());
-            
+        alert("Inside Save Earn Old");
+        console.log(object);
+   
+        var C = Object.keys(object.objJsonData.JsonList1).length;// count of values in JsonList1
+        /*alert(C);*/
+        for (j = 0; j < C; j++) {
+            count = j + 1;
+            var innerCount = Object.keys(object.objJsonData.JsonList1[j]).length;
+            if (innerCount > 1) {
+                DynamicResult[j] = "ddlCustom" + j;
+                
+                var K =1;
+                $.each(object.objJsonData.JsonList1[j], function (i, item) {
+                    if (K == 1) {
+                        
+                        //alert(DynamicResult[j]);
+                        
+                        var Temp1 = $("#" + DynamicResult[j]).val();    
+                        Dynamicname[j] = item.FieldName;                       
+                        DynamicData.push([Dynamicname[j], Temp1]);                    
+                    }
+                    K++;
+                });
 
+            }
+            else {
+                $.each(object.objJsonData.JsonList1[j], function (i, item) {
+
+                    Dynamicname[j] = item.FieldName
+                    if (item.FieldOptionId == "1") {
+                        DynamicResult[j] = "txtCustome" + j;
+                        var Temp2 = $("#" + DynamicResult[j]).val();
+                        DynamicData.push([Dynamicname[j], Temp2]);
+                    }
+                    else if (item.FieldOptionId == "2") {
+                        DynamicResult[j] = "txtDate" + j;
+                        var Temp3 = $("#" + DynamicResult[j]).val();
+                        DynamicData.push([Dynamicname[j], Temp3]);
+                    }
+                });
+            }
+        }
+
+        item["DynamicData"] = DynamicData;
+       // alert(DynamicData);
             FilterData.push(item);
             var data = JSON.stringify(FilterData);
             $.ajax({
