@@ -116,6 +116,7 @@ namespace BOTS_BL.Repository
 
                         cmd.Parameters.AddWithValue("@pi_OutletCode", Convert.ToString(dt.Rows[i]["OutletCode"]));
                         cmd.Parameters.AddWithValue("@pi_MobileNo", Convert.ToString(dt.Rows[i]["MobileNo"]));
+                        cmd.Parameters.AddWithValue("@pi_CustomerName", Convert.ToString(dt.Rows[i]["CustomerName"]));
                         cmd.Parameters.AddWithValue("@pi_TxnDateText", dt.Rows[i]["TxnDate"]);      
                         cmd.Parameters.AddWithValue("@pi_CategoryCode", Convert.ToString(dt.Rows[i]["CategoryCode"]));
                        // cmd.Parameters.AddWithValue("@pi_CategoryName", Convert.ToString(dt.Rows[i]["CategoryName"]));
