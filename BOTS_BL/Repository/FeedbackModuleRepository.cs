@@ -553,7 +553,7 @@ namespace BOTS_BL.Repository
                         objPointsAndMessages.IsPositiveMessage = Convert.ToBoolean(item["IsPositiveMessage"]);
                         objPointsAndMessages.IsAudio = Convert.ToBoolean(item["IsAudio"]);
                         objPointsAndMessages.AudioMessageText = Convert.ToString(item["AudioMessageText"]);
-                        
+
                     }
                     if (objPointsAndMessages.AddedBy == null)
                     {
@@ -776,14 +776,16 @@ namespace BOTS_BL.Repository
                     Combinedpoint += point;
                     objfeedback = context.feedback_FeedbackMaster.Add(objfeedback);
                     context.SaveChanges();
-                    if (feedbackpointsmsg.IsOtherInfoShow)
-                    {
-                        status = "true";
-                    }
-                    else
-                    {
-                        status = "pointsGiven";
-                    }                    
+
+                    status = "true";
+                    //if (feedbackpointsmsg.IsOtherInfoShow)
+                    //{
+                    //    status = "true";
+                    //}
+                    //else
+                    //{
+                    //    status = "pointsGiven";
+                    //}                    
                 }
 
                 if (GroupId != "1051")
@@ -970,6 +972,70 @@ namespace BOTS_BL.Repository
                                 }
                             }
                         }
+                    }
+                    if (!feedbackpointsmsg.IsOtherInfoShow)
+                    {
+                        if (string.IsNullOrEmpty(feedbackpointsmsg.PointsConfig))
+                        {
+                            Feedback_SMSNumbers objsmsnumber1 = new Feedback_SMSNumbers();
+                            string mobileNos = "";
+                            string WATokenId = "";
+                            using (var contextNew = new CommonDBContext())
+                            {
+                                objsmsnumber1 = contextNew.Feedback_SMSNumbers.Where(x => x.GroupId == GroupId && x.OutletId == outletId).FirstOrDefault();
+                                mobileNos = objsmsnumber1.MobileNos;
+                            }
+                            string WAMsg = feedbackpointsmsg.MsgToCustomer;
+                            var objsmsdetails = context.SMSDetails.Where(x => x.OutletId == outletId).FirstOrDefault();
+                            if(objsmsdetails!=null)
+                            {
+                                WATokenId = objsmsdetails.WhatsAppTokenId;
+                            }
+                            if(GroupId=="1225")
+                            {
+                                var SMSDetailsMapping= context.SMSOutletMappings.Where(x=>x.OutletId== outletId).FirstOrDefault();
+                                if(SMSDetailsMapping!=null)
+                                {
+                                    WATokenId = SMSDetailsMapping.WATokenId;
+                                }
+                            }
+                            if (objcustdetails != null)
+                            {
+                                WAMsg = WAMsg.Replace("#01", objcustdetails.CustomerName);
+                            }
+                            else
+                            {
+                                WAMsg = WAMsg.Replace("#01", "Member");
+                            }
+                            WAMsg = WAMsg.Replace("#02", Convert.ToString(feedbackpointsmsg.AwardFeedbackPoints));
+
+                            var bitly = context.MWP_Details.Where(x => x.MWP_Id == "08").Select(y => y.MWP_Name).FirstOrDefault();
+                            WAMsg = WAMsg.Replace("#03", bitly);
+                            var customerName = context.GroupDetails.Where(x => x.GroupId == GroupId).Select(y => y.GroupName).FirstOrDefault();
+                            WAMsg = WAMsg.Replace("#04", customerName);
+
+                            SendMessage(mobileNo, WAMsg, WATokenId);
+                            if (feedbackpointsmsg.IsPositiveMessage)
+                            {
+                                var SuccessMSG = "Successful Feedback registered by : #01";
+                                SuccessMSG = SuccessMSG.Replace("#01", mobileNo);
+                                SendMessage(mobileNos, SuccessMSG, WATokenId);
+                            }
+
+                            if (!string.IsNullOrEmpty(feedbackpointsmsg.MsgNegativeFeedback))
+                            {
+                                if (Combinedpoint <= 6)
+                                {
+                                    var negativeMSG = "Negative Feedback by : #01 | On date time #08| Negative Score: #31";
+                                    negativeMSG = negativeMSG.Replace("#01", mobileNo);
+                                    negativeMSG = negativeMSG.Replace("#08", Convert.ToString(date));
+                                    negativeMSG = negativeMSG.Replace("#31", Convert.ToString(Combinedpoint));
+
+                                    SendMessage(feedbackpointsmsg.MsgNegativeFeedback, negativeMSG, WATokenId);
+                                }
+                            }
+                        }
+
                     }
                 }
             }
@@ -1786,7 +1852,7 @@ namespace BOTS_BL.Repository
                                             howtoknow = result.Select(x => x.HowToKnowAbout).FirstOrDefault(),
                                             datetime = result.Select(x => x.AddedDate).FirstOrDefault(),
                                             comments = result.Select(x => x.Comments).FirstOrDefault(),
-                                            AudioStream = result.Select(x => x.AudioStream).FirstOrDefault(),                                            
+                                            AudioStream = result.Select(x => x.AudioStream).FirstOrDefault(),
                                         }).FirstOrDefault();
                         }
                         else

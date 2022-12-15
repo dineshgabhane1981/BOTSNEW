@@ -19,6 +19,7 @@
 
 <link href="~/Scripts/cute-alert-master/style-alert.css" rel="stylesheet" />
 <style>
+
     #loader {
         display: flex;
         width: 100%;
@@ -142,7 +143,7 @@
                     @Html.Hidden("HiddenHowToKnow", null, new { @id = "hdHowToKnow" })
                     if (Model.GroupId != "1051")
                     {
-                        <div class="col-md-12 col-sm-12 pt-3 pl-3 pr-3" style="text-align:center;" id="dvLogo">
+                        <div class="col-md-12 col-sm-12 pt-3 pl-3 pr-3 mt-5" style="text-align:center;" id="dvLogo">
                             <img src="@Model.LogoUrl" style="width:300px;" alt="Logo">
                         </div>
 
@@ -159,11 +160,11 @@
                                                 {
                                                     if (Model.GroupId != "1051")
                                                     {
-                                                        <h1 style="font-size:34px;">@item.Text @Model.GroupName!!!</h1>
+                                                        <h1 style="font-size:34px;">@Html.Raw(@item.Text) @Model.GroupName!!!</h1>
                                                     }
                                                     else
                                                     {
-                                                        <h1 style="font-size:34px;">@item.Text!!!</h1>
+                                                        <h1 style="font-size:34px;">@Html.Raw(@item.Text)!!!</h1>
                                                     }
                                                 }
                                                 if (item.TypeId == 2)
@@ -280,18 +281,21 @@
                                                 <label class="drinkcard-cc rbtvariety1" for="@rbtn1" style="margin-right:120px;"></label>
                                                 <label style="position: absolute; margin-top: 80px; margin-left: -200px; font-weight: bold; font-size: 24px;">Very Good</label>
                                                 <label style="position: absolute; margin-top: 115px; margin-left: -200px; font-weight: bold; font-size: 24px; ">खूप छान</label>
+
                                                 <input id="@rbtn2" type="radio" name="@name" />
                                                 <label class="drinkcard-cc rbtvariety2" for="@rbtn2" style="margin-right:120px;"></label>
                                                 <label style="position: absolute; margin-top: 80px; margin-left: -200px; font-weight: bold; font-size: 24px;">Good</label>
                                                 <label style="position: absolute; margin-top: 115px; margin-left: -200px; font-weight: bold; font-size: 24px; ">छान</label>
+
                                                 <input id="@rbtn3" type="radio" name="@name" />
                                                 <label class="drinkcard-cc rbtvariety3" for="@rbtn3" style="margin-right:120px;"></label>
-                                                <input id="@rbtn4" type="radio" name="@name" />
                                                 <label style="position: absolute; margin-top: 80px; margin-left: -200px; font-weight: bold; font-size: 24px;">Average</label>
                                                 <label style="position: absolute; margin-top: 115px; margin-left: -200px; font-weight: bold; font-size: 24px; ">सरासरी</label>
-                                                <label class="drinkcard-cc rbtvariety4" for="@rbtn4"></label>
-                                                <label style="position: absolute; margin-top: 80px; margin-left: -70px; font-weight: bold; font-size: 24px;">Bad</label>
-                                                <label style="position: absolute; margin-top: 115px; margin-left: -70px; font-weight: bold; font-size: 24px;">वाईट</label>
+
+                                                <input id="@rbtn4" type="radio" name="@name" />
+                                                <label class="drinkcard-cc rbtvariety4" for="@rbtn4" style="margin-right:120px;"></label>
+                                                <label style="position: absolute; margin-top: 80px; margin-left: -180px; font-weight: bold; font-size: 24px;">Bad</label>
+                                                <label style="position: absolute; margin-top: 115px; margin-left: -180px; font-weight: bold; font-size: 24px;">वाईट</label>
                                             </div>
 
                                         }
@@ -344,9 +348,18 @@
                         <div class="row mt-3">
                             @if (Model.GroupId != "1051")
                             {
-                                <div class="col-md-12 col-sm-12 pb-5" style="text-align:center;">
-                                    <button type="button" class="btn btn-primary" style="width: 280px; background-color: #1C699F; color:white; font-weight:bold; font-size:18px; border-radius:5px;" id="btnNextpg" onclick="SubmitRating();">Next Page</button>
-                                </div>
+                                if (Model.PointsAndMessages.IsOtherInfoShow)
+                                {
+                                    <div class="col-md-12 col-sm-12 pb-5" style="text-align:center;">
+                                        <button type="button" class="btn btn-primary" style="width: 280px; background-color: #1C699F; color:white; font-weight:bold; font-size:18px; border-radius:5px;" id="btnNextpg" onclick="SubmitRating();">Next Page</button>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="col-md-12 col-sm-12 pb-5" style="text-align:center;">
+                                        <button type="button" class="btn btn-primary" style="width: 280px; background-color: #1C699F; color:white; font-weight:bold; font-size:18px; border-radius:5px;" id="btnNextpg" onclick="SubmitRating();">Submit</button>
+                                    </div>
+                                }
                             }
                             else
                             {
@@ -590,6 +603,7 @@
                 success: function (response) {
                      console.log(response);
                     if (response == "true") {
+
                         var nm = $('#spnCustName').text();
                         $('#spnCustName1').text(nm);
                         $("#divLoader").hide();
@@ -605,8 +619,23 @@
                                 message: "Feedback Sent Successfully!",
                                 buttonText: "Okay"
                             }).then((e) => {
-                                    window.location.replace("https://www.blueocktopus.com/");
+                                window.location.replace("https://www.blueocktopus.com/");
                             });
+                        }
+                        else {
+                            var IsOtherInfoShow='@Model.PointsAndMessages.IsOtherInfoShow';
+                            if (IsOtherInfoShow != "True") {
+                                $("#dvLogo").hide();
+                                $("#divLoader").hide();
+                                cuteAlert({
+                                    type: "success",
+                                    title: "Save",
+                                    message: "FeedBack Save Successfully!",
+                                    buttonText: "Okay"
+                                }).then((e) => {
+                                    window.location.replace($("#url").text() + $("#hdoutletId").val());
+                                });
+                            }
                         }
 
                     }

@@ -10,7 +10,19 @@ html, body {
     margin: 0;
     padding: 0;
 }
+@media only screen and (max-width: 950px) {
+    .cf7_custom_style_1 {
+        padding-left: 0;
+        padding-right: 0;
+    }
+}
 
+@media only screen and (max-width: 600px) {
+    .cf7_custom_style_1 {
+        padding-left: 0;
+        padding-right: 0;
+    }
+}
 .user-menu, .notification-menu, .create-learning {
     border-radius: 0;
     position: relative;

@@ -18,6 +18,7 @@ namespace BOTS_BL.Models
             : base(connectionStringName)
         {
         }
+        public virtual DbSet<SMSOutletMapping> SMSOutletMappings { get; set; }
         public virtual DbSet<CompetitionDetail> CompetitionDetails { get; set; }
         public virtual DbSet<tblEmployee> tblEmployees {    get; set; }
         public virtual DbSet<tblNPCCategory> tblNPCCategories { get; set; }
