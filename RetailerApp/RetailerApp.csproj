@@ -243,6 +243,7 @@
     <Content Include="Content\assets\fonts\Pe-icon-7-stroke.eot" />
     <Content Include="Content\assets\fonts\Pe-icon-7-stroke.ttf" />
     <Content Include="Content\assets\fonts\Pe-icon-7-stroke.woff" />
+    <Content Include="Scripts\ConcatData.js" />
     <Content Include="Scripts\cute-alert-master\LICENSE" />
     <Content Include="Scripts\cute-alert-master\README.md" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
