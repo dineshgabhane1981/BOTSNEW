@@ -404,26 +404,27 @@
 
                                     //$("#CusExistContain").append('<div class = "col-md-2 col-sm-2" id="' + dynCustExistName[j] + '">' + Dynamicname + '</div>');
                                     if (j == 0) {
-                                    alert("Above div");
+                                    //alert("Above div");
                                         $('<div class="col-md-12 col-sm-12 row" id="TestRow1"></div>').insertAfter("#TestRow");
-                                        alert(Dynamicname);
+                                        //alert(Dynamicname);
                                         //$('<div class = "col-md-2 col-sm-2" id="' + dynCustExistName[j] + '">' + Dynamicname + '</div>').append("#TestRow1");
                                         
-                                        
+                                        alert(dynCustExistdiv2[j])
                                         $("#TestRow1").append('<div class = "col-md-2 col-sm-2" id="' + dynCustExistName[j] + '">' + Dynamicname + '</div>');
                                         
                                         //$("#" + dynCustExistName[j]).attr("class", "col-md-2 col-sm-2");
                                         var DD = $("#" + dynCustExistName[j]).val();
-                                        alert(DD);
+                                        //alert(DD);
                                         $("#" + dynCustExistName[j]).css("style", "margin-top:10px");
                                         //$("#CusExistContain").append('<div class = "col-md-4 col-sm-4" id="' + dynCustExistdiv2[j] + '"></div>');
                                         ////$("#" + dynCustExistdiv2[j]).attr("class", "col-md-4 col-sm-4");
                                         /*alert($("#" + dynCustExistdiv2[j]).val());*/
                                         //$('<div class = "col-md-4 col-sm-4" id="' + dynCustExistdiv2[j] + '"></div>').insertAfter("#" + dynCustExistName[j]);
                                         //$("#TestRow1").append('<div class = "col-md-4 col-sm-4" id="' + dynCustExistdiv2[j] + '"></div>');
-                                        $("#TestRow1").append('<div class = "col-md-2 col-sm-2" id="' + dynCustExistdiv2[j] + '"></div>');
-                                        $("#" + dynCustExistdiv2[j]).append('<input id=" + ctrlId1 + " type=\"number\"  class=\"input50\" />');
-                                        $("#" + dynCustExistdiv2[j]).css("style", "margin-top:10px");
+                                        var newId = "testing101";
+                                        $("#TestRow1").append('<div class = "col-md-4 col-sm-4" id="' + newId + '"></div>');
+                                        $("#" + newId).append('<input id=" + ctrlId1 + " type=\"number\"  class=\"input50\" />');
+                                        $("#" + newId).css("style", "margin-top:10px");
                                         //$("#" + dynCustExistdiv2[j]).css("style", "margin-top:10px");
                                         //$("#" + dynCustExistdiv2[j]).append(newCtrl);
                                         //$("#" + ctrlId).attr("class", "input50");
