@@ -485,6 +485,21 @@ namespace WebApp.Controllers
             return View("NonTransactionData", objDataNew);
         }
 
+        public ActionResult GetAllNonRedeemedData()
+        {
+            List<tblNonRedeemedGroup> objDataNew = new List<tblNonRedeemedGroup>();
+
+            try
+            {
+                objDataNew = SPR.GetAllNonRedeemedData();
+
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "NonRedeemedData");
+            }
+            return View("NonRedeemedData", objDataNew);
+        }
 
     }
 }

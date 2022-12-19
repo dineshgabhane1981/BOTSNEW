@@ -1133,6 +1133,16 @@ namespace BOTS_BL.Repository
             return objData;
         }
 
+        public List<tblNonRedeemedGroup> GetAllNonRedeemedData()
+        {
+            List<tblNonRedeemedGroup> objData = new List<tblNonRedeemedGroup>();
+            using (var context = new CommonDBContext())
+            {
+                objData = context.tblNonRedeemedGroups.OrderByDescending(x => x.LastTxnDate).ToList();
+            }
+            return objData;
+        }
+
 
     }
 
