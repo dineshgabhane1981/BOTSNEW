@@ -912,7 +912,7 @@ namespace BOTS_BL.Repository
                 {
                     var csId = context.tblRMAssigneds.Where(x => x.LoginId == CSWise).Select(y => y.RMAssignedId).FirstOrDefault();
                     groups = groups.Where(x => x.RMAssigned.Value == csId).ToList();
-                }              
+                }
                 foreach (var group in groups)
                 {
                     string grpId = Convert.ToString(group.GroupId);
@@ -1073,11 +1073,11 @@ namespace BOTS_BL.Repository
             {
                 using (var context = new CommonDBContext())
                 {
-                   
+
                     var FromDate = new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1);
                     var ToDate = new DateTime(DateTime.Today.AddMonths(3).Year, DateTime.Today.AddMonths(3).Month, 30);
 
-                    lstData = context.tblRenewalDatas.Where(x=>(x.RenewalDate> FromDate && x.RenewalDate<ToDate) || (x.NextPaymentDate > FromDate && x.NextPaymentDate < ToDate)).OrderByDescending(y=>y.RenewalDate).ToList();
+                    lstData = context.tblRenewalDatas.Where(x => (x.RenewalDate > FromDate && x.RenewalDate < ToDate) || (x.NextPaymentDate > FromDate && x.NextPaymentDate < ToDate)).OrderByDescending(y => y.RenewalDate).ToList();
 
                     foreach (var item in lstData)
                     {
@@ -1121,6 +1121,19 @@ namespace BOTS_BL.Repository
             }
             return status;
         }
+
+
+        public List<NonTransacting> GetAllNonTransactingData()
+        {
+            List<NonTransacting> objData = new List<NonTransacting>();
+            using (var context = new CommonDBContext())
+            {
+                objData = context.NonTransacting.OrderByDescending(x=>x.LastTxnDate).ToList();
+            }
+            return objData;
+        }
+
+
     }
-    
+
 }

@@ -138,12 +138,12 @@
                                 <ul>
                                     @if (roleId == "1" || roleId == "5" || roleId == "6" || roleId == "9")
                                     {
-                                        <li class="@Html.IsSelected(controller: "SinglePage", action: "NonTransacting")">
+                                        @*<li class="@Html.IsSelected(controller: "SinglePage", action: "NonTransacting")">
                                             <a class="@Html.IsSelected(controller: "SinglePage", action: "NonTransacting")" href="@Url.Action("NonTransacting", "SinglePage")">
                                                 <i class="metismenu-icon"></i>
                                                 Non Transacting
                                             </a>
-                                        </li>
+                                        </li>*@
                                     }
                                     <li class="@Html.IsSelected(controller: "SinglePage", action: "Communication")">
                                         <a class="@Html.IsSelected(controller: "SinglePage", action: "Communication")" href="@Url.Action("Communication", "SinglePage")">
@@ -175,6 +175,12 @@
                                             <a class="@Html.IsSelected(controller: "SinglePage", action: "GroupWise")" href="@Url.Action("GroupWise", "SinglePage")">
                                                 <i class="metismenu-icon"></i>
                                                 Group Wise
+                                            </a>
+                                        </li>
+                                        <li class="@Html.IsSelected(controller: "SinglePage", action: "GetAllNonTransactingData")">
+                                            <a class="@Html.IsSelected(controller: "SinglePage", action: "GetAllNonTransactingData")" href="@Url.Action("GetAllNonTransactingData", "SinglePage")">
+                                                <i class="metismenu-icon"></i>
+                                                Non Transacting
                                             </a>
                                         </li>
                                         if (roleId == "1" || roleId == "6")

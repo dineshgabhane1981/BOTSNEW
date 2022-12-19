@@ -468,5 +468,23 @@ namespace WebApp.Controllers
             result = SPR.AddPayment(objData);
             return new JsonResult() { Data = result, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
+
+        public ActionResult GetAllNonTransactingData()
+        {
+            List<NonTransacting> objDataNew = new List<NonTransacting>();
+           
+            try
+            {
+                objDataNew = SPR.GetAllNonTransactingData();
+               
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "NonTransactionData");
+            }
+            return View("NonTransactionData", objDataNew);
+        }
+
+
     }
 }

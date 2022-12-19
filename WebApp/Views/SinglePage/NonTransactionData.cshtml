@@ -1,0 +1,27 @@
+﻿@model  List<BOTS_BL.Models.NonTransacting>
+@{
+    ViewBag.Title = "NonTransactionData";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row mb-3 pt-3 pl-3 pr-3">
+    @if (Model != null)
+    {
+        <div>
+            <table border="1" cellpadding="5" cellspacing="5" style="margin-left:5px;margin-right:-10px;">
+                <tr style="background-color: lightgray;">
+                    <th>Customer Name</th>
+                    <th>Last Txn Date</th>
+
+                </tr>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.GroupName</td>
+                        <td>@item.LastTxnDate.Value.ToString("dd-MMM-yyyy")</td>
+                    </tr>
+                }
+            </table>
+        </div>
+    }
+</div>

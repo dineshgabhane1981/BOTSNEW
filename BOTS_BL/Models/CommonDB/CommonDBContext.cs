@@ -17,6 +17,8 @@ namespace BOTS_BL.Models
             : base("name=CommonDBContext")
         {
         }
+        public virtual DbSet<tblNonRedeemedGroup> tblNonRedeemedGroups { get; set; }
+        public virtual DbSet<NonTransacting> NonTransacting { get; set; }
         public virtual DbSet<WAReport> WAReports { get; set; }
         public virtual DbSet<CommonWAInstanceMaster> CommonWAInstanceMasters { get; set; }
         public virtual DbSet<tblRenewalData> tblRenewalDatas { get; set; }
