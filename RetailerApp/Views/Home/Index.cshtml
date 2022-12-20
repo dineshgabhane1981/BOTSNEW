@@ -266,7 +266,7 @@
                     <input id="txtInvoiceAmOldt" type="number" min="1" class="input50" />
                 </div>
             </div>
-            <div class="col-md-12 col-sm-12 row" id="TestRow">
+            <div class="col-md-12 col-sm-12 row" id="TestRow" hidden>
                 @*<div class="col-md-12 col-sm-12 row" style="margin-top:10px;">*@
                     <div class="col-md-2 col-sm-2" style="margin-top:10px;" id="TestField">
                         Test Field
@@ -370,6 +370,13 @@
                             var dynCustExistName = [];
                             for (j = 0; j < c; j++) {
                                 count = j + 1;
+                                var k = j - 1;
+                                var Iddivrow = [];
+                                Iddivrow[j] = "ddlCustom" + j;
+                                var IdExistName = [];
+                                IdExistName[j] = "dynCustExistName" + j;
+                                var IdExistdiv2 = [];
+                                IdExistdiv2[j] = "dynCustExistdiv2" + j;
 
                                 var innerCount = Object.keys(response.objJsonData.JsonList1[j]).length;
                                 if (innerCount > 1) {
@@ -377,134 +384,68 @@
                                     var Dynamicname;
                                     var ctrlId = "ddlCustom" + j;
                                     var items = "";
-                                    var newCtrl = '<select id="' + ctrlId + '"></select>';
+                                    var newCtrl = '<select id="' + ctrlId + ' "></select>';
                                     $.each(response.objJsonData.JsonList1[j], function (i, item) {
                                         Dynamicname = item.FieldName
                                         items += "<option value='" + item.FieldValue + "'>" + item.FieldValue + "</option>";
                                     });
 
-                                    ////$("#CusExistContain").html("<div id=div1></div>")
-                                    //$("#CusExistContain").append("Dynamic Field" + count);                              
-                                    //$("#CusExistContain").append(newCtrl);
-                                    //$("#" + ctrlId).html(items);
-
-                                    //$("#CusExistContain").append('<div class = "col-md-12 col-sm-12 row" id="' + dynCustExistdiv1[j] + '" ></div>');
-                                    //$("#" + dynCustExistdiv1[j]).append('<div id="' + dynCustExistName[j] + '">' + Dynamicname + '</div>');
-                                    //$("#" + dynCustExistName[j]).attr("class", "col-md-2 col-sm-2");
-                                    //$("#" + dynCustExistName[j]).css("style", "margin-top:10px");
-                                    //$("#CusExistContain").append('<div id="' + dynCustExistdiv2[j] + '"></div>');
-                                    //$("#" + dynCustExistdiv2[j]).attr("class", "col-md-4 col-sm-4");
-                                    //$("#" + dynCustExistdiv2[j]).css("style", "margin-top:10px");
-                                    //$("#" + dynCustExistdiv2[j]).append(newCtrl);
-                                    //$("#" + ctrlId).attr("class", "input50");
-                                    //$("#" + ctrlId).attr("style", "margin-top:10px");
-                                    //$("#" + ctrlId).html(items);
-
-                                   // $("#CusExistContain").append('<div class = "col-md-12 col-sm-12 row" id="' + dynCustExistdiv1[j] + '" ></div>');
-
-                                    //$("#CusExistContain").append('<div class = "col-md-2 col-sm-2" id="' + dynCustExistName[j] + '">' + Dynamicname + '</div>');
                                     if (j == 0) {
                                     //alert("Above div");
-                                        $('<div class="col-md-12 col-sm-12 row" id="TestRow1"></div>').insertAfter("#TestRow");
-                                        //alert(Dynamicname);
-                                        //$('<div class = "col-md-2 col-sm-2" id="' + dynCustExistName[j] + '">' + Dynamicname + '</div>').append("#TestRow1");
                                         
-                                        alert(dynCustExistdiv2[j])
-                                        $("#TestRow1").append('<div class = "col-md-2 col-sm-2" id="' + dynCustExistName[j] + '">' + Dynamicname + '</div>');
+                                        $('<div class="col-md-12 col-sm-12 row" id="' + Iddivrow[j]+'"></div>').insertAfter("#TestRow");
                                         
-                                        //$("#" + dynCustExistName[j]).attr("class", "col-md-2 col-sm-2");
-                                        var DD = $("#" + dynCustExistName[j]).val();
-                                        //alert(DD);
-                                        $("#" + dynCustExistName[j]).css("style", "margin-top:10px");
-                                        //$("#CusExistContain").append('<div class = "col-md-4 col-sm-4" id="' + dynCustExistdiv2[j] + '"></div>');
-                                        ////$("#" + dynCustExistdiv2[j]).attr("class", "col-md-4 col-sm-4");
-                                        /*alert($("#" + dynCustExistdiv2[j]).val());*/
-                                        //$('<div class = "col-md-4 col-sm-4" id="' + dynCustExistdiv2[j] + '"></div>').insertAfter("#" + dynCustExistName[j]);
-                                        //$("#TestRow1").append('<div class = "col-md-4 col-sm-4" id="' + dynCustExistdiv2[j] + '"></div>');
-                                        var newId = "testing101";
-                                        $("#TestRow1").append('<div class = "col-md-4 col-sm-4" id="' + newId + '"></div>');
-                                        $("#" + newId).append('<input id=" + ctrlId1 + " type=\"number\"  class=\"input50\" />');
-                                        $("#" + newId).css("style", "margin-top:10px");
-                                        //$("#" + dynCustExistdiv2[j]).css("style", "margin-top:10px");
-                                        //$("#" + dynCustExistdiv2[j]).append(newCtrl);
+                                        alert(IdExistName);
+                                        alert(IdExistdiv2);
+                                        alert(newCtrl);
+                                        alert(Dynamicname);
+                                        $("#" + Iddivrow[j]).append('<div class = "col-md-2 col-sm-2" id="' + IdExistName[j] + '">' + Dynamicname + '</div>');
+                                        
+                                        $("#" + IdExistName[j]).attr("style", "margin-top:10px");
+                                               
+                                        $("#" + Iddivrow[j]).append('<div class = "col-md-4 col-sm-4" id="' + IdExistdiv2[j] + '"></div>');
+                                        //$('<div class = "col-md-4 col-sm-4" id="' + IdExistdiv2 + '"></div>').insertAfter("#" + IdExistName);
+                                        $("#" + IdExistdiv2[j]).append('<input id=" + ctrlId1 + " type=\"number\"  class=\"input50\" />');
+                                        $("#" + IdExistdiv2[j]).attr("style", "margin-top:10px");
+                                        //$("#" + IdExistdiv2[j]).append(newCtrl);
+                                        //alert(newCtrl);
+                                        //alert(ctrlId);
+                                        //alert(items);
                                         //$("#" + ctrlId).attr("class", "input50");
+                                        
                                         //$("#" + ctrlId).attr("style", "margin-top:10px");
-                                        //$("#" + ctrlId).html(items);
+                                        //$("#" + ctrlId).append(items);
                                     }
-                                    //else {
-                                    //    $('<div class = "col-md-2 col-sm-2" id="' + dynCustExistName[j] + '">' + Dynamicname + '</div>').insertAfter("#" + dynCustExistName[j]);
-                                    //    //$("#" + dynCustExistName[j]).attr("class", "col-md-2 col-sm-2");
-                                    //    $("#" + dynCustExistName[j]).css("style", "margin-top:10px");
-                                    //    //$("#CusExistContain").append('<div class = "col-md-4 col-sm-4" id="' + dynCustExistdiv2[j] + '"></div>');
-                                    //    ////$("#" + dynCustExistdiv2[j]).attr("class", "col-md-4 col-sm-4");
-                                    //    $('<div class = "col-md-4 col-sm-4" id="' + dynCustExistdiv2[j] + '"></div>').insertAfter("#" + dynCustExistdiv2[j]);
-                                    //    $("#" + dynCustExistdiv2[j]).css("style", "margin-top:10px");
-                                    //    $("#" + dynCustExistdiv2[j]).append(newCtrl);
-                                    //    $("#" + ctrlId).attr("class", "input50");
-                                    //    $("#" + ctrlId).attr("style", "margin-top:10px");
-                                    //    $("#" + ctrlId).html(items);
-                                    //}
                                 }
-                                //else {
-                                //    //Textbox or date
-                                //    $.each(response.objJsonData.JsonList1[j], function (i, item) {
-                                //        var Dynamicname;
-                                //        Dynamicname = item.FieldName
-                                //        if (item.FieldOptionId == "1") {
-                                //            //$("#CusExistContain").append("<br/>");
-                                //            //$("#CusExistContain").append("Dynamic Field" + count);
-                                //            //var ctrlId1 = "txtCustome" + j;
-                                //            //var txtCtrl = "<input id=" + ctrlId1 + " type=\"number\"  class=\"input50\" />";
-                                //            //$("#CusExistContain").append(txtCtrl);
+                                else {
+                                    //Textbox or date
+                                    alert("inside else");
+                                    alert(IdExistName[j]);
+                                    alert("k ="+ k)
+                                    alert($("#"+Iddivrow[k]));
+                                    $.each(response.objJsonData.JsonList1[j], function (i, item) {
+                                        var Dynamicname;
+                                        Dynamicname = item.FieldName
+                                        if (item.FieldOptionId == "1") {                                           
+                                            var ctrlId1 = "txtCustome" + j;
+                                            var txtCtrl = "<input id=" + ctrlId1 + " type=\"text\"  class=\"input50\" />";
 
-                                //            //$("#CusExistContain").append("<div id =div1></div>");
-                                //            //$("#div1").append("Dynamic Field" + count);
-                                //            var ctrlId1 = "txtCustome" + j;
-                                //            var txtCtrl = "<input id=" + ctrlId1 + " type=\"text\"  class=\"input50\" />";
+                                            $('<div class="col-md-12 col-sm-12 row" id="' + Iddivrow[j] + '"></div>').insertAfter("#" + Iddivrow[k]);
+                                            $("#" + Iddivrow[j]).append('<div class = "col-md-2 col-sm-2" id="' + IdExistName[j] + '">' + Dynamicname + '</div>');
+                                            $("#" + IdExistName[j]).attr("style", "margin-top:10px");
 
+                                            $("#" + Iddivrow[j]).append('<div class = "col-md-4 col-sm-4" id="' + IdExistdiv2[j] + '"></div>');
+                                            $("#" + IdExistdiv2[j]).append('<input id=" + ctrlId1 + " type=\"number\"  class=\"input50\" />');
+                                            $("#" + IdExistdiv2[j]).attr("style", "margin-top:10px");
+                                            //$('<div id="' + dynCustExistName[j] + '">' + Dynamicname + '</div>').insertAfter("#" + dynCustExistName[j-1]);
+                                            //$("#" + dynCustExistName[j]).attr("class", "col-md-2 col-sm-2", "style", "margin-top:10px;");
+                                            //$('<div id="' + dynCustExistdiv2[j] + '"></div>').insertAfter("#" + dynCustExistdiv2[j]);
+                                            //$("#" + dynCustExistdiv2[j]).attr("class", "col-md-4 col-sm-4", "style", "margin-top:10px;");
+                                            //$("#" + dynCustExistdiv2[j]).append(txtCtrl);
 
-                                //            //$("#CusExistContain").append('<div class = "col-md-12 col-sm-12 row" id="' + dynCustExistdiv1[j] + '" ></div>');
-                                //            ////$("#" + dynCustExistdiv1[j]).append("Dynamic Field" + count);
-                                //            ////$("#CusExistContain").append('<div id="' + dynCustExistName[j] + '">Dynamic Field</div>');
-                                //            //$("#" + dynCustExistdiv1[j]).append('<div id="' + dynCustExistName[j] + '">' + Dynamicname + '</div>');
-                                //            //$("#" + dynCustExistName[j]).attr("class", "col-md-2 col-sm-2", "style", "margin-top:10px;");
-                                //            //$("#" + dynCustExistdiv1[j]).append('<div id="' + dynCustExistdiv2[j] + '"></div>');
-                                //            //$("#" + dynCustExistdiv2[j]).attr("class", "col-md-4 col-sm-4", "style", "margin-top:10px;");
-                                //            //$("#" + dynCustExistdiv2[j]).append(txtCtrl);
-
-                                //            //$("#CusExistContain").append('<div class = "col-md-12 col-sm-12 row" id="' + dynCustExistdiv1[j] + '" ></div>');
-                                //            //$("#CusExistContain").append('<div id="' + dynCustExistName[j] + '">' + Dynamicname + '</div>');
-                                //            $('<div id="' + dynCustExistName[j] + '">' + Dynamicname + '</div>').insertAfter("#" + dynCustExistName[j]);
-                                //            $("#" + dynCustExistName[j]).attr("class", "col-md-2 col-sm-2", "style", "margin-top:10px;");
-                                //            //$("#CusExistContain").append('<div id="' + dynCustExistdiv2[j] + '"></div>');
-                                //            $('<div id="' + dynCustExistdiv2[j] + '"></div>').insertAfter("#" + dynCustExistdiv2[j]);
-                                //            $("#" + dynCustExistdiv2[j]).attr("class", "col-md-4 col-sm-4", "style", "margin-top:10px;");
-                                //            $("#" + dynCustExistdiv2[j]).append(txtCtrl);
-
-                                //        }
-                                //        else if (item.FieldOptionId == "2") {
-                                //            var ctrlId2 = "txtDate" + j;
-                                //            var txtDate = "<input id=" + ctrlId2 + " type=\"Date\"  class=\"input50\" />";
-
-                                //            //$("#CusExistContain").append('<div class = "col-md-12 col-sm-12 row" id="' + dynCustExistdiv1[j] + '" ></div>');
-                                //            //$("#" + dynCustExistdiv1[j]).append('<div id="' + dynCustExistName[j] + '">' + Dynamicname + '</div>');
-                                //            //$("#" + dynCustExistName[j]).attr("class", "col-md-2 col-sm-2", "style", "margin-top:10px;");
-                                //            //$("#" + dynCustExistdiv1[j]).append('<div id="' + dynCustExistdiv2[j] + '"></div>');
-                                //            //$("#" + dynCustExistdiv2[j]).attr("class", "col-md-4 col-sm-4", "style", "margin-top:10px;");
-                                //            //$("#" + dynCustExistdiv2[j]).append(txtDate);
-
-                                //            //$("#CusExistContain").append('<div class = "col-md-12 col-sm-12 row" id="' + dynCustExistdiv1[j] + '" ></div>');
-
-                                //            //$("#CusExistContain").append('<div id="' + dynCustExistName[j] + '">' + Dynamicname + '</div>');
-                                //            $('<div id="' + dynCustExistName[j] + '">' + Dynamicname + '</div>').insertAfter("#" + dynCustExistName[j]);
-                                //            $("#" + dynCustExistName[j]).attr("class", "col-md-2 col-sm-2", "style", "margin-top:10px;");
-                                //            //$("#CusExistContain").append('<div id="' + dynCustExistdiv2[j] + '"></div>');
-                                //            $('<div id="' + dynCustExistdiv2[j] + '"></div>').insertAfter("#" + dynCustExistdiv2[j]);;
-                                //            $("#" + dynCustExistdiv2[j]).attr("class", "col-md-4 col-sm-4", "style", "margin-top:10px;");
-                                //            $("#" + dynCustExistdiv2[j]).append(txtDate);
-                                //        }
-                                //    });
-                                //}
+                                        }
+                                    });
+                                }
                                 count++;
                                 //$.each(response.objJsonData.JsonList1[j], function (i, item) {
 
