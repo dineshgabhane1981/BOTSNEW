@@ -49,12 +49,14 @@ namespace WebApp.Controllers
                 string StartDate = Convert.ToString(item["StartDate"]);
                 string PerFeedback = Convert.ToString(item["PerFeedback"]);
                 string PaymentMode = Convert.ToString(item["PaymentMode"]);
+                string ReminderCount = Convert.ToString(item["ReminderCount"]);
 
                 Feedback_FeedbackConfig objFeedback = new Feedback_FeedbackConfig();
                 objFeedback.GroupId = Convert.ToInt32(GroupId);
                 objFeedback.Fees = Fees;
                 objFeedback.PaymentMode = PaymentMode;
                 objFeedback.PerFeedbackCharge = Convert.ToInt32(PerFeedback);
+                objFeedback.ReminderCount = Convert.ToInt32(ReminderCount);
                 objFeedback.StartDate = Convert.ToDateTime(StartDate).Date;
                 objFeedback.EndDate = Convert.ToDateTime(StartDate).AddDays(364).Date;
                 objFeedback.AddedBy = userDetails.LoginId;

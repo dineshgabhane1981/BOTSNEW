@@ -1437,9 +1437,11 @@ namespace BOTS_BL.Repository
                 {
                     lstData = lstData.Where(x => x.OutletId == OutletId).Select(y => y).ToList();
                 }
-
-                lstData = lstData.Where(x => x.AddedDate >= Frmdt).Select(y => y).ToList();
-                lstData = lstData.Where(x => x.AddedDate < Tdt).Select(y => y).ToList();
+                if (!string.IsNullOrEmpty(FromDt) && !string.IsNullOrEmpty(ToDT))
+                {
+                    lstData = lstData.Where(x => x.AddedDate >= Frmdt).Select(y => y).ToList();
+                    lstData = lstData.Where(x => x.AddedDate < Tdt).Select(y => y).ToList();
+                }
 
                 var uniqueMobileNo = lstData.GroupBy(x => x.MobileNo).Select(y => y.First()).ToList();
 

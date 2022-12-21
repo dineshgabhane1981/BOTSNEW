@@ -27,6 +27,10 @@
                         <option value="Cheque">Cheque</option>
                     </select>
                 </div>
+                <div class="col-sm-3" style="float:left;width:50px;">
+                    Recharge Reminder count
+                    <input id="txtReminderCount" type="number" class="input50" />
+                </div>
                 <div class="col-sm-1" style="margin-top:10px;">
                     <button class="btn btn-primary" onclick="EnableFeedback();">Save</button>
                 </div>
@@ -189,6 +193,9 @@
             item["StartDate"] = $("#txtStartDate").val();
             item["PerFeedback"] = $("#txtPerFeedback").val();
             item["PaymentMode"] = $("#ddlPaymentMode").val();
+            item["ReminderCount"] = $("#txtReminderCount").val();
+
+            
 
             SeardhData.push(item);
             var data = JSON.stringify(SeardhData);
