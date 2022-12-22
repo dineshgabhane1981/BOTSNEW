@@ -12,7 +12,7 @@
 
 <div class="app-main__inner">
     <input type="hidden" id="hdnNames" />
-    @if (!string.IsNullOrEmpty(Model.RenewalDate))
+    @*@if (!string.IsNullOrEmpty(Model.RenewalDate))
     {
         if (Model.RemainingDaysForRenewal < 45)
         {
@@ -26,9 +26,22 @@
                 <marquee direction="left"> Renewal Date - <b style="color:green;"> @Model.RenewalDate </b> & Days remaining for renewal - <b style="color: green;"> @Model.RemainingDaysForRenewal </b></marquee>
             </div>
         }
-    }
+    }*@
     @if (level == "02")
     {
+        <div class="row">
+            <div class="col-md-12 col-lg-12">
+                <div class="mb-3 card">
+                    <div class="card-header-tab card-header-tab-animation card-header">
+                        <div class="card-header-title" style="cursor:pointer;">
+                            <i class="header-icon lnr-apartment icon-gradient bg-love-kiss"> </i>
+                            From Date &nbsp; &nbsp; <input type="date" id="FromDate" class="input50" />&nbsp; &nbsp;  To Date &nbsp; &nbsp; <input type="date" id="ToDate" class="input50" />&nbsp; &nbsp; <button type="button" id="Filter" class="btn btn-primary" style="margin-top:10px;">Filter</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <div class="row">
             <div class="col-md-6 col-xl-4">
                 <div class="card mb-3 widget-content bg-midnight-bloom">
@@ -124,7 +137,6 @@
                     </div>
                 </div>
             </div>
-
         </div>
 
         <div class="row">
