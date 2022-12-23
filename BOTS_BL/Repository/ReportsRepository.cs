@@ -132,6 +132,7 @@ namespace BOTS_BL.Repository
             {
                 using (var context = new BOTSDBContext(connstr))
                 {
+                    context.Database.CommandTimeout = 120;
                     if (GroupId == "1086")
                     {
                         lstOutletWise = context.Database.SqlQuery<OutletWise>("sp_BOTS_OutletwiseSummary @pi_GroupId, @pi_Date, @pi_LoginId, @pi_DateRangeFlag, @pi_FromDate, @pi_ToDate",
@@ -156,7 +157,7 @@ namespace BOTS_BL.Repository
             }
             catch (Exception ex)
             {
-                throw ex;
+                newexception.AddException(ex, GroupId);
             }
             return lstOutletWise;
         }

@@ -719,6 +719,7 @@ namespace BOTS_BL.Repository
             string connStr = objCustRepo.GetCustomerConnString(GroupId);
             using (var contextNew = new BOTSDBContext(connStr))
             {
+                contextNew.Database.CommandTimeout = 300;
                 lstLogDetails = contextNew.LogDetailsRWs.Where(x => x.ReceivedData.Contains(search)).ToList();
             }
             foreach (var item in lstLogDetails)

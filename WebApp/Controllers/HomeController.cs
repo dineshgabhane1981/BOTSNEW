@@ -29,7 +29,7 @@ namespace WebApp.Controllers
             {
                 var userDetails = (CustomerLoginDetail)Session["UserSession"];
                 var lstOutlet = RR.GetOutletList(userDetails.GroupId, userDetails.connectionString);
-                dataDashboard = DR.GetDashboardData(userDetails.GroupId, userDetails.connectionString, userDetails.LoginId);
+                dataDashboard = DR.GetDashboardData(userDetails.GroupId, userDetails.connectionString, userDetails.LoginId,"","");
                 userDetails.IsFeedback = CR.GetIsFeedback(userDetails.GroupId);
                 Session["UserSession"] = userDetails;
                 ViewBag.OutletList = lstOutlet;
@@ -43,6 +43,7 @@ namespace WebApp.Controllers
             }
             return View(dataDashboard);
         }
+        
 
         public ActionResult About()
         {
@@ -59,7 +60,25 @@ namespace WebApp.Controllers
         }
 
         [HttpPost]
-        public JsonResult GetMemberSegmentResult(string OutletId)
+        public JsonResult GetDashboardDataFiltered(string frmDate, string toDate)
+        {
+            ExecutiveSummary dataDashboard = new ExecutiveSummary();
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            try
+            {
+                dataDashboard = DR.GetDashboardData(userDetails.GroupId, userDetails.connectionString, userDetails.LoginId, frmDate, toDate);
+
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, userDetails.GroupId);
+            }
+            //lstMember = RR.GetMemberList(SearchText);
+            return new JsonResult() { Data = dataDashboard, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
+        }
+
+        [HttpPost]
+        public JsonResult GetMemberSegmentResult(string OutletId, string frmDate, string toDate)
         {
             List<object> lstData = new List<object>();
             List<long> dataList = new List<long>();
@@ -69,7 +88,7 @@ namespace WebApp.Controllers
                 List<string> lstDates = new List<string>();
 
                 DashboardMemberSegment dataMemberSegment = new DashboardMemberSegment();
-                dataMemberSegment = DR.GetDashboardMemberSegmentData(userDetails.GroupId, OutletId, userDetails.connectionString, userDetails.LoginId);
+                dataMemberSegment = DR.GetDashboardMemberSegmentData(userDetails.GroupId, OutletId, userDetails.connectionString, userDetails.LoginId, frmDate, toDate);
 
                 dataList.Add(dataMemberSegment.NoofMember_Total);
                 dataList.Add(dataMemberSegment.NoofMember_Repeat);
@@ -91,7 +110,7 @@ namespace WebApp.Controllers
         }
 
         [HttpPost]
-        public JsonResult GetSharedBizResult(string OutletId)
+        public JsonResult GetSharedBizResult(string OutletId, string frmDate, string toDate)
         {
             List<object> lstData = new List<object>();
             List<string> nameList = new List<string>();
@@ -102,7 +121,7 @@ namespace WebApp.Controllers
             try
             {
                 List<DashboardBizShared> lstBizShared = new List<DashboardBizShared>();
-                lstBizShared = DR.GetDashboardBizShared(userDetails.GroupId, OutletId, userDetails.connectionString, userDetails.LoginId);
+                lstBizShared = DR.GetDashboardBizShared(userDetails.GroupId, OutletId, userDetails.connectionString, userDetails.LoginId, frmDate, toDate);
                 lstBizShared.Reverse();
                 foreach (var item in lstBizShared)
                 {
@@ -125,14 +144,14 @@ namespace WebApp.Controllers
         }
 
         [HttpPost]
-        public JsonResult GetMemberSegmentTxnResult(string OutletId)
+        public JsonResult GetMemberSegmentTxnResult(string OutletId, string frmDate, string toDate)
         {
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
             List<DashboardMemberSegmentTxn> dataMemberSegmentTxn = new List<DashboardMemberSegmentTxn>();
             try
             {
 
-                dataMemberSegmentTxn = DR.GetDashboardMemberSegmentTxnData(userDetails.GroupId, OutletId, userDetails.connectionString, userDetails.LoginId);
+                dataMemberSegmentTxn = DR.GetDashboardMemberSegmentTxnData(userDetails.GroupId, OutletId, userDetails.connectionString, userDetails.LoginId, frmDate, toDate);
             }
             catch (Exception ex)
             {
@@ -142,7 +161,7 @@ namespace WebApp.Controllers
         }
 
         [HttpPost]
-        public JsonResult GetOutletEnrolmentResult(string monthFlag)
+        public JsonResult GetOutletEnrolmentResult(string monthFlag, string frmDate, string toDate)
         {
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
             List<object> lstData = new List<object>();
@@ -150,7 +169,7 @@ namespace WebApp.Controllers
             {
 
                 List<DashboardOutletEnrolment> dataOutletEnrolment = new List<DashboardOutletEnrolment>();
-                dataOutletEnrolment = DR.GetDashboardOutletEnrolmentData(userDetails.GroupId, monthFlag, userDetails.connectionString, userDetails.LoginId);
+                dataOutletEnrolment = DR.GetDashboardOutletEnrolmentData(userDetails.GroupId, monthFlag, userDetails.connectionString, userDetails.LoginId, frmDate, toDate);
                 List<string> nameList = new List<string>();
                 List<long> dataList = new List<long>();
                 foreach (var item in dataOutletEnrolment)
@@ -172,7 +191,7 @@ namespace WebApp.Controllers
         }
 
         [HttpPost]
-        public JsonResult GetPointsSummaryResult(string monthFlag)
+        public JsonResult GetPointsSummaryResult(string monthFlag, string frmDate, string toDate)
         {
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
             List<long> dataList = new List<long>();
@@ -184,7 +203,7 @@ namespace WebApp.Controllers
                     loginId = userDetails.OutletOrBrandId;
                 }
                 DashboardPointsSummary dataPointsSummary = new DashboardPointsSummary();
-                dataPointsSummary = DR.GetDashboardPointsSummaryData(userDetails.GroupId, monthFlag, userDetails.connectionString, loginId);
+                dataPointsSummary = DR.GetDashboardPointsSummaryData(userDetails.GroupId, monthFlag, userDetails.connectionString, loginId, frmDate, toDate);
 
                 dataList.Add(dataPointsSummary.PointsIssued);
                 dataList.Add(dataPointsSummary.PointsRedeemed);
@@ -200,7 +219,7 @@ namespace WebApp.Controllers
             return new JsonResult() { Data = dataList, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
 
-        public JsonResult GetMemberWebPageResult(string profileFlag)
+        public JsonResult GetMemberWebPageResult(string profileFlag, string frmDate, string toDate)
         {
             List<long> dataList = new List<long>();
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
@@ -208,7 +227,7 @@ namespace WebApp.Controllers
             {
 
                 DashboardMemberWebPage dataMemberWebPage = new DashboardMemberWebPage();
-                dataMemberWebPage = DR.GetDashboardMemberWebPageData(userDetails.GroupId, profileFlag, userDetails.connectionString, userDetails.LoginId);
+                dataMemberWebPage = DR.GetDashboardMemberWebPageData(userDetails.GroupId, profileFlag, userDetails.connectionString, userDetails.LoginId, frmDate, toDate);
 
                 dataList.Add(dataMemberWebPage.MemberBase);
                 dataList.Add(dataMemberWebPage.ReferringBase);
@@ -237,7 +256,7 @@ namespace WebApp.Controllers
         }
 
 
-        public JsonResult GetBulkUploadResult()
+        public JsonResult GetBulkUploadResult(string frmDate, string toDate)
         {
             List<object> dataList = new List<object>();
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
@@ -245,10 +264,9 @@ namespace WebApp.Controllers
             {
 
                 DashboardBulkUpload objDashboardBulkUpload = new DashboardBulkUpload();
-                objDashboardBulkUpload = DR.GetDashboardBulkUpload(userDetails.GroupId, userDetails.connectionString, userDetails.LoginId);
+                objDashboardBulkUpload = DR.GetDashboardBulkUpload(userDetails.GroupId, userDetails.connectionString, userDetails.LoginId, frmDate, toDate);
                 if (objDashboardBulkUpload != null)
                 {
-
                     dataList.Add(objDashboardBulkUpload.TotalUpload);
                     dataList.Add(objDashboardBulkUpload.UniqueTransacted);
                     dataList.Add(objDashboardBulkUpload.TransactedCount);
@@ -263,7 +281,7 @@ namespace WebApp.Controllers
             }
             return new JsonResult() { Data = dataList, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
-        public JsonResult GetRedemptionResult(string type)
+        public JsonResult GetRedemptionResult(string type, string frmDate, string toDate)
         {
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
             List<object> dataList = new List<object>();
@@ -271,7 +289,7 @@ namespace WebApp.Controllers
             {
 
                 DashboardRedemption objDashboardRedemption = new DashboardRedemption();
-                objDashboardRedemption = DR.GetDashboardRedemption(userDetails.GroupId, type, userDetails.connectionString, userDetails.LoginId);
+                objDashboardRedemption = DR.GetDashboardRedemption(userDetails.GroupId, type, userDetails.connectionString, userDetails.LoginId, frmDate, toDate);
                 if (objDashboardRedemption != null)
                 {
                     dataList.Add(objDashboardRedemption.RedeemedMembers);

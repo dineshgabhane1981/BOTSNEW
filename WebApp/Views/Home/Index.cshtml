@@ -35,7 +35,7 @@
                     <div class="card-header-tab card-header-tab-animation card-header">
                         <div class="card-header-title" style="cursor:pointer;">
                             <i class="header-icon lnr-apartment icon-gradient bg-love-kiss"> </i>
-                            From Date &nbsp; &nbsp; <input type="date" id="FromDate" class="input50" />&nbsp; &nbsp;  To Date &nbsp; &nbsp; <input type="date" id="ToDate" class="input50" />&nbsp; &nbsp; <button type="button" id="Filter" class="btn btn-primary" style="margin-top:10px;">Filter</button>
+                            From Date &nbsp; &nbsp; <input type="date" id="FromDate" class="input50" />&nbsp; &nbsp;  To Date &nbsp; &nbsp; <input type="date" id="ToDate" class="input50" />&nbsp; &nbsp; <button type="button" id="btnFilter" class="btn btn-primary" style="margin-top:10px;">Filter</button>
                         </div>
                     </div>
                 </div>
@@ -53,7 +53,7 @@
 
                         </div>
                         <div class="widget-content-right">
-                            <div class="widget-numbers text-white"><span>@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(Model.TotalBiz))</span></div>
+                            <div class="widget-numbers text-white"><span id="spnTotalBiz">@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(Model.TotalBiz))</span></div>
                         </div>
                     </div>
                 </div>
@@ -68,7 +68,7 @@
 
                         </div>
                         <div class="widget-content-right">
-                            <div class="widget-numbers text-white"><span>@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(Model.LoyaltyBiz))</span></div>
+                            <div class="widget-numbers text-white"><span id="spnLoyaltyBiz">@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(Model.LoyaltyBiz))</span></div>
                         </div>
                     </div>
                 </div>
@@ -88,7 +88,7 @@
                                 @if (Convert.ToDouble(Model.TotalBiz) > 0)
                                 {
                                     var num = String.Format(new CultureInfo("en-IN", false), "{0:n2}", Convert.ToDouble(Convert.ToDouble(Model.LoyaltyBiz * 100) / Convert.ToDouble(Model.TotalBiz)));
-                                    <span>
+                                    <span id="spnLoyaltyPercentage">
                                         @num%
                                     </span>
                                 }
@@ -484,6 +484,7 @@
 
 <script>
     $(document).ready(function () {
+
         ShowMemberSegmentChart();
         ShowAllSharedBiz();
         showOutletEnrolmentChart('');
@@ -497,6 +498,17 @@
         $("#sharedBizOutletList").on("change", function () {
             ShowAllSharedBiz();
         });
+        $("#btnFilter").on("click", function () {
+            ShowLoyaltyBizData();
+            ShowMemberSegmentChart();
+            ShowAllSharedBiz();
+            showOutletEnrolmentChart('');
+            showPointSummeryChart('');
+            showMemberWebpageChart('1');
+            showBulkUploadChart();
+            showRedemptionChart('1');            
+        });
+
 
     });
     function ToggleKeyPointers() {
@@ -507,14 +519,50 @@
         ShowMemberSegmentChart();
     }
 
+    function ShowLoyaltyBizData() {
+        var frmDate = $("#FromDate").val();
+        var toDate = $("#ToDate").val();
+        $("#divLoader").show();
+        
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("GetDashboardDataFiltered", "Home")',
+            data: "{'frmDate': '" + frmDate + "','toDate': '" + toDate + "'}",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                console.log("IN");
+                console.log(response);
+                console.log(response.TotalBiz);
+                
+                $("#spnTotalBiz").text(addComma(response.TotalBiz));
+                $("#spnLoyaltyBiz").text(addComma(response.LoyaltyBiz));
+                if (response.LoyaltyBiz > 0)
+                {
+                    var num = parseFloat(response.LoyaltyBiz) * 100 / parseFloat(response.TotalBiz);
+                    $("#spnLoyaltyPercentage").text(parseFloat(num.toFixed(2))+'%');
+                    
+                }
+            },
+            failure: function (response) {
+                $("#divLoader").hide();
+            },
+            error: function (response) {
+                $("#divLoader").hide();
+            }
+        });
+    }
+
     function ShowMemberSegmentChart() {
+        var frmDate = $("#FromDate").val();
+        var toDate = $("#ToDate").val();
         $("#divLoader").show();
         var selectedOutlet = $("#memberSegmentOutletList").val();
         var outletData = [];
         $.ajax({
             type: "POST",
             url: '@Url.Action("GetMemberSegmentResult", "Home")',
-            data: "{'OutletId': '" + selectedOutlet + "'}",
+            data: "{'OutletId': '" + selectedOutlet + "','frmDate': '" + frmDate + "','toDate': '" + toDate + "'}",
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             success: function (response) {
@@ -608,7 +656,7 @@
 
 
                     var resp1 = response[1];
-                    console.log("aaa - "+resp1);
+                    //console.log("aaa - "+resp1);
                     if (resp1[0] != null && resp1[1] != null) {
                         $("#spnPeriod").text("PERIOD : " + resp1[0] + " TO " + resp1[1]);
                     }
@@ -621,7 +669,7 @@
                     $.ajax({
                         type: "POST",
                         url: "Home/GetMemberSegmentTxnResult",
-                        data: "{'OutletId': '" + selectedOutlet + "'}",
+                        data: "{'OutletId': '" + selectedOutlet + "','frmDate': '" + frmDate + "','toDate': '" + toDate + "'}",
                         contentType: "application/json; charset=utf-8",
                         dataType: "json",
                         success: function (response) {
@@ -697,15 +745,17 @@
     function ShowAllSharedBiz() {
         $("#divLoader").show();
         var selectedOutlet = $("#sharedBizOutletList").val();
+        var frmDate = $("#FromDate").val();
+        var toDate = $("#ToDate").val();
         var outletData = [];
         $.ajax({
             type: "POST",
             url: '@Url.Action("GetSharedBizResult", "Home")',
-            data: "{'OutletId': '" + selectedOutlet + "'}",
+            data: "{'OutletId': '" + selectedOutlet + "','frmDate': '" + frmDate + "','toDate': '" + toDate + "'}",
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             success: function (response) {
-                console.log(response);
+                //console.log(response);
                 $('#sharedBizcanvas').remove(); // this is my <canvas> element
                 $('#canvasSharedBizContainer').append('<canvas id="sharedBizcanvas"><canvas>');
                 var names = response[0];
@@ -766,11 +816,13 @@
     }
 
     function showOutletEnrolmentChart(flag) {
+        var frmDate = $("#FromDate").val();
+        var toDate = $("#ToDate").val();
         $("#divLoader").show();
         $.ajax({
             type: "POST",
             url: '@Url.Action("GetOutletEnrolmentResult", "Home")',
-            data: "{'monthFlag': '" + flag + "'}",
+            data: "{'monthFlag': '" + flag + "','frmDate': '" + frmDate + "','toDate': '" + toDate + "'}",
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             success: function (response) {
@@ -898,11 +950,13 @@
     }
 
     function showPointSummeryChart(flag) {
+        var frmDate = $("#FromDate").val();
+        var toDate = $("#ToDate").val();
         $("#divLoader").show();
         $.ajax({
             type: "POST",
             url: '@Url.Action("GetPointsSummaryResult", "Home")',
-            data: "{'monthFlag': '" + flag + "'}",
+            data: "{'monthFlag': '" + flag + "','frmDate': '" + frmDate + "','toDate': '" + toDate + "'}",
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             success: function (response) {
@@ -1006,15 +1060,17 @@
     }
 
     function showMemberWebpageChart(flag) {
+        var frmDate = $("#FromDate").val();
+        var toDate = $("#ToDate").val();
         $("#divLoader").show();
         $.ajax({
             type: "POST",
              url: '@Url.Action("GetMemberWebPageResult", "Home")',
-            data: "{'profileFlag': '" + flag + "'}",
+            data: "{'profileFlag': '" + flag + "','frmDate': '" + frmDate + "','toDate': '" + toDate + "'}",
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             success: function (response) {
-                console.log(response)
+                //console.log(response)
                 if (response != null) {
                     if (response[7] == "1") {
                         $("#dvMWPMsessage").show();
@@ -1047,7 +1103,7 @@
                         var data1 = response[0];
                         var data2 = response[6];
                         if (flag == 1) {
-                            console.log("Profile");
+                            //console.log("Profile");
                             data2 = response[1];
                         }
                         var data = {
@@ -1108,11 +1164,14 @@
         }
     }
 
-     function showBulkUploadChart() {
+    function showBulkUploadChart() {
+        var frmDate = $("#FromDate").val();
+        var toDate = $("#ToDate").val();
         $("#divLoader").show();
         $.ajax({
             type: "POST",
-             url: '@Url.Action("GetBulkUploadResult", "Home")',
+            url: '@Url.Action("GetBulkUploadResult", "Home")',
+            data: "{'frmDate': '" + frmDate + "','toDate': '" + toDate + "'}",
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             success: function (response) {
@@ -1199,16 +1258,18 @@
     }
 
     function showRedemptionChart(type) {
+        var frmDate = $("#FromDate").val();
+        var toDate = $("#ToDate").val();
         $("#divLoader").show();
         $.ajax({
             type: "POST",
             url: '@Url.Action("GetRedemptionResult", "Home")',
-            data: "{'type': '" + type + "'}",
+            data: "{'type': '" + type + "','frmDate': '" + frmDate + "','toDate': '" + toDate + "'}",
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             success: function (response) {
                 if (response != null) {
-                    console.log(response[0]);
+                    //console.log(response[0]);
                     $('#cvRedemption').remove(); // this is my <canvas> element
                     $('#containerRedemption').append('<canvas id="cvRedemption"><canvas>');
 
