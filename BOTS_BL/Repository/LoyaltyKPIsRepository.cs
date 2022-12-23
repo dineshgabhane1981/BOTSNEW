@@ -22,23 +22,27 @@ namespace BOTS_BL.Repository
                 {
                     if (GroupId == "1086")
                     {
-                        objLoyaltyKPIs = context.Database.SqlQuery<LoyaltyKPIs>("sp_BOTS_LoyaltyPerfromance @pi_GroupId, @pi_Date, @pi_LoginId, @pi_Month, @pi_Year, @pi_OutletId",
+                        objLoyaltyKPIs = context.Database.SqlQuery<LoyaltyKPIs>("sp_BOTS_LoyaltyPerfromance @pi_GroupId, @pi_Date, @pi_LoginId, @pi_Month, @pi_Year, @pi_OutletId,@pi_FromDate,@pi_ToDate",
                         new SqlParameter("@pi_GroupId", GroupId),
                         new SqlParameter("@pi_Date", DateTime.Now.ToShortDateString()),
                         new SqlParameter("@pi_LoginId", loginId),
                         new SqlParameter("@pi_Month", DateTime.Now.Month),
                         new SqlParameter("@pi_Year", DateTime.Now.Year),
-                        new SqlParameter("@pi_OutletId", "")).FirstOrDefault<LoyaltyKPIs>();
+                        new SqlParameter("@pi_OutletId", ""),
+                        new SqlParameter("@pi_FromDate", ""), 
+                        new SqlParameter("@pi_ToDate", "")).FirstOrDefault<LoyaltyKPIs>();
                     }
                     else
                     {
-                        objLoyaltyKPIs = context.Database.SqlQuery<LoyaltyKPIs>("sp_BOTS_LoyaltyPerfromance @pi_GroupId, @pi_Date, @pi_LoginId, @pi_Month, @pi_Year, @pi_OutletId",
+                        objLoyaltyKPIs = context.Database.SqlQuery<LoyaltyKPIs>("sp_BOTS_LoyaltyPerfromance @pi_GroupId, @pi_Date, @pi_LoginId, @pi_Month, @pi_Year, @pi_OutletId,@pi_FromDate,@pi_ToDate",
                         new SqlParameter("@pi_GroupId", GroupId),
                         new SqlParameter("@pi_Date", DateTime.Now.ToShortDateString()),
                         new SqlParameter("@pi_LoginId", ""),
                         new SqlParameter("@pi_Month", DateTime.Now.Month),
                         new SqlParameter("@pi_Year", DateTime.Now.Year),
-                        new SqlParameter("@pi_OutletId", "")).FirstOrDefault<LoyaltyKPIs>();
+                        new SqlParameter("@pi_OutletId", ""),
+                        new SqlParameter("@pi_FromDate", ""),
+                        new SqlParameter("@pi_ToDate", "")).FirstOrDefault<LoyaltyKPIs>();
                     }
                     
                 }
