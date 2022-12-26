@@ -53,7 +53,7 @@
 
 
 
-   
+
 
     .modal {
         display: none; /* Hidden by default */
@@ -99,29 +99,32 @@
 </style>
 <div class="app-main__inner">
     <div class="row" style="margin-top : 20px; padding-bottom : 20px" id="divSearchHeading">
-        <div class="col-sm-4">
-            <b>Search Customer</b>
-        </div>
+
     </div>
-    <div class="mb-3 card" style="padding-top:20px;" id="divSearch">
+    <div class="col-md-12 col-sm-12 card" style="padding: 10px; margin: 5px; margin-right: 20px !important;  border-radius: 10px;" id="divSearch">
+        <div class="col-sm-4">
+            <h6><b>Search Customer</b></h6>
+        </div>
         <div class="content col-md-12 col-sm-12 row mb-3">
             <div class="col-md-2 col-sm-2" style="margin-top:10px;">
                 Enter Mobile No
             </div>
             <div class="col-md-3 col-sm-3">
-                <input id="txtMobileNo" type="number" class="input50" />
+                <input id="txtMobileNo" type="text" onkeypress="phoneno()" maxlength="10" class="input50" />
             </div>
             <div class="col-md-2 col-sm-2">
                 <button type="button" id="btnSearchCustomer" class="btn btn-primary" onclick="SearchCustomer();" style="margin-top:10px;">Search</button>
             </div>
         </div>
+
     </div>
     <div class="row" style="margin-top: 20px; padding-bottom: 20px; display: none;" id="dvCustDetailsHeading">
-        <div class="col-sm-4">
-            <b>Customer Details</b>
-        </div>
+
     </div>
     <div class="mb-3 card col-md-12 col-sm-12" style="padding-top:20px;padding-bottom:20px; display:none;" id="dvCustomerDetails">
+        <div class="col-sm-4">
+            <h6><b>Customer Details</b></h6>
+        </div>
 
         <div class="col-md-12 col-sm-12 row">
             <div class="col-md-4 col-sm-4" style="margin-top:10px;">Mobile No : <span id="spnMobileNo" style="font-weight:bold;"></span></div>
@@ -137,11 +140,12 @@
         </div>
     </div>
     <div class="row" style="margin-top: 20px; padding-bottom: 20px; display: none;" id="divSearchHeading">
-        <div class="col-sm-4">
-            <b>Search Customer</b>
-        </div>
+
     </div>
     <div class="mb-3 card col-md-12 col-sm-12" style="padding-top:20px; display:none;" id="dvEnrollment">
+        <div class="col-sm-4">
+            <h6><b>Search Customer</b></h6>
+        </div>
         <div class="content col-md-12 col-sm-12 row mb-3">
             <div class="col-md-12 col-sm-12 row">
                 <div class="col-md-2 col-sm-2" style="margin-top:10px;">
@@ -205,11 +209,12 @@
         </div>
     </div>
     <div class="row" style="margin-top: 20px; padding-bottom: 20px; display: none;" id="dvInvoiceHeading">
-        <div class="col-sm-4">
-            <b>Invoice Details</b>
-        </div>
+
     </div>
     <div class="mb-3 card col-md-12 col-sm-12" style="padding-top:20px; display:none;" id="dvInvoice">
+        <div class="col-sm-4">
+            <h6> <b>Invoice Details</b></h6>
+        </div>
         <div class="content col-md-12 col-sm-12 row mb-3">
             <div class="col-md-12 col-sm-12 row">
                 <div class="col-md-2 col-sm-2" style="margin-top:10px;">
@@ -265,6 +270,9 @@
     </div>
 
     <div class="mb-3 card col-md-12 col-sm-12" style="padding-top:20px; display:none;" id="dvInvoiceCustExist">
+        <div class="col-sm-4">
+            <h6><b>Invoice Details</b></h6>
+        </div>
         <div class="content col-md-12 col-sm-12 row mb-3">
             <div class="col-md-12 col-sm-12 row">
                 <div class="col-md-2 col-sm-2" style="margin-top:10px;">
@@ -311,7 +319,7 @@
                     <button type="button" id="btnPaybyPoints" class="btn btn-success" style="margin-top:10px;">Points(Redeem)</button>
                 </div>
                 <div class="col-md-2 col-sm-2" style="margin-left: 10px;">
-                    <button type="button" id="btnResetOld" class="btn btn-primary" style="margin-top:10px;">Reset</button>
+                    <button type="button" id="btnResetOld" class="btn btn-primary" style="margin-top:10px;">Go Back</button>
                 </div>
             </div>
         </div>
@@ -339,6 +347,18 @@
         });
     });
 
+    function phoneno() {
+        $('#txtMobileNo').keypress(function (e) {
+            var a = [];
+            var k = e.which;
+
+            for (i = 48; i < 58; i++)
+                a.push(i);
+
+            if (!(a.indexOf(k) >= 0))
+                e.preventDefault();
+        });
+    }
     function SearchCustomer() {
         if ($("#txtMobileNo").val() == "") {
             cuteAlert({
@@ -360,8 +380,8 @@
                 dataType: "json",
                 success: function (response) {
                     console.log(response);
-                    
-                    
+
+
                     if (response.objCDetails.ResponseCode == "00") {
                         $("#divSearchHeading").hide();
                         $("#divSearch").hide();
@@ -407,14 +427,14 @@
 
                                     if (j == 0) {
                                     //alert("Above div");
-                                        
+
                                         $('<div class="col-md-12 col-sm-12 row" id="' + Iddivrow[j]+'"></div>').insertAfter("#TestRow");
                                         ControlId = Iddivrow[j];
                                         $("#" + Iddivrow[j]).append('<div class = "col-md-2 col-sm-2 id="' +IdExistName[j]+ '">' + Dynamicname + '</div>');
                                         $("#" + IdExistName[j]).attr("style", "margin-top:10px");
                                         $("#" + Iddivrow[j]).append('<div class = "col-md-4 col-sm-4" id="' + IdExistdiv2[j] + '"></div>');
                                         $("#" + IdExistdiv2[j]).append(newCtrl);
-                                        $("#" + ctrlId).attr("class", "input50");  
+                                        $("#" + ctrlId).attr("class", "input50");
                                         $("#" + ctrlId).attr("style", "margin-top:10px");
                                         $("#" + ctrlId).html(items);
                                     }
@@ -424,8 +444,8 @@
                                     $.each(response.objJsonData.JsonList1[j], function (i, item) {
                                         var Dynamicname;
                                         Dynamicname = item.FieldName
-                                       
-                                        if (item.FieldOptionId == "1") {                                           
+
+                                        if (item.FieldOptionId == "1") {
                                             var ctrlId1 = "txtCustome" + j;
                                             //var txtCtrl = "<input id=" + ctrlId1 + " type=\"text\"  class=\"input50\" />";
                                             $('<div class="col-md-12 col-sm-12 row" id="' + Iddivrow[j] + '"></div>').insertAfter("#" + ControlId);
@@ -503,11 +523,11 @@
                                 </div> *@
                             }
                         }
-                                               
-                        
+
+
                         //var items = '<select id="myselect">' + D1 + '</select>';
                         //alert(items);
-                                           
+
                         //$("#dynCustExistdiv2").html(items);
                         //$("#myselect").addClass("input50");
                         //alert($("#myselect").val());
@@ -519,6 +539,7 @@
                         $("#dynCustExistdiv1").show();
                         $("#dvEnrollment").hide();
                         $("#dvInvoice").hide();
+                        $("#btnPaybyCash").show();
                     }
                     if (response.objCDetails.ResponseCode == "06") {
                         cuteAlert({
@@ -538,14 +559,14 @@
 
                                 object = response;
                                 var c = Object.keys(response.objJsonData.JsonList1).length;
-                                alert(object);
+                                //alert(object);
                                 /*alert($("#CusNewContain").is(":visible"));*/
                                 /*if (($("#CusNewContain").is(":visible")) == false) {*/
                                     //alert("Inside If");
                                     //$("#CusNewContain").show();
                                     var count, D1, items;
                                     D1 = '';
-                                
+
                                     for (j = 0; j < c; j++) {
                                         count = j + 1;
                                         var Iddivrow = [];
@@ -678,10 +699,23 @@
             $("#txtCardNoNew").val("");
             $("#txtDOB").val("");
             $("#txtInvoiceNo").val("");
-            $("#txtInvoiceAmt").val("");
+        $("#txtInvoiceAmt").val("");
+        $("#dvInvoiceCustExist").hide();
+        $("#dvInvoice").hide();
+        $("#dvEnrollment").hide();
+        $("#dvCustomerDetails").hide();
+        $("#divSearch").show();
+        $("#txtMobileNo").val("");
     });
 
     $("#btnResetOld").click(function () {
+
+        $("#dvInvoiceCustExist").hide();
+        $("#dvInvoice").hide();
+        $("#dvEnrollment").hide();
+        $("#dvCustomerDetails").hide();
+        $("#divSearch").show();
+        $("#txtMobileNo").val("");
 
         $("#txtInvoiceNoOld").val("");
         $("#txtInvoiceAmOldt").val("");
@@ -746,7 +780,7 @@
 
         var Result = ConcatData(DynamicData);
         alert(Result);
-        
+
         alert(DynamicData);
 
 
@@ -845,7 +879,7 @@
             item["InvoiceAmt"] = $("#txtInvoiceAmOldt").val();
         alert("Inside Save Earn Old");
         console.log(object);
-   
+
         var C = Object.keys(object.objJsonData.JsonList1).length;// count of values in JsonList1
         /*alert(C);*/
         for (j = 0; j < C; j++) {
@@ -853,13 +887,13 @@
             var innerCount = Object.keys(object.objJsonData.JsonList1[j]).length;
             if (innerCount > 1) {
                 DynamicResult[j] = "ddlCustom" + j;
-                
+
                 var K =1;
                 $.each(object.objJsonData.JsonList1[j], function (i, item) {
                     if (K == 1) {
-                        
-                        var Temp1 = $("#" + DynamicResult[j]).val();    
-                        Dynamicname[j] = item.FieldName;                       
+
+                        var Temp1 = $("#" + DynamicResult[j]).val();
+                        Dynamicname[j] = item.FieldName;
                         DynamicData.push([Dynamicname[j], Temp1]);
                         //DynamicData.push(result);
                         alert(DynamicData);
@@ -887,7 +921,7 @@
                 });
             }
         }
-        
+
         var Result = ConcatData(DynamicData);
         alert(Result);
         item["DynamicData"] = Result;
@@ -967,6 +1001,8 @@
         }
         else {
             $("#BurnPoints").show();
+            $("#btnPaybyCash").hide();
+
         }
     });
 
@@ -1049,8 +1085,8 @@
                             title: "Invoice Saved Successfully",
                             message: " Poits Earned" + response.PointsEarned + " Avail Points" + response.AvailablePoints + " Points Redeemed"+response.PointsRedeemed,
                             buttonText: "Okay"
-                        }).then(() => {                        
-                            SearchCustomer();                           
+                        }).then(() => {
+                            SearchCustomer();
                             $("#txtOTP").val("");
                             $("#OTPModal").hide();
                             $("#txtInvoiceNoOld").val("");
@@ -1207,9 +1243,9 @@
     });
 
 </script>
-    <script src="~/Scripts/jquery-ui-1.12.1.js"></script>
-    <script src="~/Scripts/jquery-ui-1.12.1.min.js"></script>
-    <link href="~/Content/themes/base/jquery-ui.min.css" rel="stylesheet" />
-    <link href="~/Content/themes/base/jquery-ui.css" rel="stylesheet" />
-    <script src="~/Scripts/ConcatData.js"></script>
-    
+<script src="~/Scripts/jquery-ui-1.12.1.js"></script>
+<script src="~/Scripts/jquery-ui-1.12.1.min.js"></script>
+<link href="~/Content/themes/base/jquery-ui.min.css" rel="stylesheet" />
+<link href="~/Content/themes/base/jquery-ui.css" rel="stylesheet" />
+<script src="~/Scripts/ConcatData.js"></script>
+

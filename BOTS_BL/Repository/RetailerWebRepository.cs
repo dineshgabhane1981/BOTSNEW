@@ -25,7 +25,7 @@ namespace BOTS_BL.Repository
         public List<DynamicFieldInfo>[] DynamicData(string connectionString)
         {
             DynamicFieldInfo Obj = new DynamicFieldInfo();
-            
+
 
             //List<DynamicFieldInfo> objListDymanic = new List<DynamicFieldInfo>();
 
@@ -50,7 +50,7 @@ namespace BOTS_BL.Repository
                 SqlParameter param1 = new SqlParameter("pi_Date", DateTime.Now.ToString("yyyy-MM-dd"));
                 cmdReport.CommandType = CommandType.StoredProcedure;
                 cmdReport.Parameters.Add(param1);
-                
+
                 daReport.Fill(retVal);
 
                 Tbl = retVal.Tables[0];
@@ -60,35 +60,35 @@ namespace BOTS_BL.Repository
                 json_serializer.MaxJsonLength = int.MaxValue;
                 object[] objOutletData = (object[])json_serializer.DeserializeObject((string)JsonData);
 
-                List<DynamicFieldInfo> objListDymanic  = new List<DynamicFieldInfo>();
+                List<DynamicFieldInfo> objListDymanic = new List<DynamicFieldInfo>();
 
                 int i = 1;
                 foreach (Dictionary<string, object> item in objOutletData)
-                {  
-                    
-                    
-                        DynamicFieldInfo DymFld = new DynamicFieldInfo();
-                        DymFld.Fieldid = Convert.ToString(item["Fieldid"]);
-                        DymFld.FieldOptionId = Convert.ToString(item["FieldOptionId"]);
-                        DymFld.FieldTypeId = Convert.ToString(item["FieldTypeId"]);
-                        DymFld.FieldValue = Convert.ToString(item["FieldValue"]);
-                        DymFld.FieldName = Convert.ToString(item["FieldName"]);
+                {
 
-                    objListDymanic.Add(DymFld);                       
+
+                    DynamicFieldInfo DymFld = new DynamicFieldInfo();
+                    DymFld.Fieldid = Convert.ToString(item["Fieldid"]);
+                    DymFld.FieldOptionId = Convert.ToString(item["FieldOptionId"]);
+                    DymFld.FieldTypeId = Convert.ToString(item["FieldTypeId"]);
+                    DymFld.FieldValue = Convert.ToString(item["FieldValue"]);
+                    DymFld.FieldName = Convert.ToString(item["FieldName"]);
+
+                    objListDymanic.Add(DymFld);
                 }
 
 
                 int C = objListDymanic.GroupBy(data => data.Fieldid).Count();
 
-                 var query = new DynamicFieldInfo[C];
-               
+                var query = new DynamicFieldInfo[C];
+
                 List<DynamicFieldInfo> objList1 = new List<DynamicFieldInfo>();
-              
+
                 var distinctFieldId = objListDymanic?.Select(o => o.Fieldid).Distinct();
                 List<DynamicFieldInfo>[] dynamicFieldInfos = new List<DynamicFieldInfo>[distinctFieldId.Count()];
                 if (distinctFieldId != null && distinctFieldId.Any())
                 {
-                    
+
                     foreach (var fieldid in distinctFieldId)
                     {
                         dynamicFieldInfos[Convert.ToInt16(fieldid) - 1] = objListDymanic?.Where(data => data.Fieldid == fieldid).ToList();
@@ -98,7 +98,7 @@ namespace BOTS_BL.Repository
                 Obj1 = dynamicFieldInfos;
             }
 
-             return Obj1;
+            return Obj1;
         }
         public CustomerDetails GetCustomerDetails(string CounterId, string MobileNo)
         {
@@ -142,7 +142,7 @@ namespace BOTS_BL.Repository
                         objData.TotalSpend = Convert.ToString(dt1.Rows[0]["TotalSpendText"]);
                         objData.LastTxnDate = Convert.ToString(dt1.Rows[0]["LastTxnText"]);
                     }
-                    
+
                     else
                     {
                         objData.ResponseCode = Convert.ToString(dt.Rows[0]["ResponseCode"]);
@@ -153,7 +153,7 @@ namespace BOTS_BL.Repository
             return objData;
         }
 
-        public EarnResponse InsertEarnData(string CounterId, string Mobileno, string CustomerName, string InvoiceNo, string InvoiceAmt, string DOB, string EmailId, string Gender, string ADate, string CardNo,string DynamicData)
+        public EarnResponse InsertEarnData(string CounterId, string Mobileno, string CustomerName, string InvoiceNo, string InvoiceAmt, string DOB, string EmailId, string Gender, string ADate, string CardNo, string DynamicData)
         {
             EarnResponse R = new EarnResponse();
             using (var context = new CommonDBContext())
@@ -206,7 +206,7 @@ namespace BOTS_BL.Repository
                         R.AvailablePoints = Convert.ToString(dt1.Rows[0]["AvailablePoints"]);
                         R.PointsEarned = Convert.ToString(dt1.Rows[0]["PointsEarned"]);
 
-                        if(dt2.Rows.Count > 0)
+                        if (dt2.Rows.Count > 0)
                         {
                             string SMSStatus = Convert.ToString(dt2.Rows[0]["SMSStatusTxn"]);
                             string WAStatus = Convert.ToString(dt2.Rows[0]["WAStatusTxn"]);
@@ -226,7 +226,7 @@ namespace BOTS_BL.Repository
             return R;
         }
 
-        public EarnResponse InsertEarnDataOld(string CounterId, string Mobileno, string InvoiceNo, string InvoiceAmt,string DynamicData)
+        public EarnResponse InsertEarnDataOld(string CounterId, string Mobileno, string InvoiceNo, string InvoiceAmt, string DynamicData)
         {
             EarnResponse R = new EarnResponse();
             using (var context = new CommonDBContext())
@@ -560,7 +560,11 @@ namespace BOTS_BL.Repository
                                 objMDRData.AvailablePoints = Convert.ToString(dt1.Rows[i]["AvailablePoints"]);
                                 objMDRData.CardNo = Convert.ToString(dt1.Rows[i]["CardNo"]);
                                 objMDRData.EnrolledOutlet = Convert.ToString(dt1.Rows[i]["EnrolledOutlet"]);
-                                objMDRData.EnrolledOn = Convert.ToString(dt1.Rows[i]["EnrolledOn"]);
+                                objMDRData.EnrolledOn = Convert.ToDateTime(dt1.Rows[i]["EnrolledOn"]).ToString("MM/dd/yyyy");
+                                if (Convert.ToDateTime(dt1.Rows[i]["DOB"]).Month == DateTime.Now.Month)
+                                {
+                                    objMDRData.DOB = Convert.ToDateTime(dt1.Rows[i]["DOB"]).ToString("MM/dd/yyyy");
+                                }
                                 ObjMDRDetails.MDRData = objMDRData;
                             }
 
@@ -826,9 +830,9 @@ namespace BOTS_BL.Repository
             string _WATokenId = dt3.Rows[0]["WATokenId"].ToString();
             string _WAMessage = dt3.Rows[0]["WhatsAppMessage"].ToString();
 
-                Thread _job = new Thread(() => WAText(_MobileNo, _WATokenId, _WAMessage));
-                _job.Start();
-            
+            Thread _job = new Thread(() => WAText(_MobileNo, _WATokenId, _WAMessage));
+            _job.Start();
+
         }
         public void SendMessageOTP(DataTable dt3)
         {
@@ -840,7 +844,7 @@ namespace BOTS_BL.Repository
             _job.Start();
 
         }
-        public void WAText(string MobileNo,string WATokenId,string WAMessage)
+        public void WAText(string MobileNo, string WATokenId, string WAMessage)
         {
             string responseString;
             try

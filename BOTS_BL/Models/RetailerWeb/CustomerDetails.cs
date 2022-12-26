@@ -21,15 +21,15 @@ namespace BOTS_BL.Models.RetailerWeb
 
     public class EarnResponse
     {
-      public string ResponseCode { get; set; }
-      public string ResponseMessage { get; set; }
-      public string MobileNo { get; set; }
-      public string AvailablePoints { get; set; }
-      public string PointsEarned { get; set; }
-      public string CustomerName { get; set; }
-      public string BonusPoints { get; set; }
-      public string RefNo { get; set; }
-      public string CardNo { get; set; }
+        public string ResponseCode { get; set; }
+        public string ResponseMessage { get; set; }
+        public string MobileNo { get; set; }
+        public string AvailablePoints { get; set; }
+        public string PointsEarned { get; set; }
+        public string CustomerName { get; set; }
+        public string BonusPoints { get; set; }
+        public string RefNo { get; set; }
+        public string CardNo { get; set; }
     }
     public class BurnValidationResponse
     {
@@ -70,11 +70,11 @@ namespace BOTS_BL.Models.RetailerWeb
 
     public class MDRTxnDetails
     {
-       public string Date { get; set; }
-       public string InvoiceNo { get; set; }
-       public string InvoiceAmt { get; set; }
-       public string Points { get; set; }
-       public string Type { get; set; }
+        public string Date { get; set; }
+        public string InvoiceNo { get; set; }
+        public string InvoiceAmt { get; set; }
+        public string Points { get; set; }
+        public string Type { get; set; }
     }
 
     public class MDRData
@@ -85,6 +85,7 @@ namespace BOTS_BL.Models.RetailerWeb
         public string CardNo { get; set; }
         public string EnrolledOutlet { get; set; }
         public string EnrolledOn { get; set; }
+        public string DOB { get; set; }
 
     }
 
@@ -95,7 +96,7 @@ namespace BOTS_BL.Models.RetailerWeb
         public MDRData MDRData { get; set; }
 
         public List<MDRTxnDetails> ListMDRTxnDetails { get; set; }
-        
+
 
     }
     public class Response
@@ -157,7 +158,7 @@ namespace BOTS_BL.Models.RetailerWeb
         public string FieldValue { get; set; }
 
         public string FieldName { get; set; }
-    }   
+    }
 
     public class JSONDATA
     {
@@ -169,6 +170,6 @@ namespace BOTS_BL.Models.RetailerWeb
         public CustomerDetails objCDetails { get; set; }
         public JSONDATA objJsonData { get; set; }
     }
-    
+
 
 }

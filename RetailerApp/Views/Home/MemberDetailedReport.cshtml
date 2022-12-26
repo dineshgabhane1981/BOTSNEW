@@ -38,45 +38,31 @@
             <div class="col-md-4 col-sm-4" style="margin-top:10px;">Enrolled Outlet : <span id="spnEnrollOutlet" style="font-weight:bold;"></span></div>
             <div class="col-md-4 col-sm-4" style="margin-top:10px;">Enrolled On : <span id="spnEnrollOn" style="font-weight:bold;"></span></div>
         </div>
+        <div class="col-md-12 col-sm-12 row" style="padding-bottom:20px;display:none;" id="dvDOB">
+            <div class="col-md-4 col-sm-4" style="margin-top:10px;">Date of Birth : <span id="spnDOB" style="font-weight:bold;"></span></div>
+        </div>
     </div>
 
-    @*<div class="row" style="overflow-x: auto; padding-right: 20px; margin-top: 10px; margin-left: 60px; display: none;" id="Tabl">
-            <table class="table" id="InstanceTable" border="1" cellpadding="5" cellspacing="5">
+    <div class="mb-3 card col-md-12 col-sm-12" style="padding-top:20px; display:none;" id="dvMemReport">
+        <div class="table-responsive">
+            <table class="table" id="InstanceTable">
                 <thead>
                     <tr>
-                        <th>Date</th>
-                        <th>InvoiceNo</th>
-                        <th>InvoiceAmt</th>
-                        <th>Points</th>
-                        <th>Type</th>
+                        <th scope="col" style="text-align:center;">Date</th>
+                        <th scope="col" style="text-align:center;">Invoice No</th>
+                        <th scope="col" style="text-align:center;">Invoice Amt</th>
+                        <th scope="col" style="text-align:center;">Points</th>
+                        <th scope="col" style="text-align:center;">Type</th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody style="text-align:center;">
                 </tbody>
             </table>
-        </div>*@
-
-<div class="mb-3 card col-md-12 col-sm-12" style="padding-top:20px; display:none;" id="dvMemReport">
-    <div class="table-responsive">
-        <table class="table" id="InstanceTable">
-            <thead>
-                <tr>
-                    <th scope="col" style="text-align:center;">Date</th>
-                    <th scope="col" style="text-align:center;">Invoice No</th>
-                    <th scope="col" style="text-align:center;">Invoice Amt</th>
-                    <th scope="col" style="text-align:center;">Points</th>
-                    <th scope="col" style="text-align:center;">Type</th>
-                </tr>
-            </thead>
-            <tbody style="text-align:center;">
-
-            </tbody>
-        </table>
+        </div>
     </div>
-</div>
 
 </div>
-    <script>
+<script>
 function SearchCustomer() {
         if ($("#txtMobileNo").val() == "") {
             cuteAlert({
@@ -114,6 +100,11 @@ function SearchCustomer() {
                             $("#spnPointsAvail").text(response.MDRData.AvailablePoints);
                             $("#spnEnrollOutlet").text(response.MDRData.EnrolledOutlet);
                             $("#spnEnrollOn").text(response.MDRData.EnrolledOn);
+
+                            if (response.MDRData.DOB != "" && response.MDRData.DOB != null) {
+                                $("#spnDOB").text(response.MDRData.DOB);
+                                $("#dvDOB").show();
+                            }
 
                             $("#dvCustomerDetails").show();
 
@@ -193,8 +184,8 @@ function SearchCustomer() {
         table.draw();
 
     }
-    </script>
-    <script src="~/Scripts/jquery-ui-1.12.1.js"></script>
-    <script src="~/Scripts/jquery-ui-1.12.1.min.js"></script>
-    <link href="~/Content/themes/base/jquery-ui.min.css" rel="stylesheet" />
-    <link href="~/Content/themes/base/jquery-ui.css" rel="stylesheet" />
+</script>
+<script src="~/Scripts/jquery-ui-1.12.1.js"></script>
+<script src="~/Scripts/jquery-ui-1.12.1.min.js"></script>
+<link href="~/Content/themes/base/jquery-ui.min.css" rel="stylesheet" />
+<link href="~/Content/themes/base/jquery-ui.css" rel="stylesheet" />
