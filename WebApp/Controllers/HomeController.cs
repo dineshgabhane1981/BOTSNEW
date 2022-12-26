@@ -13,6 +13,7 @@ using System.Globalization;
 using BOTS_BL;
 using System.Text;
 using System.IO;
+using WebApp.App_Start;
 
 namespace WebApp.Controllers
 {
@@ -429,6 +430,25 @@ namespace WebApp.Controllers
             userDetails.GroupId = null;
             Session["UserSession"] = userDetails;
             return RedirectToAction("Index", "CustomerManagement");
+        }
+
+        public bool GenerateReports()
+        {
+            bool status = false;
+            var AllCustomer = CR.GetAllCustomer();
+            foreach(var customer in AllCustomer)
+            {
+                GeneratePDF(Convert.ToString(customer.GroupId));
+            }
+
+            return status;         
+        }
+        public ActionResult GeneratePDF(string groupId)
+        {
+            DashboardSummaryViewModel objData = new DashboardSummaryViewModel();
+                       
+
+            return View(objData);
         }
     }
 }

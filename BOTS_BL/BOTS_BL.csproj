@@ -265,6 +265,7 @@
     <Compile Include="Models\CommonDB\Tbl_SinglePageSummaryTable.cs" />
     <Compile Include="Models\CommonDB\WAReport.cs" />
     <Compile Include="Models\CompetitionDetail.cs" />
+    <Compile Include="Models\DashboardSummary\MemberBaseAndTransaction.cs" />
     <Compile Include="Models\Dashboard\DashboardMemberSegment.cs" />
     <Compile Include="Models\DBContext.cs" />
     <Compile Include="Models\DiscussionReport.cs" />

@@ -5,6 +5,7 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
+using WebApp.TaskService;
 
 namespace WebApp
 {
@@ -16,6 +17,8 @@ namespace WebApp
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
+            //The Schedular Class  
+            SchedulerService.StartAsync().GetAwaiter().GetResult();
         }
 
         protected void Application_EndRequest()
