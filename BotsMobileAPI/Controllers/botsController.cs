@@ -104,7 +104,7 @@ namespace BotsMobileAPI.Controllers
                     List<string> lstDates = new List<string>();
                     string connectionString = CR.GetCustomerConnString(GroupId);
 
-                    dataMemberSegment = DR.GetDashboardMemberSegmentData(GroupId, OutletId, connectionString, "");
+                    dataMemberSegment = DR.GetDashboardMemberSegmentData(GroupId, OutletId, connectionString, "","","");
                 }
                 catch (Exception ex)
                 {
@@ -128,7 +128,7 @@ namespace BotsMobileAPI.Controllers
                     string loginId = string.Empty;
                     string connectionString = CR.GetCustomerConnString(GroupId);
 
-                    dataPointsSummary = DR.GetDashboardPointsSummaryData(GroupId, monthFlag, connectionString, loginId);
+                    dataPointsSummary = DR.GetDashboardPointsSummaryData(GroupId, monthFlag, connectionString, loginId, "", "");
                 }
                 catch (Exception ex)
                 {
@@ -149,7 +149,7 @@ namespace BotsMobileAPI.Controllers
                 string connectionString = CR.GetCustomerConnString(GroupId);
                 try
                 {
-                    objDashboardBulkUpload = DR.GetDashboardBulkUpload(GroupId, connectionString, "");
+                    objDashboardBulkUpload = DR.GetDashboardBulkUpload(GroupId, connectionString, "", "", "");
                 }
                 catch (Exception ex)
                 {
@@ -171,7 +171,7 @@ namespace BotsMobileAPI.Controllers
                 List<object> dataList = new List<object>();
                 try
                 {
-                    objDashboardRedemption = DR.GetDashboardRedemption(GroupId, "1", connectionString, "");
+                    objDashboardRedemption = DR.GetDashboardRedemption(GroupId, "1", connectionString, "", "", "");
 
                 }
                 catch (Exception ex)
@@ -231,7 +231,7 @@ namespace BotsMobileAPI.Controllers
                     }
                     string connectionString = CR.GetCustomerConnString(GroupId);
                     List<DashboardBizShared> lstBizShared = new List<DashboardBizShared>();
-                    lstBizShared = DR.GetDashboardBizShared(GroupId, OutletId, connectionString, "");
+                    lstBizShared = DR.GetDashboardBizShared(GroupId, OutletId, connectionString, "", "", "");
                     lstBizShared.Reverse();
                     foreach (var item in lstBizShared)
                     {
@@ -297,7 +297,7 @@ namespace BotsMobileAPI.Controllers
                 {
 
                     DashboardMemberWebPage dataMemberWebPage = new DashboardMemberWebPage();
-                    dataMemberWebPage = DR.GetDashboardMemberWebPageData(GroupId, profileFlag, connectionString, "");
+                    dataMemberWebPage = DR.GetDashboardMemberWebPageData(GroupId, profileFlag, connectionString, "", "", "");
 
                     dataList.Add(dataMemberWebPage.MemberBase);
                     dataList.Add(dataMemberWebPage.ReferringBase);
