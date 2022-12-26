@@ -98,12 +98,12 @@
     }
 </style>
 <div class="app-main__inner">
-    <div class="row" style="margin-top : 20px; padding-bottom : 20px">
+    <div class="row" style="margin-top : 20px; padding-bottom : 20px" id="divSearchHeading">
         <div class="col-sm-4">
             <b>Search Customer</b>
         </div>
     </div>
-    <div class="mb-3 card" style="padding-top:20px;">
+    <div class="mb-3 card" style="padding-top:20px;" id="divSearch">
         <div class="content col-md-12 col-sm-12 row mb-3">
             <div class="col-md-2 col-sm-2" style="margin-top:10px;">
                 Enter Mobile No
@@ -116,7 +116,13 @@
             </div>
         </div>
     </div>
+    <div class="row" style="margin-top: 20px; padding-bottom: 20px; display: none;" id="dvCustDetailsHeading">
+        <div class="col-sm-4">
+            <b>Customer Details</b>
+        </div>
+    </div>
     <div class="mb-3 card col-md-12 col-sm-12" style="padding-top:20px;padding-bottom:20px; display:none;" id="dvCustomerDetails">
+
         <div class="col-md-12 col-sm-12 row">
             <div class="col-md-4 col-sm-4" style="margin-top:10px;">Mobile No : <span id="spnMobileNo" style="font-weight:bold;"></span></div>
             <div class="col-md-4 col-sm-4" style="margin-top: 10px;">Customer Name : <span id="spnCustName" style="font-weight:bold;"></span></div>
@@ -128,6 +134,11 @@
         <div class="col-md-12 col-sm-12 row">
             <div class="col-md-4 col-sm-4" style="margin-top:10px;">Total Spend : <span id="spnTotalSpend" style="font-weight:bold;"></span></div>
             <div class="col-md-4 col-sm-4" style="margin-top: 10px;">Last Txn Date : <span id="spnLastTxnDate" style="font-weight:bold;"></span></div>
+        </div>
+    </div>
+    <div class="row" style="margin-top: 20px; padding-bottom: 20px; display: none;" id="divSearchHeading">
+        <div class="col-sm-4">
+            <b>Search Customer</b>
         </div>
     </div>
     <div class="mb-3 card col-md-12 col-sm-12" style="padding-top:20px; display:none;" id="dvEnrollment">
@@ -188,9 +199,14 @@
                     <input id="txtADate" type="text" class="input50" />
                 </div>
             </div>
-            
 
 
+
+        </div>
+    </div>
+    <div class="row" style="margin-top: 20px; padding-bottom: 20px; display: none;" id="dvInvoiceHeading">
+        <div class="col-sm-4">
+            <b>Invoice Details</b>
         </div>
     </div>
     <div class="mb-3 card col-md-12 col-sm-12" style="padding-top:20px; display:none;" id="dvInvoice">
@@ -268,38 +284,38 @@
             </div>
             <div class="col-md-12 col-sm-12 row" id="TestRow" hidden>
                 @*<div class="col-md-12 col-sm-12 row" style="margin-top:10px;">*@
-                    <div class="col-md-2 col-sm-2" style="margin-top:10px;" id="TestField">
-                        Test Field
-                    </div>
-                    <div class="col-md-4 col-sm-4" style="margin-top:10px;" id="dynCustExistdiv4">
-                        <input type="text" class="input50" />
-                    </div>
+                <div class="col-md-2 col-sm-2" style="margin-top:10px;" id="TestField">
+                    Test Field
+                </div>
+                <div class="col-md-4 col-sm-4" style="margin-top:10px;" id="dynCustExistdiv4">
+                    <input type="text" class="input50" />
+                </div>
                 @*</div>*@
             </div>
-                <div class="col-md-12 col-sm-12 row" id="CusExistContain" style="display: none;">
+            <div class="col-md-12 col-sm-12 row" id="CusExistContain" style="display: none;">
 
+            </div>
+            <div class="col-md-12 col-sm-12 row" id="BurnPoints" style="display: none;">
+                <div class="col-md-2 col-sm-2" style="margin-top:10px;">
+                    Amt To Redeem
                 </div>
-                <div class="col-md-12 col-sm-12 row" id="BurnPoints" style="display: none;">
-                    <div class="col-md-2 col-sm-2" style="margin-top:10px;">
-                        Amt To Redeem
-                    </div>
-                    <div class="col-md-4 col-sm-4" style="margin-top:10px;">
-                        <input id="txtBurnpoints" type="number" min="1" class="input50" />
-                    </div>
+                <div class="col-md-4 col-sm-4" style="margin-top:10px;">
+                    <input id="txtBurnpoints" type="number" min="1" class="input50" />
                 </div>
-                <div class="col-md-12 col-sm-12 row" style="margin-top: 10px;">
-                    <div class="col-md-2 col-sm-2" style="margin-left: 10px;">
-                        <button type="button" id="btnPaybyCash" class="btn btn-primary" style="margin-top:10px;">PaybyCash</button>
-                    </div>
-                    <div class="col-md-2 col-sm-2" style="margin-left: 10px;">
-                        <button type="button" id="btnPaybyPoints" class="btn btn-success" style="margin-top:10px;">Points(Redeem)</button>
-                    </div>
-                    <div class="col-md-2 col-sm-2" style="margin-left: 10px;">
-                        <button type="button" id="btnResetOld" class="btn btn-primary" style="margin-top:10px;">Reset</button>
-                    </div>
+            </div>
+            <div class="col-md-12 col-sm-12 row" style="margin-top: 10px;">
+                <div class="col-md-2 col-sm-2" style="margin-left: 10px;">
+                    <button type="button" id="btnPaybyCash" class="btn btn-primary" style="margin-top:10px;">PaybyCash</button>
+                </div>
+                <div class="col-md-2 col-sm-2" style="margin-left: 10px;">
+                    <button type="button" id="btnPaybyPoints" class="btn btn-success" style="margin-top:10px;">Points(Redeem)</button>
+                </div>
+                <div class="col-md-2 col-sm-2" style="margin-left: 10px;">
+                    <button type="button" id="btnResetOld" class="btn btn-primary" style="margin-top:10px;">Reset</button>
                 </div>
             </div>
         </div>
+    </div>
 
 </div>
 <script>
@@ -347,6 +363,8 @@
                     
                     
                     if (response.objCDetails.ResponseCode == "00") {
+                        $("#divSearchHeading").hide();
+                        $("#divSearch").hide();
                         $("#spnMobileNo").text(response.objCDetails.MobileNo);
                         $("#spnCustName").text(response.objCDetails.CustomerName);
                         $("#spnCardNo").text(response.objCDetails.CardNo);
@@ -495,7 +513,8 @@
                         //alert($("#myselect").val());
 
                         $("#dvCustomerDetails").show();
-                        
+                        $("#dvCustDetailsHeading").show();
+                        $("#dvInvoiceHeading").show();
                         $("#dvInvoiceCustExist").show();
                         $("#dynCustExistdiv1").show();
                         $("#dvEnrollment").hide();
@@ -510,6 +529,8 @@
                             cancelText: "Cancel"
                         }).then((e) => {
                             if (e == ("confirm")) {
+                                $("#divSearchHeading").hide();
+                                $("#divSearch").hide();
                                 $("#txtMobileNoNew").val($("#txtMobileNo").val());
                                 $("#txtMobileNoNew").attr("disabled", "disabled");
                                 $("#dvCustomerDetails").hide();
