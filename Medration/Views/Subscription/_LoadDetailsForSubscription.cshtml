@@ -1,0 +1,53 @@
+﻿
+
+
+@if (ViewBag.NumberOfPerson > 0)
+{
+    for (var count = 1; count <= ViewBag.NumberOfPerson; count++)
+    {
+        var newCount = count - 1;
+        <div class="app-main__inner">
+            <div class="col-md-12 col-sm-12 card" style="padding:10px;margin:5px;margin-right:20px !important; border-radius:10px;">
+                @if (count == 1)
+                {
+                    <fieldset style="border-radius: 10px;">
+                        <legend><b>Primary Account</b></legend>
+
+                        <div class="col-md-12 col-sm-12">
+                            <div class="col-md-1 col-sm-1">Name</div>
+                            <div class="col-md-4 col-sm-4"><input id="txtName" type="text" class="input100" /> </div>
+                            <div class="col-md-1 col-sm-1">Contact No</div>
+                            <div class="col-md-3 col-sm-3"><input id="txtName" type="number" class="input50" /></div>
+                        </div>
+                        <div class="col-md-12 col-sm-12" style="margin-top:10px;">
+                            <div class="col-md-1 col-sm-1">Email</div>
+                            <div class="col-md-4 col-sm-4"><input id="txtName" type="text" class="input100" /></div>
+                            <div class="col-md-1 col-sm-1">Age</div>
+                            <div class="col-md-3 col-sm-3"><input id="txtName" type="number" class="input50" /> </div>
+                        </div>
+                    </fieldset>
+                }
+                else
+                {
+                    
+                    <fieldset style="border-radius: 10px;">
+                        <legend><b>Secondary @newCount </b></legend>
+                        <div class="col-md-12 col-sm-12">
+                            <div class="col-md-1 col-sm-1">Name</div>
+                            <div class="col-md-4 col-sm-4"><input id="txtName" type="text" class="input100" /> </div>
+                            <div class="col-md-1 col-sm-1">Contact No</div>
+                            <div class="col-md-3 col-sm-3"><input id="txtName" type="number" class="input50" /></div>
+                        </div>
+                        <div class="col-md-12 col-sm-12" style="margin-top:10px;">
+                            <div class="col-md-1 col-sm-1">Email</div>
+                            <div class="col-md-4 col-sm-4"><input id="txtName" type="text" class="input100" /></div>
+                            <div class="col-md-1 col-sm-1">Age</div>
+                            <div class="col-md-3 col-sm-3"><input id="txtName" type="number" class="input50" /> </div>
+                        </div>
+                    </fieldset>
+                }
+            </div>
+        </div>
+
+    }
+}
