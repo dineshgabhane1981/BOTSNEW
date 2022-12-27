@@ -228,26 +228,34 @@ namespace BOTS_BL.Repository
         public DashboardBulkUpload GetDashboardBulkUpload(string GroupId, string connstr, string loginId, string frmDate, string toDate)
         {
             DashboardBulkUpload objDashboardBulkUpload = new DashboardBulkUpload();
-            using (var context = new BOTSDBContext(connstr))
+            try
             {
-                if (GroupId == "1086")
+                using (var context = new BOTSDBContext(connstr))
                 {
-                    objDashboardBulkUpload = context.Database.SqlQuery<DashboardBulkUpload>("sp_BOTS_DashboardBulkUpload @pi_GroupId, @pi_Date, @pi_LoginId,@pi_FromDate,@pi_ToDate", new SqlParameter("@pi_GroupId", GroupId),
-                        new SqlParameter("@pi_Date", DateTime.Now.ToShortDateString()),
-                        new SqlParameter("@pi_LoginId", loginId),
-                        new SqlParameter("@pi_FromDate", frmDate),
-                        new SqlParameter("@pi_ToDate", toDate)).FirstOrDefault<DashboardBulkUpload>();
-                }
-                else
-                {
+                    if (GroupId == "1086")
+                    {
+                        objDashboardBulkUpload = context.Database.SqlQuery<DashboardBulkUpload>("sp_BOTS_DashboardBulkUpload @pi_GroupId, @pi_Date, @pi_LoginId,@pi_FromDate,@pi_ToDate", new SqlParameter("@pi_GroupId", GroupId),
+                            new SqlParameter("@pi_Date", DateTime.Now.ToShortDateString()),
+                            new SqlParameter("@pi_LoginId", loginId),
+                            new SqlParameter("@pi_FromDate", frmDate),
+                            new SqlParameter("@pi_ToDate", toDate)).FirstOrDefault<DashboardBulkUpload>();
+                    }
+                    else
+                    {
 
-                    objDashboardBulkUpload = context.Database.SqlQuery<DashboardBulkUpload>("sp_BOTS_DashboardBulkUpload @pi_GroupId, @pi_Date, @pi_LoginId,@pi_FromDate,@pi_ToDate", new SqlParameter("@pi_GroupId", GroupId),
-                        new SqlParameter("@pi_Date", DateTime.Now.ToShortDateString()),
-                        new SqlParameter("@pi_LoginId", ""),
-                        new SqlParameter("@pi_FromDate", frmDate),
-                        new SqlParameter("@pi_ToDate", toDate)).FirstOrDefault<DashboardBulkUpload>();
+                        objDashboardBulkUpload = context.Database.SqlQuery<DashboardBulkUpload>("sp_BOTS_DashboardBulkUpload @pi_GroupId, @pi_Date, @pi_LoginId,@pi_FromDate,@pi_ToDate", new SqlParameter("@pi_GroupId", GroupId),
+                            new SqlParameter("@pi_Date", DateTime.Now.ToShortDateString()),
+                            new SqlParameter("@pi_LoginId", ""),
+                            new SqlParameter("@pi_FromDate", frmDate),
+                            new SqlParameter("@pi_ToDate", toDate)).FirstOrDefault<DashboardBulkUpload>();
+                    }
                 }
             }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetDashboardBulkUpload");
+            }
+
             return objDashboardBulkUpload;
         }
 

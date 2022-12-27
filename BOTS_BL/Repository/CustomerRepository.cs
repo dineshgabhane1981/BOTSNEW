@@ -298,6 +298,19 @@ namespace BOTS_BL.Repository
             }
             return CustomerName;
         }
+
+        public string GetCustomerLogo(string GroupId)
+        {
+            var conStr = GetCustomerConnString(GroupId);
+            string CustomerLogo = string.Empty;
+            using (var context = new BOTSDBContext(conStr))
+            {
+
+                CustomerLogo = context.BrandDetails.Select(y => y.BrandLogoUrl).FirstOrDefault();
+            }
+            return CustomerLogo;
+        }
+
         public bool GetIsFeedback(string GroupId)
         {
             bool IsFeedback = false;
@@ -1059,6 +1072,35 @@ namespace BOTS_BL.Repository
             }
             return status;
         }
-                
+              
+        public List<MemberBaseAndTransaction> GetMemberBaseAndTransactions(string groupId)
+        {
+            List<MemberBaseAndTransaction> objData = new List<MemberBaseAndTransaction>();
+            var conStr = GetCustomerConnString(groupId);
+            
+            using (var context = new BOTSDBContext(conStr))
+            {
+                MemberBaseAndTransaction objItem = new MemberBaseAndTransaction();
+                var FromDate= new DateTime(DateTime.Now.Year, DateTime.Now.AddMonths(-1).Month, 1);
+                var lastDay= DateTime.DaysInMonth(DateTime.Now.Year, DateTime.Now.AddMonths(-1).Month);
+                var ToDate = new DateTime(DateTime.Now.Year, DateTime.Now.AddMonths(-1).Month, lastDay); 
+                objItem.MemberType = "New Enrollment";
+                objItem.BaseCount = context.CustomerDetails.Where(x => x.DOJ >= FromDate && x.DOJ <= ToDate).Count();
+                objItem.TxnCount = context.TransactionMasters.Where(x => x.Datetime >= FromDate && x.Datetime <= ToDate).Count();
+                objItem.BizGen = context.TransactionMasters.Where(x => x.Datetime >= FromDate && x.Datetime <= ToDate).Select(y => y.InvoiceAmt).Sum();
+                objData.Add(objItem);
+
+                MemberBaseAndTransaction objItem1 = new MemberBaseAndTransaction();
+                objItem1.MemberType = "Existing Base";
+                objItem1.BaseCount = context.CustomerDetails.Count();
+                objItem1.TxnCount = context.TransactionMasters.Count();
+                objItem1.BizGen = context.TransactionMasters.Select(y => y.InvoiceAmt).Sum();
+                objData.Add(objItem1);
+
+            }
+
+
+            return objData;
+        }
     }
 }

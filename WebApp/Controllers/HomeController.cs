@@ -14,6 +14,8 @@ using BOTS_BL;
 using System.Text;
 using System.IO;
 using WebApp.App_Start;
+using Rotativa;
+
 
 namespace WebApp.Controllers
 {
@@ -435,20 +437,59 @@ namespace WebApp.Controllers
         public bool GenerateReports()
         {
             bool status = false;
-            var AllCustomer = CR.GetAllCustomer();
-            foreach(var customer in AllCustomer)
-            {
-                GeneratePDF(Convert.ToString(customer.GroupId));
-            }
+            //var AllCustomer = CR.GetAllCustomer();
+            GeneratePDF("1051");
+            //foreach(var customer in AllCustomer)
+            //{
+            //    GeneratePDF(Convert.ToString(customer.GroupId));
+            //}
 
             return status;         
         }
         public ActionResult GeneratePDF(string groupId)
         {
             DashboardSummaryViewModel objData = new DashboardSummaryViewModel();
-                       
+            objData.CustomerName = CR.GetCustomerName(groupId);
+            objData.CustomerLogoURL = CR.GetCustomerLogo(groupId);
+            objData.ReportMonth = DateTime.Now.AddMonths(-1).ToString("MMMM", CultureInfo.InvariantCulture) + " - " + DateTime.Now.AddMonths(-1).Year.ToString();
+            objData.lstMemberBaseAndTransaction = CR.GetMemberBaseAndTransactions(groupId);
+            var connectionString = CR.GetCustomerConnString(groupId);
+            var dataDashboard = DR.GetDashboardData(groupId, connectionString, "", "", "");
+            TotalStats objStats = new TotalStats();
+            objStats.TotalBiz = dataDashboard.TotalBiz;
+            objStats.LoyaltyBiz = dataDashboard.LoyaltyBiz;
+            objStats.LoyaltyPercentage = String.Format(new CultureInfo("en-IN", false), "{0:n2}", Convert.ToDouble(Convert.ToDouble(dataDashboard.LoyaltyBiz * 100) / Convert.ToDouble(dataDashboard.TotalBiz)));
+            objData.objTotalStats = objStats;
+
 
             return View(objData);
+        }
+        public void SavePDF(string groupId)
+        {
+            DashboardSummaryViewModel objData = new DashboardSummaryViewModel();
+            objData.CustomerName = CR.GetCustomerName(groupId);
+            objData.CustomerLogoURL = CR.GetCustomerLogo(groupId);
+            objData.ReportMonth = DateTime.Now.AddMonths(-1).ToString("MMMM", CultureInfo.InvariantCulture) + "_" + DateTime.Now.AddMonths(-1).Year.ToString();
+            objData.lstMemberBaseAndTransaction = CR.GetMemberBaseAndTransactions(groupId);
+
+            var connectionString = CR.GetCustomerConnString(groupId);
+            var dataDashboard = DR.GetDashboardData(groupId, connectionString, "", "", "");
+            TotalStats objStats = new TotalStats();
+            objStats.TotalBiz = dataDashboard.TotalBiz;
+            objStats.LoyaltyBiz = dataDashboard.LoyaltyBiz;
+            objStats.LoyaltyPercentage = String.Format(new CultureInfo("en-IN", false), "{0:n2}", Convert.ToDouble(Convert.ToDouble(dataDashboard.LoyaltyBiz * 100) / Convert.ToDouble(dataDashboard.TotalBiz)));
+            objData.objTotalStats = objStats;
+
+            var a = new ViewAsPdf();
+            a.ViewName = "GeneratePDF";
+            a.Model = objData;
+
+            var pdfBytes = a.BuildFile(this.ControllerContext);
+
+            // Optionally save the PDF to server in a proper IIS location.
+            var fileName = objData.CustomerName+"_"+ objData.ReportMonth + ".pdf";
+            var path = Server.MapPath("~/Temp/" + fileName);
+            System.IO.File.WriteAllBytes(path, pdfBytes);
         }
     }
 }

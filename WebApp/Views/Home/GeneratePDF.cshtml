@@ -1,8 +1,154 @@
-﻿
+﻿@model WebApp.ViewModel.DashboardSummaryViewModel
+@using System.Globalization
 @{
     ViewBag.Title = "GeneratePDF";
     Layout = null;
 }
 
-<h2>GeneratePDF</h2>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title></title>
+    <link href="~/Content/main.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css" />
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script type="text/javascript" src="~/Content/assets/scripts/main.js"></script>
+    <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+    <link href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" rel="stylesheet" />
+    <script src="~/Scripts/cute-alert-master/cute-alert.js"></script>
+    <link href="~/Scripts/cute-alert-master/style-alert.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="col-lg-8 col-md-8 row" style="padding: 10px; margin:10px;">
+        <table style="width:100%;">
+            <tr>
+                <td style="text-align: center; font-size: 20px;width:20%;"><img src="@Model.CustomerLogoURL" /></td>
+                <td style="text-align: center; font-size: 20px; border-top: 2px solid darkred; border-bottom: 2px solid darkred; ">
+                    <h3><b> @Model.CustomerName </b></h3>
+                    <h4>
+                        LOYALTY PROGRAM
+                    </h4>
+                    <h5>  SUMMARY for: <b><i style="color:darkred;"> @Model.ReportMonth </i></b></h5>
+                </td>
+                <td style="text-align: center; font-size: 20px;"><img src="~/Content/assets/OnlyLogo.png" /></td>
+            </tr>
+            <tr>
+                <th colspan="4" style="padding:10px;"></th>
+            </tr>
+            <tr style="background-color:grey;color:white;">
+                <th colspan="4" style="padding:5px; text-align:left;">A. MEMBER BASE & TRANSACTIONS</th>
+            </tr>
+            <tr>
+                <th colspan="4" style="padding:2px;"></th>
+            </tr>
+            <tr>
+                <td colspan="4">
+                    <table border="1" cellpadding="5" cellspacing="5" class="col-lg-12 col-md-12">
+                        <tr style="text-align: center; color: white;">
+                            <th style="background-color: #B381D9;" width="25%">Member Type</th>
+                            <th style="background-color: #8FAADC;" width="25%">Base Count</th>
+                            <th style="background-color: #DEB9CA;" width="25%">Txn Count</th>
+                            <th style="background-color: #A9D18E;" width="25%">Biz Gen (Rs.)</th>
+                        </tr>
+                        @foreach (var item in Model.lstMemberBaseAndTransaction)
+                        {
+                            <tr style="text-align: center;">
+                                <td width="25%">@item.MemberType</td>
+                                <td width="25%">@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(item.BaseCount))</td>
+                                <td width="25%">@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(item.TxnCount))</td>
+                                <td width="25%">@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(item.BizGen))</td>
+                            </tr>
+                        }
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <th colspan="4" style="padding:10px;"></th>
+            </tr>
+            <tr style="background-color:grey;color:white;">
+                <th colspan="4" style="padding: 5px; text-align: left;">B. BUSINESS GENERATED</th>
+            </tr>
+            <tr>
+                <th colspan="4" style="padding:2px;"></th>
+            </tr>
+            <tr>
+                <td colspan="4">
+                    <table border="1" cellpadding="5" cellspacing="5" class="col-lg-12 col-md-12">
+                        <tr style="text-align: center; color: white;">
+                            <th style="background-color: #B381D9;" width="25%">Elements</th>
+                            <th style="background-color: #8FAADC;" width="25%">Base Count</th>
+                            <th style="background-color: #DEB9CA;" width="25%">Txn Count</th>
+                            <th style="background-color: #A9D18E;" width="25%">Loyalty Biz (Rs.)</th>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+
+        <table cellpadding="5" cellspacing="5" class="col-lg-12 col-md-12">
+            <tr>
+                <th colspan="5" style="padding:2px;"></th>
+            </tr>
+            <tr style="color:white;">
+                <td width="30%" style="background-color: #FFC000;padding:15px;">
+                    <b><u>Total Biz (Rs.) </u></b> <br /> <b style="font-size:20px;"> @String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(Model.objTotalStats.TotalBiz))</b>
+                </td>
+                <td width="5%"></td>
+                <td width="30%" style="background-color: #00B0F0; padding: 15px;">
+                    <b><u>Loyalty Biz (Rs.)</u></b> <br /><b style="font-size:20px;"> @String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(Model.objTotalStats.LoyaltyBiz)) </b>
+                </td>
+                <td width="5%"></td>
+                <td width="30%" style="background-color: #F4B183; padding: 15px;">
+                    <b><u> Loyalty % to Total Biz</u></b> <br />
+                    <b style="font-size:20px;"> @String.Format(new CultureInfo("en-IN", false), "{0:n2}", Convert.ToDouble(Model.objTotalStats.LoyaltyPercentage))% </b>
+                </td>
+            </tr>
+        </table>
+
+        <table style="width:100%;margin-top:10px;">
+            <tr style="background-color:grey;color:white;">
+                <th colspan="5" style="padding: 5px; text-align: left;">C. KEY METRICS (TILL DATE)</th>
+            </tr>
+            <tr>
+                <th colspan="5" style="padding:2px;"></th>
+            </tr>
+            <tr>
+                <td width="30%" style="background-color: #E2F0D9; padding: 15px;">
+                    <b>Redemption Rates</b> <br /> <b style="font-size:20px;"> </b>
+                </td>
+                <td width="5%"></td>
+                <td width="30%" style="background-color: #FBE5D6; padding: 15px;">
+                    <b>Redeem to Inv (times)</b> <br /><b style="font-size:20px;"></b>
+                </td>
+                <td width="5%"></td>
+                <td width="30%" style="background-color: #FFF2CC; padding: 15px;">
+                    <b>Inactive Base(> 6 mths)</b> <br />
+                    <b style="font-size:20px;"></b>
+                </td>
+            </tr>
+        </table>
+        <table style="width:100%;margin-top:10px;">           
+            <tr>
+                <th colspan="5" style="padding:2px;"></th>
+            </tr>
+            <tr>
+                <td width="30%" style="background-color: #E2F0D9; padding: 15px;">
+                    <b>Only Once Base</b> <br /> <b style="font-size:20px;"> </b>
+                </td>
+                <td width="5%"></td>
+                <td width="30%" style="background-color: #FBE5D6; padding: 15px;">
+                    <b>Non-redeem base</b> <br /><b style="font-size:20px;"></b>
+                </td>
+                <td width="5%"></td>
+                <td width="30%" style="background-color: #FFF2CC; padding: 15px;">
+                    <b>Non-transacting base</b> <br />
+                    <b style="font-size:20px;"></b>
+                </td>
+            </tr>
+        </table>
+    </div>
+</body>
+</html>
 

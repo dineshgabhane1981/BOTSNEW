@@ -331,6 +331,7 @@
     <Content Include="Content\assets\images\shape_editUser.png" />
     <Content Include="Content\assets\images\task.png" />
     <Content Include="Content\assets\images\woman.jpg" />
+    <Content Include="Content\assets\OnlyLogo.png" />
     <Content Include="Content\assets\scripts\common.js" />
     <Content Include="Content\assets\scripts\main.js" />
     <Content Include="Content\bootstrap-theme.css" />
