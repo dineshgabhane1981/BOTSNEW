@@ -254,6 +254,8 @@
     <Content Include="Scripts\cute-alert-master\img\success.svg" />
     <Content Include="Scripts\cute-alert-master\img\warning.svg" />
     <Content Include="Scripts\cute-alert-master\style-alert.css" />
+    <Content Include="Scripts\EnrolDynCustData.js" />
+    <Content Include="Scripts\InvoiceDynData.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />
     <Content Include="Scripts\jquery-3.4.1.slim.js" />

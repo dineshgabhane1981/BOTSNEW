@@ -20,8 +20,9 @@ namespace RetailerApp.Controllers
             DynamicFieldInfo DynaInfo = new DynamicFieldInfo();
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
             var obj = RWR.DynamicData(userDetails.connectionString);
-
+            var obj1 = RWR.DynamicCustData(userDetails.connectionString);
             Session["DynamicData"] = obj;
+            Session["DynamicCustData"] = obj1;
 
             //var J1 = Session["DynamicData"];
 
@@ -73,15 +74,17 @@ namespace RetailerApp.Controllers
             List<DynamicFieldInfo> Obj1 = new List<DynamicFieldInfo>();
             List<DynamicFieldInfo> Obj2 = new List<DynamicFieldInfo>();
             JSONDATA J1 = new JSONDATA();
+            JSONDATA1 J2 = new JSONDATA1();
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
             objData = RWR.GetCustomerDetails(userDetails.OutletOrBrandId, MobileNo);
             objCustData.objCDetails = objData;
             J1.JsonList1 = (List<DynamicFieldInfo>[])Session["DynamicData"];
-            
-            objCustData.objJsonData = new JSONDATA();
+            J2.JsonListCust = (List<DynamicFieldInfo>[])Session["DynamicCustData"];
 
+            objCustData.objJsonData = new JSONDATA();
+            objCustData.objJsonCustData = new JSONDATA1();
             objCustData.objJsonData.JsonList1 = J1.JsonList1;
-            //objCustData.objJsonData.JsonList2 = J1.JsonList2;
+            objCustData.objJsonCustData.JsonListCust = J2.JsonListCust;
             return new JsonResult() { Data = objCustData, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
 
@@ -96,17 +99,18 @@ namespace RetailerApp.Controllers
             foreach (Dictionary<string, object> item in obj)
             {
                 string MobileNo = Convert.ToString(item["MobileNo"]);
-                string CustomerName = Convert.ToString(item["CustomerName"]);
+                
                 string InvoiceNo = Convert.ToString(item["InvoiceNo"]);
                 string InvoiceAmt = Convert.ToString(item["InvoiceAmt"]);
-                string DOB = Convert.ToString(item["DOB"]);
-                string EmailId = Convert.ToString(item["EmailId"]);
-                string Gender = Convert.ToString(item["Gender"]);
-                string ADate = Convert.ToString(item["ADate"]);
-                string CardNo = Convert.ToString(item["CardNo"]);
+                //string DOB = Convert.ToString(item["DOB"]);
+                //string EmailId = Convert.ToString(item["EmailId"]);
+                //string Gender = Convert.ToString(item["Gender"]);
+                //string ADate = Convert.ToString(item["ADate"]);
+                //string CardNo = Convert.ToString(item["CardNo"]);
                 string DynamicData = Convert.ToString(item["DynamicData"]);
+                string DynamicCustData = Convert.ToString(item["DynamicCustData"]);
 
-                EResponse = RWR.InsertEarnData(userDetails.OutletOrBrandId, MobileNo, CustomerName, InvoiceNo, InvoiceAmt, DOB, EmailId, Gender, ADate, CardNo, jsonData);
+                EResponse = RWR.InsertEarnData(userDetails.OutletOrBrandId, MobileNo, InvoiceNo, InvoiceAmt, DynamicData, DynamicCustData);
             }            
             return new JsonResult() { Data = EResponse, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }

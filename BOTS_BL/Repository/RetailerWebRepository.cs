@@ -26,18 +26,10 @@ namespace BOTS_BL.Repository
         {
             DynamicFieldInfo Obj = new DynamicFieldInfo();
 
-
-            //List<DynamicFieldInfo> objListDymanic = new List<DynamicFieldInfo>();
-
-
             List<DynamicFieldInfo> objList2 = new List<DynamicFieldInfo>();
             List<DynamicFieldInfo>[] Obj1 = new List<DynamicFieldInfo>[1000];
-            //List<JSONDATA> DynJson = new List<JSONDATA>();
 
             JSONDATA J = new JSONDATA();
-
-
-
 
             SqlConnection _Con = new SqlConnection(connectionString);
             DataSet retVal = new DataSet();
@@ -65,8 +57,6 @@ namespace BOTS_BL.Repository
                 int i = 1;
                 foreach (Dictionary<string, object> item in objOutletData)
                 {
-
-
                     DynamicFieldInfo DymFld = new DynamicFieldInfo();
                     DymFld.Fieldid = Convert.ToString(item["Fieldid"]);
                     DymFld.FieldOptionId = Convert.ToString(item["FieldOptionId"]);
@@ -76,7 +66,6 @@ namespace BOTS_BL.Repository
 
                     objListDymanic.Add(DymFld);
                 }
-
 
                 int C = objListDymanic.GroupBy(data => data.Fieldid).Count();
 
@@ -88,16 +77,77 @@ namespace BOTS_BL.Repository
                 List<DynamicFieldInfo>[] dynamicFieldInfos = new List<DynamicFieldInfo>[distinctFieldId.Count()];
                 if (distinctFieldId != null && distinctFieldId.Any())
                 {
-
                     foreach (var fieldid in distinctFieldId)
                     {
                         dynamicFieldInfos[Convert.ToInt16(fieldid) - 1] = objListDymanic?.Where(data => data.Fieldid == fieldid).ToList();
                     }
                 }
-
                 Obj1 = dynamicFieldInfos;
             }
+            return Obj1;
+        }
+        public List<DynamicFieldInfo>[] DynamicCustData(string connectionString)
+        {
+            DynamicFieldInfo Obj = new DynamicFieldInfo();
 
+            List<DynamicFieldInfo> objList2 = new List<DynamicFieldInfo>();
+            List<DynamicFieldInfo>[] Obj1 = new List<DynamicFieldInfo>[1000];
+
+            JSONDATA J = new JSONDATA();
+
+            SqlConnection _Con = new SqlConnection(connectionString);
+            DataSet retVal = new DataSet();
+            DataTable Tbl = new DataTable();
+            SqlCommand cmdReport = new SqlCommand("sp_DynamicCustomerDataJSON", _Con);
+            SqlDataAdapter daReport = new SqlDataAdapter(cmdReport);
+
+            using (cmdReport)
+            {
+                SqlParameter param1 = new SqlParameter("pi_Date", DateTime.Now.ToString("yyyy-MM-dd"));
+                cmdReport.CommandType = CommandType.StoredProcedure;
+                cmdReport.Parameters.Add(param1);
+
+                daReport.Fill(retVal);
+
+                Tbl = retVal.Tables[0];
+                var JsonData = Tbl.Rows[0]["JSONData"];
+
+                JavaScriptSerializer json_serializer = new JavaScriptSerializer();
+                json_serializer.MaxJsonLength = int.MaxValue;
+                object[] objOutletData = (object[])json_serializer.DeserializeObject((string)JsonData);
+
+                List<DynamicFieldInfo> objListDymanic = new List<DynamicFieldInfo>();
+
+                int i = 1;
+                foreach (Dictionary<string, object> item in objOutletData)
+                {
+                    DynamicFieldInfo DymFld = new DynamicFieldInfo();
+                    DymFld.Fieldid = Convert.ToString(item["Fieldid"]);
+                    DymFld.FieldOptionId = Convert.ToString(item["FieldOptionId"]);
+                    DymFld.FieldTypeId = Convert.ToString(item["FieldTypeId"]);
+                    DymFld.FieldValue = Convert.ToString(item["FieldValue"]);
+                    DymFld.FieldName = Convert.ToString(item["FieldName"]);
+
+                    objListDymanic.Add(DymFld);
+                }
+
+                int C = objListDymanic.GroupBy(data => data.Fieldid).Count();
+
+                var query = new DynamicFieldInfo[C];
+
+                List<DynamicFieldInfo> objList1 = new List<DynamicFieldInfo>();
+
+                var distinctFieldId = objListDymanic?.Select(o => o.Fieldid).Distinct();
+                List<DynamicFieldInfo>[] dynamicFieldInfos = new List<DynamicFieldInfo>[distinctFieldId.Count()];
+                if (distinctFieldId != null && distinctFieldId.Any())
+                {
+                    foreach (var fieldid in distinctFieldId)
+                    {
+                        dynamicFieldInfos[Convert.ToInt16(fieldid) - 1] = objListDymanic?.Where(data => data.Fieldid == fieldid).ToList();
+                    }
+                }
+                Obj1 = dynamicFieldInfos;
+            }
             return Obj1;
         }
         public CustomerDetails GetCustomerDetails(string CounterId, string MobileNo)
@@ -153,7 +203,7 @@ namespace BOTS_BL.Repository
             return objData;
         }
 
-        public EarnResponse InsertEarnData(string CounterId, string Mobileno, string CustomerName, string InvoiceNo, string InvoiceAmt, string DOB, string EmailId, string Gender, string ADate, string CardNo, string DynamicData)
+        public EarnResponse InsertEarnData(string CounterId, string Mobileno, string InvoiceNo, string InvoiceAmt, string DynamicData,string DynamicCustData)
         {
             EarnResponse R = new EarnResponse();
             using (var context = new CommonDBContext())
@@ -171,14 +221,15 @@ namespace BOTS_BL.Repository
                     SqlParameter param2 = new SqlParameter("pi_MobileNo", Mobileno);
                     SqlParameter param3 = new SqlParameter("pi_InvoiceNo", InvoiceNo);
                     SqlParameter param4 = new SqlParameter("pi_InvoiceAmt", InvoiceAmt);
-                    SqlParameter param5 = new SqlParameter("pi_DOB", DOB);
-                    SqlParameter param6 = new SqlParameter("pi_EmailId", EmailId);
-                    SqlParameter param7 = new SqlParameter("pi_CustomerName", CustomerName);
-                    SqlParameter param8 = new SqlParameter("pi_CardNo", CardNo);
-                    SqlParameter param9 = new SqlParameter("pi_Gender", Gender);
-                    SqlParameter param10 = new SqlParameter("pi_Anniversary", ADate);
-                    SqlParameter param11 = new SqlParameter("pi_Datetime", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
-                    SqlParameter param12 = new SqlParameter("pi_json", DynamicData);
+                    //SqlParameter param5 = new SqlParameter("pi_DOB", DOB);
+                    //SqlParameter param6 = new SqlParameter("pi_EmailId", EmailId);
+                    //SqlParameter param7 = new SqlParameter("pi_CustomerName", CustomerName);
+                    //SqlParameter param8 = new SqlParameter("pi_CardNo", CardNo);
+                    //SqlParameter param9 = new SqlParameter("pi_Gender", Gender);
+                    //SqlParameter param10 = new SqlParameter("pi_Anniversary", ADate);
+                    SqlParameter param5 = new SqlParameter("pi_Datetime", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
+                    SqlParameter param6 = new SqlParameter("pi_json", DynamicData);
+                    SqlParameter param7 = new SqlParameter("pi_json1", DynamicCustData);
 
                     cmdReport.CommandType = CommandType.StoredProcedure;
                     cmdReport.Parameters.Add(param1);
@@ -188,11 +239,11 @@ namespace BOTS_BL.Repository
                     cmdReport.Parameters.Add(param5);
                     cmdReport.Parameters.Add(param6);
                     cmdReport.Parameters.Add(param7);
-                    cmdReport.Parameters.Add(param8);
-                    cmdReport.Parameters.Add(param9);
-                    cmdReport.Parameters.Add(param10);
-                    cmdReport.Parameters.Add(param11);
-                    cmdReport.Parameters.Add(param12);
+                    //cmdReport.Parameters.Add(param8);
+                    //cmdReport.Parameters.Add(param9);
+                    //cmdReport.Parameters.Add(param10);
+                    //cmdReport.Parameters.Add(param11);
+                    //cmdReport.Parameters.Add(param12);
                     daReport.Fill(retVal);
 
                     DataTable dt = retVal.Tables[0];

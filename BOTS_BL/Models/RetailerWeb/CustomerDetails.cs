@@ -165,10 +165,16 @@ namespace BOTS_BL.Models.RetailerWeb
         public List<DynamicFieldInfo>[] JsonList1 { get; set; }
     }
 
+    public class JSONDATA1
+    {
+        public List<DynamicFieldInfo>[] JsonListCust { get; set; }
+    }
+
     public class CustDetails
     {
         public CustomerDetails objCDetails { get; set; }
         public JSONDATA objJsonData { get; set; }
+        public JSONDATA1 objJsonCustData { get; set; }
     }
 
 
