@@ -211,7 +211,7 @@ namespace BOTS_BL.Repository
                 string groupId = CounterId.Substring(0, 4);
                 var conStr = CR.GetCustomerConnString(groupId);
 
-                SqlConnection _Con = new SqlConnection(conStr);
+                        SqlConnection _Con = new SqlConnection(conStr);
                 DataSet retVal = new DataSet();
                 SqlCommand cmdReport = new SqlCommand("sp_Web_Earn", _Con);
                 SqlDataAdapter daReport = new SqlDataAdapter(cmdReport);
@@ -221,12 +221,6 @@ namespace BOTS_BL.Repository
                     SqlParameter param2 = new SqlParameter("pi_MobileNo", Mobileno);
                     SqlParameter param3 = new SqlParameter("pi_InvoiceNo", InvoiceNo);
                     SqlParameter param4 = new SqlParameter("pi_InvoiceAmt", InvoiceAmt);
-                    //SqlParameter param5 = new SqlParameter("pi_DOB", DOB);
-                    //SqlParameter param6 = new SqlParameter("pi_EmailId", EmailId);
-                    //SqlParameter param7 = new SqlParameter("pi_CustomerName", CustomerName);
-                    //SqlParameter param8 = new SqlParameter("pi_CardNo", CardNo);
-                    //SqlParameter param9 = new SqlParameter("pi_Gender", Gender);
-                    //SqlParameter param10 = new SqlParameter("pi_Anniversary", ADate);
                     SqlParameter param5 = new SqlParameter("pi_Datetime", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
                     SqlParameter param6 = new SqlParameter("pi_json", DynamicData);
                     SqlParameter param7 = new SqlParameter("pi_json1", DynamicCustData);
@@ -354,7 +348,7 @@ namespace BOTS_BL.Repository
             return R;
         }
 
-        public BurnValidationResponse BurnValidation(string CounterId, string Mobileno, string InvoiceNo, string InvoiceAmt, string PointsBurn)
+        public BurnValidationResponse BurnValidation(string CounterId, string Mobileno, string InvoiceNo, string InvoiceAmt, string PointsBurn,string DynamicData)
         {
             BurnValidationResponse R = new BurnValidationResponse();
             using (var context = new CommonDBContext())
@@ -373,7 +367,9 @@ namespace BOTS_BL.Repository
                     SqlParameter param3 = new SqlParameter("pi_InvoiceNo", InvoiceNo);
                     SqlParameter param4 = new SqlParameter("pi_InvoiceAmt", InvoiceAmt);
                     SqlParameter param5 = new SqlParameter("pi_BurnPoints", PointsBurn);
-                    SqlParameter param11 = new SqlParameter("pi_Datetime", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
+                    SqlParameter param6 = new SqlParameter("pi_Datetime", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
+                    SqlParameter param7 = new SqlParameter("pi_jsondata", DynamicData);
+
 
                     cmdReport.CommandType = CommandType.StoredProcedure;
                     cmdReport.Parameters.Add(param1);
@@ -381,7 +377,8 @@ namespace BOTS_BL.Repository
                     cmdReport.Parameters.Add(param3);
                     cmdReport.Parameters.Add(param4);
                     cmdReport.Parameters.Add(param5);
-                    cmdReport.Parameters.Add(param11);
+                    cmdReport.Parameters.Add(param6);
+                    cmdReport.Parameters.Add(param7);
                     daReport.Fill(retVal);
 
                     DataTable dt = retVal.Tables[0];
