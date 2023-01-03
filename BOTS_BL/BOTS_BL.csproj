@@ -245,6 +245,7 @@
     <Compile Include="Models\CommonDB\tblChannelPartner.cs" />
     <Compile Include="Models\CommonDB\tblCity.cs" />
     <Compile Include="Models\CommonDB\tblErrorLog.cs" />
+    <Compile Include="Models\CommonDB\tblFestival.cs" />
     <Compile Include="Models\CommonDB\tblGroupDetail.cs" />
     <Compile Include="Models\CommonDB\tblModulesPayment.cs" />
     <Compile Include="Models\CommonDB\tblNonRedeemedGroup.cs" />
@@ -266,6 +267,7 @@
     <Compile Include="Models\CommonDB\WAReport.cs" />
     <Compile Include="Models\CompetitionDetail.cs" />
     <Compile Include="Models\DashboardSummary\DashboardSummary.cs" />
+    <Compile Include="Models\DashboardSummary\KeyMetrics.cs" />
     <Compile Include="Models\Dashboard\DashboardMemberSegment.cs" />
     <Compile Include="Models\DBContext.cs" />
     <Compile Include="Models\DiscussionReport.cs" />

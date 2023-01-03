@@ -16,6 +16,7 @@ using System.Net;
 using System.Web.Script.Serialization;
 using DocumentFormat.OpenXml.InkML;
 using System.Runtime.Remoting.Contexts;
+using System.Data.Entity.Infrastructure;
 
 namespace BOTS_BL.Repository
 {
@@ -176,7 +177,7 @@ namespace BOTS_BL.Repository
             List<SelectListItem> lstAllFroup = new List<SelectListItem>();
             using (var context = new CommonDBContext())
             {
-                var GroupDetails = context.tblGroupDetails.Where(x=>x.IsActive==true && x.IsLive==true).OrderBy(y=>y.GroupName).ToList();
+                var GroupDetails = context.tblGroupDetails.Where(x => x.IsActive == true && x.IsLive == true).OrderBy(y => y.GroupName).ToList();
 
                 foreach (var item in GroupDetails)
                 {
@@ -257,7 +258,7 @@ namespace BOTS_BL.Repository
                                 {
                                     ProgramRenewalDate = nextRenewal;
                                 }
-                                objGroup.RenewalDate = ProgramRenewalDate.ToString("dd-MMM-yyyy");                                 
+                                objGroup.RenewalDate = ProgramRenewalDate.ToString("dd-MMM-yyyy");
                             }
 
 
@@ -278,12 +279,21 @@ namespace BOTS_BL.Repository
         public string GetCustomerConnString(string GroupId)
         {
             string ConnectionString = string.Empty;
-            using (var context = new CommonDBContext())
+            try
             {
-                var DBDetails = context.DatabaseDetails.Where(x => x.GroupId == GroupId).FirstOrDefault();
-                //CustomerConnString.ConnectionStringCustomer = DBDetails.DBName;
-
-                ConnectionString = "Data Source = " + DBDetails.IPAddress + "; Initial Catalog = " + DBDetails.DBName + "; user id = " + DBDetails.DBId + "; password = " + DBDetails.DBPassword + "";
+                using (var context = new CommonDBContext())
+                {
+                    var DBDetails = context.DatabaseDetails.Where(x => x.GroupId == GroupId).FirstOrDefault();
+                    //CustomerConnString.ConnectionStringCustomer = DBDetails.DBName;
+                    if (DBDetails != null)
+                    {
+                        ConnectionString = "Data Source = " + DBDetails.IPAddress + "; Initial Catalog = " + DBDetails.DBName + "; user id = " + DBDetails.DBId + "; password = " + DBDetails.DBPassword + "";
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, GroupId);
             }
             return ConnectionString;
         }
@@ -305,7 +315,6 @@ namespace BOTS_BL.Repository
             string CustomerLogo = string.Empty;
             using (var context = new BOTSDBContext(conStr))
             {
-
                 CustomerLogo = context.BrandDetails.Select(y => y.BrandLogoUrl).FirstOrDefault();
             }
             return CustomerLogo;
@@ -1072,35 +1081,167 @@ namespace BOTS_BL.Repository
             }
             return status;
         }
-              
+
         public List<MemberBaseAndTransaction> GetMemberBaseAndTransactions(string groupId)
         {
             List<MemberBaseAndTransaction> objData = new List<MemberBaseAndTransaction>();
             var conStr = GetCustomerConnString(groupId);
-            
-            using (var context = new BOTSDBContext(conStr))
+            if (!string.IsNullOrEmpty(conStr))
             {
-                MemberBaseAndTransaction objItem = new MemberBaseAndTransaction();
-                var FromDate= new DateTime(DateTime.Now.Year, DateTime.Now.AddMonths(-1).Month, 1);
-                var lastDay= DateTime.DaysInMonth(DateTime.Now.Year, DateTime.Now.AddMonths(-1).Month);
-                var ToDate = new DateTime(DateTime.Now.Year, DateTime.Now.AddMonths(-1).Month, lastDay); 
-                objItem.MemberType = "New Enrollment";
-                objItem.BaseCount = context.CustomerDetails.Where(x => x.DOJ >= FromDate && x.DOJ <= ToDate).Count();
-                objItem.TxnCount = context.TransactionMasters.Where(x => x.Datetime >= FromDate && x.Datetime <= ToDate).Count();
-                objItem.BizGen = context.TransactionMasters.Where(x => x.Datetime >= FromDate && x.Datetime <= ToDate).Select(y => y.InvoiceAmt).Sum();
-                objData.Add(objItem);
+                using (var context = new BOTSDBContext(conStr))
+                {
+                    MemberBaseAndTransaction objItem = new MemberBaseAndTransaction();
+                    var FromDate = new DateTime(DateTime.Now.Year, DateTime.Now.AddMonths(-1).Month, 1);
+                    var lastDay = DateTime.DaysInMonth(DateTime.Now.Year, DateTime.Now.AddMonths(-1).Month);
+                    var ToDate = new DateTime(DateTime.Now.Year, DateTime.Now.AddMonths(-1).Month, lastDay);
+                    objItem.MemberType = "New Enrollment";
+                    objItem.BaseCount = context.CustomerDetails.Where(x => x.DOJ >= FromDate && x.DOJ <= ToDate).Count();
+                    objItem.TxnCount = context.TransactionMasters.Where(x => x.Datetime >= FromDate && x.Datetime <= ToDate).Count();
+                    objItem.BizGen = context.TransactionMasters.Where(x => x.Datetime >= FromDate && x.Datetime <= ToDate).Select(y => y.InvoiceAmt).Sum();
+                    objData.Add(objItem);
 
-                MemberBaseAndTransaction objItem1 = new MemberBaseAndTransaction();
-                objItem1.MemberType = "Existing Base";
-                objItem1.BaseCount = context.CustomerDetails.Count();
-                objItem1.TxnCount = context.TransactionMasters.Count();
-                objItem1.BizGen = context.TransactionMasters.Select(y => y.InvoiceAmt).Sum();
-                objData.Add(objItem1);
+                    MemberBaseAndTransaction objItem1 = new MemberBaseAndTransaction();
+                    objItem1.MemberType = "Existing Base";
+                    objItem1.BaseCount = context.CustomerDetails.Count();
+                    objItem1.TxnCount = context.TransactionMasters.Count();
+                    objItem1.BizGen = context.TransactionMasters.Select(y => y.InvoiceAmt).Sum();
+                    objData.Add(objItem1);
+                }
 
             }
 
 
             return objData;
         }
+
+        public KeyMetrics GetKeyMetrics(string groupId)
+        {
+            KeyMetrics objData = new KeyMetrics();
+            var conStr = GetCustomerConnString(groupId);
+            if (!string.IsNullOrEmpty(conStr))
+            {
+                using (var context = new BOTSDBContext(conStr))
+                {
+
+                    string sqlString = "select C.MobileNo,C.Points,C.EnrollingOutlet,(Convert(varchar(10),cast(C.DOJ as date),103)) as EnrolledDate,C.CustomerName,Count(TM.MobileNo) as " +
+                            "TxnCount,COUNT(CASE WHEN TM.TransType = '2' THEN 1 ELSE NULL END) as TotalBurnTxn,sum((case when TM.TransType = '2' then TM.PointsBurned else 0 " +
+                            "end)) as TotalBurnPoints,COUNT(CASE WHEN TM.TransType = '1' THEN 1 ELSE NULL END) as EarnCount,COUNT(CASE WHEN TM.TransType = '2' THEN 1 ELSE " +
+                            "NULL END) as BurnCount,Min(cast(TM.Datetime as date)) as FirstTxnDate,Max(cast(TM.Datetime as date)) as LastTxnDate,isnull(Sum(TM.PointsEarned) " +
+                            ", 0) as PointsEarned,isnull(sum(TM.PointsBurned), 0) as PointsBurned,isnull(sum(TM.InvoiceAmt), 0) as InvoiceAmt,sum((case when TM.TransType = '2' " +
+                            "then TM.InvoiceAmt else 0 end)) as BurnAmt from TransactionMaster TM right join CustomerDetails C on C.MobileNo = TM.MobileNo where " +
+                            "((TM.TransType = '1') or(TM.TransType = '2')) and TM.InvoiceNo != 'B_Birthday' and TM.InvoiceNo != 'B_Anniversary' and TM.InvoiceNo != " +
+                            "'B_ProfileUpdate' and TM.InvoiceNo != 'B_ReferralBonus' and TM.InvoiceNo != 'B_RefereePoints' and TM.InvoiceNo != 'B_GiftingPoints' and " +
+                            "TM.InvoiceNo != 'Bonus' and TM.InvoiceNo != 'B_ReferralPoints' and TM.InvoiceNo != 'B_RefereeBonus' and TM.Status = '06' and " +
+                            "((C.CustomerThrough = '2') or (C.CustomerThrough = '4') or (C.CustomerThrough = '5') or (C.CustomerThrough = '7')) and C.Status = '00' group by " +
+                            "C.MobileNo,C.Points,C.CustomerName,C.EnrollingOutlet,C.DOJ";
+
+                    var AllData = context.Database.SqlQuery<KeyMetricsData>(sqlString).ToList();
+                    decimal? TotalRedeemPoints = 0;
+                    decimal? TotalEarnPoints = 0;
+
+                    TotalRedeemPoints = AllData.Sum(x => x.TotalBurnPoints);
+                    if (TotalRedeemPoints == null)
+                        TotalRedeemPoints = 0;
+                    TotalEarnPoints = AllData.Sum(x => x.PointsEarned);
+                    if (TotalEarnPoints == null)
+                        TotalEarnPoints = 0;
+                    if (TotalRedeemPoints != 0 && TotalEarnPoints != 0)
+                    {
+                        objData.RedemptionRate = decimal.Round(Convert.ToDecimal(((TotalRedeemPoints / TotalEarnPoints) * 100)), 2, MidpointRounding.AwayFromZero);
+                    }
+                    var TotalBurnInvoiceAmt = AllData.Sum(x => x.BurnAmt);
+                    var TotalBurnPoints = AllData.Sum(x => x.TotalBurnPoints);
+                    var PointAllocation = context.EarnRules.Select(x => x.PointsAllocation).FirstOrDefault();
+                    if (TotalBurnPoints > 0)
+                    {
+                        objData.RedeemToInv = decimal.Round((Convert.ToDecimal(TotalBurnInvoiceAmt / (TotalBurnPoints * PointAllocation))), 2, MidpointRounding.AwayFromZero);
+                    }
+                    else
+                    {
+                        objData.RedeemToInv = 0;
+                    }
+                    objData.OnlyOnceBase = AllData.Where(x => x.TxnCount == 1).Count();
+                    objData.NonRedeemBase = AllData.Where(x => x.BurnCount == 1).Count();
+                    var InactiveDate = DateTime.Now.AddMonths(-6);
+                    objData.InactiveBase = AllData.Where(x => x.LastTxnDate < InactiveDate).Count();
+                    objData.BulkImportBase = context.CustomerDetails.Where(x => x.CustomerThrough == "1").Count();
+
+                    decimal? Issued = 0;
+                    decimal? Redeemed = 0;
+
+                    Issued = AllData.Sum(x => x.PointsEarned);
+                    Redeemed = AllData.Sum(x => x.PointsBurned);
+                    if (Issued == null)
+                        Issued = 0;
+                    if (Redeemed == null)
+                        Redeemed = 0;
+
+                    objData.Issued = Issued.Value;
+                    objData.Redeemed = Redeemed.Value;
+
+                    var ExpiredPointStr = "select sum(Points) from PointsExpiryDetails";
+                    decimal? ExpiredPoint = 0;
+                    ExpiredPoint = context.Database.SqlQuery<decimal?>(ExpiredPointStr).FirstOrDefault();
+                    if (ExpiredPoint != null)
+                        objData.Expired = ExpiredPoint.Value;
+                    else
+                        objData.Expired = 0;
+                    objData.Available = objData.Issued - (objData.Redeemed + objData.Expired);
+
+                }
+            }
+            return objData;
+        }
+
+        public List<KeyInfoForNextMonth> GetKeyInfoForNextMonth(string groupId)
+        {
+            List<KeyInfoForNextMonth> lstData = new List<KeyInfoForNextMonth>();
+            var conStr = GetCustomerConnString(groupId);
+            if (!string.IsNullOrEmpty(conStr))
+            {
+                using (var context = new BOTSDBContext(conStr))
+                {
+                    var FromDate = new DateTime(DateTime.Now.Year, DateTime.Now.AddMonths(1).Month, 1);
+                    var lastDay = DateTime.DaysInMonth(DateTime.Now.Year, DateTime.Now.AddMonths(1).Month);
+                    var ToDate = new DateTime(DateTime.Now.Year, DateTime.Now.AddMonths(1).Month, lastDay);
+
+                    var Birthday = context.CustomerDetails.Where(x => x.DOB >= FromDate && x.DOB <= ToDate).Count();
+                    var Anniversary = context.CustomerDetails.Where(x => x.AnniversaryDate >= FromDate && x.AnniversaryDate <= ToDate).Count();
+                    var Expiry = context.PointsExpiries.Where(x => x.ExpiryDate >= FromDate && x.ExpiryDate <= ToDate).GroupBy(y => y.MobileNo).Count();
+
+                    KeyInfoForNextMonth objItem = new KeyInfoForNextMonth();
+                    objItem.Elements = "Birthday";
+                    objItem.BaseCount = Birthday;
+                    lstData.Add(objItem);
+
+                    KeyInfoForNextMonth objItem1 = new KeyInfoForNextMonth();
+                    objItem1.Elements = "Anniversary";
+                    objItem1.BaseCount = Anniversary;
+                    lstData.Add(objItem1);
+
+                    KeyInfoForNextMonth objItem2 = new KeyInfoForNextMonth();
+                    objItem2.Elements = "Expiry";
+                    objItem2.BaseCount = Expiry;
+                    lstData.Add(objItem2);
+                }
+            }
+            return lstData;
+        }
+
+        public List<tblFestival> GetFestivalDates()
+        {
+            List<tblFestival> lstData = new List<tblFestival>();
+
+            using (var context = new CommonDBContext())
+            {
+                var FromDate = new DateTime(DateTime.Now.Year, DateTime.Now.AddMonths(1).Month, 1);
+                var lastDay = DateTime.DaysInMonth(DateTime.Now.Year, DateTime.Now.AddMonths(1).Month);
+                var ToDate = new DateTime(DateTime.Now.Year, DateTime.Now.AddMonths(1).Month, lastDay);
+                lstData = context.tblFestivals.Where(x => x.Date >= FromDate && x.Date <= ToDate).ToList();
+            }
+            return lstData;
+        }
+
+
     }
 }

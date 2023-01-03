@@ -733,6 +733,7 @@
     <Folder Include="App_Browsers\" />
     <Folder Include="App_Data\" />
     <Folder Include="CustomerDocuments\" />
+    <Folder Include="DashboardReports\" />
     <Folder Include="Temp\" />
     <Folder Include="Views\testSinglepagews\" />
     <Folder Include="Views\Test\" />

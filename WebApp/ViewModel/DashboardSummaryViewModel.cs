@@ -12,9 +12,9 @@ namespace WebApp.ViewModel
         public List<MemberBaseAndTransaction> lstMemberBaseAndTransaction { get; set; }
         public List<BusinessGenerated> lstBusinessGenerated { get; set; }
         public TotalStats objTotalStats { get; set; }
-        public KeyMetricsTillDate objKeyMetricsTillDate { get; set; }
+        public KeyMetrics objKeyMetricsTillDate { get; set; }
         public List<KeyInfoForNextMonth> lstKeyInfoForNextMonth { get; set; }
-        public List<FestivalDates> lstFestivalDates { get; set; }
+        public List<tblFestival> lstFestivals { get; set; }
         public PointSummary objPointSummary { get; set; }
         public string CustomerName { get; set; }
         public string CustomerLogoURL { get; set; }

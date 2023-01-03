@@ -47,9 +47,9 @@ namespace BOTS_BL.Models
     }
     public class PointSummary
     {
-        public Int64 Issued { get; set; }
-        public Int64 Redeemed { get; set; }
-        public Int64 Expired { get; set; }
-        public Int64 Available { get; set; }
+        public decimal Issued { get; set; }
+        public decimal Redeemed { get; set; }
+        public decimal Expired { get; set; }
+        public decimal Available { get; set; }
     }
 }
