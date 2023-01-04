@@ -14,7 +14,7 @@
                     Dynamicname[j] = item.FieldName
                     if (item.FieldOptionId == "1") {
                         var ctrlId1 = "txtCustome" + j;
-                        var Temp2 = $("#" + ctrlId1).val();
+                        var Temp2 = ($("#" + ctrlId1).val());
                         MandFieldText[j] = item.FieldTypeId
 
                         if (( MandFieldText[j] == "1") && ( Temp2 == "")) {

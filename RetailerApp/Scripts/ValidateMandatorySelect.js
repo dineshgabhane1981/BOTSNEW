@@ -1,4 +1,4 @@
-function ValidateManditorySelect(){
+function ValidateMandatorySelect(){
   var C = Object.keys(object.objJsonData.JsonList1).length;// count of values in JsonList1
    
   var Dynamicname = [], MandFieldSelect = [],status;

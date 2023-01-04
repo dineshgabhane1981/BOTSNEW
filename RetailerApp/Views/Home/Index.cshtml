@@ -110,10 +110,10 @@
                 Enter Mobile No
             </div>
             <div class="col-md-3 col-sm-3">
-                <input id="txtMobileNo" type="text" onkeypress="phoneno()" maxlength="10" class="input50" />
+                <input id="txtMobileNo" type="text" onkeypress="phoneno()"   maxlength="10" class="input50" />
             </div>
             <div class="col-md-2 col-sm-2">
-                <button type="button" id="btnSearchCustomer" class="btn btn-primary" onclick="SearchCustomer();" style="margin-top:10px;">Search</button>
+                <button type="button" id="btnSearchCustomer" class="btn btn-primary" onclick="ValidateMobileno();" style="margin-top:10px;">Search</button>
             </div>
         </div>
 
@@ -155,57 +155,6 @@
                     <input id="txtMobileNoNew" type="number" class="input50" />
                 </div>
             </div>
-            @*<div class="col-md-12 col-sm-12 row">
-                    <div class="col-md-2 col-sm-2" style="margin-top:10px;">
-                        Card No
-                    </div>
-                    <div class="col-md-4 col-sm-4" style="margin-top:10px;">
-                        <input id="txtCardNoNew" type="number" class="input50" />
-                    </div>
-                </div>
-                <div class="col-md-12 col-sm-12 row">
-                    <div class="col-md-2 col-sm-2" style="margin-top:10px;">
-                        Member Name
-                    </div>
-                    <div class="col-md-4 col-sm-4" style="margin-top:10px;">
-                        <input id="txtMemberName" type="text" class="input100" />
-                    </div>
-                </div>
-                <div class="col-md-12 col-sm-12 row">
-                    <div class="col-md-2 col-sm-2" style="margin-top:10px;">
-                        DOB
-                    </div>
-                    <div class="col-md-4 col-sm-4" style="margin-top:10px;">
-                        <input id="txtDOB" type="text" class="input50" />
-                    </div>
-                </div>
-                <div class="col-md-12 col-sm-12 row">
-                    <div class="col-md-2 col-sm-2" style="margin-top:10px;">
-                        Email Id
-                    </div>
-                    <div class="col-md-4 col-sm-4" style="margin-top:10px;">
-                        <input id="txtEmail" type="text" class="input50" />
-                    </div>
-                </div>
-                <div class="col-md-12 col-sm-12 row">
-                    <div class="col-md-2 col-sm-2" style="margin-top:10px;">
-                        Gender
-                    </div>
-                    <div class="col-md-4 col-sm-4" style="margin-top:10px;">
-                        <input id="txtGender" type="text" class="input50" />
-                    </div>
-                </div>
-                <div class="col-md-12 col-sm-12 row">
-                    <div class="col-md-2 col-sm-2" style="margin-top:10px;">
-                        Anniversary date
-                    </div>
-                    <div class="col-md-4 col-sm-4" style="margin-top:10px;">
-                        <input id="txtADate" type="text" class="input50" />
-                    </div>
-                </div>*@
-
-
-
         </div>
     </div>
     <div class="row" style="margin-top: 20px; padding-bottom: 20px; display: none;" id="dvInvoiceHeading">
@@ -359,6 +308,38 @@
                 e.preventDefault();
         });
     }
+    function ValidateMobileno() {
+        var Temp = $("#txtMobileNo").val();
+        const firstDigitStr = String(Temp)[0];
+    
+        if ($("#txtMobileNo").val() == "") {
+            cuteAlert({
+                type: "error",
+                title: "OOPS...",
+                message: "Please enter Mobile number to search",
+                buttonText: "Okay"
+            })
+        }
+        else if ((Temp.length) < 10) {
+            cuteAlert({
+                type: "error",
+                title: "OOPS...",
+                message: "Please enter Mobile number with 10 digits",
+                buttonText: "Okay"
+            })
+        }
+        else if (firstDigitStr < 5) {
+            cuteAlert({
+                type: "error",
+                title: "OOPS...",
+                message: "Please enter Mobile number starting greater than 5",
+                buttonText: "Okay"
+            })
+        }
+        else {
+            SearchCustomer();
+        }
+    }
     function SearchCustomer() {
         if ($("#txtMobileNo").val() == "") {
             cuteAlert({
@@ -428,7 +409,7 @@
                                         items += "<option value='" + dropdownval + "'>" + item.FieldValue + "</option>";
                                         dropdownval++;
                                     });
-                                    alert(items);
+/*                                    alert(items);*/
                                     if (j == 0) {
                                         //alert("Above div");
 
@@ -485,7 +466,7 @@
                                                 }
                                                 $("#" + IdExistName[j]).attr("style", "margin-top:10px");
                                                 $("#" + Iddivrow[j]).append('<div class = "col-md-4 col-sm-4" id="' + IdExistdiv2[j] + '"></div>');
-                                                $("#" + IdExistdiv2[j]).append('<input id=" + ctrlId1 + " type=\"number\"  class=\"input50\" />');
+                                                $("#" + IdExistdiv2[j]).append('<input id=" '+ ctrlId1 +' " /*type=\"number\"*/  class=\"input50\" />');
                                                 $("#" + IdExistdiv2[j]).attr("style", "margin-top:10px");
                                             }
                                             else {
@@ -499,7 +480,7 @@
                                                 }
                                                 $("#" + IdExistName[j]).attr("style", "margin-top:10px");
                                                 $("#" + Iddivrow[j]).append('<div class = "col-md-4 col-sm-4" id="' + IdExistdiv2[j] + '"></div>');
-                                                $("#" + IdExistdiv2[j]).append('<input id=" + ctrlId1 + " type=\"number\"  class=\"input50\" />');
+                                                $("#" + IdExistdiv2[j]).append('<input id="' + ctrlId1 +' " /*type=\"number\"*/  class=\"input50\" />');
                                                 $("#" + IdExistdiv2[j]).attr("style", "margin-top:10px");
                                             }
                                         }
@@ -643,7 +624,7 @@
                                                 MandField = item.FieldTypeId;
                                                 if (item.FieldOptionId == "1") {
                                                     if (k == 0) {
-                                                        var ctrlId1 = "txtCustome" + k;
+                                                        var ctrlId1 = "txtCustomeEnroll" + k;
 
                                                         //var txtCtrl = "<input id=" + ctrlId1 + " type=\"text\"  class=\"input50\" />";
                                                         $('<div class="col-md-12 col-sm-12 row" id="' + IddivEnrollrow[k] + '"></div>').insertAfter("#dvEnrollMobileNo");
@@ -661,7 +642,7 @@
                                                         $("#" + IdEnrolldiv[k]).attr("style", "margin-top:10px");
                                                     }
                                                     else {
-                                                        var ctrlId1 = "txtCustome" + k;
+                                                        var ctrlId1 = "txtCustomeEnroll" + k;
 
                                                         //var txtCtrl = "<input id=" + ctrlId1 + " type=\"text\"  class=\"input50\" />";
                                                         $('<div class="col-md-12 col-sm-12 row" id="' + IddivEnrollrow[k] + '"></div>').insertAfter("#" + ControlId2);
@@ -680,7 +661,7 @@
                                                 }
                                                 else if (item.FieldOptionId == "2") {
                                                     if (k == 0) {
-                                                        var ctrlId2 = "txtDate" + k;
+                                                        var ctrlId2 = "txtDateEnroll" + k;
                                                         var txtDate = "<input id=" + ctrlId2 + " type=\"Date\"  class=\"input50\" />";
 
                                                         $('<div class="col-md-12 col-sm-12 row" id="' + IddivEnrollrow[k] + '"></div>').insertAfter("#dvEnrollMobileNo");
@@ -699,7 +680,7 @@
 
                                                     }
                                                     else {
-                                                        var ctrlId2 = "txtDate" + k;
+                                                        var ctrlId2 = "txtDateEnroll" + k;
                                                         var txtDate = "<input id=" + ctrlId2 + " type=\"Date\"  class=\"input50\" />";
 
                                                         $('<div class="col-md-12 col-sm-12 row" id="' + IddivEnrollrow[k] + '"></div>').insertAfter("#" + ControlId2);
@@ -825,7 +806,7 @@
                                                         }
                                                         $("#" + IdExistName[j]).attr("style", "margin-top:10px");
                                                         $("#" + Iddivrow[j]).append('<div class = "col-md-4 col-sm-4" id="' + IdExistdiv2[j] + '"></div>');
-                                                        $("#" + IdExistdiv2[j]).append('<input id="' + ctrlId1 + '" /*type=\"number\"*/  class=\"input50\" />');
+                                                        $("#" + IdExistdiv2[j]).append('<input id="' + ctrlId1 + '"  class=\"input50\" />');
                                                         $("#" + IdExistdiv2[j]).attr("style", "margin-top:10px");
                                                     }
                                                 }
@@ -888,49 +869,13 @@
 
     $("#btnSubmit").click(function () {
 
-        //var C = Object.keys(object.objJsonData.JsonList1).length;// count of values in JsonList1
+        var ResltInvoiceSelect = ValidateMandatorySelect();
+        var ResltInvoiceText = ValidateMandatoryText();
+        var ResltInvoiceDate = ValidateMandatoryDate();
 
-        //var Dynamicname = [], MandFieldSelect = [], MandFieldText = [], MandFieldDate = [];
-        //for (j = 0; j < C; j++) {
-        //    count = j + 1;
-
-        //    var ctrlId = "ddlCustomCtrl" + j;
-        //    var innerCount = Object.keys(object.objJsonData.JsonList1[j]).length;
-        //    if (innerCount > 1) {
-
-        //        var K = 1;
-        //        $.each(object.objJsonData.JsonList1[j], function (i, item) {
-        //            if (K == 1) {
-
-        //                var Temp1 = $("#" + ctrlId).val();
-        //                Dynamicname[j] = item.FieldName;
-        //                MandFieldSelect[j] = item.FieldTypeId
-        //            }
-        //            K++;
-        //        });
-        //    }
-        //    else {
-        //        $.each(object.objJsonData.JsonList1[j], function (i, item) {
-
-        //            Dynamicname[j] = item.FieldName
-        //            if (item.FieldOptionId == "1") {
-        //                var ctrlId1 = "txtCustome" + j;
-        //                var Temp2 = $("#" + ctrlId1).val();
-        //                MandFieldText[j] = item.FieldTypeId
-        //            }
-        //            else if (item.FieldOptionId == "2") {
-        //                var ctrlId2 = "txtDate" + j;
-        //                var Temp3 = $("#" + ctrlId2).val();
-        //                MandFieldDate[j] = item.FieldTypeId
-        //            }
-        //        });
-        //    }
-        //}
-
-        var status;
-
-        status = ValidateManditorySelect();
-        status1 = ValidateMandatoryText();
+        var ResltEnrollSelect = ValidateMandEnrollSelect();
+        var ResltEnrollText = ValidateMandEnrollText();
+        var ResltEnrollDate = ValidateMandEnrollDate();
 
             if ($("#txtInvoiceNo").val() == "") {
                 cuteAlert({
@@ -948,27 +893,57 @@
                     buttonText: "Okay"
                 })
             }
-            else if (status !="0") {
+            else if ((ResltInvoiceSelect != "0") && (ResltInvoiceSelect != true)) {
+                
                 cuteAlert({
                     type: "error",
                     title: "OOPS...",
-                    message: "Enter Mandetary Field " + status,
+                    message: "Enter Mandetary Field " + ResltInvoiceSelect,
                     buttonText: "Okay"
                 })
             }
-            else if (status1 != "0") {
+            else if ((ResltInvoiceText != "0") && (ResltInvoiceText != true)) {
+                
                 cuteAlert({
                     type: "error",
                     title: "OOPS...",
-                    message: "Enter Mandetary Field " + status1,
+                    message: "Enter Mandetary Field " + ResltInvoiceText,
                     buttonText: "Okay"
                 })
             }
-            else if (($("#" + MandFieldDate[j]).val() == "1") && ($("#" + Temp3).val() == "")) {
+            else if ((ResltInvoiceDate != "0") && (ResltInvoiceDate != true)) {
+                
                 cuteAlert({
                     type: "error",
                     title: "OOPS...",
-                    message: "Enter Mandetary Field",
+                    message: "Enter Mandetary Field " + ResltInvoiceDate,
+                    buttonText: "Okay"
+                })
+            }
+            else if ((ResltEnrollSelect != "0") && (ResltEnrollSelect != true)) {
+                
+                cuteAlert({
+                    type: "error",
+                    title: "OOPS...",
+                    message: "Enter Mandetary Field " + ResltEnrollSelect,
+                    buttonText: "Okay"
+                })
+            }
+            else if ((ResltEnrollText != "0") && (ResltEnrollText != true)) {
+                
+                cuteAlert({
+                    type: "error",
+                    title: "OOPS...",
+                    message: "Enter Mandetary Field " + ResltEnrollText,
+                    buttonText: "Okay"
+                })
+            }
+            else if ((ResltEnrollDate != "0") && (ResltEnrollDate != true)) {
+                
+                cuteAlert({
+                    type: "error",
+                    title: "OOPS...",
+                    message: "Enter Mandetary Field " + ResltEnrollDate,
                     buttonText: "Okay"
                 })
             }
@@ -1077,6 +1052,11 @@
     }
 
     $("#btnPaybyCash").click(function () {
+
+        var ResltInvoiceSelect = ValidateMandatorySelect();
+        var ResltInvoiceText = ValidateMandatoryText();
+        var ResltInvoiceDate = ValidateMandatoryDate();
+
         if ($("#txtInvoiceNoOld").val() == "") {
             cuteAlert({
                 type: "error",
@@ -1098,6 +1078,33 @@
                 type: "error",
                 title: "OOPS...",
                 message: "Please enter Mobile Number",
+                buttonText: "Okay"
+            })
+        }
+        else if ((ResltInvoiceSelect != "0") && (ResltInvoiceSelect != true)) {
+
+            cuteAlert({
+                type: "error",
+                title: "OOPS...",
+                message: "Enter Mandetary Field " + ResltInvoiceSelect,
+                buttonText: "Okay"
+            })
+        }
+        else if ((ResltInvoiceText != "0") && (ResltInvoiceText != true)) {
+
+            cuteAlert({
+                type: "error",
+                title: "OOPS...",
+                message: "Enter Mandetary Field " + ResltInvoiceText,
+                buttonText: "Okay"
+            })
+        }
+        else if ((ResltInvoiceDate != "0") && (ResltInvoiceDate != true)) {
+
+            cuteAlert({
+                type: "error",
+                title: "OOPS...",
+                message: "Enter Mandetary Field " + ResltInvoiceDate,
                 buttonText: "Okay"
             })
         }
@@ -1169,6 +1176,9 @@
     }
 
     $("#btnPaybyPoints").click(function () {
+        var ResltInvoiceSelect = ValidateMandatorySelect();
+        var ResltInvoiceText = ValidateMandatoryText();
+        var ResltInvoiceDate = ValidateMandatoryDate();
 
         if ($('#BurnPoints').is(":visible")) {
             if ($("#txtInvoiceNoOld").val() == "") {
@@ -1192,6 +1202,33 @@
                     type: "error",
                     title: "OOPS...",
                     message: "Please enter Points as amount to redeem",
+                    buttonText: "Okay"
+                })
+            }
+            else if ((ResltInvoiceSelect != "0") && (ResltInvoiceSelect != true)) {
+
+                cuteAlert({
+                    type: "error",
+                    title: "OOPS...",
+                    message: "Enter Mandetary Field " + ResltInvoiceSelect,
+                    buttonText: "Okay"
+                })
+            }
+            else if ((ResltInvoiceText != "0") && (ResltInvoiceText != true)) {
+
+                cuteAlert({
+                    type: "error",
+                    title: "OOPS...",
+                    message: "Enter Mandetary Field " + ResltInvoiceText,
+                    buttonText: "Okay"
+                })
+            }
+            else if ((ResltInvoiceDate != "0") && (ResltInvoiceDate != true)) {
+
+                cuteAlert({
+                    type: "error",
+                    title: "OOPS...",
+                    message: "Enter Mandetary Field " + ResltInvoiceDate,
                     buttonText: "Okay"
                 })
             }
@@ -1219,7 +1256,7 @@
             item["InvoiceAmt"] = $("#txtInvoiceAmOldt").val();
             item["PointsBurn"] = $("#txtBurnpoints").val();
 
-        alert("Inside SaveBurnOld");
+        /*alert("Inside SaveBurnOld");*/
         console.log(object);
 
         var C = Object.keys(object.objJsonData.JsonList1).length;// count of values in JsonList1
@@ -1384,11 +1421,8 @@
     });
 
     $("#BurnCompletion").click(function () {
-        alert("inside Burn Completion");
         var OTPval = $("#txtOTP").val();
-        //alert(OTPval);
-        var OTP = $("txtOTPval").val();
-        //alert(OTP);
+
         if ($("#txtOTP").val() == "") {
             cuteAlert({
                 type: "error",
@@ -1419,6 +1453,10 @@
 <script src="~/Scripts/ConcatData.js"></script>
 <script src="~/Scripts/InvoiceDynData.js"></script>
 <script src="~/Scripts/EnrolDynCustData.js"></script>
-<script src="~/Scripts/ValidateManditarySelect.js"></script>
+<script src="~/Scripts/ValidateMandatorySelect.js"></script>
 <script src="~/Scripts/ValidateMandatoryText.js"></script>
+<script src="~/Scripts/ValidateMandatoryDate.js"></script>
+<script src="~/Scripts/ValidateMandEnrollSelect.js"></script>
+<script src="~/Scripts/ValidateMandEnrollText.js"></script>
+<script src="~/Scripts/ValidateMandEnrollDate.js"></script>
 

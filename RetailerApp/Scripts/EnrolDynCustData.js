@@ -31,12 +31,12 @@ function EnrolDynCustData() {
 
                 Dynamicname[k] = item.FieldName
                 if (item.FieldOptionId == "1") {
-                    var ctrlId1 = "txtCustome" + k;
+                    var ctrlId1 = "txtCustomeEnroll" + k;
                     var Temp2 = $("#" + ctrlId1).val();
                     DynamicCustData.push([Dynamicname[k], Temp2]);
                 }
                 else if (item.FieldOptionId == "2") {
-                    var ctrlId2 = "txtDate" + k;
+                    var ctrlId2 = "txtDateEnroll" + k;
                     var Temp3 = $("#" + ctrlId2).val();
                     DynamicCustData.push([Dynamicname[k], Temp3]);
                 }

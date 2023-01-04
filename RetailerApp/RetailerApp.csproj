@@ -268,8 +268,12 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
+    <Content Include="Scripts\ValidateMandatoryDate.js" />
     <Content Include="Scripts\ValidateMandatoryText.js" />
-    <Content Include="Scripts\ValidateManditarySelect.js" />
+    <Content Include="Scripts\ValidateMandatorySelect.js" />
+    <Content Include="Scripts\ValidateMandEnrollDate.js" />
+    <Content Include="Scripts\ValidateMandEnrollSelect.js" />
+    <Content Include="Scripts\ValidateMandEnrollText.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
