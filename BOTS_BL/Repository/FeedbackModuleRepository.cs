@@ -185,7 +185,7 @@ namespace BOTS_BL.Repository
                         {
                             string tableScript = "CREATE TABLE [dbo].[feedback_FeedbackMaster]([FeedbackId][int] IDENTITY(1, 1) NOT NULL,[GroupId] [varchar](4) NULL,[OutletId] [varchar](10) NULL," +
                                                 "[MobileNo] [varchar](10) NULL,	[CustomerName] [varchar](100) NULL,	[QuestionId] [varchar](5) NULL,	[QuestionPoints] [int] NULL,	[DOB] [date] NULL," +
-                                                "[DOA] [date] NULL,	[HowToKnowAbout] [varchar](10) NULL,[AddedDate] [datetime] NULL,[SalesRepresentative] [varchar](10) NULL, [Comments] [nvarchar](max) NULL, [AudioStream] [nvarchar](max) NULL," +
+                                                "[DOA] [date] NULL,	[HowToKnowAbout] [varchar](10) NULL,[AddedDate] [datetime] NULL,[SalesRepresentative] [varchar](10) NULL, [Comments] [nvarchar](max) NULL, [AudioStream] [nvarchar](max) NULL, [CustomText] [nvarchar](max) NULL," +
                                                 "CONSTRAINT[PK_FeedBackModuleMaster] PRIMARY KEY CLUSTERED([FeedbackId] ASC)WITH(PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON[PRIMARY]) ON[PRIMARY]";
                             contextdb.Database.CreateIfNotExists();
                             contextdb.Database.ExecuteSqlCommand(tableScript);
@@ -697,7 +697,7 @@ namespace BOTS_BL.Repository
             return obj;
         }
 
-        public string SubmitRating(string mobileNo, string ranking, string GroupId, string salesid, string Comments, string outletId, string media)
+        public string SubmitRating(string mobileNo, string ranking, string GroupId, string salesid, string Comments, string outletId, string media,string customText)
         {
             string status = "false";
             // string smsresponce = "";
@@ -772,6 +772,7 @@ namespace BOTS_BL.Repository
                     objfeedback.SalesRepresentative = salesid;
                     objfeedback.Comments = Comments;
                     objfeedback.AudioStream = media;
+                    objfeedback.CustomText = customText;
                     objfeedback.AddedDate = date;
                     Combinedpoint += point;
                     objfeedback = context.feedback_FeedbackMaster.Add(objfeedback);

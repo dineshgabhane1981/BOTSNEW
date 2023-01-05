@@ -1242,6 +1242,14 @@ namespace BOTS_BL.Repository
             return lstData;
         }
 
-
+        public string GetWAGroupCode(string groupId)
+        {
+            string WAGroupCode = string.Empty;
+            using (var context = new CommonDBContext())
+            {
+                WAGroupCode = context.WAReports.Where(x => x.GroupId == groupId).Select(y => y.GroupCode).FirstOrDefault();
+            }
+            return WAGroupCode;
+        }
     }
 }

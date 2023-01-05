@@ -325,6 +325,8 @@
     <Content Include="Content\assets\images\logo.png" />
     <Content Include="Content\assets\images\LoyaltyProgress.png" />
     <Content Include="Content\assets\images\Man.jpg" />
+    <Content Include="Content\assets\images\mic.png" />
+    <Content Include="Content\assets\images\MicAnnimation.gif" />
     <Content Include="Content\assets\images\NoProfile.jpg" />
     <Content Include="Content\assets\images\ops.jpg" />
     <Content Include="Content\assets\images\ops.png" />

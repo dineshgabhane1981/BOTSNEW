@@ -35,6 +35,7 @@
                                 <th scope="col">Txn</th>
                                 <th scope="col">Txn Amount</th>
                                 <th scope="col">Audio</th>
+                                <th scope="col">CustomText</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -128,6 +129,14 @@
                                         {
                                             <td style="text-align:center;">--</td>
                                         }
+                                        @if ((item.CustomText != "" && item.CustomText != null))
+                                        {
+                                            <td style="text-align:center;">@item.CustomText</td>
+                                        }
+                                        else
+                                        {
+                                            <td style="text-align:center;">--</td>
+                                        }
                                     </tr>
 
                                 }
@@ -135,7 +144,7 @@
                             else
                             {
                                 <tr>
-                                    <td colspan="13" align="center">No Feedback Available</td>
+                                    <td colspan="14" align="center">No Feedback Available</td>
                                 </tr>
                             }
                         </tbody>

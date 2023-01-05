@@ -213,6 +213,7 @@
 
                     <div class="container-fluid pt-3 pl-3 pr-3 pb-3" style="display:none;" id="divquestions">
                         <div class="row">
+
                             @if (Model.GroupId == "1051")
                             {
                                 <div class="col-md-12 col-sm-12 pt-3 pl-3 pr-3 pb-3" style="text-align:center;" id="dvLogo">
@@ -224,6 +225,7 @@
                                 </div>
 
                             }
+
                             @foreach (var item in Model.lstFeedbackData)
                             {
                                 if (item.Section == "FeedbackQuestions")
@@ -328,6 +330,13 @@
                                     </div>
                                 }
                             }
+                            @if (Model.PointsAndMessages.IsCustomField)
+                            {
+                                <div class="col-md-12 col-sm-12 pt-3 pl-3 pr-3" style="text-align:center;">
+                                    <h2 style="font-size: 34px;"> @Html.Raw(Model.PointsAndMessages.CustomFieldText): <input type="text" class="input100" id="txtCustomField" /></h2>
+
+                                </div>
+                            }
                             @if (Model.PointsAndMessages.IsAudio)
                             {
                                 <div class="col-md-12 col-sm-12 pt-3 pl-3 pr-3 " style="text-align:center;">
@@ -337,11 +346,18 @@
                                     </h3>
 
                                     <video style="display:none;" id="gum" autoplay muted playsinline></video>
-                                    <audio id="recorded" autoplay controls loop playsinline></audio>
+                                    <audio id="recorded" style="display:none;" autoplay controls loop playsinline></audio>
                                     <div style="padding-top:10px;">
-                                        <button id="record" class="btn btn-primary">Start Recording</button>
+                                        @*<button id="record" class="btn btn-primary">Start Recording</button>*@
                                         @*<button id="download" disabled>Download</button>*@
+                                        <img src="~/Content/assets/images/mic.png" onclick="startRecordingNew();" id="imgRecordStart" width="10%" />
+                                        <img src="~/Content/assets/images/MicAnnimation.gif" id="imgRecordStop" width="10%" style="display:none;" />
+                                        <span id="time"></span>
+
+
+                                        <button id="record" style="display:none;">Start Recording</button>
                                     </div>
+
                                 </div>
                             }
                         </div>
@@ -587,6 +603,13 @@
                      base64data = reader.result;
                 }
             }
+            var customText = "";
+            var isCustomField='@Model.PointsAndMessages.IsCustomField';
+            if (isCustomField == "True") {
+                customText = $("#txtCustomField").val();
+            }
+            //txtCustomField
+
             $("#divLoader").show();
             setTimeout(() => {
             var mobileNo = "";
@@ -597,7 +620,7 @@
                 $.ajax({
                 type: "POST",
                 url: '@Url.Action("SubmitPoints", "Feedback")',
-                data: '{mobileNo: ' + JSON.stringify(mobileNo) + ', ranking: ' + JSON.stringify(JSON.stringify(HomeData)) + ', GroupId: ' + JSON.stringify($("#hdGroupId").val()) + ', SalesRepresentative: ' + JSON.stringify(sales) + ',Comments: ' + JSON.stringify(Comments) + ', outletId: ' + JSON.stringify($("#hdoutletId").val()) + ', media: ' + JSON.stringify(base64data) + '}',
+                    data: '{mobileNo: ' + JSON.stringify(mobileNo) + ', ranking: ' + JSON.stringify(JSON.stringify(HomeData)) + ', GroupId: ' + JSON.stringify($("#hdGroupId").val()) + ', SalesRepresentative: ' + JSON.stringify(sales) + ',Comments: ' + JSON.stringify(Comments) + ', outletId: ' + JSON.stringify($("#hdoutletId").val()) + ', media: ' + JSON.stringify(base64data) + ', customText: ' + JSON.stringify(customText) + '}',
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
                 success: function (response) {

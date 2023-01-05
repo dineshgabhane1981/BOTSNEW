@@ -299,6 +299,9 @@
                     "mData": "MaskedMobileNo",
                     "mRender": function (data, type, row) {
                         var MobileNo = row.MobileNo;
+                        if (MobileNo == "")
+                            return '<span class="login"></span>';
+                        else
                         return '<span class="login" title=' + MobileNo + '>' + data + '</span>';
                     }
                 },
@@ -393,6 +396,7 @@
 
         var urlLink = "@Url.Action("ExportToExcelCelebrations", "Reports")";
         urlLink = urlLink + "?month=" + clickedMonth + "&type=" + clickedType + "&ReportName=Celebrations" + "&EmailId=" + emailid + "";
+
         console.log(urlLink);
         window.location.href = urlLink;
         $("#divLoader").hide();

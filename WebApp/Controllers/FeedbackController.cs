@@ -498,13 +498,13 @@ namespace WebApp.Controllers
             return new JsonResult() { Data = obj, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
 
         }
-        public ActionResult SubmitPoints(string mobileNo, string ranking, string GroupId, string SalesRepresentative, string Comments, string outletId,string media)
+        public ActionResult SubmitPoints(string mobileNo, string ranking, string GroupId, string SalesRepresentative, string Comments, string outletId, string media, string customText)
         {
             string status = "false";
             CustomerDetail objcustomerdetails = new CustomerDetail();
             try
             {
-                status = FMR.SubmitRating(mobileNo, ranking, GroupId, SalesRepresentative, Comments, outletId,media);
+                status = FMR.SubmitRating(mobileNo, ranking, GroupId, SalesRepresentative, Comments, outletId, media, customText);
             }
             catch (Exception ex)
             {

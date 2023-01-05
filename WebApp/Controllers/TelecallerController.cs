@@ -170,7 +170,9 @@ namespace WebApp.Controllers
                     worksheet.Cell(1, 1).Value = "Report Name";
                     worksheet.Cell(1, 2).Value = "Telecaller Report";
                     worksheet.Cell(2, 1).Value = "Period";
-                    worksheet.Cell(2, 2).Value = fromdt + "-" + Todt;                    
+                    worksheet.Cell(2, 2).Value = fromdt.ToString("dd-MMM-yyyy");
+                    worksheet.Cell(2, 3).Value = "To";
+                    worksheet.Cell(2, 4).Value = Todt.ToString("dd-MMM-yyyy");
                     worksheet.Cell(5, 1).InsertTable(table);
                     //wb.Worksheets.Add(table);
                     using (MemoryStream stream = new MemoryStream())

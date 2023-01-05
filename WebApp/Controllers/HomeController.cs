@@ -32,7 +32,7 @@ namespace WebApp.Controllers
             {
                 var userDetails = (CustomerLoginDetail)Session["UserSession"];
                 var lstOutlet = RR.GetOutletList(userDetails.GroupId, userDetails.connectionString);
-                dataDashboard = DR.GetDashboardData(userDetails.GroupId, userDetails.connectionString, userDetails.LoginId,"","");
+                dataDashboard = DR.GetDashboardData(userDetails.GroupId, userDetails.connectionString, userDetails.LoginId, "", "");
                 userDetails.IsFeedback = CR.GetIsFeedback(userDetails.GroupId);
                 Session["UserSession"] = userDetails;
                 ViewBag.OutletList = lstOutlet;
@@ -46,7 +46,7 @@ namespace WebApp.Controllers
             }
             return View(dataDashboard);
         }
-        
+
 
         public ActionResult About()
         {
@@ -434,17 +434,23 @@ namespace WebApp.Controllers
             return RedirectToAction("Index", "CustomerManagement");
         }
 
-        public bool GenerateReports()
+        public string GenerateReports()
         {
-            bool status = false;
-            //var AllCustomer = CR.GetAllCustomer();
-            GeneratePDF("1051");
-            //foreach(var customer in AllCustomer)
-            //{
-            //    GeneratePDF(Convert.ToString(customer.GroupId));
-            //}
-
-            return status;         
+            string status = "Report Sent";
+            try
+            {
+                var AllCustomer = CR.GetAllCustomer();
+                //GeneratePDF("1051");
+                foreach (var customer in AllCustomer)
+                {
+                    SavePDF(Convert.ToString(customer.GroupId));
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "");
+            }
+            return status;
         }
         public ActionResult GeneratePDF(string groupId)
         {
@@ -461,35 +467,112 @@ namespace WebApp.Controllers
             objStats.LoyaltyPercentage = String.Format(new CultureInfo("en-IN", false), "{0:n2}", Convert.ToDouble(Convert.ToDouble(dataDashboard.LoyaltyBiz * 100) / Convert.ToDouble(dataDashboard.TotalBiz)));
             objData.objTotalStats = objStats;
 
+            objData.objKeyMetricsTillDate = CR.GetKeyMetrics(groupId);
+            objData.lstKeyInfoForNextMonth = CR.GetKeyInfoForNextMonth(groupId);
+            objData.lstFestivals = CR.GetFestivalDates();
 
             return View(objData);
         }
         public void SavePDF(string groupId)
         {
-            DashboardSummaryViewModel objData = new DashboardSummaryViewModel();
-            objData.CustomerName = CR.GetCustomerName(groupId);
-            objData.CustomerLogoURL = CR.GetCustomerLogo(groupId);
-            objData.ReportMonth = DateTime.Now.AddMonths(-1).ToString("MMMM", CultureInfo.InvariantCulture) + "_" + DateTime.Now.AddMonths(-1).Year.ToString();
-            objData.lstMemberBaseAndTransaction = CR.GetMemberBaseAndTransactions(groupId);
+            try
+            {
+                DashboardSummaryViewModel objData = new DashboardSummaryViewModel();
+                objData.CustomerName = CR.GetCustomerName(groupId);
+                objData.CustomerLogoURL = CR.GetCustomerLogo(groupId);
+                objData.ReportMonth = DateTime.Now.AddMonths(-1).ToString("MMMM", CultureInfo.InvariantCulture) + "_" + DateTime.Now.AddMonths(-1).Year.ToString();
+                objData.lstMemberBaseAndTransaction = CR.GetMemberBaseAndTransactions(groupId);
 
-            var connectionString = CR.GetCustomerConnString(groupId);
-            var dataDashboard = DR.GetDashboardData(groupId, connectionString, "", "", "");
-            TotalStats objStats = new TotalStats();
-            objStats.TotalBiz = dataDashboard.TotalBiz;
-            objStats.LoyaltyBiz = dataDashboard.LoyaltyBiz;
-            objStats.LoyaltyPercentage = String.Format(new CultureInfo("en-IN", false), "{0:n2}", Convert.ToDouble(Convert.ToDouble(dataDashboard.LoyaltyBiz * 100) / Convert.ToDouble(dataDashboard.TotalBiz)));
-            objData.objTotalStats = objStats;
+                var connectionString = CR.GetCustomerConnString(groupId);
+                var dataDashboard = DR.GetDashboardData(groupId, connectionString, "", "", "");
+                TotalStats objStats = new TotalStats();
+                objStats.TotalBiz = dataDashboard.TotalBiz;
+                objStats.LoyaltyBiz = dataDashboard.LoyaltyBiz;
+                objStats.LoyaltyPercentage = String.Format(new CultureInfo("en-IN", false), "{0:n2}", Convert.ToDouble(Convert.ToDouble(dataDashboard.LoyaltyBiz * 100) / Convert.ToDouble(dataDashboard.TotalBiz)));
+                objData.objTotalStats = objStats;
 
-            var a = new ViewAsPdf();
-            a.ViewName = "GeneratePDF";
-            a.Model = objData;
+                objData.objKeyMetricsTillDate = CR.GetKeyMetrics(groupId);
+                objData.lstKeyInfoForNextMonth = CR.GetKeyInfoForNextMonth(groupId);
+                objData.lstFestivals = CR.GetFestivalDates();
 
-            var pdfBytes = a.BuildFile(this.ControllerContext);
+                var a = new ViewAsPdf();
+                a.ViewName = "GeneratePDF";
+                a.Model = objData;
 
-            // Optionally save the PDF to server in a proper IIS location.
-            var fileName = objData.CustomerName+"_"+ objData.ReportMonth + ".pdf";
-            var path = Server.MapPath("~/Temp/" + fileName);
-            System.IO.File.WriteAllBytes(path, pdfBytes);
+                var pdfBytes = a.BuildFile(this.ControllerContext);
+
+                // Optionally save the PDF to server in a proper IIS location.
+                var fileName = objData.CustomerName.Trim() + "_" + objData.ReportMonth + ".pdf";
+                var path = Server.MapPath("~/DashboardReports/" + fileName);
+                System.IO.File.WriteAllBytes(path, pdfBytes);
+                var status = SendMessage(groupId, fileName);
+
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, groupId);
+            }
+        }
+
+        public bool SendMessage(string GroupId, string fileName)
+        {
+            bool result = false;
+            var WAGroupCode = CR.GetWAGroupCode(GroupId);
+            string responseString;
+            try
+            {
+                var path = "https://blueocktopus.in/bots/DashboardReports/" + fileName;
+                string _MobileMessage = "Dear Customer, Your LOYALTY PROGRAM SYNOPSIS is attached";
+                StringBuilder sbposdata = new StringBuilder();
+                sbposdata.AppendFormat("https://bo.enotify.app/api/sendFiles?");
+                sbposdata.AppendFormat("token={0}", "5fc8ed623629423c01ce4221");
+                //sbposdata.AppendFormat("&phone={0}", WAGroupCode);
+
+                sbposdata.AppendFormat("&phone=91{0}", "9834545425");
+                sbposdata.AppendFormat("&link={0}", path);
+                sbposdata.AppendFormat("&text={0}", _MobileMessage);
+                string Url = sbposdata.ToString();
+                //this.WriteToFile(Url);
+                ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls | (SecurityProtocolType)3072;
+
+                ServicePointManager.ServerCertificateValidationCallback += (sender, cert, chain, sslPolicyErrors) => true;
+                HttpWebRequest httpWReq = (HttpWebRequest)WebRequest.Create(Url);
+                UTF8Encoding encoding = new UTF8Encoding();
+                byte[] data = encoding.GetBytes(sbposdata.ToString());
+                httpWReq.Method = "POST";
+
+                httpWReq.ContentType = "application/x-www-form-urlencoded";
+                httpWReq.ContentLength = data.Length;
+                using (Stream stream = httpWReq.GetRequestStream())
+                {
+                    stream.Write(data, 0, data.Length);
+                }
+                HttpWebResponse response = (HttpWebResponse)httpWReq.GetResponse();
+                StreamReader reader = new StreamReader(response.GetResponseStream());
+                responseString = reader.ReadToEnd();
+                //this.WriteToFile(responseString);
+
+                reader.Close();
+                response.Close();
+                result = true;
+            }
+            catch (ArgumentException ex)
+            {
+
+                responseString = string.Format("HTTP_ERROR :: The second HttpWebRequest object has raised an Argument Exception as 'Connection' Property is set to 'Close' :: {0}", ex.Message);
+                //this.WriteToFile(responseString);
+            }
+            catch (WebException ex)
+            {
+                responseString = string.Format("HTTP_ERROR :: WebException raised! :: {0}", ex.Message);
+                //this.WriteToFile(responseString);
+            }
+            catch (Exception ex)
+            {
+                responseString = string.Format("HTTP_ERROR :: Exception raised! :: {0}", ex.Message);
+                //this.WriteToFile(responseString);
+            }
+            return result;
         }
     }
 }

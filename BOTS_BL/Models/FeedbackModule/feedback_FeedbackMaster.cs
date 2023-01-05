@@ -44,6 +44,7 @@ namespace BOTS_BL.Models
 
         public string Comments { get; set; }
         public string AudioStream { get; set; }
+        public string CustomText { get; set; }
 
     }
 }

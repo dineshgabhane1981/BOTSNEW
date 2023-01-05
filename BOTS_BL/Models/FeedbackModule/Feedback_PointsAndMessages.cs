@@ -42,5 +42,7 @@ namespace BOTS_BL.Models
         public string UpdatedBy { get; set; }
 
         public DateTime? UpdatedDate { get; set; }
+        public bool IsCustomField { get; set; }
+        public string CustomFieldText { get; set; }
     }
 }

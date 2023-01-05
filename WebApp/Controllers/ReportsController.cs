@@ -112,12 +112,12 @@ namespace WebApp.Controllers
             objCelebrationsMoreDetails = RR.GetCelebrationsTxnData(userDetails.GroupId, month, type, userDetails.connectionString);
             var GroupDetails = CR.GetGroupDetails(Convert.ToInt32(userDetails.GroupId));
 
-            long? amt = 0;             
+            long? amt = 0;
             long? apts = 0;
             long? txnCount = 0;
             foreach (var item in objCelebrationsMoreDetails)
             {
-                amt += item.TotalSpend;                 
+                amt += item.TotalSpend;
                 apts += item.AvlPoints;
                 txnCount += item.TxnCount;
             }
@@ -255,9 +255,9 @@ namespace WebApp.Controllers
                     createownviewmodel.listTxnR = RR.GenerateTxnTypeReport(ColumnId, lstcustomerdetails, userDetails.GroupId, userDetails.connectionString);
                     Session["ExportTransactionReport"] = createownviewmodel.listTxnR;
                 }
-                
+
             }
-            
+
             return PartialView("_CreateOwnReportCustomerWise", createownviewmodel);
             //return new JsonResult() { Data = createownviewmodel, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
@@ -628,8 +628,8 @@ namespace WebApp.Controllers
                 foreach (DataRow dr in table.Rows)
                 {
                     amt += Convert.ToDecimal(dr["InvoiceAmt"]);
-                    epts += Convert.ToDecimal(dr["PointsEarned"]); 
-                    bpts += Convert.ToDecimal(dr["PointsBurned"]); 
+                    epts += Convert.ToDecimal(dr["PointsEarned"]);
+                    bpts += Convert.ToDecimal(dr["PointsBurned"]);
                     if (!string.IsNullOrEmpty(Convert.ToString(dr["InvoiceAmt"])))
                     {
                         dr["InvoiceAmtStr"] = String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(dr["InvoiceAmt"]));
@@ -1003,11 +1003,14 @@ namespace WebApp.Controllers
 
         }
 
+
         public ActionResult ExportToExcelCelebrations(int month, int type, string ReportName, string EmailId)
         {
+            newexception.AddDummyException("0011");
             System.Data.DataTable table = new System.Data.DataTable();
             try
             {
+                newexception.AddDummyException("111");
                 var userDetails = (CustomerLoginDetail)Session["UserSession"];
                 List<CelebrationsMoreDetails> objCelebrationsMoreDetails = new List<CelebrationsMoreDetails>();
                 objCelebrationsMoreDetails = RR.GetCelebrationsTxnData(userDetails.GroupId, month, type, userDetails.connectionString);
@@ -1016,6 +1019,7 @@ namespace WebApp.Controllers
                 foreach (PropertyDescriptor prop in properties)
                     table.Columns.Add(prop.Name, Nullable.GetUnderlyingType(prop.PropertyType) ?? prop.PropertyType);
 
+                newexception.AddDummyException("222");
                 foreach (CelebrationsMoreDetails item in objCelebrationsMoreDetails)
                 {
                     DataRow row = table.NewRow();
@@ -1024,6 +1028,7 @@ namespace WebApp.Controllers
 
                     table.Rows.Add(row);
                 }
+                newexception.AddDummyException("333");
                 if (userDetails.LoginType == "1" || userDetails.LoginType == "6" || userDetails.LoginType == "7")
                 {
                     table.Columns.Remove("MaskedMobileNo");
@@ -1041,7 +1046,7 @@ namespace WebApp.Controllers
                         table.Columns["MaskedMobileNo"].ColumnName = "MobileNo";
                     }
                 }
-
+                newexception.AddDummyException("444");
                 foreach (DataRow dr in table.Rows)
                 {
                     if (!string.IsNullOrEmpty(Convert.ToString(dr["TotalSpend"])))
@@ -1065,6 +1070,7 @@ namespace WebApp.Controllers
                         .ToString("MM/dd/yyyy", CultureInfo.InvariantCulture);
                     }
                 }
+                newexception.AddDummyException("555");
                 table.Columns.Remove("TotalSpend");
                 table.Columns.Remove("AvlPoints");
                 table.Columns.Remove("PointsExpiry");
@@ -1076,7 +1082,7 @@ namespace WebApp.Controllers
                 string fileName = "BOTS_" + ReportName + ".xlsx";
                 using (XLWorkbook wb = new XLWorkbook())
                 {
-
+                    newexception.AddDummyException("666");
                     //excelSheet.Name
                     table.TableName = ReportName;
                     IXLWorksheet worksheet = wb.AddWorksheet(sheetName: ReportName);
@@ -1115,20 +1121,27 @@ namespace WebApp.Controllers
                     }
                     worksheet.Cell(6, 1).InsertTable(table);
                     //wb.Worksheets.Add(table);
+                    newexception.AddDummyException("777");
                     using (MemoryStream stream = new MemoryStream())
                     {
+                        newexception.AddDummyException("888");
                         wb.SaveAs(stream);
+                        newexception.AddDummyException("999");
                         if (EmailId != "")
                         {
+                            newexception.AddDummyException("000");
                             RR.email_send(EmailId, ReportName, stream.ToArray(), userDetails.EmailId);
 
                         }
+                        newexception.AddDummyException("1010");
                         return File(stream.ToArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
                     }
                 }
             }
             catch (Exception ex)
             {
+                newexception.AddDummyException("1011");
+                newexception.AddException(ex, ReportName);
                 return null;
             }
 
@@ -1338,6 +1351,7 @@ namespace WebApp.Controllers
             }
             catch (Exception ex)
             {
+                newexception.AddException(ex, ReportName);
                 return null;
             }
 
@@ -1348,19 +1362,19 @@ namespace WebApp.Controllers
         {
             System.Data.DataTable table = new System.Data.DataTable();
             try
-            {               
+            {
                 var userDetails = (CustomerLoginDetail)Session["UserSession"];
                 CreateOwnReportViewModel objmodelview = new CreateOwnReportViewModel();
                 objmodelview.lstcolumnlist = (List<string>)Session["ExportColumnList"];
 
                 if (Session["ExportCustomerReport"] != null)
                 {
-                    
+
                     List<CustomerTypeReport> lstcustreport = (List<CustomerTypeReport>)Session["ExportCustomerReport"];
                     PropertyDescriptorCollection properties = TypeDescriptor.GetProperties(typeof(CustomerTypeReport));
                     foreach (PropertyDescriptor prop in properties)
                         table.Columns.Add(prop.Name, Nullable.GetUnderlyingType(prop.PropertyType) ?? prop.PropertyType);
-                
+
                     foreach (CustomerTypeReport item in lstcustreport)
                     {
                         DataRow row = table.NewRow();
@@ -1371,7 +1385,7 @@ namespace WebApp.Controllers
                     }
 
                 }
-                else if(Session["ExportTransactionReport"] != null)
+                else if (Session["ExportTransactionReport"] != null)
                 {
                     PropertyDescriptorCollection properties = TypeDescriptor.GetProperties(typeof(TransactionTypeReport));
                     foreach (PropertyDescriptor prop in properties)
@@ -1386,7 +1400,7 @@ namespace WebApp.Controllers
 
                         table.Rows.Add(row);
                     }
-                }                    
+                }
 
                 string fileName = "BOTS_" + ReportName + ".xlsx";
                 using (XLWorkbook wb = new XLWorkbook())
@@ -1395,8 +1409,8 @@ namespace WebApp.Controllers
                     table.TableName = ReportName;
                     IXLWorksheet worksheet = wb.AddWorksheet(sheetName: ReportName);
                     worksheet.Cell(1, 1).Value = "Report Name";
-                    worksheet.Cell(1, 2).Value = ReportName;                    
-                    worksheet.Cell(5, 1).InsertTable(table);                  
+                    worksheet.Cell(1, 2).Value = ReportName;
+                    worksheet.Cell(5, 1).InsertTable(table);
                     using (MemoryStream stream = new MemoryStream())
                     {
                         wb.SaveAs(stream);
@@ -1407,6 +1421,7 @@ namespace WebApp.Controllers
             }
             catch (Exception ex)
             {
+                newexception.AddException(ex, ReportName);
                 return null;
             }
         }

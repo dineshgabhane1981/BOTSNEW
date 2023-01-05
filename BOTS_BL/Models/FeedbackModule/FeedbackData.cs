@@ -25,6 +25,7 @@ namespace BOTS_BL.Models
         public DateTime? datetime { get; set; }
         public string comments { get; set; }
         public string AudioStream { get; set; }
+        public string CustomText { get; set; }
 
     }
 }
