@@ -102,11 +102,6 @@ namespace RetailerApp.Controllers
                 
                 string InvoiceNo = Convert.ToString(item["InvoiceNo"]);
                 string InvoiceAmt = Convert.ToString(item["InvoiceAmt"]);
-                //string DOB = Convert.ToString(item["DOB"]);
-                //string EmailId = Convert.ToString(item["EmailId"]);
-                //string Gender = Convert.ToString(item["Gender"]);
-                //string ADate = Convert.ToString(item["ADate"]);
-                //string CardNo = Convert.ToString(item["CardNo"]);
                 string DynamicData = Convert.ToString(item["DynamicData"]);
                 string DynamicCustData = Convert.ToString(item["DynamicCustData"]);
 
@@ -132,7 +127,7 @@ namespace RetailerApp.Controllers
                 string InvoiceAmt = Convert.ToString(item["InvoiceAmt"]);
                 string DynamicData = Convert.ToString(item["DynamicData"]);
 
-                EResponse = RWR.InsertEarnDataOld(userDetails.OutletOrBrandId, MobileNo,InvoiceNo, InvoiceAmt, jsonData);
+                EResponse = RWR.InsertEarnDataOld(userDetails.OutletOrBrandId, MobileNo,InvoiceNo, InvoiceAmt, DynamicData);
             }
             return new JsonResult() { Data = EResponse, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
@@ -151,9 +146,9 @@ namespace RetailerApp.Controllers
                 string InvoiceNo = Convert.ToString(item["InvoiceNo"]);
                 string InvoiceAmt = Convert.ToString(item["InvoiceAmt"]); 
                 string PointsBurn = Convert.ToString(item["PointsBurn"]);
-                string DynamicData = Convert.ToString(item["DynamicData"]);
+                string DynamicDatas = Convert.ToString(item["DynamicData"]);
 
-                BResponse = RWR.BurnValidation(userDetails.OutletOrBrandId, MobileNo, InvoiceNo, InvoiceAmt, PointsBurn, DynamicData);
+                BResponse = RWR.BurnValidation(userDetails.OutletOrBrandId, MobileNo, InvoiceNo, InvoiceAmt, PointsBurn, DynamicDatas);
             }
             return new JsonResult() { Data = BResponse, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }

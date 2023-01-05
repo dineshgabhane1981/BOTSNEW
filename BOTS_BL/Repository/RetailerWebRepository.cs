@@ -233,11 +233,7 @@ namespace BOTS_BL.Repository
                     cmdReport.Parameters.Add(param5);
                     cmdReport.Parameters.Add(param6);
                     cmdReport.Parameters.Add(param7);
-                    //cmdReport.Parameters.Add(param8);
-                    //cmdReport.Parameters.Add(param9);
-                    //cmdReport.Parameters.Add(param10);
-                    //cmdReport.Parameters.Add(param11);
-                    //cmdReport.Parameters.Add(param12);
+  
                     daReport.Fill(retVal);
 
                     DataTable dt = retVal.Tables[0];
@@ -281,7 +277,7 @@ namespace BOTS_BL.Repository
 
                 SqlConnection _Con = new SqlConnection(conStr);
                 DataSet retVal = new DataSet();
-                SqlCommand cmdReport = new SqlCommand("sp_Web_Earn", _Con);
+                SqlCommand cmdReport = new SqlCommand("sp_Web_EarnOld", _Con);
                 SqlDataAdapter daReport = new SqlDataAdapter(cmdReport);
                 using (cmdReport)
                 {
@@ -289,15 +285,8 @@ namespace BOTS_BL.Repository
                     SqlParameter param2 = new SqlParameter("pi_MobileNo", Mobileno);
                     SqlParameter param3 = new SqlParameter("pi_InvoiceNo", InvoiceNo);
                     SqlParameter param4 = new SqlParameter("pi_InvoiceAmt", InvoiceAmt);
-                    SqlParameter param5 = new SqlParameter("pi_DOB", "");
-                    SqlParameter param6 = new SqlParameter("pi_EmailId", "");
-                    SqlParameter param7 = new SqlParameter("pi_CustomerName", "");
-                    SqlParameter param8 = new SqlParameter("pi_CardNo", "");
-                    SqlParameter param9 = new SqlParameter("pi_Gender", "");
-                    SqlParameter param10 = new SqlParameter("pi_Anniversary", "");
-                    //SqlParameter param11 = new SqlParameter("pi_Datetime", DateTime.Today.ToString("yyyy-MM-dd hh:mm:ss"));
-                    SqlParameter param11 = new SqlParameter("pi_Datetime", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
-                    SqlParameter param12 = new SqlParameter("pi_json", DynamicData);
+                    SqlParameter param5 = new SqlParameter("pi_Datetime", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
+                    SqlParameter param6 = new SqlParameter("pi_json", DynamicData);
 
                     cmdReport.CommandType = CommandType.StoredProcedure;
                     cmdReport.Parameters.Add(param1);
@@ -306,12 +295,7 @@ namespace BOTS_BL.Repository
                     cmdReport.Parameters.Add(param4);
                     cmdReport.Parameters.Add(param5);
                     cmdReport.Parameters.Add(param6);
-                    cmdReport.Parameters.Add(param7);
-                    cmdReport.Parameters.Add(param8);
-                    cmdReport.Parameters.Add(param9);
-                    cmdReport.Parameters.Add(param10);
-                    cmdReport.Parameters.Add(param11);
-                    cmdReport.Parameters.Add(param12);
+           
                     daReport.Fill(retVal);
 
                     DataTable dt = retVal.Tables[0];
