@@ -78,15 +78,15 @@
 
         <table cellpadding="5" cellspacing="5" class="col-lg-12 col-md-12">
             <tr style="color: white;">
-                <td width="30%" style="background-color: #1D65A6; padding: 15px;">
+                <td width="30%" style="background-color: #b2e061; padding: 15px; ">
                     <b><u>Total Biz (Rs.) </u></b> <br /> <b style="font-size:20px;"> @String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(Model.objTotalStats.TotalBiz))</b>
                 </td>
                 <td width="5%"></td>
-                <td width="30%" style="background-color: #1D65A6; padding: 15px;">
+                <td width="30%" style="background-color: #ffb55a; padding: 15px;">
                     <b><u>Loyalty Biz (Rs.)</u></b> <br /><b style="font-size:20px;"> @String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(Model.objTotalStats.LoyaltyBiz)) </b>
                 </td>
                 <td width="5%"></td>
-                <td width="30%" style="background-color: #1D65A6; padding: 15px; ">
+                <td width="30%" style="background-color: #c86558; padding: 15px; ">
                     <b><u> Loyalty % to Total Biz</u></b> <br />
                     <b style="font-size:20px;"> @String.Format(new CultureInfo("en-IN", false), "{0:n2}", Convert.ToDouble(Model.objTotalStats.LoyaltyPercentage))% </b>
                 </td>
@@ -101,17 +101,17 @@
                 <th colspan="5" style="padding:2px;"></th>
             </tr>
             <tr style="color:white;">
-                <td width="30%" style="background-color: #1D65A6; padding: 15px; ">
+                <td width="30%" style="background-color: #b2e061; padding: 15px; ">
                     <b>Redemption Rates</b> <br /> <b style="font-size:20px;">@String.Format(new CultureInfo("en-IN", false), "{0:n2}", Convert.ToDouble(Model.objKeyMetricsTillDate.RedemptionRate))% </b>
 
                 </td>
                 <td width="5%"></td>
-                <td width="30%" style="background-color: #1D65A6; padding: 15px; ">
+                <td width="30%" style="background-color: #ffb55a; padding: 15px; ">
                     <b>Redeem to Inv (times)</b> <br /><b style="font-size:20px;">@String.Format(new CultureInfo("en-IN", false), "{0:n2}", Convert.ToDouble(Model.objKeyMetricsTillDate.RedeemToInv))</b>
 
                 </td>
                 <td width="5%"></td>
-                <td width="30%" style="background-color: #1D65A6; padding: 15px; ">
+                <td width="30%" style="background-color: #c86558; padding: 15px; ">
                     <b>Inactive Base(> 6 mths)</b> <br />
                     <b style="font-size:20px;">@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(Model.objKeyMetricsTillDate.InactiveBase))</b>
                 </td>
@@ -122,15 +122,15 @@
                 <th colspan="5" style="padding:2px;"></th>
             </tr>
             <tr style="color:white;">
-                <td width="30%" style="background-color: #1D65A6; padding: 15px; ">
+                <td width="30%" style="background-color: #b2e061; padding: 15px; ">
                     <b>Only Once Base</b> <br /> <b style="font-size:20px;">@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(Model.objKeyMetricsTillDate.OnlyOnceBase))</b>
                 </td>
                 <td width="5%"></td>
-                <td width="30%" style="background-color: #1D65A6; padding: 15px; ">
+                <td width="30%" style="background-color: #ffb55a; padding: 15px; ">
                     <b>Non-redeem base</b> <br /><b style="font-size:20px;">@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(Model.objKeyMetricsTillDate.NonRedeemBase))</b>
                 </td>
                 <td width="5%"></td>
-                <td width="30%" style="background-color: #1D65A6; padding: 15px; ">
+                <td width="30%" style="background-color: #c86558; padding: 15px; ">
                     <b>Non-transacting base</b> <br />
                     <b style="font-size:20px;">@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(Model.objKeyMetricsTillDate.BulkImportBase))</b>
                 </td>

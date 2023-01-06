@@ -505,7 +505,7 @@ namespace WebApp.Controllers
                 var fileName = objData.CustomerName.Trim() + "_" + objData.ReportMonth + ".pdf";
                 var path = Server.MapPath("~/DashboardReports/" + fileName);
                 System.IO.File.WriteAllBytes(path, pdfBytes);
-                var status = SendMessage(groupId, fileName);
+                //var status = SendMessage(groupId, fileName);
 
             }
             catch (Exception ex)
