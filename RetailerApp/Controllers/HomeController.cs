@@ -169,7 +169,7 @@ namespace RetailerApp.Controllers
                 string PointsBurn = Convert.ToString(item["PointsBurn"]);
                 string DynamicData = Convert.ToString(item["DynamicData"]);
 
-                BResponse = RWR.SaveBurnTxn(userDetails.OutletOrBrandId, MobileNo, InvoiceNo, InvoiceAmt, PointsBurn, jsonData);
+                BResponse = RWR.SaveBurnTxn(userDetails.OutletOrBrandId, MobileNo, InvoiceNo, InvoiceAmt, PointsBurn, DynamicData);
             }
             return new JsonResult() { Data = BResponse, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
