@@ -30,7 +30,8 @@
                         Customer Name
                     </div>
                     <div class="col-md-4 col-sm-4">
-                        <span id="spnCustName" style="font-weight:bold;"></span>
+                        @*<span id="spnCustName" style="font-weight:bold;"></span>*@
+                        @Html.DropDownListFor(model => model.objGroupData, new SelectList(Model.objGroupData, "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input50", @id = "ddlGroupid" })
                     </div>
                     <div class="col-md-2 col-sm-2">
 
@@ -204,8 +205,11 @@
         var SaveData = [];
         if (CheckValidations()) {
             saveitem = {}
-            saveitem["GroupId"] = $("#hdnGroupId").val();
-            saveitem["GroupName"] = $("#spnCustName").text();
+            //saveitem["GroupId"] = $("#hdnGroupId").val();
+            //saveitem["GroupName"] = $("#spnCustName").text(); ddlGroupid
+            saveitem["GroupId"] = $("#ddlGroupid").val();
+            //saveitem["GroupName"] = $("#ddlGroupid").text();
+            saveitem["GroupName"] = $("#ddlGroupid option:selected").text();
             saveitem["PaymentType"] = $("#ddlPaymentType").val();
             saveitem["Frequency"] = $("#ddlFrequency").val();
             saveitem["RenewalAmount"] = $("#txtRenewalAmount").val();

@@ -409,8 +409,10 @@ namespace WebApp.Controllers
             List<SelectListItem> lstGroups = new List<SelectListItem>();
             try
             {
+                tblGroupDetail objGrpdetails = new tblGroupDetail();
                 tblRenewalData objRenewal = new tblRenewalData();
                 objData.objRenewalData = objRenewal;
+                objData.objGroupData = SPR.GetGroupDetails();
                 //lstRenewalData = SPR.GetRenewalData();
                 //lstGroups = CR.GetAllActiveGroups();
 

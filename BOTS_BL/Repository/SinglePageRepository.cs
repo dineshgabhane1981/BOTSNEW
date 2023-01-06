@@ -14,6 +14,8 @@ using BOTS_BL.Models.CommonDB;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Data.Entity.Migrations;
+using System.Web.Mvc;
+
 
 namespace BOTS_BL.Repository
 {
@@ -1143,7 +1145,26 @@ namespace BOTS_BL.Repository
             return objData;
         }
 
+        public List<SelectListItem> GetGroupDetails()
+        {
+            List<SelectListItem> lstData = new List<SelectListItem>();
+            using (var context = new CommonDBContext())
+            {
 
+                var temp = context.tblGroupDetails.Where(x => x.IsActive == true).ToList();
+                foreach (var item in temp)
+                {
+                    lstData.Add(new SelectListItem
+                    {
+                        Text = item.GroupName,
+                        Value = Convert.ToString(item.GroupId)
+
+                    });
+                }
+            }
+
+            return lstData;
+        }
     }
 
 }

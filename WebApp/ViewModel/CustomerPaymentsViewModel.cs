@@ -1,4 +1,5 @@
 ﻿using BOTS_BL.Models.CommonDB;
+using BOTS_BL.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +10,7 @@ namespace WebApp.ViewModel
 {
     public class CustomerPaymentsViewModel
     {
+        public List<SelectListItem> objGroupData { get; set; }
         public tblRenewalData objRenewalData { get; set; }
         public SelectListItem[] PaymentType()
         {
