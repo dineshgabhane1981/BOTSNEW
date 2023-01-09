@@ -35,10 +35,10 @@
                         @Html.DropDownListFor(model => model.objGroupData, new SelectList(Model.objGroupData, "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input50", @id = "ddlGroupid" })
                     </div>
                     <div class="col-md-2 col-sm-2">
-
+                        Renewal Date
                     </div>
                     <div class="col-md-4 col-sm-4">
-
+                        <input id="Renewaldate" type="date" class="input50" />
                     </div>
                 </div>
                 <div class="row mb-3">
@@ -78,10 +78,10 @@
                         @Html.CheckBoxFor(model => model.objRenewalData.IsPartPayment, htmlAttributes: new { @style = "width:20px; height:20px;cursor:pointer;", @id = "IsPartPayment" })
                     </div>
                     <div class="col-md-2 col-sm-2">
-                        Partial Payment Date
+                        Next Payment Date
                     </div>
                     <div class="col-md-4 col-sm-4">
-                        <input id="txtPartialPaymentDate" type="text" class="input50" />
+                        <input id="txtNxtPaymentDate" type="text" class="input50" />
                     </div>
                 </div>
                 <div class="row mb-3">
@@ -131,26 +131,26 @@
     $(document).ready(function () {
         GetRenewalData();
 
-        $("#txtPartialPaymentDate").attr("disabled", true);
+        $("#txtNxtPaymentDate").attr("disabled", true);
         $("#txtNextPaymentAmount").attr("disabled", true);
 
         $('#btnAddRenewal').on("click", function () {
             AddRenewal();
         });
         var today = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
-        $("#txtPartialPaymentDate").datepicker({
+        $("#txtNxtPaymentDate").datepicker({
             dateFormat: "yy-mm-dd",
             minDate: today,
         });
         $('#IsPartPayment').change(function () {
             if (this.checked) {
-                $("#txtPartialPaymentDate").attr("disabled", false);
+                $("#txtNxtPaymentDate").attr("disabled", false);
                 $("#txtNextPaymentAmount").attr("disabled", false);
             }
             else {
-                $("#txtPartialPaymentDate").val("");
+                $("#txtNxtPaymentDate").val("");
                 $("#txtNextPaymentAmount").val("");
-                $("#txtPartialPaymentDate").attr("disabled", true);
+                $("#txtNxtPaymentDate").attr("disabled", true);
                 $("#txtNextPaymentAmount").attr("disabled", true);
 
             }
@@ -198,7 +198,7 @@
         $("#txtRenewalAmount").val("");
         $("#txtDiscountAmount").val("");
         $('#IsPartPayment').prop('checked', false);         
-        $("#txtPartialPaymentDate").val("");
+        $("#txtNxtPaymentDate").val("");
         $("#txtPaymentAmount").val("");
         $("#txtNextPaymentAmount").val("");
         $("#txtFreebies").val("");
@@ -220,7 +220,7 @@
             saveitem["RenewalAmount"] = $("#txtRenewalAmount").val();
             saveitem["DiscountAmount"] = $("#txtDiscountAmount").val();
             saveitem["IsPartPayment"] = $("#IsPartPayment").val();
-            saveitem["PartialPaymentDate"] = $("#txtPartialPaymentDate").val();
+            saveitem["PartialPaymentDate"] = $("#txtNxtPaymentDate").val();
             saveitem["PaymentAmount"] = $("#txtPaymentAmount").val();
             saveitem["NextPaymentAmount"] = $("#txtNextPaymentAmount").val();
             saveitem["Freebies"] = $("#txtFreebies").val();
@@ -337,6 +337,24 @@
         }
         return true;
     }
+
+    $("#ddlFrequency").change(function () {
+        var Temp = $("#ddlFrequency").prop('selectedIndex');
+        var RDate = $("#Renewaldate").val();
+       
+        if (Temp == "1" && RDate != "") {            
+            var date = new Date(RDate);
+            var Test = new Date(date.setMonth(date.getMonth() + 12));
+            var d = (Test).toISOString().split('T')[0];
+            $("#txtNxtPaymentDate").val(d);
+        }
+        else if (Temp == "2" && RDate != "") {
+            var date = new Date(RDate);
+            var Test = new Date(date.setMonth(date.getMonth() + 6));
+            var d = (Test).toISOString().split('T')[0];
+            $("#txtNxtPaymentDate").val(d);
+        }
+    });
 
 </script>
 

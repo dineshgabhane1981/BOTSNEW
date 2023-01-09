@@ -19,7 +19,7 @@ namespace BOTS_BL.Repository
         Exceptions newexception = new Exceptions();
         public ExecutiveSummary GetDashboardData(string GroupId, string connstr, string LoginId, string frmDate, string toDate)
         {
-
+            
             ExecutiveSummary dataDashboard = new ExecutiveSummary();
             try
             {
@@ -56,6 +56,34 @@ namespace BOTS_BL.Repository
 
                         dataDashboard.RemainingDaysForRenewal = (ProgramRenewalDate - DateTime.Today).Days;
                     }
+                }
+
+                using (var context = new CommonDBContext())
+                {
+                    var GrpId = GroupId;
+                    //var RenewDate = context.tblRenewalDatas.Where(x => x.GroupId == GrpId).Select(y => y.PaymentDate).FirstOrDefault();
+                    var RenewDate = (from S in context.tblRenewalDatas where S.GroupId == GrpId && S.PaymentType == "Renewal" orderby S.Id descending select S.NextPaymentDate).FirstOrDefault();
+                    var VerifiedDate = (from S in context.tblRenewalDatas where S.GroupId == GrpId && S.PaymentType == "VerifiedWA" orderby S.Id descending select S.NextPaymentDate).FirstOrDefault();
+                    
+                    if(RenewDate == null)
+                    {
+                        dataDashboard.RenewDate = "";
+                    }
+                    else
+                    {
+                        dataDashboard.RenewDate = RenewDate.ToString();
+                    }
+                    if (VerifiedDate == null)
+                    {
+                        dataDashboard.VerifiedWARenewalDate = "";
+                    }
+                    else
+                    {
+                        dataDashboard.VerifiedWARenewalDate = VerifiedDate.ToString();
+                    }
+
+
+                    
                 }
             }
             catch (Exception ex)

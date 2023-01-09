@@ -122,6 +122,8 @@ namespace BOTS_BL.Models
         public long LoyaltyBiz { get; set; }
 
         public string RenewalDate { get; set; }
+        public string RenewDate { get; set; }
+        public string VerifiedWARenewalDate { get; set; }
         public int RemainingDaysForRenewal { get; set; }
 
         public List<OutletDetails> lstOutletDetails { get; set; }
