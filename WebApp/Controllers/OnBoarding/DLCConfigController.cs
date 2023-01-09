@@ -13,7 +13,11 @@ namespace WebApp.Controllers.OnBoarding
         {
             return View();
         }
-        public ActionResult Dashboard()
+        public ActionResult DashboardConfig()
+        {
+            return View();
+        }
+        public ActionResult ProfileConfig()
         {
             return View();
         }
