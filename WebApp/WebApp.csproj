@@ -253,6 +253,7 @@
     <Compile Include="Controllers\LoyaltyKPIsController.cs" />
     <Compile Include="Controllers\OnBoarding\CustomerMasterController.cs" />
     <Compile Include="Controllers\OnBoarding\CustomerOnBoardingController.cs" />
+    <Compile Include="Controllers\OnBoarding\DLCConfigController.cs" />
     <Compile Include="Controllers\OtherReportsController.cs" />
     <Compile Include="Controllers\ReportsController.cs" />
     <Compile Include="Controllers\SinglePageController.cs" />
@@ -582,6 +583,7 @@
     <Content Include="Views\SinglePage\NonTransactionData.cshtml" />
     <Content Include="Views\SinglePage\NonRedeemedData.cshtml" />
     <Content Include="Views\Home\GeneratePDF.cshtml" />
+    <Content Include="Views\DLCConfig\Dashboard.cshtml" />
     <None Include="_bin_deployableAssemblies\x86\sqlcese40.dll" />
     <None Include="_bin_deployableAssemblies\x86\sqlceqp40.dll" />
     <None Include="_bin_deployableAssemblies\x86\sqlceme40.dll" />

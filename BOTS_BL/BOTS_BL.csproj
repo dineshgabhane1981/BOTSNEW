@@ -386,6 +386,7 @@
     <Compile Include="Repository\DashBoardCustomerLoginRepository.cs" />
     <Compile Include="Repository\DashboardRepository.cs" />
     <Compile Include="Repository\DiscussionsRepository.cs" />
+    <Compile Include="Repository\DLCConfigRepository.cs" />
     <Compile Include="Repository\DLCReportingRepository.cs" />
     <Compile Include="Repository\EmployeeRepository.cs" />
     <Compile Include="Repository\FeedbackModuleRepository.cs" />
