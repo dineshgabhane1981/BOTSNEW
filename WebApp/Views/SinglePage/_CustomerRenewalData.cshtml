@@ -20,7 +20,7 @@
                     <th>CS Name</th>
                     <th>Freebies</th>
                     <th>Comments</th>
-                    <th>Action</th>
+                    @*<th>Action</th>*@
                 </tr>
                 @foreach (var item in Model)
                 {
@@ -37,7 +37,7 @@
                         <td>@item.CSName</td>
                         <td>@Html.Raw(item.Freebies)</td>
                         <td>@Html.Raw(item.Comments)</td>
-                        <td><a onclick="AddPayment(@item.GroupId, '@item.CustomerName','@item.RenewalDate');" style="cursor:pointer;color:blue;"><u>Add Payment</u></a></td>
+                        @*<td><a onclick="AddPayment(@item.GroupId, '@item.CustomerName','@item.RenewalDate');" style="cursor:pointer;color:blue;"><u>Add Payment</u></a></td>*@
                     </tr>
                 }
             </table>

@@ -20,9 +20,10 @@
                 <input type="radio" id="rdnHalfYear" name="rbtnDuration" /> Half Year &nbsp;&nbsp;&nbsp;&nbsp;
                 <input type="radio" id="rdnYear" name="rbtnDuration" /> Year
             </div>
+            <button type="button" id="btnNewAdd" class="btn btn-primary pull-right" onclick="AddNewPayment();" style="margin-right:10px;">Add New Payment</button>
         </div>
     </div>
-    <div class="mb-3 card" style="padding-top:20px;padding-bottom:20px;display:none;" id="dvRenewalAdd">
+    <div class="mb-3 card" style="padding-top:20px;padding-bottom:20px;display:none;" id="dvRenewalAdd">        
         <div class="content col-md-12 col-sm-12" style="text-align: left; ">
             <div class="container-fluid p-3" style="border: 1px solid grey;border-radius:10px;">
                 <div class="row mb-3">
@@ -118,6 +119,7 @@
             </div>
         </div>
     </div>
+    
     <div class="mb-3 card" style="padding-top:20px;padding-bottom:20px;" id="dvRenewalData">
         <div class="content" style="text-align:center;">
             No data available
@@ -156,6 +158,9 @@
         });
     });
 
+    function AddNewPayment() {
+        $("#dvRenewalAdd").show(1000);
+    }
     function GetRenewalData() {
         $("#divLoader").show();
         $.ajax({
