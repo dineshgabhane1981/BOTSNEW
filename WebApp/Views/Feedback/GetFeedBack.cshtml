@@ -128,8 +128,11 @@
         </div>
     </div>
     <div class="row card">
+         
         @if (Model != null)
         {
+            int c = 0;
+
             if (Model.IsExpiredOrStopped)
             {
                 if (Model.lstFeedbackData != null)
@@ -226,6 +229,7 @@
 
                             }
 
+
                             @foreach (var item in Model.lstFeedbackData)
                             {
                                 if (item.Section == "FeedbackQuestions")
@@ -242,6 +246,7 @@
                                                         <h1 style="font-size: 34px; color: green; font-weight:bold;">Welcome <span id="spnCustomerName"></span></h1>
                                                     }
                                                 }
+
                                                 if (item.TypeId == 2)
                                                 {
                                                     if (Model.GroupId != "1051")
@@ -259,8 +264,20 @@
                                     </div>
                                 }
 
+                                
                                 if (item.Section == "FeedbackQuestions")
                                 {
+
+                                    if (c == 3)
+                                    {
+                                        if (Model.PointsAndMessages.IsCustomField)
+                                        {
+                                            <div class="col-md-12 col-sm-12 pt-3 pl-3 pr-3" style="text-align:center;">
+                                                <h2 style="font-size: 34px;"> @Html.Raw(Model.PointsAndMessages.CustomFieldText): <input type="text" class="input100" id="txtCustomField" /></h2>
+
+                                            </div>
+                                                    }
+                                                }
                                     <div class="col-md-12 col-sm-12 pt-3 pl-3 pr-3 " style="text-align:center;">
                                         @if (item.Type == "Question")
                                         {
@@ -278,6 +295,7 @@
                                                     <span style="color:red;">*</span>
                                                 }
                                             </h3>
+
                                             <div class="cc-selector mb-5 pb-5">
                                                 <input id="@rbtn1" type="radio" name="@name" />
                                                 <label class="drinkcard-cc rbtvariety1" for="@rbtn1" style="margin-right:120px;"></label>
@@ -329,14 +347,9 @@
 
                                     </div>
                                 }
+                                c++;
                             }
-                            @if (Model.PointsAndMessages.IsCustomField)
-                            {
-                                <div class="col-md-12 col-sm-12 pt-3 pl-3 pr-3" style="text-align:center;">
-                                    <h2 style="font-size: 34px;"> @Html.Raw(Model.PointsAndMessages.CustomFieldText): <input type="text" class="input100" id="txtCustomField" /></h2>
 
-                                </div>
-                            }
                             @if (Model.PointsAndMessages.IsAudio)
                             {
                                 <div class="col-md-12 col-sm-12 pt-3 pl-3 pr-3 " style="text-align:center;">
