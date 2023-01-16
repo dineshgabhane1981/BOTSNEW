@@ -715,6 +715,8 @@ namespace BOTS_BL.Repository
             using (var context = new BOTSDBContext(connStr))
             {
                 CustomerDetail objcustdetails = context.CustomerDetails.Where(x => x.MobileNo == mobileNo).FirstOrDefault();
+                //var lstOutlet = context.Database.SqlQuery<OutletList>("sp_GetOutletList @pi_GroupId", new SqlParameter("@pi_GroupId", GroupId)).ToList<OutletList>();
+                //var lstOutlet = context.OutletDetails.Where (x=> x.OutletId = outletId)
 
                 OutletDetail objoutlet = context.OutletDetails.Where(x => x.OutletId == outletId).FirstOrDefault();
                 TransactionMaster objtransactionMaster = new TransactionMaster();
@@ -810,6 +812,7 @@ namespace BOTS_BL.Repository
 
                         message = message.Replace("#30", mobileNo);
                         message = message.Replace("#08", Convert.ToString(date));
+                        
                         // message = message.Replace("#31", Convert.ToString(ranking[0]));
                         // message = message.Replace("#32", Convert.ToString(ranking[1]));
 
@@ -1027,10 +1030,12 @@ namespace BOTS_BL.Repository
                             {
                                 if (Combinedpoint <= 6)
                                 {
-                                    var negativeMSG = "Negative Feedback by : #01 | On date time #08| Negative Score: #31";
+                                    var negativeMSG = "Negative Feedback by : #01 | On date time #08 | Negative Score: #31 | Outlet Name : #09";
                                     negativeMSG = negativeMSG.Replace("#01", mobileNo);
                                     negativeMSG = negativeMSG.Replace("#08", Convert.ToString(date));
                                     negativeMSG = negativeMSG.Replace("#31", Convert.ToString(Combinedpoint));
+                                    negativeMSG = negativeMSG.Replace("#09", objoutlet.OutletName);
+                                    //message = message.Replace("#09", objoutlet.OutletName);
 
                                     SendMessage(feedbackpointsmsg.MsgNegativeFeedback, negativeMSG, WATokenId);
                                 }
