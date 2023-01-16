@@ -251,13 +251,33 @@ namespace BOTS_BL.Repository
                         {
                             string SMSStatus = Convert.ToString(dt2.Rows[0]["SMSStatusTxn"]);
                             string WAStatus = Convert.ToString(dt2.Rows[0]["WAStatusTxn"]);
-                            //if (SMSStatus == "1" && WAStatus == "1")
-                            //{
+                            
+                            if (SMSStatus == "1" && WAStatus == "1")
+                            {
+                                DataTable dt3 = retVal.Tables[3];
+                                Thread _job = new Thread(() => SendSMSandWA(dt3));
+                                _job.Start();
+                            }
+                            else if (SMSStatus == "1")
+                            {
+                                DataTable dt3 = retVal.Tables[3];
 
-                            //}
-                            //DataTable dt3 = retVal.Tables[3];
-                            //Thread _job = new Thread(() => SendMessage(dt3));
-                            //_job.Start();
+                                string _MobileNo = dt3.Rows[0]["CommMobileNoTxn"].ToString();
+                                string _MobileMessage = dt3.Rows[0]["MessageTxn"].ToString();
+                                string _UserName = dt3.Rows[0]["UserNameTxn"].ToString();
+                                string _Password = dt3.Rows[0]["PasswordTxn"].ToString();
+                                string _Sender = dt3.Rows[0]["SenderIdTxn"].ToString();
+                                string _Url = dt3.Rows[0]["UrlTxn"].ToString();
+                                string _SMSBrandId = dt3.Rows[0]["SMSBrandId"].ToString();
+                                Thread _job = new Thread(() => SendSMS(_MobileNo, _MobileMessage, _UserName, _Password, _Sender, _Url, _SMSBrandId));
+                                _job.Start();
+                            }
+                            else if (WAStatus == "1")
+                            {
+                                DataTable dt3 = retVal.Tables[3];
+                                Thread _job = new Thread(() => SendWAMessage(dt3));
+                                _job.Start();
+                            }
                         }
 
 
@@ -313,13 +333,33 @@ namespace BOTS_BL.Repository
                         {
                             string SMSStatus = Convert.ToString(dt2.Rows[0]["SMSStatusTxn"]);
                             string WAStatus = Convert.ToString(dt2.Rows[0]["WAStatusTxn"]);
-                            if (SMSStatus == "1" || WAStatus == "1")
-                            {
 
+                            if (SMSStatus == "1" && WAStatus == "1")
+                            {
+                                DataTable dt3 = retVal.Tables[3];
+                                Thread _job = new Thread(() => SendSMSandWA(dt3));
+                                _job.Start();
                             }
-                            //DataTable dt3 = retVal.Tables[3];
-                            //Thread _job = new Thread(() => SendMessage(dt3));
-                            //_job.Start();
+                            else if (SMSStatus == "1" && WAStatus == "0")
+                            {
+                                DataTable dt3 = retVal.Tables[3];
+
+                                string _MobileNo = dt3.Rows[0]["CommMobileNoTxn"].ToString();
+                                string _MobileMessage = dt3.Rows[0]["MessageTxn"].ToString();
+                                string _UserName = dt3.Rows[0]["UserNameTxn"].ToString();
+                                string _Password = dt3.Rows[0]["PasswordTxn"].ToString();
+                                string _Sender = dt3.Rows[0]["SenderIdTxn"].ToString();
+                                string _Url = dt3.Rows[0]["UrlTxn"].ToString();
+                                string _SMSBrandId = dt3.Rows[0]["SMSBrandId"].ToString();
+                                Thread _job = new Thread(() => SendSMS(_MobileNo, _MobileMessage, _UserName, _Password, _Sender, _Url, _SMSBrandId));
+                                _job.Start();
+                            }
+                            else if (SMSStatus == "0" && WAStatus == "1")
+                            {
+                                DataTable dt3 = retVal.Tables[3];
+                                Thread _job = new Thread(() => SendWAMessage(dt3));
+                                _job.Start();
+                            }
                         }
                     }
                     else
@@ -380,14 +420,33 @@ namespace BOTS_BL.Repository
                         {
                             string SMSStatus = Convert.ToString(dt2.Rows[0]["SMSStatusOTP"]);
                             string WAStatus = Convert.ToString(dt2.Rows[0]["WAStatusOTP"]);
-                            //if (SMSStatus == "1" && WAStatus == "1")
-                            //{
 
-                            //}
+                            if (SMSStatus == "1" && WAStatus == "1")
+                            {
+                                DataTable dt3 = retVal.Tables[3];
+                                Thread _job = new Thread(() => SendSMSandWA(dt3));
+                                _job.Start();
+                            }
+                            else if (SMSStatus == "1" && WAStatus == "0")
+                            {
+                                DataTable dt3 = retVal.Tables[3];
 
-                            //DataTable dt3 = retVal.Tables[3];
-                            //Thread _job = new Thread(() => SendMessageOTP(dt3));
-                            //_job.Start();
+                                string _MobileNo = dt3.Rows[0]["CommMobileNoOTP"].ToString();
+                                string _MobileMessage = dt3.Rows[0]["MessageOTP"].ToString();
+                                string _UserName = dt3.Rows[0]["UserNameOTP"].ToString();
+                                string _Password = dt3.Rows[0]["PasswordOTP"].ToString();
+                                string _Sender = dt3.Rows[0]["SenderIdOTP"].ToString();
+                                string _Url = dt3.Rows[0]["UrlOTP"].ToString();
+                                string _SMSBrandId = dt3.Rows[0]["SMSBrandId"].ToString();
+                                Thread _job = new Thread(() => SendSMS(_MobileNo, _MobileMessage, _UserName, _Password, _Sender, _Url, _SMSBrandId));
+                                _job.Start();
+                            }
+                            else if (SMSStatus == "0" && WAStatus == "1")
+                            {
+                                DataTable dt3 = retVal.Tables[3];
+                                Thread _job = new Thread(() => SendWAMessage(dt3));
+                                _job.Start();
+                            }
                         }
                     }
                     else
@@ -447,13 +506,32 @@ namespace BOTS_BL.Repository
                         {
                             string SMSStatus = Convert.ToString(dt2.Rows[0]["SMSStatusTxn"]);
                             string WAStatus = Convert.ToString(dt2.Rows[0]["WAStatusTxn"]);
-                            //if (SMSStatus == "1" && WAStatus == "1")
-                            //{
+                            if(SMSStatus == "1" && WAStatus == "1")
+                            {
+                                DataTable dt3 = retVal.Tables[3];
+                                Thread _job = new Thread(() => SendSMSandWA(dt3));
+                                _job.Start();
+                            }
+                            else if (SMSStatus == "1" && WAStatus == "0")
+                            {
+                                DataTable dt3 = retVal.Tables[3];
 
-                            //}
-                            //DataTable dt3 = retVal.Tables[3];
-                            //Thread _job = new Thread(() => SendMessage(dt3));
-                            //_job.Start();
+                                string _MobileNo = dt3.Rows[0]["CommMobileNoTxn"].ToString();
+                                string _MobileMessage = dt3.Rows[0]["MessageTxn"].ToString();
+                                string _UserName = dt3.Rows[0]["UserNameTxn"].ToString();
+                                string _Password = dt3.Rows[0]["PasswordTxn"].ToString();
+                                string _Sender = dt3.Rows[0]["SenderIdTxn"].ToString();
+                                string _Url = dt3.Rows[0]["UrlTxn"].ToString();
+                                string _SMSBrandId = dt3.Rows[0]["SMSBrandId"].ToString();
+                                Thread _job = new Thread(() => SendSMS(_MobileNo, _MobileMessage, _UserName, _Password, _Sender, _Url, _SMSBrandId));
+                                _job.Start();
+                            }
+                            else if(SMSStatus == "0" && WAStatus == "1")
+                            {
+                                DataTable dt3 = retVal.Tables[3];
+                                Thread _job = new Thread(() => SendWAMessage(dt3));
+                                _job.Start();
+                            }
                         }
                     }
                     else
@@ -778,13 +856,33 @@ namespace BOTS_BL.Repository
                         {
                             string SMSStatus = Convert.ToString(dt2.Rows[0]["SMSStatusTxn"]);
                             string WAStatus = Convert.ToString(dt2.Rows[0]["WAStatusTxn"]);
-                            //if (SMSStatus == "1" && WAStatus == "1")
-                            //{
 
-                            //}
-                            DataTable dt3 = retVal.Tables[3];
-                            Thread _job = new Thread(() => SendMessage(dt3));
-                            _job.Start();
+                            if (SMSStatus == "1" && WAStatus == "1")
+                            {
+                                DataTable dt3 = retVal.Tables[3];
+                                Thread _job = new Thread(() => SendSMSandWA(dt3));
+                                _job.Start();
+                            }
+                            else if (SMSStatus == "1")
+                            {
+                                DataTable dt3 = retVal.Tables[3];
+
+                                string _MobileNo = dt3.Rows[0]["CommMobileNoTxn"].ToString();
+                                string _MobileMessage = dt3.Rows[0]["MessageTxn"].ToString();
+                                string _UserName = dt3.Rows[0]["UserNameTxn"].ToString();
+                                string _Password = dt3.Rows[0]["PasswordTxn"].ToString();
+                                string _Sender = dt3.Rows[0]["SenderIdTxn"].ToString();
+                                string _Url = dt3.Rows[0]["UrlTxn"].ToString();
+                                string _SMSBrandId = dt3.Rows[0]["SMSBrandId"].ToString();
+                                Thread _job = new Thread(() => SendSMS(_MobileNo, _MobileMessage, _UserName, _Password, _Sender, _Url, _SMSBrandId));
+                                _job.Start();
+                            }
+                            else if (WAStatus == "1")
+                            {
+                                DataTable dt3 = retVal.Tables[3];
+                                Thread _job = new Thread(() => SendWAMessage(dt3));
+                                _job.Start();
+                            }
                         }
                     }
                     else
@@ -836,13 +934,7 @@ namespace BOTS_BL.Repository
                         {
                             string SMSStatus = Convert.ToString(dt2.Rows[0]["SMSStatusOTP"]);
                             string WAStatus = Convert.ToString(dt2.Rows[0]["WAStatusOTP"]);
-                            //if (SMSStatus == "1" && WAStatus == "1")
-                            //{
-
-                            //}
-                            DataTable dt3 = retVal.Tables[3];
-                            Thread _job = new Thread(() => SendMessageOTP(dt3));
-                            _job.Start();
+                            
                         }
 
                     }
@@ -856,40 +948,30 @@ namespace BOTS_BL.Repository
             return R;
         }
 
-        public void SendMessage(DataTable dt3)
+        public void SendSMSandWA(DataTable dt3)
         {
             string _MobileNo = dt3.Rows[0]["CommMobileNoTxn"].ToString();
             string _WATokenId = dt3.Rows[0]["WATokenId"].ToString();
             string _WAMessage = dt3.Rows[0]["WhatsAppMessage"].ToString();
+            string _MobileMessage = dt3.Rows[0]["MessageTxn"].ToString();
+            string _UserName = dt3.Rows[0]["UserNameTxn"].ToString();
+            string _Password = dt3.Rows[0]["PasswordTxn"].ToString();
+            string _Sender = dt3.Rows[0]["SenderIdTxn"].ToString();
+            string _Url = dt3.Rows[0]["UrlTxn"].ToString();
+            string _SMSBrandId = dt3.Rows[0]["SMSBrandId"].ToString();
 
-            Thread _job = new Thread(() => WAText(_MobileNo, _WATokenId, _WAMessage));
-            _job.Start();
-
-        }
-        public void SendMessageOTP(DataTable dt3)
-        {
-            string _MobileNo = dt3.Rows[0]["CommMobileNoOTP"].ToString();
-            string _WATokenId = dt3.Rows[0]["WATokenId"].ToString();
-            string _WAMessage = dt3.Rows[0]["MessageOTP"].ToString();
-
-            Thread _job = new Thread(() => WAText(_MobileNo, _WATokenId, _WAMessage));
-            _job.Start();
-
-        }
-        public void WAText(string MobileNo, string WATokenId, string WAMessage)
-        {
             string responseString;
             try
             {
 
-                WAMessage = WAMessage.Replace("#99", "&");
-                WAMessage = HttpUtility.UrlEncode(WAMessage);
+                _WAMessage = _WAMessage.Replace("#99", "&");
+                _WAMessage = HttpUtility.UrlEncode(_WAMessage);
                 //string type = "TEXT";
                 StringBuilder sbposdata = new StringBuilder();
                 sbposdata.AppendFormat("https://bo.enotify.app/api/sendText?");
-                sbposdata.AppendFormat("token={0}", WATokenId);
-                sbposdata.AppendFormat("&phone=91{0}", MobileNo);
-                sbposdata.AppendFormat("&message={0}", WAMessage);
+                sbposdata.AppendFormat("token={0}", _WATokenId);
+                sbposdata.AppendFormat("&phone=91{0}", _MobileNo);
+                sbposdata.AppendFormat("&message={0}", _WAMessage);
                 sbposdata.AppendFormat("&wacheck={0}", "true");
 
                 string Url = sbposdata.ToString();
@@ -914,23 +996,292 @@ namespace BOTS_BL.Repository
             }
             catch (ArgumentException ex)
             {
-                //Thread _job = new Thread(() => SendSMSMessageTxn(_MobileNo, _MobileMessage, _UserName, _Password, _Sender, _Url, _CounterId));
-                //_job.Start();
+                Thread _job = new Thread(() => SendSMS(_MobileNo, _MobileMessage, _UserName, _Password, _Sender, _Url, _SMSBrandId));
+                _job.Start();
                 responseString = string.Format("HTTP_ERROR :: The second HttpWebRequest object has raised an Argument Exception as 'Connection' Property is set to 'Close' :: {0}", ex.Message);
             }
             catch (WebException ex)
             {
-                //Thread _job = new Thread(() => SendSMSMessageTxn(_MobileNo, _MobileMessage, _UserName, _Password, _Sender, _Url, _CounterId));
-                //_job.Start();
+                Thread _job = new Thread(() => SendSMS(_MobileNo, _MobileMessage, _UserName, _Password, _Sender, _Url, _SMSBrandId));
+                _job.Start();
                 responseString = string.Format("HTTP_ERROR :: WebException raised! :: {0}", ex.Message);
             }
             catch (Exception ex)
             {
-                //Thread _job = new Thread(() => SendSMSMessageTxn(_MobileNo, _MobileMessage, _UserName, _Password, _Sender, _Url, _CounterId));
-                //_job.Start();
+                Thread _job = new Thread(() => SendSMS(_MobileNo, _MobileMessage, _UserName, _Password, _Sender, _Url, _SMSBrandId));
+                _job.Start();
+                responseString = string.Format("HTTP_ERROR :: Exception raised! :: {0}", ex.Message);
+            }
+
+        }
+        public void SendMessageOTP(DataTable dt3)
+        {
+            string _MobileNo = dt3.Rows[0]["CommMobileNoOTP"].ToString();
+            string _WATokenId = dt3.Rows[0]["WATokenId"].ToString();
+            string _WAMessage = dt3.Rows[0]["MessageOTP"].ToString();
+
+            //Thread _job = new Thread(() => WAText(_MobileNo, _WATokenId, _WAMessage));
+            //_job.Start();
+
+        }
+        public void SendWAMessage(DataTable dt3)
+        {
+            string responseString;
+            string _MobileNo = dt3.Rows[0]["CommMobileNoTxn"].ToString();
+            string _WATokenId = dt3.Rows[0]["WATokenId"].ToString();
+            string _WAMessage = dt3.Rows[0]["WhatsAppMessage"].ToString();
+            try
+            {
+
+                _WAMessage = _WAMessage.Replace("#99", "&");
+                _WAMessage = HttpUtility.UrlEncode(_WAMessage);
+                //string type = "TEXT";
+                StringBuilder sbposdata = new StringBuilder();
+                sbposdata.AppendFormat("https://bo.enotify.app/api/sendText?");
+                sbposdata.AppendFormat("token={0}", _WATokenId);
+                sbposdata.AppendFormat("&phone=91{0}", _MobileNo);
+                sbposdata.AppendFormat("&message={0}", _WAMessage);
+                sbposdata.AppendFormat("&wacheck={0}", "true");
+
+                string Url = sbposdata.ToString();
+                ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls | (SecurityProtocolType)3072;
+                ServicePointManager.ServerCertificateValidationCallback += (sender, cert, chain, sslPolicyErrors) => true;
+                HttpWebRequest httpWReq = (HttpWebRequest)WebRequest.Create(Url);
+                UTF8Encoding encoding = new UTF8Encoding();
+                byte[] data = encoding.GetBytes(sbposdata.ToString());
+                httpWReq.Method = "POST";
+
+                httpWReq.ContentType = "application/x-www-form-urlencoded";
+                httpWReq.ContentLength = data.Length;
+                using (Stream stream = httpWReq.GetRequestStream())
+                {
+                    stream.Write(data, 0, data.Length);
+                }
+                HttpWebResponse response = (HttpWebResponse)httpWReq.GetResponse();
+                StreamReader reader = new StreamReader(response.GetResponseStream());
+                responseString = reader.ReadToEnd();
+                reader.Close();
+                response.Close();
+            }
+            catch (ArgumentException ex)
+            {
+                responseString = string.Format("HTTP_ERROR :: The second HttpWebRequest object has raised an Argument Exception as 'Connection' Property is set to 'Close' :: {0}", ex.Message);
+            }
+            catch (WebException ex)
+            {
+                responseString = string.Format("HTTP_ERROR :: WebException raised! :: {0}", ex.Message);
+            }
+            catch (Exception ex)
+            {
                 responseString = string.Format("HTTP_ERROR :: Exception raised! :: {0}", ex.Message);
             }
         }
+
+        public void SendSMS(string _MobileNo, string _MobileMessage, string _UserName, string _Password, string _Sender, string _Url,string _SMSBrandId)
+        {
+                    switch (_SMSBrandId)
+                    {
+                        case "00001": //Techno Core Unicode
+                            string date_00001 = DateTime.Now.ToString("MM/dd/yyyy HH:mm");
+                            _MobileMessage = _MobileMessage.Replace("#99", "&");
+                            _MobileMessage = HttpUtility.UrlEncode(_MobileMessage);
+                            string type_00001 = "unicode";
+                            StringBuilder sbposdata_00001 = new StringBuilder();
+                            sbposdata_00001.AppendFormat("userid={0}", _UserName);
+                            sbposdata_00001.AppendFormat("&password={0}", _Password);
+                            sbposdata_00001.AppendFormat("&sendMethod={0}", "quick");
+                            sbposdata_00001.AppendFormat("&mobile={0}", _MobileNo);
+                            sbposdata_00001.AppendFormat("&msg={0}", _MobileMessage);
+                            sbposdata_00001.AppendFormat("&senderid={0}", _Sender);
+                            sbposdata_00001.AppendFormat("&msgType={0}", type_00001);
+                            sbposdata_00001.AppendFormat("&format={0}", type_00001);
+                            ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls | (SecurityProtocolType)3072;
+                            ServicePointManager.ServerCertificateValidationCallback += (sender, cert, chain, sslPolicyErrors) => true;
+                            HttpWebRequest httpWReq_00001 = (HttpWebRequest)WebRequest.Create(_Url);
+                            UTF8Encoding encoding_00001 = new UTF8Encoding();
+                            byte[] data_00001 = encoding_00001.GetBytes(sbposdata_00001.ToString());
+                            httpWReq_00001.Method = "POST";
+                            httpWReq_00001.ContentType = "application/x-www-form-urlencoded";
+                            httpWReq_00001.ContentLength = data_00001.Length;
+                            using (Stream stream_00001 = httpWReq_00001.GetRequestStream())
+                            {
+                                stream_00001.Write(data_00001, 0, data_00001.Length);
+                            }
+                            HttpWebResponse response_00001 = (HttpWebResponse)httpWReq_00001.GetResponse();
+                            StreamReader reader_00001 = new StreamReader(response_00001.GetResponseStream());
+                            string responseString_00001 = reader_00001.ReadToEnd();
+                            reader_00001.Close();
+                            response_00001.Close();
+                            break;
+                        case "00002": // Value First Unicode
+                            string date_00002 = DateTime.Now.ToString("MM/dd/yyyy HH:mm");
+                            _MobileMessage = _MobileMessage.Replace("#99", "&");
+                            _MobileMessage = HttpUtility.UrlEncode(_MobileMessage);
+                            string type_00002 = "unicode";
+                            StringBuilder sbposdata_00002 = new StringBuilder();
+                            sbposdata_00002.AppendFormat("userid={0}", _UserName);
+                            sbposdata_00002.AppendFormat("&password={0}", _Password);
+                            sbposdata_00002.AppendFormat("&sendMethod={0}", "quick");
+                            sbposdata_00002.AppendFormat("&mobile={0}", _MobileNo);
+                            sbposdata_00002.AppendFormat("&msg={0}", _MobileMessage);
+                            sbposdata_00002.AppendFormat("&senderid={0}", _Sender);
+                            sbposdata_00002.AppendFormat("&msgType={0}", type_00002);
+                            sbposdata_00002.AppendFormat("&format={0}", type_00002);
+                            ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls | (SecurityProtocolType)3072;
+                            ServicePointManager.ServerCertificateValidationCallback += (sender, cert, chain, sslPolicyErrors) => true;
+                            HttpWebRequest httpWReq_00002 = (HttpWebRequest)WebRequest.Create(_Url);
+                            UTF8Encoding encoding_00002 = new UTF8Encoding();
+                            byte[] data_00002 = encoding_00002.GetBytes(sbposdata_00002.ToString());
+                            httpWReq_00002.Method = "POST";
+                            httpWReq_00002.ContentType = "application/x-www-form-urlencoded";
+                            httpWReq_00002.ContentLength = data_00002.Length;
+                            using (Stream stream_00002 = httpWReq_00002.GetRequestStream())
+                            {
+                                stream_00002.Write(data_00002, 0, data_00002.Length);
+                            }
+                            HttpWebResponse response_00002 = (HttpWebResponse)httpWReq_00002.GetResponse();
+                            StreamReader reader_00002 = new StreamReader(response_00002.GetResponseStream());
+                            string responseString_00002 = reader_00002.ReadToEnd();
+                            reader_00002.Close();
+                            response_00002.Close();
+                            break;
+                        case "00003": //Vision HLT English
+                            var httpWebRequest_00003 = (HttpWebRequest)WebRequest.Create(_Url);
+                            httpWebRequest_00003.ContentType = "application/json";
+                            httpWebRequest_00003.Method = "POST";
+
+                            using (var streamWriter_00003 = new StreamWriter(httpWebRequest_00003.GetRequestStream()))
+                            {
+
+                                string json_00003 = "{\"Account\":" +
+                                                "{\"APIKey\":\"" + _Password + "\"," +
+                                                "\"SenderId\":\"" + _Sender + "\"," +
+                                                "\"Channel\":\"Trans\"," +
+                                                "\"DCS\":\"0\"," +
+                                                "\"SchedTime\":null," +
+                                                "\"GroupId\":null}," +
+                                                "\"Messages\":[{\"Number\":\"91" + _MobileNo + "\"," +
+                                                "\"Text\":\"" + _MobileMessage + "\"}]" +
+                                                "}";
+                                streamWriter_00003.Write(json_00003);
+                            }
+
+                            var httpResponse_00003 = (HttpWebResponse)httpWebRequest_00003.GetResponse();
+                            using (var streamReader_00003 = new StreamReader(httpResponse_00003.GetResponseStream()))
+                            {
+                                var result_00003 = streamReader_00003.ReadToEnd();
+                            }
+                            break;
+                        case "00004": //Vision HLT Unicode
+                            var httpWebRequest_00004 = (HttpWebRequest)WebRequest.Create(_Url);
+                            httpWebRequest_00004.ContentType = "application/json";
+                            httpWebRequest_00004.Method = "POST";
+
+                            using (var streamWriter_00004 = new StreamWriter(httpWebRequest_00004.GetRequestStream()))
+                            {
+
+                                string json_00004 = "{\"Account\":" +
+                                                "{\"APIKey\":\"" + _Password + "\"," +
+                                                "\"SenderId\":\"" + _Sender + "\"," +
+                                                "\"Channel\":\"Trans\"," +
+                                                "\"DCS\":\"8\"," +
+                                                "\"SchedTime\":null," +
+                                                "\"GroupId\":null}," +
+                                                "\"Messages\":[{\"Number\":\"91" + _MobileNo + "\"," +
+                                                "\"Text\":\"" + _MobileMessage + "\"}]" +
+                                                "}";
+                                streamWriter_00004.Write(json_00004);
+                            }
+
+                            var httpResponse_00004 = (HttpWebResponse)httpWebRequest_00004.GetResponse();
+                            using (var streamReader_00004 = new StreamReader(httpResponse_00004.GetResponseStream()))
+                            {
+                                var result_00004 = streamReader_00004.ReadToEnd();
+                            }
+                            break;
+                        case "00005": //Pinnacle English
+                            ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls | (SecurityProtocolType)3072;
+                            ServicePointManager.ServerCertificateValidationCallback += (sender, cert, chain, sslPolicyErrors) => true;
+                            var httpWebRequest_00005 = (HttpWebRequest)WebRequest.Create(_Url);
+                            httpWebRequest_00005.ContentType = "application/json";
+                            httpWebRequest_00005.Headers.Add("Apikey", _Password);
+                            httpWebRequest_00005.Method = "POST";
+                            _MobileMessage = _MobileMessage.Replace("#99", "&");
+
+                            using (var streamWriter_00005 = new StreamWriter(httpWebRequest_00005.GetRequestStream()))
+                            {
+
+                                string json_00005 = "{\"sender\":\"" + _Sender + "\"," +
+                                "\"message\":[{\"number\":\"91" + _MobileNo + "\"," +
+                                 "\"text\":\"" + _MobileMessage + "\"}]," + "\"messagetype\":\"TXT\"," + "\"dltentityid\":null ," + "\"dlttempid\":null}";
+                                streamWriter_00005.Write(json_00005);
+                            }
+
+                            var httpResponse_00005 = (HttpWebResponse)httpWebRequest_00005.GetResponse();
+                            using (var streamReader_00005 = new StreamReader(httpResponse_00005.GetResponseStream()))
+                            {
+                                var result_00005 = streamReader_00005.ReadToEnd();
+                            }
+                            break;
+                        case "00006": //Pinnacle Unicode
+                            ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls | (SecurityProtocolType)3072;
+                            ServicePointManager.ServerCertificateValidationCallback += (sender, cert, chain, sslPolicyErrors) => true;
+                            var httpWebRequest_00006 = (HttpWebRequest)WebRequest.Create(_Url);
+                            httpWebRequest_00006.ContentType = "application/json";
+                            httpWebRequest_00006.Headers.Add("Apikey", _Password);
+                            httpWebRequest_00006.Method = "POST";
+                            _MobileMessage = _MobileMessage.Replace("#99", "&");
+
+                            using (var streamWriter_00006 = new StreamWriter(httpWebRequest_00006.GetRequestStream()))
+                            {
+
+                                string json_00006 = "{\"sender\":\"" + _Sender + "\"," +
+                                "\"message\":[{\"number\":\"91" + _MobileNo + "\"," +
+                                 "\"text\":\"" + _MobileMessage + "\"}]," + "\"messagetype\":\"TXT\"," + "\"dltentityid\":null ," + "\"dlttempid\":null}";
+                                streamWriter_00006.Write(json_00006);
+                            }
+
+                            var httpResponse_00006 = (HttpWebResponse)httpWebRequest_00006.GetResponse();
+                            using (var streamReader_00006 = new StreamReader(httpResponse_00006.GetResponseStream()))
+                            {
+                                var result_00006 = streamReader_00006.ReadToEnd();
+                            }
+                            break;
+                        default:
+                    string date_00000 = DateTime.Now.ToString("MM/dd/yyyy HH:mm");
+                    _MobileMessage = _MobileMessage.Replace("#99", "&");
+                    _MobileMessage = HttpUtility.UrlEncode(_MobileMessage);
+                    string type_00000 = "text";
+                    StringBuilder sbposdata_00000 = new StringBuilder();
+                    sbposdata_00000.AppendFormat("userid={0}", _UserName);
+                    sbposdata_00000.AppendFormat("&password={0}", _Password);
+                    sbposdata_00000.AppendFormat("&sendMethod={0}", "quick");
+                    sbposdata_00000.AppendFormat("&mobile={0}", _MobileNo);
+                    sbposdata_00000.AppendFormat("&msg={0}", _MobileMessage);
+                    sbposdata_00000.AppendFormat("&senderid={0}", _Sender);
+                    sbposdata_00000.AppendFormat("&msgType={0}", type_00000);
+                    sbposdata_00000.AppendFormat("&format={0}", type_00000);
+                    ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls | (SecurityProtocolType)3072;
+                    ServicePointManager.ServerCertificateValidationCallback += (sender, cert, chain, sslPolicyErrors) => true;
+                    HttpWebRequest httpWReq_00000 = (HttpWebRequest)WebRequest.Create(_Url);
+                    UTF8Encoding encoding_00000 = new UTF8Encoding();
+                    byte[] data_00000 = encoding_00000.GetBytes(sbposdata_00000.ToString());
+                    httpWReq_00000.Method = "POST";
+                    httpWReq_00000.ContentType = "application/x-www-form-urlencoded";
+                    httpWReq_00000.ContentLength = data_00000.Length;
+                    using (Stream stream_00000 = httpWReq_00000.GetRequestStream())
+                    {
+                        stream_00000.Write(data_00000, 0, data_00000.Length);
+                    }
+                    HttpWebResponse response_00000 = (HttpWebResponse)httpWReq_00000.GetResponse();
+                    StreamReader reader_00000 = new StreamReader(response_00000.GetResponseStream());
+                    string responseString_00000 = reader_00000.ReadToEnd();
+                    reader_00000.Close();
+                    response_00000.Close();
+                    break;
+                    }       
+        }
+
 
         //public void SendSMSMessageTxn(string _MobileNo, string _MobileMessage, string _UserName, string _Password, string _Sender, string _Url, string _CounterId)
         //{
