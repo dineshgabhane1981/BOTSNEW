@@ -812,7 +812,7 @@
                                                     else {
                                                         $('<div class="col-md-12 col-sm-12 row" id="' + Iddivrow[j] + '"></div>').insertAfter("#" + ControlId);
                                                         ControlId = Iddivrow[j];
-                                                        if (MandField = "3") {
+                                                        if (MandField = "1") {
                                                             $("#" + Iddivrow[j]).append('<div class = "col-md-2 col-sm-2" id="' + IdExistName[j] + '">' + Dynamicname + "*" + '</div>');
                                                         }
                                                         else {
@@ -1072,15 +1072,16 @@
         var ResltInvoiceText = ValidateMandatoryText();
         var ResltInvoiceDate = ValidateMandatoryDate();
 
-        if ($("#txtInvoiceNoOld").val() == "") {
-            cuteAlert({
-                type: "error",
-                title: "OOPS...",
-                message: "Please enter Invoice number",
-                buttonText: "Okay"
-            })
-        }
-        else if ($("#txtInvoiceAmOldt").val() == "") {
+        //if ($("#txtInvoiceNoOld").val() == "") {
+        //    cuteAlert({
+        //        type: "error",
+        //        title: "OOPS...",
+        //        message: "Please enter Invoice number",
+        //        buttonText: "Okay"
+        //    })
+        //}
+        //else 
+        if ($("#txtInvoiceAmOldt").val() == "") {
             cuteAlert({
                 type: "error",
                 title: "OOPS...",
@@ -1198,15 +1199,16 @@
         var ResltInvoiceDate = ValidateMandatoryDate();
 
         if ($('#BurnPoints').is(":visible")) {
-            if ($("#txtInvoiceNoOld").val() == "") {
-                cuteAlert({
-                    type: "error",
-                    title: "OOPS...",
-                    message: "Please enter Invoice number",
-                    buttonText: "Okay"
-                })
-            }
-            else if ($("#txtInvoiceAmOldt").val() == "") {
+            //if ($("#txtInvoiceNoOld").val() == "") {
+            //    cuteAlert({
+            //        type: "error",
+            //        title: "OOPS...",
+            //        message: "Please enter Invoice number",
+            //        buttonText: "Okay"
+            //    })
+            //}
+            //else 
+            if ($("#txtInvoiceAmOldt").val() == "") {
                 cuteAlert({
                     type: "error",
                     title: "OOPS...",
