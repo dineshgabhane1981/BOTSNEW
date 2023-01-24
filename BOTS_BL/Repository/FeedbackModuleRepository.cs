@@ -1028,17 +1028,34 @@ namespace BOTS_BL.Repository
 
                             if (!string.IsNullOrEmpty(feedbackpointsmsg.MsgNegativeFeedback))
                             {
-                                if (Combinedpoint <= 6)
+                                if(GroupId == "1225")
                                 {
-                                    var negativeMSG = "Negative Feedback by : #01 | On date time #08 | Negative Score: #31 | Outlet Name : #09";
-                                    negativeMSG = negativeMSG.Replace("#01", mobileNo);
-                                    negativeMSG = negativeMSG.Replace("#08", Convert.ToString(date));
-                                    negativeMSG = negativeMSG.Replace("#31", Convert.ToString(Combinedpoint));
-                                    negativeMSG = negativeMSG.Replace("#09", objoutlet.OutletName);
-                                    //message = message.Replace("#09", objoutlet.OutletName);
+                                    if (Combinedpoint <= 9)
+                                    {
+                                        var negativeMSG = "Negative Feedback by : #01 | On date time #08 | Negative Score: #31 | Outlet Name : #09";
+                                        negativeMSG = negativeMSG.Replace("#01", mobileNo);
+                                        negativeMSG = negativeMSG.Replace("#08", Convert.ToString(date));
+                                        negativeMSG = negativeMSG.Replace("#31", Convert.ToString(Combinedpoint));
+                                        negativeMSG = negativeMSG.Replace("#09", objoutlet.OutletName);
+                                        //message = message.Replace("#09", objoutlet.OutletName);
 
-                                    SendMessage(feedbackpointsmsg.MsgNegativeFeedback, negativeMSG, WATokenId);
+                                        SendMessage(feedbackpointsmsg.MsgNegativeFeedback, negativeMSG, WATokenId);
+                                    }
                                 }
+                                else
+                                {
+                                    if (Combinedpoint <= 6)
+                                    {
+                                        var negativeMSG = "Negative Feedback by : #01 | On date time #08 | Negative Score: #31 | Outlet Name : #09";
+                                        negativeMSG = negativeMSG.Replace("#01", mobileNo);
+                                        negativeMSG = negativeMSG.Replace("#08", Convert.ToString(date));
+                                        negativeMSG = negativeMSG.Replace("#31", Convert.ToString(Combinedpoint));
+                                        negativeMSG = negativeMSG.Replace("#09", objoutlet.OutletName);
+                                        //message = message.Replace("#09", objoutlet.OutletName);
+
+                                        SendMessage(feedbackpointsmsg.MsgNegativeFeedback, negativeMSG, WATokenId);
+                                    }
+                                }                               
                             }
                         }
 
