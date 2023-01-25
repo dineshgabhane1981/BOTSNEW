@@ -156,7 +156,8 @@ namespace BOTS_BL.Repository
             using (var context = new CommonDBContext())
             {
                 string groupId = CounterId.Substring(0, 4);
-                var conStr = CR.GetCustomerConnString(groupId);
+                //var conStr = CR.GetCustomerConnString(groupId);
+                var conStr = CR.GetRetailWebConnString(CounterId);
 
                 SqlConnection _Con = new SqlConnection(conStr);
                 DataSet retVal = new DataSet();
@@ -209,7 +210,7 @@ namespace BOTS_BL.Repository
             using (var context = new CommonDBContext())
             {
                 string groupId = CounterId.Substring(0, 4);
-                var conStr = CR.GetCustomerConnString(groupId);
+                var conStr = CR.GetRetailWebConnString(CounterId);
 
                         SqlConnection _Con = new SqlConnection(conStr);
                 DataSet retVal = new DataSet();
@@ -293,7 +294,7 @@ namespace BOTS_BL.Repository
             using (var context = new CommonDBContext())
             {
                 string groupId = CounterId.Substring(0, 4);
-                var conStr = CR.GetCustomerConnString(groupId);
+                var conStr = CR.GetRetailWebConnString(CounterId);
 
                 SqlConnection _Con = new SqlConnection(conStr);
                 DataSet retVal = new DataSet();
@@ -378,7 +379,7 @@ namespace BOTS_BL.Repository
             using (var context = new CommonDBContext())
             {
                 string groupId = CounterId.Substring(0, 4);
-                var conStr = CR.GetCustomerConnString(groupId);
+                var conStr = CR.GetRetailWebConnString(CounterId);
 
                 SqlConnection _Con = new SqlConnection(conStr);
                 DataSet retVal = new DataSet();
@@ -465,7 +466,7 @@ namespace BOTS_BL.Repository
             using (var context = new CommonDBContext())
             {
                 string groupId = CounterId.Substring(0, 4);
-                var conStr = CR.GetCustomerConnString(groupId);
+                var conStr = CR.GetRetailWebConnString(CounterId);
 
                 SqlConnection _Con = new SqlConnection(conStr);
                 DataSet retVal = new DataSet();
@@ -553,7 +554,7 @@ namespace BOTS_BL.Repository
             {
                 string groupId = CounterId.Substring(0, 4);
                 string outletId = CounterId.Substring(0, 8);
-                var conStr = CR.GetCustomerConnString(groupId);
+                var conStr = CR.GetRetailWebConnString(CounterId);
 
                 SqlConnection _Con = new SqlConnection(conStr);
                 DataSet retVal = new DataSet();
@@ -620,7 +621,7 @@ namespace BOTS_BL.Repository
             {
                 string groupId = CounterId.Substring(0, 4);
                 string outletId = CounterId.Substring(0, 8);
-                var conStr = CR.GetCustomerConnString(groupId);
+                var conStr = CR.GetRetailWebConnString(CounterId);
 
                 SqlConnection _Con = new SqlConnection(conStr);
                 DataSet retVal = new DataSet();
@@ -716,7 +717,7 @@ namespace BOTS_BL.Repository
             {
                 string groupId = CounterId.Substring(0, 4);
                 string outletId = CounterId.Substring(0, 8);
-                var conStr = CR.GetCustomerConnString(groupId);
+                var conStr = CR.GetRetailWebConnString(CounterId);
 
                 SqlConnection _Con = new SqlConnection(conStr);
                 DataSet retVal = new DataSet();
@@ -805,7 +806,7 @@ namespace BOTS_BL.Repository
             {
                 string groupId = CounterId.Substring(0, 4);
                 string outletId = CounterId.Substring(0, 8);
-                var conStr = CR.GetCustomerConnString(groupId);
+                var conStr = CR.GetRetailWebConnString(CounterId);
 
                 SqlConnection _Con = new SqlConnection(conStr);
                 DataSet retVal = new DataSet();
@@ -902,7 +903,7 @@ namespace BOTS_BL.Repository
             using (var context = new CommonDBContext())
             {
                 string groupId = CounterId.Substring(0, 4);
-                var conStr = CR.GetCustomerConnString(groupId);
+                var conStr = CR.GetRetailWebConnString(CounterId);
 
                 SqlConnection _Con = new SqlConnection(conStr);
                 DataSet retVal = new DataSet();

@@ -298,6 +298,28 @@ namespace BOTS_BL.Repository
             return ConnectionString;
         }
 
+        public string GetRetailWebConnString(string CounterId)
+        {
+            string ConnectionString = string.Empty;
+            try
+            {
+                using (var context = new CommonDBContext())
+                {
+                    var DBDetails = context.DatabaseDetails.Where(x => x.CounterId == CounterId).FirstOrDefault();
+                    //CustomerConnString.ConnectionStringCustomer = DBDetails.DBName;
+                    if (DBDetails != null)
+                    {
+                        ConnectionString = "Data Source = " + DBDetails.IPAddress + "; Initial Catalog = " + DBDetails.DBName + "; user id = " + DBDetails.DBId + "; password = " + DBDetails.DBPassword + "";
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, CounterId);
+            }
+            return ConnectionString;
+        }
+
         public string GetCustomerName(string GroupId)
         {
             string CustomerName = string.Empty;
