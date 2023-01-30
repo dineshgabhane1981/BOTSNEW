@@ -128,7 +128,7 @@
         </div>
     </div>
     <div class="row card">
-         
+
         @if (Model != null)
         {
             int c = 0;
@@ -264,7 +264,7 @@
                                     </div>
                                 }
 
-                                
+
                                 if (item.Section == "FeedbackQuestions")
                                 {
 
@@ -276,8 +276,8 @@
                                                 <h2 style="font-size: 34px;"> @Html.Raw(Model.PointsAndMessages.CustomFieldText): <input type="text" class="input100" id="txtCustomField" /></h2>
 
                                             </div>
-                                                    }
-                                                }
+                                        }
+                                    }
                                     <div class="col-md-12 col-sm-12 pt-3 pl-3 pr-3 " style="text-align:center;">
                                         @if (item.Type == "Question")
                                         {
@@ -622,15 +622,96 @@
                 customText = $("#txtCustomField").val();
             }
             //txtCustomField
-
-            $("#divLoader").show();
-            setTimeout(() => {
-            var mobileNo = "";
-            if (@Model.GroupId != "1051") {
-                mobileNo = $("#txtMobileNo").val();
-            }
-
+            if (base64data == "data:" || base64data == "") {
+                
+                $("#divLoader").show();               
+                var mobileNo = "";
+                if (@Model.GroupId != "1051") {
+                    mobileNo = $("#txtMobileNo").val();
+                }
                 $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("SubmitPoints", "Feedback")',
+                    data: '{mobileNo: ' + JSON.stringify(mobileNo) + ', ranking: ' + JSON.stringify(JSON.stringify(HomeData)) + ', GroupId: ' + JSON.stringify($("#hdGroupId").val()) + ', SalesRepresentative: ' + JSON.stringify(sales) + ',Comments: ' + JSON.stringify(Comments) + ', outletId: ' + JSON.stringify($("#hdoutletId").val()) + ', media: ' + JSON.stringify(base64data) + ', customText: ' + JSON.stringify(customText) + '}',
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (response) {
+                        console.log(response);
+                        if (response == "true") {
+
+                            var nm = $('#spnCustName').text();
+                            $('#spnCustName1').text(nm);
+                            $("#divLoader").hide();
+                            $("#divthankyou").show();
+                            $("#divquestions").hide();
+                            $("#divwelcome").hide();
+
+                            if ($("#hdGroupId").val() == "1051") {
+                                $("#dvLogo").hide();
+                                cuteAlert({
+                                    type: "success",
+                                    title: "Save",
+                                    message: "Feedback Sent Successfully!",
+                                    buttonText: "Okay"
+                                }).then((e) => {
+                                    window.location.replace("https://www.blueocktopus.com/");
+                                });
+                            }
+                            else {
+                                var IsOtherInfoShow = '@Model.PointsAndMessages.IsOtherInfoShow';
+                                if (IsOtherInfoShow != "True") {
+                                    $("#dvLogo").hide();
+                                    $("#divLoader").hide();
+                                    cuteAlert({
+                                        type: "success",
+                                        title: "Save",
+                                        message: "FeedBack Save Successfully!",
+                                        buttonText: "Okay"
+                                    }).then((e) => {
+                                        window.location.replace($("#url").text() + $("#hdoutletId").val());
+                                    });
+                                }
+                            }
+                            $("#divLoader").hide();
+                        }
+                        if (response == "false") {
+                            $("#divLoader").hide();
+                            $("#divquestions").hide();
+                            $("#divwelcome").hide();
+                        }
+                        if (response == "pointsGiven") {
+                            $("#divLoader").hide();
+                            cuteAlert({
+                                type: "success",
+                                title: "Save",
+                                message: "FeedBack Save Successfully!",
+                                buttonText: "Okay"
+                            }).then((e) => {
+                                window.location.replace($("#url").text() + $("#hdoutletId").val());
+                            });
+                            $("#divLoader").hide();
+                        }
+
+                        
+                    },
+                    failure: function (response) {
+                        $("#divLoader").hide();
+                    },
+                    error: function (response) {
+
+                        $("#divLoader").hide();
+                    }
+                });
+            }
+            else {               
+                setTimeout(() => {
+                    $("#divLoader").show();
+                    var mobileNo = "";
+                    if (@Model.GroupId != "1051") {
+                        mobileNo = $("#txtMobileNo").val();
+                    }
+
+                      $.ajax({
                 type: "POST",
                 url: '@Url.Action("SubmitPoints", "Feedback")',
                     data: '{mobileNo: ' + JSON.stringify(mobileNo) + ', ranking: ' + JSON.stringify(JSON.stringify(HomeData)) + ', GroupId: ' + JSON.stringify($("#hdGroupId").val()) + ', SalesRepresentative: ' + JSON.stringify(sales) + ',Comments: ' + JSON.stringify(Comments) + ', outletId: ' + JSON.stringify($("#hdoutletId").val()) + ', media: ' + JSON.stringify(base64data) + ', customText: ' + JSON.stringify(customText) + '}',
@@ -673,7 +754,7 @@
                                 });
                             }
                         }
-
+                        $("#divLoader").hide();
                     }
                     if (response == "false") {
                         $("#divLoader").hide();
@@ -690,10 +771,10 @@
                         }).then((e) => {
                             window.location.replace($("#url").text() + $("#hdoutletId").val());
                         });
-
+                        $("#divLoader").hide();
                     }
 
-                    $("#divLoader").hide();
+                    
                 },
                 failure: function (response) {
                     $("#divLoader").hide();
@@ -704,8 +785,8 @@
                 }
             });
 
-            }, 1000);
-            $("#divLoader").hide();
+                }, 1000);
+            }
         }
 
     }

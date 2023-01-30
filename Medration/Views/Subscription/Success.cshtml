@@ -1,0 +1,25 @@
+﻿
+@{ Layout = null; }
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Success</title>
+</head>
+<body>
+    <div style="text-align:center;margin-top:50px;color:green;">
+        <h1> Thank You, You have Subscribed Successfully !!! </h1>
+    </div>
+</body>
+</html>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+    $(document).ready(function () {
+        setTimeout(callBack_func, 2000);
+    });
+    function callBack_func() {
+        window.location.replace("https://medration.com/");
+    }
+</script>

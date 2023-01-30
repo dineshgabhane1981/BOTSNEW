@@ -1,53 +1,154 @@
-﻿
+﻿@model Medration.Controllers.SubscriptionController.PaymentInitiateModel
 
-
-@if (ViewBag.NumberOfPerson > 0)
+@using (Html.BeginForm("CreateOrder", "Subscription", FormMethod.Post))
 {
-    for (var count = 1; count <= ViewBag.NumberOfPerson; count++)
+    @Html.AntiForgeryToken()
+    if (ViewBag.NumberOfPerson > 0)
     {
-        var newCount = count - 1;
-        <div class="app-main__inner">
-            <div class="col-md-12 col-sm-12 card" style="padding:10px;margin:5px;margin-right:20px !important; border-radius:10px;">
-                @if (count == 1)
-                {
-                    <fieldset style="border-radius: 10px;">
-                        <legend><b>Primary Account</b></legend>
+        for (var count = 1; count <= ViewBag.NumberOfPerson; count++)
+        {
+            var newCount = count - 1;
+            var txtName = "txtName" + count;
+            var txtContact = "txtContact" + count;
+            var txtEmail = "txtEmail" + count;
+            var txtAge = "txtDOB" + count;
+            <div class="app-main__inner">
+                @Html.HiddenFor(model => model.jsonData, new { @id = "hdnjsonData" })
+                @Html.HiddenFor(model => model.amount, new { @id = "hdnAmount" })
+                <input id="hdnNoOfPerson" type="hidden" />
+                <div class="col-md-12 col-sm-12 card" style="padding:10px;margin:5px;margin-right:20px !important; border-radius:10px;">
+                    @if (count == 1)
+                    {
+                        <fieldset style="border-radius: 10px;">
+                            <legend><b>Primary Account</b></legend>
+                            <div class="col-md-12 col-sm-12">
+                                <div class="col-md-1 col-sm-1">Name</div>
+                                <div class="col-md-4 col-sm-4">@Html.TextBoxFor(x => x.name, new { @class = "input100", @id = "txtName" }) </div>
+                                <div class="col-md-1 col-sm-1">Contact No</div>
+                                <div class="col-md-3 col-sm-3">@Html.TextBoxFor(x => x.contactNumber, new { @class = "input50", @type = "number", @id = "txtcontactNumber" })</div>
+                            </div>
+                            <div class="col-md-12 col-sm-12" style="margin-top:10px;">
+                                <div class="col-md-1 col-sm-1">Email</div>
+                                <div class="col-md-4 col-sm-4">@Html.TextBoxFor(x => x.email, new { @class = "input100", @id = "txtemail" })</div>
+                                <div class="col-md-1 col-sm-1">DOB</div>
+                                <div class="col-md-3 col-sm-3">@Html.TextBoxFor(x => x.age, new { @class = "input50", @type = "date", @id = "txtDOB" })</div>
+                            </div>
+                        </fieldset>
+                    }
+                    else
+                    {
+                        <fieldset style="border-radius: 10px;">
+                            <legend><b>Secondary @newCount </b></legend>
+                            <div class="col-md-12 col-sm-12">
+                                <div class="col-md-1 col-sm-1">Name</div>
+                                <div class="col-md-4 col-sm-4"><input id="@txtName" type="text" class="input100" /> </div>
+                                <div class="col-md-1 col-sm-1">Contact No</div>
+                                <div class="col-md-3 col-sm-3"><input id="@txtContact" type="number" class="input50" /></div>
+                            </div>
+                            <div class="col-md-12 col-sm-12" style="margin-top:10px;">
+                                <div class="col-md-1 col-sm-1">Email</div>
+                                <div class="col-md-4 col-sm-4"><input id="@txtEmail" type="text" class="input100" /></div>
+                                <div class="col-md-1 col-sm-1">DOB</div>
+                                <div class="col-md-3 col-sm-3"><input id="@txtAge" type="date" class="input50" /> </div>
+                            </div>
+                        </fieldset>
+                    }
+                </div>
+            </div>
 
-                        <div class="col-md-12 col-sm-12">
-                            <div class="col-md-1 col-sm-1">Name</div>
-                            <div class="col-md-4 col-sm-4"><input id="txtName" type="text" class="input100" /> </div>
-                            <div class="col-md-1 col-sm-1">Contact No</div>
-                            <div class="col-md-3 col-sm-3"><input id="txtName" type="number" class="input50" /></div>
-                        </div>
-                        <div class="col-md-12 col-sm-12" style="margin-top:10px;">
-                            <div class="col-md-1 col-sm-1">Email</div>
-                            <div class="col-md-4 col-sm-4"><input id="txtName" type="text" class="input100" /></div>
-                            <div class="col-md-1 col-sm-1">Age</div>
-                            <div class="col-md-3 col-sm-3"><input id="txtName" type="number" class="input50" /> </div>
-                        </div>
-                    </fieldset>
-                }
-                else
-                {
-                    
-                    <fieldset style="border-radius: 10px;">
-                        <legend><b>Secondary @newCount </b></legend>
-                        <div class="col-md-12 col-sm-12">
-                            <div class="col-md-1 col-sm-1">Name</div>
-                            <div class="col-md-4 col-sm-4"><input id="txtName" type="text" class="input100" /> </div>
-                            <div class="col-md-1 col-sm-1">Contact No</div>
-                            <div class="col-md-3 col-sm-3"><input id="txtName" type="number" class="input50" /></div>
-                        </div>
-                        <div class="col-md-12 col-sm-12" style="margin-top:10px;">
-                            <div class="col-md-1 col-sm-1">Email</div>
-                            <div class="col-md-4 col-sm-4"><input id="txtName" type="text" class="input100" /></div>
-                            <div class="col-md-1 col-sm-1">Age</div>
-                            <div class="col-md-3 col-sm-3"><input id="txtName" type="number" class="input50" /> </div>
-                        </div>
-                    </fieldset>
-                }
+        }
+        <div class="app-main__inner">
+            <div class="col-md-12 col-sm-12 card" id="dvBtnPay" style="text-align:center; padding: 10px; margin: 5px; margin-right: 20px !important; border-radius: 10px;">
+                <button type="submit" onclick="return ProceedToPay();" id="btnProceedToPay" style="color: #fff; background-color: #337ab7; border-color: #2e6da4;cursor:pointer;width:50%;height:35px;font-size:20px;border-radius:10px;">Proceed to Pay</button>
             </div>
         </div>
-
     }
 }
+<script src="~/Scripts/cute-alert-master/cute-alert.js"></script>
+<link href="~/Scripts/cute-alert-master/style-alert.css" rel="stylesheet" />
+<script>
+
+    function ProceedToPay() {
+        var status = true;
+        var count = $("#hdnNoOfPerson").val();
+        
+            $("#hdnAmount").val(@ViewBag.TotalAmount);        
+       
+
+        //alert($("#hdnAmount").val());
+
+        if ($("#txtName").val() == "") {
+            status = false;
+        }
+        if ($("#txtcontactNumber").val() == "") {
+            status = false;
+        }
+        if ($("#txtemail").val() == "") {
+            status = false;
+        }
+        if ($("#txtDOB").val() == "") {
+            status = false;
+        }
+        if (status) {
+            var PrimaryData = [];
+            item1 = {}
+            item1["name"] = $("#txtName").val();
+            item1["email"] = $("#txtemail").val();
+            item1["contactNumber"] = $("#txtcontactNumber").val();
+            item1["address"] = "";
+            item1["DOB"] = $("#txtDOB").val();
+            item1["amount"] = $("#hdnAmount").val();
+            item1["PlanId"] = count;
+            item1["IsPrimary"] = true;
+
+            PrimaryData.push(item1);
+
+            for (let i = 2; i <= count; i++) {
+                item = {}
+                item["name"] = $("#txtName" + i).val();
+                item["email"] = $("#txtEmail" + i).val();
+                item["contactNumber"] = $("#txtContact" + i).val();
+                item["address"] = "";
+                item["DOB"] = $("#txtDOB" + i).val();
+                item["amount"] = $("#hdnAmount").val();
+                item["PlanId"] = count;
+                item["IsPrimary"] = false;
+
+                PrimaryData.push(item);
+            }
+            var PData = JSON.stringify(PrimaryData);
+            $("#hdnjsonData").val(PData);
+        }
+        else {
+            cuteAlert({
+                type: "error",
+                title: "Saved",
+                message: "Primary Account information is Mandatory !!!",
+                buttonText: "Okay"
+            })
+        }
+        return status;
+        @* $.ajax({
+            type: "POST",
+            url: '@Url.Action("CreateOrder", "Subscription")',
+            data: '{jsonData: ' + JSON.stringify(PData) + '}',
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                $("#dvPaymentPage").html(response);
+                $("#dvPaymentPage").show();
+                $("#dvAllDetails").hide();
+                $("#dvBtnPay").hide();
+            },
+            failure: function (response) {
+            },
+            error: function (response) {
+                $("#dvPaymentPage").html(response.responseText);
+                $("#dvPaymentPage").show();
+                $("#dvAllDetails").hide();
+                $("#dvMain").hide(800);
+                $("#dvBtnPay").hide();
+            }
+        });*@
+    }
+</script>

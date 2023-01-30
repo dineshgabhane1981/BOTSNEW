@@ -5,150 +5,117 @@
 }
 
 <link href="~/Content/Site.css" rel="stylesheet" />
+<link rel="stylesheet" href="~/Content/style.css" />
+<style>
+    .styled-table {
+        border-collapse: collapse;
+        margin: 25px 0;
+        font-size: 0.9em;
+        font-family: sans-serif;
+        min-width: 300px;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+    }
+
+    .styled-table thead tr {
+        background-color: #009879;
+        color: #ffffff;
+        text-align: left;
+    }
+
+    .styled-table th,
+    .styled-table td {
+        padding: 12px 15px;
+    }
+
+    .styled-table tbody tr {
+        border-bottom: 1px solid #dddddd;
+    }
+
+    .styled-table tbody tr:nth-of-type(even) {
+        background-color: #f3f3f3;
+    }
+
+    .styled-table tbody tr:last-of-type {
+        border-bottom: 2px solid #009879;
+    }
+
+    .styled-table tbody tr.active-row {
+        font-weight: bold;
+        color: #009879;
+    }
+</style>
 <div class="app-main__inner">
-    <div class="col-md-12 col-sm-12 mb-5" style="display:flex;" >
-        <div class="col-md-2 col-sm-2" style="margin-top:-60px;margin-bottom:10px;">
-            <img src="~/Content/Logo.png" width="250px" />
+    <div class="col-md-12 col-sm-12 mb-5" style="display:flex;">
+        <div class="col-md-2 col-sm-2" style="margin-top:0px;margin-bottom:0px;">
+            <img src="https://medration.com/wp-content/uploads/2023/01/MedRation-web23.png"/>
         </div>
-        <div class="col-md-9 col-sm-9" style="margin-top:-60px;margin-bottom:10px;padding:30px; padding-left:90px;">
-            <h2> Subscribe with <b style="color: #B1D242;">MEDRATION</b> and get extra <b style="color: #B1D242;">discount</b> on your purchase</h2>
+        <div class="col-md-9 col-sm-9" style="margin-top:-60px;margin-bottom:0px;padding:20px; padding-left:90px;">
+            <table border="1" class="styled-table" cellpadding="5" cellspacing="5" style="text-align:end;">
+                <tr>
+                    <th>Title</th>
+                    <th>Amount</th>
+                </tr>
+                <tr>
+                    <td>Plan Amount</td>
+                    <td>RS. @ViewBag.PlanAmount</td>
+                </tr>
+                <tr>
+                    <td>Discount</td>
+                    <td>@ViewBag.Discount%</td>
+                </tr>
+                <tr style="font-weight: bold; background-color: #B1D242;">
+                    <td>Total</td>
+                    <td>
+                        RS. @ViewBag.TotalAmount
+                    </td>
+                </tr>
+            </table>
         </div>
     </div>
-    <div class="mb-3 card col-md-12 col-sm-12" style="border-radius: 20px; padding-bottom: 30px;margin-top:-20px;">       
-        <div class="col-md-1"></div>
-        <div class="flip-card col-md-2 col-sm-3" >
-            <div class="flip-card-inner">
-                <div class="flip-card-front">
-                    <div class="badge" id="dv1">
-                        <svg xmlns="http://www.w3.org/2000/svg" version="1.1" x="0px" y="0px" width="200px" height="282px" viewBox="0 0 216 232">
-                            <path fill="#2B2B2B" d="M207,0C171.827,0.001,43.875,0.004,9.003,0c-5.619-0.001-9,3.514-9,9c0,28.23-0.006,151.375,0,169    c0.005,13.875,94.499,54,107.999,54S216,191.57,216,178V9C216,3.298,212.732,0,207,0z" />
-                        </svg>
-                        <p class="title" style="background-color:orange;color:white !important;" id="t1">Single</p>
-                        <p class="subtitle">₹ 250 <br />1 Person</p>
-                    </div>
-                </div>
-                <div class="flip-card-back" style="cursor:pointer;" onclick="ShowDetails(1)">
-                    <div class="badge blue">
-                        <svg xmlns="http://www.w3.org/2000/svg" version="1.1" x="0px" y="0px" width="200px" height="282px" viewBox="0 0 216 232">
-                            <path fill="#2B2B2B" d="M207,0C171.827,0.001,43.875,0.004,9.003,0c-5.619-0.001-9,3.514-9,9c0,28.23-0.006,151.375,0,169    c0.005,13.875,94.499,54,107.999,54S216,191.57,216,178V9C216,3.298,212.732,0,207,0z" />
-                        </svg>
-                        <p class="title" style="background-color:orange;" id="t11">Details</p>
-                        <p class="subtitle1">Lorem ipsum, or lipsum as it is sometimes known</p>
-                    </div>
-                </div>
-            </div>
-        </div>
+    
+</div>
+<div id="dvAllDetails">
+    @Html.Partial("~/Views/Subscription/_LoadDetailsForSubscription.cshtml")
+</div>
 
-        <div class="flip-card col-md-2 col-sm-3">
-            <div class="flip-card-inner">
-                <div class="flip-card-front">
-                    <div class="badge" id="dv2">
-                        <svg xmlns="http://www.w3.org/2000/svg" version="1.1" x="0px" y="0px" width="200px" height="282px" viewBox="0 0 216 232">
-                            <path fill="#2B2B2B" d="M207,0C171.827,0.001,43.875,0.004,9.003,0c-5.619-0.001-9,3.514-9,9c0,28.23-0.006,151.375,0,169    c0.005,13.875,94.499,54,107.999,54S216,191.57,216,178V9C216,3.298,212.732,0,207,0z" />
-                        </svg>
-                        <p class="title" style="cursor: pointer; color: white !important;background-color:#FFF000;" onclick="ShowDetails(2)">Couple</p>
-                        <p class="subtitle">₹ 400 <br />2 Person</p>
-                    </div>
-                </div>
-                <div class="flip-card-back" style="cursor:pointer;" onclick="ShowDetails(2)">
-                    <div class="badge green">
-                        <svg xmlns="http://www.w3.org/2000/svg" version="1.1" x="0px" y="0px" width="200px" height="282px" viewBox="0 0 216 232">
-                            <path fill="#2B2B2B" d="M207,0C171.827,0.001,43.875,0.004,9.003,0c-5.619-0.001-9,3.514-9,9c0,28.23-0.006,151.375,0,169    c0.005,13.875,94.499,54,107.999,54S216,191.57,216,178V9C216,3.298,212.732,0,207,0z" />
-                        </svg>
-                        <p class="title" style="background-color: #FFF000;">Details</p>
-                        <p class="subtitle1">Lorem ipsum, or lipsum as it is sometimes known</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="flip-card col-md-2 col-sm-3">
-            <div class="flip-card-inner">
-                <div class="flip-card-front">
-                    <div class="badge gray" id="dv4">
-                        <svg xmlns="http://www.w3.org/2000/svg" version="1.1" x="0px" y="0px" width="200px" height="282px" viewBox="0 0 216 232">
-                            <path fill="#2B2B2B" d="M207,0C171.827,0.001,43.875,0.004,9.003,0c-5.619-0.001-9,3.514-9,9c0,28.23-0.006,151.375,0,169    c0.005,13.875,94.499,54,107.999,54S216,191.57,216,178V9C216,3.298,212.732,0,207,0z" />
-                        </svg>
-                        <p class="title" style="cursor: pointer; color: white !important; background-color: #FF007F;" onclick="ShowDetails(4)">Family</p>
-                        <p class="subtitle">₹ 600 <br />4 Person</p>
-                    </div>
-                </div>
-                <div class="flip-card-back" style="cursor:pointer;" onclick="ShowDetails(4)">
-                    <div class="badge gray">
-                        <svg xmlns="http://www.w3.org/2000/svg" version="1.1" x="0px" y="0px" width="200px" height="282px" viewBox="0 0 216 232">
-                            <path fill="#2B2B2B" d="M207,0C171.827,0.001,43.875,0.004,9.003,0c-5.619-0.001-9,3.514-9,9c0,28.23-0.006,151.375,0,169    c0.005,13.875,94.499,54,107.999,54S216,191.57,216,178V9C216,3.298,212.732,0,207,0z" />
-                        </svg>
-                        <p class="title" style="background-color: #FF007F;">Details</p>
-                        <p class="subtitle1">Lorem ipsum, or lipsum as it is sometimes known</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="flip-card col-md-2 col-sm-3">
-            <div class="flip-card-inner">
-                <div class="flip-card-front">
-                    <div class="badge yellow" id="dv6">
-                        <svg xmlns="http://www.w3.org/2000/svg" version="1.1" x="0px" y="0px" width="200px" height="282px" viewBox="0 0 216 232">
-                            <path fill="#2B2B2B" d="M207,0C171.827,0.001,43.875,0.004,9.003,0c-5.619-0.001-9,3.514-9,9c0,28.23-0.006,151.375,0,169    c0.005,13.875,94.499,54,107.999,54S216,191.57,216,178V9C216,3.298,212.732,0,207,0z" />
-                        </svg>
-                        <p class="title" style="cursor: pointer; color: white !important; background-color: #17DEEE;" onclick="ShowDetails(6)">Family Plus</p>
-                        <p class="subtitle">₹ 750 <br />6 Person</p>
-                    </div>
-                </div>
-                <div class="flip-card-back" style="cursor:pointer;" onclick="ShowDetails(6)">
-                    <div class="badge yellow">
-                        <svg xmlns="http://www.w3.org/2000/svg" version="1.1" x="0px" y="0px" width="200px" height="282px" viewBox="0 0 216 232">
-                            <path fill="#2B2B2B" d="M207,0C171.827,0.001,43.875,0.004,9.003,0c-5.619-0.001-9,3.514-9,9c0,28.23-0.006,151.375,0,169    c0.005,13.875,94.499,54,107.999,54S216,191.57,216,178V9C216,3.298,212.732,0,207,0z" />
-                        </svg>
-                        <p class="title" style="background-color: #17DEEE;">Details</p>
-                        <p class="subtitle1">Lorem ipsum, or lipsum as it is sometimes known</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-1"></div>
-
-        @*<div class="badge blue">
-            <svg xmlns="http://www.w3.org/2000/svg" version="1.1" x="0px" y="0px" width="216px" height="232px" viewBox="0 0 216 232">
-                <path fill="#2B2B2B" d="M207,0C171.827,0.001,43.875,0.004,9.003,0c-5.619-0.001-9,3.514-9,9c0,28.23-0.006,151.375,0,169    c0.005,13.875,94.499,54,107.999,54S216,191.57,216,178V9C216,3.298,212.732,0,207,0z" />
-            </svg>
-            <p class="title">CRYPTO MASTER</p>
-            <p class="subtitle">CTF 365</p>
-        </div>*@
-
-    </div>
-    </div>
-<div id="dvAllDetails" style="display:none;"> Testing the Div</div>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script>
+    $(document).ready(function () {
+        $("#hdnNoOfPerson").val('@ViewBag.NumberOfPerson');
+    });
     function ShowDetails(type) {
-        //$(".badge").css("border-top", "0px dashed red");
-        //$("#t" + type).css("border", "1px dashed red");
-        //$("#t1" + type).css("border", "1px dashed red");
 
-
-            $.ajax({
-                type: "POST",
-                url: '@Url.Action("LoadDetails", "Subscription")',
-                data: '{num: ' + JSON.stringify(type) + '}',
-                contentType: "application/json; charset=utf-8",
-                dataType: "json",
-                success: function (response) {
-                    $("#dvAllDetails").html(response);
-
-                    //$("#divLoader").hide();
-                },
-                failure: function (response) {
-                    //$("#divLoader").hide();
-                },
-                error: function (response) {
-                    $("#dvAllDetails").html(response.responseText);
-                    $("#dvAllDetails").show(800);
-                    //$("#divLoader").hide();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("LoadDetails", "Subscription")',
+            data: '{num: ' + JSON.stringify(type) + '}',
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                $("#dvAllDetails").html(response);
+            },
+            failure: function (response) {
+            },
+            error: function (response) {
+                $("#dvAllDetails").html(response.responseText);
+                $("#dvAllDetails").show(800);
+                $("#dvBtnPay").show();
+                if (type == 1) {
+                    $("#hdnAmount").val(399);
                 }
-            });
+                if (type == 2) {
+                    $("#hdnAmount").val(599);
+                }
+                if (type == 4) {
+                    $("#hdnAmount").val(999);
+                }
+                if (type == 6) {
+                    $("#hdnAmount").val(1199);
+                }
 
-     }
+            }
+        });
+
+    }
+
 </script>
