@@ -242,7 +242,7 @@
 
 
     $(document).ready(function () {
-        RemoveRequiredBorderData();
+       /* RemoveRequiredBorderData();*/
         var today = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
 
 
@@ -254,8 +254,8 @@
         var RegNo = $("#hdntemp").val();
 
 
-            var validationStatus = ValidateData();
-        if (validationStatus) {
+           // var validationStatus = ValidateData();
+        /*if (validationStatus) {*/
 
                 if (/^[6789]\d{9,9}$/.test($("#txtWhatsAppNo").val())) {
 
@@ -341,126 +341,126 @@
                 }
 
             }
-        }
-
-    function ValidateData() {
-        var status = true;
-        if ($("#txtFullName").val() == "") {
-            $('#txtFullName').css('border-color', 'red');
-            status = false;
-        }
-        if ($("#txtDOB").val() == "") {
-            $('#txtDOB').css('border-color', 'red');
-            status = false;
-        }
-        if ($("#ddlGender").val() == "Select") {
-            $('#ddlGender').css('border-color', 'red');
-            status = false;
-        }
-        if ($("#ddlSchoolName").val() == "Select") {
-            $('#ddlSchoolName').css('border-color', 'red');
-            status = false;
-        }
-        if ($("#ddlClass").val() == "Select") {
-            $('#ddlClass').css('border-color', 'red');
-            status = false;
-        }
-        if ($("#txtParentsName").val() == "") {
-            $('#txtParentsName').css('border-color', 'red');
-            status = false;
-        }
-        if ($("#txtWhatsAppNo").val() == "") {
-            $('#txtWhatsAppNo').css('border-color', 'red');
-            status = false;
-        }
-        //if ($("#txtEmail").val() == "") {
-        //    $('#txtEmail').css('border-color', 'red');
-        //    status = false;
         //}
-        if ($("#txtAddress").val() == "") {
-            $('#txtAddress').css('border-color', 'red');
-            status = false;
-        }
 
-        if (!status) {
-            cuteAlert({
-                type: "error",
-                title: "Oops..",
-                message: "Please Enter required fields",
-                buttonText: "Okay"
-            })
+    //function ValidateData() {
+    //    var status = true;
+    //    if ($("#txtFullName").val() == "") {
+    //        $('#txtFullName').css('border-color', 'red');
+    //        status = false;
+    //    }
+    //    if ($("#txtDOB").val() == "") {
+    //        $('#txtDOB').css('border-color', 'red');
+    //        status = false;
+    //    }
+    //    if ($("#ddlGender").val() == "Select") {
+    //        $('#ddlGender').css('border-color', 'red');
+    //        status = false;
+    //    }
+    //    if ($("#ddlSchoolName").val() == "Select") {
+    //        $('#ddlSchoolName').css('border-color', 'red');
+    //        status = false;
+    //    }
+    //    if ($("#ddlClass").val() == "Select") {
+    //        $('#ddlClass').css('border-color', 'red');
+    //        status = false;
+    //    }
+    //    if ($("#txtParentsName").val() == "") {
+    //        $('#txtParentsName').css('border-color', 'red');
+    //        status = false;
+    //    }
+    //    if ($("#txtWhatsAppNo").val() == "") {
+    //        $('#txtWhatsAppNo').css('border-color', 'red');
+    //        status = false;
+    //    }
+    //    //if ($("#txtEmail").val() == "") {
+    //    //    $('#txtEmail').css('border-color', 'red');
+    //    //    status = false;
+    //    //}
+    //    if ($("#txtAddress").val() == "") {
+    //        $('#txtAddress').css('border-color', 'red');
+    //        status = false;
+    //    }
 
-        }
+    //    if (!status) {
+    //        cuteAlert({
+    //            type: "error",
+    //            title: "Oops..",
+    //            message: "Please Enter required fields",
+    //            buttonText: "Okay"
+    //        })
 
-        return status;
-    }
+    //    }
 
-    function RemoveRequiredBorderData() {
-        $("#txtFullName").focusout(function () {
-            if ($("#txtFullName").val() != "") {
-                $('#txtFullName').css('border-color', '');
-            }
-            else {
-                $('#txtFullName').css('border-color', 'red');
-            }
-        });
-        $("#txtDOB").focusout(function () {
-            if ($("#txtDOB").val() != "") {
-                $('#txtDOB').css('border-color', '');
-            }
-            else {
-                $('#txtDOB').css('border-color', 'red');
-            }
-        });
-        $("#ddlGender").focusout(function () {
-            if ($("#ddlGender").val() != "") {
-                $('#ddlGender').css('border-color', '');
-            }
-            else {
-                $('#ddlGender').css('border-color', 'red');
-            }
-        });
-        $("#ddlSchoolName").focusout(function () {
-            if ($("#ddlSchoolName").val() != "") {
-                $('#ddlSchoolName').css('border-color', '');
-            }
-            else {
-                $('#ddlSchoolName').css('border-color', 'red');
-            }
-        });
-        $("#ddlClass").focusout(function () {
-            if ($("#ddlClass").val() != "") {
-                $('#ddlClass').css('border-color', '');
-            }
-            else {
-                $('#ddlClass').css('border-color', 'red');
-            }
-        });
-        $("#txtParentsName").focusout(function () {
-            if ($("#txtParentsName").val() != "") {
-                $('#txtParentsName').css('border-color', '');
-            }
-            else {
-                $('#txtParentsName').css('border-color', 'red');
-            }
-        });
-        $("#txtWhatsAppNo").focusout(function () {
-            if ($("#txtWhatsAppNo").val() != "") {
-                $('#txtWhatsAppNo').css('border-color', '');
-            }
-            else {
-                $('#txtWhatsAppNo').css('border-color', 'red');
-            }
-        });
-        $("#txtAddress").focusout(function () {
-            if ($("#txtAddress").val() != "") {
-                $('#txtAddress').css('border-color', '');
-            }
-            else {
-                $('#txtAddress').css('border-color', 'red');
-            }
-        });
-    }
+    //    return status;
+    //}
+
+    //function RemoveRequiredBorderData() {
+    //    $("#txtFullName").focusout(function () {
+    //        if ($("#txtFullName").val() != "") {
+    //            $('#txtFullName').css('border-color', '');
+    //        }
+    //        else {
+    //            $('#txtFullName').css('border-color', 'red');
+    //        }
+    //    });
+    //    $("#txtDOB").focusout(function () {
+    //        if ($("#txtDOB").val() != "") {
+    //            $('#txtDOB').css('border-color', '');
+    //        }
+    //        else {
+    //            $('#txtDOB').css('border-color', 'red');
+    //        }
+    //    });
+    //    $("#ddlGender").focusout(function () {
+    //        if ($("#ddlGender").val() != "") {
+    //            $('#ddlGender').css('border-color', '');
+    //        }
+    //        else {
+    //            $('#ddlGender').css('border-color', 'red');
+    //        }
+    //    });
+    //    $("#ddlSchoolName").focusout(function () {
+    //        if ($("#ddlSchoolName").val() != "") {
+    //            $('#ddlSchoolName').css('border-color', '');
+    //        }
+    //        else {
+    //            $('#ddlSchoolName').css('border-color', 'red');
+    //        }
+    //    });
+    //    $("#ddlClass").focusout(function () {
+    //        if ($("#ddlClass").val() != "") {
+    //            $('#ddlClass').css('border-color', '');
+    //        }
+    //        else {
+    //            $('#ddlClass').css('border-color', 'red');
+    //        }
+    //    });
+    //    $("#txtParentsName").focusout(function () {
+    //        if ($("#txtParentsName").val() != "") {
+    //            $('#txtParentsName').css('border-color', '');
+    //        }
+    //        else {
+    //            $('#txtParentsName').css('border-color', 'red');
+    //        }
+    //    });
+    //    $("#txtWhatsAppNo").focusout(function () {
+    //        if ($("#txtWhatsAppNo").val() != "") {
+    //            $('#txtWhatsAppNo').css('border-color', '');
+    //        }
+    //        else {
+    //            $('#txtWhatsAppNo').css('border-color', 'red');
+    //        }
+    //    });
+    //    $("#txtAddress").focusout(function () {
+    //        if ($("#txtAddress").val() != "") {
+    //            $('#txtAddress').css('border-color', '');
+    //        }
+    //        else {
+    //            $('#txtAddress').css('border-color', 'red');
+    //        }
+    //    });
+    //}
 
     function Index()
     {
