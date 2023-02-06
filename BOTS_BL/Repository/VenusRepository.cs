@@ -89,26 +89,26 @@ namespace BOTS_BL.Repository
                 }
                 
 
-                daReport.Fill(Tbl);
-                if (Tbl.Rows[0]["ResponseCode"].ToString() == "0")
-                {
+                //daReport.Fill(Tbl);
+                //if (Tbl.Rows[0]["ResponseCode"].ToString() == "0")
+                //{
                   
-                    string _Message;
+                //    string _Message;
 
-                    _Message = "*Dear #01, Your Registration No. " + WhatsAppNo + " for the Handwriting Competition is submitted successfully. See you soon! Thanks & Regards, Venus Traders.*";
+                //    _Message = "*Dear #01, Your Registration No. " + WhatsAppNo + " for the Handwriting Competition is submitted successfully. See you soon! Thanks & Regards, Venus Traders.*";
 
 
-                    //"Dear *TestBO*,"
+                //    //"Dear *TestBO*,"
 
-                    //"*Your registration no. 5 for the Handwriting Competition is done successfully. See you soon! *"
+                //    //"*Your registration no. 5 for the Handwriting Competition is done successfully. See you soon! *"
 
-                    //Thanks & Regards,
-                    //Venus Traders.
+                //    //Thanks & Regards,
+                //    //Venus Traders.
 
-                    Thread _job = new Thread(() => SendWhatsText(StudentName, WhatsAppNo, _Message));
-                    _job.Start();
+                //    Thread _job = new Thread(() => SendWhatsText(StudentName, WhatsAppNo, _Message));
+                //    _job.Start();
 
-                }
+                //}
 
 
 
@@ -120,62 +120,62 @@ namespace BOTS_BL.Repository
             
         }
 
-        public void SendWhatsText(string _StudentName, string _MobileNo, string _Message)
-        {
-            string responseString;
-            try
-            {
-                _Message = _Message.Replace("#99", "&");
-                _Message = _Message.Replace("#01", _StudentName);
-                _Message = HttpUtility.UrlEncode(_Message);
-                //string type = "TEXT";
-                StringBuilder sbposdata = new StringBuilder();
-                string _Url = "https://bo.enotify.app/api/sendText?";
-                sbposdata.AppendFormat(_Url);
-                sbposdata.AppendFormat("token={0}", "63917ceb9504293bbcc53cd1");
-                sbposdata.AppendFormat("&phone=91{0}", _MobileNo);
-                //sbposdata.AppendFormat("&link={0}", _ImageUrl);
-                sbposdata.AppendFormat("&message={0}", _Message);
-                //sbposdata.AppendFormat("&text={0}", _MobileMessage);
-                string Url = sbposdata.ToString();
-                ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls | (SecurityProtocolType)3072;
-                ServicePointManager.ServerCertificateValidationCallback += (sender, cert, chain, sslPolicyErrors) => true;
-                HttpWebRequest httpWReq = (HttpWebRequest)WebRequest.Create(Url);
-                UTF8Encoding encoding = new UTF8Encoding();
-                byte[] data = encoding.GetBytes(sbposdata.ToString());
-                httpWReq.Method = "POST";
+        //public void SendWhatsText(string _StudentName, string _MobileNo, string _Message)
+        //{
+        //    string responseString;
+        //    try
+        //    {
+        //        _Message = _Message.Replace("#99", "&");
+        //        _Message = _Message.Replace("#01", _StudentName);
+        //        _Message = HttpUtility.UrlEncode(_Message);
+        //        //string type = "TEXT";
+        //        StringBuilder sbposdata = new StringBuilder();
+        //        string _Url = "https://bo.enotify.app/api/sendText?";
+        //        sbposdata.AppendFormat(_Url);
+        //        sbposdata.AppendFormat("token={0}", "63917ceb9504293bbcc53cd1");
+        //        sbposdata.AppendFormat("&phone=91{0}", _MobileNo);
+        //        //sbposdata.AppendFormat("&link={0}", _ImageUrl);
+        //        sbposdata.AppendFormat("&message={0}", _Message);
+        //        //sbposdata.AppendFormat("&text={0}", _MobileMessage);
+        //        string Url = sbposdata.ToString();
+        //        ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls | (SecurityProtocolType)3072;
+        //        ServicePointManager.ServerCertificateValidationCallback += (sender, cert, chain, sslPolicyErrors) => true;
+        //        HttpWebRequest httpWReq = (HttpWebRequest)WebRequest.Create(Url);
+        //        UTF8Encoding encoding = new UTF8Encoding();
+        //        byte[] data = encoding.GetBytes(sbposdata.ToString());
+        //        httpWReq.Method = "POST";
 
-                httpWReq.ContentType = "application/x-www-form-urlencoded";
-                httpWReq.ContentLength = data.Length;
-                using (Stream stream = httpWReq.GetRequestStream())
-                {
-                    stream.Write(data, 0, data.Length);
-                }
-                HttpWebResponse response = (HttpWebResponse)httpWReq.GetResponse();
-                StreamReader reader = new StreamReader(response.GetResponseStream());
-                responseString = reader.ReadToEnd();
+        //        httpWReq.ContentType = "application/x-www-form-urlencoded";
+        //        httpWReq.ContentLength = data.Length;
+        //        using (Stream stream = httpWReq.GetRequestStream())
+        //        {
+        //            stream.Write(data, 0, data.Length);
+        //        }
+        //        HttpWebResponse response = (HttpWebResponse)httpWReq.GetResponse();
+        //        StreamReader reader = new StreamReader(response.GetResponseStream());
+        //        responseString = reader.ReadToEnd();
 
-                reader.Close();
-                response.Close();
-            }
-            catch (ArgumentException ex)
-            {
-                //Thread _job = new Thread(() => SendSMSMessageTxn(_MobileNo, _MobileMessage, _UserName, _Password, _Sender, _Url));
-                //_job.Start();
-                responseString = string.Format("HTTP_ERROR :: The second HttpWebRequest object has raised an Argument Exception as 'Connection' Property is set to 'Close' :: {0}", ex.Message);
-            }
-            catch (WebException ex)
-            {
-                //Thread _job = new Thread(() => SendSMSMessageTxn(_MobileNo, _MobileMessage, _UserName, _Password, _Sender, _Url));
-                //_job.Start();
-                responseString = string.Format("HTTP_ERROR :: WebException raised! :: {0}", ex.Message);
-            }
-            catch (Exception ex)
-            {
-                //Thread _job = new Thread(() => SendSMSMessageTxn(_MobileNo, _MobileMessage, _UserName, _Password, _Sender, _Url));
-                //_job.Start();
-                responseString = string.Format("HTTP_ERROR :: Exception raised! :: {0}", ex.Message);
-            }
-        }
+        //        reader.Close();
+        //        response.Close();
+        //    }
+        //    catch (ArgumentException ex)
+        //    {
+        //        //Thread _job = new Thread(() => SendSMSMessageTxn(_MobileNo, _MobileMessage, _UserName, _Password, _Sender, _Url));
+        //        //_job.Start();
+        //        responseString = string.Format("HTTP_ERROR :: The second HttpWebRequest object has raised an Argument Exception as 'Connection' Property is set to 'Close' :: {0}", ex.Message);
+        //    }
+        //    catch (WebException ex)
+        //    {
+        //        //Thread _job = new Thread(() => SendSMSMessageTxn(_MobileNo, _MobileMessage, _UserName, _Password, _Sender, _Url));
+        //        //_job.Start();
+        //        responseString = string.Format("HTTP_ERROR :: WebException raised! :: {0}", ex.Message);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        //Thread _job = new Thread(() => SendSMSMessageTxn(_MobileNo, _MobileMessage, _UserName, _Password, _Sender, _Url));
+        //        //_job.Start();
+        //        responseString = string.Format("HTTP_ERROR :: Exception raised! :: {0}", ex.Message);
+        //    }
+        //}
     }
 }
